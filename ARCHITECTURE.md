@@ -1,7 +1,7 @@
 # Architecture
 
 ## Consensus
-Consensus is achieved using the [Stellar Consensus Protocol](https://github.com/stellar/stellar-core/blob/master/src/scp/readme.md).
+Consensus is achieved through the [Stellar Consensus Protocol](https://github.com/stellar/stellar-core/blob/master/src/scp/readme.md).
 
 ## Replicated State Machine
 Other pieces of [stellar-core](https://github.com/stellar/stellar-core/tree/master/src) will be used to implement the replicated state machine (RSM):
