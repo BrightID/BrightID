@@ -9,6 +9,6 @@ Applications built on Brightside have their own ledger space, visible (raw or en
 
 ---
 ## Architecture
-We're still making architectural decisions.  [See Architecture](ARCHITECTURE.md).
+We're still in the early stages of [making architectural decisions](ARCHITECTURE.md).
 
-If you're interested in contributing to the architecture, please [start a new Issue](https://github.com/adamstallard/brightside/issues) and we'll add you to the conversation.
+If you're interested in contributing, please [start a new Issue](https://github.com/adamstallard/brightside/issues) and we'll add you to the conversation.
