@@ -1,7 +1,7 @@
 # Brightside
 Brightside is a public [distributed ledger](https://en.wikipedia.org/wiki/Distributed_ledger) secured by a social graph of face-to-face connections instead of a blockchain (proof-of-work or proof-of-stake).
 
-## Unique Identity is Fundamental
+## Unique Identity of Users is Fundamental
 As a side-effect of its security model, Brightside maintains in its ledger a set of public keys representing unique individuals.  Applications built on Brightside have access to this set.  This makes Brightside a good fit for applications where each user represents a unique person--such as social networks, universal basic income systems, and voting systems.
 
 ## Appropriate Scale
