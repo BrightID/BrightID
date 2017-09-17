@@ -7,5 +7,6 @@ As a side-effect of its security model, Brightside maintains in its ledger a set
 ## Appropriate Scale
 Applications built on Brightside have their own ledger space, visible (raw or encrypted), but not alterable by other applications.  Each application is a [replicated state machine](https://en.wikipedia.org/wiki/State_machine_replication) operating within its own ledger space.  Brightside nodes can run any combination of applications, allowing for application networks of different sizes.  This allows applications to achieve (but not exceed) the scale they need.  Applications can be written in any language, connecting to the ledger through a local API.
 
-## Early Stage
+---
+### Early Stage
 We're still in the early stages of making architectural decisions.  If you're interested in contributing to the discussion, please contact [Adam Stallard](https://github.com/adamstallard)
