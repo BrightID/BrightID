@@ -1,4 +1,4 @@
-# Brightside <img width="200px" src="images/brightside.svg"/>
+# Brightside <img width="250px" src="images/brightside.svg"/>
 Brightside is a public [distributed ledger](https://en.wikipedia.org/wiki/Distributed_ledger) secured by a social graph of face-to-face connections instead of a blockchain (proof-of-work or proof-of-stake).
 
 ## Unique Identity of Users is Fundamental
