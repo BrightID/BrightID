@@ -23,7 +23,7 @@ Once a user's network has enough of the right kind of connections to be consider
 Users not on the whitelist can still benefit from using the network, but they're excluded from certain priveliges such as running a node.
 
 ### Running a node
-Anyone on the whitelist can run a node.  They should have a computer that can stay connected to the internet for at least 8 hours a day.  The software is installed using a simple installer.  Network and hardware requirements are typical of those of a home computer.
+Anyone on the whitelist can run a node.  They should have a computer that can stay connected to the internet.  The software is installed using a simple installer.  Network and hardware requirements are typical of those of a home computer.
 
 Running a node is very valuable because it allows more users to join the network; a new user must already know someone who's running a node.
 
