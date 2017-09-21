@@ -20,7 +20,7 @@ From there, they can expand their network by adding real-world connections
 Once a user's network has enough of the right kind of connections to be considered unique by graph analysis, they're added to the *whitelist*.  The whitelist is the set of users considered by the system to be unique.
 <div><img height="300px" src="images/whitelist.svg"/></div>
 
-Users not on the whitelist can still benefit from using the network, but they're excluded from certain priveliges such as running a node.
+Users not on the whitelist can still benefit from using the network, but they may be excluded from certain application-specific privileges such as receive a basic income disbursement.
 
 ### Running a node
 Anyone on the whitelist can run a node.  They should have a computer that can stay connected to the internet.  The software is installed using a simple installer.  Network and hardware requirements are typical of those of a home computer.
