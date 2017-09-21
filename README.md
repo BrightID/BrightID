@@ -27,7 +27,7 @@ Anyone on the whitelist can run a node.  They should have a computer that can st
 
 Running a node is very valuable because it allows more users to join the network; a new user must already know someone who's running a node.
 
-Nodes communicate with all other nodes, store the social graph information, and receive updates to the graph (proof of new connections).
+Nodes communicate with other nodes, store the social graph information, and receive updates to the graph (new, signed connections) from clients.
 <div><img height="300px" src="images/many-nodes.svg"/></div>
 
 Each node can run a different set of application modules.  For instance, Node A could run a voting module and an id service, while Nodes B and C could support a universal basic income currency ledger.
