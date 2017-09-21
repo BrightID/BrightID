@@ -17,7 +17,7 @@ From there, they can expand their network by adding real-world connections
 <div><img height="300px" src="images/network-growth.svg"/></div>
 
 ### Whitelist (stamp of uniqueness)
-Once a user's network contains enough of the right kind of connections to be verified by graph analysis, they're added to the *whitelist*.  The whitelist is the set of users considered by the system to be unique.
+Once a user's network has enough of the right kind of connections to be verified as unique by graph analysis, they're added to the *whitelist*.  The whitelist is the set of users considered by the system to be unique.
 <div><img height="300px" src="images/whitelist.svg"/></div>
 
 Users not on the whitelist can still benefit from using the network, but they're excluded from certain priveliges such as running a node.
@@ -27,7 +27,7 @@ Anyone on the whitelist can run a node.  They should have a computer that can st
 
 Running a node is very valuable because it allows more users to join the network; a new user must already know someone who's running a node.
 
-Nodes communicate with other nodes, store the social graph information, and receive updates to the graph (new, signed connections) from clients.
+Nodes communicate with other nodes, store the social graph information, and receive updates to the graph (signed attestations of face-to-face connections) from clients.
 <div><img height="300px" src="images/many-nodes.svg"/></div>
 
 Each node can run a different set of application modules.  For instance, Node A could run a voting module and an id service, while Nodes B and C could support a universal basic income currency ledger.
