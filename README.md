@@ -11,14 +11,14 @@ Applications built on Brightside have their own ledger space, visible (raw or en
 A social graph of connected users is central to both the security and the operation of Brightside.
 
 When a new user joins, they must find a real-world contact who's running a node.
-![new user join](images/init.svg)
+<div><img height="300px" src="images/init.svg"/></div>
 
 From there, they can expand their network by adding real-world connections
-![expand network](images/network-growth.svg)
+<div><img height="300px" src="images/network-growth.svg"/></div>
 
 ### Whitelist (stamp of uniqueness)
 Once a user's network contains enough of the right kind of connections to be verified by graph analysis, they're added to the *whitelist*.  The whitelist is the set of users considered by the system to be unique.
-<img height="330px" style="clear:both; float:none" src="images/whitelist.svg"/>
+<div><img height="300px" src="images/whitelist.svg"/></div>
 
 Users not on the whitelist can still benefit from using the network, but they're excluded from certain priveliges such as running a node until they become added to the whitelist.
 
@@ -28,7 +28,7 @@ Anyone on the whitelist can run a node.  They should have a computer that can st
 Running a node is very valuable because it allows more users to join the network; a new user must already know someone who's running a node.
 
 Nodes communicate with all other nodes, store the social graph information, and receive updates to the graph (proof of new connections).
-![many nodes](images/many-nodes.svg)
+<div><img height="300px" src="images/many-nodes.svg"/></div>
 
 Each node can contain a different set of application modules.  For instance, Node A could support a voting module, while Nodes B and C could support a universal basic income currency ledger.
 
