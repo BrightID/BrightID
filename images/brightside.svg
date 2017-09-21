@@ -45,7 +45,7 @@
        xlink:href="#linearGradient3775"
        id="radialGradient3002"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.6897896,-2.6929154e-4,-0.00114809,0.19026776,-220.41136,1265.4844)"
+       gradientTransform="matrix(0.49170797,-2.6929154e-4,-8.1840174e-4,0.19026776,-49.309398,1265.4844)"
        cx="862.00842"
        cy="1807.6053"
        fx="862.00842"
@@ -94,12 +94,12 @@
     <rect
        style="fill:url(#radialGradient3002);fill-opacity:1;stroke:none"
        id="rect3773"
-       width="1323.2931"
+       width="943.29309"
        height="616.0246"
-       x="-286.22095"
+       x="-96.220947"
        y="1020.2056"
        ry="124.77547"
-       rx="291.25955" />
+       rx="207.62076" />
     <g
        id="g2997"
        transform="translate(258.07198,960)"
