@@ -20,7 +20,7 @@ From there, they can expand their network by adding real-world connections
 Once a user's network contains enough of the right kind of connections to be verified by graph analysis, they're added to the *whitelist*.  The whitelist is the set of users considered by the system to be unique.
 <div><img height="300px" src="images/whitelist.svg"/></div>
 
-Users not on the whitelist can still benefit from using the network, but they're excluded from certain priveliges such as running a node until they become added to the whitelist.
+Users not on the whitelist can still benefit from using the network, but they're excluded from certain priveliges such as running a node.
 
 ### Running a node
 Anyone on the whitelist can run a node.  They should have a computer that can stay connected to the internet for at least 8 hours a day.  The software is installed using a simple installer.  Network and hardware requirements are typical of those of a home computer.
@@ -30,7 +30,7 @@ Running a node is very valuable because it allows more users to join the network
 Nodes communicate with all other nodes, store the social graph information, and receive updates to the graph (proof of new connections).
 <div><img height="300px" src="images/many-nodes.svg"/></div>
 
-Each node can contain a different set of application modules.  For instance, Node A could support a voting module, while Nodes B and C could support a universal basic income currency ledger.
+Each node can run a different set of application modules.  For instance, Node A could run a voting module and an id service, while Nodes B and C could support a universal basic income currency ledger.
 
 ---
 ### Architecture
