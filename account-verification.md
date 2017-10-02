@@ -14,7 +14,7 @@ The non-combining restriction is as follows. Each verifier has a set of other ve
 
 (The verifiers along the top row of the figure make up the set of non-combinable-verifiers for verifier __V1__)
 
-It's the responsibility of a potential recruit (or a client program acting on her behalf) to find and submit verifiers that pass the non-combining restriction; the network is then responsible for checking them.  The network can be queried for any verifier's set of non-combinable-verifiers to help with this process.
+It's the responsibility of a potential recruit (or a client program acting on her behalf) to find and submit verifiers that pass the non-combining restriction; the network is then responsible for checking them.  The network can be queried for any account's non-combinable-verifiers to help with this process.
 
 ## Limits to Attackers
 
