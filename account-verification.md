@@ -20,11 +20,11 @@ It's the responsibility of a potential recruit (or a client program acting on he
 
 The number of sybils a group of colluding attackers can verify is 
 
-![ceil(n/(k-1))-1](images/sybil-formula1.png)
+![ceil(n/(k-1))-1; k >= 2](images/sybil-formula1.png)
 
 without reusing new sybils for verification, and
 
-![ceil(n/(k-2))-1](images/sybil-formula2.png)
+![ceil(n/(k-2))-1; k >= 3](images/sybil-formula2.png)
 
 when reusing new sybils for verification, where _k_ is the network constant representing the number of verifiers required per recruit and _n_ is the number of colluding attackers.
 
