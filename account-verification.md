@@ -28,7 +28,7 @@ without reusing new sybils for verification, and
 
 when reusing new sybils for verification, where _k_ is the network constant representing the number of verifiers required per recruit and _n_ is the number of colluding attackers.
 
-For example, for values _k_ = 4 and _n_ = 300, 99 sybils could be verified initially and 149 total if the new sybils are reused for verification.
+For example, with 4 verifications needed per recruit and 300 colluding attackers, 99 sybils could be verified initially and 149 total if the new sybils are reused for verification.
 
 When _k_ >= 3, _s_ will be less than _n_, meaning each attacker will receive less than one sybil account.  This means that to share the benefits of the attack, attackers must continue to collude and share accounts, making the attack more difficult.
 
