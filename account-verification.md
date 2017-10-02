@@ -30,7 +30,7 @@ when reusing new sybils for verification, where _v_ is the network variable repr
 
 For example, with 4 verifications needed per recruit and 300 colluding attackers, 99 sybils could be verified initially and 149 total if the new sybils are reused for verification.
 
-When _v_ >= 3, _s_ will be less than _n_, meaning each attacker will receive less than one sybil account.  This means that to share the benefits of the attack, attackers must continue to collude and share accounts, making the attack more difficult.
+When _v_ >= 3, _s_ will be less than _n_, meaning each attacker will verify less than one sybil account.  This means that to share the benefits of the attack, attackers must continue to collude and share accounts, making the attack more difficult.
 
 ----
 #### Notes
