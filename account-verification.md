@@ -1,6 +1,6 @@
 ## Motivation
 
-The number of sybil (fake, duplicate) accounts from which a group of malicious users can benefit should be limited. To this end, each account must be *verified* to perform important functions like running a node, or to receive benefits that require a unique identity, such as basic income from a basic income distribution application. This is done by analyzing the social graph.
+The number of sybil (fake, duplicate) accounts from which a group of attackers can benefit should be limited. To this end, each account must be *verified* to perform important functions like running a node, or to receive benefits that require a unique identity, such as basic income from a basic income distribution application. This is done by analyzing the social graph.
 
 ## Verification Process
 
