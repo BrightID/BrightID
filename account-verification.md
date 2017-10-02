@@ -4,7 +4,7 @@ The number of sybil (fake, duplicate) accounts from which a group of attackers c
 
 ## Verification Process
 
-Accounts are verified when _k_ (a constant agreed upon by the network) accounts that are already verified have made a connection to the account (with an additional non-combining restriction, outlined below). The newly-verified account is known as a _recruit_ and the accounts used to verify it are known as _verifiers_.
+Accounts are verified when _k_ (a constant agreed upon by the network) accounts that are already verified have made a connection to the account (with an additional *non-combining restriction*, outlined below). The newly-verified account is known as a _recruit_ and the accounts used to verify it are known as _verifiers_.
 
 A potential recruit submits the identities (public keys) of the proposed verifiers to the network which checks that the needed connections exist and also checks the non-combining restriction.  If these checks pass, the account is marked as verified and listed as a recruit of each of the verifiers.
 
@@ -14,7 +14,7 @@ The non-combining restriction is as follows. Each verifier has a set of other ve
 
 (The verifiers along the top row of the figure make up the set of non-combinable-verifiers for verifier __V1__)
 
-It's the responsibility of a potential recruit (or a client program acting on her behalf) to find and submit verifiers that pass the restriction; the network is then responsible for checking them.  The network can be queried for any account's non-combinable-verifiers to help with this process.
+It's the responsibility of a potential recruit (or a client program acting on her behalf) to find and submit verifiers that pass the non-combining restriction; the network is then responsible for checking them.  The network can be queried for any account's non-combinable-verifiers to help with this process.
 
 ## Limits to Attackers
 
