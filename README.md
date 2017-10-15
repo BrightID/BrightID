@@ -16,17 +16,21 @@ When a new user joins, they must find a real-world contact who's running a node.
 From there, they can expand their network by adding real-world connections
 <div><img height="300px" src="images/network-growth.svg"/></div>
 
-### Verification (stamp of uniqueness)
-Once a user's network has enough of the right kind of connections to be considered unique by graph analysis, they're added to the set of *verified* users.  This is the set of users considered by the system to be unique.
+### Security
+Once a user has enough face-to-face connections to already *verified* users, they're added to the set of verified users.
 
 Non-verified users can still use the network, but some applications may exclude them from certain benefits such as receiving a basic income.
 
-[Read more about account verification](account-verification.md).
+After a waiting period, verified users can run a node. Each node adds to the overall security of the system.
+
+Brightside nodes analyze the network to protect against sybil (fake, duplicate) accounts.
+
+[Read more about security](security.md).
 
 ### Running a node
 Any verified user can run a node.  They should have a computer that can stay connected to the internet.  The software is installed using a simple installer.  Network and hardware requirements are typical of those of a home computer.
 
-Running a node is very valuable because it allows more users to join the network; a new user must already know someone who's running a node.
+Running a node is very valuable because it allows more users to join the network; a new user must already know someone who's running a node.  They also aid in the graph analysis used to detect sybil accounts.
 
 Nodes communicate with other nodes, store the social graph information, and receive updates to the graph (signed attestations of face-to-face connections) from clients.
 <div><img height="300px" src="images/many-nodes.svg"/></div>
