@@ -2,13 +2,13 @@
 Brightside is a public [distributed ledger](https://en.wikipedia.org/wiki/Distributed_ledger) secured by a social graph instead of a blockchain (proof-of-work or proof-of-stake).
 
 ### Unique Identity of Users is Fundamental
-As a side-effect of its security model, Brightside maintains in its ledger a set of public keys representing unique individuals.  Applications built on Brightside have access to this set.  This makes Brightside a good fit for applications where each account represents a unique person--such as self-sovereign identity, self-managed medical and credit histories, universal basic income distribution, charities, and voting systems.
+As a side-effect of [its security model](security.md), Brightside maintains in its ledger a set of public keys representing unique individuals.  Applications built on Brightside have access to this set.  This makes Brightside a good fit for applications where each account represents a unique person--such as self-sovereign identity, self-managed medical and credit histories, universal basic income distribution, charities, and voting systems.
 
 ### Appropriate Scale
 Applications built on Brightside have their own ledger space, visible (raw or encrypted), but not alterable by other applications.  Each application is a [replicated state machine](https://en.wikipedia.org/wiki/State_machine_replication) operating within its own ledger space.  Brightside nodes can run any combination of applications, allowing application networks of different sizes.  This allows applications to achieve (but not exceed) the scale they need, thereby cutting costs when compared to Ethereum.  Applications can be written in any language, connecting to the ledger through a local API.
 
 ## Operational Overview
-A social graph of connected users is central to both the security and the operation of Brightside.
+A social graph of connected users is central to both [the security](security.md) and the operation of Brightside.
 
 When a new user joins, they must find a real-world contact who's running a node.
 <div><img height="300px" src="images/init.svg"/></div>
@@ -17,13 +17,11 @@ From there, they can expand their network by adding real-world connections
 <div><img height="300px" src="images/network-growth.svg"/></div>
 
 ### Security
-Once a user has enough face-to-face connections to already *verified* users, they're added to the set of verified users.
+Once a user has enough face-to-face connections to already *verified* users, and after a waiting period, they're added to the set of verified users.
 
 Non-verified users can still use the network, but some applications may exclude them from certain benefits such as receiving a basic income.
 
-After a waiting period, verified users can run a node. Each node adds to the overall security of the system.
-
-Brightside nodes analyze the network to protect against sybil (fake, duplicate) accounts.
+Verified users can run a node. Each node adds to the overall security of the system. Brightside nodes analyze the network to protect against sybil (fake, duplicate) accounts.
 
 [Read more about security](security.md).
 
