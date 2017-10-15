@@ -2,16 +2,16 @@
 
 The security model has the following goals, in order of importance:
 
-1. Protect the network against disruption
-1. Prevent sybils--which can make applications less effective
-1. Allow the network to grow
+1. [Protect the network against disruption](#protect-against-disruption)
+1. [Prevent sybils--which can make applications less effective](#prevent-sybils)
+1. [Allow the network to grow](#allow-the-network-to-grow)
 
 ### Protect against disruption
 
 Consensus among nodes is achieved with [federated byzantine agreement](https://www.stellar.org/blog/stellar-consensus-protocol-proof-code).  As such, it's subject to the limits of [byzantine fault tolerance](https://en.wikipedia.org/wiki/Byzantine_fault_tolerance).  It can tolerate up to ``n/3`` nodes behaving badly. If ``n/2`` verifiers decide to collude and run nodes, they can disrupt the network. Brightside protects against this in the following ways.
 
-1. Encourage legitimate users to run nodes by requiring new users to connect the node of a user they know face-to-face.
-1. Prevent sybils, thereby limiting the number of nodes attackers can use.
+1. Encourage legitimate users to run nodes by requiring new users to connect to the node of a user they know face-to-face.
+1. [Prevent sybils](#prevent-sybils), thereby limiting the number of nodes attackers can use.
 
 ### Prevent sybils
 
