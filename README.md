@@ -37,7 +37,7 @@ Each node can run a different set of application modules.  For instance, Node A 
 
 ---
 ### Architecture
-Consensus between nodes is mediated by [SCP (Stellar Consensus Protocol)](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwij5cvx4LbWAhWi5lQKHXGpCoAQFggtMAA&url=https%3A%2F%2Fwww.stellar.org%2Fpapers%2Fstellar-consensus-protocol.pdf&usg=AFQjCNFDrsjJtP5IbB05TRfIQqARqDCr-A).  Other pieces of [stellar-core](https://github.com/stellar/stellar-core) are being considered for inclusion.
+Consensus between nodes is mediated by [SCP (Stellar Consensus Protocol)](https://www.stellar.org/blog/stellar-consensus-protocol-proof-code/).  Other pieces of [stellar-core](https://github.com/stellar/stellar-core) are being considered for inclusion.
 
 ## Contributing
 
