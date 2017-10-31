@@ -7,9 +7,10 @@ Nodes receive client requests to record signed interactions. Signed interactions
 ### Consensus
 Nodes reach a consensus about signed interactions. Once it's clear that all nodes will accept a signed interaction, it's added to the social graph.
 ### Uniqueness Verification Service
-Nodes respond to queries about the verification status of a public key.
+Nodes respond to requests about the verification status of a public key.
 #### Direct Network
 A node can choose to respond to a direct network request about a public key.
 #### Blockchain Push Requests
+A request can placed on a public blockchain for the node to read, along with an optional payment. The node can then post the reponse. The ability to support different blockchains comes with the Brightside node software package.
 ### Sybil Detection
 Nodes run [SybilInfer](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.149.6318), [SybilDefender](https://pdfs.semanticscholar.org/7606/64eab41125b06692a95832961bc5473d2aae.pdf) and/or other systems designed to detect sybils. They publish information about possible sybils so that applications can alert their users. Users can revoke their connections to sybil accounts which can in turn revoke their verification status.
