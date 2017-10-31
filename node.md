@@ -12,4 +12,4 @@ Nodes respond to queries about the verification status of a public key.
 A node can choose to respond to direct network requests about a public key.
 #### Blockchain Push Requests
 ### Sybil Detection
-Nodes run SybilInfer, SybilDefender and/or other systems designed to detect sybils. They publish information about possible sybils so that applications can alert their users. Users can revoke their connection to sybil accounts which can in turn revoke the verification status.
+Nodes run [SybilInfer](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.149.6318), [SybilDefender](https://pdfs.semanticscholar.org/7606/64eab41125b06692a95832961bc5473d2aae.pdf) and/or other systems designed to detect sybils. They publish information about possible sybils so that applications can alert their users. Users can revoke their connection to sybil accounts which can in turn revoke the verification status.
