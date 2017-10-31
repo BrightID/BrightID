@@ -14,7 +14,7 @@ Third-party applications interface with the Brightside interaction client runnin
 An application pushes a public key obtained through the interaction API to one or more Brightside nodes, which then perform a verification check and publish the result.
 
 ## How it Works
-When two people record an interaction, they each check the interaction client on their device to see whether they've previously interacted, and if not, record the other person's name and photograph. The interaction client signs this event with each person's private key and sends it to a Brightside node to be recorded. Names and photographs are stored locally and public keys and signed interactions are sent to Brightside nodes.
+When two people record an interaction, they each check the interaction client on their device to see whether they've previously interacted, and if not, record the other person's name. The interaction client signs this event with each person's private key and sends it to a Brightside node to be recorded. Names are stored locally and public keys and signed interactions are sent to Brightside nodes.
 
 Brightside nodes store pairs of interactions, forming a social graph. By analyzing this graph, a node is able to determine whether or not a person can be verified as unique. When another application, such as a Basic Income application wants to know whether a user is a unique individual in their system, they push a request to a Brightside node. It's up to a node to offer methods for handling these requests.
 
