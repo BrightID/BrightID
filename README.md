@@ -1,46 +1,31 @@
 # Brightside <img width="330px" src="images/brightside.svg"/>
-Brightside is a public [distributed ledger](https://en.wikipedia.org/wiki/Distributed_ledger) secured by a social graph instead of a blockchain (proof-of-work or proof-of-stake).
+Brightside is a decentralized service that allows applications to verify that users are unique individuals.
 
-### Unique Identity of Users is Fundamental
-As a side-effect of [its security model](security.md), Brightside maintains in its ledger a set of public keys representing unique individuals.  Applications built on Brightside have access to this set.  This makes Brightside a good fit for applications where each account represents a unique person--such as self-sovereign identity, self-managed medical and credit histories, universal basic income distribution, charities, and voting systems.
+This is important to a variety of applications, including basic income, voting, membership, records and credential management, and charities.
 
-### Appropriate Scale
-Applications built on Brightside have their own ledger space, visible (raw or encrypted), but not alterable by other applications.  Each application is a [replicated state machine](https://en.wikipedia.org/wiki/State_machine_replication) operating within its own ledger space.  Brightside nodes can run any combination of applications, allowing application networks of different sizes.  This allows applications to achieve (but not exceed) the scale they need, thereby cutting costs when compared to Ethereum.  Applications can be written in any language, connecting to the ledger through a local API.
+## Components
+### Interaction Client
+The Brightside interaction client runs on mobile devices and records face-to-face interactions. These interactions form the basis for establishing someone's uniqueness.
 
-## Operational Overview
-A social graph of connected users is central to both [the security](security.md) and the operation of Brightside.
+Individuals use the interaction client to grant third-party applications the right to verify their uniqueness.
+### Interaction API
+Third-party applications interface with the Brightside interaction client running on the same device to retrieve a public key associated with the user.
+### Uniqueness Verification Service
+An application pushes a public key obtained through the interaction API to one or more Brightside nodes, which then perform a verification check and publish the result.
 
-When a new user joins, they must find a real-world contact who's running a node.
-<div><img height="300px" src="images/init.svg"/></div>
+## How it Works
+When two people record an interaction, they each check the interaction client on their device to see whether they've previously interacted, and if not, record the other person's name and photograph. The interaction client signs this event with each person's private key and sends it to a Brightside node to be recorded. Names and photographs are stored locally and public keys and signed interactions are sent to Brightside nodes.
 
-From there, they can expand their network by adding real-world connections
-<div><img height="300px" src="images/network-growth.svg"/></div>
+Brightside nodes store pairs of interactions, forming a social graph. By analyzing this graph, a node is able to determine whether or not a person can be verified as unique. When another application, such as a Basic Income application wants to know whether a user is a unique individual in their system, they push a request to a Brightside node. It's up to a node to offer methods for handling these requests.
 
-### Security
-Once a user has enough face-to-face connections to already *verified* users, and after a waiting period, they're added to the set of verified users.
+Any verified unique user can run a Brightside node. A network of nodes forms the decentralized core of the uniqueness verification service. The nodes reach a consensus about changes to the social graph, and store a copy of the complete graph. They run software that can detect the presence of sybils based on social graph analysis.
 
-Non-verified users can still use the network, but some applications may exclude them from certain benefits such as receiving a basic income.
-
-Verified users can run a node. Each node adds to the overall security of the system. Brightside nodes analyze the network to protect against sybil (fake, duplicate) accounts.
-
-[Read more about security](security.md).
-
-### Running a node
-Any verified user can run a node.  They should have a computer that can stay connected to the internet.  The software is installed using a simple installer.  Network and hardware requirements are typical of those of a home computer.
-
-Running a node is very valuable because it allows more users to join the network; a new user must already know someone who's running a node.  They also aid in the graph analysis used to detect sybil accounts.
-
-Nodes communicate with other nodes, store the social graph information, and receive updates to the graph (signed attestations of face-to-face connections) from clients.
-<div><img height="300px" src="images/many-nodes.svg"/></div>
-
-Each node can run a different set of application modules.  For instance, Node A could run a voting module and an id service, while Nodes B and C could support a universal basic income currency ledger.
+## Read More
+* [Security](security.md)
+* [Running/Monetizing a Node](node.md)
+* Consensus is mediated by [SCP (Stellar Consensus Protocol)](https://www.stellar.org/blog/stellar-consensus-protocol-proof-code/)
 
 ---
-### Architecture
-Consensus between nodes is mediated by [SCP (Stellar Consensus Protocol)](https://www.stellar.org/blog/stellar-consensus-protocol-proof-code/).  Other pieces of [stellar-core](https://github.com/stellar/stellar-core) are being considered for inclusion.
-
-## Contributing
-
-Help us [make architectural decisions](architecture.md).
+## Contribute
 
 If you're interested in contributing, please [start a new Issue](https://github.com/adamstallard/brightside/issues) and we'll add you to the conversation.
