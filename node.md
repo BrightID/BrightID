@@ -3,7 +3,7 @@
 Any verified unique user can run a Brightside node. A network of nodes forms the decentralized core of the uniqueness verification service. The nodes reach a consensus about changes to the social graph, and store a copy of the complete graph. They run software that can detect the presence of sybils based on social graph analysis.
 ## Node Software
 ### Interaction Recorder
-Nodes receive client requests to record signed interactions. Signed interactions include the public keys of the two people involved, and a dated proof of interaction signed by both. They forward these requests to other nodes for consensus.
+Nodes receive client requests to record signed interactions. Signed interactions include the public keys of the two people involved, and a dated proof of interaction signed by their private keys. Nodes forward these requests to other nodes for consensus.
 ### Consensus
 Nodes reach a consensus about signed interactions. Once it's clear that all nodes will accept a signed interaction, it's added to the social graph.
 ### Uniqueness Verification Service
