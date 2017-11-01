@@ -18,10 +18,10 @@ Consensus among nodes is achieved with [federated byzantine agreement](https://w
 Brightside prevents sybils in the following ways.
 
 1. Require users to have to connections to ``v`` already-verified users in order to be to verified.
-1. Provide each node with a built-in command that runs [SybilInfer](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.149.6318), [SybilDefender](https://pdfs.semanticscholar.org/7606/64eab41125b06692a95832961bc5473d2aae.pdf) or a similar algorithm, either manually or on a schedule.
+1. Provide each node with built-in commands that run [SybilInfer](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.149.6318), [SybilDefender](https://pdfs.semanticscholar.org/7606/64eab41125b06692a95832961bc5473d2aae.pdf) and similar algorithms, either manually or on a schedule.
 1. Enforce a wait period for newly verified users, giving the sybil detection algorithm time to do its job.
 1. Allow verifiers to revoke their verification of an already-verified user, returning them to the provisional state.  This prevents the revoked user from verifying other users, and in turn revokes their verification of other users.  This can have a cascading effect.
-1. Allow apps on the system to provide additional verification checks, the results of which can be made available to other apps.
+1. Allow apps on the system to provide additional verification checks (such as KYC, photo Ids, biometrics), the results of which can be made available to other apps.
 
 ### Allow the network to grow
 
@@ -36,6 +36,7 @@ Nodes agree to adopt a _security schedule_. Here's an example.
 |1|1|2|
 |2|3|4|
 |3|5|7|
+|...|...|...|
 
 The schedule dictates how _v_ increases with the number of nodes and verified users.  For _v_ to increase, both _n_ and "Verified users" must reach the level indicated.
 
