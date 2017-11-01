@@ -10,7 +10,7 @@ The security model has the following goals, in order of importance:
 
 Consensus among nodes is achieved with [federated byzantine agreement](https://www.stellar.org/blog/stellar-consensus-protocol-proof-code).  As such, it's subject to the limits of [byzantine fault tolerance](https://en.wikipedia.org/wiki/Byzantine_fault_tolerance).  It can tolerate up to ``n/3`` nodes behaving badly. If ``n/2`` verifiers decide to collude and run nodes, they can disrupt the network. Brightside protects against this in the following ways.
 
-1. Encourage legitimate users to run nodes by requiring new users to connect to the node of a user they know face-to-face.
+1. Encourage legitimate users to run nodes. One way to do this is to allow them to monetize the services they offer.  See [Running a Node](node.md).
 1. [Prevent sybils](#prevent-sybils), thereby limiting the number of nodes attackers can use.
 
 ### Prevent sybils
