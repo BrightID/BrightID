@@ -52,4 +52,4 @@ The value in "Verified users" could be increased if it becomes the limiting fact
 If nodes agree, they can update the security schedule.  They do this using the [ledger versioning](https://www.stellar.org/developers/guides/concepts/versioning.html#ledger-versioning) model from stellar-core.
 
 #### Merging networks
-It's possible for multiple Brightside networks to exist, and existing networks to merge. Signed connections from one network are added to the other and re-verified. [Read more about merging](merging.md).
+It's possible for multiple Brightside networks to exist, and existing networks to merge. Signed interactions from one network are added to the other and re-verified. [Read more about merging](merging.md).
