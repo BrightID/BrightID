@@ -19,8 +19,8 @@ When two people record an interaction, they each check the interaction client on
 Brightside nodes store pairs of interactions, forming a social graph. By analyzing this graph, a node is able to determine whether or not a person can be verified as unique. When another application, such as a Basic Income application wants to know whether a user is a unique individual in their system, they push a request to a Brightside node. There are several methods available to nodes to handle these requests. Brightside nodes protect systems against fake or duplicate accounts, known as _sybils_. Node operators may earn money for their services.
 
 ## Read More
-* [Security](security.md)
 * [Running a Node](node.md)
+* [Security](security.md)
 * Consensus is mediated by [SCP (Stellar Consensus Protocol)](https://www.stellar.org/blog/stellar-consensus-protocol-proof-code/)
 
 ---
