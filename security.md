@@ -40,7 +40,7 @@ Nodes agree to adopt a _security schedule_. Here's an example.
 
 The schedule dictates how _v_ increases with the number of nodes and verified users.  For _v_ to increase, both _n_ and "Verified users" must reach the level indicated.
 
-The first row (with all zeros) sets the stage for the [genesis connection](genesis.md) between the first two users.
+The first row (with all zeros) sets the stage for the genesis connection between the first two users.
 
 The second row dictates that after the first two users exist, a user will need to connect to an existing verified user to be verified.
  
@@ -52,4 +52,4 @@ The value in "Verified users" could be increased if it becomes the limiting fact
 If nodes agree, they can update the security schedule.  They do this using the [ledger versioning](https://www.stellar.org/developers/guides/concepts/versioning.html#ledger-versioning) model from stellar-core.
 
 #### Merging networks
-It's possible for multiple Brightside networks to exist, and existing networks to merge. Signed interactions from one network are added to the other and re-verified. [Read more about merging](merging.md).
+It's possible for multiple Brightside networks to exist, and existing networks to merge. Signed interactions from one network are added to the other and re-verified.
