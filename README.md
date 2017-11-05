@@ -3,7 +3,7 @@ Brightside is a decentralized service that allows applications to verify that us
 
 This is important to a variety of applications, including basic income, voting, membership, records and credential management, and charities.
 ***
-<sub>We're building this together! Join the conversation in http://tinyurl.com/decstack-projects-invite channel: https://hub.decstack.com/projects/channels/brightside-f2f</sub>
+We're building this together! Join the conversation in http://tinyurl.com/decstack-projects-invite channel: https://hub.decstack.com/projects/channels/brightside-f2f
 ***
 ## Components
 ### Interaction Client
