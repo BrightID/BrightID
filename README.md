@@ -1,5 +1,5 @@
 # Brightside <img width="330px" src="images/brightside.svg"/>
-<sup>Join the conversation in http://tinyurl.com/decstack-projects-invite channel: https://hub.decstack.com/projects/channels/brightside-f2f</sup>
+<sup>[💬 Join the conversation at decstack](http://tinyurl.com/decstack-projects-invite) channel: brightside-f2f</sup>
 
 Brightside is a decentralized service that allows applications to verify that users are unique individuals.
 
@@ -34,6 +34,6 @@ If you're interested in contributing, please [start a new Issue](https://github.
 
 Discuss on [Decstack](http://decstack.com/)
 
-Join the conversation in http://tinyurl.com/decstack-projects-invite
+Join the conversation at http://tinyurl.com/decstack-projects-invite
 
 Brightside channel: https://hub.decstack.com/projects/channels/brightside-f2f.
