@@ -28,7 +28,7 @@ Brightside nodes store pairs of interactions, forming a social graph. By analyzi
 ---
 ## Contribute
 
-If you're interested in contributing, please [start a new Issue](https://github.com/adamstallard/brightside/issues) and we'll add you to the conversation.
+Check out our [open projects](https://github.com/adamstallard/brightside/projects).  Or [start a new Issue](https://github.com/adamstallard/brightside/issues) and we'll add you to the conversation.
 
 ## Discuss
 
