@@ -32,6 +32,6 @@ If you're interested in contributing, please [start a new Issue](https://github.
 
 ## Discuss
 
-[Decstack](http://decstack.com/) is kindly hosting a mattermost server where we can discuss the project.
+Discuss on [Decstack](http://decstack.com/)
 Join the conversation in http://tinyurl.com/decstack-projects-invite
 Brightside channel: https://hub.decstack.com/projects/channels/brightside-f2f.
