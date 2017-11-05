@@ -32,4 +32,4 @@ If you're interested in contributing, please [start a new Issue](https://github.
 
 ## Discuss
 
-Discuss on [Decstack](http://decstack.com/) Join the conversation at http://tinyurl.com/decstack-projects-invite , channel: https://hub.decstack.com/projects/channels/brightside-f2f.
+Discuss on [Decstack](http://decstack.com/)--Join the conversation at http://tinyurl.com/decstack-projects-invite, channel: https://hub.decstack.com/projects/channels/brightside-f2f.
