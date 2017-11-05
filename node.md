@@ -1,6 +1,6 @@
 # Running A Node
 ## Overview
-Any verified unique user can run a Brightside node--but it isn't required to use the Brightside network or the interaction client.
+Any verified unique user can run a Brightside node--but they aren't required to do so.
 
 A network of nodes forms the decentralized core of the uniqueness verification service. The nodes reach a consensus about changes to the social graph and store a copy of the complete graph. They run software that can detect the presence of sybils based on social graph analysis.
 ## Node Software
