@@ -10,6 +10,7 @@ This is important to a variety of applications, including basic income, voting, 
 The Brightside interaction client runs on mobile devices and records face-to-face interactions. These interactions form the basis for establishing someone's uniqueness.
 
 Individuals use the interaction client to grant third-party applications the right to verify their uniqueness.
+
 [Read more about the Interaction client in the wiki](https://github.com/adamstallard/brightside/wiki/Interaction-Client)
 ### Interaction API
 Third-party applications interface with the Brightside interaction client running on the same device to retrieve a public key associated with the user.
