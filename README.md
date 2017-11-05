@@ -30,7 +30,7 @@ Brightside nodes store pairs of interactions, forming a social graph. By analyzi
 
 If you're interested in contributing, please [start a new Issue](https://github.com/adamstallard/brightside/issues) and we'll add you to the conversation.
 
-## Conversation
+## Discuss
 
 [Decstack](http://decstack.com/) is kindly hosting a mattermost server where we can discuss the project.
 Join the conversation in http://tinyurl.com/decstack-projects-invite
