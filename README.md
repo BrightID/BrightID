@@ -1,6 +1,6 @@
 # Brightside <img width="330px" src="images/brightside.svg"/>
 <sub>We're building this together! Join the conversation in http://tinyurl.com/decstack-projects-invite channel: https://hub.decstack.com/projects/channels/brightside-f2f</sub>
-***
+
 Brightside is a decentralized service that allows applications to verify that users are unique individuals.
 
 This is important to a variety of applications, including basic income, voting, membership, records and credential management, and charities.
