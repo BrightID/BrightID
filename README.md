@@ -7,7 +7,7 @@ This is important to a variety of applications, including basic income, voting, 
 
 ## Components
 ### Interaction Client
-The Brightside interaction client runs on mobile devices and records face-to-face interactions. These interactions form the basis for establishing someone's uniqueness.
+The Brightside interaction client runs on mobile devices and registers face-to-face interactions. These interactions form the basis for establishing someone's uniqueness.
 
 Individuals use the interaction client to grant third-party applications the right to verify their uniqueness.
 
