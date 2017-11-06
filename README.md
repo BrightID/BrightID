@@ -18,7 +18,7 @@ Third-party applications interface with the Brightside interaction client runnin
 An application pushes a public key obtained through the interaction API to one or more Brightside nodes, which then perform a verification check and publish the result.
 
 ## How it Works
-Brightside nodes store interactions, forming a social graph. By analyzing this graph, a node is able to determine whether or not a person can be verified as unique. When another application, such as a Basic Income application wants to know whether a user is a unique individual in their system, they push a request to a Brightside node. There are several methods available to nodes to handle these requests. Brightside nodes protect systems against fake or duplicate accounts, known as _sybils_. Node operators may earn money for their services.
+Brightside nodes store interactions, forming a social graph. By analyzing this graph, a node is able to determine whether or not a person can be verified as unique. When another application, such as a Basic Income application wants to know whether a user is a unique individual in their system, they make a request to a Brightside node. Brightside nodes also protect systems against fake or duplicate accounts, known as _sybils_. Node operators may earn money for their services.
 
 ## Read More
 * [Running a Node](node.md)
