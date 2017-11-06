@@ -3,7 +3,7 @@
 
 Brightside is a decentralized service that allows applications to verify that their users are unique.
 
-This is important to a variety of applications, including basic income, voting, and charities.
+This is important to a variety of applications, including basic income, voting, reputation systems, and charities.
 
 ## Components
 ### Interaction Client
