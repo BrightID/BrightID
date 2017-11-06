@@ -21,7 +21,7 @@ Brightside prevents sybils in the following ways.
 1. Provide each node with built-in commands that run [SybilInfer](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.149.6318), [SybilDefender](https://pdfs.semanticscholar.org/7606/64eab41125b06692a95832961bc5473d2aae.pdf) and similar algorithms, either manually or on a schedule.
 1. Enforce a wait period for newly verified users, giving the sybil detection algorithm time to do its job.
 1. Allow users to revoke their verification of an already-verified user, returning them to the provisional state.  This prevents the revoked user from verifying other users, and in turn revokes their verification of other users.  This can have a cascading effect.
-1. Allow applications on the system to provide additional verification checks (such as KYC, photo Ids, biometrics), the results of which can be made available to other apps.
+1. Allow applications on the system to provide additional verification checks (such as biometrics), the results of which can be made available to other apps.
 
 ### Allow the network to grow
 
