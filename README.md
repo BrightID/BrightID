@@ -26,7 +26,7 @@ This repo is for our mobile app.
 Other repos
 * [Brightside Node](https://github.com/Brightside-Social/brightside-node): A node hosting the Brightside social graph
 * [Brightside Unique](https://github.com/Brightside-Social/brightside-unique): Decentralized unique user verification using a social graph
-* [Our (Github Pages) Web Site](https://github.com/Brightside-Social/Brightside-Social.github.io)
+* [Github Pages repo for our site](https://github.com/Brightside-Social/Brightside-Social.github.io)
 
 ## Discuss
 
