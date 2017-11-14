@@ -15,7 +15,7 @@ Brightside helps applications know their users are unique. We offer [Brightside 
 
 We're decentralized.  There's no organization to capture your information and sell it to advertisers.  There are no central servers storing your information. Your personal information stays with you and with your contacts with whom you choose to share.
 
-Anyone can [run a node in our system](node.md) to host the social graph.
+Anyone can [run a node in our system](https://github.com/Brightside-Social/brightside-node) to host the social graph.
 
 ## Contribute
 
