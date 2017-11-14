@@ -3,13 +3,13 @@
 
 We're building a social platform that captures the value of face-to-face interactions.
 
-By capturing this value, we can support a variety of applications such as universal basic income, voting, group decision-making and reputation systems while providing a social network based on positive, real-world experiences.
+By capturing this value, we can support a variety of applications such as universal basic income, voting, group decision-making and reputation systems, while providing a social network based on positive, real-world experiences.
 
-Our current focus is to build a [beta version that will run on mobile devices](https://github.com/Brightside-Social/brightside/wiki/Brightside-Mobile).
+Our current focus is to build a [mobile app](https://github.com/Brightside-Social/brightside/wiki/Brightside-Mobile).
 
 ## Users are Unique
 
-Brightside helps applications know their users are unique. We offer [Brightside Unique](https://github.com/Brightside-Social/brightside-unique) as a solution to third-party applications.
+Brightside helps applications know their users are unique. We offer [Brightside Unique](https://github.com/Brightside-Social/brightside-unique) as a solution to participating applications.
 
 ## Decentralized
 
