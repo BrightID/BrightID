@@ -13,7 +13,7 @@ Brightside helps applications know their users are unique. We offer [Brightside 
 
 ## Decentralized
 
-We are decentralized.  There is no organization to capture your information and sell it to advertisers.  There are no central servers to store this data. Your personal information stays with you and with your contacts with whom you choose to share.
+We're decentralized.  There's no organization to capture your information and sell it to advertisers.  There are no central servers to store this data. Your personal information stays with you and with your contacts with whom you choose to share.
 
 Anyone can [run a node in our system](node.md).
 
