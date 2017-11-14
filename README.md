@@ -17,7 +17,7 @@ We're decentralized.  There's no organization to capture your information and se
 
 Anyone can [run a node in our system](node.md).
 
---
+---
 ## Contribute
 
 Check out our [open projects](https://github.com/Brightside-Social/brightside/projects).  Or [start a new Issue](https://github.com/Brightside-Social/brightside/issues) and we'll add you to the conversation.
