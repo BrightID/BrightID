@@ -9,7 +9,7 @@ Our current focus is to build a [mobile app](https://github.com/Brightside-Socia
 
 ## Users are Unique
 
-Brightside helps applications know their users are unique. We offer [Brightside Unique](https://github.com/Brightside-Social/brightside-unique) as a solution to these applications.
+Brightside helps applications know their users are unique. We offer [Brightside Unique](https://github.com/Brightside-Social/brightside-unique) as a solution.
 
 ## Decentralized
 
