@@ -19,7 +19,7 @@ Anyone can [run a node in our system](https://github.com/Brightside-Social/brigh
 
 ## Contribute
 
-Check out our [open projects](https://github.com/Brightside-Social/brightside/projects).  Or [start a new Issue](https://github.com/Brightside-Social/brightside/issues) and we'll add you to the conversation.
+Check out our [open projects](https://github.com/orgs/Brightside-Social/projects).  Or [start a new Issue](https://github.com/Brightside-Social/brightside/issues) and we'll add you to the conversation.
 
 This repo is for our mobile app.
 
