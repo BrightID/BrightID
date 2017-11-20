@@ -3,7 +3,7 @@
 
 We're building a social platform that captures the value of face-to-face interactions.
 
-By capturing this value, we can support a variety of applications such as universal basic income, voting, group decision-making and reputation systems, while providing a social network around these interactions.
+By capturing this value, we can support a variety of applications such as universal basic income, voting, group decision-making and reputation systems.  We're providing a social network around these interactions.
 
 Our current focus is to build a [mobile app](https://github.com/Brightside-Social/brightside/wiki/Brightside-Mobile).
 
