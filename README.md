@@ -13,7 +13,7 @@ Our current focus is to build a [mobile app](https://github.com/Brightside-Socia
 
 ## Decentralized
 
-We're decentralized.  There's no organization to capture personal information and sell it to advertisers.  Data (including photos and names) stay with the person who created them and the contacts with whom they choose to share. There's no central server holding this information. 
+We're decentralized.  There's no organization to capture personal information and sell it to advertisers.  Data (including photos and names) stay with the person who created them and the contacts with whom they choose to share.
 
 Anyone can [run a node in our system](https://github.com/Brightside-Social/brightside-node) to host the social graph.
 
