@@ -1,19 +1,19 @@
 # Brightside <img width="330px" src="images/brightside.svg"/>
 <sup>[💬 Join the conversation at decstack](http://tinyurl.com/decstack-projects-invite) channel: brightside</sup>
 
-We're building a social platform that captures the value of face-to-face interactions.
+We're building a social platform around real-world interactions that establishes the uniqueness of its users.
 
-By capturing this value, we can support a variety of applications such as universal basic income, voting, group decision-making and reputation systems.  We're providing a social network around these interactions.
+Uniqueness of users is important to applications such as universal basic income, voting, group decision-making and reputation systems.  We're building a social platform to support these.
 
 Our current focus is to build a [mobile app](https://github.com/Brightside-Social/brightside/wiki/Brightside-Mobile).
 
-## Users are Unique
+## Establishing the uniqueness of users
 
-Brightside helps applications know their users are unique. We offer [Brightside Unique](https://github.com/Brightside-Social/brightside-unique) as a solution.
+[Brightside Unique](https://github.com/Brightside-Social/brightside-unique) analyzes the social graph to protect against duplicate accounts (sybils).
 
 ## Decentralized
 
-We're decentralized.  There's no organization to capture your information and sell it to advertisers.  There are no central servers storing your information. Your personal information stays with you and with your contacts with whom you choose to share.
+We're decentralized.  There's no organization to capture personal information and sell it to advertisers.  Data (including photos and names) stay with the person who created them and the contacts with whom they choose to share. There's no central server holding this information. 
 
 Anyone can [run a node in our system](https://github.com/Brightside-Social/brightside-node) to host the social graph.
 
