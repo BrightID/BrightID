@@ -9,7 +9,7 @@ Our current focus is to build a [mobile app](https://github.com/Brightside-Socia
 
 ## Establishing the uniqueness of users
 
-[Brightside Unique](https://github.com/Brightside-Social/brightside-unique) analyzes the social graph to protect against duplicate accounts (sybils).
+[Brightside Unique](https://github.com/Brightside-Social/brightside-unique) analyzes the social graph to protect against duplicate accounts (sybils), and offers this as a service to apps built on Brightside.
 
 ## Decentralized
 
