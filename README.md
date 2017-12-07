@@ -1,9 +1,9 @@
 # Brightside <img width="330px" src="images/brightside.svg"/>
-<sup>[💬 Join the conversation at decstack](http://tinyurl.com/decstack-projects-invite) channel: brightside</sup>
+<sup>[💬 Join the conversation at decstack](https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh) channel: brightside</sup>
 
 We're building a social platform around real-world interactions that establishes the uniqueness of its users.
 
-Uniqueness of users is important to applications such as universal basic income, voting, group decision-making and reputation systems.  We're building a social platform to support these.
+Uniqueness of users is important to applications such as universal basic income, voting, group decision-making, rating systems, and charities.  We're building a social platform to support these.
 
 Our current focus is to build a [mobile app](https://github.com/Brightside-Social/brightside/wiki/Brightside-Mobile).
 
@@ -30,4 +30,4 @@ Other repos
 
 ## Discuss
 
-We have an active community on [Decstack](http://decstack.com/)--Join the conversation at http://tinyurl.com/decstack-projects-invite, channel: https://hub.decstack.com/projects/channels/brightside.
+We have an active community on [Decstack](http://decstack.com/)--Join the conversation at https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh, channel: https://hub.decstack.com/projects/channels/brightside.
