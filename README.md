@@ -30,4 +30,4 @@ Other repos
 
 ## Discuss
 
-We have an active community on [Decstack](http://decstack.com/)--Join the conversation at https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh, channel: https://hub.decstack.com/projects/channels/brightside.
+We have an active community on [Decstack](http://decstack.com/)--Join the conversation at [the Decstack projects team](https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh), channel: https://hub.decstack.com/projects/channels/brightside.
