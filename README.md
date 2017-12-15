@@ -3,7 +3,7 @@
 
 We're building a social platform around real-world interactions that establishes the uniqueness of its users.
 
-Personal uniqueness is important to applications such as universal basic income, voting, group decision-making, rating systems, and charities.  We're building a social platform to support these.
+Personal uniqueness is important to applications such as universal basic income, voting, rating systems, and giveaways.  We're building a social platform to support these.
 
 Our current focus is to build a [mobile app](https://github.com/Brightside-Social/brightside/wiki/Brightside-Mobile).
 
