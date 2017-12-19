@@ -23,6 +23,8 @@ Check out our [open projects](https://github.com/orgs/Brightside-Social/projects
 
 This repo is for our mobile app.
 
+See our [dev setup](https://github.com/Brightside-Social/brightside/wiki/Development-Guide) for instructions on how to run the application.
+
 Other repos
 * [Brightside Node](https://github.com/Brightside-Social/brightside-node): A node hosting the Brightside social graph
 * [Brightside Unique](https://github.com/Brightside-Social/brightside-unique): Decentralized unique user verification using a social graph
