@@ -1,5 +1,5 @@
 # BrightID <img width="330px" src="images/logo.svg"/>
-<sup>[💬 Join our active community on decstack](https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh) channel: brightid</sup>
+<sup>[💬 Join our active community on decstack](https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh) channel: BrightID</sup>
 
 We're building a social platform around real-world interactions that establishes the uniqueness of its users.
 
@@ -26,7 +26,7 @@ This repo is for our mobile app.
 See our [dev setup](https://github.com/BrightID/BrightID/wiki/Development-Guide) for instructions on how to run the application.
 
 Other repos
-* [BrightID Node](https://github.com/BrightID/BrightID-Node): A node hosting the Brightside social graph
+* [BrightID Node](https://github.com/BrightID/BrightID-Node): A node hosting the BrightID social graph
 * [BrightID Service](https://github.com/BrightID/BrightID-Service): Service allowing third-party apps to verify users
 * [Github Pages repo for our site](https://github.com/BrightID/BrightID.github.io)
 
