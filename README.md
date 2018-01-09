@@ -1,4 +1,4 @@
-# Brightside <img width="330px" src="images/brightside.svg"/>
+# BrightID <img width="330px" src="images/logo.svg"/>
 <sup>[💬 Join the conversation at decstack](https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh) channel: brightside</sup>
 
 We're building a social platform around real-world interactions that establishes the uniqueness of its users.
