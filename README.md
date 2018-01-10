@@ -15,7 +15,7 @@ The ID, personal connections, and connections to third-party apps are managed th
 
 ## Third-Party Applications
 
-Examples of third-party apps that could connect to BrightID are:
+Examples of third-party apps that would benefit from connecting to BrightID are:
 * Universal Basic Income
 * Online Voting
 * Rating Systems
