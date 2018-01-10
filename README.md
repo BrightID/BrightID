@@ -4,24 +4,33 @@
 Our mission is to provide everyone with an ID that can be used to verify they're a unique individual without any connection to a central authority.
 
 The ID will have the following characteristics:
-* Verification comes from a trusted group of close personal contacts plus a decentralized social graph that's owned by no one
+* Verification comes from a trusted group of close personal contacts plus a [decentralized social graph that's owned by no one](#decentralized_graph)
 * Uniqueness and data are kept separate.  A person can show they're unique without sharing any data.
 * A lost or compromised ID can be replaced by reconnecting with a few close personal contacts
 * Uniqueness can be shared with third-party apps that extend capabilities to the ID holder
 
-Examples of third-party apps that rely on a person's uniqueness and extend capabilities or benefits are: universal basic income, voting systems, rating systems, referral systems and giveaways.
+## Mobile App
 
-The ID, personal connections, and links to third-party apps are managed though the BrightID [mobile app](https://github.com/BrightID/BrightID/wiki/BrightID-Mobile).
+The ID, personal connections, and connections to third-party apps are managed though the BrightID [mobile app](https://github.com/BrightID/BrightID/wiki/BrightID-Mobile).
 
 ## Third-Party Applications
 
-[We offer an API to third-party apps](https://github.com/BrightID/BrightID-Service) to connect to the BrightID mobile app.
+Examples of third-party apps that could connect to BrightID are:
+* Universal Basic Income
+* Online Voting
+* Rating Systems
+* Gift Economies and Bartering
+* Online Communities
+* Referral Systems
+* Giveaways
 
-## Decentralized, Non-Authoritarian, Personal
+[We offer an API to third-party apps](https://github.com/BrightID/BrightID-Service) to connect to the BrightID mobile app and validate a person's uniqueness.
 
-This software is licensed under a liberal open-source license (ISC).
+## Decentralized Graph 
 
-Anyone can [run a node](https://github.com/BrightID/BrightID-Node) and connect to other nodes.  Nodes host the social graph used for verification, but they don't hold any personal information.
+Anyone can [run a node](https://github.com/BrightID/BrightID-Node).  Nodes host the social graph used for verification, but they don't hold any personal information.
+
+## Personal Data
 
 It's up to individual users to safeguard their own personal data by choosing carefully with whom to share it (contacts or apps) once they've shared their ID.
 
