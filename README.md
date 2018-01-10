@@ -11,7 +11,7 @@ The ID will have the following characteristics:
 
 ## Mobile App
 
-The ID, personal connections, and connections to third-party apps are managed though the BrightID [mobile app](https://github.com/BrightID/BrightID/wiki/BrightID-Mobile).
+The ID, personal connections, and connections to third-party apps are managed though the [BrightID mobile app](https://github.com/BrightID/BrightID/wiki/BrightID-Mobile).
 
 ## Third-Party Applications
 
@@ -38,7 +38,7 @@ It's up to individual users to safeguard their own personal data by choosing car
 
 Check out our [open projects](https://github.com/orgs/BrightID/projects).  Or [start a new Issue](https://github.com/BrightID/BrightID/issues) and we'll add you to the conversation.
 
-This repo is for the BrightID mobile app.
+This repo is for the [BrightID mobile app](https://github.com/BrightID/BrightID/wiki/BrightID-Mobile).
 
 See our [dev setup](https://github.com/BrightID/BrightID/wiki/Development-Guide) for instructions on how to run the application.
 
