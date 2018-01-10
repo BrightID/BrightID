@@ -1,7 +1,12 @@
 # BrightID <img width="330px" src="images/logo.svg"/>
 <sup>[💬 Join our active community on decstack](https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh) channel: BrightID</sup>
 
-We're building a social platform around real-world interactions that establishes the uniqueness of its users.
+Our mission is to provide everyone with an ID that can be used to verify they're a unique individual without any connection to a central authority.
+
+The ID will have the following characteristics:
+* verification comes from a trusted group of one's closest personal contacts plus a decentralized social graph that's owned by no one
+* uniqueness and data are kept separate.  A person can show they're unique without sharing any data.
+* a lost or compromised ID can be replaced by reconnecting with a few close personal contacts
 
 Personal uniqueness is important to applications such as universal basic income, voting, rating systems, referrals, and giveaways.  We're building a social platform to support these.
 
