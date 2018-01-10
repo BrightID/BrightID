@@ -19,7 +19,7 @@ Examples of third-party apps that benefit from connecting to BrightID are:
 * Universal Basic Income
 * Online Voting
 * Rating Systems
-* Gift Economies and Bartering
+* Gift Economies
 * Online Communities
 * Referral Systems
 * Giveaways
