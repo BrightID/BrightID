@@ -4,10 +4,10 @@
 Our mission is to provide everyone with an ID that can be used to verify their individuality without central authorities.
 
 The ID will have the following characteristics:
-* Verification comes from a trusted group of close personal contacts plus a [decentralized social graph that's owned by no one](#decentralized-graph).
-* Uniqueness and data are kept separate.  A person can show they're unique without sharing any data.
+* Verified by a trusted group of close personal contacts plus a [decentralized social graph owned by no one](#decentralized-graph).
+* Individuality and data are kept separate.  A person can show they're unique without sharing any data.
 * A lost or compromised ID can be replaced by reconnecting with a few close personal contacts.
-* Uniqueness can be shared with third-party apps that extend capabilities to the ID holder.
+* Individuality can be shared with third-party apps that extend capabilities to the ID holder.
 
 ## Mobile App
 
