@@ -1,7 +1,7 @@
 # BrightID <img width="330px" src="images/logo.svg"/>
 <sup>[💬 Join our active community on decstack](https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh) channel: BrightID</sup>
 
-Our mission is to provide everyone with an ID that can be used to verify their individuality without central authorities.
+Our mission is to provide everyone with an ID that can be used to verify individuality without central authorities.
 
 The ID will have the following characteristics:
 * Verified by a trusted group of close personal contacts plus a [decentralized social graph owned by no one](#decentralized-graph).
