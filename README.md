@@ -25,7 +25,7 @@ Examples of apps that benefit from connecting to BrightID are:
 * Referral Systems
 * Giveaways
 
-[We offer an API to third-party apps](https://github.com/BrightID/BrightID-Service) to connect to the BrightID mobile app and validate a person's uniqueness.
+[We offer an API to third-party apps](https://github.com/BrightID/BrightID-Service) to connect to the BrightID mobile app and verify a person's uniqueness.
 
 ## Decentralized Graph 
 
