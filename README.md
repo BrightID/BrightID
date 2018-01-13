@@ -14,7 +14,7 @@ The ID will have the following characteristics:
 The ID, personal connections, and connections to third-party apps are managed though the [BrightID mobile app](https://github.com/BrightID/BrightID/wiki/BrightID-Mobile).
 
 ## Third-Party Applications
-There are several kinds of apps that work better when every user in the system is a unique person.  When you make a one-time connection to an app with BrightID, you're able to show it that you're unique.
+There are several kinds of apps that work better when every user in the system is a unique person.  When you make a one-time connection to an app with BrightID, it will be able to know that you're unique.
 
 Examples of apps that benefit from connecting to BrightID are:
 * Universal Basic Income
