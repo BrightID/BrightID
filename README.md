@@ -3,6 +3,8 @@
 
 Our mission is to provide everyone with an ID that can be used to verify individuality without central authorities.
 
+Unlike most IDs, which are used to prove who you are, BrightIDs are used to prove that you're a unique person and can be used anonymously.
+
 The ID will have the following characteristics:
 * Verified by a trusted group of close personal contacts plus a [decentralized social graph owned by no one](#decentralized-graph).
 * Individuality and data are kept separate.  A person can show they're unique without sharing any data.
