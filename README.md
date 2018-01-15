@@ -9,7 +9,7 @@ BrightIDs have the following characteristics:
 * Verified by a trusted group of close personal contacts plus a [decentralized social graph owned by no one](#decentralized-graph).
 * No data is stored with the ID.  A person can show they're unique without sharing any data.
 * A lost or compromised ID can be replaced by reconnecting with a few close personal contacts.
-* BrightID holders can authorize 3rd-party apps to check with the BrightID service to know they're unique.
+* BrightID holders can authorize third-party apps to check with the BrightID service to know they're unique.
 
 ## Mobile App
 
