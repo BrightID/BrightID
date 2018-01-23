@@ -35,7 +35,7 @@ Anyone can [run a node](https://github.com/BrightID/BrightID-Node).  Nodes host 
 
 ## Personal Data
 
-It's up to individual users to safeguard their own personal data by choosing carefully with whom to share it (contacts or apps) once they've shared their ID with them.
+It's up to individual users to safeguard their own personal data by choosing carefully with whom to share it (contacts or apps) once they've shared their BrightID with them.
 
 ## Contribute
 
