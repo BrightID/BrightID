@@ -15,7 +15,7 @@ BrightIDs have the following characteristics:
 
 The ID, personal connections, and connections to third-party apps are managed though the [BrightID mobile app](https://github.com/BrightID/BrightID/wiki/BrightID-Mobile).
 
-## Third-Party Applications
+## Why Use a BrightID?
 There are several kinds of apps that work better when everyone in the system is unique.  When you authorize an app with BrightID, you allow it to check your ID to see that you're unique.  No personal information needs to be shared.
 
 Examples of apps that benefit from connecting to BrightID are:
