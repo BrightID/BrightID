@@ -1,7 +1,7 @@
 # BrightID <img width="330px" src="images/logo.svg"/>
 <sup>[💬 Join our active community on decstack](https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh) channel: BrightID</sup>
 
-Our mission is to provide everyone with an ID that can be used to verify individuality without central authorities.
+Our mission is to provide everyone with an ID that can be used to show they're a unique person without requiring or sharing personal data.
 
 Unlike most IDs--which are used to prove who you are--BrightIDs are used to prove that you're a unique person and can be used anonymously.
 
