@@ -13,7 +13,7 @@ BrightIDs have the following characteristics:
 ## Where Can a BrightID be Used?
 Businesses that care about limiting fake and duplicate accounts while preserving user privacy accept BrightIDs.
 
-There are several kinds of apps that work better when everyone in the system is unique.  You can authorize these apps to use BrightID to verify that you're unique without sharing any personal information.  In many cases, a BrightID can be used to register instead of a name, email address, phone number, or other identifying information.  You're verified as unique while preserving your privacy.
+There are several kinds of apps that work better when everyone in the system is unique.  You can authorize these apps to use BrightID to verify that you're unique without sharing any personal information.  In many cases, a BrightID can be used to register instead of a name, email address, phone number, or other identifying information.
 
 Examples of apps that benefit from verifying their users as unique using BrightID:
 * Social networks like Facebook
