@@ -44,7 +44,7 @@ ID creation and connectons to people, sites and apps are managed though the [Bri
 
 ## API for Businesses
 
-[We offer an API to third-party apps](https://github.com/BrightID/BrightID-Service) to connect to the BrightID mobile app and verify users as unique.
+[We offer an API to third-parties](https://github.com/BrightID/BrightID-Service) to connect to the BrightID mobile app and verify users as unique.
 
 ## Contribute
 
