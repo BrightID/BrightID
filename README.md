@@ -32,7 +32,7 @@ Global initiatives such as Universal Basic Income or a World-Wide vote can use B
 
 ## Decentralized and Owner-Free
 
-There's no organization controlling BrightID. The network consists of volunteers [running nodes](https://github.com/BrightID/BrightID-Node).  Nodes host the social graph used for verification, but they don't hold any personal information.
+There's no organization controlling BrightID. The network consists of volunteers [running nodes](https://github.com/BrightID/BrightID-Node).  Nodes host the social graph used for verification, but there's no personal information stored there.
 
 ## Personal Data
 
