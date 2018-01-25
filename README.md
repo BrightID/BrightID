@@ -28,7 +28,7 @@ A BrightID is a proof of world citizenship.
 
 Boundary-preserving IDs like state-issued IDs require central agencies and intrusive checks; BrightIDs don't.
 
-Global initiatives such as Universal Basic Income or a worldwide vote can use BrightIDs to include everyone while keeping out fakes and duplicates.
+Global initiatives such as Universal Basic Income or worldwide votes can use BrightIDs to include everyone while keeping out fakes and duplicates.
 
 ## Decentralized and Owner-Free
 
