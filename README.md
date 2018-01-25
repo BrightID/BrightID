@@ -6,7 +6,7 @@ Our mission is to provide everyone with an ID that shows they're a unique person
 Unlike most IDs--which are used to prove who you are--BrightIDs are used to prove that you're a unique person and can be used anonymously.
 
 BrightIDs have the following characteristics:
-* Verified by a trusted group of close personal contacts plus a [decentralized social graph owned by no one](#decentralized-graph).
+* Verified by a trusted group of close personal contacts plus a [decentralized social graph owned by no one](#decentralized-and-owner-free).
 * No data is stored with the ID.  A person can show they're unique without sharing any data.
 * A lost or compromised ID can be replaced by reconnecting with a few close personal contacts.
 
@@ -30,21 +30,21 @@ Boundary-preserving IDs like state-issued IDs require central agencies and intru
 
 Global initiatives such as Universal Basic Income or a World-Wide vote can use BrightIDs to include everyone while keeping out fakes and duplicates.
 
-## API for Businesses
+## Decentralized and Owner-Free
 
-[We offer an API to third-party apps](https://github.com/BrightID/BrightID-Service) to connect to the BrightID mobile app and verify users as unique.
-
-## Mobile App
-
-ID creation and connectons to people, sites and apps are managed though the [BrightID mobile app](https://github.com/BrightID/BrightID/wiki/BrightID-Mobile).
+There's no organization controlling BrightID. The network consists of volunteers [running nodes](https://github.com/BrightID/BrightID-Node).  Nodes host the social graph used for verification, but they don't hold any personal information.
 
 ## Personal Data
 
 It's up to you to safeguard your own personal data by choosing carefully what to share once you've connected with a person or app on BrightID.  BrightID lets you share your name and picture with contacts for identification purposes, but it doesn't ask you to share these with businesses or apps.
 
-## Decentralized and Owner-Free
+## Mobile App
 
-There's no organization controlling BrightID. The network consists of volunteers [running nodes](https://github.com/BrightID/BrightID-Node).  Nodes host the social graph used for verification, but they don't hold any personal information.
+ID creation and connectons to people, sites and apps are managed though the [BrightID mobile app](https://github.com/BrightID/BrightID/wiki/BrightID-Mobile).
+
+## API for Businesses
+
+[We offer an API to third-party apps](https://github.com/BrightID/BrightID-Service) to connect to the BrightID mobile app and verify users as unique.
 
 ## Contribute
 
