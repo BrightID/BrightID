@@ -36,7 +36,7 @@ There's no organization controlling BrightID. The network consists of volunteers
 
 ## Personal Data
 
-It's up to you to safeguard your own personal data by choosing carefully with whom to share once you've connected with a person or app on BrightID.  BrightID lets you share your name and picture with contacts for identification purposes, but it doesn't ask you to share these with businesses or apps.
+It's up to you to safeguard your own personal data by choosing carefully with whom to share once you've connected with a person or app on BrightID.  BrightID lets you share your name and picture with contacts for identification purposes, but it doesn't ask you to share them with businesses or apps.
 
 ## Mobile App
 
