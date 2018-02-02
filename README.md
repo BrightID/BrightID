@@ -34,10 +34,6 @@ Global initiatives such as Universal Basic Income or a worldwide vote can use Br
 
 There's no organization controlling BrightID. The network consists of volunteers [running nodes](https://github.com/BrightID/BrightID-Node).  Nodes host the social graph used for verification, but there's no personal information stored there.
 
-## Personal Data
-
-It's up to you to safeguard your own personal data by choosing carefully with whom to share once you've connected with a person or app on BrightID.  BrightID lets you share your name and picture with contacts for identification purposes, but it doesn't ask you to share them with businesses or apps.
-
 ## Mobile App
 
 ID creation and connectons to people, sites and apps are managed though the [BrightID mobile app](https://github.com/BrightID/BrightID/wiki/BrightID-Mobile).
