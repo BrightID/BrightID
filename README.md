@@ -36,11 +36,11 @@ There's no organization controlling BrightID. The network consists of volunteers
 
 ## Mobile App
 
-ID creation and connectons to people, sites and apps are managed though the [BrightID mobile app](https://github.com/BrightID/BrightID/wiki/BrightID-Mobile).
+ID creation and connectons to people and apps are managed though the [BrightID mobile app](https://github.com/BrightID/BrightID/wiki/BrightID-Mobile).
 
 ## API for Businesses
 
-[We offer an API to third-parties](https://github.com/BrightID/BrightID-Service) to connect to the BrightID mobile app and verify users as unique.
+[We offer an API to third-parties](https://github.com/BrightID/BrightID-API) to connect to the BrightID mobile app and BrightID nodes to verify users as unique.
 
 ## Contribute
 
