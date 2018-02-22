@@ -56,7 +56,6 @@ See our [dev setup](https://github.com/BrightID/BrightID/wiki/Development-Guide)
 Other repos
 * [BrightID Node](https://github.com/BrightID/BrightID-Node): A node hosting the BrightID social graph
 * [BrightID API](https://github.com/BrightID/BrightID-API): APIs allowing third-party apps to verify users
-* [Github Pages repo for our site](https://github.com/BrightID/BrightID.github.io)
 
 ## Discuss
 
