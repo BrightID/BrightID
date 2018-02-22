@@ -1,8 +1,10 @@
 <img height="220px" src="images/logo-31.jpg"/>
 
+<img height="400px" align="right" src="images/Onboarding%20Flow.png" />
+
 [💬 Join our active community on decstack](https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh) channel: BrightID
 
-[www.brightid.org](http://www.brightid.org)
+🌐 [www.brightid.org](http://www.brightid.org)
 
 Our mission is to provide everyone with an ID that shows they're a unique person without requiring personal data.
 
