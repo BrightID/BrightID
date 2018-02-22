@@ -49,7 +49,7 @@ ID creation and connectons to people and apps are managed though the [BrightID m
 
 Check out our [open projects](https://github.com/orgs/BrightID/projects).  Or [start a new Issue](https://github.com/BrightID/BrightID/issues) and we'll add you to the conversation.
 
-This repo is for the [BrightID mobile app](https://github.com/BrightID/BrightID/wiki/BrightID-Mobile).
+This repo is for the [BrightID mobile app](https://github.com/BrightID/BrightID/wiki/BrightID---Full-Mobile-Spec).
 
 See our [dev setup](https://github.com/BrightID/BrightID/wiki/Development-Guide) for instructions on how to run the application.
 
