@@ -10,7 +10,7 @@ BrightIDs have the following characteristics:
 * No data is stored with the ID.  A person can show they're unique without sharing any data.
 * A lost or compromised ID can be replaced by reconnecting with a few close personal contacts.
 
-## Where Can a BrightID be Used?
+## Where Can BrightID be Used?
 Businesses that care about limiting fake and duplicate accounts while preserving user privacy accept BrightIDs.
 
 There are several kinds of apps that work better when everyone in the system is unique.  You can authorize these apps to use BrightID to verify that you're unique without sharing any personal information.  In some cases, a BrightID can be used to register instead of a name, email address, phone number, or other identifying information.
