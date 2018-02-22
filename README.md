@@ -1,4 +1,4 @@
-<img width="450px" src="images/logo-31.jpg" style="float:left"/> [www.brightid.org](http://www.brightid.org)
+<img height="220px" src="images/logo-31.jpg"/>[www.brightid.org](http://www.brightid.org)
 
 <sup>[💬 Join our active community on decstack](https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh) channel: BrightID</sup>
 
