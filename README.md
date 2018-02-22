@@ -1,4 +1,5 @@
-# BrightID <img width="330px" src="images/logo.svg"/>
+<img width="450px" src="images/logo-31.jpg" style="float:left"/> [www.brightid.org](http://www.brightid.org)
+
 <sup>[💬 Join our active community on decstack](https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh) channel: BrightID</sup>
 
 Our mission is to provide everyone with an ID that shows they're a unique person without requiring personal data.
