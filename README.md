@@ -4,6 +4,8 @@
 
 [www.brightid.org](http://www.brightid.org)
 
+<img height="500px" style="float: left;" src="images/Onboarding%20Flow.png" />
+
 Our mission is to provide everyone with an ID that shows they're a unique person without requiring personal data.
 
 Unlike most IDs--which are used to prove who you are--BrightIDs are used to prove that you're a unique person while preserving your privacy.
