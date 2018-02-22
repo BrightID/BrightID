@@ -39,7 +39,7 @@ There's no organization controlling BrightID. The network consists of volunteers
 
 ## Mobile App
 
-ID creation and connectons to people and apps are managed though the [BrightID mobile app](https://github.com/BrightID/BrightID/wiki/BrightID-Mobile).
+ID creation and connectons to people and apps are managed though the [BrightID mobile app](https://github.com/BrightID/BrightID/wiki/BrightID---Full-Mobile-Spec).
 
 ## API for Businesses
 
@@ -55,7 +55,7 @@ See our [dev setup](https://github.com/BrightID/BrightID/wiki/Development-Guide)
 
 Other repos
 * [BrightID Node](https://github.com/BrightID/BrightID-Node): A node hosting the BrightID social graph
-* [BrightID Service](https://github.com/BrightID/BrightID-Service): Service allowing third-party apps to verify users
+* [BrightID API](https://github.com/BrightID/BrightID-API): APIs allowing third-party apps to verify users
 * [Github Pages repo for our site](https://github.com/BrightID/BrightID.github.io)
 
 ## Discuss
