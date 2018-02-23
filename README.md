@@ -1,3 +1,5 @@
+<img height="200px" src="images/logo-31.jpg"/>
+
 [💬 Join our active community on decstack](https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh) channel: BrightID
 
 [🌐 www.brightid.org](http://www.brightid.org)
