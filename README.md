@@ -47,10 +47,15 @@ ID creation and connectons to people and apps are managed though the [BrightID m
 
 ## Contribute
 
-Check out our [open projects](https://github.com/orgs/BrightID/projects).  Or [start a new Issue](https://github.com/BrightID/BrightID/issues) and we'll add you to the conversation.
+### KanBans
+[Mobile project](https://github.com/BrightID/BrightID/projects/2 )
 
+[Node project](https://github.com/BrightID/BrightID-Node/projects/1)
+
+[Documentation project](https://github.com/orgs/BrightID/projects/2)
+
+### Repos
 This repo is for the [BrightID mobile app](https://github.com/BrightID/BrightID/wiki/BrightID---Full-Mobile-Spec).
-
 See our [dev setup](https://github.com/BrightID/BrightID/wiki/Development-Guide) for instructions on how to run the application.
 
 Other repos
