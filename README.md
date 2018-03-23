@@ -4,14 +4,16 @@
 
 [🌐 www.brightid.org](http://www.brightid.org)
 
-Our mission is to provide everyone with an ID that shows they're a unique person without requiring personal data.
+Our mission is to provide everyone with an ID that shows they're a unique person without requiring any personal data.
 
 Unlike most IDs--which are used to prove who you are--BrightIDs are used to prove that you're a unique person while preserving your privacy.
 
 BrightIDs have the following characteristics:
-* Verified by a trusted group of close personal contacts plus a [decentralized social graph owned by no one](#decentralized-and-owner-free).
+* Can be used anonymously.
 * No data is stored with the ID; personal data or biometrics aren't used for verification.
+* Verified by a trusted group of close personal contacts plus a [decentralized social graph owned by no one](#decentralized-and-owner-free).
 * A lost or compromised ID can be replaced by reconnecting with a few close personal contacts.
+* [Proof of world-citizenship.](#a-world-without-boundaries)
 
 ## Where Can BrightID be Used?
 Businesses that care about limiting fake and duplicate accounts while preserving user privacy accept BrightIDs.
