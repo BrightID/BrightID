@@ -30,8 +30,6 @@ Examples of apps that benefit from verifying their users as unique using BrightI
 
 A BrightID is a proof of world citizenship.  
 
-Boundary-preserving IDs like state-issued IDs require central agencies to conduct checks; BrightIDs don't.
-
 Global initiatives such as Universal Basic Income or a worldwide vote can use BrightIDs to include everyone while keeping out fakes and duplicates and preserving privacy.
 
 ## Decentralized and Owner-Free
