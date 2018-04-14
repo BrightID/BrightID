@@ -6,7 +6,7 @@
 
 Our mission is to provide everyone with an ID that shows they're a unique person without requiring any personal data.
 
-Unlike most IDs--which are used to prove who you are--BrightIDs are used to prove that you're a unique person while preserving your privacy.
+Unlike most IDs--which prove who you are--BrightIDs prove that you're a unique person.
 
 BrightIDs have the following characteristics:
 * Can be used anonymously. No data is stored. Personal data or biometrics aren't used for verification.
