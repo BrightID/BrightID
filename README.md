@@ -4,9 +4,9 @@
 
 [🌐 www.brightid.org](http://www.brightid.org)
 
-Our mission is to provide everyone with an ID that shows they're a unique person without requiring any personal data.
+BrightID uses the people you know (a social graph) to keep out duplicates and enforce one-user-per-person for important cases like voting and universal basic income.
 
-Unlike most IDs--which prove who you are--BrightIDs prove that you're a unique person.
+Unlike most IDs--which prove who you are--a BrightID proves that you're a unique person.
 
 BrightIDs have the following characteristics:
 * Can be used anonymously. No data is stored. Personal data or biometrics aren't used for verification.
