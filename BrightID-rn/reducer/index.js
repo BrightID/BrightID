@@ -6,7 +6,7 @@ import {
 	TRUST_SCORE,
 	CONNECTIONS_COUNT,
 	GROUPS_COUNT,
-	AVATAR,
+	USER_AVATAR,
 	NAME,
 	SEARCH_PARAM
 } from "../actions";
@@ -21,7 +21,7 @@ import { fromJS } from "immutable";
  *
  * @param trustScore String
  * @param	name String
- * @param avatar Image
+ * @param userAvatar Image
  * @param connectionsCount Number
  * @param groupsCount Number
  * @param searchParam String
@@ -43,8 +43,8 @@ const mainReducer = (state = initialState, action) => {
 			return state.set("trustScore", action.payload);
 		case NAME:
 			return state.set("name", action.payload);
-		case AVATAR:
-			return state.set("avatar", action.payload);
+		case USER_AVATAR:
+			return state.set("userAvatar", action.payload);
 		case CONNECTIONS_COUNT:
 			return state.set("connectionsCount", action.payload);
 		case GROUPS_COUNT:

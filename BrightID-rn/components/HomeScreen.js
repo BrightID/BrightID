@@ -1,15 +1,23 @@
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
+import PropTypes from "prop-types";
 import HeaderButtons from "react-navigation-header-buttons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import BottomNav from "./BottomNav";
-import Avatar from "../containers/Avatar";
+import UserAvatar from "../containers/UserAvatar";
 
 /**
  * Home screen of BrightID
  */
 
 export default class HomeScreen extends React.Component {
+	static propTypes = {
+		trustScore: PropTypes.string,
+		connectionsCount: PropTypes.number,
+		groupsCount: PropTypes.number,
+		name: PropTypes.string
+	};
+
 	static navigationOptions = {
 		title: "BrightID",
 		headerBackTitle: "Home",
@@ -42,7 +50,7 @@ export default class HomeScreen extends React.Component {
 		return (
 			<View style={styles.container}>
 				<View style={styles.user}>
-					<Avatar />
+					<UserAvatar />
 					<Text style={styles.name}>{this.props.name}</Text>
 				</View>
 				<View style={styles.trustScoreContainer}>

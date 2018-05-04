@@ -1,11 +1,22 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import PropTypes from "prop-types";
+/**
+ * Avatar Picture displayed on the HomeScreen
+ * The Image is sourced from the main reducer as userAvatar
+ * @prop userAvatar a raw image string
+ * TODO store the image locally using asyncStorage
+ * or any local db easy to use with React-native
+ */
 
-export default class Avatar extends React.Component {
+export default class UserAvatar extends React.Component {
+	static propTypes = {
+		userAvatar: PropTypes.number
+	};
 	render() {
 		return (
 			<View style={styles.container}>
-				<Image source={this.props.avatar} style={styles.avatar} />
+				<Image source={this.props.userAvatar} style={styles.avatar} />
 			</View>
 		);
 	}

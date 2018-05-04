@@ -1,7 +1,15 @@
 import React from "react";
 import { TextInput, StyleSheet, Text, View } from "react-native";
+import PropTypes from "prop-types";
+
+/**
+ * Search Bar in the Connections Screen
+ */
 
 export default class SearchConnections extends React.Component {
+	static propTypes = {
+		searchParam: PropTypes.string
+	};
 	render() {
 		return (
 			<View style={styles.container}>

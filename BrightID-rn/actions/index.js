@@ -4,7 +4,7 @@ export const TRUST_SCORE = "TRUST_SCORE";
 export const CONNECTIONS_COUNT = "CONNECTIONS_COUNT";
 export const GROUPS_COUNT = "GROUPS_COUNT";
 export const NAME = "NAME";
-export const AVATAR = "AVATAR";
+export const USER_AVATAR = "USER_AVATAR";
 export const SEARCH_PARAM = "SEARCH_PARAM";
 
 /**
@@ -36,8 +36,8 @@ export const name = payload => ({
 	payload
 });
 
-export const avatar = payload => ({
-	type: AVATAR,
+export const mainAvatar = payload => ({
+	type: USER_AVATAR,
 	payload
 });
 
