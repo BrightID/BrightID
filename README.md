@@ -22,7 +22,7 @@ There's no organization controlling BrightID. The network consists of volunteers
 
 ID creation and connectons to people and apps are managed though the [BrightID mobile app](https://github.com/BrightID/BrightID/wiki/BrightID---Full-Mobile-Spec).
 
-## API for Applications
+## API
 
 [We offer an API to third-parties](https://github.com/BrightID/BrightID-API) to connect to the BrightID mobile app and BrightID nodes to verify users as unique.
 
