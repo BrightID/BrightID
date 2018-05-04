@@ -1,10 +1,33 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import TopNavBar from "../containers/TopNavBar";
+import { Button, StyleSheet, Text, View } from "react-native";
 import BottomNav from "../containers/BottomNav";
 import Avatar from "../containers/Avatar";
+import HeaderButtons from "react-navigation-header-buttons";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
-export default class App extends React.Component {
+export default class HomeScreen extends React.Component {
+	static navigationOptions = {
+		title: "BrightID",
+		headerRight: (
+			<HeaderButtons IconComponent={Ionicons} iconSize={32} color='#fff'>
+				<HeaderButtons.Item
+					title="more"
+					iconName="ios-more-outline"
+					onPress={() => console.warn("more")}
+				/>
+			</HeaderButtons>
+		),
+		headerLeft: (
+			<HeaderButtons IconComponent={Ionicons} iconSize={32} color='#fff' left={true}>
+				<HeaderButtons.Item
+					title="help"
+					iconName="ios-help-circle-outline"
+					onPress={() => console.warn("help")}
+				/>
+			</HeaderButtons>
+		),
+	};
+
 	componentWillMount() {
 		// initializes the state of the application
 		// TODO  move this up into the app or a higher component
@@ -14,7 +37,6 @@ export default class App extends React.Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<TopNavBar />
 				<View style={styles.user}>
 					<Avatar />
 					<Text style={styles.name}>{this.props.name}</Text>
@@ -47,8 +69,9 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: "#fff",
-		alignItems: "center"
-		// justifyContent: "center"
+		alignItems: "center",
+		flexDirection: "column",
+		justifyContent: "space-between"
 	},
 	name: {
 		fontSize: 33,

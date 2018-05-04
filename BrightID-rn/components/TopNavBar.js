@@ -1,5 +1,7 @@
 import React from "react";
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-navigation';
 
 export default class TopNavBar extends React.Component {
 	_onPressButton() {
@@ -7,7 +9,7 @@ export default class TopNavBar extends React.Component {
 	}
 	render() {
 		return (
-			<View style={styles.container}>
+			<SafeAreaView style={styles.container}>
 				<View style={styles.info}>
 					<TouchableOpacity onPress={this._onPressButton}>
 						<View style={styles.info}>
@@ -25,7 +27,7 @@ export default class TopNavBar extends React.Component {
 						</View>
 					</TouchableOpacity>
 				</View>
-			</View>
+			</SafeAreaView>
 		);
 	}
 }
@@ -35,31 +37,36 @@ const styles = StyleSheet.create({
 		// flex: 0.2,
 		flexDirection: "row",
 		backgroundColor: "#d98200",
-		alignItems: "center",
-		justifyContent: "center",
-		height: 64
+		alignItems: "flex-end",
+		flexDirection: 'row',
+		justifyContent: "flex-start",
+		height: 64,
+		top: 0,
 	},
 	title: {
 		flex: 1,
 		marginLeft: "auto",
-		marginRight: "auto"
+		marginRight: "auto",
+		paddingBottom: 7
 	},
 	titleText: {
 		color: "white",
 		textAlign: "center"
 	},
 	info: {
-		flex: 1,
 		alignItems: "center",
-		justifyContent: "center"
+		justifyContent: "center",
+		paddingBottom: 4,
+		marginLeft: 12
 	},
 	infoIcon: {
 		color: "white"
 	},
 	expand: {
-		flex: 1,
 		alignItems: "center",
-		justifyContent: "center"
+		justifyContent: "center",
+		paddingBottom: 4,
+		marginRight: 12
 	},
 	expandIcon: {
 		color: "white"

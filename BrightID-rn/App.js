@@ -2,6 +2,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import { StyleSheet, Text, View } from "react-native";
 import Home from "./containers/Home";
+import RootStack from './RootStack';
 import store from "./store";
 
 export default class App extends React.Component {
@@ -9,7 +10,7 @@ export default class App extends React.Component {
 		return (
 			<Provider store={store}>
 				<View style={styles.container}>
-					<Home />
+					<RootStack />
 				</View>
 			</Provider>
 		);
