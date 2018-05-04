@@ -1,15 +1,18 @@
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
+import PropTypes from "prop-types";
 
 import SearchConnections from "../containers/SearchConnections";
-import HeaderButtons from "react-navigation-header-buttons";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import ConnectionCard from "../containers/ConnectionCard";
 
 /**
  * Connection screen of BrightID
  */
 
 export default class ConnectionsScreen extends React.Component {
+	static propTypes = {
+		connections: PropTypes.array
+	};
 	static navigationOptions = {
 		title: "Connections"
 	};
@@ -18,18 +21,9 @@ export default class ConnectionsScreen extends React.Component {
 		return (
 			<View style={styles.container}>
 				<SearchConnections />
-				<View style={styles.friend}>
-					<Text>Friend1</Text>
-				</View>
-				<View style={styles.friend}>
-					<Text>Friend2</Text>
-				</View>
-				<View style={styles.friend}>
-					<Text>Friend3</Text>
-				</View>
-				<View style={styles.friend}>
-					<Text>Friend4</Text>
-				</View>
+				{this.props.connections.map((props, index) => (
+					<ConnectionCard key={index} {...props} />
+				))}
 			</View>
 		);
 	}
@@ -42,18 +36,5 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		flexDirection: "column",
 		justifyContent: "flex-start"
-	},
-	friend: {
-		width: "100%",
-		alignItems: "center",
-		flexDirection: "row",
-		justifyContent: "space-evenly",
-		backgroundColor: "#fff",
-		height: 110,
-		marginTop: 22,
-		shadowColor: "#ccc",
-		shadowOffset: { width: 0, height: 7 },
-		shadowOpacity: 0.3,
-		shadowRadius: 4
 	}
 });
