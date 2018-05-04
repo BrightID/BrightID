@@ -1,4 +1,3 @@
-// containers/WalletView.js
 import { connect } from "react-redux";
 import Avatar from "../components/Avatar";
 

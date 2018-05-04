@@ -1,15 +1,20 @@
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
-import BottomNav from "../containers/BottomNav";
-import Avatar from "../containers/Avatar";
 import HeaderButtons from "react-navigation-header-buttons";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import BottomNav from "./BottomNav";
+import Avatar from "../containers/Avatar";
+
+/**
+ * Home screen of BrightID
+ */
 
 export default class HomeScreen extends React.Component {
 	static navigationOptions = {
 		title: "BrightID",
+		headerBackTitle: "Home",
 		headerRight: (
-			<HeaderButtons IconComponent={Ionicons} iconSize={32} color='#fff'>
+			<HeaderButtons IconComponent={Ionicons} iconSize={32} color="#fff">
 				<HeaderButtons.Item
 					title="more"
 					iconName="ios-more-outline"
@@ -18,22 +23,21 @@ export default class HomeScreen extends React.Component {
 			</HeaderButtons>
 		),
 		headerLeft: (
-			<HeaderButtons IconComponent={Ionicons} iconSize={32} color='#fff' left={true}>
+			<HeaderButtons
+				IconComponent={Ionicons}
+				iconSize={32}
+				color="#fff"
+				left={true}
+			>
 				<HeaderButtons.Item
 					title="help"
 					iconName="ios-help-circle-outline"
 					onPress={() => console.warn("help")}
 				/>
 			</HeaderButtons>
-		),
+		)
 	};
 
-	componentWillMount() {
-		// initializes the state of the application
-		// TODO  move this up into the app or a higher component
-		// initialize the state of the application with dummy data
-		this.props.setUpDefault();
-	}
 	render() {
 		return (
 			<View style={styles.container}>
@@ -48,18 +52,18 @@ export default class HomeScreen extends React.Component {
 				</View>
 				<View style={styles.counts}>
 					<View style={styles.countsGroup}>
-						<Text style={styles.countsText}>{this.props.connections}</Text>
+						<Text style={styles.countsText}>{this.props.connectionsCount}</Text>
 						<Text style={styles.countsText}>Connections</Text>
 					</View>
 					<View style={styles.countsGroup}>
-						<Text style={styles.countsText}>{this.props.groups}</Text>
+						<Text style={styles.countsText}>{this.props.groupsCount}</Text>
 						<Text style={styles.countsText}>Groups</Text>
 					</View>
 				</View>
 				<View style={styles.connectContainer}>
 					<Text style={styles.connectText}>CONNECT</Text>
 				</View>
-				<BottomNav />
+				<BottomNav {...this.props} />
 			</View>
 		);
 	}
@@ -109,7 +113,7 @@ const styles = StyleSheet.create({
 		fontSize: 18
 	},
 	connectContainer: {
-		width: "90%",
+		width: "100%",
 		alignItems: "center",
 		justifyContent: "center",
 		backgroundColor: "#ccc",

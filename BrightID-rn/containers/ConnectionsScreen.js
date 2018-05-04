@@ -1,14 +1,13 @@
-// containers/WalletView.js
 import { connect } from "react-redux";
-import Home from "../components/Home";
+import ConnectionsScreen from "../components/ConnectionsScreen";
 import { setUpDefault } from "../actions/setUpDefault";
 
 const mapStateToProps = state => {
 	return {
 		trustScore: state.main.get("trustScore"),
 		name: state.main.get("name"),
-		connections: state.main.get("connections"),
-		groups: state.main.get("groups")
+		connectionsCount: state.main.get("connectionsCount"),
+		groupsCount: state.main.get("groupsCount")
 	};
 };
 
@@ -20,4 +19,4 @@ const mapDispatchToProps = dispatch => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(ConnectionsScreen);
