@@ -4,9 +4,9 @@
 
 [🌐 www.brightid.org](http://www.brightid.org)
 
-BrightID uses the people you know (a social graph) to keep out duplicates and enforce one-user-per-person for important applications like voting and universal basic income.
+BrightID uses the people you know (a social graph) to enforce one-account-per-person for important applications like voting and universal basic income.
 
-Unlike most IDs--which prove who you are--a BrightID proves that you're a unique person.
+A BrightID proves that you're a unique person.
 
 BrightIDs have the following characteristics:
 * Can be used anonymously. No data is stored. Personal data or biometrics aren't used for verification.
