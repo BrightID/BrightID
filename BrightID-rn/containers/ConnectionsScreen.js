@@ -4,10 +4,12 @@ import { setUpDefault } from "../actions/setUpDefault";
 
 const mapStateToProps = state => {
 	return {
-		trustScore: state.main.get("trustScore"),
-		name: state.main.get("name"),
-		connectionsCount: state.main.get("connectionsCount"),
-		groupsCount: state.main.get("groupsCount")
+		connections: [
+			{ name: "friend1" },
+			{ name: "friend3" },
+			{ name: "friend2" },
+			{ name: "friend4" }
+		]
 	};
 };
 
