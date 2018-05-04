@@ -5,6 +5,10 @@ import SearchConnections from "../containers/SearchConnections";
 import HeaderButtons from "react-navigation-header-buttons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
+/**
+ * Connection screen of BrightID
+ */
+
 export default class ConnectionsScreen extends React.Component {
 	static navigationOptions = {
 		title: "Connections"
