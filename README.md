@@ -4,7 +4,7 @@
 
 [🌐 www.brightid.org](http://www.brightid.org)
 
-BrightID uses the people you know (a social graph) to keep out duplicates and enforce one-accounts-per-person for important applications like voting and universal basic income.
+BrightID uses the people you know (a social graph) to keep out duplicates and enforce one-account-per-person for important applications like voting and universal basic income.
 
 Unlike most IDs--which prove who you are--a BrightID proves that you're a unique person.
 
