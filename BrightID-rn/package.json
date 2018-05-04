@@ -1,0 +1,35 @@
+{
+  "name": "BrightID-rn",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "jest-expo": "~27.0.0",
+    "react-native-scripts": "1.14.0",
+    "react-test-renderer": "16.3.1"
+  },
+  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
+  "scripts": {
+    "start": "react-native-scripts start",
+    "eject": "react-native-scripts eject",
+    "android": "react-native-scripts android",
+    "ios": "react-native-scripts ios",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "jest-expo"
+  },
+  "dependencies": {
+    "expo": "^27.0.1",
+    "immutable": "^3.8.2",
+    "react": "16.3.1",
+    "react-native": "~0.55.2",
+    "react-native-platform-touchable": "^1.1.1",
+    "react-native-vector-icons": "^4.6.0",
+    "react-navigation": "^1.5.12",
+    "react-navigation-header-buttons": "^0.0.7",
+    "react-redux": "^5.0.7",
+    "react-router-native": "^4.2.0",
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.2.0"
+  }
+}
