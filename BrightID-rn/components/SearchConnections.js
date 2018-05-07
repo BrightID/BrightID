@@ -24,6 +24,7 @@ export default class SearchConnections extends React.Component {
 					value={this.props.searchParam}
 					onChangeText={value => this.props.updateParam(value)}
 					style={styles.searchField}
+					placeholder="Search Connections"
 				/>
 				<Touchable onPress={this.focus} style={styles.searchIcon}>
 					<Ionicon size={28} name="ios-options-outline" color="#000" />
@@ -42,7 +43,8 @@ const styles = StyleSheet.create({
 		borderColor: "#ccc",
 		borderWidth: 1,
 		justifyContent: "space-between",
-		alignItems: "center"
+		alignItems: "center",
+		backgroundColor: "#fff"
 	},
 	searchIcon: {
 		marginLeft: 5,
@@ -55,6 +57,7 @@ const styles = StyleSheet.create({
 	searchField: {
 		height: 34,
 		flex: 1
+
 		// width: "80%"
 	}
 });

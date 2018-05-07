@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
 	trustScoreContainer: {
 		borderBottomColor: "#333",
 		borderTopColor: "#333",
-		borderTopWidth: 1,
-		borderBottomWidth: 1,
+		borderTopWidth: StyleSheet.hairlineWidth,
+		borderBottomWidth: StyleSheet.hairlineWidth,
 		width: "80%",
 		paddingTop: 7,
 		paddingBottom: 7

@@ -32,19 +32,19 @@ export default class BottomNav extends React.Component {
 						<Text>Connections</Text>
 					</View>
 				</Touchable>
-				<Touchable onPress={() => console.warn("Groups")}>
+				<Touchable onPress={() => console.log("Groups")}>
 					<View style={styles.navIconContainer}>
 						<Ionicon size={32} name="ios-contacts-outline" color="#000" />
 						<Text>Groups</Text>
 					</View>
 				</Touchable>
-				<Touchable onPress={() => console.warn("Notifications")}>
+				<Touchable onPress={() => console.log("Notifications")}>
 					<View style={styles.navIconContainer}>
 						<Ionicon size={32} name="ios-notifications-outline" color="#000" />
 						<Text>Notifications</Text>
 					</View>
 				</Touchable>
-				<Touchable onPress={() => console.warn("Apps")}>
+				<Touchable onPress={() => console.log("Apps")}>
 					<View style={styles.navIconContainer}>
 						<Ionicon size={32} name="ios-apps-outline" color="#000" />
 						<Text>Apps</Text>
