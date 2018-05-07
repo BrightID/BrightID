@@ -8,7 +8,8 @@ import {
 	GROUPS_COUNT,
 	USER_AVATAR,
 	NAME,
-	SEARCH_PARAM
+	SEARCH_PARAM,
+	ALL_CONNECTIONS
 } from "../actions";
 
 // immutable js optional, but works really well with redux
@@ -25,7 +26,7 @@ import { fromJS } from "immutable";
  * @param connectionsCount Number
  * @param groupsCount Number
  * @param searchParam String
- *
+ * @param allConnections List => Map
  */
 
 const initialState = fromJS({
@@ -34,7 +35,8 @@ const initialState = fromJS({
 	avatar: "",
 	connectionsCount: 0,
 	groupsCount: 0,
-	searchParam: ""
+	searchParam: "",
+	allConnections: [{ name: "Rand Paul" }]
 });
 
 const mainReducer = (state = initialState, action) => {
@@ -51,6 +53,8 @@ const mainReducer = (state = initialState, action) => {
 			return state.set("groupsCount", action.payload);
 		case SEARCH_PARAM:
 			return state.set("searchParam", action.value);
+		case ALL_CONNECTIONS:
+			return state.set("allConnections", action.payload);
 		default:
 			return state;
 	}

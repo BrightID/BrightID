@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, FlatList, StyleSheet, Text, View } from "react-native";
 import PropTypes from "prop-types";
 
 import SearchConnections from "../containers/SearchConnections";
@@ -16,14 +16,16 @@ export default class ConnectionsScreen extends React.Component {
 	static navigationOptions = {
 		title: "Connections"
 	};
-
+	_keyExtractor = (item, index) => item.name;
 	render() {
 		return (
 			<View style={styles.container}>
 				<SearchConnections />
-				{this.props.connections.map((props, index) => (
-					<ConnectionCard key={index} {...props} />
-				))}
+				<FlatList
+					data={this.props.connections}
+					keyExtractor={this._keyExtractor}
+					renderItem={({ item }) => <ConnectionCard {...item} />}
+				/>
 			</View>
 		);
 	}

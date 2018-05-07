@@ -2,14 +2,24 @@ import { connect } from "react-redux";
 import ConnectionsScreen from "../components/ConnectionsScreen";
 import { setUpDefault } from "../actions/setUpDefault";
 
+// filter connections
+// currently comparing searchParam with item name in list
+// data is santitized into lower case, and white space is removed
+// prior to comparing the strings with the data array
+
 const mapStateToProps = state => {
+	const searchParam = state.main.get("searchParam");
 	return {
-		connections: [
-			{ name: "friend1" },
-			{ name: "friend3" },
-			{ name: "friend2" },
-			{ name: "friend4" }
-		]
+		connections: state.main
+			.get("allConnections")
+			.filter(item =>
+				item
+					.get("name")
+					.toLowerCase()
+					.replace(/\s/g, "")
+					.includes(searchParam.toLowerCase().replace(/\s/g, ""))
+			)
+			.toJS()
 	};
 };
 
