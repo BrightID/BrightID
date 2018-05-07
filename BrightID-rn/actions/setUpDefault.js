@@ -3,9 +3,11 @@ import {
 	connectionsCount,
 	groupsCount,
 	name,
-	mainAvatar
+	mainAvatar,
+	allConnections
 } from "./index";
 
+import { fromJS } from "immutable";
 /**
  * Sets the app up with dummy data
  * based on the project's spec found in the wiki
@@ -21,6 +23,21 @@ export const setUpDefault = () => async dispatch => {
 		dispatch(groupsCount(4));
 		dispatch(name("Ron Paul"));
 		dispatch(mainAvatar(require("../ron_paul_avatar.jpg")));
+		dispatch(
+			allConnections(
+				fromJS([
+					{ name: "friend1" },
+					{ name: "friend3" },
+					{ name: "friend2" },
+					{ name: "friend4" },
+					{ name: "friend5" },
+					{ name: "friend7" },
+					{ name: "friend6" },
+					{ name: "friend9" },
+					{ name: "friend8" }
+				])
+			)
+		);
 	} catch (err) {
 		console.log(err);
 	}

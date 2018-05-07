@@ -6,6 +6,7 @@ export const GROUPS_COUNT = "GROUPS_COUNT";
 export const NAME = "NAME";
 export const USER_AVATAR = "USER_AVATAR";
 export const SEARCH_PARAM = "SEARCH_PARAM";
+export const ALL_CONNECTIONS = "ALL_CONNECTIONS";
 
 /**
  * Redux boilerplate, pass data through the app
@@ -44,4 +45,9 @@ export const mainAvatar = payload => ({
 export const searchParam = value => ({
 	type: SEARCH_PARAM,
 	value
+});
+
+export const allConnections = payload => ({
+	type: ALL_CONNECTIONS,
+	payload
 });
