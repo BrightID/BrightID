@@ -12,12 +12,18 @@ const mapStateToProps = state => {
 	return {
 		connections: state.main
 			.get("allConnections")
-			.filter(item =>
-				item
-					.get("name")
-					.toLowerCase()
-					.replace(/\s/g, "")
-					.includes(searchParam.toLowerCase().replace(/\s/g, ""))
+			.filter(
+				item =>
+					item
+						.get("firstName")
+						.toLowerCase()
+						.replace(/\s/g, "")
+						.includes(searchParam.toLowerCase().replace(/\s/g, "")) ||
+					item
+						.get("lastName")
+						.toLowerCase()
+						.replace(/\s/g, "")
+						.includes(searchParam.toLowerCase().replace(/\s/g, ""))
 			)
 			.toJS()
 	};

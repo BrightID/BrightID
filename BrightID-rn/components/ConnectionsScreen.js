@@ -16,7 +16,7 @@ export default class ConnectionsScreen extends React.Component {
 	static navigationOptions = {
 		title: "Connections"
 	};
-	_keyExtractor = (item, index) => item.name;
+	_keyExtractor = (item, index) => item.firstName + item.lastName + item.id;
 	render() {
 		return (
 			<View style={styles.container}>
@@ -34,7 +34,7 @@ export default class ConnectionsScreen extends React.Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#fff",
+		backgroundColor: "#fcfcfc",
 		alignItems: "center",
 		flexDirection: "column",
 		justifyContent: "flex-start"
