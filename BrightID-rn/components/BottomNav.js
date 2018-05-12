@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "space-evenly",
 		width: "100%",
-		marginBottom: 3
+		paddingBottom: 16
 	},
 	navIconContainer: {
 		flexDirection: "column",

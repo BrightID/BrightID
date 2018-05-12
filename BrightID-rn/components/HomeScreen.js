@@ -26,7 +26,7 @@ export default class HomeScreen extends React.Component {
 				<HeaderButtons.Item
 					title="more"
 					iconName="ios-more-outline"
-					onPress={() => console.warn("more")}
+					onPress={() => console.log("more")}
 				/>
 			</HeaderButtons>
 		),
@@ -40,7 +40,7 @@ export default class HomeScreen extends React.Component {
 				<HeaderButtons.Item
 					title="help"
 					iconName="ios-help-circle-outline"
-					onPress={() => console.warn("help")}
+					onPress={() => console.log("help")}
 				/>
 			</HeaderButtons>
 		)
