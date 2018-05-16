@@ -57,13 +57,13 @@ export default class BottomNav extends React.Component {
 
 const styles = StyleSheet.create({
 	container: {
-		height: 84,
+		height: 71,
 		backgroundColor: "#fff",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "space-evenly",
-		width: "100%",
-		paddingBottom: 16
+		width: "100%"
+		// paddingBottom: 16
 	},
 	navIconContainer: {
 		flexDirection: "column",

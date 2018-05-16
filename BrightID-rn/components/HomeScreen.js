@@ -49,27 +49,31 @@ export default class HomeScreen extends React.Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<View style={styles.user}>
-					<UserAvatar />
-					<Text style={styles.name}>{this.props.name}</Text>
-				</View>
-				<View style={styles.trustScoreContainer}>
-					<Text style={styles.trustScore}>
-						{this.props.trustScore}% Trusted
-					</Text>
-				</View>
-				<View style={styles.counts}>
-					<View style={styles.countsGroup}>
-						<Text style={styles.countsText}>{this.props.connectionsCount}</Text>
-						<Text style={styles.countsText}>Connections</Text>
+				<View style={styles.main}>
+					<View style={styles.user}>
+						<UserAvatar />
+						<Text style={styles.name}>{this.props.name}</Text>
 					</View>
-					<View style={styles.countsGroup}>
-						<Text style={styles.countsText}>{this.props.groupsCount}</Text>
-						<Text style={styles.countsText}>Groups</Text>
+					<View style={styles.trustScoreContainer}>
+						<Text style={styles.trustScore}>
+							{this.props.trustScore}% Trusted
+						</Text>
 					</View>
-				</View>
-				<View style={styles.connectContainer}>
-					<Text style={styles.connectText}>CONNECT</Text>
+					<View style={styles.counts}>
+						<View style={styles.countsGroup}>
+							<Text style={styles.countsText}>
+								{this.props.connectionsCount}
+							</Text>
+							<Text style={styles.countsText}>Connections</Text>
+						</View>
+						<View style={styles.countsGroup}>
+							<Text style={styles.countsText}>{this.props.groupsCount}</Text>
+							<Text style={styles.countsText}>Groups</Text>
+						</View>
+					</View>
+					<View style={styles.connectContainer}>
+						<Text style={styles.connectText}>CONNECT</Text>
+					</View>
 				</View>
 				<BottomNav {...this.props} />
 			</View>
@@ -80,7 +84,14 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#fff",
+		backgroundColor: "#fff"
+		// alignItems: "center",
+		// flexDirection: "column",
+		// justifyContent: "space-between"
+	},
+	main: {
+		flex: 1,
+		width: "100%",
 		alignItems: "center",
 		flexDirection: "column",
 		justifyContent: "space-between"
