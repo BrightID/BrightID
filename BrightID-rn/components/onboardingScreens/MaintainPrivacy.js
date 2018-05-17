@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
 	guyFox: {
 		marginLeft: "auto",
 		marginRight: "auto",
-		marginTop: -80,
+		// marginTop: -80,
 		marginBottom: 40
 	},
 	mainText: {

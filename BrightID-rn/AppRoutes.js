@@ -1,6 +1,7 @@
 import HomeScreen from "./containers/HomeScreen";
 import ConnectionsScreen from "./containers/ConnectionsScreen";
 import Onboard from "./containers/Onboard";
+import SignUp from "./containers/SignUp";
 import { createStackNavigator, createSwitchNavigator } from "react-navigation";
 
 const AppStack = createStackNavigator(
@@ -28,14 +29,19 @@ const OnboardingStack = createStackNavigator(
 	{
 		Onboard: {
 			screen: Onboard
+		},
+		SignUp: {
+			screen: SignUp
 		}
 	},
 	{
-		initialRouteName: "Onboard",
+		initialRouteName: "SignUp",
 		navigationOptions: {
+			title: "BrightID",
 			headerStyle: {
-				height: 0
-			}
+				backgroundColor: "#f48b1e"
+			},
+			headerTintColor: "#fff"
 		}
 	}
 );
