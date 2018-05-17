@@ -30,6 +30,13 @@ export default class Onboard extends React.Component {
 		};
 	}
 
+	static navigationOptions = {
+		title: "",
+		headerStyle: {
+			height: 0
+		}
+	};
+
 	_renderItem({ item, index }) {
 		return <View style={styles.onboardingScreens}>{item}</View>;
 	}
@@ -73,7 +80,10 @@ export default class Onboard extends React.Component {
 				</View>
 				<View style={{ flex: 1 }}>{this.pagination()}</View>
 				<View style={{ flex: 1 }}>
-					<TouchableOpacity style={styles.button}>
+					<TouchableOpacity
+						onPress={() => this.props.navigation.navigate("SignUp")}
+						style={styles.button}
+					>
 						<Text style={styles.buttonText}>Get Started</Text>
 					</TouchableOpacity>
 				</View>
