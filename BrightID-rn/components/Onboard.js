@@ -61,18 +61,22 @@ export default class Onboard extends React.Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<Carousel
-					data={this.state.entries}
-					renderItem={this._renderItem}
-					layout={"default"}
-					sliderWidth={340}
-					itemWidth={340}
-					onSnapToItem={index => this.setState({ activeSlide: index })}
-				/>
-				{this.pagination()}
-				<TouchableOpacity style={styles.button}>
-					<Text style={styles.buttonText}>Get Started</Text>
-				</TouchableOpacity>
+				<View style={{ height: 471 }}>
+					<Carousel
+						data={this.state.entries}
+						renderItem={this._renderItem}
+						layout={"default"}
+						sliderWidth={340}
+						itemWidth={340}
+						onSnapToItem={index => this.setState({ activeSlide: index })}
+					/>
+				</View>
+				<View style={{ flex: 1 }}>{this.pagination()}</View>
+				<View style={{ flex: 1 }}>
+					<TouchableOpacity style={styles.button}>
+						<Text style={styles.buttonText}>Get Started</Text>
+					</TouchableOpacity>
+				</View>
 			</View>
 		);
 	}
@@ -84,13 +88,21 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff",
 		alignItems: "center",
 		flexDirection: "column",
-		justifyContent: "space-evenly"
+		justifyContent: "flex-start"
 	},
 	onboardingScreens: {
-		height: 440,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: "#5497E8",
+		height: 476,
+		// borderWidth: StyleSheet.hairlineWidth,
+		// borderColor: "#5497E8",
 		width: "100%"
+	},
+	pagination: {
+		flex: 1,
+		// borderWidth: StyleSheet.hairlineWidth,
+		// borderColor: "#5497E8",
+		// flex: 1,
+		// marginTop: -400,
+		alignSelf: "center"
 	},
 	button: {
 		// borderWidth: StyleSheet.hairlineWidth,
@@ -108,10 +120,5 @@ const styles = StyleSheet.create({
 		color: "#5497E8",
 		fontSize: 17,
 		fontWeight: "bold"
-	},
-	pagination: {
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: "#5497E8",
-		marginTop: 0
 	}
 });
