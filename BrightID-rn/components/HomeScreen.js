@@ -101,6 +101,10 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		marginTop: 7,
 		textAlign: "center"
+		// shadowColor: "#000",
+		// shadowOffset: { width: 0, height: 0 },
+		// shadowOpacity: 0.3,
+		// shadowRadius: 1
 	},
 	user: {
 		marginTop: 20,

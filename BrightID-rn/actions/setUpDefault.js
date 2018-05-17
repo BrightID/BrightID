@@ -23,7 +23,7 @@ export const setUpDefault = () => async dispatch => {
 		dispatch(connectionsCount(222));
 		dispatch(groupsCount(4));
 		dispatch(name("Ron Paul"));
-		dispatch(mainAvatar(require("../ron_paul_avatar.jpg")));
+		dispatch(mainAvatar(require("../static/ron_paul_avatar.jpg")));
 		dispatch(
 			allConnections(
 				fromJS([
