@@ -1,7 +1,7 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { StyleSheet, Text, View } from "react-native";
-import RootStack from "./RootStack";
+import AppRoutes from "./AppRoutes";
 import store from "./store";
 import { setUpDefault } from "./actions/setUpDefault";
 
@@ -9,7 +9,7 @@ import { setUpDefault } from "./actions/setUpDefault";
  * Central part of the application
  * react-navigation is used for routing
  * read docs here: https://reactnavigation.org/
- * RootStack.js contains all of the Routes
+ * AppRoutes.js contains all of the Routes
  * Redux / Immutable are used for managing state
  * read docs here: https://facebook.github.io/immutable-js/
  */
@@ -23,7 +23,7 @@ export default class App extends React.Component {
 		return (
 			<Provider store={store}>
 				<View style={styles.container}>
-					<RootStack />
+					<AppRoutes />
 				</View>
 			</Provider>
 		);
