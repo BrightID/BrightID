@@ -1,6 +1,7 @@
 import React from "react";
 import {
 	Button,
+	CameraRoll,
 	StyleSheet,
 	Text,
 	TextInput,
@@ -11,6 +12,7 @@ import PropTypes from "prop-types";
 import HeaderButtons from "react-navigation-header-buttons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
+import ImagePicker from "react-native-image-picker";
 import BottomNav from "./BottomNav";
 import UserAvatar from "../containers/UserAvatar";
 
@@ -22,7 +24,8 @@ export default class HomeScreen extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			name: ""
+			name: "",
+			active: false
 		};
 	}
 
@@ -43,11 +46,51 @@ export default class HomeScreen extends React.Component {
 		)
 	};
 
+	getAvatarPhoto = () => {
+		// see https://github.com/react-community/react-native-image-picker
+		// for full documentation on the Image Picker api
+
+		const options = {
+			title: "Select Avatar",
+			customButtons: [{ name: "fb", title: "Choose Photo from Facebook" }],
+			storageOptions: {
+				skipBackup: true,
+				path: "images"
+			}
+		};
+
+		ImagePicker.showImagePicker(options, response => {
+			console.log("Response = ", response);
+
+			if (response.didCancel) {
+				console.log("User cancelled image picker");
+			} else if (response.error) {
+				console.log("ImagePicker Error: ", response.error);
+			} else if (response.customButton) {
+				console.log("User tapped custom button: ", response.customButton);
+			} else {
+				let source = { uri: response.uri };
+
+				// You can also display the image using data:
+				// let source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+				this.setState({
+					avatarSource: source
+				});
+			}
+		});
+	};
+
 	render() {
 		return (
 			<View style={styles.container}>
-				<View style={styles.addPhotoContainer}>
-					<TouchableOpacity style={styles.addPhoto}>
+				<View
+					style={this.state.active ? styles.hidden : styles.addPhotoContainer}
+				>
+					<TouchableOpacity
+						onPress={this.getAvatarPhoto}
+						style={styles.addPhoto}
+					>
 						<Text style={styles.addPhotoText}>Add Photo</Text>
 						<Feather size={35} name="camera" color="#979797" />
 					</TouchableOpacity>
@@ -60,6 +103,12 @@ export default class HomeScreen extends React.Component {
 						placeholder="Name or Nym"
 						placeholderTextColor="#9e9e9e"
 						style={styles.textInput}
+						onFocus={() => this.setState({ active: true })}
+						onBlur={() => {
+							this.setState({ active: false });
+							console.warn(this.state.name);
+						}}
+						onEndEditing={() => this.setState({ active: false })}
 					/>
 				</View>
 				<View style={styles.buttonContainer}>
@@ -114,6 +163,9 @@ const styles = StyleSheet.create({
 		borderRadius: 80,
 		justifyContent: "center",
 		alignItems: "center"
+	},
+	hidden: {
+		display: "none"
 	},
 	addPhotoText: {
 		color: "#979797",
