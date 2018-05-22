@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import SignUp from "../components/SignUp";
-import { setUpDefault } from "../actions/setUpDefault";
+import { saveUserData } from "../actions/storage";
 
 const mapStateToProps = state => {
 	return {
@@ -13,8 +13,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		setUpDefault: () => {
-			dispatch(setUpDefault());
+		saveUserData: async userData => {
+			dispatch(await saveUserData(userData));
 		}
 	};
 };

@@ -46,6 +46,10 @@ export default class HomeScreen extends React.Component {
 		)
 	};
 
+	componentWillMount() {
+		this.props.setUpDefault();
+	}
+
 	render() {
 		return (
 			<View style={styles.container}>

@@ -4,9 +4,10 @@ import {
 	groupsCount,
 	name,
 	mainAvatar,
-	allConnections
+	allConnections,
+	ronPaul
 } from "./index";
-
+import { getUserData } from "./storage";
 import { fromJS } from "immutable";
 /**
  * Sets the app up with dummy data
@@ -22,8 +23,10 @@ export const setUpDefault = () => async dispatch => {
 		dispatch(trustScore("99.9"));
 		dispatch(connectionsCount(222));
 		dispatch(groupsCount(4));
-		dispatch(name("Ron Paul"));
-		dispatch(mainAvatar(require("../static/ron_paul_avatar.jpg")));
+		// get name / picture from storage
+		dispatch(getUserData());
+		// dispatch(name("Ron Paul"));
+		// dispatch(ronPaul(require("../static/ron_paul_avatar.jpg")));
 		dispatch(
 			allConnections(
 				fromJS([
