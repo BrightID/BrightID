@@ -7,7 +7,7 @@ export const NAME = "NAME";
 export const USER_AVATAR = "USER_AVATAR";
 export const SEARCH_PARAM = "SEARCH_PARAM";
 export const ALL_CONNECTIONS = "ALL_CONNECTIONS";
-
+export const RON_PAUL = "RON_PAUL";
 /**
  * Redux boilerplate, pass data through the app
  * Async actions / async functions can be implemented
@@ -49,5 +49,10 @@ export const searchParam = value => ({
 
 export const allConnections = payload => ({
 	type: ALL_CONNECTIONS,
+	payload
+});
+
+export const ronPaul = payload => ({
+	type: RON_PAUL,
 	payload
 });

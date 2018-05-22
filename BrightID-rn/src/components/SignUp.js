@@ -1,5 +1,6 @@
 import React from "react";
 import {
+	AsyncStorage,
 	Button,
 	CameraRoll,
 	Image,
@@ -15,6 +16,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
 import ImagePicker from "react-native-image-picker";
 import UserAvatar from "./UserAvatar";
+import USER_DATA from '../actions/storage';
 
 /**
  * Home screen of BrightID
@@ -24,10 +26,11 @@ export default class HomeScreen extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			name: "",
+			nameornym: "",
 			active: false,
-			avatarSource: ""
+			avatarUri: ""
 		};
+		// this.handleBrightIdCreation = this.handleBrightIdCreation.bind(this);
 	}
 
 	static navigationOptions = {
@@ -48,6 +51,7 @@ export default class HomeScreen extends React.Component {
 	};
 
 	getAvatarPhoto = () => {
+
 		// for full documentation on the Image Picker api
 		// see https://github.com/react-community/react-native-image-picker
 
@@ -75,14 +79,28 @@ export default class HomeScreen extends React.Component {
 				// let source = { uri: 'data:image/jpeg;base64,' + response.data };
 
 				this.setState({
-					avatarSource: uri
+					avatarUri: uri
 				});
+				console.warn(uri);
 			}
 		});
 	};
 
+	handleBrightIdCreation = async () => {
+		const { avatarUri, nameornym } = this.state;
+		if (avatarUri && nameornym) {
+			const saveData = JSON.stringify({ avatarUri, nameornym });
+			await AsyncStorage.setItem(USER_DATA, saveData););
+			this.props.navigation.navigate("App");
+		} else if (!avatarUri) {
+			alert("please upload a photo so I can see your face");
+		} else if (!nameornym) {
+			alert("please add your name or nym so I know who you are");
+		}
+	};
+
 	render() {
-		const { avatarSource } = this.state;
+		const { avatarUri } = this.state;
 		const addPhotoButton = (
 			<TouchableOpacity onPress={this.getAvatarPhoto} style={styles.addPhoto}>
 				<Text style={styles.addPhotoText}>Add Photo</Text>
@@ -95,8 +113,8 @@ export default class HomeScreen extends React.Component {
 				<View
 					style={this.state.active ? styles.hidden : styles.addPhotoContainer}
 				>
-					{avatarSource ? (
-						<Image style={styles.avatar} source={{ uri: avatarSource }} />
+					{avatarUri ? (
+						<Image style={styles.avatar} source={{ uri: avatarUri }} />
 					) : (
 						addPhotoButton
 					)}
@@ -104,16 +122,13 @@ export default class HomeScreen extends React.Component {
 				<View style={styles.textInputContainer}>
 					<Text style={styles.midText}>What do your friends know you by?</Text>
 					<TextInput
-						onChangeText={name => this.setState({ name })}
-						value={this.state.name}
+						onChangeText={nameornym => this.setState({ nameornym })}
+						value={this.state.nameornym}
 						placeholder="Name or Nym"
 						placeholderTextColor="#9e9e9e"
 						style={styles.textInput}
 						onFocus={() => this.setState({ active: true })}
-						onBlur={() => {
-							this.setState({ active: false });
-							console.warn(this.state.name);
-						}}
+						onBlur={() => this.setState({ active: false })}
 						onEndEditing={() => this.setState({ active: false })}
 					/>
 				</View>
@@ -124,11 +139,7 @@ export default class HomeScreen extends React.Component {
 					</Text>
 					<TouchableOpacity
 						style={styles.createBrightIdButton}
-						onPress={() =>
-							alert(
-								"bright id created!! still need to store photo, nothing happens yet"
-							)
-						}
+						onPress={this.handleBrightIdCreation}
 					>
 						<Text style={styles.buttonInnerText}>Create My BrightID</Text>
 					</TouchableOpacity>

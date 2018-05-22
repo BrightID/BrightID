@@ -9,7 +9,8 @@ import {
 	USER_AVATAR,
 	NAME,
 	SEARCH_PARAM,
-	ALL_CONNECTIONS
+	ALL_CONNECTIONS,
+	RON_PAUL
 } from "../actions";
 
 // immutable js optional, but works really well with redux
@@ -36,7 +37,8 @@ const initialState = fromJS({
 	connectionsCount: 0,
 	groupsCount: 0,
 	searchParam: "",
-	allConnections: [{ name: "Rand Paul" }]
+	allConnections: [{ name: "Rand Paul" }],
+	ronPaul: ""
 });
 
 const mainReducer = (state = initialState, action) => {
@@ -47,6 +49,8 @@ const mainReducer = (state = initialState, action) => {
 			return state.set("name", action.payload);
 		case USER_AVATAR:
 			return state.set("userAvatar", action.payload);
+		case RON_PAUL:
+			return state.set("ronPaul", action.payload);
 		case CONNECTIONS_COUNT:
 			return state.set("connectionsCount", action.payload);
 		case GROUPS_COUNT:

@@ -35,7 +35,7 @@ const OnboardingStack = createStackNavigator(
 		}
 	},
 	{
-		initialRouteName: "SignUp",
+		initialRouteName: "Onboard",
 		navigationOptions: {
 			title: "BrightID",
 			headerStyle: {

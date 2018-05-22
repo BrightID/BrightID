@@ -16,7 +16,14 @@ export default class UserAvatar extends React.Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<Image source={this.props.userAvatar} style={styles.avatar} />
+				<Image
+					source={
+						this.props.userAvatar
+							? { uri: this.props.userAvatar }
+							: this.props.ronPaul
+					}
+					style={styles.avatar}
+				/>
 			</View>
 		);
 	}
