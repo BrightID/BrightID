@@ -2,6 +2,7 @@ import HomeScreen from "./containers/HomeScreen";
 import ConnectionsScreen from "./containers/ConnectionsScreen";
 import Onboard from "./containers/Onboard";
 import SignUp from "./containers/SignUp";
+import AuthLoadingScreen from "./AuthLoading";
 import { createStackNavigator, createSwitchNavigator } from "react-navigation";
 
 const AppStack = createStackNavigator(
@@ -48,11 +49,11 @@ const OnboardingStack = createStackNavigator(
 
 export default createSwitchNavigator(
 	{
-		// AuthLoading: AuthLoadingScreen,
+		AuthLoading: AuthLoadingScreen,
 		App: AppStack,
 		Auth: OnboardingStack
 	},
 	{
-		initialRouteName: "Auth"
+		initialRouteName: "AuthLoading"
 	}
 );

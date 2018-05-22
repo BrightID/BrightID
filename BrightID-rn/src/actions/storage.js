@@ -1,39 +1,66 @@
-// import { AsyncStorage } from "react-native";
+// @flow
 
-import { name, mainAvatar, ronPaul } from "./index.js";
-export const USER_DATA = "@USER_DATA";
+import { AsyncStorage } from "react-native";
+import {
+	savingData,
+	saveDataSuccess,
+	loadingUser,
+	userData,
+	handleError
+} from "./index.js";
 
-export const saveUserData = userData => async dispatch => {
+export const getUserData = () => async dispatch => {
+	// this action will determine whether or not to naviage to the Signup or homescreen
+	// this action will be called inside of ./setUpDefault.js
 	try {
-		if (
-			userData.hasOwnProperty(nameornym) &&
-			userData.hasOwnProperty(avatarUri)
-		) {
-			const saveData = JSON.stringify(userData);
-			await AsyncStorage.setItem(USER_DATA, saveData);
+		dispatch(loadingUser());
+		// const saveData = JSON.stringify(userData);
+		// var userToken, userName, userAvata;
+		const userToken = await AsyncStorage.getItem("@USER_TOKEN:brighId");
+		const nameornym = await AsyncStorage.getItem("@USER_NAME:nameornym");
+		const avatarUri = await AsyncStorage.getItem("@USER_AVATAR:avatarUri");
+		// console.warn(saveData);
+		if (userToken !== null && nameornym !== null && avatarUri !== null) {
+			dispatch(userData({ userToken, nameornym, avatarUri }));
+		} else {
+			dispatch(handleError("Missing User data"));
+			if (userToken === null) {
+				dispatch(handleError("Missing User Token"));
+			}
+			if (nameornym === null) {
+				dispatch(handleError("Missing User Name or Nym"));
+			}
+			if (avatarUri === null) {
+				dispatch(handleError("Missing User Avatar Uri"));
+			}
 		}
 	} catch (err) {
 		console.warn(err);
 	}
 };
 
-export const getUserData = () => async dispatch => {
+// saves the user data after 'create my brightID' is clicked
+// during the onboard flow
+
+export const saveUserData = (
+	nameornym: String,
+	avatarUri: String
+) => async dispatch => {
 	try {
-		// const saveData = JSON.stringify(userData);
-		let userData;
-		const saveData = await AsyncStorage.getItem(USER_DATA);
-		// console.warn(saveData);
-		if (saveData !== null) {
-			let userData = JSON.parse(saveData);
-		}
-		if (typeof userData === "object") {
-			const { nameornym, avatarUri } = userData;
-			dispatch(name(nameornym));
-			dispatch(mainAvatar(avatarUri));
-		} else {
-			// dispatch(name("Ron Paul"));
-			// dispatch(ronPaul(require("../static/ron_paul_avatar.jpg")));
-		}
+		console.warn("here");
+		dispatch(savingData());
+		// save the users BrightID USER_TOKEN
+		// TODO connect to backend API before storing locally
+		const userToken = "user_token";
+		console.warn(nameornym);
+		console.warn(avatarUri);
+		await AsyncStorage.setItem("@USER_TOKEN:brighId", userToken);
+		// save the user's nameornym
+		await AsyncStorage.setItem("@USER_NAME:nameornym", nameornym);
+		// save the user's avatar uri
+		await AsyncStorage.setItem("@USER_AVATAR:avatarUri", avatarUri);
+		// if there are no errors... navigate to the homepage
+		dispatch(saveDataSuccess({ userToken, nameornym, avatarUri }));
 	} catch (err) {
 		console.warn(err);
 	}

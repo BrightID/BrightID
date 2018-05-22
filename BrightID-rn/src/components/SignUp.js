@@ -16,7 +16,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
 import ImagePicker from "react-native-image-picker";
 import UserAvatar from "./UserAvatar";
-import USER_DATA from '../actions/storage';
+import USER_TOKEN from "../actions/storage";
 
 /**
  * Home screen of BrightID
@@ -32,6 +32,10 @@ export default class HomeScreen extends React.Component {
 		};
 		// this.handleBrightIdCreation = this.handleBrightIdCreation.bind(this);
 	}
+
+	static Props: {
+		saveUserData: PropTypes.func
+	};
 
 	static navigationOptions = {
 		title: "BrightID",
@@ -50,8 +54,19 @@ export default class HomeScreen extends React.Component {
 		)
 	};
 
-	getAvatarPhoto = () => {
+	static getDerivedStateFromProps(nextProps) {
+		// this is an indirect way to listen for actions
+		// when saveDataSuccess is dispatched, the state of the app will
+		// add a userToken into the redux store
+		// thats how we will know data has been saved successfully and we can
+		// navigate out of the onboarding flow
+		if (nextProps.userToken) {
+			nextProps.navigation.navigate("Connections");
+		}
+		return null;
+	}
 
+	getAvatarPhoto = () => {
 		// for full documentation on the Image Picker api
 		// see https://github.com/react-community/react-native-image-picker
 
@@ -81,22 +96,23 @@ export default class HomeScreen extends React.Component {
 				this.setState({
 					avatarUri: uri
 				});
-				console.warn(uri);
 			}
 		});
 	};
 
-	handleBrightIdCreation = async () => {
+	handleBrightIdCreation = () => {
 		const { avatarUri, nameornym } = this.state;
-		if (avatarUri && nameornym) {
-			const saveData = JSON.stringify({ avatarUri, nameornym });
-			await AsyncStorage.setItem(USER_DATA, saveData););
-			this.props.navigation.navigate("App");
-		} else if (!avatarUri) {
-			alert("please upload a photo so I can see your face");
+		// saveUserData is located in actions/storage.js
+		// it contains three asynchrous function calls, updating async storage
+		// the order of parameters are important for now
+		if (!avatarUri) {
+			return alert("Please Upload a picture!");
 		} else if (!nameornym) {
-			alert("please add your name or nym so I know who you are");
+			return alert("Please add your name or nym");
 		}
+		// save avatar photo uri and name in async storage
+
+		this.props.saveUserData(nameornym, avatarUri);
 	};
 
 	render() {

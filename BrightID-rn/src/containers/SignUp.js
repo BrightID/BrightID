@@ -4,17 +4,14 @@ import { saveUserData } from "../actions/storage";
 
 const mapStateToProps = state => {
 	return {
-		trustScore: state.main.get("trustScore"),
-		name: state.main.get("name"),
-		connectionsCount: state.main.get("connectionsCount"),
-		groupsCount: state.main.get("groupsCount")
+		userToken: state.main.get("userToken")
 	};
 };
 
 const mapDispatchToProps = dispatch => {
 	return {
-		saveUserData: async userData => {
-			dispatch(await saveUserData(userData));
+		saveUserData: (nameornym: String, avatarUri: String) => {
+			dispatch(saveUserData(nameornym, avatarUri));
 		}
 	};
 };

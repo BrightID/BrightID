@@ -15,10 +15,6 @@ import { setUpDefault } from "./actions/setUpDefault";
  */
 
 export default class App extends React.Component {
-	componentWillMount() {
-		// initialize the state of the application with dummy data
-		store.dispatch(setUpDefault());
-	}
 	render() {
 		return (
 			<Provider store={store}>
