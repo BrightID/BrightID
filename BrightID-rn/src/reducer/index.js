@@ -11,7 +11,8 @@ import {
 	SAVING_DATA,
 	SAVE_DATA_SUCCESS,
 	LOADING_USER,
-	USER_DATA
+	USER_DATA,
+	REMOVE_USER_DATA
 } from "../actions";
 
 // immutable js optional, but works really well with redux
@@ -25,7 +26,6 @@ import { fromJS } from "immutable";
  * @param trustScore String
  * @param	name String
  * @param userAvatar Image
- * @param connectionsCount Number
  * @param groupsCount Number
  * @param searchParam String
  * @param allConnections List => Map
@@ -36,7 +36,6 @@ const initialState = fromJS({
 	name: "",
 	avatar: "",
 	userToken: "",
-	connectionsCount: 0,
 	groupsCount: 0,
 	searchParam: "",
 	allConnections: [{ name: "Rand Paul" }],
@@ -48,39 +47,36 @@ const initialState = fromJS({
 const mainReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case TRUST_SCORE:
-			state.set("trustScore", action.payload);
-			break;
+			return state.set("trustScore", action.payload);
 		case LOADING_USER:
-			state.set("loadingUser", true);
-			break;
+			return state.set("loadingUser", true);
 		case USER_DATA:
-			state.set("userAvatar", action.avatarUri);
-			state.set("name", action.nameornym);
-			state.set("userToken", action.userToken);
-			state.set("loadingUser", false);
-			break;
+			return state.merge({
+				userAvatar: action.avatarUri,
+				name: action.nameornym,
+				userToken: action.userToken,
+				loadingUser: false
+			});
 		case GROUPS_COUNT:
-			state.set("groupsCount", action.payload);
-			break;
+			return state.set("groupsCount", action.payload);
 		case SEARCH_PARAM:
-			state.set("searchParam", action.value);
-			break;
+			return state.set("searchParam", action.value);
 		case ALL_CONNECTIONS:
-			// turn connections array an immutable List of Structs
-			// const connections = fromJS(connections);
-			state.set("allConnections", action.connections);
-			state.set("connectionsCount", action.connections.length);
-			break;
+			return state.merge({
+				allConnections: action.connections
+			});
 		case SAVING_DATA:
-			state.set("savingData", true);
-			break;
+			return state.set("savingData", true);
 		case SAVE_DATA_SUCCESS:
 			// userToken is used for navigation out of onboarding flow
-			state.set("userAvatar", action.avatarUri);
-			state.set("name", action.nameornym);
-			state.set("userToken", action.userToken);
-			state.set("savingData", false);
-			break;
+			return state.merge({
+				userAvatar: action.avatarUri,
+				name: action.nameornym,
+				userToken: action.userToken,
+				savingData: false
+			});
+		case REMOVE_USER_DATA:
+			return state.merge({ avatarUri: "", name: "", userToken: "" });
 		default:
 			return state;
 	}

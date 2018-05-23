@@ -24,9 +24,14 @@ export default class AuthLoadingScreen extends React.Component {
 		// fake connections data is loaded into the store
 		// this will navigate to either the Auth or App stack
 		try {
-			const userToken = await AsyncStorage.getItem("@USER_TOKEN:brighId");
-			store.dispatch(setUpDefault());
-			this.props.navigation.navigate(userToken ? "App" : "Auth");
+			let userData = await AsyncStorage.getItem("userData");
+			if (userData !== null) {
+				userData = JSON.parse(userData);
+				store.dispatch(setUpDefault(userData));
+			} else {
+				store.dispatch(setUpDefault({}));
+			}
+			this.props.navigation.navigate(userData ? "App" : "Auth");
 		} catch (err) {
 			console.warn(err);
 		}

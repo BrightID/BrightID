@@ -1,11 +1,19 @@
 import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import {
+	Alert,
+	AsyncStorage,
+	Button,
+	StyleSheet,
+	Text,
+	View
+} from "react-native";
 import PropTypes from "prop-types";
 import HeaderButtons from "react-navigation-header-buttons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import BottomNav from "./BottomNav";
 import UserAvatar from "../containers/UserAvatar";
-
+import store from "../store";
+import { removeUserData } from "../actions";
 /**
  * Home screen of BrightID
  */
@@ -18,32 +26,60 @@ export default class HomeScreen extends React.Component {
 		name: PropTypes.string
 	};
 
-	static navigationOptions = {
-		title: "BrightID",
-		headerBackTitle: "Home",
-		headerRight: (
-			<HeaderButtons IconComponent={Ionicons} iconSize={32} color="#fff">
-				<HeaderButtons.Item
-					title="more"
-					iconName="ios-more-outline"
-					onPress={() => console.log("more")}
-				/>
-			</HeaderButtons>
-		),
-		headerLeft: (
-			<HeaderButtons
-				IconComponent={Ionicons}
-				iconSize={32}
-				color="#fff"
-				left={true}
-			>
-				<HeaderButtons.Item
-					title="help"
-					iconName="ios-help-circle-outline"
-					onPress={() => console.log("help")}
-				/>
-			</HeaderButtons>
-		)
+	static navigationOptions = ({ navigation }) => {
+		return {
+			title: "BrightID",
+			headerBackTitle: "Home",
+			headerRight: (
+				<HeaderButtons IconComponent={Ionicons} iconSize={32} color="#fff">
+					<HeaderButtons.Item
+						title="more"
+						iconName="ios-more-outline"
+						onPress={async () => {
+							Alert.alert(
+								"WARNING",
+								"Would you like to delete user data and return to the onboarding screen?",
+								[
+									{
+										text: "Cancel",
+										onPress: () => console.log("Cancel Pressed"),
+										style: "cancel"
+									},
+									{
+										text: "Sure",
+										onPress: async () => {
+											try {
+												navigation.navigate("Auth");
+												await AsyncStorage.flushGetRequests();
+												await AsyncStorage.removeItem("userData");
+												store.dispatch(removeUserData());
+											} catch (err) {
+												console.warn(err);
+											}
+										}
+									}
+								],
+								{ cancelable: true }
+							);
+						}}
+					/>
+				</HeaderButtons>
+			),
+			headerLeft: (
+				<HeaderButtons
+					IconComponent={Ionicons}
+					iconSize={32}
+					color="#fff"
+					left={true}
+				>
+					<HeaderButtons.Item
+						title="help"
+						iconName="ios-help-circle-outline"
+						onPress={() => console.log("help")}
+					/>
+				</HeaderButtons>
+			)
+		};
 	};
 
 	render() {
@@ -98,13 +134,13 @@ const styles = StyleSheet.create({
 	},
 	name: {
 		fontSize: 33,
-		fontWeight: "bold",
+		fontWeight: "300",
 		marginTop: 7,
-		textAlign: "center"
-		// shadowColor: "#000",
-		// shadowOffset: { width: 0, height: 0 },
-		// shadowOpacity: 0.3,
-		// shadowRadius: 1
+		textAlign: "center",
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 0 },
+		shadowOpacity: 0.4,
+		shadowRadius: 1.9
 	},
 	user: {
 		marginTop: 20,

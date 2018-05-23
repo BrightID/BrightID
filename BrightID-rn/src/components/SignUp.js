@@ -15,8 +15,6 @@ import HeaderButtons from "react-navigation-header-buttons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
 import ImagePicker from "react-native-image-picker";
-import UserAvatar from "./UserAvatar";
-import USER_TOKEN from "../actions/storage";
 
 /**
  * Home screen of BrightID
@@ -28,7 +26,8 @@ export default class HomeScreen extends React.Component {
 		this.state = {
 			nameornym: "",
 			active: false,
-			avatarUri: ""
+			avatarUri: "",
+			keys: []
 		};
 		// this.handleBrightIdCreation = this.handleBrightIdCreation.bind(this);
 	}
@@ -61,7 +60,7 @@ export default class HomeScreen extends React.Component {
 		// thats how we will know data has been saved successfully and we can
 		// navigate out of the onboarding flow
 		if (nextProps.userToken) {
-			nextProps.navigation.navigate("Connections");
+			nextProps.navigation.navigate("App");
 		}
 		return null;
 	}
@@ -100,23 +99,41 @@ export default class HomeScreen extends React.Component {
 		});
 	};
 
-	handleBrightIdCreation = () => {
-		const { avatarUri, nameornym } = this.state;
-		// saveUserData is located in actions/storage.js
-		// it contains three asynchrous function calls, updating async storage
-		// the order of parameters are important for now
-		if (!avatarUri) {
-			return alert("Please Upload a picture!");
-		} else if (!nameornym) {
-			return alert("Please add your name or nym");
-		}
-		// save avatar photo uri and name in async storage
+	handleBrightIdCreation = async () => {
+		try {
+			const { avatarUri, nameornym } = this.state;
+			// saveUserData is located in actions/storage.js
+			// it contains three asynchrous function calls, updating async storage
+			// the order of parameters are important for now
+			if (!avatarUri) {
+				return alert("Please Upload a picture!");
+			} else if (!nameornym) {
+				return alert("Please add your name or nym");
+			}
+			// save avatar photo uri and name in async storage
 
-		this.props.saveUserData(nameornym, avatarUri);
+			// const userData = {
+			// 	userToken: "user_token",
+			// 	nameornym,
+			// 	avatarUri
+			// };
+
+			this.props.saveUserData(nameornym, avatarUri);
+
+			// await AsyncStorage.setItem("userData", JSON.stringify(userData));
+			// await AsyncStorage.setItem("@USER_NAME:nameornym", nameornym);
+			// await AsyncStorage.setItem("@USER_AVATAR:avatarUri", avatarUri);
+			// await AsyncStorage.setItem("@USER_TOKEN:brighId", userToken);
+			// const keys = await AsyncStorage.getAllKeys();
+			// this.setState({ keys: keys });
+		} catch (err) {
+			console.warn(err);
+		}
 	};
 
 	render() {
 		const { avatarUri } = this.state;
+
 		const addPhotoButton = (
 			<TouchableOpacity onPress={this.getAvatarPhoto} style={styles.addPhoto}>
 				<Text style={styles.addPhotoText}>Add Photo</Text>
@@ -126,6 +143,7 @@ export default class HomeScreen extends React.Component {
 
 		return (
 			<View style={styles.container}>
+				<Text>{this.state.keys}</Text>
 				<View
 					style={this.state.active ? styles.hidden : styles.addPhotoContainer}
 				>

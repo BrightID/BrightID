@@ -16,10 +16,11 @@ export const getUserData = () => async dispatch => {
 		dispatch(loadingUser());
 		// const saveData = JSON.stringify(userData);
 		// var userToken, userName, userAvata;
-		const userToken = await AsyncStorage.getItem("@USER_TOKEN:brighId");
-		const nameornym = await AsyncStorage.getItem("@USER_NAME:nameornym");
-		const avatarUri = await AsyncStorage.getItem("@USER_AVATAR:avatarUri");
-		// console.warn(saveData);
+		const userData = await AsyncStorage.getItem("userData");
+		const { userToken, nameornym, avatarUri } = JSON.parse(userData);
+
+		console.warn(userData);
+
 		if (userToken !== null && nameornym !== null && avatarUri !== null) {
 			dispatch(userData({ userToken, nameornym, avatarUri }));
 		} else {
@@ -47,18 +48,20 @@ export const saveUserData = (
 	avatarUri: String
 ) => async dispatch => {
 	try {
-		console.warn("here");
+		// console.warn("here");
 		dispatch(savingData());
 		// save the users BrightID USER_TOKEN
 		// TODO connect to backend API before storing locally
 		const userToken = "user_token";
-		console.warn(nameornym);
-		console.warn(avatarUri);
-		await AsyncStorage.setItem("@USER_TOKEN:brighId", userToken);
-		// save the user's nameornym
-		await AsyncStorage.setItem("@USER_NAME:nameornym", nameornym);
-		// save the user's avatar uri
-		await AsyncStorage.setItem("@USER_AVATAR:avatarUri", avatarUri);
+		// console.warn(nameornym);
+		// console.warn(avatarUri);
+		const userData = {
+			userToken: "user_token",
+			nameornym,
+			avatarUri
+		};
+
+		await AsyncStorage.setItem("userData", JSON.stringify(userData));
 		// if there are no errors... navigate to the homepage
 		dispatch(saveDataSuccess({ userToken, nameornym, avatarUri }));
 	} catch (err) {

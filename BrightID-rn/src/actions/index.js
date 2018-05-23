@@ -11,6 +11,7 @@ export const SAVE_DATA_SUCCESS = "SAVE_DATA_SUCCESS";
 export const LOADING_USER = "LOADING_USER";
 export const USER_DATA = "USER_DATA";
 export const ERROR = "ERROR";
+export const REMOVE_USER_DATA = "REMOVE_USER_DATA";
 /**
  * Redux boilerplate, pass data through the app
  * Async actions / async functions can be implemented
@@ -58,7 +59,11 @@ export const loadingUser = () => ({
 	type: LOADING_USER
 });
 
-export const userData = ({ userToken, nameornym, avatarUri }) => ({
+export const removeUserData = () => ({
+	type: REMOVE_USER_DATA
+});
+
+export const setUserData = ({ userToken, nameornym, avatarUri }) => ({
 	type: USER_DATA,
 	userToken,
 	nameornym,
