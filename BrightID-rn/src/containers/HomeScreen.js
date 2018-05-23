@@ -6,7 +6,7 @@ const mapStateToProps = state => {
 	return {
 		trustScore: state.main.get("trustScore"),
 		name: state.main.get("name"),
-		connectionsCount: state.main.get("connectionsCount"),
+		connectionsCount: state.main.get("allConnections").size,
 		groupsCount: state.main.get("groupsCount")
 	};
 };

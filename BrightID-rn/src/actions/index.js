@@ -3,11 +3,15 @@
 export const TRUST_SCORE = "TRUST_SCORE";
 export const CONNECTIONS_COUNT = "CONNECTIONS_COUNT";
 export const GROUPS_COUNT = "GROUPS_COUNT";
-export const NAME = "NAME";
-export const USER_AVATAR = "USER_AVATAR";
 export const SEARCH_PARAM = "SEARCH_PARAM";
 export const ALL_CONNECTIONS = "ALL_CONNECTIONS";
 export const RON_PAUL = "RON_PAUL";
+export const SAVING_DATA = "SAVING_DATA";
+export const SAVE_DATA_SUCCESS = "SAVE_DATA_SUCCESS";
+export const LOADING_USER = "LOADING_USER";
+export const USER_DATA = "USER_DATA";
+export const ERROR = "ERROR";
+export const REMOVE_USER_DATA = "REMOVE_USER_DATA";
 /**
  * Redux boilerplate, pass data through the app
  * Async actions / async functions can be implemented
@@ -17,13 +21,13 @@ export const RON_PAUL = "RON_PAUL";
  *
  */
 
-export const trustScore = payload => ({
-	type: TRUST_SCORE,
-	payload
+export const handleError = error => ({
+	type: ERROR,
+	error
 });
 
-export const connectionsCount = payload => ({
-	type: CONNECTIONS_COUNT,
+export const trustScore = payload => ({
+	type: TRUST_SCORE,
 	payload
 });
 
@@ -32,27 +36,43 @@ export const groupsCount = payload => ({
 	payload
 });
 
-export const name = payload => ({
-	type: NAME,
-	payload
-});
-
-export const mainAvatar = payload => ({
-	type: USER_AVATAR,
-	payload
-});
-
 export const searchParam = value => ({
 	type: SEARCH_PARAM,
 	value
 });
 
-export const allConnections = payload => ({
+export const allConnections = (connections: Array) => ({
 	type: ALL_CONNECTIONS,
-	payload
+	connections
 });
 
 export const ronPaul = payload => ({
 	type: RON_PAUL,
 	payload
+});
+
+export const savingData = () => ({
+	type: SAVING_DATA
+});
+
+export const loadingUser = () => ({
+	type: LOADING_USER
+});
+
+export const removeUserData = () => ({
+	type: REMOVE_USER_DATA
+});
+
+export const setUserData = ({ userToken, nameornym, avatarUri }) => ({
+	type: USER_DATA,
+	userToken,
+	nameornym,
+	avatarUri
+});
+
+export const saveDataSuccess = ({ userToken, nameornym, avatarUri }) => ({
+	type: SAVE_DATA_SUCCESS,
+	nameornym,
+	avatarUri,
+	userToken
 });

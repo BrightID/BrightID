@@ -1,12 +1,4 @@
-import {
-	trustScore,
-	connectionsCount,
-	groupsCount,
-	name,
-	mainAvatar,
-	allConnections,
-	ronPaul
-} from "./index";
+import { trustScore, groupsCount, allConnections, setUserData } from "./index";
 import { getUserData } from "./storage";
 import { fromJS } from "immutable";
 /**
@@ -17,16 +9,24 @@ import { fromJS } from "immutable";
  * This function is called in App.js
  */
 
-export const setUpDefault = () => async dispatch => {
+export const setUpDefault = userData => async dispatch => {
 	// async is unncessary here, but this is a useful template for handling the API
 	try {
+		// disptaches the getUserData action from actions/storage.js
+		// this is an async action will a lot of important functionality for the app
+		// dispatch(getUserData());
+		// console.warn(userData);
+		if (
+			userData.hasOwnProperty("nameornym") &&
+			userData.hasOwnProperty("avatarUri") &&
+			userData.hasOwnProperty("userToken")
+		) {
+			dispatch(setUserData(userData));
+		}
+
+		// populate the app with dummy data for now
 		dispatch(trustScore("99.9"));
-		dispatch(connectionsCount(222));
 		dispatch(groupsCount(4));
-		// get name / picture from storage
-		dispatch(getUserData());
-		// dispatch(name("Ron Paul"));
-		// dispatch(ronPaul(require("../static/ron_paul_avatar.jpg")));
 		dispatch(
 			allConnections(
 				fromJS([

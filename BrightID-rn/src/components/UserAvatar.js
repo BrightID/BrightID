@@ -11,19 +11,12 @@ import PropTypes from "prop-types";
 
 export default class UserAvatar extends React.Component {
 	static propTypes = {
-		userAvatar: PropTypes.number
+		userAvatar: PropTypes.string
 	};
 	render() {
 		return (
 			<View style={styles.container}>
-				<Image
-					source={
-						this.props.userAvatar
-							? { uri: this.props.userAvatar }
-							: this.props.ronPaul
-					}
-					style={styles.avatar}
-				/>
+				<Image source={{ uri: this.props.userAvatar }} style={styles.avatar} />
 			</View>
 		);
 	}
