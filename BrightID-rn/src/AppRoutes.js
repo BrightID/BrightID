@@ -1,9 +1,11 @@
+import React from "react";
 import HomeScreen from "./containers/HomeScreen";
 import ConnectionsScreen from "./containers/ConnectionsScreen";
 import Onboard from "./containers/Onboard";
 import SignUp from "./containers/SignUp";
-import AuthLoadingScreen from "./AuthLoading";
+import AppBootstrap from "./AppBootstrap";
 import { createStackNavigator, createSwitchNavigator } from "react-navigation";
+import LinearGradient from "react-native-linear-gradient";
 
 const AppStack = createStackNavigator(
 	{
@@ -18,9 +20,12 @@ const AppStack = createStackNavigator(
 		initialRouteName: "Home",
 		navigationOptions: {
 			title: "BrightID",
-			headerStyle: {
-				backgroundColor: "#f48b1e"
-			},
+			headerBackground: (
+				<LinearGradient
+					colors={["#F52828", "#F76B1C"]}
+					style={{ flex: 1, width: "100%" }}
+				/>
+			),
 			headerTintColor: "#fff"
 		}
 	}
@@ -39,21 +44,25 @@ const OnboardingStack = createStackNavigator(
 		initialRouteName: "Onboard",
 		navigationOptions: {
 			title: "BrightID",
-			headerStyle: {
-				backgroundColor: "#f48b1e"
-			},
-			headerTintColor: "#fff"
+			headerTintColor: "#fff",
+			headerTransparent: true,
+			headerBackground: (
+				<LinearGradient
+					colors={["#F52828", "#F76B1C"]}
+					style={{ flex: 1, width: "100%" }}
+				/>
+			)
 		}
 	}
 );
 
 export default createSwitchNavigator(
 	{
-		AuthLoading: AuthLoadingScreen,
+		AppBootstrap: AppBootstrap,
 		App: AppStack,
-		Auth: OnboardingStack
+		Onboarding: OnboardingStack
 	},
 	{
-		initialRouteName: "AuthLoading"
+		initialRouteName: "AppBootstrap"
 	}
 );

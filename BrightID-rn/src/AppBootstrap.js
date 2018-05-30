@@ -10,7 +10,7 @@ import {
 import store from "./store";
 import { setUpDefault } from "./actions/setUpDefault";
 
-export default class AuthLoadingScreen extends React.Component {
+export default class AppBootstrap extends React.Component {
 	constructor(props) {
 		super(props);
 		this._bootstrapAsync();
@@ -31,7 +31,7 @@ export default class AuthLoadingScreen extends React.Component {
 			} else {
 				store.dispatch(setUpDefault({}));
 			}
-			this.props.navigation.navigate(userData ? "App" : "Auth");
+			this.props.navigation.navigate(userData ? "App" : "Onboarding");
 		} catch (err) {
 			console.warn(err);
 		}

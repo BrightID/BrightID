@@ -31,9 +31,9 @@ const styles = StyleSheet.create({
 		shadowRadius: 2
 	},
 	avatar: {
-		width: 145,
-		height: 145,
-		borderRadius: 72.5,
+		width: 142,
+		height: 142,
+		borderRadius: 71,
 		shadowColor: "#000",
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.8,

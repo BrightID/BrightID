@@ -32,8 +32,10 @@ export default class Onboard extends React.Component {
 
 	static navigationOptions = {
 		title: "",
+		headerBackground: "",
 		headerStyle: {
-			height: 0
+			borderBottomWidth: 0
+			// height: 0
 		}
 	};
 

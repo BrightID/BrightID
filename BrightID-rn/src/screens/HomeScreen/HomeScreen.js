@@ -133,13 +133,14 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between"
 	},
 	name: {
-		fontSize: 30,
+		fontSize: 33,
 		fontWeight: "300",
 		marginTop: 7,
 		textAlign: "center",
-		shadowColor: "rgba(0,0,0,0.32)",
-		shadowOffset: { width: 0, height: 2 },
-		shadowRadius: 4
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 0 },
+		shadowOpacity: 0.4,
+		shadowRadius: 1.9
 	},
 	user: {
 		marginTop: 20,
