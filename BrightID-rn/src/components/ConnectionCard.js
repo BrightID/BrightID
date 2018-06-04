@@ -38,7 +38,7 @@ export default class ConnectionCard extends React.Component {
 						Connected {moment(this.props.connectionDate).fromNow()}
 					</Text>
 				</View>
-				<Touchable onPress={this.focus} style={styles.searchIcon}>
+				<Touchable onPress={this.focus} style={styles.moreIcon}>
 					<Ionicon size={48} name="ios-more" color="#ccc" />
 				</Touchable>
 			</View>
@@ -67,7 +67,11 @@ const styles = StyleSheet.create({
 		marginLeft: 14
 	},
 	info: {
-		marginLeft: 25
+		marginLeft: 25,
+		flex: 1,
+		height: 71,
+		flexDirection: "column",
+		justifyContent: "space-evenly"
 		// width: "50%"
 	},
 	name: {
@@ -85,5 +89,8 @@ const styles = StyleSheet.create({
 	conectedText: {
 		fontFamily: "ApexNew-Book",
 		fontSize: 14
+	},
+	moreIcon: {
+		marginRight: 16
 	}
 });
