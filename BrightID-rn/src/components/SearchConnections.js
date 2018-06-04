@@ -12,7 +12,8 @@ import Ionicon from "react-native-vector-icons/Ionicons";
 
 export default class SearchConnections extends React.Component {
 	static propTypes = {
-		searchParam: PropTypes.string
+		searchParam: PropTypes.string,
+		updateParam: PropTypes.function
 	};
 	render() {
 		return (
@@ -26,7 +27,7 @@ export default class SearchConnections extends React.Component {
 					style={styles.searchField}
 					placeholder="Search Connections"
 				/>
-				<Touchable onPress={this.focus} style={styles.searchIcon}>
+				<Touchable onPress={this.focus} style={styles.optionsIcon}>
 					<Ionicon size={28} name="ios-options-outline" color="#000" />
 				</Touchable>
 			</View>
@@ -37,9 +38,8 @@ export default class SearchConnections extends React.Component {
 const styles = StyleSheet.create({
 	container: {
 		flexDirection: "row",
-		marginTop: 11,
-		marginBottom: 11,
-		width: "80%",
+		marginTop: 10,
+		width: "90%",
 		borderColor: "#ccc",
 		borderWidth: 1,
 		justifyContent: "space-between",
@@ -47,17 +47,19 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff"
 	},
 	searchIcon: {
-		marginLeft: 5,
-		marginRight: 5,
-		marginTop: 3,
-		// justifyContent: "center",
-		// alignItems: "center",
-		height: 34
+		marginLeft: 10,
+		marginRight: 12,
+		marginTop: 5
+	},
+	optionsIcon: {
+		marginLeft: 10,
+		marginRight: 8.8,
+		marginTop: 5
 	},
 	searchField: {
-		height: 34,
+		fontFamily: "ApexNew-Book",
+		fontSize: 14,
+		marginTop: 3.1,
 		flex: 1
-
-		// width: "80%"
 	}
 });

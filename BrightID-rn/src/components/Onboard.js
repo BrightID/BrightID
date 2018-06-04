@@ -109,16 +109,10 @@ const styles = StyleSheet.create({
 	},
 	onboardingScreens: {
 		height: 476,
-		// borderWidth: StyleSheet.hairlineWidth,
-		// borderColor: "#5497E8",
 		width: "100%"
 	},
 	pagination: {
 		flex: 1,
-		// borderWidth: StyleSheet.hairlineWidth,
-		// borderColor: "#5497E8",
-		// flex: 1,
-		// marginTop: -400,
 		alignSelf: "center"
 	},
 	button: {

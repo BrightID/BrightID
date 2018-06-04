@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, TextInput, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import PropTypes from "prop-types";
 import Touchable from "react-native-platform-touchable";
 import Ionicon from "react-native-vector-icons/Ionicons";
@@ -20,7 +20,8 @@ export default class ConnectionCard extends React.Component {
 		firstName: PropTypes.string,
 		lastName: PropTypes.string,
 		avatar: PropTypes.string,
-		trustScore: PropTypes.number
+		trustScore: PropTypes.number,
+		connectionDate: PropTypes.string
 	};
 	render() {
 		return (
@@ -33,7 +34,9 @@ export default class ConnectionCard extends React.Component {
 					<Text style={styles.trustScore}>
 						{this.props.trustScore}% Trusted
 					</Text>
-					<Text>Connected {moment(this.props.connectionDate).fromNow()}</Text>
+					<Text style={styles.connectedText}>
+						Connected {moment(this.props.connectionDate).fromNow()}
+					</Text>
 				</View>
 				<Touchable onPress={this.focus} style={styles.searchIcon}>
 					<Ionicon size={48} name="ios-more" color="#ccc" />
@@ -50,26 +53,37 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-evenly",
 		backgroundColor: "#fff",
-		height: 110,
-		marginTop: 22,
-		shadowColor: "#ccc",
-		shadowOffset: { width: 0, height: 7 },
-		shadowOpacity: 0.3,
+		height: 94,
+		marginBottom: 11.8,
+		shadowColor: "rgba(0,0,0,0.32)",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.43,
 		shadowRadius: 4
 	},
 	avatar: {
-		borderRadius: 25,
-		width: 50,
-		height: 50
+		borderRadius: 30,
+		width: 60,
+		height: 60,
+		marginLeft: 14
 	},
 	info: {
-		width: "50%"
+		marginLeft: 25
+		// width: "50%"
 	},
 	name: {
-		fontSize: 22
+		fontFamily: "ApexNew-Book",
+		fontSize: 20,
+		shadowColor: "rgba(0,0,0,0.32)",
+		shadowOffset: { width: 0, height: 2 },
+		shadowRadius: 4
 	},
 	trustScore: {
-		color: "green",
-		fontWeight: "100"
+		fontFamily: "ApexNew-Medium",
+		fontSize: 14,
+		color: "green"
+	},
+	conectedText: {
+		fontFamily: "ApexNew-Book",
+		fontSize: 14
 	}
 });
