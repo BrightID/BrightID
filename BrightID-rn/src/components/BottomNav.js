@@ -17,7 +17,7 @@ export default class BottomNav extends React.Component {
 				<Touchable onPress={() => this.props.navigation.navigate("Home")}>
 					<View style={styles.navIconContainer}>
 						<Ionicon size={32} name="ios-home-outline" color="#000" />
-						<Text>Home</Text>
+						<Text style={styles.navText}>Home</Text>
 					</View>
 				</Touchable>
 				<Touchable
@@ -29,25 +29,25 @@ export default class BottomNav extends React.Component {
 							name="ios-git-pull-request-outline"
 							color="#000"
 						/>
-						<Text>Connections</Text>
+						<Text style={styles.navText}>Connections</Text>
 					</View>
 				</Touchable>
 				<Touchable onPress={() => console.log("Groups")}>
 					<View style={styles.navIconContainer}>
 						<Ionicon size={32} name="ios-contacts-outline" color="#000" />
-						<Text>Groups</Text>
+						<Text style={styles.navText}>Groups</Text>
 					</View>
 				</Touchable>
 				<Touchable onPress={() => console.log("Notifications")}>
 					<View style={styles.navIconContainer}>
 						<Ionicon size={32} name="ios-notifications-outline" color="#000" />
-						<Text>Notifications</Text>
+						<Text style={styles.navText}>Notifications</Text>
 					</View>
 				</Touchable>
 				<Touchable onPress={() => console.log("Apps")}>
 					<View style={styles.navIconContainer}>
 						<Ionicon size={32} name="ios-apps-outline" color="#000" />
-						<Text>Apps</Text>
+						<Text style={styles.navText}>Apps</Text>
 					</View>
 				</Touchable>
 			</View>
@@ -57,7 +57,7 @@ export default class BottomNav extends React.Component {
 
 const styles = StyleSheet.create({
 	container: {
-		height: 71,
+		height: 63,
 		backgroundColor: "#fff",
 		flexDirection: "row",
 		alignItems: "center",
@@ -68,5 +68,9 @@ const styles = StyleSheet.create({
 	navIconContainer: {
 		flexDirection: "column",
 		alignItems: "center"
+	},
+	navText: {
+		fontFamily: "ApexNew-Book",
+		fontSize: 12
 	}
 });
