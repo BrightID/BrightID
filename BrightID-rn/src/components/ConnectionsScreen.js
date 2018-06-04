@@ -16,12 +16,13 @@ export default class ConnectionsScreen extends React.Component {
 	static navigationOptions = {
 		title: "Connections"
 	};
-	_keyExtractor = (item, index) => item.firstName + item.lastName + item.id;
+	_keyExtractor = item => item.firstName + item.lastName + item.id;
 	render() {
 		return (
 			<View style={styles.container}>
 				<SearchConnections />
 				<FlatList
+					style={styles.connectionsContainer}
 					data={this.props.connections}
 					keyExtractor={this._keyExtractor}
 					renderItem={({ item }) => <ConnectionCard {...item} />}
@@ -34,9 +35,13 @@ export default class ConnectionsScreen extends React.Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#fcfcfc",
+		backgroundColor: "#fdfdfd",
 		alignItems: "center",
 		flexDirection: "column",
 		justifyContent: "flex-start"
+	},
+	connectionsContainer: {
+		marginTop: 8,
+		flex: 1
 	}
 });
