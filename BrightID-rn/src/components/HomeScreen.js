@@ -1,12 +1,5 @@
 import React from "react";
-import {
-	Alert,
-	AsyncStorage,
-	Button,
-	StyleSheet,
-	Text,
-	View
-} from "react-native";
+import { Alert, AsyncStorage, StyleSheet, Text, View } from "react-native";
 import PropTypes from "prop-types";
 import HeaderButtons from "react-navigation-header-buttons";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -14,6 +7,7 @@ import BottomNav from "./BottomNav";
 import UserAvatar from "../containers/UserAvatar";
 import store from "../store";
 import { removeUserData } from "../actions";
+
 /**
  * Home screen of BrightID
  */
@@ -31,7 +25,7 @@ export default class HomeScreen extends React.Component {
 			title: "BrightID",
 			headerBackTitle: "Home",
 			headerRight: (
-				<HeaderButtons IconComponent={Ionicons} iconSize={32} color="#fff">
+				<HeaderButtons IconComponent={Ionicons} iconSize={24} color="#fff">
 					<HeaderButtons.Item
 						title="more"
 						iconName="ios-more-outline"
@@ -68,7 +62,7 @@ export default class HomeScreen extends React.Component {
 			headerLeft: (
 				<HeaderButtons
 					IconComponent={Ionicons}
-					iconSize={32}
+					iconSize={24}
 					color="#fff"
 					left={true}
 				>

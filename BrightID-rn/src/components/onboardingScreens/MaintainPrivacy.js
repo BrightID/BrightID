@@ -6,7 +6,7 @@ export default class Onboard extends React.Component {
 		return (
 			<View style={styles.container}>
 				<Image
-					source={require("../../static/guy_fox.png")}
+					source={require("../../static/icons8-anonymous-mask-96.png")}
 					style={styles.guyFox}
 				/>
 				<Text style={styles.mainText}>Maintain Privacy</Text>
@@ -28,19 +28,20 @@ const styles = StyleSheet.create({
 	guyFox: {
 		marginLeft: "auto",
 		marginRight: "auto",
-		// marginTop: -80,
-		marginBottom: 40
+		marginTop: 110,
+		marginBottom: 41
 	},
 	mainText: {
-		fontSize: 26,
-		fontWeight: "bold",
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 0 },
-		shadowOpacity: 0.2,
-		shadowRadius: 1.4,
-		marginBottom: 20
+		fontFamily: "ApexNew-Medium",
+		fontSize: 24,
+		shadowColor: "rgba(0,0,0,0.32)",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 1.0,
+		shadowRadius: 4,
+		marginBottom: 15
 	},
 	secondaryText: {
+		fontFamily: "ApexNew-Book",
 		fontSize: 18,
 		lineHeight: 22
 	}

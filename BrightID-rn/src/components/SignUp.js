@@ -110,22 +110,19 @@ export default class HomeScreen extends React.Component {
 			} else if (!nameornym) {
 				return alert("Please add your name or nym");
 			}
+
+			const userData = {
+				userToken: "user_token",
+				nameornym,
+				avatarUri
+			};
+
 			// save avatar photo uri and name in async storage
 
-			// const userData = {
-			// 	userToken: "user_token",
-			// 	nameornym,
-			// 	avatarUri
-			// };
+			await AsyncStorage.setItem("userData", JSON.stringify(userData));
 
+			// update redux store
 			this.props.saveUserData(nameornym, avatarUri);
-
-			// await AsyncStorage.setItem("userData", JSON.stringify(userData));
-			// await AsyncStorage.setItem("@USER_NAME:nameornym", nameornym);
-			// await AsyncStorage.setItem("@USER_AVATAR:avatarUri", avatarUri);
-			// await AsyncStorage.setItem("@USER_TOKEN:brighId", userToken);
-			// const keys = await AsyncStorage.getAllKeys();
-			// this.setState({ keys: keys });
 		} catch (err) {
 			console.warn(err);
 		}
@@ -137,13 +134,12 @@ export default class HomeScreen extends React.Component {
 		const addPhotoButton = (
 			<TouchableOpacity onPress={this.getAvatarPhoto} style={styles.addPhoto}>
 				<Text style={styles.addPhotoText}>Add Photo</Text>
-				<Feather size={35} name="camera" color="#979797" />
+				<Ionicons size={48} name="ios-camera-outline" color="#979797" />
 			</TouchableOpacity>
 		);
 
 		return (
 			<View style={styles.container}>
-				<Text>{this.state.keys}</Text>
 				<View
 					style={this.state.active ? styles.hidden : styles.addPhotoContainer}
 				>
@@ -194,7 +190,8 @@ const styles = StyleSheet.create({
 	addPhotoContainer: {
 		height: 320,
 		alignItems: "center",
-		justifyContent: "center"
+		justifyContent: "center",
+		marginTop: 54
 		// borderWidth: 1
 	},
 	textInputContainer: {
@@ -213,9 +210,9 @@ const styles = StyleSheet.create({
 		// borderWidth: StyleSheet.hairlineWidth,
 		borderWidth: 1,
 		borderColor: "#979797",
-		height: 160,
-		width: 160,
-		borderRadius: 80,
+		height: 183,
+		width: 183,
+		borderRadius: 91.5,
 		justifyContent: "center",
 		alignItems: "center"
 	},
@@ -223,6 +220,7 @@ const styles = StyleSheet.create({
 		display: "none"
 	},
 	addPhotoText: {
+		fontFamily: "ApexNew-Book",
 		color: "#979797",
 		marginBottom: 11,
 		marginTop: 11,
@@ -230,14 +228,14 @@ const styles = StyleSheet.create({
 	},
 
 	midText: {
-		fontSize: 16,
-		fontWeight: "100"
+		fontFamily: "ApexNew-Book",
+		fontSize: 18
 	},
 	textInput: {
-		fontSize: 28,
+		fontFamily: "ApexNew-Light",
+		fontSize: 36,
 		borderBottomWidth: StyleSheet.hairlineWidth,
 		borderBottomColor: "#9e9e9e",
-		fontWeight: "100",
 		marginTop: 22,
 		width: 275,
 		textAlign: "center",
@@ -245,23 +243,25 @@ const styles = StyleSheet.create({
 		// lineHeight: 35
 	},
 	buttonInfoText: {
-		fontWeight: "100",
+		fontFamily: "ApexNew-Book",
 		color: "#9e9e9e",
+		fontSize: 14,
 		width: 298,
 		textAlign: "center"
 	},
 	createBrightIdButton: {
 		backgroundColor: "#428BE5",
-		width: 298,
+		width: 300,
 		justifyContent: "center",
 		alignItems: "center",
-		paddingTop: 12,
+		paddingTop: 13,
 		paddingBottom: 12
 	},
 	buttonInnerText: {
+		fontFamily: "ApexNew-Medium",
 		color: "#fff",
 		fontWeight: "600",
-		fontSize: 16
+		fontSize: 18
 	},
 	avatar: {
 		width: 160,
