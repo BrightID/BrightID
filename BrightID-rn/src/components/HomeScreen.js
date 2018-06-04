@@ -25,7 +25,7 @@ export default class HomeScreen extends React.Component {
 			title: "BrightID",
 			headerBackTitle: "Home",
 			headerRight: (
-				<HeaderButtons IconComponent={Ionicons} iconSize={24} color="#fff">
+				<HeaderButtons IconComponent={Ionicons} iconSize={32} color="#fff">
 					<HeaderButtons.Item
 						title="more"
 						iconName="ios-more-outline"
@@ -62,7 +62,7 @@ export default class HomeScreen extends React.Component {
 			headerLeft: (
 				<HeaderButtons
 					IconComponent={Ionicons}
-					iconSize={24}
+					iconSize={32}
 					color="#fff"
 					left={true}
 				>
@@ -89,16 +89,18 @@ export default class HomeScreen extends React.Component {
 							{this.props.trustScore}% Trusted
 						</Text>
 					</View>
-					<View style={styles.counts}>
+					<View style={styles.countsContainer}>
 						<View style={styles.countsGroup}>
-							<Text style={styles.countsText}>
+							<Text style={styles.countsNumberText}>
 								{this.props.connectionsCount}
 							</Text>
-							<Text style={styles.countsText}>Connections</Text>
+							<Text style={styles.countsDescriptionText}>Connections</Text>
 						</View>
 						<View style={styles.countsGroup}>
-							<Text style={styles.countsText}>{this.props.groupsCount}</Text>
-							<Text style={styles.countsText}>Groups</Text>
+							<Text style={styles.countsNumberText}>
+								{this.props.groupsCount}
+							</Text>
+							<Text style={styles.countsDescriptionText}>Groups</Text>
 						</View>
 					</View>
 					<View style={styles.connectContainer}>
@@ -127,51 +129,59 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between"
 	},
 	name: {
+		fontFamily: "ApexNew-Book",
 		fontSize: 30,
-		fontWeight: "300",
-		marginTop: 7,
+		marginTop: 8,
 		textAlign: "center",
 		shadowColor: "rgba(0,0,0,0.32)",
 		shadowOffset: { width: 0, height: 2 },
 		shadowRadius: 4
 	},
 	user: {
-		marginTop: 20,
-		marginBottom: 18
+		marginTop: 24
 	},
 	trustScoreContainer: {
-		borderBottomColor: "#333",
-		borderTopColor: "#333",
-		borderTopWidth: StyleSheet.hairlineWidth,
-		borderBottomWidth: StyleSheet.hairlineWidth,
+		borderBottomColor: "#e3e1e1",
+		borderTopColor: "#e3e1e1",
+		borderTopWidth: 1,
+		borderBottomWidth: 1,
 		width: "80%",
+		marginTop: 9,
 		paddingTop: 7,
 		paddingBottom: 7
 	},
 	trustScore: {
+		fontFamily: "ApexNew-Book",
+		fontSize: 18,
 		textAlign: "center",
-		color: "green",
-		fontSize: 18
+		color: "green"
 	},
-	counts: {
+	countsContainer: {
 		justifyContent: "space-evenly",
 		flexDirection: "row",
 		width: "80%",
-		paddingTop: 16,
-		paddingBottom: 16
+		marginTop: 12
 	},
-	countsText: {
+	countsDescriptionText: {
+		fontFamily: "ApexNew-Book",
 		textAlign: "center",
-		fontSize: 18
+		fontSize: 16
+	},
+	countsNumberText: {
+		fontFamily: "ApexNew-Book",
+		textAlign: "center",
+		fontSize: 22
 	},
 	connectContainer: {
 		width: "100%",
 		alignItems: "center",
 		justifyContent: "center",
 		backgroundColor: "#ccc",
-		height: 200
+		flex: 1,
+		marginTop: 17
 	},
 	connectText: {
-		fontSize: 12
+		fontFamily: "ApexNew-Book",
+		fontSize: 16
 	}
 });
