@@ -80,8 +80,8 @@ export default class Onboard extends React.Component {
 						onSnapToItem={index => this.setState({ activeSlide: index })}
 					/>
 				</View>
-				<View style={{ flex: 1 }}>{this.pagination()}</View>
-				<View style={{ flex: 1 }}>
+				<View style={styles.center}>{this.pagination()}</View>
+				<View style={styles.center}>
 					<TouchableOpacity
 						onPress={() => this.props.navigation.navigate("SignUp")}
 						style={styles.button}
@@ -100,7 +100,12 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff",
 		alignItems: "center",
 		flexDirection: "column",
-		justifyContent: "flex-start"
+		justifyContent: "space-between"
+	},
+	center: {
+		flex: 1
+		// justifyContent: "center",
+		// alignItems: "center"
 	},
 	onboardingScreens: {
 		height: 476,
@@ -117,20 +122,23 @@ const styles = StyleSheet.create({
 		alignSelf: "center"
 	},
 	button: {
-		// borderWidth: StyleSheet.hairlineWidth,
+		width: 300,
+		// height: 48,
 		borderWidth: 1,
-		borderColor: "#5497E8",
-		paddingTop: 12,
+		borderColor: "#4990e2",
+		paddingTop: 13,
 		paddingBottom: 12,
-		width: 290,
 		alignItems: "center",
 		justifyContent: "center",
 		marginTop: 10,
 		marginBottom: 10
 	},
 	buttonText: {
-		color: "#5497E8",
-		fontSize: 17,
+		fontFamily: "ApexNew-Medium",
+		color: "#4990e2",
+		fontSize: 18,
 		fontWeight: "bold"
+		// marginTop: 13,
+		// marginBottom: 12
 	}
 });

@@ -20,13 +20,17 @@ const AppStack = createStackNavigator(
 		initialRouteName: "Home",
 		navigationOptions: {
 			title: "BrightID",
+			headerTintColor: "#fff",
+			headerTitleStyle: {
+				fontFamily: "EurostileRegular",
+				fontSize: 24
+			},
 			headerBackground: (
 				<LinearGradient
 					colors={["#F52828", "#F76B1C"]}
 					style={{ flex: 1, width: "100%" }}
 				/>
-			),
-			headerTintColor: "#fff"
+			)
 		}
 	}
 );
@@ -45,6 +49,10 @@ const OnboardingStack = createStackNavigator(
 		navigationOptions: {
 			title: "BrightID",
 			headerTintColor: "#fff",
+			headerTitleStyle: {
+				fontFamily: "EurostileRegular",
+				fontSize: 24
+			},
 			headerTransparent: true,
 			headerBackground: (
 				<LinearGradient

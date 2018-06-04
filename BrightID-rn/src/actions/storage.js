@@ -53,15 +53,7 @@ export const saveUserData = (
 		// save the users BrightID USER_TOKEN
 		// TODO connect to backend API before storing locally
 		const userToken = "user_token";
-		// console.warn(nameornym);
-		// console.warn(avatarUri);
-		const userData = {
-			userToken: "user_token",
-			nameornym,
-			avatarUri
-		};
 
-		await AsyncStorage.setItem("userData", JSON.stringify(userData));
 		// if there are no errors... navigate to the homepage
 		dispatch(saveDataSuccess({ userToken, nameornym, avatarUri }));
 	} catch (err) {

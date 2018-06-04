@@ -19,10 +19,11 @@ export default class AppBootstrap extends React.Component {
 	// Fetch the token from storage then navigate to our appropriate place
 	_bootstrapAsync = async () => {
 		// bootstrap the application
-		// user token determines whether or not to load onboarding HomeScreen
-		// setUpDefault will call the getUserData action located in actions/storage
-		// fake connections data is loaded into the store
-		// this will navigate to either the Auth or App stack
+		// async storage key 'userData' : {
+		//	userToken: String,
+		//  nameornym: String,
+		//  avatarUri: String
+		//	}
 		try {
 			let userData = await AsyncStorage.getItem("userData");
 			if (userData !== null) {
