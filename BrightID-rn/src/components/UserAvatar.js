@@ -1,5 +1,6 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 /**
  * Avatar Picture displayed on the HomeScreen
@@ -9,7 +10,7 @@ import PropTypes from "prop-types";
  * or any local db easy to use with React-native
  */
 
-export default class UserAvatar extends React.Component {
+class UserAvatar extends React.Component {
 	static propTypes = {
 		userAvatar: PropTypes.string
 	};
@@ -40,3 +41,5 @@ const styles = StyleSheet.create({
 		shadowRadius: 2
 	}
 });
+
+export default connect(state => state.main)(UserAvatar);

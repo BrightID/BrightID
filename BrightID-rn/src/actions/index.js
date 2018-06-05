@@ -6,7 +6,6 @@ export const GROUPS_COUNT = "GROUPS_COUNT";
 export const SEARCH_PARAM = "SEARCH_PARAM";
 export const ALL_CONNECTIONS = "ALL_CONNECTIONS";
 export const RON_PAUL = "RON_PAUL";
-export const SAVING_DATA = "SAVING_DATA";
 export const SAVE_DATA_SUCCESS = "SAVE_DATA_SUCCESS";
 export const LOADING_USER = "LOADING_USER";
 export const USER_DATA = "USER_DATA";
@@ -36,7 +35,7 @@ export const groupsCount = payload => ({
 	payload
 });
 
-export const searchParam = value => ({
+export const setSearchParam = value => ({
 	type: SEARCH_PARAM,
 	value
 });
@@ -49,10 +48,6 @@ export const allConnections = (connections: Array) => ({
 export const ronPaul = payload => ({
 	type: RON_PAUL,
 	payload
-});
-
-export const savingData = () => ({
-	type: SAVING_DATA
 });
 
 export const loadingUser = () => ({

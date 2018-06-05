@@ -16,7 +16,7 @@ import {
 
 // immutable js optional, but works really well with redux
 
-import { fromJS } from "immutable";
+// import { fromJS } from "immutable";
 
 /**
  * INITIAL STATE
@@ -30,10 +30,10 @@ import { fromJS } from "immutable";
  * @param allConnections List => Map
  */
 
-const initialState = fromJS({
+const initialState = {
 	trustScore: "",
 	name: "",
-	avatar: "",
+	userAvatar: "",
 	userToken: "",
 	groupsCount: 0,
 	searchParam: "",
@@ -41,41 +41,59 @@ const initialState = fromJS({
 	ronPaul: "",
 	savingData: false,
 	saveDataSuccess: false
-});
+};
 
 const mainReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case TRUST_SCORE:
-			return state.set("trustScore", action.payload);
+			return {
+				...state,
+				trustScore: action.payload
+			};
 		case LOADING_USER:
-			return state.set("loadingUser", true);
+			return {
+				...state,
+				loadingUser: true
+			};
 		case USER_DATA:
-			return state.merge({
+			return {
+				...state,
 				userAvatar: action.avatarUri,
 				name: action.nameornym,
 				userToken: action.userToken,
 				loadingUser: false
-			});
+			};
 		case GROUPS_COUNT:
-			return state.set("groupsCount", action.payload);
+			return {
+				...state,
+				groupsCount: action.payload
+			};
 		case SEARCH_PARAM:
-			return state.set("searchParam", action.value);
+			return {
+				...state,
+				searchParam: action.value
+			};
 		case ALL_CONNECTIONS:
-			return state.merge({
+			return {
+				...state,
 				allConnections: action.connections
-			});
-		case SAVING_DATA:
-			return state.set("savingData", true);
+			};
 		case SAVE_DATA_SUCCESS:
 			// userToken is used for navigation out of onboarding flow
-			return state.merge({
+			return {
+				...state,
 				userAvatar: action.avatarUri,
 				name: action.nameornym,
 				userToken: action.userToken,
 				savingData: false
-			});
+			};
 		case REMOVE_USER_DATA:
-			return state.merge({ avatarUri: "", name: "", userToken: "" });
+			return {
+				...state,
+				avatarUri: "",
+				name: "",
+				userToken: ""
+			};
 		default:
 			return state;
 	}

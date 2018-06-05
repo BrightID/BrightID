@@ -1,10 +1,11 @@
 import React from "react";
 import { Alert, AsyncStorage, StyleSheet, Text, View } from "react-native";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import HeaderButtons from "react-navigation-header-buttons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import BottomNav from "./BottomNav";
-import UserAvatar from "../containers/UserAvatar";
+import UserAvatar from "./UserAvatar";
 import store from "../store";
 import { removeUserData } from "../actions";
 
@@ -12,12 +13,14 @@ import { removeUserData } from "../actions";
  * Home screen of BrightID
  */
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
 	static propTypes = {
 		trustScore: PropTypes.string,
 		connectionsCount: PropTypes.number,
 		groupsCount: PropTypes.number,
-		name: PropTypes.string
+		name: PropTypes.string,
+		allConnections: PropTypes.array,
+		navigation: PropTypes.object
 	};
 
 	static navigationOptions = ({ navigation }) => {
@@ -92,7 +95,7 @@ export default class HomeScreen extends React.Component {
 					<View style={styles.countsContainer}>
 						<View style={styles.countsGroup}>
 							<Text style={styles.countsNumberText}>
-								{this.props.connectionsCount}
+								{this.props.allConnections.length}
 							</Text>
 							<Text style={styles.countsDescriptionText}>Connections</Text>
 						</View>
@@ -107,7 +110,7 @@ export default class HomeScreen extends React.Component {
 						<Text style={styles.connectText}>CONNECT</Text>
 					</View>
 				</View>
-				<BottomNav {...this.props} />
+				<BottomNav navigation={this.props.navigation} />
 			</View>
 		);
 	}
@@ -185,3 +188,5 @@ const styles = StyleSheet.create({
 		fontSize: 16
 	}
 });
+
+export default connect(state => state.main)(HomeScreen);

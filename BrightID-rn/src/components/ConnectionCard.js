@@ -1,5 +1,6 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Touchable from "react-native-platform-touchable";
 import Ionicon from "react-native-vector-icons/Ionicons";
@@ -15,7 +16,7 @@ import moment from "moment";
  * @prop avatar
  */
 
-export default class ConnectionCard extends React.Component {
+class ConnectionCard extends React.Component {
 	static propTypes = {
 		firstName: PropTypes.string,
 		lastName: PropTypes.string,
@@ -94,3 +95,5 @@ const styles = StyleSheet.create({
 		marginRight: 16
 	}
 });
+
+export default connect(null)(ConnectionCard);
