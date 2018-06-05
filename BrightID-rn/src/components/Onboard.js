@@ -8,6 +8,7 @@ import {
 	View
 } from "react-native";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaintainPrivacy from "./onboardingScreens/MaintainPrivacy";
 import Carousel, { Pagination } from "react-native-snap-carousel";
@@ -16,7 +17,7 @@ import Carousel, { Pagination } from "react-native-snap-carousel";
  * Home screen of BrightID
  */
 
-export default class Onboard extends React.Component {
+class Onboard extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -136,3 +137,5 @@ const styles = StyleSheet.create({
 		// marginBottom: 12
 	}
 });
+
+export default connect(null)(Onboard);

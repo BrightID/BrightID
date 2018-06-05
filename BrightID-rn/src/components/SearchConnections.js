@@ -1,8 +1,10 @@
 import React from "react";
 import { TextInput, StyleSheet, Text, View } from "react-native";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Touchable from "react-native-platform-touchable";
 import Ionicon from "react-native-vector-icons/Ionicons";
+import { setSearchParam } from "../actions";
 
 /**
  * Search Bar in the Connections Screen
@@ -10,10 +12,10 @@ import Ionicon from "react-native-vector-icons/Ionicons";
  * TODO: add search filter in redux actions
  */
 
-export default class SearchConnections extends React.Component {
+class SearchConnections extends React.Component {
 	static propTypes = {
 		searchParam: PropTypes.string,
-		updateParam: PropTypes.function
+		dispatch: PropTypes.func
 	};
 	render() {
 		return (
@@ -23,7 +25,7 @@ export default class SearchConnections extends React.Component {
 				</Touchable>
 				<TextInput
 					value={this.props.searchParam}
-					onChangeText={value => this.props.updateParam(value)}
+					onChangeText={value => this.props.dispatch(setSearchParam(value))}
 					style={styles.searchField}
 					placeholder="Search Connections"
 				/>
@@ -63,3 +65,5 @@ const styles = StyleSheet.create({
 		flex: 1
 	}
 });
+
+export default connect(null)(SearchConnections);

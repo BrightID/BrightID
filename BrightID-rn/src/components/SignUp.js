@@ -11,16 +11,21 @@ import {
 	View
 } from "react-native";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import HeaderButtons from "react-navigation-header-buttons";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import Feather from "react-native-vector-icons/Feather";
 import ImagePicker from "react-native-image-picker";
+import { saveDataSuccess } from "../actions";
 
 /**
  * Home screen of BrightID
  */
 
-export default class HomeScreen extends React.Component {
+class SignUp extends React.Component {
+	static propTypes = {
+		dispatch: PropTypes.func,
+		navigation: PropTypes.object
+	};
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -31,10 +36,6 @@ export default class HomeScreen extends React.Component {
 		};
 		// this.handleBrightIdCreation = this.handleBrightIdCreation.bind(this);
 	}
-
-	static Props: {
-		saveUserData: PropTypes.func
-	};
 
 	static navigationOptions = {
 		title: "BrightID",
@@ -122,7 +123,9 @@ export default class HomeScreen extends React.Component {
 			await AsyncStorage.setItem("userData", JSON.stringify(userData));
 
 			// update redux store
-			this.props.saveUserData(nameornym, avatarUri);
+			await this.props.dispatch(saveDataSuccess(userData));
+			// navigate to home page
+			this.props.navigation.navigate("App");
 		} catch (err) {
 			console.warn(err);
 		}
@@ -273,3 +276,5 @@ const styles = StyleSheet.create({
 		shadowRadius: 2
 	}
 });
+
+export default connect(null)(SignUp);

@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
+import PropTypes from "prop-types";
 import Touchable from "react-native-platform-touchable";
 import Ionicon from "react-native-vector-icons/Ionicons";
 
@@ -11,6 +12,9 @@ import Ionicon from "react-native-vector-icons/Ionicons";
  */
 
 export default class BottomNav extends React.Component {
+	static propTypes = {
+		navigation: PropTypes.object
+	};
 	render() {
 		return (
 			<View style={styles.container}>

@@ -1,8 +1,8 @@
 import React from "react";
-import HomeScreen from "./containers/HomeScreen";
-import ConnectionsScreen from "./containers/ConnectionsScreen";
-import Onboard from "./containers/Onboard";
-import SignUp from "./containers/SignUp";
+import HomeScreen from "./components/HomeScreen";
+import ConnectionsScreen from "./components/ConnectionsScreen";
+import Onboard from "./components/Onboard";
+import SignUp from "./components/SignUp";
 import AppBootstrap from "./AppBootstrap";
 import { createStackNavigator, createSwitchNavigator } from "react-navigation";
 import LinearGradient from "react-native-linear-gradient";
