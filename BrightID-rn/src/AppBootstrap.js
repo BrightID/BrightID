@@ -43,7 +43,7 @@ export default class AppBootstrap extends React.Component {
 
 		try{
 			//Should use some kind of encrypted storage
-			let ppKeys = await AsyncStorage.getItem("ppKeys")
+			let ppKeys = await AsyncStorage.getItem("connectionPPKeys")
 
 			if(ppKeys !== null){
 				ppKeys = JSON.parse(ppKeys);
