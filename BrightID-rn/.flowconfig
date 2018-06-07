@@ -19,6 +19,9 @@
 ; Ignore metro
 .*/node_modules/metro/.*
 
+; Ignore react-navigation
+.*/node_modules/react-navigation-header-buttons/.*
+
 [include]
 
 [libs]

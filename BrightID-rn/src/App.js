@@ -1,9 +1,10 @@
-import React from "react";
-import { Provider } from "react-redux";
-import { StyleSheet, Text, View } from "react-native";
-import AppRoutes from "./AppRoutes";
-import store from "./store";
-import { setUpDefault } from "./actions/setUpDefault";
+// @flow
+
+import * as React from 'react';
+import { Provider } from 'react-redux';
+import { StyleSheet, View } from 'react-native';
+import AppRoutes from './AppRoutes';
+import store from './store';
 
 /**
  * Central part of the application
@@ -15,19 +16,19 @@ import { setUpDefault } from "./actions/setUpDefault";
  */
 
 export default class App extends React.Component {
-	render() {
-		return (
-			<Provider store={store}>
-				<View style={styles.container}>
-					<AppRoutes />
-				</View>
-			</Provider>
-		);
-	}
+  render() {
+    return (
+      <Provider store={store}>
+        <View style={styles.container}>
+          <AppRoutes />
+        </View>
+      </Provider>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1
-	}
+  container: {
+    flex: 1,
+  },
 });
