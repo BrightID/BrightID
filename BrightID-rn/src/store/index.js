@@ -12,7 +12,7 @@ export const setupPPKeys = ppKeys => async dispatch => {
 
     try {
 
-        if (ppKeys.hasOwnProperty("key1") && ppKeys.hasOwnProperty("key2")) {
+        if (ppKeys.hasOwnProperty("ppk")) {
             dispatch(setPPKeys(ppKeys));
         }
     } catch (err) {
@@ -24,15 +24,14 @@ export const generatePPKeys = () => async dispatch => {
 
     try {
 
-        key1 = nacl.box.keyPair();
-        key2 = nacl.box.keyPair();
+        ppk = nacl.sign.keyPair();
 
         axios.post("http://rest.learncode.academy/api/brightid/keys",
-            {"key1": key1.publicKey, "key2": key2.publicKey},
+            {"publicKey": ppk.publicKey},
             {'Content-Type': 'application/json'})
             .then((response) => {
                 if (response === "ok") {
-                    dispatch(setPPKeys({"key1": key1, "key2": key2}));
+                    dispatch(setPPKeys(ppk));
                 }
             })
             .catch((err) => {
