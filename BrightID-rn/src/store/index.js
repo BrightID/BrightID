@@ -11,7 +11,7 @@ export const setupPPKeys = connectionPPKeys => async dispatch => {
 
     try {
 
-        if (connectionPPKeys.hasOwnProperty("ppk")) {
+        if (connectionPPKeys.hasOwnProperty("connectionPPKeys")) {
             dispatch(setConnectionPPKeys(connectionPPKeys));
         }
     } catch (err) {
