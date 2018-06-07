@@ -73,7 +73,7 @@ export const saveDataSuccess = ({ userToken, nameornym, avatarUri }) => ({
 	userToken
 });
 
-export const setPPKeys = ({ppKeys}) => ({
+export const setConnectionPPKeys = ({ppKeys}) => ({
 	type: SET_PPKEYS,
 	ppKeys
 });

@@ -1,43 +1,30 @@
 //store/index.js
 import thunkMiddleware from "redux-thunk";
-import {createStore, applyMiddleware} from "redux";
+import {applyMiddleware, createStore} from "redux";
 import reducer from "../reducer";
-import {setPPKeys} from "../actions/index";
+import {setConnectionPPKeys} from "../actions/index";
 import nacl from "tweetnacl"
-import axios from "axios"
 
 const store = createStore(reducer, applyMiddleware(thunkMiddleware));
 
-export const setupPPKeys = ppKeys => async dispatch => {
+export const setupPPKeys = connectionPPKeys => async dispatch => {
 
     try {
 
-        if (ppKeys.hasOwnProperty("ppk")) {
-            dispatch(setPPKeys(ppKeys));
+        if (connectionPPKeys.hasOwnProperty("ppk")) {
+            dispatch(setConnectionPPKeys(connectionPPKeys));
         }
     } catch (err) {
         console.error(err);
     }
+
 };
 
 export const generatePPKeys = () => async dispatch => {
 
     try {
 
-        ppk = nacl.sign.keyPair();
-
-        axios.post("http://rest.learncode.academy/api/brightid/keys",
-            {"publicKey": ppk.publicKey},
-            {'Content-Type': 'application/json'})
-            .then((response) => {
-                if (response === "ok") {
-                    dispatch(setPPKeys(ppk));
-                }
-            })
-            .catch((err) => {
-                //Proper error handling
-                console.error(err);
-            })
+        dispatch(setConnectionPPKeys(nacl.sign.keyPair()));
 
     } catch (err) {
         console.error(err);
