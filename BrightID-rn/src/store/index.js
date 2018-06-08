@@ -1,33 +1,10 @@
 // @flow
 
 import thunkMiddleware from 'redux-thunk';
-import nacl from 'tweetnacl';
 import { applyMiddleware, createStore } from 'redux';
 import reducer from '../reducer';
-import { setPPKeys } from '../actions/index';
 
 const store = createStore(reducer, applyMiddleware(thunkMiddleware));
-
-export const setupPPKeys = ppKeys => async dispatch => {
-  try {
-    if (
-      ppKeys.hasOwnProperty('publicKey') &&
-      ppKeys.hasOwnProperty('privateKey')
-    ) {
-      dispatch(setPPKeys({ connectionPPKeys: ppKeys }));
-    }
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-export const generatePPKeys = () => async dispatch => {
-  try {
-    dispatch(setPPKeys({ connectionPKeys: nacl.sign.keyPair() }));
-  } catch (err) {
-    console.error(err);
-  }
-};
 
 export default store;
 
