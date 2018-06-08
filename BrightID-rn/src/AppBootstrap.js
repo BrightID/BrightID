@@ -8,7 +8,8 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import store, { setupPPKeys, generatePPKeys } from './store';
+import store from './store';
+import { setupPPKeys, generatePPKeys } from './actions/ppKeys';
 import { setUpDefault } from './actions/setUpDefault';
 
 type Props = {

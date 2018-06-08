@@ -91,18 +91,18 @@ class HomeScreen extends React.Component<Props> {
             </Text>
           </View>
           <View style={styles.countsContainer}>
-            {/* <View style={styles.countsGroup}> */}
-            <Text style={styles.countsNumberText}>
-              {this.props.allConnections.length}
-            </Text>
-            <Text style={styles.countsDescriptionText}>Connections</Text>
-            {/* </View> */}
-            {/* <View style={styles.countsGroup}> */}
-            <Text style={styles.countsNumberText}>
-              {this.props.groupsCount}
-            </Text>
-            <Text style={styles.countsDescriptionText}>Groups</Text>
-            {/* </View> */}
+            <View style={styles.countsGroup}>
+              <Text style={styles.countsNumberText}>
+                {this.props.allConnections.length}
+              </Text>
+              <Text style={styles.countsDescriptionText}>Connections</Text>
+            </View>
+            <View style={styles.countsGroup}>
+              <Text style={styles.countsNumberText}>
+                {this.props.groupsCount}
+              </Text>
+              <Text style={styles.countsDescriptionText}>Groups</Text>
+            </View>
           </View>
           <View style={styles.connectContainer}>
             <Text style={styles.connectText}>CONNECT</Text>
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   countsContainer: {
     justifyContent: 'space-evenly',
     flexDirection: 'row',
-    width: '80%',
+    width: '75%',
     marginTop: 12,
   },
   countsDescriptionText: {
@@ -184,6 +184,9 @@ const styles = StyleSheet.create({
   connectText: {
     fontFamily: 'ApexNew-Book',
     fontSize: 16,
+  },
+  countsGroup: {
+    flex: 1,
   },
 });
 
