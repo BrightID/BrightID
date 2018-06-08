@@ -1,77 +1,78 @@
 // @flow
-import React from "react";
+
+import * as React from 'react';
 import {
-	ActivityIndicator,
-	AsyncStorage,
-	StatusBar,
-	StyleSheet,
-	View
-} from "react-native";
-import store from "./store";
-import { setUpDefault } from "./actions/setUpDefault";
-import { setupPPKeys, generatePPKeys } from "./store/index";
+  ActivityIndicator,
+  AsyncStorage,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
+import store, { setupPPKeys, generatePPKeys } from './store';
+import { setUpDefault } from './actions/setUpDefault';
 
-export default class AppBootstrap extends React.Component {
-	constructor(props) {
-		super(props);
-		this._bootstrapAsync();
-	}
+type Props = {
+  navigation: { navigate: Function },
+};
 
-	// Fetch the token from storage then navigate to our appropriate place
-	_bootstrapAsync = async () => {
-		// bootstrap the application
-		// async storage key 'userData' : {
-		//	userToken: String,
-		//  nameornym: String,
-		//  avatarUri: String
-		//	}
-		try {
-			let userData = await AsyncStorage.getItem("userData");
-			if (userData !== null) {
-				userData = JSON.parse(userData);
-				store.dispatch(setUpDefault(userData));
-			} else {
-				store.dispatch(setUpDefault({}));
-			}
-			this.props.navigation.navigate(userData ? "App" : "Onboarding");
-		} catch (err) {
-			console.warn(err);
-		}
+export default class AppBootstrap extends React.Component<Props> {
+  componentDidMount() {
+    this.bootstrapAsync();
+  }
 
-		//This should check the async storage for the Public/private keys as well. If they don't exist, it generates
-		//new ones using tweetnacl.js.
+  // Fetch the token from storage then navigate to our appropriate place
+  bootstrapAsync = async () => {
+    // bootstrap the application
+    // async storage key 'userData' : {
+    // userToken: String,
+    // nameornym: String,
+    // avatarUri: String
+    // }
+    try {
+      let userData = await AsyncStorage.getItem('userData');
+      if (userData !== null) {
+        userData = JSON.parse(userData);
+        store.dispatch(setUpDefault(userData));
+      } else {
+        store.dispatch(setUpDefault({}));
+      }
+      this.props.navigation.navigate(userData ? 'App' : 'Onboarding');
+    } catch (err) {
+      console.warn(err);
+    }
 
-		try{
-			//Should use some kind of encrypted storage
-			let ppKeys = await AsyncStorage.getItem("connectionPPKeys")
+    // This should check the async storage for the Public/private keys as well.
+    // If they don't exist, it generates new ones using tweetnacl.js.
 
-			if(ppKeys !== null){
-				ppKeys = JSON.parse(ppKeys);
-				store.dispatch(setupPPKeys(ppKeys));
-			} else {
+    try {
+      // Should use some kind of encrypted storage
+      let ppKeys = await AsyncStorage.getItem('connectionPPKeys');
 
-				//Generate new PPKeys and exchange with server.
-				store.dispatch(generatePPKeys({}))
-			}
+      if (ppKeys !== null) {
+        ppKeys = JSON.parse(ppKeys);
+        store.dispatch(setupPPKeys(ppKeys));
+      } else {
+        // Generate new PPKeys and exchange with server.
+        store.dispatch(generatePPKeys({}));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-		}catch (err) {
-			console.error(err);
-		}
-	};
-
-	// Render any loading content that you like here
-	render() {
-		return (
-			<View style={styles.container}>
-				<ActivityIndicator />
-				<StatusBar barStyle="default" />
-			</View>
-		);
-	}
+  // Render any loading content that you like here
+  render() {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator />
+        <StatusBar barStyle="default" />
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1
-	}
+  container: {
+    flex: 1,
+  },
 });

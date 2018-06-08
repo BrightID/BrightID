@@ -1,11 +1,7 @@
 {
-  "name": "BrightID",
+  "name": "brightid",
   "version": "0.0.1",
   "private": true,
-  "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
-  },
   "rnpm": {
     "assets": [
       "./assets/fonts/"
@@ -35,14 +31,45 @@
     "babel-jest": "22.4.4",
     "babel-preset-react-native": "4.0.0",
     "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-babel": "^5.1.0",
+    "eslint-plugin-flowtype": "^2.49.3",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "^7.8.2",
+    "flow-bin": "^0.67.1",
     "jest": "22.4.4",
+    "prettier": "^1.13.4",
     "react-test-renderer": "16.3.1",
     "redux-mock-store": "^1.5.1"
   },
   "jest": {
     "preset": "react-native"
+  },
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "flow-start": "flow start",
+    "flow-stop": "flow stop",
+    "flow-status": "flow status",
+    "flow-coverage": "flow coverage",
+    "eslint": "eslint 'src/**/*.js*'",
+    "prettify": "prettier --write 'src/**/*.js*'",
+    "test": "jest"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BrightID/BrightID"
   }
 }
