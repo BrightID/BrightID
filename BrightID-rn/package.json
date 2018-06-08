@@ -2,14 +2,6 @@
   "name": "brightid",
   "version": "0.0.1",
   "private": true,
-  "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "flow-start": "flow start",
-    "flow-stop": "flow stop",
-    "flow-status": "flow status",
-    "flow-coverage": "flow coverage",
-    "test": "jest"
-  },
   "rnpm": {
     "assets": [
       "./assets/fonts/"
@@ -52,5 +44,27 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "flow-start": "flow start",
+    "flow-stop": "flow stop",
+    "flow-status": "flow status",
+    "flow-coverage": "flow coverage",
+    "eslint": "eslint 'src/**/*.js*'",
+    "prettify": "prettier --write 'src/**/*.js*'",
+    "test": "jest"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": ["prettier --write", "git add"]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BrightID/BrightID"
   }
 }

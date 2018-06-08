@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import PropTypes from 'prop-types';
 import Touchable from 'react-native-platform-touchable';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
@@ -13,10 +12,11 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
  * see RootStack.js for list of screens / routes in the app
  */
 
-export default class BottomNav extends React.Component {
-  static propTypes = {
-    navigation: PropTypes.object,
-  };
+type Props = {
+  navigation: { navigate: Function },
+};
+
+export default class BottomNav extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>

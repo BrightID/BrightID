@@ -1,6 +1,6 @@
 {
   "parser": "babel-eslint",
-  "plugins": ["react", "prettier", "import", "jsx-a11y"],
+  "plugins": ["react", "prettier", "import", "jsx-a11y", "flowtype"],
   "extends": ["airbnb", "plugin:react/recommended"],
   "env": {
     "browser": true,
@@ -8,15 +8,18 @@
     "es6": true
   },
   "rules": {
-    "no-console": 0,
-    "arrow-parens": 0,
-    "global-require": 0,
-    "no-use-before-define": 0,
-    "no-prototype-builtins": 0,
-    "function-paren-newline": 0,
-    "react/prefer-stateless-function": 0,
-    "react/jsx-filename-extension": 0,
-    "react/no-unescaped-entities": 0,
-    "react/require-default-props": 0
+    "no-console": "off",
+    "arrow-parens": "off",
+    "global-require": "off",
+    "no-use-before-define": "off",
+    "no-prototype-builtins": "off",
+    "function-paren-newline": "off",
+    "react/prefer-stateless-function": "off",
+    "react/jsx-filename-extension": "off",
+    "react/no-unescaped-entities": "off",
+    "react/require-default-props": "off",
+    "react/jsx-boolean-value": "off",
+    "consistent-return": "off",
+    "no-alert": "off"
   }
 }

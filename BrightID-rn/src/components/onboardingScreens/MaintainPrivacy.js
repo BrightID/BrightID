@@ -3,7 +3,9 @@
 import * as React from 'react';
 import { StyleSheet, Image, Text, View } from 'react-native';
 
-export default class Onboard extends React.Component {
+type Props = {};
+
+export default class Onboard extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>

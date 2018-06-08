@@ -1,49 +1,44 @@
 // @flow
 
 import * as React from 'react';
-import {
-  Button,
-  StyleSheet,
-  Image,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import PropTypes from 'prop-types';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaintainPrivacy from './onboardingScreens/MaintainPrivacy';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import MaintainPrivacy from './onboardingScreens/MaintainPrivacy';
 
 /**
- * Home screen of BrightID
+ * Initial Onboarding screen of BrightID
+ * Uses react-native-snap-carousel for displaying privacy and other notices
  */
 
-class Onboard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      entries: [
-        <MaintainPrivacy />,
-        <MaintainPrivacy />,
-        <MaintainPrivacy />,
-        <MaintainPrivacy />,
-      ],
-      activeSlide: 0,
-    };
-  }
+type Props = {
+  navigation: { navigate: Function },
+};
+type State = {
+  entries: Array<React.Element<typeof MaintainPrivacy>>,
+  activeSlide: number,
+};
 
+class Onboard extends React.Component<Props, State> {
   static navigationOptions = {
     title: '',
     headerBackground: '',
     headerStyle: {
       borderBottomWidth: 0,
-      // height: 0
     },
   };
 
-  _renderItem({ item, index }) {
-    return <View style={styles.onboardingScreens}>{item}</View>;
+  constructor(props) {
+    super(props);
+    this.state = {
+      entries: [
+        <MaintainPrivacy key={1} />,
+        <MaintainPrivacy key={2} />,
+        <MaintainPrivacy key={3} />,
+        <MaintainPrivacy key={4} />,
+      ],
+      activeSlide: 0,
+    };
   }
 
   pagination() {
@@ -70,14 +65,19 @@ class Onboard extends React.Component {
       />
     );
   }
+  renderItem = ({ item, index }) => (
+    <View key={index} style={styles.onboardingScreens}>
+      {item}
+    </View>
+  );
   render() {
     return (
       <View style={styles.container}>
         <View style={{ height: 471 }}>
           <Carousel
             data={this.state.entries}
-            renderItem={this._renderItem}
-            layout={'default'}
+            renderItem={this.renderItem}
+            layout="default"
             sliderWidth={340}
             itemWidth={340}
             onSnapToItem={index => this.setState({ activeSlide: index })}

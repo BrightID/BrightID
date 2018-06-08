@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { Alert, AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import HeaderButtons from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import BottomNav from './BottomNav';
@@ -15,71 +14,68 @@ import { removeUserData } from '../actions';
  * Home screen of BrightID
  */
 
-class HomeScreen extends React.Component {
-  static propTypes = {
-    trustScore: PropTypes.string,
-    connectionsCount: PropTypes.number,
-    groupsCount: PropTypes.number,
-    name: PropTypes.string,
-    allConnections: PropTypes.array,
-    navigation: PropTypes.object,
-  };
+type Props = {
+  trustScore: string,
+  groupsCount: number,
+  name: string,
+  allConnections: Array<{}>,
+  navigation: { navigate: Function },
+};
 
-  static navigationOptions = ({ navigation }) => {
-    return {
-      title: 'BrightID',
-      headerBackTitle: 'Home',
-      headerRight: (
-        <HeaderButtons IconComponent={Ionicons} iconSize={32} color="#fff">
-          <HeaderButtons.Item
-            title="more"
-            iconName="ios-more-outline"
-            onPress={async () => {
-              Alert.alert(
-                'WARNING',
-                'Would you like to delete user data and return to the onboarding screen?',
-                [
-                  {
-                    text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
+class HomeScreen extends React.Component<Props> {
+  static navigationOptions = ({ navigation }) => ({
+    title: 'BrightID',
+    headerBackTitle: 'Home',
+    headerRight: (
+      <HeaderButtons IconComponent={Ionicons} iconSize={32} color="#fff">
+        <HeaderButtons.Item
+          title="more"
+          iconName="ios-more-outline"
+          onPress={() => {
+            Alert.alert(
+              'WARNING',
+              'Would you like to delete user data and return to the onboarding screen?',
+              [
+                {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+                {
+                  text: 'Sure',
+                  onPress: async () => {
+                    try {
+                      navigation.navigate('Onboarding');
+                      await AsyncStorage.flushGetRequests();
+                      await AsyncStorage.removeItem('userData');
+                      store.dispatch(removeUserData());
+                    } catch (err) {
+                      console.warn(err);
+                    }
                   },
-                  {
-                    text: 'Sure',
-                    onPress: async () => {
-                      try {
-                        navigation.navigate('Onboarding');
-                        await AsyncStorage.flushGetRequests();
-                        await AsyncStorage.removeItem('userData');
-                        store.dispatch(removeUserData());
-                      } catch (err) {
-                        console.warn(err);
-                      }
-                    },
-                  },
-                ],
-                { cancelable: true },
-              );
-            }}
-          />
-        </HeaderButtons>
-      ),
-      headerLeft: (
-        <HeaderButtons
-          IconComponent={Ionicons}
-          iconSize={32}
-          color="#fff"
-          left={true}
-        >
-          <HeaderButtons.Item
-            title="help"
-            iconName="ios-help-circle-outline"
-            onPress={() => console.log('help')}
-          />
-        </HeaderButtons>
-      ),
-    };
-  };
+                },
+              ],
+              { cancelable: true },
+            );
+          }}
+        />
+      </HeaderButtons>
+    ),
+    headerLeft: (
+      <HeaderButtons
+        IconComponent={Ionicons}
+        iconSize={32}
+        color="#fff"
+        left={true}
+      >
+        <HeaderButtons.Item
+          title="help"
+          iconName="ios-help-circle-outline"
+          onPress={() => console.log('help')}
+        />
+      </HeaderButtons>
+    ),
+  });
 
   render() {
     return (
@@ -95,18 +91,18 @@ class HomeScreen extends React.Component {
             </Text>
           </View>
           <View style={styles.countsContainer}>
-            <View style={styles.countsGroup}>
-              <Text style={styles.countsNumberText}>
-                {this.props.allConnections.length}
-              </Text>
-              <Text style={styles.countsDescriptionText}>Connections</Text>
-            </View>
-            <View style={styles.countsGroup}>
-              <Text style={styles.countsNumberText}>
-                {this.props.groupsCount}
-              </Text>
-              <Text style={styles.countsDescriptionText}>Groups</Text>
-            </View>
+            {/* <View style={styles.countsGroup}> */}
+            <Text style={styles.countsNumberText}>
+              {this.props.allConnections.length}
+            </Text>
+            <Text style={styles.countsDescriptionText}>Connections</Text>
+            {/* </View> */}
+            {/* <View style={styles.countsGroup}> */}
+            <Text style={styles.countsNumberText}>
+              {this.props.groupsCount}
+            </Text>
+            <Text style={styles.countsDescriptionText}>Groups</Text>
+            {/* </View> */}
           </View>
           <View style={styles.connectContainer}>
             <Text style={styles.connectText}>CONNECT</Text>

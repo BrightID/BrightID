@@ -3,8 +3,6 @@
 import * as React from 'react';
 import {
   AsyncStorage,
-  Button,
-  CameraRoll,
   Image,
   StyleSheet,
   Text,
@@ -12,33 +10,24 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import PropTypes from 'prop-types';
+import ImagePicker from 'react-native-image-picker';
 import { connect } from 'react-redux';
 import HeaderButtons from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import ImagePicker from 'react-native-image-picker';
 import { saveDataSuccess } from '../actions';
 
-/**
- * Home screen of BrightID
- */
+type Props = {
+  dispatch: Function,
+  navigation: { navigate: Function },
+};
 
-class SignUp extends React.Component {
-  static propTypes = {
-    dispatch: PropTypes.func,
-    navigation: PropTypes.object,
-  };
-  constructor(props) {
-    super(props);
-    this.state = {
-      nameornym: '',
-      active: false,
-      avatarUri: '',
-      keys: [],
-    };
-    // this.handleBrightIdCreation = this.handleBrightIdCreation.bind(this);
-  }
+type State = {
+  nameornym: string,
+  active: boolean,
+  avatarUri: string,
+};
 
+class SignUp extends React.Component<Props, State> {
   static navigationOptions = {
     title: 'BrightID',
     headerBackTitle: 'SignUp',
@@ -55,6 +44,16 @@ class SignUp extends React.Component {
       </HeaderButtons>
     ),
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      nameornym: '',
+      active: false,
+      avatarUri: '',
+    };
+    // this.handleBrightIdCreation = this.handleBrightIdCreation.bind(this);
+  }
 
   static getDerivedStateFromProps(nextProps) {
     // this is an indirect way to listen for actions

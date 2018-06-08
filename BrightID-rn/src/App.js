@@ -15,7 +15,9 @@ import store from './store';
  * read docs here: https://facebook.github.io/immutable-js/
  */
 
-export default class App extends React.Component {
+type Props = {};
+
+export default class App extends React.Component<Props> {
   render() {
     return (
       <Provider store={store}>

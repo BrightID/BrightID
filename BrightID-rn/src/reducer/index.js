@@ -8,7 +8,6 @@ import {
   GROUPS_COUNT,
   SEARCH_PARAM,
   ALL_CONNECTIONS,
-  SAVING_DATA,
   SAVE_DATA_SUCCESS,
   LOADING_USER,
   USER_DATA,
@@ -24,7 +23,7 @@ import {
  * structure the state of tha app here
  *
  * @param trustScore String
- * @param	name String
+ * @param name String
  * @param userAvatar Image
  * @param groupsCount Number
  * @param searchParam String

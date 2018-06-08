@@ -11,20 +11,23 @@ import {
 import store from './store';
 import { setUpDefault } from './actions/setUpDefault';
 
-export default class AppBootstrap extends React.Component {
-  constructor(props) {
-    super(props);
-    this._bootstrapAsync();
+type Props = {
+  navigation: { navigate: Function },
+};
+
+export default class AppBootstrap extends React.Component<Props> {
+  componentDidMount() {
+    this.bootstrapAsync();
   }
 
   // Fetch the token from storage then navigate to our appropriate place
-  _bootstrapAsync = async () => {
+  bootstrapAsync = async () => {
     // bootstrap the application
     // async storage key 'userData' : {
-    //	userToken: String,
-    //  nameornym: String,
-    //  avatarUri: String
-    //	}
+    // userToken: String,
+    // nameornym: String,
+    // avatarUri: String
+    // }
     try {
       let userData = await AsyncStorage.getItem('userData');
       if (userData !== null) {

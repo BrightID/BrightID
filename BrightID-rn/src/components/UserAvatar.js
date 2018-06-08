@@ -1,9 +1,9 @@
 // @flow
 
 import * as React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+
 /**
  * Avatar Picture displayed on the HomeScreen
  * The Image is sourced from the main reducer as userAvatar
@@ -12,10 +12,11 @@ import PropTypes from 'prop-types';
  * or any local db easy to use with React-native
  */
 
-class UserAvatar extends React.Component {
-  static propTypes = {
-    userAvatar: PropTypes.string,
-  };
+type Props = {
+  userAvatar: string,
+};
+
+class UserAvatar extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>

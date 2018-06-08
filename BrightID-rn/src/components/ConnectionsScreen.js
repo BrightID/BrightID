@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
 
@@ -11,15 +10,20 @@ import ConnectionCard from './ConnectionCard';
  * Connection screen of BrightID
  */
 
-class ConnectionsScreen extends React.Component {
-  static propTypes = {
-    allConnections: PropTypes.array,
-    searchParam: PropTypes.string,
-  };
+type Props = {
+  allConnections: Array<{
+    firstName: string,
+    lastName: string,
+    id: number,
+  }>,
+  searchParam: string,
+};
+
+class ConnectionsScreen extends React.Component<Props> {
   static navigationOptions = {
     title: 'Connections',
   };
-  _keyExtractor = item => item.firstName + item.lastName + item.id;
+  keyExtractor = item => item.firstName + item.lastName + item.id;
 
   filterConnections = () =>
     this.props.allConnections.filter(item =>
@@ -36,7 +40,7 @@ class ConnectionsScreen extends React.Component {
         <FlatList
           style={styles.connectionsContainer}
           data={this.filterConnections()}
-          keyExtractor={this._keyExtractor}
+          keyExtractor={this.keyExtractor}
           renderItem={({ item }) => <ConnectionCard {...item} />}
         />
       </View>

@@ -12,7 +12,9 @@ import { trustScore, groupsCount, allConnections, setUserData } from './index';
 
 export const whatever = 'whatever';
 
-export const setUpDefault = userData => async dispatch => {
+export const setUpDefault = (userData: Object) => async (
+  dispatch: Function,
+) => {
   // async is unncessary here, but this is a useful template for handling the API
   try {
     // disptaches the getUserData action from actions/storage.js

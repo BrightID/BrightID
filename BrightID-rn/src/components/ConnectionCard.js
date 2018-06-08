@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import Touchable from 'react-native-platform-touchable';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
@@ -18,14 +17,15 @@ import moment from 'moment';
  * @prop avatar
  */
 
-class ConnectionCard extends React.Component {
-  static propTypes = {
-    firstName: PropTypes.string,
-    lastName: PropTypes.string,
-    avatar: PropTypes.string,
-    trustScore: PropTypes.number,
-    connectionDate: PropTypes.string,
-  };
+type Props = {
+  firstName: string,
+  lastName: string,
+  avatar: string,
+  trustScore: string,
+  connectionDate: string,
+};
+
+class ConnectionCard extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>
@@ -41,7 +41,7 @@ class ConnectionCard extends React.Component {
             Connected {moment(this.props.connectionDate).fromNow()}
           </Text>
         </View>
-        <Touchable onPress={this.focus} style={styles.moreIcon}>
+        <Touchable style={styles.moreIcon}>
           <Ionicon size={48} name="ios-more" color="#ccc" />
         </Touchable>
       </View>
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'green',
   },
-  conectedText: {
+  connectedText: {
     fontFamily: 'ApexNew-Book',
     fontSize: 14,
   },

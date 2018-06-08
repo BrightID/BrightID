@@ -20,34 +20,29 @@ export const REMOVE_USER_DATA = 'REMOVE_USER_DATA';
  *
  */
 
-export const handleError = error => ({
+export const handleError = (error: string) => ({
   type: ERROR,
   error,
 });
 
-export const trustScore = payload => ({
+export const trustScore = (payload: string) => ({
   type: TRUST_SCORE,
   payload,
 });
 
-export const groupsCount = payload => ({
+export const groupsCount = (payload: number) => ({
   type: GROUPS_COUNT,
   payload,
 });
 
-export const setSearchParam = value => ({
+export const setSearchParam = (value: string) => ({
   type: SEARCH_PARAM,
   value,
 });
 
-export const allConnections = connections => ({
+export const allConnections = (connections: Array<{}>) => ({
   type: ALL_CONNECTIONS,
   connections,
-});
-
-export const ronPaul = payload => ({
-  type: RON_PAUL,
-  payload,
 });
 
 export const loadingUser = () => ({
@@ -58,14 +53,30 @@ export const removeUserData = () => ({
   type: REMOVE_USER_DATA,
 });
 
-export const setUserData = ({ userToken, nameornym, avatarUri }) => ({
+export const setUserData = ({
+  userToken,
+  nameornym,
+  avatarUri,
+}: {
+  userToken: string,
+  nameornym: string,
+  avatarUri: string,
+}) => ({
   type: USER_DATA,
   userToken,
   nameornym,
   avatarUri,
 });
 
-export const saveDataSuccess = ({ userToken, nameornym, avatarUri }) => ({
+export const saveDataSuccess = ({
+  userToken,
+  nameornym,
+  avatarUri,
+}: {
+  userToken: string,
+  nameornym: string,
+  avatarUri: string,
+}) => ({
   type: SAVE_DATA_SUCCESS,
   nameornym,
   avatarUri,
