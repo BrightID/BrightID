@@ -11,6 +11,8 @@ export const LOADING_USER = 'LOADING_USER';
 export const USER_DATA = 'USER_DATA';
 export const ERROR = 'ERROR';
 export const REMOVE_USER_DATA = 'REMOVE_USER_DATA';
+export const SET_PPKEYS = 'SET_PPKEYS';
+
 /**
  * Redux boilerplate, pass data through the app
  * Async actions / async functions can be implemented
@@ -81,4 +83,9 @@ export const saveDataSuccess = ({
   nameornym,
   avatarUri,
   userToken,
+});
+
+export const setPPKeys = ({ ppKeys }) => ({
+  type: SET_PPKEYS,
+  ppKeys,
 });
