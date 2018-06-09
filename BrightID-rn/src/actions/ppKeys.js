@@ -1,9 +1,15 @@
 // @flow
 
+// moved from store/index
+// these functions are written as redux-thunk actions
+
 import nacl from 'tweetnacl';
 import { setPPKeys } from '../actions/index';
 
-export const setupPPKeys = (ppKeys: {}) => async dispatch => {
+// I added flow types
+// ppKeys: {} (object)
+// dispatch: Function
+export const setupPPKeys = (ppKeys: {}) => async (dispatch: Function) => {
   try {
     if (
       ppKeys.hasOwnProperty('publicKey') &&
@@ -16,7 +22,7 @@ export const setupPPKeys = (ppKeys: {}) => async dispatch => {
   }
 };
 
-export const generatePPKeys = () => async dispatch => {
+export const generatePPKeys = () => async (dispatch: Function) => {
   try {
     dispatch(setPPKeys({ connectionPKeys: nacl.sign.keyPair() }));
   } catch (err) {

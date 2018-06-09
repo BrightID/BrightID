@@ -54,7 +54,7 @@ export default class AppBootstrap extends React.Component<Props> {
         store.dispatch(setupPPKeys(ppKeys));
       } else {
         // Generate new PPKeys and exchange with server.
-        store.dispatch(generatePPKeys({}));
+        store.dispatch(generatePPKeys());
       }
     } catch (err) {
       console.error(err);

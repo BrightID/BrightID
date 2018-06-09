@@ -85,7 +85,9 @@ export const saveDataSuccess = ({
   userToken,
 });
 
-export const setPPKeys = ({ ppKeys }) => ({
+// @greenkode - ({ppKeys}) uses object destructring so I changed
+//              the parameter to (ppKeys) so that it works correctly
+export const setPPKeys = (ppKeys: {}) => ({
   type: SET_PPKEYS,
   ppKeys,
 });
