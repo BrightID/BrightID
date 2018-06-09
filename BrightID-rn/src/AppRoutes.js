@@ -56,12 +56,12 @@ const OnboardingStack = createStackNavigator(
         fontSize: 24,
       },
       headerTransparent: true,
-      headerBackground: (
-        <LinearGradient
+      headerBackground: {
+        /* <LinearGradient
           colors={['#F52828', '#F76B1C']}
           style={{ flex: 1, width: '100%' }}
-        />
-      ),
+        /> */
+      },
     },
   },
 );
