@@ -12,6 +12,7 @@ import {
   LOADING_USER,
   USER_DATA,
   REMOVE_USER_DATA,
+  USER_AVATAR,
 } from '../actions';
 
 // immutable js optional, but works really well with redux
@@ -77,6 +78,11 @@ const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         allConnections: action.connections,
+      };
+    case USER_AVATAR:
+      return {
+        ...state,
+        userAvatar: action.avatarUri,
       };
     case SAVE_DATA_SUCCESS:
       // userToken is used for navigation out of onboarding flow

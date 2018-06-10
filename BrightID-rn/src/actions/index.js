@@ -5,7 +5,7 @@ export const CONNECTIONS_COUNT = 'CONNECTIONS_COUNT';
 export const GROUPS_COUNT = 'GROUPS_COUNT';
 export const SEARCH_PARAM = 'SEARCH_PARAM';
 export const ALL_CONNECTIONS = 'ALL_CONNECTIONS';
-export const RON_PAUL = 'RON_PAUL';
+export const USER_AVATAR = 'USER_AVATAR';
 export const SAVE_DATA_SUCCESS = 'SAVE_DATA_SUCCESS';
 export const LOADING_USER = 'LOADING_USER';
 export const USER_DATA = 'USER_DATA';
@@ -45,6 +45,11 @@ export const setSearchParam = (value: string) => ({
 export const allConnections = (connections: Array<{}>) => ({
   type: ALL_CONNECTIONS,
   connections,
+});
+
+export const userAvatar = (avatarUri: String) => ({
+  type: USER_AVATAR,
+  avatarUri,
 });
 
 export const loadingUser = () => ({
