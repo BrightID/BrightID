@@ -73,21 +73,28 @@ class SignUp extends React.Component<Props, State> {
 
     const options = {
       title: 'Select Avatar',
+      mediaType: 'photo',
       storageOptions: {
-        skipBackup: true,
+        skipBackup: false,
         path: 'images',
       },
+      customButtons: [{ name: 'defaultAvatar', title: 'Use Default Avatar' }],
+      noData: true,
+      allowsEditing: true,
     };
 
-    ImagePicker.showImagePicker(options, response => {
+    ImagePicker.showImagePicker(options, (response) => {
       console.log('Response = ', response);
 
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+        console.warn('User cancelled image picker');
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
+        console.warn('ImagePicker Error: ', response.error);
+      } else if (response.customButton === 'defaultAvatar') {
+        this.setState({
+          avatarUri: 'https://commons.wikimedia.org/wiki/File:PICA.jpg',
+        });
+        console.warn('User tapped custom button: ', response.customButton);
       } else {
         const { uri } = response;
 
@@ -156,7 +163,7 @@ class SignUp extends React.Component<Props, State> {
         <View style={styles.textInputContainer}>
           <Text style={styles.midText}>What do your friends know you by?</Text>
           <TextInput
-            onChangeText={nameornym => this.setState({ nameornym })}
+            onChangeText={(nameornym) => this.setState({ nameornym })}
             value={this.state.nameornym}
             placeholder="Name or Nym"
             placeholderTextColor="#9e9e9e"

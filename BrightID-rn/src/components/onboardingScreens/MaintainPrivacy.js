@@ -38,9 +38,9 @@ const styles = StyleSheet.create({
   mainText: {
     fontFamily: 'ApexNew-Medium',
     fontSize: 24,
-    shadowColor: 'rgba(0,0,0,0.32)',
+    elevation: 1,
+    shadowColor: 'rgba(0, 0, 0, 0.09)',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 1.0,
     shadowRadius: 4,
     marginBottom: 15,
   },
