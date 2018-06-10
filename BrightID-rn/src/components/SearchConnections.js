@@ -25,12 +25,12 @@ class SearchConnections extends React.Component<Props> {
         <Touchable style={styles.searchIcon}>
           <Ionicon size={28} name="ios-search-outline" color="#000" />
         </Touchable>
-        <TextInput
+        {/* <TextInput
           value={this.props.searchParam}
           onChangeText={value => this.props.dispatch(setSearchParam(value))}
           style={styles.searchField}
           placeholder="Search Connections"
-        />
+        /> */}
         <Touchable style={styles.optionsIcon}>
           <Ionicon size={28} name="ios-options-outline" color="#000" />
         </Touchable>

@@ -1,8 +1,5 @@
-// @flow
-
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { connect } from 'react-redux';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import MaintainPrivacy from './onboardingScreens/MaintainPrivacy';
 
@@ -11,38 +8,25 @@ import MaintainPrivacy from './onboardingScreens/MaintainPrivacy';
  * Uses react-native-snap-carousel for displaying privacy and other notices
  */
 
-type Props = {
-  navigation: { navigate: Function },
-};
-type State = {
-  entries: Array<React.Element<typeof MaintainPrivacy>>,
-  activeSlide: number,
-};
-
-class Onboard extends React.Component<Props, State> {
+class Onboard extends React.Component {
   static navigationOptions = {
-    title: '',
-    headerBackground: '',
     headerStyle: {
       borderBottomWidth: 0,
+      height: 0,
     },
+    headerBackTitle: ' ',
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      entries: [
-        <MaintainPrivacy key={1} />,
-        <MaintainPrivacy key={2} />,
-        <MaintainPrivacy key={3} />,
-        <MaintainPrivacy key={4} />,
-      ],
       activeSlide: 0,
+      entries: [0, 1, 2, 3],
     };
   }
 
   pagination() {
-    const { entries, activeSlide } = this.state;
+    const { activeSlide, entries } = this.state;
     return (
       <Pagination
         dotsLength={entries.length}
@@ -67,7 +51,7 @@ class Onboard extends React.Component<Props, State> {
   }
   renderItem = ({ item, index }) => (
     <View key={index} style={styles.onboardingScreens}>
-      {item}
+      <MaintainPrivacy />
     </View>
   );
   render() {
@@ -80,7 +64,7 @@ class Onboard extends React.Component<Props, State> {
             layout="default"
             sliderWidth={340}
             itemWidth={340}
-            onSnapToItem={index => this.setState({ activeSlide: index })}
+            onSnapToItem={(index) => this.setState({ activeSlide: index })}
           />
         </View>
         <View style={styles.center}>{this.pagination()}</View>
@@ -107,8 +91,6 @@ const styles = StyleSheet.create({
   },
   center: {
     flex: 1,
-    // justifyContent: "center",
-    // alignItems: "center"
   },
   onboardingScreens: {
     height: 476,
@@ -120,7 +102,6 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 300,
-    // height: 48,
     borderWidth: 1,
     borderColor: '#4990e2',
     paddingTop: 13,
@@ -135,9 +116,7 @@ const styles = StyleSheet.create({
     color: '#4990e2',
     fontSize: 18,
     fontWeight: 'bold',
-    // marginTop: 13,
-    // marginBottom: 12
   },
 });
 
-export default connect(null)(Onboard);
+export default Onboard;

@@ -190,4 +190,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(state => state.main)(HomeScreen);
+export default connect((state) => state.main)(HomeScreen);
