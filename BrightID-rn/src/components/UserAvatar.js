@@ -18,9 +18,13 @@ type Props = {
 
 class UserAvatar extends React.Component<Props> {
   render() {
+    let { userAvatar } = this.props;
+    userAvatar = userAvatar
+      ? { uri: userAvatar }
+      : require('../static/ron_paul_avatar.jpg');
     return (
       <View style={styles.container}>
-        <Image source={{ uri: this.props.userAvatar }} style={styles.avatar} />
+        <Image source={userAvatar} style={styles.avatar} />
       </View>
     );
   }
@@ -44,4 +48,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(state => state.main)(UserAvatar);
+export default connect((state) => state.main)(UserAvatar);

@@ -9,7 +9,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
  * list of icons which will navigate between screens inside the app
  * navigate between screens using the react-navigation
  * @prop navigation.navigate accepts param for linking to another screen
- * see RootStack.js for list of screens / routes in the app
+ * see AppRoutes.js for list of screens / routes in the app
  */
 
 type Props = {

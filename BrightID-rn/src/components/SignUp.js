@@ -124,7 +124,7 @@ class SignUp extends React.Component<Props, State> {
       await AsyncStorage.setItem('userData', JSON.stringify(userData));
 
       // update redux store
-      await this.props.dispatch(saveDataSuccess(userData));
+      this.props.dispatch(saveDataSuccess(userData));
       // navigate to home page
       this.props.navigation.navigate('App');
     } catch (err) {
