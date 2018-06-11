@@ -12,6 +12,7 @@ export const USER_DATA = 'USER_DATA';
 export const ERROR = 'ERROR';
 export const REMOVE_USER_DATA = 'REMOVE_USER_DATA';
 export const SET_PPKEYS = 'SET_PPKEYS';
+export const REFRESH_NEARBY_PEOPLE = 'REFRESH_NEARBY_PEOPLE';
 
 /**
  * Redux boilerplate, pass data through the app
@@ -58,6 +59,10 @@ export const loadingUser = () => ({
 
 export const removeUserData = () => ({
   type: REMOVE_USER_DATA,
+});
+export const refreshNearbyPeople = (nearbyPeople: Array<{}>) => ({
+  type: REFRESH_NEARBY_PEOPLE,
+  nearbyPeople,
 });
 
 export const setUserData = ({
