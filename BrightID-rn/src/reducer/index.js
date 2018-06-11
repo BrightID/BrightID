@@ -13,6 +13,7 @@ import {
   USER_DATA,
   REMOVE_USER_DATA,
   USER_AVATAR,
+  REFRESH_NEARBY_PEOPLE,
 } from '../actions';
 
 // immutable js optional, but works really well with redux
@@ -42,6 +43,7 @@ const initialState = {
   ronPaul: '',
   savingData: false,
   saveDataSuccess: false,
+  nearbyPeople: [],
 };
 
 const mainReducer = (state = initialState, action) => {
@@ -99,6 +101,11 @@ const mainReducer = (state = initialState, action) => {
         avatarUri: '',
         name: '',
         userToken: '',
+      };
+    case REFRESH_NEARBY_PEOPLE:
+      return {
+        ...state,
+        nearbyPeople: action.nearbyPeople,
       };
     default:
       return state;

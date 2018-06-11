@@ -5,6 +5,7 @@ import { Alert, AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import HeaderButtons from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Connect from './Connect';
 import BottomNav from './BottomNav';
 import UserAvatar from './UserAvatar';
 import store from '../store';
@@ -80,7 +81,7 @@ class HomeScreen extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.main}>
+        <View style={styles.mainContainer}>
           <View style={styles.user}>
             <UserAvatar />
             <Text style={styles.name}>{this.props.name}</Text>
@@ -104,10 +105,10 @@ class HomeScreen extends React.Component<Props> {
               <Text style={styles.countsDescriptionText}>Groups</Text>
             </View>
           </View>
-          <View style={styles.connectContainer}>
-            <Text style={styles.connectText}>CONNECT</Text>
-          </View>
+          {/* Connect component */}
+          <Connect />
         </View>
+
         <BottomNav navigation={this.props.navigation} />
       </View>
     );
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
     // flexDirection: "column",
     // justifyContent: "space-between"
   },
-  main: {
+  mainContainer: {
     flex: 1,
     width: '100%',
     alignItems: 'center',
@@ -173,18 +174,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 22,
   },
-  connectContainer: {
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#ccc',
-    flex: 1,
-    marginTop: 17,
-  },
-  connectText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 16,
-  },
+
   countsGroup: {
     flex: 1,
   },
