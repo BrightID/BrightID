@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		009828F873F54B00BB33C5E5 /* ufonts.com_apexnew-book-opentype.otf in Resources */ = {isa = PBXBuildFile; fileRef = F573A41556CE4AD6AC2CFD68 /* ufonts.com_apexnew-book-opentype.otf */; };
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
@@ -46,22 +47,22 @@
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		5FA3804771B94F63BD2A0F99 /* Apex New Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2858B066ED624B3D9D153D38 /* Apex New Medium.otf */; };
 		6A02355258A6429F8EEB3F9D /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 68FDE6C07BE74FD8BE3A3A4B /* Octicons.ttf */; };
+		76F9C673E705472E86FDA08E /* EurostileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EE4E71BD0F24545A916572E /* EurostileRegular.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		8C976462C8624F279D55F2FC /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 172C74E4038948E1881F028D /* Ionicons.ttf */; };
 		9746F3EEB5104ACDA550B75C /* ApexNew-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE8CA06ABFCF48F6BC4A9A92 /* ApexNew-Book.otf */; };
 		9AB98F779BF64CD9A43D4626 /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ABAAB2A301C45948C5FD12A /* libRNImagePicker.a */; };
+		9DFB53E42D224EBC91FE597C /* ufonts.com_apexnew-thin-opentype.otf in Resources */ = {isa = PBXBuildFile; fileRef = E023AC78DEA24998A23E2C10 /* ufonts.com_apexnew-thin-opentype.otf */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
+		B52563CAAB7E48CC8F937EAD /* ApexNew-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 39675C27505D4D188F735E7D /* ApexNew-Light.otf */; };
 		C9C792D276274B229BC20A4E /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41A678622CA44C0D806E0810 /* Foundation.ttf */; };
 		D184CB1C3C20442B951833AD /* ufonts.com_apexnew-medium-opentype.otf in Resources */ = {isa = PBXBuildFile; fileRef = 76A75DDEB86644F5B2AD47E4 /* ufonts.com_apexnew-medium-opentype.otf */; };
+		D48FBEBF5E174C7488D181F7 /* Eurostile.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 474A98462CF8402A9FBEA810 /* Eurostile.ttf */; };
 		D6387D22BEF1415F98CD7FF4 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C871160A68354C269629C10F /* MaterialIcons.ttf */; };
 		E3265E3BF2414DA786B6431F /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7DC94DC0FF4E495E8D19702E /* EvilIcons.ttf */; };
 		E66940AED9BA4F8D81BD1B0D /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 842D198371B84E9AB3E6490E /* MaterialCommunityIcons.ttf */; };
 		E8B13C77114941A8A0CCF497 /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A7BCFB6817C4C7CA07D5702 /* libBVLinearGradient.a */; };
 		F2EA3319C31E4643AA0A2558 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8780CB370AD24F2FBBDE21EF /* SimpleLineIcons.ttf */; };
-		9DFB53E42D224EBC91FE597C /* ufonts.com_apexnew-thin-opentype.otf in Resources */ = {isa = PBXBuildFile; fileRef = E023AC78DEA24998A23E2C10 /* ufonts.com_apexnew-thin-opentype.otf */; };
-		B52563CAAB7E48CC8F937EAD /* ApexNew-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 39675C27505D4D188F735E7D /* ApexNew-Light.otf */; };
-		76F9C673E705472E86FDA08E /* EurostileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EE4E71BD0F24545A916572E /* EurostileRegular.ttf */; };
-		D48FBEBF5E174C7488D181F7 /* Eurostile.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 474A98462CF8402A9FBEA810 /* Eurostile.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -395,13 +396,16 @@
 		2D02E47B1E0B4A5D006451C7 /* BrightID-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BrightID-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* BrightID-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BrightID-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		39675C27505D4D188F735E7D /* ApexNew-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ApexNew-Light.otf"; path = "../assets/fonts/ApexNew-Light.otf"; sourceTree = "<group>"; };
 		3EEFA4A573A74CA4A4E10621 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		41A678622CA44C0D806E0810 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		474A98462CF8402A9FBEA810 /* Eurostile.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Eurostile.ttf; path = ../assets/fonts/Eurostile.ttf; sourceTree = "<group>"; };
 		4A947147774440A8902207D7 /* ApexNew-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ApexNew-Medium.otf"; path = "../assets/fonts/ApexNew-Medium.otf"; sourceTree = "<group>"; };
 		4ABAAB2A301C45948C5FD12A /* libRNImagePicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNImagePicker.a; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		68FDE6C07BE74FD8BE3A3A4B /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		6A7BCFB6817C4C7CA07D5702 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
+		6EE4E71BD0F24545A916572E /* EurostileRegular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EurostileRegular.ttf; path = ../assets/fonts/EurostileRegular.ttf; sourceTree = "<group>"; };
 		76A75DDEB86644F5B2AD47E4 /* ufonts.com_apexnew-medium-opentype.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ufonts.com_apexnew-medium-opentype.otf"; path = "../assets/fonts/ufonts.com_apexnew-medium-opentype.otf"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		7DC94DC0FF4E495E8D19702E /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
@@ -416,13 +420,10 @@
 		C871160A68354C269629C10F /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		CE8CA06ABFCF48F6BC4A9A92 /* ApexNew-Book.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ApexNew-Book.otf"; path = "../assets/fonts/ApexNew-Book.otf"; sourceTree = "<group>"; };
 		D00DE2F7C2014E99AF64DC6E /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
+		E023AC78DEA24998A23E2C10 /* ufonts.com_apexnew-thin-opentype.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ufonts.com_apexnew-thin-opentype.otf"; path = "../assets/fonts/ufonts.com_apexnew-thin-opentype.otf"; sourceTree = "<group>"; };
 		E1074A4C74DA4A2EBB55B141 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		F174E5B0DC754BC59B69EB2B /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		F573A41556CE4AD6AC2CFD68 /* ufonts.com_apexnew-book-opentype.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ufonts.com_apexnew-book-opentype.otf"; path = "../assets/fonts/ufonts.com_apexnew-book-opentype.otf"; sourceTree = "<group>"; };
-		E023AC78DEA24998A23E2C10 /* ufonts.com_apexnew-thin-opentype.otf */ = {isa = PBXFileReference; name = "ufonts.com_apexnew-thin-opentype.otf"; path = "../assets/fonts/ufonts.com_apexnew-thin-opentype.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		39675C27505D4D188F735E7D /* ApexNew-Light.otf */ = {isa = PBXFileReference; name = "ApexNew-Light.otf"; path = "../assets/fonts/ApexNew-Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		6EE4E71BD0F24545A916572E /* EurostileRegular.ttf */ = {isa = PBXFileReference; name = "EurostileRegular.ttf"; path = "../assets/fonts/EurostileRegular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		474A98462CF8402A9FBEA810 /* Eurostile.ttf */ = {isa = PBXFileReference; name = "Eurostile.ttf"; path = "../assets/fonts/Eurostile.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
