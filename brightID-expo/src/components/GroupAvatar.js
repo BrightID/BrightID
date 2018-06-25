@@ -16,17 +16,15 @@ type Props = {
   userAvatar: string,
 };
 
-class UserAvatar extends React.Component<Props> {
+class GroupAvatar extends React.Component<Props> {
   render() {
     let { userAvatar } = this.props;
-    userAvatar = userAvatar
-      ? { uri: userAvatar }
-      : require('../static/default_avatar.jpg');
-    return (
-      <View style={styles.container}>
-        <Image source={userAvatar} style={styles.avatar} />
-      </View>
+    const Avatar = userAvatar ? (
+      <Image source={{ uri: userAvatar }} style={styles.avatar} />
+    ) : (
+      <View style={styles.avatar} />
     );
+    return <View style={styles.container}>{Avatar}</View>;
   }
 }
 
@@ -39,13 +37,12 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
   avatar: {
-    width: 142,
-    height: 142,
-    borderRadius: 71,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    marginLeft: 14,
+    backgroundColor: '#d8d8d8',
   },
 });
 
-export default connect((state) => state.main)(UserAvatar);
+export default connect((state) => state.main)(GroupAvatar);
