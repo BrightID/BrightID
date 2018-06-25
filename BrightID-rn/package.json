@@ -39,6 +39,7 @@
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "^7.8.2",
     "flow-bin": "^0.67.1",
+    "husky": "^1.0.0-rc.9",
     "jest": "22.4.4",
     "prettier": "^1.13.4",
     "react-test-renderer": "16.3.1",
@@ -55,7 +56,8 @@
     "flow-coverage": "flow coverage",
     "eslint": "eslint 'src/**/*.js*'",
     "prettify": "prettier --write 'src/**/*.js*'",
-    "test": "jest"
+    "test": "jest",
+    "precommit": "lint-staged"
   },
   "husky": {
     "hooks": {

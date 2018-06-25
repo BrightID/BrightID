@@ -22,6 +22,13 @@ type Props = {
 class ConnectionsScreen extends React.Component<Props> {
   static navigationOptions = {
     title: 'Groups',
+    headerTitleStyle: {
+      fontFamily: 'EurostileRegular',
+      fontWeight: '200',
+      fontSize: 24,
+      // marginLeft: '0',
+      // marginRight: '0',
+    },
   };
 
   filterConnections = () =>
