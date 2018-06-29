@@ -18,7 +18,7 @@ type Props = {
   dispatch: Function,
 };
 
-class SearchConnections extends React.Component<Props> {
+class SearchGroups extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>
@@ -26,10 +26,10 @@ class SearchConnections extends React.Component<Props> {
           <Ionicon size={28} name="ios-search-outline" color="#000" />
         </Touchable>
         <TextInput
-          // value={this.props.searchParam}
+          value={this.props.searchParam}
           onChangeText={(value) => this.props.dispatch(setSearchParam(value))}
           style={styles.searchField}
-          placeholder="Search Connections"
+          placeholder="Search Groups"
         />
         <Touchable style={styles.optionsIcon}>
           <Ionicon size={28} name="ios-options-outline" color="#000" />
@@ -68,4 +68,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null)(SearchConnections);
+export default connect(null)(SearchGroups);

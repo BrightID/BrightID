@@ -38,7 +38,7 @@ export default class BottomNav extends React.Component<Props> {
             <Text style={styles.navText}>Connections</Text>
           </View>
         </Touchable>
-        <Touchable onPress={() => this.props.navigation.navigate('Groups')}>
+        <Touchable onPress={() => console.log('Groups')}>
           <View style={styles.navIconContainer}>
             <Ionicon size={32} name="ios-contacts-outline" color="#000" />
             <Text style={styles.navText}>Groups</Text>

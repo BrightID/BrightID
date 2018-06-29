@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { Text } from 'react-native';
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import LinearGradient from 'react-native-linear-gradient';
+// import { LinearGradient } from 'expo';
 import HomeScreen from './components/HomeScreen';
 import ConnectionsScreen from './components/ConnectionsScreen';
+import GroupsScreen from './components/GroupsScreen';
 import Onboard from './components/Onboard';
 import SignUp from './components/SignUp';
 import AppBootstrap from './AppBootstrap';
@@ -47,6 +48,9 @@ const AppStack = createStackNavigator(
     },
     Connections: {
       screen: ConnectionsScreen,
+    },
+    Groups: {
+      screen: GroupsScreen,
     },
   },
   {
