@@ -62,7 +62,7 @@
     }
   },
   "lint-staged": {
-    "BrightID-rn/src/**/*.{js,json,css,md}": [
+    "./src/**/*.{js,json,css,md}": [
       "prettier --write",
       "git add"
     ]

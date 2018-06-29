@@ -13,10 +13,14 @@
     }
   },
   "lint-staged": {
-    "BrightID-rn/src/**/*.{js,json,css,md}": [
+    "brightID-expo/src/**/*.{js,json,css,md}": [
       "prettier --write",
       "git add"
-    ]
+		],
+		"brightID-rn/src/**/*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+		]
   },
   "repository": {
     "type": "git",
