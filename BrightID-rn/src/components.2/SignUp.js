@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-// import { ImagePicker, Permissions } from 'expo';
 import ImagePicker from 'react-native-image-picker';
 import { connect } from 'react-redux';
 import HeaderButtons from 'react-navigation-header-buttons';
@@ -68,22 +67,8 @@ class SignUp extends React.Component<Props, State> {
     return null;
   }
 
-  getAvatarPhoto = async () => {
-    // expo version
-    // try {
-    //   let result = await ImagePicker.launchImageLibraryAsync({
-    //     mediaTypes: 'Images',
-    //     base64: true,
-    //   });
-
-    //   if (!result.cancelled) {
-    //     this.setState({ avatarUri: result.uri });
-    //   }
-    // } catch (err) {
-    //   console.warn(err);
-    // }
-
-    // react-native version
+  getAvatarPhoto = () => {
+    // for full documentation on the Image Picker api
     // see https://github.com/react-community/react-native-image-picker
 
     const options = {
@@ -129,13 +114,9 @@ class SignUp extends React.Component<Props, State> {
       // saveUserData is located in actions/storage.js
       // it contains three asynchrous function calls, updating async storage
       // the order of parameters are important for now
-      // if (!avatarUri) {
-      // 	return alert('Please Upload a picture!');
-      // } else if (!nameornym) {
-      // 	return alert('Please add your name or nym');
-      // }
-
-      if (!nameornym) {
+      if (!avatarUri) {
+        return alert('Please Upload a picture!');
+      } else if (!nameornym) {
         return alert('Please add your name or nym');
       }
 

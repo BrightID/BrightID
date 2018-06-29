@@ -13,18 +13,18 @@ import { connect } from 'react-redux';
  */
 
 type Props = {
-  userAvatar: string,
+  avatarUri: string,
 };
 
-class UserAvatar extends React.Component<Props> {
+class NearbyAvatar extends React.Component<Props> {
   render() {
-    let { userAvatar } = this.props;
-    userAvatar = userAvatar
-      ? { uri: userAvatar }
-      : require('../static/default_avatar.jpg');
+    // let { avatarUri } = this.props;
     return (
       <View style={styles.container}>
-        <Image source={userAvatar} style={styles.avatar} />
+        <Image
+          source={require('../static/ron_paul_avatar.jpg')}
+          style={styles.avatar}
+        />
       </View>
     );
   }
@@ -33,19 +33,17 @@ class UserAvatar extends React.Component<Props> {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
+    marginTop: 11,
+    marginBottom: 9,
   },
   avatar: {
-    width: 142,
-    height: 142,
-    borderRadius: 71,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowRadius: 4,
   },
 });
 
-export default connect((state) => state.main)(UserAvatar);
+export default connect(null)(NearbyAvatar);

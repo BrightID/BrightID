@@ -16,9 +16,9 @@ type Props = {
   userAvatar: string,
 };
 
-class GroupAvatar extends React.Component<Props> {
+class EligibleGroupAvatar extends React.Component<Props> {
   render() {
-    let { userAvatar } = this.props;
+    const { userAvatar } = this.props;
     const Avatar = userAvatar ? (
       <Image source={{ uri: userAvatar }} style={styles.avatar} />
     ) : (
@@ -45,4 +45,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(GroupAvatar);
+export default connect((state) => state.main)(EligibleGroupAvatar);

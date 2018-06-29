@@ -21,7 +21,7 @@ class UserAvatar extends React.Component<Props> {
     let { userAvatar } = this.props;
     userAvatar = userAvatar
       ? { uri: userAvatar }
-      : require('../static/default_avatar.jpg');
+      : require('../static/ron_paul_avatar.jpg');
     return (
       <View style={styles.container}>
         <Image source={userAvatar} style={styles.avatar} />
