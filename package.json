@@ -15,12 +15,12 @@
   "lint-staged": {
     "brightID-expo/src/**/*.{js,json,css,md}": [
       "prettier --write",
-      "git add"
-		],
-		"brightID-rn/src/**/*.{js,json,css,md}": [
+      "git add -A"
+    ],
+    "brightID-rn/src/**/*.{js,json,css,md}": [
       "prettier --write",
-      "git add"
-		]
+      "git add -A"
+    ]
   },
   "repository": {
     "type": "git",
