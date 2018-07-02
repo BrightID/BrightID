@@ -7,7 +7,7 @@ import { setPPKeys } from '../actions/index';
 // I added flow types
 // ppKeys: {} (object)
 // dispatch: Function
-export const setupPPKeys = ppKeys => async dispatch => {
+export const setupPPKeys = (ppKeys) => async (dispatch) => {
   try {
     if (
       ppKeys.hasOwnProperty('publicKey') &&
@@ -20,7 +20,7 @@ export const setupPPKeys = ppKeys => async dispatch => {
   }
 };
 
-export const generatePPKeys = () => async dispatch => {
+export const generatePPKeys = () => async (dispatch) => {
   try {
     dispatch(setPPKeys({ connectionPKeys: nacl.sign.keyPair() }));
   } catch (err) {

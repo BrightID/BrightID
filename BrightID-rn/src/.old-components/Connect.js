@@ -19,8 +19,8 @@ class Connect extends React.Component<Props> {
     let nearbyPeopleArray = [{ name: 'Ron Paul', avatarUri: '' }];
     setInterval(() => {
       this.props.dispatch(refreshNearbyPeople(nearbyPeopleArray));
-      if (nearbyPeopleArray.length === 1) nearbyPeopleArray = [];
-      else nearbyPeopleArray = [{ name: 'Ron Paul', avatarUri: '' }];
+      // if (nearbyPeopleArray.length === 1) nearbyPeopleArray = [];
+      // else nearbyPeopleArray = [{ name: 'Ron Paul', avatarUri: '' }];
     }, 8000);
   }
   genLines() {

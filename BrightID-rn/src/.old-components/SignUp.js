@@ -10,8 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { ImagePicker, Permissions } from 'expo';
-// import ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-picker';
 import { connect } from 'react-redux';
 import HeaderButtons from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -67,62 +66,46 @@ class SignUp extends React.Component<Props, State> {
     }
     return null;
   }
-  // async componentDidMount() {
-  // 	await Permissions.getAsync(Permissions.CAMERA_ROLL);
-  // }
-  getAvatarPhoto = async () => {
-    // expo version
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: 'Images',
-        base64: true,
-      });
 
-      if (!result.cancelled) {
-        this.setState({ avatarUri: result.uri });
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-
+  getAvatarPhoto = () => {
     // for full documentation on the Image Picker api
     // see https://github.com/react-community/react-native-image-picker
 
-    // const options = {
-    //   title: 'Select Avatar',
-    //   mediaType: 'photo',
-    //   storageOptions: {
-    //     skipBackup: false,
-    //     path: 'images',
-    //   },
-    //   customButtons: [{ name: 'defaultAvatar', title: 'Use Default Avatar' }],
-    //   noData: true,
-    //   allowsEditing: true,
-    // };
+    const options = {
+      title: 'Select Avatar',
+      mediaType: 'photo',
+      storageOptions: {
+        skipBackup: false,
+        path: 'images',
+      },
+      customButtons: [{ name: 'defaultAvatar', title: 'Use Default Avatar' }],
+      noData: true,
+      allowsEditing: true,
+    };
 
-    // ImagePicker.showImagePicker(options, (response) => {
-    //   console.log('Response = ', response);
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
 
-    //   if (response.didCancel) {
-    //     console.warn('User cancelled image picker');
-    //   } else if (response.error) {
-    //     console.warn('ImagePicker Error: ', response.error);
-    //   } else if (response.customButton === 'defaultAvatar') {
-    //     this.setState({
-    //       avatarUri: 'https://commons.wikimedia.org/wiki/File:PICA.jpg',
-    //     });
-    //     console.warn('User tapped custom button: ', response.customButton);
-    //   } else {
-    //     const { uri } = response;
+      if (response.didCancel) {
+        console.warn('User cancelled image picker');
+      } else if (response.error) {
+        console.warn('ImagePicker Error: ', response.error);
+      } else if (response.customButton === 'defaultAvatar') {
+        this.setState({
+          avatarUri: 'https://commons.wikimedia.org/wiki/File:PICA.jpg',
+        });
+        console.warn('User tapped custom button: ', response.customButton);
+      } else {
+        const { uri } = response;
 
-    //     // You can also display the image using data:
-    //     // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+        // You can also display the image using data:
+        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
 
-    //     this.setState({
-    //       avatarUri: uri,
-    //     });
-    //   }
-    // });
+        this.setState({
+          avatarUri: uri,
+        });
+      }
+    });
   };
 
   handleBrightIdCreation = async () => {
@@ -131,13 +114,9 @@ class SignUp extends React.Component<Props, State> {
       // saveUserData is located in actions/storage.js
       // it contains three asynchrous function calls, updating async storage
       // the order of parameters are important for now
-      // if (!avatarUri) {
-      // 	return alert('Please Upload a picture!');
-      // } else if (!nameornym) {
-      // 	return alert('Please add your name or nym');
-      // }
-
-      if (!nameornym) {
+      if (!avatarUri) {
+        return alert('Please Upload a picture!');
+      } else if (!nameornym) {
         return alert('Please add your name or nym');
       }
 
