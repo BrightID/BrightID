@@ -8,7 +8,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { Font, Permissions } from 'expo';
+// import { Font, Permissions } from 'expo';
 import store from './store';
 import { setupPPKeys, generatePPKeys } from './actions/ppKeys';
 import { setUpDefault } from './actions/setUpDefault';
@@ -33,17 +33,17 @@ export default class AppBootstrap extends React.Component<Props> {
 
     try {
       // add user permssions
-      const cam = await Permissions.getAsync(Permissions.CAMERA);
-      const camr = await Permissions.getAsync(Permissions.CAMERA_ROLL);
-      // console.warn(cam);
-      // console.warn(camr);
-      // load font
-      await Font.loadAsync({
-        EurostileRegular: require('../assets/fonts/EurostileRegular.ttf'),
-        'ApexNew-Book': require('../assets/fonts/ApexNew-Book.otf'),
-        'ApexNew-Medium': require('../assets/fonts/ApexNew-Medium.otf'),
-        'ApexNew-Light': require('../assets/fonts/ApexNew-Light.otf'),
-      });
+      // const cam = await Permissions.getAsync(Permissions.CAMERA);
+      // const camr = await Permissions.getAsync(Permissions.CAMERA_ROLL);
+      // // console.warn(cam);
+      // // console.warn(camr);
+      // // load font
+      // await Font.loadAsync({
+      //   EurostileRegular: require('../assets/fonts/EurostileRegular.ttf'),
+      //   'ApexNew-Book': require('../assets/fonts/ApexNew-Book.otf'),
+      //   'ApexNew-Medium': require('../assets/fonts/ApexNew-Medium.otf'),
+      //   'ApexNew-Light': require('../assets/fonts/ApexNew-Light.otf'),
+      // });
 
       // load user data
       let userData = await AsyncStorage.getItem('userData');
