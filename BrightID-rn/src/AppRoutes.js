@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
-import LinearGradient from 'react-native-linear-gradient';
-// import { LinearGradient } from 'expo';
+// import LinearGradient from 'react-native-linear-gradient';
+import { LinearGradient } from 'expo';
 import HomeScreen from './components/HomeScreen';
 import ConnectionsScreen from './components/ConnectionsScreen';
 import GroupsScreen from './components/GroupsScreen';
