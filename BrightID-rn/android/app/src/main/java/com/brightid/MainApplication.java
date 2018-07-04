@@ -6,6 +6,7 @@ import com.facebook.react.ReactApplication;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.imagepicker.ImagePickerPackage;
+import com.oney.WebRTCModule.WebRTCModulePackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -28,7 +29,8 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
           new LinearGradientPackage(),
           new VectorIconsPackage(),
-          new ImagePickerPackage()
+          new ImagePickerPackage(),
+          new WebRTCModulePackage()
       );
     }
 

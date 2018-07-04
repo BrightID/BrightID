@@ -18,20 +18,20 @@ import store from './store';
 type Props = {};
 
 export default class App extends React.Component<Props> {
-	render() {
-		return (
-			<Provider store={store}>
-				<View style={styles.container}>
-					<AppRoutes />
-				</View>
-			</Provider>
-		);
-	}
+  render() {
+    return (
+      <Provider store={store}>
+        <View style={styles.container}>
+          <AppRoutes />
+        </View>
+      </Provider>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		elevation: 1,
-	},
+  container: {
+    flex: 1,
+    elevation: 1,
+  },
 });
