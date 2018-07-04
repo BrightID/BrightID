@@ -19,6 +19,7 @@
     "react/no-unescaped-entities": "off",
     "react/require-default-props": "off",
     "react/jsx-boolean-value": "off",
+    "react/no-did-mount-set-state": "off",
     "consistent-return": "off",
     "no-alert": "off"
   }

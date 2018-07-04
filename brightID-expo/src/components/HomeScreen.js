@@ -72,7 +72,33 @@ class HomeScreen extends React.Component<Props> {
         <HeaderButtons.Item
           title="help"
           iconName="ios-help-circle-outline"
-          onPress={() => console.log('help')}
+          onPress={() => {
+            Alert.alert(
+              'WARNING',
+              'Would you like to delete user data and return to the onboarding screen?',
+              [
+                {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+                {
+                  text: 'Sure',
+                  onPress: async () => {
+                    try {
+                      navigation.navigate('Onboarding');
+                      await AsyncStorage.flushGetRequests();
+                      await AsyncStorage.removeItem('userData');
+                      store.dispatch(removeUserData());
+                    } catch (err) {
+                      console.warn(err);
+                    }
+                  },
+                },
+              ],
+              { cancelable: true },
+            );
+          }}
         />
       </HeaderButtons>
     ),
@@ -106,7 +132,7 @@ class HomeScreen extends React.Component<Props> {
             </View>
           </View>
           {/* Connect component */}
-          <Connect />
+          <Connect navigation={this.props.navigation} />
         </View>
 
         <BottomNav navigation={this.props.navigation} />

@@ -67,9 +67,12 @@ class SignUp extends React.Component<Props, State> {
     }
     return null;
   }
-  // async componentDidMount() {
-  // 	await Permissions.getAsync(Permissions.CAMERA_ROLL);
-  // }
+  async componentDidMount() {
+    const crp = await Permissions.getAsync(Permissions.CAMERA_ROLL);
+    const cp = await Permissions.getAsync(Permissions.CAMERA);
+    console.warn(crp);
+    console.warn(cp);
+  }
   getAvatarPhoto = async () => {
     // expo version
     try {

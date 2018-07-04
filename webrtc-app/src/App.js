@@ -45,11 +45,11 @@ class App extends Component {
         modulusLength: 2048,
         publicExponent: new Uint8Array([1, 0, 1]),
       });
-      lc = new RTCPeerConnection({
-        iceCandidatePoolSize: 1,
-        iceServers: [{ url: 'stun:stun.l.google.com:19302' }],
-      });
-      // lc = new RTCPeerConnection(null);
+      // lc = new RTCPeerConnection({
+      //   iceCandidatePoolSize: 1,
+      //   iceServers: [{ url: 'stun:stun.l.google.com:19302' }],
+      // });
+      lc = new RTCPeerConnection(null);
       // sendChannel = lc.createDataChannel('sendChannel');
       // sendChannel.onopen = this.handleSendChannelStatusChange;
       // sendChannel.onclose = this.handleSendChannelStatusChange;

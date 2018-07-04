@@ -1,10 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import NearbyAvatar from './NearbyAvatar';
 import { refreshNearbyPeople } from '../actions';
+import { Camera, BarCodeScanner, Permissions } from 'expo';
 
 type Props = {
   nearbyPeople: Array<{
@@ -12,9 +13,15 @@ type Props = {
     name: string,
   }>,
   dispatch: () => void,
+  navigation: { navigate: Function },
 };
 
-class Connect extends React.Component<Props> {
+type State = {
+  hasCameraPermission: boolean,
+  scanBarcode: boolean,
+  type: string,
+};
+class Connect extends React.Component<Props, State> {
   componentDidMount() {
     let nearbyPeopleArray = [{ name: 'Ron Paul', avatarUri: '' }];
     setInterval(() => {
@@ -28,8 +35,35 @@ class Connect extends React.Component<Props> {
     const sep = 138 / lineCount;
   }
 
-  renderNearbyPeople = () => {
+  renderConnect = () => {
     const { nearbyPeople } = this.props;
+    // render the qr code buttons for now
+    if (true) {
+      return (
+        <View style={styles.qrCodeButtonContainer}>
+          {/* <TouchableOpacity>
+            <Text>Scan</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text>Display QR Code</Text>
+          </TouchableOpacity> */}
+          <Button
+            onPress={() => {
+              this.props.navigation.navigate('BarcodeScanner');
+            }}
+            title="Scan"
+            color="#4990e2"
+            accessibilityLabel="Open camera to scan barcode"
+          />
+          <Button
+            onPress={() => console.warn('pressed')}
+            title="Display"
+            color="#4990e2"
+            accessibilityLabel="Display QR Code"
+          />
+        </View>
+      );
+    }
     if (nearbyPeople.length === 0) {
       return (
         <View style={styles.defaultOrb}>
@@ -51,7 +85,7 @@ class Connect extends React.Component<Props> {
     // render nearby people if someone is nearby
     return (
       <View style={styles.connectContainer}>
-        <View>{this.renderNearbyPeople()}</View>
+        <View>{this.renderConnect()}</View>
       </View>
     );
   }
@@ -65,6 +99,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
     flex: 1,
     marginTop: 17,
+  },
+  qrCodeButtonContainer: {
+    flexDirection: 'row',
   },
   defaultOrb: {
     width: 138,

@@ -33,10 +33,9 @@ export default class AppBootstrap extends React.Component<Props> {
 
     try {
       // add user permssions
-      const cam = await Permissions.getAsync(Permissions.CAMERA);
-      const camr = await Permissions.getAsync(Permissions.CAMERA_ROLL);
-      // console.warn(cam);
-      // console.warn(camr);
+      await Permissions.askAsync(Permissions.CAMERA);
+      await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
       // load font
       await Font.loadAsync({
         EurostileRegular: require('../assets/fonts/EurostileRegular.ttf'),
