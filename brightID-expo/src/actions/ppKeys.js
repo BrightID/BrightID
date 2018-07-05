@@ -4,9 +4,6 @@
 import nacl from 'tweetnacl';
 import { setPPKeys } from '../actions/index';
 
-// I added flow types
-// ppKeys: {} (object)
-// dispatch: Function
 export const setupPPKeys = (ppKeys) => async (dispatch) => {
   try {
     if (

@@ -10,7 +10,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
  * Connection screen of BrightID
  */
 
-type Props = {};
+type Props = {
+  navigation: { navigate: Function },
+};
 
 type State = {
   hasCameraPermission: boolean,
@@ -33,7 +35,7 @@ class BarcodeScannerScreen extends React.Component<Props, State> {
     this.setState({ hasCameraPermission: status === 'granted' });
   }
   handleBarCodeRead = ({ type, data }) => {
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    this.props.navigation.navigate;
   };
   render() {
     const { hasCameraPermission } = this.state;
