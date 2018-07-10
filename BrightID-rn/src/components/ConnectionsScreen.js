@@ -1,7 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { connect } from 'react-redux';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
@@ -23,10 +29,10 @@ class ConnectionsScreen extends React.Component<Props> {
   static navigationOptions = {
     title: 'Connections',
   };
-  keyExtractor = item => item.firstName + item.lastName + item.id;
+  keyExtractor = (item) => item.firstName + item.lastName + item.id;
 
   filterConnections = () =>
-    this.props.allConnections.filter(item =>
+    this.props.allConnections.filter((item) =>
       `${item.firstName} ${item.lastName}`
         .toLowerCase()
         .replace(/\s/g, '')
@@ -62,4 +68,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(state => state.main)(ConnectionsScreen);
+export default connect((state) => state.main)(ConnectionsScreen);

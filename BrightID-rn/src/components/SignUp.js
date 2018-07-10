@@ -10,8 +10,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-// import { ImagePicker, Permissions } from 'expo';
-import ImagePicker from 'react-native-image-picker';
+import { ImagePicker, Permissions } from 'expo';
+import nacl from 'tweetnacl';
+// import ImagePicker from 'react-native-image-picker';
 import { connect } from 'react-redux';
 import HeaderButtons from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -67,9 +68,7 @@ class SignUp extends React.Component<Props, State> {
     }
     return null;
   }
-  // async componentDidMount() {
-  // 	await Permissions.getAsync(Permissions.CAMERA_ROLL);
-  // }
+
   getAvatarPhoto = async () => {
     // expo version
     try {
@@ -126,38 +125,44 @@ class SignUp extends React.Component<Props, State> {
   };
 
   handleBrightIdCreation = async () => {
-    try {
-      const { avatarUri, nameornym } = this.state;
-      // saveUserData is located in actions/storage.js
-      // it contains three asynchrous function calls, updating async storage
-      // the order of parameters are important for now
-      // if (!avatarUri) {
-      // 	return alert('Please Upload a picture!');
-      // } else if (!nameornym) {
-      // 	return alert('Please add your name or nym');
-      // }
+    // try {
+    const { avatarUri, nameornym } = this.state;
+    // saveUserData is located in actions/storage.js
+    // it contains three asynchrous function calls, updating async storage
+    // the order of parameters are important for now
+    // if (!avatarUri) {
+    // 	return alert('Please Upload a picture!');
+    // } else if (!nameornym) {
+    // 	return alert('Please add your name or nym');
+    // }
 
-      if (!nameornym) {
-        return alert('Please add your name or nym');
-      }
-
-      const userData = {
-        userToken: 'user_token',
-        nameornym,
-        avatarUri,
-      };
-
-      // save avatar photo uri and name in async storage
-
-      await AsyncStorage.setItem('userData', JSON.stringify(userData));
-
-      // update redux store
-      this.props.dispatch(saveDataSuccess(userData));
-      // navigate to home page
-      this.props.navigation.navigate('App');
-    } catch (err) {
-      console.warn(err);
+    if (!nameornym) {
+      return alert('Please add your name or nym');
     }
+
+    // create public / private key pair
+
+    const { publicKey, secretKey } = nacl.sign.keyPair();
+    console.warn(publicKey);
+    console.warn(secretKey);
+    const userData = {
+      publicKey,
+      secretKey,
+      nameornym,
+      avatarUri,
+    };
+
+    // save avatar photo uri and name in async storage
+
+    // await AsyncStorage.setItem('userData', JSON.stringify(userData));
+
+    // update redux store
+    // this.props.dispatch(saveDataSuccess(userData));
+    // navigate to home page
+    // this.props.navigation.navigate('App');
+    // } catch (err) {
+    //   console.warn(err);
+    // }
   };
 
   render() {

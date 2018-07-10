@@ -22,7 +22,7 @@ class NearbyAvatar extends React.Component<Props> {
     return (
       <View style={styles.container}>
         <Image
-          source={require('../static/ron_paul_avatar.jpg')}
+          source={require('../static/ronaldjones.png')}
           style={styles.avatar}
         />
       </View>

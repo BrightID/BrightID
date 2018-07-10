@@ -1,9 +1,18 @@
 // @flow
 
 import * as React from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Button,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableHighlight,
+  View,
+} from 'react-native';
 import { connect } from 'react-redux';
 import NearbyAvatar from './NearbyAvatar';
+
 import { refreshNearbyPeople } from '../actions';
 import { Camera, BarCodeScanner, Permissions } from 'expo';
 
@@ -12,72 +21,97 @@ type Props = {
     avatarUri: string,
     name: string,
   }>,
-  dispatch: () => void,
+  dispatch: Function,
   navigation: { navigate: Function },
+  toggleModal: Function,
 };
 
 type State = {
   hasCameraPermission: boolean,
   scanBarcode: boolean,
   type: string,
+  modalVisible: boolean,
 };
+
 class Connect extends React.Component<Props, State> {
+  state = {
+    modalVisible: false,
+  };
+
   componentDidMount() {
-    let nearbyPeopleArray = [{ name: 'Ron Paul', avatarUri: '' }];
+    let nearbyPeopleArray = [
+      { name: 'Ronald Jones', avatarUri: '' },
+      // { name: 'Sean Jones', avatarUri: '' },
+    ];
     setInterval(() => {
       this.props.dispatch(refreshNearbyPeople(nearbyPeopleArray));
       if (nearbyPeopleArray.length === 1) nearbyPeopleArray = [];
-      else nearbyPeopleArray = [{ name: 'Ron Paul', avatarUri: '' }];
+      else nearbyPeopleArray = [{ name: 'Ronald Jones', avatarUri: '' }];
     }, 8000);
   }
   genLines() {
     const lineCount = 6;
     const sep = 138 / lineCount;
   }
-
+  toggleModal = () => {
+    this.setState({ modalVisible: true });
+  };
   renderConnect = () => {
     const { nearbyPeople } = this.props;
     // render the qr code buttons for now
-    if (true) {
-      return (
-        <View style={styles.qrCodeButtonContainer}>
-          {/* <TouchableOpacity>
-            <Text>Scan</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text>Display QR Code</Text>
-          </TouchableOpacity> */}
-          <Button
-            onPress={() => {
-              this.props.navigation.navigate('BarcodeScanner');
-            }}
-            title="Scan"
-            color="#4990e2"
-            accessibilityLabel="Open camera to scan barcode"
-          />
-          <Button
-            onPress={() => console.warn('pressed')}
-            title="Display"
-            color="#4990e2"
-            accessibilityLabel="Display QR Code"
-          />
-        </View>
-      );
-    }
+    // if (true) {
+    //   return (
+    //     <View style={styles.qrCodeButtonContainer}>
+    //       {/* <TouchableOpacity>
+    //         <Text>Scan</Text>
+    //       </TouchableOpacity>
+    //       <TouchableOpacity>
+    //         <Text>Display QR Code</Text>
+    //       </TouchableOpacity> */}
+    //       <Button
+    //         onPress={() => {
+    //           this.props.navigation.navigate('BarcodeScanner');
+    //         }}
+    //         title="Scan"
+    //         color="#4990e2"
+    //         accessibilityLabel="Open camera to scan barcode"
+    //       />
+    //       <Button
+    //         onPress={() => console.warn('pressed')}
+    //         title="Display"
+    //         color="#4990e2"
+    //         accessibilityLabel="Display QR Code"
+    //       />
+    //     </View>
+    //   );
+    // }
     if (nearbyPeople.length === 0) {
       return (
-        <View style={styles.defaultOrb}>
+        <TouchableOpacity
+          style={styles.defaultOrb}
+          onPress={() => {
+            this.props.navigation.navigate('MakeConnection');
+          }}
+        >
           <Text style={styles.connectText}>CONNECT</Text>
-        </View>
+        </TouchableOpacity>
       );
     }
-    return nearbyPeople.map((person, index) => (
-      <View key={index} style={styles.nearbyPeopleContainer}>
-        <Text style={styles.nearbyText}>NEARBY PEOPLE</Text>
-        <NearbyAvatar avatarUri={person.avatarUri} />
-        <Text style={styles.connectText}>{person.name}</Text>
+    return (
+      <View style={styles.nearbyPeopleContainer}>
+        <Text style={styles.nearbyTextTop}>NEARBY PEOPLE</Text>
+        <View style={styles.nearbyPeopleList}>
+          {nearbyPeople.map((person, index) => (
+            <View key={index} style={styles.nearbyPerson}>
+              <TouchableOpacity key={index}>
+                <NearbyAvatar avatarUri={person.avatarUri} />
+              </TouchableOpacity>
+              <Text style={styles.nearbyTextBottom}>{person.name}</Text>
+            </View>
+          ))}
+        </View>
       </View>
-    ));
+    );
   };
   render() {
     // array of nearby people (determined by NFC?)
@@ -100,12 +134,22 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 17,
   },
+  modalContainer: {
+    width: '100%',
+    alignItems: 'center',
+    // justifyContent: 'center',
+    backgroundColor: '#f9f9f9',
+    flex: 1,
+    marginTop: 17,
+    flexDirection: 'column',
+  },
   qrCodeButtonContainer: {
     flexDirection: 'row',
   },
   defaultOrb: {
     width: 138,
     height: 138,
+    // backgroundColor: '#4990e2',
     borderColor: '#fff893',
     borderWidth: 17,
     borderRadius: 69,
@@ -120,13 +164,23 @@ const styles = StyleSheet.create({
     fontFamily: 'ApexNew-Book',
     fontSize: 16,
   },
+  nearbyTextBottom: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 16,
+  },
   nearbyPeopleContainer: {
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  nearbyText: {
+  nearbyTextTop: {
     fontFamily: 'ApexNew-Book',
     fontSize: 14,
+  },
+  nearbyPeopleList: {
+    flexDirection: 'row',
+  },
+  nearbyPerson: {
+    margin: 5,
   },
   line: {
     width: 1,

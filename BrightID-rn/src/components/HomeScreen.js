@@ -1,11 +1,18 @@
 // @flow
 
 import * as React from 'react';
-import { Alert, AsyncStorage, StyleSheet, Text, View } from 'react-native';
+import {
+  Alert,
+  AsyncStorage,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { connect } from 'react-redux';
 import HeaderButtons from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Connect from './Connect';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import BottomNav from './BottomNav';
 import UserAvatar from './UserAvatar';
 import store from '../store';
@@ -23,7 +30,11 @@ type Props = {
   navigation: { navigate: Function },
 };
 
-class HomeScreen extends React.Component<Props> {
+type State = {
+  modalVisible: boolean,
+};
+
+class HomeScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
     title: 'BrightID',
     headerBackTitle: 'Home',
@@ -72,7 +83,33 @@ class HomeScreen extends React.Component<Props> {
         <HeaderButtons.Item
           title="help"
           iconName="ios-help-circle-outline"
-          onPress={() => console.log('help')}
+          onPress={() => {
+            Alert.alert(
+              'WARNING',
+              'Would you like to delete user data and return to the onboarding screen?',
+              [
+                {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+                {
+                  text: 'Sure',
+                  onPress: async () => {
+                    try {
+                      navigation.navigate('Onboarding');
+                      await AsyncStorage.flushGetRequests();
+                      await AsyncStorage.removeItem('userData');
+                      store.dispatch(removeUserData());
+                    } catch (err) {
+                      console.warn(err);
+                    }
+                  },
+                },
+              ],
+              { cancelable: true },
+            );
+          }}
         />
       </HeaderButtons>
     ),
@@ -105,8 +142,18 @@ class HomeScreen extends React.Component<Props> {
               <Text style={styles.countsDescriptionText}>Groups</Text>
             </View>
           </View>
-          {/* Connect component */}
-          <Connect />
+
+          <View style={styles.connectContainer}>
+            <TouchableOpacity
+              style={styles.connectButton}
+              onPress={() => {
+                this.props.navigation.navigate('NewConnection');
+              }}
+            >
+              <Text style={styles.connectText}>CONNECT</Text>
+              <Material name="key-plus" size={26} color="#fff" />
+            </TouchableOpacity>
+          </View>
         </View>
 
         <BottomNav navigation={this.props.navigation} />
@@ -142,6 +189,15 @@ const styles = StyleSheet.create({
   user: {
     marginTop: 24,
   },
+  connectContainer: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f9f9f9',
+    flex: 1,
+    marginTop: 17,
+    flexDirection: 'row',
+  },
   trustScoreContainer: {
     borderBottomColor: '#e3e1e1',
     borderTopColor: '#e3e1e1',
@@ -152,6 +208,7 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     paddingBottom: 7,
   },
+
   trustScore: {
     fontFamily: 'ApexNew-Book',
     fontSize: 18,
@@ -174,9 +231,27 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 22,
   },
-
   countsGroup: {
     flex: 1,
+  },
+  connectButton: {
+    width: 138,
+    height: 138,
+    backgroundColor: '#4990e2',
+    borderRadius: 69,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 20, height: 20 },
+    shadowRadius: 20,
+    elevation: 1,
+  },
+  connectText: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 16,
+    color: '#fff',
+    marginTop: 10,
+    marginBottom: 5,
   },
 });
 

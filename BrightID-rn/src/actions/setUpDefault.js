@@ -22,9 +22,10 @@ export const setUpDefault = (userData: Object) => async (
     // dispatch(getUserData());
     // console.warn(userData);
     if (
+      userData.hasOwnProperty('publicKey') &&
+      userData.hasOwnProperty('secretKey') &&
       userData.hasOwnProperty('nameornym') &&
-      userData.hasOwnProperty('avatarUri') &&
-      userData.hasOwnProperty('userToken')
+      userData.hasOwnProperty('avatarUri')
     ) {
       dispatch(setUserData(userData));
     }

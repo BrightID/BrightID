@@ -1,7 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { connect } from 'react-redux';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';

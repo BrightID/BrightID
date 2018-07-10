@@ -66,33 +66,39 @@ export const refreshNearbyPeople = (nearbyPeople: Array<{}>) => ({
 });
 
 export const setUserData = ({
-  userToken,
+  publicKey,
+  secretKey,
   nameornym,
   avatarUri,
 }: {
-  userToken: string,
+  publicKey: Array<number>,
+  secretKey: Array<number>,
   nameornym: string,
   avatarUri: string,
 }) => ({
   type: USER_DATA,
-  userToken,
+  publicKey,
+  secretKey,
   nameornym,
   avatarUri,
 });
 
 export const saveDataSuccess = ({
-  userToken,
+  publicKey,
+  secretKey,
   nameornym,
   avatarUri,
 }: {
-  userToken: string,
+  publicKey: Array<number>,
+  secretKey: Array<number>,
   nameornym: string,
   avatarUri: string,
 }) => ({
   type: SAVE_DATA_SUCCESS,
+  publicKey,
+  secretKey,
   nameornym,
   avatarUri,
-  userToken,
 });
 
 // @greenkode - ({ppKeys}) uses object destructring so I changed
