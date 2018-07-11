@@ -30,7 +30,7 @@ const AppStack = createStackNavigator(
     },
   },
   {
-    initialRouteName: 'NewConnection',
+    initialRouteName: 'Home',
     navigationOptions: {
       title: 'BrightID',
       headerTintColor: '#fff',
