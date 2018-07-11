@@ -1,4 +1,12 @@
 rootProject.name = 'BrightID'
+include ':react-native-tcp'
+project(':react-native-tcp').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-tcp/android')
+include ':react-native-udp'
+project(':react-native-udp').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-udp/android')
+include ':react-native-os'
+project(':react-native-os').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-os/android')
+include ':react-native-randombytes'
+project(':react-native-randombytes').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-randombytes/android')
 include ':react-native-linear-gradient'
 project(':react-native-linear-gradient').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-linear-gradient/android')
 include ':react-native-vector-icons'
@@ -6,6 +14,6 @@ project(':react-native-vector-icons').projectDir = new File(rootProject.projectD
 include ':react-native-image-picker'
 project(':react-native-image-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-image-picker/android')
 include ':WebRTCModule', ':app'
-project(':WebRTCModule').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-webrtc/android')
-
+project(':WebRTCModule').projectDir = new File(rootProject.projectDir,
+'../node_modules/react-native-webrtc/android')
 include ':app'

@@ -8,7 +8,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { Font, Permissions } from 'expo';
+// import { Font, Permissions } from 'expo';
 import store from './store';
 import { setUpDefault } from './actions/setUpDefault';
 
@@ -33,16 +33,16 @@ export default class AppBootstrap extends React.Component<Props> {
 
     try {
       // add user permssions
-      await Permissions.askAsync(Permissions.CAMERA);
-      await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      // await Permissions.askAsync(Permissions.CAMERA);
+      // await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
-      // load font
-      await Font.loadAsync({
-        EurostileRegular: require('../assets/fonts/EurostileRegular.ttf'),
-        'ApexNew-Book': require('../assets/fonts/ApexNew-Book.otf'),
-        'ApexNew-Medium': require('../assets/fonts/ApexNew-Medium.otf'),
-        'ApexNew-Light': require('../assets/fonts/ApexNew-Light.otf'),
-      });
+      // // load font
+      // await Font.loadAsync({
+      //   EurostileRegular: require('../assets/fonts/EurostileRegular.ttf'),
+      //   'ApexNew-Book': require('../assets/fonts/ApexNew-Book.otf'),
+      //   'ApexNew-Medium': require('../assets/fonts/ApexNew-Medium.otf'),
+      //   'ApexNew-Light': require('../assets/fonts/ApexNew-Light.otf'),
+      // });
 
       // load user data
       let userData = await AsyncStorage.getItem('userData');

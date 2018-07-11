@@ -62,6 +62,12 @@
 		E66940AED9BA4F8D81BD1B0D /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 842D198371B84E9AB3E6490E /* MaterialCommunityIcons.ttf */; };
 		E8B13C77114941A8A0CCF497 /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A7BCFB6817C4C7CA07D5702 /* libBVLinearGradient.a */; };
 		F2EA3319C31E4643AA0A2558 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8780CB370AD24F2FBBDE21EF /* SimpleLineIcons.ttf */; };
+		4655956DF2334B658F832CC3 /* libRNRandomBytes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DECCF2C0B8B64489808A1012 /* libRNRandomBytes.a */; };
+		E53E363E60754451AFB5CD4A /* libRNRandomBytes-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE30E7007FF84F16BD6ECC88 /* libRNRandomBytes-tvOS.a */; };
+		E44D1870BB6D445D9278D1D8 /* libRCTWebRTC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A41A0210C1347DAA9724CEC /* libRCTWebRTC.a */; };
+		549D2ABB8FD0400D95CF431F /* libRNOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 845053D560EC4D429A2EBEC1 /* libRNOS.a */; };
+		7A729B44783F4897A3D1999B /* libUdpSockets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 783C3080E34C4F9490A5B68E /* libUdpSockets.a */; };
+		8E9BBA2ECB5B4138BD86810C /* libTcpSockets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C73E51A7D1AD481D9A42B604 /* libTcpSockets.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -423,6 +429,17 @@
 		E1074A4C74DA4A2EBB55B141 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		F174E5B0DC754BC59B69EB2B /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		F573A41556CE4AD6AC2CFD68 /* ufonts.com_apexnew-book-opentype.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ufonts.com_apexnew-book-opentype.otf"; path = "../assets/fonts/ufonts.com_apexnew-book-opentype.otf"; sourceTree = "<group>"; };
+		D286B1E984E74BE18F809B7C /* RNRandomBytes.xcodeproj */ = {isa = PBXFileReference; name = "RNRandomBytes.xcodeproj"; path = "../node_modules/react-native-randombytes/RNRandomBytes.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		DECCF2C0B8B64489808A1012 /* libRNRandomBytes.a */ = {isa = PBXFileReference; name = "libRNRandomBytes.a"; path = "libRNRandomBytes.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		CE30E7007FF84F16BD6ECC88 /* libRNRandomBytes-tvOS.a */ = {isa = PBXFileReference; name = "libRNRandomBytes-tvOS.a"; path = "libRNRandomBytes-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		F237E62E73C347DD9DB85094 /* RCTWebRTC.xcodeproj */ = {isa = PBXFileReference; name = "RCTWebRTC.xcodeproj"; path = "../node_modules/react-native-webrtc/ios/RCTWebRTC.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		4A41A0210C1347DAA9724CEC /* libRCTWebRTC.a */ = {isa = PBXFileReference; name = "libRCTWebRTC.a"; path = "libRCTWebRTC.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		D0BE37381BBD405F9F2538F9 /* RNOS.xcodeproj */ = {isa = PBXFileReference; name = "RNOS.xcodeproj"; path = "../node_modules/react-native-os/ios/RNOS.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		845053D560EC4D429A2EBEC1 /* libRNOS.a */ = {isa = PBXFileReference; name = "libRNOS.a"; path = "libRNOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		13E5C9FB1D9D419EBFF4E078 /* UdpSockets.xcodeproj */ = {isa = PBXFileReference; name = "UdpSockets.xcodeproj"; path = "../node_modules/react-native-udp/ios/UdpSockets.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		783C3080E34C4F9490A5B68E /* libUdpSockets.a */ = {isa = PBXFileReference; name = "libUdpSockets.a"; path = "libUdpSockets.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		EBE03A56B13C402EB7E7B368 /* TcpSockets.xcodeproj */ = {isa = PBXFileReference; name = "TcpSockets.xcodeproj"; path = "../node_modules/react-native-tcp/ios/TcpSockets.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		C73E51A7D1AD481D9A42B604 /* libTcpSockets.a */ = {isa = PBXFileReference; name = "libTcpSockets.a"; path = "libTcpSockets.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -454,6 +471,11 @@
 				9AB98F779BF64CD9A43D4626 /* libRNImagePicker.a in Frameworks */,
 				31CBD85750BA46EF976D7A91 /* libRNVectorIcons.a in Frameworks */,
 				E8B13C77114941A8A0CCF497 /* libBVLinearGradient.a in Frameworks */,
+				4655956DF2334B658F832CC3 /* libRNRandomBytes.a in Frameworks */,
+				E44D1870BB6D445D9278D1D8 /* libRCTWebRTC.a in Frameworks */,
+				549D2ABB8FD0400D95CF431F /* libRNOS.a in Frameworks */,
+				7A729B44783F4897A3D1999B /* libUdpSockets.a in Frameworks */,
+				8E9BBA2ECB5B4138BD86810C /* libTcpSockets.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,6 +491,7 @@
 				2D02E4C61E0B4AEC006451C7 /* libRCTSettings-tvOS.a in Frameworks */,
 				2D02E4C71E0B4AEC006451C7 /* libRCTText-tvOS.a in Frameworks */,
 				2D02E4C81E0B4AEC006451C7 /* libRCTWebSocket-tvOS.a in Frameworks */,
+				E53E363E60754451AFB5CD4A /* libRNRandomBytes-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -672,6 +695,11 @@
 				0AFCAA29CD6C46F3A38D6EC4 /* RNImagePicker.xcodeproj */,
 				C0ED7167F9A0461FA93F490B /* RNVectorIcons.xcodeproj */,
 				E1074A4C74DA4A2EBB55B141 /* BVLinearGradient.xcodeproj */,
+				D286B1E984E74BE18F809B7C /* RNRandomBytes.xcodeproj */,
+				F237E62E73C347DD9DB85094 /* RCTWebRTC.xcodeproj */,
+				D0BE37381BBD405F9F2538F9 /* RNOS.xcodeproj */,
+				13E5C9FB1D9D419EBFF4E078 /* UdpSockets.xcodeproj */,
+				EBE03A56B13C402EB7E7B368 /* TcpSockets.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1395,12 +1423,23 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)\..\node_modules\react-native-randombytes",
+					"$(SRCROOT)\..\node_modules\react-native-webrtc\ios\RCTWebRTC/**",
+					"$(SRCROOT)\..\node_modules\react-native-os\ios",
+					"$(SRCROOT)\..\node_modules\react-native-udp\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-tcp\ios/**",
 				);
 				INFOPLIST_FILE = BrightIDTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1424,12 +1463,23 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)\..\node_modules\react-native-randombytes",
+					"$(SRCROOT)\..\node_modules\react-native-webrtc\ios\RCTWebRTC/**",
+					"$(SRCROOT)\..\node_modules\react-native-os\ios",
+					"$(SRCROOT)\..\node_modules\react-native-udp\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-tcp\ios/**",
 				);
 				INFOPLIST_FILE = BrightIDTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1457,6 +1507,11 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)\..\node_modules\react-native-randombytes",
+					"$(SRCROOT)\..\node_modules\react-native-webrtc\ios\RCTWebRTC/**",
+					"$(SRCROOT)\..\node_modules\react-native-os\ios",
+					"$(SRCROOT)\..\node_modules\react-native-udp\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-tcp\ios/**",
 				);
 				INFOPLIST_FILE = BrightID/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1484,6 +1539,11 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)\..\node_modules\react-native-randombytes",
+					"$(SRCROOT)\..\node_modules\react-native-webrtc\ios\RCTWebRTC/**",
+					"$(SRCROOT)\..\node_modules\react-native-os\ios",
+					"$(SRCROOT)\..\node_modules\react-native-udp\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-tcp\ios/**",
 				);
 				INFOPLIST_FILE = BrightID/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1515,11 +1575,22 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)\..\node_modules\react-native-randombytes",
+					"$(SRCROOT)\..\node_modules\react-native-webrtc\ios\RCTWebRTC/**",
+					"$(SRCROOT)\..\node_modules\react-native-os\ios",
+					"$(SRCROOT)\..\node_modules\react-native-udp\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-tcp\ios/**",
 				);
 				INFOPLIST_FILE = "BrightID-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1553,11 +1624,22 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)\..\node_modules\react-native-randombytes",
+					"$(SRCROOT)\..\node_modules\react-native-webrtc\ios\RCTWebRTC/**",
+					"$(SRCROOT)\..\node_modules\react-native-os\ios",
+					"$(SRCROOT)\..\node_modules\react-native-udp\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-tcp\ios/**",
 				);
 				INFOPLIST_FILE = "BrightID-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1590,11 +1672,22 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)\..\node_modules\react-native-randombytes",
+					"$(SRCROOT)\..\node_modules\react-native-webrtc\ios\RCTWebRTC/**",
+					"$(SRCROOT)\..\node_modules\react-native-os\ios",
+					"$(SRCROOT)\..\node_modules\react-native-udp\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-tcp\ios/**",
 				);
 				INFOPLIST_FILE = "BrightID-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1627,11 +1720,22 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)\..\node_modules\react-native-randombytes",
+					"$(SRCROOT)\..\node_modules\react-native-webrtc\ios\RCTWebRTC/**",
+					"$(SRCROOT)\..\node_modules\react-native-os\ios",
+					"$(SRCROOT)\..\node_modules\react-native-udp\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-tcp\ios/**",
 				);
 				INFOPLIST_FILE = "BrightID-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",

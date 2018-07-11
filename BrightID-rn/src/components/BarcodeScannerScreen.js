@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
-import { Camera, BarCodeScanner, Permissions } from 'expo';
+// import { Camera, BarCodeScanner, Permissions } from 'expo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 /**
@@ -27,13 +27,13 @@ class BarcodeScannerScreen extends React.Component<Props, State> {
   state = {
     hasCameraPermission: false,
     scanBarcode: false,
-    type: Camera.Constants.Type.back,
+    // type: Camera.Constants.Type.back,
     qrData: '',
     dataFound: false,
   };
 
   async componentWillMount() {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    // const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ hasCameraPermission: status === 'granted' });
   }
   handleBarCodeRead = ({ type, data }) => {
@@ -59,12 +59,12 @@ class BarcodeScannerScreen extends React.Component<Props, State> {
     } else {
       return (
         <View style={styles.container}>
-          <BarCodeScanner
+          {/* <BarCodeScanner
             onBarCodeRead={this.handleBarCodeRead}
             style={styles.barcodeScanner}
           >
             <Ionicons name="ios-qr-scanner" size={223} color="#F76B1C" />
-          </BarCodeScanner>
+          </BarCodeScanner> */}
         </View>
       );
     }

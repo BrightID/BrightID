@@ -14,7 +14,6 @@ import { connect } from 'react-redux';
 import NearbyAvatar from './NearbyAvatar';
 
 import { refreshNearbyPeople } from '../actions';
-import { Camera, BarCodeScanner, Permissions } from 'expo';
 
 type Props = {
   nearbyPeople: Array<{
