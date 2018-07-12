@@ -9,7 +9,7 @@ BrightID uses the people you know (a social graph) to enforce one-account-per-pe
 A BrightID proves that you're a unique person.
 
 BrightIDs have the following characteristics:
-* Can be used anonymously. No data is stored. Personal data or biometrics aren't used for verification.
+* Can be used anonymously. No data is stored. No personal data or biometrics are used for verification.
 * Verified by a trusted group of close personal contacts plus a [decentralized social graph owned by no one](#decentralized-and-owner-free).
 * A lost or compromised ID can be replaced by reconnecting with a few close personal contacts.
 * Proof of world-citizenship.
