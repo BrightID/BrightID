@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 // import { Camera, BarCodeScanner, Permissions } from 'expo';
+import { RNCamera } from 'react-native-camera';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 /**
