@@ -4,6 +4,8 @@
 
 [🌐 www.brightid.org](http://www.brightid.org)
 
+## A Personal Stamp of Uniqueness
+
 BrightID uses the people you know (a trust graph) to enforce one-account-per-person for important applications like voting and universal basic income.
 
 A BrightID proves that you're a unique person.
