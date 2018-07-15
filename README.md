@@ -17,7 +17,7 @@ BrightIDs have the following characteristics:
 
 ## Decentralized & Anonymous
 
-The network consists of volunteers [running nodes](https://github.com/BrightID/BrightID-Node). Nodes host the social graph used for verification, but there's no personal information stored there.
+The network consists of volunteers [running nodes](https://github.com/BrightID/BrightID-Node). Nodes host the trust graph used for verification, but there's no personal information stored there.
 
 ## Mobile App
 
