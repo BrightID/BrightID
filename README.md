@@ -14,7 +14,7 @@ BrightIDs have the following characteristics:
 * A lost or compromised ID can be replaced by reconnecting with a few close personal contacts.
 * Proof of world-citizenship.
 
-## Decentralized
+## Decentralized & Anonymous
 
 The network consists of volunteers [running nodes](https://github.com/BrightID/BrightID-Node). Nodes host the social graph used for verification, but there's no personal information stored there.
 
