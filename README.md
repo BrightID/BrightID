@@ -14,7 +14,6 @@ BrightIDs have the following characteristics:
 * Can be used anonymously. [No personal data or biometrics are used for verification](https://www.brightid.org/faq).
 * Verified by a trusted group of close personal contacts plus a [decentralized graph database](#decentralized-and-owner-free).
 * A lost or compromised ID can be replaced by reconnecting with a few close personal contacts.
-* Proof of world-citizenship.
 
 ## Decentralized & Anonymous
 
