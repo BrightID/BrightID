@@ -30,6 +30,10 @@ class SearchConnections extends React.Component<Props> {
           onChangeText={(value) => this.props.dispatch(setSearchParam(value))}
           style={styles.searchField}
           placeholder="Search Connections"
+          autoCapitalize="words"
+          autoCorrect={false}
+          textContentType="name"
+          underlineColorAndroid="transparent"
         />
         <Touchable style={styles.optionsIcon}>
           <Ionicon size={28} name="ios-options-outline" color="#000" />
@@ -65,6 +69,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 3.1,
     flex: 1,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
   },
 });
 

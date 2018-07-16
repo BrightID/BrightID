@@ -22,6 +22,12 @@
   font-size: 1.5em;
 }
 
+.qrcode {
+  width: 150px;
+  height: 150px;
+  margin: 15px auto;
+}
+
 .App-intro {
   font-size: large;
 }

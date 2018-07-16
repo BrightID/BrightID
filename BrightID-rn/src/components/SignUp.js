@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native';
 // import { ImagePicker, Permissions } from 'expo';
+import nacl from 'tweetnacl';
 import ImagePicker from 'react-native-image-picker';
 import { connect } from 'react-redux';
 import HeaderButtons from 'react-navigation-header-buttons';
@@ -56,73 +57,46 @@ class SignUp extends React.Component<Props, State> {
     // this.handleBrightIdCreation = this.handleBrightIdCreation.bind(this);
   }
 
-  static getDerivedStateFromProps(nextProps) {
-    // this is an indirect way to listen for actions
-    // when saveDataSuccess is dispatched, the state of the app will
-    // add a userToken into the redux store
-    // thats how we will know data has been saved successfully and we can
-    // navigate out of the onboarding flow
-    if (nextProps.userToken) {
-      nextProps.navigation.navigate('App');
-    }
-    return null;
-  }
-  // async componentDidMount() {
-  // 	await Permissions.getAsync(Permissions.CAMERA_ROLL);
-  // }
   getAvatarPhoto = async () => {
-    // expo version
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: 'Images',
-        base64: true,
-      });
-
-      if (!result.cancelled) {
-        this.setState({ avatarUri: result.uri });
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-
     // for full documentation on the Image Picker api
     // see https://github.com/react-community/react-native-image-picker
 
-    // const options = {
-    //   title: 'Select Avatar',
-    //   mediaType: 'photo',
-    //   storageOptions: {
-    //     skipBackup: false,
-    //     path: 'images',
-    //   },
-    //   customButtons: [{ name: 'defaultAvatar', title: 'Use Default Avatar' }],
-    //   noData: true,
-    //   allowsEditing: true,
-    // };
+    const options = {
+      title: 'Select Avatar',
+      mediaType: 'photo',
+      storageOptions: {
+        skipBackup: false,
+        path: 'images',
+      },
+      customButtons: [{ name: 'defaultAvatar', title: 'Use Default Avatar' }],
+      noData: true,
+      allowsEditing: true,
+    };
 
-    // ImagePicker.showImagePicker(options, (response) => {
-    //   console.log('Response = ', response);
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
 
-    //   if (response.didCancel) {
-    //     console.warn('User cancelled image picker');
-    //   } else if (response.error) {
-    //     console.warn('ImagePicker Error: ', response.error);
-    //   } else if (response.customButton === 'defaultAvatar') {
-    //     this.setState({
-    //       avatarUri: 'https://commons.wikimedia.org/wiki/File:PICA.jpg',
-    //     });
-    //     console.warn('User tapped custom button: ', response.customButton);
-    //   } else {
-    //     const { uri } = response;
+      if (response.didCancel) {
+        // console.warn('User cancelled image picker');
+      } else if (response.error) {
+        console.warn('ImagePicker Error: ', response.error);
+      } else if (response.customButton === 'defaultAvatar') {
+        this.setState({
+          avatarUri: 'https://commons.wikimedia.org/wiki/File:PICA.jpg',
+        });
+        console.warn('User tapped custom button: ', response.customButton);
+      } else {
+        const { uri } = response;
+        this.setState({
+          avatarUri: uri,
+        });
+        // You can also display the image using data:
+        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
 
-    //     // You can also display the image using data:
-    //     // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-    //     this.setState({
-    //       avatarUri: uri,
-    //     });
-    //   }
-    // });
+        // test this later
+        // const uri = 'data:image/jpeg;base64,' + response.data
+      }
+    });
   };
 
   handleBrightIdCreation = async () => {
@@ -141,8 +115,14 @@ class SignUp extends React.Component<Props, State> {
         return alert('Please add your name or nym');
       }
 
+      // create public / private key pair
+
+      const { publicKey, secretKey } = nacl.sign.keyPair();
+      console.warn(publicKey);
+      console.warn(secretKey);
       const userData = {
-        userToken: 'user_token',
+        publicKey,
+        secretKey,
         nameornym,
         avatarUri,
       };
@@ -155,6 +135,7 @@ class SignUp extends React.Component<Props, State> {
       this.props.dispatch(saveDataSuccess(userData));
       // navigate to home page
       this.props.navigation.navigate('App');
+      // catch any errors with saving data or generating the public / private key
     } catch (err) {
       console.warn(err);
     }
@@ -192,6 +173,10 @@ class SignUp extends React.Component<Props, State> {
             onFocus={() => this.setState({ active: true })}
             onBlur={() => this.setState({ active: false })}
             onEndEditing={() => this.setState({ active: false })}
+            autoCapitalize="words"
+            autoCorrect={false}
+            textContentType="name"
+            underlineColorAndroid="transparent"
           />
         </View>
         <View style={styles.buttonContainer}>
@@ -257,6 +242,9 @@ const styles = StyleSheet.create({
     marginBottom: 11,
     marginTop: 11,
     fontSize: 18,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
   },
 
   midText: {
@@ -266,13 +254,16 @@ const styles = StyleSheet.create({
   textInput: {
     fontFamily: 'ApexNew-Light',
     fontSize: 36,
+    fontWeight: '300',
+    fontStyle: 'normal',
+    letterSpacing: 0,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#9e9e9e',
     marginTop: 22,
     width: 275,
     textAlign: 'center',
+
     paddingBottom: 5,
-    // lineHeight: 35
   },
   buttonInfoText: {
     fontFamily: 'ApexNew-Book',

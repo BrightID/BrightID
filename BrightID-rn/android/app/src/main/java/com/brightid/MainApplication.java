@@ -5,8 +5,10 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
+import com.bitgo.randombytes.RandomBytesPackage;
+import com.peel.react.rnos.RNOSModule;
 import com.imagepicker.ImagePickerPackage;
-import com.oney.WebRTCModule.WebRTCModulePackage;
+import org.reactnative.camera.RNCameraPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -27,10 +29,12 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-          new LinearGradientPackage(),
-          new VectorIconsPackage(),
-          new ImagePickerPackage(),
-          new WebRTCModulePackage()
+            new LinearGradientPackage(),
+            new VectorIconsPackage(),
+            new RandomBytesPackage(),
+            new RNOSModule(),
+            new ImagePickerPackage(),
+            new RNCameraPackage()
       );
     }
 

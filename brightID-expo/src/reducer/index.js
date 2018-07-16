@@ -36,7 +36,6 @@ const initialState = {
   trustScore: '',
   name: '',
   userAvatar: '',
-  userToken: '',
   groupsCount: 0,
   searchParam: '',
   allConnections: [{ name: 'Rand Paul' }],
@@ -44,6 +43,8 @@ const initialState = {
   savingData: false,
   saveDataSuccess: false,
   nearbyPeople: [],
+  publicKey: '',
+  privateKey: '',
 };
 
 const mainReducer = (state = initialState, action) => {
@@ -63,7 +64,8 @@ const mainReducer = (state = initialState, action) => {
         ...state,
         userAvatar: action.avatarUri,
         name: action.nameornym,
-        userToken: action.userToken,
+        publicKey: action.publicKey,
+        privateKey: action.privateKey,
         loadingUser: false,
       };
     case GROUPS_COUNT:
@@ -87,12 +89,13 @@ const mainReducer = (state = initialState, action) => {
         userAvatar: action.avatarUri,
       };
     case SAVE_DATA_SUCCESS:
-      // userToken is used for navigation out of onboarding flow
+      // publicKey is used for navigation out of onboarding flow
       return {
         ...state,
         userAvatar: action.avatarUri,
         name: action.nameornym,
-        userToken: action.userToken,
+        publicKey: action.publicKey,
+        privateKey: action.privateKey,
         savingData: false,
       };
     case REMOVE_USER_DATA:
@@ -100,7 +103,8 @@ const mainReducer = (state = initialState, action) => {
         ...state,
         avatarUri: '',
         name: '',
-        userToken: '',
+        publicKey: '',
+        privateKey: '',
       };
     case REFRESH_NEARBY_PEOPLE:
       return {

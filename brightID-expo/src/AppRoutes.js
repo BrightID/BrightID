@@ -7,7 +7,49 @@ import ConnectionsScreen from './components/ConnectionsScreen';
 import GroupsScreen from './components/GroupsScreen';
 import Onboard from './components/Onboard';
 import SignUp from './components/SignUp';
+import BarcodeScannerScreen from './components/BarcodeScannerScreen';
+import NewConnectionScreen from './components/NewConnectionScreen';
 import AppBootstrap from './AppBootstrap';
+
+const AppStack = createStackNavigator(
+  {
+    Home: {
+      screen: HomeScreen,
+    },
+    Connections: {
+      screen: ConnectionsScreen,
+    },
+    Groups: {
+      screen: GroupsScreen,
+    },
+    BarcodeScanner: {
+      screen: BarcodeScannerScreen,
+    },
+    NewConnection: {
+      screen: NewConnectionScreen,
+    },
+  },
+  {
+    initialRouteName: 'Home',
+    navigationOptions: {
+      title: 'BrightID',
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontFamily: 'EurostileRegular',
+        fontWeight: '200',
+        fontSize: 24,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+      },
+      headerBackground: (
+        <LinearGradient
+          colors={['#F52828', '#F76B1C']}
+          style={{ flex: 1, width: '100%' }}
+        />
+      ),
+    },
+  },
+);
 
 const OnboardingStack = createStackNavigator(
   {
@@ -31,40 +73,6 @@ const OnboardingStack = createStackNavigator(
         marginRight: 'auto',
       },
       headerTransparent: true,
-      headerBackground: (
-        <LinearGradient
-          colors={['#F52828', '#F76B1C']}
-          style={{ flex: 1, width: '100%' }}
-        />
-      ),
-    },
-  },
-);
-
-const AppStack = createStackNavigator(
-  {
-    Home: {
-      screen: HomeScreen,
-    },
-    Connections: {
-      screen: ConnectionsScreen,
-    },
-    Groups: {
-      screen: GroupsScreen,
-    },
-  },
-  {
-    initialRouteName: 'Home',
-    navigationOptions: {
-      title: 'BrightID',
-      headerTintColor: '#fff',
-      headerTitleStyle: {
-        fontFamily: 'EurostileRegular',
-        fontWeight: '200',
-        fontSize: 24,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-      },
       headerBackground: (
         <LinearGradient
           colors={['#F52828', '#F76B1C']}

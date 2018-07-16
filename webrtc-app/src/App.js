@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import nacl from 'tweetnacl';
+import QRCode from 'qrcode';
 import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -33,9 +35,24 @@ class App extends Component {
       open: true,
       localMessage: '',
       remoteMessage: '',
+      keys: {},
+      qrcode: '',
     };
   }
-  async componentDidMount() {}
+  async componentDidMount() {
+    const keys = nacl.sign.keyPair();
+    this.setState({
+      keys,
+    });
+    QRCode.toString(keys.publicKey.toString(), (err, qrcode) => {
+      if (err) throw err;
+      this.setState({
+        qrcode,
+      });
+    });
+    console.log(keys);
+  }
+  genQrCode = () => {};
   connectPeers = async () => {
     try {
       console.log('connecting peers...');
@@ -45,11 +62,12 @@ class App extends Component {
         modulusLength: 2048,
         publicExponent: new Uint8Array([1, 0, 1]),
       });
-      lc = new RTCPeerConnection({
-        iceCandidatePoolSize: 1,
-        iceServers: [{ url: 'stun:stun.l.google.com:19302' }],
-      });
-      // lc = new RTCPeerConnection(null);
+
+      // lc = new RTCPeerConnection({
+      //   iceCandidatePoolSize: 1,
+      //   iceServers: [{ url: 'stun:stun.l.google.com:19302' }],
+      // });
+      lc = new RTCPeerConnection(null);
       // sendChannel = lc.createDataChannel('sendChannel');
       // sendChannel.onopen = this.handleSendChannelStatusChange;
       // sendChannel.onclose = this.handleSendChannelStatusChange;
@@ -276,6 +294,11 @@ class App extends Component {
           <h1 className="App-title">Welcome to React</h1>
         </header>
         <div className="connect-buttons">
+          {/* {this.state.qrcode} */}
+          <div
+            className="qrcode"
+            dangerouslySetInnerHTML={{ __html: this.state.qrcode }}
+          />
           <button
             id="connectButton"
             name="connectButton"
