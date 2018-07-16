@@ -4,19 +4,20 @@
 
 [🌐 www.brightid.org](http://www.brightid.org)
 
-BrightID uses the people you know (a social graph) to enforce one-account-per-person for important applications like voting and universal basic income.
+## A Personal Stamp of Uniqueness
+
+BrightID uses the people you know (a trust graph) to enforce one-account-per-person for important applications like voting and universal basic income.
 
 A BrightID proves that you're a unique person.
 
 BrightIDs have the following characteristics:
-* Can be used anonymously. No data is stored. Personal data or biometrics aren't used for verification.
-* Verified by a trusted group of close personal contacts plus a [decentralized social graph owned by no one](#decentralized-and-owner-free).
+* Can be used anonymously. [No personal data or biometrics are used for verification](https://www.brightid.org/faq).
+* Verified by a trusted group of close personal contacts plus a [decentralized graph database](#decentralized-and-owner-free).
 * A lost or compromised ID can be replaced by reconnecting with a few close personal contacts.
-* Proof of world-citizenship.
 
-## Decentralized and Owner-Free
+## Decentralized & Anonymous
 
-There's no organization controlling BrightID. The network consists of volunteers [running nodes](https://github.com/BrightID/BrightID-Node).  Nodes host the social graph used for verification, but there's no personal information stored there.
+The network consists of volunteers [running nodes](https://github.com/BrightID/BrightID-Node). Nodes host the trust graph used for verification, but there's no personal information stored there.
 
 ## Mobile App
 
