@@ -57,33 +57,7 @@ class SignUp extends React.Component<Props, State> {
     // this.handleBrightIdCreation = this.handleBrightIdCreation.bind(this);
   }
 
-  static getDerivedStateFromProps(nextProps) {
-    // this is an indirect way to listen for actions
-    // when saveDataSuccess is dispatched, the state of the app will
-    // add a userToken into the redux store
-    // thats how we will know data has been saved successfully and we can
-    // navigate out of the onboarding flow
-    if (nextProps.userToken) {
-      nextProps.navigation.navigate('App');
-    }
-    return null;
-  }
-
   getAvatarPhoto = async () => {
-    // expo version
-    // try {
-    //   let result = await ImagePicker.launchImageLibraryAsync({
-    //     mediaTypes: 'Images',
-    //     base64: true,
-    //   });
-
-    //   if (!result.cancelled) {
-    //     this.setState({ avatarUri: result.uri });
-    //   }
-    // } catch (err) {
-    //   console.warn(err);
-    // }
-
     // for full documentation on the Image Picker api
     // see https://github.com/react-community/react-native-image-picker
 
@@ -103,7 +77,7 @@ class SignUp extends React.Component<Props, State> {
       console.log('Response = ', response);
 
       if (response.didCancel) {
-        console.warn('User cancelled image picker');
+        // console.warn('User cancelled image picker');
       } else if (response.error) {
         console.warn('ImagePicker Error: ', response.error);
       } else if (response.customButton === 'defaultAvatar') {
@@ -113,56 +87,58 @@ class SignUp extends React.Component<Props, State> {
         console.warn('User tapped custom button: ', response.customButton);
       } else {
         const { uri } = response;
-
-        // You can also display the image using data:
-        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-
         this.setState({
           avatarUri: uri,
         });
+        // You can also display the image using data:
+        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+        // test this later
+        // const uri = 'data:image/jpeg;base64,' + response.data
       }
     });
   };
 
   handleBrightIdCreation = async () => {
-    // try {
-    const { avatarUri, nameornym } = this.state;
-    // saveUserData is located in actions/storage.js
-    // it contains three asynchrous function calls, updating async storage
-    // the order of parameters are important for now
-    // if (!avatarUri) {
-    // 	return alert('Please Upload a picture!');
-    // } else if (!nameornym) {
-    // 	return alert('Please add your name or nym');
-    // }
+    try {
+      const { avatarUri, nameornym } = this.state;
+      // saveUserData is located in actions/storage.js
+      // it contains three asynchrous function calls, updating async storage
+      // the order of parameters are important for now
+      // if (!avatarUri) {
+      // 	return alert('Please Upload a picture!');
+      // } else if (!nameornym) {
+      // 	return alert('Please add your name or nym');
+      // }
 
-    if (!nameornym) {
-      return alert('Please add your name or nym');
+      if (!nameornym) {
+        return alert('Please add your name or nym');
+      }
+
+      // create public / private key pair
+
+      const { publicKey, secretKey } = nacl.sign.keyPair();
+      console.warn(publicKey);
+      console.warn(secretKey);
+      const userData = {
+        publicKey,
+        secretKey,
+        nameornym,
+        avatarUri,
+      };
+
+      // save avatar photo uri and name in async storage
+
+      await AsyncStorage.setItem('userData', JSON.stringify(userData));
+
+      // update redux store
+      this.props.dispatch(saveDataSuccess(userData));
+      // navigate to home page
+      this.props.navigation.navigate('App');
+      // catch any errors with saving data or generating the public / private key
+    } catch (err) {
+      console.warn(err);
     }
-
-    // create public / private key pair
-
-    const { publicKey, secretKey } = nacl.sign.keyPair();
-    console.warn(publicKey);
-    console.warn(secretKey);
-    const userData = {
-      publicKey,
-      secretKey,
-      nameornym,
-      avatarUri,
-    };
-
-    // save avatar photo uri and name in async storage
-
-    // await AsyncStorage.setItem('userData', JSON.stringify(userData));
-
-    // update redux store
-    // this.props.dispatch(saveDataSuccess(userData));
-    // navigate to home page
-    // this.props.navigation.navigate('App');
-    // } catch (err) {
-    //   console.warn(err);
-    // }
   };
 
   render() {
@@ -197,6 +173,10 @@ class SignUp extends React.Component<Props, State> {
             onFocus={() => this.setState({ active: true })}
             onBlur={() => this.setState({ active: false })}
             onEndEditing={() => this.setState({ active: false })}
+            autoCapitalize="words"
+            autoCorrect={false}
+            textContentType="name"
+            underlineColorAndroid="transparent"
           />
         </View>
         <View style={styles.buttonContainer}>
@@ -262,6 +242,9 @@ const styles = StyleSheet.create({
     marginBottom: 11,
     marginTop: 11,
     fontSize: 18,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
   },
 
   midText: {
@@ -271,13 +254,16 @@ const styles = StyleSheet.create({
   textInput: {
     fontFamily: 'ApexNew-Light',
     fontSize: 36,
+    fontWeight: '300',
+    fontStyle: 'normal',
+    letterSpacing: 0,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#9e9e9e',
     marginTop: 22,
     width: 275,
     textAlign: 'center',
+
     paddingBottom: 5,
-    // lineHeight: 35
   },
   buttonInfoText: {
     fontFamily: 'ApexNew-Book',

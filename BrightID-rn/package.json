@@ -30,6 +30,7 @@
     "react-native-level-fs": "^3.0.1",
     "react-native-linear-gradient": "^2.4.0",
     "react-native-os": "^1.2.1",
+    "react-native-permissions": "^1.1.1",
     "react-native-platform-touchable": "^1.1.1",
     "react-native-randombytes": "^3.4.0",
     "react-native-snap-carousel": "^3.7.2",

@@ -44,7 +44,7 @@ const initialState = {
   saveDataSuccess: false,
   nearbyPeople: [],
   publicKey: '',
-  privateKey: '',
+  secretKey: '',
 };
 
 const mainReducer = (state = initialState, action) => {
@@ -65,7 +65,7 @@ const mainReducer = (state = initialState, action) => {
         userAvatar: action.avatarUri,
         name: action.nameornym,
         publicKey: action.publicKey,
-        privateKey: action.privateKey,
+        secretKey: action.secretKey,
         loadingUser: false,
       };
     case GROUPS_COUNT:
@@ -89,13 +89,12 @@ const mainReducer = (state = initialState, action) => {
         userAvatar: action.avatarUri,
       };
     case SAVE_DATA_SUCCESS:
-      // publicKey is used for navigation out of onboarding flow
       return {
         ...state,
         userAvatar: action.avatarUri,
         name: action.nameornym,
         publicKey: action.publicKey,
-        privateKey: action.privateKey,
+        secretKey: action.secretKey,
         savingData: false,
       };
     case REMOVE_USER_DATA:
@@ -104,7 +103,7 @@ const mainReducer = (state = initialState, action) => {
         avatarUri: '',
         name: '',
         publicKey: '',
-        privateKey: '',
+        secretKey: '',
       };
     case REFRESH_NEARBY_PEOPLE:
       return {

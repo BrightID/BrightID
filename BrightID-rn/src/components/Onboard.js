@@ -115,7 +115,9 @@ const styles = StyleSheet.create({
     fontFamily: 'ApexNew-Medium',
     color: '#4990e2',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '500',
+    fontStyle: 'normal',
+    letterSpacing: 0,
   },
 });
 

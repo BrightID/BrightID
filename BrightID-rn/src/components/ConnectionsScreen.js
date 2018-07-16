@@ -28,6 +28,7 @@ type Props = {
 class ConnectionsScreen extends React.Component<Props> {
   static navigationOptions = {
     title: 'Connections',
+    headerRight: <View />,
   };
   keyExtractor = (item) => item.firstName + item.lastName + item.id;
 

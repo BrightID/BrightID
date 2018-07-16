@@ -26,28 +26,16 @@ export default class AppBootstrap extends React.Component<Props> {
     // bootstrap the application
     // async storage key 'userData' : {
     // publicKey: Array<number>,
-    // privateKey: Array<number>,
+    // secretKey: Array<number>,
     // nameornym: String,
     // avatarUri: String
     // }
-
     try {
-      // add user permssions
-      // await Permissions.askAsync(Permissions.CAMERA);
-      // await Permissions.askAsync(Permissions.CAMERA_ROLL);
-
-      // // load font
-      // await Font.loadAsync({
-      //   EurostileRegular: require('../assets/fonts/EurostileRegular.ttf'),
-      //   'ApexNew-Book': require('../assets/fonts/ApexNew-Book.otf'),
-      //   'ApexNew-Medium': require('../assets/fonts/ApexNew-Medium.otf'),
-      //   'ApexNew-Light': require('../assets/fonts/ApexNew-Light.otf'),
-      // });
-
       // load user data
       let userData = await AsyncStorage.getItem('userData');
       if (userData !== null) {
         userData = JSON.parse(userData);
+
         store.dispatch(setUpDefault(userData));
       } else {
         store.dispatch(setUpDefault({}));

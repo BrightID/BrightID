@@ -16,6 +16,7 @@ type Props = {
 class NewConnectionScreen extends React.Component<Props> {
   static navigationOptions = {
     title: 'New Connection',
+    headerRight: <View />,
   };
 
   render() {
@@ -23,8 +24,8 @@ class NewConnectionScreen extends React.Component<Props> {
       <View style={styles.container}>
         <Text style={styles.makeConnectionTitle}>How to make a connection</Text>
         <Text style={styles.infoText}>
-          There are a unique set of public and private keys stored on this
-          device that must be transferred in order to make a new connection.
+          To make a connection between two people, one person needs to display a
+          QR code, and the other needs to scan it with their phone's camera.
           Please select one of the options below:
         </Text>
         <TouchableOpacity style={styles.displayQR}>

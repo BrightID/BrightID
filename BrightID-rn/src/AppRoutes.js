@@ -40,6 +40,9 @@ const AppStack = createStackNavigator(
         fontSize: 24,
         marginLeft: 'auto',
         marginRight: 'auto',
+        textAlign: 'center',
+        alignSelf: 'center',
+        flex: 1,
       },
       headerBackground: (
         <LinearGradient
@@ -71,6 +74,9 @@ const OnboardingStack = createStackNavigator(
         fontSize: 24,
         marginLeft: 'auto',
         marginRight: 'auto',
+        textAlign: 'center',
+        alignSelf: 'center',
+        flex: 1,
       },
       headerTransparent: true,
       headerBackground: (

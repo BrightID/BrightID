@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
-// import { Camera, BarCodeScanner, Permissions } from 'expo';
+// import Permissions from 'react-native-permissions'
 import { RNCamera } from 'react-native-camera';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -17,25 +17,23 @@ type Props = {
 
 type State = {
   hasCameraPermission: boolean,
-  scanBarcode: boolean,
   type: string,
 };
 
 class BarcodeScannerScreen extends React.Component<Props, State> {
   static navigationOptions = {
-    title: 'Scan Barcode',
+    title: 'Scan QR code',
+    headerRight: <View />,
   };
   state = {
-    hasCameraPermission: false,
-    scanBarcode: false,
-    // type: Camera.Constants.Type.back,
-    qrData: '',
+    hasCameraPermission: '',
     dataFound: false,
   };
-
-  async componentWillMount() {
-    // const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({ hasCameraPermission: status === 'granted' });
+  componentDidMount() {
+    // Permissions.check('photo').then((response) => {
+    //   // Response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+    //   this.setState({ hasCameraPermission: response });
+    // });
   }
   handleBarCodeRead = ({ type, data }) => {
     this.setState({ qrData: data, dataFound: true });
@@ -60,12 +58,21 @@ class BarcodeScannerScreen extends React.Component<Props, State> {
     } else {
       return (
         <View style={styles.container}>
-          {/* <BarCodeScanner
-            onBarCodeRead={this.handleBarCodeRead}
-            style={styles.barcodeScanner}
+          <RNCamera
+            ref={(ref) => {
+              this.camera = ref;
+            }}
+            style={styles.preview}
+            onBarCodeRead={this.handleBarCoeRead}
+            type={RNCamera.Constants.Type.back}
+            flashMode={RNCamera.Constants.FlashMode.off}
+            permissionDialogTitle={'Permission to use camera'}
+            permissionDialogMessage={
+              'We need your permission to use your camera phone'
+            }
           >
             <Ionicons name="ios-qr-scanner" size={223} color="#F76B1C" />
-          </BarCodeScanner> */}
+          </RNCamera>
         </View>
       );
     }
@@ -80,7 +87,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
   },
-  barcodeScanner: {
+  preview: {
     ...StyleSheet.absoluteFillObject,
     alignItems: 'center',
     justifyContent: 'center',
