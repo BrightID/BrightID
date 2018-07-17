@@ -9,6 +9,7 @@ import Onboard from './components/Onboard';
 import SignUp from './components/SignUp';
 import BarcodeScannerScreen from './components/BarcodeScannerScreen';
 import NewConnectionScreen from './components/NewConnectionScreen';
+import DisplayQRCodeScreen from './components/DisplayQRCodeScreen';
 import AppBootstrap from './AppBootstrap';
 
 const AppStack = createStackNavigator(
@@ -27,6 +28,9 @@ const AppStack = createStackNavigator(
     },
     NewConnection: {
       screen: NewConnectionScreen,
+    },
+    DisplayQRCode: {
+      screen: DisplayQRCodeScreen,
     },
   },
   {
