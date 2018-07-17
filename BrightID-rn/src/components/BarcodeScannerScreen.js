@@ -63,7 +63,7 @@ class BarcodeScannerScreen extends React.Component<Props, State> {
               this.camera = ref;
             }}
             style={styles.preview}
-            onBarCodeRead={this.handleBarCoeRead}
+            onBarCodeRead={this.handleBarCodeRead}
             type={RNCamera.Constants.Type.back}
             flashMode={RNCamera.Constants.FlashMode.off}
             permissionDialogTitle={'Permission to use camera'}

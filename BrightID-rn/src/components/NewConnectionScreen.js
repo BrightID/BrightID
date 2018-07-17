@@ -28,7 +28,12 @@ class NewConnectionScreen extends React.Component<Props> {
           QR code, and the other needs to scan it with their phone's camera.
           Please select one of the options below:
         </Text>
-        <TouchableOpacity style={styles.displayQR}>
+        <TouchableOpacity
+          style={styles.displayQR}
+          onPress={() => {
+            this.props.navigation.navigate('DisplayQRCode');
+          }}
+        >
           <Text style={styles.buttonText}>Display QR Code</Text>
         </TouchableOpacity>
         <TouchableOpacity

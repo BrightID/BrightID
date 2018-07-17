@@ -17,6 +17,7 @@
     "react/prefer-stateless-function": "off",
     "react/jsx-filename-extension": "off",
     "react/no-unescaped-entities": "off",
+    "react/no-did-mount-set-state": "off",
     "react/require-default-props": "off",
     "react/jsx-boolean-value": "off",
     "consistent-return": "off",
