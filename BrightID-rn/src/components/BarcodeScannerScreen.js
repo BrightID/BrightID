@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 // import Permissions from 'react-native-permissions'
 import { RNCamera } from 'react-native-camera';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { generateMessage } from '../actions/exchange';
 
 /**
  * Connection screen of BrightID
@@ -36,9 +37,13 @@ class BarcodeScannerScreen extends React.Component<Props, State> {
     // });
   }
   handleBarCodeRead = ({ type, data }) => {
+    // generate Message after scanning qrcode
     this.setState({ qrData: data, dataFound: true });
     if (!this.state.dataFound) {
-      Alert.alert(data);
+      // Alert.alert(data);
+      //
+      console.warn(data);
+      this.props.dispatch(generateMessage(data));
     }
   };
   render() {

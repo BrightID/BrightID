@@ -5,12 +5,15 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
 import { connect } from 'react-redux';
+import { generateMessage } from '../actions/exchange';
 
 /**
  * Connection screen of BrightID
  */
 
-type Props = {};
+type Props = {
+  publicKey: Object,
+};
 
 type State = {
   qrsvg: string,
@@ -26,7 +29,9 @@ class DisplayQRCodeScreen extends React.Component<Props, State> {
     qrsvg: '',
   };
   componentDidMount() {
-    qrcode.toString('it works!', (err, qrsvg) => {
+    const { publicKey } = this.props;
+
+    qrcode.toString('publicKey', (err, qrsvg) => {
       if (err) throw err;
       this.parseSVG(qrsvg);
       this.setState({ qrsvg });
@@ -43,7 +48,7 @@ class DisplayQRCodeScreen extends React.Component<Props, State> {
   render() {
     return (
       <View style={styles.container}>
-        <Text>User Key</Text>
+        <Text>Public Key</Text>
         <Svg height="150" width="150" viewBox="0 0 29 29">
           <Path fill="#fff" d="M0 0h29v29H0z" />
           <Path stroke="#000" d={this.state.qrsvgd} />
