@@ -13,6 +13,7 @@ export const ERROR = 'ERROR';
 export const REMOVE_USER_DATA = 'REMOVE_USER_DATA';
 export const SET_PPKEYS = 'SET_PPKEYS';
 export const REFRESH_NEARBY_PEOPLE = 'REFRESH_NEARBY_PEOPLE';
+export const PUBLICKEY2 = 'PUBLICKEY2';
 
 /**
  * Redux boilerplate, pass data through the app
@@ -55,6 +56,11 @@ export const userAvatar = (avatarUri: String) => ({
 
 export const loadingUser = () => ({
   type: LOADING_USER,
+});
+
+export const setPublicKey2 = (publicKey2: string) => ({
+  type: PUBLICKEY2,
+  publicKey2,
 });
 
 export const removeUserData = () => ({
