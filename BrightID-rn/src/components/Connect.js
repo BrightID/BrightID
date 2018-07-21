@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import NearbyAvatar from './NearbyAvatar';
+import { generateMessage } from '../actions/exchange';
 
 import { refreshNearbyPeople } from '../actions';
 
@@ -89,7 +90,7 @@ class Connect extends React.Component<Props, State> {
         <TouchableOpacity
           style={styles.defaultOrb}
           onPress={() => {
-            this.props.navigation.navigate('MakeConnection');
+            this.props.dispatch(generateMessage({ 0: 12, 1: 22, 3: 98 }));
           }}
         >
           <Text style={styles.connectText}>CONNECT</Text>

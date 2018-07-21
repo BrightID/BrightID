@@ -10,6 +10,8 @@ let sendChannel;
 let receiveChannel;
 let rc;
 
+window.nacl = nacl;
+
 function handleRecieveChannelStatusChange(event) {
   if (receiveChannel) {
     console.log(

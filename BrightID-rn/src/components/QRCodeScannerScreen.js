@@ -21,7 +21,7 @@ type State = {
   type: string,
 };
 
-class BarcodeScannerScreen extends React.Component<Props, State> {
+class QRCodeScannerScreen extends React.Component<Props, State> {
   static navigationOptions = {
     title: 'Scan QR code',
     headerRight: <View />,
@@ -99,4 +99,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(BarcodeScannerScreen);
+export default connect((state) => state.main)(QRCodeScannerScreen);

@@ -7,7 +7,7 @@ import ConnectionsScreen from './components/ConnectionsScreen';
 import GroupsScreen from './components/GroupsScreen';
 import Onboard from './components/Onboard';
 import SignUp from './components/SignUp';
-import BarcodeScannerScreen from './components/BarcodeScannerScreen';
+import QRCodeScannerScreen from './components/QRCodeScannerScreen';
 import NewConnectionScreen from './components/NewConnectionScreen';
 import DisplayQRCodeScreen from './components/DisplayQRCodeScreen';
 import AppBootstrap from './AppBootstrap';
@@ -23,8 +23,8 @@ const AppStack = createStackNavigator(
     Groups: {
       screen: GroupsScreen,
     },
-    BarcodeScanner: {
-      screen: BarcodeScannerScreen,
+    QRCodeScanner: {
+      screen: QRCodeScannerScreen,
     },
     NewConnection: {
       screen: NewConnectionScreen,
