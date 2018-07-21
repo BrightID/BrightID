@@ -31,11 +31,14 @@ export default class AppBootstrap extends React.Component<Props> {
     // avatarUri: String
     // }
     try {
-      // load user data
+      // load user data from async storage
       let userData = await AsyncStorage.getItem('userData');
       if (userData !== null) {
         userData = JSON.parse(userData);
-
+        // convert public / secret keys to Uint8Array
+        userData.publicKey = new Uint8Array(Object.values(userData.publicKey));
+        userData.secretKey = new Uint8Array(Object.values(userData.secretKey));
+        // update redux store
         store.dispatch(setUpDefault(userData));
       } else {
         store.dispatch(setUpDefault({}));

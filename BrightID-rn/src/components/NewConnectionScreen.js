@@ -39,7 +39,7 @@ class NewConnectionScreen extends React.Component<Props> {
         <TouchableOpacity
           style={styles.scanQR}
           onPress={() => {
-            this.props.navigation.navigate('BarcodeScanner');
+            this.props.navigation.navigate('QRCodeScanner');
           }}
         >
           <Text style={styles.buttonText}>Scan QR Code</Text>
