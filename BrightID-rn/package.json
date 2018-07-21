@@ -1,5 +1,5 @@
 {
-  "name": "BrightID",
+  "name": "brightid",
   "version": "0.0.1",
   "private": true,
   "rnpm": {
@@ -61,13 +61,18 @@
     "vm-browserify": "0.0.4"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0-beta.54",
+    "@babel/preset-flow": "^7.0.0-beta.54",
+    "babel-core": "^7.0.0-beta.54",
     "babel-eslint": "^8.2.6",
-    "babel-jest": "23.4.0",
+    "babel-jest": "^23.4.0",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-preset-react-native": "^5",
     "eslint": "^5.1.0",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-plugin-babel": "^5.1.0",
     "eslint-plugin-flowtype": "^2.50.0",
+    "eslint-plugin-jest": "^21.18.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-react": "^7.10.0",
@@ -78,7 +83,13 @@
     "redux-mock-store": "^1.5.3"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(react-native|react-navigation-header-buttons|react-native-linear-gradient|react-native-vector-icons|react-native-platform-touchable|react-native-snap-carousel|react-native-svg|react-navigation|react-native-safe-area-view|react-native-*)/)"
+    ]
   },
   "react-native": {
     "zlib": "browserify-zlib",
