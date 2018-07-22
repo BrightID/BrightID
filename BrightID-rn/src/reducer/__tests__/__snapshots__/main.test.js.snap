@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`main reducer should return the initial state 1`] = `
+Object {
+  "connections": Array [
+    Object {
+      "avatar": "",
+      "connectionDate": "",
+      "name": "",
+      "publicKey": Array [],
+      "trustScore": "",
+    },
+  ],
+  "groupsCount": 0,
+  "name": "",
+  "nearbyPeople": Array [],
+  "publicKey": "",
+  "publicKey2": "",
+  "searchParam": "",
+  "secretKey": "",
+  "trustScore": "",
+  "userAvatar": "",
+}
+`;
+
+exports[`main reducer should update GROUPS_COUNT 1`] = `
+Object {
+  "connections": Array [
+    Object {
+      "avatar": "",
+      "connectionDate": "",
+      "name": "",
+      "publicKey": Array [],
+      "trustScore": "",
+    },
+  ],
+  "groupsCount": 64,
+  "name": "",
+  "nearbyPeople": Array [],
+  "publicKey": "",
+  "publicKey2": "",
+  "searchParam": "",
+  "secretKey": "",
+  "trustScore": "",
+  "userAvatar": "",
+}
+`;
+
+exports[`main reducer should update USER_TRUST_SCORE 1`] = `
+Object {
+  "connections": Array [
+    Object {
+      "avatar": "",
+      "connectionDate": "",
+      "name": "",
+      "publicKey": Array [],
+      "trustScore": "",
+    },
+  ],
+  "groupsCount": 0,
+  "name": "",
+  "nearbyPeople": Array [],
+  "publicKey": "",
+  "publicKey2": "",
+  "searchParam": "",
+  "secretKey": "",
+  "trustScore": "99.9",
+  "userAvatar": "",
+}
+`;

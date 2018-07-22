@@ -18,7 +18,7 @@ class Onboard extends React.Component {
   };
 
   constructor(props) {
-    super(props);
+    super(props)s;
     this.state = {
       activeSlide: 0,
       entries: [0, 1, 2, 3],

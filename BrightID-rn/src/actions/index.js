@@ -1,19 +1,17 @@
 // @flow
 
-export const TRUST_SCORE = 'TRUST_SCORE';
-export const CONNECTIONS_COUNT = 'CONNECTIONS_COUNT';
+export const USER_TRUST_SCORE = 'USER_TRUST_SCORE';
+export const CONNECTION_TRUST_SCORE = 'CONNECTION_TRUST_SCORE';
 export const GROUPS_COUNT = 'GROUPS_COUNT';
 export const SEARCH_PARAM = 'SEARCH_PARAM';
-export const ALL_CONNECTIONS = 'ALL_CONNECTIONS';
-export const USER_AVATAR = 'USER_AVATAR';
-export const SAVE_DATA_SUCCESS = 'SAVE_DATA_SUCCESS';
-export const LOADING_USER = 'LOADING_USER';
-export const USER_DATA = 'USER_DATA';
-export const ERROR = 'ERROR';
+export const UPDATE_CONNECTIONS = 'UPDATE_CONNECTIONS';
+export const ADD_CONNECTION = 'ADD_CONNECTION';
+export const UPDATE_USER_DATA = 'UPDATE_USER_DATA';
 export const REMOVE_USER_DATA = 'REMOVE_USER_DATA';
-export const SET_PPKEYS = 'SET_PPKEYS';
+export const USER_AVATAR = 'USER_AVATAR';
 export const REFRESH_NEARBY_PEOPLE = 'REFRESH_NEARBY_PEOPLE';
 export const PUBLICKEY2 = 'PUBLICKEY2';
+export const ERROR = 'ERROR';
 
 /**
  * Redux boilerplate, pass data through the app
@@ -24,19 +22,23 @@ export const PUBLICKEY2 = 'PUBLICKEY2';
  *
  */
 
-export const handleError = (error: string) => ({
-  type: ERROR,
-  error,
+export const userTrustScore = (trustScore: string) => ({
+  type: USER_TRUST_SCORE,
+  trustScore,
 });
 
-export const trustScore = (payload: string) => ({
-  type: TRUST_SCORE,
-  payload,
+export const connectionTrustScore = (
+  publicKey: Array<number>,
+  trustScore: string,
+) => ({
+  type: CONNECTION_TRUST_SCORE,
+  publicKey,
+  trustScore,
 });
 
-export const groupsCount = (payload: number) => ({
+export const groupsCount = (count: number) => ({
   type: GROUPS_COUNT,
-  payload,
+  count,
 });
 
 export const setSearchParam = (value: string) => ({
@@ -44,31 +46,14 @@ export const setSearchParam = (value: string) => ({
   value,
 });
 
-export const allConnections = (connections: Array<{}>) => ({
-  type: ALL_CONNECTIONS,
+export const setConnections = (connections: Array<{}>) => ({
+  type: UPDATE_CONNECTIONS,
   connections,
 });
 
-export const userAvatar = (avatarUri: String) => ({
-  type: USER_AVATAR,
-  avatarUri,
-});
-
-export const loadingUser = () => ({
-  type: LOADING_USER,
-});
-
-export const setPublicKey2 = (publicKey2: string) => ({
-  type: PUBLICKEY2,
-  publicKey2,
-});
-
-export const removeUserData = () => ({
-  type: REMOVE_USER_DATA,
-});
-export const refreshNearbyPeople = (nearbyPeople: Array<{}>) => ({
-  type: REFRESH_NEARBY_PEOPLE,
-  nearbyPeople,
+export const addConnection = (connection: Object) => ({
+  type: ADD_CONNECTION,
+  connection,
 });
 
 export const setUserData = ({
@@ -82,34 +67,33 @@ export const setUserData = ({
   nameornym: string,
   avatarUri: string,
 }) => ({
-  type: USER_DATA,
+  type: UPDATE_USER_DATA,
   publicKey,
   secretKey,
   nameornym,
   avatarUri,
 });
 
-export const saveDataSuccess = ({
-  publicKey,
-  secretKey,
-  nameornym,
-  avatarUri,
-}: {
-  publicKey: Array<number>,
-  secretKey: Array<number>,
-  nameornym: string,
-  avatarUri: string,
-}) => ({
-  type: SAVE_DATA_SUCCESS,
-  publicKey,
-  secretKey,
-  nameornym,
+export const removeUserData = () => ({
+  type: REMOVE_USER_DATA,
+});
+
+export const userAvatar = (avatarUri: String) => ({
+  type: USER_AVATAR,
   avatarUri,
 });
 
-// @greenkode - ({ppKeys}) uses object destructring so I changed
-//              the parameter to (ppKeys) so that it works correctly
-export const setPPKeys = (ppKeys: {}) => ({
-  type: SET_PPKEYS,
-  ppKeys,
+export const setPublicKey2 = (publicKey2: string) => ({
+  type: PUBLICKEY2,
+  publicKey2,
+});
+
+export const refreshNearbyPeople = (nearbyPeople: Array<{}>) => ({
+  type: REFRESH_NEARBY_PEOPLE,
+  nearbyPeople,
+});
+
+export const handleError = (error: string) => ({
+  type: ERROR,
+  error,
 });

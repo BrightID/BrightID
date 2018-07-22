@@ -51,7 +51,7 @@ class CurrentGroupCard extends React.Component<Props, State> {
           // first we set the width at 100%
           // then we calculate 50% manually
           let { width } = event.nativeEvent.layout;
-          width = width / 2;
+          width /= 2;
 
           if (this.state.width === 0) {
             this.setState({ width });

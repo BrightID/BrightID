@@ -26,7 +26,7 @@ type Props = {
   trustScore: string,
   groupsCount: number,
   name: string,
-  allConnections: Array<{}>,
+  connections: Array<{}>,
   navigation: { navigate: Function },
 };
 
@@ -131,7 +131,7 @@ class HomeScreen extends React.Component<Props, State> {
           <View style={styles.countsContainer}>
             <View style={styles.countsGroup}>
               <Text style={styles.countsNumberText}>
-                {this.props.allConnections.length}
+                {this.props.connections.length}
               </Text>
               <Text style={styles.countsDescriptionText}>Connections</Text>
             </View>

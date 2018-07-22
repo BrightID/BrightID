@@ -32,6 +32,5 @@ export default class App extends React.Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    elevation: 1,
   },
 });
