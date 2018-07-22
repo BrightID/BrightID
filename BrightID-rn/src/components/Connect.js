@@ -1,15 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {
-  Button,
-  Modal,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TouchableHighlight,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import NearbyAvatar from './NearbyAvatar';
 import { generateMessage } from '../actions/exchange';
@@ -22,8 +14,6 @@ type Props = {
     name: string,
   }>,
   dispatch: Function,
-  navigation: { navigate: Function },
-  toggleModal: Function,
 };
 
 type State = {
@@ -34,30 +24,26 @@ type State = {
 };
 
 class Connect extends React.Component<Props, State> {
-  state = {
-    modalVisible: false,
-  };
-
   componentDidMount() {
     let nearbyPeopleArray = [
       { name: 'Ronald Jones', avatarUri: '' },
       // { name: 'Sean Jones', avatarUri: '' },
     ];
     setInterval(() => {
-      this.props.dispatch(refreshNearbyPeople(nearbyPeopleArray));
+      const { dispatch } = this.props;
+      dispatch(refreshNearbyPeople(nearbyPeopleArray));
       if (nearbyPeopleArray.length === 1) nearbyPeopleArray = [];
       else nearbyPeopleArray = [{ name: 'Ronald Jones', avatarUri: '' }];
     }, 8000);
   }
+
   genLines() {
     const lineCount = 6;
     const sep = 138 / lineCount;
   }
-  toggleModal = () => {
-    this.setState({ modalVisible: true });
-  };
+
   renderConnect = () => {
-    const { nearbyPeople } = this.props;
+    const { nearbyPeople, dispatch } = this.props;
     // render the qr code buttons for now
     // if (true) {
     //   return (
@@ -90,7 +76,7 @@ class Connect extends React.Component<Props, State> {
         <TouchableOpacity
           style={styles.defaultOrb}
           onPress={() => {
-            this.props.dispatch(generateMessage({ 0: 12, 1: 22, 3: 98 }));
+            dispatch(generateMessage({ 0: 12, 1: 22, 3: 98 }));
           }}
         >
           <Text style={styles.connectText}>CONNECT</Text>
@@ -113,6 +99,7 @@ class Connect extends React.Component<Props, State> {
       </View>
     );
   };
+
   render() {
     // array of nearby people (determined by NFC?)
     // render default Orb is there are no nearby people

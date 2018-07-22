@@ -18,7 +18,7 @@ import CurrentGroupCard from './CurrentGroupCard';
  */
 
 type Props = {
-  allConnections: Array<{
+  connections: Array<{
     firstName: string,
     lastName: string,
     id: number,
@@ -33,7 +33,7 @@ class ConnectionsScreen extends React.Component<Props> {
   };
 
   filterConnections = () =>
-    this.props.allConnections.filter((item) =>
+    this.props.connections.filter((item) =>
       `${item.firstName} ${item.lastName}`
         .toLowerCase()
         .replace(/\s/g, '')

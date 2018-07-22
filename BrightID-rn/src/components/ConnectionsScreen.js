@@ -1,13 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
@@ -17,7 +11,7 @@ import ConnectionCard from './ConnectionCard';
  */
 
 type Props = {
-  allConnections: Array<{
+  connections: Array<{
     firstName: string,
     lastName: string,
     id: number,
@@ -30,10 +24,11 @@ class ConnectionsScreen extends React.Component<Props> {
     title: 'Connections',
     headerRight: <View />,
   };
+
   keyExtractor = (item) => item.firstName + item.lastName + item.id;
 
   filterConnections = () =>
-    this.props.allConnections.filter((item) =>
+    this.props.connections.filter((item) =>
       `${item.firstName} ${item.lastName}`
         .toLowerCase()
         .replace(/\s/g, '')

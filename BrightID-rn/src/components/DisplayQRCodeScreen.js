@@ -24,10 +24,12 @@ class DisplayQRCodeScreen extends React.Component<Props, State> {
     title: 'QR Code',
     headerRight: <View />,
   };
+
   state = {
     qrsvgd: '',
     qrsvg: '',
   };
+
   componentDidMount() {
     const { publicKey } = this.props;
 
@@ -37,6 +39,7 @@ class DisplayQRCodeScreen extends React.Component<Props, State> {
       this.setState({ qrsvg });
     });
   }
+
   parseSVG = (qrsvg) => {
     // obtain the second path's d
     // use only what's inside the quotations
@@ -45,6 +48,7 @@ class DisplayQRCodeScreen extends React.Component<Props, State> {
     const qrsvgd = dpath.match(/"([^"]+)"/g)[0].split('"')[1];
     this.setState({ qrsvgd });
   };
+
   render() {
     return (
       <View style={styles.container}>

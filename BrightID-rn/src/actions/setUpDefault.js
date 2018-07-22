@@ -1,6 +1,11 @@
 // @flow
 
-import { trustScore, groupsCount, allConnections, setUserData } from './index';
+import {
+  userTrustScore,
+  groupsCount,
+  setConnections,
+  setUserData,
+} from './index';
 
 /**
  * Sets the app up with dummy data
@@ -9,8 +14,6 @@ import { trustScore, groupsCount, allConnections, setUserData } from './index';
  *
  * This function is called in App.js
  */
-
-export const whatever = 'whatever';
 
 export const setUpDefault = (userData: Object) => async (
   dispatch: Function,
@@ -31,10 +34,10 @@ export const setUpDefault = (userData: Object) => async (
     }
 
     // populate the app with dummy data for now
-    dispatch(trustScore('99.9'));
+    dispatch(userTrustScore('99.9'));
     dispatch(groupsCount(4));
     dispatch(
-      allConnections([
+      setConnections([
         {
           id: 1,
           firstName: 'Keslie',
@@ -924,3 +927,5 @@ export const setUpDefault = (userData: Object) => async (
     console.log(err);
   }
 };
+
+export const whatever = 'whatever';

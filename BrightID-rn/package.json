@@ -9,7 +9,8 @@
   },
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "updateSnap": "jest --updateSnapshot"
   },
   "dependencies": {
     "@tradle/react-native-http": "^2.0.1",
@@ -70,8 +71,10 @@
     "babel-preset-react-native": "^5",
     "eslint": "^5.1.0",
     "eslint-config-airbnb": "^17.0.0",
+    "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-babel": "^5.1.0",
     "eslint-plugin-flowtype": "^2.50.0",
+    "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-jest": "^21.18.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-prettier": "^2.6.2",

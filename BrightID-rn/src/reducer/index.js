@@ -4,13 +4,12 @@ import { combineReducers } from 'redux';
 // reducer/web3.js
 
 import {
-  TRUST_SCORE,
+  USER_TRUST_SCORE,
   GROUPS_COUNT,
   SEARCH_PARAM,
-  ALL_CONNECTIONS,
-  SAVE_DATA_SUCCESS,
-  LOADING_USER,
-  USER_DATA,
+  UPDATE_CONNECTIONS,
+  ADD_CONNECTION,
+  UPDATE_USER_DATA,
   REMOVE_USER_DATA,
   USER_AVATAR,
   REFRESH_NEARBY_PEOPLE,
@@ -23,81 +22,76 @@ import {
 
 /**
  * INITIAL STATE
- * structure the state of tha app here
+ * structure the state of the app here
  *
  * @param trustScore String
  * @param name String
  * @param userAvatar Image
  * @param groupsCount Number
  * @param searchParam String
- * @param allConnections List => Map
+ * @param connections Array => Object
  */
 
-const initialState = {
+export const initialState = {
   trustScore: '',
   name: '',
   userAvatar: '',
   groupsCount: 0,
   searchParam: '',
-  allConnections: [{ name: 'Rand Paul' }],
-  ronPaul: '',
-  savingData: false,
-  saveDataSuccess: false,
+  connections: [
+    {
+      publicKey: [],
+      name: '',
+      avatar: '',
+      connectionDate: '',
+      trustScore: '',
+    },
+  ],
   nearbyPeople: [],
   publicKey: '',
   secretKey: '',
   publicKey2: '',
 };
 
-const mainReducer = (state = initialState, action) => {
+export const mainReducer = (state = initialState, action) => {
   switch (action.type) {
-    case TRUST_SCORE:
+    case USER_TRUST_SCORE:
       return {
         ...state,
-        trustScore: action.payload,
-      };
-    case LOADING_USER:
-      return {
-        ...state,
-        loadingUser: true,
-      };
-    case USER_DATA:
-      return {
-        ...state,
-        userAvatar: action.avatarUri,
-        name: action.nameornym,
-        publicKey: action.publicKey,
-        secretKey: action.secretKey,
-        loadingUser: false,
+        trustScore: action.trustScore,
       };
     case GROUPS_COUNT:
       return {
         ...state,
-        groupsCount: action.payload,
-      };
-    case SEARCH_PARAM:
-      return {
-        ...state,
-        searchParam: action.value,
-      };
-    case ALL_CONNECTIONS:
-      return {
-        ...state,
-        allConnections: action.connections,
+        groupsCount: action.count,
       };
     case USER_AVATAR:
       return {
         ...state,
         userAvatar: action.avatarUri,
       };
-    case SAVE_DATA_SUCCESS:
+    case SEARCH_PARAM:
+      return {
+        ...state,
+        searchParam: action.value,
+      };
+    case UPDATE_CONNECTIONS:
+      return {
+        ...state,
+        connections: action.connections,
+      };
+    case ADD_CONNECTION:
+      return {
+        ...state,
+        connections: [...state.connections, action.connection],
+      };
+    case UPDATE_USER_DATA:
       return {
         ...state,
         userAvatar: action.avatarUri,
         name: action.nameornym,
         publicKey: action.publicKey,
         secretKey: action.secretKey,
-        savingData: false,
       };
     case REMOVE_USER_DATA:
       return {
@@ -107,6 +101,7 @@ const mainReducer = (state = initialState, action) => {
         publicKey: '',
         secretKey: '',
       };
+
     case REFRESH_NEARBY_PEOPLE:
       return {
         ...state,
