@@ -68,7 +68,7 @@ export const mainReducer = (state = initialState, action) => {
     case USER_AVATAR:
       return {
         ...state,
-        userAvatar: action.avatarUri,
+        userAvatar: action.userAvatar,
       };
     case SEARCH_PARAM:
       return {
@@ -88,7 +88,7 @@ export const mainReducer = (state = initialState, action) => {
     case UPDATE_USER_DATA:
       return {
         ...state,
-        userAvatar: action.avatarUri,
+        userAvatar: action.userAvatar,
         name: action.nameornym,
         publicKey: action.publicKey,
         secretKey: action.secretKey,
@@ -96,7 +96,7 @@ export const mainReducer = (state = initialState, action) => {
     case REMOVE_USER_DATA:
       return {
         ...state,
-        avatarUri: '',
+        userAvatar: '',
         name: '',
         publicKey: '',
         secretKey: '',

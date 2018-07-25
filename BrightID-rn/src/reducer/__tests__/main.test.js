@@ -1,7 +1,7 @@
 // @flow
 
+import nacl from 'tweetnacl';
 import { mainReducer, initialState } from '../index';
-
 import {
   USER_TRUST_SCORE,
   GROUPS_COUNT,
@@ -55,6 +55,85 @@ describe('main reducer', () => {
     });
   });
 
+  it('should UPDATE_CONNECTIONS', () => {
+    const pk = new Uint8Array(32);
+    expect(
+      mainReducer(undefined, {
+        type: UPDATE_CONNECTIONS,
+        connections: [
+          {
+            publicKey: pk,
+            name: 'Test User',
+            avatar: 'todo...',
+            connectionDate: 1532537998586,
+            trustScore: '85.1',
+          },
+        ],
+      }),
+    ).toEqual({
+      ...initialState,
+      connections: [
+        {
+          publicKey: pk,
+          name: 'Test User',
+          avatar: 'todo...',
+          connectionDate: 1532537998586,
+          trustScore: '85.1',
+        },
+      ],
+    });
+  });
+
+  it('should UPDATE_USER_DATA', () => {
+    const { publicKey, secretKey } = nacl.sign.keyPair();
+    expect(
+      mainReducer(undefined, {
+        type: UPDATE_USER_DATA,
+        publicKey,
+        secretKey,
+        nameornym: 'Test User',
+        userAvatar: 'todo...',
+      }),
+    ).toEqual({
+      ...initialState,
+      publicKey,
+      secretKey,
+      name: 'Test User',
+      userAvatar: 'todo...',
+    });
+  });
+
+  it('should REMOVE_USER_DATA', () => {
+    expect(
+      mainReducer(undefined, {
+        type: REMOVE_USER_DATA,
+        publicKey: new Uint8Array(32),
+        secretKey: new Uint8Array(64),
+        name: 'Test User',
+        userAvatar: 'todo...',
+      }),
+    ).toEqual({
+      ...initialState,
+      publicKey: '',
+      secretKey: '',
+      name: '',
+      userAvatar: '',
+    });
+  });
+
+  it('should set PUBLICKEY2', () => {
+    const { publicKey } = nacl.sign.keyPair();
+    expect(
+      mainReducer(undefined, {
+        type: PUBLICKEY2,
+        publicKey2: publicKey,
+      }),
+    ).toEqual({
+      ...initialState,
+      publicKey2: publicKey,
+    });
+  });
+
   it('should update USER_TRUST_SCORE', () => {
     expect(
       mainReducer(undefined, {
@@ -78,6 +157,56 @@ describe('main reducer', () => {
       mainReducer(undefined, {
         type: SEARCH_PARAM,
         value: 'hi john',
+      }),
+    ).toMatchSnapshot();
+  });
+
+  it('should UPDATE_CONNECTIONS', () => {
+    expect(
+      mainReducer(undefined, {
+        type: UPDATE_CONNECTIONS,
+        connections: [
+          {
+            publicKey: [],
+            name: 'Test User',
+            avatar: 'todo...',
+            connectionDate: 1532537998586,
+            trustScore: '85.1',
+          },
+        ],
+      }),
+    ).toMatchSnapshot();
+  });
+
+  it('should UPDATE_USER_DATA', () => {
+    expect(
+      mainReducer(undefined, {
+        type: UPDATE_USER_DATA,
+        publicKey: [],
+        secretKey: [],
+        nameornym: 'Test User',
+        userAvatar: 'todo...',
+      }),
+    ).toMatchSnapshot();
+  });
+
+  it('should REMOVE_USER_DATA', () => {
+    expect(
+      mainReducer(undefined, {
+        type: REMOVE_USER_DATA,
+        publicKey: new Uint8Array(32),
+        secretKey: new Uint8Array(64),
+        name: 'Test User',
+        userAvatar: 'todo...',
+      }),
+    ).toMatchSnapshot();
+  });
+
+  it('should set PUBLICKEY2', () => {
+    expect(
+      mainReducer(undefined, {
+        type: PUBLICKEY2,
+        publicKey2: [],
       }),
     ).toMatchSnapshot();
   });
