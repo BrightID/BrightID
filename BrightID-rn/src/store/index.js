@@ -1,14 +1,19 @@
 // @flow
 
 import thunkMiddleware from 'redux-thunk';
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, compose } from 'redux';
 import reducer from '../reducer';
+const composeEnhancers =
+  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    : compose;
+const store = createStore(
+  reducer,
+  composeEnhancers(applyMiddleware(thunkMiddleware)),
+);
 
-const store = createStore(reducer, applyMiddleware(thunkMiddleware));
-
-// const unsubscribe = store.subscribe(() =>
-//   console.warn(store.getState().secretKey),
-// );
+console.log('window', typeof window);
+const unsubscribe = store.subscribe(() => console.log(store.getState()));
 
 export default store;
 

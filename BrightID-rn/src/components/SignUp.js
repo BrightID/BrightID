@@ -16,7 +16,7 @@ import ImagePicker from 'react-native-image-picker';
 import { connect } from 'react-redux';
 import HeaderButtons from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { saveDataSuccess } from '../actions';
+import { setUserData } from '../actions';
 
 type Props = {
   dispatch: Function,
@@ -25,8 +25,9 @@ type Props = {
 
 type State = {
   nameornym: string,
-  active: boolean,
-  userAvatar: string,
+  inputActive: boolean,
+  imagePicking: boolean,
+  userAvatar: Object,
 };
 
 class SignUp extends React.Component<Props, State> {
@@ -51,8 +52,9 @@ class SignUp extends React.Component<Props, State> {
     super(props);
     this.state = {
       nameornym: '',
-      active: false,
+      inputActive: false,
       userAvatar: '',
+      imagePicking: false,
     };
     // this.handleBrightIdCreation = this.handleBrightIdCreation.bind(this);
   }
@@ -64,21 +66,39 @@ class SignUp extends React.Component<Props, State> {
     const options = {
       title: 'Select Avatar',
       mediaType: 'photo',
-      storageOptions: {
-        skipBackup: false,
-        path: 'images',
-      },
-      customButtons: [{ name: 'defaultAvatar', title: 'Use Default Avatar' }],
-      noData: true,
+      // customButtons: [{ name: 'defaultAvatar', title: 'Use Default Avatar' }],
+      noData: false,
       allowsEditing: true,
+      // maxWidth: 500,
+      // maxHeight: 500
     };
+    // loading UI to account for the delay after picking an image
+    setTimeout(
+      () =>
+        this.setState({
+          imagePicking: true,
+        }),
+      1000,
+    );
 
     ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
-
       if (response.didCancel) {
+        setTimeout(
+          () =>
+            this.setState({
+              imagePicking: false,
+            }),
+          1001,
+        );
         // console.warn('User cancelled image picker');
       } else if (response.error) {
+        setTimeout(
+          () =>
+            this.setState({
+              imagePicking: false,
+            }),
+          1001,
+        );
         console.warn('ImagePicker Error: ', response.error);
       } else if (response.customButton === 'defaultAvatar') {
         this.setState({
@@ -86,9 +106,12 @@ class SignUp extends React.Component<Props, State> {
         });
         console.warn('User tapped custom button: ', response.customButton);
       } else {
-        const { uri } = response;
+        // const { uri } = response;
+        const imageData = { uri: `data:image/jpeg;base64,${response.data}` };
+
         this.setState({
-          userAvatar: uri,
+          userAvatar: imageData,
+          imagePicking: false,
         });
         // You can also display the image using data:
         // let source = { uri: 'data:image/jpeg;base64,' + response.data };
@@ -102,7 +125,8 @@ class SignUp extends React.Component<Props, State> {
   handleBrightIdCreation = async () => {
     try {
       const { userAvatar, nameornym } = this.state;
-      // saveUserData is located in actions/storage.js
+      const { dispatch, navigation } = this.props;
+      // setUserData is located in actions/storage.js
       // it contains three asynchrous function calls, updating async storage
       // the order of parameters are important for now
       // if (!userAvatar) {
@@ -118,8 +142,6 @@ class SignUp extends React.Component<Props, State> {
       // create public / private key pair
 
       const { publicKey, secretKey } = nacl.sign.keyPair();
-      console.warn(publicKey);
-      console.warn(secretKey);
       const userData = {
         publicKey,
         secretKey,
@@ -127,14 +149,12 @@ class SignUp extends React.Component<Props, State> {
         userAvatar,
       };
 
-      // save avatar photo uri and name in async storage
-
+      // save avatar photo base64 data, and user data in async storage
       await AsyncStorage.setItem('userData', JSON.stringify(userData));
-
       // update redux store
-      this.props.dispatch(saveDataSuccess(userData));
+      await dispatch(setUserData(userData));
       // navigate to home page
-      this.props.navigation.navigate('App');
+      navigation.navigate('App');
       // catch any errors with saving data or generating the public / private key
     } catch (err) {
       console.warn(err);
@@ -142,9 +162,11 @@ class SignUp extends React.Component<Props, State> {
   };
 
   render() {
-    const { userAvatar } = this.state;
+    const { inputActive, imagePicking, nameornym, userAvatar } = this.state;
 
-    const addPhotoButton = (
+    const AddPhotoButton = userAvatar ? (
+      <Image style={styles.avatar} source={userAvatar} />
+    ) : (
       <TouchableOpacity onPress={this.getAvatarPhoto} style={styles.addPhoto}>
         <Text style={styles.addPhotoText}>Add Photo</Text>
         <Ionicons size={48} name="ios-camera-outline" color="#979797" />
@@ -153,26 +175,20 @@ class SignUp extends React.Component<Props, State> {
 
     return (
       <View style={styles.container}>
-        <View
-          style={this.state.active ? styles.hidden : styles.addPhotoContainer}
-        >
-          {userAvatar ? (
-            <Image style={styles.avatar} source={{ uri: userAvatar }} />
-          ) : (
-            addPhotoButton
-          )}
+        <View style={inputActive ? styles.hidden : styles.addPhotoContainer}>
+          {!imagePicking ? AddPhotoButton : <Text>waiting...</Text>}
         </View>
         <View style={styles.textInputContainer}>
           <Text style={styles.midText}>What do your friends know you by?</Text>
           <TextInput
             onChangeText={(nameornym) => this.setState({ nameornym })}
-            value={this.state.nameornym}
+            value={nameornym}
             placeholder="Name or Nym"
             placeholderTextColor="#9e9e9e"
             style={styles.textInput}
-            onFocus={() => this.setState({ active: true })}
-            onBlur={() => this.setState({ active: false })}
-            onEndEditing={() => this.setState({ active: false })}
+            onFocus={() => this.setState({ inputActive: true })}
+            onBlur={() => this.setState({ inputActive: false })}
+            onEndEditing={() => this.setState({ inputActive: false })}
             autoCapitalize="words"
             autoCorrect={false}
             textContentType="name"
