@@ -28,7 +28,7 @@ export default class AppBootstrap extends React.Component<Props> {
     // publicKey: Array<number>,
     // secretKey: Array<number>,
     // nameornym: String,
-    // avatarUri: String
+    // userAvatar: String
     // }
     try {
       // load user data from async storage
@@ -39,9 +39,9 @@ export default class AppBootstrap extends React.Component<Props> {
         userData.publicKey = new Uint8Array(Object.values(userData.publicKey));
         userData.secretKey = new Uint8Array(Object.values(userData.secretKey));
         // update redux store
-        store.dispatch(setUpDefault(userData));
+        await store.dispatch(setUpDefault(userData));
       } else {
-        store.dispatch(setUpDefault({}));
+        await store.dispatch(setUpDefault({}));
       }
 
       // once everything is set up

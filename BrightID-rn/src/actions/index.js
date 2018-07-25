@@ -36,9 +36,9 @@ export const connectionTrustScore = (
   trustScore,
 });
 
-export const groupsCount = (count: number) => ({
+export const setGroupsCount = (groupsCount: number) => ({
   type: GROUPS_COUNT,
-  count,
+  groupsCount,
 });
 
 export const setSearchParam = (value: string) => ({
@@ -60,30 +60,30 @@ export const setUserData = ({
   publicKey,
   secretKey,
   nameornym,
-  avatarUri,
+  userAvatar,
 }: {
   publicKey: Array<number>,
   secretKey: Array<number>,
   nameornym: string,
-  avatarUri: string,
+  userAvatar: string,
 }) => ({
   type: UPDATE_USER_DATA,
   publicKey,
   secretKey,
   nameornym,
-  avatarUri,
+  userAvatar,
 });
 
 export const removeUserData = () => ({
   type: REMOVE_USER_DATA,
 });
 
-export const userAvatar = (avatarUri: String) => ({
+export const setUserAvatar = (userAvatar: string) => ({
   type: USER_AVATAR,
-  avatarUri,
+  userAvatar,
 });
 
-export const setPublicKey2 = (publicKey2: string) => ({
+export const setPublicKey2 = (publicKey2: Array<number>) => ({
   type: PUBLICKEY2,
   publicKey2,
 });

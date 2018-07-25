@@ -10,6 +10,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
+    "test:watch": "npm test -- --watch",
     "updateSnap": "jest --updateSnapshot"
   },
   "dependencies": {

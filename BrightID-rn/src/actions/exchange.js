@@ -1,5 +1,7 @@
+// @flow
+
 import nacl from 'tweetnacl';
-import { strToUint8Array, b64ToUint8Array } from './encoding';
+import { strToUint8Array } from '../utils/encoding';
 
 import { setPublicKey2 } from './index';
 
@@ -11,6 +13,7 @@ export const generateMessage = (publicKey2: Object) => (
 ) => {
   // set publickey from nearby connection
   publicKey2 = new Uint8Array(Object.values(publicKey2));
+
   dispatch(setPublicKey2(publicKey2));
   // generate timestamp
   const timestamp = Date.now();
@@ -22,7 +25,7 @@ export const generateMessage = (publicKey2: Object) => (
   );
   const genKeys = nacl.sign.keyPair();
   // console.warn(publicKey.toString());
-  console.warn(new Buffer(message).toString());
+  console.warn(Buffer.from(message).toString());
   const sig1 = nacl.sign.detached(message, secretKey);
   const sig2 = nacl.sign.detached(message, genKeys.secretKey);
   // console.warn(publicKey instanceof Uint8Array);

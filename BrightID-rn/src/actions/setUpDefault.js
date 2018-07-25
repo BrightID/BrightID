@@ -2,7 +2,7 @@
 
 import {
   userTrustScore,
-  groupsCount,
+  setGroupsCount,
   setConnections,
   setUserData,
 } from './index';
@@ -28,14 +28,14 @@ export const setUpDefault = (userData: Object) => async (
       userData.hasOwnProperty('publicKey') &&
       userData.hasOwnProperty('secretKey') &&
       userData.hasOwnProperty('nameornym') &&
-      userData.hasOwnProperty('avatarUri')
+      userData.hasOwnProperty('userAvatar')
     ) {
       dispatch(setUserData(userData));
     }
 
     // populate the app with dummy data for now
     dispatch(userTrustScore('99.9'));
-    dispatch(groupsCount(4));
+    dispatch(setGroupsCount(64));
     dispatch(
       setConnections([
         {

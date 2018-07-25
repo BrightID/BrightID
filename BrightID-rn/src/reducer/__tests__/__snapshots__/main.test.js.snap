@@ -1,5 +1,74 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`main reducer should REMOVE_USER_DATA 1`] = `
+Object {
+  "connections": Array [
+    Object {
+      "avatar": "",
+      "connectionDate": "",
+      "name": "",
+      "publicKey": Array [],
+      "trustScore": "",
+    },
+  ],
+  "groupsCount": 0,
+  "name": "",
+  "nearbyPeople": Array [],
+  "publicKey": "",
+  "publicKey2": "",
+  "searchParam": "",
+  "secretKey": "",
+  "trustScore": "",
+  "userAvatar": "",
+}
+`;
+
+exports[`main reducer should UPDATE_CONNECTIONS 1`] = `
+Object {
+  "connections": Array [
+    Object {
+      "avatar": "todo...",
+      "connectionDate": 1532537998586,
+      "name": "Test User",
+      "publicKey": Array [],
+      "trustScore": "85.1",
+    },
+  ],
+  "groupsCount": 0,
+  "name": "",
+  "nearbyPeople": Array [],
+  "publicKey": "",
+  "publicKey2": "",
+  "searchParam": "",
+  "secretKey": "",
+  "trustScore": "",
+  "userAvatar": "",
+}
+`;
+
+exports[`main reducer should UPDATE_USER_DATA 1`] = `
+Object {
+  "connections": Array [
+    Object {
+      "avatar": "",
+      "connectionDate": "",
+      "name": "",
+      "publicKey": Array [],
+      "trustScore": "",
+    },
+  ],
+  "groupsCount": 0,
+  "name": "Test User",
+  "nearbyPeople": Array [],
+  "publicKey": Array [],
+  "publicKey2": "",
+  "searchParam": "",
+  "secretKey": Array [],
+  "trustScore": "",
+  "userAvatar": "todo...",
+}
+`;
+
 exports[`main reducer should return the initial state 1`] = `
 Object {
   "connections": Array [
@@ -16,6 +85,29 @@ Object {
   "nearbyPeople": Array [],
   "publicKey": "",
   "publicKey2": "",
+  "searchParam": "",
+  "secretKey": "",
+  "trustScore": "",
+  "userAvatar": "",
+}
+`;
+
+exports[`main reducer should set PUBLICKEY2 1`] = `
+Object {
+  "connections": Array [
+    Object {
+      "avatar": "",
+      "connectionDate": "",
+      "name": "",
+      "publicKey": Array [],
+      "trustScore": "",
+    },
+  ],
+  "groupsCount": 0,
+  "name": "",
+  "nearbyPeople": Array [],
+  "publicKey": "",
+  "publicKey2": Array [],
   "searchParam": "",
   "secretKey": "",
   "trustScore": "",
@@ -40,6 +132,29 @@ Object {
   "publicKey": "",
   "publicKey2": "",
   "searchParam": "",
+  "secretKey": "",
+  "trustScore": "",
+  "userAvatar": "",
+}
+`;
+
+exports[`main reducer should update SEARCH_PARAM 1`] = `
+Object {
+  "connections": Array [
+    Object {
+      "avatar": "",
+      "connectionDate": "",
+      "name": "",
+      "publicKey": Array [],
+      "trustScore": "",
+    },
+  ],
+  "groupsCount": 0,
+  "name": "",
+  "nearbyPeople": Array [],
+  "publicKey": "",
+  "publicKey2": "",
+  "searchParam": "hi john",
   "secretKey": "",
   "trustScore": "",
   "userAvatar": "",

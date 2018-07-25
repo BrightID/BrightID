@@ -26,7 +26,7 @@ type Props = {
 type State = {
   nameornym: string,
   active: boolean,
-  avatarUri: string,
+  userAvatar: string,
 };
 
 class SignUp extends React.Component<Props, State> {
@@ -52,7 +52,7 @@ class SignUp extends React.Component<Props, State> {
     this.state = {
       nameornym: '',
       active: false,
-      avatarUri: '',
+      userAvatar: '',
     };
     // this.handleBrightIdCreation = this.handleBrightIdCreation.bind(this);
   }
@@ -82,13 +82,13 @@ class SignUp extends React.Component<Props, State> {
         console.warn('ImagePicker Error: ', response.error);
       } else if (response.customButton === 'defaultAvatar') {
         this.setState({
-          avatarUri: 'https://commons.wikimedia.org/wiki/File:PICA.jpg',
+          userAvatar: 'https://commons.wikimedia.org/wiki/File:PICA.jpg',
         });
         console.warn('User tapped custom button: ', response.customButton);
       } else {
         const { uri } = response;
         this.setState({
-          avatarUri: uri,
+          userAvatar: uri,
         });
         // You can also display the image using data:
         // let source = { uri: 'data:image/jpeg;base64,' + response.data };
@@ -101,11 +101,11 @@ class SignUp extends React.Component<Props, State> {
 
   handleBrightIdCreation = async () => {
     try {
-      const { avatarUri, nameornym } = this.state;
+      const { userAvatar, nameornym } = this.state;
       // saveUserData is located in actions/storage.js
       // it contains three asynchrous function calls, updating async storage
       // the order of parameters are important for now
-      // if (!avatarUri) {
+      // if (!userAvatar) {
       // 	return alert('Please Upload a picture!');
       // } else if (!nameornym) {
       // 	return alert('Please add your name or nym');
@@ -124,7 +124,7 @@ class SignUp extends React.Component<Props, State> {
         publicKey,
         secretKey,
         nameornym,
-        avatarUri,
+        userAvatar,
       };
 
       // save avatar photo uri and name in async storage
@@ -142,7 +142,7 @@ class SignUp extends React.Component<Props, State> {
   };
 
   render() {
-    const { avatarUri } = this.state;
+    const { userAvatar } = this.state;
 
     const addPhotoButton = (
       <TouchableOpacity onPress={this.getAvatarPhoto} style={styles.addPhoto}>
@@ -156,8 +156,8 @@ class SignUp extends React.Component<Props, State> {
         <View
           style={this.state.active ? styles.hidden : styles.addPhotoContainer}
         >
-          {avatarUri ? (
-            <Image style={styles.avatar} source={{ uri: avatarUri }} />
+          {userAvatar ? (
+            <Image style={styles.avatar} source={{ uri: userAvatar }} />
           ) : (
             addPhotoButton
           )}
