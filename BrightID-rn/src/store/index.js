@@ -5,14 +5,18 @@ import { applyMiddleware, createStore, compose } from 'redux';
 import Reactotron from 'reactotron-react-native';
 import reducer from '../reducer';
 
-console.warn(__DEV__);
+let store;
 
-const store = Reactotron.createStore(
-  reducer,
-  compose(applyMiddleware(thunkMiddleware)),
-);
+if (__DEV__) {
+  store = Reactotron.createStore(
+    reducer,
+    compose(applyMiddleware(thunkMiddleware)),
+  );
+} else {
+  store = createStore(reducer, compose(applyMiddleware(thunkMiddleware)));
+}
 
-const unsubscribe = store.subscribe(() => console.log(store.getState()));
+// store.subscribe(() => console.log(store.getState()));
 
 export default store;
 
