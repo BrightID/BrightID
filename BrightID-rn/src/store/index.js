@@ -2,18 +2,21 @@
 
 import thunkMiddleware from 'redux-thunk';
 import { applyMiddleware, createStore, compose } from 'redux';
+import Reactotron from 'reactotron-react-native';
 import reducer from '../reducer';
-const composeEnhancers =
-  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    : compose;
-const store = createStore(
-  reducer,
-  composeEnhancers(applyMiddleware(thunkMiddleware)),
-);
 
-console.log('window', typeof window);
-const unsubscribe = store.subscribe(() => console.log(store.getState()));
+let store;
+
+if (__DEV__) {
+  store = Reactotron.createStore(
+    reducer,
+    compose(applyMiddleware(thunkMiddleware)),
+  );
+} else {
+  store = createStore(reducer, compose(applyMiddleware(thunkMiddleware)));
+}
+
+// store.subscribe(() => console.log(store.getState()));
 
 export default store;
 
