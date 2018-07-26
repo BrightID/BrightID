@@ -84,6 +84,8 @@
     "jest": "23.4.1",
     "prettier": "^1.13.7",
     "react-test-renderer": "^16.4.1",
+    "reactotron-react-native": "^2.0.0",
+    "reactotron-redux": "^2.0.0",
     "redux-mock-store": "^1.5.3"
   },
   "jest": {
