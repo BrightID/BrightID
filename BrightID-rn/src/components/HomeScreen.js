@@ -34,7 +34,7 @@ type State = {
   modalVisible: boolean,
 };
 
-class HomeScreen extends React.Component<Props, State> {
+export class HomeScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
     title: 'BrightID',
     headerBackTitle: 'Home',
@@ -121,23 +121,25 @@ class HomeScreen extends React.Component<Props, State> {
         <View style={styles.mainContainer}>
           <View style={styles.user}>
             <UserAvatar />
-            <Text style={styles.name}>{this.props.name}</Text>
+            <Text id="nameornym" style={styles.name}>
+              {this.props.name}
+            </Text>
           </View>
           <View style={styles.trustScoreContainer}>
-            <Text style={styles.trustScore}>
+            <Text id="trustScore" style={styles.trustScore}>
               {this.props.trustScore}% Trusted
             </Text>
           </View>
           <View style={styles.countsContainer}>
             <View style={styles.countsGroup}>
-              <Text style={styles.countsNumberText}>
-                {this.props.connections.length}
+              <Text id="connectionsCount" style={styles.countsNumberText}>
+                {this.props.connections.length || 0}
               </Text>
               <Text style={styles.countsDescriptionText}>Connections</Text>
             </View>
             <View style={styles.countsGroup}>
-              <Text style={styles.countsNumberText}>
-                {this.props.groupsCount}
+              <Text id="groupsCount" style={styles.countsNumberText}>
+                {this.props.groupsCount || 0}
               </Text>
               <Text style={styles.countsDescriptionText}>Groups</Text>
             </View>

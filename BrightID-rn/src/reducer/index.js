@@ -36,7 +36,7 @@ export const initialState = {
   trustScore: '',
   name: '',
   userAvatar: '',
-  groupsCount: 0,
+  groupsCount: '',
   searchParam: '',
   connections: [
     {
@@ -63,7 +63,7 @@ export const mainReducer = (state = initialState, action) => {
     case GROUPS_COUNT:
       return {
         ...state,
-        groupsCount: action.count,
+        groupsCount: action.groupsCount,
       };
     case USER_AVATAR:
       return {

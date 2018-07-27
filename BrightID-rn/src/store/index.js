@@ -7,7 +7,7 @@ import reducer from '../reducer';
 
 let store;
 
-if (__DEV__) {
+if (global.__DEV__ && !global.__TESTING__) {
   store = Reactotron.createStore(
     reducer,
     compose(applyMiddleware(thunkMiddleware)),

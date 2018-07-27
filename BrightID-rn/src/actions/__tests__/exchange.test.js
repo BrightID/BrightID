@@ -8,7 +8,7 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 describe('async action', () => {
-  it('sets up dummy data without userData', () => {
+  test('sets up dummy data without userData', () => {
     const keyPair1 = nacl.sign.keyPair();
     let keyPair2 = {
       publicKey: new Uint8Array([
