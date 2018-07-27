@@ -5,40 +5,17 @@ import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
-let lc;
-let sendChannel;
-let receiveChannel;
-let rc;
-
 window.nacl = nacl;
-
-function handleRecieveChannelStatusChange(event) {
-  if (receiveChannel) {
-    console.log(
-      "Receive channel's status has changed to " + receiveChannel.readyState,
-    );
-  }
-}
-
-function handleAddCandidateError(err) {
-  console.log(err);
-}
-
-function handleCreateDescriptionError(err) {
-  console.log(err);
-}
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      localSuccess: false,
-      remoteSuccess: true,
-      open: true,
       localMessage: '',
       remoteMessage: '',
       keys: {},
       qrcode: '',
+      readyState: '',
     };
   }
   async componentDidMount() {
@@ -58,232 +35,251 @@ class App extends Component {
   connectPeers = async () => {
     try {
       console.log('connecting peers...');
-      const cert = await RTCPeerConnection.generateCertificate({
-        name: 'RSASSA-PKCS1-v1_5',
-        hash: 'SHA-256',
-        modulusLength: 2048,
-        publicExponent: new Uint8Array([1, 0, 1]),
-      });
+      // const cert = await RTCPeerConnection.generateCertificate({
+      //   name: 'RSASSA-PKCS1-v1_5',
+      //   hash: 'SHA-256',
+      //   modulusLength: 2048,
+      //   publicExponent: new Uint8Array([1, 0, 1]),
+      // });
 
       // lc = new RTCPeerConnection({
       //   iceCandidatePoolSize: 1,
       //   iceServers: [{ url: 'stun:stun.l.google.com:19302' }],
       // });
-      lc = new RTCPeerConnection(null);
-      // sendChannel = lc.createDataChannel('sendChannel');
-      // sendChannel.onopen = this.handleSendChannelStatusChange;
-      // sendChannel.onclose = this.handleSendChannelStatusChange;
-      rc = new RTCPeerConnection(null);
+      this.lc = new RTCPeerConnection(null);
+      window.lc = this.lc;
 
-      lc.onaddstream = (e) => {
+      this.rc = new RTCPeerConnection(null);
+      window.rc = this.rc;
+
+      this.lc.onaddstream = (e) => {
         console.log('onaddstream');
         console.log(e);
       };
 
-      lc.onconnectionstatechange = (e) => {
+      this.lc.onconnectionstatechange = (e) => {
         console.log('onaddstream');
         console.log(e);
       };
 
-      lc.ondatachannel = (e) => {
+      this.lc.ondatachannel = (e) => {
         console.log('ondatachannel');
         console.log(e);
       };
 
-      lc.ondatachannel = (e) => {
-        console.log('ondatachannel');
-        console.log(e);
-      };
-
-      lc.onicecandidate = (e) => {
+      this.lc.onicecandidate = async (e) => {
         console.log('lc icecandidate: ', e.candidate);
+        try {
+          if (e.candidate && this.rc) {
+            console.log('setting rc ice candidate');
+            await this.rc.addIceCandidate(e.candidate);
+          }
+        } catch (err) {
+          console.warn(err);
+        }
       };
 
-      rc.onicecandidate = (e) => {
+      this.rc.onicecandidate = async (e) => {
         console.log('rc icecandidate: ', e.candidate);
+        try {
+          if (e.candidate && this.lc) {
+            console.log('setting lc ice candidate');
+            await this.lc.addIceCandidate(e.candidate);
+          }
+        } catch (err) {
+          console.warn(err);
+        }
       };
 
-      rc.oniceconnectionstatechange = (e) => {
-        console.log('rc: ', rc.iceConnectionState);
+      this.rc.oniceconnectionstatechange = (e) => {
+        if (this.rc) console.log('rc: ', this.rc.iceConnectionState);
       };
 
-      rc.onicegatheringstatechange = (e) => {
-        console.log('rc: ', rc.iceGatheringState);
+      this.rc.onicegatheringstatechange = (e) => {
+        if (this.rc) console.log('rc: ', this.rc.iceGatheringState);
       };
 
-      lc.oniceconnectionstatechange = (e) => {
-        console.log('lc: ', lc.iceConnectionState);
+      this.lc.oniceconnectionstatechange = (e) => {
+        if (this.lc) console.log('lc: ', this.lc.iceConnectionState);
       };
 
-      lc.onicegatheringstatechange = (e) => {
-        console.log('lc: ', lc.iceGatheringState);
+      this.lc.onicegatheringstatechange = (e) => {
+        if (this.lc) console.log('lc: ', this.lc.iceGatheringState);
       };
 
-      lc.onidentityresult = (e) => {
+      this.lc.onidentityresult = (e) => {
         console.log('onidentityresult');
         console.log(e);
       };
 
-      lc.onidpassertionerror = (e) => {
+      this.lc.onidpassertionerror = (e) => {
         console.log('onidpassertionerror');
         console.log(e);
       };
 
-      lc.onidpvalidationerror = (e) => {
+      this.lc.onidpvalidationerror = (e) => {
         console.log('onidpvalidationerror');
         console.log(e);
       };
 
-      lc.onnegotiationneeded = async (e) => {
+      this.lc.onnegotiationneeded = async (e) => {
         try {
-          const offer2 = await lc.createOffer();
+          // const offer2 = await lc.createOffer();
           console.log('onnegotiationneeded');
-          await lc.setLocalDescription(offer2);
-          await rc.setRemoteDescription(offer2);
-          const answer2 = await rc.createAnswer();
-          await rc.setLocalDescription(answer2);
-          await lc.setRemoteDescription(answer2);
+          // await lc.setLocalDescription(offer2);
+          // await rc.setRemoteDescription(offer2);
+          // const answer2 = await rc.createAnswer();
+          // await rc.setLocalDescription(answer2);
+          // await lc.setRemoteDescription(answer2);
         } catch (err) {
           console.log(err);
         }
       };
 
-      lc.onpeeridentity = (e) => {
+      this.lc.onpeeridentity = (e) => {
         console.log('onpeeridentity');
         console.log(e);
       };
 
-      lc.onremovestream = (e) => {
+      this.lc.onremovestream = (e) => {
         console.log('onremovestream');
         console.log(e);
       };
 
-      rc.onsignalingstatechange = (e) => {
-        console.log('rc state:', rc.signalingState);
+      this.rc.onsignalingstatechange = (e) => {
+        if (this.rc) console.log('rc state:', this.rc.signalingState);
       };
 
-      lc.onsignalingstatechange = (e) => {
-        console.log('lc state:', lc.signalingState);
+      this.lc.onsignalingstatechange = (e) => {
+        if (this.lc) console.log('lc state:', this.lc.signalingState);
       };
 
-      lc.ontrack = (e) => {
+      this.lc.ontrack = (e) => {
         console.log('ontrack');
         console.log(e);
       };
 
-      // rc.ondatachannel = this.receiveChannelCallback;
-      // lc.onicecandidate = (e) => {
-      //   console.log('local on ice candidate');
-      //   console.log(e.candidate);
-      //   !e.candidate ||
-      //     rc
-      //       .addIceCandidate(e.candidate)
-      //       .catch(handleAddCandidateError);
-      // };
+      this.lcDataChannel = this.lc.createDataChannel('chat');
+      window.lcDataChannel = this.lcDataChannel;
 
-      // rc.onicecandidate = (e) => {
-      //   console.log('remote on ice candidate');
-      //   console.log(e.candidate);
-      //   !e.candidate ||
-      //     lc
-      //       .addIceCandidate(e.candidate)
-      //       .catch(handleAddCandidateError);
-      // };
-
-      const offer = await lc.createOffer();
-      await lc.setLocalDescription(new RTCSessionDescription(offer));
-      // note: pass the offer (localDescription) to the remote device
-      // in order to connect via webrtc
-      await rc.setRemoteDescription(
-        new RTCSessionDescription(lc.localDescription),
-      );
-      const answer = await rc.createAnswer();
-      await rc.setLocalDescription(new RTCSessionDescription(answer));
-      await lc.setRemoteDescription(
-        new RTCSessionDescription(rc.localDescription),
-      );
-      const channel = lc.createDataChannel('chat', null);
-      window.channel = channel;
-      channel.onopen = (e) => {
-        console.log('channel opened');
-        channel.send('Hi you!');
+      this.lcDataChannel.onopen = (e) => {
+        console.log('lcDataChannel opened');
+        this.handleLcDataChannelStatusChange();
       };
-      channel.onmessage = (e) => {
+
+      this.lcDataChannel.onclose = (e) => {
+        console.log('lcDataChannel closed');
+        this.handleLcDataChannelStatusChange();
+      };
+
+      this.lcDataChannel.onmessage = (e) => {
         console.log('message:');
         console.log(e.data);
       };
 
-      console.log(offer);
-      console.log(answer);
-      window.lc = lc;
-      window.rc = rc;
+      this.rc.ondatachannel = (e) => {
+        console.log('creating rcDataChannel');
+        this.rcDataChannel = e.channel;
+        this.lcDataChannel.onmessage = (e) => {
+          console.log('message:');
+          console.log(e.data);
+          // this.handleReceiveMessage(e)
+        };
+        this.rcDataChannel.onopen = (e) => {
+          console.log('rcDataChannel opened');
+        };
+        this.rcDataChannel.onclose = (e) => {
+          console.log('rcDataChannel closed');
+        };
+      };
+
+      console.log('creating offer');
+      const offer = await this.lc.createOffer();
+      console.log('setting lc local description');
+      await this.lc.setLocalDescription(new RTCSessionDescription(offer));
+
+      // note: pass the offer (localDescription) to the remote device
+      // in order to connect via webrtc
+      console.log('setting rc remote description');
+      await this.rc.setRemoteDescription(
+        new RTCSessionDescription(this.lc.localDescription),
+      );
+      console.log('creating answer');
+      const answer = await this.rc.createAnswer();
+      console.log('setting rc local description');
+      await this.rc.setLocalDescription(new RTCSessionDescription(answer));
+      console.log('setting lc remote description');
+      await this.lc.setRemoteDescription(
+        new RTCSessionDescription(this.rc.localDescription),
+      );
     } catch (err) {
       console.log(err);
     }
   };
 
-  disconnectPeers = () => {
+  handleLcDataChannelStatusChange = () => {
+    if (this.lcDataChannel) {
+      const { readyState } = this.lcDataChannel;
+
+      if (readyState === 'open') {
+        this.setState({
+          readyState: true,
+        });
+        // this.messageInputBox.disabled = false;
+        this.messageInputBox.focus();
+        // this.sendButton.disabled = false;
+        // this.disconnectButton.disabled = false;
+        // this.connectButton.disabled = true;
+      } else {
+        this.setState({
+          readyState: '',
+        });
+        // this.messageInputBox.disabled = true;
+        // this.sendButton.disabled = true;
+        // this.connectButton.disabled = true;
+        // this.disconnectButton.disabled = true;
+      }
+    } else {
+      this.setState({
+        readyState: '',
+      });
+    }
+  };
+
+  handleDisconnect = () => {
     // Close the RTCDataChannels if they're open
 
-    sendChannel.close();
-    receiveChannel.close();
+    this.lcDataChannel.close();
+    this.rcDataChannel.close();
 
     // Close the RTCPeerConnections
 
-    lc.close();
-    rc.close();
+    this.lc.close();
+    this.rc.close();
 
-    sendChannel = null;
-    receiveChannel = null;
-    lc = null;
-    rc = null;
+    this.lcDataChannel = null;
+    this.rcDataChannel = null;
+    this.lc = null;
+    this.rc = null;
 
     // Update user interface elements
 
-    this.connectButton.disabled = false;
-    this.disconnectButton.disabled = true;
-    this.sendButton.disabled = true;
-    this.messageInputBox.disabled = true;
+    // this.connectButton.disabled = false;
+    // this.disconnectButton.disabled = true;
+    // this.sendButton.disabled = true;
+    // this.messageInputBox.disabled = true;
     this.setState({ localMessage: '' });
   };
-  handleSendChannelStatusChange = (event) => {
-    console.log('here');
-    if (sendChannel) {
-      const { readyState } = sendChannel;
-      if (readyState === 'open') {
-        this.messageInputBox.disabled = false;
-        this.messageInputBox.focus();
-        this.sendButton.disabled = false;
-        this.disconnectButton.disabled = false;
-        this.connectButton.disabled = true;
-      } else {
-        this.messageInputBox.disabled = true;
-        this.sendButton.disabled = true;
-        this.connectButton.disabled = true;
-        this.disconnectButton.disabled = true;
-      }
-    }
-  };
-  receiveChannelCallback = (event) => {
-    console.log('here');
-    receiveChannel = event.channel;
-    receiveChannel.onmessage = this.handleReceiveMessage;
-    receiveChannel.onopen = handleRecieveChannelStatusChange;
-  };
+
   handleReceiveMessage = (event) => {
     this.setState({
       remoteMessage: event.data,
     });
   };
-  handleLocalAddCandidateSuccess = () => {
-    this.setState({ localSuccess: true });
-  };
-  handleRemoteAddCandidateSuccess = () => {
-    this.setState({ remoteSuccess: true });
-  };
+
   handleSendMessage = () => {
     const { localMessage } = this.state;
-    sendChannel.send(localMessage);
+    this.lcDataChannel.send(localMessage);
     this.messageInputBox.focus();
     this.setState({ localMessage: '' });
   };
@@ -293,7 +289,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">Webrtc Demo</h1>
         </header>
         <div className="connect-buttons">
           {/* {this.state.qrcode} */}
@@ -307,6 +303,7 @@ class App extends Component {
             ref={(node) => (this.connectButton = node)}
             className="btn btn-success buttonleft"
             onClick={this.connectPeers}
+            disabled={this.state.readyState}
           >
             Connect
           </button>
@@ -315,8 +312,8 @@ class App extends Component {
             name="disconnectButton"
             ref={(node) => (this.disconnectButton = node)}
             className="btn btn-danger buttonright"
-            onClick={this.disconnectPeers}
-            disabled
+            onClick={this.handleDisconnect}
+            disabled={!this.state.readyState}
           >
             Disconnect
           </button>
@@ -338,15 +335,15 @@ class App extends Component {
               onChange={(e) => {
                 this.setState({ localMessage: e.target.value });
               }}
-              disabled
+              disabled={!this.state.readyState}
             />
           </label>
           <button
             id="sendButton"
             name="sendButton"
-            className="buttonright"
-            disabled
-            ref={(node) => (this.sendButotn = node)}
+            className="buttonright btn btn-info"
+            disabled={!this.state.readyState}
+            ref={(node) => (this.sendButton = node)}
             onClick={this.handleSendMessage}
           >
             Send
