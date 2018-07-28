@@ -1,3 +1,5 @@
+// @flow
+
 import * as React from 'react';
 import {
   Dimensions,
@@ -31,7 +33,11 @@ console.tron.log('statusBarHeight', statusBarHeight);
 /* Onboarding Screen */
 /* ======================================== */
 
-class Onboard extends React.Component {
+type Props = {
+  navigation: { navigate: Function },
+};
+
+class Onboard extends React.Component<Props> {
   static navigationOptions = {
     headerBackTitle: ' ',
     header: null,
@@ -73,7 +79,11 @@ class Onboard extends React.Component {
     const { activeSlide, entries } = this.state;
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="default" backgroundColor="#fff" />
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor={'#fff'}
+          translucent={false}
+        />
         <View style={styles.carousel}>
           <Carousel
             data={this.state.entries}
@@ -116,7 +126,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   carousel: {
-    flex: 3.8,
+    flex: 3.5,
     marginTop: statusBarHeight,
   },
   onboardingCards: {
