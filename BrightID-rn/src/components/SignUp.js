@@ -4,6 +4,7 @@ import * as React from 'react';
 import {
   AsyncStorage,
   Image,
+  StatusBar,
   StyleSheet,
   Text,
   TextInput,

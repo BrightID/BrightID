@@ -4,6 +4,8 @@ import * as React from 'react';
 import {
   Alert,
   AsyncStorage,
+  Dimensions,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -30,11 +32,7 @@ type Props = {
   navigation: { navigate: Function },
 };
 
-type State = {
-  modalVisible: boolean,
-};
-
-export class HomeScreen extends React.Component<Props, State> {
+export class HomeScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({
     title: 'BrightID',
     headerBackTitle: 'Home',
