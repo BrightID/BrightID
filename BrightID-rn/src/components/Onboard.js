@@ -1,73 +1,99 @@
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Dimensions,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import MaintainPrivacy from './onboardingScreens/MaintainPrivacy';
+import MaintainPrivacy from './onboardingCards/MaintainPrivacy';
+
+/* Description */
+/* ======================================== */
 
 /**
  * Initial Onboarding screen of BrightID
  * Uses react-native-snap-carousel for displaying privacy and other notices
  */
 
+/* Constants */
+/* ======================================== */
+
+const winWidth = Dimensions.get('window').width;
+const winHeight = Dimensions.get('window').height;
+const statusBarHeight = getStatusBarHeight();
+
+console.tron.log('statusBarHeight', statusBarHeight);
+
+/* Onboarding Screen */
+/* ======================================== */
+
 class Onboard extends React.Component {
   static navigationOptions = {
-    headerStyle: {
-      borderBottomWidth: 0,
-      height: 0,
-    },
     headerBackTitle: ' ',
+    header: null,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       activeSlide: 0,
-      entries: [0, 1, 2, 3],
+      entries: [...Array(4)],
+      winHeight,
+      winWidth,
+      statusBarHeight,
     };
   }
 
-  pagination() {
-    const { activeSlide, entries } = this.state;
-    return (
-      <Pagination
-        dotsLength={entries.length}
-        activeDotIndex={activeSlide}
-        containerStyle={styles.pagination}
-        dotStyle={{
-          width: 7,
-          height: 7,
-          borderRadius: 3.5,
-          marginHorizontal: 8,
-          backgroundColor: '#333',
-        }}
-        inactiveDotStyle={
-          {
-            // Define styles for inactive dots here
-          }
-        }
-        inactiveDotOpacity={0.4}
-        inactiveDotScale={1}
-      />
-    );
+  componentDidMount() {
+    Dimensions.addEventListener('change', (e) => {
+      console.tron.log(e);
+      this.setState({
+        winHeight: e.window.height,
+        winWidth: e.window.width,
+        statusBarHeight: getStatusBarHeight(),
+      });
+    });
   }
+
+  componentWillUnmount() {
+    Dimensions.removeEventListener('change');
+  }
+
   renderItem = ({ item, index }) => (
-    <View key={index} style={styles.onboardingScreens}>
+    <View key={index} style={styles.onboardingCards}>
       <MaintainPrivacy />
     </View>
   );
+
   render() {
+    const { activeSlide, entries } = this.state;
     return (
       <View style={styles.container}>
-        <View style={{ height: 471 }}>
+        <StatusBar barStyle="default" backgroundColor="#fff" />
+        <View style={styles.carousel}>
           <Carousel
             data={this.state.entries}
             renderItem={this.renderItem}
             layout="default"
-            sliderWidth={340}
-            itemWidth={340}
+            sliderWidth={this.state.winWidth}
+            itemWidth={this.state.winWidth - 40}
             onSnapToItem={(index) => this.setState({ activeSlide: index })}
           />
         </View>
-        <View style={styles.center}>{this.pagination()}</View>
+        <View style={styles.center}>
+          <Pagination
+            dotsLength={entries.length}
+            activeDotIndex={activeSlide}
+            containerStyle={styles.pagination}
+            dotStyle={styles.dotStyle}
+            inactiveDotOpacity={0.4}
+            inactiveDotScale={1}
+          />
+        </View>
         <View style={styles.center}>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('SignUp')}
@@ -89,17 +115,20 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
+  carousel: {
+    flex: 3.8,
+    marginTop: statusBarHeight,
+  },
+  onboardingCards: {
+    flex: 1,
+  },
   center: {
     flex: 1,
-  },
-  onboardingScreens: {
-    height: 476,
+    justifyContent: 'center',
+    alignItems: 'center',
     width: '100%',
   },
-  pagination: {
-    flex: 1,
-    alignSelf: 'center',
-  },
+  pagination: {},
   button: {
     width: 300,
     borderWidth: 1,
@@ -118,6 +147,13 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontStyle: 'normal',
     letterSpacing: 0,
+  },
+  dotStyle: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginHorizontal: 8,
+    backgroundColor: '#333',
   },
 });
 

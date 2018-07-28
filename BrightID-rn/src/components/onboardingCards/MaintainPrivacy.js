@@ -3,19 +3,36 @@
 import * as React from 'react';
 import { StyleSheet, Image, Text, View } from 'react-native';
 
-type Props = {};
+type Props = {
+  winHeight: number,
+  winWidth: number,
+};
 
-export default class Onboard extends React.Component<Props> {
+export default class MaintainPrivacy extends React.Component<Props> {
   render() {
     return (
-      <View style={styles.container}>
-        <Image
-          source={require('../../static/icons8-anonymous-mask-96.png')}
-          style={styles.guyFox}
-        />
-        <Text style={styles.mainText}>Maintain Privacy</Text>
-        <Text style={styles.secondaryText}>Prove you're a unique person</Text>
-        <Text style={styles.secondaryText}>while preserving your privacy.</Text>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: 'transparent',
+          alignItems: 'center',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}
+      >
+        <View style={styles.top}>
+          <Image
+            source={require('../../static/icons8-anonymous-mask-96.png')}
+            style={styles.guyFox}
+          />
+          <Text style={styles.mainText}>Maintain Privacy</Text>
+        </View>
+        <View style={styles.top}>
+          <Text style={styles.secondaryText}>Prove you're a unique person</Text>
+          <Text style={styles.secondaryText}>
+            while preserving your privacy.
+          </Text>
+        </View>
       </View>
     );
   }
@@ -29,16 +46,17 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
   },
+  top: {},
+  bottom: {},
   guyFox: {
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginTop: 110,
+    // marginTop: 100,
     marginBottom: 41,
   },
   mainText: {
     fontFamily: 'ApexNew-Medium',
     fontSize: 24,
-    elevation: 1,
     fontWeight: '500',
     fontStyle: 'normal',
     color: '#222',

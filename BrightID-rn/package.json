@@ -44,6 +44,7 @@
     "react-native-qrcode": "^0.2.6",
     "react-native-randombytes": "^3.4.0",
     "react-native-snap-carousel": "^3.7.2",
+    "react-native-status-bar-height": "^2.0.0",
     "react-native-svg": "^6.4.1",
     "react-native-tcp": "^3.3.0",
     "react-native-udp": "^2.3.1",

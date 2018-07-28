@@ -5,3 +5,5 @@ Reactotron.configure({ name: 'BrightID' }) // controls connection & communicatio
   .useReactNative() // add all built-in react native plugins
   .use(reactotronRedux())
   .connect(); // let's connect!
+
+console.tron = Reactotron;
