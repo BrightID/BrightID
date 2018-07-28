@@ -4,6 +4,7 @@ import * as React from 'react';
 import {
   AsyncStorage,
   Image,
+  Platform,
   StatusBar,
   StyleSheet,
   Text,
@@ -57,7 +58,6 @@ class SignUp extends React.Component<Props, State> {
       userAvatar: '',
       imagePicking: false,
     };
-    // this.handleBrightIdCreation = this.handleBrightIdCreation.bind(this);
   }
 
   getAvatarPhoto = async () => {
@@ -67,11 +67,8 @@ class SignUp extends React.Component<Props, State> {
     const options = {
       title: 'Select Avatar',
       mediaType: 'photo',
-      // customButtons: [{ name: 'defaultAvatar', title: 'Use Default Avatar' }],
       noData: false,
       allowsEditing: true,
-      // maxWidth: 500,
-      // maxHeight: 500
     };
     // loading UI to account for the delay after picking an image
     setTimeout(
@@ -91,7 +88,6 @@ class SignUp extends React.Component<Props, State> {
             }),
           1001,
         );
-        // console.warn('User cancelled image picker');
       } else if (response.error) {
         setTimeout(
           () =>
@@ -107,18 +103,12 @@ class SignUp extends React.Component<Props, State> {
         });
         console.warn('User tapped custom button: ', response.customButton);
       } else {
-        // const { uri } = response;
         const imageData = { uri: `data:image/jpeg;base64,${response.data}` };
 
         this.setState({
           userAvatar: imageData,
           imagePicking: false,
         });
-        // You can also display the image using data:
-        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-        // test this later
-        // const uri = 'data:image/jpeg;base64,' + response.data
       }
     });
   };
@@ -127,14 +117,6 @@ class SignUp extends React.Component<Props, State> {
     try {
       const { userAvatar, nameornym } = this.state;
       const { dispatch, navigation } = this.props;
-      // setUserData is located in actions/storage.js
-      // it contains three asynchrous function calls, updating async storage
-      // the order of parameters are important for now
-      // if (!userAvatar) {
-      // 	return alert('Please Upload a picture!');
-      // } else if (!nameornym) {
-      // 	return alert('Please add your name or nym');
-      // }
 
       if (!nameornym) {
         return alert('Please add your name or nym');
@@ -143,6 +125,7 @@ class SignUp extends React.Component<Props, State> {
       // create public / private key pair
 
       const { publicKey, secretKey } = nacl.sign.keyPair();
+
       const userData = {
         publicKey,
         secretKey,
@@ -176,6 +159,11 @@ class SignUp extends React.Component<Props, State> {
 
     return (
       <View style={styles.container}>
+        <StatusBar
+          barStyle="default"
+          backgroundColor={Platform.OS === 'ios' ? 'transparent' : '#000'}
+          translucent={false}
+        />
         <View style={inputActive ? styles.hidden : styles.addPhotoContainer}>
           {!imagePicking ? AddPhotoButton : <Text>waiting...</Text>}
         </View>
