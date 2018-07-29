@@ -12,12 +12,13 @@ class App extends Component {
     super(props);
     this.state = {
       localMessage: '',
-      remoteMessage: '',
+      remoteMessages: [],
       keys: {},
       qrcode: '',
       readyState: '',
     };
   }
+
   async componentDidMount() {
     const keys = nacl.sign.keyPair();
     this.setState({
@@ -31,7 +32,9 @@ class App extends Component {
     });
     console.log(keys);
   }
+
   genQrCode = () => {};
+
   connectPeers = async () => {
     try {
       console.log('connecting peers...');
@@ -173,16 +176,22 @@ class App extends Component {
       };
 
       this.lcDataChannel.onmessage = (e) => {
-        console.log('message:');
+        console.log('lc recieve message:');
         console.log(e.data);
       };
 
       this.rc.ondatachannel = (e) => {
         console.log('creating rcDataChannel');
         this.rcDataChannel = e.channel;
-        this.lcDataChannel.onmessage = (e) => {
+        window.rcDataChannel = this.rcDataChannel;
+        this.rcDataChannel.onmessage = (e) => {
           console.log('message:');
           console.log(e.data);
+          const { remoteMessages } = this.state;
+          remoteMessages.push(e.data);
+          this.setState({
+            remoteMessages,
+          });
           // this.handleReceiveMessage(e)
         };
         this.rcDataChannel.onopen = (e) => {
@@ -271,14 +280,10 @@ class App extends Component {
     this.setState({ localMessage: '' });
   };
 
-  handleReceiveMessage = (event) => {
-    this.setState({
-      remoteMessage: event.data,
-    });
-  };
-
   handleSendMessage = () => {
+    console.log('sending message...');
     const { localMessage } = this.state;
+    console.log(localMessage);
     this.lcDataChannel.send(localMessage);
     this.messageInputBox.focus();
     this.setState({ localMessage: '' });
@@ -299,6 +304,7 @@ class App extends Component {
           />
           <button
             id="connectButton"
+            type="button"
             name="connectButton"
             ref={(node) => (this.connectButton = node)}
             className="btn btn-success buttonleft"
@@ -309,6 +315,7 @@ class App extends Component {
           </button>
           <button
             id="disconnectButton"
+            type="button"
             name="disconnectButton"
             ref={(node) => (this.disconnectButton = node)}
             className="btn btn-danger buttonright"
@@ -324,7 +331,9 @@ class App extends Component {
             <input
               type="text"
               name="message"
-              ref={(node) => (this.messageInputBox = node)}
+              ref={(node) => {
+                this.messageInputBox = node;
+              }}
               className="input-control"
               id="message"
               placeholder="Message text"
@@ -335,11 +344,17 @@ class App extends Component {
               onChange={(e) => {
                 this.setState({ localMessage: e.target.value });
               }}
+              onKeyDown={(e) => {
+                if (e.keyCode === 13) {
+                  this.handleSendMessage();
+                }
+              }}
               disabled={!this.state.readyState}
             />
           </label>
           <button
             id="sendButton"
+            type="button"
             name="sendButton"
             className="buttonright btn btn-info"
             disabled={!this.state.readyState}
@@ -350,8 +365,10 @@ class App extends Component {
           </button>
         </div>
         <div className="messagebox" id="receivebox">
-          <p>Messages received:</p>
-          <p>{this.state.remoteMessage}</p>
+          <div>Messages received:</div>
+          {this.state.remoteMessages.map((msg, i) => (
+            <div key={i + msg}>{msg}</div>
+          ))}
         </div>
       </div>
     );
