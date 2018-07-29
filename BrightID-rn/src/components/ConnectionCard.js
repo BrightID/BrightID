@@ -18,8 +18,7 @@ import moment from 'moment';
  */
 
 type Props = {
-  firstName: string,
-  lastName: string,
+  nameornym: string,
   avatar: string,
   trustScore: string,
   connectionDate: string,
@@ -31,14 +30,13 @@ class ConnectionCard extends React.Component<Props> {
       <View style={styles.container}>
         <Image source={{ uri: this.props.avatar }} style={styles.avatar} />
         <View style={styles.info}>
-          <Text style={styles.name}>
-            {this.props.firstName} {this.props.lastName}
-          </Text>
+          <Text style={styles.name}>{this.props.nameornym}</Text>
           <Text style={styles.trustScore}>
             {this.props.trustScore}% Trusted
           </Text>
           <Text style={styles.connectedText}>
-            Connected {moment(this.props.connectionDate).fromNow()}
+            Connected{' '}
+            {moment.unix(parseInt(this.props.connectionDate, 10)).fromNow()}
           </Text>
         </View>
         <Touchable style={styles.moreIcon}>

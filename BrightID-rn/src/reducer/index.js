@@ -34,7 +34,7 @@ import {
 
 export const initialState = {
   trustScore: '',
-  name: '',
+  nameornym: '',
   userAvatar: '',
   groupsCount: '',
   searchParam: '',
@@ -89,7 +89,7 @@ export const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         userAvatar: action.userAvatar,
-        name: action.nameornym,
+        nameornym: action.nameornym,
         publicKey: action.publicKey,
         secretKey: action.secretKey,
       };
@@ -97,7 +97,7 @@ export const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         userAvatar: '',
-        name: '',
+        nameornym: '',
         publicKey: '',
         secretKey: '',
       };

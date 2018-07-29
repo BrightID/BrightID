@@ -12,8 +12,7 @@ import ConnectionCard from './ConnectionCard';
 
 type Props = {
   connections: Array<{
-    firstName: string,
-    lastName: string,
+    nameornym: string,
     id: number,
   }>,
   searchParam: string,
@@ -25,11 +24,11 @@ class ConnectionsScreen extends React.Component<Props> {
     headerRight: <View />,
   };
 
-  keyExtractor = (item) => item.firstName + item.lastName + item.id;
+  keyExtractor = (item) => item.publicKey;
 
   filterConnections = () =>
     this.props.connections.filter((item) =>
-      `${item.firstName} ${item.lastName}`
+      `${item.nameornym}`
         .toLowerCase()
         .replace(/\s/g, '')
         .includes(this.props.searchParam.toLowerCase().replace(/\s/g, '')),

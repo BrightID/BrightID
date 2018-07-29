@@ -32,12 +32,14 @@ class EligibleGroupCard extends React.Component<Props> {
       </TouchableOpacity>
     </View>
   );
+
   renderReviewButton = () => (
     <TouchableOpacity style={styles.reviewButton}>
       <Text style={styles.reviewButtonText}>New Group</Text>
       <Text style={styles.reviewButtonText}> Review</Text>
     </TouchableOpacity>
   );
+
   render() {
     const { names } = this.props;
     return (
@@ -80,7 +82,6 @@ const styles = StyleSheet.create({
     height: 71,
     flexDirection: 'column',
     justifyContent: 'space-evenly',
-    // width: "50%"
   },
   names: {
     fontFamily: 'ApexNew-Book',
