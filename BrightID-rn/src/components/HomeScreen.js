@@ -27,7 +27,7 @@ import { removeUserData } from '../actions';
 type Props = {
   trustScore: string,
   groupsCount: number,
-  name: string,
+  nameornym: string,
   connections: Array<{}>,
   navigation: { navigate: Function },
 };
@@ -120,7 +120,7 @@ export class HomeScreen extends React.Component<Props> {
           <View style={styles.user}>
             <UserAvatar />
             <Text id="nameornym" style={styles.name}>
-              {this.props.name}
+              {this.props.nameornym}
             </Text>
           </View>
           <View style={styles.trustScoreContainer}>

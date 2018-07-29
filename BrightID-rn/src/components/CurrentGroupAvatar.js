@@ -20,7 +20,7 @@ class CurrentGroupAvatar extends React.Component<Props> {
   render() {
     const { userAvatar } = this.props;
     const Avatar = userAvatar ? (
-      <Image source={{ uri: userAvatar }} style={styles.avatar} />
+      <Image source={userAvatar} style={styles.avatar} />
     ) : (
       <View style={styles.avatar} />
     );

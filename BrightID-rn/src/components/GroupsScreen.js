@@ -39,6 +39,7 @@ class ConnectionsScreen extends React.Component<Props> {
         .replace(/\s/g, '')
         .includes(this.props.searchParam.toLowerCase().replace(/\s/g, '')),
     );
+
   render() {
     return (
       <View style={styles.container}>
@@ -120,8 +121,6 @@ const styles = StyleSheet.create({
   currentGroupRow: {
     width: '100%',
     flexDirection: 'row',
-    // alignItems: 'flex-start',
-    // justifyContent: 'flex-start',
   },
 });
 
