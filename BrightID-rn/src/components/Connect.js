@@ -20,7 +20,6 @@ type State = {
   hasCameraPermission: boolean,
   scanBarcode: boolean,
   type: string,
-  modalVisible: boolean,
 };
 
 class Connect extends React.Component<Props, State> {
@@ -120,15 +119,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
     flex: 1,
     marginTop: 17,
-  },
-  modalContainer: {
-    width: '100%',
-    alignItems: 'center',
-    // justifyContent: 'center',
-    backgroundColor: '#f9f9f9',
-    flex: 1,
-    marginTop: 17,
-    flexDirection: 'column',
   },
   qrCodeButtonContainer: {
     flexDirection: 'row',

@@ -102,7 +102,7 @@
       "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(react-native|react-navigation-header-buttons|react-native-linear-gradient|react-native-vector-icons|react-native-platform-touchable|react-native-snap-carousel|react-native-svg|react-navigation|react-native-safe-area-view|react-native-*)/)"
+      "node_modules/(?!(react-native|react-navigation-header-buttons|react-native-linear-gradient|react-native-vector-icons|react-native-platform-touchable|react-native-snap-carousel|react-native-svg|react-navigation|react-native-safe-area-view|react-native-status-bar-height|react-native-iphone-x-helper)/)"
     ]
   },
   "react-native": {
