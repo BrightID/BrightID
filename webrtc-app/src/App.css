@@ -8,24 +8,56 @@
 }
 
 .connect-buttons {
-  padding: 20px;
+  padding: 10px;
+  display: flex;
+  align-content: center;
 }
 
 .App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+  background: linear-gradient(#f52828, #f76b1c);
+  color: #fff;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.App-title {
-  font-size: 1.5em;
+.c-state {
+  padding: 20px;
+}
+
+.message-box {
+  width: 100%;
+}
+.gen-message {
+  display: flex;
+}
+
+.local-messages {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.qr-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-label {
+  text-align: center;
+  display: flex;
+  padding: 20px;
+  margin-left: -75px;
 }
 
 .qrcode {
   width: 150px;
   height: 150px;
-  margin: 15px auto;
+  display: inline-block;
 }
 
 .App-intro {

@@ -61,7 +61,7 @@
     "string_decoder": "^0.10.31",
     "timers-browserify": "^1.4.2",
     "tty-browserify": "0.0.0",
-    "tweetnacl": "https://github.com/RnbWd/tweetnacl-js",
+    "tweetnacl": "https://github.com/BrightID/tweetnacl-js",
     "url": "^0.10.3",
     "util": "^0.10.4",
     "vm-browserify": "0.0.4"
