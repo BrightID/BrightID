@@ -28,8 +28,6 @@ const winWidth = Dimensions.get('window').width;
 const winHeight = Dimensions.get('window').height;
 const statusBarHeight = getStatusBarHeight();
 
-console.tron.log('statusBarHeight', statusBarHeight);
-
 /* Onboarding Screen */
 /* ======================================== */
 

@@ -1,8 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Touchable from 'react-native-platform-touchable';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
 /**
@@ -20,14 +25,20 @@ export default class BottomNav extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Touchable onPress={() => this.props.navigation.navigate('Home')}>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('Home')}
+          accessible={true}
+          accessibilityLabel="Home"
+        >
           <View style={styles.navIconContainer}>
             <Ionicon size={32} name="ios-home-outline" color="#000" />
             <Text style={styles.navText}>Home</Text>
           </View>
-        </Touchable>
-        <Touchable
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.props.navigation.navigate('Connections')}
+          accessible={true}
+          accessibilityLabel="Connections"
         >
           <View style={styles.navIconContainer}>
             <Ionicon
@@ -37,25 +48,37 @@ export default class BottomNav extends React.Component<Props> {
             />
             <Text style={styles.navText}>Connections</Text>
           </View>
-        </Touchable>
-        <Touchable onPress={() => this.props.navigation.navigate('Groups')}>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('Groups')}
+          accessible={true}
+          accessibilityLabel="Groups"
+        >
           <View style={styles.navIconContainer}>
             <Ionicon size={32} name="ios-contacts-outline" color="#000" />
             <Text style={styles.navText}>Groups</Text>
           </View>
-        </Touchable>
-        <Touchable onPress={() => console.log('Notifications')}>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => console.log('Notifications')}
+          accessible={true}
+          accessibilityLabel="Notifications"
+        >
           <View style={styles.navIconContainer}>
             <Ionicon size={32} name="ios-notifications-outline" color="#000" />
             <Text style={styles.navText}>Notifications</Text>
           </View>
-        </Touchable>
-        <Touchable onPress={() => console.log('Apps')}>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => console.log('Apps')}
+          accessible={true}
+          accessibilityLabel="Apps"
+        >
           <View style={styles.navIconContainer}>
             <Ionicon size={32} name="ios-apps-outline" color="#000" />
             <Text style={styles.navText}>Apps</Text>
           </View>
-        </Touchable>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -64,19 +87,23 @@ export default class BottomNav extends React.Component<Props> {
 const styles = StyleSheet.create({
   container: {
     height: 63,
-    backgroundColor: '#fff',
+    backgroundColor: '#F7F7F7',
     flexDirection: 'row',
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: 'rgba(0, 0, 0, .3)',
     alignItems: 'center',
     justifyContent: 'space-evenly',
     width: '100%',
-    // paddingBottom: 16
   },
   navIconContainer: {
+    flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   navText: {
     fontFamily: 'ApexNew-Book',
     fontSize: 12,
+    marginBottom: 1.5,
   },
 });

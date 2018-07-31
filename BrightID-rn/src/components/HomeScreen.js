@@ -149,6 +149,8 @@ export class HomeScreen extends React.Component<Props> {
               onPress={() => {
                 this.props.navigation.navigate('NewConnection');
               }}
+              accessible={true}
+              accessibilityLabel="Connect"
             >
               <Text style={styles.connectText}>CONNECT</Text>
               <Material name="key-plus" size={26} color="#fff" />
