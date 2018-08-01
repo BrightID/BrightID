@@ -9,9 +9,11 @@ export const setKeys = ({ publicKey, secretKey }) => ({
   secretKey,
 });
 
-export const setPublicKey2 = (publicKey2) => ({
+export const setPublicKey2 = ({ publicKey, avatar, nameornym }) => ({
   type: PUBLICKEY2,
-  publicKey2,
+  publicKey,
+  avatar,
+  nameornym,
 });
 
 export const setPairingMessage = ({ msg, msgStr }) => ({

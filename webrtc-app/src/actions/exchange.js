@@ -1,16 +1,18 @@
 // @flow
 
-import nacl from 'tweetnacl';
 import { Buffer } from 'buffer';
 import { strToUint8Array } from '../utils/encoding';
 
-import { setPublicKey2, setPairingMessage } from './index';
+import { setPairingMessage } from './index';
 
 export const GENERATE_MESSAGE = 'GENERATE_MESSAGE';
 
 export const genMsg = () => (dispatch: Function, getState: Function) => {
   // set publickey from nearby connection
-  const { publicKey, secretKey, publicKey2 } = getState();
+  const { publicKey, publicKey2 } = getState();
+
+  console.log('publicKey', Array.isArray(publicKey));
+  console.log('publicKey', publicKey instanceof Uint8Array);
 
   // generate timestamp
   const timestamp = Date.now();
@@ -27,15 +29,15 @@ export const genMsg = () => (dispatch: Function, getState: Function) => {
     }),
   );
 
-  // testing signed message
-  const genKeys = nacl.sign.keyPair();
-  // console.warn(publicKey.toString());
-  console.log(Buffer.from(message).toString());
-  const sig1 = nacl.sign.detached(message, secretKey);
-  const sig2 = nacl.sign.detached(message, genKeys.secretKey);
-  // console.log(publicKey instanceof Uint8Array);
-  console.log(nacl.sign.detached.verify(message, sig1, publicKey));
-  console.log(nacl.sign.detached.verify(message, sig2, genKeys.publicKey));
+  // // testing signed message
+  // const genKeys = nacl.sign.keyPair();
+  // // console.warn(publicKey.toString());
+  // console.log(Buffer.from(message).toString());
+  // const sig1 = nacl.sign.detached(message, secretKey);
+  // const sig2 = nacl.sign.detached(message, genKeys.secretKey);
+  // // console.log(publicKey instanceof Uint8Array);
+  // console.log(nacl.sign.detached.verify(message, sig1, publicKey));
+  // console.log(nacl.sign.detached.verify(message, sig2, genKeys.publicKey));
 
   // console.warn(signedMessage);
 };
