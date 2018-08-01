@@ -56,6 +56,14 @@ class QRCode extends Component {
           <div className="qr-label" onClick={this.handleClick}>
             <u>NaCl Public Key:</u>
           </div>
+          <input
+            type="text"
+            name="public key"
+            className="input-control pk-box"
+            placeholder="Message text"
+            value={this.props.publicKey}
+            disabled
+          />
           <div
             className="qrcode"
             dangerouslySetInnerHTML={{ __html: this.state.qrcode }}
@@ -66,4 +74,4 @@ class QRCode extends Component {
   }
 }
 
-export default connect()(QRCode);
+export default connect((s) => s)(QRCode);

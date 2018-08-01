@@ -4,7 +4,6 @@ import nacl from 'tweetnacl';
 import store from './store';
 import WebRTC from './WebRTC';
 import QRCode from './QRCode';
-import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -14,8 +13,8 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <div className="App">
-          <header className="App-header">
+        <div>
+          <header className="header">
             <h1 className="display-4">WebRTC</h1>
           </header>
           <QRCode />

@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import nacl from 'tweetnacl';
 import { connect } from 'react-redux';
-import JsonView from 'react-json-view';
+// import JsonView from 'react-json-view';
 import logging from './utils/logging';
 import { setPublicKey2, resetStore } from './actions';
-import { genMsg } from './actions/exchange';
+// import { genMsg } from './actions/exchange';
+import { avatar } from './utils/toDataUrl';
 
 window.nacl = nacl;
-
-function h(obj, key) {
-  return obj.hasOwnProperty(key);
-}
 
 class WebRTC extends Component {
   constructor(props) {
@@ -127,8 +124,10 @@ class WebRTC extends Component {
 
         // generate keypair to send across the wire
         const { publicKey } = nacl.sign.keyPair();
-        // create data object with timestamp
-        const dataObj = { time: Date.now(), publicKey };
+        // create data object with timestamp, publicKey, image, and nameornym
+        const nameornym = 'UserA';
+
+        const dataObj = { time: Date.now(), publicKey, avatar, nameornym };
         // send public key to person who initiated contact
         this.rcDataChannel.send(JSON.stringify(dataObj));
 
@@ -165,24 +164,14 @@ class WebRTC extends Component {
   handleLcDataChannelStatusChange = () => {
     if (this.lcDataChannel) {
       const { readyState } = this.lcDataChannel;
-
       if (readyState === 'open') {
         this.setState({
           readyState: true,
         });
-        // this.messageInputBox.disabled = false;
-        this.messageInputBox.focus();
-        // this.sendButton.disabled = false;
-        // this.disconnectButton.disabled = false;
-        // this.connectButton.disabled = true;
       } else {
         this.setState({
           readyState: '',
         });
-        // this.messageInputBox.disabled = true;
-        // this.sendButton.disabled = true;
-        // this.connectButton.disabled = true;
-        // this.disconnectButton.disabled = true;
       }
     } else {
       this.setState({
@@ -213,7 +202,7 @@ class WebRTC extends Component {
     // this.disconnectButton.disabled = true;
     // this.sendButton.disabled = true;
     // this.messageInputBox.disabled = true;
-    this.setState({ localMessage: '' });
+    this.setState({ localMessage: '', localMessages: [], remoteMessages: [] });
   };
 
   handleSendMessage = () => {
@@ -229,14 +218,12 @@ class WebRTC extends Component {
     const msg = JSON.parse(data);
     // if we recieve a public key
     // update the app store with the second key
-    if (msg.publicKey) {
-      // convert public key back to unt8Array for nacl
-      const publicKey2 = new Uint8Array(Object.values(msg.publicKey));
-      this.props.dispatch(setPublicKey2(publicKey2));
+    if (msg.publicKey && msg.avatar && msg.nameornym) {
+      this.props.dispatch(setPublicKey2(msg));
     }
     // append all messages locally
     const { localMessages } = this.state;
-    localMessages.push(data);
+    localMessages.push(msg);
     this.setState({
       localMessages,
     });
@@ -277,7 +264,8 @@ class WebRTC extends Component {
           <span className="p-2">Disconnected</span>
         )}
       </div>
-      <div className="local-messages">
+
+      {/* <div className="local-messages">
         {this.state.localMessages.map((msg, i) => (
           <JsonView
             key={i + msg}
@@ -286,83 +274,44 @@ class WebRTC extends Component {
             theme="rjv-default"
           />
         ))}
-      </div>
+      </div> */}
     </div>
   );
+
+  renderPublicKeyRecieved = () => {
+    if (this.props.publicKey2.length > 1 && this.state.localMessages[0]) {
+      return (
+        <div className="ml-2">
+          {this.state.localMessages[0].time}: Recieved PublicKey, Name, Image
+        </div>
+      );
+    }
+  };
+
+  renderConnectWith = () => {
+    if (this.props.publicKey2.length > 1) {
+      return (
+        <div className="connect-with">
+          Would you like to connect with {this.props.nameornym2}?
+          <img
+            src={this.props.avatar2}
+            alt="user avatar 2"
+            className="avatar2"
+          />
+        </div>
+      );
+    }
+  };
 
   render() {
     return (
       <div>
         {this.renderCD()}
         <hr />
-        <div className="gen-message">
-          <button
-            type="button"
-            name="gen-message"
-            className="btn btn-primary p-3 ml-3"
-            onClick={() => {
-              this.props.dispatch(genMsg());
-            }}
-          >
-            Generate Message
-          </button>
-          <input
-            type="text"
-            name="generated message"
-            className="input-control message-box"
-            placeholder="Message text"
-            value={this.props.messageStr}
-            disabled
-          />
-        </div>
+        {this.renderPublicKeyRecieved()}
         <hr />
-        <div className="messagebox ">
-          <label htmlFor="message">
-            Test a message:
-            <input
-              type="text"
-              name="message"
-              ref={(node) => {
-                this.messageInputBox = node;
-              }}
-              className="input-control"
-              id="message"
-              placeholder="write something here..."
-              inputMode="latin"
-              size={60}
-              maxLength={120}
-              value={this.state.localMessage}
-              onChange={(e) => {
-                this.setState({ localMessage: e.target.value });
-              }}
-              onKeyDown={(e) => {
-                if (e.keyCode === 13) {
-                  this.handleSendMessage();
-                }
-              }}
-              disabled={!this.state.readyState}
-            />
-          </label>
-          <button
-            id="sendButton"
-            type="button"
-            name="sendButton"
-            className="buttonright btn btn-info"
-            disabled={!this.state.readyState}
-            ref={(node) => {
-              this.sendButton = node;
-            }}
-            onClick={this.handleSendMessage}
-          >
-            Send
-          </button>
-        </div>
-        <div className="messagebox" id="receivebox">
-          <div>Messages received:</div>
-          {this.state.remoteMessages.map((msg, i) => (
-            <div key={i + msg}>{msg}</div>
-          ))}
-        </div>
+        {this.renderConnectWith()}
+        <hr />
       </div>
     );
   }

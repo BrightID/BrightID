@@ -3,11 +3,13 @@
 import { KEYS, PAIRING_MESSAGE, PUBLICKEY2, RESET_STORE } from './actions';
 
 export const initialState = {
-  publicKey: [],
-  secretKey: [],
+  publicKey: new Uint8Array(),
+  secretKey: new Uint8Array(),
   message: '',
   messageStr: '',
-  publicKey2: [],
+  publicKey2: new Uint8Array(),
+  avatar2: '',
+  nameornym2: '',
 };
 
 export const reducer = (state = initialState, action) => {
@@ -21,7 +23,9 @@ export const reducer = (state = initialState, action) => {
     case PUBLICKEY2:
       return {
         ...state,
-        publicKey2: action.publicKey2,
+        publicKey2: new Uint8Array(Object.values(action.publicKey)),
+        avatar2: action.avatar,
+        nameornym2: action.nameornym,
       };
     case PAIRING_MESSAGE:
       return {
@@ -30,7 +34,14 @@ export const reducer = (state = initialState, action) => {
         messageStr: action.msgStr,
       };
     case RESET_STORE:
-      return initialState;
+      return {
+        ...state,
+        message: '',
+        messageStr: '',
+        publicKey2: new Uint8Array(),
+        avatar2: '',
+        nameornym2: '',
+      };
     default:
       return state;
   }
