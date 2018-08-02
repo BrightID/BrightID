@@ -1,6 +1,7 @@
 // @flow
 
 import { Buffer } from 'buffer';
+import nacl from 'tweetnacl';
 import { strToUint8Array } from '../utils/encoding';
 
 import { setPairingMessage } from './index';
@@ -9,23 +10,23 @@ export const GENERATE_MESSAGE = 'GENERATE_MESSAGE';
 
 export const genMsg = () => (dispatch: Function, getState: Function) => {
   // set publickey from nearby connection
-  const { publicKey, publicKey2 } = getState();
+  const { publicKey, publicKey2, secretKey, timestamp } = getState();
 
-  console.log('publicKey', Array.isArray(publicKey));
-  console.log('publicKey', publicKey instanceof Uint8Array);
-
-  // generate timestamp
-  const timestamp = Date.now();
   // obtain local public / secret keys
   // message (publicKey1 + publicKey2 + timestamp) signed by the private key of the user represented by publicKey1
-  const message = strToUint8Array(
+  const msg = strToUint8Array(
     publicKey.toString() + publicKey2.toString() + timestamp,
   );
 
+  const msgStr = Buffer.from(msg).toString();
+
+  const signedMsg = nacl.sign(msg, secretKey);
+
   dispatch(
     setPairingMessage({
-      msg: message,
-      msgStr: Buffer.from(message).toString(),
+      msg,
+      msgStr,
+      signedMsg,
     }),
   );
 
