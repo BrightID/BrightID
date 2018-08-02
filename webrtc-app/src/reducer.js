@@ -1,6 +1,13 @@
 // @flow
 
-import { KEYS, PAIRING_MESSAGE, PUBLICKEY2, RESET_STORE } from './actions';
+import {
+  KEYS,
+  PAIRING_MESSAGE,
+  PUBLICKEY2,
+  RESET_STORE,
+  TIMESTAMP,
+  PUBLICKEY3,
+} from './actions';
 
 export const initialState = {
   publicKey: new Uint8Array(),
@@ -10,6 +17,8 @@ export const initialState = {
   publicKey2: new Uint8Array(),
   avatar2: '',
   nameornym2: '',
+  timestamp: '',
+  signedMsg: '',
 };
 
 export const reducer = (state = initialState, action) => {
@@ -27,20 +36,34 @@ export const reducer = (state = initialState, action) => {
         avatar2: action.avatar,
         nameornym2: action.nameornym,
       };
+    case PUBLICKEY3:
+      return {
+        ...state,
+        publicKey3: new Uint8Array(Object.values(action.publicKey)),
+      };
     case PAIRING_MESSAGE:
       return {
         ...state,
         message: action.msg,
         messageStr: action.msgStr,
+        signedMsg: action.signedMsg,
+      };
+    case TIMESTAMP:
+      return {
+        ...state,
+        timestamp: action.timestamp,
       };
     case RESET_STORE:
       return {
         ...state,
         message: '',
         messageStr: '',
+        signedMsg: '',
         publicKey2: new Uint8Array(),
+        publicKey3: new Uint8Array(),
         avatar2: '',
         nameornym2: '',
+        timestamp: '',
       };
     default:
       return state;

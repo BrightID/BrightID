@@ -1,7 +1,9 @@
 export const KEYS = 'KEYS';
 export const PUBLICKEY2 = 'PUBLICKEY2';
+export const PUBLICKEY3 = 'PUBLICKEY3';
 export const RESET_STORE = 'RESET_STORE';
 export const PAIRING_MESSAGE = 'PAIRING_MESSAGE';
+export const TIMESTAMP = 'TIMESTAMP';
 
 export const setKeys = ({ publicKey, secretKey }) => ({
   type: KEYS,
@@ -16,12 +18,23 @@ export const setPublicKey2 = ({ publicKey, avatar, nameornym }) => ({
   nameornym,
 });
 
-export const setPairingMessage = ({ msg, msgStr }) => ({
+export const setPublicKey3 = (publicKey) => ({
+  type: PUBLICKEY3,
+  publicKey,
+});
+
+export const setPairingMessage = ({ msg, msgStr, signedMsg }) => ({
   type: PAIRING_MESSAGE,
   msg,
   msgStr,
+  signedMsg,
 });
 
 export const resetStore = () => ({
   type: RESET_STORE,
+});
+
+export const setTimestamp = (timestamp) => ({
+  type: TIMESTAMP,
+  timestamp,
 });

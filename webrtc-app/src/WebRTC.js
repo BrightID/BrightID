@@ -3,11 +3,26 @@ import nacl from 'tweetnacl';
 import { connect } from 'react-redux';
 // import JsonView from 'react-json-view';
 import logging from './utils/logging';
-import { setPublicKey2, resetStore } from './actions';
-// import { genMsg } from './actions/exchange';
+import {
+  setPublicKey2,
+  resetStore,
+  setTimestamp,
+  setPublicKey3,
+} from './actions';
+import { genMsg } from './actions/exchange';
 import { avatar } from './utils/toDataUrl';
 
 window.nacl = nacl;
+
+/**
+ * Constants
+ */
+
+const DELAY = 500;
+
+/**
+ * =============================
+ */
 
 class WebRTC extends Component {
   constructor(props) {
@@ -17,8 +32,120 @@ class WebRTC extends Component {
       remoteMessages: [],
       localMessages: [],
       readyState: '',
+      ahoyRecieved: '',
+      msgSent: '',
+      msgCorrect: '',
+      cDataSent: '',
     };
+    this.lc = null;
+    this.rc = null;
+    this.rcDataChannel = null;
+    this.lcDataChannel = null;
   }
+
+  createRcDataChannel = (event) => {
+    console.log('creating rc data channel');
+
+    this.rcDataChannel = event.channel;
+    console.log(event.channel);
+
+    /**
+     * Send ahoy, signalling that both data channels are open
+     * and ready to transmit data
+     */
+
+    if (this.rcDataChannel && this.rcDataChannel.readyState === 'open') {
+      const dataObj = {
+        timestamp: Date.now(),
+        msg: 'wadata',
+      };
+      this.rcDataChannel.send(JSON.stringify(dataObj));
+      console.log('ahoy message sent');
+    }
+
+    /**
+     * handle recieving messages
+     */
+
+    this.rcDataChannel.onmessage = (e) => {
+      const msg = JSON.parse(e.data);
+
+      console.log('rc receive message:');
+      console.log(e.data);
+
+      /**
+       * Upon recieving ahoy back, with timestamp and public key,
+       * set the timestamp to be used in the message
+       * and send UserA connection data
+       */
+
+      if (
+        msg.msg === 'wadatai' &&
+        this.rcDataChannel &&
+        this.rcDataChannel.readyState === 'open'
+      ) {
+        // set new connection timestamp
+        this.props.dispatch(setTimestamp(msg.timestamp));
+        this.props.dispatch(setPublicKey3(msg.publicKey));
+
+        const { publicKey } = nacl.sign.keyPair();
+
+        const nameornym = 'UserB';
+
+        const dataObj = {
+          timestamp: Date.now(),
+          publicKey,
+          avatar,
+          nameornym,
+        };
+        // send public key to person who initiated contact
+        this.rcDataChannel.send(JSON.stringify(dataObj));
+      }
+
+      /**
+       * Upon recieving signed message, verify it is correct
+       */
+
+      if (
+        msg.signedMsg &&
+        this.rcDataChannel &&
+        this.rcDataChannel.readyState === 'open'
+      ) {
+        // set new connection timestamp
+        const {
+          publicKey,
+          publicKey2,
+          publicKey3,
+          timestamp,
+          message,
+        } = this.props;
+
+        const signedMsg = new Uint8Array(Object.values(msg.signedMsg));
+        const openedMsg = nacl.sign.open(signedMsg, publicKey3);
+
+        console.log(
+          'signed messaged correct?',
+          openedMsg.toString() === message.toString(),
+        );
+
+        if (openedMsg.toString() === message.toString()) {
+          this.setState({
+            msgCorrect: Date.now(),
+          });
+        }
+      }
+    };
+
+    this.rcDataChannel.onopen = () => {
+      console.log('rcDataChannel opened');
+    };
+
+    this.rcDataChannel.onclose = () => {
+      console.log('rcDataChannel closed');
+    };
+
+    window.rcDataChannel = this.rcDataChannel;
+  };
 
   connectPeers = async () => {
     try {
@@ -70,114 +197,163 @@ class WebRTC extends Component {
       this.lcDataChannel = this.lc.createDataChannel('chat');
       window.lcDataChannel = this.lcDataChannel;
 
+      /**
+       * Seting up WebRTC connection
+       * requires a signalling server in the future
+       */
+
+      /**
+       * Creating Offer
+       *
+       * note:
+       * must send offer to the signalling server
+       */
+
       console.log('creating offer');
+
       const offer = await this.lc.createOffer();
+
+      /**
+       * Setting lc local description
+       */
+
       console.log('setting lc local description');
+
       await this.lc.setLocalDescription(new RTCSessionDescription(offer));
 
-      // note: pass the offer (localDescription) to the remote device
-      // in order to connect via webrtc
-      console.log('setting rc remote description');
-      await this.rc.setRemoteDescription(
-        new RTCSessionDescription(this.lc.localDescription),
-      );
-      console.log('creating answer');
-      const answer = await this.rc.createAnswer();
-      console.log('setting rc local description');
-      await this.rc.setLocalDescription(new RTCSessionDescription(answer));
-      console.log('setting lc remote description');
-      await this.lc.setRemoteDescription(
-        new RTCSessionDescription(this.rc.localDescription),
-      );
+      /**
+       * Setting rc remote description
+       */
 
-      this.lcDataChannel.onopen = (e) => {
+      console.log('setting rc remote description');
+
+      await this.rc.setRemoteDescription(new RTCSessionDescription(offer));
+
+      /**
+       * Creating Answer
+       *
+       * note:
+       * must send offer to the signalling server
+       */
+
+      console.log('creating answer');
+
+      const answer = await this.rc.createAnswer();
+
+      /**
+       * Setting rc local description
+       */
+
+      console.log('setting rc local description');
+
+      await this.rc.setLocalDescription(new RTCSessionDescription(answer));
+
+      /**
+       * Setting lc remote description
+       */
+
+      console.log('setting lc remote description');
+
+      await this.lc.setRemoteDescription(new RTCSessionDescription(answer));
+
+      /**
+       * When channel opens, begin info exchange
+       */
+
+      this.lcDataChannel.onopen = () => {
         console.log('lcDataChannel opened');
-        this.handleLcDataChannelStatusChange();
+
+        this.lcDataChannelOpened();
       };
 
-      this.lcDataChannel.onclose = (e) => {
+      this.lcDataChannel.onclose = () => {
         console.log('lcDataChannel closed');
-        this.handleLcDataChannelStatusChange();
+        this.setState({
+          readyState: '',
+        });
       };
 
       /**
        * handle recieving messages
        */
 
-      this.lcDataChannel.onmessage = (e) => {
-        console.log('lc recieve message:');
-        console.log(e.data);
-        this.handleRecieveMessage(e.data);
-      };
+      this.lcDataChannel.onmessage = this.handleRecieveMessage;
 
       /**
-       =====================================
-      */
-
-      /**
-       * create second data channel
+       * ======================================================
        */
 
       this.rc.ondatachannel = (e) => {
-        console.log('creating rcDataChannel');
-        this.rcDataChannel = e.channel;
-
-        // generate keypair to send across the wire
-        const { publicKey } = nacl.sign.keyPair();
-        // create data object with timestamp, publicKey, image, and nameornym
-        const nameornym = 'UserA';
-
-        const dataObj = { time: Date.now(), publicKey, avatar, nameornym };
-        // send public key to person who initiated contact
-        this.rcDataChannel.send(JSON.stringify(dataObj));
-
-        this.rcDataChannel.onmessage = () => {
-          console.log('message:');
-          console.log(e.data);
-          // store and display remote messages recieved
-          const { remoteMessages } = this.state;
-          remoteMessages.push(e.data);
-          this.setState({
-            remoteMessages,
-          });
-        };
-
         /**
-       =====================================
-      */
-
-        this.rcDataChannel.onopen = (e) => {
-          console.log('rcDataChannel opened');
-        };
-        this.rcDataChannel.onclose = (e) => {
-          console.log('rcDataChannel closed');
-        };
-
-        // send the key
-        window.rcDataChannel = this.rcDataChannel;
+         * creating second data channel
+         */
+        setTimeout(() => {
+          this.createRcDataChannel(e);
+        }, DELAY);
       };
     } catch (err) {
       console.log(err);
     }
   };
 
-  handleLcDataChannelStatusChange = () => {
-    if (this.lcDataChannel) {
-      const { readyState } = this.lcDataChannel;
-      if (readyState === 'open') {
-        this.setState({
-          readyState: true,
-        });
-      } else {
-        this.setState({
-          readyState: '',
-        });
-      }
-    } else {
+  handleRecieveMessage = (e) => {
+    console.log('lc recieve message:');
+    console.log(e.data);
+    const msg = JSON.parse(e.data);
+    const { publicKey } = this.props;
+    // if we recieve a public key
+    // update the app store with the second key
+    if (
+      msg.msg === 'wadata' &&
+      this.lcDataChannel &&
+      this.lcDataChannel.readyState === 'open'
+    ) {
+      let dataObj = {
+        timestamp: Date.now(),
+        msg: 'wadatai',
+        publicKey,
+      };
+
+      this.lcDataChannel.send(JSON.stringify(dataObj));
+
       this.setState({
-        readyState: '',
+        ahoyRecieved: msg.timestamp,
+        cDataSent: dataObj.timestamp,
       });
+
+      // create data object with timestamp, publicKey, image, and nameornym
+      const nameornym = 'UserA';
+
+      dataObj = {
+        timestamp: Date.now(),
+        publicKey,
+        avatar,
+        nameornym,
+      };
+
+      console.log('sending user data to remote user');
+
+      // send public key to person who initiated contact
+      this.lcDataChannel.send(JSON.stringify(dataObj));
     }
+
+    if (msg.publicKey && msg.avatar && msg.nameornym) {
+      this.props.dispatch(setPublicKey2(msg));
+    }
+    // append all messages locally
+    const { localMessages } = this.state;
+    localMessages.push(msg);
+    this.setState({
+      localMessages,
+    });
+  };
+
+  lcDataChannelOpened = () => {
+    this.setState({
+      readyState: true,
+    });
+
+    console.log('lc user data sent');
   };
 
   handleDisconnect = () => {
@@ -196,13 +372,16 @@ class WebRTC extends Component {
     this.lc = null;
     this.rc = null;
 
-    // Update user interface elements
-
-    // this.connectButton.disabled = false;
-    // this.disconnectButton.disabled = true;
-    // this.sendButton.disabled = true;
-    // this.messageInputBox.disabled = true;
-    this.setState({ localMessage: '', localMessages: [], remoteMessages: [] });
+    this.setState({
+      localMessage: '',
+      localMessages: [],
+      remoteMessages: [],
+      readyState: '',
+      ahoyRecieved: '',
+      msgSent: '',
+      msgCorrect: '',
+      cDataSent: '',
+    });
   };
 
   handleSendMessage = () => {
@@ -214,19 +393,21 @@ class WebRTC extends Component {
     this.setState({ localMessage: '' });
   };
 
-  handleRecieveMessage = (data) => {
-    const msg = JSON.parse(data);
-    // if we recieve a public key
-    // update the app store with the second key
-    if (msg.publicKey && msg.avatar && msg.nameornym) {
-      this.props.dispatch(setPublicKey2(msg));
+  handleNewConnection = async () => {
+    // generate and sign pairing message
+    await this.props.dispatch(genMsg());
+    // send signed message to UserB
+    const { signedMsg } = this.props;
+    if (signedMsg) {
+      const dataObj = {
+        timestamp: Date.now(),
+        signedMsg,
+      };
+      this.lcDataChannel.send(JSON.stringify(dataObj));
+      this.setState({
+        msgSent: dataObj.timestamp,
+      });
     }
-    // append all messages locally
-    const { localMessages } = this.state;
-    localMessages.push(msg);
-    this.setState({
-      localMessages,
-    });
   };
 
   renderCD = () => (
@@ -278,11 +459,50 @@ class WebRTC extends Component {
     </div>
   );
 
+  renderAhoyRecieved = () => {
+    if (this.state.ahoyRecieved) {
+      return (
+        <div className="ml-2">{this.state.ahoyRecieved}: Recieved Ahoy</div>
+      );
+    }
+  };
+
+  renderMsgCorrect = () => {
+    if (this.state.msgCorrect) {
+      return (
+        <div className="ml-2">
+          {this.state.msgCorrect}: Message correctly recieved and verified
+        </div>
+      );
+    }
+  };
+
+  rendercDataSent = () => {
+    if (this.state.cDataSent) {
+      return (
+        <div className="ml-2">
+          {this.state.cDataSent}: Sent timestamp and public key to UserB
+        </div>
+      );
+    }
+  };
+
   renderPublicKeyRecieved = () => {
     if (this.props.publicKey2.length > 1 && this.state.localMessages[0]) {
       return (
         <div className="ml-2">
-          {this.state.localMessages[0].time}: Recieved PublicKey, Name, Image
+          {this.state.localMessages[0].timestamp}: Recieved PublicKey, Name,
+          Image from UserB
+        </div>
+      );
+    }
+  };
+
+  renderSentMsg = () => {
+    if (this.state.msgSent) {
+      return (
+        <div className="ml-2">
+          {this.state.msgSent}: Sent signed message to UserB
         </div>
       );
     }
@@ -298,6 +518,22 @@ class WebRTC extends Component {
             alt="user avatar 2"
             className="avatar2"
           />
+          <button
+            type="button"
+            className="btn btn-primary ml-2"
+            name="yes connect"
+            onClick={this.handleNewConnection}
+          >
+            Yes
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary ml-2"
+            name="no connect"
+            onClick={this.handleDisconnect}
+          >
+            No
+          </button>
         </div>
       );
     }
@@ -308,9 +544,17 @@ class WebRTC extends Component {
       <div>
         {this.renderCD()}
         <hr />
+        {this.renderAhoyRecieved()}
+        <hr />
+        {this.rendercDataSent()}
+        <hr />
         {this.renderPublicKeyRecieved()}
         <hr />
         {this.renderConnectWith()}
+        <hr />
+        {this.renderSentMsg()}
+        <hr />
+        {this.renderMsgCorrect()}
         <hr />
       </div>
     );
