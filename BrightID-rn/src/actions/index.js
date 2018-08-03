@@ -14,11 +14,9 @@ export const PUBLICKEY2 = 'PUBLICKEY2';
 export const ERROR = 'ERROR';
 
 /**
- * Redux boilerplate, pass data through the app
- * Async actions / async functions can be implemented
- *
- * @param type derived from constants
- * @param payload data passed into the redux reducer
+ * redux action creator that updates user `trustScore`
+ * @param type USER_TRUST_SCORE
+ * @param trustScore string fetched from server
  *
  */
 
@@ -27,8 +25,16 @@ export const userTrustScore = (trustScore: string) => ({
   trustScore,
 });
 
+/**
+ * redux action creator that updates a connection's trust score in the connection array
+ * @param type CONNECTION_TRUST_SCORE
+ * @param publicKey Uint8Array to identify connection
+ * @param trustScore string fetched from server
+ *
+ */
+
 export const connectionTrustScore = (
-  publicKey: Array<number>,
+  publicKey: Uint8Array,
   trustScore: string,
 ) => ({
   type: CONNECTION_TRUST_SCORE,
@@ -36,25 +42,61 @@ export const connectionTrustScore = (
   trustScore,
 });
 
+/**
+ * redux action creator updates the Group Count
+ * unneccessary after group API is created
+ *
+ */
+
 export const setGroupsCount = (groupsCount: number) => ({
   type: GROUPS_COUNT,
   groupsCount,
 });
+
+/**
+ * redux action creator for setting the search param used to filter connections array
+ * @param type SEARCH_PARAM
+ * @param value string used to filter connections
+ */
 
 export const setSearchParam = (value: string) => ({
   type: SEARCH_PARAM,
   value,
 });
 
+/**
+ * redux action creator for setting connections array
+ * @param type UPDATE_CONNECTIONS
+ * @param connections array of connections obtained from server and stored locally
+ */
+
 export const setConnections = (connections: Array<{}>) => ({
   type: UPDATE_CONNECTIONS,
   connections,
 });
 
-export const addConnection = (connection: Object) => ({
+/**
+ * redux action creator for adding a connection
+ * @param type ADD_CONNECTION
+ * @param connection appends a new connection object to the array of connections
+ */
+
+export const addConnection = (connection: {
+  publicKey: Uint8Array,
+  nameornym: string,
+  avatar: string,
+  trustScore: string,
+  connectionDate: string,
+}) => ({
   type: ADD_CONNECTION,
   connection,
 });
+
+/**
+ * redux action setting user data
+ * @param type UPDATE_USER_DATA
+ * @param userData object containing important user data obtained from async storage during initialization
+ */
 
 export const setUserData = ({
   publicKey,
@@ -62,8 +104,8 @@ export const setUserData = ({
   nameornym,
   userAvatar,
 }: {
-  publicKey: Array<number>,
-  secretKey: Array<number>,
+  publicKey: Uint8Array,
+  secretKey: Uint8Array,
   nameornym: string,
   userAvatar: string,
 }) => ({
@@ -74,24 +116,52 @@ export const setUserData = ({
   userAvatar,
 });
 
+/**
+ * redux action creator for reseting the app's store
+ */
+
 export const removeUserData = () => ({
   type: REMOVE_USER_DATA,
 });
+
+/**
+ * redux action creator for setting user avatar
+ * @param type USER_AVATAR
+ * @param userAvatar string representaiton of user avatar encoded in base64 format
+ */
 
 export const setUserAvatar = (userAvatar: string) => ({
   type: USER_AVATAR,
   userAvatar,
 });
 
-export const setPublicKey2 = (publicKey2: Array<number>) => ({
+/**
+ * redux action creator for setting public key 2
+ * @param type PUBLICKEY2
+ * @param publicKey2 public key of new user while adding a new connection
+ */
+
+export const setPublicKey2 = (publicKey2: Uint8Array) => ({
   type: PUBLICKEY2,
   publicKey2,
 });
+
+/**
+ * redux action creator for refreshing nearby people
+ * @param type REFRESH_NEARBY_PEOPLE
+ * @param nearbyPeople array of nearby people
+ */
 
 export const refreshNearbyPeople = (nearbyPeople: Array<{}>) => ({
   type: REFRESH_NEARBY_PEOPLE,
   nearbyPeople,
 });
+
+/**
+ * redux action creator for handling errors
+ * @param type ERROR
+ * @param error error message string
+ */
 
 export const handleError = (error: string) => ({
   type: ERROR,

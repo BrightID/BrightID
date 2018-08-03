@@ -2,15 +2,24 @@
 
 export default function logging(connection, type) {
   connection.onsignalingstatechange = () => {
-    if (connection) console.log(`${type} state:`, connection.signalingState);
+    if (connection)
+      console.log(`${type} signaling state:`, connection.signalingState);
   };
 
   connection.oniceconnectionstatechange = () => {
-    if (connection) console.log(`${type}: `, connection.iceConnectionState);
+    if (connection)
+      console.log(
+        `${type} ice connection state: `,
+        connection.iceConnectionState,
+      );
   };
 
   connection.onicegatheringstatechange = () => {
-    if (connection) console.log(`${type}: `, connection.iceGatheringState);
+    if (connection)
+      console.log(
+        `${type} ice gathering state: `,
+        connection.iceGatheringState,
+      );
   };
 
   connection.onaddstream = (e) => {

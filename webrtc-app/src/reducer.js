@@ -7,6 +7,8 @@ import {
   RESET_STORE,
   TIMESTAMP,
   PUBLICKEY3,
+  DISPATCHER,
+  RTC_ID,
 } from './actions';
 
 export const initialState = {
@@ -19,6 +21,7 @@ export const initialState = {
   nameornym2: '',
   timestamp: '',
   signedMsg: '',
+  rtcId: '',
 };
 
 export const reducer = (state = initialState, action) => {
@@ -53,6 +56,16 @@ export const reducer = (state = initialState, action) => {
         ...state,
         timestamp: action.timestamp,
       };
+    case RTC_ID:
+      return {
+        ...state,
+        rtcId: action.rtcId,
+      };
+    case DISPATCHER:
+      return {
+        ...state,
+        dispatcher: action.dispatcher,
+      };
     case RESET_STORE:
       return {
         ...state,
@@ -64,6 +77,7 @@ export const reducer = (state = initialState, action) => {
         avatar2: '',
         nameornym2: '',
         timestamp: '',
+        rtcId: '',
       };
     default:
       return state;

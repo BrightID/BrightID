@@ -4,6 +4,8 @@ export const PUBLICKEY3 = 'PUBLICKEY3';
 export const RESET_STORE = 'RESET_STORE';
 export const PAIRING_MESSAGE = 'PAIRING_MESSAGE';
 export const TIMESTAMP = 'TIMESTAMP';
+export const RTC_ID = 'RTC_ID';
+export const DISPATCHER = 'DISPATCHER';
 
 export const setKeys = ({ publicKey, secretKey }) => ({
   type: KEYS,
@@ -37,4 +39,14 @@ export const resetStore = () => ({
 export const setTimestamp = (timestamp) => ({
   type: TIMESTAMP,
   timestamp,
+});
+
+export const setRtcId = (rtcId) => ({
+  type: RTC_ID,
+  rtcId,
+});
+
+export const setDispatcher = (dispatcher) => ({
+  type: DISPATCHER,
+  dispatcher,
 });

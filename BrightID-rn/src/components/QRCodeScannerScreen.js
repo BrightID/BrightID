@@ -26,16 +26,19 @@ class QRCodeScannerScreen extends React.Component<Props, State> {
     title: 'Scan QR code',
     headerRight: <View />,
   };
+
   state = {
     hasCameraPermission: '',
     dataFound: false,
   };
+
   componentDidMount() {
     // Permissions.check('photo').then((response) => {
     //   // Response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
     //   this.setState({ hasCameraPermission: response });
     // });
   }
+
   handleBarCodeRead = ({ type, data }) => {
     // generate Message after scanning qrcode
     this.setState({ qrData: data, dataFound: true });
@@ -46,6 +49,7 @@ class QRCodeScannerScreen extends React.Component<Props, State> {
       this.props.dispatch(generateMessage(data));
     }
   };
+
   render() {
     const { hasCameraPermission } = this.state;
     if (hasCameraPermission === null) {

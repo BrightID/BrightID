@@ -10,9 +10,6 @@ import store from './store';
  * Central part of the application
  * react-navigation is used for routing
  * read docs here: https://reactnavigation.org/
- * AppRoutes.js contains all of the Routes
- * Redux / Immutable are used for managing state
- * read docs here: https://facebook.github.io/immutable-js/
  */
 
 type Props = {};

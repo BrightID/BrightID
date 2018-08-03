@@ -32,6 +32,12 @@
   align-content: center;
 }
 
+.api-buttons {
+  padding: 10px;
+  display: flex;
+  align-content: center;
+}
+
 .local-messages {
   display: flex;
   justify-content: flex-start;

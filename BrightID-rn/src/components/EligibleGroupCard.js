@@ -12,8 +12,6 @@ import GroupAvatar from './EligibleGroupAvatar';
  * each connection should have:
  * @prop name
  * @prop trustScore
- * @prop connectionTime
- * @prop avatar
  */
 
 type Props = {
@@ -70,12 +68,6 @@ const styles = StyleSheet.create({
     borderTopColor: '#e3e0e4',
     borderTopWidth: 1,
   },
-  avatar: {
-    borderRadius: 30,
-    width: 60,
-    height: 60,
-    marginLeft: 14,
-  },
   info: {
     marginLeft: 25,
     flex: 1,
@@ -94,10 +86,6 @@ const styles = StyleSheet.create({
     fontFamily: 'ApexNew-Medium',
     fontSize: 14,
     color: 'green',
-  },
-  connectedText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 14,
   },
   moreIcon: {
     marginRight: 8,
