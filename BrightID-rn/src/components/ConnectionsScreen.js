@@ -8,6 +8,7 @@ import ConnectionCard from './ConnectionCard';
 
 /**
  * Connection screen of BrightID
+ * Displays a search input and list of Connection Cards
  */
 
 type Props = {

@@ -12,7 +12,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-// import { ImagePicker, Permissions } from 'expo';
 import nacl from 'tweetnacl';
 import ImagePicker from 'react-native-image-picker';
 import { connect } from 'react-redux';
@@ -220,16 +219,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // borderWidth: 1
   },
   buttonContainer: {
     flex: 1,
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    // borderWidth: 1
   },
   addPhoto: {
-    // borderWidth: StyleSheet.hairlineWidth,
     borderWidth: 1,
     borderColor: '#979797',
     height: 183,
@@ -251,7 +247,6 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     letterSpacing: 0,
   },
-
   midText: {
     fontFamily: 'ApexNew-Book',
     fontSize: 18,
@@ -267,7 +262,6 @@ const styles = StyleSheet.create({
     marginTop: 22,
     width: 275,
     textAlign: 'center',
-
     paddingBottom: 5,
   },
   buttonInfoText: {

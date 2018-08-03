@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react';
 import nacl from 'tweetnacl';
 import { connect } from 'react-redux';
@@ -11,6 +13,17 @@ import {
 } from './actions';
 import { genMsg } from './actions/exchange';
 import { avatar } from './utils/toDataUrl';
+import {
+  fetchEntries,
+  createRTCId,
+  update,
+  ALPHA,
+  ZETA,
+  ICE_CANDIDATE,
+  OFFER,
+  ANSWER,
+} from './actions/api';
+import { timeout } from '../node_modules/rxjs/operator/timeout';
 
 window.nacl = nacl;
 
@@ -24,7 +37,11 @@ const DELAY = 500;
  * =============================
  */
 
-class WebRTC extends Component {
+type Props = {
+  dispatch: Function,
+};
+
+class WebRTC extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
@@ -41,6 +58,19 @@ class WebRTC extends Component {
     this.rc = null;
     this.rcDataChannel = null;
     this.lcDataChannel = null;
+  }
+
+  componentDidMount() {
+    // create RTC ID
+    // make sure the signalling server is running locally
+    this.props.dispatch(createRTCId());
+    this.timerId = setInterval(() => {
+      this.updateRtc();
+    }, 3000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
   }
 
   createRcDataChannel = (event) => {
@@ -149,6 +179,7 @@ class WebRTC extends Component {
 
   connectPeers = async () => {
     try {
+      const { dispatch } = this.props;
       console.log('connecting peers...');
 
       // const cert = await RTCPeerConnection.generateCertificate({
@@ -173,9 +204,26 @@ class WebRTC extends Component {
       this.lc.onicecandidate = async (e) => {
         console.log('lc icecandidate: ', e.candidate);
         try {
-          if (e.candidate && this.rc) {
-            console.log('setting rc ice candidate');
-            await this.rc.addIceCandidate(e.candidate);
+          if (e.candidate) {
+            // console.log('setting rc ice candidate');
+            // await this.rc.addIceCandidate(e.candidate);
+            /**
+             * update the signaling server dispatcher with ice candidate info
+             * @param person = ALPHA
+             * @param type = ICE_CANDIDATE
+             * @param value = e.candidate
+             */
+            //
+            //
+            //
+            dispatch(
+              update({
+                person: ALPHA,
+                type: ICE_CANDIDATE,
+                value: e.candidate,
+              }),
+            );
+            window.lcCandidate = e.candidate;
           }
         } catch (err) {
           console.warn(err);
@@ -186,8 +234,19 @@ class WebRTC extends Component {
         console.log('rc icecandidate: ', e.candidate);
         try {
           if (e.candidate && this.lc) {
-            console.log('setting lc ice candidate');
-            await this.lc.addIceCandidate(e.candidate);
+            /**
+             * update the signaling server dispatcher with ice candidate info
+             * @param person = ZETA
+             * @param type = ICE_CANDIDATE
+             * @param value = e.candidate
+             */
+            //
+            //
+            //
+            dispatch(
+              update({ person: ZETA, type: ICE_CANDIDATE, value: e.candidate }),
+            );
+            window.rcCandidate = e.candidate;
           }
         } catch (err) {
           console.warn(err);
@@ -213,6 +272,9 @@ class WebRTC extends Component {
 
       const offer = await this.lc.createOffer();
 
+      // update the signaling server
+      dispatch(update({ person: ALPHA, type: OFFER, value: offer }));
+
       /**
        * Setting lc local description
        */
@@ -220,41 +282,6 @@ class WebRTC extends Component {
       console.log('setting lc local description');
 
       await this.lc.setLocalDescription(new RTCSessionDescription(offer));
-
-      /**
-       * Setting rc remote description
-       */
-
-      console.log('setting rc remote description');
-
-      await this.rc.setRemoteDescription(new RTCSessionDescription(offer));
-
-      /**
-       * Creating Answer
-       *
-       * note:
-       * must send offer to the signalling server
-       */
-
-      console.log('creating answer');
-
-      const answer = await this.rc.createAnswer();
-
-      /**
-       * Setting rc local description
-       */
-
-      console.log('setting rc local description');
-
-      await this.rc.setLocalDescription(new RTCSessionDescription(answer));
-
-      /**
-       * Setting lc remote description
-       */
-
-      console.log('setting lc remote description');
-
-      await this.lc.setRemoteDescription(new RTCSessionDescription(answer));
 
       /**
        * When channel opens, begin info exchange
@@ -287,12 +314,105 @@ class WebRTC extends Component {
         /**
          * creating second data channel
          */
+
         setTimeout(() => {
           this.createRcDataChannel(e);
         }, DELAY);
       };
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  updateRtc = async () => {
+    try {
+      const { dispatch, dispatcher } = this.props;
+      if (this.rc && dispatcher && dispatcher.ALPHA) {
+        /**
+         * Setting rc ice candidate
+         */
+
+        if (
+          this.rc.iceConnectionState === 'new' &&
+          this.rc.remoteDescription.type &&
+          dispatcher.ALPHA.ICE_CANDIDATE
+        ) {
+          console.log('setting rc ice candidate');
+          console.log(new RTCIceCandidate(dispatcher.ALPHA.ICE_CANDIDATE));
+          await this.rc.addIceCandidate(
+            new RTCIceCandidate(dispatcher.ALPHA.ICE_CANDIDATE),
+          );
+        }
+
+        /**
+         * Setting rc remote description
+         */
+
+        if (!this.rc.remoteDescription.type && dispatcher.ALPHA.OFFER) {
+          console.log('setting rc remote description');
+
+          await this.rc.setRemoteDescription(
+            new RTCSessionDescription(dispatcher.ALPHA.OFFER),
+          );
+        }
+
+        /**
+         * Creating Answer
+         *
+         * note:
+         * must send offer to the signalling server
+         */
+
+        if (!this.rc.localDescription.type) {
+          console.log('creating answer');
+
+          const answer = await this.rc.createAnswer();
+          // update the signaling server
+          dispatch(update({ person: ZETA, type: ANSWER, value: answer }));
+
+          /**
+           * Setting rc local description
+           */
+
+          console.log('setting rc local description');
+
+          await this.rc.setLocalDescription(new RTCSessionDescription(answer));
+        }
+      }
+
+      if (this.lc && dispatcher && dispatcher.ZETA) {
+        /**
+         * Setting rc ice candidate
+         */
+
+        if (
+          this.lc.iceConnectionState === 'new' &&
+          this.lc.remoteDescription.type &&
+          dispatcher.ZETA.ICE_CANDIDATE
+        ) {
+          console.log('setting lc ice candidate');
+          console.log(dispatcher.ZETA.ICE_CANDIDATE);
+          await this.lc.addIceCandidate(
+            new RTCIceCandidate(dispatcher.ZETA.ICE_CANDIDATE),
+          );
+        }
+
+        /**
+         * Setting lc remote description
+         */
+
+        if (!this.lc.remoteDescription.type) {
+          console.log('setting lc remote description');
+
+          await this.lc.setRemoteDescription(
+            new RTCSessionDescription(dispatcher.ZETA.ANSWER),
+          );
+        }
+
+        // this should finish connection setup
+      }
+    } catch (err) {
+      throw err;
     }
   };
 
@@ -539,9 +659,46 @@ class WebRTC extends Component {
     }
   };
 
+  renderAPIButtons = () => (
+    <div className="api-buttons">
+      <button
+        type="button"
+        className="btn btn-primary ml-2"
+        name="fetch entries"
+        onClick={() => {
+          this.props.dispatch(fetchEntries());
+        }}
+      >
+        Fetch Entries
+      </button>
+      <button
+        type="button"
+        className="btn btn-primary ml-2"
+        name="create ID"
+        onClick={() => {
+          this.props.dispatch(createRTCId());
+        }}
+      >
+        Create ID
+      </button>
+      <button
+        type="button"
+        className="btn btn-primary ml-2"
+        name="create ID"
+        onClick={() => {
+          this.updateRtc();
+        }}
+      >
+        Try it
+      </button>
+    </div>
+  );
+
   render() {
     return (
       <div>
+        {this.renderAPIButtons()}
+        <hr />
         {this.renderCD()}
         <hr />
         {this.renderAhoyRecieved()}

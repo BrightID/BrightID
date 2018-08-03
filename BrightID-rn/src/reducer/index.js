@@ -16,10 +16,6 @@ import {
   PUBLICKEY2,
 } from '../actions';
 
-// immutable js optional, but works really well with redux
-
-// import { fromJS } from "immutable";
-
 /**
  * INITIAL STATE
  * structure the state of the app here
@@ -40,7 +36,7 @@ export const initialState = {
   searchParam: '',
   connections: [
     {
-      publicKey: [],
+      publicKey: new Uint8Array(),
       name: '',
       avatar: '',
       connectionDate: '',

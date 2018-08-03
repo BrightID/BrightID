@@ -18,7 +18,7 @@ import MaintainPrivacy from './onboardingCards/MaintainPrivacy';
 
 /**
  * Initial Onboarding screen of BrightID
- * Uses react-native-snap-carousel for displaying privacy and other notices
+ * Uses react-native-snap-carousel for displaying onboarding cards
  */
 
 /* Constants */

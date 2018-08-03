@@ -12,13 +12,10 @@ import { connect } from 'react-redux';
  * or any local db easy to use with React-native
  */
 
-type Props = {
-  avatarUri: string,
-};
+type Props = {};
 
 class NearbyAvatar extends React.Component<Props> {
   render() {
-    // let { avatarUri } = this.props;
     return (
       <View style={styles.container}>
         <Image

@@ -8,7 +8,6 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-// import { Font, Permissions } from 'expo';
 import store from './store';
 import { setUpDefault } from './actions/setUpDefault';
 

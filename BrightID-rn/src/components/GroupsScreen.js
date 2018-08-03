@@ -14,7 +14,7 @@ import EligibleGroupCard from './EligibleGroupCard';
 import CurrentGroupCard from './CurrentGroupCard';
 
 /**
- * Connection screen of BrightID
+ * Groups screen of BrightID
  */
 
 type Props = {
