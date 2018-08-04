@@ -4,21 +4,26 @@ import nacl from 'tweetnacl';
 import store from './store';
 import WebRTC from './WebRTC';
 import QRCode from './QRCode';
+import Device from './Device';
+import bootstrap from './bootstrap';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
 window.nacl = nacl;
 
 class App extends Component {
+  componentDidMount() {
+    bootstrap();
+  }
+
   render() {
     return (
       <Provider store={store}>
         <div>
-          <header className="header">
-            <h1 className="display-4">WebRTC</h1>
-          </header>
-          <QRCode />
-          <hr />
+          <div className="main-container">
+            <Device user="UserA" />
+            <Device user="UserB" />
+          </div>
           <WebRTC />
         </div>
       </Provider>

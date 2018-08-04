@@ -1,10 +1,67 @@
-.header {
-  background: linear-gradient(#f52828, #f76b1c);
-  color: #fff;
-  height: 100px;
+body {
+  width: 100%;
+  height: 100%;
+}
+
+.main-container {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-grow: 1;
+  height: 81vh;
+  width: 100%;
+  overflow: scroll;
+}
+
+.device {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border: 12px solid black;
+  border-radius: 5px;
+  margin: 15px;
+  width: 360px;
+  min-width: 200px;
+  height: 440px;
+}
+
+.device-header {
+  background: linear-gradient(#f52828, #f76b1c);
+  color: #fff;
+  height: 40px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.device-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 436px;
+  width: 100%;
+}
+
+.back-button {
+  /* position: absolute; */
+  align-self: flex-start;
+  top: 0px;
+  left: 0px;
+}
+
+.qrcode-screen {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.qrcode {
+  width: 100px;
+  height: 100px;
+  display: inline-block;
 }
 
 .c-state {
@@ -57,12 +114,6 @@
   text-align: center;
   display: flex;
   padding: 10px;
-}
-
-.qrcode {
-  width: 50px;
-  height: 50px;
-  display: inline-block;
 }
 
 .App-intro {

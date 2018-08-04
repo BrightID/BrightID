@@ -4,19 +4,29 @@ import { Buffer } from 'buffer';
 import nacl from 'tweetnacl';
 import { strToUint8Array } from '../utils/encoding';
 
-import { setPairingMessage } from './index';
+import { setPairingMessage } from '.';
 
 export const GENERATE_MESSAGE = 'GENERATE_MESSAGE';
 
-export const genMsg = () => (dispatch: Function, getState: Function) => {
+export const genMsg = (user: string) => (
+  dispatch: Function,
+  getState: Function,
+) => {
   // set publickey from nearby connection
-  const { publicKey, publicKey2, secretKey, timestamp } = getState();
+  const { publicKey, publicKey2, secretKey, timestamp } = getState()[user];
 
   // obtain local public / secret keys
   // message (publicKey1 + publicKey2 + timestamp) signed by the private key of the user represented by publicKey1
-  const msg = strToUint8Array(
-    publicKey.toString() + publicKey2.toString() + timestamp,
-  );
+  let msg;
+  if (user === 'userA') {
+    msg = strToUint8Array(
+      publicKey.toString() + publicKey2.toString() + timestamp,
+    );
+  } else if (user === 'userB') {
+    msg = strToUint8Array(
+      publicKey2.toString() + publicKey.toString() + timestamp,
+    );
+  }
 
   const msgStr = Buffer.from(msg).toString();
 

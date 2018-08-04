@@ -17,9 +17,20 @@ export const createRTCId = () => async (
   try {
     const res = await fetch(`http://localhost:${PORT}/id`);
     const { rtcId, dispatcher } = await res.json();
+
+    // simulate network delay
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, 500);
+    });
+
+    // update redux store
     dispatch(setRtcId(rtcId));
     dispatch(setDispatcher(dispatcher));
-    console.log({ rtcId, dispatcher });
+
+    // return rtcId to component letting it know api fetch is successful
+    return rtcId;
   } catch (err) {
     throw err;
   }
