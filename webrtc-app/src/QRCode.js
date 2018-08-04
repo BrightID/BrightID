@@ -3,6 +3,7 @@ import nacl from 'tweetnacl';
 import qrcode from 'qrcode';
 import { connect } from 'react-redux';
 import { setKeys } from './actions';
+import { createRTCId } from './actions/api';
 
 class QRCode extends Component {
   constructor(props) {

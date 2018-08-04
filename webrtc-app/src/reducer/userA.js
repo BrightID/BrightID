@@ -1,7 +1,7 @@
 // @flow
 
 import {
-  KEYS,
+  KEYS_USER_A,
   PAIRING_MESSAGE,
   PUBLICKEY2,
   RESET_STORE,
@@ -9,7 +9,7 @@ import {
   PUBLICKEY3,
   DISPATCHER,
   RTC_ID,
-} from './actions';
+} from '../actions';
 
 export const initialState = {
   publicKey: new Uint8Array(),
@@ -26,7 +26,7 @@ export const initialState = {
 
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case KEYS:
+    case KEYS_USER_A:
       return {
         ...state,
         publicKey: action.publicKey,

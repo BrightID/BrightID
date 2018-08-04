@@ -1,4 +1,5 @@
-export const KEYS = 'KEYS';
+export const KEYS_USER_A = 'KEYS_USER_A';
+export const KEYS_USER_B = 'KEYS_USER_B';
 export const PUBLICKEY2 = 'PUBLICKEY2';
 export const PUBLICKEY3 = 'PUBLICKEY3';
 export const RESET_STORE = 'RESET_STORE';
@@ -7,8 +8,8 @@ export const TIMESTAMP = 'TIMESTAMP';
 export const RTC_ID = 'RTC_ID';
 export const DISPATCHER = 'DISPATCHER';
 
-export const setKeys = ({ publicKey, secretKey }) => ({
-  type: KEYS,
+export const setKeys = ({ user, publicKey, secretKey }) => ({
+  type: user === 'userA' ? KEYS_USER_A : KEYS_USER_B,
   publicKey,
   secretKey,
 });

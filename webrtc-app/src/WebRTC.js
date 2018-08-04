@@ -63,7 +63,7 @@ class WebRTC extends Component<Props> {
   componentDidMount() {
     // create RTC ID
     // make sure the signalling server is running locally
-    this.props.dispatch(createRTCId());
+    // this.props.dispatch(createRTCId());
     this.timerId = setInterval(() => {
       this.updateRtc();
     }, 3000);
@@ -697,6 +697,8 @@ class WebRTC extends Component<Props> {
   render() {
     return (
       <div>
+        <div>WebRTC Data logs</div>
+        <hr />
         {this.renderAPIButtons()}
         <hr />
         {this.renderCD()}
@@ -718,4 +720,4 @@ class WebRTC extends Component<Props> {
   }
 }
 
-export default connect((s) => s)(WebRTC);
+export default connect((s) => s.userA)(WebRTC);
