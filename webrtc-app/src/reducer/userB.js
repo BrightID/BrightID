@@ -8,7 +8,7 @@ import {
   TIMESTAMP,
   PUBLICKEY3,
   DISPATCHER,
-  RTC_ID,
+  RTC_ID_USER_B,
 } from '../actions';
 
 export const initialState = {
@@ -56,7 +56,7 @@ export const reducer = (state = initialState, action) => {
         ...state,
         timestamp: action.timestamp,
       };
-    case RTC_ID:
+    case RTC_ID_USER_B:
       return {
         ...state,
         rtcId: action.rtcId,
