@@ -35,6 +35,20 @@ body {
   justify-content: center;
 }
 
+.scan-text {
+  margin-top: -20px;
+  padding: 5px;
+}
+
+.qr-input {
+  padding: 5px;
+  width: 96%;
+  text-align: center;
+}
+
+.qr-input input {
+  text-align: center;
+}
 .device-main {
   display: flex;
   align-items: center;
@@ -56,6 +70,7 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  margin-top: -30px;
 }
 
 .qrcode {

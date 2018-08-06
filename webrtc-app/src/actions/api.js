@@ -41,7 +41,7 @@ export const update = ({ type, person, value }) => async (
   getState: Function,
 ) => {
   try {
-    const { rtcId } = getState();
+    const { rtcId } = getState().userA;
     const {
       data: { msg, dispatcher },
     } = await post(`http://localhost:${PORT}/update`, {
@@ -51,7 +51,26 @@ export const update = ({ type, person, value }) => async (
       value,
     });
     dispatch(setDispatcher(dispatcher));
-    console.log({ msg, dispatcher });
+    return dispatcher;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const fetchDispatcher = (rtcId) => async (
+  dispatch: Function,
+  getState: Function,
+) => {
+  try {
+    const {
+      data: { msg, dispatcher },
+    } = await post(`http://localhost:${PORT}/dispatcher`, {
+      rtcId,
+    });
+    dispatch(setDispatcher(dispatcher));
+    console.log('inside action');
+    console.log(dispatcher);
+    return dispatcher;
   } catch (err) {
     throw err;
   }

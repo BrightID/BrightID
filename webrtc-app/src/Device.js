@@ -6,6 +6,7 @@ import qrcode from 'qrcode';
 import { connect } from 'react-redux';
 import { setKeys } from './actions';
 import DisplayQR from './DisplayQR';
+import ScanQR from './ScanQR';
 
 type Props = {
   user: string,
@@ -25,7 +26,7 @@ class Device extends Component<Props> {
     }
 
     if (user === 'UserB' && start) {
-      return null;
+      return <ScanQR />;
     }
   };
 
