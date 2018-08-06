@@ -7,7 +7,10 @@ export const PAIRING_MESSAGE = 'PAIRING_MESSAGE';
 export const TIMESTAMP = 'TIMESTAMP';
 export const RTC_ID = 'RTC_ID';
 export const RTC_ID_USER_B = 'RTC_ID_USER_B';
-export const DISPATCHER = 'DISPATCHER';
+export const DISPATCHER_USER_A = 'DISPATCHER_USER_A';
+export const DISPATCHER_USER_B = 'DISPATCHER_USER_B';
+export const USER_A_WAITING = 'USER_A_WAITING';
+export const USER_B_WAITING = 'USER_B_WAITING';
 
 export const setKeys = ({ user, publicKey, secretKey }) => ({
   type: user === 'userA' ? KEYS_USER_A : KEYS_USER_B,
@@ -53,7 +56,20 @@ export const setUserBRtcId = (rtcId) => ({
   rtcId,
 });
 
-export const setDispatcher = (dispatcher) => ({
-  type: DISPATCHER,
+export const userAWaiting = () => ({
+  type: USER_A_WAITING,
+});
+
+export const userBWaiting = () => ({
+  type: USER_B_WAITING,
+});
+
+export const setUserADispatcher = (dispatcher) => ({
+  type: DISPATCHER_USER_A,
+  dispatcher,
+});
+
+export const setUserBDispatcher = (dispatcher) => ({
+  type: DISPATCHER_USER_B,
   dispatcher,
 });

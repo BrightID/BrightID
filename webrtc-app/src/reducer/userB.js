@@ -7,7 +7,8 @@ import {
   RESET_STORE,
   TIMESTAMP,
   PUBLICKEY3,
-  DISPATCHER,
+  DISPATCHER_USER_B,
+  USER_B_WAITING,
   RTC_ID_USER_B,
 } from '../actions';
 
@@ -22,6 +23,7 @@ export const initialState = {
   timestamp: '',
   signedMsg: '',
   rtcId: '',
+  waiting: false,
 };
 
 export const reducer = (state = initialState, action) => {
@@ -61,10 +63,16 @@ export const reducer = (state = initialState, action) => {
         ...state,
         rtcId: action.rtcId,
       };
-    case DISPATCHER:
+    case USER_B_WAITING:
+      return {
+        ...state,
+        waiting: true,
+      };
+    case DISPATCHER_USER_B:
       return {
         ...state,
         dispatcher: action.dispatcher,
+        waiting: false,
       };
     case RESET_STORE:
       return {

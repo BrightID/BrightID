@@ -4,12 +4,20 @@ import React, { Component } from 'react';
 // import nacl from 'tweetnacl';
 import qrcode from 'qrcode';
 import { connect } from 'react-redux';
-import { createRTCId, update, OFFER, ALPHA } from './actions/api';
-import { resetStore } from './actions';
+import {
+  createRTCId,
+  update,
+  OFFER,
+  ALPHA,
+  fetchDispatcher,
+} from './actions/api';
+import { resetStore, setUserADispatcher } from './actions';
+import { socket } from './websockets';
 
 type Props = {
   rtcId: string,
   dispatch: () => Promise,
+  dispatcher: {},
 };
 
 class DisplayQR extends Component<Props> {
@@ -21,22 +29,48 @@ class DisplayQR extends Component<Props> {
     // set up initial webrtc connection
     this.connection = null;
     this.channel = null;
+    this.socket = null;
   }
 
   async componentDidMount() {
-    // fetch rtc id from signaling server
-    const { dispatch } = this.props;
+    // fetch initial rtc id from signaling server
+    const { dispatch, waiting } = this.props;
     const rtcId = await dispatch(createRTCId());
-    console.log(rtcId);
+    console.log(`displayQr ${rtcId}`);
+    // generate qrcode with rtc id
     this.genQrCode();
+    // initiate webrtc
     this.initiateWebrtc();
+    // join websocket room
+    this.socket = socket();
+    this.socket.emit('join', rtcId);
+    // subscribe to update event
+    this.socket.on('update', (dispatcher) => {
+      // update redux store
+      console.log('socket io update');
+      console.log(dispatcher);
+      dispatch(setUserADispatcher(dispatcher));
+    });
   }
 
-  componentDidUpdate(prevProps) {
+  async componentDidUpdate(prevProps) {
     // generate a new qrcode if the rtcId value changes
-    const { rtcId } = this.props;
+    const { rtcId, dispatcher } = this.props;
+    // regen qr code
     if (prevProps.rtcId !== rtcId) {
       this.genQrCode();
+    }
+    // set local description
+    if (
+      this.connection &&
+      dispatcher &&
+      dispatcher.ALPHA.OFFER &&
+      (dispatcher.ALPHA.OFFER.sdp !== prevProps.dispatcher.ALPHA.OFFER.sdp ||
+        dispatcher.ALPHA.OFFER.type !== prevProps.dispatcher.ALPHA.OFFER.type)
+    ) {
+      await this.connection.setLocalDescription(
+        new RTCSessionDescription(dispatcher.ALPHA.OFFER),
+      );
     }
   }
 
@@ -53,7 +87,6 @@ class DisplayQR extends Component<Props> {
     console.log('creating offer');
     const offer = await this.connection.createOffer();
     await dispatch(update({ type: OFFER, person: ALPHA, value: offer }));
-    await this.connection.setLocalDescription(offer);
   };
 
   genQrCode = () => {

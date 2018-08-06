@@ -32,6 +32,7 @@
     "react/jsx-boolean-value": "off",
     "react/jsx-one-expression-per-line": "off",
     "consistent-return": "off",
-    "no-alert": "off"
+    "no-alert": "off",
+    "prefer-destructuring": "off"
   }
 }

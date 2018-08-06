@@ -28,8 +28,7 @@ class ScanQR extends Component<Props> {
     this.connection = new RTCPeerConnection(null);
     const {
       ALPHA: { OFFER },
-    } = await dispatch(fetchDispatcher(rtcId));
-    console.log(OFFER);
+    } = await dispatch(fetchDispatcher('ZETA'));
     await this.connection.setRemoteDescription(
       new RTCSessionDescription(OFFER),
     );
