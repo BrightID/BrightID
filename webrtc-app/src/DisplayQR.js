@@ -34,7 +34,7 @@ class DisplayQR extends Component<Props> {
 
   async componentDidMount() {
     // fetch initial rtc id from signaling server
-    const { dispatch, waiting } = this.props;
+    const { dispatch } = this.props;
     const rtcId = await dispatch(createRTCId());
     console.log(`displayQr ${rtcId}`);
     // generate qrcode with rtc id
@@ -55,11 +55,8 @@ class DisplayQR extends Component<Props> {
 
   async componentDidUpdate(prevProps) {
     // generate a new qrcode if the rtcId value changes
-    const { rtcId, dispatcher } = this.props;
-    // regen qr code
-    if (prevProps.rtcId !== rtcId) {
-      this.genQrCode();
-    }
+    const { dispatcher } = this.props;
+    console.log(dispatcher);
     // set local description
     if (
       this.connection &&
@@ -70,6 +67,18 @@ class DisplayQR extends Component<Props> {
     ) {
       await this.connection.setLocalDescription(
         new RTCSessionDescription(dispatcher.ALPHA.OFFER),
+      );
+    }
+    // set remote description
+    if (
+      this.connection &&
+      dispatcher &&
+      dispatcher.ZETA.ANSWER &&
+      (dispatcher.ZETA.ANSWER.sdp !== prevProps.dispatcher.ZETA.ANSWER.sdp ||
+        dispatcher.ZETA.ANSWER.type !== prevProps.dispatcher.ZETA.ANSWER.type)
+    ) {
+      await this.connection.setRemoteDescription(
+        new RTCSessionDescription(dispatcher.ZETA.ANSWER),
       );
     }
   }

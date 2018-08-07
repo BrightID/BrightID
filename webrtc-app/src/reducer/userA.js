@@ -24,6 +24,16 @@ export const initialState = {
   signedMsg: '',
   rtcId: '',
   waiting: false,
+  dispatcher: {
+    ALPHA: {
+      OFFER: '',
+      ICE_CANDIDATE: '',
+    },
+    ZETA: {
+      ANSWER: '',
+      ICE_CANDIDATE: '',
+    },
+  },
 };
 
 export const reducer = (state = initialState, action) => {

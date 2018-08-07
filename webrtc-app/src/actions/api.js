@@ -56,6 +56,7 @@ export const update = ({ type, person, value }) => async (
     } else if (person === ZETA) {
       rtcId = getState().userB.rtcId;
     }
+    console.log(rtcId);
     // attempt to fetch dispatcher
     const { data } = await post(`http://localhost:${PORT}/update`, {
       rtcId,
@@ -98,10 +99,10 @@ export const fetchDispatcher = (person) => async (
       waiting = getState().userB.waiting;
     }
     // do not send a network request if one is already in progress
-    if (waiting) {
-      console.log('waiting');
-      return null;
-    }
+    // if (waiting) {
+    //   console.log('waiting');
+    //   return null;
+    // }
     console.log('fetching dispatcher');
     // update redux store with network status
     if (person === ALPHA) {
@@ -123,6 +124,8 @@ export const fetchDispatcher = (person) => async (
       return data;
     }
     const { dispatcher } = data;
+    console.log(data);
+    console.log(dispatcher);
     // update redux store
     if (person === ALPHA) {
       dispatch(setUserADispatcher(dispatcher));

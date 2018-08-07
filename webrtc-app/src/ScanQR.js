@@ -19,22 +19,56 @@ class ScanQR extends Component<Props> {
     };
     this.connection = null;
     this.channel = null;
+    this.socket = null;
+  }
+
+  async componentDidUpdate(prevProps) {
+    // generate a new qrcode if the rtcId value changes
+    const { dispatcher, dispatch } = this.props;
+    console.log(dispatcher);
+    // set remote description
+    // create answer
+    // send updated state to server
+    if (
+      this.connection &&
+      dispatcher &&
+      dispatcher.ALPHA.OFFER &&
+      (dispatcher.ALPHA.OFFER.sdp !== prevProps.dispatcher.ALPHA.OFFER.sdp ||
+        dispatcher.ALPHA.OFFER.type !== prevProps.dispatcher.ALPHA.OFFER.type)
+    ) {
+      // set remote description
+      await this.connection.setRemoteDescription(
+        new RTCSessionDescription(dispatcher.ALPHA.OFFER),
+      );
+      // create answer
+      const answer = await this.connection.createAnswer();
+      // send answer to signal server
+      await dispatch(update({ person: ZETA, type: ANSWER, value: answer }));
+    }
+
+    // set local description
+    if (
+      this.connection &&
+      dispatcher &&
+      dispatcher.ZETA.ANSWER &&
+      (dispatcher.ZETA.ANSWER.sdp !== prevProps.dispatcher.ZETA.ANSWER.sdp ||
+        dispatcher.ZETA.ANSWER.type !== prevProps.dispatcher.ZETA.ANSWER.type)
+    ) {
+      await this.connection.setLocalDescription(
+        new RTCSessionDescription(dispatcher.ZETA.ANSWER),
+      );
+    }
   }
 
   initiateWebrtc = async (rtcId) => {
     const { dispatch } = this.props;
+    // set rtc token
     await dispatch(setUserBRtcId(rtcId));
     // create webrtc peer connection
     this.connection = new RTCPeerConnection(null);
-    const {
-      ALPHA: { OFFER },
-    } = await dispatch(fetchDispatcher('ZETA'));
-    await this.connection.setRemoteDescription(
-      new RTCSessionDescription(OFFER),
-    );
-    const answer = await this.connection.createAnswer();
-    await dispatch(update({ person: ZETA, type: ANSWER, value: answer }));
-    await this.connection.setLocalDescription(answer);
+    // fetch dispatcher
+    await dispatch(fetchDispatcher(ZETA));
+    // set remote connection
   };
 
   render() {
@@ -48,8 +82,9 @@ class ScanQR extends Component<Props> {
             className="form-control"
             placeholder="place id here"
             value={this.state.value}
-            onChange={async (e) => {
+            onChange={(e) => {
               this.setState({ value: e.target.value });
+              // initiate webrtc with rtc token
               this.initiateWebrtc(e.target.value);
             }}
           />
