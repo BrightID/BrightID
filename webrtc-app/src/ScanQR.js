@@ -4,8 +4,16 @@ import React, { Component } from 'react';
 import nacl from 'tweetnacl';
 import qrcode from 'qrcode';
 import { connect } from 'react-redux';
-import { setUserBRtcId } from './actions';
-import { fetchDispatcher, update, ZETA, ANSWER } from './actions/api';
+import { setUserBRtcId, setUserBDispatcher } from './actions';
+import {
+  fetchDispatcher,
+  update,
+  ZETA,
+  ANSWER,
+  ICE_CANDIDATE,
+} from './actions/api';
+import logging from './utils/logging';
+import { socket } from './websockets';
 
 type Props = {
   dispatch: Function,
@@ -23,56 +31,128 @@ class ScanQR extends Component<Props> {
   }
 
   async componentDidUpdate(prevProps) {
-    // generate a new qrcode if the rtcId value changes
-    const { dispatcher, dispatch } = this.props;
-    console.log(dispatcher);
-    // set remote description
-    // create answer
-    // send updated state to server
+    const { dispatcher } = this.props;
+    // set ice candidate
     if (
       this.connection &&
+      this.connection.remoteDescription &&
       dispatcher &&
-      dispatcher.ALPHA.OFFER &&
-      (dispatcher.ALPHA.OFFER.sdp !== prevProps.dispatcher.ALPHA.OFFER.sdp ||
-        dispatcher.ALPHA.OFFER.type !== prevProps.dispatcher.ALPHA.OFFER.type)
+      dispatcher.ALPHA.ICE_CANDIDATE &&
+      (dispatcher.ALPHA.ICE_CANDIDATE.candidate !==
+        prevProps.dispatcher.ALPHA.ICE_CANDIDATE.candidate ||
+        dispatcher.ALPHA.ICE_CANDIDATE.sdpMLineIndex !==
+          prevProps.dispatcher.ALPHA.ICE_CANDIDATE.sdpMLineIndex ||
+        dispatcher.ALPHA.ICE_CANDIDATE.sdpMid !==
+          prevProps.dispatcher.ALPHA.ICE_CANDIDATE.sdpMid)
     ) {
-      // set remote description
-      await this.connection.setRemoteDescription(
-        new RTCSessionDescription(dispatcher.ALPHA.OFFER),
-      );
-      // create answer
-      const answer = await this.connection.createAnswer();
-      // send answer to signal server
-      await dispatch(update({ person: ZETA, type: ANSWER, value: answer }));
-    }
-
-    // set local description
-    if (
-      this.connection &&
-      dispatcher &&
-      dispatcher.ZETA.ANSWER &&
-      (dispatcher.ZETA.ANSWER.sdp !== prevProps.dispatcher.ZETA.ANSWER.sdp ||
-        dispatcher.ZETA.ANSWER.type !== prevProps.dispatcher.ZETA.ANSWER.type)
-    ) {
-      await this.connection.setLocalDescription(
-        new RTCSessionDescription(dispatcher.ZETA.ANSWER),
+      console.log('UserB:');
+      console.log(dispatcher.ALPHA.ICE_CANDIDATE);
+      await this.connection.addIceCandidate(
+        new RTCIceCandidate(dispatcher.ALPHA.ICE_CANDIDATE),
       );
     }
   }
 
+  setRtcDescription = async (offer) => {
+    try {
+      const { dispatch } = this.props;
+      // set remote description
+      await this.connection.setRemoteDescription(
+        new RTCSessionDescription(offer),
+      );
+      // create answer
+      const answer = await this.connection.createAnswer();
+      // set local description
+      await this.connection.setLocalDescription(answer);
+      // send answer to signal server
+      await dispatch(update({ person: ZETA, type: ANSWER, value: answer }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   initiateWebrtc = async (rtcId) => {
+    try {
+      const { dispatch } = this.props;
+      // set rtc token
+      await dispatch(setUserBRtcId(rtcId));
+      // create webrtc peer connection
+      this.connection = new RTCPeerConnection(null);
+      logging(this.connection, 'UserB');
+      window.cb = this.connection;
+      // handle ice
+      this.connection.onicecandidate = this.updateIce;
+      // create data channel
+      this.connection.ondatachannel = this.updateChannel;
+      // fetch dispatcher
+      const dispatcher = await dispatch(fetchDispatcher(ZETA));
+      // return if error or no offer
+      if (dispatcher.error || !dispatcher.ALPHA.OFFER) return;
+      // set rtc description with offer
+      this.setRtcDescription(dispatcher.ALPHA.OFFER);
+      // initiate websockets
+      this.initiateWebSocket(rtcId);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  initiateWebSocket = async (rtcId) => {
+    // fetch initial rtc id from signaling server
     const { dispatch } = this.props;
-    // set rtc token
-    await dispatch(setUserBRtcId(rtcId));
-    // create webrtc peer connection
-    this.connection = new RTCPeerConnection(null);
-    // fetch dispatcher
-    await dispatch(fetchDispatcher(ZETA));
-    // set remote connection
+    // join websocket room
+    this.socket = socket();
+    this.socket.emit('join', rtcId);
+    // subscribe to update event
+    this.socket.on('update', (dispatcher) => {
+      // update redux store
+      console.log('socket io update user B');
+      console.log(dispatcher);
+      dispatch(setUserBDispatcher(dispatcher));
+    });
+  };
+
+  updateChannel = (event) => {
+    if (event.channel) {
+      this.channel = event.channel;
+      this.channel.onopen = () => {
+        console.log('user B channel opened');
+      };
+      this.channel.onclose = () => {
+        console.log('user B channel closed');
+      };
+      this.channel.onmessage = (e) => {
+        console.log(`user A recieved message ${e.data}`);
+        console.log(e);
+      };
+    }
+  };
+
+  updateIce = async (e) => {
+    try {
+      const { dispatch } = this.props;
+      if (e.candidate) {
+        /**
+         * update the signaling server dispatcher with ice candidate info
+         * @param person = ZETA
+         * @param type = ICE_CANDIDATE
+         * @param value = e.candidate
+         */
+
+        dispatch(
+          update({
+            person: ZETA,
+            type: ICE_CANDIDATE,
+            value: e.candidate,
+          }),
+        );
+      }
+    } catch (err) {
+      console.warn(err);
+    }
   };
 
   render() {
-    const { dispatch } = this.props;
     return (
       <div className="qrcode-screen">
         <div className="scan-text">copy / paste the qrcode</div>

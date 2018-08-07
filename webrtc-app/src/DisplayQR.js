@@ -9,10 +9,12 @@ import {
   update,
   OFFER,
   ALPHA,
+  ICE_CANDIDATE,
   fetchDispatcher,
 } from './actions/api';
 import { resetStore, setUserADispatcher } from './actions';
 import { socket } from './websockets';
+import logging from './utils/logging';
 
 type Props = {
   rtcId: string,
@@ -36,7 +38,6 @@ class DisplayQR extends Component<Props> {
     // fetch initial rtc id from signaling server
     const { dispatch } = this.props;
     const rtcId = await dispatch(createRTCId());
-    console.log(`displayQr ${rtcId}`);
     // generate qrcode with rtc id
     this.genQrCode();
     // initiate webrtc
@@ -47,7 +48,7 @@ class DisplayQR extends Component<Props> {
     // subscribe to update event
     this.socket.on('update', (dispatcher) => {
       // update redux store
-      console.log('socket io update');
+      console.log('socket io update User A');
       console.log(dispatcher);
       dispatch(setUserADispatcher(dispatcher));
     });
@@ -56,19 +57,7 @@ class DisplayQR extends Component<Props> {
   async componentDidUpdate(prevProps) {
     // generate a new qrcode if the rtcId value changes
     const { dispatcher } = this.props;
-    console.log(dispatcher);
-    // set local description
-    if (
-      this.connection &&
-      dispatcher &&
-      dispatcher.ALPHA.OFFER &&
-      (dispatcher.ALPHA.OFFER.sdp !== prevProps.dispatcher.ALPHA.OFFER.sdp ||
-        dispatcher.ALPHA.OFFER.type !== prevProps.dispatcher.ALPHA.OFFER.type)
-    ) {
-      await this.connection.setLocalDescription(
-        new RTCSessionDescription(dispatcher.ALPHA.OFFER),
-      );
-    }
+
     // set remote description
     if (
       this.connection &&
@@ -81,6 +70,24 @@ class DisplayQR extends Component<Props> {
         new RTCSessionDescription(dispatcher.ZETA.ANSWER),
       );
     }
+    // set ice candidate
+    if (
+      this.connection &&
+      dispatcher &&
+      dispatcher.ZETA.ICE_CANDIDATE &&
+      (dispatcher.ZETA.ICE_CANDIDATE.candidate !==
+        prevProps.dispatcher.ZETA.ICE_CANDIDATE.candidate ||
+        dispatcher.ZETA.ICE_CANDIDATE.sdpMLineIndex !==
+          prevProps.dispatcher.ZETA.ICE_CANDIDATE.sdpMLineIndex ||
+        dispatcher.ZETA.ICE_CANDIDATE.sdpMid !==
+          prevProps.dispatcher.ZETA.ICE_CANDIDATE.sdpMid)
+    ) {
+      console.log('UserA:');
+      console.log(dispatcher.ZETA.ICE_CANDIDATE);
+      await this.connection.addIceCandidate(
+        new RTCIceCandidate(dispatcher.ZETA.ICE_CANDIDATE),
+      );
+    }
   }
 
   componentWillUnmount() {
@@ -90,12 +97,62 @@ class DisplayQR extends Component<Props> {
 
   initiateWebrtc = async () => {
     const { dispatch } = this.props;
+    // create webrtc instance
     console.log('creating w3ebrtc data channel');
     this.connection = new RTCPeerConnection(null);
+    logging(this.connection, 'UserA');
+    window.ca = this.connection;
+    // handle ice
+    this.connection.onicecandidate = this.updateIce;
+    // create data channel
     this.channel = this.connection.createDataChannel('connect');
+    // handle channel events
+    this.updateChannel();
+    // create offer and set local connection
     console.log('creating offer');
     const offer = await this.connection.createOffer();
+    await this.connection.setLocalDescription(offer);
+    // update redux store
     await dispatch(update({ type: OFFER, person: ALPHA, value: offer }));
+  };
+
+  updateChannel = () => {
+    if (this.channel) {
+      this.channel.onopen = () => {
+        console.log('user A channel opened');
+      };
+      this.channel.onclose = () => {
+        console.log('user A channel closed');
+      };
+      this.channel.onmessage = (e) => {
+        console.log(`user A recieved message ${e.data}`);
+        console.log(e);
+      };
+    }
+  };
+
+  updateIce = async (e) => {
+    try {
+      const { dispatch } = this.props;
+      if (e.candidate) {
+        /**
+         * update the signaling server dispatcher with ice candidate info
+         * @param person = ZETA
+         * @param type = ICE_CANDIDATE
+         * @param value = e.candidate
+         */
+
+        dispatch(
+          update({
+            person: ALPHA,
+            type: ICE_CANDIDATE,
+            value: e.candidate,
+          }),
+        );
+      }
+    } catch (err) {
+      console.warn(err);
+    }
   };
 
   genQrCode = () => {

@@ -8,9 +8,11 @@ body {
   align-items: center;
   justify-content: center;
   flex-grow: 1;
-  height: 81vh;
+  height: 100vh;
   width: 100%;
-  overflow: scroll;
+  min-height: 500px;
+  overflow-y: scroll;
+  padding: 12px;
 }
 
 .device {
@@ -18,7 +20,7 @@ body {
   align-items: center;
   flex-direction: column;
   border: 12px solid black;
-  border-radius: 5px;
+  border-radius: 7px;
   margin: 15px;
   width: 360px;
   min-width: 200px;

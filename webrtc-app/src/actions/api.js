@@ -72,7 +72,9 @@ export const update = ({ type, person, value }) => async (
       return data;
     }
     const { dispatcher } = data;
+    console.log(dispatcher);
     // update redux store
+    // ONLY UPDATE REDUX STORE VIA SOCKET IO
     if (person === ALPHA) {
       dispatch(setUserADispatcher(dispatcher));
     } else if (person === ZETA) {
@@ -91,19 +93,19 @@ export const fetchDispatcher = (person) => async (
 ) => {
   try {
     let rtcId = null;
-    let waiting = null;
-    // check waiting status
-    if (person === ALPHA) {
-      waiting = getState().userA.waiting;
-    } else if (person === ZETA) {
-      waiting = getState().userB.waiting;
-    }
+    // let waiting = null;
+    // // check waiting status
+    // if (person === ALPHA) {
+    //   waiting = getState().userA.waiting;
+    // } else if (person === ZETA) {
+    //   waiting = getState().userB.waiting;
+    // }
     // do not send a network request if one is already in progress
     // if (waiting) {
     //   console.log('waiting');
     //   return null;
     // }
-    console.log('fetching dispatcher');
+
     // update redux store with network status
     if (person === ALPHA) {
       rtcId = getState().userA.rctId;
