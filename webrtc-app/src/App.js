@@ -24,7 +24,7 @@ class App extends Component {
             <Device user="UserA" />
             <Device user="UserB" />
           </div>
-          <WebRTC />
+          <div className="p-5">open dev tools for logging info</div>
         </div>
       </Provider>
     );
