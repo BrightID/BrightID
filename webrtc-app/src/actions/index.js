@@ -2,7 +2,8 @@ export const KEYS_USER_A = 'KEYS_USER_A';
 export const KEYS_USER_B = 'KEYS_USER_B';
 export const PUBLICKEY2 = 'PUBLICKEY2';
 export const PUBLICKEY3 = 'PUBLICKEY3';
-export const RESET_STORE = 'RESET_STORE';
+export const RESET_STORE_USER_A = 'RESET_STORE_USER_A';
+export const RESET_STORE_USER_B = 'RESET_STORE_USER_B';
 export const PAIRING_MESSAGE = 'PAIRING_MESSAGE';
 export const TIMESTAMP = 'TIMESTAMP';
 export const RTC_ID = 'RTC_ID';
@@ -37,8 +38,12 @@ export const setPairingMessage = ({ msg, msgStr, signedMsg }) => ({
   signedMsg,
 });
 
-export const resetStore = () => ({
-  type: RESET_STORE,
+export const resetUserAStore = () => ({
+  type: RESET_STORE_USER_A,
+});
+
+export const resetUserBStore = () => ({
+  type: RESET_STORE_USER_B,
 });
 
 export const setTimestamp = (timestamp) => ({

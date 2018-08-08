@@ -5,12 +5,7 @@ import nacl from 'tweetnacl';
 import { connect } from 'react-redux';
 // import JsonView from 'react-json-view';
 import logging from './utils/logging';
-import {
-  setPublicKey2,
-  resetStore,
-  setTimestamp,
-  setPublicKey3,
-} from './actions';
+import { setPublicKey2, setTimestamp, setPublicKey3 } from './actions';
 import { genMsg } from './actions/exchange';
 import { avatar } from './utils/toDataUrl';
 import {
@@ -478,7 +473,7 @@ class WebRTC extends Component<Props> {
 
   handleDisconnect = () => {
     // Close the RTCDataChannels if they're open
-    this.props.dispatch(resetStore());
+
     this.lcDataChannel.close();
     this.rcDataChannel.close();
 
