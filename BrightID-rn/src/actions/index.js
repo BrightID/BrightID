@@ -9,6 +9,9 @@ export const ADD_CONNECTION = 'ADD_CONNECTION';
 export const UPDATE_USER_DATA = 'UPDATE_USER_DATA';
 export const REMOVE_USER_DATA = 'REMOVE_USER_DATA';
 export const USER_AVATAR = 'USER_AVATAR';
+export const RTC_ID = 'RTC_ID';
+export const ARBITER = 'ARBITER';
+export const RESET_WEBRTC = 'RESET_WEBRTC';
 export const REFRESH_NEARBY_PEOPLE = 'REFRESH_NEARBY_PEOPLE';
 export const PUBLICKEY2 = 'PUBLICKEY2';
 export const ERROR = 'ERROR';
@@ -144,6 +147,40 @@ export const setUserAvatar = (userAvatar: string) => ({
 export const setPublicKey2 = (publicKey2: Uint8Array) => ({
   type: PUBLICKEY2,
   publicKey2,
+});
+
+/**
+ * redux action sets rtc token info necessary for webrtc data channel
+ * @param type RTC_ID
+ *  @param rtcId webrtc signalling object
+ */
+
+export const setRtcId = (rtcId: string) => ({
+  type: RTC_ID,
+  rtcId,
+});
+
+/**
+ * redux action sets arbiter info necessary for webrtc data channel
+ * @param type ARBITER
+ *  @param arbiter webrtc signalling object
+ */
+
+export const setArbiter = (arbiter: {
+  ALPHA: { OFFER: string, ICE_CONNECTION: string },
+  ZETA: { ANSWER: string, ICE_CONNECTION: string },
+}) => ({
+  type: ARBITER,
+  arbiter,
+});
+
+/**
+ * redux action reset webrtc connection info
+ * @param type RESET_WEBRTC
+ */
+
+export const resetWebrtc = () => ({
+  type: RESET_WEBRTC,
 });
 
 /**

@@ -14,7 +14,21 @@ import {
   USER_AVATAR,
   REFRESH_NEARBY_PEOPLE,
   PUBLICKEY2,
+  ARBITER,
+  RTC_ID,
+  RESET_WEBRTC,
 } from '../actions';
+
+const arbiterSchema = {
+  ALPHA: {
+    OFFER: '',
+    ICE_CANDIDATE: '',
+  },
+  ZETA: {
+    ANSWER: '',
+    ICE_CANDIDATE: '',
+  },
+};
 
 /**
  * INITIAL STATE
@@ -47,6 +61,8 @@ export const initialState = {
   publicKey: '',
   secretKey: '',
   publicKey2: '',
+  rtcId: '',
+  arbiter: arbiterSchema,
 };
 
 export const mainReducer = (state = initialState, action) => {
@@ -107,6 +123,22 @@ export const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         publicKey2: action.publicKey2,
+      };
+    case ARBITER:
+      return {
+        ...state,
+        arbiter: action.arbiter,
+      };
+    case RTC_ID:
+      return {
+        ...state,
+        rtcId: action.rtcId,
+      };
+    case RESET_WEBRTC:
+      return {
+        ...state,
+        rtcId: '',
+        arbiter: arbiterSchema,
       };
     default:
       return state;
