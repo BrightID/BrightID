@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import nacl from 'tweetnacl';
 import qrcode from 'qrcode';
 import { connect } from 'react-redux';
-import { setUserBRtcId, setUserBDispatcher } from './actions';
+import { resetUserBStore, setUserBRtcId, setUserBDispatcher } from './actions';
 import {
   fetchDispatcher,
   update,
@@ -14,6 +14,7 @@ import {
 } from './actions/api';
 import logging from './utils/logging';
 import { socket } from './websockets';
+import Chat from './Chat';
 
 type Props = {
   dispatch: Function,
@@ -24,6 +25,7 @@ class ScanQR extends Component<Props> {
     super(props);
     this.state = {
       value: '',
+      connecting: true,
     };
     this.connection = null;
     this.channel = null;
@@ -51,6 +53,26 @@ class ScanQR extends Component<Props> {
         new RTCIceCandidate(dispatcher.ALPHA.ICE_CANDIDATE),
       );
     }
+  }
+
+  componentWillUnmount() {
+    // close and remove webrtc connection
+    if (this.connection) {
+      this.connection.close();
+      this.connection = null;
+    }
+    // close data channel and remove
+    if (this.channel) {
+      this.channel.close();
+      this.channel = null;
+    }
+    // disconnect and remove socket
+    if (this.socket) {
+      this.socket.disconnect();
+      this.socket = null;
+    }
+    const { dispatch } = this.props;
+    dispatch(resetUserBStore());
   }
 
   setRtcDescription = async (offer) => {
@@ -117,6 +139,9 @@ class ScanQR extends Component<Props> {
       this.channel = event.channel;
       this.channel.onopen = () => {
         console.log('user B channel opened');
+        this.setState({
+          connecting: false,
+        });
       };
       this.channel.onclose = () => {
         console.log('user B channel closed');
@@ -152,23 +177,34 @@ class ScanQR extends Component<Props> {
     }
   };
 
+  renderDefault = () => (
+    <div>
+      <div className="scan-text">copy / paste the qrcode</div>
+      <div className="qr-input">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="place id here"
+          value={this.state.value}
+          onChange={(e) => {
+            this.setState({ value: e.target.value });
+            // initiate webrtc with rtc token
+            this.initiateWebrtc(e.target.value);
+          }}
+        />
+      </div>
+    </div>
+  );
+
   render() {
+    const { connecting } = this.state;
     return (
       <div className="qrcode-screen">
-        <div className="scan-text">copy / paste the qrcode</div>
-        <div className="qr-input">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="place id here"
-            value={this.state.value}
-            onChange={(e) => {
-              this.setState({ value: e.target.value });
-              // initiate webrtc with rtc token
-              this.initiateWebrtc(e.target.value);
-            }}
-          />
-        </div>
+        {connecting ? (
+          this.renderDefault()
+        ) : (
+          <Chat user="UserB" channel={this.channel} {...this.props} />
+        )}
       </div>
     );
   }

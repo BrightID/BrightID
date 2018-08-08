@@ -4,13 +4,24 @@ import {
   KEYS_USER_A,
   PAIRING_MESSAGE,
   PUBLICKEY2,
-  RESET_STORE,
+  RESET_STORE_USER_A,
   TIMESTAMP,
   PUBLICKEY3,
   DISPATCHER_USER_A,
   USER_A_WAITING,
   RTC_ID,
 } from '../actions';
+
+const schema = {
+  ALPHA: {
+    OFFER: '',
+    ICE_CANDIDATE: '',
+  },
+  ZETA: {
+    ANSWER: '',
+    ICE_CANDIDATE: '',
+  },
+};
 
 export const initialState = {
   publicKey: new Uint8Array(),
@@ -24,16 +35,7 @@ export const initialState = {
   signedMsg: '',
   rtcId: '',
   waiting: false,
-  dispatcher: {
-    ALPHA: {
-      OFFER: '',
-      ICE_CANDIDATE: '',
-    },
-    ZETA: {
-      ANSWER: '',
-      ICE_CANDIDATE: '',
-    },
-  },
+  dispatcher: schema,
 };
 
 export const reducer = (state = initialState, action) => {
@@ -84,7 +86,7 @@ export const reducer = (state = initialState, action) => {
         ...state,
         waiting: true,
       };
-    case RESET_STORE:
+    case RESET_STORE_USER_A:
       return {
         ...state,
         message: '',
@@ -96,6 +98,7 @@ export const reducer = (state = initialState, action) => {
         nameornym2: '',
         timestamp: '',
         rtcId: '',
+        dispatcher: schema,
       };
     default:
       return state;

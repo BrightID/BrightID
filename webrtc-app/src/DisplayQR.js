@@ -12,9 +12,10 @@ import {
   ICE_CANDIDATE,
   fetchDispatcher,
 } from './actions/api';
-import { resetStore, setUserADispatcher } from './actions';
+import { resetUserAStore, setUserADispatcher } from './actions';
 import { socket } from './websockets';
 import logging from './utils/logging';
+import Chat from './Chat';
 
 type Props = {
   rtcId: string,
@@ -27,6 +28,7 @@ class DisplayQR extends Component<Props> {
     super(props);
     this.state = {
       qrcode: '',
+      connecting: true,
     };
     // set up initial webrtc connection
     this.connection = null;
@@ -91,8 +93,23 @@ class DisplayQR extends Component<Props> {
   }
 
   componentWillUnmount() {
+    // close and remove webrtc connection
+    if (this.connection) {
+      this.connection.close();
+      this.connection = null;
+    }
+    // close data channel and remove
+    if (this.channel) {
+      this.channel.close();
+      this.channel = null;
+    }
+    // disconnect and remove socket
+    if (this.socket) {
+      this.socket.disconnect();
+      this.socket = null;
+    }
     const { dispatch } = this.props;
-    dispatch(resetStore());
+    dispatch(resetUserAStore());
   }
 
   initiateWebrtc = async () => {
@@ -120,6 +137,9 @@ class DisplayQR extends Component<Props> {
     if (this.channel) {
       this.channel.onopen = () => {
         console.log('user A channel opened');
+        this.setState({
+          connecting: false,
+        });
       };
       this.channel.onclose = () => {
         console.log('user A channel closed');
@@ -167,15 +187,26 @@ class DisplayQR extends Component<Props> {
     }
   };
 
+  renderDefault = () => (
+    <div className="qrcode-screen">
+      {' '}
+      <div
+        className="qrcode"
+        dangerouslySetInnerHTML={{ __html: this.state.qrcode }}
+      />
+      {this.props.rtcId}
+    </div>
+  );
+
   render() {
-    const { rtcId } = this.props;
+    const { connecting } = this.state;
     return (
       <div className="qrcode-screen">
-        <div
-          className="qrcode"
-          dangerouslySetInnerHTML={{ __html: this.state.qrcode }}
-        />
-        {rtcId}
+        {connecting ? (
+          this.renderDefault()
+        ) : (
+          <Chat user="UserA" channel={this.channel} {...this.props} />
+        )}
       </div>
     );
   }
