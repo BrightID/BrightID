@@ -108,6 +108,7 @@ class DisplayQR extends Component<Props> {
       this.socket.disconnect();
       this.socket = null;
     }
+    // clear polling interval
     const { dispatch } = this.props;
     dispatch(resetUserAStore());
   }
