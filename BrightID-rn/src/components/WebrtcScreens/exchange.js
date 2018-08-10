@@ -1,11 +1,9 @@
 // @flow
 
 import nacl from 'tweetnacl';
-import { strToUint8Array } from '../utils/encoding';
+import { strToUint8Array } from '../../utils/encoding';
 
-export const GENERATE_MESSAGE = 'GENERATE_MESSAGE';
-
-export const generateMessage = async (pk2: Object) => (
+export const generateMessage = async () => (
   dispatch: Function,
   getState: Function,
 ) => {
@@ -35,3 +33,5 @@ export const generateMessage = async (pk2: Object) => (
   // console.warn(publicKey instanceof Uint8Array);
   console.warn(`message status: ${verify}`);
 };
+
+export const random = 'random';

@@ -2,14 +2,14 @@ import * as React from 'react';
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import LinearGradient from 'react-native-linear-gradient';
 // import { LinearGradient } from 'expo';
-import HomeScreen from './components/HomeScreen';
+import { HomeScreen } from './components/HomeScreen';
 import ConnectionsScreen from './components/ConnectionsScreen';
-import GroupsScreen from './components/GroupsScreen';
-import Onboard from './components/Onboard';
-import SignUp from './components/SignUp';
-import QRCodeScannerScreen from './components/QRCodeScannerScreen';
-import NewConnectionScreen from './components/NewConnectionScreen';
-import DisplayQRCodeScreen from './components/DisplayQRCodeScreen';
+import GroupsScreen from './components/GroupsScreens/GroupsScreen';
+import Onboard from './components/OnboardingScreens/Onboard';
+import SignUp from './components/OnboardingScreens/SignUp';
+import QRCodeScannerScreen from './components/WebrtcScreens/QRCodeScannerScreen';
+import NewConnectionScreen from './components/WebrtcScreens/NewConnectionScreen';
+import DisplayQRCodeScreen from './components/WebrtcScreens/DisplayQRCodeScreen';
 import AppBootstrap from './AppBootstrap';
 
 /**
