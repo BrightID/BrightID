@@ -13,7 +13,9 @@ import {
   REMOVE_USER_DATA,
   USER_AVATAR,
   REFRESH_NEARBY_PEOPLE,
-  PUBLICKEY2,
+  CONNECT_PUBLICKEY,
+  CONNECT_NAMEORNYM,
+  CONNECT_TIMESTAMP,
   ARBITER,
   RTC_ID,
   RESET_WEBRTC,
@@ -60,7 +62,9 @@ export const initialState = {
   nearbyPeople: [],
   publicKey: '',
   secretKey: '',
-  publicKey2: '',
+  connectNameornym: '',
+  connectPublicKey: '',
+  connectTimestamp: '',
   rtcId: '',
   arbiter: arbiterSchema,
 };
@@ -119,10 +123,20 @@ export const mainReducer = (state = initialState, action) => {
         ...state,
         nearbyPeople: action.nearbyPeople,
       };
-    case PUBLICKEY2:
+    case CONNECT_PUBLICKEY:
       return {
         ...state,
-        publicKey2: action.publicKey2,
+        connectPublicKey: action.publicKey,
+      };
+    case CONNECT_NAMEORNYM:
+      return {
+        ...state,
+        connectNameornym: action.nameornym,
+      };
+    case CONNECT_TIMESTAMP:
+      return {
+        ...state,
+        connectTimestamp: action.timestamp,
       };
     case ARBITER:
       return {
