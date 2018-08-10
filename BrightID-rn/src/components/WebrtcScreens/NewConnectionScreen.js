@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
-import Connect from './Connect';
 
 /**
  * Connection screen of BrightID
@@ -44,7 +43,6 @@ class NewConnectionScreen extends React.Component<Props> {
         >
           <Text style={styles.buttonText}>Scan QR Code</Text>
         </TouchableOpacity>
-        <Connect navigation={this.props.navigation} />
       </View>
     );
   }

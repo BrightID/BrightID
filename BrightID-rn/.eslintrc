@@ -33,6 +33,7 @@
     "react/jsx-one-expression-per-line": "off",
     "consistent-return": "off",
     "no-alert": "off",
-    "no-else-return": "off"
+    "no-else-return": "warn",
+    "no-unused-vars": "warn"
   }
 }

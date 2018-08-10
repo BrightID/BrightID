@@ -54,7 +54,7 @@ class Onboard extends React.Component<Props> {
 
   componentDidMount() {
     Dimensions.addEventListener('change', (e) => {
-      console.tron.log(e);
+      console.warn(e);
       this.setState({
         winHeight: e.window.height,
         winWidth: e.window.width,
