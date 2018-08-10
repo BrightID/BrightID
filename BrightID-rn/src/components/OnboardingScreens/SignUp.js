@@ -17,7 +17,7 @@ import ImagePicker from 'react-native-image-picker';
 import { connect } from 'react-redux';
 import HeaderButtons from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { setUserData } from '../actions';
+import { setUserData } from '../../actions';
 
 type Props = {
   dispatch: Function,

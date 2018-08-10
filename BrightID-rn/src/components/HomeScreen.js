@@ -114,30 +114,37 @@ export class HomeScreen extends React.Component<Props> {
   });
 
   render() {
+    const {
+      navigation,
+      nameornym,
+      trustScore,
+      connections,
+      groupsCount,
+    } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.mainContainer}>
           <View style={styles.user}>
             <UserAvatar />
             <Text id="nameornym" style={styles.name}>
-              {this.props.nameornym}
+              {nameornym}
             </Text>
           </View>
           <View style={styles.trustScoreContainer}>
             <Text id="trustScore" style={styles.trustScore}>
-              {this.props.trustScore}% Trusted
+              {trustScore}% Trusted
             </Text>
           </View>
           <View style={styles.countsContainer}>
             <View style={styles.countsGroup}>
               <Text id="connectionsCount" style={styles.countsNumberText}>
-                {this.props.connections.length || 0}
+                {(connections && connections.length) || 0}
               </Text>
               <Text style={styles.countsDescriptionText}>Connections</Text>
             </View>
             <View style={styles.countsGroup}>
               <Text id="groupsCount" style={styles.countsNumberText}>
-                {this.props.groupsCount || 0}
+                {groupsCount || 0}
               </Text>
               <Text style={styles.countsDescriptionText}>Groups</Text>
             </View>
@@ -147,7 +154,7 @@ export class HomeScreen extends React.Component<Props> {
             <TouchableOpacity
               style={styles.connectButton}
               onPress={() => {
-                this.props.navigation.navigate('NewConnection');
+                navigation.navigate('NewConnection');
               }}
               accessible={true}
               accessibilityLabel="Connect"
@@ -158,7 +165,7 @@ export class HomeScreen extends React.Component<Props> {
           </View>
         </View>
 
-        <BottomNav navigation={this.props.navigation} />
+        <BottomNav navigation={navigation} />
       </View>
     );
   }

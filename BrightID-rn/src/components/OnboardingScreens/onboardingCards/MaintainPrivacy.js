@@ -3,10 +3,7 @@
 import * as React from 'react';
 import { StyleSheet, Image, Text, View } from 'react-native';
 
-type Props = {
-  winHeight: number,
-  winWidth: number,
-};
+type Props = {};
 
 export default class MaintainPrivacy extends React.Component<Props> {
   render() {
@@ -22,7 +19,7 @@ export default class MaintainPrivacy extends React.Component<Props> {
       >
         <View style={styles.top}>
           <Image
-            source={require('../../static/icons8-anonymous-mask-96.png')}
+            source={require('../../../static/icons8-anonymous-mask-96.png')}
             style={styles.guyFox}
           />
           <Text style={styles.mainText}>Maintain Privacy</Text>

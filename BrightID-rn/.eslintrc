@@ -31,9 +31,12 @@
     "react/require-default-props": "off",
     "react/jsx-boolean-value": "off",
     "react/jsx-one-expression-per-line": "off",
+    "react/no-unused-prop-types": "warn",
+    "react/no-unused-state": "warn",
     "consistent-return": "off",
     "no-alert": "off",
     "no-else-return": "warn",
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "no-shadow": "warn"
   }
 }
