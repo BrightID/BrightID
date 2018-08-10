@@ -20,6 +20,7 @@ import {
   ICE_CANDIDATE,
   fetchArbiter,
 } from '../actions/api';
+import { handleRecievedMessage } from '../actions/webrtc';
 import { resetWebrtc } from '../actions';
 /**
  * Connection screen of BrightID
@@ -152,6 +153,7 @@ class DisplayQRCodeScreen extends React.Component<Props, State> {
   };
 
   updateChannel = () => {
+    const { dispatch } = this.props;
     if (this.channel) {
       this.channel.onopen = () => {
         console.warn('user A channel opened');
@@ -162,9 +164,13 @@ class DisplayQRCodeScreen extends React.Component<Props, State> {
       this.channel.onclose = () => {
         console.warn('user A channel closed');
       };
+      /**
+       * recieve webrtc messages here
+       * pass data along to action creator in ../actions/webrtc
+       */
       this.channel.onmessage = (e) => {
         console.warn(`user A recieved message ${e.data}`);
-        console.warn(e);
+        dispatch(handleRecievedMessage(e.data));
       };
     }
   };

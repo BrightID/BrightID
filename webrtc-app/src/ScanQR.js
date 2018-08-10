@@ -107,6 +107,7 @@ class ScanQR extends Component<Props> {
       // create data channel
       this.connection.ondatachannel = this.updateChannel;
       // fetch dispatcher
+      this.connection.oniceconnectionstatechange = this.handleIce;
       const dispatcher = await dispatch(fetchDispatcher(ZETA));
       // return if error or no offer
       if (dispatcher.error || !dispatcher.ALPHA.OFFER) return;
@@ -174,6 +175,21 @@ class ScanQR extends Component<Props> {
       }
     } catch (err) {
       console.warn(err);
+    }
+  };
+
+  handleIce = () => {
+    if (this.connection) {
+      const { iceConnectionState } = this.connection;
+      console.log(`user b ice connection state ${iceConnectionState}`);
+      if (
+        iceConnectionState === 'failed' ||
+        iceConnectionState === 'disconnected'
+      ) {
+        this.setState({
+          connecting: true,
+        });
+      }
     }
   };
 

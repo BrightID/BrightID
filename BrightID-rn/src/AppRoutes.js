@@ -12,6 +12,15 @@ import NewConnectionScreen from './components/NewConnectionScreen';
 import DisplayQRCodeScreen from './components/DisplayQRCodeScreen';
 import AppBootstrap from './AppBootstrap';
 
+/**
+ * This is BrightID's router, written with React-Navigation
+ * Here's the app flow:
+ * bootstrap component loads user data from async storage
+ * this determines whether to navigate to the onboarding or app stack
+ * the onboarding stack contains an intro screen, and a screen for uploading a photo and creating a user name
+ * the appstack contains most of the app
+ */
+
 const AppStack = createStackNavigator(
   {
     Home: {

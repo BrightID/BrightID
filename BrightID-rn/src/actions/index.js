@@ -13,7 +13,10 @@ export const RTC_ID = 'RTC_ID';
 export const ARBITER = 'ARBITER';
 export const RESET_WEBRTC = 'RESET_WEBRTC';
 export const REFRESH_NEARBY_PEOPLE = 'REFRESH_NEARBY_PEOPLE';
-export const PUBLICKEY2 = 'PUBLICKEY2';
+export const CONNECT_PUBLICKEY = 'CONNECT_PUBLICKEY';
+export const CONNECT_NAMEORNYM = 'CONNECT_NAMEORNYM';
+export const CONNECT_TIMESTAMP = 'CONNECT_TIMESTAMP';
+export const CONNECT_AVATAR = 'CONNECT_AVATAR';
 export const ERROR = 'ERROR';
 
 /**
@@ -139,14 +142,36 @@ export const setUserAvatar = (userAvatar: string) => ({
 });
 
 /**
- * redux action creator for setting public key 2
- * @param type PUBLICKEY2
- * @param publicKey2 public key of new user while adding a new connection
+ * redux action creator for setting the public key of the user you are currently connecting with via webrtc
+ * @param type CONNECT_PUBLICKEY
+ * @param publicKey public key of new user while adding a new connection
  */
 
-export const setPublicKey2 = (publicKey2: Uint8Array) => ({
-  type: PUBLICKEY2,
-  publicKey2,
+export const setConnectPublicKey = (publicKey: Uint8Array) => ({
+  type: CONNECT_PUBLICKEY,
+  publicKey,
+});
+
+/**
+ * redux action creator for setting the nameornym of the user you are currently connecting with via webrtc
+ * @param type CONNECT_NAMEORNYM
+ * @param nameornym - nameornym of new user while adding a new connection
+ */
+
+export const setConnectNameornym = (nameornym: string) => ({
+  type: CONNECT_NAMEORNYM,
+  nameornym,
+});
+
+/**
+ * redux action creator for setting the timestamp used while forming a new connection with a user
+ * @param type CONNECT_TIMESTAMP
+ * @param  timestamp - unix timestamp of used for generating a message while forming a new connection
+ */
+
+export const setConnectTimestamp = (timestamp: number) => ({
+  type: CONNECT_TIMESTAMP,
+  timestamp,
 });
 
 /**
