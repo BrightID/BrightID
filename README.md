@@ -8,7 +8,7 @@
 
 BrightID uses the people you know (a trust graph) to enforce one-account-per-person for important applications like voting and universal basic income.
 
-A BrightID proves that you're a unique person.
+A BrightID proves you're a unique person.
 
 BrightIDs have the following characteristics:
 * Can be used anonymously. [No personal data or biometrics are used for verification](https://www.brightid.org/faq).
