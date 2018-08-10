@@ -6,14 +6,14 @@ import { connect } from 'react-redux';
 // import Permissions from 'react-native-permissions'
 import { RNCamera } from 'react-native-camera';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { generateMessage } from '../actions/exchange';
+import { generateMessage } from './exchange';
 
 /**
  * Connection screen of BrightID
  */
 
 type Props = {
-  navigation: { navigate: Function },
+  dispatch: Function,
 };
 
 type State = {
@@ -40,51 +40,57 @@ class QRCodeScannerScreen extends React.Component<Props, State> {
   }
 
   handleBarCodeRead = ({ type, data }) => {
-    // generate Message after scanning qrcode
-    this.setState({ qrData: data, dataFound: true });
+    // TODO - CHANGE THIS
+    const { dispatch } = this.props;
+
     if (!this.state.dataFound) {
       // Alert.alert(data);
       //
       console.warn(data);
-      this.props.dispatch(generateMessage(data));
+      dispatch(generateMessage(data));
     }
+    // only scan code once
+    // this is a hack, TODO: CHANGE THIS
+    this.setState({ qrData: data, dataFound: true });
   };
 
   render() {
     const { hasCameraPermission } = this.state;
+    // conditionally return different views
+    // if no camera permission.. render error screen
+    // TODO: ask user for camera permissions
     if (hasCameraPermission === null) {
       return (
         <View style={styles.container}>
           <Text>Requesting for camera permission</Text>
         </View>
       );
-    } else if (hasCameraPermission === false) {
+    }
+    if (hasCameraPermission === false) {
       return (
         <View style={styles.container}>
           <Text>No access to camera</Text>
         </View>
       );
-    } else {
-      return (
-        <View style={styles.container}>
-          <RNCamera
-            ref={(ref) => {
-              this.camera = ref;
-            }}
-            style={styles.preview}
-            onBarCodeRead={this.handleBarCodeRead}
-            type={RNCamera.Constants.Type.back}
-            flashMode={RNCamera.Constants.FlashMode.off}
-            permissionDialogTitle={'Permission to use camera'}
-            permissionDialogMessage={
-              'We need your permission to use your camera phone'
-            }
-          >
-            <Ionicons name="ios-qr-scanner" size={223} color="#F76B1C" />
-          </RNCamera>
-        </View>
-      );
     }
+    // else
+    return (
+      <View style={styles.container}>
+        <RNCamera
+          ref={(ref) => {
+            this.camera = ref;
+          }}
+          style={styles.preview}
+          onBarCodeRead={this.handleBarCodeRead}
+          type={RNCamera.Constants.Type.back}
+          flashMode={RNCamera.Constants.FlashMode.off}
+          permissionDialogTitle="Permission to use camera"
+          permissionDialogMessage="We need your permission to use your camera phone"
+        >
+          <Ionicons name="ios-qr-scanner" size={223} color="#F76B1C" />
+        </RNCamera>
+      </View>
+    );
   }
 }
 

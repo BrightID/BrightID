@@ -11,7 +11,7 @@ import {
   RTCIceCandidate,
 } from 'react-native-webrtc';
 // import { generateMessage } from '../actions/exchange';
-import logging from '../utils/logging';
+import logging from '../../utils/logging';
 import {
   createRTCId,
   update,
@@ -19,9 +19,10 @@ import {
   ALPHA,
   ICE_CANDIDATE,
   fetchArbiter,
-} from '../actions/api';
-import { handleRecievedMessage } from '../actions/webrtc';
-import { resetWebrtc } from '../actions';
+  handleRecievedMessage,
+} from './webrtc';
+
+import { resetWebrtc } from '../../actions';
 /**
  * Connection screen of BrightID
  */

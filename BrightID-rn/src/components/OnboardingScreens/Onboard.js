@@ -25,7 +25,6 @@ import MaintainPrivacy from './onboardingCards/MaintainPrivacy';
 /* ======================================== */
 
 const winWidth = Dimensions.get('window').width;
-const winHeight = Dimensions.get('window').height;
 const statusBarHeight = getStatusBarHeight();
 
 /* Onboarding Screen */
@@ -46,49 +45,48 @@ class Onboard extends React.Component<Props> {
     this.state = {
       activeSlide: 0,
       entries: [...Array(4)],
-      winHeight,
       winWidth,
-      statusBarHeight,
     };
   }
 
   componentDidMount() {
+    // watch for device rotation
     Dimensions.addEventListener('change', (e) => {
       console.warn(e);
       this.setState({
-        winHeight: e.window.height,
         winWidth: e.window.width,
-        statusBarHeight: getStatusBarHeight(),
       });
     });
   }
 
   componentWillUnmount() {
+    // remove event listener
     Dimensions.removeEventListener('change');
   }
 
   renderItem = ({ item, index }) => (
+    // slide item
     <View key={index} style={styles.onboardingCards}>
       <MaintainPrivacy />
     </View>
   );
 
   render() {
-    const { activeSlide, entries } = this.state;
+    const { activeSlide, entries, winWidth } = this.state;
     return (
       <View style={styles.container}>
         <StatusBar
           barStyle="dark-content"
-          backgroundColor={'#fff'}
+          backgroundColor="#fff"
           translucent={false}
         />
         <View style={styles.carousel}>
           <Carousel
-            data={this.state.entries}
+            data={entries}
             renderItem={this.renderItem}
             layout="default"
-            sliderWidth={this.state.winWidth}
-            itemWidth={this.state.winWidth - 40}
+            sliderWidth={winWidth}
+            itemWidth={winWidth - 40}
             onSnapToItem={(index) => this.setState({ activeSlide: index })}
           />
         </View>

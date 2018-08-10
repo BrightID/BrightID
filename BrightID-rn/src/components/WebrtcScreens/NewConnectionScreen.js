@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 
 type Props = {
   navigation: { navigate: Function },
+  dispatch: Function,
 };
 
 class NewConnectionScreen extends React.Component<Props> {

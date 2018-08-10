@@ -24,6 +24,7 @@ type Props = {
     id: number,
   }>,
   searchParam: string,
+  eligibleGroups: number,
 };
 
 class ConnectionsScreen extends React.Component<Props> {

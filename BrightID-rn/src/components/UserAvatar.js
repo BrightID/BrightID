@@ -19,9 +19,7 @@ type Props = {
 class UserAvatar extends React.Component<Props> {
   render() {
     let { userAvatar } = this.props;
-    userAvatar = userAvatar
-      ? userAvatar
-      : require('../static/default_avatar.jpg');
+    userAvatar = userAvatar || require('../static/default_avatar.jpg');
     return (
       <View style={styles.container}>
         <Image source={userAvatar} style={styles.avatar} />
