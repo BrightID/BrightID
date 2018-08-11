@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 /**
  * Connection screen of BrightID
+ * TODO: Add Connection screens
  */
 
 type Props = {
@@ -19,31 +20,61 @@ class NewConnectionScreen extends React.Component<Props> {
     headerRight: <View />,
   };
 
+  state = {
+    display: 'qrcode',
+  };
+
   render() {
+    const { display } = this.state;
+    // boolean for displaying button styles
+    const qr = display === 'qrcode';
+
     return (
       <View style={styles.container}>
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity
+            style={qr ? styles.buttonActive : styles.buttonDefault}
+            accessible={true}
+            accessibilityLabel="My Code"
+            disabled={qr}
+            onPress={() => {
+              // display qrcode
+              this.setState({
+                display: 'qrcode',
+              });
+            }}
+          >
+            <Text
+              style={qr ? styles.buttonTextActive : styles.buttonTextDefault}
+            >
+              My Code
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={!qr ? styles.buttonActive : styles.buttonDefault}
+            accessible={true}
+            accessibilityLabel="Scan Code"
+            disabled={!qr}
+            onPress={() => {
+              // display qrcode scanner
+              this.setState({
+                display: 'scanner',
+              });
+            }}
+          >
+            <Text
+              style={!qr ? styles.buttonTextActive : styles.buttonTextDefault}
+            >
+              Scan Code
+            </Text>
+          </TouchableOpacity>
+        </View>
         <Text style={styles.makeConnectionTitle}>How to make a connection</Text>
         <Text style={styles.infoText}>
           To make a connection between two people, one person needs to display a
           QR code, and the other needs to scan it with their phone's camera.
           Please select one of the options below:
         </Text>
-        <TouchableOpacity
-          style={styles.displayQR}
-          onPress={() => {
-            this.props.navigation.navigate('DisplayQRCode');
-          }}
-        >
-          <Text style={styles.buttonText}>Display QR Code</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.scanQR}
-          onPress={() => {
-            this.props.navigation.navigate('QRCodeScanner');
-          }}
-        >
-          <Text style={styles.buttonText}>Scan QR Code</Text>
-        </TouchableOpacity>
       </View>
     );
   }
@@ -57,43 +88,42 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
   },
-  infoText: {
+  buttonsContainer: {
+    height: 55,
+    width: '100%',
+    flexDirection: 'row',
+  },
+  buttonDefault: {
+    width: '50%',
+    height: 52,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderColor: '#e3e0e0',
+  },
+  buttonActive: {
+    width: '50%',
+    height: 52,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f1c6b9',
+  },
+  buttonTextDefault: {
+    color: '#4a4a4a',
     fontFamily: 'ApexNew-Book',
     fontSize: 16,
-    marginTop: 16,
-    width: '90%',
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
   },
-  makeConnectionTitle: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 23,
-    shadowColor: 'rgba(0,0,0,0.32)',
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    marginTop: 22,
-  },
-  displayQR: {
-    borderWidth: 1,
-    borderColor: '#4990e2',
-    paddingTop: 13,
-    paddingBottom: 12,
-    width: '83.33%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  scanQR: {
-    borderWidth: 1,
-    borderColor: '#4990e2',
-    paddingTop: 13,
-    paddingBottom: 12,
-    width: '83.33%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  buttonText: {
+  buttonTextActive: {
+    color: '#4a4a4a',
     fontFamily: 'ApexNew-Medium',
-    color: '#4990e2',
+    fontSize: 16,
+    fontWeight: '500',
+    fontStyle: 'normal',
+    letterSpacing: 0,
   },
 });
 
