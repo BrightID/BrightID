@@ -37,7 +37,7 @@ type State = {
   qrsvg: string,
 };
 
-class DisplayQRCodeScreen extends React.Component<Props, State> {
+class MyCodeScreen extends React.Component<Props, State> {
   static navigationOptions = {
     title: 'QR Code',
     headerRight: <View />,
@@ -235,11 +235,13 @@ class DisplayQRCodeScreen extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
     backgroundColor: '#fdfdfd',
+    // backgroundColor: 'blue',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
   },
 });
 
-export default connect((state) => state.main)(DisplayQRCodeScreen);
+export default connect((state) => state.main)(MyCodeScreen);

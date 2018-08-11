@@ -21,7 +21,7 @@ type State = {
   type: string,
 };
 
-class QRCodeScannerScreen extends React.Component<Props, State> {
+class ScanCodeScreen extends React.Component<Props, State> {
   static navigationOptions = {
     title: 'Scan QR code',
     headerRight: <View />,
@@ -66,6 +66,7 @@ class QRCodeScannerScreen extends React.Component<Props, State> {
         </View>
       );
     }
+
     if (hasCameraPermission === false) {
       return (
         <View style={styles.container}>
@@ -101,6 +102,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
+    width: '100%',
   },
   preview: {
     ...StyleSheet.absoluteFillObject,
@@ -109,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(QRCodeScannerScreen);
+export default connect((state) => state.main)(ScanCodeScreen);

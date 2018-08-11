@@ -3,10 +3,13 @@
 import * as React from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
+import MyCodeScreen from './MyCodeScreen';
+import ScanCodeScreen from './ScanCodeScreen';
 
 /**
  * Connection screen of BrightID
- * TODO: Add Connection screens
+ *
+ * renders MyCodeScreen / ScanCodeScreen
  */
 
 type Props = {
@@ -27,6 +30,7 @@ class NewConnectionScreen extends React.Component<Props> {
   render() {
     const { display } = this.state;
     // boolean for displaying button styles
+    // conditionally render MyCodeScreen
     const qr = display === 'qrcode';
 
     return (
@@ -69,12 +73,7 @@ class NewConnectionScreen extends React.Component<Props> {
             </Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.makeConnectionTitle}>How to make a connection</Text>
-        <Text style={styles.infoText}>
-          To make a connection between two people, one person needs to display a
-          QR code, and the other needs to scan it with their phone's camera.
-          Please select one of the options below:
-        </Text>
+        {qr ? <MyCodeScreen /> : <ScanCodeScreen />}
       </View>
     );
   }
@@ -83,6 +82,7 @@ class NewConnectionScreen extends React.Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
     backgroundColor: '#fdfdfd',
     alignItems: 'center',
     flexDirection: 'column',
