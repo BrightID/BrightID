@@ -37,6 +37,7 @@
     "no-alert": "off",
     "no-else-return": "warn",
     "no-unused-vars": "warn",
-    "no-shadow": "warn"
+    "no-shadow": "warn",
+    "import/no-named-as-default": "off"
   }
 }
