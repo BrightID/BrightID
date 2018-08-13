@@ -95,12 +95,12 @@ class SignUp extends React.Component<Props, State> {
             }),
           1001,
         );
-        console.warn('ImagePicker Error: ', response.error);
+        console.log('ImagePicker Error: ', response.error);
       } else if (response.customButton === 'defaultAvatar') {
         this.setState({
           userAvatar: 'https://commons.wikimedia.org/wiki/File:PICA.jpg',
         });
-        console.warn('User tapped custom button: ', response.customButton);
+        console.log('User tapped custom button: ', response.customButton);
       } else {
         const imageData = { uri: `data:image/jpeg;base64,${response.data}` };
 
@@ -140,7 +140,7 @@ class SignUp extends React.Component<Props, State> {
       navigation.navigate('App');
       // catch any errors with saving data or generating the public / private key
     } catch (err) {
-      console.warn(err);
+      console.log(err);
     }
   };
 

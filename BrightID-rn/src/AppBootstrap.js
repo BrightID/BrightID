@@ -46,7 +46,7 @@ export default class AppBootstrap extends React.Component<Props> {
       // once everything is set up
       this.props.navigation.navigate(userData ? 'App' : 'Onboarding');
     } catch (err) {
-      console.warn(err);
+      console.log(err);
     }
   };
 

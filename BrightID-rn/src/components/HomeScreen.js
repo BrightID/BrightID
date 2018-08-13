@@ -60,7 +60,7 @@ export class HomeScreen extends React.Component<Props> {
                       await AsyncStorage.removeItem('userData');
                       store.dispatch(removeUserData());
                     } catch (err) {
-                      console.warn(err);
+                      console.log(err);
                     }
                   },
                 },
@@ -100,7 +100,7 @@ export class HomeScreen extends React.Component<Props> {
                       await AsyncStorage.removeItem('userData');
                       store.dispatch(removeUserData());
                     } catch (err) {
-                      console.warn(err);
+                      console.log(err);
                     }
                   },
                 },

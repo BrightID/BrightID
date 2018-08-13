@@ -3,12 +3,12 @@
 export default function logging(connection, type) {
   connection.onsignalingstatechange = () => {
     if (connection)
-      console.warn(`${type} signaling state:`, connection.signalingState);
+      console.log(`${type} signaling state:`, connection.signalingState);
   };
 
   connection.oniceconnectionstatechange = () => {
     if (connection)
-      console.warn(
+      console.log(
         `${type} ice connection state: `,
         connection.iceConnectionState,
       );
@@ -16,63 +16,63 @@ export default function logging(connection, type) {
 
   connection.onicegatheringstatechange = () => {
     if (connection)
-      console.warn(
+      console.log(
         `${type} ice gathering state: `,
         connection.iceGatheringState,
       );
   };
 
   connection.onaddstream = (e) => {
-    console.warn('onaddstream');
-    console.warn(e);
+    console.log('onaddstream');
+    console.log(e);
   };
 
   connection.onconnectionstatechange = (e) => {
-    console.warn('onaddstream');
-    console.warn(e);
+    console.log('onaddstream');
+    console.log(e);
   };
 
   connection.onidentityresult = (e) => {
-    console.warn('onidentityresult');
-    console.warn(e);
+    console.log('onidentityresult');
+    console.log(e);
   };
 
   connection.onidpassertionerror = (e) => {
-    console.warn('onidpassertionerror');
-    console.warn(e);
+    console.log('onidpassertionerror');
+    console.log(e);
   };
 
   connection.onidpvalidationerror = (e) => {
-    console.warn('onidpvalidationerror');
-    console.warn(e);
+    console.log('onidpvalidationerror');
+    console.log(e);
   };
 
   connection.onpeeridentity = (e) => {
-    console.warn('onpeeridentity');
-    console.warn(e);
+    console.log('onpeeridentity');
+    console.log(e);
   };
 
   connection.onremovestream = (e) => {
-    console.warn('onremovestream');
-    console.warn(e);
+    console.log('onremovestream');
+    console.log(e);
   };
 
   connection.ontrack = (e) => {
-    console.warn('ontrack');
-    console.warn(e);
+    console.log('ontrack');
+    console.log(e);
   };
 
   connection.onnegotiationneeded = async () => {
     try {
       // const offer2 = await lc.createOffer();
-      console.warn('onnegotiationneeded');
+      console.log('onnegotiationneeded');
       // await lc.setLocalDescription(offer2);
       // await rc.setRemoteDescription(offer2);
       // const answer2 = await rc.createAnswer();
       // await rc.setLocalDescription(answer2);
       // await lc.setRemoteDescription(answer2);
     } catch (err) {
-      console.warn(err);
+      console.log(err);
     }
   };
 }

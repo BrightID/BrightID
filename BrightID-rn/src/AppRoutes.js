@@ -8,6 +8,7 @@ import GroupsScreen from './components/GroupsScreens/GroupsScreen';
 import Onboard from './components/OnboardingScreens/Onboard';
 import SignUp from './components/OnboardingScreens/SignUp';
 import NewConnectionScreen from './components/WebrtcScreens/NewConnectionScreen';
+import RtcAnswerScreen from './components/WebrtcScreens/RtcAnswerScreen';
 import AppBootstrap from './AppBootstrap';
 
 /**
@@ -32,6 +33,9 @@ const AppStack = createStackNavigator(
     },
     NewConnection: {
       screen: NewConnectionScreen,
+    },
+    RtcAnswer: {
+      screen: RtcAnswerScreen,
     },
   },
   {

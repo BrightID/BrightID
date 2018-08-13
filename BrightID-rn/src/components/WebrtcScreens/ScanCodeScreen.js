@@ -6,10 +6,15 @@ import { connect } from 'react-redux';
 // import Permissions from 'react-native-permissions'
 import { RNCamera } from 'react-native-camera';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { generateMessage } from './exchange';
+import { setRtcId } from '../../actions';
 
 /**
- * Connection screen of BrightID
+ * Scan code screen of BrightID
+ * ==================================================================
+ * displays a react-native-camera view
+ * after scanning qrcode - ab RTC channel is established with rtcId credentials
+ * when unmounted - the RTC connection is removed
+ *
  */
 
 type Props = {
@@ -22,14 +27,8 @@ type State = {
 };
 
 class ScanCodeScreen extends React.Component<Props, State> {
-  static navigationOptions = {
-    title: 'Scan QR code',
-    headerRight: <View />,
-  };
-
   state = {
     hasCameraPermission: '',
-    dataFound: false,
   };
 
   componentDidMount() {
@@ -41,40 +40,27 @@ class ScanCodeScreen extends React.Component<Props, State> {
 
   handleBarCodeRead = ({ type, data }) => {
     // TODO - CHANGE THIS
-    const { dispatch } = this.props;
+    const { dispatch, navigation } = this.props;
+    console.warn(`type: ${type}`);
+    console.warn(`data: ${data}`);
+    // set rtc id url into redux store
+    if (data && data.length > 5 && data.length < 15) dispatch(setRtcId(data));
 
-    if (!this.state.dataFound) {
-      // Alert.alert(data);
-      //
-      console.warn(data);
-      dispatch(generateMessage(data));
-    }
-    // only scan code once
-    // this is a hack, TODO: CHANGE THIS
-    this.setState({ qrData: data, dataFound: true });
+    // switch to RtcAnswerScreen
+    navigation.navigate('RtcAnswer');
+    // if (!this.state.dataFound) {
+    //   // Alert.alert(data);
+    //   //
+    //   console.log(data);
+    //   dispatch(generateMessage(data));
+    // }
+    // // only scan code once
+    // // this is a hack, TODO: CHANGE THIS
+    // this.setState({ qrData: data, dataFound: true });
   };
 
   render() {
     const { hasCameraPermission } = this.state;
-    // conditionally return different views
-    // if no camera permission.. render error screen
-    // TODO: ask user for camera permissions
-    if (hasCameraPermission === null) {
-      return (
-        <View style={styles.container}>
-          <Text>Requesting for camera permission</Text>
-        </View>
-      );
-    }
-
-    if (hasCameraPermission === false) {
-      return (
-        <View style={styles.container}>
-          <Text>No access to camera</Text>
-        </View>
-      );
-    }
-    // else
     return (
       <View style={styles.container}>
         <RNCamera
@@ -98,11 +84,11 @@ class ScanCodeScreen extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
     backgroundColor: '#fdfdfd',
     alignItems: 'center',
+    justifyContent: 'center',
     flexDirection: 'column',
-    justifyContent: 'flex-start',
-    width: '100%',
   },
   preview: {
     ...StyleSheet.absoluteFillObject,

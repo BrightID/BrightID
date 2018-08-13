@@ -13,10 +13,9 @@ import {
 // import { generateMessage } from '../actions/exchange';
 import logging from '../../utils/logging';
 import {
-  createRTCId,
   update,
-  OFFER,
-  ALPHA,
+  ANSWER,
+  ZETA,
   ICE_CANDIDATE,
   fetchArbiter,
   handleRecievedMessage,
@@ -43,14 +42,19 @@ type State = {
   qrsvg: string,
 };
 
-class MyCodeScreen extends React.Component<Props, State> {
+class RtcAnswerScreen extends React.Component<Props, State> {
+  static navigationOptions = {
+    title: 'New Connection',
+    headerRight: <View />,
+  };
+
   constructor(props) {
     super(props);
+
     this.state = {
-      qrsvgd: '',
       connecting: true,
     };
-    // set up initial webrtc connection
+    // set up initial webrtc connection vars
     this.connection = null;
     this.channel = null;
     this.socket = null;
@@ -58,49 +62,32 @@ class MyCodeScreen extends React.Component<Props, State> {
   }
 
   async componentDidMount() {
-    const { dispatch } = this.props;
-    const rtcId = await dispatch(createRTCId());
-
-    // generate qrcode with rtc id
-    this.genQrCode();
-    // initiate webrtc
+    // create RTCPeerConnection
     this.initiateWebrtc();
-    // start polling server for remote desc and ice candidates
-    this.pollSignalServer();
+    // fetch arbiter, then set RTC remote / local description and update signaling server
+    this.answerWebrtc();
   }
 
   async componentDidUpdate(prevProps) {
     // generate a new qrcode if the rtcId value changes
     const { arbiter } = this.props;
 
-    // set remote description
-    if (
-      this.connection &&
-      arbiter &&
-      arbiter.ZETA.ANSWER &&
-      (arbiter.ZETA.ANSWER.sdp !== prevProps.arbiter.ZETA.ANSWER.sdp ||
-        arbiter.ZETA.ANSWER.type !== prevProps.arbiter.ZETA.ANSWER.type)
-    ) {
-      await this.connection.setRemoteDescription(
-        new RTCSessionDescription(arbiter.ZETA.ANSWER),
-      );
-    }
     // set ice candidate
     if (
       this.connection &&
       arbiter &&
-      arbiter.ZETA.ICE_CANDIDATE &&
-      (arbiter.ZETA.ICE_CANDIDATE.candidate !==
-        prevProps.arbiter.ZETA.ICE_CANDIDATE.candidate ||
-        arbiter.ZETA.ICE_CANDIDATE.sdpMLineIndex !==
-          prevProps.arbiter.ZETA.ICE_CANDIDATE.sdpMLineIndex ||
-        arbiter.ZETA.ICE_CANDIDATE.sdpMid !==
-          prevProps.arbiter.ZETA.ICE_CANDIDATE.sdpMid)
+      arbiter.ALPHA.ICE_CANDIDATE &&
+      (arbiter.ALPHA.ICE_CANDIDATE.candidate !==
+        prevProps.arbiter.ALPHA.ICE_CANDIDATE.candidate ||
+        arbiter.ALPHA.ICE_CANDIDATE.sdpMLineIndex !==
+          prevProps.arbiter.ALPHA.ICE_CANDIDATE.sdpMLineIndex ||
+        arbiter.ALPHA.ICE_CANDIDATE.sdpMid !==
+          prevProps.arbiter.ALPHA.ICE_CANDIDATE.sdpMid)
     ) {
-      console.log('UserA:');
-      console.log(arbiter.ZETA.ICE_CANDIDATE);
+      console.log('UserB:');
+      console.log(arbiter.ALPHA.ICE_CANDIDATE);
       await this.connection.addIceCandidate(
-        new RTCIceCandidate(arbiter.ZETA.ICE_CANDIDATE),
+        new RTCIceCandidate(arbiter.ALPHA.ICE_CANDIDATE),
       );
     }
   }
@@ -131,25 +118,67 @@ class MyCodeScreen extends React.Component<Props, State> {
     dispatch(resetWebrtc());
   }
 
-  initiateWebrtc = async () => {
-    const { dispatch } = this.props;
-    // create webrtc instance
-    console.log('creating w3ebrtc data channel');
+  initiateWebrtc = () => {
+    const { dispatch, arbiter } = this.props;
+    // create webrtc instance after we have the arbiter
     this.connection = new RTCPeerConnection(null);
-    logging(this.connection, 'UserA');
-    window.ca = this.connection;
-    // handle ice
+    logging(this.connection, 'UserB');
+    // update arbiter when ice candidate is found
     this.connection.onicecandidate = this.updateIce;
     // create data channel
-    this.channel = this.connection.createDataChannel('connect');
-    // handle channel events
-    this.updateChannel();
-    // create offer and set local connection
-    console.log('creating offer');
-    const offer = await this.connection.createOffer();
-    await this.connection.setLocalDescription(offer);
+    this.connection.ondatachannel = this.handleDataChannel;
+    // set remote description
+    return 'connection started';
+  };
+
+  handleDataChannel = (e) => {
+    const { dispatch } = this.props;
+    if (e.channel) {
+      this.channel = e.channel;
+      this.channel.onopen = () => {
+        console.log('user B channel opened');
+        this.setState({
+          connecting: false,
+        });
+      };
+      this.channel.onclose = () => {
+        console.log('user A channel closed');
+      };
+      /**
+       * recieve webrtc messages here
+       * pass data along to action creator in ../actions/webrtc
+       */
+      this.channel.onmessage = (e) => {
+        console.log(`user B recieved message ${e.data}`);
+        dispatch(handleRecievedMessage(e.data));
+      };
+    }
+  };
+
+  answerWebrtc = async () => {
+    const { dispatch } = this.props;
+    // fetch arbiter prior to setting RTC description
+    const arbiter = await dispatch(fetchArbiter());
+    // poll signaling server for changes
+    this.pollSignalServer();
+    // set remote description
+    if (this.connection && arbiter && arbiter.ALPHA.OFFER) {
+      await this.connection.setRemoteDescription(
+        new RTCSessionDescription(arbiter.ALPHA.OFFER),
+      );
+    }
+    // set ice candidate
+    if (this.connection && arbiter && arbiter.ALPHA.ICE_CANDIDATE) {
+      await this.connection.addIceCandidate(
+        new RTCIceCandidate(arbiter.ALPHA.ICE_CANDIDATE),
+      );
+    }
+    // create answer
+    const answer = await this.connection.createAnswer();
+    // set local description
+    await this.connection.setLocalDescription(answer);
     // update redux store
-    await dispatch(update({ type: OFFER, person: ALPHA, value: offer }));
+    await dispatch(update({ type: ANSWER, person: ZETA, value: answer }));
   };
 
   pollSignalServer = () => {
@@ -168,29 +197,6 @@ class MyCodeScreen extends React.Component<Props, State> {
     }
   };
 
-  updateChannel = () => {
-    const { dispatch } = this.props;
-    if (this.channel) {
-      this.channel.onopen = () => {
-        console.log('user A channel opened');
-        this.setState({
-          connecting: false,
-        });
-      };
-      this.channel.onclose = () => {
-        console.log('user A channel closed');
-      };
-      /**
-       * recieve webrtc messages here
-       * pass data along to action creator in ../actions/webrtc
-       */
-      this.channel.onmessage = (e) => {
-        console.log(`user A recieved message ${e.data}`);
-        dispatch(handleRecievedMessage(e.data));
-      };
-    }
-  };
-
   updateIce = async (e) => {
     try {
       const { dispatch } = this.props;
@@ -204,7 +210,7 @@ class MyCodeScreen extends React.Component<Props, State> {
 
         dispatch(
           update({
-            person: ALPHA,
+            person: ZETA,
             type: ICE_CANDIDATE,
             value: e.candidate,
           }),
@@ -215,33 +221,10 @@ class MyCodeScreen extends React.Component<Props, State> {
     }
   };
 
-  genQrCode = () => {
-    const { rtcId } = this.props;
-    if (rtcId) {
-      qrcode.toString(rtcId, (err, data) => {
-        if (err) throw err;
-        this.parseSVG(data);
-      });
-    }
-  };
-
-  parseSVG = (qrsvg) => {
-    // obtain the second path's d
-    // use only what's inside the quotations
-    const dinx = qrsvg.lastIndexOf('d');
-    const dpath = qrsvg.substr(dinx);
-    const qrsvgd = dpath.match(/"([^"]+)"/g)[0].split('"')[1];
-    this.setState({ qrsvgd });
-  };
-
   render() {
     return (
       <View style={styles.container}>
-        <TextInput value={this.props.rtcId || 'RTC TOKEN'} editable={true} />
-        <Svg height="150" width="150" viewBox="0 0 29 29">
-          <Path fill="#fff" d="M0 0h29v29H0z" />
-          <Path stroke="#000" d={this.state.qrsvgd} />
-        </Svg>
+        <Text>Exchanging info...</Text>
       </View>
     );
   }
@@ -258,4 +241,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(MyCodeScreen);
+export default connect((state) => state.main)(RtcAnswerScreen);
