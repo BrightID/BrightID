@@ -52,7 +52,7 @@ class Onboard extends React.Component<Props> {
   componentDidMount() {
     // watch for device rotation
     Dimensions.addEventListener('change', (e) => {
-      console.warn(e);
+      console.log(e);
       this.setState({
         winWidth: e.window.width,
       });

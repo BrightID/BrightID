@@ -36,9 +36,9 @@ export const handleRecievedMessage = (data: string) => async (
   getState: Function,
 ) => {
   // parse message with json
-  console.warn('parsing json');
+  console.log('parsing json');
   const msg = JSON.parse(data);
-  console.warn(msg);
+  console.log(msg);
   const { timestamp } = getState().main;
   // update redux store based on message content
 
@@ -55,7 +55,7 @@ export const handleRecievedMessage = (data: string) => async (
     dispatch(setConnectTimestamp(msg.timestamp));
   }
 
-  console.warn(msg);
+  console.log(msg);
 };
 
 /**
@@ -85,7 +85,7 @@ export const createRTCId = () => async (dispatch: Function) => {
       resolve(rtcId);
     });
   } catch (err) {
-    throw err;
+    console.log(err);
   }
 };
 
@@ -96,7 +96,7 @@ export const update = ({ type, person, value }) => async (
   try {
     // set rtcId
     const { rtcId } = getState().main;
-    console.warn(rtcId);
+    console.log(rtcId);
     // attempt to fetch dispatcher
     const { data } = await post(`http://localhost:${PORT}/update`, {
       rtcId,
@@ -106,13 +106,13 @@ export const update = ({ type, person, value }) => async (
     });
     // handle error
     if (data.error) {
-      console.warn('error updating dispatcher');
-      console.warn(data.msg);
-      console.warn(data.error);
+      console.log('error updating dispatcher');
+      console.log(data.msg);
+      console.log(data.error);
       return data;
     }
     const { dispatcher } = data;
-    console.warn(dispatcher);
+    console.log(dispatcher);
     // update redux store
     // ONLY UPDATE REDUX STORE VIA SOCKET IO
     dispatch(setArbiter(dispatcher));
@@ -120,7 +120,7 @@ export const update = ({ type, person, value }) => async (
     // finish async api call
     return dispatcher;
   } catch (err) {
-    throw err;
+    console.log(err);
   }
 };
 
@@ -129,6 +129,7 @@ export const fetchArbiter = () => async (
   getState: Function,
 ) => {
   try {
+    // obtain rtcId from redux store - which is the source of truth
     const { rtcId } = getState().main;
 
     // fetch dispatcher from signaling server
@@ -137,9 +138,9 @@ export const fetchArbiter = () => async (
     });
     // handle error
     if (data.error) {
-      console.warn('error updating dispatcher');
-      console.warn(data.msg);
-      console.warn(data.error);
+      console.log('error updating dispatcher');
+      console.log(data.msg);
+      console.log(data.error);
       return data;
     }
     const { dispatcher } = data;
@@ -149,6 +150,6 @@ export const fetchArbiter = () => async (
     // finish async api call
     return dispatcher;
   } catch (err) {
-    throw err;
+    console.log(err);
   }
 };

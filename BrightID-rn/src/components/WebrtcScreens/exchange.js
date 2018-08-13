@@ -26,12 +26,12 @@ export const generateMessage = async () => (
     publicKey.toString() + publicKey2.toString() + timestamp,
   );
 
-  // console.warn(publicKey.toString());
-  console.warn(Buffer.from(message).toString());
+  // console.log(publicKey.toString());
+  console.log(Buffer.from(message).toString());
   const sig1 = nacl.sign.detached(message, secretKey);
   const verify = nacl.sign.detached.verify(message, sig1, publicKey);
-  // console.warn(publicKey instanceof Uint8Array);
-  console.warn(`message status: ${verify}`);
+  // console.log(publicKey instanceof Uint8Array);
+  console.log(`message status: ${verify}`);
 };
 
 export const random = 'random';

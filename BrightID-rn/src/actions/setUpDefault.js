@@ -23,7 +23,7 @@ export const setUpDefault = (userData: Object) => async (
     // disptaches the getUserData action from actions/storage.js
     // this is an async action will a lot of important functionality for the app
     // dispatch(getUserData());
-    // console.warn(userData);
+    // console.log(userData);
     if (
       userData.hasOwnProperty('publicKey') &&
       userData.hasOwnProperty('secretKey') &&
