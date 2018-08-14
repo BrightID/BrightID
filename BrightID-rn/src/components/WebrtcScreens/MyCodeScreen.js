@@ -29,7 +29,7 @@ import { resetWebrtc } from '../../actions';
  * displays a qrcode with rtcId url obtained from a signalling server
  * this component also establishes a RTCPeerConnection and data channel
  * when mounted - the RTC channel is initiated with rtcId credentials
- * when unmounted - the RTC connection is removed
+ * when unmounted - the RTC connection is removed along with all redux data associated with creating a connection
  *
  */
 
@@ -127,7 +127,7 @@ class MyCodeScreen extends React.Component<Props, State> {
       clearInterval(this.pollingId);
       this.pollingId = null;
     }
-
+    // look out for this prior to finishing webrtc code
     dispatch(resetWebrtc());
   }
 

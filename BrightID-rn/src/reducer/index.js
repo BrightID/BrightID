@@ -16,6 +16,8 @@ import {
   CONNECT_PUBLICKEY,
   CONNECT_NAMEORNYM,
   CONNECT_TIMESTAMP,
+  CONNECT_TRUST_SCORE,
+  CONNECT_AVATAR,
   ARBITER,
   RTC_ID,
   RESET_WEBRTC,
@@ -65,6 +67,8 @@ export const initialState = {
   connectNameornym: '',
   connectPublicKey: '',
   connectTimestamp: '',
+  connectTrustScore: '',
+  connectAvatar: '',
   rtcId: '',
   arbiter: arbiterSchema,
 };
@@ -133,10 +137,20 @@ export const mainReducer = (state = initialState, action) => {
         ...state,
         connectNameornym: action.nameornym,
       };
+    case CONNECT_AVATAR:
+      return {
+        ...state,
+        connectAvatar: action.avatar,
+      };
     case CONNECT_TIMESTAMP:
       return {
         ...state,
         connectTimestamp: action.timestamp,
+      };
+    case CONNECT_TRUST_SCORE:
+      return {
+        ...state,
+        connectTrustScore: action.trustScore,
       };
     case ARBITER:
       return {

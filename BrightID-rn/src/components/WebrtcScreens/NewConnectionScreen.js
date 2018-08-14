@@ -73,7 +73,11 @@ class NewConnectionScreen extends React.Component<Props> {
             </Text>
           </TouchableOpacity>
         </View>
-        {qr ? <MyCodeScreen /> : <ScanCodeScreen />}
+        {qr ? (
+          <MyCodeScreen navigation={this.props.navigation} />
+        ) : (
+          <ScanCodeScreen navigation={this.props.navigation} />
+        )}
       </View>
     );
   }

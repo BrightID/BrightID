@@ -15,6 +15,7 @@ export const RESET_WEBRTC = 'RESET_WEBRTC';
 export const REFRESH_NEARBY_PEOPLE = 'REFRESH_NEARBY_PEOPLE';
 export const CONNECT_PUBLICKEY = 'CONNECT_PUBLICKEY';
 export const CONNECT_NAMEORNYM = 'CONNECT_NAMEORNYM';
+export const CONNECT_TRUST_SCORE = 'CONNECT_TRUST_SCORE';
 export const CONNECT_TIMESTAMP = 'CONNECT_TIMESTAMP';
 export const CONNECT_AVATAR = 'CONNECT_AVATAR';
 export const ERROR = 'ERROR';
@@ -164,6 +165,28 @@ export const setConnectNameornym = (nameornym: string) => ({
 });
 
 /**
+ * redux action creator for setting the trust score of the user you are currently connecting with via webrtc
+ * @param type CONNECT_NAMEORNYM
+ * @param nameornym - nameornym of new user while adding a new connection
+ */
+
+export const setConnectTrustScore = (trustScore: string) => ({
+  type: CONNECT_TRUST_SCORE,
+  trustScore,
+});
+
+/**
+ * redux action creator for setting the avatar of the user you are currently connecting with via webrtc
+ * @param type CONNECT_NAMEORNYM
+ * @param nameornym - nameornym of new user while adding a new connection
+ */
+
+export const setConnectAvatar = (avatar: string) => ({
+  type: CONNECT_AVATAR,
+  avatar,
+});
+
+/**
  * redux action creator for setting the timestamp used while forming a new connection with a user
  * @param type CONNECT_TIMESTAMP
  * @param  timestamp - unix timestamp of used for generating a message while forming a new connection
@@ -201,6 +224,7 @@ export const setArbiter = (arbiter: {
 
 /**
  * redux action reset webrtc connection info
+ * removes from redux store: rtcId, arbiter
  * @param type RESET_WEBRTC
  */
 
