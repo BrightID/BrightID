@@ -1,9 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
-import Svg, { Path } from 'react-native-svg';
-import qrcode from 'qrcode';
+import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
 import { connect } from 'react-redux';
 import {
   RTCPeerConnection,
@@ -25,7 +23,7 @@ import { resetWebrtc } from '../../actions';
 /**
  * My Code screen of BrightID
  * ==================================================================
- * displays a qrcode with rtcId url obtained from a signalling server
+ * exchanges user data
  * this component also establishes a RTCPeerConnection and data channel
  * when mounted - the RTC channel is initiated with rtcId credentials
  * when unmounted - the RTC connection is removed
@@ -34,8 +32,11 @@ import { resetWebrtc } from '../../actions';
 
 type Props = {
   publicKey: Uint8Array,
-  rtcId: string,
+  trustScore: string,
+  userAvatar: string,
+  nameornym: string,
   dispatch: Function,
+  navigation: { goBack: Function, navigate: (string) => null },
 };
 
 type State = {
@@ -51,9 +52,6 @@ class RtcAnswerScreen extends React.Component<Props, State> {
   constructor(props) {
     super(props);
 
-    this.state = {
-      connecting: true,
-    };
     // set up initial webrtc connection vars
     this.connection = null;
     this.channel = null;
@@ -68,11 +66,25 @@ class RtcAnswerScreen extends React.Component<Props, State> {
     this.answerWebrtc();
   }
 
-  async componentDidUpdate(prevProps) {
-    // generate a new qrcode if the rtcId value changes
-    const { arbiter } = this.props;
+  shouldComponentUpdate(nextProps) {
+    const {
+      arbiter,
+      connectTimestamp,
+      connectPublicKey,
+      connectNameornym,
+      navigation,
+    } = nextProps;
 
-    // set ice candidate
+    // if we have all of the second users data, proceed to the next screen
+    // avatar is optionally since we aren't setting them universally yet
+    if (connectTimestamp && connectPublicKey && connectNameornym) {
+      // navigation.navigate()
+    }
+
+    return true;
+  }
+
+  async componentDidUpdate(prevProps) {
     if (
       this.connection &&
       arbiter &&
@@ -84,6 +96,7 @@ class RtcAnswerScreen extends React.Component<Props, State> {
         arbiter.ALPHA.ICE_CANDIDATE.sdpMid !==
           prevProps.arbiter.ALPHA.ICE_CANDIDATE.sdpMid)
     ) {
+      // set ice candidate
       console.log('UserB:');
       console.log(arbiter.ALPHA.ICE_CANDIDATE);
       await this.connection.addIceCandidate(
@@ -119,7 +132,6 @@ class RtcAnswerScreen extends React.Component<Props, State> {
   }
 
   initiateWebrtc = () => {
-    const { dispatch, arbiter } = this.props;
     // create webrtc instance after we have the arbiter
     this.connection = new RTCPeerConnection(null);
     logging(this.connection, 'UserB');
@@ -127,22 +139,21 @@ class RtcAnswerScreen extends React.Component<Props, State> {
     this.connection.onicecandidate = this.updateIce;
     // create data channel
     this.connection.ondatachannel = this.handleDataChannel;
-    // set remote description
-    return 'connection started';
   };
 
   handleDataChannel = (e) => {
     const { dispatch } = this.props;
     if (e.channel) {
       this.channel = e.channel;
+      // send user data when channel opens
       this.channel.onopen = () => {
         console.log('user B channel opened');
-        this.setState({
-          connecting: false,
-        });
+        // send public key, avatar, nameornym, and trustscore
+        this.sendUserBData();
       };
+      // do nothing when channel closes... yet
       this.channel.onclose = () => {
-        console.log('user A channel closed');
+        console.log('user B channel closed');
       };
       /**
        * recieve webrtc messages here
@@ -150,35 +161,96 @@ class RtcAnswerScreen extends React.Component<Props, State> {
        */
       this.channel.onmessage = (e) => {
         console.log(`user B recieved message ${e.data}`);
-        dispatch(handleRecievedMessage(e.data));
+        dispatch(handleRecievedMessage(e.data, this.channel));
       };
     }
   };
 
   answerWebrtc = async () => {
-    const { dispatch } = this.props;
-    // fetch arbiter prior to setting RTC description
-    const arbiter = await dispatch(fetchArbiter());
-    // poll signaling server for changes
-    this.pollSignalServer();
-    // set remote description
-    if (this.connection && arbiter && arbiter.ALPHA.OFFER) {
-      await this.connection.setRemoteDescription(
-        new RTCSessionDescription(arbiter.ALPHA.OFFER),
-      );
+    try {
+      const { dispatch, navigation } = this.props;
+      // fetch arbiter prior to setting RTC description
+      const arbiter = await dispatch(fetchArbiter());
+      // if arbiter doesn't exist return to the previous screen
+      if (
+        arbiter.error === "arbiter doesn't exist" ||
+        arbiter.msg === 'error'
+      ) {
+        this.handleError();
+      }
+      // poll signaling server for changes
+      this.pollSignalServer();
+      // set remote description
+      if (this.connection && arbiter && arbiter.ALPHA && arbiter.ALPHA.OFFER) {
+        await this.connection.setRemoteDescription(
+          new RTCSessionDescription(arbiter.ALPHA.OFFER),
+        );
+      }
+      // set ice candidate
+      if (
+        this.connection &&
+        arbiter &&
+        arbiter.ALPHA &&
+        arbiter.ALPHA.ICE_CANDIDATE
+      ) {
+        await this.connection.addIceCandidate(
+          new RTCIceCandidate(arbiter.ALPHA.ICE_CANDIDATE),
+        );
+      }
+      // create answer
+      const answer = await this.connection.createAnswer();
+      // set local description
+      await this.connection.setLocalDescription(answer);
+      // update redux store
+      await dispatch(update({ type: ANSWER, person: ZETA, value: answer }));
+    } catch (err) {
+      console.log(err);
     }
-    // set ice candidate
-    if (this.connection && arbiter && arbiter.ALPHA.ICE_CANDIDATE) {
-      await this.connection.addIceCandidate(
-        new RTCIceCandidate(arbiter.ALPHA.ICE_CANDIDATE),
-      );
+  };
+
+  sendUserBData = () => {
+    // send data individually
+    if (this.channel) {
+      const { trustScore, nameornym, userAvatar, publicKey } = this.props;
+      // send trust score
+      if (trustScore) {
+        let dataObj = { trustScore };
+        this.channel.send(JSON.stringify(dataObj));
+      }
+      // send nameornym
+      if (nameornym) {
+        let dataObj = { nameornym };
+        this.channel.send(JSON.stringify(dataObj));
+      }
+      // send public key
+      if (nameornym) {
+        let dataObj = { publicKey };
+        this.channel.send(JSON.stringify(dataObj));
+      }
+      // send user avatar
+      if (userAvatar) {
+        let dataObj = { avatar: userAvatar };
+        this.channel.send(JSON.stringify(dataObj));
+      }
     }
-    // create answer
-    const answer = await this.connection.createAnswer();
-    // set local description
-    await this.connection.setLocalDescription(answer);
-    // update redux store
-    await dispatch(update({ type: ANSWER, person: ZETA, value: answer }));
+  };
+
+  handleError = () => {
+    const { navigation } = this.props;
+    Alert.alert(
+      'Please try again',
+      'RtcId value is incorrect',
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            // return to the previous screen
+            navigation.goBack();
+          },
+        },
+      ],
+      { cancelable: false },
+    );
   };
 
   pollSignalServer = () => {

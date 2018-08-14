@@ -11,6 +11,8 @@ import {
   setConnectPublicKey,
   setConnectTimestamp,
   setConnectNameornym,
+  setConnectAvatar,
+  setConnectTrustScore,
   setRtcId,
   setArbiter,
 } from '../../actions';
@@ -25,37 +27,67 @@ export const ZETA = 'ZETA';
 export const ICE_CANDIDATE = 'ICE_CANDIDATE';
 export const OFFER = 'OFFER';
 export const ANSWER = 'ANSWER';
+export const recievedMessages = {
+  publicKey: 'recieved public key',
+  trustScore: 'recieved trust score',
+  nameornym: 'received nameornym',
+  avatar: 'received avatar',
+  timestamp: 'received timestamp',
+};
 
 /**
  * handle webrtc messages recieved
  * ======================================
  */
 
-export const handleRecievedMessage = (data: string) => async (
-  dispatch: Function,
-  getState: Function,
-) => {
-  // parse message with json
-  console.log('parsing json');
-  const msg = JSON.parse(data);
-  console.log(msg);
-  const { timestamp } = getState().main;
-  // update redux store based on message content
+export const handleRecievedMessage = (
+  data: string,
+  channel: { send: Function },
+) => async (dispatch: Function, getState: Function) => {
+  try {
+    // parse message with json
+    console.log('parsing json');
+    const msg = JSON.parse(data);
+    console.log(msg);
+    const { timestamp } = getState().main;
+    // update redux store based on message content
 
-  // set public key
-  if (msg.publicKey) {
-    dispatch(setConnectPublicKey(new Uint8Array(Object.values(msg.publicKey))));
-  }
-  // set nameornym
-  if (msg.nameornym) {
-    dispatch(setConnectNameornym(msg.nameornym));
-  }
-  // only set timestamp if this is user b
-  if (msg.timestamp && !timestamp) {
-    dispatch(setConnectTimestamp(msg.timestamp));
-  }
+    // set public key
+    if (msg && msg.publicKey) {
+      dispatch(
+        setConnectPublicKey(new Uint8Array(Object.values(msg.publicKey))),
+      );
+      // send recieve message
+      channel.send(JSON.stringify({ msg: recievedMessages.publicKey }));
+    }
+    // set nameornym
+    if (msg && msg.nameornym) {
+      dispatch(setConnectNameornym(msg.nameornym));
+      // send recieve message
+      channel.send(JSON.stringify({ msg: recievedMessages.nameornym }));
+    }
+    // set avatar
+    if (msg && msg.avatar) {
+      dispatch(setConnectAvatar(msg.avatar));
+      // send recieve message
+      channel.send(JSON.stringify({ msg: recievedMessages.avatar }));
+    }
+    // set trust score
+    if (msg && msg.trustCore) {
+      dispatch(setConnectTrustScore(msg.trustScore));
+      // send recieve message
+      channel.send(JSON.stringify({ msg: recievedMessages.trustScore }));
+    }
+    // only set timestamp if this is user b
+    if (!timestamp && msg && msg.timestamp) {
+      dispatch(setConnectTimestamp(msg.timestamp));
+      channel.send(JSON.stringify({ msg: recievedMessages.timestamp }));
+    }
 
-  console.log(msg);
+    console.log(msg);
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 /**
@@ -66,7 +98,7 @@ export const handleRecievedMessage = (data: string) => async (
 export const createRTCId = () => async (dispatch: Function) => {
   try {
     const res = await fetch(`http://localhost:${PORT}/id`);
-    const { rtcId, dispatcher } = await res.json();
+    const { rtcId, arbiter } = await res.json();
 
     // simulate network delay
     await new Promise((resolve) => {
@@ -78,7 +110,7 @@ export const createRTCId = () => async (dispatch: Function) => {
     // update redux store
     dispatch(setRtcId(rtcId));
     // only userA initializes creation an RTC Id
-    dispatch(setArbiter(dispatcher));
+    dispatch(setArbiter(arbiter));
 
     // return rtcId to component letting it know api fetch is successful
     return new Promise((resolve) => {
@@ -97,7 +129,7 @@ export const update = ({ type, person, value }) => async (
     // set rtcId
     const { rtcId } = getState().main;
     console.log(rtcId);
-    // attempt to fetch dispatcher
+    // attempt to fetch arbiter
     const { data } = await post(`http://localhost:${PORT}/update`, {
       rtcId,
       person,
@@ -106,19 +138,19 @@ export const update = ({ type, person, value }) => async (
     });
     // handle error
     if (data.error) {
-      console.log('error updating dispatcher');
+      console.log('error UPDATING arbiter');
       console.log(data.msg);
       console.log(data.error);
       return data;
     }
-    const { dispatcher } = data;
-    console.log(dispatcher);
+    const { arbiter } = data;
+    console.log(arbiter);
     // update redux store
     // ONLY UPDATE REDUX STORE VIA SOCKET IO
-    dispatch(setArbiter(dispatcher));
+    dispatch(setArbiter(arbiter));
 
     // finish async api call
-    return dispatcher;
+    return arbiter;
   } catch (err) {
     console.log(err);
   }
@@ -132,23 +164,23 @@ export const fetchArbiter = () => async (
     // obtain rtcId from redux store - which is the source of truth
     const { rtcId } = getState().main;
 
-    // fetch dispatcher from signaling server
+    // fetch arbiter from signaling server
     const { data } = await post(`http://localhost:${PORT}/dispatcher`, {
       rtcId,
     });
     // handle error
     if (data.error) {
-      console.log('error updating dispatcher');
+      console.log('error updating arbiter');
       console.log(data.msg);
       console.log(data.error);
       return data;
     }
-    const { dispatcher } = data;
+    const { arbiter } = data;
 
     // update redux store
-    dispatch(setArbiter(dispatcher));
+    dispatch(setArbiter(arbiter));
     // finish async api call
-    return dispatcher;
+    return arbiter;
   } catch (err) {
     console.log(err);
   }

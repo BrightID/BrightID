@@ -38,6 +38,7 @@
     "no-else-return": "warn",
     "no-unused-vars": "warn",
     "no-shadow": "warn",
-    "import/no-named-as-default": "off"
+    "import/no-named-as-default": "off",
+    "prefer-const": "off"
   }
 }

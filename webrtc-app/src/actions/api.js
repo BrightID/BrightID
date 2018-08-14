@@ -21,7 +21,7 @@ export const ANSWER = 'ANSWER';
 export const createRTCId = () => async (dispatch: Function) => {
   try {
     const res = await fetch(`http://localhost:${PORT}/id`);
-    const { rtcId, dispatcher } = await res.json();
+    const { rtcId, arbiter } = await res.json();
 
     // simulate network delay
     await new Promise((resolve) => {
@@ -33,7 +33,7 @@ export const createRTCId = () => async (dispatch: Function) => {
     // update redux store
     dispatch(setRtcId(rtcId));
     // only userA initializes creation an RTC Id
-    dispatch(setUserADispatcher(dispatcher));
+    dispatch(setUserADispatcher(arbiter));
 
     // return rtcId to component letting it know api fetch is successful
     return new Promise((resolve) => {
@@ -71,17 +71,17 @@ export const update = ({ type, person, value }) => async (
       console.log(data.error);
       return data;
     }
-    const { dispatcher } = data;
-    console.log(dispatcher);
+    const { arbiter } = data;
+    console.log(arbiter);
     // update redux store
     // ONLY UPDATE REDUX STORE VIA SOCKET IO
     if (person === ALPHA) {
-      dispatch(setUserADispatcher(dispatcher));
+      dispatch(setUserADispatcher(arbiter));
     } else if (person === ZETA) {
-      dispatch(setUserBDispatcher(dispatcher));
+      dispatch(setUserBDispatcher(arbiter));
     }
     // finish async api call
-    return dispatcher;
+    return arbiter;
   } catch (err) {
     throw err;
   }
@@ -125,17 +125,17 @@ export const fetchDispatcher = (person) => async (
       console.log(data.error);
       return data;
     }
-    const { dispatcher } = data;
+    const { arbiter } = data;
     console.log(data);
-    console.log(dispatcher);
+    console.log(arbiter);
     // update redux store
     if (person === ALPHA) {
-      dispatch(setUserADispatcher(dispatcher));
+      dispatch(setUserADispatcher(arbiter));
     } else if (person === ZETA) {
-      dispatch(setUserBDispatcher(dispatcher));
+      dispatch(setUserBDispatcher(arbiter));
     }
     // finish async api call
-    return dispatcher;
+    return arbiter;
   } catch (err) {
     throw err;
   }
