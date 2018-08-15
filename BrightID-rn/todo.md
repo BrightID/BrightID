@@ -15,3 +15,4 @@ app generates qrcode with unique id
 user2 sends a POST request to the server with the unique id and RTCSessionDescription
 user 1 polls the signalling server
 when each user is connected and complete, send POST request to server indicating they are ready to exchange information
+split up user avatar string into chunks when sending over webrtc
