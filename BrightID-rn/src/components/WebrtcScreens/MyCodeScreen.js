@@ -186,7 +186,7 @@ class MyCodeScreen extends React.Component<Props, State> {
        */
       this.channel.onmessage = (e) => {
         console.log(`user A recieved message ${e.data}`);
-        dispatch(handleRecievedMessage(e.data));
+        dispatch(handleRecievedMessage(e.data, this.channel));
       };
     }
   };
@@ -226,8 +226,10 @@ class MyCodeScreen extends React.Component<Props, State> {
   };
 
   parseSVG = (qrsvg) => {
-    // obtain the second path's d
-    // use only what's inside the quotations
+    // qrcode gives us a string representation of an svg
+    // we must extract the value of d from this string in order to use it
+    // with react-native-svg
+    //
     const dinx = qrsvg.lastIndexOf('d');
     const dpath = qrsvg.substr(dinx);
     const qrsvgd = dpath.match(/"([^"]+)"/g)[0].split('"')[1];
