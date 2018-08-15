@@ -22,7 +22,7 @@ import {
  * ===================
  */
 export const PORT = '3001';
-export const URL = '10.0.0.48';
+export const URL = 'localhost'; // place your url here
 export const ALPHA = 'ALPHA';
 export const ZETA = 'ZETA';
 export const ICE_CANDIDATE = 'ICE_CANDIDATE';
