@@ -10,6 +10,8 @@ import {
 } from 'react-native-webrtc';
 // import { generateMessage } from '../actions/exchange';
 import logging from '../../utils/logging';
+import { stringByteLength } from '../../utils/encoding';
+import channelLogging from './channelLogging';
 import {
   update,
   ANSWER,
@@ -17,6 +19,7 @@ import {
   ICE_CANDIDATE,
   fetchArbiter,
   handleRecievedMessage,
+  sendMessage,
 } from './webrtc';
 
 import { resetWebrtc, setConnectTimestamp } from '../../actions';
@@ -146,23 +149,32 @@ class RtcAnswerScreen extends React.Component<Props, State> {
     const { dispatch } = this.props;
     if (e.channel) {
       this.channel = e.channel;
+      channelLogging(this.channel);
       // send user data when channel opens
       this.channel.onopen = () => {
-        console.log('user B channel opened');
+        console.warn('user B channel opened');
         // send public key, avatar, nameornym, and trustscore
         this.sendUserBData();
       };
       // do nothing when channel closes... yet
       this.channel.onclose = () => {
-        console.log('user B channel closed');
+        console.warn('user B channel closed');
       };
       /**
        * recieve webrtc messages here
        * pass data along to action creator in ../actions/webrtc
        */
       this.channel.onmessage = (e) => {
-        console.log(`user B recieved message ${e.data}`);
+        // handle recieved message
         dispatch(handleRecievedMessage(e.data, this.channel));
+      };
+      this.channel.onbufferedamountlow = (e) => {
+        console.warn(`on buffered amount low`);
+        console.warn(e);
+      };
+      this.channel.onerror = (e) => {
+        console.warn(`channel error`);
+        console.warn(e);
       };
     }
   };
@@ -223,35 +235,67 @@ class RtcAnswerScreen extends React.Component<Props, State> {
       /**
        * CREATE TIMESTAMP
        */
+
       const timestamp = Date.now();
       // save timestamp into redux store
       dispatch(setConnectTimestamp(timestamp));
 
       // send time stamp
       if (timestamp) {
-        // let dataObj = { timestamp };
-        this.channel.send(JSON.stringify({ timestamp }));
+        let dataObj = { timestamp };
+
+        console.warn(`
+        timestamp byte length: ${stringByteLength(JSON.stringify(dataObj))}
+        str length: ${JSON.stringify(dataObj).length}
+        `);
+        // webrtc helper function for sending messages
+        dispatch(sendMessage(JSON.stringify({ timestamp }), this.channel));
       }
       // send trust score
       if (trustScore) {
-        // let dataObj = { trustScore };
-        this.channel.send(JSON.stringify({ trustScore }));
+        let dataObj = { trustScore };
+
+        console.warn(`
+        trustScore byte length: ${stringByteLength(JSON.stringify(dataObj))}
+        str length: ${JSON.stringify(dataObj).length}
+        `);
+        // webrtc helper function for sending messages
+        dispatch(sendMessage(JSON.stringify({ trustScore }), this.channel));
       }
       // send nameornym
       if (nameornym) {
-        // let dataObj = { nameornym };
-        this.channel.send(JSON.stringify({ nameornym }));
+        let dataObj = { nameornym };
+
+        console.warn(`
+        nameornym byte length: ${stringByteLength(JSON.stringify(dataObj))}
+        str length: ${JSON.stringify(dataObj).length}
+        `);
+        // webrtc helper function for sending messages
+        dispatch(sendMessage(JSON.stringify({ nameornym })), this.channel);
       }
       // send public key
-      if (nameornym) {
-        // let dataObj = { publicKey };
-        this.channel.send(JSON.stringify({ publicKey }));
+      if (publicKey) {
+        let dataObj = { publicKey };
+
+        console.warn(`
+        publicKey byte length: ${stringByteLength(JSON.stringify(dataObj))}
+        str length: ${JSON.stringify(dataObj).length}
+        `);
+        // webrtc helper function for sending messages
+        dispatch(sendMessage(JSON.stringify({ publicKey }), this.channel));
       }
       // send user avatar
       if (userAvatar) {
         console.warn('has user avatar');
-        // let dataObj = { avatar: userAvatar };
-        this.channel.send(JSON.stringify({ avatar: userAvatar }));
+        let dataObj = { avatar: userAvatar };
+        console.warn(`
+        user Avatar byte length: ${stringByteLength(JSON.stringify(dataObj))}
+        str length: ${JSON.stringify(dataObj).length}
+        `);
+        // webrtc helper function for sending messages
+        dispatch(
+          sendMessage(JSON.stringify({ avatar: userAvatar }), this.channel),
+        );
       }
     }
   };

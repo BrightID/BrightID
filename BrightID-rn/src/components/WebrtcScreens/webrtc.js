@@ -17,12 +17,14 @@ import {
   setArbiter,
 } from '../../actions';
 
+import fragment from '../../utils/fragment';
+
 /**
  * constants
  * ===================
  */
 export const PORT = '3001';
-export const URL = 'localhost'; // place your url here
+export const URL = '10.0.0.48'; // place your url here
 export const ALPHA = 'ALPHA';
 export const ZETA = 'ZETA';
 export const ICE_CANDIDATE = 'ICE_CANDIDATE';
@@ -41,50 +43,80 @@ export const recievedMessages = {
  * ======================================
  */
 
+export const sendMessage = (
+  data: string,
+  channel: { send: Function },
+) => async (dispatch: Function, getState: Function) => {
+  try {
+    if (channel && channel.readyState === 'open') {
+      // fragments messages into chunks of 600 bytes and converts message into Uint8Array
+      const messages = fragment(data);
+      console.warn(messages);
+      let sendTime = 0;
+      for (let m of messages) {
+        // stagger sending messages by 200 ms
+        setTimeout(() => {
+          channel.send(JSON.stringify(m));
+        }, sendTime);
+        sendTime += 200;
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+/**
+ * handle webrtc messages recieved
+ * ======================================
+ */
+
 export const handleRecievedMessage = (
   data: string,
   channel: { send: Function },
 ) => async (dispatch: Function, getState: Function) => {
   try {
-    // parse message with json
-    const msg = JSON.parse(data);
-    console.warn(msg);
-    const { timestamp } = getState().main;
-    // update redux store based on message content
+    if (channel && channel.readyState === 'open') {
+      // parse message with json
+      const msg = JSON.parse(data);
+      console.warn(msg);
+      const { timestamp } = getState().main;
+      // update redux store based on message content
 
-    // set public key
-    if (msg && msg.publicKey) {
-      dispatch(
-        setConnectPublicKey(new Uint8Array(Object.values(msg.publicKey))),
-      );
-      // send recieve message
-      channel.send(JSON.stringify({ msg: recievedMessages.publicKey }));
-    }
-    // set nameornym
-    if (msg && msg.nameornym) {
-      dispatch(setConnectNameornym(msg.nameornym));
-      // send recieve message
-      channel.send(JSON.stringify({ msg: recievedMessages.nameornym }));
-    }
-    // set avatar
-    if (msg && msg.avatar) {
-      dispatch(setConnectAvatar(msg.avatar));
-      // send recieve message
-      channel.send(JSON.stringify({ msg: recievedMessages.avatar }));
-    }
-    // set trust score
-    if (msg && msg.trustScore) {
-      dispatch(setConnectTrustScore(msg.trustScore));
-      // send recieve message
-      channel.send(JSON.stringify({ msg: recievedMessages.trustScore }));
-    }
-    // only set timestamp if this is the user displaying qr code
-    if (!timestamp && msg && msg.timestamp) {
-      dispatch(setConnectTimestamp(msg.timestamp));
-      channel.send(JSON.stringify({ msg: recievedMessages.timestamp }));
-    }
+      // set public key
+      if (msg && msg.publicKey) {
+        dispatch(
+          setConnectPublicKey(new Uint8Array(Object.values(msg.publicKey))),
+        );
+        // send recieve message
+        channel.send(JSON.stringify({ msg: recievedMessages.publicKey }));
+      }
+      // set nameornym
+      if (msg && msg.nameornym) {
+        dispatch(setConnectNameornym(msg.nameornym));
+        // send recieve message
+        channel.send(JSON.stringify({ msg: recievedMessages.nameornym }));
+      }
+      // set avatar
+      if (msg && msg.avatar) {
+        dispatch(setConnectAvatar(msg.avatar));
+        // send recieve message
+        channel.send(JSON.stringify({ msg: recievedMessages.avatar }));
+      }
+      // set trust score
+      if (msg && msg.trustScore) {
+        dispatch(setConnectTrustScore(msg.trustScore));
+        // send recieve message
+        channel.send(JSON.stringify({ msg: recievedMessages.trustScore }));
+      }
+      // only set timestamp if this is the user displaying qr code
+      if (!timestamp && msg && msg.timestamp) {
+        dispatch(setConnectTimestamp(msg.timestamp));
+        channel.send(JSON.stringify({ msg: recievedMessages.timestamp }));
+      }
 
-    console.log(msg);
+      console.log(msg);
+    }
   } catch (err) {
     console.log(err);
   }

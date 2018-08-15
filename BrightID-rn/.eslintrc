@@ -39,6 +39,7 @@
     "no-unused-vars": "warn",
     "no-shadow": "warn",
     "import/no-named-as-default": "off",
-    "prefer-const": "off"
+    "prefer-const": "off",
+    "no-restricted-syntax": "warn"
   }
 }

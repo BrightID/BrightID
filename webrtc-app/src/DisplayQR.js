@@ -122,6 +122,7 @@ class DisplayQR extends Component<Props> {
     window.ca = this.connection;
     // handle ice
     this.connection.onicecandidate = this.updateIce;
+    this.connection.oniceconnectionstatechange = this.handleIce;
     // create data channel
     this.channel = this.connection.createDataChannel('connect');
     // handle channel events
@@ -144,11 +145,14 @@ class DisplayQR extends Component<Props> {
       };
       this.channel.onclose = () => {
         console.log('user A channel closed');
+        this.setState({
+          connecting: true,
+        });
       };
-      this.channel.onmessage = (e) => {
-        console.log(`user A recieved message ${e.data}`);
-        console.log(e);
-      };
+      // this.channel.onmessage = (e) => {
+      //   console.log(`user A recieved message ${e.data}`);
+      //   console.log(e);
+      // };
     }
   };
 
@@ -173,6 +177,21 @@ class DisplayQR extends Component<Props> {
       }
     } catch (err) {
       console.warn(err);
+    }
+  };
+
+  handleIce = () => {
+    if (this.connection) {
+      const { iceConnectionState } = this.connection;
+      console.log(`user b ice connection state ${iceConnectionState}`);
+      if (
+        iceConnectionState === 'failed' ||
+        iceConnectionState === 'disconnected'
+      ) {
+        this.setState({
+          connecting: true,
+        });
+      }
     }
   };
 

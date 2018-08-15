@@ -12,8 +12,7 @@ import { setRtcId } from '../../actions';
  * Scan code screen of BrightID
  * ==================================================================
  * displays a react-native-camera view
- * after scanning qrcode - ab RTC channel is established with rtcId credentials
- * when unmounted - the RTC connection is removed
+ * after scanning qrcode - the rtc id is set
  *
  */
 
@@ -47,7 +46,7 @@ class ScanCodeScreen extends React.Component<Props, State> {
     // set rtc id url into redux store
     if (data && data.length > 20 && data.length < 25) dispatch(setRtcId(data));
 
-    // switch to RtcAnswerScreen
+    // switch to RtcAnswerScreen after RTC ID is set
     navigation.navigate('RtcAnswer');
     // if (!this.state.dataFound) {
     //   // Alert.alert(data);
