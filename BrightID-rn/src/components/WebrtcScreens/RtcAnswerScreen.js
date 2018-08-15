@@ -19,7 +19,7 @@ import {
   handleRecievedMessage,
 } from './webrtc';
 
-import { resetWebrtc } from '../../actions';
+import { resetWebrtc, setConnectTimestamp } from '../../actions';
 /**
  * My Code screen of BrightID
  * ==================================================================
@@ -85,6 +85,7 @@ class RtcAnswerScreen extends React.Component<Props, State> {
   }
 
   async componentDidUpdate(prevProps) {
+    const { arbiter } = this.props;
     if (
       this.connection &&
       arbiter &&
@@ -209,28 +210,48 @@ class RtcAnswerScreen extends React.Component<Props, State> {
   };
 
   sendUserBData = () => {
-    // send data individually
+    // create timestamp then send data individually
     if (this.channel) {
-      const { trustScore, nameornym, userAvatar, publicKey } = this.props;
+      const {
+        dispatch,
+        trustScore,
+        nameornym,
+        userAvatar,
+        publicKey,
+      } = this.props;
+
+      /**
+       * CREATE TIMESTAMP
+       */
+      const timestamp = Date.now();
+      // save timestamp into redux store
+      dispatch(setConnectTimestamp(timestamp));
+
+      // send time stamp
+      if (timestamp) {
+        // let dataObj = { timestamp };
+        this.channel.send(JSON.stringify({ timestamp }));
+      }
       // send trust score
       if (trustScore) {
-        let dataObj = { trustScore };
-        this.channel.send(JSON.stringify(dataObj));
+        // let dataObj = { trustScore };
+        this.channel.send(JSON.stringify({ trustScore }));
       }
       // send nameornym
       if (nameornym) {
-        let dataObj = { nameornym };
-        this.channel.send(JSON.stringify(dataObj));
+        // let dataObj = { nameornym };
+        this.channel.send(JSON.stringify({ nameornym }));
       }
       // send public key
       if (nameornym) {
-        let dataObj = { publicKey };
-        this.channel.send(JSON.stringify(dataObj));
+        // let dataObj = { publicKey };
+        this.channel.send(JSON.stringify({ publicKey }));
       }
       // send user avatar
       if (userAvatar) {
-        let dataObj = { avatar: userAvatar };
-        this.channel.send(JSON.stringify(dataObj));
+        console.warn('has user avatar');
+        // let dataObj = { avatar: userAvatar };
+        this.channel.send(JSON.stringify({ avatar: userAvatar }));
       }
     }
   };

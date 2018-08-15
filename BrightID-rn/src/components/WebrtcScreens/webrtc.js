@@ -22,6 +22,7 @@ import {
  * ===================
  */
 export const PORT = '3001';
+export const URL = '10.0.0.48';
 export const ALPHA = 'ALPHA';
 export const ZETA = 'ZETA';
 export const ICE_CANDIDATE = 'ICE_CANDIDATE';
@@ -46,9 +47,8 @@ export const handleRecievedMessage = (
 ) => async (dispatch: Function, getState: Function) => {
   try {
     // parse message with json
-    console.log('parsing json');
     const msg = JSON.parse(data);
-    console.log(msg);
+    console.warn(msg);
     const { timestamp } = getState().main;
     // update redux store based on message content
 
@@ -73,12 +73,12 @@ export const handleRecievedMessage = (
       channel.send(JSON.stringify({ msg: recievedMessages.avatar }));
     }
     // set trust score
-    if (msg && msg.trustCore) {
+    if (msg && msg.trustScore) {
       dispatch(setConnectTrustScore(msg.trustScore));
       // send recieve message
       channel.send(JSON.stringify({ msg: recievedMessages.trustScore }));
     }
-    // only set timestamp if this is user b
+    // only set timestamp if this is the user displaying qr code
     if (!timestamp && msg && msg.timestamp) {
       dispatch(setConnectTimestamp(msg.timestamp));
       channel.send(JSON.stringify({ msg: recievedMessages.timestamp }));
@@ -97,7 +97,7 @@ export const handleRecievedMessage = (
 
 export const createRTCId = () => async (dispatch: Function) => {
   try {
-    const res = await fetch(`http://localhost:${PORT}/id`);
+    const res = await fetch(`http://${URL}:${PORT}/id`);
     const { rtcId, arbiter } = await res.json();
 
     // simulate network delay
@@ -130,7 +130,7 @@ export const update = ({ type, person, value }) => async (
     const { rtcId } = getState().main;
     console.log(rtcId);
     // attempt to fetch arbiter
-    const { data } = await post(`http://localhost:${PORT}/update`, {
+    const { data } = await post(`http://${URL}:${PORT}/update`, {
       rtcId,
       person,
       type,
@@ -165,7 +165,7 @@ export const fetchArbiter = () => async (
     const { rtcId } = getState().main;
 
     // fetch arbiter from signaling server
-    const { data } = await post(`http://localhost:${PORT}/dispatcher`, {
+    const { data } = await post(`http://${URL}:${PORT}/dispatcher`, {
       rtcId,
     });
     // handle error

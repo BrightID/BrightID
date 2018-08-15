@@ -166,7 +166,7 @@ export const setConnectNameornym = (nameornym: string) => ({
 
 /**
  * redux action creator for setting the trust score of the user you are currently connecting with via webrtc
- * @param type CONNECT_NAMEORNYM
+ * @param type CONNECT_TRUST_SCORE
  * @param nameornym - nameornym of new user while adding a new connection
  */
 
