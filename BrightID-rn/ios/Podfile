@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+platform :ios, '9.0'
 
 target 'BrightID' do
   # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
@@ -28,4 +28,15 @@ target 'BrightID' do
   # React Native Webrtc
   pod 'react-native-webrtc', :path => '../node_modules/react-native-webrtc'
 
+ # remove React target so that project will archive
+
+  post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      if target.name == "React"
+        target.remove_from_project
+      end
+    end
+  end
+
 end
+

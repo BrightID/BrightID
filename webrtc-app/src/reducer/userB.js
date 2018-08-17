@@ -7,7 +7,7 @@ import {
   RESET_STORE_USER_B,
   TIMESTAMP,
   PUBLICKEY3,
-  DISPATCHER_USER_B,
+  ARBITER_USER_B,
   USER_B_WAITING,
   RTC_ID_USER_B,
 } from '../actions';
@@ -16,16 +16,23 @@ const schema = {
   ALPHA: {
     OFFER: '',
     ICE_CANDIDATE: '',
+    PUBLIC_KEY: '',
   },
   ZETA: {
     ANSWER: '',
     ICE_CANDIDATE: '',
+    PUBLIC_KEY: '',
   },
 };
 
 export const initialState = {
   publicKey: new Uint8Array(),
   secretKey: new Uint8Array(),
+  boxKeypair: {
+    publicKey: '',
+    secretKey: '',
+    nonce: 'wadata',
+  },
   message: '',
   messageStr: '',
   publicKey2: new Uint8Array(),
@@ -35,7 +42,7 @@ export const initialState = {
   signedMsg: '',
   rtcId: '',
   waiting: false,
-  dispatcher: schema,
+  arbiter: schema,
 };
 
 export const reducer = (state = initialState, action) => {
@@ -80,10 +87,10 @@ export const reducer = (state = initialState, action) => {
         ...state,
         waiting: true,
       };
-    case DISPATCHER_USER_B:
+    case ARBITER_USER_B:
       return {
         ...state,
-        dispatcher: action.dispatcher,
+        arbiter: action.arbiter,
         waiting: false,
       };
     case RESET_STORE_USER_B:
@@ -98,7 +105,7 @@ export const reducer = (state = initialState, action) => {
         nameornym2: '',
         timestamp: '',
         rtcId: '',
-        dispatcher: schema,
+        arbiter: schema,
       };
     default:
       return state;

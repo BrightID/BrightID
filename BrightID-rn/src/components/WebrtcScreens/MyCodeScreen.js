@@ -17,14 +17,18 @@ import {
   update,
   OFFER,
   ALPHA,
+  PUBLIC_KEY,
   ICE_CANDIDATE,
   fetchArbiter,
   handleRecievedMessage,
+  createKeypair,
 } from './webrtc';
 
 import { resetWebrtc } from '../../actions';
 /**
  * My Code screen of BrightID
+ *
+ * ALPHA represents this user
  * ==================================================================
  * displays a qrcode with rtcId url obtained from a signalling server
  * this component also establishes a RTCPeerConnection and data channel
@@ -58,15 +62,30 @@ class MyCodeScreen extends React.Component<Props, State> {
   }
 
   async componentDidMount() {
-    const { dispatch } = this.props;
-    const rtcId = await dispatch(createRTCId());
-
-    // generate qrcode with rtc id
-    this.genQrCode();
-    // initiate webrtc
-    this.initiateWebrtc();
-    // start polling server for remote desc and ice candidates
-    this.pollSignalServer();
+    try {
+      const { dispatch } = this.props;
+      // obtain rtcId from server
+      await dispatch(createRTCId());
+      // generate box keypair
+      // const { publicKey } = await dispatch(createKeypair());
+      // // update arbiter with keypair
+      // await dispatch(
+      //   update({
+      //     type: PUBLIC_KEY,
+      //     person: ALPHA,
+      //     value: publicKey,
+      //   }),
+      // );3
+      // generate qrcode with rtc id
+      this.genQrCode();
+      // initiate webrtc
+      this.initiateWebrtc();
+      // start polling server for remote desc and ice candidates
+      this.pollSignalServer();
+    } catch (err) {
+      // we should handle err here in case network is down
+      console.log(err);
+    }
   }
 
   async componentDidUpdate(prevProps) {

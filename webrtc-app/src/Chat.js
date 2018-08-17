@@ -1,27 +1,17 @@
 // @flow
 
 import React, { Component } from 'react';
-import nacl from 'tweetnacl';
-import { connect } from 'react-redux';
-import { resetUserB, setUserBRtcId, setUserBDispatcher } from './actions';
-import {
-  fetchDispatcher,
-  update,
-  ZETA,
-  ANSWER,
-  ICE_CANDIDATE,
-} from './actions/api';
-import logging from './utils/logging';
-import { socket } from './websockets';
-
+import { handleRecievedMessage } from './webrtc';
 /**
  * This component handles webrtc messaging
  * it sends the timestamp, publickey,
  */
 
 type Props = {
-  dispatch: Function,
   channel: {},
+  user: string,
+  publicKey: Uint8Array,
+  dispatch: Function,
 };
 
 class Chat extends Component<Props> {
@@ -35,11 +25,12 @@ class Chat extends Component<Props> {
   }
 
   componentWillMount() {
-    const { channel, user, publicKey } = this.props;
+    const { channel, user, publicKey, dispatch } = this.props;
     const { messages } = this.state;
     if (channel) {
       channel.onmessage = (e) => {
         // parse data
+        dispatch(handleRecievedMessage(e.data, channel));
         const msg = JSON.parse(e.data);
         // public key is too long to display
         if (!msg.publicKey) {
@@ -56,17 +47,17 @@ class Chat extends Component<Props> {
       };
       // channel metrics
 
-      console.log(`id ${channel.id}`);
-      console.log(`binaryType ${channel.binaryType}`);
-      console.log(
-        `bufferedAmountLowThreshold ${channel.bufferedAmountLowThreshold}`,
-      );
-      console.log(`maxPacketLifeTime ${channel.maxPAcketLifeTime}`);
-      console.log(`maxRetransmits ${channel.maxRetransmits}`);
-      console.log(`negotiated ${channel.negotiated}`);
-      console.log(`ordered ${channel.ordered}`);
-      console.log(`protocol ${channel.protocol}`);
-      console.log(`readyState ${channel.readyState}`);
+      // console.log(`id ${channel.id}`);
+      // console.log(`binaryType ${channel.binaryType}`);
+      // console.log(
+      //   `bufferedAmountLowThreshold ${channel.bufferedAmountLowThreshold}`,
+      // );
+      // console.log(`maxPacketLifeTime ${channel.maxPAcketLifeTime}`);
+      // console.log(`maxRetransmits ${channel.maxRetransmits}`);
+      // console.log(`negotiated ${channel.negotiated}`);
+      // console.log(`ordered ${channel.ordered}`);
+      // console.log(`protocol ${channel.protocol}`);
+      // console.log(`readyState ${channel.readyState}`);
       // send nameornym
       const nameornym = JSON.stringify({ nameornym: user });
       channel.send(nameornym);

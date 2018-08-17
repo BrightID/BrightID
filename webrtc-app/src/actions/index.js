@@ -8,8 +8,8 @@ export const PAIRING_MESSAGE = 'PAIRING_MESSAGE';
 export const TIMESTAMP = 'TIMESTAMP';
 export const RTC_ID = 'RTC_ID';
 export const RTC_ID_USER_B = 'RTC_ID_USER_B';
-export const DISPATCHER_USER_A = 'DISPATCHER_USER_A';
-export const DISPATCHER_USER_B = 'DISPATCHER_USER_B';
+export const ARBITER_USER_A = 'ARBITER_USER_A';
+export const ARBITER_USER_B = 'ARBITER_USER_B';
 export const USER_A_WAITING = 'USER_A_WAITING';
 export const USER_B_WAITING = 'USER_B_WAITING';
 
@@ -69,12 +69,12 @@ export const userBWaiting = () => ({
   type: USER_B_WAITING,
 });
 
-export const setUserADispatcher = (dispatcher) => ({
-  type: DISPATCHER_USER_A,
-  dispatcher,
+export const setUserAArbiter = (arbiter) => ({
+  type: ARBITER_USER_A,
+  arbiter,
 });
 
-export const setUserBDispatcher = (dispatcher) => ({
-  type: DISPATCHER_USER_B,
-  dispatcher,
+export const setUserBArbiter = (arbiter) => ({
+  type: ARBITER_USER_B,
+  arbiter,
 });
