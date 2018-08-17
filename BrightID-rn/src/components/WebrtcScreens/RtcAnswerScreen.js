@@ -132,6 +132,7 @@ class RtcAnswerScreen extends React.Component<Props, State> {
 
   componentWillUnmount() {
     const { dispatch } = this.props;
+    this.stopPollingServer();
     // close and remove webrtc connection
     if (this.connection) {
       this.connection.close();
@@ -356,7 +357,7 @@ class RtcAnswerScreen extends React.Component<Props, State> {
   updateIce = async (e) => {
     try {
       const { dispatch } = this.props;
-      if (e.candidate) {
+      if (e.candidate && !this.count) {
         /**
          * update the signaling server dispatcher with ice candidate info
          * @param person = ZETA
@@ -371,6 +372,8 @@ class RtcAnswerScreen extends React.Component<Props, State> {
             value: e.candidate,
           }),
         );
+        this.count = 1;
+        console.warn(e.candidate);
       }
     } catch (err) {
       console.log(err);

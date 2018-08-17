@@ -126,6 +126,7 @@ class MyCodeScreen extends React.Component<Props, State> {
 
   componentWillUnmount() {
     const { dispatch } = this.props;
+    this.stopPollingServer();
     // close and remove webrtc connection
     if (this.connection) {
       this.connection.close();
