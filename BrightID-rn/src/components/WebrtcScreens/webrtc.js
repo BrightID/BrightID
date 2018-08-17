@@ -234,6 +234,7 @@ export const fetchArbiter = () => async (
     const { data } = await post(`http://${URL}:${PORT}/dispatcher`, {
       rtcId,
     });
+    //
     // handle error
     if (data.error) {
       console.log('error updating arbiter');
