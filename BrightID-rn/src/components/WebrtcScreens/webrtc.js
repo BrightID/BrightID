@@ -6,6 +6,7 @@
  */
 
 import { post } from 'axios';
+import nacl from 'tweetnacl';
 
 import {
   setConnectPublicKey,
@@ -15,6 +16,7 @@ import {
   setConnectTrustScore,
   setRtcId,
   setArbiter,
+  setBoxKeypair,
 } from '../../actions';
 
 import fragment from '../../utils/fragment';
@@ -23,11 +25,13 @@ import fragment from '../../utils/fragment';
  * constants
  * ===================
  */
+
 export const PORT = '3001';
-export const URL = '10.0.0.48'; // place your url here
+export const URL = 'localhost'; // place your url here
 export const ALPHA = 'ALPHA';
 export const ZETA = 'ZETA';
 export const ICE_CANDIDATE = 'ICE_CANDIDATE';
+export const PUBLIC_KEY = 'PUBLIC_KEY';
 export const OFFER = 'OFFER';
 export const ANSWER = 'ANSWER';
 export const recievedMessages = {
@@ -67,6 +71,17 @@ export const sendMessage = (
 };
 
 /**
+ * create nacl messaging box keypair
+ * ======================================
+ */
+
+export const createKeypair = () => (dispatch: Function) => {
+  // create box keypair
+  const keypair = nacl.box.keyPair();
+  dispatch(setBoxKeypair(keypair));
+};
+
+/**
  * handle webrtc messages recieved
  * ======================================
  */
@@ -80,7 +95,7 @@ export const handleRecievedMessage = (
       // parse message with json
       const msg = JSON.parse(data);
       console.warn(msg);
-      const { timestamp } = getState().main;
+      const { timestamp, connectBoxKeypair } = getState().main;
       // update redux store based on message content
 
       // set public key
@@ -159,14 +174,33 @@ export const update = ({ type, person, value }) => async (
 ) => {
   try {
     // set rtcId
-    const { rtcId } = getState().main;
+    const { rtcId, connectBoxKeypair, arbiter } = getState().main;
     console.log(rtcId);
+
+    /**
+     * in order to encrypt box - we must have the other user's public key - which is stored in the arbiter - if we are updating the ALPHA arbiter, then the other key is stored in ZETA arbiter, and vice versa - if we are setting our own public key in the arbiter, we do not encrypt the message - otherwise, all other messages will be encrypted for security
+     */
+
+    let box;
+    let { publicKey } = type === 'ALPHA' ? arbiter[ZETA] : arbiter[ALPHA];
+
+    // encrypt value msg
+    if (typeof value === 'string' && publicKey) {
+      box = nacl.box(
+        value,
+        publicKey,
+        connectBoxKeypair.nonce,
+        connectBoxKeypair.secretKey,
+      );
+    } else if (type === PUBLIC_KEY) {
+      box = value;
+    }
     // attempt to fetch arbiter
     const { data } = await post(`http://${URL}:${PORT}/update`, {
       rtcId,
       person,
       type,
-      value,
+      box,
     });
     // handle error
     if (data.error) {
@@ -175,14 +209,14 @@ export const update = ({ type, person, value }) => async (
       console.log(data.error);
       return data;
     }
-    const { arbiter } = data;
-    console.log(arbiter);
+    // new arbiter should exist inside of the data object
+    console.log(data.arbiter);
     // update redux store
     // ONLY UPDATE REDUX STORE VIA SOCKET IO
-    dispatch(setArbiter(arbiter));
+    dispatch(setArbiter(data.arbiter));
 
-    // finish async api call
-    return arbiter;
+    // finish async api call by returning the new arbiter
+    return data.arbiter;
   } catch (err) {
     console.log(err);
   }
@@ -207,6 +241,11 @@ export const fetchArbiter = () => async (
       console.log(data.error);
       return data;
     }
+
+    /**
+     * in order to decrypt arbiter values - we must have the other user's public key - which is stored in the arbiter - if we are updating the ALPHA arbiter, then the other key is stored in ZETA arbiter, and vice versa - if we are setting our own public key in the arbiter, we do not encrypt the message - otherwise, all other messages will be encrypted for security
+     */
+
     const { arbiter } = data;
 
     // update redux store

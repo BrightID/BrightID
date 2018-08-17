@@ -6,6 +6,7 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.1.1",
     "buffer": "^5.2.0",
+    "nanoid": "^1.2.1",
     "qrcode": "^1.2.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",

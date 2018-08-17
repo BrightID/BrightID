@@ -26,6 +26,7 @@
 		140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		17DE71074479414D9BA1E509 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0DAB19B9FC4446EA512C49A /* Zocial.ttf */; };
+		1CBB6894F7C7C91D2E316F6D /* libPods-BrightID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 97370B147200463A4297A20A /* libPods-BrightID.a */; };
 		1E7BB7E112324F8587485223 /* apexnewbookwebfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BBFEF736A480484F873E504D /* apexnewbookwebfont.ttf */; };
 		1F8EF4486BD2413BA4B7A268 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37690CBB26D743DB98A7BE6D /* Ionicons.ttf */; };
 		227AF643EA374D04A561A2ED /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AE44A95AFF3479BB8C6A98D /* libBVLinearGradient.a */; };
@@ -59,8 +60,8 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		8F3F1C754D2F4E8FAB1DEBF1 /* libRNRandomBytes-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F399846BD014ECDB1385462 /* libRNRandomBytes-tvOS.a */; };
 		9075644C976D4208A03E392A /* Eurostile-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 89D77E53D069476486799420 /* Eurostile-Regular.ttf */; };
+		922BE704212636B50015E4FA /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 922BE703212636B50015E4FA /* Launch Screen.storyboard */; };
 		9281D908211B8506004CB7D5 /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9281D907211B8506004CB7D5 /* WebRTC.framework */; };
-		971EBB1A3B9E9DAA762EFCF7 /* libPods-BrightID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A8411832658F5573740AE2D /* libPods-BrightID.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		C121BE1C9CDE442EA526707F /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C4B4A4C8FF804985AC0B82AE /* MaterialIcons.ttf */; };
 		C140BC5AB2EE4392ACE7315A /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6CC42E590493489490862786 /* MaterialCommunityIcons.ttf */; };
@@ -444,7 +445,6 @@
 		00E356EE1AD99517003FC87E /* BrightIDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrightIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* BrightIDTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BrightIDTests.m; sourceTree = "<group>"; };
-		05BE3091F6A30F22E1B6E2C2 /* Pods-BrightID.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.release.xcconfig"; path = "Pods/Target Support Files/Pods-BrightID/Pods-BrightID.release.xcconfig"; sourceTree = "<group>"; };
 		07DE6EF1F4AA4E5BBEC35A56 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		0C07EE427D7B4CDDAFC60478 /* RNOS.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNOS.xcodeproj; path = "../node_modules/react-native-os/ios/RNOS.xcodeproj"; sourceTree = "<group>"; };
 		0C20B8AFCA7D49819352BB10 /* ApexNew-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ApexNew-Light.otf"; path = "../assets/fonts/ApexNew-Light.otf"; sourceTree = "<group>"; };
@@ -473,13 +473,13 @@
 		3CD0BDC27DC444D18CD96700 /* libRNRandomBytes.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNRandomBytes.a; sourceTree = "<group>"; };
 		3F399846BD014ECDB1385462 /* libRNRandomBytes-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNRandomBytes-tvOS.a"; sourceTree = "<group>"; };
 		45FC149EB1DF410BB552E8E1 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
-		4A8411832658F5573740AE2D /* libPods-BrightID.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		56CD0ADE4190446A92E93C1D /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		58666D289F104B0AB360162D /* libReactNativePermissions.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libReactNativePermissions.a; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		6073FEDAFFC6436BA6073F85 /* ufonts.com_apexnew-thin-opentype.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ufonts.com_apexnew-thin-opentype.otf"; path = "../assets/fonts/ufonts.com_apexnew-thin-opentype.otf"; sourceTree = "<group>"; };
 		689516850F914E8EAC74034E /* ApexNew-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ApexNew-Medium.otf"; path = "../assets/fonts/ApexNew-Medium.otf"; sourceTree = "<group>"; };
 		6CC42E590493489490862786 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
+		71E3E9B81A6202B6E349C322 /* Pods-BrightID.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.release.xcconfig"; path = "Pods/Target Support Files/Pods-BrightID/Pods-BrightID.release.xcconfig"; sourceTree = "<group>"; };
 		7504ABC0088C4EFAA43E276A /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		785883C1F31B4F23B312C0D9 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
@@ -488,10 +488,14 @@
 		89F635C2BD1F45C197400298 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		8AE44A95AFF3479BB8C6A98D /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
 		9111F90AF2E74CF7842E8406 /* ufonts.com_apexnew-medium-opentype.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ufonts.com_apexnew-medium-opentype.otf"; path = "../assets/fonts/ufonts.com_apexnew-medium-opentype.otf"; sourceTree = "<group>"; };
+		922BE703212636B50015E4FA /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "BrightID/Images.xcassets/Launch Screen.storyboard"; sourceTree = "<group>"; };
 		9281D8D1211B84CF004CB7D5 /* RCTWebRTC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebRTC.xcodeproj; path = "../node_modules/react-native-webrtc/ios/RCTWebRTC.xcodeproj"; sourceTree = "<group>"; };
 		9281D907211B8506004CB7D5 /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = "../node_modules/react-native-webrtc/ios/WebRTC.framework"; sourceTree = "<group>"; };
+		92B5EACD2125DB0C006B9524 /* BrightID.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BrightID.entitlements; path = BrightID/BrightID.entitlements; sourceTree = "<group>"; };
 		95F25D847C844847AD12C00E /* ApexNew-Book.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ApexNew-Book.otf"; path = "../assets/fonts/ApexNew-Book.otf"; sourceTree = "<group>"; };
+		97370B147200463A4297A20A /* libPods-BrightID.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C20A36FF9F74CFBB1109AE6 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
+		9EDFCF070FD71E7EC3D41624 /* Pods-BrightID.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BrightID/Pods-BrightID.debug.xcconfig"; sourceTree = "<group>"; };
 		A55E9461551A4615B50A6545 /* RNRandomBytes.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNRandomBytes.xcodeproj; path = "../node_modules/react-native-randombytes/RNRandomBytes.xcodeproj"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		B464979CE093443EB5302400 /* ufonts.com_apexnew-book-opentype.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ufonts.com_apexnew-book-opentype.otf"; path = "../assets/fonts/ufonts.com_apexnew-book-opentype.otf"; sourceTree = "<group>"; };
@@ -500,7 +504,6 @@
 		C4B4A4C8FF804985AC0B82AE /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		CA90BA4463434D71B80CC3DE /* libRNOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNOS.a; sourceTree = "<group>"; };
 		E0DAB19B9FC4446EA512C49A /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
-		E5041A6073C60ACCB4341633 /* Pods-BrightID.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BrightID/Pods-BrightID.debug.xcconfig"; sourceTree = "<group>"; };
 		E9F16ECE516B49EC82A1A522 /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
 		F430F58BF11443AE87C7F60A /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		FB389FAA63AE4D18AF41DA79 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
@@ -543,7 +546,7 @@
 				227AF643EA374D04A561A2ED /* libBVLinearGradient.a in Frameworks */,
 				EBB74B46FE2F4351857154EF /* libReactNativePermissions.a in Frameworks */,
 				D98DEB895EC14EA680FB5576 /* libRNSVG.a in Frameworks */,
-				971EBB1A3B9E9DAA762EFCF7 /* libPods-BrightID.a in Frameworks */,
+				1CBB6894F7C7C91D2E316F6D /* libPods-BrightID.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -657,10 +660,12 @@
 		13B07FAE1A68108700A75B9A /* BrightID */ = {
 			isa = PBXGroup;
 			children = (
+				92B5EACD2125DB0C006B9524 /* BrightID.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				922BE703212636B50015E4FA /* Launch Screen.storyboard */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
@@ -696,7 +701,7 @@
 			children = (
 				9281D907211B8506004CB7D5 /* WebRTC.framework */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
-				4A8411832658F5573740AE2D /* libPods-BrightID.a */,
+				97370B147200463A4297A20A /* libPods-BrightID.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -766,7 +771,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				90ECC085656B4B66B6B44185 /* Resources */,
 				928DA11020FE4C1100BCCA12 /* Recovered References */,
-				B3981DA4A8C40D60607ED7AF /* Pods */,
+				9702962B37EC1F555AE996E5 /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -905,6 +910,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		9702962B37EC1F555AE996E5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9EDFCF070FD71E7EC3D41624 /* Pods-BrightID.debug.xcconfig */,
+				71E3E9B81A6202B6E349C322 /* Pods-BrightID.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		ADBDB9201DFEBF0600ED6528 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -912,15 +926,6 @@
 				2D16E6721FA4F8DC00B85C8A /* libRCTBlob-tvOS.a */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		B3981DA4A8C40D60607ED7AF /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				E5041A6073C60ACCB4341633 /* Pods-BrightID.debug.xcconfig */,
-				05BE3091F6A30F22E1B6E2C2 /* Pods-BrightID.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -948,12 +953,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "BrightID" */;
 			buildPhases = (
-				EA9CE75189087E3A5AE18A61 /* [CP] Check Pods Manifest.lock */,
+				A37DB9AE75BED2D7D23C397A /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				8B894BA083239D6744864F35 /* [CP] Embed Pods Frameworks */,
+				7BCA73582AFE0A80614BFF0A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1015,6 +1020,17 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 8YXQK74X6B;
+						SystemCapabilities = {
+							com.apple.AccessWiFi = {
+								enabled = 0;
+							};
+							com.apple.DataProtection = {
+								enabled = 0;
+							};
+							com.apple.Push = {
+								enabled = 0;
+							};
+						};
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -1505,6 +1521,7 @@
 				73BE61A70D034929A7DD5B13 /* Octicons.ttf in Resources */,
 				5257B36202824BC68A922234 /* SimpleLineIcons.ttf in Resources */,
 				17DE71074479414D9BA1E509 /* Zocial.ttf in Resources */,
+				922BE704212636B50015E4FA /* Launch Screen.storyboard in Resources */,
 				DD47C614E4694191B433E531 /* Apex New Medium.otf in Resources */,
 				41819DABA161439C8CF2331F /* ApexNew-Book.otf in Resources */,
 				7E23739A30E94642AC63EC6F /* ApexNew-Light.otf in Resources */,
@@ -1549,7 +1566,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1565,7 +1582,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		8B894BA083239D6744864F35 /* [CP] Embed Pods Frameworks */ = {
+		7BCA73582AFE0A80614BFF0A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1583,7 +1600,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BrightID/Pods-BrightID-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		EA9CE75189087E3A5AE18A61 /* [CP] Check Pods Manifest.lock */ = {
+		A37DB9AE75BED2D7D23C397A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1729,7 +1746,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E5041A6073C60ACCB4341633 /* Pods-BrightID.debug.xcconfig */;
+			baseConfigurationReference = 9EDFCF070FD71E7EC3D41624 /* Pods-BrightID.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1752,7 +1769,7 @@
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
 				);
 				INFOPLIST_FILE = BrightID/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1768,6 +1785,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.demo;
 				PRODUCT_NAME = BrightID;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1775,7 +1793,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 05BE3091F6A30F22E1B6E2C2 /* Pods-BrightID.release.xcconfig */;
+			baseConfigurationReference = 71E3E9B81A6202B6E349C322 /* Pods-BrightID.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1797,7 +1815,7 @@
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
 				);
 				INFOPLIST_FILE = BrightID/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1813,6 +1831,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.demo;
 				PRODUCT_NAME = BrightID;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

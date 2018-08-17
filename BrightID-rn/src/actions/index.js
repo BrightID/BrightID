@@ -19,6 +19,7 @@ export const CONNECT_TRUST_SCORE = 'CONNECT_TRUST_SCORE';
 export const CONNECT_TIMESTAMP = 'CONNECT_TIMESTAMP';
 export const CONNECT_AVATAR = 'CONNECT_AVATAR';
 export const ERROR = 'ERROR';
+export const BOX_KEYPAIR = 'BOX_KEYPAIR';
 
 /**
  * redux action creator that updates user `trustScore`
@@ -143,6 +144,20 @@ export const setUserAvatar = (userAvatar: string) => ({
 });
 
 /**
+ * redux action creator for setting user avatar
+ * @param type USER_AVATAR
+ * @param userAvatar string representaiton of user avatar encoded in base64 format
+ */
+
+export const setBoxKeypair = (keypair: {
+  publicKey: Uint8Array,
+  secretKey: Uint8Array,
+}) => ({
+  type: BOX_KEYPAIR,
+  keypair,
+});
+
+/**
  * redux action creator for setting the public key of the user you are currently connecting with via webrtc
  * @param type CONNECT_PUBLICKEY
  * @param publicKey public key of new user while adding a new connection
@@ -215,8 +230,16 @@ export const setRtcId = (rtcId: string) => ({
  */
 
 export const setArbiter = (arbiter: {
-  ALPHA: { OFFER: string, ICE_CONNECTION: string },
-  ZETA: { ANSWER: string, ICE_CONNECTION: string },
+  ALPHA: {
+    OFFER: Array<number>,
+    ICE_CONNECTION: Array<number>,
+    PUBLIC_KEY: Array<number>,
+  },
+  ZETA: {
+    ANSWER: Array<number>,
+    ICE_CONNECTION: Array<number>,
+    PUBLIC_KEY: Array<number>,
+  },
 }) => ({
   type: ARBITER,
   arbiter,

@@ -20,6 +20,7 @@ import {
   fetchArbiter,
   handleRecievedMessage,
   sendMessage,
+  createKeypair,
 } from './webrtc';
 
 import { resetWebrtc, setConnectTimestamp } from '../../actions';
@@ -63,6 +64,9 @@ class RtcAnswerScreen extends React.Component<Props, State> {
   }
 
   async componentDidMount() {
+    const { dispatch } = this.props;
+    // generate box keypair
+    await dispatch(createKeypair());
     // create RTCPeerConnection
     this.initiateWebrtc();
     // fetch arbiter, then set RTC remote / local description and update signaling server
@@ -249,7 +253,7 @@ class RtcAnswerScreen extends React.Component<Props, State> {
         str length: ${JSON.stringify(dataObj).length}
         `);
         // webrtc helper function for sending messages
-        dispatch(sendMessage(JSON.stringify({ timestamp }), this.channel));
+        this.channel.send(JSON.stringify({ timestamp }));
       }
       // send trust score
       if (trustScore) {
@@ -260,7 +264,7 @@ class RtcAnswerScreen extends React.Component<Props, State> {
         str length: ${JSON.stringify(dataObj).length}
         `);
         // webrtc helper function for sending messages
-        dispatch(sendMessage(JSON.stringify({ trustScore }), this.channel));
+        this.channel.send(JSON.stringify({ trustScore }));
       }
       // send nameornym
       if (nameornym) {
@@ -271,7 +275,7 @@ class RtcAnswerScreen extends React.Component<Props, State> {
         str length: ${JSON.stringify(dataObj).length}
         `);
         // webrtc helper function for sending messages
-        dispatch(sendMessage(JSON.stringify({ nameornym })), this.channel);
+        this.channel.send(JSON.stringify({ nameornym }));
       }
       // send public key
       if (publicKey) {
@@ -282,7 +286,7 @@ class RtcAnswerScreen extends React.Component<Props, State> {
         str length: ${JSON.stringify(dataObj).length}
         `);
         // webrtc helper function for sending messages
-        dispatch(sendMessage(JSON.stringify({ publicKey }), this.channel));
+        this.channel.send(JSON.stringify({ publicKey }));
       }
       // send user avatar
       if (userAvatar) {
@@ -293,9 +297,7 @@ class RtcAnswerScreen extends React.Component<Props, State> {
         str length: ${JSON.stringify(dataObj).length}
         `);
         // webrtc helper function for sending messages
-        dispatch(
-          sendMessage(JSON.stringify({ avatar: userAvatar }), this.channel),
-        );
+        this.channel.send(JSON.stringify({ avatar: userAvatar }));
       }
     }
   };

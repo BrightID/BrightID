@@ -20,6 +20,7 @@ import {
   ICE_CANDIDATE,
   fetchArbiter,
   handleRecievedMessage,
+  createKeypair,
 } from './webrtc';
 
 import { resetWebrtc } from '../../actions';
@@ -59,6 +60,9 @@ class MyCodeScreen extends React.Component<Props, State> {
 
   async componentDidMount() {
     const { dispatch } = this.props;
+    // generate box keypair
+    await dispatch(createKeypair());
+    // obtain rtcId from server
     const rtcId = await dispatch(createRTCId());
 
     // generate qrcode with rtc id

@@ -16,16 +16,23 @@ const schema = {
   ALPHA: {
     OFFER: '',
     ICE_CANDIDATE: '',
+    PUBLIC_KEY: '',
   },
   ZETA: {
     ANSWER: '',
     ICE_CANDIDATE: '',
+    PUBLIC_KEY: '',
   },
 };
 
 export const initialState = {
   publicKey: new Uint8Array(),
   secretKey: new Uint8Array(),
+  boxKeypair: {
+    publicKey: '',
+    secretKey: '',
+    nonce: 'wadata',
+  },
   message: '',
   messageStr: '',
   publicKey2: new Uint8Array(),
