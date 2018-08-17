@@ -1,17 +1,9 @@
 // @flow
 
 import React, { Component } from 'react';
-import nacl from 'tweetnacl';
-import qrcode from 'qrcode';
 import { connect } from 'react-redux';
-import { resetUserBStore, setUserBRtcId, setUserBDispatcher } from './actions';
-import {
-  fetchDispatcher,
-  update,
-  ZETA,
-  ANSWER,
-  ICE_CANDIDATE,
-} from './actions/api';
+import { resetUserBStore, setUserBRtcId, setUserBArbiter } from './actions';
+import { fetchArbiter, update, ZETA, ANSWER, ICE_CANDIDATE } from './webrtc';
 import logging from './utils/logging';
 import { socket } from './websockets';
 import Chat from './Chat';
@@ -33,24 +25,24 @@ class ScanQR extends Component<Props> {
   }
 
   async componentDidUpdate(prevProps) {
-    const { dispatcher } = this.props;
+    const { arbiter } = this.props;
     // set ice candidate
     if (
       this.connection &&
       this.connection.remoteDescription &&
-      dispatcher &&
-      dispatcher.ALPHA.ICE_CANDIDATE &&
-      (dispatcher.ALPHA.ICE_CANDIDATE.candidate !==
-        prevProps.dispatcher.ALPHA.ICE_CANDIDATE.candidate ||
-        dispatcher.ALPHA.ICE_CANDIDATE.sdpMLineIndex !==
-          prevProps.dispatcher.ALPHA.ICE_CANDIDATE.sdpMLineIndex ||
-        dispatcher.ALPHA.ICE_CANDIDATE.sdpMid !==
-          prevProps.dispatcher.ALPHA.ICE_CANDIDATE.sdpMid)
+      arbiter &&
+      arbiter.ALPHA.ICE_CANDIDATE &&
+      (arbiter.ALPHA.ICE_CANDIDATE.candidate !==
+        prevProps.arbiter.ALPHA.ICE_CANDIDATE.candidate ||
+        arbiter.ALPHA.ICE_CANDIDATE.sdpMLineIndex !==
+          prevProps.arbiter.ALPHA.ICE_CANDIDATE.sdpMLineIndex ||
+        arbiter.ALPHA.ICE_CANDIDATE.sdpMid !==
+          prevProps.arbiter.ALPHA.ICE_CANDIDATE.sdpMid)
     ) {
       console.log('UserB:');
-      console.log(dispatcher.ALPHA.ICE_CANDIDATE);
+      console.log(arbiter.ALPHA.ICE_CANDIDATE);
       await this.connection.addIceCandidate(
-        new RTCIceCandidate(dispatcher.ALPHA.ICE_CANDIDATE),
+        new RTCIceCandidate(arbiter.ALPHA.ICE_CANDIDATE),
       );
     }
   }
@@ -109,11 +101,11 @@ class ScanQR extends Component<Props> {
       // disconnect if ice connection fails
       this.connection.oniceconnectionstatechange = this.handleIce;
       // fetch dispatcher
-      const dispatcher = await dispatch(fetchDispatcher(ZETA));
+      const arbiter = await dispatch(fetchArbiter());
       // return if error or no offer
-      if (dispatcher.error || !dispatcher.ALPHA.OFFER) return;
+      if (arbiter.error || !arbiter.ALPHA.OFFER) return;
       // set rtc description with offer
-      this.setRtcDescription(dispatcher.ALPHA.OFFER);
+      this.setRtcDescription(arbiter.ALPHA.OFFER);
       // initiate websockets
       this.initiateWebSocket(rtcId);
     } catch (err) {
@@ -128,11 +120,11 @@ class ScanQR extends Component<Props> {
     this.socket = socket();
     this.socket.emit('join', rtcId);
     // subscribe to update event
-    this.socket.on('update', (dispatcher) => {
+    this.socket.on('update', (arbiter) => {
       // update redux store
       console.log('socket io update user B');
-      console.log(dispatcher);
-      dispatch(setUserBDispatcher(dispatcher));
+      console.log(arbiter);
+      dispatch(setUserBArbiter(arbiter));
     });
   };
 
@@ -163,7 +155,7 @@ class ScanQR extends Component<Props> {
       const { dispatch } = this.props;
       if (e.candidate) {
         /**
-         * update the signaling server dispatcher with ice candidate info
+         * update the signaling server arbiter with ice candidate info
          * @param person = ZETA
          * @param type = ICE_CANDIDATE
          * @param value = e.candidate

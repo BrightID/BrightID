@@ -7,7 +7,7 @@ import {
   RESET_STORE_USER_A,
   TIMESTAMP,
   PUBLICKEY3,
-  DISPATCHER_USER_A,
+  ARBITER_USER_A,
   USER_A_WAITING,
   RTC_ID,
 } from '../actions';
@@ -42,7 +42,7 @@ export const initialState = {
   signedMsg: '',
   rtcId: '',
   waiting: false,
-  dispatcher: schema,
+  arbiter: schema,
 };
 
 export const reducer = (state = initialState, action) => {
@@ -82,10 +82,10 @@ export const reducer = (state = initialState, action) => {
         ...state,
         rtcId: action.rtcId,
       };
-    case DISPATCHER_USER_A:
+    case ARBITER_USER_A:
       return {
         ...state,
-        dispatcher: action.dispatcher,
+        arbiter: action.arbiter,
         waiting: false,
       };
     case USER_A_WAITING:
@@ -105,7 +105,7 @@ export const reducer = (state = initialState, action) => {
         nameornym2: '',
         timestamp: '',
         rtcId: '',
-        dispatcher: schema,
+        arbiter: schema,
       };
     default:
       return state;

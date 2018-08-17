@@ -10,9 +10,9 @@ import {
   OFFER,
   ALPHA,
   ICE_CANDIDATE,
-  fetchDispatcher,
-} from './actions/api';
-import { resetUserAStore, setUserADispatcher } from './actions';
+  fetchArbiter,
+} from './webrtc';
+import { resetUserAStore, setUserAArbiter } from './actions';
 import { socket } from './websockets';
 import logging from './utils/logging';
 import Chat from './Chat';
@@ -20,7 +20,7 @@ import Chat from './Chat';
 type Props = {
   rtcId: string,
   dispatch: () => Promise,
-  dispatcher: {},
+  arbiter: {},
 };
 
 class DisplayQR extends Component<Props> {
@@ -48,46 +48,46 @@ class DisplayQR extends Component<Props> {
     this.socket = socket();
     this.socket.emit('join', rtcId);
     // subscribe to update event
-    this.socket.on('update', (dispatcher) => {
+    this.socket.on('update', (arbiter) => {
       // update redux store
       console.log('socket io update User A');
-      console.log(dispatcher);
-      dispatch(setUserADispatcher(dispatcher));
+      console.log(arbiter);
+      dispatch(setUserAArbiter(arbiter));
     });
   }
 
   async componentDidUpdate(prevProps) {
     // generate a new qrcode if the rtcId value changes
-    const { dispatcher } = this.props;
+    const { arbiter } = this.props;
 
     // set remote description
     if (
       this.connection &&
-      dispatcher &&
-      dispatcher.ZETA.ANSWER &&
-      (dispatcher.ZETA.ANSWER.sdp !== prevProps.dispatcher.ZETA.ANSWER.sdp ||
-        dispatcher.ZETA.ANSWER.type !== prevProps.dispatcher.ZETA.ANSWER.type)
+      arbiter &&
+      arbiter.ZETA.ANSWER &&
+      (arbiter.ZETA.ANSWER.sdp !== prevProps.arbiter.ZETA.ANSWER.sdp ||
+        arbiter.ZETA.ANSWER.type !== prevProps.arbiter.ZETA.ANSWER.type)
     ) {
       await this.connection.setRemoteDescription(
-        new RTCSessionDescription(dispatcher.ZETA.ANSWER),
+        new RTCSessionDescription(arbiter.ZETA.ANSWER),
       );
     }
     // set ice candidate
     if (
       this.connection &&
-      dispatcher &&
-      dispatcher.ZETA.ICE_CANDIDATE &&
-      (dispatcher.ZETA.ICE_CANDIDATE.candidate !==
-        prevProps.dispatcher.ZETA.ICE_CANDIDATE.candidate ||
-        dispatcher.ZETA.ICE_CANDIDATE.sdpMLineIndex !==
-          prevProps.dispatcher.ZETA.ICE_CANDIDATE.sdpMLineIndex ||
-        dispatcher.ZETA.ICE_CANDIDATE.sdpMid !==
-          prevProps.dispatcher.ZETA.ICE_CANDIDATE.sdpMid)
+      arbiter &&
+      arbiter.ZETA.ICE_CANDIDATE &&
+      (arbiter.ZETA.ICE_CANDIDATE.candidate !==
+        prevProps.arbiter.ZETA.ICE_CANDIDATE.candidate ||
+        arbiter.ZETA.ICE_CANDIDATE.sdpMLineIndex !==
+          prevProps.arbiter.ZETA.ICE_CANDIDATE.sdpMLineIndex ||
+        arbiter.ZETA.ICE_CANDIDATE.sdpMid !==
+          prevProps.arbiter.ZETA.ICE_CANDIDATE.sdpMid)
     ) {
       console.log('UserA:');
-      console.log(dispatcher.ZETA.ICE_CANDIDATE);
+      console.log(arbiter.ZETA.ICE_CANDIDATE);
       await this.connection.addIceCandidate(
-        new RTCIceCandidate(dispatcher.ZETA.ICE_CANDIDATE),
+        new RTCIceCandidate(arbiter.ZETA.ICE_CANDIDATE),
       );
     }
   }
@@ -161,7 +161,7 @@ class DisplayQR extends Component<Props> {
       const { dispatch } = this.props;
       if (e.candidate) {
         /**
-         * update the signaling server dispatcher with ice candidate info
+         * update the signaling server arbiter with ice candidate info
          * @param person = ZETA
          * @param type = ICE_CANDIDATE
          * @param value = e.candidate

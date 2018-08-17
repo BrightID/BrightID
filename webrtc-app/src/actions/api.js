@@ -4,8 +4,8 @@ import { post } from 'axios';
 
 import {
   setRtcId,
-  setUserADispatcher,
-  setUserBDispatcher,
+  setUserAArbiter,
+  setUserBArbiter,
   userAWaiting,
   userBWaiting,
 } from './index';
@@ -33,7 +33,7 @@ export const createRTCId = () => async (dispatch: Function) => {
     // update redux store
     dispatch(setRtcId(rtcId));
     // only userA initializes creation an RTC Id
-    dispatch(setUserADispatcher(arbiter));
+    dispatch(setUserAArbiter(arbiter));
 
     // return rtcId to component letting it know api fetch is successful
     return new Promise((resolve) => {
@@ -58,11 +58,13 @@ export const update = ({ type, person, value }) => async (
     }
     console.log(rtcId);
     // attempt to fetch dispatcher
+    // in future encrypt data
+    let box = value;
     const { data } = await post(`http://localhost:${PORT}/update`, {
       rtcId,
       person,
       type,
-      value,
+      box,
     });
     // handle error
     if (data.error) {
@@ -76,9 +78,9 @@ export const update = ({ type, person, value }) => async (
     // update redux store
     // ONLY UPDATE REDUX STORE VIA SOCKET IO
     if (person === ALPHA) {
-      dispatch(setUserADispatcher(arbiter));
+      dispatch(setUserAArbiter(arbiter));
     } else if (person === ZETA) {
-      dispatch(setUserBDispatcher(arbiter));
+      dispatch(setUserBArbiter(arbiter));
     }
     // finish async api call
     return arbiter;
@@ -130,9 +132,9 @@ export const fetchDispatcher = (person) => async (
     console.log(arbiter);
     // update redux store
     if (person === ALPHA) {
-      dispatch(setUserADispatcher(arbiter));
+      dispatch(setUserAArbiter(arbiter));
     } else if (person === ZETA) {
-      dispatch(setUserBDispatcher(arbiter));
+      dispatch(setUserBArbiter(arbiter));
     }
     // finish async api call
     return arbiter;

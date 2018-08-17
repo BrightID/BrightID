@@ -17,6 +17,7 @@ import {
   ANSWER,
   ZETA,
   ICE_CANDIDATE,
+  PUBLIC_KEY,
   fetchArbiter,
   handleRecievedMessage,
   sendMessage,
@@ -25,7 +26,9 @@ import {
 
 import { resetWebrtc, setConnectTimestamp } from '../../actions';
 /**
- * My Code screen of BrightID
+ * RTC Ansewr Screen of BrightID
+ *
+ * ZETA represents this user
  * ==================================================================
  * exchanges user data
  * this component also establishes a RTCPeerConnection and data channel
@@ -64,13 +67,27 @@ class RtcAnswerScreen extends React.Component<Props, State> {
   }
 
   async componentDidMount() {
-    const { dispatch } = this.props;
-    // generate box keypair
-    await dispatch(createKeypair());
-    // create RTCPeerConnection
-    this.initiateWebrtc();
-    // fetch arbiter, then set RTC remote / local description and update signaling server
-    this.answerWebrtc();
+    try {
+      const { dispatch } = this.props;
+      // generate box keypair
+
+      // const { publicKey } = await dispatch(createKeypair());
+      // // update arbiter with keypair
+      // await dispatch(
+      //   update({
+      //     type: PUBLIC_KEY,
+      //     person: ZETA,
+      //     value: publicKey,
+      //   }),
+      // );
+      // create RTCPeerConnection
+      this.initiateWebrtc();
+      // fetch arbiter, then set RTC remote / local description and update signaling server
+      this.answerWebrtc();
+    } catch (err) {
+      // we should handle err here in case network is down or something
+      console.log(err);
+    }
   }
 
   shouldComponentUpdate(nextProps) {
@@ -248,7 +265,7 @@ class RtcAnswerScreen extends React.Component<Props, State> {
       if (timestamp) {
         let dataObj = { timestamp };
 
-        console.warn(`
+        console.log(`
         timestamp byte length: ${stringByteLength(JSON.stringify(dataObj))}
         str length: ${JSON.stringify(dataObj).length}
         `);
@@ -259,7 +276,7 @@ class RtcAnswerScreen extends React.Component<Props, State> {
       if (trustScore) {
         let dataObj = { trustScore };
 
-        console.warn(`
+        console.log(`
         trustScore byte length: ${stringByteLength(JSON.stringify(dataObj))}
         str length: ${JSON.stringify(dataObj).length}
         `);
@@ -270,7 +287,7 @@ class RtcAnswerScreen extends React.Component<Props, State> {
       if (nameornym) {
         let dataObj = { nameornym };
 
-        console.warn(`
+        console.log(`
         nameornym byte length: ${stringByteLength(JSON.stringify(dataObj))}
         str length: ${JSON.stringify(dataObj).length}
         `);
@@ -281,7 +298,7 @@ class RtcAnswerScreen extends React.Component<Props, State> {
       if (publicKey) {
         let dataObj = { publicKey };
 
-        console.warn(`
+        console.log(`
         publicKey byte length: ${stringByteLength(JSON.stringify(dataObj))}
         str length: ${JSON.stringify(dataObj).length}
         `);
@@ -290,14 +307,14 @@ class RtcAnswerScreen extends React.Component<Props, State> {
       }
       // send user avatar
       if (userAvatar) {
-        console.warn('has user avatar');
-        let dataObj = { avatar: userAvatar };
-        console.warn(`
-        user Avatar byte length: ${stringByteLength(JSON.stringify(dataObj))}
-        str length: ${JSON.stringify(dataObj).length}
-        `);
-        // webrtc helper function for sending messages
-        this.channel.send(JSON.stringify({ avatar: userAvatar }));
+        // console.log('has user avatar');
+        // let dataObj = { avatar: userAvatar };
+        // console.log(`
+        // user Avatar byte length: ${stringByteLength(JSON.stringify(dataObj))}
+        // str length: ${JSON.stringify(dataObj).length}
+        // `);
+        // // webrtc helper function for sending messages
+        // this.channel.send(JSON.stringify({ avatar: userAvatar }));
       }
     }
   };
