@@ -3,7 +3,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { resetUserBStore, setUserBRtcId, setUserBArbiter } from './actions';
-import { fetchArbiter, update, ZETA, ANSWER, ICE_CANDIDATE } from './webrtc';
+import {
+  fetchArbiter,
+  update,
+  ZETA,
+  ANSWER,
+  ICE_CANDIDATE,
+  ICE_SERVERS,
+} from './webrtc';
 import logging from './utils/logging';
 import { socket } from './websockets';
 import Chat from './Chat';
@@ -91,7 +98,7 @@ class ScanQR extends Component<Props> {
       // set rtc token
       await dispatch(setUserBRtcId(rtcId));
       // create webrtc peer connection
-      this.connection = new RTCPeerConnection(null);
+      this.connection = new RTCPeerConnection(ICE_SERVERS);
       logging(this.connection, 'UserB');
       window.cb = this.connection;
       // handle ice
@@ -168,6 +175,7 @@ class ScanQR extends Component<Props> {
             value: e.candidate,
           }),
         );
+        console.log(e.candidate);
       }
     } catch (err) {
       console.warn(err);

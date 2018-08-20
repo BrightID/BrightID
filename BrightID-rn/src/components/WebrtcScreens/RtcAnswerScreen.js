@@ -18,6 +18,7 @@ import {
   ZETA,
   ICE_CANDIDATE,
   PUBLIC_KEY,
+  ICE_SERVERS,
   fetchArbiter,
   handleRecievedMessage,
   sendMessage,
@@ -90,23 +91,23 @@ class RtcAnswerScreen extends React.Component<Props, State> {
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    const {
-      arbiter,
-      connectTimestamp,
-      connectPublicKey,
-      connectNameornym,
-      navigation,
-    } = nextProps;
+  // shouldComponentUpdate(nextProps) {
+  //   const {
+  //     arbiter,
+  //     connectTimestamp,
+  //     connectPublicKey,
+  //     connectNameornym,
+  //     navigation,
+  //   } = nextProps;
 
-    // if we have all of the second users data, proceed to the next screen
-    // avatar is optionally since we aren't setting them universally yet
-    if (connectTimestamp && connectPublicKey && connectNameornym) {
-      // navigation.navigate()
-    }
+  //   // if we have all of the second users data, proceed to the next screen
+  //   // avatar is optionally since we aren't setting them universally yet
+  //   if (connectTimestamp && connectPublicKey && connectNameornym) {
+  //     // navigation.navigate()
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
 
   async componentDidUpdate(prevProps) {
     const { arbiter } = this.props;
@@ -159,7 +160,7 @@ class RtcAnswerScreen extends React.Component<Props, State> {
 
   initiateWebrtc = () => {
     // create webrtc instance after we have the arbiter
-    this.connection = new RTCPeerConnection(null);
+    this.connection = new RTCPeerConnection(ICE_SERVERS);
     logging(this.connection, 'UserB');
     // update arbiter when ice candidate is found
     this.connection.onicecandidate = this.updateIce;
@@ -372,7 +373,7 @@ class RtcAnswerScreen extends React.Component<Props, State> {
             value: e.candidate,
           }),
         );
-        this.count = 1;
+        // this.count = 1;
         console.warn(e.candidate);
       }
     } catch (err) {
