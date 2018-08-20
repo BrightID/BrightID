@@ -24,8 +24,17 @@ import {
  * ===================
  */
 
-export const PORT = '3001';
-export const URL = 'signal.hotlinebling.space'; // place your url here
+export const ICE_SERVERS = {
+  iceServers: [
+    // { url: 'stun:stun.l.google.com:19302' },
+    {
+      url: 'turn:signal.hotlinebling.space',
+      username: 'trident',
+      credential: 'flamethrower',
+    },
+  ],
+};
+export const URL = 'https://signal.hotlinebling.space'; // place your url here
 export const ALPHA = 'ALPHA';
 export const ZETA = 'ZETA';
 export const ICE_CANDIDATE = 'ICE_CANDIDATE';
@@ -103,7 +112,7 @@ export const handleRecievedMessage = (
 
 export const createRTCId = () => async (dispatch: Function) => {
   try {
-    const res = await fetch(`http://${URL}:${PORT}/id`);
+    const res = await fetch(`${URL}/id`);
     const { rtcId, arbiter } = await res.json();
 
     // simulate network delay
@@ -139,7 +148,7 @@ export const update = ({ type, person, value }) => async (
     let box = value;
 
     // attempt to update and fetch new arbiter
-    const { data } = await post(`http://${URL}:${PORT}/update`, {
+    const { data } = await post(`${URL}/update`, {
       rtcId,
       person,
       type,
@@ -174,7 +183,7 @@ export const fetchArbiter = () => async (
     const { rtcId } = getState().userA || getState().userB;
 
     // fetch arbiter from signaling server
-    const { data } = await post(`http://${URL}:${PORT}/dispatcher`, {
+    const { data } = await post(`${URL}/dispatcher`, {
       rtcId,
     });
     // handle error
@@ -244,7 +253,7 @@ export const createKeypair = () => (dispatch: Function) => {
 //       box = value;
 //     }
 //     // attempt to update and fetch new arbiter
-//     const { data } = await post(`http://${URL}:${PORT}/update`, {
+//     const { data } = await post(`${URL}/update`, {
 //       rtcId,
 //       person,
 //       type,

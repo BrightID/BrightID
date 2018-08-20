@@ -26,6 +26,16 @@ import fragment from '../../utils/fragment';
  * ===================
  */
 
+export const ICE_SERVERS = {
+  iceServers: [
+    // { url: 'stun:stun.l.google.com:19302' },
+    {
+      url: 'turn:signal.hotlinebling.space',
+      username: 'trident',
+      credential: 'flamethrower',
+    },
+  ],
+};
 export const URL = 'https://signal.hotlinebling.space'; // place your url here
 export const ALPHA = 'ALPHA';
 export const ZETA = 'ZETA';

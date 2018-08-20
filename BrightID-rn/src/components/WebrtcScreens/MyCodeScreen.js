@@ -19,6 +19,7 @@ import {
   ALPHA,
   PUBLIC_KEY,
   ICE_CANDIDATE,
+  ICE_SERVERS,
   fetchArbiter,
   handleRecievedMessage,
   createKeypair,
@@ -155,7 +156,7 @@ class MyCodeScreen extends React.Component<Props, State> {
     const { dispatch } = this.props;
     // create webrtc instance
     console.log('creating w3ebrtc data channel');
-    this.connection = new RTCPeerConnection(null);
+    this.connection = new RTCPeerConnection(ICE_SERVERS);
     logging(this.connection, 'UserA');
     window.ca = this.connection;
     // handle ice
@@ -230,6 +231,7 @@ class MyCodeScreen extends React.Component<Props, State> {
           }),
         );
       }
+      console.warn(e.candidate);
     } catch (err) {
       console.log(err);
     }

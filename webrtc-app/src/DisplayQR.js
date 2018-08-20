@@ -11,6 +11,7 @@ import {
   ALPHA,
   ICE_CANDIDATE,
   fetchArbiter,
+  ICE_SERVERS,
 } from './webrtc';
 import { resetUserAStore, setUserAArbiter } from './actions';
 import { socket } from './websockets';
@@ -84,8 +85,6 @@ class DisplayQR extends Component<Props> {
         arbiter.ZETA.ICE_CANDIDATE.sdpMid !==
           prevProps.arbiter.ZETA.ICE_CANDIDATE.sdpMid)
     ) {
-      console.log('UserA:');
-      console.log(arbiter.ZETA.ICE_CANDIDATE);
       await this.connection.addIceCandidate(
         new RTCIceCandidate(arbiter.ZETA.ICE_CANDIDATE),
       );
@@ -117,8 +116,9 @@ class DisplayQR extends Component<Props> {
     const { dispatch } = this.props;
     // create webrtc instance
     console.log('creating w3ebrtc data channel');
-    this.connection = new RTCPeerConnection(null);
+    this.connection = new RTCPeerConnection(ICE_SERVERS);
     logging(this.connection, 'UserA');
+
     window.ca = this.connection;
     // handle ice
     this.connection.onicecandidate = this.updateIce;
@@ -174,6 +174,7 @@ class DisplayQR extends Component<Props> {
             value: e.candidate,
           }),
         );
+        console.log(e.candidate);
       }
     } catch (err) {
       console.warn(err);

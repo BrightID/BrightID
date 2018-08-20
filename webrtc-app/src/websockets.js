@@ -2,7 +2,9 @@
 
 import io from 'socket.io-client';
 
-export const socket = () => io.connect('http://localhost:3001/signal');
+import { URL } from './webrtc';
+
+export const socket = () => io.connect(`${URL}/signal`);
 
 export const signal = (rtcId) => {
   socket().emit('join', rtcId);
