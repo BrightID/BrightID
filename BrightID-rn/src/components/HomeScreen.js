@@ -164,7 +164,8 @@ export class HomeScreen extends React.Component<Props> {
             <TouchableOpacity
               style={styles.connectButton}
               onPress={() => {
-                navigation.navigate('NewConnection');
+                // navigation.navigate('NewConnection');
+                navigation.navigate('PreviewConnection');
               }}
               accessible={true}
               accessibilityLabel="Connect"

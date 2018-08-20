@@ -9,6 +9,8 @@ import Onboard from './components/OnboardingScreens/Onboard';
 import SignUp from './components/OnboardingScreens/SignUp';
 import NewConnectionScreen from './components/WebrtcScreens/NewConnectionScreen';
 import RtcAnswerScreen from './components/WebrtcScreens/RtcAnswerScreen';
+import PreviewConnectionScreen from './components/WebrtcScreens/PreviewConnectionScreen';
+import SuccessScreen from './components/WebrtcScreens/SuccessScreen';
 import AppBootstrap from './AppBootstrap';
 
 /**
@@ -36,6 +38,12 @@ const AppStack = createStackNavigator(
     },
     RtcAnswer: {
       screen: RtcAnswerScreen,
+    },
+    Success: {
+      screen: SuccessScreen,
+    },
+    PreviewConnection: {
+      screen: PreviewConnectionScreen,
     },
   },
   {
