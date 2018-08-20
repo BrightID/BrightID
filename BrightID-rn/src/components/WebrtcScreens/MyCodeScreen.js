@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
 import { connect } from 'react-redux';
@@ -42,6 +42,7 @@ type Props = {
   publicKey: Uint8Array,
   rtcId: string,
   dispatch: Function,
+  userAvatar: { uri: string },
 };
 
 type State = {
@@ -76,7 +77,7 @@ class MyCodeScreen extends React.Component<Props, State> {
       //     person: ALPHA,
       //     value: publicKey,
       //   }),
-      // );3
+      // );
       // generate qrcode with rtc id
       this.genQrCode();
       // initiate webrtc
@@ -231,7 +232,7 @@ class MyCodeScreen extends React.Component<Props, State> {
           }),
         );
       }
-      console.warn(e.candidate);
+      console.log(e.candidate);
     } catch (err) {
       console.log(err);
     }
@@ -252,20 +253,52 @@ class MyCodeScreen extends React.Component<Props, State> {
     // we must extract the value of d from this string in order to use it
     // with react-native-svg
     //
+    console.log(qrsvg);
     const dinx = qrsvg.lastIndexOf('d');
     const dpath = qrsvg.substr(dinx);
     const qrsvgd = dpath.match(/"([^"]+)"/g)[0].split('"')[1];
     this.setState({ qrsvgd });
+    console.log(qrsvgd);
   };
 
   render() {
+    const { userAvatar, nameornym } = this.props;
     return (
       <View style={styles.container}>
-        <TextInput value={this.props.rtcId || 'RTC TOKEN'} editable={true} />
-        <Svg height="150" width="150" viewBox="0 0 29 29">
-          <Path fill="#fff" d="M0 0h29v29H0z" />
-          <Path stroke="#000" d={this.state.qrsvgd} />
-        </Svg>
+        <View style={styles.myCodeInfoContainer}>
+          <Text style={styles.myCodeInfoText}>
+            To make a new connection, you will share your
+          </Text>
+          <Text style={styles.myCodeInfoText}>
+            name, your photo, your trust score
+          </Text>
+        </View>
+        <View style={styles.userAvatarContainer}>
+          <Image
+            source={userAvatar}
+            style={styles.userAvatar}
+            resizeMode="cover"
+            onError={(e) => {
+              console.log(e.error);
+            }}
+            accessible={true}
+            accessibilityLabel="user avatar image"
+          />
+          <Text style={styles.nameornym}>{nameornym}</Text>
+        </View>
+        {/* <TextInput value={this.props.rtcId || 'RTC TOKEN'} editable={true} /> */}
+        <View style={styles.qrsvgContainer}>
+          <Svg
+            height="246"
+            width="246"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 33 33"
+            shape-rendering="crispEdges"
+          >
+            <Path fill="#fff" d="M0 0h33v33H0z" />
+            <Path stroke="#000" d={this.state.qrsvgd} />
+          </Svg>
+        </View>
       </View>
     );
   }
@@ -277,8 +310,54 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#fdfdfd',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     flexDirection: 'column',
+  },
+  myCodeInfoContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 24,
+    marginBottom: 36,
+  },
+  myCodeInfoText: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 16,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'center',
+    color: '#4a4a4a',
+  },
+  userAvatarContainer: {
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  userAvatar: {
+    width: 102,
+    height: 102,
+    borderRadius: 51,
+  },
+  nameornym: {
+    fontFamily: 'ApexNew-Book',
+    marginTop: 12,
+    fontSize: 20,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#000000',
+    textShadowColor: 'rgba(0, 0, 0, 0.32)',
+    textShadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    textShadowRadius: 4,
+  },
+  qrsvgContainer: {
+    width: '100%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
 });
 

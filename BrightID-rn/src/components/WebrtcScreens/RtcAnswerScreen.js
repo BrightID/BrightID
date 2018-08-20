@@ -374,7 +374,7 @@ class RtcAnswerScreen extends React.Component<Props, State> {
           }),
         );
         // this.count = 1;
-        console.warn(e.candidate);
+        console.log(e.candidate);
       }
     } catch (err) {
       console.log(err);
