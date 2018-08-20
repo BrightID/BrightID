@@ -18,6 +18,7 @@ import { setRtcId } from '../../actions';
 
 type Props = {
   dispatch: Function,
+  navigation: { navigate: Function },
 };
 
 type State = {
@@ -48,26 +49,37 @@ class ScanCodeScreen extends React.Component<Props, State> {
 
     // switch to RtcAnswerScreen after RTC ID is set
     navigation.navigate('RtcAnswer');
-    // if (!this.state.dataFound) {
-    //   // Alert.alert(data);
-    //   //
-    //   console.log(data);
-    //   dispatch(generateMessage(data));
-    // }
-    // // only scan code once
-    // // this is a hack, TODO: CHANGE THIS
-    // this.setState({ qrData: data, dataFound: true });
   };
 
   render() {
     const { hasCameraPermission } = this.state;
     return (
       <View style={styles.container}>
+        <View style={styles.scanTextContainer}>
+          <TextInput
+            value={this.state.rtcId}
+            onChangeText={(value) => {
+              console.log(value.length);
+              if (value.length > 19 && value.length < 23) {
+                this.handleBarCodeRead({
+                  type: 'text-input',
+                  data: value.trim(),
+                });
+              }
+            }}
+            style={styles.searchField}
+            placeholder="Scan a BrightID code to make a connection"
+            autoCapitalize="none"
+            autoCorrect={false}
+            textContentType="name"
+            underlineColorAndroid="transparent"
+          />
+        </View>
         <RNCamera
           ref={(ref) => {
             this.camera = ref;
           }}
-          style={styles.preview}
+          style={styles.cameraPreview}
           onBarCodeRead={this.handleBarCodeRead}
           type={RNCamera.Constants.Type.back}
           flashMode={RNCamera.Constants.FlashMode.off}
@@ -76,27 +88,6 @@ class ScanCodeScreen extends React.Component<Props, State> {
         >
           <Ionicons name="ios-qr-scanner" size={223} color="#F76B1C" />
         </RNCamera>
-        <View style={styles.inputContainer}>
-          <TextInput
-            value={this.state.rtcId}
-            onChangeText={(value) => {
-              this.setState({ rtcId: value.trim() });
-            }}
-            style={styles.searchField}
-            placeholder="Copy RtcId"
-            autoCapitalize="none"
-            autoCorrect={false}
-            textContentType="name"
-            underlineColorAndroid="transparent"
-          />
-          <Button
-            title="submit rtc token"
-            onPress={() => {
-              const { rtcId } = this.state;
-              this.handleBarCodeRead({ type: 'text-input', data: rtcId });
-            }}
-          />
-        </View>
       </View>
     );
   }
@@ -111,32 +102,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
   },
-  preview: {
-    // ...StyleSheet.absoluteFillObject,
-    flex: 4,
+  cameraPreview: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
   },
-  inputContainer: {
-    flex: 1,
+  scanTextContainer: {
+    height: 85,
     width: '100%',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 10,
   },
   searchField: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 14,
-    marginTop: 3.1,
+    fontSize: 16,
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: '#333',
-    padding: 3.4,
-    height: 23,
-    minWidth: 200,
   },
 });
 

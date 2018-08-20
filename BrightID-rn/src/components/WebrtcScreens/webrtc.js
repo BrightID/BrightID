@@ -28,7 +28,7 @@ import fragment from '../../utils/fragment';
 
 export const ICE_SERVERS = {
   iceServers: [
-    // { url: 'stun:stun.l.google.com:19302' },
+    { url: 'stun:signal.hotlinebling.space' },
     {
       url: 'turn:signal.hotlinebling.space',
       username: 'trident',
@@ -64,7 +64,7 @@ export const handleRecievedMessage = (
     if (channel && channel.readyState === 'open') {
       // parse message with json
       const msg = JSON.parse(data);
-      console.warn(msg);
+      console.log(msg);
       const { timestamp, connectBoxKeypair } = getState().main;
       // update redux store based on message content
 
@@ -100,7 +100,7 @@ export const handleRecievedMessage = (
         channel.send(JSON.stringify({ msg: recievedMessages.timestamp }));
       }
 
-      console.warn(msg);
+      console.log(msg);
     }
   } catch (err) {
     console.log(err);
@@ -158,9 +158,9 @@ export const update = ({ type, person, value }) => async (
     });
     // handle error
     if (data.error) {
-      console.warn('error UPDATING arbiter');
-      console.warn(data.msg);
-      console.warn(data.error);
+      console.log('error UPDATING arbiter');
+      console.log(data.msg);
+      console.log(data.error);
       return data;
     }
     // new arbiter should exist inside of the data object
@@ -190,9 +190,9 @@ export const fetchArbiter = () => async (
     });
     // handle error
     if (data.error) {
-      console.warn('error updating arbiter');
-      console.warn(data.msg);
-      console.warn(data.error);
+      console.log('error updating arbiter');
+      console.log(data.msg);
+      console.log(data.error);
       return data;
     }
 
@@ -289,7 +289,7 @@ export const createKeypair = () => (dispatch: Function) => {
 //     if (channel && channel.readyState === 'open') {
 //       // fragments messages into chunks of 600 bytes and converts message into Uint8Array
 //       const messages = fragment(data);
-//       console.warn(messages);
+//       console.log(messages);
 //       let sendTime = 0;
 //       for (let m of messages) {
 //         // stagger sending messages by 200 ms

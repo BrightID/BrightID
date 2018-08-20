@@ -5,6 +5,7 @@ import {
   Alert,
   AsyncStorage,
   Dimensions,
+  Image,
   StatusBar,
   StyleSheet,
   Text,
@@ -16,7 +17,6 @@ import HeaderButtons from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import BottomNav from './BottomNav';
-import UserAvatar from './UserAvatar';
 import store from '../store';
 import { removeUserData } from '../actions';
 
@@ -120,13 +120,23 @@ export class HomeScreen extends React.Component<Props> {
       trustScore,
       connections,
       groupsCount,
+      userAvatar,
     } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.mainContainer}>
-          <View style={styles.user}>
-            <UserAvatar />
-            <Text id="nameornym" style={styles.name}>
+          <View style={styles.userAvatarContainer}>
+            <Image
+              source={userAvatar}
+              style={styles.userAvatar}
+              resizeMode="cover"
+              onError={(e) => {
+                console.log(e.error);
+              }}
+              accessible={true}
+              accessibilityLabel="user avatar image"
+            />
+            <Text id="nameornym" style={styles.nameornym}>
               {nameornym}
             </Text>
           </View>
@@ -183,17 +193,37 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
-  name: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 30,
-    marginTop: 8,
-    textAlign: 'center',
-    shadowColor: 'rgba(0,0,0,0.32)',
+
+  userAvatarContainer: {
+    marginTop: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  userAvatar: {
+    width: 142,
+    height: 142,
+    borderRadius: 71,
+    shadowColor: 'rgba(0, 0, 0, 0.5)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
-  user: {
-    marginTop: 24,
+  nameornym: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 30,
+    marginTop: 8,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.32)',
+    textShadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    textShadowRadius: 4,
+    shadowColor: 'rgba(0,0,0,0.32)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
   },
   connectContainer: {
     width: '100%',
@@ -214,10 +244,12 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     paddingBottom: 7,
   },
-
   trustScore: {
     fontFamily: 'ApexNew-Book',
     fontSize: 18,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
     textAlign: 'center',
     color: 'green',
   },
@@ -231,11 +263,17 @@ const styles = StyleSheet.create({
     fontFamily: 'ApexNew-Book',
     textAlign: 'center',
     fontSize: 16,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
   },
   countsNumberText: {
     fontFamily: 'ApexNew-Book',
     textAlign: 'center',
     fontSize: 22,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
   },
   countsGroup: {
     flex: 1,

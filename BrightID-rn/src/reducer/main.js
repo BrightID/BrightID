@@ -111,7 +111,8 @@ export const mainReducer = (state = initialState, action) => {
     case UPDATE_USER_DATA:
       return {
         ...state,
-        userAvatar: action.userAvatar,
+        userAvatar:
+          action.userAvatar || require('../static/default_avatar.jpg'),
         nameornym: action.nameornym,
         publicKey: action.publicKey,
         secretKey: action.secretKey,
