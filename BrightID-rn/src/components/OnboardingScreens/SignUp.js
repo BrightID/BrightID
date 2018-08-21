@@ -15,7 +15,10 @@ import {
 import nacl from 'tweetnacl';
 import ImagePicker from 'react-native-image-picker';
 import { connect } from 'react-redux';
-import HeaderButtons from 'react-navigation-header-buttons';
+import HeaderButtons, {
+  HeaderButton,
+  Item,
+} from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { setUserData } from '../../actions';
 
@@ -31,6 +34,19 @@ type State = {
   userAvatar: Object,
 };
 
+// header Button
+const IoniconsHeaderButton = (passMeFurther) => (
+  // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
+  // and it is important to pass those props to `HeaderButton`
+  // then you may add some information like icon size or color (if you use icons)
+  <HeaderButton
+    {...passMeFurther}
+    IconComponent={Ionicons}
+    iconSize={32}
+    color="#fff"
+  />
+);
+
 class SignUp extends React.Component<Props, State> {
   static navigationOptions = {
     title: 'BrightID',
@@ -39,8 +55,8 @@ class SignUp extends React.Component<Props, State> {
       backgroundColor: '#f48b1e',
     },
     headerRight: (
-      <HeaderButtons IconComponent={Ionicons} iconSize={32} color="#fff">
-        <HeaderButtons.Item
+      <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
+        <Item
           title="help"
           iconName="ios-help-circle-outline"
           onPress={() => console.log('help')}
@@ -152,7 +168,7 @@ class SignUp extends React.Component<Props, State> {
     ) : (
       <TouchableOpacity onPress={this.getAvatarPhoto} style={styles.addPhoto}>
         <Text style={styles.addPhotoText}>Add Photo</Text>
-        <Ionicons size={48} name="ios-camera-outline" color="#979797" />
+        <Ionicons size={48} name="ios-camera" color="#979797" />
       </TouchableOpacity>
     );
 

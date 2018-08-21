@@ -13,7 +13,10 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import HeaderButtons from 'react-navigation-header-buttons';
+import HeaderButtons, {
+  HeaderButton,
+  Item,
+} from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import BottomNav from './BottomNav';
@@ -22,7 +25,21 @@ import { removeUserData } from '../actions';
 
 /**
  * Home screen of BrightID
+ * ==========================
  */
+
+// header Button
+const IoniconsHeaderButton = (passMeFurther) => (
+  // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
+  // and it is important to pass those props to `HeaderButton`
+  // then you may add some information like icon size or color (if you use icons)
+  <HeaderButton
+    {...passMeFurther}
+    IconComponent={Ionicons}
+    iconSize={32}
+    color="#fff"
+  />
+);
 
 type Props = {
   trustScore: string,
@@ -37,10 +54,10 @@ export class HomeScreen extends React.Component<Props> {
     title: 'BrightID',
     headerBackTitle: 'Home',
     headerRight: (
-      <HeaderButtons IconComponent={Ionicons} iconSize={32} color="#fff">
-        <HeaderButtons.Item
+      <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
+        <Item
           title="more"
-          iconName="ios-more-outline"
+          iconName="ios-more"
           onPress={() => {
             Alert.alert(
               'WARNING',
@@ -72,13 +89,8 @@ export class HomeScreen extends React.Component<Props> {
       </HeaderButtons>
     ),
     headerLeft: (
-      <HeaderButtons
-        IconComponent={Ionicons}
-        iconSize={32}
-        color="#fff"
-        left={true}
-      >
-        <HeaderButtons.Item
+      <HeaderButtons left={true} HeaderButtonComponent={IoniconsHeaderButton}>
+        <Item
           title="help"
           iconName="ios-help-circle-outline"
           onPress={() => {

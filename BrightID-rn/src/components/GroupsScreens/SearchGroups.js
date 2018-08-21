@@ -23,7 +23,7 @@ class SearchGroups extends React.Component<Props> {
     return (
       <View style={styles.container}>
         <Touchable style={styles.searchIcon}>
-          <Ionicon size={28} name="ios-search-outline" color="#000" />
+          <Ionicon size={28} name="ios-search" color="#000" />
         </Touchable>
         <TextInput
           value={this.props.searchParam}
@@ -32,7 +32,7 @@ class SearchGroups extends React.Component<Props> {
           placeholder="Search Groups"
         />
         <Touchable style={styles.optionsIcon}>
-          <Ionicon size={28} name="ios-options-outline" color="#000" />
+          <Ionicon size={28} name="ios-options" color="#000" />
         </Touchable>
       </View>
     );
