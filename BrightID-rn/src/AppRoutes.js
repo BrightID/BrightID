@@ -20,6 +20,8 @@ import AppBootstrap from './AppBootstrap';
  * this determines whether to navigate to the onboarding or app stack
  * the onboarding stack contains an intro screen, and a screen for uploading a photo and creating a user name
  * the appstack contains most of the app
+ * the mainstack contains the app stack and modals
+ *
  */
 
 const AppStack = createStackNavigator(
@@ -39,7 +41,7 @@ const AppStack = createStackNavigator(
     RtcAnswer: {
       screen: RtcAnswerScreen,
     },
-    Success: {
+    ConnectSuccess: {
       screen: SuccessScreen,
     },
     PreviewConnection: {

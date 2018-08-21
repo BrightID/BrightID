@@ -14,6 +14,11 @@ import {
   setConnectNameornym,
   setConnectAvatar,
   setConnectTrustScore,
+  setConnectRecievedTimestamp,
+  setConnectRecievedPublicKey,
+  setConnectRecievedTrustScore,
+  setConnectRecievedNameornym,
+  setConnectRecievedAvatar,
   setRtcId,
   setArbiter,
   setBoxKeypair,
@@ -43,7 +48,7 @@ export const ICE_CANDIDATE = 'ICE_CANDIDATE';
 export const PUBLIC_KEY = 'PUBLIC_KEY';
 export const OFFER = 'OFFER';
 export const ANSWER = 'ANSWER';
-export const recievedMessages = {
+export const confirmation = {
   publicKey: 'recieved public key',
   trustScore: 'recieved trust score',
   nameornym: 'received nameornym',
@@ -65,42 +70,68 @@ export const handleRecievedMessage = (
       // parse message with json
       const msg = JSON.parse(data);
       console.log(msg);
-      const { timestamp, connectBoxKeypair } = getState().main;
+      const { timestamp } = getState().main;
       // update redux store based on message content
+
+      /**
+       * Handle recieving connection content from other user
+       * after recieving each message, we store the content
+       * inside of the redux store, and we reply to the sender
+       * with a confirmation message
+       */
 
       // set public key
       if (msg && msg.publicKey) {
         dispatch(
+          // convert public key to Uint8Array
           setConnectPublicKey(new Uint8Array(Object.values(msg.publicKey))),
         );
         // send recieve message
-        channel.send(JSON.stringify({ msg: recievedMessages.publicKey }));
+        channel.send(JSON.stringify({ msg: confirmation.publicKey }));
       }
       // set nameornym
       if (msg && msg.nameornym) {
         dispatch(setConnectNameornym(msg.nameornym));
         // send recieve message
-        channel.send(JSON.stringify({ msg: recievedMessages.nameornym }));
+        channel.send(JSON.stringify({ msg: confirmation.nameornym }));
       }
       // set avatar
       if (msg && msg.avatar) {
         dispatch(setConnectAvatar(msg.avatar));
         // send recieve message
-        channel.send(JSON.stringify({ msg: recievedMessages.avatar }));
+        channel.send(JSON.stringify({ msg: confirmation.avatar }));
       }
       // set trust score
       if (msg && msg.trustScore) {
         dispatch(setConnectTrustScore(msg.trustScore));
         // send recieve message
-        channel.send(JSON.stringify({ msg: recievedMessages.trustScore }));
+        channel.send(JSON.stringify({ msg: confirmation.trustScore }));
       }
       // only set timestamp if this is the user displaying qr code
       if (!timestamp && msg && msg.timestamp) {
         dispatch(setConnectTimestamp(msg.timestamp));
-        channel.send(JSON.stringify({ msg: recievedMessages.timestamp }));
+        channel.send(JSON.stringify({ msg: confirmation.timestamp }));
       }
 
-      console.log(msg);
+      /**
+       * Handle recieving confirmation messages
+       * upon recieving each confirmation message,
+       * update the redux store
+       */
+
+      if (msg && msg.msg) {
+        if (msg.msg === confirmation.timestamp) {
+          dispatch(setConnectRecievedTimestamp());
+        } else if (msg.msg === confirmation.publicKey) {
+          dispatch(setConnectRecievedPublicKey());
+        } else if (msg.msg === confirmation.trustScore) {
+          dispatch(setConnectRecievedTrustScore());
+        } else if (msg.msg === confirmation.nameornym) {
+          dispatch(setConnectRecievedNameornym());
+        } else if (msg.msg === confirmation.avatar) {
+          dispatch(setConnectRecievedAvatar());
+        }
+      }
     }
   } catch (err) {
     console.log(err);

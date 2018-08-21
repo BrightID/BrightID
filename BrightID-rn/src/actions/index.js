@@ -17,6 +17,11 @@ export const CONNECT_PUBLICKEY = 'CONNECT_PUBLICKEY';
 export const CONNECT_NAMEORNYM = 'CONNECT_NAMEORNYM';
 export const CONNECT_TRUST_SCORE = 'CONNECT_TRUST_SCORE';
 export const CONNECT_TIMESTAMP = 'CONNECT_TIMESTAMP';
+export const CONNECT_RECIEVED_TIMESTAMP = 'CONNECT_RECIEVED_TIMESTAMP';
+export const CONNECT_RECIEVED_TRUSTSCORE = 'CONNECT_RECIEVED_TRUSTSCORE';
+export const CONNECT_RECIEVED_NAMEORNYM = 'CONNECT_RECIEVED_NAMEORNYM';
+export const CONNECT_RECIEVED_PUBLICKEY = 'CONNECT_RECIEVED_PUBLICKEY';
+export const CONNECT_RECIEVED_AVATAR = 'CONNECT_RECIEVED_AVATAR';
 export const CONNECT_AVATAR = 'CONNECT_AVATAR';
 export const ERROR = 'ERROR';
 export const BOX_KEYPAIR = 'BOX_KEYPAIR';
@@ -210,6 +215,56 @@ export const setConnectAvatar = (avatar: string) => ({
 export const setConnectTimestamp = (timestamp: number) => ({
   type: CONNECT_TIMESTAMP,
   timestamp,
+});
+
+/**
+ * redux action creator for setting that trust score was received on the other end of webrtc data channel
+ * @param type CONNECT_TRUST_SCORE
+ *
+ */
+
+export const setConnectRecievedTrustScore = () => ({
+  type: CONNECT_RECIEVED_TRUSTSCORE,
+});
+
+/**
+ * redux action creator for setting that public key was received on the other end of webrtc data channel
+ * @param type CONNECT_RECIEVED_PUBLICKEY
+ *
+ */
+
+export const setConnectRecievedPublicKey = () => ({
+  type: CONNECT_RECIEVED_PUBLICKEY,
+});
+
+/**
+ * redux action creator for setting that avatar was received on the other end of webrtc data channel
+ * @param type CONNECT_RECIEVED_AVATAR
+ *
+ */
+
+export const setConnectRecievedAvatar = () => ({
+  type: CONNECT_RECIEVED_AVATAR,
+});
+
+/**
+ * redux action creator for setting that public key was received on the other end of webrtc data channel
+ * @param type CONNECT_RECIEVED_NAMEORNYM
+ *
+ */
+
+export const setConnectRecievedNameornym = () => ({
+  type: CONNECT_RECIEVED_NAMEORNYM,
+});
+
+/**
+ * redux action creator for setting that public key was received on the other end of webrtc data channel
+ * @param type CONNECT_RECIEVED_TIMESTAMP
+ *
+ */
+
+export const setConnectRecievedTimestamp = () => ({
+  type: CONNECT_RECIEVED_TIMESTAMP,
 });
 
 /**

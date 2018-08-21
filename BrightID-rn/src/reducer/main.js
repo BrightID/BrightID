@@ -15,6 +15,11 @@ import {
   CONNECT_TIMESTAMP,
   CONNECT_TRUST_SCORE,
   CONNECT_AVATAR,
+  CONNECT_RECIEVED_TIMESTAMP,
+  CONNECT_RECIEVED_NAMEORNYM,
+  CONNECT_RECIEVED_PUBLICKEY,
+  CONNECT_RECIEVED_AVATAR,
+  CONNECT_RECIEVED_TRUSTSCORE,
   ARBITER,
   RTC_ID,
   RESET_WEBRTC,
@@ -63,10 +68,15 @@ export const initialState = {
   publicKey: '',
   secretKey: '',
   connectNameornym: '',
+  connectRecievedNameornym: false,
   connectPublicKey: '',
+  connectRecievedPublicKey: false,
   connectTimestamp: '',
+  connectRecievedTimestamp: false,
   connectTrustScore: '',
+  connectRecievedTrustScore: false,
   connectAvatar: '',
+  connectRecievedAvatar: false,
   connectBoxKeypair: {
     publicKey: '',
     secretKey: '',
@@ -106,7 +116,7 @@ export const mainReducer = (state = initialState, action) => {
     case ADD_CONNECTION:
       return {
         ...state,
-        connections: [...state.connections, action.connection],
+        connections: [action.connection, ...state.connections],
       };
     case UPDATE_USER_DATA:
       return {
@@ -156,6 +166,31 @@ export const mainReducer = (state = initialState, action) => {
         ...state,
         connectTrustScore: action.trustScore,
       };
+    case CONNECT_RECIEVED_NAMEORNYM:
+      return {
+        ...state,
+        connectRecievedNameornym: true,
+      };
+    case CONNECT_RECIEVED_TRUSTSCORE:
+      return {
+        ...state,
+        connectRecievedTrustScore: true,
+      };
+    case CONNECT_RECIEVED_PUBLICKEY:
+      return {
+        ...state,
+        connectRecievedPublicKey: true,
+      };
+    case CONNECT_RECIEVED_TIMESTAMP:
+      return {
+        ...state,
+        connectRecievedTimestamp: true,
+      };
+    case CONNECT_RECIEVED_AVATAR:
+      return {
+        ...state,
+        connectRecievedAvatar: true,
+      };
     case BOX_KEYPAIR:
       return {
         ...state,
@@ -180,6 +215,16 @@ export const mainReducer = (state = initialState, action) => {
         ...state,
         rtcId: '',
         arbiter: arbiterSchema,
+        connectNameornym: '',
+        connectRecievedNameornym: false,
+        connectPublicKey: '',
+        connectRecievedPublicKey: false,
+        connectTimestamp: '',
+        connectRecievedTimestamp: false,
+        connectTrustScore: '',
+        connectRecievedTrustScore: false,
+        connectAvatar: '',
+        connectRecievedAvatar: false,
         connectBoxKeypair: {
           ...state.connectBoxKeypair,
           publicKey: '',
