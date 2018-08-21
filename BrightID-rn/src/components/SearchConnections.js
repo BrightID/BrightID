@@ -23,7 +23,7 @@ class SearchConnections extends React.Component<Props> {
     return (
       <View style={styles.container}>
         <Touchable style={styles.searchIcon}>
-          <Ionicon size={28} name="ios-search-outline" color="#000" />
+          <Ionicon size={28} name="ios-search" color="#333" />
         </Touchable>
         <TextInput
           // value={this.props.searchParam}
@@ -36,7 +36,7 @@ class SearchConnections extends React.Component<Props> {
           underlineColorAndroid="transparent"
         />
         <Touchable style={styles.optionsIcon}>
-          <Ionicon size={28} name="ios-options-outline" color="#000" />
+          <Ionicon size={28} name="ios-options" color="#333" />
         </Touchable>
       </View>
     );

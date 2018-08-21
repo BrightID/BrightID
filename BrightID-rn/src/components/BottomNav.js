@@ -31,7 +31,7 @@ export default class BottomNav extends React.Component<Props> {
           accessibilityLabel="Home"
         >
           <View style={styles.navIconContainer}>
-            <Ionicon size={32} name="ios-home-outline" color="#000" />
+            <Ionicon size={32} name="ios-home" color="#222" />
             <Text style={styles.navText}>Home</Text>
           </View>
         </TouchableOpacity>
@@ -41,11 +41,7 @@ export default class BottomNav extends React.Component<Props> {
           accessibilityLabel="Connections"
         >
           <View style={styles.navIconContainer}>
-            <Ionicon
-              size={32}
-              name="ios-git-pull-request-outline"
-              color="#000"
-            />
+            <Ionicon size={32} name="ios-git-pull-request" color="#222" />
             <Text style={styles.navText}>Connections</Text>
           </View>
         </TouchableOpacity>
@@ -55,7 +51,7 @@ export default class BottomNav extends React.Component<Props> {
           accessibilityLabel="Groups"
         >
           <View style={styles.navIconContainer}>
-            <Ionicon size={32} name="ios-contacts-outline" color="#000" />
+            <Ionicon size={32} name="ios-contacts" color="#222" />
             <Text style={styles.navText}>Groups</Text>
           </View>
         </TouchableOpacity>
@@ -65,7 +61,7 @@ export default class BottomNav extends React.Component<Props> {
           accessibilityLabel="Notifications"
         >
           <View style={styles.navIconContainer}>
-            <Ionicon size={32} name="ios-notifications-outline" color="#000" />
+            <Ionicon size={32} name="ios-notifications" color="#222" />
             <Text style={styles.navText}>Notifications</Text>
           </View>
         </TouchableOpacity>
@@ -75,7 +71,7 @@ export default class BottomNav extends React.Component<Props> {
           accessibilityLabel="Apps"
         >
           <View style={styles.navIconContainer}>
-            <Ionicon size={32} name="ios-apps-outline" color="#000" />
+            <Ionicon size={32} name="ios-apps" color="#222" />
             <Text style={styles.navText}>Apps</Text>
           </View>
         </TouchableOpacity>

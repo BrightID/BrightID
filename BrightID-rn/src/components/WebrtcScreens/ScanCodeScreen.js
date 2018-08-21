@@ -71,7 +71,8 @@ class ScanCodeScreen extends React.Component<Props, State> {
             placeholder="Scan a BrightID code to make a connection"
             autoCapitalize="none"
             autoCorrect={false}
-            textContentType="name"
+            textContentType="none"
+            clearTextOnFocus={true}
             underlineColorAndroid="transparent"
           />
         </View>
@@ -121,6 +122,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
+    width: '85%',
   },
 });
 
