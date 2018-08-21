@@ -26,7 +26,7 @@ import {
 
 export const ICE_SERVERS = {
   iceServers: [
-    // { url: 'stun:stun.l.google.com:19302' },
+    { url: 'stun:signal.hotlinebling.space' },
     {
       url: 'turn:signal.hotlinebling.space',
       username: 'trident',
