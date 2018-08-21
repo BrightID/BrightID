@@ -55,6 +55,7 @@ class DisplayQR extends Component<Props> {
       console.log(arbiter);
       dispatch(setUserAArbiter(arbiter));
     });
+    console.log(rtcId.length);
   }
 
   async componentDidUpdate(prevProps) {
