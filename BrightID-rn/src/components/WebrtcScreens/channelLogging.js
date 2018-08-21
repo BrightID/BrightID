@@ -1,22 +1,22 @@
 const logging = (channel) => {
-  console.warn(`id ${channel.id}`);
-  console.warn(`binaryType ${channel.binaryType}`);
-  console.warn(
+  console.log(`id ${channel.id}`);
+  console.log(`binaryType ${channel.binaryType}`);
+  console.log(
     `bufferedAmountLowThreshold ${channel.bufferedAmountLowThreshold}`,
   );
-  console.warn(`maxPacketLifeTime ${channel.maxPAcketLifeTime}`);
-  console.warn(`maxRetransmits ${channel.maxRetransmits}`);
-  console.warn(`negotiated ${channel.negotiated}`);
-  console.warn(`ordered ${channel.ordered}`);
-  console.warn(`protocol ${channel.protocol}`);
-  console.warn(`readyState ${channel.readyState}`);
+  console.log(`maxPacketLifeTime ${channel.maxPAcketLifeTime}`);
+  console.log(`maxRetransmits ${channel.maxRetransmits}`);
+  console.log(`negotiated ${channel.negotiated}`);
+  console.log(`ordered ${channel.ordered}`);
+  console.log(`protocol ${channel.protocol}`);
+  console.log(`readyState ${channel.readyState}`);
   channel.onbufferedamountlow = (e) => {
-    console.warn(`on buffered amount low`);
-    console.warn(e);
+    console.log(`on buffered amount low`);
+    console.log(e);
   };
   channel.onerror = (e) => {
-    console.warn(`channel error`);
-    console.warn(e);
+    console.log(`channel error`);
+    console.log(e);
   };
 };
 

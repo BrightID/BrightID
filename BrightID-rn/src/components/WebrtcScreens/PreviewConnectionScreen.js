@@ -11,20 +11,22 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
+import { addConnection, resetWebrtc } from '../../actions';
 
 /**
- * Confirm Connection  Screen of BrightID
+ * Confirm / Preview Connection  Screen of BrightID
  *
 ==================================================================
  *
  */
 
 type Props = {
-  publicKey: Uint8Array,
-  trustScore: string,
-  userAvatar: string,
-  nameornym: string,
   dispatch: Function,
+  connectNameornym: string,
+  connectTimestamp: number,
+  connectPublicKey: Uint8Array,
+  connectTrustScore: string,
+  connectAvatar: string,
   navigation: { goBack: Function, navigate: (string) => null },
 };
 
@@ -36,7 +38,37 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
     headerRight: <View />,
   };
 
+  addNewConnection = () => {
+    /**
+     * Append connection to list of connections &&
+     * Clear the redux store of all leftoverwebrtc data
+     */
+    const {
+      dispatch,
+      connectPublicKey,
+      connectNameornym,
+      connectAvatar,
+      connectTrustScore,
+      connectTimestamp,
+    } = this.props;
+
+    // TODO formalize spec for this
+    // create a new connection object
+    const connection = {
+      publicKey: connectPublicKey,
+      nameornym: connectNameornym,
+      avatar: connectAvatar,
+      trustScore: connectTrustScore,
+      connectionDate: connectTimestamp / 1000, // hack for moment,
+    };
+    // append connection to the list in the redux store
+    dispatch(addConnection(connection));
+    // clear webrtc data
+    dispatch(resetWebrtc());
+  };
+
   render() {
+    const { connectNameornym, navigation } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.questionTextContainer}>
@@ -45,7 +77,7 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
         </View>
         <View style={styles.userContainer}>
           <Image
-            source={require('../../static/ron_paul_avatar.jpg')}
+            source={require('../../static/default_avatar.jpg')}
             style={styles.userAvatar}
             resizeMode="cover"
             onError={(e) => {
@@ -54,10 +86,16 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
             accessible={true}
             accessibilityLabel="user avatar image"
           />
-          <Text style={styles.connectNameornym}>Nameornym</Text>
+          <Text style={styles.connectNameornym}>{connectNameornym}</Text>
         </View>
         <View style={styles.confirmButtonContainer}>
-          <TouchableOpacity style={styles.confirmButton}>
+          <TouchableOpacity
+            onPress={() => {
+              this.addNewConnection();
+              navigation.navigate('ConnectSuccess');
+            }}
+            style={styles.confirmButton}
+          >
             <Text style={styles.confirmButtonText}>Confirm Connection</Text>
           </TouchableOpacity>
         </View>
@@ -77,7 +115,7 @@ const styles = StyleSheet.create({
   },
   questionTextContainer: {
     // flex: 1,
-    // marginTop: 95,
+    marginTop: 83,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -129,7 +167,7 @@ const styles = StyleSheet.create({
     width: '82%',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 48,
+    height: 51,
   },
   confirmButtonText: {
     fontFamily: 'ApexNew-Book',

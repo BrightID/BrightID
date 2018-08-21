@@ -21,7 +21,6 @@ import {
   ICE_SERVERS,
   fetchArbiter,
   handleRecievedMessage,
-  sendMessage,
   createKeypair,
 } from './webrtc';
 
@@ -47,11 +46,7 @@ type Props = {
   navigation: { goBack: Function, navigate: (string) => null },
 };
 
-type State = {
-  qrsvg: string,
-};
-
-class RtcAnswerScreen extends React.Component<Props, State> {
+class RtcAnswerScreen extends React.Component<Props> {
   static navigationOptions = {
     title: 'New Connection',
     headerRight: <View />,
@@ -65,6 +60,7 @@ class RtcAnswerScreen extends React.Component<Props, State> {
     this.channel = null;
     this.socket = null;
     this.pollingId = null;
+    this.done = false;
   }
 
   async componentDidMount() {
@@ -91,26 +87,24 @@ class RtcAnswerScreen extends React.Component<Props, State> {
     }
   }
 
-  // shouldComponentUpdate(nextProps) {
-  //   const {
-  //     arbiter,
-  //     connectTimestamp,
-  //     connectPublicKey,
-  //     connectNameornym,
-  //     navigation,
-  //   } = nextProps;
-
-  //   // if we have all of the second users data, proceed to the next screen
-  //   // avatar is optionally since we aren't setting them universally yet
-  //   if (connectTimestamp && connectPublicKey && connectNameornym) {
-  //     // navigation.navigate()
-  //   }
-
-  //   return true;
-  // }
-
   async componentDidUpdate(prevProps) {
-    const { arbiter } = this.props;
+    const {
+      arbiter,
+      connectTimestamp,
+      connectPublicKey,
+      connectNameornym,
+      connectTrustScore,
+      connectRecievedTimestamp,
+      connectRecievedTrustScore,
+      connectRecievedPublicKey,
+      connectRecievedNameornym,
+      connectRecievedAvatar,
+      connectAvatar,
+      connect,
+      navigation,
+    } = this.props;
+    console.log('did update');
+    // update ice candidate
     if (
       this.connection &&
       arbiter &&
@@ -128,6 +122,33 @@ class RtcAnswerScreen extends React.Component<Props, State> {
       await this.connection.addIceCandidate(
         new RTCIceCandidate(arbiter.ALPHA.ICE_CANDIDATE),
       );
+    }
+    /**
+     * This logic determines whether all webrtc data has been
+     * successfully transferred and we are able to create a new
+     * connection
+     *
+     * currently this is determined by whether the client recieved our timestamp, public key, trust score, and nameornym - and whether we recieved their nameornym and public key
+     *
+     * react navigation might not unmount the component, it
+     * hides components during the transitions between screens
+     *
+     * TODO - handle logic for re attempting to send user data
+     * this will become more important if the avatar logic is implemented
+     */
+    if (
+      connectPublicKey &&
+      connectNameornym &&
+      connectTimestamp &&
+      connectRecievedTimestamp &&
+      connectRecievedPublicKey &&
+      connectRecievedNameornym &&
+      connectRecievedTrustScore &&
+      !this.done
+    ) {
+      // navigate to preview screen
+      navigation.navigate('PreviewConnection');
+      this.done = true;
     }
   }
 
@@ -175,13 +196,13 @@ class RtcAnswerScreen extends React.Component<Props, State> {
       channelLogging(this.channel);
       // send user data when channel opens
       this.channel.onopen = () => {
-        console.warn('user B channel opened');
+        console.log('user B channel opened');
         // send public key, avatar, nameornym, and trustscore
         this.sendUserBData();
       };
       // do nothing when channel closes... yet
       this.channel.onclose = () => {
-        console.warn('user B channel closed');
+        console.log('user B channel closed');
       };
       /**
        * recieve webrtc messages here
@@ -192,12 +213,12 @@ class RtcAnswerScreen extends React.Component<Props, State> {
         dispatch(handleRecievedMessage(e.data, this.channel));
       };
       this.channel.onbufferedamountlow = (e) => {
-        console.warn(`on buffered amount low`);
-        console.warn(e);
+        console.log(`on buffered amount low`);
+        console.log(e);
       };
       this.channel.onerror = (e) => {
-        console.warn(`channel error`);
-        console.warn(e);
+        console.log(`channel error`);
+        console.log(e);
       };
     }
   };

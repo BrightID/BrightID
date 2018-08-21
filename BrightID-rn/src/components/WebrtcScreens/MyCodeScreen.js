@@ -10,8 +10,9 @@ import {
   RTCSessionDescription,
   RTCIceCandidate,
 } from 'react-native-webrtc';
-// import { generateMessage } from '../actions/exchange';
+import { stringByteLength } from '../../utils/encoding';
 import logging from '../../utils/logging';
+import channelLogging from './channelLogging';
 import {
   createRTCId,
   update,
@@ -26,6 +27,7 @@ import {
 } from './webrtc';
 
 import { resetWebrtc } from '../../actions';
+
 /**
  * My Code screen of BrightID
  *
@@ -43,6 +45,8 @@ type Props = {
   rtcId: string,
   dispatch: Function,
   userAvatar: { uri: string },
+  nameornym: string,
+  trustScore: string,
 };
 
 type State = {
@@ -54,13 +58,13 @@ class MyCodeScreen extends React.Component<Props, State> {
     super(props);
     this.state = {
       qrsvgd: '',
-      connecting: true,
     };
     // set up initial webrtc connection
     this.connection = null;
     this.channel = null;
     this.socket = null;
     this.pollingId = null;
+    this.done = false;
   }
 
   async componentDidMount() {
@@ -92,7 +96,16 @@ class MyCodeScreen extends React.Component<Props, State> {
 
   async componentDidUpdate(prevProps) {
     // generate a new qrcode if the rtcId value changes
-    const { arbiter } = this.props;
+    const {
+      arbiter,
+      connectPublicKey,
+      connectNameornym,
+      connectTimestamp,
+      connectRecievedPublicKey,
+      connectRecievedNameornym,
+      connectRecievedTrustScore,
+      navigation,
+    } = this.props;
 
     // set remote description
     if (
@@ -123,6 +136,33 @@ class MyCodeScreen extends React.Component<Props, State> {
       await this.connection.addIceCandidate(
         new RTCIceCandidate(arbiter.ZETA.ICE_CANDIDATE),
       );
+    }
+
+    /**
+     * This logic determines whether all webrtc data has been
+     * successfully transferred and we are able to create a new
+     * connection
+     *
+     * currently this is determined by whether the client recieved our timestamp, public key, trust score, and nameornym - and whether we recieved their nameornym and public key
+     *
+     * react navigation might not unmount the component, it
+     * hides components during the transitions between screens
+     *
+     * TODO - handle logic for re attempting to send user data
+     * this will become more important if the avatar logic is implemented
+     */
+    if (
+      connectPublicKey &&
+      connectNameornym &&
+      connectTimestamp &&
+      connectRecievedPublicKey &&
+      connectRecievedNameornym &&
+      connectRecievedTrustScore &&
+      !this.done
+    ) {
+      // navigate to preview screen
+      navigation.navigate('PreviewConnection');
+      this.done = true;
     }
   }
 
@@ -165,7 +205,7 @@ class MyCodeScreen extends React.Component<Props, State> {
     // create data channel
     this.channel = this.connection.createDataChannel('connect');
     // handle channel events
-    this.updateChannel();
+    this.handleDataChannel();
     // create offer and set local connection
     console.log('creating offer');
     const offer = await this.connection.createOffer();
@@ -190,15 +230,17 @@ class MyCodeScreen extends React.Component<Props, State> {
     }
   };
 
-  updateChannel = () => {
+  handleDataChannel = () => {
     const { dispatch } = this.props;
     if (this.channel) {
+      channelLogging(this.channel);
+      // send user data when channel opens
       this.channel.onopen = () => {
         console.log('user A channel opened');
-        this.setState({
-          connecting: false,
-        });
+        // send public key, avatar, nameornym, and trustscore
+        this.sendUserAData();
       };
+      // do nothing when channel closes... yet
       this.channel.onclose = () => {
         console.log('user A channel closed');
       };
@@ -207,9 +249,69 @@ class MyCodeScreen extends React.Component<Props, State> {
        * pass data along to action creator in ../actions/webrtc
        */
       this.channel.onmessage = (e) => {
-        console.log(`user A recieved message ${e.data}`);
+        // handle recieved message
         dispatch(handleRecievedMessage(e.data, this.channel));
       };
+      this.channel.onbufferedamountlow = (e) => {
+        console.log(`on buffered amount low`);
+        console.log(e);
+      };
+      this.channel.onerror = (e) => {
+        console.log(`channel error`);
+        console.log(e);
+      };
+    }
+  };
+
+  sendUserAData = () => {
+    // create timestamp then send data individually
+    if (this.channel) {
+      const { trustScore, nameornym, userAvatar, publicKey } = this.props;
+
+      // send trust score
+      if (trustScore) {
+        let dataObj = { trustScore };
+
+        console.log(`
+        trustScore byte length: ${stringByteLength(JSON.stringify(dataObj))}
+        str length: ${JSON.stringify(dataObj).length}
+        `);
+        // webrtc helper function for sending messages
+        this.channel.send(JSON.stringify({ trustScore }));
+      }
+      // send nameornym
+      if (nameornym) {
+        let dataObj = { nameornym };
+
+        console.log(`
+        nameornym byte length: ${stringByteLength(JSON.stringify(dataObj))}
+        str length: ${JSON.stringify(dataObj).length}
+        `);
+        // webrtc helper function for sending messages
+        this.channel.send(JSON.stringify({ nameornym }));
+      }
+      // send public key
+      if (publicKey) {
+        let dataObj = { publicKey };
+
+        console.log(`
+        publicKey byte length: ${stringByteLength(JSON.stringify(dataObj))}
+        str length: ${JSON.stringify(dataObj).length}
+        `);
+        // webrtc helper function for sending messages
+        this.channel.send(JSON.stringify({ publicKey }));
+      }
+      // send user avatar
+      if (userAvatar) {
+        // console.log('has user avatar');
+        // let dataObj = { avatar: userAvatar };
+        // console.log(`
+        // user Avatar byte length: ${stringByteLength(JSON.stringify(dataObj))}
+        // str length: ${JSON.stringify(dataObj).length}
+        // `);
+        // // webrtc helper function for sending messages
+        // this.channel.send(JSON.stringify({ avatar: userAvatar }));
+      }
     }
   };
 
@@ -308,7 +410,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#fdfdfd',
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'column',
