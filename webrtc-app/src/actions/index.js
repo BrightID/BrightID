@@ -1,5 +1,9 @@
 export const KEYS_USER_A = 'KEYS_USER_A';
 export const KEYS_USER_B = 'KEYS_USER_B';
+export const SET_USER_A_NAME = 'SET_USER_A_NAME';
+export const SET_USER_B_NAME = 'SET_USER_B_NAME';
+export const SET_USER_A_TRUST_SCORE = 'SET_USER_A_TRUST_SCORE';
+export const SET_USER_B_TRUST_SCORE = 'SET_USER_B_TRUST_SCORE';
 export const PUBLICKEY2 = 'PUBLICKEY2';
 export const PUBLICKEY3 = 'PUBLICKEY3';
 export const RESET_STORE_USER_A = 'RESET_STORE_USER_A';
@@ -29,6 +33,26 @@ export const setPublicKey2 = ({ publicKey, avatar, nameornym }) => ({
 export const setPublicKey3 = (publicKey) => ({
   type: PUBLICKEY3,
   publicKey,
+});
+
+export const setUserAName = (name) => ({
+  type: SET_USER_A_NAME,
+  name,
+});
+
+export const setUserBTrustScore = (trustScore) => ({
+  type: SET_USER_B_TRUST_SCORE,
+  trustScore,
+});
+
+export const setUserATrustScore = (trustScore) => ({
+  type: SET_USER_A_TRUST_SCORE,
+  trustScore,
+});
+
+export const setUserBName = (name) => ({
+  type: SET_USER_B_NAME,
+  name,
 });
 
 export const setPairingMessage = ({ msg, msgStr, signedMsg }) => ({

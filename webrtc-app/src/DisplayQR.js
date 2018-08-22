@@ -70,6 +70,7 @@ class DisplayQR extends Component<Props> {
       (arbiter.ZETA.ANSWER.sdp !== prevProps.arbiter.ZETA.ANSWER.sdp ||
         arbiter.ZETA.ANSWER.type !== prevProps.arbiter.ZETA.ANSWER.type)
     ) {
+      console.log(`setting answer to ${arbiter.ZETA.ANSWER}`);
       await this.connection.setRemoteDescription(
         new RTCSessionDescription(arbiter.ZETA.ANSWER),
       );
@@ -86,9 +87,11 @@ class DisplayQR extends Component<Props> {
         arbiter.ZETA.ICE_CANDIDATE.sdpMid !==
           prevProps.arbiter.ZETA.ICE_CANDIDATE.sdpMid)
     ) {
+      console.log(`setting ice candidate to ${arbiter.ZETA.ICE_CANDIDATE}`);
       await this.connection.addIceCandidate(
         new RTCIceCandidate(arbiter.ZETA.ICE_CANDIDATE),
       );
+      console.log(``);
     }
   }
 

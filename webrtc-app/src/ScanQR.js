@@ -46,8 +46,8 @@ class ScanQR extends Component<Props> {
         arbiter.ALPHA.ICE_CANDIDATE.sdpMid !==
           prevProps.arbiter.ALPHA.ICE_CANDIDATE.sdpMid)
     ) {
-      console.log('UserB:');
-      console.log(arbiter.ALPHA.ICE_CANDIDATE);
+      console.log(`setting new ice candidate ${arbiter.ALPHA.ICE_CANDIDATE}`);
+
       await this.connection.addIceCandidate(
         new RTCIceCandidate(arbiter.ALPHA.ICE_CANDIDATE),
       );

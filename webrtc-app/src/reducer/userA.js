@@ -10,6 +10,8 @@ import {
   ARBITER_USER_A,
   USER_A_WAITING,
   RTC_ID,
+  SET_USER_A_NAME,
+  SET_USER_A_TRUST_SCORE,
 } from '../actions';
 
 const schema = {
@@ -33,8 +35,10 @@ export const initialState = {
     secretKey: '',
     nonce: 'wadata',
   },
+  nameornym: 'userA',
   message: '',
   messageStr: '',
+  trustScore: '99.9',
   publicKey2: new Uint8Array(),
   avatar2: '',
   nameornym2: '',
@@ -76,6 +80,16 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         timestamp: action.timestamp,
+      };
+    case SET_USER_A_NAME:
+      return {
+        ...state,
+        nameornym: action.name,
+      };
+    case SET_USER_A_TRUST_SCORE:
+      return {
+        ...state,
+        trustScore: action.trustScore,
       };
     case RTC_ID:
       return {

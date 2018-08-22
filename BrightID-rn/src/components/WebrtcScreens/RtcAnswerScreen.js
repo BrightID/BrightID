@@ -63,28 +63,28 @@ class RtcAnswerScreen extends React.Component<Props> {
     this.done = false;
   }
 
-  async componentDidMount() {
-    try {
-      const { dispatch } = this.props;
-      // generate box keypair
+  componentDidMount() {
+    // try {
+    //   const { dispatch } = this.props;
+    // generate box keypair
 
-      // const { publicKey } = await dispatch(createKeypair());
-      // // update arbiter with keypair
-      // await dispatch(
-      //   update({
-      //     type: PUBLIC_KEY,
-      //     person: ZETA,
-      //     value: publicKey,
-      //   }),
-      // );
-      // create RTCPeerConnection
-      this.initiateWebrtc();
-      // fetch arbiter, then set RTC remote / local description and update signaling server
-      this.answerWebrtc();
-    } catch (err) {
-      // we should handle err here in case network is down or something
-      console.log(err);
-    }
+    // const { publicKey } = await dispatch(createKeypair());
+    // // update arbiter with keypair
+    // await dispatch(
+    //   update({
+    //     type: PUBLIC_KEY,
+    //     person: ZETA,
+    //     value: publicKey,
+    //   }),
+    // );
+    // create RTCPeerConnection
+    this.initiateWebrtc();
+    // fetch arbiter, then set RTC remote / local description and update signaling server
+    this.answerWebrtc();
+    // } catch (err) {
+    // we should handle err here in case network is down or something
+    //   console.log(err);
+    // }
   }
 
   async componentDidUpdate(prevProps) {
@@ -225,7 +225,7 @@ class RtcAnswerScreen extends React.Component<Props> {
 
   answerWebrtc = async () => {
     try {
-      const { dispatch, navigation } = this.props;
+      const { dispatch } = this.props;
       // fetch arbiter prior to setting RTC description
       const arbiter = await dispatch(fetchArbiter());
       // if arbiter doesn't exist return to the previous screen
@@ -261,6 +261,7 @@ class RtcAnswerScreen extends React.Component<Props> {
       // update redux store
       await dispatch(update({ type: ANSWER, person: ZETA, value: answer }));
     } catch (err) {
+      // we should attempt to restart webrtc here
       console.log(err);
     }
   };
@@ -377,6 +378,8 @@ class RtcAnswerScreen extends React.Component<Props> {
   };
 
   updateIce = async (e) => {
+    // many ice candidates are emited
+    // how should we handle this???
     try {
       const { dispatch } = this.props;
       if (e.candidate && !this.count) {

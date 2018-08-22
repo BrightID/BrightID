@@ -7,6 +7,12 @@ import { connect } from 'react-redux';
 import { setKeys } from './actions';
 import DisplayQR from './DisplayQR';
 import ScanQR from './ScanQR';
+import {
+  setUserAName,
+  setUserBName,
+  setUserATrustScore,
+  setUserBTrustScore,
+} from './actions';
 
 type Props = {
   user: string,
@@ -51,15 +57,53 @@ class Device extends Component<Props> {
     const { start } = this.state;
     if (!start) {
       return (
-        <button
-          type="button"
-          className="btn btn-success"
-          onClick={() => {
-            this.setState({ start: true });
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-evenly',
+            flexDirection: 'column',
+            height: 200,
           }}
         >
-          Start
-        </button>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="enter name"
+            onChange={(e) => {
+              const { dispatch, user } = this.props;
+              if (user === 'UserA') {
+                dispatch(setUserAName(e.target.value));
+              } else {
+                dispatch(setUserBName(e.target.value));
+              }
+            }}
+          />
+          <input
+            type="text"
+            className="form-control"
+            placeholder="enter trust score"
+            onChange={(e) => {
+              const { dispatch, user } = this.props;
+              if (user === 'UserA') {
+                dispatch(setUserATrustScore(e.target.value));
+              } else {
+                dispatch(setUserBTrustScore(e.target.value));
+              }
+            }}
+          />
+          <div>
+            <button
+              type="button"
+              className="btn btn-success"
+              onClick={() => {
+                this.setState({ start: true });
+              }}
+            >
+              Start
+            </button>
+          </div>
+        </div>
       );
     }
   };
