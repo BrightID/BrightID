@@ -26,7 +26,9 @@ import {
   createKeypair,
 } from './webrtc';
 
-import { resetWebrtc } from '../../actions';
+import { socket } from './websockets';
+
+import { resetWebrtc, setArbiter } from '../../actions';
 
 /**
  * My Code screen of BrightID
@@ -87,7 +89,9 @@ class MyCodeScreen extends React.Component<Props, State> {
       // initiate webrtc
       this.initiateWebrtc();
       // start polling server for remote desc and ice candidates
-      this.pollSignalServer();
+      // this.pollSignalServer();
+      // use websockets instead of polling
+      this.initiateWebSocket();
     } catch (err) {
       // we should handle err here in case network is down
       console.log(err);
@@ -117,24 +121,6 @@ class MyCodeScreen extends React.Component<Props, State> {
     ) {
       await this.connection.setRemoteDescription(
         new RTCSessionDescription(arbiter.ZETA.ANSWER),
-      );
-    }
-    // set ice candidate
-    if (
-      this.connection &&
-      arbiter &&
-      arbiter.ZETA.ICE_CANDIDATE &&
-      (arbiter.ZETA.ICE_CANDIDATE.candidate !==
-        prevProps.arbiter.ZETA.ICE_CANDIDATE.candidate ||
-        arbiter.ZETA.ICE_CANDIDATE.sdpMLineIndex !==
-          prevProps.arbiter.ZETA.ICE_CANDIDATE.sdpMLineIndex ||
-        arbiter.ZETA.ICE_CANDIDATE.sdpMid !==
-          prevProps.arbiter.ZETA.ICE_CANDIDATE.sdpMid)
-    ) {
-      console.log('UserA:');
-      console.log(arbiter.ZETA.ICE_CANDIDATE);
-      await this.connection.addIceCandidate(
-        new RTCIceCandidate(arbiter.ZETA.ICE_CANDIDATE),
       );
     }
 
@@ -168,7 +154,6 @@ class MyCodeScreen extends React.Component<Props, State> {
 
   componentWillUnmount() {
     const { dispatch } = this.props;
-    this.stopPollingServer();
     // close and remove webrtc connection
     if (this.connection) {
       this.connection.close();
@@ -193,6 +178,22 @@ class MyCodeScreen extends React.Component<Props, State> {
     dispatch(resetWebrtc());
   }
 
+  setIceCandidate = async (arbiter) => {
+    try {
+      // set ice candidate
+      if (this.connection && arbiter && arbiter.ZETA.ICE_CANDIDATE) {
+        console.log('UserA:');
+        console.log(arbiter.ZETA.ICE_CANDIDATE);
+        await this.connection.addIceCandidate(
+          new RTCIceCandidate(arbiter.ZETA.ICE_CANDIDATE),
+        );
+      }
+    } catch (err) {
+      // error setting ice candidate?
+      console.log(err);
+    }
+  };
+
   initiateWebrtc = async () => {
     const { dispatch } = this.props;
     // create webrtc instance
@@ -214,21 +215,37 @@ class MyCodeScreen extends React.Component<Props, State> {
     await dispatch(update({ type: OFFER, person: ALPHA, value: offer }));
   };
 
-  pollSignalServer = () => {
-    const { dispatch } = this.props;
-    // poll signalling server
-    this.pollingId = setInterval(() => {
-      dispatch(fetchArbiter());
-    }, 1000);
+  initiateWebSocket = () => {
+    // fetch initial rtc id from signaling server
+    const { dispatch, rtcId } = this.props;
+    // join websocket room
+    this.socket = socket();
+    this.socket.emit('join', rtcId);
+    // subscribe to update event
+    this.socket.on('update', (arbiter) => {
+      // update redux store
+      console.log('socket io update user B');
+      console.log(arbiter);
+      dispatch(setArbiter(arbiter));
+      this.setIceCandidate();
+    });
   };
 
-  stopPollingServer = () => {
-    // clear polling interval
-    if (this.pollingId) {
-      clearInterval(this.pollingId);
-      this.pollingId = null;
-    }
-  };
+  // pollSignalServer = () => {
+  //   const { dispatch } = this.props;
+  //   // poll signalling server
+  //   this.pollingId = setInterval(() => {
+  //     dispatch(fetchArbiter());
+  //   }, 1000);
+  // };
+
+  // stopPollingServer = () => {
+  //   // clear polling interval
+  //   if (this.pollingId) {
+  //     clearInterval(this.pollingId);
+  //     this.pollingId = null;
+  //   }
+  // };
 
   handleDataChannel = () => {
     const { dispatch } = this.props;
