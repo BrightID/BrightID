@@ -19,6 +19,8 @@ import {
   setBoxKeypair,
 } from './actions/mobile';
 
+import { setUserAArbiter, setUserBArbiter } from './actions';
+
 /**
  * constants
  * ===================
@@ -125,7 +127,7 @@ export const createRTCId = () => async (dispatch: Function) => {
     // update redux store
     dispatch(setRtcId(rtcId));
     // only userA initializes creation an RTC Id
-    dispatch(setArbiter(arbiter));
+    dispatch(setUserAArbiter(arbiter));
 
     // return rtcId to component letting it know api fetch is successful
     return new Promise((resolve) => {
@@ -165,7 +167,7 @@ export const update = ({ type, person, value }) => async (
     console.log(data.arbiter);
     // update redux store
     // ONLY UPDATE REDUX STORE VIA SOCKET IO
-    dispatch(setArbiter(data.arbiter));
+    // dispatch(setArbiter(data.arbiter));
 
     // finish async api call by returning the new arbiter
     return data.arbiter;
@@ -197,7 +199,7 @@ export const fetchArbiter = () => async (
     const { arbiter } = data;
 
     // update redux store
-    dispatch(setArbiter(arbiter));
+    dispatch(setUserBArbiter(arbiter));
     // finish async api call
     return arbiter;
   } catch (err) {

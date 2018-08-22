@@ -24,7 +24,9 @@ import {
   createKeypair,
 } from './webrtc';
 
-import { resetWebrtc, setConnectTimestamp } from '../../actions';
+import { socket } from './websockets';
+
+import { resetWebrtc, setConnectTimestamp, setArbiter } from '../../actions';
 /**
  * RTC Ansewr Screen of BrightID
  *
@@ -43,6 +45,7 @@ type Props = {
   userAvatar: string,
   nameornym: string,
   dispatch: Function,
+  rtcId: string,
   navigation: { goBack: Function, navigate: (string) => null },
 };
 
@@ -81,80 +84,67 @@ class RtcAnswerScreen extends React.Component<Props> {
     this.initiateWebrtc();
     // fetch arbiter, then set RTC remote / local description and update signaling server
     this.answerWebrtc();
+    // initiate websocket
+    this.initiateWebSocket();
     // } catch (err) {
     // we should handle err here in case network is down or something
     //   console.log(err);
     // }
   }
 
-  async componentDidUpdate(prevProps) {
-    const {
-      arbiter,
-      connectTimestamp,
-      connectPublicKey,
-      connectNameornym,
-      connectTrustScore,
-      connectRecievedTimestamp,
-      connectRecievedTrustScore,
-      connectRecievedPublicKey,
-      connectRecievedNameornym,
-      connectRecievedAvatar,
-      connectAvatar,
-      connect,
-      navigation,
-    } = this.props;
-    console.log('did update');
-    // update ice candidate
-    if (
-      this.connection &&
-      arbiter &&
-      arbiter.ALPHA.ICE_CANDIDATE &&
-      (arbiter.ALPHA.ICE_CANDIDATE.candidate !==
-        prevProps.arbiter.ALPHA.ICE_CANDIDATE.candidate ||
-        arbiter.ALPHA.ICE_CANDIDATE.sdpMLineIndex !==
-          prevProps.arbiter.ALPHA.ICE_CANDIDATE.sdpMLineIndex ||
-        arbiter.ALPHA.ICE_CANDIDATE.sdpMid !==
-          prevProps.arbiter.ALPHA.ICE_CANDIDATE.sdpMid)
-    ) {
-      // set ice candidate
-      console.log('UserB:');
-      console.log(arbiter.ALPHA.ICE_CANDIDATE);
-      await this.connection.addIceCandidate(
-        new RTCIceCandidate(arbiter.ALPHA.ICE_CANDIDATE),
-      );
-    }
-    /**
-     * This logic determines whether all webrtc data has been
-     * successfully transferred and we are able to create a new
-     * connection
-     *
-     * currently this is determined by whether the client recieved our timestamp, public key, trust score, and nameornym - and whether we recieved their nameornym and public key
-     *
-     * react navigation might not unmount the component, it
-     * hides components during the transitions between screens
-     *
-     * TODO - handle logic for re attempting to send user data
-     * this will become more important if the avatar logic is implemented
-     */
-    if (
-      connectPublicKey &&
-      connectNameornym &&
-      connectTimestamp &&
-      connectRecievedTimestamp &&
-      connectRecievedPublicKey &&
-      connectRecievedNameornym &&
-      connectRecievedTrustScore &&
-      !this.done
-    ) {
-      // navigate to preview screen
-      navigation.navigate('PreviewConnection');
-      this.done = true;
+  componentDidUpdate(prevProps) {
+    try {
+      const {
+        arbiter,
+        connectTimestamp,
+        connectPublicKey,
+        connectNameornym,
+        connectTrustScore,
+        connectRecievedTimestamp,
+        connectRecievedTrustScore,
+        connectRecievedPublicKey,
+        connectRecievedNameornym,
+        connectRecievedAvatar,
+        connectAvatar,
+        connect,
+        navigation,
+      } = this.props;
+      console.log('did update');
+      /**
+       * This logic determines whether all webrtc data has been
+       * successfully transferred and we are able to create a new
+       * connection
+       *
+       * currently this is determined by whether the client recieved our timestamp, public key, trust score, and nameornym - and whether we recieved their nameornym and public key
+       *
+       * react navigation might not unmount the component, it
+       * hides components during the transitions between screens
+       *
+       * TODO - handle logic for re attempting to send user data
+       * this will become more important if the avatar logic is implemented
+       */
+      if (
+        connectPublicKey &&
+        connectNameornym &&
+        connectTimestamp &&
+        connectRecievedTimestamp &&
+        connectRecievedPublicKey &&
+        connectRecievedNameornym &&
+        connectRecievedTrustScore &&
+        !this.done
+      ) {
+        // navigate to preview screen
+        navigation.navigate('PreviewConnection');
+        this.done = true;
+      }
+    } catch (err) {
+      // do we have an issue setting an ice candidate?
+      console.log(err);
     }
   }
 
   componentWillUnmount() {
     const { dispatch } = this.props;
-    this.stopPollingServer();
     // close and remove webrtc connection
     if (this.connection) {
       this.connection.close();
@@ -179,6 +169,26 @@ class RtcAnswerScreen extends React.Component<Props> {
     dispatch(resetWebrtc());
   }
 
+  setIceCandidate = async (arbiter) => {
+    // many ice candidates are emited
+    // how should we handle this???
+    try {
+      // update ice candidate
+      if (this.connection && arbiter && arbiter.ALPHA.ICE_CANDIDATE) {
+        // set ice candidate
+        console.log(
+          `setting ice candidate to ${arbiter.ALPHA.ICE_CANDIDATE.candidate}`,
+        );
+
+        await this.connection.addIceCandidate(
+          new RTCIceCandidate(arbiter.ALPHA.ICE_CANDIDATE),
+        );
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   initiateWebrtc = () => {
     // create webrtc instance after we have the arbiter
     this.connection = new RTCPeerConnection(ICE_SERVERS);
@@ -187,6 +197,22 @@ class RtcAnswerScreen extends React.Component<Props> {
     this.connection.onicecandidate = this.updateIce;
     // create data channel
     this.connection.ondatachannel = this.handleDataChannel;
+  };
+
+  initiateWebSocket = () => {
+    // fetch initial rtc id from signaling server
+    const { dispatch, rtcId } = this.props;
+    // join websocket room
+    this.socket = socket();
+    this.socket.emit('join', rtcId);
+    // subscribe to update event
+    this.socket.on('update', (arbiter) => {
+      // update redux store
+      console.log('socket io update user B');
+      console.log(arbiter);
+      dispatch(setArbiter(arbiter));
+      this.setIceCandidate(arbiter);
+    });
   };
 
   handleDataChannel = (e) => {
@@ -236,7 +262,7 @@ class RtcAnswerScreen extends React.Component<Props> {
         this.handleError();
       }
       // poll signaling server for changes
-      this.pollSignalServer();
+      // this.pollSignalServer();
       // set remote description
       if (this.connection && arbiter && arbiter.ALPHA && arbiter.ALPHA.OFFER) {
         await this.connection.setRemoteDescription(
@@ -255,7 +281,9 @@ class RtcAnswerScreen extends React.Component<Props> {
         );
       }
       // create answer
-      const answer = await this.connection.createAnswer();
+      let answer = await this.connection.createAnswer();
+      if (!answer) answer = await this.connection.createAnswer();
+      if (!answer) answer = await this.connection.createAnswer();
       // set local description
       await this.connection.setLocalDescription(answer);
       // update redux store
@@ -361,22 +389,6 @@ class RtcAnswerScreen extends React.Component<Props> {
     );
   };
 
-  pollSignalServer = () => {
-    const { dispatch } = this.props;
-    // poll signalling server
-    this.pollingId = setInterval(() => {
-      dispatch(fetchArbiter());
-    }, 1000);
-  };
-
-  stopPollingServer = () => {
-    // clear polling interval
-    if (this.pollingId) {
-      clearInterval(this.pollingId);
-      this.pollingId = null;
-    }
-  };
-
   updateIce = async (e) => {
     // many ice candidates are emited
     // how should we handle this???
@@ -404,6 +416,22 @@ class RtcAnswerScreen extends React.Component<Props> {
       console.log(err);
     }
   };
+
+  // pollSignalServer = () => {
+  //   const { dispatch } = this.props;
+  //   // poll signalling server
+  //   this.pollingId = setInterval(() => {
+  //     dispatch(fetchArbiter());
+  //   }, 1000);
+  // };
+
+  // stopPollingServer = () => {
+  //   // clear polling interval
+  //   if (this.pollingId) {
+  //     clearInterval(this.pollingId);
+  //     this.pollingId = null;
+  //   }
+  // };
 
   render() {
     return (

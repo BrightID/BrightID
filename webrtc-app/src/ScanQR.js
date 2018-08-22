@@ -25,6 +25,7 @@ class ScanQR extends Component<Props> {
     this.state = {
       value: '',
       connecting: true,
+      // iceCandidates: [],
     };
     this.connection = null;
     this.channel = null;
@@ -46,11 +47,22 @@ class ScanQR extends Component<Props> {
         arbiter.ALPHA.ICE_CANDIDATE.sdpMid !==
           prevProps.arbiter.ALPHA.ICE_CANDIDATE.sdpMid)
     ) {
-      console.log(`setting new ice candidate ${arbiter.ALPHA.ICE_CANDIDATE}`);
-
       await this.connection.addIceCandidate(
         new RTCIceCandidate(arbiter.ALPHA.ICE_CANDIDATE),
       );
+      // might implement in the future if ice candidate errors continue
+      // if (
+      //   this.connection &&
+      //   this.connection.remoteDescription &&
+      //   arbiter &&
+      //   arbiter.ALPHA.ICE_CANDIDATE
+      // ) {
+      //   console.log(`setting ice candidates ${arbiter.ALPHA.ICE_CANDIDATE}`);
+      //   await Promise.all(
+      //     arbiter.ALPHA.ICE_CANDIDATE.map((val) =>
+      //       this.connection.addIceCandidate(new RTCIceCandidate(val)),
+      //     ),
+      //   );
     }
   }
 
@@ -107,6 +119,8 @@ class ScanQR extends Component<Props> {
       this.connection.ondatachannel = this.updateChannel;
       // disconnect if ice connection fails
       this.connection.oniceconnectionstatechange = this.handleIce;
+      // send ice candidates when done collecting
+      // this.connection.onicegatheringstatechange = this.sendIce;
       // fetch dispatcher
       const arbiter = await dispatch(fetchArbiter());
       // return if error or no offer
@@ -120,7 +134,7 @@ class ScanQR extends Component<Props> {
     }
   };
 
-  initiateWebSocket = async (rtcId) => {
+  initiateWebSocket = (rtcId) => {
     // fetch initial rtc id from signaling server
     const { dispatch } = this.props;
     // join websocket room
@@ -160,6 +174,7 @@ class ScanQR extends Component<Props> {
   updateIce = async (e) => {
     try {
       const { dispatch } = this.props;
+      // const { iceCandidates } = this.state;
       if (e.candidate) {
         /**
          * update the signaling server arbiter with ice candidate info
@@ -175,11 +190,32 @@ class ScanQR extends Component<Props> {
             value: e.candidate,
           }),
         );
+        // might implement in the future
+        // this.setState({
+        //   iceCandidates: [...iceCandidates, e.candidate],
+        // });
         console.log(e.candidate);
       }
     } catch (err) {
       console.warn(err);
     }
+  };
+
+  sendIce = () => {
+    // const { dispatch } = this.props;
+    // const { iceCandidates } = this.state;
+    if (this.connection)
+      console.log(`ice gathering state: `, this.connection.iceGatheringState);
+    // send array instead of string value
+    // if (this.connection.iceGatheringState === 'complete') {
+    //   dispatch(
+    //     update({
+    //       person: ZETA,
+    //       type: ICE_CANDIDATE,
+    //       value: iceCandidates,
+    //     }),
+    //   );
+    // }
   };
 
   handleIce = () => {
@@ -188,7 +224,8 @@ class ScanQR extends Component<Props> {
       console.log(`user b ice connection state ${iceConnectionState}`);
       if (
         iceConnectionState === 'failed' ||
-        iceConnectionState === 'disconnected'
+        iceConnectionState === 'disconnected' ||
+        iceConnectionState === 'closed'
       ) {
         this.setState({
           connecting: true,

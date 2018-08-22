@@ -45,7 +45,7 @@ class ScanCodeScreen extends React.Component<Props, State> {
     console.log(`type: ${type}`);
     console.log(`data: ${data}`);
     // set rtc id url into redux store
-    if (data && data.length > 20 && data.length < 25) dispatch(setRtcId(data));
+    if (data && data.length === 21) dispatch(setRtcId(data));
 
     // switch to RtcAnswerScreen after RTC ID is set
     navigation.navigate('RtcAnswer');
@@ -61,8 +61,7 @@ class ScanCodeScreen extends React.Component<Props, State> {
               this.textInput = c;
             }}
             onChangeText={(value) => {
-              console.log(value.length);
-              if (value.length > 20 && value.length < 22) {
+              if (value.trim().length > 20 && value.trim().length < 22) {
                 this.handleBarCodeRead({
                   type: 'text-input',
                   data: value.trim(),

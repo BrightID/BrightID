@@ -38,6 +38,7 @@ export const initialState = {
   message: '',
   messageStr: '',
   trustScore: '99.9',
+  nameornym: 'UserB',
   publicKey2: new Uint8Array(),
   avatar2: '',
   nameornym2: '',

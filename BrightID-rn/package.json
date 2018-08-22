@@ -55,6 +55,7 @@
     "readable-stream": "^1.0.33",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
+    "socket.io-client": "^2.1.1",
     "stream-browserify": "^1.0.0",
     "string_decoder": "^0.10.31",
     "timers-browserify": "^1.4.2",
