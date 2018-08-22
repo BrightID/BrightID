@@ -57,14 +57,17 @@ class ScanCodeScreen extends React.Component<Props, State> {
       <View style={styles.container}>
         <View style={styles.scanTextContainer}>
           <TextInput
-            value={this.state.rtcId}
+            ref={(c) => {
+              this.textInput = c;
+            }}
             onChangeText={(value) => {
               console.log(value.length);
-              if (value.length > 19 && value.length < 23) {
+              if (value.length > 20 && value.length < 22) {
                 this.handleBarCodeRead({
                   type: 'text-input',
                   data: value.trim(),
                 });
+                this.textInput.blur();
               }
             }}
             style={styles.searchField}
@@ -72,7 +75,6 @@ class ScanCodeScreen extends React.Component<Props, State> {
             autoCapitalize="none"
             autoCorrect={false}
             textContentType="none"
-            clearTextOnFocus={true}
             underlineColorAndroid="transparent"
           />
         </View>

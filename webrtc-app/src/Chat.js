@@ -25,7 +25,14 @@ class Chat extends Component<Props> {
   }
 
   componentWillMount() {
-    const { channel, user, publicKey, dispatch } = this.props;
+    const {
+      channel,
+      user,
+      publicKey,
+      dispatch,
+      nameornym,
+      trustScore,
+    } = this.props;
     const { messages } = this.state;
     if (channel) {
       channel.onmessage = (e) => {
@@ -47,23 +54,12 @@ class Chat extends Component<Props> {
       };
       // channel metrics
 
-      // console.log(`id ${channel.id}`);
-      // console.log(`binaryType ${channel.binaryType}`);
-      // console.log(
-      //   `bufferedAmountLowThreshold ${channel.bufferedAmountLowThreshold}`,
-      // );
-      // console.log(`maxPacketLifeTime ${channel.maxPAcketLifeTime}`);
-      // console.log(`maxRetransmits ${channel.maxRetransmits}`);
-      // console.log(`negotiated ${channel.negotiated}`);
-      // console.log(`ordered ${channel.ordered}`);
-      // console.log(`protocol ${channel.protocol}`);
-      // console.log(`readyState ${channel.readyState}`);
       // send nameornym
-      const nameornym = JSON.stringify({ nameornym: user });
-      channel.send(nameornym);
+      channel.send(JSON.stringify({ nameornym }));
+      // send trustScore
+      channel.send(JSON.stringify({ trustScore }));
       // send public key
-      const pk = JSON.stringify({ publicKey });
-      channel.send(pk);
+      channel.send(JSON.stringify({ publicKey }));
       // if user B send timestamp
       if (user === 'UserB') {
         const timestamp = JSON.stringify({
