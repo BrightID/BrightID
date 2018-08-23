@@ -67,29 +67,17 @@ class RtcAnswerScreen extends React.Component<Props> {
   }
 
   componentDidMount() {
-    // try {
-    //   const { dispatch } = this.props;
-    // generate box keypair
-
-    // const { publicKey } = await dispatch(createKeypair());
-    // // update arbiter with keypair
-    // await dispatch(
-    //   update({
-    //     type: PUBLIC_KEY,
-    //     person: ZETA,
-    //     value: publicKey,
-    //   }),
-    // );
-    // create RTCPeerConnection
-    this.initiateWebrtc();
-    // fetch arbiter, then set RTC remote / local description and update signaling server
-    this.answerWebrtc();
-    // initiate websocket
-    this.initiateWebSocket();
-    // } catch (err) {
-    // we should handle err here in case network is down or something
-    //   console.log(err);
-    // }
+    try {
+      // create RTCPeerConnection
+      this.initiateWebrtc();
+      // fetch arbiter, then set RTC remote / local description and update signaling server
+      this.answerWebrtc();
+      // initiate websocket
+      this.initiateWebSocket();
+    } catch (err) {
+      // we should handle err here in case network is down or something
+      console.log(err);
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -109,7 +97,6 @@ class RtcAnswerScreen extends React.Component<Props> {
         connect,
         navigation,
       } = this.props;
-      console.log('did update');
       /**
        * This logic determines whether all webrtc data has been
        * successfully transferred and we are able to create a new
@@ -176,9 +163,9 @@ class RtcAnswerScreen extends React.Component<Props> {
       // update ice candidate
       if (this.connection && arbiter && arbiter.ALPHA.ICE_CANDIDATE) {
         // set ice candidate
-        console.log(
-          `setting ice candidate to ${arbiter.ALPHA.ICE_CANDIDATE.candidate}`,
-        );
+        // console.log(
+        //   `setting ice candidate: ${arbiter.ALPHA.ICE_CANDIDATE.candidate}`,
+        // );
 
         await this.connection.addIceCandidate(
           new RTCIceCandidate(arbiter.ALPHA.ICE_CANDIDATE),
@@ -189,14 +176,57 @@ class RtcAnswerScreen extends React.Component<Props> {
     }
   };
 
-  initiateWebrtc = () => {
-    // create webrtc instance after we have the arbiter
-    this.connection = new RTCPeerConnection(ICE_SERVERS);
-    logging(this.connection, 'UserB');
-    // update arbiter when ice candidate is found
-    this.connection.onicecandidate = this.updateIce;
-    // create data channel
-    this.connection.ondatachannel = this.handleDataChannel;
+  initiateWebrtc = async () => {
+    try {
+      const { dispatch } = this.props;
+      // fetch arbiter prior to initiating webrtc
+      const arbiter = await dispatch(fetchArbiter());
+
+      // create webrtc instance after we have the arbiter
+      this.connection = new RTCPeerConnection(ICE_SERVERS);
+      // window.cb = this.connection;
+      logging(this.connection, 'UserB');
+      // update arbiter when ice candidate is found
+      this.connection.onicecandidate = this.updateIce;
+      // create data channel
+      this.connection.ondatachannel = this.handleDataChannel;
+      // if arbiter doesn't exist return to the previous screen
+      if (
+        arbiter.error === "arbiter doesn't exist" ||
+        arbiter.msg === 'error'
+      ) {
+        this.handleError();
+      }
+      // set remote description
+      if (this.connection && arbiter && arbiter.ALPHA && arbiter.ALPHA.OFFER) {
+        await this.connection.setRemoteDescription(
+          new RTCSessionDescription(arbiter.ALPHA.OFFER),
+        );
+      }
+      // create answer
+      let answer = await this.connection.createAnswer();
+      if (!answer) answer = await this.connection.createAnswer();
+      if (!answer) answer = await this.connection.createAnswer();
+      // set local description
+      await this.connection.setLocalDescription(answer);
+      // update redux store
+      await dispatch(update({ type: ANSWER, person: ZETA, value: answer }));
+
+      // set an ice candidate
+      if (
+        this.connection &&
+        arbiter &&
+        arbiter.ALPHA &&
+        arbiter.ALPHA.ICE_CANDIDATE
+      ) {
+        await this.connection.addIceCandidate(
+          new RTCIceCandidate(arbiter.ALPHA.ICE_CANDIDATE),
+        );
+      }
+    } catch (err) {
+      // we should attempt to restart webrtc here
+      console.log(err);
+    }
   };
 
   initiateWebSocket = () => {
@@ -208,8 +238,6 @@ class RtcAnswerScreen extends React.Component<Props> {
     // subscribe to update event
     this.socket.on('update', (arbiter) => {
       // update redux store
-      console.log('socket io update user B');
-      console.log(arbiter);
       dispatch(setArbiter(arbiter));
       this.setIceCandidate(arbiter);
     });
@@ -249,50 +277,7 @@ class RtcAnswerScreen extends React.Component<Props> {
     }
   };
 
-  answerWebrtc = async () => {
-    try {
-      const { dispatch } = this.props;
-      // fetch arbiter prior to setting RTC description
-      const arbiter = await dispatch(fetchArbiter());
-      // if arbiter doesn't exist return to the previous screen
-      if (
-        arbiter.error === "arbiter doesn't exist" ||
-        arbiter.msg === 'error'
-      ) {
-        this.handleError();
-      }
-      // poll signaling server for changes
-      // this.pollSignalServer();
-      // set remote description
-      if (this.connection && arbiter && arbiter.ALPHA && arbiter.ALPHA.OFFER) {
-        await this.connection.setRemoteDescription(
-          new RTCSessionDescription(arbiter.ALPHA.OFFER),
-        );
-      }
-      // set ice candidate
-      if (
-        this.connection &&
-        arbiter &&
-        arbiter.ALPHA &&
-        arbiter.ALPHA.ICE_CANDIDATE
-      ) {
-        await this.connection.addIceCandidate(
-          new RTCIceCandidate(arbiter.ALPHA.ICE_CANDIDATE),
-        );
-      }
-      // create answer
-      let answer = await this.connection.createAnswer();
-      if (!answer) answer = await this.connection.createAnswer();
-      if (!answer) answer = await this.connection.createAnswer();
-      // set local description
-      await this.connection.setLocalDescription(answer);
-      // update redux store
-      await dispatch(update({ type: ANSWER, person: ZETA, value: answer }));
-    } catch (err) {
-      // we should attempt to restart webrtc here
-      console.log(err);
-    }
-  };
+  answerWebrtc = async () => {};
 
   sendUserBData = () => {
     // create timestamp then send data individually
@@ -317,10 +302,6 @@ class RtcAnswerScreen extends React.Component<Props> {
       if (timestamp) {
         let dataObj = { timestamp };
 
-        console.log(`
-        timestamp byte length: ${stringByteLength(JSON.stringify(dataObj))}
-        str length: ${JSON.stringify(dataObj).length}
-        `);
         // webrtc helper function for sending messages
         this.channel.send(JSON.stringify({ timestamp }));
       }
@@ -328,10 +309,6 @@ class RtcAnswerScreen extends React.Component<Props> {
       if (trustScore) {
         let dataObj = { trustScore };
 
-        console.log(`
-        trustScore byte length: ${stringByteLength(JSON.stringify(dataObj))}
-        str length: ${JSON.stringify(dataObj).length}
-        `);
         // webrtc helper function for sending messages
         this.channel.send(JSON.stringify({ trustScore }));
       }
@@ -339,10 +316,6 @@ class RtcAnswerScreen extends React.Component<Props> {
       if (nameornym) {
         let dataObj = { nameornym };
 
-        console.log(`
-        nameornym byte length: ${stringByteLength(JSON.stringify(dataObj))}
-        str length: ${JSON.stringify(dataObj).length}
-        `);
         // webrtc helper function for sending messages
         this.channel.send(JSON.stringify({ nameornym }));
       }
@@ -350,10 +323,6 @@ class RtcAnswerScreen extends React.Component<Props> {
       if (publicKey) {
         let dataObj = { publicKey };
 
-        console.log(`
-        publicKey byte length: ${stringByteLength(JSON.stringify(dataObj))}
-        str length: ${JSON.stringify(dataObj).length}
-        `);
         // webrtc helper function for sending messages
         this.channel.send(JSON.stringify({ publicKey }));
       }
@@ -409,8 +378,6 @@ class RtcAnswerScreen extends React.Component<Props> {
             value: e.candidate,
           }),
         );
-        // this.count = 1;
-        console.log(e.candidate);
       }
     } catch (err) {
       console.log(err);
@@ -446,7 +413,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#fdfdfd',
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',

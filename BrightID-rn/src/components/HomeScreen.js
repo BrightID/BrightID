@@ -19,6 +19,7 @@ import HeaderButtons, {
 } from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import BottomNav from './BottomNav';
 import store from '../store';
 import { removeUserData } from '../actions';

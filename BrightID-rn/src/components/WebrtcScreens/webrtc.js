@@ -148,22 +148,13 @@ export const createRTCId = () => async (dispatch: Function) => {
     const res = await fetch(`${URL}/id`);
     const { rtcId, arbiter } = await res.json();
 
-    // simulate network delay
-    await new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, 200);
-    });
-
     // update redux store
     dispatch(setRtcId(rtcId));
     // only userA initializes creation an RTC Id
     dispatch(setArbiter(arbiter));
 
     // return rtcId to component letting it know api fetch is successful
-    return new Promise((resolve) => {
-      resolve(rtcId);
-    });
+    return rtcId;
   } catch (err) {
     console.log(err);
   }
@@ -195,7 +186,7 @@ export const update = ({ type, person, value }) => async (
       return data;
     }
     // new arbiter should exist inside of the data object
-    console.log(data.arbiter);
+    // console.log(data.arbiter);
     // update redux store
     // ONLY UPDATE REDUX STORE VIA SOCKET IO
     dispatch(setArbiter(data.arbiter));

@@ -37,7 +37,7 @@ import { resetWebrtc, setArbiter } from '../../actions';
  * ==================================================================
  * displays a qrcode with rtcId url obtained from a signalling server
  * this component also establishes a RTCPeerConnection and data channel
- * when mounted - the RTC channel is initiated with rtcId credentials
+ * when mounted - the RTC channel is initiated with rtcId credentials already existing
  * when unmounted - the RTC connection is removed along with all redux data associated with creating a connection
  *
  */
@@ -67,23 +67,15 @@ class MyCodeScreen extends React.Component<Props, State> {
     this.socket = null;
     this.pollingId = null;
     this.done = false;
+    this.iceCount = 0;
+    this.sucount = 0;
   }
 
   async componentDidMount() {
     try {
       const { dispatch } = this.props;
       // obtain rtcId from server
-      await dispatch(createRTCId());
-      // generate box keypair
-      // const { publicKey } = await dispatch(createKeypair());
-      // // update arbiter with keypair
-      // await dispatch(
-      //   update({
-      //     type: PUBLIC_KEY,
-      //     person: ALPHA,
-      //     value: publicKey,
-      //   }),
-      // );
+      const rtcId = await dispatch(createRTCId());
       // generate qrcode with rtc id
       this.genQrCode();
       // initiate webrtc
@@ -182,8 +174,9 @@ class MyCodeScreen extends React.Component<Props, State> {
     try {
       // set ice candidate
       if (this.connection && arbiter && arbiter.ZETA.ICE_CANDIDATE) {
-        console.log('UserA:');
-        console.log(arbiter.ZETA.ICE_CANDIDATE);
+        // console.log(
+        //   `updating ice candidate: ${arbiter.ZETA.ICE_CANDIDATE.candidate}`,
+        // );
         await this.connection.addIceCandidate(
           new RTCIceCandidate(arbiter.ZETA.ICE_CANDIDATE),
         );
@@ -197,19 +190,20 @@ class MyCodeScreen extends React.Component<Props, State> {
   initiateWebrtc = async () => {
     const { dispatch } = this.props;
     // create webrtc instance
-    console.log('creating w3ebrtc data channel');
     this.connection = new RTCPeerConnection(ICE_SERVERS);
     logging(this.connection, 'UserA');
-    window.ca = this.connection;
-    // handle ice
-    this.connection.onicecandidate = this.updateIce;
     // create data channel
     this.channel = this.connection.createDataChannel('connect');
+    // window.ca = this.connection;
+    // handle ice
+    this.connection.onicecandidate = this.updateIce;
+
     // handle channel events
     this.handleDataChannel();
     // create offer and set local connection
-    console.log('creating offer');
-    const offer = await this.connection.createOffer();
+    let offer = await this.connection.createOffer();
+    if (!offer) offer = await this.connection.createOffer();
+    if (!offer) offer = await this.connection.createOffer();
     await this.connection.setLocalDescription(offer);
     // update redux store
     await dispatch(update({ type: OFFER, person: ALPHA, value: offer }));
@@ -224,10 +218,10 @@ class MyCodeScreen extends React.Component<Props, State> {
     // subscribe to update event
     this.socket.on('update', (arbiter) => {
       // update redux store
-      console.log('socket io update user B');
-      console.log(arbiter);
       dispatch(setArbiter(arbiter));
-      this.setIceCandidate();
+      this.setIceCandidate(arbiter);
+      this.sucount += 1;
+      // console.log(`socketio update ${this.sucount}`);
     });
   };
 
@@ -289,10 +283,6 @@ class MyCodeScreen extends React.Component<Props, State> {
       if (trustScore) {
         let dataObj = { trustScore };
 
-        console.log(`
-        trustScore byte length: ${stringByteLength(JSON.stringify(dataObj))}
-        str length: ${JSON.stringify(dataObj).length}
-        `);
         // webrtc helper function for sending messages
         this.channel.send(JSON.stringify({ trustScore }));
       }
@@ -300,10 +290,6 @@ class MyCodeScreen extends React.Component<Props, State> {
       if (nameornym) {
         let dataObj = { nameornym };
 
-        console.log(`
-        nameornym byte length: ${stringByteLength(JSON.stringify(dataObj))}
-        str length: ${JSON.stringify(dataObj).length}
-        `);
         // webrtc helper function for sending messages
         this.channel.send(JSON.stringify({ nameornym }));
       }
@@ -311,10 +297,6 @@ class MyCodeScreen extends React.Component<Props, State> {
       if (publicKey) {
         let dataObj = { publicKey };
 
-        console.log(`
-        publicKey byte length: ${stringByteLength(JSON.stringify(dataObj))}
-        str length: ${JSON.stringify(dataObj).length}
-        `);
         // webrtc helper function for sending messages
         this.channel.send(JSON.stringify({ publicKey }));
       }
@@ -350,8 +332,9 @@ class MyCodeScreen extends React.Component<Props, State> {
             value: e.candidate,
           }),
         );
+        this.iceCount += 1;
+        // console.log(`ice count: ${this.iceCount}`);
       }
-      console.log(e.candidate);
     } catch (err) {
       console.log(err);
     }
@@ -372,12 +355,10 @@ class MyCodeScreen extends React.Component<Props, State> {
     // we must extract the value of d from this string in order to use it
     // with react-native-svg
     //
-    console.log(qrsvg);
     const dinx = qrsvg.lastIndexOf('d');
     const dpath = qrsvg.substr(dinx);
     const qrsvgd = dpath.match(/"([^"]+)"/g)[0].split('"')[1];
     this.setState({ qrsvgd });
-    console.log(qrsvgd);
   };
 
   render() {
@@ -405,7 +386,7 @@ class MyCodeScreen extends React.Component<Props, State> {
           />
           <Text style={styles.nameornym}>{nameornym}</Text>
         </View>
-        {/* <TextInput value={this.props.rtcId || 'RTC TOKEN'} editable={true} /> */}
+
         <View style={styles.qrsvgContainer}>
           <Svg
             height="246"
@@ -418,6 +399,7 @@ class MyCodeScreen extends React.Component<Props, State> {
             <Path stroke="#000" d={this.state.qrsvgd} />
           </Svg>
         </View>
+        {/* <TextInput value={this.props.rtcId || 'RTC TOKEN'} editable={true} /> */}
       </View>
     );
   }
