@@ -145,7 +145,7 @@ export const update = ({ type, person, value }) => async (
   try {
     // action recieves type, person, and value to update the signaling server arbiter
 
-    const { rtcId } = getState().userA || getState().userB;
+    const rtcId = getState().userA.rtcId || getState().userB.rtcId;
     // in the future lets encrypt all data
     let box = value;
 
@@ -182,7 +182,7 @@ export const fetchArbiter = () => async (
 ) => {
   try {
     // obtain rtcId from redux store - which is the source of truth
-    const { rtcId } = getState().userA || getState().userB;
+    const rtcId = getState().userA.rtcId || getState().userB.rtcId;
 
     // fetch arbiter from signaling server
     const { data } = await post(`${URL}/dispatcher`, {

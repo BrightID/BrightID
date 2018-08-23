@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
 import { connect } from 'react-redux';
+import Spinner from 'react-native-spinkit';
 import {
   RTCPeerConnection,
   RTCSessionDescription,
@@ -71,7 +72,7 @@ class RtcAnswerScreen extends React.Component<Props> {
       // create RTCPeerConnection
       this.initiateWebrtc();
       // fetch arbiter, then set RTC remote / local description and update signaling server
-      this.answerWebrtc();
+      // this.answerWebrtc();
       // initiate websocket
       this.initiateWebSocket();
     } catch (err) {
@@ -403,6 +404,13 @@ class RtcAnswerScreen extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>
+        <Spinner
+          style={styles.spinner}
+          isVisible={true}
+          size={41}
+          type="9CubeGrid"
+          color="#4990e2"
+        />
         <Text>Exchanging info...</Text>
       </View>
     );
@@ -417,6 +425,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
+  },
+  spinner: {
+    margin: 10,
   },
 });
 

@@ -8,6 +8,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import Spinner from 'react-native-spinkit';
 import store from './store';
 import { setUpDefault } from './actions/setUpDefault';
 
@@ -54,7 +55,13 @@ export default class AppBootstrap extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <ActivityIndicator />
+        <Spinner
+          style={styles.spinner}
+          isVisible={true}
+          size={47}
+          type="9CubeGrid"
+          color="#4990e2"
+        />
         <StatusBar barStyle="default" />
       </View>
     );
