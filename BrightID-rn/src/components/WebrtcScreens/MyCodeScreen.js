@@ -5,6 +5,7 @@ import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
 import { connect } from 'react-redux';
+import Spinner from 'react-native-spinkit';
 import {
   RTCPeerConnection,
   RTCSessionDescription,
@@ -90,7 +91,7 @@ class MyCodeScreen extends React.Component<Props, State> {
     }
   }
 
-  async componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps) {
     // generate a new qrcode if the rtcId value changes
     const {
       arbiter,
@@ -102,19 +103,6 @@ class MyCodeScreen extends React.Component<Props, State> {
       connectRecievedTrustScore,
       navigation,
     } = this.props;
-
-    // set remote description
-    if (
-      this.connection &&
-      arbiter &&
-      arbiter.ZETA.ANSWER &&
-      (arbiter.ZETA.ANSWER.sdp !== prevProps.arbiter.ZETA.ANSWER.sdp ||
-        arbiter.ZETA.ANSWER.type !== prevProps.arbiter.ZETA.ANSWER.type)
-    ) {
-      await this.connection.setRemoteDescription(
-        new RTCSessionDescription(arbiter.ZETA.ANSWER),
-      );
-    }
 
     /**
      * This logic determines whether all webrtc data has been
@@ -187,26 +175,48 @@ class MyCodeScreen extends React.Component<Props, State> {
     }
   };
 
-  initiateWebrtc = async () => {
-    const { dispatch } = this.props;
-    // create webrtc instance
-    this.connection = new RTCPeerConnection(ICE_SERVERS);
-    logging(this.connection, 'UserA');
-    // create data channel
-    this.channel = this.connection.createDataChannel('connect');
-    // window.ca = this.connection;
-    // handle ice
-    this.connection.onicecandidate = this.updateIce;
+  setRemoteDescription = async (arbiter) => {
+    // set remote description
+    try {
+      if (
+        this.connection &&
+        arbiter &&
+        arbiter.ZETA.ANSWER &&
+        arbiter.ZETA.ANSWER.sdp !== this.connection.localDescription.sdp
+      ) {
+        await this.connection.setRemoteDescription(
+          new RTCSessionDescription(arbiter.ZETA.ANSWER),
+        );
+      }
+    } catch (Err) {
+      console.log(Err);
+    }
+  };
 
-    // handle channel events
-    this.handleDataChannel();
-    // create offer and set local connection
-    let offer = await this.connection.createOffer();
-    if (!offer) offer = await this.connection.createOffer();
-    if (!offer) offer = await this.connection.createOffer();
-    await this.connection.setLocalDescription(offer);
-    // update redux store
-    await dispatch(update({ type: OFFER, person: ALPHA, value: offer }));
+  initiateWebrtc = async () => {
+    try {
+      const { dispatch } = this.props;
+      // create webrtc instance
+      this.connection = new RTCPeerConnection(ICE_SERVERS);
+      logging(this.connection, 'UserA');
+      // create data channel
+      this.channel = this.connection.createDataChannel('connect');
+      // window.ca = this.connection;
+      // handle ice
+      this.connection.onicecandidate = this.updateIce;
+
+      // handle channel events
+      this.handleDataChannel();
+      // create offer and set local connection
+      let offer = await this.connection.createOffer();
+      if (!offer) offer = await this.connection.createOffer();
+      if (!offer) offer = await this.connection.createOffer();
+      await this.connection.setLocalDescription(offer);
+      // update redux store
+      await dispatch(update({ type: OFFER, person: ALPHA, value: offer }));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   initiateWebSocket = () => {
@@ -219,6 +229,7 @@ class MyCodeScreen extends React.Component<Props, State> {
     this.socket.on('update', (arbiter) => {
       // update redux store
       dispatch(setArbiter(arbiter));
+      this.setRemoteDescription(arbiter);
       this.setIceCandidate(arbiter);
       this.sucount += 1;
       // console.log(`socketio update ${this.sucount}`);
@@ -361,6 +372,38 @@ class MyCodeScreen extends React.Component<Props, State> {
     this.setState({ qrsvgd });
   };
 
+  renderQrCode = () => {
+    // render qrcode or spinner while waiting
+    if (this.state.qrsvgd) {
+      return (
+        <View style={styles.qrsvgContainer}>
+          <Svg
+            height="246"
+            width="246"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 33 33"
+            shape-rendering="crispEdges"
+          >
+            <Path fill="#fff" d="M0 0h33v33H0z" />
+            <Path stroke="#000" d={this.state.qrsvgd} />
+          </Svg>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.qrsvgContainer}>
+          <Spinner
+            style={styles.spinner}
+            isVisible={true}
+            size={47}
+            type="9CubeGrid"
+            color="#4990e2"
+          />
+        </View>
+      );
+    }
+  };
+
   render() {
     const { userAvatar, nameornym } = this.props;
     return (
@@ -387,18 +430,7 @@ class MyCodeScreen extends React.Component<Props, State> {
           <Text style={styles.nameornym}>{nameornym}</Text>
         </View>
 
-        <View style={styles.qrsvgContainer}>
-          <Svg
-            height="246"
-            width="246"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 33 33"
-            shape-rendering="crispEdges"
-          >
-            <Path fill="#fff" d="M0 0h33v33H0z" />
-            <Path stroke="#000" d={this.state.qrsvgd} />
-          </Svg>
-        </View>
+        {this.renderQrCode()}
         {/* <TextInput value={this.props.rtcId || 'RTC TOKEN'} editable={true} /> */}
       </View>
     );
@@ -457,8 +489,9 @@ const styles = StyleSheet.create({
   },
   qrsvgContainer: {
     width: '100%',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
+    minHeight: 284,
   },
 });
 

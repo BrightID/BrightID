@@ -242,11 +242,11 @@ class ScanQR extends Component<Props> {
           type="text"
           className="form-control"
           placeholder="place id here"
-          value={this.state.value}
           onChange={(e) => {
-            this.setState({ value: e.target.value });
-            // initiate webrtc with rtc token
-            this.initiateWebrtc(e.target.value);
+            if (e.target.value.trim().length === 21) {
+              // initiate webrtc with rtc token
+              this.initiateWebrtc(e.target.value.trim());
+            }
           }}
         />
       </div>
