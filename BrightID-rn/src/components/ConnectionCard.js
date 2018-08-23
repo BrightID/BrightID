@@ -26,17 +26,18 @@ type Props = {
 
 class ConnectionCard extends React.Component<Props> {
   render() {
+    const { avatar, nameornym, trustScore, connectionDate } = this.props;
+    const image = avatar
+      ? { uri: avatar }
+      : require('../static/default_avatar.jpg');
     return (
       <View style={styles.container}>
-        <Image source={{ uri: this.props.avatar }} style={styles.avatar} />
+        <Image source={image} style={styles.avatar} />
         <View style={styles.info}>
-          <Text style={styles.name}>{this.props.nameornym}</Text>
-          <Text style={styles.trustScore}>
-            {this.props.trustScore}% Trusted
-          </Text>
+          <Text style={styles.name}>{nameornym}</Text>
+          <Text style={styles.trustScore}>{trustScore}% Trusted</Text>
           <Text style={styles.connectedText}>
-            Connected{' '}
-            {moment.unix(parseInt(this.props.connectionDate, 10)).fromNow()}
+            Connected {moment.unix(parseInt(connectionDate, 10)).fromNow()}
           </Text>
         </View>
         <Touchable style={styles.moreIcon}>

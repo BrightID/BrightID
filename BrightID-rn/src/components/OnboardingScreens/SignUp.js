@@ -20,6 +20,7 @@ import HeaderButtons, {
   Item,
 } from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { setUserData } from '../../actions';
 
 type Props = {
@@ -166,9 +167,14 @@ class SignUp extends React.Component<Props, State> {
     const AddPhotoButton = userAvatar ? (
       <Image style={styles.avatar} source={userAvatar} />
     ) : (
-      <TouchableOpacity onPress={this.getAvatarPhoto} style={styles.addPhoto}>
+      <TouchableOpacity
+        onPress={this.getAvatarPhoto}
+        style={styles.addPhoto}
+        accessible={true}
+        accessibilityLabel="add avatar photo"
+      >
         <Text style={styles.addPhotoText}>Add Photo</Text>
-        <Ionicons size={48} name="ios-camera" color="#979797" />
+        <SimpleLineIcons size={48} name="camera" color="#979797" />
       </TouchableOpacity>
     );
 
@@ -309,6 +315,9 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
+  },
+  cameraIcon: {
+    width: 48,
   },
 });
 

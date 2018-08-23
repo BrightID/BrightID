@@ -42,10 +42,11 @@ class ScanCodeScreen extends React.Component<Props, State> {
   handleBarCodeRead = ({ type, data }) => {
     // TODO - CHANGE THIS
     const { dispatch, navigation } = this.props;
-    console.log(`type: ${type}`);
-    console.log(`data: ${data}`);
+    // console.log(`type: ${type}`);
+    // console.log(`data: ${data}`);
     // set rtc id url into redux store
     if (data && data.length === 21) dispatch(setRtcId(data));
+    // TODO: Prevent background rescans
 
     // switch to RtcAnswerScreen after RTC ID is set
     navigation.navigate('RtcAnswer');
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#fdfdfd',
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',

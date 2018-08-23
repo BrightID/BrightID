@@ -25,7 +25,7 @@ class ConnectionsScreen extends React.Component<Props> {
     headerRight: <View />,
   };
 
-  keyExtractor = (item) => item.publicKey;
+  keyExtractor = (connection, index) => connection.publicKey.toString() + index;
 
   filterConnections = () =>
     this.props.connections.filter((item) =>

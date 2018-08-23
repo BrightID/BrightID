@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -864,7 +865,6 @@
 				3CD0BDC27DC444D18CD96700 /* libRNRandomBytes.a */,
 				E9F16ECE516B49EC82A1A522 /* libRNVectorIcons.a */,
 				8AE44A95AFF3479BB8C6A98D /* libBVLinearGradient.a */,
-				58666D289F104B0AB360162D /* libReactNativePermissions.a */,
 				3F399846BD014ECDB1385462 /* libRNRandomBytes-tvOS.a */,
 				1E5474A31DDB447F986C2AD7 /* libRNSVG.a */,
 				36D995DB57E244F6AE82B868 /* libRNSVG-tvOS.a */,

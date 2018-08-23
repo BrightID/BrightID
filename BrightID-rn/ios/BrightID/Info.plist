@@ -21,37 +21,33 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1</string>
+	<string>1.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSAppTransportSecurity</key>
-	<dict/>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>$(PRODUCT_NAME) does not access your apple music library</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>&gt;$(PRODUCT_NAME) might need to use this in the future </string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>&gt;$(PRODUCT_NAME) does not access your calender</string>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to use your camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>$(PRODUCT_NAME) does not access your location</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to access to your microphone</string>
+	<key>NSMotionUsageDescription</key>
+	<string>$(PRODUCT_NAME) does not need to access your device's motion</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to save photos to your photo gallery</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like access to your photo gallery</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>>$(PRODUCT_NAME) might need to use this in the future </string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>>$(PRODUCT_NAME) does not access your calender</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) does not access your location</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>$(PRODUCT_NAME) should not access speech recognition</string>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>$(PRODUCT_NAME) does not access your apple music library</string>
-	<key>NSMotionUsageDescription</key>
-	<string>$(PRODUCT_NAME) does not need to access your device's motion</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>
@@ -91,5 +87,17 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSAppTransportSecurity</key>
+	<!--See http://ste.vn/2015/06/10/configuring-app-transport-security-ios-9-osx-10-11/ -->
+	<dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
 </dict>
 </plist>
