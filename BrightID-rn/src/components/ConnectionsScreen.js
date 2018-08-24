@@ -1,10 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { AsyncStorage, FlatList, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
+import Spinner from 'react-native-spinkit';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
+import { setConnections } from '../actions';
 
 /**
  * Connection screen of BrightID
@@ -25,7 +27,30 @@ class ConnectionsScreen extends React.Component<Props> {
     headerRight: <View />,
   };
 
-  keyExtractor = (connection, index) => connection.publicKey.toString() + index;
+  componentDidMount() {
+    this.getConnections();
+  }
+
+  getConnections = async () => {
+    try {
+      const { dispatch } = this.props;
+      /**
+       * obtain connection keys from async storage
+       * currently everything in async storage except for `userData` is a connection
+       */
+
+      const allKeys = await AsyncStorage.getAllKeys();
+      const connectionKeys = allKeys.filter((val) => val !== 'userData');
+      const storageValues = await AsyncStorage.multiGet(connectionKeys);
+      const connections = storageValues.map((val) => JSON.parse(val[1]));
+      // update redux store
+      dispatch(setConnections(connections));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  keyExtractor = (publicKey, index) => publicKey.toString() + index;
 
   filterConnections = () =>
     this.props.connections.filter((item) =>
@@ -35,16 +60,34 @@ class ConnectionsScreen extends React.Component<Props> {
         .includes(this.props.searchParam.toLowerCase().replace(/\s/g, '')),
     );
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <SearchConnections />
+  renderList = () => {
+    if (this.props.connections.length > 0) {
+      return (
         <FlatList
           style={styles.connectionsContainer}
           data={this.filterConnections()}
           keyExtractor={this.keyExtractor}
           renderItem={({ item }) => <ConnectionCard {...item} />}
         />
+      );
+    } else {
+      return (
+        <Spinner
+          style={styles.spinner}
+          isVisible={true}
+          size={47}
+          type="WanderingCubes"
+          color="#4990e2"
+        />
+      );
+    }
+  };
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <SearchConnections />
+        <View style={styles.mainContainer}>{this.renderList()}</View>
       </View>
     );
   }
@@ -59,8 +102,13 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   connectionsContainer: {
+    flex: 1,
+  },
+  mainContainer: {
     marginTop: 8,
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

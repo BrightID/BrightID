@@ -1,11 +1,19 @@
 // @flow
 
 import * as React from 'react';
-import { Alert, Image, StyleSheet, Text, View } from 'react-native';
+import {
+  Alert,
+  AsyncStorage,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { connect } from 'react-redux';
 import Touchable from 'react-native-platform-touchable';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
+import { removeConnection } from '../actions';
 
 /**
  * Connection Card in the Connections Screen
@@ -22,24 +30,38 @@ type Props = {
   avatar: string,
   trustScore: string,
   connectionDate: string,
+  publicKey: string,
+  dispatch: Function,
 };
 
 class ConnectionCard extends React.Component<Props> {
   handleUserOptions = () => {
     const { nameornym } = this.props;
     Alert.alert(
-      'Delete User',
-      `${nameornym}`,
+      'Delete connection',
+      `Are you sure you want to remove ${nameornym} from your list of connections? Your decision is irreversable.`,
       [
         {
           text: 'Cancel',
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        { text: 'OK', onPress: () => console.log('OK Pressed') },
+        { text: 'OK', onPress: this.removeUser },
       ],
-      { cancelable: false },
+      { cancelable: true },
     );
+  };
+
+  removeUser = async () => {
+    try {
+      const { publicKey, dispatch } = this.props;
+      // update redux store
+      dispatch(removeConnection(publicKey));
+      // remove connection from async storage
+      await AsyncStorage.removeItem(publicKey.toString());
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   render() {

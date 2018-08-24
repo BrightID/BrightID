@@ -19,6 +19,12 @@ type Props = {
 };
 
 class SearchConnections extends React.Component<Props> {
+  componentWillUnmount() {
+    // reset search Param
+    const { dispatch } = this.props;
+    dispatch(setSearchParam(''));
+  }
+
   render() {
     return (
       <View style={styles.container}>
