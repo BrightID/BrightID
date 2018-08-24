@@ -2,11 +2,10 @@
 
 import * as React from 'react';
 import {
-  Alert,
+  AsyncStorage,
   Image,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -38,33 +37,41 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
     headerRight: <View />,
   };
 
-  addNewConnection = () => {
+  addNewConnection = async () => {
     /**
-     * Append connection to list of connections &&
+     * Add connection in async storage  &&
      * Clear the redux store of all leftoverwebrtc data
      */
-    const {
-      dispatch,
-      connectPublicKey,
-      connectNameornym,
-      connectAvatar,
-      connectTrustScore,
-      connectTimestamp,
-    } = this.props;
+    try {
+      const {
+        dispatch,
+        connectPublicKey,
+        connectNameornym,
+        connectAvatar,
+        connectTrustScore,
+        connectTimestamp,
+      } = this.props;
 
-    // TODO formalize spec for this
-    // create a new connection object
-    const connection = {
-      publicKey: connectPublicKey,
-      nameornym: connectNameornym,
-      avatar: connectAvatar,
-      trustScore: connectTrustScore,
-      connectionDate: connectTimestamp / 1000, // hack for moment,
-    };
-    // append connection to the list in the redux store
-    dispatch(addConnection(connection));
-    // clear webrtc data
-    dispatch(resetWebrtc());
+      // TODO formalize spec for this
+      // create a new connection object
+      const connection = {
+        publicKey: connectPublicKey,
+        nameornym: connectNameornym,
+        avatar: connectAvatar,
+        trustScore: connectTrustScore,
+        connectionDate: connectTimestamp / 1000, // hack for moment,
+      };
+      // add connection inside of async storage
+      await AsyncStorage.setItem(
+        connectPublicKey.toString(),
+        JSON.stringify(connection),
+      );
+
+      // clear webrtc data
+      dispatch(resetWebrtc());
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   render() {
@@ -90,8 +97,8 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
         </View>
         <View style={styles.confirmButtonContainer}>
           <TouchableOpacity
-            onPress={() => {
-              this.addNewConnection();
+            onPress={async () => {
+              await this.addNewConnection();
               navigation.navigate('ConnectSuccess');
             }}
             style={styles.confirmButton}

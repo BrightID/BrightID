@@ -22,6 +22,7 @@ import HeaderButtons, {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { setUserData } from '../../actions';
+import { addSampleConnections } from './actions';
 
 type Props = {
   dispatch: Function,
@@ -148,11 +149,13 @@ class SignUp extends React.Component<Props, State> {
         nameornym,
         userAvatar,
       };
-
+      // add sample connections to async store
+      await addSampleConnections();
       // save avatar photo base64 data, and user data in async storage
       await AsyncStorage.setItem('userData', JSON.stringify(userData));
       // update redux store
       await dispatch(setUserData(userData));
+
       // navigate to home page
       navigation.navigate('App');
       // catch any errors with saving data or generating the public / private key

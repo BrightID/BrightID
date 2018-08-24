@@ -6,6 +6,7 @@ export const GROUPS_COUNT = 'GROUPS_COUNT';
 export const SEARCH_PARAM = 'SEARCH_PARAM';
 export const UPDATE_CONNECTIONS = 'UPDATE_CONNECTIONS';
 export const ADD_CONNECTION = 'ADD_CONNECTION';
+export const REMOVE_CONNECTION = 'REMOVE_CONNECTION';
 export const UPDATE_USER_DATA = 'UPDATE_USER_DATA';
 export const REMOVE_USER_DATA = 'REMOVE_USER_DATA';
 export const USER_AVATAR = 'USER_AVATAR';
@@ -103,6 +104,17 @@ export const addConnection = (connection: {
 }) => ({
   type: ADD_CONNECTION,
   connection,
+});
+
+/**
+ * redux action creator for removing a connection
+ * @param type REMOVE_CONNECTION
+ * @param connection removes a connection object from the array of connections and removes public key from connection keys
+ */
+
+export const removeConnection = (publicKey: string) => ({
+  type: REMOVE_CONNECTION,
+  publicKey,
 });
 
 /**

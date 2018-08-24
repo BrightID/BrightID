@@ -408,7 +408,7 @@ class RtcAnswerScreen extends React.Component<Props> {
           style={styles.spinner}
           isVisible={true}
           size={41}
-          type="9CubeGrid"
+          type="Wave"
           color="#4990e2"
         />
         <Text>Exchanging info...</Text>

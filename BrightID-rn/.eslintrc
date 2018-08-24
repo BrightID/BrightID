@@ -35,7 +35,7 @@
     "react/no-unused-state": "warn",
     "consistent-return": "off",
     "no-alert": "off",
-    "no-else-return": "warn",
+    "no-else-return": "off",
     "no-unused-vars": "warn",
     "no-shadow": "warn",
     "import/no-named-as-default": "off",

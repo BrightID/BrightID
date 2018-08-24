@@ -20,6 +20,7 @@ import {
   CONNECT_RECIEVED_PUBLICKEY,
   CONNECT_RECIEVED_AVATAR,
   CONNECT_RECIEVED_TRUSTSCORE,
+  REMOVE_CONNECTION,
   ARBITER,
   RTC_ID,
   RESET_WEBRTC,
@@ -55,15 +56,7 @@ export const initialState = {
   userAvatar: '',
   groupsCount: '',
   searchParam: '',
-  connections: [
-    {
-      publicKey: new Uint8Array(),
-      name: '',
-      avatar: '',
-      connectionDate: '',
-      trustScore: '',
-    },
-  ],
+  connections: [],
   nearbyPeople: [],
   publicKey: '',
   secretKey: '',
@@ -87,6 +80,7 @@ export const initialState = {
 };
 
 export const mainReducer = (state = initialState, action) => {
+  const connections = state.connections.slice();
   switch (action.type) {
     case USER_TRUST_SCORE:
       return {
@@ -116,7 +110,14 @@ export const mainReducer = (state = initialState, action) => {
     case ADD_CONNECTION:
       return {
         ...state,
-        connections: [action.connection, ...state.connections],
+        connections: [action.connection, ...connections],
+      };
+    case REMOVE_CONNECTION:
+      return {
+        ...state,
+        connections: connections.filter(
+          (val) => val.publicKey.toString() !== action.publicKey.toString(),
+        ),
       };
     case UPDATE_USER_DATA:
       return {
