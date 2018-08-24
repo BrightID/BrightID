@@ -75,7 +75,8 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
   };
 
   render() {
-    const { connectNameornym, navigation } = this.props;
+    const { connectNameornym, navigation, connectAvatar } = this.props;
+    const image = connectAvatar || require('../../static/default_avatar.jpg');
     return (
       <View style={styles.container}>
         <View style={styles.questionTextContainer}>
@@ -84,7 +85,7 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
         </View>
         <View style={styles.userContainer}>
           <Image
-            source={require('../../static/default_avatar.jpg')}
+            source={image}
             style={styles.userAvatar}
             resizeMode="cover"
             onError={(e) => {

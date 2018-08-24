@@ -9,7 +9,6 @@ import {
   RTCSessionDescription,
   RTCIceCandidate,
 } from 'react-native-webrtc';
-// import { generateMessage } from '../actions/exchange';
 import logging from '../../utils/logging';
 import { stringByteLength } from '../../utils/encoding';
 import channelLogging from './channelLogging';
@@ -17,17 +16,24 @@ import {
   update,
   ANSWER,
   ZETA,
+  ALPHA,
   ICE_CANDIDATE,
   PUBLIC_KEY,
   ICE_SERVERS,
   fetchArbiter,
   handleRecievedMessage,
   createKeypair,
+  exchangeAvatar,
 } from './webrtc';
 
 import { socket } from './websockets';
 
-import { resetWebrtc, setConnectTimestamp, setArbiter } from '../../actions';
+import {
+  resetWebrtc,
+  setConnectTimestamp,
+  setArbiter,
+  setConnectAvatar,
+} from '../../actions';
 /**
  * RTC Ansewr Screen of BrightID
  *
@@ -123,6 +129,7 @@ class RtcAnswerScreen extends React.Component<Props> {
       ) {
         // navigate to preview screen
         navigation.navigate('PreviewConnection');
+
         this.done = true;
       }
     } catch (err) {
@@ -132,6 +139,7 @@ class RtcAnswerScreen extends React.Component<Props> {
   }
 
   componentWillUnmount() {
+    console.log('unmounting rtc answer screen');
     const { dispatch } = this.props;
     // close and remove webrtc connection
     if (this.connection) {
@@ -157,22 +165,14 @@ class RtcAnswerScreen extends React.Component<Props> {
     dispatch(resetWebrtc());
   }
 
-  setIceCandidate = async (arbiter) => {
-    // many ice candidates are emited
-    // how should we handle this???
+  setIceCandidate = async (candidate) => {
     try {
-      // update ice candidate
-      if (this.connection && arbiter && arbiter.ALPHA.ICE_CANDIDATE) {
-        // set ice candidate
-        // console.log(
-        //   `setting ice candidate: ${arbiter.ALPHA.ICE_CANDIDATE.candidate}`,
-        // );
-
-        await this.connection.addIceCandidate(
-          new RTCIceCandidate(arbiter.ALPHA.ICE_CANDIDATE),
-        );
+      // set ice candidate
+      if (this.connection && candidate) {
+        await this.connection.addIceCandidate(new RTCIceCandidate(candidate));
       }
     } catch (err) {
+      // error setting ice candidate?
       console.log(err);
     }
   };
@@ -189,7 +189,11 @@ class RtcAnswerScreen extends React.Component<Props> {
       logging(this.connection, 'UserB');
       // update arbiter when ice candidate is found
       this.connection.onicecandidate = this.updateIce;
+      this.connection.oniceconnectionstatechange = this.handleICEConnectionStateChange;
+      this.connection.onicegatheringstatechange = this.handleICEGatheringStateChange;
+      this.connection.onsignalingstatechange = this.handleSignalingStateChange;
       // create data channel
+
       this.connection.ondatachannel = this.handleDataChannel;
       // if arbiter doesn't exist return to the previous screen
       if (
@@ -213,17 +217,7 @@ class RtcAnswerScreen extends React.Component<Props> {
       // update redux store
       await dispatch(update({ type: ANSWER, person: ZETA, value: answer }));
 
-      // set an ice candidate
-      if (
-        this.connection &&
-        arbiter &&
-        arbiter.ALPHA &&
-        arbiter.ALPHA.ICE_CANDIDATE
-      ) {
-        await this.connection.addIceCandidate(
-          new RTCIceCandidate(arbiter.ALPHA.ICE_CANDIDATE),
-        );
-      }
+      // setup all ice candidates?
     } catch (err) {
       // we should attempt to restart webrtc here
       console.log(err);
@@ -240,7 +234,20 @@ class RtcAnswerScreen extends React.Component<Props> {
     this.socket.on('update', (arbiter) => {
       // update redux store
       dispatch(setArbiter(arbiter));
-      this.setIceCandidate(arbiter);
+    });
+    // update ice candidate
+    this.socket.on('new-ice-candidate', ({ candidate, person }) => {
+      console.log(`new ice candidate ${candidate}`);
+      if (person === ALPHA) this.setIceCandidate({ candidate, person });
+      // console.log(`socketio update ${this.sucount}`);
+    });
+
+    // update connect avatar
+    this.socket.on('avatar', ({ avatar, person }) => {
+      console.log(`avatar: ${avatar}`);
+      if (person === ALPHA) {
+        dispatch(setConnectAvatar(avatar));
+      }
     });
   };
 
@@ -329,6 +336,10 @@ class RtcAnswerScreen extends React.Component<Props> {
       }
       // send user avatar
       if (userAvatar) {
+        console.log('here');
+        // send avatar to signaling server
+        // payload too big!!
+        // dispatch(exchangeAvatar({ person: ZETA }));
         // console.log('has user avatar');
         // let dataObj = { avatar: userAvatar };
         // console.log(`
@@ -382,6 +393,38 @@ class RtcAnswerScreen extends React.Component<Props> {
       }
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  handleICEConnectionStateChange = () => {
+    const { navigation } = this.props;
+    if (
+      this.connection &&
+      (this.connection.iceConnectionState === 'closed' ||
+        this.connection.iceConnectionState === 'failed' ||
+        this.connection.iceConnectionState === 'disconnected') &&
+      !this.done
+    ) {
+      // hang up call
+      navigation.goBack();
+    }
+  };
+
+  handleICEGatheringStateChange = () => {
+    if (this.connection) {
+      console.log(`ice gathering state: `, this.connection.iceGatheringState);
+    }
+  };
+
+  handleSignalingStateChange = () => {
+    const { navigation } = this.props;
+    if (
+      this.connection &&
+      this.connection.signalingState === 'closed' &&
+      !this.done
+    ) {
+      // hang up call
+      navigation.goBack();
     }
   };
 

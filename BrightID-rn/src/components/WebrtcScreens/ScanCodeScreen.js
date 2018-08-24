@@ -30,6 +30,7 @@ class ScanCodeScreen extends React.Component<Props, State> {
   state = {
     hasCameraPermission: '',
     rtcId: '',
+    scanned: false,
   };
 
   componentDidMount() {
@@ -42,14 +43,22 @@ class ScanCodeScreen extends React.Component<Props, State> {
   handleBarCodeRead = ({ type, data }) => {
     // TODO - CHANGE THIS
     const { dispatch, navigation } = this.props;
+    const { scanned } = this.state;
     // console.log(`type: ${type}`);
     // console.log(`data: ${data}`);
     // set rtc id url into redux store
-    if (data && data.length === 21) dispatch(setRtcId(data));
-    // TODO: Prevent background rescans
-
-    // switch to RtcAnswerScreen after RTC ID is set
-    navigation.navigate('RtcAnswer');
+    if (!scanned && data && data.length === 21) {
+      dispatch(setRtcId(data));
+      this.setState(
+        {
+          scanned: 'true',
+        },
+        () => {
+          // switch to RtcAnswerScreen after RTC ID is set
+          navigation.navigate('RtcAnswer');
+        },
+      );
+    }
   };
 
   render() {

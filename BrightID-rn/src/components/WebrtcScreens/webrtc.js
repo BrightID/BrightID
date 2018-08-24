@@ -229,6 +229,29 @@ export const fetchArbiter = () => async (
   }
 };
 
+export const exchangeAvatar = ({ person }) => async (
+  dispatch: Function,
+  getState: Function,
+) => {
+  try {
+    // obtain rtcId from redux store - which is the source of truth
+    const { rtcId, userAvatar } = getState().main;
+
+    // fetch arbiter from signaling server
+    const { data } = await post(`${URL}/avatar`, {
+      rtcId,
+      person,
+      avatar: userAvatar,
+    });
+
+    if (data.msg === 'avatar recieved') {
+      // that's good
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 /**
  * create nacl messaging box keypair
  * ======================================

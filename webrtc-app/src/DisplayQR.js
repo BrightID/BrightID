@@ -9,6 +9,7 @@ import {
   update,
   OFFER,
   ALPHA,
+  ZETA,
   ICE_CANDIDATE,
   // fetchArbiter,
   ICE_SERVERS,
@@ -57,7 +58,11 @@ class DisplayQR extends Component<Props> {
         console.log(arbiter);
         dispatch(setUserAArbiter(arbiter));
       });
-      console.log(rtcId.length);
+
+      this.socket.on('new-ice-candidate', ({ candidate, person }) => {
+        console.log(`new ice candidate ${candidate}`);
+        if (person === ZETA) this.setIceCandidate(candidate);
+      });
     } catch (err) {
       console.log(err);
     }
@@ -80,24 +85,6 @@ class DisplayQR extends Component<Props> {
         await this.connection.setRemoteDescription(
           new RTCSessionDescription(arbiter.ZETA.ANSWER),
         );
-      }
-      // set ice candidate
-      if (
-        this.connection &&
-        arbiter &&
-        arbiter.ZETA.ICE_CANDIDATE &&
-        (arbiter.ZETA.ICE_CANDIDATE.candidate !==
-          prevProps.arbiter.ZETA.ICE_CANDIDATE.candidate ||
-          arbiter.ZETA.ICE_CANDIDATE.sdpMLineIndex !==
-            prevProps.arbiter.ZETA.ICE_CANDIDATE.sdpMLineIndex ||
-          arbiter.ZETA.ICE_CANDIDATE.sdpMid !==
-            prevProps.arbiter.ZETA.ICE_CANDIDATE.sdpMid)
-      ) {
-        console.log(`setting ice candidate to ${arbiter.ZETA.ICE_CANDIDATE}`);
-        await this.connection.addIceCandidate(
-          new RTCIceCandidate(arbiter.ZETA.ICE_CANDIDATE),
-        );
-        console.log(``);
       }
     } catch (err) {
       console.log(err);
@@ -124,6 +111,18 @@ class DisplayQR extends Component<Props> {
     const { dispatch } = this.props;
     dispatch(resetUserAStore());
   }
+
+  setIceCandidate = async (candidate) => {
+    try {
+      // set ice candidate
+      if (this.connection && candidate) {
+        await this.connection.addIceCandidate(new RTCIceCandidate(candidate));
+      }
+    } catch (err) {
+      // error setting ice candidate?
+      console.log(err);
+    }
+  };
 
   initiateWebrtc = async () => {
     try {
@@ -171,10 +170,6 @@ class DisplayQR extends Component<Props> {
           connecting: true,
         });
       };
-      // this.channel.onmessage = (e) => {
-      //   console.log(`user A recieved message ${e.data}`);
-      //   console.log(e);
-      // };
     }
   };
 
@@ -229,6 +224,7 @@ class DisplayQR extends Component<Props> {
   };
 
   handleIce = () => {
+    const { goBackBack } = this.props;
     if (this.connection) {
       const { iceConnectionState } = this.connection;
       console.log(`user b ice connection state ${iceConnectionState}`);
@@ -240,6 +236,7 @@ class DisplayQR extends Component<Props> {
         this.setState({
           connecting: true,
         });
+        goBackBack();
       }
     }
   };
