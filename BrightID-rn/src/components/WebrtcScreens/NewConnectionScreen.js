@@ -27,12 +27,33 @@ class NewConnectionScreen extends React.Component<Props> {
     display: 'qrcode',
   };
 
-  render() {
+  resetQr = () => {
+    // unmount / mount MyCodeScreen
+    this.setState({ display: '' });
+    setTimeout(() => {
+      this.setState({
+        display: 'qrcode',
+      });
+    }, 100);
+  };
+
+  renderScreen = () => {
+    const { navigation } = this.props;
     const { display } = this.state;
     // boolean for displaying button styles
     // conditionally render MyCodeScreen
-    const qr = display === 'qrcode';
+    if (display === 'qrcode') {
+      return <MyCodeScreen navigation={navigation} resetQr={this.resetQr} />;
+    } else if (display === 'scanner') {
+      return <ScanCodeScreen navigation={navigation} />;
+    } else if (!display) {
+      return <View />;
+    }
+  };
 
+  render() {
+    const { display } = this.state;
+    const qr = display === 'qrcode';
     return (
       <View style={styles.container}>
         <View style={styles.buttonsContainer}>
@@ -73,11 +94,7 @@ class NewConnectionScreen extends React.Component<Props> {
             </Text>
           </TouchableOpacity>
         </View>
-        {qr ? (
-          <MyCodeScreen navigation={this.props.navigation} />
-        ) : (
-          <ScanCodeScreen navigation={this.props.navigation} />
-        )}
+        {this.renderScreen()}
       </View>
     );
   }

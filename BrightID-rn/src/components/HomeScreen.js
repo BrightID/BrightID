@@ -140,7 +140,7 @@ export class HomeScreen extends React.Component<Props> {
         <View style={styles.mainContainer}>
           <View style={styles.userAvatarContainer}>
             <Image
-              source={userAvatar}
+              source={userAvatar || require('../static/default_avatar.jpg')}
               style={styles.userAvatar}
               resizeMode="cover"
               onError={(e) => {

@@ -19,17 +19,19 @@ import {
   update,
   OFFER,
   ALPHA,
+  ZETA,
   PUBLIC_KEY,
   ICE_CANDIDATE,
   ICE_SERVERS,
   fetchArbiter,
   handleRecievedMessage,
   createKeypair,
+  exchangeAvatar,
 } from './webrtc';
 
 import { socket } from './websockets';
 
-import { resetWebrtc, setArbiter } from '../../actions';
+import { resetWebrtc, setArbiter, setConnectAvatar } from '../../actions';
 
 /**
  * My Code screen of BrightID
@@ -50,6 +52,7 @@ type Props = {
   userAvatar: { uri: string },
   nameornym: string,
   trustScore: string,
+  resetQr: Function,
 };
 
 type State = {
@@ -133,6 +136,7 @@ class MyCodeScreen extends React.Component<Props, State> {
   }
 
   componentWillUnmount() {
+    console.log('unmounting mycode screen');
     const { dispatch } = this.props;
     // close and remove webrtc connection
     if (this.connection) {
@@ -158,16 +162,11 @@ class MyCodeScreen extends React.Component<Props, State> {
     dispatch(resetWebrtc());
   }
 
-  setIceCandidate = async (arbiter) => {
+  setIceCandidate = async (candidate) => {
     try {
       // set ice candidate
-      if (this.connection && arbiter && arbiter.ZETA.ICE_CANDIDATE) {
-        // console.log(
-        //   `updating ice candidate: ${arbiter.ZETA.ICE_CANDIDATE.candidate}`,
-        // );
-        await this.connection.addIceCandidate(
-          new RTCIceCandidate(arbiter.ZETA.ICE_CANDIDATE),
-        );
+      if (this.connection && candidate) {
+        await this.connection.addIceCandidate(new RTCIceCandidate(candidate));
       }
     } catch (err) {
       // error setting ice candidate?
@@ -204,7 +203,9 @@ class MyCodeScreen extends React.Component<Props, State> {
       // window.ca = this.connection;
       // handle ice
       this.connection.onicecandidate = this.updateIce;
-
+      this.connection.oniceconnectionstatechange = this.handleICEConnectionStateChange;
+      this.connection.onicegatheringstatechange = this.handleICEGatheringStateChange;
+      this.connection.onsignalingstatechange = this.handleSignalingStateChange;
       // handle channel events
       this.handleDataChannel();
       // create offer and set local connection
@@ -230,9 +231,24 @@ class MyCodeScreen extends React.Component<Props, State> {
       // update redux store
       dispatch(setArbiter(arbiter));
       this.setRemoteDescription(arbiter);
-      this.setIceCandidate(arbiter);
+      // console.log(`socketio update ${this.sucount}`);
+    });
+    // update ice candidate
+    this.socket.on('new-ice-candidate', ({ candidate, person }) => {
+      console.log(`new ice candidate ${candidate}`);
+
+      if (person === ZETA) this.setIceCandidate(candidate);
+
       this.sucount += 1;
       // console.log(`socketio update ${this.sucount}`);
+    });
+
+    // update connect avatar
+    this.socket.on('avatar', ({ avatar, person }) => {
+      console.log(`avatar: ${avatar}`);
+      if (person === ZETA) {
+        dispatch(setConnectAvatar(avatar));
+      }
     });
   };
 
@@ -286,6 +302,7 @@ class MyCodeScreen extends React.Component<Props, State> {
   };
 
   sendUserAData = () => {
+    const { dispatch } = this.props;
     // create timestamp then send data individually
     if (this.channel) {
       const { trustScore, nameornym, userAvatar, publicKey } = this.props;
@@ -313,6 +330,9 @@ class MyCodeScreen extends React.Component<Props, State> {
       }
       // send user avatar
       if (userAvatar) {
+        // send avatar to signaling server
+        // payload too big!!
+        // dispatch(exchangeAvatar({ person: ALPHA }));
         // console.log('has user avatar');
         // let dataObj = { avatar: userAvatar };
         // console.log(`
@@ -331,7 +351,7 @@ class MyCodeScreen extends React.Component<Props, State> {
       if (e.candidate) {
         /**
          * update the signaling server dispatcher with ice candidate info
-         * @param person = ZETA
+         * @param person = ALPHA
          * @param type = ICE_CANDIDATE
          * @param value = e.candidate
          */
@@ -348,6 +368,38 @@ class MyCodeScreen extends React.Component<Props, State> {
       }
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  handleICEConnectionStateChange = () => {
+    const { resetQr } = this.props;
+    if (
+      this.connection &&
+      (this.connection.iceConnectionState === 'closed' ||
+        this.connection.iceConnectionState === 'failed' ||
+        this.connection.iceConnectionState === 'disconnected') &&
+      !this.done
+    ) {
+      // hang up call
+      resetQr();
+    }
+  };
+
+  handleICEGatheringStateChange = () => {
+    if (this.connection) {
+      console.log(`ice gathering state: `, this.connection.iceGatheringState);
+    }
+  };
+
+  handleSignalingStateChange = () => {
+    const { resetQr } = this.props;
+    if (
+      this.connection &&
+      this.connection.signalingState === 'closed' &&
+      !this.done
+    ) {
+      // hang up call
+      resetQr();
     }
   };
 
@@ -418,7 +470,7 @@ class MyCodeScreen extends React.Component<Props, State> {
         </View>
         <View style={styles.userAvatarContainer}>
           <Image
-            source={userAvatar}
+            source={userAvatar || require('../../static/default_avatar.jpg')}
             style={styles.userAvatar}
             resizeMode="cover"
             onError={(e) => {

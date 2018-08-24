@@ -122,8 +122,7 @@ export const mainReducer = (state = initialState, action) => {
     case UPDATE_USER_DATA:
       return {
         ...state,
-        userAvatar:
-          action.userAvatar || require('../static/default_avatar.jpg'),
+        userAvatar: action.userAvatar,
         nameornym: action.nameornym,
         publicKey: action.publicKey,
         secretKey: action.secretKey,
@@ -216,15 +215,10 @@ export const mainReducer = (state = initialState, action) => {
         ...state,
         rtcId: '',
         arbiter: arbiterSchema,
-        connectNameornym: '',
         connectRecievedNameornym: false,
-        connectPublicKey: '',
         connectRecievedPublicKey: false,
-        connectTimestamp: '',
         connectRecievedTimestamp: false,
-        connectTrustScore: '',
         connectRecievedTrustScore: false,
-        connectAvatar: '',
         connectRecievedAvatar: false,
         connectBoxKeypair: {
           ...state.connectBoxKeypair,

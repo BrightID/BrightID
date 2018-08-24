@@ -23,16 +23,22 @@ class Device extends Component<Props> {
     start: false,
   };
 
+  goBackBack = () => {
+    this.setState({
+      start: false,
+    });
+  };
+
   renderScreen = () => {
     const { user } = this.props;
     const { start } = this.state;
 
     if (user === 'UserA' && start) {
-      return <DisplayQR />;
+      return <DisplayQR goBackBack={this.goBackBack} />;
     }
 
     if (user === 'UserB' && start) {
-      return <ScanQR />;
+      return <ScanQR goBackBack={this.goBackBack} />;
     }
   };
 

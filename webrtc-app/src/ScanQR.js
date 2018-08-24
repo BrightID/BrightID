@@ -7,6 +7,7 @@ import {
   fetchArbiter,
   update,
   ZETA,
+  ALPHA,
   ANSWER,
   ICE_CANDIDATE,
   ICE_SERVERS,
@@ -30,40 +31,6 @@ class ScanQR extends Component<Props> {
     this.connection = null;
     this.channel = null;
     this.socket = null;
-  }
-
-  async componentDidUpdate(prevProps) {
-    const { arbiter } = this.props;
-    // set ice candidate
-    if (
-      this.connection &&
-      this.connection.remoteDescription &&
-      arbiter &&
-      arbiter.ALPHA.ICE_CANDIDATE &&
-      (arbiter.ALPHA.ICE_CANDIDATE.candidate !==
-        prevProps.arbiter.ALPHA.ICE_CANDIDATE.candidate ||
-        arbiter.ALPHA.ICE_CANDIDATE.sdpMLineIndex !==
-          prevProps.arbiter.ALPHA.ICE_CANDIDATE.sdpMLineIndex ||
-        arbiter.ALPHA.ICE_CANDIDATE.sdpMid !==
-          prevProps.arbiter.ALPHA.ICE_CANDIDATE.sdpMid)
-    ) {
-      await this.connection.addIceCandidate(
-        new RTCIceCandidate(arbiter.ALPHA.ICE_CANDIDATE),
-      );
-      // might implement in the future if ice candidate errors continue
-      // if (
-      //   this.connection &&
-      //   this.connection.remoteDescription &&
-      //   arbiter &&
-      //   arbiter.ALPHA.ICE_CANDIDATE
-      // ) {
-      //   console.log(`setting ice candidates ${arbiter.ALPHA.ICE_CANDIDATE}`);
-      //   await Promise.all(
-      //     arbiter.ALPHA.ICE_CANDIDATE.map((val) =>
-      //       this.connection.addIceCandidate(new RTCIceCandidate(val)),
-      //     ),
-      //   );
-    }
   }
 
   componentWillUnmount() {
@@ -100,6 +67,18 @@ class ScanQR extends Component<Props> {
       // send answer to signal server
       await dispatch(update({ person: ZETA, type: ANSWER, value: answer }));
     } catch (err) {
+      console.log(err);
+    }
+  };
+
+  setIceCandidate = async (candidate) => {
+    try {
+      // set ice candidate
+      if (this.connection && candidate) {
+        await this.connection.addIceCandidate(new RTCIceCandidate(candidate));
+      }
+    } catch (err) {
+      // error setting ice candidate?
       console.log(err);
     }
   };
@@ -146,6 +125,11 @@ class ScanQR extends Component<Props> {
       console.log('socket io update user B');
       console.log(arbiter);
       dispatch(setUserBArbiter(arbiter));
+    });
+    // set ice candidate
+    this.socket.on('new-ice-candidate', ({ candidate, person }) => {
+      console.log(`new ice candidate ${candidate}`);
+      if (person === ALPHA) this.setIceCandidate(candidate);
     });
   };
 
