@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Alert, Image, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import Touchable from 'react-native-platform-touchable';
 import Ionicon from 'react-native-vector-icons/Ionicons';
@@ -25,6 +25,23 @@ type Props = {
 };
 
 class ConnectionCard extends React.Component<Props> {
+  handleUserOptions = () => {
+    const { nameornym } = this.props;
+    Alert.alert(
+      'Delete User',
+      `${nameornym}`,
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ],
+      { cancelable: false },
+    );
+  };
+
   render() {
     const { avatar, nameornym, trustScore, connectionDate } = this.props;
     const image = avatar
@@ -40,7 +57,7 @@ class ConnectionCard extends React.Component<Props> {
             Connected {moment.unix(parseInt(connectionDate, 10)).fromNow()}
           </Text>
         </View>
-        <Touchable style={styles.moreIcon}>
+        <Touchable style={styles.moreIcon} onPress={this.handleUserOptions}>
           <Ionicon size={48} name="ios-more" color="#ccc" />
         </Touchable>
       </View>
