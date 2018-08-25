@@ -5,6 +5,7 @@ import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import MyCodeScreen from './MyCodeScreen';
 import ScanCodeScreen from './ScanCodeScreen';
+import { resetWebrtc } from '../../actions';
 
 /**
  * Connection screen of BrightID
@@ -25,6 +26,7 @@ class NewConnectionScreen extends React.Component<Props> {
 
   state = {
     display: 'qrcode',
+    rtcOn: true,
   };
 
   resetQr = () => {
@@ -39,20 +41,46 @@ class NewConnectionScreen extends React.Component<Props> {
 
   renderScreen = () => {
     const { navigation } = this.props;
-    const { display } = this.state;
+    const { display, rtcOn } = this.state;
     // boolean for displaying button styles
     // conditionally render MyCodeScreen
     if (display === 'qrcode') {
-      return <MyCodeScreen navigation={navigation} resetQr={this.resetQr} />;
+      return (
+        <MyCodeScreen
+          navigation={navigation}
+          rtcOn={rtcOn}
+          resetQr={this.resetQr}
+          hangUp={this.hangUp}
+        />
+      );
     } else if (display === 'scanner') {
-      return <ScanCodeScreen navigation={navigation} />;
+      return (
+        <ScanCodeScreen
+          navigation={navigation}
+          rtcOn={rtcOn}
+          hangUp={this.hangUp}
+        />
+      );
     } else if (!display) {
       return <View />;
     }
   };
 
+  hangUp = async () => {
+    console.log('hanging up');
+    const { dispatch } = this.props;
+    await dispatch(resetWebrtc());
+    this.setState({
+      rtcOn: false,
+    });
+    setTimeout(() => {
+      this.setState({ rtcOn: true });
+    }, 300);
+  };
+
   render() {
     const { display } = this.state;
+    const { dispatch } = this.props;
     const qr = display === 'qrcode';
     return (
       <View style={styles.container}>
@@ -62,8 +90,9 @@ class NewConnectionScreen extends React.Component<Props> {
             accessible={true}
             accessibilityLabel="My Code"
             disabled={qr}
-            onPress={() => {
+            onPress={async () => {
               // display qrcode
+              await dispatch(resetWebrtc());
               this.setState({
                 display: 'qrcode',
               });
@@ -80,8 +109,9 @@ class NewConnectionScreen extends React.Component<Props> {
             accessible={true}
             accessibilityLabel="Scan Code"
             disabled={!qr}
-            onPress={() => {
+            onPress={async () => {
               // display qrcode scanner
+              await dispatch(resetWebrtc());
               this.setState({
                 display: 'scanner',
               });

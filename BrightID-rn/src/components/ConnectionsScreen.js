@@ -37,6 +37,8 @@ class ConnectionsScreen extends React.Component<Props> {
       /**
        * obtain connection keys from async storage
        * currently everything in async storage except for `userData` is a connection
+       *
+       * THIS MIGHT CHANGE WHEN GROUPS ARE ADDED
        */
 
       const allKeys = await AsyncStorage.getAllKeys();

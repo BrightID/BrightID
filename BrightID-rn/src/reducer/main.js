@@ -25,14 +25,16 @@ import {
   RTC_ID,
   RESET_WEBRTC,
   BOX_KEYPAIR,
+  SET_PREVIEW,
+  RESET_PREVIEW,
 } from '../actions';
 
 const arbiterSchema = {
-  ALPHA: {
+  USERA: {
     OFFER: '',
     ICE_CANDIDATE: '',
   },
-  ZETA: {
+  USERB: {
     ANSWER: '',
     ICE_CANDIDATE: '',
   },
@@ -215,6 +217,11 @@ export const mainReducer = (state = initialState, action) => {
         ...state,
         rtcId: '',
         arbiter: arbiterSchema,
+        connectTimestamp: '',
+        connectNameornym: '',
+        connectTrustScore: '',
+        connectAvatar: '',
+        connectPublicKey: '',
         connectRecievedNameornym: false,
         connectRecievedPublicKey: false,
         connectRecievedTimestamp: false,
@@ -225,6 +232,24 @@ export const mainReducer = (state = initialState, action) => {
           publicKey: '',
           secretKey: '',
         },
+      };
+    case SET_PREVIEW:
+      return {
+        ...state,
+        previewTimestamp: state.connectTimestamp,
+        previewNameornym: state.connectNameornym,
+        previewTrustScore: state.connectTrustScore,
+        previewAvatar: state.connectAvatar,
+        previewPublicKey: state.connectPublicKey,
+      };
+    case RESET_PREVIEW:
+      return {
+        ...state,
+        previewTimestamp: '',
+        previewNameornym: '',
+        previewTrustScore: '',
+        previewAvatar: '',
+        previewPublicKey: '',
       };
     default:
       return state;

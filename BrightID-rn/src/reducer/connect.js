@@ -24,12 +24,12 @@ import {
 } from '../actions';
 
 const arbiterSchema = {
-  ALPHA: {
+  USERA: {
     OFFER: '',
     ICE_CANDIDATE: '',
     PUBLIC_KEY: '',
   },
-  ZETA: {
+  USERB: {
     ANSWER: '',
     ICE_CANDIDATE: '',
     PUBLIC_KEY: '',

@@ -26,6 +26,8 @@ export const CONNECT_RECIEVED_AVATAR = 'CONNECT_RECIEVED_AVATAR';
 export const CONNECT_AVATAR = 'CONNECT_AVATAR';
 export const ERROR = 'ERROR';
 export const BOX_KEYPAIR = 'BOX_KEYPAIR';
+export const SET_PREVIEW = 'SET_PREVIEW';
+export const RESET_PREVIEW = 'RESET_PREVIEW';
 
 /**
  * redux action creator that updates user `trustScore`
@@ -260,6 +262,26 @@ export const setConnectRecievedAvatar = () => ({
 });
 
 /**
+ * redux action creator for transferring connect user data to preview user data
+ * @param type SET_PREVIEW
+ *
+ */
+
+export const setPreview = () => ({
+  type: SET_PREVIEW,
+});
+
+/**
+ * redux action creator for resetting preview data
+ * @param type RESET PREVIEW
+ *
+ */
+
+export const resetPreview = () => ({
+  type: RESET_PREVIEW,
+});
+
+/**
  * redux action creator for setting that public key was received on the other end of webrtc data channel
  * @param type CONNECT_RECIEVED_NAMEORNYM
  *
@@ -297,12 +319,12 @@ export const setRtcId = (rtcId: string) => ({
  */
 
 export const setArbiter = (arbiter: {
-  ALPHA: {
+  USERA: {
     OFFER: Array<number>,
     ICE_CONNECTION: Array<number>,
     PUBLIC_KEY: Array<number>,
   },
-  ZETA: {
+  USERB: {
     ANSWER: Array<number>,
     ICE_CONNECTION: Array<number>,
     PUBLIC_KEY: Array<number>,
