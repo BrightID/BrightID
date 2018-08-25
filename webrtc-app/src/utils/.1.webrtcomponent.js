@@ -12,8 +12,8 @@ import {
   fetchEntries,
   createRTCId,
   update,
-  ALPHA,
-  ZETA,
+  USERA,
+  USERB,
   ICE_CANDIDATE,
   OFFER,
   ANSWER,
@@ -204,7 +204,7 @@ class WebRTC extends Component<Props> {
             // await this.rc.addIceCandidate(e.candidate);
             /**
              * update the signaling server dispatcher with ice candidate info
-             * @param person = ALPHA
+             * @param person = USERA
              * @param type = ICE_CANDIDATE
              * @param value = e.candidate
              */
@@ -213,7 +213,7 @@ class WebRTC extends Component<Props> {
             //
             dispatch(
               update({
-                person: ALPHA,
+                person: USERA,
                 type: ICE_CANDIDATE,
                 value: e.candidate,
               }),
@@ -231,7 +231,7 @@ class WebRTC extends Component<Props> {
           if (e.candidate && this.lc) {
             /**
              * update the signaling server dispatcher with ice candidate info
-             * @param person = ZETA
+             * @param person = USERB
              * @param type = ICE_CANDIDATE
              * @param value = e.candidate
              */
@@ -239,7 +239,7 @@ class WebRTC extends Component<Props> {
             //
             //
             dispatch(
-              update({ person: ZETA, type: ICE_CANDIDATE, value: e.candidate }),
+              update({ person: USERB, type: ICE_CANDIDATE, value: e.candidate }),
             );
             window.rcCandidate = e.candidate;
           }
@@ -268,7 +268,7 @@ class WebRTC extends Component<Props> {
       const offer = await this.lc.createOffer();
 
       // update the signaling server
-      dispatch(update({ person: ALPHA, type: OFFER, value: offer }));
+      dispatch(update({ person: USERA, type: OFFER, value: offer }));
 
       /**
        * Setting lc local description
@@ -322,7 +322,7 @@ class WebRTC extends Component<Props> {
   updateRtc = async () => {
     try {
       const { dispatch, dispatcher } = this.props;
-      if (this.rc && dispatcher && dispatcher.ALPHA) {
+      if (this.rc && dispatcher && dispatcher.USERA) {
         /**
          * Setting rc ice candidate
          */
@@ -330,12 +330,12 @@ class WebRTC extends Component<Props> {
         if (
           this.rc.iceConnectionState === 'new' &&
           this.rc.remoteDescription.type &&
-          dispatcher.ALPHA.ICE_CANDIDATE
+          dispatcher.USERA.ICE_CANDIDATE
         ) {
           console.log('setting rc ice candidate');
-          console.log(new RTCIceCandidate(dispatcher.ALPHA.ICE_CANDIDATE));
+          console.log(new RTCIceCandidate(dispatcher.USERA.ICE_CANDIDATE));
           await this.rc.addIceCandidate(
-            new RTCIceCandidate(dispatcher.ALPHA.ICE_CANDIDATE),
+            new RTCIceCandidate(dispatcher.USERA.ICE_CANDIDATE),
           );
         }
 
@@ -343,11 +343,11 @@ class WebRTC extends Component<Props> {
          * Setting rc remote description
          */
 
-        if (!this.rc.remoteDescription.type && dispatcher.ALPHA.OFFER) {
+        if (!this.rc.remoteDescription.type && dispatcher.USERA.OFFER) {
           console.log('setting rc remote description');
 
           await this.rc.setRemoteDescription(
-            new RTCSessionDescription(dispatcher.ALPHA.OFFER),
+            new RTCSessionDescription(dispatcher.USERA.OFFER),
           );
         }
 
@@ -363,7 +363,7 @@ class WebRTC extends Component<Props> {
 
           const answer = await this.rc.createAnswer();
           // update the signaling server
-          dispatch(update({ person: ZETA, type: ANSWER, value: answer }));
+          dispatch(update({ person: USERB, type: ANSWER, value: answer }));
 
           /**
            * Setting rc local description
@@ -375,7 +375,7 @@ class WebRTC extends Component<Props> {
         }
       }
 
-      if (this.lc && dispatcher && dispatcher.ZETA) {
+      if (this.lc && dispatcher && dispatcher.USERB) {
         /**
          * Setting rc ice candidate
          */
@@ -383,12 +383,12 @@ class WebRTC extends Component<Props> {
         if (
           this.lc.iceConnectionState === 'new' &&
           this.lc.remoteDescription.type &&
-          dispatcher.ZETA.ICE_CANDIDATE
+          dispatcher.USERB.ICE_CANDIDATE
         ) {
           console.log('setting lc ice candidate');
-          console.log(dispatcher.ZETA.ICE_CANDIDATE);
+          console.log(dispatcher.USERB.ICE_CANDIDATE);
           await this.lc.addIceCandidate(
-            new RTCIceCandidate(dispatcher.ZETA.ICE_CANDIDATE),
+            new RTCIceCandidate(dispatcher.USERB.ICE_CANDIDATE),
           );
         }
 
@@ -400,7 +400,7 @@ class WebRTC extends Component<Props> {
           console.log('setting lc remote description');
 
           await this.lc.setRemoteDescription(
-            new RTCSessionDescription(dispatcher.ZETA.ANSWER),
+            new RTCSessionDescription(dispatcher.USERB.ANSWER),
           );
         }
 

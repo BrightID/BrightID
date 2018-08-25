@@ -12,8 +12,8 @@ import {
 
 export const PORT = '3001';
 
-export const ALPHA = 'ALPHA';
-export const ZETA = 'ZETA';
+export const USERA = 'USERA';
+export const USERB = 'USERB';
 export const ICE_CANDIDATE = 'ICE_CANDIDATE';
 export const OFFER = 'OFFER';
 export const ANSWER = 'ANSWER';
@@ -51,9 +51,9 @@ export const update = ({ type, person, value }) => async (
   try {
     // set rtcId
     let rtcId = null;
-    if (person === ALPHA) {
+    if (person === USERA) {
       rtcId = getState().userA.rtcId;
-    } else if (person === ZETA) {
+    } else if (person === USERB) {
       rtcId = getState().userB.rtcId;
     }
     console.log(rtcId);
@@ -77,9 +77,9 @@ export const update = ({ type, person, value }) => async (
     console.log(arbiter);
     // update redux store
     // ONLY UPDATE REDUX STORE VIA SOCKET IO
-    if (person === ALPHA) {
+    if (person === USERA) {
       dispatch(setUserAArbiter(arbiter));
-    } else if (person === ZETA) {
+    } else if (person === USERB) {
       dispatch(setUserBArbiter(arbiter));
     }
     // finish async api call
@@ -97,9 +97,9 @@ export const fetchDispatcher = (person) => async (
     let rtcId = null;
     // let waiting = null;
     // // check waiting status
-    // if (person === ALPHA) {
+    // if (person === USERA) {
     //   waiting = getState().userA.waiting;
-    // } else if (person === ZETA) {
+    // } else if (person === USERB) {
     //   waiting = getState().userB.waiting;
     // }
     // do not send a network request if one is already in progress
@@ -109,10 +109,10 @@ export const fetchDispatcher = (person) => async (
     // }
 
     // update redux store with network status
-    if (person === ALPHA) {
+    if (person === USERA) {
       rtcId = getState().userA.rctId;
       dispatch(userAWaiting());
-    } else if (person === ZETA) {
+    } else if (person === USERB) {
       rtcId = getState().userB.rtcId;
       dispatch(userBWaiting());
     }
@@ -131,9 +131,9 @@ export const fetchDispatcher = (person) => async (
     console.log(data);
     console.log(arbiter);
     // update redux store
-    if (person === ALPHA) {
+    if (person === USERA) {
       dispatch(setUserAArbiter(arbiter));
-    } else if (person === ZETA) {
+    } else if (person === USERB) {
       dispatch(setUserBArbiter(arbiter));
     }
     // finish async api call
