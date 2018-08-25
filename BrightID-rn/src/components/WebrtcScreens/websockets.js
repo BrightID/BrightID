@@ -2,7 +2,7 @@
 
 import io from 'socket.io-client';
 
-import { URL } from './webrtc';
+import { URL } from './signalApi';
 
 export const socket = () => io.connect(`${URL}/signal`);
 

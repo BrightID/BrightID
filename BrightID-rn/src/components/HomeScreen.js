@@ -48,6 +48,7 @@ type Props = {
   nameornym: string,
   connections: Array<{}>,
   navigation: { navigate: Function },
+  userAvatar: string,
 };
 
 export class HomeScreen extends React.Component<Props> {
@@ -126,6 +127,26 @@ export class HomeScreen extends React.Component<Props> {
     ),
   });
 
+  state = {
+    connectionsCount: 0,
+  };
+
+  componentDidMount() {
+    this.getConnectionsCount();
+  }
+
+  getConnectionsCount = async () => {
+    // currently connections count is based on async storage keys - 1
+    /**
+     *
+     * THIS MIGHT CHANGE WHEN GROUPS ARE ADDED
+     */
+    const allKeys = await AsyncStorage.getAllKeys();
+    this.setState({
+      connectionsCount: allKeys.length - 1,
+    });
+  };
+
   render() {
     const {
       navigation,
@@ -135,6 +156,7 @@ export class HomeScreen extends React.Component<Props> {
       groupsCount,
       userAvatar,
     } = this.props;
+    const { connectionsCount } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.mainContainer}>
@@ -161,7 +183,7 @@ export class HomeScreen extends React.Component<Props> {
           <View style={styles.countsContainer}>
             <View style={styles.countsGroup}>
               <Text id="connectionsCount" style={styles.countsNumberText}>
-                {(connections && connections.length) || 0}
+                {connectionsCount}
               </Text>
               <Text style={styles.countsDescriptionText}>Connections</Text>
             </View>

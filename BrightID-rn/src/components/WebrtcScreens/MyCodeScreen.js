@@ -11,23 +11,23 @@ import {
   RTCSessionDescription,
   RTCIceCandidate,
 } from 'react-native-webrtc';
+import WebRTCLogic from './WebRTCLogic';
 import { stringByteLength } from '../../utils/encoding';
 import logging from '../../utils/logging';
-import channelLogging from './channelLogging';
+import channelLogging from '../../utils/channelLogging';
+import { ICE_SERVERS, handleRecievedMessage } from './webrtc';
+
 import {
-  createRTCId,
   update,
   OFFER,
-  ALPHA,
-  ZETA,
-  PUBLIC_KEY,
+  ANSWER,
+  USERB,
+  USERA,
   ICE_CANDIDATE,
-  ICE_SERVERS,
   fetchArbiter,
-  handleRecievedMessage,
-  createKeypair,
   exchangeAvatar,
-} from './webrtc';
+  createRTCId,
+} from './signalApi';
 
 import { socket } from './websockets';
 
@@ -36,7 +36,7 @@ import { resetWebrtc, setArbiter, setConnectAvatar } from '../../actions';
 /**
  * My Code screen of BrightID
  *
- * ALPHA represents this user
+ * USERA represents this user
  * ==================================================================
  * displays a qrcode with rtcId url obtained from a signalling server
  * this component also establishes a RTCPeerConnection and data channel
@@ -53,6 +53,9 @@ type Props = {
   nameornym: string,
   trustScore: string,
   resetQr: Function,
+  hangUp: Function,
+  rtcOn: boolean,
+  navigation: Function,
 };
 
 type State = {
@@ -60,20 +63,9 @@ type State = {
 };
 
 class MyCodeScreen extends React.Component<Props, State> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      qrsvgd: '',
-    };
-    // set up initial webrtc connection
-    this.connection = null;
-    this.channel = null;
-    this.socket = null;
-    this.pollingId = null;
-    this.done = false;
-    this.iceCount = 0;
-    this.sucount = 0;
-  }
+  state = {
+    qrsvgd: '',
+  };
 
   async componentDidMount() {
     try {
@@ -82,326 +74,12 @@ class MyCodeScreen extends React.Component<Props, State> {
       const rtcId = await dispatch(createRTCId());
       // generate qrcode with rtc id
       this.genQrCode();
-      // initiate webrtc
-      this.initiateWebrtc();
-      // start polling server for remote desc and ice candidates
-      // this.pollSignalServer();
-      // use websockets instead of polling
-      this.initiateWebSocket();
+      //
     } catch (err) {
       // we should handle err here in case network is down
       console.log(err);
     }
   }
-
-  componentDidUpdate(prevProps) {
-    // generate a new qrcode if the rtcId value changes
-    const {
-      arbiter,
-      connectPublicKey,
-      connectNameornym,
-      connectTimestamp,
-      connectRecievedPublicKey,
-      connectRecievedNameornym,
-      connectRecievedTrustScore,
-      navigation,
-    } = this.props;
-
-    /**
-     * This logic determines whether all webrtc data has been
-     * successfully transferred and we are able to create a new
-     * connection
-     *
-     * currently this is determined by whether the client recieved our timestamp, public key, trust score, and nameornym - and whether we recieved their nameornym and public key
-     *
-     * react navigation might not unmount the component, it
-     * hides components during the transitions between screens
-     *
-     * TODO - handle logic for re attempting to send user data
-     * this will become more important if the avatar logic is implemented
-     */
-    if (
-      connectPublicKey &&
-      connectNameornym &&
-      connectTimestamp &&
-      connectRecievedPublicKey &&
-      connectRecievedNameornym &&
-      connectRecievedTrustScore &&
-      !this.done
-    ) {
-      // navigate to preview screen
-      navigation.navigate('PreviewConnection');
-      this.done = true;
-    }
-  }
-
-  componentWillUnmount() {
-    console.log('unmounting mycode screen');
-    const { dispatch } = this.props;
-    // close and remove webrtc connection
-    if (this.connection) {
-      this.connection.close();
-      this.connection = null;
-    }
-    // close data channel and remove
-    if (this.channel) {
-      this.channel.close();
-      this.channel = null;
-    }
-    // disconnect and remove socket
-    if (this.socket) {
-      this.socket.disconnect();
-      this.socket = null;
-    }
-    // clear polling interval
-    if (this.pollingId) {
-      clearInterval(this.pollingId);
-      this.pollingId = null;
-    }
-    // look out for this prior to finishing webrtc code
-    dispatch(resetWebrtc());
-  }
-
-  setIceCandidate = async (candidate) => {
-    try {
-      // set ice candidate
-      if (this.connection && candidate) {
-        await this.connection.addIceCandidate(new RTCIceCandidate(candidate));
-      }
-    } catch (err) {
-      // error setting ice candidate?
-      console.log(err);
-    }
-  };
-
-  setRemoteDescription = async (arbiter) => {
-    // set remote description
-    try {
-      if (
-        this.connection &&
-        arbiter &&
-        arbiter.ZETA.ANSWER &&
-        arbiter.ZETA.ANSWER.sdp !== this.connection.localDescription.sdp
-      ) {
-        await this.connection.setRemoteDescription(
-          new RTCSessionDescription(arbiter.ZETA.ANSWER),
-        );
-      }
-    } catch (Err) {
-      console.log(Err);
-    }
-  };
-
-  initiateWebrtc = async () => {
-    try {
-      const { dispatch } = this.props;
-      // create webrtc instance
-      this.connection = new RTCPeerConnection(ICE_SERVERS);
-      logging(this.connection, 'UserA');
-      // create data channel
-      this.channel = this.connection.createDataChannel('connect');
-      // window.ca = this.connection;
-      // handle ice
-      this.connection.onicecandidate = this.updateIce;
-      this.connection.oniceconnectionstatechange = this.handleICEConnectionStateChange;
-      this.connection.onicegatheringstatechange = this.handleICEGatheringStateChange;
-      this.connection.onsignalingstatechange = this.handleSignalingStateChange;
-      // handle channel events
-      this.handleDataChannel();
-      // create offer and set local connection
-      let offer = await this.connection.createOffer();
-      if (!offer) offer = await this.connection.createOffer();
-      if (!offer) offer = await this.connection.createOffer();
-      await this.connection.setLocalDescription(offer);
-      // update redux store
-      await dispatch(update({ type: OFFER, person: ALPHA, value: offer }));
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  initiateWebSocket = () => {
-    // fetch initial rtc id from signaling server
-    const { dispatch, rtcId } = this.props;
-    // join websocket room
-    this.socket = socket();
-    this.socket.emit('join', rtcId);
-    // subscribe to update event
-    this.socket.on('update', (arbiter) => {
-      // update redux store
-      dispatch(setArbiter(arbiter));
-      this.setRemoteDescription(arbiter);
-      // console.log(`socketio update ${this.sucount}`);
-    });
-    // update ice candidate
-    this.socket.on('new-ice-candidate', ({ candidate, person }) => {
-      console.log(`new ice candidate ${candidate}`);
-
-      if (person === ZETA) this.setIceCandidate(candidate);
-
-      this.sucount += 1;
-      // console.log(`socketio update ${this.sucount}`);
-    });
-
-    // update connect avatar
-    this.socket.on('avatar', ({ avatar, person }) => {
-      console.log(`avatar: ${avatar}`);
-      if (person === ZETA) {
-        dispatch(setConnectAvatar(avatar));
-      }
-    });
-  };
-
-  // pollSignalServer = () => {
-  //   const { dispatch } = this.props;
-  //   // poll signalling server
-  //   this.pollingId = setInterval(() => {
-  //     dispatch(fetchArbiter());
-  //   }, 1000);
-  // };
-
-  // stopPollingServer = () => {
-  //   // clear polling interval
-  //   if (this.pollingId) {
-  //     clearInterval(this.pollingId);
-  //     this.pollingId = null;
-  //   }
-  // };
-
-  handleDataChannel = () => {
-    const { dispatch } = this.props;
-    if (this.channel) {
-      channelLogging(this.channel);
-      // send user data when channel opens
-      this.channel.onopen = () => {
-        console.log('user A channel opened');
-        // send public key, avatar, nameornym, and trustscore
-        this.sendUserAData();
-      };
-      // do nothing when channel closes... yet
-      this.channel.onclose = () => {
-        console.log('user A channel closed');
-      };
-      /**
-       * recieve webrtc messages here
-       * pass data along to action creator in ../actions/webrtc
-       */
-      this.channel.onmessage = (e) => {
-        // handle recieved message
-        dispatch(handleRecievedMessage(e.data, this.channel));
-      };
-      this.channel.onbufferedamountlow = (e) => {
-        console.log(`on buffered amount low`);
-        console.log(e);
-      };
-      this.channel.onerror = (e) => {
-        console.log(`channel error`);
-        console.log(e);
-      };
-    }
-  };
-
-  sendUserAData = () => {
-    const { dispatch } = this.props;
-    // create timestamp then send data individually
-    if (this.channel) {
-      const { trustScore, nameornym, userAvatar, publicKey } = this.props;
-
-      // send trust score
-      if (trustScore) {
-        let dataObj = { trustScore };
-
-        // webrtc helper function for sending messages
-        this.channel.send(JSON.stringify({ trustScore }));
-      }
-      // send nameornym
-      if (nameornym) {
-        let dataObj = { nameornym };
-
-        // webrtc helper function for sending messages
-        this.channel.send(JSON.stringify({ nameornym }));
-      }
-      // send public key
-      if (publicKey) {
-        let dataObj = { publicKey };
-
-        // webrtc helper function for sending messages
-        this.channel.send(JSON.stringify({ publicKey }));
-      }
-      // send user avatar
-      if (userAvatar) {
-        // send avatar to signaling server
-        // payload too big!!
-        // dispatch(exchangeAvatar({ person: ALPHA }));
-        // console.log('has user avatar');
-        // let dataObj = { avatar: userAvatar };
-        // console.log(`
-        // user Avatar byte length: ${stringByteLength(JSON.stringify(dataObj))}
-        // str length: ${JSON.stringify(dataObj).length}
-        // `);
-        // // webrtc helper function for sending messages
-        // this.channel.send(JSON.stringify({ avatar: userAvatar }));
-      }
-    }
-  };
-
-  updateIce = async (e) => {
-    try {
-      const { dispatch } = this.props;
-      if (e.candidate) {
-        /**
-         * update the signaling server dispatcher with ice candidate info
-         * @param person = ALPHA
-         * @param type = ICE_CANDIDATE
-         * @param value = e.candidate
-         */
-
-        dispatch(
-          update({
-            person: ALPHA,
-            type: ICE_CANDIDATE,
-            value: e.candidate,
-          }),
-        );
-        this.iceCount += 1;
-        // console.log(`ice count: ${this.iceCount}`);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  handleICEConnectionStateChange = () => {
-    const { resetQr } = this.props;
-    if (
-      this.connection &&
-      (this.connection.iceConnectionState === 'closed' ||
-        this.connection.iceConnectionState === 'failed' ||
-        this.connection.iceConnectionState === 'disconnected') &&
-      !this.done
-    ) {
-      // hang up call
-      resetQr();
-    }
-  };
-
-  handleICEGatheringStateChange = () => {
-    if (this.connection) {
-      console.log(`ice gathering state: `, this.connection.iceGatheringState);
-    }
-  };
-
-  handleSignalingStateChange = () => {
-    const { resetQr } = this.props;
-    if (
-      this.connection &&
-      this.connection.signalingState === 'closed' &&
-      !this.done
-    ) {
-      // hang up call
-      resetQr();
-    }
-  };
 
   genQrCode = () => {
     const { rtcId } = this.props;
@@ -456,6 +134,15 @@ class MyCodeScreen extends React.Component<Props, State> {
     }
   };
 
+  renderWebRTCLogic = () => {
+    const { rtcId, rtcOn, hangUp, navigation } = this.props;
+    if (rtcId && rtcOn) {
+      return (
+        <WebRTCLogic user="UserA" hangUp={hangUp} navigation={navigation} />
+      );
+    }
+  };
+
   render() {
     const { userAvatar, nameornym } = this.props;
     return (
@@ -483,6 +170,7 @@ class MyCodeScreen extends React.Component<Props, State> {
         </View>
 
         {this.renderQrCode()}
+        {this.renderWebRTCLogic()}
         {/* <TextInput value={this.props.rtcId || 'RTC TOKEN'} editable={true} /> */}
       </View>
     );

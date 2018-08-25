@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { addConnection, resetWebrtc } from '../../actions';
+import { addConnection, resetWebrtc, resetPreview } from '../../actions';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -21,11 +21,11 @@ import { addConnection, resetWebrtc } from '../../actions';
 
 type Props = {
   dispatch: Function,
-  connectNameornym: string,
-  connectTimestamp: number,
-  connectPublicKey: Uint8Array,
-  connectTrustScore: string,
-  connectAvatar: string,
+  previewNameornym: string,
+  previewTimestamp: number,
+  previewPublicKey: Uint8Array,
+  previewTrustScore: string,
+  previewAvatar: string,
   navigation: { goBack: Function, navigate: (string) => null },
 };
 
@@ -45,28 +45,29 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
     try {
       const {
         dispatch,
-        connectPublicKey,
-        connectNameornym,
-        connectAvatar,
-        connectTrustScore,
-        connectTimestamp,
+        previewPublicKey,
+        previewNameornym,
+        previewAvatar,
+        previewTrustScore,
+        previewTimestamp,
       } = this.props;
 
       // TODO formalize spec for this
       // create a new connection object
       const connection = {
-        publicKey: connectPublicKey,
-        nameornym: connectNameornym,
-        avatar: connectAvatar,
-        trustScore: connectTrustScore,
-        connectionDate: connectTimestamp / 1000, // hack for moment,
+        publicKey: previewPublicKey,
+        nameornym: previewNameornym,
+        avatar: previewAvatar,
+        trustScore: previewTrustScore,
+        connectionDate: previewTimestamp / 1000, // hack for moment,
       };
       // add connection inside of async storage
       await AsyncStorage.setItem(
         connectPublicKey.toString(),
         JSON.stringify(connection),
       );
-
+      // reset Preview
+      dispatch(resetPreview());
       // clear webrtc data
       dispatch(resetWebrtc());
     } catch (err) {
@@ -75,8 +76,8 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
   };
 
   render() {
-    const { connectNameornym, navigation, connectAvatar } = this.props;
-    const image = connectAvatar || require('../../static/default_avatar.jpg');
+    const { previewNameornym, navigation, previewAvatar } = this.props;
+    const image = previewAvatar || require('../../static/default_avatar.jpg');
     return (
       <View style={styles.container}>
         <View style={styles.questionTextContainer}>
@@ -94,7 +95,7 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
             accessible={true}
             accessibilityLabel="user avatar image"
           />
-          <Text style={styles.connectNameornym}>{connectNameornym}</Text>
+          <Text style={styles.connectNameornym}>{previewNameornym}</Text>
         </View>
         <View style={styles.confirmButtonContainer}>
           <TouchableOpacity

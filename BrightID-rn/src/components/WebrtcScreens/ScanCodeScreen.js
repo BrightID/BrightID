@@ -5,8 +5,10 @@ import { Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import { connect } from 'react-redux';
 // import Permissions from 'react-native-permissions'
 import { RNCamera } from 'react-native-camera';
+import Spinner from 'react-native-spinkit';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { setRtcId } from '../../actions';
+import WebRTCLogic from './WebRTCLogic';
 
 /**
  * Scan code screen of BrightID
@@ -19,6 +21,9 @@ import { setRtcId } from '../../actions';
 type Props = {
   dispatch: Function,
   navigation: { navigate: Function },
+  rtcId: string,
+  hangUp: Function,
+  rtcOn: boolean,
 };
 
 type State = {
@@ -29,79 +34,80 @@ type State = {
 class ScanCodeScreen extends React.Component<Props, State> {
   state = {
     hasCameraPermission: '',
-    rtcId: '',
-    scanned: false,
   };
 
-  componentDidMount() {
-    // Permissions.check('photo').then((response) => {
-    //   // Response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
-    //   this.setState({ hasCameraPermission: response });
-    // });
-  }
-
   handleBarCodeRead = ({ type, data }) => {
-    // TODO - CHANGE THIS
-    const { dispatch, navigation } = this.props;
-    const { scanned } = this.state;
+    const { dispatch } = this.props;
     // console.log(`type: ${type}`);
     // console.log(`data: ${data}`);
     // set rtc id url into redux store
-    if (!scanned && data && data.length === 21) {
+    if (data && data.length === 21) {
       dispatch(setRtcId(data));
-      this.setState(
-        {
-          scanned: 'true',
-        },
-        () => {
-          // switch to RtcAnswerScreen after RTC ID is set
-          navigation.navigate('RtcAnswer');
-        },
+    }
+  };
+
+  renderCameraOrWave = () => {
+    // either camera is showing or webrtc is connecting
+    const { rtcId, hangUp, rtcOn, navigation } = this.props;
+    if (rtcId && rtcOn) {
+      return (
+        <View style={styles.cameraPreview}>
+          <WebRTCLogic user="UserB" hangUp={hangUp} navigation={navigation} />
+          <Spinner
+            style={styles.spinner}
+            isVisible={true}
+            size={41}
+            type="Wave"
+            color="#4990e2"
+          />
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.cameraPreview}>
+          <View style={styles.scanTextContainer}>
+            <TextInput
+              ref={(c) => {
+                this.textInput = c;
+              }}
+              onChangeText={(value) => {
+                if (value.trim().length > 20 && value.trim().length < 22) {
+                  this.handleBarCodeRead({
+                    type: 'text-input',
+                    data: value.trim(),
+                  });
+                  this.textInput.blur();
+                }
+              }}
+              style={styles.searchField}
+              placeholder="Scan a BrightID code to make a connection"
+              autoCapitalize="none"
+              autoCorrect={false}
+              textContentType="none"
+              underlineColorAndroid="transparent"
+            />
+          </View>
+          <RNCamera
+            ref={(ref) => {
+              this.camera = ref;
+            }}
+            style={styles.cameraPreview}
+            onBarCodeRead={this.handleBarCodeRead}
+            type={RNCamera.Constants.Type.back}
+            flashMode={RNCamera.Constants.FlashMode.off}
+            permissionDialogTitle="Permission to use camera"
+            permissionDialogMessage="We need your permission to use your camera phone"
+          >
+            <Ionicons name="ios-qr-scanner" size={223} color="#F76B1C" />
+          </RNCamera>
+        </View>
       );
     }
   };
 
   render() {
     const { hasCameraPermission } = this.state;
-    return (
-      <View style={styles.container}>
-        <View style={styles.scanTextContainer}>
-          <TextInput
-            ref={(c) => {
-              this.textInput = c;
-            }}
-            onChangeText={(value) => {
-              if (value.trim().length > 20 && value.trim().length < 22) {
-                this.handleBarCodeRead({
-                  type: 'text-input',
-                  data: value.trim(),
-                });
-                this.textInput.blur();
-              }
-            }}
-            style={styles.searchField}
-            placeholder="Scan a BrightID code to make a connection"
-            autoCapitalize="none"
-            autoCorrect={false}
-            textContentType="none"
-            underlineColorAndroid="transparent"
-          />
-        </View>
-        <RNCamera
-          ref={(ref) => {
-            this.camera = ref;
-          }}
-          style={styles.cameraPreview}
-          onBarCodeRead={this.handleBarCodeRead}
-          type={RNCamera.Constants.Type.back}
-          flashMode={RNCamera.Constants.FlashMode.off}
-          permissionDialogTitle="Permission to use camera"
-          permissionDialogMessage="We need your permission to use your camera phone"
-        >
-          <Ionicons name="ios-qr-scanner" size={223} color="#F76B1C" />
-        </RNCamera>
-      </View>
-    );
+    return <View style={styles.container}>{this.renderCameraOrWave()}</View>;
   }
 }
 
