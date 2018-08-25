@@ -39,7 +39,7 @@
     "react-native-image-crop-picker": "^0.21.1",
     "react-native-image-picker": "^0.26.10",
     "react-native-level-fs": "^3.0.1",
-    "react-native-linear-gradient": "^2.4.1",
+    "react-native-linear-gradient": "2.4.0",
     "react-native-os": "^1.2.1",
     "react-native-platform-touchable": "^1.1.1",
     "react-native-progress": "^3.5.0",
