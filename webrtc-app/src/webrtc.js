@@ -37,8 +37,8 @@ export const ICE_SERVERS = {
   ],
 };
 export const URL = 'https://signal.hotlinebling.space'; // place your url here
-export const ALPHA = 'ALPHA';
-export const ZETA = 'ZETA';
+export const USERA = 'USERA';
+export const USERB = 'USERB';
 export const ICE_CANDIDATE = 'ICE_CANDIDATE';
 export const PUBLIC_KEY = 'PUBLIC_KEY';
 export const OFFER = 'OFFER';
@@ -235,11 +235,11 @@ export const createKeypair = () => (dispatch: Function) => {
 //     console.log(rtcId);
 
 //     /**
-//      * in order to encrypt box - we must have the other user's public key - which is stored in the arbiter - if we are updating the ALPHA arbiter, then the other key is stored in ZETA arbiter, and vice versa - if we are setting our own public key in the arbiter, we do not encrypt the message - otherwise, all other messages will be encrypted for security
+//      * in order to encrypt box - we must have the other user's public key - which is stored in the arbiter - if we are updating the USERA arbiter, then the other key is stored in USERB arbiter, and vice versa - if we are setting our own public key in the arbiter, we do not encrypt the message - otherwise, all other messages will be encrypted for security
 //      */
 
 //     let box;
-//     let { publicKey } = type === 'ALPHA' ? arbiter[ZETA] : arbiter[ALPHA];
+//     let { publicKey } = type === 'USERA' ? arbiter[USERB] : arbiter[USERA];
 
 //     // encrypt value msg
 //     if (typeof value === 'string' && publicKey) {

@@ -8,8 +8,8 @@ import {
   createRTCId,
   update,
   OFFER,
-  ALPHA,
-  ZETA,
+  USERA,
+  USERB,
   ICE_CANDIDATE,
   // fetchArbiter,
   ICE_SERVERS,
@@ -61,7 +61,7 @@ class DisplayQR extends Component<Props> {
 
       this.socket.on('new-ice-candidate', ({ candidate, person }) => {
         console.log(`new ice candidate ${candidate}`);
-        if (person === ZETA) this.setIceCandidate(candidate);
+        if (person === USERB) this.setIceCandidate(candidate);
       });
     } catch (err) {
       console.log(err);
@@ -77,13 +77,13 @@ class DisplayQR extends Component<Props> {
       if (
         this.connection &&
         arbiter &&
-        arbiter.ZETA.ANSWER &&
-        (arbiter.ZETA.ANSWER.sdp !== prevProps.arbiter.ZETA.ANSWER.sdp ||
-          arbiter.ZETA.ANSWER.type !== prevProps.arbiter.ZETA.ANSWER.type)
+        arbiter.USERB.ANSWER &&
+        (arbiter.USERB.ANSWER.sdp !== prevProps.arbiter.USERB.ANSWER.sdp ||
+          arbiter.USERB.ANSWER.type !== prevProps.arbiter.USERB.ANSWER.type)
       ) {
-        console.log(`setting answer to ${arbiter.ZETA.ANSWER}`);
+        console.log(`setting answer to ${arbiter.USERB.ANSWER}`);
         await this.connection.setRemoteDescription(
-          new RTCSessionDescription(arbiter.ZETA.ANSWER),
+          new RTCSessionDescription(arbiter.USERB.ANSWER),
         );
       }
     } catch (err) {
@@ -150,7 +150,7 @@ class DisplayQR extends Component<Props> {
       if (!offer) offer = await this.connection.createOffer();
       await this.connection.setLocalDescription(offer);
       // update redux store
-      await dispatch(update({ type: OFFER, person: ALPHA, value: offer }));
+      await dispatch(update({ type: OFFER, person: USERA, value: offer }));
     } catch (err) {
       console.log(err);
     }
@@ -180,7 +180,7 @@ class DisplayQR extends Component<Props> {
       if (e.candidate) {
         /**
          * update the signaling server arbiter with ice candidate info
-         * @param person = ZETA
+         * @param person = USERB
          * @param type = ICE_CANDIDATE
          * @param value = e.candidate
          */
@@ -190,7 +190,7 @@ class DisplayQR extends Component<Props> {
 
         dispatch(
           update({
-            person: ALPHA,
+            person: USERA,
             type: ICE_CANDIDATE,
             value: e.candidate,
           }),
@@ -215,7 +215,7 @@ class DisplayQR extends Component<Props> {
     // if (this.connection.iceGatheringState === 'complete') {
     //   dispatch(
     //     update({
-    //       person: ALPHA,
+    //       person: USERA,
     //       type: ICE_CANDIDATE,
     //       value: iceCandidates,
     //     }),

@@ -230,12 +230,12 @@ export const setRtcId = (rtcId: string) => ({
  */
 
 export const setArbiter = (arbiter: {
-  ALPHA: {
+  USERA: {
     OFFER: Array<number>,
     ICE_CONNECTION: Array<number>,
     PUBLIC_KEY: Array<number>,
   },
-  ZETA: {
+  USERB: {
     ANSWER: Array<number>,
     ICE_CONNECTION: Array<number>,
     PUBLIC_KEY: Array<number>,

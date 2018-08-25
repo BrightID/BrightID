@@ -6,8 +6,8 @@ import { resetUserBStore, setUserBRtcId, setUserBArbiter } from './actions';
 import {
   fetchArbiter,
   update,
-  ZETA,
-  ALPHA,
+  USERB,
+  USERA,
   ANSWER,
   ICE_CANDIDATE,
   ICE_SERVERS,
@@ -65,7 +65,7 @@ class ScanQR extends Component<Props> {
       // set local description
       await this.connection.setLocalDescription(answer);
       // send answer to signal server
-      await dispatch(update({ person: ZETA, type: ANSWER, value: answer }));
+      await dispatch(update({ person: USERB, type: ANSWER, value: answer }));
     } catch (err) {
       console.log(err);
     }
@@ -103,9 +103,9 @@ class ScanQR extends Component<Props> {
       // fetch dispatcher
       const arbiter = await dispatch(fetchArbiter());
       // return if error or no offer
-      if (arbiter.error || !arbiter.ALPHA.OFFER) return;
+      if (arbiter.error || !arbiter.USERA.OFFER) return;
       // set rtc description with offer
-      this.setRtcDescription(arbiter.ALPHA.OFFER);
+      this.setRtcDescription(arbiter.USERA.OFFER);
       // initiate websockets
       this.initiateWebSocket(rtcId);
     } catch (err) {
@@ -129,7 +129,7 @@ class ScanQR extends Component<Props> {
     // set ice candidate
     this.socket.on('new-ice-candidate', ({ candidate, person }) => {
       console.log(`new ice candidate ${candidate}`);
-      if (person === ALPHA) this.setIceCandidate(candidate);
+      if (person === USERA) this.setIceCandidate(candidate);
     });
   };
 
@@ -162,14 +162,14 @@ class ScanQR extends Component<Props> {
       if (e.candidate) {
         /**
          * update the signaling server arbiter with ice candidate info
-         * @param person = ZETA
+         * @param person = USERB
          * @param type = ICE_CANDIDATE
          * @param value = e.candidate
          */
 
         dispatch(
           update({
-            person: ZETA,
+            person: USERB,
             type: ICE_CANDIDATE,
             value: e.candidate,
           }),
@@ -194,7 +194,7 @@ class ScanQR extends Component<Props> {
     // if (this.connection.iceGatheringState === 'complete') {
     //   dispatch(
     //     update({
-    //       person: ZETA,
+    //       person: USERB,
     //       type: ICE_CANDIDATE,
     //       value: iceCandidates,
     //     }),
