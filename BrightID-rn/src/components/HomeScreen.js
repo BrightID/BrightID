@@ -19,7 +19,7 @@ import HeaderButtons, {
 } from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import BottomNav from './BottomNav';
 import store from '../store';
 import { removeUserData } from '../actions';
@@ -30,13 +30,13 @@ import { removeUserData } from '../actions';
  */
 
 // header Button
-const IoniconsHeaderButton = (passMeFurther) => (
+const SimpleLineIconsHeaderButton = (passMeFurther) => (
   // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
   // and it is important to pass those props to `HeaderButton`
   // then you may add some information like icon size or color (if you use icons)
   <HeaderButton
     {...passMeFurther}
-    IconComponent={Ionicons}
+    IconComponent={SimpleLineIcons}
     iconSize={32}
     color="#fff"
   />
@@ -56,10 +56,10 @@ export class HomeScreen extends React.Component<Props> {
     title: 'BrightID',
     headerBackTitle: 'Home',
     headerRight: (
-      <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
+      <HeaderButtons HeaderButtonComponent={SimpleLineIconsHeaderButton}>
         <Item
           title="more"
-          iconName="ios-more"
+          iconName="options"
           onPress={() => {
             Alert.alert(
               'WARNING',
@@ -91,10 +91,13 @@ export class HomeScreen extends React.Component<Props> {
       </HeaderButtons>
     ),
     headerLeft: (
-      <HeaderButtons left={true} HeaderButtonComponent={IoniconsHeaderButton}>
+      <HeaderButtons
+        left={true}
+        HeaderButtonComponent={SimpleLineIconsHeaderButton}
+      >
         <Item
           title="help"
-          iconName="ios-help-circle-outline"
+          iconName="question"
           onPress={() => {
             Alert.alert(
               'WARNING',
