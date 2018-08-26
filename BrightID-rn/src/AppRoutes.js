@@ -8,6 +8,7 @@ import GroupsScreen from './components/GroupsScreens/GroupsScreen';
 import Onboard from './components/OnboardingScreens/Onboard';
 import SignUp from './components/OnboardingScreens/SignUp';
 import NewConnectionScreen from './components/WebrtcScreens/NewConnectionScreen';
+import NewGroupScreen from './components/GroupsScreens/NewGroupScreen';
 import RtcAnswerScreen from './components/WebrtcScreens/RtcAnswerScreen';
 import PreviewConnectionScreen from './components/WebrtcScreens/PreviewConnectionScreen';
 import SuccessScreen from './components/WebrtcScreens/SuccessScreen';
@@ -46,6 +47,9 @@ const AppStack = createStackNavigator(
     },
     PreviewConnection: {
       screen: PreviewConnectionScreen,
+    },
+    NewGroup: {
+      screen: NewGroupScreen,
     },
   },
   {

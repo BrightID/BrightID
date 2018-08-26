@@ -1,20 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {
-  Alert,
-  AsyncStorage,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { AsyncStorage, FlatList, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-spinkit';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import SearchConnections from './SearchConnections';
-import ConnectionCard from './ConnectionCard';
-import { removeConnection, setConnections } from '../actions';
+import SearchConnections from '../SearchConnections';
+import ConnectionCard from '../ConnectionCard';
+import { setConnections } from '../../actions';
 
 /**
  * Connection screen of BrightID
@@ -29,7 +21,7 @@ type Props = {
   searchParam: string,
 };
 
-class ConnectionsScreen extends React.Component<Props> {
+class NewGroupScreen extends React.Component<Props> {
   static navigationOptions = {
     title: 'Connections',
     headerRight: <View />,
@@ -60,70 +52,22 @@ class ConnectionsScreen extends React.Component<Props> {
     }
   };
 
-  handleUserOptions = (publicKey) => () => {
-    const { nameornym } = this.props;
-    Alert.alert(
-      'Delete connection',
-      `Are you sure you want to remove ${nameornym} from your list of connections? Your decision is irreversable.`,
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        { text: 'OK', onPress: this.removeUser(publicKey) },
-      ],
-      { cancelable: true },
-    );
-  };
-
-  removeUser = (publicKey) => async () => {
-    try {
-      const { dispatch } = this.props;
-      // update redux store
-      dispatch(removeConnection(publicKey));
-      // remove connection from async storage
-      await AsyncStorage.removeItem(publicKey.toString());
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  filterConnections = () => {
-    const { connections, searchParam } = this.props;
-    return connections.filter((item) =>
+  filterConnections = () =>
+    this.props.connections.filter((item) =>
       `${item.nameornym}`
         .toLowerCase()
         .replace(/\s/g, '')
-        .includes(searchParam.toLowerCase().replace(/\s/g, '')),
+        .includes(this.props.searchParam.toLowerCase().replace(/\s/g, '')),
     );
-  };
-
-  renderActionComponent = (publicKey) => (
-    <TouchableOpacity
-      style={styles.moreIcon}
-      onPress={this.handleUserOptions(publicKey)}
-    >
-      <Ionicon size={48} name="ios-more" color="#ccc" />
-    </TouchableOpacity>
-  );
-
-  renderConnection = ({ item }) => (
-    <ConnectionCard
-      {...item}
-      renderActionComponent={this.renderActionComponent}
-    />
-  );
 
   renderList = () => {
-    const { connections } = this.props;
-    if (connections.length > 0) {
+    if (this.props.connections.length > 0) {
       return (
         <FlatList
           style={styles.connectionsContainer}
           data={this.filterConnections()}
           keyExtractor={({ publicKey }, index) => publicKey.toString() + index}
-          renderItem={this.renderConnection}
+          renderItem={({ item }) => <ConnectionCard {...item} />}
         />
       );
     } else {
@@ -166,9 +110,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  moreIcon: {
-    marginRight: 16,
-  },
 });
 
-export default connect((state) => state.main)(ConnectionsScreen);
+export default connect((state) => state.main)(NewGroupScreen);

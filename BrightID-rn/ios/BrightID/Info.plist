@@ -85,6 +85,9 @@
 		<string>ufonts.com_apexnew-book-opentype.otf</string>
 		<string>ufonts.com_apexnew-medium-opentype.otf</string>
 		<string>ufonts.com_apexnew-thin-opentype.otf</string>
+		<string>FontAwesome5_Brands.ttf</string>
+		<string>FontAwesome5_Regular.ttf</string>
+		<string>FontAwesome5_Solid.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>Launch Screen</string>

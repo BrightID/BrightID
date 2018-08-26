@@ -10,10 +10,7 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import Touchable from 'react-native-platform-touchable';
-import Ionicon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
-import { removeConnection } from '../actions';
 
 /**
  * Connection Card in the Connections Screen
@@ -30,42 +27,20 @@ type Props = {
   avatar: string,
   trustScore: string,
   connectionDate: string,
+  renderActionComponent: () => React.Component,
   publicKey: string,
-  dispatch: Function,
 };
 
 class ConnectionCard extends React.Component<Props> {
-  handleUserOptions = () => {
-    const { nameornym } = this.props;
-    Alert.alert(
-      'Delete connection',
-      `Are you sure you want to remove ${nameornym} from your list of connections? Your decision is irreversable.`,
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        { text: 'OK', onPress: this.removeUser },
-      ],
-      { cancelable: true },
-    );
-  };
-
-  removeUser = async () => {
-    try {
-      const { publicKey, dispatch } = this.props;
-      // update redux store
-      dispatch(removeConnection(publicKey));
-      // remove connection from async storage
-      await AsyncStorage.removeItem(publicKey.toString());
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   render() {
-    const { avatar, nameornym, trustScore, connectionDate } = this.props;
+    const {
+      avatar,
+      nameornym,
+      trustScore,
+      connectionDate,
+      renderActionComponent,
+      publicKey,
+    } = this.props;
     const image = avatar
       ? { uri: avatar }
       : require('../static/default_avatar.jpg');
@@ -79,9 +54,7 @@ class ConnectionCard extends React.Component<Props> {
             Connected {moment.unix(parseInt(connectionDate, 10)).fromNow()}
           </Text>
         </View>
-        <Touchable style={styles.moreIcon} onPress={this.handleUserOptions}>
-          <Ionicon size={48} name="ios-more" color="#ccc" />
-        </Touchable>
+        {renderActionComponent(publicKey)}
       </View>
     );
   }
@@ -130,9 +103,6 @@ const styles = StyleSheet.create({
   connectedText: {
     fontFamily: 'ApexNew-Book',
     fontSize: 14,
-  },
-  moreIcon: {
-    marginRight: 16,
   },
 });
 
