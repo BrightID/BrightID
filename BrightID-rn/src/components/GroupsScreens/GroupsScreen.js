@@ -17,6 +17,13 @@ import CurrentGroupCard from './CurrentGroupCard';
  * Groups screen of BrightID
  */
 
+const groupData = [
+  { name: 'Whisler Crew', trustScore: '94.5' },
+  { name: 'Hawaii Fam', trustScore: '92.5' },
+  { name: 'Henry McWellington', trustScore: '5.6' },
+  { name: "Von Neuman's Mad Scientists", trustScore: '99.9' },
+];
+
 type Props = {
   connections: Array<{
     firstName: string,
@@ -41,6 +48,10 @@ class ConnectionsScreen extends React.Component<Props> {
         .includes(this.props.searchParam.toLowerCase().replace(/\s/g, '')),
     );
 
+  renderCurrentGroup = ({ item }) => (
+    <CurrentGroupCard name={item.name} trustScore={item.trustScore} />
+  );
+
   render() {
     return (
       <View style={styles.container}>
@@ -59,15 +70,14 @@ class ConnectionsScreen extends React.Component<Props> {
           </TouchableOpacity>
         </View>
         <View style={styles.currentContainer}>
-          <Text style={styles.groupTitle}>CURRENT</Text>
-          <View style={styles.currentGroupRow}>
-            <CurrentGroupCard
-              name="Whisler Crew"
-              trustScore="94.5"
-              left={true}
-            />
-            <CurrentGroupCard name="Hawaii Fam" trustScore="92.5" />
+          <View style={styles.currentGroupsHeader}>
+            <Text style={styles.groupTitle}>CURRENT</Text>
           </View>
+          <FlatList
+            data={groupData}
+            renderItem={this.renderCurrentGroup}
+            horizontal={true}
+          />
         </View>
       </View>
     );
@@ -90,6 +100,7 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
+    flex: 1,
   },
   groupTitle: {
     fontFamily: 'ApexNew-Book',
@@ -97,18 +108,26 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 5,
   },
+
   seeAllButton: {
     width: '90%',
-    borderTopColor: '#e3e0e4',
-    borderTopWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
     height: 38,
+    borderTopColor: '#e3e0e4',
+    borderTopWidth: 1,
   },
   seeAllText: {
     fontFamily: 'ApexNew-Medium',
     fontSize: 18,
     color: '#4A8FE6',
+  },
+  currentGroupsHeader: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomColor: '#e3e0e4',
+    borderBottomWidth: 1,
   },
   currentContainer: {
     backgroundColor: '#fff',
@@ -118,6 +137,7 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
+    flex: 1,
   },
   currentGroupRow: {
     width: '100%',

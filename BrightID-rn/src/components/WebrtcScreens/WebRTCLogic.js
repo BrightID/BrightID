@@ -180,7 +180,7 @@ class WebRTCLogic extends React.Component<Props> {
         this.connection &&
         arbiter &&
         arbiter.USERB.ANSWER &&
-        arbiter.USERB.ANSWER.sdp !== this.connection.localDescription.sdp
+        arbiter.USERB.ANSWER.sdp !== this.connection.remoteDescription.sdp
       ) {
         await this.connection.setRemoteDescription(
           new RTCSessionDescription(arbiter.USERB.ANSWER),
