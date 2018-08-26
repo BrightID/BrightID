@@ -52,8 +52,6 @@ class ConnectionsScreen extends React.Component<Props> {
     }
   };
 
-  keyExtractor = (publicKey, index) => publicKey.toString() + index;
-
   filterConnections = () =>
     this.props.connections.filter((item) =>
       `${item.nameornym}`
@@ -68,7 +66,7 @@ class ConnectionsScreen extends React.Component<Props> {
         <FlatList
           style={styles.connectionsContainer}
           data={this.filterConnections()}
-          keyExtractor={this.keyExtractor}
+          keyExtractor={({ publicKey }, index) => publicKey.toString() + index}
           renderItem={({ item }) => <ConnectionCard {...item} />}
         />
       );

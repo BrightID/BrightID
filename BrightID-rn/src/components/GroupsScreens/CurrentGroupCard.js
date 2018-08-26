@@ -32,11 +32,11 @@ class CurrentGroupCard extends React.Component<Props, State> {
 
   render() {
     return (
-      <View style={styles.container}>
+      <TouchableOpacity style={styles.container}>
         <CurrentGroupAvatar />
         <Text style={styles.name}>{this.props.name}</Text>
         <Text style={styles.trustScore}>{this.props.trustScore}% Trusted</Text>
-      </View>
+      </TouchableOpacity>
     );
   }
 }

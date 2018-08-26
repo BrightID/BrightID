@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SearchGroups from './SearchGroups';
 import EligibleGroupCard from './EligibleGroupCard';
 import CurrentGroupCard from './CurrentGroupCard';
@@ -77,7 +78,13 @@ class ConnectionsScreen extends React.Component<Props> {
             data={groupData}
             renderItem={this.renderCurrentGroup}
             horizontal={true}
+            keyExtractor={({ name }, index) => name + index}
           />
+          <View style={styles.addGroupButtonContainer}>
+            <TouchableOpacity style={styles.addGroupButton}>
+              <Material size={41} name="plus" color="#fff" />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -142,6 +149,25 @@ const styles = StyleSheet.create({
   currentGroupRow: {
     width: '100%',
     flexDirection: 'row',
+  },
+  addGroupButtonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    zIndex: 100,
+    right: 20,
+    bottom: 20,
+  },
+  addGroupButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f98961',
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    shadowColor: 'rgba(0,0,0,0.5)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
   },
 });
 
