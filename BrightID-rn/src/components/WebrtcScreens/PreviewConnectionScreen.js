@@ -50,8 +50,9 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
         previewAvatar,
         previewTrustScore,
         previewTimestamp,
+        connectPublicKey,
       } = this.props;
-
+      console.log(`connect public key ${connectPublicKey}`);
       // TODO formalize spec for this
       // create a new connection object
       const connection = {
@@ -63,7 +64,7 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
       };
       // add connection inside of async storage
       await AsyncStorage.setItem(
-        connectPublicKey.toString(),
+        previewPublicKey.toString(),
         JSON.stringify(connection),
       );
       // reset Preview

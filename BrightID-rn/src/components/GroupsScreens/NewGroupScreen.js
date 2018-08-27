@@ -6,6 +6,7 @@ import {
   AsyncStorage,
   FlatList,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
