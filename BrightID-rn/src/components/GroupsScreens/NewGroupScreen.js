@@ -6,15 +6,16 @@ import {
   AsyncStorage,
   FlatList,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-spinkit';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import SearchConnections from './SearchConnections';
-import ConnectionCard from './ConnectionCard';
-import { removeConnection, setConnections } from '../actions';
+import SearchConnections from '../SearchConnections';
+import ConnectionCard from '../ConnectionCard';
+import { removeConnection, setConnections } from '../../actions';
 
 /**
  * Connection screen of BrightID
@@ -29,9 +30,9 @@ type Props = {
   searchParam: string,
 };
 
-class ConnectionsScreen extends React.Component<Props> {
+class NewGroupScreen extends React.Component<Props> {
   static navigationOptions = {
-    title: 'Connections',
+    title: 'New Group',
     headerRight: <View />,
   };
 
@@ -142,6 +143,10 @@ class ConnectionsScreen extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>
+        <View style={styles.cofounderMessage}>
+          <Text>CO-FOUNDERS</Text>
+          <Text>To create a group, you must select two co-founders</Text>
+        </View>
         <SearchConnections />
         <View style={styles.mainContainer}>{this.renderList()}</View>
       </View>
@@ -171,4 +176,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(ConnectionsScreen);
+export default connect((state) => state.main)(NewGroupScreen);

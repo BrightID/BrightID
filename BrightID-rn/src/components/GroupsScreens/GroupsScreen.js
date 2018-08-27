@@ -9,13 +9,40 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import HeaderButtons, {
+  HeaderButton,
+  Item,
+} from 'react-navigation-header-buttons';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import SearchGroups from './SearchGroups';
 import EligibleGroupCard from './EligibleGroupCard';
 import CurrentGroupCard from './CurrentGroupCard';
+import BottomNav from '../BottomNav';
 
 /**
  * Groups screen of BrightID
  */
+
+const groupData = [
+  { name: 'Whisler Crew', trustScore: '94.5' },
+  { name: 'Hawaii Fam', trustScore: '92.5' },
+  { name: 'Henry McWellington', trustScore: '5.6' },
+  { name: "Von Neuman's Mad Scientists", trustScore: '99.9' },
+];
+
+// header Button
+const SimpleLineIconsHeaderButton = (passMeFurther) => (
+  // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
+  // and it is important to pass those props to `HeaderButton`
+  // then you may add some information like icon size or color (if you use icons)
+  <HeaderButton
+    {...passMeFurther}
+    IconComponent={SimpleLineIcons}
+    iconSize={32}
+    color="#fff"
+  />
+);
 
 type Props = {
   connections: Array<{
@@ -25,13 +52,30 @@ type Props = {
   }>,
   searchParam: string,
   eligibleGroups: number,
+  navigation: {
+    navigate: Function,
+  },
 };
 
 class ConnectionsScreen extends React.Component<Props> {
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => ({
     title: 'Groups',
     headerRight: <View />,
-  };
+    headerLeft: (
+      <HeaderButtons
+        left={true}
+        HeaderButtonComponent={SimpleLineIconsHeaderButton}
+      >
+        <Item
+          title="help"
+          iconName="question"
+          onPress={() => {
+            navigation.goBack(null);
+          }}
+        />
+      </HeaderButtons>
+    ),
+  });
 
   filterConnections = () =>
     this.props.connections.filter((item) =>
@@ -41,7 +85,12 @@ class ConnectionsScreen extends React.Component<Props> {
         .includes(this.props.searchParam.toLowerCase().replace(/\s/g, '')),
     );
 
+  renderCurrentGroup = ({ item }) => (
+    <CurrentGroupCard name={item.name} trustScore={item.trustScore} />
+  );
+
   render() {
+    const { navigation } = this.props;
     return (
       <View style={styles.container}>
         <SearchGroups />
@@ -59,16 +108,27 @@ class ConnectionsScreen extends React.Component<Props> {
           </TouchableOpacity>
         </View>
         <View style={styles.currentContainer}>
-          <Text style={styles.groupTitle}>CURRENT</Text>
-          <View style={styles.currentGroupRow}>
-            <CurrentGroupCard
-              name="Whisler Crew"
-              trustScore="94.5"
-              left={true}
-            />
-            <CurrentGroupCard name="Hawaii Fam" trustScore="92.5" />
+          <View style={styles.currentGroupsHeader}>
+            <Text style={styles.groupTitle}>CURRENT</Text>
+          </View>
+          <FlatList
+            data={groupData}
+            renderItem={this.renderCurrentGroup}
+            horizontal={true}
+            keyExtractor={({ name }, index) => name + index}
+          />
+          <View style={styles.addGroupButtonContainer}>
+            <TouchableOpacity
+              style={styles.addGroupButton}
+              onPress={() => {
+                navigation.navigate('NewGroup');
+              }}
+            >
+              <Material size={41} name="plus" color="#fff" />
+            </TouchableOpacity>
           </View>
         </View>
+        <BottomNav navigation={navigation} />
       </View>
     );
   }
@@ -90,6 +150,7 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
+    flex: 1,
   },
   groupTitle: {
     fontFamily: 'ApexNew-Book',
@@ -97,18 +158,26 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 5,
   },
+
   seeAllButton: {
     width: '90%',
-    borderTopColor: '#e3e0e4',
-    borderTopWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
     height: 38,
+    borderTopColor: '#e3e0e4',
+    borderTopWidth: 1,
   },
   seeAllText: {
     fontFamily: 'ApexNew-Medium',
     fontSize: 18,
     color: '#4A8FE6',
+  },
+  currentGroupsHeader: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomColor: '#e3e0e4',
+    borderBottomWidth: 1,
   },
   currentContainer: {
     backgroundColor: '#fff',
@@ -118,10 +187,30 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
+    flex: 1,
   },
   currentGroupRow: {
     width: '100%',
     flexDirection: 'row',
+  },
+  addGroupButtonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    zIndex: 100,
+    right: 18,
+    bottom: 12,
+  },
+  addGroupButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f98961',
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    shadowColor: 'rgba(0,0,0,0.5)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
   },
 });
 

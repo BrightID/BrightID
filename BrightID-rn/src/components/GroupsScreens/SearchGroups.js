@@ -1,10 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import { TextInput, StyleSheet, View } from 'react-native';
+import { TouchableOpacity, TextInput, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
-import Touchable from 'react-native-platform-touchable';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import Octicons from 'react-native-vector-icons/Octicons';
+
 import { setSearchParam } from '../../actions';
 
 /**
@@ -22,18 +23,18 @@ class SearchGroups extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Touchable style={styles.searchIcon}>
-          <Ionicon size={28} name="ios-search" color="#000" />
-        </Touchable>
+        <TouchableOpacity style={styles.searchIcon}>
+          <Octicons size={26} name="search" color="#000" />
+        </TouchableOpacity>
         <TextInput
           value={this.props.searchParam}
           onChangeText={(value) => this.props.dispatch(setSearchParam(value))}
           style={styles.searchField}
           placeholder="Search Groups"
         />
-        <Touchable style={styles.optionsIcon}>
-          <Ionicon size={28} name="ios-options" color="#000" />
-        </Touchable>
+        <TouchableOpacity style={styles.optionsIcon}>
+          <Ionicon size={30} name="ios-options" color="#000" />
+        </TouchableOpacity>
       </View>
     );
   }

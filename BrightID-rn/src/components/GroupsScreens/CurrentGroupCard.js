@@ -32,49 +32,30 @@ class CurrentGroupCard extends React.Component<Props, State> {
 
   render() {
     return (
-      <View
-        style={{
-          width: this.state.width === 0 ? '100%' : this.state.width,
-          height: this.state.width > 185 ? this.state.width : 185,
-          minHeight: 185,
-          alignItems: 'center',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          backgroundColor: '#fff',
-          borderColor: '#e3e0e4',
-          borderTopWidth: 1,
-          borderLeftWidth: this.props.left ? 1 : 0,
-          borderRightWidth: 1,
-          borderBottomWidth: 1,
-        }}
-        onLayout={(event) => {
-          // first we set the width at 100%
-          // then we calculate 50% manually
-          let { width } = event.nativeEvent.layout;
-          width /= 2;
-
-          if (this.state.width === 0) {
-            this.setState({ width });
-          }
-        }}
-      >
+      <TouchableOpacity style={styles.container}>
         <CurrentGroupAvatar />
         <Text style={styles.name}>{this.props.name}</Text>
         <Text style={styles.trustScore}>{this.props.trustScore}% Trusted</Text>
-      </View>
+      </TouchableOpacity>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    width: '50%',
+    width: 182,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
     backgroundColor: '#fff',
-    borderTopColor: '#e3e0e4',
+    flex: 1,
+    padding: 20,
+    // minHeight: 182,
+    borderColor: '#e3e0e4',
     borderTopWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
   },
   name: {
     fontFamily: 'ApexNew-Book',

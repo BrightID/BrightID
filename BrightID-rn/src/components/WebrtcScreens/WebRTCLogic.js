@@ -179,8 +179,11 @@ class WebRTCLogic extends React.Component<Props> {
       if (
         this.connection &&
         arbiter &&
+        arbiter.USERB &&
         arbiter.USERB.ANSWER &&
-        arbiter.USERB.ANSWER.sdp !== this.connection.localDescription.sdp
+        (!this.connection.remoteDescription ||
+          (this.connection.remoteDescription &&
+            arbiter.USERB.ANSWER.sdp !== this.connection.remoteDescription.sdp))
       ) {
         await this.connection.setRemoteDescription(
           new RTCSessionDescription(arbiter.USERB.ANSWER),
@@ -196,6 +199,7 @@ class WebRTCLogic extends React.Component<Props> {
       const { dispatch } = this.props;
       // create webrtc instance
       this.connection = new RTCPeerConnection(ICE_SERVERS);
+      window.ca = this.connection;
       // logging(this.connection, 'UserA');
       // create data channel
       this.channel = this.connection.createDataChannel('connect');

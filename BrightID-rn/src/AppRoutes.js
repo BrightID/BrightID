@@ -8,6 +8,7 @@ import GroupsScreen from './components/GroupsScreens/GroupsScreen';
 import Onboard from './components/OnboardingScreens/Onboard';
 import SignUp from './components/OnboardingScreens/SignUp';
 import NewConnectionScreen from './components/WebrtcScreens/NewConnectionScreen';
+import NewGroupScreen from './components/GroupsScreens/NewGroupScreen';
 import RtcAnswerScreen from './components/WebrtcScreens/RtcAnswerScreen';
 import PreviewConnectionScreen from './components/WebrtcScreens/PreviewConnectionScreen';
 import SuccessScreen from './components/WebrtcScreens/SuccessScreen';
@@ -24,6 +25,42 @@ import AppBootstrap from './AppBootstrap';
  *
  */
 
+const GroupStack = createStackNavigator(
+  {
+    Main: {
+      screen: GroupsScreen,
+    },
+    NewGroup: {
+      screen: NewGroupScreen,
+    },
+  },
+  {
+    initialRouteName: 'Main',
+    mode: 'modal',
+    headerLayoutPreset: 'center',
+    navigationOptions: {
+      title: 'Groups',
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontFamily: 'EurostileRegular',
+        fontWeight: '200',
+        fontSize: 24,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        textAlign: 'center',
+        alignSelf: 'center',
+        flex: 1,
+      },
+      headerBackground: (
+        <LinearGradient
+          colors={['#F52828', '#F76B1C']}
+          style={{ flex: 1, width: '100%' }}
+        />
+      ),
+    },
+  },
+);
+
 const AppStack = createStackNavigator(
   {
     Home: {
@@ -33,7 +70,10 @@ const AppStack = createStackNavigator(
       screen: ConnectionsScreen,
     },
     Groups: {
-      screen: GroupsScreen,
+      screen: GroupStack,
+      navigationOptions: {
+        header: null,
+      },
     },
     NewConnection: {
       screen: NewConnectionScreen,
@@ -50,8 +90,9 @@ const AppStack = createStackNavigator(
   },
   {
     initialRouteName: 'Home',
+    headerLayoutPreset: 'center',
     navigationOptions: {
-      title: 'BrightID',
+      title: 'Groups',
       headerTintColor: '#fff',
       headerTitleStyle: {
         fontFamily: 'EurostileRegular',

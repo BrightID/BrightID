@@ -19,12 +19,15 @@ type Props = {
 class CurrentGroupAvatar extends React.Component<Props> {
   render() {
     const { userAvatar } = this.props;
-    const Avatar = userAvatar ? (
-      <Image source={userAvatar} style={styles.avatar} />
-    ) : (
-      <View style={styles.avatar} />
+
+    return (
+      <View style={styles.container}>
+        <Image
+          source={userAvatar || require('../../static/default_avatar.jpg')}
+          style={styles.avatar}
+        />
+      </View>
     );
-    return <View style={styles.container}>{Avatar}</View>;
   }
 }
 
