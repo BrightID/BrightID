@@ -3,7 +3,8 @@ import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import LinearGradient from 'react-native-linear-gradient';
 // import { LinearGradient } from 'expo';
 import HomeScreen from './components/HomeScreen';
-import ConnectionsScreen from './components/ConnectionsScreen';
+import ConnectionsScreen from './components/Connections/ConnectionsScreen';
+import SortingConnectionsScreen from './components/Connections/SortingConnectionsScreen';
 import GroupsScreen from './components/GroupsScreens/GroupsScreen';
 import Onboard from './components/OnboardingScreens/Onboard';
 import SignUp from './components/OnboardingScreens/SignUp';
@@ -27,7 +28,7 @@ import AppBootstrap from './AppBootstrap';
 
 const GroupStack = createStackNavigator(
   {
-    Main: {
+    GroupMain: {
       screen: GroupsScreen,
     },
     NewGroup: {
@@ -35,7 +36,43 @@ const GroupStack = createStackNavigator(
     },
   },
   {
-    initialRouteName: 'Main',
+    initialRouteName: 'GroupMain',
+    mode: 'modal',
+    headerLayoutPreset: 'center',
+    navigationOptions: {
+      title: 'Groups',
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontFamily: 'EurostileRegular',
+        fontWeight: '200',
+        fontSize: 24,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        textAlign: 'center',
+        alignSelf: 'center',
+        flex: 1,
+      },
+      headerBackground: (
+        <LinearGradient
+          colors={['#F52828', '#F76B1C']}
+          style={{ flex: 1, width: '100%' }}
+        />
+      ),
+    },
+  },
+);
+
+const ConnectionsStack = createStackNavigator(
+  {
+    ConnectionsMain: {
+      screen: ConnectionsScreen,
+    },
+    SortingConnections: {
+      screen: SortingConnectionsScreen,
+    },
+  },
+  {
+    initialRouteName: 'ConnectionsMain',
     mode: 'modal',
     headerLayoutPreset: 'center',
     navigationOptions: {
@@ -67,7 +104,10 @@ const AppStack = createStackNavigator(
       screen: HomeScreen,
     },
     Connections: {
-      screen: ConnectionsScreen,
+      screen: ConnectionsStack,
+      navigationOptions: {
+        header: null,
+      },
     },
     Groups: {
       screen: GroupStack,

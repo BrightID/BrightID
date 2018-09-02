@@ -16,12 +16,14 @@ import HeaderButtons, {
   Item,
 } from 'react-navigation-header-buttons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import Feather from 'react-native-vector-icons/Feather';
+
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import store from '../store';
+import store from '../../store';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
-import { removeConnection, setConnections } from '../actions';
-import { addConnection } from '../actions/fakeContact';
+import { removeConnection, setConnections } from '../../actions';
+import { addConnection } from '../../actions/fakeContact';
 
 /**
  * Connection screen of BrightID
@@ -36,6 +38,19 @@ const MaterialHeaderButton = (passMeFurther) => (
   <HeaderButton
     {...passMeFurther}
     IconComponent={Material}
+    iconSize={32}
+    color="#fff"
+  />
+);
+
+// header Button
+const FeatherHeaderButton = (passMeFurther) => (
+  // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
+  // and it is important to pass those props to `HeaderButton`
+  // then you may add some information like icon size or color (if you use icons)
+  <HeaderButton
+    {...passMeFurther}
+    IconComponent={Feather}
     iconSize={32}
     color="#fff"
   />
@@ -77,6 +92,17 @@ class ConnectionsScreen extends React.Component<Props> {
               ],
               { cancelable: true },
             );
+          }}
+        />
+      </HeaderButtons>
+    ),
+    headerLeft: (
+      <HeaderButtons left={true} HeaderButtonComponent={FeatherHeaderButton}>
+        <Item
+          title="go back"
+          iconName="chevron-left"
+          onPress={() => {
+            navigation.goBack(null);
           }}
         />
       </HeaderButtons>
@@ -190,7 +216,7 @@ class ConnectionsScreen extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <SearchConnections />
+        <SearchConnections navigation={this.props.navigation} />
         <View style={styles.mainContainer}>{this.renderList()}</View>
       </View>
     );
