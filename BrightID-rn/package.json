@@ -8,6 +8,8 @@
     ]
   },
   "scripts": {
+    "fix": "rn-nodeify --hack",
+    "postinstall": "rn-nodeify --hack",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "test:watch": "npm test -- --watch",
@@ -69,9 +71,9 @@
     "vm-browserify": "0.0.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.56",
-    "@babel/preset-flow": "^7.0.0-beta.56",
-    "@babel/types": "^7.0.0-rc.3",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-flow": "^7.0.0",
+    "@babel/types": "^7.0.0",
     "babel-core": "^7.0.0-beta.56",
     "babel-eslint": "^8.2.6",
     "babel-jest": "^23.4.2",
@@ -94,7 +96,8 @@
     "prettier": "^1.14.2",
     "react-native-mock": "^0.3.1",
     "react-test-renderer": "^16.4.1",
-    "redux-mock-store": "^1.5.3"
+    "redux-mock-store": "^1.5.3",
+    "rn-nodeify": "^10.0.0"
   },
   "jest": {
     "preset": "react-native",
