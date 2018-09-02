@@ -84,7 +84,7 @@ export default class BottomNav extends React.Component<Props> {
 const styles = StyleSheet.create({
   container: {
     height: 63,
-    backgroundColor: '#F7F7F7',
+    backgroundColor: '#fff',
     flexDirection: 'row',
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: 'rgba(0, 0, 0, .3)',

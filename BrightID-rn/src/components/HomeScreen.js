@@ -42,6 +42,19 @@ const SimpleLineIconsHeaderButton = (passMeFurther) => (
   />
 );
 
+// header Button
+const MaterialHeaderButton = (passMeFurther) => (
+  // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
+  // and it is important to pass those props to `HeaderButton`
+  // then you may add some information like icon size or color (if you use icons)
+  <HeaderButton
+    {...passMeFurther}
+    IconComponent={Material}
+    iconSize={32}
+    color="#fff"
+  />
+);
+
 type Props = {
   trustScore: string,
   groupsCount: number,
@@ -56,10 +69,10 @@ export class HomeScreen extends React.Component<Props> {
     title: 'BrightID',
     headerBackTitle: 'Home',
     headerRight: (
-      <HeaderButtons HeaderButtonComponent={SimpleLineIconsHeaderButton}>
+      <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
         <Item
-          title="more"
-          iconName="options"
+          title="options"
+          iconName="dots-horizontal"
           onPress={() => {
             Alert.alert(
               'WARNING',
@@ -265,9 +278,11 @@ const styles = StyleSheet.create({
   },
   connectContainer: {
     width: '100%',
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: '#e3e1e1',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#fff',
     flex: 1,
     marginTop: 17,
     flexDirection: 'row',

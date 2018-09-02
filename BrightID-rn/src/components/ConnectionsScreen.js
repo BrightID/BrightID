@@ -11,15 +11,35 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-spinkit';
+import HeaderButtons, {
+  HeaderButton,
+  Item,
+} from 'react-navigation-header-buttons';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import store from '../store';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
 import { removeConnection, setConnections } from '../actions';
+import { addConnection } from '../actions/fakeContact';
 
 /**
  * Connection screen of BrightID
  * Displays a search input and list of Connection Cards
  */
+
+// header Button
+const MaterialHeaderButton = (passMeFurther) => (
+  // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
+  // and it is important to pass those props to `HeaderButton`
+  // then you may add some information like icon size or color (if you use icons)
+  <HeaderButton
+    {...passMeFurther}
+    IconComponent={Material}
+    iconSize={32}
+    color="#fff"
+  />
+);
 
 type Props = {
   connections: Array<{
@@ -30,10 +50,38 @@ type Props = {
 };
 
 class ConnectionsScreen extends React.Component<Props> {
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => ({
     title: 'Connections',
-    headerRight: <View />,
-  };
+    headerRight: (
+      <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
+        <Item
+          title="options"
+          iconName="dots-horizontal"
+          onPress={() => {
+            Alert.alert(
+              'New Connection',
+              'Would you like simulate adding a new connection?',
+              [
+                {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+                {
+                  text: 'Sure',
+                  onPress: () => {
+                    store.dispatch(addConnection());
+                    navigation.navigate('PreviewConnection');
+                  },
+                },
+              ],
+              { cancelable: true },
+            );
+          }}
+        />
+      </HeaderButtons>
+    ),
+  });
 
   componentDidMount() {
     this.getConnections();
