@@ -17,7 +17,7 @@ import HeaderButtons, {
   HeaderButton,
   Item,
 } from 'react-navigation-header-buttons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import BottomNav from './BottomNav';
@@ -42,6 +42,19 @@ const SimpleLineIconsHeaderButton = (passMeFurther) => (
   />
 );
 
+// header Button
+const MaterialHeaderButton = (passMeFurther) => (
+  // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
+  // and it is important to pass those props to `HeaderButton`
+  // then you may add some information like icon size or color (if you use icons)
+  <HeaderButton
+    {...passMeFurther}
+    IconComponent={Material}
+    iconSize={32}
+    color="#fff"
+  />
+);
+
 type Props = {
   trustScore: string,
   groupsCount: number,
@@ -56,10 +69,10 @@ export class HomeScreen extends React.Component<Props> {
     title: 'BrightID',
     headerBackTitle: 'Home',
     headerRight: (
-      <HeaderButtons HeaderButtonComponent={SimpleLineIconsHeaderButton}>
+      <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
         <Item
-          title="more"
-          iconName="options"
+          title="options"
+          iconName="dots-horizontal"
           onPress={() => {
             Alert.alert(
               'WARNING',
@@ -95,37 +108,7 @@ export class HomeScreen extends React.Component<Props> {
         left={true}
         HeaderButtonComponent={SimpleLineIconsHeaderButton}
       >
-        <Item
-          title="help"
-          iconName="question"
-          onPress={() => {
-            Alert.alert(
-              'WARNING',
-              'Would you like to delete user data and return to the onboarding screen?',
-              [
-                {
-                  text: 'Cancel',
-                  onPress: () => console.log('Cancel Pressed'),
-                  style: 'cancel',
-                },
-                {
-                  text: 'Sure',
-                  onPress: async () => {
-                    try {
-                      navigation.navigate('Onboarding');
-                      await AsyncStorage.flushGetRequests();
-                      await AsyncStorage.removeItem('userData');
-                      store.dispatch(removeUserData());
-                    } catch (err) {
-                      console.log(err);
-                    }
-                  },
-                },
-              ],
-              { cancelable: true },
-            );
-          }}
-        />
+        <Item title="help" iconName="question" onPress={() => {}} />
       </HeaderButtons>
     ),
   });
@@ -207,8 +190,9 @@ export class HomeScreen extends React.Component<Props> {
               accessible={true}
               accessibilityLabel="Connect"
             >
-              <Text style={styles.connectText}>CONNECT</Text>
-              <Material name="key-plus" size={26} color="#fff" />
+              <FontAwesome name="qrcode" size={26} color="#fff" />
+              <Text style={styles.connectText}>New Connection</Text>
+              <SimpleLineIcons name="plus" size={26} color="#fff" />
             </TouchableOpacity>
           </View>
         </View>
@@ -265,9 +249,11 @@ const styles = StyleSheet.create({
   },
   connectContainer: {
     width: '100%',
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: '#e3e1e1',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#fff',
     flex: 1,
     marginTop: 17,
     flexDirection: 'row',
@@ -317,12 +303,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   connectButton: {
-    width: 138,
-    height: 138,
+    // width: 138,
+    // height: 138,
+    height: 65,
+    paddingTop: 13,
+    paddingBottom: 12,
+    width: '80%',
     backgroundColor: '#4990e2',
-    borderRadius: 69,
+    borderRadius: 3,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
+    flexDirection: 'row',
     shadowColor: '#000',
     shadowOffset: { width: 20, height: 20 },
     shadowRadius: 20,

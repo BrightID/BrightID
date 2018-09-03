@@ -13,8 +13,8 @@ import {
 import { connect } from 'react-redux';
 import Spinner from 'react-native-spinkit';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import SearchConnections from '../SearchConnections';
-import ConnectionCard from '../ConnectionCard';
+import SearchConnections from '../Connections/SearchConnections';
+import ConnectionCard from '../Connections/ConnectionCard';
 import { removeConnection, setConnections } from '../../actions';
 
 /**

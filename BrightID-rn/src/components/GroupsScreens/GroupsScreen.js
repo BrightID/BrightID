@@ -15,6 +15,7 @@ import HeaderButtons, {
   Item,
 } from 'react-navigation-header-buttons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Feather from 'react-native-vector-icons/Feather';
 import SearchGroups from './SearchGroups';
 import EligibleGroupCard from './EligibleGroupCard';
 import CurrentGroupCard from './CurrentGroupCard';
@@ -32,13 +33,13 @@ const groupData = [
 ];
 
 // header Button
-const SimpleLineIconsHeaderButton = (passMeFurther) => (
+const FeatherHeaderButton = (passMeFurther) => (
   // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
   // and it is important to pass those props to `HeaderButton`
   // then you may add some information like icon size or color (if you use icons)
   <HeaderButton
     {...passMeFurther}
-    IconComponent={SimpleLineIcons}
+    IconComponent={Feather}
     iconSize={32}
     color="#fff"
   />
@@ -62,13 +63,10 @@ class ConnectionsScreen extends React.Component<Props> {
     title: 'Groups',
     headerRight: <View />,
     headerLeft: (
-      <HeaderButtons
-        left={true}
-        HeaderButtonComponent={SimpleLineIconsHeaderButton}
-      >
+      <HeaderButtons left={true} HeaderButtonComponent={FeatherHeaderButton}>
         <Item
-          title="help"
-          iconName="question"
+          title="go back"
+          iconName="chevron-left"
           onPress={() => {
             navigation.goBack(null);
           }}

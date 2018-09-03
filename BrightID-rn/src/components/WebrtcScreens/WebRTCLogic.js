@@ -30,7 +30,6 @@ import {
   setConnectTimestamp,
   setArbiter,
   setConnectAvatar,
-  setPreview,
 } from '../../actions';
 /**
  * RTC Ansewr Screen of BrightID
@@ -134,8 +133,6 @@ class WebRTCLogic extends React.Component<Props> {
       connectRecievedTrustScore &&
       !this.done
     ) {
-      // transfer connection props to preview
-      dispatch(setPreview());
       // navigate to preview screen
       navigation.navigate('PreviewConnection');
       this.done = true;
@@ -254,6 +251,14 @@ class WebRTCLogic extends React.Component<Props> {
 
         // update signaling server
         await dispatch(update({ type: ANSWER, person: USERB, value: answer }));
+      }
+      // update ice servers
+      if (arbiter.USERA.ICE_CANDIDATE.length > 0) {
+        await Promise.all(
+          arbiter.USERA.ICECANDIDATE.map((candidate) =>
+            this.connection.addIceCandidate(new RTCIceCandidate(candidate)),
+          ),
+        );
       }
     } catch (err) {
       // we should attempt to restart webrtc here

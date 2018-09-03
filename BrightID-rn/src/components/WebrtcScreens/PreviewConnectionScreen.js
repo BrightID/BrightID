@@ -10,7 +10,12 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { addConnection, resetWebrtc, resetPreview } from '../../actions';
+import {
+  addConnection,
+  resetWebrtc,
+  resetPreview,
+  setPreview,
+} from '../../actions';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -36,6 +41,12 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
     title: 'New Connection',
     headerRight: <View />,
   };
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    // transfer connection props to preview
+    dispatch(setPreview());
+  }
 
   addNewConnection = async () => {
     /**

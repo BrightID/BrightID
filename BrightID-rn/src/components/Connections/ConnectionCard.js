@@ -43,7 +43,7 @@ class ConnectionCard extends React.Component<Props> {
     } = this.props;
     const image = avatar
       ? { uri: avatar }
-      : require('../static/default_avatar.jpg');
+      : require('../../static/default_avatar.jpg');
     return (
       <View style={styles.container}>
         <Image source={image} style={styles.avatar} />
