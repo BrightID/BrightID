@@ -27,21 +27,28 @@ type Props = {
 
 class SortingConnectionsScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Sorting Connections',
+    title: 'Connections',
+    headerRight: <View />,
   });
 
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity style={styles.sortingOption}>
-          <Text style={styles.sortingText}>Sort by name</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.sortingOption}>
-          <Text style={styles.sortingText}>Sort by date added</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.sortingOption}>
-          <Text style={styles.sortingText}>Sort by trust score</Text>
-        </TouchableOpacity>
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>Sorting connections</Text>
+          <Text style={styles.infoText}>Choose one of the methods below</Text>
+        </View>
+        <View style={styles.optionsContainer}>
+          <TouchableOpacity style={styles.sortingOption}>
+            <Text style={styles.sortingText}>Sort by name</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.sortingOption}>
+            <Text style={styles.sortingText}>Sort by date added</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.sortingOption}>
+            <Text style={styles.sortingText}>Sort by trust score</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -55,15 +62,51 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
   },
+  optionsContainer: {
+    width: '96.7%',
+  },
   sortingOption: {
-    height: 200,
-    justifyContent: 'center',
+    padding: 33,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    width: '100%',
+    borderRadius: 5,
   },
   sortingText: {
     fontFamily: 'ApexNew-Medium',
     fontSize: 14,
     color: '#4990e2',
+  },
+  titleContainer: {
+    justifyContent: 'space-around',
+    height: 106,
+    paddingTop: 11,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#e3e1e1',
+    width: '96.7%',
+  },
+  titleText: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 18,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.09)',
+    textShadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    textShadowRadius: 4,
+  },
+  infoText: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 14,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'center',
   },
 });
 

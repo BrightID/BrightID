@@ -63,19 +63,6 @@ class NewGroupScreen extends React.Component<Props> {
 
   handleUserOptions = (publicKey) => () => {
     const { nameornym } = this.props;
-    Alert.alert(
-      'Delete connection',
-      `Are you sure you want to remove ${nameornym} from your list of connections? Your decision is irreversable.`,
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        { text: 'OK', onPress: this.removeUser(publicKey) },
-      ],
-      { cancelable: true },
-    );
   };
 
   removeUser = (publicKey) => async () => {
@@ -105,7 +92,9 @@ class NewGroupScreen extends React.Component<Props> {
       style={styles.moreIcon}
       onPress={this.handleUserOptions(publicKey)}
     >
-      <Ionicon size={48} name="ios-more" color="#ccc" />
+      <View>
+        <Ionicon size={41} name="ios-checkmark-circle-outline" color="#333" />
+      </View>
     </TouchableOpacity>
   );
 
@@ -113,6 +102,7 @@ class NewGroupScreen extends React.Component<Props> {
     <ConnectionCard
       {...item}
       renderActionComponent={this.renderActionComponent}
+      style={styles.connectionCard}
     />
   );
 
@@ -143,11 +133,13 @@ class NewGroupScreen extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.cofounderMessage}>
-          <Text>CO-FOUNDERS</Text>
-          <Text>To create a group, you must select two co-founders</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>CO-FOUNDERS</Text>
+          <Text style={styles.infoText}>
+            To create a group, you must select two co-founders
+          </Text>
         </View>
-        <SearchConnections />
+        <SearchConnections navigation={this.props.navigation} />
         <View style={styles.mainContainer}>{this.renderList()}</View>
       </View>
     );
@@ -157,13 +149,16 @@ class NewGroupScreen extends React.Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
+    backgroundColor: '#fff',
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
   },
   connectionsContainer: {
     flex: 1,
+    width: '96.7%',
+    borderTopWidth: 1,
+    borderTopColor: '#e3e1e1',
   },
   mainContainer: {
     marginTop: 8,
@@ -173,6 +168,48 @@ const styles = StyleSheet.create({
   },
   moreIcon: {
     marginRight: 16,
+  },
+  titleContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 12,
+    backgroundColor: '#fff',
+    width: '96.7%',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#e3e1e1',
+    paddingTop: 11,
+    paddingBottom: 11,
+  },
+  titleText: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 18,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'left',
+    textShadowColor: 'rgba(0, 0, 0, 0.09)',
+    textShadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    textShadowRadius: 4,
+    marginBottom: 6,
+  },
+  infoText: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 14,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
+  },
+  connectionCard: {
+    marginBottom: 0,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e3e1e1',
+    width: '100%',
   },
 });
 
