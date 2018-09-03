@@ -93,7 +93,7 @@ class NewGroupScreen extends React.Component<Props> {
       onPress={this.handleUserOptions(publicKey)}
     >
       <View>
-        <Ionicon size={41} name="ios-checkmark-circle-outline" color="#333" />
+        <Ionicon size={37} name="ios-checkmark-circle-outline" color="#333" />
       </View>
     </TouchableOpacity>
   );

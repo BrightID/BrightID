@@ -255,7 +255,7 @@ class WebRTCLogic extends React.Component<Props> {
       // update ice servers
       if (arbiter.USERA.ICE_CANDIDATE.length > 0) {
         await Promise.all(
-          arbiter.USERA.ICECANDIDATE.map((candidate) =>
+          arbiter.USERA.ICE_CANDIDATE.map((candidate) =>
             this.connection.addIceCandidate(new RTCIceCandidate(candidate)),
           ),
         );
