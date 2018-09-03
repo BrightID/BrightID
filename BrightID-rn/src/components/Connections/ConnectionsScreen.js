@@ -43,19 +43,6 @@ const MaterialHeaderButton = (passMeFurther) => (
   />
 );
 
-// header Button
-const FeatherHeaderButton = (passMeFurther) => (
-  // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
-  // and it is important to pass those props to `HeaderButton`
-  // then you may add some information like icon size or color (if you use icons)
-  <HeaderButton
-    {...passMeFurther}
-    IconComponent={Feather}
-    iconSize={32}
-    color="#fff"
-  />
-);
-
 type Props = {
   connections: Array<{
     nameornym: string,
@@ -92,17 +79,6 @@ class ConnectionsScreen extends React.Component<Props> {
               ],
               { cancelable: true },
             );
-          }}
-        />
-      </HeaderButtons>
-    ),
-    headerLeft: (
-      <HeaderButtons left={true} HeaderButtonComponent={FeatherHeaderButton}>
-        <Item
-          title="go back"
-          iconName="chevron-left"
-          onPress={() => {
-            navigation.goBack(null);
           }}
         />
       </HeaderButtons>

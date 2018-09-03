@@ -40,6 +40,7 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
   static navigationOptions = {
     title: 'New Connection',
     headerRight: <View />,
+    headerLeft: <View />,
   };
 
   componentDidMount() {
