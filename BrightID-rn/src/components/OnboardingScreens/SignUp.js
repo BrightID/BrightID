@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import nacl from 'tweetnacl';
 import ImagePicker from 'react-native-image-picker';
+import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import HeaderButtons, {
   HeaderButton,
@@ -189,7 +190,17 @@ class SignUp extends React.Component<Props, State> {
           translucent={false}
         />
         <View style={inputActive ? styles.hidden : styles.addPhotoContainer}>
-          {!imagePicking ? AddPhotoButton : <Text>waiting...</Text>}
+          {!imagePicking ? (
+            AddPhotoButton
+          ) : (
+            <Spinner
+              style={styles.spinner}
+              isVisible={true}
+              size={79}
+              type="Bounce"
+              color="#4990e2"
+            />
+          )}
         </View>
         <View style={styles.textInputContainer}>
           <Text style={styles.midText}>What do your friends know you by?</Text>
