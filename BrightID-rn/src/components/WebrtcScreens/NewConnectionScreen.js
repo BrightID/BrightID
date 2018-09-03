@@ -9,6 +9,11 @@ import { resetWebrtc } from '../../actions';
 
 /**
  * Connection screen of BrightID
+ * Displays a search input and list of Connection Cards
+ */
+
+/**
+ * Connection screen of BrightID
  *
  * renders MyCodeScreen / ScanCodeScreen
  */
