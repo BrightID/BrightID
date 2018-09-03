@@ -27,7 +27,7 @@ type Props = {
 
 class SortingConnectionsScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Sort Connections By',
+    title: 'Sorting Connections',
   });
 
   render() {

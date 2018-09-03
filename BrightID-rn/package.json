@@ -30,6 +30,7 @@
     "moment": "^2.22.2",
     "nanoid": "^1.2.1",
     "path-browserify": "0.0.0",
+    "pokemon": "^1.2.3",
     "process": "^0.11.10",
     "qrcode": "^1.2.2",
     "querystring-es3": "^0.2.1",
