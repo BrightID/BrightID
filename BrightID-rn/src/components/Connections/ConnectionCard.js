@@ -29,6 +29,7 @@ type Props = {
   connectionDate: string,
   renderActionComponent: () => React.Component,
   publicKey: string,
+  style: {},
 };
 
 class ConnectionCard extends React.Component<Props> {
@@ -40,12 +41,13 @@ class ConnectionCard extends React.Component<Props> {
       connectionDate,
       renderActionComponent,
       publicKey,
+      style,
     } = this.props;
     const image = avatar
       ? { uri: avatar }
       : require('../../static/default_avatar.jpg');
     return (
-      <View style={styles.container}>
+      <View style={{ ...styles.container, ...style }}>
         <Image source={image} style={styles.avatar} />
         <View style={styles.info}>
           <Text style={styles.name}>{nameornym}</Text>
