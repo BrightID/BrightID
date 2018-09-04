@@ -111,7 +111,10 @@ class ConnectionsScreen extends React.Component<Props> {
   };
 
   handleUserOptions = (publicKey) => () => {
-    const { nameornym } = this.props;
+    const { connections } = this.props;
+    const { nameornym } = connections.find(
+      (item) => item.publicKey.toString() === publicKey.toString(),
+    );
     Alert.alert(
       'Delete connection',
       `Are you sure you want to remove ${nameornym} from your list of connections? Your decision is irreversable.`,

@@ -47,7 +47,7 @@ export const sampleConnections: Array<{}> = [
       'b2d16e7d2350502f6f274d76a9557793069af573d75d6719c3a2b68275da6bff',
     nameornym: 'Jolie McVane',
     avatar: 'https://robohash.org/undeofficiisnon.png?size=145x145&set=set1',
-    connectionDate: '1452035995',
+    connectionDate: '1452035995000',
     trustScore: 94.2,
   },
   {
@@ -56,7 +56,7 @@ export const sampleConnections: Array<{}> = [
       '433dc03f55c62639c7834ce0340f15a294094ddc0356bf2f9803a1bbf77f92f7',
     nameornym: 'Georgette Brownhill',
     avatar: 'https://robohash.org/temporibussitdolor.jpg?size=145x145&set=set1',
-    connectionDate: '1460122008',
+    connectionDate: '1460122008000',
     trustScore: 80.5,
   },
   {
@@ -66,7 +66,7 @@ export const sampleConnections: Array<{}> = [
     nameornym: 'Miquela Arden',
     avatar:
       'https://robohash.org/evenietautexcepturi.bmp?size=145x145&set=set1',
-    connectionDate: '1468000912',
+    connectionDate: '1468000912000',
     trustScore: 72.3,
   },
   {
@@ -75,7 +75,7 @@ export const sampleConnections: Array<{}> = [
       '636b07c46fd93576dd4fa8ec2b82f655b28efa23f604c7638694dad237af18a0',
     nameornym: 'Emory Liven',
     avatar: 'https://robohash.org/quisrerumsint.jpg?size=145x145&set=set1',
-    connectionDate: '1388433658',
+    connectionDate: '1388433658000',
     trustScore: 75.8,
   },
   {
@@ -85,7 +85,7 @@ export const sampleConnections: Array<{}> = [
     nameornym: 'Halimeda Vignaux',
     avatar:
       'https://robohash.org/voluptatemetaperiam.jpg?size=145x145&set=set1',
-    connectionDate: '1384979985',
+    connectionDate: '1384979985000',
     trustScore: 73.8,
   },
   {
@@ -95,7 +95,7 @@ export const sampleConnections: Array<{}> = [
     nameornym: 'Alyssa Langsdon',
     avatar:
       'https://robohash.org/velitestrepudiandae.bmp?size=145x145&set=set1',
-    connectionDate: '1439836420',
+    connectionDate: '1439836420000',
     trustScore: 53.4,
   },
   {
@@ -104,7 +104,7 @@ export const sampleConnections: Array<{}> = [
       'e32a26b21c3f8902b59f9fb43a1d11e9f9cfb6a0d50a1f0766f9ef1bf30318e4',
     nameornym: 'Judith Hriinchenko',
     avatar: 'https://robohash.org/totamporroodio.bmp?size=145x145&set=set1',
-    connectionDate: '1372055295',
+    connectionDate: '1372055295000',
     trustScore: 67.5,
   },
   {
@@ -114,7 +114,7 @@ export const sampleConnections: Array<{}> = [
     nameornym: 'Kele Ludwikiewicz',
     avatar:
       'https://robohash.org/quisquamofficiisnon.png?size=145x145&set=set1',
-    connectionDate: '1431542215',
+    connectionDate: '1431542215000',
     trustScore: 81.7,
   },
   {
@@ -123,7 +123,7 @@ export const sampleConnections: Array<{}> = [
       '8ca15fa795d064946335c45f016c773ee1bbfc88b2eb861911d23759c6c92c96',
     nameornym: 'Pryce Hallatt',
     avatar: 'https://robohash.org/idsitnon.png?size=145x145&set=set1',
-    connectionDate: '1505229487',
+    connectionDate: '1505229487000',
     trustScore: 51.8,
   },
   {
@@ -133,7 +133,7 @@ export const sampleConnections: Array<{}> = [
     nameornym: 'Alvy Gilman',
     avatar:
       'https://robohash.org/accusantiumveritatisest.bmp?size=145x145&set=set1',
-    connectionDate: '1374959168',
+    connectionDate: '1374959168000',
     trustScore: 79.7,
   },
   {
@@ -142,7 +142,7 @@ export const sampleConnections: Array<{}> = [
       '89923f63a0609929d116dced0c78f7ac3fe17cdf016bed5a6a985c578f7b9be3',
     nameornym: 'Catriona Wasiel',
     avatar: 'https://robohash.org/modilaborumsed.bmp?size=145x145&set=set1',
-    connectionDate: '1379627892',
+    connectionDate: '1379627892000',
     trustScore: 87.8,
   },
   {
@@ -151,7 +151,7 @@ export const sampleConnections: Array<{}> = [
       '4c2bb1ff1f93a69c8c4c148a6e1e546e91db08cceb85cd149884a56ee593069b',
     nameornym: 'Alikee Osbaldstone',
     avatar: 'https://robohash.org/doloremodioquam.bmp?size=145x145&set=set1',
-    connectionDate: '1359291224',
+    connectionDate: '1359291224000',
     trustScore: 71.0,
   },
   {
@@ -161,7 +161,7 @@ export const sampleConnections: Array<{}> = [
     nameornym: 'Hersch Campion',
     avatar:
       'https://robohash.org/itaqueplaceatexplicabo.jpg?size=145x145&set=set1',
-    connectionDate: '1405409270',
+    connectionDate: '1405409270000',
     trustScore: 63.8,
   },
   {
@@ -171,7 +171,7 @@ export const sampleConnections: Array<{}> = [
     nameornym: 'Darnall Jenyns',
     avatar:
       'https://robohash.org/eiussequivoluptatum.jpg?size=145x145&set=set1',
-    connectionDate: '1463122609',
+    connectionDate: '1463122609000',
     trustScore: 99.1,
   },
   {
@@ -180,7 +180,7 @@ export const sampleConnections: Array<{}> = [
       'd320e37cbd0d20e320b69defd15aa634a899b83e4db7af7fa4097bcb2cd5a492',
     nameornym: 'Elaine Braley',
     avatar: 'https://robohash.org/mollitiaexsed.png?size=145x145&set=set1',
-    connectionDate: '1445648037',
+    connectionDate: '1445648037000',
     trustScore: 76.7,
   },
   {
@@ -190,7 +190,7 @@ export const sampleConnections: Array<{}> = [
     nameornym: 'Bambie Bernot',
     avatar:
       'https://robohash.org/atquesintvoluptates.jpg?size=145x145&set=set1',
-    connectionDate: '1408211906',
+    connectionDate: '1408211906000',
     trustScore: 51.5,
   },
   {
@@ -200,7 +200,7 @@ export const sampleConnections: Array<{}> = [
     nameornym: 'Zak Conville',
     avatar:
       'https://robohash.org/inciduntmolestiasoptio.png?size=145x145&set=set1',
-    connectionDate: '1443710319',
+    connectionDate: '1443710319000',
     trustScore: 57.9,
   },
   {
@@ -209,7 +209,7 @@ export const sampleConnections: Array<{}> = [
       '9fbb04da75471471e9ad4dc4735288c2625fa8e56233ae36b163d59c6a727d3d',
     nameornym: 'Gilbertine Olifard',
     avatar: 'https://robohash.org/ametsolutanisi.jpg?size=145x145&set=set1',
-    connectionDate: '1430685304',
+    connectionDate: '1430685304000',
     trustScore: 61.3,
   },
   {
@@ -218,7 +218,7 @@ export const sampleConnections: Array<{}> = [
       'fc7a6d15c6e72240221c55c19e9c941bc7dec68e63ad6674b1835e77fa5d09b8',
     nameornym: 'Vivia Stodart',
     avatar: 'https://robohash.org/blanditiisinvero.jpg?size=145x145&set=set1',
-    connectionDate: '1469496922',
+    connectionDate: '1469496922000',
     trustScore: 85.3,
   },
   {
@@ -228,7 +228,7 @@ export const sampleConnections: Array<{}> = [
     nameornym: 'Letizia Thomson',
     avatar:
       'https://robohash.org/doloremnihileligendi.bmp?size=145x145&set=set1',
-    connectionDate: '1486453778',
+    connectionDate: '1486453778000',
     trustScore: 74.9,
   },
   {
@@ -237,7 +237,7 @@ export const sampleConnections: Array<{}> = [
       'b0fd4c8cc64e26d6af969b0ad3dc68a15828151dfb8736c9331371184b79cb5c',
     nameornym: 'Emilee Sidney',
     avatar: 'https://robohash.org/illumadistinctio.bmp?size=145x145&set=set1',
-    connectionDate: '1441088359',
+    connectionDate: '1441088359000',
     trustScore: 53.2,
   },
   {
@@ -246,7 +246,7 @@ export const sampleConnections: Array<{}> = [
       '38bda739db0f01265232117b7d10cc3646acc1b3ee77d5dc20d15649224f1f45',
     nameornym: 'Augie Salvadore',
     avatar: 'https://robohash.org/eosaccusamuseos.jpg?size=145x145&set=set1',
-    connectionDate: '1477635766',
+    connectionDate: '1477635766000',
     trustScore: 52.2,
   },
   {
@@ -256,7 +256,7 @@ export const sampleConnections: Array<{}> = [
     nameornym: 'Cynde Danilchik',
     avatar:
       'https://robohash.org/eaquelaboriosamvelit.jpg?size=145x145&set=set1',
-    connectionDate: '1434290503',
+    connectionDate: '1434290503000',
     trustScore: 64.9,
   },
 ];

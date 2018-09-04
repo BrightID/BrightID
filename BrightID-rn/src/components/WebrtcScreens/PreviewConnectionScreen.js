@@ -72,7 +72,7 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
         nameornym: previewNameornym,
         avatar: previewAvatar,
         trustScore: previewTrustScore,
-        connectionDate: previewTimestamp / 1000, // hack for moment,
+        connectionDate: previewTimestamp,
       };
       // add connection inside of async storage
       await AsyncStorage.setItem(

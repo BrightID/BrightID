@@ -5,6 +5,7 @@ export const CONNECTION_TRUST_SCORE = 'CONNECTION_TRUST_SCORE';
 export const GROUPS_COUNT = 'GROUPS_COUNT';
 export const SEARCH_PARAM = 'SEARCH_PARAM';
 export const UPDATE_CONNECTIONS = 'UPDATE_CONNECTIONS';
+export const CONNECTIONS_SORT = 'CONNECTIONS_SORT';
 export const ADD_CONNECTION = 'ADD_CONNECTION';
 export const REMOVE_CONNECTION = 'REMOVE_CONNECTION';
 export const UPDATE_USER_DATA = 'UPDATE_USER_DATA';
@@ -89,6 +90,17 @@ export const setSearchParam = (value: string) => ({
 export const setConnections = (connections: Array<{}>) => ({
   type: UPDATE_CONNECTIONS,
   connections,
+});
+
+/**
+ * redux action creator for setting connections array
+ * @param type CONNECTION_SORT
+ * @param connections array of connections obtained from server and stored locally
+ */
+
+export const setConnectionsSort = (connectionsSort: string) => ({
+  type: CONNECTIONS_SORT,
+  connectionsSort,
 });
 
 /**

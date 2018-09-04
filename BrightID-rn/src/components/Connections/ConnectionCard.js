@@ -53,7 +53,7 @@ class ConnectionCard extends React.Component<Props> {
           <Text style={styles.name}>{nameornym}</Text>
           <Text style={styles.trustScore}>{trustScore}% Trusted</Text>
           <Text style={styles.connectedText}>
-            Connected {moment.unix(parseInt(connectionDate, 10)).fromNow()}
+            Connected {moment(parseInt(connectionDate, 10)).fromNow()}
           </Text>
         </View>
         {renderActionComponent(publicKey)}
