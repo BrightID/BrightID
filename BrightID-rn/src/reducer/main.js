@@ -5,6 +5,7 @@ import {
   GROUPS_COUNT,
   SEARCH_PARAM,
   UPDATE_CONNECTIONS,
+  CONNECTIONS_SORT,
   ADD_CONNECTION,
   UPDATE_USER_DATA,
   REMOVE_USER_DATA,
@@ -79,6 +80,7 @@ export const initialState = {
   },
   rtcId: '',
   arbiter: arbiterSchema,
+  connectionsSort: '',
 };
 
 export const mainReducer = (state = initialState, action) => {
@@ -108,6 +110,11 @@ export const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         connections: action.connections,
+      };
+    case CONNECTIONS_SORT:
+      return {
+        ...state,
+        connectionsSort: action.connectionsSort,
       };
     case ADD_CONNECTION:
       return {
