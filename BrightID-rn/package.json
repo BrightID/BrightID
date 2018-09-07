@@ -37,7 +37,7 @@
     "react": "16.4.1",
     "react-dom": "^16.4.1",
     "react-native": "^0.56.0",
-    "react-native-camera": "^1.2.0",
+    "react-native-camera": "https://github.com/BrightID/react-native-camera",
     "react-native-crypto": "^2.1.2",
     "react-native-image-crop-picker": "^0.21.1",
     "react-native-image-picker": "^0.26.10",
