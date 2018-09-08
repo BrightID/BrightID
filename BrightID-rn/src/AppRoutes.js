@@ -15,7 +15,6 @@ import Onboard from './components/OnboardingScreens/Onboard';
 import SignUp from './components/OnboardingScreens/SignUp';
 import NewConnectionScreen from './components/WebrtcScreens/NewConnectionScreen';
 import NewGroupScreen from './components/GroupsScreens/NewGroupScreen';
-import RtcAnswerScreen from './components/WebrtcScreens/RtcAnswerScreen';
 import PreviewConnectionScreen from './components/WebrtcScreens/PreviewConnectionScreen';
 import SuccessScreen from './components/WebrtcScreens/SuccessScreen';
 import AppBootstrap from './AppBootstrap';
@@ -44,6 +43,24 @@ const MaterialHeaderButton = (passMeFurther) => (
   />
 );
 
+const headerTitleStyle = {
+  fontFamily: 'EurostileRegular',
+  fontWeight: '200',
+  fontSize: 24,
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  textAlign: 'center',
+  alignSelf: 'center',
+  flex: 1,
+};
+
+const headerBackground = (
+  <LinearGradient
+    colors={['#F52828', '#F76B1C']}
+    style={{ flex: 1, width: '100%' }}
+  />
+);
+
 const GroupStack = createStackNavigator(
   {
     GroupMain: {
@@ -60,22 +77,8 @@ const GroupStack = createStackNavigator(
     navigationOptions: ({ navigation }) => ({
       title: 'Groups',
       headerTintColor: '#fff',
-      headerTitleStyle: {
-        fontFamily: 'EurostileRegular',
-        fontWeight: '200',
-        fontSize: 24,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        textAlign: 'center',
-        alignSelf: 'center',
-        flex: 1,
-      },
-      headerBackground: (
-        <LinearGradient
-          colors={['#F52828', '#F76B1C']}
-          style={{ flex: 1, width: '100%' }}
-        />
-      ),
+      headerTitleStyle: {},
+      headerBackground,
       headerLeft: (
         <HeaderButtons left={true} HeaderButtonComponent={MaterialHeaderButton}>
           <Item
@@ -109,22 +112,8 @@ const ConnectionsStack = createStackNavigator(
     navigationOptions: ({ navigation }) => ({
       title: 'Groups',
       headerTintColor: '#fff',
-      headerTitleStyle: {
-        fontFamily: 'EurostileRegular',
-        fontWeight: '200',
-        fontSize: 24,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        textAlign: 'center',
-        alignSelf: 'center',
-        flex: 1,
-      },
-      headerBackground: (
-        <LinearGradient
-          colors={['#F52828', '#F76B1C']}
-          style={{ flex: 1, width: '100%' }}
-        />
-      ),
+      headerTitleStyle,
+      headerBackground,
       headerLeft: (
         <HeaderButtons left={true} HeaderButtonComponent={MaterialHeaderButton}>
           <Item
@@ -145,9 +134,6 @@ const NewConnectStack = createStackNavigator(
     NewConnectMain: {
       screen: NewConnectionScreen,
     },
-    RtcAnswer: {
-      screen: RtcAnswerScreen,
-    },
     ConnectSuccess: {
       screen: SuccessScreen,
     },
@@ -162,22 +148,8 @@ const NewConnectStack = createStackNavigator(
     navigationOptions: ({ navigation }) => ({
       title: 'Groups',
       headerTintColor: '#fff',
-      headerTitleStyle: {
-        fontFamily: 'EurostileRegular',
-        fontWeight: '200',
-        fontSize: 24,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        textAlign: 'center',
-        alignSelf: 'center',
-        flex: 1,
-      },
-      headerBackground: (
-        <LinearGradient
-          colors={['#F52828', '#F76B1C']}
-          style={{ flex: 1, width: '100%' }}
-        />
-      ),
+      headerTitleStyle,
+      headerBackground,
       headerLeft: (
         <HeaderButtons left={true} HeaderButtonComponent={MaterialHeaderButton}>
           <Item
@@ -223,22 +195,8 @@ const AppStack = createStackNavigator(
     navigationOptions: {
       title: 'Groups',
       headerTintColor: '#fff',
-      headerTitleStyle: {
-        fontFamily: 'EurostileRegular',
-        fontWeight: '200',
-        fontSize: 24,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        textAlign: 'center',
-        alignSelf: 'center',
-        flex: 1,
-      },
-      headerBackground: (
-        <LinearGradient
-          colors={['#F52828', '#F76B1C']}
-          style={{ flex: 1, width: '100%' }}
-        />
-      ),
+      headerTitleStyle,
+      headerBackground,
     },
   },
 );
@@ -257,23 +215,9 @@ const OnboardingStack = createStackNavigator(
     navigationOptions: {
       title: 'BrightID',
       headerTintColor: '#fff',
-      headerTitleStyle: {
-        fontFamily: 'EurostileRegular',
-        fontWeight: '200',
-        fontSize: 24,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        textAlign: 'center',
-        alignSelf: 'center',
-        flex: 1,
-      },
+      headerTitleStyle,
       headerTransparent: true,
-      headerBackground: (
-        <LinearGradient
-          colors={['#F52828', '#F76B1C']}
-          style={{ flex: 1, width: '100%' }}
-        />
-      ),
+      headerBackground,
     },
   },
 );

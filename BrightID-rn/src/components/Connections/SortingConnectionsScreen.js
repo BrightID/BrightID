@@ -21,6 +21,8 @@ import {
   types,
 } from './sortingUtility';
 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 /**
  * Connection screen of BrightID
  * Displays a search input and list of Connection Cards
@@ -51,6 +53,61 @@ class SortingConnectionsScreen extends React.Component<Props> {
     ),
   });
 
+  renderCaret = () => {
+    const { connectionsSort } = this.props;
+    switch (connectionsSort) {
+      case types.byDateAddedAscending:
+      case types.byTrustScoreAscending:
+      case types.byNameAscending:
+        return (
+          <MaterialCommunityIcons size={26} name="chevron-up" color="#4990e2" />
+        );
+      case types.byDateAddedDescending:
+      case types.byTrustScoreDescending:
+      case types.byNameDescending:
+        return (
+          <MaterialCommunityIcons
+            size={26}
+            name="chevron-down"
+            color="#4990e2"
+          />
+        );
+      default:
+        return (
+          <MaterialCommunityIcons size={26} name="chevron-up" color="#4990e2" />
+        );
+    }
+  };
+
+  sortByName = () => {
+    const { connectionsSort } = this.props;
+    return (
+      connectionsSort === types.byNameAscending ||
+      connectionsSort === types.byNameDescending
+    );
+  };
+
+  sortByDateAdded = () => {
+    const { connectionsSort } = this.props;
+    return (
+      connectionsSort === types.byDateAddedAscending ||
+      connectionsSort === types.byDateAddedDescending
+    );
+  };
+
+  sortByTrustScore = () => {
+    const { connectionsSort } = this.props;
+    return (
+      connectionsSort === types.byTrustScoreAscending ||
+      connectionsSort === types.byTrustScoreDescending
+    );
+  };
+
+  selectedStyle = () => ({
+    ...styles.sortingOption,
+    ...styles.selected,
+  });
+
   render() {
     const { dispatch, connectionsSort } = this.props;
     return (
@@ -61,58 +118,53 @@ class SortingConnectionsScreen extends React.Component<Props> {
         </View>
         <View style={styles.optionsContainer}>
           <TouchableOpacity
-            style={{ ...styles.sortingOption }}
+            style={
+              this.sortByDateAdded()
+                ? this.selectedStyle()
+                : styles.sortingOption
+            }
             onPress={() => {
-              dispatch(sortByNameAscending());
+              if (connectionsSort !== types.byDateAddedDescending) {
+                dispatch(sortByDateAddedDescending());
+              } else {
+                dispatch(sortByDateAddedAscending());
+              }
             }}
           >
-            <Text style={styles.sortingText}>Sort by name ascending</Text>
+            <Text style={styles.sortingText}>Sort by date added </Text>
+            {this.sortByDateAdded() ? this.renderCaret() : <View />}
           </TouchableOpacity>
           <TouchableOpacity
-            style={{ ...styles.sortingOption }}
+            style={
+              this.sortByName() ? this.selectedStyle() : styles.sortingOption
+            }
             onPress={() => {
-              dispatch(sortByNameDescending());
+              if (connectionsSort !== types.byNameDescending) {
+                dispatch(sortByNameDescending());
+              } else {
+                dispatch(sortByNameAscending());
+              }
             }}
           >
-            <Text style={styles.sortingText}>Sort by name descending</Text>
+            <Text style={styles.sortingText}>Sort by name </Text>
+            {this.sortByName() ? this.renderCaret() : <View />}
           </TouchableOpacity>
           <TouchableOpacity
-            style={{ ...styles.sortingOption }}
+            style={
+              this.sortByTrustScore()
+                ? this.selectedStyle()
+                : styles.sortingOption
+            }
             onPress={() => {
-              dispatch(sortByDateAddedAscending());
+              if (connectionsSort !== types.byTrustScoreDescending) {
+                dispatch(sortByTrustScoreDescending());
+              } else {
+                dispatch(sortByTrustScoreAscending());
+              }
             }}
           >
-            <Text style={styles.sortingText}>Sort by date added ascending</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ ...styles.sortingOption }}
-            onPress={() => {
-              dispatch(sortByDateAddedDescending());
-            }}
-          >
-            <Text style={styles.sortingText}>
-              Sort by date added descending
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ ...styles.sortingOption }}
-            onPress={() => {
-              dispatch(sortByTrustScoreAscending());
-            }}
-          >
-            <Text style={styles.sortingText}>
-              Sort by trust score ascending
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ ...styles.sortingOption }}
-            onPress={() => {
-              dispatch(sortByTrustScoreDescending());
-            }}
-          >
-            <Text style={styles.sortingText}>
-              Sort by trust score descending
-            </Text>
+            <Text style={styles.sortingText}>Sort by trust score </Text>
+            {this.sortByTrustScore() ? this.renderCaret() : <View />}
           </TouchableOpacity>
         </View>
       </View>
@@ -132,9 +184,10 @@ const styles = StyleSheet.create({
     width: '96.7%',
   },
   sortingOption: {
-    padding: 33,
+    marginTop: 23,
+    padding: 10,
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
     borderRadius: 5,
@@ -174,7 +227,9 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: 'center',
   },
-  headerSave: {},
+  headerSave: {
+    padding: 12,
+  },
   headerSaveText: {
     fontFamily: 'ApexNew-Medium',
     fontSize: 18,
