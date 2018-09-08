@@ -62,9 +62,7 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
         previewAvatar,
         previewTrustScore,
         previewTimestamp,
-        connectPublicKey,
       } = this.props;
-      console.log(`connect public key ${connectPublicKey}`);
       // TODO formalize spec for this
       // create a new connection object
       const connection = {

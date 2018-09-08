@@ -21,6 +21,7 @@ import { resetWebrtc } from '../../actions';
 type Props = {
   navigation: { navigate: Function },
   dispatch: Function,
+  previewPublicKey: Uint8Array,
 };
 
 class NewConnectionScreen extends React.Component<Props> {
