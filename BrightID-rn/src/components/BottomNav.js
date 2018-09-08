@@ -27,7 +27,9 @@ export default class BottomNav extends React.Component<Props> {
     return (
       <View style={styles.container}>
         <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('Home')}
+          onPress={() => {
+            this.props.navigation.navigate('Home');
+          }}
           accessible={true}
           accessibilityLabel="Home"
         >
@@ -37,7 +39,9 @@ export default class BottomNav extends React.Component<Props> {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('Connections')}
+          onPress={() => {
+            this.props.navigation.navigate('Connections');
+          }}
           accessible={true}
           accessibilityLabel="Connections"
         >
@@ -47,7 +51,9 @@ export default class BottomNav extends React.Component<Props> {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('Groups')}
+          onPress={() => {
+            this.props.navigation.navigate('Groups');
+          }}
           accessible={true}
           accessibilityLabel="Groups"
         >

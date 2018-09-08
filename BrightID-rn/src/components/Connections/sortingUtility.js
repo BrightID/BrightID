@@ -57,3 +57,29 @@ export const sortByDateAddedDescending = () => (dispatch, getState) => {
   dispatch(setConnections(list));
   dispatch(setConnectionsSort(types.byDateAddedDescending));
 };
+
+export const defaultSort = () => (dispatch, getState) => {
+  const { connectionsSort } = getState().main;
+  switch (connectionsSort) {
+    case types.byNameAscending:
+      dispatch(sortByNameAscending());
+      break;
+    case types.byNameDescending:
+      dispatch(sortByNameDescending());
+      break;
+    case types.byDateAddedAscending:
+      dispatch(sortByDateAddedAscending());
+      break;
+    case types.byDateAddedDescending:
+      dispatch(sortByDateAddedDescending());
+      break;
+    case types.byTrustScoreAscending:
+      dispatch(sortByTrustScoreAscending());
+      break;
+    case types.byTrustScoreDescending:
+      dispatch(sortByTrustScoreDescending());
+      break;
+    default:
+      return null;
+  }
+};

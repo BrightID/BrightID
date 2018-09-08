@@ -24,6 +24,7 @@ import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
 import { removeConnection, setConnections } from '../../actions';
 import { addConnection } from '../../actions/fakeContact';
+import { defaultSort } from './sortingUtility';
 
 /**
  * Connection screen of BrightID
@@ -105,6 +106,8 @@ class ConnectionsScreen extends React.Component<Props> {
       const connections = storageValues.map((val) => JSON.parse(val[1]));
       // update redux store
       dispatch(setConnections(connections));
+      // sort connections
+      dispatch(defaultSort());
     } catch (err) {
       console.log(err);
     }

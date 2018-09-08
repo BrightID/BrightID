@@ -254,11 +254,9 @@ class WebRTCLogic extends React.Component<Props> {
       }
       // update ice servers
       if (arbiter.USERA.ICE_CANDIDATE.length > 0) {
-        await Promise.all(
-          arbiter.USERA.ICE_CANDIDATE.map((candidate) =>
-            this.connection.addIceCandidate(new RTCIceCandidate(candidate)),
-          ),
-        );
+        arbiter.USERA.ICE_CANDIDATE.forEach((candidate) => {
+          this.setIceCandidate(candidate);
+        });
       }
     } catch (err) {
       // we should attempt to restart webrtc here
