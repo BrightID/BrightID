@@ -11,7 +11,7 @@ import {
 } from './index';
 
 export const addConnection = () => (dispatch) => {
-  const { publicKey } = nacl.sign.keyPair();
+  const { publicKey } = () => nacl.sign.keyPair();
   const timestamp = Date.now();
   const trustScore = Math.random() * 49.5 + 50.5;
   const nameornym = pokemon.random();

@@ -1,7 +1,7 @@
 // @flow
 
 import nacl from 'tweetnacl';
-import { mainReducer, initialState } from '../index';
+import { mainReducer, initialState } from '../main';
 import {
   USER_TRUST_SCORE,
   GROUPS_COUNT,
@@ -9,9 +9,6 @@ import {
   UPDATE_CONNECTIONS,
   UPDATE_USER_DATA,
   REMOVE_USER_DATA,
-  USER_AVATAR,
-  REFRESH_NEARBY_PEOPLE,
-  PUBLICKEY2,
 } from '../../actions';
 
 describe('main reducer', () => {
@@ -83,15 +80,6 @@ describe('main reducer', () => {
         secretKey: new Uint8Array(64),
         name: 'Test User',
         userAvatar: 'todo...',
-      }),
-    ).toMatchSnapshot();
-  });
-
-  test('should set PUBLICKEY2', () => {
-    expect(
-      mainReducer(undefined, {
-        type: PUBLICKEY2,
-        publicKey2: [],
       }),
     ).toMatchSnapshot();
   });
