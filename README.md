@@ -1,6 +1,7 @@
 <img height="200px" src="images/brightid%20final-01.svg"/>
 
 [🌐 www.brightid.org](http://www.brightid.org)
+
 [💬 Join our active community on decstack](https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh) channel: BrightID
 
 
