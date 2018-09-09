@@ -25,6 +25,7 @@ import ConnectionCard from './ConnectionCard';
 import { removeConnection, setConnections } from '../../actions';
 import { addConnection } from '../../actions/fakeContact';
 import { defaultSort } from './sortingUtility';
+import { objToUint8 } from '../../utils/uint8';
 
 /**
  * Connection screen of BrightID
@@ -101,9 +102,14 @@ class ConnectionsScreen extends React.Component<Props> {
        */
 
       const allKeys = await AsyncStorage.getAllKeys();
+      console.log(allKeys);
       const connectionKeys = allKeys.filter((val) => val !== 'userData');
       const storageValues = await AsyncStorage.multiGet(connectionKeys);
-      const connections = storageValues.map((val) => JSON.parse(val[1]));
+      let connections = storageValues.map((val) => JSON.parse(val[1]));
+      connections = connections.map((val) => {
+        val.publicKey = objToUint8(val.publicKey);
+        return val;
+      });
       // update redux store
       dispatch(setConnections(connections));
       // sort connections

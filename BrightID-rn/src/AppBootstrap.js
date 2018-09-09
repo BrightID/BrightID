@@ -11,6 +11,7 @@ import {
 import Spinner from 'react-native-spinkit';
 import store from './store';
 import { setUpDefault } from './actions/setUpDefault';
+import { objToUint8 } from './utils/uint8';
 
 type Props = {
   navigation: { navigate: Function },
@@ -36,8 +37,8 @@ export default class AppBootstrap extends React.Component<Props> {
       if (userData !== null) {
         userData = JSON.parse(userData);
         // convert public / secret keys to Uint8Array
-        userData.publicKey = new Uint8Array(Object.values(userData.publicKey));
-        userData.secretKey = new Uint8Array(Object.values(userData.secretKey));
+        userData.publicKey = objToUint8(userData.publicKey);
+        userData.secretKey = objToUint8(userData.secretKey);
         // update redux store
         await store.dispatch(setUpDefault(userData));
       } else {

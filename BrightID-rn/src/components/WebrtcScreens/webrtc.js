@@ -22,7 +22,7 @@ import {
 } from '../../actions';
 
 import fragment from '../../utils/fragment';
-
+import { objToUint8 } from '../../utils/uint8';
 /**
  * constants
  * ===================
@@ -75,7 +75,7 @@ export const handleRecievedMessage = (
       if (msg && msg.publicKey) {
         dispatch(
           // convert public key to Uint8Array
-          setConnectPublicKey(new Uint8Array(Object.values(msg.publicKey))),
+          setConnectPublicKey(objToUint8(msg.publicKey)),
         );
         // send recieve message
         channel.send(JSON.stringify({ msg: confirmation.publicKey }));

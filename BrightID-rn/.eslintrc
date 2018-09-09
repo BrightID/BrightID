@@ -41,6 +41,7 @@
     "import/no-named-as-default": "off",
     "prefer-const": "off",
     "no-restricted-syntax": "warn",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "no-param-reassign": "off"
   }
 }
