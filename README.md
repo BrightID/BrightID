@@ -1,8 +1,8 @@
 <img height="150px" src="images/brightid%20final-01.svg"/>
 
-[💬 Join our active community on decstack](https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh) channel: BrightID
+[🌐 www.brightid.org](http://www.brightid.org) &nbsp; &nbsp; &nbsp; &nbsp; [💬 Join our active community on decstack](https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh) channel: BrightID
 
-[🌐 www.brightid.org](http://www.brightid.org)
+
 
 ## A Personal Stamp of Uniqueness
 
