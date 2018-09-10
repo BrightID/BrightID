@@ -103,7 +103,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         manifestPlaceholders = [HOCKEYAPP_APP_ID: "fe3b000696104611ab939693923be864"]
         versionCode 1
-        versionName "1.7"
+        versionName "1.8"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

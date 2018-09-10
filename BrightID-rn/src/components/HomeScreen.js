@@ -119,6 +119,11 @@ export class HomeScreen extends React.Component<Props> {
 
   componentDidMount() {
     this.getConnectionsCount();
+    console.log('HomeScreen Mounted');
+  }
+
+  componentWillUnmount() {
+    console.log('Homescreen unmounting');
   }
 
   getConnectionsCount = async () => {

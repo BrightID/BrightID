@@ -47,6 +47,11 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
     const { dispatch } = this.props;
     // transfer connection props to preview
     dispatch(setPreview());
+    console.log('Preview Connection Screen Mounting');
+  }
+
+  componentWillUnmount() {
+    console.log('Preview Connection Screen Unmounting');
   }
 
   addNewConnection = async () => {

@@ -89,6 +89,11 @@ class ConnectionsScreen extends React.Component<Props> {
 
   componentDidMount() {
     this.getConnections();
+    console.log('Connections Screen Mounting');
+  }
+
+  componentWillUnmount() {
+    console.log('Connections Screen Unmounting');
   }
 
   getConnections = async () => {

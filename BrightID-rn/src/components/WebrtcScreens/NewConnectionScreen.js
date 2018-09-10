@@ -35,6 +35,14 @@ class NewConnectionScreen extends React.Component<Props> {
     rtcOn: true,
   };
 
+  componentDidMount() {
+    console.log('New Connections Screen Mounting');
+  }
+
+  componentWillUnmount() {
+    console.log('New Connection Screen Unmounting');
+  }
+
   resetQr = () => {
     // unmount / mount MyCodeScreen
     this.setState({ display: '' });

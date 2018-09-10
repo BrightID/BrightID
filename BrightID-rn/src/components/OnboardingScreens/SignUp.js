@@ -78,6 +78,14 @@ class SignUp extends React.Component<Props, State> {
     };
   }
 
+  componentDidMount() {
+    console.log('Sign up Screen Mounting');
+  }
+
+  componentWillUnmount() {
+    console.log('Sign upScreen Unmounting');
+  }
+
   getAvatarPhoto = async () => {
     // for full documentation on the Image Picker api
     // see https://github.com/react-community/react-native-image-picker

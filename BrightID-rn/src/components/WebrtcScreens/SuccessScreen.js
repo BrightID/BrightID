@@ -36,7 +36,13 @@ class SuccessScreen extends React.Component<Props, State> {
     header: null,
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    console.log('Success Screen Mounting');
+  }
+
+  componentWillUnmount() {
+    console.log('Success Screen Unmounting');
+  }
 
   render() {
     return (

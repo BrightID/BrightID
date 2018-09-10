@@ -57,11 +57,14 @@ class Onboard extends React.Component<Props> {
         winWidth: e.window.width,
       });
     });
+
+    console.log('Onboarding Screen Mounting');
   }
 
   componentWillUnmount() {
     // remove event listener
     Dimensions.removeEventListener('change');
+    console.log('Onboarding Screen Unmounting');
   }
 
   renderItem = ({ item, index }) => (
