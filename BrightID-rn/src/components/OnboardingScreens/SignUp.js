@@ -13,7 +13,7 @@ import {
   View,
 } from 'react-native';
 import nacl from 'tweetnacl';
-import ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import HeaderButtons, {
@@ -86,15 +86,18 @@ class SignUp extends React.Component<Props, State> {
     console.log('Sign upScreen Unmounting');
   }
 
-  getAvatarPhoto = async () => {
+  getAvatarPhoto = () => {
     // for full documentation on the Image Picker api
     // see https://github.com/react-community/react-native-image-picker
 
     const options = {
       title: 'Select Avatar',
+      cropping: true,
+      width: 300,
+      height: 300,
+      includeBase64: true,
+      compressImageQuality: 0.2,
       mediaType: 'photo',
-      noData: false,
-      allowsEditing: true,
     };
     // loading UI to account for the delay after picking an image
     setTimeout(
@@ -105,37 +108,19 @@ class SignUp extends React.Component<Props, State> {
       1000,
     );
 
-    ImagePicker.showImagePicker(options, (response) => {
-      if (response.didCancel) {
-        setTimeout(
-          () =>
-            this.setState({
-              imagePicking: false,
-            }),
-          1001,
-        );
-      } else if (response.error) {
-        setTimeout(
-          () =>
-            this.setState({
-              imagePicking: false,
-            }),
-          1001,
-        );
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton === 'defaultAvatar') {
-        this.setState({
-          userAvatar: 'https://commons.wikimedia.org/wiki/File:PICA.jpg',
-        });
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        const imageData = { uri: `data:image/jpeg;base64,${response.data}` };
-
-        this.setState({
-          userAvatar: imageData,
-          imagePicking: false,
-        });
-      }
+    ImagePicker.openPicker(options).then((image) => {
+      const imageData = { uri: `data:image/jpeg;base64,${image.data}` };
+      this.setState({
+        userAvatar: imageData,
+        imagePicking: false,
+      });
+      setTimeout(
+        () =>
+          this.setState({
+            imagePicking: false,
+          }),
+        1001,
+      );
     });
   };
 
