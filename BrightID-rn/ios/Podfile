@@ -30,7 +30,7 @@ target 'BrightID' do
 
  # remove React target so that project will archive
 
-  pod 'react-native-spinkit', :path => '../node_modules/react-native-spinkit'
+ # pod 'react-native-spinkit', :path => '../node_modules/react-native-spinkit'
 
   post_install do |installer|
     installer.pods_project.targets.each do |target|
@@ -41,4 +41,3 @@ target 'BrightID' do
   end
 
 end
-
