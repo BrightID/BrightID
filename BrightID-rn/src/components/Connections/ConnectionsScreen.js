@@ -88,8 +88,8 @@ class ConnectionsScreen extends React.Component<Props> {
       console.log(allKeys);
       const connectionKeys = allKeys.filter((val) => val !== 'userData');
       const storageValues = await AsyncStorage.multiGet(connectionKeys);
-      let connections = storageValues.map((val) => JSON.parse(val[1]));
-      connections = connections.map((val) => {
+      const connectionValues = storageValues.map((val) => JSON.parse(val[1]));
+      const connections = connectionValues.map((val) => {
         val.publicKey = objToUint8(val.publicKey);
         return val;
       });
@@ -105,11 +105,12 @@ class ConnectionsScreen extends React.Component<Props> {
   handleUserOptions = (publicKey) => () => {
     const { connections } = this.props;
     const { nameornym } = connections.find(
-      (item) => item.publicKey.toString() === publicKey.toString(),
+      (item) => JSON.stringify(item.publicKey) === JSON.stringify(publicKey),
     );
+
     Alert.alert(
-      'Delete connection',
-      `Are you sure you want to remove ${nameornym} from your list of connections? Your decision is irreversable.`,
+      `Delete Connection`,
+      `Are you sure you want to remove ${nameornym} from your list of connections?`,
       [
         {
           text: 'Cancel',
@@ -128,7 +129,7 @@ class ConnectionsScreen extends React.Component<Props> {
       // update redux store
       dispatch(removeConnection(publicKey));
       // remove connection from async storage
-      await AsyncStorage.removeItem(publicKey.toString());
+      await AsyncStorage.removeItem(JSON.stringify(publicKey));
     } catch (err) {
       console.log(err);
     }
@@ -167,7 +168,9 @@ class ConnectionsScreen extends React.Component<Props> {
         <FlatList
           style={styles.connectionsContainer}
           data={this.filterConnections()}
-          keyExtractor={({ publicKey }, index) => publicKey.toString() + index}
+          keyExtractor={({ publicKey }, index) =>
+            JSON.stringify(publicKey) + index
+          }
           renderItem={this.renderConnection}
         />
       );
