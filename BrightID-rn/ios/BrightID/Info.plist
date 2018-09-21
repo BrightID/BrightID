@@ -77,6 +77,10 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>ApexNew-Book.otf</string>
+		<string>ApexNew-Light.otf</string>
+		<string>ApexNew-Medium.otf</string>
+		<string>EurostileRegular.ttf</string>
 	</array>
 </dict>
 </plist>

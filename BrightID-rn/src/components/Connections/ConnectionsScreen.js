@@ -17,15 +17,13 @@ import HeaderButtons, {
 } from 'react-navigation-header-buttons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
-
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import store from '../../store';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
 import { removeConnection, setConnections } from '../../actions';
-import { addConnection } from '../../actions/fakeContact';
 import { defaultSort } from './sortingUtility';
 import { objToUint8 } from '../../utils/uint8';
+import { createNewConnection } from './createNewConnection';
 
 /**
  * Connection screen of BrightID
@@ -61,27 +59,7 @@ class ConnectionsScreen extends React.Component<Props> {
         <Item
           title="options"
           iconName="dots-horizontal"
-          onPress={() => {
-            Alert.alert(
-              'New Connection',
-              'Would you like simulate adding a new connection?',
-              [
-                {
-                  text: 'Cancel',
-                  onPress: () => console.log('Cancel Pressed'),
-                  style: 'cancel',
-                },
-                {
-                  text: 'Sure',
-                  onPress: () => {
-                    store.dispatch(addConnection());
-                    navigation.navigate('PreviewConnection');
-                  },
-                },
-              ],
-              { cancelable: true },
-            );
-          }}
+          onPress={createNewConnection(navigation)}
         />
       </HeaderButtons>
     ),

@@ -15,6 +15,7 @@
     "jest": true
   },
   "rules": {
+    "no-unused-vars": "error",
     "no-console": "off",
     "arrow-parens": "off",
     "global-require": "off",
@@ -36,7 +37,6 @@
     "consistent-return": "off",
     "no-alert": "off",
     "no-else-return": "off",
-    "no-unused-vars": "warn",
     "no-shadow": "warn",
     "import/no-named-as-default": "off",
     "prefer-const": "off",
