@@ -108,20 +108,31 @@ class SignUp extends React.Component<Props, State> {
       1000,
     );
 
-    ImagePicker.openPicker(options).then((image) => {
-      const imageData = { uri: `data:image/jpeg;base64,${image.data}` };
-      this.setState({
-        userAvatar: imageData,
-        imagePicking: false,
+    ImagePicker.openPicker(options)
+      .then((image) => {
+        const imageData = { uri: `data:image/jpeg;base64,${image.data}` };
+        this.setState({
+          userAvatar: imageData,
+          imagePicking: false,
+        });
+        setTimeout(
+          () =>
+            this.setState({
+              imagePicking: false,
+            }),
+          1001,
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+        setTimeout(
+          () =>
+            this.setState({
+              imagePicking: false,
+            }),
+          1001,
+        );
       });
-      setTimeout(
-        () =>
-          this.setState({
-            imagePicking: false,
-          }),
-        1001,
-      );
-    });
   };
 
   handleBrightIdCreation = async () => {

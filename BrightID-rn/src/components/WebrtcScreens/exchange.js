@@ -23,7 +23,7 @@ export const generateMessage = async () => (
 
   // this generates the message
   const message = strToUint8Array(
-    publicKey.toString() + publicKey2.toString() + timestamp,
+    JSON.stringify(publicKey) + JSON.stringify(publicKey2) + timestamp,
   );
 
   // console.log(publicKey.toString());

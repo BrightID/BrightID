@@ -12,6 +12,7 @@ target 'BrightID' do
     'CxxBridge', # Include this for RN >= 0.47
     'DevSupport', # Include this to enable In-App Devmenu if RN >= 0.43
     'RCTText',
+    'RCTImage',
     'RCTNetwork',
     'RCTWebSocket', # Needed for debugging
     'RCTAnimation', # Needed for FlatList and animations running on native UI thread
@@ -26,13 +27,14 @@ target 'BrightID' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
  
   # React Native Webrtc
-  pod 'react-native-webrtc', :path => '../node_modules/react-native-webrtc'
 
  # remove React target so that project will archive
 
- # pod 'react-native-spinkit', :path => '../node_modules/react-native-spinkit'
+  # pod 'react-native-spinkit', :path => '../node_modules/react-native-spinkit'
 
-  pod 'react-native-randombytes', :path => '../node_modules/react-native-randombytes'
+  # pod 'react-native-randombytes', :path => '../node_modules/react-native-randombytes'
+
+  # pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
   post_install do |installer|
     installer.pods_project.targets.each do |target|

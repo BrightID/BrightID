@@ -9,7 +9,7 @@ export const addSampleConnections = async () => {
   try {
     // save each connection with their public key as the async storage key
     const arrayToSave = sampleConnections.map((val) => [
-      val.publicKey.toString(),
+      JSON.stringify(val.publicKey),
       JSON.stringify(val),
     ]);
     await AsyncStorage.multiSet(arrayToSave);

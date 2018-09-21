@@ -71,7 +71,7 @@ class NewGroupScreen extends React.Component<Props> {
       // update redux store
       dispatch(removeConnection(publicKey));
       // remove connection from async storage
-      await AsyncStorage.removeItem(publicKey.toString());
+      await AsyncStorage.removeItem(JSON.stringify(publicKey));
     } catch (err) {
       console.log(err);
     }
@@ -113,7 +113,9 @@ class NewGroupScreen extends React.Component<Props> {
         <FlatList
           style={styles.connectionsContainer}
           data={this.filterConnections()}
-          keyExtractor={({ publicKey }, index) => publicKey.toString() + index}
+          keyExtractor={({ publicKey }, index) =>
+            JSON.stringify(publicKey) + index
+          }
           renderItem={this.renderConnection}
         />
       );

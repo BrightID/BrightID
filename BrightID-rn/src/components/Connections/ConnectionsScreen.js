@@ -17,15 +17,13 @@ import HeaderButtons, {
 } from 'react-navigation-header-buttons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
-
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import store from '../../store';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
 import { removeConnection, setConnections } from '../../actions';
-import { addConnection } from '../../actions/fakeContact';
 import { defaultSort } from './sortingUtility';
 import { objToUint8 } from '../../utils/uint8';
+import { createNewConnection } from './createNewConnection';
 
 /**
  * Connection screen of BrightID
@@ -61,27 +59,7 @@ class ConnectionsScreen extends React.Component<Props> {
         <Item
           title="options"
           iconName="dots-horizontal"
-          onPress={() => {
-            Alert.alert(
-              'New Connection',
-              'Would you like simulate adding a new connection?',
-              [
-                {
-                  text: 'Cancel',
-                  onPress: () => console.log('Cancel Pressed'),
-                  style: 'cancel',
-                },
-                {
-                  text: 'Sure',
-                  onPress: () => {
-                    store.dispatch(addConnection());
-                    navigation.navigate('PreviewConnection');
-                  },
-                },
-              ],
-              { cancelable: true },
-            );
-          }}
+          onPress={createNewConnection(navigation)}
         />
       </HeaderButtons>
     ),
@@ -110,8 +88,8 @@ class ConnectionsScreen extends React.Component<Props> {
       console.log(allKeys);
       const connectionKeys = allKeys.filter((val) => val !== 'userData');
       const storageValues = await AsyncStorage.multiGet(connectionKeys);
-      let connections = storageValues.map((val) => JSON.parse(val[1]));
-      connections = connections.map((val) => {
+      const connectionValues = storageValues.map((val) => JSON.parse(val[1]));
+      const connections = connectionValues.map((val) => {
         val.publicKey = objToUint8(val.publicKey);
         return val;
       });
@@ -127,11 +105,12 @@ class ConnectionsScreen extends React.Component<Props> {
   handleUserOptions = (publicKey) => () => {
     const { connections } = this.props;
     const { nameornym } = connections.find(
-      (item) => item.publicKey.toString() === publicKey.toString(),
+      (item) => JSON.stringify(item.publicKey) === JSON.stringify(publicKey),
     );
+
     Alert.alert(
-      'Delete connection',
-      `Are you sure you want to remove ${nameornym} from your list of connections? Your decision is irreversable.`,
+      `Delete Connection`,
+      `Are you sure you want to remove ${nameornym} from your list of connections?`,
       [
         {
           text: 'Cancel',
@@ -150,7 +129,7 @@ class ConnectionsScreen extends React.Component<Props> {
       // update redux store
       dispatch(removeConnection(publicKey));
       // remove connection from async storage
-      await AsyncStorage.removeItem(publicKey.toString());
+      await AsyncStorage.removeItem(JSON.stringify(publicKey));
     } catch (err) {
       console.log(err);
     }
@@ -189,7 +168,9 @@ class ConnectionsScreen extends React.Component<Props> {
         <FlatList
           style={styles.connectionsContainer}
           data={this.filterConnections()}
-          keyExtractor={({ publicKey }, index) => publicKey.toString() + index}
+          keyExtractor={({ publicKey }, index) =>
+            JSON.stringify(publicKey) + index
+          }
           renderItem={this.renderConnection}
         />
       );

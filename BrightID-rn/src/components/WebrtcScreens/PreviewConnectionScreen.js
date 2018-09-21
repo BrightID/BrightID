@@ -79,7 +79,7 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
       };
       // add connection inside of async storage
       await AsyncStorage.setItem(
-        previewPublicKey.toString(),
+        JSON.stringify(previewPublicKey),
         JSON.stringify(connection),
       );
       // reset Preview

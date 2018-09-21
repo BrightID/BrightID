@@ -1,0 +1,22 @@
+{
+  "name": "react-native-spinkit",
+  "version": "1.0.2",
+  "license": "MIT",
+  "homepage": "https://github.com/maxs15/react-native-spinkit",
+  "authors": {
+    "Maxime Mezrahi": "maximemezrahi@gmail.com"
+  },
+  "summary": "A collection of animated loading indicators. React native port of SpinKit.",
+  "source": {
+    "git": "https://github.com/maxs15/react-native-spinkit"
+  },
+  "source_files": "ios/**/*.{h,m}",
+  "platforms": {
+    "ios": "7.0"
+  },
+  "dependencies": {
+    "React": [
+
+    ]
+  }
+}

@@ -125,7 +125,8 @@ export const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         connections: connections.filter(
-          (val) => val.publicKey.toString() !== action.publicKey.toString(),
+          (val) =>
+            JSON.stringify(val.publicKey) !== JSON.stringify(action.publicKey),
         ),
       };
     case UPDATE_USER_DATA:

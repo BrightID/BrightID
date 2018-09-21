@@ -6,10 +6,6 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - React (0.57.0):
-    - React/Core (= 0.57.0)
-  - react-native-webrtc (1.67.1):
-    - React
   - React/Core (0.57.0):
     - yoga (= 0.57.0.React)
   - React/CxxBridge (0.57.0):
@@ -34,6 +30,9 @@ PODS:
     - React/Core
   - React/RCTBlob (0.57.0):
     - React/Core
+  - React/RCTImage (0.57.0):
+    - React/Core
+    - React/RCTNetwork
   - React/RCTNetwork (0.57.0):
     - React/Core
   - React/RCTText (0.57.0):
@@ -48,11 +47,11 @@ DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - react-native-webrtc (from `../node_modules/react-native-webrtc`)
   - React/Core (from `../node_modules/react-native`)
   - React/CxxBridge (from `../node_modules/react-native`)
   - React/DevSupport (from `../node_modules/react-native`)
   - React/RCTAnimation (from `../node_modules/react-native`)
+  - React/RCTImage (from `../node_modules/react-native`)
   - React/RCTNetwork (from `../node_modules/react-native`)
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
@@ -71,8 +70,6 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   React:
     :path: "../node_modules/react-native"
-  react-native-webrtc:
-    :path: "../node_modules/react-native-webrtc"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -82,9 +79,8 @@ SPEC CHECKSUMS:
   Folly: c89ac2d5c6ab169cd7397ef27485c44f35f742c7
   glog: e8acf0ebbf99759d3ff18c86c292a5898282dcde
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
-  react-native-webrtc: 31b6d3f1e3e2ce373aa43fd682b04367250f807d
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: d31cedf5615cfb3a4e08fb0bd17455fb6379d8ce
+PODFILE CHECKSUM: 7d7427899e01808e58309160e0a9c2aae208fce5
 
 COCOAPODS: 1.5.3
