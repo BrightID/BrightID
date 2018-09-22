@@ -27,6 +27,7 @@
     "domain-browser": "^1.2.0",
     "events": "^1.1.1",
     "https-browserify": "0.0.1",
+    "mitt": "^1.1.3",
     "moment": "^2.22.2",
     "path-browserify": "0.0.0",
     "pokemon": "^1.2.3",

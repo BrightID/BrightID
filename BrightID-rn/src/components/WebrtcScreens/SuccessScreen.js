@@ -65,7 +65,7 @@ class SuccessScreen extends React.Component<Props, State> {
           <TouchableOpacity
             onPress={() => {
               const { navigation } = this.props;
-              navigation.navigate('Home');
+              navigation.navigate('Connections');
             }}
             style={styles.confirmButton}
           >
