@@ -90,7 +90,7 @@ export class HomeScreen extends React.Component<Props> {
                     try {
                       navigation.navigate('Onboarding');
                       await AsyncStorage.flushGetRequests();
-                      await AsyncStorage.removeItem('userData');
+                      await AsyncStorage.clear();
                       store.dispatch(removeUserData());
                     } catch (err) {
                       console.log(err);

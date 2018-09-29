@@ -129,8 +129,13 @@ class ConnectionsScreen extends React.Component<Props> {
   removeUser = (publicKey) => async () => {
     try {
       // remove connection from async storage
+      console.log(publicKey);
+      console.log(typeof publicKey);
+      console.log(publicKey instanceof Uint8Array);
+      console.log(publicKey.toString());
+      console.log(JSON.stringify(publicKey));
       await AsyncStorage.removeItem(JSON.stringify(publicKey));
-      emitter.emit('refreshConnections');
+      emitter.emit('refreshConnections', {});
     } catch (err) {
       console.log(err);
     }
