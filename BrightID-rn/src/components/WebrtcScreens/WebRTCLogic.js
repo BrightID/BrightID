@@ -11,7 +11,7 @@ import {
 } from 'react-native-webrtc';
 import logging from '../../utils/logging';
 import channelLogging from '../../utils/channelLogging';
-import { ICE_SERVERS, handleRecievedMessage } from './webrtc';
+import { ICE_SERVERS, handleRecievedMessage } from './actions';
 import {
   update,
   OFFER,

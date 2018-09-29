@@ -53,14 +53,28 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>$(PRODUCT_NAME) does not access your apple music library</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>&gt;$(PRODUCT_NAME) might need to use this in the future </string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>&gt;$(PRODUCT_NAME) does not access your calender</string>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to use your camera</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>$(PRODUCT_NAME) must know where you are at all times in order to verify your identity</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>$(PRODUCT_NAME) does not access your location</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to access to your microphone</string>
+	<key>NSMotionUsageDescription</key>
+	<string>$(PRODUCT_NAME) does not need to access your device's motion</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to save photos to your photo gallery</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like access to your photo gallery</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>$(PRODUCT_NAME) should not access speech recognition</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>

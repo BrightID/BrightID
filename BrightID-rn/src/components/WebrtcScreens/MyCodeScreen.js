@@ -15,7 +15,7 @@ import WebRTCLogic from './WebRTCLogic';
 import { stringByteLength } from '../../utils/encoding';
 import logging from '../../utils/logging';
 import channelLogging from '../../utils/channelLogging';
-import { ICE_SERVERS, handleRecievedMessage } from './webrtc';
+import { ICE_SERVERS, handleRecievedMessage } from './actions';
 
 import {
   update,
@@ -134,14 +134,14 @@ class MyCodeScreen extends React.Component<Props, State> {
     }
   };
 
-  renderWebRTCLogic = () => {
-    const { rtcId, rtcOn, hangUp, navigation } = this.props;
-    if (rtcId && rtcOn) {
-      return (
-        <WebRTCLogic user="UserA" hangUp={hangUp} navigation={navigation} />
-      );
-    }
-  };
+  // renderWebRTCLogic = () => {
+  //   const { rtcId, rtcOn, hangUp, navigation } = this.props;
+  //   if (rtcId && rtcOn) {
+  //     return (
+  //       <WebRTCLogic user="UserA" hangUp={hangUp} navigation={navigation} />
+  //     );
+  //   }
+  // };
 
   render() {
     const { userAvatar, nameornym } = this.props;
@@ -170,7 +170,7 @@ class MyCodeScreen extends React.Component<Props, State> {
         </View>
 
         {this.renderQrCode()}
-        {this.renderWebRTCLogic()}
+        {/* {this.renderWebRTCLogic()} */}
         {/* <TextInput value={this.props.rtcId || 'RTC TOKEN'} editable={true} /> */}
       </View>
     );

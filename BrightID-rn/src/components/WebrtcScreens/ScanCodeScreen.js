@@ -52,7 +52,7 @@ class ScanCodeScreen extends React.Component<Props, State> {
     if (rtcId && rtcOn) {
       return (
         <View style={styles.cameraPreview}>
-          <WebRTCLogic user="UserB" hangUp={hangUp} navigation={navigation} />
+          {/* <WebRTCLogic user="UserB" hangUp={hangUp} navigation={navigation} /> */}
           <Spinner
             style={styles.spinner}
             isVisible={true}

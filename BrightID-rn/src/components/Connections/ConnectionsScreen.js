@@ -24,6 +24,7 @@ import { removeConnection, setConnections } from '../../actions';
 import { defaultSort } from './sortingUtility';
 import { objToUint8 } from '../../utils/uint8';
 import { createNewConnection } from './createNewConnection';
+import emitter from '../../emitter';
 
 /**
  * Connection screen of BrightID
@@ -67,10 +68,12 @@ class ConnectionsScreen extends React.Component<Props> {
 
   componentDidMount() {
     this.getConnections();
+    emitter.on('refreshConnections', this.getConnections);
     console.log('Connections Screen Mounting');
   }
 
   componentWillUnmount() {
+    emitter.off('refreshConnections', this.getConnections);
     console.log('Connections Screen Unmounting');
   }
 
@@ -125,11 +128,14 @@ class ConnectionsScreen extends React.Component<Props> {
 
   removeUser = (publicKey) => async () => {
     try {
-      const { dispatch } = this.props;
-      // update redux store
-      dispatch(removeConnection(publicKey));
       // remove connection from async storage
+      console.log(publicKey);
+      console.log(typeof publicKey);
+      console.log(publicKey instanceof Uint8Array);
+      console.log(publicKey.toString());
+      console.log(JSON.stringify(publicKey));
       await AsyncStorage.removeItem(JSON.stringify(publicKey));
+      emitter.emit('refreshConnections', {});
     } catch (err) {
       console.log(err);
     }

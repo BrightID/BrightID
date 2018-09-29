@@ -16,6 +16,7 @@ import {
   resetPreview,
   setPreview,
 } from '../../actions';
+import emitter from '../../emitter';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -86,6 +87,7 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
       dispatch(resetPreview());
       // clear webrtc data
       dispatch(resetWebrtc());
+      emitter.emit('refreshConnections', {});
     } catch (err) {
       console.log(err);
     }

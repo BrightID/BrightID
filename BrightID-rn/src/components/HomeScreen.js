@@ -23,6 +23,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import BottomNav from './BottomNav';
 import store from '../store';
 import { removeUserData } from '../actions';
+import emitter from '../emitter';
 
 /**
  * Home screen of BrightID
@@ -89,7 +90,7 @@ export class HomeScreen extends React.Component<Props> {
                     try {
                       navigation.navigate('Onboarding');
                       await AsyncStorage.flushGetRequests();
-                      await AsyncStorage.removeItem('userData');
+                      await AsyncStorage.clear();
                       store.dispatch(removeUserData());
                     } catch (err) {
                       console.log(err);
@@ -119,10 +120,19 @@ export class HomeScreen extends React.Component<Props> {
 
   componentDidMount() {
     this.getConnectionsCount();
+    emitter.on('refreshConnections', this.getConnectionsCount);
     console.log('HomeScreen Mounted');
   }
 
+  componentDidUpdate(prevProps) {
+    const { connections } = this.props;
+    if (connections.length !== prevProps.connections.length) {
+      this.setState({ connectionsCount: connections.length });
+    }
+  }
+
   componentWillUnmount() {
+    emitter.off('refreshConnections', this.getConnectionsCount);
     console.log('Homescreen unmounting');
   }
 
