@@ -41,9 +41,25 @@ class ScanCodeScreen extends React.Component<Props, State> {
     // console.log(`type: ${type}`);
     // console.log(`data: ${data}`);
     // set rtc id url into redux store
-    if (data && data.length === 21) {
-      dispatch(setRtcId(data));
-    }
+    // if (data && data.length === 21) {
+    //   dispatch(setRtcId(data));
+    // }
+    Alert.alert(
+      'SCAN RESULTS',
+      `${data}`,
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Sure',
+          onPress: () => console.log('sure pressed'),
+        },
+      ],
+      { cancelable: true },
+    );
   };
 
   renderCameraOrWave = () => {
