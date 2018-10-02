@@ -15,7 +15,7 @@ import WebRTCLogic from './WebRTCLogic';
 import { stringByteLength } from '../../utils/encoding';
 import logging from '../../utils/logging';
 import channelLogging from '../../utils/channelLogging';
-import { ICE_SERVERS, handleRecievedMessage } from './actions';
+import { ICE_SERVERS, handleRecievedMessage, sendAvatar } from './actions';
 
 import {
   update,
@@ -71,7 +71,9 @@ class MyCodeScreen extends React.Component<Props, State> {
     try {
       const { dispatch } = this.props;
       // obtain rtcId from server
-      const rtcId = await dispatch(createRTCId());
+      await dispatch(createRTCId());
+      // send user avatar
+      // await dispatch(sendAvatar());
       // generate qrcode with rtc id
       this.genQrCode();
       //
@@ -108,8 +110,8 @@ class MyCodeScreen extends React.Component<Props, State> {
       return (
         <View style={styles.qrsvgContainer}>
           <Svg
-            height="246"
-            width="246"
+            height="212"
+            width="212"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 33 33"
             shape-rendering="crispEdges"
@@ -147,29 +149,30 @@ class MyCodeScreen extends React.Component<Props, State> {
     const { userAvatar, nameornym } = this.props;
     return (
       <View style={styles.container}>
-        <View style={styles.myCodeInfoContainer}>
-          <Text style={styles.myCodeInfoText}>
-            To make a new connection, you will share your
-          </Text>
-          <Text style={styles.myCodeInfoText}>
-            name, your photo, your trust score
-          </Text>
+        <View style={styles.half}>
+          <View style={styles.myCodeInfoContainer}>
+            <Text style={styles.myCodeInfoText}>
+              To make a new connection, you will share your
+            </Text>
+            <Text style={styles.myCodeInfoText}>
+              name, your photo, your trust score
+            </Text>
+          </View>
+          <View style={styles.userAvatarContainer}>
+            <Image
+              source={userAvatar || require('../../static/default_avatar.jpg')}
+              style={styles.userAvatar}
+              resizeMode="cover"
+              onError={(e) => {
+                console.log(e.error);
+              }}
+              accessible={true}
+              accessibilityLabel="user avatar image"
+            />
+            <Text style={styles.nameornym}>{nameornym}</Text>
+          </View>
         </View>
-        <View style={styles.userAvatarContainer}>
-          <Image
-            source={userAvatar || require('../../static/default_avatar.jpg')}
-            style={styles.userAvatar}
-            resizeMode="cover"
-            onError={(e) => {
-              console.log(e.error);
-            }}
-            accessible={true}
-            accessibilityLabel="user avatar image"
-          />
-          <Text style={styles.nameornym}>{nameornym}</Text>
-        </View>
-
-        {this.renderQrCode()}
+        <View style={styles.half}>{this.renderQrCode()}</View>
         {/* {this.renderWebRTCLogic()} */}
         {/* <TextInput value={this.props.rtcId || 'RTC TOKEN'} editable={true} /> */}
       </View>
@@ -185,6 +188,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'column',
+  },
+  half: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   myCodeInfoContainer: {
     width: '100%',
@@ -231,7 +239,6 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    minHeight: 284,
   },
 });
 
