@@ -1,0 +1,54 @@
+<!doctype html>  
+<html lang="en">  
+    <head>
+
+    </head>
+    <body>
+        <h1>BrightID WS tester</h1>
+
+        Random Public Key:
+        <div id="key_txt"></div>
+
+        <br>
+
+        <div id="signals">
+        </div>
+        
+        <form id="form" id="frm_id">
+            <input placeholder="User B's public key" id="key_id" type="text">
+            <br>
+            <textarea id="data_id" placeholder="Data ..."></textarea>
+            <input type="submit" value="Send">
+        </form>
+        
+        <script src="/jquery/dist/jquery.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+
+        <script>
+            var randomKey = "KEY-"+Math.floor(Math.random() * 1000);
+            $('#key_txt').text(randomKey);
+
+            var socket = io.connect();
+            socket.on('connect', function(data) {
+                socket.emit('join', randomKey);
+            });
+            
+            socket.on('signals', function(data) {
+                $("#signals").append("New Signal: "+data+"<br>");
+                $("#signals").append("Download Link: <a href='/download/"+JSON.parse(data).uuid+"'>"+JSON.parse(data).uuid+"</a><br>");
+            });
+            
+            $('form').submit(function(e){
+                e.preventDefault();
+                var key = $('#key_id').val();
+                var data = $("#data_id").val();
+
+                $.post("/upload", {key: key, data: data}, function(data){
+                    $("#signals").append("/upload response: "+JSON.stringify(data)+"<br>");
+                });
+            });
+        </script>
+        
+    </body>
+</html>
+
