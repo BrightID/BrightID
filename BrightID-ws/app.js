@@ -7,7 +7,6 @@ var config = require("./config/config");
 var bodyParser = require('body-parser');
 const NodeCache = require( "node-cache" );
 const dataCache = new NodeCache(config.node_cache);
-var uuid = require('uuid');
 
 // BodyParser Middleware
 app.use(bodyParser.json());
@@ -26,7 +25,7 @@ app.get('/test', function(req, res,next){
 app.post('/upload', function(req, res, next){
     var data = req.body.data;
     // save data in cache
-    var id = uuid.v4();
+    var id = req.body.uuid;
 
     dataCache.set(id, data, function(err, success){
         if(err){
@@ -36,7 +35,7 @@ app.post('/upload', function(req, res, next){
             signal: 'new_upload',
             uuid: id
         });
-        io.to(req.body.key).emit("signals", signal);
+        io.to(id).emit("signals", signal);
         res.send({success:1});
     });
 });
@@ -51,8 +50,8 @@ app.get("/download/:uuid", function(req, res, next){
 io.on('connection', function(client){
     console.log('Client connected...');
 
-    client.on('join', function(publicKey){
-        client.join(publicKey);
+    client.on('join', function(uuid){
+        client.join(uuid);
     });
 });
 

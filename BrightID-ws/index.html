@@ -6,15 +6,16 @@
     <body>
         <h1>BrightID WS tester</h1>
 
-        Random Public Key:
+        UUID:
         <div id="key_txt"></div>
 
-        <br>
+        <br><br>
 
-        <div id="signals">
+        User A: <br>
+        <div id="signals_a">
         </div>
         
-        <form id="form" id="frm_id">
+        <form id="form_a" id="frm_id">
             <input placeholder="User B's public key" id="key_id" type="text">
             <br>
             <textarea id="data_id" placeholder="Data ..."></textarea>
@@ -24,27 +25,43 @@
         <script src="/jquery/dist/jquery.js"></script>
         <script src="/socket.io/socket.io.js"></script>
 
-        <script>
-            var randomKey = "KEY-"+Math.floor(Math.random() * 1000);
-            $('#key_txt').text(randomKey);
+        User B signals:
+        <div id="signals_b">
+        </div>
 
-            var socket = io.connect();
-            socket.on('connect', function(data) {
-                socket.emit('join', randomKey);
+        <script>
+            var uuid = "74d43d63-f142-4538-9829-0d508a2baa36";
+            $('#key_txt').text(uuid);
+
+            // User A join room UUID+2
+            var socketA = io.connect();
+            socketA.on('connect', function(data) {
+                socketA.emit('join', uuid+"2");
+            });
+
+            // User A join room UUID+2
+            var socketB = io.connect();
+            socketB.on('connect', function(data) {
+                socketB.emit('join', uuid+"1");
+            });            
+            
+            socketA.on('signals', function(data) {
+                $("#signals_a").append("New Signal: "+data+"<br>");
+                $("#signals_a").append("Download Link: <a href='/download/"+JSON.parse(data).uuid+"'>"+JSON.parse(data).uuid+"</a><br>");
             });
             
-            socket.on('signals', function(data) {
-                $("#signals").append("New Signal: "+data+"<br>");
-                $("#signals").append("Download Link: <a href='/download/"+JSON.parse(data).uuid+"'>"+JSON.parse(data).uuid+"</a><br>");
+            socketB.on('signals', function(data) {
+                $("#signals_b").append("New Signal: "+data+"<br>");
+                $("#signals_b").append("Download Link: <a href='/download/"+JSON.parse(data).uuid+"'>"+JSON.parse(data).uuid+"</a><br>");
             });
-            
+
             $('form').submit(function(e){
                 e.preventDefault();
-                var key = $('#key_id').val();
+                var uuid = $('#key_id').val();
                 var data = $("#data_id").val();
 
-                $.post("/upload", {key: key, data: data}, function(data){
-                    $("#signals").append("/upload response: "+JSON.stringify(data)+"<br>");
+                $.post("/upload", {uuid: uuid, data: data}, function(data){
+                    $("#signals_a").append("/upload response: "+JSON.stringify(data)+"<br>");
                 });
             });
         </script>
