@@ -73,7 +73,7 @@ class MyCodeScreen extends React.Component<Props, State> {
       // obtain rtcId from server
       await dispatch(createRTCId());
       // send user avatar
-      // await dispatch(sendAvatar());
+      await dispatch(sendAvatar());
       // generate qrcode with rtc id
       this.genQrCode();
       //
