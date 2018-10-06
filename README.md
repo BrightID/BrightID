@@ -2,10 +2,6 @@
 
 [🌐 www.brightid.org](http://www.brightid.org)
 
-[💬 Join our active community on decstack](https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh) channel: BrightID
-
-
-
 ## A Personal Stamp of Uniqueness
 
 BrightID uses the people you know (a trust graph) to enforce one-account-per-person for important applications like voting and universal basic income.
@@ -48,7 +44,3 @@ This repo is for the BrightID mobile app.
 Other repos
 * [BrightID Node](https://github.com/BrightID/BrightID-Node): A node hosting the brightID social graph
 * [BrightID API](https://github.com/BrightID/BrightID-API): APIs allowing third-party apps to verify users
-
-## Discuss
-
-We have an active community on [Decstack](http://decstack.com/)--Join the conversation at [the Decstack projects team](https://hub.decstack.com/signup_user_complete/?id=wutow3kb6bda5bhptir6aapyfh), channel: https://hub.decstack.com/projects/channels/brightid.
