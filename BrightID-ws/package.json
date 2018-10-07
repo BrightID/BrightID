@@ -4,6 +4,7 @@
   "description": "BrightID socket server",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -14,5 +15,8 @@
     "node-cache": "^4.2.0",
     "socket.io": "^2.1.1",
     "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
   }
 }
