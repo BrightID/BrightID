@@ -6,17 +6,10 @@ import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-spinkit';
-import {
-  RTCPeerConnection,
-  RTCSessionDescription,
-  RTCIceCandidate,
-} from 'react-native-webrtc';
 import WebRTCLogic from './WebRTCLogic';
 import { stringByteLength } from '../../utils/encoding';
-import logging from '../../utils/logging';
-import channelLogging from '../../utils/channelLogging';
 import { ICE_SERVERS, handleRecievedMessage, sendAvatar } from './actions';
-
+import { qrData } from '../../actions/genQrData';
 import {
   update,
   OFFER,
@@ -64,18 +57,14 @@ type State = {
 
 class MyCodeScreen extends React.Component<Props, State> {
   state = {
-    qrsvgd: '',
+    qrsvg: '',
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     try {
       const { dispatch } = this.props;
-      // obtain rtcId from server
-      await dispatch(createRTCId());
-      // send user avatar
-      await dispatch(sendAvatar());
-      // generate qrcode with rtc id
-      this.genQrCode();
+      const data = dispatch(qrData());
+      this.genQrCode(data);
       //
     } catch (err) {
       // we should handle err here in case network is down
@@ -83,41 +72,34 @@ class MyCodeScreen extends React.Component<Props, State> {
     }
   }
 
-  genQrCode = () => {
-    const { rtcId } = this.props;
-    if (rtcId) {
-      qrcode.toString(rtcId, (err, data) => {
-        if (err) throw err;
-        this.parseSVG(data);
-      });
-    }
+  genQrCode = (data) => {
+    qrcode.toString(data, (err, qr) => {
+      if (err) throw err;
+      this.parseSVG(qr);
+    });
   };
 
-  parseSVG = (qrsvg) => {
-    // qrcode gives us a string representation of an svg
-    // we must extract the value of d from this string in order to use it
-    // with react-native-svg
-    //
-    const dinx = qrsvg.lastIndexOf('d');
-    const dpath = qrsvg.substr(dinx);
-    const qrsvgd = dpath.match(/"([^"]+)"/g)[0].split('"')[1];
-    this.setState({ qrsvgd });
+  parseSVG = (qr) => {
+    const dinx = qr.lastIndexOf('d');
+    const dpath = qr.substr(dinx);
+    const qrsvg = dpath.match(/"([^"]+)"/g)[0].split('"')[1];
+    this.setState({ qrsvg });
   };
 
   renderQrCode = () => {
     // render qrcode or spinner while waiting
-    if (this.state.qrsvgd) {
+    if (this.state.qrsvg) {
       return (
         <View style={styles.qrsvgContainer}>
           <Svg
             height="212"
             width="212"
             xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 33 33"
+            viewBox="0 0 57 57"
             shape-rendering="crispEdges"
           >
             <Path fill="#fff" d="M0 0h33v33H0z" />
-            <Path stroke="#000" d={this.state.qrsvgd} />
+            <Path stroke="#000" d={this.state.qrsvg} />
           </Svg>
         </View>
       );
