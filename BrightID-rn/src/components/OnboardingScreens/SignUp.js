@@ -93,10 +93,10 @@ class SignUp extends React.Component<Props, State> {
     const options = {
       title: 'Select Avatar',
       cropping: true,
-      width: 300,
-      height: 300,
+      width: 142,
+      height: 142,
       includeBase64: true,
-      compressImageQuality: 0.2,
+      // compressImageQuality: 0.2,
       mediaType: 'photo',
     };
     // loading UI to account for the delay after picking an image
@@ -110,7 +110,9 @@ class SignUp extends React.Component<Props, State> {
 
     ImagePicker.openPicker(options)
       .then((image) => {
-        const imageData = { uri: `data:image/jpeg;base64,${image.data}` };
+        const imageData = { uri: `data:${image.mime};base64,${image.data}` };
+        console.log(imageData);
+
         this.setState({
           userAvatar: imageData,
           imagePicking: false,

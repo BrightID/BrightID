@@ -76,7 +76,6 @@ class MyCodeScreen extends React.Component<Props, State> {
     qrcode.toString(data, (err, qr) => {
       if (err) throw err;
       this.parseSVG(qr);
-      console.log(qr);
     });
   };
 
