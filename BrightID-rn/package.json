@@ -68,6 +68,7 @@
     "tweetnacl": "https://github.com/BrightID/tweetnacl-js",
     "url": "~0.10.1",
     "util": "~0.10.3",
+    "uuid": "^3.3.2",
     "vm-browserify": "0.0.4"
   },
   "devDependencies": {
