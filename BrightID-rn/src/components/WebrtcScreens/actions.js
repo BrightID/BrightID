@@ -6,7 +6,8 @@
  */
 
 import nacl from 'tweetnacl';
-
+import { post } from 'axios';
+import { URL } from './signalApi';
 import {
   setConnectPublicKey,
   setConnectTimestamp,
@@ -139,6 +140,17 @@ export const createKeypair = () => (dispatch: Function) => {
   const keypair = nacl.box.keyPair();
   dispatch(setBoxKeypair(keypair));
   return keypair;
+};
+
+export const sendAvatar = () => async (
+  dispatch: Function,
+  getState: Function,
+) => {
+  const { userAvatar, rtcId } = getState().main;
+  const { data } = await post(`${URL}/avatar`, {
+    userAvatar,
+    rtcId,
+  });
 };
 
 /**

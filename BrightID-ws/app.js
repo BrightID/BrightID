@@ -1,60 +1,58 @@
 // app.js
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
-var config = require("./config/config");
-var bodyParser = require('body-parser');
-const NodeCache = require( "node-cache" );
+const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+const config = require('./config/config');
+const bodyParser = require('body-parser');
+const NodeCache = require('node-cache');
 const dataCache = new NodeCache(config.node_cache);
 
 // BodyParser Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// use a templating library
 app.use(express.static(__dirname + '/node_modules'));
 
-app.get('/', function(req, res,next){
-    res.send("BrightID socket server");
+app.get('/', function(req, res, next) {
+  res.send('BrightID socket server');
 });
 
-app.get('/test', function(req, res,next){
-	res.sendFile(__dirname + '/index.html');
+app.get('/test', function(req, res, next) {
+  res.sendFile(__dirname + '/index.html');
 });
 
-app.post('/upload', function(req, res, next){
-    var data = req.body.data;
-    // save data in cache
-    var id = req.body.uuid;
+app.post('/upload', function(req, res, next) {
+  const data = req.body.data;
+  // save data in cache
+  const id = req.body.uuid;
 
-    dataCache.set(id, data, function(err, success){
-        if(err){
-            console.log(err);
-        }
-        var signal = JSON.stringify({
-            signal: 'new_upload',
-            uuid: id
-        });
-        io.to(id).emit("signals", signal);
-        res.send({success:1});
-    });
+  dataCache.set(id, data, function(err, success) {
+    if (err) {
+      console.log(err);
+    }
+    io.to(id).emit('upload', 'ready');
+    res.send({ success: 1 });
+  });
 });
 
-app.get("/download/:uuid", function(req, res, next){
-    var data = dataCache.get(req.params.uuid);
-    res.send({
-        data: data || null
-    });
+app.get('/download/:uuid', function(req, res, next) {
+  var data = dataCache.get(req.params.uuid);
+  res.send({
+    data: data || null,
+  });
 });
 
-io.on('connection', function(client){
-    console.log('Client connected...');
+io.on('connection', function(client) {
+  console.log('Client connected...');
 
-    client.on('join', function(uuid){
-        client.join(uuid);
-    });
+  client.on('join', function(uuid) {
+    client.join(uuid);
+    if (dataCache.keys().contains(uuid)) io.to(id).emit('upload', 'ready');
+  });
 });
 
-var port = config.port || 3000;
-console.log("Listening on port: ", port);
+const port = config.port || 3000;
+console.log('Listening on port: ', port);
 server.listen(port);
