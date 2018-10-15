@@ -24,6 +24,7 @@ export const CONNECT_RECIEVED_TRUSTSCORE = 'CONNECT_RECIEVED_TRUSTSCORE';
 export const CONNECT_RECIEVED_NAMEORNYM = 'CONNECT_RECIEVED_NAMEORNYM';
 export const CONNECT_RECIEVED_PUBLICKEY = 'CONNECT_RECIEVED_PUBLICKEY';
 export const CONNECT_RECIEVED_AVATAR = 'CONNECT_RECIEVED_AVATAR';
+export const CONNECT_QR_DATA = 'CONNECT_QR_DATA';
 export const CONNECT_AVATAR = 'CONNECT_AVATAR';
 export const ERROR = 'ERROR';
 export const BOX_KEYPAIR = 'BOX_KEYPAIR';
@@ -197,6 +198,21 @@ export const setBoxKeypair = (keypair: {
 export const setConnectPublicKey = (publicKey: Uint8Array) => ({
   type: CONNECT_PUBLICKEY,
   publicKey,
+});
+
+/**
+ * redux action creator for setting the public key of the user you are currently connecting with via webrtc
+ * @param type CONNECT_PUBLICKEY
+ * @param publicKey public key of new user while adding a new connection
+ */
+
+export const setConnectQrData = (connectQrData: {
+  ipAddress: Array<number>,
+  aesKey: string,
+  uuid: string,
+}) => ({
+  type: CONNECT_QR_DATA,
+  connectQrData,
 });
 
 /**

@@ -93,8 +93,8 @@ class SignUp extends React.Component<Props, State> {
     const options = {
       title: 'Select Avatar',
       cropping: true,
-      width: 142,
-      height: 142,
+      width: 180,
+      height: 180,
       includeBase64: true,
       // compressImageQuality: 0.2,
       mediaType: 'photo',
@@ -111,7 +111,7 @@ class SignUp extends React.Component<Props, State> {
     ImagePicker.openPicker(options)
       .then((image) => {
         const imageData = { uri: `data:${image.mime};base64,${image.data}` };
-        console.log(imageData);
+        console.log(image.mime);
 
         this.setState({
           userAvatar: imageData,
@@ -175,7 +175,17 @@ class SignUp extends React.Component<Props, State> {
     const { inputActive, imagePicking, nameornym, userAvatar } = this.state;
 
     const AddPhotoButton = userAvatar ? (
-      <Image style={styles.avatar} source={userAvatar} />
+      <TouchableOpacity
+        onPress={this.getAvatarPhoto}
+        accessible={true}
+        accessibilityLabel="edit avatar photo"
+      >
+        <Image
+          style={styles.avatar}
+          source={userAvatar}
+          onPress={this.getAvatarPhoto}
+        />
+      </TouchableOpacity>
     ) : (
       <TouchableOpacity
         onPress={this.getAvatarPhoto}
@@ -270,11 +280,20 @@ const styles = StyleSheet.create({
   addPhoto: {
     borderWidth: 1,
     borderColor: '#979797',
-    height: 183,
-    width: 183,
-    borderRadius: 91.5,
+    height: 180,
+    width: 180,
+    borderRadius: 90,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  avatar: {
+    width: 174,
+    height: 174,
+    borderRadius: 87,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
   },
   hidden: {
     display: 'none',
@@ -327,15 +346,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 18,
   },
-  avatar: {
-    width: 160,
-    height: 160,
-    borderRadius: 80,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-  },
+
   cameraIcon: {
     width: 48,
   },
