@@ -1,27 +1,22 @@
 // @flow
 
 import { createCipher, createDecipher } from 'react-native-crypto';
-
-import { randomBytes } from 'react-native-randombytes';
+import { Buffer } from 'buffer';
 
 export const encryptUserData = () => (dispatch, getState) => {
-  const { publicKey, userAvatar, nameornym } = getState().main;
+  const { publicKey, userAvatar, nameornym, connectQrData } = getState().main;
   if (!publicKey || !userAvatar || !nameornym) return;
   const dataObj = {
-    publicKey: Object.values(publicKey).join(),
+    publicKey: Buffer.from(publicKey).toString('base64'),
     userAvatar: userAvatar.uri,
     nameornym,
   };
 
   const dataStr = JSON.stringify(dataObj);
-  let ipAddress = Buffer.from([192, 168, 0, 1]).toString('hex');
-  console.log(ipAddress);
-  ipAddress = Buffer.from(ipAddress, 'hex');
-  console.log([...ipAddress]);
-  const password = randomBytes(18).toString('base64');
-  console.log(password);
-  const cipher = createCipher('aes192', password);
-  const decipher = createDecipher('aes192', password);
+
+  const { aesKey } = connectQrData;
+  const cipher = createCipher('aes192', aesKey);
+  const decipher = createDecipher('aes192', aesKey);
 
   let encrypted = cipher.update(dataStr, 'utf8', 'base64');
   encrypted += cipher.final('base64');

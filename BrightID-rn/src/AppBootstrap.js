@@ -11,9 +11,7 @@ import {
 import Spinner from 'react-native-spinkit';
 import store from './store';
 import { setUpDefault } from './actions/setUpDefault';
-import { encryptUserData } from './actions/encryptData';
-import { objToUint8 } from './utils/uint8';
-import { qrData } from './actions/genQrData';
+import { objToUint8 } from './utils/objToUint8';
 
 type Props = {
   navigation: { navigate: Function },
@@ -26,13 +24,6 @@ export default class AppBootstrap extends React.Component<Props> {
 
   // Fetch the token from storage then navigate to our appropriate place
   bootstrapAsync = async () => {
-    // bootstrap the application
-    // async storage key 'userData' : {
-    // publicKey: Array<number>,
-    // secretKey: Array<number>,
-    // nameornym: String,
-    // userAvatar: String
-    // }
     try {
       // load user data from async storage
       let userData = await AsyncStorage.getItem('userData');
@@ -46,8 +37,6 @@ export default class AppBootstrap extends React.Component<Props> {
       } else {
         await store.dispatch(setUpDefault({}));
       }
-      // store.dispatch(encryptUserData());
-      store.dispatch(qrData());
       // once everything is set up
       this.props.navigation.navigate(userData ? 'App' : 'Onboarding');
     } catch (err) {

@@ -16,13 +16,12 @@ import HeaderButtons, {
   Item,
 } from 'react-navigation-header-buttons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import Feather from 'react-native-vector-icons/Feather';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
-import { removeConnection, setConnections } from '../../actions';
+import { setConnections } from '../../actions';
 import { defaultSort } from './sortingUtility';
-import { objToUint8 } from '../../utils/uint8';
+import { objToUint8 } from '../../utils/objToUint8';
 import { createNewConnection } from './createNewConnection';
 import emitter from '../../emitter';
 
@@ -88,7 +87,6 @@ class ConnectionsScreen extends React.Component<Props> {
        */
 
       const allKeys = await AsyncStorage.getAllKeys();
-      console.log(allKeys);
       const connectionKeys = allKeys.filter((val) => val !== 'userData');
       const storageValues = await AsyncStorage.multiGet(connectionKeys);
       const connectionValues = storageValues.map((val) => JSON.parse(val[1]));
@@ -129,11 +127,6 @@ class ConnectionsScreen extends React.Component<Props> {
   removeUser = (publicKey) => async () => {
     try {
       // remove connection from async storage
-      console.log(publicKey);
-      console.log(typeof publicKey);
-      console.log(publicKey instanceof Uint8Array);
-      console.log(publicKey.toString());
-      console.log(JSON.stringify(publicKey));
       await AsyncStorage.removeItem(JSON.stringify(publicKey));
       emitter.emit('refreshConnections', {});
     } catch (err) {

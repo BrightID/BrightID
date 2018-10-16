@@ -23,7 +23,7 @@ import {
 } from '../../actions';
 
 import fragment from '../../utils/fragment';
-import { objToUint8 } from '../../utils/uint8';
+import { objToUint8 } from '../../utils/objToUint8';
 /**
  * constants
  * ===================

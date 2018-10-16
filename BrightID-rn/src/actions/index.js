@@ -30,6 +30,7 @@ export const ERROR = 'ERROR';
 export const BOX_KEYPAIR = 'BOX_KEYPAIR';
 export const SET_PREVIEW = 'SET_PREVIEW';
 export const RESET_PREVIEW = 'RESET_PREVIEW';
+export const CONNECT_USER_DATA = 'CONNECT_USER_DATA';
 
 /**
  * redux action creator that updates user `trustScore`
@@ -213,6 +214,15 @@ export const setConnectQrData = (connectQrData: {
 }) => ({
   type: CONNECT_QR_DATA,
   connectQrData,
+});
+
+export const setConnectUserData = (connectUserData: {
+  nameornym: string,
+  publicKey: Uint8Array,
+  avatar: string,
+}) => ({
+  type: CONNECT_USER_DATA,
+  connectUserData,
 });
 
 /**

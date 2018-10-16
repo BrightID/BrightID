@@ -22,7 +22,7 @@ import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
 import { removeConnection, setConnections } from '../../actions';
 import { defaultSort } from './sortingUtility';
-import { objToUint8 } from '../../utils/uint8';
+import { objToUint8 } from '../../utils/objToUint8';
 import { createNewConnection } from './createNewConnection';
 import emitter from '../../emitter';
 
