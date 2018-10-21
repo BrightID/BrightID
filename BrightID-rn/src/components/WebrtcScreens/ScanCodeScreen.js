@@ -8,7 +8,7 @@ import { RNCamera } from 'react-native-camera';
 import Spinner from 'react-native-spinkit';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { setRtcId } from '../../actions';
-import WebRTCLogic from './WebRTCLogic';
+import { parseQrData } from '../../actions/parseQrData';
 
 /**
  * Scan code screen of BrightID
@@ -34,6 +34,7 @@ type State = {
 class ScanCodeScreen extends React.Component<Props, State> {
   state = {
     hasCameraPermission: '',
+    scanned: false,
   };
 
   handleBarCodeRead = ({ type, data }) => {
@@ -44,28 +45,15 @@ class ScanCodeScreen extends React.Component<Props, State> {
     // if (data && data.length === 21) {
     //   dispatch(setRtcId(data));
     // }
-    Alert.alert(
-      'SCAN RESULTS',
-      `${data}`,
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {
-          text: 'Sure',
-          onPress: () => console.log('sure pressed'),
-        },
-      ],
-      { cancelable: true },
-    );
+    dispatch(parseQrData(data));
+    this.setState({ scanned: true });
   };
 
   renderCameraOrWave = () => {
     // either camera is showing or webrtc is connecting
     const { rtcId, hangUp, rtcOn, navigation } = this.props;
-    if (rtcId && rtcOn) {
+    const { scanned } = this.state;
+    if (scanned) {
       return (
         <View style={styles.cameraPreview}>
           {/* <WebRTCLogic user="UserB" hangUp={hangUp} navigation={navigation} /> */}
@@ -87,13 +75,11 @@ class ScanCodeScreen extends React.Component<Props, State> {
                 this.textInput = c;
               }}
               onChangeText={(value) => {
-                if (value.trim().length > 20 && value.trim().length < 22) {
-                  this.handleBarCodeRead({
-                    type: 'text-input',
-                    data: value.trim(),
-                  });
-                  this.textInput.blur();
-                }
+                this.handleBarCodeRead({
+                  type: 'text-input',
+                  data: value.trim(),
+                });
+                this.textInput.blur();
               }}
               style={styles.searchField}
               placeholder="Scan a BrightID code to make a connection"

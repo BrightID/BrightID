@@ -21,6 +21,7 @@ import {
   CONNECT_RECIEVED_PUBLICKEY,
   CONNECT_RECIEVED_AVATAR,
   CONNECT_RECIEVED_TRUSTSCORE,
+  CONNECT_QR_DATA,
   REMOVE_CONNECTION,
   ARBITER,
   RTC_ID,
@@ -155,6 +156,11 @@ export const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         connectPublicKey: action.publicKey,
+      };
+    case CONNECT_QR_DATA:
+      return {
+        ...state,
+        connectQrData: action.connectQrData,
       };
     case CONNECT_NAMEORNYM:
       return {
