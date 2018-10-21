@@ -12,3 +12,5 @@ split up user avatar image base64 string into chunks when sending over webrtc
 research webrtc max bytes
 ~~send and verify messages are recieved via webrtc~~
 handle WEBRTC ERRORS
+
+testing...
