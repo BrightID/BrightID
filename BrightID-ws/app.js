@@ -9,8 +9,7 @@ const NodeCache = require('node-cache');
 const dataCache = new NodeCache(config.node_cache);
 
 // BodyParser Middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({ limit: '6mb' }));
 
 // use a templating library
 app.use(express.static(__dirname + '/node_modules'));
@@ -27,7 +26,7 @@ app.post('/upload', function(req, res, next) {
   const data = req.body.data;
   // save data in cache
   const id = req.body.uuid;
-
+  console.log(`recieved data: ${id}`);
   dataCache.set(id, data, function(err, success) {
     if (err) {
       console.log(err);

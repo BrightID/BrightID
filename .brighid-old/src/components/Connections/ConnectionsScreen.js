@@ -16,10 +16,11 @@ import HeaderButtons, {
   Item,
 } from 'react-navigation-header-buttons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import Feather from 'react-native-vector-icons/Feather';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
-import { setConnections } from '../../actions';
+import { removeConnection, setConnections } from '../../actions';
 import { defaultSort } from './sortingUtility';
 import { objToUint8 } from '../../utils/objToUint8';
 import { createNewConnection } from './createNewConnection';

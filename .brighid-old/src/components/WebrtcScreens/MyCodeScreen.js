@@ -76,7 +76,6 @@ class MyCodeScreen extends React.Component<Props, State> {
     qrcode.toString(data, (err, qr) => {
       if (err) throw err;
       this.parseSVG(qr);
-      console.log(qr);
     });
   };
 
@@ -96,7 +95,7 @@ class MyCodeScreen extends React.Component<Props, State> {
             height="212"
             width="212"
             xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 57 57"
+            viewBox="0 0 45 45"
             shape-rendering="crispEdges"
           >
             <Path fill="#fff" d="M0 0h33v33H0z" />

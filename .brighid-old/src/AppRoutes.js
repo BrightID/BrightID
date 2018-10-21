@@ -6,7 +6,6 @@ import HeaderButtons, {
 } from 'react-navigation-header-buttons';
 import LinearGradient from 'react-native-linear-gradient';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-// import { LinearGradient } from 'expo';
 import HomeScreen from './components/HomeScreen';
 import ConnectionsScreen from './components/Connections/ConnectionsScreen';
 import SortingConnectionsScreen from './components/Connections/SortingConnectionsScreen';

@@ -21,6 +21,7 @@ import {
   CONNECT_RECIEVED_PUBLICKEY,
   CONNECT_RECIEVED_AVATAR,
   CONNECT_RECIEVED_TRUSTSCORE,
+  CONNECT_QR_DATA,
   REMOVE_CONNECTION,
   ARBITER,
   RTC_ID,
@@ -28,6 +29,7 @@ import {
   BOX_KEYPAIR,
   SET_PREVIEW,
   RESET_PREVIEW,
+  CONNECT_USER_DATA,
 } from '../actions';
 
 const arbiterSchema = {
@@ -81,6 +83,8 @@ export const initialState = {
   rtcId: '',
   arbiter: arbiterSchema,
   connectionsSort: '',
+  connectQrData: { aesKey: '', ipAddress: {}, uuid: '' },
+  connectUserData: { publicKey: '', avatar: '', nameornym: '' },
 };
 
 export const mainReducer = (state = initialState, action) => {
@@ -155,6 +159,16 @@ export const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         connectPublicKey: action.publicKey,
+      };
+    case CONNECT_QR_DATA:
+      return {
+        ...state,
+        connectQrData: action.connectQrData,
+      };
+    case CONNECT_USER_DATA:
+      return {
+        ...state,
+        connectUserData: action.connectUserData,
       };
     case CONNECT_NAMEORNYM:
       return {
