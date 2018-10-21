@@ -11,7 +11,9 @@ import {
 import Spinner from 'react-native-spinkit';
 import store from './store';
 import { setUpDefault } from './actions/setUpDefault';
+import { encryptUserData } from './actions/encryptData';
 import { objToUint8 } from './utils/uint8';
+import { qrData } from './actions/genQrData';
 
 type Props = {
   navigation: { navigate: Function },
@@ -44,6 +46,8 @@ export default class AppBootstrap extends React.Component<Props> {
       } else {
         await store.dispatch(setUpDefault({}));
       }
+      // store.dispatch(encryptUserData());
+      store.dispatch(qrData());
       // once everything is set up
       this.props.navigation.navigate(userData ? 'App' : 'Onboarding');
     } catch (err) {
