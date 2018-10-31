@@ -9,6 +9,7 @@ import Spinner from 'react-native-spinkit';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { setRtcId } from '../../actions';
 import { parseQrData } from '../../actions/parseQrData';
+import { encryptUserData } from '../../actions/encryptData';
 
 /**
  * Scan code screen of BrightID
@@ -45,7 +46,9 @@ class ScanCodeScreen extends React.Component<Props, State> {
     // if (data && data.length === 21) {
     //   dispatch(setRtcId(data));
     // }
-    dispatch(parseQrData(data));
+    console.log('scanned data');
+    dispatch(parseQrData({ data, user: 2 }));
+    setTimeout(() => dispatch(encryptUserData()));
     this.setState({ scanned: true });
   };
 

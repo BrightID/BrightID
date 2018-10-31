@@ -63,6 +63,7 @@ class MyCodeScreen extends React.Component<Props, State> {
       const { dispatch } = this.props;
       const data = dispatch(qrData());
       this.genQrCode(data);
+      console.log(data);
       setTimeout(() => dispatch(encryptUserData()));
       //
     } catch (err) {
@@ -180,8 +181,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: 'grey',
   },
   myCodeInfoContainer: {
     width: '100%',

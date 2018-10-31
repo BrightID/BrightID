@@ -3,7 +3,7 @@
 import { createCipher, createDecipher } from 'react-native-crypto';
 import { Buffer } from 'buffer';
 import { objToUint8 } from '../utils/encoding';
-import { connectUserData } from './index';
+import { setConnectUserData } from './index';
 
 export const decryptData = (data) => async (dispatch, getState) => {
   const { connectQrData } = getState().main;
@@ -15,6 +15,5 @@ export const decryptData = (data) => async (dispatch, getState) => {
   decrypted += decipher.final('utf8');
   const decryptedObj = JSON.parse(decrypted);
   decryptedObj.publicKey = Buffer.from(decryptedObj.publicKey, 'base64');
-  // decryptedObj.publicKey = objToUint8([...decryptedObj.publicKey]);
-  console.log(decryptedObj);
+  dispatch(setConnectUserData(decryptedObj));
 };
