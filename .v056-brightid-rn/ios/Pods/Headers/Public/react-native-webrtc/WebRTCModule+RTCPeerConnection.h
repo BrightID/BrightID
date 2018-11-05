@@ -1,1 +1,0 @@
-../../../../../node_modules/react-native-webrtc/ios/RCTWebRTC/WebRTCModule+RTCPeerConnection.h
