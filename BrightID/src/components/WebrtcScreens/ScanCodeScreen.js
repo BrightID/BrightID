@@ -7,9 +7,10 @@ import { connect } from 'react-redux';
 import { RNCamera } from 'react-native-camera';
 import Spinner from 'react-native-spinkit';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { setRtcId } from '../../actions';
 import { parseQrData } from '../../actions/parseQrData';
-import { encryptUserData } from '../../actions/encryptData';
+import { fetchData } from '../../actions/fetchData';
+import { encryptAndUploadLocalData } from '../../actions/encryptData';
+import emitter from '../../emitter';
 
 /**
  * Scan code screen of BrightID
@@ -34,27 +35,31 @@ type State = {
 
 class ScanCodeScreen extends React.Component<Props, State> {
   state = {
-    hasCameraPermission: '',
     scanned: false,
   };
 
+  componentDidMount() {
+    emitter.on('connectDataReady', this.navigateToPreview);
+  }
+
+  componentWillUnmount() {
+    emitter.off('connectDataReady', this.navigateToPreview);
+  }
+
   handleBarCodeRead = ({ type, data }) => {
     const { dispatch } = this.props;
-    // console.log(`type: ${type}`);
-    // console.log(`data: ${data}`);
-    // set rtc id url into redux store
-    // if (data && data.length === 21) {
-    //   dispatch(setRtcId(data));
-    // }
-    console.log('scanned data');
     dispatch(parseQrData({ data, user: 2 }));
-    setTimeout(() => dispatch(encryptUserData()));
+    setTimeout(() => dispatch(encryptAndUploadLocalData()));
+    setTimeout(() => dispatch(fetchData()));
     this.setState({ scanned: true });
+  };
+
+  navigateToPreview = () => {
+    this.props.navigation.navigate('PreviewConnection');
   };
 
   renderCameraOrWave = () => {
     // either camera is showing or webrtc is connecting
-    const { rtcId, hangUp, rtcOn, navigation } = this.props;
     const { scanned } = this.state;
     if (scanned) {
       return (
@@ -111,7 +116,6 @@ class ScanCodeScreen extends React.Component<Props, State> {
   };
 
   render() {
-    const { hasCameraPermission } = this.state;
     return <View style={styles.container}>{this.renderCameraOrWave()}</View>;
   }
 }

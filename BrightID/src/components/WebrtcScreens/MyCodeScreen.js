@@ -1,28 +1,19 @@
 // @flow
 
 import * as React from 'react';
-import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-spinkit';
 // import WebRTCLogic from './WebRTCLogic';
 import { qrData } from '../../actions/genQrData';
-import {
-  update,
-  OFFER,
-  ANSWER,
-  USERB,
-  USERA,
-  ICE_CANDIDATE,
-  fetchArbiter,
-  exchangeAvatar,
-  createRTCId,
-} from './signalApi';
 
-import { encryptUserData } from '../../actions/encryptData';
-
+import { encryptAndUploadLocalData } from '../../actions/encryptData';
+import { setUpWs, closeWs } from '../../actions/websocket';
 import { removeEncryptedUserData, removeConnectQrData } from '../../actions';
+import { parseQrData } from '../../actions/parseQrData';
+import emitter from '../../emitter';
 
 /**
  * My Code screen of BrightID
@@ -62,10 +53,12 @@ class MyCodeScreen extends React.Component<Props, State> {
     try {
       const { dispatch } = this.props;
       const data = dispatch(qrData());
-      this.genQrCode(data);
       console.log(data);
-      setTimeout(() => dispatch(encryptUserData()));
-      //
+      this.genQrCode(data);
+      dispatch(parseQrData({ data, user: 1 }));
+      this.socket = dispatch(setUpWs());
+      setTimeout(() => dispatch(encryptAndUploadLocalData()));
+      emitter.on('connectDataReady', this.navigateToPreview);
     } catch (err) {
       // we should handle err here in case network is down
       console.log(err);
@@ -74,9 +67,15 @@ class MyCodeScreen extends React.Component<Props, State> {
 
   componentWillUnmount() {
     const { dispatch } = this.props;
-    dispatch(removeEncryptedUserData());
-    dispatch(removeConnectQrData());
+    this.socket.close();
+    // dispatch(removeEncryptedUserData());
+    // dispatch(removeConnectQrData());
+    emitter.off('connectDataReady', this.navigateToPreview);
   }
+
+  navigateToPreview = () => {
+    this.props.navigation.navigate('PreviewConnection');
+  };
 
   genQrCode = (data) => {
     qrcode.toString(data, (err, qr) => {
@@ -94,7 +93,7 @@ class MyCodeScreen extends React.Component<Props, State> {
 
   renderQrCode = () => {
     // render qrcode or spinner while waiting
-    if (this.state.qrsvg && this.props.encryptedUserData) {
+    if (this.state.qrsvg) {
       return (
         <View style={styles.qrsvgContainer}>
           <Svg

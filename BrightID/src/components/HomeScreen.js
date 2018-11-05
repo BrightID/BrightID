@@ -121,7 +121,6 @@ export class HomeScreen extends React.Component<Props> {
   componentDidMount() {
     this.getConnectionsCount();
     emitter.on('refreshConnections', this.getConnectionsCount);
-    console.log('HomeScreen Mounted');
   }
 
   componentDidUpdate(prevProps) {
@@ -133,7 +132,6 @@ export class HomeScreen extends React.Component<Props> {
 
   componentWillUnmount() {
     emitter.off('refreshConnections', this.getConnectionsCount);
-    console.log('Homescreen unmounting');
   }
 
   getConnectionsCount = async () => {

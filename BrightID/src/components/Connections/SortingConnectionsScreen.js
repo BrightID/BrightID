@@ -53,14 +53,6 @@ class SortingConnectionsScreen extends React.Component<Props> {
     ),
   });
 
-  componentDidMount() {
-    console.log('Sorting Connections Screen Screen Mounting');
-  }
-
-  componentWillUnmount() {
-    console.log('Sorting Connections ScreenScreen Unmounting');
-  }
-
   renderCaret = () => {
     const { connectionsSort } = this.props;
     switch (connectionsSort) {

@@ -10,12 +10,7 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import {
-  addConnection,
-  resetWebrtc,
-  resetPreview,
-  setPreview,
-} from '../../actions';
+import { resetWebrtc, resetPreview, setPreview } from '../../actions';
 import emitter from '../../emitter';
 
 /**
@@ -33,6 +28,7 @@ type Props = {
   previewTrustScore: string,
   previewAvatar: string,
   navigation: { goBack: () => null, navigate: (string) => null },
+  connectUserData: { avatar: string, publicKey: Buffer, nameornym: string },
 };
 
 type State = {};
@@ -44,17 +40,6 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
     headerLeft: <View />,
   };
 
-  componentDidMount() {
-    const { dispatch } = this.props;
-    // transfer connection props to preview
-    dispatch(setPreview());
-    console.log('Preview Connection Screen Mounting');
-  }
-
-  componentWillUnmount() {
-    console.log('Preview Connection Screen Unmounting');
-  }
-
   addNewConnection = async () => {
     /**
      * Add connection in async storage  &&
@@ -62,31 +47,25 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
      */
     try {
       const {
-        dispatch,
-        previewPublicKey,
-        previewNameornym,
-        previewAvatar,
-        previewTrustScore,
-        previewTimestamp,
+        connectUserData: { avatar, nameornym, publicKey },
       } = this.props;
       // TODO formalize spec for this
       // create a new connection object
       const connection = {
-        publicKey: previewPublicKey,
-        nameornym: previewNameornym,
-        avatar: previewAvatar,
-        trustScore: previewTrustScore,
-        connectionDate: previewTimestamp,
+        publicKey,
+        nameornym,
+        avatar,
+        trustScore: '99.9',
+        connectionDate: Date.now(),
       };
       // add connection inside of async storage
       await AsyncStorage.setItem(
-        JSON.stringify(previewPublicKey),
+        JSON.stringify(publicKey),
         JSON.stringify(connection),
       );
       // reset Preview
-      dispatch(resetPreview());
-      // clear webrtc data
-      dispatch(resetWebrtc());
+      // dispatch(resetPreview());
+
       emitter.emit('refreshConnections', {});
     } catch (err) {
       console.log(err);
@@ -94,8 +73,13 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
   };
 
   render() {
-    const { previewNameornym, navigation, previewAvatar } = this.props;
-    const image = previewAvatar || require('../../static/default_avatar.jpg');
+    const {
+      navigation,
+      connectUserData: { avatar, nameornym },
+    } = this.props;
+    const image = avatar
+      ? { uri: avatar }
+      : require('../../static/default_avatar.jpg');
     return (
       <View style={styles.container}>
         <View style={styles.questionTextContainer}>
@@ -113,7 +97,7 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
             accessible={true}
             accessibilityLabel="user avatar image"
           />
-          <Text style={styles.connectNameornym}>{previewNameornym}</Text>
+          <Text style={styles.connectNameornym}>{nameornym}</Text>
         </View>
         <View style={styles.confirmButtonContainer}>
           <TouchableOpacity

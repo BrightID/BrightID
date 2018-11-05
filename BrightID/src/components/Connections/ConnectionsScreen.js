@@ -25,6 +25,7 @@ import { defaultSort } from './sortingUtility';
 import { objToUint8 } from '../../utils/encoding';
 import { createNewConnection } from './createNewConnection';
 import emitter from '../../emitter';
+import BottomNav from '../BottomNav';
 
 /**
  * Connection screen of BrightID
@@ -69,18 +70,15 @@ class ConnectionsScreen extends React.Component<Props> {
   componentDidMount() {
     this.getConnections();
     emitter.on('refreshConnections', this.getConnections);
-    console.log('Connections Screen Mounting');
   }
 
   componentWillUnmount() {
     emitter.off('refreshConnections', this.getConnections);
-    console.log('Connections Screen Unmounting');
   }
 
   getConnections = async () => {
     try {
       const { dispatch } = this.props;
-      console.log('emitter working');
       /**
        * obtain connection keys from async storage
        * currently everything in async storage except for `userData` is a connection
@@ -189,10 +187,14 @@ class ConnectionsScreen extends React.Component<Props> {
   };
 
   render() {
+    const { navigation } = this.props;
     return (
       <View style={styles.container}>
-        <SearchConnections navigation={this.props.navigation} />
-        <View style={styles.mainContainer}>{this.renderList()}</View>
+        <View style={styles.mainContainer}>
+          <SearchConnections navigation={this.props.navigation} />
+          <View style={styles.mainContainer}>{this.renderList()}</View>
+        </View>
+        <BottomNav navigation={navigation} />
       </View>
     );
   }
@@ -200,6 +202,10 @@ class ConnectionsScreen extends React.Component<Props> {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: '#fdfdfd',
+  },
+  mainContainer: {
     flex: 1,
     backgroundColor: '#fdfdfd',
     alignItems: 'center',

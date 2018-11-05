@@ -52,19 +52,15 @@ class Onboard extends React.Component<Props> {
   componentDidMount() {
     // watch for device rotation
     Dimensions.addEventListener('change', (e) => {
-      console.log(e);
       this.setState({
         winWidth: e.window.width,
       });
     });
-
-    console.log('Onboarding Screen Mounting');
   }
 
   componentWillUnmount() {
     // remove event listener
     Dimensions.removeEventListener('change');
-    console.log('Onboarding Screen Unmounting');
   }
 
   renderItem = ({ item, index }) => (

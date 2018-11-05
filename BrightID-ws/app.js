@@ -48,7 +48,7 @@ io.on('connection', function(client) {
 
   client.on('join', function(uuid) {
     client.join(uuid);
-    if (dataCache.keys().contains(uuid)) io.to(id).emit('upload', 'ready');
+    if (dataCache.keys().contains(uuid)) io.to(uuid).emit('upload', 'ready');
   });
 });
 

@@ -71,7 +71,7 @@ export const initialState = {
   secretKey: '',
   connectionsSort: '',
   connectQrData: { aesKey: '', ipAddress: {}, uuid: '', user: '' },
-  connectUserData: { publicKey: '', avatar: '', nameornym: '' },
+  connectUserData: { publicKey: '', avatar: '', nameornym: '', timestamp: '' },
   encryptedUserData: '',
 };
 
@@ -176,7 +176,12 @@ export const mainReducer = (state = initialState, action) => {
     case REMOVE_CONNECT_USER_DATA:
       return {
         ...state,
-        connectUserData: { publicKey: '', avatar: '', nameornym: '' },
+        connectUserData: {
+          publicKey: '',
+          avatar: '',
+          nameornym: '',
+          timestamp: '',
+        },
       };
     case CONNECT_NAMEORNYM:
       return {

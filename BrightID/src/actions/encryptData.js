@@ -6,30 +6,32 @@ import { setEncryptedUserData } from './index';
 import { postData } from './postData';
 import { fetchData } from './fetchData';
 
-export const encryptUserData = () => async (dispatch, getState) => {
-  const { publicKey, userAvatar, nameornym, connectQrData } = getState().main;
-  if (!publicKey || !userAvatar || !nameornym) return;
+export const encryptAndUploadLocalData = () => async (dispatch, getState) => {
+  const {
+    publicKey,
+    userAvatar,
+    nameornym,
+    connectQrData: { aesKey },
+  } = getState().main;
+  // return here for testing
+  if (!publicKey || !userAvatar || !nameornym || !aesKey) return;
+  //
+
   const dataObj = {
     publicKey: Buffer.from(publicKey).toString('base64'),
-    userAvatar: userAvatar.uri,
+    avatar: userAvatar.uri,
     nameornym,
   };
 
   const dataStr = JSON.stringify(dataObj);
 
-  const { aesKey } = connectQrData;
   const cipher = createCipher('aes192', aesKey);
-  // const decipher = createDecipher('aes192', aesKey);
 
   let encrypted = cipher.update(dataStr, 'utf8', 'base64');
   encrypted += cipher.final('base64');
-  dispatch(setEncryptedUserData(encrypted));
+  // dispatch(setEncryptedUserData(encrypted));
   // for testing
   dispatch(postData(encrypted));
-  setTimeout(() => dispatch(fetchData()), 1000);
-
-  // let decrypted = decipher.update(encryptedData, 'base64', 'utf8');
-  // decrypted += decipher.final('utf8');
-  // const decryptedObj = JSON.parse(decrypted);
-  // console.log(decryptedObj.nameornym);
+  // setTimeout(() => dispatch(fetchData()), 1000);
+  //
 };

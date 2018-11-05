@@ -36,14 +36,6 @@ class SuccessScreen extends React.Component<Props, State> {
     header: null,
   };
 
-  componentDidMount() {
-    console.log('Success Screen Mounting');
-  }
-
-  componentWillUnmount() {
-    console.log('Success Screen Unmounting');
-  }
-
   render() {
     return (
       <View style={styles.container}>
@@ -65,7 +57,7 @@ class SuccessScreen extends React.Component<Props, State> {
           <TouchableOpacity
             onPress={() => {
               const { navigation } = this.props;
-              navigation.navigate('Connections');
+              navigation.navigate('Home');
             }}
             style={styles.confirmButton}
           >
