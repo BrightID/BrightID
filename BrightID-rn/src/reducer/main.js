@@ -82,6 +82,12 @@ export const initialState = {
   rtcId: '',
   arbiter: arbiterSchema,
   connectionsSort: '',
+<<<<<<< HEAD:BrightID/src/reducer/main.js
+  connectQrData: { aesKey: '', ipAddress: {}, uuid: '', user: '' },
+  connectUserData: { publicKey: '', avatar: '', nameornym: '', timestamp: '' },
+  encryptedUserData: '',
+=======
+>>>>>>> brightId/master:BrightID-rn/src/reducer/main.js
 };
 
 export const mainReducer = (state = initialState, action) => {
@@ -162,6 +168,29 @@ export const mainReducer = (state = initialState, action) => {
         ...state,
         connectQrData: action.connectQrData,
       };
+<<<<<<< HEAD:BrightID/src/reducer/main.js
+    case REMOVE_CONNECT_QR_DATA:
+      return {
+        ...state,
+        connectQrData: { aesKey: '', ipAddress: {}, uuid: '', user: '' },
+      };
+    case SET_CONNECT_USER_DATA:
+      return {
+        ...state,
+        connectUserData: action.connectUserData,
+      };
+    case REMOVE_CONNECT_USER_DATA:
+      return {
+        ...state,
+        connectUserData: {
+          publicKey: '',
+          avatar: '',
+          nameornym: '',
+          timestamp: '',
+        },
+      };
+=======
+>>>>>>> brightId/master:BrightID-rn/src/reducer/main.js
     case CONNECT_NAMEORNYM:
       return {
         ...state,

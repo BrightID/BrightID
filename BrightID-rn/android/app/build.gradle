@@ -107,6 +107,16 @@ android {
             abiFilters "armeabi-v7a", "x86"
         }
     }
+    signingConfigs {
+        release {
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            }
+        }
+    }
     splits {
         abi {
             reset()
@@ -119,6 +129,7 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
@@ -137,13 +148,22 @@ android {
 }
 
 dependencies {
+<<<<<<< HEAD:BrightID/android/app/build.gradle
+    compile project(':react-native-vector-icons')
+=======
+>>>>>>> brightId/master:BrightID-rn/android/app/build.gradle
     compile project(':react-native-svg')
     compile project(':react-native-vector-icons')
     compile project(':react-native-spinkit')
+    compile project(':react-native-randombytes')
     compile project(':react-native-linear-gradient')
+<<<<<<< HEAD:BrightID/android/app/build.gradle
+    compile project(':react-native-camera')
+=======
     compile project(':react-native-image-crop-picker')
     compile project(':react-native-camera')
     compile project(':react-native-randombytes')
+>>>>>>> brightId/master:BrightID-rn/android/app/build.gradle
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules

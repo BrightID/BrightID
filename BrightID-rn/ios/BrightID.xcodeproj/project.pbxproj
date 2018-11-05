@@ -13,9 +13,15 @@
 		00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
 		00E356F31AD99517003FC87E /* BrightIDTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BrightIDTests.m */; };
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+		078A42C2AC1C436BA05E162F /* ApexNew-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = DF85D7C0B68847988B3740E5 /* ApexNew-Book.otf */; };
+		0AE0B8AD4A4FFE2A09FEECD5 /* libPods-BrightID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 260EDCDCEAEDA52E2B9C4D72 /* libPods-BrightID.a */; };
+=======
 		0C35A1EC09484630A84C67DF /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 30244BCC642748E0BC56FF9E /* Octicons.ttf */; };
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 		11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
+		136CDE0594194ED2A6A0860C /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2926FD279D34687AE18E5BB /* Foundation.ttf */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
 		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -24,7 +30,11 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+		2C004E22C3F84C9C9E770F45 /* EurostileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6301CEFD62D94D438A82B1C3 /* EurostileRegular.ttf */; };
+=======
 		20D4FEEBD77641C7A07BA2BA /* libRNRandomBytes-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 79E819B1B6384A9AA3E6F039 /* libRNRandomBytes-tvOS.a */; };
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -38,6 +48,26 @@
 		2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6891FA4F8E400B85C8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* BrightIDTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BrightIDTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+		33E47D65940544A099EDE078 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1FA781E876174A8A81C88F19 /* Octicons.ttf */; };
+		359844CDDC054FBF85400117 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2175A889754B400DB73D3B57 /* FontAwesome.ttf */; };
+		510C95851239447B8131CE5B /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BDEEB14D85334CD8A3FA62FB /* Ionicons.ttf */; };
+		6569F6D5249A4B28B2E7CBF9 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 040ADE5CA17E4C9C9F5EEC3C /* MaterialIcons.ttf */; };
+		77D26D8515F640379275C5C2 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7404A1EBAD8347AD97A1C88F /* SimpleLineIcons.ttf */; };
+		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		8E4DCD17C31344839E8F0C58 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 58BA19CC5ED1432FB1BF8938 /* EvilIcons.ttf */; };
+		8FC496007BB340DC83604070 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 08D36969276B45ADA3A69CEA /* Zocial.ttf */; };
+		96E57631DA184D6595FDDA1E /* ApexNew-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = BBF6F07EB50C4197BB6962E5 /* ApexNew-Light.otf */; };
+		A98E0C311EFB44FCBF18D6EF /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D58B5819867438A8082BFA7 /* Feather.ttf */; };
+		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
+		C9690049E97340ADA917FC90 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B8924BA0723543868E550435 /* FontAwesome5_Regular.ttf */; };
+		C9E874F0C4B8478EB129E00A /* ApexNew-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4EA579C1EFA54DA1A0E2D2AC /* ApexNew-Medium.otf */; };
+		D128476BB43A48A2BC3BC723 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 335C9F0AF6BC43DAB1613F75 /* FontAwesome5_Brands.ttf */; };
+		D65DDFC423BD48E680A8C15B /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9A865ABD2DBC425DBCDD20E6 /* MaterialCommunityIcons.ttf */; };
+		F10DF140A0EB4AE692C4C75F /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 56E5B8AF368148988552CA22 /* Entypo.ttf */; };
+		F12D3083A3DB49C39AA0CE0B /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C8F131F05B4F49F1B44CC7D5 /* FontAwesome5_Solid.ttf */; };
+		F490CDE4C9834DC494030A8E /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2C9BB6C94954D74825C723C /* AntDesign.ttf */; };
+=======
 		3AE52B28440048FFB3C74778 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 96FD0134FC0F42DFAE7FCDD3 /* FontAwesome.ttf */; };
 		3D3D9E2AED6C4724B660FE51 /* EurostileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F8391592A4CF4F98AFE860C1 /* EurostileRegular.ttf */; };
 		3EF9EFC3AA5542FCA771F944 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 57AD87636AF1484BA84BF3FB /* FontAwesome5_Brands.ttf */; };
@@ -67,6 +97,7 @@
 		F7B87258823741AF8FF54B3A /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF0237A408074E0A8E629A4D /* MaterialIcons.ttf */; };
 		F84D00D5746D4919961A7370 /* libRNSpinkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 453DAE12C8FE4FB1BFCAC2CC /* libRNSpinkit.a */; };
 		FA8020EA2A81475E9606BAB5 /* libimageCropPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85F0F1ADACF04012873F8E8D /* libimageCropPicker.a */; };
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -439,9 +470,14 @@
 		00E356EE1AD99517003FC87E /* BrightIDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrightIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* BrightIDTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BrightIDTests.m; sourceTree = "<group>"; };
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+		040ADE5CA17E4C9C9F5EEC3C /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
+		08D36969276B45ADA3A69CEA /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
+=======
 		0303A5C3616445ACBAD6EB87 /* ApexNew-Book.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ApexNew-Book.otf"; path = "../assets/fonts/ApexNew-Book.otf"; sourceTree = "<group>"; };
 		0BE5AD4D17CC43F58F98CAC4 /* libRNSVG.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSVG.a; sourceTree = "<group>"; };
 		0F094277AF36479B8E2F1E50 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* BrightID.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrightID.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -452,6 +488,35 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = BrightID/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = BrightID/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+		1FA781E876174A8A81C88F19 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
+		2175A889754B400DB73D3B57 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
+		260EDCDCEAEDA52E2B9C4D72 /* libPods-BrightID.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D02E47B1E0B4A5D006451C7 /* BrightID-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BrightID-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D02E4901E0B4A5D006451C7 /* BrightID-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BrightID-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		335C9F0AF6BC43DAB1613F75 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
+		3D58B5819867438A8082BFA7 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
+		4EA579C1EFA54DA1A0E2D2AC /* ApexNew-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "ApexNew-Medium.otf"; path = "../assets/fonts/ApexNew-Medium.otf"; sourceTree = "<group>"; };
+		56E5B8AF368148988552CA22 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
+		58BA19CC5ED1432FB1BF8938 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
+		5F59C8B28431C20224179FF3 /* Pods-BrightID.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BrightID/Pods-BrightID.debug.xcconfig"; sourceTree = "<group>"; };
+		6301CEFD62D94D438A82B1C3 /* EurostileRegular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = EurostileRegular.ttf; path = ../assets/fonts/EurostileRegular.ttf; sourceTree = "<group>"; };
+		7404A1EBAD8347AD97A1C88F /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
+		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
+		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		866F5692F5D6968D9B0A46EF /* Pods-BrightID.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.release.xcconfig"; path = "Pods/Target Support Files/Pods-BrightID/Pods-BrightID.release.xcconfig"; sourceTree = "<group>"; };
+		9A865ABD2DBC425DBCDD20E6 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
+		A2926FD279D34687AE18E5BB /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
+		B8924BA0723543868E550435 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
+		BBF6F07EB50C4197BB6962E5 /* ApexNew-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "ApexNew-Light.otf"; path = "../assets/fonts/ApexNew-Light.otf"; sourceTree = "<group>"; };
+		BDEEB14D85334CD8A3FA62FB /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		C8F131F05B4F49F1B44CC7D5 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
+		D2C9BB6C94954D74825C723C /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
+		DF85D7C0B68847988B3740E5 /* ApexNew-Book.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "ApexNew-Book.otf"; path = "../assets/fonts/ApexNew-Book.otf"; sourceTree = "<group>"; };
+=======
 		14DC221B94EE47BC8354847B /* ApexNew-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ApexNew-Medium.otf"; path = "../assets/fonts/ApexNew-Medium.otf"; sourceTree = "<group>"; };
 		1D4982CF2A9B4948AD281B96 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* BrightID-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BrightID-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -492,6 +557,7 @@
 		F95DC75AA16F4648B4E580B3 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		FAAEADC8C7184901B09F62E5 /* libRNSVG-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNSVG-tvOS.a"; sourceTree = "<group>"; };
 		FD94F21820774B2085C4C046 /* imageCropPicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = imageCropPicker.xcodeproj; path = "../node_modules/react-native-image-crop-picker/ios/imageCropPicker.xcodeproj"; sourceTree = "<group>"; };
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -519,6 +585,9 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+				0AE0B8AD4A4FFE2A09FEECD5 /* libPods-BrightID.a in Frameworks */,
+=======
 				E6DC6EC1FC5C4AC39E279365 /* libRNRandomBytes.a in Frameworks */,
 				E2F1D0CB64864734B3068017 /* libRNCamera.a in Frameworks */,
 				FA8020EA2A81475E9606BAB5 /* libimageCropPicker.a in Frameworks */,
@@ -526,6 +595,7 @@
 				F84D00D5746D4919961A7370 /* libRNSpinkit.a in Frameworks */,
 				DA9EA3C84FB44FDCA54A87FB /* libRNVectorIcons.a in Frameworks */,
 				7CA4021F154943929A1D1E68 /* libRNSVG.a in Frameworks */,
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -541,9 +611,12 @@
 				2D02E4C61E0B4AEC006451C7 /* libRCTSettings-tvOS.a in Frameworks */,
 				2D02E4C71E0B4AEC006451C7 /* libRCTText-tvOS.a in Frameworks */,
 				2D02E4C81E0B4AEC006451C7 /* libRCTWebSocket-tvOS.a in Frameworks */,
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+=======
 				20D4FEEBD77641C7A07BA2BA /* libRNRandomBytes-tvOS.a in Frameworks */,
 				907C0DBFCF9D43399C71354B /* libRNVectorIcons-tvOS.a in Frameworks */,
 				57CA289D3AA846AEA5D3DBA1 /* libRNSVG-tvOS.a in Frameworks */,
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -678,8 +751,39 @@
 			isa = PBXGroup;
 			children = (
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+				260EDCDCEAEDA52E2B9C4D72 /* libPods-BrightID.a */,
+=======
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		57427FB49D254E839DDF5DC7 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DF85D7C0B68847988B3740E5 /* ApexNew-Book.otf */,
+				BBF6F07EB50C4197BB6962E5 /* ApexNew-Light.otf */,
+				4EA579C1EFA54DA1A0E2D2AC /* ApexNew-Medium.otf */,
+				6301CEFD62D94D438A82B1C3 /* EurostileRegular.ttf */,
+				D2C9BB6C94954D74825C723C /* AntDesign.ttf */,
+				56E5B8AF368148988552CA22 /* Entypo.ttf */,
+				58BA19CC5ED1432FB1BF8938 /* EvilIcons.ttf */,
+				3D58B5819867438A8082BFA7 /* Feather.ttf */,
+				2175A889754B400DB73D3B57 /* FontAwesome.ttf */,
+				335C9F0AF6BC43DAB1613F75 /* FontAwesome5_Brands.ttf */,
+				B8924BA0723543868E550435 /* FontAwesome5_Regular.ttf */,
+				C8F131F05B4F49F1B44CC7D5 /* FontAwesome5_Solid.ttf */,
+				A2926FD279D34687AE18E5BB /* Foundation.ttf */,
+				BDEEB14D85334CD8A3FA62FB /* Ionicons.ttf */,
+				9A865ABD2DBC425DBCDD20E6 /* MaterialCommunityIcons.ttf */,
+				040ADE5CA17E4C9C9F5EEC3C /* MaterialIcons.ttf */,
+				1FA781E876174A8A81C88F19 /* Octicons.ttf */,
+				7404A1EBAD8347AD97A1C88F /* SimpleLineIcons.ttf */,
+				08D36969276B45ADA3A69CEA /* Zocial.ttf */,
+			);
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 		5E91572E1DD0AC6500FF2AA8 /* Products */ = {
@@ -741,6 +845,8 @@
 				832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */,
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+=======
 				E9CD2544723E4F21B72F24C7 /* RNRandomBytes.xcodeproj */,
 				6D721FE40241440690AB5E63 /* RNCamera.xcodeproj */,
 				FD94F21820774B2085C4C046 /* imageCropPicker.xcodeproj */,
@@ -748,6 +854,7 @@
 				E42AA4CF77E24C77B4724BA4 /* RNSpinkit.xcodeproj */,
 				AF3121A788B34CEEBCCEAD15 /* RNVectorIcons.xcodeproj */,
 				5CA967D5CBF94EAAA5B3DB18 /* RNSVG.xcodeproj */,
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -769,8 +876,13 @@
 				00E356EF1AD99517003FC87E /* BrightIDTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+				A3974ED76D28C4D2292AC8EF /* Pods */,
+				57427FB49D254E839DDF5DC7 /* Resources */,
+=======
 				657190A733564D7FA73061F4 /* Resources */,
 				9212EEB5216C531800438A35 /* Recovered References */,
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -788,6 +900,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+		A3974ED76D28C4D2292AC8EF /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5F59C8B28431C20224179FF3 /* Pods-BrightID.debug.xcconfig */,
+				866F5692F5D6968D9B0A46EF /* Pods-BrightID.release.xcconfig */,
+=======
 		9212EEB5216C531800438A35 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -809,6 +928,7 @@
 			isa = PBXGroup;
 			children = (
 				9212EEF4216C531D00438A35 /* libRNCamera.a */,
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -822,6 +942,8 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+=======
 		9212EEE1216C531D00438A35 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -875,6 +997,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -900,10 +1023,18 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "BrightID" */;
 			buildPhases = (
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+				E59731910EC3D35DDD3416B0 /* [CP] Check Pods Manifest.lock */,
+=======
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+				C396C03C25C4B339D63449B6 /* [CP] Copy Pods Resources */,
+=======
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 			);
 			buildRules = (
 			);
@@ -1433,6 +1564,27 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+				078A42C2AC1C436BA05E162F /* ApexNew-Book.otf in Resources */,
+				96E57631DA184D6595FDDA1E /* ApexNew-Light.otf in Resources */,
+				C9E874F0C4B8478EB129E00A /* ApexNew-Medium.otf in Resources */,
+				2C004E22C3F84C9C9E770F45 /* EurostileRegular.ttf in Resources */,
+				F490CDE4C9834DC494030A8E /* AntDesign.ttf in Resources */,
+				F10DF140A0EB4AE692C4C75F /* Entypo.ttf in Resources */,
+				8E4DCD17C31344839E8F0C58 /* EvilIcons.ttf in Resources */,
+				A98E0C311EFB44FCBF18D6EF /* Feather.ttf in Resources */,
+				359844CDDC054FBF85400117 /* FontAwesome.ttf in Resources */,
+				D128476BB43A48A2BC3BC723 /* FontAwesome5_Brands.ttf in Resources */,
+				C9690049E97340ADA917FC90 /* FontAwesome5_Regular.ttf in Resources */,
+				F12D3083A3DB49C39AA0CE0B /* FontAwesome5_Solid.ttf in Resources */,
+				136CDE0594194ED2A6A0860C /* Foundation.ttf in Resources */,
+				510C95851239447B8131CE5B /* Ionicons.ttf in Resources */,
+				D65DDFC423BD48E680A8C15B /* MaterialCommunityIcons.ttf in Resources */,
+				6569F6D5249A4B28B2E7CBF9 /* MaterialIcons.ttf in Resources */,
+				33E47D65940544A099EDE078 /* Octicons.ttf in Resources */,
+				77D26D8515F640379275C5C2 /* SimpleLineIcons.ttf in Resources */,
+				8FC496007BB340DC83604070 /* Zocial.ttf in Resources */,
+=======
 				9162BA4AD5CC49B38F6B9C95 /* AntDesign.ttf in Resources */,
 				6743E113E3544C62801623CE /* Entypo.ttf in Resources */,
 				6CF0C420E3D946F0833782FF /* EvilIcons.ttf in Resources */,
@@ -1452,6 +1604,7 @@
 				D6C9FE671EE7450683CBAC3B /* ApexNew-Light.otf in Resources */,
 				762D820547274F5498560E04 /* ApexNew-Medium.otf in Resources */,
 				3D3D9E2AED6C4724B660FE51 /* EurostileRegular.ttf in Resources */,
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1501,6 +1654,77 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+		C396C03C25C4B339D63449B6 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-BrightID/Pods-BrightID-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/QBImagePickerController/QBImagePicker.bundle",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Feather.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Foundation.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf",
+				"${PODS_ROOT}/RSKImageCropper/RSKImageCropper/RSKImageCropperStrings.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Feather.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Brands.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Regular.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Solid.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Foundation.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Ionicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCommunityIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Octicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SimpleLineIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Zocial.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RSKImageCropperStrings.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BrightID/Pods-BrightID-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E59731910EC3D35DDD3416B0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BrightID-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+=======
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1574,6 +1798,11 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+				INFOPLIST_FILE = BrightIDTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+=======
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-randombytes",
@@ -1592,6 +1821,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1607,6 +1837,11 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+				INFOPLIST_FILE = BrightIDTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+=======
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-randombytes",
@@ -1625,6 +1860,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1637,10 +1873,16 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+			baseConfigurationReference = 5F59C8B28431C20224179FF3 /* Pods-BrightID.debug.xcconfig */;
+=======
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+=======
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-randombytes",
@@ -1651,6 +1893,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
 				);
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 				INFOPLIST_FILE = BrightID/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -1666,6 +1909,12 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+			baseConfigurationReference = 866F5692F5D6968D9B0A46EF /* Pods-BrightID.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CURRENT_PROJECT_VERSION = 1;
+=======
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1679,6 +1928,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
 				);
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 				INFOPLIST_FILE = BrightID/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -1704,6 +1954,10 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+				INFOPLIST_FILE = "BrightID-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+=======
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-randombytes",
@@ -1721,6 +1975,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1745,6 +2000,10 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+				INFOPLIST_FILE = "BrightID-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+=======
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-randombytes",
@@ -1762,6 +2021,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1785,6 +2045,10 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+				INFOPLIST_FILE = "BrightID-tvOSTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+=======
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-randombytes",
@@ -1802,6 +2066,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1825,6 +2090,10 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
+<<<<<<< HEAD:BrightID/ios/BrightID.xcodeproj/project.pbxproj
+				INFOPLIST_FILE = "BrightID-tvOSTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+=======
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-randombytes",
@@ -1842,6 +2111,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
+>>>>>>> brightId/master:BrightID-rn/ios/BrightID.xcodeproj/project.pbxproj
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",

@@ -78,14 +78,6 @@ class SignUp extends React.Component<Props, State> {
     };
   }
 
-  componentDidMount() {
-    console.log('Sign up Screen Mounting');
-  }
-
-  componentWillUnmount() {
-    console.log('Sign upScreen Unmounting');
-  }
-
   getAvatarPhoto = () => {
     // for full documentation on the Image Picker api
     // see https://github.com/react-community/react-native-image-picker
@@ -111,8 +103,6 @@ class SignUp extends React.Component<Props, State> {
     ImagePicker.openPicker(options)
       .then((image) => {
         const imageData = { uri: `data:${image.mime};base64,${image.data}` };
-        console.log(image.mime);
-
         this.setState({
           userAvatar: imageData,
           imagePicking: false,

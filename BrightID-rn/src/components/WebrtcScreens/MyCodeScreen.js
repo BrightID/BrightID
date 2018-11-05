@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
 import { connect } from 'react-redux';
@@ -10,6 +10,14 @@ import WebRTCLogic from './WebRTCLogic';
 import { stringByteLength } from '../../utils/encoding';
 import { ICE_SERVERS, handleRecievedMessage, sendAvatar } from './actions';
 import { qrData } from '../../actions/genQrData';
+<<<<<<< HEAD:BrightID/src/components/WebrtcScreens/MyCodeScreen.js
+
+import { encryptAndUploadLocalData } from '../../actions/encryptData';
+import { setUpWs, closeWs } from '../../actions/websocket';
+import { removeEncryptedUserData, removeConnectQrData } from '../../actions';
+import { parseQrData } from '../../actions/parseQrData';
+import emitter from '../../emitter';
+=======
 import {
   update,
   OFFER,
@@ -25,6 +33,7 @@ import {
 import { socket } from './websockets';
 
 import { resetWebrtc, setArbiter, setConnectAvatar } from '../../actions';
+>>>>>>> brightId/master:BrightID-rn/src/components/WebrtcScreens/MyCodeScreen.js
 
 /**
  * My Code screen of BrightID
@@ -64,14 +73,37 @@ class MyCodeScreen extends React.Component<Props, State> {
     try {
       const { dispatch } = this.props;
       const data = dispatch(qrData());
+      console.log(data);
       this.genQrCode(data);
+<<<<<<< HEAD:BrightID/src/components/WebrtcScreens/MyCodeScreen.js
+      dispatch(parseQrData({ data, user: 1 }));
+      this.socket = dispatch(setUpWs());
+      setTimeout(() => dispatch(encryptAndUploadLocalData()));
+      emitter.on('connectDataReady', this.navigateToPreview);
+=======
       //
+>>>>>>> brightId/master:BrightID-rn/src/components/WebrtcScreens/MyCodeScreen.js
     } catch (err) {
       // we should handle err here in case network is down
       console.log(err);
     }
   }
 
+<<<<<<< HEAD:BrightID/src/components/WebrtcScreens/MyCodeScreen.js
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    this.socket.close();
+    // dispatch(removeEncryptedUserData());
+    // dispatch(removeConnectQrData());
+    emitter.off('connectDataReady', this.navigateToPreview);
+  }
+
+  navigateToPreview = () => {
+    this.props.navigation.navigate('PreviewConnection');
+  };
+
+=======
+>>>>>>> brightId/master:BrightID-rn/src/components/WebrtcScreens/MyCodeScreen.js
   genQrCode = (data) => {
     qrcode.toString(data, (err, qr) => {
       if (err) throw err;

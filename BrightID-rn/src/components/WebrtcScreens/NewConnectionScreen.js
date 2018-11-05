@@ -35,14 +35,6 @@ class NewConnectionScreen extends React.Component<Props> {
     rtcOn: true,
   };
 
-  componentDidMount() {
-    console.log('New Connections Screen Mounting');
-  }
-
-  componentWillUnmount() {
-    console.log('New Connection Screen Unmounting');
-  }
-
   resetQr = () => {
     // unmount / mount MyCodeScreen
     this.setState({ display: '' });
@@ -83,7 +75,6 @@ class NewConnectionScreen extends React.Component<Props> {
   hangUp = async () => {
     console.log('hanging up');
     const { dispatch } = this.props;
-    await dispatch(resetWebrtc());
     this.setState({
       rtcOn: false,
     });
@@ -106,7 +97,6 @@ class NewConnectionScreen extends React.Component<Props> {
             disabled={qr}
             onPress={async () => {
               // display qrcode
-              await dispatch(resetWebrtc());
               this.setState({
                 display: 'qrcode',
               });
@@ -125,7 +115,6 @@ class NewConnectionScreen extends React.Component<Props> {
             disabled={!qr}
             onPress={async () => {
               // display qrcode scanner
-              await dispatch(resetWebrtc());
               this.setState({
                 display: 'scanner',
               });
