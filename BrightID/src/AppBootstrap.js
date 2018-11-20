@@ -42,13 +42,7 @@ export default class AppBootstrap extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Spinner
-          style={styles.spinner}
-          isVisible={true}
-          size={47}
-          type="9CubeGrid"
-          color="#4990e2"
-        />
+        <Spinner isVisible={true} size={47} type="9CubeGrid" color="#4990e2" />
         <StatusBar barStyle="default" />
       </View>
     );

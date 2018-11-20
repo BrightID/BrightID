@@ -1,10 +1,18 @@
 // @flow
 
 import * as React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import emitter from '../../emitter';
 
 /**
  * Connection Card in the Connections Screen
@@ -21,21 +29,37 @@ type Props = {
   avatar: string,
   trustScore: string,
   connectionDate: string,
-  renderActionComponent: () => React.Component,
   publicKey: string,
   style: {},
 };
 
 class ConnectionCard extends React.Component<Props> {
+  handleUserOptions = () => {
+    const { nameornym, publicKey } = this.props;
+
+    Alert.alert(
+      `Delete Connection`,
+      `Are you sure you want to remove ${nameornym} from your list of connections?`,
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            emitter.emit('removeConnection', publicKey);
+          },
+        },
+      ],
+      { cancelable: true },
+    );
+  };
+
   render() {
-    const {
-      avatar,
-      nameornym,
-      trustScore,
-      connectionDate,
-      publicKey,
-      style,
-    } = this.props;
+    const { avatar, nameornym, trustScore, connectionDate, style } = this.props;
+
     const image = avatar
       ? { uri: avatar }
       : require('../../static/default_avatar.jpg');

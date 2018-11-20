@@ -22,7 +22,7 @@ import HeaderButtons, {
 } from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { setUserData } from '../../actions';
+import { setUserData, connectionTrustScore } from '../../actions';
 import { addSampleConnections } from './actions';
 
 type Props = {
@@ -75,6 +75,7 @@ class SignUp extends React.Component<Props, State> {
       inputActive: false,
       userAvatar: '',
       imagePicking: false,
+      creatingBrightId: false,
     };
   }
 
@@ -136,6 +137,10 @@ class SignUp extends React.Component<Props, State> {
         return alert('Please add your name or nym');
       }
 
+      this.setState({
+        creatingBrightId: true,
+      });
+
       // create public / private key pair
 
       const { publicKey, secretKey } = nacl.sign.keyPair();
@@ -157,9 +162,24 @@ class SignUp extends React.Component<Props, State> {
       navigation.navigate('App');
       // catch any errors with saving data or generating the public / private key
     } catch (err) {
+      this.setState({
+        creatingBrightId: false,
+      });
       console.log(err);
     }
   };
+
+  renderButtonOrSpinner = () =>
+    !this.state.creatingBrightId ? (
+      <TouchableOpacity
+        style={styles.createBrightIdButton}
+        onPress={this.handleBrightIdCreation}
+      >
+        <Text style={styles.buttonInnerText}>Create My BrightID</Text>
+      </TouchableOpacity>
+    ) : (
+      <Spinner isVisible={true} size={47} type="9CubeGrid" color="#4990e2" />
+    );
 
   render() {
     const { inputActive, imagePicking, nameornym, userAvatar } = this.state;
@@ -230,12 +250,7 @@ class SignUp extends React.Component<Props, State> {
             Your name and photo will never be shared with apps or stored on
             servers
           </Text>
-          <TouchableOpacity
-            style={styles.createBrightIdButton}
-            onPress={this.handleBrightIdCreation}
-          >
-            <Text style={styles.buttonInnerText}>Create My BrightID</Text>
-          </TouchableOpacity>
+          {this.renderButtonOrSpinner()}
         </View>
       </View>
     );

@@ -70,10 +70,12 @@ class ConnectionsScreen extends React.Component<Props> {
   componentDidMount() {
     this.getConnections();
     emitter.on('refreshConnections', this.getConnections);
+    emitter.on('removeConnection', this.removeConnection);
   }
 
   componentWillUnmount() {
     emitter.off('refreshConnections', this.getConnections);
+    emitter.off('removeConnection', this.removeConnection);
   }
 
   getConnections = async () => {
@@ -103,28 +105,7 @@ class ConnectionsScreen extends React.Component<Props> {
     }
   };
 
-  handleUserOptions = (publicKey) => () => {
-    const { connections } = this.props;
-    const { nameornym } = connections.find(
-      (item) => JSON.stringify(item.publicKey) === JSON.stringify(publicKey),
-    );
-
-    Alert.alert(
-      `Delete Connection`,
-      `Are you sure you want to remove ${nameornym} from your list of connections?`,
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        { text: 'OK', onPress: this.removeUser(publicKey) },
-      ],
-      { cancelable: true },
-    );
-  };
-
-  removeUser = (publicKey) => async () => {
+  removeConnection = async (publicKey) => {
     try {
       // remove connection from async storage
       await AsyncStorage.removeItem(JSON.stringify(publicKey));
