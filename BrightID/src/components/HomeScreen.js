@@ -151,7 +151,6 @@ export class HomeScreen extends React.Component<Props> {
       navigation,
       nameornym,
       trustScore,
-      connections,
       groupsCount,
       userAvatar,
     } = this.props;
@@ -175,8 +174,9 @@ export class HomeScreen extends React.Component<Props> {
             </Text>
           </View>
           <View style={styles.trustScoreContainer}>
-            <Text id="trustScore" style={styles.trustScore}>
-              {trustScore}% Trusted
+            <Text style={styles.trustScoreLeft}>Score:</Text>
+            <Text id="trustScore" style={styles.trustScoreRight}>
+              {trustScore}
             </Text>
           </View>
           <View style={styles.countsContainer}>
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
-    textAlign: 'center',
+    color: '#000000',
     textShadowColor: 'rgba(0, 0, 0, 0.32)',
     textShadowOffset: {
       width: 0,
@@ -273,22 +273,37 @@ const styles = StyleSheet.create({
   },
   trustScoreContainer: {
     borderBottomColor: '#e3e1e1',
-    borderTopColor: '#e3e1e1',
-    borderTopWidth: 1,
     borderBottomWidth: 1,
     width: '80%',
-    marginTop: 9,
-    paddingTop: 7,
-    paddingBottom: 7,
+    marginTop: 12,
+    paddingBottom: 16,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  trustScore: {
+  trustScoreLeft: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
     textAlign: 'center',
-    color: 'green',
+    color: '#9b9b9b',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 5,
+    paddingTop: 3.5,
+  },
+  trustScoreRight: {
+    fontFamily: 'ApexNew-Medium',
+    fontSize: 22,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    textAlign: 'center',
+    color: '#139c60',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   countsContainer: {
     justifyContent: 'space-evenly',
@@ -316,8 +331,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   connectButton: {
-    // width: 138,
-    // height: 138,
     height: 65,
     paddingTop: 13,
     paddingBottom: 12,

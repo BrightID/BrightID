@@ -33,7 +33,7 @@ type Props = {
   style: {},
 };
 
-class ConnectionCard extends React.Component<Props> {
+class ConnectionCard extends React.PureComponent<Props> {
   handleUserOptions = () => {
     const { nameornym, publicKey } = this.props;
 
@@ -57,6 +57,15 @@ class ConnectionCard extends React.Component<Props> {
     );
   };
 
+  trustScoreColor = () => {
+    const { trustScore } = this.props;
+    if (parseFloat(trustScore) >= 85) {
+      return { color: '#139c60' };
+    } else {
+      return { color: '#e39f2f' };
+    }
+  };
+
   render() {
     const { avatar, nameornym, trustScore, connectionDate, style } = this.props;
 
@@ -68,7 +77,12 @@ class ConnectionCard extends React.Component<Props> {
         <Image source={image} style={styles.avatar} />
         <View style={styles.info}>
           <Text style={styles.name}>{nameornym}</Text>
-          <Text style={styles.trustScore}>{trustScore}% Trusted</Text>
+          <View style={styles.trustScoreContainer}>
+            <Text style={styles.trustScoreLeft}>Score:</Text>
+            <Text style={[styles.trustScoreRight, this.trustScoreColor()]}>
+              {trustScore}
+            </Text>
+          </View>
           <Text style={styles.connectedText}>
             Connected {moment(parseInt(connectionDate, 10)).fromNow()}
           </Text>
@@ -118,14 +132,27 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
-  trustScore: {
-    fontFamily: 'ApexNew-Medium',
+  trustScoreContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  trustScoreLeft: {
+    fontFamily: 'ApexNew-Book',
     fontSize: 14,
-    color: 'green',
+    color: '#9b9b9b',
+    marginRight: 3,
+    paddingTop: 1.5,
+  },
+  trustScoreRight: {
+    fontFamily: 'ApexNew-Medium',
+    fontSize: 16,
   },
   connectedText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 14,
+    fontSize: 12,
+    color: '#aba9a9',
+    fontStyle: 'italic',
   },
   moreIcon: {
     marginRight: 16,

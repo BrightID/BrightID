@@ -125,23 +125,9 @@ class ConnectionsScreen extends React.Component<Props> {
     );
   };
 
-  renderActionComponent = (publicKey) => (
-    <TouchableOpacity
-      style={styles.moreIcon}
-      onPress={this.handleUserOptions(publicKey)}
-    >
-      <Ionicon size={48} name="ios-more" color="#ccc" />
-    </TouchableOpacity>
-  );
+  renderConnection = ({ item }) => <ConnectionCard {...item} />;
 
-  renderConnection = ({ item }) => (
-    <ConnectionCard
-      {...item}
-      renderActionComponent={this.renderActionComponent}
-    />
-  );
-
-  renderList = () => {
+  renderListOrSpinner = () => {
     const { connections } = this.props;
     if (connections.length > 0) {
       return (
@@ -173,7 +159,7 @@ class ConnectionsScreen extends React.Component<Props> {
       <View style={styles.container}>
         <View style={styles.mainContainer}>
           <SearchConnections navigation={this.props.navigation} />
-          <View style={styles.mainContainer}>{this.renderList()}</View>
+          <View style={styles.mainContainer}>{this.renderListOrSpinner()}</View>
         </View>
         <BottomNav navigation={navigation} />
       </View>
@@ -191,7 +177,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fdfdfd',
     alignItems: 'center',
     flexDirection: 'column',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     marginTop: 8,
   },
   connectionsContainer: {
