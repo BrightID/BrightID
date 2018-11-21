@@ -1,7 +1,7 @@
 // @flow
 
 import io from 'socket.io-client';
-import { fetchData } from '../../actions/fetchData';
+import { fetchData } from './fetchData';
 
 export const setUpWs = () => (dispatch: () => null, getState: () => {}) => {
   let {

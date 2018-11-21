@@ -2,8 +2,11 @@
 
 import { createDecipher } from 'react-native-crypto';
 import { Buffer } from 'buffer';
-import { setConnectUserData, removeConnectUserData } from './index';
-import emitter from '../emitter';
+import {
+  setConnectUserData,
+  removeConnectUserData,
+} from '../../../actions/index';
+import emitter from '../../../emitter';
 
 export const decryptData = (data) => async (dispatch, getState) => {
   const { connectQrData } = getState().main;

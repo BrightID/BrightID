@@ -6,13 +6,12 @@ import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-spinkit';
-// import WebRTCLogic from './WebRTCLogic';
-import { qrData } from '../../actions/genQrData';
-
-import { encryptAndUploadLocalData } from '../../actions/encryptData';
-import { setUpWs, closeWs } from './websocket';
-import { parseQrData } from '../../actions/parseQrData';
+import { qrData } from './actions/genQrData';
+import { encryptAndUploadLocalData } from './actions/encryptData';
+import { setUpWs, closeWs } from './actions/websocket';
+import { parseQrData } from './actions/parseQrData';
 import emitter from '../../emitter';
+import { removeConnectQrData } from '../../actions';
 
 /**
  * My Code screen of BrightID
@@ -49,19 +48,15 @@ class MyCodeScreen extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    try {
-      const { dispatch } = this.props;
-      const data = dispatch(qrData());
-      console.log(data);
-      this.genQrCode(data);
-      dispatch(parseQrData({ data, user: 1 }));
-      this.socket = dispatch(setUpWs());
-      setTimeout(() => dispatch(encryptAndUploadLocalData()));
-      emitter.on('connectDataReady', this.navigateToPreview);
-    } catch (err) {
-      // we should handle err here in case network is down
-      console.log(err);
-    }
+    const { dispatch } = this.props;
+    dispatch(removeConnectQrData());
+    const data = dispatch(qrData());
+    console.log(data);
+    this.genQrCode(data);
+    dispatch(parseQrData({ data, user: 1 }));
+    this.socket = dispatch(setUpWs());
+    setTimeout(() => dispatch(encryptAndUploadLocalData()));
+    emitter.on('connectDataReady', this.navigateToPreview);
   }
 
   componentWillUnmount() {

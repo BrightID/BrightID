@@ -8,9 +8,10 @@ import { RNCamera } from 'react-native-camera';
 import Spinner from 'react-native-spinkit';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { parseQrData } from './actions/parseQrData';
-import { fetchData } from '../../actions/fetchData';
+import { fetchData } from './actions/fetchData';
 import { encryptAndUploadLocalData } from './actions/encryptData';
 import emitter from '../../emitter';
+import { removeConnectQrData } from '../../actions';
 
 /**
  * Scan code screen of BrightID
@@ -39,6 +40,8 @@ class ScanCodeScreen extends React.Component<Props, State> {
   };
 
   componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch(removeConnectQrData());
     emitter.on('connectDataReady', this.navigateToPreview);
   }
 
@@ -48,6 +51,7 @@ class ScanCodeScreen extends React.Component<Props, State> {
 
   handleBarCodeRead = ({ data }) => {
     const { dispatch } = this.props;
+    console.log(data);
     dispatch(parseQrData({ data, user: 2 }));
     setTimeout(() => dispatch(encryptAndUploadLocalData()));
     setTimeout(() => dispatch(fetchData()));

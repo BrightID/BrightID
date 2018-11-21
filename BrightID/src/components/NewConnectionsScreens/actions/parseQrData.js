@@ -1,6 +1,6 @@
 // @flow
 
-import { setConnectQrData } from './index';
+import { setConnectQrData } from '../../../actions/index';
 
 export const parseQrData = ({
   data,
