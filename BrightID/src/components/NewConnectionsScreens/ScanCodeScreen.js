@@ -7,9 +7,9 @@ import { connect } from 'react-redux';
 import { RNCamera } from 'react-native-camera';
 import Spinner from 'react-native-spinkit';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { parseQrData } from '../../actions/parseQrData';
+import { parseQrData } from './actions/parseQrData';
 import { fetchData } from '../../actions/fetchData';
-import { encryptAndUploadLocalData } from '../../actions/encryptData';
+import { encryptAndUploadLocalData } from './actions/encryptData';
 import emitter from '../../emitter';
 
 /**
@@ -46,7 +46,7 @@ class ScanCodeScreen extends React.Component<Props, State> {
     emitter.off('connectDataReady', this.navigateToPreview);
   }
 
-  handleBarCodeRead = ({ type, data }) => {
+  handleBarCodeRead = ({ data }) => {
     const { dispatch } = this.props;
     dispatch(parseQrData({ data, user: 2 }));
     setTimeout(() => dispatch(encryptAndUploadLocalData()));

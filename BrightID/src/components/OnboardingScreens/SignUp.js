@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import {
+  Alert,
   AsyncStorage,
   Image,
   Platform,
@@ -13,7 +14,7 @@ import {
   View,
 } from 'react-native';
 import nacl from 'tweetnacl';
-import ImagePicker from 'react-native-image-crop-picker';
+import ImagePicker from 'react-native-image-picker';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import HeaderButtons, {
@@ -22,7 +23,7 @@ import HeaderButtons, {
 } from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { setUserData, connectionTrustScore } from '../../actions';
+import { setUserData } from '../../actions';
 import { addSampleConnections } from './actions';
 
 type Props = {
@@ -85,15 +86,11 @@ class SignUp extends React.Component<Props, State> {
 
     const options = {
       title: 'Select Avatar',
-      cropping: true,
-      avoidEmptySpaceAroundImage: true,
-      width: 180,
-      height: 180,
-      includeBase64: true,
-      compressImageQuality: 0.8,
       mediaType: 'photo',
-      compressImageMaxWidth: 180,
-      compressImageMaxHeight: 180,
+      maxWidth: 180,
+      maxHeight: 180,
+      quality: 0.6,
+      allowsEditing: true,
       loadingLabelText: 'loading avatar photo...',
     };
     // loading UI to account for the delay after picking an image
@@ -105,31 +102,37 @@ class SignUp extends React.Component<Props, State> {
       1000,
     );
 
-    ImagePicker.openPicker(options)
-      .then((image) => {
-        const imageData = { uri: `data:${image.mime};base64,${image.data}` };
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+        setTimeout(
+          () =>
+            this.setState({
+              imagePicking: false,
+            }),
+          1001,
+        );
+      } else if (response.error) {
+        Alert.alert('ERROR', response.error);
+        setTimeout(
+          () =>
+            this.setState({
+              imagePicking: false,
+            }),
+          1001,
+        );
+      } else {
+        console.log(`image size: ${response.fileSize}`);
+        console.log(response.type);
+        const mime = response.type ? response.type : 'jpeg';
+        const imageData = {
+          uri: `data:${mime};base64,${response.data}`,
+        };
         this.setState({
           userAvatar: imageData,
           imagePicking: false,
         });
-        setTimeout(
-          () =>
-            this.setState({
-              imagePicking: false,
-            }),
-          1001,
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-        setTimeout(
-          () =>
-            this.setState({
-              imagePicking: false,
-            }),
-          1001,
-        );
-      });
+      }
+    });
   };
 
   handleBrightIdCreation = async () => {

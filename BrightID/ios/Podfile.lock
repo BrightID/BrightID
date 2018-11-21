@@ -1,7 +1,6 @@
 PODS:
   - BVLinearGradient (2.4.3):
     - React
-  - QBImagePickerController (3.4.0)
   - React (0.57.5):
     - React/Core (= 0.57.5)
   - react-native-camera (1.4.1):
@@ -11,6 +10,8 @@ PODS:
   - react-native-camera/RCT (1.4.1):
     - React
   - react-native-camera/RN (1.4.1):
+    - React
+  - react-native-image-picker (0.27.1):
     - React
   - react-native-randombytes (3.5.1):
     - React
@@ -48,20 +49,16 @@ PODS:
     - React/Core
   - RNFS (2.12.1):
     - React
-  - RNImageCropPicker (0.21.3):
-    - QBImagePickerController
-    - React/Core
-    - RSKImageCropper
   - RNSVG (8.0.8):
     - React
   - RNVectorIcons (6.0.2):
     - React
-  - RSKImageCropper (2.2.1)
   - yoga (0.57.5.React)
 
 DEPENDENCIES:
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - react-native-camera (from `../node_modules/react-native-camera`)
+  - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
   - react-native-spinkit (from `../node_modules/react-native-spinkit`)
   - React/Core (from `../node_modules/react-native`)
@@ -77,15 +74,9 @@ DEPENDENCIES:
   - React/RCTWebSocket (from `../node_modules/react-native`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - RNFS (from `../node_modules/react-native-fs`)
-  - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga/yoga.podspec`)
-
-SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
-    - QBImagePickerController
-    - RSKImageCropper
 
 EXTERNAL SOURCES:
   BVLinearGradient:
@@ -94,6 +85,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native"
   react-native-camera:
     :path: "../node_modules/react-native-camera"
+  react-native-image-picker:
+    :path: "../node_modules/react-native-image-picker"
   react-native-randombytes:
     :path: "../node_modules/react-native-randombytes"
   react-native-spinkit:
@@ -102,8 +95,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/rn-fetch-blob"
   RNFS:
     :path: "../node_modules/react-native-fs"
-  RNImageCropPicker:
-    :path: "../node_modules/react-native-image-crop-picker"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   RNVectorIcons:
@@ -113,19 +104,17 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   BVLinearGradient: 6d8909e3fc6b089defa4b89d967441fa6827a2ee
-  QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
   react-native-camera: eac1e8cc7523273a2a11956d0e5dac08296cf4b0
+  react-native-image-picker: f42de90075c5b1af53417af927631d909a1a746e
   react-native-randombytes: d3184d351604f78e019535178766590188bbc133
   react-native-spinkit: c9f5826e1a0bf0da889b3795278eb96ae15c1350
   rn-fetch-blob: 76a8f798dae965bbcd146a2438f2e1d381c91ae3
   RNFS: bbb1a64eb245763daf34aea86f97c97c4e85f74c
-  RNImageCropPicker: 32ca4b9fef4e1b7b85ba69494242122948117e06
   RNSVG: 6252323c0312735f0af5f58b5adf2965b6a9ffbf
   RNVectorIcons: 8c52e1e8da1153613fdef44748e865c25556cb9c
-  RSKImageCropper: 98296ad26b41753f796b6898d015509598f13d97
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: def573553996c9ffc4ff33c9a1d76f37449eca38
+PODFILE CHECKSUM: a93affba4f477b5abd2b7f2b10bd079a283aafa8
 
 COCOAPODS: 1.5.3

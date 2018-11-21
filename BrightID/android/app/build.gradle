@@ -148,9 +148,9 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-image-picker')
     compile project(':react-native-fs')
     compile project(':rn-fetch-blob')
-    compile project(':react-native-image-crop-picker')
     compile project(':react-native-vector-icons')
     compile project(':react-native-svg')
     compile project(':react-native-spinkit')
