@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
-import Feather from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import GroupAvatar from './EligibleGroupAvatar';
 
 /**
@@ -23,35 +23,54 @@ class EligibleGroupCard extends React.Component<Props> {
   renderApprovalButtons = () => (
     <View style={styles.approvalButtonContainer}>
       <TouchableOpacity style={styles.moreIcon}>
-        <Feather size={30} name="x-circle" color="#ccc" />
+        <AntDesign size={30} name="closecircleo" color="#000" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.moreIcon}>
-        <Feather size={30} name="check-circle" color="#ccc" />
+        <AntDesign size={30} name="checkcircleo" color="#000" />
       </TouchableOpacity>
     </View>
   );
 
   renderReviewButton = () => (
     <TouchableOpacity style={styles.reviewButton}>
-      <Text style={styles.reviewButtonText}>New Group</Text>
-      <Text style={styles.reviewButtonText}> Review</Text>
+      <Text style={styles.reviewButtonText}>Awaiting co-</Text>
+      <Text style={styles.reviewButtonText}>founders</Text>
     </TouchableOpacity>
   );
 
-  render() {
-    const { names } = this.props;
-    return (
-      <View style={styles.container}>
-        <GroupAvatar />
-        <View style={styles.info}>
-          <Text style={styles.names}>{this.props.names.join(', ')}</Text>
-          <Text style={styles.trustScore}>
-            {this.props.trustScore}% Trusted
+  trustScoreColor = () => {
+    const { trustScore } = this.props;
+    if (parseFloat(trustScore) >= 85) {
+      return { color: '#139c60' };
+    } else {
+      return { color: '#e39f2f' };
+    }
+  };
+
+  renderTrustScore = () => {
+    const { trustScore } = this.props;
+    if (trustScore) {
+      return (
+        <View style={styles.trustScoreContainer}>
+          <Text style={styles.trustScoreLeft}>Score:</Text>
+          <Text style={[styles.trustScoreRight, this.trustScoreColor()]}>
+            {this.props.trustScore}
           </Text>
         </View>
-        {names.length > 2
-          ? this.renderApprovalButtons()
-          : this.renderReviewButton()}
+      );
+    }
+  };
+
+  render() {
+    const { names, trustScore } = this.props;
+    return (
+      <View style={styles.container}>
+        <GroupAvatar names={names} />
+        <View style={styles.info}>
+          <Text style={styles.names}>{names.join(', ')}</Text>
+          {this.renderTrustScore()}
+        </View>
+        {trustScore ? this.renderApprovalButtons() : this.renderReviewButton()}
       </View>
     );
   }
@@ -64,7 +83,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     backgroundColor: '#fff',
-    height: 76,
+    height: 90,
     borderTopColor: '#e3e0e4',
     borderTopWidth: 1,
   },
@@ -82,10 +101,21 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
-  trustScore: {
-    fontFamily: 'ApexNew-Medium',
+  trustScoreContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  trustScoreLeft: {
+    fontFamily: 'ApexNew-Book',
     fontSize: 14,
-    color: 'green',
+    color: '#9b9b9b',
+    marginRight: 3,
+    paddingTop: 1.5,
+  },
+  trustScoreRight: {
+    fontFamily: 'ApexNew-Medium',
+    fontSize: 16,
   },
   moreIcon: {
     marginRight: 8,
@@ -95,18 +125,18 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   reviewButton: {
-    width: 78,
-    height: 47,
+    width: 89,
+    height: 43,
     borderRadius: 3,
-    borderColor: '#4990e2',
-    borderWidth: 1,
+    backgroundColor: '#f8f8ba',
     justifyContent: 'center',
     alignItems: 'center',
   },
   reviewButtonText: {
-    fontFamily: 'ApexNew-Book',
+    fontFamily: 'ApexNew-Medium',
     fontSize: 14,
-    color: '#4990e2',
+    // fontWeight: '500',
+    color: '#b9b75c',
   },
 });
 

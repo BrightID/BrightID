@@ -2,8 +2,6 @@
 
 import * as React from 'react';
 import {
-  Alert,
-  AsyncStorage,
   FlatList,
   StyleSheet,
   Text,
@@ -15,7 +13,7 @@ import Spinner from 'react-native-spinkit';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import SearchConnections from '../Connections/SearchConnections';
 import ConnectionCard from '../Connections/ConnectionCard';
-import { removeConnection, setConnections } from '../../actions';
+import { getConnections } from '../../actions/getConnections';
 
 /**
  * Connection screen of BrightID
@@ -40,41 +38,9 @@ class NewGroupScreen extends React.Component<Props> {
     this.getConnections();
   }
 
-  getConnections = async () => {
-    try {
-      const { dispatch } = this.props;
-      /**
-       * obtain connection keys from async storage
-       * currently everything in async storage except for `userData` is a connection
-       *
-       * THIS MIGHT CHANGE WHEN GROUPS ARE ADDED
-       */
-
-      const allKeys = await AsyncStorage.getAllKeys();
-      const connectionKeys = allKeys.filter((val) => val !== 'userData');
-      const storageValues = await AsyncStorage.multiGet(connectionKeys);
-      const connections = storageValues.map((val) => JSON.parse(val[1]));
-      // update redux store
-      dispatch(setConnections(connections));
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  handleUserOptions = (publicKey) => () => {
-    const { nameornym } = this.props;
-  };
-
-  removeUser = (publicKey) => async () => {
-    try {
-      const { dispatch } = this.props;
-      // update redux store
-      dispatch(removeConnection(publicKey));
-      // remove connection from async storage
-      await AsyncStorage.removeItem(JSON.stringify(publicKey));
-    } catch (err) {
-      console.log(err);
-    }
+  getConnections = () => {
+    const { dispatch } = this.props;
+    dispatch(getConnections());
   };
 
   filterConnections = () => {
@@ -99,11 +65,7 @@ class NewGroupScreen extends React.Component<Props> {
   );
 
   renderConnection = ({ item }) => (
-    <ConnectionCard
-      {...item}
-      renderActionComponent={this.renderActionComponent}
-      style={styles.connectionCard}
-    />
+    <ConnectionCard {...item} groups={true} style={styles.connectionCard} />
   );
 
   renderList = () => {

@@ -1,21 +1,19 @@
 // @flow
 
-import { createCipher, createDecipher } from 'react-native-crypto';
+import { createCipher } from 'react-native-crypto';
 import { Buffer } from 'buffer';
-import { setEncryptedUserData } from './index';
 import { postData } from './postData';
 import { fetchData } from './fetchData';
 
-export const encryptAndUploadLocalData = () => async (dispatch, getState) => {
+export const encryptAndUploadLocalData = () => (dispatch, getState) => {
   const {
     publicKey,
     userAvatar,
     nameornym,
     connectQrData: { aesKey },
   } = getState().main;
-  // return here for testing
-  if (!publicKey || !userAvatar || !nameornym || !aesKey) return;
-  //
+
+  // if (!publicKey || !userAvatar || !nameornym || !aesKey) return;
 
   const dataObj = {
     publicKey: Buffer.from(publicKey).toString('base64'),
@@ -29,9 +27,7 @@ export const encryptAndUploadLocalData = () => async (dispatch, getState) => {
 
   let encrypted = cipher.update(dataStr, 'utf8', 'base64');
   encrypted += cipher.final('base64');
-  // dispatch(setEncryptedUserData(encrypted));
-  // for testing
+  console.log('encrypting data');
   dispatch(postData(encrypted));
   // setTimeout(() => dispatch(fetchData()), 1000);
-  //
 };

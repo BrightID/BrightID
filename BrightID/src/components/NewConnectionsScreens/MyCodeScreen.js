@@ -10,8 +10,7 @@ import Spinner from 'react-native-spinkit';
 import { qrData } from '../../actions/genQrData';
 
 import { encryptAndUploadLocalData } from '../../actions/encryptData';
-import { setUpWs, closeWs } from '../../actions/websocket';
-import { removeEncryptedUserData, removeConnectQrData } from '../../actions';
+import { setUpWs, closeWs } from './websocket';
 import { parseQrData } from '../../actions/parseQrData';
 import emitter from '../../emitter';
 
@@ -66,10 +65,7 @@ class MyCodeScreen extends React.Component<Props, State> {
   }
 
   componentWillUnmount() {
-    const { dispatch } = this.props;
     this.socket.close();
-    // dispatch(removeEncryptedUserData());
-    // dispatch(removeConnectQrData());
     emitter.off('connectDataReady', this.navigateToPreview);
   }
 
@@ -123,15 +119,6 @@ class MyCodeScreen extends React.Component<Props, State> {
     }
   };
 
-  // renderWebRTCLogic = () => {
-  //   const { rtcId, rtcOn, hangUp, navigation } = this.props;
-  //   if (rtcId && rtcOn) {
-  //     return (
-  //       <WebRTCLogic user="UserA" hangUp={hangUp} navigation={navigation} />
-  //     );
-  //   }
-  // };
-
   render() {
     const { userAvatar, nameornym } = this.props;
     return (
@@ -160,8 +147,6 @@ class MyCodeScreen extends React.Component<Props, State> {
           </View>
         </View>
         <View style={styles.half}>{this.renderQrCode()}</View>
-        {/* {this.renderWebRTCLogic()} */}
-        {/* <TextInput value={this.props.rtcId || 'RTC TOKEN'} editable={true} /> */}
       </View>
     );
   }

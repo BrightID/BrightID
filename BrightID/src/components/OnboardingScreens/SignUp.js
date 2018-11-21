@@ -86,11 +86,15 @@ class SignUp extends React.Component<Props, State> {
     const options = {
       title: 'Select Avatar',
       cropping: true,
+      avoidEmptySpaceAroundImage: true,
       width: 180,
       height: 180,
       includeBase64: true,
-      // compressImageQuality: 0.2,
+      compressImageQuality: 0.8,
       mediaType: 'photo',
+      compressImageMaxWidth: 180,
+      compressImageMaxHeight: 180,
+      loadingLabelText: 'loading avatar photo...',
     };
     // loading UI to account for the delay after picking an image
     setTimeout(

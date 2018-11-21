@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { resetWebrtc, resetPreview, setPreview } from '../../actions';
+import { removeConnectUserData } from '../../actions';
 import emitter from '../../emitter';
 
 /**
@@ -48,6 +48,7 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
     try {
       const {
         connectUserData: { avatar, nameornym, publicKey },
+        dispatch,
       } = this.props;
       // TODO formalize spec for this
       // create a new connection object
@@ -65,7 +66,7 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
       );
       // reset Preview
       // dispatch(resetPreview());
-
+      dispatch(removeConnectUserData());
       emitter.emit('refreshConnections', {});
     } catch (err) {
       console.log(err);

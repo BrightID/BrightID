@@ -23,7 +23,7 @@
     "no-prototype-builtins": "off",
     "function-paren-newline": "off",
     "class-methods-use-this": "warn",
-    "react/destructuring-assignment": "warn",
+    "react/destructuring-assignment": "off",
     "react/no-array-index-key": "warn",
     "react/prefer-stateless-function": "off",
     "react/jsx-filename-extension": "off",

@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import CurrentGroupAvatar from './CurrentGroupAvatar';
 
@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flex: 1,
     padding: 20,
-    // minHeight: 182,
     borderColor: '#e3e0e4',
     borderTopWidth: 1,
     borderLeftWidth: 1,

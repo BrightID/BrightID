@@ -12,6 +12,7 @@ export const addConnection = () => (dispatch) => {
     publicKey,
     avatar: '',
     nameornym,
+    trustScore: `${Math.floor(Math.random() * 99)}`,
   };
 
   dispatch(setConnectUserData(userData));

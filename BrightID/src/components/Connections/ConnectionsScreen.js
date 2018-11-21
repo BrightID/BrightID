@@ -1,14 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {
-  Alert,
-  AsyncStorage,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { AsyncStorage, FlatList, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-spinkit';
 import HeaderButtons, {
@@ -16,13 +9,9 @@ import HeaderButtons, {
   Item,
 } from 'react-navigation-header-buttons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import Feather from 'react-native-vector-icons/Feather';
-import Ionicon from 'react-native-vector-icons/Ionicons';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
-import { removeConnection, setConnections } from '../../actions';
-import { defaultSort } from './sortingUtility';
-import { objToUint8 } from '../../utils/encoding';
+import { getConnections } from '../../actions/getConnections';
 import { createNewConnection } from './createNewConnection';
 import emitter from '../../emitter';
 import BottomNav from '../BottomNav';
@@ -78,31 +67,9 @@ class ConnectionsScreen extends React.Component<Props> {
     emitter.off('removeConnection', this.removeConnection);
   }
 
-  getConnections = async () => {
-    try {
-      const { dispatch } = this.props;
-      /**
-       * obtain connection keys from async storage
-       * currently everything in async storage except for `userData` is a connection
-       *
-       * THIS MIGHT CHANGE WHEN GROUPS ARE ADDED
-       */
-
-      const allKeys = await AsyncStorage.getAllKeys();
-      const connectionKeys = allKeys.filter((val) => val !== 'userData');
-      const storageValues = await AsyncStorage.multiGet(connectionKeys);
-      const connectionValues = storageValues.map((val) => JSON.parse(val[1]));
-      const connections = connectionValues.map((val) => {
-        val.publicKey = objToUint8(val.publicKey);
-        return val;
-      });
-      // update redux store
-      dispatch(setConnections(connections));
-      // sort connections
-      dispatch(defaultSort());
-    } catch (err) {
-      console.log(err);
-    }
+  getConnections = () => {
+    const { dispatch } = this.props;
+    dispatch(getConnections());
   };
 
   removeConnection = async (publicKey) => {

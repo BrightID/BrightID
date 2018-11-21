@@ -12,10 +12,10 @@ import SortingConnectionsScreen from './components/Connections/SortingConnection
 import GroupsScreen from './components/GroupsScreens/GroupsScreen';
 import Onboard from './components/OnboardingScreens/Onboard';
 import SignUp from './components/OnboardingScreens/SignUp';
-import NewConnectionScreen from './components/WebrtcScreens/NewConnectionScreen';
+import NewConnectionScreen from './components/NewConnectionsScreens/NewConnectionScreen';
 import NewGroupScreen from './components/GroupsScreens/NewGroupScreen';
-import PreviewConnectionScreen from './components/WebrtcScreens/PreviewConnectionScreen';
-import SuccessScreen from './components/WebrtcScreens/SuccessScreen';
+import PreviewConnectionScreen from './components/NewConnectionsScreens/PreviewConnectionScreen';
+import SuccessScreen from './components/NewConnectionsScreens/SuccessScreen';
 import AppBootstrap from './AppBootstrap';
 
 /**
@@ -76,7 +76,7 @@ const GroupStack = createStackNavigator(
     navigationOptions: ({ navigation }) => ({
       title: 'Groups',
       headerTintColor: '#fff',
-      headerTitleStyle: {},
+      headerTitleStyle,
       headerBackground,
       headerLeft: (
         <HeaderButtons left={true} HeaderButtonComponent={MaterialHeaderButton}>

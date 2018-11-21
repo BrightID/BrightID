@@ -14,18 +14,32 @@ import { connect } from 'react-redux';
 
 type Props = {
   userAvatar: string,
+  names: [string],
 };
 
 class EligibleGroupAvatar extends React.Component<Props> {
   render() {
-    const { userAvatar } = this.props;
-
+    const { userAvatar, names } = this.props;
+    const faded = names.includes('Anna');
     return (
       <View style={styles.container}>
-        <Image
-          source={userAvatar || require('../../static/default_avatar.jpg')}
-          style={styles.avatar}
-        />
+        <View style={styles.topAvatars}>
+          <Image
+            source={userAvatar || require('../../static/default_avatar.jpg')}
+            style={[styles.avatar]}
+          />
+        </View>
+        <View style={styles.bottomAvatars}>
+          <Image
+            source={userAvatar || require('../../static/default_avatar.jpg')}
+            style={[styles.avatar, faded ? styles.faded : '']}
+          />
+
+          <Image
+            source={userAvatar || require('../../static/default_avatar.jpg')}
+            style={[styles.avatar, faded ? styles.faded : '']}
+          />
+        </View>
       </View>
     );
   }
@@ -34,17 +48,30 @@ class EligibleGroupAvatar extends React.Component<Props> {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
+    justifyContent: 'center',
+    flexDirection: 'column',
+    width: 85,
   },
   avatar: {
-    borderRadius: 30,
-    width: 60,
-    height: 60,
-    marginLeft: 14,
+    borderRadius: 20,
+    width: 40,
+    height: 40,
     backgroundColor: '#d8d8d8',
+  },
+  faded: {
+    opacity: 0.25,
+  },
+  topAvatars: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    marginBottom: -3.3,
+  },
+  bottomAvatars: {
+    marginTop: -3.3,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
   },
 });
 

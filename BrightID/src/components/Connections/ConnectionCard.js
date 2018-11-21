@@ -12,6 +12,7 @@ import {
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import emitter from '../../emitter';
 
 /**
@@ -31,6 +32,7 @@ type Props = {
   connectionDate: string,
   publicKey: string,
   style: {},
+  groups: boolean,
 };
 
 class ConnectionCard extends React.PureComponent<Props> {
@@ -57,6 +59,10 @@ class ConnectionCard extends React.PureComponent<Props> {
     );
   };
 
+  handleGroupSelect = () => {
+    console.log('pressed');
+  };
+
   trustScoreColor = () => {
     const { trustScore } = this.props;
     if (parseFloat(trustScore) >= 85) {
@@ -64,6 +70,28 @@ class ConnectionCard extends React.PureComponent<Props> {
     } else {
       return { color: '#e39f2f' };
     }
+  };
+
+  renderActionButton = () => {
+    const { groups } = this.props;
+    if (groups) {
+      return (
+        <TouchableOpacity
+          style={styles.moreIcon}
+          onPress={this.handleGroupSelect}
+        >
+          <AntDesign size={30.4} name="checkcircleo" color="#000" />
+        </TouchableOpacity>
+      );
+    }
+    return (
+      <TouchableOpacity
+        style={styles.moreIcon}
+        onPress={this.handleUserOptions}
+      >
+        <Ionicon size={48} name="ios-more" color="#ccc" />
+      </TouchableOpacity>
+    );
   };
 
   render() {
@@ -87,12 +115,7 @@ class ConnectionCard extends React.PureComponent<Props> {
             Connected {moment(parseInt(connectionDate, 10)).fromNow()}
           </Text>
         </View>
-        <TouchableOpacity
-          style={styles.moreIcon}
-          onPress={this.handleUserOptions}
-        >
-          <Ionicon size={48} name="ios-more" color="#ccc" />
-        </TouchableOpacity>
+        {this.renderActionButton()}
       </View>
     );
   }

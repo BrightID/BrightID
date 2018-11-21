@@ -3,7 +3,7 @@
 export const postData = (data: string) => (_, getState: () => {}) => {
   let { ipAddress, uuid, user } = getState().main.connectQrData;
   // change this for production
-  // ipAddress = '127.0.0.1';
+  ipAddress = '127.0.0.1:3000';
   console.log(ipAddress);
   fetch(`http://${ipAddress}/profile/upload`, {
     method: 'POST', // or 'PUT'

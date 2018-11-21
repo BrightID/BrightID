@@ -10,8 +10,6 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import Feather from 'react-native-vector-icons/Feather';
 import SearchGroups from './SearchGroups';
 import EligibleGroupCard from './EligibleGroupCard';
 import CurrentGroupCard from './CurrentGroupCard';
@@ -42,7 +40,7 @@ type Props = {
 };
 
 class ConnectionsScreen extends React.Component<Props> {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = () => ({
     title: 'Groups',
     headerRight: <View />,
   });
@@ -68,9 +66,9 @@ class ConnectionsScreen extends React.Component<Props> {
           <Text style={styles.groupTitle}>ELIGIBLE</Text>
           <EligibleGroupCard
             names={['Sherry', 'Melissa', 'Bob']}
-            trustScore="91.7"
+            trustScore="92"
           />
-          <EligibleGroupCard names={['Nick', 'Anna']} trustScore="91.7" />
+          <EligibleGroupCard names={['Brent', 'Nick', 'Anna']} trustScore="" />
           <TouchableOpacity style={styles.seeAllButton}>
             <Text style={styles.seeAllText}>
               See all {this.props.eligibleGroups || 5}
@@ -120,7 +118,6 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
-    flex: 1,
   },
   groupTitle: {
     fontFamily: 'ApexNew-Book',
@@ -157,7 +154,6 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
-    flex: 1,
   },
   currentGroupRow: {
     width: '100%',

@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import { Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 import { connect } from 'react-redux';
 // import Permissions from 'react-native-permissions'
 import { RNCamera } from 'react-native-camera';
