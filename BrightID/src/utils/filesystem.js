@@ -23,3 +23,12 @@ export const saveAvatar = async ({ base64Image, publicKey }) => {
     Alert.alert('Error', err);
   }
 };
+
+export const retrieveAvatar = async (uri) => {
+  try {
+    const base64Image = await RNFS.readFile(uri, 'base64');
+    return base64Image;
+  } catch (err) {
+    Alert.alert('Error', err);
+  }
+};

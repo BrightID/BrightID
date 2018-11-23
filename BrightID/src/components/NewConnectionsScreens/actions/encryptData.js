@@ -3,12 +3,13 @@
 import { createCipher } from 'react-native-crypto';
 import { Buffer } from 'buffer';
 import { postData } from './postData';
+import { retrieveAvatar } from '../../../utils/filesystem';
 // import { fetchData } from './fetchData';
 
 export const encryptAndUploadLocalData = () => (dispatch, getState) => {
   const {
     publicKey,
-    avatar,
+    avatar: { uri },
     nameornym,
     connectQrData: { aesKey },
     trustScore,
@@ -16,12 +17,13 @@ export const encryptAndUploadLocalData = () => (dispatch, getState) => {
 
   // encode public key into a base64 string
   const base64Key = Buffer.from(publicKey).toString('base64');
-
+  // retrieve avatar
+  const avatar = retrieveAvatar(uri);
   // encrypted via aes key from qr code
 
   const dataObj = {
     publicKey: base64Key,
-    avatar: avatar.uri,
+    avatar,
     nameornym,
     trustScore,
   };
