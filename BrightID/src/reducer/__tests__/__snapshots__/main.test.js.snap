@@ -19,7 +19,7 @@ Object {
   "searchParam": "",
   "secretKey": "",
   "trustScore": "",
-  "userAvatar": "",
+  "avatar": "",
 }
 `;
 
@@ -42,7 +42,7 @@ Object {
   "searchParam": "",
   "secretKey": "",
   "trustScore": "",
-  "userAvatar": "",
+  "avatar": "",
 }
 `;
 
@@ -65,7 +65,7 @@ Object {
   "searchParam": "",
   "secretKey": Array [],
   "trustScore": "",
-  "userAvatar": "todo...",
+  "avatar": "todo...",
 }
 `;
 
@@ -88,7 +88,7 @@ Object {
   "searchParam": "",
   "secretKey": "",
   "trustScore": "",
-  "userAvatar": "",
+  "avatar": "",
 }
 `;
 
@@ -111,7 +111,7 @@ Object {
   "searchParam": "",
   "secretKey": "",
   "trustScore": "",
-  "userAvatar": "",
+  "avatar": "",
 }
 `;
 
@@ -134,7 +134,7 @@ Object {
   "searchParam": "",
   "secretKey": "",
   "trustScore": "",
-  "userAvatar": "",
+  "avatar": "",
 }
 `;
 
@@ -157,7 +157,7 @@ Object {
   "searchParam": "hi john",
   "secretKey": "",
   "trustScore": "",
-  "userAvatar": "",
+  "avatar": "",
 }
 `;
 
@@ -180,6 +180,6 @@ Object {
   "searchParam": "",
   "secretKey": "",
   "trustScore": "99.9",
-  "userAvatar": "",
+  "avatar": "",
 }
 `;

@@ -3,7 +3,6 @@
 import * as React from 'react';
 import {
   Alert,
-  AsyncStorage,
   Image,
   Platform,
   StatusBar,
@@ -13,7 +12,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import nacl from 'tweetnacl';
 import ImagePicker from 'react-native-image-picker';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
@@ -23,8 +21,8 @@ import HeaderButtons, {
 } from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { setUserData } from '../../actions';
-import { addSampleConnections } from './actions';
+import { handleBrightIdCreation } from './actions';
+import { mimeFromUri } from '../../utils/images';
 
 type Props = {
   dispatch: () => null,
@@ -35,7 +33,7 @@ type State = {
   nameornym: string,
   inputActive: boolean,
   imagePicking: boolean,
-  userAvatar: Object,
+  avatar: Object,
 };
 
 // header Button
@@ -74,7 +72,7 @@ class SignUp extends React.Component<Props, State> {
     this.state = {
       nameornym: '',
       inputActive: false,
-      userAvatar: '',
+      avatar: '',
       imagePicking: false,
       creatingBrightId: false,
     };
@@ -89,7 +87,7 @@ class SignUp extends React.Component<Props, State> {
       mediaType: 'photo',
       maxWidth: 180,
       maxHeight: 180,
-      quality: 0.6,
+      quality: 0.8,
       allowsEditing: true,
       loadingLabelText: 'loading avatar photo...',
     };
@@ -121,14 +119,12 @@ class SignUp extends React.Component<Props, State> {
           1001,
         );
       } else {
-        console.log(`image size: ${response.fileSize}`);
-        console.log(response.type);
-        const mime = response.type ? response.type : 'jpeg';
+        const mime = mimeFromUri(response.uri);
         const imageData = {
           uri: `data:${mime};base64,${response.data}`,
         };
         this.setState({
-          userAvatar: imageData,
+          avatar: imageData,
           imagePicking: false,
         });
       }
@@ -137,42 +133,25 @@ class SignUp extends React.Component<Props, State> {
 
   handleBrightIdCreation = async () => {
     try {
-      const { userAvatar, nameornym } = this.state;
-      const { dispatch, navigation } = this.props;
-
-      if (!nameornym) {
-        return alert('Please add your name or nym');
-      }
-
+      const { avatar, nameornym } = this.state;
+      const { navigation, dispatch } = this.props;
       this.setState({
         creatingBrightId: true,
       });
-
-      // create public / private key pair
-
-      const { publicKey, secretKey } = nacl.sign.keyPair();
-
-      const userData = {
-        publicKey,
-        secretKey,
-        nameornym,
-        userAvatar,
-      };
-      // add sample connections to async store
-      await addSampleConnections();
-      // save avatar photo base64 data, and user data in async storage
-      await AsyncStorage.setItem('userData', JSON.stringify(userData));
-      // update redux store
-      await dispatch(setUserData(userData));
-
-      // navigate to home page
-      navigation.navigate('App');
-      // catch any errors with saving data or generating the public / private key
+      const result = await dispatch(
+        handleBrightIdCreation({ avatar, nameornym }),
+      );
+      if (result) {
+        navigation.navigate('App');
+      } else {
+        this.setState({
+          creatingBrightId: false,
+        });
+      }
     } catch (err) {
       this.setState({
         creatingBrightId: false,
       });
-      console.log(err);
     }
   };
 
@@ -185,13 +164,16 @@ class SignUp extends React.Component<Props, State> {
         <Text style={styles.buttonInnerText}>Create My BrightID</Text>
       </TouchableOpacity>
     ) : (
-      <Spinner isVisible={true} size={47} type="9CubeGrid" color="#4990e2" />
+      <View style={styles.loader}>
+        <Text>Generating fake user content...</Text>
+        <Spinner isVisible={true} size={47} type="Wave" color="#4990e2" />
+      </View>
     );
 
   render() {
-    const { inputActive, imagePicking, nameornym, userAvatar } = this.state;
+    const { inputActive, imagePicking, nameornym, avatar } = this.state;
 
-    const AddPhotoButton = userAvatar ? (
+    const AddPhotoButton = avatar ? (
       <TouchableOpacity
         onPress={this.getAvatarPhoto}
         accessible={true}
@@ -199,7 +181,7 @@ class SignUp extends React.Component<Props, State> {
       >
         <Image
           style={styles.avatar}
-          source={userAvatar}
+          source={avatar}
           onPress={this.getAvatarPhoto}
         />
       </TouchableOpacity>
@@ -361,6 +343,10 @@ const styles = StyleSheet.create({
 
   cameraIcon: {
     width: 48,
+  },
+  loader: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

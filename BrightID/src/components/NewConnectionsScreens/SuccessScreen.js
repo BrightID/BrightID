@@ -22,7 +22,7 @@ import { connect } from 'react-redux';
 type Props = {
   publicKey: Uint8Array,
   trustScore: string,
-  userAvatar: string,
+  avatar: string,
   nameornym: string,
   dispatch: () => null,
   navigation: { goBack: () => null, navigate: (string) => null },

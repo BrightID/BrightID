@@ -62,7 +62,7 @@ type Props = {
   nameornym: string,
   connections: Array<{}>,
   navigation: { navigate: () => null },
-  userAvatar: string,
+  avatar: string,
 };
 
 export class HomeScreen extends React.Component<Props> {
@@ -152,16 +152,16 @@ export class HomeScreen extends React.Component<Props> {
       nameornym,
       trustScore,
       groupsCount,
-      userAvatar,
+      avatar,
     } = this.props;
     const { connectionsCount } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.mainContainer}>
-          <View style={styles.userAvatarContainer}>
+          <View style={styles.avatarContainer}>
             <Image
-              source={userAvatar || require('../static/default_avatar.jpg')}
-              style={styles.userAvatar}
+              source={avatar || require('../static/default_avatar.jpg')}
+              style={styles.avatar}
               resizeMode="cover"
               onError={(e) => {
                 console.log(e.error);
@@ -229,12 +229,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 
-  userAvatarContainer: {
+  avatarContainer: {
     marginTop: 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  userAvatar: {
+  avatar: {
     width: 142,
     height: 142,
     borderRadius: 71,

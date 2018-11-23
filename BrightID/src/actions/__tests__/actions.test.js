@@ -39,7 +39,7 @@ describe('actions', () => {
       publicKey: [],
       secretKey: [],
       nameornym: 'aragon',
-      userAvatar: 'avatar string',
+      avatar: 'avatar string',
     };
     expect(action.setUserData(userData)).toMatchSnapshot();
   });
@@ -49,8 +49,8 @@ describe('actions', () => {
   });
 
   test('should create an action to set user avatar', () => {
-    const userAvatar = 'avatar string';
-    expect(action.setUserAvatar(userAvatar)).toMatchSnapshot();
+    const avatar = 'avatar string';
+    expect(action.setavatar(avatar)).toMatchSnapshot();
   });
 
   test('should create an action to set public key 1', () => {

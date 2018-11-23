@@ -7,7 +7,7 @@ Array [
     "publicKey": Array [],
     "secretKey": Array [],
     "type": "UPDATE_USER_DATA",
-    "userAvatar": "avatar",
+    "avatar": "avatar",
   },
   Object {
     "trustScore": "99.9",

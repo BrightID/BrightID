@@ -6,24 +6,24 @@ import { connect } from 'react-redux';
 
 /**
  * Avatar Picture displayed on the HomeScreen
- * The Image is sourced from the main reducer as userAvatar
- * @prop userAvatar a raw image string
+ * The Image is sourced from the main reducer as avatar
+ * @prop avatar a raw image string
  * TODO store the image locally using asyncStorage
  * or any local db easy to use with React-native
  */
 
 type Props = {
-  userAvatar: string,
+  avatar: string,
 };
 
 class CurrentGroupAvatar extends React.Component<Props> {
   render() {
-    const { userAvatar } = this.props;
+    const { avatar } = this.props;
 
     return (
       <View style={styles.container}>
         <Image
-          source={userAvatar || require('../../static/default_avatar.jpg')}
+          source={avatar || require('../../static/default_avatar.jpg')}
           style={styles.avatar}
         />
       </View>

@@ -67,7 +67,7 @@ describe('main reducer', () => {
         publicKey: [],
         secretKey: [],
         nameornym: 'Test User',
-        userAvatar: 'todo...',
+        avatar: 'todo...',
       }),
     ).toMatchSnapshot();
   });
@@ -79,7 +79,7 @@ describe('main reducer', () => {
         publicKey: new Uint8Array(32),
         secretKey: new Uint8Array(64),
         name: 'Test User',
-        userAvatar: 'todo...',
+        avatar: 'todo...',
       }),
     ).toMatchSnapshot();
   });
@@ -158,14 +158,14 @@ test('should update USER_TRUST_SCORE', () => {
 //       publicKey,
 //       secretKey,
 //       nameornym: 'Test User',
-//       userAvatar: 'todo...',
+//       avatar: 'todo...',
 //     }),
 //   ).toEqual({
 //     ...initialState,
 //     publicKey,
 //     secretKey,
 //     name: 'Test User',
-//     userAvatar: 'todo...',
+//     avatar: 'todo...',
 //   });
 // });
 
@@ -176,14 +176,14 @@ test('should update USER_TRUST_SCORE', () => {
 //       publicKey: new Uint8Array(32),
 //       secretKey: new Uint8Array(64),
 //       name: 'Test User',
-//       userAvatar: 'todo...',
+//       avatar: 'todo...',
 //     }),
 //   ).toEqual({
 //     ...initialState,
 //     publicKey: '',
 //     secretKey: '',
 //     name: '',
-//     userAvatar: '',
+//     avatar: '',
 //   });
 // });
 

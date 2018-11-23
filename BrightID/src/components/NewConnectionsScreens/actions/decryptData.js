@@ -14,9 +14,11 @@ export const decryptData = (data) => async (dispatch, getState) => {
   const { aesKey } = connectQrData;
   const decipher = createDecipher('aes192', aesKey);
 
-  let decrypted = decipher.update(data, 'base64', 'utf8');
-  decrypted += decipher.final('utf8');
+  const decrypted =
+    decipher.update(data, 'base64', 'utf8') + decipher.final('utf8');
+
   const decryptedObj = JSON.parse(decrypted);
+
   decryptedObj.publicKey = new Uint8Array(
     Buffer.from(decryptedObj.publicKey, 'base64'),
   );

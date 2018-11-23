@@ -97,12 +97,12 @@ class ConnectionCard extends React.PureComponent<Props> {
   render() {
     const { avatar, nameornym, trustScore, connectionDate, style } = this.props;
 
-    const image = avatar
-      ? { uri: avatar }
-      : require('../../static/default_avatar.jpg');
     return (
       <View style={{ ...styles.container, ...style }}>
-        <Image source={image} style={styles.avatar} />
+        <Image
+          source={avatar || require('../../static/default_avatar.jpg')}
+          style={styles.avatar}
+        />
         <View style={styles.info}>
           <Text style={styles.name}>{nameornym}</Text>
           <View style={styles.trustScoreContainer}>

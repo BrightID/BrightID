@@ -53,7 +53,7 @@ const arbiterSchema = {
  *
  * @param trustScore String
  * @param name String
- * @param userAvatar Image
+ * @param avatar Image
  * @param groupsCount Number
  * @param searchParam String
  * @param connections Array => Object
@@ -62,7 +62,7 @@ const arbiterSchema = {
 export const initialState = {
   trustScore: '',
   nameornym: '',
-  userAvatar: '',
+  avatar: '',
   groupsCount: '',
   searchParam: '',
   connections: [],
@@ -91,7 +91,7 @@ export const mainReducer = (state = initialState, action) => {
     case USER_AVATAR:
       return {
         ...state,
-        userAvatar: action.userAvatar,
+        avatar: action.avatar,
       };
     case SEARCH_PARAM:
       return {
@@ -134,7 +134,7 @@ export const mainReducer = (state = initialState, action) => {
     case UPDATE_USER_DATA:
       return {
         ...state,
-        userAvatar: action.userAvatar,
+        avatar: action.avatar,
         nameornym: action.nameornym,
         publicKey: action.publicKey,
         secretKey: action.secretKey,
@@ -142,7 +142,7 @@ export const mainReducer = (state = initialState, action) => {
     case REMOVE_USER_DATA:
       return {
         ...state,
-        userAvatar: '',
+        avatar: '',
         nameornym: '',
         publicKey: '',
         secretKey: '',
