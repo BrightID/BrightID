@@ -29,7 +29,7 @@ type Props = {
   publicKey: Uint8Array,
   rtcId: string,
   dispatch: () => null,
-  userAvatar: { uri: string },
+  avatar: { uri: string },
   nameornym: string,
   trustScore: string,
   resetQr: () => null,
@@ -115,7 +115,7 @@ class MyCodeScreen extends React.Component<Props, State> {
   };
 
   render() {
-    const { userAvatar, nameornym } = this.props;
+    const { avatar, nameornym } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.half}>
@@ -127,10 +127,10 @@ class MyCodeScreen extends React.Component<Props, State> {
               name, your photo, your trust score
             </Text>
           </View>
-          <View style={styles.userAvatarContainer}>
+          <View style={styles.avatarContainer}>
             <Image
-              source={userAvatar || require('../../static/default_avatar.jpg')}
-              style={styles.userAvatar}
+              source={avatar || require('../../static/default_avatar.jpg')}
+              style={styles.avatar}
               resizeMode="cover"
               onError={(e) => {
                 console.log(e.error);
@@ -177,11 +177,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#4a4a4a',
   },
-  userAvatarContainer: {
+  avatarContainer: {
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  userAvatar: {
+  avatar: {
     width: 102,
     height: 102,
     borderRadius: 51,

@@ -147,18 +147,18 @@ export const setUserData = ({
   publicKey,
   secretKey,
   nameornym,
-  userAvatar,
+  avatar,
 }: {
   publicKey: Uint8Array,
   secretKey: Uint8Array,
   nameornym: string,
-  userAvatar: string,
+  avatar: string,
 }) => ({
   type: UPDATE_USER_DATA,
   publicKey,
   secretKey,
   nameornym,
-  userAvatar,
+  avatar,
 });
 
 /**
@@ -172,18 +172,18 @@ export const removeUserData = () => ({
 /**
  * redux action creator for setting user avatar
  * @param type USER_AVATAR
- * @param userAvatar string representaiton of user avatar encoded in base64 format
+ * @param avatar string representaiton of user avatar encoded in base64 format
  */
 
-export const setUserAvatar = (userAvatar: string) => ({
+export const setavatar = (avatar: string) => ({
   type: USER_AVATAR,
-  userAvatar,
+  avatar,
 });
 
 /**
  * redux action creator for setting user avatar
  * @param type USER_AVATAR
- * @param userAvatar string representaiton of user avatar encoded in base64 format
+ * @param avatar string representaiton of user avatar encoded in base64 format
  */
 
 export const setBoxKeypair = (keypair: {

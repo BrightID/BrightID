@@ -58,7 +58,7 @@ Object {
 exports[`actions should create an action to set user avatar 1`] = `
 Object {
   "type": "USER_AVATAR",
-  "userAvatar": "avatar string",
+  "avatar": "avatar string",
 }
 `;
 
@@ -68,7 +68,7 @@ Object {
   "publicKey": Array [],
   "secretKey": Array [],
   "type": "UPDATE_USER_DATA",
-  "userAvatar": "avatar string",
+  "avatar": "avatar string",
 }
 `;
 

@@ -10,8 +10,7 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { removeConnectUserData } from '../../actions';
-import emitter from '../../emitter';
+import { addNewConnection } from './actions/addNewConnection';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -40,42 +39,14 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
     headerLeft: <View />,
   };
 
-  addNewConnection = async () => {
-    /**
-     * Add connection in async storage  &&
-     * Clear the redux store of all leftoverwebrtc data
-     */
-    try {
-      const {
-        connectUserData: { avatar, nameornym, publicKey },
-        dispatch,
-      } = this.props;
-      // TODO formalize spec for this
-      // create a new connection object
-      const connection = {
-        publicKey,
-        nameornym,
-        avatar,
-        trustScore: '99.9',
-        connectionDate: Date.now(),
-      };
-      // add connection inside of async storage
-      await AsyncStorage.setItem(
-        JSON.stringify(publicKey),
-        JSON.stringify(connection),
-      );
-      // reset Preview
-      // dispatch(resetPreview());
-      dispatch(removeConnectUserData());
-      emitter.emit('refreshConnections', {});
-    } catch (err) {
-      console.log(err);
-    }
+  handleConfirmation = async () => {
+    const { dispatch, navigation } = this.props;
+    await dispatch(addNewConnection());
+    navigation.navigate('ConnectSuccess');
   };
 
   render() {
     const {
-      navigation,
       connectUserData: { avatar, nameornym },
     } = this.props;
     const image = avatar
@@ -90,7 +61,7 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
         <View style={styles.userContainer}>
           <Image
             source={image}
-            style={styles.userAvatar}
+            style={styles.avatar}
             resizeMode="cover"
             onError={(e) => {
               console.log(e.error);
@@ -102,10 +73,7 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
         </View>
         <View style={styles.confirmButtonContainer}>
           <TouchableOpacity
-            onPress={async () => {
-              await this.addNewConnection();
-              navigation.navigate('ConnectSuccess');
-            }}
+            onPress={this.handleConfirmation}
             style={styles.confirmButton}
           >
             <Text style={styles.confirmButtonText}>Confirm Connection</Text>
@@ -146,7 +114,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  userAvatar: {
+  avatar: {
     width: 148,
     height: 148,
     borderRadius: 74,

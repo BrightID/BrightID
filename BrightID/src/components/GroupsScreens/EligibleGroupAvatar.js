@@ -6,37 +6,37 @@ import { connect } from 'react-redux';
 
 /**
  * Avatar Picture displayed on the HomeScreen
- * The Image is sourced from the main reducer as userAvatar
- * @prop userAvatar a raw image string
+ * The Image is sourced from the main reducer as avatar
+ * @prop avatar a raw image string
  * TODO store the image locally using asyncStorage
  * or any local db easy to use with React-native
  */
 
 type Props = {
-  userAvatar: string,
+  avatar: string,
   names: [string],
 };
 
 class EligibleGroupAvatar extends React.Component<Props> {
   render() {
-    const { userAvatar, names } = this.props;
+    const { avatar, names } = this.props;
     const faded = names.includes('Anna');
     return (
       <View style={styles.container}>
         <View style={styles.topAvatars}>
           <Image
-            source={userAvatar || require('../../static/default_avatar.jpg')}
+            source={avatar || require('../../static/default_avatar.jpg')}
             style={[styles.avatar]}
           />
         </View>
         <View style={styles.bottomAvatars}>
           <Image
-            source={userAvatar || require('../../static/default_avatar.jpg')}
+            source={avatar || require('../../static/default_avatar.jpg')}
             style={[styles.avatar, faded ? styles.faded : '']}
           />
 
           <Image
-            source={userAvatar || require('../../static/default_avatar.jpg')}
+            source={avatar || require('../../static/default_avatar.jpg')}
             style={[styles.avatar, faded ? styles.faded : '']}
           />
         </View>

@@ -36,7 +36,16 @@ export const setUpDefault = (userData: Object) => async (
   }
 };
 
-export const sampleConnections: Array<{}> = [
+export const sampleConnections: [
+  {
+    publicKey: Uint8Array,
+    secreKey: Uint8Array,
+    nameornym: string,
+    avatar: string,
+    connectionDate: string,
+    trustScore: number,
+  },
+] = [
   {
     publicKey: nacl.sign.keyPair().publicKey,
     secretKey:

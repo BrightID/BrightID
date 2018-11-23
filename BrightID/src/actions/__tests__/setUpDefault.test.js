@@ -13,7 +13,7 @@ describe('async action', () => {
       publicKey: [],
       secretKey: [],
       nameornym: 'charlie sheen',
-      userAvatar: 'avatar',
+      avatar: 'avatar',
     };
     return store.dispatch(setUpDefault(userData)).then(() => {
       // return of async actions
@@ -25,7 +25,7 @@ describe('async action', () => {
     const store = mockStore({ trustScore: '22.3' });
     const userData = {
       nameornym: 'charlie sheen',
-      userAvatar: 'avatar',
+      avatar: 'avatar',
     };
     return store.dispatch(setUpDefault(userData)).then(() => {
       // return of async actions
