@@ -16,7 +16,8 @@ export const fetchData = () => async (
     console.log(`fetching data for ${user}`);
 
     const res = await fetch(`http://${ipAddress}/profile/download/${uuid}`);
-    const { data } = res.json();
+    const { data } = await res.json();
+    console.log(data);
     if (data) dispatch(decryptData(data));
   } catch (err) {
     console.log(err);

@@ -5,14 +5,15 @@ export const postData = (data: string) => async (_, getState: () => {}) => {
     let { ipAddress, uuid, user } = getState().main.connectQrData;
     // change this for production
     // ipAddress = '127.0.0.1:3000';
-    const res = await fetch(`http://${ipAddress}/profile/upload`, {
+    let res = await fetch(`http://${ipAddress}/profile/upload`, {
       method: 'POST', // or 'PUT'
       body: JSON.stringify({ data, uuid: uuid + user }),
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    console.log(res.json());
+    res = await res.json();
+    console.log(res);
   } catch (err) {
     console.log(err);
   }
