@@ -131,7 +131,7 @@ class SignUp extends React.Component<Props, State> {
     });
   };
 
-  handleBrightIdCreation = async () => {
+  createBrightID = async () => {
     try {
       const { avatar, nameornym } = this.state;
       const { navigation, dispatch } = this.props;
@@ -159,7 +159,7 @@ class SignUp extends React.Component<Props, State> {
     !this.state.creatingBrightId ? (
       <TouchableOpacity
         style={styles.createBrightIdButton}
-        onPress={this.handleBrightIdCreation}
+        onPress={this.createBrightID}
       >
         <Text style={styles.buttonInnerText}>Create My BrightID</Text>
       </TouchableOpacity>

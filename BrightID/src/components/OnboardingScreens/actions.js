@@ -9,6 +9,7 @@ import {
   createConnectionAvatarDirectory,
   saveAvatar,
 } from '../../utils/filesystem';
+import api from "../../Api/BrightIdApi";
 
 export const handleBrightIdCreation = ({ nameornym, avatar }) => async (
   dispatch: () => null,
@@ -34,15 +35,20 @@ export const handleBrightIdCreation = ({ nameornym, avatar }) => async (
     } else {
       userData.avatar = '';
     }
-
-    // // add sample connections to async store
-    await addSampleConnections();
-    // // save avatar photo base64 data, and user data in async storage
-    await AsyncStorage.setItem('userData', JSON.stringify(userData));
-    // // update redux store
-    await dispatch(setUserData(userData));
-    // // navigate to home page
-    return 'success';
+    let creationResponse = await api.createUser(publicKey);
+    if(creationResponse.data && creationResponse.data.key) {
+        // // add sample connections to async store
+        await addSampleConnections();
+        // // save avatar photo base64 data, and user data in async storage
+        await AsyncStorage.setItem('userData', JSON.stringify(userData));
+        // // update redux store
+        await dispatch(setUserData(userData));
+        // // navigate to home page
+        return 'success';
+    }else {
+        alert(creationResponse.errorMessage ? creationResponse.errorMessage : "Error in user creation.");
+        return 'fail';
+    }
     // catch any errors with saving data or generating the public / private key
   } catch (err) {
     Alert.alert('Error', err);

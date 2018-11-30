@@ -14,6 +14,7 @@ import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import emitter from '../../emitter';
+import {toggleNewGroupCoFounder} from "../GroupsScreens/actions";
 
 /**
  * Connection Card in the Connections Screen
@@ -32,6 +33,7 @@ type Props = {
   connectionDate: string,
   publicKey: string,
   style: {},
+    selected: boolean,
   groups: boolean,
 };
 
@@ -61,6 +63,9 @@ class ConnectionCard extends React.PureComponent<Props> {
 
   handleGroupSelect = () => {
     console.log('pressed');
+    let {toggleCoFounder, publicKey} = this.props;
+      toggleCoFounder(publicKey);
+    // alert(JSON.stringify(Object.keys(this.props)));
   };
 
   trustScoreColor = () => {
@@ -73,14 +78,14 @@ class ConnectionCard extends React.PureComponent<Props> {
   };
 
   renderActionButton = () => {
-    const { groups } = this.props;
+    const { groups, selected } = this.props;
     if (groups) {
       return (
         <TouchableOpacity
           style={styles.moreIcon}
           onPress={this.handleGroupSelect}
         >
-          <AntDesign size={30.4} name="checkcircleo" color="#000" />
+          <AntDesign size={30.4} name={selected ? "checkcircle" : "checkcircleo"} color="#000" />
         </TouchableOpacity>
       );
     }
@@ -182,4 +187,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null)(ConnectionCard);
+export default connect(
+    null,
+    dispatch => ({
+        toggleCoFounder: publicKey => dispatch(toggleNewGroupCoFounder(publicKey))
+    })
+)(ConnectionCard);

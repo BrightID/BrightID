@@ -6,14 +6,19 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+    ActivityIndicator,
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
+import {NavigationEvents} from 'react-navigation';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SearchGroups from './SearchGroups';
 import EligibleGroupCard from './EligibleGroupCard';
 import CurrentGroupCard from './CurrentGroupCard';
 import BottomNav from '../BottomNav';
+import reloadUserInfo from "../../actions/reloadUserInfo";
+import {obj2b64, objToUint8} from "../../utils/encoding";
+import api from "../../Api/BrightIdApi";
 
 /**
  * Groups screen of BrightID
@@ -33,7 +38,8 @@ type Props = {
     id: number,
   }>,
   searchParam: string,
-  eligibleGroups: number,
+  // eligibleGroups comes from store and contains list of user eligible groups.
+  // eligibleGroups: number,
   navigation: {
     navigate: () => null,
   },
@@ -45,6 +51,10 @@ class ConnectionsScreen extends React.Component<Props> {
     headerRight: <View />,
   });
 
+  state = {
+      userInfoLoading: false
+  };
+
   filterConnections = () =>
     this.props.connections.filter((item) =>
       `${item.firstName} ${item.lastName}`
@@ -54,24 +64,75 @@ class ConnectionsScreen extends React.Component<Props> {
     );
 
   renderCurrentGroup = ({ item }) => (
-    <CurrentGroupCard name={item.name} trustScore={item.trustScore} />
+    <CurrentGroupCard name={item.nameornym} trustScore={item.score} />
   );
 
+  refreshUserInfo = async () => {
+      let {dispatch} = this.props;
+      this.setState({userInfoLoading: true});
+      await dispatch(reloadUserInfo());
+      this.setState({userInfoLoading: false});
+  };
+
+  getTwoEligibleGroup(){
+      let {eligibleGroups} = this.props;
+      let groups = eligibleGroups.filter(group => group.isNew);
+      if(groups.length < 2){
+          Array.prototype.push.apply(groups, eligibleGroups.filter(group => !group.isNew));
+      }
+      if(groups.length > 2)
+          groups = [groups[0], groups[1]];
+      return groups;
+  }
+
+  mapPublicKeysToNames(publicKeys){
+      let {connections} = this.props;
+      let names = [];
+      let user = api.urlSafe(obj2b64(this.props.publicKey));
+      publicKeys.map(publicKey => {
+          if(publicKey === user)
+              names.push('You');
+          else {
+              let findedConnection = connections.find(connection => api.urlSafe(obj2b64(connection.publicKey)) === publicKey);
+              names.push(findedConnection ? findedConnection.nameornym.split(' ')[0] : 'Unknown');
+          }
+      });
+      return names;
+  }
+
   render() {
-    const { navigation } = this.props;
+    const { navigation, currentGroups, publicKey } = this.props;
+    let twoEligibleGroups = this.getTwoEligibleGroup();
     return (
       <View style={styles.container}>
+          <NavigationEvents
+              onDidFocus={this.refreshUserInfo}
+          />
         <SearchGroups />
         <View style={styles.eligibleContainer}>
           <Text style={styles.groupTitle}>ELIGIBLE</Text>
-          <EligibleGroupCard
-            names={['Sherry', 'Melissa', 'Bob']}
-            trustScore="92"
-          />
-          <EligibleGroupCard names={['Brent', 'Nick', 'Anna']} trustScore="" />
+            {this.state.userInfoLoading && (
+                <View style={styles.alignCenter}>
+                    <ActivityIndicator size="large" color="#0000ff" />
+                </View>
+            )}
+            {twoEligibleGroups.map(group => (
+                <EligibleGroupCard
+                    key={group.id}
+                    groupId={group.id}
+                    names={this.mapPublicKeysToNames(group.knownMembers)}
+                    alreadyIn={group.knownMembers.indexOf(api.urlSafe(obj2b64(publicKey))) >= 0}
+                    trustScore={group.trustScore}
+                />
+            ))}
+          {/*<EligibleGroupCard*/}
+            {/*names={['Sherry', 'Melissa', 'Bob']}*/}
+            {/*trustScore="92"*/}
+          {/*/>*/}
+          {/*<EligibleGroupCard names={['Brent', 'Nick', 'Anna']} trustScore="" />*/}
           <TouchableOpacity style={styles.seeAllButton}>
             <Text style={styles.seeAllText}>
-              See all {this.props.eligibleGroups || 5}
+              See all {this.props.eligibleGroups.length || 5}
             </Text>
           </TouchableOpacity>
         </View>
@@ -80,10 +141,10 @@ class ConnectionsScreen extends React.Component<Props> {
             <Text style={styles.groupTitle}>CURRENT</Text>
           </View>
           <FlatList
-            data={groupData}
+            data={currentGroups}
             renderItem={this.renderCurrentGroup}
             horizontal={true}
-            keyExtractor={({ name }, index) => name + index}
+            keyExtractor={({ id }, index) => id}
           />
           <View style={styles.addGroupButtonContainer}>
             <TouchableOpacity
@@ -178,6 +239,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
+  alignCenter: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 });
 
 export default connect((state) => state.main)(ConnectionsScreen);

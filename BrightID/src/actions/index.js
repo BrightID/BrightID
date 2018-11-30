@@ -4,6 +4,11 @@ export const USER_TRUST_SCORE = 'USER_TRUST_SCORE';
 export const CONNECTION_TRUST_SCORE = 'CONNECTION_TRUST_SCORE';
 export const GROUPS_COUNT = 'GROUPS_COUNT';
 export const SEARCH_PARAM = 'SEARCH_PARAM';
+export const SET_NEW_GROUP_CO_FOUNDERS = 'SET_NEW_GROUP_CO_FOUNDERS';
+export const CLEAR_NEW_GROUP_CO_FOUNDERS = 'CLEAR_NEW_GROUP_CO_FOUNDERS';
+export const SET_ELIGIBLE_GROUPS = 'SET_ELIGIBLE_GROUPS';
+export const DELETE_ELIGIBLE_GROUP = 'DELETE_ELIGIBLE_GROUP';
+export const SET_CURRENT_GROUPS = 'SET_CURRENT_GROUPS';
 export const UPDATE_CONNECTIONS = 'UPDATE_CONNECTIONS';
 export const CONNECTIONS_SORT = 'CONNECTIONS_SORT';
 export const ADD_CONNECTION = 'ADD_CONNECTION';
@@ -85,6 +90,49 @@ export const setGroupsCount = (groupsCount: number) => ({
 export const setSearchParam = (value: string) => ({
   type: SEARCH_PARAM,
   value,
+});
+
+/**
+ * redux action creator for set co-founders of new group
+ * @param coFounders: an array contain two publicKeys of co-founders of new group.
+ */
+export const setNewGroupCoFounders = (coFounders: Array<Uint8Array>) => ({
+    type: SET_NEW_GROUP_CO_FOUNDERS,
+    coFounders
+});
+
+/**
+ * redux action creator for clear co-founders of new group
+ */
+export const clearNewGroupCoFounders = () => ({
+    type: CLEAR_NEW_GROUP_CO_FOUNDERS
+});
+
+/**
+ * redux action creator for set user eligible groups
+ * @param eligibleGroups: list of user eligible groups
+ */
+export const setEligibleGroups = (eligibleGroups) => ({
+    type: SET_ELIGIBLE_GROUPS,
+    eligibleGroups
+});
+
+/**
+ * redux action creator for set user eligible groups
+ * @param eligibleGroups: list of user eligible groups
+ */
+export const deleteEligibleGroup = (groupId) => ({
+    type: DELETE_ELIGIBLE_GROUP,
+    groupId
+});
+
+/**
+ * redux action creator for set user current groups
+ * @param currentGroups: list of user current groups
+ */
+export const setCurrentGroups = (currentGroups) => ({
+    type: SET_CURRENT_GROUPS,
+    currentGroups
 });
 
 /**

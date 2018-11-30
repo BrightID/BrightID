@@ -4,6 +4,11 @@ import {
   USER_TRUST_SCORE,
   GROUPS_COUNT,
   SEARCH_PARAM,
+  SET_NEW_GROUP_CO_FOUNDERS,
+  CLEAR_NEW_GROUP_CO_FOUNDERS,
+  SET_ELIGIBLE_GROUPS,
+  DELETE_ELIGIBLE_GROUP,
+  SET_CURRENT_GROUPS,
   UPDATE_CONNECTIONS,
   CONNECTIONS_SORT,
   ADD_CONNECTION,
@@ -36,6 +41,7 @@ import {
   REMOVE_ENCRYPTED_USER_DATA,
 } from '../actions';
 
+
 const arbiterSchema = {
   USERA: {
     OFFER: '',
@@ -65,6 +71,9 @@ export const initialState = {
   avatar: '',
   groupsCount: '',
   searchParam: '',
+  newGroupCoFounders: [],
+  eligibleGroups: [],
+  currentGroups: [],
   connections: [],
   nearbyPeople: [],
   publicKey: '',
@@ -98,6 +107,33 @@ export const mainReducer = (state = initialState, action) => {
         ...state,
         searchParam: action.value,
       };
+    case SET_NEW_GROUP_CO_FOUNDERS: {
+        return {
+            ... state,
+            newGroupCoFounders: [...action.coFounders]
+        };
+    }
+    case CLEAR_NEW_GROUP_CO_FOUNDERS: {
+      return {
+          ... state,
+          newGroupCoFounders: []
+      };
+    }
+    case SET_ELIGIBLE_GROUPS:
+        return{
+            ...state,
+            eligibleGroups: action.eligibleGroups
+        };
+      case DELETE_ELIGIBLE_GROUP:
+        return{
+            ...state,
+            eligibleGroups: [...state.eligibleGroups].filter(group => group.id != action.groupId)
+        };
+    case SET_CURRENT_GROUPS:
+        return{
+            ...state,
+            currentGroups: action.currentGroups
+        };
     case UPDATE_CONNECTIONS:
       return {
         ...state,

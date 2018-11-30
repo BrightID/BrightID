@@ -1,10 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import GroupAvatar from './EligibleGroupAvatar';
+import {deleteNewGroup, joinToGroup} from "./actions";
 
 /**
  * Connection Card in the Connections Screen
@@ -16,16 +17,19 @@ import GroupAvatar from './EligibleGroupAvatar';
 
 type Props = {
   names: Array<string>,
+  groupId: string,
+  isNew: boolean,
+  alreadyIn: boolean,
   trustScore: string,
 };
 
 class EligibleGroupCard extends React.Component<Props> {
   renderApprovalButtons = () => (
     <View style={styles.approvalButtonContainer}>
-      <TouchableOpacity style={styles.moreIcon}>
+      <TouchableOpacity style={styles.moreIcon} onPress={()=>this.deleteThisGroup()}>
         <AntDesign size={30} name="closecircleo" color="#000" />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.moreIcon}>
+      <TouchableOpacity style={styles.moreIcon} onPress={()=>this.joinThisGroup()}>
         <AntDesign size={30} name="checkcircleo" color="#000" />
       </TouchableOpacity>
     </View>
@@ -61,8 +65,60 @@ class EligibleGroupCard extends React.Component<Props> {
     }
   };
 
+  deleteThisGroup = () => {
+      Alert.alert(
+          'WARNING',
+          'Are you sure to delete this group?',
+          [
+              {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+              },
+              {
+                  text: 'Sure',
+                  onPress: async () => {
+                      try {
+                          let result = await this.props.dispatch(deleteNewGroup(this.props.groupId));
+                          alert(result.success ? "Group deleted successfully" : JSON.stringify(result,null,4));
+                      } catch (err) {
+                          console.log(err);
+                      }
+                  },
+              },
+          ],
+          { cancelable: true },
+      );
+  }
+
+  joinThisGroup = () => {
+      Alert.alert(
+          'ATTENTION',
+          'Are you sure to join to this group?',
+          [
+              {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+              },
+              {
+                  text: 'Sure',
+                  onPress: async () => {
+                      try {
+                          let result = await this.props.dispatch(joinToGroup(this.props.groupId));
+                          alert(result.success ? "You joined to the group successfully" : JSON.stringify(result,null,4));
+                      } catch (err) {
+                          console.log(err);
+                      }
+                  },
+              },
+          ],
+          { cancelable: true },
+      );
+  }
+
   render() {
-    const { names, trustScore } = this.props;
+    const { names, trustScore, isNew, alreadyIn } = this.props;
     return (
       <View style={styles.container}>
         <GroupAvatar names={names} />
@@ -70,7 +126,7 @@ class EligibleGroupCard extends React.Component<Props> {
           <Text style={styles.names}>{names.join(', ')}</Text>
           {this.renderTrustScore()}
         </View>
-        {trustScore ? this.renderApprovalButtons() : this.renderReviewButton()}
+        {!alreadyIn ? this.renderApprovalButtons() : this.renderReviewButton()}
       </View>
     );
   }

@@ -7,6 +7,21 @@ export function b64ToUint8Array(str: string) {
   return new Uint8Array(b.slice());
 }
 
+export function str2b64(str: string) {
+    const b = Buffer.from(str);
+    return b.toString('base64');
+}
+
+export function uInt8Array2b64(array: Uint8Array) {
+    const b = Buffer.from(array);
+    return b.toString('base64');
+}
+
+export function obj2b64(obj: {}) {
+  const array = objToUint8(obj);
+  return uInt8Array2b64(array);
+}
+
 export function strToUint8Array(str: string) {
   const b = Buffer.from(str);
   return new Uint8Array(b.slice());

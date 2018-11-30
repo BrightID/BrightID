@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@tradle/react-native-http": "^2.0.0",
+    "apisauce": "^1.0.0",
     "assert": "^1.1.1",
     "browserify-zlib": "~0.1.4",
     "buffer": "^5.2.1",
