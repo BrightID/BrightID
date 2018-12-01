@@ -4,9 +4,7 @@
 
 ## A Personal Stamp of Uniqueness
 
-BrightID uses the people you know (a trust graph) to enforce one-account-per-person for important applications like voting and universal basic income.
-
-A brightID proves you're a unique person.
+BrightID is an identity network providing socially unique identifiers to everyone.
 
 BrightIDs have the following characteristics:
 * Can be used anonymously. [No personal data or biometrics are used for verification](https://www.brightid.org/faq).
