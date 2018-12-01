@@ -4,7 +4,7 @@
 
 ## A Personal Stamp of Uniqueness
 
-BrightID is an identity network providing socially unique identifiers to everyone.
+BrightID is an identity network providing socially unique identifiers to everyone. These are verified through graph analysis.
 
 BrightIDs have the following characteristics:
 * Can be used anonymously. [No personal data or biometrics are used for verification](https://www.brightid.org/faq).
