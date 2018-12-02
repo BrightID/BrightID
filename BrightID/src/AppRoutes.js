@@ -209,6 +209,9 @@ const OnboardingStack = createStackNavigator(
   {
     Onboard: {
       screen: Onboard,
+      navigationOptions: {
+        header: null,
+      },
     },
     SignUp: {
       screen: SignUp,
@@ -220,7 +223,6 @@ const OnboardingStack = createStackNavigator(
       title: 'BrightID',
       headerTintColor: '#fff',
       headerTitleStyle,
-      headerTransparent: true,
       headerBackground,
     },
   },

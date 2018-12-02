@@ -1,6 +1,6 @@
 import RNFS from 'react-native-fs';
 import { Alert } from 'react-native';
-import { parseBase64 } from './images';
+import { parseBase64, mimeFromUri } from './images';
 import { uInt8ToKeyString } from './encoding';
 
 export const createConnectionAvatarDirectory = async () => {
@@ -26,8 +26,9 @@ export const saveAvatar = async ({ base64Image, publicKey }) => {
 
 export const retrieveAvatar = async (uri) => {
   try {
+    const mime = mimeFromUri(uri);
     const base64Image = await RNFS.readFile(uri, 'base64');
-    return base64Image;
+    return `data:${mime};base64,${base64Image}`;
   } catch (err) {
     Alert.alert('Error', err);
   }

@@ -2,24 +2,24 @@ import { decryptData } from './decryptData';
 
 // @flow
 
-export const fetchData = () => async (
-  dispatch: () => null,
-  getState: () => {},
-) => {
-  try {
-    let { ipAddress, uuid, user } = getState().main.connectQrData;
+export const fetchData = () => (dispatch: () => null, getState: () => {}) => {
+  let { ipAddress, uuid, user } = getState().main.connectQrData;
 
-    // ipAddress = '127.0.0.1:3000';
-    user = user === 1 ? 2 : 1;
-    uuid += user;
+  // ipAddress = '127.0.0.1:3000';
+  // ipAddress = 'test.brightid.org';
+  user = user === 1 ? 2 : 1;
+  uuid += user;
 
-    console.log(`fetching data for ${user}`);
+  console.log(`fetching data for ${user}`);
 
-    const res = await fetch(`http://${ipAddress}/profile/download/${uuid}`);
-    const { data } = await res.json();
-    console.log(data);
-    if (data) dispatch(decryptData(data));
-  } catch (err) {
-    console.log(err);
-  }
+  fetch(`http://${ipAddress}/profile/download/${uuid}`)
+    .then((res) => res.json())
+    .then((data) => {
+      if (data) {
+        dispatch(decryptData(data));
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };

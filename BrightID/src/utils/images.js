@@ -4,7 +4,10 @@ import { compose } from 'ramda';
 
 const splitString = (str: string): [string, string] => str.split(',');
 
-const extractData = ([data, image]): { filetype: string, image: string } => {
+const extractData = ([data = 'jpeg', image = ' ']): {
+  filetype: string,
+  image: string,
+} => {
   switch (data) {
     case data.includes('jpeg'):
       return { filetype: 'jpg', image };
