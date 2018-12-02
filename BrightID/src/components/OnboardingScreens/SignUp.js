@@ -4,6 +4,7 @@ import * as React from 'react';
 import {
   Alert,
   Image,
+  KeyboardAvoidingView,
   Platform,
   StatusBar,
   StyleSheet,
@@ -12,6 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ImagePicker from 'react-native-image-picker';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
@@ -198,13 +200,13 @@ class SignUp extends React.Component<Props, State> {
     );
 
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
         <StatusBar
           barStyle="default"
           backgroundColor={Platform.OS === 'ios' ? 'transparent' : '#000'}
           translucent={false}
         />
-        <View style={inputActive ? styles.hidden : styles.addPhotoContainer}>
+        <View style={styles.addPhotoContainer}>
           {!imagePicking ? (
             AddPhotoButton
           ) : (
@@ -241,7 +243,7 @@ class SignUp extends React.Component<Props, State> {
           </Text>
           {this.renderButtonOrSpinner()}
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -255,19 +257,22 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   addPhotoContainer: {
-    height: 320,
+    // height: 320,
+    // padding: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 54,
+    marginTop: 44,
     // borderWidth: 1
   },
   textInputContainer: {
-    flex: 1,
+    // flex: 1,
+    marginTop: 44,
     justifyContent: 'center',
     alignItems: 'center',
   },
   buttonContainer: {
-    flex: 1,
+    // flex: 1,
+    marginTop: 44,
     justifyContent: 'space-evenly',
     alignItems: 'center',
   },
@@ -281,9 +286,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   avatar: {
-    width: 174,
-    height: 174,
-    borderRadius: 87,
+    width: 180,
+    height: 180,
+    borderRadius: 90,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
@@ -333,6 +338,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 13,
     paddingBottom: 12,
+    marginTop: 22,
   },
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',

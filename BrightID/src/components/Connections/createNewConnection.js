@@ -17,8 +17,8 @@ export const createNewConnection = (navigation) => () => {
       {
         text: 'Sure',
         onPress: () => {
-          store.dispatch(addConnection());
-          navigation.navigate('PreviewConnection');
+          store.dispatch(addConnection(navigation));
+          // navigation.navigate('PreviewConnection');
         },
       },
     ],

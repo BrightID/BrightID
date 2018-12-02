@@ -9,7 +9,7 @@ import {
   createConnectionAvatarDirectory,
   saveAvatar,
 } from '../../utils/filesystem';
-import api from "../../Api/BrightIdApi";
+import api from '../../Api/BrightIdApi';
 
 export const handleBrightIdCreation = ({ nameornym, avatar }) => async (
   dispatch: () => null,
@@ -31,23 +31,28 @@ export const handleBrightIdCreation = ({ nameornym, avatar }) => async (
     // save avatar photo
     if (avatar) {
       const uri = await saveAvatar({ publicKey, base64Image: avatar.uri });
-      userData.avatar = { uri };
+      userData.avatar = { uri: `file://${uri}` };
     } else {
-      userData.avatar = '';
+      const uri = await fakeUserAvatar(publicKey);
+      userData.avatar = { uri: `file://${uri}` };
     }
     let creationResponse = await api.createUser(publicKey);
-    if(creationResponse.data && creationResponse.data.key) {
-        // // add sample connections to async store
-        await addSampleConnections();
-        // // save avatar photo base64 data, and user data in async storage
-        await AsyncStorage.setItem('userData', JSON.stringify(userData));
-        // // update redux store
-        await dispatch(setUserData(userData));
-        // // navigate to home page
-        return 'success';
-    }else {
-        alert(creationResponse.errorMessage ? creationResponse.errorMessage : "Error in user creation.");
-        return 'fail';
+    if (creationResponse.data && creationResponse.data.key) {
+      // // add sample connections to async store
+      await addSampleConnections();
+      // // save avatar photo base64 data, and user data in async storage
+      await AsyncStorage.setItem('userData', JSON.stringify(userData));
+      // // update redux store
+      await dispatch(setUserData(userData));
+      // // navigate to home page
+      return 'success';
+    } else {
+      alert(
+        creationResponse.errorMessage
+          ? creationResponse.errorMessage
+          : 'Error in user creation.',
+      );
+      return 'fail';
     }
     // catch any errors with saving data or generating the public / private key
   } catch (err) {
@@ -69,14 +74,12 @@ const addSampleConnections = async () => {
           {},
         );
         if (res.info().status === 200) {
-          saveAvatar({
+          const uri = await saveAvatar({
             publicKey: sampleConnections[index].publicKey,
             base64Image: `data:image/jpeg;base64,${res.base64()}`,
-          }).then((uri) => {
-            sampleConnections[index].avatar = { uri };
           });
+          sampleConnections[index].avatar = { uri: `file://${uri}` };
         } else {
-          console.log(index);
           sampleConnections[index].avatar = {
             uri: sampleConnections[index].avatar,
           };
@@ -91,6 +94,28 @@ const addSampleConnections = async () => {
     ]);
 
     await AsyncStorage.multiSet(arrayToSave);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const fakeUserAvatar = async (publicKey) => {
+  try {
+    // save each connection with their public key as the async storage key
+    const res = await RNFetchBlob.fetch(
+      'GET',
+      'https://loremflickr.com/180/180',
+      {},
+    );
+    if (res.info().status === 200) {
+      const uri = await saveAvatar({
+        publicKey,
+        base64Image: `data:image/jpeg;base64,${res.base64()}`,
+      });
+      return uri;
+    } else {
+      return 'https://loremflickr.com/180/180';
+    }
   } catch (err) {
     console.log(err);
   }

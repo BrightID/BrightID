@@ -5,7 +5,7 @@ import pokemon from 'pokemon';
 import RNFetchBlob from 'rn-fetch-blob';
 import { setConnectUserData } from './index';
 
-export const addConnection = () => (dispatch) => {
+export const addConnection = (navigation) => (dispatch) => {
   const { publicKey } = nacl.sign.keyPair();
 
   const nameornym = pokemon.random();
@@ -25,6 +25,7 @@ export const addConnection = () => (dispatch) => {
       if (res.info().status === 200) {
         userData.avatar = `data:image/jpeg;base64,${res.base64()}`;
         dispatch(setConnectUserData(userData));
+        navigation.navigate('PreviewConnection');
       } else {
         dispatch(setConnectUserData(userData));
       }
