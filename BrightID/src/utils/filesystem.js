@@ -8,7 +8,7 @@ export const createConnectionAvatarDirectory = async () => {
     await RNFS.mkdir(`${RNFS.DocumentDirectoryPath}/avatars`);
     return 'success';
   } catch (err) {
-    Alert.alert('Error', err);
+    Alert.alert('Error', err.stack);
   }
 };
 
@@ -20,7 +20,7 @@ export const saveAvatar = async ({ base64Image, publicKey }) => {
     await RNFS.writeFile(path, image, 'base64');
     return path;
   } catch (err) {
-    Alert.alert('Error', err);
+    Alert.alert('Error', err.stack);
   }
 };
 
@@ -30,6 +30,6 @@ export const retrieveAvatar = async (uri) => {
     const base64Image = await RNFS.readFile(uri, 'base64');
     return `data:${mime};base64,${base64Image}`;
   } catch (err) {
-    Alert.alert('Error', err);
+    Alert.alert('Error', err.stack);
   }
 };

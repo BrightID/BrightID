@@ -56,7 +56,7 @@ export const handleBrightIdCreation = ({ nameornym, avatar }) => async (
     }
     // catch any errors with saving data or generating the public / private key
   } catch (err) {
-    Alert.alert('Error', err);
+    Alert.alert('Error', err.stack);
   }
 };
 
