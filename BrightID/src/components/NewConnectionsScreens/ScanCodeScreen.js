@@ -43,10 +43,12 @@ class ScanCodeScreen extends React.Component<Props, State> {
     const { dispatch } = this.props;
     dispatch(removeConnectQrData());
     emitter.on('connectDataReady', this.navigateToPreview);
+    emitter.on('connectFailure', this.navigateToHome);
   }
 
   componentWillUnmount() {
     emitter.off('connectDataReady', this.navigateToPreview);
+    emitter.off('connectFailure', this.navigateToHome);
   }
 
   handleBarCodeRead = ({ data }) => {
@@ -60,6 +62,10 @@ class ScanCodeScreen extends React.Component<Props, State> {
 
   navigateToPreview = () => {
     this.props.navigation.navigate('PreviewConnection');
+  };
+
+  navigateToHome = () => {
+    this.props.navigation.navigate('Home');
   };
 
   renderCameraOrWave = () => {

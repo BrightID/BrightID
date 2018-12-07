@@ -8,7 +8,7 @@ import {
 } from '../../../actions/index';
 import emitter from '../../../emitter';
 
-export const decryptData = (data) => async (dispatch, getState) => {
+export const decryptData = (data: string) => async (dispatch, getState) => {
   const { connectQrData } = getState().main;
 
   const { aesKey } = connectQrData;

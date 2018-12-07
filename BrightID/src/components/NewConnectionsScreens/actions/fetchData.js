@@ -1,4 +1,5 @@
 import { decryptData } from './decryptData';
+import emitter from '../../../emitter';
 
 // @flow
 
@@ -15,8 +16,11 @@ export const fetchData = () => (dispatch: () => null, getState: () => {}) => {
   fetch(`http://${ipAddress}/profile/download/${uuid}`)
     .then((res) => res.json())
     .then((data) => {
-      if (data) {
-        dispatch(decryptData(data));
+      if (data && data.data) {
+        dispatch(decryptData(data.data));
+      } else {
+        emitter.emit('connectFailure');
+        throw new Error("Empty 'data' returned from profile download.");
       }
     })
     .catch((err) => {
