@@ -1,4 +1,4 @@
-package com.brightid;
+package org.brightid;
 
 import com.facebook.react.ReactActivity;
 

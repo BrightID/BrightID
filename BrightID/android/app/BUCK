@@ -45,12 +45,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.brightid",
+    package = "org.brightid",
 )
 
 android_resource(
     name = "res",
-    package = "com.brightid",
+    package = "org.brightid",
     res = "src/main/res",
 )
 
