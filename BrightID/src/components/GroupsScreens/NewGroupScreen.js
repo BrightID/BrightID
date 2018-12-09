@@ -1,27 +1,16 @@
 // @flow
 
 import * as React from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
-import Spinner from 'react-native-spinkit';
-import Ionicon from 'react-native-vector-icons/Ionicons';
+import { NavigationEvents } from 'react-navigation';
+
 import SearchConnections from '../Connections/SearchConnections';
 import ConnectionCard from '../Connections/ConnectionCard';
 import { getConnections } from '../../actions/getConnections';
 import store from '../../store';
+import emitter from '../../emitter';
 import { creatNewGroup } from './actions';
-import { NavigationEvents } from 'react-navigation';
-import Material from 'react-native-vector-icons/MaterialIcons';
-import HeaderButtons, {
-  HeaderButton,
-  Item,
-} from 'react-navigation-header-buttons';
 import { renderListOrSpinner } from '../Connections/renderConnections';
 import { clearNewGroupCoFounders } from '../../actions/index';
 
@@ -42,18 +31,7 @@ type Props = {
 type State = {
   loading: boolean,
 };
-// header Button
-const MaterialHeaderButton = (passMeFurther) => (
-  // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
-  // and it is important to pass those props to `HeaderButton`
-  // then you may add some information like icon size or color (if you use icons)
-  <HeaderButton
-    {...passMeFurther}
-    IconComponent={Material}
-    iconSize={32}
-    color="#fff"
-  />
-);
+
 class NewGroupScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
     title: 'New Group',
@@ -65,6 +43,11 @@ class NewGroupScreen extends React.Component<Props, State> {
 
   componentDidMount() {
     this.getConnections();
+    emitter.on('refreshConnections', this.getConnections);
+  }
+
+  componentWillUnmount() {
+    emitter.off('refreshConnections', this.getConnections);
   }
 
   onWillBlur = () => {
@@ -89,17 +72,6 @@ class NewGroupScreen extends React.Component<Props, State> {
     );
   };
 
-  renderActionComponent = (publicKey) => (
-    <TouchableOpacity
-      style={styles.moreIcon}
-      onPress={this.handleUserOptions(publicKey)}
-    >
-      <View>
-        <Ionicon size={37} name="ios-checkmark-circle-outline" color="#333" />
-      </View>
-    </TouchableOpacity>
-  );
-
   cardIsSelected = (card) => {
     let { newGroupCoFounders } = this.props;
     for (let i in newGroupCoFounders)
@@ -120,6 +92,7 @@ class NewGroupScreen extends React.Component<Props, State> {
   );
 
   render() {
+    const { navigation } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.mainContainer}>
@@ -136,10 +109,14 @@ class NewGroupScreen extends React.Component<Props, State> {
         <View style={styles.createGroupButtonContainer}>
           <TouchableOpacity
             onPress={async () => {
-              // alert('new group');
-              let result = await store.dispatch(creatNewGroup());
-              console.log(result);
-              if (result) navigation.goBack();
+              try {
+                // alert('new group');
+                let result = await store.dispatch(creatNewGroup());
+                console.log(result);
+                if (result) navigation.goBack();
+              } catch (err) {
+                console.log(err);
+              }
             }}
             style={styles.createGroupButton}
           >

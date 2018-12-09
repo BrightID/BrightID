@@ -126,7 +126,7 @@ class ConnectionsScreen extends React.Component<Props, State> {
   );
 
   renderEligibleGroups() {
-    let { eligibleGroups } = this.props;
+    let { eligibleGroups, publicKey } = this.props;
 
     let twoEligibleGroups = this.getTwoEligibleGroup();
     if (eligibleGroups.length > 0) {

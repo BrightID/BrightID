@@ -28,7 +28,6 @@ export const handleBrightIdCreation = ({ nameornym, avatar }) => async (
     };
 
     let creationResponse = await api.createUser(publicKey);
-    console.log(creationResponse);
     if (creationResponse.data && creationResponse.data.key) {
       // // save avatar photo base64 data, and user data in async storage
       await AsyncStorage.setItem('userData', JSON.stringify(userData));

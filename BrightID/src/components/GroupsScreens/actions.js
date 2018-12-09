@@ -39,7 +39,8 @@ export const creatNewGroup = () => async (
     newGroupCoFounders[0],
     newGroupCoFounders[1],
   );
-  alert(JSON.stringify(response, null, 2));
+  // alert(JSON.stringify(response, null, 2));
+  console.log(response);
   if (response.data && response.data.id) return true;
   else {
     return false;
