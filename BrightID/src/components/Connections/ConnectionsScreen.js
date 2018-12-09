@@ -15,6 +15,7 @@ import { getConnections } from '../../actions/getConnections';
 import { createNewConnection } from './createNewConnection';
 import emitter from '../../emitter';
 import BottomNav from '../BottomNav';
+import { renderListOrSpinner } from './renderConnections';
 
 /**
  * Connection screen of BrightID
@@ -106,46 +107,13 @@ class ConnectionsScreen extends React.Component<Props, State> {
 
   renderConnection = ({ item }) => <ConnectionCard {...item} />;
 
-  renderListOrSpinner = () => {
-    const { connections } = this.props;
-    const { loading } = this.state;
-    if (loading) {
-      return (
-        <Spinner
-          style={styles.spinner}
-          isVisible={true}
-          size={47}
-          type="WanderingCubes"
-          color="#4990e2"
-        />
-      );
-    } else if (connections.length > 0) {
-      return (
-        <FlatList
-          style={styles.connectionsContainer}
-          data={this.filterConnections()}
-          keyExtractor={({ publicKey }, index) =>
-            JSON.stringify(publicKey) + index
-          }
-          renderItem={this.renderConnection}
-        />
-      );
-    } else {
-      return (
-        <View>
-          <Text style={styles.emptyText}>No connections</Text>
-        </View>
-      );
-    }
-  };
-
   render() {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.mainContainer}>
-          <SearchConnections navigation={this.props.navigation} />
-          <View style={styles.mainContainer}>{this.renderListOrSpinner()}</View>
+          <SearchConnections navigation={navigation} />
+          <View style={styles.mainContainer}>{renderListOrSpinner(this)}</View>
         </View>
         <BottomNav navigation={navigation} />
       </View>
