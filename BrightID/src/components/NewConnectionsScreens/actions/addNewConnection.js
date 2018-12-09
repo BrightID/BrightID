@@ -1,9 +1,9 @@
 // @flow
 
 import { AsyncStorage } from 'react-native';
-import { removeConnectUserData } from '../../../actions';
 import emitter from '../../../emitter';
 import { saveAvatar } from '../../../utils/filesystem';
+import { connectUsers } from './connectUsers';
 
 export const addNewConnection = () => async (
   dispatch: () => null,
@@ -14,27 +14,32 @@ export const addNewConnection = () => async (
    * Clear the redux store of all leftoverwebrtc data
    */
   try {
-    const {
-      connectUserData: { avatar, nameornym, publicKey, trustScore },
-    } = getState().main;
+    const { connectUserData, publicKey, secretKey } = getState().main;
+    // Test connections
+    // TODO - pass signatures between devicers
+    let connectionDate = Date.now();
+    if (connectUserData.secretKey) {
+      let userA = { publicKey, secretKey };
+      let userB = connectUserData;
+      connectionDate = await connectUsers(userA, userB);
+    }
+    const uri = await saveAvatar({
+      publicKey: connectUserData.publicKey,
+      base64Image: connectUserData.avatar,
+    });
     // TODO formalize spec for this
     // create a new connection object
     const connectionData = {
-      publicKey,
-      nameornym,
-      trustScore,
-      connectionDate: Date.now(),
+      publicKey: connectUserData.publicKey,
+      nameornym: connectUserData.nameornym,
+      trustScore: connectUserData.trustScore,
+      connectionDate,
+      avatar: { uri: `file://${uri}` },
     };
-    if (avatar) {
-      const uri = await saveAvatar({ publicKey, base64Image: avatar });
-      connectionData.avatar = { uri: `file://${uri}` };
-    } else {
-      connectionData.avatar = { uri: 'https://loremflickr.com/180/180/all' };
-    }
 
     // add connection inside of async storage
     await AsyncStorage.setItem(
-      JSON.stringify(publicKey),
+      JSON.stringify(connectUserData.publicKey),
       JSON.stringify(connectionData),
     );
 

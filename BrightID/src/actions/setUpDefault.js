@@ -30,8 +30,8 @@ export const setUpDefault = (userData: Object) => async (
     }
 
     // populate the app with dummy data for now
-    dispatch(userTrustScore('99.9'));
-    dispatch(setGroupsCount(64));
+    dispatch(userTrustScore('98.5'));
+    dispatch(setGroupsCount(0));
   } catch (err) {
     console.log(err);
   }

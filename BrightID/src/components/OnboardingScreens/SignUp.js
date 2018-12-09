@@ -100,7 +100,6 @@ class SignUp extends React.Component<Props, State> {
 
   randomAvatar = async () => {
     const randomImage = await fakeUserAvatar();
-    console.log(randomImage);
     const avatar = {
       uri: `data:image/jpeg;base64,${randomImage}`,
     };
