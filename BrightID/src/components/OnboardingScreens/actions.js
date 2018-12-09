@@ -37,9 +37,8 @@ export const handleBrightIdCreation = ({ nameornym, avatar }) => async (
       userData.avatar = { uri: `file://${uri}` };
     }
     let creationResponse = await api.createUser(publicKey);
+    console.log(creationResponse);
     if (creationResponse.data && creationResponse.data.key) {
-      // // add sample connections to async store
-      await addSampleConnections();
       // // save avatar photo base64 data, and user data in async storage
       await AsyncStorage.setItem('userData', JSON.stringify(userData));
       // // update redux store
@@ -57,45 +56,6 @@ export const handleBrightIdCreation = ({ nameornym, avatar }) => async (
     // catch any errors with saving data or generating the public / private key
   } catch (err) {
     Alert.alert('Error', err.stack);
-  }
-};
-
-const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
-
-const addSampleConnections = async () => {
-  try {
-    // save each connection with their public key as the async storage key
-    /* eslint-disable */
-    for (index in sampleConnections) {
-      if (sampleConnections.hasOwnProperty(index)) {
-        const res = await RNFetchBlob.fetch(
-          'GET',
-          sampleConnections[index].avatar,
-          {},
-        );
-        if (res.info().status === 200) {
-          const uri = await saveAvatar({
-            publicKey: sampleConnections[index].publicKey,
-            base64Image: `data:image/jpeg;base64,${res.base64()}`,
-          });
-          sampleConnections[index].avatar = { uri: `file://${uri}` };
-        } else {
-          sampleConnections[index].avatar = {
-            uri: sampleConnections[index].avatar,
-          };
-        }
-      }
-      await sleep(300);
-    }
-    /* eslint-enable */
-    const arrayToSave = sampleConnections.map((val) => [
-      JSON.stringify(val.publicKey),
-      JSON.stringify(val),
-    ]);
-
-    await AsyncStorage.multiSet(arrayToSave);
-  } catch (err) {
-    console.log(err);
   }
 };
 

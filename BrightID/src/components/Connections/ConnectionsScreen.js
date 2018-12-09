@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import { AsyncStorage, FlatList, StyleSheet, View } from 'react-native';
+import { AsyncStorage, FlatList, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-spinkit';
 import HeaderButtons, {
@@ -40,9 +40,14 @@ type Props = {
     id: number,
   }>,
   searchParam: string,
+  dispatch: (() => Promise<null>) => Promise<null>,
 };
 
-class ConnectionsScreen extends React.Component<Props> {
+type State = {
+  loading: boolean,
+};
+
+class ConnectionsScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
     title: 'Connections',
     headerRight: (
@@ -56,6 +61,10 @@ class ConnectionsScreen extends React.Component<Props> {
     ),
   });
 
+  state = {
+    loading: true,
+  };
+
   componentDidMount() {
     this.getConnections();
     emitter.on('refreshConnections', this.getConnections);
@@ -67,9 +76,12 @@ class ConnectionsScreen extends React.Component<Props> {
     emitter.off('removeConnection', this.removeConnection);
   }
 
-  getConnections = () => {
+  getConnections = async () => {
     const { dispatch } = this.props;
-    dispatch(getConnections());
+    await dispatch(getConnections());
+    this.setState({
+      loading: false,
+    });
   };
 
   removeConnection = async (publicKey) => {
@@ -96,7 +108,18 @@ class ConnectionsScreen extends React.Component<Props> {
 
   renderListOrSpinner = () => {
     const { connections } = this.props;
-    if (connections.length > 0) {
+    const { loading } = this.state;
+    if (loading) {
+      return (
+        <Spinner
+          style={styles.spinner}
+          isVisible={true}
+          size={47}
+          type="WanderingCubes"
+          color="#4990e2"
+        />
+      );
+    } else if (connections.length > 0) {
       return (
         <FlatList
           style={styles.connectionsContainer}
@@ -109,13 +132,9 @@ class ConnectionsScreen extends React.Component<Props> {
       );
     } else {
       return (
-        <Spinner
-          style={styles.spinner}
-          isVisible={true}
-          size={47}
-          type="WanderingCubes"
-          color="#4990e2"
-        />
+        <View>
+          <Text style={styles.emptyText}>No connections</Text>
+        </View>
       );
     }
   };
@@ -152,6 +171,10 @@ const styles = StyleSheet.create({
   },
   moreIcon: {
     marginRight: 16,
+  },
+  emptyText: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 20,
   },
 });
 

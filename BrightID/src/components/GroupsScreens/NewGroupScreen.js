@@ -15,14 +15,14 @@ import SearchConnections from '../Connections/SearchConnections';
 import ConnectionCard from '../Connections/ConnectionCard';
 import { getConnections } from '../../actions/getConnections';
 import store from '../../store';
-import {creatNewGroup} from './actions';
-import {NavigationEvents} from 'react-navigation';
+import { creatNewGroup } from './actions';
+import { NavigationEvents } from 'react-navigation';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import HeaderButtons, {
-    HeaderButton,
-    Item,
+  HeaderButton,
+  Item,
 } from 'react-navigation-header-buttons';
-import {clearNewGroupCoFounders} from "../../actions/index";
+import { clearNewGroupCoFounders } from '../../actions/index';
 
 /**
  * Connection screen of BrightID
@@ -39,33 +39,32 @@ type Props = {
 };
 // header Button
 const MaterialHeaderButton = (passMeFurther) => (
-    // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
-    // and it is important to pass those props to `HeaderButton`
-    // then you may add some information like icon size or color (if you use icons)
-    <HeaderButton
-        {...passMeFurther}
-        IconComponent={Material}
-        iconSize={32}
-        color="#fff"
-    />
+  // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
+  // and it is important to pass those props to `HeaderButton`
+  // then you may add some information like icon size or color (if you use icons)
+  <HeaderButton
+    {...passMeFurther}
+    IconComponent={Material}
+    iconSize={32}
+    color="#fff"
+  />
 );
 class NewGroupScreen extends React.Component<Props> {
-  static navigationOptions = ({navigation}) => ({
+  static navigationOptions = ({ navigation }) => ({
     title: 'New Group',
-      headerRight: (
-          <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
-              <Item
-                  title="Create Group"
-                  iconName="check"
-                  onPress={async () => {
-                      // alert('new group');
-                      let result = await store.dispatch(creatNewGroup());
-                      if(result)
-                          navigation.goBack();
-                  }}
-              />
-          </HeaderButtons>
-      ),
+    headerRight: (
+      <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
+        <Item
+          title="Create Group"
+          iconName="check"
+          onPress={async () => {
+            // alert('new group');
+            let result = await store.dispatch(creatNewGroup());
+            if (result) navigation.goBack();
+          }}
+        />
+      </HeaderButtons>
+    ),
   });
 
   componentDidMount() {
@@ -73,7 +72,7 @@ class NewGroupScreen extends React.Component<Props> {
   }
 
   onWillBlur = () => {
-      this.props.dispatch(clearNewGroupCoFounders());
+    this.props.dispatch(clearNewGroupCoFounders());
   };
 
   getConnections = () => {
@@ -103,15 +102,22 @@ class NewGroupScreen extends React.Component<Props> {
   );
 
   cardIsSelected = (card) => {
-      let {newGroupCoFounders} = this.props;
-      for(let i in newGroupCoFounders)
-          if(JSON.stringify(newGroupCoFounders[i]) === JSON.stringify(card.publicKey))
-              return true;
-      return false;
-  }
+    let { newGroupCoFounders } = this.props;
+    for (let i in newGroupCoFounders)
+      if (
+        JSON.stringify(newGroupCoFounders[i]) === JSON.stringify(card.publicKey)
+      )
+        return true;
+    return false;
+  };
 
   renderConnection = ({ item }) => (
-    <ConnectionCard {...item} selected={this.cardIsSelected(item)} groups={true} style={styles.connectionCard} />
+    <ConnectionCard
+      {...item}
+      selected={this.cardIsSelected(item)}
+      groups={true}
+      style={styles.connectionCard}
+    />
   );
 
   renderList = () => {
@@ -119,7 +125,7 @@ class NewGroupScreen extends React.Component<Props> {
     if (connections.length > 0) {
       return (
         <View>
-            {/*<Text>{JSON.stringify(newGroupCoFounders)}</Text>*/}
+          {/*<Text>{JSON.stringify(newGroupCoFounders)}</Text>*/}
           <FlatList
             style={styles.connectionsContainer}
             data={this.filterConnections()}
@@ -146,9 +152,7 @@ class NewGroupScreen extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-          <NavigationEvents
-              onWillBlur={payload => this.onWillBlur()}
-          />
+        <NavigationEvents onWillBlur={(payload) => this.onWillBlur()} />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>CO-FOUNDERS</Text>
           <Text style={styles.infoText}>
