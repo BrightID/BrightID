@@ -23,7 +23,7 @@ import HeaderButtons, {
 } from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { handleBrightIdCreation } from './actions';
+import { handleBrightIdCreation, fakeUserAvatar } from './actions';
 import { mimeFromUri } from '../../utils/images';
 
 type Props = {
@@ -35,7 +35,8 @@ type State = {
   nameornym: string,
   inputActive: boolean,
   imagePicking: boolean,
-  avatar: Object,
+  avatar: '',
+  creatingBrightId: boolean,
 };
 
 // header Button
@@ -69,16 +70,45 @@ class SignUp extends React.Component<Props, State> {
     ),
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      nameornym: '',
-      inputActive: false,
-      avatar: '',
-      imagePicking: false,
-      creatingBrightId: false,
+  state = {
+    nameornym: '',
+    inputActive: false,
+    avatar: '',
+    imagePicking: false,
+    creatingBrightId: false,
+  };
+
+  imagePickingFalse = () => {
+    setTimeout(
+      () =>
+        this.setState({
+          imagePicking: false,
+        }),
+      201,
+    );
+  };
+
+  imagePickingTrue = () => {
+    setTimeout(
+      () =>
+        this.setState({
+          imagePicking: true,
+        }),
+      200,
+    );
+  };
+
+  randomAvatar = async () => {
+    const randomImage = await fakeUserAvatar();
+    console.log(randomImage);
+    const avatar = {
+      uri: `data:image/jpeg;base64,${randomImage}`,
     };
-  }
+    this.setState({
+      avatar,
+    });
+    this.imagePickingFalse();
+  };
 
   getAvatarPhoto = () => {
     // for full documentation on the Image Picker api
@@ -92,41 +122,26 @@ class SignUp extends React.Component<Props, State> {
       quality: 0.8,
       allowsEditing: true,
       loadingLabelText: 'loading avatar photo...',
+      customButtons: [{ name: 'random', title: 'Random Avatar' }],
     };
     // loading UI to account for the delay after picking an image
-    setTimeout(
-      () =>
-        this.setState({
-          imagePicking: true,
-        }),
-      1000,
-    );
+    this.imagePickingTrue();
 
     ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
-        setTimeout(
-          () =>
-            this.setState({
-              imagePicking: false,
-            }),
-          1001,
-        );
+        this.imagePickingFalse();
       } else if (response.error) {
         Alert.alert('ERROR', response.error);
-        setTimeout(
-          () =>
-            this.setState({
-              imagePicking: false,
-            }),
-          1001,
-        );
+        this.imagePickingFalse();
+      } else if (response.customButton) {
+        this.randomAvatar();
       } else {
         const mime = mimeFromUri(response.uri);
-        const imageData = {
+        const avatar = {
           uri: `data:${mime};base64,${response.data}`,
         };
         this.setState({
-          avatar: imageData,
+          avatar,
           imagePicking: false,
         });
       }
@@ -140,6 +155,24 @@ class SignUp extends React.Component<Props, State> {
       this.setState({
         creatingBrightId: true,
       });
+      if (!nameornym) {
+        this.setState({
+          creatingBrightId: false,
+        });
+        return Alert.alert(
+          'BrightID Form Incomplete',
+          'Please add your name or nym',
+        );
+      }
+      if (!avatar) {
+        this.setState({
+          creatingBrightId: false,
+        });
+        return Alert.alert(
+          'BrightID Form Incomplete',
+          'An avatar photo is required',
+        );
+      }
       const result = await dispatch(
         handleBrightIdCreation({ avatar, nameornym }),
       );
