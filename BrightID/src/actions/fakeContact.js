@@ -1,14 +1,18 @@
 // @flow
 
 import nacl from 'tweetnacl';
-import pokemon from 'pokemon';
 import RNFetchBlob from 'rn-fetch-blob';
+import { Alert } from 'react-native';
+import { names } from '../utils/fakeNames';
+
 import { setConnectUserData } from './index';
 
 export const addConnection = (navigation) => (dispatch) => {
   const { publicKey } = nacl.sign.keyPair();
-
-  const nameornym = pokemon.random();
+  const { firstName, lastName } = names[
+    Math.floor(Math.random() * (names.length - 1))
+  ];
+  const nameornym = `${firstName} ${lastName}`;
   const trustScore = `${Math.floor(Math.random() * 99)}.${Math.floor(
     Math.random() * 9,
   )}`;
@@ -17,7 +21,7 @@ export const addConnection = (navigation) => (dispatch) => {
     publicKey,
     nameornym,
     trustScore,
-    avatar: '',
+    avatar: 'https://loremflickr.com/180/180',
   };
 
   RNFetchBlob.fetch('GET', 'https://loremflickr.com/180/180', {})
@@ -27,7 +31,7 @@ export const addConnection = (navigation) => (dispatch) => {
         dispatch(setConnectUserData(userData));
         navigation.navigate('PreviewConnection');
       } else {
-        dispatch(setConnectUserData(userData));
+        Alert.alert('Error', 'Unable to fetch avatar image');
       }
     })
     .catch((err) => {

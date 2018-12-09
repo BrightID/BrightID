@@ -34,6 +34,7 @@
     "react/jsx-one-expression-per-line": "off",
     "react/no-unused-prop-types": "warn",
     "react/no-unused-state": "warn",
+    "react/sort-comp": "off",
     "consistent-return": "off",
     "no-alert": "off",
     "no-else-return": "off",

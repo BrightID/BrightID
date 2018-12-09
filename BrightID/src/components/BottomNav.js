@@ -23,17 +23,16 @@ type Props = {
 };
 
 export default class BottomNav extends React.Component<Props> {
-    handleCheatPageNavigation = () => {
-        this.pressCount ++;
-        if(this.pressCount === 4)
-            this.props.navigation.navigate('CheatPage');
-        if(this.timeOutHandler)
-            clearTimeout(this.timeOutHandler);
-        this.timeOutHandler = setTimeout(() => {
-            this.pressCount = 0;
-        },300)
-    };
-    pressCount = 0;
+  pressCount = 0;
+  handleCheatPageNavigation = () => {
+    this.pressCount++;
+    if (this.pressCount === 4) this.props.navigation.navigate('CheatPage');
+    if (this.timeOutHandler) clearTimeout(this.timeOutHandler);
+    this.timeOutHandler = setTimeout(() => {
+      this.pressCount = 0;
+    }, 300);
+  };
+
   render() {
     return (
       <View style={styles.container}>

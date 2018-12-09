@@ -37,7 +37,7 @@ export const addNewConnection = () => async (
       JSON.stringify(publicKey),
       JSON.stringify(connectionData),
     );
-    dispatch(removeConnectUserData());
+
     emitter.emit('refreshConnections', {});
   } catch (err) {
     console.log(err);

@@ -1,16 +1,9 @@
 // @flow
 
 import * as React from 'react';
-import {
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
+import { removeConnectUserData } from '../../actions';
 
 /**
  * Successfly Added Connection Confirmation Screen of BrightID
@@ -56,7 +49,8 @@ class SuccessScreen extends React.Component<Props, State> {
         <View style={styles.confirmButtonContainer}>
           <TouchableOpacity
             onPress={() => {
-              const { navigation } = this.props;
+              const { navigation, dispatch } = this.props;
+              dispatch(removeConnectUserData());
               navigation.navigate('Home');
             }}
             style={styles.confirmButton}

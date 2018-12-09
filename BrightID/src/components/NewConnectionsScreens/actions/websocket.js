@@ -3,7 +3,18 @@
 import io from 'socket.io-client';
 import { fetchData } from './fetchData';
 
-export const setUpWs = () => (dispatch: () => null, getState: () => {}) => {
+export const setUpWs = () => (
+  dispatch: (() => null) => null,
+  getState: () => {
+    main: {
+      connectQrData: {
+        ipAddress: string,
+        uuid: string,
+        user: string,
+      },
+    },
+  },
+) => {
   let {
     connectQrData: { ipAddress, uuid, user },
   } = getState().main;

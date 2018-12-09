@@ -167,7 +167,7 @@ class SignUp extends React.Component<Props, State> {
       </TouchableOpacity>
     ) : (
       <View style={styles.loader}>
-        <Text>Generating fake user content...</Text>
+        <Text>Creating Bright ID...</Text>
         <Spinner isVisible={true} size={47} type="Wave" color="#4990e2" />
       </View>
     );
@@ -353,6 +353,11 @@ const styles = StyleSheet.create({
   loader: {
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 22,
+  },
+  creatingBrightIdText: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 14,
   },
 });
 

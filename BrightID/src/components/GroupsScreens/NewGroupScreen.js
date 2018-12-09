@@ -15,14 +15,15 @@ import SearchConnections from '../Connections/SearchConnections';
 import ConnectionCard from '../Connections/ConnectionCard';
 import { getConnections } from '../../actions/getConnections';
 import store from '../../store';
-import {creatNewGroup} from './actions';
-import {NavigationEvents} from 'react-navigation';
+import { creatNewGroup } from './actions';
+import { NavigationEvents } from 'react-navigation';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import HeaderButtons, {
-    HeaderButton,
-    Item,
+  HeaderButton,
+  Item,
 } from 'react-navigation-header-buttons';
-import {clearNewGroupCoFounders} from "../../actions/index";
+import { renderListOrSpinner } from '../Connections/renderConnections';
+import { clearNewGroupCoFounders } from '../../actions/index';
 
 /**
  * Connection screen of BrightID
@@ -37,48 +38,45 @@ type Props = {
   newGroupCoFounders: [],
   searchParam: string,
 };
+
+type State = {
+  loading: boolean,
+};
 // header Button
 const MaterialHeaderButton = (passMeFurther) => (
-    // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
-    // and it is important to pass those props to `HeaderButton`
-    // then you may add some information like icon size or color (if you use icons)
-    <HeaderButton
-        {...passMeFurther}
-        IconComponent={Material}
-        iconSize={32}
-        color="#fff"
-    />
+  // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
+  // and it is important to pass those props to `HeaderButton`
+  // then you may add some information like icon size or color (if you use icons)
+  <HeaderButton
+    {...passMeFurther}
+    IconComponent={Material}
+    iconSize={32}
+    color="#fff"
+  />
 );
-class NewGroupScreen extends React.Component<Props> {
-  static navigationOptions = ({navigation}) => ({
+class NewGroupScreen extends React.Component<Props, State> {
+  static navigationOptions = ({ navigation }) => ({
     title: 'New Group',
-      headerRight: (
-          <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
-              <Item
-                  title="Create Group"
-                  iconName="check"
-                  onPress={async () => {
-                      // alert('new group');
-                      let result = await store.dispatch(creatNewGroup());
-                      if(result)
-                          navigation.goBack();
-                  }}
-              />
-          </HeaderButtons>
-      ),
   });
+
+  state = {
+    loading: true,
+  };
 
   componentDidMount() {
     this.getConnections();
   }
 
   onWillBlur = () => {
-      this.props.dispatch(clearNewGroupCoFounders());
+    this.props.dispatch(clearNewGroupCoFounders());
   };
 
-  getConnections = () => {
+  getConnections = async () => {
     const { dispatch } = this.props;
-    dispatch(getConnections());
+    await dispatch(getConnections());
+    this.setState({
+      loading: false,
+    });
   };
 
   filterConnections = () => {
@@ -103,60 +101,51 @@ class NewGroupScreen extends React.Component<Props> {
   );
 
   cardIsSelected = (card) => {
-      let {newGroupCoFounders} = this.props;
-      for(let i in newGroupCoFounders)
-          if(JSON.stringify(newGroupCoFounders[i]) === JSON.stringify(card.publicKey))
-              return true;
-      return false;
-  }
+    let { newGroupCoFounders } = this.props;
+    for (let i in newGroupCoFounders)
+      if (
+        JSON.stringify(newGroupCoFounders[i]) === JSON.stringify(card.publicKey)
+      )
+        return true;
+    return false;
+  };
 
   renderConnection = ({ item }) => (
-    <ConnectionCard {...item} selected={this.cardIsSelected(item)} groups={true} style={styles.connectionCard} />
+    <ConnectionCard
+      {...item}
+      selected={this.cardIsSelected(item)}
+      groups={true}
+      style={styles.connectionCard}
+    />
   );
-
-  renderList = () => {
-    const { connections, newGroupCoFounders } = this.props;
-    if (connections.length > 0) {
-      return (
-        <View>
-            {/*<Text>{JSON.stringify(newGroupCoFounders)}</Text>*/}
-          <FlatList
-            style={styles.connectionsContainer}
-            data={this.filterConnections()}
-            keyExtractor={({ publicKey }, index) =>
-              JSON.stringify(publicKey) + index
-            }
-            renderItem={this.renderConnection}
-          />
-        </View>
-      );
-    } else {
-      return (
-        <Spinner
-          style={styles.spinner}
-          isVisible={true}
-          size={47}
-          type="WanderingCubes"
-          color="#4990e2"
-        />
-      );
-    }
-  };
 
   render() {
     return (
       <View style={styles.container}>
-          <NavigationEvents
-              onWillBlur={payload => this.onWillBlur()}
-          />
-        <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>CO-FOUNDERS</Text>
-          <Text style={styles.infoText}>
-            To create a group, you must select two co-founders
-          </Text>
+        <View style={styles.mainContainer}>
+          <NavigationEvents onWillBlur={(payload) => this.onWillBlur()} />
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleText}>CO-FOUNDERS</Text>
+            <Text style={styles.infoText}>
+              To create a group, you must select two co-founders
+            </Text>
+          </View>
+          <SearchConnections navigation={this.props.navigation} />
+          <View style={styles.mainContainer}>{renderListOrSpinner(this)}</View>
         </View>
-        <SearchConnections navigation={this.props.navigation} />
-        <View style={styles.mainContainer}>{this.renderList()}</View>
+        <View style={styles.createGroupButtonContainer}>
+          <TouchableOpacity
+            onPress={async () => {
+              // alert('new group');
+              let result = await store.dispatch(creatNewGroup());
+              console.log(result);
+              if (result) navigation.goBack();
+            }}
+            style={styles.createGroupButton}
+          >
+            <Text style={styles.buttonInnerText}>Create Group</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -166,15 +155,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-  },
-  connectionsContainer: {
-    flex: 1,
-    width: '96.7%',
-    borderTopWidth: 1,
-    borderTopColor: '#e3e1e1',
   },
   mainContainer: {
     marginTop: 8,
@@ -182,6 +162,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  connectionsContainer: {
+    flex: 1,
+    width: '96.7%',
+    borderTopWidth: 1,
+    borderTopColor: '#e3e1e1',
+  },
+
   moreIcon: {
     marginRight: 16,
   },
@@ -226,6 +213,26 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e3e1e1',
     width: '100%',
+  },
+  createGroupButtonContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  createGroupButton: {
+    backgroundColor: '#428BE5',
+    width: 300,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 13,
+    paddingBottom: 12,
+    marginTop: 9,
+    marginBottom: 7,
+  },
+  buttonInnerText: {
+    fontFamily: 'ApexNew-Medium',
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 18,
   },
 });
 

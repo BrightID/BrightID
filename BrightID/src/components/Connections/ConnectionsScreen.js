@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import { AsyncStorage, FlatList, StyleSheet, View } from 'react-native';
+import { AsyncStorage, FlatList, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-spinkit';
 import HeaderButtons, {
@@ -15,6 +15,7 @@ import { getConnections } from '../../actions/getConnections';
 import { createNewConnection } from './createNewConnection';
 import emitter from '../../emitter';
 import BottomNav from '../BottomNav';
+import { renderListOrSpinner } from './renderConnections';
 
 /**
  * Connection screen of BrightID
@@ -40,9 +41,14 @@ type Props = {
     id: number,
   }>,
   searchParam: string,
+  dispatch: (() => Promise<null>) => Promise<null>,
 };
 
-class ConnectionsScreen extends React.Component<Props> {
+type State = {
+  loading: boolean,
+};
+
+class ConnectionsScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
     title: 'Connections',
     headerRight: (
@@ -56,6 +62,10 @@ class ConnectionsScreen extends React.Component<Props> {
     ),
   });
 
+  state = {
+    loading: true,
+  };
+
   componentDidMount() {
     this.getConnections();
     emitter.on('refreshConnections', this.getConnections);
@@ -67,9 +77,12 @@ class ConnectionsScreen extends React.Component<Props> {
     emitter.off('removeConnection', this.removeConnection);
   }
 
-  getConnections = () => {
+  getConnections = async () => {
     const { dispatch } = this.props;
-    dispatch(getConnections());
+    await dispatch(getConnections());
+    this.setState({
+      loading: false,
+    });
   };
 
   removeConnection = async (publicKey) => {
@@ -94,39 +107,13 @@ class ConnectionsScreen extends React.Component<Props> {
 
   renderConnection = ({ item }) => <ConnectionCard {...item} />;
 
-  renderListOrSpinner = () => {
-    const { connections } = this.props;
-    if (connections.length > 0) {
-      return (
-        <FlatList
-          style={styles.connectionsContainer}
-          data={this.filterConnections()}
-          keyExtractor={({ publicKey }, index) =>
-            JSON.stringify(publicKey) + index
-          }
-          renderItem={this.renderConnection}
-        />
-      );
-    } else {
-      return (
-        <Spinner
-          style={styles.spinner}
-          isVisible={true}
-          size={47}
-          type="WanderingCubes"
-          color="#4990e2"
-        />
-      );
-    }
-  };
-
   render() {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.mainContainer}>
-          <SearchConnections navigation={this.props.navigation} />
-          <View style={styles.mainContainer}>{this.renderListOrSpinner()}</View>
+          <SearchConnections navigation={navigation} />
+          <View style={styles.mainContainer}>{renderListOrSpinner(this)}</View>
         </View>
         <BottomNav navigation={navigation} />
       </View>
@@ -152,6 +139,10 @@ const styles = StyleSheet.create({
   },
   moreIcon: {
     marginRight: 16,
+  },
+  emptyText: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 20,
   },
 });
 
