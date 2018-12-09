@@ -15,27 +15,18 @@ export const handleBrightIdCreation = ({ nameornym, avatar }) => async (
   dispatch: () => null,
 ) => {
   try {
-    if (!nameornym) {
-      return Alert.alert('Please add your name or nym');
-    }
-
-    await createConnectionAvatarDirectory();
     // create public / private key pair
     const { publicKey, secretKey } = nacl.sign.keyPair();
+    await createConnectionAvatarDirectory();
+    const uri = await saveAvatar({ publicKey, base64Image: avatar.uri });
 
     const userData = {
       publicKey,
       secretKey,
       nameornym,
+      avatar: { uri: `file://${uri}` },
     };
-    // save avatar photo
-    if (avatar) {
-      const uri = await saveAvatar({ publicKey, base64Image: avatar.uri });
-      userData.avatar = { uri: `file://${uri}` };
-    } else {
-      const uri = await fakeUserAvatar(publicKey);
-      userData.avatar = { uri: `file://${uri}` };
-    }
+
     let creationResponse = await api.createUser(publicKey);
     console.log(creationResponse);
     if (creationResponse.data && creationResponse.data.key) {
@@ -59,22 +50,18 @@ export const handleBrightIdCreation = ({ nameornym, avatar }) => async (
   }
 };
 
-const fakeUserAvatar = async (publicKey) => {
+export const fakeUserAvatar = async () => {
   try {
     // save each connection with their public key as the async storage key
     const res = await RNFetchBlob.fetch(
       'GET',
-      'https://loremflickr.com/180/180',
+      'https://loremflickr.com/180/180/all',
       {},
     );
     if (res.info().status === 200) {
-      const uri = await saveAvatar({
-        publicKey,
-        base64Image: `data:image/jpeg;base64,${res.base64()}`,
-      });
-      return uri;
+      return res.base64();
     } else {
-      return 'https://loremflickr.com/180/180';
+      return 'https://loremflickr.com/180/180/all';
     }
   } catch (err) {
     console.log(err);

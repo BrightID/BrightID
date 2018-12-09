@@ -29,7 +29,7 @@ export const addNewConnection = () => async (
       const uri = await saveAvatar({ publicKey, base64Image: avatar });
       connectionData.avatar = { uri: `file://${uri}` };
     } else {
-      connectionData.avatar = { uri: 'https://loremflickr.com/180/180' };
+      connectionData.avatar = { uri: 'https://loremflickr.com/180/180/all' };
     }
 
     // add connection inside of async storage
