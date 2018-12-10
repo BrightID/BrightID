@@ -42,7 +42,7 @@
     "react-native-camera": "^1.4.1",
     "react-native-crypto": "^2.1.2",
     "react-native-fs": "^2.12.1",
-    "react-native-image-picker": "^0.27.1",
+    "react-native-image-picker": "^0.27.2",
     "react-native-keyboard-aware-scroll-view": "^0.7.4",
     "react-native-level-fs": "^3.0.0",
     "react-native-linear-gradient": "^2.4.3",
