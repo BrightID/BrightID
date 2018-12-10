@@ -42,7 +42,7 @@ class SuccessScreen extends React.Component<Props, State> {
               console.log(e.error);
             }}
             accessible={true}
-            accessibilityLabel="user avatar image"
+            accessibilityLabel="success image"
           />
         </View>
 

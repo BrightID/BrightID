@@ -3,6 +3,7 @@
 import * as React from 'react';
 import {
   FlatList,
+  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -113,15 +114,29 @@ class ConnectionsScreen extends React.Component<Props, State> {
     return names;
   }
 
-  noEligibleGroups = () => (
-    <View style={styles.emptyContainer}>
-      <Text style={styles.emptyText}>No Eligible Groups</Text>
+  noCurrentGroups = () => (
+    <View style={styles.noCurrentGroups}>
+      <Image
+        source={require('../../static/groups_logo.png')}
+        style={styles.groupsLogo}
+        resizeMode="cover"
+        onError={(e) => {
+          console.log(e.error);
+        }}
+        accessible={true}
+        accessibilityLabel="groups logo"
+      />
+      <View>
+        <Text style={styles.emptyGroupsText}>By creating and joining</Text>
+        <Text style={styles.emptyGroupsText}>groups, you can increase </Text>
+        <Text style={styles.emptyGroupsText}>your score</Text>
+      </View>
     </View>
   );
 
-  noCurrentGroups = () => (
+  noEligibleGroups = () => (
     <View style={styles.emptyContainer}>
-      <Text style={styles.emptyText}>No Current Groups</Text>
+      <Text style={styles.emptyText}>No Eligible Groups</Text>
     </View>
   );
 
@@ -130,17 +145,22 @@ class ConnectionsScreen extends React.Component<Props, State> {
 
     let twoEligibleGroups = this.getTwoEligibleGroup();
     if (eligibleGroups.length > 0) {
-      return twoEligibleGroups.map((group) => (
-        <EligibleGroupCard
-          key={group.id}
-          groupId={group.id}
-          names={this.mapPublicKeysToNames(group.knownMembers)}
-          alreadyIn={
-            group.knownMembers.indexOf(api.urlSafe(obj2b64(publicKey))) >= 0
-          }
-          trustScore={group.trustScore}
-        />
-      ));
+      return (
+        <View style={styles.eligibleContainer}>
+          <Text style={styles.groupTitle}>ELIGIBLE</Text>
+          {twoEligibleGroups.map((group) => (
+            <EligibleGroupCard
+              key={group.id}
+              groupId={group.id}
+              names={this.mapPublicKeysToNames(group.knownMembers)}
+              alreadyIn={
+                group.knownMembers.indexOf(api.urlSafe(obj2b64(publicKey))) >= 0
+              }
+              trustScore={group.trustScore}
+            />
+          ))}
+        </View>
+      );
     } else {
       return this.noEligibleGroups();
     }
@@ -164,12 +184,17 @@ class ConnectionsScreen extends React.Component<Props, State> {
   renderCurrentGroups() {
     let { currentGroups } = this.props;
     if (currentGroups.length > 0) {
-      <FlatList
-        data={currentGroups}
-        renderItem={this.renderCurrentGroup}
-        horizontal={true}
-        keyExtractor={({ id }, index) => id}
-      />;
+      return (
+        <View style={styles.currentContainer}>
+          <Text style={styles.groupTitle}>CURRENT</Text>
+          <FlatList
+            data={currentGroups}
+            renderItem={this.renderCurrentGroup}
+            horizontal={true}
+            keyExtractor={({ id }, index) => id}
+          />
+        </View>
+      );
     } else {
       return this.noCurrentGroups();
     }
@@ -183,28 +208,19 @@ class ConnectionsScreen extends React.Component<Props, State> {
         <View style={styles.mainContainer}>
           <NavigationEvents onDidFocus={this.refreshUserInfo} />
           <SearchGroups />
-          <View style={styles.eligibleContainer}>
-            <Text style={styles.groupTitle}>ELIGIBLE</Text>
-            {this.state.userInfoLoading && (
-              <View style={styles.alignCenter}>
-                <ActivityIndicator size="large" color="#0000ff" />
-              </View>
-            )}
-            {this.renderEligibleGroups()}
-            {/* <EligibleGroupCard
-              names={['Sherry', 'Melissa', 'Bob']}
-              trustScore="92"
-            />
-            <EligibleGroupCard
-              names={['Brent', 'Nick', 'Anna']}
-              trustScore=""
-            /> */}
-            <View style={styles.eligibleBottomView} />
-          </View>
-          <View style={styles.currentContainer}>
-            <Text style={styles.groupTitle}>CURRENT</Text>
-            {this.renderCurrentGroups()}
-          </View>
+
+          {this.state.userInfoLoading && (
+            <View style={styles.alignCenter}>
+              <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+          )}
+
+          {this.renderEligibleGroups()}
+
+          <View style={styles.eligibleBottomView} />
+
+          {this.renderCurrentGroups()}
+
           <View style={styles.addGroupButtonContainer}>
             <TouchableOpacity
               style={styles.addGroupButton}
@@ -324,12 +340,19 @@ const styles = StyleSheet.create({
     borderTopColor: '#e3e0e4',
     borderTopWidth: 1,
   },
-  emptyText: {
+  noCurrentGroups: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  emptyGroupsText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 14,
-    shadowColor: 'rgba(0,0,0,0.32)',
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
+    fontSize: 18,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    color: '#4a4a4a',
   },
 });
 
