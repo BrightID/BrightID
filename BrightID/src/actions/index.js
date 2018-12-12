@@ -260,7 +260,7 @@ export const setConnectPublicKey = (publicKey: Uint8Array) => ({
  */
 
 export const setConnectQrData = (connectQrData: {
-  ipAddress: Array<number>,
+  ipAddress: string,
   aesKey: string,
   uuid: string,
 }) => ({
