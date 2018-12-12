@@ -2,20 +2,13 @@
 
 import { setConnectQrData } from '../../../actions/index';
 
-export const parseQrData = ({
-  data,
-  user,
-}: {
-  data: string,
-  user: number,
-}) => async (dispatch: () => null) => {
-  const dataList = data.split(';');
+export const parseQrData = (qrString): string => async (dispatch: () => null) => {
+  const aesKey = qrString.substr(0,32);
+  const uuid = qrString.substr(32, 12);
+  const ipAddress = [...Buffer.from(qrString.substr(44, 8), 'base64')].join('.');
 
-  const aesKey = dataList[0];
-  const uuid = dataList[1];
-  const ipAddress = [...Buffer.from(dataList[2], 'base64')].join('.');
-
-  const dataObj = { aesKey, uuid, ipAddress, user };
+  const user = '2';
+  const dataObj = { aesKey, uuid, ipAddress, user, qrString };
 
   dispatch(setConnectQrData(dataObj));
 };

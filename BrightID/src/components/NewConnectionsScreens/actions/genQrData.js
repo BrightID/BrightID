@@ -2,13 +2,28 @@
 
 import { randomBytes } from 'react-native-randombytes';
 import uuidv4 from 'uuid/v4';
+import { Alert } from 'react-native';
+import server from '../../../Api/server'
+import { b64ToUrlSafeB64 } from '../../../utils/encoding'
+import { setConnectQrData } from '../../../actions';
 
-const IP_ADDRESS = [40, 70, 26, 245];
+export const genQrData = () => async (dispatch: () => null) => {
 
-export const qrData = () => () => {
-  const uuid = uuidv4();
-  const aesKey = randomBytes(18).toString('base64');
-  const ipAddress = Buffer.from(IP_ADDRESS).toString('base64');
+  const aesKey = randomBytes(24).toString('base64');
+  const uuid = b64ToUrlSafeB64(randomBytes(9).toString('base64'));
+  try {
+    var ipAddress = await server.getIp();
+    var b64Ip = Buffer.from(
+      ipAddress.split('.').map(octet => parseInt(octet))
+    ).toString('base64');
+  } catch (e){
+    Alert.alert(`Bad ip address (${ipAddress}) from server`, e.stack);
+  }
+  const qrString = `${aesKey}${uuid}${b64Ip}`;
+  const user = '1';
 
-  return `${aesKey};${uuid};${ipAddress}`;
+  const dataObj = { aesKey, uuid, ipAddress, user, qrString };
+
+  dispatch(setConnectQrData(dataObj));
+
 };

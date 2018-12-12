@@ -6,10 +6,9 @@ import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-spinkit';
-import { qrData } from './actions/genQrData';
+import { genQrData } from './actions/genQrData';
 import { encryptAndUploadLocalData } from './actions/encryptData';
 import { setUpWs, closeWs } from './actions/websocket';
-import { parseQrData } from './actions/parseQrData';
 import emitter from '../../emitter';
 import { removeConnectQrData } from '../../actions';
 
@@ -48,15 +47,14 @@ class MyCodeScreen extends React.Component<Props, State> {
   };
 
   componentDidMount() {
+    emitter.on('connectDataReady', this.navigateToPreview);
     const { dispatch } = this.props;
     dispatch(removeConnectQrData());
-    const data = dispatch(qrData());
-    console.log(data);
-    this.genQrCode(data);
-    dispatch(parseQrData({ data, user: 1 }));
-    this.socket = dispatch(setUpWs());
-    setTimeout(() => dispatch(encryptAndUploadLocalData()));
-    emitter.on('connectDataReady', this.navigateToPreview);
+    dispatch(genQrData()).then(() =>{
+      dispatch(this.genQrCode());
+      this.socket = dispatch(setUpWs());
+      setTimeout(() => dispatch(encryptAndUploadLocalData()));
+    });
   }
 
   componentWillUnmount() {
@@ -68,8 +66,8 @@ class MyCodeScreen extends React.Component<Props, State> {
     this.props.navigation.navigate('PreviewConnection');
   };
 
-  genQrCode = (data) => {
-    qrcode.toString(data, (err, qr) => {
+  genQrCode = () => async (_, getState) =>  {
+    qrcode.toString(getState().main.connectQrData.qrString, (err, qr) => {
       if (err) throw err;
       this.parseSVG(qr);
     });

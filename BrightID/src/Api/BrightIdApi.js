@@ -1,14 +1,16 @@
 import {create} from 'apisauce';
+import Config from 'react-native-config';
+import nacl from 'tweetnacl';
 import {obj2b64, strToUint8Array} from "../utils/encoding";
 import store from "../store";
-import nacl from 'tweetnacl';
 
 const api = create({
-    baseURL: 'http://anti-sybil.eastus2.cloudapp.azure.com/brightid/',
-    // baseURL: 'http://104.207.144.107/brightid/',
+    baseURL: Config.SEED_URL,
+});
 
-    // headers: {'Accept': 'application/json'}
-})
+function setBaseUrl(url: string){
+  api.setBaseURL(url);
+}
 
 function urlSafe(str) {
     return str.replace(/\=/g, "").replace(/\//g, "_").replace(/\+/g, "-");
@@ -16,7 +18,7 @@ function urlSafe(str) {
 
 function noContentResponse(response) {
     return {
-        success: response.status == 204,
+        success: response.status === 204,
         ok: response.ok,
         status: response.status,
         data: response.data
@@ -33,9 +35,7 @@ function createConnection(publicKey1, sig1, publicKey2, sig2, timestamp) {
     };
     return api.put(`/connections`, requestParams)
         .then(response => noContentResponse(response))
-        .catch(error => {
-            return error.data ? error.data : error;
-        });
+        .catch(error => error.data ? error.data : error);
 }
 
 function deleteConnection(publicKey1, publicKey2) {
@@ -48,9 +48,7 @@ function deleteConnection(publicKey1, publicKey2) {
     };
     return api.delete(`/connections`, {}, {data: requestParams})
         .then(response => noContentResponse(response))
-        .catch(error => {
-            return error.data ? error.data : error;
-        });
+        .catch(error => error.data ? error.data : error);
 }
 
 function joinAGroup(groupId) {
@@ -69,9 +67,7 @@ function joinAGroup(groupId) {
     console.log("====================",requestParams);
     return api.put(`/membership`, requestParams)
         .then(response => noContentResponse(response))
-        .catch(error => {
-            return error.data ? error.data : error;
-        });
+        .catch(error => error.data ? error.data : error);
 }
 
 function leaveAGroup(groupId) {
@@ -89,18 +85,14 @@ function leaveAGroup(groupId) {
     };
     return api.delete(`/membership`, {}, {data: requestParams})
         .then(response => noContentResponse(response))
-        .catch(error => {
-            return error.data ? error.data : error;
-        });
+        .catch(error => error.data ? error.data : error);
 }
 
 function createUser(publicKey) {
     let b64PublicKey = urlSafe(obj2b64(publicKey))
     return api.post('/users', {publicKey: b64PublicKey})
         .then(response => response.data)
-        .catch(error => {
-            return error.data ? error.data : error;
-        });
+        .catch(error => error.data ? error.data : error);
 }
 
 function getUserInfo() {
@@ -111,9 +103,7 @@ function getUserInfo() {
     let sig = obj2b64(nacl.sign.detached(strToUint8Array(message), secretKey));
     return api.post(`/fetchUserInfo`, {publicKey: publicKeyStr, sig, timestamp})
         .then(response => response.data)
-        .catch(error => {
-            return error.data ? error.data : error;
-        });
+        .catch(error => error.data ? error.data : error);
 }
 
 function createGroup(publicKey1, publicKey2, publicKey3) {
@@ -131,9 +121,7 @@ function createGroup(publicKey1, publicKey2, publicKey3) {
     };
     return api.post(`/groups`, requestParams)
         .then(response => response.data)
-        .catch(error => {
-            return error.data ? error.data : error;
-        });
+        .catch(error => error.data ? error.data : error);
 }
 
 function deleteGroup(groupId) {
@@ -151,19 +139,24 @@ function deleteGroup(groupId) {
     };
     return api.delete(`/groups`, {}, {data: requestParams})
         .then(response => noContentResponse(response))
-        .catch(error => {
-            return error.data ? error.data : error;
-        });
+        .catch(error => error.data ? error.data : error);
+}
+
+function ip(){
+    return api.get('/ip')
+      .then(response => response.data.data)
 }
 
 export default {
-    urlSafe: urlSafe,
-    createConnection: createConnection,
-    deleteConnection: deleteConnection,
-    joinAGroup: joinAGroup,
-    leaveAGroup: leaveAGroup,
-    createGroup: createGroup,
-    deleteGroup: deleteGroup,
-    getUserInfo: getUserInfo,
-    createUser: createUser,
-}
+    setBaseUrl,
+    urlSafe,
+    createConnection,
+    deleteConnection,
+    joinAGroup,
+    leaveAGroup,
+    createGroup,
+    deleteGroup,
+    getUserInfo,
+    createUser,
+    ip
+};

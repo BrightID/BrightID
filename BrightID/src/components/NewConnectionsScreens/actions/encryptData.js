@@ -4,7 +4,6 @@ import { createCipher } from 'react-native-crypto';
 import { Buffer } from 'buffer';
 import { postData } from './postData';
 import { retrieveAvatar } from '../../../utils/filesystem';
-// import { fetchData } from './fetchData';
 
 export const encryptAndUploadLocalData = () => async (dispatch, getState) => {
   const {
@@ -36,5 +35,4 @@ export const encryptAndUploadLocalData = () => async (dispatch, getState) => {
     cipher.update(dataStr, 'utf8', 'base64') + cipher.final('base64');
   console.log('encrypting data');
   dispatch(postData(encrypted));
-  // setTimeout(() => dispatch(fetchData()), 1000);
 };

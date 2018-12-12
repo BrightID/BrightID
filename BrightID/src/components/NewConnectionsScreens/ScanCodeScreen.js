@@ -54,7 +54,7 @@ class ScanCodeScreen extends React.Component<Props, State> {
   handleBarCodeRead = ({ data }) => {
     const { dispatch } = this.props;
     console.log(data);
-    dispatch(parseQrData({ data, user: 2 }));
+    dispatch(parseQrData(data));
     setTimeout(() => dispatch(encryptAndUploadLocalData()));
     setTimeout(() => dispatch(fetchData()));
     this.setState({ scanned: true });

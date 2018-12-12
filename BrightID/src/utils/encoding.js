@@ -40,3 +40,14 @@ export const objToUint8 = (obj: {}) => new Uint8Array(Object.values(obj));
 
 export const uInt8ToKeyString = (ary: UInt8Array) =>
   Object.values(ary).join('-');
+
+export function b64ToUrlSafeB64(s) {
+  const alts = {
+    '/': '_',
+    '+': '-',
+    '=': ''
+  };
+  return s.replace(/[/+=]/g, function (c) {
+    return alts[c];
+  });
+}

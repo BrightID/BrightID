@@ -10,27 +10,18 @@ export const setUpWs = () => (
       connectQrData: {
         ipAddress: string,
         uuid: string,
-        user: string,
+        channel: string,
       },
     },
   },
 ) => {
-  let {
-    connectQrData: { ipAddress, uuid, user },
-  } = getState().main;
+  let { ipAddress, uuid, channel } = getState().main.connectQrData;
 
-  user = user === 1 ? 2 : 1;
-
-  // uuid += user;
-
-  // const socket = io.connect(`${ipAddress}/profile`);
-  // ipAddress = '127.0.0.1:3000';
   const socket = io.connect(`http://${ipAddress}`);
 
-  socket.emit('join', uuid + 1);
-  socket.emit('join', uuid + 2);
+  socket.emit('join', channel);
 
-  console.log(uuid);
+  console.log(`Joined channel: ${channel}`);
 
   socket.on('signals', () => {
     console.log('signals');
