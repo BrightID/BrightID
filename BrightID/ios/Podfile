@@ -37,6 +37,8 @@ target 'BrightID' do
 
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
+  pod 'react-native-config', :path => '../node_modules/react-native-config'
+
 end
 
 # very important to have, unless you removed React dependencies for Libraries 
