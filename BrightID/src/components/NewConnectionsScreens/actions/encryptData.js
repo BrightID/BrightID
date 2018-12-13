@@ -29,7 +29,7 @@ export const encryptAndUploadLocalData = () => async (dispatch, getState) => {
 
   const dataStr = JSON.stringify(dataObj);
 
-  const cipher = createCipher('aes192', aesKey);
+  const cipher = createCipher('aes128', aesKey);
 
   let encrypted =
     cipher.update(dataStr, 'utf8', 'base64') + cipher.final('base64');

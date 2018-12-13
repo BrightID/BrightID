@@ -9,13 +9,13 @@ import { setConnectQrData } from '../../../actions';
 
 export const genQrData = () => async (dispatch: () => null) => {
 
-  const aesKey = randomBytes(24).toString('base64');
+  const aesKey = randomBytes(16).toString('base64');
   const uuid = b64ToUrlSafeB64(randomBytes(9).toString('base64'));
   try {
     var ipAddress = await server.getIp();
     var b64Ip = Buffer.from(
       ipAddress.split('.').map(octet => parseInt(octet))
-    ).toString('base64');
+    ).toString('base64').substring(0, 6);
   } catch (e){
     Alert.alert(`Bad ip address (${ipAddress}) from server`, e.stack);
   }
