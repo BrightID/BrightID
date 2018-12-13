@@ -11,6 +11,7 @@ import { encryptAndUploadLocalData } from './actions/encryptData';
 import { setUpWs, closeWs } from './actions/websocket';
 import emitter from '../../emitter';
 import { removeConnectQrData } from '../../actions';
+import TimerMixin from 'react-timer-mixin';
 
 /**
  * My Code screen of BrightID
@@ -47,6 +48,9 @@ class MyCodeScreen extends React.Component<Props, State> {
   };
 
   componentDidMount() {
+    // After 1 minute, connection attempts expire on the server.
+    //  Let users start the connection over.
+    this.connectionExpired = setTimeout(this.navigateToHome, 60000);
     emitter.on('connectDataReady', this.navigateToPreview);
     const { dispatch } = this.props;
     dispatch(removeConnectQrData());
@@ -58,12 +62,17 @@ class MyCodeScreen extends React.Component<Props, State> {
   }
 
   componentWillUnmount() {
-    this.socket.close();
+    clearTimeout(this.connectionExpired);
     emitter.off('connectDataReady', this.navigateToPreview);
+    this.socket.close();
   }
 
   navigateToPreview = () => {
     this.props.navigation.navigate('PreviewConnection');
+  };
+
+  navigateToHome = () => {
+    this.props.navigation.navigate('Home');
   };
 
   genQrCode = () => async (_, getState) =>  {
