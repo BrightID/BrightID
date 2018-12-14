@@ -1,3 +1,4 @@
+import { Alert } from 'react-native';
 import { decryptData } from './decryptData';
 import emitter from '../../../emitter';
 
@@ -19,6 +20,7 @@ export const fetchData = () => (dispatch: () => null, getState: () => {}) => {
       }
     })
     .catch((err) => {
-      console.log(err);
+      Alert.alert("Error" || err.message, err.stack);
+      return emitter.emit('connectFailure');
     });
 };
