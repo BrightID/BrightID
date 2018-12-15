@@ -43,6 +43,9 @@
     "prefer-const": "off",
     "no-restricted-syntax": "warn",
     "import/prefer-default-export": "off",
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "no-var": "off",
+    "vars-on-top": "off",
+    "block-scoped-var": "off"
   }
 }

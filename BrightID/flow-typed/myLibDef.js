@@ -1,2 +1,2 @@
-declare type dispatch = (any) => null | Promise;
+declare type dispatch = (any) => any;
 declare type getState = () => { main: {} };
