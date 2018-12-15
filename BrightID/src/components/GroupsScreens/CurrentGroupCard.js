@@ -18,11 +18,10 @@ import CurrentGroupAvatar from './CurrentGroupAvatar';
 type Props = {
   name: string,
   trustScore: string,
-  left: boolean,
 };
 
 type State = {
-  height: number,
+  width: number,
 };
 
 class CurrentGroupCard extends React.Component<Props, State> {

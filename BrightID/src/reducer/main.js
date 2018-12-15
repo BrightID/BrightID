@@ -41,7 +41,6 @@ import {
   REMOVE_ENCRYPTED_USER_DATA,
 } from '../actions';
 
-
 const arbiterSchema = {
   USERA: {
     OFFER: '',
@@ -65,7 +64,7 @@ const arbiterSchema = {
  * @param connections Array => Object
  */
 
-export const initialState = {
+export const initialState: Main = {
   trustScore: '',
   nameornym: '',
   avatar: '',
@@ -79,12 +78,19 @@ export const initialState = {
   publicKey: '',
   secretKey: '',
   connectionsSort: '',
-  connectQrData: { aesKey: '', ipAddress: {}, uuid: '', user: '', qrString: '', channel: '' },
+  connectQrData: {
+    aesKey: '',
+    ipAddress: '',
+    uuid: '',
+    user: '',
+    qrString: '',
+    channel: '',
+  },
   connectUserData: { publicKey: '', avatar: '', nameornym: '', timestamp: '' },
   encryptedUserData: '',
 };
 
-export const mainReducer = (state = initialState, action) => {
+export const mainReducer = (state: Main = initialState, action: {}) => {
   const connections = state.connections.slice();
   switch (action.type) {
     case USER_TRUST_SCORE:
@@ -108,32 +114,34 @@ export const mainReducer = (state = initialState, action) => {
         searchParam: action.value,
       };
     case SET_NEW_GROUP_CO_FOUNDERS: {
-        return {
-            ... state,
-            newGroupCoFounders: [...action.coFounders]
-        };
+      return {
+        ...state,
+        newGroupCoFounders: [...action.coFounders],
+      };
     }
     case CLEAR_NEW_GROUP_CO_FOUNDERS: {
       return {
-          ... state,
-          newGroupCoFounders: []
+        ...state,
+        newGroupCoFounders: [],
       };
     }
     case SET_ELIGIBLE_GROUPS:
-        return{
-            ...state,
-            eligibleGroups: action.eligibleGroups
-        };
-      case DELETE_ELIGIBLE_GROUP:
-        return{
-            ...state,
-            eligibleGroups: [...state.eligibleGroups].filter(group => group.id != action.groupId)
-        };
+      return {
+        ...state,
+        eligibleGroups: action.eligibleGroups,
+      };
+    case DELETE_ELIGIBLE_GROUP:
+      return {
+        ...state,
+        eligibleGroups: [...state.eligibleGroups].filter(
+          (group) => group.id != action.groupId,
+        ),
+      };
     case SET_CURRENT_GROUPS:
-        return{
-            ...state,
-            currentGroups: action.currentGroups
-        };
+      return {
+        ...state,
+        currentGroups: action.currentGroups,
+      };
     case UPDATE_CONNECTIONS:
       return {
         ...state,
@@ -197,8 +205,9 @@ export const mainReducer = (state = initialState, action) => {
     case SET_CONNECT_QR_DATA:
       // Automatically compute the websocket channel and download (but not upload) path
 
-      action.connectQrData.channel = action.connectQrData.uuid +
-        ( action.connectQrData.user === '1' ? '2' : '1' );
+      action.connectQrData.channel =
+        action.connectQrData.uuid +
+        (action.connectQrData.user === '1' ? '2' : '1');
       return {
         ...state,
         connectQrData: action.connectQrData,
@@ -206,7 +215,14 @@ export const mainReducer = (state = initialState, action) => {
     case REMOVE_CONNECT_QR_DATA:
       return {
         ...state,
-        connectQrData: { aesKey: '', ipAddress: '', uuid: '', user: '', qrString: '', channel: '' },
+        connectQrData: {
+          aesKey: '',
+          ipAddress: '',
+          uuid: '',
+          user: '',
+          qrString: '',
+          channel: '',
+        },
       };
     case SET_CONNECT_USER_DATA:
       return {

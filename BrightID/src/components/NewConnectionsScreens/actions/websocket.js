@@ -15,7 +15,7 @@ export const setUpWs = () => (
     },
   },
 ) => {
-  let { ipAddress, uuid, channel } = getState().main.connectQrData;
+  let { ipAddress, channel } = getState().main.connectQrData;
 
   const socket = io.connect(`http://${ipAddress}`);
 

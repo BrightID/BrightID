@@ -37,13 +37,15 @@ type Props = {
 };
 
 type State = {
-  qrsvg: {
-    svg: {
-      $: {
-        viewBox: string,
+  qrsvg:
+    | string
+    | {
+        svg: {
+          $: {
+            viewBox: string,
+          },
+        },
       },
-    },
-  },
 };
 
 class MyCodeScreen extends React.Component<Props, State> {
