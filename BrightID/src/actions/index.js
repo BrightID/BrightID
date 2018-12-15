@@ -97,15 +97,15 @@ export const setSearchParam = (value: string) => ({
  * @param coFounders: an array contain two publicKeys of co-founders of new group.
  */
 export const setNewGroupCoFounders = (coFounders: Array<Uint8Array>) => ({
-    type: SET_NEW_GROUP_CO_FOUNDERS,
-    coFounders
+  type: SET_NEW_GROUP_CO_FOUNDERS,
+  coFounders,
 });
 
 /**
  * redux action creator for clear co-founders of new group
  */
 export const clearNewGroupCoFounders = () => ({
-    type: CLEAR_NEW_GROUP_CO_FOUNDERS
+  type: CLEAR_NEW_GROUP_CO_FOUNDERS,
 });
 
 /**
@@ -113,8 +113,8 @@ export const clearNewGroupCoFounders = () => ({
  * @param eligibleGroups: list of user eligible groups
  */
 export const setEligibleGroups = (eligibleGroups) => ({
-    type: SET_ELIGIBLE_GROUPS,
-    eligibleGroups
+  type: SET_ELIGIBLE_GROUPS,
+  eligibleGroups,
 });
 
 /**
@@ -122,8 +122,8 @@ export const setEligibleGroups = (eligibleGroups) => ({
  * @param eligibleGroups: list of user eligible groups
  */
 export const deleteEligibleGroup = (groupId) => ({
-    type: DELETE_ELIGIBLE_GROUP,
-    groupId
+  type: DELETE_ELIGIBLE_GROUP,
+  groupId,
 });
 
 /**
@@ -131,8 +131,8 @@ export const deleteEligibleGroup = (groupId) => ({
  * @param currentGroups: list of user current groups
  */
 export const setCurrentGroups = (currentGroups) => ({
-    type: SET_CURRENT_GROUPS,
-    currentGroups
+  type: SET_CURRENT_GROUPS,
+  currentGroups,
 });
 
 /**
@@ -200,7 +200,7 @@ export const setUserData = ({
   publicKey: Uint8Array,
   secretKey: Uint8Array,
   nameornym: string,
-  avatar: string,
+  avatar: { uri: string },
 }) => ({
   type: UPDATE_USER_DATA,
   publicKey,

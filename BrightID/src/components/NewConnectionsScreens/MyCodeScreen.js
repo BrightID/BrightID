@@ -11,7 +11,6 @@ import { encryptAndUploadLocalData } from './actions/encryptData';
 import { setUpWs, closeWs } from './actions/websocket';
 import emitter from '../../emitter';
 import { removeConnectQrData } from '../../actions';
-import TimerMixin from 'react-timer-mixin';
 
 /**
  * My Code screen of BrightID
@@ -54,7 +53,7 @@ class MyCodeScreen extends React.Component<Props, State> {
     emitter.on('connectDataReady', this.navigateToPreview);
     const { dispatch } = this.props;
     dispatch(removeConnectQrData());
-    dispatch(genQrData()).then(() =>{
+    dispatch(genQrData()).then(() => {
       dispatch(this.genQrCode());
       this.socket = dispatch(setUpWs());
       setTimeout(() => dispatch(encryptAndUploadLocalData()));
@@ -75,7 +74,7 @@ class MyCodeScreen extends React.Component<Props, State> {
     this.props.navigation.navigate('Home');
   };
 
-  genQrCode = () => async (_, getState) =>  {
+  genQrCode = () => async (_, getState) => {
     qrcode.toString(getState().main.connectQrData.qrString, (err, qr) => {
       if (err) throw err;
       this.parseSVG(qr);
