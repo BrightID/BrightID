@@ -13,7 +13,8 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "test:watch": "npm test -- --watch",
-    "updateSnap": "jest --updateSnapshot"
+    "updateSnap": "jest --updateSnapshot",
+    "build:release": "android/gradlew assembleRelease"
   },
   "dependencies": {
     "@tradle/react-native-http": "^2.0.0",
