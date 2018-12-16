@@ -18,8 +18,9 @@ import EligibleGroupCard from './EligibleGroupCard';
 import CurrentGroupCard from './CurrentGroupCard';
 import BottomNav from '../BottomNav';
 import reloadUserInfo from '../../actions/reloadUserInfo';
-import { obj2b64, objToUint8 } from '../../utils/encoding';
+import { obj2b64 } from '../../utils/encoding';
 import api from '../../Api/BrightIdApi';
+import { NoCurrentGroups } from './EmptyGroups';
 
 /**
  * Groups screen of BrightID
@@ -40,20 +41,7 @@ const groupData = [
   { name: "Von Neuman's Mad Scientists", trustScore: '99.9' },
 ];
 
-type Props = {
-  connections: Array<{
-    firstName: string,
-    lastName: string,
-    id: number,
-  }>,
-  searchParam: string,
-  // eligibleGroups comes from store and contains list of user eligible groups.
-  eligibleGroups: [{}],
-  currentGroups: [{}],
-  navigation: {
-    navigate: () => null,
-  },
-};
+type Props = Main;
 
 type State = {
   userInfoLoading: boolean,
@@ -69,9 +57,11 @@ class ConnectionsScreen extends React.Component<Props, State> {
     userInfoLoading: false,
   };
 
-  renderCurrentGroup = ({ item }) => (
-    <CurrentGroupCard name={item.nameornym} trustScore={item.score} />
-  );
+  renderCurrentGroup = ({
+    item,
+  }: {
+    item: { nameornym: string, score: string },
+  }) => <CurrentGroupCard name={item.nameornym} trustScore={item.score} />;
 
   refreshUserInfo = async () => {
     let { dispatch } = this.props;
@@ -82,7 +72,9 @@ class ConnectionsScreen extends React.Component<Props, State> {
 
   getTwoEligibleGroup() {
     let { eligibleGroups } = this.props;
-    let groups = eligibleGroups.filter((group) => group.isNew);
+    let groups = eligibleGroups.filter(
+      (group: { isNew: boolean }) => group.isNew,
+    );
     if (groups.length < 2) {
       Array.prototype.push.apply(
         groups,
@@ -114,26 +106,6 @@ class ConnectionsScreen extends React.Component<Props, State> {
     return names;
   }
 
-  noCurrentGroups = () => (
-    <View style={styles.noCurrentGroups}>
-      <Image
-        source={require('../../static/groups_logo.png')}
-        style={styles.groupsLogo}
-        resizeMode="cover"
-        onError={(e) => {
-          console.log(e.error);
-        }}
-        accessible={true}
-        accessibilityLabel="groups logo"
-      />
-      <View>
-        <Text style={styles.emptyGroupsText}>By creating and joining</Text>
-        <Text style={styles.emptyGroupsText}>groups, you can increase </Text>
-        <Text style={styles.emptyGroupsText}>your score</Text>
-      </View>
-    </View>
-  );
-
   noEligibleGroups = () => (
     <View style={styles.emptyContainer}>
       <Text style={styles.emptyText}>No Eligible Groups</Text>
@@ -157,6 +129,7 @@ class ConnectionsScreen extends React.Component<Props, State> {
                 group.knownMembers.indexOf(api.urlSafe(obj2b64(publicKey))) >= 0
               }
               trustScore={group.trustScore}
+              isNew={false}
             />
           ))}
         </View>
@@ -182,7 +155,7 @@ class ConnectionsScreen extends React.Component<Props, State> {
   }
 
   renderCurrentGroups() {
-    let { currentGroups } = this.props;
+    let { currentGroups, navigation } = this.props;
     if (currentGroups.length > 0) {
       return (
         <View style={styles.currentContainer}>
@@ -196,7 +169,7 @@ class ConnectionsScreen extends React.Component<Props, State> {
         </View>
       );
     } else {
-      return this.noCurrentGroups();
+      return <NoCurrentGroups navigation={navigation} />;
     }
   }
 
@@ -339,20 +312,6 @@ const styles = StyleSheet.create({
     height: 90,
     borderTopColor: '#e3e0e4',
     borderTopWidth: 1,
-  },
-  noCurrentGroups: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  emptyGroupsText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 18,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
-    color: '#4a4a4a',
   },
 });
 

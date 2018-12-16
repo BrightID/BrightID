@@ -4,9 +4,10 @@ import Config from 'react-native-config';
 import { Alert } from 'react-native';
 import api from './BrightIdApi';
 
+const SEED_URL = 'http://test.brightid.org';
+
 class Server {
   constructor(seedURL: string) {
-
     // for now set the baseURL to the seedURL since there is only one server
 
     this.baseURL = seedURL;
@@ -21,30 +22,32 @@ class Server {
     api.setBaseUrl(this.apiUrl);
   }
 
-  switch(){
+  switch() {
     // TODO: blacklist the current server and choose another
   }
 
-  getIp(){
-    return api.ip().then( data => data.ip ).
-      catch((error) => {
+  getIp() {
+    return api
+      .ip()
+      .then((data) => data.ip)
+      .catch((error) => {
         Alert.alert("Couldn't get ip address of server.", error.stack);
-    });
+      });
   }
 
-  get baseUrl(){
+  get baseUrl() {
     return this.baseURL;
   }
 
-  get apiUrl(){
+  get apiUrl() {
     return this.apiURL;
   }
 
-  get profileUrl(){
+  get profileUrl() {
     return this.profileURL;
   }
 }
 
-const server = new Server(Config.SEED_URL);
+const server = new Server(SEED_URL);
 
 export default server;

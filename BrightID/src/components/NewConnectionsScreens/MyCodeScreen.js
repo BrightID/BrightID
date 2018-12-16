@@ -5,13 +5,14 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
 import { connect } from 'react-redux';
+import { parseString } from 'xml2js';
+import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import { genQrData } from './actions/genQrData';
 import { encryptAndUploadLocalData } from './actions/encryptData';
 import { setUpWs, closeWs } from './actions/websocket';
 import emitter from '../../emitter';
 import { removeConnectQrData } from '../../actions';
-import TimerMixin from 'react-timer-mixin';
 
 /**
  * My Code screen of BrightID
@@ -26,23 +27,32 @@ import TimerMixin from 'react-timer-mixin';
  */
 
 type Props = {
-  publicKey: Uint8Array,
-  rtcId: string,
-  dispatch: () => null,
+  dispatch: dispatch,
   avatar: { uri: string },
   nameornym: string,
-  trustScore: string,
-  resetQr: () => null,
-  hangUp: () => null,
-  rtcOn: boolean,
   navigation: () => null,
+  connectQrData: {
+    qrString: string,
+  },
 };
 
 type State = {
-  qrsvg: string,
+  qrsvg:
+    | string
+    | {
+        svg: {
+          $: {
+            viewBox: string,
+          },
+        },
+      },
 };
 
 class MyCodeScreen extends React.Component<Props, State> {
+  connectionExpired: TimeoutID;
+
+  socket: { close: () => null };
+
   state = {
     qrsvg: '',
   };
@@ -54,8 +64,8 @@ class MyCodeScreen extends React.Component<Props, State> {
     emitter.on('connectDataReady', this.navigateToPreview);
     const { dispatch } = this.props;
     dispatch(removeConnectQrData());
-    dispatch(genQrData()).then(() =>{
-      dispatch(this.genQrCode());
+    dispatch(genQrData()).then(() => {
+      this.genQrCode();
       this.socket = dispatch(setUpWs());
       setTimeout(() => dispatch(encryptAndUploadLocalData()));
     });
@@ -75,34 +85,42 @@ class MyCodeScreen extends React.Component<Props, State> {
     this.props.navigation.navigate('Home');
   };
 
-  genQrCode = () => async (_, getState) =>  {
-    qrcode.toString(getState().main.connectQrData.qrString, (err, qr) => {
-      if (err) throw err;
-      this.parseSVG(qr);
-    });
+  genQrCode = () => {
+    const {
+      connectQrData: { qrString },
+    } = this.props;
+    qrcode.toString(qrString, this.handleQrString);
   };
 
-  parseSVG = (qr) => {
-    const dinx = qr.lastIndexOf('d');
-    const dpath = qr.substr(dinx);
-    const qrsvg = dpath.match(/"([^"]+)"/g)[0].split('"')[1];
+  handleQrString = (err, qr) => {
+    if (err) return console.log(err);
+    parseString(qr, this.parseQrString);
+  };
+
+  parseQrString = (err, qrsvg) => {
+    if (err) return console.log(err);
     this.setState({ qrsvg });
   };
 
   renderQrCode = () => {
     // render qrcode or spinner while waiting
-    if (this.state.qrsvg) {
+    const { qrsvg } = this.state;
+    if (qrsvg) {
+      console.log(qrsvg);
       return (
         <View style={styles.qrsvgContainer}>
           <Svg
             height="212"
             width="212"
             xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 45 45"
+            viewBox={path(['svg', '$', 'viewBox'], qrsvg)}
             shape-rendering="crispEdges"
           >
-            <Path fill="#fff" d="M0 0h33v33H0z" />
-            <Path stroke="#000" d={this.state.qrsvg} />
+            <Path fill="#fff" d={path(['svg', 'path', '0', '$', 'd'], qrsvg)} />
+            <Path
+              stroke="#000"
+              d={path(['svg', 'path', '1', '$', 'd'], qrsvg)}
+            />
           </Svg>
         </View>
       );

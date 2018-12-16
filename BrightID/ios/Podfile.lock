@@ -1,5 +1,5 @@
 PODS:
-  - BVLinearGradient (2.4.3):
+  - BVLinearGradient (2.5.3):
     - React
   - React (0.57.5):
     - React/Core (= 0.57.5)
@@ -11,7 +11,7 @@ PODS:
     - React
   - react-native-camera/RN (1.4.1):
     - React
-  - react-native-image-picker (0.27.1):
+  - react-native-image-picker (0.27.2):
     - React
   - react-native-randombytes (3.5.1):
     - React
@@ -49,7 +49,7 @@ PODS:
     - React/Core
   - RNFS (2.12.1):
     - React
-  - RNSVG (8.0.8):
+  - RNSVG (8.0.10):
     - React
   - RNVectorIcons (6.0.2):
     - React
@@ -103,7 +103,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga/yoga.podspec"
 
 SPEC CHECKSUMS:
-  BVLinearGradient: 6d8909e3fc6b089defa4b89d967441fa6827a2ee
+  BVLinearGradient: b0b70acf63ee888829b7c2ebbf6b50e227396e55
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
   react-native-camera: eac1e8cc7523273a2a11956d0e5dac08296cf4b0
   react-native-image-picker: f42de90075c5b1af53417af927631d909a1a746e
@@ -115,6 +115,6 @@ SPEC CHECKSUMS:
   RNVectorIcons: 8c52e1e8da1153613fdef44748e865c25556cb9c
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: a93affba4f477b5abd2b7f2b10bd079a283aafa8
+PODFILE CHECKSUM: b8c6d4073f7392ed5110556c8eb974935772eb5c
 
 COCOAPODS: 1.5.3

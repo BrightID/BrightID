@@ -3,7 +3,6 @@
 import { Alert, AsyncStorage } from 'react-native';
 import nacl from 'tweetnacl';
 import RNFetchBlob from 'rn-fetch-blob';
-import { sampleConnections } from '../../actions/setUpDefault';
 import { setUserData } from '../../actions';
 import {
   createConnectionAvatarDirectory,
@@ -11,9 +10,13 @@ import {
 } from '../../utils/filesystem';
 import api from '../../Api/BrightIdApi';
 
-export const handleBrightIdCreation = ({ nameornym, avatar }) => async (
-  dispatch: () => null,
-) => {
+export const handleBrightIdCreation = ({
+  nameornym,
+  avatar,
+}: {
+  nameornym: string,
+  avatar: { uri: string },
+}) => async (dispatch: dispatch) => {
   try {
     // create public / private key pair
     const { publicKey, secretKey } = nacl.sign.keyPair();
@@ -28,6 +31,7 @@ export const handleBrightIdCreation = ({ nameornym, avatar }) => async (
     };
 
     let creationResponse = await api.createUser(publicKey);
+    console.log(creationResponse);
     if (creationResponse.data && creationResponse.data.key) {
       // // save avatar photo base64 data, and user data in async storage
       await AsyncStorage.setItem('userData', JSON.stringify(userData));
