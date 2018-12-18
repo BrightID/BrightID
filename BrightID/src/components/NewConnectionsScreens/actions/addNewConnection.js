@@ -15,8 +15,6 @@ export const addNewConnection = () => async (
    */
   try {
     const { connectUserData, publicKey, secretKey } = getState().main;
-    // Test connections
-    // TODO - pass signatures between devicers
     let connectionDate = Date.now();
     if (connectUserData.secretKey) {
       let userA = { publicKey, secretKey };

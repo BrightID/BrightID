@@ -75,8 +75,8 @@ export const initialState: Main = {
   currentGroups: [],
   connections: [],
   nearbyPeople: [],
-  publicKey: '',
-  secretKey: '',
+  publicKey: null,
+  secretKey: null,
   connectionsSort: '',
   connectQrData: {
     aesKey: '',
@@ -86,7 +86,13 @@ export const initialState: Main = {
     qrString: '',
     channel: '',
   },
-  connectUserData: { publicKey: '', avatar: '', nameornym: '', timestamp: '' },
+  connectUserData: {
+    publicKey: '',
+    avatar: '',
+    nameornym: '',
+    timestamp: '',
+    signature: ''
+  },
   encryptedUserData: '',
 };
 
@@ -203,7 +209,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         connectPublicKey: action.publicKey,
       };
     case SET_CONNECT_QR_DATA:
-      // Automatically compute the websocket channel and download (but not upload) path
+      // Compute the websocket channel and download (but not upload) path
 
       action.connectQrData.channel =
         action.connectQrData.uuid +
@@ -237,6 +243,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
           avatar: '',
           nameornym: '',
           timestamp: '',
+          signature: ''
         },
       };
     case CONNECT_NAMEORNYM:
