@@ -114,14 +114,13 @@ class SignUp extends React.Component<Props, State> {
     // see https://github.com/react-community/react-native-image-picker
 
     const options = {
-      title: 'Select Avatar',
+      title: 'Select Photo',
       mediaType: 'photo',
       maxWidth: 180,
       maxHeight: 180,
       quality: 0.8,
       allowsEditing: true,
-      loadingLabelText: 'loading avatar photo...',
-      customButtons: [{ name: 'random', title: 'Random Avatar' }],
+      loadingLabelText: 'loading photo...',
     };
     // loading UI to account for the delay after picking an image
     this.imagePickingTrue();
@@ -132,8 +131,6 @@ class SignUp extends React.Component<Props, State> {
       } else if (response.error) {
         Alert.alert('ERROR', response.error);
         this.imagePickingFalse();
-      } else if (response.customButton) {
-        this.randomAvatar();
       } else {
         const mime = mimeFromUri(response.uri);
         const avatar = {
