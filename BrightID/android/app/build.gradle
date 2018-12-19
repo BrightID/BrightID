@@ -93,33 +93,26 @@ def enableSeparateBuildPerCPUArchitecture = false
  */
 def enableProguardInReleaseBuilds = false
 
+// See https://developer.android.com/studio/publish/app-signing#secure-key
 
-/**
-* Retrieves password from MacOS Keychain
-* change this if you are building and signing the app for release
-*/
-def getPassword(String currentUser, String keyChain) {
-   def stdout = new ByteArrayOutputStream()
-   def stderr = new ByteArrayOutputStream()
-   exec {
-       commandLine 'security', '-q', 'find-generic-password', '-a', currentUser, '-s', keyChain, '-w'
-       standardOutput = stdout
-       errorOutput = stderr
-       ignoreExitValue true
-   }
-   //noinspection GroovyAssignabilityCheck
-      stdout.toString().trim()
+// Create a variable called keystorePropertiesFile, and initialize it to your
+// keystore.properties file, in the rootProject folder.
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+// Initialize a new Properties() object called keystoreProperties.
+def keystoreProperties = new Properties()
+
+if (keystorePropertiesFile.exists()){
+    // Load your keystore.properties file into the keystoreProperties object.
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
-
-// password from Keychain
-def pass = getPassword("Finnegan","android_keystore")
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "org.brightid.demo"
+        applicationId "org.brightid"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -130,11 +123,11 @@ android {
     }
     signingConfigs {
         release {
-            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
-                storeFile file(MYAPP_RELEASE_STORE_FILE)
-                storePassword pass
-                keyAlias MYAPP_RELEASE_KEY_ALIAS
-                keyPassword pass
+            if (keystoreProperties['keyAlias']){
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
             }
         }
     }
@@ -151,6 +144,10 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix '-DEBUG'
         }
     }
     // applicationVariants are e.g. debug, release
