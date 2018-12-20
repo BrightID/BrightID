@@ -74,7 +74,6 @@ export const initialState: Main = {
   eligibleGroups: [],
   currentGroups: [],
   connections: [],
-  nearbyPeople: [],
   publicKey: null,
   secretKey: null,
   connectionsSort: '',
@@ -91,7 +90,7 @@ export const initialState: Main = {
     avatar: '',
     nameornym: '',
     timestamp: '',
-    signature: ''
+    signedMessage: ''
   },
   encryptedUserData: '',
 };
@@ -163,16 +162,6 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         ...state,
         connections: [action.connection, ...connections],
       };
-    case SET_ENCRYPTED_USER_DATA:
-      return {
-        ...state,
-        encryptedUserData: action.encryptedData,
-      };
-    case REMOVE_ENCRYPTED_USER_DATA:
-      return {
-        ...state,
-        encryptedUserData: '',
-      };
     case REMOVE_CONNECTION:
       return {
         ...state,
@@ -243,7 +232,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
           avatar: '',
           nameornym: '',
           timestamp: '',
-          signature: ''
+          signedMessage: ''
         },
       };
     case CONNECT_NAMEORNYM:
