@@ -106,7 +106,7 @@ function leaveAGroup(groupId) {
 }
 
 function createUser(publicKey: Uint8Array) {
-  let b64PublicKey = urlSafe(obj2b64(publicKey));
+  let b64PublicKey = obj2b64(publicKey);
   return api
     .post('/users', { publicKey: b64PublicKey })
     .then((response) => response.data)
