@@ -183,8 +183,8 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         ...state,
         avatar: '',
         nameornym: '',
-        publicKey: '',
-        secretKey: '',
+        publicKey: null,
+        secretKey: null,
       };
 
     case REFRESH_NEARBY_PEOPLE:
