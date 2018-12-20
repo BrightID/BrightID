@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
+import { Alert, StyleSheet, TextInput, View } from 'react-native';
 import { connect } from 'react-redux';
 // import Permissions from 'react-native-permissions'
 import { RNCamera } from 'react-native-camera';
@@ -12,6 +12,7 @@ import { fetchData } from './actions/fetchData';
 import { encryptAndUploadLocalData } from './actions/encryptData';
 import emitter from '../../emitter';
 import { removeConnectQrData } from '../../actions';
+import { setUpWs } from './actions/websocket';
 
 /**
  * Scan code screen of BrightID
@@ -39,30 +40,48 @@ class ScanCodeScreen extends React.Component<Props, State> {
     scanned: false,
   };
 
+  connectionExpired: TimeoutID;
+
+  socket: { close: () => null };
+
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(removeConnectQrData());
     emitter.on('connectDataReady', this.navigateToPreview);
     emitter.on('connectFailure', this.navigateToHome);
+    emitter.on('profileNotReady', this.subscribeToProfileUpload);
   }
 
   componentWillUnmount() {
     emitter.off('connectDataReady', this.navigateToPreview);
     emitter.off('connectFailure', this.navigateToHome);
+    emitter.off('profileNotReady', this.subscribeToProfileUpload);
+    clearTimeout(this.connectionExpired);
+    this.socket.close();
   }
 
   handleBarCodeRead = ({ data }) => {
     const { dispatch } = this.props;
     console.log(data);
     dispatch(parseQrData(data));
-    setTimeout(() => dispatch(encryptAndUploadLocalData()));
     setTimeout(() => dispatch(fetchData()));
     this.setState({ scanned: true });
+  };
+
+  subscribeToProfileUpload = () => {
+    const { dispatch } = this.props;
+    this.socket = dispatch(setUpWs());
+    this.connectionExpired = setTimeout(this.showProfileError, 30000);
   };
 
   navigateToPreview = () => {
     this.props.navigation.navigate('PreviewConnection');
   };
+
+  showProfileError = () => {
+    Alert.alert("Timeout reached", "There was a problem downloading the other person's profile. Please try again.");
+    this.setState({ scanned: false });
+  }
 
   navigateToHome = () => {
     this.props.navigation.navigate('Home');
