@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { NavigationEvents } from 'react-navigation';
 
 import SearchConnections from '../Connections/SearchConnections';
-import ConnectionCard from '../Connections/ConnectionCard';
+import NewGroupCard from './NewGroupCard';
 import { getConnections } from '../../actions/getConnections';
 import store from '../../store';
 import emitter from '../../emitter';
@@ -83,7 +83,7 @@ class NewGroupScreen extends React.Component<Props, State> {
   };
 
   renderConnection = ({ item }) => (
-    <ConnectionCard
+    <NewGroupCard
       {...item}
       selected={this.cardIsSelected(item)}
       groups={true}
@@ -152,13 +152,12 @@ const styles = StyleSheet.create({
   titleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 12,
+    marginTop: 6,
     backgroundColor: '#fff',
     width: '96.7%',
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#e3e1e1',
-    paddingTop: 11,
-    paddingBottom: 11,
+    marginBottom: 11,
   },
   titleText: {
     fontFamily: 'ApexNew-Book',
@@ -181,6 +180,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
+    textAlign: 'center',
   },
   connectionCard: {
     marginBottom: 0,
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     paddingTop: 13,
     paddingBottom: 12,
     marginTop: 9,
-    marginBottom: 7,
+    marginBottom: 10,
   },
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',

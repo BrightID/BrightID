@@ -38,14 +38,20 @@ export const handleBrightIdCreation = ({
       // // update redux store
       await dispatch(setUserData(userData));
       // // navigate to home page
-      return 'success';
+      console.log(`brightid creation success: ${creationResponse.data.key}`);
+      return true;
     } else {
       alert(
         creationResponse.errorMessage
           ? creationResponse.errorMessage
           : 'Error in user creation.',
       );
-      return 'fail';
+      // change this
+      await AsyncStorage.setItem('userData', JSON.stringify(userData));
+      // // update redux store
+      await dispatch(setUserData(userData));
+      // // navigate to home page
+      return true;
     }
     // catch any errors with saving data or generating the public / private key
   } catch (err) {

@@ -1,13 +1,13 @@
 // @flow
 
 import { create } from 'apisauce';
+import { SEED_URL } from 'react-native-dotenv';
 import nacl from 'tweetnacl';
 import { obj2b64, strToUint8Array } from '../utils/encoding';
 import store from '../store';
-import server from './server';
 
 const api = create({
-  baseURL: server.apiURL,
+  baseURL: SEED_URL,
 });
 
 function setBaseUrl(url: string) {
@@ -144,9 +144,30 @@ function createGroup(
     sig1,
     timestamp,
   };
-  return api
-    .post(`/groups`, requestParams)
-    .then((response) => response.data)
+  console.log(requestParams);
+  // return api
+  //   .post(`/groups`, requestParams)
+  //   .then((response) => response.data)
+  //   .catch((error) => (error.data ? error.data : error));
+  return fetch(`${SEED_URL}/groups`, {
+    method: 'POST', // or 'PUT'
+    body: JSON.stringify(requestParams),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => {
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.indexOf('application/json') !== -1) {
+        return response.json();
+      } else {
+        return response.text();
+      }
+    })
+    .then((res) => {
+      console.log(res);
+      return res;
+    })
     .catch((error) => (error.data ? error.data : error));
 }
 

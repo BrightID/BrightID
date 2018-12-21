@@ -1,10 +1,11 @@
 // @flow
 
-import Config from 'react-native-config';
+import { SEED_URL } from 'react-native-dotenv';
 import { Alert } from 'react-native';
 import api from './BrightIdApi';
 
-const SEED_URL = 'http://test.brightid.org';
+// const SEED_URL = 'http://test.brightid.org';
+// const SEED_URL = 'http://node.brightid.org';
 
 class Server {
   constructor(seedURL: string) {

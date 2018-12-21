@@ -106,7 +106,6 @@ class MyCodeScreen extends React.Component<Props, State> {
     // render qrcode or spinner while waiting
     const { qrsvg } = this.state;
     if (qrsvg) {
-      console.log(qrsvg);
       return (
         <View style={styles.qrsvgContainer}>
           <Svg

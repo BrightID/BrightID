@@ -1,11 +1,16 @@
 // @flow
 
 import * as React from 'react';
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
+import HeaderButtons, {
+  HeaderButton,
+  Item,
+} from 'react-navigation-header-buttons';
+import { createNewConnection } from '../connections/createNewConnection';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import MyCodeScreen from './MyCodeScreen';
 import ScanCodeScreen from './ScanCodeScreen';
-import { resetWebrtc } from '../../actions';
 
 /**
  * Connection screen of BrightID
@@ -18,6 +23,16 @@ import { resetWebrtc } from '../../actions';
  * renders MyCodeScreen / ScanCodeScreen
  */
 
+// header Button
+const MaterialHeaderButton = (passMeFurther) => (
+  <HeaderButton
+    {...passMeFurther}
+    IconComponent={Material}
+    iconSize={32}
+    color="#fff"
+  />
+);
+
 type Props = {
   navigation: { navigate: () => null },
   dispatch: () => null,
@@ -25,9 +40,17 @@ type Props = {
 };
 
 class NewConnectionScreen extends React.Component<Props> {
-  static navigationOptions = {
+  static navigationOptions = ({navigation}) => {
     title: 'New Connection',
-    headerRight: <View />,
+    headerRight: (
+      <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
+        <Item
+          title="options"
+          iconName="dots-horizontal"
+          onPress={createNewConnection(navigation)}
+        />
+      </HeaderButtons>
+    ),
   };
 
   state = {

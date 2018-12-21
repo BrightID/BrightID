@@ -1,9 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import { AsyncStorage, FlatList, StyleSheet, Text, View } from 'react-native';
+import { AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
-import Spinner from 'react-native-spinkit';
 import HeaderButtons, {
   HeaderButton,
   Item,
@@ -24,9 +23,6 @@ import { renderListOrSpinner } from './renderConnections';
 
 // header Button
 const MaterialHeaderButton = (passMeFurther) => (
-  // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
-  // and it is important to pass those props to `HeaderButton`
-  // then you may add some information like icon size or color (if you use icons)
   <HeaderButton
     {...passMeFurther}
     IconComponent={Material}
