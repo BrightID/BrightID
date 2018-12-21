@@ -6,13 +6,12 @@ import {
   setEligibleGroups,
   setNewGroupCoFounders,
 } from '../../actions/index';
-import { NavigationActions } from 'react-navigation';
 import api from '../../Api/BrightIdApi';
 import { obj2b64 } from '../../utils/encoding';
 
 export const toggleNewGroupCoFounder = (publicKey) => (
-  dispatch: () => null,
-  getState: () => {},
+  dispatch: dispatch,
+  getState: getState,
 ) => {
   let coFounders = [...getState().main.newGroupCoFounders];
   let match = JSON.stringify(publicKey);
@@ -34,6 +33,11 @@ export const creatNewGroup = () => async (
   // alert(JSON.stringify({
   //     publicKey, newGroupCoFounders
   // },null,2));
+
+  console.log(newGroupCoFounders);
+  if (newGroupCoFounders.length < 2) {
+    return alert('you need two people to form a group');
+  }
   let response = await api.createGroup(
     publicKey,
     newGroupCoFounders[0],

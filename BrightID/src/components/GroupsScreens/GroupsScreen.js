@@ -20,7 +20,7 @@ import BottomNav from '../BottomNav';
 import reloadUserInfo from '../../actions/reloadUserInfo';
 import { obj2b64 } from '../../utils/encoding';
 import api from '../../Api/BrightIdApi';
-import { NoCurrentGroups } from './EmptyGroups';
+import { NoCurrentGroups, EmptyFullScreen } from './EmptyGroups';
 
 /**
  * Groups screen of BrightID
@@ -67,6 +67,7 @@ class ConnectionsScreen extends React.Component<Props, State> {
     let { dispatch } = this.props;
     this.setState({ userInfoLoading: true });
     await dispatch(reloadUserInfo());
+
     this.setState({ userInfoLoading: false });
   };
 
@@ -169,46 +170,86 @@ class ConnectionsScreen extends React.Component<Props, State> {
         </View>
       );
     } else {
-      return <NoCurrentGroups navigation={navigation} />;
+      return;
     }
   }
 
   render() {
     const { navigation, currentGroups, publicKey, eligibleGroups } = this.props;
-
+    let twoEligibleGroups = this.getTwoEligibleGroup();
     return (
       <View style={styles.container}>
         <View style={styles.mainContainer}>
           <NavigationEvents onDidFocus={this.refreshUserInfo} />
-          <SearchGroups />
 
+          {eligibleGroups.length || currentGroups.length ? (
+            <SearchGroups />
+          ) : (
+            <View />
+          )}
           {this.state.userInfoLoading && (
             <View style={styles.alignCenter}>
               <ActivityIndicator size="large" color="#0000ff" />
             </View>
           )}
+          {!eligibleGroups.length && !currentGroups.length && (
+            <EmptyFullScreen navigation={navigation} />
+          )}
+          {!!eligibleGroups.length && (
+            <View style={styles.eligibleContainer}>
+              <Text style={styles.groupTitle}>ELIGIBLE</Text>
+              {twoEligibleGroups.map((group) => (
+                <EligibleGroupCard
+                  key={group.id}
+                  groupId={group.id}
+                  names={this.mapPublicKeysToNames(group.knownMembers)}
+                  alreadyIn={
+                    group.knownMembers.indexOf(
+                      api.urlSafe(obj2b64(publicKey)),
+                    ) >= 0
+                  }
+                  trustScore={group.trustScore}
+                  isNew={false}
+                />
+              ))}
+              <View style={styles.eligibleBottomView} />
+            </View>
+          )}
+          {!!currentGroups.length &&
+            !eligibleGroups.length &&
+            this.noEligibleGroups()}
 
-          {this.renderEligibleGroups()}
-
-          <View style={styles.eligibleBottomView} />
-
-          {this.renderCurrentGroups()}
-
-          <View style={styles.addGroupButtonContainer}>
-            <TouchableOpacity
-              style={styles.addGroupButton}
-              onPress={() => {
-                navigation.navigate('NewGroup');
-              }}
-            >
-              <Material
-                size={ICON_SIZE}
-                name="plus"
-                color="#fff"
-                style={{ width: ICON_SIZE, height: ICON_SIZE }}
+          {!!currentGroups.length && (
+            <View style={styles.currentContainer}>
+              <Text style={styles.groupTitle}>CURRENT</Text>
+              <FlatList
+                data={currentGroups}
+                renderItem={this.renderCurrentGroup}
+                horizontal={true}
+                keyExtractor={({ id }) => id}
               />
-            </TouchableOpacity>
-          </View>
+            </View>
+          )}
+          {!!eligibleGroups.length && !currentGroups.length && (
+            <NoCurrentGroups navigation={navigation} />
+          )}
+          {!!currentGroups.length && !!eligibleGroups.length && (
+            <View style={styles.addGroupButtonContainer}>
+              <TouchableOpacity
+                style={styles.addGroupButton}
+                onPress={() => {
+                  navigation.navigate('NewGroup');
+                }}
+              >
+                <Material
+                  size={ICON_SIZE}
+                  name="plus"
+                  color="#fff"
+                  style={{ width: ICON_SIZE, height: ICON_SIZE }}
+                />
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
         <BottomNav navigation={navigation} />
       </View>

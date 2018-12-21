@@ -11,6 +11,7 @@ export const addConnection = (navigation) => async (dispatch, getState) => {
   const { publicKey, secretKey } = nacl.sign.keyPair();
 
   let creationResponse = await api.createUser(publicKey);
+  console.log(creationResponse.data);
   if (creationResponse.data && creationResponse.data.key) {
     const { firstName, lastName } = names[
       Math.floor(Math.random() * (names.length - 1))
