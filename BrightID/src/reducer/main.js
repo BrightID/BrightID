@@ -74,9 +74,8 @@ export const initialState: Main = {
   eligibleGroups: [],
   currentGroups: [],
   connections: [],
-  nearbyPeople: [],
-  publicKey: '',
-  secretKey: '',
+  publicKey: null,
+  secretKey: null,
   connectionsSort: '',
   connectQrData: {
     aesKey: '',
@@ -86,7 +85,13 @@ export const initialState: Main = {
     qrString: '',
     channel: '',
   },
-  connectUserData: { publicKey: '', avatar: '', nameornym: '', timestamp: '' },
+  connectUserData: {
+    publicKey: '',
+    avatar: '',
+    nameornym: '',
+    timestamp: '',
+    signedMessage: ''
+  },
   encryptedUserData: '',
 };
 
@@ -157,16 +162,6 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         ...state,
         connections: [action.connection, ...connections],
       };
-    case SET_ENCRYPTED_USER_DATA:
-      return {
-        ...state,
-        encryptedUserData: action.encryptedData,
-      };
-    case REMOVE_ENCRYPTED_USER_DATA:
-      return {
-        ...state,
-        encryptedUserData: '',
-      };
     case REMOVE_CONNECTION:
       return {
         ...state,
@@ -188,8 +183,8 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         ...state,
         avatar: '',
         nameornym: '',
-        publicKey: '',
-        secretKey: '',
+        publicKey: null,
+        secretKey: null,
       };
 
     case REFRESH_NEARBY_PEOPLE:
@@ -203,7 +198,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         connectPublicKey: action.publicKey,
       };
     case SET_CONNECT_QR_DATA:
-      // Automatically compute the websocket channel and download (but not upload) path
+      // Compute the websocket channel and download (but not upload) path
 
       action.connectQrData.channel =
         action.connectQrData.uuid +
@@ -237,6 +232,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
           avatar: '',
           nameornym: '',
           timestamp: '',
+          signedMessage: ''
         },
       };
     case CONNECT_NAMEORNYM:

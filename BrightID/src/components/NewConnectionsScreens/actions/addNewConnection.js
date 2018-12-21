@@ -3,7 +3,11 @@
 import { AsyncStorage } from 'react-native';
 import emitter from '../../../emitter';
 import { saveAvatar } from '../../../utils/filesystem';
-import { connectUsers } from './connectUsers';
+import { setUpWs } from './websocket';
+import nacl from "tweetnacl";
+import { strToUint8Array, obj2b64, objToUint8 } from '../../../utils/encoding';
+import { encryptAndUploadLocalData } from './encryptData';
+import api from '../../../Api/BrightIdApi';
 
 export const addNewConnection = () => async (
   dispatch: () => null,
@@ -15,13 +19,26 @@ export const addNewConnection = () => async (
    */
   try {
     const { connectUserData, publicKey, secretKey } = getState().main;
-    // Test connections
-    // TODO - pass signatures between devicers
     let connectionDate = Date.now();
-    if (connectUserData.secretKey) {
-      let userA = { publicKey, secretKey };
-      let userB = connectUserData;
-      connectionDate = await connectUsers(userA, userB);
+    if (connectUserData.signedMessage) {
+      // The other user signed a connection request; we have enough info to
+      // make an API call to create the connection.
+
+      const message = connectUserData.publicKey + obj2b64(publicKey) + connectUserData.timestamp;
+      const signedMessage = obj2b64(nacl.sign.detached(strToUint8Array(message), objToUint8(secretKey)));
+      let result = await api.createConnection(
+        connectUserData.publicKey,
+        connectUserData.signedMessage,
+        publicKey,
+        signedMessage,
+        connectUserData.timestamp,
+      );
+      console.log(result);
+    } else {
+      // We will sign a connection request and upload it. The other user will
+      // make the API call to create the connection.
+
+      dispatch(encryptAndUploadLocalData());
     }
     const uri = await saveAvatar({
       publicKey: connectUserData.publicKey,

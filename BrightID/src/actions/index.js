@@ -38,8 +38,6 @@ export const SET_PREVIEW = 'SET_PREVIEW';
 export const RESET_PREVIEW = 'RESET_PREVIEW';
 export const SET_CONNECT_USER_DATA = 'SET_CONNECT_USER_DATA';
 export const REMOVE_CONNECT_USER_DATA = 'REMOVE_CONNECT_USER_DATA';
-export const SET_ENCRYPTED_USER_DATA = 'SET_ENCRYPTED_USER_DATA';
-export const REMOVE_ENCRYPTED_USER_DATA = 'REMOVE_ENCRYPTED_USER_DATA';
 
 /**
  * redux action creator that updates user `trustScore`
@@ -294,15 +292,6 @@ export const removeConnectUserData = () => ({
 export const setConnectNameornym = (nameornym: string) => ({
   type: CONNECT_NAMEORNYM,
   nameornym,
-});
-
-export const setEncryptedUserData = (encryptedData: string) => ({
-  type: SET_ENCRYPTED_USER_DATA,
-  encryptedData,
-});
-
-export const removeEncryptedUserData = () => ({
-  type: REMOVE_ENCRYPTED_USER_DATA,
 });
 
 /**

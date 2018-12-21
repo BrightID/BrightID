@@ -6,9 +6,6 @@ import nacl from 'tweetnacl';
 import { obj2b64, strToUint8Array } from '../utils/encoding';
 import store from '../store';
 
-// const SEED_URL = 'http://test.brightid.org';
-// const SEED_URL = 'http://node.brightid.org';
-
 const api = create({
   baseURL: SEED_URL,
 });
@@ -107,7 +104,7 @@ function leaveAGroup(groupId) {
 }
 
 function createUser(publicKey: Uint8Array) {
-  let b64PublicKey = urlSafe(obj2b64(publicKey));
+  let b64PublicKey = obj2b64(publicKey);
   return api
     .post('/users', { publicKey: b64PublicKey })
     .then((response) => response.data)

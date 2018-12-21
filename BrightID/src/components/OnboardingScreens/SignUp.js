@@ -114,14 +114,13 @@ class SignUp extends React.Component<Props, State> {
     // see https://github.com/react-community/react-native-image-picker
 
     const options = {
-      title: 'Select Avatar',
+      title: 'Select Photo',
       mediaType: 'photo',
       maxWidth: 180,
       maxHeight: 180,
       quality: 0.8,
       allowsEditing: true,
-      loadingLabelText: 'loading avatar photo...',
-      customButtons: [{ name: 'random', title: 'Random Avatar' }],
+      loadingLabelText: 'loading photo...',
     };
     // loading UI to account for the delay after picking an image
     this.imagePickingTrue();
@@ -132,8 +131,6 @@ class SignUp extends React.Component<Props, State> {
       } else if (response.error) {
         Alert.alert('ERROR', response.error);
         this.imagePickingFalse();
-      } else if (response.customButton) {
-        this.randomAvatar();
       } else {
         const mime = mimeFromUri(response.uri);
         const avatar = {
@@ -160,7 +157,7 @@ class SignUp extends React.Component<Props, State> {
         });
         return Alert.alert(
           'BrightID Form Incomplete',
-          'Please add your name or nym',
+          'Please add your name',
         );
       }
       if (!avatar) {
@@ -169,7 +166,7 @@ class SignUp extends React.Component<Props, State> {
         });
         return Alert.alert(
           'BrightID Form Incomplete',
-          'An avatar photo is required',
+          'A photo is required',
         );
       }
       const result = await dispatch(
@@ -211,7 +208,7 @@ class SignUp extends React.Component<Props, State> {
       <TouchableOpacity
         onPress={this.getAvatarPhoto}
         accessible={true}
-        accessibilityLabel="edit avatar photo"
+        accessibilityLabel="edit photo"
       >
         <Image
           style={styles.avatar}
@@ -224,7 +221,7 @@ class SignUp extends React.Component<Props, State> {
         onPress={this.getAvatarPhoto}
         style={styles.addPhoto}
         accessible={true}
-        accessibilityLabel="add avatar photo"
+        accessibilityLabel="add photo"
       >
         <Text style={styles.addPhotoText}>Add Photo</Text>
         <SimpleLineIcons size={48} name="camera" color="#979797" />
@@ -256,7 +253,7 @@ class SignUp extends React.Component<Props, State> {
           <TextInput
             onChangeText={(nameornym) => this.setState({ nameornym })}
             value={nameornym}
-            placeholder="Name or Nym"
+            placeholder="Name"
             placeholderTextColor="#9e9e9e"
             style={styles.textInput}
             onFocus={() => this.setState({ inputActive: true })}
