@@ -1,15 +1,13 @@
 // @flow
 
 import { create } from 'apisauce';
-import Config from 'react-native-config';
 import nacl from 'tweetnacl';
 import { obj2b64, strToUint8Array } from '../utils/encoding';
 import store from '../store';
-
-const SEED_URL = 'http://test.brightid.org';
+import server from './server';
 
 const api = create({
-  baseURL: SEED_URL,
+  baseURL: server.apiURL,
 });
 
 function setBaseUrl(url: string) {

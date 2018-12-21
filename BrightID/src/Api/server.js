@@ -11,19 +11,25 @@ class Server {
     // for now set the baseURL to the seedURL since there is only one server
 
     this.baseURL = seedURL;
-    this.apiURL = this.baseURL + '/brightid';
-    this.profileURL = this.baseURL + '/profile';
 
     // TODO: get a list of nodes from the seed node through an API call
     //  https://github.com/BrightID/BrightID/issues/191
     // TODO: select the best server to use through a "promise race"
     //  https://github.com/BrightID/BrightID/issues/202
 
-    api.setBaseUrl(this.apiUrl);
   }
 
+  /**
+   *  Switch servers if the current one is having problems--for example, if the
+   *  user you're connecting with can't access it for a profile exchange.
+   */
   switch() {
-    // TODO: blacklist the current server and choose another
+    // TODO: temporarily blacklist the current server and choose another
+  }
+
+  update(newBaseUrl) {
+    this.baseURL = newBaseUrl;
+    api.setBaseUrl(this.apiUrl);
   }
 
   getIp() {
@@ -40,11 +46,11 @@ class Server {
   }
 
   get apiUrl() {
-    return this.apiURL;
+    return this.baseURL + '/brightid';
   }
 
   get profileUrl() {
-    return this.profileURL;
+    return this.baseURL + '/profile';
   }
 }
 
