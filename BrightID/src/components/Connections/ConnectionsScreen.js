@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import { AsyncStorage, StyleSheet, Text, View } from 'react-native';
+import { AsyncStorage, StyleSheet, Text, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import HeaderButtons, {
   HeaderButton,
@@ -15,6 +15,7 @@ import { createNewConnection } from './createNewConnection';
 import emitter from '../../emitter';
 import BottomNav from '../BottomNav';
 import { renderListOrSpinner } from './renderConnections';
+import api from '../../Api/BrightIdApi';
 
 /**
  * Connection screen of BrightID
@@ -83,11 +84,12 @@ class ConnectionsScreen extends React.Component<Props, State> {
 
   removeConnection = async (publicKey) => {
     try {
+      await api.deleteConnection(publicKey);
       // remove connection from async storage
       await AsyncStorage.removeItem(JSON.stringify(publicKey));
       emitter.emit('refreshConnections', {});
     } catch (err) {
-      console.log(err);
+      Alert("Couldn't remove connection", err.stack);
     }
   };
 

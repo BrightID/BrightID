@@ -1,18 +1,19 @@
 // @flow
 
 import { create } from 'apisauce';
-import { SEED_URL } from 'react-native-dotenv';
 import nacl from 'tweetnacl';
-import { obj2b64, strToUint8Array } from '../utils/encoding';
+import { obj2b64, strToUint8Array, uInt8Array2b64 } from '../utils/encoding';
 import store from '../store';
+import server from './server';
+import emitter from '../emitter';
 
 const api = create({
-  baseURL: SEED_URL,
+  baseURL: server.apiUrl,
 });
 
-function setBaseUrl(url: string) {
-  api.setBaseURL(url);
-}
+emitter.on('serverUrlChange', () => {
+  api.setBaseURL(server.apiUrl);
+});
 
 function urlSafe(str: string) {
   return str
@@ -38,8 +39,8 @@ function createConnection(
   timestamp: number,
 ) {
   let requestParams = {
-    publicKey1: urlSafe(obj2b64(publicKey1)),
-    publicKey2: urlSafe(obj2b64(publicKey2)),
+    publicKey1: uInt8Array2b64(publicKey1),
+    publicKey2: uInt8Array2b64(publicKey2),
     sig1,
     sig2,
     timestamp,
@@ -50,13 +51,18 @@ function createConnection(
     .catch((error) => (error.data ? error.data : error));
 }
 
-function deleteConnection(publicKey1: Uint8Array, publicKey2: Uint8Array) {
-  let sig1 = 'sample sig';
+function deleteConnection(publicKey2: Uint8Array) {
+  const { publicKey, secretKey } = store.getState().main;
+  const b64key1 = uInt8Array2b64(publicKey);
+  const b64key2 = uInt8Array2b64(publicKey2);
+  const timestamp = Date.now();
+  const message = b64key1 + b64key2 + timestamp;
+  let sig1 = uInt8Array2b64(nacl.sign.detached(strToUint8Array(message), secretKey));
   let requestParams = {
-    publicKey1: urlSafe(obj2b64(publicKey1)),
-    publicKey2: urlSafe(obj2b64(publicKey2)),
+    publicKey1: b64key1,
+    publicKey2: b64key2,
     sig1,
-    timestamp: Date.now(),
+    timestamp,
   };
   return api
     .delete(`/connections`, {}, { data: requestParams })
@@ -149,7 +155,7 @@ function createGroup(
   //   .post(`/groups`, requestParams)
   //   .then((response) => response.data)
   //   .catch((error) => (error.data ? error.data : error));
-  return fetch(`${SEED_URL}/groups`, {
+  return fetch(`${server.apiUrl}/groups`, {
     method: 'POST', // or 'PUT'
     body: JSON.stringify(requestParams),
     headers: {
@@ -190,12 +196,11 @@ function deleteGroup(groupId) {
     .catch((error) => (error.data ? error.data : error));
 }
 
-function ip() {
-  return api.get('/ip').then((response) => response.data.data);
+function ip(): string {
+  return api.get('/ip').then((response) => response.data.data.ip);
 }
 
 export default {
-  setBaseUrl,
   urlSafe,
   createConnection,
   deleteConnection,
@@ -206,4 +211,5 @@ export default {
   getUserInfo,
   createUser,
   ip,
+  baseUrl: server.apiUrl,
 };

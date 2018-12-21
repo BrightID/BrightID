@@ -1,11 +1,10 @@
 // @flow
 
 import { AsyncStorage } from 'react-native';
+import nacl from "tweetnacl";
 import emitter from '../../../emitter';
 import { saveAvatar } from '../../../utils/filesystem';
-import { setUpWs } from './websocket';
-import nacl from "tweetnacl";
-import { strToUint8Array, obj2b64, objToUint8 } from '../../../utils/encoding';
+import { strToUint8Array, uInt8Array2b64 } from '../../../utils/encoding';
 import { encryptAndUploadLocalData } from './encryptData';
 import api from '../../../Api/BrightIdApi';
 
@@ -24,8 +23,8 @@ export const addNewConnection = () => async (
       // The other user signed a connection request; we have enough info to
       // make an API call to create the connection.
 
-      const message = connectUserData.publicKey + obj2b64(publicKey) + connectUserData.timestamp;
-      const signedMessage = obj2b64(nacl.sign.detached(strToUint8Array(message), objToUint8(secretKey)));
+      const message = uInt8Array2b64(connectUserData.publicKey) + uInt8Array2b64(publicKey) + connectUserData.timestamp;
+      const signedMessage = uInt8Array2b64(nacl.sign.detached(strToUint8Array(message), secretKey));
       let result = await api.createConnection(
         connectUserData.publicKey,
         connectUserData.signedMessage,

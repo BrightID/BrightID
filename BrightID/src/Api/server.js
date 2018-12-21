@@ -1,11 +1,7 @@
 // @flow
 
 import { SEED_URL } from 'react-native-dotenv';
-import { Alert } from 'react-native';
-import api from './BrightIdApi';
-
-// const SEED_URL = 'http://test.brightid.org';
-// const SEED_URL = 'http://node.brightid.org';
+import emitter from '../emitter';
 
 class Server {
   constructor(seedURL: string) {
@@ -30,16 +26,7 @@ class Server {
 
   update(newBaseUrl) {
     this.baseURL = newBaseUrl;
-    api.setBaseUrl(this.apiUrl);
-  }
-
-  getIp() {
-    return api
-      .ip()
-      .then((data) => data.ip)
-      .catch((error) => {
-        Alert.alert("Couldn't get ip address of server.", error.stack);
-      });
+    emitter.emit('serverUrlChange', newBaseUrl);
   }
 
   get baseUrl() {
@@ -47,11 +34,11 @@ class Server {
   }
 
   get apiUrl() {
-    return this.baseURL + '/brightid';
+    return `${this.baseURL}/brightid`;
   }
 
   get profileUrl() {
-    return this.baseURL + '/profile';
+    return `${this.baseURL}/profile`;
   }
 }
 

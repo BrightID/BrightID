@@ -37,8 +37,6 @@ import {
   RESET_PREVIEW,
   SET_CONNECT_USER_DATA,
   REMOVE_CONNECT_USER_DATA,
-  SET_ENCRYPTED_USER_DATA,
-  REMOVE_ENCRYPTED_USER_DATA,
 } from '../actions';
 
 const arbiterSchema = {
@@ -86,13 +84,12 @@ export const initialState: Main = {
     channel: '',
   },
   connectUserData: {
-    publicKey: '',
+    publicKey: null,
     avatar: '',
     nameornym: '',
     timestamp: '',
     signedMessage: ''
   },
-  encryptedUserData: '',
 };
 
 export const mainReducer = (state: Main = initialState, action: {}) => {
@@ -139,7 +136,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
       return {
         ...state,
         eligibleGroups: [...state.eligibleGroups].filter(
-          (group) => group.id != action.groupId,
+          (group) => group.id !== action.groupId,
         ),
       };
     case SET_CURRENT_GROUPS:
