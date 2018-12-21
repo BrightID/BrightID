@@ -7,8 +7,8 @@ import HeaderButtons, {
   HeaderButton,
   Item,
 } from 'react-navigation-header-buttons';
-import { createNewConnection } from '../connections/createNewConnection';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { createNewConnection } from '../Connections/createNewConnection';
 import MyCodeScreen from './MyCodeScreen';
 import ScanCodeScreen from './ScanCodeScreen';
 
@@ -40,7 +40,7 @@ type Props = {
 };
 
 class NewConnectionScreen extends React.Component<Props> {
-  static navigationOptions = ({navigation}) => {
+  static navigationOptions = ({ navigation }) => ({
     title: 'New Connection',
     headerRight: (
       <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
@@ -51,7 +51,7 @@ class NewConnectionScreen extends React.Component<Props> {
         />
       </HeaderButtons>
     ),
-  };
+  });
 
   state = {
     display: 'qrcode',
