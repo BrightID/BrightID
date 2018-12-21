@@ -2,7 +2,7 @@
 
 import { randomBytes } from 'react-native-randombytes';
 import { Alert } from 'react-native';
-import api from '../../../Api/BrightIdApi';
+import api from '../../../Api/brightId';
 import { b64ToUrlSafeB64 } from '../../../utils/encoding';
 import { setConnectQrData } from '../../../actions';
 

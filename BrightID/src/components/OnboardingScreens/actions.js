@@ -8,7 +8,7 @@ import {
   createConnectionAvatarDirectory,
   saveAvatar,
 } from '../../utils/filesystem';
-import api from '../../Api/BrightIdApi';
+import api from '../../Api/brightId';
 
 export const handleBrightIdCreation = ({
   nameornym,

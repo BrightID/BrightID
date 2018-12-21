@@ -18,8 +18,7 @@ import EligibleGroupCard from './EligibleGroupCard';
 import CurrentGroupCard from './CurrentGroupCard';
 import BottomNav from '../BottomNav';
 import reloadUserInfo from '../../actions/reloadUserInfo';
-import { obj2b64 } from '../../utils/encoding';
-import api from '../../Api/BrightIdApi';
+import { uInt8ArrayToUrlSafeB64 } from '../../utils/encoding';
 import { NoCurrentGroups, EmptyFullScreen } from './EmptyGroups';
 
 /**
@@ -89,13 +88,13 @@ class ConnectionsScreen extends React.Component<Props, State> {
   mapPublicKeysToNames(publicKeys) {
     let { connections } = this.props;
     let names = [];
-    let user = api.urlSafe(obj2b64(this.props.publicKey));
+    let user = uInt8ArrayToUrlSafeB64(this.props.publicKey);
     publicKeys.map((publicKey) => {
       if (publicKey === user) names.push('You');
       else {
         let findedConnection = connections.find(
           (connection) =>
-            api.urlSafe(obj2b64(connection.publicKey)) === publicKey,
+            uInt8ArrayToUrlSafeB64(connection.publicKey) === publicKey,
         );
         names.push(
           findedConnection
@@ -127,7 +126,7 @@ class ConnectionsScreen extends React.Component<Props, State> {
               groupId={group.id}
               names={this.mapPublicKeysToNames(group.knownMembers)}
               alreadyIn={
-                group.knownMembers.indexOf(api.urlSafe(obj2b64(publicKey))) >= 0
+                group.knownMembers.indexOf(uInt8ArrayToUrlSafeB64(publicKey)) >= 0
               }
               trustScore={group.trustScore}
               isNew={false}
@@ -205,7 +204,7 @@ class ConnectionsScreen extends React.Component<Props, State> {
                   names={this.mapPublicKeysToNames(group.knownMembers)}
                   alreadyIn={
                     group.knownMembers.indexOf(
-                      api.urlSafe(obj2b64(publicKey)),
+                      uInt8ArrayToUrlSafeB64(publicKey),
                     ) >= 0
                   }
                   trustScore={group.trustScore}

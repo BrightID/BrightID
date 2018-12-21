@@ -1,6 +1,6 @@
 // @flow
 
-import api from '../Api/BrightIdApi';
+import api from '../Api/brightId';
 import { setCurrentGroups, setEligibleGroups } from './index';
 
 const reloadUserInfo = () => async (

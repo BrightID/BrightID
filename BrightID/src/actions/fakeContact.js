@@ -4,10 +4,10 @@ import nacl from 'tweetnacl';
 import RNFetchBlob from 'rn-fetch-blob';
 import { Alert } from 'react-native';
 import { names } from '../utils/fakeNames';
-import api from '../Api/BrightIdApi';
+import api from '../Api/brightId';
 import { setConnectUserData } from './index';
 
-export const addConnection = (navigation) => async (dispatch, getState) => {
+export const addConnection = (navigation) => async (dispatch) => {
   const { publicKey, secretKey } = nacl.sign.keyPair();
 
   let creationResponse = await api.createUser(publicKey);

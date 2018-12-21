@@ -6,8 +6,8 @@ import {
   setEligibleGroups,
   setNewGroupCoFounders,
 } from '../../actions/index';
-import api from '../../Api/BrightIdApi';
-import { obj2b64 } from '../../utils/encoding';
+import api from '../../Api/brightId';
+import { uInt8ArrayToUrlSafeB64 } from '../../utils/encoding';
 
 export const toggleNewGroupCoFounder = (publicKey) => (
   dispatch: dispatch,
@@ -29,17 +29,16 @@ export const creatNewGroup = () => async (
   dispatch: () => null,
   getState: () => {},
 ) => {
-  let { publicKey, newGroupCoFounders } = getState().main;
+  let { newGroupCoFounders } = getState().main;
   // alert(JSON.stringify({
   //     publicKey, newGroupCoFounders
   // },null,2));
 
   console.log(newGroupCoFounders);
   if (newGroupCoFounders.length < 2) {
-    return alert('you need two people to form a group');
+    return alert('you need two other people to form a group');
   }
   let response = await api.createGroup(
-    publicKey,
     newGroupCoFounders[0],
     newGroupCoFounders[1],
   );
@@ -55,14 +54,13 @@ export const joinToGroup = (groupId) => async (
   dispatch: () => null,
   getState: () => {},
 ) => {
-  let { publicKey } = getState().main;
-  let result = await api.joinAGroup(groupId);
+  let result = await api.joinGroup(groupId);
   if (result.success) {
     let { eligibleGroups, currentGroups, publicKey } = getState().main;
     let newCurrentGroups = [];
-    let userKey = api.urlSafe(obj2b64(publicKey));
+    let userKey = uInt8ArrayToUrlSafeB64(publicKey);
     eligibleGroups = [...eligibleGroups].reduce((filtered, group) => {
-      if (group.id == groupId) {
+      if (group.id === groupId) {
         if (group.knownMembers.indexOf(userKey) < 0)
           group.knownMembers.push(userKey);
       }
@@ -83,10 +81,8 @@ export const joinToGroup = (groupId) => async (
 };
 
 export const deleteNewGroup = (groupId) => async (
-  dispatch: () => null,
-  getState: () => {},
+  dispatch: () => null
 ) => {
-  let { publicKey } = getState().main;
   // return alert(JSON.stringify(publicKey, groupId));
   let result = await api.deleteGroup(groupId);
   if (result.success) dispatch(deleteEligibleGroup(groupId));

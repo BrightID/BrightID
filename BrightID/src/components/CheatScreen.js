@@ -21,10 +21,13 @@ import { connect } from 'react-redux';
 import BottomNav from './BottomNav';
 import nacl from 'tweetnacl';
 import { getConnections } from '../actions/getConnections';
-import { setUserData } from '../actions';
 import Material from 'react-native-vector-icons/MaterialIcons';
-import {objToUint8, b64ToUint8Array,obj2b64,strToUint8Array,str2b64,uint8Array2b64} from "../utils/encoding";
-import api from "../Api/BrightIdApi";
+import {
+  obj2b64,
+  strToUint8Array,
+  uInt8ArrayToB64,
+} from '../utils/encoding';
+import api from "../Api/brightId";
 
 /**
  * Home screen of BrightID
@@ -65,9 +68,9 @@ export class TestConnectionScreen extends React.Component {
         let groupId = '1585018';
         let {publicKey, secretKey} = this.props;
         let timestamp = '1543516944543';
-        let publicKeyStr = api.urlSafe(obj2b64(publicKey));
+        let publicKeyStr = uInt8ArrayToB64(publicKey);
         let message = publicKeyStr + groupId + timestamp;
-        let sig = obj2b64(nacl.sign.detached(strToUint8Array(message), secretKey));
+        let sig = uInt8ArrayToB64(nacl.sign.detached(strToUint8Array(message), secretKey));
 
         this.setState({sig, timestamp, groupId});
     }
@@ -95,7 +98,7 @@ export class TestConnectionScreen extends React.Component {
     testGetUserInfo(){
         let {publicKey, secretKey} = this.props;
         let timestamp = Date.now();
-        let message = api.urlSafe(obj2b64(publicKey)) + timestamp;
+        let message = uInt8ArrayToB64(publicKey) + timestamp;
         let sig = nacl.sign.detached(strToUint8Array(message), secretKey);
         // let verify = nacl.sign.detached.verify(strToUint8Array(message), sig, publicKey);
         // alert(verify ? 'verified successfully' : 'verification failed');
@@ -159,14 +162,14 @@ export class TestConnectionScreen extends React.Component {
         try {
             // return alert(JSON.stringify(objToUint8(userA.secretKey)));
             let timestamp = Date.now();
-            let publicKeyStr1 = api.urlSafe(obj2b64(userA.publicKey));
-            let publicKeyStr2 = api.urlSafe(obj2b64(userB.publicKey));
+            let publicKeyStr1 = uInt8ArrayToB64(userA.publicKey);
+            let publicKeyStr2 = uInt8ArrayToB64(userB.publicKey);
 
             let message = publicKeyStr1 + publicKeyStr2 + timestamp;
-            let sig1 = obj2b64(nacl.sign.detached(strToUint8Array(message), objToUint8(userA.secretKey)));
+            let sig1 = uInt8ArrayToB64(nacl.sign.detached(strToUint8Array(message), userA.secretKey));
             // return alert(sig1);
 
-            let sig2 = obj2b64(nacl.sign.detached(strToUint8Array(message), objToUint8(userB.secretKey)));
+            let sig2 = uInt8ArrayToB64(nacl.sign.detached(strToUint8Array(message), userB.secretKey));
 
             let result = await api.createConnection(userA.publicKey, sig1, userB.publicKey, sig2, timestamp);
             alert(JSON.stringify(result, null, 4));
@@ -228,7 +231,7 @@ export class TestConnectionScreen extends React.Component {
                             <Text>name: {nameornym}</Text>
                             <View>
                                 <Text>PublicKey</Text>
-                                <TextInput value={api.urlSafe(obj2b64(publicKey))}/>
+                                <TextInput value={uInt8ArrayToUrlSafeB64(publicKey)}/>
                                 {/*<Text>timestamp</Text>*/}
                                 {/*<TextInput value={this.state.timestamp}/>*/}
                                 {/*<Text>Sig</Text>*/}

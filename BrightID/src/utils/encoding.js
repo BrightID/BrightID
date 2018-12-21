@@ -7,33 +7,29 @@ export function b64ToUint8Array(str: string) {
   return new Uint8Array(b.slice());
 }
 
-export function str2b64(str: string) {
-    const b = Buffer.from(str);
-    return b.toString('base64');
-}
-
-export function uInt8Array2b64(array: Uint8Array) {
+export function uInt8ArrayToB64(array: Uint8Array) {
     const b = Buffer.from(array);
     return b.toString('base64');
 }
 
+export function uInt8ArrayToUrlSafeB64(array: Uint8Array) {
+  const b = Buffer.from(array);
+  return b64ToUrlSafeB64(b.toString('base64'));
+}
+
 export function obj2b64(obj: {}) {
   const array = objToUint8(obj);
-  return uInt8Array2b64(array);
+  return uInt8ArrayToB64(array);
+}
+
+export function str2b64(str: string) {
+  const b = Buffer.from(str);
+  return b.toString('base64');
 }
 
 export function strToUint8Array(str: string) {
   const b = Buffer.from(str);
   return new Uint8Array(b.slice());
-}
-
-export function uint8ArraytoString(array: Uint8Array) {
-  const b = Buffer.from(array);
-  return b.toString();
-}
-
-export function stringByteLength(str: string) {
-  return Buffer.byteLength(str, 'utf8');
 }
 
 export const objToUint8 = (obj: {}) => new Uint8Array(Object.values(obj));
@@ -47,7 +43,15 @@ export function b64ToUrlSafeB64(s) {
     '+': '-',
     '=': ''
   };
-  return s.replace(/[/+=]/g, function (c) {
-    return alts[c];
-  });
+  return s.replace(/[/+=]/g, (c) => alts[c]);
+}
+
+
+export function uint8ArraytoString(array: Uint8Array) {
+  const b = Buffer.from(array);
+  return b.toString();
+}
+
+export function stringByteLength(str: string) {
+  return Buffer.byteLength(str, 'utf8');
 }
