@@ -110,9 +110,7 @@ class NewGroupScreen extends React.Component<Props, State> {
           <TouchableOpacity
             onPress={async () => {
               try {
-                // alert('new group');
                 let result = await store.dispatch(creatNewGroup());
-                console.log(result);
                 if (result) navigation.goBack();
               } catch (err) {
                 console.log(err);
