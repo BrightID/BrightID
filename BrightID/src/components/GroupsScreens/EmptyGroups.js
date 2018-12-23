@@ -7,7 +7,7 @@ type Navigation = { navigate: (str: string) => null };
 type Props = { navigation: Navigation };
 
 export const NoEligibleGroups = ({ navigation }: Props) => (
-  <View style={styles.smallContainer}>
+  <View style={styles.noEligibleContainer}>
     <View style={styles.noEligibleGroupsInfo}>
       <Image
         source={require('../../static/groups_logo.png')}
@@ -45,7 +45,7 @@ export const NoEligibleGroups = ({ navigation }: Props) => (
 );
 
 export const NoCurrentGroups = ({ navigation }: Props) => (
-  <View style={styles.smallContainer}>
+  <View style={styles.noCurrentContainer}>
     <View style={styles.noCurrentGroupsInfo}>
       <Image
         source={require('../../static/groups_logo.png')}
@@ -122,17 +122,26 @@ export const EmptyFullScreen = ({ navigation }: Props) => (
 );
 
 const styles = StyleSheet.create({
-  smallContainer: {
+  noEligibleContainer: {
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     width: '100%',
-    height: '46%',
+    height: '55%',
+    backgroundColor: '#f9f9f9',
+  },
+  noCurrentContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '45%',
+    backgroundColor: '#f9f9f9',
   },
   fullScreenContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
+    backgroundColor: '#f9f9f9',
   },
   noCurrentGroupsInfo: {
     flexDirection: 'row',
