@@ -7,11 +7,11 @@ type Navigation = { navigate: (str: string) => null };
 type Props = { navigation: Navigation };
 
 export const NoEligibleGroups = ({ navigation }: Props) => (
-  <View style={styles.fullScreenContainer}>
-    <View style={styles.fullScreenEmptyGroupsInfo}>
+  <View style={styles.smallContainer}>
+    <View style={styles.noEligibleGroupsInfo}>
       <Image
-        source={require('../../static/groups.png')}
-        style={styles.largeGroupsLogo}
+        source={require('../../static/groups_logo.png')}
+        style={styles.smallGroupsLogo}
         resizeMode="cover"
         onError={(e) => {
           console.log(e.error);
@@ -20,10 +20,10 @@ export const NoEligibleGroups = ({ navigation }: Props) => (
         accessibilityLabel="groups logo"
       />
       <View>
-        <Text style={styles.fullScreenEmptyGroupsText}>
+        <Text style={styles.eligibleEmptyGroupsText}>
           By creating and joining groups,
         </Text>
-        <Text style={styles.fullScreenEmptyGroupsText}>
+        <Text style={styles.eligibleEmptyGroupsText}>
           you can increase your score
         </Text>
       </View>
@@ -32,7 +32,12 @@ export const NoEligibleGroups = ({ navigation }: Props) => (
       <TouchableOpacity style={styles.learnMoreButton}>
         <Text style={styles.learnMoreText}>Learn More</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.createGroupButton}>
+      <TouchableOpacity
+        style={styles.createGroupButton}
+        onPress={() => {
+          navigation.navigate('NewGroup');
+        }}
+      >
         <Text style={styles.createGroupText}>Create Group</Text>
       </TouchableOpacity>
     </View>
@@ -40,7 +45,7 @@ export const NoEligibleGroups = ({ navigation }: Props) => (
 );
 
 export const NoCurrentGroups = ({ navigation }: Props) => (
-  <View style={styles.container}>
+  <View style={styles.smallContainer}>
     <View style={styles.noCurrentGroupsInfo}>
       <Image
         source={require('../../static/groups_logo.png')}
@@ -117,10 +122,11 @@ export const EmptyFullScreen = ({ navigation }: Props) => (
 );
 
 const styles = StyleSheet.create({
-  container: {
+  smallContainer: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     width: '100%',
+    height: '46%',
   },
   fullScreenContainer: {
     flex: 1,
@@ -135,7 +141,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   noEligibleGroupsInfo: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',

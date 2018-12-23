@@ -1,5 +1,5 @@
 // @flow
-
+import { Alert } from 'react-native';
 import {
   deleteEligibleGroup,
   setCurrentGroups,
@@ -30,13 +30,11 @@ export const creatNewGroup = () => async (
   getState: () => {},
 ) => {
   let { newGroupCoFounders } = getState().main;
-  // alert(JSON.stringify({
-  //     publicKey, newGroupCoFounders
-  // },null,2));
-
-  console.log(newGroupCoFounders);
   if (newGroupCoFounders.length < 2) {
-    return alert('you need two other people to form a group');
+    return Alert.alert(
+      'Cannot create group',
+      'You need two other people to form a group',
+    );
   }
   let response = await api.createGroup(
     newGroupCoFounders[0],
@@ -44,10 +42,10 @@ export const creatNewGroup = () => async (
   );
   // alert(JSON.stringify(response, null, 2));
   console.log(response);
+
+  if (response.error) Alert.alert('Cannot create group', response.errorMessage);
+
   if (response.data && response.data.id) return true;
-  else {
-    return false;
-  }
 };
 
 export const joinToGroup = (groupId) => async (
@@ -80,9 +78,7 @@ export const joinToGroup = (groupId) => async (
   return result;
 };
 
-export const deleteNewGroup = (groupId) => async (
-  dispatch: () => null
-) => {
+export const deleteNewGroup = (groupId) => async (dispatch: () => null) => {
   // return alert(JSON.stringify(publicKey, groupId));
   let result = await api.deleteGroup(groupId);
   if (result.success) dispatch(deleteEligibleGroup(groupId));

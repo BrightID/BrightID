@@ -17,6 +17,7 @@ import HeaderButtons, {
   HeaderButton,
   Item,
 } from 'react-navigation-header-buttons';
+import { NavigationEvents } from 'react-navigation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -24,6 +25,7 @@ import BottomNav from './BottomNav';
 import store from '../store';
 import { removeUserData } from '../actions';
 import emitter from '../emitter';
+import { getConnections } from '../actions/getConnections';
 
 /**
  * Home screen of BrightID
@@ -114,38 +116,6 @@ export class HomeScreen extends React.Component<Props> {
     ),
   });
 
-  state = {
-    connectionsCount: 0,
-  };
-
-  componentDidMount() {
-    this.getConnectionsCount();
-    emitter.on('refreshConnections', this.getConnectionsCount);
-  }
-
-  componentDidUpdate(prevProps) {
-    const { connections } = this.props;
-    if (connections.length !== prevProps.connections.length) {
-      this.setState({ connectionsCount: connections.length });
-    }
-  }
-
-  componentWillUnmount() {
-    emitter.off('refreshConnections', this.getConnectionsCount);
-  }
-
-  getConnectionsCount = async () => {
-    // currently connections count is based on async storage keys - 1
-    /**
-     *
-     * THIS MIGHT CHANGE WHEN GROUPS ARE ADDED
-     */
-    const allKeys = await AsyncStorage.getAllKeys();
-    this.setState({
-      connectionsCount: allKeys.length - 1,
-    });
-  };
-
   render() {
     const {
       navigation,
@@ -153,10 +123,16 @@ export class HomeScreen extends React.Component<Props> {
       trustScore,
       groupsCount,
       avatar,
+      connections,
+      dispatch,
     } = this.props;
-    const { connectionsCount } = this.state;
     return (
       <View style={styles.container}>
+        <NavigationEvents
+          onDidFocus={() => {
+            dispatch(getConnections());
+          }}
+        />
         <View style={styles.mainContainer}>
           <View style={styles.avatarContainer}>
             <Image
@@ -182,7 +158,7 @@ export class HomeScreen extends React.Component<Props> {
           <View style={styles.countsContainer}>
             <View style={styles.countsGroup}>
               <Text id="connectionsCount" style={styles.countsNumberText}>
-                {connectionsCount}
+                {connections.length}
               </Text>
               <Text style={styles.countsDescriptionText}>Connections</Text>
             </View>

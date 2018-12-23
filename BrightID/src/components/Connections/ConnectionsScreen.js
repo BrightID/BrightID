@@ -10,6 +10,7 @@ import HeaderButtons, {
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
+import { NavigationEvents } from 'react-navigation';
 import { getConnections } from '../../actions/getConnections';
 import { createNewConnection } from './createNewConnection';
 import emitter from '../../emitter';
@@ -109,6 +110,11 @@ class ConnectionsScreen extends React.Component<Props, State> {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
+        <NavigationEvents
+          onDidFocus={() => {
+            this.getConnections();
+          }}
+        />
         <View style={styles.mainContainer}>
           <SearchConnections navigation={navigation} />
           <View style={styles.mainContainer}>{renderListOrSpinner(this)}</View>

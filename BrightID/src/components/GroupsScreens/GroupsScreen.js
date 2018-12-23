@@ -18,7 +18,11 @@ import EligibleGroupCard from './EligibleGroupCard';
 import CurrentGroupCard from './CurrentGroupCard';
 import BottomNav from '../BottomNav';
 import reloadUserInfo from '../../actions/reloadUserInfo';
-import { NoCurrentGroups, EmptyFullScreen } from './EmptyGroups';
+import {
+  NoCurrentGroups,
+  EmptyFullScreen,
+  NoEligibleGroups,
+} from './EmptyGroups';
 
 /**
  * Groups screen of BrightID
@@ -106,25 +110,6 @@ class ConnectionsScreen extends React.Component<Props, State> {
     }
   }
 
-  renderCurrentGroups() {
-    let { currentGroups, navigation } = this.props;
-    if (currentGroups.length > 0) {
-      return (
-        <View style={styles.currentContainer}>
-          <Text style={styles.groupTitle}>CURRENT</Text>
-          <FlatList
-            data={currentGroups}
-            renderItem={this.renderCurrentGroup}
-            horizontal={true}
-            keyExtractor={({ id }, index) => id}
-          />
-        </View>
-      );
-    } else {
-      return;
-    }
-  }
-
   render() {
     const { navigation, currentGroups, publicKey, eligibleGroups } = this.props;
     let twoEligibleGroups = this.getTwoEligibleGroup();
@@ -155,9 +140,9 @@ class ConnectionsScreen extends React.Component<Props, State> {
               <View style={styles.eligibleBottomBorder} />
             </View>
           )}
-          {!!currentGroups.length &&
-            !eligibleGroups.length &&
-            this.noEligibleGroups()}
+          {!!currentGroups.length && !eligibleGroups.length && (
+            <NoEligibleGroups navigation={navigation} />
+          )}
 
           {!!currentGroups.length && (
             <View style={styles.currentContainer}>
