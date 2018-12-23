@@ -14,6 +14,7 @@ import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import emitter from '../../emitter';
+import { fakeJoinGroups } from '../../actions/fakeGroup';
 import { toggleNewGroupCoFounder } from '../GroupsScreens/actions';
 
 /**
@@ -39,7 +40,7 @@ type Props = {
 
 class ConnectionCard extends React.PureComponent<Props> {
   handleUserOptions = () => {
-    const { nameornym, publicKey } = this.props;
+    const { nameornym, publicKey, secretKey, dispatch } = this.props;
 
     Alert.alert(
       `Delete Connection`,
@@ -56,16 +57,15 @@ class ConnectionCard extends React.PureComponent<Props> {
             emitter.emit('removeConnection', publicKey);
           },
         },
+        {
+          text: 'Join All Groups',
+          onPress: () => {
+            dispatch(fakeJoinGroups({ publicKey, secretKey }));
+          },
+        },
       ],
       { cancelable: true },
     );
-  };
-
-  handleGroupSelect = () => {
-    console.log('pressed');
-    let { toggleCoFounder, publicKey } = this.props;
-    toggleCoFounder(publicKey);
-    // alert(JSON.stringify(Object.keys(this.props)));
   };
 
   trustScoreColor = () => {
@@ -75,32 +75,6 @@ class ConnectionCard extends React.PureComponent<Props> {
     } else {
       return { color: '#e39f2f' };
     }
-  };
-
-  renderActionButton = () => {
-    const { groups, selected } = this.props;
-    if (groups) {
-      return (
-        <TouchableOpacity
-          style={styles.moreIcon}
-          onPress={this.handleGroupSelect}
-        >
-          <AntDesign
-            size={30.4}
-            name={selected ? 'checkcircle' : 'checkcircleo'}
-            color="#000"
-          />
-        </TouchableOpacity>
-      );
-    }
-    return (
-      <TouchableOpacity
-        style={styles.moreIcon}
-        onPress={this.handleUserOptions}
-      >
-        <Ionicon size={48} name="ios-more" color="#ccc" />
-      </TouchableOpacity>
-    );
   };
 
   render() {
@@ -124,7 +98,12 @@ class ConnectionCard extends React.PureComponent<Props> {
             Connected {moment(parseInt(connectionDate, 10)).fromNow()}
           </Text>
         </View>
-        {this.renderActionButton()}
+        <TouchableOpacity
+          style={styles.moreIcon}
+          onPress={this.handleUserOptions}
+        >
+          <Ionicon size={48} name="ios-more" color="#ccc" />
+        </TouchableOpacity>
       </View>
     );
   }
@@ -191,10 +170,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(
-  null,
-  (dispatch) => ({
-    toggleCoFounder: (publicKey) =>
-      dispatch(toggleNewGroupCoFounder(publicKey)),
-  }),
-)(ConnectionCard);
+export default connect()(ConnectionCard);

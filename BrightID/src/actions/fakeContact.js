@@ -6,9 +6,11 @@ import { Alert } from 'react-native';
 import { names } from '../utils/fakeNames';
 import api from '../Api/brightId';
 import { setConnectUserData } from './index';
+import { strToUint8Array, uInt8ArrayToB64 } from '../utils/encoding';
 
-export const addConnection = (navigation) => async (dispatch) => {
+export const addConnection = (navigation) => async (dispatch, getState) => {
   const { publicKey, secretKey } = nacl.sign.keyPair();
+  const { main } = getState();
 
   let creationResponse = await api.createUser(publicKey);
   console.log(creationResponse.data);
@@ -20,10 +22,18 @@ export const addConnection = (navigation) => async (dispatch) => {
     const trustScore = `${Math.floor(Math.random() * 99)}.${Math.floor(
       Math.random() * 9,
     )}`;
+    const timestamp = Date.now();
+    const base64Key = uInt8ArrayToB64(publicKey);
+    const message = base64Key + uInt8ArrayToB64(main.publicKey) + timestamp;
+    const signedMessage = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
 
     const userData = {
       publicKey,
+      timestamp,
       secretKey,
+      signedMessage,
       nameornym,
       trustScore,
       avatar: 'https://loremflickr.com/180/180/all',

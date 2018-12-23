@@ -12,7 +12,9 @@ export const postData = (data: string) => async (_, getState: () => {main: {conn
     },
   })
     .then((res) => {
-      console.log(res.status);
+      if (res.status === 200) {
+        console.log('successfully uploaded data')
+      }
     })
     .catch((err) => {
       console.log(err);

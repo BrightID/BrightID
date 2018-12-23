@@ -7,11 +7,8 @@ import store from '../store';
 import server from './server';
 import emitter from '../emitter';
 
-class BrightId
-{
-
-  constructor()
-  {
+class BrightId {
+  constructor() {
     this.api = create({
       baseURL: BrightId.baseURL,
     });
@@ -21,8 +18,7 @@ class BrightId
     });
   }
 
-  static get baseURL()
-  {
+  static get baseURL() {
     return server.apiUrl;
   }
 
@@ -49,6 +45,7 @@ class BrightId
       sig2,
       timestamp,
     };
+    console.log(requestParams);
     return this.api
       .put(`/connections`, requestParams)
       .then((response) => BrightId.noContentResponse(response))
@@ -61,7 +58,9 @@ class BrightId
     const b64key2 = uInt8ArrayToB64(publicKey2);
     const timestamp = Date.now();
     const message = b64key1 + b64key2 + timestamp;
-    let sig1 = uInt8ArrayToB64(nacl.sign.detached(strToUint8Array(message), secretKey));
+    let sig1 = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
     let requestParams = {
       publicKey1: b64key1,
       publicKey2: b64key2,
@@ -79,7 +78,9 @@ class BrightId
     let timestamp = Date.now();
     let publicKeyStr = uInt8ArrayToB64(publicKey);
     let message = publicKeyStr + groupId + timestamp;
-    let sig = uInt8ArrayToB64(nacl.sign.detached(strToUint8Array(message), secretKey));
+    let sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
 
     let requestParams = {
       publicKey: publicKeyStr,
@@ -99,7 +100,9 @@ class BrightId
     let timestamp = Date.now();
     let publicKeyStr = uInt8ArrayToB64(publicKey);
     let message = publicKeyStr + timestamp;
-    let sig = uInt8ArrayToB64(nacl.sign.detached(strToUint8Array(message), secretKey));
+    let sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
 
     let requestParams = {
       publicKey: publicKeyStr,
@@ -126,17 +129,16 @@ class BrightId
     let timestamp = Date.now();
     let publicKeyStr = uInt8ArrayToB64(publicKey);
     let message = publicKeyStr + timestamp;
-    let sig = uInt8ArrayToB64(nacl.sign.detached(strToUint8Array(message), secretKey));
+    let sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
     return this.api
       .post(`/fetchUserInfo`, { publicKey: publicKeyStr, sig, timestamp })
       .then((response) => response.data)
       .catch((error) => (error.data ? error.data : error));
   }
 
-  createGroup(
-    publicKey2: Uint8Array,
-    publicKey3: Uint8Array,
-  ) {
+  createGroup(publicKey2: Uint8Array, publicKey3: Uint8Array) {
     const { publicKey, secretKey } = store.getState().main;
     const timestamp = Date.now();
     const key1 = uInt8ArrayToB64(publicKey);
@@ -144,7 +146,9 @@ class BrightId
     const key3 = uInt8ArrayToB64(publicKey3);
     const message = key1 + key2 + key3 + timestamp;
 
-    const sig1 = uInt8ArrayToB64(nacl.sign.detached(strToUint8Array(message), secretKey));
+    const sig1 = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
 
     let requestParams = {
       publicKey1: key1,
@@ -154,30 +158,30 @@ class BrightId
       timestamp,
     };
     console.log(requestParams);
-    // return this.api
-    //   .post(`/groups`, requestParams)
-    //   .then((response) => response.data)
-    //   .catch((error) => (error.data ? error.data : error));
-    return fetch(`${BrightId.baseURL}/groups`, {
-      method: 'POST', // or 'PUT'
-      body: JSON.stringify(requestParams),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.indexOf('application/json') !== -1) {
-          return response.json();
-        } else {
-          return response.text();
-        }
-      })
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
+    return this.api
+      .post(`/groups`, requestParams)
+      .then((response) => response.data)
       .catch((error) => (error.data ? error.data : error));
+    // return fetch(`${BrightId.baseURL}/groups`, {
+    //   method: 'POST', // or 'PUT'
+    //   body: JSON.stringify(requestParams),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    //   .then((response) => {
+    //     const contentType = response.headers.get('content-type');
+    //     if (contentType && contentType.indexOf('application/json') !== -1) {
+    //       return response.json();
+    //     } else {
+    //       return response.text();
+    //     }
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //     return res;
+    //   })
+    //   .catch((error) => (error.data ? error.data : error));
   }
 
   deleteGroup(groupId) {
@@ -185,7 +189,9 @@ class BrightId
     let timestamp = Date.now();
     let publicKeyStr = uInt8ArrayToB64(publicKey);
     let message = publicKeyStr + groupId + timestamp;
-    let sig = uInt8ArrayToB64(nacl.sign.detached(strToUint8Array(message), secretKey));
+    let sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
 
     let requestParams = {
       publicKey: publicKeyStr,
@@ -202,10 +208,8 @@ class BrightId
   ip(): string {
     return this.api.get('/ip').then((response) => response.data.data.ip);
   }
-
 }
 
 const brightId = new BrightId();
 
 export default brightId;
-

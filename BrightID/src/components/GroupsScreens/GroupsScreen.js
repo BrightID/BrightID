@@ -18,7 +18,6 @@ import EligibleGroupCard from './EligibleGroupCard';
 import CurrentGroupCard from './CurrentGroupCard';
 import BottomNav from '../BottomNav';
 import reloadUserInfo from '../../actions/reloadUserInfo';
-import { uInt8ArrayToUrlSafeB64 } from '../../utils/encoding';
 import { NoCurrentGroups, EmptyFullScreen } from './EmptyGroups';
 
 /**
@@ -63,6 +62,7 @@ class ConnectionsScreen extends React.Component<Props, State> {
   }) => <CurrentGroupCard name={item.nameornym} trustScore={item.score} />;
 
   refreshUserInfo = async () => {
+    console.log('refreshing user info');
     let { dispatch } = this.props;
     this.setState({ userInfoLoading: true });
     await dispatch(reloadUserInfo());
@@ -85,59 +85,11 @@ class ConnectionsScreen extends React.Component<Props, State> {
     return groups;
   }
 
-  mapPublicKeysToNames(publicKeys) {
-    let { connections } = this.props;
-    let names = [];
-    let user = uInt8ArrayToUrlSafeB64(this.props.publicKey);
-    publicKeys.map((publicKey) => {
-      if (publicKey === user) names.push('You');
-      else {
-        let findedConnection = connections.find(
-          (connection) =>
-            uInt8ArrayToUrlSafeB64(connection.publicKey) === publicKey,
-        );
-        names.push(
-          findedConnection
-            ? findedConnection.nameornym.split(' ')[0]
-            : 'Unknown',
-        );
-      }
-    });
-    return names;
-  }
-
   noEligibleGroups = () => (
     <View style={styles.emptyContainer}>
       <Text style={styles.emptyText}>No Eligible Groups</Text>
     </View>
   );
-
-  renderEligibleGroups() {
-    let { eligibleGroups, publicKey } = this.props;
-
-    let twoEligibleGroups = this.getTwoEligibleGroup();
-    if (eligibleGroups.length > 0) {
-      return (
-        <View style={styles.eligibleContainer}>
-          <Text style={styles.groupTitle}>ELIGIBLE</Text>
-          {twoEligibleGroups.map((group) => (
-            <EligibleGroupCard
-              key={group.id}
-              groupId={group.id}
-              names={this.mapPublicKeysToNames(group.knownMembers)}
-              alreadyIn={
-                group.knownMembers.indexOf(uInt8ArrayToUrlSafeB64(publicKey)) >= 0
-              }
-              trustScore={group.trustScore}
-              isNew={false}
-            />
-          ))}
-        </View>
-      );
-    } else {
-      return this.noEligibleGroups();
-    }
-  }
 
   renderSeeAllButtom() {
     let { eligibleGroups } = this.props;
@@ -196,22 +148,11 @@ class ConnectionsScreen extends React.Component<Props, State> {
           )}
           {!!eligibleGroups.length && (
             <View style={styles.eligibleContainer}>
-              <Text style={styles.groupTitle}>ELIGIBLE</Text>
+              <Text style={styles.eligibleGroupTitle}>ELIGIBLE</Text>
               {twoEligibleGroups.map((group) => (
-                <EligibleGroupCard
-                  key={group.id}
-                  groupId={group.id}
-                  names={this.mapPublicKeysToNames(group.knownMembers)}
-                  alreadyIn={
-                    group.knownMembers.indexOf(
-                      uInt8ArrayToUrlSafeB64(publicKey),
-                    ) >= 0
-                  }
-                  trustScore={group.trustScore}
-                  isNew={false}
-                />
+                <EligibleGroupCard key={group.id} group={group} isNew={false} />
               ))}
-              <View style={styles.eligibleBottomView} />
+              <View style={styles.eligibleBottomBorder} />
             </View>
           )}
           {!!currentGroups.length &&
@@ -268,24 +209,28 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   eligibleContainer: {
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
     marginTop: 7,
-    paddingTop: 9,
     width: '100%',
+    height: '45%',
     alignItems: 'center',
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
-  groupTitle: {
+  eligibleGroupTitle: {
     fontFamily: 'ApexNew-Book',
     fontSize: 18,
     paddingBottom: 5,
+    paddingTop: 9,
+    backgroundColor: '#fff',
+    width: '100%',
+    textAlign: 'center',
   },
-  eligibleBottomView: {
+  eligibleBottomBorder: {
     borderTopColor: '#e3e0e4',
     borderTopWidth: 1,
-    width: '90%',
+    width: '100%',
   },
   seeAllButton: {
     width: '100%',
@@ -311,6 +256,7 @@ const styles = StyleSheet.create({
     marginTop: 9,
     paddingTop: 9,
     width: '100%',
+    height: '50%',
     alignItems: 'center',
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },

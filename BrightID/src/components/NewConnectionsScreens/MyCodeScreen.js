@@ -10,7 +10,7 @@ import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import { genQrData } from './actions/genQrData';
 import { encryptAndUploadLocalData } from './actions/encryptData';
-import { setUpWs, closeWs } from './actions/websocket';
+import { setUpWs } from './actions/websocket';
 import emitter from '../../emitter';
 import { removeConnectQrData } from '../../actions';
 
@@ -74,7 +74,7 @@ class MyCodeScreen extends React.Component<Props, State> {
   componentWillUnmount() {
     clearTimeout(this.connectionExpired);
     emitter.off('connectDataReady', this.navigateToPreview);
-    this.socket.close();
+    if (this.socket) this.socket.close();
   }
 
   navigateToPreview = () => {

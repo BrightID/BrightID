@@ -50,6 +50,7 @@
     "react-native-linear-gradient": "^2.5.3",
     "react-native-os": "^1.0.1",
     "react-native-randombytes": "^3.5.1",
+    "react-native-selection-menu": "^0.0.1",
     "react-native-snap-carousel": "^3.7.5",
     "react-native-spinkit": "^1.1.1",
     "react-native-status-bar-height": "^2.1.0",
