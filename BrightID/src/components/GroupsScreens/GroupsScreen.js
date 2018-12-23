@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationEvents } from 'react-navigation';
+import { splitEvery, take } from 'ramda';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SearchGroups from './SearchGroups';
 import EligibleGroupCard from './EligibleGroupCard';
@@ -59,11 +60,15 @@ class ConnectionsScreen extends React.Component<Props, State> {
     userInfoLoading: false,
   };
 
-  renderCurrentGroup = ({
-    item,
-  }: {
-    item: { nameornym: string, score: string },
-  }) => <CurrentGroupCard name={item.nameornym} trustScore={item.score} />;
+  renderCurrentGroup({ item }) {
+    const [group1, group2] = item;
+    return (
+      <View style={styles.currentGroupRow}>
+        {!!group1 && <CurrentGroupCard group={group1} />}
+        {!!group2 && <CurrentGroupCard group={group2} />}
+      </View>
+    );
+  }
 
   refreshUserInfo = async () => {
     console.log('refreshing user info');
@@ -76,48 +81,28 @@ class ConnectionsScreen extends React.Component<Props, State> {
 
   getTwoEligibleGroup() {
     let { eligibleGroups } = this.props;
-    let groups = eligibleGroups.filter(
-      (group: { isNew: boolean }) => group.isNew,
+    let groups = eligibleGroups
+      .filter((group: { isNew: boolean }) => group.isNew)
+      .concat(eligibleGroups.filter((group) => !group.isNew));
+    if (groups.length === 1) groups.push('');
+    return take(2, groups).map((group) =>
+      group ? (
+        <EligibleGroupCard key={group.id} group={group} isNew={false} />
+      ) : (
+        <View style={styles.emptyContainer} />
+      ),
     );
-    if (groups.length < 2) {
-      Array.prototype.push.apply(
-        groups,
-        eligibleGroups.filter((group) => !group.isNew),
-      );
-    }
-    if (groups.length > 2) groups = [groups[0], groups[1]];
-    return groups;
-  }
-
-  noEligibleGroups = () => (
-    <View style={styles.emptyContainer}>
-      <Text style={styles.emptyText}>No Eligible Groups</Text>
-    </View>
-  );
-
-  renderSeeAllButtom() {
-    let { eligibleGroups } = this.props;
-    if (eligibleGroups.length > 2) {
-      return (
-        <TouchableOpacity style={styles.seeAllButton}>
-          <Text style={styles.seeAllText}>
-            See all {this.props.eligibleGroups.length}
-          </Text>
-        </TouchableOpacity>
-      );
-    } else {
-      return <View />;
-    }
   }
 
   render() {
     const { navigation, currentGroups, publicKey, eligibleGroups } = this.props;
-    let twoEligibleGroups = this.getTwoEligibleGroup();
+    const groupPairs =
+      currentGroups.length > 2 ? splitEvery(2, currentGroups) : [currentGroups];
+    console.log(groupPairs);
     return (
       <View style={styles.container}>
         <View style={styles.mainContainer}>
           <NavigationEvents onDidFocus={this.refreshUserInfo} />
-
           {eligibleGroups.length || currentGroups.length ? (
             <SearchGroups />
           ) : (
@@ -134,10 +119,13 @@ class ConnectionsScreen extends React.Component<Props, State> {
           {!!eligibleGroups.length && (
             <View style={styles.eligibleContainer}>
               <Text style={styles.eligibleGroupTitle}>ELIGIBLE</Text>
-              {twoEligibleGroups.map((group) => (
-                <EligibleGroupCard key={group.id} group={group} isNew={false} />
-              ))}
+              {this.getTwoEligibleGroup()}
               <View style={styles.eligibleBottomBorder} />
+              <TouchableOpacity style={styles.seeAllButton}>
+                <Text style={styles.seeAllText}>
+                  See all {this.props.eligibleGroups.length}
+                </Text>
+              </TouchableOpacity>
             </View>
           )}
           {!!currentGroups.length && !eligibleGroups.length && (
@@ -146,12 +134,11 @@ class ConnectionsScreen extends React.Component<Props, State> {
 
           {!!currentGroups.length && (
             <View style={styles.currentContainer}>
-              <Text style={styles.groupTitle}>CURRENT</Text>
+              <Text style={styles.currentGroupTitle}>CURRENT</Text>
               <FlatList
-                data={currentGroups}
+                data={groupPairs}
                 renderItem={this.renderCurrentGroup}
-                horizontal={true}
-                keyExtractor={({ id }) => id}
+                keyExtractor={([group1]) => group1 && group1.id}
               />
             </View>
           )}
@@ -186,19 +173,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f9f9f9',
+    alignItems: 'center',
+    width: '100%',
   },
   mainContainer: {
     flex: 1,
+    width: '100%',
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
+    backgroundColor: '#fff',
+    paddingBottom: 40,
   },
   eligibleContainer: {
     // backgroundColor: '#fff',
     marginTop: 7,
     width: '100%',
-    height: '45%',
+    maxHeight: '55%',
     alignItems: 'center',
+    justifyContent: 'flex-start',
+    shadowColor: 'rgba(0,0,0,0.32)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+  },
+  currentContainer: {
+    backgroundColor: '#fff',
+    paddingTop: 9,
+    width: '100%',
+    minHeight: '45%',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
@@ -212,6 +216,22 @@ const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center',
   },
+  currentGroupTitle: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 18,
+    paddingBottom: 5,
+    paddingTop: 9,
+    backgroundColor: '#fff',
+    width: '100%',
+    textAlign: 'center',
+    color: '#4a4a4a',
+    textShadowColor: 'rgba(0, 0, 0, 0.09)',
+    textShadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    textShadowRadius: 4,
+  },
   eligibleBottomBorder: {
     borderTopColor: '#e3e0e4',
     borderTopWidth: 1,
@@ -222,6 +242,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: 38,
+    backgroundColor: '#fff',
   },
   seeAllText: {
     fontFamily: 'ApexNew-Medium',
@@ -236,20 +257,11 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e3e0e4',
     borderBottomWidth: 1,
   },
-  currentContainer: {
-    backgroundColor: '#fff',
-    marginTop: 9,
-    paddingTop: 9,
-    width: '100%',
-    height: '50%',
-    alignItems: 'center',
-    shadowColor: 'rgba(0,0,0,0.32)',
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-  },
   currentGroupRow: {
     width: '100%',
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
   },
   addGroupButtonContainer: {
     alignItems: 'center',

@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import CurrentGroupAvatar from './CurrentGroupAvatar';
+import EligibleGroupAvatar from './EligibleGroupAvatar';
 
 /**
  * Connection Card in the Connections Screen
@@ -30,11 +30,12 @@ class CurrentGroupCard extends React.Component<Props, State> {
   };
 
   render() {
+    const { group } = this.props;
     return (
       <TouchableOpacity style={styles.container}>
-        <CurrentGroupAvatar />
-        <Text style={styles.name}>{this.props.name}</Text>
-        <Text style={styles.trustScore}>{this.props.trustScore}% Trusted</Text>
+        <EligibleGroupAvatar group={group} />
+        <Text style={styles.name}>{group.name}</Text>
+        <Text style={styles.trustScore}>{group.score}% Trusted</Text>
       </TouchableOpacity>
     );
   }
