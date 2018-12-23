@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import { AsyncStorage, StyleSheet, Text, View, Alert } from 'react-native';
+import { AsyncStorage, StyleSheet, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import HeaderButtons, {
   HeaderButton,

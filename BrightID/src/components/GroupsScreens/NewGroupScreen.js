@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     paddingTop: 13,
     paddingBottom: 12,
     marginTop: 9,
-    marginBottom: 10,
+    marginBottom: 30,
   },
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',

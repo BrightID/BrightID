@@ -57,7 +57,6 @@ class ScanCodeScreen extends React.Component<Props, State> {
     emitter.off('connectFailure', this.navigateToHome);
     emitter.off('profileNotReady', this.subscribeToProfileUpload);
     clearTimeout(this.connectionExpired);
-    this.socket.close();
   }
 
   handleBarCodeRead = ({ data }) => {
@@ -79,9 +78,12 @@ class ScanCodeScreen extends React.Component<Props, State> {
   };
 
   showProfileError = () => {
-    Alert.alert("Timeout reached", "There was a problem downloading the other person's profile. Please try again.");
+    Alert.alert(
+      'Timeout reached',
+      "There was a problem downloading the other person's profile. Please try again.",
+    );
     this.setState({ scanned: false });
-  }
+  };
 
   navigateToHome = () => {
     this.props.navigation.navigate('Home');

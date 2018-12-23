@@ -1,7 +1,7 @@
 // @flow
 
 import { AsyncStorage } from 'react-native';
-import nacl from "tweetnacl";
+import nacl from 'tweetnacl';
 import emitter from '../../../emitter';
 import { saveAvatar } from '../../../utils/filesystem';
 import { strToUint8Array, uInt8ArrayToB64 } from '../../../utils/encoding';
@@ -23,8 +23,13 @@ export const addNewConnection = () => async (
       // The other user signed a connection request; we have enough info to
       // make an API call to create the connection.
 
-      const message = uInt8ArrayToB64(connectUserData.publicKey) + uInt8ArrayToB64(publicKey) + connectUserData.timestamp;
-      const signedMessage = uInt8ArrayToB64(nacl.sign.detached(strToUint8Array(message), secretKey));
+      const message =
+        uInt8ArrayToB64(connectUserData.publicKey) +
+        uInt8ArrayToB64(publicKey) +
+        connectUserData.timestamp;
+      const signedMessage = uInt8ArrayToB64(
+        nacl.sign.detached(strToUint8Array(message), secretKey),
+      );
       let result = await api.createConnection(
         connectUserData.publicKey,
         connectUserData.signedMessage,
@@ -49,6 +54,7 @@ export const addNewConnection = () => async (
       publicKey: connectUserData.publicKey,
       nameornym: connectUserData.nameornym,
       trustScore: connectUserData.trustScore,
+      secretKey: connectUserData.secretKey || '',
       connectionDate,
       avatar: { uri: `file://${uri}` },
     };

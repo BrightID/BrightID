@@ -5961,6 +5961,11 @@ pngjs@^3.3.0:
   resolved "https://registry.yarnpkg.com/pngjs/-/pngjs-3.3.3.tgz#85173703bde3edac8998757b96e5821d0966a21b"
   integrity sha512-1n3Z4p3IOxArEs1VRXnZ/RXdfEniAUS9jb68g58FIXMNkPJeZd+Qh4Uq7/e0LVxAQGos1eIUrqrt4FpjdnEd+Q==
 
+pod-installer@0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/pod-installer/-/pod-installer-0.0.0.tgz#363290ec9f2eb7a88bc3e1f229793efdcc7c81c6"
+  integrity sha512-5GFFvaXwESMx0QoopeJqFZzi4xOqI86Lh65WqWAVuZNorUio4/ZBRx7AQBfwnBwOeGA/JjXHP+nHZmSKWGoG1g==
+
 pokemon@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/pokemon/-/pokemon-1.2.3.tgz#2b494263606408df10f6c499c299e9c2446ac05c"
@@ -6331,6 +6336,13 @@ react-native-screens@^1.0.0-alpha.11:
   version "1.0.0-alpha.17"
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-1.0.0-alpha.17.tgz#8c1a7224b967c476670963fce7d06b946e7158e9"
   integrity sha512-BvLtqbMpteXsY3XofCCX0c2LM6X14PhjN5FZraROEXuEnw8n8ImDTuXxUPDYZqq2Wjb1bLlm1zE5+c6dcGlY+Q==
+
+react-native-selection-menu@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-selection-menu/-/react-native-selection-menu-0.0.1.tgz#4712a0c2be3d4ab03e4bfcd17331567cb825cfc0"
+  integrity sha512-cOIOJbKxT4TOXpg220Ozs63pEtFECCAUM3KksMSG0723cypT7yEYy4gKPO+NR3LVKKUlQI+b9DC5Bg67FyDHOw==
+  dependencies:
+    pod-installer "0.0.0"
 
 react-native-snap-carousel@^3.7.5:
   version "3.7.5"

@@ -38,29 +38,6 @@ type Props = {
 };
 
 class NewGroupCard extends React.PureComponent<Props> {
-  handleUserOptions = () => {
-    const { nameornym, publicKey } = this.props;
-
-    Alert.alert(
-      `Delete Connection`,
-      `Are you sure you want to remove ${nameornym} from your list of connections?`,
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {
-          text: 'OK',
-          onPress: () => {
-            emitter.emit('removeConnection', publicKey);
-          },
-        },
-      ],
-      { cancelable: true },
-    );
-  };
-
   handleGroupSelect = () => {
     console.log('pressed');
     let { toggleCoFounder, publicKey } = this.props;

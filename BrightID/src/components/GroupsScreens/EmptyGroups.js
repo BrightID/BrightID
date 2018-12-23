@@ -66,7 +66,12 @@ export const NoCurrentGroups = ({ navigation }: Props) => (
       <TouchableOpacity style={styles.learnMoreButton}>
         <Text style={styles.learnMoreText}>Learn More</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.createGroupButton}>
+      <TouchableOpacity
+        style={styles.createGroupButton}
+        onPress={() => {
+          navigation.navigate('NewGroup');
+        }}
+      >
         <Text style={styles.createGroupText}>Create Group</Text>
       </TouchableOpacity>
     </View>
@@ -180,8 +185,8 @@ const styles = StyleSheet.create({
     borderColor: '#4a90e2',
     borderWidth: 1,
     width: 150,
-    paddingTop: 12,
-    paddingBottom: 11,
+    paddingTop: 15,
+    paddingBottom: 15,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -197,8 +202,8 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     backgroundColor: '#4a90e2',
     width: 150,
-    paddingTop: 13,
-    paddingBottom: 12,
+    paddingTop: 16,
+    paddingBottom: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },

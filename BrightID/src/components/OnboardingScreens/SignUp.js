@@ -121,6 +121,7 @@ class SignUp extends React.Component<Props, State> {
       quality: 0.8,
       allowsEditing: true,
       loadingLabelText: 'loading photo...',
+      customButtons: [{ name: 'random', title: 'Random Avatar' }],
     };
     // loading UI to account for the delay after picking an image
     this.imagePickingTrue();
@@ -131,6 +132,8 @@ class SignUp extends React.Component<Props, State> {
       } else if (response.error) {
         Alert.alert('ERROR', response.error);
         this.imagePickingFalse();
+      } else if (response.customButton) {
+        this.randomAvatar()
       } else {
         const mime = mimeFromUri(response.uri);
         const avatar = {
