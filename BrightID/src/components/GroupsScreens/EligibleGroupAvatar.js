@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import { without } from 'ramda';
+import { NavigationEvents } from 'react-navigation';
 import { uInt8ArrayToUrlSafeB64 } from '../../utils/encoding';
 
 /**
@@ -31,13 +32,15 @@ class EligibleGroupAvatar extends React.Component<Props> {
   retreiveAvatars() {
     const { group, connections } = this.props;
     const { knownMembers, founders } = group;
+    const userPk = uInt8ArrayToUrlSafeB64(this.props.publicKey);
     const findConnection = (publicKey) =>
       connections.find(
         (connection) =>
           uInt8ArrayToUrlSafeB64(connection.publicKey) === publicKey,
       ) || { avatar: { uri: '' } };
     const avatarSrc = knownMembers.map((publicKey) => {
-      const { avatar } = findConnection(publicKey);
+      const { avatar } =
+        userPk === publicKey ? this.props : findConnection(publicKey);
       return { avatar, faded: false };
     });
     without(knownMembers, founders).forEach((publicKey) => {
@@ -45,7 +48,7 @@ class EligibleGroupAvatar extends React.Component<Props> {
       avatarSrc.push({ avatar, faded: true });
     });
     console.log(avatarSrc);
-    // this.setState({ avatarSrc });
+    this.setState({ avatarSrc });
   }
 
   render() {
@@ -54,25 +57,30 @@ class EligibleGroupAvatar extends React.Component<Props> {
 
     return (
       <View style={styles.container}>
+        <NavigationEvents
+          onDidFocus={() => {
+            this.retreiveAvatars();
+          }}
+        />
         <View style={styles.topAvatars}>
           {!!avatarSrc[0] && (
             <Image
-              source={avatar || require('../../static/default_avatar.jpg')}
-              style={[styles.avatar]}
+              source={avatarSrc[0].avatar}
+              style={[styles.avatar, avatarSrc[0].faded ? styles.faded : '']}
             />
           )}
         </View>
         <View style={styles.bottomAvatars}>
           {!!avatarSrc[1] && (
             <Image
-              source={avatar || require('../../static/default_avatar.jpg')}
-              style={[styles.avatar, true ? styles.faded : '']}
+              source={avatarSrc[1].avatar}
+              style={[styles.avatar, avatarSrc[1].faded ? styles.faded : '']}
             />
           )}
           {!!avatarSrc[2] && (
             <Image
-              source={avatar || require('../../static/default_avatar.jpg')}
-              style={[styles.avatar, true ? styles.faded : '']}
+              source={avatarSrc[2].avatar}
+              style={[styles.avatar, avatarSrc[2].faded ? styles.faded : '']}
             />
           )}
         </View>

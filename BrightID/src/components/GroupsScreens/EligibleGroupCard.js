@@ -124,7 +124,6 @@ class EligibleGroupCard extends React.Component<Props> {
 
   mapPublicKeysToNames() {
     let { connections, nameornym, group } = this.props;
-    console.log(connections);
     let user = uInt8ArrayToUrlSafeB64(this.props.publicKey);
     const findConnection = (publicKey) =>
       connections.find(
