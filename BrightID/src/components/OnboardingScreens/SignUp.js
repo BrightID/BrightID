@@ -121,8 +121,13 @@ class SignUp extends React.Component<Props, State> {
       quality: 0.8,
       allowsEditing: true,
       loadingLabelText: 'loading photo...',
-      customButtons: [{ name: 'random', title: 'Random Avatar' }],
     };
+
+    if(__DEV__){
+      options.customButtons = [
+        { name: 'random', title: 'Random Avatar' }
+      ]
+    }
     // loading UI to account for the delay after picking an image
     this.imagePickingTrue();
 
