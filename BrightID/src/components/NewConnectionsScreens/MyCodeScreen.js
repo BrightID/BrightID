@@ -148,7 +148,7 @@ class MyCodeScreen extends React.Component<Props, State> {
               To make a new connection, you will share your
             </Text>
             <Text style={styles.myCodeInfoText}>
-              name, your photo, your trust score
+              name, your photo, your score
             </Text>
           </View>
           <View style={styles.avatarContainer}>
