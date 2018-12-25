@@ -42,28 +42,33 @@ class ConnectionCard extends React.PureComponent<Props> {
   handleUserOptions = () => {
     const { nameornym, publicKey, secretKey, dispatch } = this.props;
 
+    const buttons = [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: () => {
+          emitter.emit('removeConnection', publicKey);
+        },
+      }
+    ];
+
+    if(__DEV__){
+      buttons.push({
+        text: 'Join All Groups',
+        onPress: () => {
+          dispatch(fakeJoinGroups({ publicKey, secretKey }));
+        },
+      })
+    }
+
     Alert.alert(
       `Delete Connection`,
       `Are you sure you want to remove ${nameornym} from your list of connections?`,
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {
-          text: 'OK',
-          onPress: () => {
-            emitter.emit('removeConnection', publicKey);
-          },
-        },
-        {
-          text: 'Join All Groups',
-          onPress: () => {
-            dispatch(fakeJoinGroups({ publicKey, secretKey }));
-          },
-        },
-      ],
+      buttons,
       { cancelable: true },
     );
   };
