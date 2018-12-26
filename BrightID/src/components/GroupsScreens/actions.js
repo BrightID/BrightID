@@ -48,7 +48,7 @@ export const creatNewGroup = () => async (
   if (response.data && response.data.id) return true;
 };
 
-export const joinToGroup = (groupId) => async (
+export const joinGroup = (groupId) => async (
   dispatch: () => null,
   getState: () => {},
 ) => {

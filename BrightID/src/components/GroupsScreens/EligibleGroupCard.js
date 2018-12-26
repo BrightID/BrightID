@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import GroupAvatar from './EligibleGroupAvatar';
 import { uInt8ArrayToUrlSafeB64 } from '../../utils/encoding';
-import { deleteNewGroup, joinToGroup } from './actions';
+import { deleteNewGroup, joinGroup } from './actions';
 
 /**
  * Connection Card in the Connections Screen
@@ -73,7 +73,7 @@ class EligibleGroupCard extends React.Component<Props> {
           onPress: async () => {
             try {
               let result = await this.props.dispatch(
-                deleteNewGroup(this.props.groupId),
+                deleteNewGroup(this.props.group.id),
               );
               alert(
                 result.success
@@ -93,13 +93,16 @@ class EligibleGroupCard extends React.Component<Props> {
   joinThisGroup = async () => {
     try {
       let result = await this.props.dispatch(
-        joinToGroup(this.props.groupId),
+        joinGroup(this.props.group.id),
       );
-      alert(
-        result.success
-          ? 'You joined the group'
-          : JSON.stringify(result, null, 4),
-      );
+      if (result.success) {
+        Alert.alert(
+          "\u2728 You joined the group!"
+        );
+      } else {
+        Alert.alert('Failed to join the group', JSON.stringify(result, null, 4));
+      }
+
     } catch (err) {
       console.log(err);
     }
