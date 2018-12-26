@@ -1,11 +1,7 @@
 // @flow
 
-import { SEED_URL, SEED_URL_DEV } from 'react-native-dotenv';
+import { SEED_URL } from 'react-native-dotenv';
 import emitter from '../emitter';
-
-if (__DEV__){
-  SEED_URL = SEED_URL_DEV;
-}
 
 class Server {
   constructor(seedURL: string) {
