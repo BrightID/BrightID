@@ -23,14 +23,11 @@ type Props = {
 };
 
 export default class BottomNav extends React.Component<Props> {
-  pressCount = 0;
+
   handleCheatPageNavigation = () => {
-    this.pressCount++;
-    if (this.pressCount === 4) this.props.navigation.navigate('CheatPage');
-    if (this.timeOutHandler) clearTimeout(this.timeOutHandler);
-    this.timeOutHandler = setTimeout(() => {
-      this.pressCount = 0;
-    }, 300);
+    if (__DEV__) {
+      this.props.navigation.navigate('CheatPage');
+    }
   };
 
   render() {
@@ -83,7 +80,7 @@ export default class BottomNav extends React.Component<Props> {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => this.handleCheatPageNavigation()}
+          onPress={this.handleCheatPageNavigation}
           accessible={true}
           accessibilityLabel="Apps"
         >

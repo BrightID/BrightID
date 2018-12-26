@@ -29,15 +29,15 @@ class EligibleGroupCard extends React.Component<Props> {
     <View style={styles.approvalButtonContainer}>
       <TouchableOpacity
         style={styles.moreIcon}
-        onPress={() => this.deleteThisGroup()}
+        onPress={this.deleteThisGroup}
       >
-        <AntDesign size={30} name="closecircleo" color="#000" />
+        <AntDesign size={30} name="closecircleo" color="#000"/>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.moreIcon}
-        onPress={() => this.joinThisGroup()}
+        onPress={this.joinThisGroup}
       >
-        <AntDesign size={30} name="checkcircleo" color="#000" />
+        <AntDesign size={30} name="checkcircleo" color="#000"/>
       </TouchableOpacity>
     </View>
   );
@@ -60,8 +60,8 @@ class EligibleGroupCard extends React.Component<Props> {
 
   deleteThisGroup = () => {
     Alert.alert(
-      'WARNING',
-      'Are you sure to delete this group?',
+      'Delete Group',
+      'Delete this group?',
       [
         {
           text: 'Cancel',
@@ -90,36 +90,19 @@ class EligibleGroupCard extends React.Component<Props> {
     );
   };
 
-  joinThisGroup = () => {
-    Alert.alert(
-      'ATTENTION',
-      'Are you sure to join to this group?',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {
-          text: 'Sure',
-          onPress: async () => {
-            try {
-              let result = await this.props.dispatch(
-                joinToGroup(this.props.groupId),
-              );
-              alert(
-                result.success
-                  ? 'You joined to the group successfully'
-                  : JSON.stringify(result, null, 4),
-              );
-            } catch (err) {
-              console.log(err);
-            }
-          },
-        },
-      ],
-      { cancelable: true },
-    );
+  joinThisGroup = async () => {
+    try {
+      let result = await this.props.dispatch(
+        joinToGroup(this.props.groupId),
+      );
+      alert(
+        result.success
+          ? 'You joined the group'
+          : JSON.stringify(result, null, 4),
+      );
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   mapPublicKeysToNames() {
