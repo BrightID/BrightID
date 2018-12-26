@@ -3,15 +3,16 @@
 import { SEED_URL, SEED_URL_DEV } from 'react-native-dotenv';
 import emitter from '../emitter';
 
+const seedUrl = SEED_URL
 if (__DEV__){
-  SEED_URL = SEED_URL_DEV;
+  seedUrl = SEED_URL_DEV;
 }
 
 class Server {
-  constructor(seedURL: string) {
-    // for now set the baseURL to the seedURL since there is only one server
+  constructor(seedUrl: string) {
+    // for now set the baseURL to the seedUrl since there is only one server
 
-    this.baseURL = seedURL;
+    this.baseURL = seedUrl;
 
     // TODO: get a list of nodes from the seed node through an API call
     //  https://github.com/BrightID/BrightID/issues/191
@@ -46,6 +47,6 @@ class Server {
   }
 }
 
-const server = new Server(SEED_URL);
+const server = new Server(seedUrl);
 
 export default server;
