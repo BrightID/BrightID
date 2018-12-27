@@ -1,7 +1,7 @@
 // @flow
 
 import {
-  USER_TRUST_SCORE,
+  USER_SCORE,
   GROUPS_COUNT,
   SEARCH_PARAM,
   SET_NEW_GROUP_CO_FOUNDERS,
@@ -54,7 +54,7 @@ const arbiterSchema = {
  * INITIAL STATE
  * structure the state of the app here
  *
- * @param trustScore String
+ * @param score number
  * @param name String
  * @param avatar Image
  * @param groupsCount Number
@@ -63,10 +63,10 @@ const arbiterSchema = {
  */
 
 export const initialState: Main = {
-  trustScore: '',
+  score: 0,
   nameornym: '',
   avatar: '',
-  groupsCount: '',
+  groupsCount: 0,
   searchParam: '',
   newGroupCoFounders: [],
   eligibleGroups: [],
@@ -95,10 +95,10 @@ export const initialState: Main = {
 export const mainReducer = (state: Main = initialState, action: {}) => {
   const connections = state.connections.slice();
   switch (action.type) {
-    case USER_TRUST_SCORE:
+    case USER_SCORE:
       return {
         ...state,
-        trustScore: action.trustScore,
+        score: action.score,
       };
     case GROUPS_COUNT:
       return {

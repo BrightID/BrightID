@@ -1,7 +1,7 @@
 // @flow
 
 import nacl from 'tweetnacl';
-import { userTrustScore, setGroupsCount, setUserData } from './index';
+import { userScore, setGroupsCount, setUserData } from './index';
 import { b64ToUint8Array } from '../utils/encoding';
 
 /**
@@ -30,7 +30,7 @@ export const setUpDefault = (userData: Object) => async (
     }
 
     // populate the app with dummy data for now
-    dispatch(userTrustScore('98.5'));
+    dispatch(userScore(0));
     dispatch(setGroupsCount(0));
   } catch (err) {
     console.log(err);

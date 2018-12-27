@@ -22,7 +22,7 @@ import { toggleNewGroupCoFounder } from '../GroupsScreens/actions';
  * is created from an array of connections
  * each connection should have:
  * @prop name
- * @prop trustScore
+ * @prop score
  * @prop connectionTime
  * @prop avatar
  */
@@ -30,7 +30,7 @@ import { toggleNewGroupCoFounder } from '../GroupsScreens/actions';
 type Props = {
   nameornym: string,
   avatar: string,
-  trustScore: string,
+  score: number,
   connectionDate: string,
   publicKey: string,
   style: {},
@@ -74,8 +74,8 @@ class ConnectionCard extends React.PureComponent<Props> {
   };
 
   trustScoreColor = () => {
-    const { trustScore } = this.props;
-    if (parseFloat(trustScore) >= 85) {
+    const { score } = this.props;
+    if (score >= 85) {
       return { color: '#139c60' };
     } else {
       return { color: '#e39f2f' };
@@ -83,7 +83,7 @@ class ConnectionCard extends React.PureComponent<Props> {
   };
 
   render() {
-    const { avatar, nameornym, trustScore, connectionDate, style } = this.props;
+    const { avatar, nameornym, score, connectionDate, style } = this.props;
 
     return (
       <View style={{ ...styles.container, ...style }}>
@@ -96,7 +96,7 @@ class ConnectionCard extends React.PureComponent<Props> {
           <View style={styles.trustScoreContainer}>
             <Text style={styles.trustScoreLeft}>Score:</Text>
             <Text style={[styles.trustScoreRight, this.trustScoreColor()]}>
-              {trustScore}
+              {score}
             </Text>
           </View>
           <Text style={styles.connectedText}>

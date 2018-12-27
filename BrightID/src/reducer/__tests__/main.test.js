@@ -3,7 +3,7 @@
 import nacl from 'tweetnacl';
 import { mainReducer, initialState } from '../main';
 import {
-  USER_TRUST_SCORE,
+  USER_SCORE,
   GROUPS_COUNT,
   SEARCH_PARAM,
   UPDATE_CONNECTIONS,
@@ -16,11 +16,11 @@ describe('main reducer', () => {
     expect(mainReducer(undefined, {})).toMatchSnapshot();
   });
 
-  test('should update USER_TRUST_SCORE', () => {
+  test('should update USER_SCORE', () => {
     expect(
       mainReducer(undefined, {
-        type: USER_TRUST_SCORE,
-        trustScore: '99.9',
+        type: USER_SCORE,
+        score: 99.9,
       }),
     ).toMatchSnapshot();
   });
@@ -85,11 +85,11 @@ describe('main reducer', () => {
   });
 });
 
-test('should update USER_TRUST_SCORE', () => {
+test('should update USER_SCORE', () => {
   expect(
     mainReducer(undefined, {
-      type: USER_TRUST_SCORE,
-      trustScore: '99.9',
+      type: USER_SCORE,
+      score: 99.9,
     }),
   ).toEqual({
     ...initialState,

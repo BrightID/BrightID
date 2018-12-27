@@ -1,6 +1,6 @@
 // @flow
 
-export const USER_TRUST_SCORE = 'USER_TRUST_SCORE';
+export const USER_SCORE = 'USER_SCORE';
 export const CONNECTION_TRUST_SCORE = 'CONNECTION_TRUST_SCORE';
 export const GROUPS_COUNT = 'GROUPS_COUNT';
 export const SEARCH_PARAM = 'SEARCH_PARAM';
@@ -40,15 +40,15 @@ export const SET_CONNECT_USER_DATA = 'SET_CONNECT_USER_DATA';
 export const REMOVE_CONNECT_USER_DATA = 'REMOVE_CONNECT_USER_DATA';
 
 /**
- * redux action creator that updates user `trustScore`
- * @param type USER_TRUST_SCORE
- * @param trustScore string fetched from server
+ * redux action creator that updates user `score`
+ *
+ * @param score number fetched from server
  *
  */
 
-export const userTrustScore = (trustScore: string) => ({
-  type: USER_TRUST_SCORE,
-  trustScore,
+export const userScore = (score: number) => ({
+  type: USER_SCORE,
+  score,
 });
 
 /**
