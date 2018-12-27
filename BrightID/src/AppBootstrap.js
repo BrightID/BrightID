@@ -29,7 +29,7 @@ export default class AppBootstrap extends React.Component<Props> {
         userData.secretKey = objToUint8(userData.secretKey);
         // update redux store
         await store.dispatch(setUserData(userData));
-        fetchUserInfo();
+        store.dispatch(fetchUserInfo());
       }
       // once everything is set up
       this.props.navigation.navigate(userData ? 'App' : 'Onboarding');
