@@ -95,14 +95,9 @@ class EligibleGroupCard extends React.Component<Props> {
       let result = await this.props.dispatch(
         joinGroup(this.props.group.id),
       );
-      if (result.success) {
-        Alert.alert(
-          "\u2728 You joined the group!"
-        );
-      } else {
+      if (!result.success) {
         Alert.alert('Failed to join the group', JSON.stringify(result, null, 4));
       }
-
     } catch (err) {
       console.log(err);
     }
