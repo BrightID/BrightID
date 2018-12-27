@@ -163,7 +163,7 @@ class SortingConnectionsScreen extends React.Component<Props> {
               }
             }}
           >
-            <Text style={styles.sortingText}>Sort by trust score </Text>
+            <Text style={styles.sortingText}>Sort by score </Text>
             {this.sortByTrustScore() ? this.renderCaret() : <View />}
           </TouchableOpacity>
         </View>

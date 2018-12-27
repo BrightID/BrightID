@@ -35,7 +35,6 @@ class CurrentGroupCard extends React.Component<Props, State> {
       <TouchableOpacity style={styles.container}>
         <EligibleGroupAvatar group={group} />
         <Text style={styles.name}>{group.name}</Text>
-        <Text style={styles.trustScore}>{group.score}% Trusted</Text>
       </TouchableOpacity>
     );
   }
