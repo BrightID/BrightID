@@ -1,7 +1,7 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { setUpDefault } from '../setUpDefault';
+import { setUserInfo } from '../setUserInfo';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -15,7 +15,7 @@ describe('async action', () => {
       nameornym: 'charlie sheen',
       avatar: 'avatar',
     };
-    return store.dispatch(setUpDefault(userData)).then(() => {
+    return store.dispatch(setUserInfo(userData)).then(() => {
       // return of async actions
       expect(store.getActions()).toMatchSnapshot();
     });
@@ -27,7 +27,7 @@ describe('async action', () => {
       nameornym: 'charlie sheen',
       avatar: 'avatar',
     };
-    return store.dispatch(setUpDefault(userData)).then(() => {
+    return store.dispatch(setUserInfo(userData)).then(() => {
       // return of async actions
       expect(store.getActions()).toMatchSnapshot();
     });

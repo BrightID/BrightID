@@ -122,7 +122,7 @@ export class HomeScreen extends React.Component<Props> {
     const {
       navigation,
       nameornym,
-      trustScore,
+      score,
       groupsCount,
       avatar,
       connections,
@@ -154,7 +154,7 @@ export class HomeScreen extends React.Component<Props> {
           <View style={styles.trustScoreContainer}>
             <Text style={styles.trustScoreLeft}>Score:</Text>
             <Text id="trustScore" style={styles.trustScoreRight}>
-              {trustScore}
+              {score}
             </Text>
           </View>
           <View style={styles.countsContainer}>
@@ -166,7 +166,7 @@ export class HomeScreen extends React.Component<Props> {
             </View>
             <View style={styles.countsGroup}>
               <Text id="groupsCount" style={styles.countsNumberText}>
-                {groupsCount || 0}
+                {groupsCount}
               </Text>
               <Text style={styles.countsDescriptionText}>Groups</Text>
             </View>

@@ -4,8 +4,9 @@ import * as React from 'react';
 import { AsyncStorage, StatusBar, StyleSheet, View } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import store from './store';
-import { setUpDefault } from './actions/setUpDefault';
 import { objToUint8 } from './utils/encoding';
+import { setUserData } from './actions';
+import fetchUserInfo from './actions/fetchUserInfo';
 
 type Props = {
   navigation: { navigate: () => null },
@@ -27,9 +28,8 @@ export default class AppBootstrap extends React.Component<Props> {
         userData.publicKey = objToUint8(userData.publicKey);
         userData.secretKey = objToUint8(userData.secretKey);
         // update redux store
-        await store.dispatch(setUpDefault(userData));
-      } else {
-        await store.dispatch(setUpDefault({}));
+        await store.dispatch(setUserData(userData));
+        fetchUserInfo();
       }
       // once everything is set up
       this.props.navigation.navigate(userData ? 'App' : 'Onboarding');

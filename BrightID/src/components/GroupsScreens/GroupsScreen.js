@@ -18,7 +18,7 @@ import SearchGroups from './SearchGroups';
 import EligibleGroupCard from './EligibleGroupCard';
 import CurrentGroupCard from './CurrentGroupCard';
 import BottomNav from '../BottomNav';
-import reloadUserInfo from '../../actions/reloadUserInfo';
+import fetchUserInfo from '../../actions/fetchUserInfo';
 import {
   NoCurrentGroups,
   EmptyFullScreen,
@@ -74,7 +74,7 @@ class ConnectionsScreen extends React.Component<Props, State> {
     console.log('refreshing user info');
     let { dispatch } = this.props;
     this.setState({ userInfoLoading: true });
-    await dispatch(reloadUserInfo());
+    await dispatch(fetchUserInfo());
 
     this.setState({ userInfoLoading: false });
   };

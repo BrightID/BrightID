@@ -46,7 +46,7 @@ export const REMOVE_CONNECT_USER_DATA = 'REMOVE_CONNECT_USER_DATA';
  *
  */
 
-export const userScore = (score: number) => ({
+export const setUserScore = (score: number) => ({
   type: USER_SCORE,
   score,
 });

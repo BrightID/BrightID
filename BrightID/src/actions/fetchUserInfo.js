@@ -1,21 +1,23 @@
 // @flow
 
 import api from '../Api/brightId';
-import { setCurrentGroups, setEligibleGroups } from './index';
+import { setCurrentGroups, setEligibleGroups, setGroupsCount, setUserScore } from './index';
 
-const reloadUserInfo = () => async (dispatch: () => null) => {
+const fetchUserInfo = () => async (dispatch: () => null) => {
   // async is unncessary here, but this is a useful template for handling the API
   try {
     let result = await api.getUserInfo();
     console.log(result);
     if (result && result.data && result.data.eligibleGroups) {
-      let { eligibleGroups, currentGroups } = result.data;
+      let { eligibleGroups, currentGroups, score } = result.data;
       dispatch(setEligibleGroups(eligibleGroups));
       dispatch(setCurrentGroups(currentGroups));
+      dispatch(setUserScore(score));
+      dispatch(setGroupsCount(currentGroups.length));
     }
   } catch (err) {
     console.log(err);
   }
 };
 
-export default reloadUserInfo;
+export default fetchUserInfo;

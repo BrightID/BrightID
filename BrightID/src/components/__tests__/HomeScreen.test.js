@@ -8,7 +8,7 @@ import { initialState } from '../../reducer';
 import store from '../../store';
 import {
   setUserData,
-  userScore,
+  setUserScore,
   setGroupsCount,
   setConnections,
 } from '../../actions';
@@ -71,7 +71,7 @@ describe('homescreen', () => {
         .text(),
     ).toBe('% Trusted');
 
-    store.dispatch(userScore(99.8));
+    store.dispatch(setUserScore(99.8));
 
     const main2 = store.getState().main;
     const wrapper2 = shallow(<HomeScreen {...main2} />);

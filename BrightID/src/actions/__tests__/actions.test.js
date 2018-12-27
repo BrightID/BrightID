@@ -3,7 +3,7 @@ import * as action from '../index';
 describe('actions', () => {
   test('should create an action to update the user trust score', () => {
     const trustScore = '99.9';
-    expect(action.userScore(trustScore)).toMatchSnapshot();
+    expect(action.setUserScore(trustScore)).toMatchSnapshot();
   });
 
   test('should create an action to update the trust score of a connection', () => {
