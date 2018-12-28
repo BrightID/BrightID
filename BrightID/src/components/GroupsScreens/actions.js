@@ -67,9 +67,9 @@ export const joinGroup = (groupId) => async (
       }
       return filtered;
     }, []);
-    await dispatch(setEligibleGroups(eligibleGroups));
+    dispatch(setEligibleGroups(eligibleGroups));
     if (newCurrentGroups.length > 0) {
-      await dispatch(setCurrentGroups([...currentGroups, ...newCurrentGroups]));
+      dispatch(setCurrentGroups([...currentGroups, ...newCurrentGroups]));
     }
   }
   return result;

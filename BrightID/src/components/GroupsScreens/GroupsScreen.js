@@ -23,16 +23,6 @@ import {
   NoEligibleGroups,
 } from './EmptyGroups';
 
-/**
- * Groups screen of BrightID
- * =======================================================
- */
-
-/**
- * CONSTANTS
- * =======================================================
- */
-
 const ICON_SIZE = 36;
 
 type Props = Main;
