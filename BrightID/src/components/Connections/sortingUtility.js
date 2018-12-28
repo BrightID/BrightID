@@ -4,8 +4,8 @@ import { setConnections, setConnectionsSort } from '../../actions';
 export const types = {
   byNameAscending: 'BY_NAME_ASCENDING',
   byNameDescending: 'BY_NAME_DESCENDING',
-  byTrustScoreAscending: 'BY_TRUST_SCORE_ASCENDING',
-  byTrustScoreDescending: 'BY_TRUST_SCORE_DECENDING',
+  byScoreAscending: 'BY_SCORE_ASCENDING',
+  byScoreDescending: 'BY_SCORE_DECENDING',
   byDateAddedAscending: 'BY_DATE_ADDED_ASCENDING',
   byDateAddedDescending: 'BY_DATE_ADDED_DESCENDING',
 };
@@ -26,20 +26,20 @@ export const sortByNameDescending = () => (dispatch, getState) => {
   dispatch(setConnectionsSort(types.byNameDescending));
 };
 
-export const sortByTrustScoreAscending = () => (dispatch, getState) => {
+export const sortByScoreAscending = () => (dispatch, getState) => {
   const { connections } = getState().main;
   let list = connections.slice();
-  list.sort((a, b) => parseFloat(a.trustScore) - parseFloat(b.trustScore));
+  list.sort((a, b) => a.score - b.score);
   dispatch(setConnections(list));
-  dispatch(setConnectionsSort(types.byTrustScoreAscending));
+  dispatch(setConnectionsSort(types.byScoreAscending));
 };
 
-export const sortByTrustScoreDescending = () => (dispatch, getState) => {
+export const sortByScoreDescending = () => (dispatch, getState) => {
   const { connections } = getState().main;
   let list = connections.slice();
-  list.sort((a, b) => parseFloat(b.trustScore) - parseFloat(a.trustScore));
+  list.sort((a, b) => b.score - a.score);
   dispatch(setConnections(list));
-  dispatch(setConnectionsSort(types.byTrustScoreDescending));
+  dispatch(setConnectionsSort(types.byScoreDescending));
 };
 
 export const sortByDateAddedAscending = () => (dispatch, getState) => {
@@ -73,11 +73,11 @@ export const defaultSort = () => (dispatch, getState) => {
     case types.byDateAddedDescending:
       dispatch(sortByDateAddedDescending());
       break;
-    case types.byTrustScoreAscending:
-      dispatch(sortByTrustScoreAscending());
+    case types.byScoreAscending:
+      dispatch(sortByScoreAscending());
       break;
-    case types.byTrustScoreDescending:
-      dispatch(sortByTrustScoreDescending());
+    case types.byScoreDescending:
+      dispatch(sortByScoreDescending());
       break;
     default:
       dispatch(sortByDateAddedDescending());

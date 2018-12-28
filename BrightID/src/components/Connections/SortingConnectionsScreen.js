@@ -16,8 +16,8 @@ import {
   sortByNameDescending,
   sortByDateAddedAscending,
   sortByDateAddedDescending,
-  sortByTrustScoreAscending,
-  sortByTrustScoreDescending,
+  sortByScoreAscending,
+  sortByScoreDescending,
   types,
 } from './sortingUtility';
 
@@ -57,13 +57,13 @@ class SortingConnectionsScreen extends React.Component<Props> {
     const { connectionsSort } = this.props;
     switch (connectionsSort) {
       case types.byDateAddedAscending:
-      case types.byTrustScoreAscending:
+      case types.byScoreAscending:
       case types.byNameAscending:
         return (
           <MaterialCommunityIcons size={26} name="chevron-up" color="#4990e2" />
         );
       case types.byDateAddedDescending:
-      case types.byTrustScoreDescending:
+      case types.byScoreDescending:
       case types.byNameDescending:
         return (
           <MaterialCommunityIcons
@@ -95,11 +95,11 @@ class SortingConnectionsScreen extends React.Component<Props> {
     );
   };
 
-  sortByTrustScore = () => {
+  sortByScore = () => {
     const { connectionsSort } = this.props;
     return (
-      connectionsSort === types.byTrustScoreAscending ||
-      connectionsSort === types.byTrustScoreDescending
+      connectionsSort === types.byScoreAscending ||
+      connectionsSort === types.byScoreDescending
     );
   };
 
@@ -151,20 +151,20 @@ class SortingConnectionsScreen extends React.Component<Props> {
           </TouchableOpacity>
           <TouchableOpacity
             style={
-              this.sortByTrustScore()
+              this.sortByScore()
                 ? this.selectedStyle()
                 : styles.sortingOption
             }
             onPress={() => {
-              if (connectionsSort !== types.byTrustScoreDescending) {
-                dispatch(sortByTrustScoreDescending());
+              if (connectionsSort !== types.byScoreDescending) {
+                dispatch(sortByScoreDescending());
               } else {
-                dispatch(sortByTrustScoreAscending());
+                dispatch(sortByScoreAscending());
               }
             }}
           >
             <Text style={styles.sortingText}>Sort by score </Text>
-            {this.sortByTrustScore() ? this.renderCaret() : <View />}
+            {this.sortByScore() ? this.renderCaret() : <View />}
           </TouchableOpacity>
         </View>
       </View>

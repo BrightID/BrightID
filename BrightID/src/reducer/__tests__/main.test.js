@@ -53,7 +53,7 @@ describe('main reducer', () => {
             name: 'Test User',
             avatar: 'todo...',
             connectionDate: 1532537998586,
-            trustScore: '85.1',
+            score: '85.1',
           },
         ],
       }),
@@ -93,7 +93,7 @@ test('should update USER_SCORE', () => {
     }),
   ).toEqual({
     ...initialState,
-    trustScore: '99.9',
+    score: '99.9',
   });
 });
 
@@ -132,7 +132,7 @@ test('should update USER_SCORE', () => {
 //           name: 'Test User',
 //           avatar: 'todo...',
 //           connectionDate: 1532537998586,
-//           trustScore: '85.1',
+//           score: '85.1',
 //         },
 //       ],
 //     }),
@@ -144,7 +144,7 @@ test('should update USER_SCORE', () => {
 //         name: 'Test User',
 //         avatar: 'todo...',
 //         connectionDate: 1532537998586,
-//         trustScore: '85.1',
+//         score: '85.1',
 //       },
 //     ],
 //   });

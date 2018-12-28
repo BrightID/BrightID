@@ -56,17 +56,17 @@ describe('homescreen', () => {
     ).toBe('Shiva');
   });
 
-  test('trustScore is updated', () => {
+  test('score is updated', () => {
     // updating redux store should update homescreen component
 
     const main1 = store.getState().main;
     const wrapper1 = shallow(<HomeScreen {...main1} />);
 
-    expect(wrapper1.find('#trustScore').children()).toHaveLength(1);
+    expect(wrapper1.find('#score').children()).toHaveLength(1);
 
     expect(
       wrapper1
-        .find('#trustScore')
+        .find('#score')
         .children()
         .text(),
     ).toBe('% Trusted');
@@ -76,11 +76,11 @@ describe('homescreen', () => {
     const main2 = store.getState().main;
     const wrapper2 = shallow(<HomeScreen {...main2} />);
 
-    expect(wrapper2.find('#trustScore').children()).toHaveLength(2);
+    expect(wrapper2.find('#score').children()).toHaveLength(2);
 
     expect(
       wrapper2
-        .find('#trustScore')
+        .find('#score')
         .children()
         .first()
         .text(),
@@ -88,7 +88,7 @@ describe('homescreen', () => {
 
     expect(
       wrapper2
-        .find('#trustScore')
+        .find('#score')
         .children()
         .last()
         .text(),

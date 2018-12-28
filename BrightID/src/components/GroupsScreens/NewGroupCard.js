@@ -21,7 +21,7 @@ import { toggleNewGroupCoFounder } from './actions';
  * is created from an array of connections
  * each connection should have:
  * @prop name
- * @prop trustScore
+ * @prop score
  * @prop connectionTime
  * @prop avatar
  */
@@ -29,7 +29,7 @@ import { toggleNewGroupCoFounder } from './actions';
 type Props = {
   nameornym: string,
   avatar: string,
-  trustScore: string,
+  score: string,
   connectionDate: string,
   publicKey: string,
   style: {},
@@ -45,9 +45,9 @@ class NewGroupCard extends React.PureComponent<Props> {
     // alert(JSON.stringify(Object.keys(this.props)));
   };
 
-  trustScoreColor = () => {
-    const { trustScore } = this.props;
-    if (parseFloat(trustScore) >= 85) {
+  scoreColor = () => {
+    const { score } = this.props;
+    if (score >= 85) {
       return { color: '#139c60' };
     } else {
       return { color: '#e39f2f' };
@@ -81,7 +81,7 @@ class NewGroupCard extends React.PureComponent<Props> {
   };
 
   render() {
-    const { avatar, nameornym, trustScore, connectionDate, style } = this.props;
+    const { avatar, nameornym, score, connectionDate, style } = this.props;
 
     return (
       <View style={{ ...styles.container, ...style }}>
@@ -91,10 +91,10 @@ class NewGroupCard extends React.PureComponent<Props> {
         />
         <View style={styles.info}>
           <Text style={styles.name}>{nameornym}</Text>
-          <View style={styles.trustScoreContainer}>
-            <Text style={styles.trustScoreLeft}>Score:</Text>
-            <Text style={[styles.trustScoreRight, this.trustScoreColor()]}>
-              {trustScore}
+          <View style={styles.scoreContainer}>
+            <Text style={styles.scoreLeft}>Score:</Text>
+            <Text style={[styles.scoreRight, this.scoreColor()]}>
+              {score}
             </Text>
           </View>
           <Text style={styles.connectedText}>
@@ -141,19 +141,19 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
-  trustScoreContainer: {
+  scoreContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  trustScoreLeft: {
+  scoreLeft: {
     fontFamily: 'ApexNew-Book',
     fontSize: 14,
     color: '#9b9b9b',
     marginRight: 3,
     paddingTop: 1.5,
   },
-  trustScoreRight: {
+  scoreRight: {
     fontFamily: 'ApexNew-Medium',
     fontSize: 16,
   },

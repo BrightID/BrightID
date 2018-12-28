@@ -19,7 +19,7 @@ export const addConnection = (navigation) => async (dispatch, getState) => {
       Math.floor(Math.random() * (names.length - 1))
     ];
     const nameornym = `${firstName} ${lastName}`;
-    const trustScore = `${Math.floor(Math.random() * 99)}.${Math.floor(
+    const score = `${Math.floor(Math.random() * 99)}.${Math.floor(
       Math.random() * 9,
     )}`;
     const timestamp = Date.now();
@@ -35,7 +35,7 @@ export const addConnection = (navigation) => async (dispatch, getState) => {
       secretKey,
       signedMessage,
       nameornym,
-      trustScore,
+      score,
       avatar: 'https://loremflickr.com/180/180/all',
     };
 

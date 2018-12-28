@@ -8,7 +8,7 @@ Object {
       "connectionDate": "",
       "name": "",
       "publicKey": Array [],
-      "trustScore": "",
+      "score": "",
     },
   ],
   "groupsCount": "",
@@ -18,7 +18,7 @@ Object {
   "publicKey2": "",
   "searchParam": "",
   "secretKey": "",
-  "trustScore": "",
+  "score": "",
   "avatar": "",
 }
 `;
@@ -31,7 +31,7 @@ Object {
       "connectionDate": 1532537998586,
       "name": "Test User",
       "publicKey": Array [],
-      "trustScore": "85.1",
+      "score": "85.1",
     },
   ],
   "groupsCount": "",
@@ -41,7 +41,7 @@ Object {
   "publicKey2": "",
   "searchParam": "",
   "secretKey": "",
-  "trustScore": "",
+  "score": "",
   "avatar": "",
 }
 `;
@@ -54,7 +54,7 @@ Object {
       "connectionDate": "",
       "name": "",
       "publicKey": Array [],
-      "trustScore": "",
+      "score": "",
     },
   ],
   "groupsCount": "",
@@ -64,7 +64,7 @@ Object {
   "publicKey2": "",
   "searchParam": "",
   "secretKey": Array [],
-  "trustScore": "",
+  "score": "",
   "avatar": "todo...",
 }
 `;
@@ -77,7 +77,7 @@ Object {
       "connectionDate": "",
       "name": "",
       "publicKey": Array [],
-      "trustScore": "",
+      "score": "",
     },
   ],
   "groupsCount": "",
@@ -87,7 +87,7 @@ Object {
   "publicKey2": "",
   "searchParam": "",
   "secretKey": "",
-  "trustScore": "",
+  "score": "",
   "avatar": "",
 }
 `;
@@ -100,7 +100,7 @@ Object {
       "connectionDate": "",
       "name": "",
       "publicKey": Array [],
-      "trustScore": "",
+      "score": "",
     },
   ],
   "groupsCount": "",
@@ -110,7 +110,7 @@ Object {
   "publicKey2": Array [],
   "searchParam": "",
   "secretKey": "",
-  "trustScore": "",
+  "score": "",
   "avatar": "",
 }
 `;
@@ -123,7 +123,7 @@ Object {
       "connectionDate": "",
       "name": "",
       "publicKey": Array [],
-      "trustScore": "",
+      "score": "",
     },
   ],
   "groupsCount": 64,
@@ -133,7 +133,7 @@ Object {
   "publicKey2": "",
   "searchParam": "",
   "secretKey": "",
-  "trustScore": "",
+  "score": "",
   "avatar": "",
 }
 `;
@@ -146,7 +146,7 @@ Object {
       "connectionDate": "",
       "name": "",
       "publicKey": Array [],
-      "trustScore": "",
+      "score": "",
     },
   ],
   "groupsCount": "",
@@ -156,12 +156,12 @@ Object {
   "publicKey2": "",
   "searchParam": "hi john",
   "secretKey": "",
-  "trustScore": "",
+  "score": "",
   "avatar": "",
 }
 `;
 
-exports[`main reducer should update USER_TRUST_SCORE 1`] = `
+exports[`main reducer should update USER_SCORE 1`] = `
 Object {
   "connections": Array [
     Object {
@@ -169,7 +169,7 @@ Object {
       "connectionDate": "",
       "name": "",
       "publicKey": Array [],
-      "trustScore": "",
+      "score": "",
     },
   ],
   "groupsCount": "",
@@ -179,7 +179,7 @@ Object {
   "publicKey2": "",
   "searchParam": "",
   "secretKey": "",
-  "trustScore": "99.9",
+  "score": "99.9",
   "avatar": "",
 }
 `;

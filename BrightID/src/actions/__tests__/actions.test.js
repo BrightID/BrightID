@@ -2,15 +2,15 @@ import * as action from '../index';
 
 describe('actions', () => {
   test('should create an action to update the user trust score', () => {
-    const trustScore = '99.9';
-    expect(action.setUserScore(trustScore)).toMatchSnapshot();
+    const score = '99.9';
+    expect(action.setUserScore(score)).toMatchSnapshot();
   });
 
   test('should create an action to update the trust score of a connection', () => {
     const publicKey = [];
-    const trustScore = '88.6';
+    const score = '88.6';
     expect(
-      action.connectionTrustScore(publicKey, trustScore),
+      action.connectionScore(publicKey, score),
     ).toMatchSnapshot();
   });
 
@@ -50,7 +50,7 @@ describe('actions', () => {
 
   test('should create an action to set user avatar', () => {
     const avatar = 'avatar string';
-    expect(action.setavatar(avatar)).toMatchSnapshot();
+    expect(action.setPhoto(avatar)).toMatchSnapshot();
   });
 
   test('should create an action to set public key 1', () => {

@@ -97,7 +97,7 @@ exports[`homescreen renders correctly 1`] = `
       }
     >
       <Text
-        id="trustScore"
+        id="score"
         style={
           Object {
             "color": "green",

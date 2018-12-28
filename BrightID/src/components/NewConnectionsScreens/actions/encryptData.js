@@ -13,7 +13,7 @@ export const encryptAndUploadLocalData = () => async (dispatch, getState) => {
     avatar: { uri },
     nameornym,
     connectQrData: { aesKey },
-    trustScore,
+    score,
     connectUserData,
   } = getState().main;
 
@@ -37,7 +37,7 @@ export const encryptAndUploadLocalData = () => async (dispatch, getState) => {
     publicKey: base64Key,
     avatar,
     nameornym,
-    trustScore,
+    score,
     signedMessage,
     timestamp,
   };

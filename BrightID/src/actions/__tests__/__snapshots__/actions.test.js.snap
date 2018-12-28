@@ -75,14 +75,14 @@ Object {
 exports[`actions should create an action to update the trust score of a connection 1`] = `
 Object {
   "publicKey": Array [],
-  "trustScore": "88.6",
-  "type": "CONNECTION_TRUST_SCORE",
+  "score": "88.6",
+  "type": "CONNECTION_SCORE",
 }
 `;
 
 exports[`actions should create an action to update the user trust score 1`] = `
 Object {
-  "trustScore": "99.9",
-  "type": "USER_TRUST_SCORE",
+  "score": "99.9",
+  "type": "USER_SCORE",
 }
 `;

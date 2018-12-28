@@ -15,40 +15,12 @@ import {
   UPDATE_USER_DATA,
   REMOVE_USER_DATA,
   USER_AVATAR,
-  REFRESH_NEARBY_PEOPLE,
-  CONNECT_PUBLICKEY,
-  CONNECT_NAMEORNYM,
-  CONNECT_TIMESTAMP,
-  CONNECT_TRUST_SCORE,
-  CONNECT_AVATAR,
-  CONNECT_RECIEVED_TIMESTAMP,
-  CONNECT_RECIEVED_NAMEORNYM,
-  CONNECT_RECIEVED_PUBLICKEY,
-  CONNECT_RECIEVED_AVATAR,
-  CONNECT_RECIEVED_TRUSTSCORE,
   SET_CONNECT_QR_DATA,
   REMOVE_CONNECT_QR_DATA,
   REMOVE_CONNECTION,
-  ARBITER,
-  RTC_ID,
-  RESET_WEBRTC,
-  BOX_KEYPAIR,
-  SET_PREVIEW,
-  RESET_PREVIEW,
   SET_CONNECT_USER_DATA,
   REMOVE_CONNECT_USER_DATA,
 } from '../actions';
-
-const arbiterSchema = {
-  USERA: {
-    OFFER: '',
-    ICE_CANDIDATE: '',
-  },
-  USERB: {
-    ANSWER: '',
-    ICE_CANDIDATE: '',
-  },
-};
 
 /**
  * INITIAL STATE
@@ -183,17 +155,6 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         publicKey: null,
         secretKey: null,
       };
-
-    case REFRESH_NEARBY_PEOPLE:
-      return {
-        ...state,
-        nearbyPeople: action.nearbyPeople,
-      };
-    case CONNECT_PUBLICKEY:
-      return {
-        ...state,
-        connectPublicKey: action.publicKey,
-      };
     case SET_CONNECT_QR_DATA:
       // Compute the websocket channel and download (but not upload) path
 
@@ -231,109 +192,6 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
           timestamp: '',
           signedMessage: ''
         },
-      };
-    case CONNECT_NAMEORNYM:
-      return {
-        ...state,
-        connectNameornym: action.nameornym,
-      };
-    case CONNECT_AVATAR:
-      return {
-        ...state,
-        connectAvatar: action.avatar,
-      };
-    case CONNECT_TIMESTAMP:
-      return {
-        ...state,
-        connectTimestamp: action.timestamp,
-      };
-    case CONNECT_TRUST_SCORE:
-      return {
-        ...state,
-        connectTrustScore: action.trustScore,
-      };
-    case CONNECT_RECIEVED_NAMEORNYM:
-      return {
-        ...state,
-        connectRecievedNameornym: true,
-      };
-    case CONNECT_RECIEVED_TRUSTSCORE:
-      return {
-        ...state,
-        connectRecievedTrustScore: true,
-      };
-    case CONNECT_RECIEVED_PUBLICKEY:
-      return {
-        ...state,
-        connectRecievedPublicKey: true,
-      };
-    case CONNECT_RECIEVED_TIMESTAMP:
-      return {
-        ...state,
-        connectRecievedTimestamp: true,
-      };
-    case CONNECT_RECIEVED_AVATAR:
-      return {
-        ...state,
-        connectRecievedAvatar: true,
-      };
-    case BOX_KEYPAIR:
-      return {
-        ...state,
-        connectBoxKeypair: {
-          ...state.connectBoxKeypair,
-          publicKey: action.keypair.publicKey,
-          secretKey: action.keypair.secretKey,
-        },
-      };
-    case ARBITER:
-      return {
-        ...state,
-        arbiter: action.arbiter,
-      };
-    case RTC_ID:
-      return {
-        ...state,
-        rtcId: action.rtcId,
-      };
-    case RESET_WEBRTC:
-      return {
-        ...state,
-        rtcId: '',
-        arbiter: arbiterSchema,
-        connectTimestamp: '',
-        connectNameornym: '',
-        connectTrustScore: '',
-        connectAvatar: '',
-        connectPublicKey: '',
-        connectRecievedNameornym: false,
-        connectRecievedPublicKey: false,
-        connectRecievedTimestamp: false,
-        connectRecievedTrustScore: false,
-        connectRecievedAvatar: false,
-        connectBoxKeypair: {
-          ...state.connectBoxKeypair,
-          publicKey: '',
-          secretKey: '',
-        },
-      };
-    case SET_PREVIEW:
-      return {
-        ...state,
-        previewTimestamp: state.connectTimestamp,
-        previewNameornym: state.connectNameornym,
-        previewTrustScore: state.connectTrustScore,
-        previewAvatar: state.connectAvatar,
-        previewPublicKey: state.connectPublicKey,
-      };
-    case RESET_PREVIEW:
-      return {
-        ...state,
-        previewTimestamp: '',
-        previewNameornym: '',
-        previewTrustScore: '',
-        previewAvatar: '',
-        previewPublicKey: '',
       };
     default:
       return state;

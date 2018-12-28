@@ -24,7 +24,7 @@ type Props = {
   previewNameornym: string,
   previewTimestamp: number,
   previewPublicKey: Uint8Array,
-  previewTrustScore: string,
+  previewScore: string,
   previewAvatar: string,
   navigation: { goBack: () => null, navigate: (string) => null },
   connectUserData: { avatar: string, publicKey: Buffer, nameornym: string },

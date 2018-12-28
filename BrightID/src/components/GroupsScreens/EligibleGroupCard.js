@@ -14,7 +14,7 @@ import { groupName } from '../../utils/groups'
  * is created from an array of connections
  * each connection should have:
  * @prop name
- * @prop trustScore
+ * @prop score
  */
 
 class EligibleGroupCard extends React.Component<Props> {
@@ -42,9 +42,9 @@ class EligibleGroupCard extends React.Component<Props> {
     </TouchableOpacity>
   );
 
-  trustScoreColor = () => {
+  scoreColor = () => {
     const { group } = this.props;
-    if (parseFloat(group.score) >= 85) {
+    if (group.score >= 85) {
       return { color: '#139c60' };
     } else {
       return { color: '#e39f2f' };
@@ -109,9 +109,9 @@ class EligibleGroupCard extends React.Component<Props> {
         <GroupAvatar group={group} />
         <View style={styles.info}>
           <Text style={styles.names}>{groupName(group)}</Text>
-          <View style={styles.trustScoreContainer}>
-            <Text style={styles.trustScoreLeft}>Score:</Text>
-            <Text style={[styles.trustScoreRight, this.trustScoreColor()]}>
+          <View style={styles.scoreContainer}>
+            <Text style={styles.scoreLeft}>Score:</Text>
+            <Text style={[styles.scoreRight, this.scoreColor()]}>
               {group.score}
             </Text>
           </View>
@@ -149,19 +149,19 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
-  trustScoreContainer: {
+  scoreContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  trustScoreLeft: {
+  scoreLeft: {
     fontFamily: 'ApexNew-Book',
     fontSize: 14,
     color: '#9b9b9b',
     marginRight: 3,
     paddingTop: 1.5,
   },
-  trustScoreRight: {
+  scoreRight: {
     fontFamily: 'ApexNew-Medium',
     fontSize: 16,
   },

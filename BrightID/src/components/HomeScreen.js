@@ -59,7 +59,7 @@ const MaterialHeaderButton = (passMeFurther) => (
 );
 
 type Props = {
-  trustScore: string,
+  score: string,
   groupsCount: number,
   nameornym: string,
   connections: Array<{}>,
@@ -151,9 +151,9 @@ export class HomeScreen extends React.Component<Props> {
               {nameornym}
             </Text>
           </View>
-          <View style={styles.trustScoreContainer}>
-            <Text style={styles.trustScoreLeft}>Score:</Text>
-            <Text id="trustScore" style={styles.trustScoreRight}>
+          <View style={styles.scoreContainer}>
+            <Text style={styles.scoreLeft}>Score:</Text>
+            <Text id="score" style={styles.scoreRight}>
               {score}
             </Text>
           </View>
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     marginTop: 17,
     flexDirection: 'row',
   },
-  trustScoreContainer: {
+  scoreContainer: {
     borderBottomColor: '#e3e1e1',
     borderBottomWidth: 1,
     width: '80%',
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  trustScoreLeft: {
+  scoreLeft: {
     fontFamily: 'ApexNew-Book',
     fontSize: 16,
     fontWeight: 'normal',
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
     paddingTop: 3.5,
   },
-  trustScoreRight: {
+  scoreRight: {
     fontFamily: 'ApexNew-Medium',
     fontSize: 22,
     fontWeight: 'normal',

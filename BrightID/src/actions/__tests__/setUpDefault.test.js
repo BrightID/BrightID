@@ -8,7 +8,7 @@ const mockStore = configureMockStore(middlewares);
 
 describe('async action', () => {
   test('sets up dummy data including userData', () => {
-    const store = mockStore({ trustScore: '22.3' });
+    const store = mockStore({ score: '22.3' });
     const userData = {
       publicKey: [],
       secretKey: [],
@@ -22,7 +22,7 @@ describe('async action', () => {
   });
 
   test('sets up dummy data without userData', () => {
-    const store = mockStore({ trustScore: '22.3' });
+    const store = mockStore({ score: '22.3' });
     const userData = {
       nameornym: 'charlie sheen',
       avatar: 'avatar',

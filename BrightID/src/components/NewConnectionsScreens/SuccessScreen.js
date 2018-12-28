@@ -14,7 +14,7 @@ import { removeConnectUserData } from '../../actions';
 
 type Props = {
   publicKey: Uint8Array,
-  trustScore: string,
+  score: string,
   avatar: string,
   nameornym: string,
   dispatch: () => null,

@@ -73,7 +73,7 @@ class ConnectionCard extends React.PureComponent<Props> {
     );
   };
 
-  trustScoreColor = () => {
+  scoreColor = () => {
     const { score } = this.props;
     if (score >= 85) {
       return { color: '#139c60' };
@@ -93,9 +93,9 @@ class ConnectionCard extends React.PureComponent<Props> {
         />
         <View style={styles.info}>
           <Text style={styles.name}>{nameornym}</Text>
-          <View style={styles.trustScoreContainer}>
-            <Text style={styles.trustScoreLeft}>Score:</Text>
-            <Text style={[styles.trustScoreRight, this.trustScoreColor()]}>
+          <View style={styles.scoreContainer}>
+            <Text style={styles.scoreLeft}>Score:</Text>
+            <Text style={[styles.scoreRight, this.scoreColor()]}>
               {score}
             </Text>
           </View>
@@ -148,19 +148,19 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
-  trustScoreContainer: {
+  scoreContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  trustScoreLeft: {
+  scoreLeft: {
     fontFamily: 'ApexNew-Book',
     fontSize: 14,
     color: '#9b9b9b',
     marginRight: 3,
     paddingTop: 1.5,
   },
-  trustScoreRight: {
+  scoreRight: {
     fontFamily: 'ApexNew-Medium',
     fontSize: 16,
   },

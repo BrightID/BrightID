@@ -11,14 +11,14 @@ import { groupName } from '../../utils/groups'
  * is created from an array of connections
  * each connection should have:
  * @prop name
- * @prop trustScore
+ * @prop score
  * @prop connectionTime
  * @prop avatar
  */
 
 type Props = {
   name: string,
-  trustScore: string,
+  score: string,
 };
 
 type State = {
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     marginTop: 7.3,
   },
-  trustScore: {
+  score: {
     fontFamily: 'ApexNew-Medium',
     fontSize: 14,
     color: 'green',

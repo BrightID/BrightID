@@ -53,7 +53,7 @@ export const addNewConnection = () => async (
     const connectionData = {
       publicKey: connectUserData.publicKey,
       nameornym: connectUserData.nameornym,
-      trustScore: connectUserData.trustScore,
+      score: connectUserData.score,
       secretKey: connectUserData.secretKey || '',
       connectionDate,
       avatar: { uri: `file://${uri}` },

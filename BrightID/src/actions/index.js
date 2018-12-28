@@ -1,7 +1,7 @@
 // @flow
 
 export const USER_SCORE = 'USER_SCORE';
-export const CONNECTION_TRUST_SCORE = 'CONNECTION_TRUST_SCORE';
+export const CONNECTION_SCORE = 'CONNECTION_SCORE';
 export const GROUPS_COUNT = 'GROUPS_COUNT';
 export const SEARCH_PARAM = 'SEARCH_PARAM';
 export const SET_NEW_GROUP_CO_FOUNDERS = 'SET_NEW_GROUP_CO_FOUNDERS';
@@ -16,26 +16,8 @@ export const REMOVE_CONNECTION = 'REMOVE_CONNECTION';
 export const UPDATE_USER_DATA = 'UPDATE_USER_DATA';
 export const REMOVE_USER_DATA = 'REMOVE_USER_DATA';
 export const USER_AVATAR = 'USER_AVATAR';
-export const RTC_ID = 'RTC_ID';
-export const ARBITER = 'ARBITER';
-export const RESET_WEBRTC = 'RESET_WEBRTC';
-export const REFRESH_NEARBY_PEOPLE = 'REFRESH_NEARBY_PEOPLE';
-export const CONNECT_PUBLICKEY = 'CONNECT_PUBLICKEY';
-export const CONNECT_NAMEORNYM = 'CONNECT_NAMEORNYM';
-export const CONNECT_TRUST_SCORE = 'CONNECT_TRUST_SCORE';
-export const CONNECT_TIMESTAMP = 'CONNECT_TIMESTAMP';
-export const CONNECT_RECIEVED_TIMESTAMP = 'CONNECT_RECIEVED_TIMESTAMP';
-export const CONNECT_RECIEVED_TRUSTSCORE = 'CONNECT_RECIEVED_TRUSTSCORE';
-export const CONNECT_RECIEVED_NAMEORNYM = 'CONNECT_RECIEVED_NAMEORNYM';
-export const CONNECT_RECIEVED_PUBLICKEY = 'CONNECT_RECIEVED_PUBLICKEY';
-export const CONNECT_RECIEVED_AVATAR = 'CONNECT_RECIEVED_AVATAR';
 export const SET_CONNECT_QR_DATA = 'SET_CONNECT_QR_DATA';
 export const REMOVE_CONNECT_QR_DATA = 'REMOVE_CONNECT_QR_DATA';
-export const CONNECT_AVATAR = 'CONNECT_AVATAR';
-export const ERROR = 'ERROR';
-export const BOX_KEYPAIR = 'BOX_KEYPAIR';
-export const SET_PREVIEW = 'SET_PREVIEW';
-export const RESET_PREVIEW = 'RESET_PREVIEW';
 export const SET_CONNECT_USER_DATA = 'SET_CONNECT_USER_DATA';
 export const REMOVE_CONNECT_USER_DATA = 'REMOVE_CONNECT_USER_DATA';
 
@@ -53,19 +35,19 @@ export const setUserScore = (score: number) => ({
 
 /**
  * redux action creator that updates a connection's trust score in the connection array
- * @param type CONNECTION_TRUST_SCORE
+ * @param type CONNECTION_SCORE
  * @param publicKey Uint8Array to identify connection
- * @param trustScore string fetched from server
+ * @param score string fetched from server
  *
  */
 
-export const connectionTrustScore = (
+export const connectionScore = (
   publicKey: Uint8Array,
-  trustScore: string,
+  score: number,
 ) => ({
-  type: CONNECTION_TRUST_SCORE,
+  type: CONNECTION_SCORE,
   publicKey,
-  trustScore,
+  score,
 });
 
 /**
@@ -165,7 +147,7 @@ export const addConnection = (connection: {
   publicKey: Uint8Array,
   nameornym: string,
   avatar: string,
-  trustScore: string,
+  score: number,
   connectionDate: string,
 }) => ({
   type: ADD_CONNECTION,
@@ -221,41 +203,10 @@ export const removeUserData = () => ({
  * @param avatar string representaiton of user avatar encoded in base64 format
  */
 
-export const setavatar = (avatar: string) => ({
+export const setPhoto = (avatar: string) => ({
   type: USER_AVATAR,
   avatar,
 });
-
-/**
- * redux action creator for setting user avatar
- * @param type USER_AVATAR
- * @param avatar string representaiton of user avatar encoded in base64 format
- */
-
-export const setBoxKeypair = (keypair: {
-  publicKey: Uint8Array,
-  secretKey: Uint8Array,
-}) => ({
-  type: BOX_KEYPAIR,
-  keypair,
-});
-
-/**
- * redux action creator for setting the public key of the user you are currently connecting with via webrtc
- * @param type CONNECT_PUBLICKEY
- * @param publicKey public key of new user while adding a new connection
- */
-
-export const setConnectPublicKey = (publicKey: Uint8Array) => ({
-  type: CONNECT_PUBLICKEY,
-  publicKey,
-});
-
-/**
- * redux action creator for setting the public key of the user you are currently connecting with via webrtc
- * @param type CONNECT_PUBLICKEY
- * @param publicKey public key of new user while adding a new connection
- */
 
 export const setConnectQrData = (connectQrData: {
   ipAddress: string,
@@ -274,6 +225,7 @@ export const setConnectUserData = (connectUserData: {
   nameornym: string,
   publicKey: Uint8Array,
   avatar: string,
+  score: number,
 }) => ({
   type: SET_CONNECT_USER_DATA,
   connectUserData,
@@ -283,181 +235,4 @@ export const removeConnectUserData = () => ({
   type: REMOVE_CONNECT_USER_DATA,
 });
 
-/**
- * redux action creator for setting the nameornym of the user you are currently connecting with via webrtc
- * @param type CONNECT_NAMEORNYM
- * @param nameornym - nameornym of new user while adding a new connection
- */
 
-export const setConnectNameornym = (nameornym: string) => ({
-  type: CONNECT_NAMEORNYM,
-  nameornym,
-});
-
-/**
- * redux action creator for setting the trust score of the user you are currently connecting with via webrtc
- * @param type CONNECT_TRUST_SCORE
- * @param nameornym - nameornym of new user while adding a new connection
- */
-
-export const setConnectTrustScore = (trustScore: string) => ({
-  type: CONNECT_TRUST_SCORE,
-  trustScore,
-});
-
-/**
- * redux action creator for setting the avatar of the user you are currently connecting with via webrtc
- * @param type CONNECT_NAMEORNYM
- * @param nameornym - nameornym of new user while adding a new connection
- */
-
-export const setConnectAvatar = (avatar: string) => ({
-  type: CONNECT_AVATAR,
-  avatar,
-});
-
-/**
- * redux action creator for setting the timestamp used while forming a new connection with a user
- * @param type CONNECT_TIMESTAMP
- * @param  timestamp - unix timestamp of used for generating a message while forming a new connection
- */
-
-export const setConnectTimestamp = (timestamp: number) => ({
-  type: CONNECT_TIMESTAMP,
-  timestamp,
-});
-
-/**
- * redux action creator for setting that trust score was received on the other end of webrtc data channel
- * @param type CONNECT_TRUST_SCORE
- *
- */
-
-export const setConnectRecievedTrustScore = () => ({
-  type: CONNECT_RECIEVED_TRUSTSCORE,
-});
-
-/**
- * redux action creator for setting that public key was received on the other end of webrtc data channel
- * @param type CONNECT_RECIEVED_PUBLICKEY
- *
- */
-
-export const setConnectRecievedPublicKey = () => ({
-  type: CONNECT_RECIEVED_PUBLICKEY,
-});
-
-/**
- * redux action creator for setting that avatar was received on the other end of webrtc data channel
- * @param type CONNECT_RECIEVED_AVATAR
- *
- */
-
-export const setConnectRecievedAvatar = () => ({
-  type: CONNECT_RECIEVED_AVATAR,
-});
-
-/**
- * redux action creator for transferring connect user data to preview user data
- * @param type SET_PREVIEW
- *
- */
-
-export const setPreview = () => ({
-  type: SET_PREVIEW,
-});
-
-/**
- * redux action creator for resetting preview data
- * @param type RESET PREVIEW
- *
- */
-
-export const resetPreview = () => ({
-  type: RESET_PREVIEW,
-});
-
-/**
- * redux action creator for setting that public key was received on the other end of webrtc data channel
- * @param type CONNECT_RECIEVED_NAMEORNYM
- *
- */
-
-export const setConnectRecievedNameornym = () => ({
-  type: CONNECT_RECIEVED_NAMEORNYM,
-});
-
-/**
- * redux action creator for setting that public key was received on the other end of webrtc data channel
- * @param type CONNECT_RECIEVED_TIMESTAMP
- *
- */
-
-export const setConnectRecievedTimestamp = () => ({
-  type: CONNECT_RECIEVED_TIMESTAMP,
-});
-
-/**
- * redux action sets rtc token info necessary for webrtc data channel
- * @param type RTC_ID
- *  @param rtcId webrtc signalling object
- */
-
-export const setRtcId = (rtcId: string) => ({
-  type: RTC_ID,
-  rtcId,
-});
-
-/**
- * redux action sets arbiter info necessary for webrtc data channel
- * @param type ARBITER
- *  @param arbiter webrtc signalling object
- */
-
-export const setArbiter = (arbiter: {
-  USERA: {
-    OFFER: Array<number>,
-    ICE_CONNECTION: Array<number>,
-    PUBLIC_KEY: Array<number>,
-  },
-  USERB: {
-    ANSWER: Array<number>,
-    ICE_CONNECTION: Array<number>,
-    PUBLIC_KEY: Array<number>,
-  },
-}) => ({
-  type: ARBITER,
-  arbiter,
-});
-
-/**
- * redux action reset webrtc connection info
- * removes from redux store: rtcId, arbiter
- * @param type RESET_WEBRTC
- */
-
-export const resetWebrtc = () => ({
-  type: RESET_WEBRTC,
-});
-
-/**
- * redux action creator for refreshing nearby people
- * @param type REFRESH_NEARBY_PEOPLE
- * @param nearbyPeople array of nearby people
- */
-
-export const refreshNearbyPeople = (nearbyPeople: Array<{}>) => ({
-  type: REFRESH_NEARBY_PEOPLE,
-  nearbyPeople,
-});
-
-/**
- * redux action creator for handling errors
- * @param type ERROR
- * @param error error message string
- */
-
-export const handleError = (error: string) => ({
-  type: ERROR,
-  error,
-});

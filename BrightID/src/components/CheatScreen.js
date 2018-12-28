@@ -195,7 +195,7 @@ export class TestConnectionScreen extends React.Component {
         const {
             navigation,
             nameornym,
-            trustScore,
+            score,
             connections,
             groupsCount,
             userAvatar,
@@ -257,7 +257,7 @@ export class TestConnectionScreen extends React.Component {
                                         {this.state.connections.map((connection,index) => (
                                             <View key={index} style={{flexDirection: 'row', paddingVertical: 5}}>
                                                 {/*<Text style={{flex: 1}}>{JSON.stringify(connection,null, 4)}</Text>*/}
-                                                <Text style={{flex: 1}}>{connection.nameornym} - {connection.trustScore} {obj2b64(connection.publicKey)}</Text>
+                                                <Text style={{flex: 1}}>{connection.nameornym} - {connection.score} {obj2b64(connection.publicKey)}</Text>
                                                 <View style={{flex: 0}}>
                                                     <Button title="switch" onPress={()=>this.switchToConnection(connection)}/>
                                                 </View>
