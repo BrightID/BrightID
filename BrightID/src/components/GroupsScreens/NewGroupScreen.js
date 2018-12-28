@@ -10,7 +10,7 @@ import NewGroupCard from './NewGroupCard';
 import { getConnections } from '../../actions/getConnections';
 import store from '../../store';
 import emitter from '../../emitter';
-import { creatNewGroup } from './actions';
+import { createNewGroup } from './actions';
 import { renderListOrSpinner } from '../Connections/renderConnections';
 import { clearNewGroupCoFounders } from '../../actions/index';
 
@@ -110,7 +110,7 @@ class NewGroupScreen extends React.Component<Props, State> {
           <TouchableOpacity
             onPress={async () => {
               try {
-                let result = await store.dispatch(creatNewGroup());
+                let result = await store.dispatch(createNewGroup());
                 if (result) navigation.goBack();
               } catch (err) {
                 console.log(err);

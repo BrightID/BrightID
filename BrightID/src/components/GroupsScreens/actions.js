@@ -18,14 +18,11 @@ export const toggleNewGroupCoFounder = (publicKey) => (
   let index = coFounders.findIndex((item) => JSON.stringify(item) === match);
   if (index >= 0) {
     coFounders.splice(index, 1);
-  } else {
-    // limit to 2 co-founder
-    if (coFounders.length < 2) coFounders.push(publicKey);
-  }
+  } else if (coFounders.length < 2) coFounders.push(publicKey);
   dispatch(setNewGroupCoFounders(coFounders));
 };
 
-export const creatNewGroup = () => async (
+export const createNewGroup = () => async (
   dispatch: () => null,
   getState: () => {},
 ) => {
