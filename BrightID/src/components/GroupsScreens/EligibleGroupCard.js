@@ -4,9 +4,10 @@ import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import GroupAvatar from './EligibleGroupAvatar';
+import GroupAvatar from './GroupAvatar';
 import { uInt8ArrayToUrlSafeB64 } from '../../utils/encoding';
 import { deleteNewGroup, joinGroup } from './actions';
+import { groupName } from '../../utils/groups'
 
 /**
  * Connection Card in the Connections Screen
@@ -15,14 +16,6 @@ import { deleteNewGroup, joinGroup } from './actions';
  * @prop name
  * @prop trustScore
  */
-
-type Props = {
-  names: Array<string>,
-  groupId: string,
-  isNew: boolean,
-  alreadyIn: boolean,
-  trustScore: string,
-};
 
 class EligibleGroupCard extends React.Component<Props> {
   renderApprovalButtons = () => (
@@ -103,24 +96,6 @@ class EligibleGroupCard extends React.Component<Props> {
     }
   };
 
-  mapPublicKeysToNames() {
-    let { connections, nameornym, group } = this.props;
-    let user = uInt8ArrayToUrlSafeB64(this.props.publicKey);
-    const findConnection = (publicKey) =>
-      connections.find(
-        (connection) =>
-          uInt8ArrayToUrlSafeB64(connection.publicKey) === publicKey,
-      ) || { nameornym: 'Stranger' };
-    return group.founders.map((publicKey) =>
-      publicKey === user ? nameornym : findConnection(publicKey).nameornym,
-    );
-  }
-
-  names() {
-    const { group } = this.props;
-    this.mapPublicKeysToNames(group.knownMembers);
-  }
-
   alreadyIn() {
     const { group, publicKey } = this.props;
     return group.knownMembers.indexOf(uInt8ArrayToUrlSafeB64(publicKey)) >= 0;
@@ -128,13 +103,12 @@ class EligibleGroupCard extends React.Component<Props> {
 
   render() {
     const { group } = this.props;
-    const names = this.mapPublicKeysToNames();
     console.log(group);
     return (
       <View style={styles.container}>
         <GroupAvatar group={group} />
         <View style={styles.info}>
-          <Text style={styles.names}>{names.join(', ')}</Text>
+          <Text style={styles.names}>{groupName(group)}</Text>
           <View style={styles.trustScoreContainer}>
             <Text style={styles.trustScoreLeft}>Score:</Text>
             <Text style={[styles.trustScoreRight, this.trustScoreColor()]}>

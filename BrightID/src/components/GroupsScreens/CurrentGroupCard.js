@@ -3,7 +3,8 @@
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import EligibleGroupAvatar from './EligibleGroupAvatar';
+import GroupAvatar from './GroupAvatar';
+import { groupName } from '../../utils/groups'
 
 /**
  * Connection Card in the Connections Screen
@@ -33,8 +34,8 @@ class CurrentGroupCard extends React.Component<Props, State> {
     const { group } = this.props;
     return (
       <TouchableOpacity style={styles.container}>
-        <EligibleGroupAvatar group={group} />
-        <Text style={styles.name}>{group.name}</Text>
+        <GroupAvatar group={group} />
+        <Text style={styles.name}>{ groupName(group) }</Text>
       </TouchableOpacity>
     );
   }

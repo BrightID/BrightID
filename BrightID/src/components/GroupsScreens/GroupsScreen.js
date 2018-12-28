@@ -3,11 +3,9 @@
 import * as React from 'react';
 import {
   FlatList,
-  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
-  ActivityIndicator,
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
@@ -37,13 +35,6 @@ import {
 
 const ICON_SIZE = 36;
 
-const groupData = [
-  { name: 'Whisler Crew', trustScore: '94.5' },
-  { name: 'Hawaii Fam', trustScore: '92.5' },
-  { name: 'Henry McWellington', trustScore: '5.6' },
-  { name: "Von Neuman's Mad Scientists", trustScore: '99.9' },
-];
-
 type Props = Main;
 
 type State = {
@@ -55,10 +46,6 @@ class ConnectionsScreen extends React.Component<Props, State> {
     title: 'Groups',
     headerRight: <View />,
   });
-
-  state = {
-    userInfoLoading: false,
-  };
 
   renderCurrentGroup({ item }) {
     const [group1, group2] = item;
@@ -73,10 +60,7 @@ class ConnectionsScreen extends React.Component<Props, State> {
   refreshUserInfo = async () => {
     console.log('refreshing user info');
     let { dispatch } = this.props;
-    this.setState({ userInfoLoading: true });
     await dispatch(fetchUserInfo());
-
-    this.setState({ userInfoLoading: false });
   };
 
   getTwoEligibleGroup() {
@@ -108,11 +92,6 @@ class ConnectionsScreen extends React.Component<Props, State> {
           ) : (
             <View />
           )}
-          {this.state.userInfoLoading && (
-            <View style={styles.alignCenter}>
-              <ActivityIndicator size="large" color="#0000ff" />
-            </View>
-          )}
           {!eligibleGroups.length && !currentGroups.length && (
             <EmptyFullScreen navigation={navigation} />
           )}
@@ -138,7 +117,7 @@ class ConnectionsScreen extends React.Component<Props, State> {
               <FlatList
                 data={groupPairs}
                 renderItem={this.renderCurrentGroup}
-                keyExtractor={([group1]) => group1 && group1.id}
+                keyExtractor={([group]) => group && group.id}
               />
             </View>
           )}
