@@ -2,14 +2,13 @@
 
 import * as React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
+import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 
 /**
  * Avatar Picture displayed on the HomeScreen
  * The Image is sourced from the main reducer as avatar
- * @prop avatar a raw image string
- * TODO store the image locally using asyncStorage
- * or any local db easy to use with React-native
+ * @prop avatar is a filename - avatars located in ~/documents/avatar
  */
 
 type Props = {
@@ -23,7 +22,11 @@ class CurrentGroupAvatar extends React.Component<Props> {
     return (
       <View style={styles.container}>
         <Image
-          source={avatar || require('../../static/default_avatar.jpg')}
+          source={{
+            uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
+              avatar.filename
+            }`,
+          }}
           style={styles.avatar}
         />
       </View>

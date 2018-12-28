@@ -21,13 +21,13 @@ export const handleBrightIdCreation = ({
     // create public / private key pair
     const { publicKey, secretKey } = nacl.sign.keyPair();
     await createConnectionAvatarDirectory();
-    const uri = await saveAvatar({ publicKey, base64Image: avatar.uri });
+    const filename = await saveAvatar({ publicKey, base64Image: avatar.uri });
 
     const userData = {
       publicKey,
       secretKey,
       nameornym,
-      avatar: { uri: `file://${uri}` },
+      avatar: { filename },
     };
 
     let creationResponse = await api.createUser(publicKey);

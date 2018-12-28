@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
+import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import { parseString } from 'xml2js';
 import { path } from 'ramda';
@@ -28,7 +29,7 @@ import { removeConnectQrData } from '../../actions';
 
 type Props = {
   dispatch: dispatch,
-  avatar: { uri: string },
+  avatar: { filename: string },
   nameornym: string,
   navigation: () => null,
   connectQrData: {
@@ -153,7 +154,11 @@ class MyCodeScreen extends React.Component<Props, State> {
           </View>
           <View style={styles.avatarContainer}>
             <Image
-              source={avatar || require('../../static/default_avatar.jpg')}
+              source={{
+                uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
+                  avatar.filename
+                }`,
+              }}
               style={styles.avatar}
               resizeMode="cover"
               onError={(e) => {

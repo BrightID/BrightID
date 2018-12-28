@@ -3,14 +3,13 @@
 import * as React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
+import RNFS from 'react-native-fs';
 import { groupPhotos } from '../../utils/groups';
 
 /**
  * Avatar Picture displayed on the HomeScreen
  * The Image is sourced from the main reducer as avatar
- * @prop avatar a raw image string
- * TODO store the image locally using asyncStorage
- * or any local db easy to use with React-native
+ * @prop avatar is a filename - avatars located in ~/documents/avatar
  */
 
 class GroupAvatar extends React.Component {
@@ -23,33 +22,46 @@ class GroupAvatar extends React.Component {
   }
 
   updatePhoto() {
-    this.setState({ groupPhotos: groupPhotos(this.props.group)});
+    const avatars = groupPhotos(this.props.group);
+    this.setState({ avatars });
   }
 
   render() {
-    const { groupPhotos } = this.state;
+    const { avatars } = this.state;
 
     return (
       <View style={styles.container}>
         <View style={styles.topAvatars}>
-          {groupPhotos[0] && (
+          {avatars[0] && (
             <Image
-              source={groupPhotos[0].avatar}
-              style={[styles.avatar, groupPhotos[0].faded ? styles.faded : '']}
+              source={{
+                uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
+                  avatars[0].avatar.filename
+                }`,
+              }}
+              style={[styles.avatar, avatars[0].faded ? styles.faded : '']}
             />
           )}
         </View>
         <View style={styles.bottomAvatars}>
-          {groupPhotos[1] && (
+          {avatars[1] && (
             <Image
-              source={groupPhotos[1].avatar}
-              style={[styles.avatar, groupPhotos[1].faded ? styles.faded : '']}
+              source={{
+                uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
+                  avatars[1].avatar.filename
+                }`,
+              }}
+              style={[styles.avatar, avatars[1].faded ? styles.faded : '']}
             />
           )}
-          {groupPhotos[2] && (
+          {avatars[2] && (
             <Image
-              source={groupPhotos[2].avatar}
-              style={[styles.avatar, groupPhotos[2].faded ? styles.faded : '']}
+              source={{
+                uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
+                  avatars[2].avatar.filename
+                }`,
+              }}
+              style={[styles.avatar, avatars[2].faded ? styles.faded : '']}
             />
           )}
         </View>

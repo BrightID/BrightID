@@ -123,10 +123,8 @@ class SignUp extends React.Component<Props, State> {
       loadingLabelText: 'loading photo...',
     };
 
-    if(__DEV__){
-      options.customButtons = [
-        { name: 'random', title: 'Random Avatar' }
-      ]
+    if (__DEV__) {
+      options.customButtons = [{ name: 'random', title: 'Random Avatar' }];
     }
     // loading UI to account for the delay after picking an image
     this.imagePickingTrue();
@@ -138,7 +136,7 @@ class SignUp extends React.Component<Props, State> {
         Alert.alert('ERROR', response.error);
         this.imagePickingFalse();
       } else if (response.customButton) {
-        this.randomAvatar()
+        this.randomAvatar();
       } else {
         const mime = mimeFromUri(response.uri);
         const avatar = {
@@ -163,19 +161,13 @@ class SignUp extends React.Component<Props, State> {
         this.setState({
           creatingBrightId: false,
         });
-        return Alert.alert(
-          'BrightID Form Incomplete',
-          'Please add your name',
-        );
+        return Alert.alert('BrightID Form Incomplete', 'Please add your name');
       }
       if (!avatar) {
         this.setState({
           creatingBrightId: false,
         });
-        return Alert.alert(
-          'BrightID Form Incomplete',
-          'A photo is required',
-        );
+        return Alert.alert('BrightID Form Incomplete', 'A photo is required');
       }
       const result = await dispatch(
         handleBrightIdCreation({ avatar, nameornym }),
@@ -210,7 +202,7 @@ class SignUp extends React.Component<Props, State> {
     );
 
   render() {
-    const { inputActive, imagePicking, nameornym, avatar } = this.state;
+    const { imagePicking, nameornym, avatar } = this.state;
 
     const AddPhotoButton = avatar ? (
       <TouchableOpacity
