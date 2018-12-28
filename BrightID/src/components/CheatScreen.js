@@ -27,7 +27,7 @@ import {
   strToUint8Array,
   uInt8ArrayToB64,
 } from '../utils/encoding';
-import api from "../Api/brightId";
+import api from "../Api/BrightId";
 
 /**
  * Home screen of BrightID

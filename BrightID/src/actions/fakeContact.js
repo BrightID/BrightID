@@ -4,7 +4,7 @@ import nacl from 'tweetnacl';
 import RNFetchBlob from 'rn-fetch-blob';
 import { Alert } from 'react-native';
 import { names } from '../utils/fakeNames';
-import api from '../Api/brightId';
+import api from '../Api/BrightId';
 import { setConnectUserData } from './index';
 import { strToUint8Array, uInt8ArrayToB64 } from '../utils/encoding';
 

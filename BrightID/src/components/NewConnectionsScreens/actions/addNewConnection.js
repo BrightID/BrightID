@@ -6,7 +6,7 @@ import emitter from '../../../emitter';
 import { saveAvatar } from '../../../utils/filesystem';
 import { strToUint8Array, uInt8ArrayToB64 } from '../../../utils/encoding';
 import { encryptAndUploadLocalData } from './encryptData';
-import api from '../../../Api/brightId';
+import api from '../../../Api/BrightId';
 
 export const addNewConnection = () => async (
   dispatch: () => null,

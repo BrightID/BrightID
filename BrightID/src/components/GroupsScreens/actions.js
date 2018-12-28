@@ -6,7 +6,7 @@ import {
   setEligibleGroups,
   setNewGroupCoFounders,
 } from '../../actions/index';
-import api from '../../Api/brightId';
+import api from '../../Api/BrightId';
 import { uInt8ArrayToUrlSafeB64 } from '../../utils/encoding';
 
 export const toggleNewGroupCoFounder = (publicKey) => (

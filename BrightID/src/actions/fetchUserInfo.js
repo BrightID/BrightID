@@ -1,6 +1,6 @@
 // @flow
 
-import api from '../Api/brightId';
+import api from '../Api/BrightId';
 import { setCurrentGroups, setEligibleGroups, setGroupsCount, setUserScore } from './index';
 
 const fetchUserInfo = () => async (dispatch: () => null) => {

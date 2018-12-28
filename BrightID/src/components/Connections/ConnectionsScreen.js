@@ -16,7 +16,7 @@ import { createNewConnection } from './createNewConnection';
 import emitter from '../../emitter';
 import BottomNav from '../BottomNav';
 import { renderListOrSpinner } from './renderConnections';
-import api from '../../Api/brightId';
+import api from '../../Api/BrightId';
 
 /**
  * Connection screen of BrightID
