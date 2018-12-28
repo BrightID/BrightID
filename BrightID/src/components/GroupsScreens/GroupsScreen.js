@@ -61,7 +61,7 @@ class GroupsScreen extends React.Component<Props, State> {
     if (groups.length === 1) groups.push('');
     return take(2, groups).map((group) =>
       group ? (
-        <EligibleGroupCard key={group.id} group={group} isNew={false} />
+        <EligibleGroupCard group={group} />
       ) : (
         <View style={styles.emptyContainer} />
       ),

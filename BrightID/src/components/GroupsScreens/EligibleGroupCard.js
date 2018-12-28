@@ -7,7 +7,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import GroupAvatar from './GroupAvatar';
 import { uInt8ArrayToUrlSafeB64 } from '../../utils/encoding';
 import { deleteNewGroup, joinGroup } from './actions';
-import { groupName } from '../../utils/groups'
+import { groupName } from '../../utils/groups';
 
 /**
  * Connection Card in the Connections Screen
@@ -85,10 +85,10 @@ class EligibleGroupCard extends React.Component<Props> {
 
   joinThisGroup = async () => {
     try {
-      let result = await this.props.dispatch(
-        joinGroup(this.props.group.id),
-      );
-      if (!result.success) {
+      let result = await this.props.dispatch(joinGroup(this.props.group.id));
+      if (result.success) {
+        GroupAvatar.updatePhoto();
+      } else {
         Alert.alert('Failed to join the group', JSON.stringify(result, null, 4));
       }
     } catch (err) {
@@ -106,7 +106,7 @@ class EligibleGroupCard extends React.Component<Props> {
     console.log(group);
     return (
       <View style={styles.container}>
-        <GroupAvatar group={group} />
+        <GroupAvatar group={group}/>
         <View style={styles.info}>
           <Text style={styles.names}>{groupName(group)}</Text>
           <View style={styles.scoreContainer}>
