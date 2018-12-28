@@ -13,7 +13,7 @@ import { groupPhotos } from '../../utils/groups';
  * or any local db easy to use with React-native
  */
 
-class GroupAvatar extends React.Component<Props> {
+class GroupAvatar extends React.Component {
   state = {
     groupPhotos: [],
   };
