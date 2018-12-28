@@ -76,34 +76,34 @@ export class HomeScreen extends React.Component<Props> {
           title="options"
           iconName="dots-horizontal"
           onPress={() => {
-            if (__DEV__) {
-              Alert.alert(
-                'WARNING',
-                'Would you like to delete user data and return to the onboarding screen?',
-                [
-                  {
-                    text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
+            // if (__DEV__) {
+            Alert.alert(
+              'WARNING',
+              'Would you like to delete user data and return to the onboarding screen?',
+              [
+                {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+                {
+                  text: 'Sure',
+                  onPress: async () => {
+                    try {
+                      navigation.navigate('Onboarding');
+                      await AsyncStorage.flushGetRequests();
+                      await AsyncStorage.clear();
+                      store.dispatch(removeUserData());
+                    } catch (err) {
+                      console.log(err);
+                    }
                   },
-                  {
-                    text: 'Sure',
-                    onPress: async () => {
-                      try {
-                        navigation.navigate('Onboarding');
-                        await AsyncStorage.flushGetRequests();
-                        await AsyncStorage.clear();
-                        store.dispatch(removeUserData());
-                      } catch (err) {
-                        console.log(err);
-                      }
-                    },
-                  },
-                ],
-                { cancelable: true },
-              );
-            }
+                },
+              ],
+              { cancelable: true },
+            );
           }}
+          // }
         />
       </HeaderButtons>
     ),

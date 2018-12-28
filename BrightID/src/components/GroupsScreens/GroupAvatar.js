@@ -14,7 +14,7 @@ import { groupPhotos } from '../../utils/groups';
 
 class GroupAvatar extends React.Component<Props> {
   state = {
-    groupPhotos: [],
+    avatars: [],
   };
 
   componentDidMount() {
