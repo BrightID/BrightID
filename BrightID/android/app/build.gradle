@@ -166,7 +166,6 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-selection-menu')
     compile project(':react-native-image-picker')
     compile project(':react-native-fs')
     compile project(':rn-fetch-blob')

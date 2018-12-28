@@ -18,16 +18,19 @@ export const saveAvatar = async ({ base64Image, publicKey }) => {
     const key = uInt8ToKeyString(publicKey);
     const path = `${RNFS.DocumentDirectoryPath}/avatars/${key}.${filetype}`;
     await RNFS.writeFile(path, image, 'base64');
-    return path;
+    return `${key}.${filetype}`;
   } catch (err) {
     Alert.alert('Error', err.stack);
   }
 };
 
-export const retrieveAvatar = async (uri) => {
+export const retrieveAvatar = async (filename) => {
   try {
-    const mime = mimeFromUri(uri);
-    const base64Image = await RNFS.readFile(uri, 'base64');
+    const mime = mimeFromUri(filename);
+    const base64Image = await RNFS.readFile(
+      `${RNFS.DocumentDirectoryPath}/avatars/${filename}`,
+      'base64',
+    );
     return `data:${mime};base64,${base64Image}`;
   } catch (err) {
     Alert.alert('Error', err.stack);

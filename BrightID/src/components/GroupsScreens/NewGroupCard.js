@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
+import RNFS from 'react-native-fs';
 import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -86,16 +87,18 @@ class NewGroupCard extends React.PureComponent<Props> {
     return (
       <View style={{ ...styles.container, ...style }}>
         <Image
-          source={avatar || require('../../static/default_avatar.jpg')}
+          source={{
+            uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
+              avatar.filename
+            }`,
+          }}
           style={styles.avatar}
         />
         <View style={styles.info}>
           <Text style={styles.name}>{nameornym}</Text>
           <View style={styles.scoreContainer}>
             <Text style={styles.scoreLeft}>Score:</Text>
-            <Text style={[styles.scoreRight, this.scoreColor()]}>
-              {score}
-            </Text>
+            <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>
           </View>
           <Text style={styles.connectedText}>
             Connected {moment(parseInt(connectionDate, 10)).fromNow()}
