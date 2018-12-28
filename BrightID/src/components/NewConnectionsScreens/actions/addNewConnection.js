@@ -50,6 +50,10 @@ export const addNewConnection = () => async (
     });
     // TODO formalize spec for this
     // create a new connection object
+
+    // TODO: call to backend to get all connections scores, then update all of them
+    // A score from a node is reliable, whereas a score from a direct connection may not be.
+    
     const connectionData = {
       publicKey: connectUserData.publicKey,
       nameornym: connectUserData.nameornym,
