@@ -46,5 +46,5 @@ export const groupName = (group) => {
   const names = memberList.map((publicKey) =>
     publicKey === userPk ? nameornym : findConnection(publicKey, connections).nameornym,
   );
-  return names.map( n => n.substr(0,8)).join(', ');
+  return names.map( n => n.substr(0,12)).join(', ');
 };

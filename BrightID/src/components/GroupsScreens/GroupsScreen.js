@@ -41,7 +41,7 @@ type State = {
   userInfoLoading: boolean,
 };
 
-class ConnectionsScreen extends React.Component<Props, State> {
+class GroupsScreen extends React.Component<Props, State> {
   static navigationOptions = () => ({
     title: 'Groups',
     headerRight: <View />,
@@ -277,4 +277,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(ConnectionsScreen);
+export default connect((state) => state.main)(GroupsScreen);
