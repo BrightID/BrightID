@@ -4,9 +4,7 @@ import * as React from 'react';
 import {
   Alert,
   AsyncStorage,
-  Dimensions,
   Image,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -17,6 +15,7 @@ import HeaderButtons, {
   HeaderButton,
   Item,
 } from 'react-navigation-header-buttons';
+import RNFS from 'react-native-fs';
 import { NavigationEvents } from 'react-navigation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -138,7 +137,11 @@ export class HomeScreen extends React.Component<Props> {
         <View style={styles.mainContainer}>
           <View style={styles.avatarContainer}>
             <Image
-              source={avatar || require('../static/default_avatar.jpg')}
+              source={{
+                uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
+                  avatar.filename
+                }`,
+              }}
               style={styles.avatar}
               resizeMode="cover"
               onError={(e) => {

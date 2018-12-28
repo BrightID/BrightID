@@ -41,10 +41,7 @@ export const setUserScore = (score: number) => ({
  *
  */
 
-export const connectionScore = (
-  publicKey: Uint8Array,
-  score: number,
-) => ({
+export const connectionScore = (publicKey: Uint8Array, score: number) => ({
   type: CONNECTION_SCORE,
   publicKey,
   score,
@@ -180,7 +177,7 @@ export const setUserData = ({
   publicKey: Uint8Array,
   secretKey: Uint8Array,
   nameornym: string,
-  avatar: { uri: string },
+  avatar: { filename: string },
 }) => ({
   type: UPDATE_USER_DATA,
   publicKey,
@@ -234,5 +231,3 @@ export const setConnectUserData = (connectUserData: {
 export const removeConnectUserData = () => ({
   type: REMOVE_CONNECT_USER_DATA,
 });
-
-

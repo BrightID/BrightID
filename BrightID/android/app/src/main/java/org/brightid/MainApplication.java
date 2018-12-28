@@ -3,7 +3,6 @@ package org.brightid;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import ui.selectionmenu.RNSelectionMenuPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.rnfs.RNFSPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
@@ -33,7 +32,6 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNSelectionMenuPackage(),
             new ImagePickerPackage(),
             new RNFSPackage(),
             new RNFetchBlobPackage(),

@@ -44,7 +44,7 @@ export const addNewConnection = () => async (
 
       dispatch(encryptAndUploadLocalData());
     }
-    const uri = await saveAvatar({
+    const filename = await saveAvatar({
       publicKey: connectUserData.publicKey,
       base64Image: connectUserData.avatar,
     });
@@ -62,7 +62,7 @@ export const addNewConnection = () => async (
       score: connectUserData.score,
       secretKey: connectUserData.secretKey || '',
       connectionDate,
-      avatar: { uri: `file://${uri}` },
+      avatar: { filename },
     };
 
     // add connection inside of async storage
