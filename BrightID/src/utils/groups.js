@@ -22,7 +22,7 @@ export const groupPhotos = (group) => {
   const memberList = group.isNew ? founders : knownMembers;
 
   const photos = memberList.map((publicKey) => {
-    let foundAvatar, faded;
+    let foundAvatar;
     if (userPk === publicKey) {
       foundAvatar = avatar;
     } else {
@@ -31,7 +31,7 @@ export const groupPhotos = (group) => {
     // knownMembers has the founders that have joined. If a founder isn't in
     // knownMembers, that founder hasn't joined yet and will still show in the
     // list, but be faded.
-    faded = group.isNew && !knownMembers.includes(publicKey);
+    const faded = group.isNew && !knownMembers.includes(publicKey);
     return { avatar: foundAvatar , faded};
   });
 
