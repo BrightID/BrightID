@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import GroupAvatar from './GroupAvatar';
 import { uInt8ArrayToUrlSafeB64 } from '../../utils/encoding';
-import { deleteNewGroup, joinGroup } from './actions';
+import { deleteNewGroup, join } from './actions';
 import { groupName } from '../../utils/groups';
 
 /**
@@ -16,6 +16,11 @@ import { groupName } from '../../utils/groups';
  * @prop name
  * @prop score
  */
+type Props = {
+  group: { id: string, knownMembers: string[] },
+  dispatch: dispatch,
+  publicKey: []
+}
 
 class EligibleGroupCard extends React.Component<Props> {
 
@@ -85,8 +90,9 @@ class EligibleGroupCard extends React.Component<Props> {
   };
 
   joinThisGroup = async () => {
+    const { dispatch, group } = this.props;
     try {
-      let result = await this.props.dispatch(joinGroup(this.props.group.id));
+      let result = await dispatch(join(group));
       if (!result.success) {
         Alert.alert('Failed to join the group', JSON.stringify(result, null, 4));
       }

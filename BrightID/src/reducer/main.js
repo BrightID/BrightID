@@ -9,6 +9,8 @@ import {
   SET_ELIGIBLE_GROUPS,
   DELETE_ELIGIBLE_GROUP,
   SET_CURRENT_GROUPS,
+  JOIN_GROUP,
+  JOIN_GROUP_AS_CO_FOUNDER,
   UPDATE_CONNECTIONS,
   CONNECTIONS_SORT,
   ADD_CONNECTION,
@@ -21,6 +23,7 @@ import {
   SET_CONNECT_USER_DATA,
   REMOVE_CONNECT_USER_DATA,
 } from '../actions';
+import { uInt8ArrayToUrlSafeB64 } from '../utils/encoding';
 
 /**
  * INITIAL STATE
@@ -45,6 +48,7 @@ export const initialState: Main = {
   currentGroups: [],
   connections: [],
   publicKey: null,
+  safePubKey: '',
   secretKey: null,
   connectionsSort: '',
   connectQrData: {
@@ -60,12 +64,12 @@ export const initialState: Main = {
     avatar: '',
     nameornym: '',
     timestamp: '',
-    signedMessage: ''
+    signedMessage: '',
   },
 };
 
 export const mainReducer = (state: Main = initialState, action: {}) => {
-  const connections = state.connections.slice();
+  let connections, newElGroups, index;
   switch (action.type) {
     case USER_SCORE:
       return {
@@ -108,13 +112,31 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
       return {
         ...state,
         eligibleGroups: [...state.eligibleGroups].filter(
-          (group) => group.id !== action.groupId,
+          group => group.id !== action.groupId,
         ),
       };
     case SET_CURRENT_GROUPS:
       return {
         ...state,
         currentGroups: action.currentGroups,
+      };
+    case JOIN_GROUP:
+      action.group.isNew = false;
+      action.group.knownMembers.push(state.safePubKey);
+      return {
+        ...state,
+        currentGroups: [...state.currentGroups, action.group],
+        eligibleGroups: [...state.eligibleGroups].filter(
+          group => group.id !== action.group.id,
+        )
+      };
+    case JOIN_GROUP_AS_CO_FOUNDER:
+      newElGroups = state.eligibleGroups.slice();
+      index = newElGroups.findIndex(g => g.id === action.groupId);
+      newElGroups[index].knownMembers.push(state.safePubKey);
+      return {
+        ...state,
+        eligibleGroups: newElGroups,
       };
     case UPDATE_CONNECTIONS:
       return {
@@ -127,11 +149,13 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         connectionsSort: action.connectionsSort,
       };
     case ADD_CONNECTION:
+      connections = state.connections.slice();
       return {
         ...state,
         connections: [action.connection, ...connections],
       };
     case REMOVE_CONNECTION:
+      connections = state.connections.slice();
       return {
         ...state,
         connections: connections.filter(
@@ -145,6 +169,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         avatar: action.avatar,
         nameornym: action.nameornym,
         publicKey: action.publicKey,
+        safePubKey: uInt8ArrayToUrlSafeB64(action.publicKey),
         secretKey: action.secretKey,
       };
     case REMOVE_USER_DATA:
@@ -190,7 +215,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
           avatar: '',
           nameornym: '',
           timestamp: '',
-          signedMessage: ''
+          signedMessage: '',
         },
       };
     default:

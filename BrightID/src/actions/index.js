@@ -9,6 +9,8 @@ export const CLEAR_NEW_GROUP_CO_FOUNDERS = 'CLEAR_NEW_GROUP_CO_FOUNDERS';
 export const SET_ELIGIBLE_GROUPS = 'SET_ELIGIBLE_GROUPS';
 export const DELETE_ELIGIBLE_GROUP = 'DELETE_ELIGIBLE_GROUP';
 export const SET_CURRENT_GROUPS = 'SET_CURRENT_GROUPS';
+export const JOIN_GROUP = 'JOIN_GROUP';
+export const JOIN_GROUP_AS_CO_FOUNDER = 'JOIN_GROUP_AS_CO_FOUNDER';
 export const UPDATE_CONNECTIONS = 'UPDATE_CONNECTIONS';
 export const CONNECTIONS_SORT = 'CONNECTIONS_SORT';
 export const ADD_CONNECTION = 'ADD_CONNECTION';
@@ -111,6 +113,16 @@ export const setCurrentGroups = (currentGroups) => ({
   type: SET_CURRENT_GROUPS,
   currentGroups,
 });
+
+export const joinGroup = (group) => ({
+  type: JOIN_GROUP,
+  group,
+});
+
+export const joinGroupAsCoFounder = (groupId) => ({
+  type: JOIN_GROUP_AS_CO_FOUNDER,
+  groupId,
+})
 
 /**
  * redux action creator for setting connections array

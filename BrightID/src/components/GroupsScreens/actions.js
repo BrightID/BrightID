@@ -2,12 +2,11 @@
 import { Alert } from 'react-native';
 import {
   deleteEligibleGroup,
-  setCurrentGroups,
-  setEligibleGroups,
+  joinGroup,
+  joinGroupAsCoFounder,
   setNewGroupCoFounders,
 } from '../../actions/index';
 import api from '../../Api/BrightId';
-import { uInt8ArrayToUrlSafeB64 } from '../../utils/encoding';
 
 export const toggleNewGroupCoFounder = (publicKey) => (
   dispatch: dispatch,
@@ -45,31 +44,16 @@ export const createNewGroup = () => async (
   if (response.data && response.data.id) return true;
 };
 
-export const joinGroup = (groupId) => async (
-  dispatch: () => null,
-  getState: () => {},
+export const join = (group) => async (
+  dispatch: () => null
 ) => {
-  let result = await api.joinGroup(groupId);
+  let result = await api.joinGroup(group.id);
   if (result.success) {
-    let { eligibleGroups, currentGroups, publicKey } = getState().main;
-    let newCurrentGroups = [];
-    let userKey = uInt8ArrayToUrlSafeB64(publicKey);
-    eligibleGroups = [...eligibleGroups].reduce((filtered, group) => {
-      if (group.id === groupId) {
-        if (group.knownMembers.indexOf(userKey) < 0)
-          group.knownMembers.push(userKey);
-      }
-      // when third co-founder join the group, the group will move to current groups
-      if (group.knownMembers.length > 2) {
-        newCurrentGroups.push(group);
-      } else {
-        filtered.push(group);
-      }
-      return filtered;
-    }, []);
-    await dispatch(setEligibleGroups(eligibleGroups));
-    if (newCurrentGroups.length > 0) {
-      await dispatch(setCurrentGroups([...currentGroups, ...newCurrentGroups]));
+    if(group.isNew && group.knownMembers.length < 3){
+      dispatch(joinGroupAsCoFounder(group.id));
+    }
+    else {
+      dispatch(joinGroup(group));
     }
   }
   return result;
