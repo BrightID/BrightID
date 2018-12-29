@@ -18,6 +18,7 @@ import { groupName } from '../../utils/groups';
  */
 
 class EligibleGroupCard extends React.Component<Props> {
+
   renderApprovalButtons = () => (
     <View style={styles.approvalButtonContainer}>
       <TouchableOpacity
@@ -86,9 +87,7 @@ class EligibleGroupCard extends React.Component<Props> {
   joinThisGroup = async () => {
     try {
       let result = await this.props.dispatch(joinGroup(this.props.group.id));
-      if (result.success) {
-        GroupAvatar.updatePhoto();
-      } else {
+      if (!result.success) {
         Alert.alert('Failed to join the group', JSON.stringify(result, null, 4));
       }
     } catch (err) {
@@ -106,7 +105,7 @@ class EligibleGroupCard extends React.Component<Props> {
     console.log(group);
     return (
       <View style={styles.container}>
-        <GroupAvatar group={group}/>
+        <GroupAvatar group={group} />
         <View style={styles.info}>
           <Text style={styles.names}>{groupName(group)}</Text>
           <View style={styles.scoreContainer}>

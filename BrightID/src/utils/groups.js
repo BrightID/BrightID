@@ -11,7 +11,7 @@ const findConnection = (findKey, connections) =>
     (connection) => uInt8ArrayToUrlSafeB64(connection.publicKey) === findKey,
   ) || STRANGER;
 
-export const groupPhotos = (group) => {
+export const groupCirclePhotos = (group) => {
   const { avatar, publicKey, connections } = store.getState().main;
   const { knownMembers, founders } = group;
   const userPk = uInt8ArrayToUrlSafeB64(publicKey);

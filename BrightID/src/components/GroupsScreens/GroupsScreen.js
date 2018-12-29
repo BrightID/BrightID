@@ -27,17 +27,13 @@ const ICON_SIZE = 36;
 
 type Props = Main;
 
-type State = {
-  userInfoLoading: boolean,
-};
-
 class GroupsScreen extends React.Component<Props, State> {
   static navigationOptions = () => ({
     title: 'Groups',
     headerRight: <View />,
   });
 
-  renderCurrentGroup({ item }) {
+  renderCurrentGroups({ item }) {
     const [group1, group2] = item;
     return (
       <View style={styles.currentGroupRow}>
@@ -49,11 +45,10 @@ class GroupsScreen extends React.Component<Props, State> {
 
   refreshUserInfo = async () => {
     console.log('refreshing user info');
-    let { dispatch } = this.props;
-    await dispatch(fetchUserInfo());
+    await this.props.dispatch(fetchUserInfo());
   };
 
-  getTwoEligibleGroup() {
+  getTwoEligibleGroups() {
     let { eligibleGroups } = this.props;
     let groups = eligibleGroups
       .filter((group: { isNew: boolean }) => group.isNew)
@@ -77,7 +72,7 @@ class GroupsScreen extends React.Component<Props, State> {
       <View style={styles.container}>
         <View style={styles.mainContainer}>
           <NavigationEvents onDidFocus={this.refreshUserInfo} />
-          {eligibleGroups.length || currentGroups.length ? (
+          {eligibleGroups.length > 2 || currentGroups.length > 2 ? (
             <SearchGroups />
           ) : (
             <View />
@@ -88,7 +83,7 @@ class GroupsScreen extends React.Component<Props, State> {
           {!!eligibleGroups.length && (
             <View style={styles.eligibleContainer}>
               <Text style={styles.eligibleGroupTitle}>ELIGIBLE</Text>
-              {this.getTwoEligibleGroup()}
+              {this.getTwoEligibleGroups()}
               <View style={styles.eligibleBottomBorder} />
               <TouchableOpacity style={styles.seeAllButton}>
                 <Text style={styles.seeAllText}>
@@ -106,7 +101,7 @@ class GroupsScreen extends React.Component<Props, State> {
               <Text style={styles.currentGroupTitle}>CURRENT</Text>
               <FlatList
                 data={groupPairs}
-                renderItem={this.renderCurrentGroup}
+                renderItem={this.renderCurrentGroups}
                 keyExtractor={([group]) => group && group.id}
               />
             </View>
