@@ -4,7 +4,6 @@ import * as React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import RNFS from 'react-native-fs';
-import { NavigationEvents } from 'react-navigation';
 import { groupCirclePhotos } from '../../utils/groups';
 
 /**
