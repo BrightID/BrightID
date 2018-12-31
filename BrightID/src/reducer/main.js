@@ -69,7 +69,7 @@ export const initialState: Main = {
 };
 
 export const mainReducer = (state: Main = initialState, action: {}) => {
-  let connections, newElGroups, index;
+  let connections, newElGroups, groupIndex, group, newKnownMembers;
   switch (action.type) {
     case USER_SCORE:
       return {
@@ -94,7 +94,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
     case SET_NEW_GROUP_CO_FOUNDERS: {
       return {
         ...state,
-        newGroupCoFounders: [...action.coFounders],
+        newGroupCoFounders: action.coFounders,
       };
     }
     case CLEAR_NEW_GROUP_CO_FOUNDERS: {
@@ -111,7 +111,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
     case DELETE_ELIGIBLE_GROUP:
       return {
         ...state,
-        eligibleGroups: [...state.eligibleGroups].filter(
+        eligibleGroups: state.eligibleGroups.filter(
           group => group.id !== action.groupId,
         ),
       };
@@ -125,15 +125,19 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
       action.group.knownMembers.push(state.safePubKey);
       return {
         ...state,
-        currentGroups: [...state.currentGroups, action.group],
-        eligibleGroups: [...state.eligibleGroups].filter(
+        currentGroups: [action.group, ...state.currentGroups],
+        eligibleGroups: state.eligibleGroups.filter(
           group => group.id !== action.group.id,
         )
       };
     case JOIN_GROUP_AS_CO_FOUNDER:
+      // modify eligibleGroups[groupIndex].knownMembers, creating copies
+      // at each of those three levels
       newElGroups = state.eligibleGroups.slice();
-      index = newElGroups.findIndex(g => g.id === action.groupId);
-      newElGroups[index].knownMembers.push(state.safePubKey);
+      groupIndex = newElGroups.findIndex(g => g.id === action.groupId);
+      group = newElGroups[groupIndex];
+      newKnownMembers = [...group.knownMembers, state.safePubKey];
+      newElGroups[groupIndex] = {...group, knownMembers: newKnownMembers};
       return {
         ...state,
         eligibleGroups: newElGroups,
