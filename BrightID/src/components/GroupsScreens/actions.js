@@ -49,10 +49,10 @@ export const join = (group) => async (
 ) => {
   let result = await api.joinGroup(group.id);
   if (result.success) {
-    if(group.isNew && group.knownMembers.length < 3){
+    if(group.isNew && group.knownMembers.length < 2){ // only creator has joined
       dispatch(joinGroupAsCoFounder(group.id));
     }
-    else {
+    else { // creator and other co-founder have already joined; treat it as a normal group
       dispatch(joinGroup(group));
     }
   }
