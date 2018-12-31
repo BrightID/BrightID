@@ -36,7 +36,7 @@ const MaterialHeaderButton = (passMeFurther) => (
 type Props = {
   navigation: { navigate: () => null },
   dispatch: () => null,
-  previewPublicKey: Uint8Array,
+  previewPublicKey: string,
 };
 
 class NewConnectionScreen extends React.Component<Props> {

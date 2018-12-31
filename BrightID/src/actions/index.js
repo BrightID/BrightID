@@ -1,7 +1,6 @@
 // @flow
 
 export const USER_SCORE = 'USER_SCORE';
-export const CONNECTION_SCORE = 'CONNECTION_SCORE';
 export const GROUPS_COUNT = 'GROUPS_COUNT';
 export const SEARCH_PARAM = 'SEARCH_PARAM';
 export const SET_NEW_GROUP_CO_FOUNDERS = 'SET_NEW_GROUP_CO_FOUNDERS';
@@ -36,20 +35,6 @@ export const setUserScore = (score: number) => ({
 });
 
 /**
- * redux action creator that updates a connection's trust score in the connection array
- * @param type CONNECTION_SCORE
- * @param publicKey Uint8Array to identify connection
- * @param score string fetched from server
- *
- */
-
-export const connectionScore = (publicKey: Uint8Array, score: number) => ({
-  type: CONNECTION_SCORE,
-  publicKey,
-  score,
-});
-
-/**
  * redux action creator updates the Group Count
  * unneccessary after group API is created
  *
@@ -75,7 +60,7 @@ export const setSearchParam = (value: string) => ({
  * redux action creator for set co-founders of new group
  * @param coFounders: an array contain two publicKeys of co-founders of new group.
  */
-export const setNewGroupCoFounders = (coFounders: Array<Uint8Array>) => ({
+export const setNewGroupCoFounders = (coFounders: string[]) => ({
   type: SET_NEW_GROUP_CO_FOUNDERS,
   coFounders,
 });
@@ -153,7 +138,7 @@ export const setConnectionsSort = (connectionsSort: string) => ({
  */
 
 export const addConnection = (connection: {
-  publicKey: Uint8Array,
+  publicKey: string,
   name: string,
   photo: string,
   score: number,
@@ -232,7 +217,7 @@ export const removeConnectQrData = () => ({
 
 export const setConnectUserData = (connectUserData: {
   name: string,
-  publicKey: Uint8Array,
+  publicKey: string,
   photo: string,
   score: number,
 }) => ({

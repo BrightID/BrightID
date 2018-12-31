@@ -28,7 +28,7 @@ import { toggleNewGroupCoFounder } from './actions';
  */
 
 type Props = {
-  nameornym: string,
+  name: string,
   photo: string,
   score: string,
   connectionDate: string,
@@ -82,7 +82,7 @@ class NewGroupCard extends React.PureComponent<Props> {
   };
 
   render() {
-    const { photo, nameornym, score, connectionDate, style } = this.props;
+    const { photo, name, score, connectionDate, style } = this.props;
 
     return (
       <View style={{ ...styles.container, ...style }}>
@@ -95,7 +95,7 @@ class NewGroupCard extends React.PureComponent<Props> {
           style={styles.photo}
         />
         <View style={styles.info}>
-          <Text style={styles.name}>{nameornym}</Text>
+          <Text style={styles.name}>{name}</Text>
           <View style={styles.scoreContainer}>
             <Text style={styles.scoreLeft}>Score:</Text>
             <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>

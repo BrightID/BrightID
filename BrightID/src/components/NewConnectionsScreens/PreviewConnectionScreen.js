@@ -23,7 +23,7 @@ type Props = {
   dispatch: () => null,
   previewName: string,
   previewTimestamp: number,
-  previewPublicKey: Uint8Array,
+  previewPublicKey: string,
   previewScore: string,
   previewPhoto: string,
   navigation: { goBack: () => null, navigate: (string) => null },

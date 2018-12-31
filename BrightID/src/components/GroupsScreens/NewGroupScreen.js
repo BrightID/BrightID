@@ -73,13 +73,8 @@ class NewGroupScreen extends React.Component<Props, State> {
   };
 
   cardIsSelected = (card) => {
-    let { newGroupCoFounders } = this.props;
-    for (let i in newGroupCoFounders)
-      if (
-        JSON.stringify(newGroupCoFounders[i]) === JSON.stringify(card.publicKey)
-      )
-        return true;
-    return false;
+    const { newGroupCoFounders } = this.props;
+    return newGroupCoFounders.includes(card.publicKey);
   };
 
   renderConnection = ({ item }) => (

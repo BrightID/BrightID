@@ -2,7 +2,7 @@ import store from '../store';
 
 const STRANGER = {
   photo: { filename: '' },
-  nameornym: 'Stranger',
+  name: 'Stranger',
 };
 
 const findConnection = (findKey, connections) =>
@@ -31,12 +31,12 @@ export const groupCirclePhotos = (group) => {
 };
 
 export const groupName = (group) => {
-  const { safePubKey, nameornym, connections } = store.getState().main;
+  const { safePubKey, name, connections } = store.getState().main;
   const memberList = group.isNew ? group.founders : group.knownMembers;
   const names = memberList.map((publicKey) =>
     publicKey === safePubKey
-      ? nameornym
-      : findConnection(publicKey, connections).nameornym,
+      ? name
+      : findConnection(publicKey, connections).name,
   );
   return names.map((n) => n.substr(0, 12)).join(', ');
 };

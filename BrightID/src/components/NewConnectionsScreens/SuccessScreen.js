@@ -13,7 +13,7 @@ import { removeConnectUserData } from '../../actions';
  */
 
 type Props = {
-  publicKey: Uint8Array,
+  publicKey: string,
   score: string,
   photo: string,
   name: string,

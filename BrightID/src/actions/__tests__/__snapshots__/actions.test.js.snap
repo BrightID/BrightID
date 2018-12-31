@@ -72,14 +72,6 @@ Object {
 }
 `;
 
-exports[`actions should create an action to update the trust score of a connection 1`] = `
-Object {
-  "publicKey": Array [],
-  "score": "88.6",
-  "type": "CONNECTION_SCORE",
-}
-`;
-
 exports[`actions should create an action to update the user trust score 1`] = `
 Object {
   "score": "99.9",
