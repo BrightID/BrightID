@@ -11,12 +11,12 @@ export const createConnectionPhotoDirectory = async () => {
   }
 };
 
-export const savePhoto = async ({ base64Image, publicKey }) => {
+export const savePhoto = async ({ base64Image, safePubKey }) => {
   try {
     const { filetype, image } = parseBase64(base64Image);
-    const path = `${RNFS.DocumentDirectoryPath}/photos/${publicKey}.${filetype}`;
+    const path = `${RNFS.DocumentDirectoryPath}/photos/${safePubKey}.${filetype}`;
     await RNFS.writeFile(path, image, 'base64');
-    return `${publicKey}.${filetype}`;
+    return `${safePubKey}.${filetype}`;
   } catch (err) {
     Alert.alert('Error', err.stack);
   }

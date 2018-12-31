@@ -48,7 +48,7 @@ export const addNewConnection = () => async (
     const connectUserSafePubKey = b64ToUrlSafeB64(connectUserData.publicKey);
 
     const filename = await savePhoto({
-      publicKey: connectUserSafePubKey,
+      safePubKey: connectUserSafePubKey,
       base64Image: connectUserData.photo,
     });
     // TODO formalize spec for this
