@@ -13,10 +13,8 @@ import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import emitter from '../../emitter';
 import { fakeJoinGroups } from '../../actions/fakeGroup';
-import { toggleNewGroupCoFounder } from '../GroupsScreens/actions';
 
 /**
  * Connection Card in the Connections Screen

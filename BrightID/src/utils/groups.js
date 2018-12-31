@@ -1,4 +1,3 @@
-import { uInt8ArrayToUrlSafeB64 } from './encoding';
 import store from '../store';
 
 const STRANGER = {
@@ -7,41 +6,35 @@ const STRANGER = {
 };
 
 const findConnection = (findKey, connections) =>
-  connections.find(
-    (connection) => uInt8ArrayToUrlSafeB64(connection.publicKey) === findKey,
-  ) || STRANGER;
+  connections.find(u => u.publicKey === findKey) || STRANGER;
 
 export const groupCirclePhotos = (group) => {
-  const { avatar, publicKey, connections } = store.getState().main;
+  const { avatar, safePubKey, connections } = store.getState().main;
   const { knownMembers, founders } = group;
-  const userPk = uInt8ArrayToUrlSafeB64(publicKey);
 
   const memberList = group.isNew ? founders : knownMembers;
 
-  const photos = memberList.map((publicKey) => {
+  const photos = memberList.map((memberKey) => {
     let foundAvatar;
-    if (userPk === publicKey) {
+    if (safePubKey === memberKey) {
       foundAvatar = avatar;
     } else {
-      foundAvatar = findConnection(publicKey, connections).avatar;
+      foundAvatar = findConnection(memberKey, connections).avatar;
     }
-    // knownMembers has the founders that have joined. If a founder isn't in
-    // knownMembers, that founder hasn't joined yet and will still show in the
-    // list, but be faded.
-    const faded = group.isNew && !knownMembers.includes(publicKey);
+    // If a founder isn't in knownMembers, that founder hasn't joined yet and
+    // will show as faded in the list.
+    const faded = group.isNew && !knownMembers.includes(memberKey);
     return { avatar: foundAvatar, faded };
   });
-
   console.log(photos);
   return photos;
 };
 
 export const groupName = (group) => {
-  const { publicKey, nameornym, connections } = store.getState().main;
-  const userPk = uInt8ArrayToUrlSafeB64(publicKey);
+  const { safePubKey, nameornym, connections } = store.getState().main;
   const memberList = group.isNew ? group.founders : group.knownMembers;
   const names = memberList.map((publicKey) =>
-    publicKey === userPk
+    publicKey === safePubKey
       ? nameornym
       : findConnection(publicKey, connections).nameornym,
   );

@@ -23,7 +23,7 @@ import {
   SET_CONNECT_USER_DATA,
   REMOVE_CONNECT_USER_DATA,
 } from '../actions';
-import { uInt8ArrayToUrlSafeB64 } from '../utils/encoding';
+import { b64ToUrlSafeB64 } from '../utils/encoding';
 
 /**
  * INITIAL STATE
@@ -47,7 +47,7 @@ export const initialState: Main = {
   eligibleGroups: [],
   currentGroups: [],
   connections: [],
-  publicKey: null,
+  publicKey: '',
   safePubKey: '',
   secretKey: null,
   connectionsSort: '',
@@ -60,7 +60,7 @@ export const initialState: Main = {
     channel: '',
   },
   connectUserData: {
-    publicKey: null,
+    publicKey: '',
     avatar: '',
     nameornym: '',
     timestamp: '',
@@ -173,7 +173,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         avatar: action.avatar,
         nameornym: action.nameornym,
         publicKey: action.publicKey,
-        safePubKey: uInt8ArrayToUrlSafeB64(action.publicKey),
+        safePubKey: action.safePubKey,
         secretKey: action.secretKey,
       };
     case REMOVE_USER_DATA:

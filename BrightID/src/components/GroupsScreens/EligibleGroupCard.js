@@ -5,7 +5,6 @@ import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import GroupAvatar from './GroupAvatar';
-import { uInt8ArrayToUrlSafeB64 } from '../../utils/encoding';
 import { deleteNewGroup, join } from './actions';
 import { groupName } from '../../utils/groups';
 
@@ -102,8 +101,8 @@ class EligibleGroupCard extends React.Component<Props> {
   };
 
   alreadyIn() {
-    const { group, publicKey } = this.props;
-    return group.knownMembers.indexOf(uInt8ArrayToUrlSafeB64(publicKey)) >= 0;
+    const { group, safePubKey } = this.props;
+    return group.knownMembers.indexOf(safePubKey) >= 0;
   }
 
   render() {

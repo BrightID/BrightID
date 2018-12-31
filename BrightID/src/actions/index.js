@@ -186,7 +186,7 @@ export const setUserData = ({
   nameornym,
   avatar,
 }: {
-  publicKey: Uint8Array,
+  publicKey: string,
   secretKey: Uint8Array,
   nameornym: string,
   avatar: { filename: string },

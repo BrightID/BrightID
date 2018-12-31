@@ -9,6 +9,7 @@ import {
   saveAvatar,
 } from '../../utils/filesystem';
 import api from '../../Api/BrightId';
+import { b64ToUrlSafeB64, uInt8ArrayToB64 } from '../../utils/encoding';
 
 export const handleBrightIdCreation = ({
   nameornym,
@@ -20,19 +21,22 @@ export const handleBrightIdCreation = ({
   try {
     // create public / private key pair
     const { publicKey, secretKey } = nacl.sign.keyPair();
+    const b64PubKey = uInt8ArrayToB64(publicKey);
+    const safePubKey = b64ToUrlSafeB64(b64PubKey);
     await createConnectionAvatarDirectory();
-    const filename = await saveAvatar({ publicKey, base64Image: avatar.uri });
+    const filename = await saveAvatar({ safePubKey, base64Image: avatar.uri });
 
     const userData = {
-      publicKey,
+      publicKey: b64PubKey,
+      safePubKey,
       secretKey,
       nameornym,
       avatar: { filename },
     };
 
-    let creationResponse = await api.createUser(publicKey);
+    let creationResponse = await api.createUser(b64PubKey);
     if (creationResponse.data && creationResponse.data.key) {
-      // // save avatar photo base64 data, and user data in async storage
+      // // save photo base64 data, and user data in async storage
       await AsyncStorage.setItem('userData', JSON.stringify(userData));
       // // update redux store
       await dispatch(setUserData(userData));

@@ -2,7 +2,6 @@
 import { AsyncStorage } from 'react-native';
 import { setConnections } from './index';
 import { defaultSort } from '../components/Connections/sortingUtility';
-import { objToUint8 } from '../utils/encoding';
 
 export const getConnections = () => async (dispatch: () => null) => {
   try {
@@ -16,11 +15,7 @@ export const getConnections = () => async (dispatch: () => null) => {
     const allKeys = await AsyncStorage.getAllKeys();
     const connectionKeys = allKeys.filter((val) => val !== 'userData');
     const storageValues = await AsyncStorage.multiGet(connectionKeys);
-    const connectionValues = storageValues.map((val) => JSON.parse(val[1]));
-    const connections = connectionValues.map((val) => {
-      val.publicKey = objToUint8(val.publicKey);
-      return val;
-    });
+    const connections = storageValues.map((val) => JSON.parse(val[1]));
     // update redux store
     dispatch(setConnections(connections));
     // sort connections

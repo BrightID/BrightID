@@ -24,8 +24,7 @@ export default class AppBootstrap extends React.Component<Props> {
       let userData = await AsyncStorage.getItem('userData');
       if (userData !== null) {
         userData = JSON.parse(userData);
-        // convert public / secret keys to Uint8Array
-        userData.publicKey = objToUint8(userData.publicKey);
+        // convert private key to uInt8Array
         userData.secretKey = objToUint8(userData.secretKey);
         // update redux store
         await store.dispatch(setUserData(userData));

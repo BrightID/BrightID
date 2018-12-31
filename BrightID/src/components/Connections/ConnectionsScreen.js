@@ -8,9 +8,9 @@ import HeaderButtons, {
   Item,
 } from 'react-navigation-header-buttons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { NavigationEvents } from 'react-navigation';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
-import { NavigationEvents } from 'react-navigation';
 import { getConnections } from '../../actions/getConnections';
 import { createNewConnection } from './createNewConnection';
 import emitter from '../../emitter';
