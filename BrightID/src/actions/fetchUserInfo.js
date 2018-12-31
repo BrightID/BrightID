@@ -1,9 +1,14 @@
 // @flow
 
 import api from '../Api/BrightId';
-import { setCurrentGroups, setEligibleGroups, setGroupsCount, setUserScore } from './index';
+import {
+  setCurrentGroups,
+  setEligibleGroups,
+  setGroupsCount,
+  setUserScore,
+} from './index';
 
-const fetchUserInfo = () => async (dispatch: () => null) => {
+const fetchUserInfo = () => async (dispatch: (action: () => {}) => null) => {
   // async is unncessary here, but this is a useful template for handling the API
   try {
     let result = await api.getUserInfo();

@@ -4,7 +4,11 @@ import { AsyncStorage } from 'react-native';
 import nacl from 'tweetnacl';
 import emitter from '../../../emitter';
 import { savePhoto } from '../../../utils/filesystem';
-import { b64ToUrlSafeB64, strToUint8Array, uInt8ArrayToB64 } from '../../../utils/encoding';
+import {
+  b64ToUrlSafeB64,
+  strToUint8Array,
+  uInt8ArrayToB64,
+} from '../../../utils/encoding';
 import { encryptAndUploadLocalData } from './encryptData';
 import api from '../../../Api/BrightId';
 
@@ -24,9 +28,7 @@ export const addNewConnection = () => async (
       // make an API call to create the connection.
 
       const message =
-        connectUserData.publicKey +
-        publicKey +
-        connectUserData.timestamp;
+        connectUserData.publicKey + publicKey + connectUserData.timestamp;
       const signedMessage = uInt8ArrayToB64(
         nacl.sign.detached(strToUint8Array(message), secretKey),
       );
@@ -63,6 +65,7 @@ export const addNewConnection = () => async (
       publicKey: connectUserSafePubKey,
       name: connectUserData.name,
       score: connectUserData.score,
+      secretKey: connectUserData.secretKey || '',
       connectionDate,
       photo: { filename },
     };

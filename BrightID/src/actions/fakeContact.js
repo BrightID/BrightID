@@ -11,8 +11,8 @@ import { strToUint8Array, uInt8ArrayToB64 } from '../utils/encoding';
 export const addConnection = (navigation) => async (dispatch, getState) => {
   const { publicKey, secretKey } = nacl.sign.keyPair();
   const { main } = getState();
-
-  let creationResponse = await api.createUser(publicKey);
+  const b64PubKey = uInt8ArrayToB64(publicKey);
+  let creationResponse = await api.createUser(b64PubKey);
   console.log(creationResponse.data);
   if (creationResponse.data && creationResponse.data.key) {
     const { firstName, lastName } = names[
@@ -24,13 +24,13 @@ export const addConnection = (navigation) => async (dispatch, getState) => {
     )}`;
     const timestamp = Date.now();
     const base64Key = uInt8ArrayToB64(publicKey);
-    const message = base64Key + uInt8ArrayToB64(main.publicKey) + timestamp;
+    const message = base64Key + main.publicKey + timestamp;
     const signedMessage = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
 
     const userData = {
-      publicKey,
+      publicKey: b64PubKey,
       timestamp,
       secretKey,
       signedMessage,

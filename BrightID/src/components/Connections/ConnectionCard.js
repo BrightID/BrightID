@@ -40,7 +40,7 @@ type Props = {
 class ConnectionCard extends React.PureComponent<Props> {
   handleUserOptions = () => {
     const { name, publicKey, secretKey, dispatch } = this.props;
-
+    console.log(secretKey);
     const buttons = [
       {
         text: 'Cancel',
