@@ -28,7 +28,6 @@ export const handleBrightIdCreation = ({
 
     const userData = {
       publicKey: b64PubKey,
-      safePubKey,
       secretKey,
       name,
       photo: { filename },

@@ -171,7 +171,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         photo: action.photo,
         name: action.name,
         publicKey: action.publicKey,
-        safePubKey: action.safePubKey,
+        safePubKey: b64ToUrlSafeB64(action.publicKey),
         secretKey: action.secretKey,
       };
     case REMOVE_USER_DATA:
@@ -179,7 +179,8 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         ...state,
         photo: '',
         name: '',
-        publicKey: null,
+        publicKey: '',
+        safePubKey: '',
         secretKey: null,
       };
     case SET_CONNECT_QR_DATA:

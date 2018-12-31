@@ -167,17 +167,20 @@ export const removeConnection = (publicKey: string) => ({
 
 export const setUserData = ({
   publicKey,
+  safePubKey,
   secretKey,
   name,
   photo,
 }: {
   publicKey: string,
+  safePubKey: string,
   secretKey: Uint8Array,
   name: string,
   photo: { filename: string },
 }) => ({
   type: UPDATE_USER_DATA,
   publicKey,
+  safePubKey,
   secretKey,
   name,
   photo,
