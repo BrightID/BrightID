@@ -12,7 +12,7 @@ describe('async action', () => {
     const userData = {
       publicKey: [],
       secretKey: [],
-      nameornym: 'charlie sheen',
+      name: 'charlie sheen',
       avatar: 'avatar',
     };
     return store.dispatch(setUserInfo(userData)).then(() => {
@@ -24,7 +24,7 @@ describe('async action', () => {
   test('sets up dummy data without userData', () => {
     const store = mockStore({ score: '22.3' });
     const userData = {
-      nameornym: 'charlie sheen',
+      name: 'charlie sheen',
       avatar: 'avatar',
     };
     return store.dispatch(setUserInfo(userData)).then(() => {

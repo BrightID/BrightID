@@ -11,7 +11,7 @@ export const encryptAndUploadLocalData = () => async (dispatch, getState) => {
     publicKey,
     secretKey,
     avatar: { filename },
-    nameornym,
+    name,
     connectQrData: { aesKey },
     score,
     connectUserData,

@@ -13,7 +13,7 @@ export const types = {
 export const sortByNameAscending = () => (dispatch, getState) => {
   const { connections } = getState().main;
   let list = connections.slice();
-  list.sort((a, b) => b.nameornym.localeCompare(a.nameornym));
+  list.sort((a, b) => b.name.localeCompare(a.name));
   dispatch(setConnections(list));
   dispatch(setConnectionsSort(types.byNameAscending));
 };
@@ -21,7 +21,7 @@ export const sortByNameAscending = () => (dispatch, getState) => {
 export const sortByNameDescending = () => (dispatch, getState) => {
   const { connections } = getState().main;
   let list = connections.slice();
-  list.sort((a, b) => a.nameornym.localeCompare(b.nameornym));
+  list.sort((a, b) => a.name.localeCompare(b.name));
   dispatch(setConnections(list));
   dispatch(setConnectionsSort(types.byNameDescending));
 };

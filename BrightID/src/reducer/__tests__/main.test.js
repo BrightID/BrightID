@@ -66,7 +66,7 @@ describe('main reducer', () => {
         type: UPDATE_USER_DATA,
         publicKey: [],
         secretKey: [],
-        nameornym: 'Test User',
+        name: 'Test User',
         avatar: 'todo...',
       }),
     ).toMatchSnapshot();
@@ -157,7 +157,7 @@ test('should update USER_SCORE', () => {
 //       type: UPDATE_USER_DATA,
 //       publicKey,
 //       secretKey,
-//       nameornym: 'Test User',
+//       name: 'Test User',
 //       avatar: 'todo...',
 //     }),
 //   ).toEqual({

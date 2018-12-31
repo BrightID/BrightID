@@ -38,7 +38,7 @@ describe('actions', () => {
     const userData = {
       publicKey: [],
       secretKey: [],
-      nameornym: 'aragon',
+      name: 'aragon',
       avatar: 'avatar string',
     };
     expect(action.setUserData(userData)).toMatchSnapshot();

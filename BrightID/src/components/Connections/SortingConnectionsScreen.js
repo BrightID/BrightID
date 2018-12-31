@@ -30,7 +30,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 type Props = {
   connections: Array<{
-    nameornym: string,
+    name: string,
     id: number,
   }>,
   dispatch: () => null,

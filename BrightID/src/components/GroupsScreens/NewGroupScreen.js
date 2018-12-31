@@ -21,7 +21,7 @@ import { clearNewGroupCoFounders } from '../../actions/index';
 
 type Props = {
   connections: Array<{
-    nameornym: string,
+    name: string,
     id: number,
   }>,
   newGroupCoFounders: [],
@@ -65,7 +65,7 @@ class NewGroupScreen extends React.Component<Props, State> {
   filterConnections = () => {
     const { connections, searchParam } = this.props;
     return connections.filter((item) =>
-      `${item.nameornym}`
+      `${item.name}`
         .toLowerCase()
         .replace(/\s/g, '')
         .includes(searchParam.toLowerCase().replace(/\s/g, '')),

@@ -27,7 +27,7 @@ import { fakeJoinGroups } from '../../actions/fakeGroup';
  */
 
 type Props = {
-  nameornym: string,
+  name: string,
   avatar: string,
   score: number,
   connectionDate: string,
@@ -39,7 +39,7 @@ type Props = {
 
 class ConnectionCard extends React.PureComponent<Props> {
   handleUserOptions = () => {
-    const { nameornym, publicKey, secretKey, dispatch } = this.props;
+    const { name, publicKey, secretKey, dispatch } = this.props;
 
     const buttons = [
       {
@@ -66,7 +66,7 @@ class ConnectionCard extends React.PureComponent<Props> {
 
     Alert.alert(
       `Delete Connection`,
-      `Are you sure you want to remove ${nameornym} from your list of connections?`,
+      `Are you sure you want to remove ${name} from your list of connections?`,
       buttons,
       { cancelable: true },
     );
@@ -82,7 +82,7 @@ class ConnectionCard extends React.PureComponent<Props> {
   };
 
   render() {
-    const { avatar, nameornym, score, connectionDate, style } = this.props;
+    const { avatar, name, score, connectionDate, style } = this.props;
 
     return (
       <View style={{ ...styles.container, ...style }}>
@@ -95,7 +95,7 @@ class ConnectionCard extends React.PureComponent<Props> {
           style={styles.avatar}
         />
         <View style={styles.info}>
-          <Text style={styles.name}>{nameornym}</Text>
+          <Text style={styles.name}>{name}</Text>
           <View style={styles.scoreContainer}>
             <Text style={styles.scoreLeft}>Score:</Text>
             <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>

@@ -12,7 +12,7 @@ import api from '../../Api/BrightId';
 import { b64ToUrlSafeB64, uInt8ArrayToB64 } from '../../utils/encoding';
 
 export const handleBrightIdCreation = ({
-  nameornym,
+  name,
   avatar,
 }: {
   nameornym: string,

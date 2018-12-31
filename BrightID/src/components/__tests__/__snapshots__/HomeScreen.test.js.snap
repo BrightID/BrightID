@@ -63,7 +63,7 @@ exports[`homescreen renders correctly 1`] = `
         />
       </View>
       <Text
-        id="nameornym"
+        id="name"
         style={
           Object {
             "fontFamily": "ApexNew-Book",

@@ -60,7 +60,7 @@ const MaterialHeaderButton = (passMeFurther) => (
 type Props = {
   score: string,
   groupsCount: number,
-  nameornym: string,
+  name: string,
   connections: Array<{}>,
   navigation: { navigate: () => null },
   avatar: string,
@@ -120,7 +120,7 @@ export class HomeScreen extends React.Component<Props> {
   render() {
     const {
       navigation,
-      nameornym,
+      name,
       score,
       groupsCount,
       avatar,
@@ -150,8 +150,8 @@ export class HomeScreen extends React.Component<Props> {
               accessible={true}
               accessibilityLabel="user avatar image"
             />
-            <Text id="nameornym" style={styles.nameornym}>
-              {nameornym}
+            <Text id="name" style={styles.name}>
+              {name}
             </Text>
           </View>
           <View style={styles.scoreContainer}>
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
-  nameornym: {
+  name: {
     fontFamily: 'ApexNew-Book',
     fontSize: 30,
     marginTop: 8,

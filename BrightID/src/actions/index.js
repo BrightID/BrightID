@@ -154,7 +154,7 @@ export const setConnectionsSort = (connectionsSort: string) => ({
 
 export const addConnection = (connection: {
   publicKey: Uint8Array,
-  nameornym: string,
+  name: string,
   avatar: string,
   score: number,
   connectionDate: string,
@@ -183,18 +183,18 @@ export const removeConnection = (publicKey: string) => ({
 export const setUserData = ({
   publicKey,
   secretKey,
-  nameornym,
+  name,
   avatar,
 }: {
   publicKey: string,
   secretKey: Uint8Array,
-  nameornym: string,
+  name: string,
   avatar: { filename: string },
 }) => ({
   type: UPDATE_USER_DATA,
   publicKey,
   secretKey,
-  nameornym,
+  name,
   avatar,
 });
 
@@ -231,7 +231,7 @@ export const removeConnectQrData = () => ({
 });
 
 export const setConnectUserData = (connectUserData: {
-  nameornym: string,
+  name: string,
   publicKey: Uint8Array,
   avatar: string,
   score: number,

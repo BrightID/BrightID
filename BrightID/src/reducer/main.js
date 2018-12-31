@@ -39,7 +39,7 @@ import { b64ToUrlSafeB64 } from '../utils/encoding';
 
 export const initialState: Main = {
   score: 0,
-  nameornym: '',
+  name: '',
   avatar: '',
   groupsCount: 0,
   searchParam: '',
@@ -62,7 +62,7 @@ export const initialState: Main = {
   connectUserData: {
     publicKey: '',
     avatar: '',
-    nameornym: '',
+    name: '',
     timestamp: '',
     signedMessage: '',
   },
@@ -171,7 +171,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
       return {
         ...state,
         avatar: action.avatar,
-        nameornym: action.nameornym,
+        name: action.name,
         publicKey: action.publicKey,
         safePubKey: action.safePubKey,
         secretKey: action.secretKey,
@@ -180,7 +180,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
       return {
         ...state,
         avatar: '',
-        nameornym: '',
+        name: '',
         publicKey: null,
         secretKey: null,
       };
@@ -217,7 +217,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         connectUserData: {
           publicKey: '',
           avatar: '',
-          nameornym: '',
+          name: '',
           timestamp: '',
           signedMessage: '',
         },
