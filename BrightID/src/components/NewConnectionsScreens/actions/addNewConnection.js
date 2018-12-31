@@ -69,7 +69,7 @@ export const addNewConnection = () => async (
 
     // add connection inside of async storage
     await AsyncStorage.setItem(
-      JSON.stringify(connectUserSafePubKey),
+      connectUserSafePubKey,
       JSON.stringify(connectionData),
     );
 

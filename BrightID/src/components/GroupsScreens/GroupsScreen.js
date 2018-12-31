@@ -52,7 +52,7 @@ class GroupsScreen extends React.Component<Props, State> {
     let { eligibleGroups } = this.props;
     let groups = eligibleGroups
       .filter((group: { isNew: boolean }) => group.isNew)
-      .concat(eligibleGroups.filter((group) => !group.isNew));
+      .concat(eligibleGroups.filter(group => !group.isNew));
     if (groups.length === 1) groups.push('');
     return take(2, groups).map((group) =>
       group ? (

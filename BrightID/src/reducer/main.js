@@ -159,12 +159,10 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         connections: [action.connection, ...connections],
       };
     case REMOVE_CONNECTION:
-      connections = state.connections.slice();
       return {
         ...state,
-        connections: connections.filter(
-          (val) =>
-            JSON.stringify(val.publicKey) !== JSON.stringify(action.publicKey),
+        connections: state.connections.filter(
+          val => val.publicKey !== action.publicKey,
         ),
       };
     case UPDATE_USER_DATA:

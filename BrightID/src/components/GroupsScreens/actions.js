@@ -13,11 +13,12 @@ export const toggleNewGroupCoFounder = (publicKey) => (
   getState: getState,
 ) => {
   let coFounders = [...getState().main.newGroupCoFounders];
-  let match = JSON.stringify(publicKey);
-  let index = coFounders.findIndex((item) => JSON.stringify(item) === match);
+  const index = coFounders.indexOf(publicKey);
   if (index >= 0) {
     coFounders.splice(index, 1);
-  } else if (coFounders.length < 2) coFounders.push(publicKey);
+  } else if (coFounders.length < 2) {
+    coFounders.push(publicKey);
+  }
   dispatch(setNewGroupCoFounders(coFounders));
 };
 
@@ -45,14 +46,13 @@ export const createNewGroup = () => async (
 };
 
 export const join = (group) => async (
-  dispatch: () => null
+  dispatch: () => null,
 ) => {
   let result = await api.joinGroup(group.id);
   if (result.success) {
-    if(group.isNew && group.knownMembers.length < 2){ // only creator has joined
+    if (group.isNew && group.knownMembers.length < 2) { // only creator has joined
       dispatch(joinGroupAsCoFounder(group.id));
-    }
-    else { // creator and other co-founder have already joined; treat it as a normal group
+    } else { // creator and other co-founder have already joined; treat it as a normal group
       dispatch(joinGroup(group));
     }
   }
