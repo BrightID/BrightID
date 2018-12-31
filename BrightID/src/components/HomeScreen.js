@@ -60,10 +60,10 @@ const MaterialHeaderButton = (passMeFurther) => (
 type Props = {
   score: string,
   groupsCount: number,
-  nameornym: string,
+  name: string,
   connections: Array<{}>,
   navigation: { navigate: () => null },
-  avatar: string,
+  photo: string,
 };
 
 export class HomeScreen extends React.Component<Props> {
@@ -120,10 +120,10 @@ export class HomeScreen extends React.Component<Props> {
   render() {
     const {
       navigation,
-      nameornym,
+      name,
       score,
       groupsCount,
-      avatar,
+      photo,
       connections,
       dispatch,
     } = this.props;
@@ -135,23 +135,23 @@ export class HomeScreen extends React.Component<Props> {
           }}
         />
         <View style={styles.mainContainer}>
-          <View style={styles.avatarContainer}>
+          <View style={styles.photoContainer}>
             <Image
               source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
-                  avatar.filename
+                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
+                  photo.filename
                 }`,
               }}
-              style={styles.avatar}
+              style={styles.photo}
               resizeMode="cover"
               onError={(e) => {
                 console.log(e.error);
               }}
               accessible={true}
-              accessibilityLabel="user avatar image"
+              accessibilityLabel="user photo"
             />
-            <Text id="nameornym" style={styles.nameornym}>
-              {nameornym}
+            <Text id="name" style={styles.name}>
+              {name}
             </Text>
           </View>
           <View style={styles.scoreContainer}>
@@ -210,12 +210,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 
-  avatarContainer: {
+  photoContainer: {
     marginTop: 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  avatar: {
+  photo: {
     width: 142,
     height: 142,
     borderRadius: 71,
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
-  nameornym: {
+  name: {
     fontFamily: 'ApexNew-Book',
     fontSize: 30,
     marginTop: 8,

@@ -35,22 +35,22 @@ describe('homescreen', () => {
     const main1 = store.getState().main;
     const wrapper1 = shallow(<HomeScreen {...main1} />);
 
-    expect(wrapper1.find('#nameornym').children()).toHaveLength(0);
+    expect(wrapper1.find('#name').children()).toHaveLength(0);
 
     store.dispatch(
       setUserData({
-        nameornym: 'Shiva',
+        name: 'Shiva',
       }),
     );
 
     const main2 = store.getState().main;
     const wrapper2 = shallow(<HomeScreen {...main2} />);
 
-    expect(wrapper2.find('#nameornym').children()).toHaveLength(1);
+    expect(wrapper2.find('#name').children()).toHaveLength(1);
 
     expect(
       wrapper2
-        .find('#nameornym')
+        .find('#name')
         .children()
         .text(),
     ).toBe('Shiva');

@@ -32,10 +32,10 @@ type Props = {
 };
 
 type State = {
-  nameornym: string,
+  name: string,
   inputActive: boolean,
   imagePicking: boolean,
-  avatar: '',
+  photo: '',
   creatingBrightId: boolean,
 };
 
@@ -71,9 +71,9 @@ class SignUp extends React.Component<Props, State> {
   };
 
   state = {
-    nameornym: '',
+    name: '',
     inputActive: false,
-    avatar: '',
+    photo: '',
     imagePicking: false,
     creatingBrightId: false,
   };
@@ -100,16 +100,16 @@ class SignUp extends React.Component<Props, State> {
 
   randomAvatar = async () => {
     const randomImage = await fakeUserAvatar();
-    const avatar = {
+    const photo = {
       uri: `data:image/jpeg;base64,${randomImage}`,
     };
     this.setState({
-      avatar,
+      photo,
     });
     this.imagePickingFalse();
   };
 
-  getAvatarPhoto = () => {
+  getPhoto = () => {
     // for full documentation on the Image Picker api
     // see https://github.com/react-community/react-native-image-picker
 
@@ -139,11 +139,11 @@ class SignUp extends React.Component<Props, State> {
         this.randomAvatar();
       } else {
         const mime = mimeFromUri(response.uri);
-        const avatar = {
+        const photo = {
           uri: `data:${mime};base64,${response.data}`,
         };
         this.setState({
-          avatar,
+          photo,
           imagePicking: false,
         });
       }
@@ -152,25 +152,25 @@ class SignUp extends React.Component<Props, State> {
 
   createBrightID = async () => {
     try {
-      const { avatar, nameornym } = this.state;
+      const { photo, name } = this.state;
       const { navigation, dispatch } = this.props;
       this.setState({
         creatingBrightId: true,
       });
-      if (!nameornym) {
+      if (!name) {
         this.setState({
           creatingBrightId: false,
         });
         return Alert.alert('BrightID Form Incomplete', 'Please add your name');
       }
-      if (!avatar) {
+      if (!photo) {
         this.setState({
           creatingBrightId: false,
         });
         return Alert.alert('BrightID Form Incomplete', 'A photo is required');
       }
       const result = await dispatch(
-        handleBrightIdCreation({ avatar, nameornym }),
+        handleBrightIdCreation({ photo, name }),
       );
       if (result) {
         navigation.navigate('App');
@@ -202,23 +202,23 @@ class SignUp extends React.Component<Props, State> {
     );
 
   render() {
-    const { imagePicking, nameornym, avatar } = this.state;
+    const { imagePicking, name, photo } = this.state;
 
-    const AddPhotoButton = avatar ? (
+    const AddPhotoButton = photo ? (
       <TouchableOpacity
-        onPress={this.getAvatarPhoto}
+        onPress={this.getPhoto}
         accessible={true}
         accessibilityLabel="edit photo"
       >
         <Image
-          style={styles.avatar}
-          source={avatar}
-          onPress={this.getAvatarPhoto}
+          style={styles.photo}
+          source={photo}
+          onPress={this.getPhoto}
         />
       </TouchableOpacity>
     ) : (
       <TouchableOpacity
-        onPress={this.getAvatarPhoto}
+        onPress={this.getPhoto}
         style={styles.addPhoto}
         accessible={true}
         accessibilityLabel="add photo"
@@ -251,8 +251,8 @@ class SignUp extends React.Component<Props, State> {
         <View style={styles.textInputContainer}>
           <Text style={styles.midText}>What do your friends know you by?</Text>
           <TextInput
-            onChangeText={(nameornym) => this.setState({ nameornym })}
-            value={nameornym}
+            onChangeText={(name) => this.setState({ name })}
+            value={name}
             placeholder="Name"
             placeholderTextColor="#9e9e9e"
             style={styles.textInput}
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  avatar: {
+  photo: {
     width: 180,
     height: 180,
     borderRadius: 90,

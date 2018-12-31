@@ -8,9 +8,9 @@ import HeaderButtons, {
   Item,
 } from 'react-navigation-header-buttons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { NavigationEvents } from 'react-navigation';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
-import { NavigationEvents } from 'react-navigation';
 import { getConnections } from '../../actions/getConnections';
 import { createNewConnection } from './createNewConnection';
 import emitter from '../../emitter';
@@ -35,7 +35,7 @@ const MaterialHeaderButton = (passMeFurther) => (
 
 type Props = {
   connections: Array<{
-    nameornym: string,
+    name: string,
     id: number,
   }>,
   searchParam: string,
@@ -87,7 +87,7 @@ class ConnectionsScreen extends React.Component<Props, State> {
     try {
       await api.deleteConnection(publicKey);
       // remove connection from async storage
-      await AsyncStorage.removeItem(JSON.stringify(publicKey));
+      await AsyncStorage.removeItem(publicKey);
       emitter.emit('refreshConnections', {});
     } catch (err) {
       Alert("Couldn't remove connection", err.stack);
@@ -97,7 +97,7 @@ class ConnectionsScreen extends React.Component<Props, State> {
   filterConnections = () => {
     const { connections, searchParam } = this.props;
     return connections.filter((item) =>
-      `${item.nameornym}`
+      `${item.name}`
         .toLowerCase()
         .replace(/\s/g, '')
         .includes(searchParam.toLowerCase().replace(/\s/g, '')),

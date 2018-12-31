@@ -44,7 +44,7 @@ exports[`homescreen renders correctly 1`] = `
         <Image
           source={
             Object {
-              "testUri": "../../../src/static/default_avatar.jpg",
+              "testUri": "../../../src/static/default_photo.jpg",
             }
           }
           style={
@@ -63,7 +63,7 @@ exports[`homescreen renders correctly 1`] = `
         />
       </View>
       <Text
-        id="nameornym"
+        id="name"
         style={
           Object {
             "fontFamily": "ApexNew-Book",

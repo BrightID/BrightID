@@ -55,28 +55,20 @@ Object {
 }
 `;
 
-exports[`actions should create an action to set user avatar 1`] = `
+exports[`actions should create an action to set user photo 1`] = `
 Object {
-  "type": "USER_AVATAR",
-  "avatar": "avatar string",
+  "type": "USER_PHOTO",
+  "photo": "photo string",
 }
 `;
 
 exports[`actions should create an action to set user data 1`] = `
 Object {
-  "nameornym": "aragon",
+  "name": "aragon",
   "publicKey": Array [],
   "secretKey": Array [],
   "type": "UPDATE_USER_DATA",
-  "avatar": "avatar string",
-}
-`;
-
-exports[`actions should create an action to update the trust score of a connection 1`] = `
-Object {
-  "publicKey": Array [],
-  "score": "88.6",
-  "type": "CONNECTION_SCORE",
+  "photo": "photo string",
 }
 `;
 

@@ -9,7 +9,6 @@ import Spinner from 'react-native-spinkit';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { parseQrData } from './actions/parseQrData';
 import { fetchData } from './actions/fetchData';
-import { encryptAndUploadLocalData } from './actions/encryptData';
 import emitter from '../../emitter';
 import { removeConnectQrData } from '../../actions';
 import { setUpWs } from './actions/websocket';

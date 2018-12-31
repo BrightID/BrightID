@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import GroupAvatar from './GroupAvatar';
+import GroupPhoto from './GroupPhoto';
 import { groupName } from '../../utils/groups'
 
 /**
@@ -13,7 +13,7 @@ import { groupName } from '../../utils/groups'
  * @prop name
  * @prop score
  * @prop connectionTime
- * @prop avatar
+ * @prop photo
  */
 
 type Props = {
@@ -34,7 +34,7 @@ class CurrentGroupCard extends React.Component<Props, State> {
     const { group } = this.props;
     return (
       <TouchableOpacity style={styles.container}>
-        <GroupAvatar group={group} />
+        <GroupPhoto group={group} />
         <Text style={styles.name}>{ groupName(group) }</Text>
       </TouchableOpacity>
     );

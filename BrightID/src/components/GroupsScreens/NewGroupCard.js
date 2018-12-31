@@ -24,12 +24,12 @@ import { toggleNewGroupCoFounder } from './actions';
  * @prop name
  * @prop score
  * @prop connectionTime
- * @prop avatar
+ * @prop photo
  */
 
 type Props = {
-  nameornym: string,
-  avatar: string,
+  name: string,
+  photo: string,
   score: string,
   connectionDate: string,
   publicKey: string,
@@ -82,20 +82,20 @@ class NewGroupCard extends React.PureComponent<Props> {
   };
 
   render() {
-    const { avatar, nameornym, score, connectionDate, style } = this.props;
+    const { photo, name, score, connectionDate, style } = this.props;
 
     return (
       <View style={{ ...styles.container, ...style }}>
         <Image
           source={{
-            uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
-              avatar.filename
+            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
+              photo.filename
             }`,
           }}
-          style={styles.avatar}
+          style={styles.photo}
         />
         <View style={styles.info}>
-          <Text style={styles.name}>{nameornym}</Text>
+          <Text style={styles.name}>{name}</Text>
           <View style={styles.scoreContainer}>
             <Text style={styles.scoreLeft}>Score:</Text>
             <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.43,
     shadowRadius: 4,
   },
-  avatar: {
+  photo: {
     borderRadius: 30,
     width: 60,
     height: 60,

@@ -23,7 +23,7 @@ import nacl from 'tweetnacl';
 import { getConnections } from '../actions/getConnections';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import {
-  obj2b64,
+  objToB64,
   strToUint8Array,
   uInt8ArrayToB64,
 } from '../utils/encoding';
@@ -80,8 +80,8 @@ export class TestConnectionScreen extends React.Component {
         const userData = {
             publicKey,
             secretKey,
-            nameornym: 'Sadegh Test',
-            avatar: ''
+            name: 'Sadegh Test',
+            photo: ''
         };
         api.createUser(publicKey)
             .then(async response => {
@@ -130,10 +130,10 @@ export class TestConnectionScreen extends React.Component {
         let {
             publicKey,
             secretKey,
-            nameornym,
+            name,
         } = connection;
 
-        let userData = {publicKey, secretKey, nameornym, avatar: ''}
+        let userData = {publicKey, secretKey, name, photo: ''}
 
         await AsyncStorage.setItem('userData', JSON.stringify(userData));
         // await this.props.dispatch(setUserData(userData));
@@ -194,18 +194,18 @@ export class TestConnectionScreen extends React.Component {
     render() {
         const {
             navigation,
-            nameornym,
+            name,
             score,
             connections,
             groupsCount,
-            userAvatar,
+            userPhoto,
             connectQrData,
             publicKey,
             secretKey,
         } = this.props;
         const { connectionsCount } = this.state;
         const timestamp = 1543441727;
-        let message = obj2b64(publicKey) + timestamp;
+        let message = objToB64(publicKey) + timestamp;
         let sig = nacl.sign.detached(strToUint8Array(message), secretKey);
         // const signature = nacl.sign(
         //     strToUint8Array(JSON.stringify(publicKey) + timestamp),
@@ -228,7 +228,7 @@ export class TestConnectionScreen extends React.Component {
                             <Button style={{flex: 0}} title="Get Info" onPress={()=>this.testGetUserInfo()} />
                         </View>
                         <View styles={{padding: 10}}>
-                            <Text>name: {nameornym}</Text>
+                            <Text>name: {name}</Text>
                             <View>
                                 <Text>PublicKey</Text>
                                 <TextInput value={uInt8ArrayToUrlSafeB64(publicKey)}/>
@@ -257,7 +257,7 @@ export class TestConnectionScreen extends React.Component {
                                         {this.state.connections.map((connection,index) => (
                                             <View key={index} style={{flexDirection: 'row', paddingVertical: 5}}>
                                                 {/*<Text style={{flex: 1}}>{JSON.stringify(connection,null, 4)}</Text>*/}
-                                                <Text style={{flex: 1}}>{connection.nameornym} - {connection.score} {obj2b64(connection.publicKey)}</Text>
+                                                <Text style={{flex: 1}}>{connection.name} - {connection.score} {objToB64(connection.publicKey)}</Text>
                                                 <View style={{flex: 0}}>
                                                     <Button title="switch" onPress={()=>this.switchToConnection(connection)}/>
                                                 </View>
@@ -281,7 +281,7 @@ export class TestConnectionScreen extends React.Component {
                                                             color="#000"
                                                         />
                                                     </TouchableOpacity>
-                                                    <Text style={{flex: 1}}>{connection.nameornym}</Text>
+                                                    <Text style={{flex: 1}}>{connection.name}</Text>
                                                 </View>
                                             ))}
                                         </View>
@@ -295,7 +295,7 @@ export class TestConnectionScreen extends React.Component {
                                                             color="#000"
                                                         />
                                                     </TouchableOpacity>
-                                                    <Text style={{flex: 1}}>{connection.nameornym}</Text>
+                                                    <Text style={{flex: 1}}>{connection.name}</Text>
                                                 </View>
                                             ))}
                                         </View>

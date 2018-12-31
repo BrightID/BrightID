@@ -4,7 +4,7 @@ exports[`main reducer should REMOVE_USER_DATA 1`] = `
 Object {
   "connections": Array [
     Object {
-      "avatar": "",
+      "photo": "",
       "connectionDate": "",
       "name": "",
       "publicKey": Array [],
@@ -12,14 +12,14 @@ Object {
     },
   ],
   "groupsCount": "",
-  "nameornym": "",
+  "name": "",
   "nearbyPeople": Array [],
   "publicKey": "",
   "publicKey2": "",
   "searchParam": "",
   "secretKey": "",
   "score": "",
-  "avatar": "",
+  "photo": "",
 }
 `;
 
@@ -27,7 +27,7 @@ exports[`main reducer should UPDATE_CONNECTIONS 1`] = `
 Object {
   "connections": Array [
     Object {
-      "avatar": "todo...",
+      "photo": "todo...",
       "connectionDate": 1532537998586,
       "name": "Test User",
       "publicKey": Array [],
@@ -35,14 +35,14 @@ Object {
     },
   ],
   "groupsCount": "",
-  "nameornym": "",
+  "name": "",
   "nearbyPeople": Array [],
   "publicKey": "",
   "publicKey2": "",
   "searchParam": "",
   "secretKey": "",
   "score": "",
-  "avatar": "",
+  "photo": "",
 }
 `;
 
@@ -50,7 +50,7 @@ exports[`main reducer should UPDATE_USER_DATA 1`] = `
 Object {
   "connections": Array [
     Object {
-      "avatar": "",
+      "photo": "",
       "connectionDate": "",
       "name": "",
       "publicKey": Array [],
@@ -58,14 +58,14 @@ Object {
     },
   ],
   "groupsCount": "",
-  "nameornym": "Test User",
+  "name": "Test User",
   "nearbyPeople": Array [],
   "publicKey": Array [],
   "publicKey2": "",
   "searchParam": "",
   "secretKey": Array [],
   "score": "",
-  "avatar": "todo...",
+  "photo": "todo...",
 }
 `;
 
@@ -73,7 +73,7 @@ exports[`main reducer should return the initial state 1`] = `
 Object {
   "connections": Array [
     Object {
-      "avatar": "",
+      "photo": "",
       "connectionDate": "",
       "name": "",
       "publicKey": Array [],
@@ -81,14 +81,14 @@ Object {
     },
   ],
   "groupsCount": "",
-  "nameornym": "",
+  "name": "",
   "nearbyPeople": Array [],
   "publicKey": "",
   "publicKey2": "",
   "searchParam": "",
   "secretKey": "",
   "score": "",
-  "avatar": "",
+  "photo": "",
 }
 `;
 
@@ -96,7 +96,7 @@ exports[`main reducer should set PUBLICKEY2 1`] = `
 Object {
   "connections": Array [
     Object {
-      "avatar": "",
+      "photo": "",
       "connectionDate": "",
       "name": "",
       "publicKey": Array [],
@@ -104,14 +104,14 @@ Object {
     },
   ],
   "groupsCount": "",
-  "nameornym": "",
+  "name": "",
   "nearbyPeople": Array [],
   "publicKey": "",
   "publicKey2": Array [],
   "searchParam": "",
   "secretKey": "",
   "score": "",
-  "avatar": "",
+  "photo": "",
 }
 `;
 
@@ -119,7 +119,7 @@ exports[`main reducer should update GROUPS_COUNT 1`] = `
 Object {
   "connections": Array [
     Object {
-      "avatar": "",
+      "photo": "",
       "connectionDate": "",
       "name": "",
       "publicKey": Array [],
@@ -127,14 +127,14 @@ Object {
     },
   ],
   "groupsCount": 64,
-  "nameornym": "",
+  "name": "",
   "nearbyPeople": Array [],
   "publicKey": "",
   "publicKey2": "",
   "searchParam": "",
   "secretKey": "",
   "score": "",
-  "avatar": "",
+  "photo": "",
 }
 `;
 
@@ -142,7 +142,7 @@ exports[`main reducer should update SEARCH_PARAM 1`] = `
 Object {
   "connections": Array [
     Object {
-      "avatar": "",
+      "photo": "",
       "connectionDate": "",
       "name": "",
       "publicKey": Array [],
@@ -150,14 +150,14 @@ Object {
     },
   ],
   "groupsCount": "",
-  "nameornym": "",
+  "name": "",
   "nearbyPeople": Array [],
   "publicKey": "",
   "publicKey2": "",
   "searchParam": "hi john",
   "secretKey": "",
   "score": "",
-  "avatar": "",
+  "photo": "",
 }
 `;
 
@@ -165,7 +165,7 @@ exports[`main reducer should update USER_SCORE 1`] = `
 Object {
   "connections": Array [
     Object {
-      "avatar": "",
+      "photo": "",
       "connectionDate": "",
       "name": "",
       "publicKey": Array [],
@@ -173,13 +173,13 @@ Object {
     },
   ],
   "groupsCount": "",
-  "nameornym": "",
+  "name": "",
   "nearbyPeople": Array [],
   "publicKey": "",
   "publicKey2": "",
   "searchParam": "",
   "secretKey": "",
   "score": "99.9",
-  "avatar": "",
+  "photo": "",
 }
 `;

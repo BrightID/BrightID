@@ -1,34 +1,32 @@
 import RNFS from 'react-native-fs';
 import { Alert } from 'react-native';
 import { parseBase64, mimeFromUri } from './images';
-import { uInt8ToKeyString } from './encoding';
 
-export const createConnectionAvatarDirectory = async () => {
+export const createConnectionPhotoDirectory = async () => {
   try {
-    await RNFS.mkdir(`${RNFS.DocumentDirectoryPath}/avatars`);
+    await RNFS.mkdir(`${RNFS.DocumentDirectoryPath}/photos`);
     return 'success';
   } catch (err) {
     Alert.alert('Error', err.stack);
   }
 };
 
-export const saveAvatar = async ({ base64Image, publicKey }) => {
+export const savePhoto = async ({ base64Image, publicKey }) => {
   try {
     const { filetype, image } = parseBase64(base64Image);
-    const key = uInt8ToKeyString(publicKey);
-    const path = `${RNFS.DocumentDirectoryPath}/avatars/${key}.${filetype}`;
+    const path = `${RNFS.DocumentDirectoryPath}/photos/${publicKey}.${filetype}`;
     await RNFS.writeFile(path, image, 'base64');
-    return `${key}.${filetype}`;
+    return `${publicKey}.${filetype}`;
   } catch (err) {
     Alert.alert('Error', err.stack);
   }
 };
 
-export const retrieveAvatar = async (filename) => {
+export const retrievePhoto = async (filename) => {
   try {
     const mime = mimeFromUri(filename);
     const base64Image = await RNFS.readFile(
-      `${RNFS.DocumentDirectoryPath}/avatars/${filename}`,
+      `${RNFS.DocumentDirectoryPath}/photos/${filename}`,
       'base64',
     );
     return `data:${mime};base64,${base64Image}`;

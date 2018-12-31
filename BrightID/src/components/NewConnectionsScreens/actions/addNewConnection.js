@@ -3,8 +3,8 @@
 import { AsyncStorage } from 'react-native';
 import nacl from 'tweetnacl';
 import emitter from '../../../emitter';
-import { saveAvatar } from '../../../utils/filesystem';
-import { strToUint8Array, uInt8ArrayToB64 } from '../../../utils/encoding';
+import { savePhoto } from '../../../utils/filesystem';
+import { b64ToUrlSafeB64, strToUint8Array, uInt8ArrayToB64 } from '../../../utils/encoding';
 import { encryptAndUploadLocalData } from './encryptData';
 import api from '../../../Api/BrightId';
 
@@ -24,8 +24,8 @@ export const addNewConnection = () => async (
       // make an API call to create the connection.
 
       const message =
-        uInt8ArrayToB64(connectUserData.publicKey) +
-        uInt8ArrayToB64(publicKey) +
+        connectUserData.publicKey +
+        publicKey +
         connectUserData.timestamp;
       const signedMessage = uInt8ArrayToB64(
         nacl.sign.detached(strToUint8Array(message), secretKey),
@@ -44,9 +44,12 @@ export const addNewConnection = () => async (
 
       dispatch(encryptAndUploadLocalData());
     }
-    const filename = await saveAvatar({
-      publicKey: connectUserData.publicKey,
-      base64Image: connectUserData.avatar,
+    // We store publicKeys as url-safe base-64.
+    const connectUserSafePubKey = b64ToUrlSafeB64(connectUserData.publicKey);
+
+    const filename = await savePhoto({
+      publicKey: connectUserSafePubKey,
+      base64Image: connectUserData.photo,
     });
     // TODO formalize spec for this
     // create a new connection object
@@ -57,17 +60,16 @@ export const addNewConnection = () => async (
     // update all scores.
 
     const connectionData = {
-      publicKey: connectUserData.publicKey,
-      nameornym: connectUserData.nameornym,
+      publicKey: connectUserSafePubKey,
+      name: connectUserData.name,
       score: connectUserData.score,
-      secretKey: connectUserData.secretKey || '',
       connectionDate,
-      avatar: { filename },
+      photo: { filename },
     };
 
     // add connection inside of async storage
     await AsyncStorage.setItem(
-      JSON.stringify(connectUserData.publicKey),
+      connectUserSafePubKey,
       JSON.stringify(connectionData),
     );
 

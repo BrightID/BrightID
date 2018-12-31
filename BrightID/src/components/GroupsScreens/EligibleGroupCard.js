@@ -4,10 +4,9 @@ import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import GroupAvatar from './GroupAvatar';
-import { uInt8ArrayToUrlSafeB64 } from '../../utils/encoding';
-import { deleteNewGroup, joinGroup } from './actions';
-import { groupName } from '../../utils/groups'
+import GroupPhoto from './GroupPhoto';
+import { deleteNewGroup, join } from './actions';
+import { groupName } from '../../utils/groups';
 
 /**
  * Connection Card in the Connections Screen
@@ -16,8 +15,14 @@ import { groupName } from '../../utils/groups'
  * @prop name
  * @prop score
  */
+type Props = {
+  group: { id: string, knownMembers: string[] },
+  dispatch: dispatch,
+  publicKey: []
+}
 
 class EligibleGroupCard extends React.Component<Props> {
+
   renderApprovalButtons = () => (
     <View style={styles.approvalButtonContainer}>
       <TouchableOpacity
@@ -84,10 +89,9 @@ class EligibleGroupCard extends React.Component<Props> {
   };
 
   joinThisGroup = async () => {
+    const { dispatch, group } = this.props;
     try {
-      let result = await this.props.dispatch(
-        joinGroup(this.props.group.id),
-      );
+      let result = await dispatch(join(group));
       if (!result.success) {
         Alert.alert('Failed to join the group', JSON.stringify(result, null, 4));
       }
@@ -97,8 +101,8 @@ class EligibleGroupCard extends React.Component<Props> {
   };
 
   alreadyIn() {
-    const { group, publicKey } = this.props;
-    return group.knownMembers.indexOf(uInt8ArrayToUrlSafeB64(publicKey)) >= 0;
+    const { group, safePubKey } = this.props;
+    return group.knownMembers.indexOf(safePubKey) >= 0;
   }
 
   render() {
@@ -106,7 +110,7 @@ class EligibleGroupCard extends React.Component<Props> {
     console.log(group);
     return (
       <View style={styles.container}>
-        <GroupAvatar group={group} />
+        <GroupPhoto group={group} />
         <View style={styles.info}>
           <Text style={styles.names}>{groupName(group)}</Text>
           <View style={styles.scoreContainer}>

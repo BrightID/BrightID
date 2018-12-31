@@ -32,15 +32,15 @@ class BrightId {
   }
 
   createConnection(
-    publicKey1: Uint8Array,
+    publicKey1: string,
     sig1: string,
-    publicKey2: Uint8Array,
+    publicKey2: string,
     sig2: string,
     timestamp: number,
   ) {
     let requestParams = {
-      publicKey1: uInt8ArrayToB64(publicKey1),
-      publicKey2: uInt8ArrayToB64(publicKey2),
+      publicKey1,
+      publicKey2,
       sig1,
       sig2,
       timestamp,
@@ -52,18 +52,16 @@ class BrightId {
       .catch((error) => (error.data ? error.data : error));
   }
 
-  deleteConnection(publicKey2: Uint8Array) {
-    const { publicKey, secretKey } = store.getState().main;
-    const b64key1 = uInt8ArrayToB64(publicKey);
-    const b64key2 = uInt8ArrayToB64(publicKey2);
+  deleteConnection(publicKey2: string) {
+    const { publicKey, secretKey} = store.getState().main;
     const timestamp = Date.now();
-    const message = b64key1 + b64key2 + timestamp;
+    const message = publicKey + publicKey2 + timestamp;
     let sig1 = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
     let requestParams = {
-      publicKey1: b64key1,
-      publicKey2: b64key2,
+      publicKey1: publicKey,
+      publicKey2,
       sig1,
       timestamp,
     };
@@ -73,18 +71,17 @@ class BrightId {
       .catch((error) => (error.data ? error.data : error));
   }
 
-  joinGroup(groupId) {
+  joinGroup(group: string) {
     const { publicKey, secretKey } = store.getState().main;
     let timestamp = Date.now();
-    let publicKeyStr = uInt8ArrayToB64(publicKey);
-    let message = publicKeyStr + groupId + timestamp;
+    let message = publicKey + group + timestamp;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
 
     let requestParams = {
-      publicKey: publicKeyStr,
-      group: groupId,
+      publicKey,
+      group,
       sig,
       timestamp,
     };
@@ -95,18 +92,17 @@ class BrightId {
       .catch((error) => (error.data ? error.data : error));
   }
 
-  leaveGroup(groupId) {
+  leaveGroup(group: string) {
     const { publicKey, secretKey } = store.getState().main;
     let timestamp = Date.now();
-    let publicKeyStr = uInt8ArrayToB64(publicKey);
-    let message = publicKeyStr + timestamp;
+    let message = publicKey + timestamp;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
 
     let requestParams = {
-      publicKey: publicKeyStr,
-      group: groupId,
+      publicKey,
+      group,
       sig,
       timestamp,
     };
@@ -116,10 +112,9 @@ class BrightId {
       .catch((error) => (error.data ? error.data : error));
   }
 
-  createUser(publicKey: Uint8Array) {
-    let b64PublicKey = uInt8ArrayToB64(publicKey);
+  createUser(publicKey: string) {
     return this.api
-      .post('/users', { publicKey: b64PublicKey })
+      .post('/users', { publicKey })
       .then((response) => response.data)
       .catch((error) => (error.data ? error.data : error));
   }
@@ -127,75 +122,49 @@ class BrightId {
   getUserInfo() {
     let { publicKey, secretKey } = store.getState().main;
     let timestamp = Date.now();
-    let publicKeyStr = uInt8ArrayToB64(publicKey);
-    let message = publicKeyStr + timestamp;
+    let message = publicKey + timestamp;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
     return this.api
-      .post(`/fetchUserInfo`, { publicKey: publicKeyStr, sig, timestamp })
+      .post(`/fetchUserInfo`, { publicKey, sig, timestamp })
       .then((response) => response.data)
       .catch((error) => (error.data ? error.data : error));
   }
 
-  createGroup(publicKey2: Uint8Array, publicKey3: Uint8Array) {
+  createGroup(publicKey2: string, publicKey3: string) {
     const { publicKey, secretKey } = store.getState().main;
     const timestamp = Date.now();
-    const key1 = uInt8ArrayToB64(publicKey);
-    const key2 = uInt8ArrayToB64(publicKey2);
-    const key3 = uInt8ArrayToB64(publicKey3);
-    const message = key1 + key2 + key3 + timestamp;
+    const message = publicKey + publicKey2 + publicKey3 + timestamp;
 
     const sig1 = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
 
     let requestParams = {
-      publicKey1: key1,
-      publicKey2: key2,
-      publicKey3: key3,
+      publicKey1: publicKey,
+      publicKey2,
+      publicKey3,
       sig1,
       timestamp,
     };
-    console.log(requestParams);
     return this.api
       .post(`/groups`, requestParams)
       .then((response) => response.data)
       .catch((error) => (error.data ? error.data : error));
-    // return fetch(`${BrightId.baseURL}/groups`, {
-    //   method: 'POST', // or 'PUT'
-    //   body: JSON.stringify(requestParams),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // })
-    //   .then((response) => {
-    //     const contentType = response.headers.get('content-type');
-    //     if (contentType && contentType.indexOf('application/json') !== -1) {
-    //       return response.json();
-    //     } else {
-    //       return response.text();
-    //     }
-    //   })
-    //   .then((res) => {
-    //     console.log(res);
-    //     return res;
-    //   })
-    //   .catch((error) => (error.data ? error.data : error));
   }
 
-  deleteGroup(groupId) {
+  deleteGroup(group: string) {
     let { publicKey, secretKey } = store.getState().main;
     let timestamp = Date.now();
-    let publicKeyStr = uInt8ArrayToB64(publicKey);
-    let message = publicKeyStr + groupId + timestamp;
+    let message = publicKey + group + timestamp;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
 
     let requestParams = {
-      publicKey: publicKeyStr,
-      group: groupId,
+      publicKey,
+      group,
       sig,
       timestamp,
     };
