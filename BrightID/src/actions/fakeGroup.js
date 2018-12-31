@@ -15,13 +15,13 @@ const api = create({
 
 export const fakeJoinGroup = ({ groupId, publicKey, secretKey }) => {
   let timestamp = Date.now();
-  let publicKeyStr = uInt8ArrayToB64(publicKey);
-  let message = publicKeyStr + groupId + timestamp;
+  let message = publicKey + groupId + timestamp;
+  console.log(secretKey);
   let sk = objToUint8(secretKey);
   let sig = uInt8ArrayToB64(nacl.sign.detached(strToUint8Array(message), sk));
 
   let requestParams = {
-    publicKey: publicKeyStr,
+    publicKey,
     group: groupId,
     sig,
     timestamp,
