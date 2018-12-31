@@ -55,10 +55,10 @@ Object {
 }
 `;
 
-exports[`actions should create an action to set user avatar 1`] = `
+exports[`actions should create an action to set user photo 1`] = `
 Object {
-  "type": "USER_AVATAR",
-  "avatar": "avatar string",
+  "type": "USER_PHOTO",
+  "photo": "photo string",
 }
 `;
 
@@ -68,7 +68,7 @@ Object {
   "publicKey": Array [],
   "secretKey": Array [],
   "type": "UPDATE_USER_DATA",
-  "avatar": "avatar string",
+  "photo": "photo string",
 }
 `;
 

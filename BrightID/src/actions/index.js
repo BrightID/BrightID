@@ -17,7 +17,7 @@ export const ADD_CONNECTION = 'ADD_CONNECTION';
 export const REMOVE_CONNECTION = 'REMOVE_CONNECTION';
 export const UPDATE_USER_DATA = 'UPDATE_USER_DATA';
 export const REMOVE_USER_DATA = 'REMOVE_USER_DATA';
-export const USER_AVATAR = 'USER_AVATAR';
+export const USER_PHOTO = 'USER_PHOTO';
 export const SET_CONNECT_QR_DATA = 'SET_CONNECT_QR_DATA';
 export const REMOVE_CONNECT_QR_DATA = 'REMOVE_CONNECT_QR_DATA';
 export const SET_CONNECT_USER_DATA = 'SET_CONNECT_USER_DATA';
@@ -155,7 +155,7 @@ export const setConnectionsSort = (connectionsSort: string) => ({
 export const addConnection = (connection: {
   publicKey: Uint8Array,
   name: string,
-  avatar: string,
+  photo: string,
   score: number,
   connectionDate: string,
 }) => ({
@@ -184,18 +184,18 @@ export const setUserData = ({
   publicKey,
   secretKey,
   name,
-  avatar,
+  photo,
 }: {
   publicKey: string,
   secretKey: Uint8Array,
   name: string,
-  avatar: { filename: string },
+  photo: { filename: string },
 }) => ({
   type: UPDATE_USER_DATA,
   publicKey,
   secretKey,
   name,
-  avatar,
+  photo,
 });
 
 /**
@@ -207,14 +207,14 @@ export const removeUserData = () => ({
 });
 
 /**
- * redux action creator for setting user avatar
- * @param type USER_AVATAR
- * @param avatar string representaiton of user avatar encoded in base64 format
+ * redux action creator for setting user photo
+ * @param type USER_PHOTO
+ * @param photo base 64 string of user photo
  */
 
-export const setPhoto = (avatar: string) => ({
-  type: USER_AVATAR,
-  avatar,
+export const setPhoto = (photo: string) => ({
+  type: USER_PHOTO,
+  photo,
 });
 
 export const setConnectQrData = (connectQrData: {
@@ -233,7 +233,7 @@ export const removeConnectQrData = () => ({
 export const setConnectUserData = (connectUserData: {
   name: string,
   publicKey: Uint8Array,
-  avatar: string,
+  photo: string,
   score: number,
 }) => ({
   type: SET_CONNECT_USER_DATA,

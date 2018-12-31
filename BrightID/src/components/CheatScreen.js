@@ -80,8 +80,8 @@ export class TestConnectionScreen extends React.Component {
         const userData = {
             publicKey,
             secretKey,
-            nameornym: 'Sadegh Test',
-            avatar: ''
+            name: 'Sadegh Test',
+            photo: ''
         };
         api.createUser(publicKey)
             .then(async response => {
@@ -130,10 +130,10 @@ export class TestConnectionScreen extends React.Component {
         let {
             publicKey,
             secretKey,
-            nameornym,
+            name,
         } = connection;
 
-        let userData = {publicKey, secretKey, nameornym, avatar: ''}
+        let userData = {publicKey, secretKey, name, photo: ''}
 
         await AsyncStorage.setItem('userData', JSON.stringify(userData));
         // await this.props.dispatch(setUserData(userData));
@@ -194,11 +194,11 @@ export class TestConnectionScreen extends React.Component {
     render() {
         const {
             navigation,
-            nameornym,
+            name,
             score,
             connections,
             groupsCount,
-            userAvatar,
+            userPhoto,
             connectQrData,
             publicKey,
             secretKey,
@@ -228,7 +228,7 @@ export class TestConnectionScreen extends React.Component {
                             <Button style={{flex: 0}} title="Get Info" onPress={()=>this.testGetUserInfo()} />
                         </View>
                         <View styles={{padding: 10}}>
-                            <Text>name: {nameornym}</Text>
+                            <Text>name: {name}</Text>
                             <View>
                                 <Text>PublicKey</Text>
                                 <TextInput value={uInt8ArrayToUrlSafeB64(publicKey)}/>
@@ -257,7 +257,7 @@ export class TestConnectionScreen extends React.Component {
                                         {this.state.connections.map((connection,index) => (
                                             <View key={index} style={{flexDirection: 'row', paddingVertical: 5}}>
                                                 {/*<Text style={{flex: 1}}>{JSON.stringify(connection,null, 4)}</Text>*/}
-                                                <Text style={{flex: 1}}>{connection.nameornym} - {connection.score} {objToB64(connection.publicKey)}</Text>
+                                                <Text style={{flex: 1}}>{connection.name} - {connection.score} {objToB64(connection.publicKey)}</Text>
                                                 <View style={{flex: 0}}>
                                                     <Button title="switch" onPress={()=>this.switchToConnection(connection)}/>
                                                 </View>
@@ -281,7 +281,7 @@ export class TestConnectionScreen extends React.Component {
                                                             color="#000"
                                                         />
                                                     </TouchableOpacity>
-                                                    <Text style={{flex: 1}}>{connection.nameornym}</Text>
+                                                    <Text style={{flex: 1}}>{connection.name}</Text>
                                                 </View>
                                             ))}
                                         </View>
@@ -295,7 +295,7 @@ export class TestConnectionScreen extends React.Component {
                                                             color="#000"
                                                         />
                                                     </TouchableOpacity>
-                                                    <Text style={{flex: 1}}>{connection.nameornym}</Text>
+                                                    <Text style={{flex: 1}}>{connection.name}</Text>
                                                 </View>
                                             ))}
                                         </View>

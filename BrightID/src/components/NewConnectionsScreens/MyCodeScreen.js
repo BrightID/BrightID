@@ -29,8 +29,8 @@ import { removeConnectQrData } from '../../actions';
 
 type Props = {
   dispatch: dispatch,
-  avatar: { filename: string },
-  nameornym: string,
+  photo: { filename: string },
+  name: string,
   navigation: () => null,
   connectQrData: {
     qrString: string,
@@ -140,7 +140,7 @@ class MyCodeScreen extends React.Component<Props, State> {
   };
 
   render() {
-    const { avatar, nameornym } = this.props;
+    const { photo, name } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.half}>
@@ -152,22 +152,22 @@ class MyCodeScreen extends React.Component<Props, State> {
               name, your photo, your score
             </Text>
           </View>
-          <View style={styles.avatarContainer}>
+          <View style={styles.photoContainer}>
             <Image
               source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
-                  avatar.filename
+                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
+                  photo.filename
                 }`,
               }}
-              style={styles.avatar}
+              style={styles.photo}
               resizeMode="cover"
               onError={(e) => {
                 console.log(e.error);
               }}
               accessible={true}
-              accessibilityLabel="user avatar image"
+              accessibilityLabel="user photo"
             />
-            <Text style={styles.nameornym}>{nameornym}</Text>
+            <Text style={styles.name}>{name}</Text>
           </View>
         </View>
         <View style={styles.half}>{this.renderQrCode()}</View>
@@ -206,16 +206,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#4a4a4a',
   },
-  avatarContainer: {
+  photoContainer: {
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  avatar: {
+  photo: {
     width: 102,
     height: 102,
     borderRadius: 51,
   },
-  nameornym: {
+  name: {
     fontFamily: 'ApexNew-Book',
     marginTop: 12,
     fontSize: 20,

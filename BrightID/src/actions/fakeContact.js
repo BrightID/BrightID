@@ -36,17 +36,17 @@ export const addConnection = (navigation) => async (dispatch, getState) => {
       signedMessage,
       name,
       score,
-      avatar: 'https://loremflickr.com/180/180/all',
+      photo: 'https://loremflickr.com/180/180/all',
     };
 
     RNFetchBlob.fetch('GET', 'https://loremflickr.com/180/180/all', {})
       .then((res) => {
         if (res.info().status === 200) {
-          userData.avatar = `data:image/jpeg;base64,${res.base64()}`;
+          userData.photo = `data:image/jpeg;base64,${res.base64()}`;
           dispatch(setConnectUserData(userData));
           navigation.navigate('PreviewConnection');
         } else {
-          Alert.alert('Error', 'Unable to fetch avatar image');
+          Alert.alert('Error', 'Unable to fetch image');
         }
       })
       .catch((err) => {

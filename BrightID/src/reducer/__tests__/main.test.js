@@ -51,7 +51,7 @@ describe('main reducer', () => {
           {
             publicKey: [],
             name: 'Test User',
-            avatar: 'todo...',
+            photo: 'todo...',
             connectionDate: 1532537998586,
             score: '85.1',
           },
@@ -67,7 +67,7 @@ describe('main reducer', () => {
         publicKey: [],
         secretKey: [],
         name: 'Test User',
-        avatar: 'todo...',
+        photo: 'todo...',
       }),
     ).toMatchSnapshot();
   });
@@ -79,7 +79,7 @@ describe('main reducer', () => {
         publicKey: new Uint8Array(32),
         secretKey: new Uint8Array(64),
         name: 'Test User',
-        avatar: 'todo...',
+        photo: 'todo...',
       }),
     ).toMatchSnapshot();
   });
@@ -130,7 +130,7 @@ test('should update USER_SCORE', () => {
 //         {
 //           publicKey: pk,
 //           name: 'Test User',
-//           avatar: 'todo...',
+//           photo: 'todo...',
 //           connectionDate: 1532537998586,
 //           score: '85.1',
 //         },
@@ -142,7 +142,7 @@ test('should update USER_SCORE', () => {
 //       {
 //         publicKey: pk,
 //         name: 'Test User',
-//         avatar: 'todo...',
+//         photo: 'todo...',
 //         connectionDate: 1532537998586,
 //         score: '85.1',
 //       },
@@ -158,14 +158,14 @@ test('should update USER_SCORE', () => {
 //       publicKey,
 //       secretKey,
 //       name: 'Test User',
-//       avatar: 'todo...',
+//       photo: 'todo...',
 //     }),
 //   ).toEqual({
 //     ...initialState,
 //     publicKey,
 //     secretKey,
 //     name: 'Test User',
-//     avatar: 'todo...',
+//     photo: 'todo...',
 //   });
 // });
 
@@ -176,14 +176,14 @@ test('should update USER_SCORE', () => {
 //       publicKey: new Uint8Array(32),
 //       secretKey: new Uint8Array(64),
 //       name: 'Test User',
-//       avatar: 'todo...',
+//       photo: 'todo...',
 //     }),
 //   ).toEqual({
 //     ...initialState,
 //     publicKey: '',
 //     secretKey: '',
 //     name: '',
-//     avatar: '',
+//     photo: '',
 //   });
 // });
 

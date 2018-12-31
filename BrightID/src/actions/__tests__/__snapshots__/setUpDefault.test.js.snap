@@ -7,7 +7,7 @@ Array [
     "publicKey": Array [],
     "secretKey": Array [],
     "type": "UPDATE_USER_DATA",
-    "avatar": "avatar",
+    "photo": "photo",
   },
   Object {
     "score": "99.9",
@@ -20,7 +20,7 @@ Array [
   Object {
     "connections": Array [
       Object {
-        "avatar": "https://robohash.org/undeofficiisnon.png?size=145x145&set=set1",
+        "photo": "https://robohash.org/undeofficiisnon.png?size=145x145&set=set1",
         "connectionDate": "1452035995",
         "name": "Jolie McVane",
         "publicKey": "6f4a37bf-09f8-4167-b306-ce6ad3526d3a",
@@ -28,7 +28,7 @@ Array [
         "score": 94.2,
       },
       Object {
-        "avatar": "https://robohash.org/temporibussitdolor.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/temporibussitdolor.jpg?size=145x145&set=set1",
         "connectionDate": "1460122008",
         "name": "Georgette Brownhill",
         "publicKey": "8e0f9bcc-3aed-4ddf-aaa3-e508e5297ed0",
@@ -36,7 +36,7 @@ Array [
         "score": 80.5,
       },
       Object {
-        "avatar": "https://robohash.org/evenietautexcepturi.bmp?size=145x145&set=set1",
+        "photo": "https://robohash.org/evenietautexcepturi.bmp?size=145x145&set=set1",
         "connectionDate": "1468000912",
         "name": "Miquela Arden",
         "publicKey": "86243fda-ab10-4d79-a950-86f787cfe33e",
@@ -44,7 +44,7 @@ Array [
         "score": 72.3,
       },
       Object {
-        "avatar": "https://robohash.org/quisrerumsint.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/quisrerumsint.jpg?size=145x145&set=set1",
         "connectionDate": "1388433658",
         "name": "Emory Liven",
         "publicKey": "f761e34b-a42b-4b6f-a0ef-3561dc719925",
@@ -52,7 +52,7 @@ Array [
         "score": 75.8,
       },
       Object {
-        "avatar": "https://robohash.org/voluptatemetaperiam.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/voluptatemetaperiam.jpg?size=145x145&set=set1",
         "connectionDate": "1384979985",
         "name": "Halimeda Vignaux",
         "publicKey": "79ad3a18-af86-4cd1-8d4a-0f25183af88d",
@@ -60,7 +60,7 @@ Array [
         "score": 73.8,
       },
       Object {
-        "avatar": "https://robohash.org/velitestrepudiandae.bmp?size=145x145&set=set1",
+        "photo": "https://robohash.org/velitestrepudiandae.bmp?size=145x145&set=set1",
         "connectionDate": "1439836420",
         "name": "Alyssa Langsdon",
         "publicKey": "dc1df32e-a805-433e-84d7-49d8f920b6ee",
@@ -68,7 +68,7 @@ Array [
         "score": 53.4,
       },
       Object {
-        "avatar": "https://robohash.org/totamporroodio.bmp?size=145x145&set=set1",
+        "photo": "https://robohash.org/totamporroodio.bmp?size=145x145&set=set1",
         "connectionDate": "1372055295",
         "name": "Judith Hriinchenko",
         "publicKey": "3038798b-1134-437c-8e6c-138d59e7567e",
@@ -76,7 +76,7 @@ Array [
         "score": 67.5,
       },
       Object {
-        "avatar": "https://robohash.org/quisquamofficiisnon.png?size=145x145&set=set1",
+        "photo": "https://robohash.org/quisquamofficiisnon.png?size=145x145&set=set1",
         "connectionDate": "1431542215",
         "name": "Kele Ludwikiewicz",
         "publicKey": "2d59ff27-5d9c-4b45-9fc1-a7696f37ccef",
@@ -84,7 +84,7 @@ Array [
         "score": 81.7,
       },
       Object {
-        "avatar": "https://robohash.org/idsitnon.png?size=145x145&set=set1",
+        "photo": "https://robohash.org/idsitnon.png?size=145x145&set=set1",
         "connectionDate": "1505229487",
         "name": "Pryce Hallatt",
         "publicKey": "91ac0c90-d190-459b-b323-f11884f762aa",
@@ -92,7 +92,7 @@ Array [
         "score": 51.8,
       },
       Object {
-        "avatar": "https://robohash.org/accusantiumveritatisest.bmp?size=145x145&set=set1",
+        "photo": "https://robohash.org/accusantiumveritatisest.bmp?size=145x145&set=set1",
         "connectionDate": "1374959168",
         "name": "Alvy Gilman",
         "publicKey": "2c2e3f7c-07cb-472c-84cf-c311979d7bb7",
@@ -100,7 +100,7 @@ Array [
         "score": 79.7,
       },
       Object {
-        "avatar": "https://robohash.org/modilaborumsed.bmp?size=145x145&set=set1",
+        "photo": "https://robohash.org/modilaborumsed.bmp?size=145x145&set=set1",
         "connectionDate": "1379627892",
         "name": "Catriona Wasiel",
         "publicKey": "a692c88f-a4da-43df-a012-d7f0cab491a2",
@@ -108,7 +108,7 @@ Array [
         "score": 87.8,
       },
       Object {
-        "avatar": "https://robohash.org/doloremodioquam.bmp?size=145x145&set=set1",
+        "photo": "https://robohash.org/doloremodioquam.bmp?size=145x145&set=set1",
         "connectionDate": "1359291224",
         "name": "Alikee Osbaldstone",
         "publicKey": "4c7e56a5-94cb-4c3f-bd55-4a92b8bc1c97",
@@ -116,7 +116,7 @@ Array [
         "score": 71,
       },
       Object {
-        "avatar": "https://robohash.org/itaqueplaceatexplicabo.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/itaqueplaceatexplicabo.jpg?size=145x145&set=set1",
         "connectionDate": "1405409270",
         "name": "Hersch Campion",
         "publicKey": "a50bdc33-5965-40a8-8c9c-34a8d355018c",
@@ -124,7 +124,7 @@ Array [
         "score": 63.8,
       },
       Object {
-        "avatar": "https://robohash.org/eiussequivoluptatum.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/eiussequivoluptatum.jpg?size=145x145&set=set1",
         "connectionDate": "1463122609",
         "name": "Darnall Jenyns",
         "publicKey": "c6b6e9ed-0141-4729-b748-9f76bed30fc7",
@@ -132,7 +132,7 @@ Array [
         "score": 99.1,
       },
       Object {
-        "avatar": "https://robohash.org/mollitiaexsed.png?size=145x145&set=set1",
+        "photo": "https://robohash.org/mollitiaexsed.png?size=145x145&set=set1",
         "connectionDate": "1445648037",
         "name": "Elaine Braley",
         "publicKey": "4b392e6e-d6c1-45dd-98ac-5aec3167ee39",
@@ -140,7 +140,7 @@ Array [
         "score": 76.7,
       },
       Object {
-        "avatar": "https://robohash.org/atquesintvoluptates.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/atquesintvoluptates.jpg?size=145x145&set=set1",
         "connectionDate": "1408211906",
         "name": "Bambie Bernot",
         "publicKey": "df9072db-c0fa-4f92-9a69-b91a710069ee",
@@ -148,7 +148,7 @@ Array [
         "score": 51.5,
       },
       Object {
-        "avatar": "https://robohash.org/inciduntmolestiasoptio.png?size=145x145&set=set1",
+        "photo": "https://robohash.org/inciduntmolestiasoptio.png?size=145x145&set=set1",
         "connectionDate": "1443710319",
         "name": "Zak Conville",
         "publicKey": "2d1c677b-624b-4b94-9c29-641810b4ad29",
@@ -156,7 +156,7 @@ Array [
         "score": 57.9,
       },
       Object {
-        "avatar": "https://robohash.org/ametsolutanisi.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/ametsolutanisi.jpg?size=145x145&set=set1",
         "connectionDate": "1430685304",
         "name": "Gilbertine Olifard",
         "publicKey": "9f7803aa-f5d3-4e16-9191-307a125c8742",
@@ -164,7 +164,7 @@ Array [
         "score": 61.3,
       },
       Object {
-        "avatar": "https://robohash.org/blanditiisinvero.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/blanditiisinvero.jpg?size=145x145&set=set1",
         "connectionDate": "1469496922",
         "name": "Vivia Stodart",
         "publicKey": "912a8617-f716-4b25-978d-543eddb6078c",
@@ -172,7 +172,7 @@ Array [
         "score": 85.3,
       },
       Object {
-        "avatar": "https://robohash.org/doloremnihileligendi.bmp?size=145x145&set=set1",
+        "photo": "https://robohash.org/doloremnihileligendi.bmp?size=145x145&set=set1",
         "connectionDate": "1486453778",
         "name": "Letizia Thomson",
         "publicKey": "aa707876-a0c1-4e23-9d18-5805fd81674b",
@@ -180,7 +180,7 @@ Array [
         "score": 74.9,
       },
       Object {
-        "avatar": "https://robohash.org/illumadistinctio.bmp?size=145x145&set=set1",
+        "photo": "https://robohash.org/illumadistinctio.bmp?size=145x145&set=set1",
         "connectionDate": "1441088359",
         "name": "Emilee Sidney",
         "publicKey": "f89ea350-bed8-4a6f-ac70-de169f121dd7",
@@ -188,7 +188,7 @@ Array [
         "score": 53.2,
       },
       Object {
-        "avatar": "https://robohash.org/eosaccusamuseos.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/eosaccusamuseos.jpg?size=145x145&set=set1",
         "connectionDate": "1477635766",
         "name": "Augie Salvadore",
         "publicKey": "2383b0ae-3351-4c6a-8c11-62639626dfe1",
@@ -196,7 +196,7 @@ Array [
         "score": 52.2,
       },
       Object {
-        "avatar": "https://robohash.org/eaquelaboriosamvelit.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/eaquelaboriosamvelit.jpg?size=145x145&set=set1",
         "connectionDate": "1434290503",
         "name": "Cynde Danilchik",
         "publicKey": "f8aad9f6-a446-4dba-ae40-d37f02e8fd7a",
@@ -222,7 +222,7 @@ Array [
   Object {
     "connections": Array [
       Object {
-        "avatar": "https://robohash.org/undeofficiisnon.png?size=145x145&set=set1",
+        "photo": "https://robohash.org/undeofficiisnon.png?size=145x145&set=set1",
         "connectionDate": "1452035995",
         "name": "Jolie McVane",
         "publicKey": "6f4a37bf-09f8-4167-b306-ce6ad3526d3a",
@@ -230,7 +230,7 @@ Array [
         "score": 94.2,
       },
       Object {
-        "avatar": "https://robohash.org/temporibussitdolor.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/temporibussitdolor.jpg?size=145x145&set=set1",
         "connectionDate": "1460122008",
         "name": "Georgette Brownhill",
         "publicKey": "8e0f9bcc-3aed-4ddf-aaa3-e508e5297ed0",
@@ -238,7 +238,7 @@ Array [
         "score": 80.5,
       },
       Object {
-        "avatar": "https://robohash.org/evenietautexcepturi.bmp?size=145x145&set=set1",
+        "photo": "https://robohash.org/evenietautexcepturi.bmp?size=145x145&set=set1",
         "connectionDate": "1468000912",
         "name": "Miquela Arden",
         "publicKey": "86243fda-ab10-4d79-a950-86f787cfe33e",
@@ -246,7 +246,7 @@ Array [
         "score": 72.3,
       },
       Object {
-        "avatar": "https://robohash.org/quisrerumsint.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/quisrerumsint.jpg?size=145x145&set=set1",
         "connectionDate": "1388433658",
         "name": "Emory Liven",
         "publicKey": "f761e34b-a42b-4b6f-a0ef-3561dc719925",
@@ -254,7 +254,7 @@ Array [
         "score": 75.8,
       },
       Object {
-        "avatar": "https://robohash.org/voluptatemetaperiam.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/voluptatemetaperiam.jpg?size=145x145&set=set1",
         "connectionDate": "1384979985",
         "name": "Halimeda Vignaux",
         "publicKey": "79ad3a18-af86-4cd1-8d4a-0f25183af88d",
@@ -262,7 +262,7 @@ Array [
         "score": 73.8,
       },
       Object {
-        "avatar": "https://robohash.org/velitestrepudiandae.bmp?size=145x145&set=set1",
+        "photo": "https://robohash.org/velitestrepudiandae.bmp?size=145x145&set=set1",
         "connectionDate": "1439836420",
         "name": "Alyssa Langsdon",
         "publicKey": "dc1df32e-a805-433e-84d7-49d8f920b6ee",
@@ -270,7 +270,7 @@ Array [
         "score": 53.4,
       },
       Object {
-        "avatar": "https://robohash.org/totamporroodio.bmp?size=145x145&set=set1",
+        "photo": "https://robohash.org/totamporroodio.bmp?size=145x145&set=set1",
         "connectionDate": "1372055295",
         "name": "Judith Hriinchenko",
         "publicKey": "3038798b-1134-437c-8e6c-138d59e7567e",
@@ -278,7 +278,7 @@ Array [
         "score": 67.5,
       },
       Object {
-        "avatar": "https://robohash.org/quisquamofficiisnon.png?size=145x145&set=set1",
+        "photo": "https://robohash.org/quisquamofficiisnon.png?size=145x145&set=set1",
         "connectionDate": "1431542215",
         "name": "Kele Ludwikiewicz",
         "publicKey": "2d59ff27-5d9c-4b45-9fc1-a7696f37ccef",
@@ -286,7 +286,7 @@ Array [
         "score": 81.7,
       },
       Object {
-        "avatar": "https://robohash.org/idsitnon.png?size=145x145&set=set1",
+        "photo": "https://robohash.org/idsitnon.png?size=145x145&set=set1",
         "connectionDate": "1505229487",
         "name": "Pryce Hallatt",
         "publicKey": "91ac0c90-d190-459b-b323-f11884f762aa",
@@ -294,7 +294,7 @@ Array [
         "score": 51.8,
       },
       Object {
-        "avatar": "https://robohash.org/accusantiumveritatisest.bmp?size=145x145&set=set1",
+        "photo": "https://robohash.org/accusantiumveritatisest.bmp?size=145x145&set=set1",
         "connectionDate": "1374959168",
         "name": "Alvy Gilman",
         "publicKey": "2c2e3f7c-07cb-472c-84cf-c311979d7bb7",
@@ -302,7 +302,7 @@ Array [
         "score": 79.7,
       },
       Object {
-        "avatar": "https://robohash.org/modilaborumsed.bmp?size=145x145&set=set1",
+        "photo": "https://robohash.org/modilaborumsed.bmp?size=145x145&set=set1",
         "connectionDate": "1379627892",
         "name": "Catriona Wasiel",
         "publicKey": "a692c88f-a4da-43df-a012-d7f0cab491a2",
@@ -310,7 +310,7 @@ Array [
         "score": 87.8,
       },
       Object {
-        "avatar": "https://robohash.org/doloremodioquam.bmp?size=145x145&set=set1",
+        "photo": "https://robohash.org/doloremodioquam.bmp?size=145x145&set=set1",
         "connectionDate": "1359291224",
         "name": "Alikee Osbaldstone",
         "publicKey": "4c7e56a5-94cb-4c3f-bd55-4a92b8bc1c97",
@@ -318,7 +318,7 @@ Array [
         "score": 71,
       },
       Object {
-        "avatar": "https://robohash.org/itaqueplaceatexplicabo.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/itaqueplaceatexplicabo.jpg?size=145x145&set=set1",
         "connectionDate": "1405409270",
         "name": "Hersch Campion",
         "publicKey": "a50bdc33-5965-40a8-8c9c-34a8d355018c",
@@ -326,7 +326,7 @@ Array [
         "score": 63.8,
       },
       Object {
-        "avatar": "https://robohash.org/eiussequivoluptatum.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/eiussequivoluptatum.jpg?size=145x145&set=set1",
         "connectionDate": "1463122609",
         "name": "Darnall Jenyns",
         "publicKey": "c6b6e9ed-0141-4729-b748-9f76bed30fc7",
@@ -334,7 +334,7 @@ Array [
         "score": 99.1,
       },
       Object {
-        "avatar": "https://robohash.org/mollitiaexsed.png?size=145x145&set=set1",
+        "photo": "https://robohash.org/mollitiaexsed.png?size=145x145&set=set1",
         "connectionDate": "1445648037",
         "name": "Elaine Braley",
         "publicKey": "4b392e6e-d6c1-45dd-98ac-5aec3167ee39",
@@ -342,7 +342,7 @@ Array [
         "score": 76.7,
       },
       Object {
-        "avatar": "https://robohash.org/atquesintvoluptates.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/atquesintvoluptates.jpg?size=145x145&set=set1",
         "connectionDate": "1408211906",
         "name": "Bambie Bernot",
         "publicKey": "df9072db-c0fa-4f92-9a69-b91a710069ee",
@@ -350,7 +350,7 @@ Array [
         "score": 51.5,
       },
       Object {
-        "avatar": "https://robohash.org/inciduntmolestiasoptio.png?size=145x145&set=set1",
+        "photo": "https://robohash.org/inciduntmolestiasoptio.png?size=145x145&set=set1",
         "connectionDate": "1443710319",
         "name": "Zak Conville",
         "publicKey": "2d1c677b-624b-4b94-9c29-641810b4ad29",
@@ -358,7 +358,7 @@ Array [
         "score": 57.9,
       },
       Object {
-        "avatar": "https://robohash.org/ametsolutanisi.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/ametsolutanisi.jpg?size=145x145&set=set1",
         "connectionDate": "1430685304",
         "name": "Gilbertine Olifard",
         "publicKey": "9f7803aa-f5d3-4e16-9191-307a125c8742",
@@ -366,7 +366,7 @@ Array [
         "score": 61.3,
       },
       Object {
-        "avatar": "https://robohash.org/blanditiisinvero.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/blanditiisinvero.jpg?size=145x145&set=set1",
         "connectionDate": "1469496922",
         "name": "Vivia Stodart",
         "publicKey": "912a8617-f716-4b25-978d-543eddb6078c",
@@ -374,7 +374,7 @@ Array [
         "score": 85.3,
       },
       Object {
-        "avatar": "https://robohash.org/doloremnihileligendi.bmp?size=145x145&set=set1",
+        "photo": "https://robohash.org/doloremnihileligendi.bmp?size=145x145&set=set1",
         "connectionDate": "1486453778",
         "name": "Letizia Thomson",
         "publicKey": "aa707876-a0c1-4e23-9d18-5805fd81674b",
@@ -382,7 +382,7 @@ Array [
         "score": 74.9,
       },
       Object {
-        "avatar": "https://robohash.org/illumadistinctio.bmp?size=145x145&set=set1",
+        "photo": "https://robohash.org/illumadistinctio.bmp?size=145x145&set=set1",
         "connectionDate": "1441088359",
         "name": "Emilee Sidney",
         "publicKey": "f89ea350-bed8-4a6f-ac70-de169f121dd7",
@@ -390,7 +390,7 @@ Array [
         "score": 53.2,
       },
       Object {
-        "avatar": "https://robohash.org/eosaccusamuseos.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/eosaccusamuseos.jpg?size=145x145&set=set1",
         "connectionDate": "1477635766",
         "name": "Augie Salvadore",
         "publicKey": "2383b0ae-3351-4c6a-8c11-62639626dfe1",
@@ -398,7 +398,7 @@ Array [
         "score": 52.2,
       },
       Object {
-        "avatar": "https://robohash.org/eaquelaboriosamvelit.jpg?size=145x145&set=set1",
+        "photo": "https://robohash.org/eaquelaboriosamvelit.jpg?size=145x145&set=set1",
         "connectionDate": "1434290503",
         "name": "Cynde Danilchik",
         "publicKey": "f8aad9f6-a446-4dba-ae40-d37f02e8fd7a",

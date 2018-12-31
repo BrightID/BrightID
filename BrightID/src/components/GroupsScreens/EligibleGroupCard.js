@@ -4,7 +4,7 @@ import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import GroupAvatar from './GroupAvatar';
+import GroupPhoto from './GroupPhoto';
 import { deleteNewGroup, join } from './actions';
 import { groupName } from '../../utils/groups';
 
@@ -110,7 +110,7 @@ class EligibleGroupCard extends React.Component<Props> {
     console.log(group);
     return (
       <View style={styles.container}>
-        <GroupAvatar group={group} />
+        <GroupPhoto group={group} />
         <View style={styles.info}>
           <Text style={styles.names}>{groupName(group)}</Text>
           <View style={styles.scoreContainer}>

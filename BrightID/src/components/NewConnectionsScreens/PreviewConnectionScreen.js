@@ -21,13 +21,13 @@ import { addNewConnection } from './actions/addNewConnection';
 
 type Props = {
   dispatch: () => null,
-  previewNameornym: string,
+  previewName: string,
   previewTimestamp: number,
   previewPublicKey: Uint8Array,
   previewScore: string,
-  previewAvatar: string,
+  previewPhoto: string,
   navigation: { goBack: () => null, navigate: (string) => null },
-  connectUserData: { avatar: string, publicKey: Buffer, nameornym: string },
+  connectUserData: { photo: string, publicKey: Buffer, name: string },
 };
 
 type State = {};
@@ -47,10 +47,10 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
 
   render() {
     const {
-      connectUserData: { avatar, nameornym },
+      connectUserData: { photo, name },
     } = this.props;
-    const image = avatar
-      ? { uri: avatar }
+    const image = photo
+      ? { uri: photo }
       : require('../../static/default_avatar.jpg');
     return (
       <View style={styles.container}>
@@ -61,15 +61,15 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
         <View style={styles.userContainer}>
           <Image
             source={image}
-            style={styles.avatar}
+            style={styles.photo}
             resizeMode="cover"
             onError={(e) => {
               console.log(e.error);
             }}
             accessible={true}
-            accessibilityLabel="user avatar image"
+            accessibilityLabel="user photo"
           />
-          <Text style={styles.connectNameornym}>{nameornym}</Text>
+          <Text style={styles.connectName}>{name}</Text>
         </View>
         <View style={styles.confirmButtonContainer}>
           <TouchableOpacity
@@ -114,12 +114,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  avatar: {
+  photo: {
     width: 148,
     height: 148,
     borderRadius: 74,
   },
-  connectNameornym: {
+  connectName: {
     fontFamily: 'ApexNew-Book',
     marginTop: 15,
     fontSize: 30,

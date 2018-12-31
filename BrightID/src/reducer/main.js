@@ -16,7 +16,7 @@ import {
   ADD_CONNECTION,
   UPDATE_USER_DATA,
   REMOVE_USER_DATA,
-  USER_AVATAR,
+  USER_PHOTO,
   SET_CONNECT_QR_DATA,
   REMOVE_CONNECT_QR_DATA,
   REMOVE_CONNECTION,
@@ -31,7 +31,7 @@ import { b64ToUrlSafeB64 } from '../utils/encoding';
  *
  * @param score number
  * @param name String
- * @param avatar Image
+ * @param photo Image
  * @param groupsCount Number
  * @param searchParam String
  * @param connections Array => Object
@@ -40,7 +40,7 @@ import { b64ToUrlSafeB64 } from '../utils/encoding';
 export const initialState: Main = {
   score: 0,
   name: '',
-  avatar: '',
+  photo: '',
   groupsCount: 0,
   searchParam: '',
   newGroupCoFounders: [],
@@ -61,7 +61,7 @@ export const initialState: Main = {
   },
   connectUserData: {
     publicKey: '',
-    avatar: '',
+    photo: '',
     name: '',
     timestamp: '',
     signedMessage: '',
@@ -81,10 +81,10 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         ...state,
         groupsCount: action.groupsCount,
       };
-    case USER_AVATAR:
+    case USER_PHOTO:
       return {
         ...state,
-        avatar: action.avatar,
+        photo: action.photo,
       };
     case SEARCH_PARAM:
       return {
@@ -170,7 +170,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
     case UPDATE_USER_DATA:
       return {
         ...state,
-        avatar: action.avatar,
+        photo: action.photo,
         name: action.name,
         publicKey: action.publicKey,
         safePubKey: action.safePubKey,
@@ -179,7 +179,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
     case REMOVE_USER_DATA:
       return {
         ...state,
-        avatar: '',
+        photo: '',
         name: '',
         publicKey: null,
         secretKey: null,
@@ -216,7 +216,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         ...state,
         connectUserData: {
           publicKey: '',
-          avatar: '',
+          photo: '',
           name: '',
           timestamp: '',
           signedMessage: '',

@@ -23,12 +23,12 @@ import { fakeJoinGroups } from '../../actions/fakeGroup';
  * @prop name
  * @prop score
  * @prop connectionTime
- * @prop avatar
+ * @prop photo
  */
 
 type Props = {
   name: string,
-  avatar: string,
+  photo: string,
   score: number,
   connectionDate: string,
   publicKey: string,
@@ -82,17 +82,17 @@ class ConnectionCard extends React.PureComponent<Props> {
   };
 
   render() {
-    const { avatar, name, score, connectionDate, style } = this.props;
+    const { photo, name, score, connectionDate, style } = this.props;
 
     return (
       <View style={{ ...styles.container, ...style }}>
         <Image
           source={{
-            uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
-              avatar.filename
+            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
+              photo.filename
             }`,
           }}
-          style={styles.avatar}
+          style={styles.photo}
         />
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.43,
     shadowRadius: 4,
   },
-  avatar: {
+  photo: {
     borderRadius: 30,
     width: 60,
     height: 60,

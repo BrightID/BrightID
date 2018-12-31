@@ -5,29 +5,23 @@ import { Image, StyleSheet, View } from 'react-native';
 import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 
-/**
- * Avatar Picture displayed on the HomeScreen
- * The Image is sourced from the main reducer as avatar
- * @prop avatar is a filename - avatars located in ~/documents/avatar
- */
-
 type Props = {
-  avatar: string,
+  photo: string,
 };
 
-class CurrentGroupAvatar extends React.Component<Props> {
+class CurrentGroupPhoto extends React.Component<Props> {
   render() {
-    const { avatar } = this.props;
+    const { photo } = this.props;
 
     return (
       <View style={styles.container}>
         <Image
           source={{
-            uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
-              avatar.filename
+            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
+              photo.filename
             }`,
           }}
-          style={styles.avatar}
+          style={styles.photo}
         />
       </View>
     );
@@ -42,7 +36,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 2,
   },
-  avatar: {
+  photo: {
     borderRadius: 40,
     width: 80,
     height: 80,
@@ -50,4 +44,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(CurrentGroupAvatar);
+export default connect((state) => state.main)(CurrentGroupPhoto);

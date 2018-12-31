@@ -63,7 +63,7 @@ type Props = {
   name: string,
   connections: Array<{}>,
   navigation: { navigate: () => null },
-  avatar: string,
+  photo: string,
 };
 
 export class HomeScreen extends React.Component<Props> {
@@ -123,7 +123,7 @@ export class HomeScreen extends React.Component<Props> {
       name,
       score,
       groupsCount,
-      avatar,
+      photo,
       connections,
       dispatch,
     } = this.props;
@@ -135,20 +135,20 @@ export class HomeScreen extends React.Component<Props> {
           }}
         />
         <View style={styles.mainContainer}>
-          <View style={styles.avatarContainer}>
+          <View style={styles.photoContainer}>
             <Image
               source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
-                  avatar.filename
+                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
+                  photo.filename
                 }`,
               }}
-              style={styles.avatar}
+              style={styles.photo}
               resizeMode="cover"
               onError={(e) => {
                 console.log(e.error);
               }}
               accessible={true}
-              accessibilityLabel="user avatar image"
+              accessibilityLabel="user photo"
             />
             <Text id="name" style={styles.name}>
               {name}
@@ -210,12 +210,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 
-  avatarContainer: {
+  photoContainer: {
     marginTop: 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  avatar: {
+  photo: {
     width: 142,
     height: 142,
     borderRadius: 71,

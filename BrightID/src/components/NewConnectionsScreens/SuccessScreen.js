@@ -15,8 +15,8 @@ import { removeConnectUserData } from '../../actions';
 type Props = {
   publicKey: Uint8Array,
   score: string,
-  avatar: string,
-  nameornym: string,
+  photo: string,
+  name: string,
   dispatch: () => null,
   navigation: { goBack: () => null, navigate: (string) => null },
 };
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     height: 170,
     marginTop: 42,
   },
-  connectNameornym: {
+  connectName: {
     fontFamily: 'ApexNew-Book',
     marginTop: 15,
     fontSize: 30,

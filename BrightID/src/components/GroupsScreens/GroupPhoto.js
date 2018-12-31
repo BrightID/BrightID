@@ -6,50 +6,44 @@ import { connect } from 'react-redux';
 import RNFS from 'react-native-fs';
 import { groupCirclePhotos } from '../../utils/groups';
 
-/**
- * Avatar Picture displayed on the HomeScreen
- * The Image is sourced from the main reducer as avatar
- * @prop avatar is a filename - avatars located in ~/documents/avatar
- */
-
-class GroupAvatar extends React.Component {
+class GroupPhoto extends React.Component {
 
   render() {
     const circlePhotos = groupCirclePhotos(this.props.group);
 
     return (
       <View style={styles.container}>
-        <View style={styles.topAvatars}>
+        <View style={styles.topPhotos}>
           {circlePhotos[0] && (
             <Image
               source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
-                  circlePhotos[0].avatar.filename
+                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
+                  circlePhotos[0].photo.filename
                 }`,
               }}
-              style={[styles.avatar, circlePhotos[0].faded ? styles.faded : '']}
+              style={[styles.photo, circlePhotos[0].faded ? styles.faded : '']}
             />
           )}
         </View>
-        <View style={styles.bottomAvatars}>
+        <View style={styles.bottomPhotos}>
           {circlePhotos[1] && (
             <Image
               source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
-                  circlePhotos[1].avatar.filename
+                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
+                  circlePhotos[1].photo.filename
                 }`,
               }}
-              style={[styles.avatar, circlePhotos[1].faded ? styles.faded : '']}
+              style={[styles.photo, circlePhotos[1].faded ? styles.faded : '']}
             />
           )}
           {circlePhotos[2] && (
             <Image
               source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
-                  circlePhotos[2].avatar.filename
+                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
+                  circlePhotos[2].photo.filename
                 }`,
               }}
-              style={[styles.avatar, circlePhotos[2].faded ? styles.faded : '']}
+              style={[styles.photo, circlePhotos[2].faded ? styles.faded : '']}
             />
           )}
         </View>
@@ -65,7 +59,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: 85,
   },
-  avatar: {
+  photo: {
     borderRadius: 20,
     width: 40,
     height: 40,
@@ -74,13 +68,13 @@ const styles = StyleSheet.create({
   faded: {
     opacity: 0.25,
   },
-  topAvatars: {
+  topPhotos: {
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
     marginBottom: -3.3,
   },
-  bottomAvatars: {
+  bottomPhotos: {
     marginTop: -3.3,
     alignItems: 'center',
     justifyContent: 'center',
@@ -88,4 +82,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(GroupAvatar);
+export default connect((state) => state.main)(GroupPhoto);

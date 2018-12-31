@@ -7,7 +7,7 @@ declare type getState = () => { main: {} };
 declare type Main = {
   trustScore: string,
   nameornym: string,
-  avatar: {
+  photo: {
     uri: string,
   },
   groupsCount: string,
@@ -29,7 +29,7 @@ declare type Main = {
   },
   connectUserData: {
     publicKey: Uint8Array,
-    avatar: {
+    photo: {
       uri: string,
     },
     nameornym: string,

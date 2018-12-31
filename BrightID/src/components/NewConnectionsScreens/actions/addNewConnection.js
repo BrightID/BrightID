@@ -3,7 +3,7 @@
 import { AsyncStorage } from 'react-native';
 import nacl from 'tweetnacl';
 import emitter from '../../../emitter';
-import { saveAvatar } from '../../../utils/filesystem';
+import { savePhoto } from '../../../utils/filesystem';
 import { b64ToUrlSafeB64, strToUint8Array, uInt8ArrayToB64 } from '../../../utils/encoding';
 import { encryptAndUploadLocalData } from './encryptData';
 import api from '../../../Api/BrightId';
@@ -47,9 +47,9 @@ export const addNewConnection = () => async (
     // We store publicKeys as url-safe base-64.
     const connectUserSafePubKey = b64ToUrlSafeB64(connectUserData.publicKey);
 
-    const filename = await saveAvatar({
+    const filename = await savePhoto({
       publicKey: connectUserSafePubKey,
-      base64Image: connectUserData.avatar,
+      base64Image: connectUserData.photo,
     });
     // TODO formalize spec for this
     // create a new connection object
@@ -61,10 +61,10 @@ export const addNewConnection = () => async (
 
     const connectionData = {
       publicKey: connectUserSafePubKey,
-      nameornym: connectUserData.nameornym,
+      name: connectUserData.name,
       score: connectUserData.score,
       connectionDate,
-      avatar: { filename },
+      photo: { filename },
     };
 
     // add connection inside of async storage

@@ -3,22 +3,22 @@
 import { createCipher } from 'react-native-crypto';
 import nacl from 'tweetnacl';
 import { postData } from './postData';
-import { retrieveAvatar } from '../../../utils/filesystem';
+import { retrievePhoto } from '../../../utils/filesystem';
 import { strToUint8Array, uInt8ArrayToB64 } from '../../../utils/encoding';
 
 export const encryptAndUploadLocalData = () => async (dispatch, getState) => {
   const {
     publicKey,
     secretKey,
-    avatar: { filename },
+    photo: { filename },
     name,
     connectQrData: { aesKey },
     score,
     connectUserData,
   } = getState().main;
 
-  // retrieve avatar
-  const avatar = await retrieveAvatar(filename);
+  // retrieve photo
+  const photo = await retrievePhoto(filename);
 
   let timestamp;
   let signedMessage;
@@ -36,8 +36,8 @@ export const encryptAndUploadLocalData = () => async (dispatch, getState) => {
 
   const dataObj = {
     publicKey,
-    avatar,
-    nameornym,
+    photo,
+    name,
     score,
     signedMessage,
     timestamp,
