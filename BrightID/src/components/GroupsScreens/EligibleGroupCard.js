@@ -23,30 +23,6 @@ type Props = {
 
 class EligibleGroupCard extends React.Component<Props> {
 
-  renderApprovalButtons = () => (
-    <View style={styles.approvalButtonContainer}>
-      <TouchableOpacity
-        style={styles.moreIcon}
-        onPress={this.deleteThisGroup}
-      >
-        <AntDesign size={30} name="closecircleo" color="#000"/>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.moreIcon}
-        onPress={this.joinThisGroup}
-      >
-        <AntDesign size={30} name="checkcircleo" color="#000"/>
-      </TouchableOpacity>
-    </View>
-  );
-
-  renderReviewButton = () => (
-    <TouchableOpacity style={styles.reviewButton}>
-      <Text style={styles.reviewButtonText}>Awaiting co-</Text>
-      <Text style={styles.reviewButtonText}>founders</Text>
-    </TouchableOpacity>
-  );
-
   scoreColor = () => {
     const { group } = this.props;
     if (group.score >= 85) {
@@ -108,23 +84,51 @@ class EligibleGroupCard extends React.Component<Props> {
   render() {
     const { group } = this.props;
     console.log(group);
-    return (
-      <View style={styles.container}>
-        <GroupPhoto group={group} />
-        <View style={styles.info}>
-          <Text style={styles.names}>{groupName(group)}</Text>
-          <View style={styles.scoreContainer}>
-            <Text style={styles.scoreLeft}>Score:</Text>
-            <Text style={[styles.scoreRight, this.scoreColor()]}>
-              {group.score}
-            </Text>
+    var groupNameAndScore = (
+      <View style={styles.info}>
+        <Text style={styles.names}>{groupName(group)}</Text>
+        <View style={styles.scoreContainer}>
+          <Text style={styles.scoreLeft}>Score:</Text>
+          <Text style={[styles.scoreRight, this.scoreColor()]}>
+            {group.score}
+          </Text>
+        </View>
+      </View>
+    )
+
+    if (this.alreadyIn()) {
+      return (
+        <TouchableOpacity style={styles.container}>
+          <GroupPhoto group={group} />
+          {groupNameAndScore}
+          <View style={styles.awaitingCofounders}>
+            <Text style={styles.reviewButtonText}>Awaiting co-</Text>
+            <Text style={styles.reviewButtonText}>founders</Text>
+          </View>
+        </TouchableOpacity>
+      )
+    } else {
+      return (
+        <View style={styles.container}>
+          <GroupPhoto group={group} />
+          {groupNameAndScore}
+          <View style={styles.approvalButtonContainer}>
+            <TouchableOpacity
+              style={styles.moreIcon}
+              onPress={this.deleteThisGroup}
+            >
+              <AntDesign size={30} name="closecircleo" color="#000" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.moreIcon}
+              onPress={this.joinThisGroup}
+            >
+              <AntDesign size={30} name="checkcircleo" color="#000" />
+            </TouchableOpacity>
           </View>
         </View>
-        {!this.alreadyIn()
-          ? this.renderApprovalButtons()
-          : this.renderReviewButton()}
-      </View>
-    );
+      );
+    }
   }
 }
 
@@ -176,7 +180,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
-  reviewButton: {
+  awaitingCofounders: {
     width: 89,
     height: 43,
     borderRadius: 3,
