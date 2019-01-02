@@ -102,7 +102,7 @@ class BrightId {
   leaveGroup(group: string) {
     const { publicKey, secretKey } = store.getState().main;
     let timestamp = Date.now();
-    let message = publicKey + timestamp;
+    let message = publicKey + group + timestamp;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );

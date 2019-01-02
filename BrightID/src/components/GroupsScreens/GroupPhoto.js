@@ -8,11 +8,11 @@ import { groupCirclePhotos } from '../../utils/groups';
 
 class GroupPhoto extends React.Component {
 
-  photoStyle(photo){
-    const { radius=20 } = this.props ;
-    const style = {...styles.photo};
-    if (photo.faded){
-      style.opacity = 0.25
+  photoStyle(photo) {
+    const { radius = 20 } = this.props;
+    const style = { ...styles.photo };
+    if (photo.faded) {
+      style.opacity = 0.25;
     }
     return {
       ...style,
@@ -33,7 +33,7 @@ class GroupPhoto extends React.Component {
               source={{
                 uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
                   circlePhotos[0].photo.filename
-                }`,
+                  }`,
               }}
               style={this.photoStyle(circlePhotos[0])}
             />
@@ -45,7 +45,7 @@ class GroupPhoto extends React.Component {
               source={{
                 uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
                   circlePhotos[1].photo.filename
-                }`,
+                  }`,
               }}
               style={this.photoStyle(circlePhotos[1])}
             />
@@ -55,7 +55,7 @@ class GroupPhoto extends React.Component {
               source={{
                 uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
                   circlePhotos[2].photo.filename
-                }`,
+                  }`,
               }}
               style={this.photoStyle(circlePhotos[2])}
             />

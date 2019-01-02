@@ -69,7 +69,7 @@ class CurrentGroupView extends Component<Props, State> {
     });
   };
 
-  confirmLeaveGroup() {
+  confirmLeaveGroup = () => {
     const buttons = [
       {
         text: 'Cancel',
@@ -79,16 +79,16 @@ class CurrentGroupView extends Component<Props, State> {
         text: 'OK',
         onPress: async () => {
           const { navigation, dispatch } = this.props;
-          const groupId = this.props.navigation.state.params.group.id;
+          const groupId = navigation.state.params.group.id;
           const response = await api.leaveGroup(groupId);
 
-          console.log(`Response from leaveGroup: ${response}`);
+          console.log(`Response from leaveGroup: ${JSON.stringify(response)}`);
 
-          if (response.error) {
-            Alert.alert('Error leaving group', response.errorMessage);
-          } else {
+          if (response.success) {
             await dispatch(leaveGroup(groupId));
             navigation.goBack(null);
+          } else if (response.data) {
+            Alert.alert('Error leaving group', `${response.status}: ${response.data.errorMessage}`);
           }
         },
       },
@@ -98,9 +98,11 @@ class CurrentGroupView extends Component<Props, State> {
       `Leave Group`,
       `Are you sure you want to leave this group?`,
       buttons,
-      { cancelable: true },
+      {
+        cancelable: true,
+      },
     );
-  }
+  };
 
   filterMembers = () => {
     const { searchParam } = this.props;
@@ -131,7 +133,7 @@ class CurrentGroupView extends Component<Props, State> {
     } else {
       return (
         <View>
-          <GroupPhoto group={group} radius={40} />
+          <GroupPhoto group={group} radius={35} />
           <Text style={styles.groupName}>{group.name}</Text>
           <FlatList
             style={styles.membersContainer}
@@ -282,7 +284,7 @@ const
       fontFamily: 'ApexNew-Book',
       fontSize: 24,
       marginLeft: 30,
-    }
+    },
   });
 
 export default connect((state) => state.main)(CurrentGroupView);
