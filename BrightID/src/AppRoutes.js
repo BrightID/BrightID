@@ -15,7 +15,7 @@ import Onboard from './components/OnboardingScreens/Onboard';
 import SignUp from './components/OnboardingScreens/SignUp';
 import NewConnectionScreen from './components/NewConnectionsScreens/NewConnectionScreen';
 import NewGroupScreen from './components/GroupsScreens/NewGroupScreen';
-import EligibleGroupView from './components/GroupsScreens/EligibleGroupView';
+import CofoundGroupReview from './components/GroupsScreens/CofoundGroupReview';
 import CurrentGroupView from './components/GroupsScreens/CurrentGroupView';
 import PreviewConnectionScreen from './components/NewConnectionsScreens/PreviewConnectionScreen';
 import SuccessScreen from './components/NewConnectionsScreens/SuccessScreen';
@@ -71,11 +71,14 @@ const GroupStack = createStackNavigator(
     NewGroup: {
       screen: NewGroupScreen,
     },
-    EligibleGroupView: {
-      screen: EligibleGroupView,
+    CofoundGroupReview: {
+      screen: CofoundGroupReview,
     },
     CurrentGroupView: {
       screen: CurrentGroupView,
+    },
+    SortingConnections: {
+      screen: SortingConnectionsScreen,
     },
   },
   {

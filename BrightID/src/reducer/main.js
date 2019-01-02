@@ -11,6 +11,7 @@ import {
   SET_CURRENT_GROUPS,
   JOIN_GROUP,
   JOIN_GROUP_AS_CO_FOUNDER,
+  LEAVE_GROUP,
   UPDATE_CONNECTIONS,
   CONNECTIONS_SORT,
   ADD_CONNECTION,
@@ -69,7 +70,7 @@ export const initialState: Main = {
 };
 
 export const mainReducer = (state: Main = initialState, action: {}) => {
-  let connections, newElGroups, groupIndex, group, newKnownMembers;
+  let newElGroups, groupIndex, group, newKnownMembers;
   switch (action.type) {
     case USER_SCORE:
       return {
@@ -142,6 +143,13 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         ...state,
         eligibleGroups: newElGroups,
       };
+    case LEAVE_GROUP:
+      return {
+        ...state,
+        currentGroups: state.currentGroups.filter(
+          group => group.id !== action.groupId,
+        )
+      }
     case UPDATE_CONNECTIONS:
       return {
         ...state,
@@ -153,7 +161,6 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         connectionsSort: action.connectionsSort,
       };
     case ADD_CONNECTION:
-      connections = state.connections.slice();
       return {
         ...state,
         connections: [action.connection, ...connections],

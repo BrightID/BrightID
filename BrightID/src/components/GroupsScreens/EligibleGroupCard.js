@@ -2,11 +2,12 @@
 
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
+import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import GroupPhoto from './GroupPhoto';
 import { deleteNewGroup, join } from './actions';
-import { groupName } from '../../utils/groups';
+import { getGroupName } from '../../utils/groups';
 
 /**
  * Connection Card in the Connections Screen
@@ -18,7 +19,6 @@ import { groupName } from '../../utils/groups';
 type Props = {
   group: { id: string, knownMembers: string[] },
   dispatch: dispatch,
-  publicKey: []
 }
 
 class EligibleGroupCard extends React.Component<Props> {
@@ -82,11 +82,11 @@ class EligibleGroupCard extends React.Component<Props> {
   }
 
   render() {
-    const { group } = this.props;
+    const { group, navigation } = this.props;
     console.log(group);
-    var groupNameAndScore = (
+    const groupNameAndScore = (
       <View style={styles.info}>
-        <Text style={styles.names}>{groupName(group)}</Text>
+        <Text style={styles.names}>{getGroupName(group)}</Text>
         <View style={styles.scoreContainer}>
           <Text style={styles.scoreLeft}>Score:</Text>
           <Text style={[styles.scoreRight, this.scoreColor()]}>
@@ -98,7 +98,10 @@ class EligibleGroupCard extends React.Component<Props> {
 
     if (this.alreadyIn()) {
       return (
-        <TouchableOpacity style={styles.container}>
+        <TouchableOpacity
+          style={styles.container}
+          onPress={() => navigation.navigate('CofoundGroupReview')}
+        >
           <GroupPhoto group={group} />
           {groupNameAndScore}
           <View style={styles.awaitingCofounders}>
@@ -196,4 +199,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ main }) => main)(EligibleGroupCard);
+export default connect(({ main }) => main)(withNavigation(EligibleGroupCard));

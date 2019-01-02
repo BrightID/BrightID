@@ -1,39 +1,46 @@
 // @flow
 
 import * as React from 'react';
-import { TouchableOpacity, TextInput, StyleSheet, View } from 'react-native';
+import { TextInput, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
-
 import { setSearchParam } from '../../actions';
-
-/**
- * Search Bar in the Connections Screen
- * TODO: Add functionality for the Ionicons
- * TODO: add search filter in redux actions
- */
 
 type Props = {
   searchParam: string,
   dispatch: () => null,
 };
 
-class SearchGroups extends React.Component<Props> {
+class SearchMembers extends React.Component<Props> {
+
+  componentWillUnmount() {
+    this.props.dispatch(setSearchParam(''));
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.searchIcon}>
-          <Octicons size={26} name="search" color="#000" />
+          <Octicons size={26} name="search" color="#333" />
         </TouchableOpacity>
         <TextInput
-          value={this.props.searchParam}
-          onChangeText={(value) => this.props.dispatch(setSearchParam(value))}
+          onChangeText={value => this.props.dispatch(setSearchParam(value))}
           style={styles.searchField}
-          placeholder="Search Groups"
+          placeholder="Search Members"
+          autoCapitalize="words"
+          autoCorrect={false}
+          textContentType="name"
+          underlineColorAndroid="transparent"
         />
-        <TouchableOpacity style={styles.optionsIcon}>
-          <Ionicon size={30} name="ios-options" color="#000" />
+        <TouchableOpacity
+          onPress={() => {
+            const { navigation } = this.props;
+            navigation.navigate('SortingConnections');
+          }}
+          style={styles.optionsIcon}
+        >
+          <Ionicon size={30} name="ios-options" color="#333" />
         </TouchableOpacity>
       </View>
     );
@@ -66,7 +73,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 3.1,
     flex: 1,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
   },
 });
 
-export default connect(null)(SearchGroups);
+export default connect(null)(SearchMembers);

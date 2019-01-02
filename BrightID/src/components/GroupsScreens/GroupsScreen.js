@@ -12,7 +12,6 @@ import { connect } from 'react-redux';
 import { NavigationEvents } from 'react-navigation';
 import { splitEvery, take } from 'ramda';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import SearchGroups from './SearchGroups';
 import EligibleGroupCard from './EligibleGroupCard';
 import CurrentGroupCard from './CurrentGroupCard';
 import BottomNav from '../BottomNav';
@@ -72,11 +71,6 @@ class GroupsScreen extends React.Component<Props, State> {
       <View style={styles.container}>
         <View style={styles.mainContainer}>
           <NavigationEvents onDidFocus={this.refreshUserInfo} />
-          {eligibleGroups.length > 2 || currentGroups.length > 2 ? (
-            <SearchGroups />
-          ) : (
-            <View />
-          )}
           {!eligibleGroups.length && !currentGroups.length && (
             <EmptyFullScreen navigation={navigation} />
           )}

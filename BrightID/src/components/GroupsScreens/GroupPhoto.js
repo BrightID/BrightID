@@ -8,6 +8,20 @@ import { groupCirclePhotos } from '../../utils/groups';
 
 class GroupPhoto extends React.Component {
 
+  photoStyle(photo){
+    const { radius=20 } = this.props ;
+    const style = {...styles.photo};
+    if (photo.faded){
+      style.opacity = 0.25
+    }
+    return {
+      ...style,
+      borderRadius: radius,
+      width: radius * 2,
+      height: radius * 2,
+    };
+  }
+
   render() {
     const circlePhotos = groupCirclePhotos(this.props.group);
 
@@ -21,7 +35,7 @@ class GroupPhoto extends React.Component {
                   circlePhotos[0].photo.filename
                 }`,
               }}
-              style={[styles.photo, circlePhotos[0].faded ? styles.faded : '']}
+              style={this.photoStyle(circlePhotos[0])}
             />
           )}
         </View>
@@ -33,7 +47,7 @@ class GroupPhoto extends React.Component {
                   circlePhotos[1].photo.filename
                 }`,
               }}
-              style={[styles.photo, circlePhotos[1].faded ? styles.faded : '']}
+              style={this.photoStyle(circlePhotos[1])}
             />
           )}
           {circlePhotos[2] && (
@@ -43,7 +57,7 @@ class GroupPhoto extends React.Component {
                   circlePhotos[2].photo.filename
                 }`,
               }}
-              style={[styles.photo, circlePhotos[2].faded ? styles.faded : '']}
+              style={this.photoStyle(circlePhotos[2])}
             />
           )}
         </View>
@@ -57,7 +71,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-    width: 85,
   },
   photo: {
     borderRadius: 20,

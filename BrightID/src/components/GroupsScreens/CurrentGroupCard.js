@@ -2,9 +2,10 @@
 
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import GroupPhoto from './GroupPhoto';
-import { groupName } from '../../utils/groups'
+import { getGroupName } from '../../utils/groups'
 
 /**
  * Connection Card in the Connections Screen
@@ -31,11 +32,15 @@ class CurrentGroupCard extends React.Component<Props, State> {
   };
 
   render() {
-    const { group } = this.props;
+    const { group, navigation } = this.props;
+    group.name = getGroupName(group);
     return (
-      <TouchableOpacity style={styles.container}>
+      <TouchableOpacity
+        style={styles.container}
+        onPress={() => navigation.navigate('CurrentGroupView', { group })}
+      >
         <GroupPhoto group={group} />
-        <Text style={styles.name}>{ groupName(group) }</Text>
+        <Text style={styles.name}>{group.name}</Text>
       </TouchableOpacity>
     );
   }
@@ -97,4 +102,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null)(CurrentGroupCard);
+export default connect(null)(withNavigation(CurrentGroupCard));

@@ -96,11 +96,12 @@ class ConnectionsScreen extends React.Component<Props, State> {
 
   filterConnections = () => {
     const { connections, searchParam } = this.props;
+    const searchString = searchParam.toLowerCase().replace(/\s/g, '');
     return connections.filter((item) =>
       `${item.name}`
         .toLowerCase()
         .replace(/\s/g, '')
-        .includes(searchParam.toLowerCase().replace(/\s/g, '')),
+        .includes(searchString),
     );
   };
 

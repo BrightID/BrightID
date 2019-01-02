@@ -23,11 +23,6 @@ import {
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-/**
- * Connection screen of BrightID
- * Displays a search input and list of Connection Cards
- */
-
 type Props = {
   connections: Array<{
     name: string,
@@ -40,7 +35,7 @@ type Props = {
 
 class SortingConnectionsScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Connections',
+    title: 'Sorting',
     headerRight: (
       <TouchableOpacity
         style={styles.headerSave}
@@ -113,7 +108,6 @@ class SortingConnectionsScreen extends React.Component<Props> {
     return (
       <View style={styles.container}>
         <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>Sorting connections</Text>
           <Text style={styles.infoText}>Choose one of the methods below</Text>
         </View>
         <View style={styles.optionsContainer}>
@@ -199,29 +193,15 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     justifyContent: 'space-around',
-    height: 106,
+    height: 58,
     paddingTop: 11,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#e3e1e1',
     width: '96.7%',
   },
-  titleText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 18,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
-    textAlign: 'center',
-    textShadowColor: 'rgba(0, 0, 0, 0.09)',
-    textShadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    textShadowRadius: 4,
-  },
   infoText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,

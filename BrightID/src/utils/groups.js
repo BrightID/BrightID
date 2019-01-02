@@ -30,7 +30,7 @@ export const groupCirclePhotos = (group) => {
   return photos;
 };
 
-export const groupName = (group) => {
+export const getGroupName = (group) => {
   const { safePubKey, name, connections } = store.getState().main;
   const memberList = group.isNew ? group.founders : group.knownMembers;
   const names = memberList.map((publicKey) =>

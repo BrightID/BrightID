@@ -71,6 +71,13 @@ class BrightId {
       .catch((error) => (error.data ? error.data : error));
   }
 
+  getMembers(group: string){
+    return this.api
+      .get(`/membership/${group}`)
+      .then((response) => response.data.data)
+      .catch((error) => (error.data ? error.data : error));
+  }
+
   joinGroup(group: string) {
     const { publicKey, secretKey } = store.getState().main;
     let timestamp = Date.now();

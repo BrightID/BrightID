@@ -10,6 +10,7 @@ export const DELETE_ELIGIBLE_GROUP = 'DELETE_ELIGIBLE_GROUP';
 export const SET_CURRENT_GROUPS = 'SET_CURRENT_GROUPS';
 export const JOIN_GROUP = 'JOIN_GROUP';
 export const JOIN_GROUP_AS_CO_FOUNDER = 'JOIN_GROUP_AS_CO_FOUNDER';
+export const LEAVE_GROUP = 'LEAVE_GROUP';
 export const UPDATE_CONNECTIONS = 'UPDATE_CONNECTIONS';
 export const CONNECTIONS_SORT = 'CONNECTIONS_SORT';
 export const ADD_CONNECTION = 'ADD_CONNECTION';
@@ -106,6 +107,11 @@ export const joinGroup = (group) => ({
 
 export const joinGroupAsCoFounder = (groupId) => ({
   type: JOIN_GROUP_AS_CO_FOUNDER,
+  groupId,
+})
+
+export const leaveGroup = (groupId) => ({
+  type: LEAVE_GROUP,
   groupId,
 })
 
