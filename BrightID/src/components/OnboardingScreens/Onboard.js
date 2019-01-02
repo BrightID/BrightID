@@ -12,6 +12,7 @@ import {
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import MaintainPrivacy from './onboardingCards/MaintainPrivacy';
+import BrightIdOnboard from './onboardingCards/BrightIdOnboard';
 
 /* Description */
 /* ======================================== */
@@ -49,26 +50,24 @@ class Onboard extends React.Component<Props> {
     };
   }
 
-  componentDidMount() {
-    // watch for device rotation
-    Dimensions.addEventListener('change', (e) => {
-      this.setState({
-        winWidth: e.window.width,
-      });
-    });
-  }
-
-  componentWillUnmount() {
-    // remove event listener
-    Dimensions.removeEventListener('change');
-  }
-
-  renderItem = ({ item, index }) => (
-    // slide item
-    <View key={index} style={styles.onboardingCards}>
-      <MaintainPrivacy />
-    </View>
-  );
+  renderItem = ({ item, index }) => {
+    switch (index) {
+      case 0:
+        return (
+          <View key={index} style={styles.onboardingCards}>
+            <BrightIdOnboard />
+          </View>
+        );
+      case 1:
+        return (
+          <View key={index} style={styles.onboardingCards}>
+            <MaintainPrivacy />
+          </View>
+        );
+      default:
+    }
+  };
+  // slide item
 
   render() {
     const { activeSlide, entries, winWidth } = this.state;
@@ -84,6 +83,8 @@ class Onboard extends React.Component<Props> {
             data={entries}
             renderItem={this.renderItem}
             layout="default"
+            lockScrollWhileSnapping={true}
+            autoplay={true}
             sliderWidth={winWidth}
             itemWidth={winWidth - 40}
             onSnapToItem={(index) => this.setState({ activeSlide: index })}
