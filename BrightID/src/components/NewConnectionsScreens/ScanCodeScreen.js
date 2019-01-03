@@ -61,8 +61,9 @@ class ScanCodeScreen extends React.Component<Props, State> {
   handleBarCodeRead = async ({ data }) => {
     const { dispatch } = this.props;
     console.log(data);
-    await dispatch(parseQrData(data));
-    dispatch(fetchData());
+    dispatch(parseQrData(data)).then(
+      setTimeout(() => dispatch(fetchData()))
+    );
     this.setState({ scanned: true });
   };
 
@@ -79,7 +80,7 @@ class ScanCodeScreen extends React.Component<Props, State> {
   showProfileError = () => {
     Alert.alert(
       'Timeout reached',
-      "There was a problem downloading the other person's profile. Please try again.",
+      'There was a problem downloading the other person\'s profile. Please try again.',
     );
     this.setState({ scanned: false });
   };
