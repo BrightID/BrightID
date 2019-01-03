@@ -37,7 +37,7 @@ type Props = {
   groups: boolean,
 };
 
-class ConnectionCard extends React.PureComponent<Props> {
+class CofounderCard extends React.PureComponent<Props> {
   handleUserOptions = () => {
     const { name, publicKey, secretKey, dispatch } = this.props;
     console.log(secretKey);
@@ -176,4 +176,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(ConnectionCard);
+export default connect()(CofounderCard);

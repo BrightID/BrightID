@@ -58,11 +58,11 @@ class ScanCodeScreen extends React.Component<Props, State> {
     clearTimeout(this.connectionExpired);
   }
 
-  handleBarCodeRead = ({ data }) => {
+  handleBarCodeRead = async ({ data }) => {
     const { dispatch } = this.props;
     console.log(data);
-    dispatch(parseQrData(data));
-    setTimeout(() => dispatch(fetchData()));
+    await dispatch(parseQrData(data));
+    dispatch(fetchData());
     this.setState({ scanned: true });
   };
 
@@ -94,7 +94,6 @@ class ScanCodeScreen extends React.Component<Props, State> {
     if (scanned) {
       return (
         <View style={styles.cameraPreview}>
-          {/* <WebRTCLogic user="UserB" hangUp={hangUp} navigation={navigation} /> */}
           <Spinner
             style={styles.spinner}
             isVisible={true}

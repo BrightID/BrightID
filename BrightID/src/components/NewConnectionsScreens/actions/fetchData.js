@@ -11,25 +11,31 @@ export const fetchData = () => (dispatch: () => null, getState: () => {}) => {
 
   const url = `http://${ipAddress}/profile/download/${channel}`;
 
+  let response;
+
   fetch(url)
     .then(async (res) => {
-      const response = await res;
+      response = await res;
       if (response.ok) {
         return res.json();
       } else {
         throw new Error(`Profile download returned ${response.status}:`
-         + `${response.statusText} for url: ${url}`);
+          + `${response.statusText} for url: ${url}`);
       }
     })
     .then((data) => {
       if (data && data.data) {
+        response.profileData = data.data;
         dispatch(decryptData(data.data));
       } else {
         emitter.emit('profileNotReady');
       }
     })
     .catch((err) => {
-      Alert.alert(err.message || "Error", err.stack);
+      let message = `Profile download attempt from url: ${url}
+      Response from profile download: ${JSON.stringify(response)}
+      Stack trace: ${err.stack}`;
+      Alert.alert(err.message || 'Error', message);
       return emitter.emit('connectFailure');
     });
 };
