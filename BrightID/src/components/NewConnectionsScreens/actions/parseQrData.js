@@ -1,11 +1,15 @@
 // @flow
 
 import { setConnectQrData } from '../../../actions/index';
+import { b64ToUint8Array } from '../../../utils/encoding';
 
-export const parseQrData = (qrString): string => (dispatch: () => null) => {
-  const aesKey = qrString.substr(0,24);
+export const parseQrData = (qrString: string) => (dispatch: () => null) => {
+  const aesKey = qrString.substr(0, 24);
   const uuid = qrString.substr(24, 12);
-  const ipAddress = [...Buffer.from(qrString.substr(36, 8), 'base64')].join('.');
+  const b64ip = `${qrString.substr(36, 6)}==`;
+  const ipAddress = b64ToUint8Array(b64ip).join('.');
+
+  console.log(JSON.stringify({b64ip, ipAddress}));
 
   const user = '2';
   const dataObj = { aesKey, uuid, ipAddress, user, qrString };

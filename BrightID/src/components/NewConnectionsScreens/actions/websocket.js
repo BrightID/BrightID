@@ -1,6 +1,7 @@
 // @flow
 
 import io from 'socket.io-client';
+import { Alert } from "react-native";
 import { fetchData } from './fetchData';
 
 export const setUpWs = () => (
@@ -15,18 +16,22 @@ export const setUpWs = () => (
     },
   },
 ) => {
-  let { ipAddress, channel } = getState().main.connectQrData;
+  try {
+    const { ipAddress, channel } = getState().main.connectQrData;
 
-  const socket = io.connect(`http://${ipAddress}`);
+    const socket = io.connect(`http://${ipAddress}`);
 
-  socket.emit('join', channel);
+    socket.emit('join', channel);
 
-  console.log(`Joined channel: ${channel}`);
+    console.log(`Joined channel: ${channel}`);
 
-  socket.on('signals', () => {
-    console.log('signals');
-    dispatch(fetchData());
-  });
+    socket.on('signals', () => {
+      console.log('signals');
+      dispatch(fetchData());
+    });
 
-  return socket;
+    return socket;
+  } catch (err){
+    Alert.alert(err.message || 'Error', err.stack);
+  }
 };

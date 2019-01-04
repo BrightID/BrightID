@@ -37,6 +37,7 @@ type State = {
 class ScanCodeScreen extends React.Component<Props, State> {
   state = {
     scanned: false,
+    connectionAttempts: 0
   };
 
   connectionExpired: TimeoutID;
@@ -47,7 +48,16 @@ class ScanCodeScreen extends React.Component<Props, State> {
     const { dispatch } = this.props;
     dispatch(removeConnectQrData());
     emitter.on('connectDataReady', this.navigateToPreview);
-    emitter.on('connectFailure', this.navigateToHome);
+    emitter.on('connectFailure', () => {
+      this.setState((prev) => ({
+        connectionAttempts: prev.connectionAttempts + 1
+      }));
+      if(this.state.connectionAttempts > 1) {
+        this.navigateToHome();
+      } else {
+        this.subscribeToProfileUpload();
+      }
+    });
     emitter.on('profileNotReady', this.subscribeToProfileUpload);
   }
 
@@ -58,18 +68,17 @@ class ScanCodeScreen extends React.Component<Props, State> {
     clearTimeout(this.connectionExpired);
   }
 
-  handleBarCodeRead = async ({ data }) => {
+  handleBarCodeRead = ({ data }) => {
     const { dispatch } = this.props;
-    console.log(data);
-    dispatch(parseQrData(data)).then(
-      setTimeout(() => dispatch(fetchData()))
-    );
+    dispatch(parseQrData(data));
+    // If the following `fetchdata()` fails, a "connectFailure" will be emitted,
+    // triggering a single retry through a websocket notification.
+    dispatch(fetchData());
     this.setState({ scanned: true });
   };
 
   subscribeToProfileUpload = () => {
-    const { dispatch } = this.props;
-    this.socket = dispatch(setUpWs());
+    this.socket = this.props.dispatch(setUpWs());
     this.connectionExpired = setTimeout(this.showProfileError, 30000);
   };
 

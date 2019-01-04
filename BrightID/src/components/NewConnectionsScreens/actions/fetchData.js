@@ -4,7 +4,7 @@ import emitter from '../../../emitter';
 
 // @flow
 
-export const fetchData = () => (dispatch: () => null, getState: () => {}) => {
+export const fetchData = (alertErrors = true) => (dispatch: () => null, getState: () => {}) => {
   let { ipAddress, channel } = getState().main.connectQrData;
 
   console.log(`fetching data for channel ${channel}`);
@@ -32,10 +32,12 @@ export const fetchData = () => (dispatch: () => null, getState: () => {}) => {
       }
     })
     .catch((err) => {
-      let message = `Profile download attempt from url: ${url}
+      if (alertErrors) {
+        let message = `Profile download attempt from url: ${url}
       Response from profile download: ${JSON.stringify(response)}
       Stack trace: ${err.stack}`;
-      Alert.alert(err.message || 'Error', message);
-      return emitter.emit('connectFailure');
+        Alert.alert(err.message || 'Error', message);
+      }
+      emitter.emit('connectFailure');
     });
 };
