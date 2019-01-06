@@ -20,10 +20,7 @@ import { removeConnectQrData } from '../../actions';
  *
  * USERA represents this user
  * ==================================================================
- * displays a qrcode with rtcId url obtained from a signalling server
- * this component also establishes a RTCPeerConnection and data channel
- * when mounted - the RTC channel is initiated with rtcId credentials already existing
- * when unmounted - the RTC connection is removed along with all redux data associated with creating a connection
+ * displays a qrcode
  *
  */
 
@@ -61,7 +58,7 @@ class MyCodeScreen extends React.Component<Props, State> {
   componentDidMount() {
     // After 1 minute, connection attempts expire on the server.
     //  Let users start the connection over.
-    this.connectionExpired = setTimeout(this.navigateToHome, 60000);
+    this.connectionExpired = setTimeout(this.navigateToHome, 120000);
     emitter.on('connectDataReady', this.navigateToPreview);
     const { dispatch } = this.props;
     dispatch(removeConnectQrData());

@@ -24,9 +24,6 @@ import { setUpWs } from './actions/websocket';
 type Props = {
   dispatch: () => null,
   navigation: { navigate: () => null },
-  rtcId: string,
-  hangUp: () => null,
-  rtcOn: boolean,
 };
 
 type State = {
@@ -79,7 +76,7 @@ class ScanCodeScreen extends React.Component<Props, State> {
 
   subscribeToProfileUpload = () => {
     this.socket = this.props.dispatch(setUpWs());
-    this.connectionExpired = setTimeout(this.showProfileError, 30000);
+    this.connectionExpired = setTimeout(this.showProfileError, 90000);
   };
 
   navigateToPreview = () => {

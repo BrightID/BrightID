@@ -77,33 +77,18 @@ class NewConnectionScreen extends React.Component<Props> {
       return (
         <MyCodeScreen
           navigation={navigation}
-          rtcOn={rtcOn}
           resetQr={this.resetQr}
-          hangUp={this.hangUp}
         />
       );
     } else if (display === 'scanner') {
       return (
         <ScanCodeScreen
           navigation={navigation}
-          rtcOn={rtcOn}
-          hangUp={this.hangUp}
         />
       );
     } else if (!display) {
       return <View />;
     }
-  };
-
-  hangUp = async () => {
-    console.log('hanging up');
-    const { dispatch } = this.props;
-    this.setState({
-      rtcOn: false,
-    });
-    setTimeout(() => {
-      this.setState({ rtcOn: true });
-    }, 300);
   };
 
   render() {
