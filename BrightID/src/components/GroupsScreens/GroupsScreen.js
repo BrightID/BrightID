@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import {
+  Alert,
   FlatList,
   StyleSheet,
   Text,
@@ -63,68 +64,73 @@ class GroupsScreen extends React.Component<Props, State> {
   }
 
   render() {
-    const { navigation, currentGroups, publicKey, eligibleGroups } = this.props;
-    const groupPairs =
-      currentGroups.length > 2 ? splitEvery(2, currentGroups) : [currentGroups];
-    console.log(groupPairs);
-    return (
-      <View style={styles.container}>
-        <View style={styles.mainContainer}>
-          <NavigationEvents onDidFocus={this.refreshUserInfo} />
-          {!eligibleGroups.length && !currentGroups.length && (
-            <EmptyFullScreen navigation={navigation} />
-          )}
-          {!!eligibleGroups.length && (
-            <View style={styles.eligibleContainer}>
-              <Text style={styles.eligibleGroupTitle}>ELIGIBLE</Text>
-              {this.getTwoEligibleGroups()}
-              <View style={styles.eligibleBottomBorder} />
-              <TouchableOpacity style={styles.seeAllButton}>
-                <Text style={styles.seeAllText}>
-                  See all {this.props.eligibleGroups.length}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
-          {!!currentGroups.length && !eligibleGroups.length && (
-            <NoEligibleGroups navigation={navigation} />
-          )}
+    try {
+      const { navigation, currentGroups, publicKey, eligibleGroups } = this.props;
+      const groupPairs =
+        currentGroups.length > 2 ? splitEvery(2, currentGroups) : [currentGroups];
+      console.log(groupPairs);
+      return (
+        <View style={styles.container}>
+          <View style={styles.mainContainer}>
+            <NavigationEvents onDidFocus={this.refreshUserInfo} />
+            {!eligibleGroups.length && !currentGroups.length && (
+              <EmptyFullScreen navigation={navigation} />
+            )}
+            {!!eligibleGroups.length && (
+              <View style={styles.eligibleContainer}>
+                <Text style={styles.eligibleGroupTitle}>ELIGIBLE</Text>
+                {this.getTwoEligibleGroups()}
+                <View style={styles.eligibleBottomBorder} />
+                <TouchableOpacity style={styles.seeAllButton}>
+                  <Text style={styles.seeAllText}>
+                    See all {this.props.eligibleGroups.length}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            {!!currentGroups.length && !eligibleGroups.length && (
+              <NoEligibleGroups navigation={navigation} />
+            )}
 
-          {!!currentGroups.length && (
-            <View style={styles.currentContainer}>
-              <Text style={styles.currentGroupTitle}>CURRENT</Text>
-              <FlatList
-                data={groupPairs}
-                renderItem={this.renderCurrentGroups}
-                keyExtractor={([group]) => group && group.id}
-              />
-            </View>
-          )}
-          {!!eligibleGroups.length && !currentGroups.length && (
-            <NoCurrentGroups navigation={navigation} />
-          )}
-          {!!currentGroups.length && !!eligibleGroups.length && (
-            <View style={styles.addGroupButtonContainer}>
-              <TouchableOpacity
-                style={styles.addGroupButton}
-                onPress={() => {
-                  navigation.navigate('NewGroup');
-                }}
-              >
-                <Material
-                  size={ICON_SIZE}
-                  name="plus"
-                  color="#fff"
-                  style={{ width: ICON_SIZE, height: ICON_SIZE }}
+            {!!currentGroups.length && (
+              <View style={styles.currentContainer}>
+                <Text style={styles.currentGroupTitle}>CURRENT</Text>
+                <FlatList
+                  data={groupPairs}
+                  renderItem={this.renderCurrentGroups}
+                  keyExtractor={([group]) => group && group.id}
                 />
-              </TouchableOpacity>
-            </View>
-          )}
+              </View>
+            )}
+            {!!eligibleGroups.length && !currentGroups.length && (
+              <NoCurrentGroups navigation={navigation} />
+            )}
+            {!!currentGroups.length && !!eligibleGroups.length && (
+              <View style={styles.addGroupButtonContainer}>
+                <TouchableOpacity
+                  style={styles.addGroupButton}
+                  onPress={() => {
+                    navigation.navigate('NewGroup');
+                  }}
+                >
+                  <Material
+                    size={ICON_SIZE}
+                    name="plus"
+                    color="#fff"
+                    style={{ width: ICON_SIZE, height: ICON_SIZE }}
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+          <BottomNav navigation={navigation} />
         </View>
-        <BottomNav navigation={navigation} />
-      </View>
-    );
+      );
+    } catch (e) {
+      Alert.alert(e.message || 'Error', e.stack);
+    }
   }
+
 }
 
 const styles = StyleSheet.create({

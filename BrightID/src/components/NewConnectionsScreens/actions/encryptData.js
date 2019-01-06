@@ -5,6 +5,7 @@ import nacl from 'tweetnacl';
 import { postData } from './postData';
 import { retrievePhoto } from '../../../utils/filesystem';
 import { strToUint8Array, uInt8ArrayToB64 } from '../../../utils/encoding';
+import { Alert } from "react-native";
 
 export const encryptAndUploadLocalData = () => async (dispatch, getState) => {
   const {
@@ -23,15 +24,19 @@ export const encryptAndUploadLocalData = () => async (dispatch, getState) => {
   let timestamp;
   let signedMessage;
 
-  if (connectUserData.publicKey && !connectUserData.signedMessage) {
-    // The other user sent their publicKey. Sign the message and send it.
+  try {
+    if (connectUserData.publicKey && !connectUserData.signedMessage) {
+      // The other user sent their publicKey. Sign the message and send it.
 
-    timestamp = Date.now();
-    const message =
-      publicKey + connectUserData.publicKey + timestamp;
-    signedMessage = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
+      timestamp = Date.now();
+      const message =
+        publicKey + connectUserData.publicKey + timestamp;
+      signedMessage = uInt8ArrayToB64(
+        nacl.sign.detached(strToUint8Array(message), secretKey),
+      );
+    }
+  } catch (e) {
+    Alert.alert(e.message || 'Error', e.stack);
   }
 
   const dataObj = {
