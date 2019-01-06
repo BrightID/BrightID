@@ -56,9 +56,10 @@ class MyCodeScreen extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    // After 1 minute, connection attempts expire on the server.
-    //  Let users start the connection over.
-    this.connectionExpired = setTimeout(this.navigateToHome, 120000);
+    // After 2 minutes, connection attempts expire on the server.
+    //  Let users start the connection over after one minute so there will be
+    //  time for the other user to connect.
+    this.connectionExpired = setTimeout(this.navigateToHome, 60000);
     emitter.on('connectDataReady', this.navigateToPreview);
     const { dispatch } = this.props;
     dispatch(removeConnectQrData());
