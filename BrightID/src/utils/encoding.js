@@ -2,7 +2,6 @@
 
 import B64 from 'base64-js';
 import { Buffer } from 'buffer';
-import { values } from 'ramda';
 
 export function uInt8ArrayToB64(array: Uint8Array) {
     const b = Buffer.from(array);
@@ -10,17 +9,11 @@ export function uInt8ArrayToB64(array: Uint8Array) {
 }
 
 export function b64ToUint8Array (str){
-  return values(B64.toByteArray(str));
-}
-
-export function str2b64(str: string) {
-  const b = Buffer.from(str);
-  return b.toString('base64');
+  return new Uint8Array(B64.toByteArray(str));
 }
 
 export function strToUint8Array(str: string) {
-  const b = Buffer.from(str);
-  return b.slice(b.byteOffset, b.byteOffset + b.byteLength);
+  return new Uint8Array(Buffer.from(str, 'ascii'));
 }
 
 export const objToUint8 = (obj: {}) => new Uint8Array(Object.values(obj));
