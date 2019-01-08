@@ -4,7 +4,7 @@
 
 ## A Personal Stamp of Uniqueness
 
-BrightID is an identity network providing proof of unique personhood. A BrightID is a socially unique identifier verified through graph analysis.
+BrightID is an identity network providing proof of unique personhood. A brightID is a socially unique identifier verified through graph analysis.
 
 BrightIDs have the following characteristics:
 * [No personal data or biometrics are used for verification](https://www.brightid.org/faq).
@@ -21,7 +21,7 @@ ID creation and connectons to people and apps are managed though the [brightID m
 
 ## API
 
-[We offer an API to third-parties](https://github.com/BrightID/BrightID-API) to connect to the BrightID mobile app and BrightID nodes to verify users as unique.
+[We offer an API to third-parties](https://github.com/BrightID/BrightID-API) to connect to the brightID mobile app and brightID nodes to verify users as unique.
 
 ## Contribute
 
@@ -37,6 +37,6 @@ ID creation and connectons to people and apps are managed though the [brightID m
 [Non-Software](https://github.com/orgs/BrightID/projects/2)
 
 ### Repos
-This repo is for the BrightID mobile app.
+This repo is for the brightID mobile app.
 
 [Other repos](https://github.com/BrightID).
