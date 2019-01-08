@@ -4,7 +4,7 @@
 
 ## A Personal Stamp of Uniqueness
 
-BrightID is an identity network providing proof of unique personhood. A brightID is a socially unique identifier verified through graph analysis.
+BrightID is an identity network providing proof of unique personhood. A BrightID is a socially unique identifier verified through graph analysis.
 
 BrightIDs have the following characteristics:
 * [No personal data or biometrics are used for verification](https://www.brightid.org/faq).
@@ -21,24 +21,22 @@ ID creation and connectons to people and apps are managed though the [brightID m
 
 ## API
 
-[We offer an API to third-parties](https://github.com/BrightID/BrightID-API) to connect to the brightID mobile app and brightID nodes to verify users as unique.
+[We offer an API to third-parties](https://github.com/BrightID/BrightID-API) to connect to the BrightID mobile app and BrightID nodes to verify users as unique.
 
 ## Contribute
 
-See our [wiki](https://github.com/BrightID/BrightID/wiki) for dev instructions.
+[Wiki](https://github.com/BrightID/BrightID/wiki) for dev instructions.
 
 ### KanBans
-[Mobile project](https://github.com/BrightID/BrightID/projects/2 )
+[Mobile App](https://github.com/BrightID/BrightID/projects/4)
 
-[Node project](https://github.com/BrightID/BrightID-Node/projects/1)
+[Node](https://github.com/BrightID/BrightID-Node/projects/2)
 
-[Documentation project](https://github.com/orgs/BrightID/projects/2)
+[Anti-Sybil](https://github.com/BrightID/BrightID-Node/projects/3)
 
-[Anti-Sybil project](https://github.com/BrightID/BrightID-Node/projects/3)
+[Non-Software](https://github.com/orgs/BrightID/projects/2)
 
 ### Repos
 This repo is for the BrightID mobile app.
 
-Other repos
-* [BrightID Node](https://github.com/BrightID/BrightID-Node): A node hosting the brightID social graph
-* [BrightID API](https://github.com/BrightID/BrightID-API): APIs allowing third-party apps to verify users
+[Other repos](https://github.com/BrightID).
