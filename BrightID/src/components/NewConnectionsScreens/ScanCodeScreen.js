@@ -34,7 +34,7 @@ type State = {
 class ScanCodeScreen extends React.Component<Props, State> {
   state = {
     scanned: false,
-    connectionAttempts: 0
+    connectionAttempts: 0,
   };
 
   connectionExpired: TimeoutID;
@@ -45,25 +45,27 @@ class ScanCodeScreen extends React.Component<Props, State> {
     const { dispatch } = this.props;
     dispatch(removeConnectQrData());
     emitter.on('connectDataReady', this.navigateToPreview);
-    emitter.on('connectFailure', () => {
-      this.setState((prev) => ({
-        connectionAttempts: prev.connectionAttempts + 1
-      }));
-      if(this.state.connectionAttempts > 1) {
-        this.navigateToHome();
-      } else {
-        this.subscribeToProfileUpload();
-      }
-    });
+    emitter.on('connectFailure', this.handleDownloadFailure);
     emitter.on('profileNotReady', this.subscribeToProfileUpload);
   }
 
   componentWillUnmount() {
     emitter.off('connectDataReady', this.navigateToPreview);
-    emitter.off('connectFailure', this.navigateToHome);
+    emitter.off('connectFailure', this.handleDownloadFailure);
     emitter.off('profileNotReady', this.subscribeToProfileUpload);
     clearTimeout(this.connectionExpired);
   }
+
+  handleDownloadFailure = () => {
+    this.setState((prev) => ({
+      connectionAttempts: prev.connectionAttempts + 1,
+    }));
+    if (this.state.connectionAttempts > 1) {
+      this.navigateToHome();
+    } else {
+      this.subscribeToProfileUpload();
+    }
+  };
 
   handleBarCodeRead = ({ data }) => {
     const { dispatch } = this.props;
