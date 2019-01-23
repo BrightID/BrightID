@@ -36,7 +36,6 @@ const MaterialHeaderButton = (passMeFurther) => (
 type Props = {
   navigation: { navigate: () => null },
   dispatch: () => null,
-  previewPublicKey: string,
 };
 
 class NewConnectionScreen extends React.Component<Props> {
@@ -55,29 +54,17 @@ class NewConnectionScreen extends React.Component<Props> {
 
   state = {
     display: 'qrcode',
-    rtcOn: true,
-  };
-
-  resetQr = () => {
-    // unmount / mount MyCodeScreen
-    this.setState({ display: '' });
-    setTimeout(() => {
-      this.setState({
-        display: 'qrcode',
-      });
-    }, 100);
   };
 
   renderScreen = () => {
     const { navigation } = this.props;
-    const { display, rtcOn } = this.state;
+    const { display } = this.state;
     // boolean for displaying button styles
     // conditionally render MyCodeScreen
     if (display === 'qrcode') {
       return (
         <MyCodeScreen
           navigation={navigation}
-          resetQr={this.resetQr}
         />
       );
     } else if (display === 'scanner') {

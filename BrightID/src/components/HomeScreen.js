@@ -23,7 +23,6 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import BottomNav from './BottomNav';
 import store from '../store';
 import { removeUserData } from '../actions';
-import emitter from '../emitter';
 import { getConnections } from '../actions/getConnections';
 
 /**

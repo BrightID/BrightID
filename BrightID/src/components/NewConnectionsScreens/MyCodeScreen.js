@@ -66,7 +66,7 @@ class MyCodeScreen extends React.Component<Props, State> {
     dispatch(genQrData()).then(() => {
       this.genQrCode();
       this.socket = dispatch(setUpWs());
-      setTimeout(() => dispatch(encryptAndUploadLocalData()));
+      dispatch(encryptAndUploadLocalData());
     });
   }
 

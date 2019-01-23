@@ -12,7 +12,7 @@ const fetchUserInfo = () => async (dispatch: (action: () => {}) => null) => {
   // async is unncessary here, but this is a useful template for handling the API
   try {
     let result = await api.getUserInfo();
-    console.log(result);
+    console.log(JSON.stringify(result));
     if (result && result.data && result.data.eligibleGroups) {
       let { eligibleGroups, currentGroups, score } = result.data;
       dispatch(setEligibleGroups(eligibleGroups));
