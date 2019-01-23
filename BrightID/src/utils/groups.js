@@ -8,6 +8,7 @@ const memberList = (group) => {
   const me = {
     photo,
     name,
+    publicKey: safePubKey,
   };
 
   const stranger = {
