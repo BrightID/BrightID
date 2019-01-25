@@ -31,7 +31,7 @@ class EligibleGroupsScreen extends React.Component<Props, State> {
     await this.props.dispatch(fetchUserInfo());
   };
 
-  renderEligibleGroup = ({ group }) => <EligibleGroupCard group={group} />;
+  renderEligibleGroup = ({ item }) => <EligibleGroupCard group={item} />;
 
   render() {
     try {
