@@ -11,6 +11,7 @@ import CheatScreen from './components/CheatScreen';
 import ConnectionsScreen from './components/Connections/ConnectionsScreen';
 import SortingConnectionsScreen from './components/Connections/SortingConnectionsScreen';
 import GroupsScreen from './components/GroupsScreens/GroupsScreen';
+import EligibleGroupsScreen from './components/GroupsScreens/EligibleGroupsScreen';
 import Onboard from './components/OnboardingScreens/Onboard';
 import SignUp from './components/OnboardingScreens/SignUp';
 import NewConnectionScreen from './components/NewConnectionsScreens/NewConnectionScreen';
@@ -80,6 +81,9 @@ const GroupStack = createStackNavigator(
     SortingConnections: {
       screen: SortingConnectionsScreen,
     },
+    EligibleGroups: {
+      screen: EligibleGroupsScreen,
+    }
   },
   {
     initialRouteName: 'GroupMain',

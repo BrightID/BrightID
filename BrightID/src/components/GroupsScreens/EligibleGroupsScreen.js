@@ -11,122 +11,59 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationEvents } from 'react-navigation';
-import { splitEvery, take } from 'ramda';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import EligibleGroupCard from './EligibleGroupCard';
-import CurrentGroupCard from './CurrentGroupCard';
 import BottomNav from '../BottomNav';
 import fetchUserInfo from '../../actions/fetchUserInfo';
-import {
-  NoCurrentGroups,
-  EmptyFullScreen,
-  NoEligibleGroups,
-} from './EmptyGroups';
 
 const ICON_SIZE = 36;
 
 type Props = Main;
 
-class GroupsScreen extends React.Component<Props, State> {
+class EligibleGroupsScreen extends React.Component<Props, State> {
   static navigationOptions = () => ({
-    title: 'Groups',
+    title: 'Eligible Groups',
     headerRight: <View />,
   });
-
-  renderCurrentGroups({ item }) {
-    const [group1, group2] = item;
-    return (
-      <View style={styles.currentGroupRow}>
-        {!!group1 && <CurrentGroupCard group={group1} />}
-        {!!group2 && <CurrentGroupCard group={group2} />}
-      </View>
-    );
-  }
 
   refreshUserInfo = async () => {
     console.log('refreshing user info');
     await this.props.dispatch(fetchUserInfo());
   };
 
-  getTwoEligibleGroups() {
-    let { eligibleGroups } = this.props;
-    let groups = eligibleGroups
-      .filter((group: { isNew: boolean }) => group.isNew)
-      .concat(eligibleGroups.filter(group => !group.isNew));
-    if (groups.length === 1) groups.push('');
-    return take(2, groups).map((group) =>
-      group ? (
-        <EligibleGroupCard group={group} />
-      ) : (
-        <View style={styles.emptyContainer} />
-      ),
-    );
-  }
+  renderEligibleGroup = ({ group }) => <EligibleGroupCard group={group} />;
 
   render() {
     try {
-      const { navigation, currentGroups, publicKey, eligibleGroups } = this.props;
-      const groupPairs =
-        currentGroups.length > 2 ? splitEvery(2, currentGroups) : [currentGroups];
-      console.log(groupPairs);
+      const { navigation, eligibleGroups } = this.props;
+
       return (
         <View style={styles.container}>
           <View style={styles.mainContainer}>
             <NavigationEvents onDidFocus={this.refreshUserInfo} />
-            {!eligibleGroups.length && !currentGroups.length && (
-              <EmptyFullScreen navigation={navigation} />
-            )}
-            {!!eligibleGroups.length && (
-              <View style={styles.eligibleContainer}>
-                <Text style={styles.eligibleGroupTitle}>ELIGIBLE</Text>
-                {this.getTwoEligibleGroups()}
-                <View style={styles.eligibleBottomBorder} />
-                <TouchableOpacity
-                  style={styles.seeAllButton}
-                  onPress={() => {
-                    navigation.navigate('EligibleGroups');
-                  }}
-                >
-                  <Text style={styles.seeAllText}>
-                    See all {this.props.eligibleGroups.length}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            {!!currentGroups.length && !eligibleGroups.length && (
-              <NoEligibleGroups navigation={navigation} />
-            )}
 
-            {!!currentGroups.length && (
-              <View style={styles.currentContainer}>
-                <Text style={styles.currentGroupTitle}>CURRENT</Text>
-                <FlatList
-                  data={groupPairs}
-                  renderItem={this.renderCurrentGroups}
-                  keyExtractor={([group]) => group && group.id}
+            <FlatList
+              data={eligibleGroups}
+              renderItem={this.renderEligibleGroup}
+              keyExtractor={group => group.id}
+            />
+
+            <View style={styles.addGroupButtonContainer}>
+              <TouchableOpacity
+                style={styles.addGroupButton}
+                onPress={() => {
+                  navigation.navigate('NewGroup');
+                }}
+              >
+                <Material
+                  size={ICON_SIZE}
+                  name="plus"
+                  color="#fff"
+                  style={{ width: ICON_SIZE, height: ICON_SIZE }}
                 />
-              </View>
-            )}
-            {!!eligibleGroups.length && !currentGroups.length && (
-              <NoCurrentGroups navigation={navigation} />
-            )}
-            {!!currentGroups.length && !!eligibleGroups.length && (
-              <View style={styles.addGroupButtonContainer}>
-                <TouchableOpacity
-                  style={styles.addGroupButton}
-                  onPress={() => {
-                    navigation.navigate('NewGroup');
-                  }}
-                >
-                  <Material
-                    size={ICON_SIZE}
-                    name="plus"
-                    color="#fff"
-                    style={{ width: ICON_SIZE, height: ICON_SIZE }}
-                  />
-                </TouchableOpacity>
-              </View>
-            )}
+              </TouchableOpacity>
+            </View>
+
           </View>
           <BottomNav navigation={navigation} />
         </View>
@@ -267,4 +204,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(GroupsScreen);
+export default connect((state) => state.main)(EligibleGroupsScreen);
