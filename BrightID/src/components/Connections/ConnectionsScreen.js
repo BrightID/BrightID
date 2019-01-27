@@ -65,22 +65,22 @@ class ConnectionsScreen extends React.Component<Props, State> {
     //       />
     //   </HeaderButtons>
     // ),
-    headerRight: (
-        <Menu>
-          <MenuTrigger>
-            <Material
-                name="dots-horizontal"
-                size={32}
-                color="#fff"
-            />
-          </MenuTrigger>
-          <MenuOptions>
-            <MenuOption onSelect={createNewConnection(navigation)} text='create new connection' />
-            <MenuOption onSelect={() => {}} text='refresh connections' />
-            <MenuOption onSelect={() => {}} text='clear all connections' />
-          </MenuOptions>
-        </Menu>
-    ),
+//     headerRight: (
+//         <Menu>
+//           <MenuTrigger>
+//             <Material
+//                 name="dots-horizontal"
+//                 size={32}
+//                 color="#fff"
+//             />
+//           </MenuTrigger>
+//           <MenuOptions>
+//             <MenuOption onSelect={createNewConnection(navigation)} text='create new connection' />
+//             <MenuOption onSelect={() => {}} text='refresh connections' />
+//             <MenuOption onSelect={() => {}} text='clear all connections' />
+//           </MenuOptions>
+//         </Menu>
+//     ),
   });
 
   state = {
