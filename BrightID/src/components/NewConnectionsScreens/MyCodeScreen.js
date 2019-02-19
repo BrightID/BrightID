@@ -1,7 +1,14 @@
 // @flow
 
 import * as React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Clipboard,
+} from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
 import RNFS from 'react-native-fs';
@@ -9,6 +16,7 @@ import { connect } from 'react-redux';
 import { parseString } from 'xml2js';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { genQrData } from './actions/genQrData';
 import { encryptAndUploadLocalData } from './actions/encryptData';
 import { setUpWs } from './actions/websocket';
@@ -101,6 +109,13 @@ class MyCodeScreen extends React.Component<Props, State> {
     this.setState({ qrsvg });
   };
 
+  copyQr = () => {
+    const {
+      connectQrData: { qrString },
+    } = this.props;
+    Clipboard.setString(qrString);
+  };
+
   renderQrCode = () => {
     // render qrcode or spinner while waiting
     const { qrsvg } = this.state;
@@ -120,6 +135,15 @@ class MyCodeScreen extends React.Component<Props, State> {
               d={path(['svg', 'path', '1', '$', 'd'], qrsvg)}
             />
           </Svg>
+          <TouchableOpacity style={styles.copyContainer} onPress={this.copyQr}>
+            <Material
+              size={24}
+              name="content-copy"
+              color="#333"
+              style={{ width: 24, height: 24 }}
+            />
+            <Text style={styles.copyText}> Copy</Text>
+          </TouchableOpacity>
         </View>
       );
     } else {
@@ -141,7 +165,7 @@ class MyCodeScreen extends React.Component<Props, State> {
     const { photo, name } = this.props;
     return (
       <View style={styles.container}>
-        <View style={styles.half}>
+        <View style={styles.topHalf}>
           <View style={styles.myCodeInfoContainer}>
             <Text style={styles.myCodeInfoText}>
               To make a new connection, you will share your
@@ -168,7 +192,7 @@ class MyCodeScreen extends React.Component<Props, State> {
             <Text style={styles.name}>{name}</Text>
           </View>
         </View>
-        <View style={styles.half}>{this.renderQrCode()}</View>
+        <View style={styles.bottomHalf}>{this.renderQrCode()}</View>
       </View>
     );
   }
@@ -183,8 +207,13 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'column',
   },
-  half: {
-    flex: 1,
+  topHalf: {
+    height: '45%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bottomHalf: {
+    height: '55%',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -233,6 +262,15 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  copyContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  copyText: {
+    color: '#333',
+    fontFamily: 'ApexNew-Book',
   },
 });
 
