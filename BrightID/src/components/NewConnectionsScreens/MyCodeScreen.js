@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
   copyNotification: {
     backgroundColor: '#428BE5',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     minHeight: 85,
     width: '100%',
     alignSelf: 'flex-end',

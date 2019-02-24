@@ -7,8 +7,8 @@ import HeaderButtons, {
   HeaderButton,
   Item,
 } from 'react-navigation-header-buttons';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { createNewConnection } from '../Connections/createNewConnection';
+import Simple from 'react-native-vector-icons/SimpleLineIcons';
+import { shareConnection } from './actions/shareConnection';
 import MyCodeScreen from './MyCodeScreen';
 import ScanCodeScreen from './ScanCodeScreen';
 
@@ -24,11 +24,11 @@ import ScanCodeScreen from './ScanCodeScreen';
  */
 
 // header Button
-const MaterialHeaderButton = (passMeFurther) => (
+const SimpleHeaderButton = (passMeFurther) => (
   <HeaderButton
     {...passMeFurther}
-    IconComponent={Material}
-    iconSize={32}
+    IconComponent={Simple}
+    iconSize={25}
     color="#fff"
   />
 );
@@ -42,12 +42,8 @@ class NewConnectionScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({
     title: 'New Connection',
     headerRight: (
-      <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
-        <Item
-          title="options"
-          iconName="dots-horizontal"
-          onPress={createNewConnection(navigation)}
-        />
+      <HeaderButtons HeaderButtonComponent={SimpleHeaderButton}>
+        <Item title="options" iconName="share-alt" onPress={shareConnection} />
       </HeaderButtons>
     ),
   });
