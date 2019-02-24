@@ -62,17 +62,9 @@ class NewConnectionScreen extends React.Component<Props> {
     // boolean for displaying button styles
     // conditionally render MyCodeScreen
     if (display === 'qrcode') {
-      return (
-        <MyCodeScreen
-          navigation={navigation}
-        />
-      );
+      return <MyCodeScreen navigation={navigation} />;
     } else if (display === 'scanner') {
-      return (
-        <ScanCodeScreen
-          navigation={navigation}
-        />
-      );
+      return <ScanCodeScreen navigation={navigation} />;
     } else if (!display) {
       return <View />;
     }
@@ -132,6 +124,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
+    height: '100%',
     backgroundColor: '#fdfdfd',
     alignItems: 'center',
     flexDirection: 'column',

@@ -43,6 +43,7 @@ type Props = {
 };
 
 type State = {
+  copied: boolean,
   qrsvg:
     | string
     | {
@@ -54,6 +55,8 @@ type State = {
       },
 };
 
+const COPIED_TIMEOUT = 2500;
+
 class MyCodeScreen extends React.Component<Props, State> {
   connectionExpired: TimeoutID;
 
@@ -61,6 +64,7 @@ class MyCodeScreen extends React.Component<Props, State> {
 
   state = {
     qrsvg: '',
+    copied: false,
   };
 
   componentDidMount() {
@@ -114,55 +118,65 @@ class MyCodeScreen extends React.Component<Props, State> {
       connectQrData: { qrString },
     } = this.props;
     Clipboard.setString(qrString);
+    this.setState({ copied: true }, () =>
+      setTimeout(() => this.setState({ copied: false }), COPIED_TIMEOUT),
+    );
   };
 
-  renderQrCode = () => {
-    // render qrcode or spinner while waiting
-    const { qrsvg } = this.state;
-    if (qrsvg) {
-      return (
-        <View style={styles.qrsvgContainer}>
-          <Svg
-            height="212"
-            width="212"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox={path(['svg', '$', 'viewBox'], qrsvg)}
-            shape-rendering="crispEdges"
-          >
-            <Path fill="#fff" d={path(['svg', 'path', '0', '$', 'd'], qrsvg)} />
-            <Path
-              stroke="#000"
-              d={path(['svg', 'path', '1', '$', 'd'], qrsvg)}
-            />
-          </Svg>
-          <TouchableOpacity style={styles.copyContainer} onPress={this.copyQr}>
-            <Material
-              size={24}
-              name="content-copy"
-              color="#333"
-              style={{ width: 24, height: 24 }}
-            />
-            <Text style={styles.copyText}> Copy</Text>
-          </TouchableOpacity>
-        </View>
-      );
-    } else {
-      return (
-        <View style={styles.qrsvgContainer}>
-          <Spinner
-            style={styles.spinner}
-            isVisible={true}
-            size={47}
-            type="9CubeGrid"
-            color="#4990e2"
-          />
-        </View>
-      );
-    }
-  };
+  renderCopyQr = () => (
+    <TouchableOpacity style={styles.copyContainer} onPress={this.copyQr}>
+      <Material
+        size={24}
+        name="content-copy"
+        color="#333"
+        style={{ width: 24, height: 24 }}
+      />
+      <Text style={styles.copyText}> Copy</Text>
+    </TouchableOpacity>
+  );
+
+  renderCopyNotificaiton = () => (
+    <View style={styles.copyNotification}>
+      <Text style={styles.copyNotificationText}>Copied to Clipboard</Text>
+    </View>
+  );
+
+  renderSpinner = () => (
+    <View style={styles.qrsvgContainer}>
+      <Spinner
+        // style={styles.spinner}
+        isVisible={true}
+        size={47}
+        type="9CubeGrid"
+        color="#4990e2"
+      />
+    </View>
+  );
+
+  renderQrCode = () => (
+    <View style={styles.qrsvgContainer}>
+      <Svg
+        height="212"
+        width="212"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox={path(['svg', '$', 'viewBox'], this.state.qrsvg)}
+        shape-rendering="crispEdges"
+      >
+        <Path
+          fill="#fff"
+          d={path(['svg', 'path', '0', '$', 'd'], this.state.qrsvg)}
+        />
+        <Path
+          stroke="#000"
+          d={path(['svg', 'path', '1', '$', 'd'], this.state.qrsvg)}
+        />
+      </Svg>
+    </View>
+  );
 
   render() {
     const { photo, name } = this.props;
+    const { copied, qrsvg } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.topHalf}>
@@ -192,7 +206,12 @@ class MyCodeScreen extends React.Component<Props, State> {
             <Text style={styles.name}>{name}</Text>
           </View>
         </View>
-        <View style={styles.bottomHalf}>{this.renderQrCode()}</View>
+        <View style={styles.bottomHalf}>
+          {qrsvg ? this.renderQrCode() : this.renderSpinner()}
+          {qrsvg && copied ? this.renderCopyNotificaiton() : <View />}
+          {qrsvg && !copied ? this.renderCopyQr() : <View />}
+          {copied ? <View style={styles.copyContainer} /> : <View />}
+        </View>
       </View>
     );
   }
@@ -202,6 +221,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
+    height: '100%',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -209,11 +229,13 @@ const styles = StyleSheet.create({
   },
   topHalf: {
     height: '45%',
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
   bottomHalf: {
     height: '55%',
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -267,10 +289,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    minHeight: 25,
+    minWidth: 100,
   },
   copyText: {
     color: '#333',
     fontFamily: 'ApexNew-Book',
+  },
+  copyNotification: {
+    backgroundColor: '#428BE5',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    minHeight: 85,
+    width: '100%',
+    alignSelf: 'flex-end',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    zIndex: -10,
+    paddingTop: 15,
+    // right: 0,
+  },
+  copyNotificationText: {
+    fontFamily: 'ApexNew-Medium',
+    color: '#fff',
+    fontWeight: '300',
+    fontSize: 20,
   },
 });
 
