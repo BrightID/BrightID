@@ -102,8 +102,7 @@ export class HomeScreen extends React.Component<Props> {
                 { cancelable: true },
               );
             }
-          }
-          }
+          }}
         />
       </HeaderButtons>
     ),
@@ -140,7 +139,7 @@ export class HomeScreen extends React.Component<Props> {
               source={{
                 uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
                   photo.filename
-                  }`,
+                }`,
               }}
               style={styles.photo}
               resizeMode="cover"
@@ -184,9 +183,8 @@ export class HomeScreen extends React.Component<Props> {
               accessible={true}
               accessibilityLabel="Connect"
             >
-              <FontAwesome name="qrcode" size={26} color="#fff" />
+              <Material name="qrcode-scan" size={26} color="#fff" />
               <Text style={styles.connectText}>New Connection</Text>
-              <SimpleLineIcons name="plus" size={26} color="#fff" />
             </TouchableOpacity>
           </View>
         </View>
@@ -243,8 +241,6 @@ const styles = StyleSheet.create({
   },
   connectContainer: {
     width: '100%',
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: '#e3e1e1',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#fff',
@@ -289,8 +285,11 @@ const styles = StyleSheet.create({
   countsContainer: {
     justifyContent: 'space-evenly',
     flexDirection: 'row',
-    width: '75%',
+    width: '80%',
     marginTop: 12,
+    borderBottomColor: '#e3e1e1',
+    borderBottomWidth: 1,
+    paddingBottom: 12,
   },
   countsDescriptionText: {
     fontFamily: 'ApexNew-Book',
@@ -316,10 +315,10 @@ const styles = StyleSheet.create({
     paddingTop: 13,
     paddingBottom: 12,
     width: '80%',
-    backgroundColor: '#4990e2',
-    borderRadius: 3,
+    borderRadius: 6,
+    backgroundColor: '#4a90e2',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
     flexDirection: 'row',
     shadowColor: '#000',
     shadowOffset: { width: 20, height: 20 },
@@ -327,11 +326,10 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   connectText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 16,
+    fontFamily: 'ApexNew-Medium',
+    fontSize: 22,
     color: '#fff',
-    marginTop: 10,
-    marginBottom: 5,
+    marginLeft: 18,
   },
 });
 
