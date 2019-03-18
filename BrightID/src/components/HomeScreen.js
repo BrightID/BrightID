@@ -23,7 +23,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import BottomNav from './BottomNav';
 import store from '../store';
 import { removeUserData } from '../actions';
-import { getConnections } from '../actions/getConnections';
+import { getConnections } from '../actions/connections';
 
 /**
  * Home screen of BrightID
