@@ -11,6 +11,7 @@ import {
 } from '../../../utils/encoding';
 import { encryptAndUploadLocalData } from './encryptData';
 import api from '../../../Api/BrightId';
+import { saveConnection } from '../../../actions/connections';
 
 export const addNewConnection = () => async (
   dispatch: () => null,
@@ -71,10 +72,13 @@ export const addNewConnection = () => async (
     };
 
     // add connection inside of async storage
-    await AsyncStorage.setItem(
-      connectUserSafePubKey,
-      JSON.stringify(connectionData),
-    );
+    // await AsyncStorage.setItem(
+    //   connectUserSafePubKey,
+    //   JSON.stringify(connectionData),
+    // );
+
+    // add connection inside of async storage
+    await saveConnection(connectionData);
 
     emitter.emit('refreshConnections', {});
   } catch (err) {

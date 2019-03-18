@@ -13,16 +13,24 @@ const api = create({
   baseURL: server.apiUrl,
 });
 
-export const fakeJoinGroup = ({ groupId, publicKey, secretKey }) => {
+export const fakeJoinGroup = ({
+  group,
+  publicKey,
+  secretKey,
+}: {
+  group: string,
+  publicKey: string,
+  secretKey: {},
+}) => {
   let timestamp = Date.now();
-  let message = publicKey + groupId + timestamp;
-  console.log(secretKey);
+  let message = publicKey + group + timestamp;
   let sk = objToUint8(secretKey);
+
   let sig = uInt8ArrayToB64(nacl.sign.detached(strToUint8Array(message), sk));
 
   let requestParams = {
     publicKey,
-    group: groupId,
+    group,
     sig,
     timestamp,
   };
@@ -41,13 +49,16 @@ export const fakeJoinGroup = ({ groupId, publicKey, secretKey }) => {
     .catch((error) => (error.data ? error.data : error));
 };
 
-export const fakeJoinGroups = ({ publicKey, secretKey }) => (
-  dispatch,
-  getState,
-) => {
+export const fakeJoinGroups = ({
+  publicKey,
+  secretKey,
+}: {
+  publicKey: string,
+  secretKey: Uint8Array,
+}) => (dispatch: dispatch, getState: getState) => {
   const { eligibleGroups } = getState().main;
-  eligibleGroups.map(function({ id }) {
-    fakeJoinGroup({ groupId: id, publicKey, secretKey });
-  });
-  //   fakeJoinGroup({ groupId: eligibleGroups[0].id, publicKey, secretKey });
+
+  eligibleGroups.map(({ id }) =>
+    fakeJoinGroup({ group: id, publicKey, secretKey }),
+  );
 };

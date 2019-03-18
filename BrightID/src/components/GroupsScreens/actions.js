@@ -37,22 +37,20 @@ export const createNewGroup = () => async (
     newGroupCoFounders[0],
     newGroupCoFounders[1],
   );
-  // alert(JSON.stringify(response, null, 2));
-  console.log(response);
 
   if (response.error) Alert.alert('Cannot create group', response.errorMessage);
 
   if (response.data && response.data.id) return true;
 };
 
-export const join = (group) => async (
-  dispatch: () => null,
-) => {
+export const join = (group) => async (dispatch: () => null) => {
   let result = await api.joinGroup(group.id);
   if (result.success) {
-    if (group.isNew && group.knownMembers.length < 2) { // only creator has joined
+    if (group.isNew && group.knownMembers.length < 2) {
+      // only creator has joined
       dispatch(joinGroupAsCoFounder(group.id));
-    } else { // creator and other co-founder have already joined; treat it as a normal group
+    } else {
+      // creator and other co-founder have already joined; treat it as a normal group
       dispatch(joinGroup(group));
     }
   }

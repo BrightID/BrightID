@@ -208,8 +208,8 @@ class MyCodeScreen extends React.Component<Props, State> {
         </View>
         <View style={styles.bottomHalf}>
           {qrsvg ? this.renderQrCode() : this.renderSpinner()}
-          {qrsvg && copied ? this.renderCopyNotificaiton() : <View />}
-          {qrsvg && !copied ? this.renderCopyQr() : <View />}
+          {/* {qrsvg && copied ? this.renderCopyNotificaiton() : <View />} */}
+          {qrsvg ? this.renderCopyQr() : <View />}
           {copied ? <View style={styles.copyContainer} /> : <View />}
         </View>
       </View>

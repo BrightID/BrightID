@@ -1,10 +1,13 @@
 // @flow
 
-import { innerJoin } from "ramda";
-import { getConnections } from './getConnections';
+import { innerJoin } from 'ramda';
+import { getConnections } from './connections';
 import api from '../Api/BrightId';
 
-export const getMembers = (groupId: string) => async (dispatch: () => null, getState) => {
+export const getMembers = (groupId: string) => async (
+  dispatch: dispatch,
+  getState: getState,
+) => {
   await getConnections();
 
   const { connections } = getState().main;
@@ -15,6 +18,7 @@ export const getMembers = (groupId: string) => async (dispatch: () => null, getS
 
   return innerJoin(
     (connection, publicKey) => connection.publicKey === publicKey,
-    connections, members
+    connections,
+    members,
   );
 };
