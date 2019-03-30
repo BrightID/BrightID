@@ -49,5 +49,8 @@
     "block-scoped-var": "off",
     "flowtype/space-after-type-colon": "off",
     "no-await-in-loop": "off"
+  },
+  "globals": {
+    "__DEV__": "readonly"
   }
 }

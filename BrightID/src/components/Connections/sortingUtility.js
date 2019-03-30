@@ -10,7 +10,10 @@ export const types = {
   byDateAddedDescending: 'BY_DATE_ADDED_DESCENDING',
 };
 
-export const sortByNameAscending = () => (dispatch, getState) => {
+export const sortByNameAscending = () => (
+  dispatch: dispatch,
+  getState: getState,
+) => {
   const { connections } = getState().main;
   let list = connections.slice();
   list.sort((a, b) => b.name.localeCompare(a.name));
@@ -18,7 +21,10 @@ export const sortByNameAscending = () => (dispatch, getState) => {
   dispatch(setConnectionsSort(types.byNameAscending));
 };
 
-export const sortByNameDescending = () => (dispatch, getState) => {
+export const sortByNameDescending = () => (
+  dispatch: dispatch,
+  getState: getState,
+) => {
   const { connections } = getState().main;
   let list = connections.slice();
   list.sort((a, b) => a.name.localeCompare(b.name));
@@ -26,7 +32,10 @@ export const sortByNameDescending = () => (dispatch, getState) => {
   dispatch(setConnectionsSort(types.byNameDescending));
 };
 
-export const sortByScoreAscending = () => (dispatch, getState) => {
+export const sortByScoreAscending = () => (
+  dispatch: dispatch,
+  getState: getState,
+) => {
   const { connections } = getState().main;
   let list = connections.slice();
   list.sort((a, b) => a.score - b.score);
@@ -34,7 +43,10 @@ export const sortByScoreAscending = () => (dispatch, getState) => {
   dispatch(setConnectionsSort(types.byScoreAscending));
 };
 
-export const sortByScoreDescending = () => (dispatch, getState) => {
+export const sortByScoreDescending = () => (
+  dispatch: dispatch,
+  getState: getState,
+) => {
   const { connections } = getState().main;
   let list = connections.slice();
   list.sort((a, b) => b.score - a.score);
@@ -42,7 +54,10 @@ export const sortByScoreDescending = () => (dispatch, getState) => {
   dispatch(setConnectionsSort(types.byScoreDescending));
 };
 
-export const sortByDateAddedAscending = () => (dispatch, getState) => {
+export const sortByDateAddedAscending = () => (
+  dispatch: dispatch,
+  getState: getState,
+) => {
   const { connections } = getState().main;
   let list = connections.slice();
   list.sort((a, b) => a.connectionDate - b.connectionDate);
@@ -50,7 +65,10 @@ export const sortByDateAddedAscending = () => (dispatch, getState) => {
   dispatch(setConnectionsSort(types.byDateAddedAscending));
 };
 
-export const sortByDateAddedDescending = () => (dispatch, getState) => {
+export const sortByDateAddedDescending = () => (
+  dispatch: dispatch,
+  getState: getState,
+) => {
   const { connections } = getState().main;
   let list = connections.slice();
   list.sort((a, b) => b.connectionDate - a.connectionDate);
@@ -58,7 +76,7 @@ export const sortByDateAddedDescending = () => (dispatch, getState) => {
   dispatch(setConnectionsSort(types.byDateAddedDescending));
 };
 
-export const defaultSort = () => (dispatch, getState) => {
+export const defaultSort = () => (dispatch: dispatch, getState: getState) => {
   const { connectionsSort } = getState().main;
   switch (connectionsSort) {
     case types.byNameAscending:

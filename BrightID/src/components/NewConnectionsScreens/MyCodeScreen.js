@@ -32,16 +32,6 @@ import { removeConnectQrData } from '../../actions';
  *
  */
 
-type Props = {
-  dispatch: dispatch,
-  photo: { filename: string },
-  name: string,
-  navigation: () => null,
-  connectQrData: {
-    qrString: string,
-  },
-};
-
 type State = {
   copied: boolean,
   qrsvg:
@@ -55,7 +45,7 @@ type State = {
       },
 };
 
-const COPIED_TIMEOUT = 2500;
+const COPIED_TIMEOUT = 500;
 
 class MyCodeScreen extends React.Component<Props, State> {
   connectionExpired: TimeoutID;
@@ -135,12 +125,6 @@ class MyCodeScreen extends React.Component<Props, State> {
     </TouchableOpacity>
   );
 
-  renderCopyNotificaiton = () => (
-    <View style={styles.copyNotification}>
-      <Text style={styles.copyNotificationText}>Copied to Clipboard</Text>
-    </View>
-  );
-
   renderSpinner = () => (
     <View style={styles.qrsvgContainer}>
       <Spinner
@@ -154,7 +138,7 @@ class MyCodeScreen extends React.Component<Props, State> {
   );
 
   renderQrCode = () => (
-    <View style={styles.qrsvgContainer}>
+    <View style={[styles.qrsvgContainer]}>
       <Svg
         height="212"
         width="212"
@@ -163,7 +147,7 @@ class MyCodeScreen extends React.Component<Props, State> {
         shape-rendering="crispEdges"
       >
         <Path
-          fill="#fff"
+          fill={this.state.copied ? 'lightblue' : '#fff'}
           d={path(['svg', 'path', '0', '$', 'd'], this.state.qrsvg)}
         />
         <Path
@@ -176,7 +160,7 @@ class MyCodeScreen extends React.Component<Props, State> {
 
   render() {
     const { photo, name } = this.props;
-    const { copied, qrsvg } = this.state;
+    const { qrsvg } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.topHalf}>
@@ -198,7 +182,7 @@ class MyCodeScreen extends React.Component<Props, State> {
               style={styles.photo}
               resizeMode="cover"
               onError={(e) => {
-                console.log(e.error);
+                console.log(e);
               }}
               accessible={true}
               accessibilityLabel="user photo"
@@ -208,9 +192,7 @@ class MyCodeScreen extends React.Component<Props, State> {
         </View>
         <View style={styles.bottomHalf}>
           {qrsvg ? this.renderQrCode() : this.renderSpinner()}
-          {/* {qrsvg && copied ? this.renderCopyNotificaiton() : <View />} */}
           {qrsvg ? this.renderCopyQr() : <View />}
-          {copied ? <View style={styles.copyContainer} /> : <View />}
         </View>
       </View>
     );
@@ -296,26 +278,6 @@ const styles = StyleSheet.create({
     color: '#333',
     fontFamily: 'ApexNew-Book',
   },
-  copyNotification: {
-    backgroundColor: '#428BE5',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: 85,
-    width: '100%',
-    alignSelf: 'flex-end',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    zIndex: -10,
-    paddingTop: 15,
-    // right: 0,
-  },
-  copyNotificationText: {
-    fontFamily: 'ApexNew-Medium',
-    color: '#fff',
-    fontWeight: '300',
-    fontSize: 20,
-  },
 });
 
-export default connect((state) => state.main)(MyCodeScreen);
+export default connect((state: state) => state.main)(MyCodeScreen);

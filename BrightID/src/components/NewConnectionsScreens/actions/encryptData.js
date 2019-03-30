@@ -2,12 +2,15 @@
 
 import { createCipher } from 'react-native-crypto';
 import nacl from 'tweetnacl';
+import { Alert } from 'react-native';
 import { postData } from './postData';
 import { retrievePhoto } from '../../../utils/filesystem';
 import { strToUint8Array, uInt8ArrayToB64 } from '../../../utils/encoding';
-import { Alert } from "react-native";
 
-export const encryptAndUploadLocalData = () => async (dispatch, getState) => {
+export const encryptAndUploadLocalData = () => async (
+  dispatch: dispatch,
+  getState: getState,
+) => {
   const {
     publicKey,
     secretKey,
@@ -29,8 +32,7 @@ export const encryptAndUploadLocalData = () => async (dispatch, getState) => {
       // The other user sent their publicKey. Sign the message and send it.
 
       timestamp = Date.now();
-      const message =
-        publicKey + connectUserData.publicKey + timestamp;
+      const message = publicKey + connectUserData.publicKey + timestamp;
       signedMessage = uInt8ArrayToB64(
         nacl.sign.detached(strToUint8Array(message), secretKey),
       );
