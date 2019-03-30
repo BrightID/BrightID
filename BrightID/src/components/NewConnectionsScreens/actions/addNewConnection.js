@@ -1,6 +1,5 @@
 // @flow
 
-import { AsyncStorage } from 'react-native';
 import nacl from 'tweetnacl';
 import emitter from '../../../emitter';
 import { savePhoto } from '../../../utils/filesystem';
@@ -14,8 +13,8 @@ import api from '../../../Api/BrightId';
 import { saveConnection } from '../../../actions/connections';
 
 export const addNewConnection = () => async (
-  dispatch: () => null,
-  getState: () => {},
+  dispatch: dispatch,
+  getState: getState,
 ) => {
   /**
    * Add connection in async storage  &&
@@ -66,7 +65,7 @@ export const addNewConnection = () => async (
       publicKey: connectUserSafePubKey,
       name: connectUserData.name,
       score: connectUserData.score,
-      secretKey: connectUserData.secretKey || '',
+      secretKey: connectUserData.secretKey,
       connectionDate,
       photo: { filename },
     };

@@ -1,6 +1,6 @@
 // @flow
 
-import { create } from 'apisauce';
+import { create, ApiSauceInstance } from 'apisauce';
 import nacl from 'tweetnacl';
 import { strToUint8Array, uInt8ArrayToB64 } from '../utils/encoding';
 import store from '../store';
@@ -8,6 +8,10 @@ import server from './server';
 import emitter from '../emitter';
 
 class BrightId {
+  api: ApiSauceInstance;
+
+  baseUrl: string;
+
   constructor() {
     this.api = create({
       baseURL: BrightId.baseURL,

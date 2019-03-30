@@ -33,13 +33,12 @@ const SimpleHeaderButton = (passMeFurther) => (
   />
 );
 
-type Props = {
-  navigation: { navigate: () => null },
-  dispatch: () => null,
+type State = {
+  display: string,
 };
 
-class NewConnectionScreen extends React.Component<Props> {
-  static navigationOptions = ({ navigation }) => ({
+class NewConnectionScreen extends React.Component<Props, State> {
+  static navigationOptions = () => ({
     title: 'New Connection',
     headerRight: (
       <HeaderButtons HeaderButtonComponent={SimpleHeaderButton}>
@@ -68,7 +67,6 @@ class NewConnectionScreen extends React.Component<Props> {
 
   render() {
     const { display } = this.state;
-    const { dispatch } = this.props;
     const qr = display === 'qrcode';
     return (
       <View style={styles.container}>

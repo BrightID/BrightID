@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import { AsyncStorage, StyleSheet, View, Alert, Text } from 'react-native';
+import { AsyncStorage, StyleSheet, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import HeaderButtons, {
   HeaderButton,
@@ -40,18 +40,7 @@ const MaterialHeaderButton = (passMeFurther) => (
   />
 );
 
-type Props = {
-  connections: Array<{
-    name: string,
-    id: number,
-  }>,
-  searchParam: string,
-  dispatch: (() => Promise<null>) => Promise<null>,
-};
-
-type State = {
-  loading: boolean,
-};
+type State = {};
 
 class ConnectionsScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
@@ -83,10 +72,6 @@ class ConnectionsScreen extends React.Component<Props, State> {
     //     ),
   });
 
-  state = {
-    loading: true,
-  };
-
   componentDidMount() {
     this.getConnections();
     emitter.on('refreshConnections', this.getConnections);
@@ -101,9 +86,6 @@ class ConnectionsScreen extends React.Component<Props, State> {
   getConnections = async () => {
     const { dispatch } = this.props;
     await dispatch(getConnections());
-    this.setState({
-      loading: false,
-    });
   };
 
   removeConnection = async (publicKey) => {
@@ -113,7 +95,7 @@ class ConnectionsScreen extends React.Component<Props, State> {
       await AsyncStorage.removeItem(publicKey);
       emitter.emit('refreshConnections', {});
     } catch (err) {
-      Alert("Couldn't remove connection", err.stack);
+      Alert.alert("Couldn't remove connection", err.stack);
     }
   };
 

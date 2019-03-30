@@ -4,8 +4,8 @@ import { Alert } from 'react-native';
 import store from '../../store';
 import { addConnection } from '../../actions/fakeContact';
 
-export const createNewConnection = (navigation) => () => {
-  if(__DEV__) {
+export const createNewConnection = (navigation: navigation) => () => {
+  if (__DEV__) {
     Alert.alert(
       'New Connection',
       'Would you like simulate adding a new connection?',

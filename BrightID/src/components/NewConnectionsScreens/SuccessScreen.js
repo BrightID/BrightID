@@ -12,15 +12,6 @@ import { removeConnectUserData } from '../../actions';
  *
  */
 
-type Props = {
-  publicKey: string,
-  score: string,
-  photo: string,
-  name: string,
-  dispatch: () => null,
-  navigation: { goBack: () => null, navigate: (string) => null },
-};
-
 type State = {};
 
 class SuccessScreen extends React.Component<Props, State> {
@@ -39,7 +30,7 @@ class SuccessScreen extends React.Component<Props, State> {
             style={styles.successImage}
             resizeMode="cover"
             onError={(e) => {
-              console.log(e.error);
+              console.log(e);
             }}
             accessible={true}
             accessibilityLabel="success image"

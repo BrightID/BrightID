@@ -13,11 +13,6 @@ import { setSearchParam } from '../../actions';
  * TODO: add search filter in redux actions
  */
 
-type Props = {
-  searchParam: string,
-  dispatch: () => null,
-};
-
 class SearchConnections extends React.Component<Props> {
   componentWillUnmount() {
     // reset search Param

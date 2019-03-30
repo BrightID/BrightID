@@ -1,41 +1,51 @@
 // @flow
 
-declare type dispatch = (any) => any;
+import { NavigationScreenProp } from 'react-navigation';
+import { Dispatch } from 'redux';
 
-declare type getState = () => { main: Main };
+declare type dispatch = Dispatch;
+
+declare type getState = () => state;
+
+declare type state = { main: Main };
+
+declare type navigation = NavigationScreenProp;
+
+declare type Props = Main & navigation & dispatch;
 
 declare type Main = {
-  trustScore: string,
-  nameornym: string,
+  score: number,
+  name: string,
   photo: {
-    uri: string,
+    filename: string,
   },
-  groupsCount: string,
+  groupsCount: number,
   searchParam: string,
   newGroupCoFounders: [],
   eligibleGroups: [],
   currentGroups: [],
   connections: [],
-  nearbyPeople: [],
-  publicKey: Uint8Array,
+  publicKey: string,
+  safePubKey: string,
   secretKey: Uint8Array,
   connectionsSort: string,
   connectQrData: {
     aesKey: string,
     ipAddress: string,
     uuid: string,
+    user: string,
     qrString: string,
     channel: string,
   },
   connectUserData: {
-    publicKey: Uint8Array,
-    photo: {
-      uri: string,
-    },
-    nameornym: string,
+    publicKey: string,
+    photo: string,
+    name: string,
     timestamp: number,
+    signedMessage: string,
+    score: number,
+    secretKey?: Uint8Array,
   },
-  encryptedUserData: string,
 };
 
 declare type connection = {

@@ -27,22 +27,12 @@ import api from '../../Api/BrightId';
  * @prop photo
  */
 
-type Props = {
-  name: string,
-  photo: string,
-  score: number,
-  connectionDate: string,
-  publicKey: string,
-  style: {},
-  selected: boolean,
-  groups: boolean,
-};
-
 class ConnectionCard extends React.PureComponent<Props> {
   async componentDidMount() {
     const result = await api.getUserScore(this.props.publicKey);
     console.log(result);
   }
+
   handleUserOptions = () => {
     const { name, publicKey, secretKey, dispatch } = this.props;
     console.log(secretKey);
