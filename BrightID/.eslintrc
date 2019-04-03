@@ -41,12 +41,16 @@
     "no-shadow": "warn",
     "import/no-named-as-default": "off",
     "prefer-const": "off",
-    "no-restricted-syntax": "warn",
+    "no-restricted-syntax": "off",
     "import/prefer-default-export": "off",
     "no-param-reassign": "off",
     "no-var": "off",
     "vars-on-top": "off",
     "block-scoped-var": "off",
-    "flowtype/space-after-type-colon": "off"
+    "flowtype/space-after-type-colon": "off",
+    "no-await-in-loop": "off"
+  },
+  "globals": {
+    "__DEV__": "readonly"
   }
 }

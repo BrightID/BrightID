@@ -7,8 +7,8 @@ import HeaderButtons, {
   HeaderButton,
   Item,
 } from 'react-navigation-header-buttons';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { createNewConnection } from '../Connections/createNewConnection';
+import Simple from 'react-native-vector-icons/SimpleLineIcons';
+import { shareConnection } from './actions/shareConnection';
 import MyCodeScreen from './MyCodeScreen';
 import ScanCodeScreen from './ScanCodeScreen';
 
@@ -24,30 +24,25 @@ import ScanCodeScreen from './ScanCodeScreen';
  */
 
 // header Button
-const MaterialHeaderButton = (passMeFurther) => (
+const SimpleHeaderButton = (passMeFurther) => (
   <HeaderButton
     {...passMeFurther}
-    IconComponent={Material}
-    iconSize={32}
+    IconComponent={Simple}
+    iconSize={25}
     color="#fff"
   />
 );
 
-type Props = {
-  navigation: { navigate: () => null },
-  dispatch: () => null,
+type State = {
+  display: string,
 };
 
-class NewConnectionScreen extends React.Component<Props> {
-  static navigationOptions = ({ navigation }) => ({
+class NewConnectionScreen extends React.Component<Props, State> {
+  static navigationOptions = () => ({
     title: 'New Connection',
     headerRight: (
-      <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
-        <Item
-          title="options"
-          iconName="dots-horizontal"
-          onPress={createNewConnection(navigation)}
-        />
+      <HeaderButtons HeaderButtonComponent={SimpleHeaderButton}>
+        <Item title="options" iconName="share-alt" onPress={shareConnection} />
       </HeaderButtons>
     ),
   });
@@ -62,17 +57,9 @@ class NewConnectionScreen extends React.Component<Props> {
     // boolean for displaying button styles
     // conditionally render MyCodeScreen
     if (display === 'qrcode') {
-      return (
-        <MyCodeScreen
-          navigation={navigation}
-        />
-      );
+      return <MyCodeScreen navigation={navigation} />;
     } else if (display === 'scanner') {
-      return (
-        <ScanCodeScreen
-          navigation={navigation}
-        />
-      );
+      return <ScanCodeScreen navigation={navigation} />;
     } else if (!display) {
       return <View />;
     }
@@ -80,7 +67,6 @@ class NewConnectionScreen extends React.Component<Props> {
 
   render() {
     const { display } = this.state;
-    const { dispatch } = this.props;
     const qr = display === 'qrcode';
     return (
       <View style={styles.container}>
@@ -132,6 +118,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
+    height: '100%',
     backgroundColor: '#fdfdfd',
     alignItems: 'center',
     flexDirection: 'column',

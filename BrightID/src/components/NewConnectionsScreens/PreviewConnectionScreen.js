@@ -1,14 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {
-  AsyncStorage,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import { addNewConnection } from './actions/addNewConnection';
 
@@ -18,17 +11,6 @@ import { addNewConnection } from './actions/addNewConnection';
 ==================================================================
  *
  */
-
-type Props = {
-  dispatch: () => null,
-  previewName: string,
-  previewTimestamp: number,
-  previewPublicKey: string,
-  previewScore: string,
-  previewPhoto: string,
-  navigation: { goBack: () => null, navigate: (string) => null },
-  connectUserData: { photo: string, publicKey: Buffer, name: string },
-};
 
 type State = {};
 
@@ -64,7 +46,7 @@ class PreviewConnectionScreen extends React.Component<Props, State> {
             style={styles.photo}
             resizeMode="cover"
             onError={(e) => {
-              console.log(e.error);
+              console.log(e);
             }}
             accessible={true}
             accessibilityLabel="user photo"
@@ -160,4 +142,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(PreviewConnectionScreen);
+export default connect((state: state) => state.main)(PreviewConnectionScreen);

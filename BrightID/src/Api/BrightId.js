@@ -1,6 +1,6 @@
 // @flow
 
-import { create } from 'apisauce';
+import { create, ApiSauceInstance } from 'apisauce';
 import nacl from 'tweetnacl';
 import { strToUint8Array, uInt8ArrayToB64 } from '../utils/encoding';
 import store from '../store';
@@ -8,6 +8,10 @@ import server from './server';
 import emitter from '../emitter';
 
 class BrightId {
+  api: ApiSauceInstance;
+
+  baseUrl: string;
+
   constructor() {
     this.api = create({
       baseURL: BrightId.baseURL,
@@ -45,7 +49,6 @@ class BrightId {
       sig2,
       timestamp,
     };
-    console.log(requestParams);
     return this.api
       .put(`/connections`, requestParams)
       .then((response) => BrightId.noContentResponse(response))
@@ -53,7 +56,7 @@ class BrightId {
   }
 
   deleteConnection(publicKey2: string) {
-    const { publicKey, secretKey} = store.getState().main;
+    const { publicKey, secretKey } = store.getState().main;
     const timestamp = Date.now();
     const message = publicKey + publicKey2 + timestamp;
     let sig1 = uInt8ArrayToB64(
@@ -71,7 +74,7 @@ class BrightId {
       .catch((error) => (error.data ? error.data : error));
   }
 
-  getMembers(group: string){
+  getMembers(group: string) {
     return this.api
       .get(`/membership/${group}`)
       .then((response) => response.data.data)
@@ -135,6 +138,13 @@ class BrightId {
     );
     return this.api
       .post(`/fetchUserInfo`, { publicKey, sig, timestamp })
+      .then((response) => response.data)
+      .catch((error) => (error.data ? error.data : error));
+  }
+
+  getUserScore(publicKey: string) {
+    return this.api
+      .get(`/userScore/${publicKey}`)
       .then((response) => response.data)
       .catch((error) => (error.data ? error.data : error));
   }

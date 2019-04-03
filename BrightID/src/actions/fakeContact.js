@@ -8,20 +8,20 @@ import api from '../Api/BrightId';
 import { setConnectUserData } from './index';
 import { strToUint8Array, uInt8ArrayToB64 } from '../utils/encoding';
 
-export const addConnection = (navigation) => async (dispatch, getState) => {
+export const addConnection = (navigation: () => null) => async (
+  dispatch: dispatch,
+  getState: getState,
+) => {
   const { publicKey, secretKey } = nacl.sign.keyPair();
   const { main } = getState();
   const b64PubKey = uInt8ArrayToB64(publicKey);
   let creationResponse = await api.createUser(b64PubKey);
-  console.log(creationResponse.data);
   if (creationResponse.data && creationResponse.data.key) {
     const { firstName, lastName } = names[
       Math.floor(Math.random() * (names.length - 1))
     ];
     const name = `${firstName} ${lastName}`;
-    const score = `${Math.floor(Math.random() * 99)}.${Math.floor(
-      Math.random() * 9,
-    )}`;
+    const score = Math.floor(Math.random() * 99);
     const timestamp = Date.now();
     const base64Key = uInt8ArrayToB64(publicKey);
     const message = base64Key + main.publicKey + timestamp;
@@ -42,7 +42,7 @@ export const addConnection = (navigation) => async (dispatch, getState) => {
     RNFetchBlob.fetch('GET', 'https://loremflickr.com/180/180/all', {})
       .then((res) => {
         if (res.info().status === 200) {
-          userData.photo = `data:image/jpeg;base64,${res.base64()}`;
+          userData.photo = `data:image/jpeg;base64,${String(res.base64())}`;
           dispatch(setConnectUserData(userData));
           navigation.navigate('PreviewConnection');
         } else {

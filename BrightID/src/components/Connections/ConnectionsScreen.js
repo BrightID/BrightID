@@ -7,16 +7,23 @@ import HeaderButtons, {
   HeaderButton,
   Item,
 } from 'react-navigation-header-buttons';
+// import {
+//   Menu,
+//   MenuOptions,
+//   MenuOption,
+//   MenuTrigger,
+// } from 'react-native-popup-menu';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationEvents } from 'react-navigation';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
-import { getConnections } from '../../actions/getConnections';
+import { getConnections } from '../../actions/connections';
 import { createNewConnection } from './createNewConnection';
 import emitter from '../../emitter';
 import BottomNav from '../BottomNav';
 import { renderListOrSpinner } from './renderConnections';
 import api from '../../Api/BrightId';
+import FloatingActionButton from '../FloatingActionButton';
 
 /**
  * Connection screen of BrightID
@@ -33,18 +40,7 @@ const MaterialHeaderButton = (passMeFurther) => (
   />
 );
 
-type Props = {
-  connections: Array<{
-    name: string,
-    id: number,
-  }>,
-  searchParam: string,
-  dispatch: (() => Promise<null>) => Promise<null>,
-};
-
-type State = {
-  loading: boolean,
-};
+type State = {};
 
 class ConnectionsScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
@@ -58,11 +54,23 @@ class ConnectionsScreen extends React.Component<Props, State> {
         />
       </HeaderButtons>
     ),
+    //     headerRight: (
+    //         <Menu>
+    //           <MenuTrigger>
+    //             <Material
+    //                 name="dots-horizontal"
+    //                 size={32}
+    //                 color="#fff"
+    //             />
+    //           </MenuTrigger>
+    //           <MenuOptions>
+    //             <MenuOption onSelect={createNewConnection(navigation)} text='create new connection' />
+    //             <MenuOption onSelect={() => {}} text='refresh connections' />
+    //             <MenuOption onSelect={() => {}} text='clear all connections' />
+    //           </MenuOptions>
+    //         </Menu>
+    //     ),
   });
-
-  state = {
-    loading: true,
-  };
 
   componentDidMount() {
     this.getConnections();
@@ -78,9 +86,6 @@ class ConnectionsScreen extends React.Component<Props, State> {
   getConnections = async () => {
     const { dispatch } = this.props;
     await dispatch(getConnections());
-    this.setState({
-      loading: false,
-    });
   };
 
   removeConnection = async (publicKey) => {
@@ -90,7 +95,7 @@ class ConnectionsScreen extends React.Component<Props, State> {
       await AsyncStorage.removeItem(publicKey);
       emitter.emit('refreshConnections', {});
     } catch (err) {
-      Alert("Couldn't remove connection", err.stack);
+      Alert.alert("Couldn't remove connection", err.stack);
     }
   };
 
@@ -116,11 +121,18 @@ class ConnectionsScreen extends React.Component<Props, State> {
             this.getConnections();
           }}
         />
-        <View style={styles.mainContainer}>
-          <SearchConnections navigation={navigation} />
-          <View style={styles.mainContainer}>{renderListOrSpinner(this)}</View>
+        <View style={{ flex: 1 }}>
+          <View style={styles.mainContainer}>
+            <SearchConnections navigation={navigation} />
+            <View style={styles.mainContainer}>
+              {renderListOrSpinner(this)}
+            </View>
+          </View>
+          <FloatingActionButton
+            onPress={() => navigation.navigate('NewConnection')}
+          />
         </View>
-        <BottomNav navigation={navigation} />
+        <BottomNav style={{ flex: 0 }} navigation={navigation} />
       </View>
     );
   }

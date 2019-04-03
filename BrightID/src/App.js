@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { StyleSheet, View } from 'react-native';
 import AppRoutes from './AppRoutes';
 import store from './store';
+import { MenuProvider } from 'react-native-popup-menu';
 
 /**
  * Central part of the application
@@ -17,11 +18,13 @@ type Props = {};
 export default class App extends React.Component<Props> {
   render() {
     return (
-      <Provider store={store}>
-        <View style={styles.container}>
-          <AppRoutes />
-        </View>
-      </Provider>
+      <MenuProvider>
+        <Provider store={store}>
+          <View style={styles.container}>
+            <AppRoutes />
+          </View>
+        </Provider>
+      </MenuProvider>
     );
   }
 }
@@ -29,5 +32,7 @@ export default class App extends React.Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
+    height: '100%',
   },
 });

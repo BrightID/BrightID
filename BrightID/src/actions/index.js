@@ -77,7 +77,7 @@ export const clearNewGroupCoFounders = () => ({
  * redux action creator for set user eligible groups
  * @param eligibleGroups: list of user eligible groups
  */
-export const setEligibleGroups = (eligibleGroups) => ({
+export const setEligibleGroups = (eligibleGroups: eligibleGroups) => ({
   type: SET_ELIGIBLE_GROUPS,
   eligibleGroups,
 });
@@ -86,7 +86,7 @@ export const setEligibleGroups = (eligibleGroups) => ({
  * redux action creator for set user eligible groups
  * @param eligibleGroups: list of user eligible groups
  */
-export const deleteEligibleGroup = (groupId) => ({
+export const deleteEligibleGroup = (groupId: string) => ({
   type: DELETE_ELIGIBLE_GROUP,
   groupId,
 });
@@ -108,12 +108,12 @@ export const joinGroup = (group) => ({
 export const joinGroupAsCoFounder = (groupId) => ({
   type: JOIN_GROUP_AS_CO_FOUNDER,
   groupId,
-})
+});
 
 export const leaveGroup = (groupId) => ({
   type: LEAVE_GROUP,
   groupId,
-})
+});
 
 /**
  * redux action creator for setting connections array

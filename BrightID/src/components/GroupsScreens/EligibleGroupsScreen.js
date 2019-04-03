@@ -45,7 +45,7 @@ class EligibleGroupsScreen extends React.Component<Props, State> {
             <FlatList
               data={eligibleGroups}
               renderItem={this.renderEligibleGroup}
-              keyExtractor={group => group.id}
+              keyExtractor={(group) => group.id}
             />
 
             <View style={styles.addGroupButtonContainer}>
@@ -63,7 +63,6 @@ class EligibleGroupsScreen extends React.Component<Props, State> {
                 />
               </TouchableOpacity>
             </View>
-
           </View>
           <BottomNav navigation={navigation} />
         </View>
@@ -72,7 +71,6 @@ class EligibleGroupsScreen extends React.Component<Props, State> {
       Alert.alert(e.message || 'Error', e.stack);
     }
   }
-
 }
 
 const styles = StyleSheet.create({

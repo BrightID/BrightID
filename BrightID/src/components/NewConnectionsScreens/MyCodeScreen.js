@@ -1,7 +1,14 @@
 // @flow
 
 import * as React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Clipboard,
+} from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
 import RNFS from 'react-native-fs';
@@ -9,6 +16,7 @@ import { connect } from 'react-redux';
 import { parseString } from 'xml2js';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { genQrData } from './actions/genQrData';
 import { encryptAndUploadLocalData } from './actions/encryptData';
 import { setUpWs } from './actions/websocket';
@@ -24,17 +32,8 @@ import { removeConnectQrData } from '../../actions';
  *
  */
 
-type Props = {
-  dispatch: dispatch,
-  photo: { filename: string },
-  name: string,
-  navigation: () => null,
-  connectQrData: {
-    qrString: string,
-  },
-};
-
 type State = {
+  copied: boolean,
   qrsvg:
     | string
     | {
@@ -46,6 +45,8 @@ type State = {
       },
 };
 
+const COPIED_TIMEOUT = 500;
+
 class MyCodeScreen extends React.Component<Props, State> {
   connectionExpired: TimeoutID;
 
@@ -53,6 +54,7 @@ class MyCodeScreen extends React.Component<Props, State> {
 
   state = {
     qrsvg: '',
+    copied: false,
   };
 
   componentDidMount() {
@@ -101,47 +103,67 @@ class MyCodeScreen extends React.Component<Props, State> {
     this.setState({ qrsvg });
   };
 
-  renderQrCode = () => {
-    // render qrcode or spinner while waiting
-    const { qrsvg } = this.state;
-    if (qrsvg) {
-      return (
-        <View style={styles.qrsvgContainer}>
-          <Svg
-            height="212"
-            width="212"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox={path(['svg', '$', 'viewBox'], qrsvg)}
-            shape-rendering="crispEdges"
-          >
-            <Path fill="#fff" d={path(['svg', 'path', '0', '$', 'd'], qrsvg)} />
-            <Path
-              stroke="#000"
-              d={path(['svg', 'path', '1', '$', 'd'], qrsvg)}
-            />
-          </Svg>
-        </View>
-      );
-    } else {
-      return (
-        <View style={styles.qrsvgContainer}>
-          <Spinner
-            style={styles.spinner}
-            isVisible={true}
-            size={47}
-            type="9CubeGrid"
-            color="#4990e2"
-          />
-        </View>
-      );
-    }
+  copyQr = () => {
+    const {
+      connectQrData: { qrString },
+    } = this.props;
+    Clipboard.setString(qrString);
+    this.setState({ copied: true }, () =>
+      setTimeout(() => this.setState({ copied: false }), COPIED_TIMEOUT),
+    );
   };
+
+  renderCopyQr = () => (
+    <TouchableOpacity style={styles.copyContainer} onPress={this.copyQr}>
+      <Material
+        size={24}
+        name="content-copy"
+        color="#333"
+        style={{ width: 24, height: 24 }}
+      />
+      <Text style={styles.copyText}> Copy</Text>
+    </TouchableOpacity>
+  );
+
+  renderSpinner = () => (
+    <View style={styles.qrsvgContainer}>
+      <Spinner
+        // style={styles.spinner}
+        isVisible={true}
+        size={47}
+        type="9CubeGrid"
+        color="#4990e2"
+      />
+    </View>
+  );
+
+  renderQrCode = () => (
+    <View style={[styles.qrsvgContainer]}>
+      <Svg
+        height="212"
+        width="212"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox={path(['svg', '$', 'viewBox'], this.state.qrsvg)}
+        shape-rendering="crispEdges"
+      >
+        <Path
+          fill={this.state.copied ? 'lightblue' : '#fff'}
+          d={path(['svg', 'path', '0', '$', 'd'], this.state.qrsvg)}
+        />
+        <Path
+          stroke="#000"
+          d={path(['svg', 'path', '1', '$', 'd'], this.state.qrsvg)}
+        />
+      </Svg>
+    </View>
+  );
 
   render() {
     const { photo, name } = this.props;
+    const { qrsvg } = this.state;
     return (
       <View style={styles.container}>
-        <View style={styles.half}>
+        <View style={styles.topHalf}>
           <View style={styles.myCodeInfoContainer}>
             <Text style={styles.myCodeInfoText}>
               To make a new connection, you will share your
@@ -160,7 +182,7 @@ class MyCodeScreen extends React.Component<Props, State> {
               style={styles.photo}
               resizeMode="cover"
               onError={(e) => {
-                console.log(e.error);
+                console.log(e);
               }}
               accessible={true}
               accessibilityLabel="user photo"
@@ -168,7 +190,10 @@ class MyCodeScreen extends React.Component<Props, State> {
             <Text style={styles.name}>{name}</Text>
           </View>
         </View>
-        <View style={styles.half}>{this.renderQrCode()}</View>
+        <View style={styles.bottomHalf}>
+          {qrsvg ? this.renderQrCode() : this.renderSpinner()}
+          {qrsvg ? this.renderCopyQr() : <View />}
+        </View>
       </View>
     );
   }
@@ -178,13 +203,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
+    height: '100%',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'column',
   },
-  half: {
-    flex: 1,
+  topHalf: {
+    height: '45%',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bottomHalf: {
+    height: '55%',
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -234,6 +267,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  copyContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 25,
+    minWidth: 100,
+  },
+  copyText: {
+    color: '#333',
+    fontFamily: 'ApexNew-Book',
+  },
 });
 
-export default connect((state) => state.main)(MyCodeScreen);
+export default connect((state: state) => state.main)(MyCodeScreen);

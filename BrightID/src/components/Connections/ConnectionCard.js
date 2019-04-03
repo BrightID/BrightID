@@ -15,6 +15,7 @@ import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import emitter from '../../emitter';
 import { fakeJoinGroups } from '../../actions/fakeGroup';
+import api from '../../Api/BrightId';
 
 /**
  * Connection Card in the Connections Screen
@@ -26,18 +27,12 @@ import { fakeJoinGroups } from '../../actions/fakeGroup';
  * @prop photo
  */
 
-type Props = {
-  name: string,
-  photo: string,
-  score: number,
-  connectionDate: string,
-  publicKey: string,
-  style: {},
-  selected: boolean,
-  groups: boolean,
-};
-
 class ConnectionCard extends React.PureComponent<Props> {
+  async componentDidMount() {
+    const result = await api.getUserScore(this.props.publicKey);
+    console.log(result);
+  }
+
   handleUserOptions = () => {
     const { name, publicKey, secretKey, dispatch } = this.props;
     console.log(secretKey);
@@ -82,7 +77,7 @@ class ConnectionCard extends React.PureComponent<Props> {
   };
 
   render() {
-    const { photo, name, score, connectionDate, style } = this.props;
+    const { photo, name, connectionDate, score, style } = this.props;
 
     return (
       <View style={{ ...styles.container, ...style }}>

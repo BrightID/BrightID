@@ -1,15 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import {
-  Alert,
-  AsyncStorage,
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 import {
   sortByNameAscending,
@@ -20,18 +13,6 @@ import {
   sortByScoreDescending,
   types,
 } from './sortingUtility';
-
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
-type Props = {
-  connections: Array<{
-    name: string,
-    id: number,
-  }>,
-  dispatch: () => null,
-  connectionsSort: string,
-  searchParam: string,
-};
 
 class SortingConnectionsScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({
@@ -145,9 +126,7 @@ class SortingConnectionsScreen extends React.Component<Props> {
           </TouchableOpacity>
           <TouchableOpacity
             style={
-              this.sortByScore()
-                ? this.selectedStyle()
-                : styles.sortingOption
+              this.sortByScore() ? this.selectedStyle() : styles.sortingOption
             }
             onPress={() => {
               if (connectionsSort !== types.byScoreDescending) {

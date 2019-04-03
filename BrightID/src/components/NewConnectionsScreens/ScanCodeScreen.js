@@ -21,17 +21,16 @@ import { setUpWs } from './actions/websocket';
  *
  */
 
-type Props = {
-  dispatch: () => null,
-  navigation: { navigate: () => null },
-};
-
 type State = {
-  hasCameraPermission: boolean,
-  type: string,
+  scanned: boolean,
+  connectionAttempts: number,
 };
 
 class ScanCodeScreen extends React.Component<Props, State> {
+  textInput: null | TextInput;
+
+  camera: null | RNCamera;
+
   state = {
     scanned: false,
     connectionAttempts: 0,
@@ -88,7 +87,7 @@ class ScanCodeScreen extends React.Component<Props, State> {
   showProfileError = () => {
     Alert.alert(
       'Timeout reached',
-      'There was a problem downloading the other person\'s profile. Please try again.',
+      "There was a problem downloading the other person's profile. Please try again.",
     );
     this.setState({ scanned: false });
   };
@@ -103,13 +102,7 @@ class ScanCodeScreen extends React.Component<Props, State> {
     if (scanned) {
       return (
         <View style={styles.cameraPreview}>
-          <Spinner
-            style={styles.spinner}
-            isVisible={true}
-            size={41}
-            type="Wave"
-            color="#4990e2"
-          />
+          <Spinner isVisible={true} size={41} type="Wave" color="#4990e2" />
         </View>
       );
     } else {
@@ -125,7 +118,7 @@ class ScanCodeScreen extends React.Component<Props, State> {
                   type: 'text-input',
                   data: value.trim(),
                 });
-                this.textInput.blur();
+                if (this.textInput) this.textInput.blur();
               }}
               style={styles.searchField}
               placeholder="Scan a BrightID code to make a connection"

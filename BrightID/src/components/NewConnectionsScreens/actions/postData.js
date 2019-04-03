@@ -1,7 +1,9 @@
 // @flow
 
-export const postData = (data: string) => async (_, getState: () => {main: {connectQrData: {}}}) => {
-
+export const postData = (data: string) => async (
+  _: dispatch,
+  getState: getState,
+) => {
   let { ipAddress, uuid, user } = getState().main.connectQrData;
 
   fetch(`http://${ipAddress}/profile/upload`, {
@@ -13,7 +15,7 @@ export const postData = (data: string) => async (_, getState: () => {main: {conn
   })
     .then((res) => {
       if (res.status === 200) {
-        console.log('successfully uploaded data')
+        console.log('successfully uploaded data');
       }
     })
     .catch((err) => {
