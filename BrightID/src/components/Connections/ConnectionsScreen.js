@@ -40,7 +40,9 @@ const MaterialHeaderButton = (passMeFurther) => (
   />
 );
 
-type State = {};
+type State = {
+  loading: boolean,
+};
 
 class ConnectionsScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
@@ -72,6 +74,10 @@ class ConnectionsScreen extends React.Component<Props, State> {
     //     ),
   });
 
+  state = {
+    loading: true,
+  };
+
   componentDidMount() {
     this.getConnections();
     emitter.on('refreshConnections', this.getConnections);
@@ -86,6 +92,9 @@ class ConnectionsScreen extends React.Component<Props, State> {
   getConnections = async () => {
     const { dispatch } = this.props;
     await dispatch(getConnections());
+    this.setState({
+      loading: false,
+    });
   };
 
   removeConnection = async (publicKey) => {

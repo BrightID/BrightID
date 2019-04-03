@@ -4,8 +4,7 @@ import Spinner from 'react-native-spinkit';
 
 export const renderListOrSpinner = (comp) => {
   const { connections } = comp.props;
-  const { loading } = comp.state;
-  if (loading) {
+  if (comp.state && comp.state.loading) {
     return (
       <Spinner
         style={styles.spinner}
