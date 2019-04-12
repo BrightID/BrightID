@@ -5,7 +5,7 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import GroupPhoto from './GroupPhoto';
-import { getGroupName } from '../../utils/groups'
+import { getGroupName } from '../../utils/groups';
 
 /**
  * Connection Card in the Connections Screen
@@ -17,20 +17,7 @@ import { getGroupName } from '../../utils/groups'
  * @prop photo
  */
 
-type Props = {
-  name: string,
-  score: string,
-};
-
-type State = {
-  width: number,
-};
-
-class CurrentGroupCard extends React.Component<Props, State> {
-  state = {
-    width: 0,
-  };
-
+class CurrentGroupCard extends React.Component<Props> {
   render() {
     const { group, navigation } = this.props;
     group.name = getGroupName(group);

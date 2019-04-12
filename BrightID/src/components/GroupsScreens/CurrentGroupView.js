@@ -1,7 +1,14 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { StyleSheet, View, Alert, FlatList, Text, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Alert,
+  FlatList,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import HeaderButtons, {
@@ -31,16 +38,8 @@ const MaterialHeaderButton = (passMeFurther) => (
   />
 );
 
-type Props = {
-  searchParam: string,
-  dispatch: (() => Promise<null>) => Promise<null>,
-};
-
 type State = {
-  members: Array<{
-    name: string,
-    id: number,
-  }>,
+  optionsVisible: boolean,
   loading: boolean,
 };
 
@@ -52,7 +51,7 @@ class CurrentGroupView extends Component<Props, State> {
 
   static navigationOptions = ({ navigation }) => {
     const { group } = navigation.state.params;
-    return ({
+    return {
       title: group.name,
       headerTitleStyle: { fontSize: 16 },
       headerRight: (
@@ -66,7 +65,7 @@ class CurrentGroupView extends Component<Props, State> {
           />
         </HeaderButtons>
       ),
-    });
+    };
   };
 
   confirmLeaveGroup = () => {
@@ -88,7 +87,10 @@ class CurrentGroupView extends Component<Props, State> {
             await dispatch(leaveGroup(groupId));
             navigation.goBack(null);
           } else if (response.data) {
-            Alert.alert('Error leaving group', `${response.status}: ${response.data.errorMessage}`);
+            Alert.alert(
+              'Error leaving group',
+              `${response.status}: ${response.data.errorMessage}`,
+            );
           }
         },
       },
@@ -178,14 +180,10 @@ class CurrentGroupView extends Component<Props, State> {
     <Fragment>
       <View style={[styles.triangle, this.props.style]} />
       <View style={styles.optionsBox}>
-        <TouchableOpacity
-          onPress={hideModal}
-        >
+        <TouchableOpacity onPress={hideModal}>
           <AntDesign size={30} name="closecircleo" color="#000" />
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={this.confirmLeaveGroup}
-        >
+        <TouchableOpacity onPress={this.confirmLeaveGroup}>
           <Text style={styles.leaveGroupText}>Leave Group</Text>
         </TouchableOpacity>
       </View>
@@ -196,16 +194,15 @@ class CurrentGroupView extends Component<Props, State> {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
-        <NavigationEvents
-          onDidFocus={this.getMembers}
-        />
+        <NavigationEvents onDidFocus={this.getMembers} />
         <Overlay
           visible={this.state.optionsVisible}
           onClose={this.hideOptionsMenu}
           closeOnTouchOutside
           containerStyle={styles.optionsOverlay}
           childrenWrapperStyle={styles.optionsContainer}
-        >{this.renderOptions}
+        >
+          {this.renderOptions}
         </Overlay>
         <View style={styles.mainContainer}>
           <SearchMembers navigation={navigation} />
@@ -217,74 +214,72 @@ class CurrentGroupView extends Component<Props, State> {
   }
 }
 
-
-const
-  styles = StyleSheet.create({
-    membersContainer: {
-      flex: 1,
-    },
-    container: {
-      flex: 1,
-      backgroundColor: '#fdfdfd',
-    },
-    mainContainer: {
-      flex: 1,
-      backgroundColor: '#fdfdfd',
-      alignItems: 'center',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      marginTop: 8,
-    },
-    moreIcon: {
-      marginRight: 16,
-    },
-    groupName: {
-      fontFamily: 'ApexNew-Book',
-      fontSize: 28,
-      shadowColor: 'rgba(0,0,0,0.32)',
-      shadowOffset: { width: 0, height: 2 },
-      shadowRadius: 4,
-      textAlign: 'center',
-    },
-    optionsOverlay: {
-      backgroundColor: 'rgba(62,34,24,0.4)',
-    },
-    optionsContainer: {
-      backgroundColor: '#fdfdfd',
-      height: '12%',
-      width: '105%',
-      borderRadius: 5,
-      position: 'absolute',
-      top: 50,
-      alignSelf: 'center',
-    },
-    triangle: {
-      width: 0,
-      height: 0,
-      backgroundColor: 'transparent',
-      borderStyle: 'solid',
-      borderLeftWidth: 9,
-      borderRightWidth: 9,
-      borderBottomWidth: 18,
-      borderLeftColor: 'transparent',
-      borderRightColor: 'transparent',
-      borderBottomColor: '#fdfdfd',
-      position: 'absolute',
-      top: -18,
-      right: 20,
-    },
-    optionsBox: {
-      flexDirection: 'row',
-      width: '90%',
-      height: '70%',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-    },
-    leaveGroupText: {
-      fontFamily: 'ApexNew-Book',
-      fontSize: 24,
-      marginLeft: 30,
-    },
-  });
+const styles = StyleSheet.create({
+  membersContainer: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#fdfdfd',
+  },
+  mainContainer: {
+    flex: 1,
+    backgroundColor: '#fdfdfd',
+    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    marginTop: 8,
+  },
+  moreIcon: {
+    marginRight: 16,
+  },
+  groupName: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 28,
+    shadowColor: 'rgba(0,0,0,0.32)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    textAlign: 'center',
+  },
+  optionsOverlay: {
+    backgroundColor: 'rgba(62,34,24,0.4)',
+  },
+  optionsContainer: {
+    backgroundColor: '#fdfdfd',
+    height: '12%',
+    width: '105%',
+    borderRadius: 5,
+    position: 'absolute',
+    top: 50,
+    alignSelf: 'center',
+  },
+  triangle: {
+    width: 0,
+    height: 0,
+    backgroundColor: 'transparent',
+    borderStyle: 'solid',
+    borderLeftWidth: 9,
+    borderRightWidth: 9,
+    borderBottomWidth: 18,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: '#fdfdfd',
+    position: 'absolute',
+    top: -18,
+    right: 20,
+  },
+  optionsBox: {
+    flexDirection: 'row',
+    width: '90%',
+    height: '70%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  leaveGroupText: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 24,
+    marginLeft: 30,
+  },
+});
 
 export default connect((state) => state.main)(CurrentGroupView);

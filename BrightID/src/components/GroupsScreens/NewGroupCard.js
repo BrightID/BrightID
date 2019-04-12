@@ -27,17 +27,6 @@ import { toggleNewGroupCoFounder } from './actions';
  * @prop photo
  */
 
-type Props = {
-  name: string,
-  photo: string,
-  score: string,
-  connectionDate: string,
-  publicKey: string,
-  style: {},
-  selected: boolean,
-  groups: boolean,
-};
-
 class NewGroupCard extends React.PureComponent<Props> {
   handleGroupSelect = () => {
     console.log('pressed');

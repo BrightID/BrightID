@@ -24,19 +24,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
  * @prop photo
  */
 
-type Props = {
-  name: string,
-  photo: string,
-  score: number,
-  connectionDate: string,
-  publicKey: string,
-  style: {},
-  selected: boolean,
-  groups: boolean,
-};
-
 class MemberCard extends React.PureComponent<Props> {
-
   scoreColor = () => {
     const { score } = this.props;
     if (score >= 85) {
@@ -71,7 +59,7 @@ class MemberCard extends React.PureComponent<Props> {
         </View>
         <TouchableOpacity
           style={styles.moreIcon}
-//          onPress={this.flagMember}
+          //          onPress={this.flagMember}
         >
           <Ionicon size={48} name="ios-more" color="#ccc" />
         </TouchableOpacity>

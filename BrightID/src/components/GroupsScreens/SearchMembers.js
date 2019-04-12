@@ -7,13 +7,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import { setSearchParam } from '../../actions';
 
-type Props = {
-  searchParam: string,
-  dispatch: () => null,
-};
-
 class SearchMembers extends React.Component<Props> {
-
   componentWillUnmount() {
     this.props.dispatch(setSearchParam(''));
   }
@@ -25,7 +19,7 @@ class SearchMembers extends React.Component<Props> {
           <Octicons size={26} name="search" color="#333" />
         </TouchableOpacity>
         <TextInput
-          onChangeText={value => this.props.dispatch(setSearchParam(value))}
+          onChangeText={(value) => this.props.dispatch(setSearchParam(value))}
           style={styles.searchField}
           placeholder="Search Members"
           autoCapitalize="words"

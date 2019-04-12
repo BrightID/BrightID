@@ -2,7 +2,8 @@
 
 import { compose } from 'ramda';
 
-const splitString = (str: string): [string, string] => str.split(',');
+// image -> [datatype, base64]
+const splitString = (str: string) => str.split(',');
 
 const extractData = ([data = 'jpeg', image = ' ']): {
   filetype: string,

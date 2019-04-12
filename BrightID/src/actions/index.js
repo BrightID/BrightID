@@ -52,18 +52,18 @@ export const setGroupsCount = (groupsCount: number) => ({
  * @param value string used to filter connections
  */
 
-export const setSearchParam = (value: string) => ({
+export const setSearchParam = (searchParam: string) => ({
   type: SEARCH_PARAM,
-  value,
+  searchParam,
 });
 
 /**
  * redux action creator for set co-founders of new group
  * @param coFounders: an array contain two publicKeys of co-founders of new group.
  */
-export const setNewGroupCoFounders = (coFounders: string[]) => ({
+export const setNewGroupCoFounders = (newGroupCoFounders: string[]) => ({
   type: SET_NEW_GROUP_CO_FOUNDERS,
-  coFounders,
+  newGroupCoFounders,
 });
 
 /**
@@ -135,23 +135,6 @@ export const setConnections = (connections: Array<{}>) => ({
 export const setConnectionsSort = (connectionsSort: string) => ({
   type: CONNECTIONS_SORT,
   connectionsSort,
-});
-
-/**
- * redux action creator for adding a connection
- * @param type ADD_CONNECTION
- * @param connection appends a new connection object to the array of connections
- */
-
-export const addConnection = (connection: {
-  publicKey: string,
-  name: string,
-  photo: string,
-  score: number,
-  connectionDate: string,
-}) => ({
-  type: ADD_CONNECTION,
-  connection,
 });
 
 /**

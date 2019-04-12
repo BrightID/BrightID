@@ -16,13 +16,8 @@ import { getGroupName } from '../../utils/groups';
  * @prop name
  * @prop score
  */
-type Props = {
-  group: { id: string, knownMembers: string[] },
-  dispatch: dispatch,
-}
 
 class EligibleGroupCard extends React.Component<Props> {
-
   scoreColor = () => {
     const { group } = this.props;
     if (group.score >= 85) {
@@ -69,7 +64,10 @@ class EligibleGroupCard extends React.Component<Props> {
     try {
       let result = await dispatch(join(group));
       if (!result.success) {
-        Alert.alert('Failed to join the group', JSON.stringify(result, null, 4));
+        Alert.alert(
+          'Failed to join the group',
+          JSON.stringify(result, null, 4),
+        );
       }
     } catch (err) {
       console.log(err);
@@ -94,7 +92,7 @@ class EligibleGroupCard extends React.Component<Props> {
           </Text>
         </View>
       </View>
-    )
+    );
 
     if (this.alreadyIn()) {
       return (
@@ -109,7 +107,7 @@ class EligibleGroupCard extends React.Component<Props> {
             <Text style={styles.reviewButtonText}>founders</Text>
           </View>
         </TouchableOpacity>
-      )
+      );
     } else {
       return (
         <View style={styles.container}>

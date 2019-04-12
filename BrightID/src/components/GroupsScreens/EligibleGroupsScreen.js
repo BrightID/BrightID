@@ -18,8 +18,6 @@ import fetchUserInfo from '../../actions/fetchUserInfo';
 
 const ICON_SIZE = 36;
 
-type Props = Main;
-
 class EligibleGroupsScreen extends React.Component<Props, State> {
   static navigationOptions = () => ({
     title: 'Eligible Groups',

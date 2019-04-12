@@ -3,9 +3,9 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import { StyleSheet, View } from 'react-native';
+import { MenuProvider } from 'react-native-popup-menu';
 import AppRoutes from './AppRoutes';
 import store from './store';
-import { MenuProvider } from 'react-native-popup-menu';
 
 /**
  * Central part of the application

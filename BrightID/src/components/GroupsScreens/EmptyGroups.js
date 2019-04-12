@@ -3,9 +3,6 @@
 import * as React from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-type Navigation = { navigate: (str: string) => null };
-type Props = { navigation: Navigation };
-
 export const NoEligibleGroups = ({ navigation }: Props) => (
   <View style={styles.noEligibleContainer}>
     <View style={styles.noEligibleGroupsInfo}>
@@ -14,7 +11,7 @@ export const NoEligibleGroups = ({ navigation }: Props) => (
         style={styles.smallGroupsLogo}
         resizeMode="cover"
         onError={(e) => {
-          console.log(e.error);
+          console.log(e);
         }}
         accessible={true}
         accessibilityLabel="groups logo"
@@ -52,7 +49,7 @@ export const NoCurrentGroups = ({ navigation }: Props) => (
         style={styles.smallGroupsLogo}
         resizeMode="cover"
         onError={(e) => {
-          console.log(e.error);
+          console.log(e);
         }}
         accessible={true}
         accessibilityLabel="groups logo"
@@ -91,7 +88,7 @@ export const EmptyFullScreen = ({ navigation }: Props) => (
         style={styles.largeGroupsLogo}
         resizeMode="cover"
         onError={(e) => {
-          console.log(e.error);
+          console.log(e);
         }}
         accessible={true}
         accessibilityLabel="groups logo"

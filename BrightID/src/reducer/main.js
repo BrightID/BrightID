@@ -41,7 +41,7 @@ import { b64ToUrlSafeB64 } from '../utils/encoding';
 export const initialState: Main = {
   score: 0,
   name: '',
-  photo: '',
+  photo: { filename: '' },
   groupsCount: 0,
   searchParam: '',
   newGroupCoFounders: [],
@@ -50,7 +50,7 @@ export const initialState: Main = {
   connections: [],
   publicKey: '',
   safePubKey: '',
-  secretKey: null,
+  secretKey: new Uint8Array([]),
   connectionsSort: '',
   connectQrData: {
     aesKey: '',
@@ -64,13 +64,17 @@ export const initialState: Main = {
     publicKey: '',
     photo: '',
     name: '',
-    timestamp: '',
+    timestamp: 0,
     signedMessage: '',
+    score: 0,
   },
 };
 
-export const mainReducer = (state: Main = initialState, action: {}) => {
-  let newElGroups, groupIndex, group, newKnownMembers;
+export const mainReducer = (state: Main = initialState, action: action) => {
+  let newElGroups;
+  let groupIndex;
+  // let group;
+  let newKnownMembers;
   switch (action.type) {
     case USER_SCORE:
       return {
@@ -90,12 +94,12 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
     case SEARCH_PARAM:
       return {
         ...state,
-        searchParam: action.value,
+        searchParam: action.searchParam,
       };
     case SET_NEW_GROUP_CO_FOUNDERS: {
       return {
         ...state,
-        newGroupCoFounders: action.coFounders,
+        newGroupCoFounders: action.newGroupCoFounders,
       };
     }
     case CLEAR_NEW_GROUP_CO_FOUNDERS: {
@@ -113,7 +117,7 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
       return {
         ...state,
         eligibleGroups: state.eligibleGroups.filter(
-          group => group.id !== action.groupId,
+          (group) => group.id !== action.groupId,
         ),
       };
     case SET_CURRENT_GROUPS:
@@ -128,17 +132,17 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         ...state,
         currentGroups: [action.group, ...state.currentGroups],
         eligibleGroups: state.eligibleGroups.filter(
-          group => group.id !== action.group.id,
-        )
+          (group) => group.id !== action.group.id,
+        ),
       };
     case JOIN_GROUP_AS_CO_FOUNDER:
       // modify eligibleGroups[groupIndex].knownMembers, creating copies
       // at each of those three levels
       newElGroups = state.eligibleGroups.slice();
-      groupIndex = newElGroups.findIndex(g => g.id === action.groupId);
+      groupIndex = newElGroups.findIndex((g) => g.id === action.groupId);
       group = newElGroups[groupIndex];
       newKnownMembers = [...group.knownMembers, state.safePubKey];
-      newElGroups[groupIndex] = {...group, knownMembers: newKnownMembers};
+      newElGroups[groupIndex] = { ...group, knownMembers: newKnownMembers };
       return {
         ...state,
         eligibleGroups: newElGroups,
@@ -147,9 +151,9 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
       return {
         ...state,
         currentGroups: state.currentGroups.filter(
-          group => group.id !== action.groupId,
-        )
-      }
+          (group) => group.id !== action.groupId,
+        ),
+      };
     case UPDATE_CONNECTIONS:
       return {
         ...state,
@@ -160,16 +164,11 @@ export const mainReducer = (state: Main = initialState, action: {}) => {
         ...state,
         connectionsSort: action.connectionsSort,
       };
-    case ADD_CONNECTION:
-      return {
-        ...state,
-        connections: [action.connection, ...connections],
-      };
     case REMOVE_CONNECTION:
       return {
         ...state,
         connections: state.connections.filter(
-          val => val.publicKey !== action.publicKey,
+          (val: connection) => val.publicKey !== action.publicKey,
         ),
       };
     case UPDATE_USER_DATA:

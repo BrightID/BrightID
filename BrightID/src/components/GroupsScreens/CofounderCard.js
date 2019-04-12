@@ -26,17 +26,6 @@ import { fakeJoinGroups } from '../../actions/fakeGroup';
  * @prop photo
  */
 
-type Props = {
-  name: string,
-  photo: string,
-  score: number,
-  connectionDate: string,
-  publicKey: string,
-  style: {},
-  selected: boolean,
-  groups: boolean,
-};
-
 class CofounderCard extends React.PureComponent<Props> {
   handleUserOptions = () => {
     const { name, publicKey, secretKey, dispatch } = this.props;

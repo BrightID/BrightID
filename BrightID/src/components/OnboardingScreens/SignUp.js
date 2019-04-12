@@ -26,11 +26,6 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { handleBrightIdCreation, fakeUserAvatar } from './actions';
 import { mimeFromUri } from '../../utils/images';
 
-type Props = {
-  dispatch: () => null,
-  navigation: { navigate: () => null },
-};
-
 type State = {
   name: string,
   inputActive: boolean,
@@ -169,9 +164,7 @@ class SignUp extends React.Component<Props, State> {
         });
         return Alert.alert('BrightID Form Incomplete', 'A photo is required');
       }
-      const result = await dispatch(
-        handleBrightIdCreation({ photo, name }),
-      );
+      const result = await dispatch(handleBrightIdCreation({ photo, name }));
       if (result) {
         navigation.navigate('App');
       } else {
@@ -210,11 +203,7 @@ class SignUp extends React.Component<Props, State> {
         accessible={true}
         accessibilityLabel="edit photo"
       >
-        <Image
-          style={styles.photo}
-          source={photo}
-          onPress={this.getPhoto}
-        />
+        <Image style={styles.photo} source={photo} onPress={this.getPhoto} />
       </TouchableOpacity>
     ) : (
       <TouchableOpacity

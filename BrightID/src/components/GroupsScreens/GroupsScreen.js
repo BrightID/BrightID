@@ -25,8 +25,6 @@ import {
 
 const ICON_SIZE = 36;
 
-type Props = Main;
-
 class GroupsScreen extends React.Component<Props, State> {
   static navigationOptions = () => ({
     title: 'Groups',
@@ -52,7 +50,7 @@ class GroupsScreen extends React.Component<Props, State> {
     let { eligibleGroups } = this.props;
     let groups = eligibleGroups
       .filter((group: { isNew: boolean }) => group.isNew)
-      .concat(eligibleGroups.filter(group => !group.isNew));
+      .concat(eligibleGroups.filter((group) => !group.isNew));
     if (groups.length === 1) groups.push('');
     return take(2, groups).map((group) =>
       group ? (
@@ -65,9 +63,16 @@ class GroupsScreen extends React.Component<Props, State> {
 
   render() {
     try {
-      const { navigation, currentGroups, publicKey, eligibleGroups } = this.props;
+      const {
+        navigation,
+        currentGroups,
+        publicKey,
+        eligibleGroups,
+      } = this.props;
       const groupPairs =
-        currentGroups.length > 2 ? splitEvery(2, currentGroups) : [currentGroups];
+        currentGroups.length > 2
+          ? splitEvery(2, currentGroups)
+          : [currentGroups];
       console.log(groupPairs);
       return (
         <View style={styles.container}>
@@ -135,7 +140,6 @@ class GroupsScreen extends React.Component<Props, State> {
       Alert.alert(e.message || 'Error', e.stack);
     }
   }
-
 }
 
 const styles = StyleSheet.create({

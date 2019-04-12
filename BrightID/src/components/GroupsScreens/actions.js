@@ -8,7 +8,7 @@ import {
 } from '../../actions/index';
 import api from '../../Api/BrightId';
 
-export const toggleNewGroupCoFounder = (publicKey) => (
+export const toggleNewGroupCoFounder = (publicKey: string) => (
   dispatch: dispatch,
   getState: getState,
 ) => {
@@ -23,8 +23,8 @@ export const toggleNewGroupCoFounder = (publicKey) => (
 };
 
 export const createNewGroup = () => async (
-  dispatch: () => null,
-  getState: () => {},
+  dispatch: dispatch,
+  getState: getState,
 ) => {
   let { newGroupCoFounders } = getState().main;
   if (newGroupCoFounders.length < 2) {

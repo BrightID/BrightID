@@ -9,9 +9,7 @@ describe('actions', () => {
   test('should create an action to update the trust score of a connection', () => {
     const publicKey = [];
     const score = '88.6';
-    expect(
-      action.connectionScore(publicKey, score),
-    ).toMatchSnapshot();
+    expect(action.connectionScore(publicKey, score)).toMatchSnapshot();
   });
 
   test('should create an action to set the group count', () => {
@@ -27,11 +25,6 @@ describe('actions', () => {
   test('should create an action to set the connections list', () => {
     const connections = [];
     expect(action.setConnections(connections)).toMatchSnapshot();
-  });
-
-  test('should create an action to add a connection', () => {
-    const connection = {};
-    expect(action.addConnection(connection)).toMatchSnapshot();
   });
 
   test('should create an action to set user data', () => {
