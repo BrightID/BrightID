@@ -13,7 +13,6 @@ export const JOIN_GROUP_AS_CO_FOUNDER = 'JOIN_GROUP_AS_CO_FOUNDER';
 export const LEAVE_GROUP = 'LEAVE_GROUP';
 export const UPDATE_CONNECTIONS = 'UPDATE_CONNECTIONS';
 export const CONNECTIONS_SORT = 'CONNECTIONS_SORT';
-export const ADD_CONNECTION = 'ADD_CONNECTION';
 export const REMOVE_CONNECTION = 'REMOVE_CONNECTION';
 export const UPDATE_USER_DATA = 'UPDATE_USER_DATA';
 export const REMOVE_USER_DATA = 'REMOVE_USER_DATA';
@@ -77,7 +76,7 @@ export const clearNewGroupCoFounders = () => ({
  * redux action creator for set user eligible groups
  * @param eligibleGroups: list of user eligible groups
  */
-export const setEligibleGroups = (eligibleGroups: eligibleGroups) => ({
+export const setEligibleGroups = (eligibleGroups: group[]) => ({
   type: SET_ELIGIBLE_GROUPS,
   eligibleGroups,
 });
@@ -95,22 +94,22 @@ export const deleteEligibleGroup = (groupId: string) => ({
  * redux action creator for set user current groups
  * @param currentGroups: list of user current groups
  */
-export const setCurrentGroups = (currentGroups) => ({
+export const setCurrentGroups = (currentGroups: group[]) => ({
   type: SET_CURRENT_GROUPS,
   currentGroups,
 });
 
-export const joinGroup = (group) => ({
+export const joinGroup = (group: group) => ({
   type: JOIN_GROUP,
   group,
 });
 
-export const joinGroupAsCoFounder = (groupId) => ({
+export const joinGroupAsCoFounder = (groupId: string) => ({
   type: JOIN_GROUP_AS_CO_FOUNDER,
   groupId,
 });
 
-export const leaveGroup = (groupId) => ({
+export const leaveGroup = (groupId: string) => ({
   type: LEAVE_GROUP,
   groupId,
 });
@@ -121,7 +120,7 @@ export const leaveGroup = (groupId) => ({
  * @param connections array of connections obtained from server and stored locally
  */
 
-export const setConnections = (connections: Array<{}>) => ({
+export const setConnections = (connections: connection[]) => ({
   type: UPDATE_CONNECTIONS,
   connections,
 });

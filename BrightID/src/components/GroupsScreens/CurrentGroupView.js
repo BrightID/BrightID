@@ -41,12 +41,14 @@ const MaterialHeaderButton = (passMeFurther) => (
 type State = {
   optionsVisible: boolean,
   loading: boolean,
+  members: string[],
 };
 
 class CurrentGroupView extends Component<Props, State> {
   state = {
     loading: true,
     optionsVisible: false,
+    members: [],
   };
 
   static navigationOptions = ({ navigation }) => {
@@ -166,13 +168,14 @@ class CurrentGroupView extends Component<Props, State> {
     this.setState({ optionsVisible: false });
   };
 
-  getMembers = async () => {
+  getMembers = () => {
     const { dispatch, navigation } = this.props;
     const groupId = navigation.state.params.group.id;
-    const members = await dispatch(getMembers(groupId));
-    this.setState({
-      loading: false,
-      members,
+    const members = dispatch(getMembers(groupId)).then(() => {
+      this.setState({
+        loading: false,
+        members,
+      });
     });
   };
 

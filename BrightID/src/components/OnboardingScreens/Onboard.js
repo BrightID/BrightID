@@ -22,6 +22,11 @@ import BrightIdOnboard from './onboardingCards/BrightIdOnboard';
  * Uses react-native-snap-carousel for displaying onboarding cards
  */
 
+type State = {
+  activeSlide: number,
+  entries: number[],
+};
+
 /* Constants */
 /* ======================================== */
 
@@ -31,22 +36,21 @@ const statusBarHeight = getStatusBarHeight();
 /* Onboarding Screen */
 /* ======================================== */
 
-class Onboard extends React.Component<Props> {
+class Onboard extends React.Component<Props, State> {
   static navigationOptions = {
     headerBackTitle: ' ',
     header: null,
   };
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       activeSlide: 0,
       entries: [...Array(4)],
-      winWidth,
     };
   }
 
-  renderItem = ({ item, index }) => {
+  renderItem = ({ index }: { index: number }) => {
     switch (index) {
       case 0:
         return (
@@ -66,7 +70,7 @@ class Onboard extends React.Component<Props> {
   // slide item
 
   render() {
-    const { activeSlide, entries, winWidth } = this.state;
+    const { activeSlide, entries } = this.state;
     return (
       <View style={styles.container}>
         <StatusBar

@@ -13,7 +13,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ImagePicker from 'react-native-image-picker';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
@@ -28,9 +27,8 @@ import { mimeFromUri } from '../../utils/images';
 
 type State = {
   name: string,
-  inputActive: boolean,
   imagePicking: boolean,
-  photo: '',
+  photo: { uri: string },
   creatingBrightId: boolean,
 };
 
@@ -67,8 +65,7 @@ class SignUp extends React.Component<Props, State> {
 
   state = {
     name: '',
-    inputActive: false,
-    photo: '',
+    photo: { uri: '' },
     imagePicking: false,
     creatingBrightId: false,
   };
@@ -94,14 +91,18 @@ class SignUp extends React.Component<Props, State> {
   };
 
   randomAvatar = async () => {
-    const randomImage = await fakeUserAvatar();
-    const photo = {
-      uri: `data:image/jpeg;base64,${randomImage}`,
-    };
-    this.setState({
-      photo,
-    });
-    this.imagePickingFalse();
+    try {
+      const randomImage = await fakeUserAvatar();
+      const photo = {
+        uri: `data:image/jpeg;base64,${randomImage}`,
+      };
+      this.setState({
+        photo,
+      });
+      this.imagePickingFalse();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   getPhoto = () => {
@@ -116,6 +117,7 @@ class SignUp extends React.Component<Props, State> {
       quality: 0.8,
       allowsEditing: true,
       loadingLabelText: 'loading photo...',
+      customButtons: [],
     };
 
     if (__DEV__) {
@@ -228,13 +230,7 @@ class SignUp extends React.Component<Props, State> {
           {!imagePicking ? (
             AddPhotoButton
           ) : (
-            <Spinner
-              style={styles.spinner}
-              isVisible={true}
-              size={79}
-              type="Bounce"
-              color="#4990e2"
-            />
+            <Spinner isVisible={true} size={79} type="Bounce" color="#4990e2" />
           )}
         </View>
         <View style={styles.textInputContainer}>
@@ -245,9 +241,6 @@ class SignUp extends React.Component<Props, State> {
             placeholder="Name"
             placeholderTextColor="#9e9e9e"
             style={styles.textInput}
-            onFocus={() => this.setState({ inputActive: true })}
-            onBlur={() => this.setState({ inputActive: false })}
-            onEndEditing={() => this.setState({ inputActive: false })}
             autoCapitalize="words"
             autoCorrect={false}
             textContentType="name"
@@ -275,21 +268,16 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   addPhotoContainer: {
-    // height: 320,
-    // padding: 40,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 44,
-    // borderWidth: 1
   },
   textInputContainer: {
-    // flex: 1,
     marginTop: 44,
     justifyContent: 'center',
     alignItems: 'center',
   },
   buttonContainer: {
-    // flex: 1,
     marginTop: 44,
     justifyContent: 'space-evenly',
     alignItems: 'center',
@@ -364,18 +352,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 18,
   },
-
-  cameraIcon: {
-    width: 48,
-  },
   loader: {
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
-  },
-  creatingBrightIdText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 14,
   },
 });
 

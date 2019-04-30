@@ -28,6 +28,7 @@ export const handleBrightIdCreation = ({
 
     const userData = {
       publicKey: b64PubKey,
+      safePubKey,
       secretKey,
       name,
       photo: { filename },
@@ -61,20 +62,16 @@ export const handleBrightIdCreation = ({
   }
 };
 
-export const fakeUserAvatar = async () => {
-  try {
-    // save each connection with their public key as the async storage key
-    const res = await RNFetchBlob.fetch(
-      'GET',
-      'https://loremflickr.com/180/180/all',
-      {},
-    );
-    if (res.info().status === 200) {
-      return res.base64();
-    } else {
-      return 'https://loremflickr.com/180/180/all';
-    }
-  } catch (err) {
-    console.log(err);
-  }
+export const fakeUserAvatar = (): Promise<string | Promise<string>> => {
+  // save each connection with their public key as the async storage key
+  return RNFetchBlob.fetch('GET', 'https://loremflickr.com/180/180/all', {})
+    .then((res) => {
+      if (res.info().status === 200) {
+        let b64 = res.base64();
+        return b64;
+      } else {
+        return 'https://loremflickr.com/180/180/all';
+      }
+    })
+    .catch((err) => console.log(err));
 };

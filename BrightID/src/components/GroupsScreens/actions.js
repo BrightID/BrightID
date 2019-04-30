@@ -43,7 +43,7 @@ export const createNewGroup = () => async (
   if (response.data && response.data.id) return true;
 };
 
-export const join = (group) => async (dispatch: () => null) => {
+export const join = (group: group) => async (dispatch: dispatch) => {
   let result = await api.joinGroup(group.id);
   if (result.success) {
     if (group.isNew && group.knownMembers.length < 2) {
@@ -57,7 +57,9 @@ export const join = (group) => async (dispatch: () => null) => {
   return result;
 };
 
-export const deleteNewGroup = (groupId) => async (dispatch: () => null) => {
+export const deleteNewGroup = (groupId: string) => async (
+  dispatch: dispatch,
+) => {
   // return alert(JSON.stringify(publicKey, groupId));
   let result = await api.deleteGroup(groupId);
   if (result.success) dispatch(deleteEligibleGroup(groupId));

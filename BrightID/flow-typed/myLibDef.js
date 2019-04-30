@@ -11,9 +11,9 @@ declare type Main = {
   },
   groupsCount: number,
   searchParam: string,
-  newGroupCoFounders: [],
-  eligibleGroups: [],
-  currentGroups: [],
+  newGroupCoFounders: string[],
+  eligibleGroups: group[],
+  currentGroups: group[],
   connections: connection[],
   publicKey: string,
   safePubKey: string,
@@ -59,13 +59,13 @@ declare type connection = {
   },
 };
 
-declare type eligibleGroups = {
+declare type group = {
   isNew: boolean,
   score: number,
   id: string,
   knownMembers: string[],
   founders: string[],
-}[];
+};
 
 declare type Uint8Obj = {
   [index: string]: number,
