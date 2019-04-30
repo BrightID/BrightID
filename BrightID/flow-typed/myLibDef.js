@@ -3,16 +3,6 @@
 import { NavigationScreenProp } from 'react-navigation';
 import { Dispatch } from 'redux';
 
-declare type dispatch = Dispatch;
-
-declare type getState = () => state;
-
-declare type state = { main: Main };
-
-declare type navigation = NavigationScreenProp;
-
-declare type Props = Main & navigation & dispatch;
-
 declare type Main = {
   score: number,
   name: string,
@@ -21,10 +11,10 @@ declare type Main = {
   },
   groupsCount: number,
   searchParam: string,
-  newGroupCoFounders: [],
-  eligibleGroups: [],
-  currentGroups: [],
-  connections: [],
+  newGroupCoFounders: string[],
+  eligibleGroups: group[],
+  currentGroups: group[],
+  connections: connection[],
   publicKey: string,
   safePubKey: string,
   secretKey: Uint8Array,
@@ -48,6 +38,16 @@ declare type Main = {
   },
 };
 
+declare type state = { main: Main };
+
+declare type getState = () => state;
+
+declare type dispatch = Dispatch;
+
+declare type navigation = NavigationScreenProp;
+
+declare type Props = Main & navigation & dispatch;
+
 declare type connection = {
   publicKey: string,
   name: string,
@@ -59,10 +59,19 @@ declare type connection = {
   },
 };
 
-declare type eligibleGroups = {
+declare type group = {
   isNew: boolean,
   score: number,
   id: string,
   knownMembers: string[],
   founders: string[],
-}[];
+};
+
+declare type Uint8Obj = {
+  [index: string]: number,
+};
+
+declare type action = {
+  type: string,
+  [key: $Keys<Main>]: any,
+};

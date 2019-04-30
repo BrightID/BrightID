@@ -8,10 +8,6 @@ import { objToUint8 } from './utils/encoding';
 import { setUserData } from './actions';
 import fetchUserInfo from './actions/fetchUserInfo';
 
-type Props = {
-  navigation: { navigate: () => null },
-};
-
 export default class AppBootstrap extends React.Component<Props> {
   componentDidMount() {
     this.bootstrapAsync();

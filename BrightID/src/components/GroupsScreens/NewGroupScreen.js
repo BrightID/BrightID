@@ -19,15 +19,6 @@ import { clearNewGroupCoFounders } from '../../actions/index';
  * Displays a search input and list of Connection Cards
  */
 
-type Props = {
-  connections: Array<{
-    name: string,
-    id: number,
-  }>,
-  newGroupCoFounders: [],
-  searchParam: string,
-};
-
 type State = {
   loading: boolean,
 };

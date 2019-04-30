@@ -1,20 +1,10 @@
 // @flow
 
 import * as React from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 
-const ICON_SIZE = 36;
-
-type Props = Main;
-
-class CofoundGroupReview extends React.Component<Props, State> {
+class CofoundGroupReview extends React.Component<Props> {
   static navigationOptions = () => ({
     title: 'Review Group',
     headerRight: <View />,

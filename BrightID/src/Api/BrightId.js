@@ -1,6 +1,6 @@
 // @flow
 
-import { create, ApiSauceInstance } from 'apisauce';
+import { create, ApiSauceInstance, ApiResponse } from 'apisauce';
 import nacl from 'tweetnacl';
 import { strToUint8Array, uInt8ArrayToB64 } from '../utils/encoding';
 import store from '../store';
@@ -26,7 +26,7 @@ class BrightId {
     return server.apiUrl;
   }
 
-  static noContentResponse(response) {
+  static noContentResponse(response: ApiResponse) {
     return {
       success: response.status === 204,
       ok: response.ok,

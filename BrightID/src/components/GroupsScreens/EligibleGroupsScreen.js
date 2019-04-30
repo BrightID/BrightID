@@ -5,7 +5,6 @@ import {
   Alert,
   FlatList,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -17,8 +16,6 @@ import BottomNav from '../BottomNav';
 import fetchUserInfo from '../../actions/fetchUserInfo';
 
 const ICON_SIZE = 36;
-
-type Props = Main;
 
 class EligibleGroupsScreen extends React.Component<Props, State> {
   static navigationOptions = () => ({

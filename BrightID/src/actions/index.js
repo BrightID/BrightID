@@ -13,7 +13,6 @@ export const JOIN_GROUP_AS_CO_FOUNDER = 'JOIN_GROUP_AS_CO_FOUNDER';
 export const LEAVE_GROUP = 'LEAVE_GROUP';
 export const UPDATE_CONNECTIONS = 'UPDATE_CONNECTIONS';
 export const CONNECTIONS_SORT = 'CONNECTIONS_SORT';
-export const ADD_CONNECTION = 'ADD_CONNECTION';
 export const REMOVE_CONNECTION = 'REMOVE_CONNECTION';
 export const UPDATE_USER_DATA = 'UPDATE_USER_DATA';
 export const REMOVE_USER_DATA = 'REMOVE_USER_DATA';
@@ -52,18 +51,18 @@ export const setGroupsCount = (groupsCount: number) => ({
  * @param value string used to filter connections
  */
 
-export const setSearchParam = (value: string) => ({
+export const setSearchParam = (searchParam: string) => ({
   type: SEARCH_PARAM,
-  value,
+  searchParam,
 });
 
 /**
  * redux action creator for set co-founders of new group
  * @param coFounders: an array contain two publicKeys of co-founders of new group.
  */
-export const setNewGroupCoFounders = (coFounders: string[]) => ({
+export const setNewGroupCoFounders = (newGroupCoFounders: string[]) => ({
   type: SET_NEW_GROUP_CO_FOUNDERS,
-  coFounders,
+  newGroupCoFounders,
 });
 
 /**
@@ -77,7 +76,7 @@ export const clearNewGroupCoFounders = () => ({
  * redux action creator for set user eligible groups
  * @param eligibleGroups: list of user eligible groups
  */
-export const setEligibleGroups = (eligibleGroups: eligibleGroups) => ({
+export const setEligibleGroups = (eligibleGroups: group[]) => ({
   type: SET_ELIGIBLE_GROUPS,
   eligibleGroups,
 });
@@ -95,22 +94,22 @@ export const deleteEligibleGroup = (groupId: string) => ({
  * redux action creator for set user current groups
  * @param currentGroups: list of user current groups
  */
-export const setCurrentGroups = (currentGroups) => ({
+export const setCurrentGroups = (currentGroups: group[]) => ({
   type: SET_CURRENT_GROUPS,
   currentGroups,
 });
 
-export const joinGroup = (group) => ({
+export const joinGroup = (group: group) => ({
   type: JOIN_GROUP,
   group,
 });
 
-export const joinGroupAsCoFounder = (groupId) => ({
+export const joinGroupAsCoFounder = (groupId: string) => ({
   type: JOIN_GROUP_AS_CO_FOUNDER,
   groupId,
 });
 
-export const leaveGroup = (groupId) => ({
+export const leaveGroup = (groupId: string) => ({
   type: LEAVE_GROUP,
   groupId,
 });
@@ -121,7 +120,7 @@ export const leaveGroup = (groupId) => ({
  * @param connections array of connections obtained from server and stored locally
  */
 
-export const setConnections = (connections: Array<{}>) => ({
+export const setConnections = (connections: connection[]) => ({
   type: UPDATE_CONNECTIONS,
   connections,
 });
@@ -135,23 +134,6 @@ export const setConnections = (connections: Array<{}>) => ({
 export const setConnectionsSort = (connectionsSort: string) => ({
   type: CONNECTIONS_SORT,
   connectionsSort,
-});
-
-/**
- * redux action creator for adding a connection
- * @param type ADD_CONNECTION
- * @param connection appends a new connection object to the array of connections
- */
-
-export const addConnection = (connection: {
-  publicKey: string,
-  name: string,
-  photo: string,
-  score: number,
-  connectionDate: string,
-}) => ({
-  type: ADD_CONNECTION,
-  connection,
 });
 
 /**

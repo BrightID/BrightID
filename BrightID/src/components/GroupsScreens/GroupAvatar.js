@@ -12,7 +12,7 @@ import { groupPhotos } from '../../utils/groups';
  * @prop avatar is a filename - avatars located in ~/documents/avatar
  */
 
-class GroupAvatar extends React.Component {
+class GroupAvatar extends React.Component<Props> {
   state = {
     avatars: [],
   };

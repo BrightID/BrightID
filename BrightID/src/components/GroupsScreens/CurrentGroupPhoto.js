@@ -5,10 +5,6 @@ import { Image, StyleSheet, View } from 'react-native';
 import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 
-type Props = {
-  photo: string,
-};
-
 class CurrentGroupPhoto extends React.Component<Props> {
   render() {
     const { photo } = this.props;
