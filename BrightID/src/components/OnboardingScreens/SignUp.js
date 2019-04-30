@@ -90,9 +90,9 @@ class SignUp extends React.Component<Props, State> {
     );
   };
 
-  randomAvatar = async () => {
+  randomAvatar = async (): Promise<void> => {
     try {
-      const randomImage = await fakeUserAvatar();
+      const randomImage: string = await fakeUserAvatar();
       const photo = {
         uri: `data:image/jpeg;base64,${randomImage}`,
       };
@@ -199,7 +199,7 @@ class SignUp extends React.Component<Props, State> {
   render() {
     const { imagePicking, name, photo } = this.state;
 
-    const AddPhotoButton = photo ? (
+    const AddPhotoButton = photo.uri ? (
       <TouchableOpacity
         onPress={this.getPhoto}
         accessible={true}

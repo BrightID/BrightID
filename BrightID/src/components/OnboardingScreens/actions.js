@@ -62,7 +62,7 @@ export const handleBrightIdCreation = ({
   }
 };
 
-export const fakeUserAvatar = (): Promise<string | Promise<string>> => {
+export const fakeUserAvatar = (): Promise<string> => {
   // save each connection with their public key as the async storage key
   return RNFetchBlob.fetch('GET', 'https://loremflickr.com/180/180/all', {})
     .then((res) => {
