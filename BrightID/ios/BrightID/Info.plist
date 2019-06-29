@@ -45,7 +45,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to use your camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSMainNibFile</key>
 	<string>LaunchScreen</string>
 	<key>NSMainNibFile~ipad</key>

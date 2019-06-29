@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
 import HeaderButtons, {
   HeaderButton,
   Item,
@@ -243,7 +243,7 @@ const OnboardingStack = createStackNavigator(
   },
 );
 
-export default createSwitchNavigator(
+const AppNavigator = createSwitchNavigator(
   {
     AppBootstrap,
     App: AppStack,
@@ -253,3 +253,11 @@ export default createSwitchNavigator(
     initialRouteName: 'AppBootstrap',
   },
 );
+
+const prefix = 'brightid://brightid/';
+
+const App = createAppContainer(AppNavigator);
+
+const MainApp = () => <App uriPrefix={prefix} />;
+
+export default MainApp;
