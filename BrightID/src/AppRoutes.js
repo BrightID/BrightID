@@ -21,6 +21,7 @@ import CurrentGroupView from './components/GroupsScreens/CurrentGroupView';
 import PreviewConnectionScreen from './components/NewConnectionsScreens/PreviewConnectionScreen';
 import SuccessScreen from './components/NewConnectionsScreens/SuccessScreen';
 import AppBootstrap from './AppBootstrap';
+import Verifications from './components/Verifications';
 
 /**
  * This is BrightID's router, written with React-Navigation
@@ -206,6 +207,10 @@ const AppStack = createStackNavigator(
         header: null,
       },
     },
+    Verifications: {
+      screen: Verifications,
+      path: 'link-verification/:host/:context/:id',
+    },
   },
   {
     initialRouteName: 'Home',
@@ -246,7 +251,10 @@ const OnboardingStack = createStackNavigator(
 const AppNavigator = createSwitchNavigator(
   {
     AppBootstrap,
-    App: AppStack,
+    App: {
+      screen: AppStack,
+      path: '',
+    },
     Onboarding: OnboardingStack,
   },
   {
@@ -254,7 +262,7 @@ const AppNavigator = createSwitchNavigator(
   },
 );
 
-const prefix = 'brightid://brightid/';
+const prefix = 'brightid://';
 
 const App = createAppContainer(AppNavigator);
 
