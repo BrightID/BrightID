@@ -149,6 +149,26 @@ class BrightId {
       .catch((error) => (error.data ? error.data : error));
   }
 
+  getContext(context: string) {
+    return this.api
+      .get(`/contexts/${context}`)
+      .then((response) => response.data)
+      .catch((error) => (error.data ? error.data : error))
+  }
+
+  getVerification(context: string, id: string){
+    let { publicKey, secretKey } = store.getState().main;
+    let timestamp = Date.now();
+    let message = `${context},${id},${timestamp}`;
+    let sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+    return this.api
+      .post('/fetchVerification', { publicKey, context, id, sig, timestamp} )
+      .then((response) => response.data)
+      .catch((error) => (error.data ? error.data : error));
+  }
+
   createGroup(publicKey2: string, publicKey3: string) {
     const { publicKey, secretKey } = store.getState().main;
     const timestamp = Date.now();
