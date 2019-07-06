@@ -70,9 +70,9 @@ export default class BottomNav extends React.Component<Props> {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => console.log('Notifications')}
+          onPress={this.handleCheatPageNavigation}
           accessible={true}
-          accessibilityLabel="Notifications"
+          accessibilityLabel="Apps"
         >
           <View style={styles.navIconContainer}>
             <SimpleLineIcons size={32} name="bell" color="#222" />
@@ -80,7 +80,9 @@ export default class BottomNav extends React.Component<Props> {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={this.handleCheatPageNavigation}
+          onPress={() => {
+            this.props.navigation.navigate('Apps');
+          }}
           accessible={true}
           accessibilityLabel="Apps"
         >
