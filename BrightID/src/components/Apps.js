@@ -25,25 +25,44 @@ class Apps extends React.Component<Props> {
         server.update(oldHost);
       }
 
-      if (contextInfo) {
+      if (contextInfo && contextInfo.verification) {
 
-        Alert.alert(
-          'Link Verification?',
-          `Do you want to allow ${context} to link the account with id ${id} to your BrightID verification?`,
-          [
-            {
-              text: 'Yes',
-              onPress: () => this.linkVerification(host, context, contextInfo, id)
-            },
-            {
-              text: 'No',
-              style: 'cancel',
-              onPress: () => {
-                this.props.navigation.goBack();
+        const verifications = []; // TODO: populate this from redux
+
+        if (verifications.includes(contextInfo.verification)) {
+
+          Alert.alert(
+            'Link Verification?',
+            `Do you want to allow ${context} to link the account with id ${id} to your BrightID verification?`,
+            [
+              {
+                text: 'Yes',
+                onPress: () => this.linkVerification(host, context, contextInfo, id),
+              },
+              {
+                text: 'No',
+                style: 'cancel',
+                onPress: () => {
+                  this.props.navigation.goBack();
+                },
+              },
+            ],
+          );
+        } else {
+          Alert.alert(
+            'Verification not found',
+            `${context} requires you to have the ${contextInfo.verification} verification.`,
+            [
+              {
+                text: 'Dismiss',
+                style: 'cancel',
+                onPress: () => {
+                  this.props.navigation.goBack();
+                },
               }
-            }
-          ]
-        );
+            ]
+          )
+        }
       } else {
         this.props.navigation.goBack();
       }
@@ -59,7 +78,7 @@ class Apps extends React.Component<Props> {
   linkVerification(host, context, contextInfo, id) {
     const oldHost = server.baseUrl;
     let verification;
-    try{
+    try {
       server.update(host);
       verification = api.getVerification(context, id);
       fetch(`${contextInfo.verificationUrl}/${id}`, {
@@ -68,10 +87,9 @@ class Apps extends React.Component<Props> {
         headers: {
           'Content-Type': 'application/json',
         },
-      })
+      });
       // TODO: handle fetch errors
-    }
-    finally {
+    } finally {
       server.update(oldHost);
     }
   }
