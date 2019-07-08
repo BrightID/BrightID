@@ -29,7 +29,7 @@ class Apps extends React.Component<Props> {
 
       if (contextInfo && contextInfo.verification) {
         Alert.alert(
-          'Link Verification?',
+          'App Verification?',
           `Do you want to allow ${context} to link the account with id ${id} to your BrightID verification?`,
           [
             {
