@@ -103,7 +103,7 @@ const GroupStack = createStackNavigator(
               navigation.state.routeName === 'NewGroup' ? 'close' : 'arrow-left'
             }
             onPress={() => {
-              navigation.goBack(null);
+              navigation.goBack();
             }}
           />
         </HeaderButtons>
@@ -136,7 +136,7 @@ const ConnectionsStack = createStackNavigator(
             title="go back"
             iconName="arrow-left"
             onPress={() => {
-              navigation.goBack(null);
+              navigation.goBack();
             }}
           />
         </HeaderButtons>
@@ -172,7 +172,7 @@ const NewConnectStack = createStackNavigator(
             title="go back"
             iconName="arrow-left"
             onPress={() => {
-              navigation.goBack(null);
+              navigation.goBack();
             }}
           />
         </HeaderButtons>

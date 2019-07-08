@@ -85,13 +85,13 @@ class CurrentGroupView extends Component<Props, State> {
 
           console.log(`Response from leaveGroup: ${JSON.stringify(response)}`);
 
-          if (response.success) {
+          if (response.ok) {
             await dispatch(leaveGroup(groupId));
-            navigation.goBack(null);
-          } else if (response.data) {
+            navigation.goBack();
+          } else {
             Alert.alert(
               'Error leaving group',
-              `${response.status}: ${response.data.errorMessage}`,
+              response,
             );
           }
         },

@@ -82,4 +82,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null)(SearchConnections);
+export default connect()(SearchConnections);

@@ -21,7 +21,7 @@ class SortingConnectionsScreen extends React.Component<Props> {
       <TouchableOpacity
         style={styles.headerSave}
         onPress={() => {
-          navigation.goBack(null);
+          navigation.goBack();
         }}
       >
         <Text style={styles.headerSaveText}>Save</Text>

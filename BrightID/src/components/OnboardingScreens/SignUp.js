@@ -359,4 +359,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null)(SignUp);
+export default connect()(SignUp);

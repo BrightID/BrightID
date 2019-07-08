@@ -73,4 +73,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null)(SearchMembers);
+export default connect()(SearchMembers);

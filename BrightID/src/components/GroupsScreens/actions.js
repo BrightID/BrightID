@@ -28,24 +28,28 @@ export const createNewGroup = () => async (
 ) => {
   let { newGroupCoFounders } = getState().main;
   if (newGroupCoFounders.length < 2) {
-    return Alert.alert(
+    Alert.alert(
       'Cannot create group',
       'You need two other people to form a group',
     );
+    return false;
   }
   let response = await api.createGroup(
     newGroupCoFounders[0],
     newGroupCoFounders[1],
   );
 
-  if (response.error) Alert.alert('Cannot create group', response.errorMessage);
-
-  if (response.data && response.data.id) return true;
+  if (response.data && response.data.id) {
+    return true;
+  } else {
+    Alert.alert('Cannot create group', response);
+    return false;
+  }
 };
 
 export const join = (group: group) => async (dispatch: dispatch) => {
   let result = await api.joinGroup(group.id);
-  if (result.success) {
+  if (result.ok) {
     if (group.isNew && group.knownMembers.length < 2) {
       // only creator has joined
       dispatch(joinGroupAsCoFounder(group.id));
@@ -62,6 +66,6 @@ export const deleteNewGroup = (groupId: string) => async (
 ) => {
   // return alert(JSON.stringify(publicKey, groupId));
   let result = await api.deleteGroup(groupId);
-  if (result.success) dispatch(deleteEligibleGroup(groupId));
+  if (result.ok) dispatch(deleteEligibleGroup(groupId));
   return result;
 };

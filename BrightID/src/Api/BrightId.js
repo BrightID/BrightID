@@ -1,6 +1,6 @@
 // @flow
 
-import { create, ApiSauceInstance, ApiResponse } from 'apisauce';
+import { create, ApiSauceInstance } from 'apisauce';
 import nacl from 'tweetnacl';
 import { strToUint8Array, uInt8ArrayToB64 } from '../utils/encoding';
 import store from '../store';
@@ -26,14 +26,7 @@ class BrightId {
     return server.apiUrl;
   }
 
-  static noContentResponse(response: ApiResponse) {
-    return {
-      success: response.status === 204,
-      ok: response.ok,
-      status: response.status,
-      data: response.data,
-    };
-  }
+  static error = error => error.data ? error.data.errorMessage : error.problem;
 
   createConnection(
     publicKey1: string,
@@ -51,8 +44,7 @@ class BrightId {
     };
     return this.api
       .put(`/connections`, requestParams)
-      .then((response) => BrightId.noContentResponse(response))
-      .catch((error) => (error.data ? error.data : error));
+      .catch(BrightId.error);
   }
 
   deleteConnection(publicKey2: string) {
@@ -70,15 +62,14 @@ class BrightId {
     };
     return this.api
       .delete(`/connections`, {}, { data: requestParams })
-      .then((response) => BrightId.noContentResponse(response))
-      .catch((error) => (error.data ? error.data : error));
+      .catch(BrightId.error)
   }
 
   getMembers(group: string) {
     return this.api
       .get(`/membership/${group}`)
-      .then((response) => response.data.data)
-      .catch((error) => (error.data ? error.data : error));
+      .then(response => response.data.data)
+      .catch(BrightId.error);
   }
 
   joinGroup(group: string) {
@@ -98,8 +89,7 @@ class BrightId {
     console.log('====================', requestParams);
     return this.api
       .put(`/membership`, requestParams)
-      .then((response) => BrightId.noContentResponse(response))
-      .catch((error) => (error.data ? error.data : error));
+      .catch(BrightId.error);
   }
 
   leaveGroup(group: string) {
@@ -118,15 +108,14 @@ class BrightId {
     };
     return this.api
       .delete(`/membership`, {}, { data: requestParams })
-      .then((response) => BrightId.noContentResponse(response))
-      .catch((error) => (error.data ? error.data : error));
+      .catch(BrightId.error);
   }
 
   createUser(publicKey: string) {
     return this.api
       .post('/users', { publicKey })
-      .then((response) => response.data)
-      .catch((error) => (error.data ? error.data : error));
+      .then(response => response.data)
+      .catch(BrightId.error);
   }
 
   getUserInfo() {
@@ -138,22 +127,22 @@ class BrightId {
     );
     return this.api
       .post(`/fetchUserInfo`, { publicKey, sig, timestamp })
-      .then((response) => response.data)
-      .catch((error) => (error.data ? error.data : error));
+      .then(response => response.data)
+      .catch(BrightId.error);
   }
 
   getUserScore(publicKey: string) {
     return this.api
       .get(`/userScore/${publicKey}`)
-      .then((response) => response.data)
-      .catch((error) => (error.data ? error.data : error));
+      .then(response => response.data)
+      .catch(BrightId.error);
   }
 
   getContext(context: string) {
     return this.api
       .get(`/contexts/${context}`)
-      .then((response) => response.data)
-      .catch((error) => (error.data ? error.data : error))
+      .then(response => response.data)
+      .catch(BrightId.error)
   }
 
   getVerification(context: string, id: string){
@@ -165,8 +154,8 @@ class BrightId {
     );
     return this.api
       .post('/fetchVerification', { publicKey, context, id, sig, timestamp} )
-      .then((response) => response.data)
-      .catch((error) => (error.data ? error.data : error));
+      .then(response => response.data)
+      .catch(BrightId.error);
   }
 
   createGroup(publicKey2: string, publicKey3: string) {
@@ -187,8 +176,8 @@ class BrightId {
     };
     return this.api
       .post(`/groups`, requestParams)
-      .then((response) => response.data)
-      .catch((error) => (error.data ? error.data : error));
+      .then(response => response.data)
+      .catch(BrightId.error);
   }
 
   deleteGroup(group: string) {
@@ -207,12 +196,14 @@ class BrightId {
     };
     return this.api
       .delete(`/groups`, {}, { data: requestParams })
-      .then((response) => BrightId.noContentResponse(response))
-      .catch((error) => (error.data ? error.data : error));
+      .catch(BrightId.error);
   }
 
   ip(): string {
-    return this.api.get('/ip').then((response) => response.data.data.ip);
+    return this.api
+      .get('/ip')
+      .then(response => response.data.data.ip)
+      .catch(BrightId.error);
   }
 }
 

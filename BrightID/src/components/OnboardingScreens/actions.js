@@ -44,10 +44,9 @@ export const handleBrightIdCreation = ({
       console.log(`brightid creation success: ${creationResponse.data.key}`);
       return true;
     } else {
-      alert(
-        creationResponse.errorMessage
-          ? creationResponse.errorMessage
-          : 'Error in user creation.',
+      Alert.alert(
+        'Error leaving group',
+        creationResponse
       );
       // change this
       await AsyncStorage.setItem('userData', JSON.stringify(userData));

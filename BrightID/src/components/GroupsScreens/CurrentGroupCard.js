@@ -89,4 +89,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null)(withNavigation(CurrentGroupCard));
+export default connect()(withNavigation(CurrentGroupCard));

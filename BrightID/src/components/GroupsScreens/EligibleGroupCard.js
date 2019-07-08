@@ -45,7 +45,7 @@ class EligibleGroupCard extends React.Component<Props> {
                 deleteNewGroup(this.props.group.id),
               );
               alert(
-                result.success
+                result.ok
                   ? 'Group deleted successfully'
                   : JSON.stringify(result, null, 4),
               );
@@ -63,7 +63,7 @@ class EligibleGroupCard extends React.Component<Props> {
     const { dispatch, group } = this.props;
     try {
       let result = await dispatch(join(group));
-      if (!result.success) {
+      if (!result.ok) {
         Alert.alert(
           'Failed to join the group',
           JSON.stringify(result, null, 4),
