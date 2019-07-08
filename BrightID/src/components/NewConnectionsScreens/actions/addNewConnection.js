@@ -32,14 +32,13 @@ export const addNewConnection = () => async (
       const signedMessage = uInt8ArrayToB64(
         nacl.sign.detached(strToUint8Array(message), secretKey),
       );
-      let result = await api.createConnection(
+      await api.createConnection(
         connectUserData.publicKey,
         connectUserData.signedMessage,
         publicKey,
         signedMessage,
         connectUserData.timestamp,
       );
-      console.log(result);
     } else {
       // We will sign a connection request and upload it. The other user will
       // make the API call to create the connection.
@@ -53,8 +52,6 @@ export const addNewConnection = () => async (
       safePubKey: connectUserSafePubKey,
       base64Image: connectUserData.photo,
     });
-    // TODO formalize spec for this
-    // create a new connection object
 
     // TODO: call to backend to get all connections scores, then update all of them
     // A score from a node is reliable, whereas a score from a direct connection may not be.

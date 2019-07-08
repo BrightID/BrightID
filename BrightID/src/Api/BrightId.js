@@ -26,9 +26,17 @@ class BrightId {
     return server.apiUrl;
   }
 
-  static error = error => error.data ? error.data.errorMessage : error.problem;
+  static throwOnError(response) {
+    if (response.ok) {
+      return;
+    }
+    if (response.data && response.data.errorMessage) {
+      throw new Error(response.data.errorMessage);
+    }
+    throw new Error(response.problem);
+  }
 
-  createConnection(
+  async createConnection(
     publicKey1: string,
     sig1: string,
     publicKey2: string,
@@ -42,12 +50,11 @@ class BrightId {
       sig2,
       timestamp,
     };
-    return this.api
-      .put(`/connections`, requestParams)
-      .catch(BrightId.error);
+    const res = await this.api.put(`/connections`, requestParams);
+    BrightId.throwOnError(res);
   }
 
-  deleteConnection(publicKey2: string) {
+  async deleteConnection(publicKey2: string) {
     const { publicKey, secretKey } = store.getState().main;
     const timestamp = Date.now();
     const message = publicKey + publicKey2 + timestamp;
@@ -60,19 +67,17 @@ class BrightId {
       sig1,
       timestamp,
     };
-    return this.api
-      .delete(`/connections`, {}, { data: requestParams })
-      .catch(BrightId.error)
+    const res = await this.api.delete(`/connections`, {}, { data: requestParams });
+    BrightId.throwOnError(res);
   }
 
-  getMembers(group: string) {
-    return this.api
-      .get(`/membership/${group}`)
-      .then(response => response.data.data)
-      .catch(BrightId.error);
+  async getMembers(group: string) {
+    const res = await this.api.get(`/membership/${group}`);
+    BrightId.throwOnError(res);
+    return res.data.data;
   }
 
-  joinGroup(group: string) {
+  async joinGroup(group: string) {
     const { publicKey, secretKey } = store.getState().main;
     let timestamp = Date.now();
     let message = publicKey + group + timestamp;
@@ -87,12 +92,11 @@ class BrightId {
       timestamp,
     };
     console.log('====================', requestParams);
-    return this.api
-      .put(`/membership`, requestParams)
-      .catch(BrightId.error);
+    const res = await this.api.put(`/membership`, requestParams);
+    BrightId.throwOnError(res);
   }
 
-  leaveGroup(group: string) {
+  async leaveGroup(group: string) {
     const { publicKey, secretKey } = store.getState().main;
     let timestamp = Date.now();
     let message = publicKey + group + timestamp;
@@ -106,59 +110,53 @@ class BrightId {
       sig,
       timestamp,
     };
-    return this.api
-      .delete(`/membership`, {}, { data: requestParams })
-      .catch(BrightId.error);
+    const res = await this.api.delete(`/membership`, {}, { data: requestParams });
+    BrightId.throwOnError(res);
   }
 
-  createUser(publicKey: string) {
-    return this.api
-      .post('/users', { publicKey })
-      .then(response => response.data)
-      .catch(BrightId.error);
+  async createUser(publicKey: string) {
+    const res = await this.api.post('/users', { publicKey });
+    BrightId.throwOnError(res);
+    return res.data.data;
   }
 
-  getUserInfo() {
+  async getUserInfo() {
     let { publicKey, secretKey } = store.getState().main;
     let timestamp = Date.now();
     let message = publicKey + timestamp;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    return this.api
-      .post(`/fetchUserInfo`, { publicKey, sig, timestamp })
-      .then(response => response.data)
-      .catch(BrightId.error);
+    const res = await this.api.post(`/fetchUserInfo`, { publicKey, sig, timestamp });
+    BrightId.throwOnError(res);
+    return res.data.data;
   }
 
-  getUserScore(publicKey: string) {
-    return this.api
-      .get(`/userScore/${publicKey}`)
-      .then(response => response.data)
-      .catch(BrightId.error);
+  async getUserScore(publicKey: string) {
+    const res = await this.api.get(`/userScore/${publicKey}`);
+    BrightId.throwOnError(res);
+    return res.data.data.score;
   }
 
-  getContext(context: string) {
-    return this.api
-      .get(`/contexts/${context}`)
-      .then(response => response.data)
-      .catch(BrightId.error)
+  async getContext(context: string) {
+    const res = await this.api.get(`/contexts/${context}`);
+    BrightId.throwOnError(res);
+    return res.data.data;
   }
 
-  getVerification(context: string, id: string){
+  async getVerification(context: string, id: string) {
     let { publicKey, secretKey } = store.getState().main;
     let timestamp = Date.now();
     let message = `${context},${id},${timestamp}`;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    return this.api
-      .post('/fetchVerification', { publicKey, context, id, sig, timestamp} )
-      .then(response => response.data)
-      .catch(BrightId.error);
+    const res = await this.api.post('/fetchVerification', { publicKey, context, id, sig, timestamp });
+    BrightId.throwOnError(res);
+    return res.data.data;
   }
 
-  createGroup(publicKey2: string, publicKey3: string) {
+  async createGroup(publicKey2: string, publicKey3: string) {
     const { publicKey, secretKey } = store.getState().main;
     const timestamp = Date.now();
     const message = publicKey + publicKey2 + publicKey3 + timestamp;
@@ -174,13 +172,12 @@ class BrightId {
       sig1,
       timestamp,
     };
-    return this.api
-      .post(`/groups`, requestParams)
-      .then(response => response.data)
-      .catch(BrightId.error);
+    const res = await this.api.post(`/groups`, requestParams);
+    BrightId.throwOnError(res);
+    return res.data.data;
   }
 
-  deleteGroup(group: string) {
+  async deleteGroup(group: string) {
     let { publicKey, secretKey } = store.getState().main;
     let timestamp = Date.now();
     let message = publicKey + group + timestamp;
@@ -194,16 +191,14 @@ class BrightId {
       sig,
       timestamp,
     };
-    return this.api
-      .delete(`/groups`, {}, { data: requestParams })
-      .catch(BrightId.error);
+    const res = await this.api.delete(`/groups`, {}, { data: requestParams });
+    BrightId.throwOnError(res);
   }
 
-  ip(): string {
-    return this.api
-      .get('/ip')
-      .then(response => response.data.data.ip)
-      .catch(BrightId.error);
+  async ip(): string {
+    const res = await this.api.get('/ip');
+    BrightId.throwOnError(res);
+    return res.data.data.ip;
   }
 }
 

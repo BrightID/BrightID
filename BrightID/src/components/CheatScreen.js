@@ -106,11 +106,10 @@ export class TestConnectionScreen extends React.Component {
       .getUserInfo()
       .then((response) => {
         alert(JSON.stringify(response, null, 2));
-        if (response && response.data && response.data.eligibleGroups)
-          this.setState({
-            groups: response.data.eligibleGroups,
-            scope: 'info',
-          });
+        this.setState({
+          groups: response.eligibleGroups,
+          scope: 'info',
+        });
       })
       .catch((error) => {
         alert(JSON.stringify(error, null, 2));
@@ -356,7 +355,7 @@ export class TestConnectionScreen extends React.Component {
                               name={
                                 this.state.userA &&
                                 JSON.stringify(this.state.userA.publicKey) ==
-                                  JSON.stringify(connection.publicKey)
+                                JSON.stringify(connection.publicKey)
                                   ? 'radio-button-checked'
                                   : 'radio-button-unchecked'
                               }
@@ -390,7 +389,7 @@ export class TestConnectionScreen extends React.Component {
                               name={
                                 this.state.userB &&
                                 JSON.stringify(this.state.userB.publicKey) ==
-                                  JSON.stringify(connection.publicKey)
+                                JSON.stringify(connection.publicKey)
                                   ? 'radio-button-checked'
                                   : 'radio-button-unchecked'
                               }

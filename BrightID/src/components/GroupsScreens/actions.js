@@ -34,16 +34,13 @@ export const createNewGroup = () => async (
     );
     return false;
   }
-  let response = await api.createGroup(
-    newGroupCoFounders[0],
-    newGroupCoFounders[1],
-  );
-
-  if (response.data && response.data.id) {
-    return true;
-  } else {
-    Alert.alert('Cannot create group', response);
-    return false;
+  try {
+    await api.createGroup(
+      newGroupCoFounders[0],
+      newGroupCoFounders[1],
+    );
+  } catch (error) {
+    Alert.alert('Cannot create group', error);
   }
 };
 

@@ -11,10 +11,7 @@ import {
 import api from '../../Api/BrightId';
 import { b64ToUrlSafeB64, uInt8ArrayToB64 } from '../../utils/encoding';
 
-export const handleBrightIdCreation = ({
-  name,
-  photo,
-}: {
+export const handleBrightIdCreation = ({ name, photo }: {
   name: string,
   photo: { uri: string },
 }) => async (dispatch: dispatch) => {
@@ -34,30 +31,20 @@ export const handleBrightIdCreation = ({
       photo: { filename },
     };
 
-    let creationResponse = await api.createUser(b64PubKey);
-    if (creationResponse.data && creationResponse.data.key) {
-      // // save photo base64 data, and user data in async storage
-      await AsyncStorage.setItem('userData', JSON.stringify(userData));
-      // // update redux store
-      await dispatch(setUserData(userData));
-      // // navigate to home page
-      console.log(`brightid creation success: ${creationResponse.data.key}`);
-      return true;
-    } else {
-      Alert.alert(
-        'Error leaving group',
-        creationResponse
-      );
-      // change this
-      await AsyncStorage.setItem('userData', JSON.stringify(userData));
-      // // update redux store
-      await dispatch(setUserData(userData));
-      // // navigate to home page
-      return true;
-    }
-    // catch any errors with saving data or generating the public / private key
+    await api.createUser(b64PubKey);
+
+    await AsyncStorage.setItem('userData', JSON.stringify(userData));
+    // // update redux store
+    await dispatch(setUserData(userData));
+
+    console.log('brightid creation success');
+
+    // // navigate to home page
+    return true;
+
   } catch (err) {
-    Alert.alert('Error', err.stack);
+    Alert.alert(err.message || 'Error', err.stack);
+    return false;
   }
 };
 

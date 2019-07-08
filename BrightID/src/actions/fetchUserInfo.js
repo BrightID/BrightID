@@ -9,16 +9,12 @@ import {
 } from './index';
 
 const fetchUserInfo = () => async (dispatch: dispatch) => {
-  // async is unncessary here, but this is a useful template for handling the API
   try {
-    let result = await api.getUserInfo();
-    if (result && result.data && result.data.eligibleGroups) {
-      let { eligibleGroups, currentGroups, score } = result.data;
-      dispatch(setEligibleGroups(eligibleGroups));
-      dispatch(setCurrentGroups(currentGroups));
-      dispatch(setUserScore(score));
-      dispatch(setGroupsCount(currentGroups.length));
-    }
+    const { eligibleGroups, currentGroups, score } = await api.getUserInfo();
+    dispatch(setEligibleGroups(eligibleGroups));
+    dispatch(setCurrentGroups(currentGroups));
+    dispatch(setUserScore(score));
+    dispatch(setGroupsCount(currentGroups.length));
   } catch (err) {
     console.log(err);
   }

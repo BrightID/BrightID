@@ -40,12 +40,10 @@ export const updateScores = (connections: connection[]) => async (
      */
 
     for (let user of connections) {
-      let res = await api.getUserScore(user.publicKey);
-      if (!res.error && res.data) {
-        user.score = res.data.score;
-        await saveConnection(user);
-      }
+      user.score = await api.getUserScore(user.publicKey);
+      await saveConnection(user);
     }
+
     dispatch(defaultSort());
   } catch (err) {
     console.log(err);
