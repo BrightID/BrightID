@@ -209,7 +209,7 @@ const AppStack = createStackNavigator(
     },
     Apps: {
       screen: Apps,
-      path: 'link-verification/:host/:context/:id',
+      path: 'link-verification/:baseUrl/:context/:id',
     },
   },
   {

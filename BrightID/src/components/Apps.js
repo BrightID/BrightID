@@ -14,16 +14,16 @@ class Apps extends React.Component<Props> {
 
   async componentDidMount() {
     if (this.props.navigation.state.params) { // if 'params' is defined, the user came through a deep link
-      const { host, context, id } = this.props.navigation.state.params;
-      const oldHost = api.baseUrl;
+      const { baseUrl, context, id } = this.props.navigation.state.params;
+      const oldBaseUrl = api.baseUrl;
       let contextInfo;
       try {
-        api.baseUrl = host;
+        api.baseUrl = baseUrl;
         contextInfo = await api.getContext(context);
       } catch (e) {
         console.log(e);
       } finally {
-        api.baseUrl = oldHost;
+        api.baseUrl = oldBaseUrl;
       }
 
       if (contextInfo && contextInfo.verification) {
@@ -33,7 +33,7 @@ class Apps extends React.Component<Props> {
           [
             {
               text: 'Yes',
-              onPress: () => this.linkVerification(host, context, contextInfo, id),
+              onPress: () => this.linkVerification(baseUrl, context, contextInfo, id),
             },
             {
               text: 'No',
@@ -56,10 +56,10 @@ class Apps extends React.Component<Props> {
     );
   }
 
-  async linkVerification(host, context, contextInfo, id) {
-    const oldHost = api.baseUrl;
+  async linkVerification(baseUrl, context, contextInfo, id) {
+    const oldBaseUrl = api.baseUrl;
     try {
-      api.baseUrl = host;
+      api.baseUrl = baseUrl;
       const verification = await api.getVerification(context, id);
       const response = await fetch(`${contextInfo.verificationUrl}/${id}`, {
         method: 'PUT',
@@ -86,7 +86,7 @@ class Apps extends React.Component<Props> {
         ],
       );
     } finally {
-      api.baseUrl = oldHost;
+      api.baseUrl = oldBaseUrl;
     }
   }
 }
