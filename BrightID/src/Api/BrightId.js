@@ -2,28 +2,39 @@
 
 import { create, ApiSauceInstance } from 'apisauce';
 import nacl from 'tweetnacl';
+import { SEED_URL, SEED_URL_DEV } from 'react-native-dotenv';
 import { strToUint8Array, uInt8ArrayToB64 } from '../utils/encoding';
 import store from '../store';
-import server from './server';
-import emitter from '../emitter';
+
+let seedUrl = SEED_URL;
+if (__DEV__) {
+  seedUrl = SEED_URL_DEV;
+}
 
 class BrightId {
   api: ApiSauceInstance;
 
-  baseUrl: string;
+  baseUrlInternal: string;
 
   constructor() {
+    // for now set the baseUrl to the seedUrl since there is only one server
+    this.baseUrlInternal = seedUrl;
     this.api = create({
-      baseURL: BrightId.baseURL,
-    });
-
-    emitter.on('serverUrlChange', () => {
-      this.api.setBaseURL(BrightId.baseURL);
+      baseURL: this.apiUrl,
     });
   }
 
-  static get baseURL() {
-    return server.apiUrl;
+  get baseUrl() {
+    return this.baseUrlInternal;
+  }
+
+  set baseUrl(url) {
+    this.baseUrlInternal = url;
+    this.api.setBaseURL(this.apiUrl);
+  }
+
+  get apiUrl() {
+    return `${this.baseUrl}/brightid`;
   }
 
   static throwOnError(response) {

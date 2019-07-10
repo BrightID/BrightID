@@ -4,7 +4,6 @@ import * as React from 'react';
 import { StyleSheet, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
-import server from '../Api/server';
 import api from '../Api/BrightId';
 
 class Apps extends React.Component<Props> {
@@ -16,15 +15,15 @@ class Apps extends React.Component<Props> {
   async componentDidMount() {
     if (this.props.navigation.state.params) { // if 'params' is defined, the user came through a deep link
       const { host, context, id } = this.props.navigation.state.params;
-      const oldHost = server.baseUrl;
+      const oldHost = api.baseUrl;
       let contextInfo;
       try {
-        server.update(host);
+        api.baseUrl = host;
         contextInfo = await api.getContext(context);
       } catch (e) {
         console.log(e);
       } finally {
-        server.update(oldHost);
+        api.baseUrl = oldHost;
       }
 
       if (contextInfo && contextInfo.verification) {
@@ -58,9 +57,9 @@ class Apps extends React.Component<Props> {
   }
 
   async linkVerification(host, context, contextInfo, id) {
-    const oldHost = server.baseUrl;
+    const oldHost = api.baseUrl;
     try {
-      server.update(host);
+      api.baseUrl = host;
       const verification = await api.getVerification(context, id);
       const response = await fetch(`${contextInfo.verificationUrl}/${id}`, {
         method: 'PUT',
@@ -87,7 +86,7 @@ class Apps extends React.Component<Props> {
         ],
       );
     } finally {
-      server.update(oldHost);
+      api.baseUrl = oldHost;
     }
   }
 }

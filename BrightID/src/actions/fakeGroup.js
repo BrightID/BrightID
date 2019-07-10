@@ -1,17 +1,12 @@
 // @flow
 
 import nacl from 'tweetnacl';
-import { create } from 'apisauce';
-import server from '../Api/server';
+import api from '../Api/BrightId';
 import {
   strToUint8Array,
   uInt8ArrayToB64,
   objToUint8,
 } from '../utils/encoding';
-
-const api = create({
-  baseURL: server.apiUrl,
-});
 
 export const fakeJoinGroup = ({
   group,
