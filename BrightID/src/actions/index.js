@@ -1,3 +1,4 @@
+
 // @flow
 
 export const USER_SCORE = 'USER_SCORE';
@@ -21,6 +22,7 @@ export const SET_CONNECT_QR_DATA = 'SET_CONNECT_QR_DATA';
 export const REMOVE_CONNECT_QR_DATA = 'REMOVE_CONNECT_QR_DATA';
 export const SET_CONNECT_USER_DATA = 'SET_CONNECT_USER_DATA';
 export const REMOVE_CONNECT_USER_DATA = 'REMOVE_CONNECT_USER_DATA';
+export const SET_VERIFICATIONS = 'SET_VERIFICATIONS';
 
 /**
  * redux action creator that updates user `score`
@@ -88,6 +90,11 @@ export const setEligibleGroups = (eligibleGroups: group[]) => ({
 export const deleteEligibleGroup = (groupId: string) => ({
   type: DELETE_ELIGIBLE_GROUP,
   groupId,
+});
+
+export const setVerifications = (verifications: string[]) => ({
+  type: SET_VERIFICATIONS,
+  verifications,
 });
 
 /**

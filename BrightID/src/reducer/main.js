@@ -14,7 +14,6 @@ import {
   LEAVE_GROUP,
   UPDATE_CONNECTIONS,
   CONNECTIONS_SORT,
-  ADD_CONNECTION,
   UPDATE_USER_DATA,
   REMOVE_USER_DATA,
   USER_PHOTO,
@@ -23,6 +22,7 @@ import {
   REMOVE_CONNECTION,
   SET_CONNECT_USER_DATA,
   REMOVE_CONNECT_USER_DATA,
+  SET_VERIFICATIONS,
 } from '../actions';
 import { b64ToUrlSafeB64 } from '../utils/encoding';
 
@@ -73,7 +73,7 @@ export const initialState: Main = {
 export const mainReducer = (state: Main = initialState, action: action) => {
   let newElGroups;
   let groupIndex;
-  // let group;
+  let group;
   let newKnownMembers;
   switch (action.type) {
     case USER_SCORE:
@@ -226,6 +226,11 @@ export const mainReducer = (state: Main = initialState, action: action) => {
           timestamp: '',
           signedMessage: '',
         },
+      };
+    case SET_VERIFICATIONS:
+      return {
+        ...state,
+        verifications: action.verifications,
       };
     default:
       return state;
