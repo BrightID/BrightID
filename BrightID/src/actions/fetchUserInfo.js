@@ -11,7 +11,7 @@ import {
 
 const fetchUserInfo = () => async (dispatch: dispatch) => {
   try {
-    const { eligibleGroups, currentGroups, score, verifications } = await api.getUserInfo();
+    const { eligibleGroups, currentGroups, score, verifications = [] } = await api.getUserInfo();
     dispatch(setEligibleGroups(eligibleGroups));
     dispatch(setCurrentGroups(currentGroups));
     dispatch(setUserScore(score));

@@ -17,9 +17,9 @@ import HeaderButtons, {
 } from 'react-navigation-header-buttons';
 import RNFS from 'react-native-fs';
 import { NavigationEvents } from 'react-navigation';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import VerificationSticker from './Verifications/VerificationSticker';
 import BottomNav from './BottomNav';
 import store from '../store';
 import { removeUserData } from '../actions';
@@ -63,6 +63,7 @@ type Props = {
   connections: Array<{}>,
   navigation: { navigate: () => null },
   photo: string,
+  verifications: Array<string>,
 };
 
 export class HomeScreen extends React.Component<Props> {
@@ -117,6 +118,7 @@ export class HomeScreen extends React.Component<Props> {
   });
 
   render() {
+
     const {
       navigation,
       name,
@@ -125,7 +127,10 @@ export class HomeScreen extends React.Component<Props> {
       photo,
       connections,
       dispatch,
+      verifications = [],
+      // verifications = ['DollarForEveryone','BrightID','NodeOne'],
     } = this.props;
+
     return (
       <View style={styles.container}>
         <NavigationEvents
@@ -134,6 +139,7 @@ export class HomeScreen extends React.Component<Props> {
           }}
         />
         <View style={styles.mainContainer}>
+
           <View style={styles.photoContainer}>
             <Image
               source={{
@@ -153,12 +159,14 @@ export class HomeScreen extends React.Component<Props> {
               {name}
             </Text>
           </View>
+
           <View style={styles.scoreContainer}>
             <Text style={styles.scoreLeft}>Score:</Text>
             <Text id="score" style={styles.scoreRight}>
               {score}
             </Text>
           </View>
+
           <View style={styles.countsContainer}>
             <View style={styles.countsGroup}>
               <Text id="connectionsCount" style={styles.countsNumberText}>
@@ -172,6 +180,10 @@ export class HomeScreen extends React.Component<Props> {
               </Text>
               <Text style={styles.countsDescriptionText}>Groups</Text>
             </View>
+          </View>
+
+          <View style={styles.verificationsContainer}>
+            {verifications && verifications.map(name => <VerificationSticker name={name} key={name} />)}
           </View>
 
           <View style={styles.connectContainer}>
@@ -238,6 +250,17 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
+  },
+  verificationsContainer: {
+    height: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    marginTop: 10,
+    marginBottom: 10,
+    width: '100%',
+  },
+  verificationSticker: {
   },
   connectContainer: {
     width: '100%',
@@ -333,4 +356,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(HomeScreen);
+export default connect(state => state.main)(HomeScreen);
