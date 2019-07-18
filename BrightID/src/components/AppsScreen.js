@@ -6,9 +6,9 @@ import { connect } from 'react-redux';
 
 import api from '../Api/BrightId';
 
-class Apps extends React.Component<Props> {
+class AppsScreen extends React.Component<Props> {
   static navigationOptions = () => ({
-    title: 'Apps',
+    title: 'AppsScreen',
     headerRight: <View />,
   });
 
@@ -58,6 +58,11 @@ class Apps extends React.Component<Props> {
 
   async linkVerification(baseUrl, context, contextInfo, id) {
     const oldBaseUrl = api.baseUrl;
+    if(contextInfo.isApp){
+      // TODO: store the app's image locally,
+      //  save the app in redux, so it can show in the app list
+      //  until the user removes it.
+    }
     try {
       api.baseUrl = baseUrl;
       const verification = await api.getVerification(context, id);
@@ -100,4 +105,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(Apps);
+export default connect((state) => state.main)(AppsScreen);
