@@ -8,7 +8,7 @@ import api from '../Api/BrightId';
 
 class AppsScreen extends React.Component<Props> {
   static navigationOptions = () => ({
-    title: 'AppsScreen',
+    title: 'Apps',
     headerRight: <View />,
   });
 
