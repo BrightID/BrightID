@@ -2,7 +2,7 @@
 
 import nacl from 'tweetnacl';
 import emitter from '../../../emitter';
-import { savePhoto } from '../../../utils/filesystem';
+import { saveImage } from '../../../utils/filesystem';
 import {
   b64ToUrlSafeB64,
   strToUint8Array,
@@ -48,15 +48,10 @@ export const addNewConnection = () => async (
     // We store publicKeys as url-safe base-64.
     const connectUserSafePubKey = b64ToUrlSafeB64(connectUserData.publicKey);
 
-    const filename = await savePhoto({
-      safePubKey: connectUserSafePubKey,
+    const filename = await saveImage({
+      imageName: connectUserSafePubKey,
       base64Image: connectUserData.photo,
     });
-
-    // TODO: call to backend to get all connections scores, then update all of them
-    // A score from a node is reliable, whereas a score from a direct connection may not be.
-    // Also, scores may become stale. When a new connection is made, it's a good time to
-    // update all scores.
 
     const connectionData = {
       publicKey: connectUserSafePubKey,
@@ -66,12 +61,6 @@ export const addNewConnection = () => async (
       connectionDate,
       photo: { filename },
     };
-
-    // add connection inside of async storage
-    // await AsyncStorage.setItem(
-    //   connectUserSafePubKey,
-    //   JSON.stringify(connectionData),
-    // );
 
     // add connection inside of async storage
     await saveConnection(connectionData);

@@ -4,7 +4,7 @@ import { createCipher } from 'react-native-crypto';
 import nacl from 'tweetnacl';
 import { Alert } from 'react-native';
 import { postData } from './postData';
-import { retrievePhoto } from '../../../utils/filesystem';
+import { retrieveImage } from '../../../utils/filesystem';
 import { strToUint8Array, uInt8ArrayToB64 } from '../../../utils/encoding';
 
 export const encryptAndUploadLocalData = () => async (
@@ -22,7 +22,7 @@ export const encryptAndUploadLocalData = () => async (
   } = getState().main;
 
   // retrieve photo
-  const photo = await retrievePhoto(filename);
+  const photo = await retrieveImage(filename);
 
   let timestamp;
   let signedMessage;

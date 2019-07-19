@@ -2,28 +2,29 @@
 
 import { compose } from 'ramda';
 
-// image -> [datatype, base64]
-const splitString = (str: string) => str.split(',');
+// split on comma in Data URI
+// e.g. "data:image/png;base64,iVBORw0KGg"
+const splitDataURI = (str: string) => str.split(',', 2);
 
-const extractData = ([data = 'jpeg', image = ' ']): {
+const mediaTypeToFileExtension = ([mediaType = 'jpeg', image = ' ']): {
   filetype: string,
   image: string,
 } => {
-  switch (data) {
-    case data.includes('jpeg'):
-      return { filetype: 'jpg', image };
-    case data.includes('png'):
-      return { filetype: 'png', image };
-    case data.includes('gif'):
-      return { filetype: 'gif', image };
-    default:
-      return { filetype: 'jpg', image };
+  if (mediaType.includes('jpeg')) {
+    return { filetype: 'jpg', image };
   }
+  if (mediaType.includes('png')) {
+    return { filetype: 'png', image };
+  }
+  if (mediaType.includes('gif')) {
+    return { filetype: 'gif', image };
+  }
+  return { filetype: 'jpg', image };
 };
 
-export const parseBase64 = compose(
-  extractData,
-  splitString,
+export const parseDataUri = compose(
+  mediaTypeToFileExtension,
+  splitDataURI,
 );
 
 const fileType = (str: string): string =>

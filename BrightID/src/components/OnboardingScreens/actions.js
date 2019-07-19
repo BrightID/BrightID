@@ -5,8 +5,8 @@ import nacl from 'tweetnacl';
 import RNFetchBlob from 'rn-fetch-blob';
 import { setUserData } from '../../actions';
 import {
-  createConnectionPhotoDirectory,
-  savePhoto,
+  createImageDirectory,
+  saveImage,
 } from '../../utils/filesystem';
 import api from '../../Api/BrightId';
 import { b64ToUrlSafeB64, uInt8ArrayToB64 } from '../../utils/encoding';
@@ -20,8 +20,8 @@ export const handleBrightIdCreation = ({ name, photo }: {
     const { publicKey, secretKey } = nacl.sign.keyPair();
     const b64PubKey = uInt8ArrayToB64(publicKey);
     const safePubKey = b64ToUrlSafeB64(b64PubKey);
-    await createConnectionPhotoDirectory();
-    const filename = await savePhoto({ safePubKey, base64Image: photo.uri });
+    await createImageDirectory();
+    const filename = await saveImage({ imageName: safePubKey, base64Image: photo.uri });
 
     const userData = {
       publicKey: b64PubKey,
