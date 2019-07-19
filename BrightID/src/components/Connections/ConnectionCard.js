@@ -15,7 +15,6 @@ import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import emitter from '../../emitter';
 import { fakeJoinGroups } from '../../actions/fakeGroup';
-import api from '../../Api/BrightId';
 
 /**
  * Connection Card in the Connections Screen
@@ -28,10 +27,6 @@ import api from '../../Api/BrightId';
  */
 
 class ConnectionCard extends React.PureComponent<Props> {
-  async componentDidMount() {
-    const result = await api.getUserScore(this.props.publicKey);
-    console.log(result);
-  }
 
   handleUserOptions = () => {
     const { name, publicKey, secretKey, dispatch } = this.props;
