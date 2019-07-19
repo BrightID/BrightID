@@ -8,7 +8,7 @@ export const getMembers = (groupId: string) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  await getConnections();
+  await dispatch(getConnections());
 
   const { connections } = getState().main;
 
