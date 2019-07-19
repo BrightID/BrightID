@@ -21,7 +21,7 @@ import CurrentGroupView from './components/GroupsScreens/CurrentGroupView';
 import PreviewConnectionScreen from './components/NewConnectionsScreens/PreviewConnectionScreen';
 import SuccessScreen from './components/NewConnectionsScreens/SuccessScreen';
 import AppBootstrap from './AppBootstrap';
-import Apps from './components/AppsScreen';
+import Apps from './components/Apps/AppsScreen';
 
 /**
  * This is BrightID's router, written with React-Navigation

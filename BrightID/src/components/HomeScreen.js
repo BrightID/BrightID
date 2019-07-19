@@ -127,7 +127,7 @@ export class HomeScreen extends React.Component<Props> {
       photo,
       connections,
       dispatch,
-      verifications = [],
+      verifications,
       // verifications = ['DollarForEveryone','BrightID','NodeOne'],
     } = this.props;
 
@@ -183,7 +183,7 @@ export class HomeScreen extends React.Component<Props> {
           </View>
 
           <View style={styles.verificationsContainer}>
-            {verifications && verifications.map(name => <VerificationSticker name={name} key={name} />)}
+            {verifications.map(name => <VerificationSticker name={name} key={name} />)}
           </View>
 
           <View style={styles.connectContainer}>

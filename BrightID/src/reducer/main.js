@@ -23,6 +23,9 @@ import {
   SET_CONNECT_USER_DATA,
   REMOVE_CONNECT_USER_DATA,
   SET_VERIFICATIONS,
+  ADD_APP,
+  REMOVE_APP,
+  SET_APPS,
 } from '../actions';
 import { b64ToUrlSafeB64 } from '../utils/encoding';
 
@@ -48,6 +51,8 @@ export const initialState: Main = {
   eligibleGroups: [],
   currentGroups: [],
   connections: [],
+  verifications: [],
+  apps: [],
   publicKey: '',
   safePubKey: '',
   secretKey: new Uint8Array([]),
@@ -231,6 +236,23 @@ export const mainReducer = (state: Main = initialState, action: action) => {
       return {
         ...state,
         verifications: action.verifications,
+      };
+    case SET_APPS:
+      return {
+        ...state,
+        apps: action.apps,
+      };
+    case ADD_APP:
+      return {
+        ...state,
+        apps: [ ...state.apps, action.app ],
+      };
+    case REMOVE_APP:
+      return {
+        ...state,
+        apps: state.apps.filter(
+          app => app.name !== action.name,
+        ),
       };
     default:
       return state;

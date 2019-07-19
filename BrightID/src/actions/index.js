@@ -1,5 +1,6 @@
-
 // @flow
+
+import { AppInfo } from './apps';
 
 export const USER_SCORE = 'USER_SCORE';
 export const GROUPS_COUNT = 'GROUPS_COUNT';
@@ -23,6 +24,9 @@ export const REMOVE_CONNECT_QR_DATA = 'REMOVE_CONNECT_QR_DATA';
 export const SET_CONNECT_USER_DATA = 'SET_CONNECT_USER_DATA';
 export const REMOVE_CONNECT_USER_DATA = 'REMOVE_CONNECT_USER_DATA';
 export const SET_VERIFICATIONS = 'SET_VERIFICATIONS';
+export const SET_APPS = 'SET_APPS';
+export const ADD_APP = 'ADD_APP';
+export const REMOVE_APP = 'REMOVE_APP';
 
 /**
  * redux action creator that updates user `score`
@@ -161,12 +165,12 @@ export const removeConnection = (publicKey: string) => ({
  */
 
 export const setUserData = ({
-  publicKey,
-  safePubKey,
-  secretKey,
-  name,
-  photo,
-}: {
+                              publicKey,
+                              safePubKey,
+                              secretKey,
+                              name,
+                              photo,
+                            }: {
   publicKey: string,
   safePubKey: string,
   secretKey: Uint8Array,
@@ -225,4 +229,19 @@ export const setConnectUserData = (connectUserData: {
 
 export const removeConnectUserData = () => ({
   type: REMOVE_CONNECT_USER_DATA,
+});
+
+export const setApps = (appInfos: [AppInfo]) => ({
+  type: SET_APPS,
+  apps: appInfos,
+});
+
+export const addApp = (appInfo: AppInfo) => ({
+  type: ADD_APP,
+  app: appInfo,
+});
+
+export const removeApp = (name: string) => ({
+  type: REMOVE_APP,
+  name,
 });

@@ -8,15 +8,15 @@ export const getConnections = () => async (dispatch: dispatch) => {
   try {
     /**
      * obtain connection keys from async storage
-     * currently everything in async storage except for `userData` is a connection
-     *
-     * THIS MIGHT CHANGE WHEN GROUPS ARE ADDED
+     * currently everything in async storage is a connection except
+     *    "userData"
+     *    apps (which have keys starting with "App:")
      */
 
     const allKeys = await AsyncStorage.getAllKeys();
-    const connectionKeys = allKeys.filter((val) => val !== 'userData');
+    const connectionKeys = allKeys.filter(val => val !== 'userData' && !val.startsWith('App:'));
     const storageValues = await AsyncStorage.multiGet(connectionKeys);
-    const connections = storageValues.map((val) => JSON.parse(val[1]));
+    const connections = storageValues.map(val => JSON.parse(val[1]));
     // update redux store
     dispatch(setConnections(connections));
     dispatch(defaultSort());
@@ -32,12 +32,6 @@ export const updateScores = (connections: connection[]) => async (
   dispatch: dispatch,
 ) => {
   try {
-    /**
-     * obtain connection keys from async storage
-     * currently everything in async storage except for `userData` is a connection
-     *
-     * THIS MIGHT CHANGE WHEN GROUPS ARE ADDED
-     */
 
     for (let user of connections) {
       user.score = await api.getUserScore(user.publicKey);
