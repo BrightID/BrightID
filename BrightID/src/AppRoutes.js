@@ -1,6 +1,11 @@
 import * as React from 'react';
-import { createStackNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
-import HeaderButtons, {
+import {
+  createStackNavigator,
+  createSwitchNavigator,
+  createAppContainer,
+} from 'react-navigation';
+import {
+  HeaderButtons,
   HeaderButton,
   Item,
 } from 'react-navigation-header-buttons';
@@ -84,7 +89,7 @@ const GroupStack = createStackNavigator(
     },
     EligibleGroups: {
       screen: EligibleGroupsScreen,
-    }
+    },
   },
   {
     initialRouteName: 'GroupMain',

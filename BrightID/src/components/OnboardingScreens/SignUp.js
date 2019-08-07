@@ -16,7 +16,8 @@ import {
 import ImagePicker from 'react-native-image-picker';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
-import HeaderButtons, {
+import {
+  HeaderButtons,
   HeaderButton,
   Item,
 } from 'react-navigation-header-buttons';

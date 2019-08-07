@@ -1,8 +1,10 @@
-{
+module.exports = {
+  root: true,
   "parser": "babel-eslint",
   "plugins": ["import", "react", "jsx-a11y", "flowtype"],
   "extends": [
     "airbnb",
+    "@react-native-community",
     "plugin:react/recommended",
     "plugin:jsx-a11y/recommended",
     "plugin:flowtype/recommended",
@@ -53,4 +55,4 @@
   "globals": {
     "__DEV__": "readonly"
   }
-}
+};

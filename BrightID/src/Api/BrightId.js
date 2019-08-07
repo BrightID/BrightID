@@ -2,13 +2,12 @@
 
 import { create, ApiSauceInstance } from 'apisauce';
 import nacl from 'tweetnacl';
-import { SEED_URL, SEED_URL_DEV } from 'react-native-dotenv';
 import { strToUint8Array, uInt8ArrayToB64 } from '../utils/encoding';
 import store from '../store';
 
-let seedUrl = SEED_URL;
+let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
-  seedUrl = SEED_URL_DEV;
+  seedUrl = 'http://test.brightid.org';
 }
 
 class BrightId {

@@ -11,7 +11,8 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import HeaderButtons, {
+import {
+  HeaderButtons,
   HeaderButton,
   Item,
 } from 'react-navigation-header-buttons';
