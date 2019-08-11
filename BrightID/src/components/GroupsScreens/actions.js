@@ -35,9 +35,10 @@ export const createNewGroup = () => async (
     return false;
   }
   try {
-    await api.createGroup(newGroupCoFounders[0], newGroupCoFounders[1]);
+    return await api.createGroup(newGroupCoFounders[0], newGroupCoFounders[1]);
   } catch (err) {
     Alert.alert(err.message || 'Cannot create group', err.stack);
+    return false;
   }
 };
 
