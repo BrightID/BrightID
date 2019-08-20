@@ -169,14 +169,13 @@ class CurrentGroupView extends Component<Props, State> {
     this.setState({ optionsVisible: false });
   };
 
-  getMembers = () => {
+  getMembers = async () => {
     const { dispatch, navigation } = this.props;
     const groupId = navigation.state.params.group.id;
-    const members = dispatch(getMembers(groupId)).then(() => {
-      this.setState({
-        loading: false,
-        members,
-      });
+    const members = await dispatch(getMembers(groupId));
+    this.setState({
+      loading: false,
+      members,
     });
   };
 
