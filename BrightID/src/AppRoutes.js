@@ -95,7 +95,7 @@ const GroupStack = createStackNavigator(
     initialRouteName: 'GroupMain',
     mode: 'modal',
     headerLayoutPreset: 'center',
-    navigationOptions: ({ navigation }) => ({
+    defaultNavigationOptions: ({ navigation }) => ({
       title: 'Groups',
       headerTintColor: '#fff',
       headerTitleStyle,
@@ -130,7 +130,7 @@ const ConnectionsStack = createStackNavigator(
     initialRouteName: 'ConnectionsMain',
     mode: 'modal',
     headerLayoutPreset: 'center',
-    navigationOptions: ({ navigation }) => ({
+    defaultNavigationOptions: ({ navigation }) => ({
       title: 'Groups',
       headerTintColor: '#fff',
       headerTitleStyle,
@@ -166,7 +166,7 @@ const NewConnectStack = createStackNavigator(
     initialRouteName: 'NewConnectMain',
     mode: 'modal',
     headerLayoutPreset: 'center',
-    navigationOptions: ({ navigation }) => ({
+    defaultNavigationOptions: ({ navigation }) => ({
       title: 'Groups',
       headerTintColor: '#fff',
       headerTitleStyle,
@@ -221,7 +221,7 @@ const AppStack = createStackNavigator(
     initialRouteName: 'Home',
     // initialRouteName: 'CheatPage',
     headerLayoutPreset: 'center',
-    navigationOptions: {
+    defaultNavigationOptions: {
       title: 'Groups',
       headerTintColor: '#fff',
       headerTitleStyle,
@@ -244,7 +244,7 @@ const OnboardingStack = createStackNavigator(
   },
   {
     initialRouteName: 'Onboard',
-    navigationOptions: {
+    defaultNavigationOptions: {
       title: 'BrightID',
       headerTintColor: '#fff',
       headerTitleStyle,
