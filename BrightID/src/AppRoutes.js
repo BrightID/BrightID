@@ -11,8 +11,8 @@ import {
 } from 'react-navigation-header-buttons';
 import LinearGradient from 'react-native-linear-gradient';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import HomeScreen from './components/HomeScreen';
-import CheatScreen from './components/CheatScreen';
+import Home from './components/HomeScreen';
+import CheatPage from './components/CheatScreen';
 import ConnectionsScreen from './components/Connections/ConnectionsScreen';
 import SortingConnectionsScreen from './components/Connections/SortingConnectionsScreen';
 import GroupsScreen from './components/GroupsScreens/GroupsScreen';
@@ -70,6 +70,23 @@ const headerBackground = (
   />
 );
 
+const defaultNavigationOptions = ({ navigation }) => ({
+  headerTintColor: '#fff',
+  headerTitleStyle,
+  headerBackground,
+  headerLeft: (
+    <HeaderButtons left={true} HeaderButtonComponent={MaterialHeaderButton}>
+      <Item
+        title="go back"
+        iconName="arrow-left"
+        onPress={() => {
+          navigation.goBack(null);
+        }}
+      />
+    </HeaderButtons>
+  ),
+});
+
 const GroupStack = createStackNavigator(
   {
     GroupMain: {
@@ -77,6 +94,22 @@ const GroupStack = createStackNavigator(
     },
     NewGroup: {
       screen: NewGroupScreen,
+      navigationOptions: ({ navigation }) => ({
+        headerLeft: (
+          <HeaderButtons
+            left={true}
+            HeaderButtonComponent={MaterialHeaderButton}
+          >
+            <Item
+              title="close"
+              iconName="close"
+              onPress={() => {
+                navigation.goBack();
+              }}
+            />
+          </HeaderButtons>
+        ),
+      }),
     },
     CofoundGroupReview: {
       screen: CofoundGroupReview,
@@ -95,25 +128,7 @@ const GroupStack = createStackNavigator(
     initialRouteName: 'GroupMain',
     mode: 'modal',
     headerLayoutPreset: 'center',
-    defaultNavigationOptions: ({ navigation }) => ({
-      title: 'Groups',
-      headerTintColor: '#fff',
-      headerTitleStyle,
-      headerBackground,
-      headerLeft: (
-        <HeaderButtons left={true} HeaderButtonComponent={MaterialHeaderButton}>
-          <Item
-            title="go back"
-            iconName={
-              navigation.state.routeName === 'NewGroup' ? 'close' : 'arrow-left'
-            }
-            onPress={() => {
-              navigation.goBack();
-            }}
-          />
-        </HeaderButtons>
-      ),
-    }),
+    defaultNavigationOptions,
   },
 );
 
@@ -130,23 +145,7 @@ const ConnectionsStack = createStackNavigator(
     initialRouteName: 'ConnectionsMain',
     mode: 'modal',
     headerLayoutPreset: 'center',
-    defaultNavigationOptions: ({ navigation }) => ({
-      title: 'Groups',
-      headerTintColor: '#fff',
-      headerTitleStyle,
-      headerBackground,
-      headerLeft: (
-        <HeaderButtons left={true} HeaderButtonComponent={MaterialHeaderButton}>
-          <Item
-            title="go back"
-            iconName="arrow-left"
-            onPress={() => {
-              navigation.goBack();
-            }}
-          />
-        </HeaderButtons>
-      ),
-    }),
+    defaultNavigationOptions,
   },
 );
 
@@ -166,34 +165,14 @@ const NewConnectStack = createStackNavigator(
     initialRouteName: 'NewConnectMain',
     mode: 'modal',
     headerLayoutPreset: 'center',
-    defaultNavigationOptions: ({ navigation }) => ({
-      title: 'Groups',
-      headerTintColor: '#fff',
-      headerTitleStyle,
-      headerBackground,
-      headerLeft: (
-        <HeaderButtons left={true} HeaderButtonComponent={MaterialHeaderButton}>
-          <Item
-            title="go back"
-            iconName="arrow-left"
-            onPress={() => {
-              navigation.goBack();
-            }}
-          />
-        </HeaderButtons>
-      ),
-    }),
+    defaultNavigationOptions,
   },
 );
 
 const AppStack = createStackNavigator(
   {
-    Home: {
-      screen: HomeScreen,
-    },
-    CheatPage: {
-      screen: CheatScreen,
-    },
+    Home,
+    CheatPage,
     Connections: {
       screen: ConnectionsStack,
       navigationOptions: {
@@ -221,12 +200,7 @@ const AppStack = createStackNavigator(
     initialRouteName: 'Home',
     // initialRouteName: 'CheatPage',
     headerLayoutPreset: 'center',
-    defaultNavigationOptions: {
-      title: 'Groups',
-      headerTintColor: '#fff',
-      headerTitleStyle,
-      headerBackground,
-    },
+    defaultNavigationOptions,
   },
 );
 
@@ -238,18 +212,11 @@ const OnboardingStack = createStackNavigator(
         header: null,
       },
     },
-    SignUp: {
-      screen: SignUp,
-    },
+    SignUp,
   },
   {
     initialRouteName: 'Onboard',
-    defaultNavigationOptions: {
-      title: 'BrightID',
-      headerTintColor: '#fff',
-      headerTitleStyle,
-      headerBackground,
-    },
+    defaultNavigationOptions,
   },
 );
 
