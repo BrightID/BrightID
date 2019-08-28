@@ -1,14 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 /**
@@ -23,7 +16,6 @@ type Props = {
 };
 
 export default class BottomNav extends React.Component<Props> {
-
   handleCheatPageNavigation = () => {
     if (__DEV__) {
       this.props.navigation.navigate('CheatPage');

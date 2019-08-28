@@ -63,12 +63,7 @@ class GroupsScreen extends React.Component<Props, State> {
 
   render() {
     try {
-      const {
-        navigation,
-        currentGroups,
-        publicKey,
-        eligibleGroups,
-      } = this.props;
+      const { navigation, currentGroups, eligibleGroups } = this.props;
       const groupPairs =
         currentGroups.length > 2
           ? splitEvery(2, currentGroups)

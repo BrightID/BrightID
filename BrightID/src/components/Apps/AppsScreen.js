@@ -18,7 +18,8 @@ class AppsScreen extends React.Component<Props> {
   async componentDidMount() {
     const { navigation, dispatch } = this.props;
 
-    if (navigation.state.params) { // if 'params' is defined, the user came through a deep link
+    if (navigation.state.params) {
+      // if 'params' is defined, the user came through a deep link
       const { baseUrl, context, id } = navigation.state.params;
       const oldBaseUrl = api.baseUrl;
       let contextInfo;
@@ -38,7 +39,8 @@ class AppsScreen extends React.Component<Props> {
           [
             {
               text: 'Yes',
-              onPress: () => this.linkVerification(baseUrl, context, contextInfo, id),
+              onPress: () =>
+                this.linkVerification(baseUrl, context, contextInfo, id),
             },
             {
               text: 'No',
@@ -91,19 +93,15 @@ class AppsScreen extends React.Component<Props> {
         throw new Error(response.statusText);
       }
     } catch (e) {
-      Alert.alert(
-        `App verification failed`,
-        `${e.message}\n${e.stack || ''}`,
-        [
-          {
-            text: 'Dismiss',
-            style: 'cancel',
-            onPress: () => {
-              navigation.goBack();
-            },
+      Alert.alert(`App verification failed`, `${e.message}\n${e.stack || ''}`, [
+        {
+          text: 'Dismiss',
+          style: 'cancel',
+          onPress: () => {
+            navigation.goBack();
           },
-        ],
-      );
+        },
+      ]);
     } finally {
       api.baseUrl = oldBaseUrl;
       if (contextInfo.isApp) {
@@ -111,7 +109,6 @@ class AppsScreen extends React.Component<Props> {
       }
     }
   }
-
 }
 
 const styles = StyleSheet.create({
@@ -124,4 +121,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(state => state.main)(AppsScreen);
+export default connect((state) => state.main)(AppsScreen);
