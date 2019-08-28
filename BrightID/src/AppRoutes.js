@@ -159,6 +159,22 @@ const NewConnectStack = createStackNavigator(
     },
     PreviewConnection: {
       screen: PreviewConnectionScreen,
+      navigationOptions: ({ navigation }) => ({
+        headerLeft: (
+          <HeaderButtons
+            left={true}
+            HeaderButtonComponent={MaterialHeaderButton}
+          >
+            <Item
+              title="close"
+              iconName="close"
+              onPress={() => {
+                navigation.navigate('Home');
+              }}
+            />
+          </HeaderButtons>
+        ),
+      }),
     },
   },
   {
