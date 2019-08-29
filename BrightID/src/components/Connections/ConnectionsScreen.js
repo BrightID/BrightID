@@ -105,7 +105,7 @@ class ConnectionsScreen extends React.Component<Props, State> {
       await AsyncStorage.removeItem(publicKey);
       emitter.emit('refreshConnections', {});
     } catch (err) {
-      Alert.alert("Couldn't remove connection", err.stack);
+      Alert.alert("Couldn't remove connection", err.message);
     }
   };
 
