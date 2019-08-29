@@ -41,16 +41,10 @@ class EligibleGroupCard extends React.Component<Props> {
           text: 'Sure',
           onPress: async () => {
             try {
-              let result = await this.props.dispatch(
-                deleteNewGroup(this.props.group.id),
-              );
-              alert(
-                result.ok
-                  ? 'Group deleted successfully'
-                  : JSON.stringify(result, null, 4),
-              );
+              await this.props.dispatch(deleteNewGroup(this.props.group.id));
+              alert('Group deleted successfully');
             } catch (err) {
-              console.log(err);
+              Alert.alert('Failed to delete group', err.message);
             }
           },
         },
@@ -62,15 +56,9 @@ class EligibleGroupCard extends React.Component<Props> {
   joinThisGroup = async () => {
     const { dispatch, group } = this.props;
     try {
-      let result = await dispatch(join(group));
-      if (!result.ok) {
-        Alert.alert(
-          'Failed to join the group',
-          JSON.stringify(result, null, 4),
-        );
-      }
+      await dispatch(join(group));
     } catch (err) {
-      console.log(err);
+      Alert.alert('Failed to join the group', err.message);
     }
   };
 

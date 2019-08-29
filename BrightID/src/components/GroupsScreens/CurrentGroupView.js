@@ -82,23 +82,16 @@ class CurrentGroupView extends Component<Props, State> {
         onPress: async () => {
           const { navigation, dispatch } = this.props;
           const groupId = navigation.state.params.group.id;
-          const response = await api.leaveGroup(groupId);
-
-          console.log(`Response from leaveGroup: ${JSON.stringify(response)}`);
-
-          if (response.ok) {
+          try {
+            await api.leaveGroup(groupId);
             await dispatch(leaveGroup(groupId));
             navigation.goBack();
-          } else {
-            Alert.alert(
-              'Error leaving group',
-              response,
-            );
+          } catch (err) {
+            Alert.alert('Error leaving group', err.message);
           }
         },
       },
     ];
-
     Alert.alert(
       `Leave Group`,
       `Are you sure you want to leave this group?`,

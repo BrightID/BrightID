@@ -43,24 +43,20 @@ export const createNewGroup = () => async (
 };
 
 export const join = (group: group) => async (dispatch: dispatch) => {
-  let result = await api.joinGroup(group.id);
-  if (result.ok) {
-    if (group.isNew && group.knownMembers.length < 2) {
-      // only creator has joined
-      dispatch(joinGroupAsCoFounder(group.id));
-    } else {
-      // creator and other co-founder have already joined; treat it as a normal group
-      dispatch(joinGroup(group));
-    }
+  await api.joinGroup(group.id);
+  if (group.isNew && group.knownMembers.length < 2) {
+    // only creator has joined
+    dispatch(joinGroupAsCoFounder(group.id));
+  } else {
+    // creator and other co-founder have already joined; treat it as a normal group
+    dispatch(joinGroup(group));
   }
-  return result;
 };
 
 export const deleteNewGroup = (groupId: string) => async (
   dispatch: dispatch,
 ) => {
   // return alert(JSON.stringify(publicKey, groupId));
-  let result = await api.deleteGroup(groupId);
-  if (result.ok) dispatch(deleteEligibleGroup(groupId));
-  return result;
+  await api.deleteGroup(groupId);
+  dispatch(deleteEligibleGroup(groupId));
 };
