@@ -18,36 +18,38 @@ target 'BrightID' do
   pod 'React-RCTText', :path => '../node_modules/react-native/Libraries/Text'
   pod 'React-RCTVibration', :path => '../node_modules/react-native/Libraries/Vibration'
   pod 'React-RCTWebSocket', :path => '../node_modules/react-native/Libraries/WebSocket'
-
   pod 'React-cxxreact', :path => '../node_modules/react-native/ReactCommon/cxxreact'
   pod 'React-jsi', :path => '../node_modules/react-native/ReactCommon/jsi'
   pod 'React-jsiexecutor', :path => '../node_modules/react-native/ReactCommon/jsiexecutor'
   pod 'React-jsinspector', :path => '../node_modules/react-native/ReactCommon/jsinspector'
   pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
-
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   # Our pods for BrightId
 
+    target 'BrightIDTests' do
+      inherit! :search_paths
+      # Pods for testing
+    end
 
-
-
-
-
-
-
-
-
+    use_native_modules!
 end
 
-# very important to have, unless you removed React dependencies for Libraries 
-# and you rely on Cocoapods to manage it
-post_install do |installer|
-installer.pods_project.targets.each do |target|
-  if target.name == "React"
-    target.remove_from_project
+target 'BrightID-tvOS' do
+  # Pods for BrightID-tvOS
+  target 'BrightID-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
   end
 end
-end
+# very important to have, unless you removed React dependencies for Libraries 
+# and you rely on Cocoapods to manage it
+# post_install do |installer|
+# installer.pods_project.targets.each do |target|
+#   if target.name == "React"
+#     target.remove_from_project
+#   end
+# end
+# end
