@@ -3,15 +3,10 @@ set -e
 set -u
 set -o pipefail
 
-function on_error {
-  echo "$(realpath -mq "${0}"):$1: error: Unexpected failure"
-}
-trap 'on_error $LINENO' ERR
-
 if [ -z ${UNLOCALIZED_RESOURCES_FOLDER_PATH+x} ]; then
-  # If UNLOCALIZED_RESOURCES_FOLDER_PATH is not set, then there's nowhere for us to copy
-  # resources to, so exit 0 (signalling the script phase was successful).
-  exit 0
+    # If UNLOCALIZED_RESOURCES_FOLDER_PATH is not set, then there's nowhere for us to copy
+    # resources to, so exit 0 (signalling the script phase was successful).
+    exit 0
 fi
 
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
@@ -105,6 +100,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"
   install_resource "${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"
   install_resource "${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"
+  install_resource "${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"
   install_resource "${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"
   install_resource "${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"
   install_resource "${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"
@@ -122,6 +118,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"
   install_resource "${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"
   install_resource "${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"
+  install_resource "${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"
   install_resource "${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"
   install_resource "${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"
   install_resource "${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"
