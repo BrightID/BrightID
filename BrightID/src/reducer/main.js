@@ -245,14 +245,12 @@ export const mainReducer = (state: Main = initialState, action: action) => {
     case ADD_APP:
       return {
         ...state,
-        apps: [ ...state.apps, action.app ],
+        apps: [...state.apps, action.app],
       };
     case REMOVE_APP:
       return {
         ...state,
-        apps: state.apps.filter(
-          app => app.name !== action.name,
-        ),
+        apps: state.apps.filter((app) => app.name !== action.name),
       };
     default:
       return state;

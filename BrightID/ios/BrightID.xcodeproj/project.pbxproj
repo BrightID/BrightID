@@ -28,6 +28,7 @@
 		2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6891FA4F8E400B85C8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* BrightIDTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BrightIDTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
+		8112F96AF07C566DBD6B4E9A /* libPods-BrightID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C987693B6B2261BEAB3AE6FE /* libPods-BrightID.a */; };
 		96E57631DA184D6595FDDA1E /* ApexNew-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = BBF6F07EB50C4197BB6962E5 /* ApexNew-Light.otf */; };
 		9CEFF1F7B5D52A4D0CD291C2 /* libPods-BrightID-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DC9D71AEC75AC69B44448B2 /* libPods-BrightID-tvOSTests.a */; };
 		C9E874F0C4B8478EB129E00A /* ApexNew-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4EA579C1EFA54DA1A0E2D2AC /* ApexNew-Medium.otf */; };
@@ -386,6 +387,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8112F96AF07C566DBD6B4E9A /* libPods-BrightID.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1231,10 +1233,8 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-BrightID/Pods-BrightID-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-BrightID/Pods-BrightID-resources.sh",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -1253,8 +1253,6 @@
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
@@ -1275,7 +1273,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BrightID/Pods-BrightID-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BrightID/Pods-BrightID-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		951B2D039A3AA33D029396F6 /* [CP] Check Pods Manifest.lock */ = {
