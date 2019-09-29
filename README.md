@@ -19,10 +19,6 @@ The network consists of volunteers [running nodes](https://github.com/BrightID/B
 
 ID creation and connectons to people and apps are managed though the [brightID mobile app](https://github.com/BrightID/BrightID/wiki/BrightID---Full-Mobile-Spec).
 
-## API
-
-[We offer an API to third-parties](https://github.com/BrightID/BrightID-API) to connect to the brightID mobile app and brightID nodes to verify users as unique.
-
 ## Contribute
 
 [Wiki](https://github.com/BrightID/BrightID/wiki) for dev instructions.
