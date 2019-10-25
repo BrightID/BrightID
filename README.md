@@ -11,7 +11,7 @@ BrightIDs have the following characteristics:
 * Verified by a trusted group of close personal contacts plus a [decentralized graph database](#decentralized-and-owner-free).
 * A lost or compromised ID can be replaced by reconnecting with a few close personal contacts.
 
-## Decentralized & Unintrusive
+## Decentralized & Nonintrusive
 
 The network consists of volunteers [running nodes](https://github.com/BrightID/BrightID-Node). Nodes host the trust graph used for verification, but there's no personal information stored there.
 
