@@ -22,7 +22,7 @@ import BottomNav from './BottomNav';
 import nacl from 'tweetnacl';
 import { getConnections } from '../actions/connections';
 import Material from 'react-native-vector-icons/MaterialIcons';
-import { objToB64, strToUint8Array, uInt8ArrayToB64 } from '../utils/encoding';
+import { strToUint8Array, uInt8ArrayToB64 } from '../utils/encoding';
 import api from '../Api/BrightId';
 
 /**
@@ -217,7 +217,7 @@ export class TestConnectionScreen extends React.Component {
     } = this.props;
     const { connectionsCount } = this.state;
     const timestamp = 1543441727;
-    let message = objToB64(publicKey) + timestamp;
+    let message = publicKey + timestamp;
     let sig = nacl.sign.detached(strToUint8Array(message), secretKey);
     // const signature = nacl.sign(
     //     strToUint8Array(JSON.stringify(publicKey) + timestamp),
@@ -265,7 +265,7 @@ export class TestConnectionScreen extends React.Component {
               <Text>name: {name}</Text>
               <View>
                 <Text>PublicKey</Text>
-                <TextInput value={uInt8ArrayToUrlSafeB64(publicKey)} />
+                <TextInput value={publicKey} />
                 {/*<Text>timestamp</Text>*/}
                 {/*<TextInput value={this.state.timestamp}/>*/}
                 {/*<Text>Sig</Text>*/}
@@ -302,7 +302,7 @@ export class TestConnectionScreen extends React.Component {
                         {/*<Text style={{flex: 1}}>{JSON.stringify(connection,null, 4)}</Text>*/}
                         <Text style={{ flex: 1 }}>
                           {connection.name} - {connection.score}{' '}
-                          {objToB64(connection.publicKey)}
+                          {connection.publicKey}
                         </Text>
                         <View style={{ flex: 0 }}>
                           <Button

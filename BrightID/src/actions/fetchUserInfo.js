@@ -19,7 +19,7 @@ const fetchUserInfo = () => async (dispatch: dispatch) => {
     } = await api.getUserInfo();
     dispatch(setEligibleGroups(eligibleGroups));
     dispatch(setCurrentGroups(currentGroups));
-    dispatch(setUserScore(score));
+    dispatch(setUserScore(__DEV__ ? 100 : score));
     dispatch(setGroupsCount(currentGroups.length));
     dispatch(setVerifications(verifications));
   } catch (err) {

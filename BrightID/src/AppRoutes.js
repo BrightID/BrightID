@@ -27,6 +27,8 @@ import PreviewConnectionScreen from './components/NewConnectionsScreens/PreviewC
 import SuccessScreen from './components/NewConnectionsScreens/SuccessScreen';
 import AppBootstrap from './AppBootstrap';
 import Apps from './components/Apps/AppsScreen';
+import Notifications from './components/Notifications/NotificationsScreen';
+import BackupScreen from './components/Backup/BackupScreen';
 
 /**
  * This is BrightID's router, written with React-Navigation
@@ -206,6 +208,10 @@ const AppStack = createStackNavigator(
       navigationOptions: {
         header: null,
       },
+    },
+    Notifications,
+    Backup: {
+      'screen': BackupScreen,
     },
     Apps: {
       screen: Apps,

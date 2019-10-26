@@ -1,6 +1,7 @@
 // @flow
 
 import { AppInfo } from './apps';
+import { NotificationInfo } from './notifications';
 
 export const USER_SCORE = 'USER_SCORE';
 export const GROUPS_COUNT = 'GROUPS_COUNT';
@@ -27,7 +28,9 @@ export const SET_VERIFICATIONS = 'SET_VERIFICATIONS';
 export const SET_APPS = 'SET_APPS';
 export const ADD_APP = 'ADD_APP';
 export const REMOVE_APP = 'REMOVE_APP';
-
+export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
+export const SET_TRUSTED_CONNECTIONS = 'SET_TRUSTED_CONNECTIONS';
+export const SET_BACKUP_COMPLETED = 'SET_BACKUP_COMPLETED';
 /**
  * redux action creator that updates user `score`
  *
@@ -244,4 +247,19 @@ export const addApp = (appInfo: AppInfo) => ({
 export const removeApp = (name: string) => ({
   type: REMOVE_APP,
   name,
+});
+
+export const setNotifications = (notificationInfos: [NotificationInfo]) => ({
+  type: SET_NOTIFICATIONS,
+  notifications: notificationInfos,
+});
+
+export const setTrustedConnections = (trustedConnections: string[]) => ({
+  type: SET_TRUSTED_CONNECTIONS,
+  trustedConnections,
+});
+
+export const setBackupCompleted = (backupCompleted: boolean) => ({
+  type: SET_BACKUP_COMPLETED,
+  backupCompleted,
 });

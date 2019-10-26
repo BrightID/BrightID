@@ -26,6 +26,9 @@ import {
   ADD_APP,
   REMOVE_APP,
   SET_APPS,
+  SET_NOTIFICATIONS,
+  SET_TRUSTED_CONNECTIONS,
+  SET_BACKUP_COMPLETED
 } from '../actions';
 import { b64ToUrlSafeB64 } from '../utils/encoding';
 
@@ -53,6 +56,9 @@ export const initialState: Main = {
   connections: [],
   verifications: [],
   apps: [],
+  notifications: [],
+  trustedConnections: [],
+  backupCompleted: false,
   publicKey: '',
   safePubKey: '',
   secretKey: new Uint8Array([]),
@@ -252,6 +258,22 @@ export const mainReducer = (state: Main = initialState, action: action) => {
         ...state,
         apps: state.apps.filter((app) => app.name !== action.name),
       };
+    case SET_NOTIFICATIONS:
+      return {
+        ...state,
+        notifications: action.notifications,
+      };
+    case SET_TRUSTED_CONNECTIONS:
+      return {
+        ...state,
+        trustedConnections: action.trustedConnections,
+      };
+    case SET_BACKUP_COMPLETED:
+      return {
+        ...state,
+        backupCompleted: action.backupCompleted,
+      };
+    
     default:
       return state;
   }

@@ -2,7 +2,11 @@
 
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { NavigationEvents } from 'react-navigation';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import store from '../store';
+import { getNotifications, NotificationInfo } from '../actions/notifications';
+import { connect } from 'react-redux';
 
 /**
  * list of icons which will navigate between screens inside the app
@@ -13,18 +17,28 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 type Props = {
   navigation: { navigate: () => null },
+  notifications: Array<NotificationInfo>
 };
 
-export default class BottomNav extends React.Component<Props> {
+export class BottomNav extends React.Component<Props> {
   handleCheatPageNavigation = () => {
     if (__DEV__) {
       this.props.navigation.navigate('CheatPage');
     }
   };
-
+  
   render() {
+    let notificationsBadge = null;
+    if (this.props.notifications.length > 0) {
+      notificationsBadge = <Text style={styles.badge}> {this.props.notifications.length} </Text>
+    }
     return (
       <View style={styles.container}>
+        <NavigationEvents
+          onDidFocus={() => {
+            store.dispatch(getNotifications());
+          }}
+        />
         <TouchableOpacity
           onPress={() => {
             this.props.navigation.navigate('Home');
@@ -62,11 +76,14 @@ export default class BottomNav extends React.Component<Props> {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={this.handleCheatPageNavigation}
+          onPress={() => {
+            this.props.navigation.navigate('Notifications');
+          }}
           accessible={true}
-          accessibilityLabel="Apps"
+          accessibilityLabel="Notifications"
         >
           <View style={styles.navIconContainer}>
+            {notificationsBadge}
             <SimpleLineIcons size={32} name="bell" color="#222" />
             <Text style={styles.navText}>Notifications</Text>
           </View>
@@ -110,4 +127,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 1.5,
   },
+  badge:{
+    color:'#fff',
+    position:'absolute',
+    zIndex:10,
+    top:1,
+    right:1,
+    padding:1,
+    backgroundColor:'red',
+    borderRadius:5
+  }
 });
+
+export default connect(state => state.main)(BottomNav);
