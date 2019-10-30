@@ -28,7 +28,9 @@ import {
   SET_APPS,
   SET_NOTIFICATIONS,
   SET_TRUSTED_CONNECTIONS,
-  SET_BACKUP_COMPLETED
+  SET_BACKUP_COMPLETED,
+  SET_RECOVERY_KEYS,
+  SET_RECOVERY_REQUEST_CODE,
 } from '../actions';
 import { b64ToUrlSafeB64 } from '../utils/encoding';
 
@@ -59,6 +61,11 @@ export const initialState: Main = {
   notifications: [],
   trustedConnections: [],
   backupCompleted: false,
+  recoveryKeys: {
+    publicKey: '',
+    secretKey: new Uint8Array([])
+  },
+  recoveryRequestCode: '',
   publicKey: '',
   safePubKey: '',
   secretKey: new Uint8Array([]),
@@ -273,7 +280,16 @@ export const mainReducer = (state: Main = initialState, action: action) => {
         ...state,
         backupCompleted: action.backupCompleted,
       };
-    
+    case SET_RECOVERY_KEYS:
+      return {
+        ...state,
+        recoveryKeys: action.recoveryKeys,
+      };
+    case SET_RECOVERY_REQUEST_CODE:
+      return {
+        ...state,
+        recoveryRequestCode: action.recoveryRequestCode,
+      };
     default:
       return state;
   }

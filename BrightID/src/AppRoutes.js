@@ -28,7 +28,10 @@ import SuccessScreen from './components/NewConnectionsScreens/SuccessScreen';
 import AppBootstrap from './AppBootstrap';
 import Apps from './components/Apps/AppsScreen';
 import Notifications from './components/Notifications/NotificationsScreen';
-import BackupScreen from './components/Backup/BackupScreen';
+import TrustedConnectionsScreen from './components/Recovery/TrustedConnectionsScreen';
+import BackupScreen from './components/Recovery/BackupScreen';
+import RecoveringConnectionScreen from './components/Recovery/RecoveringConnectionScreen';
+import RecoveryCodeScreen from './components/Recovery/RecoveryCodeScreen';
 
 /**
  * This is BrightID's router, written with React-Navigation
@@ -187,6 +190,45 @@ const NewConnectStack = createStackNavigator(
   },
 );
 
+const RecoveryStack = createStackNavigator(
+  {
+  	TrustedConnections: {
+      screen: TrustedConnectionsScreen,
+    },
+    Backup: {
+      'screen': BackupScreen,
+    },
+    RecoveringConnection: {
+      'screen': RecoveringConnectionScreen,
+    },
+    RecoveryCode: {
+      'screen': RecoveryCodeScreen,
+      navigationOptions: ({ navigation }) => ({
+        headerLeft: (
+          <HeaderButtons
+            left={true}
+            HeaderButtonComponent={MaterialHeaderButton}
+          >
+            <Item
+              title="go back"
+              iconName="arrow-left"
+              onPress={() => {
+                navigation.navigate('SignUp');
+              }}
+            />
+          </HeaderButtons>
+        ),
+      }),
+    },
+  },
+  {
+    initialRouteName: 'TrustedConnections',
+    mode: 'modal',
+    headerLayoutPreset: 'center',
+    defaultNavigationOptions,
+  },
+);
+
 const AppStack = createStackNavigator(
   {
     Home,
@@ -209,10 +251,13 @@ const AppStack = createStackNavigator(
         header: null,
       },
     },
-    Notifications,
-    Backup: {
-      'screen': BackupScreen,
+    Recovery: {
+      screen: RecoveryStack,
+      navigationOptions: {
+        header: null,
+      },
     },
+    Notifications,
     Apps: {
       screen: Apps,
       path: 'link-verification/:baseUrl/:context/:id',

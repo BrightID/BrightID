@@ -5,7 +5,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import store from '../store';
-import { getNotifications, NotificationInfo } from '../actions/notifications';
+import { NotificationInfo } from '../actions/notifications';
 import { connect } from 'react-redux';
 
 /**
@@ -34,11 +34,6 @@ export class BottomNav extends React.Component<Props> {
     }
     return (
       <View style={styles.container}>
-        <NavigationEvents
-          onDidFocus={() => {
-            store.dispatch(getNotifications());
-          }}
-        />
         <TouchableOpacity
           onPress={() => {
             this.props.navigation.navigate('Home');

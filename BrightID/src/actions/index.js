@@ -31,6 +31,8 @@ export const REMOVE_APP = 'REMOVE_APP';
 export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
 export const SET_TRUSTED_CONNECTIONS = 'SET_TRUSTED_CONNECTIONS';
 export const SET_BACKUP_COMPLETED = 'SET_BACKUP_COMPLETED';
+export const SET_RECOVERY_KEYS = 'SET_RECOVERY_KEYS';
+export const SET_RECOVERY_REQUEST_CODE = 'SET_RECOVERY_REQUEST_CODE';
 /**
  * redux action creator that updates user `score`
  *
@@ -262,4 +264,17 @@ export const setTrustedConnections = (trustedConnections: string[]) => ({
 export const setBackupCompleted = (backupCompleted: boolean) => ({
   type: SET_BACKUP_COMPLETED,
   backupCompleted,
+});
+
+export const setRecoveryKeys = (recoveryKeys: {
+  publicKey: string,
+  secretKey: Uint8Array
+}) => ({
+  type: SET_RECOVERY_KEYS,
+  recoveryKeys,
+});
+
+export const setRecoveryRequestCode = (recoveryRequestCode: string) => ({
+  type: SET_RECOVERY_REQUEST_CODE,
+  recoveryRequestCode,
 });

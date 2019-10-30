@@ -9,7 +9,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { parseQrData } from './actions/parseQrData';
 import { fetchData } from './actions/fetchData';
 import emitter from '../../emitter';
-import { removeConnectQrData } from '../../actions';
+import { removeConnectQrData, setRecoveryRequestCode } from '../../actions';
 import { setUpWs } from './actions/websocket';
 
 /**
@@ -74,16 +74,19 @@ class ScanCodeScreen extends React.Component<Props, State> {
   };
 
   handleBarCodeRead = ({ data }) => {
-    const { dispatch } = this.props;
-    if (!validQrString(data)) {
-      return;
+    const { dispatch, navigation } = this.props;
+
+    if (data.startsWith('Recovery_')) {
+      dispatch(setRecoveryRequestCode(data));
+      navigation.navigate('RecoveringConnection');
+    } else if (validQrString(data)) {
+      dispatch(parseQrData(data));
+      // If the following `fetchdata()` fails, a "connectFailure" will be emitted,
+      // triggering a single retry through a websocket notification.
+      dispatch(fetchData());
+      this.setState({ scanned: true });
+      if (this.textInput) this.textInput.blur();
     }
-    dispatch(parseQrData(data));
-    // If the following `fetchdata()` fails, a "connectFailure" will be emitted,
-    // triggering a single retry through a websocket notification.
-    dispatch(fetchData());
-    this.setState({ scanned: true });
-    if (this.textInput) this.textInput.blur();
   };
 
   subscribeToProfileUpload = () => {

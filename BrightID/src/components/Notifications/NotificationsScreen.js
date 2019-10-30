@@ -13,11 +13,6 @@ class NotificationsScreen extends React.Component<Props> {
     title: 'Notifications',
   });
 
-  async componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(getNotifications());
-  }
-
   render() {
     const { navigation } = this.props;
     return (

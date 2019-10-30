@@ -30,7 +30,7 @@ class NotificationCard extends React.Component<Props> {
     return (
       <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Backup');
+            navigation.navigate('TrustedConnections');
           }}
       >
         <View style={{ ...styles.container }}>
@@ -55,8 +55,9 @@ const styles = StyleSheet.create({
   msg: {
     fontFamily: 'ApexNew-Book',
     color: 'black',
-    fontSize: 24,
-    marginLeft: 20,
+    fontSize: 18,
+    marginLeft: 18,
+    marginRight: 18,
   },
   itemIcon: {
     // margin: 16,
