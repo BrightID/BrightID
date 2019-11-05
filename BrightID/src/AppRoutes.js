@@ -30,6 +30,7 @@ import Apps from './components/Apps/AppsScreen';
 import Notifications from './components/Notifications/NotificationsScreen';
 import TrustedConnectionsScreen from './components/Recovery/TrustedConnectionsScreen';
 import BackupScreen from './components/Recovery/BackupScreen';
+import RestoreScreen from './components/Recovery/RestoreScreen';
 import RecoveringConnectionScreen from './components/Recovery/RecoveringConnectionScreen';
 import RecoveryCodeScreen from './components/Recovery/RecoveryCodeScreen';
 
@@ -200,6 +201,9 @@ const RecoveryStack = createStackNavigator(
     },
     RecoveringConnection: {
       'screen': RecoveringConnectionScreen,
+    },
+    Restore: {
+      'screen': RestoreScreen,
     },
     RecoveryCode: {
       'screen': RecoveryCodeScreen,

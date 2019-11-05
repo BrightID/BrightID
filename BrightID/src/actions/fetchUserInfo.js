@@ -9,15 +9,17 @@ import {
   setVerifications,
 } from './index';
 import { getNotifications } from './notifications';
+import store from '../store';
 
 const fetchUserInfo = () => async (dispatch: dispatch) => {
   try {
+    const { publicKey, secretKey } = store.getState().main;
     const {
       eligibleGroups,
       currentGroups,
       score,
       verifications = [],
-    } = await api.getUserInfo();
+    } = await api.getUserInfo(publicKey, secretKey);
     dispatch(setEligibleGroups(eligibleGroups));
     dispatch(setCurrentGroups(currentGroups));
     dispatch(setUserScore(__DEV__ ? 100 : score));

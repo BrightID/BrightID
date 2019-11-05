@@ -7,7 +7,7 @@ import store from '../store';
 
 let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
-  seedUrl = 'http://test.brightid.org';
+  seedUrl = 'http://104.207.144.107';
 }
 
 class BrightId {
@@ -130,8 +130,7 @@ class BrightId {
     return res.data.data;
   }
 
-  async getUserInfo() {
-    let { publicKey, secretKey } = store.getState().main;
+  async getUserInfo(publicKey: string, secretKey: string) {
     let timestamp = Date.now();
     let message = publicKey + timestamp;
     let sig = uInt8ArrayToB64(
@@ -209,6 +208,41 @@ class BrightId {
     const res = await this.api.get('/ip');
     BrightId.throwOnError(res);
     return res.data.data.ip;
+  }
+
+  async trustedConnections(connections: string) {
+    let { publicKey, secretKey } = store.getState().main;
+    let timestamp = Date.now();
+    let message = publicKey + connections + timestamp;
+    let sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+    let requestParams = {
+      publicKey,
+      connections,
+      sig,
+      timestamp,
+    };
+    const res = await this.api.post(`/trustedConnections`, requestParams);
+    BrightId.throwOnError(res);
+  }
+
+  async recover(oldPublicKey: string, newPublicKey: string) {
+    let { publicKey, secretKey } = store.getState().main;
+    let timestamp = Date.now();
+    let message = publicKey + oldPublicKey + newPublicKey + timestamp;
+    let sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+    let requestParams = {
+      publicKey,
+      oldPublicKey,
+      newPublicKey,
+      sig,
+      timestamp,
+    };
+    const res = await this.api.post(`/recover`, requestParams);
+    BrightId.throwOnError(res);
   }
 }
 
