@@ -28,7 +28,6 @@ type State = {
   completed: number,
   total: number,
   restoreInProgress: boolean,
-
 };
 
 class RestoreScreen extends React.Component<Props, State> {
@@ -58,27 +57,25 @@ class RestoreScreen extends React.Component<Props, State> {
     );
   }
 
+  restore = async (k1, k2) => {
+    const decipher = createDecipher('aes128', this.state.pass);
+    const res = await backupApi.get(k1, k2);
+    this.setState({
+      completed: this.state.completed + 1
+    });
+    return decipher.update(res.data, 'base64', 'utf8') + decipher.final('utf8');
+  }
+
   startRestore = async () => {
     try {
-      const { dispatch } = this.props;
-      const { pass } = this.state;
       const { oldPublicKey, publicKey, secretKey } = this.props.navigation.state.params;
-      this.setState({
-        restoreInProgress: true,
-      });
-      let decipher, res, decrypted;
-      res = await backupApi.get(oldPublicKey, 'data');
-      decipher = createDecipher('aes128', pass);
-      decrypted = decipher.update(res.data, 'base64', 'utf8') + decipher.final('utf8');
+      this.setState({ restoreInProgress: true });
+      let decrypted = await this.restore(oldPublicKey, 'data');
       const { userData, connections } = JSON.parse(decrypted);
-      this.setState({
-        total: connections.length + 1
-      });
+      this.setState({ total: connections.length + 2 });
       
       for (const connectUserData of connections) {
-        decipher = createDecipher('aes128', pass);
-        res = await backupApi.get(oldPublicKey, connectUserData.publicKey);
-        decrypted = decipher.update(res.data, 'base64', 'utf8') + decipher.final('utf8');
+        decrypted = await this.restore(oldPublicKey, connectUserData.publicKey);
         const filename = await saveImage({
           imageName: connectUserData.publicKey,
           base64Image: decrypted,
@@ -86,29 +83,21 @@ class RestoreScreen extends React.Component<Props, State> {
         connectUserData.photo = { filename };
         // add connection inside of async storage
         await saveConnection(connectUserData);
-        this.setState({
-          completed: this.state.completed + 1
-        });
       }
       emitter.emit('refreshConnections', {});
 
       userData.publicKey = publicKey;
       userData.secretKey = secretKey;
-      userData.safePubKey = b64ToUrlSafeB64(publicKey);
-      
-      res = await backupApi.get(oldPublicKey, oldPublicKey);
-      decipher = createDecipher('aes128', pass);
-      decrypted = decipher.update(res.data, 'base64', 'utf8') + decipher.final('utf8');
+      userData.safePubKey = b64ToUrlSafeB64(publicKey);    
+      decrypted = await this.restore(oldPublicKey, oldPublicKey);
       const filename = await saveImage({
         imageName: userData.safePubKey,
         base64Image: decrypted,
       });
       userData.photo = { filename };
 
-      this.setState({
-        completed: this.state.completed + 1
-      });
-      await dispatch(setUserData(userData));
+      await AsyncStorage.setItem('userData', JSON.stringify(userData));
+      await this.props.dispatch(setUserData(userData));
       this.restoreCompleted();
     } catch (err) {
       console.warn(err.message);
@@ -130,7 +119,7 @@ class RestoreScreen extends React.Component<Props, State> {
         <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
       </View>
     );
-// , {oldPublicKey: res.oldKeys[res.oldKeys.length - 1]
+
   render() {
     const { pass } = this.state;
 
@@ -160,8 +149,7 @@ class RestoreScreen extends React.Component<Props, State> {
         <View style={styles.buttonContainer}>
           {this.renderButtonOrSpinner()}
         </View>
-        
-        
+
       </KeyboardAvoidingView>
     );
   }

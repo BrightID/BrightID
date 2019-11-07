@@ -10,6 +10,7 @@ export const getNotifications = () => async (dispatch: dispatch) => {
     let notifications = [];
     let backupCompleted = await AsyncStorage.getItem('backupCompleted');
     backupCompleted =  backupCompleted == 'true' ? true : false;
+    backupCompleted = false;
     if (!backupCompleted && store.getState().main.score > 0) {
       notifications.push({'icon': 'ios-star-outline', 'msg': 'Choose trusted connections to backup your BrightID'});
     }

@@ -46,7 +46,7 @@ import { b64ToUrlSafeB64 } from '../utils/encoding';
  */
 
 export const initialState: Main = {
-  score: 0,
+  score: __DEV__ ? 100 : 0,
   name: '',
   photo: { filename: '' },
   groupsCount: 0,

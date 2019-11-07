@@ -60,7 +60,7 @@ class BackupScreen extends React.Component<Props, State> {
   }
 
   backup = async (k1, k2, data) => {
-    let cipher = createCipher('aes128', this.state.pass1);
+    const cipher = createCipher('aes128', this.state.pass1);
     const encrypted = cipher.update(data, 'utf8', 'base64') + cipher.final('base64');
     await backupApi.set(k1, k2, encrypted);
     this.setState({
