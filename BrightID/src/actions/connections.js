@@ -10,12 +10,13 @@ export const getConnections = () => async (dispatch: dispatch) => {
     /**
      * obtain connection keys from async storage
      * currently everything in async storage is a connection except
-     *    "userData"
+     *    'userData', 'backupCompleted', 'recoveryKeys', 'password'
      *    apps (which have keys starting with "App:")
      */
 
     const allKeys = await AsyncStorage.getAllKeys();
-    const connectionKeys = allKeys.filter(val => val !== 'userData' && val !== 'backupCompleted' && val !== 'recoveryKeys' && !val.startsWith('App:'));
+    const varsKeys = ['userData', 'backupCompleted', 'recoveryKeys', 'password']
+    const connectionKeys = allKeys.filter(val => !varsKeys.includes(val) && !val.startsWith('App:'));
     const storageValues = await AsyncStorage.multiGet(connectionKeys);
     const connections = storageValues.map(val => JSON.parse(val[1]));
 
