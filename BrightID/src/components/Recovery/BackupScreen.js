@@ -47,7 +47,7 @@ class BackupScreen extends React.Component<Props, State> {
 
   backupCompleted = async () => {
     const { dispatch, navigation } = this.props;
-    await AsyncStorage.setItem('backupCompleted', 'true');
+    AsyncStorage.setItem('backupCompleted', 'true');
     dispatch(setBackupCompleted(true));
     this.setState({
       backupInProgress: false,  
@@ -76,6 +76,7 @@ class BackupScreen extends React.Component<Props, State> {
         return Alert.alert('Password and confirm password does not match.');
       }
       // TODO: check password strength
+      AsyncStorage.setItem('password', pass1);
       const userData = { publicKey, safePubKey, name, score };
       this.setState({
         backupInProgress: true, 
