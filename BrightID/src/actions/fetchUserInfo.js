@@ -8,7 +8,6 @@ import {
   setUserScore,
   setVerifications,
 } from './index';
-import { getNotifications } from './notifications';
 import store from '../store';
 
 const fetchUserInfo = () => async (dispatch: dispatch) => {
@@ -19,13 +18,13 @@ const fetchUserInfo = () => async (dispatch: dispatch) => {
       currentGroups,
       score,
       verifications = [],
+      connections = [],
     } = await api.getUserInfo(publicKey, secretKey);
     dispatch(setEligibleGroups(eligibleGroups));
     dispatch(setCurrentGroups(currentGroups));
     dispatch(setUserScore(__DEV__ ? 100 : score));
     dispatch(setGroupsCount(currentGroups.length));
     dispatch(setVerifications(verifications));
-    dispatch(getNotifications());
   } catch (err) {
     console.log(err);
   }

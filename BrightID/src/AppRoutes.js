@@ -191,48 +191,6 @@ const NewConnectStack = createStackNavigator(
   },
 );
 
-const RecoveryStack = createStackNavigator(
-  {
-  	TrustedConnections: {
-      screen: TrustedConnectionsScreen,
-    },
-    Backup: {
-      'screen': BackupScreen,
-    },
-    RecoveringConnection: {
-      'screen': RecoveringConnectionScreen,
-    },
-    Restore: {
-      'screen': RestoreScreen,
-    },
-    RecoveryCode: {
-      'screen': RecoveryCodeScreen,
-      navigationOptions: ({ navigation }) => ({
-        headerLeft: (
-          <HeaderButtons
-            left={true}
-            HeaderButtonComponent={MaterialHeaderButton}
-          >
-            <Item
-              title="go back"
-              iconName="arrow-left"
-              onPress={() => {
-                navigation.navigate('SignUp');
-              }}
-            />
-          </HeaderButtons>
-        ),
-      }),
-    },
-  },
-  {
-    initialRouteName: 'TrustedConnections',
-    mode: 'modal',
-    headerLayoutPreset: 'center',
-    defaultNavigationOptions,
-  },
-);
-
 const AppStack = createStackNavigator(
   {
     Home,
@@ -255,16 +213,19 @@ const AppStack = createStackNavigator(
         header: null,
       },
     },
-    Recovery: {
-      screen: RecoveryStack,
-      navigationOptions: {
-        header: null,
-      },
-    },
     Notifications,
     Apps: {
       screen: Apps,
       path: 'link-verification/:baseUrl/:context/:id',
+    },
+    TrustedConnections: {
+      screen: TrustedConnectionsScreen,
+    },
+    Backup: {
+      'screen': BackupScreen,
+    },
+    RecoveringConnection: {
+      'screen': RecoveringConnectionScreen,
     },
   },
   {
@@ -284,6 +245,12 @@ const OnboardingStack = createStackNavigator(
       },
     },
     SignUp,
+    RecoveryCode: {
+      'screen': RecoveryCodeScreen,
+    },
+    Restore: {
+      'screen': RestoreScreen,
+    },
   },
   {
     initialRouteName: 'Onboard',

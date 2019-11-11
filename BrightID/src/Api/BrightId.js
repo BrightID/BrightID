@@ -141,12 +141,6 @@ class BrightId {
     return res.data.data;
   }
 
-  async getUserScore(publicKey: string) {
-    const res = await this.api.get(`/userScore/${publicKey}`);
-    BrightId.throwOnError(res);
-    return res.data.data.score;
-  }
-
   async getContext(context: string) {
     const res = await this.api.get(`/contexts/${context}`);
     BrightId.throwOnError(res);

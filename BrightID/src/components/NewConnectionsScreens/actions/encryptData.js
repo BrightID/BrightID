@@ -14,6 +14,7 @@ export const encryptAndUploadLocalData = () => async (
   const {
     publicKey,
     secretKey,
+    oldKeys,
     photo: { filename },
     name,
     connectQrData: { aesKey },
@@ -43,6 +44,7 @@ export const encryptAndUploadLocalData = () => async (
 
   const dataObj = {
     publicKey,
+    oldKeys,
     photo,
     name,
     score,

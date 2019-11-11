@@ -80,7 +80,6 @@ class ConnectionsScreen extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    this.getConnections();
     emitter.on('refreshConnections', this.getConnections);
     emitter.on('removeConnection', this.removeConnection);
   }

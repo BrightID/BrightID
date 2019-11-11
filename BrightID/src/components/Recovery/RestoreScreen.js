@@ -68,8 +68,10 @@ class RestoreScreen extends React.Component<Props, State> {
 
   startRestore = async () => {
     try {
-      const { oldPublicKey, publicKey, secretKey } = this.props.navigation.state.params;
       this.setState({ restoreInProgress: true });
+
+      const { oldKeys, publicKey, secretKey } = this.props.navigation.state.params;
+      const oldPublicKey = oldKeys[oldKeys.length - 1];
       let decrypted = await this.restore(oldPublicKey, 'data');
       const { userData, connections } = JSON.parse(decrypted);
       this.setState({ total: connections.length + 2 });
@@ -88,7 +90,8 @@ class RestoreScreen extends React.Component<Props, State> {
 
       userData.publicKey = publicKey;
       userData.secretKey = secretKey;
-      userData.safePubKey = b64ToUrlSafeB64(publicKey);    
+      userData.safePubKey = b64ToUrlSafeB64(publicKey);
+      userData.oldKeys = oldKeys;
       decrypted = await this.restore(oldPublicKey, oldPublicKey);
       const filename = await saveImage({
         imageName: userData.safePubKey,

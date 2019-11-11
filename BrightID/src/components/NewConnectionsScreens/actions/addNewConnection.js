@@ -1,6 +1,7 @@
 // @flow
 
 import nacl from 'tweetnacl';
+import { AsyncStorage } from 'react-native';
 import emitter from '../../../emitter';
 import { saveImage } from '../../../utils/filesystem';
 import {
@@ -47,6 +48,10 @@ export const addNewConnection = () => async (
     }
     // We store publicKeys as url-safe base-64.
     const connectUserSafePubKey = b64ToUrlSafeB64(connectUserData.publicKey);
+
+    if (connectUserData.oldKeys) {
+      AsyncStorage.multiRemove(connectUserData.oldKeys);
+    }
 
     const filename = await saveImage({
       imageName: connectUserSafePubKey,

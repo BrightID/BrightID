@@ -87,8 +87,11 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
     const checkIntervalId = setInterval(() => {
       api.getUserInfo(publicKey, secretKey).then((res) => {
         clearInterval(checkIntervalId);
-        const oldPublicKey = res.oldKeys[res.oldKeys.length - 1];
-        navigation.navigate('Restore', {oldPublicKey: oldPublicKey, publicKey: publicKey, secretKey: secretKey});
+        navigation.navigate('Restore', {
+          oldKeys: res.oldKeys, 
+          publicKey: publicKey, 
+          secretKey: secretKey
+        });
       });
     }, 3000);
     this.setState({ checkIntervalId });

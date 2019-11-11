@@ -7,6 +7,7 @@ import store from './store';
 import { objToUint8 } from './utils/encoding';
 import { setUserData } from './actions';
 import fetchUserInfo from './actions/fetchUserInfo';
+import { getNotifications } from './actions/notifications';
 
 export default class AppBootstrap extends React.Component<Props> {
   componentDidMount() {
@@ -24,7 +25,9 @@ export default class AppBootstrap extends React.Component<Props> {
         userData.secretKey = objToUint8(userData.secretKey);
         // update redux store
         await store.dispatch(setUserData(userData));
-        store.dispatch(fetchUserInfo());
+        store.dispatch(fetchUserInfo()).then(() => {
+          store.dispatch(getNotifications());
+        });
       }
       // once everything is set up
       this.props.navigation.navigate(userData ? 'App' : 'Onboarding');

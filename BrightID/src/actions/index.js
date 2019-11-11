@@ -172,12 +172,14 @@ export const setUserData = ({
                               publicKey,
                               safePubKey,
                               secretKey,
+                              oldKeys,
                               name,
                               photo,
                             }: {
   publicKey: string,
   safePubKey: string,
   secretKey: Uint8Array,
+  oldKeys: string[],
   name: string,
   photo: { filename: string },
 }) => ({
@@ -185,6 +187,7 @@ export const setUserData = ({
   publicKey,
   safePubKey,
   secretKey,
+  oldKeys,
   name,
   photo,
 });
@@ -224,6 +227,7 @@ export const removeConnectQrData = () => ({
 export const setConnectUserData = (connectUserData: {
   name: string,
   publicKey: string,
+  oldKeys: string[],
   photo: string,
   score: number,
 }) => ({

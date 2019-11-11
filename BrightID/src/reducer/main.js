@@ -64,6 +64,7 @@ export const initialState: Main = {
   publicKey: '',
   safePubKey: '',
   secretKey: new Uint8Array([]),
+  oldKeys: [],
   connectionsSort: '',
   connectQrData: {
     aesKey: '',
@@ -75,6 +76,7 @@ export const initialState: Main = {
   },
   connectUserData: {
     publicKey: '',
+    oldKeys: [],
     photo: '',
     name: '',
     timestamp: 0,
@@ -192,6 +194,7 @@ export const mainReducer = (state: Main = initialState, action: action) => {
         publicKey: action.publicKey,
         safePubKey: b64ToUrlSafeB64(action.publicKey),
         secretKey: action.secretKey,
+        oldKeys: action.oldKeys,
       };
     case REMOVE_USER_DATA:
       return {
@@ -201,10 +204,20 @@ export const mainReducer = (state: Main = initialState, action: action) => {
         publicKey: '',
         safePubKey: '',
         secretKey: null,
+        oldKeys: [],
+        backupCompleted: false,
+        recoveryRequestCode: '',
+        groupsCount: 0,
+        eligibleGroups: [],
+        currentGroups: [],
+        connections: [],
+        verifications: [],
+        apps: [],
+        notifications: [],
+        trustedConnections: []
       };
     case SET_CONNECT_QR_DATA:
       // Compute the websocket channel and download (but not upload) path
-
       action.connectQrData.channel =
         action.connectQrData.uuid +
         (action.connectQrData.user === '1' ? '2' : '1');
@@ -234,6 +247,7 @@ export const mainReducer = (state: Main = initialState, action: action) => {
         ...state,
         connectUserData: {
           publicKey: '',
+          oldKeys: [],
           photo: '',
           name: '',
           timestamp: '',
