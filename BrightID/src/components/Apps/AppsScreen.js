@@ -80,17 +80,20 @@ class AppsScreen extends React.Component<Props> {
     try {
       api.baseUrl = baseUrl;
       const verification = await api.getVerification(context, id);
-      const response = await fetch(`${contextInfo.verificationUrl}/${id}`, {
-        method: 'PUT',
-        body: JSON.stringify(verification),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      if (response.ok) {
-        contextInfo.verified = true;
-      } else {
-        throw new Error(response.statusText);
+      // not all contexts have a verification URL
+      if (contextInfo.verificationUrl) {
+        const response = await fetch(`${contextInfo.verificationUrl}/${id}`, {
+          method: 'PUT',
+          body: JSON.stringify(verification),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.ok) {
+          contextInfo.verified = true;
+        } else {
+          throw new Error(response.statusText);
+        }
       }
     } catch (e) {
       Alert.alert(`App verification failed`, `${e.message}\n${e.stack || ''}`, [
