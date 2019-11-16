@@ -4,7 +4,10 @@ import emitter from '../../../emitter';
 
 // @flow
 
-export const fetchData = (alertErrors = true) => (dispatch: () => null, getState: () => {}) => {
+export const fetchData = (alertErrors = true) => (
+  dispatch: () => null,
+  getState: () => {},
+) => {
   let { ipAddress, channel } = getState().main.connectQrData;
 
   console.log(`fetching data for channel ${channel}`);
@@ -19,8 +22,10 @@ export const fetchData = (alertErrors = true) => (dispatch: () => null, getState
       if (response.ok) {
         return res.json();
       } else {
-        throw new Error(`Profile download returned ${response.status}:`
-          + `${response.statusText} for url: ${url}`);
+        throw new Error(
+          `Profile download returned ${response.status}:` +
+            `${response.statusText} for url: ${url}`,
+        );
       }
     })
     .then((data) => {

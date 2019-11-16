@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { Alert, StyleSheet, TextInput, View } from 'react-native';
 import { connect } from 'react-redux';
-// import Permissions from 'react-native-permissions'
 import { RNCamera } from 'react-native-camera';
 import Spinner from 'react-native-spinkit';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -12,6 +11,14 @@ import { fetchData } from './actions/fetchData';
 import emitter from '../../emitter';
 import { removeConnectQrData } from '../../actions';
 import { setUpWs } from './actions/websocket';
+
+/**
+ * Returns whether the string is a valid QR identifier
+ * @param {*} qrString
+ */
+function validQrString(qrString) {
+  return qrString.length >= 42;
+}
 
 /**
  * Scan code screen of BrightID
@@ -68,11 +75,15 @@ class ScanCodeScreen extends React.Component<Props, State> {
 
   handleBarCodeRead = ({ data }) => {
     const { dispatch } = this.props;
+    if (!validQrString(data)) {
+      return;
+    }
     dispatch(parseQrData(data));
     // If the following `fetchdata()` fails, a "connectFailure" will be emitted,
     // triggering a single retry through a websocket notification.
     dispatch(fetchData());
     this.setState({ scanned: true });
+    if (this.textInput) this.textInput.blur();
   };
 
   subscribeToProfileUpload = () => {
@@ -118,7 +129,6 @@ class ScanCodeScreen extends React.Component<Props, State> {
                   type: 'text-input',
                   data: value.trim(),
                 });
-                if (this.textInput) this.textInput.blur();
               }}
               style={styles.searchField}
               placeholder="Scan a BrightID code to make a connection"
@@ -172,6 +182,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
+    backgroundColor: '#fff',
+    zIndex: 100,
   },
   searchField: {
     fontFamily: 'ApexNew-Book',
