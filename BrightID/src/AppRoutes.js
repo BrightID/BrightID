@@ -12,7 +12,6 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Home from './components/HomeScreen';
-import CheatPage from './components/CheatScreen';
 import ConnectionsScreen from './components/Connections/ConnectionsScreen';
 import SortingConnectionsScreen from './components/Connections/SortingConnectionsScreen';
 import GroupsScreen from './components/GroupsScreens/GroupsScreen';
@@ -194,7 +193,6 @@ const NewConnectStack = createStackNavigator(
 const AppStack = createStackNavigator(
   {
     Home,
-    CheatPage,
     Connections: {
       screen: ConnectionsStack,
       navigationOptions: {
@@ -230,7 +228,6 @@ const AppStack = createStackNavigator(
   },
   {
     initialRouteName: 'Home',
-    // initialRouteName: 'CheatPage',
     headerLayoutPreset: 'center',
     defaultNavigationOptions,
   },

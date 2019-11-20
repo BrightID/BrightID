@@ -21,7 +21,7 @@ import { b64ToUrlSafeB64 } from '../../utils/encoding';
 import emitter from '../../emitter';
 import { saveImage } from '../../utils/filesystem';
 import { saveConnection } from '../../actions/connections';
-import { setUserData } from '../../actions';
+import { setUserData, setBackupCompleted } from '../../actions';
 
 type State = {
   pass: string,
@@ -63,47 +63,63 @@ class RestoreScreen extends React.Component<Props, State> {
     this.setState({
       completed: this.state.completed + 1
     });
-    return decipher.update(res.data, 'base64', 'utf8') + decipher.final('utf8');
+    const decrypted = decipher.update(res.data, 'base64', 'utf8') + decipher.final('utf8');
+    return decrypted
   }
 
   startRestore = async () => {
     try {
       this.setState({ restoreInProgress: true });
 
-      const { oldKeys, publicKey, secretKey } = this.props.navigation.state.params;
-      const oldPublicKey = oldKeys[oldKeys.length - 1];
-      let decrypted = await this.restore(oldPublicKey, 'data');
+      const { id, secretKey, publicKey } = this.props.navigation.state.params;
+      let decrypted = await this.restore(id, 'data');
+      
       const { userData, connections } = JSON.parse(decrypted);
+      
       this.setState({ total: connections.length + 2 });
       
-      for (const connectUserData of connections) {
-        decrypted = await this.restore(oldPublicKey, connectUserData.publicKey);
+      for (const conn of connections) {
+        decrypted = await this.restore(id, conn.id);
         const filename = await saveImage({
-          imageName: connectUserData.publicKey,
+          imageName: conn.id,
           base64Image: decrypted,
         });
-        connectUserData.photo = { filename };
+        conn.photo = { filename };
         // add connection inside of async storage
-        await saveConnection(connectUserData);
+        await saveConnection(conn);
       }
       emitter.emit('refreshConnections', {});
 
+      userData.id = id;
       userData.publicKey = publicKey;
       userData.secretKey = secretKey;
-      userData.safePubKey = b64ToUrlSafeB64(publicKey);
-      userData.oldKeys = oldKeys;
-      decrypted = await this.restore(oldPublicKey, oldPublicKey);
+      decrypted = await this.restore(id, id);
       const filename = await saveImage({
-        imageName: userData.safePubKey,
+        imageName: userData.id,
         base64Image: decrypted,
       });
       userData.photo = { filename };
 
       await AsyncStorage.setItem('userData', JSON.stringify(userData));
+      // user should be able to use old backup and there is no need to backup again
+      await AsyncStorage.setItem('backupCompleted', 'true');
+      await this.props.dispatch(setBackupCompleted(true));
+      // password is required to update backup when user makes new connections
+      await AsyncStorage.setItem('password', JSON.stringify(this.state.pass));
+      
       await this.props.dispatch(setUserData(userData));
       this.restoreCompleted();
+
     } catch (err) {
-      console.warn(err.message);
+      if (err.message == 'unable to decrypt data') {
+        this.setState({ restoreInProgress: false, completed: 0 });
+        Alert.alert(
+          'Error',
+          'Incorrect password!',
+        );
+      } else {
+        console.log(err.message);  
+      }
     }
   };
 
@@ -125,7 +141,6 @@ class RestoreScreen extends React.Component<Props, State> {
 
   render() {
     const { pass } = this.state;
-
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <StatusBar

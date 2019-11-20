@@ -15,6 +15,7 @@ import {
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import { setBackupCompleted } from '../../actions/index';
+import { getNotifications } from '../../actions/notifications';
 import { retrieveImage } from '../../utils/filesystem';
 import { createCipher } from 'react-native-crypto';
 import api from '../../Api/BrightId';
@@ -47,8 +48,9 @@ class BackupScreen extends React.Component<Props, State> {
 
   backupCompleted = async () => {
     const { dispatch, navigation } = this.props;
-    AsyncStorage.setItem('backupCompleted', 'true');
-    dispatch(setBackupCompleted(true));
+    await AsyncStorage.setItem('backupCompleted', 'true');
+    await dispatch(setBackupCompleted(true));
+    dispatch(getNotifications());
     this.setState({
       backupInProgress: false,  
     })
@@ -71,13 +73,13 @@ class BackupScreen extends React.Component<Props, State> {
   startBackup = async () => {
     try {
       const { pass1, pass2 } = this.state;
-      const { score, name, photo, safePubKey, publicKey, connections, trustedConnections } = this.props;
+      const { score, name, photo, id, connections, trustedConnections } = this.props;
       if (pass1 != pass2) {
         return Alert.alert('Password and confirm password does not match.');
       }
       // TODO: check password strength
       AsyncStorage.setItem('password', pass1);
-      const userData = { publicKey, safePubKey, name, score };
+      const userData = { id, name, score };
       this.setState({
         backupInProgress: true, 
         total: connections.length + 2
@@ -85,15 +87,15 @@ class BackupScreen extends React.Component<Props, State> {
       
       let dataStr;
       dataStr = await retrieveImage(photo.filename);
-      await this.backup(safePubKey, safePubKey, dataStr);
+      await this.backup(id, id, dataStr);
       for (const item of connections) {
         dataStr = await retrieveImage(item.photo.filename);
-        await this.backup(safePubKey, item.publicKey, dataStr);
+        await this.backup(id, item.id, dataStr);
       }
       dataStr = JSON.stringify({userData, connections});
-      await this.backup(safePubKey, 'data', dataStr);
+      await this.backup(id, 'data', dataStr);
       
-      await api.trustedConnections(trustedConnections.join(','));
+      await api.setTrusted(trustedConnections);
       this.backupCompleted();
     } catch (err) {
       console.warn(err.message);

@@ -30,9 +30,8 @@ import { toggleNewGroupCoFounder } from './actions';
 class NewGroupCard extends React.PureComponent<Props> {
   handleGroupSelect = () => {
     console.log('pressed');
-    let { toggleCoFounder, publicKey } = this.props;
-    toggleCoFounder(publicKey);
-    // alert(JSON.stringify(Object.keys(this.props)));
+    let { toggleCoFounder, id } = this.props;
+    toggleCoFounder(id);
   };
 
   scoreColor = () => {
@@ -163,7 +162,7 @@ const styles = StyleSheet.create({
 export default connect(
   null,
   (dispatch) => ({
-    toggleCoFounder: (publicKey) =>
-      dispatch(toggleNewGroupCoFounder(publicKey)),
+    toggleCoFounder: (id) =>
+      dispatch(toggleNewGroupCoFounder(id)),
   }),
 )(NewGroupCard);

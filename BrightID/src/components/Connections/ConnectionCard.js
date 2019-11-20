@@ -29,7 +29,7 @@ import { fakeJoinGroups } from '../../actions/fakeGroup';
 class ConnectionCard extends React.PureComponent<Props> {
 
   handleUserOptions = () => {
-    const { name, publicKey, secretKey, dispatch } = this.props;
+    const { name, id, secretKey, dispatch } = this.props;
     console.log(secretKey);
     const buttons = [
       {
@@ -40,7 +40,7 @@ class ConnectionCard extends React.PureComponent<Props> {
       {
         text: 'OK',
         onPress: () => {
-          emitter.emit('removeConnection', publicKey);
+          emitter.emit('removeConnection', id);
         },
       },
     ];
@@ -49,7 +49,7 @@ class ConnectionCard extends React.PureComponent<Props> {
       buttons.push({
         text: 'Join All Groups',
         onPress: () => {
-          dispatch(fakeJoinGroups({ publicKey, secretKey }));
+          dispatch(fakeJoinGroups({ id, secretKey }));
         },
       });
     }

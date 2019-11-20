@@ -21,11 +21,6 @@ type Props = {
 };
 
 export class BottomNav extends React.Component<Props> {
-  handleCheatPageNavigation = () => {
-    if (__DEV__) {
-      this.props.navigation.navigate('CheatPage');
-    }
-  };
   
   render() {
     let notificationsBadge = null;

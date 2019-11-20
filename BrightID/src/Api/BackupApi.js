@@ -29,32 +29,19 @@ class BackupApi {
     throw new Error(response.problem);
   }
 
-  async get(
-    publicKey: string,
-    key: string,
-  ) {
-    let requestParams = {
-      publicKey,
-      key
-    };
+  async get(key1: string, key2: string) {
+    let requestParams = { key1, key2 };
     const res = await this.api.get(`/get`, requestParams);
     BackupApi.throwOnError(res);
     return res;
   }
 
-  async set(
-    publicKey: string,
-    key: string,
-    data: string
-  ) {
-    let requestParams = {
-      publicKey,
-      key,
-      data
-    };
+  async set(key1: string, key2: string, data: string) {
+    let requestParams = { key1, key2, data };
     const res = await this.api.post(`/set`, requestParams);
     BackupApi.throwOnError(res);
   }
+
 }
 
 const backupApi = new BackupApi();

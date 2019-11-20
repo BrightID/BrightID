@@ -65,7 +65,7 @@ class NewGroupScreen extends React.Component<Props, State> {
 
   cardIsSelected = (card) => {
     const { newGroupCoFounders } = this.props;
-    return newGroupCoFounders.includes(card.publicKey);
+    return newGroupCoFounders.includes(card.id);
   };
 
   renderConnection = ({ item }) => (

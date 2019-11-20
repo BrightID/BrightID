@@ -29,7 +29,6 @@ import {
   SET_NOTIFICATIONS,
   SET_TRUSTED_CONNECTIONS,
   SET_BACKUP_COMPLETED,
-  SET_RECOVERY_REQUEST_CODE,
 } from '../actions';
 import { b64ToUrlSafeB64 } from '../utils/encoding';
 
@@ -60,11 +59,9 @@ export const initialState: Main = {
   notifications: [],
   trustedConnections: [],
   backupCompleted: false,
-  recoveryRequestCode: '',
+  id: '',
   publicKey: '',
-  safePubKey: '',
   secretKey: new Uint8Array([]),
-  oldKeys: [],
   connectionsSort: '',
   connectQrData: {
     aesKey: '',
@@ -75,8 +72,7 @@ export const initialState: Main = {
     channel: '',
   },
   connectUserData: {
-    publicKey: '',
-    oldKeys: [],
+    id: '',
     photo: '',
     name: '',
     timestamp: 0,
@@ -142,7 +138,7 @@ export const mainReducer = (state: Main = initialState, action: action) => {
       };
     case JOIN_GROUP:
       action.group.isNew = false;
-      action.group.knownMembers.push(state.safePubKey);
+      action.group.knownMembers.push(state.id);
       return {
         ...state,
         currentGroups: [action.group, ...state.currentGroups],
@@ -156,7 +152,7 @@ export const mainReducer = (state: Main = initialState, action: action) => {
       newElGroups = state.eligibleGroups.slice();
       groupIndex = newElGroups.findIndex((g) => g.id === action.groupId);
       group = newElGroups[groupIndex];
-      newKnownMembers = [...group.knownMembers, state.safePubKey];
+      newKnownMembers = [...group.knownMembers, state.id];
       newElGroups[groupIndex] = { ...group, knownMembers: newKnownMembers };
       return {
         ...state,
@@ -183,7 +179,7 @@ export const mainReducer = (state: Main = initialState, action: action) => {
       return {
         ...state,
         connections: state.connections.filter(
-          (val: connection) => val.publicKey !== action.publicKey,
+          (val: connection) => val.id !== action.id,
         ),
       };
     case UPDATE_USER_DATA:
@@ -191,22 +187,19 @@ export const mainReducer = (state: Main = initialState, action: action) => {
         ...state,
         photo: action.photo,
         name: action.name,
+        id: b64ToUrlSafeB64(action.publicKey),
         publicKey: action.publicKey,
-        safePubKey: b64ToUrlSafeB64(action.publicKey),
         secretKey: action.secretKey,
-        oldKeys: action.oldKeys,
       };
     case REMOVE_USER_DATA:
       return {
         ...state,
         photo: '',
         name: '',
+        id: '',
         publicKey: '',
-        safePubKey: '',
         secretKey: null,
-        oldKeys: [],
         backupCompleted: false,
-        recoveryRequestCode: '',
         groupsCount: 0,
         eligibleGroups: [],
         currentGroups: [],
@@ -246,8 +239,7 @@ export const mainReducer = (state: Main = initialState, action: action) => {
       return {
         ...state,
         connectUserData: {
-          publicKey: '',
-          oldKeys: [],
+          id: '',
           photo: '',
           name: '',
           timestamp: '',
@@ -288,11 +280,6 @@ export const mainReducer = (state: Main = initialState, action: action) => {
       return {
         ...state,
         backupCompleted: action.backupCompleted,
-      };
-    case SET_RECOVERY_REQUEST_CODE:
-      return {
-        ...state,
-        recoveryRequestCode: action.recoveryRequestCode,
       };
     default:
       return state;

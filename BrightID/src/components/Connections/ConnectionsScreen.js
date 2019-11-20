@@ -97,11 +97,11 @@ class ConnectionsScreen extends React.Component<Props, State> {
     });
   };
 
-  removeConnection = async (publicKey) => {
+  removeConnection = async (id) => {
     try {
-      await api.deleteConnection(publicKey);
+      await api.deleteConnection(id);
       // remove connection from async storage
-      await AsyncStorage.removeItem(publicKey);
+      await AsyncStorage.removeItem(id);
       emitter.emit('refreshConnections', {});
     } catch (err) {
       Alert.alert("Couldn't remove connection", err.message);

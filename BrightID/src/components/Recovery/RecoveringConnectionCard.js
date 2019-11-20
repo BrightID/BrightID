@@ -17,17 +17,36 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import emitter from '../../emitter';
 import store from '../../store';
 import api from '../../Api/BrightId';
+import { strToUint8Array, uInt8ArrayToB64 } from '../../utils/encoding';
 
 class ConnectionCard extends React.PureComponent<Props> {
   handleConnectionSelect = async () => {
-    let { score, publicKey, navigation } = this.props;
-    let { recoveryRequestCode } = store.getState().main
-    await api.recover(publicKey, recoveryRequestCode.replace('Recovery_', ''));
-    Alert.alert(
-      'Info',
-      'Your request to help recovering this account submitted successfully!',
-      [{text: 'OK', onPress: () => navigation.navigate('Home')}]
+    let { id, secretKey } = store.getState().main;
+    const qrData = this.props.recoveryRequestCode.replace('Recovery_', '');
+    const { signingKey, timestamp } = JSON.parse(qrData);
+    const message = this.props.id + signingKey + timestamp;
+    const sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
     );
+    const ipAddress = await api.ip();
+    const data = {signer: id, id: this.props.id, sig}
+    fetch(`http://${ipAddress}/profile/upload`, {
+      method: 'POST', // or 'PUT'
+      body: JSON.stringify({ data, uuid: signingKey }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((res) => {
+      if (res.status === 200) {
+        Alert.alert(
+          'Info',
+          'Your request to help recovering this account submitted successfully!',
+          [{text: 'OK', onPress: () => this.props.navigation.navigate('Home')}]
+        );
+      }
+    }).catch((err) => {
+      console.log(err);
+    });
   };
 
   scoreColor = () => {

@@ -18,7 +18,7 @@ export const getMembers = (groupId: string) => async (
   // return a list of connections filtered by the members of this group
 
   return innerJoin(
-    (connection, publicKey) => connection.publicKey === publicKey,
+    (connection, id) => connection.id === id,
     connections,
     members,
   );

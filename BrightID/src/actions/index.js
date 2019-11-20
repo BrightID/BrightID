@@ -31,7 +31,6 @@ export const REMOVE_APP = 'REMOVE_APP';
 export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
 export const SET_TRUSTED_CONNECTIONS = 'SET_TRUSTED_CONNECTIONS';
 export const SET_BACKUP_COMPLETED = 'SET_BACKUP_COMPLETED';
-export const SET_RECOVERY_REQUEST_CODE = 'SET_RECOVERY_REQUEST_CODE';
 /**
  * redux action creator that updates user `score`
  *
@@ -68,7 +67,7 @@ export const setSearchParam = (searchParam: string) => ({
 
 /**
  * redux action creator for set co-founders of new group
- * @param coFounders: an array contain two publicKeys of co-founders of new group.
+ * @param coFounders: an array contain two ids of co-founders of new group.
  */
 export const setNewGroupCoFounders = (newGroupCoFounders: string[]) => ({
   type: SET_NEW_GROUP_CO_FOUNDERS,
@@ -154,12 +153,12 @@ export const setConnectionsSort = (connectionsSort: string) => ({
 /**
  * redux action creator for removing a connection
  * @param type REMOVE_CONNECTION
- * @param connection removes a connection object from the array of connections and removes public key from connection keys
+ * @param connection removes a connection object from the array of connections and removes id from connection ids
  */
 
-export const removeConnection = (publicKey: string) => ({
+export const removeConnection = (id: string) => ({
   type: REMOVE_CONNECTION,
-  publicKey,
+  id,
 });
 
 /**
@@ -169,25 +168,22 @@ export const removeConnection = (publicKey: string) => ({
  */
 
 export const setUserData = ({
+                              id,
                               publicKey,
-                              safePubKey,
                               secretKey,
-                              oldKeys,
                               name,
                               photo,
                             }: {
+  id: string,
   publicKey: string,
-  safePubKey: string,
   secretKey: Uint8Array,
-  oldKeys: string[],
   name: string,
   photo: { filename: string },
 }) => ({
   type: UPDATE_USER_DATA,
+  id,
   publicKey,
-  safePubKey,
   secretKey,
-  oldKeys,
   name,
   photo,
 });
@@ -226,8 +222,7 @@ export const removeConnectQrData = () => ({
 
 export const setConnectUserData = (connectUserData: {
   name: string,
-  publicKey: string,
-  oldKeys: string[],
+  id: string,
   photo: string,
   score: number,
 }) => ({
@@ -267,9 +262,4 @@ export const setTrustedConnections = (trustedConnections: string[]) => ({
 export const setBackupCompleted = (backupCompleted: boolean) => ({
   type: SET_BACKUP_COMPLETED,
   backupCompleted,
-});
-
-export const setRecoveryRequestCode = (recoveryRequestCode: string) => ({
-  type: SET_RECOVERY_REQUEST_CODE,
-  recoveryRequestCode,
 });

@@ -26,12 +26,11 @@ export const addNewConnection = () => async (
   try {
     const {
       connectUserData,
-      publicKey,
+      id,
       secretKey,
       backupCompleted,
       name,
       score,
-      safePubKey,
       connections
     } = getState().main;
     let connectionDate = Date.now();
@@ -41,14 +40,14 @@ export const addNewConnection = () => async (
       // make an API call to create the connection.
 
       const message =
-        connectUserData.publicKey + publicKey + connectUserData.timestamp;
+        connectUserData.id + id + connectUserData.timestamp;
       const signedMessage = uInt8ArrayToB64(
         nacl.sign.detached(strToUint8Array(message), secretKey),
       );
       await api.createConnection(
-        connectUserData.publicKey,
+        connectUserData.id,
         connectUserData.signedMessage,
-        publicKey,
+        id,
         signedMessage,
         connectUserData.timestamp,
       );
@@ -58,20 +57,14 @@ export const addNewConnection = () => async (
 
       dispatch(encryptAndUploadLocalData());
     }
-    // We store publicKeys as url-safe base-64.
-    const connectUserSafePubKey = b64ToUrlSafeB64(connectUserData.publicKey);
-
-    if (connectUserData.oldKeys) {
-      AsyncStorage.multiRemove(connectUserData.oldKeys);
-    }
 
     const filename = await saveImage({
-      imageName: connectUserSafePubKey,
+      imageName: connectUserData.id,
       base64Image: connectUserData.photo,
     });
 
     const connectionData = {
-      publicKey: connectUserSafePubKey,
+      id: connectUserData.id,
       name: connectUserData.name,
       score: connectUserData.score,
       secretKey: connectUserData.secretKey,
@@ -86,16 +79,15 @@ export const addNewConnection = () => async (
       const password = await AsyncStorage.getItem('password');
       let cipher = createCipher('aes128', password);
       let encrypted = cipher.update(connectUserData.photo, 'utf8', 'base64') + cipher.final('base64');
-      await backupApi.set(safePubKey, connectUserSafePubKey, encrypted);
-      const userData = { publicKey, safePubKey, name, score };
+      await backupApi.set(id, connectUserData.id, encrypted);
+      const userData = { id, name, score };
       const tmp = [...connections, connectionData];
       const dataStr = JSON.stringify({userData, connections: tmp});
       cipher = createCipher('aes128', password);
       encrypted = cipher.update(dataStr, 'utf8', 'base64') + cipher.final('base64');
-      await backupApi.set(safePubKey, 'data', encrypted);
+      await backupApi.set(id, 'data', encrypted);
       console.log('new connection backup completed!');
     }
-    
 
     // add connection inside of async storage
     await saveConnection(connectionData);

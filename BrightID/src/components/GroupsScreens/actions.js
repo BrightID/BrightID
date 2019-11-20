@@ -8,16 +8,16 @@ import {
 } from '../../actions/index';
 import api from '../../Api/BrightId';
 
-export const toggleNewGroupCoFounder = (publicKey: string) => (
+export const toggleNewGroupCoFounder = (id: string) => (
   dispatch: dispatch,
   getState: getState,
 ) => {
   let coFounders = [...getState().main.newGroupCoFounders];
-  const index = coFounders.indexOf(publicKey);
+  const index = coFounders.indexOf(id);
   if (index >= 0) {
     coFounders.splice(index, 1);
   } else if (coFounders.length < 2) {
-    coFounders.push(publicKey);
+    coFounders.push(id);
   }
   dispatch(setNewGroupCoFounders(coFounders));
 };
@@ -56,7 +56,6 @@ export const join = (group: group) => async (dispatch: dispatch) => {
 export const deleteNewGroup = (groupId: string) => async (
   dispatch: dispatch,
 ) => {
-  // return alert(JSON.stringify(publicKey, groupId));
   await api.deleteGroup(groupId);
   dispatch(deleteEligibleGroup(groupId));
 };

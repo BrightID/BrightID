@@ -7,7 +7,6 @@ import { NavigationEvents } from 'react-navigation';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
 import { getConnections } from '../../actions/connections';
-import store from '../../store';
 import emitter from '../../emitter';
 import { renderListOrSpinner } from '../Connections/renderConnections';
 
@@ -54,6 +53,7 @@ class RecoveringConnectionScreen extends React.Component<Props, State> {
   renderConnection = ({ item }) => (
     <RecoveringConnectionCard
       {...item}
+      recoveryRequestCode={this.props.navigation.state.params.recoveryRequestCode}
       navigation={this.props.navigation}
       style={styles.recoveringConnectionCard}
     />

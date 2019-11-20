@@ -58,7 +58,7 @@ class TrustedConnectionsScreen extends React.Component<Props, State> {
 
   cardIsSelected = (card) => {
     const { trustedConnections } = this.props;
-    return trustedConnections.includes(card.publicKey);
+    return trustedConnections.includes(card.id);
   };
 
   renderConnection = ({ item }) => (

@@ -19,7 +19,7 @@ export const renderListOrSpinner = (comp) => {
       <FlatList
         style={styles.connectionsContainer}
         data={comp.filterConnections()}
-        keyExtractor={({ publicKey }, index) => publicKey + index}
+        keyExtractor={({ id }, index) => id + index}
         renderItem={comp.renderConnection}
       />
     );

@@ -19,19 +19,19 @@ export const handleBrightIdCreation = ({ name, photo }: {
     // create public / private key pair
     const { publicKey, secretKey } = nacl.sign.keyPair();
     const b64PubKey = uInt8ArrayToB64(publicKey);
-    const safePubKey = b64ToUrlSafeB64(b64PubKey);
+    const id = b64ToUrlSafeB64(b64PubKey);
     await createImageDirectory();
-    const filename = await saveImage({ imageName: safePubKey, base64Image: photo.uri });
+    const filename = await saveImage({ imageName: id, base64Image: photo.uri });
 
     const userData = {
       publicKey: b64PubKey,
-      safePubKey,
+      id,
       secretKey,
       name,
       photo: { filename },
     };
 
-    await api.createUser(b64PubKey);
+    await api.createUser(id, b64PubKey);
 
     await AsyncStorage.setItem('userData', JSON.stringify(userData));
     // // update redux store
@@ -49,7 +49,7 @@ export const handleBrightIdCreation = ({ name, photo }: {
 };
 
 export const fakeUserAvatar = (): Promise<string> => {
-  // save each connection with their public key as the async storage key
+  // save each connection with their id as the async storage key
   return RNFetchBlob.fetch('GET', 'https://loremflickr.com/180/180/all', {})
     .then((res) => {
       if (res.info().status === 200) {

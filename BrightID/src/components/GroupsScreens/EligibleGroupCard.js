@@ -63,8 +63,8 @@ class EligibleGroupCard extends React.Component<Props> {
   };
 
   alreadyIn() {
-    const { group, safePubKey } = this.props;
-    return group.knownMembers.indexOf(safePubKey) >= 0;
+    const { group, id } = this.props;
+    return group.knownMembers.indexOf(id) >= 0;
   }
 
   render() {

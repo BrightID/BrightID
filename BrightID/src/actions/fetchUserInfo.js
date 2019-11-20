@@ -8,18 +8,16 @@ import {
   setUserScore,
   setVerifications,
 } from './index';
-import store from '../store';
 
 const fetchUserInfo = () => async (dispatch: dispatch) => {
   try {
-    const { publicKey, secretKey } = store.getState().main;
     const {
       eligibleGroups,
       currentGroups,
       score,
       verifications = [],
       connections = [],
-    } = await api.getUserInfo(publicKey, secretKey);
+    } = await api.getUserInfo();
     dispatch(setEligibleGroups(eligibleGroups));
     dispatch(setCurrentGroups(currentGroups));
     dispatch(setUserScore(__DEV__ ? 100 : score));

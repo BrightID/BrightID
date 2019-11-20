@@ -10,21 +10,21 @@ import {
 
 export const fakeJoinGroup = ({
   group,
-  publicKey,
+  id,
   secretKey,
 }: {
   group: string,
-  publicKey: string,
+  id: string,
   secretKey: {},
 }) => {
   let timestamp = Date.now();
-  let message = publicKey + group + timestamp;
+  let message = id + group + timestamp;
   let sk = objToUint8(secretKey);
 
   let sig = uInt8ArrayToB64(nacl.sign.detached(strToUint8Array(message), sk));
 
   let requestParams = {
-    publicKey,
+    id,
     group,
     sig,
     timestamp,
@@ -45,15 +45,15 @@ export const fakeJoinGroup = ({
 };
 
 export const fakeJoinGroups = ({
-  publicKey,
+  id,
   secretKey,
 }: {
-  publicKey: string,
+  id: string,
   secretKey: Uint8Array,
 }) => (dispatch: dispatch, getState: getState) => {
   const { eligibleGroups } = getState().main;
 
-  eligibleGroups.map(({ id }) =>
-    fakeJoinGroup({ group: id, publicKey, secretKey }),
+  eligibleGroups.map((group) =>
+    fakeJoinGroup({ group: group.id, id, secretKey }),
   );
 };

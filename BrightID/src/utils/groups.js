@@ -1,13 +1,13 @@
 import store from '../store';
 
 const memberList = (group) => {
-  const { safePubKey, photo, name, connections } = store.getState().main;
+  const { id, photo, name, connections } = store.getState().main;
   const { founders, knownMembers, isNew } = group;
 
   const me = {
     photo,
     name,
-    publicKey: safePubKey,
+    id,
   };
 
   const stranger = {
@@ -21,10 +21,10 @@ const memberList = (group) => {
   // be used. Use "Stranger" if the user doesn't know the other co-founder.
 
   founders.forEach((founder) => {
-    if (founder === safePubKey) {
+    if (founder === id) {
       list.push(me);
     } else {
-      const connection = connections.find((u) => u.publicKey === founder);
+      const connection = connections.find((u) => u.id === founder);
       if (connection) {
         list.push(connection);
       } else if (isNew) {
@@ -40,9 +40,9 @@ const memberList = (group) => {
 
     let m = 0;
     while (list.length < 3 && m < knownMembers.length) {
-      let currentKey = knownMembers[m];
-      if (!founders.includes(currentKey)) {
-        const connection = connections.find((u) => u.publicKey === currentKey);
+      let current = knownMembers[m];
+      if (!founders.includes(current)) {
+        const connection = connections.find((u) => u.id === current);
         if (connection) {
           list.push(connection);
         }
@@ -54,8 +54,8 @@ const memberList = (group) => {
 
     if (
       list.length < 3 &&
-      !founders.includes(safePubKey) &&
-      knownMembers.includes(safePubKey)
+      !founders.includes(id) &&
+      knownMembers.includes(id)
     ) {
       list.push(me);
     }
@@ -71,7 +71,7 @@ export const groupCirclePhotos = (group) => {
     // If a founder isn't in knownMembers, that founder hasn't joined yet and
     // their photo will be faded.
 
-    const faded = group.isNew && !knownMembers.includes(member.publicKey);
+    const faded = group.isNew && !knownMembers.includes(member.id);
 
     return { photo: member.photo, faded };
   });

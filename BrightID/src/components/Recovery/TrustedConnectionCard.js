@@ -21,13 +21,13 @@ import { setTrustedConnections } from '../../actions/index';
 
 class TrustedConnectionCard extends React.PureComponent<Props> {
   handleConnectionSelect = () => {
-    let { toggleConnection, publicKey } = this.props;
+    let id = this.props.id;
     let trustedConnections = [...store.getState().main.trustedConnections];
-    const index = trustedConnections.indexOf(publicKey);
+    const index = trustedConnections.indexOf(id);
     if (index >= 0) {
       trustedConnections.splice(index, 1);
     } else {
-      trustedConnections.push(publicKey);
+      trustedConnections.push(id);
     }
     store.dispatch(setTrustedConnections(trustedConnections));
   };

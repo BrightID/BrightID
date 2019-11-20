@@ -9,7 +9,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { parseQrData } from './actions/parseQrData';
 import { fetchData } from './actions/fetchData';
 import emitter from '../../emitter';
-import { removeConnectQrData, setRecoveryRequestCode } from '../../actions';
+import { removeConnectQrData } from '../../actions';
 import { setUpWs } from './actions/websocket';
 
 /**
@@ -77,8 +77,9 @@ class ScanCodeScreen extends React.Component<Props, State> {
     const { dispatch, navigation } = this.props;
 
     if (data.startsWith('Recovery_')) {
-      dispatch(setRecoveryRequestCode(data));
-      navigation.navigate('RecoveringConnection');
+      navigation.navigate('RecoveringConnection', {
+        recoveryRequestCode: data,
+      });
     } else if (validQrString(data)) {
       dispatch(parseQrData(data));
       // If the following `fetchdata()` fails, a "connectFailure" will be emitted,
