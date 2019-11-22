@@ -61,6 +61,30 @@ class BackupScreen extends React.Component<Props, State> {
     );
   }
 
+  validatePass = (p) => {
+    const anUpperCase = /[A-Z]/;
+    const aNumber = /[0-9]/;
+    const aSpecial = /[!|@|#|$|%|^|&|*|(|)|-|_]/;
+    if(p.length < 8) {
+      return false;
+    }
+    let numUpper = 0;
+    let numNums = 0;
+    let numSpecials = 0;
+    for (let i=0; i<p.length; i++) {
+      if(anUpperCase.test(p[i]))
+        numUpper++;
+      else if(aNumber.test(p[i]))
+        numNums++;
+      else if(aSpecial.test(p[i]))
+        numSpecials++;
+    }
+    if (numUpper < 1 && numNums < 1 && numSpecials < 1){
+      return false;
+    }
+    return true;
+  }
+
   backup = async (k1, k2, data) => {
     const cipher = createCipher('aes128', this.state.pass1);
     const encrypted = cipher.update(data, 'utf8', 'base64') + cipher.final('base64');
@@ -75,9 +99,11 @@ class BackupScreen extends React.Component<Props, State> {
       const { pass1, pass2 } = this.state;
       const { score, name, photo, id, connections, trustedConnections } = this.props;
       if (pass1 != pass2) {
-        return Alert.alert('Password and confirm password does not match.');
+        return Alert.alert('Error', 'Password and confirm password does not match.');
       }
-      // TODO: check password strength
+      if (!this.validatePass(pass1)) {
+        return Alert.alert('Error', 'Your password must be at least 8 characters long, and contain at least one uppercase, digit or special character.');
+      }
       AsyncStorage.setItem('password', pass1);
       const userData = { id, name, score };
       this.setState({
