@@ -187,7 +187,7 @@ export const mainReducer = (state: Main = initialState, action: action) => {
         ...state,
         photo: action.photo,
         name: action.name,
-        id: b64ToUrlSafeB64(action.publicKey),
+        id: action.id,
         publicKey: action.publicKey,
         secretKey: action.secretKey,
       };

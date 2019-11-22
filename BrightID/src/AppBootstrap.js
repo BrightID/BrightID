@@ -24,7 +24,7 @@ export default class AppBootstrap extends React.Component<Props> {
 
     // update connections data
     const allKeys = await AsyncStorage.getAllKeys();
-    const varsKeys = ['userData', 'backupCompleted', 'recoveryKeys', 'password'];
+    const varsKeys = ['userData', 'backupCompleted', 'recoveryData', 'password'];
     const connectionKeys = allKeys.filter(val => !varsKeys.includes(val) && !val.startsWith('App:'));
     const storageValues = await AsyncStorage.multiGet(connectionKeys);
     const connections = storageValues.map(val => JSON.parse(val[1]));

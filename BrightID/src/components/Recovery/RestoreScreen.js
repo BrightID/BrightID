@@ -17,7 +17,7 @@ import { connect } from 'react-redux';
 import { createDecipher } from 'react-native-crypto';
 import api from '../../Api/BrightId';
 import backupApi from '../../Api/BackupApi';
-import { b64ToUrlSafeB64 } from '../../utils/encoding';
+import { b64ToUrlSafeB64, b64ToUint8Array } from '../../utils/encoding';
 import emitter from '../../emitter';
 import { saveImage } from '../../utils/filesystem';
 import { saveConnection } from '../../actions/connections';
@@ -92,7 +92,7 @@ class RestoreScreen extends React.Component<Props, State> {
 
       userData.id = id;
       userData.publicKey = publicKey;
-      userData.secretKey = secretKey;
+      userData.secretKey = b64ToUint8Array(secretKey);
       decrypted = await this.restore(id, id);
       const filename = await saveImage({
         imageName: userData.id,
@@ -105,7 +105,7 @@ class RestoreScreen extends React.Component<Props, State> {
       await AsyncStorage.setItem('backupCompleted', 'true');
       await this.props.dispatch(setBackupCompleted(true));
       // password is required to update backup when user makes new connections
-      await AsyncStorage.setItem('password', JSON.stringify(this.state.pass));
+      await AsyncStorage.setItem('password', this.state.pass);
       
       await this.props.dispatch(setUserData(userData));
       this.restoreCompleted();

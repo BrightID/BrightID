@@ -8,7 +8,8 @@ import {
   View,
   TouchableOpacity,
   Clipboard,
-  AsyncStorage
+  AsyncStorage,
+  Alert
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
@@ -21,7 +22,7 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import emitter from '../../emitter';
 import store from '../../store';
 import nacl from 'tweetnacl';
-import { uInt8ArrayToB64 } from '../../utils/encoding';
+import { uInt8ArrayToB64, b64ToUrlSafeB64 } from '../../utils/encoding';
 import api from '../../Api/BrightId';
 
 /**
@@ -62,11 +63,11 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
 
   async componentDidMount() {
     const recoveryData = await AsyncStorage.getItem('recoveryData');
-    if (recoveryData !== null) {
+    if (recoveryData) {
       var { publicKey, secretKey, timestamp, sigs } = JSON.parse(recoveryData);
       this.sigs = sigs;
     } else {
-      const timestamp = Date.now();
+      var timestamp = Date.now();
       var { publicKey, secretKey } = nacl.sign.keyPair();
       publicKey = uInt8ArrayToB64(publicKey);
       secretKey = uInt8ArrayToB64(secretKey);
@@ -75,7 +76,7 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
         JSON.stringify({ publicKey, secretKey, timestamp, sigs: {} })
       );
     }
-    const qrStr = "Recovery_" + JSON.stringify({ publicKey, timestamp });
+    const qrStr = "Recovery_" + JSON.stringify({ signingKey: publicKey, timestamp });
     qrcode.toString(qrStr, this.handleQrString);
     this.waitForSigs(publicKey);
   }
@@ -92,35 +93,36 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
     });
     try {
       await api.setSigningKey(recoveryData.id, recoveryData.publicKey, sigs, recoveryData.timestamp);
-      navigation.navigate('Restore', recoveryData);
+      this.props.navigation.navigate('Restore', recoveryData);
     } catch (e) {
       Alert.alert('Error', e.message);
     }
   };
 
   waitForSigs = async (publicKey) => {
-    const { navigation } = this.props;
     const ipAddress = await api.ip();
     let recoveryData = await AsyncStorage.getItem('recoveryData');
     recoveryData = JSON.parse(recoveryData);
     this.checkIntervalId = setInterval(() => {
-      fetch(`http://${ipAddress}/profile/download/${publicKey}`).then((res) => {
-        if (res.status === 200 && res.json()) {
-          const data = res.json();
-          if (this.sigs[data.signer] &&
-              this.sigs[data.signer].sig == data.sig &&
-              this.sigs[data.signer].id == data.id) {
-            return;
-          }
-          this.sigs[data.signer] = data;
-          recoveryData.sigs = this.sigs;
-          recoveryData.id = data.id;
-          AsyncStorage.setItem('recoveryData', JSON.stringify(recoveryData));
-          if (Object.keys(this.sigs).length > 1) {
-            this.processSigs();
-          } else {
-            Alert.alert('Info', 'One of your trusted connection signed your request');
-          }
+      fetch(`http://${ipAddress}/profile/download/${b64ToUrlSafeB64(publicKey)}`).then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+      }).then(({ data }) => {
+        if (!data) return;
+        if (this.sigs[data.signer] &&
+            this.sigs[data.signer].sig == data.sig &&
+            this.sigs[data.signer].id == data.id) {
+          return;
+        }
+        this.sigs[data.signer] = data;
+        recoveryData.sigs = this.sigs;
+        recoveryData.id = data.id;
+        AsyncStorage.setItem('recoveryData', JSON.stringify(recoveryData));
+        if (Object.keys(this.sigs).length > 1) {
+          this.processSigs();
+        } else {
+          Alert.alert('Info', 'One of your trusted connections signed your request');
         }
       }).catch((err) => {
         console.log(err);
@@ -140,9 +142,9 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
 
   copyQr = () => {
     const {
-      recoveryData: { publicKey },
+      recoveryData: { publicKey, timestamp },
     } = store.getState().main;
-    Clipboard.setString('Recovery_' + publicKey);
+    Clipboard.setString('Recovery_' + JSON.stringify({ publicKey, timestamp }));
     this.setState({ copied: true });
   };
 

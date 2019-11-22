@@ -17,7 +17,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import emitter from '../../emitter';
 import store from '../../store';
 import api from '../../Api/BrightId';
-import { strToUint8Array, uInt8ArrayToB64 } from '../../utils/encoding';
+import nacl from 'tweetnacl';
+import { b64ToUrlSafeB64, strToUint8Array, uInt8ArrayToB64 } from '../../utils/encoding';
 
 class ConnectionCard extends React.PureComponent<Props> {
   handleConnectionSelect = async () => {
@@ -29,10 +30,10 @@ class ConnectionCard extends React.PureComponent<Props> {
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
     const ipAddress = await api.ip();
-    const data = {signer: id, id: this.props.id, sig}
+    const data = { signer: id, id: this.props.id, sig }
     fetch(`http://${ipAddress}/profile/upload`, {
       method: 'POST', // or 'PUT'
-      body: JSON.stringify({ data, uuid: signingKey }),
+      body: JSON.stringify({ data, uuid: b64ToUrlSafeB64(signingKey) }),
       headers: {
         'Content-Type': 'application/json',
       },
