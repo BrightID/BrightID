@@ -119,7 +119,6 @@ export class HomeScreen extends React.Component<Props> {
   });
 
   render() {
-
     const {
       navigation,
       name,
@@ -129,7 +128,6 @@ export class HomeScreen extends React.Component<Props> {
       connections,
       dispatch,
       verifications,
-      // verifications = ['DollarForEveryone','BrightID','NodeOne'],
     } = this.props;
 
     return (
@@ -140,13 +138,10 @@ export class HomeScreen extends React.Component<Props> {
           }}
         />
         <View style={styles.mainContainer}>
-
           <View style={styles.photoContainer}>
             <Image
               source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
-                  photo.filename
-                }`,
+                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo.filename}`,
               }}
               style={styles.photo}
               resizeMode="cover"
@@ -184,7 +179,9 @@ export class HomeScreen extends React.Component<Props> {
           </View>
 
           <View style={styles.verificationsContainer}>
-            {verifications.map(name => <VerificationSticker name={name} key={name} />)}
+            {verifications.map((name) => (
+              <VerificationSticker name={name} key={name} />
+            ))}
           </View>
 
           <View style={styles.connectContainer}>
@@ -261,8 +258,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: '100%',
   },
-  verificationSticker: {
-  },
+  verificationSticker: {},
   connectContainer: {
     width: '100%',
     alignItems: 'center',
@@ -357,4 +353,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(state => state.main)(HomeScreen);
+export default connect((state) => state.main)(HomeScreen);

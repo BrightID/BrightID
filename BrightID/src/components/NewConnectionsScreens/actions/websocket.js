@@ -31,7 +31,7 @@ export const setUpWs = () => (
     });
 
     return socket;
-  } catch (err){
+  } catch (err) {
     Alert.alert(err.message || 'Error', err.stack);
   }
 };
