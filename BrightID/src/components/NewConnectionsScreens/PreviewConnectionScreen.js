@@ -141,4 +141,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state: state) => state.main)(PreviewConnectionScreen);
+export default connect(state => state)(PreviewConnectionScreen);

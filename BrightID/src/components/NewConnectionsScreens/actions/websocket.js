@@ -5,19 +5,11 @@ import { Alert } from "react-native";
 import { fetchData } from './fetchData';
 
 export const setUpWs = () => (
-  dispatch: (() => null) => null,
-  getState: () => {
-    main: {
-      connectQrData: {
-        ipAddress: string,
-        uuid: string,
-        channel: string,
-      },
-    },
-  },
+  dispatch: dispatch,
+  getState: () => State,
 ) => {
   try {
-    const { ipAddress, channel } = getState().main.connectQrData;
+    const { ipAddress, channel } = getState().connectQrData;
 
     const socket = io.connect(`http://${ipAddress}`);
 

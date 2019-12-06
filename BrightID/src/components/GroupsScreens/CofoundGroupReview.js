@@ -28,4 +28,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(CofoundGroupReview);
+export default connect(state => state)(CofoundGroupReview);

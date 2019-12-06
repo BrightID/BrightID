@@ -32,7 +32,7 @@ describe('homescreen', () => {
   test('name is updated', () => {
     // updating redux store should update homescreen component
 
-    const main1 = store.getState().main;
+    const main1 = store.getState();
     const wrapper1 = shallow(<HomeScreen {...main1} />);
 
     expect(wrapper1.find('#name').children()).toHaveLength(0);
@@ -43,7 +43,7 @@ describe('homescreen', () => {
       }),
     );
 
-    const main2 = store.getState().main;
+    const main2 = store.getState();
     const wrapper2 = shallow(<HomeScreen {...main2} />);
 
     expect(wrapper2.find('#name').children()).toHaveLength(1);
@@ -59,7 +59,7 @@ describe('homescreen', () => {
   test('score is updated', () => {
     // updating redux store should update homescreen component
 
-    const main1 = store.getState().main;
+    const main1 = store.getState();
     const wrapper1 = shallow(<HomeScreen {...main1} />);
 
     expect(wrapper1.find('#score').children()).toHaveLength(1);
@@ -73,7 +73,7 @@ describe('homescreen', () => {
 
     store.dispatch(setUserScore(99.8));
 
-    const main2 = store.getState().main;
+    const main2 = store.getState();
     const wrapper2 = shallow(<HomeScreen {...main2} />);
 
     expect(wrapper2.find('#score').children()).toHaveLength(2);
@@ -98,7 +98,7 @@ describe('homescreen', () => {
   test('connectionsCount is updated', () => {
     // updating redux store should update homescreen component
 
-    const main1 = store.getState().main;
+    const main1 = store.getState();
     const wrapper1 = shallow(<HomeScreen {...main1} />);
 
     expect(wrapper1.find('#connectionsCount').children()).toHaveLength(1);
@@ -112,7 +112,7 @@ describe('homescreen', () => {
 
     store.dispatch(setConnections([...Array(8)]));
 
-    const main2 = store.getState().main;
+    const main2 = store.getState();
     const wrapper2 = shallow(<HomeScreen {...main2} />);
 
     expect(wrapper2.find('#connectionsCount').children()).toHaveLength(1);
@@ -128,14 +128,14 @@ describe('homescreen', () => {
   test('groupsCount is updated', () => {
     // updating redux store should update homescreen component
 
-    const main1 = store.getState().main;
+    const main1 = store.getState();
     const wrapper1 = shallow(<HomeScreen {...main1} />);
 
     expect(wrapper1.find('#groupsCount').children()).toHaveLength(0);
 
     store.dispatch(setGroupsCount(10));
 
-    const main2 = store.getState().main;
+    const main2 = store.getState();
     const wrapper2 = shallow(<HomeScreen {...main2} />);
 
     expect(wrapper2.find('#groupsCount').children()).toHaveLength(1);

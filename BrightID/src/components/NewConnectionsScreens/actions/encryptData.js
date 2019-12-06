@@ -19,7 +19,7 @@ export const encryptAndUploadLocalData = () => async (
     connectQrData: { aesKey },
     score,
     connectUserData,
-  } = getState().main;
+  } = getState();
 
   // retrieve photo
   const photo = await retrieveImage(filename);

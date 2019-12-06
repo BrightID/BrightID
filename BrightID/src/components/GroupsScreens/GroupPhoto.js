@@ -95,4 +95,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(GroupPhoto);
+export default connect(state => state)(GroupPhoto);

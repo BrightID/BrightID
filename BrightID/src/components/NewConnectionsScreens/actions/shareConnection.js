@@ -7,7 +7,7 @@ export const shareConnection = async () => {
   try {
     const {
       connectQrData: { qrString },
-    } = store.getState().main;
+    } = store.getState();
     const result = await Share.share({
       message: qrString,
     });

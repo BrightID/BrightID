@@ -14,7 +14,7 @@ export const sortByNameAscending = () => (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  const { connections } = getState().main;
+  const { connections } = getState();
   let list = connections.slice();
   list.sort((a, b) => b.name.localeCompare(a.name));
   dispatch(setConnections(list));
@@ -25,7 +25,7 @@ export const sortByNameDescending = () => (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  const { connections } = getState().main;
+  const { connections } = getState();
   let list = connections.slice();
   list.sort((a, b) => a.name.localeCompare(b.name));
   dispatch(setConnections(list));
@@ -36,7 +36,7 @@ export const sortByScoreAscending = () => (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  const { connections } = getState().main;
+  const { connections } = getState();
   let list = connections.slice();
   list.sort((a, b) => a.score - b.score);
   dispatch(setConnections(list));
@@ -47,7 +47,7 @@ export const sortByScoreDescending = () => (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  const { connections } = getState().main;
+  const { connections } = getState();
   let list = connections.slice();
   list.sort((a, b) => b.score - a.score);
   dispatch(setConnections(list));
@@ -58,7 +58,7 @@ export const sortByDateAddedAscending = () => (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  const { connections } = getState().main;
+  const { connections } = getState();
   let list = connections.slice();
   list.sort((a, b) => a.connectionDate - b.connectionDate);
   dispatch(setConnections(list));
@@ -69,7 +69,7 @@ export const sortByDateAddedDescending = () => (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  const { connections } = getState().main;
+  const { connections } = getState();
   let list = connections.slice();
   list.sort((a, b) => b.connectionDate - a.connectionDate);
   dispatch(setConnections(list));
@@ -77,7 +77,7 @@ export const sortByDateAddedDescending = () => (
 };
 
 export const defaultSort = () => (dispatch: dispatch, getState: getState) => {
-  const { connectionsSort } = getState().main;
+  const { connectionsSort } = getState();
   switch (connectionsSort) {
     case types.byNameAscending:
       dispatch(sortByNameAscending());

@@ -100,4 +100,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(GroupAvatar);
+export default connect(state => state)(GroupAvatar);

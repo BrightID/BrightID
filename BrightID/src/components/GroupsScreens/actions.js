@@ -12,7 +12,7 @@ export const toggleNewGroupCoFounder = (id: string) => (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  let coFounders = [...getState().main.newGroupCoFounders];
+  let coFounders = [...getState().newGroupCoFounders];
   const index = coFounders.indexOf(id);
   if (index >= 0) {
     coFounders.splice(index, 1);
@@ -26,7 +26,7 @@ export const createNewGroup = () => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  let { newGroupCoFounders } = getState().main;
+  let { newGroupCoFounders } = getState();
   if (newGroupCoFounders.length < 2) {
     Alert.alert(
       'Cannot create group',

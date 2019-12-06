@@ -28,7 +28,7 @@ export const addNewConnection = () => async (
       name,
       score,
       connections,
-    } = getState().main;
+    } = getState();
     let connectionDate = Date.now();
 
     if (connectUserData.signedMessage) {

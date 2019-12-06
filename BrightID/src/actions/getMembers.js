@@ -10,7 +10,7 @@ export const getMembers = (groupId: string) => async (
 ) => {
   await dispatch(getConnections());
 
-  const { connections } = getState().main;
+  const { connections } = getState();
 
   const members = await api.getMembers(groupId);
   console.log('members', members);

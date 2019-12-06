@@ -11,7 +11,7 @@ export const decryptData = (data: string) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  const { connectQrData } = getState().main;
+  const { connectQrData } = getState();
 
   const { aesKey } = connectQrData;
   const decipher = createDecipher('aes128', aesKey);

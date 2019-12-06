@@ -8,7 +8,7 @@ export const fetchData = (alertErrors = true) => (
   dispatch: () => null,
   getState: () => {},
 ) => {
-  let { ipAddress, channel } = getState().main.connectQrData;
+  let { ipAddress, channel } = getState().connectQrData;
 
   console.log(`fetching data for channel ${channel}`);
 

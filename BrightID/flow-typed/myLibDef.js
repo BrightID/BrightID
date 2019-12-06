@@ -3,7 +3,7 @@
 import { NavigationScreenProp } from 'react-navigation';
 import { Dispatch } from 'redux';
 
-declare type Main = {
+declare type State = {
   score: number,
   name: string,
   photo: {
@@ -51,7 +51,7 @@ declare type Main = {
   },
 };
 
-declare type state = { main: Main };
+declare type state = State;
 
 declare type getState = () => state;
 
@@ -59,7 +59,7 @@ declare type dispatch = Dispatch;
 
 declare type navigation = NavigationScreenProp;
 
-declare type Props = Main & navigation & dispatch;
+declare type Props = State & navigation & dispatch;
 
 declare type connection = {
   publicKey: string,
@@ -105,5 +105,5 @@ declare type Uint8Obj = {
 
 declare type action = {
   type: string,
-  [key: $Keys<Main>]: any,
+  [key: $Keys<State>]: any,
 };

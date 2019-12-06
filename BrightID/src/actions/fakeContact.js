@@ -17,7 +17,7 @@ export const addConnection = (navigation: navigation) => async (
   getState: getState,
 ) => {
   const { publicKey, secretKey } = nacl.sign.keyPair();
-  const { main } = getState();
+  const state = getState();
   const b64PubKey = uInt8ArrayToB64(publicKey);
   const id = b64ToUrlSafeB64(b64PubKey);
   await api.createUser(id, b64PubKey);
@@ -27,7 +27,7 @@ export const addConnection = (navigation: navigation) => async (
   const name = `${firstName} ${lastName}`;
   const score = Math.floor(Math.random() * 99);
   const timestamp = Date.now();
-  const message = id + main.id + timestamp;
+  const message = id + state.id + timestamp;
   const signedMessage = uInt8ArrayToB64(
     nacl.sign.detached(strToUint8Array(message), secretKey),
   );

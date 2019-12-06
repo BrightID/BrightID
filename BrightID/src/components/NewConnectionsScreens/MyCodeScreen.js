@@ -280,4 +280,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state: state) => state.main)(MyCodeScreen);
+export default connect(state => state)(MyCodeScreen);

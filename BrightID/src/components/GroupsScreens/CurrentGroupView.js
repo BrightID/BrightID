@@ -278,4 +278,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(CurrentGroupView);
+export default connect(state => state)(CurrentGroupView);

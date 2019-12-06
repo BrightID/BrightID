@@ -65,7 +65,7 @@ class BrightId {
   }
 
   async deleteConnection(id2: string) {
-    const { id, secretKey } = store.getState().main;
+    const { id, secretKey } = store.getState();
     const timestamp = Date.now();
     const message = id + id2 + timestamp;
     let sig1 = uInt8ArrayToB64(
@@ -92,7 +92,7 @@ class BrightId {
   }
 
   async joinGroup(group: string) {
-    const { id, secretKey } = store.getState().main;
+    const { id, secretKey } = store.getState();
     let timestamp = Date.now();
     let message = id + group + timestamp;
     let sig = uInt8ArrayToB64(
@@ -111,7 +111,7 @@ class BrightId {
   }
 
   async leaveGroup(group: string) {
-    const { id, secretKey } = store.getState().main;
+    const { id, secretKey } = store.getState();
     let timestamp = Date.now();
     let message = id + group + timestamp;
     let sig = uInt8ArrayToB64(
@@ -139,7 +139,7 @@ class BrightId {
   }
 
   async getUserInfo() {
-    let { id, secretKey } = store.getState().main;
+    let { id, secretKey } = store.getState();
     let timestamp = Date.now();
     let message = id + timestamp;
     let sig = uInt8ArrayToB64(
@@ -157,7 +157,7 @@ class BrightId {
   }
 
   async getVerification(context: string, userid: string) {
-    let { id, secretKey } = store.getState().main;
+    let { id, secretKey } = store.getState();
     let timestamp = Date.now();
     let message = `${context},${userid},${timestamp}`;
     let sig = uInt8ArrayToB64(
@@ -175,7 +175,7 @@ class BrightId {
   }
 
   async createGroup(id2: string, id3: string) {
-    const { id, secretKey } = store.getState().main;
+    const { id, secretKey } = store.getState();
     const timestamp = Date.now();
     const message = id + id2 + id3 + timestamp;
 
@@ -196,7 +196,7 @@ class BrightId {
   }
 
   async deleteGroup(group: string) {
-    let { id, secretKey } = store.getState().main;
+    let { id, secretKey } = store.getState();
     let timestamp = Date.now();
     let message = id + group + timestamp;
     let sig = uInt8ArrayToB64(

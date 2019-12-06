@@ -1,7 +1,7 @@
 import store from '../store';
 
 const memberList = (group) => {
-  const { id, photo, name, connections } = store.getState().main;
+  const { id, photo, name, connections } = store.getState();
   const { founders, knownMembers, isNew } = group;
 
   const me = {
