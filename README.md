@@ -1,10 +1,10 @@
 <img height="200px" src="images/brightid%20final-01.svg"/>
 
-[🌐 www.brightid.org](http://www.brightid.org)
+[🌐 www.brightid.org](https://www.brightid.org)
 
 ## A Personal Stamp of Uniqueness
 
-BrightID is an identity network providing proof of unique personhood. A brightID is a socially unique identifier verified through graph analysis.
+BrightID allows people to prove to applications that they only have one account.
 
 BrightIDs have the following characteristics:
 * [No personal data or biometrics are used for verification](https://www.brightid.org/faq).
@@ -13,7 +13,7 @@ BrightIDs have the following characteristics:
 
 ## Decentralized & Nonintrusive
 
-The network consists of volunteers [running nodes](https://github.com/BrightID/BrightID-Node). Nodes host the trust graph used for verification, but there's no personal information stored there.
+The network consists of volunteers [running nodes](https://github.com/BrightID/BrightID-Node). Nodes host the social graph used for verification, but there's no personal information stored there.
 
 ## Mobile App
 
