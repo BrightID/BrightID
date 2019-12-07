@@ -2,7 +2,7 @@
 
 [🌐 www.brightid.org](https://www.brightid.org)
 
-## A Personal Stamp of Uniqueness
+## Social Identity Network
 
 BrightID allows people to prove to applications that they're only using account.
 
@@ -11,7 +11,7 @@ BrightIDs have the following characteristics:
 * Verified by a trusted group of close personal contacts plus a [decentralized graph database](#decentralized--nonintrusive).
 * A lost or compromised ID can be replaced by reconnecting with a few close personal contacts.
 
-## Decentralized & Nonintrusive
+### Decentralized & Nonintrusive
 
 The network consists of volunteers [running nodes](https://github.com/BrightID/BrightID-Node). Nodes host the social graph used for verification, but there's no personal information stored there.
 
