@@ -4,7 +4,7 @@
 
 ## A Personal Stamp of Uniqueness
 
-BrightID allows people to prove to applications that they only have one account.
+BrightID allows people to prove to applications that they're only using account.
 
 BrightIDs have the following characteristics:
 * [No personal data or biometrics are used for verification](https://www.brightid.org/faq).
@@ -31,6 +31,6 @@ ID creation and connectons to people and apps are managed though the [BrightID m
 [Anti-Sybil](https://github.com/BrightID/BrightID-Node/projects/3)
 
 ### Repos
-This repo is for the brightID mobile app.
+This repo is for the BrightID mobile app.
 
-[Other repos](https://github.com/BrightID).
+[Full list of repos](https://github.com/BrightID).
