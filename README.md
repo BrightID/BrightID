@@ -31,6 +31,4 @@ ID creation and connectons to people and apps are managed though the [BrightID m
 [Anti-Sybil](https://github.com/BrightID/BrightID-Node/projects/3)
 
 ### Repos
-This repo is for the BrightID mobile app.
-
-[Full list of repos](https://github.com/BrightID).
+[All repos.](https://github.com/BrightID).
