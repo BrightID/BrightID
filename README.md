@@ -21,7 +21,7 @@ ID creation and connectons to people and apps are managed though the [BrightID m
 
 ## Contribute
 
-[Wiki](https://github.com/BrightID/BrightID/wiki) for dev instructions.
+[Wiki](https://github.com/BrightID/BrightID/wiki) for dev instructions. [Apply to our keybase](https://keybase.io/team/brightid) to start contributing.
 
 ### KanBans
 [Mobile App](https://github.com/BrightID/BrightID/projects/4)
