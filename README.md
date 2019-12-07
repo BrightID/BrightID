@@ -8,7 +8,7 @@ BrightID allows people to prove to applications that they're only using account.
 
 BrightIDs have the following characteristics:
 * [No personal data or biometrics are used for verification](https://www.brightid.org/faq).
-* Verified by a trusted group of close personal contacts plus a [decentralized graph database](#decentralized-and-owner-free).
+* Verified by a trusted group of close personal contacts plus a [decentralized graph database](#decentralized--nonintrusive).
 * A lost or compromised ID can be replaced by reconnecting with a few close personal contacts.
 
 ## Decentralized & Nonintrusive
