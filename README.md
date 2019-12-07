@@ -24,11 +24,7 @@ ID creation and connectons to people and apps are managed though the [BrightID m
 [Wiki](https://github.com/BrightID/BrightID/wiki) for dev instructions. [Apply to our keybase](https://keybase.io/team/brightid) to start contributing.
 
 ### KanBans
-[Mobile App](https://github.com/BrightID/BrightID/projects/4)
-
-[Node](https://github.com/BrightID/BrightID-Node/projects/2)
-
-[Anti-Sybil](https://github.com/BrightID/BrightID-Node/projects/3)
+[Mobile App](https://github.com/BrightID/BrightID/projects/4), [Node](https://github.com/BrightID/BrightID-Node/projects/2), [Anti-Sybil](https://github.com/BrightID/BrightID-Node/projects/3)
 
 ### Repos
 [All repos](https://github.com/BrightID)
