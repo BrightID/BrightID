@@ -175,9 +175,7 @@ class MyCodeScreen extends React.Component<Props, State> {
           <View style={styles.photoContainer}>
             <Image
               source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
-                  photo.filename
-                }`,
+                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo.filename}`,
               }}
               style={styles.photo}
               resizeMode="cover"
@@ -280,4 +278,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(state => state)(MyCodeScreen);
+export default connect((state) => state)(MyCodeScreen);

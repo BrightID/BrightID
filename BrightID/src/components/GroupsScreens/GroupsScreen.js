@@ -54,7 +54,7 @@ class GroupsScreen extends React.Component<Props, State> {
     if (groups.length === 1) groups.push('');
     return take(2, groups).map((group) =>
       group ? (
-        <EligibleGroupCard group={group} />
+        <EligibleGroupCard key={group.id} group={group} />
       ) : (
         <View style={styles.emptyContainer} />
       ),
@@ -266,4 +266,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(state => state)(GroupsScreen);
+export default connect((state) => state)(GroupsScreen);

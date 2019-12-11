@@ -40,4 +40,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(state => state)(CurrentGroupPhoto);
+export default connect((state) => state)(CurrentGroupPhoto);

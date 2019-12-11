@@ -185,4 +185,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(state => state)(withNavigation(EligibleGroupCard));
+export default connect((state) => state)(withNavigation(EligibleGroupCard));

@@ -1,13 +1,10 @@
 // @flow
 
 import io from 'socket.io-client';
-import { Alert } from "react-native";
+import { Alert } from 'react-native';
 import { fetchData } from './fetchData';
 
-export const setUpWs = () => (
-  dispatch: dispatch,
-  getState: () => State,
-) => {
+export const setUpWs = () => (dispatch: dispatch, getState: () => State) => {
   try {
     const { ipAddress, channel } = getState().connectQrData;
 

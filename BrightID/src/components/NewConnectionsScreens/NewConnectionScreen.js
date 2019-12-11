@@ -164,4 +164,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(state => state)(NewConnectionScreen);
+export default connect((state) => state)(NewConnectionScreen);

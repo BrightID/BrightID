@@ -199,4 +199,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(state => state)(ScanCodeScreen);
+export default connect((state) => state)(ScanCodeScreen);

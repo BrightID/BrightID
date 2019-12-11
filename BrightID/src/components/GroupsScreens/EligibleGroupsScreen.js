@@ -199,4 +199,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(state => state)(EligibleGroupsScreen);
+export default connect((state) => state)(EligibleGroupsScreen);
