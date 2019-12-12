@@ -21,11 +21,11 @@ export const bootstrapAndUpgrade = async () => {
     const v1 = await isV1(allKeys);
     if (v0) {
       await bootstrapV0();
-      await getConnections();
-      await getApps();
-      const connectionsVerified = await verifyConnections();
+      await getConnections(allKeys);
+      await getApps(allKeys);
+      const connectionsVerified = await verifyConnections(allKeys);
       const userDataVerified = await verifyUserData();
-      const appsVerified = await verifyApps();
+      const appsVerified = await verifyApps(allKeys);
       if (connectionsVerified && userDataVerified && appsVerified) {
         // delete the database
         await delStorage();
@@ -38,8 +38,6 @@ export const bootstrapAndUpgrade = async () => {
     } else if (v1) {
       await bootstrapV1();
     } else {
-      // delete the database
-      await delStorage();
       // set version 1
       await setVersion('v1');
     }

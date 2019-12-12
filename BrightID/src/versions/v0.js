@@ -25,7 +25,7 @@ export const bootstrapV0 = async (navigation: navigation) => {
   }
 };
 
-export const getConnections = async () => {
+export const getConnections = async (allKeys: string[]) => {
   try {
     /**
      * obtain connection keys from async storage
@@ -34,9 +34,11 @@ export const getConnections = async () => {
      *    apps (which have keys starting with "App:")
      */
 
-    const allKeys = await AsyncStorage.getAllKeys();
     const connectionKeys = allKeys.filter(
-      (val) => val !== 'userData' && !val.startsWith('App:'),
+      (val) =>
+        val !== 'userData' &&
+        !val.startsWith('App:') &&
+        !val.startsWith('store'),
     );
     const storageValues = await AsyncStorage.multiGet(connectionKeys);
     const connections = storageValues.map((val) => JSON.parse(val[1]));
@@ -50,9 +52,8 @@ export const getConnections = async () => {
   }
 };
 
-export const getApps = async () => {
+export const getApps = async (allKeys: string[]) => {
   try {
-    const allKeys = await AsyncStorage.getAllKeys();
     const appKeys = allKeys.filter((key) => key.startsWith('App:'));
     const appValues = await AsyncStorage.multiGet(appKeys);
     // see https://facebook.github.io/react-native/docs/asyncstorage#multiget
@@ -66,7 +67,7 @@ export const getApps = async () => {
   }
 };
 
-export const verifyConnections = async () => {
+export const verifyConnections = async (allKeys: string[]) => {
   try {
     /**
      * obtain connection keys from async storage
@@ -75,9 +76,13 @@ export const verifyConnections = async () => {
      *    apps (which have keys starting with "App:")
      */
 
-    const allKeys = await AsyncStorage.getAllKeys();
     const connectionKeys = allKeys
-      .filter((val) => val !== 'userData' && !val.startsWith('App:'))
+      .filter(
+        (val) =>
+          val !== 'userData' &&
+          !val.startsWith('App:') &&
+          !val.startsWith('store'),
+      )
       .sort();
 
     const reduxConnectionKeys = store
@@ -93,9 +98,8 @@ export const verifyConnections = async () => {
   }
 };
 
-export const verifyApps = async () => {
+export const verifyApps = async (allKeys: string[]) => {
   try {
-    const allKeys = await AsyncStorage.getAllKeys();
     const appKeys = allKeys.filter((key) => key.startsWith('App:'));
     const appValues = await AsyncStorage.multiGet(appKeys);
     // see https://facebook.github.io/react-native/docs/asyncstorage#multiget
