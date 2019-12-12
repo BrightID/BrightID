@@ -1,15 +1,13 @@
 // @flow
 
 import nacl from 'tweetnacl';
-import { AsyncStorage } from 'react-native';
 import { createCipher } from 'react-native-crypto';
-import emitter from '../../../emitter';
 import { saveImage } from '../../../utils/filesystem';
 import { strToUint8Array, uInt8ArrayToB64 } from '../../../utils/encoding';
 import { encryptAndUploadLocalData } from './encryptData';
 import api from '../../../Api/BrightId';
-import { saveConnection } from '../../../actions/connections';
 import backupApi from '../../../Api/BackupApi';
+import { addConnection } from '../../../actions';
 
 export const addNewConnection = () => async (
   dispatch: dispatch,
@@ -70,27 +68,24 @@ export const addNewConnection = () => async (
     // first backup the connection because if we save the connection first
     // and then we get an error in saving the backup, user will not solve
     // the issue by making the connection again.
-    if (backupCompleted) {
-      const password = await AsyncStorage.getItem('password');
-      let cipher = createCipher('aes128', password);
-      let encrypted =
-        cipher.update(connectUserData.photo, 'utf8', 'base64') +
-        cipher.final('base64');
-      await backupApi.set(id, connectUserData.id, encrypted);
-      const userData = { id, name, score };
-      const tmp = [...connections, connectionData];
-      const dataStr = JSON.stringify({ userData, connections: tmp });
-      cipher = createCipher('aes128', password);
-      encrypted =
-        cipher.update(dataStr, 'utf8', 'base64') + cipher.final('base64');
-      await backupApi.set(id, 'data', encrypted);
-      console.log('new connection backup completed!');
-    }
+    // if (backupCompleted) {
+    //   const password = await AsyncStorage.getItem('password');
+    //   let cipher = createCipher('aes128', password);
+    //   let encrypted =
+    //     cipher.update(connectUserData.photo, 'utf8', 'base64') +
+    //     cipher.final('base64');
+    //   await backupApi.set(id, connectUserData.id, encrypted);
+    //   const userData = { id, name, score };
+    //   const tmp = [...connections, connectionData];
+    //   const dataStr = JSON.stringify({ userData, connections: tmp });
+    //   cipher = createCipher('aes128', password);
+    //   encrypted =
+    //     cipher.update(dataStr, 'utf8', 'base64') + cipher.final('base64');
+    //   await backupApi.set(id, 'data', encrypted);
+    //   console.log('new connection backup completed!');
+    // }
 
-    // add connection inside of async storage
-    await saveConnection(connectionData);
-
-    emitter.emit('refreshConnections', {});
+    dispatch(addConnection(connectionData));
   } catch (err) {
     console.log(err);
   }

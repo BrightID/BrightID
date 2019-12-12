@@ -1,5 +1,6 @@
 // @flow
 
+import { Alert } from 'react-native';
 import {
   USER_SCORE,
   GROUPS_COUNT,
@@ -26,8 +27,12 @@ import {
   ADD_APP,
   REMOVE_APP,
   SET_APPS,
+  UPDATE_CONNECTION,
+  ADD_CONNECTION,
+  HYDRATE_STATE,
 } from '../actions';
 import { b64ToUrlSafeB64 } from '../utils/encoding';
+import { verifyStore } from './verifyStoreV1';
 
 /**
  * INITIAL STATE
@@ -40,6 +45,9 @@ import { b64ToUrlSafeB64 } from '../utils/encoding';
  * @param searchParam String
  * @param connections Array => Object
  */
+
+// TODO: destructure every layer of this reducer
+// check immutable functions
 
 export const initialState: State = {
   score: 0,
@@ -76,31 +84,39 @@ export const initialState: State = {
 };
 
 export const reducer = (state: State = initialState, action: action) => {
-  let newElGroups;
-  let groupIndex;
-  let group;
-  let newKnownMembers;
   switch (action.type) {
-    case USER_SCORE:
+    case HYDRATE_STATE: {
+      if (verifyStore(action.state)) {
+        return action.state;
+      } else {
+        Alert.alert('Redux Store was not verified...');
+        return state;
+      }
+    }
+    case USER_SCORE: {
       return {
         ...state,
         score: action.score,
       };
-    case GROUPS_COUNT:
+    }
+    case GROUPS_COUNT: {
       return {
         ...state,
         groupsCount: action.groupsCount,
       };
-    case USER_PHOTO:
+    }
+    case USER_PHOTO: {
       return {
         ...state,
         photo: action.photo,
       };
-    case SEARCH_PARAM:
+    }
+    case SEARCH_PARAM: {
       return {
         ...state,
         searchParam: action.searchParam,
       };
+    }
     case SET_NEW_GROUP_CO_FOUNDERS: {
       return {
         ...state,
@@ -113,24 +129,27 @@ export const reducer = (state: State = initialState, action: action) => {
         newGroupCoFounders: [],
       };
     }
-    case SET_ELIGIBLE_GROUPS:
+    case SET_ELIGIBLE_GROUPS: {
       return {
         ...state,
         eligibleGroups: action.eligibleGroups,
       };
-    case DELETE_ELIGIBLE_GROUP:
+    }
+    case DELETE_ELIGIBLE_GROUP: {
       return {
         ...state,
         eligibleGroups: state.eligibleGroups.filter(
           (group) => group.id !== action.groupId,
         ),
       };
-    case SET_CURRENT_GROUPS:
+    }
+    case SET_CURRENT_GROUPS: {
       return {
         ...state,
         currentGroups: action.currentGroups,
       };
-    case JOIN_GROUP:
+    }
+    case JOIN_GROUP: {
       action.group.isNew = false;
       action.group.knownMembers.push(state.safePubKey);
       return {
@@ -140,43 +159,72 @@ export const reducer = (state: State = initialState, action: action) => {
           (group) => group.id !== action.group.id,
         ),
       };
-    case JOIN_GROUP_AS_CO_FOUNDER:
+    }
+    case JOIN_GROUP_AS_CO_FOUNDER: {
       // modify eligibleGroups[groupIndex].knownMembers, creating copies
       // at each of those three levels
-      newElGroups = state.eligibleGroups.slice();
-      groupIndex = newElGroups.findIndex((g) => g.id === action.groupId);
-      group = newElGroups[groupIndex];
-      newKnownMembers = [...group.knownMembers, state.safePubKey];
+      let newElGroups = state.eligibleGroups.slice();
+      let groupIndex = newElGroups.findIndex((g) => g.id === action.groupId);
+      let group = newElGroups[groupIndex];
+      let newKnownMembers = [...group.knownMembers, state.safePubKey];
       newElGroups[groupIndex] = { ...group, knownMembers: newKnownMembers };
       return {
         ...state,
         eligibleGroups: newElGroups,
       };
-    case LEAVE_GROUP:
+    }
+    case LEAVE_GROUP: {
       return {
         ...state,
         currentGroups: state.currentGroups.filter(
           (group) => group.id !== action.groupId,
         ),
       };
-    case UPDATE_CONNECTIONS:
+    }
+    case UPDATE_CONNECTIONS: {
       return {
         ...state,
-        connections: action.connections,
+        connections: action.connections.slice(0),
       };
-    case CONNECTIONS_SORT:
+    }
+    case UPDATE_CONNECTION: {
+      return {
+        ...state,
+        connections: [
+          ...state.connections.slice(0, action.index),
+          action.connection,
+          ...state.connections.slice(action.index + 1),
+        ],
+      };
+    }
+    case ADD_CONNECTION: {
+      return {
+        ...state,
+        connections: [...state.connections.slice(0), action.connection],
+      };
+    }
+    case CONNECTIONS_SORT: {
       return {
         ...state,
         connectionsSort: action.connectionsSort,
       };
-    case REMOVE_CONNECTION:
+    }
+    case REMOVE_CONNECTION: {
+      let index = state.connections.findIndex(
+        (val: connection) => val.publicKey === action.publicKey,
+      );
       return {
         ...state,
-        connections: state.connections.filter(
-          (val: connection) => val.publicKey !== action.publicKey,
-        ),
+        connections:
+          index !== -1
+            ? [
+                ...state.connections.slice(0, index),
+                ...state.connections.slice(index + 1),
+              ]
+            : state.connections,
       };
-    case UPDATE_USER_DATA:
+    }
+    case UPDATE_USER_DATA: {
       return {
         ...state,
         photo: action.photo,
@@ -185,7 +233,8 @@ export const reducer = (state: State = initialState, action: action) => {
         safePubKey: b64ToUrlSafeB64(action.publicKey),
         secretKey: action.secretKey,
       };
-    case REMOVE_USER_DATA:
+    }
+    case REMOVE_USER_DATA: {
       return {
         ...state,
         photo: '',
@@ -194,7 +243,8 @@ export const reducer = (state: State = initialState, action: action) => {
         safePubKey: '',
         secretKey: null,
       };
-    case SET_CONNECT_QR_DATA:
+    }
+    case SET_CONNECT_QR_DATA: {
       // Compute the websocket channel and download (but not upload) path
 
       action.connectQrData.channel =
@@ -204,7 +254,8 @@ export const reducer = (state: State = initialState, action: action) => {
         ...state,
         connectQrData: action.connectQrData,
       };
-    case REMOVE_CONNECT_QR_DATA:
+    }
+    case REMOVE_CONNECT_QR_DATA: {
       return {
         ...state,
         connectQrData: {
@@ -216,12 +267,14 @@ export const reducer = (state: State = initialState, action: action) => {
           channel: '',
         },
       };
-    case SET_CONNECT_USER_DATA:
+    }
+    case SET_CONNECT_USER_DATA: {
       return {
         ...state,
         connectUserData: action.connectUserData,
       };
-    case REMOVE_CONNECT_USER_DATA:
+    }
+    case REMOVE_CONNECT_USER_DATA: {
       return {
         ...state,
         connectUserData: {
@@ -232,28 +285,34 @@ export const reducer = (state: State = initialState, action: action) => {
           signedMessage: '',
         },
       };
-    case SET_VERIFICATIONS:
+    }
+    case SET_VERIFICATIONS: {
       return {
         ...state,
         verifications: action.verifications,
       };
-    case SET_APPS:
+    }
+    case SET_APPS: {
       return {
         ...state,
         apps: action.apps,
       };
-    case ADD_APP:
+    }
+    case ADD_APP: {
       return {
         ...state,
         apps: [...state.apps, action.app],
       };
-    case REMOVE_APP:
+    }
+    case REMOVE_APP: {
       return {
         ...state,
         apps: state.apps.filter((app) => app.name !== action.name),
       };
-    default:
+    }
+    default: {
       return state;
+    }
   }
 };
 

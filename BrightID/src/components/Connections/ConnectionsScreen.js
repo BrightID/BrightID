@@ -1,30 +1,25 @@
 // @flow
 
 import * as React from 'react';
-import { AsyncStorage, StyleSheet, View, Alert } from 'react-native';
+import { StyleSheet, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import {
   HeaderButtons,
   HeaderButton,
   Item,
 } from 'react-navigation-header-buttons';
-// import {
-//   Menu,
-//   MenuOptions,
-//   MenuOption,
-//   MenuTrigger,
-// } from 'react-native-popup-menu';
+
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { NavigationEvents } from 'react-navigation';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
-import { getConnections } from '../../actions/connections';
 import { createNewConnection } from './createNewConnection';
 import emitter from '../../emitter';
 import BottomNav from '../BottomNav';
 import { renderListOrSpinner } from './renderConnections';
 import api from '../../Api/BrightId';
 import FloatingActionButton from '../FloatingActionButton';
+import { removeConnection } from '../../actions';
+import { updateScores } from '../../actions/connections';
 
 /**
  * Connection screen of BrightID
@@ -57,52 +52,24 @@ class ConnectionsScreen extends React.Component<Props, State> {
         />
       </HeaderButtons>
     ),
-    //     headerRight: (
-    //         <Menu>
-    //           <MenuTrigger>
-    //             <Material
-    //                 name="dots-horizontal"
-    //                 size={32}
-    //                 color="#fff"
-    //             />
-    //           </MenuTrigger>
-    //           <MenuOptions>
-    //             <MenuOption onSelect={createNewConnection(navigation)} text='create new connection' />
-    //             <MenuOption onSelect={() => {}} text='refresh connections' />
-    //             <MenuOption onSelect={() => {}} text='clear all connections' />
-    //           </MenuOptions>
-    //         </Menu>
-    //     ),
   });
 
-  state = {
-    loading: true,
-  };
-
   componentDidMount() {
-    emitter.on('refreshConnections', this.getConnections);
+    const { dispatch } = this.props;
+    dispatch(updateScores());
     emitter.on('removeConnection', this.removeConnection);
   }
 
   componentWillUnmount() {
-    emitter.off('refreshConnections', this.getConnections);
     emitter.off('removeConnection', this.removeConnection);
   }
 
-  getConnections = async () => {
-    const { dispatch } = this.props;
-    await dispatch(getConnections());
-    this.setState({
-      loading: false,
-    });
-  };
-
-  removeConnection = async (id) => {
+  removeConnection = async (publicKey) => {
     try {
-      await api.deleteConnection(id);
-      // remove connection from async storage
-      await AsyncStorage.removeItem(id);
-      emitter.emit('refreshConnections', {});
+      const { dispatch } = this.props;
+      await api.deleteConnection(publicKey);
+      // remove connection from redux
+      dispatch(removeConnection(publicKey));
     } catch (err) {
       Alert.alert("Couldn't remove connection", err.message);
     }
@@ -125,11 +92,6 @@ class ConnectionsScreen extends React.Component<Props, State> {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
-        <NavigationEvents
-          onDidFocus={() => {
-            this.getConnections();
-          }}
-        />
         <View style={{ flex: 1 }}>
           <View style={styles.mainContainer}>
             <SearchConnections navigation={navigation} sortable={true} />

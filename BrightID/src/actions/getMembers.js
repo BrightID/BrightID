@@ -1,15 +1,12 @@
 // @flow
 
 import { innerJoin } from 'ramda';
-import { getConnections } from './connections';
 import api from '../Api/BrightId';
 
 export const getMembers = (groupId: string) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  await dispatch(getConnections());
-
   const { connections } = getState();
 
   const members = await api.getMembers(groupId);

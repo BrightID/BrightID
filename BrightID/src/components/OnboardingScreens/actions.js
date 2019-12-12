@@ -1,6 +1,6 @@
 // @flow
 
-import { Alert, AsyncStorage } from 'react-native';
+import { Alert } from 'react-native';
 import nacl from 'tweetnacl';
 import RNFetchBlob from 'rn-fetch-blob';
 import { setUserData } from '../../actions';
@@ -33,7 +33,6 @@ export const handleBrightIdCreation = ({
 
     await api.createUser(id, b64PubKey);
 
-    await AsyncStorage.setItem('userData', JSON.stringify(userData));
     // // update redux store
     await dispatch(setUserData(userData));
 

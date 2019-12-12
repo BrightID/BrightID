@@ -17,14 +17,12 @@ import {
   Item,
 } from 'react-navigation-header-buttons';
 import RNFS from 'react-native-fs';
-import { NavigationEvents } from 'react-navigation';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import VerificationSticker from './Verifications/VerificationSticker';
 import BottomNav from './BottomNav';
 import store from '../store';
 import { removeUserData } from '../actions';
-import { getConnections } from '../actions/connections';
 
 /**
  * Home screen of BrightID
@@ -126,17 +124,11 @@ export class HomeScreen extends React.Component<Props> {
       groupsCount,
       photo,
       connections,
-      dispatch,
       verifications,
     } = this.props;
 
     return (
       <View style={styles.container}>
-        <NavigationEvents
-          onDidFocus={() => {
-            dispatch(getConnections());
-          }}
-        />
         <View style={styles.mainContainer}>
           <View style={styles.photoContainer}>
             <Image
@@ -353,4 +345,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(state => state)(HomeScreen);
+export default connect((state) => state)(HomeScreen);

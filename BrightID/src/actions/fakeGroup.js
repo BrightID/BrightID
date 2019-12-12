@@ -30,7 +30,7 @@ export const fakeJoinGroup = ({
     timestamp,
   };
   console.log('====================', requestParams);
-  return api
+  return api.api
     .put(`/membership`, requestParams)
     .then((response) => ({
       success: response.status === 204,

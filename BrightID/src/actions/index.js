@@ -33,7 +33,9 @@ export const SET_PASSWORD = 'SET_PASSWORD';
 export const SET_RECOVERY_DATA = 'SET_RECOVERY_DATA';
 export const REMOVE_RECOVERY_DATA = 'REMOVE_RECOVERY_DATA';
 export const SET_HASHED_ID = 'SET_HASHED_ID';
-
+export const UPDATE_CONNECTION = 'UPDATE_CONNECTION';
+export const ADD_CONNECTION = 'ADD_CONNECTION';
+export const HYDRATE_STATE = 'HYDRATE_STATE';
 /**
  * redux action creator that updates user `score`
  *
@@ -140,6 +142,29 @@ export const leaveGroup = (groupId: string) => ({
 export const setConnections = (connections: connection[]) => ({
   type: UPDATE_CONNECTIONS,
   connections,
+});
+
+/**
+ * redux action creator for setting connections array
+ * @param type UPDATE_CONNECTION
+ * @param connection a single connection
+ */
+
+export const updateConnection = (connection: connection, index: number) => ({
+  type: UPDATE_CONNECTION,
+  connection,
+  index,
+});
+
+/**
+ * redux action creator for setting connections array
+ * @param type ADD_CONNECTION
+ * @param connection add a single connection
+ */
+
+export const addConnection = (connection: connection) => ({
+  type: ADD_CONNECTION,
+  connection,
 });
 
 /**
@@ -295,4 +320,9 @@ export const removeRecoveryData = () => ({
 export const setHashedId = (hash: string) => ({
   type: SET_HASHED_ID,
   hash,
+});
+
+export const hydrateState = (state: State) => ({
+  type: HYDRATE_STATE,
+  state,
 });

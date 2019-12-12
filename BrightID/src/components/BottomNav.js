@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
  */
 
 type Props = {
-  navigation: { navigate: () => null },
+  navigation: navigation,
   notifications: Array<NotificationInfo>,
 };
 

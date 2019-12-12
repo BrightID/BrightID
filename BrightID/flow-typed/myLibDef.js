@@ -19,6 +19,7 @@ declare type State = {
   notifications: NotificationInfo[],
   backupCompleted: boolean,
   apps: AppInfo[],
+  verifications: any[],
   publicKey: string,
   id: string,
   password: string,
@@ -105,5 +106,5 @@ declare type Uint8Obj = {
 
 declare type action = {
   type: string,
-  [key: $Keys<State>]: any,
+  [key: string]: any,
 };
