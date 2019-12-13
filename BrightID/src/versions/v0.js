@@ -40,6 +40,7 @@ export const getConnections = async (allKeys: string[]) => {
         !val.startsWith('App:') &&
         !val.startsWith('store'),
     );
+    console.log(connectionKeys);
     const storageValues = await AsyncStorage.multiGet(connectionKeys);
     const connections = storageValues.map((val) => JSON.parse(val[1]));
     // update redux store
