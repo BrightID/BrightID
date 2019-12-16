@@ -28,8 +28,6 @@ export const bootstrapAndUpgrade = async () => {
       const userDataVerified = await verifyUserData();
       const appsVerified = await verifyApps(allKeys);
       if (connectionsVerified && userDataVerified && appsVerified) {
-        // delete the database
-        await delStorage();
         // save the redux store
         await saveStore();
         await setVersion('v1');
@@ -48,19 +46,19 @@ export const bootstrapAndUpgrade = async () => {
   }
 };
 
-const delStorage = async () => {
+const setVersion = async (version: string) => {
   try {
-    const allKeys = await AsyncStorage.getAllKeys();
-
-    await AsyncStorage.multiRemove(allKeys);
+    await AsyncStorage.setItem('version', version);
   } catch (err) {
     throw err;
   }
 };
 
-const setVersion = async (version: string) => {
+const delStorage = async () => {
   try {
-    await AsyncStorage.setItem('version', version);
+    const allKeys = await AsyncStorage.getAllKeys();
+
+    await AsyncStorage.multiRemove(allKeys);
   } catch (err) {
     throw err;
   }

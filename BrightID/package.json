@@ -116,7 +116,10 @@
     },
     "globals": {
       "window": {}
-    }
+    },
+    "setupFiles": [
+      "./jestSetupFile.js"
+    ]
   },
   "react-native": {
     "zlib": "browserify-zlib",

@@ -40,7 +40,6 @@ export const getConnections = async (allKeys: string[]) => {
         !val.startsWith('App:') &&
         !val.startsWith('store'),
     );
-    console.log(connectionKeys);
     const storageValues = await AsyncStorage.multiGet(connectionKeys);
     const connections = storageValues.map((val) => JSON.parse(val[1]));
     // update redux store
@@ -122,7 +121,6 @@ export const verifyUserData = async () => {
     if (userData !== null) {
       userData = JSON.parse(userData);
       let { publicKey, secretKey, name, photo } = store.getState();
-      console.log(store.getState());
 
       return (
         JSON.stringify(userData.publicKey) === JSON.stringify(publicKey) &&
@@ -137,5 +135,5 @@ export const verifyUserData = async () => {
 };
 
 export const isV0 = (allKeys: string[]) => {
-  return allKeys.includes('userData');
+  return !allKeys.includes('version');
 };
