@@ -1,6 +1,7 @@
 // @flow
 
-import { Alert, AsyncStorage } from 'react-native';
+import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 // eslint-disable-next-line import/no-cycle
 import store from './index';
 

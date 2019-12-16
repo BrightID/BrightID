@@ -1,6 +1,6 @@
 // @flow
 
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { hydrateStore } from '../store/hydrateStore';
 
 export const bootstrapV1 = hydrateStore;

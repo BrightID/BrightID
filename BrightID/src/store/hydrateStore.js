@@ -1,6 +1,7 @@
 // @flow
 
-import { Alert, AsyncStorage } from 'react-native';
+import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import store from './index';
 import { objToUint8 } from '../utils/encoding';
 import { hydrateState } from '../actions';
