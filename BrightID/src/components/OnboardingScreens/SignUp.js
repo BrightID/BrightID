@@ -46,7 +46,7 @@ const IoniconsHeaderButton = (passMeFurther) => (
   />
 );
 
-class SignUp extends React.Component<Props, State> {
+export class SignUp extends React.Component<Props, State> {
   static navigationOptions = {
     title: 'BrightID',
     headerBackTitle: 'SignUp',

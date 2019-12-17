@@ -47,7 +47,7 @@ type State = {
 
 const COPIED_TIMEOUT = 500;
 
-class MyCodeScreen extends React.Component<Props, State> {
+export class MyCodeScreen extends React.Component<Props, State> {
   connectionExpired: TimeoutID;
 
   socket: { close: () => null };

@@ -45,7 +45,7 @@ type State = {
   members: string[],
 };
 
-class CurrentGroupView extends Component<Props, State> {
+export class CurrentGroupView extends Component<Props, State> {
   state = {
     loading: true,
     optionsVisible: false,

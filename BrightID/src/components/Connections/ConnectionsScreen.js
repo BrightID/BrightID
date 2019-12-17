@@ -40,7 +40,7 @@ type State = {
   loading: boolean,
 };
 
-class ConnectionsScreen extends React.Component<Props, State> {
+export class ConnectionsScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
     title: 'Connections',
     headerRight: (

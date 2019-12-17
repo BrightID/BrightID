@@ -1,0 +1,364 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing AppsScreen renders as expected 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#fdfdfd",
+      "flex": 1,
+    }
+  }
+>
+  <RCTScrollView
+    disableVirtualization={false}
+    getItem={[Function]}
+    getItemCount={[Function]}
+    horizontal={false}
+    initialNumToRender={10}
+    keyExtractor={[Function]}
+    maxToRenderPerBatch={10}
+    numColumns={1}
+    onContentSizeChange={[Function]}
+    onEndReachedThreshold={2}
+    onLayout={[Function]}
+    onMomentumScrollEnd={[Function]}
+    onScroll={[Function]}
+    onScrollBeginDrag={[Function]}
+    onScrollEndDrag={[Function]}
+    removeClippedSubviews={false}
+    renderItem={[Function]}
+    scrollEventThrottle={50}
+    stickyHeaderIndices={Array []}
+    style={
+      Object {
+        "flex": 1,
+      }
+    }
+    updateCellsBatchingPeriod={50}
+    viewabilityConfigCallbackPairs={Array []}
+    windowSize={21}
+  >
+    <View />
+  </RCTScrollView>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#fff",
+        "borderTopColor": "rgba(0, 0, 0, .3)",
+        "borderTopWidth": 0.5,
+        "flexDirection": "row",
+        "height": 63,
+        "justifyContent": "space-evenly",
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      accessibilityLabel="Home"
+      accessible={true}
+      clickable={true}
+      isTVSelectable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "opacity": 1,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "flex": 1,
+            "flexDirection": "column",
+            "justifyContent": "center",
+          }
+        }
+      >
+        <Text
+          allowFontScaling={false}
+          style={
+            Array [
+              Object {
+                "color": "#222",
+                "fontSize": 32,
+              },
+              undefined,
+              Object {
+                "fontFamily": "simple-line-icons",
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+              },
+              Object {},
+            ]
+          }
+        >
+          
+        </Text>
+        <Text
+          style={
+            Object {
+              "fontFamily": "ApexNew-Book",
+              "fontSize": 12,
+              "marginBottom": 1.5,
+            }
+          }
+        >
+          Home
+        </Text>
+      </View>
+    </View>
+    <View
+      accessibilityLabel="Connections"
+      accessible={true}
+      clickable={true}
+      isTVSelectable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "opacity": 1,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "flex": 1,
+            "flexDirection": "column",
+            "justifyContent": "center",
+          }
+        }
+      >
+        <Text
+          allowFontScaling={false}
+          style={
+            Array [
+              Object {
+                "color": "#222",
+                "fontSize": 32,
+              },
+              undefined,
+              Object {
+                "fontFamily": "simple-line-icons",
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+              },
+              Object {},
+            ]
+          }
+        >
+          
+        </Text>
+        <Text
+          style={
+            Object {
+              "fontFamily": "ApexNew-Book",
+              "fontSize": 12,
+              "marginBottom": 1.5,
+            }
+          }
+        >
+          Connections
+        </Text>
+      </View>
+    </View>
+    <View
+      accessibilityLabel="Groups"
+      accessible={true}
+      clickable={true}
+      isTVSelectable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "opacity": 1,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "flex": 1,
+            "flexDirection": "column",
+            "justifyContent": "center",
+          }
+        }
+      >
+        <Text
+          allowFontScaling={false}
+          style={
+            Array [
+              Object {
+                "color": "#222",
+                "fontSize": 32,
+              },
+              undefined,
+              Object {
+                "fontFamily": "simple-line-icons",
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+              },
+              Object {},
+            ]
+          }
+        >
+          
+        </Text>
+        <Text
+          style={
+            Object {
+              "fontFamily": "ApexNew-Book",
+              "fontSize": 12,
+              "marginBottom": 1.5,
+            }
+          }
+        >
+          Groups
+        </Text>
+      </View>
+    </View>
+    <View
+      accessibilityLabel="Apps"
+      accessible={true}
+      clickable={true}
+      isTVSelectable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "opacity": 1,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "flex": 1,
+            "flexDirection": "column",
+            "justifyContent": "center",
+          }
+        }
+      >
+        <Text
+          allowFontScaling={false}
+          style={
+            Array [
+              Object {
+                "color": "#222",
+                "fontSize": 32,
+              },
+              undefined,
+              Object {
+                "fontFamily": "simple-line-icons",
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+              },
+              Object {},
+            ]
+          }
+        >
+          
+        </Text>
+        <Text
+          style={
+            Object {
+              "fontFamily": "ApexNew-Book",
+              "fontSize": 12,
+              "marginBottom": 1.5,
+            }
+          }
+        >
+          Notifications
+        </Text>
+      </View>
+    </View>
+    <View
+      accessibilityLabel="Apps"
+      accessible={true}
+      clickable={true}
+      isTVSelectable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "opacity": 1,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "flex": 1,
+            "flexDirection": "column",
+            "justifyContent": "center",
+          }
+        }
+      >
+        <Text
+          allowFontScaling={false}
+          style={
+            Array [
+              Object {
+                "color": "#222",
+                "fontSize": 32,
+              },
+              undefined,
+              Object {
+                "fontFamily": "simple-line-icons",
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+              },
+              Object {},
+            ]
+          }
+        >
+          
+        </Text>
+        <Text
+          style={
+            Object {
+              "fontFamily": "ApexNew-Book",
+              "fontSize": 12,
+              "marginBottom": 1.5,
+            }
+          }
+        >
+          Apps
+        </Text>
+      </View>
+    </View>
+  </View>
+</View>
+`;

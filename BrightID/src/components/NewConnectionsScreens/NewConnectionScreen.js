@@ -38,7 +38,7 @@ type State = {
   display: string,
 };
 
-class NewConnectionScreen extends React.Component<Props, State> {
+export class NewConnectionScreen extends React.Component<Props, State> {
   static navigationOptions = () => ({
     title: 'New Connection',
     headerRight: (

@@ -14,7 +14,7 @@ import { addNewConnection } from './actions/addNewConnection';
 
 type State = {};
 
-class PreviewConnectionScreen extends React.Component<Props, State> {
+export class PreviewConnectionScreen extends React.Component<Props, State> {
   static navigationOptions = {
     title: 'New Connection',
     headerRight: <View />,

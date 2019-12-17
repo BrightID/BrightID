@@ -9,7 +9,7 @@ import BottomNav from '../BottomNav';
 import api from '../../Api/BrightId';
 import AppCard from './AppCard';
 
-class AppsScreen extends React.Component<Props> {
+export class AppsScreen extends React.Component<Props> {
   static navigationOptions = () => ({
     title: 'Apps',
     headerRight: <View />,

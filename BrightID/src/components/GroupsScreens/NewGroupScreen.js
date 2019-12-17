@@ -21,7 +21,7 @@ type State = {
   loading: boolean,
 };
 
-class NewGroupScreen extends React.Component<Props, State> {
+export class NewGroupScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
     title: 'New Group',
   });

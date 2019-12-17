@@ -33,7 +33,7 @@ type State = {
   connectionAttempts: number,
 };
 
-class ScanCodeScreen extends React.Component<Props, State> {
+export class ScanCodeScreen extends React.Component<Props, State> {
   textInput: null | TextInput;
 
   camera: null | RNCamera;
