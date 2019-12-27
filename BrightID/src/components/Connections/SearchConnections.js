@@ -13,7 +13,11 @@ import { setSearchParam } from '../../actions';
  * TODO: add search filter in redux actions
  */
 
-class SearchConnections extends React.Component<Props> {
+type LocalProps = {
+  sortable: boolean,
+};
+
+class SearchConnections extends React.Component<Props & LocalProps> {
   componentWillUnmount() {
     // reset search Param
     const { dispatch } = this.props;
@@ -21,13 +25,13 @@ class SearchConnections extends React.Component<Props> {
   }
 
   render() {
+    const { sortable } = this.props;
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.searchIcon}>
           <Octicons size={26} name="search" color="#333" />
         </TouchableOpacity>
         <TextInput
-          // value={this.props.searchParam}
           onChangeText={(value) => this.props.dispatch(setSearchParam(value))}
           style={styles.searchField}
           placeholder="Search Connections"
@@ -36,15 +40,17 @@ class SearchConnections extends React.Component<Props> {
           textContentType="name"
           underlineColorAndroid="transparent"
         />
-        <TouchableOpacity
-          onPress={() => {
-            const { navigation } = this.props;
-            navigation.navigate('SortingConnections');
-          }}
-          style={styles.optionsIcon}
-        >
-          <Ionicon size={30} name="ios-options" color="#333" />
-        </TouchableOpacity>
+        {sortable && (
+          <TouchableOpacity
+            onPress={() => {
+              const { navigation } = this.props;
+              navigation.navigate('SortingConnections');
+            }}
+            style={styles.optionsIcon}
+          >
+            <Ionicon size={30} name="ios-options" color="#333" />
+          </TouchableOpacity>
+        )}
       </View>
     );
   }
@@ -73,8 +79,9 @@ const styles = StyleSheet.create({
   },
   searchField: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 14,
+    fontSize: 16,
     marginTop: 3.1,
+    marginLeft: 23,
     flex: 1,
     fontWeight: 'normal',
     fontStyle: 'normal',

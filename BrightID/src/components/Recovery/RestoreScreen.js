@@ -10,18 +10,12 @@ import {
   View,
   KeyboardAvoidingView,
   Alert,
-  AsyncStorage
+  Platform,
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
-import { createDecipher } from 'react-native-crypto';
-import api from '../../Api/BrightId';
-import backupApi from '../../Api/BackupApi';
-import { b64ToUrlSafeB64, b64ToUint8Array } from '../../utils/encoding';
 import emitter from '../../emitter';
-import { saveImage } from '../../utils/filesystem';
-import { saveConnection } from '../../actions/connections';
-import { setUserData, setBackupCompleted } from '../../actions';
+import { recoverData } from './helpers';
 
 type State = {
   pass: string,
@@ -45,96 +39,79 @@ class RestoreScreen extends React.Component<Props, State> {
     restoreInProgress: false,
   };
 
+  componentDidMount() {
+    const { navigation } = this.props;
+    emitter.on('restoreProgress', this.updateRestoreStatus);
+    emitter.on('restoreTotal', this.updateRestoreTotal);
+    navigation.addListener('willBlur', () => {
+      emitter.off('restoreProgress', this.updateRestoreStatus);
+      emitter.off('restoreTotal', this.updateRestoreTotal);
+    });
+  }
+
+  updateRestoreStatus = (num: number) => {
+    this.setState(({ completed }) => ({
+      completed: completed + num,
+    }));
+  };
+
+  updateRestoreTotal = (num: number) => {
+    this.setState({
+      total: num,
+    });
+  };
+
   restoreCompleted = async () => {
     const { navigation } = this.props;
     this.setState({
       restoreInProgress: false,
     });
-    Alert.alert(
-      'Info',
-      'Your account recovered successfully!',
-      [{text: 'OK', onPress: () => navigation.navigate('Home')}]
-    );
-  }
+    Alert.alert('Info', 'Your account recovered successfully!', [
+      { text: 'OK', onPress: () => navigation.navigate('Home') },
+    ]);
+  };
 
-  restore = async (k1, k2) => {
-    const decipher = createDecipher('aes128', this.state.pass);
-    const res = await backupApi.get(k1, k2);
+  resetState = () => {
     this.setState({
-      completed: this.state.completed + 1
+      restoreInProgress: false,
+      completed: 0,
+      total: 0,
+      pass: '',
     });
-    const decrypted = decipher.update(res.data, 'base64', 'utf8') + decipher.final('utf8');
-    return decrypted
-  }
+  };
 
-  startRestore = async () => {
-    try {
-      this.setState({ restoreInProgress: true });
-
-      const { id, secretKey, publicKey } = this.props.navigation.state.params;
-      let decrypted = await this.restore(id, 'data');
-      
-      const { userData, connections } = JSON.parse(decrypted);
-      
-      this.setState({ total: connections.length + 2 });
-      
-      for (const conn of connections) {
-        decrypted = await this.restore(id, conn.id);
-        const filename = await saveImage({
-          imageName: conn.id,
-          base64Image: decrypted,
-        });
-        conn.photo = { filename };
-        // add connection inside of async storage
-        await saveConnection(conn);
-      }
-      emitter.emit('refreshConnections', {});
-
-      userData.id = id;
-      userData.publicKey = publicKey;
-      userData.secretKey = b64ToUint8Array(secretKey);
-      decrypted = await this.restore(id, id);
-      const filename = await saveImage({
-        imageName: userData.id,
-        base64Image: decrypted,
+  restore = () => {
+    this.setState({ restoreInProgress: true });
+    recoverData(this.state.pass)
+      .then((result) => {
+        if (result) {
+          this.restoreCompleted();
+        } else {
+          this.resetState();
+        }
+      })
+      .catch((err) => {
+        this.resetState();
+        console.warn(err);
       });
-      userData.photo = { filename };
-
-      await AsyncStorage.setItem('userData', JSON.stringify(userData));
-      // user should be able to use old backup and there is no need to backup again
-      await AsyncStorage.setItem('backupCompleted', 'true');
-      await this.props.dispatch(setBackupCompleted(true));
-      // password is required to update backup when user makes new connections
-      await AsyncStorage.setItem('password', this.state.pass);
-      
-      await this.props.dispatch(setUserData(userData));
-      this.restoreCompleted();
-
-    } catch (err) {
-      if (err.message == 'unable to decrypt data') {
-        this.setState({ restoreInProgress: false, completed: 0 });
-        Alert.alert(
-          'Error',
-          'Incorrect password!',
-        );
-      } else {
-        console.log(err.message);  
-      }
-    }
   };
 
   renderButtonOrSpinner = () =>
     !this.state.restoreInProgress ? (
       <TouchableOpacity
         style={styles.startRestoreButton}
-        onPress={this.startRestore}
+        onPress={this.restore}
       >
         <Text style={styles.buttonInnerText}>Start Restore</Text>
       </TouchableOpacity>
     ) : (
       <View style={styles.loader}>
-        <Text style={styles.textInfo}>Downloading data from backup server ...</Text>
-        <Text style={styles.textInfo}>{this.state.completed}/{this.state.total} completed</Text>
+        <Text style={styles.textInfo}>
+          Downloading data from backup server ...
+        </Text>
+        <Text style={styles.textInfo}>
+          {this.state.completed}/{this.state.total} completed
+        </Text>
         <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
       </View>
     );
@@ -149,8 +126,11 @@ class RestoreScreen extends React.Component<Props, State> {
           translucent={false}
         />
         <View style={styles.textInputContainer}>
-          <Text style={styles.textInfo}>Enter a password that you encrypted your backup data with:</Text>
+          <Text style={styles.textInfo}>
+            Enter a password that you encrypted your backup data with:
+          </Text>
           <TextInput
+            // eslint-disable-next-line no-shadow
             onChangeText={(pass) => this.setState({ pass })}
             value={pass}
             placeholder="Password"
@@ -167,7 +147,6 @@ class RestoreScreen extends React.Component<Props, State> {
         <View style={styles.buttonContainer}>
           {this.renderButtonOrSpinner()}
         </View>
-
       </KeyboardAvoidingView>
     );
   }

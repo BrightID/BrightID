@@ -220,10 +220,10 @@ const AppStack = createStackNavigator(
       screen: TrustedConnectionsScreen,
     },
     Backup: {
-      'screen': BackupScreen,
+      screen: BackupScreen,
     },
     RecoveringConnection: {
-      'screen': RecoveringConnectionScreen,
+      screen: RecoveringConnectionScreen,
     },
   },
   {
@@ -243,10 +243,10 @@ const OnboardingStack = createStackNavigator(
     },
     SignUp,
     RecoveryCode: {
-      'screen': RecoveryCodeScreen,
+      screen: RecoveryCodeScreen,
     },
     Restore: {
-      'screen': RestoreScreen,
+      screen: RestoreScreen,
     },
   },
   {

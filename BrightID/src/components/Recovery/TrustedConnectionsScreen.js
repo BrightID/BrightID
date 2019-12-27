@@ -3,11 +3,9 @@
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
-import { NavigationEvents } from 'react-navigation';
 import SearchConnections from '../Connections/SearchConnections';
 import TrustedConnectionCard from './TrustedConnectionCard';
 import { getConnections } from '../../actions/connections';
-import store from '../../store';
 import emitter from '../../emitter';
 import { renderListOrSpinner } from '../Connections/renderConnections';
 
@@ -91,7 +89,8 @@ class TrustedConnectionsScreen extends React.Component<Props, State> {
               Choose three or more trusted connections to back up your BrightID.
             </Text>
             <Text style={styles.infoText}>
-              If your BrightID is lost or stolen, you can reconnect with two trusted connections to recover it.
+              If your BrightID is lost or stolen, you can reconnect with two
+              trusted connections to recover it.
             </Text>
           </View>
           <SearchConnections navigation={navigation} />

@@ -208,7 +208,6 @@ class SignUp extends React.Component<Props, State> {
 
   render() {
     const { imagePicking, name, photo } = this.state;
-    const { navigation } = this.props;
 
     const AddPhotoButton = photo.uri ? (
       <TouchableOpacity
@@ -264,7 +263,7 @@ class SignUp extends React.Component<Props, State> {
             servers
           </Text>
           {this.renderButtonOrSpinner()}
-        </View>        
+        </View>
       </KeyboardAvoidingView>
     );
   }

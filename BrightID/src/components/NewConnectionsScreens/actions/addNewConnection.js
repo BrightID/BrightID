@@ -5,11 +5,7 @@ import { AsyncStorage } from 'react-native';
 import { createCipher } from 'react-native-crypto';
 import emitter from '../../../emitter';
 import { saveImage } from '../../../utils/filesystem';
-import {
-  b64ToUrlSafeB64,
-  strToUint8Array,
-  uInt8ArrayToB64,
-} from '../../../utils/encoding';
+import { strToUint8Array, uInt8ArrayToB64 } from '../../../utils/encoding';
 import { encryptAndUploadLocalData } from './encryptData';
 import api from '../../../Api/BrightId';
 import { saveConnection } from '../../../actions/connections';
@@ -31,7 +27,7 @@ export const addNewConnection = () => async (
       backupCompleted,
       name,
       score,
-      connections
+      connections,
     } = getState().main;
     let connectionDate = Date.now();
 
@@ -39,8 +35,7 @@ export const addNewConnection = () => async (
       // The other user signed a connection request; we have enough info to
       // make an API call to create the connection.
 
-      const message =
-        connectUserData.id + id + connectUserData.timestamp;
+      const message = connectUserData.id + id + connectUserData.timestamp;
       const signedMessage = uInt8ArrayToB64(
         nacl.sign.detached(strToUint8Array(message), secretKey),
       );
@@ -78,13 +73,16 @@ export const addNewConnection = () => async (
     if (backupCompleted) {
       const password = await AsyncStorage.getItem('password');
       let cipher = createCipher('aes128', password);
-      let encrypted = cipher.update(connectUserData.photo, 'utf8', 'base64') + cipher.final('base64');
+      let encrypted =
+        cipher.update(connectUserData.photo, 'utf8', 'base64') +
+        cipher.final('base64');
       await backupApi.set(id, connectUserData.id, encrypted);
       const userData = { id, name, score };
       const tmp = [...connections, connectionData];
-      const dataStr = JSON.stringify({userData, connections: tmp});
+      const dataStr = JSON.stringify({ userData, connections: tmp });
       cipher = createCipher('aes128', password);
-      encrypted = cipher.update(dataStr, 'utf8', 'base64') + cipher.final('base64');
+      encrypted =
+        cipher.update(dataStr, 'utf8', 'base64') + cipher.final('base64');
       await backupApi.set(id, 'data', encrypted);
       console.log('new connection backup completed!');
     }

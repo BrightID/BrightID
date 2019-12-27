@@ -7,7 +7,7 @@ import store from '../store';
 
 let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
-  seedUrl = 'http://104.207.144.107';
+  seedUrl = 'http://test.brightid.org';
 }
 
 class BrightId {
@@ -77,7 +77,11 @@ class BrightId {
       sig1,
       timestamp,
     };
-    const res = await this.api.delete(`/connections`, {}, { data: requestParams });
+    const res = await this.api.delete(
+      `/connections`,
+      {},
+      { data: requestParams },
+    );
     BrightId.throwOnError(res);
   }
 
@@ -120,7 +124,11 @@ class BrightId {
       sig,
       timestamp,
     };
-    const res = await this.api.delete(`/membership`, {}, { data: requestParams });
+    const res = await this.api.delete(
+      `/membership`,
+      {},
+      { data: requestParams },
+    );
     BrightId.throwOnError(res);
   }
 
@@ -155,7 +163,13 @@ class BrightId {
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    const res = await this.api.post('/fetchVerification', { id, context, userid, sig, timestamp });
+    const res = await this.api.post('/fetchVerification', {
+      id,
+      context,
+      userid,
+      sig,
+      timestamp,
+    });
     BrightId.throwOnError(res);
     return res.data.data;
   }
@@ -222,7 +236,12 @@ class BrightId {
     BrightId.throwOnError(res);
   }
 
-  async setSigningKey(id: string, signingKey: string, sigs: object[], timestamp: number) {
+  async setSigningKey(
+    id: string,
+    signingKey: string,
+    sigs: {}[],
+    timestamp: number,
+  ) {
     let requestParams = {
       id,
       signingKey,
@@ -232,7 +251,6 @@ class BrightId {
     const res = await this.api.put(`/signingKey`, requestParams);
     BrightId.throwOnError(res);
   }
-
 }
 
 const brightId = new BrightId();

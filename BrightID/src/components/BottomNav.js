@@ -2,10 +2,7 @@
 
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { NavigationEvents } from 'react-navigation';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import store from '../store';
-import { NotificationInfo } from '../actions/notifications';
 import { connect } from 'react-redux';
 
 /**
@@ -17,21 +14,18 @@ import { connect } from 'react-redux';
 
 type Props = {
   navigation: { navigate: () => null },
-  notifications: Array<NotificationInfo>
+  notifications: Array<NotificationInfo>,
 };
 
 export class BottomNav extends React.Component<Props> {
-  
   render() {
-    let notificationsBadge = null;
-    if (this.props.notifications.length > 0) {
-      notificationsBadge = <Text style={styles.badge}> {this.props.notifications.length} </Text>
-    }
+    const { notifications, navigation } = this.props;
+
     return (
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate('Home');
+            navigation.navigate('Home');
           }}
           accessible={true}
           accessibilityLabel="Home"
@@ -43,7 +37,7 @@ export class BottomNav extends React.Component<Props> {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate('Connections');
+            navigation.navigate('Connections');
           }}
           accessible={true}
           accessibilityLabel="Connections"
@@ -55,7 +49,7 @@ export class BottomNav extends React.Component<Props> {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate('Groups');
+            navigation.navigate('Groups');
           }}
           accessible={true}
           accessibilityLabel="Groups"
@@ -67,20 +61,22 @@ export class BottomNav extends React.Component<Props> {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate('Notifications');
+            navigation.navigate('Notifications');
           }}
           accessible={true}
           accessibilityLabel="Notifications"
         >
           <View style={styles.navIconContainer}>
-            {notificationsBadge}
+            {notifications.length > 0 && (
+              <Text style={styles.badge}> {notifications.length} </Text>
+            )}
             <SimpleLineIcons size={32} name="bell" color="#222" />
             <Text style={styles.navText}>Notifications</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate('Apps');
+            navigation.navigate('Apps');
           }}
           accessible={true}
           accessibilityLabel="Apps"
@@ -117,16 +113,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 1.5,
   },
-  badge:{
-    color:'#fff',
-    position:'absolute',
-    zIndex:10,
-    top:1,
-    right:1,
-    padding:1,
-    backgroundColor:'red',
-    borderRadius:5
-  }
+  badge: {
+    color: '#fff',
+    position: 'absolute',
+    zIndex: 10,
+    top: 1,
+    right: 1,
+    padding: 1,
+    backgroundColor: 'red',
+    borderRadius: 5,
+  },
 });
 
-export default connect(state => state.main)(BottomNav);
+export default connect((state) => state.main)(BottomNav);

@@ -1,8 +1,5 @@
 // @flow
 
-import { AppInfo } from './apps';
-import { NotificationInfo } from './notifications';
-
 export const USER_SCORE = 'USER_SCORE';
 export const GROUPS_COUNT = 'GROUPS_COUNT';
 export const SEARCH_PARAM = 'SEARCH_PARAM';
@@ -29,8 +26,13 @@ export const SET_APPS = 'SET_APPS';
 export const ADD_APP = 'ADD_APP';
 export const REMOVE_APP = 'REMOVE_APP';
 export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
-export const SET_TRUSTED_CONNECTIONS = 'SET_TRUSTED_CONNECTIONS';
+export const ADD_TRUSTED_CONNECTION = 'ADD_TRUSTED_CONNECTION';
+export const REMOVE_TRUSTED_CONNECTION = 'REMOVE_TRUSTED_CONNECTION';
 export const SET_BACKUP_COMPLETED = 'SET_BACKUP_COMPLETED';
+export const SET_PASSWORD = 'SET_PASSWORD';
+export const SET_RECOVERY_DATA = 'SET_RECOVERY_DATA';
+export const REMOVE_RECOVERY_DATA = 'REMOVE_RECOVERY_DATA';
+
 /**
  * redux action creator that updates user `score`
  *
@@ -168,12 +170,12 @@ export const removeConnection = (id: string) => ({
  */
 
 export const setUserData = ({
-                              id,
-                              publicKey,
-                              secretKey,
-                              name,
-                              photo,
-                            }: {
+  id,
+  publicKey,
+  secretKey,
+  name,
+  photo,
+}: {
   id: string,
   publicKey: string,
   secretKey: Uint8Array,
@@ -234,7 +236,7 @@ export const removeConnectUserData = () => ({
   type: REMOVE_CONNECT_USER_DATA,
 });
 
-export const setApps = (appInfos: [AppInfo]) => ({
+export const setApps = (appInfos: AppInfo[]) => ({
   type: SET_APPS,
   apps: appInfos,
 });
@@ -249,17 +251,41 @@ export const removeApp = (name: string) => ({
   name,
 });
 
-export const setNotifications = (notificationInfos: [NotificationInfo]) => ({
+export const setNotifications = (notificationInfos: NotificationInfo[]) => ({
   type: SET_NOTIFICATIONS,
   notifications: notificationInfos,
 });
 
-export const setTrustedConnections = (trustedConnections: string[]) => ({
-  type: SET_TRUSTED_CONNECTIONS,
-  trustedConnections,
+export const addTrustedConnection = (id: string) => ({
+  type: ADD_TRUSTED_CONNECTION,
+  id,
+});
+
+export const removeTrustedConnection = (id: string) => ({
+  type: REMOVE_TRUSTED_CONNECTION,
+  id,
 });
 
 export const setBackupCompleted = (backupCompleted: boolean) => ({
   type: SET_BACKUP_COMPLETED,
   backupCompleted,
+});
+
+export const setPassword = (password: string) => ({
+  type: SET_PASSWORD,
+  password,
+});
+
+export const setRecoveryData = (recoveryData: {
+  publicKey: string,
+  secretKey: string,
+  timestamp: number,
+  sigs: Signature[],
+}) => ({
+  type: SET_RECOVERY_DATA,
+  recoveryData,
+});
+
+export const removeRecoveryData = () => ({
+  type: REMOVE_RECOVERY_DATA,
 });

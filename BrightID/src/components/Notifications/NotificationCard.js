@@ -1,12 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
@@ -17,21 +12,15 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
  * @prop icon
  */
 
-type Props = {
-  navigation: { navigate: () => null },
-};
-
-
 class NotificationCard extends React.Component<Props> {
-
   render() {
     const { navigation, msg, icon } = this.props;
 
     return (
       <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('TrustedConnections');
-          }}
+        onPress={() => {
+          navigation.navigate('TrustedConnections');
+        }}
       >
         <View style={{ ...styles.container }}>
           <Ionicon size={32} style={styles.itemIcon} name={icon} color="#ccc" />
@@ -48,9 +37,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingVertical: 15,
     paddingHorizontal: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center"
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   msg: {
     fontFamily: 'ApexNew-Book',

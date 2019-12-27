@@ -10,16 +10,15 @@ import {
   View,
   KeyboardAvoidingView,
   Alert,
-  AsyncStorage
+  Platform,
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
-import { setBackupCompleted } from '../../actions/index';
+import { setBackupCompleted, setPassword } from '../../actions/index';
 import { getNotifications } from '../../actions/notifications';
-import { retrieveImage } from '../../utils/filesystem';
-import { createCipher } from 'react-native-crypto';
-import api from '../../Api/BrightId';
-import backupApi from '../../Api/BackupApi';
+import emitter from '../../emitter';
+
+import { backupAppData } from './helpers';
 
 type State = {
   pass1: string,
@@ -27,7 +26,6 @@ type State = {
   completed: number,
   total: number,
   backupInProgress: boolean,
-
 };
 
 class BackupScreen extends React.Component<Props, State> {
@@ -46,103 +44,59 @@ class BackupScreen extends React.Component<Props, State> {
     backupInProgress: false,
   };
 
-  backupCompleted = async () => {
-    const { dispatch, navigation } = this.props;
-    await AsyncStorage.setItem('backupCompleted', 'true');
-    await dispatch(setBackupCompleted(true));
-    dispatch(getNotifications());
-    this.setState({
-      backupInProgress: false,  
-    })
-    Alert.alert(
-      'Info',
-      'Backup completed successfully!',
-      [{text: 'OK', onPress: () => navigation.navigate('Home')}]
-    );
+  componentDidMount() {
+    emitter.on('backupProgress', this.updateProgress);
   }
 
-  validatePass = (p) => {
-    const anUpperCase = /[A-Z]/;
-    const aNumber = /[0-9]/;
-    const aSpecial = /[!|@|#|$|%|^|&|*|(|)|-|_]/;
-    if(p.length < 8) {
-      return false;
-    }
-    let numUpper = 0;
-    let numNums = 0;
-    let numSpecials = 0;
-    for (let i=0; i<p.length; i++) {
-      if(anUpperCase.test(p[i]))
-        numUpper++;
-      else if(aNumber.test(p[i]))
-        numNums++;
-      else if(aSpecial.test(p[i]))
-        numSpecials++;
-    }
-    if (numUpper < 1 && numNums < 1 && numSpecials < 1){
-      return false;
-    }
-    return true;
+  componentWillUnmount() {
+    emitter.off('backupProgress', this.updateProgress);
   }
 
-  backup = async (k1, k2, data) => {
-    const cipher = createCipher('aes128', this.state.pass1);
-    const encrypted = cipher.update(data, 'utf8', 'base64') + cipher.final('base64');
-    await backupApi.set(k1, k2, encrypted);
-    this.setState({
-      completed: this.state.completed + 1
-    });
-  }
+  updateProgress = (num: number) => {
+    this.setState(({ completed }) => ({
+      completed: completed + num,
+    }));
+  };
 
-  startBackup = async () => {
-    try {
-      const { pass1, pass2 } = this.state;
-      const { score, name, photo, id, connections, trustedConnections } = this.props;
-      if (pass1 != pass2) {
-        return Alert.alert('Error', 'Password and confirm password does not match.');
-      }
-      if (!this.validatePass(pass1)) {
-        return Alert.alert('Error', 'Your password must be at least 8 characters long, and contain at least one uppercase, digit or special character.');
-      }
-      AsyncStorage.setItem('password', pass1);
-      const userData = { id, name, score };
-      this.setState({
-        backupInProgress: true, 
-        total: connections.length + 2
-      });
-      
-      let dataStr;
-      dataStr = await retrieveImage(photo.filename);
-      await this.backup(id, id, dataStr);
-      for (const item of connections) {
-        dataStr = await retrieveImage(item.photo.filename);
-        await this.backup(id, item.id, dataStr);
-      }
-      dataStr = JSON.stringify({userData, connections});
-      await this.backup(id, 'data', dataStr);
-      
-      await api.setTrusted(trustedConnections);
-      this.backupCompleted();
-    } catch (err) {
-      console.warn(err.message);
+  validatePass = () => {
+    const { pass1, pass2 } = this.state;
+    if (pass1 !== pass2) {
+      Alert.alert('Error', 'Password and confirm password does not match.');
+    } else if (pass1.length < 8) {
+      Alert.alert('Error', 'Your password must be at least 8 characters long.');
+    } else {
+      return true;
     }
   };
 
-  renderButtonOrSpinner = () =>
-    !this.state.backupInProgress ? (
-      <TouchableOpacity
-        style={styles.startBackupButton}
-        onPress={this.startBackup}
-      >
-        <Text style={styles.buttonInnerText}>Start Backup</Text>
-      </TouchableOpacity>
-    ) : (
-      <View style={styles.loader}>
-        <Text style={styles.textInfo}>Uploading encrypted data to backup server ...</Text>
-        <Text style={styles.textInfo}>{this.state.completed}/{this.state.total} completed</Text>
-        <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
-      </View>
-    );
+  startBackup = async () => {
+    if (!this.validatePass()) return;
+    try {
+      const { dispatch, connections, navigation } = this.props;
+
+      dispatch(setPassword(this.state.pass1));
+
+      this.setState({
+        backupInProgress: true,
+        total: connections.length + 2,
+      });
+
+      await backupAppData();
+
+      this.setState({
+        backupInProgress: false,
+      });
+
+      dispatch(setBackupCompleted(true));
+      dispatch(getNotifications());
+
+      Alert.alert('Info', 'Backup completed successfully!', [
+        { text: 'OK', onPress: () => navigation.navigate('Home') },
+      ]);
+    } catch (err) {
+      console.warn(err);
+    }
+  };
 
   render() {
     const { pass1, pass2 } = this.state;
@@ -155,9 +109,11 @@ class BackupScreen extends React.Component<Props, State> {
           translucent={false}
         />
         <View style={styles.textInputContainer}>
-          <Text style={styles.textInfo}>Enter a password to encrypt your backup data with:</Text>
+          <Text style={styles.textInfo}>
+            Enter a password to encrypt your backup data with:
+          </Text>
           <TextInput
-            onChangeText={(pass1) => this.setState({ pass1 })}
+            onChangeText={(pass) => this.setState({ pass1: pass })}
             value={pass1}
             placeholder="Password"
             placeholderTextColor="#9e9e9e"
@@ -169,7 +125,7 @@ class BackupScreen extends React.Component<Props, State> {
             secureTextEntry={true}
           />
           <TextInput
-            onChangeText={(pass2) => this.setState({ pass2 })}
+            onChangeText={(pass) => this.setState({ pass2: pass })}
             value={pass2}
             placeholder="Confirm Password"
             placeholderTextColor="#9e9e9e"
@@ -181,12 +137,26 @@ class BackupScreen extends React.Component<Props, State> {
             secureTextEntry={true}
           />
         </View>
-
         <View style={styles.buttonContainer}>
-          {this.renderButtonOrSpinner()}
+          {!this.state.backupInProgress ? (
+            <TouchableOpacity
+              style={styles.startBackupButton}
+              onPress={this.startBackup}
+            >
+              <Text style={styles.buttonInnerText}>Start Backup</Text>
+            </TouchableOpacity>
+          ) : (
+            <View style={styles.loader}>
+              <Text style={styles.textInfo}>
+                Uploading encrypted data to backup server ...
+              </Text>
+              <Text style={styles.textInfo}>
+                {this.state.completed}/{this.state.total} completed
+              </Text>
+              <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
+            </View>
+          )}
         </View>
-        
-        
       </KeyboardAvoidingView>
     );
   }

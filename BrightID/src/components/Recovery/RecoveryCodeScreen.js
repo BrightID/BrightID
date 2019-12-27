@@ -2,41 +2,31 @@
 
 import * as React from 'react';
 import {
-  Image,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   Clipboard,
-  AsyncStorage,
-  Alert
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
-import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import { parseString } from 'xml2js';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import emitter from '../../emitter';
-import store from '../../store';
-import nacl from 'tweetnacl';
-import { uInt8ArrayToB64, b64ToUrlSafeB64 } from '../../utils/encoding';
-import api from '../../Api/BrightId';
+import backupApi from '../../Api/BackupApi';
+import { setRecoveryData, removeRecoveryData } from '../../actions';
+import { setupRecovery, recoveryQrStr, handleSigs } from './helpers';
 
 /**
- * My Code screen of BrightID
+ * Recovery Code screen of BrightID
  *
- * USERA represents this user
- * ==================================================================
  * displays a qrcode
- *
  */
 
 type State = {
   copied: boolean,
-  checkIntervalId: number,
   qrsvg:
     | string
     | {
@@ -53,7 +43,8 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
     title: 'Recovery Code',
   };
 
-  checkIntervalId = 0;
+  checkIntervalId: IntervalID;
+
   sigs = {};
 
   state = {
@@ -61,72 +52,24 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
     copied: false,
   };
 
-  async componentDidMount() {
-    const recoveryData = await AsyncStorage.getItem('recoveryData');
-    if (recoveryData) {
-      var { publicKey, secretKey, timestamp, sigs } = JSON.parse(recoveryData);
-      this.sigs = sigs;
-    } else {
-      var timestamp = Date.now();
-      var { publicKey, secretKey } = nacl.sign.keyPair();
-      publicKey = uInt8ArrayToB64(publicKey);
-      secretKey = uInt8ArrayToB64(secretKey);
-      AsyncStorage.setItem(
-        'recoveryData',
-        JSON.stringify({ publicKey, secretKey, timestamp, sigs: {} })
-      );
-    }
-    const qrStr = "Recovery_" + JSON.stringify({ signingKey: publicKey, timestamp });
-    qrcode.toString(qrStr, this.handleQrString);
-    this.waitForSigs(publicKey);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.checkIntervalId);
-  }
-
-  processSigs = async () => {
-    let recoveryData = await AsyncStorage.getItem('recoveryData');
-    recoveryData = JSON.parse(recoveryData);
-    const sigs = Object.values(this.sigs).map((sig) => {
-      return { id: sig.signer, sig: sig.sig}
+  componentDidMount() {
+    const { navigation } = this.props;
+    setupRecovery();
+    qrcode.toString(recoveryQrStr(), this.handleQrString);
+    navigation.addListener('willFocus', this.waitForSigs);
+    navigation.addListener('willBlur', () => {
+      clearInterval(this.checkIntervalId);
     });
-    try {
-      await api.setSigningKey(recoveryData.id, recoveryData.publicKey, sigs, recoveryData.timestamp);
-      this.props.navigation.navigate('Restore', recoveryData);
-    } catch (e) {
-      Alert.alert('Error', e.message);
-    }
-  };
+  }
 
-  waitForSigs = async (publicKey) => {
-    const ipAddress = await api.ip();
-    let recoveryData = await AsyncStorage.getItem('recoveryData');
-    recoveryData = JSON.parse(recoveryData);
+  waitForSigs = () => {
     this.checkIntervalId = setInterval(() => {
-      fetch(`http://${ipAddress}/profile/download/${b64ToUrlSafeB64(publicKey)}`).then((res) => {
-        if (res.status === 200) {
-          return res.json();
-        }
-      }).then(({ data }) => {
-        if (!data) return;
-        if (this.sigs[data.signer] &&
-            this.sigs[data.signer].sig == data.sig &&
-            this.sigs[data.signer].id == data.id) {
-          return;
-        }
-        this.sigs[data.signer] = data;
-        recoveryData.sigs = this.sigs;
-        recoveryData.id = data.id;
-        AsyncStorage.setItem('recoveryData', JSON.stringify(recoveryData));
-        if (Object.keys(this.sigs).length > 1) {
-          this.processSigs();
-        } else {
-          Alert.alert('Info', 'One of your trusted connections signed your request');
-        }
-      }).catch((err) => {
-        console.log(err);
-      });
+      backupApi
+        .getSig()
+        .then(handleSigs)
+        .then((data) => {
+          if (data) this.props.navigation.navigate('Restore');
+        });
     }, 3000);
   };
 
@@ -141,10 +84,7 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
   };
 
   copyQr = () => {
-    const {
-      recoveryData: { publicKey, timestamp },
-    } = store.getState().main;
-    Clipboard.setString('Recovery_' + JSON.stringify({ publicKey, timestamp }));
+    Clipboard.setString(recoveryQrStr());
     this.setState({ copied: true });
   };
 
@@ -194,7 +134,6 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
   );
 
   render() {
-    const { photo, name } = this.props;
     const { qrsvg } = this.state;
     return (
       <View style={styles.container}>

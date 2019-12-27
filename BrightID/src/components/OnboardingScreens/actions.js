@@ -4,14 +4,14 @@ import { Alert, AsyncStorage } from 'react-native';
 import nacl from 'tweetnacl';
 import RNFetchBlob from 'rn-fetch-blob';
 import { setUserData } from '../../actions';
-import {
-  createImageDirectory,
-  saveImage,
-} from '../../utils/filesystem';
+import { createImageDirectory, saveImage } from '../../utils/filesystem';
 import api from '../../Api/BrightId';
 import { b64ToUrlSafeB64, uInt8ArrayToB64 } from '../../utils/encoding';
 
-export const handleBrightIdCreation = ({ name, photo }: {
+export const handleBrightIdCreation = ({
+  name,
+  photo,
+}: {
   name: string,
   photo: { uri: string },
 }) => async (dispatch: dispatch) => {
@@ -41,7 +41,6 @@ export const handleBrightIdCreation = ({ name, photo }: {
 
     // // navigate to home page
     return true;
-
   } catch (err) {
     Alert.alert(err.message || 'Error', err.stack);
     return false;

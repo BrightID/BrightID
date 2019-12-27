@@ -1,25 +1,24 @@
 // @flow
 
-import { AsyncStorage } from 'react-native';
+// eslint-disable-next-line import/no-cycle
 import { setNotifications } from './index';
-import { saveImage } from '../utils/filesystem';
-import store from '../store';
 
-export const getNotifications = () => async (dispatch: dispatch) => {
+export const getNotifications = () => async (
+  dispatch: dispatch,
+  getState: () => State,
+) => {
   try {
-    const { backupCompleted, score } = store.getState().main;
+    const { backupCompleted, score } = getState().main;
     let notifications = [];
     // backupCompleted = false;
     if (!backupCompleted && score > 0) {
-      notifications.push({'icon': 'ios-star-outline', 'msg': 'Choose trusted connections to backup your BrightID'});
+      notifications.push({
+        icon: 'ios-star-outline',
+        msg: 'Choose trusted connections to backup your BrightID',
+      });
     }
     dispatch(setNotifications(notifications));
   } catch (err) {
     console.log(err);
   }
-};
-
-export type NotificationInfo = {
-  msg: string,
-  icon: string
 };

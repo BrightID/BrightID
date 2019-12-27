@@ -1,25 +1,30 @@
 // @flow
 
-import { create, ApiSauceInstance } from 'apisauce';
-import nacl from 'tweetnacl';
-import { strToUint8Array, uInt8ArrayToB64 } from '../utils/encoding';
+import { create, ApiSauceInstance, ApiResponse } from 'apisauce';
+import { b64ToUrlSafeB64 } from '../utils/encoding';
 import store from '../store';
 
-let seedUrl = 'http://backup.brightid.org';
+let recoveryUrl = 'https://recovery.brightid.org';
+let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
-  seedUrl = 'http://104.207.144.107:5001';
+  seedUrl = 'http://test.brightid.org';
 }
 
 class BackupApi {
-  api: ApiSauceInstance;
+  recoveryApi: ApiSauceInstance;
+
+  profileApi: ApiSauceInstance;
 
   constructor() {
-    this.api = create({
+    this.recoveryApi = create({
+      baseURL: recoveryUrl,
+    });
+    this.profileApi = create({
       baseURL: seedUrl,
     });
   }
 
-  static throwOnError(response) {
+  static throwOnError(response: ApiResponse) {
     if (response.ok) {
       return;
     }
@@ -29,19 +34,50 @@ class BackupApi {
     throw new Error(response.problem);
   }
 
-  async get(key1: string, key2: string) {
+  async getRecovery(key1: string, key2: string) {
     let requestParams = { key1, key2 };
-    const res = await this.api.get(`/get`, requestParams);
+    console.log('get', requestParams);
+    const res = await this.recoveryApi.get(`/backups/${key1}/${key2}`);
     BackupApi.throwOnError(res);
     return res;
   }
 
-  async set(key1: string, key2: string, data: string) {
-    let requestParams = { key1, key2, data };
-    const res = await this.api.post(`/set`, requestParams);
+  async putRecovery(key1: string, key2: string, data: string) {
+    console.log('put', { key1, key2, data });
+    const res = await this.recoveryApi.put(`/backups/${key1}/${key2}`, {
+      data,
+    });
     BackupApi.throwOnError(res);
   }
 
+  async getSig() {
+    try {
+      let { publicKey } = store.getState().main.recoveryData;
+      console.log(publicKey);
+      const res = await this.profileApi.get(
+        `/profile/download/${b64ToUrlSafeB64(publicKey)}`,
+      );
+      BackupApi.throwOnError(res);
+      console.log('getSig', res);
+      return res.data.data;
+    } catch (err) {
+      console.warn(err);
+    }
+  }
+
+  async setSig(data: {}, signingKey: string) {
+    try {
+      const res = await this.profileApi.post(`/profile/upload`, {
+        data,
+        uuid: b64ToUrlSafeB64(signingKey),
+      });
+      BackupApi.throwOnError(res);
+      console.log('setSigData', data);
+      console.log('setSig', res);
+    } catch (err) {
+      console.warn(err);
+    }
+  }
 }
 
 const backupApi = new BackupApi();

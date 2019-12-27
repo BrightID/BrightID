@@ -132,7 +132,7 @@ class ConnectionsScreen extends React.Component<Props, State> {
         />
         <View style={{ flex: 1 }}>
           <View style={styles.mainContainer}>
-            <SearchConnections navigation={navigation} />
+            <SearchConnections navigation={navigation} sortable={true} />
             <View style={styles.mainContainer}>
               {renderListOrSpinner(this)}
             </View>
@@ -172,4 +172,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(state => state.main)(ConnectionsScreen);
+export default connect((state) => state.main)(ConnectionsScreen);

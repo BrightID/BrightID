@@ -27,10 +27,13 @@ import {
   REMOVE_APP,
   SET_APPS,
   SET_NOTIFICATIONS,
-  SET_TRUSTED_CONNECTIONS,
+  ADD_TRUSTED_CONNECTION,
+  REMOVE_TRUSTED_CONNECTION,
   SET_BACKUP_COMPLETED,
+  SET_PASSWORD,
+  SET_RECOVERY_DATA,
+  REMOVE_RECOVERY_DATA,
 } from '../actions';
-import { b64ToUrlSafeB64 } from '../utils/encoding';
 
 /**
  * INITIAL STATE
@@ -61,6 +64,7 @@ export const initialState: Main = {
   backupCompleted: false,
   id: '',
   publicKey: '',
+  password: '',
   secretKey: new Uint8Array([]),
   connectionsSort: '',
   connectQrData: {
@@ -79,9 +83,19 @@ export const initialState: Main = {
     signedMessage: '',
     score: 0,
   },
+  recoveryData: {
+    id: '',
+    publicKey: '',
+    secretKey: '',
+    timestamp: 0,
+    sigs: [],
+  },
 };
 
-export const mainReducer = (state: Main = initialState, action: action) => {
+export const mainReducer = (
+  state: Main = initialState,
+  action: action,
+): Main => {
   let newElGroups;
   let groupIndex;
   let group;
@@ -194,7 +208,7 @@ export const mainReducer = (state: Main = initialState, action: action) => {
     case REMOVE_USER_DATA:
       return {
         ...state,
-        photo: '',
+        photo: { filename: '' },
         name: '',
         id: '',
         publicKey: '',
@@ -207,7 +221,7 @@ export const mainReducer = (state: Main = initialState, action: action) => {
         verifications: [],
         apps: [],
         notifications: [],
-        trustedConnections: []
+        trustedConnections: [],
       };
     case SET_CONNECT_QR_DATA:
       // Compute the websocket channel and download (but not upload) path
@@ -242,8 +256,9 @@ export const mainReducer = (state: Main = initialState, action: action) => {
           id: '',
           photo: '',
           name: '',
-          timestamp: '',
+          timestamp: 0,
           signedMessage: '',
+          score: 0,
         },
       };
     case SET_VERIFICATIONS:
@@ -271,15 +286,43 @@ export const mainReducer = (state: Main = initialState, action: action) => {
         ...state,
         notifications: action.notifications,
       };
-    case SET_TRUSTED_CONNECTIONS:
+    case ADD_TRUSTED_CONNECTION:
       return {
         ...state,
-        trustedConnections: action.trustedConnections,
+        trustedConnections: [...state.trustedConnections, action.id],
+      };
+    case REMOVE_TRUSTED_CONNECTION:
+      return {
+        ...state,
+        trustedConnections: state.trustedConnections.filter(
+          (id) => id !== action.id,
+        ),
       };
     case SET_BACKUP_COMPLETED:
       return {
         ...state,
         backupCompleted: action.backupCompleted,
+      };
+    case SET_PASSWORD:
+      return {
+        ...state,
+        password: action.password,
+      };
+    case SET_RECOVERY_DATA:
+      return {
+        ...state,
+        recoveryData: action.recoveryData,
+      };
+    case REMOVE_RECOVERY_DATA:
+      return {
+        ...state,
+        recoveryData: {
+          publicKey: '',
+          secretKey: '',
+          id: '',
+          timestamp: 0,
+          sigs: [],
+        },
       };
     default:
       return state;

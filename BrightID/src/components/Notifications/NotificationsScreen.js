@@ -1,11 +1,9 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, View, Alert, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import BottomNav from '../BottomNav';
-import { getNotifications } from '../../actions/notifications';
-import api from '../../Api/BrightId';
 import NotificationCard from './NotificationCard';
 
 class NotificationsScreen extends React.Component<Props> {
@@ -14,20 +12,25 @@ class NotificationsScreen extends React.Component<Props> {
   });
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, notifications } = this.props;
     return (
       <View style={styles.container}>
         <FlatList
           style={styles.NotificationsList}
           keyExtractor={({ msg }, index) => msg + index}
-          data={this.props.notifications}
-          renderItem={({ item }) => <NotificationCard navigation={navigation} {...item} />}
+          data={notifications}
+          renderItem={({ item }) => (
+            <NotificationCard
+              navigation={navigation}
+              msg={item.msg}
+              icon={item.icon}
+            />
+          )}
         />
-        <BottomNav style={{ flex: 0 }} navigation={navigation} />
+        <BottomNav style={styles.bottomNav} navigation={navigation} />
       </View>
     );
   }
-
 }
 
 const styles = StyleSheet.create({
@@ -37,6 +40,9 @@ const styles = StyleSheet.create({
   },
   NotificationsList: {
     flex: 1,
+  },
+  bottomNav: {
+    flex: 0,
   },
 });
 

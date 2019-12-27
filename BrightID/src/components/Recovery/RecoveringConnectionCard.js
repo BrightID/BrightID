@@ -12,42 +12,62 @@ import {
 import { connect } from 'react-redux';
 import RNFS from 'react-native-fs';
 import moment from 'moment';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import nacl from 'tweetnacl';
 import emitter from '../../emitter';
 import store from '../../store';
-import api from '../../Api/BrightId';
-import nacl from 'tweetnacl';
-import { b64ToUrlSafeB64, strToUint8Array, uInt8ArrayToB64 } from '../../utils/encoding';
+import api from '../../Api/BackupApi';
+import { strToUint8Array, uInt8ArrayToB64 } from '../../utils/encoding';
 
 class ConnectionCard extends React.PureComponent<Props> {
   handleConnectionSelect = async () => {
-    let { id, secretKey } = store.getState().main;
-    const qrData = this.props.recoveryRequestCode.replace('Recovery_', '');
-    const { signingKey, timestamp } = JSON.parse(qrData);
-    const message = this.props.id + signingKey + timestamp;
-    const sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
-    const ipAddress = await api.ip();
-    const data = { signer: id, id: this.props.id, sig }
-    fetch(`http://${ipAddress}/profile/upload`, {
-      method: 'POST', // or 'PUT'
-      body: JSON.stringify({ data, uuid: b64ToUrlSafeB64(signingKey) }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then((res) => {
-      if (res.status === 200) {
-        Alert.alert(
-          'Info',
-          'Your request to help recovering this account submitted successfully!',
-          [{text: 'OK', onPress: () => this.props.navigation.navigate('Home')}]
-        );
-      }
-    }).catch((err) => {
-      console.log(err);
-    });
+    try {
+      let { id, secretKey } = store.getState().main;
+      const qrData = this.props.recoveryRequestCode.replace('Recovery_', '');
+      const { signingKey, timestamp } = JSON.parse(qrData);
+      const message = this.props.id + signingKey + timestamp;
+      const sig = uInt8ArrayToB64(
+        nacl.sign.detached(strToUint8Array(message), secretKey),
+      );
+      const data = { signer: id, id: this.props.id, sig };
+      await api.setSig(data, signingKey);
+      Alert.alert(
+        'Info',
+        'Your request to help recovering this account submitted successfully!',
+        [
+          {
+            text: 'OK',
+            onPress: () => this.props.navigation.navigate('Home'),
+          },
+        ],
+      );
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // fetch(`http://${ipAddress}/profile/upload`, {
+    //   method: 'POST', // or 'PUT'
+    //   body: JSON.stringify({ data, uuid: b64ToUrlSafeB64(signingKey) }),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    //   .then((res) => {
+    //     if (res.status === 200) {
+    //       Alert.alert(
+    //         'Info',
+    //         'Your request to help recovering this account submitted successfully!',
+    //         [
+    //           {
+    //             text: 'OK',
+    //             onPress: () => this.props.navigation.navigate('Home'),
+    //           },
+    //         ],
+    //       );
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   scoreColor = () => {
@@ -63,15 +83,11 @@ class ConnectionCard extends React.PureComponent<Props> {
     const { photo, name, score, connectionDate, style } = this.props;
 
     return (
-      <TouchableOpacity
-          onPress={this.handleConnectionSelect}
-        >
+      <TouchableOpacity onPress={this.handleConnectionSelect}>
         <View style={{ ...styles.container, ...style }}>
           <Image
             source={{
-              uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
-                photo.filename
-              }`,
+              uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo.filename}`,
             }}
             style={styles.photo}
           />
@@ -79,7 +95,9 @@ class ConnectionCard extends React.PureComponent<Props> {
             <Text style={styles.name}>{name}</Text>
             <View style={styles.scoreContainer}>
               <Text style={styles.scoreLeft}>Score:</Text>
-              <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>
+              <Text style={[styles.scoreRight, this.scoreColor()]}>
+                {score}
+              </Text>
             </View>
             <Text style={styles.connectedText}>
               Connected {moment(parseInt(connectionDate, 10)).fromNow()}
