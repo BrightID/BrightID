@@ -8,6 +8,7 @@ import TrustedConnectionCard from './TrustedConnectionCard';
 import { getConnections } from '../../actions/connections';
 import emitter from '../../emitter';
 import { renderListOrSpinner } from '../Connections/renderConnections';
+import { setTrustedConnections } from './helpers';
 
 /**
  * Backup screen of BrightID
@@ -28,8 +29,12 @@ class TrustedConnectionsScreen extends React.Component<Props, State> {
   };
 
   componentDidMount() {
+    const { navigation } = this.props;
     this.getConnections();
     emitter.on('refreshConnections', this.getConnections);
+    navigation.addListener('willBlur', () => {
+      emitter.off('refreshConnections', this.getConnections);
+    });
   }
 
   componentWillUnmount() {
@@ -69,14 +74,23 @@ class TrustedConnectionsScreen extends React.Component<Props, State> {
 
   navigateToBackup = async () => {
     let { navigation, trustedConnections } = this.props;
-    if (trustedConnections.length < 1) {
+    if (trustedConnections.length < 3) {
       Alert.alert(
         'Error',
         'You need at least three trusted connections for backup.',
       );
-      return false;
+    } else {
+      setTrustedConnections()
+        .then((success) => {
+          if (success) navigation.navigate('Backup');
+        })
+        .catch((err) => {
+          if (err.message === `trusted connections can't be overwritten`) {
+            navigation.navigate('Backup');
+          }
+          console.warn(err.message);
+        });
     }
-    navigation.navigate('Backup');
   };
 
   render() {

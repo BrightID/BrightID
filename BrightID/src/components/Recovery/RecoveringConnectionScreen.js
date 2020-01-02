@@ -1,9 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
-import { NavigationEvents } from 'react-navigation';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
 import { getConnections } from '../../actions/connections';
@@ -24,12 +23,12 @@ class RecoveringConnectionScreen extends React.Component<Props, State> {
   };
 
   componentDidMount() {
+    const { navigation } = this.props;
     this.getConnections();
     emitter.on('refreshConnections', this.getConnections);
-  }
-
-  componentWillUnmount() {
-    emitter.off('refreshConnections', this.getConnections);
+    navigation.addListener('willBlur', () => {
+      emitter.off('refreshConnections', this.getConnections);
+    });
   }
 
   getConnections = async () => {
@@ -53,7 +52,9 @@ class RecoveringConnectionScreen extends React.Component<Props, State> {
   renderConnection = ({ item }) => (
     <RecoveringConnectionCard
       {...item}
-      recoveryRequestCode={this.props.navigation.state.params.recoveryRequestCode}
+      recoveryRequestCode={
+        this.props.navigation.state.params.recoveryRequestCode
+      }
       navigation={this.props.navigation}
       style={styles.recoveringConnectionCard}
     />
@@ -67,7 +68,8 @@ class RecoveringConnectionScreen extends React.Component<Props, State> {
           <View style={styles.titleContainer}>
             <Text style={styles.titleText}>Choose Connection</Text>
             <Text style={styles.infoText}>
-              Please select the connection whose account you are helping to recover.
+              Please select the connection whose account you are helping to
+              recover.
             </Text>
           </View>
           <SearchConnections navigation={navigation} />

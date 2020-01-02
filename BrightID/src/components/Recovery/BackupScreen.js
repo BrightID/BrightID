@@ -45,11 +45,11 @@ class BackupScreen extends React.Component<Props, State> {
   };
 
   componentDidMount() {
+    const { navigation } = this.props;
     emitter.on('backupProgress', this.updateProgress);
-  }
-
-  componentWillUnmount() {
-    emitter.off('backupProgress', this.updateProgress);
+    navigation.addListener('willBlur', () => {
+      emitter.off('backupProgress', this.updateProgress);
+    });
   }
 
   updateProgress = (num: number) => {

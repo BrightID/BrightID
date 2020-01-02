@@ -15,48 +15,55 @@ import {
   setUserData,
   setConnections,
   setPassword,
+  setHashedId,
 } from '../../../actions';
 import {
   uInt8ArrayToB64,
-  b64ToUrlSafeB64,
   b64ToUint8Array,
+  b64ToUrlSafeB64,
+  strToUint8Array,
 } from '../../../utils/encoding';
 import { saveConnection } from '../../../actions/connections';
 
-const setTrustedConnections = async () => {
+export const setTrustedConnections = async () => {
   try {
     const { trustedConnections } = store.getState().main;
     await api.setTrusted(trustedConnections);
+    return true;
   } catch (err) {
-    console.warn(err);
+    throw err;
   }
 };
 
-export const encryptAndBackup = async (
-  k1: string,
-  k2: string,
-  data: string,
-) => {
-  const { password } = store.getState().main;
+const hashId = (id: string, password: string) => {
+  const cipher = createCipher('aes128', password);
+  const hash = cipher.update(id, 'utf8', 'base64') + cipher.final('base64');
+  const safeHash = b64ToUrlSafeB64(hash);
+  store.dispatch(setHashedId(safeHash));
+  return safeHash;
+};
+
+export const encryptAndBackup = async (key: string, data: string) => {
+  let { id, hashedId, password } = store.getState().main;
+  if (!hashedId) hashedId = hashId(id, password);
   try {
     const cipher = createCipher('aes128', password);
     const encrypted =
       cipher.update(data, 'utf8', 'base64') + cipher.final('base64');
-    await backupApi.putRecovery(k1, k2, encrypted);
+    await backupApi.putRecovery(hashedId, key, encrypted);
     emitter.emit('backupProgress', 1);
   } catch (err) {
-    console.warn(err);
     emitter.emit('backupProgress', 0);
+    err instanceof Error ? console.warn(err.message) : console.warn(err);
   }
 };
 
-const backupPhoto = async (id1: string, filename: string) => {
+const backupPhoto = async (id: string, filename: string) => {
   try {
-    const { id } = store.getState().main;
     const data = await retrieveImage(filename);
-    await encryptAndBackup(id, id1, data);
+    await encryptAndBackup(id, data);
   } catch (err) {
-    console.warn(err);
+    err instanceof Error ? console.warn(err.message) : console.warn(err);
   }
 };
 
@@ -67,7 +74,7 @@ const backupConnectionPhotos = async () => {
       await backupPhoto(item.id, item.photo.filename);
     }
   } catch (err) {
-    console.warn(err);
+    err instanceof Error ? console.warn(err.message) : console.warn(err);
   }
 };
 
@@ -92,23 +99,21 @@ const backupUser = async () => {
       connections,
       trustedConnections,
     });
-    await encryptAndBackup(id, 'data', dataStr);
+    await encryptAndBackup('data', dataStr);
     await backupPhoto(id, photo.filename);
   } catch (err) {
-    console.warn(err);
+    err instanceof Error ? console.warn(err.message) : console.warn(err);
   }
 };
 
 export const backupAppData = async () => {
   try {
-    // set trusted connections first
-    await setTrustedConnections();
     // backup user
     await backupUser();
     // backup connection photos
     await backupConnectionPhotos();
   } catch (err) {
-    console.warn(err);
+    err instanceof Error ? console.warn(err.message) : console.warn(err);
   }
 };
 
@@ -120,6 +125,7 @@ export const setupRecovery = () => {
   const recoveryData = {
     publicKey: uInt8ArrayToB64(publicKey),
     secretKey: uInt8ArrayToB64(secretKey),
+    id: '',
     timestamp: Date.now(),
     sigs: [],
   };
@@ -128,11 +134,49 @@ export const setupRecovery = () => {
 };
 
 export const recoveryQrStr = () => {
-  const {
-    publicKey: signingKey,
-    timestamp,
-  } = store.getState().main.recoveryData;
-  return `Recovery_${JSON.stringify({ signingKey, timestamp })}`;
+  try {
+    const {
+      publicKey: signingKey,
+      timestamp,
+    } = store.getState().main.recoveryData;
+    return `Recovery_${JSON.stringify({ signingKey, timestamp })}`;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const parseRecoveryQr = (
+  qrString: string,
+): { signingKey: string, timestamp: number } => {
+  try {
+    const data = JSON.parse(qrString.replace('Recovery_', ''));
+    if (!data.signingKey || !data.timestamp) {
+      throw new Error('Bad QR Data');
+    } else {
+      return data;
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const setRecoverySig = async (
+  id: string,
+  signingKey: string,
+  timestamp: number,
+) => {
+  try {
+    const { id: userId, secretKey } = store.getState().main;
+    const message = id + signingKey + timestamp;
+    const sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+    const data = { signer: userId, id, sig };
+    await backupApi.setSig(data, signingKey);
+    return true;
+  } catch (err) {
+    throw err;
+  }
 };
 
 export const sigExists = (data: Signature) => {
@@ -171,41 +215,44 @@ export const handleSigs = async (data?: Signature) => {
       );
       return true;
     } catch (err) {
-      console.warn(err);
+      err instanceof Error ? console.warn(err.message) : console.warn(err);
     }
   }
 };
 
-export const fetchBackupData = async (k1: string, k2: string, pass: string) => {
+export const fetchBackupData = async (key: string, pass: string) => {
   try {
+    const hashedId = hashId(store.getState().main.recoveryData.id, pass);
     const decipher = createDecipher('aes128', pass);
-    const res = await backupApi.getRecovery(k1, k2);
+    const res = await backupApi.getRecovery(hashedId, key);
     const decrypted =
       decipher.update(res.data, 'base64', 'utf8') + decipher.final('utf8');
+    emitter.emit('restoreProgress', 1);
     return decrypted;
   } catch (err) {
+    emitter.emit('restoreProgress', 0);
     Alert.alert('Error', 'Incorrect password!');
-    console.warn(err);
+    throw err;
   }
 };
 
 export const restoreUserData = async (pass: string) => {
   try {
     const { id, secretKey, publicKey } = store.getState().main.recoveryData;
-    const decrypted = await fetchBackupData(id, 'data', pass);
+
+    const decrypted = await fetchBackupData('data', pass);
     if (decrypted) {
       const { userData, connections } = JSON.parse(decrypted);
-      console.log(JSON.parse(decrypted));
       emitter.emit('restoreTotal', connections.length + 2);
       userData.id = id;
       userData.publicKey = publicKey;
       userData.secretKey = b64ToUint8Array(secretKey);
 
-      const userPhoto = await fetchBackupData(id, id, pass);
+      const userPhoto = await fetchBackupData(id, pass);
       if (userPhoto) {
         const filename = await saveImage({
           imageName: id,
-          base64Image: decrypted,
+          base64Image: userPhoto,
         });
         userData.photo = { filename };
       }
@@ -214,21 +261,23 @@ export const restoreUserData = async (pass: string) => {
 
       // TODO REMOVE THIS FOR V1 / add trusted connections
       await AsyncStorage.setItem('userData', JSON.stringify(userData));
-      return connections;
+      console.log(JSON.parse(decrypted));
+    } else {
+      throw new Error('incorrect password');
     }
   } catch (err) {
-    Alert.alert('Error', 'Cannot Decrypt Recovery Data');
-    console.warn(err);
+    throw err;
   }
 };
 
 export const recoverData = async (pass: string) => {
   try {
-    const { id } = store.getState().main.recoveryData;
-    const connections = await restoreUserData(pass);
-    if (!connections) return;
+    await restoreUserData(pass);
+
+    const { connections } = store.getState().main;
+
     for (const conn of connections) {
-      let decrypted = await fetchBackupData(id, conn.id, pass);
+      let decrypted = await fetchBackupData(conn.id, pass);
       const filename = await saveImage({
         imageName: conn.id,
         base64Image: decrypted,
@@ -244,11 +293,6 @@ export const recoverData = async (pass: string) => {
     store.dispatch(removeRecoveryData());
     return true;
   } catch (err) {
-    // if (err.message == 'unable to decrypt data') {
-    //   this.setState({ restoreInProgress: false, completed: 0 });
-    //   Alert.alert('Error', 'Incorrect password!');
-    // } else {
-    console.warn(err);
-    // }
+    throw err;
   }
 };

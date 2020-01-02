@@ -32,6 +32,7 @@ export const SET_BACKUP_COMPLETED = 'SET_BACKUP_COMPLETED';
 export const SET_PASSWORD = 'SET_PASSWORD';
 export const SET_RECOVERY_DATA = 'SET_RECOVERY_DATA';
 export const REMOVE_RECOVERY_DATA = 'REMOVE_RECOVERY_DATA';
+export const SET_HASHED_ID = 'SET_HASHED_ID';
 
 /**
  * redux action creator that updates user `score`
@@ -278,6 +279,7 @@ export const setPassword = (password: string) => ({
 
 export const setRecoveryData = (recoveryData: {
   publicKey: string,
+  id: string,
   secretKey: string,
   timestamp: number,
   sigs: Signature[],
@@ -288,4 +290,9 @@ export const setRecoveryData = (recoveryData: {
 
 export const removeRecoveryData = () => ({
   type: REMOVE_RECOVERY_DATA,
+});
+
+export const setHashedId = (hash: string) => ({
+  type: SET_HASHED_ID,
+  hash,
 });

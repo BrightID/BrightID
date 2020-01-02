@@ -6,9 +6,13 @@ import { Alert } from 'react-native';
 import { names } from '../utils/fakeNames';
 import api from '../Api/BrightId';
 import { setConnectUserData } from './index';
-import { strToUint8Array, uInt8ArrayToB64, b64ToUrlSafeB64 } from '../utils/encoding';
+import {
+  strToUint8Array,
+  uInt8ArrayToB64,
+  b64ToUrlSafeB64,
+} from '../utils/encoding';
 
-export const addConnection = (navigation: () => null) => async (
+export const addConnection = (navigation: navigation) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
@@ -19,7 +23,7 @@ export const addConnection = (navigation: () => null) => async (
   await api.createUser(id, b64PubKey);
   const { firstName, lastName } = names[
     Math.floor(Math.random() * (names.length - 1))
-    ];
+  ];
   const name = `${firstName} ${lastName}`;
   const score = Math.floor(Math.random() * 99);
   const timestamp = Date.now();

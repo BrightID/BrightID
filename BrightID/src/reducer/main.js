@@ -33,6 +33,7 @@ import {
   SET_PASSWORD,
   SET_RECOVERY_DATA,
   REMOVE_RECOVERY_DATA,
+  SET_HASHED_ID,
 } from '../actions';
 
 /**
@@ -65,6 +66,7 @@ export const initialState: Main = {
   id: '',
   publicKey: '',
   password: '',
+  hashedId: '',
   secretKey: new Uint8Array([]),
   connectionsSort: '',
   connectQrData: {
@@ -323,6 +325,11 @@ export const mainReducer = (
           timestamp: 0,
           sigs: [],
         },
+      };
+    case SET_HASHED_ID:
+      return {
+        ...state,
+        hashedId: action.hash,
       };
     default:
       return state;

@@ -92,7 +92,7 @@ class RestoreScreen extends React.Component<Props, State> {
       })
       .catch((err) => {
         this.resetState();
-        console.warn(err);
+        err instanceof Error ? console.warn(err.message) : console.log(err);
       });
   };
 
@@ -109,9 +109,11 @@ class RestoreScreen extends React.Component<Props, State> {
         <Text style={styles.textInfo}>
           Downloading data from backup server ...
         </Text>
-        <Text style={styles.textInfo}>
-          {this.state.completed}/{this.state.total} completed
-        </Text>
+        {this.state.total !== 0 && (
+          <Text style={styles.textInfo}>
+            {this.state.completed}/{this.state.total} completed
+          </Text>
+        )}
         <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
       </View>
     );

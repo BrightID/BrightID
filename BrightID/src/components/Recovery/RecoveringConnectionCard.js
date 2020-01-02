@@ -12,62 +12,30 @@ import {
 import { connect } from 'react-redux';
 import RNFS from 'react-native-fs';
 import moment from 'moment';
-import nacl from 'tweetnacl';
-import emitter from '../../emitter';
-import store from '../../store';
-import api from '../../Api/BackupApi';
-import { strToUint8Array, uInt8ArrayToB64 } from '../../utils/encoding';
+import { parseRecoveryQr, setRecoverySig } from './helpers';
 
 class ConnectionCard extends React.PureComponent<Props> {
   handleConnectionSelect = async () => {
     try {
-      let { id, secretKey } = store.getState().main;
-      const qrData = this.props.recoveryRequestCode.replace('Recovery_', '');
-      const { signingKey, timestamp } = JSON.parse(qrData);
-      const message = this.props.id + signingKey + timestamp;
-      const sig = uInt8ArrayToB64(
-        nacl.sign.detached(strToUint8Array(message), secretKey),
+      const { signingKey, timestamp } = parseRecoveryQr(
+        this.props.recoveryRequestCode,
       );
-      const data = { signer: id, id: this.props.id, sig };
-      await api.setSig(data, signingKey);
-      Alert.alert(
-        'Info',
-        'Your request to help recovering this account submitted successfully!',
-        [
-          {
-            text: 'OK',
-            onPress: () => this.props.navigation.navigate('Home'),
-          },
-        ],
-      );
+      const next = await setRecoverySig(this.props.id, signingKey, timestamp);
+      if (next) {
+        Alert.alert(
+          'Info',
+          'Your request to help recovering this account submitted successfully!',
+          [
+            {
+              text: 'OK',
+              onPress: () => this.props.navigation.navigate('Home'),
+            },
+          ],
+        );
+      }
     } catch (err) {
-      console.warn(err);
+      console.warn(err.message);
     }
-
-    // fetch(`http://${ipAddress}/profile/upload`, {
-    //   method: 'POST', // or 'PUT'
-    //   body: JSON.stringify({ data, uuid: b64ToUrlSafeB64(signingKey) }),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // })
-    //   .then((res) => {
-    //     if (res.status === 200) {
-    //       Alert.alert(
-    //         'Info',
-    //         'Your request to help recovering this account submitted successfully!',
-    //         [
-    //           {
-    //             text: 'OK',
-    //             onPress: () => this.props.navigation.navigate('Home'),
-    //           },
-    //         ],
-    //       );
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   };
 
   scoreColor = () => {

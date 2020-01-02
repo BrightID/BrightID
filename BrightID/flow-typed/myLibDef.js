@@ -22,6 +22,7 @@ declare type Main = {
   publicKey: string,
   id: string,
   password: string,
+  hashedId: string,
   secretKey: Uint8Array,
   connectionsSort: string,
   connectQrData: {

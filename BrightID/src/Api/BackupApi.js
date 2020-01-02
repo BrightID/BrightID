@@ -37,23 +37,29 @@ class BackupApi {
   async getRecovery(key1: string, key2: string) {
     let requestParams = { key1, key2 };
     console.log('get', requestParams);
-    const res = await this.recoveryApi.get(`/backups/${key1}/${key2}`);
+    const res = await this.recoveryApi.get(
+      `/backups/${b64ToUrlSafeB64(key1)}/${b64ToUrlSafeB64(key2)}`,
+    );
+    console.log('get', res);
     BackupApi.throwOnError(res);
     return res;
   }
 
   async putRecovery(key1: string, key2: string, data: string) {
     console.log('put', { key1, key2, data });
-    const res = await this.recoveryApi.put(`/backups/${key1}/${key2}`, {
-      data,
-    });
+    const res = await this.recoveryApi.put(
+      `/backups/${b64ToUrlSafeB64(key1)}/${b64ToUrlSafeB64(key2)}`,
+      {
+        data,
+      },
+    );
+    console.log('put', res);
     BackupApi.throwOnError(res);
   }
 
   async getSig() {
     try {
       let { publicKey } = store.getState().main.recoveryData;
-      console.log(publicKey);
       const res = await this.profileApi.get(
         `/profile/download/${b64ToUrlSafeB64(publicKey)}`,
       );

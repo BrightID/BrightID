@@ -16,7 +16,6 @@ import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import backupApi from '../../Api/BackupApi';
-import { setRecoveryData, removeRecoveryData } from '../../actions';
 import { setupRecovery, recoveryQrStr, handleSigs } from './helpers';
 
 /**
@@ -53,13 +52,19 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    const { navigation } = this.props;
-    setupRecovery();
-    qrcode.toString(recoveryQrStr(), this.handleQrString);
-    navigation.addListener('willFocus', this.waitForSigs);
-    navigation.addListener('willBlur', () => {
-      clearInterval(this.checkIntervalId);
-    });
+    try {
+      const { navigation } = this.props;
+      navigation.addListener('willFocus', () => {
+        setupRecovery();
+        qrcode.toString(recoveryQrStr(), this.handleQrString);
+      });
+      navigation.addListener('willFocus', this.waitForSigs);
+      navigation.addListener('willBlur', () => {
+        clearInterval(this.checkIntervalId);
+      });
+    } catch (err) {
+      console.warn(err.message);
+    }
   }
 
   waitForSigs = () => {
@@ -67,8 +72,8 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
       backupApi
         .getSig()
         .then(handleSigs)
-        .then((data) => {
-          if (data) this.props.navigation.navigate('Restore');
+        .then((ready) => {
+          if (ready) this.props.navigation.navigate('Restore');
         });
     }, 3000);
   };
