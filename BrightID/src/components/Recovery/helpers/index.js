@@ -118,11 +118,13 @@ export const backupAppData = async () => {
 };
 
 export const setupRecovery = () => {
-  const { timestamp } = store.getState().main.recoveryData;
-  if (timestamp) return;
+  let { recoveryData } = store.getState().main;
+  recoveryData.sigs = [];
+  store.dispatch(setRecoveryData(recoveryData));
+  if (recoveryData.timestamp) return;
 
   const { publicKey, secretKey } = nacl.sign.keyPair();
-  const recoveryData = {
+  recoveryData = {
     publicKey: uInt8ArrayToB64(publicKey),
     secretKey: uInt8ArrayToB64(secretKey),
     id: '',
@@ -202,21 +204,28 @@ export const handleSigs = async (data?: Signature) => {
     Alert.alert('Info', 'One of your trusted connections signed your request');
   } else {
     recoveryData.sigs[1] = data;
-    const sigs = recoveryData.sigs.map((sig) => ({
-      id: sig.signer,
-      sig: sig.sig,
-    }));
-    try {
-      await api.setSigningKey(
-        recoveryData.id,
-        recoveryData.publicKey,
-        sigs,
-        recoveryData.timestamp,
-      );
-      return true;
-    } catch (err) {
-      err instanceof Error ? console.warn(err.message) : console.warn(err);
-    }
+    store.dispatch(setRecoveryData(recoveryData));
+    return true;
+  }
+};
+
+export const setSigningKey = async () => {
+  const { recoveryData } = store.getState().main;
+  console.log('setting signing key');
+  try {
+    await api.setSigningKey({
+      id: recoveryData.id,
+      signingKey: recoveryData.publicKey,
+      timestamp: recoveryData.timestamp,
+      id1: recoveryData.sigs[0].signer,
+      id2: recoveryData.sigs[1].signer,
+      sig1: recoveryData.sigs[0].sig,
+      sig2: recoveryData.sigs[1].sig,
+    });
+  } catch (err) {
+    recoveryData.sigs = [];
+    store.dispatch(setRecoveryData(recoveryData));
+    throw new Error('bad sigs');
   }
 };
 
@@ -232,7 +241,7 @@ export const fetchBackupData = async (key: string, pass: string) => {
   } catch (err) {
     emitter.emit('restoreProgress', 0);
     Alert.alert('Error', 'Incorrect password!');
-    throw err;
+    throw new Error('bad password');
   }
 };
 
@@ -241,30 +250,26 @@ export const restoreUserData = async (pass: string) => {
     const { id, secretKey, publicKey } = store.getState().main.recoveryData;
 
     const decrypted = await fetchBackupData('data', pass);
-    if (decrypted) {
-      const { userData, connections } = JSON.parse(decrypted);
-      emitter.emit('restoreTotal', connections.length + 2);
-      userData.id = id;
-      userData.publicKey = publicKey;
-      userData.secretKey = b64ToUint8Array(secretKey);
 
-      const userPhoto = await fetchBackupData(id, pass);
-      if (userPhoto) {
-        const filename = await saveImage({
-          imageName: id,
-          base64Image: userPhoto,
-        });
-        userData.photo = { filename };
-      }
-      store.dispatch(setUserData(userData));
-      store.dispatch(setConnections(connections));
-
-      // TODO REMOVE THIS FOR V1 / add trusted connections
-      await AsyncStorage.setItem('userData', JSON.stringify(userData));
-      console.log(JSON.parse(decrypted));
-    } else {
-      throw new Error('incorrect password');
+    const { userData, connections } = JSON.parse(decrypted);
+    if (!userData || !connections) {
+      throw new Error('bad password');
     }
+    emitter.emit('restoreTotal', connections.length + 2);
+    userData.id = id;
+    userData.publicKey = publicKey;
+    userData.secretKey = b64ToUint8Array(secretKey);
+
+    const userPhoto = await fetchBackupData(id, pass);
+    if (userPhoto) {
+      const filename = await saveImage({
+        imageName: id,
+        base64Image: userPhoto,
+      });
+      userData.photo = { filename };
+    }
+
+    return { userData, connections };
   } catch (err) {
     throw err;
   }
@@ -272,9 +277,16 @@ export const restoreUserData = async (pass: string) => {
 
 export const recoverData = async (pass: string) => {
   try {
-    await restoreUserData(pass);
+    // fetch user data / save photo
+    const { userData, connections } = await restoreUserData(pass);
 
-    const { connections } = store.getState().main;
+    // set new signing key on the backend
+    await setSigningKey();
+
+    // TODO REMOVE THIS FOR V1 / add trusted connections
+    await AsyncStorage.setItem('userData', JSON.stringify(userData));
+    store.dispatch(setUserData(userData));
+    store.dispatch(setConnections(connections));
 
     for (const conn of connections) {
       let decrypted = await fetchBackupData(conn.id, pass);

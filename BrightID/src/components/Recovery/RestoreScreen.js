@@ -81,18 +81,22 @@ class RestoreScreen extends React.Component<Props, State> {
   };
 
   restore = () => {
+    const { navigation } = this.props;
     this.setState({ restoreInProgress: true });
     recoverData(this.state.pass)
       .then((result) => {
-        if (result) {
-          this.restoreCompleted();
-        } else {
-          this.resetState();
-        }
+        result ? this.restoreCompleted() : this.resetState();
       })
       .catch((err) => {
         this.resetState();
         err instanceof Error ? console.warn(err.message) : console.log(err);
+        if (err instanceof Error && err.message === 'bad sigs') {
+          Alert.alert(
+            'Uh Oh',
+            'One of your connections is not in your list of trusted connections for recovery',
+            [{ text: 'OK', onPress: () => navigation.goBack() }],
+          );
+        }
       });
   };
 

@@ -236,19 +236,16 @@ class BrightId {
     BrightId.throwOnError(res);
   }
 
-  async setSigningKey(
+  async setSigningKey(params: {
     id: string,
     signingKey: string,
-    sigs: {}[],
     timestamp: number,
-  ) {
-    let requestParams = {
-      id,
-      signingKey,
-      sigs,
-      timestamp,
-    };
-    const res = await this.api.put(`/signingKey`, requestParams);
+    id1: string,
+    id2: string,
+    sig1: string,
+    sig2: string,
+  }) {
+    const res = await this.api.put(`/signingKey`, params);
     BrightId.throwOnError(res);
   }
 }
