@@ -158,7 +158,7 @@ export const parseRecoveryQr = (
       return data;
     }
   } catch (err) {
-    throw err;
+    throw new Error('Bad QR Data');
   }
 };
 

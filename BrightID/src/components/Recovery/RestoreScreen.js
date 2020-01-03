@@ -93,7 +93,7 @@ class RestoreScreen extends React.Component<Props, State> {
         if (err instanceof Error && err.message === 'bad sigs') {
           Alert.alert(
             'Uh Oh',
-            'One of your connections is not in your list of trusted connections for recovery',
+            'One of your friends is not in your list of trusted connections',
             [{ text: 'OK', onPress: () => navigation.goBack() }],
           );
         }
