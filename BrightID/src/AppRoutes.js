@@ -12,7 +12,6 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Home from './components/HomeScreen';
-import CheatPage from './components/CheatScreen';
 import ConnectionsScreen from './components/Connections/ConnectionsScreen';
 import SortingConnectionsScreen from './components/Connections/SortingConnectionsScreen';
 import GroupsScreen from './components/GroupsScreens/GroupsScreen';
@@ -27,6 +26,12 @@ import PreviewConnectionScreen from './components/NewConnectionsScreens/PreviewC
 import SuccessScreen from './components/NewConnectionsScreens/SuccessScreen';
 import AppBootstrap from './AppBootstrap';
 import Apps from './components/Apps/AppsScreen';
+import Notifications from './components/Notifications/NotificationsScreen';
+import TrustedConnectionsScreen from './components/Recovery/TrustedConnectionsScreen';
+import BackupScreen from './components/Recovery/BackupScreen';
+import RestoreScreen from './components/Recovery/RestoreScreen';
+import RecoveringConnectionScreen from './components/Recovery/RecoveringConnectionScreen';
+import RecoveryCodeScreen from './components/Recovery/RecoveryCodeScreen';
 
 /**
  * This is BrightID's router, written with React-Navigation
@@ -188,7 +193,6 @@ const NewConnectStack = createStackNavigator(
 const AppStack = createStackNavigator(
   {
     Home,
-    CheatPage,
     Connections: {
       screen: ConnectionsStack,
       navigationOptions: {
@@ -207,14 +211,23 @@ const AppStack = createStackNavigator(
         header: null,
       },
     },
+    Notifications,
     Apps: {
       screen: Apps,
       path: 'link-verification/:baseUrl/:context/:id',
     },
+    TrustedConnections: {
+      screen: TrustedConnectionsScreen,
+    },
+    Backup: {
+      screen: BackupScreen,
+    },
+    RecoveringConnection: {
+      screen: RecoveringConnectionScreen,
+    },
   },
   {
     initialRouteName: 'Home',
-    // initialRouteName: 'CheatPage',
     headerLayoutPreset: 'center',
     defaultNavigationOptions,
   },
@@ -229,6 +242,12 @@ const OnboardingStack = createStackNavigator(
       },
     },
     SignUp,
+    RecoveryCode: {
+      screen: RecoveryCodeScreen,
+    },
+    Restore: {
+      screen: RestoreScreen,
+    },
   },
   {
     initialRouteName: 'Onboard',

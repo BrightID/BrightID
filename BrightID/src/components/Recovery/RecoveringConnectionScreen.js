@@ -1,31 +1,21 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
-import { NavigationEvents } from 'react-navigation';
-
 import SearchConnections from '../Connections/SearchConnections';
-import NewGroupCard from './NewGroupCard';
+import RecoveringConnectionCard from './RecoveringConnectionCard';
 import { getConnections } from '../../actions/connections';
-import store from '../../store';
 import emitter from '../../emitter';
-import { createNewGroup } from './actions';
 import { renderListOrSpinner } from '../Connections/renderConnections';
-import { clearNewGroupCoFounders } from '../../actions/index';
-
-/**
- * Connection screen of BrightID
- * Displays a search input and list of Connection Cards
- */
 
 type State = {
   loading: boolean,
 };
 
-class NewGroupScreen extends React.Component<Props, State> {
+class RecoveringConnectionScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
-    title: 'New Group',
+    title: 'Account Recovery',
   });
 
   state = {
@@ -33,17 +23,13 @@ class NewGroupScreen extends React.Component<Props, State> {
   };
 
   componentDidMount() {
+    const { navigation } = this.props;
     this.getConnections();
     emitter.on('refreshConnections', this.getConnections);
+    navigation.addListener('willBlur', () => {
+      emitter.off('refreshConnections', this.getConnections);
+    });
   }
-
-  componentWillUnmount() {
-    emitter.off('refreshConnections', this.getConnections);
-  }
-
-  onWillBlur = () => {
-    this.props.dispatch(clearNewGroupCoFounders());
-  };
 
   getConnections = async () => {
     const { dispatch } = this.props;
@@ -63,17 +49,14 @@ class NewGroupScreen extends React.Component<Props, State> {
     );
   };
 
-  cardIsSelected = (card) => {
-    const { newGroupCoFounders } = this.props;
-    return newGroupCoFounders.includes(card.id);
-  };
-
   renderConnection = ({ item }) => (
-    <NewGroupCard
+    <RecoveringConnectionCard
       {...item}
-      selected={this.cardIsSelected(item)}
-      groups={true}
-      style={styles.connectionCard}
+      recoveryRequestCode={
+        this.props.navigation.state.params.recoveryRequestCode
+      }
+      navigation={this.props.navigation}
+      style={styles.recoveringConnectionCard}
     />
   );
 
@@ -82,30 +65,15 @@ class NewGroupScreen extends React.Component<Props, State> {
     return (
       <View style={styles.container}>
         <View style={styles.mainContainer}>
-          <NavigationEvents onWillBlur={(payload) => this.onWillBlur()} />
           <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>CO-FOUNDERS</Text>
+            <Text style={styles.titleText}>Choose Connection</Text>
             <Text style={styles.infoText}>
-              To create a group, you must select two co-founders
+              Please select the connection whose account you are helping to
+              recover.
             </Text>
           </View>
-          <SearchConnections navigation={this.props.navigation} />
+          <SearchConnections navigation={navigation} />
           <View style={styles.mainContainer}>{renderListOrSpinner(this)}</View>
-        </View>
-        <View style={styles.createGroupButtonContainer}>
-          <TouchableOpacity
-            onPress={async () => {
-              try {
-                let result = await store.dispatch(createNewGroup());
-                if (result) navigation.goBack();
-              } catch (err) {
-                console.log(err);
-              }
-            }}
-            style={styles.createGroupButton}
-          >
-            <Text style={styles.buttonInnerText}>Create Group</Text>
-          </TouchableOpacity>
         </View>
       </View>
     );
@@ -129,7 +97,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#e3e1e1',
   },
-
   moreIcon: {
     marginRight: 16,
   },
@@ -166,7 +133,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: 'center',
   },
-  connectionCard: {
+  recoveringConnectionCard: {
     marginBottom: 0,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0,
@@ -175,11 +142,11 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e3e1e1',
     width: '100%',
   },
-  createGroupButtonContainer: {
+  buttonContainer: {
     justifyContent: 'center',
     alignItems: 'center',
   },
-  createGroupButton: {
+  saveButton: {
     backgroundColor: '#428BE5',
     width: 300,
     justifyContent: 'center',
@@ -197,4 +164,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(NewGroupScreen);
+export default connect((state) => state.main)(RecoveringConnectionScreen);

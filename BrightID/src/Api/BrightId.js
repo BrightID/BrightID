@@ -47,15 +47,15 @@ class BrightId {
   }
 
   async createConnection(
-    publicKey1: string,
+    id1: string,
     sig1: string,
-    publicKey2: string,
+    id2: string,
     sig2: string,
     timestamp: number,
   ) {
     let requestParams = {
-      publicKey1,
-      publicKey2,
+      id1,
+      id2,
       sig1,
       sig2,
       timestamp,
@@ -64,20 +64,24 @@ class BrightId {
     BrightId.throwOnError(res);
   }
 
-  async deleteConnection(publicKey2: string) {
-    const { publicKey, secretKey } = store.getState().main;
+  async deleteConnection(id2: string) {
+    const { id, secretKey } = store.getState().main;
     const timestamp = Date.now();
-    const message = publicKey + publicKey2 + timestamp;
+    const message = id + id2 + timestamp;
     let sig1 = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
     let requestParams = {
-      publicKey1: publicKey,
-      publicKey2,
+      id1: id,
+      id2,
       sig1,
       timestamp,
     };
-    const res = await this.api.delete(`/connections`, {}, { data: requestParams });
+    const res = await this.api.delete(
+      `/connections`,
+      {},
+      { data: requestParams },
+    );
     BrightId.throwOnError(res);
   }
 
@@ -88,15 +92,15 @@ class BrightId {
   }
 
   async joinGroup(group: string) {
-    const { publicKey, secretKey } = store.getState().main;
+    const { id, secretKey } = store.getState().main;
     let timestamp = Date.now();
-    let message = publicKey + group + timestamp;
+    let message = id + group + timestamp;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
 
     let requestParams = {
-      publicKey,
+      id,
       group,
       sig,
       timestamp,
@@ -107,45 +111,43 @@ class BrightId {
   }
 
   async leaveGroup(group: string) {
-    const { publicKey, secretKey } = store.getState().main;
+    const { id, secretKey } = store.getState().main;
     let timestamp = Date.now();
-    let message = publicKey + group + timestamp;
+    let message = id + group + timestamp;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
 
     let requestParams = {
-      publicKey,
+      id,
       group,
       sig,
       timestamp,
     };
-    const res = await this.api.delete(`/membership`, {}, { data: requestParams });
+    const res = await this.api.delete(
+      `/membership`,
+      {},
+      { data: requestParams },
+    );
     BrightId.throwOnError(res);
   }
 
-  async createUser(publicKey: string) {
-    const res = await this.api.post('/users', { publicKey });
+  async createUser(id: string, signingKey: string) {
+    const res = await this.api.post('/users', { id, signingKey });
     BrightId.throwOnError(res);
     return res.data.data;
   }
 
   async getUserInfo() {
-    let { publicKey, secretKey } = store.getState().main;
+    let { id, secretKey } = store.getState().main;
     let timestamp = Date.now();
-    let message = publicKey + timestamp;
+    let message = id + timestamp;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    const res = await this.api.post(`/fetchUserInfo`, { publicKey, sig, timestamp });
+    const res = await this.api.post(`/fetchUserInfo`, { id, sig, timestamp });
     BrightId.throwOnError(res);
     return res.data.data;
-  }
-
-  async getUserScore(publicKey: string) {
-    const res = await this.api.get(`/userScore/${publicKey}`);
-    BrightId.throwOnError(res);
-    return res.data.data.score;
   }
 
   async getContext(context: string) {
@@ -154,31 +156,37 @@ class BrightId {
     return res.data.data;
   }
 
-  async getVerification(context: string, id: string) {
-    let { publicKey, secretKey } = store.getState().main;
+  async getVerification(context: string, userid: string) {
+    let { id, secretKey } = store.getState().main;
     let timestamp = Date.now();
-    let message = `${context},${id},${timestamp}`;
+    let message = `${context},${userid},${timestamp}`;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    const res = await this.api.post('/fetchVerification', { publicKey, context, id, sig, timestamp });
+    const res = await this.api.post('/fetchVerification', {
+      id,
+      context,
+      userid,
+      sig,
+      timestamp,
+    });
     BrightId.throwOnError(res);
     return res.data.data;
   }
 
-  async createGroup(publicKey2: string, publicKey3: string) {
-    const { publicKey, secretKey } = store.getState().main;
+  async createGroup(id2: string, id3: string) {
+    const { id, secretKey } = store.getState().main;
     const timestamp = Date.now();
-    const message = publicKey + publicKey2 + publicKey3 + timestamp;
+    const message = id + id2 + id3 + timestamp;
 
     const sig1 = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
 
     let requestParams = {
-      publicKey1: publicKey,
-      publicKey2,
-      publicKey3,
+      id1: id,
+      id2,
+      id3,
       sig1,
       timestamp,
     };
@@ -188,15 +196,15 @@ class BrightId {
   }
 
   async deleteGroup(group: string) {
-    let { publicKey, secretKey } = store.getState().main;
+    let { id, secretKey } = store.getState().main;
     let timestamp = Date.now();
-    let message = publicKey + group + timestamp;
+    let message = id + group + timestamp;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
 
     let requestParams = {
-      publicKey,
+      id,
       group,
       sig,
       timestamp,
@@ -209,6 +217,36 @@ class BrightId {
     const res = await this.api.get('/ip');
     BrightId.throwOnError(res);
     return res.data.data.ip;
+  }
+
+  async setTrusted(trusted: string[]) {
+    let { id, secretKey } = store.getState().main;
+    let timestamp = Date.now();
+    let message = id + trusted.join(',') + timestamp;
+    let sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+    let requestParams = {
+      id,
+      trusted,
+      sig,
+      timestamp,
+    };
+    const res = await this.api.put(`/trusted`, requestParams);
+    BrightId.throwOnError(res);
+  }
+
+  async setSigningKey(params: {
+    id: string,
+    signingKey: string,
+    timestamp: number,
+    id1: string,
+    id2: string,
+    sig1: string,
+    sig2: string,
+  }) {
+    const res = await this.api.put(`/signingKey`, params);
+    BrightId.throwOnError(res);
   }
 }
 

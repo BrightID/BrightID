@@ -74,16 +74,20 @@ class ScanCodeScreen extends React.Component<Props, State> {
   };
 
   handleBarCodeRead = ({ data }) => {
-    const { dispatch } = this.props;
-    if (!validQrString(data)) {
-      return;
+    const { dispatch, navigation } = this.props;
+
+    if (data.startsWith('Recovery_')) {
+      navigation.navigate('RecoveringConnection', {
+        recoveryRequestCode: data,
+      });
+    } else if (validQrString(data)) {
+      dispatch(parseQrData(data));
+      // If the following `fetchdata()` fails, a "connectFailure" will be emitted,
+      // triggering a single retry through a websocket notification.
+      dispatch(fetchData());
+      this.setState({ scanned: true });
+      if (this.textInput) this.textInput.blur();
     }
-    dispatch(parseQrData(data));
-    // If the following `fetchdata()` fails, a "connectFailure" will be emitted,
-    // triggering a single retry through a websocket notification.
-    dispatch(fetchData());
-    this.setState({ scanned: true });
-    if (this.textInput) this.textInput.blur();
   };
 
   subscribeToProfileUpload = () => {

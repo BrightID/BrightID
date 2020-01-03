@@ -80,7 +80,6 @@ class ConnectionsScreen extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    this.getConnections();
     emitter.on('refreshConnections', this.getConnections);
     emitter.on('removeConnection', this.removeConnection);
   }
@@ -98,11 +97,11 @@ class ConnectionsScreen extends React.Component<Props, State> {
     });
   };
 
-  removeConnection = async (publicKey) => {
+  removeConnection = async (id) => {
     try {
-      await api.deleteConnection(publicKey);
+      await api.deleteConnection(id);
       // remove connection from async storage
-      await AsyncStorage.removeItem(publicKey);
+      await AsyncStorage.removeItem(id);
       emitter.emit('refreshConnections', {});
     } catch (err) {
       Alert.alert("Couldn't remove connection", err.message);
@@ -133,7 +132,7 @@ class ConnectionsScreen extends React.Component<Props, State> {
         />
         <View style={{ flex: 1 }}>
           <View style={styles.mainContainer}>
-            <SearchConnections navigation={navigation} />
+            <SearchConnections navigation={navigation} sortable={true} />
             <View style={styles.mainContainer}>
               {renderListOrSpinner(this)}
             </View>
@@ -173,4 +172,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(state => state.main)(ConnectionsScreen);
+export default connect((state) => state.main)(ConnectionsScreen);

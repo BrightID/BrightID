@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import { connect } from 'react-redux';
 
 /**
  * list of icons which will navigate between screens inside the app
@@ -13,21 +14,18 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 type Props = {
   navigation: { navigate: () => null },
+  notifications: Array<NotificationInfo>,
 };
 
-export default class BottomNav extends React.Component<Props> {
-  handleCheatPageNavigation = () => {
-    if (__DEV__) {
-      this.props.navigation.navigate('CheatPage');
-    }
-  };
-
+export class BottomNav extends React.Component<Props> {
   render() {
+    const { notifications, navigation } = this.props;
+
     return (
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate('Home');
+            navigation.navigate('Home');
           }}
           accessible={true}
           accessibilityLabel="Home"
@@ -39,7 +37,7 @@ export default class BottomNav extends React.Component<Props> {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate('Connections');
+            navigation.navigate('Connections');
           }}
           accessible={true}
           accessibilityLabel="Connections"
@@ -51,7 +49,7 @@ export default class BottomNav extends React.Component<Props> {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate('Groups');
+            navigation.navigate('Groups');
           }}
           accessible={true}
           accessibilityLabel="Groups"
@@ -62,18 +60,23 @@ export default class BottomNav extends React.Component<Props> {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={this.handleCheatPageNavigation}
+          onPress={() => {
+            navigation.navigate('Notifications');
+          }}
           accessible={true}
-          accessibilityLabel="Apps"
+          accessibilityLabel="Notifications"
         >
           <View style={styles.navIconContainer}>
+            {notifications.length > 0 && (
+              <Text style={styles.badge}> {notifications.length} </Text>
+            )}
             <SimpleLineIcons size={32} name="bell" color="#222" />
             <Text style={styles.navText}>Notifications</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate('Apps');
+            navigation.navigate('Apps');
           }}
           accessible={true}
           accessibilityLabel="Apps"
@@ -110,4 +113,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 1.5,
   },
+  badge: {
+    color: '#fff',
+    position: 'absolute',
+    zIndex: 10,
+    top: 1,
+    right: 1,
+    padding: 1,
+    backgroundColor: 'red',
+    borderRadius: 5,
+  },
 });
+
+export default connect((state) => state.main)(BottomNav);

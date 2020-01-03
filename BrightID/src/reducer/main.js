@@ -26,8 +26,15 @@ import {
   ADD_APP,
   REMOVE_APP,
   SET_APPS,
+  SET_NOTIFICATIONS,
+  ADD_TRUSTED_CONNECTION,
+  REMOVE_TRUSTED_CONNECTION,
+  SET_BACKUP_COMPLETED,
+  SET_PASSWORD,
+  SET_RECOVERY_DATA,
+  REMOVE_RECOVERY_DATA,
+  SET_HASHED_ID,
 } from '../actions';
-import { b64ToUrlSafeB64 } from '../utils/encoding';
 
 /**
  * INITIAL STATE
@@ -42,7 +49,7 @@ import { b64ToUrlSafeB64 } from '../utils/encoding';
  */
 
 export const initialState: Main = {
-  score: 0,
+  score: __DEV__ ? 100 : 0,
   name: '',
   photo: { filename: '' },
   groupsCount: 0,
@@ -53,8 +60,13 @@ export const initialState: Main = {
   connections: [],
   verifications: [],
   apps: [],
+  notifications: [],
+  trustedConnections: [],
+  backupCompleted: false,
+  id: '',
   publicKey: '',
-  safePubKey: '',
+  password: '',
+  hashedId: '',
   secretKey: new Uint8Array([]),
   connectionsSort: '',
   connectQrData: {
@@ -66,16 +78,26 @@ export const initialState: Main = {
     channel: '',
   },
   connectUserData: {
-    publicKey: '',
+    id: '',
     photo: '',
     name: '',
     timestamp: 0,
     signedMessage: '',
     score: 0,
   },
+  recoveryData: {
+    id: '',
+    publicKey: '',
+    secretKey: '',
+    timestamp: 0,
+    sigs: [],
+  },
 };
 
-export const mainReducer = (state: Main = initialState, action: action) => {
+export const mainReducer = (
+  state: Main = initialState,
+  action: action,
+): Main => {
   let newElGroups;
   let groupIndex;
   let group;
@@ -132,7 +154,7 @@ export const mainReducer = (state: Main = initialState, action: action) => {
       };
     case JOIN_GROUP:
       action.group.isNew = false;
-      action.group.knownMembers.push(state.safePubKey);
+      action.group.knownMembers.push(state.id);
       return {
         ...state,
         currentGroups: [action.group, ...state.currentGroups],
@@ -146,7 +168,7 @@ export const mainReducer = (state: Main = initialState, action: action) => {
       newElGroups = state.eligibleGroups.slice();
       groupIndex = newElGroups.findIndex((g) => g.id === action.groupId);
       group = newElGroups[groupIndex];
-      newKnownMembers = [...group.knownMembers, state.safePubKey];
+      newKnownMembers = [...group.knownMembers, state.id];
       newElGroups[groupIndex] = { ...group, knownMembers: newKnownMembers };
       return {
         ...state,
@@ -173,7 +195,7 @@ export const mainReducer = (state: Main = initialState, action: action) => {
       return {
         ...state,
         connections: state.connections.filter(
-          (val: connection) => val.publicKey !== action.publicKey,
+          (val: connection) => val.id !== action.id,
         ),
       };
     case UPDATE_USER_DATA:
@@ -181,22 +203,30 @@ export const mainReducer = (state: Main = initialState, action: action) => {
         ...state,
         photo: action.photo,
         name: action.name,
+        id: action.id,
         publicKey: action.publicKey,
-        safePubKey: b64ToUrlSafeB64(action.publicKey),
         secretKey: action.secretKey,
       };
     case REMOVE_USER_DATA:
       return {
         ...state,
-        photo: '',
+        photo: { filename: '' },
         name: '',
+        id: '',
         publicKey: '',
-        safePubKey: '',
         secretKey: null,
+        backupCompleted: false,
+        groupsCount: 0,
+        eligibleGroups: [],
+        currentGroups: [],
+        connections: [],
+        verifications: [],
+        apps: [],
+        notifications: [],
+        trustedConnections: [],
       };
     case SET_CONNECT_QR_DATA:
       // Compute the websocket channel and download (but not upload) path
-
       action.connectQrData.channel =
         action.connectQrData.uuid +
         (action.connectQrData.user === '1' ? '2' : '1');
@@ -225,11 +255,12 @@ export const mainReducer = (state: Main = initialState, action: action) => {
       return {
         ...state,
         connectUserData: {
-          publicKey: '',
+          id: '',
           photo: '',
           name: '',
-          timestamp: '',
+          timestamp: 0,
           signedMessage: '',
+          score: 0,
         },
       };
     case SET_VERIFICATIONS:
@@ -251,6 +282,54 @@ export const mainReducer = (state: Main = initialState, action: action) => {
       return {
         ...state,
         apps: state.apps.filter((app) => app.name !== action.name),
+      };
+    case SET_NOTIFICATIONS:
+      return {
+        ...state,
+        notifications: action.notifications,
+      };
+    case ADD_TRUSTED_CONNECTION:
+      return {
+        ...state,
+        trustedConnections: [...state.trustedConnections, action.id],
+      };
+    case REMOVE_TRUSTED_CONNECTION:
+      return {
+        ...state,
+        trustedConnections: state.trustedConnections.filter(
+          (id) => id !== action.id,
+        ),
+      };
+    case SET_BACKUP_COMPLETED:
+      return {
+        ...state,
+        backupCompleted: action.backupCompleted,
+      };
+    case SET_PASSWORD:
+      return {
+        ...state,
+        password: action.password,
+      };
+    case SET_RECOVERY_DATA:
+      return {
+        ...state,
+        recoveryData: action.recoveryData,
+      };
+    case REMOVE_RECOVERY_DATA:
+      return {
+        ...state,
+        recoveryData: {
+          publicKey: '',
+          secretKey: '',
+          id: '',
+          timestamp: 0,
+          sigs: [],
+        },
+      };
+    case SET_HASHED_ID:
+      return {
+        ...state,
+        hashedId: action.hash,
       };
     default:
       return state;

@@ -12,7 +12,7 @@ export const encryptAndUploadLocalData = () => async (
   getState: getState,
 ) => {
   const {
-    publicKey,
+    id,
     secretKey,
     photo: { filename },
     name,
@@ -28,11 +28,11 @@ export const encryptAndUploadLocalData = () => async (
   let signedMessage;
 
   try {
-    if (connectUserData.publicKey && !connectUserData.signedMessage) {
-      // The other user sent their publicKey. Sign the message and send it.
+    if (connectUserData.id && !connectUserData.signedMessage) {
+      // The other user sent their id. Sign the message and send it.
 
       timestamp = Date.now();
-      const message = publicKey + connectUserData.publicKey + timestamp;
+      const message = id + connectUserData.id + timestamp;
       signedMessage = uInt8ArrayToB64(
         nacl.sign.detached(strToUint8Array(message), secretKey),
       );
@@ -42,7 +42,9 @@ export const encryptAndUploadLocalData = () => async (
   }
 
   const dataObj = {
-    publicKey,
+    id,
+    // publicKey is added to make it compatible with earlier version
+    publicKey: id,
     photo,
     name,
     score,

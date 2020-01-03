@@ -6,30 +6,35 @@ import { Alert } from 'react-native';
 import { names } from '../utils/fakeNames';
 import api from '../Api/BrightId';
 import { setConnectUserData } from './index';
-import { strToUint8Array, uInt8ArrayToB64 } from '../utils/encoding';
+import {
+  strToUint8Array,
+  uInt8ArrayToB64,
+  b64ToUrlSafeB64,
+} from '../utils/encoding';
 
-export const addConnection = (navigation: () => null) => async (
+export const addConnection = (navigation: navigation) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
   const { publicKey, secretKey } = nacl.sign.keyPair();
   const { main } = getState();
   const b64PubKey = uInt8ArrayToB64(publicKey);
-  await api.createUser(b64PubKey);
+  const id = b64ToUrlSafeB64(b64PubKey);
+  await api.createUser(id, b64PubKey);
   const { firstName, lastName } = names[
     Math.floor(Math.random() * (names.length - 1))
-    ];
+  ];
   const name = `${firstName} ${lastName}`;
   const score = Math.floor(Math.random() * 99);
   const timestamp = Date.now();
-  const base64Key = uInt8ArrayToB64(publicKey);
-  const message = base64Key + main.publicKey + timestamp;
+  const message = id + main.id + timestamp;
   const signedMessage = uInt8ArrayToB64(
     nacl.sign.detached(strToUint8Array(message), secretKey),
   );
 
   const userData = {
     publicKey: b64PubKey,
+    id,
     timestamp,
     secretKey,
     signedMessage,

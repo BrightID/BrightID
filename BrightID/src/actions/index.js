@@ -1,7 +1,5 @@
 // @flow
 
-import { AppInfo } from './apps';
-
 export const USER_SCORE = 'USER_SCORE';
 export const GROUPS_COUNT = 'GROUPS_COUNT';
 export const SEARCH_PARAM = 'SEARCH_PARAM';
@@ -27,6 +25,14 @@ export const SET_VERIFICATIONS = 'SET_VERIFICATIONS';
 export const SET_APPS = 'SET_APPS';
 export const ADD_APP = 'ADD_APP';
 export const REMOVE_APP = 'REMOVE_APP';
+export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
+export const ADD_TRUSTED_CONNECTION = 'ADD_TRUSTED_CONNECTION';
+export const REMOVE_TRUSTED_CONNECTION = 'REMOVE_TRUSTED_CONNECTION';
+export const SET_BACKUP_COMPLETED = 'SET_BACKUP_COMPLETED';
+export const SET_PASSWORD = 'SET_PASSWORD';
+export const SET_RECOVERY_DATA = 'SET_RECOVERY_DATA';
+export const REMOVE_RECOVERY_DATA = 'REMOVE_RECOVERY_DATA';
+export const SET_HASHED_ID = 'SET_HASHED_ID';
 
 /**
  * redux action creator that updates user `score`
@@ -64,7 +70,7 @@ export const setSearchParam = (searchParam: string) => ({
 
 /**
  * redux action creator for set co-founders of new group
- * @param coFounders: an array contain two publicKeys of co-founders of new group.
+ * @param coFounders: an array contain two ids of co-founders of new group.
  */
 export const setNewGroupCoFounders = (newGroupCoFounders: string[]) => ({
   type: SET_NEW_GROUP_CO_FOUNDERS,
@@ -150,12 +156,12 @@ export const setConnectionsSort = (connectionsSort: string) => ({
 /**
  * redux action creator for removing a connection
  * @param type REMOVE_CONNECTION
- * @param connection removes a connection object from the array of connections and removes public key from connection keys
+ * @param connection removes a connection object from the array of connections and removes id from connection ids
  */
 
-export const removeConnection = (publicKey: string) => ({
+export const removeConnection = (id: string) => ({
   type: REMOVE_CONNECTION,
-  publicKey,
+  id,
 });
 
 /**
@@ -165,21 +171,21 @@ export const removeConnection = (publicKey: string) => ({
  */
 
 export const setUserData = ({
-                              publicKey,
-                              safePubKey,
-                              secretKey,
-                              name,
-                              photo,
-                            }: {
+  id,
+  publicKey,
+  secretKey,
+  name,
+  photo,
+}: {
+  id: string,
   publicKey: string,
-  safePubKey: string,
   secretKey: Uint8Array,
   name: string,
   photo: { filename: string },
 }) => ({
   type: UPDATE_USER_DATA,
+  id,
   publicKey,
-  safePubKey,
   secretKey,
   name,
   photo,
@@ -219,7 +225,7 @@ export const removeConnectQrData = () => ({
 
 export const setConnectUserData = (connectUserData: {
   name: string,
-  publicKey: string,
+  id: string,
   photo: string,
   score: number,
 }) => ({
@@ -231,7 +237,7 @@ export const removeConnectUserData = () => ({
   type: REMOVE_CONNECT_USER_DATA,
 });
 
-export const setApps = (appInfos: [AppInfo]) => ({
+export const setApps = (appInfos: AppInfo[]) => ({
   type: SET_APPS,
   apps: appInfos,
 });
@@ -244,4 +250,49 @@ export const addApp = (appInfo: AppInfo) => ({
 export const removeApp = (name: string) => ({
   type: REMOVE_APP,
   name,
+});
+
+export const setNotifications = (notificationInfos: NotificationInfo[]) => ({
+  type: SET_NOTIFICATIONS,
+  notifications: notificationInfos,
+});
+
+export const addTrustedConnection = (id: string) => ({
+  type: ADD_TRUSTED_CONNECTION,
+  id,
+});
+
+export const removeTrustedConnection = (id: string) => ({
+  type: REMOVE_TRUSTED_CONNECTION,
+  id,
+});
+
+export const setBackupCompleted = (backupCompleted: boolean) => ({
+  type: SET_BACKUP_COMPLETED,
+  backupCompleted,
+});
+
+export const setPassword = (password: string) => ({
+  type: SET_PASSWORD,
+  password,
+});
+
+export const setRecoveryData = (recoveryData: {
+  publicKey: string,
+  id: string,
+  secretKey: string,
+  timestamp: number,
+  sigs: Signature[],
+}) => ({
+  type: SET_RECOVERY_DATA,
+  recoveryData,
+});
+
+export const removeRecoveryData = () => ({
+  type: REMOVE_RECOVERY_DATA,
+});
+
+export const setHashedId = (hash: string) => ({
+  type: SET_HASHED_ID,
+  hash,
 });

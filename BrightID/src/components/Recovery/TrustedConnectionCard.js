@@ -1,64 +1,24 @@
 // @flow
 
 import * as React from 'react';
-import {
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import RNFS from 'react-native-fs';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
+import RNFS from 'react-native-fs';
 import moment from 'moment';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import emitter from '../../emitter';
-import { fakeJoinGroups } from '../../actions/fakeGroup';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {
+  addTrustedConnection,
+  removeTrustedConnection,
+} from '../../actions/index';
+import store from '../../store';
 
-/**
- * Connection Card in the Connections Screen
- * is created from an array of connections
- * each connection should have:
- * @prop name
- * @prop score
- * @prop connectionTime
- * @prop photo
- */
-
-class CofounderCard extends React.PureComponent<Props> {
-  handleUserOptions = () => {
-    const { name, id, secretKey, dispatch } = this.props;
-    console.log(secretKey);
-    const buttons = [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {
-        text: 'OK',
-        onPress: () => {
-          emitter.emit('removeConnection', id);
-        },
-      },
-    ];
-
-    if (__DEV__) {
-      buttons.push({
-        text: 'Join All Groups',
-        onPress: () => {
-          dispatch(fakeJoinGroups({ id, secretKey }));
-        },
-      });
-    }
-
-    Alert.alert(
-      `Delete Connection`,
-      `Are you sure you want to remove ${name} from your list of connections?`,
-      buttons,
-      { cancelable: true },
-    );
+class TrustedConnectionCard extends React.PureComponent<Props> {
+  toggleConnectionSelect = () => {
+    const { id } = this.props;
+    const { trustedConnections } = store.getState().main;
+    trustedConnections.includes(id)
+      ? store.dispatch(removeTrustedConnection(id))
+      : store.dispatch(addTrustedConnection(id));
   };
 
   scoreColor = () => {
@@ -70,6 +30,12 @@ class CofounderCard extends React.PureComponent<Props> {
     }
   };
 
+  selected = () => {
+    const { id } = this.props;
+    const { trustedConnections } = store.getState().main;
+    return trustedConnections.includes(id);
+  };
+
   render() {
     const { photo, name, score, connectionDate, style } = this.props;
 
@@ -77,9 +43,7 @@ class CofounderCard extends React.PureComponent<Props> {
       <View style={{ ...styles.container, ...style }}>
         <Image
           source={{
-            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
-              photo.filename
-            }`,
+            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo.filename}`,
           }}
           style={styles.photo}
         />
@@ -95,9 +59,13 @@ class CofounderCard extends React.PureComponent<Props> {
         </View>
         <TouchableOpacity
           style={styles.moreIcon}
-          onPress={this.handleUserOptions}
+          onPress={this.toggleConnectionSelect}
         >
-          <Ionicon size={48} name="ios-more" color="#ccc" />
+          <AntDesign
+            size={30.4}
+            name={this.selected() ? 'checkcircle' : 'checkcircleo'}
+            color="#000"
+          />
         </TouchableOpacity>
       </View>
     );
@@ -165,4 +133,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(CofounderCard);
+export default connect()(TrustedConnectionCard);

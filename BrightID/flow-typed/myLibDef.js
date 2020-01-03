@@ -15,8 +15,14 @@ declare type Main = {
   eligibleGroups: group[],
   currentGroups: group[],
   connections: connection[],
+  trustedConnections: string[],
+  notifications: NotificationInfo[],
+  backupCompleted: boolean,
+  apps: AppInfo[],
   publicKey: string,
-  safePubKey: string,
+  id: string,
+  password: string,
+  hashedId: string,
   secretKey: Uint8Array,
   connectionsSort: string,
   connectQrData: {
@@ -28,13 +34,20 @@ declare type Main = {
     channel: string,
   },
   connectUserData: {
-    publicKey: string,
+    id: string,
     photo: string,
     name: string,
     timestamp: number,
     signedMessage: string,
     score: number,
     secretKey?: Uint8Array,
+  },
+  recoveryData: {
+    publicKey: string,
+    secretKey: string,
+    timestamp: number,
+    id: string,
+    sigs: Signature[],
   },
 };
 
@@ -65,6 +78,25 @@ declare type group = {
   id: string,
   knownMembers: string[],
   founders: string[],
+};
+
+declare type NotificationInfo = {
+  msg: string,
+  icon: string,
+};
+
+declare type Signature = {
+  signer: string,
+  sig: string,
+  id: string,
+};
+
+declare type AppInfo = {
+  name: string,
+  url: string,
+  logoFile: string,
+  verified: boolean,
+  dateAdded: number,
 };
 
 declare type Uint8Obj = {

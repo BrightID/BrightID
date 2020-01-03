@@ -136,7 +136,7 @@ class CurrentGroupView extends Component<Props, State> {
           <FlatList
             style={styles.membersContainer}
             data={this.filterMembers()}
-            keyExtractor={({ publicKey }, index) => publicKey + index}
+            keyExtractor={({ id }, index) => id + index}
             renderItem={this.renderMember}
           />
         </View>

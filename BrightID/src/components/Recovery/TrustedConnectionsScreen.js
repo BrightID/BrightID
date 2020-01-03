@@ -1,21 +1,17 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
-import { NavigationEvents } from 'react-navigation';
-
 import SearchConnections from '../Connections/SearchConnections';
-import NewGroupCard from './NewGroupCard';
+import TrustedConnectionCard from './TrustedConnectionCard';
 import { getConnections } from '../../actions/connections';
-import store from '../../store';
 import emitter from '../../emitter';
-import { createNewGroup } from './actions';
 import { renderListOrSpinner } from '../Connections/renderConnections';
-import { clearNewGroupCoFounders } from '../../actions/index';
+import { setTrustedConnections } from './helpers';
 
 /**
- * Connection screen of BrightID
+ * Backup screen of BrightID
  * Displays a search input and list of Connection Cards
  */
 
@@ -23,9 +19,9 @@ type State = {
   loading: boolean,
 };
 
-class NewGroupScreen extends React.Component<Props, State> {
+class TrustedConnectionsScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
-    title: 'New Group',
+    title: 'Trusted Connections',
   });
 
   state = {
@@ -33,17 +29,17 @@ class NewGroupScreen extends React.Component<Props, State> {
   };
 
   componentDidMount() {
+    const { navigation } = this.props;
     this.getConnections();
     emitter.on('refreshConnections', this.getConnections);
+    navigation.addListener('willBlur', () => {
+      emitter.off('refreshConnections', this.getConnections);
+    });
   }
 
   componentWillUnmount() {
     emitter.off('refreshConnections', this.getConnections);
   }
-
-  onWillBlur = () => {
-    this.props.dispatch(clearNewGroupCoFounders());
-  };
 
   getConnections = async () => {
     const { dispatch } = this.props;
@@ -64,47 +60,62 @@ class NewGroupScreen extends React.Component<Props, State> {
   };
 
   cardIsSelected = (card) => {
-    const { newGroupCoFounders } = this.props;
-    return newGroupCoFounders.includes(card.id);
+    const { trustedConnections } = this.props;
+    return trustedConnections.includes(card.id);
   };
 
   renderConnection = ({ item }) => (
-    <NewGroupCard
+    <TrustedConnectionCard
       {...item}
       selected={this.cardIsSelected(item)}
-      groups={true}
       style={styles.connectionCard}
     />
   );
+
+  navigateToBackup = async () => {
+    let { navigation, trustedConnections } = this.props;
+    if (trustedConnections.length < 3) {
+      Alert.alert(
+        'Error',
+        'You need at least three trusted connections for backup.',
+      );
+    } else {
+      setTrustedConnections()
+        .then((success) => {
+          if (success) navigation.navigate('Backup');
+        })
+        .catch((err) => {
+          if (err.message === `trusted connections can't be overwritten`) {
+            navigation.navigate('Backup');
+          }
+          console.warn(err.message);
+        });
+    }
+  };
 
   render() {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.mainContainer}>
-          <NavigationEvents onWillBlur={(payload) => this.onWillBlur()} />
           <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>CO-FOUNDERS</Text>
             <Text style={styles.infoText}>
-              To create a group, you must select two co-founders
+              Choose three or more trusted connections to back up your BrightID.
+            </Text>
+            <Text style={styles.infoText}>
+              If your BrightID is lost or stolen, you can reconnect with two
+              trusted connections to recover it.
             </Text>
           </View>
-          <SearchConnections navigation={this.props.navigation} />
+          <SearchConnections navigation={navigation} />
           <View style={styles.mainContainer}>{renderListOrSpinner(this)}</View>
         </View>
-        <View style={styles.createGroupButtonContainer}>
+        <View style={styles.buttonContainer}>
           <TouchableOpacity
-            onPress={async () => {
-              try {
-                let result = await store.dispatch(createNewGroup());
-                if (result) navigation.goBack();
-              } catch (err) {
-                console.log(err);
-              }
-            }}
-            style={styles.createGroupButton}
+            onPress={this.navigateToBackup}
+            style={styles.nextButton}
           >
-            <Text style={styles.buttonInnerText}>Create Group</Text>
+            <Text style={styles.buttonInnerText}>Next</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -123,16 +134,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  connectionsContainer: {
-    flex: 1,
-    width: '96.7%',
-    borderTopWidth: 1,
-    borderTopColor: '#e3e1e1',
-  },
-
-  moreIcon: {
-    marginRight: 16,
-  },
   titleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -143,28 +144,14 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e3e1e1',
     marginBottom: 11,
   },
-  titleText: {
+  infoText: {
     fontFamily: 'ApexNew-Book',
     fontSize: 18,
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
     textAlign: 'left',
-    textShadowColor: 'rgba(0, 0, 0, 0.09)',
-    textShadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    textShadowRadius: 4,
-    marginBottom: 6,
-  },
-  infoText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 14,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
-    textAlign: 'center',
+    margin: 6,
   },
   connectionCard: {
     marginBottom: 0,
@@ -175,11 +162,11 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e3e1e1',
     width: '100%',
   },
-  createGroupButtonContainer: {
+  buttonContainer: {
     justifyContent: 'center',
     alignItems: 'center',
   },
-  createGroupButton: {
+  nextButton: {
     backgroundColor: '#428BE5',
     width: 300,
     justifyContent: 'center',
@@ -197,4 +184,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(NewGroupScreen);
+export default connect((state) => state.main)(TrustedConnectionsScreen);

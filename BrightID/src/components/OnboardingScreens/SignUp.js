@@ -184,12 +184,21 @@ class SignUp extends React.Component<Props, State> {
 
   renderButtonOrSpinner = () =>
     !this.state.creatingBrightId ? (
-      <TouchableOpacity
-        style={styles.createBrightIdButton}
-        onPress={this.createBrightID}
-      >
-        <Text style={styles.buttonInnerText}>Create My BrightID</Text>
-      </TouchableOpacity>
+      <View>
+        <TouchableOpacity
+          style={styles.createBrightIdButton}
+          onPress={this.createBrightID}
+        >
+          <Text style={styles.buttonInnerText}>Create My BrightID</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('RecoveryCode')}
+          style={styles.button}
+          accessibilityLabel="Recover BrightID"
+        >
+          <Text style={styles.buttonText}>Recover BrightID</Text>
+        </TouchableOpacity>
+      </View>
     ) : (
       <View style={styles.loader}>
         <Text>Creating Bright ID...</Text>
@@ -352,6 +361,25 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '600',
     fontSize: 18,
+  },
+  button: {
+    width: 300,
+    borderWidth: 1,
+    borderColor: '#4990e2',
+    paddingTop: 13,
+    paddingBottom: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  buttonText: {
+    fontFamily: 'ApexNew-Medium',
+    color: '#4990e2',
+    fontSize: 18,
+    fontWeight: '500',
+    fontStyle: 'normal',
+    letterSpacing: 0,
   },
   loader: {
     justifyContent: 'center',
