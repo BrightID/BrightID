@@ -85,9 +85,12 @@ export const verifyConnections = async (allKeys: string[]) => {
 
     const reduxConnectionKeys = store
       .getState()
-      .connections.map(({ publicKey }) => publicKey)
+      .connections.map(({ publicKey, id }) => publicKey || id)
       .sort();
-
+    console.log(
+      JSON.stringify(connectionKeys),
+      JSON.stringify(reduxConnectionKeys),
+    );
     return (
       JSON.stringify(connectionKeys) === JSON.stringify(reduxConnectionKeys)
     );
@@ -106,7 +109,7 @@ export const verifyApps = async (allKeys: string[]) => {
       .sort((a, b) => b.dateAdded - a.dateAdded);
 
     const { apps } = store.getState();
-
+    console.log(JSON.stringify(appInfos), JSON.stringify(apps));
     return JSON.stringify(appInfos) === JSON.stringify(apps);
   } catch (err) {
     err instanceof Error ? console.warn(err.message) : console.log(err);
@@ -120,11 +123,20 @@ export const verifyUserData = async () => {
     if (userData !== null) {
       userData = JSON.parse(userData);
       let { publicKey, secretKey, name, photo } = store.getState();
-
+      console.log(
+        JSON.stringify(userData.publicKey),
+        JSON.stringify(publicKey),
+      );
+      console.log(
+        JSON.stringify(userData.secretKey),
+        JSON.stringify(secretKey),
+      );
+      console.log(userData.name, name);
+      console.log(JSON.stringify(userData.photo), JSON.stringify(photo));
       return (
         JSON.stringify(userData.publicKey) === JSON.stringify(publicKey) &&
         JSON.stringify(userData.secretKey) === JSON.stringify(secretKey) &&
-        JSON.stringify(userData.name) === JSON.stringify(name) &&
+        userData.name === name &&
         JSON.stringify(userData.photo) === JSON.stringify(photo)
       );
     } else {
