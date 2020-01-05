@@ -41,7 +41,7 @@ type State = {
 };
 
 export class ConnectionsScreen extends React.Component<Props, State> {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({ navigation }: { navigation: navigation }) => ({
     title: 'Connections',
     headerRight: (
       <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
@@ -55,21 +55,22 @@ export class ConnectionsScreen extends React.Component<Props, State> {
   });
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, navigation } = this.props;
     dispatch(updateScores());
     emitter.on('removeConnection', this.removeConnection);
+    navigation.addListener('willBlur', () => {
+      emitter.off('removeConnection', this.removeConnection);
+    });
   }
 
-  componentWillUnmount() {
-    emitter.off('removeConnection', this.removeConnection);
-  }
-
-  removeConnection = async (publicKey) => {
+  removeConnection = async (id: string) => {
     try {
       const { dispatch } = this.props;
-      await api.deleteConnection(publicKey);
+      const res = await api.deleteConnection(id);
+      // TODO - only delete connection if verified on the backend
+      console.log(res);
       // remove connection from redux
-      dispatch(removeConnection(publicKey));
+      dispatch(removeConnection(id));
     } catch (err) {
       Alert.alert("Couldn't remove connection", err.message);
     }

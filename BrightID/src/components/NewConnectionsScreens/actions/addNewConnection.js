@@ -26,6 +26,7 @@ export const addNewConnection = () => async (
       name,
       score,
       connections,
+      password,
     } = getState();
     let connectionDate = Date.now();
 

@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Easing,
   Animated,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -13,7 +13,6 @@ const ICON_SIZE = 36;
 const BACKGROUND_COLOR = '#f98961';
 
 export default class FloatActionButton extends Component {
-
   constructor(props) {
     super(props);
     this.visible = true;
@@ -33,16 +32,14 @@ export default class FloatActionButton extends Component {
   }
 
   show() {
-    if (this.visible)
-      return;
+    if (this.visible) return;
     this.visible = true;
     this.hideAnim.stop();
     this.showAnim.start();
   }
 
   hide() {
-    if (!this.visible)
-      return;
+    if (!this.visible) return;
     this.visible = false;
     this.showAnim.stop();
     this.hideAnim.start();
@@ -50,27 +47,33 @@ export default class FloatActionButton extends Component {
 
   _onPress = () => {
     this.props.onPress && this.props.onPress();
-  }
+  };
 
   render() {
     return (
-        <Animated.View style={[styles.container, {
-          transform: [
-            {
-              translateY: this.state.offset
-            }
-          ]
-        }]}>
-          <TouchableOpacity onPress={this._onPress}>
-            <View style={styles.circleButton}>
-              <Material name="plus"
-                size={ICON_SIZE}
-                color={ICON_COLOR}
-                style={{ width: ICON_SIZE, height: ICON_SIZE }}
-              />
-            </View>
-          </TouchableOpacity>
-        </Animated.View>
+      <Animated.View
+        style={[
+          styles.container,
+          {
+            transform: [
+              {
+                translateY: this.state.offset,
+              },
+            ],
+          },
+        ]}
+      >
+        <TouchableOpacity onPress={this._onPress}>
+          <View style={styles.circleButton}>
+            <Material
+              name="plus"
+              size={ICON_SIZE}
+              color={ICON_COLOR}
+              style={{ width: ICON_SIZE, height: ICON_SIZE }}
+            />
+          </View>
+        </TouchableOpacity>
+      </Animated.View>
     );
   }
 }
@@ -94,6 +97,6 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0,0,0,0.5)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
-    elevation:4
-  }
+    elevation: 4,
+  },
 });

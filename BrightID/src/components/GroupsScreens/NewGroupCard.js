@@ -1,20 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import RNFS from 'react-native-fs';
 import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import emitter from '../../emitter';
 import { toggleNewGroupCoFounder } from './actions';
 
 /**
@@ -76,9 +68,7 @@ class NewGroupCard extends React.PureComponent<Props> {
       <View style={{ ...styles.container, ...style }}>
         <Image
           source={{
-            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
-              photo.filename
-            }`,
+            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo.filename}`,
           }}
           style={styles.photo}
         />
@@ -162,7 +152,6 @@ const styles = StyleSheet.create({
 export default connect(
   null,
   (dispatch) => ({
-    toggleCoFounder: (id) =>
-      dispatch(toggleNewGroupCoFounder(id)),
+    toggleCoFounder: (id) => dispatch(toggleNewGroupCoFounder(id)),
   }),
 )(NewGroupCard);

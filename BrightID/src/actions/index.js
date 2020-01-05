@@ -11,11 +11,10 @@ export const SET_CURRENT_GROUPS = 'SET_CURRENT_GROUPS';
 export const JOIN_GROUP = 'JOIN_GROUP';
 export const JOIN_GROUP_AS_CO_FOUNDER = 'JOIN_GROUP_AS_CO_FOUNDER';
 export const LEAVE_GROUP = 'LEAVE_GROUP';
-export const UPDATE_CONNECTIONS = 'UPDATE_CONNECTIONS';
+export const SET_CONNECTIONS = 'SET_CONNECTIONS';
 export const CONNECTIONS_SORT = 'CONNECTIONS_SORT';
 export const REMOVE_CONNECTION = 'REMOVE_CONNECTION';
 export const UPDATE_USER_DATA = 'UPDATE_USER_DATA';
-export const REMOVE_USER_DATA = 'REMOVE_USER_DATA';
 export const USER_PHOTO = 'USER_PHOTO';
 export const SET_CONNECT_QR_DATA = 'SET_CONNECT_QR_DATA';
 export const REMOVE_CONNECT_QR_DATA = 'REMOVE_CONNECT_QR_DATA';
@@ -35,7 +34,10 @@ export const REMOVE_RECOVERY_DATA = 'REMOVE_RECOVERY_DATA';
 export const SET_HASHED_ID = 'SET_HASHED_ID';
 export const UPDATE_CONNECTION = 'UPDATE_CONNECTION';
 export const ADD_CONNECTION = 'ADD_CONNECTION';
+export const SET_USER_ID = 'SET_USER_ID';
 export const HYDRATE_STATE = 'HYDRATE_STATE';
+export const REMOVE_SAFE_PUB_KEY = 'REMOVE_SAFE_PUB_KEY';
+export const RESET_STORE = 'RESET_STORE';
 /**
  * redux action creator that updates user `score`
  *
@@ -135,12 +137,12 @@ export const leaveGroup = (groupId: string) => ({
 
 /**
  * redux action creator for setting connections array
- * @param type UPDATE_CONNECTIONS
+ * @param type SET_CONNECTIONS
  * @param connections array of connections obtained from server and stored locally
  */
 
 export const setConnections = (connections: connection[]) => ({
-  type: UPDATE_CONNECTIONS,
+  type: SET_CONNECTIONS,
   connections,
 });
 
@@ -214,14 +216,6 @@ export const setUserData = ({
   secretKey,
   name,
   photo,
-});
-
-/**
- * redux action creator for reseting the app's store
- */
-
-export const removeUserData = () => ({
-  type: REMOVE_USER_DATA,
 });
 
 /**
@@ -322,7 +316,20 @@ export const setHashedId = (hash: string) => ({
   hash,
 });
 
+export const setUserId = (id: string) => ({
+  type: SET_USER_ID,
+  id,
+});
+
 export const hydrateState = (state: State) => ({
   type: HYDRATE_STATE,
   state,
+});
+
+export const removeSafePubKey = () => ({
+  type: REMOVE_SAFE_PUB_KEY,
+});
+
+export const resetStore = () => ({
+  type: RESET_STORE,
 });

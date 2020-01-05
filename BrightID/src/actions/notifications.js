@@ -1,6 +1,5 @@
 // @flow
 
-// eslint-disable-next-line import/no-cycle
 import { setNotifications } from './index';
 
 export const getNotifications = () => async (
@@ -8,7 +7,7 @@ export const getNotifications = () => async (
   getState: () => State,
 ) => {
   try {
-    const { backupCompleted, score } = getState().main;
+    const { backupCompleted, score } = getState();
     let notifications = [];
     // backupCompleted = false;
     if (!backupCompleted && score > 0) {

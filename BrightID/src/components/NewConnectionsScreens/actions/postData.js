@@ -19,6 +19,6 @@ export const postData = (data: string) => async (
       }
     })
     .catch((err) => {
-      console.log(err);
+      err instanceof Error ? console.warn(err.message) : console.log(err);
     });
 };

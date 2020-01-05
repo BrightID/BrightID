@@ -1,5 +1,4 @@
 // @flow
-// eslint-disable-next-line import/no-cycle
 import { addApp, removeApp } from './index';
 import { saveImage } from '../utils/filesystem';
 
@@ -9,18 +8,10 @@ type ContextInfo = {
   appUrl: string,
 };
 
-export type AppInfo = {
-  name: string,
-  url: string,
-  logoFile: string,
-  verified: boolean,
-  dateAdded: number,
-};
-
 export const saveApp = (name: string, contextInfo: ContextInfo) => async (
   dispatch: dispatch,
 ) => {
-  let logoFile;
+  let logoFile = '';
   try {
     if (contextInfo.appLogo) {
       logoFile = await saveImage({

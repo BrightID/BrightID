@@ -5,8 +5,6 @@ import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import SearchConnections from '../Connections/SearchConnections';
 import TrustedConnectionCard from './TrustedConnectionCard';
-import { getConnections } from '../../actions/connections';
-import emitter from '../../emitter';
 import { renderListOrSpinner } from '../Connections/renderConnections';
 import { setTrustedConnections } from './helpers';
 
@@ -23,31 +21,6 @@ class TrustedConnectionsScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
     title: 'Trusted Connections',
   });
-
-  state = {
-    loading: true,
-  };
-
-  componentDidMount() {
-    const { navigation } = this.props;
-    this.getConnections();
-    emitter.on('refreshConnections', this.getConnections);
-    navigation.addListener('willBlur', () => {
-      emitter.off('refreshConnections', this.getConnections);
-    });
-  }
-
-  componentWillUnmount() {
-    emitter.off('refreshConnections', this.getConnections);
-  }
-
-  getConnections = async () => {
-    const { dispatch } = this.props;
-    await dispatch(getConnections());
-    this.setState({
-      loading: false,
-    });
-  };
 
   filterConnections = () => {
     const { connections, searchParam } = this.props;

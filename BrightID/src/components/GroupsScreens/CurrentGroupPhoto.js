@@ -13,9 +13,7 @@ class CurrentGroupPhoto extends React.Component<Props> {
       <View style={styles.container}>
         <Image
           source={{
-            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
-              photo.filename
-            }`,
+            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo.filename}`,
           }}
           style={styles.photo}
         />

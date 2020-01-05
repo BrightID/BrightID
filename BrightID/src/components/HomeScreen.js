@@ -22,7 +22,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import VerificationSticker from './Verifications/VerificationSticker';
 import BottomNav from './BottomNav';
 import store from '../store';
-import { removeUserData } from '../actions';
+import { resetStore } from '../actions';
 
 /**
  * Home screen of BrightID
@@ -92,7 +92,7 @@ export class HomeScreen extends React.Component<Props> {
                         navigation.navigate('Onboarding');
                         await AsyncStorage.flushGetRequests();
                         await AsyncStorage.clear();
-                        store.dispatch(removeUserData());
+                        store.dispatch(resetStore());
                       } catch (err) {
                         console.log(err);
                       }

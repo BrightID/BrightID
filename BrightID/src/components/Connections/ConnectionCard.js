@@ -27,10 +27,8 @@ import { fakeJoinGroups } from '../../actions/fakeGroup';
  */
 
 class ConnectionCard extends React.PureComponent<Props> {
-
   handleUserOptions = () => {
-    const { name, id, secretKey, dispatch } = this.props;
-    console.log(secretKey);
+    const { name, id, dispatch } = this.props;
     const buttons = [
       {
         text: 'Cancel',
@@ -46,6 +44,7 @@ class ConnectionCard extends React.PureComponent<Props> {
     ];
 
     if (__DEV__) {
+      let { secretKey } = this.props;
       buttons.push({
         text: 'Join All Groups',
         onPress: () => {
@@ -78,9 +77,7 @@ class ConnectionCard extends React.PureComponent<Props> {
       <View style={{ ...styles.container, ...style }}>
         <Image
           source={{
-            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
-              photo.filename
-            }`,
+            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo.filename}`,
           }}
           style={styles.photo}
         />

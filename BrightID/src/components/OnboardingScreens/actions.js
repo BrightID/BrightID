@@ -31,6 +31,7 @@ export const handleBrightIdCreation = ({
       photo: { filename },
     };
 
+    // TODO: Verify success before proceeding
     await api.createUser(id, b64PubKey);
 
     // // update redux store
@@ -41,8 +42,7 @@ export const handleBrightIdCreation = ({
     // // navigate to home page
     return true;
   } catch (err) {
-    Alert.alert(err.message || 'Error', err.stack);
-    return false;
+    err instanceof Error ? console.warn(err.message) : console.log(err);
   }
 };
 
@@ -57,5 +57,7 @@ export const fakeUserAvatar = (): Promise<string> => {
         return 'https://loremflickr.com/180/180/all';
       }
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      err instanceof Error ? console.warn(err.message) : console.log(err);
+    });
 };

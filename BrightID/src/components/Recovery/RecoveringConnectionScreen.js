@@ -5,8 +5,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
-import { getConnections } from '../../actions/connections';
-import emitter from '../../emitter';
 import { renderListOrSpinner } from '../Connections/renderConnections';
 
 type State = {
@@ -17,27 +15,6 @@ class RecoveringConnectionScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
     title: 'Account Recovery',
   });
-
-  state = {
-    loading: true,
-  };
-
-  componentDidMount() {
-    const { navigation } = this.props;
-    this.getConnections();
-    emitter.on('refreshConnections', this.getConnections);
-    navigation.addListener('willBlur', () => {
-      emitter.off('refreshConnections', this.getConnections);
-    });
-  }
-
-  getConnections = async () => {
-    const { dispatch } = this.props;
-    await dispatch(getConnections());
-    this.setState({
-      loading: false,
-    });
-  };
 
   filterConnections = () => {
     const { connections, searchParam } = this.props;

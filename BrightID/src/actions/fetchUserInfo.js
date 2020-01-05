@@ -9,6 +9,7 @@ import {
   setVerifications,
 } from './index';
 
+// TODO update connections here
 const fetchUserInfo = () => async (dispatch: dispatch) => {
   try {
     const {

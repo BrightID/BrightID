@@ -13,10 +13,9 @@ import {
   JOIN_GROUP,
   JOIN_GROUP_AS_CO_FOUNDER,
   LEAVE_GROUP,
-  UPDATE_CONNECTIONS,
+  SET_CONNECTIONS,
   CONNECTIONS_SORT,
   UPDATE_USER_DATA,
-  REMOVE_USER_DATA,
   USER_PHOTO,
   SET_CONNECT_QR_DATA,
   REMOVE_CONNECT_QR_DATA,
@@ -29,7 +28,18 @@ import {
   SET_APPS,
   UPDATE_CONNECTION,
   ADD_CONNECTION,
+  SET_NOTIFICATIONS,
+  ADD_TRUSTED_CONNECTION,
+  REMOVE_TRUSTED_CONNECTION,
+  SET_BACKUP_COMPLETED,
+  SET_PASSWORD,
+  SET_RECOVERY_DATA,
+  REMOVE_RECOVERY_DATA,
+  SET_HASHED_ID,
+  SET_USER_ID,
+  REMOVE_SAFE_PUB_KEY,
   HYDRATE_STATE,
+  RESET_STORE,
 } from '../actions';
 import { b64ToUrlSafeB64 } from '../utils/encoding';
 import { verifyStore } from './verifyStoreV1';
@@ -50,7 +60,7 @@ import { verifyStore } from './verifyStoreV1';
 // check immutable functions
 
 export const initialState: State = {
-  score: 0,
+  score: __DEV__ ? 100 : 0,
   name: '',
   photo: { filename: '' },
   groupsCount: 0,
@@ -61,8 +71,13 @@ export const initialState: State = {
   connections: [],
   verifications: [],
   apps: [],
+  notifications: [],
+  trustedConnections: [],
+  backupCompleted: false,
+  id: '',
   publicKey: '',
-  safePubKey: '',
+  password: '',
+  hashedId: '',
   secretKey: new Uint8Array([]),
   connectionsSort: '',
   connectQrData: {
@@ -74,12 +89,19 @@ export const initialState: State = {
     channel: '',
   },
   connectUserData: {
-    publicKey: '',
+    id: '',
     photo: '',
     name: '',
     timestamp: 0,
     signedMessage: '',
     score: 0,
+  },
+  recoveryData: {
+    id: '',
+    publicKey: '',
+    secretKey: '',
+    timestamp: 0,
+    sigs: [],
   },
 };
 
@@ -166,7 +188,7 @@ export const reducer = (state: State = initialState, action: action) => {
       let newElGroups = state.eligibleGroups.slice();
       let groupIndex = newElGroups.findIndex((g) => g.id === action.groupId);
       let group = newElGroups[groupIndex];
-      let newKnownMembers = [...group.knownMembers, state.safePubKey];
+      let newKnownMembers = [...group.knownMembers, state.id];
       newElGroups[groupIndex] = { ...group, knownMembers: newKnownMembers };
       return {
         ...state,
@@ -181,7 +203,7 @@ export const reducer = (state: State = initialState, action: action) => {
         ),
       };
     }
-    case UPDATE_CONNECTIONS: {
+    case SET_CONNECTIONS: {
       return {
         ...state,
         connections: action.connections.slice(0),
@@ -234,16 +256,6 @@ export const reducer = (state: State = initialState, action: action) => {
         secretKey: action.secretKey,
       };
     }
-    case REMOVE_USER_DATA: {
-      return {
-        ...state,
-        photo: '',
-        name: '',
-        publicKey: '',
-        safePubKey: '',
-        secretKey: null,
-      };
-    }
     case SET_CONNECT_QR_DATA: {
       // Compute the websocket channel and download (but not upload) path
 
@@ -278,11 +290,12 @@ export const reducer = (state: State = initialState, action: action) => {
       return {
         ...state,
         connectUserData: {
-          publicKey: '',
+          id: '',
           photo: '',
           name: '',
-          timestamp: '',
+          timestamp: 0,
           signedMessage: '',
+          score: 0,
         },
       };
     }
@@ -309,6 +322,75 @@ export const reducer = (state: State = initialState, action: action) => {
         ...state,
         apps: state.apps.filter((app) => app.name !== action.name),
       };
+    }
+    case SET_NOTIFICATIONS: {
+      return {
+        ...state,
+        notifications: action.notifications,
+      };
+    }
+    case ADD_TRUSTED_CONNECTION: {
+      return {
+        ...state,
+        trustedConnections: [...state.trustedConnections, action.id],
+      };
+    }
+    case REMOVE_TRUSTED_CONNECTION: {
+      return {
+        ...state,
+        trustedConnections: state.trustedConnections.filter(
+          (id) => id !== action.id,
+        ),
+      };
+    }
+    case SET_BACKUP_COMPLETED: {
+      return {
+        ...state,
+        backupCompleted: action.backupCompleted,
+      };
+    }
+    case SET_PASSWORD: {
+      return {
+        ...state,
+        password: action.password,
+      };
+    }
+    case SET_RECOVERY_DATA: {
+      return {
+        ...state,
+        recoveryData: action.recoveryData,
+      };
+    }
+    case REMOVE_RECOVERY_DATA: {
+      return {
+        ...state,
+        recoveryData: {
+          publicKey: '',
+          secretKey: '',
+          id: '',
+          timestamp: 0,
+          sigs: [],
+        },
+      };
+    }
+    case SET_HASHED_ID: {
+      return {
+        ...state,
+        hashedId: action.hash,
+      };
+    }
+    case SET_USER_ID: {
+      return {
+        ...state,
+        id: action.id,
+      };
+    }
+    case REMOVE_SAFE_PUB_KEY: {
+      delete state.safePublicKey;
+      return state;
+    }
+    case RESET_STORE: {
+      return initialState;
     }
     default: {
       return state;

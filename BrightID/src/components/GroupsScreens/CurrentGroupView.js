@@ -52,7 +52,7 @@ export class CurrentGroupView extends Component<Props, State> {
     members: [],
   };
 
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = ({ navigation }: { navigation: navigation }) => {
     const { group } = navigation.state.params;
     return {
       title: group.name,

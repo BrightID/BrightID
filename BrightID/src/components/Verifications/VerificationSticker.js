@@ -1,10 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {
-  Image,
-  StyleSheet,
-} from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 
 /**
  * Verification Stickers
@@ -12,9 +9,8 @@ import {
  */
 
 export default class VerificationSticker extends React.PureComponent<Props> {
-
-  imagePath = name => {
-    switch(name) {
+  imagePath = (name) => {
+    switch (name) {
       case 'DollarForEveryone':
         return require('../../static/verifications/DollarForEveryone.png');
       case 'BrightID':
@@ -30,19 +26,12 @@ export default class VerificationSticker extends React.PureComponent<Props> {
     const { name } = this.props;
     const imagePath = this.imagePath(name);
 
-    if(imagePath) {
-      return (
-        <Image
-          source={imagePath}
-          style={styles.verificationSticker}
-        />
-      );
+    if (imagePath) {
+      return <Image source={imagePath} style={styles.verificationSticker} />;
     }
   }
 }
 
 const styles = StyleSheet.create({
-  verificationSticker: {
-  },
+  verificationSticker: {},
 });
-

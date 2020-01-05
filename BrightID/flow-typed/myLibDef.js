@@ -22,6 +22,7 @@ declare type State = {
   verifications: any[],
   publicKey: string,
   id: string,
+  safePublicKey?: string,
   password: string,
   hashedId: string,
   secretKey: Uint8Array,

@@ -1,8 +1,14 @@
 // @flow
 
 import AsyncStorage from '@react-native-community/async-storage';
-import { objToUint8 } from '../utils/encoding';
-import { setUserData, setConnections, setApps } from '../actions';
+import { objToUint8, b64ToUrlSafeB64 } from '../utils/encoding';
+import {
+  setUserData,
+  setUserId,
+  setConnections,
+  setApps,
+  removeSafePubKey,
+} from '../actions';
 import fetchUserInfo from '../actions/fetchUserInfo';
 import { defaultSort } from '../components/Connections/sortingUtility';
 
@@ -19,21 +25,17 @@ export const bootstrapV0 = async (navigation: navigation) => {
       // update redux store
       await store.dispatch(setUserData(userData));
       store.dispatch(fetchUserInfo());
+    } else {
+      throw new Error('unable to recover user data');
     }
   } catch (err) {
-    console.log(err);
+    err instanceof Error ? console.warn(err.message) : console.log(err);
+    throw new Error('unable to recover user data');
   }
 };
 
 export const getConnections = async (allKeys: string[]) => {
   try {
-    /**
-     * obtain connection keys from async storage
-     * currently everything in async storage is a connection except
-     *    "userData"
-     *    apps (which have keys starting with "App:")
-     */
-
     const connectionKeys = allKeys.filter(
       (val) =>
         val !== 'userData' &&
@@ -48,7 +50,8 @@ export const getConnections = async (allKeys: string[]) => {
 
     // sort connections
   } catch (err) {
-    console.log(err);
+    err instanceof Error ? console.warn(err.message) : console.log(err);
+    throw new Error('unable to recover connections');
   }
 };
 
@@ -63,19 +66,13 @@ export const getApps = async (allKeys: string[]) => {
 
     store.dispatch(setApps(appInfos));
   } catch (err) {
-    console.log(err);
+    err instanceof Error ? console.warn(err.message) : console.log(err);
+    throw new Error('unable to recover apps');
   }
 };
 
 export const verifyConnections = async (allKeys: string[]) => {
   try {
-    /**
-     * obtain connection keys from async storage
-     * currently everything in async storage is a connection except
-     *    "userData"
-     *    apps (which have keys starting with "App:")
-     */
-
     const connectionKeys = allKeys
       .filter(
         (val) =>
@@ -94,7 +91,8 @@ export const verifyConnections = async (allKeys: string[]) => {
       JSON.stringify(connectionKeys) === JSON.stringify(reduxConnectionKeys)
     );
   } catch (err) {
-    console.log(err);
+    err instanceof Error ? console.warn(err.message) : console.log(err);
+    throw new Error('unable to verify connections');
   }
 };
 
@@ -102,7 +100,6 @@ export const verifyApps = async (allKeys: string[]) => {
   try {
     const appKeys = allKeys.filter((key) => key.startsWith('App:'));
     const appValues = await AsyncStorage.multiGet(appKeys);
-    // see https://facebook.github.io/react-native/docs/asyncstorage#multiget
     const appInfos = appValues
       .map((val) => JSON.parse(val[1]))
       .sort((a, b) => b.dateAdded - a.dateAdded);
@@ -111,7 +108,8 @@ export const verifyApps = async (allKeys: string[]) => {
 
     return JSON.stringify(appInfos) === JSON.stringify(apps);
   } catch (err) {
-    console.log(err);
+    err instanceof Error ? console.warn(err.message) : console.log(err);
+    throw new Error('unable to verify apps');
   }
 };
 
@@ -128,12 +126,24 @@ export const verifyUserData = async () => {
         JSON.stringify(userData.name) === JSON.stringify(name) &&
         JSON.stringify(userData.photo) === JSON.stringify(photo)
       );
+    } else {
+      throw new Error('unable to verify user data');
     }
   } catch (err) {
-    console.log(err);
+    err instanceof Error ? console.warn(err.message) : console.log(err);
+    throw new Error('unable to verify user data');
   }
 };
 
-export const isV0 = (allKeys: string[]) => {
-  return !allKeys.includes('version');
+export const upgradeIds = () => {
+  let { publicKey, connections } = store.getState();
+  const id = b64ToUrlSafeB64(publicKey);
+  store.dispatch(setUserId(id));
+  connections = connections.map((conn) => {
+    conn.id = conn.publicKey;
+    delete conn.publicKey;
+    return conn;
+  });
+  store.dispatch(setConnections(connections));
+  store.dispatch(removeSafePubKey());
 };
