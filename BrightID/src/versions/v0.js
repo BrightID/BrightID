@@ -153,8 +153,10 @@ export const upgradeIds = () => {
   const id = b64ToUrlSafeB64(publicKey);
   store.dispatch(setUserId(id));
   connections = connections.map((conn) => {
-    conn.id = conn.publicKey;
-    delete conn.publicKey;
+    if (conn.publicKey) {
+      conn.id = conn.publicKey;
+      delete conn.publicKey;
+    }
     return conn;
   });
   store.dispatch(setConnections(connections));
