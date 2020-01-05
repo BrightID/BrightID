@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(NotificationsScreen);
+export default connect((state) => state)(NotificationsScreen);

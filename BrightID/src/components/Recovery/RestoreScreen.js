@@ -234,4 +234,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(RestoreScreen);
+export default connect((state) => state)(RestoreScreen);

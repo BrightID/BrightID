@@ -141,4 +141,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(RecoveringConnectionScreen);
+export default connect((state) => state)(RecoveringConnectionScreen);

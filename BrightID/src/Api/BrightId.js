@@ -220,7 +220,7 @@ class BrightId {
   }
 
   async setTrusted(trusted: string[]) {
-    let { id, secretKey } = store.getState().main;
+    let { id, secretKey } = store.getState();
     let timestamp = Date.now();
     let message = id + trusted.join(',') + timestamp;
     let sig = uInt8ArrayToB64(

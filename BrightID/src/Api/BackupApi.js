@@ -59,7 +59,7 @@ class BackupApi {
 
   async getSig() {
     try {
-      let { publicKey } = store.getState().main.recoveryData;
+      let { publicKey } = store.getState().recoveryData;
       const res = await this.profileApi.get(
         `/profile/download/${b64ToUrlSafeB64(publicKey)}`,
       );

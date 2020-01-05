@@ -30,6 +30,7 @@ export const bootstrapAndUpgrade = async () => {
       const appsVerified = await verifyApps(allKeys);
       if (connectionsVerified && userDataVerified && appsVerified) {
         // save the redux store
+        console.log('here');
         upgradeIds();
         await saveStore();
       } else {
@@ -41,7 +42,7 @@ export const bootstrapAndUpgrade = async () => {
   }
 };
 
-export const isV1 = async (allKeys: string[]) => allKeys.includes('store@v1');
+export const isV1 = (allKeys: string[]) => allKeys.includes('store@v1');
 
 const delStorage = async () => {
   try {

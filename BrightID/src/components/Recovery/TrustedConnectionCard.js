@@ -15,7 +15,7 @@ import store from '../../store';
 class TrustedConnectionCard extends React.PureComponent<Props> {
   toggleConnectionSelect = () => {
     const { id } = this.props;
-    const { trustedConnections } = store.getState().main;
+    const { trustedConnections } = store.getState();
     trustedConnections.includes(id)
       ? store.dispatch(removeTrustedConnection(id))
       : store.dispatch(addTrustedConnection(id));
@@ -32,7 +32,7 @@ class TrustedConnectionCard extends React.PureComponent<Props> {
 
   selected = () => {
     const { id } = this.props;
-    const { trustedConnections } = store.getState().main;
+    const { trustedConnections } = store.getState();
     return trustedConnections.includes(id);
   };
 
