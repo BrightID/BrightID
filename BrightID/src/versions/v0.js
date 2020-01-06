@@ -9,7 +9,7 @@ import {
   setApps,
   removeSafePubKey,
 } from '../actions';
-import fetchUserInfo from '../actions/fetchUserInfo';
+
 import { defaultSort } from '../components/Connections/sortingUtility';
 
 import store from '../store';
@@ -24,7 +24,6 @@ export const bootstrapV0 = async (navigation: navigation) => {
       userData.secretKey = objToUint8(userData.secretKey);
       // update redux store
       await store.dispatch(setUserData(userData));
-      store.dispatch(fetchUserInfo());
     } else {
       throw new Error('unable to recover user data');
     }

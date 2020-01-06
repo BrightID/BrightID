@@ -3,6 +3,8 @@
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { saveStore } from '../store/saveStore';
+import store from '../store';
+import fetchUserInfo from '../actions/fetchUserInfo';
 import {
   bootstrapV0,
   getConnections,
@@ -30,8 +32,9 @@ export const bootstrapAndUpgrade = async () => {
       const appsVerified = await verifyApps(allKeys);
       if (connectionsVerified && userDataVerified && appsVerified) {
         // save the redux store
-        console.log('here');
+
         upgradeIds();
+        store.dispatch(fetchUserInfo);
         await saveStore();
       } else {
         Alert.alert('Error: Please Backup Data and reinstall BrightId');
@@ -43,11 +46,3 @@ export const bootstrapAndUpgrade = async () => {
 };
 
 export const isV1 = (allKeys: string[]) => allKeys.includes('store@v1');
-
-const delStorage = async () => {
-  try {
-    await AsyncStorage.clear();
-  } catch (err) {
-    throw err;
-  }
-};
