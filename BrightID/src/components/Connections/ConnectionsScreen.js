@@ -19,7 +19,6 @@ import { renderListOrSpinner } from './renderConnections';
 import api from '../../Api/BrightId';
 import FloatingActionButton from '../FloatingActionButton';
 import { removeConnection } from '../../actions';
-import { updateScores } from '../../actions/connections';
 
 /**
  * Connection screen of BrightID
@@ -55,8 +54,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
   });
 
   componentDidMount() {
-    const { dispatch, navigation } = this.props;
-    dispatch(updateScores());
+    const { navigation } = this.props;
     emitter.on('removeConnection', this.removeConnection);
     navigation.addListener('willBlur', () => {
       emitter.off('removeConnection', this.removeConnection);

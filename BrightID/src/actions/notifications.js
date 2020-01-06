@@ -7,10 +7,10 @@ export const getNotifications = () => async (
   getState: () => State,
 ) => {
   try {
-    const { backupCompleted, score } = getState();
+    const { backupCompleted, connections } = getState();
     let notifications = [];
     // backupCompleted = false;
-    if (!backupCompleted && score > 0) {
+    if (!backupCompleted && connections.length > 2) {
       notifications.push({
         icon: 'ios-star-outline',
         msg: 'Choose trusted connections to backup your BrightID',

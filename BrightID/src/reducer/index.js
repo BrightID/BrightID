@@ -1,7 +1,7 @@
 // @flow
 
 import { Alert } from 'react-native';
-import { dissoc } from 'ramda';
+import { dissoc, find, mergeRight, propEq } from 'ramda';
 import {
   USER_SCORE,
   GROUPS_COUNT,
@@ -41,8 +41,8 @@ import {
   REMOVE_SAFE_PUB_KEY,
   HYDRATE_STATE,
   RESET_STORE,
+  UPDATE_CONNECTION_SCORES,
 } from '../actions';
-import { b64ToUrlSafeB64 } from '../utils/encoding';
 import { verifyStore } from './verifyStoreV1';
 
 /**
@@ -174,7 +174,7 @@ export const reducer = (state: State = initialState, action: action) => {
     }
     case JOIN_GROUP: {
       action.group.isNew = false;
-      action.group.knownMembers.push(state.safePubKey);
+      action.group.knownMembers.push(state.id);
       return {
         ...state,
         currentGroups: [action.group, ...state.currentGroups],
@@ -220,6 +220,19 @@ export const reducer = (state: State = initialState, action: action) => {
         ],
       };
     }
+    case UPDATE_CONNECTION_SCORES: {
+      return {
+        ...state,
+        connections: state.connections.map<connection>((conn: connection) => {
+          const updatedConn = find(propEq('id', conn.id))(action.connections);
+          if (!updatedConn) {
+            return conn;
+          } else {
+            return mergeRight(conn, updatedConn);
+          }
+        }),
+      };
+    }
     case ADD_CONNECTION: {
       return {
         ...state,
@@ -254,7 +267,6 @@ export const reducer = (state: State = initialState, action: action) => {
         name: action.name,
         publicKey: action.publicKey,
         id: action.id,
-        safePubKey: b64ToUrlSafeB64(action.publicKey),
         secretKey: action.secretKey,
       };
     }

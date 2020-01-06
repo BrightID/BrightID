@@ -33,11 +33,13 @@ export const SET_RECOVERY_DATA = 'SET_RECOVERY_DATA';
 export const REMOVE_RECOVERY_DATA = 'REMOVE_RECOVERY_DATA';
 export const SET_HASHED_ID = 'SET_HASHED_ID';
 export const UPDATE_CONNECTION = 'UPDATE_CONNECTION';
+export const UPDATE_CONNECTION_SCORES = 'UPDATE_CONNECTION_SCORES';
 export const ADD_CONNECTION = 'ADD_CONNECTION';
 export const SET_USER_ID = 'SET_USER_ID';
 export const HYDRATE_STATE = 'HYDRATE_STATE';
 export const REMOVE_SAFE_PUB_KEY = 'REMOVE_SAFE_PUB_KEY';
 export const RESET_STORE = 'RESET_STORE';
+
 /**
  * redux action creator that updates user `score`
  *
@@ -332,4 +334,11 @@ export const removeSafePubKey = () => ({
 
 export const resetStore = () => ({
   type: RESET_STORE,
+});
+
+export const updateConnectionScores = (
+  connections: Array<{ id: string, score: number }>,
+) => ({
+  type: UPDATE_CONNECTION_SCORES,
+  connections,
 });

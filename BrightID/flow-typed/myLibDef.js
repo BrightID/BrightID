@@ -64,7 +64,8 @@ declare type navigation = NavigationScreenProp;
 declare type Props = State & navigation & dispatch;
 
 declare type connection = {
-  publicKey: string,
+  publicKey?: string,
+  id: string,
   name: string,
   score: number,
   secretKey?: Uint8Array,
