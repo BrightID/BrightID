@@ -1,6 +1,7 @@
 // @flow
 
 import { Alert } from 'react-native';
+import { dissoc } from 'ramda';
 import {
   USER_SCORE,
   GROUPS_COUNT,
@@ -386,8 +387,7 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case REMOVE_SAFE_PUB_KEY: {
-      delete state.safePublicKey;
-      return state;
+      return dissoc('safePubKey', state);
     }
     case RESET_STORE: {
       return initialState;
