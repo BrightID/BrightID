@@ -23,6 +23,7 @@ import VerificationSticker from './Verifications/VerificationSticker';
 import BottomNav from './BottomNav';
 import store from '../store';
 import { resetStore } from '../actions';
+import { getNotifications } from '../actions/notifications';
 
 /**
  * Home screen of BrightID
@@ -54,16 +55,6 @@ const MaterialHeaderButton = (passMeFurther) => (
     color="#fff"
   />
 );
-
-type Props = {
-  score: string,
-  groupsCount: number,
-  name: string,
-  connections: Array<{}>,
-  navigation: { navigate: () => null },
-  photo: string,
-  verifications: Array<string>,
-};
 
 export class HomeScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({
@@ -115,6 +106,13 @@ export class HomeScreen extends React.Component<Props> {
       </HeaderButtons>
     ),
   });
+
+  componentDidMount() {
+    const { navigation, dispatch } = this.props;
+    navigation.addListener('willFocus', () => {
+      dispatch(getNotifications());
+    });
+  }
 
   render() {
     const {

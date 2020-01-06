@@ -14,7 +14,7 @@ export const LEAVE_GROUP = 'LEAVE_GROUP';
 export const SET_CONNECTIONS = 'SET_CONNECTIONS';
 export const CONNECTIONS_SORT = 'CONNECTIONS_SORT';
 export const REMOVE_CONNECTION = 'REMOVE_CONNECTION';
-export const UPDATE_USER_DATA = 'UPDATE_USER_DATA';
+export const SET_USER_DATA = 'SET_USER_DATA';
 export const USER_PHOTO = 'USER_PHOTO';
 export const SET_CONNECT_QR_DATA = 'SET_CONNECT_QR_DATA';
 export const REMOVE_CONNECT_QR_DATA = 'REMOVE_CONNECT_QR_DATA';
@@ -193,7 +193,7 @@ export const removeConnection = (id: string) => ({
 
 /**
  * redux action setting user data
- * @param type UPDATE_USER_DATA
+ * @param type SET_USER_DATA
  * @param userData object containing important user data obtained from async storage during initialization
  */
 
@@ -210,7 +210,7 @@ export const setUserData = ({
   name: string,
   photo: { filename: string },
 }) => ({
-  type: UPDATE_USER_DATA,
+  type: SET_USER_DATA,
   id,
   publicKey,
   secretKey,

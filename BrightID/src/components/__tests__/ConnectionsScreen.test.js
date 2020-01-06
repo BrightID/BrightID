@@ -1,6 +1,6 @@
 import 'react-native';
 import React from 'react';
-import renderer from 'react-test-renderer';
+import ShallowRenderer from 'react-test-renderer/shallow';
 import { ConnectionsScreen } from '../Connections/ConnectionsScreen';
 
 // you can mock any middlewares here if necessary
@@ -12,9 +12,11 @@ const props = {
   connections: [],
 };
 
+const renderer = new ShallowRenderer();
+
 describe('Testing ConnectionsScreen', () => {
   it('renders blank connection screen', () => {
-    const wrapper = renderer.create(<ConnectionsScreen {...props} />);
-    expect(wrapper.toJSON()).toMatchSnapshot();
+    renderer.render(<ConnectionsScreen {...props} />);
+    expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
 });

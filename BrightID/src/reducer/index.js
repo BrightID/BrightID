@@ -16,7 +16,7 @@ import {
   LEAVE_GROUP,
   SET_CONNECTIONS,
   CONNECTIONS_SORT,
-  UPDATE_USER_DATA,
+  SET_USER_DATA,
   USER_PHOTO,
   SET_CONNECT_QR_DATA,
   REMOVE_CONNECT_QR_DATA,
@@ -247,12 +247,13 @@ export const reducer = (state: State = initialState, action: action) => {
             : state.connections,
       };
     }
-    case UPDATE_USER_DATA: {
+    case SET_USER_DATA: {
       return {
         ...state,
         photo: action.photo,
         name: action.name,
         publicKey: action.publicKey,
+        id: action.id,
         safePubKey: b64ToUrlSafeB64(action.publicKey),
         secretKey: action.secretKey,
       };

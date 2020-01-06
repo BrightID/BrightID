@@ -159,42 +159,86 @@ exports[`Testing SignUp renders as expected 1`] = `
     >
       Your name and photo will never be shared with apps or stored on servers
     </Text>
-    <View
-      accessible={true}
-      clickable={true}
-      isTVSelectable={true}
-      onClick={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
-      style={
-        Object {
-          "alignItems": "center",
-          "backgroundColor": "#428BE5",
-          "justifyContent": "center",
-          "marginTop": 22,
-          "opacity": 1,
-          "paddingBottom": 12,
-          "paddingTop": 13,
-          "width": 300,
-        }
-      }
-    >
-      <Text
+    <View>
+      <View
+        accessible={true}
+        clickable={true}
+        isTVSelectable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
         style={
           Object {
-            "color": "#fff",
-            "fontFamily": "ApexNew-Medium",
-            "fontSize": 18,
-            "fontWeight": "600",
+            "alignItems": "center",
+            "backgroundColor": "#428BE5",
+            "justifyContent": "center",
+            "marginTop": 22,
+            "opacity": 1,
+            "paddingBottom": 12,
+            "paddingTop": 13,
+            "width": 300,
           }
         }
       >
-        Create My BrightID
-      </Text>
+        <Text
+          style={
+            Object {
+              "color": "#fff",
+              "fontFamily": "ApexNew-Medium",
+              "fontSize": 18,
+              "fontWeight": "600",
+            }
+          }
+        >
+          Create My BrightID
+        </Text>
+      </View>
+      <View
+        accessibilityLabel="Recover BrightID"
+        accessible={true}
+        clickable={true}
+        isTVSelectable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "alignItems": "center",
+            "borderColor": "#4990e2",
+            "borderWidth": 1,
+            "justifyContent": "center",
+            "marginBottom": 10,
+            "marginTop": 10,
+            "opacity": 1,
+            "paddingBottom": 12,
+            "paddingTop": 13,
+            "width": 300,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "#4990e2",
+              "fontFamily": "ApexNew-Medium",
+              "fontSize": 18,
+              "fontStyle": "normal",
+              "fontWeight": "500",
+              "letterSpacing": 0,
+            }
+          }
+        >
+          Recover BrightID
+        </Text>
+      </View>
     </View>
   </View>
 </View>

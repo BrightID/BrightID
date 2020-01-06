@@ -1,7 +1,8 @@
 import 'react-native';
 import React from 'react';
-import renderer from 'react-test-renderer';
+import ShallowRenderer from 'react-test-renderer/shallow';
 import { HomeScreen } from '../HomeScreen';
+import BottomNav from '../BottomNav';
 
 // you can mock any middlewares here if necessary
 
@@ -15,9 +16,11 @@ const props = {
   verifications: [],
 };
 
+const renderer = new ShallowRenderer();
+
 describe('Testing HomeScreen', () => {
   it('renders as expected', () => {
-    const wrapper = renderer.create(<HomeScreen {...props} />);
-    expect(wrapper.toJSON()).toMatchSnapshot();
+    renderer.render(<HomeScreen {...props} />);
+    expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
 });
