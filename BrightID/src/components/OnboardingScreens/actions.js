@@ -31,7 +31,9 @@ export const handleBrightIdCreation = ({
       photo: { filename },
     };
 
-    await api.createUser(id, b64PubKey);
+    // We have no createUser anymore
+    // new user is created while making its first connection with a verified user 
+    // await api.createUser(id, b64PubKey);
 
     await AsyncStorage.setItem('userData', JSON.stringify(userData));
     // // update redux store

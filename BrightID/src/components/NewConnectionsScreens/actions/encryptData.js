@@ -32,7 +32,7 @@ export const encryptAndUploadLocalData = () => async (
       // The other user sent their id. Sign the message and send it.
 
       timestamp = Date.now();
-      const message = id + connectUserData.id + timestamp;
+      const message = 'Add Connection' + id + connectUserData.id + timestamp;
       signedMessage = uInt8ArrayToB64(
         nacl.sign.detached(strToUint8Array(message), secretKey),
       );

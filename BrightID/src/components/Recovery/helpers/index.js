@@ -169,7 +169,7 @@ export const setRecoverySig = async (
 ) => {
   try {
     const { id: userId, secretKey } = store.getState().main;
-    const message = id + signingKey + timestamp;
+    const message = 'Set Signing Key' + id + signingKey + timestamp;
     const sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );

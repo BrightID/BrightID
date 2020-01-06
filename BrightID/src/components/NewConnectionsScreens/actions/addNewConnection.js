@@ -35,7 +35,7 @@ export const addNewConnection = () => async (
       // The other user signed a connection request; we have enough info to
       // make an API call to create the connection.
 
-      const message = connectUserData.id + id + connectUserData.timestamp;
+      const message = 'Add Connection' + connectUserData.id + id + connectUserData.timestamp;
       const signedMessage = uInt8ArrayToB64(
         nacl.sign.detached(strToUint8Array(message), secretKey),
       );
