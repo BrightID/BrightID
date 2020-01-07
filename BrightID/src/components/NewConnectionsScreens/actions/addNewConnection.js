@@ -1,12 +1,11 @@
 // @flow
 
 import nacl from 'tweetnacl';
-import { createCipher } from 'react-native-crypto';
 import { saveImage } from '../../../utils/filesystem';
 import { strToUint8Array, uInt8ArrayToB64 } from '../../../utils/encoding';
 import { encryptAndUploadLocalData } from './encryptData';
 import api from '../../../Api/BrightId';
-import backupApi from '../../../Api/BackupApi';
+import { backupPhoto, backupUser } from '../../Recovery/helpers';
 import { addConnection } from '../../../actions';
 
 export const addNewConnection = () => async (
@@ -18,16 +17,7 @@ export const addNewConnection = () => async (
    * Clear the redux store of all leftoverwebrtc data
    */
   try {
-    const {
-      connectUserData,
-      id,
-      secretKey,
-      backupCompleted,
-      name,
-      score,
-      connections,
-      password,
-    } = getState();
+    const { connectUserData, id, secretKey, backupCompleted } = getState();
     let connectionDate = Date.now();
 
     if (connectUserData.signedMessage) {
@@ -66,27 +56,15 @@ export const addNewConnection = () => async (
       photo: { filename },
     };
 
+    dispatch(addConnection(connectionData));
+
+    if (backupCompleted) {
+      await backupUser();
+      await backupPhoto(connectUserData.id, filename);
+    }
     // first backup the connection because if we save the connection first
     // and then we get an error in saving the backup, user will not solve
     // the issue by making the connection again.
-    // if (backupCompleted) {
-    //   const password = await AsyncStorage.getItem('password');
-    //   let cipher = createCipher('aes128', password);
-    //   let encrypted =
-    //     cipher.update(connectUserData.photo, 'utf8', 'base64') +
-    //     cipher.final('base64');
-    //   await backupApi.set(id, connectUserData.id, encrypted);
-    //   const userData = { id, name, score };
-    //   const tmp = [...connections, connectionData];
-    //   const dataStr = JSON.stringify({ userData, connections: tmp });
-    //   cipher = createCipher('aes128', password);
-    //   encrypted =
-    //     cipher.update(dataStr, 'utf8', 'base64') + cipher.final('base64');
-    //   await backupApi.set(id, 'data', encrypted);
-    //   console.log('new connection backup completed!');
-    // }
-
-    dispatch(addConnection(connectionData));
   } catch (err) {
     console.log(err);
   }

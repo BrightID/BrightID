@@ -1,9 +1,8 @@
 // @flow
 
-import { Alert } from 'react-native';
 import nacl from 'tweetnacl';
 import RNFetchBlob from 'rn-fetch-blob';
-import { setUserData } from '../../actions';
+import { setUserData, setHashedId } from '../../actions';
 import { createImageDirectory, saveImage } from '../../utils/filesystem';
 import api from '../../Api/BrightId';
 import { b64ToUrlSafeB64, uInt8ArrayToB64 } from '../../utils/encoding';
@@ -36,6 +35,8 @@ export const handleBrightIdCreation = ({
 
     // // update redux store
     await dispatch(setUserData(userData));
+    // to fix bug while testing
+    dispatch(setHashedId(''));
 
     console.log('brightid creation success');
 

@@ -57,7 +57,7 @@ export const encryptAndBackup = async (key: string, data: string) => {
   }
 };
 
-const backupPhoto = async (id: string, filename: string) => {
+export const backupPhoto = async (id: string, filename: string) => {
   try {
     const data = await retrieveImage(filename);
     await encryptAndBackup(id, data);
@@ -66,18 +66,19 @@ const backupPhoto = async (id: string, filename: string) => {
   }
 };
 
-const backupConnectionPhotos = async () => {
+const backupPhotos = async () => {
   try {
-    const { connections } = store.getState();
+    const { connections, id, photo } = store.getState();
     for (const item of connections) {
       await backupPhoto(item.id, item.photo.filename);
     }
+    await backupPhoto(id, photo.filename);
   } catch (err) {
     err instanceof Error ? console.warn(err.message) : console.warn(err);
   }
 };
 
-const backupUser = async () => {
+export const backupUser = async () => {
   try {
     const {
       score,
@@ -99,7 +100,6 @@ const backupUser = async () => {
       trustedConnections,
     });
     await encryptAndBackup('data', dataStr);
-    await backupPhoto(id, photo.filename);
   } catch (err) {
     err instanceof Error ? console.warn(err.message) : console.warn(err);
   }
@@ -110,7 +110,7 @@ export const backupAppData = async () => {
     // backup user
     await backupUser();
     // backup connection photos
-    await backupConnectionPhotos();
+    await backupPhotos();
   } catch (err) {
     err instanceof Error ? console.warn(err.message) : console.warn(err);
   }
