@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 class CofoundGroupReview extends React.Component<Props> {
   static navigationOptions = () => ({
     title: 'Review Group',
-    headerRight: <View />,
+    headerRight: () => <View />,
   });
 
   render() {

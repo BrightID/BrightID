@@ -12,7 +12,7 @@ import AppCard from './AppCard';
 export class AppsScreen extends React.Component<Props> {
   static navigationOptions = () => ({
     title: 'Apps',
-    headerRight: <View />,
+    headerRight: () => <View />,
   });
 
   async componentDidMount() {

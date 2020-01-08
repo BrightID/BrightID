@@ -41,7 +41,7 @@ type State = {
 export class NewConnectionScreen extends React.Component<Props, State> {
   static navigationOptions = () => ({
     title: 'New Connection',
-    headerRight: (
+    headerRight: () => (
       <HeaderButtons HeaderButtonComponent={SimpleHeaderButton}>
         <Item title="options" iconName="share-alt" onPress={shareConnection} />
       </HeaderButtons>

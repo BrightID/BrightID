@@ -17,7 +17,7 @@ type State = {};
 export class SuccessScreen extends React.Component<Props, State> {
   static navigationOptions = {
     headerBackTitle: ' ',
-    header: null,
+    headerShown: false,
   };
 
   render() {

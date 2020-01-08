@@ -17,7 +17,7 @@ type State = {};
 export class PreviewConnectionScreen extends React.Component<Props, State> {
   static navigationOptions = {
     title: 'New Connection',
-    headerRight: <View />,
+    headerRight: () => <View />,
   };
 
   handleConfirmation = async () => {

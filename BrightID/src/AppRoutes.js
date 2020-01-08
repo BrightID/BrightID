@@ -1,9 +1,7 @@
 import * as React from 'react';
-import {
-  createStackNavigator,
-  createSwitchNavigator,
-  createAppContainer,
-} from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
 import {
   HeaderButtons,
   HeaderButton,
@@ -61,14 +59,9 @@ const headerTitleStyle = {
   fontFamily: 'EurostileRegular',
   fontWeight: '200',
   fontSize: 24,
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  textAlign: 'center',
-  alignSelf: 'center',
-  flex: 1,
 };
 
-const headerBackground = (
+const headerBackground = () => (
   <LinearGradient
     colors={['#F52828', '#F76B1C']}
     style={{ flex: 1, width: '100%' }}
@@ -79,7 +72,7 @@ const defaultNavigationOptions = ({ navigation }) => ({
   headerTintColor: '#fff',
   headerTitleStyle,
   headerBackground,
-  headerLeft: (
+  headerLeft: () => (
     <HeaderButtons left={true} HeaderButtonComponent={MaterialHeaderButton}>
       <Item
         title="go back"
@@ -100,7 +93,7 @@ const GroupStack = createStackNavigator(
     NewGroup: {
       screen: NewGroupScreen,
       navigationOptions: ({ navigation }) => ({
-        headerLeft: (
+        headerLeft: () => (
           <HeaderButtons
             left={true}
             HeaderButtonComponent={MaterialHeaderButton}
@@ -132,7 +125,6 @@ const GroupStack = createStackNavigator(
   {
     initialRouteName: 'GroupMain',
     mode: 'modal',
-    headerLayoutPreset: 'center',
     defaultNavigationOptions,
   },
 );
@@ -149,7 +141,6 @@ const ConnectionsStack = createStackNavigator(
   {
     initialRouteName: 'ConnectionsMain',
     mode: 'modal',
-    headerLayoutPreset: 'center',
     defaultNavigationOptions,
   },
 );
@@ -165,7 +156,7 @@ const NewConnectStack = createStackNavigator(
     PreviewConnection: {
       screen: PreviewConnectionScreen,
       navigationOptions: ({ navigation }) => ({
-        headerLeft: (
+        headerLeft: () => (
           <HeaderButtons
             left={true}
             HeaderButtonComponent={MaterialHeaderButton}
@@ -185,7 +176,6 @@ const NewConnectStack = createStackNavigator(
   {
     initialRouteName: 'NewConnectMain',
     mode: 'modal',
-    headerLayoutPreset: 'center',
     defaultNavigationOptions,
   },
 );
@@ -196,19 +186,19 @@ const AppStack = createStackNavigator(
     Connections: {
       screen: ConnectionsStack,
       navigationOptions: {
-        header: null,
+        headerShown: false,
       },
     },
     Groups: {
       screen: GroupStack,
       navigationOptions: {
-        header: null,
+        headerShown: false,
       },
     },
     NewConnection: {
       screen: NewConnectStack,
       navigationOptions: {
-        header: null,
+        headerShown: false,
       },
     },
     Notifications,
@@ -228,7 +218,6 @@ const AppStack = createStackNavigator(
   },
   {
     initialRouteName: 'Home',
-    headerLayoutPreset: 'center',
     defaultNavigationOptions,
   },
 );
@@ -238,7 +227,7 @@ const OnboardingStack = createStackNavigator(
     Onboard: {
       screen: Onboard,
       navigationOptions: {
-        header: null,
+        headerShown: false,
       },
     },
     SignUp,
@@ -255,7 +244,7 @@ const OnboardingStack = createStackNavigator(
   },
 );
 
-const AppNavigator = createSwitchNavigator(
+const AppNavigator = createAnimatedSwitchNavigator(
   {
     AppBootstrap,
     App: {

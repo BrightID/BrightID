@@ -42,7 +42,7 @@ type State = {
 export class ConnectionsScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }: { navigation: navigation }) => ({
     title: 'Connections',
-    headerRight: (
+    headerRight: () => (
       <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
         <Item
           title="options"

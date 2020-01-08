@@ -57,7 +57,7 @@ export class CurrentGroupView extends Component<Props, State> {
     return {
       title: group.name,
       headerTitleStyle: { fontSize: 16 },
-      headerRight: (
+      headerRight: () => (
         <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
           <Item
             title="options"

@@ -44,6 +44,7 @@ const SimpleLineIconsHeaderButton = (passMeFurther) => (
 );
 
 // header Button
+// TODO: Remove dependency from this library
 const MaterialHeaderButton = (passMeFurther) => (
   // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
   // and it is important to pass those props to `HeaderButton`
@@ -60,7 +61,7 @@ export class HomeScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({
     title: 'BrightID',
     headerBackTitle: 'Home',
-    headerRight: (
+    headerRight: () => (
       <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
         <Item
           title="options"
@@ -97,7 +98,7 @@ export class HomeScreen extends React.Component<Props> {
         />
       </HeaderButtons>
     ),
-    headerLeft: (
+    headerLeft: () => (
       <HeaderButtons
         left={true}
         HeaderButtonComponent={SimpleLineIconsHeaderButton}

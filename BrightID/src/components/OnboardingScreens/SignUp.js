@@ -53,7 +53,7 @@ export class SignUp extends React.Component<Props, State> {
     headerStyle: {
       backgroundColor: '#f48b1e',
     },
-    headerRight: (
+    headerRight: () => (
       <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
         <Item
           title="help"

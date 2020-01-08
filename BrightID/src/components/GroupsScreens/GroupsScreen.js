@@ -28,7 +28,7 @@ const ICON_SIZE = 36;
 export class GroupsScreen extends React.Component<Props, State> {
   static navigationOptions = () => ({
     title: 'Groups',
-    headerRight: <View />,
+    headerRight: () => <View />,
   });
 
   renderCurrentGroups({ item }) {
@@ -52,11 +52,11 @@ export class GroupsScreen extends React.Component<Props, State> {
       .filter((group: { isNew: boolean }) => group.isNew)
       .concat(eligibleGroups.filter((group) => !group.isNew));
     if (groups.length === 1) groups.push('');
-    return take(2, groups).map((group) =>
+    return take(2, groups).map((group, i) =>
       group ? (
         <EligibleGroupCard key={group.id} group={group} />
       ) : (
-        <View style={styles.emptyContainer} />
+        <View key={i} style={styles.emptyContainer} />
       ),
     );
   }
@@ -103,7 +103,6 @@ export class GroupsScreen extends React.Component<Props, State> {
                 <FlatList
                   data={groupPairs}
                   renderItem={this.renderCurrentGroups}
-                  keyExtractor={([group]) => group && group.id}
                 />
               </View>
             )}
