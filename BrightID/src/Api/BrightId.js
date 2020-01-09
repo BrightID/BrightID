@@ -9,7 +9,7 @@ import { createHash } from 'react-native-crypto';
 
 let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
-  seedUrl = 'http://192.168.43.7';
+  seedUrl = 'http://192.168.8.138';
 }
 
 function hash(data) {
@@ -238,23 +238,6 @@ class BrightId {
     return res.data.data;
   }
   
-  async getSignedVerification(context) {
-    let { id, secretKey } = store.getState().main;
-    let timestamp = Date.now();
-    let message = 'Get Signed Verification' + id + context + timestamp;
-    let sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
-    const res = await this.api.get(`/signedVerification/${context}/${id}`, {}, {
-      headers: {
-        'x-brightid-signature': sig,
-        'x-brightid-timestamp': timestamp
-      }
-    });
-    BrightId.throwOnError(res);
-    return res.data.data;
-  }
-
   async getUserInfo() {
     let { id, secretKey } = store.getState().main;
     let timestamp = Date.now();

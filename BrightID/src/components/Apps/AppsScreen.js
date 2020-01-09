@@ -75,29 +75,13 @@ class AppsScreen extends React.Component<Props> {
 
   async linkVerification(baseUrl, context, contextInfo, account) {
     const { navigation, dispatch } = this.props;
+    if (contextInfo.isApp) {
+      dispatch(saveApp(context, contextInfo));
+    }
     const oldBaseUrl = api.baseUrl;
-
     try {
       api.baseUrl = baseUrl;
-      await api.verifyAccount(context, account);
-      // fixme: we should wait somehow here, because signed verification
-      // can be obtained only after consensus on "Verify Account" operation
-      const verification = await api.getSignedVerification(context);
-      // not all contexts have a verification URL
-      if (contextInfo.verificationUrl) {
-        const response = await fetch(`${contextInfo.verificationUrl}/${account}`, {
-          method: 'PUT',
-          body: JSON.stringify(verification),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        if (response.ok) {
-          contextInfo.verified = true;
-        } else {
-          throw new Error(response.statusText);
-        }
-      }
+      api.verifyAccount(context, account);
     } catch (e) {
       Alert.alert(`App verification failed`, `${e.message}\n${e.stack || ''}`, [
         {
@@ -110,9 +94,6 @@ class AppsScreen extends React.Component<Props> {
       ]);
     } finally {
       api.baseUrl = oldBaseUrl;
-      if (contextInfo.isApp) {
-        dispatch(saveApp(context, contextInfo));
-      }
     }
   }
 }
