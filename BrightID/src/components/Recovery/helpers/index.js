@@ -1,6 +1,6 @@
 // @flow
 
-import { Alert, AsyncStorage } from 'react-native';
+import { Alert } from 'react-native';
 import { createCipher, createDecipher } from 'react-native-crypto';
 import nacl from 'tweetnacl';
 import { retrieveImage, saveImage } from '../../../utils/filesystem';
@@ -16,6 +16,7 @@ import {
   setConnections,
   setPassword,
   setHashedId,
+  setTrustedConnections,
 } from '../../../actions';
 import {
   uInt8ArrayToB64,
@@ -24,7 +25,7 @@ import {
   strToUint8Array,
 } from '../../../utils/encoding';
 
-export const setTrustedConnections = async () => {
+export const setTrusted = async () => {
   try {
     const { trustedConnections } = store.getState();
     await api.setTrusted(trustedConnections);
@@ -247,7 +248,7 @@ export const restoreUserData = async (pass: string) => {
 
     const decrypted = await fetchBackupData('data', pass);
 
-    const { userData, connections } = JSON.parse(decrypted);
+    const { userData, connections, trustedConnections } = JSON.parse(decrypted);
     if (!userData || !connections) {
       throw new Error('bad password');
     }
@@ -265,7 +266,7 @@ export const restoreUserData = async (pass: string) => {
       userData.photo = { filename };
     }
 
-    return { userData, connections };
+    return { userData, connections, trustedConnections };
   } catch (err) {
     throw err;
   }
@@ -274,13 +275,16 @@ export const restoreUserData = async (pass: string) => {
 export const recoverData = async (pass: string) => {
   try {
     // fetch user data / save photo
-    const { userData, connections } = await restoreUserData(pass);
+    const { userData, connections, trustedConnections } = await restoreUserData(
+      pass,
+    );
 
     // set new signing key on the backend
     await setSigningKey();
 
     store.dispatch(setUserData(userData));
     store.dispatch(setConnections(connections));
+    store.dispatch(setTrustedConnections(trustedConnections));
 
     for (const conn of connections) {
       let decrypted = await fetchBackupData(conn.id, pass);

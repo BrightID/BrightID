@@ -42,6 +42,7 @@ import {
   HYDRATE_STATE,
   RESET_STORE,
   UPDATE_CONNECTION_SCORES,
+  SET_TRUSTED_CONNECTIONS,
 } from '../actions';
 import { verifyStore } from './verifyStoreV1';
 
@@ -355,6 +356,12 @@ export const reducer = (state: State = initialState, action: action) => {
         trustedConnections: state.trustedConnections.filter(
           (id) => id !== action.id,
         ),
+      };
+    }
+    case SET_TRUSTED_CONNECTIONS: {
+      return {
+        ...state,
+        trustedConnections: action.trustedConnections.slice(0),
       };
     }
     case SET_BACKUP_COMPLETED: {

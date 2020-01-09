@@ -27,6 +27,7 @@ export const REMOVE_APP = 'REMOVE_APP';
 export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
 export const ADD_TRUSTED_CONNECTION = 'ADD_TRUSTED_CONNECTION';
 export const REMOVE_TRUSTED_CONNECTION = 'REMOVE_TRUSTED_CONNECTION';
+export const SET_TRUSTED_CONNECTIONS = 'SET_TRUSTED_CONNECTIONS';
 export const SET_BACKUP_COMPLETED = 'SET_BACKUP_COMPLETED';
 export const SET_PASSWORD = 'SET_PASSWORD';
 export const SET_RECOVERY_DATA = 'SET_RECOVERY_DATA';
@@ -281,6 +282,11 @@ export const setNotifications = (notificationInfos: NotificationInfo[]) => ({
 export const addTrustedConnection = (id: string) => ({
   type: ADD_TRUSTED_CONNECTION,
   id,
+});
+
+export const setTrustedConnections = (trustedConnections: string[]) => ({
+  type: SET_TRUSTED_CONNECTIONS,
+  trustedConnections,
 });
 
 export const removeTrustedConnection = (id: string) => ({

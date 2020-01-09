@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import SearchConnections from '../Connections/SearchConnections';
 import TrustedConnectionCard from './TrustedConnectionCard';
 import { renderListOrSpinner } from '../Connections/renderConnections';
-import { setTrustedConnections } from './helpers';
+import { setTrusted } from './helpers';
 
 /**
  * Backup screen of BrightID
@@ -53,7 +53,7 @@ class TrustedConnectionsScreen extends React.Component<Props, State> {
         'You need at least three trusted connections for backup.',
       );
     } else {
-      setTrustedConnections()
+      setTrusted()
         .then((success) => {
           if (success) navigation.navigate('Backup');
         })
