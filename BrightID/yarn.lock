@@ -7796,11 +7796,6 @@ react-native-os@^1.0.1:
   resolved "https://registry.yarnpkg.com/react-native-os/-/react-native-os-1.2.2.tgz#402cee00ac00a0588200a66b90e1d2b5a593fec0"
   integrity sha512-LfA6bip2P1kKgexvNL26TaIKYrJIdc/xlRZ7WAgi+19s+qq/+l9mk897EDNXgmue/8tRJk55GjlGd709AJY9XA==
 
-react-native-platform-touchable@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-platform-touchable/-/react-native-platform-touchable-1.1.1.tgz#fde4acc65eea585d28b164d0c3716a42129a68e4"
-  integrity sha1-/eSsxl7qWF0osWTQw3FqQhKaaOQ=
-
 react-native-popup-menu@^0.14.2:
   version "0.14.2"
   resolved "https://registry.yarnpkg.com/react-native-popup-menu/-/react-native-popup-menu-0.14.2.tgz#c71e6d662ce143cdfd3a640fe22f2c54f2f54eda"
@@ -7938,13 +7933,6 @@ react-navigation-animated-switch@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/react-navigation-animated-switch/-/react-navigation-animated-switch-0.4.1.tgz#5928d0cff40d2bfcb2a60f1baabebf09ed6c1b09"
   integrity sha512-p3W/2ecwet2w1mkZzzH3x9KXnnRTLUq3Z4MD+QlsCm/dPSVAz/4UZwT+1iYfqS0D7Zl6K/RXol7aNOrcuDldxA==
-
-react-navigation-header-buttons@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/react-navigation-header-buttons/-/react-navigation-header-buttons-3.0.1.tgz#4c10d5883774ca483e36edad8500432ba200d3d6"
-  integrity sha512-Z/JHuqtFL6p1jvRnwya6AiAjzlVcbGOy1tHA8TutDkVdlMhrJvG+WjmWLaMasz4J9+AMyBdri2tz7pyA1Jr3sg==
-  dependencies:
-    react-native-platform-touchable "^1.1.1"
 
 react-navigation-stack@^2.0.12:
   version "2.0.12"

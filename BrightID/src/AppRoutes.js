@@ -2,11 +2,6 @@ import * as React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
-import {
-  HeaderButtons,
-  HeaderButton,
-  Item,
-} from 'react-navigation-header-buttons';
 import LinearGradient from 'react-native-linear-gradient';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Home from './components/HomeScreen';
@@ -42,19 +37,6 @@ import RecoveryCodeScreen from './components/Recovery/RecoveryCodeScreen';
  *
  */
 
-// header Button
-const MaterialHeaderButton = (passMeFurther) => (
-  // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
-  // and it is important to pass those props to `HeaderButton`
-  // then you may add some information like icon size or color (if you use icons)
-  <HeaderButton
-    {...passMeFurther}
-    IconComponent={Material}
-    iconSize={32}
-    color="#fff"
-  />
-);
-
 const headerTitleStyle = {
   fontFamily: 'EurostileRegular',
   fontWeight: '200',
@@ -72,82 +54,12 @@ const defaultNavigationOptions = ({ navigation }) => ({
   headerTintColor: '#fff',
   headerTitleStyle,
   headerBackground,
-  headerLeft: () => (
-    <HeaderButtons left={true} HeaderButtonComponent={MaterialHeaderButton}>
-      <Item
-        title="go back"
-        iconName="arrow-left"
-        onPress={() => {
-          navigation.goBack(null);
-        }}
-      />
-    </HeaderButtons>
-  ),
 });
 
-const GroupStack = createStackNavigator(
+const AppStack = createStackNavigator(
   {
-    GroupMain: {
-      screen: GroupsScreen,
-    },
-    NewGroup: {
-      screen: NewGroupScreen,
-      navigationOptions: ({ navigation }) => ({
-        headerLeft: () => (
-          <HeaderButtons
-            left={true}
-            HeaderButtonComponent={MaterialHeaderButton}
-          >
-            <Item
-              title="close"
-              iconName="close"
-              onPress={() => {
-                navigation.goBack();
-              }}
-            />
-          </HeaderButtons>
-        ),
-      }),
-    },
-    CofoundGroupReview: {
-      screen: CofoundGroupReview,
-    },
-    CurrentGroupView: {
-      screen: CurrentGroupView,
-    },
-    SortingConnections: {
-      screen: SortingConnectionsScreen,
-    },
-    EligibleGroups: {
-      screen: EligibleGroupsScreen,
-    },
-  },
-  {
-    initialRouteName: 'GroupMain',
-    mode: 'modal',
-    defaultNavigationOptions,
-  },
-);
-
-const ConnectionsStack = createStackNavigator(
-  {
-    ConnectionsMain: {
-      screen: ConnectionsScreen,
-    },
-    SortingConnections: {
-      screen: SortingConnectionsScreen,
-    },
-  },
-  {
-    initialRouteName: 'ConnectionsMain',
-    mode: 'modal',
-    defaultNavigationOptions,
-  },
-);
-
-const NewConnectStack = createStackNavigator(
-  {
-    NewConnectMain: {
+    Home,
+    NewConnection: {
       screen: NewConnectionScreen,
     },
     ConnectSuccess: {
@@ -155,51 +67,27 @@ const NewConnectStack = createStackNavigator(
     },
     PreviewConnection: {
       screen: PreviewConnectionScreen,
-      navigationOptions: ({ navigation }) => ({
-        headerLeft: () => (
-          <HeaderButtons
-            left={true}
-            HeaderButtonComponent={MaterialHeaderButton}
-          >
-            <Item
-              title="close"
-              iconName="close"
-              onPress={() => {
-                navigation.navigate('Home');
-              }}
-            />
-          </HeaderButtons>
-        ),
-      }),
     },
-  },
-  {
-    initialRouteName: 'NewConnectMain',
-    mode: 'modal',
-    defaultNavigationOptions,
-  },
-);
-
-const AppStack = createStackNavigator(
-  {
-    Home,
     Connections: {
-      screen: ConnectionsStack,
-      navigationOptions: {
-        headerShown: false,
-      },
+      screen: ConnectionsScreen,
+    },
+    SortingConnections: {
+      screen: SortingConnectionsScreen,
     },
     Groups: {
-      screen: GroupStack,
-      navigationOptions: {
-        headerShown: false,
-      },
+      screen: GroupsScreen,
     },
-    NewConnection: {
-      screen: NewConnectStack,
-      navigationOptions: {
-        headerShown: false,
-      },
+    NewGroup: {
+      screen: NewGroupScreen,
+    },
+    CofoundGroupReview: {
+      screen: CofoundGroupReview,
+    },
+    CurrentGroupView: {
+      screen: CurrentGroupView,
+    },
+    EligibleGroups: {
+      screen: EligibleGroupsScreen,
     },
     Notifications,
     Apps: {
@@ -265,3 +153,98 @@ const App = createAppContainer(AppNavigator);
 const MainApp = () => <App uriPrefix={prefix} />;
 
 export default MainApp;
+
+// const GroupStack = createStackNavigator(
+//   {
+//     GroupMain: {
+//       screen: GroupsScreen,
+//     },
+//     NewGroup: {
+//       screen: NewGroupScreen,
+//       navigationOptions: ({ navigation }) => ({
+//         // headerLeft: () => (
+//         //   <HeaderButtons
+//         //     left={true}
+//         //     HeaderButtonComponent={MaterialHeaderButton}
+//         //   >
+//         //     <Item
+//         //       title="close"
+//         //       iconName="close"
+//         //       onPress={() => {
+//         //         navigation.goBack();
+//         //       }}
+//         //     />
+//         //   </HeaderButtons>
+//         // ),
+//       }),
+//     },
+//     CofoundGroupReview: {
+//       screen: CofoundGroupReview,
+//     },
+//     CurrentGroupView: {
+//       screen: CurrentGroupView,
+//     },
+//     SortingConnections: {
+//       screen: SortingConnectionsScreen,
+//     },
+//     EligibleGroups: {
+//       screen: EligibleGroupsScreen,
+//     },
+//   },
+//   {
+//     initialRouteName: 'GroupMain',
+//     mode: 'modal',
+//     defaultNavigationOptions,
+//   },
+// );
+
+// const ConnectionsStack = createStackNavigator(
+//   {
+//     ConnectionsMain: {
+//       screen: ConnectionsScreen,
+//     },
+//     SortingConnections: {
+//       screen: SortingConnectionsScreen,
+//     },
+//   },
+//   {
+//     initialRouteName: 'ConnectionsMain',
+//     mode: 'modal',
+//     defaultNavigationOptions,
+//   },
+// );
+
+// const NewConnectStack = createStackNavigator(
+//   {
+//     NewConnectMain: {
+//       screen: NewConnectionScreen,
+//     },
+//     ConnectSuccess: {
+//       screen: SuccessScreen,
+//     },
+//     PreviewConnection: {
+//       screen: PreviewConnectionScreen,
+//       navigationOptions: ({ navigation }) => ({
+//         // headerLeft: () => (
+//         //   <HeaderButtons
+//         //     left={true}
+//         //     HeaderButtonComponent={MaterialHeaderButton}
+//         //   >
+//         //     <Item
+//         //       title="close"
+//         //       iconName="close"
+//         //       onPress={() => {
+//         //         navigation.navigate('Home');
+//         //       }}
+//         //     />
+//         //   </HeaderButtons>
+//         // ),
+//       }),
+//     },
+//   },
+//   {
+//     initialRouteName: 'NewConnectMain',
+//     mode: 'modal',
+//     defaultNavigationOptions,
+//   },
+// );

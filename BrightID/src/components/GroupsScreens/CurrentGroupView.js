@@ -11,11 +11,6 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
-import {
-  HeaderButtons,
-  HeaderButton,
-  Item,
-} from 'react-navigation-header-buttons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationEvents } from 'react-navigation';
 import Overlay from 'react-native-modal-overlay';
@@ -28,16 +23,6 @@ import SearchMembers from './SearchMembers';
 import GroupPhoto from './GroupPhoto';
 import emitter from '../../emitter';
 import { leaveGroup } from '../../actions';
-
-// header Button
-const MaterialHeaderButton = (passMeFurther) => (
-  <HeaderButton
-    {...passMeFurther}
-    IconComponent={Material}
-    iconSize={32}
-    color="#fff"
-  />
-);
 
 type State = {
   optionsVisible: boolean,
@@ -58,15 +43,14 @@ export class CurrentGroupView extends Component<Props, State> {
       title: group.name,
       headerTitleStyle: { fontSize: 16 },
       headerRight: () => (
-        <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
-          <Item
-            title="options"
-            iconName="dots-horizontal"
-            onPress={() => {
-              emitter.emit('optionsSelected');
-            }}
-          />
-        </HeaderButtons>
+        <TouchableOpacity
+          style={{ marginRight: 11 }}
+          onPress={() => {
+            emitter.emit('optionsSelected');
+          }}
+        >
+          <Material name="dots-horizontal" size={32} color="#fff" />
+        </TouchableOpacity>
       ),
     };
   };

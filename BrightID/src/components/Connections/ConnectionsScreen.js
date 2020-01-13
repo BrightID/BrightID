@@ -1,14 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
+import { TouchableOpacity, StyleSheet, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
-import {
-  HeaderButtons,
-  HeaderButton,
-  Item,
-} from 'react-navigation-header-buttons';
-
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
@@ -25,16 +19,6 @@ import { removeConnection } from '../../actions';
  * Displays a search input and list of Connection Cards
  */
 
-// header Button
-const MaterialHeaderButton = (passMeFurther) => (
-  <HeaderButton
-    {...passMeFurther}
-    IconComponent={Material}
-    iconSize={32}
-    color="#fff"
-  />
-);
-
 type State = {
   loading: boolean,
 };
@@ -43,13 +27,12 @@ export class ConnectionsScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }: { navigation: navigation }) => ({
     title: 'Connections',
     headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
-        <Item
-          title="options"
-          iconName="dots-horizontal"
-          onPress={createNewConnection(navigation)}
-        />
-      </HeaderButtons>
+      <TouchableOpacity
+        style={{ marginRight: 11 }}
+        onPress={createNewConnection(navigation)}
+      >
+        <Material name="dots-horizontal" size={32} color="#fff" />
+      </TouchableOpacity>
     ),
   });
 
