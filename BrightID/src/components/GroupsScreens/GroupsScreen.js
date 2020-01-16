@@ -100,7 +100,7 @@ class GroupsScreen extends React.Component<Props, State> {
                 <FlatList
                   data={groupPairs}
                   renderItem={this.renderCurrentGroups}
-                  keyExtractor={({ id }, index) => {console.warn(id, index); return index;}}
+                  keyExtractor={([group]) => group && group.id}
                 />
               </View>
             )}
