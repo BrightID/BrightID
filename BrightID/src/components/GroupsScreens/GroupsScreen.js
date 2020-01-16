@@ -51,13 +51,10 @@ class GroupsScreen extends React.Component<Props, State> {
     let groups = eligibleGroups
       .filter((group: { isNew: boolean }) => group.isNew)
       .concat(eligibleGroups.filter((group) => !group.isNew));
-    if (groups.length === 1) groups.push('');
-    return take(2, groups).map((group) =>
-      group ? (
-        <EligibleGroupCard group={group} />
-      ) : (
-        <View style={styles.emptyContainer} />
-      ),
+    return groups.slice(0, 2).map((group) =>
+      (
+        <EligibleGroupCard group={group} key={group.id} />
+      )
     );
   }
 
@@ -103,7 +100,7 @@ class GroupsScreen extends React.Component<Props, State> {
                 <FlatList
                   data={groupPairs}
                   renderItem={this.renderCurrentGroups}
-                  keyExtractor={([group]) => group && group.id}
+                  keyExtractor={({ id }, index) => {console.warn(id, index); return index;}}
                 />
               </View>
             )}
