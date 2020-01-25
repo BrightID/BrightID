@@ -5,7 +5,9 @@ import { StyleSheet, View, Alert, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { saveApp, getApps } from '../../actions/apps';
 import BottomNav from '../BottomNav';
+import nacl from 'tweetnacl';
 
+import { strToUint8Array, uInt8ArrayToB64 } from '../../utils/encoding';
 import api from '../../Api/BrightId';
 import AppCard from './AppCard';
 
@@ -17,10 +19,9 @@ class AppsScreen extends React.Component<Props> {
 
   async componentDidMount() {
     const { navigation, dispatch } = this.props;
-
     if (navigation.state.params) {
       // if 'params' is defined, the user came through a deep link
-      const { baseUrl, context, id } = navigation.state.params;
+      const { baseUrl, context, contextId, sponsorshipSig } = navigation.state.params;
       const oldBaseUrl = api.baseUrl;
       let contextInfo;
       try {
@@ -31,16 +32,15 @@ class AppsScreen extends React.Component<Props> {
       } finally {
         api.baseUrl = oldBaseUrl;
       }
-
       if (contextInfo && contextInfo.verification) {
         Alert.alert(
           'App Verification?',
-          `Do you want to allow ${context} to link the account with id ${id} to your BrightID verification?`,
+          `Do you want to verify your account in ${context} by your BrightID?`,
           [
             {
               text: 'Yes',
               onPress: () =>
-                this.linkVerification(baseUrl, context, contextInfo, id),
+                this.linkVerification(baseUrl, context, contextInfo, contextId, sponsorshipSig)
             },
             {
               text: 'No',
@@ -73,15 +73,32 @@ class AppsScreen extends React.Component<Props> {
     );
   }
 
-  async linkVerification(baseUrl, context, contextInfo, account) {
+  async linkVerification(baseUrl, context, contextInfo, contextId, sponsorshipSig) {
     const { navigation, dispatch } = this.props;
-    if (contextInfo.isApp) {
-      dispatch(saveApp(context, contextInfo));
-    }
     const oldBaseUrl = api.baseUrl;
     try {
+      if (contextInfo.verificationUrl) {
+        const { publicKey, secretKey } = nacl.sign.keyPair();
+        const b64PubKey = uInt8ArrayToB64(publicKey);
+        const sig = uInt8ArrayToB64(
+          nacl.sign.detached(strToUint8Array(contextId), secretKey)
+        );
+        let resp = await fetch(contextInfo.verificationUrl, {
+          method: 'PUT',
+          body: JSON.stringify({ 'contextId': contextId, 'publicKey': b64PubKey, sig }),
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        resp = await resp.json();
+        sponsorshipSig = resp.data.sponsorshipSig;
+        contextId = b64PubKey;
+      }
       api.baseUrl = baseUrl;
-      api.verifyAccount(context, account);
+      api.linkContextId(context, contextId);
+      if (sponsorshipSig && sponsorshipSig != 'null') {
+        api.sponsor(context, contextId, sponsorshipSig);
+      }
     } catch (e) {
       Alert.alert(`App verification failed`, `${e.message}\n${e.stack || ''}`, [
         {
@@ -94,6 +111,10 @@ class AppsScreen extends React.Component<Props> {
       ]);
     } finally {
       api.baseUrl = oldBaseUrl;
+      if (contextInfo.isApp) {
+        dispatch(saveApp(context, contextInfo));
+      }
+      navigation.goBack();
     }
   }
 }

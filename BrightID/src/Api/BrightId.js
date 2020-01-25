@@ -6,10 +6,9 @@ import { strToUint8Array, uInt8ArrayToB64, b64ToUrlSafeB64 } from '../utils/enco
 import store from '../store';
 import { createHash } from 'react-native-crypto';
 
-
 let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
-  seedUrl = 'http://192.168.8.138';
+  seedUrl = 'http://192.168.8.125';
 }
 
 function hash(data) {
@@ -212,21 +211,37 @@ class BrightId {
     BrightId.throwOnError(res);
   }
 
-  async verifyAccount(context: string, account: string) {
+  async sponsor(context: string, contextId: string, sponsorshipSig: string) {
     let { id, secretKey } = store.getState().main;
     let timestamp = Date.now();
-    let message = `Verify Account,${context},${account},${timestamp}`;
+    const op = {
+      _key: hash(sponsorshipSig),
+      name: 'Sponsor',
+      id,
+      context,
+      contextId,
+      sig: sponsorshipSig,
+      timestamp
+    }
+    const res = await this.api.put(`/operations`, op);
+    BrightId.throwOnError(res);
+  }
+
+  async linkContextId(context: string, contextId: string) {
+    let { id, secretKey } = store.getState().main;
+    let timestamp = Date.now();
+    let message = `Link ContextId,${context},${contextId},${timestamp}`;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
     const op = {
       _key: hash(message),
-      name: 'Verify Account',
+      name: 'Link ContextId',
       id,
       context,
-      account,
+      contextId,
       sig,
-      timestamp,
+      timestamp
     }
     const res = await this.api.put(`/operations`, op);
     BrightId.throwOnError(res);
@@ -237,7 +252,7 @@ class BrightId {
     BrightId.throwOnError(res);
     return res.data.data;
   }
-  
+
   async getUserInfo() {
     let { id, secretKey } = store.getState().main;
     let timestamp = Date.now();
@@ -261,15 +276,11 @@ class BrightId {
     return res.data.data;
   }
 
-  
-  
   async ip(): string {
     const res = await this.api.get('/ip');
     BrightId.throwOnError(res);
     return res.data.data.ip;
   }
-
-
 }
 
 const brightId = new BrightId();
