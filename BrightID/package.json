@@ -60,7 +60,7 @@
     "react-native-popup-menu": "^0.14.2",
     "react-native-randombytes": "^3.5.1",
     "react-native-screens": "^1.0.0-alpha.23",
-    "react-native-snap-carousel": "^3.8.0",
+    "react-native-snap-carousel": "^3.8.4",
     "react-native-spinkit": "^1.4.1",
     "react-native-status-bar-height": "^2.1.0",
     "react-native-svg": "^9.6.2",
