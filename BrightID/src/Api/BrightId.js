@@ -8,7 +8,7 @@ import { createHash } from 'react-native-crypto';
 
 let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
-  seedUrl = 'http://192.168.8.125';
+  seedUrl = 'http://192.168.18.2';
 }
 
 function hash(data) {
@@ -248,7 +248,7 @@ class BrightId {
   }
 
   async getMembers(group: string) {
-    const res = await this.api.get(`/membership/${group}`);
+    const res = await this.api.get(`/memberships/${group}`);
     BrightId.throwOnError(res);
     return res.data.data;
   }
@@ -260,7 +260,7 @@ class BrightId {
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    const res = await this.api.get(`/user/${id}`, {}, {
+    const res = await this.api.get(`/users/${id}`, {}, {
       headers: {
         'x-brightid-signature': sig,
         'x-brightid-timestamp': timestamp
