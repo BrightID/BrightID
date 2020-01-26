@@ -21,7 +21,7 @@ class AppsScreen extends React.Component<Props> {
     const { navigation, dispatch } = this.props;
     if (navigation.state.params) {
       // if 'params' is defined, the user came through a deep link
-      const { baseUrl, context, contextId, sponsorshipSig } = navigation.state.params;
+      const { baseUrl, context, contextId } = navigation.state.params;
       const oldBaseUrl = api.baseUrl;
       let contextInfo;
       try {
@@ -40,7 +40,7 @@ class AppsScreen extends React.Component<Props> {
             {
               text: 'Yes',
               onPress: () =>
-                this.linkVerification(baseUrl, context, contextInfo, contextId, sponsorshipSig)
+                this.linkVerification(baseUrl, context, contextInfo, contextId)
             },
             {
               text: 'No',
@@ -73,7 +73,7 @@ class AppsScreen extends React.Component<Props> {
     );
   }
 
-  async linkVerification(baseUrl, context, contextInfo, contextId, sponsorshipSig) {
+  async linkVerification(baseUrl, context, contextInfo, contextId) {
     const { navigation, dispatch } = this.props;
     const oldBaseUrl = api.baseUrl;
     try {
@@ -91,14 +91,10 @@ class AppsScreen extends React.Component<Props> {
           }
         });
         resp = await resp.json();
-        sponsorshipSig = resp.data.sponsorshipSig;
         contextId = b64PubKey;
       }
       api.baseUrl = baseUrl;
       api.linkContextId(context, contextId);
-      if (sponsorshipSig && sponsorshipSig != 'null') {
-        api.sponsor(context, contextId, sponsorshipSig);
-      }
     } catch (e) {
       Alert.alert(`App verification failed`, `${e.message}\n${e.stack || ''}`, [
         {

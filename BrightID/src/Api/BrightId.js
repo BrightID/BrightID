@@ -211,22 +211,6 @@ class BrightId {
     BrightId.throwOnError(res);
   }
 
-  async sponsor(context: string, contextId: string, sponsorshipSig: string) {
-    let { id, secretKey } = store.getState().main;
-    let timestamp = Date.now();
-    const op = {
-      _key: hash(sponsorshipSig),
-      name: 'Sponsor',
-      id,
-      context,
-      contextId,
-      sig: sponsorshipSig,
-      timestamp
-    }
-    const res = await this.api.put(`/operations`, op);
-    BrightId.throwOnError(res);
-  }
-
   async linkContextId(context: string, contextId: string) {
     let { id, secretKey } = store.getState().main;
     let timestamp = Date.now();
