@@ -73,6 +73,7 @@
     "socket.io-client": "^2.2.0",
     "stream-browserify": "^1.0.0",
     "string_decoder": "~0.10.25",
+    "timers": "^0.1.1",
     "timers-browserify": "^1.0.1",
     "tty-browserify": "0.0.0",
     "tweetnacl": "https://github.com/BrightID/tweetnacl-js",
