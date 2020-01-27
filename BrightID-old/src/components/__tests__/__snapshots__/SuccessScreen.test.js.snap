@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing SuccessScreen renders as expected 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#fff",
+      "flex": 1,
+      "flexDirection": "column",
+      "justifyContent": "space-around",
+      "width": "100%",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "justifyContent": "center",
+        "marginTop": 131,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#000000",
+          "fontFamily": "ApexNew-Book",
+          "fontSize": 24,
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+          "letterSpacing": 0,
+          "textAlign": "center",
+        }
+      }
+    >
+      Connection Successful!
+    </Text>
+    <Image
+      accessibilityLabel="success image"
+      accessible={true}
+      onError={[Function]}
+      resizeMode="cover"
+      source={
+        Object {
+          "testUri": "../../../src/static/success.png",
+        }
+      }
+      style={
+        Object {
+          "height": 170,
+          "marginTop": 42,
+          "width": 170,
+        }
+      }
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "justifyContent": "center",
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      accessible={true}
+      clickable={true}
+      isTVSelectable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#4a90e2",
+          "borderRadius": 3,
+          "height": 48,
+          "justifyContent": "center",
+          "opacity": 1,
+          "width": "82%",
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#ffffff",
+            "fontFamily": "ApexNew-Book",
+            "fontSize": 18,
+            "fontStyle": "normal",
+            "fontWeight": "500",
+            "letterSpacing": 0,
+            "textAlign": "left",
+          }
+        }
+      >
+        Done
+      </Text>
+    </View>
+  </View>
+</View>
+`;

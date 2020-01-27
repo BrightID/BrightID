@@ -67,7 +67,7 @@ exports[`Testing SuccessScreen renders as expected 1`] = `
   >
     <View
       accessible={true}
-      clickable={true}
+      focusable={true}
       isTVSelectable={true}
       onClick={[Function]}
       onResponderGrant={[Function]}

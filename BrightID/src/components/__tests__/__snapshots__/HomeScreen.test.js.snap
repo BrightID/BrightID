@@ -36,7 +36,7 @@ exports[`Testing HomeScreen renders as expected 1`] = `
         resizeMode="cover"
         source={
           Object {
-            "uri": "file://function mockConstructor() {
+            "uri": "file://function() {
         return fn.apply(this, arguments);
       }/photos/",
           }
@@ -297,7 +297,7 @@ exports[`Testing HomeScreen renders as expected 1`] = `
       </TouchableOpacity>
     </View>
   </View>
-  <Connect(BottomNav)
+  <Memo(Connect(BottomNav))
     navigation={
       Object {
         "navigate": [MockFunction],
