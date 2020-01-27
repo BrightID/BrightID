@@ -11,11 +11,6 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { connect } from 'react-redux';
-import {
-  HeaderButtons,
-  HeaderButton,
-  Item,
-} from 'react-navigation-header-buttons';
 import RNFS from 'react-native-fs';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -30,80 +25,52 @@ import { getNotifications } from '../actions/notifications';
  * ==========================
  */
 
-// header Button
-const SimpleLineIconsHeaderButton = (passMeFurther) => (
-  // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
-  // and it is important to pass those props to `HeaderButton`
-  // then you may add some information like icon size or color (if you use icons)
-  <HeaderButton
-    {...passMeFurther}
-    IconComponent={SimpleLineIcons}
-    iconSize={32}
-    color="#fff"
-  />
-);
-
-// header Button
-const MaterialHeaderButton = (passMeFurther) => (
-  // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
-  // and it is important to pass those props to `HeaderButton`
-  // then you may add some information like icon size or color (if you use icons)
-  <HeaderButton
-    {...passMeFurther}
-    IconComponent={Material}
-    iconSize={32}
-    color="#fff"
-  />
-);
-
 export class HomeScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({
     title: 'BrightID',
     headerBackTitle: 'Home',
-    headerRight: (
-      <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
-        <Item
-          title="options"
-          iconName="dots-horizontal"
-          onPress={() => {
-            if (__DEV__) {
-              Alert.alert(
-                'WARNING',
-                'Would you like to delete user data and return to the onboarding screen?',
-                [
-                  {
-                    text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
+    headerRight: () => (
+      <TouchableOpacity
+        style={{ marginRight: 11 }}
+        onPress={() => {
+          if (__DEV__) {
+            Alert.alert(
+              'WARNING',
+              'Would you like to delete user data and return to the onboarding screen?',
+              [
+                {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+                {
+                  text: 'Sure',
+                  onPress: async () => {
+                    try {
+                      navigation.navigate('Onboarding');
+                      await AsyncStorage.flushGetRequests();
+                      await AsyncStorage.clear();
+                      store.dispatch(resetStore());
+                    } catch (err) {
+                      err instanceof Error
+                        ? console.warn('delete storage', err.message)
+                        : console.log('delete storage', err);
+                    }
                   },
-                  {
-                    text: 'Sure',
-                    onPress: async () => {
-                      try {
-                        navigation.navigate('Onboarding');
-                        await AsyncStorage.flushGetRequests();
-                        await AsyncStorage.clear();
-                        store.dispatch(resetStore());
-                      } catch (err) {
-                        console.log(err);
-                      }
-                    },
-                  },
-                ],
-                { cancelable: true },
-              );
-            }
-          }}
-        />
-      </HeaderButtons>
-    ),
-    headerLeft: (
-      <HeaderButtons
-        left={true}
-        HeaderButtonComponent={SimpleLineIconsHeaderButton}
+                },
+              ],
+              { cancelable: true },
+            );
+          }
+        }}
       >
-        <Item title="help" iconName="question" onPress={() => {}} />
-      </HeaderButtons>
+        <Material size={32} name="dots-horizontal" color="#fff" />
+      </TouchableOpacity>
+    ),
+    headerLeft: () => (
+      <TouchableOpacity style={{ marginLeft: 11 }} onPress={() => {}}>
+        <SimpleLineIcons name="question" size={32} color="#fff" />
+      </TouchableOpacity>
     ),
   });
 

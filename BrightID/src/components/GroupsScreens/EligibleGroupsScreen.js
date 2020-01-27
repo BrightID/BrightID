@@ -20,7 +20,7 @@ const ICON_SIZE = 36;
 class EligibleGroupsScreen extends React.Component<Props, State> {
   static navigationOptions = () => ({
     title: 'Eligible Groups',
-    headerRight: <View />,
+    headerRight: () => <View />,
   });
 
   refreshUserInfo = async () => {

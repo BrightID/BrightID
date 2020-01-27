@@ -28,7 +28,7 @@ const ICON_SIZE = 36;
 export class GroupsScreen extends React.Component<Props, State> {
   static navigationOptions = () => ({
     title: 'Groups',
-    headerRight: <View />,
+    headerRight: () => <View />,
   });
 
   renderCurrentGroups({ item }) {
