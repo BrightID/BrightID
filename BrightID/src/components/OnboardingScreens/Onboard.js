@@ -39,7 +39,7 @@ const statusBarHeight = getStatusBarHeight();
 export class Onboard extends React.Component<Props, State> {
   static navigationOptions = {
     headerBackTitle: ' ',
-    header: null,
+    headerShown: false,
   };
 
   constructor(props: Props) {

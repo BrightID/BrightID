@@ -1,9 +1,6 @@
 import * as React from 'react';
-import {
-  createStackNavigator,
-  createSwitchNavigator,
-  createAppContainer,
-} from 'react-navigation';
+import { createSwitchNavigator, createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 import {
   HeaderButtons,
   HeaderButton,
@@ -196,19 +193,19 @@ const AppStack = createStackNavigator(
     Connections: {
       screen: ConnectionsStack,
       navigationOptions: {
-        header: null,
+        headerShown: false,
       },
     },
     Groups: {
       screen: GroupStack,
       navigationOptions: {
-        header: null,
+        headerShown: false,
       },
     },
     NewConnection: {
       screen: NewConnectStack,
       navigationOptions: {
-        header: null,
+        headerShown: false,
       },
     },
     Notifications,
@@ -238,7 +235,7 @@ const OnboardingStack = createStackNavigator(
     Onboard: {
       screen: Onboard,
       navigationOptions: {
-        header: null,
+        headerShown: false,
       },
     },
     SignUp,
