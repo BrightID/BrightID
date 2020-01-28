@@ -77,7 +77,7 @@ export class AppsScreen extends React.Component<Props> {
     const oldBaseUrl = api.baseUrl;
     try {
       if (contextInfo.verificationUrl) {
-        const { publicKey, secretKey } = nacl.sign.keyPair();
+        const { publicKey, secretKey } = await nacl.sign.keyPair();
         const b64PubKey = uInt8ArrayToB64(publicKey);
         const sig = uInt8ArrayToB64(
           nacl.sign.detached(strToUint8Array(contextId), secretKey)

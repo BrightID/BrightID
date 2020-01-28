@@ -16,7 +16,7 @@ export const handleBrightIdCreation = ({
 }) => async (dispatch: dispatch) => {
   try {
     // create public / private key pair
-    const { publicKey, secretKey } = nacl.sign.keyPair();
+    const { publicKey, secretKey } = await nacl.sign.keyPair();
     const b64PubKey = uInt8ArrayToB64(publicKey);
     const id = b64ToUrlSafeB64(b64PubKey);
     await createImageDirectory();

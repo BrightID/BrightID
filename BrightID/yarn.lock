@@ -8820,9 +8820,9 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
 
-"tweetnacl@https://github.com/BrightID/tweetnacl-js":
+"tweetnacl@https://github.com/RnbWd/tweetnacl-native":
   version "1.0.1"
-  resolved "https://github.com/BrightID/tweetnacl-js#90b290734397f60660b116ba23d38ee54f0200ae"
+  resolved "https://github.com/RnbWd/tweetnacl-native#0aa377e1ecfa943efb18020bde1e08008cd4d292"
 
 type-check@~0.3.2:
   version "0.3.2"
