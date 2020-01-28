@@ -92,7 +92,7 @@ const AppStack = createStackNavigator(
     Notifications,
     Apps: {
       screen: Apps,
-      path: 'link-verification/:baseUrl/:context/:id',
+      path: 'link-verification/:baseUrl/:context/:contextId',
     },
     TrustedConnections: {
       screen: TrustedConnectionsScreen,

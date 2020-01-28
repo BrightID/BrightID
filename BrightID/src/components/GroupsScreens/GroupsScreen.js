@@ -51,13 +51,10 @@ export class GroupsScreen extends React.Component<Props, State> {
     let groups = eligibleGroups
       .filter((group: { isNew: boolean }) => group.isNew)
       .concat(eligibleGroups.filter((group) => !group.isNew));
-    if (groups.length === 1) groups.push('');
-    return take(2, groups).map((group) =>
-      group ? (
-        <EligibleGroupCard key={group.id} group={group} />
-      ) : (
-        <View style={styles.emptyContainer} />
-      ),
+    return groups.slice(0, 2).map((group) =>
+      (
+        <EligibleGroupCard group={group} key={group.id} />
+      )
     );
   }
 
