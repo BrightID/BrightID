@@ -2,13 +2,13 @@
 
 import { create, ApiSauceInstance } from 'apisauce';
 import nacl from 'tweetnacl';
+import { createHash } from 'react-native-crypto';
 import {
   strToUint8Array,
   uInt8ArrayToB64,
   b64ToUrlSafeB64,
 } from '../utils/encoding';
 import store from '../store';
-import { createHash } from 'react-native-crypto';
 
 let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
@@ -83,7 +83,7 @@ class BrightId {
   async deleteConnection(id2: string) {
     const { id, secretKey } = store.getState();
     const timestamp = Date.now();
-    const message = 'Remove Connection' + id + id2 + timestamp;
+    const message = `Remove Connection${id}${id2}${timestamp}`;
     let sig1 = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
@@ -100,9 +100,9 @@ class BrightId {
   }
 
   async createGroup(id2: string, id3: string) {
-    const { id, secretKey } = store.getState().main;
+    const { id, secretKey } = store.getState();
     const timestamp = Date.now();
-    const message = 'Add Group' + id + id2 + id3 + timestamp;
+    const message = `Add Group${id}${id2}${id3}${timestamp}`;
 
     const sig1 = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
@@ -124,9 +124,9 @@ class BrightId {
   }
 
   async deleteGroup(group: string) {
-    let { id, secretKey } = store.getState().main;
+    let { id, secretKey } = store.getState();
     let timestamp = Date.now();
-    let message = 'Remove Group' + id + group + timestamp;
+    let message = `Remove Group${id}${group}${timestamp}`;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
@@ -144,9 +144,9 @@ class BrightId {
   }
 
   async joinGroup(group: string) {
-    const { id, secretKey } = store.getState().main;
+    const { id, secretKey } = store.getState();
     let timestamp = Date.now();
-    let message = 'Add Membership' + id + group + timestamp;
+    let message = `Add Membership${id}${group}${timestamp}`;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
@@ -164,9 +164,9 @@ class BrightId {
   }
 
   async leaveGroup(group: string) {
-    const { id, secretKey } = store.getState().main;
+    const { id, secretKey } = store.getState();
     let timestamp = Date.now();
-    let message = 'Remove Membership' + id + group + timestamp;
+    let message = `Remove Membership${id}${group}${timestamp}`;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
@@ -184,10 +184,11 @@ class BrightId {
   }
 
   async setTrusted(trusted: string[]) {
-    let { id, secretKey } = store.getState().main;
+    let { id, secretKey } = store.getState();
     let timestamp = Date.now();
-    let message =
-      'Set Trusted Connections' + id + trusted.join(',') + timestamp;
+    let message = `Set Trusted Connections${id}${trusted.join(
+      ',',
+    )}${timestamp}`;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
@@ -219,7 +220,7 @@ class BrightId {
   }
 
   async linkContextId(context: string, contextId: string) {
-    let { id, secretKey } = store.getState().main;
+    let { id, secretKey } = store.getState();
     let timestamp = Date.now();
     let message = `Link ContextId,${context},${contextId},${timestamp}`;
     let sig = uInt8ArrayToB64(
@@ -245,9 +246,9 @@ class BrightId {
   }
 
   async getUserInfo() {
-    let { id, secretKey } = store.getState().main;
+    let { id, secretKey } = store.getState();
     let timestamp = Date.now();
-    let message = 'Get User' + id + timestamp;
+    let message = `Get User${id}${timestamp}`;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );

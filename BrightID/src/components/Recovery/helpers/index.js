@@ -1,6 +1,6 @@
 // @flow
 
-import { Alert, AsyncStorage } from 'react-native';
+import { Alert } from 'react-native';
 import { createCipher, createDecipher } from 'react-native-crypto';
 import nacl from 'tweetnacl';
 import { retrieveImage, saveImage } from '../../../utils/filesystem';
@@ -25,13 +25,9 @@ import {
 } from '../../../utils/encoding';
 
 export const setTrustedConnections = async () => {
-  try {
-    const { trustedConnections } = store.getState();
-    await api.setTrusted(trustedConnections);
-    return true;
-  } catch (err) {
-    throw err;
-  }
+  const { trustedConnections } = store.getState();
+  await api.setTrusted(trustedConnections);
+  return true;
 };
 
 const hashId = (id: string, password: string) => {
@@ -135,12 +131,8 @@ export const setupRecovery = () => {
 };
 
 export const recoveryQrStr = () => {
-  try {
-    const { publicKey: signingKey, timestamp } = store.getState().recoveryData;
-    return `Recovery_${JSON.stringify({ signingKey, timestamp })}`;
-  } catch (err) {
-    throw err;
-  }
+  const { publicKey: signingKey, timestamp } = store.getState().recoveryData;
+  return `Recovery_${JSON.stringify({ signingKey, timestamp })}`;
 };
 
 export const parseRecoveryQr = (
@@ -163,18 +155,14 @@ export const setRecoverySig = async (
   signingKey: string,
   timestamp: number,
 ) => {
-  try {
-    const { id: userId, secretKey } = store.getState().main;
-    const message = 'Set Signing Key' + id + signingKey + timestamp;
-    const sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
-    const data = { signer: userId, id, sig };
-    await backupApi.setSig(data, signingKey);
-    return true;
-  } catch (err) {
-    throw err;
-  }
+  const { id: userId, secretKey } = store.getState();
+  const message = `Set Signing Key${id}${signingKey}${timestamp}`;
+  const sig = uInt8ArrayToB64(
+    nacl.sign.detached(strToUint8Array(message), secretKey),
+  );
+  const data = { signer: userId, id, sig };
+  await backupApi.setSig(data, signingKey);
+  return true;
 };
 
 export const sigExists = (data: Signature) => {
@@ -242,61 +230,53 @@ export const fetchBackupData = async (key: string, pass: string) => {
 };
 
 export const restoreUserData = async (pass: string) => {
-  try {
-    const { id, secretKey, publicKey } = store.getState().recoveryData;
+  const { id, secretKey, publicKey } = store.getState().recoveryData;
 
-    const decrypted = await fetchBackupData('data', pass);
+  const decrypted = await fetchBackupData('data', pass);
 
-    const { userData, connections } = JSON.parse(decrypted);
-    if (!userData || !connections) {
-      throw new Error('bad password');
-    }
-    emitter.emit('restoreTotal', connections.length + 2);
-    userData.id = id;
-    userData.publicKey = publicKey;
-    userData.secretKey = b64ToUint8Array(secretKey);
-
-    const userPhoto = await fetchBackupData(id, pass);
-    if (userPhoto) {
-      const filename = await saveImage({
-        imageName: id,
-        base64Image: userPhoto,
-      });
-      userData.photo = { filename };
-    }
-
-    return { userData, connections };
-  } catch (err) {
-    throw err;
+  const { userData, connections } = JSON.parse(decrypted);
+  if (!userData || !connections) {
+    throw new Error('bad password');
   }
+  emitter.emit('restoreTotal', connections.length + 2);
+  userData.id = id;
+  userData.publicKey = publicKey;
+  userData.secretKey = b64ToUint8Array(secretKey);
+
+  const userPhoto = await fetchBackupData(id, pass);
+  if (userPhoto) {
+    const filename = await saveImage({
+      imageName: id,
+      base64Image: userPhoto,
+    });
+    userData.photo = { filename };
+  }
+
+  return { userData, connections };
 };
 
 export const recoverData = async (pass: string) => {
-  try {
-    // fetch user data / save photo
-    const { userData, connections } = await restoreUserData(pass);
+  // fetch user data / save photo
+  const { userData, connections } = await restoreUserData(pass);
 
-    // set new signing key on the backend
-    await setSigningKey();
+  // set new signing key on the backend
+  await setSigningKey();
 
-    store.dispatch(setUserData(userData));
-    store.dispatch(setConnections(connections));
+  store.dispatch(setUserData(userData));
+  store.dispatch(setConnections(connections));
 
-    for (const conn of connections) {
-      let decrypted = await fetchBackupData(conn.id, pass);
-      const filename = await saveImage({
-        imageName: conn.id,
-        base64Image: decrypted,
-      });
-      conn.photo = { filename };
-    }
-
-    store.dispatch(setBackupCompleted(true));
-    // password is required to update backup when user makes new connections
-    store.dispatch(setPassword(pass));
-    store.dispatch(removeRecoveryData());
-    return true;
-  } catch (err) {
-    throw err;
+  for (const conn of connections) {
+    let decrypted = await fetchBackupData(conn.id, pass);
+    const filename = await saveImage({
+      imageName: conn.id,
+      base64Image: decrypted,
+    });
+    conn.photo = { filename };
   }
+
+  store.dispatch(setBackupCompleted(true));
+  // password is required to update backup when user makes new connections
+  store.dispatch(setPassword(pass));
+  store.dispatch(removeRecoveryData());
+  return true;
 };

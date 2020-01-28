@@ -27,7 +27,7 @@ const fetchUserInfo = () => async (dispatch: dispatch) => {
     dispatch(setVerifications(verifications));
     dispatch(updateConnectionScores(connections));
   } catch (err) {
-    console.log(err);
+    err instanceof Error ? console.warn(err.message) : console.log(err);
   }
 };
 
