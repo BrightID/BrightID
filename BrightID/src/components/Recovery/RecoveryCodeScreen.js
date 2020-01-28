@@ -54,8 +54,8 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
   componentDidMount() {
     try {
       const { navigation } = this.props;
-      navigation.addListener('willFocus', () => {
-        setupRecovery();
+      navigation.addListener('willFocus', async () => {
+        await setupRecovery();
         qrcode.toString(recoveryQrStr(), this.handleQrString);
       });
       navigation.addListener('willFocus', this.waitForSigs);

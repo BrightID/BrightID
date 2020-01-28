@@ -15,7 +15,7 @@ export const addConnection = (navigation: navigation) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  const { publicKey, secretKey } = nacl.sign.keyPair();
+  const { publicKey, secretKey } = await nacl.sign.keyPair();
   const state = getState();
   const b64PubKey = uInt8ArrayToB64(publicKey);
   const id = b64ToUrlSafeB64(b64PubKey);

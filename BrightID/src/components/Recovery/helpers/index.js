@@ -112,13 +112,13 @@ export const backupAppData = async () => {
   }
 };
 
-export const setupRecovery = () => {
+export const setupRecovery = async () => {
   let { recoveryData } = store.getState();
   recoveryData.sigs = [];
   store.dispatch(setRecoveryData(recoveryData));
   if (recoveryData.timestamp) return;
 
-  const { publicKey, secretKey } = nacl.sign.keyPair();
+  const { publicKey, secretKey } = await nacl.sign.keyPair();
   recoveryData = {
     publicKey: uInt8ArrayToB64(publicKey),
     secretKey: uInt8ArrayToB64(secretKey),
