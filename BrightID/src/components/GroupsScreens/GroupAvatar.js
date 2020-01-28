@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import RNFS from 'react-native-fs';
-import { groupPhotos } from '../../utils/groups';
+import { groupCirclePhotos } from '../../utils/groups';
 
 /**
  * Avatar Picture displayed on the HomeScreen
@@ -22,7 +22,7 @@ class GroupAvatar extends React.Component<Props> {
   }
 
   updatePhoto() {
-    const avatars = groupPhotos(this.props.group);
+    const avatars = groupCirclePhotos(this.props.group);
     this.setState({ avatars });
   }
 
@@ -35,9 +35,7 @@ class GroupAvatar extends React.Component<Props> {
           {avatars[0] && (
             <Image
               source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
-                  avatars[0].avatar.filename
-                }`,
+                uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${avatars[0].avatar.filename}`,
               }}
               style={[styles.avatar, avatars[0].faded ? styles.faded : '']}
             />
@@ -47,9 +45,7 @@ class GroupAvatar extends React.Component<Props> {
           {avatars[1] && (
             <Image
               source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
-                  avatars[1].avatar.filename
-                }`,
+                uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${avatars[1].avatar.filename}`,
               }}
               style={[styles.avatar, avatars[1].faded ? styles.faded : '']}
             />
@@ -57,9 +53,7 @@ class GroupAvatar extends React.Component<Props> {
           {avatars[2] && (
             <Image
               source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${
-                  avatars[2].avatar.filename
-                }`,
+                uri: `file://${RNFS.DocumentDirectoryPath}/avatars/${avatars[2].avatar.filename}`,
               }}
               style={[styles.avatar, avatars[2].faded ? styles.faded : '']}
             />

@@ -4,7 +4,6 @@ import nacl from 'tweetnacl';
 import RNFetchBlob from 'rn-fetch-blob';
 import { Alert } from 'react-native';
 import { names } from '../utils/fakeNames';
-import api from '../Api/BrightId';
 import { setConnectUserData } from './index';
 import {
   strToUint8Array,
@@ -28,7 +27,7 @@ export const addConnection = (navigation: navigation) => async (
   const name = `${firstName} ${lastName}`;
   const score = Math.floor(Math.random() * 99);
   const timestamp = Date.now();
-  const message = 'Add Connection' + id + main.id + timestamp;
+  const message = `Add Connection${id}${state.id}${timestamp}`;
   const signedMessage = uInt8ArrayToB64(
     nacl.sign.detached(strToUint8Array(message), secretKey),
   );
