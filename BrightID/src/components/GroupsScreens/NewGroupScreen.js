@@ -7,9 +7,7 @@ import { NavigationEvents } from 'react-navigation';
 
 import SearchConnections from '../Connections/SearchConnections';
 import NewGroupCard from './NewGroupCard';
-import { getConnections } from '../../actions/connections';
 import store from '../../store';
-import emitter from '../../emitter';
 import { createNewGroup } from './actions';
 import { renderListOrSpinner } from '../Connections/renderConnections';
 import { clearNewGroupCoFounders } from '../../actions/index';
@@ -23,34 +21,13 @@ type State = {
   loading: boolean,
 };
 
-class NewGroupScreen extends React.Component<Props, State> {
+export class NewGroupScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
     title: 'New Group',
   });
 
-  state = {
-    loading: true,
-  };
-
-  componentDidMount() {
-    this.getConnections();
-    emitter.on('refreshConnections', this.getConnections);
-  }
-
-  componentWillUnmount() {
-    emitter.off('refreshConnections', this.getConnections);
-  }
-
   onWillBlur = () => {
     this.props.dispatch(clearNewGroupCoFounders());
-  };
-
-  getConnections = async () => {
-    const { dispatch } = this.props;
-    await dispatch(getConnections());
-    this.setState({
-      loading: false,
-    });
   };
 
   filterConnections = () => {
@@ -199,4 +176,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(NewGroupScreen);
+export default connect((state) => state)(NewGroupScreen);

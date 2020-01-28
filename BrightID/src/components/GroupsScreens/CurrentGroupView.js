@@ -11,11 +11,6 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
-import {
-  HeaderButtons,
-  HeaderButton,
-  Item,
-} from 'react-navigation-header-buttons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationEvents } from 'react-navigation';
 import Overlay from 'react-native-modal-overlay';
@@ -45,28 +40,27 @@ type State = {
   members: string[],
 };
 
-class CurrentGroupView extends Component<Props, State> {
+export class CurrentGroupView extends Component<Props, State> {
   state = {
     loading: true,
     optionsVisible: false,
     members: [],
   };
 
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = ({ navigation }: { navigation: navigation }) => {
     const { group } = navigation.state.params;
     return {
       title: group.name,
       headerTitleStyle: { fontSize: 16 },
-      headerRight: (
-        <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
-          <Item
-            title="options"
-            iconName="dots-horizontal"
-            onPress={() => {
-              emitter.emit('optionsSelected');
-            }}
-          />
-        </HeaderButtons>
+      headerRight: () => (
+        <TouchableOpacity
+          style={{ marginRight: 11 }}
+          onPress={() => {
+            emitter.emit('optionsSelected');
+          }}
+        >
+          <Material name="dots-horizontal" size={32} color="#fff" />
+        </TouchableOpacity>
       ),
     };
   };
@@ -278,4 +272,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(CurrentGroupView);
+export default connect((state) => state)(CurrentGroupView);

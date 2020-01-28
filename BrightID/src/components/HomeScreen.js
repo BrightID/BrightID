@@ -3,120 +3,83 @@
 import * as React from 'react';
 import {
   Alert,
-  AsyncStorage,
   Image,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { connect } from 'react-redux';
-import {
-  HeaderButtons,
-  HeaderButton,
-  Item,
-} from 'react-navigation-header-buttons';
 import RNFS from 'react-native-fs';
-import { NavigationEvents } from 'react-navigation';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import VerificationSticker from './Verifications/VerificationSticker';
 import BottomNav from './BottomNav';
 import store from '../store';
-import { removeUserData } from '../actions';
-import { getConnections } from '../actions/connections';
+import { resetStore } from '../actions';
+import { getNotifications } from '../actions/notifications';
 
 /**
  * Home screen of BrightID
  * ==========================
  */
 
-// header Button
-const SimpleLineIconsHeaderButton = (passMeFurther) => (
-  // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
-  // and it is important to pass those props to `HeaderButton`
-  // then you may add some information like icon size or color (if you use icons)
-  <HeaderButton
-    {...passMeFurther}
-    IconComponent={SimpleLineIcons}
-    iconSize={32}
-    color="#fff"
-  />
-);
-
-// header Button
-const MaterialHeaderButton = (passMeFurther) => (
-  // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
-  // and it is important to pass those props to `HeaderButton`
-  // then you may add some information like icon size or color (if you use icons)
-  <HeaderButton
-    {...passMeFurther}
-    IconComponent={Material}
-    iconSize={32}
-    color="#fff"
-  />
-);
-
-type Props = {
-  score: string,
-  groupsCount: number,
-  name: string,
-  connections: Array<{}>,
-  navigation: { navigate: () => null },
-  photo: string,
-  verifications: Array<string>,
-};
-
 export class HomeScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({
     title: 'BrightID',
     headerBackTitle: 'Home',
-    headerRight: (
-      <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
-        <Item
-          title="options"
-          iconName="dots-horizontal"
-          onPress={() => {
-            if (__DEV__) {
-              Alert.alert(
-                'WARNING',
-                'Would you like to delete user data and return to the onboarding screen?',
-                [
-                  {
-                    text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
+    headerRight: () => (
+      <TouchableOpacity
+        style={{ marginRight: 11 }}
+        onPress={() => {
+          if (__DEV__) {
+            Alert.alert(
+              'WARNING',
+              'Would you like to delete user data and return to the onboarding screen?',
+              [
+                {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+                {
+                  text: 'Sure',
+                  onPress: async () => {
+                    try {
+                      navigation.navigate('Onboarding');
+                      await AsyncStorage.flushGetRequests();
+                      await AsyncStorage.clear();
+                      store.dispatch(resetStore());
+                    } catch (err) {
+                      err instanceof Error
+                        ? console.warn('delete storage', err.message)
+                        : console.log('delete storage', err);
+                    }
                   },
-                  {
-                    text: 'Sure',
-                    onPress: async () => {
-                      try {
-                        navigation.navigate('Onboarding');
-                        await AsyncStorage.flushGetRequests();
-                        await AsyncStorage.clear();
-                        store.dispatch(removeUserData());
-                      } catch (err) {
-                        console.log(err);
-                      }
-                    },
-                  },
-                ],
-                { cancelable: true },
-              );
-            }
-          }}
-        />
-      </HeaderButtons>
-    ),
-    headerLeft: (
-      <HeaderButtons
-        left={true}
-        HeaderButtonComponent={SimpleLineIconsHeaderButton}
+                },
+              ],
+              { cancelable: true },
+            );
+          }
+        }}
       >
-        <Item title="help" iconName="question" onPress={() => {}} />
-      </HeaderButtons>
+        <Material size={32} name="dots-horizontal" color="#fff" />
+      </TouchableOpacity>
+    ),
+    headerLeft: () => (
+      <TouchableOpacity style={{ marginLeft: 11 }} onPress={() => {}}>
+        <SimpleLineIcons name="question" size={32} color="#fff" />
+      </TouchableOpacity>
     ),
   });
+
+  componentDidMount() {
+    const { navigation, dispatch } = this.props;
+    navigation.addListener('willFocus', () => {
+      dispatch(getNotifications());
+    });
+  }
 
   render() {
     const {
@@ -126,17 +89,11 @@ export class HomeScreen extends React.Component<Props> {
       groupsCount,
       photo,
       connections,
-      dispatch,
       verifications,
     } = this.props;
 
     return (
       <View style={styles.container}>
-        <NavigationEvents
-          onDidFocus={() => {
-            dispatch(getConnections());
-          }}
-        />
         <View style={styles.mainContainer}>
           <View style={styles.photoContainer}>
             <Image
@@ -353,4 +310,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(HomeScreen);
+export default connect((state) => state)(HomeScreen);

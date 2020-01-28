@@ -3,11 +3,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
-import {
-  HeaderButtons,
-  HeaderButton,
-  Item,
-} from 'react-navigation-header-buttons';
 import Simple from 'react-native-vector-icons/SimpleLineIcons';
 import { shareConnection } from './actions/shareConnection';
 import MyCodeScreen from './MyCodeScreen';
@@ -24,27 +19,17 @@ import ScanCodeScreen from './ScanCodeScreen';
  * renders MyCodeScreen / ScanCodeScreen
  */
 
-// header Button
-const SimpleHeaderButton = (passMeFurther) => (
-  <HeaderButton
-    {...passMeFurther}
-    IconComponent={Simple}
-    iconSize={25}
-    color="#fff"
-  />
-);
-
 type State = {
   display: string,
 };
 
-class NewConnectionScreen extends React.Component<Props, State> {
+export class NewConnectionScreen extends React.Component<Props, State> {
   static navigationOptions = () => ({
     title: 'New Connection',
-    headerRight: (
-      <HeaderButtons HeaderButtonComponent={SimpleHeaderButton}>
-        <Item title="options" iconName="share-alt" onPress={shareConnection} />
-      </HeaderButtons>
+    headerRight: () => (
+      <TouchableOpacity style={{ marginRight: 11 }} onPress={shareConnection}>
+        <Simple name="share-alt" size={25} color="#fff" />
+      </TouchableOpacity>
     ),
   });
 
@@ -164,4 +149,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(NewConnectionScreen);
+export default connect((state) => state)(NewConnectionScreen);

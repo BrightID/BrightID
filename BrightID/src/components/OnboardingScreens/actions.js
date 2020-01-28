@@ -1,9 +1,8 @@
 // @flow
 
-import { Alert, AsyncStorage } from 'react-native';
 import nacl from 'tweetnacl';
 import RNFetchBlob from 'rn-fetch-blob';
-import { setUserData } from '../../actions';
+import { setUserData, setHashedId } from '../../actions';
 import { createImageDirectory, saveImage } from '../../utils/filesystem';
 import api from '../../Api/BrightId';
 import { b64ToUrlSafeB64, uInt8ArrayToB64 } from '../../utils/encoding';
@@ -35,17 +34,17 @@ export const handleBrightIdCreation = ({
     // new user is created while making its first connection with a verified user 
     // await api.createUser(id, b64PubKey);
 
-    await AsyncStorage.setItem('userData', JSON.stringify(userData));
     // // update redux store
     await dispatch(setUserData(userData));
+    // to fix bug while testing
+    dispatch(setHashedId(''));
 
     console.log('brightid creation success');
 
     // // navigate to home page
     return true;
   } catch (err) {
-    Alert.alert(err.message || 'Error', err.stack);
-    return false;
+    err instanceof Error ? console.warn(err.message) : console.log(err);
   }
 };
 
@@ -60,5 +59,7 @@ export const fakeUserAvatar = (): Promise<string> => {
         return 'https://loremflickr.com/180/180/all';
       }
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      err instanceof Error ? console.warn(err.message) : console.log(err);
+    });
 };

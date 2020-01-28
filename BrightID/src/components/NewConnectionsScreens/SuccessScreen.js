@@ -14,10 +14,10 @@ import { removeConnectUserData } from '../../actions';
 
 type State = {};
 
-class SuccessScreen extends React.Component<Props, State> {
+export class SuccessScreen extends React.Component<Props, State> {
   static navigationOptions = {
     headerBackTitle: ' ',
-    header: null,
+    headerShown: false,
   };
 
   render() {
@@ -130,4 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(SuccessScreen);
+export default connect((state) => state)(SuccessScreen);

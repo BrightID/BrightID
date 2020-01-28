@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing ScanCodeScreen renders as expected 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#fff",
+      "flex": 1,
+      "flexDirection": "column",
+      "justifyContent": "center",
+      "width": "100%",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#fff",
+          "height": 85,
+          "justifyContent": "center",
+          "padding": 10,
+          "width": "100%",
+          "zIndex": 100,
+        }
+      }
+    >
+      <TextInput
+        allowFontScaling={true}
+        autoCapitalize="none"
+        autoCorrect={false}
+        onChangeText={[Function]}
+        placeholder="Scan a BrightID code to make a connection"
+        rejectResponderTermination={true}
+        style={
+          Object {
+            "fontFamily": "ApexNew-Book",
+            "fontSize": 16,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "letterSpacing": 0,
+            "width": "85%",
+          }
+        }
+        textContentType="none"
+        underlineColorAndroid="transparent"
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flex": 1,
+          "justifyContent": "center",
+        }
+      }
+    >
+      <ActivityIndicator
+        animating={true}
+        color="#999999"
+        hidesWhenStopped={true}
+        size="small"
+      />
+    </View>
+  </View>
+</View>
+`;

@@ -1,0 +1,308 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing HomeScreen renders as expected 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#fff",
+      "flex": 1,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "flexDirection": "column",
+        "justifyContent": "space-between",
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "justifyContent": "center",
+          "marginTop": 24,
+        }
+      }
+    >
+      <Image
+        accessibilityLabel="user photo"
+        accessible={true}
+        onError={[Function]}
+        resizeMode="cover"
+        source={
+          Object {
+            "uri": "file://function mockConstructor() {
+        return fn.apply(this, arguments);
+      }/photos/",
+          }
+        }
+        style={
+          Object {
+            "borderRadius": 71,
+            "height": 142,
+            "shadowColor": "rgba(0, 0, 0, 0.5)",
+            "shadowOffset": Object {
+              "height": 2,
+              "width": 0,
+            },
+            "shadowRadius": 4,
+            "width": 142,
+          }
+        }
+      />
+      <Text
+        id="name"
+        style={
+          Object {
+            "color": "#000000",
+            "fontFamily": "ApexNew-Book",
+            "fontSize": 30,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "letterSpacing": 0,
+            "marginTop": 8,
+            "shadowColor": "rgba(0,0,0,0.32)",
+            "shadowOffset": Object {
+              "height": 2,
+              "width": 0,
+            },
+            "shadowRadius": 4,
+            "textShadowColor": "rgba(0, 0, 0, 0.32)",
+            "textShadowOffset": Object {
+              "height": 2,
+              "width": 0,
+            },
+            "textShadowRadius": 4,
+          }
+        }
+      >
+        Test
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "borderBottomColor": "#e3e1e1",
+          "borderBottomWidth": 1,
+          "flexDirection": "row",
+          "justifyContent": "center",
+          "marginTop": 12,
+          "paddingBottom": 16,
+          "width": "80%",
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "alignItems": "center",
+            "color": "#9b9b9b",
+            "fontFamily": "ApexNew-Book",
+            "fontSize": 16,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "justifyContent": "center",
+            "letterSpacing": 0,
+            "marginRight": 5,
+            "paddingTop": 3.5,
+            "textAlign": "center",
+          }
+        }
+      >
+        Score:
+      </Text>
+      <Text
+        id="score"
+        style={
+          Object {
+            "alignItems": "center",
+            "color": "#139c60",
+            "fontFamily": "ApexNew-Medium",
+            "fontSize": 22,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "justifyContent": "center",
+            "letterSpacing": 0,
+            "textAlign": "center",
+          }
+        }
+      >
+        100
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "borderBottomColor": "#e3e1e1",
+          "borderBottomWidth": 1,
+          "flexDirection": "row",
+          "justifyContent": "space-evenly",
+          "marginTop": 12,
+          "paddingBottom": 12,
+          "width": "80%",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "flex": 1,
+          }
+        }
+      >
+        <Text
+          id="connectionsCount"
+          style={
+            Object {
+              "fontFamily": "ApexNew-Book",
+              "fontSize": 22,
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+              "letterSpacing": 0,
+              "textAlign": "center",
+            }
+          }
+        >
+          0
+        </Text>
+        <Text
+          style={
+            Object {
+              "fontFamily": "ApexNew-Book",
+              "fontSize": 16,
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+              "letterSpacing": 0,
+              "textAlign": "center",
+            }
+          }
+        >
+          Connections
+        </Text>
+      </View>
+      <View
+        style={
+          Object {
+            "flex": 1,
+          }
+        }
+      >
+        <Text
+          id="groupsCount"
+          style={
+            Object {
+              "fontFamily": "ApexNew-Book",
+              "fontSize": 22,
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+              "letterSpacing": 0,
+              "textAlign": "center",
+            }
+          }
+        >
+          2
+        </Text>
+        <Text
+          style={
+            Object {
+              "fontFamily": "ApexNew-Book",
+              "fontSize": 16,
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+              "letterSpacing": 0,
+              "textAlign": "center",
+            }
+          }
+        >
+          Groups
+        </Text>
+      </View>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "height": 16,
+          "justifyContent": "space-evenly",
+          "marginBottom": 10,
+          "marginTop": 10,
+          "width": "100%",
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#fff",
+          "flex": 1,
+          "flexDirection": "row",
+          "justifyContent": "center",
+          "marginTop": 17,
+          "width": "100%",
+        }
+      }
+    >
+      <TouchableOpacity
+        accessibilityLabel="Connect"
+        accessible={true}
+        activeOpacity={0.2}
+        onPress={[Function]}
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#4a90e2",
+            "borderRadius": 6,
+            "elevation": 1,
+            "flexDirection": "row",
+            "height": 65,
+            "justifyContent": "center",
+            "paddingBottom": 12,
+            "paddingTop": 13,
+            "shadowColor": "#000",
+            "shadowOffset": Object {
+              "height": 20,
+              "width": 20,
+            },
+            "shadowRadius": 20,
+            "width": "80%",
+          }
+        }
+      >
+        <Icon
+          allowFontScaling={false}
+          color="#fff"
+          name="qrcode-scan"
+          size={26}
+        />
+        <Text
+          style={
+            Object {
+              "color": "#fff",
+              "fontFamily": "ApexNew-Medium",
+              "fontSize": 22,
+              "marginLeft": 18,
+            }
+          }
+        >
+          New Connection
+        </Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+  <Connect(BottomNav)
+    navigation={
+      Object {
+        "navigate": [MockFunction],
+      }
+    }
+  />
+</View>
+`;

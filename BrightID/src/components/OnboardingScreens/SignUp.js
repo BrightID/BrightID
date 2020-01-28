@@ -16,11 +16,6 @@ import {
 import ImagePicker from 'react-native-image-picker';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
-import {
-  HeaderButtons,
-  HeaderButton,
-  Item,
-} from 'react-navigation-header-buttons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { handleBrightIdCreation, fakeUserAvatar } from './actions';
@@ -33,34 +28,17 @@ type State = {
   creatingBrightId: boolean,
 };
 
-// header Button
-const IoniconsHeaderButton = (passMeFurther) => (
-  // the `passMeFurther` variable here contains props from <Item .../> as well as <HeaderButtons ... />
-  // and it is important to pass those props to `HeaderButton`
-  // then you may add some information like icon size or color (if you use icons)
-  <HeaderButton
-    {...passMeFurther}
-    IconComponent={Ionicons}
-    iconSize={32}
-    color="#fff"
-  />
-);
-
-class SignUp extends React.Component<Props, State> {
+export class SignUp extends React.Component<Props, State> {
   static navigationOptions = {
     title: 'BrightID',
     headerBackTitle: 'SignUp',
     headerStyle: {
       backgroundColor: '#f48b1e',
     },
-    headerRight: (
-      <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
-        <Item
-          title="help"
-          iconName="ios-help-circle-outline"
-          onPress={() => console.log('help')}
-        />
-      </HeaderButtons>
+    headerRight: () => (
+      <TouchableOpacity style={{ marginRight: 11 }}>
+        <Ionicons name="ios-help-circle-outline" size={32} color="#fff" />
+      </TouchableOpacity>
     ),
   };
 

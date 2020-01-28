@@ -14,10 +14,10 @@ import { addNewConnection } from './actions/addNewConnection';
 
 type State = {};
 
-class PreviewConnectionScreen extends React.Component<Props, State> {
+export class PreviewConnectionScreen extends React.Component<Props, State> {
   static navigationOptions = {
     title: 'New Connection',
-    headerRight: <View />,
+    headerRight: () => <View />,
   };
 
   handleConfirmation = async () => {
@@ -141,4 +141,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state: state) => state.main)(PreviewConnectionScreen);
+export default connect((state) => state)(PreviewConnectionScreen);

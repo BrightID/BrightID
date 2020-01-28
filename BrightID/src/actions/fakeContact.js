@@ -17,7 +17,7 @@ export const addConnection = (navigation: navigation) => async (
   getState: getState,
 ) => {
   const { publicKey, secretKey } = nacl.sign.keyPair();
-  const { main } = getState();
+  const state = getState();
   const b64PubKey = uInt8ArrayToB64(publicKey);
   const id = b64ToUrlSafeB64(b64PubKey);
   // We have no createUser anymore

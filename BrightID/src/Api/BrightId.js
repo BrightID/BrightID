@@ -75,7 +75,7 @@ class BrightId {
   }
 
   async deleteConnection(id2: string) {
-    const { id, secretKey } = store.getState().main;
+    const { id, secretKey } = store.getState();
     const timestamp = Date.now();
     const message = 'Remove Connection' + id + id2 + timestamp;
     let sig1 = uInt8ArrayToB64(

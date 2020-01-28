@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 class CofoundGroupReview extends React.Component<Props> {
   static navigationOptions = () => ({
     title: 'Review Group',
-    headerRight: <View />,
+    headerRight: () => <View />,
   });
 
   render() {
@@ -28,4 +28,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(CofoundGroupReview);
+export default connect((state) => state)(CofoundGroupReview);

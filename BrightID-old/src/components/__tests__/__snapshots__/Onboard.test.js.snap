@@ -1,0 +1,532 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Onboard renders as expected 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#fff",
+      "flex": 1,
+      "flexDirection": "column",
+      "justifyContent": "space-between",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flex": 3.5,
+        "marginTop": 20,
+      }
+    }
+  >
+    <RCTScrollView
+      activeAnimationOptions={null}
+      activeAnimationType="timing"
+      activeSlideAlignment="center"
+      activeSlideOffset={20}
+      apparitionDelay={0}
+      automaticallyAdjustContentInsets={false}
+      autoplay={true}
+      autoplayDelay={1000}
+      autoplayInterval={3000}
+      callbackOffsetMargin={5}
+      containerCustomStyle={Object {}}
+      contentContainerCustomStyle={Object {}}
+      contentContainerStyle={
+        Array [
+          Object {
+            "paddingLeft": 20,
+            "paddingRight": 20,
+          },
+          Object {},
+        ]
+      }
+      data={
+        Array [
+          undefined,
+          undefined,
+        ]
+      }
+      decelerationRate="fast"
+      directionalLockEnabled={true}
+      disableVirtualization={false}
+      enableMomentum={false}
+      enableSnap={true}
+      firstItem={0}
+      getItem={[Function]}
+      getItemCount={[Function]}
+      hasParallaxImages={false}
+      horizontal={true}
+      inactiveSlideOpacity={0.7}
+      inactiveSlideScale={0.9}
+      inactiveSlideShift={0}
+      initialNumToRender={7}
+      invertStickyHeaders={false}
+      inverted={false}
+      itemWidth={710}
+      keyExtractor={[Function]}
+      layout="default"
+      lockScrollTimeoutDuration={1000}
+      lockScrollWhileSnapping={true}
+      loop={false}
+      loopClonesPerSide={3}
+      maxToRenderPerBatch={15}
+      numColumns={1}
+      onContentSizeChange={[Function]}
+      onEndReachedThreshold={2}
+      onLayout={[Function]}
+      onMomentumScrollEnd={[Function]}
+      onResponderRelease={[Function]}
+      onScroll={[Function]}
+      onScrollBeginDrag={[Function]}
+      onScrollEndDrag={[Function]}
+      onSnapToItem={[Function]}
+      onStartShouldSetResponderCapture={[Function]}
+      onTouchEnd={[Function]}
+      onTouchStart={[Function]}
+      overScrollMode="never"
+      pinchGestureEnabled={false}
+      removeClippedSubviews={true}
+      renderItem={[Function]}
+      scrollEnabled={true}
+      scrollEventThrottle={1}
+      scrollsToTop={false}
+      shouldOptimizeUpdates={true}
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
+      slideStyle={Object {}}
+      sliderWidth={750}
+      stickyHeaderIndices={Array []}
+      style={
+        Object {
+          "flexDirection": "row",
+          "opacity": 0,
+          "width": 750,
+        }
+      }
+      swipeThreshold={20}
+      updateCellsBatchingPeriod={50}
+      useScrollView={false}
+      vertical={false}
+      viewabilityConfigCallbackPairs={Array []}
+      windowSize={15}
+    >
+      <View>
+        <View
+          onLayout={[Function]}
+          style={
+            Array [
+              Object {
+                "flexDirection": "row",
+              },
+              null,
+            ]
+          }
+        >
+          <View
+            pointerEvents="box-none"
+            style={
+              Object {
+                "opacity": 1,
+                "transform": Array [
+                  Object {
+                    "scale": 1,
+                  },
+                ],
+                "width": 710,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "flex": 1,
+                }
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "alignItems": "center",
+                    "backgroundColor": "transparent",
+                    "flex": 1,
+                    "flexDirection": "column",
+                    "justifyContent": "center",
+                  }
+                }
+              >
+                <View
+                  style={Object {}}
+                >
+                  <Image
+                    source={
+                      Object {
+                        "testUri": "../../../src/static/brightidonboard.png",
+                      }
+                    }
+                    style={
+                      Object {
+                        "marginBottom": 41,
+                        "marginLeft": "auto",
+                        "marginRight": "auto",
+                      }
+                    }
+                  />
+                </View>
+                <View
+                  style={Object {}}
+                >
+                  <Text
+                    style={
+                      Object {
+                        "color": "#000000",
+                        "fontFamily": "ApexNew-Book",
+                        "fontSize": 18,
+                        "fontStyle": "normal",
+                        "fontWeight": "normal",
+                        "letterSpacing": 0,
+                        "lineHeight": 22,
+                        "textAlign": "center",
+                      }
+                    }
+                  >
+                    BrightID uses the people you know
+                     
+                  </Text>
+                  <Text
+                    style={
+                      Object {
+                        "color": "#000000",
+                        "fontFamily": "ApexNew-Book",
+                        "fontSize": 18,
+                        "fontStyle": "normal",
+                        "fontWeight": "normal",
+                        "letterSpacing": 0,
+                        "lineHeight": 22,
+                        "textAlign": "center",
+                      }
+                    }
+                  >
+                    to enforce one-account-per-person
+                  </Text>
+                  <Text
+                    style={
+                      Object {
+                        "color": "#000000",
+                        "fontFamily": "ApexNew-Book",
+                        "fontSize": 18,
+                        "fontStyle": "normal",
+                        "fontWeight": "normal",
+                        "letterSpacing": 0,
+                        "lineHeight": 22,
+                        "textAlign": "center",
+                      }
+                    }
+                  >
+                    for important applications like
+                  </Text>
+                  <Text
+                    style={
+                      Object {
+                        "color": "#000000",
+                        "fontFamily": "ApexNew-Book",
+                        "fontSize": 18,
+                        "fontStyle": "normal",
+                        "fontWeight": "normal",
+                        "letterSpacing": 0,
+                        "lineHeight": 22,
+                        "textAlign": "center",
+                      }
+                    }
+                  >
+                    voting and universal basic income.
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+        <View
+          onLayout={[Function]}
+          style={
+            Array [
+              Object {
+                "flexDirection": "row",
+              },
+              null,
+            ]
+          }
+        >
+          <View
+            pointerEvents="box-none"
+            style={
+              Object {
+                "opacity": 0.7,
+                "transform": Array [
+                  Object {
+                    "scale": 0.9,
+                  },
+                ],
+                "width": 710,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "flex": 1,
+                }
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "alignItems": "center",
+                    "backgroundColor": "transparent",
+                    "flex": 1,
+                    "flexDirection": "column",
+                    "justifyContent": "center",
+                  }
+                }
+              >
+                <View
+                  style={Object {}}
+                >
+                  <Image
+                    source={
+                      Object {
+                        "testUri": "../../../src/static/icons8-anonymous-mask-96.png",
+                      }
+                    }
+                    style={
+                      Object {
+                        "marginBottom": 41,
+                        "marginLeft": "auto",
+                        "marginRight": "auto",
+                      }
+                    }
+                  />
+                  <Text
+                    style={
+                      Object {
+                        "color": "#222",
+                        "fontFamily": "ApexNew-Medium",
+                        "fontSize": 24,
+                        "fontStyle": "normal",
+                        "fontWeight": "500",
+                        "letterSpacing": 0,
+                        "marginBottom": 15,
+                        "textShadowColor": "rgba(0, 0, 0, 0.09)",
+                        "textShadowOffset": Object {
+                          "height": 2,
+                          "width": 0,
+                        },
+                        "textShadowRadius": 4,
+                      }
+                    }
+                  >
+                    Maintain Privacy
+                  </Text>
+                </View>
+                <View
+                  style={Object {}}
+                >
+                  <Text
+                    style={
+                      Object {
+                        "color": "#222",
+                        "fontFamily": "ApexNew-Book",
+                        "fontSize": 18,
+                        "fontStyle": "normal",
+                        "fontWeight": "normal",
+                        "letterSpacing": 0,
+                        "lineHeight": 22,
+                      }
+                    }
+                  >
+                    Prove you're a unique person
+                  </Text>
+                  <Text
+                    style={
+                      Object {
+                        "color": "#222",
+                        "fontFamily": "ApexNew-Book",
+                        "fontSize": 18,
+                        "fontStyle": "normal",
+                        "fontWeight": "normal",
+                        "letterSpacing": 0,
+                        "lineHeight": 22,
+                      }
+                    }
+                  >
+                    while preserving your privacy.
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+    </RCTScrollView>
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      accessible={false}
+      pointerEvents="box-none"
+      style={
+        Array [
+          Object {
+            "alignItems": "center",
+            "justifyContent": "center",
+            "paddingHorizontal": 20,
+            "paddingVertical": 30,
+          },
+          Object {
+            "flexDirection": "row",
+          },
+          Object {},
+        ]
+      }
+    >
+      <View
+        accessible={false}
+        clickable={false}
+        isTVSelectable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "alignItems": "center",
+            "justifyContent": "center",
+            "marginHorizontal": 8,
+            "opacity": 1,
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "backgroundColor": "#333",
+              "borderRadius": 4,
+              "height": 8,
+              "marginHorizontal": 8,
+              "opacity": 0.4,
+              "transform": Array [
+                Object {
+                  "scale": 1,
+                },
+              ],
+              "width": 8,
+            }
+          }
+        />
+      </View>
+      <View
+        accessible={false}
+        clickable={false}
+        isTVSelectable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "alignItems": "center",
+            "justifyContent": "center",
+            "marginHorizontal": 8,
+            "opacity": 1,
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "backgroundColor": "#333",
+              "borderRadius": 4,
+              "height": 8,
+              "marginHorizontal": 8,
+              "opacity": 0.4,
+              "transform": Array [
+                Object {
+                  "scale": 1,
+                },
+              ],
+              "width": 8,
+            }
+          }
+        />
+      </View>
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      accessible={true}
+      clickable={true}
+      isTVSelectable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "borderColor": "#4990e2",
+          "borderWidth": 1,
+          "justifyContent": "center",
+          "marginBottom": 10,
+          "marginTop": 10,
+          "opacity": 1,
+          "paddingBottom": 12,
+          "paddingTop": 13,
+          "width": 300,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#4990e2",
+            "fontFamily": "ApexNew-Medium",
+            "fontSize": 18,
+            "fontStyle": "normal",
+            "fontWeight": "500",
+            "letterSpacing": 0,
+          }
+        }
+      >
+        Get Started
+      </Text>
+    </View>
+  </View>
+</View>
+`;

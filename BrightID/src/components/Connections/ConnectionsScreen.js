@@ -1,108 +1,57 @@
 // @flow
 
 import * as React from 'react';
-import { AsyncStorage, StyleSheet, View, Alert } from 'react-native';
+import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import {
-  HeaderButtons,
-  HeaderButton,
-  Item,
-} from 'react-navigation-header-buttons';
-// import {
-//   Menu,
-//   MenuOptions,
-//   MenuOption,
-//   MenuTrigger,
-// } from 'react-native-popup-menu';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { NavigationEvents } from 'react-navigation';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
-import { getConnections } from '../../actions/connections';
 import { createNewConnection } from './createNewConnection';
 import emitter from '../../emitter';
 import BottomNav from '../BottomNav';
 import { renderListOrSpinner } from './renderConnections';
 import api from '../../Api/BrightId';
 import FloatingActionButton from '../FloatingActionButton';
+import { removeConnection } from '../../actions';
 
 /**
  * Connection screen of BrightID
  * Displays a search input and list of Connection Cards
  */
 
-// header Button
-const MaterialHeaderButton = (passMeFurther) => (
-  <HeaderButton
-    {...passMeFurther}
-    IconComponent={Material}
-    iconSize={32}
-    color="#fff"
-  />
-);
-
 type State = {
   loading: boolean,
 };
 
-class ConnectionsScreen extends React.Component<Props, State> {
-  static navigationOptions = ({ navigation }) => ({
+export class ConnectionsScreen extends React.Component<Props, State> {
+  static navigationOptions = ({ navigation }: { navigation: navigation }) => ({
     title: 'Connections',
-    headerRight: (
-      <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
-        <Item
-          title="options"
-          iconName="dots-horizontal"
-          onPress={createNewConnection(navigation)}
-        />
-      </HeaderButtons>
+    headerRight: () => (
+      <TouchableOpacity
+        style={{ marginRight: 11 }}
+        onPress={createNewConnection(navigation)}
+      >
+        <Material name="dots-horizontal" size={32} color="#fff" />
+      </TouchableOpacity>
     ),
-    //     headerRight: (
-    //         <Menu>
-    //           <MenuTrigger>
-    //             <Material
-    //                 name="dots-horizontal"
-    //                 size={32}
-    //                 color="#fff"
-    //             />
-    //           </MenuTrigger>
-    //           <MenuOptions>
-    //             <MenuOption onSelect={createNewConnection(navigation)} text='create new connection' />
-    //             <MenuOption onSelect={() => {}} text='refresh connections' />
-    //             <MenuOption onSelect={() => {}} text='clear all connections' />
-    //           </MenuOptions>
-    //         </Menu>
-    //     ),
   });
 
-  state = {
-    loading: true,
-  };
-
   componentDidMount() {
-    emitter.on('refreshConnections', this.getConnections);
+    const { navigation } = this.props;
     emitter.on('removeConnection', this.removeConnection);
-  }
-
-  componentWillUnmount() {
-    emitter.off('refreshConnections', this.getConnections);
-    emitter.off('removeConnection', this.removeConnection);
-  }
-
-  getConnections = async () => {
-    const { dispatch } = this.props;
-    await dispatch(getConnections());
-    this.setState({
-      loading: false,
+    navigation.addListener('willBlur', () => {
+      emitter.off('removeConnection', this.removeConnection);
     });
-  };
+  }
 
-  removeConnection = async (id) => {
+  removeConnection = async (id: string) => {
     try {
-      await api.deleteConnection(id);
-      // remove connection from async storage
-      await AsyncStorage.removeItem(id);
-      emitter.emit('refreshConnections', {});
+      const { dispatch } = this.props;
+      const res = await api.deleteConnection(id);
+      // TODO - only delete connection if verified on the backend
+      console.log(res);
+      // remove connection from redux
+      dispatch(removeConnection(id));
     } catch (err) {
       Alert.alert("Couldn't remove connection", err.message);
     }
@@ -125,11 +74,6 @@ class ConnectionsScreen extends React.Component<Props, State> {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
-        <NavigationEvents
-          onDidFocus={() => {
-            this.getConnections();
-          }}
-        />
         <View style={{ flex: 1 }}>
           <View style={styles.mainContainer}>
             <SearchConnections navigation={navigation} sortable={true} />
@@ -172,4 +116,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(ConnectionsScreen);
+export default connect((state) => state)(ConnectionsScreen);

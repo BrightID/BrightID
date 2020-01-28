@@ -1,0 +1,245 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing SignUp renders as expected 1`] = `
+<View
+  onLayout={[Function]}
+  style={
+    Array [
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#fff",
+        "flex": 1,
+        "flexDirection": "column",
+        "justifyContent": "flex-start",
+      },
+      Object {
+        "paddingBottom": 0,
+      },
+    ]
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "justifyContent": "center",
+        "marginTop": 44,
+      }
+    }
+  >
+    <View
+      accessibilityLabel="add photo"
+      accessible={true}
+      clickable={true}
+      isTVSelectable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "borderColor": "#979797",
+          "borderRadius": 90,
+          "borderWidth": 1,
+          "height": 180,
+          "justifyContent": "center",
+          "opacity": 1,
+          "width": 180,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#979797",
+            "fontFamily": "ApexNew-Book",
+            "fontSize": 18,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "letterSpacing": 0,
+            "marginBottom": 11,
+            "marginTop": 11,
+          }
+        }
+      >
+        Add Photo
+      </Text>
+      <Text
+        allowFontScaling={false}
+        style={
+          Array [
+            Object {
+              "color": "#979797",
+              "fontSize": 48,
+            },
+            undefined,
+            Object {
+              "fontFamily": "simple-line-icons",
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+            },
+            Object {},
+          ]
+        }
+      >
+        
+      </Text>
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "justifyContent": "center",
+        "marginTop": 44,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "fontFamily": "ApexNew-Book",
+          "fontSize": 18,
+        }
+      }
+    >
+      What do your friends know you by?
+    </Text>
+    <TextInput
+      allowFontScaling={true}
+      autoCapitalize="words"
+      autoCorrect={false}
+      onChangeText={[Function]}
+      placeholder="Name"
+      placeholderTextColor="#9e9e9e"
+      rejectResponderTermination={true}
+      style={
+        Object {
+          "borderBottomColor": "#9e9e9e",
+          "borderBottomWidth": 0.5,
+          "fontFamily": "ApexNew-Light",
+          "fontSize": 36,
+          "fontStyle": "normal",
+          "fontWeight": "300",
+          "letterSpacing": 0,
+          "marginTop": 22,
+          "paddingBottom": 5,
+          "textAlign": "center",
+          "width": 275,
+        }
+      }
+      textContentType="name"
+      underlineColorAndroid="transparent"
+      value=""
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "justifyContent": "space-evenly",
+        "marginTop": 44,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#9e9e9e",
+          "fontFamily": "ApexNew-Book",
+          "fontSize": 14,
+          "textAlign": "center",
+          "width": 298,
+        }
+      }
+    >
+      Your name and photo will never be shared with apps or stored on servers
+    </Text>
+    <View>
+      <View
+        accessible={true}
+        clickable={true}
+        isTVSelectable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#428BE5",
+            "justifyContent": "center",
+            "marginTop": 22,
+            "opacity": 1,
+            "paddingBottom": 12,
+            "paddingTop": 13,
+            "width": 300,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "#fff",
+              "fontFamily": "ApexNew-Medium",
+              "fontSize": 18,
+              "fontWeight": "600",
+            }
+          }
+        >
+          Create My BrightID
+        </Text>
+      </View>
+      <View
+        accessibilityLabel="Recover BrightID"
+        accessible={true}
+        clickable={true}
+        isTVSelectable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "alignItems": "center",
+            "borderColor": "#4990e2",
+            "borderWidth": 1,
+            "justifyContent": "center",
+            "marginBottom": 10,
+            "marginTop": 10,
+            "opacity": 1,
+            "paddingBottom": 12,
+            "paddingTop": 13,
+            "width": 300,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "#4990e2",
+              "fontFamily": "ApexNew-Medium",
+              "fontSize": 18,
+              "fontStyle": "normal",
+              "fontWeight": "500",
+              "letterSpacing": 0,
+            }
+          }
+        >
+          Recover BrightID
+        </Text>
+      </View>
+    </View>
+  </View>
+</View>
+`;

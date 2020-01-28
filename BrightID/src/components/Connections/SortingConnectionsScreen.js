@@ -17,7 +17,7 @@ import {
 class SortingConnectionsScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({
     title: 'Sorting',
-    headerRight: (
+    headerRight: () => (
       <TouchableOpacity
         style={styles.headerSave}
         onPress={() => {
@@ -211,4 +211,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(SortingConnectionsScreen);
+export default connect((state) => state)(SortingConnectionsScreen);

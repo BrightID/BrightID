@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing ConnectionsScreen renders blank connection screen 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#fdfdfd",
+      "flex": 1,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flex": 1,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#fdfdfd",
+          "flex": 1,
+          "flexDirection": "column",
+          "justifyContent": "center",
+          "marginTop": 8,
+        }
+      }
+    >
+      <SearchConnections
+        navigation={
+          Object {
+            "navigate": [MockFunction],
+          }
+        }
+        sortable={true}
+      />
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#fdfdfd",
+            "flex": 1,
+            "flexDirection": "column",
+            "justifyContent": "center",
+            "marginTop": 8,
+          }
+        }
+      >
+        <View>
+          <Text
+            style={
+              Object {
+                "fontFamily": "ApexNew-Book",
+                "fontSize": 20,
+              }
+            }
+          >
+            No connections
+          </Text>
+        </View>
+      </View>
+    </View>
+    <FloatActionButton
+      onPress={[Function]}
+    />
+  </View>
+  <Connect(BottomNav)
+    navigation={
+      Object {
+        "navigate": [MockFunction],
+      }
+    }
+    style={
+      Object {
+        "flex": 0,
+      }
+    }
+  />
+</View>
+`;

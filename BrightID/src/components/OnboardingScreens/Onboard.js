@@ -36,10 +36,10 @@ const statusBarHeight = getStatusBarHeight();
 /* Onboarding Screen */
 /* ======================================== */
 
-class Onboard extends React.Component<Props, State> {
+export class Onboard extends React.Component<Props, State> {
   static navigationOptions = {
     headerBackTitle: ' ',
-    header: null,
+    headerShown: false,
   };
 
   constructor(props: Props) {

@@ -33,7 +33,7 @@ type State = {
   connectionAttempts: number,
 };
 
-class ScanCodeScreen extends React.Component<Props, State> {
+export class ScanCodeScreen extends React.Component<Props, State> {
   textInput: null | TextInput;
 
   camera: null | RNCamera;
@@ -147,11 +147,16 @@ class ScanCodeScreen extends React.Component<Props, State> {
               this.camera = ref;
             }}
             style={styles.cameraPreview}
+            captureAudio={false}
             onBarCodeRead={this.handleBarCodeRead}
             type={RNCamera.Constants.Type.back}
             flashMode={RNCamera.Constants.FlashMode.off}
-            permissionDialogTitle="Permission to use camera"
-            permissionDialogMessage="We need your permission to use your camera phone"
+            androidCameraPermissionOptions={{
+              title: 'Permission to use camera',
+              message: 'We need your permission to use your camera',
+              buttonPositive: 'Ok',
+              buttonNegative: 'Cancel',
+            }}
           >
             <Ionicons name="ios-qr-scanner" size={223} color="#F76B1C" />
           </RNCamera>
@@ -199,4 +204,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(ScanCodeScreen);
+export default connect((state) => state)(ScanCodeScreen);

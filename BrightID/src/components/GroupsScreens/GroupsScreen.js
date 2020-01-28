@@ -25,10 +25,10 @@ import {
 
 const ICON_SIZE = 36;
 
-class GroupsScreen extends React.Component<Props, State> {
+export class GroupsScreen extends React.Component<Props, State> {
   static navigationOptions = () => ({
     title: 'Groups',
-    headerRight: <View />,
+    headerRight: () => <View />,
   });
 
   renderCurrentGroups({ item }) {
@@ -263,4 +263,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state.main)(GroupsScreen);
+export default connect((state) => state)(GroupsScreen);
