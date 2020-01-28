@@ -2,17 +2,23 @@
 
 import { create, ApiSauceInstance } from 'apisauce';
 import nacl from 'tweetnacl';
-import { strToUint8Array, uInt8ArrayToB64, b64ToUrlSafeB64 } from '../utils/encoding';
+import {
+  strToUint8Array,
+  uInt8ArrayToB64,
+  b64ToUrlSafeB64,
+} from '../utils/encoding';
 import store from '../store';
 import { createHash } from 'react-native-crypto';
 
 let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
-  seedUrl = 'http://192.168.18.2';
+  seedUrl = 'http://test.brightid.org';
 }
 
 function hash(data) {
-  const h = createHash('sha256').update(data).digest('hex');
+  const h = createHash('sha256')
+    .update(data)
+    .digest('hex');
   const b = Buffer.from(h, 'hex').toString('base64');
   return b64ToUrlSafeB64(b);
 }
@@ -87,7 +93,7 @@ class BrightId {
       id1: id,
       id2,
       sig1,
-      timestamp
+      timestamp,
     };
     const res = await this.api.put(`/operations`, op);
     BrightId.throwOnError(res);
@@ -180,7 +186,8 @@ class BrightId {
   async setTrusted(trusted: string[]) {
     let { id, secretKey } = store.getState().main;
     let timestamp = Date.now();
-    let message = 'Set Trusted Connections' + id + trusted.join(',') + timestamp;
+    let message =
+      'Set Trusted Connections' + id + trusted.join(',') + timestamp;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
@@ -225,8 +232,8 @@ class BrightId {
       context,
       contextId,
       sig,
-      timestamp
-    }
+      timestamp,
+    };
     const res = await this.api.put(`/operations`, op);
     BrightId.throwOnError(res);
   }
@@ -240,16 +247,20 @@ class BrightId {
   async getUserInfo() {
     let { id, secretKey } = store.getState().main;
     let timestamp = Date.now();
-    let message = "Get User" + id + timestamp;
+    let message = 'Get User' + id + timestamp;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    const res = await this.api.get(`/users/${id}`, {}, {
-      headers: {
-        'x-brightid-signature': sig,
-        'x-brightid-timestamp': timestamp
-      }
-    });
+    const res = await this.api.get(
+      `/users/${id}`,
+      {},
+      {
+        headers: {
+          'x-brightid-signature': sig,
+          'x-brightid-timestamp': timestamp,
+        },
+      },
+    );
     BrightId.throwOnError(res);
     return res.data.data;
   }
