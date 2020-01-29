@@ -1,10 +1,19 @@
 // @flow
 
-import { randomBytes } from 'react-native-randombytes';
-import { Alert } from 'react-native';
+import { NativeModules } from 'react-native';
+import { Buffer } from 'buffer';
 import api from '../../../Api/BrightId';
 import { b64ToUrlSafeB64 } from '../../../utils/encoding';
 import { setConnectQrData } from '../../../actions';
+
+const { RNRandomBytes } = NativeModules;
+
+const randomKey = (size: number) =>
+  new Promise((resolve, reject) => {
+    RNRandomBytes.randomBytes(size, (err, bytes) => {
+      err ? reject(err) : resolve(bytes);
+    });
+  });
 
 export const genQrData = () => async (dispatch: dispatch) => {
   try {
@@ -15,8 +24,9 @@ export const genQrData = () => async (dispatch: dispatch) => {
     )
       .toString('base64')
       .substring(0, 6);
-    const aesKey = randomBytes(16).toString('base64');
-    const uuid = b64ToUrlSafeB64(randomBytes(9).toString('base64'));
+    const aesKey = await randomKey(16);
+    const uuidKey = await randomKey(9);
+    const uuid = b64ToUrlSafeB64(uuidKey);
     const qrString = `${aesKey}${uuid}${b64Ip}`;
     const user = '1';
 

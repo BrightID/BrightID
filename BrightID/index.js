@@ -1,6 +1,5 @@
 /** @format */
 
-import './shim';
 import { AppRegistry, YellowBox, Text, TextInput } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
