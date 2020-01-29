@@ -2,7 +2,7 @@
 
 import { create, ApiSauceInstance } from 'apisauce';
 import nacl from 'tweetnacl';
-import { createHash } from 'react-native-crypto';
+import CryptoJS from 'crypto-js';
 import {
   strToUint8Array,
   uInt8ArrayToB64,
@@ -16,10 +16,8 @@ if (__DEV__) {
 }
 
 function hash(data) {
-  const h = createHash('sha256')
-    .update(data)
-    .digest('hex');
-  const b = Buffer.from(h, 'hex').toString('base64');
+  const h = CryptoJS.SHA256(data);
+  const b = h.toString(CryptoJS.enc.Base64);
   return b64ToUrlSafeB64(b);
 }
 

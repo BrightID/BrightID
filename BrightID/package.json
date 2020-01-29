@@ -26,6 +26,7 @@
     "buffer": "^5.2.1",
     "console-browserify": "^1.1.0",
     "constants-browserify": "^1.0.0",
+    "crypto-js": "^3.1.9-1",
     "dns.js": "^1.0.1",
     "domain-browser": "^1.1.1",
     "emittery": "^0.5.1",

@@ -1,7 +1,7 @@
 // @flow
 
 import { Alert } from 'react-native';
-import { createCipher, createDecipher } from 'react-native-crypto';
+import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
 import { retrieveImage, saveImage } from '../../../utils/filesystem';
 import backupApi from '../../../Api/BackupApi';
@@ -31,9 +31,10 @@ export const setTrustedConnections = async () => {
 };
 
 const hashId = (id: string, password: string) => {
-  const cipher = createCipher('aes128', password);
-  const hash = cipher.update(id, 'utf8', 'base64') + cipher.final('base64');
+  const hash = CryptoJS.AES.encrypt(id, password).toString();
+  console.log('hash', hash);
   const safeHash = b64ToUrlSafeB64(hash);
+  console.log('safehash', safeHash);
   store.dispatch(setHashedId(safeHash));
   return safeHash;
 };
@@ -42,9 +43,10 @@ export const encryptAndBackup = async (key: string, data: string) => {
   let { id, hashedId, password } = store.getState();
   if (!hashedId) hashedId = hashId(id, password);
   try {
-    const cipher = createCipher('aes128', password);
-    const encrypted =
-      cipher.update(data, 'utf8', 'base64') + cipher.final('base64');
+    // const cipher = createCipher('aes128', password);
+    // const encrypted =
+    //   cipher.update(data, 'utf8', 'base64') + cipher.final('base64');
+    const encrypted = CryptoJS.AES.encrypt(data, password).toString();
     await backupApi.putRecovery(hashedId, key, encrypted);
     emitter.emit('backupProgress', 1);
   } catch (err) {
@@ -216,10 +218,10 @@ export const setSigningKey = async () => {
 export const fetchBackupData = async (key: string, pass: string) => {
   try {
     const hashedId = hashId(store.getState().recoveryData.id, pass);
-    const decipher = createDecipher('aes128', pass);
     const res = await backupApi.getRecovery(hashedId, key);
-    const decrypted =
-      decipher.update(res.data, 'base64', 'utf8') + decipher.final('utf8');
+    const decrypted = CryptoJS.AES.decrypt(res.data, pass).toString(
+      CryptoJS.enc.Utf8,
+    );
     emitter.emit('restoreProgress', 1);
     return decrypted;
   } catch (err) {

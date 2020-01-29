@@ -1,6 +1,6 @@
 // @flow
 
-import { createCipher } from 'react-native-crypto';
+import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
 import { postData } from './postData';
 import { retrieveImage } from '../../../utils/filesystem';
@@ -30,7 +30,7 @@ export const encryptAndUploadLocalData = () => async (
       // The other user sent their id. Sign the message and send it.
 
       timestamp = Date.now();
-      const message = 'Add Connection' + id + connectUserData.id + timestamp;
+      const message = `Add Connection${id}${connectUserData.id}${timestamp}`;
       signedMessage = uInt8ArrayToB64(
         nacl.sign.detached(strToUint8Array(message), secretKey),
       );
@@ -49,11 +49,13 @@ export const encryptAndUploadLocalData = () => async (
 
     const dataStr = JSON.stringify(dataObj);
 
-    const cipher = createCipher('aes128', aesKey);
+    // const cipher = createCipher('aes128', aesKey);
 
-    let encrypted =
-      cipher.update(dataStr, 'utf8', 'base64') + cipher.final('base64');
-    console.log('encrypting data');
+    // let encrypted =
+    //   cipher.update(dataStr, 'utf8', 'base64') + cipher.final('base64');
+
+    let encrypted = CryptoJS.AES.encrypt(dataStr, aesKey).toString();
+    console.log('encrypted', encrypted);
     dispatch(postData(encrypted));
   } catch (err) {
     err instanceof Error ? console.warn(err.message) : console.log(err);
