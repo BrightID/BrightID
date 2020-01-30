@@ -19,12 +19,13 @@ import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { handleBrightIdCreation, fakeUserAvatar } from './actions';
-import { mimeFromUri } from '../../utils/images';
+import ResizeImage from '../../utils/ResizeImage';
 
 type State = {
   name: string,
   imagePicking: boolean,
-  photo: { uri: string },
+  initialPhoto: { uri: string },
+  finalBase64: { uri: string },
   creatingBrightId: boolean,
 };
 
@@ -44,7 +45,8 @@ export class SignUp extends React.Component<Props, State> {
 
   state = {
     name: '',
-    photo: { uri: '' },
+    initialPhoto: { uri: '' },
+    finalBase64: { uri: '' },
     imagePicking: false,
     creatingBrightId: false,
   };
@@ -72,11 +74,11 @@ export class SignUp extends React.Component<Props, State> {
   randomAvatar = async (): Promise<void> => {
     try {
       const randomImage: string = await fakeUserAvatar();
-      const photo = {
+      const finalBase64 = {
         uri: `data:image/jpeg;base64,${randomImage}`,
       };
       this.setState({
-        photo,
+        finalBase64,
       });
       this.imagePickingFalse();
     } catch (err) {
@@ -93,7 +95,7 @@ export class SignUp extends React.Component<Props, State> {
       mediaType: 'photo',
       maxWidth: 180,
       maxHeight: 180,
-      quality: 0.8,
+      quality: 1.0,
       allowsEditing: true,
       loadingLabelText: 'loading photo...',
       customButtons: [],
@@ -114,12 +116,13 @@ export class SignUp extends React.Component<Props, State> {
       } else if (response.customButton) {
         this.randomAvatar();
       } else {
-        const mime = mimeFromUri(response.uri);
-        const photo = {
-          uri: `data:${mime};base64,${response.data}`,
+        // const mime = mimeFromUri(response.uri);
+        const initialPhoto = {
+          uri: response.uri,
         };
+        console.log('initialPhoto', initialPhoto);
         this.setState({
-          photo,
+          initialPhoto,
           imagePicking: false,
         });
       }
@@ -128,7 +131,7 @@ export class SignUp extends React.Component<Props, State> {
 
   createBrightID = async () => {
     try {
-      const { photo, name } = this.state;
+      const { finalBase64, name } = this.state;
       const { navigation, dispatch } = this.props;
       this.setState({
         creatingBrightId: true,
@@ -139,13 +142,15 @@ export class SignUp extends React.Component<Props, State> {
         });
         return Alert.alert('BrightID Form Incomplete', 'Please add your name');
       }
-      if (!photo) {
+      if (!finalBase64.uri) {
         this.setState({
           creatingBrightId: false,
         });
         return Alert.alert('BrightID Form Incomplete', 'A photo is required');
       }
-      const result = await dispatch(handleBrightIdCreation({ photo, name }));
+      const result = await dispatch(
+        handleBrightIdCreation({ photo: finalBase64, name }),
+      );
       if (result) {
         navigation.navigate('App');
       } else {
@@ -184,16 +189,25 @@ export class SignUp extends React.Component<Props, State> {
       </View>
     );
 
-  render() {
-    const { imagePicking, name, photo } = this.state;
+  onCapture = (uri: string) => {
+    this.setState({ finalBase64: { uri } });
+    console.log('here');
+  };
 
-    const AddPhotoButton = photo.uri ? (
+  render() {
+    const { imagePicking, name, initialPhoto, finalBase64 } = this.state;
+
+    const AddPhotoButton = finalBase64.uri ? (
       <TouchableOpacity
         onPress={this.getPhoto}
         accessible={true}
         accessibilityLabel="edit photo"
       >
-        <Image style={styles.photo} source={photo} onPress={this.getPhoto} />
+        <Image
+          style={styles.photo}
+          source={finalBase64}
+          onPress={this.getPhoto}
+        />
       </TouchableOpacity>
     ) : (
       <TouchableOpacity
@@ -213,6 +227,12 @@ export class SignUp extends React.Component<Props, State> {
           barStyle="default"
           backgroundColor={Platform.OS === 'ios' ? 'transparent' : '#000'}
           translucent={false}
+        />
+        <ResizeImage
+          width={180}
+          height={180}
+          onCapture={this.onCapture}
+          uri={initialPhoto.uri}
         />
         <View style={styles.addPhotoContainer}>
           {!imagePicking ? (
