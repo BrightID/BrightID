@@ -13,7 +13,6 @@ type Props = {
 export class ResizeImage extends React.Component<Props> {
   render() {
     const { onCapture, width, height, uri } = this.props;
-    console.log('uri', uri);
     return (
       <ViewShot
         ref="viewShot"

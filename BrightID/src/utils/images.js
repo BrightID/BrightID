@@ -1,9 +1,66 @@
 // @flow
 
+import ImagePicker from 'react-native-image-picker';
+import RNFetchBlob from 'rn-fetch-blob';
 import { compose } from 'ramda';
 
-// split on comma in Data URI
-// e.g. "data:image/png;base64,iVBORw0KGg"
+export const selectImage = () =>
+  new Promise((res, rej) => {
+    const options = {
+      title: 'Select Photo',
+      mediaType: 'photo',
+      maxWidth: 180,
+      maxHeight: 180,
+      quality: 1.0,
+      allowsEditing: true,
+      loadingLabelText: 'loading photo...',
+      customButtons: [],
+    };
+
+    if (__DEV__) {
+      options.customButtons = [{ name: 'random', title: 'Random Avatar' }];
+    }
+
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.error) {
+        rej(response.error);
+      } else if (response.customButton) {
+        res(randomAvatar());
+      } else {
+        res({
+          uri: response.uri,
+        });
+      }
+    });
+  });
+
+const fakeUserAvatar = (): Promise<string> => {
+  // save each connection with their id as the async storage key
+  return RNFetchBlob.fetch('GET', 'https://loremflickr.com/180/180/all', {})
+    .then((res) => {
+      if (res.info().status === 200) {
+        let b64 = res.base64();
+        return b64;
+      } else {
+        return 'https://loremflickr.com/180/180/all';
+      }
+    })
+    .catch((err) => {
+      err instanceof Error ? console.warn(err.message) : console.log(err);
+    });
+};
+
+const randomAvatar = async (): Promise<void> => {
+  try {
+    const randomImage: string = await fakeUserAvatar();
+    return {
+      uri: `data:image/jpeg;base64,${randomImage}`,
+    };
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const splitDataURI = (str: string) => str.split(',', 2);
 
 const mediaTypeToFileExtension = ([mediaType = 'jpeg', image = ' ']): {
@@ -22,10 +79,7 @@ const mediaTypeToFileExtension = ([mediaType = 'jpeg', image = ' ']): {
   return { filetype: 'jpg', image };
 };
 
-export const parseDataUri = compose(
-  mediaTypeToFileExtension,
-  splitDataURI,
-);
+export const parseDataUri = compose(mediaTypeToFileExtension, splitDataURI);
 
 const fileType = (str: string): string =>
   str
@@ -46,7 +100,4 @@ const normalizeType = (t: string): string => {
   }
 };
 
-export const mimeFromUri = compose(
-  normalizeType,
-  fileType,
-);
+export const mimeFromUri = compose(normalizeType, fileType);

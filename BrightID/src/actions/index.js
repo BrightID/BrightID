@@ -15,7 +15,7 @@ export const SET_CONNECTIONS = 'SET_CONNECTIONS';
 export const CONNECTIONS_SORT = 'CONNECTIONS_SORT';
 export const REMOVE_CONNECTION = 'REMOVE_CONNECTION';
 export const SET_USER_DATA = 'SET_USER_DATA';
-export const USER_PHOTO = 'USER_PHOTO';
+export const SET_USER_PHOTO = 'SET_USER_PHOTO';
 export const SET_CONNECT_QR_DATA = 'SET_CONNECT_QR_DATA';
 export const REMOVE_CONNECT_QR_DATA = 'REMOVE_CONNECT_QR_DATA';
 export const SET_CONNECT_USER_DATA = 'SET_CONNECT_USER_DATA';
@@ -222,12 +222,12 @@ export const setUserData = ({
 
 /**
  * redux action creator for setting user photo
- * @param type USER_PHOTO
+ * @param type SET_USER_PHOTO
  * @param photo base 64 string of user photo
  */
 
-export const setPhoto = (photo: string) => ({
-  type: USER_PHOTO,
+export const setPhoto = (photo: { filename: string }) => ({
+  type: SET_USER_PHOTO,
   photo,
 });
 

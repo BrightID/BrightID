@@ -13,17 +13,17 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import ImagePicker from 'react-native-image-picker';
+
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { handleBrightIdCreation, fakeUserAvatar } from './actions';
+import { handleBrightIdCreation } from './actions';
 import ResizeImage from '../../utils/ResizeImage';
+import { selectImage } from '../../utils/images';
 
 type State = {
   name: string,
-  imagePicking: boolean,
   initialPhoto: { uri: string },
   finalBase64: { uri: string },
   creatingBrightId: boolean,
@@ -47,86 +47,22 @@ export class SignUp extends React.Component<Props, State> {
     name: '',
     initialPhoto: { uri: '' },
     finalBase64: { uri: '' },
-    imagePicking: false,
     creatingBrightId: false,
   };
 
-  imagePickingFalse = () => {
-    setTimeout(
-      () =>
-        this.setState({
-          imagePicking: false,
-        }),
-      201,
-    );
-  };
-
-  imagePickingTrue = () => {
-    setTimeout(
-      () =>
-        this.setState({
-          imagePicking: true,
-        }),
-      200,
-    );
-  };
-
-  randomAvatar = async (): Promise<void> => {
+  getPhoto = async () => {
     try {
-      const randomImage: string = await fakeUserAvatar();
-      const finalBase64 = {
-        uri: `data:image/jpeg;base64,${randomImage}`,
-      };
+      const initialPhoto = await selectImage();
       this.setState({
-        finalBase64,
+        initialPhoto,
       });
-      this.imagePickingFalse();
     } catch (err) {
       console.log(err);
     }
   };
 
-  getPhoto = () => {
-    // for full documentation on the Image Picker api
-    // see https://github.com/react-community/react-native-image-picker
-
-    const options = {
-      title: 'Select Photo',
-      mediaType: 'photo',
-      maxWidth: 180,
-      maxHeight: 180,
-      quality: 1.0,
-      allowsEditing: true,
-      loadingLabelText: 'loading photo...',
-      customButtons: [],
-    };
-
-    if (__DEV__) {
-      options.customButtons = [{ name: 'random', title: 'Random Avatar' }];
-    }
-    // loading UI to account for the delay after picking an image
-    this.imagePickingTrue();
-
-    ImagePicker.showImagePicker(options, (response) => {
-      if (response.didCancel) {
-        this.imagePickingFalse();
-      } else if (response.error) {
-        Alert.alert('ERROR', response.error);
-        this.imagePickingFalse();
-      } else if (response.customButton) {
-        this.randomAvatar();
-      } else {
-        // const mime = mimeFromUri(response.uri);
-        const initialPhoto = {
-          uri: response.uri,
-        };
-        console.log('initialPhoto', initialPhoto);
-        this.setState({
-          initialPhoto,
-          imagePicking: false,
-        });
-      }
-    });
+  onCapture = (uri: string) => {
+    this.setState({ finalBase64: { uri } });
   };
 
   createBrightID = async () => {
@@ -165,61 +101,8 @@ export class SignUp extends React.Component<Props, State> {
     }
   };
 
-  renderButtonOrSpinner = () =>
-    !this.state.creatingBrightId ? (
-      <View>
-        <TouchableOpacity
-          style={styles.createBrightIdButton}
-          onPress={this.createBrightID}
-        >
-          <Text style={styles.buttonInnerText}>Create My BrightID</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('RecoveryCode')}
-          style={styles.button}
-          accessibilityLabel="Recover BrightID"
-        >
-          <Text style={styles.buttonText}>Recover BrightID</Text>
-        </TouchableOpacity>
-      </View>
-    ) : (
-      <View style={styles.loader}>
-        <Text>Creating Bright ID...</Text>
-        <Spinner isVisible={true} size={47} type="Wave" color="#4990e2" />
-      </View>
-    );
-
-  onCapture = (uri: string) => {
-    this.setState({ finalBase64: { uri } });
-    console.log('here');
-  };
-
   render() {
-    const { imagePicking, name, initialPhoto, finalBase64 } = this.state;
-
-    const AddPhotoButton = finalBase64.uri ? (
-      <TouchableOpacity
-        onPress={this.getPhoto}
-        accessible={true}
-        accessibilityLabel="edit photo"
-      >
-        <Image
-          style={styles.photo}
-          source={finalBase64}
-          onPress={this.getPhoto}
-        />
-      </TouchableOpacity>
-    ) : (
-      <TouchableOpacity
-        onPress={this.getPhoto}
-        style={styles.addPhoto}
-        accessible={true}
-        accessibilityLabel="add photo"
-      >
-        <Text style={styles.addPhotoText}>Add Photo</Text>
-        <SimpleLineIcons size={48} name="camera" color="#979797" />
-      </TouchableOpacity>
-    );
+    const { name, initialPhoto, finalBase64, creatingBrightId } = this.state;
 
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -235,10 +118,28 @@ export class SignUp extends React.Component<Props, State> {
           uri={initialPhoto.uri}
         />
         <View style={styles.addPhotoContainer}>
-          {!imagePicking ? (
-            AddPhotoButton
+          {finalBase64.uri ? (
+            <TouchableOpacity
+              onPress={this.getPhoto}
+              accessible={true}
+              accessibilityLabel="edit photo"
+            >
+              <Image
+                style={styles.photo}
+                source={finalBase64}
+                onPress={this.getPhoto}
+              />
+            </TouchableOpacity>
           ) : (
-            <Spinner isVisible={true} size={79} type="Bounce" color="#4990e2" />
+            <TouchableOpacity
+              onPress={this.getPhoto}
+              style={styles.addPhoto}
+              accessible={true}
+              accessibilityLabel="add photo"
+            >
+              <Text style={styles.addPhotoText}>Add Photo</Text>
+              <SimpleLineIcons size={48} name="camera" color="#979797" />
+            </TouchableOpacity>
           )}
         </View>
         <View style={styles.textInputContainer}>
@@ -260,7 +161,28 @@ export class SignUp extends React.Component<Props, State> {
             Your name and photo will never be shared with apps or stored on
             servers
           </Text>
-          {this.renderButtonOrSpinner()}
+          {!creatingBrightId ? (
+            <View>
+              <TouchableOpacity
+                style={styles.createBrightIdButton}
+                onPress={this.createBrightID}
+              >
+                <Text style={styles.buttonInnerText}>Create My BrightID</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('RecoveryCode')}
+                style={styles.button}
+                accessibilityLabel="Recover BrightID"
+              >
+                <Text style={styles.buttonText}>Recover BrightID</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View style={styles.loader}>
+              <Text>Creating Bright ID...</Text>
+              <Spinner isVisible={true} size={47} type="Wave" color="#4990e2" />
+            </View>
+          )}
         </View>
       </KeyboardAvoidingView>
     );

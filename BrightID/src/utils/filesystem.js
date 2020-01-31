@@ -18,7 +18,7 @@ export const saveImage = async ({ base64Image, imageName }) => {
     await RNFS.writeFile(path, image, 'base64');
     return `${imageName}.${filetype}`;
   } catch (err) {
-    Alert.alert('Error', err.stack);
+    err instanceof Error ? console.warn(err.message) : console.log(err);
   }
 };
 
