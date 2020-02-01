@@ -6,6 +6,7 @@ import {
   USER_SCORE,
   GROUPS_COUNT,
   SEARCH_PARAM,
+  CREATE_GROUP,
   SET_NEW_GROUP_CO_FOUNDERS,
   CLEAR_NEW_GROUP_CO_FOUNDERS,
   SET_ELIGIBLE_GROUPS,
@@ -138,6 +139,12 @@ export const reducer = (state: State = initialState, action: action) => {
       return {
         ...state,
         searchParam: action.searchParam,
+      };
+    }
+    case CREATE_GROUP: {
+      return {
+        ...state,
+        eligibleGroups: [...state.eligibleGroups.slice(0), action.group],
       };
     }
     case SET_NEW_GROUP_CO_FOUNDERS: {

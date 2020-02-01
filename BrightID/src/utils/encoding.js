@@ -2,6 +2,7 @@
 
 import B64 from 'base64-js';
 import { Buffer } from 'buffer';
+import { createHash } from 'react-native-crypto';
 
 export function uInt8ArrayToB64(array: Uint8Array) {
   const b = Buffer.from(array);
@@ -39,4 +40,12 @@ export function b64ToUrlSafeB64(s: string) {
     '=': '',
   };
   return s.replace(/[/+=]/g, (c) => alts[c]);
+}
+
+export function hash(data: string) {
+  const h = createHash('sha256')
+    .update(data)
+    .digest('hex');
+  const b = Buffer.from(h, 'hex').toString('base64');
+  return b64ToUrlSafeB64(b);
 }

@@ -11,7 +11,10 @@ import {
 } from './index';
 
 // TODO update connections here
-const fetchUserInfo = () => async (dispatch: dispatch) => {
+const fetchUserInfo = () => async (
+  dispatch: dispatch,
+  getState: getState,
+) => {
   try {
     const {
       eligibleGroups,
@@ -20,7 +23,11 @@ const fetchUserInfo = () => async (dispatch: dispatch) => {
       verifications = [],
       connections = [],
     } = await api.getUserInfo();
-    dispatch(setEligibleGroups(eligibleGroups));
+    const oldEligibleGroups = [...getState().eligibleGroups];
+    const remained = oldEligibleGroups.filter( function( el ) {
+      return (! eligibleGroups.some(x => x.id == el.id) && ! currentGroups.some(x => x.id == el.id))
+    });
+    dispatch(setEligibleGroups([...remained, ...eligibleGroups]));
     dispatch(setCurrentGroups(currentGroups));
     dispatch(setUserScore(__DEV__ ? 100 : score));
     dispatch(setGroupsCount(currentGroups.length));

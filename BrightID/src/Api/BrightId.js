@@ -2,23 +2,12 @@
 
 import { create, ApiSauceInstance } from 'apisauce';
 import nacl from 'tweetnacl';
-import CryptoJS from 'crypto-js';
-import {
-  strToUint8Array,
-  uInt8ArrayToB64,
-  b64ToUrlSafeB64,
-} from '../utils/encoding';
+import { strToUint8Array, uInt8ArrayToB64, hash } from '../utils/encoding';
 import store from '../store';
 
 let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
   seedUrl = 'http://test.brightid.org';
-}
-
-function hash(data) {
-  const h = CryptoJS.SHA256(data);
-  const b = h.toString(CryptoJS.enc.Base64);
-  return b64ToUrlSafeB64(b);
 }
 
 class BrightId {
@@ -117,8 +106,6 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
-    // we can have group id here if required by sorting and joining
-    // the founders ids and getting sha256 hash from that
   }
 
   async deleteGroup(group: string) {

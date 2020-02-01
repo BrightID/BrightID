@@ -3,6 +3,7 @@
 export const USER_SCORE = 'USER_SCORE';
 export const GROUPS_COUNT = 'GROUPS_COUNT';
 export const SEARCH_PARAM = 'SEARCH_PARAM';
+export const CREATE_GROUP = 'CREATE_GROUP';
 export const SET_NEW_GROUP_CO_FOUNDERS = 'SET_NEW_GROUP_CO_FOUNDERS';
 export const CLEAR_NEW_GROUP_CO_FOUNDERS = 'CLEAR_NEW_GROUP_CO_FOUNDERS';
 export const SET_ELIGIBLE_GROUPS = 'SET_ELIGIBLE_GROUPS';
@@ -72,6 +73,15 @@ export const setGroupsCount = (groupsCount: number) => ({
 export const setSearchParam = (searchParam: string) => ({
   type: SEARCH_PARAM,
   searchParam,
+});
+
+/**
+ * redux action creator for create new group
+ * @param group: new group
+ */
+export const createGroup = (group: group) => ({
+  type: CREATE_GROUP,
+  group,
 });
 
 /**
