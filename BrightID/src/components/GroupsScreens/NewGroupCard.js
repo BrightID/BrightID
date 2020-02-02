@@ -149,9 +149,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(
-  null,
-  (dispatch) => ({
-    toggleCoFounder: (id) => dispatch(toggleNewGroupCoFounder(id)),
-  }),
-)(NewGroupCard);
+export default connect(null, (dispatch) => ({
+  toggleCoFounder: (id) => dispatch(toggleNewGroupCoFounder(id)),
+}))(NewGroupCard);

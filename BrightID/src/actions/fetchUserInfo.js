@@ -11,7 +11,7 @@ import {
 } from './index';
 
 // TODO update connections here
-const fetchUserInfo = () => async (dispatch: dispatch) => {
+const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
   try {
     const {
       eligibleGroups,

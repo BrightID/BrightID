@@ -1,10 +1,12 @@
 // @flow
 import { Alert } from 'react-native';
+import { newGroupId } from '../../utils/groups';
 import {
   deleteEligibleGroup,
   joinGroup,
   joinGroupAsCoFounder,
   setNewGroupCoFounders,
+  createGroup,
 } from '../../actions/index';
 import api from '../../Api/BrightId';
 
@@ -26,7 +28,7 @@ export const createNewGroup = () => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  let { newGroupCoFounders } = getState();
+  let { id, newGroupCoFounders } = getState();
   if (newGroupCoFounders.length < 2) {
     Alert.alert(
       'Cannot create group',
@@ -35,6 +37,15 @@ export const createNewGroup = () => async (
     return false;
   }
   try {
+    const groupId = newGroupId();
+    const newGroup = {
+      founders: [id, newGroupCoFounders[0], newGroupCoFounders[1]],
+      id: groupId,
+      isNew: true,
+      knownMembers: [id],
+      score: 0,
+    };
+    dispatch(createGroup(newGroup));
     return await api.createGroup(newGroupCoFounders[0], newGroupCoFounders[1]);
   } catch (err) {
     Alert.alert('Cannot create group', err.message);
