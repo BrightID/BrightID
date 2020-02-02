@@ -1,68 +1,37 @@
 // @flow
 
 import * as React from 'react';
-import {
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import RNFS from 'react-native-fs';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import VerificationSticker from './Verifications/VerificationSticker';
 import BottomNav from './BottomNav';
-import store from '../store';
-import { resetStore } from '../actions';
+import { setPhoto } from '../actions';
 import { getNotifications } from '../actions/notifications';
+import { delStorage } from '../utils/dev';
+import { selectImage } from '../utils/images';
+import ResizeImage from '../utils/ResizeImage';
+import { saveImage } from '../utils/filesystem';
 
 /**
  * Home screen of BrightID
  * ==========================
  */
 
-export class HomeScreen extends React.Component<Props> {
+type State = {
+  initialPhoto: { uri: string },
+};
+
+export class HomeScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
     title: 'BrightID',
     headerBackTitle: 'Home',
     headerRight: () => (
       <TouchableOpacity
         style={{ marginRight: 11 }}
-        onPress={() => {
-          if (__DEV__) {
-            Alert.alert(
-              'WARNING',
-              'Would you like to delete user data and return to the onboarding screen?',
-              [
-                {
-                  text: 'Cancel',
-                  onPress: () => console.log('Cancel Pressed'),
-                  style: 'cancel',
-                },
-                {
-                  text: 'Sure',
-                  onPress: async () => {
-                    try {
-                      navigation.navigate('Onboarding');
-                      await AsyncStorage.flushGetRequests();
-                      await AsyncStorage.clear();
-                      store.dispatch(resetStore());
-                    } catch (err) {
-                      err instanceof Error
-                        ? console.warn('delete storage', err.message)
-                        : console.log('delete storage', err);
-                    }
-                  },
-                },
-              ],
-              { cancelable: true },
-            );
-          }
-        }}
+        onPress={delStorage(navigation)}
       >
         <Material size={32} name="dots-horizontal" color="#fff" />
       </TouchableOpacity>
@@ -74,12 +43,38 @@ export class HomeScreen extends React.Component<Props> {
     ),
   });
 
+  state = {
+    initialPhoto: {
+      uri: '',
+    },
+  };
+
   componentDidMount() {
     const { navigation, dispatch } = this.props;
     navigation.addListener('willFocus', () => {
       dispatch(getNotifications());
     });
   }
+
+  changePhoto = async () => {
+    try {
+      const initialPhoto = await selectImage();
+      this.setState({
+        initialPhoto,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  onCapture = async (uri: string) => {
+    const { id, photo } = this.props;
+    const filename = await saveImage({ imageName: id, base64Image: uri });
+    setPhoto({ filename });
+    this.setState({
+      initialPhoto: { uri: '' },
+    });
+  };
 
   render() {
     const {
@@ -91,23 +86,37 @@ export class HomeScreen extends React.Component<Props> {
       connections,
       verifications,
     } = this.props;
+    const { initialPhoto } = this.state;
 
     return (
       <View style={styles.container}>
+        <ResizeImage
+          width={180}
+          height={180}
+          onCapture={this.onCapture}
+          uri={initialPhoto.uri}
+        />
         <View style={styles.mainContainer}>
           <View style={styles.photoContainer}>
-            <Image
-              source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo.filename}`,
-              }}
-              style={styles.photo}
-              resizeMode="cover"
-              onError={(e) => {
-                console.log(e.error);
-              }}
+            <TouchableOpacity
+              onPress={this.changePhoto}
               accessible={true}
-              accessibilityLabel="user photo"
-            />
+              accessibilityLabel="edit photo"
+            >
+              <Image
+                source={{
+                  uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo.filename}`,
+                }}
+                style={styles.photo}
+                resizeMode="cover"
+                onError={(e) => {
+                  console.log(e.error);
+                }}
+                accessible={true}
+                accessibilityLabel="user photo"
+                key={initialPhoto.uri}
+              />
+            </TouchableOpacity>
             <Text id="name" style={styles.name}>
               {name}
             </Text>

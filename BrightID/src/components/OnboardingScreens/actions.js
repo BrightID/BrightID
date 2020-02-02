@@ -1,7 +1,6 @@
 // @flow
 
 import nacl from 'tweetnacl';
-import RNFetchBlob from 'rn-fetch-blob';
 import { setUserData, setHashedId } from '../../actions';
 import { createImageDirectory, saveImage } from '../../utils/filesystem';
 import api from '../../Api/BrightId';
@@ -31,7 +30,7 @@ export const handleBrightIdCreation = ({
     };
 
     // We have no createUser anymore
-    // new user is created while making its first connection with a verified user 
+    // new user is created while making its first connection with a verified user
     // await api.createUser(id, b64PubKey);
 
     // // update redux store
@@ -46,20 +45,4 @@ export const handleBrightIdCreation = ({
   } catch (err) {
     err instanceof Error ? console.warn(err.message) : console.log(err);
   }
-};
-
-export const fakeUserAvatar = (): Promise<string> => {
-  // save each connection with their id as the async storage key
-  return RNFetchBlob.fetch('GET', 'https://loremflickr.com/180/180/all', {})
-    .then((res) => {
-      if (res.info().status === 200) {
-        let b64 = res.base64();
-        return b64;
-      } else {
-        return 'https://loremflickr.com/180/180/all';
-      }
-    })
-    .catch((err) => {
-      err instanceof Error ? console.warn(err.message) : console.log(err);
-    });
 };
