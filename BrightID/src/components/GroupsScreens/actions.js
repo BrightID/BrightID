@@ -1,6 +1,6 @@
 // @flow
 import { Alert } from 'react-native';
-import { hash } from '../../utils/encoding';
+import { newGroupId } from '../../utils/groups';
 import {
   deleteEligibleGroup,
   joinGroup,
@@ -9,7 +9,6 @@ import {
   createGroup,
 } from '../../actions/index';
 import api from '../../Api/BrightId';
-import { addConnection } from '../../actions';
 
 export const toggleNewGroupCoFounder = (id: string) => (
   dispatch: dispatch,
@@ -29,7 +28,7 @@ export const createNewGroup = () => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  let { id, newGroupCoFounders, eligibleGroups, currentGroups } = getState();
+  let { id, newGroupCoFounders } = getState();
   if (newGroupCoFounders.length < 2) {
     Alert.alert(
       'Cannot create group',
@@ -38,19 +37,14 @@ export const createNewGroup = () => async (
     return false;
   }
   try {
-    const existGroups = [...eligibleGroups, ...currentGroups]
-    const groupId = hash([id, newGroupCoFounders[0], newGroupCoFounders[1]].sort().join(','));
-    const found = existGroups.some(el => el.id === groupId);
-    if (found) {
-      throw new Error('Duplicate group');
-    }
+    const groupId = newGroupId();
     const newGroup = {
       founders: [id, newGroupCoFounders[0], newGroupCoFounders[1]],
       id: groupId,
       isNew: true,
       knownMembers: [id],
-      score: 0
-    }
+      score: 0,
+    };
     dispatch(createGroup(newGroup));
     return await api.createGroup(newGroupCoFounders[0], newGroupCoFounders[1]);
   } catch (err) {

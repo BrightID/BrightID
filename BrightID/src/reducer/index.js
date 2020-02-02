@@ -1,7 +1,7 @@
 // @flow
 
 import { Alert } from 'react-native';
-import { dissoc, find, mergeRight, propEq } from 'ramda';
+import { dissoc, find, mergeRight, propEq, uniqBy } from 'ramda';
 import {
   USER_SCORE,
   GROUPS_COUNT,
@@ -18,7 +18,7 @@ import {
   SET_CONNECTIONS,
   CONNECTIONS_SORT,
   SET_USER_DATA,
-  USER_PHOTO,
+  SET_USER_PHOTO,
   SET_CONNECT_QR_DATA,
   REMOVE_CONNECT_QR_DATA,
   REMOVE_CONNECTION,
@@ -129,7 +129,7 @@ export const reducer = (state: State = initialState, action: action) => {
         groupsCount: action.groupsCount,
       };
     }
-    case USER_PHOTO: {
+    case SET_USER_PHOTO: {
       return {
         ...state,
         photo: action.photo,
@@ -162,7 +162,10 @@ export const reducer = (state: State = initialState, action: action) => {
     case SET_ELIGIBLE_GROUPS: {
       return {
         ...state,
-        eligibleGroups: action.eligibleGroups,
+        eligibleGroups: uniqBy(({ id }) => id, [
+          ...state.eligibleGroups,
+          ...action.eligibleGroups,
+        ]),
       };
     }
     case DELETE_ELIGIBLE_GROUP: {

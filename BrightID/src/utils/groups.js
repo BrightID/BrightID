@@ -1,4 +1,5 @@
 import store from '../store';
+import { hash } from './encoding';
 
 const memberList = (group) => {
   const { id, photo, name, connections } = store.getState();
@@ -82,4 +83,21 @@ export const getGroupName = (group) => {
   const names = memberList(group).map((member) => member.name.substr(0, 13));
 
   return names.join(', ');
+};
+
+export const newGroupId = () => {
+  const {
+    id,
+    newGroupCoFounders,
+    eligibleGroups,
+    currentGroups,
+  } = store.getState();
+  const existingGroups = [...eligibleGroups, ...currentGroups];
+  const groupId = hash(
+    [id, newGroupCoFounders[0], newGroupCoFounders[1]].sort().join(','),
+  );
+  if (existingGroups.some((el) => el.id === groupId)) {
+    throw new Error('group already exists');
+  }
+  return groupId;
 };

@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     height: '45%',
-    backgroundColor: '#fff',
+    backgroundColor: '#fcfcfc',
   },
   fullScreenContainer: {
     flex: 1,
