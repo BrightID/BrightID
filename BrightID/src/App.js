@@ -7,6 +7,7 @@ import { MenuProvider } from 'react-native-popup-menu';
 
 import AppRoutes from './AppRoutes';
 import store from './store';
+import fetchUserInfo from './actions/fetchUserInfo';
 
 /**
  * Central part of the application
@@ -17,6 +18,16 @@ import store from './store';
 type Props = {};
 
 export default class App extends React.Component<Props> {
+  componentDidMount() {
+    this.intervalId = setInterval(() => {
+      store.dispatch(fetchUserInfo());
+    }, 3000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(clearInterval(this.intervalId));
+  }
+
   render() {
     return (
       <MenuProvider>

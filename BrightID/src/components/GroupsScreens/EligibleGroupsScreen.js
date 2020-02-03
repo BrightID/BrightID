@@ -9,11 +9,9 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { NavigationEvents } from 'react-navigation';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import EligibleGroupCard from './EligibleGroupCard';
 import BottomNav from '../BottomNav';
-import fetchUserInfo from '../../actions/fetchUserInfo';
 
 const ICON_SIZE = 36;
 
@@ -22,11 +20,6 @@ class EligibleGroupsScreen extends React.Component<Props, State> {
     title: 'Eligible Groups',
     headerRight: () => <View />,
   });
-
-  refreshUserInfo = async () => {
-    console.log('refreshing user info');
-    await this.props.dispatch(fetchUserInfo());
-  };
 
   renderEligibleGroup = ({ item }) => <EligibleGroupCard group={item} />;
 
@@ -37,8 +30,6 @@ class EligibleGroupsScreen extends React.Component<Props, State> {
       return (
         <View style={styles.container}>
           <View style={styles.mainContainer}>
-            <NavigationEvents onDidFocus={this.refreshUserInfo} />
-
             <FlatList
               data={eligibleGroups}
               renderItem={this.renderEligibleGroup}

@@ -10,13 +10,11 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { NavigationEvents } from 'react-navigation';
-import { splitEvery, take } from 'ramda';
+import { splitEvery } from 'ramda';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import EligibleGroupCard from './EligibleGroupCard';
 import CurrentGroupCard from './CurrentGroupCard';
 import BottomNav from '../BottomNav';
-import fetchUserInfo from '../../actions/fetchUserInfo';
 import {
   NoCurrentGroups,
   EmptyFullScreen,
@@ -31,6 +29,7 @@ export class GroupsScreen extends React.Component<Props, State> {
     headerRight: () => <View />,
   });
 
+  // eslint-disable-next-line class-methods-use-this
   renderCurrentGroups({ item }) {
     const [group1, group2] = item;
     return (
@@ -41,21 +40,14 @@ export class GroupsScreen extends React.Component<Props, State> {
     );
   }
 
-  refreshUserInfo = async () => {
-    console.log('refreshing user info');
-    await this.props.dispatch(fetchUserInfo());
-  };
-
   getTwoEligibleGroups() {
     let { eligibleGroups } = this.props;
     let groups = eligibleGroups
       .filter((group: { isNew: boolean }) => group.isNew)
       .concat(eligibleGroups.filter((group) => !group.isNew));
-    return groups.slice(0, 2).map((group) =>
-      (
-        <EligibleGroupCard group={group} key={group.id} />
-      )
-    );
+    return groups
+      .slice(0, 2)
+      .map((group) => <EligibleGroupCard group={group} key={group.id} />);
   }
 
   render() {
@@ -65,11 +57,9 @@ export class GroupsScreen extends React.Component<Props, State> {
         currentGroups.length > 2
           ? splitEvery(2, currentGroups)
           : [currentGroups];
-      console.log(groupPairs);
       return (
         <View style={styles.container}>
           <View style={styles.mainContainer}>
-            <NavigationEvents onDidFocus={this.refreshUserInfo} />
             {!eligibleGroups.length && !currentGroups.length && (
               <EmptyFullScreen navigation={navigation} />
             )}
