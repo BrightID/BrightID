@@ -42,7 +42,7 @@ import {
   REMOVE_SAFE_PUB_KEY,
   HYDRATE_STATE,
   RESET_STORE,
-  UPDATE_CONNECTION_SCORES,
+  UPDATE_CONNECTIONS,
 } from '../actions';
 import { verifyStore } from './verifyStoreV1';
 
@@ -230,14 +230,18 @@ export const reducer = (state: State = initialState, action: action) => {
         ],
       };
     }
-    case UPDATE_CONNECTION_SCORES: {
+    case UPDATE_CONNECTIONS: {
       return {
         ...state,
         connections: state.connections.map<connection>((conn: connection) => {
           const updatedConn = find(propEq('id', conn.id))(action.connections);
           if (!updatedConn) {
+            if (conn.status == 'verified') {
+              conn.status = 'deleted';
+            }
             return conn;
           } else {
+            conn.status = 'verified';
             return mergeRight(conn, updatedConn);
           }
         }),

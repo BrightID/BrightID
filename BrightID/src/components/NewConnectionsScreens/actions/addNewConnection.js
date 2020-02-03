@@ -54,6 +54,7 @@ export const addNewConnection = () => async (
       secretKey: connectUserData.secretKey,
       connectionDate,
       photo: { filename },
+      status: 'initiated'
     };
 
     dispatch(addConnection(connectionData));

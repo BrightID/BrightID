@@ -34,7 +34,7 @@ export const SET_RECOVERY_DATA = 'SET_RECOVERY_DATA';
 export const REMOVE_RECOVERY_DATA = 'REMOVE_RECOVERY_DATA';
 export const SET_HASHED_ID = 'SET_HASHED_ID';
 export const UPDATE_CONNECTION = 'UPDATE_CONNECTION';
-export const UPDATE_CONNECTION_SCORES = 'UPDATE_CONNECTION_SCORES';
+export const UPDATE_CONNECTIONS = 'UPDATE_CONNECTIONS';
 export const ADD_CONNECTION = 'ADD_CONNECTION';
 export const SET_USER_ID = 'SET_USER_ID';
 export const HYDRATE_STATE = 'HYDRATE_STATE';
@@ -346,9 +346,9 @@ export const resetStore = () => ({
   type: RESET_STORE,
 });
 
-export const updateConnectionScores = (
-  connections: Array<{ id: string, score: number }>,
+export const updateConnections = (
+  connections: Array<{ id: string, score: number, status: string }>,
 ) => ({
-  type: UPDATE_CONNECTION_SCORES,
+  type: UPDATE_CONNECTIONS,
   connections,
 });
