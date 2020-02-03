@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     height: '55%',
-    backgroundColor: '#fff',
+    backgroundColor: '#fcfcfc',
   },
   noCurrentContainer: {
     alignItems: 'center',

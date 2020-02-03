@@ -1,7 +1,14 @@
 // @flow
 
 import { Alert } from 'react-native';
-import { dissoc, find, mergeRight, propEq, uniqBy } from 'ramda';
+import {
+  compose,
+  dissoc,
+  find,
+  mergeRight,
+  propEq,
+  differenceWith,
+} from 'ramda';
 import {
   USER_SCORE,
   GROUPS_COUNT,
@@ -160,12 +167,15 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case SET_ELIGIBLE_GROUPS: {
+      const byId = (x, y) => x.id === y.id;
+      const diffById = differenceWith(byId);
+      const diffByIdTwice = compose(diffById, diffById(state.eligibleGroups));
+      const localGroups = diffByIdTwice(action.eligibleGroups)(
+        state.currentGroups,
+      );
       return {
         ...state,
-        eligibleGroups: uniqBy(({ id }) => id, [
-          ...state.eligibleGroups,
-          ...action.eligibleGroups,
-        ]),
+        eligibleGroups: localGroups.concat(action.eligibleGroups),
       };
     }
     case DELETE_ELIGIBLE_GROUP: {
