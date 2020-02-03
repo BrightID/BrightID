@@ -55,7 +55,6 @@ export const encryptAndUploadLocalData = () => async (
     //   cipher.update(dataStr, 'utf8', 'base64') + cipher.final('base64');
 
     let encrypted = CryptoJS.AES.encrypt(dataStr, aesKey).toString();
-    console.log('encrypted', encrypted);
     dispatch(postData(encrypted));
   } catch (err) {
     err instanceof Error ? console.warn(err.message) : console.log(err);

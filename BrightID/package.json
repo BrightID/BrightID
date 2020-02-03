@@ -54,7 +54,6 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "rn-fetch-blob": "^0.12.0",
-    "socket.io-client": "^2.2.0",
     "stream": "^0.0.2",
     "timers": "^0.1.1",
     "tweetnacl": "https://github.com/RnbWd/tweetnacl-native",

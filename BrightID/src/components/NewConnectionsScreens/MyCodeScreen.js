@@ -18,8 +18,8 @@ import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { genQrData } from './actions/genQrData';
+import { fetchData } from './actions/fetchData';
 import { encryptAndUploadLocalData } from './actions/encryptData';
-import { setUpWs } from './actions/websocket';
 import emitter from '../../emitter';
 import { removeConnectQrData } from '../../actions';
 
@@ -50,8 +50,6 @@ const COPIED_TIMEOUT = 500;
 export class MyCodeScreen extends React.Component<Props, State> {
   connectionExpired: TimeoutID;
 
-  socket: { close: () => null };
-
   state = {
     qrsvg: '',
     copied: false,
@@ -62,21 +60,36 @@ export class MyCodeScreen extends React.Component<Props, State> {
     //  Let users start the connection over after one minute so there will be
     //  time for the other user to connect.
     const { dispatch } = this.props;
-    this.connectionExpired = setTimeout(this.navigateToHome, 60000);
+    this.subscribeToProfileUpload();
     emitter.on('connectDataReady', this.navigateToPreview);
+    emitter.on('recievedProfileData', this.unsubscribeToProfileUpload);
     dispatch(removeConnectQrData());
     dispatch(genQrData()).then(() => {
       this.genQrCode();
-      this.socket = dispatch(setUpWs());
       dispatch(encryptAndUploadLocalData());
     });
   }
 
   componentWillUnmount() {
-    clearTimeout(this.connectionExpired);
+    const { dispatch } = this.props;
+    this.unsubscribeToProfileUpload();
     emitter.off('connectDataReady', this.navigateToPreview);
-    if (this.socket) this.socket.close();
+    emitter.off('recievedProfileData', this.unsubscribeToProfileUpload);
+    dispatch(removeConnectQrData());
   }
+
+  subscribeToProfileUpload = () => {
+    const { dispatch } = this.props;
+    this.connectionExpired = setTimeout(this.navigateToHome, 60000);
+    this.fetchProfileData = setInterval(() => {
+      dispatch(fetchData());
+    }, 1000);
+  };
+
+  unsubscribeToProfileUpload = () => {
+    clearTimeout(this.connectionExpired);
+    clearInterval(this.fetchProfileData);
+  };
 
   navigateToPreview = () => {
     this.props.navigation.navigate('PreviewConnection');

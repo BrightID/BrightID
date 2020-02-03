@@ -20,7 +20,6 @@ const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
       verifications = [],
       connections = [],
     } = await api.getUserInfo();
-    console.log('fetchingUserInfo');
     dispatch(setEligibleGroups(eligibleGroups));
     dispatch(setCurrentGroups(currentGroups));
     dispatch(setUserScore(__DEV__ ? 100 : score));

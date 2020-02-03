@@ -10,7 +10,6 @@ import { parseQrData } from './actions/parseQrData';
 import { fetchData } from './actions/fetchData';
 import emitter from '../../emitter';
 import { removeConnectQrData } from '../../actions';
-import { setUpWs } from './actions/websocket';
 
 /**
  * Returns whether the string is a valid QR identifier
@@ -45,22 +44,35 @@ export class ScanCodeScreen extends React.Component<Props, State> {
 
   connectionExpired: TimeoutID;
 
-  socket: { close: () => null };
-
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(removeConnectQrData());
     emitter.on('connectDataReady', this.navigateToPreview);
     emitter.on('connectFailure', this.handleDownloadFailure);
-    emitter.on('profileNotReady', this.subscribeToProfileUpload);
+    emitter.on('recievedProfileData', this.unsubscribeToProfileUpload);
   }
 
   componentWillUnmount() {
+    const { dispatch } = this.props;
+    this.unsubscribeToProfileUpload();
     emitter.off('connectDataReady', this.navigateToPreview);
     emitter.off('connectFailure', this.handleDownloadFailure);
-    emitter.off('profileNotReady', this.subscribeToProfileUpload);
-    clearTimeout(this.connectionExpired);
+    emitter.off('recievedProfileData', this.unsubscribeToProfileUpload);
+    dispatch(removeConnectQrData());
   }
+
+  subscribeToProfileUpload = () => {
+    const { dispatch } = this.props;
+    this.connectionExpired = setTimeout(this.showProfileError, 90000);
+    this.fetchProfileData = setInterval(() => {
+      dispatch(fetchData());
+    }, 1000);
+  };
+
+  unsubscribeToProfileUpload = () => {
+    clearTimeout(this.connectionExpired);
+    clearInterval(this.fetchProfileData);
+  };
 
   handleDownloadFailure = () => {
     this.setState((prev) => ({
@@ -83,16 +95,10 @@ export class ScanCodeScreen extends React.Component<Props, State> {
     } else if (validQrString(data)) {
       dispatch(parseQrData(data));
       // If the following `fetchdata()` fails, a "connectFailure" will be emitted,
-      // triggering a single retry through a websocket notification.
-      dispatch(fetchData());
+      this.subscribeToProfileUpload();
       this.setState({ scanned: true });
       if (this.textInput) this.textInput.blur();
     }
-  };
-
-  subscribeToProfileUpload = () => {
-    this.socket = this.props.dispatch(setUpWs());
-    this.connectionExpired = setTimeout(this.showProfileError, 90000);
   };
 
   navigateToPreview = () => {

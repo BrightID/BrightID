@@ -9,6 +9,7 @@ export const fetchData = (alertErrors = true) => (
   getState: () => {},
 ) => {
   let { ipAddress, channel } = getState().connectQrData;
+  if (!channel) return;
 
   console.log(`fetching data for channel ${channel}`);
 
@@ -31,9 +32,8 @@ export const fetchData = (alertErrors = true) => (
     .then((data) => {
       if (data && data.data) {
         response.profileData = data.data;
+        emitter.emit('recievedProfileData');
         dispatch(decryptData(data.data));
-      } else {
-        emitter.emit('profileNotReady');
       }
     })
     .catch((err) => {
