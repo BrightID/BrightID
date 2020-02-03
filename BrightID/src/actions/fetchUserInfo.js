@@ -7,7 +7,7 @@ import {
   setGroupsCount,
   setUserScore,
   setVerifications,
-  updateConnectionScores,
+  updateConnections,
 } from './index';
 
 // TODO update connections here
@@ -25,7 +25,7 @@ const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
     dispatch(setUserScore(__DEV__ ? 100 : score));
     dispatch(setGroupsCount(currentGroups.length));
     dispatch(setVerifications(verifications));
-    dispatch(updateConnectionScores(connections));
+    dispatch(updateConnections(connections));
   } catch (err) {
     err instanceof Error ? console.warn(err.message) : console.log(err);
   }

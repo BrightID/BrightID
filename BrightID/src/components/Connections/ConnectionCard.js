@@ -70,6 +70,30 @@ class ConnectionCard extends React.PureComponent<Props> {
     }
   };
 
+  setStatus = () => {
+    const { score, status } = this.props;
+    if (status == 'initiated') {
+      return (
+        <View style={styles.scoreContainer}>
+          <Text style={styles.waitingMessage}>Waiting</Text>
+        </View>
+      );
+    } else if (status == 'deleted') {
+      return (
+        <View style={styles.scoreContainer}>
+          <Text style={styles.deletedMessage}>Deleted</Text>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.scoreContainer}>
+          <Text style={styles.scoreLeft}>Score:</Text>
+          <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>
+        </View>
+      );
+    }
+  };
+
   render() {
     const { photo, name, connectionDate, score, style } = this.props;
 
@@ -83,10 +107,7 @@ class ConnectionCard extends React.PureComponent<Props> {
         />
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
-          <View style={styles.scoreContainer}>
-            <Text style={styles.scoreLeft}>Score:</Text>
-            <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>
-          </View>
+          <this.setStatus />
           <Text style={styles.connectedText}>
             Connected {moment(parseInt(connectionDate, 10)).fromNow()}
           </Text>
@@ -160,6 +181,16 @@ const styles = StyleSheet.create({
   },
   moreIcon: {
     marginRight: 16,
+  },
+  waitingMessage: {
+    fontFamily: 'ApexNew-Medium',
+    fontSize: 16,
+    color: '#e39f2f'
+  },
+  deletedMessage: {
+    fontFamily: 'ApexNew-Medium',
+    fontSize: 16,
+    color: '#FF0800',
   },
 });
 

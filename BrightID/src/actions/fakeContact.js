@@ -41,6 +41,7 @@ export const addConnection = (navigation: navigation) => async (
     name,
     score,
     photo: 'https://loremflickr.com/180/180/all',
+    status: 'initiated',
   };
 
   RNFetchBlob.fetch('GET', 'https://loremflickr.com/180/180/all', {})
