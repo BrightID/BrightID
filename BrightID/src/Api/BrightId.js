@@ -238,7 +238,7 @@ class BrightId {
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
     const res = await this.api.get(
-      `/users/${id}`,
+      `/me/${id}`,
       {},
       {
         headers: {
@@ -247,6 +247,12 @@ class BrightId {
         },
       },
     );
+    BrightId.throwOnError(res);
+    return res.data.data;
+  }
+
+  async getConectionInfo(id: string) {
+    const res = await this.api.get(`/users/${id}`);
     BrightId.throwOnError(res);
     return res.data.data;
   }
