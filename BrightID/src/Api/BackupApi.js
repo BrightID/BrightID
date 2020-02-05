@@ -36,7 +36,7 @@ class BackupApi {
 
   async getRecovery(key1: string, key2: string) {
     let requestParams = { key1, key2 };
-    console.log('get', requestParams);
+    console.log('getRecovery', requestParams);
     const res = await this.recoveryApi.get(
       `/backups/${b64ToUrlSafeB64(key1)}/${b64ToUrlSafeB64(key2)}`,
     );
@@ -46,14 +46,13 @@ class BackupApi {
   }
 
   async putRecovery(key1: string, key2: string, data: string) {
-    console.log('put', { key1, key2, data });
+    console.log('putRecovery', { key1, key2 });
     const res = await this.recoveryApi.put(
       `/backups/${b64ToUrlSafeB64(key1)}/${b64ToUrlSafeB64(key2)}`,
       {
         data,
       },
     );
-    console.log('put', res);
     BackupApi.throwOnError(res);
   }
 
@@ -64,7 +63,7 @@ class BackupApi {
         `/profile/download/${b64ToUrlSafeB64(publicKey)}`,
       );
       BackupApi.throwOnError(res);
-      console.log('getSig', res);
+      console.log('getSig');
       return res.data.data;
     } catch (err) {
       console.warn(err);
@@ -78,8 +77,7 @@ class BackupApi {
         uuid: b64ToUrlSafeB64(signingKey),
       });
       BackupApi.throwOnError(res);
-      console.log('setSigData', data);
-      console.log('setSig', res);
+      console.log('setSig');
     } catch (err) {
       console.warn(err);
     }

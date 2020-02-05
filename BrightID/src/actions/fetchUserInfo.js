@@ -12,6 +12,8 @@ import {
 
 // TODO update connections here
 const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
+  const { id } = getState();
+  if (!id) return;
   try {
     const {
       eligibleGroups,

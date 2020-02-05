@@ -20,8 +20,8 @@ import {
 import {
   uInt8ArrayToB64,
   b64ToUint8Array,
-  b64ToUrlSafeB64,
   strToUint8Array,
+  safeHash,
 } from '../../../utils/encoding';
 
 export const setTrustedConnections = async () => {
@@ -31,12 +31,9 @@ export const setTrustedConnections = async () => {
 };
 
 const hashId = (id: string, password: string) => {
-  const hash = CryptoJS.AES.encrypt(id, password).toString();
-  console.log('hash', hash);
-  const safeHash = b64ToUrlSafeB64(hash);
-  console.log('safehash', safeHash);
-  store.dispatch(setHashedId(safeHash));
-  return safeHash;
+  const hash = safeHash(id);
+  store.dispatch(setHashedId(hash));
+  return hash;
 };
 
 export const encryptAndBackup = async (key: string, data: string) => {
@@ -78,14 +75,7 @@ const backupPhotos = async () => {
 
 export const backupUser = async () => {
   try {
-    const {
-      score,
-      name,
-      photo,
-      id,
-      connections,
-      trustedConnections,
-    } = store.getState();
+    const { score, name, photo, id, connections } = store.getState();
     const userData = {
       id,
       name,
@@ -95,7 +85,6 @@ export const backupUser = async () => {
     const dataStr = JSON.stringify({
       userData,
       connections,
-      trustedConnections,
     });
     await encryptAndBackup('data', dataStr);
   } catch (err) {

@@ -3,6 +3,7 @@
 import B64 from 'base64-js';
 import { Buffer } from 'buffer';
 import CryptoJS from 'crypto-js';
+import { compose } from 'ramda';
 
 export function uInt8ArrayToB64(array: Uint8Array) {
   const b = Buffer.from(array);
@@ -42,8 +43,10 @@ export function b64ToUrlSafeB64(s: string) {
   return s.replace(/[/+=]/g, (c) => alts[c]);
 }
 
-export function hash(data: string) {
+export const hash = (data: string) => {
   const h = CryptoJS.SHA256(data);
   const b = h.toString(CryptoJS.enc.Base64);
   return b64ToUrlSafeB64(b);
-}
+};
+
+export const safeHash = compose(b64ToUrlSafeB64, hash);
