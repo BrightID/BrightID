@@ -31,7 +31,7 @@ export const setTrustedConnections = async () => {
 };
 
 const hashId = (id: string, password: string) => {
-  const hash = safeHash(id);
+  const hash = safeHash(id + password);
   store.dispatch(setHashedId(hash));
   return hash;
 };
@@ -248,6 +248,7 @@ export const restoreUserData = async (pass: string) => {
 
 export const recoverData = async (pass: string) => {
   // fetch user data / save photo
+  // throws if data is bad
   const { userData, connections } = await restoreUserData(pass);
 
   // set new signing key on the backend
