@@ -15,9 +15,13 @@ export const sortByNameAscending = () => (
   getState: getState,
 ) => {
   const { connections } = getState();
-  let list = connections.slice();
+  let list = connections.filter((c) => c.status !== 'deleted');
   list.sort((a, b) => b.name.localeCompare(a.name));
-  dispatch(setConnections(list));
+  dispatch(
+    setConnections(
+      list.concat(connections.filter((c) => c.status === 'deleted')),
+    ),
+  );
   dispatch(setConnectionsSort(types.byNameAscending));
 };
 
@@ -26,9 +30,13 @@ export const sortByNameDescending = () => (
   getState: getState,
 ) => {
   const { connections } = getState();
-  let list = connections.slice();
+  let list = connections.filter((c) => c.status !== 'deleted');
   list.sort((a, b) => a.name.localeCompare(b.name));
-  dispatch(setConnections(list));
+  dispatch(
+    setConnections(
+      list.concat(connections.filter((c) => c.status === 'deleted')),
+    ),
+  );
   dispatch(setConnectionsSort(types.byNameDescending));
 };
 
@@ -37,9 +45,13 @@ export const sortByScoreAscending = () => (
   getState: getState,
 ) => {
   const { connections } = getState();
-  let list = connections.slice();
+  let list = connections.filter((c) => c.status !== 'deleted');
   list.sort((a, b) => a.score - b.score);
-  dispatch(setConnections(list));
+  dispatch(
+    setConnections(
+      list.concat(connections.filter((c) => c.status === 'deleted')),
+    ),
+  );
   dispatch(setConnectionsSort(types.byScoreAscending));
 };
 
@@ -48,9 +60,13 @@ export const sortByScoreDescending = () => (
   getState: getState,
 ) => {
   const { connections } = getState();
-  let list = connections.slice();
+  let list = connections.filter((c) => c.status !== 'deleted');
   list.sort((a, b) => b.score - a.score);
-  dispatch(setConnections(list));
+  dispatch(
+    setConnections(
+      list.concat(connections.filter((c) => c.status === 'deleted')),
+    ),
+  );
   dispatch(setConnectionsSort(types.byScoreDescending));
 };
 
@@ -59,9 +75,13 @@ export const sortByDateAddedAscending = () => (
   getState: getState,
 ) => {
   const { connections } = getState();
-  let list = connections.slice();
+  let list = connections.filter((c) => c.status !== 'deleted');
   list.sort((a, b) => a.connectionDate - b.connectionDate);
-  dispatch(setConnections(list));
+  dispatch(
+    setConnections(
+      list.concat(connections.filter((c) => c.status === 'deleted')),
+    ),
+  );
   dispatch(setConnectionsSort(types.byDateAddedAscending));
 };
 
@@ -70,9 +90,13 @@ export const sortByDateAddedDescending = () => (
   getState: getState,
 ) => {
   const { connections } = getState();
-  let list = connections.slice();
+  let list = connections.filter((c) => c.status !== 'deleted');
   list.sort((a, b) => b.connectionDate - a.connectionDate);
-  dispatch(setConnections(list));
+  dispatch(
+    setConnections(
+      list.concat(connections.filter((c) => c.status === 'deleted')),
+    ),
+  );
   dispatch(setConnectionsSort(types.byDateAddedDescending));
 };
 

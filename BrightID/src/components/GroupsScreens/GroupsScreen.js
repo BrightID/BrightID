@@ -68,16 +68,18 @@ export class GroupsScreen extends React.Component<Props, State> {
                 <Text style={styles.eligibleGroupTitle}>ELIGIBLE</Text>
                 {this.getTwoEligibleGroups()}
                 <View style={styles.eligibleBottomBorder} />
-                <TouchableOpacity
-                  style={styles.seeAllButton}
-                  onPress={() => {
-                    navigation.navigate('EligibleGroups');
-                  }}
-                >
-                  <Text style={styles.seeAllText}>
-                    See all {this.props.eligibleGroups.length}
-                  </Text>
-                </TouchableOpacity>
+                {eligibleGroups.length > 2 && (
+                  <TouchableOpacity
+                    style={styles.seeAllButton}
+                    onPress={() => {
+                      navigation.navigate('EligibleGroups');
+                    }}
+                  >
+                    <Text style={styles.seeAllText}>
+                      See all {this.props.eligibleGroups.length}
+                    </Text>
+                  </TouchableOpacity>
+                )}
               </View>
             )}
             {!!currentGroups.length && !eligibleGroups.length && (
@@ -215,7 +217,7 @@ const styles = StyleSheet.create({
   currentGroupRow: {
     width: '100%',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'stretch',
     justifyContent: 'space-evenly',
   },
   addGroupButtonContainer: {

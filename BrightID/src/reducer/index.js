@@ -8,6 +8,11 @@ import {
   mergeRight,
   propEq,
   differenceWith,
+  intersection,
+  groupWith,
+  eqProps,
+  maxBy,
+  reduce,
 } from 'ramda';
 import {
   USER_SCORE,
@@ -28,14 +33,13 @@ import {
   SET_USER_PHOTO,
   SET_CONNECT_QR_DATA,
   REMOVE_CONNECT_QR_DATA,
-  REMOVE_CONNECTION,
+  DELETE_CONNECTION,
   SET_CONNECT_USER_DATA,
   REMOVE_CONNECT_USER_DATA,
   SET_VERIFICATIONS,
   ADD_APP,
   REMOVE_APP,
   SET_APPS,
-  UPDATE_CONNECTION,
   ADD_CONNECTION,
   SET_NOTIFICATIONS,
   ADD_TRUSTED_CONNECTION,
@@ -167,15 +171,15 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case SET_ELIGIBLE_GROUPS: {
-      const byId = (x, y) => x.id === y.id;
-      const diffById = differenceWith(byId);
-      const diffByIdTwice = compose(diffById, diffById(state.eligibleGroups));
-      const localGroups = diffByIdTwice(action.eligibleGroups)(
-        state.currentGroups,
-      );
+      const duplicates = action.eligibleGroups.concat(state.eligibleGroups);
+      const duplicatesById = groupWith(eqProps('id'), duplicates);
+      const byKnownMembers = (acc, val) =>
+        acc.knownMembers.length > val.knownMembers.length ? acc : val;
+      const mostKnownMembers = (list) =>
+        list.reduce(byKnownMembers, { knownMembers: [] });
       return {
         ...state,
-        eligibleGroups: localGroups.concat(action.eligibleGroups),
+        eligibleGroups: duplicatesById.map(mostKnownMembers),
       };
     }
     case DELETE_ELIGIBLE_GROUP: {
@@ -187,9 +191,12 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case SET_CURRENT_GROUPS: {
+      const byId = (x, y) => x.id === y.id;
+      const diffById = differenceWith(byId);
       return {
         ...state,
         currentGroups: action.currentGroups,
+        eligibleGroups: diffById(state.eligibleGroups)(action.currentGroups),
       };
     }
     case JOIN_GROUP: {
@@ -230,28 +237,16 @@ export const reducer = (state: State = initialState, action: action) => {
         connections: action.connections.slice(0),
       };
     }
-    case UPDATE_CONNECTION: {
-      return {
-        ...state,
-        connections: [
-          ...state.connections.slice(0, action.index),
-          action.connection,
-          ...state.connections.slice(action.index + 1),
-        ],
-      };
-    }
     case UPDATE_CONNECTIONS: {
       return {
         ...state,
         connections: state.connections.map<connection>((conn: connection) => {
           const updatedConn = find(propEq('id', conn.id))(action.connections);
           if (!updatedConn) {
-            if (conn.status == 'verified') {
-              conn.status = 'deleted';
-            }
+            if (conn.status === 'verified') conn.status = 'deleted';
             return conn;
           } else {
-            conn.status = 'verified';
+            if (conn.status !== 'deleted') conn.status = 'verified';
             return mergeRight(conn, updatedConn);
           }
         }),
@@ -269,19 +264,15 @@ export const reducer = (state: State = initialState, action: action) => {
         connectionsSort: action.connectionsSort,
       };
     }
-    case REMOVE_CONNECTION: {
-      let index = state.connections.findIndex(
-        (val: connection) => val.publicKey === action.publicKey,
-      );
+    case DELETE_CONNECTION: {
       return {
         ...state,
-        connections:
-          index !== -1
-            ? [
-                ...state.connections.slice(0, index),
-                ...state.connections.slice(index + 1),
-              ]
-            : state.connections,
+        connections: state.connections.map<connection>((conn: connection) => {
+          if (conn.id === action.id) {
+            conn.status = 'deleted';
+          }
+          return conn;
+        }),
       };
     }
     case SET_USER_DATA: {
