@@ -58,7 +58,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
         createdAt,
         currentGroups,
         connections = [],
-      } = await api.getConectionInfo(this.props.connectUserData.id);
+      } = await api.getUserInfo(this.props.connectUserData.id);
       const mutualConnections = connections.filter( function( el ) {
         return myConnections.some(x => x.id == el.id)
       });

@@ -231,27 +231,6 @@ class BrightId {
   }
 
   async getUserInfo() {
-    let { id, secretKey } = store.getState();
-    let timestamp = Date.now();
-    let message = `Get User${id}${timestamp}`;
-    let sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
-    const res = await this.api.get(
-      `/me/${id}`,
-      {},
-      {
-        headers: {
-          'x-brightid-signature': sig,
-          'x-brightid-timestamp': timestamp,
-        },
-      },
-    );
-    BrightId.throwOnError(res);
-    return res.data.data;
-  }
-
-  async getConectionInfo(id: string) {
     const res = await this.api.get(`/users/${id}`);
     BrightId.throwOnError(res);
     return res.data.data;
