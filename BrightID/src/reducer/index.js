@@ -28,14 +28,13 @@ import {
   SET_USER_PHOTO,
   SET_CONNECT_QR_DATA,
   REMOVE_CONNECT_QR_DATA,
-  REMOVE_CONNECTION,
+  DELETE_CONNECTION,
   SET_CONNECT_USER_DATA,
   REMOVE_CONNECT_USER_DATA,
   SET_VERIFICATIONS,
   ADD_APP,
   REMOVE_APP,
   SET_APPS,
-  UPDATE_CONNECTION,
   ADD_CONNECTION,
   SET_NOTIFICATIONS,
   ADD_TRUSTED_CONNECTION,
@@ -230,28 +229,16 @@ export const reducer = (state: State = initialState, action: action) => {
         connections: action.connections.slice(0),
       };
     }
-    case UPDATE_CONNECTION: {
-      return {
-        ...state,
-        connections: [
-          ...state.connections.slice(0, action.index),
-          action.connection,
-          ...state.connections.slice(action.index + 1),
-        ],
-      };
-    }
     case UPDATE_CONNECTIONS: {
       return {
         ...state,
         connections: state.connections.map<connection>((conn: connection) => {
           const updatedConn = find(propEq('id', conn.id))(action.connections);
           if (!updatedConn) {
-            if (conn.status == 'verified') {
-              conn.status = 'deleted';
-            }
+            if (conn.status === 'verified') conn.status = 'deleted';
             return conn;
           } else {
-            conn.status = 'verified';
+            if (conn.status !== 'deleted') conn.status = 'verified';
             return mergeRight(conn, updatedConn);
           }
         }),
@@ -269,19 +256,15 @@ export const reducer = (state: State = initialState, action: action) => {
         connectionsSort: action.connectionsSort,
       };
     }
-    case REMOVE_CONNECTION: {
-      let index = state.connections.findIndex(
-        (val: connection) => val.publicKey === action.publicKey,
-      );
+    case DELETE_CONNECTION: {
       return {
         ...state,
-        connections:
-          index !== -1
-            ? [
-                ...state.connections.slice(0, index),
-                ...state.connections.slice(index + 1),
-              ]
-            : state.connections,
+        connections: state.connections.map<connection>((conn: connection) => {
+          if (conn.id === action.id) {
+            conn.status = 'deleted';
+          }
+          return conn;
+        }),
       };
     }
     case SET_USER_DATA: {

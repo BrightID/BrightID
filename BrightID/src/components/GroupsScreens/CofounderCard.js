@@ -1,20 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import emitter from '../../emitter';
-import { fakeJoinGroups } from '../../actions/fakeGroup';
 
 /**
  * Connection Card in the Connections Screen
@@ -27,39 +18,7 @@ import { fakeJoinGroups } from '../../actions/fakeGroup';
  */
 
 class CofounderCard extends React.PureComponent<Props> {
-  handleUserOptions = () => {
-    const { name, id, secretKey, dispatch } = this.props;
-    console.log(secretKey);
-    const buttons = [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {
-        text: 'OK',
-        onPress: () => {
-          emitter.emit('removeConnection', id);
-        },
-      },
-    ];
-
-    if (__DEV__) {
-      buttons.push({
-        text: 'Join All Groups',
-        onPress: () => {
-          dispatch(fakeJoinGroups({ id, secretKey }));
-        },
-      });
-    }
-
-    Alert.alert(
-      `Delete Connection`,
-      `Are you sure you want to remove ${name} from your list of connections?`,
-      buttons,
-      { cancelable: true },
-    );
-  };
+  handleUserOptions = () => {};
 
   scoreColor = () => {
     const { score } = this.props;
@@ -77,9 +36,7 @@ class CofounderCard extends React.PureComponent<Props> {
       <View style={{ ...styles.container, ...style }}>
         <Image
           source={{
-            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
-              photo.filename
-            }`,
+            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo.filename}`,
           }}
           style={styles.photo}
         />

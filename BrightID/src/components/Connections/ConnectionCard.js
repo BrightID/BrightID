@@ -13,8 +13,9 @@ import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import emitter from '../../emitter';
 import { fakeJoinGroups } from '../../actions/fakeGroup';
+import api from '../../Api/BrightId';
+import { deleteConnection } from '../../actions';
 
 /**
  * Connection Card in the Connections Screen
@@ -27,6 +28,17 @@ import { fakeJoinGroups } from '../../actions/fakeGroup';
  */
 
 class ConnectionCard extends React.PureComponent<Props> {
+  deleteConnection = async () => {
+    try {
+      const { dispatch, id } = this.props;
+      await api.deleteConnection(id);
+      // remove connection from redux
+      dispatch(deleteConnection(id));
+    } catch (err) {
+      Alert.alert("Couldn't remove connection", err.message);
+    }
+  };
+
   handleUserOptions = () => {
     const { name, id, dispatch } = this.props;
     const buttons = [
@@ -37,9 +49,7 @@ class ConnectionCard extends React.PureComponent<Props> {
       },
       {
         text: 'OK',
-        onPress: () => {
-          emitter.emit('removeConnection', id);
-        },
+        onPress: this.deleteConnection,
       },
     ];
 
@@ -72,13 +82,13 @@ class ConnectionCard extends React.PureComponent<Props> {
 
   setStatus = () => {
     const { score, status } = this.props;
-    if (status == 'initiated') {
+    if (status === 'initiated') {
       return (
         <View style={styles.scoreContainer}>
           <Text style={styles.waitingMessage}>Waiting</Text>
         </View>
       );
-    } else if (status == 'deleted') {
+    } else if (status === 'deleted') {
       return (
         <View style={styles.scoreContainer}>
           <Text style={styles.deletedMessage}>Deleted</Text>
@@ -95,7 +105,7 @@ class ConnectionCard extends React.PureComponent<Props> {
   };
 
   render() {
-    const { photo, name, connectionDate, score, style } = this.props;
+    const { photo, name, connectionDate, style } = this.props;
 
     return (
       <View style={{ ...styles.container, ...style }}>
@@ -185,7 +195,7 @@ const styles = StyleSheet.create({
   waitingMessage: {
     fontFamily: 'ApexNew-Medium',
     fontSize: 16,
-    color: '#e39f2f'
+    color: '#e39f2f',
   },
   deletedMessage: {
     fontFamily: 'ApexNew-Medium',
