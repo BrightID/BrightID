@@ -8,6 +8,11 @@ import {
   mergeRight,
   propEq,
   differenceWith,
+  intersection,
+  groupWith,
+  eqProps,
+  maxBy,
+  reduce,
 } from 'ramda';
 import {
   USER_SCORE,
@@ -166,15 +171,15 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case SET_ELIGIBLE_GROUPS: {
-      const byId = (x, y) => x.id === y.id;
-      const diffById = differenceWith(byId);
-      const diffByIdTwice = compose(diffById, diffById(state.eligibleGroups));
-      const localGroups = diffByIdTwice(action.eligibleGroups)(
-        state.currentGroups,
-      );
+      const duplicates = action.eligibleGroups.concat(state.eligibleGroups);
+      const duplicatesById = groupWith(eqProps('id'), duplicates);
+      const byKnownMembers = (acc, val) =>
+        acc.knownMembers.length > val.knownMembers.length ? acc : val;
+      const mostKnownMembers = (list) =>
+        list.reduce(byKnownMembers, { knownMembers: [] });
       return {
         ...state,
-        eligibleGroups: localGroups.concat(action.eligibleGroups),
+        eligibleGroups: duplicatesById.map(mostKnownMembers),
       };
     }
     case DELETE_ELIGIBLE_GROUP: {
@@ -186,9 +191,12 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case SET_CURRENT_GROUPS: {
+      const byId = (x, y) => x.id === y.id;
+      const diffById = differenceWith(byId);
       return {
         ...state,
         currentGroups: action.currentGroups,
+        eligibleGroups: diffById(state.eligibleGroups)(action.currentGroups),
       };
     }
     case JOIN_GROUP: {

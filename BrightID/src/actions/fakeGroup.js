@@ -5,6 +5,7 @@ import api from '../Api/BrightId';
 import {
   strToUint8Array,
   uInt8ArrayToB64,
+  hash,
   objToUint8,
 } from '../utils/encoding';
 
@@ -18,20 +19,20 @@ export const fakeJoinGroup = ({
   secretKey: {},
 }) => {
   let timestamp = Date.now();
-  let message = id + group + timestamp;
   let sk = objToUint8(secretKey);
-
+  let message = `Add Membership${id}${group}${timestamp}`;
   let sig = uInt8ArrayToB64(nacl.sign.detached(strToUint8Array(message), sk));
 
-  let requestParams = {
+  const op = {
+    _key: hash(message),
+    name: 'Add Membership',
     id,
     group,
     sig,
     timestamp,
   };
-  console.log('====================', requestParams);
   return api.api
-    .put(`/membership`, requestParams)
+    .put(`/operations/${op._key}`, op)
     .then((response) => ({
       success: response.status === 204,
       ok: response.ok,

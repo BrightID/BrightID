@@ -167,7 +167,7 @@ export class CurrentGroupView extends Component<Props, State> {
   };
 
   renderOptions = (hideModal) => (
-    <Fragment>
+    <>
       <View style={[styles.triangle, this.props.style]} />
       <View style={styles.optionsBox}>
         <TouchableOpacity onPress={hideModal}>
@@ -177,7 +177,7 @@ export class CurrentGroupView extends Component<Props, State> {
           <Text style={styles.leaveGroupText}>Leave Group</Text>
         </TouchableOpacity>
       </View>
-    </Fragment>
+    </>
   );
 
   render() {
