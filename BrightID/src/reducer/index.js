@@ -258,9 +258,23 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case ADD_CONNECTION: {
+      const index = state.connections.findIndex(
+        (conn: connection) => conn.id === action.connection.id,
+      );
+      console.warn('index', index);
       return {
         ...state,
-        connections: [...state.connections.slice(0), action.connection],
+        connections:
+          index !== -1
+            ? [
+                ...state.connections.slice(0, index),
+                ...state.connections.slice(index + 1),
+                action.connection,
+              ]
+            : [
+                ...state.connections,
+                action.connection,
+              ]
       };
     }
     case CONNECTIONS_SORT: {
