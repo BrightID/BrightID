@@ -230,7 +230,7 @@ class BrightId {
     return res.data.data;
   }
 
-  async getUserInfo() {
+  async getUserInfo(id: string) {
     const res = await this.api.get(`/users/${id}`);
     BrightId.throwOnError(res);
     return res.data.data;
