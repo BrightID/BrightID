@@ -6,9 +6,9 @@ import { strToUint8Array, uInt8ArrayToB64 } from '../utils/encoding';
 import store from '../store';
 
 let seedUrl = 'http://node.brightid.org';
-if (__DEV__) {
-  seedUrl = 'http://test.brightid.org';
-}
+// if (__DEV__) {
+//   seedUrl = 'http://test.brightid.org';
+// }
 
 class BrightId {
   api: ApiSauceInstance;
@@ -77,7 +77,11 @@ class BrightId {
       sig1,
       timestamp,
     };
-    const res = await this.api.delete(`/connections`, {}, { data: requestParams });
+    const res = await this.api.delete(
+      `/connections`,
+      {},
+      { data: requestParams },
+    );
     BrightId.throwOnError(res);
   }
 
@@ -120,7 +124,11 @@ class BrightId {
       sig,
       timestamp,
     };
-    const res = await this.api.delete(`/membership`, {}, { data: requestParams });
+    const res = await this.api.delete(
+      `/membership`,
+      {},
+      { data: requestParams },
+    );
     BrightId.throwOnError(res);
   }
 
@@ -137,7 +145,11 @@ class BrightId {
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    const res = await this.api.post(`/fetchUserInfo`, { publicKey, sig, timestamp });
+    const res = await this.api.post(`/fetchUserInfo`, {
+      publicKey,
+      sig,
+      timestamp,
+    });
     BrightId.throwOnError(res);
     return res.data.data;
   }
@@ -161,7 +173,13 @@ class BrightId {
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    const res = await this.api.post('/fetchVerification', { publicKey, context, id, sig, timestamp });
+    const res = await this.api.post('/fetchVerification', {
+      publicKey,
+      context,
+      id,
+      sig,
+      timestamp,
+    });
     BrightId.throwOnError(res);
     return res.data.data;
   }
