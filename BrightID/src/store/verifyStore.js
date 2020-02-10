@@ -9,4 +9,6 @@ export const verifyStore = (data: State) =>
   Array.isArray(data.currentGroups) &&
   Array.isArray(data.connections) &&
   Array.isArray(data.verifications) &&
-  Array.isArray(data.apps);
+  Array.isArray(data.apps) &&
+  typeof data.id === 'string' &&
+  data.secretKey instanceof Uint8Array;

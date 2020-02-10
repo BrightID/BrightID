@@ -1,18 +1,13 @@
 // @flow
 
-import { Alert } from 'react-native';
 import {
-  compose,
   dissoc,
   find,
   mergeRight,
   propEq,
   differenceWith,
-  intersection,
   groupWith,
   eqProps,
-  maxBy,
-  reduce,
 } from 'ramda';
 import {
   USER_SCORE,
@@ -55,7 +50,6 @@ import {
   RESET_STORE,
   UPDATE_CONNECTIONS,
 } from '../actions';
-import { verifyStore } from './verifyStoreV1';
 
 /**
  * INITIAL STATE
@@ -121,12 +115,7 @@ export const initialState: State = {
 export const reducer = (state: State = initialState, action: action) => {
   switch (action.type) {
     case HYDRATE_STATE: {
-      if (verifyStore(action.state)) {
-        return action.state;
-      } else {
-        Alert.alert('Redux Store was not verified...');
-        return state;
-      }
+      return action.state;
     }
     case USER_SCORE: {
       return {
