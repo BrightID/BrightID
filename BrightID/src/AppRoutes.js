@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { createAppContainer } from 'react-navigation';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
-import { createStackNavigator } from 'react-navigation-stack';
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+} from 'react-navigation-stack';
 import LinearGradient from 'react-native-linear-gradient';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Home from './components/HomeScreen';
 import ConnectionsScreen from './components/Connections/ConnectionsScreen';
 import SortingConnectionsScreen from './components/Connections/SortingConnectionsScreen';
@@ -54,6 +56,8 @@ const defaultNavigationOptions = ({ navigation }) => ({
   headerTintColor: '#fff',
   headerTitleStyle,
   headerBackground,
+  headerTitleAlign: 'center',
+  cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 });
 
 const AppStack = createStackNavigator(
