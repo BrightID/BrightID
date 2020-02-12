@@ -154,7 +154,6 @@ export const upgradeIds = () => {
   const nextConn = connections.map((conn) => {
     if (conn.publicKey) {
       conn.id = conn.publicKey;
-      delete conn.publicKey;
     }
     return conn;
   });
