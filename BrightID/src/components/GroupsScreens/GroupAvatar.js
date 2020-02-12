@@ -13,6 +13,7 @@ import { groupCirclePhotos } from '../../utils/groups';
  */
 
 class GroupAvatar extends React.Component<Props> {
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     avatars: [],
   };

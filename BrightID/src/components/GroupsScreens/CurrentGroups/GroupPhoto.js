@@ -4,11 +4,11 @@ import * as React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import RNFS from 'react-native-fs';
-import { groupCirclePhotos } from '../../utils/groups';
+import { groupCirclePhotos } from '../../../utils/groups';
 
 class GroupPhoto extends React.Component {
-
   photoStyle(photo) {
+    // eslint-disable-next-line react/prop-types
     const { radius = 20 } = this.props;
     const style = { ...styles.photo };
     if (photo.faded) {
@@ -23,6 +23,7 @@ class GroupPhoto extends React.Component {
   }
 
   render() {
+    // eslint-disable-next-line react/prop-types
     const circlePhotos = groupCirclePhotos(this.props.group);
 
     return (
@@ -31,9 +32,7 @@ class GroupPhoto extends React.Component {
           {circlePhotos[0] && (
             <Image
               source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
-                  circlePhotos[0].photo.filename
-                  }`,
+                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${circlePhotos[0].photo.filename}`,
               }}
               style={this.photoStyle(circlePhotos[0])}
             />
@@ -43,9 +42,7 @@ class GroupPhoto extends React.Component {
           {circlePhotos[1] && (
             <Image
               source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
-                  circlePhotos[1].photo.filename
-                  }`,
+                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${circlePhotos[1].photo.filename}`,
               }}
               style={this.photoStyle(circlePhotos[1])}
             />
@@ -53,9 +50,7 @@ class GroupPhoto extends React.Component {
           {circlePhotos[2] && (
             <Image
               source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${
-                  circlePhotos[2].photo.filename
-                  }`,
+                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${circlePhotos[2].photo.filename}`,
               }}
               style={this.photoStyle(circlePhotos[2])}
             />

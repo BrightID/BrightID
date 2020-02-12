@@ -6,8 +6,8 @@ import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import GroupPhoto from './GroupPhoto';
-import { deleteNewGroup, join } from './actions';
-import { getGroupName } from '../../utils/groups';
+import { deleteNewGroup, join } from '../actions';
+import { getGroupName } from '../../../utils/groups';
 
 /**
  * Connection Card in the Connections Screen

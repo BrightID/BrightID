@@ -43,6 +43,7 @@ export class HomeScreen extends React.Component<Props, State> {
     ),
   });
 
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     initialPhoto: {
       uri: '',
@@ -68,7 +69,7 @@ export class HomeScreen extends React.Component<Props, State> {
   };
 
   onCapture = async (uri: string) => {
-    const { id, photo } = this.props;
+    const { id } = this.props;
     const filename = await saveImage({ imageName: id, base64Image: uri });
     setPhoto({ filename });
     this.setState({

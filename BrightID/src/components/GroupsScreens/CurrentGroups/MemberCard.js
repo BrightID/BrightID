@@ -2,12 +2,10 @@
 
 import * as React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { connect } from 'react-redux';
 import RNFS from 'react-native-fs';
+import { connect } from 'react-redux';
 import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import { toggleNewGroupCoFounder } from './actions';
 
 /**
  * Connection Card in the Connections Screen
@@ -19,13 +17,7 @@ import { toggleNewGroupCoFounder } from './actions';
  * @prop photo
  */
 
-class NewGroupCard extends React.PureComponent<Props> {
-  handleGroupSelect = () => {
-    console.log('pressed');
-    let { toggleCoFounder, id } = this.props;
-    toggleCoFounder(id);
-  };
-
+class MemberCard extends React.PureComponent<Props> {
   scoreColor = () => {
     const { score } = this.props;
     if (score >= 85) {
@@ -33,32 +25,6 @@ class NewGroupCard extends React.PureComponent<Props> {
     } else {
       return { color: '#e39f2f' };
     }
-  };
-
-  renderActionButton = () => {
-    const { groups, selected } = this.props;
-    if (groups) {
-      return (
-        <TouchableOpacity
-          style={styles.moreIcon}
-          onPress={this.handleGroupSelect}
-        >
-          <AntDesign
-            size={30.4}
-            name={selected ? 'checkcircle' : 'checkcircleo'}
-            color="#000"
-          />
-        </TouchableOpacity>
-      );
-    }
-    return (
-      <TouchableOpacity
-        style={styles.moreIcon}
-        onPress={this.handleUserOptions}
-      >
-        <Ionicon size={48} name="ios-more" color="#ccc" />
-      </TouchableOpacity>
-    );
   };
 
   render() {
@@ -82,7 +48,12 @@ class NewGroupCard extends React.PureComponent<Props> {
             Connected {moment(parseInt(connectionDate, 10)).fromNow()}
           </Text>
         </View>
-        {this.renderActionButton()}
+        <TouchableOpacity
+          style={styles.moreIcon}
+          //          onPress={this.flagMember}
+        >
+          <Ionicon size={48} name="ios-more" color="#ccc" />
+        </TouchableOpacity>
       </View>
     );
   }
@@ -149,6 +120,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null, (dispatch) => ({
-  toggleCoFounder: (id) => dispatch(toggleNewGroupCoFounder(id)),
-}))(NewGroupCard);
+export default connect()(MemberCard);

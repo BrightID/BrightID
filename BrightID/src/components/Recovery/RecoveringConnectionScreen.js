@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
-import { renderListOrSpinner } from '../Connections/renderConnections';
+import { renderListOrSpinner } from './renderConnections';
 
 type State = {
   loading: boolean,
@@ -18,12 +18,14 @@ class RecoveringConnectionScreen extends React.Component<Props, State> {
 
   filterConnections = () => {
     const { connections, searchParam } = this.props;
-    return connections.filter((item) =>
-      `${item.name}`
-        .toLowerCase()
-        .replace(/\s/g, '')
-        .includes(searchParam.toLowerCase().replace(/\s/g, '')),
-    );
+    return connections
+      .filter((item) =>
+        `${item.name}`
+          .toLowerCase()
+          .replace(/\s/g, '')
+          .includes(searchParam.toLowerCase().replace(/\s/g, '')),
+      )
+      .filter((item) => item.status === 'verified');
   };
 
   renderConnection = ({ item }) => (

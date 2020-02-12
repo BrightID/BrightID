@@ -4,13 +4,12 @@ import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationEvents } from 'react-navigation';
-
-import SearchConnections from '../Connections/SearchConnections';
+import SearchConnections from './SearchConnections';
 import NewGroupCard from './NewGroupCard';
-import store from '../../store';
-import { createNewGroup } from './actions';
-import { renderListOrSpinner } from '../Connections/renderConnections';
-import { clearNewGroupCoFounders } from '../../actions/index';
+import store from '../../../store';
+import { createNewGroup } from '../actions';
+import { renderListOrSpinner } from './renderConnections';
+import { clearNewGroupCoFounders } from '../../../actions';
 
 /**
  * Connection screen of BrightID
@@ -32,12 +31,14 @@ export class NewGroupScreen extends React.Component<Props, State> {
 
   filterConnections = () => {
     const { connections, searchParam } = this.props;
-    return connections.filter((item) =>
-      `${item.name}`
-        .toLowerCase()
-        .replace(/\s/g, '')
-        .includes(searchParam.toLowerCase().replace(/\s/g, '')),
-    );
+    return connections
+      .filter((item) =>
+        `${item.name}`
+          .toLowerCase()
+          .replace(/\s/g, '')
+          .includes(searchParam.toLowerCase().replace(/\s/g, '')),
+      )
+      .filter((item) => item.status === 'verified');
   };
 
   cardIsSelected = (card) => {
@@ -47,6 +48,7 @@ export class NewGroupScreen extends React.Component<Props, State> {
 
   renderConnection = ({ item }) => (
     <NewGroupCard
+      // eslint-disable-next-line react/jsx-props-no-spreading
       {...item}
       selected={this.cardIsSelected(item)}
       groups={true}
@@ -74,8 +76,6 @@ export class NewGroupScreen extends React.Component<Props, State> {
             onPress={async () => {
               try {
                 await store.dispatch(createNewGroup());
-                // todo: groups are not visible instantly after createNewGroup is called
-                // we should handle this someway from ux viewpoint
                 navigation.goBack();
               } catch (err) {
                 console.log(err);

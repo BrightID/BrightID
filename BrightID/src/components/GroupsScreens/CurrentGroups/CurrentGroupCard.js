@@ -5,7 +5,7 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import GroupPhoto from './GroupPhoto';
-import { getGroupName } from '../../utils/groups';
+import { getGroupName } from '../../../utils/groups';
 
 /**
  * Connection Card in the Connections Screen

@@ -11,7 +11,7 @@ import {
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import EligibleGroupCard from './EligibleGroupCard';
-import BottomNav from '../BottomNav';
+import BottomNav from '../../BottomNav';
 
 const ICON_SIZE = 36;
 

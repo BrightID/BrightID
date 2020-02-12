@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
@@ -16,23 +16,13 @@ import { NavigationEvents } from 'react-navigation';
 import Overlay from 'react-native-modal-overlay';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MemberCard from './MemberCard';
-import { getMembers } from '../../actions/getMembers';
-import BottomNav from '../BottomNav';
-import api from '../../Api/BrightId';
+import { getMembers } from '../../../actions/getMembers';
+import BottomNav from '../../BottomNav';
+import api from '../../../Api/BrightId';
 import SearchMembers from './SearchMembers';
 import GroupPhoto from './GroupPhoto';
-import emitter from '../../emitter';
-import { leaveGroup } from '../../actions';
-
-// header Button
-const MaterialHeaderButton = (passMeFurther) => (
-  <HeaderButton
-    {...passMeFurther}
-    IconComponent={Material}
-    iconSize={32}
-    color="#fff"
-  />
-);
+import emitter from '../../../emitter';
+import { leaveGroup } from '../../../actions';
 
 type State = {
   optionsVisible: boolean,
@@ -41,6 +31,7 @@ type State = {
 };
 
 export class CurrentGroupView extends Component<Props, State> {
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     loading: true,
     optionsVisible: false,
@@ -107,6 +98,7 @@ export class CurrentGroupView extends Component<Props, State> {
     );
   };
 
+  // eslint-disable-next-line react/jsx-props-no-spreading
   renderMember = ({ item }) => <MemberCard {...item} />;
 
   renderListOrSpinner() {

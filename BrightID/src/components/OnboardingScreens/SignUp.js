@@ -43,6 +43,7 @@ export class SignUp extends React.Component<Props, State> {
     ),
   };
 
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     name: '',
     initialPhoto: { uri: '' },

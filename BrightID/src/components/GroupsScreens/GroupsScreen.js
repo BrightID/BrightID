@@ -12,8 +12,8 @@ import {
 import { connect } from 'react-redux';
 import { splitEvery } from 'ramda';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import EligibleGroupCard from './EligibleGroupCard';
-import CurrentGroupCard from './CurrentGroupCard';
+import EligibleGroupCard from './EligibleGroups/EligibleGroupCard';
+import CurrentGroupCard from './CurrentGroups/CurrentGroupCard';
 import BottomNav from '../BottomNav';
 import {
   NoCurrentGroups,
