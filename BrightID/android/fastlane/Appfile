@@ -1,0 +1,2 @@
+json_key_file(".secret/api-4706809926869295734-372791-092278f9bb82.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+package_name("org.brightid.demo") # e.g. com.krausefx.app
