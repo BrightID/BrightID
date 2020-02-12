@@ -8,7 +8,7 @@
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <application
     tools:replace="android:allowBackup"
-    android:name=".MainApplication"
+    android:name="org.brightid.MainApplication"
     android:label="@string/app_name"
     android:icon="@mipmap/ic_launcher"
     android:roundIcon="@mipmap/ic_launcher_round"
@@ -19,7 +19,7 @@
   >
 
     <activity
-      android:name=".MainActivity"
+      android:name="org.brightid.MainActivity"
       android:label="@string/app_name"
       android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
       android:windowSoftInputMode="adjustResize"

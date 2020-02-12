@@ -6,9 +6,9 @@ import { strToUint8Array, uInt8ArrayToB64 } from '../utils/encoding';
 import store from '../store';
 
 let seedUrl = 'http://node.brightid.org';
-if (__DEV__) {
-  seedUrl = 'http://test.brightid.org';
-}
+// if (__DEV__) {
+//   seedUrl = 'http://test.brightid.org';
+// }
 
 class BrightId {
   api: ApiSauceInstance;

@@ -139,6 +139,7 @@ android {
         missingDimensionStrategy 'react-native-camera', 'general'
         versionCode 4
         versionName "1.0-beta4"
+        multiDexEnabled true
     }
     signingConfigs {
         debug {
@@ -207,6 +208,7 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation 'com.android.support:multidex:1.0.3'
 
     if (enableHermes) {
       def hermesPath = "../../node_modules/hermesvm/android/";
