@@ -120,8 +120,8 @@ export class GroupsScreen extends React.Component<Props, State> {
           <BottomNav navigation={navigation} />
         </View>
       );
-    } catch (e) {
-      Alert.alert(e.message || 'Error', e.stack);
+    } catch (err) {
+      err instanceof Error ? console.warn(err.message) : console.log(err);
     }
   }
 }

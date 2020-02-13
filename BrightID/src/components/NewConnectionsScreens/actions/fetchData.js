@@ -41,7 +41,7 @@ export const fetchData = (alertErrors = true) => (
         let message = `Profile download attempt from url: ${url}
       Response from profile download: ${JSON.stringify(response)}
       Stack trace: ${err.stack}`;
-        Alert.alert(err.message || 'Error', message);
+        console.log(message);
       }
       emitter.emit('connectFailure');
     });
