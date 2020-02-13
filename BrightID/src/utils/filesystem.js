@@ -1,4 +1,5 @@
 import RNFS from 'react-native-fs';
+import RNFetchBlob from 'rn-fetch-blob';
 import { Alert } from 'react-native';
 import { parseDataUri, mimeFromUri } from './images';
 
@@ -15,7 +16,13 @@ export const saveImage = async ({ base64Image, imageName }) => {
   try {
     const { filetype, image } = parseDataUri(base64Image);
     const path = `${RNFS.DocumentDirectoryPath}/photos/${imageName}.${filetype}`;
-    await RNFS.writeFile(path, image, 'base64');
+    console.log('RNFS.DocumentDirecoryPath', RNFS.DocumentDirectoryPath);
+    console.log('DocumentDir', RNFetchBlob.fs.dirs.DocumentDir);
+    const preStat = await RNFetchBlob.fs.stat(path);
+    console.log('preStat', preStat);
+    await RNFetchBlob.fs.writeFile(path, image, 'base64');
+    const postStat = await RNFetchBlob.fs.stat(path);
+    console.log('postStat', postStat);
     return `${imageName}.${filetype}`;
   } catch (err) {
     err instanceof Error ? console.warn(err.message) : console.log(err);

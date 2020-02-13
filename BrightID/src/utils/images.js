@@ -1,8 +1,11 @@
 // @flow
 
+import { Platform } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import { compose } from 'ramda';
+
+const isIOS = Platform.OS === 'ios';
 
 export const selectImage = () =>
   new Promise((res, rej) => {
@@ -11,10 +14,11 @@ export const selectImage = () =>
       mediaType: 'photo',
       maxWidth: 180,
       maxHeight: 180,
-      quality: 1.0,
+      quality: isIOS ? 1.0 : 0.8,
       allowsEditing: true,
       loadingLabelText: 'loading photo...',
       customButtons: [],
+      noData: !!isIOS,
     };
 
     if (__DEV__) {
@@ -27,9 +31,7 @@ export const selectImage = () =>
       } else if (response.customButton) {
         res(randomAvatar());
       } else {
-        res({
-          uri: response.uri,
-        });
+        res(response);
       }
     });
   });
@@ -53,9 +55,11 @@ const fakeUserAvatar = (): Promise<string> => {
 const randomAvatar = async (): Promise<void> => {
   try {
     const randomImage: string = await fakeUserAvatar();
-    return {
-      uri: `data:image/jpeg;base64,${randomImage}`,
-    };
+    return isIOS
+      ? {
+          uri: `data:image/jpeg;base64,${randomImage}`,
+        }
+      : { uri: 'data.jpg', data: randomImage };
   } catch (err) {
     console.log(err);
   }
