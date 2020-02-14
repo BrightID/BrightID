@@ -14,15 +14,17 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
+import Overlay from 'react-native-modal-overlay';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { handleBrightIdCreation } from './actions';
-import { selectImage, mimeFromUri } from '../../utils/images';
+import { takePhoto, chooseImage } from '../../utils/images';
 
 type State = {
   name: string,
   finalBase64: { uri: string },
   creatingBrightId: boolean,
+  modalVisible: boolean,
 };
 
 export class SignUp extends React.Component<Props, State> {
@@ -44,21 +46,47 @@ export class SignUp extends React.Component<Props, State> {
     name: '',
     finalBase64: { uri: '' },
     creatingBrightId: false,
+    modalVisible: false,
   };
 
-  getPhoto = async () => {
+  getPhotoFromCamera = async () => {
     try {
-      const initialPhoto = await selectImage();
-      const mime = mimeFromUri(initialPhoto.uri);
+      const { mime, data } = await takePhoto();
       const finalBase64 = {
-        uri: `data:${mime};base64,${initialPhoto.data}`,
+        uri: `data:${mime};base64,${data}`,
       };
       this.setState({
         finalBase64,
+        modalVisible: false,
       });
     } catch (err) {
       console.log(err);
     }
+  };
+
+  getPhotoFromLibrary = async () => {
+    try {
+      const { mime, data } = await chooseImage();
+      const finalBase64 = {
+        uri: `data:${mime};base64,${data}`,
+      };
+      this.setState({
+        finalBase64,
+        modalVisible: false,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  onAddPhoto = () => {
+    setTimeout(() => {
+      this.setState({ modalVisible: true });
+    }, 200);
+  };
+
+  onClose = () => {
+    this.setState({ modalVisible: false });
   };
 
   createBrightID = async () => {
@@ -108,22 +136,40 @@ export class SignUp extends React.Component<Props, State> {
           translucent={false}
           animated={true}
         />
+        <Overlay
+          visible={this.state.modalVisible}
+          onClose={this.onClose}
+          closeOnTouchOutside
+        >
+          <View>
+            <TouchableOpacity
+              onPress={this.getPhotoFromCamera}
+              style={styles.button}
+              accessibilityLabel="Take Photo"
+            >
+              <Text style={styles.buttonText}>Take Photo</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.createBrightIdButton}
+              onPress={this.getPhotoFromLibrary}
+            >
+              <Text style={styles.buttonInnerText}>Choose from Library</Text>
+            </TouchableOpacity>
+          </View>
+        </Overlay>
+
         <View style={styles.addPhotoContainer}>
           {finalBase64.uri ? (
             <TouchableOpacity
-              onPress={this.getPhoto}
+              onPress={this.onAddPhoto}
               accessible={true}
               accessibilityLabel="edit photo"
             >
-              <Image
-                style={styles.photo}
-                source={finalBase64}
-                onPress={this.getPhoto}
-              />
+              <Image style={styles.photo} source={finalBase64} />
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
-              onPress={this.getPhoto}
+              onPress={this.onAddPhoto}
               style={styles.addPhoto}
               accessible={true}
               accessibilityLabel="add photo"
@@ -282,7 +328,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
-    marginBottom: 10,
+    // marginBottom: 10,
   },
   buttonText: {
     fontFamily: 'ApexNew-Medium',
