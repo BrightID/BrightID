@@ -192,7 +192,7 @@ PODS:
     - React
   - react-native-camera/RN (3.15.1):
     - React
-  - react-native-image-picker (2.2.0):
+  - react-native-image-picker (2.3.0):
     - React
   - react-native-randombytes (3.5.3):
     - React
@@ -404,7 +404,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
   react-native-camera: 1ba3e7f2375a6b44ae09ce9be70268e0b225bc10
-  react-native-image-picker: 5f9eabde109955b2faf6ef5d5114a49a8ff45ded
+  react-native-image-picker: c8a4faf0e75ef3619f215463394388f1c222236b
   react-native-randombytes: 3638d24759d67c68f6ccba60c52a7a8a8faa6a23
   react-native-safe-area-context: 25260c5d0b9c53fd7aa88e569e2edae72af1f6a3
   react-native-spinkit: da294fd828216ad211fe36a5c14c1e09f09e62db
