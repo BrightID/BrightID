@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import { StatusBar, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import store from './store';
 import { bootstrapAndUpgrade } from './versions';
@@ -29,7 +29,6 @@ export default class AppBootstrap extends React.Component<Props> {
     return (
       <View style={styles.container}>
         <Spinner isVisible={true} size={47} type="9CubeGrid" color="#4990e2" />
-        <StatusBar barStyle="default" />
       </View>
     );
   }

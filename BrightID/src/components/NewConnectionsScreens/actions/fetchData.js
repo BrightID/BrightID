@@ -1,4 +1,3 @@
-import { Alert } from 'react-native';
 import { decryptData } from './decryptData';
 import emitter from '../../../emitter';
 

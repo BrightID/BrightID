@@ -5,7 +5,6 @@ import {
   Alert,
   Image,
   KeyboardAvoidingView,
-  Platform,
   StatusBar,
   StyleSheet,
   Text,
@@ -108,9 +107,10 @@ export class SignUp extends React.Component<Props, State> {
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <StatusBar
-          barStyle="default"
-          backgroundColor={Platform.OS === 'ios' ? 'transparent' : '#000'}
+          barStyle="dark-content"
+          backgroundColor="#F52828"
           translucent={false}
+          animated={true}
         />
         <ResizeImage
           width={180}
