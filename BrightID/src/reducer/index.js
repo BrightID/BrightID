@@ -242,9 +242,15 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case ADD_CONNECTION: {
+      if (!action.connection.id) return state;
+      const removeExisting = ({ id }: connection) =>
+        id !== action.connection.id;
+      console.log('adding connection', action.connection.id);
       return {
         ...state,
-        connections: [...state.connections.slice(0), action.connection],
+        connections: state.connections
+          .filter(removeExisting)
+          .concat(action.connection),
       };
     }
     case CONNECTIONS_SORT: {

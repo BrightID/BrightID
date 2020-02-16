@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
-import { createNewConnection } from './createNewConnection';
+import { createFakeConnection } from './createFakeConnection';
 import BottomNav from '../BottomNav';
 import { renderListOrSpinner } from './renderConnections';
 import FloatingActionButton from '../FloatingActionButton';
@@ -27,7 +27,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     headerRight: () => (
       <TouchableOpacity
         style={{ marginRight: 11 }}
-        onPress={createNewConnection(navigation)}
+        onPress={createFakeConnection(navigation)}
       >
         <Material name="dots-horizontal" size={32} color="#fff" />
       </TouchableOpacity>

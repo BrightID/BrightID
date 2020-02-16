@@ -2,9 +2,9 @@
 
 import { Alert } from 'react-native';
 import store from '../../store';
-import { addConnection } from '../../actions/fakeContact';
+import { addFakeConnection } from '../../actions/fakeContact';
 
-export const createNewConnection = (navigation: navigation) => () => {
+export const createFakeConnection = (navigation: navigation) => () => {
   if (__DEV__) {
     Alert.alert(
       'New Connection',
@@ -18,7 +18,7 @@ export const createNewConnection = (navigation: navigation) => () => {
         {
           text: 'Sure',
           onPress: () => {
-            store.dispatch(addConnection(navigation));
+            store.dispatch(addFakeConnection(navigation));
           },
         },
       ],
