@@ -15,19 +15,20 @@ class EligibleGroupsScreen extends React.Component<Props, State> {
     headerRight: () => <View />,
   });
 
-  renderEligibleGroup = ({ item }) => <EligibleGroupCard group={item} />;
+  renderEligibleGroup = ({ item }) => (
+    <EligibleGroupCard group={item} key={item.id} />
+  );
 
   render() {
     try {
       const { navigation, eligibleGroups } = this.props;
-
+      console.log(eligibleGroups.map((group) => group.id));
       return (
         <View style={styles.container}>
           <View style={styles.mainContainer}>
             <FlatList
               data={eligibleGroups}
               renderItem={this.renderEligibleGroup}
-              keyExtractor={(group) => group.id}
             />
 
             <View style={styles.addGroupButtonContainer}>

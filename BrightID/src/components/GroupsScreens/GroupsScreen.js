@@ -46,7 +46,9 @@ export class GroupsScreen extends React.Component<Props, State> {
       .concat(eligibleGroups.filter((group) => !group.isNew));
     return groups
       .slice(0, 2)
-      .map((group) => <EligibleGroupCard group={group} key={group.id} />);
+      .map((group) => (
+        <EligibleGroupCard group={group} key={`${group.id}2elig`} />
+      ));
   }
 
   render() {

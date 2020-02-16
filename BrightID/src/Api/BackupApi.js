@@ -35,18 +35,14 @@ class BackupApi {
   }
 
   async getRecovery(key1: string, key2: string) {
-    let requestParams = { key1, key2 };
-    console.log('getRecovery', requestParams);
     const res = await this.recoveryApi.get(
       `/backups/${b64ToUrlSafeB64(key1)}/${b64ToUrlSafeB64(key2)}`,
     );
-    console.log('get', res);
     BackupApi.throwOnError(res);
     return res;
   }
 
   async putRecovery(key1: string, key2: string, data: string) {
-    console.log('putRecovery', { key1, key2 });
     const res = await this.recoveryApi.put(
       `/backups/${b64ToUrlSafeB64(key1)}/${b64ToUrlSafeB64(key2)}`,
       {
@@ -63,7 +59,6 @@ class BackupApi {
         `/profile/download/${b64ToUrlSafeB64(publicKey)}`,
       );
       BackupApi.throwOnError(res);
-      console.log('getSig');
       return res.data.data;
     } catch (err) {
       console.warn(err);

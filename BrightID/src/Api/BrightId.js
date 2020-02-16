@@ -62,7 +62,6 @@ class BrightId {
       timestamp,
     };
     op._key = hash(op.name + op.id1 + op.id2 + op.timestamp);
-    console.log(op._key);
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
   }

@@ -6,8 +6,11 @@ import {
   mergeRight,
   propEq,
   differenceWith,
-  groupWith,
-  eqProps,
+  groupBy,
+  concat,
+  compose,
+  values,
+  map,
 } from 'ramda';
 import {
   USER_SCORE,
@@ -160,15 +163,25 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case SET_ELIGIBLE_GROUPS: {
-      const duplicates = action.eligibleGroups.concat(state.eligibleGroups);
-      const duplicatesById = groupWith(eqProps('id'), duplicates);
-      const byKnownMembers = (acc, val) =>
-        acc.knownMembers.length > val.knownMembers.length ? acc : val;
-      const mostKnownMembers = (list) =>
-        list.reduce(byKnownMembers, { knownMembers: [] });
+      const byMostMembers = (acc, val) =>
+        val.knownMembers &&
+        acc.knownMembers &&
+        val.knownMembers.length > acc.knownMembers.length
+          ? val
+          : acc;
+      const dedupe = (list) => {
+        return list.reduce(byMostMembers);
+      };
+      const uniqueByMostMembers = compose(
+        values,
+        map(dedupe),
+        groupBy(({ id }) => id),
+        concat(state.eligibleGroups),
+      );
+
       return {
         ...state,
-        eligibleGroups: duplicatesById.map(mostKnownMembers),
+        eligibleGroups: uniqueByMostMembers(action.eligibleGroups),
       };
     }
     case DELETE_ELIGIBLE_GROUP: {
