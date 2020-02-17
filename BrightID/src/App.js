@@ -17,16 +17,6 @@ import fetchUserInfo from './actions/fetchUserInfo';
 type Props = {};
 
 export default class App extends React.Component<Props> {
-  componentDidMount() {
-    this.intervalId = setInterval(() => {
-      store.dispatch(fetchUserInfo());
-    }, 3000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(clearInterval(this.intervalId));
-  }
-
   render() {
     return (
       <Provider store={store}>

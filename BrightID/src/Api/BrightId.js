@@ -2,6 +2,8 @@
 
 import { create, ApiSauceInstance } from 'apisauce';
 import nacl from 'tweetnacl';
+// eslint-disable-next-line import/no-cycle
+import fetchUserInfo from '../actions/fetchUserInfo';
 import { strToUint8Array, uInt8ArrayToB64, hash } from '../utils/encoding';
 import store from '../store';
 
@@ -21,6 +23,10 @@ class BrightId {
     this.api = create({
       baseURL: this.apiUrl,
     });
+    this.operations = [];
+    this.intervalId = setInterval(() => {
+      this.traceOperations();
+    }, 3000);
   }
 
   get baseUrl() {
@@ -46,6 +52,22 @@ class BrightId {
     throw new Error(response.problem);
   }
 
+  async traceOperations(self) {
+    const time_fudge = 2 * 60 * 1000; // trace operations for 2 minutes
+    this.operations.map(async (op) => {
+      if (op.timestamp + time_fudge < Date.now()) {
+        return this.operations.splice(this.operations.indexOf(op), 1);
+      }
+      const { state } = await this.getOperationState(op._key);
+      if (state === 'applied' || state === 'failed') {
+        store.dispatch(fetchUserInfo());
+        this.operations.splice(this.operations.indexOf(op), 1);
+      } else if (state !== 'sent') {
+        console.log(`${state} is an invalid state!`);
+      }
+    });
+  }
+
   async createConnection(
     id1: string,
     sig1: string,
@@ -64,6 +86,7 @@ class BrightId {
     op._key = hash(op.name + op.id1 + op.id2 + op.timestamp);
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    this.operations.push(op);
   }
 
   async deleteConnection(id2: string) {
@@ -83,6 +106,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    this.operations.push(op);
   }
 
   async flagConnection(flagged: string, reason: string) {
@@ -125,6 +149,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    this.operations.push(op);
   }
 
   async deleteGroup(group: string) {
@@ -145,6 +170,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    this.operations.push(op);
   }
 
   async joinGroup(group: string) {
@@ -165,6 +191,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    this.operations.push(op);
   }
 
   async leaveGroup(group: string) {
@@ -185,6 +212,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    this.operations.push(op);
   }
 
   async setTrusted(trusted: string[]) {
@@ -206,6 +234,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    this.operations.push(op);
   }
 
   async setSigningKey(op: {
@@ -221,6 +250,7 @@ class BrightId {
     op._key = hash(op.name + op.id + op.signingKey + op.timestamp);
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    this.operations.push(op);
   }
 
   async linkContextId(context: string, contextId: string) {
@@ -241,6 +271,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    this.operations.push(op);
   }
 
   async getMembers(group: string) {
@@ -251,6 +282,12 @@ class BrightId {
 
   async getUserInfo(id: string) {
     const res = await this.api.get(`/users/${id}`);
+    BrightId.throwOnError(res);
+    return res.data.data;
+  }
+
+  async getOperationState(opHash: string) {
+    const res = await this.api.get(`/operations/${opHash}`);
     BrightId.throwOnError(res);
     return res.data.data;
   }

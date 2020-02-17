@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import Overlay from 'react-native-modal-overlay';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import { NavigationEvents } from 'react-navigation';
 import VerificationSticker from './Verifications/VerificationSticker';
 import BottomNav from './BottomNav';
 import { setPhoto } from '../actions';
@@ -13,7 +14,7 @@ import { getNotifications } from '../actions/notifications';
 import { delStorage } from '../utils/dev';
 import { chooseImage, takePhoto } from '../utils/images';
 import { saveImage, retrieveImage } from '../utils/filesystem';
-
+import fetchUserInfo from '../actions/fetchUserInfo';
 /**
  * Home screen of BrightID
  * ==========================
@@ -43,6 +44,16 @@ export class HomeScreen extends React.Component<Props, State> {
     ),
   });
 
+  // eslint-disable-next-line react/state-in-constructor
+  state = {
+    profilePhoto: ' ',
+    modalVisible: false,
+  };
+
+  refreshUserInfo = async () => {
+    await this.props.dispatch(fetchUserInfo());
+  };
+
   componentDidMount() {
     const { navigation, dispatch, photo } = this.props;
     navigation.addListener('willFocus', () => {
@@ -52,12 +63,6 @@ export class HomeScreen extends React.Component<Props, State> {
       this.setState({ profilePhoto });
     });
   }
-
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    profilePhoto: ' ',
-    modalVisible: false,
-  };
 
   // changePhoto = async () => {
   //   const { id } = this.props;
@@ -81,7 +86,10 @@ export class HomeScreen extends React.Component<Props, State> {
       const { id } = this.props;
       const { mime, data } = await takePhoto();
       const uri = `data:${mime};base64,${data}`;
-      const filename = await saveImage({ imageName: id, base64Image: uri });
+      const filename = await saveImage({
+        imageName: id,
+        base64Image: uri,
+      });
       setPhoto({ filename });
       const profilePhoto = await retrieveImage(filename);
       this.setState({
@@ -98,7 +106,10 @@ export class HomeScreen extends React.Component<Props, State> {
       const { id } = this.props;
       const { mime, data } = await chooseImage();
       const uri = `data:${mime};base64,${data}`;
-      const filename = await saveImage({ imageName: id, base64Image: uri });
+      const filename = await saveImage({
+        imageName: id,
+        base64Image: uri,
+      });
       setPhoto({ filename });
       const profilePhoto = await retrieveImage(filename);
       this.setState({
@@ -155,6 +166,8 @@ export class HomeScreen extends React.Component<Props, State> {
           </View>
         </Overlay>
         <View style={styles.mainContainer}>
+          <NavigationEvents onDidFocus={this.refreshUserInfo} />
+
           <View style={styles.photoContainer}>
             <TouchableOpacity
               onPress={this.onEditPhoto}
