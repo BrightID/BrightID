@@ -1,14 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -25,7 +18,6 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
  */
 
 class ConnectionCard extends React.PureComponent<Props> {
-
   handleUserOptions = () => {
     const { actionSheet } = this.props;
     actionSheet.connection = this.props;
