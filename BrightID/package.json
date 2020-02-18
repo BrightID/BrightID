@@ -29,6 +29,7 @@
     "react": "16.9.0",
     "react-dom": "16.9.0",
     "react-native": "0.61.5",
+    "react-native-actionsheet": "^2.4.2",
     "react-native-camera": "^3.15.1",
     "react-native-fs": "^2.16.2",
     "react-native-gesture-handler": "^1.5.3",

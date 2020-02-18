@@ -1,21 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import { fakeJoinGroups } from '../../actions/fakeGroup';
-import api from '../../Api/BrightId';
-import { deleteConnection } from '../../actions';
 
 /**
  * Connection Card in the Connections Screen
@@ -28,47 +18,10 @@ import { deleteConnection } from '../../actions';
  */
 
 class ConnectionCard extends React.PureComponent<Props> {
-  deleteConnection = async () => {
-    try {
-      const { dispatch, id } = this.props;
-      await api.deleteConnection(id);
-      // remove connection from redux
-      dispatch(deleteConnection(id));
-    } catch (err) {
-      Alert.alert("Couldn't remove connection", err.message);
-    }
-  };
-
   handleUserOptions = () => {
-    const { name, id, dispatch } = this.props;
-    const buttons = [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {
-        text: 'OK',
-        onPress: this.deleteConnection,
-      },
-    ];
-
-    if (__DEV__) {
-      let { secretKey } = this.props;
-      buttons.push({
-        text: 'Join All Groups',
-        onPress: () => {
-          dispatch(fakeJoinGroups({ id, secretKey }));
-        },
-      });
-    }
-
-    Alert.alert(
-      `Delete Connection`,
-      `Are you sure you want to remove ${name} from your list of connections?`,
-      buttons,
-      { cancelable: true },
-    );
+    const { actionSheet } = this.props;
+    actionSheet.connection = this.props;
+    actionSheet.show();
   };
 
   scoreColor = () => {
@@ -81,7 +34,7 @@ class ConnectionCard extends React.PureComponent<Props> {
   };
 
   setStatus = () => {
-    const { score, status } = this.props;
+    const { score, status, flaggers } = this.props;
     if (status === 'initiated') {
       return (
         <View style={styles.scoreContainer}>
@@ -99,6 +52,7 @@ class ConnectionCard extends React.PureComponent<Props> {
         <View style={styles.scoreContainer}>
           <Text style={styles.scoreLeft}>Score:</Text>
           <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>
+          <Text style={styles.flagged}> {flaggers ? 'Flagged' : ' '}</Text>
         </View>
       );
     }
@@ -117,6 +71,7 @@ class ConnectionCard extends React.PureComponent<Props> {
         />
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
+
           <this.setStatus />
           <Text style={styles.connectedText}>
             Connected {moment(parseInt(connectionDate, 10)).fromNow()}
@@ -182,6 +137,12 @@ const styles = StyleSheet.create({
   scoreRight: {
     fontFamily: 'ApexNew-Medium',
     fontSize: 16,
+  },
+  flagged: {
+    fontFamily: 'ApexNew-Medium',
+    fontSize: 16,
+    color: '#FF0800',
+    marginLeft: 15,
   },
   connectedText: {
     fontFamily: 'ApexNew-Book',
