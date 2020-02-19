@@ -15,11 +15,7 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import EligibleGroupCard from './EligibleGroups/EligibleGroupCard';
 import CurrentGroupCard from './CurrentGroups/CurrentGroupCard';
 import BottomNav from '../BottomNav';
-import {
-  NoCurrentGroups,
-  EmptyFullScreen,
-  NoEligibleGroups,
-} from './EmptyGroups';
+import { EmptyFullScreen } from './EmptyGroups';
 
 const ICON_SIZE = 36;
 

@@ -3,83 +3,6 @@
 import * as React from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-export const NoEligibleGroups = ({ navigation }: Props) => (
-  <View style={styles.noEligibleContainer}>
-    <View style={styles.noEligibleGroupsInfo}>
-      <Image
-        source={require('../../static/groups_logo.png')}
-        style={styles.smallGroupsLogo}
-        resizeMode="cover"
-        onError={(e) => {
-          console.log(e);
-        }}
-        accessible={true}
-        accessibilityLabel="groups logo"
-      />
-      <View>
-        <Text style={styles.eligibleEmptyGroupsText}>
-          By creating and joining groups,
-        </Text>
-        <Text style={styles.eligibleEmptyGroupsText}>
-          you can increase your score
-        </Text>
-      </View>
-    </View>
-    <View style={styles.emptyButtons}>
-      <TouchableOpacity style={styles.learnMoreButton}>
-        <Text style={styles.learnMoreText}>Learn More</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.createGroupButton}
-        onPress={() => {
-          navigation.navigate('NewGroup');
-        }}
-      >
-        <Text style={styles.createGroupText}>Create Group</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-);
-
-export const NoCurrentGroups = ({ navigation }: Props) => (
-  <View style={styles.noCurrentContainer}>
-    <View style={styles.noCurrentGroupsInfo}>
-      <Image
-        source={require('../../static/groups_logo.png')}
-        style={styles.smallGroupsLogo}
-        resizeMode="cover"
-        onError={(e) => {
-          console.log(e);
-        }}
-        accessible={true}
-        accessibilityLabel="groups logo"
-      />
-      <View>
-        <Text style={styles.currentEmptyGroupsText}>
-          By creating and joining
-        </Text>
-        <Text style={styles.currentEmptyGroupsText}>
-          groups, you can increase{' '}
-        </Text>
-        <Text style={styles.currentEmptyGroupsText}>your score</Text>
-      </View>
-    </View>
-    <View style={styles.emptyButtons}>
-      <TouchableOpacity style={styles.learnMoreButton}>
-        <Text style={styles.learnMoreText}>Learn More</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.createGroupButton}
-        onPress={() => {
-          navigation.navigate('NewGroup');
-        }}
-      >
-        <Text style={styles.createGroupText}>Create Group</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-);
-
 export const EmptyFullScreen = ({ navigation }: Props) => (
   <View style={styles.fullScreenContainer}>
     <View style={styles.fullScreenEmptyGroupsInfo}>
@@ -119,38 +42,12 @@ export const EmptyFullScreen = ({ navigation }: Props) => (
 );
 
 const styles = StyleSheet.create({
-  noEligibleContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    height: '55%',
-    backgroundColor: '#fcfcfc',
-  },
-  noCurrentContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    height: '45%',
-    backgroundColor: '#fcfcfc',
-  },
   fullScreenContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
     backgroundColor: '#fff',
-  },
-  noCurrentGroupsInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  noEligibleGroupsInfo: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
   },
   fullScreenEmptyGroupsInfo: {
     flexDirection: 'column',
@@ -165,23 +62,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     marginTop: 17,
-  },
-  currentEmptyGroupsText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 18,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
-    color: '#4a4a4a',
-  },
-  eligibleEmptyGroupsText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 18,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
-    color: '#4a4a4a',
-    textAlign: 'center',
   },
   fullScreenEmptyGroupsText: {
     fontFamily: 'ApexNew-Book',
