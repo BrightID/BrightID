@@ -29,7 +29,6 @@ class MemberCard extends React.PureComponent<Props> {
 
   render() {
     const { photo, name, score, connectionDate, style } = this.props;
-
     return (
       <View style={{ ...styles.container, ...style }}>
         <Image
@@ -48,12 +47,6 @@ class MemberCard extends React.PureComponent<Props> {
             Connected {moment(parseInt(connectionDate, 10)).fromNow()}
           </Text>
         </View>
-        <TouchableOpacity
-          style={styles.moreIcon}
-          //          onPress={this.flagMember}
-        >
-          <Ionicon size={48} name="ios-more" color="#ccc" />
-        </TouchableOpacity>
       </View>
     );
   }

@@ -13,8 +13,6 @@ import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationEvents } from 'react-navigation';
-import Overlay from 'react-native-modal-overlay';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import MemberCard from './MemberCard';
 import { getMembers } from '../../../actions/getMembers';
 import BottomNav from '../../BottomNav';
@@ -23,9 +21,10 @@ import SearchMembers from './SearchMembers';
 import GroupPhoto from './GroupPhoto';
 import emitter from '../../../emitter';
 import { leaveGroup } from '../../../actions';
+import ActionSheet from 'react-native-actionsheet';
+
 
 type State = {
-  optionsVisible: boolean,
   loading: boolean,
   members: string[],
 };
@@ -34,7 +33,6 @@ export class CurrentGroupView extends Component<Props, State> {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     loading: true,
-    optionsVisible: false,
     members: [],
   };
 
@@ -46,14 +44,26 @@ export class CurrentGroupView extends Component<Props, State> {
       headerRight: () => (
         <TouchableOpacity
           style={{ marginRight: 11 }}
-          onPress={() => {
-            emitter.emit('optionsSelected');
-          }}
+          onPress={() => emitter.emit('optionsSelected')}
         >
           <Material name="dots-horizontal" size={32} color="#fff" />
         </TouchableOpacity>
       ),
     };
+  };
+
+  performAction = (action) => {
+    if (!this.actionSheet) return;
+    action = this.actionSheet.props.options[action];
+    if (action == 'Leave Group') {
+      this.confirmLeaveGroup();
+    } else if (action == 'Invite') {
+      const { navigation } = this.props;
+      navigation.navigate('InviteList', {
+        group: navigation.state.params.group
+      });
+    }
+
   };
 
   confirmLeaveGroup = () => {
@@ -131,22 +141,13 @@ export class CurrentGroupView extends Component<Props, State> {
   }
 
   componentDidMount() {
-    emitter.on('optionsSelected', this.showOptionsMenu);
-
+    emitter.on('optionsSelected', this.actionSheet.show);
     this.getMembers();
   }
 
   componentWillUnmount() {
-    emitter.off('optionsSelected', this.showOptionsMenu);
+    emitter.off('optionsSelected', this.actionSheet.show);
   }
-
-  showOptionsMenu = () => {
-    this.setState({ optionsVisible: true });
-  };
-
-  hideOptionsMenu = () => {
-    this.setState({ optionsVisible: false });
-  };
 
   getMembers = async () => {
     const { dispatch, navigation } = this.props;
@@ -158,38 +159,31 @@ export class CurrentGroupView extends Component<Props, State> {
     });
   };
 
-  renderOptions = (hideModal) => (
-    <>
-      <View style={[styles.triangle, this.props.style]} />
-      <View style={styles.optionsBox}>
-        <TouchableOpacity onPress={hideModal}>
-          <AntDesign size={30} name="closecircleo" color="#000" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.confirmLeaveGroup}>
-          <Text style={styles.leaveGroupText}>Leave Group</Text>
-        </TouchableOpacity>
-      </View>
-    </>
-  );
-
   render() {
-    const { navigation } = this.props;
+    const { navigation, id } = this.props;
+    const { group } = this.props.navigation.state.params;
+    let actions = ['Leave Group', 'cancel'];
+    if (group.admins && group.admins.includes(id)) {
+      actions = ['Invite'].concat(actions);
+    }
+
     return (
       <View style={styles.container}>
         <NavigationEvents onDidFocus={this.getMembers} />
-        <Overlay
-          visible={this.state.optionsVisible}
-          onClose={this.hideOptionsMenu}
-          closeOnTouchOutside
-          containerStyle={styles.optionsOverlay}
-          childrenWrapperStyle={styles.optionsContainer}
-        >
-          {this.renderOptions}
-        </Overlay>
         <View style={styles.mainContainer}>
           <SearchMembers navigation={navigation} />
           <View style={styles.mainContainer}>{this.renderListOrSpinner()}</View>
         </View>
+        <ActionSheet
+          ref={(o) => {
+            this.actionSheet = o;
+          }}
+          title="What do you want to do?"
+          options={actions}
+          cancelButtonIndex={actions.indexOf('cancel')}
+          destructiveButtonIndex={actions.indexOf('Leave Group')}
+          onPress={(index) => this.performAction(index)}
+        />
         <BottomNav navigation={navigation} />
       </View>
     );
@@ -222,45 +216,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
     textAlign: 'center',
-  },
-  optionsOverlay: {
-    backgroundColor: 'rgba(62,34,24,0.4)',
-  },
-  optionsContainer: {
-    backgroundColor: '#fdfdfd',
-    height: '12%',
-    width: '105%',
-    borderRadius: 5,
-    position: 'absolute',
-    top: 50,
-    alignSelf: 'center',
-  },
-  triangle: {
-    width: 0,
-    height: 0,
-    backgroundColor: 'transparent',
-    borderStyle: 'solid',
-    borderLeftWidth: 9,
-    borderRightWidth: 9,
-    borderBottomWidth: 18,
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-    borderBottomColor: '#fdfdfd',
-    position: 'absolute',
-    top: -18,
-    right: 20,
-  },
-  optionsBox: {
-    flexDirection: 'row',
-    width: '90%',
-    height: '70%',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  leaveGroupText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 24,
-    marginLeft: 30,
   },
 });
 

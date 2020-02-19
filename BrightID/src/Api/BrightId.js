@@ -187,6 +187,27 @@ class BrightId {
     BrightId.throwOnError(res);
   }
 
+  async invite(id2: string, group: string) {
+    const { id, secretKey } = store.getState();
+    let timestamp = Date.now();
+    let message = `Invite${id}${id2}${group}${timestamp}`;
+    let sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+
+    const op = {
+      _key: hash(message),
+      name: 'Invite',
+      inviter: id,
+      invitee: id2,
+      group,
+      sig,
+      timestamp,
+    };
+    const res = await this.api.put(`/operations/${op._key}`, op);
+    BrightId.throwOnError(res);
+  }
+
   async setTrusted(trusted: string[]) {
     let { id, secretKey } = store.getState();
     let timestamp = Date.now();
