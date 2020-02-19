@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ScrollView,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { splitEvery } from 'ramda';
@@ -51,6 +52,10 @@ export class GroupsScreen extends React.Component<Props, State> {
       ));
   }
 
+  renderEligibleGroup = ({ item }) => (
+    <EligibleGroupCard group={item} key={item.id} />
+  );
+
   render() {
     try {
       const { navigation, currentGroups, eligibleGroups } = this.props;
@@ -60,64 +65,71 @@ export class GroupsScreen extends React.Component<Props, State> {
           : [currentGroups];
       return (
         <View style={styles.container}>
-          <View style={styles.mainContainer}>
-            {!eligibleGroups.length && !currentGroups.length && (
-              <EmptyFullScreen navigation={navigation} />
-            )}
-            {!!eligibleGroups.length && (
-              <View style={styles.eligibleContainer}>
-                <Text style={styles.eligibleGroupTitle}>ELIGIBLE</Text>
-                {this.getTwoEligibleGroups()}
-                <View style={styles.eligibleBottomBorder} />
-                {eligibleGroups.length > 2 && (
+            <View style={styles.mainContainer}>
+              <ScrollView>
+
+                {!eligibleGroups.length && !currentGroups.length && (
+                  <EmptyFullScreen navigation={navigation} />
+                )}
+                {!!eligibleGroups.length && !!currentGroups.length && (
+                  <View style={styles.eligibleContainer}>
+                    <Text style={styles.eligibleGroupTitle}>ELIGIBLE</Text>
+                    {this.getTwoEligibleGroups()}
+                    <View style={styles.eligibleBottomBorder} />
+                    {eligibleGroups.length > 2 && (
+                      <TouchableOpacity
+                        style={styles.seeAllButton}
+                        onPress={() => {
+                          navigation.navigate('EligibleGroups');
+                        }}
+                      >
+                        <Text style={styles.seeAllText}>
+                          See all {this.props.eligibleGroups.length}
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                )}
+                {!!eligibleGroups.length && !currentGroups.length && (
+                  <View style={styles.eligibleContainer}>
+                    <Text style={styles.eligibleGroupTitle}>ELIGIBLE</Text>
+                    <FlatList
+                      data={eligibleGroups}
+                      renderItem={this.renderEligibleGroup}
+                    />
+                    <View style={styles.eligibleBottomBorder} />
+                  </View>
+                )}
+                {!!currentGroups.length && (
+                  <View style={styles.currentContainer}>
+                    <Text style={styles.currentGroupTitle}>CURRENT</Text>
+                    <FlatList
+                      data={groupPairs}
+                      renderItem={this.renderCurrentGroups}
+                      keyExtractor={([group]) => group && group.id}
+                    />
+                  </View>
+                )}
+              </ScrollView>
+
+              {(!!currentGroups.length || !!eligibleGroups.length) && (
+                <View style={styles.addGroupButtonContainer}>
                   <TouchableOpacity
-                    style={styles.seeAllButton}
+                    style={styles.addGroupButton}
                     onPress={() => {
-                      navigation.navigate('EligibleGroups');
+                      navigation.navigate('NewGroup');
                     }}
                   >
-                    <Text style={styles.seeAllText}>
-                      See all {this.props.eligibleGroups.length}
-                    </Text>
+                    <Material
+                      size={ICON_SIZE}
+                      name="plus"
+                      color="#fff"
+                      style={{ width: ICON_SIZE, height: ICON_SIZE }}
+                    />
                   </TouchableOpacity>
-                )}
-              </View>
-            )}
-            {!!currentGroups.length && !eligibleGroups.length && (
-              <NoEligibleGroups navigation={navigation} />
-            )}
-
-            {!!currentGroups.length && (
-              <View style={styles.currentContainer}>
-                <Text style={styles.currentGroupTitle}>CURRENT</Text>
-                <FlatList
-                  data={groupPairs}
-                  renderItem={this.renderCurrentGroups}
-                  keyExtractor={([group]) => group && group.id}
-                />
-              </View>
-            )}
-            {!!eligibleGroups.length && !currentGroups.length && (
-              <NoCurrentGroups navigation={navigation} />
-            )}
-            {!!currentGroups.length && !!eligibleGroups.length && (
-              <View style={styles.addGroupButtonContainer}>
-                <TouchableOpacity
-                  style={styles.addGroupButton}
-                  onPress={() => {
-                    navigation.navigate('NewGroup');
-                  }}
-                >
-                  <Material
-                    size={ICON_SIZE}
-                    name="plus"
-                    color="#fff"
-                    style={{ width: ICON_SIZE, height: ICON_SIZE }}
-                  />
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
+                </View>
+              )}
+            </View>
           <BottomNav navigation={navigation} />
         </View>
       );
@@ -141,13 +153,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     backgroundColor: '#fff',
-    paddingBottom: 40,
   },
   eligibleContainer: {
     // backgroundColor: '#fff',
     marginTop: 7,
     width: '100%',
-    maxHeight: '55%',
     alignItems: 'center',
     justifyContent: 'flex-start',
     shadowColor: 'rgba(0,0,0,0.32)',
@@ -207,7 +217,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#4A8FE6',
   },
-
   currentGroupsHeader: {
     width: '100%',
     alignItems: 'center',
