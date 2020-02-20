@@ -4,6 +4,9 @@ import * as React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import { addNewConnection } from './actions/addNewConnection';
+import api from '../../Api/BrightId';
+import moment from 'moment';
+
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -12,18 +15,71 @@ import { addNewConnection } from './actions/addNewConnection';
  *
  */
 
-type State = {};
+type State = {
+  connections: number,
+  groups: number,
+  mutualConnections: number,
+  connectionDate: string,
+};
 
 export class PreviewConnectionScreen extends React.Component<Props, State> {
+
+  state = {
+    connections: 'loading',
+    groups: 'loading',
+    mutualConnections: 'loading',
+    connectionDate: 'loading',
+  };
+
   static navigationOptions = {
     title: 'New Connection',
     headerRight: () => <View />,
   };
 
+  componentDidMount() {
+    this.fetchConnectionInfo().done()
+  }
+
   handleConfirmation = async () => {
     const { dispatch, navigation } = this.props;
     await dispatch(addNewConnection());
     navigation.navigate('ConnectSuccess');
+  };
+
+  reject = () => {
+    const { navigation } = this.props;
+    navigation.navigate('Home');
+  };
+
+  fetchConnectionInfo = async () => {
+    const myConnections = this.props.connections;
+    try {
+      const {
+        createdAt,
+        currentGroups,
+        connections = [],
+      } = await api.getUserInfo(this.props.connectUserData.id);
+      const mutualConnections = connections.filter( function( el ) {
+        return myConnections.some(x => x.id == el.id)
+      });
+      this.setState({
+        connections: connections.length,
+        groups: currentGroups.length,
+        mutualConnections: mutualConnections.length,
+        connectionDate: 'Created ' + moment(parseInt(createdAt, 10)).fromNow(),
+      });
+    } catch (err) {
+      if (err instanceof Error && err.message == 'User not found') {
+        this.setState({
+          connections: 0,
+          groups: 0,
+          mutualConnections: 0,
+          connectionDate: 'New user'
+        });
+      } else {
+        err instanceof Error ? console.warn(err.message) : console.log(err);
+      }
+    }
   };
 
   render() {
@@ -51,13 +107,40 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
             accessibilityLabel="user photo"
           />
           <Text style={styles.connectName}>{name}</Text>
+          <Text style={styles.connectedText}>{ this.state.connectionDate }</Text>
         </View>
-        <View style={styles.confirmButtonContainer}>
+        <View style={styles.countsContainer}>
+          <View style={styles.countsGroup}>
+            <Text id="connectionsCount" style={styles.countsNumberText}>
+              {this.state.connections}
+            </Text>
+            <Text style={styles.countsDescriptionText}>Connections</Text>
+          </View>
+          <View style={styles.countsGroup}>
+            <Text id="groupsCount" style={styles.countsNumberText}>
+              {this.state.groups}
+            </Text>
+            <Text style={styles.countsDescriptionText}>Groups</Text>
+          </View>
+          <View style={styles.countsGroup}>
+            <Text id="groupsCount" style={styles.countsNumberText}>
+              {this.state.mutualConnections}
+            </Text>
+            <Text style={styles.countsDescriptionText}>Mutual Connections</Text>
+          </View>
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={this.reject}
+            style={styles.rejectButton}
+          >
+            <Text style={styles.buttonText}>Reject</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={this.handleConfirmation}
             style={styles.confirmButton}
           >
-            <Text style={styles.confirmButtonText}>Confirm Connection</Text>
+            <Text style={styles.buttonText}>Confirm</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -75,8 +158,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   questionTextContainer: {
-    // flex: 1,
-    marginTop: 83,
+    marginTop: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -90,8 +172,8 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   userContainer: {
-    // flex: 1,
-    // marginTop: 44,
+    marginTop: 10,
+    paddingBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -102,7 +184,7 @@ const styles = StyleSheet.create({
   },
   connectName: {
     fontFamily: 'ApexNew-Book',
-    marginTop: 15,
+    marginTop: 10,
     fontSize: 30,
     fontWeight: 'normal',
     fontStyle: 'normal',
@@ -116,21 +198,31 @@ const styles = StyleSheet.create({
     },
     textShadowRadius: 4,
   },
-  confirmButtonContainer: {
-    // flex: 1,
-    width: '100%',
+  buttonContainer: {
+    flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   confirmButton: {
     borderRadius: 3,
     backgroundColor: '#4a90e2',
-    width: '82%',
+    flex: 1,
+    margin: 10,
     alignItems: 'center',
     justifyContent: 'center',
     height: 51,
   },
-  confirmButtonText: {
+  rejectButton: {
+    borderRadius: 3,
+    backgroundColor: '#f7651c',
+    flex: 1,
+    margin: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 51,
+  },
+  buttonText: {
     fontFamily: 'ApexNew-Book',
     fontSize: 18,
     fontWeight: '500',
@@ -138,6 +230,40 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: 'left',
     color: '#ffffff',
+  },
+  countsContainer: {
+    borderTopColor: '#e3e1e1',
+    borderTopWidth: 1,
+    paddingTop: 12,
+    justifyContent: 'space-evenly',
+    flexDirection: 'row',
+    width: '80%',
+    marginTop: 12,
+    borderBottomColor: '#e3e1e1',
+    borderBottomWidth: 1,
+    paddingBottom: 12,
+  },
+  countsDescriptionText: {
+    fontFamily: 'ApexNew-Book',
+    textAlign: 'center',
+    fontSize: 12,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
+  },
+  countsNumberText: {
+    fontFamily: 'ApexNew-Book',
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    letterSpacing: 0,
+  },
+  connectedText: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 12,
+    color: '#aba9a9',
+    fontStyle: 'italic',
   },
 });
 
