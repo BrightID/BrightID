@@ -1,5 +1,5 @@
 // @flow
-import { setConnections, setConnectionsSort } from '../../actions';
+import { setConnections, setConnectionsSort } from '../../../actions';
 
 export const types = {
   byNameAscending: 'BY_NAME_ASCENDING',
@@ -10,16 +10,19 @@ export const types = {
   byDateAddedDescending: 'BY_DATE_ADDED_DESCENDING',
 };
 
+const verifiedOrWaiting = (status: string) =>
+  status === 'verified' || status === 'waiting';
+
 export const sortByNameAscending = () => (
   dispatch: dispatch,
   getState: getState,
 ) => {
   const { connections } = getState();
-  let list = connections.filter((c) => c.status !== 'deleted');
+  let list = connections.filter((c) => verifiedOrWaiting(c.status));
   list.sort((a, b) => b.name.localeCompare(a.name));
   dispatch(
     setConnections(
-      list.concat(connections.filter((c) => c.status === 'deleted')),
+      list.concat(connections.filter((c) => !verifiedOrWaiting(c.status))),
     ),
   );
   dispatch(setConnectionsSort(types.byNameAscending));
@@ -30,11 +33,11 @@ export const sortByNameDescending = () => (
   getState: getState,
 ) => {
   const { connections } = getState();
-  let list = connections.filter((c) => c.status !== 'deleted');
+  let list = connections.filter((c) => verifiedOrWaiting(c.status));
   list.sort((a, b) => a.name.localeCompare(b.name));
   dispatch(
     setConnections(
-      list.concat(connections.filter((c) => c.status === 'deleted')),
+      list.concat(connections.filter((c) => !verifiedOrWaiting(c.status))),
     ),
   );
   dispatch(setConnectionsSort(types.byNameDescending));
@@ -45,11 +48,11 @@ export const sortByScoreAscending = () => (
   getState: getState,
 ) => {
   const { connections } = getState();
-  let list = connections.filter((c) => c.status !== 'deleted');
+  let list = connections.filter((c) => verifiedOrWaiting(c.status));
   list.sort((a, b) => a.score - b.score);
   dispatch(
     setConnections(
-      list.concat(connections.filter((c) => c.status === 'deleted')),
+      list.concat(connections.filter((c) => !verifiedOrWaiting(c.status))),
     ),
   );
   dispatch(setConnectionsSort(types.byScoreAscending));
@@ -60,11 +63,11 @@ export const sortByScoreDescending = () => (
   getState: getState,
 ) => {
   const { connections } = getState();
-  let list = connections.filter((c) => c.status !== 'deleted');
+  let list = connections.filter((c) => verifiedOrWaiting(c.status));
   list.sort((a, b) => b.score - a.score);
   dispatch(
     setConnections(
-      list.concat(connections.filter((c) => c.status === 'deleted')),
+      list.concat(connections.filter((c) => !verifiedOrWaiting(c.status))),
     ),
   );
   dispatch(setConnectionsSort(types.byScoreDescending));
@@ -75,11 +78,11 @@ export const sortByDateAddedAscending = () => (
   getState: getState,
 ) => {
   const { connections } = getState();
-  let list = connections.filter((c) => c.status !== 'deleted');
+  let list = connections.filter((c) => verifiedOrWaiting(c.status));
   list.sort((a, b) => a.connectionDate - b.connectionDate);
   dispatch(
     setConnections(
-      list.concat(connections.filter((c) => c.status === 'deleted')),
+      list.concat(connections.filter((c) => !verifiedOrWaiting(c.status))),
     ),
   );
   dispatch(setConnectionsSort(types.byDateAddedAscending));
@@ -90,11 +93,11 @@ export const sortByDateAddedDescending = () => (
   getState: getState,
 ) => {
   const { connections } = getState();
-  let list = connections.filter((c) => c.status !== 'deleted');
+  let list = connections.filter((c) => verifiedOrWaiting(c.status));
   list.sort((a, b) => b.connectionDate - a.connectionDate);
   dispatch(
     setConnections(
-      list.concat(connections.filter((c) => c.status === 'deleted')),
+      list.concat(connections.filter((c) => !verifiedOrWaiting(c.status))),
     ),
   );
   dispatch(setConnectionsSort(types.byDateAddedDescending));

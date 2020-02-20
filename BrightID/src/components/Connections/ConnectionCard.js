@@ -34,25 +34,24 @@ class ConnectionCard extends React.PureComponent<Props> {
   };
 
   setStatus = () => {
-    const { score, status, flaggers } = this.props;
+    const { score, status } = this.props;
     if (status === 'initiated') {
       return (
         <View style={styles.scoreContainer}>
           <Text style={styles.waitingMessage}>Waiting</Text>
         </View>
       );
-    } else if (status === 'deleted') {
+    } else if (status === 'verified') {
       return (
         <View style={styles.scoreContainer}>
-          <Text style={styles.deletedMessage}>Deleted</Text>
+          <Text style={styles.scoreLeft}>Score:</Text>
+          <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>
         </View>
       );
     } else {
       return (
         <View style={styles.scoreContainer}>
-          <Text style={styles.scoreLeft}>Score:</Text>
-          <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>
-          <Text style={styles.flagged}> {flaggers ? 'Flagged' : ' '}</Text>
+          <Text style={styles.deletedMessage}>{status}</Text>
         </View>
       );
     }

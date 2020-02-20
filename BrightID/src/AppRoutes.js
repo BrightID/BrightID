@@ -57,7 +57,7 @@ const defaultNavigationOptions = ({ navigation }) => ({
   headerTitleStyle,
   headerBackground,
   headerTitleAlign: 'center',
-  cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+  // cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 });
 
 const AppStack = createStackNavigator(

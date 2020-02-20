@@ -1,8 +1,8 @@
 // @flow
 
 import { Alert } from 'react-native';
-import store from '../../store';
-import { addFakeConnection } from '../../actions/fakeContact';
+import store from '../../../store';
+import { addFakeConnection } from '../../../actions/fakeContact';
 
 export const createFakeConnection = (navigation: navigation) => () => {
   if (__DEV__) {

@@ -10,7 +10,7 @@ import {
   removeSafePubKey,
 } from '../actions';
 
-import { defaultSort } from '../components/Connections/sortingUtility';
+import { defaultSort } from '../components/Connections/models/sortingUtility';
 
 import store from '../store';
 

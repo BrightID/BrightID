@@ -7,14 +7,12 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionSheet from 'react-native-actionsheet';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
-import { createFakeConnection } from './createFakeConnection';
+import { createFakeConnection } from './models/createFakeConnection';
 import BottomNav from '../BottomNav';
 import { renderListOrSpinner } from './renderConnections';
 import FloatingActionButton from '../FloatingActionButton';
-import { defaultSort } from './sortingUtility';
-import api from '../../Api/BrightId';
-import { deleteConnection } from '../../actions';
-import { fakeJoinGroups } from '../../actions/fakeGroup';
+import { defaultSort } from './models/sortingUtility';
+import { performAction } from './models/modifyConnections';
 
 /**
  * Connection screen of BrightID
@@ -61,52 +59,20 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     <ConnectionCard actionSheet={this.actionSheet} {...item} />
   );
 
-  deleteConnection = async () => {
-    const { dispatch } = this.props;
-    const { id } = this.actionSheet.connection;
-    try {
-      await api.deleteConnection(id);
-      // remove connection from redux
-      dispatch(deleteConnection(id));
-    } catch (err) {
-      Alert.alert("Couldn't remove connection", err.message);
-    }
-  };
-
-  flagAndDeleteConnection = async () => {
-    const { id } = this.actionSheet.connection;
-    const reason = this.actionSheet.lastAction.split(' as ')[1].toLowerCase();
-    const { dispatch } = this.props;
-    try {
-      await api.flagConnection(id, reason);
-      // remove connection from redux
-      dispatch(deleteConnection(id));
-    } catch (err) {
-      Alert.alert("Couldn't remove connection", err.message);
-    }
-  };
-
-  performAction = (action) => {
+  modifyConnection = (option: string) => {
     if (!this.actionSheet || !this.actionSheet.connection) return;
-    const { name } = this.actionSheet.connection;
-    action = this.actionSheet.props.options[action];
-    this.actionSheet.lastAction = action;
-    let title, msg, handler;
-    if (action === 'Delete') {
-      handler = this.deleteConnection;
-      title = 'Delete Connection';
-      msg = `Are you sure you want to remove ${name} from your list of connections?`;
-    } else if (action.startsWith('Flag')) {
-      handler = this.flagAndDeleteConnection;
-      title = 'Flag and Delete Connection';
-      const reason = action.split(' as ')[1];
-      msg = `Are you sure you want to flag ${name} as ${reason} and remove the connection?`;
-    } else if (action === 'Join All Groups') {
-      const { dispatch, id, secretKey } = this.actionSheet.connection;
-      return dispatch(fakeJoinGroups({ id, secretKey }));
-    } else {
-      return;
-    }
+
+    const action = this.actionSheet.props.options[option];
+
+    if (action === 'cancel') return;
+
+    const { title, msg, handler } = performAction(
+      action,
+      this.actionSheet.connection,
+    );
+
+    const { dispatch } = this.props;
+
     const buttons = [
       {
         text: 'Cancel',
@@ -115,9 +81,14 @@ export class ConnectionsScreen extends React.Component<Props, State> {
       },
       {
         text: 'OK',
-        onPress: handler,
+        onPress: () => {
+          handler().then(() => {
+            dispatch(defaultSort());
+          });
+        },
       },
     ];
+
     Alert.alert(title, msg, buttons, { cancelable: true });
   };
 
@@ -155,7 +126,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
           title="What do you want to do?"
           options={actions}
           cancelButtonIndex={actions.length - 1}
-          onPress={(index) => this.performAction(index)}
+          onPress={(index) => this.modifyConnection(index)}
         />
         <BottomNav style={{ flex: 0 }} navigation={navigation} />
       </View>

@@ -52,6 +52,7 @@ import {
   HYDRATE_STATE,
   RESET_STORE,
   UPDATE_CONNECTIONS,
+  FLAG_CONNECTION,
 } from '../actions';
 
 /**
@@ -245,10 +246,10 @@ export const reducer = (state: State = initialState, action: action) => {
         connections: state.connections.map<connection>((conn: connection) => {
           const updatedConn = find(propEq('id', conn.id))(action.connections);
           if (!updatedConn) {
-            if (conn.status === 'verified') conn.status = 'deleted';
+            if (conn.status === 'verified') conn.status = 'Deleted';
             return conn;
           } else {
-            if (conn.status !== 'deleted') conn.status = 'verified';
+            if (conn.status === 'initiated') conn.status = 'verified';
             return mergeRight(conn, updatedConn);
           }
         }),
@@ -278,6 +279,17 @@ export const reducer = (state: State = initialState, action: action) => {
         connections: state.connections.map<connection>((conn: connection) => {
           if (conn.id === action.id) {
             conn.status = 'deleted';
+          }
+          return conn;
+        }),
+      };
+    }
+    case FLAG_CONNECTION: {
+      return {
+        ...state,
+        connections: state.connections.map<connection>((conn: connection) => {
+          if (conn.id === action.id) {
+            conn.status = action.flag;
           }
           return conn;
         }),
