@@ -62,7 +62,6 @@ class BrightId {
       timestamp,
     };
     op._key = hash(op.name + op.id1 + op.id2 + op.timestamp);
-    console.log(op._key);
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
   }
@@ -80,6 +79,26 @@ class BrightId {
       id1: id,
       id2,
       sig1,
+      timestamp,
+    };
+    const res = await this.api.put(`/operations/${op._key}`, op);
+    BrightId.throwOnError(res);
+  }
+
+  async flagConnection(flagged: string, reason: string) {
+    const { id, secretKey } = store.getState();
+    const timestamp = Date.now();
+    const message = `Flag User${id}${flagged}${reason}${timestamp}`;
+    let sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+    const op = {
+      _key: hash(message),
+      name: 'Flag User',
+      flagger: id,
+      flagged,
+      reason,
+      sig,
       timestamp,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);

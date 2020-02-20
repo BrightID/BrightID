@@ -38,7 +38,6 @@ export const bootstrapAndUpgrade = async () => {
         upgradeIds();
         const { publicKey } = store.getState();
         if (publicKey) store.dispatch(fetchUserInfo());
-        await saveStore();
       } else {
         Alert.alert('Error: Please Backup Data and reinstall BrightId');
       }

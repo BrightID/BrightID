@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import {
-  Alert,
   FlatList,
   StyleSheet,
   Text,
@@ -12,8 +11,8 @@ import {
 import { connect } from 'react-redux';
 import { splitEvery } from 'ramda';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import EligibleGroupCard from './EligibleGroupCard';
-import CurrentGroupCard from './CurrentGroupCard';
+import EligibleGroupCard from './EligibleGroups/EligibleGroupCard';
+import CurrentGroupCard from './CurrentGroups/CurrentGroupCard';
 import BottomNav from '../BottomNav';
 import {
   NoCurrentGroups,
@@ -47,7 +46,9 @@ export class GroupsScreen extends React.Component<Props, State> {
       .concat(eligibleGroups.filter((group) => !group.isNew));
     return groups
       .slice(0, 2)
-      .map((group) => <EligibleGroupCard group={group} key={group.id} />);
+      .map((group) => (
+        <EligibleGroupCard group={group} key={`${group.id}2elig`} />
+      ));
   }
 
   render() {
@@ -68,16 +69,18 @@ export class GroupsScreen extends React.Component<Props, State> {
                 <Text style={styles.eligibleGroupTitle}>ELIGIBLE</Text>
                 {this.getTwoEligibleGroups()}
                 <View style={styles.eligibleBottomBorder} />
-                <TouchableOpacity
-                  style={styles.seeAllButton}
-                  onPress={() => {
-                    navigation.navigate('EligibleGroups');
-                  }}
-                >
-                  <Text style={styles.seeAllText}>
-                    See all {this.props.eligibleGroups.length}
-                  </Text>
-                </TouchableOpacity>
+                {eligibleGroups.length > 2 && (
+                  <TouchableOpacity
+                    style={styles.seeAllButton}
+                    onPress={() => {
+                      navigation.navigate('EligibleGroups');
+                    }}
+                  >
+                    <Text style={styles.seeAllText}>
+                      See all {this.props.eligibleGroups.length}
+                    </Text>
+                  </TouchableOpacity>
+                )}
               </View>
             )}
             {!!currentGroups.length && !eligibleGroups.length && (
@@ -118,8 +121,8 @@ export class GroupsScreen extends React.Component<Props, State> {
           <BottomNav navigation={navigation} />
         </View>
       );
-    } catch (e) {
-      Alert.alert(e.message || 'Error', e.stack);
+    } catch (err) {
+      err instanceof Error ? console.warn(err.message) : console.log(err);
     }
   }
 }
@@ -215,7 +218,7 @@ const styles = StyleSheet.create({
   currentGroupRow: {
     width: '100%',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'stretch',
     justifyContent: 'space-evenly',
   },
   addGroupButtonContainer: {

@@ -12,7 +12,7 @@ import {
   sortByScoreAscending,
   sortByScoreDescending,
   types,
-} from './sortingUtility';
+} from './models/sortingUtility';
 
 class SortingConnectionsScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({

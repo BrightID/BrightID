@@ -13,6 +13,7 @@ import {
 // TODO update connections here
 const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
   const { id } = getState();
+  if (!id) return;
   try {
     const {
       eligibleGroups,
@@ -28,7 +29,7 @@ const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
     dispatch(setVerifications(verifications));
     dispatch(updateConnections(connections));
   } catch (err) {
-    err instanceof Error ? console.warn(err.message) : console.log(err);
+    console.log(err.message);
   }
 };
 

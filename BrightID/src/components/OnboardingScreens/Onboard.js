@@ -77,6 +77,7 @@ export class Onboard extends React.Component<Props, State> {
           barStyle="dark-content"
           backgroundColor="#fff"
           translucent={false}
+          animated={true}
         />
         <View style={styles.carousel}>
           <Carousel

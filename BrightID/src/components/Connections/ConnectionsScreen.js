@@ -1,18 +1,18 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import ActionSheet from 'react-native-actionsheet';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
-import { createNewConnection } from './createNewConnection';
-import emitter from '../../emitter';
+import { createFakeConnection } from './models/createFakeConnection';
 import BottomNav from '../BottomNav';
 import { renderListOrSpinner } from './renderConnections';
-import api from '../../Api/BrightId';
 import FloatingActionButton from '../FloatingActionButton';
-import { removeConnection } from '../../actions';
+import { defaultSort } from './models/sortingUtility';
+import { performAction } from './models/modifyConnections';
 
 /**
  * Connection screen of BrightID
@@ -29,7 +29,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     headerRight: () => (
       <TouchableOpacity
         style={{ marginRight: 11 }}
-        onPress={createNewConnection(navigation)}
+        onPress={createFakeConnection(navigation)}
       >
         <Material name="dots-horizontal" size={32} color="#fff" />
       </TouchableOpacity>
@@ -37,25 +37,11 @@ export class ConnectionsScreen extends React.Component<Props, State> {
   });
 
   componentDidMount() {
-    const { navigation } = this.props;
-    emitter.on('removeConnection', this.removeConnection);
-    navigation.addListener('willBlur', () => {
-      emitter.off('removeConnection', this.removeConnection);
+    const { navigation, dispatch } = this.props;
+    navigation.addListener('willFocus', () => {
+      dispatch(defaultSort());
     });
   }
-
-  removeConnection = async (id: string) => {
-    try {
-      const { dispatch } = this.props;
-      const res = await api.deleteConnection(id);
-      // TODO - only delete connection if verified on the backend
-      console.log(res);
-      // remove connection from redux
-      dispatch(removeConnection(id));
-    } catch (err) {
-      Alert.alert("Couldn't remove connection", err.message);
-    }
-  };
 
   filterConnections = () => {
     const { connections, searchParam } = this.props;
@@ -68,10 +54,58 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     );
   };
 
-  renderConnection = ({ item }) => <ConnectionCard {...item} />;
+  renderConnection = ({ item }) => (
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <ConnectionCard actionSheet={this.actionSheet} {...item} />
+  );
+
+  modifyConnection = (option: string) => {
+    if (!this.actionSheet || !this.actionSheet.connection) return;
+
+    const action = this.actionSheet.props.options[option];
+
+    if (action === 'cancel') return;
+
+    const { title, msg, handler } = performAction(
+      action,
+      this.actionSheet.connection,
+    );
+
+    const { dispatch } = this.props;
+
+    const buttons = [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: () => {
+          handler().then(() => {
+            dispatch(defaultSort());
+          });
+        },
+      },
+    ];
+
+    Alert.alert(title, msg, buttons, { cancelable: true });
+  };
 
   render() {
     const { navigation } = this.props;
+    const actions = [
+      'Delete',
+      'Flag as Duplicate',
+      'Flag as Fake',
+      'Flag as Diseased',
+      'Join All Groups',
+      'cancel',
+    ];
+    if (!__DEV__) {
+      // remove 'Join All Groups'
+      actions.splice(4, 1);
+    }
     return (
       <View style={styles.container}>
         <View style={{ flex: 1 }}>
@@ -85,6 +119,15 @@ export class ConnectionsScreen extends React.Component<Props, State> {
             onPress={() => navigation.navigate('NewConnection')}
           />
         </View>
+        <ActionSheet
+          ref={(o) => {
+            this.actionSheet = o;
+          }}
+          title="What do you want to do?"
+          options={actions}
+          cancelButtonIndex={actions.length - 1}
+          onPress={(index) => this.modifyConnection(index)}
+        />
         <BottomNav style={{ flex: 0 }} navigation={navigation} />
       </View>
     );

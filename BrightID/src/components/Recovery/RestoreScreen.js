@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import {
-  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -10,7 +9,6 @@ import {
   View,
   KeyboardAvoidingView,
   Alert,
-  Platform,
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
@@ -32,6 +30,7 @@ class RestoreScreen extends React.Component<Props, State> {
     },
   };
 
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     pass: '',
     completed: 0,
@@ -126,11 +125,6 @@ class RestoreScreen extends React.Component<Props, State> {
     const { pass } = this.state;
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <StatusBar
-          barStyle="default"
-          backgroundColor={Platform.OS === 'ios' ? 'transparent' : '#000'}
-          translucent={false}
-        />
         <View style={styles.textInputContainer}>
           <Text style={styles.textInfo}>
             Enter a password that you encrypted your backup data with:

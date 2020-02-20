@@ -3,8 +3,8 @@
 import thunkMiddleware from 'redux-thunk';
 import { applyMiddleware, createStore, compose } from 'redux';
 import reducer from '../reducer';
-// eslint-disable-next-line import/no-cycle
 import { saveStore } from './saveStore';
+import { verifyStore } from './verifyStore';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -14,7 +14,11 @@ const store = createStore(
 );
 
 store.subscribe(() => {
-  setTimeout(() => saveStore());
+  if (verifyStore(store.getState())) {
+    setTimeout(() => saveStore(store.getState()));
+  } else {
+    console.warn('bad state');
+  }
 });
 
 export default store;

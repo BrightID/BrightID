@@ -3,7 +3,6 @@
 import nacl from 'tweetnacl';
 import { setUserData, setHashedId } from '../../actions';
 import { createImageDirectory, saveImage } from '../../utils/filesystem';
-import api from '../../Api/BrightId';
 import { b64ToUrlSafeB64, uInt8ArrayToB64 } from '../../utils/encoding';
 
 export const handleBrightIdCreation = ({

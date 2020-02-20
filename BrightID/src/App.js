@@ -2,8 +2,7 @@
 
 import * as React from 'react';
 import { Provider } from 'react-redux';
-import { StyleSheet, View } from 'react-native';
-import { MenuProvider } from 'react-native-popup-menu';
+import { StatusBar, StyleSheet, View } from 'react-native';
 
 import AppRoutes from './AppRoutes';
 import store from './store';
@@ -30,13 +29,16 @@ export default class App extends React.Component<Props> {
 
   render() {
     return (
-      <MenuProvider>
-        <Provider store={store}>
-          <View style={styles.container}>
-            <AppRoutes />
-          </View>
-        </Provider>
-      </MenuProvider>
+      <Provider store={store}>
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="#F52828"
+          translucent={false}
+        />
+        <View style={styles.container}>
+          <AppRoutes />
+        </View>
+      </Provider>
     );
   }
 }

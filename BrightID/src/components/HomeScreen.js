@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
-import RNFS from 'react-native-fs';
+import Overlay from 'react-native-modal-overlay';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import VerificationSticker from './Verifications/VerificationSticker';
@@ -11,9 +11,8 @@ import BottomNav from './BottomNav';
 import { setPhoto } from '../actions';
 import { getNotifications } from '../actions/notifications';
 import { delStorage } from '../utils/dev';
-import { selectImage } from '../utils/images';
-import ResizeImage from '../utils/ResizeImage';
-import { saveImage } from '../utils/filesystem';
+import { chooseImage, takePhoto } from '../utils/images';
+import { saveImage, retrieveImage } from '../utils/filesystem';
 
 /**
  * Home screen of BrightID
@@ -21,7 +20,8 @@ import { saveImage } from '../utils/filesystem';
  */
 
 type State = {
-  initialPhoto: { uri: string },
+  profilePhoto: string,
+  modalVisible: boolean,
 };
 
 export class HomeScreen extends React.Component<Props, State> {
@@ -43,37 +43,81 @@ export class HomeScreen extends React.Component<Props, State> {
     ),
   });
 
-  state = {
-    initialPhoto: {
-      uri: '',
-    },
-  };
-
   componentDidMount() {
-    const { navigation, dispatch } = this.props;
+    const { navigation, dispatch, photo } = this.props;
     navigation.addListener('willFocus', () => {
       dispatch(getNotifications());
     });
+    retrieveImage(photo.filename).then((profilePhoto) => {
+      this.setState({ profilePhoto });
+    });
   }
 
-  changePhoto = async () => {
+  // eslint-disable-next-line react/state-in-constructor
+  state = {
+    profilePhoto: ' ',
+    modalVisible: false,
+  };
+
+  // changePhoto = async () => {
+  //   const { id } = this.props;
+  //   try {
+  //     const { mime, data } = await selectImage();
+  //     const uri = `data:${mime};base64,${data}`;
+  //     const filename = await saveImage({ imageName: id, base64Image: uri });
+  //     console.log('filename', filename);
+  //     setPhoto({ filename });
+  //     const profilePhoto = await retrieveImage(filename);
+  //     this.setState({
+  //       profilePhoto,
+  //     });
+  //     // Image.getSize(`file://${RNFS.DocumentDirectoryPath}/photos/${filename}`);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+  getPhotoFromCamera = async () => {
     try {
-      const initialPhoto = await selectImage();
+      const { id } = this.props;
+      const { mime, data } = await takePhoto();
+      const uri = `data:${mime};base64,${data}`;
+      const filename = await saveImage({ imageName: id, base64Image: uri });
+      setPhoto({ filename });
+      const profilePhoto = await retrieveImage(filename);
       this.setState({
-        initialPhoto,
+        profilePhoto,
+        modalVisible: false,
       });
     } catch (err) {
       console.log(err);
     }
   };
 
-  onCapture = async (uri: string) => {
-    const { id, photo } = this.props;
-    const filename = await saveImage({ imageName: id, base64Image: uri });
-    setPhoto({ filename });
-    this.setState({
-      initialPhoto: { uri: '' },
-    });
+  getPhotoFromLibrary = async () => {
+    try {
+      const { id } = this.props;
+      const { mime, data } = await chooseImage();
+      const uri = `data:${mime};base64,${data}`;
+      const filename = await saveImage({ imageName: id, base64Image: uri });
+      setPhoto({ filename });
+      const profilePhoto = await retrieveImage(filename);
+      this.setState({
+        profilePhoto,
+        modalVisible: false,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  onEditPhoto = () => {
+    setTimeout(() => {
+      this.setState({ modalVisible: true });
+    }, 200);
+  };
+
+  onClose = () => {
+    this.setState({ modalVisible: false });
   };
 
   render() {
@@ -82,30 +126,44 @@ export class HomeScreen extends React.Component<Props, State> {
       name,
       score,
       groupsCount,
-      photo,
       connections,
       verifications,
     } = this.props;
-    const { initialPhoto } = this.state;
 
+    const { profilePhoto } = this.state;
     return (
       <View style={styles.container}>
-        <ResizeImage
-          width={180}
-          height={180}
-          onCapture={this.onCapture}
-          uri={initialPhoto.uri}
-        />
+        <Overlay
+          visible={this.state.modalVisible}
+          onClose={this.onClose}
+          closeOnTouchOutside
+        >
+          <View>
+            <TouchableOpacity
+              onPress={this.getPhotoFromCamera}
+              style={styles.button}
+              accessibilityLabel="Take Photo"
+            >
+              <Text style={styles.buttonText}>Take Photo</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.createBrightIdButton}
+              onPress={this.getPhotoFromLibrary}
+            >
+              <Text style={styles.buttonInnerText}>Choose from Library</Text>
+            </TouchableOpacity>
+          </View>
+        </Overlay>
         <View style={styles.mainContainer}>
           <View style={styles.photoContainer}>
             <TouchableOpacity
-              onPress={this.changePhoto}
+              onPress={this.onEditPhoto}
               accessible={true}
               accessibilityLabel="edit photo"
             >
               <Image
                 source={{
-                  uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo.filename}`,
+                  uri: profilePhoto,
                 }}
                 style={styles.photo}
                 resizeMode="cover"
@@ -114,7 +172,6 @@ export class HomeScreen extends React.Component<Props, State> {
                 }}
                 accessible={true}
                 accessibilityLabel="user photo"
-                key={initialPhoto.uri}
               />
             </TouchableOpacity>
             <Text id="name" style={styles.name}>
@@ -316,6 +373,40 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: '#fff',
     marginLeft: 18,
+  },
+  createBrightIdButton: {
+    backgroundColor: '#428BE5',
+    width: 300,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 13,
+    paddingBottom: 12,
+    marginTop: 22,
+  },
+  buttonInnerText: {
+    fontFamily: 'ApexNew-Medium',
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 18,
+  },
+  button: {
+    width: 300,
+    borderWidth: 1,
+    borderColor: '#4990e2',
+    paddingTop: 13,
+    paddingBottom: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    // marginBottom: 10,
+  },
+  buttonText: {
+    fontFamily: 'ApexNew-Medium',
+    color: '#4990e2',
+    fontSize: 18,
+    fontWeight: '500',
+    fontStyle: 'normal',
+    letterSpacing: 0,
   },
 });
 

@@ -1,37 +1,51 @@
 // @flow
 
-import ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import { compose } from 'ramda';
 
-export const selectImage = () =>
+const options = {
+  cropping: true,
+  width: 180,
+  height: 180,
+  writeTempFile: false,
+  includeBase64: true,
+  includeExif: true,
+  cropperToolbarTitle: 'Select Photo',
+  smartAlbums: ['RecentlyAdded', 'UserLibrary', 'PhotoStream', 'SelfPortraits'],
+  useFrontCamera: true,
+  // compressImageMaxWidth: 180,
+  // compressImageMaxHeight: 180,
+  compressImageQuality: 0.8,
+  mediaType: 'photo',
+};
+
+export const takePhoto = () =>
   new Promise((res, rej) => {
-    const options = {
-      title: 'Select Photo',
-      mediaType: 'photo',
-      maxWidth: 180,
-      maxHeight: 180,
-      quality: 1.0,
-      allowsEditing: true,
-      loadingLabelText: 'loading photo...',
-      customButtons: [],
-    };
+    ImagePicker.openCamera(options)
+      .then((response) => {
+        res(response);
+        console.log('size', response.size);
+        console.log('width', response.width);
+        console.log('height', response.height);
+      })
+      .catch((err) => {
+        rej(err);
+      });
+  });
 
-    if (__DEV__) {
-      options.customButtons = [{ name: 'random', title: 'Random Avatar' }];
-    }
-
-    ImagePicker.showImagePicker(options, (response) => {
-      if (response.error) {
-        rej(response.error);
-      } else if (response.customButton) {
-        res(randomAvatar());
-      } else {
-        res({
-          uri: response.uri,
-        });
-      }
-    });
+export const chooseImage = () =>
+  new Promise((res, rej) => {
+    ImagePicker.openPicker(options)
+      .then((response) => {
+        res(response);
+        console.log('size', response.size);
+        console.log('width', response.width);
+        console.log('height', response.height);
+      })
+      .catch((err) => {
+        rej(err);
+      });
   });
 
 const fakeUserAvatar = (): Promise<string> => {
@@ -53,9 +67,7 @@ const fakeUserAvatar = (): Promise<string> => {
 const randomAvatar = async (): Promise<void> => {
   try {
     const randomImage: string = await fakeUserAvatar();
-    return {
-      uri: `data:image/jpeg;base64,${randomImage}`,
-    };
+    return { uri: 'data.jpg', data: randomImage };
   } catch (err) {
     console.log(err);
   }

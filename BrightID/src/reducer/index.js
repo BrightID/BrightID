@@ -1,13 +1,16 @@
 // @flow
 
-import { Alert } from 'react-native';
 import {
-  compose,
   dissoc,
   find,
   mergeRight,
   propEq,
   differenceWith,
+  groupBy,
+  concat,
+  compose,
+  values,
+  map,
 } from 'ramda';
 import {
   USER_SCORE,
@@ -28,14 +31,13 @@ import {
   SET_USER_PHOTO,
   SET_CONNECT_QR_DATA,
   REMOVE_CONNECT_QR_DATA,
-  REMOVE_CONNECTION,
+  DELETE_CONNECTION,
   SET_CONNECT_USER_DATA,
   REMOVE_CONNECT_USER_DATA,
   SET_VERIFICATIONS,
   ADD_APP,
   REMOVE_APP,
   SET_APPS,
-  UPDATE_CONNECTION,
   ADD_CONNECTION,
   SET_NOTIFICATIONS,
   ADD_TRUSTED_CONNECTION,
@@ -50,8 +52,8 @@ import {
   HYDRATE_STATE,
   RESET_STORE,
   UPDATE_CONNECTIONS,
+  FLAG_CONNECTION,
 } from '../actions';
-import { verifyStore } from './verifyStoreV1';
 
 /**
  * INITIAL STATE
@@ -117,12 +119,7 @@ export const initialState: State = {
 export const reducer = (state: State = initialState, action: action) => {
   switch (action.type) {
     case HYDRATE_STATE: {
-      if (verifyStore(action.state)) {
-        return action.state;
-      } else {
-        Alert.alert('Redux Store was not verified...');
-        return state;
-      }
+      return action.state;
     }
     case USER_SCORE: {
       return {
@@ -167,15 +164,25 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case SET_ELIGIBLE_GROUPS: {
-      const byId = (x, y) => x.id === y.id;
-      const diffById = differenceWith(byId);
-      const diffByIdTwice = compose(diffById, diffById(state.eligibleGroups));
-      const localGroups = diffByIdTwice(action.eligibleGroups)(
-        state.currentGroups,
+      const byMostMembers = (acc, val) =>
+        val.knownMembers &&
+        acc.knownMembers &&
+        val.knownMembers.length > acc.knownMembers.length
+          ? val
+          : acc;
+      const dedupe = (list) => {
+        return list.reduce(byMostMembers);
+      };
+      const uniqueByMostMembers = compose(
+        values,
+        map(dedupe),
+        groupBy(({ id }) => id),
+        concat(state.eligibleGroups),
       );
+
       return {
         ...state,
-        eligibleGroups: localGroups.concat(action.eligibleGroups),
+        eligibleGroups: uniqueByMostMembers(action.eligibleGroups),
       };
     }
     case DELETE_ELIGIBLE_GROUP: {
@@ -187,9 +194,12 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case SET_CURRENT_GROUPS: {
+      const byId = (x, y) => x.id === y.id;
+      const diffById = differenceWith(byId);
       return {
         ...state,
         currentGroups: action.currentGroups,
+        eligibleGroups: diffById(state.eligibleGroups)(action.currentGroups),
       };
     }
     case JOIN_GROUP: {
@@ -230,51 +240,31 @@ export const reducer = (state: State = initialState, action: action) => {
         connections: action.connections.slice(0),
       };
     }
-    case UPDATE_CONNECTION: {
-      return {
-        ...state,
-        connections: [
-          ...state.connections.slice(0, action.index),
-          action.connection,
-          ...state.connections.slice(action.index + 1),
-        ],
-      };
-    }
     case UPDATE_CONNECTIONS: {
       return {
         ...state,
         connections: state.connections.map<connection>((conn: connection) => {
           const updatedConn = find(propEq('id', conn.id))(action.connections);
           if (!updatedConn) {
-            if (conn.status == 'verified') {
-              conn.status = 'deleted';
-            }
+            if (conn.status === 'verified') conn.status = 'Deleted';
             return conn;
           } else {
-            conn.status = 'verified';
+            if (conn.status === 'initiated') conn.status = 'verified';
             return mergeRight(conn, updatedConn);
           }
         }),
       };
     }
     case ADD_CONNECTION: {
-      const index = state.connections.findIndex(
-        (conn: connection) => conn.id === action.connection.id,
-      );
-      console.warn('index', index);
+      if (!action.connection.id) return state;
+      const removeExisting = ({ id }: connection) =>
+        id !== action.connection.id;
+      console.log('adding connection', action.connection.id);
       return {
         ...state,
-        connections:
-          index !== -1
-            ? [
-                ...state.connections.slice(0, index),
-                ...state.connections.slice(index + 1),
-                action.connection,
-              ]
-            : [
-                ...state.connections,
-                action.connection,
-              ]
+        connections: state.connections
+          .filter(removeExisting)
+          .concat(action.connection),
       };
     }
     case CONNECTIONS_SORT: {
@@ -283,19 +273,26 @@ export const reducer = (state: State = initialState, action: action) => {
         connectionsSort: action.connectionsSort,
       };
     }
-    case REMOVE_CONNECTION: {
-      let index = state.connections.findIndex(
-        (val: connection) => val.publicKey === action.publicKey,
-      );
+    case DELETE_CONNECTION: {
       return {
         ...state,
-        connections:
-          index !== -1
-            ? [
-                ...state.connections.slice(0, index),
-                ...state.connections.slice(index + 1),
-              ]
-            : state.connections,
+        connections: state.connections.map<connection>((conn: connection) => {
+          if (conn.id === action.id) {
+            conn.status = 'deleted';
+          }
+          return conn;
+        }),
+      };
+    }
+    case FLAG_CONNECTION: {
+      return {
+        ...state,
+        connections: state.connections.map<connection>((conn: connection) => {
+          if (conn.id === action.id) {
+            conn.status = action.flag;
+          }
+          return conn;
+        }),
       };
     }
     case SET_USER_DATA: {

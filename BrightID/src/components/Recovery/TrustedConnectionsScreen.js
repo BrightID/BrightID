@@ -5,7 +5,7 @@ import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import SearchConnections from '../Connections/SearchConnections';
 import TrustedConnectionCard from './TrustedConnectionCard';
-import { renderListOrSpinner } from '../Connections/renderConnections';
+import { renderListOrSpinner } from './renderConnections';
 import { setTrustedConnections } from './helpers';
 
 /**
@@ -24,12 +24,14 @@ class TrustedConnectionsScreen extends React.Component<Props, State> {
 
   filterConnections = () => {
     const { connections, searchParam } = this.props;
-    return connections.filter((item) =>
-      `${item.name}`
-        .toLowerCase()
-        .replace(/\s/g, '')
-        .includes(searchParam.toLowerCase().replace(/\s/g, '')),
-    );
+    return connections
+      .filter((item) =>
+        `${item.name}`
+          .toLowerCase()
+          .replace(/\s/g, '')
+          .includes(searchParam.toLowerCase().replace(/\s/g, '')),
+      )
+      .filter((item) => item.status === 'verified');
   };
 
   cardIsSelected = (card) => {

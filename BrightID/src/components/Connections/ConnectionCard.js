@@ -1,20 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import emitter from '../../emitter';
-import { fakeJoinGroups } from '../../actions/fakeGroup';
 
 /**
  * Connection Card in the Connections Screen
@@ -28,37 +19,9 @@ import { fakeJoinGroups } from '../../actions/fakeGroup';
 
 class ConnectionCard extends React.PureComponent<Props> {
   handleUserOptions = () => {
-    const { name, id, dispatch } = this.props;
-    const buttons = [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {
-        text: 'OK',
-        onPress: () => {
-          emitter.emit('removeConnection', id);
-        },
-      },
-    ];
-
-    if (__DEV__) {
-      let { secretKey } = this.props;
-      buttons.push({
-        text: 'Join All Groups',
-        onPress: () => {
-          dispatch(fakeJoinGroups({ id, secretKey }));
-        },
-      });
-    }
-
-    Alert.alert(
-      `Delete Connection`,
-      `Are you sure you want to remove ${name} from your list of connections?`,
-      buttons,
-      { cancelable: true },
-    );
+    const { actionSheet } = this.props;
+    actionSheet.connection = this.props;
+    actionSheet.show();
   };
 
   scoreColor = () => {
@@ -72,30 +35,30 @@ class ConnectionCard extends React.PureComponent<Props> {
 
   setStatus = () => {
     const { score, status } = this.props;
-    if (status == 'initiated') {
+    if (status === 'initiated') {
       return (
         <View style={styles.scoreContainer}>
           <Text style={styles.waitingMessage}>Waiting</Text>
         </View>
       );
-    } else if (status == 'deleted') {
-      return (
-        <View style={styles.scoreContainer}>
-          <Text style={styles.deletedMessage}>Deleted</Text>
-        </View>
-      );
-    } else {
+    } else if (status === 'verified') {
       return (
         <View style={styles.scoreContainer}>
           <Text style={styles.scoreLeft}>Score:</Text>
           <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>
         </View>
       );
+    } else {
+      return (
+        <View style={styles.scoreContainer}>
+          <Text style={styles.deletedMessage}>{status}</Text>
+        </View>
+      );
     }
   };
 
   render() {
-    const { photo, name, connectionDate, score, style } = this.props;
+    const { photo, name, connectionDate, style } = this.props;
 
     return (
       <View style={{ ...styles.container, ...style }}>
@@ -107,6 +70,7 @@ class ConnectionCard extends React.PureComponent<Props> {
         />
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
+
           <this.setStatus />
           <Text style={styles.connectedText}>
             Connected {moment(parseInt(connectionDate, 10)).fromNow()}
@@ -173,6 +137,12 @@ const styles = StyleSheet.create({
     fontFamily: 'ApexNew-Medium',
     fontSize: 16,
   },
+  flagged: {
+    fontFamily: 'ApexNew-Medium',
+    fontSize: 16,
+    color: '#FF0800',
+    marginLeft: 15,
+  },
   connectedText: {
     fontFamily: 'ApexNew-Book',
     fontSize: 12,
@@ -185,7 +155,7 @@ const styles = StyleSheet.create({
   waitingMessage: {
     fontFamily: 'ApexNew-Medium',
     fontSize: 16,
-    color: '#e39f2f'
+    color: '#e39f2f',
   },
   deletedMessage: {
     fontFamily: 'ApexNew-Medium',

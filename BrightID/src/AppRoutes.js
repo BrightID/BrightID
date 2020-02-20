@@ -1,20 +1,22 @@
 import * as React from 'react';
 import { createAppContainer } from 'react-navigation';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
-import { createStackNavigator } from 'react-navigation-stack';
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+} from 'react-navigation-stack';
 import LinearGradient from 'react-native-linear-gradient';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Home from './components/HomeScreen';
 import ConnectionsScreen from './components/Connections/ConnectionsScreen';
 import SortingConnectionsScreen from './components/Connections/SortingConnectionsScreen';
 import GroupsScreen from './components/GroupsScreens/GroupsScreen';
-import EligibleGroupsScreen from './components/GroupsScreens/EligibleGroupsScreen';
+import EligibleGroupsScreen from './components/GroupsScreens/EligibleGroups/EligibleGroupsScreen';
 import Onboard from './components/OnboardingScreens/Onboard';
 import SignUp from './components/OnboardingScreens/SignUp';
 import NewConnectionScreen from './components/NewConnectionsScreens/NewConnectionScreen';
-import NewGroupScreen from './components/GroupsScreens/NewGroupScreen';
-import CofoundGroupReview from './components/GroupsScreens/CofoundGroupReview';
-import CurrentGroupView from './components/GroupsScreens/CurrentGroupView';
+import NewGroupScreen from './components/GroupsScreens/NewGroups/NewGroupScreen';
+import CofoundGroupReview from './components/GroupsScreens/Cofounders/CofoundGroupReview';
+import CurrentGroupView from './components/GroupsScreens/CurrentGroups/CurrentGroupView';
 import PreviewConnectionScreen from './components/NewConnectionsScreens/PreviewConnectionScreen';
 import SuccessScreen from './components/NewConnectionsScreens/SuccessScreen';
 import AppBootstrap from './AppBootstrap';
@@ -54,6 +56,8 @@ const defaultNavigationOptions = ({ navigation }) => ({
   headerTintColor: '#fff',
   headerTitleStyle,
   headerBackground,
+  headerTitleAlign: 'center',
+  // cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 });
 
 const AppStack = createStackNavigator(

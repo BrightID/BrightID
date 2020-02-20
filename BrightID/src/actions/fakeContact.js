@@ -11,7 +11,7 @@ import {
   b64ToUrlSafeB64,
 } from '../utils/encoding';
 
-export const addConnection = (navigation: navigation) => async (
+export const addFakeConnection = (navigation: navigation) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {

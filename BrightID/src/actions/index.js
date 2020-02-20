@@ -14,7 +14,7 @@ export const JOIN_GROUP_AS_CO_FOUNDER = 'JOIN_GROUP_AS_CO_FOUNDER';
 export const LEAVE_GROUP = 'LEAVE_GROUP';
 export const SET_CONNECTIONS = 'SET_CONNECTIONS';
 export const CONNECTIONS_SORT = 'CONNECTIONS_SORT';
-export const REMOVE_CONNECTION = 'REMOVE_CONNECTION';
+export const DELETE_CONNECTION = 'DELETE_CONNECTION';
 export const SET_USER_DATA = 'SET_USER_DATA';
 export const SET_USER_PHOTO = 'SET_USER_PHOTO';
 export const SET_CONNECT_QR_DATA = 'SET_CONNECT_QR_DATA';
@@ -33,13 +33,13 @@ export const SET_PASSWORD = 'SET_PASSWORD';
 export const SET_RECOVERY_DATA = 'SET_RECOVERY_DATA';
 export const REMOVE_RECOVERY_DATA = 'REMOVE_RECOVERY_DATA';
 export const SET_HASHED_ID = 'SET_HASHED_ID';
-export const UPDATE_CONNECTION = 'UPDATE_CONNECTION';
 export const UPDATE_CONNECTIONS = 'UPDATE_CONNECTIONS';
 export const ADD_CONNECTION = 'ADD_CONNECTION';
 export const SET_USER_ID = 'SET_USER_ID';
 export const HYDRATE_STATE = 'HYDRATE_STATE';
 export const REMOVE_SAFE_PUB_KEY = 'REMOVE_SAFE_PUB_KEY';
 export const RESET_STORE = 'RESET_STORE';
+export const FLAG_CONNECTION = 'FLAG_CONNECTION';
 
 /**
  * redux action creator that updates user `score`
@@ -160,18 +160,6 @@ export const setConnections = (connections: connection[]) => ({
 
 /**
  * redux action creator for setting connections array
- * @param type UPDATE_CONNECTION
- * @param connection a single connection
- */
-
-export const updateConnection = (connection: connection, index: number) => ({
-  type: UPDATE_CONNECTION,
-  connection,
-  index,
-});
-
-/**
- * redux action creator for setting connections array
  * @param type ADD_CONNECTION
  * @param connection add a single connection
  */
@@ -194,13 +182,25 @@ export const setConnectionsSort = (connectionsSort: string) => ({
 
 /**
  * redux action creator for removing a connection
- * @param type REMOVE_CONNECTION
+ * @param type DELETE_CONNECTION
  * @param connection removes a connection object from the array of connections and removes id from connection ids
  */
 
-export const removeConnection = (id: string) => ({
-  type: REMOVE_CONNECTION,
+export const deleteConnection = (id: string) => ({
+  type: DELETE_CONNECTION,
   id,
+});
+
+/**
+ * redux action creator for removing a connection
+ * @param type DELETE_CONNECTION
+ * @param connection removes a connection object from the array of connections and removes id from connection ids
+ */
+
+export const flagConnection = (id: string, flag: string) => ({
+  type: FLAG_CONNECTION,
+  id,
+  flag,
 });
 
 /**
