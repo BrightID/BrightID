@@ -3,10 +3,9 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import { addNewConnection } from './actions/addNewConnection';
 import api from '../../Api/BrightId';
-import moment from 'moment';
-
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -23,7 +22,6 @@ type State = {
 };
 
 export class PreviewConnectionScreen extends React.Component<Props, State> {
-
   state = {
     connections: 'loading',
     groups: 'loading',
@@ -37,7 +35,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    this.fetchConnectionInfo().done()
+    this.fetchConnectionInfo().done();
   }
 
   handleConfirmation = async () => {
@@ -59,14 +57,14 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
         currentGroups,
         connections = [],
       } = await api.getUserInfo(this.props.connectUserData.id);
-      const mutualConnections = connections.filter( function( el ) {
-        return myConnections.some(x => x.id == el.id)
+      const mutualConnections = connections.filter(function(el) {
+        return myConnections.some((x) => x.id == el.id);
       });
       this.setState({
         connections: connections.length,
         groups: currentGroups.length,
         mutualConnections: mutualConnections.length,
-        connectionDate: 'Created ' + moment(parseInt(createdAt, 10)).fromNow(),
+        connectionDate: `Created ${moment(parseInt(createdAt, 10)).fromNow()}`,
       });
     } catch (err) {
       if (err instanceof Error && err.message == 'User not found') {
@@ -74,7 +72,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
           connections: 0,
           groups: 0,
           mutualConnections: 0,
-          connectionDate: 'New user'
+          connectionDate: 'New user',
         });
       } else {
         err instanceof Error ? console.warn(err.message) : console.log(err);
@@ -107,7 +105,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
             accessibilityLabel="user photo"
           />
           <Text style={styles.connectName}>{name}</Text>
-          <Text style={styles.connectedText}>{ this.state.connectionDate }</Text>
+          <Text style={styles.connectedText}>{this.state.connectionDate}</Text>
         </View>
         <View style={styles.countsContainer}>
           <View style={styles.countsGroup}>
@@ -130,10 +128,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            onPress={this.reject}
-            style={styles.rejectButton}
-          >
+          <TouchableOpacity onPress={this.reject} style={styles.rejectButton}>
             <Text style={styles.buttonText}>Reject</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -158,7 +153,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   questionTextContainer: {
-    marginTop: 10,
+    marginTop: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
