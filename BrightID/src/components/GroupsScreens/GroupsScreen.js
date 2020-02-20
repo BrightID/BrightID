@@ -19,7 +19,6 @@ import {
   EmptyFullScreen,
   NoEligibleGroups,
 } from './EmptyGroups';
-import { NavigationEvents } from 'react-navigation';
 import fetchUserInfo from '../../actions/fetchUserInfo';
 
 const ICON_SIZE = 36;
@@ -29,6 +28,13 @@ export class GroupsScreen extends React.Component<Props, State> {
     title: 'Groups',
     headerRight: () => <View />,
   });
+
+  componentDidMount() {
+    const { navigation, dispatch } = this.props;
+    navigation.addListener('didFocus', () => {
+      dispatch(fetchUserInfo());
+    });
+  }
 
   // eslint-disable-next-line class-methods-use-this
   renderCurrentGroups({ item }) {
@@ -40,10 +46,6 @@ export class GroupsScreen extends React.Component<Props, State> {
       </View>
     );
   }
-
-  refreshUserInfo = async () => {
-    await this.props.dispatch(fetchUserInfo());
-  };
 
   getTwoEligibleGroups() {
     let { eligibleGroups } = this.props;
@@ -67,8 +69,6 @@ export class GroupsScreen extends React.Component<Props, State> {
       return (
         <View style={styles.container}>
           <View style={styles.mainContainer}>
-            <NavigationEvents onDidFocus={this.refreshUserInfo} />
-
             {!eligibleGroups.length && !currentGroups.length && (
               <EmptyFullScreen navigation={navigation} />
             )}

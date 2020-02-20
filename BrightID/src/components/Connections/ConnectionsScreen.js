@@ -5,7 +5,6 @@ import { StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionSheet from 'react-native-actionsheet';
-import { NavigationEvents } from 'react-navigation';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
 import { createFakeConnection } from './models/createFakeConnection';
@@ -38,14 +37,11 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     ),
   });
 
-  refreshUserInfo = async () => {
-    await this.props.dispatch(fetchUserInfo());
-  };
-
   componentDidMount() {
     const { navigation, dispatch } = this.props;
     navigation.addListener('willFocus', () => {
       dispatch(defaultSort());
+      dispatch(fetchUserInfo());
     });
   }
 
@@ -116,8 +112,6 @@ export class ConnectionsScreen extends React.Component<Props, State> {
       <View style={styles.container}>
         <View style={{ flex: 1 }}>
           <View style={styles.mainContainer}>
-            <NavigationEvents onDidFocus={this.refreshUserInfo} />
-
             <SearchConnections navigation={navigation} sortable={true} />
             <View style={styles.mainContainer}>
               {renderListOrSpinner(this)}
