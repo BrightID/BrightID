@@ -1,8 +1,9 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationEvents } from 'react-navigation';
 import SearchConnections from './SearchConnections';
 import NewGroupCard from './NewGroupCard';
@@ -21,9 +22,54 @@ type State = {
 };
 
 export class NewGroupScreen extends React.Component<Props, State> {
-  static navigationOptions = ({ navigation }) => ({
-    title: 'New Group',
-  });
+
+  state = {
+    inviteOnly: false,
+  };
+
+  static navigationOptions = ({ navigation }: { navigation: navigation }) => {
+    const params = navigation.state.params || {};
+    return {
+      title: 'New Group',
+      headerRight: () => (
+        <TouchableOpacity
+          style={{ marginRight: 11 }}
+          onPress={params.setInviteOnly}
+        >
+          <Material name="dots-horizontal" size={32} color="#fff" />
+        </TouchableOpacity>
+      ),
+    };
+  };
+
+  componentDidMount() {
+    this.props.navigation.setParams({ setInviteOnly: this._setInviteOnly });
+  }
+
+  _setInviteOnly = () => {
+    const buttons = [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'No',
+        onPress: () => this.setState({ inviteOnly: false })
+      },
+      {
+        text: 'Yes',
+        onPress: () => this.setState({ inviteOnly: true })
+      }
+    ];
+    Alert.alert(
+      `Create Group`,
+      `Do you want the group be invite only?`,
+      buttons,
+      {
+        cancelable: true,
+      },
+    );
+  };
 
   onWillBlur = () => {
     this.props.dispatch(clearNewGroupCoFounders());
@@ -75,7 +121,7 @@ export class NewGroupScreen extends React.Component<Props, State> {
           <TouchableOpacity
             onPress={async () => {
               try {
-                await store.dispatch(createNewGroup());
+                await store.dispatch(createNewGroup(this.state.inviteOnly));
                 navigation.goBack();
               } catch (err) {
                 console.log(err);
@@ -83,7 +129,7 @@ export class NewGroupScreen extends React.Component<Props, State> {
             }}
             style={styles.createGroupButton}
           >
-            <Text style={styles.buttonInnerText}>Create Group</Text>
+            <Text style={styles.buttonInnerText}>Create {this.state.inviteOnly ? ' an Invite Only ' : ''} Group</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -108,7 +154,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#e3e1e1',
   },
-
   moreIcon: {
     marginRight: 16,
   },

@@ -105,7 +105,7 @@ class BrightId {
     BrightId.throwOnError(res);
   }
 
-  async createGroup(id2: string, id3: string) {
+  async createGroup(id2: string, id3: string, inviteOnly: boolean) {
     const { id, secretKey } = store.getState();
     const timestamp = Date.now();
     const message = `Add Group${id}${id2}${id3}${timestamp}`;
@@ -121,6 +121,7 @@ class BrightId {
       id2,
       id3,
       sig1,
+      inviteOnly,
       timestamp,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
