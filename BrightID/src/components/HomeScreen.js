@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View, Linking } from 'react-native';
 import { connect } from 'react-redux';
 import Overlay from 'react-native-modal-overlay';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -222,6 +222,14 @@ export class HomeScreen extends React.Component<Props, State> {
           </View>
         </View>
 
+        <View style={styles.chatContainer}>
+          <Text style={styles.chatText}
+                onPress={() => Linking.openURL('https://discord.gg/nTtuB2M')}>
+            BrightID Chat
+          </Text>
+          <Image source={require('../static/chat.png')}/>
+        </View>
+
         <BottomNav navigation={navigation} />
       </View>
     );
@@ -240,7 +248,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
-
   photoContainer: {
     marginTop: 24,
     justifyContent: 'center',
@@ -280,6 +287,21 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     width: '100%',
+  },
+  chatContainer: {
+    height: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 15,
+    width: '100%',
+  },
+  chatText: {
+    fontFamily: 'ApexNew-Medium',
+    fontSize: 17,
+    color: '#4a90e2',
+    marginRight: 5,
+    textDecorationLine: 'underline',
   },
   verificationSticker: {},
   connectContainer: {
