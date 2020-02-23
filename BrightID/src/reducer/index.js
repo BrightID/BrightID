@@ -28,6 +28,7 @@ import {
   SET_CONNECTIONS,
   CONNECTIONS_SORT,
   SET_USER_DATA,
+  SET_USER_NAME,
   SET_USER_PHOTO,
   SET_CONNECT_QR_DATA,
   REMOVE_CONNECT_QR_DATA,
@@ -303,6 +304,12 @@ export const reducer = (state: State = initialState, action: action) => {
         publicKey: action.publicKey,
         id: action.id,
         secretKey: action.secretKey,
+      };
+    }
+    case SET_USER_NAME: {
+      return {
+        ...state,
+        name: action.name,
       };
     }
     case SET_CONNECT_QR_DATA: {

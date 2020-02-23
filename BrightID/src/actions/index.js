@@ -16,6 +16,7 @@ export const SET_CONNECTIONS = 'SET_CONNECTIONS';
 export const CONNECTIONS_SORT = 'CONNECTIONS_SORT';
 export const DELETE_CONNECTION = 'DELETE_CONNECTION';
 export const SET_USER_DATA = 'SET_USER_DATA';
+export const SET_USER_NAME = 'SET_USER_NAME';
 export const SET_USER_PHOTO = 'SET_USER_PHOTO';
 export const SET_CONNECT_QR_DATA = 'SET_CONNECT_QR_DATA';
 export const REMOVE_CONNECT_QR_DATA = 'REMOVE_CONNECT_QR_DATA';
@@ -228,6 +229,17 @@ export const setUserData = ({
   secretKey,
   name,
   photo,
+});
+
+/**
+ * redux action creator for setting user name
+ * @param type SET_USER_NAME
+ * @param name the username of the user
+ */
+
+export const setName = (name: string) => ({
+  type: SET_USER_NAME,
+  name,
 });
 
 /**
