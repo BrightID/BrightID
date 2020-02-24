@@ -13,6 +13,7 @@ import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationEvents } from 'react-navigation';
+import ActionSheet from 'react-native-actionsheet';
 import MemberCard from './MemberCard';
 import { getMembers } from '../../../actions/getMembers';
 import BottomNav from '../../BottomNav';
@@ -21,8 +22,6 @@ import SearchMembers from './SearchMembers';
 import GroupPhoto from './GroupPhoto';
 import emitter from '../../../emitter';
 import { leaveGroup } from '../../../actions';
-import ActionSheet from 'react-native-actionsheet';
-
 
 type State = {
   loading: boolean,
@@ -41,6 +40,7 @@ export class CurrentGroupView extends Component<Props, State> {
     return {
       title: group.name,
       headerTitleStyle: { fontSize: 16 },
+      headerBackTitleVisible: false,
       headerRight: () => (
         <TouchableOpacity
           style={{ marginRight: 11 }}
@@ -52,18 +52,28 @@ export class CurrentGroupView extends Component<Props, State> {
     };
   };
 
+  componentDidMount() {
+    emitter.on('optionsSelected', () => {
+      this.actionSheet.show();
+    });
+    this.getMembers();
+  }
+
+  componentWillUnmount() {
+    emitter.off('optionsSelected', this.actionSheet.show);
+  }
+
   performAction = (action) => {
     if (!this.actionSheet) return;
     action = this.actionSheet.props.options[action];
-    if (action == 'Leave Group') {
+    if (action === 'Leave Group') {
       this.confirmLeaveGroup();
-    } else if (action == 'Invite') {
+    } else if (action === 'Invite') {
       const { navigation } = this.props;
       navigation.navigate('InviteList', {
-        group: navigation.state.params.group
+        group: navigation.state.params.group,
       });
     }
-
   };
 
   confirmLeaveGroup = () => {
@@ -100,54 +110,18 @@ export class CurrentGroupView extends Component<Props, State> {
   filterMembers = () => {
     const { searchParam } = this.props;
     const searchString = searchParam.toLowerCase().replace(/\s/g, '');
-    return this.state.members.filter((item) =>
-      `${item.name}`
-        .toLowerCase()
-        .replace(/\s/g, '')
-        .includes(searchString),
-    );
+    return this.state.members
+      .filter((item) =>
+        `${item.name}`
+          .toLowerCase()
+          .replace(/\s/g, '')
+          .includes(searchString),
+      )
+      .filter((item) => item.status === 'verified');
   };
 
   // eslint-disable-next-line react/jsx-props-no-spreading
   renderMember = ({ item }) => <MemberCard {...item} />;
-
-  renderListOrSpinner() {
-    const { loading } = this.state;
-    const { group } = this.props.navigation.state.params;
-    if (loading) {
-      return (
-        <Spinner
-          style={styles.spinner}
-          isVisible={true}
-          size={47}
-          type="WanderingCubes"
-          color="#4990e2"
-        />
-      );
-    } else {
-      return (
-        <View>
-          <GroupPhoto group={group} radius={35} />
-          <Text style={styles.groupName}>{group.name}</Text>
-          <FlatList
-            style={styles.membersContainer}
-            data={this.filterMembers()}
-            keyExtractor={({ id }, index) => id + index}
-            renderItem={this.renderMember}
-          />
-        </View>
-      );
-    }
-  }
-
-  componentDidMount() {
-    emitter.on('optionsSelected', this.actionSheet.show);
-    this.getMembers();
-  }
-
-  componentWillUnmount() {
-    emitter.off('optionsSelected', this.actionSheet.show);
-  }
 
   getMembers = async () => {
     const { dispatch, navigation } = this.props;
@@ -161,6 +135,7 @@ export class CurrentGroupView extends Component<Props, State> {
 
   render() {
     const { navigation, id } = this.props;
+    const { loading } = this.state;
     const { group } = this.props.navigation.state.params;
     let actions = ['Leave Group', 'cancel'];
     if (group.admins && group.admins.includes(id)) {
@@ -172,7 +147,32 @@ export class CurrentGroupView extends Component<Props, State> {
         <NavigationEvents onDidFocus={this.getMembers} />
         <View style={styles.mainContainer}>
           <SearchMembers navigation={navigation} />
-          <View style={styles.mainContainer}>{this.renderListOrSpinner()}</View>
+          <View style={styles.mainContainer}>
+            {loading ? (
+              <Spinner
+                style={styles.spinner}
+                isVisible={true}
+                size={47}
+                type="WanderingCubes"
+                color="#4990e2"
+              />
+            ) : (
+              <View style={styles.groupList}>
+                <GroupPhoto
+                  style={styles.groupPhoto}
+                  group={group}
+                  radius={35}
+                />
+                <Text style={styles.groupName}>{group.name}</Text>
+                <FlatList
+                  style={styles.membersContainer}
+                  data={this.filterMembers()}
+                  keyExtractor={({ id }, index) => id + index}
+                  renderItem={this.renderMember}
+                />
+              </View>
+            )}
+          </View>
         </View>
         <ActionSheet
           ref={(o) => {
@@ -209,6 +209,9 @@ const styles = StyleSheet.create({
   moreIcon: {
     marginRight: 16,
   },
+  groupList: {
+    marginTop: 10,
+  },
   groupName: {
     fontFamily: 'ApexNew-Book',
     fontSize: 28,
@@ -216,6 +219,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
     textAlign: 'center',
+    marginTop: 20,
+    marginBottom: 10,
+    marginLeft: 15,
+    marginRight: 15,
   },
 });
 
