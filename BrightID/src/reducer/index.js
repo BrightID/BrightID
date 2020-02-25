@@ -281,12 +281,9 @@ export const reducer = (state: State = initialState, action: action) => {
     case DELETE_CONNECTION: {
       return {
         ...state,
-        connections: state.connections.map<connection>((conn: connection) => {
-          if (conn.id === action.id) {
-            conn.status = 'deleted';
-          }
-          return conn;
-        }),
+        connections: state.connections.filter<connection>(
+          (conn: connection) => conn.id !== action.id,
+        ),
       };
     }
     case FLAG_CONNECTION: {

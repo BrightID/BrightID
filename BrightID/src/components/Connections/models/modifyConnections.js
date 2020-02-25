@@ -38,7 +38,7 @@ export const performAction = (
   const { name } = connection;
   switch (action) {
     case 'Delete': {
-      let handler = flagAndDeleteConnection(connection, 'Deleted');
+      let handler = removeConnection(connection);
       let title = 'Delete Connection';
       let msg = `Are you sure you want to remove ${name} from your list of connections?`;
       return { handler, title, msg };
