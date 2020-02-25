@@ -3,6 +3,7 @@
 import * as React from 'react';
 import {
   Image,
+  Linking,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -13,6 +14,7 @@ import { connect } from 'react-redux';
 import Overlay from 'react-native-modal-overlay';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import ActionSheet from 'react-native-actionsheet';
 import VerificationSticker from './Verifications/VerificationSticker';
 import BottomNav from './BottomNav';
 import { setPhoto, setName } from '../actions';
@@ -33,6 +35,9 @@ type State = {
   name: string,
 };
 
+let actionSheetRef = '';
+let discordUrl = 'https://discord.gg/nTtuB2M';
+
 export class HomeScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
     title: 'BrightID',
@@ -46,7 +51,12 @@ export class HomeScreen extends React.Component<Props, State> {
       </TouchableOpacity>
     ),
     headerLeft: () => (
-      <TouchableOpacity style={{ marginLeft: 11 }} onPress={() => {}}>
+      <TouchableOpacity
+        style={{ marginLeft: 11 }}
+        onPress={() => {
+          actionSheetRef.show();
+        }}
+      >
         <SimpleLineIcons name="question" size={32} color="#fff" />
       </TouchableOpacity>
     ),
@@ -73,7 +83,6 @@ export class HomeScreen extends React.Component<Props, State> {
       name,
     });
   }
-
 
   getPhotoFromCamera = async () => {
     try {
@@ -247,6 +256,22 @@ export class HomeScreen extends React.Component<Props, State> {
         </View>
 
         <BottomNav navigation={navigation} />
+
+        <ActionSheet
+          ref={(o) => {
+            actionSheetRef = o;
+          }}
+          title="Do you have questions? Ask on our discord server!"
+          options={['BrightID Discord', 'cancel']}
+          cancelButtonIndex={1}
+          onPress={(index) => {
+            if (index === 0) {
+              Linking.openURL(discordUrl).catch((err) =>
+                console.error('An error occurred', err),
+              );
+            }
+          }}
+        />
       </View>
     );
   }
