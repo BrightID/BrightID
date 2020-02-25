@@ -99,11 +99,6 @@ export class GroupsScreen extends React.Component<Props, State> {
                 <View style={styles.currentContainer}>
                   <Text style={styles.currentGroupTitle}>CURRENT</Text>
                   {this.renderCurrentGroups(groupPairs)}
-                  {/* <FlatList
-                    data={groupPairs}
-                    renderItem={this.renderCurrentGroups}
-                    keyExtractor={([group]) => group && group.id}
-                  /> */}
                 </View>
               )}
               {!!eligibleGroups.length && !currentGroups.length && (
@@ -151,7 +146,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     backgroundColor: '#fff',
-    minHeight: '100%',
+    height: '100%',
+    // borderBottomWidth: 2,
+    // borderBottomColor: 'red',
   },
   eligibleContainer: {
     // backgroundColor: '#fff',
@@ -266,6 +263,9 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     width: '100%',
+    minHeight: '100%',
+    height: '100%',
+    flex: 1,
   },
 });
 
