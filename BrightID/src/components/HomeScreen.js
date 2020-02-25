@@ -1,7 +1,14 @@
 // @flow
 
 import * as React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+} from 'react-native';
 import { connect } from 'react-redux';
 import Overlay from 'react-native-modal-overlay';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -46,12 +53,15 @@ export class HomeScreen extends React.Component<Props, State> {
   });
 
   componentDidMount() {
-    const { navigation, dispatch, photo } = this.props;
+    const { navigation, dispatch, photo, name } = this.props;
     navigation.addListener('willFocus', () => {
       dispatch(getNotifications());
     });
     retrieveImage(photo.filename).then((profilePhoto) => {
       this.setState({ profilePhoto });
+    });
+    this.setState({
+      name,
     });
   }
 
@@ -60,26 +70,8 @@ export class HomeScreen extends React.Component<Props, State> {
     profilePhoto: ' ',
     modalVisible: false,
     isEditing: false,
-    name: this.props.name,
+    name: '',
   };
-
-  // changePhoto = async () => {
-  //   const { id } = this.props;
-  //   try {
-  //     const { mime, data } = await selectImage();
-  //     const uri = `data:${mime};base64,${data}`;
-  //     const filename = await saveImage({ imageName: id, base64Image: uri });
-  //     console.log('filename', filename);
-  //     setPhoto({ filename });
-  //     const profilePhoto = await retrieveImage(filename);
-  //     this.setState({
-  //       profilePhoto,
-  //     });
-  //     // Image.getSize(`file://${RNFS.DocumentDirectoryPath}/photos/${filename}`);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
 
   getPhotoFromCamera = async () => {
     try {
@@ -178,26 +170,29 @@ export class HomeScreen extends React.Component<Props, State> {
                 accessibilityLabel="user photo"
               />
             </TouchableOpacity>
-            { this.state.isEditing ?
+            {this.state.isEditing ? (
               <TextInput
                 value={this.state.name}
-                style={styles.name}
+                style={{ ...styles.name, ...styles.editingName }}
                 onChangeText={(text) => this.setState({ name: text })}
                 autoFocus
                 onBlur={() => {
+                  if (this.state.name.length >= 2) {
                     this.props.dispatch(setName(this.state.name));
                     this.setState({ isEditing: false });
+                  } else {
+                    this.setState({ isEditing: false, name: this.props.name });
                   }
-                }
-              /> :
+                }}
+              />
+            ) : (
               <Text
                 style={styles.name}
                 onPress={() => this.setState({ isEditing: true })}
               >
-                {this.state.name}
+                {this.props.name}
               </Text>
-            }
-
+            )}
           </View>
 
           <View style={styles.scoreContainer}>
@@ -292,6 +287,9 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
+  },
+  editingName: {
+    minWidth: 180,
   },
   verificationsContainer: {
     height: 16,
