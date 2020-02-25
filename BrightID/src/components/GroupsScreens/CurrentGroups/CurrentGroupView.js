@@ -42,6 +42,7 @@ export class CurrentGroupView extends Component<Props, State> {
     return {
       title: group.name,
       headerTitleStyle: { fontSize: 16 },
+      headerBackTitleVisible: false,
       headerRight: () => (
         <TouchableOpacity
           style={{ marginRight: 11 }}
