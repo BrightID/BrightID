@@ -123,14 +123,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: '55%',
+    height: '35%',
     backgroundColor: '#fcfcfc',
   },
   noCurrentContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: '45%',
+    height: 300,
     backgroundColor: '#fcfcfc',
   },
   fullScreenContainer: {

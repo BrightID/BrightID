@@ -20,7 +20,7 @@ import { getNotifications } from '../actions/notifications';
 import { delStorage } from '../utils/dev';
 import { chooseImage, takePhoto } from '../utils/images';
 import { saveImage, retrieveImage } from '../utils/filesystem';
-
+import fetchUserInfo from '../actions/fetchUserInfo';
 /**
  * Home screen of BrightID
  * ==========================
@@ -52,10 +52,19 @@ export class HomeScreen extends React.Component<Props, State> {
     ),
   });
 
+  // eslint-disable-next-line react/state-in-constructor
+  state = {
+    profilePhoto: ' ',
+    modalVisible: false,
+    isEditing: false,
+    name: '',
+  };
+
   componentDidMount() {
     const { navigation, dispatch, photo, name } = this.props;
-    navigation.addListener('willFocus', () => {
+    navigation.addListener('didFocus', () => {
       dispatch(getNotifications());
+      dispatch(fetchUserInfo());
     });
     retrieveImage(photo.filename).then((profilePhoto) => {
       this.setState({ profilePhoto });
@@ -65,20 +74,16 @@ export class HomeScreen extends React.Component<Props, State> {
     });
   }
 
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    profilePhoto: ' ',
-    modalVisible: false,
-    isEditing: false,
-    name: '',
-  };
 
   getPhotoFromCamera = async () => {
     try {
       const { id } = this.props;
       const { mime, data } = await takePhoto();
       const uri = `data:${mime};base64,${data}`;
-      const filename = await saveImage({ imageName: id, base64Image: uri });
+      const filename = await saveImage({
+        imageName: id,
+        base64Image: uri,
+      });
       setPhoto({ filename });
       const profilePhoto = await retrieveImage(filename);
       this.setState({
@@ -95,7 +100,10 @@ export class HomeScreen extends React.Component<Props, State> {
       const { id } = this.props;
       const { mime, data } = await chooseImage();
       const uri = `data:${mime};base64,${data}`;
-      const filename = await saveImage({ imageName: id, base64Image: uri });
+      const filename = await saveImage({
+        imageName: id,
+        base64Image: uri,
+      });
       setPhoto({ filename });
       const profilePhoto = await retrieveImage(filename);
       this.setState({

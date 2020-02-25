@@ -13,6 +13,7 @@ import { renderListOrSpinner } from './renderConnections';
 import FloatingActionButton from '../FloatingActionButton';
 import { defaultSort } from './models/sortingUtility';
 import { performAction } from './models/modifyConnections';
+import fetchUserInfo from '../../actions/fetchUserInfo';
 
 /**
  * Connection screen of BrightID
@@ -40,6 +41,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     const { navigation, dispatch } = this.props;
     navigation.addListener('willFocus', () => {
       dispatch(defaultSort());
+      dispatch(fetchUserInfo());
     });
   }
 

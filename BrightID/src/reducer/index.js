@@ -54,6 +54,9 @@ import {
   RESET_STORE,
   UPDATE_CONNECTIONS,
   FLAG_CONNECTION,
+  ADD_OPERATION,
+  REMOVE_OPERATION,
+  RESET_OPERATIONS,
 } from '../actions';
 
 /**
@@ -91,6 +94,7 @@ export const initialState: State = {
   password: '',
   hashedId: '',
   secretKey: new Uint8Array([]),
+  operations: [],
   connectionsSort: '',
   connectQrData: {
     aesKey: '',
@@ -443,6 +447,21 @@ export const reducer = (state: State = initialState, action: action) => {
     }
     case REMOVE_SAFE_PUB_KEY: {
       return dissoc('safePubKey', state);
+    }
+    case ADD_OPERATION: {
+      return {
+        ...state,
+        operations: state.operations.concat(action.op),
+      };
+    }
+    case REMOVE_OPERATION: {
+      return {
+        ...state,
+        operations: state.operations.filter((op) => op !== action.op),
+      };
+    }
+    case RESET_OPERATIONS: {
+      return { ...state, operations: [] };
     }
     case RESET_STORE: {
       return initialState;

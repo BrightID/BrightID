@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
-import { NavigationEvents } from 'react-navigation';
 import SearchConnections from './SearchConnections';
 import NewGroupCard from './NewGroupCard';
 import store from '../../../store';
@@ -25,9 +24,13 @@ export class NewGroupScreen extends React.Component<Props, State> {
     title: 'New Group',
   });
 
-  onWillBlur = () => {
-    this.props.dispatch(clearNewGroupCoFounders());
-  };
+  componentDidMount() {
+    const { navigation, dispatch } = this.props;
+
+    navigation.addListener('willBlur', () => {
+      dispatch(clearNewGroupCoFounders());
+    });
+  }
 
   filterConnections = () => {
     const { connections, searchParam } = this.props;
@@ -61,7 +64,6 @@ export class NewGroupScreen extends React.Component<Props, State> {
     return (
       <View style={styles.container}>
         <View style={styles.mainContainer}>
-          <NavigationEvents onWillBlur={(payload) => this.onWillBlur()} />
           <View style={styles.titleContainer}>
             <Text style={styles.titleText}>CO-FOUNDERS</Text>
             <Text style={styles.infoText}>

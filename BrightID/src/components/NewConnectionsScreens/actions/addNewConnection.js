@@ -8,6 +8,8 @@ import api from '../../../Api/BrightId';
 import { backupPhoto, backupUser } from '../../Recovery/helpers';
 import { addConnection } from '../../../actions';
 
+const TIME_FUDGE = 60 * 60 * 1000; // timestamp can be this far in the future (milliseconds) to accommodate 2 clients clock differences
+
 export const addNewConnection = () => async (
   dispatch: dispatch,
   getState: getState,
@@ -23,6 +25,10 @@ export const addNewConnection = () => async (
     if (connectUserData.signedMessage) {
       // The other user signed a connection request; we have enough info to
       // make an API call to create the connection.
+
+      if (connectUserData.timestamp > connectionDate + TIME_FUDGE) {
+        throw "timestamp can't be in the future";
+      }
 
       const message = 'Add Connection' + connectUserData.id + id + connectUserData.timestamp;
       const signedMessage = uInt8ArrayToB64(
