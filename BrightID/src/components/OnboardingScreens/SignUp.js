@@ -96,11 +96,16 @@ export class SignUp extends React.Component<Props, State> {
       this.setState({
         creatingBrightId: true,
       });
-      if (!name) {
+      if (name.length < 2) {
         this.setState({
           creatingBrightId: false,
         });
-        return Alert.alert('BrightID Form Incomplete', 'Please add your name');
+        return Alert.alert(
+          'BrightID Form Incomplete',
+          name.length === 0
+            ? 'Please add your name'
+            : 'Your name must be at least 2 characters',
+        );
       }
       if (!finalBase64.uri) {
         this.setState({

@@ -1,14 +1,21 @@
 // @flow
 
 import * as React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+} from 'react-native';
 import { connect } from 'react-redux';
 import Overlay from 'react-native-modal-overlay';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import VerificationSticker from './Verifications/VerificationSticker';
 import BottomNav from './BottomNav';
-import { setPhoto } from '../actions';
+import { setPhoto, setName } from '../actions';
 import { getNotifications } from '../actions/notifications';
 import { delStorage } from '../utils/dev';
 import { chooseImage, takePhoto } from '../utils/images';
@@ -22,6 +29,8 @@ import fetchUserInfo from '../actions/fetchUserInfo';
 type State = {
   profilePhoto: string,
   modalVisible: boolean,
+  isEditing: boolean,
+  name: string,
 };
 
 export class HomeScreen extends React.Component<Props, State> {
@@ -47,10 +56,12 @@ export class HomeScreen extends React.Component<Props, State> {
   state = {
     profilePhoto: ' ',
     modalVisible: false,
+    isEditing: false,
+    name: '',
   };
 
   componentDidMount() {
-    const { navigation, dispatch, photo } = this.props;
+    const { navigation, dispatch, photo, name } = this.props;
     navigation.addListener('didFocus', () => {
       dispatch(getNotifications());
       dispatch(fetchUserInfo());
@@ -58,7 +69,11 @@ export class HomeScreen extends React.Component<Props, State> {
     retrieveImage(photo.filename).then((profilePhoto) => {
       this.setState({ profilePhoto });
     });
+    this.setState({
+      name,
+    });
   }
+
 
   getPhotoFromCamera = async () => {
     try {
@@ -113,7 +128,6 @@ export class HomeScreen extends React.Component<Props, State> {
   render() {
     const {
       navigation,
-      name,
       score,
       groupsCount,
       connections,
@@ -164,9 +178,29 @@ export class HomeScreen extends React.Component<Props, State> {
                 accessibilityLabel="user photo"
               />
             </TouchableOpacity>
-            <Text id="name" style={styles.name}>
-              {name}
-            </Text>
+            {this.state.isEditing ? (
+              <TextInput
+                value={this.state.name}
+                style={{ ...styles.name, ...styles.editingName }}
+                onChangeText={(text) => this.setState({ name: text })}
+                autoFocus
+                onBlur={() => {
+                  if (this.state.name.length >= 2) {
+                    this.props.dispatch(setName(this.state.name));
+                    this.setState({ isEditing: false });
+                  } else {
+                    this.setState({ isEditing: false, name: this.props.name });
+                  }
+                }}
+              />
+            ) : (
+              <Text
+                style={styles.name}
+                onPress={() => this.setState({ isEditing: true })}
+              >
+                {this.props.name}
+              </Text>
+            )}
           </View>
 
           <View style={styles.scoreContainer}>
@@ -261,6 +295,9 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
+  },
+  editingName: {
+    minWidth: 180,
   },
   verificationsContainer: {
     height: 16,
