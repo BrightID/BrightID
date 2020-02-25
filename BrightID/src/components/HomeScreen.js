@@ -13,7 +13,7 @@ import { getNotifications } from '../actions/notifications';
 import { delStorage } from '../utils/dev';
 import { chooseImage, takePhoto } from '../utils/images';
 import { saveImage, retrieveImage } from '../utils/filesystem';
-
+import fetchUserInfo from '../actions/fetchUserInfo';
 /**
  * Home screen of BrightID
  * ==========================
@@ -43,45 +43,32 @@ export class HomeScreen extends React.Component<Props, State> {
     ),
   });
 
-  componentDidMount() {
-    const { navigation, dispatch, photo } = this.props;
-    navigation.addListener('willFocus', () => {
-      dispatch(getNotifications());
-    });
-    retrieveImage(photo.filename).then((profilePhoto) => {
-      this.setState({ profilePhoto });
-    });
-  }
-
   // eslint-disable-next-line react/state-in-constructor
   state = {
     profilePhoto: ' ',
     modalVisible: false,
   };
 
-  // changePhoto = async () => {
-  //   const { id } = this.props;
-  //   try {
-  //     const { mime, data } = await selectImage();
-  //     const uri = `data:${mime};base64,${data}`;
-  //     const filename = await saveImage({ imageName: id, base64Image: uri });
-  //     console.log('filename', filename);
-  //     setPhoto({ filename });
-  //     const profilePhoto = await retrieveImage(filename);
-  //     this.setState({
-  //       profilePhoto,
-  //     });
-  //     // Image.getSize(`file://${RNFS.DocumentDirectoryPath}/photos/${filename}`);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  componentDidMount() {
+    const { navigation, dispatch, photo } = this.props;
+    navigation.addListener('didFocus', () => {
+      dispatch(getNotifications());
+      dispatch(fetchUserInfo());
+    });
+    retrieveImage(photo.filename).then((profilePhoto) => {
+      this.setState({ profilePhoto });
+    });
+  }
+
   getPhotoFromCamera = async () => {
     try {
       const { id } = this.props;
       const { mime, data } = await takePhoto();
       const uri = `data:${mime};base64,${data}`;
-      const filename = await saveImage({ imageName: id, base64Image: uri });
+      const filename = await saveImage({
+        imageName: id,
+        base64Image: uri,
+      });
       setPhoto({ filename });
       const profilePhoto = await retrieveImage(filename);
       this.setState({
@@ -98,7 +85,10 @@ export class HomeScreen extends React.Component<Props, State> {
       const { id } = this.props;
       const { mime, data } = await chooseImage();
       const uri = `data:${mime};base64,${data}`;
-      const filename = await saveImage({ imageName: id, base64Image: uri });
+      const filename = await saveImage({
+        imageName: id,
+        base64Image: uri,
+      });
       setPhoto({ filename });
       const profilePhoto = await retrieveImage(filename);
       this.setState({

@@ -19,6 +19,7 @@ import {
   EmptyFullScreen,
   NoEligibleGroups,
 } from './EmptyGroups';
+import fetchUserInfo from '../../actions/fetchUserInfo';
 
 const ICON_SIZE = 36;
 
@@ -27,6 +28,13 @@ export class GroupsScreen extends React.Component<Props, State> {
     title: 'Groups',
     headerRight: () => <View />,
   });
+
+  componentDidMount() {
+    const { navigation, dispatch } = this.props;
+    navigation.addListener('didFocus', () => {
+      dispatch(fetchUserInfo());
+    });
+  }
 
   // eslint-disable-next-line class-methods-use-this
   renderCurrentGroups({ item }) {
