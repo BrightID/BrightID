@@ -5,6 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import store from './store';
 import { bootstrapAndUpgrade } from './versions';
+import { resetOperations } from './actions';
 
 export default class AppBootstrap extends React.Component<Props> {
   componentDidMount() {
@@ -17,6 +18,8 @@ export default class AppBootstrap extends React.Component<Props> {
       // load redux store from async storage and upgrade async storage is necessary
       await bootstrapAndUpgrade();
       const { publicKey } = store.getState();
+      // reset operations
+      store.dispatch(resetOperations());
       // once everything is set up
       this.props.navigation.navigate(publicKey ? 'App' : 'Onboarding');
     } catch (err) {
