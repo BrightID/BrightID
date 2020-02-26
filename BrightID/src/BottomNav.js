@@ -13,15 +13,11 @@ import { navigate } from './NavigationService';
  * see AppRoutes.js for list of screens / routes in the app
  */
 
-type Props = {
-  notifications: Array<NotificationInfo>,
-};
-
 export class BottomNav extends React.Component<Props> {
   render() {
-    const { notifications } = this.props;
+    const { notifications, id } = this.props;
 
-    return (
+    return id ? (
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {
@@ -87,6 +83,8 @@ export class BottomNav extends React.Component<Props> {
           </View>
         </TouchableOpacity>
       </View>
+    ) : (
+      <View />
     );
   }
 }

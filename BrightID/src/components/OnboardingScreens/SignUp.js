@@ -25,6 +25,7 @@ type State = {
   finalBase64: { uri: string },
   creatingBrightId: boolean,
   modalVisible: boolean,
+  editingName: boolean,
 };
 
 export class SignUp extends React.Component<Props, State> {
@@ -47,6 +48,7 @@ export class SignUp extends React.Component<Props, State> {
     finalBase64: { uri: '' },
     creatingBrightId: false,
     modalVisible: false,
+    editingName: false,
   };
 
   getPhotoFromCamera = async () => {
@@ -111,7 +113,10 @@ export class SignUp extends React.Component<Props, State> {
         this.setState({
           creatingBrightId: false,
         });
-        return Alert.alert('BrightID Form Incomplete', 'A photo is required');
+        return Alert.alert(
+          'BrightID Form Incomplete',
+          'A photo is required. Please press enter on the keyboard.',
+        );
       }
       const result = await dispatch(
         handleBrightIdCreation({ photo: finalBase64, name }),
@@ -131,7 +136,7 @@ export class SignUp extends React.Component<Props, State> {
   };
 
   render() {
-    const { name, finalBase64, creatingBrightId } = this.state;
+    const { name, finalBase64, creatingBrightId, editingName } = this.state;
 
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -164,7 +169,7 @@ export class SignUp extends React.Component<Props, State> {
         </Overlay>
 
         <View style={styles.addPhotoContainer}>
-          {finalBase64.uri ? (
+          {finalBase64.uri && !editingName ? (
             <TouchableOpacity
               onPress={this.onAddPhoto}
               accessible={true}
@@ -172,7 +177,7 @@ export class SignUp extends React.Component<Props, State> {
             >
               <Image style={styles.photo} source={finalBase64} />
             </TouchableOpacity>
-          ) : (
+          ) : !editingName ? (
             <TouchableOpacity
               onPress={this.onAddPhoto}
               style={styles.addPhoto}
@@ -180,8 +185,10 @@ export class SignUp extends React.Component<Props, State> {
               accessibilityLabel="add photo"
             >
               <Text style={styles.addPhotoText}>Add Photo</Text>
-              <SimpleLineIcons size={48} name="camera" color="#979797" />
+              <SimpleLineIcons size={42} name="camera" color="#979797" />
             </TouchableOpacity>
+          ) : (
+            <View />
           )}
         </View>
         <View style={styles.textInputContainer}>
@@ -196,6 +203,12 @@ export class SignUp extends React.Component<Props, State> {
             autoCorrect={false}
             textContentType="name"
             underlineColorAndroid="transparent"
+            onFocus={() => {
+              this.setState({ editingName: true });
+            }}
+            onBlur={() => {
+              this.setState({ editingName: false });
+            }}
           />
         </View>
         <View style={styles.buttonContainer}>
@@ -242,30 +255,30 @@ const styles = StyleSheet.create({
   addPhotoContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 44,
+    marginTop: 28,
   },
   textInputContainer: {
-    marginTop: 44,
+    marginTop: 28,
     justifyContent: 'center',
     alignItems: 'center',
   },
   buttonContainer: {
-    marginTop: 44,
+    marginTop: 28,
     justifyContent: 'space-evenly',
     alignItems: 'center',
   },
   addPhoto: {
     borderWidth: 1,
     borderColor: '#979797',
-    height: 180,
-    width: 180,
+    height: 160,
+    width: 160,
     borderRadius: 90,
     justifyContent: 'center',
     alignItems: 'center',
   },
   photo: {
-    width: 180,
-    height: 180,
+    width: 160,
+    height: 160,
     borderRadius: 90,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -287,20 +300,20 @@ const styles = StyleSheet.create({
   },
   midText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: 16,
   },
   textInput: {
     fontFamily: 'ApexNew-Light',
-    fontSize: 36,
+    fontSize: 28,
     fontWeight: '300',
     fontStyle: 'normal',
     letterSpacing: 0,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#9e9e9e',
-    marginTop: 22,
+    marginTop: 16,
     width: 275,
     textAlign: 'center',
-    paddingBottom: 5,
+    height: 60,
   },
   buttonInfoText: {
     fontFamily: 'ApexNew-Book',
@@ -311,25 +324,25 @@ const styles = StyleSheet.create({
   },
   createBrightIdButton: {
     backgroundColor: '#428BE5',
-    width: 300,
+    width: 260,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 13,
-    paddingBottom: 12,
+    paddingTop: 10,
+    paddingBottom: 9,
     marginTop: 22,
   },
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',
     color: '#fff',
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: 16,
   },
   button: {
-    width: 300,
+    width: 260,
     borderWidth: 1,
     borderColor: '#4990e2',
-    paddingTop: 13,
-    paddingBottom: 12,
+    paddingTop: 10,
+    paddingBottom: 9,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
@@ -338,7 +351,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: 'ApexNew-Medium',
     color: '#4990e2',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '500',
     fontStyle: 'normal',
     letterSpacing: 0,

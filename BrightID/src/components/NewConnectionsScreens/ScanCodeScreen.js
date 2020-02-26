@@ -87,7 +87,7 @@ export class ScanCodeScreen extends React.Component<Props, State> {
 
   handleBarCodeRead = ({ data }) => {
     const { dispatch, navigation } = this.props;
-
+    console.log('barcode data', data);
     if (data.startsWith('Recovery_')) {
       navigation.navigate('RecoveringConnection', {
         recoveryRequestCode: data,
