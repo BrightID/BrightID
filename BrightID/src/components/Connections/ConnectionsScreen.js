@@ -8,7 +8,6 @@ import ActionSheet from 'react-native-actionsheet';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
 import { createFakeConnection } from './models/createFakeConnection';
-import BottomNav from '../BottomNav';
 import { renderListOrSpinner } from './renderConnections';
 import FloatingActionButton from '../FloatingActionButton';
 import { defaultSort } from './models/sortingUtility';
@@ -130,7 +129,6 @@ export class ConnectionsScreen extends React.Component<Props, State> {
           cancelButtonIndex={actions.length - 1}
           onPress={(index) => this.modifyConnection(index)}
         />
-        <BottomNav style={{ flex: 0 }} navigation={navigation} />
       </View>
     );
   }

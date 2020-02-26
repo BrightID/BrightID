@@ -6,6 +6,7 @@ import { StatusBar, StyleSheet, View } from 'react-native';
 import { pollOperations } from './utils/operations';
 import AppRoutes from './AppRoutes';
 import store from './store';
+import BottomNav from './BottomNav';
 
 /**
  * Central part of the application
@@ -38,6 +39,7 @@ export default class App extends React.Component<Props> {
         />
         <View style={styles.container}>
           <AppRoutes />
+          <BottomNav />
         </View>
       </Provider>
     );

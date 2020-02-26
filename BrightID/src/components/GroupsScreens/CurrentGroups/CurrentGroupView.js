@@ -16,7 +16,6 @@ import Overlay from 'react-native-modal-overlay';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MemberCard from './MemberCard';
 import { getMembers } from '../../../actions/getMembers';
-import BottomNav from '../../BottomNav';
 import api from '../../../Api/BrightId';
 import SearchMembers from './SearchMembers';
 import GroupPhoto from './GroupPhoto';
@@ -189,7 +188,6 @@ export class CurrentGroupView extends Component<Props, State> {
           <SearchMembers navigation={navigation} />
           <View style={styles.mainContainer}>{this.renderListOrSpinner()}</View>
         </View>
-        <BottomNav navigation={navigation} />
       </View>
     );
   }

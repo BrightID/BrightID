@@ -5,7 +5,6 @@ import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import EligibleGroupCard from './EligibleGroupCard';
-import BottomNav from '../../BottomNav';
 
 const ICON_SIZE = 36;
 
@@ -47,7 +46,6 @@ class EligibleGroupsScreen extends React.Component<Props, State> {
               </TouchableOpacity>
             </View>
           </View>
-          <BottomNav navigation={navigation} />
         </View>
       );
     } catch (err) {

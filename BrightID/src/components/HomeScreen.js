@@ -16,7 +16,6 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import ActionSheet from 'react-native-actionsheet';
 import VerificationSticker from './Verifications/VerificationSticker';
-import BottomNav from './BottomNav';
 import { setPhoto, setName } from '../actions';
 import { getNotifications } from '../actions/notifications';
 import { delStorage } from '../utils/dev';
@@ -254,8 +253,6 @@ export class HomeScreen extends React.Component<Props, State> {
             </TouchableOpacity>
           </View>
         </View>
-
-        <BottomNav navigation={navigation} />
 
         <ActionSheet
           ref={(o) => {

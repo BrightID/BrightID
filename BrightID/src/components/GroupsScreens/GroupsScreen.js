@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import {
-  FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -14,7 +13,6 @@ import { splitEvery } from 'ramda';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import EligibleGroupCard from './EligibleGroups/EligibleGroupCard';
 import CurrentGroupCard from './CurrentGroups/CurrentGroupCard';
-import BottomNav from '../BottomNav';
 import {
   NoCurrentGroups,
   EmptyFullScreen,
@@ -123,7 +121,6 @@ export class GroupsScreen extends React.Component<Props, State> {
               )}
             </View>
           </ScrollView>
-          <BottomNav navigation={navigation} />
         </View>
       );
     } catch (err) {
