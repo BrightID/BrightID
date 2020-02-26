@@ -96,7 +96,6 @@ export class ConnectionsScreen extends React.Component<Props, State> {
   render() {
     const { navigation } = this.props;
     const actions = [
-      'Delete',
       'Flag as Duplicate',
       'Flag as Fake',
       'Flag as Diseased',

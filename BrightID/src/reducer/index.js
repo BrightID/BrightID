@@ -53,7 +53,6 @@ import {
   HYDRATE_STATE,
   RESET_STORE,
   UPDATE_CONNECTIONS,
-  FLAG_CONNECTION,
   ADD_OPERATION,
   REMOVE_OPERATION,
   RESET_OPERATIONS,
@@ -284,17 +283,6 @@ export const reducer = (state: State = initialState, action: action) => {
         connections: state.connections.filter<connection>(
           (conn: connection) => conn.id !== action.id,
         ),
-      };
-    }
-    case FLAG_CONNECTION: {
-      return {
-        ...state,
-        connections: state.connections.map<connection>((conn: connection) => {
-          if (conn.id === action.id) {
-            conn.status = action.flag;
-          }
-          return conn;
-        }),
       };
     }
     case SET_USER_DATA: {

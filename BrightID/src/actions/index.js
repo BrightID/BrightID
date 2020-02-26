@@ -40,7 +40,6 @@ export const SET_USER_ID = 'SET_USER_ID';
 export const HYDRATE_STATE = 'HYDRATE_STATE';
 export const REMOVE_SAFE_PUB_KEY = 'REMOVE_SAFE_PUB_KEY';
 export const RESET_STORE = 'RESET_STORE';
-export const FLAG_CONNECTION = 'FLAG_CONNECTION';
 export const ADD_OPERATION = 'ADD_OPERATION';
 export const REMOVE_OPERATION = 'REMOVE_OPERATION';
 export const RESET_OPERATIONS = 'RESET_OPERATIONS';
@@ -193,18 +192,6 @@ export const setConnectionsSort = (connectionsSort: string) => ({
 export const deleteConnection = (id: string) => ({
   type: DELETE_CONNECTION,
   id,
-});
-
-/**
- * redux action creator for removing a connection
- * @param type DELETE_CONNECTION
- * @param connection removes a connection object from the array of connections and removes id from connection ids
- */
-
-export const flagConnection = (id: string, flag: string) => ({
-  type: FLAG_CONNECTION,
-  id,
-  flag,
 });
 
 /**

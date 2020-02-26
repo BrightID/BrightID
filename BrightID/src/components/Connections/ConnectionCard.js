@@ -5,7 +5,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import Ionicon from 'react-native-vector-icons/Ionicons';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
 /**
  * Connection Card in the Connections Screen
@@ -48,12 +48,14 @@ class ConnectionCard extends React.PureComponent<Props> {
           <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>
         </View>
       );
-    } else {
+    } else if (status === 'deleted') {
       return (
         <View style={styles.scoreContainer}>
-          <Text style={styles.deletedMessage}>{status}</Text>
+          <Text style={styles.deletedMessage}>Deleted</Text>
         </View>
       );
+    } else {
+      return <View style={styles.scoreContainer} />;
     }
   };
 
@@ -80,7 +82,7 @@ class ConnectionCard extends React.PureComponent<Props> {
           style={styles.moreIcon}
           onPress={this.handleUserOptions}
         >
-          <Ionicon size={48} name="ios-more" color="#ccc" />
+          <Material size={32} name="close" color="#ccc" />
         </TouchableOpacity>
       </View>
     );
@@ -150,7 +152,7 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   moreIcon: {
-    marginRight: 16,
+    marginRight: 26,
   },
   waitingMessage: {
     fontFamily: 'ApexNew-Medium',
