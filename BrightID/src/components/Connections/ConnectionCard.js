@@ -82,7 +82,7 @@ class ConnectionCard extends React.PureComponent<Props> {
           style={styles.moreIcon}
           onPress={this.handleUserOptions}
         >
-          <Material size={32} name="close" color="#ccc" />
+          <Material size={36} name="flag-remove" color="#ccc" />
         </TouchableOpacity>
       </View>
     );

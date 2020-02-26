@@ -34,7 +34,7 @@ class BrightId {
   }
 
   get apiUrl() {
-    return `${this.baseUrl}/brightid`;
+    return `${this.baseUrl}/brightid/v3`;
   }
 
   static throwOnError(response) {
