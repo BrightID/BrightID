@@ -28,17 +28,5 @@ exports[`Testing AppsScreen renders as expected 1`] = `
     updateCellsBatchingPeriod={50}
     windowSize={21}
   />
-  <Memo(Connect(BottomNav))
-    navigation={
-      Object {
-        "navigate": [MockFunction],
-      }
-    }
-    style={
-      Object {
-        "flex": 0,
-      }
-    }
-  />
 </View>
 `;

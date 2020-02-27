@@ -66,8 +66,8 @@
     "@react-native-community/eslint-plugin": "^1.0.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^25.1.0",
-    "enzyme": "^3.10.0",
-    "enzyme-adapter-react-16": "^1.15.1",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^4.3.0",
@@ -82,6 +82,7 @@
     "jest": "^25.1.0",
     "lint-staged": "^10.0.2",
     "metro-react-native-babel-preset": "^0.58.0",
+    "mock-async-storage": "^2.2.0",
     "prettier": "^1.19.1",
     "react-test-renderer": "16.9.0",
     "redux-mock-store": "^1.5.4",
@@ -100,7 +101,7 @@
       "./node_modules/react-native-gesture-handler/jestSetup.js"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!(react-native|react-navigation|@react-navigation/.*|react-navigation-stack|react-native-screens|@react-native-community/async-storage|react-native-gesture-handler|react-native-popup-menu|react-native-platform-touchable|react-native-linear-gradient|react-native-vector-icons|react-native-spinkit|react-native-status-bar-height|react-native-snap-carousel|react-native-image-picker|react-native-svg|react-native-camera)/)"
+      "node_modules/(?!(react-native|react-navigation|@react-navigation/.*|react-navigation-stack|react-native-screens|@react-native-community/async-storage|react-native-gesture-handler|react-native-popup-menu|react-native-platform-touchable|react-native-linear-gradient|react-native-vector-icons|react-native-spinkit|react-native-status-bar-height|react-native-snap-carousel|react-native-image-picker|react-native-svg|react-native-camera|react-native-image-crop-picker)/)"
     ]
   }
 }

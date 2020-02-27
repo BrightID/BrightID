@@ -253,7 +253,8 @@ export const reducer = (state: State = initialState, action: action) => {
             if (conn.status === 'verified') conn.status = 'Deleted';
             return conn;
           } else {
-            if (conn.status === 'initiated') conn.status = 'verified';
+            if (conn.status === 'initiated' || !conn.status)
+              conn.status = 'verified';
             return mergeRight(conn, updatedConn);
           }
         }),

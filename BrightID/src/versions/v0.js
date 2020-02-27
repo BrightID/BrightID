@@ -147,13 +147,14 @@ export const verifyUserData = async () => {
   }
 };
 
-export const upgradeIds = () => {
+export const upgradeConnsAndIds = () => {
   const { publicKey, connections } = store.getState();
   const id = b64ToUrlSafeB64(publicKey);
   store.dispatch(setUserId(id));
   const nextConn = connections.map((conn) => {
     if (conn.publicKey) {
       conn.id = conn.publicKey;
+      conn.status = 'verified';
     }
     return conn;
   });
