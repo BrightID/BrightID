@@ -16,12 +16,12 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import ActionSheet from 'react-native-actionsheet';
 import VerificationSticker from './Verifications/VerificationSticker';
-import { setPhoto, setName } from '../actions';
-import { getNotifications } from '../actions/notifications';
-import { delStorage } from '../utils/dev';
-import { chooseImage, takePhoto } from '../utils/images';
-import { saveImage, retrieveImage } from '../utils/filesystem';
-import fetchUserInfo from '../actions/fetchUserInfo';
+import { setPhoto, setName } from '@/actions';
+import { getNotifications } from '@/actions/notifications';
+import { delStorage } from '@/utils/dev';
+import { chooseImage, takePhoto } from '@/utils/images';
+import { saveImage, retrieveImage } from '@/utils/filesystem';
+import fetchUserInfo from '@/actions/fetchUserInfo';
 /**
  * Home screen of BrightID
  * ==========================
