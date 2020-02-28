@@ -2,10 +2,12 @@
 
 import * as React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import SafeAreaView from 'react-native-safe-area-view';
 import { connect } from 'react-redux';
 import moment from 'moment';
+
 import { addNewConnection } from './actions/addNewConnection';
-import api from '../../Api/BrightId';
+import api from '@/Api/BrightId';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -33,7 +35,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
   static navigationOptions = {
     title: 'New Connection',
     headerRight: () => <View />,
-    // headerShown: false,
+    headerShown: false,
   };
 
   componentDidMount() {
@@ -90,7 +92,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
       ? { uri: photo }
       : require('../../static/default_avatar.jpg');
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.questionTextContainer}>
           <Text style={styles.questionText}>Connect with?</Text>
         </View>
@@ -139,7 +141,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
             <Text style={styles.buttonText}>Confirm</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }
