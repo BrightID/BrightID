@@ -22,6 +22,7 @@ type State = {
 };
 
 export class PreviewConnectionScreen extends React.Component<Props, State> {
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     connections: 'loading',
     groups: 'loading',
@@ -32,6 +33,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
   static navigationOptions = {
     title: 'New Connection',
     headerRight: () => <View />,
+    // headerShown: false,
   };
 
   componentDidMount() {
@@ -67,7 +69,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
         connectionDate: `Created ${moment(parseInt(createdAt, 10)).fromNow()}`,
       });
     } catch (err) {
-      if (err instanceof Error && err.message == 'User not found') {
+      if (err instanceof Error && err.message === 'User not found') {
         this.setState({
           connections: 0,
           groups: 0,
@@ -90,8 +92,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
     return (
       <View style={styles.container}>
         <View style={styles.questionTextContainer}>
-          <Text style={styles.questionText}>Is this who you are trying</Text>
-          <Text style={styles.questionText}>to connect with?</Text>
+          <Text style={styles.questionText}>Connect with?</Text>
         </View>
         <View style={styles.userContainer}>
           <Image
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
     flexDirection: 'column',
   },
   questionTextContainer: {
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
   },
   questionText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
   connectName: {
     fontFamily: 'ApexNew-Book',
     marginTop: 10,
-    fontSize: 30,
+    fontSize: 26,
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -229,19 +230,19 @@ const styles = StyleSheet.create({
   countsContainer: {
     borderTopColor: '#e3e1e1',
     borderTopWidth: 1,
-    paddingTop: 12,
+    paddingTop: 11,
     justifyContent: 'space-evenly',
     flexDirection: 'row',
-    width: '80%',
-    marginTop: 12,
+    width: '100%',
+    marginTop: 8,
     borderBottomColor: '#e3e1e1',
     borderBottomWidth: 1,
-    paddingBottom: 12,
+    paddingBottom: 11,
   },
   countsDescriptionText: {
     fontFamily: 'ApexNew-Book',
     textAlign: 'center',
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
   },
   connectedText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 12,
+    fontSize: 14,
     color: '#aba9a9',
     fontStyle: 'italic',
   },
