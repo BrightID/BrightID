@@ -5,6 +5,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import SearchConnections from './SearchConnections';
 import NewGroupCard from './NewGroupCard';
+import ActionSheet from 'react-native-actionsheet';
 import store from '../../../store';
 import { createNewGroup } from '../actions';
 import { renderListOrSpinner } from './renderConnections';
@@ -59,6 +60,23 @@ export class NewGroupScreen extends React.Component<Props, State> {
     />
   );
 
+  getGroupType = async () => {
+    const { navigation } = this.props;
+    if (this.hasPrimaryGroup()) {
+      // there is only general group type, so no need to select
+      await store.dispatch(createNewGroup('general'));
+      navigation.goBack();
+    } else {
+      this.actionSheet.show();
+    }
+  };
+
+  hasPrimaryGroup = () => {
+    const { currentGroups, eligibleGroups } = this.props;
+    const allGroups = currentGroups.concat(eligibleGroups);
+    return allGroups.filter((group) => group.type == 'primary').length > 0;
+  };
+
   render() {
     const { navigation } = this.props;
     return (
@@ -75,19 +93,28 @@ export class NewGroupScreen extends React.Component<Props, State> {
         </View>
         <View style={styles.createGroupButtonContainer}>
           <TouchableOpacity
-            onPress={async () => {
-              try {
-                await store.dispatch(createNewGroup());
-                navigation.goBack();
-              } catch (err) {
-                console.log(err);
-              }
-            }}
+            onPress={this.getGroupType}
             style={styles.createGroupButton}
           >
             <Text style={styles.buttonInnerText}>Create Group</Text>
           </TouchableOpacity>
         </View>
+        <ActionSheet
+          ref={(o) => {
+            this.actionSheet = o;
+          }}
+          title="What type of group are you creating?"
+          options={['Immediate Family', 'General', 'cancel']}
+          cancelButtonIndex={2}
+          onPress={async (index) => {
+            if (index == 2) {
+              return;
+            }
+            const type = index == 0 ? 'primary' : 'general';
+            await store.dispatch(createNewGroup(type));
+            navigation.goBack();
+          }}
+        />
       </View>
     );
   }

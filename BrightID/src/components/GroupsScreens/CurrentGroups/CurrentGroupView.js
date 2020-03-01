@@ -12,8 +12,7 @@ import {
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import Overlay from 'react-native-modal-overlay';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import ActionSheet from 'react-native-actionsheet';
 import MemberCard from './MemberCard';
 import { getMembers } from '../../../actions/getMembers';
 import api from '../../../Api/BrightId';
@@ -23,7 +22,6 @@ import emitter from '../../../emitter';
 import { leaveGroup } from '../../../actions';
 
 type State = {
-  optionsVisible: boolean,
   loading: boolean,
   members: string[],
 };
@@ -32,7 +30,6 @@ export class CurrentGroupView extends Component<Props, State> {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     loading: true,
-    optionsVisible: false,
     members: [],
   };
 
@@ -55,6 +52,10 @@ export class CurrentGroupView extends Component<Props, State> {
     };
   };
 
+  showOptionsMenu = () => {
+    this.actionSheet.show();
+  };
+
   componentDidMount() {
     const { navigation } = this.props;
     emitter.on('optionsSelected', this.showOptionsMenu);
@@ -64,6 +65,49 @@ export class CurrentGroupView extends Component<Props, State> {
   componentWillUnmount() {
     emitter.off('optionsSelected', this.showOptionsMenu);
   }
+
+  confirmDismiss = (user) => {
+    const buttons = [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: async () => {
+          const { navigation, dispatch } = this.props;
+          const groupId = navigation.state.params.group.id;
+          try {
+            await api.dismiss(user.id, groupId);
+            navigation.goBack();
+          } catch (err) {
+            Alert.alert('Error leaving group', err.message);
+          }
+        },
+      },
+    ];
+    Alert.alert(
+      `Leave Group`,
+      `Are you sure you want to dismiss ${user.name} from this group?`,
+      buttons,
+      {
+        cancelable: true,
+      },
+    );
+  };
+
+  performAction = (action) => {
+    if (!this.actionSheet) return;
+    action = this.actionSheet.props.options[action];
+    if (action === 'Leave Group') {
+      this.confirmLeaveGroup();
+    } else if (action === 'Invite') {
+      const { navigation } = this.props;
+      navigation.navigate('InviteList', {
+        group: navigation.state.params.group,
+      });
+    }
+  };
 
   confirmLeaveGroup = () => {
     const buttons = [
@@ -108,7 +152,14 @@ export class CurrentGroupView extends Component<Props, State> {
   };
 
   // eslint-disable-next-line react/jsx-props-no-spreading
-  renderMember = ({ item }) => <MemberCard {...item} />;
+  renderMember = ({ item }) => {
+    const { group } = this.props.navigation.state.params;
+    const isAdmin = group.admins.includes(item.id);
+    const handler = isAdmin ? null : this.confirmDismiss;
+    return (
+      <MemberCard {...item} menuHandler={handler}/>
+    );
+  };
 
   renderListOrSpinner() {
     const { loading } = this.state;
@@ -139,14 +190,6 @@ export class CurrentGroupView extends Component<Props, State> {
     }
   }
 
-  showOptionsMenu = () => {
-    this.setState({ optionsVisible: true });
-  };
-
-  hideOptionsMenu = () => {
-    this.setState({ optionsVisible: false });
-  };
-
   getMembers = async () => {
     const { dispatch, navigation } = this.props;
     const groupId = navigation.state.params.group.id;
@@ -157,37 +200,30 @@ export class CurrentGroupView extends Component<Props, State> {
     });
   };
 
-  renderOptions = (hideModal) => (
-    <>
-      <View style={[styles.triangle, this.props.style]} />
-      <View style={styles.optionsBox}>
-        <TouchableOpacity onPress={hideModal}>
-          <AntDesign size={30} name="closecircleo" color="#000" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.confirmLeaveGroup}>
-          <Text style={styles.leaveGroupText}>Leave Group</Text>
-        </TouchableOpacity>
-      </View>
-    </>
-  );
-
   render() {
-    const { navigation } = this.props;
+    const { navigation, id } = this.props;
+    const { loading } = this.state;
+    const { group } = this.props.navigation.state.params;
+    let actions = ['Leave Group', 'cancel'];
+    if (group.admins && group.admins.includes(id)) {
+      actions = ['Invite'].concat(actions);
+    }
     return (
       <View style={styles.container}>
-        <Overlay
-          visible={this.state.optionsVisible}
-          onClose={this.hideOptionsMenu}
-          closeOnTouchOutside
-          containerStyle={styles.optionsOverlay}
-          childrenWrapperStyle={styles.optionsContainer}
-        >
-          {this.renderOptions}
-        </Overlay>
         <View style={styles.mainContainer}>
           <SearchMembers navigation={navigation} />
           <View style={styles.mainContainer}>{this.renderListOrSpinner()}</View>
         </View>
+        <ActionSheet
+          ref={(o) => {
+            this.actionSheet = o;
+          }}
+          title="What do you want to do?"
+          options={actions}
+          cancelButtonIndex={actions.indexOf('cancel')}
+          destructiveButtonIndex={actions.indexOf('Leave Group')}
+          onPress={(index) => this.performAction(index)}
+        />
       </View>
     );
   }

@@ -16,6 +16,7 @@ import CofoundGroupReview from './components/GroupsScreens/Cofounders/CofoundGro
 import CurrentGroupView from './components/GroupsScreens/CurrentGroups/CurrentGroupView';
 import PreviewConnectionScreen from './components/NewConnectionsScreens/PreviewConnectionScreen';
 import SuccessScreen from './components/NewConnectionsScreens/SuccessScreen';
+import InviteListScreen from './components/GroupsScreens/CurrentGroups/InviteListScreen';
 import AppBootstrap from './AppBootstrap';
 import Apps from './components/Apps/AppsScreen';
 import Notifications from './components/Notifications/NotificationsScreen';
@@ -87,6 +88,9 @@ const AppStack = createStackNavigator(
     },
     CurrentGroupView: {
       screen: CurrentGroupView,
+    },
+    InviteList: {
+      screen: InviteListScreen,
     },
     EligibleGroups: {
       screen: EligibleGroupsScreen,

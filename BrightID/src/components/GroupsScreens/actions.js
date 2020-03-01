@@ -24,7 +24,7 @@ export const toggleNewGroupCoFounder = (id: string) => (
   dispatch(setNewGroupCoFounders(coFounders));
 };
 
-export const createNewGroup = () => async (
+export const createNewGroup = (type) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
@@ -44,9 +44,10 @@ export const createNewGroup = () => async (
       isNew: true,
       knownMembers: [id],
       score: 0,
+      type: type
     };
     dispatch(createGroup(newGroup));
-    return await api.createGroup(newGroupCoFounders[0], newGroupCoFounders[1]);
+    return await api.createGroup(newGroupCoFounders[0], newGroupCoFounders[1], type);
   } catch (err) {
     Alert.alert('Cannot create group', err.message);
     return false;
