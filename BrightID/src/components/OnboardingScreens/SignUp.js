@@ -19,6 +19,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { handleBrightIdCreation } from './actions';
 import { takePhoto, chooseImage } from '../../utils/images';
+import ModalTextInput from '../ModalTextInput';
 
 type State = {
   name: string,
@@ -193,22 +194,28 @@ export class SignUp extends React.Component<Props, State> {
         </View>
         <View style={styles.textInputContainer}>
           <Text style={styles.midText}>What do your friends know you by?</Text>
-          <TextInput
+          {/*<TextInput*/}
+          {/*  onChangeText={(name) => this.setState({ name })}*/}
+          {/*  value={name}*/}
+          {/*  placeholder="Name"*/}
+          {/*  placeholderTextColor="#9e9e9e"*/}
+          {/*  style={styles.textInput}*/}
+          {/*  autoCapitalize="words"*/}
+          {/*  autoCorrect={false}*/}
+          {/*  textContentType="name"*/}
+          {/*  underlineColorAndroid="transparent"*/}
+          {/*  onFocus={() => {*/}
+          {/*    this.setState({ editingName: true });*/}
+          {/*  }}*/}
+          {/*  onBlur={() => {*/}
+          {/*    this.setState({ editingName: false });*/}
+          {/*  }}*/}
+          {/*/>*/}
+          <ModalTextInput
             onChangeText={(name) => this.setState({ name })}
-            value={name}
-            placeholder="Name"
-            placeholderTextColor="#9e9e9e"
             style={styles.textInput}
-            autoCapitalize="words"
-            autoCorrect={false}
-            textContentType="name"
-            underlineColorAndroid="transparent"
-            onFocus={() => {
-              this.setState({ editingName: true });
-            }}
-            onBlur={() => {
-              this.setState({ editingName: false });
-            }}
+            value={name}
+            label="What do your friends know you by?"
           />
         </View>
         <View style={styles.buttonContainer}>
