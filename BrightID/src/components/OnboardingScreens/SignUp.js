@@ -18,7 +18,8 @@ import Overlay from 'react-native-modal-overlay';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { handleBrightIdCreation } from './actions';
-import { takePhoto, chooseImage } from '../../utils/images';
+import { takePhoto, chooseImage } from '@/utils/images';
+import { DEVICE_TYPE } from '@/utils/constants';
 
 type State = {
   name: string,
@@ -40,6 +41,7 @@ export class SignUp extends React.Component<Props, State> {
         <Ionicons name="ios-help-circle-outline" size={32} color="#fff" />
       </TouchableOpacity>
     ),
+    headerShown: DEVICE_TYPE === 'large',
   };
 
   // eslint-disable-next-line react/state-in-constructor

@@ -13,7 +13,7 @@ import {
 import { connect } from 'react-redux';
 import Overlay from 'react-native-modal-overlay';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import ActionSheet from 'react-native-actionsheet';
 import VerificationSticker from './Verifications/VerificationSticker';
 import { setPhoto, setName } from '@/actions';
@@ -21,6 +21,7 @@ import { getNotifications } from '@/actions/notifications';
 import { delStorage } from '@/utils/dev';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
+import { DEVICE_TYPE } from '@/utils/constants';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 /**
  * Home screen of BrightID
@@ -51,12 +52,12 @@ export class HomeScreen extends React.Component<Props, State> {
     ),
     headerLeft: () => (
       <TouchableOpacity
-        style={{ marginLeft: 11 }}
+        style={{ marginLeft: 16 }}
         onPress={() => {
           actionSheetRef.show();
         }}
       >
-        <SimpleLineIcons name="question" size={32} color="#fff" />
+        <Ionicons name="ios-chatboxes" size={32} color="#fff" />
       </TouchableOpacity>
     ),
   });
@@ -139,9 +140,9 @@ export class HomeScreen extends React.Component<Props, State> {
       score,
       groupsCount,
       connections,
-      verifications,
+      // verifications,
     } = this.props;
-
+    let verifications = ['BrightID'];
     const { profilePhoto } = this.state;
     return (
       <View style={styles.container}>
@@ -197,7 +198,10 @@ export class HomeScreen extends React.Component<Props, State> {
                     this.props.dispatch(setName(this.state.name));
                     this.setState({ isEditing: false });
                   } else {
-                    this.setState({ isEditing: false, name: this.props.name });
+                    this.setState({
+                      isEditing: false,
+                      name: this.props.name,
+                    });
                   }
                 }}
               />
@@ -258,7 +262,7 @@ export class HomeScreen extends React.Component<Props, State> {
           ref={(o) => {
             actionSheetRef = o;
           }}
-          title="Do you have questions? Ask on our discord server!"
+          title="Like to chat with us?"
           options={['BrightID Discord', 'cancel']}
           cancelButtonIndex={1}
           onPress={(index) => {
@@ -274,6 +278,10 @@ export class HomeScreen extends React.Component<Props, State> {
   }
 }
 
+const PHOTO_WIDTH = DEVICE_TYPE === 'small' ? 130 : 142;
+const NUMBER_SIZE = DEVICE_TYPE === 'small' ? 16 : 22;
+const DESC_SIZE = DEVICE_TYPE === 'small' ? 12 : 16;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -288,13 +296,13 @@ const styles = StyleSheet.create({
   },
 
   photoContainer: {
-    marginTop: 24,
+    marginTop: DEVICE_TYPE === 'small' ? 10 : 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
   photo: {
-    width: 142,
-    height: 142,
+    width: PHOTO_WIDTH,
+    height: PHOTO_WIDTH,
     borderRadius: 71,
     shadowColor: 'rgba(0, 0, 0, 0.5)',
     shadowOffset: { width: 0, height: 2 },
@@ -302,7 +310,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 30,
+    fontSize: DEVICE_TYPE === 'small' ? 26 : 30,
     marginTop: 8,
     fontWeight: 'normal',
     fontStyle: 'normal',
@@ -327,7 +335,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: DEVICE_TYPE === 'small' ? 0 : 10,
     width: '100%',
   },
   verificationSticker: {},
@@ -337,22 +345,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#fff',
     flex: 1,
-    marginTop: 17,
+    marginTop: DEVICE_TYPE === 'small' ? 0 : 17,
     flexDirection: 'row',
   },
   scoreContainer: {
     borderBottomColor: '#e3e1e1',
     borderBottomWidth: 1,
     width: '80%',
-    marginTop: 12,
-    paddingBottom: 16,
+    marginTop: 10,
+    paddingBottom: 12,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
   scoreLeft: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 16,
+    fontSize: DESC_SIZE,
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -365,7 +373,7 @@ const styles = StyleSheet.create({
   },
   scoreRight: {
     fontFamily: 'ApexNew-Medium',
-    fontSize: 22,
+    fontSize: NUMBER_SIZE,
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -378,15 +386,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     flexDirection: 'row',
     width: '80%',
-    marginTop: 12,
+    marginTop: 10,
     borderBottomColor: '#e3e1e1',
     borderBottomWidth: 1,
-    paddingBottom: 12,
+    paddingBottom: 10,
   },
   countsDescriptionText: {
     fontFamily: 'ApexNew-Book',
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: DESC_SIZE,
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -394,7 +402,7 @@ const styles = StyleSheet.create({
   countsNumberText: {
     fontFamily: 'ApexNew-Book',
     textAlign: 'center',
-    fontSize: 22,
+    fontSize: NUMBER_SIZE,
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -403,7 +411,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   connectButton: {
-    height: 65,
     paddingTop: 13,
     paddingBottom: 12,
     width: '80%',
@@ -419,7 +426,7 @@ const styles = StyleSheet.create({
   },
   connectText: {
     fontFamily: 'ApexNew-Medium',
-    fontSize: 22,
+    fontSize: DEVICE_TYPE === 'small' ? 16 : 22,
     color: '#fff',
     marginLeft: 18,
   },
