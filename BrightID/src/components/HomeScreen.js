@@ -30,15 +30,16 @@ import fetchUserInfo from '@/actions/fetchUserInfo';
 
 type State = {
   profilePhoto: string,
-  modalVisible: boolean,
   isEditing: boolean,
   name: string,
 };
 
-let actionSheetRef = '';
+let chatSheetRef = '';
 let discordUrl = 'https://discord.gg/nTtuB2M';
 
 export class HomeScreen extends React.Component<Props, State> {
+  photoSheetRef: string;
+
   static navigationOptions = ({ navigation }) => ({
     title: 'BrightID',
     headerBackTitle: 'Home',
@@ -54,7 +55,7 @@ export class HomeScreen extends React.Component<Props, State> {
       <TouchableOpacity
         style={{ marginLeft: 16 }}
         onPress={() => {
-          actionSheetRef.show();
+          chatSheetRef.show();
         }}
       >
         <Ionicons name="ios-chatboxes" size={32} color="#fff" />
@@ -65,7 +66,6 @@ export class HomeScreen extends React.Component<Props, State> {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     profilePhoto: ' ',
-    modalVisible: false,
     isEditing: false,
     name: '',
   };
@@ -97,7 +97,6 @@ export class HomeScreen extends React.Component<Props, State> {
       const profilePhoto = await retrieveImage(filename);
       this.setState({
         profilePhoto,
-        modalVisible: false,
       });
     } catch (err) {
       console.log(err);
@@ -117,7 +116,6 @@ export class HomeScreen extends React.Component<Props, State> {
       const profilePhoto = await retrieveImage(filename);
       this.setState({
         profilePhoto,
-        modalVisible: false,
       });
     } catch (err) {
       console.log(err);
@@ -125,13 +123,7 @@ export class HomeScreen extends React.Component<Props, State> {
   };
 
   onEditPhoto = () => {
-    setTimeout(() => {
-      this.setState({ modalVisible: true });
-    }, 200);
-  };
-
-  onClose = () => {
-    this.setState({ modalVisible: false });
+    this.photoSheetRef.show();
   };
 
   render() {
@@ -146,29 +138,8 @@ export class HomeScreen extends React.Component<Props, State> {
     const { profilePhoto } = this.state;
     return (
       <View style={styles.container}>
-        <Overlay
-          visible={this.state.modalVisible}
-          onClose={this.onClose}
-          closeOnTouchOutside
-        >
-          <View>
-            <TouchableOpacity
-              onPress={this.getPhotoFromCamera}
-              style={styles.button}
-              accessibilityLabel="Take Photo"
-            >
-              <Text style={styles.buttonText}>Take Photo</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.createBrightIdButton}
-              onPress={this.getPhotoFromLibrary}
-            >
-              <Text style={styles.buttonInnerText}>Choose from Library</Text>
-            </TouchableOpacity>
-          </View>
-        </Overlay>
-        <View style={styles.mainContainer}>
-          <View style={styles.photoContainer}>
+        <View style={styles.photoContainer}>
+          {!this.state.isEditing ? (
             <TouchableOpacity
               onPress={this.onEditPhoto}
               accessible={true}
@@ -187,80 +158,82 @@ export class HomeScreen extends React.Component<Props, State> {
                 accessibilityLabel="user photo"
               />
             </TouchableOpacity>
-            {this.state.isEditing ? (
-              <TextInput
-                value={this.state.name}
-                style={{ ...styles.name, ...styles.editingName }}
-                onChangeText={(text) => this.setState({ name: text })}
-                autoFocus
-                onBlur={() => {
-                  if (this.state.name.length >= 2) {
-                    this.props.dispatch(setName(this.state.name));
-                    this.setState({ isEditing: false });
-                  } else {
-                    this.setState({
-                      isEditing: false,
-                      name: this.props.name,
-                    });
-                  }
-                }}
-              />
-            ) : (
-              <Text
-                style={styles.name}
-                onPress={() => this.setState({ isEditing: true })}
-              >
-                {this.props.name}
-              </Text>
-            )}
-          </View>
-
-          <View style={styles.scoreContainer}>
-            <Text style={styles.scoreLeft}>Score:</Text>
-            <Text id="score" style={styles.scoreRight}>
-              {score}
-            </Text>
-          </View>
-
-          <View style={styles.countsContainer}>
-            <View style={styles.countsGroup}>
-              <Text id="connectionsCount" style={styles.countsNumberText}>
-                {connections.length}
-              </Text>
-              <Text style={styles.countsDescriptionText}>Connections</Text>
-            </View>
-            <View style={styles.countsGroup}>
-              <Text id="groupsCount" style={styles.countsNumberText}>
-                {groupsCount}
-              </Text>
-              <Text style={styles.countsDescriptionText}>Groups</Text>
-            </View>
-          </View>
-
-          <View style={styles.verificationsContainer}>
-            {verifications.map((name) => (
-              <VerificationSticker name={name} key={name} />
-            ))}
-          </View>
-
-          <View style={styles.connectContainer}>
-            <TouchableOpacity
-              style={styles.connectButton}
-              onPress={() => {
-                navigation.navigate('NewConnection');
+          ) : (
+            <View />
+          )}
+          {this.state.isEditing ? (
+            <TextInput
+              value={this.state.name}
+              style={{ ...styles.name, ...styles.editingName }}
+              onChangeText={(text) => this.setState({ name: text })}
+              autoFocus
+              onBlur={() => {
+                if (this.state.name.length >= 2) {
+                  this.props.dispatch(setName(this.state.name));
+                  this.setState({ isEditing: false });
+                } else {
+                  this.setState({
+                    isEditing: false,
+                    name: this.props.name,
+                  });
+                }
               }}
-              accessible={true}
-              accessibilityLabel="Connect"
+            />
+          ) : (
+            <Text
+              style={styles.name}
+              onPress={() => this.setState({ isEditing: true })}
             >
-              <Material name="qrcode-scan" size={26} color="#fff" />
-              <Text style={styles.connectText}>New Connection</Text>
-            </TouchableOpacity>
+              {this.props.name}
+            </Text>
+          )}
+        </View>
+
+        <View style={styles.scoreContainer}>
+          <Text style={styles.scoreLeft}>Score:</Text>
+          <Text id="score" style={styles.scoreRight}>
+            {score}
+          </Text>
+        </View>
+
+        <View style={styles.countsContainer}>
+          <View style={styles.countsGroup}>
+            <Text id="connectionsCount" style={styles.countsNumberText}>
+              {connections.length}
+            </Text>
+            <Text style={styles.countsDescriptionText}>Connections</Text>
           </View>
+          <View style={styles.countsGroup}>
+            <Text id="groupsCount" style={styles.countsNumberText}>
+              {groupsCount}
+            </Text>
+            <Text style={styles.countsDescriptionText}>Groups</Text>
+          </View>
+        </View>
+
+        <View style={styles.verificationsContainer}>
+          {verifications.map((name) => (
+            <VerificationSticker name={name} key={name} />
+          ))}
+        </View>
+
+        <View style={styles.connectContainer}>
+          <TouchableOpacity
+            style={styles.connectButton}
+            onPress={() => {
+              navigation.navigate('NewConnection');
+            }}
+            accessible={true}
+            accessibilityLabel="Connect"
+          >
+            <Material name="qrcode-scan" size={26} color="#fff" />
+            <Text style={styles.connectText}>New Connection</Text>
+          </TouchableOpacity>
         </View>
 
         <ActionSheet
           ref={(o) => {
-            actionSheetRef = o;
+            chatSheetRef = o;
           }}
           title="Like to chat with us?"
           options={['BrightID Discord', 'cancel']}
@@ -270,6 +243,21 @@ export class HomeScreen extends React.Component<Props, State> {
               Linking.openURL(discordUrl).catch((err) =>
                 console.error('An error occurred', err),
               );
+            }
+          }}
+        />
+        <ActionSheet
+          ref={(o) => {
+            this.photoSheetRef = o;
+          }}
+          title="Select photo"
+          options={['Take Photo', 'Choose From Library', 'cancel']}
+          cancelButtonIndex={2}
+          onPress={(index) => {
+            if (index === 0) {
+              this.getPhotoFromCamera();
+            } else if (index === 1) {
+              this.getPhotoFromLibrary();
             }
           }}
         />
@@ -285,16 +273,12 @@ const DESC_SIZE = DEVICE_TYPE === 'small' ? 12 : 16;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  mainContainer: {
-    flex: 1,
     width: '100%',
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    backgroundColor: '#fff',
   },
-
   photoContainer: {
     marginTop: DEVICE_TYPE === 'small' ? 10 : 24,
     justifyContent: 'center',
