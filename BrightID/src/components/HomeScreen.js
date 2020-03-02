@@ -1,19 +1,27 @@
 // @flow
 
 import * as React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  Linking,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+} from 'react-native';
 import { connect } from 'react-redux';
 import Overlay from 'react-native-modal-overlay';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import ActionSheet from 'react-native-actionsheet';
 import VerificationSticker from './Verifications/VerificationSticker';
-import BottomNav from './BottomNav';
-import { setPhoto } from '../actions';
-import { getNotifications } from '../actions/notifications';
-import { delStorage } from '../utils/dev';
-import { chooseImage, takePhoto } from '../utils/images';
-import { saveImage, retrieveImage } from '../utils/filesystem';
-
+import { setPhoto, setName } from '@/actions';
+import { getNotifications } from '@/actions/notifications';
+import { delStorage } from '@/utils/dev';
+import { chooseImage, takePhoto } from '@/utils/images';
+import { saveImage, retrieveImage } from '@/utils/filesystem';
+import fetchUserInfo from '@/actions/fetchUserInfo';
 /**
  * Home screen of BrightID
  * ==========================
@@ -22,7 +30,12 @@ import { saveImage, retrieveImage } from '../utils/filesystem';
 type State = {
   profilePhoto: string,
   modalVisible: boolean,
+  isEditing: boolean,
+  name: string,
 };
+
+let actionSheetRef = '';
+let discordUrl = 'https://discord.gg/nTtuB2M';
 
 export class HomeScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
@@ -37,51 +50,48 @@ export class HomeScreen extends React.Component<Props, State> {
       </TouchableOpacity>
     ),
     headerLeft: () => (
-      <TouchableOpacity style={{ marginLeft: 11 }} onPress={() => {}}>
+      <TouchableOpacity
+        style={{ marginLeft: 11 }}
+        onPress={() => {
+          actionSheetRef.show();
+        }}
+      >
         <SimpleLineIcons name="question" size={32} color="#fff" />
       </TouchableOpacity>
     ),
   });
 
-  componentDidMount() {
-    const { navigation, dispatch, photo } = this.props;
-    navigation.addListener('willFocus', () => {
-      dispatch(getNotifications());
-    });
-    retrieveImage(photo.filename).then((profilePhoto) => {
-      this.setState({ profilePhoto });
-    });
-  }
-
   // eslint-disable-next-line react/state-in-constructor
   state = {
     profilePhoto: ' ',
     modalVisible: false,
+    isEditing: false,
+    name: '',
   };
 
-  // changePhoto = async () => {
-  //   const { id } = this.props;
-  //   try {
-  //     const { mime, data } = await selectImage();
-  //     const uri = `data:${mime};base64,${data}`;
-  //     const filename = await saveImage({ imageName: id, base64Image: uri });
-  //     console.log('filename', filename);
-  //     setPhoto({ filename });
-  //     const profilePhoto = await retrieveImage(filename);
-  //     this.setState({
-  //       profilePhoto,
-  //     });
-  //     // Image.getSize(`file://${RNFS.DocumentDirectoryPath}/photos/${filename}`);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  componentDidMount() {
+    const { navigation, dispatch, photo, name } = this.props;
+    navigation.addListener('didFocus', () => {
+      dispatch(getNotifications());
+      dispatch(fetchUserInfo());
+    });
+    retrieveImage(photo.filename).then((profilePhoto) => {
+      this.setState({ profilePhoto });
+    });
+    this.setState({
+      name,
+    });
+  }
+
   getPhotoFromCamera = async () => {
     try {
       const { id } = this.props;
       const { mime, data } = await takePhoto();
       const uri = `data:${mime};base64,${data}`;
-      const filename = await saveImage({ imageName: id, base64Image: uri });
+      const filename = await saveImage({
+        imageName: id,
+        base64Image: uri,
+      });
       setPhoto({ filename });
       const profilePhoto = await retrieveImage(filename);
       this.setState({
@@ -98,7 +108,10 @@ export class HomeScreen extends React.Component<Props, State> {
       const { id } = this.props;
       const { mime, data } = await chooseImage();
       const uri = `data:${mime};base64,${data}`;
-      const filename = await saveImage({ imageName: id, base64Image: uri });
+      const filename = await saveImage({
+        imageName: id,
+        base64Image: uri,
+      });
       setPhoto({ filename });
       const profilePhoto = await retrieveImage(filename);
       this.setState({
@@ -123,7 +136,6 @@ export class HomeScreen extends React.Component<Props, State> {
   render() {
     const {
       navigation,
-      name,
       score,
       groupsCount,
       connections,
@@ -174,9 +186,29 @@ export class HomeScreen extends React.Component<Props, State> {
                 accessibilityLabel="user photo"
               />
             </TouchableOpacity>
-            <Text id="name" style={styles.name}>
-              {name}
-            </Text>
+            {this.state.isEditing ? (
+              <TextInput
+                value={this.state.name}
+                style={{ ...styles.name, ...styles.editingName }}
+                onChangeText={(text) => this.setState({ name: text })}
+                autoFocus
+                onBlur={() => {
+                  if (this.state.name.length >= 2) {
+                    this.props.dispatch(setName(this.state.name));
+                    this.setState({ isEditing: false });
+                  } else {
+                    this.setState({ isEditing: false, name: this.props.name });
+                  }
+                }}
+              />
+            ) : (
+              <Text
+                style={styles.name}
+                onPress={() => this.setState({ isEditing: true })}
+              >
+                {this.props.name}
+              </Text>
+            )}
           </View>
 
           <View style={styles.scoreContainer}>
@@ -222,7 +254,21 @@ export class HomeScreen extends React.Component<Props, State> {
           </View>
         </View>
 
-        <BottomNav navigation={navigation} />
+        <ActionSheet
+          ref={(o) => {
+            actionSheetRef = o;
+          }}
+          title="Do you have questions? Ask on our discord server!"
+          options={['BrightID Discord', 'cancel']}
+          cancelButtonIndex={1}
+          onPress={(index) => {
+            if (index === 0) {
+              Linking.openURL(discordUrl).catch((err) =>
+                console.error('An error occurred', err),
+              );
+            }
+          }}
+        />
       </View>
     );
   }
@@ -271,6 +317,9 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
+  },
+  editingName: {
+    minWidth: 180,
   },
   verificationsContainer: {
     height: 16,

@@ -4,6 +4,7 @@ import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { connect } from 'react-redux';
+import { navigate } from './NavigationService';
 
 /**
  * list of icons which will navigate between screens inside the app
@@ -12,20 +13,15 @@ import { connect } from 'react-redux';
  * see AppRoutes.js for list of screens / routes in the app
  */
 
-type Props = {
-  navigation: navigation,
-  notifications: Array<NotificationInfo>,
-};
-
 export class BottomNav extends React.Component<Props> {
   render() {
-    const { notifications, navigation } = this.props;
+    const { notifications, id } = this.props;
 
-    return (
+    return id ? (
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Home');
+            navigate('Home');
           }}
           accessible={true}
           accessibilityLabel="Home"
@@ -37,7 +33,7 @@ export class BottomNav extends React.Component<Props> {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Connections');
+            navigate('Connections');
           }}
           accessible={true}
           accessibilityLabel="Connections"
@@ -49,7 +45,7 @@ export class BottomNav extends React.Component<Props> {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Groups');
+            navigate('Groups');
           }}
           accessible={true}
           accessibilityLabel="Groups"
@@ -61,7 +57,7 @@ export class BottomNav extends React.Component<Props> {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Notifications');
+            navigate('Notifications');
           }}
           accessible={true}
           accessibilityLabel="Notifications"
@@ -76,7 +72,7 @@ export class BottomNav extends React.Component<Props> {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Apps');
+            navigate('Apps');
           }}
           accessible={true}
           accessibilityLabel="Apps"
@@ -87,6 +83,8 @@ export class BottomNav extends React.Component<Props> {
           </View>
         </TouchableOpacity>
       </View>
+    ) : (
+      <View />
     );
   }
 }

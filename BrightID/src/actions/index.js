@@ -16,6 +16,7 @@ export const SET_CONNECTIONS = 'SET_CONNECTIONS';
 export const CONNECTIONS_SORT = 'CONNECTIONS_SORT';
 export const DELETE_CONNECTION = 'DELETE_CONNECTION';
 export const SET_USER_DATA = 'SET_USER_DATA';
+export const SET_USER_NAME = 'SET_USER_NAME';
 export const SET_USER_PHOTO = 'SET_USER_PHOTO';
 export const SET_CONNECT_QR_DATA = 'SET_CONNECT_QR_DATA';
 export const REMOVE_CONNECT_QR_DATA = 'REMOVE_CONNECT_QR_DATA';
@@ -39,7 +40,9 @@ export const SET_USER_ID = 'SET_USER_ID';
 export const HYDRATE_STATE = 'HYDRATE_STATE';
 export const REMOVE_SAFE_PUB_KEY = 'REMOVE_SAFE_PUB_KEY';
 export const RESET_STORE = 'RESET_STORE';
-export const FLAG_CONNECTION = 'FLAG_CONNECTION';
+export const ADD_OPERATION = 'ADD_OPERATION';
+export const REMOVE_OPERATION = 'REMOVE_OPERATION';
+export const RESET_OPERATIONS = 'RESET_OPERATIONS';
 
 /**
  * redux action creator that updates user `score`
@@ -192,18 +195,6 @@ export const deleteConnection = (id: string) => ({
 });
 
 /**
- * redux action creator for removing a connection
- * @param type DELETE_CONNECTION
- * @param connection removes a connection object from the array of connections and removes id from connection ids
- */
-
-export const flagConnection = (id: string, flag: string) => ({
-  type: FLAG_CONNECTION,
-  id,
-  flag,
-});
-
-/**
  * redux action setting user data
  * @param type SET_USER_DATA
  * @param userData object containing important user data obtained from async storage during initialization
@@ -228,6 +219,17 @@ export const setUserData = ({
   secretKey,
   name,
   photo,
+});
+
+/**
+ * redux action creator for setting user name
+ * @param type SET_USER_NAME
+ * @param name the username of the user
+ */
+
+export const setName = (name: string) => ({
+  type: SET_USER_NAME,
+  name,
 });
 
 /**
@@ -340,6 +342,20 @@ export const hydrateState = (state: State) => ({
 
 export const removeSafePubKey = () => ({
   type: REMOVE_SAFE_PUB_KEY,
+});
+
+export const addOperation = (op: string) => ({
+  type: ADD_OPERATION,
+  op,
+});
+
+export const removeOperation = (op: string) => ({
+  type: REMOVE_OPERATION,
+  op,
+});
+
+export const resetOperations = () => ({
+  type: RESET_OPERATIONS,
 });
 
 export const resetStore = () => ({

@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { createAppContainer } from 'react-navigation';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
-import {
-  createStackNavigator,
-  CardStyleInterpolators,
-} from 'react-navigation-stack';
+import { createStackNavigator } from 'react-navigation-stack';
 import LinearGradient from 'react-native-linear-gradient';
 import Home from './components/HomeScreen';
 import ConnectionsScreen from './components/Connections/ConnectionsScreen';
@@ -27,6 +24,7 @@ import BackupScreen from './components/Recovery/BackupScreen';
 import RestoreScreen from './components/Recovery/RestoreScreen';
 import RecoveringConnectionScreen from './components/Recovery/RecoveringConnectionScreen';
 import RecoveryCodeScreen from './components/Recovery/RecoveryCodeScreen';
+import { setTopLevelNavigator } from './NavigationService';
 
 /**
  * This is BrightID's router, written with React-Navigation
@@ -154,6 +152,6 @@ const prefix = 'brightid://';
 
 const App = createAppContainer(AppNavigator);
 
-const MainApp = () => <App uriPrefix={prefix} />;
+const MainApp = () => <App ref={setTopLevelNavigator} uriPrefix={prefix} />;
 
 export default MainApp;

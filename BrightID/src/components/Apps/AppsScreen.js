@@ -3,9 +3,8 @@
 import * as React from 'react';
 import { StyleSheet, View, Alert, FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import { saveApp } from '../../actions/apps';
-import BottomNav from '../BottomNav';
 import nacl from 'tweetnacl';
+import { saveApp } from '../../actions/apps';
 
 import { strToUint8Array, uInt8ArrayToB64 } from '../../utils/encoding';
 import api from '../../Api/BrightId';
@@ -18,7 +17,7 @@ export class AppsScreen extends React.Component<Props> {
   });
 
   async componentDidMount() {
-    const { navigation, dispatch } = this.props;
+    const { navigation } = this.props;
     if (navigation.state.params) {
       // if 'params' is defined, the user came through a deep link
       const { baseUrl, context, contextId } = navigation.state.params;
@@ -40,7 +39,7 @@ export class AppsScreen extends React.Component<Props> {
             {
               text: 'Yes',
               onPress: () =>
-                this.linkVerification(baseUrl, context, contextInfo, contextId)
+                this.linkVerification(baseUrl, context, contextInfo, contextId),
             },
             {
               text: 'No',
@@ -58,7 +57,6 @@ export class AppsScreen extends React.Component<Props> {
   }
 
   render() {
-    const { navigation } = this.props;
     return (
       <View style={styles.container}>
         <FlatList
@@ -67,7 +65,6 @@ export class AppsScreen extends React.Component<Props> {
           keyExtractor={({ name }, index) => name + index}
           renderItem={({ item }) => <AppCard {...item} />}
         />
-        <BottomNav style={{ flex: 0 }} navigation={navigation} />
       </View>
     );
   }
@@ -80,14 +77,18 @@ export class AppsScreen extends React.Component<Props> {
         const { publicKey, secretKey } = await nacl.sign.keyPair();
         const b64PubKey = uInt8ArrayToB64(publicKey);
         const sig = uInt8ArrayToB64(
-          nacl.sign.detached(strToUint8Array(contextId), secretKey)
+          nacl.sign.detached(strToUint8Array(contextId), secretKey),
         );
         let resp = await fetch(contextInfo.verificationUrl, {
           method: 'PUT',
-          body: JSON.stringify({ 'contextId': contextId, 'publicKey': b64PubKey, sig }),
+          body: JSON.stringify({
+            contextId,
+            publicKey: b64PubKey,
+            sig,
+          }),
           headers: {
             'Content-Type': 'application/json',
-          }
+          },
         });
         resp = await resp.json();
         contextId = b64PubKey;

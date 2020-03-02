@@ -1,6 +1,6 @@
 /** @format */
 
-import { AppRegistry, YellowBox, Text, TextInput } from 'react-native';
+import { AppRegistry, Text, TextInput } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';

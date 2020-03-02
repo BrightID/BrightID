@@ -28,6 +28,7 @@ import {
   SET_CONNECTIONS,
   CONNECTIONS_SORT,
   SET_USER_DATA,
+  SET_USER_NAME,
   SET_USER_PHOTO,
   SET_CONNECT_QR_DATA,
   REMOVE_CONNECT_QR_DATA,
@@ -52,7 +53,9 @@ import {
   HYDRATE_STATE,
   RESET_STORE,
   UPDATE_CONNECTIONS,
-  FLAG_CONNECTION,
+  ADD_OPERATION,
+  REMOVE_OPERATION,
+  RESET_OPERATIONS,
 } from '../actions';
 
 /**
@@ -90,6 +93,7 @@ export const initialState: State = {
   password: '',
   hashedId: '',
   secretKey: new Uint8Array([]),
+  operations: [],
   connectionsSort: '',
   connectQrData: {
     aesKey: '',
@@ -249,7 +253,8 @@ export const reducer = (state: State = initialState, action: action) => {
             if (conn.status === 'verified') conn.status = 'Deleted';
             return conn;
           } else {
-            if (conn.status === 'initiated') conn.status = 'verified';
+            if (conn.status === 'initiated' || !conn.status)
+              conn.status = 'verified';
             return mergeRight(conn, updatedConn);
           }
         }),
@@ -276,23 +281,9 @@ export const reducer = (state: State = initialState, action: action) => {
     case DELETE_CONNECTION: {
       return {
         ...state,
-        connections: state.connections.map<connection>((conn: connection) => {
-          if (conn.id === action.id) {
-            conn.status = 'deleted';
-          }
-          return conn;
-        }),
-      };
-    }
-    case FLAG_CONNECTION: {
-      return {
-        ...state,
-        connections: state.connections.map<connection>((conn: connection) => {
-          if (conn.id === action.id) {
-            conn.status = action.flag;
-          }
-          return conn;
-        }),
+        connections: state.connections.filter<connection>(
+          (conn: connection) => conn.id !== action.id,
+        ),
       };
     }
     case SET_USER_DATA: {
@@ -303,6 +294,12 @@ export const reducer = (state: State = initialState, action: action) => {
         publicKey: action.publicKey,
         id: action.id,
         secretKey: action.secretKey,
+      };
+    }
+    case SET_USER_NAME: {
+      return {
+        ...state,
+        name: action.name,
       };
     }
     case SET_CONNECT_QR_DATA: {
@@ -436,6 +433,21 @@ export const reducer = (state: State = initialState, action: action) => {
     }
     case REMOVE_SAFE_PUB_KEY: {
       return dissoc('safePubKey', state);
+    }
+    case ADD_OPERATION: {
+      return {
+        ...state,
+        operations: state.operations.concat(action.op),
+      };
+    }
+    case REMOVE_OPERATION: {
+      return {
+        ...state,
+        operations: state.operations.filter((op) => op !== action.op),
+      };
+    }
+    case RESET_OPERATIONS: {
+      return { ...state, operations: [] };
     }
     case RESET_STORE: {
       return initialState;

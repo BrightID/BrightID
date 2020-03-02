@@ -4,6 +4,7 @@ import { create, ApiSauceInstance } from 'apisauce';
 import nacl from 'tweetnacl';
 import { strToUint8Array, uInt8ArrayToB64, hash } from '../utils/encoding';
 import store from '../store';
+import { addOperation } from '../actions';
 
 let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
@@ -33,7 +34,7 @@ class BrightId {
   }
 
   get apiUrl() {
-    return `${this.baseUrl}/brightid`;
+    return `${this.baseUrl}/brightid/v3`;
   }
 
   static throwOnError(response) {
@@ -44,6 +45,10 @@ class BrightId {
       throw new Error(response.data.errorMessage);
     }
     throw new Error(response.problem);
+  }
+
+  static setOperation(opHash: string) {
+    store.dispatch(addOperation(opHash));
   }
 
   async createConnection(
@@ -64,12 +69,14 @@ class BrightId {
     op._key = hash(op.name + op.id1 + op.id2 + op.timestamp);
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    BrightId.setOperation(op._key);
   }
 
-  async deleteConnection(id2: string) {
+  async removeConnection(id2: string, reason: string) {
     const { id, secretKey } = store.getState();
     const timestamp = Date.now();
-    const message = `Remove Connection${id}${id2}${timestamp}`;
+    const message = `Remove Connection${id}${id2}${reason}${timestamp}`;
+
     let sig1 = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
@@ -78,31 +85,13 @@ class BrightId {
       name: 'Remove Connection',
       id1: id,
       id2,
+      reason,
       sig1,
       timestamp,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
-  }
-
-  async flagConnection(flagged: string, reason: string) {
-    const { id, secretKey } = store.getState();
-    const timestamp = Date.now();
-    const message = `Flag User${id}${flagged}${reason}${timestamp}`;
-    let sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
-    const op = {
-      _key: hash(message),
-      name: 'Flag User',
-      flagger: id,
-      flagged,
-      reason,
-      sig,
-      timestamp,
-    };
-    const res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
+    BrightId.setOperation(op._key);
   }
 
   async createGroup(id2: string, id3: string) {
@@ -125,6 +114,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    BrightId.setOperation(op._key);
   }
 
   async deleteGroup(group: string) {
@@ -145,6 +135,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    BrightId.setOperation(op._key);
   }
 
   async joinGroup(group: string) {
@@ -165,6 +156,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    BrightId.setOperation(op._key);
   }
 
   async leaveGroup(group: string) {
@@ -185,6 +177,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    BrightId.setOperation(op._key);
   }
 
   async setTrusted(trusted: string[]) {
@@ -206,6 +199,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    BrightId.setOperation(op._key);
   }
 
   async setSigningKey(op: {
@@ -221,6 +215,7 @@ class BrightId {
     op._key = hash(op.name + op.id + op.signingKey + op.timestamp);
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    BrightId.setOperation(op._key);
   }
 
   async linkContextId(context: string, contextId: string) {
@@ -241,6 +236,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    BrightId.setOperation(op._key);
   }
 
   async getMembers(group: string) {
@@ -251,6 +247,12 @@ class BrightId {
 
   async getUserInfo(id: string) {
     const res = await this.api.get(`/users/${id}`);
+    BrightId.throwOnError(res);
+    return res.data.data;
+  }
+
+  async getOperationState(opHash: string) {
+    const res = await this.api.get(`/operations/${opHash}`);
     BrightId.throwOnError(res);
     return res.data.data;
   }

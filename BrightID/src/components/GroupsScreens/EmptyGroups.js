@@ -123,14 +123,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: '55%',
+    height: 280,
     backgroundColor: '#fcfcfc',
   },
   noCurrentContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: '45%',
+    height: 280,
     backgroundColor: '#fcfcfc',
   },
   fullScreenContainer: {
@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     backgroundColor: '#fff',
+    height: '100%',
   },
   noCurrentGroupsInfo: {
     flexDirection: 'row',
@@ -231,8 +232,8 @@ const styles = StyleSheet.create({
     height: 150,
   },
   largeGroupsLogo: {
-    width: 240,
-    height: 240,
+    width: 200,
+    height: 200,
     marginBottom: 30,
   },
 });

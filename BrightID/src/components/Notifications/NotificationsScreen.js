@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import BottomNav from '../BottomNav';
 import NotificationCard from './NotificationCard';
 
 class NotificationsScreen extends React.Component<Props> {
@@ -27,7 +26,6 @@ class NotificationsScreen extends React.Component<Props> {
             />
           )}
         />
-        <BottomNav style={styles.bottomNav} navigation={navigation} />
       </View>
     );
   }
@@ -40,9 +38,6 @@ const styles = StyleSheet.create({
   },
   NotificationsList: {
     flex: 1,
-  },
-  bottomNav: {
-    flex: 0,
   },
 });
 

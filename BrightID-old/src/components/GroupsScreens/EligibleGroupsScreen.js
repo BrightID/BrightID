@@ -13,6 +13,7 @@ import { NavigationEvents } from 'react-navigation';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import EligibleGroupCard from './EligibleGroupCard';
 import BottomNav from '../BottomNav';
+import { NavigationEvents } from 'react-navigation';
 import fetchUserInfo from '../../actions/fetchUserInfo';
 
 const ICON_SIZE = 36;

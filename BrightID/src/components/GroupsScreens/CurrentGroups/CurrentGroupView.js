@@ -12,12 +12,10 @@ import {
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { NavigationEvents } from 'react-navigation';
 import Overlay from 'react-native-modal-overlay';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MemberCard from './MemberCard';
 import { getMembers } from '../../../actions/getMembers';
-import BottomNav from '../../BottomNav';
 import api from '../../../Api/BrightId';
 import SearchMembers from './SearchMembers';
 import GroupPhoto from './GroupPhoto';
@@ -43,6 +41,7 @@ export class CurrentGroupView extends Component<Props, State> {
     return {
       title: group.name,
       headerTitleStyle: { fontSize: 16 },
+      headerBackTitleVisible: false,
       headerRight: () => (
         <TouchableOpacity
           style={{ marginRight: 11 }}
@@ -55,6 +54,16 @@ export class CurrentGroupView extends Component<Props, State> {
       ),
     };
   };
+
+  componentDidMount() {
+    const { navigation } = this.props;
+    emitter.on('optionsSelected', this.showOptionsMenu);
+    navigation.addListener('didFocus', this.getMembers);
+  }
+
+  componentWillUnmount() {
+    emitter.off('optionsSelected', this.showOptionsMenu);
+  }
 
   confirmLeaveGroup = () => {
     const buttons = [
@@ -130,16 +139,6 @@ export class CurrentGroupView extends Component<Props, State> {
     }
   }
 
-  componentDidMount() {
-    emitter.on('optionsSelected', this.showOptionsMenu);
-
-    this.getMembers();
-  }
-
-  componentWillUnmount() {
-    emitter.off('optionsSelected', this.showOptionsMenu);
-  }
-
   showOptionsMenu = () => {
     this.setState({ optionsVisible: true });
   };
@@ -176,7 +175,6 @@ export class CurrentGroupView extends Component<Props, State> {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
-        <NavigationEvents onDidFocus={this.getMembers} />
         <Overlay
           visible={this.state.optionsVisible}
           onClose={this.hideOptionsMenu}
@@ -190,7 +188,6 @@ export class CurrentGroupView extends Component<Props, State> {
           <SearchMembers navigation={navigation} />
           <View style={styles.mainContainer}>{this.renderListOrSpinner()}</View>
         </View>
-        <BottomNav navigation={navigation} />
       </View>
     );
   }

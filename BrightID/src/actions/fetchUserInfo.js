@@ -10,8 +10,8 @@ import {
   updateConnections,
 } from './index';
 
-// TODO update connections here
 const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
+  console.log('refreshing user info');
   const { id } = getState();
   if (!id) return;
   try {

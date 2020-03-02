@@ -15,6 +15,14 @@ module.exports = {
     es6: true,
     jest: true,
   },
+  settings: {
+    'import/resolver': {
+      alias: {
+        map: [['@', './src']],
+        extensions: ['.ios.js', '.android.js', '.js', '.json'],
+      },
+    },
+  },
   rules: {
     'no-unused-vars': 'error',
     'no-console': 'off',

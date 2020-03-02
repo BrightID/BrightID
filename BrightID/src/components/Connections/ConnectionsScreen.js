@@ -8,11 +8,11 @@ import ActionSheet from 'react-native-actionsheet';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
 import { createFakeConnection } from './models/createFakeConnection';
-import BottomNav from '../BottomNav';
 import { renderListOrSpinner } from './renderConnections';
 import FloatingActionButton from '../FloatingActionButton';
 import { defaultSort } from './models/sortingUtility';
 import { performAction } from './models/modifyConnections';
+import fetchUserInfo from '../../actions/fetchUserInfo';
 
 /**
  * Connection screen of BrightID
@@ -40,6 +40,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     const { navigation, dispatch } = this.props;
     navigation.addListener('willFocus', () => {
       dispatch(defaultSort());
+      dispatch(fetchUserInfo());
     });
   }
 
@@ -95,7 +96,6 @@ export class ConnectionsScreen extends React.Component<Props, State> {
   render() {
     const { navigation } = this.props;
     const actions = [
-      'Delete',
       'Flag as Duplicate',
       'Flag as Fake',
       'Flag as Diseased',
@@ -128,7 +128,6 @@ export class ConnectionsScreen extends React.Component<Props, State> {
           cancelButtonIndex={actions.length - 1}
           onPress={(index) => this.modifyConnection(index)}
         />
-        <BottomNav style={{ flex: 0 }} navigation={navigation} />
       </View>
     );
   }
