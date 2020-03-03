@@ -283,12 +283,6 @@ class BrightId {
     BrightId.setOperation(op._key);
   }
 
-  async getMembers(group: string) {
-    const res = await this.api.get(`/memberships/${group}`);
-    BrightId.throwOnError(res);
-    return res.data.data;
-  }
-
   async getUserInfo(id: string) {
     const res = await this.api.get(`/users/${id}`);
     BrightId.throwOnError(res);

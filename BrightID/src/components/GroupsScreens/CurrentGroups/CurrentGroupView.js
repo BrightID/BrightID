@@ -14,25 +14,15 @@ import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionSheet from 'react-native-actionsheet';
 import MemberCard from './MemberCard';
-import { getMembers } from '../../../actions/getMembers';
+import { innerJoin } from 'ramda';
 import api from '../../../Api/BrightId';
 import SearchMembers from './SearchMembers';
 import GroupPhoto from './GroupPhoto';
 import emitter from '../../../emitter';
-import { leaveGroup } from '../../../actions';
-
-type State = {
-  loading: boolean,
-  members: string[],
-};
+import { leaveGroup, dismissFromGroup } from '../../../actions';
 
 export class CurrentGroupView extends Component<Props, State> {
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    loading: true,
-    members: [],
-  };
-
+  
   static navigationOptions = ({ navigation }: { navigation: navigation }) => {
     const { group } = navigation.state.params;
     return {
@@ -59,7 +49,6 @@ export class CurrentGroupView extends Component<Props, State> {
   componentDidMount() {
     const { navigation } = this.props;
     emitter.on('optionsSelected', this.showOptionsMenu);
-    navigation.addListener('didFocus', this.getMembers);
   }
 
   componentWillUnmount() {
@@ -79,7 +68,7 @@ export class CurrentGroupView extends Component<Props, State> {
           const groupId = navigation.state.params.group.id;
           try {
             await api.dismiss(user.id, groupId);
-            navigation.goBack();
+            await dispatch(dismissFromGroup(user.id, groupId));
           } catch (err) {
             Alert.alert('Error leaving group', err.message);
           }
@@ -143,7 +132,7 @@ export class CurrentGroupView extends Component<Props, State> {
   filterMembers = () => {
     const { searchParam } = this.props;
     const searchString = searchParam.toLowerCase().replace(/\s/g, '');
-    return this.state.members.filter((item) =>
+    return this.getMembers().filter((item) =>
       `${item.name}`
         .toLowerCase()
         .replace(/\s/g, '')
@@ -161,48 +150,19 @@ export class CurrentGroupView extends Component<Props, State> {
     );
   };
 
-  renderListOrSpinner() {
-    const { loading } = this.state;
-    const { group } = this.props.navigation.state.params;
-    if (loading) {
-      return (
-        <Spinner
-          style={styles.spinner}
-          isVisible={true}
-          size={47}
-          type="WanderingCubes"
-          color="#4990e2"
-        />
-      );
-    } else {
-      return (
-        <View>
-          <GroupPhoto group={group} radius={35} />
-          <Text style={styles.groupName}>{group.name}</Text>
-          <FlatList
-            style={styles.membersContainer}
-            data={this.filterMembers()}
-            keyExtractor={({ id }, index) => id + index}
-            renderItem={this.renderMember}
-          />
-        </View>
-      );
-    }
-  }
-
-  getMembers = async () => {
-    const { dispatch, navigation } = this.props;
-    const groupId = navigation.state.params.group.id;
-    const members = await dispatch(getMembers(groupId));
-    this.setState({
-      loading: false,
+  getMembers = () => {
+    const { navigation, connections } = this.props;
+    const members = navigation.state.params.group.members;
+    // return a list of connections filtered by the members of this group
+    return innerJoin(
+      (connection, id) => connection.id === id,
+      connections,
       members,
-    });
+    );
   };
 
   render() {
     const { navigation, id } = this.props;
-    const { loading } = this.state;
     const { group } = this.props.navigation.state.params;
     let actions = ['Leave Group', 'cancel'];
     if (group.admins && group.admins.includes(id)) {
@@ -212,7 +172,16 @@ export class CurrentGroupView extends Component<Props, State> {
       <View style={styles.container}>
         <View style={styles.mainContainer}>
           <SearchMembers navigation={navigation} />
-          <View style={styles.mainContainer}>{this.renderListOrSpinner()}</View>
+          <View style={styles.mainContainer}>
+            <GroupPhoto group={group} radius={35} />
+            <Text style={styles.groupName}>{group.name}</Text>
+            <FlatList
+              style={styles.membersContainer}
+              data={this.filterMembers()}
+              keyExtractor={({ id }, index) => id + index}
+              renderItem={this.renderMember}
+            />
+          </View>
         </View>
         <ActionSheet
           ref={(o) => {

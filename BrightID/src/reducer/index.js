@@ -25,6 +25,7 @@ import {
   JOIN_GROUP,
   JOIN_GROUP_AS_CO_FOUNDER,
   LEAVE_GROUP,
+  DISMISS_FROM_GROUP,
   SET_CONNECTIONS,
   CONNECTIONS_SORT,
   SET_USER_DATA,
@@ -235,6 +236,23 @@ export const reducer = (state: State = initialState, action: action) => {
         ...state,
         currentGroups: state.currentGroups.filter(
           (group) => group.id !== action.groupId,
+        ),
+      };
+    }
+    case DISMISS_FROM_GROUP: {
+      return {
+        ...state,
+        currentGroups: state.currentGroups.map(
+          (group) => {
+            if (group.id !== action.groupId) {
+              return group;
+            } else {
+              group.members = group.members.filter(
+                (member) =>  member !== action.member
+              );
+              return group;
+            }
+          }
         ),
       };
     }
