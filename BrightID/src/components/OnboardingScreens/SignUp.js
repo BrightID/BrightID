@@ -12,24 +12,27 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import ActionSheet from 'react-native-actionsheet';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
-import Overlay from 'react-native-modal-overlay';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { handleBrightIdCreation } from './actions';
 import { takePhoto, chooseImage } from '@/utils/images';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { DEVICE_TYPE, DEVICE_OS } from '@/utils/constants';
 
 type State = {
   name: string,
   finalBase64: { uri: string },
   creatingBrightId: boolean,
-  modalVisible: boolean,
   editingName: boolean,
 };
 
+const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
+
 export class SignUp extends React.Component<Props, State> {
+  photoSheetRef: string;
+
   static navigationOptions = {
     title: 'BrightID',
     headerBackTitle: 'SignUp',
@@ -49,7 +52,6 @@ export class SignUp extends React.Component<Props, State> {
     name: '',
     finalBase64: { uri: '' },
     creatingBrightId: false,
-    modalVisible: false,
     editingName: false,
   };
 
@@ -61,7 +63,6 @@ export class SignUp extends React.Component<Props, State> {
       };
       this.setState({
         finalBase64,
-        modalVisible: false,
       });
     } catch (err) {
       console.log(err);
@@ -76,7 +77,6 @@ export class SignUp extends React.Component<Props, State> {
       };
       this.setState({
         finalBase64,
-        modalVisible: false,
       });
     } catch (err) {
       console.log(err);
@@ -84,13 +84,7 @@ export class SignUp extends React.Component<Props, State> {
   };
 
   onAddPhoto = () => {
-    setTimeout(() => {
-      this.setState({ modalVisible: true });
-    }, 200);
-  };
-
-  onClose = () => {
-    this.setState({ modalVisible: false });
+    this.photoSheetRef.show();
   };
 
   createBrightID = async () => {
@@ -141,35 +135,13 @@ export class SignUp extends React.Component<Props, State> {
     const { name, finalBase64, creatingBrightId, editingName } = this.state;
 
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <Container style={styles.container} behavior="padding">
         <StatusBar
           barStyle="dark-content"
           backgroundColor="#F52828"
           translucent={false}
           animated={true}
         />
-        <Overlay
-          visible={this.state.modalVisible}
-          onClose={this.onClose}
-          closeOnTouchOutside
-        >
-          <View>
-            <TouchableOpacity
-              onPress={this.getPhotoFromCamera}
-              style={styles.button}
-              accessibilityLabel="Take Photo"
-            >
-              <Text style={styles.buttonText}>Take Photo</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.createBrightIdButton}
-              onPress={this.getPhotoFromLibrary}
-            >
-              <Text style={styles.buttonInnerText}>Choose from Library</Text>
-            </TouchableOpacity>
-          </View>
-        </Overlay>
-
         <View style={styles.addPhotoContainer}>
           {finalBase64.uri && !editingName ? (
             <TouchableOpacity
@@ -241,7 +213,22 @@ export class SignUp extends React.Component<Props, State> {
             </View>
           )}
         </View>
-      </KeyboardAvoidingView>
+        <ActionSheet
+          ref={(o) => {
+            this.photoSheetRef = o;
+          }}
+          title="Select photo"
+          options={['Take Photo', 'Choose From Library', 'cancel']}
+          cancelButtonIndex={2}
+          onPress={(index) => {
+            if (index === 0) {
+              this.getPhotoFromCamera();
+            } else if (index === 1) {
+              this.getPhotoFromLibrary();
+            }
+          }}
+        />
+      </Container>
     );
   }
 }
@@ -348,7 +335,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
-    // marginBottom: 10,
   },
   buttonText: {
     fontFamily: 'ApexNew-Medium',

@@ -8,7 +8,7 @@ const DEVICE_SMALL_AREA = 200000;
 export const DEVICE_TYPE =
   WIDTH * HEIGHT <= DEVICE_SMALL_AREA ? 'small' : 'large';
 
-export const PLATOFRM = Platform.OS;
+export const DEVICE_OS = Platform.OS;
 
 console.log('width, height, area', WIDTH, HEIGHT, WIDTH * HEIGHT);
 console.log('deviceType', DEVICE_TYPE);

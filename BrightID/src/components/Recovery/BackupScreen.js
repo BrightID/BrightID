@@ -12,10 +12,10 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
-import { setBackupCompleted, setPassword } from '../../actions/index';
-import emitter from '../../emitter';
-
+import { setBackupCompleted, setPassword } from '@/actions/index';
+import emitter from '@/emitter';
 import { backupAppData } from './helpers';
+import { DEVICE_OS } from '@/utils/constants';
 
 type State = {
   pass1: string,
@@ -24,6 +24,8 @@ type State = {
   total: number,
   backupInProgress: boolean,
 };
+
+const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
 class BackupScreen extends React.Component<Props, State> {
   static navigationOptions = {
@@ -99,7 +101,7 @@ class BackupScreen extends React.Component<Props, State> {
     const { pass1, pass2 } = this.state;
 
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <Container style={styles.container} behavior="padding">
         <View style={styles.textInputContainer}>
           <Text style={styles.textInfo}>
             Enter a password to encrypt your backup data with:
@@ -149,7 +151,7 @@ class BackupScreen extends React.Component<Props, State> {
             </View>
           )}
         </View>
-      </KeyboardAvoidingView>
+      </Container>
     );
   }
 }

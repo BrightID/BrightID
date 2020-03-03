@@ -7,6 +7,7 @@ import Simple from 'react-native-vector-icons/SimpleLineIcons';
 import { shareConnection } from './actions/shareConnection';
 import MyCodeScreen from './MyCodeScreen';
 import ScanCodeScreen from './ScanCodeScreen';
+import { DEVICE_TYPE } from '@/utils/constants';
 
 /**
  * Connection screen of BrightID
@@ -31,8 +32,10 @@ export class NewConnectionScreen extends React.Component<Props, State> {
         <Simple name="share-alt" size={25} color="#fff" />
       </TouchableOpacity>
     ),
+    headerShown: DEVICE_TYPE === 'large',
   });
 
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     display: 'qrcode',
   };

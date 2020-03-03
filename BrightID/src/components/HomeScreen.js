@@ -10,11 +10,10 @@ import {
   View,
   TextInput,
 } from 'react-native';
+import ActionSheet from 'react-native-actionsheet';
 import { connect } from 'react-redux';
-import Overlay from 'react-native-modal-overlay';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import ActionSheet from 'react-native-actionsheet';
 import VerificationSticker from './Verifications/VerificationSticker';
 import { setPhoto, setName } from '@/actions';
 import { getNotifications } from '@/actions/notifications';
@@ -413,40 +412,6 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_TYPE === 'small' ? 16 : 22,
     color: '#fff',
     marginLeft: 18,
-  },
-  createBrightIdButton: {
-    backgroundColor: '#428BE5',
-    width: 300,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 13,
-    paddingBottom: 12,
-    marginTop: 22,
-  },
-  buttonInnerText: {
-    fontFamily: 'ApexNew-Medium',
-    color: '#fff',
-    fontWeight: '600',
-    fontSize: 18,
-  },
-  button: {
-    width: 300,
-    borderWidth: 1,
-    borderColor: '#4990e2',
-    paddingTop: 13,
-    paddingBottom: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 10,
-    // marginBottom: 10,
-  },
-  buttonText: {
-    fontFamily: 'ApexNew-Medium',
-    color: '#4990e2',
-    fontSize: 18,
-    fontWeight: '500',
-    fontStyle: 'normal',
-    letterSpacing: 0,
   },
 });
 

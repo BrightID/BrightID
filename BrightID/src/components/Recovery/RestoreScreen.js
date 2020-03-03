@@ -12,8 +12,9 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
-import emitter from '../../emitter';
+import emitter from '@/emitter';
 import { recoverData } from './helpers';
+import { DEVICE_OS } from '@/utils/constants';
 
 type State = {
   pass: string,
@@ -21,6 +22,8 @@ type State = {
   total: number,
   restoreInProgress: boolean,
 };
+
+const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
 class RestoreScreen extends React.Component<Props, State> {
   static navigationOptions = {
@@ -124,7 +127,7 @@ class RestoreScreen extends React.Component<Props, State> {
   render() {
     const { pass } = this.state;
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <Container style={styles.container} behavior="padding">
         <View style={styles.textInputContainer}>
           <Text style={styles.textInfo}>
             Enter a password that you encrypted your backup data with:
@@ -147,7 +150,7 @@ class RestoreScreen extends React.Component<Props, State> {
         <View style={styles.buttonContainer}>
           {this.renderButtonOrSpinner()}
         </View>
-      </KeyboardAvoidingView>
+      </Container>
     );
   }
 }
