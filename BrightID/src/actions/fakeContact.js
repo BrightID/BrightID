@@ -40,11 +40,11 @@ export const addFakeConnection = (navigation: navigation) => async (
     signedMessage,
     name,
     score,
-    photo: 'https://loremflickr.com/180/180/all',
+    photo: 'https://picsum.photos/180',
     status: 'initiated',
   };
 
-  RNFetchBlob.fetch('GET', 'https://loremflickr.com/180/180/all', {})
+  RNFetchBlob.fetch('GET', 'https://picsum.photos/180', {})
     .then((res) => {
       if (res.info().status === 200) {
         userData.photo = `data:image/jpeg;base64,${String(res.base64())}`;
