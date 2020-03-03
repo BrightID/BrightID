@@ -131,9 +131,9 @@ export class HomeScreen extends React.Component<Props, State> {
       score,
       groupsCount,
       connections,
-      // verifications,
+      verifications,
     } = this.props;
-    let verifications = ['BrightID'];
+    // let verifications = ['BrightID'];
     const { profilePhoto } = this.state;
     return (
       <View style={styles.container}>
