@@ -3,7 +3,7 @@ import { Dimensions, Platform } from 'react-native';
 export const WIDTH = Dimensions.get('window').width;
 export const HEIGHT = Dimensions.get('window').height;
 
-const DEVICE_SMALL_AREA = 200000;
+const DEVICE_SMALL_AREA = 240000;
 
 export const DEVICE_TYPE =
   WIDTH * HEIGHT <= DEVICE_SMALL_AREA ? 'small' : 'large';

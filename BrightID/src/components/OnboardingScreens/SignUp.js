@@ -200,10 +200,10 @@ export class SignUp extends React.Component<Props, State> {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('RecoveryCode')}
-                style={styles.button}
+                style={styles.recoverButton}
                 accessibilityLabel="Recover BrightID"
               >
-                <Text style={styles.buttonText}>Recover BrightID</Text>
+                <Text style={styles.recoverButtonText}>Recover BrightID</Text>
               </TouchableOpacity>
             </View>
           ) : (
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonContainer: {
-    marginTop: 28,
+    marginTop: DEVICE_TYPE === 'large' ? 35 : 28,
     justifyContent: 'space-evenly',
     alignItems: 'center',
   },
@@ -313,33 +313,33 @@ const styles = StyleSheet.create({
   },
   createBrightIdButton: {
     backgroundColor: '#428BE5',
-    width: 260,
+    width: DEVICE_TYPE === 'large' ? 285 : 260,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 10,
-    paddingBottom: 9,
+    paddingTop: DEVICE_TYPE === 'large' ? 14 : 10,
+    paddingBottom: DEVICE_TYPE === 'large' ? 13 : 9,
     marginTop: 22,
   },
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',
     color: '#fff',
     fontWeight: '600',
-    fontSize: 16,
+    fontSize: DEVICE_TYPE === 'large' ? 18 : 16,
   },
-  button: {
-    width: 260,
+  recoverButton: {
+    width: DEVICE_TYPE === 'large' ? 285 : 260,
     borderWidth: 1,
     borderColor: '#4990e2',
-    paddingTop: 10,
-    paddingBottom: 9,
+    paddingTop: DEVICE_TYPE === 'large' ? 14 : 10,
+    paddingBottom: DEVICE_TYPE === 'large' ? 13 : 9,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
   },
-  buttonText: {
+  recoverButtonText: {
     fontFamily: 'ApexNew-Medium',
     color: '#4990e2',
-    fontSize: 16,
+    fontSize: DEVICE_TYPE === 'large' ? 18 : 16,
     fontWeight: '500',
     fontStyle: 'normal',
     letterSpacing: 0,

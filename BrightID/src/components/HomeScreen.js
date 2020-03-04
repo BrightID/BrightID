@@ -394,8 +394,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   connectButton: {
-    paddingTop: 13,
-    paddingBottom: 12,
+    paddingTop: DEVICE_TYPE === 'large' ? 16 : 13,
+    paddingBottom: DEVICE_TYPE === 'large' ? 15 : 12,
     width: '80%',
     borderRadius: 6,
     backgroundColor: '#4a90e2',
