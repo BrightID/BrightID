@@ -7,10 +7,13 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
+  Linking,
 } from 'react-native';
+import ActionSheet from 'react-native-actionsheet';
 import { connect } from 'react-redux';
 import { splitEvery } from 'ramda';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import emitter from '@/emitter';
 import EligibleGroupCard from './EligibleGroups/EligibleGroupCard';
 import CurrentGroupCard from './CurrentGroups/CurrentGroupCard';
 import {
@@ -18,14 +21,19 @@ import {
   EmptyFullScreen,
   NoEligibleGroups,
 } from './EmptyGroups';
-import fetchUserInfo from '../../actions/fetchUserInfo';
+import fetchUserInfo from '@/actions/fetchUserInfo';
+import { DEVICE_TYPE } from '@/utils/constants';
 
 const ICON_SIZE = 36;
+const WHITEPAPER_URL = `https://www.brightid.org/wordpress/wp-content/uploads/BrightID-Whitepaper.pdf`;
 
 export class GroupsScreen extends React.Component<Props, State> {
+  whitePaperSheetRef: string;
+
   static navigationOptions = () => ({
     title: 'Groups',
     headerRight: () => <View />,
+    headerShown: DEVICE_TYPE === 'large',
   });
 
   componentDidMount() {
@@ -33,7 +41,16 @@ export class GroupsScreen extends React.Component<Props, State> {
     navigation.addListener('didFocus', () => {
       dispatch(fetchUserInfo());
     });
+    emitter.on('showWhitePaper', this.showWhitePaper);
   }
+
+  componentWillUnmount() {
+    emitter.off('showWhitePaper', this.showWhitePaper);
+  }
+
+  showWhitePaper = () => {
+    this.whitePaperSheetRef.show();
+  };
 
   // eslint-disable-next-line class-methods-use-this
   renderCurrentGroups(groups) {
@@ -121,6 +138,21 @@ export class GroupsScreen extends React.Component<Props, State> {
               )}
             </View>
           </ScrollView>
+          <ActionSheet
+            ref={(o) => {
+              this.whitePaperSheetRef = o;
+            }}
+            title="Like to learn more about groups and BrightID?"
+            options={['BrightID Whitepaper', 'cancel']}
+            cancelButtonIndex={1}
+            onPress={(index) => {
+              if (index === 0) {
+                Linking.openURL(WHITEPAPER_URL).catch((err) =>
+                  console.error('An error occurred', err),
+                );
+              }
+            }}
+          />
         </View>
       );
     } catch (err) {

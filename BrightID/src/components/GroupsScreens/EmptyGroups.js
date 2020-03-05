@@ -2,6 +2,11 @@
 
 import * as React from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import emitter from '@/emitter';
+
+const showWhitePaper = () => {
+  emitter.emit('showWhitePaper');
+};
 
 export const NoEligibleGroups = ({ navigation }: Props) => (
   <View style={styles.noEligibleContainer}>
@@ -26,7 +31,7 @@ export const NoEligibleGroups = ({ navigation }: Props) => (
       </View>
     </View>
     <View style={styles.emptyButtons}>
-      <TouchableOpacity style={styles.learnMoreButton}>
+      <TouchableOpacity style={styles.learnMoreButton} onPress={showWhitePaper}>
         <Text style={styles.learnMoreText}>Learn More</Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -65,7 +70,7 @@ export const NoCurrentGroups = ({ navigation }: Props) => (
       </View>
     </View>
     <View style={styles.emptyButtons}>
-      <TouchableOpacity style={styles.learnMoreButton}>
+      <TouchableOpacity style={styles.learnMoreButton} onPress={showWhitePaper}>
         <Text style={styles.learnMoreText}>Learn More</Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -103,7 +108,7 @@ export const EmptyFullScreen = ({ navigation }: Props) => (
       </View>
     </View>
     <View style={styles.emptyButtons}>
-      <TouchableOpacity style={styles.learnMoreButton}>
+      <TouchableOpacity style={styles.learnMoreButton} onPress={showWhitePaper}>
         <Text style={styles.learnMoreText}>Learn More</Text>
       </TouchableOpacity>
       <TouchableOpacity
