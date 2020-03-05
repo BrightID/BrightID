@@ -8,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  SafeAreaView,
 } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
@@ -72,7 +73,7 @@ export class Onboard extends React.Component<Props, State> {
   render() {
     const { activeSlide, entries } = this.state;
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <StatusBar
           barStyle="dark-content"
           backgroundColor="#fff"
@@ -109,7 +110,7 @@ export class Onboard extends React.Component<Props, State> {
             <Text style={styles.buttonText}>Get Started</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }

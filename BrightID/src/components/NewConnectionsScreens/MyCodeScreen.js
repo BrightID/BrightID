@@ -20,8 +20,9 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { genQrData } from './actions/genQrData';
 import { fetchData } from './actions/fetchData';
 import { encryptAndUploadLocalData } from './actions/encryptData';
-import emitter from '../../emitter';
-import { removeConnectQrData } from '../../actions';
+import emitter from '@/emitter';
+import { removeConnectQrData } from '@/actions';
+import { DEVICE_TYPE } from '@/utils/constants';
 
 /**
  * My Code screen of BrightID
@@ -198,7 +199,7 @@ export class MyCodeScreen extends React.Component<Props, State> {
               accessible={true}
               accessibilityLabel="user photo"
             />
-            <Text style={styles.name}>{name}</Text>
+            {DEVICE_TYPE === 'large' && <Text style={styles.name}>{name}</Text>}
           </View>
         </View>
         <View style={styles.bottomHalf}>

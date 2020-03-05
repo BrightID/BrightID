@@ -1,7 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Alert,
+  SafeAreaView,
+} from 'react-native';
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionSheet from 'react-native-actionsheet';
@@ -109,7 +115,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
       actions.splice(4, 1);
     }
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={{ flex: 1 }}>
           <View style={styles.mainContainer}>
             <SearchConnections navigation={navigation} sortable={true} />
@@ -130,7 +136,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
           cancelButtonIndex={actions.length - 1}
           onPress={(index) => this.modifyConnection(index)}
         />
-      </View>
+      </SafeAreaView>
     );
   }
 }

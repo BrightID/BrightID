@@ -25,7 +25,8 @@ type State = {
   backupInProgress: boolean,
 };
 
-const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
+// const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
+const Container = KeyboardAvoidingView;
 
 class BackupScreen extends React.Component<Props, State> {
   static navigationOptions = {

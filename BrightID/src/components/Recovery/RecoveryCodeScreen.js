@@ -186,6 +186,8 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: 'center',
     color: '#4a4a4a',
+    marginLeft: 4,
+    marginRight: 4,
   },
   qrsvgContainer: {
     width: '100%',

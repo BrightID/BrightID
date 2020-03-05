@@ -8,6 +8,7 @@ import {
   FlatList,
   Text,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
@@ -175,7 +176,7 @@ export class CurrentGroupView extends Component<Props, State> {
   render() {
     // const { navigation } = this.props;
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <Overlay
           visible={this.state.optionsVisible}
           onClose={this.hideOptionsMenu}
@@ -189,7 +190,7 @@ export class CurrentGroupView extends Component<Props, State> {
           {/* <SearchMembers navigation={navigation} /> */}
           <View style={styles.mainContainer}>{this.renderListOrSpinner()}</View>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }

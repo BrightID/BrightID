@@ -6,11 +6,9 @@ import { connect } from 'react-redux';
 import RNFS from 'react-native-fs';
 import moment from 'moment';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {
-  addTrustedConnection,
-  removeTrustedConnection,
-} from '../../actions/index';
-import store from '../../store';
+import { addTrustedConnection, removeTrustedConnection } from '@/actions/index';
+import store from '@/store';
+import { DEVICE_TYPE } from '@/utils/constants';
 
 class TrustedConnectionCard extends React.PureComponent<Props> {
   toggleConnectionSelect = () => {
@@ -79,8 +77,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     backgroundColor: '#fff',
-    height: 94,
-    marginBottom: 11.8,
+    height: DEVICE_TYPE === 'large' ? 94 : 80,
+    marginBottom: DEVICE_TYPE === 'large' ? 11.8 : 6,
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.43,
@@ -95,13 +93,13 @@ const styles = StyleSheet.create({
   info: {
     marginLeft: 25,
     flex: 1,
-    height: 71,
+    height: DEVICE_TYPE === 'large' ? 71 : 65,
     flexDirection: 'column',
     justifyContent: 'space-evenly',
   },
   name: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 20,
+    fontSize: DEVICE_TYPE === 'large' ? 20 : 18,
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,

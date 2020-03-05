@@ -30,6 +30,7 @@ function validQrString(qrString) {
 type State = {
   scanned: boolean,
   connectionAttempts: number,
+  value: string,
 };
 
 export class ScanCodeScreen extends React.Component<Props, State> {
@@ -37,9 +38,11 @@ export class ScanCodeScreen extends React.Component<Props, State> {
 
   camera: null | RNCamera;
 
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     scanned: false,
     connectionAttempts: 0,
+    value: '',
   };
 
   connectionExpired: TimeoutID;
@@ -134,11 +137,14 @@ export class ScanCodeScreen extends React.Component<Props, State> {
               ref={(c) => {
                 this.textInput = c;
               }}
-              onChangeText={(value) => {
+              onBlur={() => {
                 this.handleBarCodeRead({
                   type: 'text-input',
-                  data: value.trim(),
+                  data: this.state.value.trim(),
                 });
+              }}
+              onChangeText={(value) => {
+                this.setState({ value });
               }}
               style={styles.searchField}
               placeholder="Scan a BrightID code to make a connection"

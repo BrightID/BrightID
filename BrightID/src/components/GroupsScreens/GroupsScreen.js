@@ -8,6 +8,7 @@ import {
   View,
   ScrollView,
   Linking,
+  SafeAreaView,
 } from 'react-native';
 import ActionSheet from 'react-native-actionsheet';
 import { connect } from 'react-redux';
@@ -82,7 +83,7 @@ export class GroupsScreen extends React.Component<Props, State> {
           ? splitEvery(2, currentGroups)
           : [currentGroups];
       return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
           <ScrollView
             style={styles.scrollView}
             contentContainerStyle={{ minHeight: '100%' }}
@@ -158,7 +159,7 @@ export class GroupsScreen extends React.Component<Props, State> {
               }
             }}
           />
-        </View>
+        </SafeAreaView>
       );
     } catch (err) {
       err instanceof Error ? console.warn(err.message) : console.log(err);

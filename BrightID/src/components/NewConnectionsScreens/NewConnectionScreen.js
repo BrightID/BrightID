@@ -1,7 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  SafeAreaView,
+} from 'react-native';
 import { connect } from 'react-redux';
 import Simple from 'react-native-vector-icons/SimpleLineIcons';
 import { shareConnection } from './actions/shareConnection';
@@ -58,7 +64,7 @@ export class NewConnectionScreen extends React.Component<Props, State> {
     const { display } = this.state;
     const qr = display === 'qrcode';
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.buttonsContainer}>
           <TouchableOpacity
             style={qr ? styles.buttonActive : styles.buttonDefault}
@@ -98,7 +104,7 @@ export class NewConnectionScreen extends React.Component<Props, State> {
           </TouchableOpacity>
         </View>
         {this.renderScreen()}
-      </View>
+      </SafeAreaView>
     );
   }
 }

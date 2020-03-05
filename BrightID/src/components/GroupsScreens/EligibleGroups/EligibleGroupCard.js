@@ -85,7 +85,7 @@ class EligibleGroupCard extends React.Component<Props> {
       return (
         <TouchableOpacity
           style={styles.container}
-          onPress={() => navigation.navigate('CofoundGroupReview')}
+          // onPress={() => navigation.navigate('CofoundGroupReview')}
         >
           <GroupPhoto group={group} />
           {groupNameAndScore}

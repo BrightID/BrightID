@@ -1,7 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  SafeAreaView,
+} from 'react-native';
 import { connect } from 'react-redux';
 import SearchConnections from './SearchConnections';
 import NewGroupCard from './NewGroupCard';
@@ -84,7 +90,7 @@ export class NewGroupScreen extends React.Component<Props, State> {
 
   render() {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.mainContainer}>
           <View style={styles.titleContainer}>
             <Text style={styles.titleText}>CO-FOUNDERS</Text>
@@ -99,7 +105,7 @@ export class NewGroupScreen extends React.Component<Props, State> {
           <View style={styles.mainContainer}>{renderListOrSpinner(this)}</View>
         </View>
         {DEVICE_TYPE === 'large' && this.renderCreateGroupButton()}
-      </View>
+      </SafeAreaView>
     );
   }
 }

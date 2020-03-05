@@ -30,7 +30,7 @@ class EligibleGroupsScreen extends React.Component<Props, State> {
               renderItem={this.renderEligibleGroup}
             />
 
-            <View style={styles.addGroupButtonContainer}>
+            {/* <View style={styles.addGroupButtonContainer}>
               <TouchableOpacity
                 style={styles.addGroupButton}
                 onPress={() => {
@@ -44,7 +44,7 @@ class EligibleGroupsScreen extends React.Component<Props, State> {
                   style={{ width: ICON_SIZE, height: ICON_SIZE }}
                 />
               </TouchableOpacity>
-            </View>
+            </View> */}
           </View>
         </View>
       );

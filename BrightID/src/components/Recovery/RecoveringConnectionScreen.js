@@ -1,11 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
 import { renderListOrSpinner } from './renderConnections';
+import { DEVICE_TYPE } from '@/utils/constants';
 
 type State = {
   loading: boolean,
@@ -14,6 +15,7 @@ type State = {
 class RecoveringConnectionScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
     title: 'Account Recovery',
+    headerShown: DEVICE_TYPE === 'large',
   });
 
   filterConnections = () => {
@@ -42,7 +44,7 @@ class RecoveringConnectionScreen extends React.Component<Props, State> {
   render() {
     const { navigation } = this.props;
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.mainContainer}>
           <View style={styles.titleContainer}>
             <Text style={styles.titleText}>Choose Connection</Text>
@@ -54,7 +56,7 @@ class RecoveringConnectionScreen extends React.Component<Props, State> {
           <SearchConnections navigation={navigation} />
           <View style={styles.mainContainer}>{renderListOrSpinner(this)}</View>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }

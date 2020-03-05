@@ -7,6 +7,7 @@ import SearchConnections from '../Connections/SearchConnections';
 import TrustedConnectionCard from './TrustedConnectionCard';
 import { renderListOrSpinner } from './renderConnections';
 import { setTrustedConnections } from './helpers';
+import { DEVICE_TYPE } from '@/utils/constants';
 
 /**
  * Backup screen of BrightID
@@ -77,12 +78,16 @@ class TrustedConnectionsScreen extends React.Component<Props, State> {
             <Text style={styles.infoText}>
               Choose three or more trusted connections to back up your BrightID.
             </Text>
-            <Text style={styles.infoText}>
-              If your BrightID is lost or stolen, you can reconnect with two
-              trusted connections to recover it.
-            </Text>
+            {DEVICE_TYPE === 'large' && (
+              <Text style={styles.infoText}>
+                If your BrightID is lost or stolen, you can reconnect with two
+                trusted connections to recover it.
+              </Text>
+            )}
           </View>
-          <SearchConnections navigation={navigation} />
+          {DEVICE_TYPE === 'large' && (
+            <SearchConnections navigation={navigation} />
+          )}
           <View style={styles.mainContainer}>{renderListOrSpinner(this)}</View>
         </View>
         <View style={styles.buttonContainer}>
@@ -112,7 +117,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 6,
+    marginTop: DEVICE_TYPE === 'large' ? 6 : 0,
     backgroundColor: '#fff',
     width: '96.7%',
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -149,7 +154,7 @@ const styles = StyleSheet.create({
     paddingTop: 13,
     paddingBottom: 12,
     marginTop: 9,
-    marginBottom: 30,
+    marginBottom: DEVICE_TYPE === 'large' ? 30 : 9,
   },
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',
