@@ -83,7 +83,10 @@ export class GroupsScreen extends React.Component<Props, State> {
           : [currentGroups];
       return (
         <View style={styles.container}>
-          <ScrollView style={styles.scrollView}>
+          <ScrollView
+            style={styles.scrollView}
+            contentContainerStyle={{ minHeight: '100%' }}
+          >
             <View style={styles.mainContainer}>
               {!eligibleGroups.length && !currentGroups.length && (
                 <EmptyFullScreen navigation={navigation} />
@@ -112,32 +115,34 @@ export class GroupsScreen extends React.Component<Props, State> {
               )}
               {!!currentGroups.length && (
                 <View style={styles.currentContainer}>
-                  <Text style={styles.currentGroupTitle}>CURRENT</Text>
+                  {!!eligibleGroups.length && (
+                    <Text style={styles.currentGroupTitle}>CURRENT</Text>
+                  )}
                   {this.renderCurrentGroups(groupPairs)}
                 </View>
               )}
               {!!eligibleGroups.length && !currentGroups.length && (
                 <NoCurrentGroups navigation={navigation} />
               )}
-              {!!currentGroups.length && !!eligibleGroups.length && (
-                <View style={styles.addGroupButtonContainer}>
-                  <TouchableOpacity
-                    style={styles.addGroupButton}
-                    onPress={() => {
-                      navigation.navigate('NewGroup');
-                    }}
-                  >
-                    <Material
-                      size={ICON_SIZE}
-                      name="plus"
-                      color="#fff"
-                      style={{ width: ICON_SIZE, height: ICON_SIZE }}
-                    />
-                  </TouchableOpacity>
-                </View>
-              )}
             </View>
           </ScrollView>
+          {!!currentGroups.length && (
+            <View style={styles.addGroupButtonContainer}>
+              <TouchableOpacity
+                style={styles.addGroupButton}
+                onPress={() => {
+                  navigation.navigate('NewGroup');
+                }}
+              >
+                <Material
+                  size={ICON_SIZE}
+                  name="plus"
+                  color="#fff"
+                  style={{ width: ICON_SIZE, height: ICON_SIZE }}
+                />
+              </TouchableOpacity>
+            </View>
+          )}
           <ActionSheet
             ref={(o) => {
               this.whitePaperSheetRef = o;
@@ -176,8 +181,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     backgroundColor: '#fff',
     height: '100%',
-    // borderBottomWidth: 2,
-    // borderBottomColor: 'red',
+  },
+  scrollView: {
+    width: '100%',
+    minHeight: '100%',
+    height: '100%',
+    flex: 1,
   },
   eligibleContainer: {
     // backgroundColor: '#fff',
@@ -289,12 +298,6 @@ const styles = StyleSheet.create({
     height: 90,
     borderTopColor: '#e3e0e4',
     borderTopWidth: 1,
-  },
-  scrollView: {
-    width: '100%',
-    minHeight: '100%',
-    height: '100%',
-    flex: 1,
   },
 });
 

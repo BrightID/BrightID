@@ -21,27 +21,6 @@ export const NoEligibleGroups = ({ navigation }: Props) => (
         accessible={true}
         accessibilityLabel="groups logo"
       />
-      <View>
-        <Text style={styles.eligibleEmptyGroupsText}>
-          By creating and joining groups,
-        </Text>
-        <Text style={styles.eligibleEmptyGroupsText}>
-          you can increase your score
-        </Text>
-      </View>
-    </View>
-    <View style={styles.emptyButtons}>
-      <TouchableOpacity style={styles.learnMoreButton} onPress={showWhitePaper}>
-        <Text style={styles.learnMoreText}>Learn More</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.createGroupButton}
-        onPress={() => {
-          navigation.navigate('NewGroup');
-        }}
-      >
-        <Text style={styles.createGroupText}>Create Group</Text>
-      </TouchableOpacity>
     </View>
   </View>
 );
@@ -128,14 +107,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: 280,
+    // height: 280,
     backgroundColor: '#fcfcfc',
   },
   noCurrentContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: 280,
+    // height: 280,
+    flex: 1,
     backgroundColor: '#fcfcfc',
   },
   fullScreenContainer: {

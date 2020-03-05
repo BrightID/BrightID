@@ -12,7 +12,8 @@ import { renderListOrSpinner } from './renderConnections';
 import FloatingActionButton from '../FloatingActionButton';
 import { defaultSort } from './models/sortingUtility';
 import { performAction } from './models/modifyConnections';
-import fetchUserInfo from '../../actions/fetchUserInfo';
+import fetchUserInfo from '@/actions/fetchUserInfo';
+import { DEVICE_TYPE } from '@/utils/constants';
 
 /**
  * Connection screen of BrightID
@@ -34,6 +35,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
         <Material name="dots-horizontal" size={32} color="#fff" />
       </TouchableOpacity>
     ),
+    headerShown: DEVICE_TYPE === 'large',
   });
 
   componentDidMount() {

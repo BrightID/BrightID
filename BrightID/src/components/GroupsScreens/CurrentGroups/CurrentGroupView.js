@@ -52,6 +52,7 @@ export class CurrentGroupView extends Component<Props, State> {
           <Material name="dots-horizontal" size={32} color="#fff" />
         </TouchableOpacity>
       ),
+      headerShown: false,
     };
   };
 
@@ -172,7 +173,7 @@ export class CurrentGroupView extends Component<Props, State> {
   );
 
   render() {
-    const { navigation } = this.props;
+    // const { navigation } = this.props;
     return (
       <View style={styles.container}>
         <Overlay
@@ -185,7 +186,7 @@ export class CurrentGroupView extends Component<Props, State> {
           {this.renderOptions}
         </Overlay>
         <View style={styles.mainContainer}>
-          <SearchMembers navigation={navigation} />
+          {/* <SearchMembers navigation={navigation} /> */}
           <View style={styles.mainContainer}>{this.renderListOrSpinner()}</View>
         </View>
       </View>

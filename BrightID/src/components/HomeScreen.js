@@ -395,8 +395,8 @@ const styles = StyleSheet.create({
   },
   connectButton: {
     paddingTop: DEVICE_TYPE === 'large' ? 16 : 13,
-    paddingBottom: DEVICE_TYPE === 'large' ? 15 : 12,
-    width: '80%',
+    paddingBottom: DEVICE_TYPE === 'large' ? 15 : 13,
+    width: DEVICE_TYPE === 'large' ? '80%' : 260,
     borderRadius: 6,
     backgroundColor: '#4a90e2',
     alignItems: 'center',

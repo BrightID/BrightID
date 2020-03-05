@@ -5,10 +5,11 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import SearchConnections from './SearchConnections';
 import NewGroupCard from './NewGroupCard';
-import store from '../../../store';
+import store from '@/store';
 import { createNewGroup } from '../actions';
 import { renderListOrSpinner } from './renderConnections';
-import { clearNewGroupCoFounders } from '../../../actions';
+import { clearNewGroupCoFounders } from '@/actions';
+import { DEVICE_TYPE } from '@/utils/constants';
 
 /**
  * Connection screen of BrightID
@@ -22,6 +23,7 @@ type State = {
 export class NewGroupScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
     title: 'New Group',
+    headerShown: DEVICE_TYPE === 'large',
   });
 
   componentDidMount() {
@@ -49,6 +51,27 @@ export class NewGroupScreen extends React.Component<Props, State> {
     return newGroupCoFounders.includes(card.id);
   };
 
+  createNewGroup = async () => {
+    const { navigation } = this.props;
+    try {
+      await store.dispatch(createNewGroup());
+      navigation.goBack();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  renderCreateGroupButton = () => (
+    <View style={styles.createGroupButtonContainer}>
+      <TouchableOpacity
+        onPress={this.createNewGroup}
+        style={styles.createGroupButton}
+      >
+        <Text style={styles.buttonInnerText}>Create Group</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   renderConnection = ({ item }) => (
     <NewGroupCard
       // eslint-disable-next-line react/jsx-props-no-spreading
@@ -60,7 +83,6 @@ export class NewGroupScreen extends React.Component<Props, State> {
   );
 
   render() {
-    const { navigation } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.mainContainer}>
@@ -70,24 +92,13 @@ export class NewGroupScreen extends React.Component<Props, State> {
               To create a group, you must select two co-founders
             </Text>
           </View>
-          <SearchConnections navigation={this.props.navigation} />
+          {DEVICE_TYPE === 'large' && (
+            <SearchConnections navigation={this.props.navigation} />
+          )}
+          {DEVICE_TYPE === 'small' && this.renderCreateGroupButton()}
           <View style={styles.mainContainer}>{renderListOrSpinner(this)}</View>
         </View>
-        <View style={styles.createGroupButtonContainer}>
-          <TouchableOpacity
-            onPress={async () => {
-              try {
-                await store.dispatch(createNewGroup());
-                navigation.goBack();
-              } catch (err) {
-                console.log(err);
-              }
-            }}
-            style={styles.createGroupButton}
-          >
-            <Text style={styles.buttonInnerText}>Create Group</Text>
-          </TouchableOpacity>
-        </View>
+        {DEVICE_TYPE === 'large' && this.renderCreateGroupButton()}
       </View>
     );
   }
@@ -122,7 +133,7 @@ const styles = StyleSheet.create({
     width: '96.7%',
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#e3e1e1',
-    marginBottom: 11,
+    marginBottom: DEVICE_TYPE === 'large' ? 11 : 0,
   },
   titleText: {
     fontFamily: 'ApexNew-Book',
@@ -168,7 +179,7 @@ const styles = StyleSheet.create({
     paddingTop: 13,
     paddingBottom: 12,
     marginTop: 9,
-    marginBottom: 30,
+    marginBottom: DEVICE_TYPE === 'large' ? 30 : 9,
   },
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',

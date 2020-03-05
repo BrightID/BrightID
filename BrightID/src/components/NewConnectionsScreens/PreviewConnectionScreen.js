@@ -33,7 +33,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
   static navigationOptions = {
     title: 'New Connection',
     headerRight: () => <View />,
-    // headerShown: false,
+    headerShown: false,
   };
 
   componentDidMount() {
