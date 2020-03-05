@@ -169,25 +169,9 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case SET_ELIGIBLE_GROUPS: {
-      const byMostMembers = (acc, val) =>
-        val.knownMembers &&
-        acc.knownMembers &&
-        val.knownMembers.length > acc.knownMembers.length
-          ? val
-          : acc;
-      const dedupe = (list) => {
-        return list.reduce(byMostMembers);
-      };
-      const uniqueByMostMembers = compose(
-        values,
-        map(dedupe),
-        groupBy(({ id }) => id),
-        concat(state.eligibleGroups),
-      );
-
       return {
         ...state,
-        eligibleGroups: uniqueByMostMembers(action.eligibleGroups),
+        eligibleGroups: action.eligibleGroups,
       };
     }
     case DELETE_ELIGIBLE_GROUP: {
@@ -199,12 +183,9 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case SET_CURRENT_GROUPS: {
-      const byId = (x, y) => x.id === y.id;
-      const diffById = differenceWith(byId);
       return {
         ...state,
         currentGroups: action.currentGroups,
-        eligibleGroups: diffById(state.eligibleGroups)(action.currentGroups),
       };
     }
     case JOIN_GROUP: {
@@ -234,26 +215,15 @@ export const reducer = (state: State = initialState, action: action) => {
     case LEAVE_GROUP: {
       return {
         ...state,
-        currentGroups: state.currentGroups.filter(
-          (group) => group.id !== action.groupId,
-        ),
+        currentGroups: state.currentGroups.filter(group => group.id !== action.groupId)
       };
     }
     case DISMISS_FROM_GROUP: {
+      const group = find(propEq('id', action.groupId))(state.currentGroups);
+      group.members = group.members.filter(member => member !== action.member);
       return {
         ...state,
-        currentGroups: state.currentGroups.map(
-          (group) => {
-            if (group.id !== action.groupId) {
-              return group;
-            } else {
-              group.members = group.members.filter(
-                (member) =>  member !== action.member
-              );
-              return group;
-            }
-          }
-        ),
+        currentGroups: [...state.currentGroups]
       };
     }
     case SET_CONNECTIONS: {

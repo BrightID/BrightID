@@ -70,13 +70,13 @@ export class CurrentGroupView extends Component<Props, State> {
             await api.dismiss(user.id, groupId);
             await dispatch(dismissFromGroup(user.id, groupId));
           } catch (err) {
-            Alert.alert('Error leaving group', err.message);
+            Alert.alert('Error dismissing member from the group', err.message);
           }
         },
       },
     ];
     Alert.alert(
-      `Leave Group`,
+      `Dismiss Member`,
       `Are you sure you want to dismiss ${user.name} from this group?`,
       buttons,
       {
@@ -143,8 +143,9 @@ export class CurrentGroupView extends Component<Props, State> {
   // eslint-disable-next-line react/jsx-props-no-spreading
   renderMember = ({ item }) => {
     const { group } = this.props.navigation.state.params;
-    const isAdmin = group.admins.includes(item.id);
-    const handler = isAdmin ? null : this.confirmDismiss;
+    const isAdmin = group.admins.includes(this.props.id);
+    const isItemAdmin = group.admins.includes(item.id);
+    const handler = (isAdmin && ! isItemAdmin) ? this.confirmDismiss : null;
     return (
       <MemberCard {...item} menuHandler={handler}/>
     );
@@ -152,12 +153,11 @@ export class CurrentGroupView extends Component<Props, State> {
 
   getMembers = () => {
     const { navigation, connections } = this.props;
-    const members = navigation.state.params.group.members;
     // return a list of connections filtered by the members of this group
     return innerJoin(
       (connection, id) => connection.id === id,
       connections,
-      members,
+      navigation.state.params.group.members,
     );
   };
 

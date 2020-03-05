@@ -12,7 +12,7 @@ import {
 
 const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
   console.log('refreshing user info');
-  const { id } = getState();
+  const { id, operations } = getState();
   if (!id) return;
   try {
     const {
@@ -22,8 +22,11 @@ const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
       verifications = [],
       connections = [],
     } = await api.getUserInfo(id);
-    dispatch(setEligibleGroups(eligibleGroups));
-    dispatch(setCurrentGroups(currentGroups));
+    if (operations.length == 0) {
+      // don't update data when there are pending operations
+      dispatch(setEligibleGroups(eligibleGroups));
+      dispatch(setCurrentGroups(currentGroups));
+    }
     dispatch(setUserScore(__DEV__ ? 100 : score));
     dispatch(setGroupsCount(currentGroups.length));
     dispatch(setVerifications(verifications));
