@@ -11,16 +11,7 @@ const showWhitePaper = () => {
 export const NoEligibleGroups = ({ navigation }: Props) => (
   <View style={styles.noEligibleContainer}>
     <View style={styles.noEligibleGroupsInfo}>
-      <Image
-        source={require('../../static/groups_logo.png')}
-        style={styles.smallGroupsLogo}
-        resizeMode="cover"
-        onError={(e) => {
-          console.log(e);
-        }}
-        accessible={true}
-        accessibilityLabel="groups logo"
-      />
+      <Text style={styles.eligibleEmptyGroupsText}>Current Groups</Text>
     </View>
   </View>
 );
@@ -108,7 +99,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     // height: 280,
-    backgroundColor: '#fcfcfc',
+    backgroundColor: '#fff',
   },
   noCurrentContainer: {
     alignItems: 'center',
@@ -137,6 +128,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
+    paddingTop: 10,
+    // paddingBottom: 10,
   },
   fullScreenEmptyGroupsInfo: {
     flexDirection: 'column',

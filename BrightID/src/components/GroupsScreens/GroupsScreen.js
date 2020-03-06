@@ -23,7 +23,6 @@ import {
   NoEligibleGroups,
 } from './EmptyGroups';
 import fetchUserInfo from '@/actions/fetchUserInfo';
-import { DEVICE_TYPE } from '@/utils/constants';
 
 const ICON_SIZE = 36;
 const WHITEPAPER_URL = `https://www.brightid.org/wordpress/wp-content/uploads/BrightID-Whitepaper.pdf`;
@@ -34,7 +33,6 @@ export class GroupsScreen extends React.Component<Props, State> {
   static navigationOptions = () => ({
     title: 'Groups',
     headerRight: () => <View />,
-    headerShown: DEVICE_TYPE === 'large',
   });
 
   componentDidMount() {
