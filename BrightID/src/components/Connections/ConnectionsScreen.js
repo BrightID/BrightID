@@ -106,7 +106,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     const actions = [
       'Flag as Duplicate',
       'Flag as Fake',
-      'Flag as Diseased',
+      'Flag as Deceased',
       'Join All Groups',
       'cancel',
     ];
