@@ -174,7 +174,10 @@ export class CurrentGroupView extends Component<Props, State> {
   );
 
   render() {
-    // const { navigation } = this.props;
+    const { loading } = this.state;
+    const { navigation } = this.props;
+    const { group } = this.props.navigation.state.params;
+
     return (
       <SafeAreaView style={styles.container}>
         <Overlay
@@ -187,8 +190,33 @@ export class CurrentGroupView extends Component<Props, State> {
           {this.renderOptions}
         </Overlay>
         <View style={styles.mainContainer}>
-          {/* <SearchMembers navigation={navigation} /> */}
-          <View style={styles.mainContainer}>{this.renderListOrSpinner()}</View>
+          <View style={styles.backButtonContainer}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Material name="arrow-left" size={32} color="#333" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.mainContainer}>
+            {loading ? (
+              <Spinner
+                style={styles.spinner}
+                isVisible={true}
+                size={47}
+                type="WanderingCubes"
+                color="#4990e2"
+              />
+            ) : (
+              <View>
+                <GroupPhoto group={group} radius={35} />
+                <Text style={styles.groupName}>{group.name}</Text>
+                <FlatList
+                  style={styles.membersContainer}
+                  data={this.filterMembers()}
+                  keyExtractor={({ id }, index) => id + index}
+                  renderItem={this.renderMember}
+                />
+              </View>
+            )}
+          </View>
         </View>
       </SafeAreaView>
     );
@@ -260,6 +288,12 @@ const styles = StyleSheet.create({
     fontFamily: 'ApexNew-Book',
     fontSize: 24,
     marginLeft: 30,
+  },
+  backButtonContainer: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    width: '100%',
+    paddingLeft: 10,
   },
 });
 

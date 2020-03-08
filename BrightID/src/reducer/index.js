@@ -1,17 +1,6 @@
 // @flow
 
-import {
-  dissoc,
-  find,
-  mergeRight,
-  propEq,
-  differenceWith,
-  groupBy,
-  concat,
-  compose,
-  values,
-  map,
-} from 'ramda';
+import { dissoc, find, mergeRight, propEq } from 'ramda';
 import {
   USER_SCORE,
   GROUPS_COUNT,
@@ -168,25 +157,9 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case SET_ELIGIBLE_GROUPS: {
-      const byMostMembers = (acc, val) =>
-        val.knownMembers &&
-        acc.knownMembers &&
-        val.knownMembers.length > acc.knownMembers.length
-          ? val
-          : acc;
-      const dedupe = (list) => {
-        return list.reduce(byMostMembers);
-      };
-      const uniqueByMostMembers = compose(
-        values,
-        map(dedupe),
-        groupBy(({ id }) => id),
-        concat(state.eligibleGroups),
-      );
-
       return {
         ...state,
-        eligibleGroups: uniqueByMostMembers(action.eligibleGroups),
+        eligibleGroups: action.eligibleGroups,
       };
     }
     case DELETE_ELIGIBLE_GROUP: {
@@ -198,12 +171,9 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case SET_CURRENT_GROUPS: {
-      const byId = (x, y) => x.id === y.id;
-      const diffById = differenceWith(byId);
       return {
         ...state,
         currentGroups: action.currentGroups,
-        eligibleGroups: diffById(state.eligibleGroups)(action.currentGroups),
       };
     }
     case JOIN_GROUP: {
