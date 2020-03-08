@@ -127,6 +127,7 @@ export const setVerifications = (verifications: string[]) => ({
   verifications,
 });
 
+
 /**
  * redux action creator for set user current groups
  * @param currentGroups: list of user current groups
@@ -141,9 +142,9 @@ export const joinGroup = (group: group) => ({
   group,
 });
 
-export const joinGroupAsCoFounder = (groupId: string) => ({
+export const joinGroupAsCoFounder = (group: string) => ({
   type: JOIN_GROUP_AS_CO_FOUNDER,
-  groupId,
+  group,
 });
 
 export const leaveGroup = (groupId: string) => ({

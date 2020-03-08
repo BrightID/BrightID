@@ -190,7 +190,7 @@ export const reducer = (state: State = initialState, action: action) => {
     }
     case JOIN_GROUP: {
       action.group.isNew = false;
-      action.group.knownMembers.push(state.id);
+      action.group.members.push(state.id);
       return {
         ...state,
         currentGroups: [action.group, ...state.currentGroups],
@@ -200,16 +200,10 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case JOIN_GROUP_AS_CO_FOUNDER: {
-      // modify eligibleGroups[groupIndex].knownMembers, creating copies
-      // at each of those three levels
-      let newElGroups = state.eligibleGroups.slice();
-      let groupIndex = newElGroups.findIndex((g) => g.id === action.groupId);
-      let group = newElGroups[groupIndex];
-      let newKnownMembers = [...group.knownMembers, state.id];
-      newElGroups[groupIndex] = { ...group, knownMembers: newKnownMembers };
+      action.group.members.push(state.id);
       return {
         ...state,
-        eligibleGroups: newElGroups,
+        eligibleGroups: [...state.eligibleGroups],
       };
     }
     case LEAVE_GROUP: {

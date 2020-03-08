@@ -103,14 +103,14 @@ export class NewGroupScreen extends React.Component<Props, State> {
           ref={(o) => {
             this.actionSheet = o;
           }}
-          title="What type of group are you creating?"
-          options={['Immediate Family', 'General', 'cancel']}
+          title="What type of group do you want to create?"
+          options={['General', 'Primary', 'cancel']}
           cancelButtonIndex={2}
           onPress={async (index) => {
             if (index == 2) {
               return;
             }
-            const type = index == 0 ? 'primary' : 'general';
+            const type = index == 0 ? 'general' : 'primary';
             await store.dispatch(createNewGroup(type));
             navigation.goBack();
           }}

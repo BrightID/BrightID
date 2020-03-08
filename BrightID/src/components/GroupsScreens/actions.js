@@ -40,9 +40,9 @@ export const createNewGroup = (type) => async (
     const groupId = newGroupId();
     const newGroup = {
       founders: [id, newGroupCoFounders[0], newGroupCoFounders[1]],
+      members: [id],
       id: groupId,
       isNew: true,
-      knownMembers: [id],
       score: 0,
       type: type
     };
@@ -55,14 +55,14 @@ export const createNewGroup = (type) => async (
 };
 
 export const join = (group: group) => async (dispatch: dispatch) => {
-  await api.joinGroup(group.id);
-  if (group.isNew && group.knownMembers.length < 2) {
+  if (group.isNew && group.members.length < 2) {
     // only creator has joined
-    dispatch(joinGroupAsCoFounder(group.id));
+    dispatch(joinGroupAsCoFounder(group));
   } else {
     // creator and other co-founder have already joined; treat it as a normal group
     dispatch(joinGroup(group));
   }
+  await api.joinGroup(group.id);
 };
 
 export const deleteNewGroup = (groupId: string) => async (

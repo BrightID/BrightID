@@ -59,7 +59,9 @@ export class GroupsScreen extends React.Component<Props, State> {
 
   render() {
     try {
-      const { navigation, currentGroups, eligibleGroups } = this.props;
+      let { navigation, currentGroups, eligibleGroups } = this.props;
+      const primaryGroup = currentGroups.filter(group => group.type=='primary')[0];
+      currentGroups = currentGroups.filter(group => group.type!='primary');
       const groupPairs =
         currentGroups.length > 2
           ? splitEvery(2, currentGroups)
@@ -68,12 +70,12 @@ export class GroupsScreen extends React.Component<Props, State> {
         <View style={styles.container}>
           <ScrollView style={styles.scrollView}>
             <View style={styles.mainContainer}>
-              {!eligibleGroups.length && !currentGroups.length && (
+              {!primaryGroup && !eligibleGroups.length && !currentGroups.length && (
                 <EmptyFullScreen navigation={navigation} />
               )}
               {!!eligibleGroups.length && (
                 <View style={styles.eligibleContainer}>
-                  <Text style={styles.eligibleGroupTitle}>ELIGIBLE</Text>
+                  <Text style={styles.eligibleGroupTitle}>INVITATIONS</Text>
                   {this.getTwoEligibleGroups()}
                   <View style={styles.eligibleBottomBorder} />
                   {eligibleGroups.length > 2 && (
@@ -90,12 +92,20 @@ export class GroupsScreen extends React.Component<Props, State> {
                   )}
                 </View>
               )}
-              {!!currentGroups.length && !eligibleGroups.length && (
+              {(!!currentGroups.length || primaryGroup) && !eligibleGroups.length && (
                 <NoEligibleGroups navigation={navigation} />
+              )}
+              {primaryGroup && (
+                <View style={styles.primaryContainer}>
+                  <Text style={styles.currentGroupTitle}>PRIMARY</Text>
+                  <View style={styles.primaryGroupRow} key={primaryGroup.id}>
+                    <CurrentGroupCard group={primaryGroup} />
+                  </View>
+                </View>
               )}
               {!!currentGroups.length && (
                 <View style={styles.currentContainer}>
-                  <Text style={styles.currentGroupTitle}>CURRENT</Text>
+                  <Text style={styles.currentGroupTitle}>GENERAL</Text>
                   {this.renderCurrentGroups(groupPairs)}
                 </View>
               )}
@@ -158,6 +168,13 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
+  primaryContainer: {
+    backgroundColor: '#fff',
+    paddingTop: 9,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
   currentContainer: {
     backgroundColor: '#fff',
     paddingTop: 9,
@@ -170,23 +187,23 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   eligibleGroupTitle: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontFamily: 'ApexNew-Medium',
+    fontSize: 22,
     paddingBottom: 5,
+    color: '#4a90e2',
     paddingTop: 9,
     backgroundColor: '#fff',
     width: '100%',
     textAlign: 'center',
   },
   currentGroupTitle: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 18,
-    paddingBottom: 5,
-    paddingTop: 9,
+    fontFamily: 'ApexNew-Medium',
+    fontSize: 22,
+    color: '#4a90e2',
+    padding: 9,
     backgroundColor: '#fff',
     width: '100%',
     textAlign: 'center',
-    color: '#4a4a4a',
     textShadowColor: 'rgba(0, 0, 0, 0.09)',
     textShadowOffset: {
       width: 0,
@@ -211,13 +228,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#4A8FE6',
   },
-
   currentGroupsHeader: {
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     borderBottomColor: '#e3e0e4',
     borderBottomWidth: 1,
+  },
+  primaryGroupRow: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    justifyContent: 'space-evenly',
   },
   currentGroupRow: {
     width: '100%',
