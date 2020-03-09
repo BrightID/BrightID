@@ -17,9 +17,9 @@ import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { handleBrightIdCreation } from './actions';
 import { takePhoto, chooseImage } from '@/utils/images';
 import { DEVICE_TYPE, DEVICE_OS } from '@/utils/constants';
+import { handleBrightIdCreation } from './actions';
 
 type State = {
   name: string,
@@ -167,28 +167,22 @@ export class SignUp extends React.Component<Props, State> {
         </View>
         <View style={styles.textInputContainer}>
           <Text style={styles.midText}>What do your friends know you by?</Text>
-          {/*<TextInput*/}
-          {/*  onChangeText={(name) => this.setState({ name })}*/}
-          {/*  value={name}*/}
-          {/*  placeholder="Name"*/}
-          {/*  placeholderTextColor="#9e9e9e"*/}
-          {/*  style={styles.textInput}*/}
-          {/*  autoCapitalize="words"*/}
-          {/*  autoCorrect={false}*/}
-          {/*  textContentType="name"*/}
-          {/*  underlineColorAndroid="transparent"*/}
-          {/*  onFocus={() => {*/}
-          {/*    this.setState({ editingName: true });*/}
-          {/*  }}*/}
-          {/*  onBlur={() => {*/}
-          {/*    this.setState({ editingName: false });*/}
-          {/*  }}*/}
-          {/*/>*/}
-          <ModalTextInput
+          <TextInput
             onChangeText={(name) => this.setState({ name })}
-            style={styles.textInput}
             value={name}
-            label="What do your friends know you by?"
+            placeholder="Name"
+            placeholderTextColor="#9e9e9e"
+            style={styles.textInput}
+            autoCapitalize="words"
+            autoCorrect={false}
+            textContentType="name"
+            underlineColorAndroid="transparent"
+            onFocus={() => {
+              this.setState({ editingName: true });
+            }}
+            onBlur={() => {
+              this.setState({ editingName: false });
+            }}
           />
         </View>
         <View style={styles.buttonContainer}>
