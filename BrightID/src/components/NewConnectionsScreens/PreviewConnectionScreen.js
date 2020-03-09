@@ -40,7 +40,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
   static navigationOptions = {
     title: 'New Connection',
     headerRight: () => <View />,
-    // headerShown: false,
+    headerShown: false,
   };
 
   componentDidMount() {
@@ -97,7 +97,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
       ? { uri: photo }
       : require('../../static/default_avatar.jpg');
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.questionTextContainer}>
           <Text style={styles.questionText}>Connect with?</Text>
         </View>
@@ -146,7 +146,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
             <Text style={styles.buttonText}>Confirm</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }
