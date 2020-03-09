@@ -109,8 +109,9 @@ export class AppsScreen extends React.Component<Props> {
       api.baseUrl = oldBaseUrl;
       if (contextInfo.isApp) {
         dispatch(saveApp(context, contextInfo));
+      } else {
+        navigation.goBack();
       }
-      navigation.goBack();
     }
   }
 }
