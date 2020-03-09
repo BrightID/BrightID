@@ -1,7 +1,7 @@
 // @flow
 
 import AsyncStorage from '@react-native-community/async-storage';
-import { objToUint8, b64ToUrlSafeB64 } from '../utils/encoding';
+import { objToUint8, b64ToUrlSafeB64 } from '@/utils/encoding';
 import {
   setUserData,
   setUserId,
@@ -153,7 +153,7 @@ export const upgradeConnsAndIds = () => {
   store.dispatch(setUserId(id));
   const nextConn = connections.map((conn) => {
     if (conn.publicKey) {
-      conn.id = conn.publicKey;
+      conn.id = b64ToUrlSafeB64(conn.publicKey);
       conn.status = 'verified';
     }
     return conn;
