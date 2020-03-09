@@ -1,5 +1,6 @@
 // @flow
 
+export const SET_IS_SPONSORED = 'SET_IS_SPONSORED';
 export const USER_SCORE = 'USER_SCORE';
 export const GROUPS_COUNT = 'GROUPS_COUNT';
 export const SEARCH_PARAM = 'SEARCH_PARAM';
@@ -44,6 +45,18 @@ export const RESET_STORE = 'RESET_STORE';
 export const ADD_OPERATION = 'ADD_OPERATION';
 export const REMOVE_OPERATION = 'REMOVE_OPERATION';
 export const RESET_OPERATIONS = 'RESET_OPERATIONS';
+
+/**
+ * redux action creator that updates user `isSponsored`
+ *
+ * @param isSponsored boolean fetched from server
+ *
+ */
+
+export const setIsSponsored = (isSponsored: boolean) => ({
+  type: SET_IS_SPONSORED,
+  isSponsored,
+});
 
 /**
  * redux action creator that updates user `score`

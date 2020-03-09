@@ -70,9 +70,12 @@ export class AppsScreen extends React.Component<Props> {
   }
 
   async linkVerification(baseUrl, context, contextInfo, contextId) {
-    const { navigation, dispatch } = this.props;
+    const { navigation, dispatch, isSponsored } = this.props;
     const oldBaseUrl = api.baseUrl;
     try {
+      if (!isSponsored && !contextInfo.hasSponsorships) {
+        throw new Error("user is not sponsored and the context doesn't have any sponsorship too");
+      }
       if (contextInfo.verificationUrl) {
         const { publicKey, secretKey } = await nacl.sign.keyPair();
         const b64PubKey = uInt8ArrayToB64(publicKey);

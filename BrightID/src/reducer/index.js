@@ -13,6 +13,7 @@ import {
   map,
 } from 'ramda';
 import {
+  SET_IS_SPONSORED,  
   USER_SCORE,
   GROUPS_COUNT,
   SEARCH_PARAM,
@@ -76,6 +77,7 @@ import {
 
 export const initialState: State = {
   score: __DEV__ ? 100 : 0,
+  isSponsored: false,
   name: '',
   photo: { filename: '' },
   groupsCount: 0,
@@ -130,6 +132,12 @@ export const reducer = (state: State = initialState, action: action) => {
       return {
         ...state,
         score: action.score,
+      };
+    }
+    case SET_IS_SPONSORED: {
+      return {
+        ...state,
+        isSponsored: action.isSponsored,
       };
     }
     case GROUPS_COUNT: {
