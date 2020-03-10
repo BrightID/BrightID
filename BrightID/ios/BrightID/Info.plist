@@ -47,9 +47,9 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSMainNibFile</key>
-	<string>LaunchScreen</string>
+	<string>LaunchScreenBrightID</string>
 	<key>NSMainNibFile~ipad</key>
-	<string>LaunchScreen</string>
+	<string>LaunchScreenBrightID</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to save photos to your photo gallery</string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -68,7 +68,7 @@
 		<string>SimpleLineIcons.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
+	<string>LaunchScreenBrightID</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
