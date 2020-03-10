@@ -11,6 +11,8 @@ import {
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionSheet from 'react-native-actionsheet';
+import fetchUserInfo from '@/actions/fetchUserInfo';
+import { DEVICE_TYPE } from '@/utils/constants';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
 import { createFakeConnection } from './models/createFakeConnection';
@@ -18,8 +20,6 @@ import { renderListOrSpinner } from './renderConnections';
 import FloatingActionButton from '../FloatingActionButton';
 import { defaultSort } from './models/sortingUtility';
 import { performAction } from './models/modifyConnections';
-import fetchUserInfo from '@/actions/fetchUserInfo';
-import { DEVICE_TYPE } from '@/utils/constants';
 
 /**
  * Connection screen of BrightID
@@ -112,7 +112,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     ];
     if (!__DEV__) {
       // remove 'Join All Groups'
-      actions.splice(4, 1);
+      actions.splice(3, 1);
     }
     return (
       <SafeAreaView style={styles.container}>
