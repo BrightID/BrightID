@@ -237,9 +237,10 @@ export const reducer = (state: State = initialState, action: action) => {
       console.log('adding connection', action.connection.id);
       return {
         ...state,
-        connections: state.connections
-          .filter(removeExisting)
-          .concat(action.connection),
+        connections: [
+          ...state.connections.filter(removeExisting),
+          action.connection,
+        ],
       };
     }
     case CONNECTIONS_SORT: {
@@ -328,9 +329,11 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case ADD_APP: {
+      const removeExisting = ({ name }: app) => name !== action.name;
+      console.log('adding app', action);
       return {
         ...state,
-        apps: [...state.apps, action.app],
+        apps: [...state.apps.filter(removeExisting), action.app],
       };
     }
     case REMOVE_APP: {
