@@ -47,9 +47,9 @@ export class InviteListScreen extends Component<Props, State> {
   getEligibles = () => {
     if (this.eligibles) return this.eligibles;
     const { connections, navigation } = this.props;
-    const gId = navigation.state.params.group.id;
+    const group = navigation.state.params.group;
     this.eligibles = connections.filter((item) => {
-      return item.eligible_groups && item.eligible_groups.includes(gId);
+      return ! group.members.includes(item.id) && item.eligible_groups && item.eligible_groups.includes(group.id);
     });
     return this.eligibles;
   };
