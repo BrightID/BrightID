@@ -3,7 +3,7 @@
 import { Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
-import { retrieveImage, saveImage } from '../../../utils/filesystem';
+import { createImageDirectory, retrieveImage, saveImage } from '../../../utils/filesystem';
 import backupApi from '../../../Api/BackupApi';
 import api from '../../../Api/BrightId';
 import store from '../../../store';
@@ -249,6 +249,7 @@ export const restoreUserData = async (pass: string) => {
 export const recoverData = async (pass: string) => {
   // fetch user data / save photo
   // throws if data is bad
+  await createImageDirectory();
   const { userData, connections } = await restoreUserData(pass);
 
   // set new signing key on the backend
