@@ -8,7 +8,7 @@ import { addOperation } from '../actions';
 
 let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
-  seedUrl = 'http://test.brightid.org';
+  seedUrl = 'http://192.168.43.7';
 }
 
 class BrightId {
@@ -94,10 +94,10 @@ class BrightId {
     BrightId.setOperation(op._key);
   }
 
-  async createGroup(id2: string, id3: string) {
+  async createGroup(id2: string, id3: string, type: string) {
     const { id, secretKey } = store.getState();
     const timestamp = Date.now();
-    const message = `Add Group${id}${id2}${id3}${timestamp}`;
+    const message = `Add Group${id}${id2}${id3}${type}${timestamp}`;
 
     const sig1 = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
@@ -110,11 +110,55 @@ class BrightId {
       id2,
       id3,
       sig1,
+      type,
       timestamp,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
     BrightId.setOperation(op._key);
+  }
+
+  async dismiss(id2: string, group: string) {
+    const { id, secretKey } = store.getState();
+    let timestamp = Date.now();
+    let message = `Dismiss${id}${id2}${group}${timestamp}`;
+    let sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+
+    const op = {
+      _key: hash(message),
+      name: 'Dismiss',
+      dismisser: id,
+      dismissee: id2,
+      group,
+      sig,
+      timestamp,
+    };
+    const res = await this.api.put(`/operations/${op._key}`, op);
+    BrightId.throwOnError(res);
+    BrightId.setOperation(op._key);
+  }
+
+  async invite(id2: string, group: string) {
+    const { id, secretKey } = store.getState();
+    let timestamp = Date.now();
+    let message = `Invite${id}${id2}${group}${timestamp}`;
+    let sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+
+    const op = {
+      _key: hash(message),
+      name: 'Invite',
+      inviter: id,
+      invitee: id2,
+      group,
+      sig,
+      timestamp,
+    };
+    const res = await this.api.put(`/operations/${op._key}`, op);
+    BrightId.throwOnError(res);
   }
 
   async deleteGroup(group: string) {
@@ -236,12 +280,6 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
-  }
-
-  async getMembers(group: string) {
-    const res = await this.api.get(`/memberships/${group}`);
-    BrightId.throwOnError(res);
-    return res.data.data;
   }
 
   async getUserInfo(id: string) {

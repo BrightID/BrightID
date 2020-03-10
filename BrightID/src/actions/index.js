@@ -13,6 +13,7 @@ export const SET_CURRENT_GROUPS = 'SET_CURRENT_GROUPS';
 export const JOIN_GROUP = 'JOIN_GROUP';
 export const JOIN_GROUP_AS_CO_FOUNDER = 'JOIN_GROUP_AS_CO_FOUNDER';
 export const LEAVE_GROUP = 'LEAVE_GROUP';
+export const DISMISS_FROM_GROUP = 'DISMISS_FROM_GROUP';
 export const SET_CONNECTIONS = 'SET_CONNECTIONS';
 export const CONNECTIONS_SORT = 'CONNECTIONS_SORT';
 export const DELETE_CONNECTION = 'DELETE_CONNECTION';
@@ -153,14 +154,20 @@ export const joinGroup = (group: group) => ({
   group,
 });
 
-export const joinGroupAsCoFounder = (groupId: string) => ({
+export const joinGroupAsCoFounder = (group: group) => ({
   type: JOIN_GROUP_AS_CO_FOUNDER,
-  groupId,
+  group,
 });
 
 export const leaveGroup = (groupId: string) => ({
   type: LEAVE_GROUP,
   groupId,
+});
+
+export const dismissFromGroup = (member: string, groupId: string) => ({
+  type: DISMISS_FROM_GROUP,
+  groupId,
+  member
 });
 
 /**

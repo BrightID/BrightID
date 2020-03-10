@@ -24,7 +24,7 @@ export const toggleNewGroupCoFounder = (id: string) => (
   dispatch(setNewGroupCoFounders(coFounders));
 };
 
-export const createNewGroup = () => async (
+export const createNewGroup = (type) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
@@ -40,13 +40,15 @@ export const createNewGroup = () => async (
     const groupId = newGroupId();
     const newGroup = {
       founders: [id, newGroupCoFounders[0], newGroupCoFounders[1]],
+      members: [id],
       id: groupId,
       isNew: true,
       knownMembers: [id],
       score: 0,
+      type
     };
     dispatch(createGroup(newGroup));
-    return await api.createGroup(newGroupCoFounders[0], newGroupCoFounders[1]);
+    return await api.createGroup(newGroupCoFounders[0], newGroupCoFounders[1], type);
   } catch (err) {
     Alert.alert('Cannot create group', err.message);
     return false;
@@ -55,9 +57,9 @@ export const createNewGroup = () => async (
 
 export const join = (group: group) => async (dispatch: dispatch) => {
   await api.joinGroup(group.id);
-  if (group.isNew && group.knownMembers.length < 2) {
+  if (group.isNew && group.members.length < 2) {
     // only creator has joined
-    dispatch(joinGroupAsCoFounder(group.id));
+    dispatch(joinGroupAsCoFounder(group));
   } else {
     // creator and other co-founder have already joined; treat it as a normal group
     dispatch(joinGroup(group));

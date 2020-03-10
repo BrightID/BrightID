@@ -75,7 +75,9 @@ export class GroupsScreen extends React.Component<Props, State> {
 
   render() {
     try {
-      const { navigation, currentGroups, eligibleGroups } = this.props;
+      let { navigation, currentGroups, eligibleGroups } = this.props;
+      const primaryGroup = currentGroups.filter(group => group.type=='primary')[0];
+      currentGroups = currentGroups.filter(group => group.type!='primary');
       const groupPairs =
         currentGroups.length > 2
           ? splitEvery(2, currentGroups)
@@ -87,12 +89,12 @@ export class GroupsScreen extends React.Component<Props, State> {
             contentContainerStyle={{ minHeight: '100%' }}
           >
             <View style={styles.mainContainer}>
-              {!eligibleGroups.length && !currentGroups.length && (
+              {!primaryGroup && !eligibleGroups.length && !currentGroups.length && (
                 <EmptyFullScreen navigation={navigation} />
               )}
               {!!eligibleGroups.length && (
                 <View style={styles.eligibleContainer}>
-                  <Text style={styles.eligibleGroupTitle}>ELIGIBLE</Text>
+                  <Text style={styles.eligibleGroupTitle}>INVITATIONS</Text>
                   {this.getTwoEligibleGroups()}
                   <View style={styles.eligibleBottomBorder} />
                   {eligibleGroups.length > 2 && (
@@ -109,14 +111,20 @@ export class GroupsScreen extends React.Component<Props, State> {
                   )}
                 </View>
               )}
-              {!!currentGroups.length && !eligibleGroups.length && (
+              {(!!currentGroups.length || primaryGroup) && !eligibleGroups.length && (
                 <NoEligibleGroups navigation={navigation} />
+              )}
+              {primaryGroup && (
+                <View style={styles.primaryContainer}>
+                  <Text style={styles.currentGroupTitle}>PRIMARY</Text>
+                  <View style={styles.primaryGroupRow} key={primaryGroup.id}>
+                    <CurrentGroupCard group={primaryGroup} />
+                  </View>
+                </View>
               )}
               {!!currentGroups.length && (
                 <View style={styles.currentContainer}>
-                  {!!eligibleGroups.length && (
-                    <Text style={styles.currentGroupTitle}>CURRENT</Text>
-                  )}
+                  <Text style={styles.currentGroupTitle}>GENERAL</Text>
                   {this.renderCurrentGroups(groupPairs)}
                 </View>
               )}
@@ -125,7 +133,7 @@ export class GroupsScreen extends React.Component<Props, State> {
               )}
             </View>
           </ScrollView>
-          {!!currentGroups.length && (
+          {(!!currentGroups.length || primaryGroup) && (
             <View style={styles.addGroupButtonContainer}>
               <TouchableOpacity
                 style={styles.addGroupButton}
@@ -198,6 +206,16 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
+  primaryContainer: {
+    backgroundColor: '#fff',
+    paddingTop: 9,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    shadowColor: 'rgba(0,0,0,0.32)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+  },
   currentContainer: {
     backgroundColor: '#fff',
     paddingTop: 9,
@@ -258,6 +276,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderBottomColor: '#e3e0e4',
     borderBottomWidth: 1,
+  },
+  primaryGroupRow: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    justifyContent: 'space-evenly',
   },
   currentGroupRow: {
     width: '100%',

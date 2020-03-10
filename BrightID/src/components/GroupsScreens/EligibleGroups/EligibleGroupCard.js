@@ -65,13 +65,17 @@ class EligibleGroupCard extends React.Component<Props> {
 
   alreadyIn() {
     const { group, id } = this.props;
-    return group.knownMembers.indexOf(id) >= 0;
+    return group.members && group.members.indexOf(id) >= 0;
   }
 
   render() {
-    const { group, navigation } = this.props;
+    const { group, navigation, connections } = this.props;
+    const inviter = connections.find(conn => group.inviter === conn.id);
     const groupNameAndScore = (
       <View style={styles.info}>
+        { inviter && (
+          <Text style={styles.scoreLeft}>{inviter.name} invited you to join</Text>
+        )}
         <Text style={styles.names}>{getGroupName(group)}</Text>
         <View style={styles.scoreContainer}>
           <Text style={styles.scoreLeft}>Score:</Text>

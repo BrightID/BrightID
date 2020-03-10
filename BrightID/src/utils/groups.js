@@ -1,9 +1,9 @@
 import store from '@/store';
 import { hash } from './encoding';
 
-const memberList = (group) => {
+const knownMembers = (group) => {
   const { id, photo, name, connections } = store.getState();
-  const { founders, knownMembers, isNew } = group;
+  const { founders, members, isNew } = group;
 
   const me = {
     photo,
@@ -33,8 +33,8 @@ const memberList = (group) => {
     // Try to find three members known to the user.
 
     let m = 0;
-    while (list.length < 3 && m < knownMembers.length) {
-      let current = knownMembers[m];
+    while (list.length < 3 && m < members.length) {
+      let current = members[m];
       if (!founders.includes(current)) {
         const connection = connections.find((u) => u.id === current);
         if (connection) {
@@ -49,7 +49,7 @@ const memberList = (group) => {
     if (
       list.length < 3 &&
       !founders.includes(id) &&
-      knownMembers.includes(id)
+      members.includes(id)
     ) {
       list.push(me);
     }
@@ -59,13 +59,13 @@ const memberList = (group) => {
 };
 
 export const groupCirclePhotos = (group) => {
-  const { knownMembers } = group;
+  const { members } = group;
 
-  const photos = memberList(group).map((member) => {
-    // If a founder isn't in knownMembers, that founder hasn't joined yet and
+  const photos = knownMembers(group).map((member) => {
+    // If a founder isn't in members, that founder hasn't joined yet and
     // their photo will be faded.
 
-    const faded = group.isNew && !knownMembers.includes(member.id);
+    const faded = group.isNew && !members.includes(member.id);
 
     return { photo: member.photo, faded };
   });
@@ -73,7 +73,7 @@ export const groupCirclePhotos = (group) => {
 };
 
 export const getGroupName = (group) => {
-  const names = memberList(group).map((member) => member.name.substr(0, 13));
+  const names = knownMembers(group).map((member) => member.name.substr(0, 13));
 
   return names.join(', ');
 };

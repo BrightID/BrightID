@@ -10,16 +10,14 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
-import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import Overlay from 'react-native-modal-overlay';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import { getMembers } from '@/actions/getMembers';
 import api from '@/Api/BrightId';
 import emitter from '@/emitter';
-import { leaveGroup } from '@/actions';
+import { leaveGroup, dismissFromGroup } from '@/actions';
 import { DEVICE_TYPE } from '@/utils/constants';
+import ActionSheet from 'react-native-actionsheet';
+import { innerJoin } from 'ramda';
 import GroupPhoto from './GroupPhoto';
 import MemberCard from './MemberCard';
 
@@ -30,13 +28,6 @@ type State = {
 };
 
 export class CurrentGroupView extends Component<Props, State> {
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    loading: true,
-    optionsVisible: false,
-    members: [],
-  };
-
   static navigationOptions = ({ navigation }: { navigation: navigation }) => {
     const { group } = navigation.state.params;
     return {
@@ -53,19 +44,65 @@ export class CurrentGroupView extends Component<Props, State> {
           <Material name="dots-horizontal" size={32} color="#fff" />
         </TouchableOpacity>
       ),
-      headerShown: false,
+      headerShown: true,
     };
+  };
+
+  showOptionsMenu = () => {
+    this.actionSheet.show();
   };
 
   componentDidMount() {
     const { navigation } = this.props;
     emitter.on('optionsSelected', this.showOptionsMenu);
-    navigation.addListener('didFocus', this.getMembers);
   }
 
   componentWillUnmount() {
     emitter.off('optionsSelected', this.showOptionsMenu);
   }
+
+  confirmDismiss = (user) => {
+    const buttons = [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: async () => {
+          const { navigation, dispatch } = this.props;
+          const groupId = navigation.state.params.group.id;
+          try {
+            await api.dismiss(user.id, groupId);
+            await dispatch(dismissFromGroup(user.id, groupId));
+          } catch (err) {
+            Alert.alert('Error dismissing member from the group', err.message);
+          }
+        },
+      },
+    ];
+    Alert.alert(
+      `Dismiss Member`,
+      `Are you sure you want to dismiss ${user.name} from this group?`,
+      buttons,
+      {
+        cancelable: true,
+      },
+    );
+  };
+
+  performAction = (action) => {
+    if (!this.actionSheet) return;
+    action = this.actionSheet.props.options[action];
+    if (action === 'Leave Group') {
+      this.confirmLeaveGroup();
+    } else if (action === 'Invite') {
+      const { navigation } = this.props;
+      navigation.navigate('InviteList', {
+        group: navigation.state.params.group,
+      });
+    }
+  };
 
   confirmLeaveGroup = () => {
     const buttons = [
@@ -101,7 +138,7 @@ export class CurrentGroupView extends Component<Props, State> {
   filterMembers = () => {
     const { searchParam } = this.props;
     const searchString = searchParam.toLowerCase().replace(/\s/g, '');
-    return this.state.members.filter((item) =>
+    return this.getMembers().filter((item) =>
       `${item.name}`
         .toLowerCase()
         .replace(/\s/g, '')
@@ -110,114 +147,56 @@ export class CurrentGroupView extends Component<Props, State> {
   };
 
   // eslint-disable-next-line react/jsx-props-no-spreading
-  renderMember = ({ item }) => <MemberCard {...item} />;
-
-  renderListOrSpinner() {
-    const { loading } = this.state;
+  renderMember = ({ item }) => {
     const { group } = this.props.navigation.state.params;
-    if (loading) {
-      return (
-        <Spinner
-          style={styles.spinner}
-          isVisible={true}
-          size={47}
-          type="WanderingCubes"
-          color="#4990e2"
-        />
-      );
-    } else {
-      return (
-        <View>
-          <GroupPhoto group={group} radius={35} />
-          <Text style={styles.groupName}>{group.name}</Text>
-          <FlatList
-            style={styles.membersContainer}
-            data={this.filterMembers()}
-            keyExtractor={({ id }, index) => id + index}
-            renderItem={this.renderMember}
-          />
-        </View>
-      );
-    }
-  }
-
-  showOptionsMenu = () => {
-    this.setState({ optionsVisible: true });
+    const isAdmin = group.admins.includes(this.props.id);
+    const isItemAdmin = group.admins.includes(item.id);
+    const handler = isAdmin && !isItemAdmin ? this.confirmDismiss : null;
+    return <MemberCard {...item} menuHandler={handler} />;
   };
 
-  hideOptionsMenu = () => {
-    this.setState({ optionsVisible: false });
+  getMembers = () => {
+    const { navigation, connections } = this.props;
+    // return a list of connections filtered by the members of this group
+    return innerJoin(
+      (connection, id) => connection.id === id,
+      connections,
+      navigation.state.params.group.members,
+    );
   };
-
-  getMembers = async () => {
-    const { dispatch, navigation } = this.props;
-    const groupId = navigation.state.params.group.id;
-    const members = await dispatch(getMembers(groupId));
-    this.setState({
-      loading: false,
-      members,
-    });
-  };
-
-  renderOptions = (hideModal) => (
-    <>
-      <View style={[styles.triangle, this.props.style]} />
-      <View style={styles.optionsBox}>
-        <TouchableOpacity onPress={hideModal}>
-          <AntDesign size={30} name="closecircleo" color="#000" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.confirmLeaveGroup}>
-          <Text style={styles.leaveGroupText}>Leave Group</Text>
-        </TouchableOpacity>
-      </View>
-    </>
-  );
 
   render() {
-    const { loading } = this.state;
-    const { navigation } = this.props;
+    const { navigation, id } = this.props;
     const { group } = this.props.navigation.state.params;
+    let actions = ['Leave Group', 'cancel'];
+    if (group.admins && group.admins.includes(id)) {
+      actions = ['Invite'].concat(actions);
+    }
 
     return (
       <SafeAreaView style={styles.container}>
-        <Overlay
-          visible={this.state.optionsVisible}
-          onClose={this.hideOptionsMenu}
-          closeOnTouchOutside
-          containerStyle={styles.optionsOverlay}
-          childrenWrapperStyle={styles.optionsContainer}
-        >
-          {this.renderOptions}
-        </Overlay>
         <View style={styles.mainContainer}>
-          <View style={styles.backButtonContainer}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Material name="arrow-left" size={32} color="#333" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.mainContainer}>
-            {loading ? (
-              <Spinner
-                style={styles.spinner}
-                isVisible={true}
-                size={47}
-                type="WanderingCubes"
-                color="#4990e2"
-              />
-            ) : (
-              <View>
-                <GroupPhoto group={group} radius={35} />
-                <Text style={styles.groupName}>{group.name}</Text>
-                <FlatList
-                  style={styles.membersContainer}
-                  data={this.filterMembers()}
-                  keyExtractor={({ id }, index) => id + index}
-                  renderItem={this.renderMember}
-                />
-              </View>
-            )}
+          <View>
+            <GroupPhoto group={group} radius={35} />
+            <Text style={styles.groupName}>{group.name}</Text>
+            <FlatList
+              style={styles.membersContainer}
+              data={this.filterMembers()}
+              keyExtractor={({ id }, index) => id + index}
+              renderItem={this.renderMember}
+            />
           </View>
         </View>
+        <ActionSheet
+          ref={(o) => {
+            this.actionSheet = o;
+          }}
+          title="What do you want to do?"
+          options={actions}
+          cancelButtonIndex={actions.indexOf('cancel')}
+          destructiveButtonIndex={actions.indexOf('Leave Group')}
+          onPress={(index) => this.performAction(index)}
+        />
       </SafeAreaView>
     );
   }

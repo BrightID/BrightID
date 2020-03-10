@@ -8,6 +8,7 @@ import {
   View,
   SafeAreaView,
 } from 'react-native';
+import ActionSheet from 'react-native-actionsheet';
 import { connect } from 'react-redux';
 import SearchConnections from './SearchConnections';
 import NewGroupCard from './NewGroupCard';
@@ -57,20 +58,10 @@ export class NewGroupScreen extends React.Component<Props, State> {
     return newGroupCoFounders.includes(card.id);
   };
 
-  createNewGroup = async () => {
-    const { navigation } = this.props;
-    try {
-      await store.dispatch(createNewGroup());
-      navigation.goBack();
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   renderCreateGroupButton = () => (
     <View style={styles.createGroupButtonContainer}>
       <TouchableOpacity
-        onPress={this.createNewGroup}
+        onPress={this.getGroupType}
         style={styles.createGroupButton}
       >
         <Text style={styles.buttonInnerText}>Create Group</Text>
@@ -88,6 +79,23 @@ export class NewGroupScreen extends React.Component<Props, State> {
     />
   );
 
+  getGroupType = async () => {
+    const { navigation } = this.props;
+    if (this.hasPrimaryGroup()) {
+      // there is only general group type, so no need to select
+      await store.dispatch(createNewGroup('general'));
+      navigation.goBack();
+    } else {
+      this.actionSheet.show();
+    }
+  };
+
+  hasPrimaryGroup = () => {
+    const { currentGroups, eligibleGroups, navigation } = this.props;
+    const allGroups = currentGroups.concat(eligibleGroups);
+    return allGroups.some((group) => group.type == 'primary');
+  };
+
   render() {
     return (
       <SafeAreaView style={styles.container}>
@@ -103,8 +111,25 @@ export class NewGroupScreen extends React.Component<Props, State> {
           )}
           {DEVICE_TYPE === 'small' && this.renderCreateGroupButton()}
           <View style={styles.mainContainer}>{renderListOrSpinner(this)}</View>
+
         </View>
         {DEVICE_TYPE === 'large' && this.renderCreateGroupButton()}
+        <ActionSheet
+          ref={(o) => {
+            this.actionSheet = o;
+          }}
+          title="What type of group do you want to create?"
+          options={['General', 'Primary', 'cancel']}
+          cancelButtonIndex={2}
+          onPress={async (index) => {
+            if (index == 2) {
+              return;
+            }
+            const type = index == 0 ? 'general' : 'primary';
+            await store.dispatch(createNewGroup(type));
+            navigation.goBack();
+          }}
+        />
       </SafeAreaView>
     );
   }
