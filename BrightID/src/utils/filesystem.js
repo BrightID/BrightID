@@ -14,7 +14,7 @@ export const createImageDirectory = async () => {
 export const saveImage = async ({ base64Image, imageName }) => {
   try {
     const { filetype, image } = parseDataUri(base64Image);
-    const path = `${RNFS.DocumentDirectoryPath}/photos/${imageName}.jpg`;
+    const path = `${RNFS.DocumentDirectoryPath}/photos/${imageName}.${filetype}`;
     console.log('RNFS.DocumentDirecoryPath', RNFS.DocumentDirectoryPath);
     console.log('DocumentDir', RNFetchBlob.fs.dirs.DocumentDir);
     await RNFS.writeFile(path, image, 'base64');
