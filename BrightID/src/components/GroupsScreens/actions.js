@@ -28,13 +28,25 @@ export const createNewGroup = (type) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  let { id, newGroupCoFounders } = getState();
+  let { id, newGroupCoFounders, connections } = getState();
   if (newGroupCoFounders.length < 2) {
     Alert.alert(
       'Cannot create group',
       'You need two other people to form a group',
     );
     return false;
+  }
+  if (type === 'primary') {
+    const u1 = connections.find(c => c.id === newGroupCoFounders[0]);
+    const u2 = connections.find(c => c.id === newGroupCoFounders[1]);
+    if (u1.hasPrimaryGroup || u2.hasPrimaryGroup) {
+      const name = u1.hasPrimaryGroup ? u1.name : u2.name;
+      Alert.alert(
+        'Cannot create group',
+        `${name} already has a primary group`,
+      );
+      return false;
+    }
   }
   try {
     const groupId = newGroupId();
@@ -43,12 +55,12 @@ export const createNewGroup = (type) => async (
       members: [id],
       id: groupId,
       isNew: true,
-      knownMembers: [id],
       score: 0,
       type
     };
     dispatch(createGroup(newGroup));
-    return await api.createGroup(newGroupCoFounders[0], newGroupCoFounders[1], type);
+    await api.createGroup(newGroupCoFounders[0], newGroupCoFounders[1], type);
+    return true;
   } catch (err) {
     Alert.alert('Cannot create group', err.message);
     return false;

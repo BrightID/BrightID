@@ -83,8 +83,9 @@ export class NewGroupScreen extends React.Component<Props, State> {
     const { navigation } = this.props;
     if (this.hasPrimaryGroup()) {
       // there is only general group type, so no need to select
-      await store.dispatch(createNewGroup('general'));
-      navigation.goBack();
+      if (await store.dispatch(createNewGroup('general'))) {
+        navigation.goBack();
+      }
     } else {
       this.actionSheet.show();
     }
@@ -97,6 +98,7 @@ export class NewGroupScreen extends React.Component<Props, State> {
   };
 
   render() {
+    const { navigation } = this.props;
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.mainContainer}>
@@ -126,8 +128,9 @@ export class NewGroupScreen extends React.Component<Props, State> {
               return;
             }
             const type = index == 0 ? 'general' : 'primary';
-            await store.dispatch(createNewGroup(type));
-            navigation.goBack();
+            if (await store.dispatch(createNewGroup(type))) {
+              navigation.goBack();
+            }
           }}
         />
       </SafeAreaView>
