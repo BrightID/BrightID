@@ -8,7 +8,7 @@ import { addOperation } from '../actions';
 
 let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
-  seedUrl = 'http://192.168.43.7';
+  seedUrl = 'http://test.brightid.org';
 }
 
 class BrightId {
@@ -34,7 +34,7 @@ class BrightId {
   }
 
   get apiUrl() {
-    return `${this.baseUrl}/brightid/v3`;
+    return `${this.baseUrl}/brightid/v4`;
   }
 
   static throwOnError(response) {
