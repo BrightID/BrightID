@@ -194,11 +194,13 @@ const styles = StyleSheet.create({
   textInfo: {
     fontFamily: 'ApexNew-Book',
     fontSize: 18,
+    color: '#333',
     margin: 18,
   },
   textInput: {
     fontFamily: 'ApexNew-Light',
     fontSize: 30,
+    color: '#333',
     fontWeight: '300',
     fontStyle: 'normal',
     letterSpacing: 0,

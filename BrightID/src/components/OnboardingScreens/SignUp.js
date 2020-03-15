@@ -183,6 +183,7 @@ export class SignUp extends React.Component<Props, State> {
             onBlur={() => {
               this.setState({ editingName: false });
             }}
+            blurOnSubmit={true}
           />
         </View>
         <View style={styles.buttonContainer}>
@@ -290,10 +291,12 @@ const styles = StyleSheet.create({
   midText: {
     fontFamily: 'ApexNew-Book',
     fontSize: 16,
+    color: '#333',
   },
   textInput: {
     fontFamily: 'ApexNew-Light',
     fontSize: 28,
+    color: '#333',
     fontWeight: '300',
     fontStyle: 'normal',
     letterSpacing: 0,

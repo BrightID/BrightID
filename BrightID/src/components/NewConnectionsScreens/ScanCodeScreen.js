@@ -137,6 +137,7 @@ export class ScanCodeScreen extends React.Component<Props, State> {
               ref={(c) => {
                 this.textInput = c;
               }}
+              style={styles.searchField}
               onBlur={() => {
                 this.handleBarCodeRead({
                   type: 'text-input',
@@ -146,12 +147,13 @@ export class ScanCodeScreen extends React.Component<Props, State> {
               onChangeText={(value) => {
                 this.setState({ value });
               }}
-              style={styles.searchField}
               placeholder="Scan a BrightID code to make a connection"
+              placeholderTextColor="#333"
               autoCapitalize="none"
               autoCorrect={false}
               textContentType="none"
               underlineColorAndroid="transparent"
+              blurOnSubmit={true}
             />
           </View>
           <RNCamera
@@ -209,6 +211,7 @@ const styles = StyleSheet.create({
   searchField: {
     fontFamily: 'ApexNew-Book',
     fontSize: 16,
+    color: '#333',
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
