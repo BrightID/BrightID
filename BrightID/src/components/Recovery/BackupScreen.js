@@ -14,8 +14,8 @@ import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import { setBackupCompleted, setPassword } from '@/actions/index';
 import emitter from '@/emitter';
-import { backupAppData } from './helpers';
 import { DEVICE_OS } from '@/utils/constants';
+import { backupAppData } from './helpers';
 
 type State = {
   pass1: string,
@@ -23,10 +23,11 @@ type State = {
   completed: number,
   total: number,
   backupInProgress: boolean,
+  isEditing: boolean,
 };
 
-// const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
-const Container = KeyboardAvoidingView;
+const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
+// const Container = KeyboardAvoidingView;
 
 class BackupScreen extends React.Component<Props, State> {
   static navigationOptions = {
@@ -43,6 +44,7 @@ class BackupScreen extends React.Component<Props, State> {
     completed: 0,
     total: 0,
     backupInProgress: false,
+    isEditing: false,
   };
 
   componentDidMount() {
@@ -68,6 +70,14 @@ class BackupScreen extends React.Component<Props, State> {
     } else {
       return true;
     }
+  };
+
+  handleTextBlur = () => {
+    this.setState({ isEditing: false });
+  };
+
+  handleTextFocus = () => {
+    this.setState({ isEditing: true });
   };
 
   startBackup = async () => {
@@ -99,14 +109,16 @@ class BackupScreen extends React.Component<Props, State> {
   };
 
   render() {
-    const { pass1, pass2 } = this.state;
+    const { pass1, pass2, isEditing } = this.state;
 
     return (
       <Container style={styles.container} behavior="padding">
         <View style={styles.textInputContainer}>
-          <Text style={styles.textInfo}>
-            Enter a password to encrypt your backup data with:
-          </Text>
+          {!isEditing && (
+            <Text style={styles.textInfo}>
+              Enter a password to encrypt your backup data with:
+            </Text>
+          )}
           <TextInput
             onChangeText={(pass) => this.setState({ pass1: pass })}
             value={pass1}
@@ -118,6 +130,7 @@ class BackupScreen extends React.Component<Props, State> {
             autoCompleteType="password"
             underlineColorAndroid="transparent"
             secureTextEntry={true}
+            onFocus={this.handleTextFocus}
           />
           <TextInput
             onChangeText={(pass) => this.setState({ pass2: pass })}
@@ -130,6 +143,9 @@ class BackupScreen extends React.Component<Props, State> {
             autoCompleteType="password"
             underlineColorAndroid="transparent"
             secureTextEntry={true}
+            onBlur={this.handleTextBlur}
+            onFocus={this.handleTextFocus}
+            blurOnSubmit={true}
           />
         </View>
         <View style={styles.buttonContainer}>

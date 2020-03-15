@@ -1,7 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Keyboard,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { connect } from 'react-redux';
 import { DEVICE_TYPE } from '@/utils/constants';
@@ -15,11 +21,42 @@ import { navigate } from './NavigationService';
 
 const ICON_WIDTH = DEVICE_TYPE === 'small' ? 26 : 32;
 
-export class BottomNav extends React.Component<Props> {
+type State = {
+  keyboardShown: boolean,
+};
+
+export class BottomNav extends React.Component<Props, State> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      keyboardShown: false,
+    };
+  }
+
+  componentDidMount() {
+    this.keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        this.setState({ keyboardShown: true });
+      },
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        this.setState({ keyboardShown: false });
+      },
+    );
+  }
+
+  componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+
   render() {
     const { notifications, id } = this.props;
-
-    return id ? (
+    const { keyboardShown } = this.state;
+    return id && !keyboardShown ? (
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {

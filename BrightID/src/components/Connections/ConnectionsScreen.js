@@ -52,6 +52,15 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     });
   }
 
+  handleNewConnection = () => {
+    const { navigation } = this.props;
+    if (__DEV__) {
+      createFakeConnection(navigation)();
+    } else {
+      navigation.navigate('NewConnection');
+    }
+  };
+
   filterConnections = () => {
     const { connections, searchParam } = this.props;
     const searchString = searchParam.toLowerCase().replace(/\s/g, '');
@@ -123,9 +132,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
               {renderListOrSpinner(this)}
             </View>
           </View>
-          <FloatingActionButton
-            onPress={() => navigation.navigate('NewConnection')}
-          />
+          <FloatingActionButton onPress={this.handleNewConnection} />
         </View>
         <ActionSheet
           ref={(o) => {
