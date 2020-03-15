@@ -4,6 +4,7 @@ import * as React from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import NotificationCard from './NotificationCard';
+import InviteCard from './InviteCard';
 
 class NotificationsScreen extends React.Component<Props> {
   static navigationOptions = () => ({
@@ -11,9 +12,21 @@ class NotificationsScreen extends React.Component<Props> {
   });
 
   render() {
-    const { navigation, notifications } = this.props;
+    const { navigation, notifications, invites } = this.props;
+    const activeInvites = invites.filter(invite => invite.state === 'active');
+
     return (
       <View style={styles.container}>
+        {activeInvites.length > 0 && (
+          <FlatList
+            style={styles.groupsContainer}
+            data={activeInvites}
+            keyExtractor={({ inviteId }, index) => inviteId + index}
+            renderItem={({ item }) => (
+              <InviteCard invite={item} />
+            )}
+          />
+        )}
         <FlatList
           style={styles.NotificationsList}
           keyExtractor={({ msg }, index) => msg + index}

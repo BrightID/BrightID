@@ -2,18 +2,18 @@
 
 export const SET_IS_SPONSORED = 'SET_IS_SPONSORED';
 export const USER_SCORE = 'USER_SCORE';
-export const GROUPS_COUNT = 'GROUPS_COUNT';
 export const SEARCH_PARAM = 'SEARCH_PARAM';
 export const CREATE_GROUP = 'CREATE_GROUP';
+export const DELETE_GROUP = 'DELETE_GROUP';
 export const SET_NEW_GROUP_CO_FOUNDERS = 'SET_NEW_GROUP_CO_FOUNDERS';
 export const CLEAR_NEW_GROUP_CO_FOUNDERS = 'CLEAR_NEW_GROUP_CO_FOUNDERS';
-export const SET_ELIGIBLE_GROUPS = 'SET_ELIGIBLE_GROUPS';
-export const DELETE_ELIGIBLE_GROUP = 'DELETE_ELIGIBLE_GROUP';
-export const SET_CURRENT_GROUPS = 'SET_CURRENT_GROUPS';
+export const SET_GROUPS = 'SET_GROUPS';
+export const SET_INVITES = 'SET_INVITES';
 export const JOIN_GROUP = 'JOIN_GROUP';
-export const JOIN_GROUP_AS_CO_FOUNDER = 'JOIN_GROUP_AS_CO_FOUNDER';
 export const LEAVE_GROUP = 'LEAVE_GROUP';
 export const DISMISS_FROM_GROUP = 'DISMISS_FROM_GROUP';
+export const REJECT_INVITE = 'REJECT_INVITE';
+export const ACCEPT_INVITE = 'ACCEPT_INVITE';
 export const SET_CONNECTIONS = 'SET_CONNECTIONS';
 export const CONNECTIONS_SORT = 'CONNECTIONS_SORT';
 export const DELETE_CONNECTION = 'DELETE_CONNECTION';
@@ -71,17 +71,6 @@ export const setUserScore = (score: number) => ({
 });
 
 /**
- * redux action creator updates the Group Count
- * unneccessary after group API is created
- *
- */
-
-export const setGroupsCount = (groupsCount: number) => ({
-  type: GROUPS_COUNT,
-  groupsCount,
-});
-
-/**
  * redux action creator for setting the search param used to filter connections array
  * @param type SEARCH_PARAM
  * @param value string used to filter connections
@@ -98,6 +87,11 @@ export const setSearchParam = (searchParam: string) => ({
  */
 export const createGroup = (group: group) => ({
   type: CREATE_GROUP,
+  group,
+});
+
+export const deleteGroup = (group: group) => ({
+  type: DELETE_GROUP,
   group,
 });
 
@@ -118,35 +112,21 @@ export const clearNewGroupCoFounders = () => ({
 });
 
 /**
- * redux action creator for set user eligible groups
- * @param eligibleGroups: list of user eligible groups
+ * redux action creator for set groups
+ * @param groups: list of user groups
  */
-export const setEligibleGroups = (eligibleGroups: group[]) => ({
-  type: SET_ELIGIBLE_GROUPS,
-  eligibleGroups,
+export const setGroups = (groups: group[]) => ({
+  type: SET_GROUPS,
+  groups,
 });
 
 /**
- * redux action creator for set user eligible groups
- * @param eligibleGroups: list of user eligible groups
+ * redux action creator for set user invites
+ * @param invites: list of user invites
  */
-export const deleteEligibleGroup = (groupId: string) => ({
-  type: DELETE_ELIGIBLE_GROUP,
-  groupId,
-});
-
-export const setVerifications = (verifications: string[]) => ({
-  type: SET_VERIFICATIONS,
-  verifications,
-});
-
-/**
- * redux action creator for set user current groups
- * @param currentGroups: list of user current groups
- */
-export const setCurrentGroups = (currentGroups: group[]) => ({
-  type: SET_CURRENT_GROUPS,
-  currentGroups,
+export const setInvites = (invites: invite[]) => ({
+  type: SET_INVITES,
+  invites,
 });
 
 export const joinGroup = (group: group) => ({
@@ -154,21 +134,32 @@ export const joinGroup = (group: group) => ({
   group,
 });
 
-export const joinGroupAsCoFounder = (group: group) => ({
-  type: JOIN_GROUP_AS_CO_FOUNDER,
+export const leaveGroup = (group: group) => ({
+  type: LEAVE_GROUP,
   group,
 });
 
-export const leaveGroup = (groupId: string) => ({
-  type: LEAVE_GROUP,
-  groupId,
-});
-
-export const dismissFromGroup = (member: string, groupId: string) => ({
+export const dismissFromGroup = (member: string, group: group) => ({
   type: DISMISS_FROM_GROUP,
-  groupId,
+  group,
   member
 });
+
+export const rejectInvite = (invite: invite) => ({
+  type: REJECT_INVITE,
+  invite,
+});
+
+export const acceptInvite = (invite: invite) => ({
+  type: ACCEPT_INVITE,
+  invite,
+});
+
+export const setVerifications = (verifications: string[]) => ({
+  type: SET_VERIFICATIONS,
+  verifications,
+});
+
 
 /**
  * redux action creator for setting connections array

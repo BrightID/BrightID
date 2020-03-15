@@ -1,14 +1,22 @@
 // @flow
-import { Alert } from 'react-native';
+import { Alert, NativeModules } from 'react-native';
+import CryptoJS from 'crypto-js';
 import { newGroupId } from '../../utils/groups';
 import {
-  deleteEligibleGroup,
-  joinGroup,
-  joinGroupAsCoFounder,
   setNewGroupCoFounders,
   createGroup,
 } from '../../actions/index';
 import api from '../../Api/BrightId';
+import backupApi from '../../Api/BackupApi';
+import { hash } from '../../utils/encoding';
+const { RNRandomBytes } = NativeModules;
+
+const randomKey = (size: number) =>
+  new Promise((resolve, reject) => {
+    RNRandomBytes.randomBytes(size, (err, bytes) => {
+      err ? reject(err) : resolve(bytes);
+    });
+  });
 
 export const toggleNewGroupCoFounder = (id: string) => (
   dispatch: dispatch,
@@ -24,7 +32,7 @@ export const toggleNewGroupCoFounder = (id: string) => (
   dispatch(setNewGroupCoFounders(coFounders));
 };
 
-export const createNewGroup = (type) => async (
+export const createNewGroup = (photo, name, type) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
@@ -36,9 +44,10 @@ export const createNewGroup = (type) => async (
     );
     return false;
   }
+
+  const u1 = connections.find(c => c.id === newGroupCoFounders[0]);
+  const u2 = connections.find(c => c.id === newGroupCoFounders[1]);
   if (type === 'primary') {
-    const u1 = connections.find(c => c.id === newGroupCoFounders[0]);
-    const u2 = connections.find(c => c.id === newGroupCoFounders[1]);
     if (u1.hasPrimaryGroup || u2.hasPrimaryGroup) {
       const name = u1.hasPrimaryGroup ? u1.name : u2.name;
       Alert.alert(
@@ -48,39 +57,36 @@ export const createNewGroup = (type) => async (
       return false;
     }
   }
+
+  const aesKey = await randomKey(16);
+  let uuidKey = await randomKey(9);
+  uuidKey = hash(uuidKey);
+  const groupId = hash(uuidKey);
+
   try {
-    const groupId = newGroupId();
+    const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ name, photo }), aesKey).toString();
+    await backupApi.putRecovery('immutable', uuidKey, encrypted);
+    const url = `https://recovery.brightid.org/backups/immutable/${uuidKey}`;
     const newGroup = {
-      founders: [id, newGroupCoFounders[0], newGroupCoFounders[1]],
+      founders: [id, u1.id, u2.id],
       members: [id],
       id: groupId,
       isNew: true,
       score: 0,
+      photo,
+      name,
+      url,
+      aesKey,
       type
     };
     dispatch(createGroup(newGroup));
-    await api.createGroup(newGroupCoFounders[0], newGroupCoFounders[1], type);
+    const data1 = CryptoJS.AES.encrypt(aesKey, u1.aesKey).toString();
+    const data2 = CryptoJS.AES.encrypt(aesKey, u2.aesKey).toString();
+    await api.createGroup(groupId, u1.id, data1, u2.id, data2, url, type);
     return true;
   } catch (err) {
+    console.log(err);
     Alert.alert('Cannot create group', err.message);
     return false;
   }
-};
-
-export const join = (group: group) => async (dispatch: dispatch) => {
-  await api.joinGroup(group.id);
-  if (group.isNew && group.members.length < 2) {
-    // only creator has joined
-    dispatch(joinGroupAsCoFounder(group));
-  } else {
-    // creator and other co-founder have already joined; treat it as a normal group
-    dispatch(joinGroup(group));
-  }
-};
-
-export const deleteNewGroup = (groupId: string) => async (
-  dispatch: dispatch,
-) => {
-  await api.deleteGroup(groupId);
-  dispatch(deleteEligibleGroup(groupId));
 };

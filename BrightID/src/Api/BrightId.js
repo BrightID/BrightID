@@ -94,10 +94,10 @@ class BrightId {
     BrightId.setOperation(op._key);
   }
 
-  async createGroup(id2: string, id3: string, type: string) {
+  async createGroup(group: string, id2: string, inviteData2: string, id3: string, inviteData3: string, url: string, type: string) {
     const { id, secretKey } = store.getState();
     const timestamp = Date.now();
-    const message = `Add Group${id}${id2}${id3}${type}${timestamp}`;
+    const message = `Add Group${group}${id}${id2}${inviteData2}${id3}${inviteData3}${url}${type}${timestamp}`;
 
     const sig1 = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
@@ -108,7 +108,11 @@ class BrightId {
       name: 'Add Group',
       id1: id,
       id2,
+      inviteData2,
       id3,
+      inviteData3,
+      group,
+      url,
       sig1,
       type,
       timestamp,
@@ -140,10 +144,10 @@ class BrightId {
     BrightId.setOperation(op._key);
   }
 
-  async invite(id2: string, group: string) {
+  async invite(id2: string, group: string, data: string) {
     const { id, secretKey } = store.getState();
     let timestamp = Date.now();
-    let message = `Invite${id}${id2}${group}${timestamp}`;
+    let message = `Invite${id}${id2}${group}${data}${timestamp}`;
     let sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
@@ -154,6 +158,7 @@ class BrightId {
       inviter: id,
       invitee: id2,
       group,
+      data,
       sig,
       timestamp,
     };

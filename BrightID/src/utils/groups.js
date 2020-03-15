@@ -1,10 +1,11 @@
 import store from '@/store';
 import { hash } from './encoding';
+import backupApi from '../Api/BackupApi';
+import CryptoJS from 'crypto-js';
 
 const knownMembers = (group) => {
   const { id, photo, name, connections } = store.getState();
   const { founders, members, isNew } = group;
-
   const me = {
     photo,
     name,
@@ -73,24 +74,24 @@ export const groupCirclePhotos = (group) => {
 };
 
 export const getGroupName = (group) => {
-  const names = knownMembers(group).map((member) => member.name.substr(0, 13));
-
-  return names.join(', ');
+  return group.name || knownMembers(group).map((member) => member.name.substr(0, 13)).join(', ');
 };
 
-export const newGroupId = () => {
-  const {
-    id,
-    newGroupCoFounders,
-    eligibleGroups,
-    currentGroups,
-  } = store.getState();
-  const existingGroups = [...eligibleGroups, ...currentGroups];
-  const groupId = hash(
-    [id, newGroupCoFounders[0], newGroupCoFounders[1]].sort().join(','),
+export const getInviteInfo = async (invite) => {
+  const { connections } = store.getState();
+  const conn = connections.find(conn => conn.id == invite.inviter);
+  console.log(conn.aesKey, invite.data, 'ivniter aesKey');
+  const groupAesKey = CryptoJS.AES.decrypt(invite.data, conn.aesKey).toString(
+    CryptoJS.enc.Utf8,
   );
-  if (existingGroups.some((el) => el.id === groupId)) {
-    throw new Error('group already exists');
-  }
-  return groupId;
+  console.log('group aes key2', groupAesKey);
+  const uuidKey = invite.url.split('/').pop();
+  // console.log(invite.url, uuidKey, 'url');
+  // const data = (await backupApi.getRecovery('immutable', uuidKey)).data;
+  const res = await fetch(invite.url);
+  const data = await res.text();
+  const info = CryptoJS.AES.decrypt(data, groupAesKey).toString(
+    CryptoJS.enc.Utf8,
+  );
+  return JSON.parse(info);
 };

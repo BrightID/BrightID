@@ -58,6 +58,7 @@ export const addNewConnection = () => async (
       name: connectUserData.name,
       score: connectUserData.score,
       secretKey: connectUserData.secretKey,
+      aesKey: connectUserData.aesKey,
       connectionDate,
       photo: { filename },
       status: 'initiated'

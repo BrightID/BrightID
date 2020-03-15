@@ -52,9 +52,9 @@ export const fakeJoinGroups = ({
   id: string,
   secretKey: Uint8Array,
 }) => (dispatch: dispatch, getState: getState) => {
-  const { eligibleGroups } = getState();
+  const { groups } = getState();
 
-  eligibleGroups.map((group) =>
+  groups.map((group) =>
     fakeJoinGroup({ group: group.id, id, secretKey }),
   );
 };

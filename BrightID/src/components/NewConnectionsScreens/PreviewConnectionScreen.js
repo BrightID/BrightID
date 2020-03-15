@@ -63,7 +63,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
     try {
       const {
         createdAt,
-        currentGroups,
+        groups,
         connections = [],
       } = await api.getUserInfo(this.props.connectUserData.id);
       const mutualConnections = connections.filter(function(el) {
@@ -71,7 +71,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
       });
       this.setState({
         connections: connections.length,
-        groups: currentGroups.length,
+        groups: groups.length,
         mutualConnections: mutualConnections.length,
         connectionDate: `Created ${moment(parseInt(createdAt, 10)).fromNow()}`,
       });

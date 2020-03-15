@@ -6,15 +6,16 @@ import LinearGradient from 'react-native-linear-gradient';
 import Home from './components/HomeScreen';
 import ConnectionsScreen from './components/Connections/ConnectionsScreen';
 import SortingConnectionsScreen from './components/Connections/SortingConnectionsScreen';
-import GroupsScreen from './components/GroupsScreens/GroupsScreen';
-import EligibleGroupsScreen from './components/GroupsScreens/EligibleGroups/EligibleGroupsScreen';
 import Onboard from './components/OnboardingScreens/Onboard';
 import SignUp from './components/OnboardingScreens/SignUp';
 import NewConnectionScreen from './components/NewConnectionsScreens/NewConnectionScreen';
+
+import GroupsScreen from './components/GroupsScreens/GroupsScreen';
+import GroupInfoScreen from './components/GroupsScreens/NewGroups/GroupInfoScreen';
 import NewGroupScreen from './components/GroupsScreens/NewGroups/NewGroupScreen';
-import CofoundGroupReview from './components/GroupsScreens/Cofounders/CofoundGroupReview';
-import CurrentGroupView from './components/GroupsScreens/CurrentGroups/CurrentGroupView';
-import InviteListScreen from './components/GroupsScreens/CurrentGroups/InviteListScreen';
+import MembersScreen from './components/GroupsScreens/Members/MembersScreen';
+import InviteListScreen from './components/GroupsScreens/Members/InviteListScreen';
+
 import PreviewConnectionScreen from './components/NewConnectionsScreens/PreviewConnectionScreen';
 import SuccessScreen from './components/NewConnectionsScreens/SuccessScreen';
 import AppBootstrap from './AppBootstrap';
@@ -83,17 +84,14 @@ const AppStack = createStackNavigator(
     NewGroup: {
       screen: NewGroupScreen,
     },
-    CofoundGroupReview: {
-      screen: CofoundGroupReview,
+    GroupInfo: {
+      screen: GroupInfoScreen,
     },
-    CurrentGroupView: {
-      screen: CurrentGroupView,
+    Members: {
+      screen: MembersScreen,
     },
     InviteList: {
       screen: InviteListScreen,
-    },
-    EligibleGroups: {
-      screen: EligibleGroupsScreen,
     },
     Notifications,
     Apps: {

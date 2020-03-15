@@ -4,16 +4,16 @@ import { dissoc, find, mergeRight, propEq } from 'ramda';
 import {
   SET_IS_SPONSORED,
   USER_SCORE,
-  GROUPS_COUNT,
   SEARCH_PARAM,
   CREATE_GROUP,
   SET_NEW_GROUP_CO_FOUNDERS,
   CLEAR_NEW_GROUP_CO_FOUNDERS,
-  SET_ELIGIBLE_GROUPS,
-  DELETE_ELIGIBLE_GROUP,
-  SET_CURRENT_GROUPS,
+  SET_GROUPS,
+  SET_INVITES,
+  DELETE_GROUP,
+  ACCEPT_INVITE,
+  REJECT_INVITE,
   JOIN_GROUP,
-  JOIN_GROUP_AS_CO_FOUNDER,
   LEAVE_GROUP,
   DISMISS_FROM_GROUP,
   SET_CONNECTIONS,
@@ -53,12 +53,6 @@ import {
  * INITIAL STATE
  * structure the state of the app here
  *
- * @param score number
- * @param name String
- * @param photo Image
- * @param groupsCount Number
- * @param searchParam String
- * @param connections Array => Object
  */
 
 // TODO: destructure every layer of this reducer
@@ -69,11 +63,10 @@ export const initialState: State = {
   isSponsored: false,
   name: '',
   photo: { filename: '' },
-  groupsCount: 0,
   searchParam: '',
   newGroupCoFounders: [],
-  eligibleGroups: [],
-  currentGroups: [],
+  groups: [],
+  invites: [],
   connections: [],
   verifications: [],
   apps: [],
@@ -129,12 +122,6 @@ export const reducer = (state: State = initialState, action: action) => {
         isSponsored: action.isSponsored,
       };
     }
-    case GROUPS_COUNT: {
-      return {
-        ...state,
-        groupsCount: action.groupsCount,
-      };
-    }
     case SET_USER_PHOTO: {
       return {
         ...state,
@@ -150,7 +137,13 @@ export const reducer = (state: State = initialState, action: action) => {
     case CREATE_GROUP: {
       return {
         ...state,
-        eligibleGroups: [...state.eligibleGroups.slice(0), action.group],
+        groups: [...state.groups.slice(0), action.group],
+      };
+    }
+    case DELETE_GROUP: {
+      return {
+        ...state,
+        groups: state.groups.filter((group) => group.id !== action.group.id),
       };
     }
     case SET_NEW_GROUP_CO_FOUNDERS: {
@@ -165,58 +158,60 @@ export const reducer = (state: State = initialState, action: action) => {
         newGroupCoFounders: [],
       };
     }
-    case SET_ELIGIBLE_GROUPS: {
+    case SET_GROUPS: {
+      const groups = action.groups.map((group) => {
+        const oldGroup = state.groups.find((g) => g.id === group.id);
+        group.name = oldGroup.name;
+        group.photo = oldGroup.photo;
+        group.aesKey = oldGroup.aesKey;
+        return group;
+      });
       return {
         ...state,
-        eligibleGroups: action.eligibleGroups,
+        groups,
       };
     }
-    case DELETE_ELIGIBLE_GROUP: {
+    case SET_INVITES: {
       return {
         ...state,
-        eligibleGroups: state.eligibleGroups.filter(
-          (group) => group.id !== action.groupId,
-        ),
+        invites: action.invites,
       };
     }
-    case SET_CURRENT_GROUPS: {
+    case ACCEPT_INVITE: {
+      action.invite.state = 'accepted';
       return {
         ...state,
-        currentGroups: action.currentGroups,
+        invites: [...state.invites],
+      };
+    }
+    case REJECT_INVITE: {
+      action.invite.state = 'rejected';
+      return {
+        ...state,
+        invites: [...state.invites],
       };
     }
     case JOIN_GROUP: {
-      action.group.isNew = false;
       action.group.members.push(state.id);
       return {
         ...state,
-        currentGroups: [action.group, ...state.currentGroups],
-        eligibleGroups: state.eligibleGroups.filter(
-          (group) => group.id !== action.group.id,
-        ),
-      };
-    }
-    case JOIN_GROUP_AS_CO_FOUNDER: {
-      action.group.members.push(state.id);
-      return {
-        ...state,
-        eligibleGroups: [...state.eligibleGroups],
+        groups: [action.group, ...state.groups],
       };
     }
     case LEAVE_GROUP: {
       return {
         ...state,
-        currentGroups: state.currentGroups.filter(
-          (group) => group.id !== action.groupId,
-        ),
+        groups: state.groups.filter((group) => group.id !== action.group.id),
       };
     }
     case DISMISS_FROM_GROUP: {
-      const group = find(propEq('id', action.groupId))(state.currentGroups);
-      group.members = group.members.filter(member => member !== action.member);
+      const group = state.groups.find((group) => group.id === action.group.id);
+      group.members = group.members.filter(
+        (member) => member !== action.member,
+      );
       return {
         ...state,
-        currentGroups: [...state.currentGroups]
+        groups: [...state.groups],
       };
     }
     case SET_CONNECTIONS: {
