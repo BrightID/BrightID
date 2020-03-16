@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_TYPE } from '@/utils/constants';
-import { getGroupName } from '@/utils/groups';
+import { getGroupName, ids2connections } from '@/utils/groups';
 import GroupPhoto from './GroupPhoto';
 /**
  * Group Card in the Groups Screen
@@ -19,18 +19,28 @@ class GroupCard extends React.PureComponent<Props> {
   
   setStatus = () => {
     const { group } = this.props;
-    const status = group.status;
-    console.log(group.aesKey, 22);
-    if (status === 'initiated') {
+    if (group.isNew) {
+      const notJoinedIds = group.founders.filter(
+        founder => ! group.members.includes(founder)
+      );
+      const notJoinedNames = ids2connections(notJoinedIds).map(o => o.name);
       return (
-        <View style={styles.membersContainer}>
-          <Text style={styles.waitingMessage}>Waiting</Text>
+        <View style={styles.waitingContainer}>
+          <Text style={styles.waitingMessage}>Waiting for {notJoinedNames.join(' and ')} to join</Text>
         </View>
       );
     } else {
+      const unknowsCount = ids2connections(
+        group.members
+      ).filter(o => o.name === 'Stranger').length;
       return (
-        <View style={styles.membersContainer}>
-          <Text style={styles.membersLeft}>Members: {group.members.length}</Text>
+        <View>
+          <View style={styles.membersContainer}>
+            <Text style={styles.membersLabel}>Known members: </Text>
+            <Text style={styles.membersKnown}>{group.members.length - unknowsCount} </Text>
+            <Text style={styles.membersLabel}>Unknown: </Text>
+            <Text style={styles.membersUnknown}>{unknowsCount}</Text>
+          </View>
         </View>
       );
     }
@@ -84,20 +94,25 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
+  waitingContainer: {},
   membersContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  membersLeft: {
-    fontFamily: 'ApexNew-Book',
+  membersLabel: {
+    fontFamily: 'ApexNew-Medium',
     fontSize: 14,
     color: '#9b9b9b',
     marginRight: 3,
     paddingTop: 1.5,
   },
-  membersRight: {
-    fontFamily: 'ApexNew-Medium',
+  membersKnown: {
+    color: '#139c60',
+    fontSize: 16,
+  },
+  membersUnknown: {
+    color: '#e39f2f',
     fontSize: 16,
   },
   waitingMessage: {

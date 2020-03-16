@@ -7,20 +7,19 @@ import {
   TouchableOpacity,
   View,
   SafeAreaView,
+  FlatList
 } from 'react-native';
 import { connect } from 'react-redux';
 import SearchConnections from './SearchConnections';
 import NewGroupCard from './NewGroupCard';
 import store from '@/store';
 import { createNewGroup } from '../actions';
-import { renderListOrSpinner } from './renderConnections';
 import { clearNewGroupCoFounders } from '@/actions';
 import { DEVICE_TYPE } from '@/utils/constants';
 
-/**
- * Connection screen of BrightID
- * Displays a search input and list of Connection Cards
- */
+type State = {
+  loading: boolean,
+};
 
 export class NewGroupScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
@@ -84,7 +83,7 @@ export class NewGroupScreen extends React.Component<Props, State> {
   render() {
     const { navigation } = this.props;
     const { photo, name } = navigation.state.params;
-
+    const connections = this.filterConnections();
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.mainContainer}>
@@ -98,8 +97,20 @@ export class NewGroupScreen extends React.Component<Props, State> {
             <SearchConnections navigation={this.props.navigation} />
           )}
           {DEVICE_TYPE === 'small' && this.renderCreateGroupButton()}
-          <View style={styles.mainContainer}>{renderListOrSpinner(this)}</View>
-
+          <View style={styles.mainContainer}>
+          {connections.length > 0 ? (
+            <FlatList
+              style={styles.connectionsContainer}
+              data={connections}
+              keyExtractor={({ id }, index) => id + index}
+              renderItem={this.renderConnection}
+            />
+          ) : (
+            <View>
+              <Text style={styles.emptyText}>No connections</Text>
+            </View>
+          )}
+          </View>
         </View>
         {DEVICE_TYPE === 'large' && this.renderCreateGroupButton()}
       </SafeAreaView>
@@ -124,7 +135,10 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#e3e1e1',
   },
-
+  emptyText: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 20,
+  },
   moreIcon: {
     marginRight: 16,
   },

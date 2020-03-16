@@ -95,3 +95,18 @@ export const getInviteInfo = async (invite) => {
   );
   return JSON.parse(info);
 };
+
+export const ids2connections = (ids) => {
+  const { connections, name, id, photo, score } = store.getState();
+  return ids.map(_id => {
+    if (_id === id) {
+      return { id, name, photo, score };
+    }
+    const conn = connections.find(conn => conn.id === _id);
+    if (conn) {
+      return conn;
+    } else {
+      return { id: _id, name: 'Stranger', score: 0 }
+    }
+  });
+}

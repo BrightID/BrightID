@@ -174,14 +174,13 @@ export class MembersScreen extends Component<Props, State> {
   };
 
   getMembers = () => {
-    const { navigation, connections } = this.props;
-    console.log(navigation.state.params.group.members, 48);
+    const { navigation, connections, name, id, photo, score } = this.props;
     // return a list of connections filtered by the members of this group
-    return innerJoin(
-      (connection, id) => connection.id === id,
+    return [{ id, name, photo, score }].concat(innerJoin(
+      (connection, member) => connection.id === member,
       connections,
       navigation.state.params.group.members,
-    );
+    ));
   };
 
   render() {

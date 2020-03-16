@@ -45,9 +45,11 @@ class MemberCard extends React.PureComponent<Props> {
             <Text style={styles.scoreLeft}>Score:</Text>
             <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>
           </View>
-          <Text style={styles.connectedText}>
-            Connected {moment(parseInt(connectionDate, 10)).fromNow()}
-          </Text>
+          {connectionDate && (
+            <Text style={styles.connectedText}>
+              Connected {moment(parseInt(connectionDate, 10)).fromNow()}
+            </Text>
+          )}
         </View>
         {menuHandler &&
           <TouchableOpacity

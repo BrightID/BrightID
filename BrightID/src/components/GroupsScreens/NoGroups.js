@@ -38,7 +38,6 @@ export const NoGroups = ({ navigation }: Props) => (
       <TouchableOpacity
         style={styles.createGroupButton}
         onPress={() => {
-          console.log(navigation, 42);
           navigation.navigate('GroupInfo');
         }}
       >
