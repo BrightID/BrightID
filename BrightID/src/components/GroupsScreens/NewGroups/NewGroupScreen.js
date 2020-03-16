@@ -16,9 +16,10 @@ import store from '@/store';
 import { createNewGroup } from '../actions';
 import { clearNewGroupCoFounders } from '@/actions';
 import { DEVICE_TYPE } from '@/utils/constants';
+import Spinner from 'react-native-spinkit';
 
 type State = {
-  loading: boolean,
+  creating: boolean,
 };
 
 export class NewGroupScreen extends React.Component<Props, State> {
@@ -26,6 +27,10 @@ export class NewGroupScreen extends React.Component<Props, State> {
     title: 'New Group',
     headerShown: DEVICE_TYPE === 'large',
   });
+
+  state = {
+    creating: false,
+  };
 
   componentDidMount() {
     const { navigation, dispatch } = this.props;
@@ -52,23 +57,34 @@ export class NewGroupScreen extends React.Component<Props, State> {
     return newGroupCoFounders.includes(card.id);
   };
 
-  renderCreateGroupButton = () => (
-    <View style={styles.createGroupButtonContainer}>
-      <TouchableOpacity
-        onPress={async () => {
-          const { navigation } = this.props;
-          const { photo, name, isPrimary } = navigation.state.params;
-          const type = isPrimary ? 'primary' : 'general';
-          if (await store.dispatch(createNewGroup(photo, name, type))) {
-            navigation.navigate('Groups');
-          }
-        }}
-        style={styles.createGroupButton}
-      >
-        <Text style={styles.buttonInnerText}>Create Group</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  renderButtonOrSpinner = () =>
+    !this.state.creating ? (
+      <View style={styles.createGroupButtonContainer}>
+        <TouchableOpacity
+          onPress={async () => {
+            this.setState({ creating: true });
+            const { navigation } = this.props;
+            const { photo, name, isPrimary } = navigation.state.params;
+            const type = isPrimary ? 'primary' : 'general';
+            if (await store.dispatch(createNewGroup(photo, name, type))) {
+              navigation.navigate('Groups');
+            } else {
+              this.setState({ creating: false });
+            }
+          }}
+          style={styles.createGroupButton}
+        >
+          <Text style={styles.buttonInnerText}>Create Group</Text>
+        </TouchableOpacity>
+      </View>
+    ): (
+      <View style={styles.loader}>
+        <Text style={styles.textInfo}>
+          Creating the group ...
+        </Text>
+        <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
+      </View>
+    );
 
   renderConnection = ({ item }) => (
     <NewGroupCard
@@ -96,7 +112,6 @@ export class NewGroupScreen extends React.Component<Props, State> {
           {DEVICE_TYPE === 'large' && (
             <SearchConnections navigation={this.props.navigation} />
           )}
-          {DEVICE_TYPE === 'small' && this.renderCreateGroupButton()}
           <View style={styles.mainContainer}>
           {connections.length > 0 ? (
             <FlatList
@@ -112,7 +127,7 @@ export class NewGroupScreen extends React.Component<Props, State> {
           )}
           </View>
         </View>
-        {DEVICE_TYPE === 'large' && this.renderCreateGroupButton()}
+        {this.renderButtonOrSpinner()}
       </SafeAreaView>
     );
   }
@@ -203,6 +218,16 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '600',
     fontSize: 18,
+  },
+  textInfo: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 18,
+    margin: 18,
+  },
+  loader: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
   },
 });
 
