@@ -52,7 +52,10 @@ class GroupCard extends React.PureComponent<Props> {
       <View style={styles.container}>
         <GroupPhoto group={group}/>
         <View style={styles.info}>
-          <Text style={styles.name}>{getGroupName(group)}</Text>
+          {group.type === 'primary' && (
+            <Text style={styles.primary}> Primary Group </Text>
+          )}
+          <Text style={styles.name}>{ getGroupName(group) }</Text>
           <this.setStatus />
         </View>
       </View>
@@ -99,6 +102,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
+  },
+  primary: {
+    color: '#139c60',
   },
   membersLabel: {
     fontFamily: 'ApexNew-Medium',
