@@ -10,6 +10,7 @@ let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
   seedUrl = 'http://test.brightid.org';
 }
+const v = 4;
 
 class BrightId {
   api: ApiSauceInstance;
@@ -65,6 +66,7 @@ class BrightId {
       sig1,
       sig2,
       timestamp,
+      v
     };
     op._key = hash(op.name + op.id1 + op.id2 + op.timestamp);
     const res = await this.api.put(`/operations/${op._key}`, op);
@@ -88,6 +90,7 @@ class BrightId {
       reason,
       sig1,
       timestamp,
+      v
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
@@ -116,6 +119,7 @@ class BrightId {
       sig1,
       type,
       timestamp,
+      v
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
@@ -138,6 +142,7 @@ class BrightId {
       group,
       sig,
       timestamp,
+      v
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
@@ -161,6 +166,7 @@ class BrightId {
       data,
       sig,
       timestamp,
+      v
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
@@ -181,6 +187,7 @@ class BrightId {
       group,
       sig,
       timestamp,
+      v
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
@@ -202,6 +209,7 @@ class BrightId {
       group,
       sig,
       timestamp,
+      v
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
@@ -223,6 +231,7 @@ class BrightId {
       group,
       sig,
       timestamp,
+      v
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
@@ -245,6 +254,7 @@ class BrightId {
       trusted,
       sig,
       timestamp,
+      v
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
@@ -262,6 +272,7 @@ class BrightId {
   }) {
     op.name = 'Set Signing Key';
     op._key = hash(op.name + op.id + op.signingKey + op.timestamp);
+    op.v = v;
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
     BrightId.setOperation(op._key);
@@ -282,6 +293,7 @@ class BrightId {
       contextId,
       sig,
       timestamp,
+      v
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
