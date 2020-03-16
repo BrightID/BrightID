@@ -137,7 +137,7 @@ export const reducer = (state: State = initialState, action: action) => {
     case CREATE_GROUP: {
       return {
         ...state,
-        groups: [...state.groups.slice(0), action.group],
+        groups: [action.group, ...state.groups.slice(0)],
       };
     }
     case DELETE_GROUP: {
@@ -244,8 +244,8 @@ export const reducer = (state: State = initialState, action: action) => {
       return {
         ...state,
         connections: [
-          ...state.connections.filter(removeExisting),
           action.connection,
+          ...state.connections.filter(removeExisting),
         ],
       };
     }
