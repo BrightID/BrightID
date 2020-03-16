@@ -1,14 +1,10 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, View, Alert, FlatList } from 'react-native';
+import { Linking, StyleSheet, View, FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import nacl from 'tweetnacl';
-import { saveApp } from '../../actions/apps';
-
-import { strToUint8Array, uInt8ArrayToB64 } from '../../utils/encoding';
-import api from '../../Api/BrightId';
 import AppCard from './AppCard';
+import { handleAppContext } from './model';
 
 export class AppsScreen extends React.Component<Props> {
   static navigationOptions = () => ({
@@ -16,45 +12,23 @@ export class AppsScreen extends React.Component<Props> {
     headerRight: () => <View />,
   });
 
-  async componentDidMount() {
+  componentDidMount() {
+    const { navigation } = this.props;
+    navigation.addListener('willFocus', async () => {
+      this.handleDeepLink();
+      Linking.addEventListener('url', this.handleDeepLink);
+    });
+    navigation.addListener('willBlur', async () => {
+      Linking.removeEventListener('url', this.handleDeepLink);
+    });
+  }
+
+  handleDeepLink = (e) => {
     const { navigation } = this.props;
     if (navigation.state.params) {
-      // if 'params' is defined, the user came through a deep link
-      const { baseUrl, context, contextId } = navigation.state.params;
-      const oldBaseUrl = api.baseUrl;
-      let contextInfo;
-      try {
-        api.baseUrl = baseUrl;
-        contextInfo = await api.getContext(context);
-      } catch (e) {
-        console.log(e);
-      } finally {
-        api.baseUrl = oldBaseUrl;
-      }
-      if (contextInfo && contextInfo.verification) {
-        Alert.alert(
-          'App Verification?',
-          `Do you want to verify your account in ${context} by your BrightID?`,
-          [
-            {
-              text: 'Yes',
-              onPress: () =>
-                this.linkVerification(baseUrl, context, contextInfo, contextId),
-            },
-            {
-              text: 'No',
-              style: 'cancel',
-              onPress: () => {
-                navigation.goBack();
-              },
-            },
-          ],
-        );
-      } else {
-        navigation.goBack();
-      }
+      handleAppContext(navigation.state.params);
     }
-  }
+  };
 
   render() {
     return (
@@ -67,52 +41,6 @@ export class AppsScreen extends React.Component<Props> {
         />
       </View>
     );
-  }
-
-  async linkVerification(baseUrl, context, contextInfo, contextId) {
-    const { navigation, dispatch } = this.props;
-    const oldBaseUrl = api.baseUrl;
-    try {
-      if (contextInfo.verificationUrl) {
-        const { publicKey, secretKey } = await nacl.sign.keyPair();
-        const b64PubKey = uInt8ArrayToB64(publicKey);
-        const sig = uInt8ArrayToB64(
-          nacl.sign.detached(strToUint8Array(contextId), secretKey),
-        );
-        let resp = await fetch(contextInfo.verificationUrl, {
-          method: 'PUT',
-          body: JSON.stringify({
-            contextId,
-            publicKey: b64PubKey,
-            sig,
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        resp = await resp.json();
-        contextId = b64PubKey;
-      }
-      api.baseUrl = baseUrl;
-      api.linkContextId(context, contextId);
-    } catch (e) {
-      Alert.alert(`App verification failed`, `${e.message}\n${e.stack || ''}`, [
-        {
-          text: 'Dismiss',
-          style: 'cancel',
-          onPress: () => {
-            navigation.goBack();
-          },
-        },
-      ]);
-    } finally {
-      api.baseUrl = oldBaseUrl;
-      if (contextInfo.isApp) {
-        dispatch(saveApp(context, contextInfo));
-      } else {
-        navigation.goBack();
-      }
-    }
   }
 }
 

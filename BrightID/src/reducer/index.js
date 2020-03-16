@@ -329,8 +329,7 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case ADD_APP: {
-      const removeExisting = ({ name }: app) => name !== action.name;
-      console.log('adding app', action);
+      const removeExisting = ({ name }: app) => name !== action.app.name;
       return {
         ...state,
         apps: [...state.apps.filter(removeExisting), action.app],

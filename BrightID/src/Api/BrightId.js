@@ -236,7 +236,6 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
-    BrightId.setOperation(op._key);
   }
 
   async getMembers(group: string) {

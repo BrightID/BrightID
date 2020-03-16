@@ -18,3 +18,8 @@ export const navigate = (routeName, params) => {
     }),
   );
 };
+
+export const goBack = (routeName, params) => {
+  if (!_navigator) return;
+  _navigator.dispatch(NavigationActions.back());
+};

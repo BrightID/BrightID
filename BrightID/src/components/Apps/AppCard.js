@@ -12,7 +12,7 @@ import {
 import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import { deleteApp } from '../../actions/apps';
+import { deleteApp } from './model';
 
 /**
  * App Card in the Apps Screen
@@ -25,8 +25,8 @@ import { deleteApp } from '../../actions/apps';
 
 class AppCard extends React.PureComponent<Props> {
   handleDelete = () => {
-    const { name, dispatch } = this.props;
-    dispatch(deleteApp(name));
+    const { name } = this.props;
+    deleteApp(name);
   };
 
   openApp = () => {
