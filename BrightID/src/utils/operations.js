@@ -1,14 +1,14 @@
 // @flow
 import store from '../store';
-import { removeOperation } from '../actions';
+import { removeOperation, resetOperations } from '../actions';
 import fetchUserInfo from '../actions/fetchUserInfo';
 import api from '../Api/BrightId';
 
 const time_fudge = 2 * 60 * 1000; // trace operations for 2 minutes
 
 export const pollOperations = async () => {
+  const { operations } = store.getState();
   try {
-    const { operations } = store.getState();
     for (const op of operations) {
       const { state } = await api.getOperationState(op);
       if (
@@ -24,5 +24,6 @@ export const pollOperations = async () => {
     }
   } catch (err) {
     console.warn(err.message);
+    store.dispatch(resetOperations());
   }
 };
