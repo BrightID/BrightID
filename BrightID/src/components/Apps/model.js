@@ -59,8 +59,14 @@ export const handleAppContext = async (params: Params) => {
 };
 
 const linkVerification = async (baseUrl, context, contextInfo, contextId) => {
+  const { isSponsored } = this.props;
   const oldBaseUrl = api.baseUrl;
   try {
+    if (!isSponsored && !contextInfo.hasSponsorships) {
+      throw new Error(
+        `Context: ${context} doesn't have sponsorships available.`,
+      );
+    }
     if (contextInfo.verificationUrl) {
       const { publicKey, secretKey } = await nacl.sign.keyPair();
       const b64PubKey = uInt8ArrayToB64(publicKey);

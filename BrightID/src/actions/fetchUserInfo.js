@@ -8,6 +8,7 @@ import {
   setUserScore,
   setVerifications,
   updateConnections,
+  setIsSponsored,
 } from './index';
 
 const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
@@ -21,6 +22,7 @@ const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
       score,
       verifications = [],
       connections = [],
+      isSponsored,
     } = await api.getUserInfo(id);
 
     if (operations.length === 0) {
@@ -32,6 +34,7 @@ const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
     dispatch(setGroupsCount(currentGroups.length));
     dispatch(setVerifications(verifications));
     dispatch(updateConnections(connections));
+    dispatch(setIsSponsored(isSponsored));
   } catch (err) {
     console.log(err.message);
   }
