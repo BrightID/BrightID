@@ -59,7 +59,7 @@ export const handleAppContext = async (params: Params) => {
 };
 
 const linkVerification = async (baseUrl, context, contextInfo, contextId) => {
-  const { isSponsored } = this.props;
+  const { isSponsored } = store.getState();
   const oldBaseUrl = api.baseUrl;
   try {
     if (!isSponsored && !contextInfo.hasSponsorships) {
@@ -91,7 +91,7 @@ const linkVerification = async (baseUrl, context, contextInfo, contextId) => {
     api.baseUrl = baseUrl;
     api.linkContextId(context, contextId);
   } catch (e) {
-    Alert.alert(`App verification failed`, `${e.message}\n${e.stack || ''}`, [
+    Alert.alert(`App verification failed`, `${e.message}`, [
       {
         text: 'Dismiss',
         style: 'cancel',

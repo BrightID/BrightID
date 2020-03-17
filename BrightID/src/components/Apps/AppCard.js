@@ -24,18 +24,13 @@ import { deleteApp } from './model';
  */
 
 class AppCard extends React.PureComponent<Props> {
-  handleDelete = () => {
-    const { name } = this.props;
-    deleteApp(name);
-  };
-
   openApp = () => {
     const { url } = this.props;
     Linking.openURL(url);
   };
 
   render() {
-    const { logoFile, name, verified, style } = this.props;
+    const { logoFile, name, verified, style, handleAction } = this.props;
 
     return (
       <View style={{ ...styles.container, ...style }}>
@@ -61,7 +56,10 @@ class AppCard extends React.PureComponent<Props> {
           />
         )}
 
-        <TouchableOpacity style={styles.deleteIcon} onPress={this.handleDelete}>
+        <TouchableOpacity
+          style={styles.deleteIcon}
+          onPress={handleAction(name)}
+        >
           <Ionicon size={24} name="ios-trash" color="#cb9" />
         </TouchableOpacity>
       </View>

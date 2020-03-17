@@ -3,14 +3,26 @@
 import * as React from 'react';
 import { Linking, StyleSheet, View, FlatList } from 'react-native';
 import { connect } from 'react-redux';
+import ActionSheet from 'react-native-actionsheet';
 import AppCard from './AppCard';
-import { handleAppContext } from './model';
+import { handleAppContext, deleteApp } from './model';
+
+let deleteSheetRef = '';
 
 export class AppsScreen extends React.Component<Props> {
   static navigationOptions = () => ({
     title: 'Apps',
     headerRight: () => <View />,
   });
+
+  deleteSheetRef: string;
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedApp: '',
+    };
+  }
 
   componentDidMount() {
     const { navigation } = this.props;
@@ -30,14 +42,36 @@ export class AppsScreen extends React.Component<Props> {
     }
   };
 
+  handleAction = (selectedApp) => () => {
+    this.setState({ selectedApp }, () => {
+      if (deleteSheetRef) deleteSheetRef.show();
+    });
+  };
+
   render() {
+    const { selectedApp } = this.state;
     return (
       <View style={styles.container}>
         <FlatList
           style={styles.AppsList}
           data={this.props.apps}
           keyExtractor={({ name }, index) => name + index}
-          renderItem={({ item }) => <AppCard {...item} />}
+          renderItem={({ item }) => (
+            <AppCard {...item} handleAction={this.handleAction} />
+          )}
+        />
+        <ActionSheet
+          ref={(o) => {
+            deleteSheetRef = o;
+          }}
+          title={`Are you sure you want to delete ${selectedApp}`}
+          options={['Delete', 'cancel']}
+          cancelButtonIndex={1}
+          onPress={(index) => {
+            if (index === 0) {
+              deleteApp(selectedApp);
+            }
+          }}
         />
       </View>
     );
