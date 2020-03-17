@@ -30,7 +30,9 @@ export const fakeJoinGroup = ({
     group,
     sig,
     timestamp,
+    v: 4
   };
+  console.log('joining', op);
   return api.api
     .put(`/operations/${op._key}`, op)
     .then((response) => ({
