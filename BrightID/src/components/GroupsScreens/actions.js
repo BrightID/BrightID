@@ -69,6 +69,7 @@ export const createNewGroup = (photo, name, type) => async (
     const url = `https://recovery.brightid.org/backups/immutable/${uuidKey}`;
     const newGroup = {
       founders: [id, u1.id, u2.id],
+      admins: [id, u1.id, u2.id],
       members: [id],
       id: groupId,
       isNew: true,
