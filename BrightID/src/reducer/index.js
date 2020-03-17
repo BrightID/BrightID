@@ -161,9 +161,11 @@ export const reducer = (state: State = initialState, action: action) => {
     case SET_GROUPS: {
       const groups = action.groups.map((group) => {
         const oldGroup = state.groups.find((g) => g.id === group.id);
-        group.name = oldGroup.name;
-        group.photo = oldGroup.photo;
-        group.aesKey = oldGroup.aesKey;
+        if (oldGroup) {
+          group.name = oldGroup.name;
+          group.photo = oldGroup.photo;
+          group.aesKey = oldGroup.aesKey;
+        }
         return group;
       });
       return {
