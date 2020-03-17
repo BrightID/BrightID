@@ -63,9 +63,8 @@ const linkVerification = async (baseUrl, context, contextInfo, contextId) => {
   const oldBaseUrl = api.baseUrl;
   try {
     if (!isSponsored && !contextInfo.hasSponsorships) {
-      throw new Error(
-        `Context: ${context} doesn't have sponsorships available.`,
-      );
+      // Context doesn't have sponsorships available
+      return;
     }
     if (contextInfo.verificationUrl) {
       const { publicKey, secretKey } = await nacl.sign.keyPair();
