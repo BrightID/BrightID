@@ -3,11 +3,11 @@
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
+import { DEVICE_TYPE } from '@/utils/constants';
 import SearchConnections from '../Connections/SearchConnections';
 import TrustedConnectionCard from './TrustedConnectionCard';
 import { renderListOrSpinner } from './renderConnections';
 import { setTrustedConnections } from './helpers';
-import { DEVICE_TYPE } from '@/utils/constants';
 
 /**
  * Backup screen of BrightID
@@ -21,6 +21,7 @@ type State = {
 class TrustedConnectionsScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
     title: 'Trusted Connections',
+    headerBackTitleVisible: false,
   });
 
   filterConnections = () => {
