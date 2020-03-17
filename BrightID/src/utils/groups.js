@@ -78,22 +78,23 @@ export const getGroupName = (group) => {
 };
 
 export const getInviteInfo = async (invite) => {
+  console.log('getting invite info');
   const { connections } = store.getState();
   const conn = connections.find(conn => conn.id == invite.inviter);
-  console.log(conn.aesKey, invite.data, 'ivniter aesKey');
   const groupAesKey = CryptoJS.AES.decrypt(invite.data, conn.aesKey).toString(
     CryptoJS.enc.Utf8,
   );
-  console.log('group aes key2', groupAesKey);
   const uuidKey = invite.url.split('/').pop();
   // console.log(invite.url, uuidKey, 'url');
   // const data = (await backupApi.getRecovery('immutable', uuidKey)).data;
   const res = await fetch(invite.url);
   const data = await res.text();
-  const info = CryptoJS.AES.decrypt(data, groupAesKey).toString(
+  let info = CryptoJS.AES.decrypt(data, groupAesKey).toString(
     CryptoJS.enc.Utf8,
   );
-  return JSON.parse(info);
+  info = JSON.parse(info);
+  console.log(`invited group name is ${info.name}`);
+  return info;
 };
 
 export const ids2connections = (ids) => {

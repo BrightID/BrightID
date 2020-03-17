@@ -87,10 +87,10 @@ export class MembersScreen extends Component<Props, State> {
         text: 'OK',
         onPress: async () => {
           const { navigation, dispatch } = this.props;
-          const groupId = navigation.state.params.group.id;
+          const group = navigation.state.params.group;
           try {
-            await api.dismiss(user.id, groupId);
-            await dispatch(dismissFromGroup(user.id, groupId));
+            await api.dismiss(user.id, group.id);
+            await dispatch(dismissFromGroup(user.id, group));
           } catch (err) {
             Alert.alert('Error dismissing member from the group', err.message);
           }

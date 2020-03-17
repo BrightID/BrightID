@@ -42,6 +42,7 @@ const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
       if (oldInvite) {
         return oldInvite;
       } else {
+        console.log(invite.data, 'invite data');
         const info = await getInviteInfo(invite);
         return Object.assign(invite, info, { state: 'active' });
       }

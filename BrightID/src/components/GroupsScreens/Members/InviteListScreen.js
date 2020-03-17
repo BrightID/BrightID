@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import MemberCard from './MemberCard';
+import CryptoJS from 'crypto-js';
 import api from '../../../Api/BrightId';
 
 type State = {
@@ -34,9 +35,10 @@ export class InviteListScreen extends Component<Props, State> {
   };
 
   inviteToGroup = async (connection) => {
-    const groupId = this.props.navigation.state.params.group.id;
+    const group = this.props.navigation.state.params.group;
     try {
-      await api.invite(connection.id, groupId);
+      const data = CryptoJS.AES.encrypt(group.aesKey, connection.aesKey).toString();
+      await api.invite(connection.id, group.id, data);
       Alert.alert('Successful Invitaion', `You invited ${connection.name} successfully to the group`);
       this.props.navigation.goBack();
     } catch (err) {
