@@ -39,6 +39,7 @@ class SearchConnections extends React.Component<Props & LocalProps> {
           autoCorrect={false}
           textContentType="name"
           underlineColorAndroid="transparent"
+          placeholderTextColor="#aaa"
         />
         {sortable && (
           <TouchableOpacity

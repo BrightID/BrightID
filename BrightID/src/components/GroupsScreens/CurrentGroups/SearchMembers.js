@@ -26,6 +26,7 @@ class SearchMembers extends React.Component<Props> {
           autoCorrect={false}
           textContentType="name"
           underlineColorAndroid="transparent"
+          placeholderTextColor="#aaa"
         />
         <TouchableOpacity
           onPress={() => {
