@@ -28,7 +28,9 @@ class InviteCard extends React.Component<Props> {
           onPress: async () => {
             try {
               await dispatch(rejectInvite(invite));
-              await api.deleteGroup(invite.id);
+              if (invite.isNew) {
+                await api.deleteGroup(invite.id);
+              }
             } catch (err) {
               Alert.alert('Failed to reject the invite', err.message);
             }
@@ -40,11 +42,12 @@ class InviteCard extends React.Component<Props> {
   };
 
   accept = async () => {
-    const { dispatch, invite } = this.props;
+    const { dispatch, navigation, invite } = this.props;
     try {
       await dispatch(acceptInvite(invite));
       await dispatch(joinGroup(invite));
       await api.joinGroup(invite.id);
+      navigation.navigate('Groups');
     } catch (err) {
       Alert.alert('Failed to join the group', err.message);
     }
