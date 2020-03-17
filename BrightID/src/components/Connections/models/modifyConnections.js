@@ -29,7 +29,7 @@ export const performAction = (
   switch (action) {
     case 'Flag as Duplicate':
     case 'Flag as Fake':
-    case 'Flag as Diseased': {
+    case 'Flag as Deceased': {
       let handler = flagAndDeleteConnection(
         connection,
         action.split(' as ')[1].toLowerCase(),
