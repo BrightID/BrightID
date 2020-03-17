@@ -24,7 +24,7 @@ class GroupPhoto extends React.Component {
 
   render() {
     const { group } = this.props;
-    if (group.photo) {
+    if (group.photo && group.photo.uri) {
       return (
         <View style={styles.container}>
           <Image

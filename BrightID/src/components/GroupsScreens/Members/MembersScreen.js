@@ -48,15 +48,15 @@ export class MembersScreen extends Component<Props, State> {
               style={styles.backStyle}
               name="arrow-left" size={24} color="#fff"
               onPress={ () => {
-                navigation.goBack()
+                navigation.goBack();
               }}
             />
-            {group.photo && <Image
+            {(group.photo && group.photo.uri) ? (<Image
               source={{
                 uri: group.photo.uri,
               }}
               style={styles.headerPhoto}
-            />}
+            />) : null}
           </View>
         );
       },

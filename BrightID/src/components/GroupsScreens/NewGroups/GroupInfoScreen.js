@@ -76,12 +76,6 @@ export class GroupInfoScreen extends React.Component<Props, State> {
           : 'The group name must be at least 2 characters',
       );
     }
-    if (!finalBase64.uri) {
-      return Alert.alert(
-        'Group Form Incomplete',
-        'A photo is required. Please press enter on the keyboard.',
-      );
-    }
     navigation.navigate('NewGroup', { photo: finalBase64, name, isPrimary });
   };
 
