@@ -5,9 +5,10 @@ import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { getGroupName } from '@/utils/groups';
+import { DEVICE_TYPE } from '@/utils/constants';
 import GroupPhoto from './GroupPhoto';
 import { deleteNewGroup, join } from '../actions';
-import { getGroupName } from '../../../utils/groups';
 
 /**
  * Connection Card in the Connections Screen
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
   },
   names: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 20,
+    fontSize: DEVICE_TYPE === 'large' ? 20 : 16,
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,

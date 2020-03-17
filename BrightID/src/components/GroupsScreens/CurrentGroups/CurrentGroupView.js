@@ -15,13 +15,13 @@ import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Overlay from 'react-native-modal-overlay';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import MemberCard from './MemberCard';
-import { getMembers } from '../../../actions/getMembers';
-import api from '../../../Api/BrightId';
-import SearchMembers from './SearchMembers';
+import { getMembers } from '@/actions/getMembers';
+import api from '@/Api/BrightId';
+import emitter from '@/emitter';
+import { leaveGroup } from '@/actions';
+import { DEVICE_TYPE } from '@/utils/constants';
 import GroupPhoto from './GroupPhoto';
-import emitter from '../../../emitter';
-import { leaveGroup } from '../../../actions';
+import MemberCard from './MemberCard';
 
 type State = {
   optionsVisible: boolean,
@@ -244,11 +244,12 @@ const styles = StyleSheet.create({
   },
   groupName: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 28,
+    fontSize: DEVICE_TYPE === 'large' ? 28 : 22,
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
     textAlign: 'center',
+    margin: 10,
   },
   optionsOverlay: {
     backgroundColor: 'rgba(62,34,24,0.4)',

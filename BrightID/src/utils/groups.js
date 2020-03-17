@@ -1,4 +1,4 @@
-import store from '../store';
+import store from '@/store';
 import { hash } from './encoding';
 
 const memberList = (group) => {
@@ -9,11 +9,6 @@ const memberList = (group) => {
     photo,
     name,
     id,
-  };
-
-  const stranger = {
-    photo: { filename: '' },
-    name: 'Stranger',
   };
 
   const list = [];
@@ -28,8 +23,6 @@ const memberList = (group) => {
       const connection = connections.find((u) => u.id === founder);
       if (connection) {
         list.push(connection);
-      } else if (isNew) {
-        list.push(stranger);
       }
     }
   });

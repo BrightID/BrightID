@@ -14,7 +14,6 @@ import ActionSheet from 'react-native-actionsheet';
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import VerificationSticker from './Verifications/VerificationSticker';
 import { setPhoto, setName } from '@/actions';
 import { getNotifications } from '@/actions/notifications';
 import { delStorage } from '@/utils/dev';
@@ -22,6 +21,7 @@ import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
 import { DEVICE_TYPE } from '@/utils/constants';
 import fetchUserInfo from '@/actions/fetchUserInfo';
+import VerificationSticker from './Verifications/VerificationSticker';
 /**
  * Home screen of BrightID
  * ==========================

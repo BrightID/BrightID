@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import RNFS from 'react-native-fs';
-import { groupCirclePhotos } from '../../../utils/groups';
+import { groupCirclePhotos } from '@/utils/groups';
 
 class GroupPhoto extends React.Component {
   photoStyle(photo) {
@@ -25,7 +25,6 @@ class GroupPhoto extends React.Component {
   render() {
     // eslint-disable-next-line react/prop-types
     const circlePhotos = groupCirclePhotos(this.props.group);
-
     return (
       <View style={styles.container}>
         <View style={styles.topPhotos}>
