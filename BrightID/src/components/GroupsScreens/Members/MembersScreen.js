@@ -130,10 +130,10 @@ export class MembersScreen extends Component<Props, State> {
         text: 'OK',
         onPress: async () => {
           const { navigation, dispatch } = this.props;
-          const groupId = navigation.state.params.group.id;
+          const group = navigation.state.params.group;
           try {
-            await api.leaveGroup(groupId);
-            await dispatch(leaveGroup(groupId));
+            await api.leaveGroup(group.id);
+            await dispatch(leaveGroup(group));
             navigation.goBack();
           } catch (err) {
             Alert.alert('Error leaving group', err.message);
