@@ -24,12 +24,12 @@ class GroupPhoto extends React.Component {
 
   render() {
     const { group } = this.props;
-    if (group.photo && group.photo.uri) {
+    if (group.photo && group.photo.filename) {
       return (
         <View style={styles.container}>
           <Image
             source={{
-              uri: group.photo.uri,
+              uri: `file://${RNFS.DocumentDirectoryPath}/photos/${group.photo.filename}`,
             }}
             style={styles.bigPhoto}
           />

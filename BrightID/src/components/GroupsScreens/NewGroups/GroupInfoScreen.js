@@ -76,7 +76,7 @@ export class GroupInfoScreen extends React.Component<Props, State> {
           : 'The group name must be at least 2 characters',
       );
     }
-    navigation.navigate('NewGroup', { photo: finalBase64, name, isPrimary });
+    navigation.navigate('NewGroup', { photo: finalBase64 && finalBase64.uri, name, isPrimary });
   };
 
   render() {

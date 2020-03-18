@@ -68,9 +68,14 @@ export const backupPhoto = async (id: string, filename: string) => {
 
 const backupPhotos = async () => {
   try {
-    const { connections, id, photo } = store.getState();
+    const { connections, groups, id, photo } = store.getState();
     for (const item of connections) {
       await backupPhoto(item.id, item.photo.filename);
+    }
+    for (const item of groups) {
+      if (item.photo.filename) {
+        await backupPhoto(item.id, item.photo.filename);
+      }
     }
     await backupPhoto(id, photo.filename);
   } catch (err) {
@@ -235,7 +240,8 @@ export const restoreUserData = async (pass: string) => {
   if (!userData || !connections) {
     throw new Error('bad password');
   }
-  emitter.emit('restoreTotal', connections.length + 2);
+  const groupsPhotoCount = groups.filter(group => group.photo && group.photo.filename).length;
+  emitter.emit('restoreTotal', connections.length + groupsPhotoCount + 2);
   userData.id = id;
   userData.publicKey = publicKey;
   userData.secretKey = b64ToUint8Array(secretKey);
@@ -272,6 +278,16 @@ export const recoverData = async (pass: string) => {
       base64Image: decrypted,
     });
     conn.photo = { filename };
+  }
+
+  for (const group of groups) {
+    if (group.photo.filename) {
+      let decrypted = await fetchBackupData(group.id, pass);
+      const filename = await saveImage({
+        imageName: group.id,
+        base64Image: decrypted,
+      });
+    }
   }
 
   store.dispatch(setBackupCompleted(true));

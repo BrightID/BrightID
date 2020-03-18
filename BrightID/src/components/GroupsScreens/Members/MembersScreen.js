@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import RNFS from 'react-native-fs';
 import ActionSheet from 'react-native-actionsheet';
 import MemberCard from './MemberCard';
 import { innerJoin } from 'ramda';
@@ -51,9 +52,9 @@ export class MembersScreen extends Component<Props, State> {
                 navigation.goBack();
               }}
             />
-            {(group.photo && group.photo.uri) ? (<Image
+            {(group.photo && group.photo.filename) ? (<Image
               source={{
-                uri: group.photo.uri,
+                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${group.photo.filename}`,
               }}
               style={styles.headerPhoto}
             />) : null}

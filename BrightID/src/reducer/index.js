@@ -195,6 +195,9 @@ export const reducer = (state: State = initialState, action: action) => {
     }
     case JOIN_GROUP: {
       action.group.members.push(state.id);
+      if (action.group.members.length == 3) {
+        action.group.isNew = false;
+      }
       return {
         ...state,
         groups: [action.group, ...state.groups],

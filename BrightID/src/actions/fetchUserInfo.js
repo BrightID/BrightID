@@ -1,7 +1,9 @@
 // @flow
 
-import api from '../Api/BrightId';
-import { getInviteInfo } from '../utils/groups';
+import api from '@/Api/BrightId';
+import { getInviteInfo } from '@/utils/groups';
+import { saveImage } from '@/utils/filesystem';
+
 import {
   setGroups,
   setInvites,
@@ -10,6 +12,7 @@ import {
   updateConnections,
   setIsSponsored,
 } from './index';
+
 
 const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
   console.log('refreshing user info');
@@ -44,7 +47,18 @@ const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
         return oldInvite;
       } else {
         const info = await getInviteInfo(invite);
-        return Object.assign(invite, info, { state: 'active' });
+        let filename = null;
+        if (info.photo) {
+          filename = await saveImage({
+            imageName: invite.id,
+            base64Image: info.photo,
+          });
+        }
+        return Object.assign(invite, {
+          name: info.name,
+          state: 'active',
+          photo: { filename }
+        });
       }
     });
     const newInvites = await Promise.all(pArray);

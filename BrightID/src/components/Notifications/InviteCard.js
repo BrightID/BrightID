@@ -9,7 +9,7 @@ import GroupPhoto from '../GroupsScreens/GroupPhoto';
 import { getGroupName } from '@/utils/groups';
 import { acceptInvite, rejectInvite, joinGroup } from '@/actions';
 import api from '@/Api/BrightId';
-import { backupUser } from '../Recovery/helpers';
+import { backupUser, backupPhoto } from '../Recovery/helpers';
 
 class InviteCard extends React.Component<Props> {
 
@@ -47,11 +47,14 @@ class InviteCard extends React.Component<Props> {
     try {
       await dispatch(acceptInvite(invite));
       await dispatch(joinGroup(invite));
+      navigation.navigate('Groups');
       if (backupCompleted) {
         await backupUser();
+        if (invite.photo && invite.photo.filename) {
+          await backupPhoto(invite.id, invite.photo.filename);
+        }
       }
       await api.joinGroup(invite.id);
-      navigation.navigate('Groups');
     } catch (err) {
       Alert.alert('Failed to join the group', err.message);
     }

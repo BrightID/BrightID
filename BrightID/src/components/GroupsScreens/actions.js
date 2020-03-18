@@ -10,6 +10,7 @@ import api from '../../Api/BrightId';
 import backupApi from '../../Api/BackupApi';
 import { hash } from '../../utils/encoding';
 import { saveImage } from '@/utils/filesystem';
+import { backupPhoto, backupUser } from '../Recovery/helpers';
 
 const { RNRandomBytes } = NativeModules;
 
@@ -38,7 +39,7 @@ export const createNewGroup = (photo, name, type) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  let { id, newGroupCoFounders, connections } = getState();
+  let { id, newGroupCoFounders, connections, backupCompleted } = getState();
   if (newGroupCoFounders.length < 2) {
     Alert.alert(
       'Cannot create group',
@@ -69,6 +70,13 @@ export const createNewGroup = (photo, name, type) => async (
     const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ name, photo }), aesKey).toString();
     await backupApi.putRecovery('immutable', uuidKey, encrypted);
     const url = `https://recovery.brightid.org/backups/immutable/${uuidKey}`;
+    let filename = null;
+    if (photo) {
+      filename = await saveImage({
+        imageName: groupId,
+        base64Image: photo,
+      });
+    }
     const newGroup = {
       founders: [id, u1.id, u2.id],
       admins: [id, u1.id, u2.id],
@@ -76,7 +84,7 @@ export const createNewGroup = (photo, name, type) => async (
       id: groupId,
       isNew: true,
       score: 0,
-      photo,
+      photo: { filename },
       name,
       url,
       aesKey,
@@ -86,6 +94,12 @@ export const createNewGroup = (photo, name, type) => async (
     const data1 = CryptoJS.AES.encrypt(aesKey, u1.aesKey).toString();
     const data2 = CryptoJS.AES.encrypt(aesKey, u2.aesKey).toString();
     await api.createGroup(groupId, u1.id, data1, u2.id, data2, url, type);
+    if (backupCompleted) {
+      await backupUser();
+      if (filename) {
+        await backupPhoto(groupId, filename);
+      }
+    }
     return true;
   } catch (err) {
     console.log(err);
