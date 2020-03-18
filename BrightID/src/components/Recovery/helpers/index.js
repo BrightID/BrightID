@@ -3,7 +3,11 @@
 import { Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
-import { createImageDirectory, retrieveImage, saveImage } from '../../../utils/filesystem';
+import {
+  createImageDirectory,
+  retrieveImage,
+  saveImage,
+} from '../../../utils/filesystem';
 import backupApi from '../../../Api/BackupApi';
 import api from '../../../Api/BrightId';
 import store from '../../../store';
@@ -16,6 +20,7 @@ import {
   setConnections,
   setPassword,
   setHashedId,
+  setGroups,
 } from '../../../actions';
 import {
   uInt8ArrayToB64,
@@ -75,7 +80,7 @@ const backupPhotos = async () => {
 
 export const backupUser = async () => {
   try {
-    const { score, name, photo, id, connections } = store.getState();
+    const { score, name, photo, id, connections, groups } = store.getState();
     const userData = {
       id,
       name,
@@ -85,6 +90,7 @@ export const backupUser = async () => {
     const dataStr = JSON.stringify({
       userData,
       connections,
+      groups,
     });
     await encryptAndBackup('data', dataStr);
   } catch (err) {
@@ -225,7 +231,7 @@ export const restoreUserData = async (pass: string) => {
 
   const decrypted = await fetchBackupData('data', pass);
 
-  const { userData, connections } = JSON.parse(decrypted);
+  const { userData, connections, groups } = JSON.parse(decrypted);
   if (!userData || !connections) {
     throw new Error('bad password');
   }
@@ -243,20 +249,21 @@ export const restoreUserData = async (pass: string) => {
     userData.photo = { filename };
   }
 
-  return { userData, connections };
+  return { userData, connections, groups };
 };
 
 export const recoverData = async (pass: string) => {
   // fetch user data / save photo
-  // throws if data is bad
   await createImageDirectory();
-  const { userData, connections } = await restoreUserData(pass);
+  // throws if data is bad
+  const { userData, connections, groups } = await restoreUserData(pass);
 
   // set new signing key on the backend
   await setSigningKey();
 
   store.dispatch(setUserData(userData));
   store.dispatch(setConnections(connections));
+  store.dispatch(setGroups(groups));
 
   for (const conn of connections) {
     let decrypted = await fetchBackupData(conn.id, pass);

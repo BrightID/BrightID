@@ -17,6 +17,7 @@ import { createNewGroup } from '../actions';
 import { clearNewGroupCoFounders } from '@/actions';
 import { DEVICE_TYPE } from '@/utils/constants';
 import Spinner from 'react-native-spinkit';
+import { backupUser } from '../../Recovery/helpers';
 
 type State = {
   creating: boolean,
@@ -63,10 +64,13 @@ export class NewGroupScreen extends React.Component<Props, State> {
         <TouchableOpacity
           onPress={async () => {
             this.setState({ creating: true });
-            const { navigation } = this.props;
+            const { navigation, backupCompleted } = this.props;
             const { photo, name, isPrimary } = navigation.state.params;
             const type = isPrimary ? 'primary' : 'general';
             if (await store.dispatch(createNewGroup(photo, name, type))) {
+              if (backupCompleted) {
+                await backupUser();
+              }
               navigation.navigate('Groups');
             } else {
               this.setState({ creating: false });

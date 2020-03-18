@@ -9,6 +9,7 @@ import GroupPhoto from '../GroupsScreens/GroupPhoto';
 import { getGroupName } from '@/utils/groups';
 import { acceptInvite, rejectInvite, joinGroup } from '@/actions';
 import api from '@/Api/BrightId';
+import { backupUser } from '../Recovery/helpers';
 
 class InviteCard extends React.Component<Props> {
 
@@ -42,10 +43,13 @@ class InviteCard extends React.Component<Props> {
   };
 
   accept = async () => {
-    const { dispatch, navigation, invite } = this.props;
+    const { dispatch, navigation, invite, backupCompleted } = this.props;
     try {
       await dispatch(acceptInvite(invite));
       await dispatch(joinGroup(invite));
+      if (backupCompleted) {
+        await backupUser();
+      }
       await api.joinGroup(invite.id);
       navigation.navigate('Groups');
     } catch (err) {

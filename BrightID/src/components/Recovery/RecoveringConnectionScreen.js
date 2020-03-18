@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
@@ -38,7 +38,7 @@ class RecoveringConnectionScreen extends React.Component<Props> {
 
   render() {
     const { navigation } = this.props;
-    const connections = this.filterConnections;
+    const connections = this.filterConnections();
 
     return (
       <SafeAreaView style={styles.container}>
