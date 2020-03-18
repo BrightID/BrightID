@@ -9,6 +9,8 @@ import {
 import api from '../../Api/BrightId';
 import backupApi from '../../Api/BackupApi';
 import { hash } from '../../utils/encoding';
+import { saveImage } from '@/utils/filesystem';
+
 const { RNRandomBytes } = NativeModules;
 
 const randomKey = (size: number) =>

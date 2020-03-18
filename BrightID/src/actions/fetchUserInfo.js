@@ -40,9 +40,9 @@ const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
         (inv) => inv.inviteId === invite.inviteId,
       );
       if (oldInvite) {
+        oldInvite.members = invite.members;
         return oldInvite;
       } else {
-        console.log(invite.data, 'invite data');
         const info = await getInviteInfo(invite);
         return Object.assign(invite, info, { state: 'active' });
       }
