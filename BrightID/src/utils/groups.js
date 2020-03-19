@@ -81,12 +81,13 @@ export const getInviteInfo = async (invite) => {
   console.log('getting invite info');
   const { connections } = store.getState();
   const conn = connections.find(conn => conn.id == invite.inviter);
+  if (! conn.aesKey) {
+    return {};
+  }
   const groupAesKey = CryptoJS.AES.decrypt(invite.data, conn.aesKey).toString(
     CryptoJS.enc.Utf8,
   );
   const uuidKey = invite.url.split('/').pop();
-  // console.log(invite.url, uuidKey, 'url');
-  // const data = (await backupApi.getRecovery('immutable', uuidKey)).data;
   const res = await fetch(invite.url);
   const data = await res.text();
   let info = CryptoJS.AES.decrypt(data, groupAesKey).toString(

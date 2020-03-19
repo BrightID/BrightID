@@ -15,8 +15,8 @@ import {
 
 
 const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
-  console.log('refreshing user info');
   const { id, operations, invites: oldInvites } = getState();
+  console.log('refreshing user info', id);
   if (!id) return;
   try {
     const {

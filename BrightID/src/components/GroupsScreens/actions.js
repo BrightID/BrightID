@@ -1,7 +1,6 @@
 // @flow
 import { Alert, NativeModules } from 'react-native';
 import CryptoJS from 'crypto-js';
-import { newGroupId } from '../../utils/groups';
 import {
   setNewGroupCoFounders,
   createGroup,
@@ -91,8 +90,8 @@ export const createNewGroup = (photo, name, type) => async (
       type
     };
     dispatch(createGroup(newGroup));
-    const data1 = CryptoJS.AES.encrypt(aesKey, u1.aesKey).toString();
-    const data2 = CryptoJS.AES.encrypt(aesKey, u2.aesKey).toString();
+    const data1 = u1.aesKey ? CryptoJS.AES.encrypt(aesKey, u1.aesKey).toString() : '';
+    const data2 = u2.aesKey ? CryptoJS.AES.encrypt(aesKey, u2.aesKey).toString() : '';
     await api.createGroup(groupId, u1.id, data1, u2.id, data2, url, type);
     if (backupCompleted) {
       await backupUser();

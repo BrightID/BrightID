@@ -37,7 +37,10 @@ export class InviteListScreen extends Component<Props, State> {
   inviteToGroup = async (connection) => {
     const group = this.props.navigation.state.params.group;
     try {
-      const data = CryptoJS.AES.encrypt(group.aesKey, connection.aesKey).toString();
+      let data = '';
+      if (connection.aesKey) {
+        data = CryptoJS.AES.encrypt(group.aesKey, connection.aesKey).toString();
+      }
       await api.invite(connection.id, group.id, data);
       Alert.alert('Successful Invitaion', `You invited ${connection.name} successfully to the group`);
       this.props.navigation.goBack();
