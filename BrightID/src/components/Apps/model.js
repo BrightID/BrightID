@@ -62,7 +62,7 @@ const linkVerification = async (baseUrl, context, contextInfo, contextId) => {
   const { isSponsored } = store.getState();
   const oldBaseUrl = api.baseUrl;
   try {
-    if (!isSponsored && !contextInfo.hasSponsorships) {
+    if (!isSponsored) {
       // Context doesn't have sponsorships available
       return;
     }
