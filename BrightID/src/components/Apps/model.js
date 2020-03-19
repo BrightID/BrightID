@@ -59,13 +59,14 @@ export const handleAppContext = async (params: Params) => {
 };
 
 const linkVerification = async (baseUrl, context, contextInfo, contextId) => {
-  const { isSponsored } = store.getState();
+  // const { isSponsored } = store.getState();
   const oldBaseUrl = api.baseUrl;
   try {
-    if (!isSponsored && !contextInfo.hasSponsorships) {
-      // Context doesn't have sponsorships available
-      return;
-    }
+    // don't include for this release
+    // if (!isSponsored && !contextInfo.hasSponsorships) {
+    //   // Context doesn't have sponsorships available
+    //   return;
+    // }
     if (contextInfo.verificationUrl) {
       const { publicKey, secretKey } = await nacl.sign.keyPair();
       const b64PubKey = uInt8ArrayToB64(publicKey);
