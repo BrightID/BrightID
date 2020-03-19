@@ -236,7 +236,7 @@ export const restoreUserData = async (pass: string) => {
 
   const decrypted = await fetchBackupData('data', pass);
 
-  const { userData, connections, groups } = JSON.parse(decrypted);
+  const { userData, connections, groups=[] } = JSON.parse(decrypted);
   if (!userData || !connections) {
     throw new Error('bad password');
   }
