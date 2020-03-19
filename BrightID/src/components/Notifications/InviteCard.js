@@ -45,6 +45,7 @@ class InviteCard extends React.Component<Props> {
   accept = async () => {
     const { dispatch, navigation, invite, backupCompleted } = this.props;
     try {
+      await api.joinGroup(invite.id);
       await dispatch(acceptInvite(invite));
       await dispatch(joinGroup(invite));
       navigation.navigate('Groups');
@@ -54,7 +55,6 @@ class InviteCard extends React.Component<Props> {
           await backupPhoto(invite.id, invite.photo.filename);
         }
       }
-      await api.joinGroup(invite.id);
     } catch (err) {
       Alert.alert('Failed to join the group', err.message);
     }
