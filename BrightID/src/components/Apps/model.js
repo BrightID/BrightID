@@ -66,27 +66,6 @@ const linkVerification = async (baseUrl, context, contextInfo, contextId) => {
       // Context doesn't have sponsorships available
       return;
     }
-    if (contextInfo.verificationUrl) {
-      const { publicKey, secretKey } = await nacl.sign.keyPair();
-      const b64PubKey = uInt8ArrayToB64(publicKey);
-      const sig = uInt8ArrayToB64(
-        nacl.sign.detached(strToUint8Array(contextId), secretKey),
-      );
-      let resp = await fetch(contextInfo.verificationUrl, {
-        method: 'PUT',
-        body: JSON.stringify({
-          contextId,
-          publicKey: b64PubKey,
-          sig,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      resp = await resp.json();
-      console.log('resp', resp);
-      contextId = b64PubKey;
-    }
     api.baseUrl = baseUrl;
     api.linkContextId(context, contextId);
   } catch (e) {
