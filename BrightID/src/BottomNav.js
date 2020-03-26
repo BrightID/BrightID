@@ -56,7 +56,9 @@ export class BottomNav extends React.Component<Props, State> {
   render() {
     const { keyboardShown } = this.state;
     const { notifications, invites, id } = this.props;
-    const activeInvites = invites.filter((invite) => invite.state === 'active');
+    const activeInvites = invites
+      ? invites.filter((invite) => invite.state === 'active')
+      : [];
     return id && !keyboardShown ? (
       <View style={styles.container}>
         <TouchableOpacity

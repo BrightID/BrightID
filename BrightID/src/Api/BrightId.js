@@ -2,9 +2,9 @@
 
 import { create, ApiSauceInstance } from 'apisauce';
 import nacl from 'tweetnacl';
-import { strToUint8Array, uInt8ArrayToB64, hash } from '../utils/encoding';
-import store from '../store';
-import { addOperation } from '../actions';
+import { strToUint8Array, uInt8ArrayToB64, hash } from '@/utils/encoding';
+import store from '@/store';
+import { addOperation } from '@/actions';
 
 let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
@@ -66,7 +66,7 @@ class BrightId {
       sig1,
       sig2,
       timestamp,
-      v
+      v,
     };
     op._key = hash(op.name + op.id1 + op.id2 + op.timestamp);
     const res = await this.api.put(`/operations/${op._key}`, op);
@@ -90,14 +90,22 @@ class BrightId {
       reason,
       sig1,
       timestamp,
-      v
+      v,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
     BrightId.setOperation(op._key);
   }
 
-  async createGroup(group: string, id2: string, inviteData2: string, id3: string, inviteData3: string, url: string, type: string) {
+  async createGroup(
+    group: string,
+    id2: string,
+    inviteData2: string,
+    id3: string,
+    inviteData3: string,
+    url: string,
+    type: string,
+  ) {
     const { id, secretKey } = store.getState();
     const timestamp = Date.now();
     const message = `Add Group${group}${id}${id2}${inviteData2}${id3}${inviteData3}${url}${type}${timestamp}`;
@@ -119,7 +127,7 @@ class BrightId {
       sig1,
       type,
       timestamp,
-      v
+      v,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
@@ -142,7 +150,7 @@ class BrightId {
       group,
       sig,
       timestamp,
-      v
+      v,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
@@ -166,7 +174,7 @@ class BrightId {
       data,
       sig,
       timestamp,
-      v
+      v,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
@@ -187,7 +195,7 @@ class BrightId {
       group,
       sig,
       timestamp,
-      v
+      v,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
@@ -209,7 +217,7 @@ class BrightId {
       group,
       sig,
       timestamp,
-      v
+      v,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
@@ -231,7 +239,7 @@ class BrightId {
       group,
       sig,
       timestamp,
-      v
+      v,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
@@ -254,7 +262,7 @@ class BrightId {
       trusted,
       sig,
       timestamp,
-      v
+      v,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
@@ -293,7 +301,7 @@ class BrightId {
       contextId,
       sig,
       timestamp,
-      v
+      v,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);

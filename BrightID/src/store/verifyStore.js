@@ -5,7 +5,6 @@ export const verifyStore = (data: State) =>
   typeof data.score === 'number' &&
   data.photo &&
   typeof data.photo.filename === 'string' &&
-  Array.isArray(data.groups) &&
   Array.isArray(data.connections) &&
   Array.isArray(data.verifications) &&
   Array.isArray(data.apps) &&
