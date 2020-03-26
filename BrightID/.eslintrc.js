@@ -47,7 +47,7 @@ module.exports = {
     'consistent-return': 'off',
     'no-alert': 'off',
     'no-else-return': 'off',
-    'no-shadow': 'warn',
+    'no-shadow': 'off',
     'import/no-named-as-default': 'off',
     'prefer-const': 'off',
     'no-restricted-syntax': 'off',

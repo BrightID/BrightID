@@ -9,7 +9,6 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { connect } from 'react-redux';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import { DEVICE_TYPE } from '@/utils/constants';
 import GroupCard from './GroupCard';
@@ -24,7 +23,6 @@ import { NoGroups } from './NoGroups';
 export class GroupsScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }: { navigation: navigation }) => ({
     title: 'Groups',
-    headerShown: DEVICE_TYPE === 'large',
   });
 
   componentDidMount() {
@@ -43,7 +41,7 @@ export class GroupsScreen extends React.Component<Props, State> {
         <GroupCard group={item} />
       </TouchableOpacity>
     );
-  }
+  };
 
   render() {
     const { navigation, groups } = this.props;
@@ -52,16 +50,16 @@ export class GroupsScreen extends React.Component<Props, State> {
       <SafeAreaView style={styles.container}>
         <View style={{ flex: 1 }}>
           <View style={styles.mainContainer}>
-          {groups.length > 0 ? (
-            <FlatList
-              style={styles.groupsContainer}
-              data={groups}
-              keyExtractor={({ id }, index) => id + index}
-              renderItem={this.renderGroup}
-            />
-          ) : (
-            <NoGroups navigation={navigation} />
-          )}
+            {groups.length > 0 ? (
+              <FlatList
+                style={styles.groupsContainer}
+                data={groups}
+                keyExtractor={({ id }, index) => id + index}
+                renderItem={this.renderGroup}
+              />
+            ) : (
+              <NoGroups navigation={navigation} />
+            )}
           </View>
           {groups.length > 0 && (
             <FloatingActionButton

@@ -13,7 +13,6 @@ import {
   setIsSponsored,
 } from './index';
 
-
 const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
   const { id, operations, invites: oldInvites } = getState();
   console.log('refreshing user info', id);
@@ -57,7 +56,7 @@ const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
         return Object.assign(invite, {
           name: info.name,
           state: 'active',
-          photo: { filename }
+          photo: { filename },
         });
       }
     });

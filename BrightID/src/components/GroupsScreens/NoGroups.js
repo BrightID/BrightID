@@ -22,12 +22,8 @@ export const NoGroups = ({ navigation }: Props) => (
         accessibilityLabel="groups logo"
       />
       <View>
-        <Text style={styles.emptyGroupsText}>
-          By creating and joining
-        </Text>
-        <Text style={styles.emptyGroupsText}>
-          groups, you can increase{' '}
-        </Text>
+        <Text style={styles.emptyGroupsText}>By creating and joining</Text>
+        <Text style={styles.emptyGroupsText}>groups, you can increase </Text>
         <Text style={styles.emptyGroupsText}>your score</Text>
       </View>
     </View>
@@ -46,7 +42,6 @@ export const NoGroups = ({ navigation }: Props) => (
     </View>
   </View>
 );
-
 
 const styles = StyleSheet.create({
   noContainer: {

@@ -6,11 +6,11 @@ import {
   View,
   FlatList,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 import { connect } from 'react-redux';
-import MemberCard from './MemberCard';
 import CryptoJS from 'crypto-js';
+import MemberCard from './MemberCard';
 import api from '../../../Api/BrightId';
 
 type State = {
@@ -18,31 +18,30 @@ type State = {
 };
 
 export class InviteListScreen extends Component<Props, State> {
-  
   static navigationOptions = () => ({
     title: 'Invite List',
   });
 
-  // eslint-disable-next-line react/jsx-props-no-spreading
   renderEligible = ({ item }) => {
     return (
-      <TouchableOpacity
-        onPress={() => this.inviteToGroup(item)}
-      >
+      <TouchableOpacity onPress={() => this.inviteToGroup(item)}>
         <MemberCard {...item} />
       </TouchableOpacity>
     );
   };
 
   inviteToGroup = async (connection) => {
-    const group = this.props.navigation.state.params.group;
+    const { group } = this.props.navigation.state.params;
     try {
       let data = '';
       if (connection.aesKey) {
         data = CryptoJS.AES.encrypt(group.aesKey, connection.aesKey).toString();
       }
       await api.invite(connection.id, group.id, data);
-      Alert.alert('Successful Invitaion', `You invited ${connection.name} successfully to the group`);
+      Alert.alert(
+        'Successful Invitaion',
+        `You invited ${connection.name} successfully to the group`,
+      );
       this.props.navigation.goBack();
     } catch (err) {
       Alert.alert('Error', err.message);
@@ -52,20 +51,19 @@ export class InviteListScreen extends Component<Props, State> {
   getEligibles = () => {
     if (this.eligibles) return this.eligibles;
     const { connections, navigation } = this.props;
-    const group = navigation.state.params.group;
+    const { group } = navigation.state.params;
     this.eligibles = connections.filter((item) => {
       return (
-        (! group.members.includes(item.id)) &&
+        !group.members.includes(item.id) &&
         item.eligible_groups &&
         item.eligible_groups.includes(group.id) &&
-        (group.type !== 'primary' || ! item.hasPrimaryGroup)
+        (group.type !== 'primary' || !item.hasPrimaryGroup)
       );
     });
     return this.eligibles;
   };
 
   render() {
-    const { navigation } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.mainContainer}>
@@ -99,7 +97,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 8,
   },
-  
 });
 
 export default connect((state) => state)(InviteListScreen);

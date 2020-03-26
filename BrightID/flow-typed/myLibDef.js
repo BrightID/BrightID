@@ -9,11 +9,10 @@ declare type State = {
   photo: {
     filename: string,
   },
-  groupsCount: number,
   searchParam: string,
   newGroupCoFounders: string[],
-  eligibleGroups: group[],
-  currentGroups: group[],
+  invites: any[],
+  groups: group[],
   connections: connection[],
   trustedConnections: string[],
   notifications: NotificationInfo[],
@@ -77,11 +76,21 @@ declare type connection = {
 };
 
 declare type group = {
-  isNew: boolean,
+  _key: string,
+  _id: string,
+  _rev: string,
   score: number,
+  isNew: boolean,
+  admins: string[],
+  url: string,
+  type: 'general' | 'primary',
+  timestamp: number,
+  founder: string[],
+  members: string[],
   id: string,
-  knownMembers: string[],
-  founders: string[],
+  name: string,
+  photo: { filename: string },
+  aesKey: string,
 };
 
 declare type NotificationInfo = {

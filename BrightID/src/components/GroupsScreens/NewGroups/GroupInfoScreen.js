@@ -13,23 +13,20 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import ToggleSwitch from 'toggle-switch-react-native'
+import ToggleSwitch from 'toggle-switch-react-native';
 import { chooseImage } from '@/utils/images';
 import { DEVICE_TYPE, DEVICE_OS } from '@/utils/constants';
 
 type State = {
   name: string,
   finalBase64: { uri: string },
-  editingName: boolean,
-  isPrimary: boolean
+  isPrimary: boolean,
 };
 
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
 export class GroupInfoScreen extends React.Component<Props, State> {
-
   static navigationOptions = {
     title: 'New Group',
     headerStyle: {
@@ -42,8 +39,7 @@ export class GroupInfoScreen extends React.Component<Props, State> {
   state = {
     name: '',
     finalBase64: { uri: '' },
-    editingName: false,
-    isPrimary: false
+    isPrimary: false,
   };
 
   getPhotoFromLibrary = async () => {
@@ -62,12 +58,12 @@ export class GroupInfoScreen extends React.Component<Props, State> {
 
   hasPrimaryGroup = () => {
     const { groups } = this.props;
-    return groups.some((group) => group.type == 'primary');
+    return groups.some((group) => group.type === 'primary');
   };
 
   validateInputs = async () => {
     const { finalBase64, name, isPrimary } = this.state;
-    const { navigation, dispatch } = this.props;
+    const { navigation } = this.props;
     if (name.length < 2) {
       return Alert.alert(
         'Group Form Incomplete',
@@ -76,11 +72,15 @@ export class GroupInfoScreen extends React.Component<Props, State> {
           : 'The group name must be at least 2 characters',
       );
     }
-    navigation.navigate('NewGroup', { photo: finalBase64 && finalBase64.uri, name, isPrimary });
+    navigation.navigate('NewGroup', {
+      photo: finalBase64?.uri,
+      name,
+      isPrimary,
+    });
   };
 
   render() {
-    const { name, finalBase64, editingName, isPrimary } = this.state;
+    const { name, finalBase64, isPrimary } = this.state;
 
     return (
       <Container style={styles.container} behavior="padding">
@@ -90,7 +90,7 @@ export class GroupInfoScreen extends React.Component<Props, State> {
           translucent={false}
           animated={true}
         />
-        <View style={{flexDirection:'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <View style={styles.addPhotoContainer}>
             {finalBase64.uri ? (
               <TouchableOpacity
@@ -107,8 +107,7 @@ export class GroupInfoScreen extends React.Component<Props, State> {
                 accessible={true}
                 accessibilityLabel="add photo"
               >
-                <Text style={styles.addPhotoText}>Add Photo</Text>
-                <SimpleLineIcons size={16} name="camera" color="#979797" />
+                <SimpleLineIcons size={26} name="camera" color="#979797" />
               </TouchableOpacity>
             )}
           </View>
@@ -123,22 +122,17 @@ export class GroupInfoScreen extends React.Component<Props, State> {
               autoCorrect={false}
               textContentType="name"
               underlineColorAndroid="transparent"
-              onFocus={() => {
-                this.setState({ editingName: true });
-              }}
-              onBlur={() => {
-                this.setState({ editingName: false });
-              }}
             />
           </View>
         </View>
-        {! this.hasPrimaryGroup() && (
+        {!this.hasPrimaryGroup() && (
           <View style={styles.toggleContainer}>
             <Text style={styles.primaryGroupText}>
-              A primary group represents the closest personal contacts (e.g. immediate family members)
-              for a particular person. Each person can have only one primary group.
+              A primary group represents the closest personal contacts (e.g.
+              immediate family members) for a particular person. Each person can
+              have only one primary group.
             </Text>
-          
+
             <ToggleSwitch
               isOn={isPrimary}
               onColor="#428BE5"
@@ -146,17 +140,17 @@ export class GroupInfoScreen extends React.Component<Props, State> {
               label="Primary Group"
               labelStyle={styles.primaryToggleLable}
               size="large"
-              onToggle={isPrimary => this.setState({ isPrimary })}
+              onToggle={(isPrimary) => this.setState({ isPrimary })}
             />
           </View>
         )}
         <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.nextButton}
-              onPress={this.validateInputs}
-            >
-              <Text style={styles.buttonInnerText}>Next</Text>
-            </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.nextButton}
+            onPress={this.validateInputs}
+          >
+            <Text style={styles.buttonInnerText}>Next</Text>
+          </TouchableOpacity>
         </View>
       </Container>
     );
@@ -224,7 +218,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#9e9e9e',
     marginTop: 8,
-    height: 60,
     marginLeft: 10,
   },
   buttonInfoText: {
@@ -254,21 +247,21 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   primaryToggleLable: {
-    color: "#555555",
+    color: '#555555',
     fontFamily: 'ApexNew-Book',
     fontSize: 18,
-    width: 200
+    width: 200,
   },
   toggleContainer: {
     marginTop: 30,
-    width: 300
+    width: 300,
   },
   primaryGroupText: {
     paddingTop: 30,
     paddingBottom: 30,
     width: 300,
     textAlign: 'justify',
-  }
+  },
 });
 
 export default connect((state) => state)(GroupInfoScreen);

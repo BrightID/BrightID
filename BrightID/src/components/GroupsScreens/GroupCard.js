@@ -1,11 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import RNFS from 'react-native-fs';
+import { StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
-import moment from 'moment';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_TYPE } from '@/utils/constants';
 import { getGroupName, ids2connections } from '@/utils/groups';
 import GroupPhoto from './GroupPhoto';
@@ -16,28 +13,31 @@ import GroupPhoto from './GroupPhoto';
 const ICON_SIZE = DEVICE_TYPE === 'large' ? 36 : 32;
 
 class GroupCard extends React.PureComponent<Props> {
-  
   setStatus = () => {
     const { group } = this.props;
     if (group.isNew) {
       const notJoinedIds = group.founders.filter(
-        founder => ! group.members.includes(founder)
+        (founder) => !group.members.includes(founder),
       );
-      const notJoinedNames = ids2connections(notJoinedIds).map(o => o.name);
+      const notJoinedNames = ids2connections(notJoinedIds).map((o) => o.name);
       return (
         <View style={styles.waitingContainer}>
-          <Text style={styles.waitingMessage}>Waiting for {notJoinedNames.join(' and ')} to join</Text>
+          <Text style={styles.waitingMessage}>
+            Waiting for {notJoinedNames.join(' and ')} to join
+          </Text>
         </View>
       );
     } else {
-      const unknowsCount = ids2connections(
-        group.members
-      ).filter(o => o.name === 'Stranger').length;
+      const unknowsCount = ids2connections(group.members).filter(
+        (o) => o.name === 'Stranger',
+      ).length;
       return (
         <View>
           <View style={styles.membersContainer}>
             <Text style={styles.membersLabel}>Known members: </Text>
-            <Text style={styles.membersKnown}>{group.members.length - unknowsCount} </Text>
+            <Text style={styles.membersKnown}>
+              {group.members.length - unknowsCount}{' '}
+            </Text>
             <Text style={styles.membersLabel}>Unknown: </Text>
             <Text style={styles.membersUnknown}>{unknowsCount}</Text>
           </View>
@@ -50,12 +50,12 @@ class GroupCard extends React.PureComponent<Props> {
     const { group } = this.props;
     return (
       <View style={styles.container}>
-        <GroupPhoto group={group}/>
+        <GroupPhoto group={group} />
         <View style={styles.info}>
           {group.type === 'primary' && (
-            <Text style={styles.primary}> Primary Group </Text>
+            <Text style={styles.primary}>Primary Group</Text>
           )}
-          <Text style={styles.name}>{ getGroupName(group) }</Text>
+          <Text style={styles.name}>{getGroupName(group)}</Text>
           <this.setStatus />
         </View>
       </View>

@@ -6,9 +6,8 @@ import { connect } from 'react-redux';
 import RNFS from 'react-native-fs';
 import { groupCirclePhotos } from '@/utils/groups';
 
-class GroupPhoto extends React.Component {
+class GroupPhoto extends React.Component<Props> {
   photoStyle(photo) {
-    // eslint-disable-next-line react/prop-types
     const { radius = 20 } = this.props;
     const style = { ...styles.photo };
     if (photo.faded) {

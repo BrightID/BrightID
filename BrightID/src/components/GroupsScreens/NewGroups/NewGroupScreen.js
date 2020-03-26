@@ -7,16 +7,16 @@ import {
   TouchableOpacity,
   View,
   SafeAreaView,
-  FlatList
+  FlatList,
 } from 'react-native';
 import { connect } from 'react-redux';
-import SearchConnections from './SearchConnections';
-import NewGroupCard from './NewGroupCard';
 import store from '@/store';
-import { createNewGroup } from '../actions';
 import { clearNewGroupCoFounders } from '@/actions';
 import { DEVICE_TYPE } from '@/utils/constants';
 import Spinner from 'react-native-spinkit';
+import { createNewGroup } from '../actions';
+import NewGroupCard from './NewGroupCard';
+import SearchConnections from './SearchConnections';
 
 type State = {
   creating: boolean,
@@ -28,9 +28,12 @@ export class NewGroupScreen extends React.Component<Props, State> {
     headerShown: DEVICE_TYPE === 'large',
   });
 
-  state = {
-    creating: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      creating: false,
+    };
+  }
 
   componentDidMount() {
     const { navigation, dispatch } = this.props;
@@ -57,31 +60,36 @@ export class NewGroupScreen extends React.Component<Props, State> {
     return newGroupCoFounders.includes(card.id);
   };
 
+  createGroup = async () => {
+    try {
+      this.setState({ creating: true });
+      const { navigation } = this.props;
+      const { photo, name, isPrimary } = navigation.state.params;
+      const type = isPrimary ? 'primary' : 'general';
+      const res = await store.dispatch(createNewGroup(photo, name, type));
+      if (res) {
+        navigation.navigate('Groups');
+      } else {
+        this.setState({ creating: false });
+      }
+    } catch (err) {
+      this.setState({ creating: false });
+    }
+  };
+
   renderButtonOrSpinner = () =>
     !this.state.creating ? (
       <View style={styles.createGroupButtonContainer}>
         <TouchableOpacity
-          onPress={async () => {
-            this.setState({ creating: true });
-            const { navigation } = this.props;
-            const { photo, name, isPrimary } = navigation.state.params;
-            const type = isPrimary ? 'primary' : 'general';
-            if (await store.dispatch(createNewGroup(photo, name, type))) {
-              navigation.navigate('Groups');
-            } else {
-              this.setState({ creating: false });
-            }
-          }}
+          onPress={this.createGroup}
           style={styles.createGroupButton}
         >
           <Text style={styles.buttonInnerText}>Create Group</Text>
         </TouchableOpacity>
       </View>
-    ): (
+    ) : (
       <View style={styles.loader}>
-        <Text style={styles.textInfo}>
-          Creating the group ...
-        </Text>
+        <Text style={styles.textInfo}>Creating the group ...</Text>
         <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
       </View>
     );
@@ -97,7 +105,6 @@ export class NewGroupScreen extends React.Component<Props, State> {
   );
 
   render() {
-    const { navigation } = this.props;
     const connections = this.filterConnections();
     return (
       <SafeAreaView style={styles.container}>
@@ -112,18 +119,18 @@ export class NewGroupScreen extends React.Component<Props, State> {
             <SearchConnections navigation={this.props.navigation} />
           )}
           <View style={styles.mainContainer}>
-          {connections.length > 0 ? (
-            <FlatList
-              style={styles.connectionsContainer}
-              data={connections}
-              keyExtractor={({ id }, index) => id + index}
-              renderItem={this.renderConnection}
-            />
-          ) : (
-            <View>
-              <Text style={styles.emptyText}>No connections</Text>
-            </View>
-          )}
+            {connections.length > 0 ? (
+              <FlatList
+                style={styles.connectionsContainer}
+                data={connections}
+                keyExtractor={({ id }, index) => id + index}
+                renderItem={this.renderConnection}
+              />
+            ) : (
+              <View>
+                <Text style={styles.emptyText}>No connections</Text>
+              </View>
+            )}
           </View>
         </View>
         {this.renderButtonOrSpinner()}

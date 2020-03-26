@@ -1,14 +1,11 @@
 // @flow
 import { Alert, NativeModules } from 'react-native';
 import CryptoJS from 'crypto-js';
-import {
-  setNewGroupCoFounders,
-  createGroup,
-} from '../../actions/index';
+import { saveImage } from '@/utils/filesystem';
+import { setNewGroupCoFounders, createGroup } from '../../actions/index';
 import api from '../../Api/BrightId';
 import backupApi from '../../Api/BackupApi';
 import { hash } from '../../utils/encoding';
-import { saveImage } from '@/utils/filesystem';
 import { backupPhoto, backupUser } from '../Recovery/helpers';
 
 const { RNRandomBytes } = NativeModules;
@@ -38,37 +35,37 @@ export const createNewGroup = (photo, name, type) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  let { id, newGroupCoFounders, connections, backupCompleted } = getState();
-  if (newGroupCoFounders.length < 2) {
-    Alert.alert(
-      'Cannot create group',
-      'You need two other people to form a group',
-    );
-    return false;
-  }
-
-  const u1 = connections.find(c => c.id === newGroupCoFounders[0]);
-  const u2 = connections.find(c => c.id === newGroupCoFounders[1]);
-  if (type === 'primary') {
-    if (u1.hasPrimaryGroup || u2.hasPrimaryGroup) {
-      const name = u1.hasPrimaryGroup ? u1.name : u2.name;
-      Alert.alert(
-        'Cannot create group',
-        `${name} already has a primary group`,
-      );
-      return false;
-    }
-  }
-
-  const aesKey = await randomKey(16);
-  let uuidKey = await randomKey(9);
-  uuidKey = hash(uuidKey);
-  const groupId = hash(uuidKey);
-
   try {
-    const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ name, photo }), aesKey).toString();
-    await backupApi.putRecovery('immutable', uuidKey, encrypted);
-    const url = `https://recovery.brightid.org/backups/immutable/${uuidKey}`;
+    let { id, newGroupCoFounders, connections, backupCompleted } = getState();
+    if (newGroupCoFounders.length < 2) {
+      throw new Error('You need two other people to form a group');
+    }
+
+    const [founder1, founder2] = newGroupCoFounders.map((u) =>
+      connections.find((c) => c.id === u),
+    );
+
+    if (type === 'primary') {
+      if (founder1.hasPrimaryGroup || founder2.hasPrimaryGroup) {
+        const name = founder1.hasPrimaryGroup ? founder1.name : founder2.name;
+        throw new Error(`${name} already has a primary group`);
+      }
+    }
+
+    const aesKey = await randomKey(16);
+    let uuidKey = await randomKey(9);
+    const groupId = hash(uuidKey);
+
+    const encrypted = CryptoJS.AES.encrypt(
+      JSON.stringify({ name, photo }),
+      aesKey,
+    ).toString();
+
+    // not sure if we should use the backup server for this...
+    await backupApi.putRecovery('immutable', groupId, encrypted);
+
+    const url = `https://recovery.brightid.org/backups/immutable/${groupId}`;
+
     let filename = null;
     if (photo) {
       filename = await saveImage({
@@ -77,8 +74,8 @@ export const createNewGroup = (photo, name, type) => async (
       });
     }
     const newGroup = {
-      founders: [id, u1.id, u2.id],
-      admins: [id, u1.id, u2.id],
+      founders: [id, founder1.id, founder2.id],
+      admins: [id, founder1.id, founder2.id],
       members: [id],
       id: groupId,
       isNew: true,
@@ -87,12 +84,29 @@ export const createNewGroup = (photo, name, type) => async (
       name,
       url,
       aesKey,
-      type
+      type,
     };
+
+    const data1 = founder1.aesKey
+      ? CryptoJS.AES.encrypt(aesKey, founder1.aesKey).toString()
+      : '';
+
+    const data2 = founder2.aesKey
+      ? CryptoJS.AES.encrypt(aesKey, founder2.aesKey).toString()
+      : '';
+
+    await api.createGroup(
+      groupId,
+      founder1.id,
+      data1,
+      founder2.id,
+      data2,
+      url,
+      type,
+    );
+
     dispatch(createGroup(newGroup));
-    const data1 = u1.aesKey ? CryptoJS.AES.encrypt(aesKey, u1.aesKey).toString() : '';
-    const data2 = u2.aesKey ? CryptoJS.AES.encrypt(aesKey, u2.aesKey).toString() : '';
-    await api.createGroup(groupId, u1.id, data1, u2.id, data2, url, type);
+
     if (backupCompleted) {
       await backupUser();
       if (filename) {

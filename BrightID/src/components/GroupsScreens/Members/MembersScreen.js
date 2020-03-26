@@ -6,25 +6,22 @@ import {
   View,
   Alert,
   FlatList,
-  Text,
   TouchableOpacity,
   SafeAreaView,
-  Image
+  Image,
 } from 'react-native';
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import RNFS from 'react-native-fs';
 import ActionSheet from 'react-native-actionsheet';
-import MemberCard from './MemberCard';
 import { innerJoin } from 'ramda';
-import api from '../../../Api/BrightId';
-import emitter from '../../../emitter';
-import { leaveGroup, dismissFromGroup } from '../../../actions';
 import { getGroupName } from '@/utils/groups';
-import GroupPhoto from '../GroupPhoto';
+import api from '@/Api/BrightId';
+import emitter from '@/emitter';
+import { leaveGroup, dismissFromGroup } from '@/actions';
+import MemberCard from './MemberCard';
 
 export class MembersScreen extends Component<Props, State> {
-
   static navigationOptions = ({ navigation }: { navigation: navigation }) => {
     const { group } = navigation.state.params;
     return {
@@ -42,22 +39,26 @@ export class MembersScreen extends Component<Props, State> {
         </TouchableOpacity>
       ),
       headerLeft: () => {
-        const group = navigation.state.params.group;
+        const { group } = navigation.state.params;
         return (
-          <View style={{flexDirection:'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <Material
               style={styles.backStyle}
-              name="arrow-left" size={24} color="#fff"
-              onPress={ () => {
+              name="arrow-left"
+              size={24}
+              color="#fff"
+              onPress={() => {
                 navigation.goBack();
               }}
             />
-            {(group.photo && group.photo.filename) ? (<Image
-              source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${group.photo.filename}`,
-              }}
-              style={styles.headerPhoto}
-            />) : null}
+            {group.photo && group.photo.filename ? (
+              <Image
+                source={{
+                  uri: `file://${RNFS.DocumentDirectoryPath}/photos/${group.photo.filename}`,
+                }}
+                style={styles.headerPhoto}
+              />
+            ) : null}
           </View>
         );
       },
@@ -70,7 +71,6 @@ export class MembersScreen extends Component<Props, State> {
   };
 
   componentDidMount() {
-    const { navigation } = this.props;
     emitter.on('optionsSelected', this.showOptionsMenu);
   }
 
@@ -88,7 +88,7 @@ export class MembersScreen extends Component<Props, State> {
         text: 'OK',
         onPress: async () => {
           const { navigation, dispatch } = this.props;
-          const group = navigation.state.params.group;
+          const { group } = navigation.state.params;
           try {
             await api.dismiss(user.id, group.id);
             await dispatch(dismissFromGroup(user.id, group));
@@ -131,7 +131,7 @@ export class MembersScreen extends Component<Props, State> {
         text: 'OK',
         onPress: async () => {
           const { navigation, dispatch } = this.props;
-          const group = navigation.state.params.group;
+          const { group } = navigation.state.params;
           try {
             await api.leaveGroup(group.id);
             await dispatch(leaveGroup(group));
@@ -163,25 +163,25 @@ export class MembersScreen extends Component<Props, State> {
     );
   };
 
-  // eslint-disable-next-line react/jsx-props-no-spreading
   renderMember = ({ item }) => {
     const { group } = this.props.navigation.state.params;
     const isAdmin = group.admins.includes(this.props.id);
     const isItemAdmin = group.admins.includes(item.id);
-    const handler = (isAdmin && ! isItemAdmin) ? this.confirmDismiss : null;
-    return (
-      <MemberCard {...item} menuHandler={handler}/>
-    );
+    const handler = isAdmin && !isItemAdmin ? this.confirmDismiss : null;
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    return <MemberCard {...item} menuHandler={handler} />;
   };
 
   getMembers = () => {
     const { navigation, connections, name, id, photo, score } = this.props;
     // return a list of connections filtered by the members of this group
-    return [{ id, name, photo, score }].concat(innerJoin(
-      (connection, member) => connection.id === member,
-      connections,
-      navigation.state.params.group.members,
-    ));
+    return [{ id, name, photo, score }].concat(
+      innerJoin(
+        (connection, member) => connection.id === member,
+        connections,
+        navigation.state.params.group.members,
+      ),
+    );
   };
 
   render() {
@@ -295,12 +295,12 @@ const styles = StyleSheet.create({
     marginLeft: 11,
     borderRadius: 24,
     width: 48,
-    height: 48
+    height: 48,
   },
   backStyle: {
     paddingTop: 8,
-    paddingLeft: 11
-  }
+    paddingLeft: 11,
+  },
 });
 
 export default connect((state) => state)(MembersScreen);
