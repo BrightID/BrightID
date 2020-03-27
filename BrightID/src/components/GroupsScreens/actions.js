@@ -73,6 +73,7 @@ export const createNewGroup = (photo, name, type) => async (
         base64Image: photo,
       });
     }
+
     const newGroup = {
       founders: [id, founder1.id, founder2.id],
       admins: [id, founder1.id, founder2.id],

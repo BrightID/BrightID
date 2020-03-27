@@ -47,7 +47,8 @@ import {
   ADD_OPERATION,
   REMOVE_OPERATION,
   RESET_OPERATIONS,
-} from '../actions';
+} from '@/actions';
+import { INVITE_ACCEPTED, INVITE_REJECTED } from '@/utils/constants';
 
 /**
  * INITIAL STATE
@@ -180,22 +181,30 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case ACCEPT_INVITE: {
-      action.invite.state = 'accepted';
       return {
         ...state,
-        invites: [...state.invites],
+        invites: state.invites.map((invite) => {
+          if (invite.inviteId === action.inviteId) {
+            invite.state = INVITE_ACCEPTED;
+          }
+          return invite;
+        }),
       };
     }
     case REJECT_INVITE: {
-      action.invite.state = 'rejected';
       return {
         ...state,
-        invites: [...state.invites],
+        invites: state.invites.map((invite) => {
+          if (invite.inviteId === action.inviteId) {
+            invite.state = INVITE_REJECTED;
+          }
+          return invite;
+        }),
       };
     }
     case JOIN_GROUP: {
       action.group.members.push(state.id);
-      if (action.group.members.length == 3) {
+      if (action.group.members.length === 3) {
         action.group.isNew = false;
       }
       return {

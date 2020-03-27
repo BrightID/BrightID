@@ -3,6 +3,7 @@
 import api from '@/Api/BrightId';
 import { getInviteInfo } from '@/utils/groups';
 import { saveImage } from '@/utils/filesystem';
+import { INVITE_ACTIVE } from '@/utils/constants';
 
 import {
   setGroups,
@@ -55,7 +56,7 @@ const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
         }
         return Object.assign(invite, {
           name: info.name,
-          state: 'active',
+          state: INVITE_ACTIVE,
           photo: { filename },
         });
       }

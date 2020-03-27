@@ -216,8 +216,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 13,
     paddingBottom: 12,
-    marginTop: 9,
-    marginBottom: DEVICE_TYPE === 'large' ? 30 : 9,
+    marginBottom: DEVICE_TYPE === 'large' ? 30 : 25,
   },
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',

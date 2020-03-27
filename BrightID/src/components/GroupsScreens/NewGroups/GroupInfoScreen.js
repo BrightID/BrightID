@@ -32,7 +32,7 @@ export class GroupInfoScreen extends React.Component<Props, State> {
     headerStyle: {
       backgroundColor: '#f48b1e',
     },
-    headerShown: DEVICE_TYPE === 'large',
+    // headerShown: DEVICE_TYPE === 'large',
   };
 
   // eslint-disable-next-line react/state-in-constructor
@@ -90,7 +90,7 @@ export class GroupInfoScreen extends React.Component<Props, State> {
           translucent={false}
           animated={true}
         />
-        <View style={{ flexDirection: 'row' }}>
+        <View style={styles.groupNameContainer}>
           <View style={styles.addPhotoContainer}>
             {finalBase64.uri ? (
               <TouchableOpacity
@@ -165,6 +165,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
   },
+  groupNameContainer: {
+    flexDirection: 'row',
+    marginTop: 22,
+  },
   addPhotoContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -172,6 +176,10 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     marginTop: 28,
+    minWidth: 200,
+    marginLeft: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonContainer: {
     marginTop: DEVICE_TYPE === 'large' ? 35 : 28,
@@ -217,8 +225,8 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#9e9e9e',
-    marginTop: 8,
-    marginLeft: 10,
+    width: '100%',
+    height: 40,
   },
   buttonInfoText: {
     fontFamily: 'ApexNew-Book',

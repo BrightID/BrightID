@@ -10,8 +10,8 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import CryptoJS from 'crypto-js';
+import api from '@/Api/BrightId';
 import MemberCard from './MemberCard';
-import api from '../../../Api/BrightId';
 
 type State = {
   eligibles: string[],

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { connect } from 'react-redux';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { DEVICE_TYPE, INVITE_ACTIVE } from '@/utils/constants';
 import { navigate } from './NavigationService';
 /**
  * list of icons which will navigate between screens inside the app
@@ -57,7 +57,7 @@ export class BottomNav extends React.Component<Props, State> {
     const { keyboardShown } = this.state;
     const { notifications, invites, id } = this.props;
     const activeInvites = invites
-      ? invites.filter((invite) => invite.state === 'active')
+      ? invites.filter((invite) => invite.state === INVITE_ACTIVE)
       : [];
     return id && !keyboardShown ? (
       <View style={styles.container}>

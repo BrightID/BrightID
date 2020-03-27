@@ -40,6 +40,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    borderBottomColor: '#e3e0e4',
+    borderBottomWidth: 1,
   },
   msg: {
     fontFamily: 'ApexNew-Book',

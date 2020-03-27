@@ -142,24 +142,23 @@ export const leaveGroup = (group: group) => ({
 export const dismissFromGroup = (member: string, group: group) => ({
   type: DISMISS_FROM_GROUP,
   group,
-  member
+  member,
 });
 
-export const rejectInvite = (invite: invite) => ({
+export const rejectInvite = (inviteId: string) => ({
   type: REJECT_INVITE,
-  invite,
+  inviteId,
 });
 
-export const acceptInvite = (invite: invite) => ({
+export const acceptInvite = (inviteId: string) => ({
   type: ACCEPT_INVITE,
-  invite,
+  inviteId,
 });
 
 export const setVerifications = (verifications: string[]) => ({
   type: SET_VERIFICATIONS,
   verifications,
 });
-
 
 /**
  * redux action creator for setting connections array

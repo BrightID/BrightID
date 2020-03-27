@@ -5,15 +5,14 @@ import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import GroupPhoto from '../GroupsScreens/GroupPhoto';
 import { getGroupName } from '@/utils/groups';
 import { acceptInvite, rejectInvite, joinGroup } from '@/actions';
 import api from '@/Api/BrightId';
-import { backupUser, backupPhoto } from '../Recovery/helpers';
+import GroupPhoto from '@/components/GroupsScreens/GroupPhoto';
+import { backupUser, backupPhoto } from '@/components/Recovery/helpers';
 
 class InviteCard extends React.Component<Props> {
-
-  reject= () => {
+  rejectInvite = () => {
     const { invite, dispatch } = this.props;
     Alert.alert(
       'Reject',
@@ -28,7 +27,7 @@ class InviteCard extends React.Component<Props> {
           text: 'Sure',
           onPress: async () => {
             try {
-              await dispatch(rejectInvite(invite));
+              await dispatch(rejectInvite(invite.inviteId));
               if (invite.isNew) {
                 await api.deleteGroup(invite.id);
               }
@@ -42,11 +41,11 @@ class InviteCard extends React.Component<Props> {
     );
   };
 
-  accept = async () => {
+  acceptInvite = async () => {
     const { dispatch, navigation, invite, backupCompleted } = this.props;
     try {
       await api.joinGroup(invite.id);
-      await dispatch(acceptInvite(invite));
+      await dispatch(acceptInvite(invite.inviteId));
       await dispatch(joinGroup(invite));
       navigation.navigate('Groups');
       if (backupCompleted) {
@@ -61,26 +60,22 @@ class InviteCard extends React.Component<Props> {
   };
 
   render() {
-    const { invite, navigation, connections } = this.props;
-    const inviter = connections.find(conn => invite.inviter === conn.id);
+    const { invite, connections } = this.props;
+    const inviter = connections.find((conn) => invite.inviter === conn.id);
     return (
       <View style={styles.container}>
         <GroupPhoto group={invite} />
         <View style={styles.info}>
-          <Text style={styles.invitationMsg}>{inviter.name} invited you to join</Text>
+          <Text style={styles.invitationMsg}>
+            {inviter.name} invited you to join
+          </Text>
           <Text style={styles.name}>{getGroupName(invite)}</Text>
         </View>
         <View style={styles.approvalButtonContainer}>
-          <TouchableOpacity
-            style={styles.moreIcon}
-            onPress={this.reject}
-          >
+          <TouchableOpacity style={styles.moreIcon} onPress={this.rejectInvite}>
             <AntDesign size={30} name="closecircleo" color="#000" />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.moreIcon}
-            onPress={this.accept}
-          >
+          <TouchableOpacity style={styles.moreIcon} onPress={this.acceptInvite}>
             <AntDesign size={30} name="checkcircleo" color="#000" />
           </TouchableOpacity>
         </View>
