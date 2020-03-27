@@ -1,4 +1,4 @@
-<img height="200px" src="images/brightid%20final-01.svg"/>
+<img height="120px" src="images/brightid%20final-01.svg"/>
 
 [🌐 www.brightid.org](https://www.brightid.org)
 
@@ -21,10 +21,13 @@ ID creation and connectons to people and apps are managed though the [BrightID m
 
 ## Contribute
 
-[Wiki](https://github.com/BrightID/BrightID/wiki) for dev instructions. [Apply to our keybase](https://keybase.io/team/brightid) to start contributing.
+Many issues have [bounties attached](https://github.com/BrightID/BrightID/wiki/Bounties) paid in [BrightID subs tokens](https://www.brightid.org/sponsorships). [Apply to our keybase](https://keybase.io/team/brightid) to start contributing, and check the bounties on our [project boards](#project-boards).
 
-### KanBans
-[Mobile App](https://github.com/BrightID/BrightID/projects/4), [Node](https://github.com/BrightID/BrightID-Node/projects/2), [Anti-Sybil](https://github.com/BrightID/BrightID-Node/projects/3)
+### Project Boards
+* [Mobile App](https://github.com/BrightID/BrightID/projects/4)
+* [Node](https://github.com/BrightID/BrightID-Node/projects/2)
+* [Everything](https://github.com/orgs/BrightID/projects/2)
+* [Anti-Sybil](https://github.com/BrightID/BrightID-Node/projects/3)
 
 ### Repos
 [All repos](https://github.com/BrightID)
