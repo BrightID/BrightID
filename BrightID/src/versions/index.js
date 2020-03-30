@@ -13,7 +13,7 @@ import {
   verifyConnections,
   verifyApps,
   verifyUserData,
-  upgradeConnsAndIdsAndGroups,
+  upgradeConnsAndIds,
 } from './v0';
 import { bootstrapV1, deleteV1 } from './v1';
 import { bootstrapV4 } from './v4';
@@ -46,7 +46,7 @@ export const bootstrapAndUpgrade = async () => {
       const appsVerified = await verifyApps(allKeys);
       if (connectionsVerified && userDataVerified && appsVerified) {
         // update connections / user to new Api
-        upgradeConnsAndIdsAndGroups();
+        upgradeConnsAndIds();
         store.dispatch(setGroups([]));
         store.dispatch(setInvites([]));
         const state = store.getState();
