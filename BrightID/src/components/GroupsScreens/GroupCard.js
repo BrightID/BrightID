@@ -10,8 +10,6 @@ import GroupPhoto from './GroupPhoto';
  * Group Card in the Groups Screen
  */
 
-const ICON_SIZE = DEVICE_TYPE === 'large' ? 36 : 32;
-
 class GroupCard extends React.PureComponent<Props> {
   setStatus = () => {
     const { group } = this.props;
@@ -50,10 +48,14 @@ class GroupCard extends React.PureComponent<Props> {
     const { group } = this.props;
     return (
       <View style={styles.container}>
-        <GroupPhoto group={group} />
+        <View style={styles.photoContainer}>
+          <GroupPhoto group={group} />
+        </View>
         <View style={styles.info}>
-          {group.type === 'primary' && (
+          {group.type === 'primary' ? (
             <Text style={styles.primary}>Primary Group</Text>
+          ) : (
+            <View />
           )}
           <Text style={styles.name}>{getGroupName(group)}</Text>
           <this.setStatus />
@@ -77,11 +79,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.43,
     shadowRadius: 4,
   },
-  photo: {
-    borderRadius: 30,
-    width: 60,
-    height: 60,
-    marginLeft: 14,
+  photoContainer: {
+    minWidth: 85,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   info: {
     marginLeft: 25,
@@ -104,26 +105,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   primary: {
+    fontSize: DEVICE_TYPE === 'large' ? 14 : 12,
     color: '#139c60',
   },
   membersLabel: {
     fontFamily: 'ApexNew-Medium',
-    fontSize: 14,
+    fontSize: DEVICE_TYPE === 'large' ? 14 : 12,
     color: '#9b9b9b',
     marginRight: 3,
     paddingTop: 1.5,
   },
   membersKnown: {
     color: '#139c60',
-    fontSize: 16,
+    fontSize: DEVICE_TYPE === 'large' ? 16 : 12,
   },
   membersUnknown: {
     color: '#e39f2f',
-    fontSize: 16,
+    fontSize: DEVICE_TYPE === 'large' ? 16 : 12,
   },
   waitingMessage: {
     fontFamily: 'ApexNew-Medium',
-    fontSize: 16,
+    fontSize: DEVICE_TYPE === 'large' ? 16 : 12,
     color: '#e39f2f',
   },
 });

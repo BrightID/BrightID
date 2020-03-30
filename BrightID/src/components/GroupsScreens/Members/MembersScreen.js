@@ -16,6 +16,7 @@ import RNFS from 'react-native-fs';
 import ActionSheet from 'react-native-actionsheet';
 import { innerJoin } from 'ramda';
 import { getGroupName } from '@/utils/groups';
+import { DEVICE_TYPE } from '@/utils/constants';
 import api from '@/Api/BrightId';
 import emitter from '@/emitter';
 import { leaveGroup, dismissFromGroup } from '@/actions';
@@ -26,7 +27,7 @@ export class MembersScreen extends Component<Props, State> {
     const { group } = navigation.state.params;
     return {
       title: getGroupName(group),
-      headerTitleStyle: { fontSize: 16 },
+      headerTitleStyle: { fontSize: DEVICE_TYPE === 'large' ? 20 : 16 },
       headerBackTitleVisible: false,
       headerRight: () => (
         <TouchableOpacity
@@ -38,30 +39,30 @@ export class MembersScreen extends Component<Props, State> {
           <Material name="dots-horizontal" size={32} color="#fff" />
         </TouchableOpacity>
       ),
-      headerLeft: () => {
-        const { group } = navigation.state.params;
-        return (
-          <View style={{ flexDirection: 'row' }}>
-            <Material
-              style={styles.backStyle}
-              name="arrow-left"
-              size={24}
-              color="#fff"
-              onPress={() => {
-                navigation.goBack();
-              }}
-            />
-            {group.photo && group.photo.filename ? (
-              <Image
-                source={{
-                  uri: `file://${RNFS.DocumentDirectoryPath}/photos/${group.photo.filename}`,
-                }}
-                style={styles.headerPhoto}
-              />
-            ) : null}
-          </View>
-        );
-      },
+      // headerLeft: () => {
+      //   const { group } = navigation.state.params;
+      //   return (
+      //     <View style={{ flexDirection: 'row' }}>
+      //       <Material
+      //         style={styles.backStyle}
+      //         name="arrow-left"
+      //         size={24}
+      //         color="#fff"
+      //         onPress={() => {
+      //           navigation.goBack();
+      //         }}
+      //       />
+      //       {/* {group.photo && group.photo.filename ? (
+      //         <Image
+      //           source={{
+      //             uri: `file://${RNFS.DocumentDirectoryPath}/photos/${group.photo.filename}`,
+      //           }}
+      //           style={styles.headerPhoto}
+      //         />
+      //       ) : null} */}
+      //     </View>
+      //   );
+      // },
       headerShown: true,
     };
   };
@@ -185,7 +186,7 @@ export class MembersScreen extends Component<Props, State> {
   };
 
   render() {
-    const { navigation, id } = this.props;
+    const { id } = this.props;
     const { group } = this.props.navigation.state.params;
     let actions = ['Leave Group', 'cancel'];
     if (group.admins && group.admins.includes(id)) {
@@ -293,9 +294,9 @@ const styles = StyleSheet.create({
   },
   headerPhoto: {
     marginLeft: 11,
-    borderRadius: 24,
-    width: 48,
-    height: 48,
+    borderRadius: 18,
+    width: 36,
+    height: 36,
   },
   backStyle: {
     paddingTop: 8,

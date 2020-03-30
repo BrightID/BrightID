@@ -77,7 +77,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-    marginLeft: 14,
   },
   bigPhoto: {
     borderRadius: 30,

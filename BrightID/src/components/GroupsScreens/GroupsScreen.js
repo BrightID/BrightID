@@ -23,6 +23,7 @@ import { NoGroups } from './NoGroups';
 export class GroupsScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }: { navigation: navigation }) => ({
     title: 'Groups',
+    headerBackTitleVisible: false,
   });
 
   componentDidMount() {

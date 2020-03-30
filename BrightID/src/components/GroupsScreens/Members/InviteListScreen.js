@@ -20,6 +20,7 @@ type State = {
 export class InviteListScreen extends Component<Props, State> {
   static navigationOptions = () => ({
     title: 'Invite List',
+    headerBackTitleVisible: false,
   });
 
   renderEligible = ({ item }) => {
