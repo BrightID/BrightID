@@ -7,11 +7,11 @@ import {
   createImageDirectory,
   retrieveImage,
   saveImage,
-} from '../../../utils/filesystem';
-import backupApi from '../../../Api/BackupApi';
-import api from '../../../Api/BrightId';
-import store from '../../../store';
-import emitter from '../../../emitter';
+} from '@/utils/filesystem';
+import backupApi from '@/Api/BackupApi';
+import api from '@/Api/BrightId';
+import store from '@/store';
+import emitter from '@/emitter';
 import {
   setRecoveryData,
   removeRecoveryData,
@@ -21,13 +21,13 @@ import {
   setPassword,
   setHashedId,
   setGroups,
-} from '../../../actions';
+} from '@/actions';
 import {
   uInt8ArrayToB64,
   b64ToUint8Array,
   strToUint8Array,
   safeHash,
-} from '../../../utils/encoding';
+} from '@/utils/encoding';
 
 export const setTrustedConnections = async () => {
   const { trustedConnections } = store.getState();
@@ -70,10 +70,10 @@ const backupPhotos = async () => {
   try {
     const { connections, groups, id, photo } = store.getState();
     for (const item of connections) {
-      await backupPhoto(item.id, item.photo.filename);
+      await backupPhoto(item.id, item.photo?.filename);
     }
     for (const item of groups) {
-      if (item.photo.filename) {
+      if (item.photo?.filename) {
         await backupPhoto(item.id, item.photo.filename);
       }
     }
@@ -236,11 +236,12 @@ export const restoreUserData = async (pass: string) => {
 
   const decrypted = await fetchBackupData('data', pass);
 
-  const { userData, connections, groups=[] } = JSON.parse(decrypted);
+  const { userData, connections, groups = [] } = JSON.parse(decrypted);
   if (!userData || !connections) {
     throw new Error('bad password');
   }
-  const groupsPhotoCount = groups.filter(group => group.photo && group.photo.filename).length;
+  const groupsPhotoCount = groups.filter((group) => group.photo?.filename)
+    .length;
   emitter.emit('restoreTotal', connections.length + groupsPhotoCount + 2);
   userData.id = id;
   userData.publicKey = publicKey;
@@ -281,9 +282,9 @@ export const recoverData = async (pass: string) => {
   }
 
   for (const group of groups) {
-    if (group.photo.filename) {
+    if (group.photo?.filename) {
       let decrypted = await fetchBackupData(group.id, pass);
-      const filename = await saveImage({
+      await saveImage({
         imageName: group.id,
         base64Image: decrypted,
       });

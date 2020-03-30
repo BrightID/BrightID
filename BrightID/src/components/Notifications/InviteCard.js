@@ -5,6 +5,7 @@ import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { DEVICE_TYPE } from '@/utils/constants';
 import { getGroupName } from '@/utils/groups';
 import { acceptInvite, rejectInvite, joinGroup } from '@/actions';
 import api from '@/Api/BrightId';
@@ -64,7 +65,9 @@ class InviteCard extends React.Component<Props> {
     const inviter = connections.find((conn) => invite.inviter === conn.id);
     return (
       <View style={styles.container}>
-        <GroupPhoto group={invite} />
+        <View style={styles.photoContainer}>
+          <GroupPhoto group={invite} />
+        </View>
         <View style={styles.info}>
           <Text style={styles.invitationMsg}>
             {inviter.name} invited you to join
@@ -72,11 +75,11 @@ class InviteCard extends React.Component<Props> {
           <Text style={styles.name}>{getGroupName(invite)}</Text>
         </View>
         <View style={styles.approvalButtonContainer}>
-          <TouchableOpacity style={styles.moreIcon} onPress={this.rejectInvite}>
-            <AntDesign size={30} name="closecircleo" color="#000" />
-          </TouchableOpacity>
           <TouchableOpacity style={styles.moreIcon} onPress={this.acceptInvite}>
-            <AntDesign size={30} name="checkcircleo" color="#000" />
+            <AntDesign size={30} name="checkcircle" color="#4a90e2" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.moreIcon} onPress={this.rejectInvite}>
+            <AntDesign size={30} name="closecircle" color="#f7651c" />
           </TouchableOpacity>
         </View>
       </View>
@@ -95,23 +98,31 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingBottom: 10,
     paddingTop: 10,
+    height: DEVICE_TYPE === 'large' ? 94 : 80,
+    marginBottom: DEVICE_TYPE === 'large' ? 11.8 : 6,
+  },
+  photoContainer: {
+    minWidth: 85,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   info: {
     marginLeft: 25,
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-evenly',
+    height: DEVICE_TYPE === 'large' ? 71 : 65,
   },
   name: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 20,
+    fontSize: DEVICE_TYPE === 'large' ? 20 : 18,
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
   invitationMsg: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 14,
+    fontSize: DEVICE_TYPE === 'large' ? 14 : 12,
     color: '#9b9b9b',
     marginRight: 3,
     paddingTop: 1.5,

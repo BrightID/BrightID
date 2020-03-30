@@ -86,14 +86,14 @@ export const getGroupName = (group) => {
 export const getInviteInfo = async (invite) => {
   console.log('getting invite info');
   const { connections } = store.getState();
-  const conn = connections.find((conn) => conn.id == invite.inviter);
+  const conn = connections.find((conn) => conn.id === invite.inviter);
   if (!conn.aesKey) {
     return {};
   }
   const groupAesKey = CryptoJS.AES.decrypt(invite.data, conn.aesKey).toString(
     CryptoJS.enc.Utf8,
   );
-  const uuidKey = invite.url.split('/').pop();
+  // const uuidKey = invite.url.split('/').pop();
   const res = await fetch(invite.url);
   const data = await res.text();
   let info = CryptoJS.AES.decrypt(data, groupAesKey).toString(

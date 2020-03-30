@@ -27,7 +27,11 @@ export class MembersScreen extends Component<Props, State> {
     const { group } = navigation.state.params;
     return {
       title: getGroupName(group),
-      headerTitleStyle: { fontSize: DEVICE_TYPE === 'large' ? 20 : 16 },
+      headerTitleStyle: {
+        fontSize: DEVICE_TYPE === 'large' ? 20 : 16,
+        paddingLeft: 20,
+        paddingRight: 30,
+      },
       headerBackTitleVisible: false,
       headerRight: () => (
         <TouchableOpacity
@@ -52,7 +56,7 @@ export class MembersScreen extends Component<Props, State> {
       //           navigation.goBack();
       //         }}
       //       />
-      //       {/* {group.photo && group.photo.filename ? (
+      //       {/* {group.photo?.filename ? (
       //         <Image
       //           source={{
       //             uri: `file://${RNFS.DocumentDirectoryPath}/photos/${group.photo.filename}`,
@@ -63,7 +67,6 @@ export class MembersScreen extends Component<Props, State> {
       //     </View>
       //   );
       // },
-      headerShown: true,
     };
   };
 
@@ -166,8 +169,8 @@ export class MembersScreen extends Component<Props, State> {
 
   renderMember = ({ item }) => {
     const { group } = this.props.navigation.state.params;
-    const isAdmin = group.admins.includes(this.props.id);
-    const isItemAdmin = group.admins.includes(item.id);
+    const isAdmin = group.admins?.includes(this.props.id);
+    const isItemAdmin = group.admins?.includes(item.id);
     const handler = isAdmin && !isItemAdmin ? this.confirmDismiss : null;
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <MemberCard {...item} menuHandler={handler} />;
@@ -189,7 +192,7 @@ export class MembersScreen extends Component<Props, State> {
     const { id } = this.props;
     const { group } = this.props.navigation.state.params;
     let actions = ['Leave Group', 'cancel'];
-    if (group.admins && group.admins.includes(id)) {
+    if (group.admins?.includes(id)) {
       actions = ['Invite'].concat(actions);
     }
 

@@ -15,10 +15,7 @@ export const decryptData = (data: string) => async (
     const { connectQrData } = getState();
 
     const { aesKey } = connectQrData;
-    // const decipher = createDecipher('aes128', aesKey);
 
-    // const decrypted =
-    //   decipher.update(data, 'base64', 'utf8') + decipher.final('utf8');
     const decrypted = CryptoJS.AES.decrypt(data, aesKey).toString(
       CryptoJS.enc.Utf8,
     );

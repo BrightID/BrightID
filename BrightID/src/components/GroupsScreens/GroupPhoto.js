@@ -23,7 +23,7 @@ class GroupPhoto extends React.Component<Props> {
 
   render() {
     const { group } = this.props;
-    if (group.photo && group.photo.filename) {
+    if (group.photo?.filename) {
       return (
         <View style={styles.container}>
           <Image

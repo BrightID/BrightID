@@ -35,7 +35,7 @@ export class InviteListScreen extends Component<Props, State> {
     const { group } = this.props.navigation.state.params;
     try {
       let data = '';
-      if (connection.aesKey) {
+      if (connection.aesKey && group.aesKey) {
         data = CryptoJS.AES.encrypt(group.aesKey, connection.aesKey).toString();
       }
       await api.invite(connection.id, group.id, data);

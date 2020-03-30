@@ -10,6 +10,7 @@ import InviteCard from './InviteCard';
 class NotificationsScreen extends React.Component<Props> {
   static navigationOptions = () => ({
     title: 'Notifications',
+    headerBackTitleVisible: false,
   });
 
   render() {
