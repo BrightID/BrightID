@@ -1,5 +1,4 @@
 import store from '@/store';
-import CryptoJS from 'crypto-js';
 
 const knownMembers = (group) => {
   const { id, photo, name, connections } = store.getState();
@@ -81,27 +80,6 @@ export const getGroupName = (group) => {
       .map((member) => member.name.substr(0, 13))
       .join(', ')
   );
-};
-
-export const getInviteInfo = async (invite) => {
-  console.log('getting invite info');
-  const { connections } = store.getState();
-  const conn = connections.find((conn) => conn.id === invite.inviter);
-  if (!conn.aesKey) {
-    return {};
-  }
-  const groupAesKey = CryptoJS.AES.decrypt(invite.data, conn.aesKey).toString(
-    CryptoJS.enc.Utf8,
-  );
-  // const uuidKey = invite.url.split('/').pop();
-  const res = await fetch(invite.url);
-  const data = await res.text();
-  let info = CryptoJS.AES.decrypt(data, groupAesKey).toString(
-    CryptoJS.enc.Utf8,
-  );
-  info = JSON.parse(info);
-  console.log(`invited group name is ${info.name}`);
-  return info;
 };
 
 export const ids2connections = (ids) => {

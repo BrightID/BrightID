@@ -1,10 +1,7 @@
 // @flow
 
 import api from '@/Api/BrightId';
-import { getInviteInfo } from '@/utils/groups';
-import { saveImage } from '@/utils/filesystem';
-import { INVITE_ACTIVE } from '@/utils/constants';
-
+import { updateInvites } from '@/utils/invites';
 import {
   setGroups,
   setInvites,
@@ -15,17 +12,17 @@ import {
 } from './index';
 
 const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
-  const { id, operations, invites: oldInvites } = getState();
+  const { id, operations } = getState();
   console.log('refreshing user info', id);
   if (!id) return;
   try {
     const {
-      invites,
       groups,
       score,
       verifications = [],
       connections = [],
       isSponsored,
+      invites,
     } = await api.getUserInfo(id);
 
     if (operations.length === 0) {
@@ -38,30 +35,7 @@ const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
     dispatch(setIsSponsored(isSponsored));
 
     // this can not be done in reducer because it should be in an async function
-    const pArray = invites.map(async (invite) => {
-      const oldInvite = oldInvites.find(
-        (inv) => inv.inviteId === invite.inviteId,
-      );
-      if (oldInvite) {
-        oldInvite.members = invite.members;
-        return oldInvite;
-      } else {
-        const info = await getInviteInfo(invite);
-        let filename = null;
-        if (info.photo) {
-          filename = await saveImage({
-            imageName: invite.id,
-            base64Image: info.photo,
-          });
-        }
-        return Object.assign(invite, {
-          name: info.name,
-          state: INVITE_ACTIVE,
-          photo: { filename },
-        });
-      }
-    });
-    const newInvites = await Promise.all(pArray);
+    const newInvites = await updateInvites(invites);
     dispatch(setInvites(newInvites));
   } catch (err) {
     console.log(err.message);
