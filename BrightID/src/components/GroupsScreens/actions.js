@@ -1,4 +1,5 @@
 // @flow
+
 import { Alert, NativeModules } from 'react-native';
 import CryptoJS from 'crypto-js';
 import { saveImage } from '@/utils/filesystem';
@@ -31,10 +32,11 @@ export const toggleNewGroupCoFounder = (id: string) => (
   dispatch(setNewGroupCoFounders(coFounders));
 };
 
-export const createNewGroup = (photo, name, type) => async (
-  dispatch: dispatch,
-  getState: getState,
-) => {
+export const createNewGroup = (
+  photo: string,
+  name: string,
+  type: string,
+) => async (dispatch: dispatch, getState: getState) => {
   try {
     let { id, newGroupCoFounders, connections, backupCompleted } = getState();
     if (newGroupCoFounders.length < 2) {
@@ -44,6 +46,8 @@ export const createNewGroup = (photo, name, type) => async (
     const [founder1, founder2] = newGroupCoFounders.map((u) =>
       connections.find((c) => c.id === u),
     );
+
+    if (!founder1 || !founder2) return;
 
     if (type === 'primary') {
       if (founder1.hasPrimaryGroup || founder2.hasPrimaryGroup) {
@@ -56,13 +60,15 @@ export const createNewGroup = (photo, name, type) => async (
     let uuidKey = await randomKey(9);
     const groupId = hash(uuidKey);
 
-    const encrypted = CryptoJS.AES.encrypt(
-      JSON.stringify({ name, photo }),
+    const groupData = JSON.stringify({ name, photo });
+
+    const encryptedGroupData = CryptoJS.AES.encrypt(
+      groupData,
       aesKey,
     ).toString();
 
     // not sure if we should use the backup server for this...
-    await backupApi.putRecovery('immutable', groupId, encrypted);
+    await backupApi.putRecovery('immutable', groupId, encryptedGroupData);
 
     const url = `https://recovery.brightid.org/backups/immutable/${groupId}`;
 

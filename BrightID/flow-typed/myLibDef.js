@@ -64,28 +64,31 @@ declare type navigation = NavigationScreenProp;
 declare type Props = State & navigation & dispatch;
 
 declare type connection = {
-  publicKey?: string,
   id: string,
   name: string,
   score: number,
   secretKey?: Uint8Array,
+  aesKey: string,
   connectionDate: number,
   photo: {
     filename: string,
   },
+  status: string,
+
+  signingKey: string,
+  createdAt: number,
+  hasPrimaryGroup: boolean,
+  publicKey?: string,
 };
 
 declare type group = {
-  _key: string,
-  _id: string,
-  _rev: string,
   score: number,
   isNew: boolean,
   admins: string[],
   url: string,
   type: 'general' | 'primary',
   timestamp: number,
-  founder: string[],
+  founders: string[],
   members: string[],
   id: string,
   name: string,
