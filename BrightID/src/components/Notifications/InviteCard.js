@@ -43,12 +43,12 @@ class InviteCard extends React.Component<Props> {
   };
 
   acceptInvite = async () => {
-    const { dispatch, navigation, invite, backupCompleted } = this.props;
+    const { dispatch, invite, backupCompleted } = this.props;
     try {
       await api.joinGroup(invite.id);
       await dispatch(acceptInvite(invite.inviteId));
       await dispatch(joinGroup(invite));
-      navigation.navigate('Groups');
+
       if (backupCompleted) {
         await backupUser();
         if (invite.photo && invite.photo.filename) {
