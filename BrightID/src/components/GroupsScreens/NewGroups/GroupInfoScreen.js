@@ -1,5 +1,3 @@
-// @flow
-
 import * as React from 'react';
 import {
   Alert,
@@ -18,15 +16,9 @@ import ToggleSwitch from 'toggle-switch-react-native';
 import { chooseImage } from '@/utils/images';
 import { DEVICE_TYPE, DEVICE_OS } from '@/utils/constants';
 
-type State = {
-  name: string,
-  finalBase64: { uri: string },
-  isPrimary: boolean,
-};
-
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
-export class GroupInfoScreen extends React.Component<Props, State> {
+export class GroupInfoScreen extends React.Component<Props> {
   static navigationOptions = {
     title: 'New Group',
     headerStyle: {

@@ -35,7 +35,8 @@ export const bootstrapAndUpgrade = async () => {
       delete state.currentGroups;
       if (verifyStore(state)) {
         await saveStore(state);
-        await deleteV1();
+        // lets not delete this just in case
+        // await deleteV1();
       }
     } else if (!v1) {
       await bootstrapV0();

@@ -1,5 +1,3 @@
-// @flow
-
 import * as React from 'react';
 import {
   StyleSheet,
@@ -11,6 +9,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import store from '@/store';
+import emitter from '@/emitter';
 import { clearNewGroupCoFounders } from '@/actions';
 import { DEVICE_TYPE } from '@/utils/constants';
 import Spinner from 'react-native-spinkit';
@@ -18,11 +17,11 @@ import { createNewGroup } from '../actions';
 import NewGroupCard from './NewGroupCard';
 import SearchConnections from './SearchConnections';
 
-type State = {
-  creating: boolean,
-};
+// type State = {
+//   creating: boolean,
+// };
 
-export class NewGroupScreen extends React.Component<Props, State> {
+export class NewGroupScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({
     title: 'New Group',
     headerShown: DEVICE_TYPE === 'large',
@@ -32,16 +31,24 @@ export class NewGroupScreen extends React.Component<Props, State> {
     super(props);
     this.state = {
       creating: false,
+      creationState: 'uploading group photo',
     };
   }
 
   componentDidMount() {
     const { navigation, dispatch } = this.props;
-
+    navigation.addListener('willFocus', () => {
+      emitter.on('creatingGroupChannel', this.updateCreationState);
+    });
     navigation.addListener('willBlur', () => {
       dispatch(clearNewGroupCoFounders());
+      emitter.off('creatingGroupChannel', this.updateCreationState);
     });
   }
+
+  updateCreationState = (creationState) => {
+    this.setState({ creationState });
+  };
 
   filterConnections = () => {
     const { connections, searchParam } = this.props;
@@ -77,22 +84,29 @@ export class NewGroupScreen extends React.Component<Props, State> {
     }
   };
 
-  renderButtonOrSpinner = () =>
-    !this.state.creating ? (
+  renderButtonOrSpinner = () => {
+    const buttonDisabled = this.props.newGroupCoFounders.length < 2;
+    return !this.state.creating ? (
       <View style={styles.createGroupButtonContainer}>
         <TouchableOpacity
           onPress={this.createGroup}
-          style={styles.createGroupButton}
+          style={
+            buttonDisabled
+              ? { ...styles.createGroupButton, opacity: 0.4 }
+              : styles.createGroupButton
+          }
+          disabled={buttonDisabled}
         >
           <Text style={styles.buttonInnerText}>Create Group</Text>
         </TouchableOpacity>
       </View>
     ) : (
       <View style={styles.loader}>
-        <Text style={styles.textInfo}>Creating the group ...</Text>
+        <Text style={styles.textInfo}>{this.state.creationState} ...</Text>
         <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
       </View>
     );
+  };
 
   renderConnection = ({ item }) => (
     <NewGroupCard
@@ -218,6 +232,7 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     marginBottom: DEVICE_TYPE === 'large' ? 30 : 25,
   },
+
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',
     color: '#fff',

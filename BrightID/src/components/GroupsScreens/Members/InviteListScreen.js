@@ -1,5 +1,3 @@
-// @flow
-
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -12,10 +10,6 @@ import { connect } from 'react-redux';
 import CryptoJS from 'crypto-js';
 import api from '@/Api/BrightId';
 import MemberCard from './MemberCard';
-
-type State = {
-  eligibles: string[],
-};
 
 export class InviteListScreen extends Component<Props, State> {
   static navigationOptions = () => ({
@@ -50,18 +44,14 @@ export class InviteListScreen extends Component<Props, State> {
   };
 
   getEligibles = () => {
-    if (this.eligibles) return this.eligibles;
     const { connections, navigation } = this.props;
     const { group } = navigation.state.params;
-    this.eligibles = connections.filter((item) => {
-      return (
-        !group.members.includes(item.id) &&
-        item.eligible_groups &&
-        item.eligible_groups.includes(group.id) &&
-        (group.type !== 'primary' || !item.hasPrimaryGroup)
-      );
-    });
-    return this.eligibles;
+    return connections.filter(
+      (item) =>
+        !group.members?.includes(item.id) &&
+        item.eligible_groups?.includes(group.id) &&
+        (group.type !== 'primary' || !item.hasPrimaryGroup),
+    );
   };
 
   render() {

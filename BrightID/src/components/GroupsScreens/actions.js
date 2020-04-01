@@ -2,11 +2,12 @@
 
 import { Alert, NativeModules } from 'react-native';
 import CryptoJS from 'crypto-js';
+import emitter from '@/emitter';
 import { saveImage } from '@/utils/filesystem';
-import { setNewGroupCoFounders, createGroup } from '../../actions/index';
-import api from '../../Api/BrightId';
-import backupApi from '../../Api/BackupApi';
-import { hash } from '../../utils/encoding';
+import { setNewGroupCoFounders, createGroup } from '@/actions/index';
+import api from '@/Api/BrightId';
+import backupApi from '@/Api/BackupApi';
+import { hash } from '@/utils/encoding';
 import { backupPhoto, backupUser } from '../Recovery/helpers';
 
 const { RNRandomBytes } = NativeModules;
@@ -67,9 +68,8 @@ export const createNewGroup = (
       aesKey,
     ).toString();
 
-    // not sure if we should use the backup server for this...
     await backupApi.putRecovery('immutable', groupId, encryptedGroupData);
-
+    emitter.emit('creatingGroupChannel', 'creating the group');
     const url = `https://recovery.brightid.org/backups/immutable/${groupId}`;
 
     let filename = null;

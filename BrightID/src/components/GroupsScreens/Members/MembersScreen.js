@@ -1,5 +1,3 @@
-// @flow
-
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -23,7 +21,7 @@ import { leaveGroup, dismissFromGroup } from '@/actions';
 import MemberCard from './MemberCard';
 
 export class MembersScreen extends Component<Props, State> {
-  static navigationOptions = ({ navigation }: { navigation: navigation }) => {
+  static navigationOptions = ({ navigation }) => {
     const { group } = navigation.state.params;
     return {
       title: getGroupName(group),
@@ -70,10 +68,6 @@ export class MembersScreen extends Component<Props, State> {
     };
   };
 
-  showOptionsMenu = () => {
-    this.actionSheet.show();
-  };
-
   componentDidMount() {
     emitter.on('optionsSelected', this.showOptionsMenu);
   }
@@ -81,6 +75,23 @@ export class MembersScreen extends Component<Props, State> {
   componentWillUnmount() {
     emitter.off('optionsSelected', this.showOptionsMenu);
   }
+
+  showOptionsMenu = () => {
+    this.actionSheet.show();
+  };
+
+  performAction = (action) => {
+    if (!this.actionSheet) return;
+    action = this.actionSheet.props.options[action];
+    if (action === 'Leave Group') {
+      this.confirmLeaveGroup();
+    } else if (action === 'Invite') {
+      const { navigation } = this.props;
+      navigation.navigate('InviteList', {
+        group: navigation.state.params.group,
+      });
+    }
+  };
 
   confirmDismiss = (user) => {
     const buttons = [
@@ -110,19 +121,6 @@ export class MembersScreen extends Component<Props, State> {
         cancelable: true,
       },
     );
-  };
-
-  performAction = (action) => {
-    if (!this.actionSheet) return;
-    action = this.actionSheet.props.options[action];
-    if (action === 'Leave Group') {
-      this.confirmLeaveGroup();
-    } else if (action === 'Invite') {
-      const { navigation } = this.props;
-      navigation.navigate('InviteList', {
-        group: navigation.state.params.group,
-      });
-    }
   };
 
   confirmLeaveGroup = () => {
