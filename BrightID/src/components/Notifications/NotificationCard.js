@@ -4,6 +4,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import { DEVICE_TYPE } from '@/utils/constants';
 
 /**
  * Notification Card in the Notifications Screen
@@ -24,6 +25,7 @@ class NotificationCard extends React.Component<Props> {
       >
         <View style={{ ...styles.container }}>
           <Ionicon size={32} style={styles.itemIcon} name={icon} color="#ccc" />
+
           <Text style={styles.msg}>{msg}</Text>
         </View>
       </TouchableOpacity>
@@ -40,6 +42,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    borderBottomColor: '#e3e0e4',
+    borderBottomWidth: 1,
+    height: DEVICE_TYPE === 'large' ? 94 : 80,
+    marginBottom: DEVICE_TYPE === 'large' ? 11.8 : 6,
   },
   msg: {
     fontFamily: 'ApexNew-Book',
@@ -49,7 +55,7 @@ const styles = StyleSheet.create({
     marginRight: 18,
   },
   itemIcon: {
-    // margin: 16,
+    // marginRight: 16,
   },
 });
 

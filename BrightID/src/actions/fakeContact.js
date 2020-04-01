@@ -10,6 +10,15 @@ import {
   uInt8ArrayToB64,
   b64ToUrlSafeB64,
 } from '../utils/encoding';
+import { NativeModules } from 'react-native';
+const { RNRandomBytes } = NativeModules;
+
+const randomKey = (size: number) =>
+  new Promise((resolve, reject) => {
+    RNRandomBytes.randomBytes(size, (err, bytes) => {
+      err ? reject(err) : resolve(bytes);
+    });
+  });
 
 export const addFakeConnection = (navigation: navigation) => async (
   dispatch: dispatch,
@@ -31,7 +40,7 @@ export const addFakeConnection = (navigation: navigation) => async (
   const signedMessage = uInt8ArrayToB64(
     nacl.sign.detached(strToUint8Array(message), secretKey),
   );
-
+  const aesKey = await randomKey(16);
   const userData = {
     publicKey: b64PubKey,
     id,
@@ -40,6 +49,8 @@ export const addFakeConnection = (navigation: navigation) => async (
     signedMessage,
     name,
     score,
+    aesKey,
+
     photo: 'https://picsum.photos/180',
     status: 'initiated',
   };

@@ -83,13 +83,14 @@ class BackupScreen extends React.Component<Props, State> {
   startBackup = async () => {
     if (!this.validatePass()) return;
     try {
-      const { dispatch, connections, navigation } = this.props;
+      const { dispatch, connections, groups, navigation } = this.props;
 
       dispatch(setPassword(this.state.pass1));
-
+      const groupsPhotoCount = groups.filter((group) => group.photo?.filename)
+        .length;
       this.setState({
         backupInProgress: true,
-        total: connections.length + 2,
+        total: connections.length + groupsPhotoCount + 2,
       });
 
       await backupAppData();

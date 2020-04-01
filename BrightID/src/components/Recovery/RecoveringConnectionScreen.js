@@ -1,18 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
-import { renderListOrSpinner } from './renderConnections';
 import { DEVICE_TYPE } from '@/utils/constants';
 
-type State = {
-  loading: boolean,
-};
-
-class RecoveringConnectionScreen extends React.Component<Props, State> {
+class RecoveringConnectionScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({
     title: 'Account Recovery',
     headerShown: DEVICE_TYPE === 'large',
@@ -43,6 +38,8 @@ class RecoveringConnectionScreen extends React.Component<Props, State> {
 
   render() {
     const { navigation } = this.props;
+    const connections = this.filterConnections();
+
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.mainContainer}>
@@ -54,7 +51,20 @@ class RecoveringConnectionScreen extends React.Component<Props, State> {
             </Text>
           </View>
           <SearchConnections navigation={navigation} />
-          <View style={styles.mainContainer}>{renderListOrSpinner(this)}</View>
+          <View style={styles.mainContainer}>
+          {connections.length > 0 ? (
+            <FlatList
+              style={styles.connectionsContainer}
+              data={connections}
+              keyExtractor={({ id }, index) => id + index}
+              renderItem={this.renderConnection}
+            />
+          ) : (
+            <View>
+              <Text style={styles.emptyText}>No connections</Text>
+            </View>
+          )}
+          </View>
         </View>
       </SafeAreaView>
     );
@@ -71,6 +81,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  emptyText: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 20,
   },
   connectionsContainer: {
     flex: 1,

@@ -29,7 +29,14 @@ class MemberCard extends React.PureComponent<Props> {
   };
 
   render() {
-    const { photo, name, score, connectionDate, style } = this.props;
+    const {
+      photo,
+      name,
+      score,
+      connectionDate,
+      style,
+      menuHandler,
+    } = this.props;
 
     return (
       <View style={{ ...styles.container, ...style }}>
@@ -45,10 +52,20 @@ class MemberCard extends React.PureComponent<Props> {
             <Text style={styles.scoreLeft}>Score:</Text>
             <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>
           </View>
-          <Text style={styles.connectedText}>
-            Connected {moment(parseInt(connectionDate, 10)).fromNow()}
-          </Text>
+          {connectionDate && (
+            <Text style={styles.connectedText}>
+              Connected {moment(parseInt(connectionDate, 10)).fromNow()}
+            </Text>
+          )}
         </View>
+        {menuHandler && (
+          <TouchableOpacity
+            style={styles.moreIcon}
+            onPress={() => menuHandler(this.props)}
+          >
+            <Ionicon size={48} name="ios-close" color="#ccc" />
+          </TouchableOpacity>
+        )}
       </View>
     );
   }

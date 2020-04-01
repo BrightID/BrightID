@@ -129,7 +129,7 @@ export class HomeScreen extends React.Component<Props, State> {
     const {
       navigation,
       score,
-      groupsCount,
+      groups,
       connections,
       verifications,
     } = this.props;
@@ -204,7 +204,7 @@ export class HomeScreen extends React.Component<Props, State> {
           </View>
           <View style={styles.countsGroup}>
             <Text id="groupsCount" style={styles.countsNumberText}>
-              {groupsCount}
+              {groups ? groups.length : 0}
             </Text>
             <Text style={styles.countsDescriptionText}>Groups</Text>
           </View>

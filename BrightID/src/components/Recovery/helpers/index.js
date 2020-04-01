@@ -3,11 +3,15 @@
 import { Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
-import { createImageDirectory, retrieveImage, saveImage } from '../../../utils/filesystem';
-import backupApi from '../../../Api/BackupApi';
-import api from '../../../Api/BrightId';
-import store from '../../../store';
-import emitter from '../../../emitter';
+import {
+  createImageDirectory,
+  retrieveImage,
+  saveImage,
+} from '@/utils/filesystem';
+import backupApi from '@/Api/BackupApi';
+import api from '@/Api/BrightId';
+import store from '@/store';
+import emitter from '@/emitter';
 import {
   setRecoveryData,
   removeRecoveryData,
@@ -16,13 +20,14 @@ import {
   setConnections,
   setPassword,
   setHashedId,
-} from '../../../actions';
+  setGroups,
+} from '@/actions';
 import {
   uInt8ArrayToB64,
   b64ToUint8Array,
   strToUint8Array,
   safeHash,
-} from '../../../utils/encoding';
+} from '@/utils/encoding';
 
 export const setTrustedConnections = async () => {
   const { trustedConnections } = store.getState();
@@ -63,9 +68,14 @@ export const backupPhoto = async (id: string, filename: string) => {
 
 const backupPhotos = async () => {
   try {
-    const { connections, id, photo } = store.getState();
+    const { connections, groups, id, photo } = store.getState();
     for (const item of connections) {
-      await backupPhoto(item.id, item.photo.filename);
+      await backupPhoto(item.id, item.photo?.filename);
+    }
+    for (const item of groups) {
+      if (item.photo?.filename) {
+        await backupPhoto(item.id, item.photo.filename);
+      }
     }
     await backupPhoto(id, photo.filename);
   } catch (err) {
@@ -75,7 +85,7 @@ const backupPhotos = async () => {
 
 export const backupUser = async () => {
   try {
-    const { score, name, photo, id, connections } = store.getState();
+    const { score, name, photo, id, connections, groups } = store.getState();
     const userData = {
       id,
       name,
@@ -85,6 +95,7 @@ export const backupUser = async () => {
     const dataStr = JSON.stringify({
       userData,
       connections,
+      groups,
     });
     await encryptAndBackup('data', dataStr);
   } catch (err) {
@@ -225,11 +236,13 @@ export const restoreUserData = async (pass: string) => {
 
   const decrypted = await fetchBackupData('data', pass);
 
-  const { userData, connections } = JSON.parse(decrypted);
+  const { userData, connections, groups = [] } = JSON.parse(decrypted);
   if (!userData || !connections) {
     throw new Error('bad password');
   }
-  emitter.emit('restoreTotal', connections.length + 2);
+  const groupsPhotoCount = groups.filter((group) => group.photo?.filename)
+    .length;
+  emitter.emit('restoreTotal', connections.length + groupsPhotoCount + 2);
   userData.id = id;
   userData.publicKey = publicKey;
   userData.secretKey = b64ToUint8Array(secretKey);
@@ -243,20 +256,21 @@ export const restoreUserData = async (pass: string) => {
     userData.photo = { filename };
   }
 
-  return { userData, connections };
+  return { userData, connections, groups };
 };
 
 export const recoverData = async (pass: string) => {
   // fetch user data / save photo
-  // throws if data is bad
   await createImageDirectory();
-  const { userData, connections } = await restoreUserData(pass);
+  // throws if data is bad
+  const { userData, connections, groups } = await restoreUserData(pass);
 
   // set new signing key on the backend
   await setSigningKey();
 
   store.dispatch(setUserData(userData));
   store.dispatch(setConnections(connections));
+  store.dispatch(setGroups(groups));
 
   for (const conn of connections) {
     let decrypted = await fetchBackupData(conn.id, pass);
@@ -265,6 +279,16 @@ export const recoverData = async (pass: string) => {
       base64Image: decrypted,
     });
     conn.photo = { filename };
+  }
+
+  for (const group of groups) {
+    if (group.photo?.filename) {
+      let decrypted = await fetchBackupData(group.id, pass);
+      await saveImage({
+        imageName: group.id,
+        base64Image: decrypted,
+      });
+    }
   }
 
   store.dispatch(setBackupCompleted(true));
