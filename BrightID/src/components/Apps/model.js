@@ -37,7 +37,7 @@ export const handleAppContext = async (params: Params) => {
   if (contextInfo && contextInfo.verification) {
     Alert.alert(
       'App Verification?',
-      `Do you want to verify your account in ${context} by your BrightID?`,
+      `Do you want to link your account in ${context} to your BrightID?`,
       [
         {
           text: 'Yes',
