@@ -63,6 +63,36 @@ declare type navigation = NavigationScreenProp;
 
 declare type Props = State & navigation & dispatch;
 
+declare type UserState = {
+  score: number,
+  name: string,
+  photo: {
+    filename: string,
+  },
+  searchParam: string,
+  notifications: NotificationInfo[],
+  backupCompleted: boolean,
+  verifications: any[],
+  publicKey: string,
+  id: string,
+  safePublicKey?: string,
+  password: string,
+  hashedId: string,
+  secretKey: Uint8Array,
+};
+
+declare type ConnectionsState = {
+  connections: connection[],
+  trustedConnections: string[],
+  connectionsSort: string,
+};
+
+declare type GroupsState = {
+  newGroupCoFounders: string[],
+  invites: invite[],
+  groups: group[],
+};
+
 declare type connection = {
   id: string,
   name: string,
@@ -116,6 +146,41 @@ declare type invite = {
   state: string,
   photo: { filename: string },
   aesKey: string,
+};
+
+declare type ConnectQrData = {
+  aesKey: string,
+  ipAddress: string,
+  uuid: string,
+  user: string,
+  qrString: string,
+  channel: string,
+};
+
+declare type ConnectUserData = {
+  id: string,
+  photo: string,
+  name: string,
+  timestamp: number,
+  signedMessage: string,
+  score: number,
+  secretKey?: Uint8Array,
+};
+
+declare type RecoveryData = {
+  publicKey: string,
+  secretKey: string,
+  timestamp: number,
+  id: string,
+  sigs: Signature[],
+};
+
+declare type OperationsState = {
+  list: string[],
+};
+
+declare type AppsState = {
+  list: AppInfo[],
 };
 
 declare type NotificationInfo = {

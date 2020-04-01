@@ -43,10 +43,11 @@ class InviteCard extends React.Component<Props> {
   };
 
   acceptInvite = async () => {
-    const { dispatch, invite, backupCompleted } = this.props;
+    const { dispatch, invite, backupCompleted, id } = this.props;
     try {
       await api.joinGroup(invite.id);
       await dispatch(acceptInvite(invite.inviteId));
+      invite.members.push(id);
       await dispatch(joinGroup(invite));
       Alert.alert('Success', `You joined ${getGroupName(invite)}`);
       if (backupCompleted) {
