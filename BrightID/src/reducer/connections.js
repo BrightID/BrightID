@@ -9,6 +9,7 @@ import {
   ADD_CONNECTION,
   ADD_TRUSTED_CONNECTION,
   REMOVE_TRUSTED_CONNECTION,
+  HYDRATE_CONNECTIONS,
 } from '@/actions';
 
 export const initialState = {
@@ -86,6 +87,12 @@ export const reducer = (
         ...state,
         trustedConnections,
       };
+    }
+    case HYDRATE_CONNECTIONS: {
+      if (!action.data.connections || !action.data.trustedConnections)
+        return state;
+
+      return { ...action.data };
     }
     default: {
       return state;

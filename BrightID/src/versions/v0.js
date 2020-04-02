@@ -84,7 +84,7 @@ export const verifyConnections = async (allKeys: string[]) => {
 
     const reduxConnectionKeys = store
       .getState()
-      .connections.map(({ publicKey, id }) => publicKey || id)
+      .connections.connections.map(({ publicKey, id }) => publicKey || id)
       .sort();
     console.log(
       JSON.stringify(connectionKeys),
@@ -107,7 +107,7 @@ export const verifyApps = async (allKeys: string[]) => {
       .map((val) => JSON.parse(val[1]))
       .sort((a, b) => b.dateAdded - a.dateAdded);
 
-    const { apps } = store.getState();
+    const apps = store.getState().apps.list;
     console.log(JSON.stringify(appInfos), JSON.stringify(apps));
     return JSON.stringify(appInfos) === JSON.stringify(apps);
   } catch (err) {
@@ -121,7 +121,7 @@ export const verifyUserData = async () => {
     let userData = await AsyncStorage.getItem('userData');
     if (userData !== null) {
       userData = JSON.parse(userData);
-      let { publicKey, secretKey, name, photo } = store.getState();
+      let { publicKey, secretKey, name, photo } = store.getState().user;
       console.log(
         JSON.stringify(userData.publicKey),
         JSON.stringify(publicKey),
@@ -148,7 +148,8 @@ export const verifyUserData = async () => {
 };
 
 export const upgradeConnsAndIds = () => {
-  const { publicKey, connections } = store.getState();
+  const { publicKey } = store.getState().user;
+  const { connections } = store.getState().connections;
   const id = b64ToUrlSafeB64(publicKey);
   store.dispatch(setUserId(id));
   const nextConn = connections.map((conn) => {

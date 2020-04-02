@@ -29,13 +29,11 @@ export const reducer = (state: AppsState = initialState, action: action) => {
       const list: AppInfo[] = state.list.filter(
         (app) => app.name !== action.name,
       );
-
       return {
         ...state,
         list,
       };
     }
-
     default: {
       return state;
     }

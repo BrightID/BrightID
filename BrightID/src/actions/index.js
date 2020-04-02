@@ -45,6 +45,8 @@ export const RESET_STORE = 'RESET_STORE';
 export const ADD_OPERATION = 'ADD_OPERATION';
 export const REMOVE_OPERATION = 'REMOVE_OPERATION';
 export const RESET_OPERATIONS = 'RESET_OPERATIONS';
+export const HYDRATE_CONNECTIONS = 'HYDRATE_CONNECTIONS';
+export const HYDRATE_USER = 'HYDRATE_USER';
 
 /**
  * redux action creator that updates user `isSponsored`
@@ -377,4 +379,24 @@ export const updateConnections = (
 ) => ({
   type: UPDATE_CONNECTIONS,
   connections,
+});
+
+export const hydrateConnections = (data: ConnectionsState) => ({
+  type: HYDRATE_CONNECTIONS,
+  data,
+});
+
+export const hydrateUser = (data: {
+  score: number,
+  name: string,
+  photo: { filename: string },
+  backupCompleted: boolean,
+  id: string,
+  publicKey: string,
+  password: string,
+  hashedId: string,
+  secretKey: Uint8Array,
+}) => ({
+  type: HYDRATE_USER,
+  data,
 });

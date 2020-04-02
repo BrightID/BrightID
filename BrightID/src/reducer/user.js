@@ -15,6 +15,7 @@ import {
   SET_USER_ID,
   REMOVE_SAFE_PUB_KEY,
   SET_VERIFICATIONS,
+  HYDRATE_USER,
 } from '@/actions';
 
 const initialState = {
@@ -114,6 +115,24 @@ export const reducer = (state: UserState = initialState, action: action) => {
     case REMOVE_SAFE_PUB_KEY: {
       return dissoc('safePubKey', state);
     }
+    case HYDRATE_USER: {
+      if (!action.data.name || !action.data.id || !action.data.secretKey)
+        return state;
+
+      return {
+        ...state,
+        score: action.data.score,
+        name: action.data.name,
+        photo: action.data.photo,
+        backupCompleted: action.data.backupCompleted,
+        id: action.data.id,
+        publicKey: action.data.publicKey,
+        password: action.data.password,
+        hashedId: action.data.hashedId,
+        secretKey: action.data.secretKey,
+      };
+    }
+
     default: {
       return state;
     }

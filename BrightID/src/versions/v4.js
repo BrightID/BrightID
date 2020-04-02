@@ -1,5 +1,55 @@
 // @flow
 
-import { hydrateStore } from '@/store/hydrateStore';
+import AsyncStorage from '@react-native-community/async-storage';
+import { store } from '@/store';
+import { setApps, hydrateConnections, hydrateUser } from '@/actions';
+import { objToUint8 } from '@/utils/encoding';
 
-export const bootstrapV4 = hydrateStore('store@v4');
+// export const bootstrapV4 = hydrateStore('store@v4');
+
+export const bootstrap = async (version: string) => {
+  const dataStr = await AsyncStorage.getItem(version);
+  if (dataStr !== null) {
+    const dataObj = JSON.parse(dataStr);
+    dataObj.secretKey = objToUint8(dataObj.secretKey);
+    dataObj.searchParam = '';
+
+    const {
+      apps,
+      connections,
+      trustedConnections,
+      connectionsSort,
+      score,
+      name,
+      photo,
+      backupCompleted,
+      id,
+      publicKey,
+      password,
+      hashedId,
+      secretKey,
+    } = dataObj;
+
+    if (apps) {
+      store.dispatch(setApps(apps));
+    }
+
+    store.dispatch(
+      hydrateConnections({ connections, trustedConnections, connectionsSort }),
+    );
+
+    store.dispatch(
+      hydrateUser({
+        score,
+        name,
+        photo,
+        backupCompleted,
+        id,
+        publicKey,
+        password,
+        hashedId,
+        secretKey,
+      }),
+    );
+  }
+};
