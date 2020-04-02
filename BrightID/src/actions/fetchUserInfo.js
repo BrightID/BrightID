@@ -12,7 +12,10 @@ import {
 } from './index';
 
 const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
-  const { id, operations } = getState();
+  const {
+    user: { id },
+    operations: { list: operations },
+  } = getState();
   console.log('refreshing user info', id);
   if (!id) return;
   try {

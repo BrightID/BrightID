@@ -9,16 +9,17 @@ const transformer = createTransform(
     // convert mySet to an Array.
     console.log('inboundState', inboundState);
     console.log('inboundKey', key);
-    return { ...inboundState };
+    return { ...inboundState, searchParam: '' };
   },
   // transform state being rehydrated
   (outboundState, key) => {
     // convert mySet back to a Set.
     console.log('outboundState', outboundState);
     console.log('outboundKey', key);
-    const secretKey = objToUint8(outboundState.user.secretKey);
-    return { ...outboundState };
+    const secretKey = objToUint8(outboundState.secretKey);
+    return { ...outboundState, secretKey };
   },
+  { whitelist: ['user'] },
 );
 
 export default transformer;

@@ -7,7 +7,9 @@ import api from '../Api/BrightId';
 const time_fudge = 2 * 60 * 1000; // trace operations for 2 minutes
 
 export const pollOperations = async () => {
-  const { operations } = store.getState();
+  const {
+    operations: { list: operations },
+  } = store.getState();
   try {
     for (const op of operations) {
       const { state } = await api.getOperationState(op);

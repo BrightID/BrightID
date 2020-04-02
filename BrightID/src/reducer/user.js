@@ -139,6 +139,4 @@ export const reducer = (state: UserState = initialState, action: action) => {
   }
 };
 
-// unnecessary for now, but when the app gets larger, combine reducers here
-
 export default reducer;

@@ -7,7 +7,10 @@ export const getNotifications = () => async (
   getState: () => State,
 ) => {
   try {
-    const { backupCompleted, connections } = getState();
+    const {
+      user: { backupCompleted },
+      connections: { connections },
+    } = getState();
     let notifications = [];
     const verifiedConnections = connections.filter(
       (conn) => conn.status === 'verified',
