@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
   approvalButtonContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    minWidth: 100,
   },
 });
 
