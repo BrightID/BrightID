@@ -106,6 +106,28 @@ export const initialState: State = {
   },
 };
 
+const byPrimaryGroup = (a, b) => {
+  if (a.type === 'primary') {
+    return -1;
+  } else if (b.type === 'primary') {
+    return 1;
+  } else {
+    return 0;
+  }
+};
+
+const byIsNew = (a, b) => {
+  if (a.isNew && b.isNew) {
+    return 0;
+  } else if (a.isNew) {
+    return 1;
+  } else if (b.isNew) {
+    return -1;
+  } else {
+    return 0;
+  }
+};
+
 export const reducer = (state: State = initialState, action: action) => {
   switch (action.type) {
     case HYDRATE_STATE: {
@@ -138,7 +160,10 @@ export const reducer = (state: State = initialState, action: action) => {
     case CREATE_GROUP: {
       return {
         ...state,
-        groups: [action.group, ...state.groups.slice(0)],
+        groups: state.groups
+          .concat(action.group)
+          .sort(byPrimaryGroup)
+          .sort(byIsNew),
       };
     }
     case DELETE_GROUP: {
@@ -160,7 +185,7 @@ export const reducer = (state: State = initialState, action: action) => {
       };
     }
     case SET_GROUPS: {
-      const groups = action.groups.map((group) => {
+      const mergeWithOld = (group) => {
         const oldGroup = state.groups.find((g) => g.id === group.id);
         if (oldGroup) {
           group.name = oldGroup.name;
@@ -168,7 +193,12 @@ export const reducer = (state: State = initialState, action: action) => {
           group.aesKey = oldGroup.aesKey;
         }
         return group;
-      });
+      };
+
+      const groups = action.groups
+        .map(mergeWithOld)
+        .sort(byPrimaryGroup)
+        .sort(byIsNew);
       return {
         ...state,
         groups,
@@ -209,7 +239,10 @@ export const reducer = (state: State = initialState, action: action) => {
       }
       return {
         ...state,
-        groups: [action.group, ...state.groups],
+        groups: state.groups
+          .concat(action.group)
+          .sort(byPrimaryGroup)
+          .sort(byIsNew),
       };
     }
     case LEAVE_GROUP: {
@@ -220,6 +253,8 @@ export const reducer = (state: State = initialState, action: action) => {
     }
     case DISMISS_FROM_GROUP: {
       const group = state.groups.find((group) => group.id === action.group.id);
+      if (!group) return state;
+
       group.members = group.members.filter(
         (member) => member !== action.member,
       );
