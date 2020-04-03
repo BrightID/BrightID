@@ -59,13 +59,8 @@ export const handleAppContext = async (params: Params) => {
 };
 
 const linkVerification = async (baseUrl, context, contextInfo, contextId) => {
-  const { isSponsored } = store.getState();
   const oldBaseUrl = api.baseUrl;
   try {
-    if (!isSponsored) {
-      // Context doesn't have sponsorships available
-      return;
-    }
     api.baseUrl = baseUrl;
     api.linkContextId(context, contextId);
   } catch (e) {
