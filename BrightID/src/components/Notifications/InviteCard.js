@@ -48,7 +48,7 @@ class InviteCard extends React.Component<Props> {
       await api.joinGroup(invite.id);
       await dispatch(acceptInvite(invite.inviteId));
       await dispatch(joinGroup(invite));
-
+      Alert.alert('Success', `You joined ${getGroupName(invite)}`);
       if (backupCompleted) {
         await backupUser();
         if (invite.photo && invite.photo.filename) {
