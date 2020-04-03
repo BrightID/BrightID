@@ -207,4 +207,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state: state) => state)(RecoveryCodeScreen);
+export default connect()(RecoveryCodeScreen);

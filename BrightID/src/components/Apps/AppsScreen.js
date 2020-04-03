@@ -88,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(AppsScreen);
+export default connect((state) => ({ apps: state.apps.list }))(AppsScreen);

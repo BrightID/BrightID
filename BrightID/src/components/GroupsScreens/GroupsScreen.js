@@ -128,4 +128,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(GroupsScreen);
+export default connect(({ groups }) => ({ ...groups }))(GroupsScreen);

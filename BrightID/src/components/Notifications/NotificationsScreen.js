@@ -88,4 +88,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(NotificationsScreen);
+export default connect(({ groups, user }) => ({ ...groups, ...user }))(
+  NotificationsScreen,
+);

@@ -211,4 +211,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(SortingConnectionsScreen);
+export default connect(({ connections }) => ({ ...connections }))(
+  SortingConnectionsScreen,
+);

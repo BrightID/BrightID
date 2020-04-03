@@ -415,4 +415,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(HomeScreen);
+export default connect(({ user, connections, groups }) => ({
+  ...user,
+  ...connections,
+  ...groups,
+}))(HomeScreen);
