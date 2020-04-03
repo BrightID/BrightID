@@ -35,6 +35,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
     groups: 'loading',
     mutualConnections: 'loading',
     connectionDate: 'loading',
+    flagged: false,
   };
 
   static navigationOptions = {
@@ -61,7 +62,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
   fetchConnectionInfo = async () => {
     const myConnections = this.props.connections;
     try {
-      const { createdAt, groups, connections = [] } = await api.getUserInfo(
+      const { createdAt, groups, connections = [], flaggers } = await api.getUserInfo(
         this.props.connectUserData.id,
       );
       const mutualConnections = connections.filter(function(el) {
@@ -72,6 +73,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
         groups: groups.length,
         mutualConnections: mutualConnections.length,
         connectionDate: `Created ${moment(parseInt(createdAt, 10)).fromNow()}`,
+        flagged: flaggers && Object.keys(flaggers).length > 0,
       });
     } catch (err) {
       if (err instanceof Error && err.message === 'User not found') {
@@ -80,6 +82,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
           groups: 0,
           mutualConnections: 0,
           connectionDate: 'New user',
+          flagged: false,
         });
       } else {
         err instanceof Error ? console.warn(err.message) : console.log(err);
@@ -110,7 +113,12 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
             accessible={true}
             accessibilityLabel="user photo"
           />
-          <Text style={styles.connectName}>{name}</Text>
+          <Text style={styles.connectName}>
+            {name}
+            {this.state.flagged && (
+              <Text style={styles.flagged}> (flagged)</Text>
+            )}
+          </Text>
           <Text style={styles.connectedText}>{this.state.connectionDate}</Text>
         </View>
         <View style={styles.countsContainer}>
@@ -198,6 +206,10 @@ const styles = StyleSheet.create({
       height: 2,
     },
     textShadowRadius: 4,
+  },
+  flagged: {
+    fontSize: 20,
+    color: 'red',
   },
   buttonContainer: {
     flex: 1,

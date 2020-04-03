@@ -36,8 +36,10 @@ class MemberCard extends React.PureComponent<Props> {
       connectionDate,
       style,
       menuHandler,
+      isAdmin,
+      flaggers,
     } = this.props;
-
+    const flagged = isAdmin && flaggers && Object.keys(flaggers).length > 0;
     return (
       <View style={{ ...styles.container, ...style }}>
         <Image
@@ -51,6 +53,9 @@ class MemberCard extends React.PureComponent<Props> {
           <View style={styles.scoreContainer}>
             <Text style={styles.scoreLeft}>Score:</Text>
             <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>
+            {flagged && (
+              <Text style={styles.flagged}> (flagged)</Text>
+            )}
           </View>
           {connectionDate && (
             <Text style={styles.connectedText}>
@@ -58,7 +63,7 @@ class MemberCard extends React.PureComponent<Props> {
             </Text>
           )}
         </View>
-        {menuHandler && (
+        {isAdmin && menuHandler && (
           <TouchableOpacity
             style={styles.moreIcon}
             onPress={() => menuHandler(this.props)}
@@ -104,6 +109,10 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
+  },
+  flagged: {
+    fontSize: DEVICE_TYPE === 'large' ? 16 : 14,
+    color: 'red',
   },
   scoreContainer: {
     flexDirection: 'row',
