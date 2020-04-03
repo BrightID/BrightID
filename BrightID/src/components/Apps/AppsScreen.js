@@ -42,7 +42,7 @@ export class AppsScreen extends React.Component<Props> {
     }
   };
 
-  handleAction = (selectedApp) => () => {
+  handleAction = (selectedApp: string) => () => {
     this.setState({ selectedApp }, () => {
       if (deleteSheetRef) deleteSheetRef.show();
     });
