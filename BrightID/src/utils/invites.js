@@ -36,8 +36,9 @@ export const updateInvites = async (invites: invite[]): Promise<invite[]> => {
       oldInvite.members = invite.members;
       newInvites.push(oldInvite);
     } else {
+      let info;
       try {
-        const info = await getInviteInfo(invite);
+        info = await getInviteInfo(invite);
       } catch (err) {
         console.log('error in getting invite info' + err instanceof Error ? err.message : err);
         continue;
