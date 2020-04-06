@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import emitter from '@/emitter';
+import { DEVICE_TYPE } from '@/utils/constants';
 
 const showWhitePaper = () => {
   emitter.emit('showWhitePaper');
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
   },
   emptyGroupsText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: DEVICE_TYPE === 'large' ? 18 : 16,
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     borderColor: '#4a90e2',
     borderWidth: 1,
-    width: 150,
+    width: DEVICE_TYPE === 'large' ? 150 : 125,
     paddingTop: 15,
     paddingBottom: 15,
     alignItems: 'center',
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
   },
   learnMoreText: {
     fontFamily: 'ApexNew-Medium',
-    fontSize: 18,
+    fontSize: DEVICE_TYPE === 'large' ? 18 : 16,
     fontWeight: '500',
     textAlign: 'center',
     color: '#4a90e2',
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
     marginLeft: 14.5,
     borderRadius: 3,
     backgroundColor: '#4a90e2',
-    width: 150,
+    width: DEVICE_TYPE === 'large' ? 150 : 125,
     paddingTop: 16,
     paddingBottom: 16,
     alignItems: 'center',
@@ -102,13 +103,13 @@ const styles = StyleSheet.create({
   },
   createGroupText: {
     fontFamily: 'ApexNew-Medium',
-    fontSize: 18,
+    fontSize: DEVICE_TYPE === 'large' ? 18 : 16,
     fontWeight: '500',
     color: '#fff',
     textAlign: 'center',
   },
   smallGroupsLogo: {
-    width: 150,
-    height: 150,
+    width: DEVICE_TYPE === 'large' ? 150 : 135,
+    height: DEVICE_TYPE === 'large' ? 150 : 135,
   },
 });
