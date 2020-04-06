@@ -7,6 +7,7 @@ import {
   View,
   TouchableOpacity,
   SafeAreaView,
+  RefreshControl,
 } from 'react-native';
 import { connect } from 'react-redux';
 import fetchUserInfo from '@/actions/fetchUserInfo';
@@ -20,11 +21,22 @@ import { NoGroups } from './NoGroups';
  * Displays a search input and list of Group Cards
  */
 
+type State = {
+  refreshing: boolean,
+};
+
 export class GroupsScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }: { navigation: navigation }) => ({
     title: 'Groups',
     headerBackTitleVisible: false,
   });
+
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      refreshing: false,
+    };
+  }
 
   componentDidMount() {
     const { navigation, dispatch } = this.props;
@@ -44,6 +56,18 @@ export class GroupsScreen extends React.Component<Props, State> {
     );
   };
 
+  onRefresh = async () => {
+    try {
+      const { dispatch } = this.props;
+      this.setState({ refreshing: true });
+      await dispatch(fetchUserInfo());
+      this.setState({ refreshing: false });
+    } catch (err) {
+      console.log(err.message);
+      this.setState({ refreshing: false });
+    }
+  };
+
   render() {
     const { navigation, groups } = this.props;
 
@@ -57,6 +81,12 @@ export class GroupsScreen extends React.Component<Props, State> {
                 data={groups}
                 keyExtractor={({ id }, index) => id + index}
                 renderItem={this.renderGroup}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={this.state.refreshing}
+                    onRefresh={this.onRefresh}
+                  />
+                }
               />
             ) : (
               <NoGroups navigation={navigation} />
