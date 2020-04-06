@@ -171,7 +171,7 @@ export class MembersScreen extends Component<Props, State> {
     const isItemAdmin = group.admins?.includes(item.id);
     const handler = isAdmin && !isItemAdmin ? this.confirmDismiss : null;
     // eslint-disable-next-line react/jsx-props-no-spreading
-    return <MemberCard {...item} menuHandler={handler} />;
+    return <MemberCard {...item} isAdmin={isAdmin} menuHandler={handler} />;
   };
 
   getMembers = () => {
