@@ -20,7 +20,7 @@ export class InviteListScreen extends Component<Props, State> {
   renderEligible = ({ item }) => {
     return (
       <TouchableOpacity onPress={() => this.inviteToGroup(item)}>
-        <MemberCard {...item} />
+        <MemberCard {...item} isAdmin={true} />
       </TouchableOpacity>
     );
   };
