@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { connect } from 'react-redux';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { DEVICE_TYPE, INVITE_ACTIVE } from '@/utils/constants';
 import { navigate } from './NavigationService';
 /**
  * list of icons which will navigate between screens inside the app
@@ -54,8 +54,11 @@ export class BottomNav extends React.Component<Props, State> {
   }
 
   render() {
-    const { notifications, id } = this.props;
     const { keyboardShown } = this.state;
+    const { notifications, invites, id } = this.props;
+    const activeInvites = invites
+      ? invites.filter((invite) => invite.state === INVITE_ACTIVE)
+      : [];
     return id && !keyboardShown ? (
       <View style={styles.container}>
         <TouchableOpacity
@@ -106,8 +109,11 @@ export class BottomNav extends React.Component<Props, State> {
           accessibilityLabel="Notifications"
         >
           <View style={styles.navIconContainer}>
-            {notifications.length > 0 && (
-              <Text style={styles.badge}> {notifications.length} </Text>
+            {notifications.length + activeInvites.length > 0 && (
+              <Text style={styles.badge}>
+                {' '}
+                {notifications.length + activeInvites.length}{' '}
+              </Text>
             )}
             <SimpleLineIcons size={ICON_WIDTH} name="bell" color="#222" />
             <Text style={styles.navText}>Notifications</Text>

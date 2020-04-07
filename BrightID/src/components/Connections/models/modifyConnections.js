@@ -1,16 +1,23 @@
 // @flow
 
-import api from '../../../Api/BrightId';
-import { deleteConnection } from '../../../actions';
-import { fakeJoinGroups } from '../../../actions/fakeGroup';
+import store from '@/store';
+import api from '@/Api/BrightId';
+import { deleteConnection } from '@/actions';
+import { fakeJoinGroups } from '@/actions/fakeGroup';
+import { backupUser } from '../../Recovery/helpers';
 
 const flagAndDeleteConnection = (connection, reason) => async () => {
   try {
+    const { backupCompleted } = store.getState();
     const { dispatch, id } = connection;
     console.log('reason', reason);
     await api.removeConnection(id, reason);
     // remove connection from redux
     dispatch(deleteConnection(id));
+
+    if (backupCompleted) {
+      await backupUser();
+    }
   } catch (err) {
     err instanceof Error ? console.warn(err.message) : console.log(err);
   }
@@ -29,7 +36,7 @@ export const performAction = (
   switch (action) {
     case 'Flag as Duplicate':
     case 'Flag as Fake':
-    case 'Flag as Diseased': {
+    case 'Flag as Deceased': {
       let handler = flagAndDeleteConnection(
         connection,
         action.split(' as ')[1].toLowerCase(),

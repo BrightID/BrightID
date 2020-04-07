@@ -5,7 +5,7 @@ import { TextInput, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
-import { setSearchParam } from '../../../actions';
+import { setSearchParam } from '@/actions';
 
 /**
  * Search Bar in the Connections Screen

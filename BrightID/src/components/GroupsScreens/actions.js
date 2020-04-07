@@ -1,14 +1,23 @@
 // @flow
-import { Alert } from 'react-native';
-import { newGroupId } from '../../utils/groups';
-import {
-  deleteEligibleGroup,
-  joinGroup,
-  joinGroupAsCoFounder,
-  setNewGroupCoFounders,
-  createGroup,
-} from '../../actions/index';
-import api from '../../Api/BrightId';
+
+import { Alert, NativeModules } from 'react-native';
+import CryptoJS from 'crypto-js';
+import emitter from '@/emitter';
+import { saveImage } from '@/utils/filesystem';
+import { setNewGroupCoFounders, createGroup } from '@/actions/index';
+import api from '@/Api/BrightId';
+import backupApi from '@/Api/BackupApi';
+import { hash } from '@/utils/encoding';
+import { backupPhoto, backupUser } from '../Recovery/helpers';
+
+const { RNRandomBytes } = NativeModules;
+
+const randomKey = (size: number) =>
+  new Promise((resolve, reject) => {
+    RNRandomBytes.randomBytes(size, (err, bytes) => {
+      err ? reject(err) : resolve(bytes);
+    });
+  });
 
 export const toggleNewGroupCoFounder = (id: string) => (
   dispatch: dispatch,
@@ -24,49 +33,97 @@ export const toggleNewGroupCoFounder = (id: string) => (
   dispatch(setNewGroupCoFounders(coFounders));
 };
 
-export const createNewGroup = () => async (
-  dispatch: dispatch,
-  getState: getState,
-) => {
-  let { id, newGroupCoFounders } = getState();
-  if (newGroupCoFounders.length < 2) {
-    Alert.alert(
-      'Cannot create group',
-      'You need two other people to form a group',
-    );
-    return false;
-  }
+export const createNewGroup = (
+  photo: string,
+  name: string,
+  type: string,
+) => async (dispatch: dispatch, getState: getState) => {
   try {
-    const groupId = newGroupId();
+    let { id, newGroupCoFounders, connections, backupCompleted } = getState();
+    if (newGroupCoFounders.length < 2) {
+      throw new Error('You need two other people to form a group');
+    }
+
+    const [founder1, founder2] = newGroupCoFounders.map((u) =>
+      connections.find((c) => c.id === u),
+    );
+
+    if (!founder1 || !founder2) return;
+
+    if (type === 'primary') {
+      if (founder1.hasPrimaryGroup || founder2.hasPrimaryGroup) {
+        const name = founder1.hasPrimaryGroup ? founder1.name : founder2.name;
+        throw new Error(`${name} already has a primary group`);
+      }
+    }
+
+    const aesKey = await randomKey(16);
+    let uuidKey = await randomKey(9);
+    const groupId = hash(uuidKey);
+
+    const groupData = JSON.stringify({ name, photo });
+
+    const encryptedGroupData = CryptoJS.AES.encrypt(
+      groupData,
+      aesKey,
+    ).toString();
+
+    await backupApi.putRecovery('immutable', groupId, encryptedGroupData);
+    emitter.emit('creatingGroupChannel', 'creating the group');
+    const url = `https://recovery.brightid.org/backups/immutable/${groupId}`;
+
+    let filename = null;
+    if (photo) {
+      filename = await saveImage({
+        imageName: groupId,
+        base64Image: photo,
+      });
+    }
+
     const newGroup = {
-      founders: [id, newGroupCoFounders[0], newGroupCoFounders[1]],
+      founders: [id, founder1.id, founder2.id],
+      admins: [id, founder1.id, founder2.id],
+      members: [id],
       id: groupId,
       isNew: true,
-      knownMembers: [id],
       score: 0,
+      photo: { filename },
+      name,
+      url,
+      aesKey,
+      type,
     };
+
+    const data1 = founder1.aesKey
+      ? CryptoJS.AES.encrypt(aesKey, founder1.aesKey).toString()
+      : '';
+
+    const data2 = founder2.aesKey
+      ? CryptoJS.AES.encrypt(aesKey, founder2.aesKey).toString()
+      : '';
+
+    await api.createGroup(
+      groupId,
+      founder1.id,
+      data1,
+      founder2.id,
+      data2,
+      url,
+      type,
+    );
+
     dispatch(createGroup(newGroup));
-    return await api.createGroup(newGroupCoFounders[0], newGroupCoFounders[1]);
+
+    if (backupCompleted) {
+      await backupUser();
+      if (filename) {
+        await backupPhoto(groupId, filename);
+      }
+    }
+    return true;
   } catch (err) {
+    console.log(err);
     Alert.alert('Cannot create group', err.message);
     return false;
   }
-};
-
-export const join = (group: group) => async (dispatch: dispatch) => {
-  await api.joinGroup(group.id);
-  if (group.isNew && group.knownMembers.length < 2) {
-    // only creator has joined
-    dispatch(joinGroupAsCoFounder(group.id));
-  } else {
-    // creator and other co-founder have already joined; treat it as a normal group
-    dispatch(joinGroup(group));
-  }
-};
-
-export const deleteNewGroup = (groupId: string) => async (
-  dispatch: dispatch,
-) => {
-  await api.deleteGroup(groupId);
-  dispatch(deleteEligibleGroup(groupId));
 };

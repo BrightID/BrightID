@@ -1,12 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Alert, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { DEVICE_TYPE } from '@/utils/constants';
 import SearchConnections from '../Connections/SearchConnections';
 import TrustedConnectionCard from './TrustedConnectionCard';
-import { renderListOrSpinner } from './renderConnections';
 import { setTrustedConnections } from './helpers';
 
 /**
@@ -14,11 +13,7 @@ import { setTrustedConnections } from './helpers';
  * Displays a search input and list of Connection Cards
  */
 
-type State = {
-  loading: boolean,
-};
-
-class TrustedConnectionsScreen extends React.Component<Props, State> {
+class TrustedConnectionsScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({
     title: 'Trusted Connections',
     headerBackTitleVisible: false,
@@ -72,6 +67,8 @@ class TrustedConnectionsScreen extends React.Component<Props, State> {
 
   render() {
     const { navigation } = this.props;
+    const connections = this.filterConnections();
+
     return (
       <View style={styles.container}>
         <View style={styles.mainContainer}>
@@ -89,7 +86,20 @@ class TrustedConnectionsScreen extends React.Component<Props, State> {
           {DEVICE_TYPE === 'large' && (
             <SearchConnections navigation={navigation} />
           )}
-          <View style={styles.mainContainer}>{renderListOrSpinner(this)}</View>
+          <View style={styles.mainContainer}>
+          {connections.length > 0 ? (
+            <FlatList
+              style={styles.connectionsContainer}
+              data={connections}
+              keyExtractor={({ id }, index) => id + index}
+              renderItem={this.renderConnection}
+            />
+          ) : (
+            <View>
+              <Text style={styles.emptyText}>No connections</Text>
+            </View>
+          )}
+          </View>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -114,6 +124,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  connectionsContainer: {
+    flex: 1,
+    width: '96.7%',
+    borderTopWidth: 1,
+    borderTopColor: '#e3e1e1',
+  },
+  emptyText: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 20,
   },
   titleContainer: {
     alignItems: 'center',

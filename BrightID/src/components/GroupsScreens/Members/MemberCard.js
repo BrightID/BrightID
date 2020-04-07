@@ -29,8 +29,19 @@ class MemberCard extends React.PureComponent<Props> {
   };
 
   render() {
-    const { photo, name, score, connectionDate, style } = this.props;
-
+    const {
+      photo,
+      name,
+      score,
+      connectionDate,
+      style,
+      menuHandler,
+      isAdmin,
+      flaggers,
+    } = this.props;
+    console.log('flaggers', flaggers);
+    const flags = flaggers && Object.keys(flaggers);
+    const flagged = isAdmin && flaggers && flags.length > 0;
     return (
       <View style={{ ...styles.container, ...style }}>
         <Image
@@ -44,11 +55,22 @@ class MemberCard extends React.PureComponent<Props> {
           <View style={styles.scoreContainer}>
             <Text style={styles.scoreLeft}>Score:</Text>
             <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>
+            {flagged && <Text style={styles.flagged}> (flagged)</Text>}
           </View>
-          <Text style={styles.connectedText}>
-            Connected {moment(parseInt(connectionDate, 10)).fromNow()}
-          </Text>
+          {connectionDate && (
+            <Text style={styles.connectedText}>
+              Connected {moment(parseInt(connectionDate, 10)).fromNow()}
+            </Text>
+          )}
         </View>
+        {isAdmin && menuHandler && (
+          <TouchableOpacity
+            style={styles.moreIcon}
+            onPress={() => menuHandler(this.props)}
+          >
+            <Ionicon size={48} name="ios-close" color="#ccc" />
+          </TouchableOpacity>
+        )}
       </View>
     );
   }
@@ -87,6 +109,11 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
+  },
+  flagged: {
+    fontFamily: 'ApexNew-Medium',
+    fontSize: 14,
+    color: 'red',
   },
   scoreContainer: {
     flexDirection: 'row',

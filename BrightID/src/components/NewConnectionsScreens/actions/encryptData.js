@@ -49,11 +49,6 @@ export const encryptAndUploadLocalData = () => async (
 
     const dataStr = JSON.stringify(dataObj);
 
-    // const cipher = createCipher('aes128', aesKey);
-
-    // let encrypted =
-    //   cipher.update(dataStr, 'utf8', 'base64') + cipher.final('base64');
-
     let encrypted = CryptoJS.AES.encrypt(dataStr, aesKey).toString();
     dispatch(postData(encrypted));
   } catch (err) {

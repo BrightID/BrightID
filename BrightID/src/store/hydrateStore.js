@@ -6,9 +6,9 @@ import store from './index';
 import { objToUint8 } from '../utils/encoding';
 import { hydrateState } from '../actions';
 
-export const hydrateStore = async () => {
+export const hydrateStore = (storeVersion: string) => async () => {
   try {
-    const dataStr = await AsyncStorage.getItem('store@v1');
+    const dataStr = await AsyncStorage.getItem(storeVersion);
     if (dataStr !== null) {
       const dataObj = JSON.parse(dataStr);
       dataObj.secretKey = objToUint8(dataObj.secretKey);

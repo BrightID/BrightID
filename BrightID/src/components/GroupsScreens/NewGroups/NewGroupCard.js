@@ -7,8 +7,8 @@ import RNFS from 'react-native-fs';
 import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { toggleNewGroupCoFounder } from '../actions';
 import { DEVICE_TYPE } from '@/utils/constants';
+import { toggleNewGroupCoFounder } from '../actions';
 
 /**
  * Connection Card in the Connections Screen
@@ -47,7 +47,7 @@ class NewGroupCard extends React.PureComponent<Props> {
           <AntDesign
             size={30.4}
             name={selected ? 'checkcircle' : 'checkcircleo'}
-            color="#000"
+            color={selected ? '#28a84a' : '#000'}
           />
         </TouchableOpacity>
       );

@@ -1,5 +1,3 @@
-// @flow
-
 import * as React from 'react';
 import {
   StyleSheet,
@@ -7,38 +5,50 @@ import {
   TouchableOpacity,
   View,
   SafeAreaView,
+  FlatList,
 } from 'react-native';
 import { connect } from 'react-redux';
-import SearchConnections from './SearchConnections';
-import NewGroupCard from './NewGroupCard';
 import store from '@/store';
-import { createNewGroup } from '../actions';
-import { renderListOrSpinner } from './renderConnections';
+import emitter from '@/emitter';
 import { clearNewGroupCoFounders } from '@/actions';
 import { DEVICE_TYPE } from '@/utils/constants';
+import Spinner from 'react-native-spinkit';
+import { createNewGroup } from '../actions';
+import NewGroupCard from './NewGroupCard';
+import SearchConnections from './SearchConnections';
 
-/**
- * Connection screen of BrightID
- * Displays a search input and list of Connection Cards
- */
+// type State = {
+//   creating: boolean,
+// };
 
-type State = {
-  loading: boolean,
-};
-
-export class NewGroupScreen extends React.Component<Props, State> {
+export class NewGroupScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({
     title: 'New Group',
     headerShown: DEVICE_TYPE === 'large',
   });
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      creating: false,
+      creationState: 'uploading group photo',
+    };
+  }
+
   componentDidMount() {
     const { navigation, dispatch } = this.props;
-
+    navigation.addListener('willFocus', () => {
+      emitter.on('creatingGroupChannel', this.updateCreationState);
+    });
     navigation.addListener('willBlur', () => {
       dispatch(clearNewGroupCoFounders());
+      emitter.off('creatingGroupChannel', this.updateCreationState);
     });
   }
+
+  updateCreationState = (creationState) => {
+    this.setState({ creationState });
+  };
 
   filterConnections = () => {
     const { connections, searchParam } = this.props;
@@ -57,26 +67,46 @@ export class NewGroupScreen extends React.Component<Props, State> {
     return newGroupCoFounders.includes(card.id);
   };
 
-  createNewGroup = async () => {
-    const { navigation } = this.props;
+  createGroup = async () => {
     try {
-      await store.dispatch(createNewGroup());
-      navigation.goBack();
+      this.setState({ creating: true });
+      const { navigation } = this.props;
+      const { photo, name, isPrimary } = navigation.state.params;
+      const type = isPrimary ? 'primary' : 'general';
+      const res = await store.dispatch(createNewGroup(photo, name, type));
+      if (res) {
+        navigation.navigate('Groups');
+      } else {
+        this.setState({ creating: false });
+      }
     } catch (err) {
-      console.log(err);
+      this.setState({ creating: false });
     }
   };
 
-  renderCreateGroupButton = () => (
-    <View style={styles.createGroupButtonContainer}>
-      <TouchableOpacity
-        onPress={this.createNewGroup}
-        style={styles.createGroupButton}
-      >
-        <Text style={styles.buttonInnerText}>Create Group</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  renderButtonOrSpinner = () => {
+    const buttonDisabled = this.props.newGroupCoFounders.length < 2;
+    return !this.state.creating ? (
+      <View style={styles.createGroupButtonContainer}>
+        <TouchableOpacity
+          onPress={this.createGroup}
+          style={
+            buttonDisabled
+              ? { ...styles.createGroupButton, opacity: 0.4 }
+              : styles.createGroupButton
+          }
+          disabled={buttonDisabled}
+        >
+          <Text style={styles.buttonInnerText}>Create Group</Text>
+        </TouchableOpacity>
+      </View>
+    ) : (
+      <View style={styles.loader}>
+        <Text style={styles.textInfo}>{this.state.creationState} ...</Text>
+        <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
+      </View>
+    );
+  };
 
   renderConnection = ({ item }) => (
     <NewGroupCard
@@ -89,6 +119,7 @@ export class NewGroupScreen extends React.Component<Props, State> {
   );
 
   render() {
+    const connections = this.filterConnections();
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.mainContainer}>
@@ -101,10 +132,22 @@ export class NewGroupScreen extends React.Component<Props, State> {
           {DEVICE_TYPE === 'large' && (
             <SearchConnections navigation={this.props.navigation} />
           )}
-          {DEVICE_TYPE === 'small' && this.renderCreateGroupButton()}
-          <View style={styles.mainContainer}>{renderListOrSpinner(this)}</View>
+          <View style={styles.mainContainer}>
+            {connections.length > 0 ? (
+              <FlatList
+                style={styles.connectionsContainer}
+                data={connections}
+                keyExtractor={({ id }, index) => id + index}
+                renderItem={this.renderConnection}
+              />
+            ) : (
+              <View>
+                <Text style={styles.emptyText}>No connections</Text>
+              </View>
+            )}
+          </View>
         </View>
-        {DEVICE_TYPE === 'large' && this.renderCreateGroupButton()}
+        {this.renderButtonOrSpinner()}
       </SafeAreaView>
     );
   }
@@ -127,7 +170,10 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#e3e1e1',
   },
-
+  emptyText: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 20,
+  },
   moreIcon: {
     marginRight: 16,
   },
@@ -184,14 +230,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 13,
     paddingBottom: 12,
-    marginTop: 9,
-    marginBottom: DEVICE_TYPE === 'large' ? 30 : 9,
+    marginBottom: DEVICE_TYPE === 'large' ? 30 : 25,
   },
+
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',
     color: '#fff',
     fontWeight: '600',
     fontSize: 18,
+  },
+  textInfo: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: 18,
+    margin: 18,
+  },
+  loader: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
   },
 });
 

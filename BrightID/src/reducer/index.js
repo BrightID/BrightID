@@ -4,17 +4,18 @@ import { dissoc, find, mergeRight, propEq } from 'ramda';
 import {
   SET_IS_SPONSORED,
   USER_SCORE,
-  GROUPS_COUNT,
   SEARCH_PARAM,
   CREATE_GROUP,
   SET_NEW_GROUP_CO_FOUNDERS,
   CLEAR_NEW_GROUP_CO_FOUNDERS,
-  SET_ELIGIBLE_GROUPS,
-  DELETE_ELIGIBLE_GROUP,
-  SET_CURRENT_GROUPS,
+  SET_GROUPS,
+  SET_INVITES,
+  DELETE_GROUP,
+  ACCEPT_INVITE,
+  REJECT_INVITE,
   JOIN_GROUP,
-  JOIN_GROUP_AS_CO_FOUNDER,
   LEAVE_GROUP,
+  DISMISS_FROM_GROUP,
   SET_CONNECTIONS,
   CONNECTIONS_SORT,
   SET_USER_DATA,
@@ -46,18 +47,13 @@ import {
   ADD_OPERATION,
   REMOVE_OPERATION,
   RESET_OPERATIONS,
-} from '../actions';
+} from '@/actions';
+import { INVITE_ACCEPTED, INVITE_REJECTED } from '@/utils/constants';
 
 /**
  * INITIAL STATE
  * structure the state of the app here
  *
- * @param score number
- * @param name String
- * @param photo Image
- * @param groupsCount Number
- * @param searchParam String
- * @param connections Array => Object
  */
 
 // TODO: destructure every layer of this reducer
@@ -68,11 +64,10 @@ export const initialState: State = {
   isSponsored: false,
   name: '',
   photo: { filename: '' },
-  groupsCount: 0,
   searchParam: '',
   newGroupCoFounders: [],
-  eligibleGroups: [],
-  currentGroups: [],
+  groups: [],
+  invites: [],
   connections: [],
   verifications: [],
   apps: [],
@@ -111,6 +106,28 @@ export const initialState: State = {
   },
 };
 
+const byPrimaryGroup = (a, b) => {
+  if (a.type === 'primary') {
+    return -1;
+  } else if (b.type === 'primary') {
+    return 1;
+  } else {
+    return 0;
+  }
+};
+
+const byIsNew = (a, b) => {
+  if (a.isNew && b.isNew) {
+    return 0;
+  } else if (a.isNew) {
+    return 1;
+  } else if (b.isNew) {
+    return -1;
+  } else {
+    return 0;
+  }
+};
+
 export const reducer = (state: State = initialState, action: action) => {
   switch (action.type) {
     case HYDRATE_STATE: {
@@ -128,12 +145,6 @@ export const reducer = (state: State = initialState, action: action) => {
         isSponsored: action.isSponsored,
       };
     }
-    case GROUPS_COUNT: {
-      return {
-        ...state,
-        groupsCount: action.groupsCount,
-      };
-    }
     case SET_USER_PHOTO: {
       return {
         ...state,
@@ -149,7 +160,16 @@ export const reducer = (state: State = initialState, action: action) => {
     case CREATE_GROUP: {
       return {
         ...state,
-        eligibleGroups: [...state.eligibleGroups.slice(0), action.group],
+        groups: state.groups
+          .concat(action.group)
+          .sort(byPrimaryGroup)
+          .sort(byIsNew),
+      };
+    }
+    case DELETE_GROUP: {
+      return {
+        ...state,
+        groups: state.groups.filter((group) => group.id !== action.group.id),
       };
     }
     case SET_NEW_GROUP_CO_FOUNDERS: {
@@ -164,56 +184,83 @@ export const reducer = (state: State = initialState, action: action) => {
         newGroupCoFounders: [],
       };
     }
-    case SET_ELIGIBLE_GROUPS: {
+    case SET_GROUPS: {
+      const mergeWithOld = (group) => {
+        const oldGroup = state.groups.find((g) => g.id === group.id);
+        if (oldGroup) {
+          group.name = oldGroup.name;
+          group.photo = oldGroup.photo;
+          group.aesKey = oldGroup.aesKey;
+        }
+        return group;
+      };
+
+      const groups = action.groups
+        .map(mergeWithOld)
+        .sort(byPrimaryGroup)
+        .sort(byIsNew);
       return {
         ...state,
-        eligibleGroups: action.eligibleGroups,
+        groups,
       };
     }
-    case DELETE_ELIGIBLE_GROUP: {
+    case SET_INVITES: {
       return {
         ...state,
-        eligibleGroups: state.eligibleGroups.filter(
-          (group) => group.id !== action.groupId,
-        ),
+        invites: action.invites,
       };
     }
-    case SET_CURRENT_GROUPS: {
+    case ACCEPT_INVITE: {
       return {
         ...state,
-        currentGroups: action.currentGroups,
+        invites: state.invites.map((invite) => {
+          if (invite.inviteId === action.inviteId) {
+            invite.state = INVITE_ACCEPTED;
+          }
+          return invite;
+        }),
+      };
+    }
+    case REJECT_INVITE: {
+      return {
+        ...state,
+        invites: state.invites.map((invite) => {
+          if (invite.inviteId === action.inviteId) {
+            invite.state = INVITE_REJECTED;
+          }
+          return invite;
+        }),
       };
     }
     case JOIN_GROUP: {
-      action.group.isNew = false;
-      action.group.knownMembers.push(state.id);
+      action.group.members.push(state.id);
+      if (action.group.members.length === 3) {
+        action.group.isNew = false;
+      }
       return {
         ...state,
-        currentGroups: [action.group, ...state.currentGroups],
-        eligibleGroups: state.eligibleGroups.filter(
-          (group) => group.id !== action.group.id,
-        ),
-      };
-    }
-    case JOIN_GROUP_AS_CO_FOUNDER: {
-      // modify eligibleGroups[groupIndex].knownMembers, creating copies
-      // at each of those three levels
-      let newElGroups = state.eligibleGroups.slice();
-      let groupIndex = newElGroups.findIndex((g) => g.id === action.groupId);
-      let group = newElGroups[groupIndex];
-      let newKnownMembers = [...group.knownMembers, state.id];
-      newElGroups[groupIndex] = { ...group, knownMembers: newKnownMembers };
-      return {
-        ...state,
-        eligibleGroups: newElGroups,
+        groups: state.groups
+          .concat(action.group)
+          .sort(byPrimaryGroup)
+          .sort(byIsNew),
       };
     }
     case LEAVE_GROUP: {
       return {
         ...state,
-        currentGroups: state.currentGroups.filter(
-          (group) => group.id !== action.groupId,
-        ),
+        groups: state.groups.filter((group) => group.id !== action.group.id),
+      };
+    }
+    case DISMISS_FROM_GROUP: {
+      const group = state.groups.find((group) => group.id === action.group.id);
+      if (!group) return state;
+
+      group.members = group.members.filter(
+        (member) => member !== action.member,
+      );
+      return {
+        ...state,
+        groups: [...state.groups],
       };
     }
     case SET_CONNECTIONS: {
@@ -228,7 +275,7 @@ export const reducer = (state: State = initialState, action: action) => {
         connections: state.connections.map<connection>((conn: connection) => {
           const updatedConn = find(propEq('id', conn.id))(action.connections);
           if (!updatedConn) {
-            if (conn.status === 'verified') conn.status = 'Deleted';
+            if (conn.status === 'verified') conn.status = 'deleted';
             return conn;
           } else {
             if (conn.status === 'initiated' || !conn.status)
@@ -246,8 +293,8 @@ export const reducer = (state: State = initialState, action: action) => {
       return {
         ...state,
         connections: [
-          ...state.connections.filter(removeExisting),
           action.connection,
+          ...state.connections.filter(removeExisting),
         ],
       };
     }

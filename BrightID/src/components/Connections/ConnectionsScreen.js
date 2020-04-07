@@ -4,9 +4,11 @@ import * as React from 'react';
 import {
   StyleSheet,
   View,
+  Text,
   TouchableOpacity,
   Alert,
   SafeAreaView,
+  FlatList
 } from 'react-native';
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -16,7 +18,6 @@ import { DEVICE_TYPE } from '@/utils/constants';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
 import { createFakeConnection } from './models/createFakeConnection';
-import { renderListOrSpinner } from './renderConnections';
 import FloatingActionButton from '../FloatingActionButton';
 import { defaultSort } from './models/sortingUtility';
 import { performAction } from './models/modifyConnections';
@@ -26,11 +27,7 @@ import { performAction } from './models/modifyConnections';
  * Displays a search input and list of Connection Cards
  */
 
-type State = {
-  loading: boolean,
-};
-
-export class ConnectionsScreen extends React.Component<Props, State> {
+export class ConnectionsScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }: { navigation: navigation }) => ({
     title: 'Connections',
     headerRight: () => (
@@ -112,6 +109,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
 
   render() {
     const { navigation } = this.props;
+    const connections = this.filterConnections();
     const actions = [
       'Flag as Duplicate',
       'Flag as Fake',
@@ -129,7 +127,18 @@ export class ConnectionsScreen extends React.Component<Props, State> {
           <View style={styles.mainContainer}>
             <SearchConnections navigation={navigation} sortable={true} />
             <View style={styles.mainContainer}>
-              {renderListOrSpinner(this)}
+            {connections.length > 0 ? (
+              <FlatList
+                style={styles.connectionsContainer}
+                data={connections}
+                keyExtractor={({ id }, index) => id + index}
+                renderItem={this.renderConnection}
+              />
+            ) : (
+              <View>
+                <Text style={styles.emptyText}>No connections</Text>
+              </View>
+            )}
             </View>
           </View>
           <FloatingActionButton onPress={this.handleNewConnection} />

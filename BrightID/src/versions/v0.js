@@ -8,11 +8,11 @@ import {
   setConnections,
   setApps,
   removeSafePubKey,
-} from '../actions';
+} from '@/actions';
 
-import { defaultSort } from '../components/Connections/models/sortingUtility';
+import { defaultSort } from '@/components/Connections/models/sortingUtility';
 
-import store from '../store';
+import store from '@/store';
 
 export const bootstrapV0 = async (navigation: navigation) => {
   try {

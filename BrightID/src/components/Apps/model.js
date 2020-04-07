@@ -30,6 +30,7 @@ export const handleAppContext = async (params: Params) => {
     contextInfo = await api.getContext(context);
     console.log('contextInfo', contextInfo);
   } catch (e) {
+    Alert.alert('Failed', `Unable to link ${context} with BrightID`);
     console.log(e);
   } finally {
     api.baseUrl = oldBaseUrl;
@@ -37,7 +38,7 @@ export const handleAppContext = async (params: Params) => {
   if (contextInfo && contextInfo.verification) {
     Alert.alert(
       'App Verification?',
-      `Do you want to verify your account in ${context} by your BrightID?`,
+      `Do you want to link your account in ${context} to your BrightID?`,
       [
         {
           text: 'Yes',
@@ -54,39 +55,14 @@ export const handleAppContext = async (params: Params) => {
       ],
     );
   } else {
+    Alert.alert('Failed', `Unable to link ${context} with BrightID`);
     goBack();
   }
 };
 
 const linkVerification = async (baseUrl, context, contextInfo, contextId) => {
-  const { isSponsored } = store.getState();
   const oldBaseUrl = api.baseUrl;
   try {
-    if (!isSponsored) {
-      // Context doesn't have sponsorships available
-      return;
-    }
-    if (contextInfo.verificationUrl) {
-      const { publicKey, secretKey } = await nacl.sign.keyPair();
-      const b64PubKey = uInt8ArrayToB64(publicKey);
-      const sig = uInt8ArrayToB64(
-        nacl.sign.detached(strToUint8Array(contextId), secretKey),
-      );
-      let resp = await fetch(contextInfo.verificationUrl, {
-        method: 'PUT',
-        body: JSON.stringify({
-          contextId,
-          publicKey: b64PubKey,
-          sig,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      resp = await resp.json();
-      console.log('resp', resp);
-      contextId = b64PubKey;
-    }
     api.baseUrl = baseUrl;
     api.linkContextId(context, contextId);
   } catch (e) {
@@ -103,7 +79,9 @@ const linkVerification = async (baseUrl, context, contextInfo, contextId) => {
     api.baseUrl = oldBaseUrl;
     if (contextInfo.isApp) {
       saveApp(context, contextInfo);
+      Alert.alert('Success', `Succesfully linked ${context} with BrightID`);
     } else {
+      Alert.alert('Success', `Succesfully linked ${context} with BrightID`);
       goBack();
     }
   }

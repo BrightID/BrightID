@@ -56,6 +56,7 @@
     "rn-fetch-blob": "^0.12.0",
     "stream": "^0.0.2",
     "timers": "^0.1.1",
+    "toggle-switch-react-native": "^2.1.0",
     "tweetnacl": "https://github.com/RnbWd/tweetnacl-native",
     "xml2js": "^0.4.19"
   },
