@@ -26,7 +26,7 @@ export class MembersScreen extends Component<Props, State> {
     return {
       title: getGroupName(group),
       headerTitleStyle: {
-        fontSize: DEVICE_TYPE === 'large' ? 20 : 16,
+        fontSize: DEVICE_TYPE === 'large' ? 20 : 18,
         paddingLeft: 20,
         paddingRight: 30,
       },

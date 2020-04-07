@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#9e9e9e',
     width: '100%',
-    height: 40,
+    height: 45,
   },
   buttonInfoText: {
     fontFamily: 'ApexNew-Book',
