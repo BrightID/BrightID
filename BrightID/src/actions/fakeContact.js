@@ -45,7 +45,7 @@ export const addFakeConnection = (navigation: navigation) => async (
   const aesKey = await randomKey(16);
   const userData = {
     publicKey: b64PubKey,
-    id,
+    id: connectId,
     timestamp,
     secretKey,
     signedMessage,
