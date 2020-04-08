@@ -25,16 +25,6 @@ export const bootstrapAndUpgrade = async () => {
       await bootstrap('store@v4');
     } else if (v1) {
       await bootstrap('store@v1');
-      // store.dispatch(setGroups([]));
-      // store.dispatch(setInvites([]));
-      // const state = store.getState();
-      // delete state.eligibleGroups;
-      // delete state.currentGroups;
-      // if (verifyStore(state)) {
-      //   await saveStore(state);
-      //   // lets not delete this just in case
-      //   // await deleteV1();
-      // }
     } else if (!v1) {
       await bootstrapV0();
       await getConnections(allKeys);
@@ -47,12 +37,6 @@ export const bootstrapAndUpgrade = async () => {
         upgradeConnsAndIds();
         store.dispatch(setGroups([]));
         store.dispatch(setInvites([]));
-        // const state = store.getState();
-        // delete state.eligibleGroups;
-        // delete state.currentGroups;
-        // if (verifyStore(state)) {
-        //   await saveStore(state);
-        // }
       } else {
         Alert.alert('Error: Please Backup Data and reinstall BrightId');
       }
@@ -64,4 +48,3 @@ export const bootstrapAndUpgrade = async () => {
 
 export const isV1 = (allKeys: string[]) => allKeys.includes('store@v1');
 export const isV4 = (allKeys: string[]) => allKeys.includes('store@v4');
-export const isV4_1 = (allKeys: string[]) => allKeys.includes('store@v4-1');
