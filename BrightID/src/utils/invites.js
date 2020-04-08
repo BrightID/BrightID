@@ -52,7 +52,7 @@ export const updateInvites = async (invites: invite[]): Promise<invite[]> => {
     let newInvites = [];
     for (const invite of invites) {
       const oldInvite = oldInvites.find(eqProps('inviteId', invite));
-      if (oldInvite && oldInvite.name) {
+      if (oldInvite && (oldInvite.name || !oldInvite.data)) {
         oldInvite.members = invite.members;
         newInvites.push(oldInvite);
       } else {
