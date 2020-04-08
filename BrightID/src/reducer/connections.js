@@ -10,6 +10,7 @@ import {
   ADD_TRUSTED_CONNECTION,
   REMOVE_TRUSTED_CONNECTION,
   HYDRATE_CONNECTIONS,
+  RESET_STORE,
 } from '@/actions';
 
 export const initialState = {
@@ -93,6 +94,9 @@ export const reducer = (
         return state;
 
       return { ...action.data };
+    }
+    case RESET_STORE: {
+      return { ...initialState };
     }
     default: {
       return state;

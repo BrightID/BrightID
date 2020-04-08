@@ -13,6 +13,7 @@ import {
   JOIN_GROUP,
   LEAVE_GROUP,
   DISMISS_FROM_GROUP,
+  RESET_STORE,
 } from '@/actions';
 import { INVITE_ACCEPTED, INVITE_REJECTED } from '@/utils/constants';
 
@@ -174,6 +175,9 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
         ...state,
         groups: update(index, updatedGroup, state.groups),
       };
+    }
+    case RESET_STORE: {
+      return { ...initialState };
     }
     default: {
       return state;

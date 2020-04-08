@@ -1,6 +1,6 @@
 // @flow
 
-import { SET_APPS, ADD_APP, REMOVE_APP } from '@/actions';
+import { SET_APPS, ADD_APP, REMOVE_APP, RESET_STORE } from '@/actions';
 
 const initialState = {
   apps: [],
@@ -33,6 +33,9 @@ export const reducer = (state: AppsState = initialState, action: action) => {
         ...state,
         apps,
       };
+    }
+    case RESET_STORE: {
+      return { ...initialState };
     }
     default: {
       return state;

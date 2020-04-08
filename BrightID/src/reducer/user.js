@@ -16,6 +16,7 @@ import {
   REMOVE_SAFE_PUB_KEY,
   SET_VERIFICATIONS,
   HYDRATE_USER,
+  RESET_STORE,
 } from '@/actions';
 
 const initialState = {
@@ -132,7 +133,9 @@ export const reducer = (state: UserState = initialState, action: action) => {
         secretKey: action.data.secretKey,
       };
     }
-
+    case RESET_STORE: {
+      return { ...initialState };
+    }
     default: {
       return state;
     }
