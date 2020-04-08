@@ -23,7 +23,7 @@ declare type State = {
 };
 
 declare type AppsState = {
-  list: AppInfo[],
+  apps: AppInfo[],
 };
 
 declare type AppInfo = {
@@ -118,7 +118,7 @@ declare type invite = {
 };
 
 declare type OperationsState = {
-  list: string[],
+  operations: string[],
 };
 
 declare type RecoveryData = {

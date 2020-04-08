@@ -35,7 +35,7 @@ export const reducer = (
         connections: state.connections.map<connection>((conn: connection) => {
           const updatedConn = find(propEq('id', conn.id))(action.connections);
           if (!updatedConn) {
-            if (conn.status === 'verified') conn.status = 'Deleted';
+            if (conn.status === 'verified') conn.status = 'deleted';
             return conn;
           } else {
             if (conn.status === 'initiated' || !conn.status)

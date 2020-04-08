@@ -9,7 +9,11 @@ import { handleAppContext, deleteApp } from './model';
 
 let deleteSheetRef = '';
 
-export class AppsScreen extends React.Component<Props> {
+type State = {
+  selectedApp: string,
+};
+
+export class AppsScreen extends React.Component<Prop, State> {
   static navigationOptions = () => ({
     title: 'Apps',
     headerRight: () => <View />,
@@ -17,7 +21,7 @@ export class AppsScreen extends React.Component<Props> {
 
   deleteSheetRef: string;
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       selectedApp: '',
@@ -88,4 +92,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => ({ apps: state.apps.list }))(AppsScreen);
+export default connect((state) => ({ apps: state.apps.apps }))(AppsScreen);

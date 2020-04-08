@@ -16,18 +16,50 @@ import {
 } from '@/actions';
 import { INVITE_ACCEPTED, INVITE_REJECTED } from '@/utils/constants';
 
+/* ******** HELPERS ****************** */
+
+const byPrimaryGroup = (a, b) => {
+  if (a.type === 'primary') {
+    return -1;
+  } else if (b.type === 'primary') {
+    return 1;
+  } else {
+    return 0;
+  }
+};
+
+const byIsNew = (a, b) => {
+  if (a.isNew && b.isNew) {
+    return 0;
+  } else if (a.isNew) {
+    return 1;
+  } else if (b.isNew) {
+    return -1;
+  } else {
+    return 0;
+  }
+};
+
+/* ******** INITIAL STATE ************** */
+
 export const initialState = {
   newGroupCoFounders: [],
   groups: [],
   invites: [],
 };
 
+/* ******** REDUCER ****************** */
+
 export const reducer = (state: GroupsState = initialState, action: action) => {
   switch (action.type) {
     case CREATE_GROUP: {
+      const groups: group[] = state.groups
+        .concat(action.group)
+        .sort(byPrimaryGroup)
+        .sort(byIsNew);
       return {
         ...state,
-        groups: [action.group, ...state.groups.slice(0)],
+        groups,
       };
     }
     case DELETE_GROUP: {
@@ -52,7 +84,7 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
       };
     }
     case SET_GROUPS: {
-      const groups = action.groups.map((group) => {
+      const mergeWithOld = (group) => {
         const oldGroup = state.groups.find((g) => g.id === group.id);
         if (oldGroup) {
           group.name = oldGroup.name;
@@ -60,7 +92,12 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
           group.aesKey = oldGroup.aesKey;
         }
         return group;
-      });
+      };
+
+      const groups = action.groups
+        .map(mergeWithOld)
+        .sort(byPrimaryGroup)
+        .sort(byIsNew);
       return {
         ...state,
         groups,
@@ -98,9 +135,15 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
       if (action.group.members.length === 3) {
         action.group.isNew = false;
       }
+
+      const groups: group[] = state.groups
+        .concat(action.group)
+        .sort(byPrimaryGroup)
+        .sort(byIsNew);
+
       return {
         ...state,
-        groups: [action.group, ...state.groups],
+        groups,
       };
     }
     case LEAVE_GROUP: {
@@ -116,7 +159,7 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
       const index = indexOf(action.group, state.groups);
 
       if (index === -1) {
-        return { ...state };
+        return state;
       }
 
       const group = state.groups[index];

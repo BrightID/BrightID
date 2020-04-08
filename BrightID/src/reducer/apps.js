@@ -3,7 +3,7 @@
 import { SET_APPS, ADD_APP, REMOVE_APP } from '@/actions';
 
 const initialState = {
-  list: [],
+  apps: [],
 };
 
 export const reducer = (state: AppsState = initialState, action: action) => {
@@ -11,27 +11,27 @@ export const reducer = (state: AppsState = initialState, action: action) => {
     case SET_APPS: {
       return {
         ...state,
-        list: action.apps,
+        apps: action.apps,
       };
     }
     case ADD_APP: {
       const removeExisting = ({ name }) => name !== action.app.name;
-      const list: AppInfo[] = state.list
+      const apps: AppInfo[] = state.apps
         .filter(removeExisting)
         .concat(action.app);
 
       return {
         ...state,
-        list,
+        apps,
       };
     }
     case REMOVE_APP: {
-      const list: AppInfo[] = state.list.filter(
+      const apps: AppInfo[] = state.apps.filter(
         (app) => app.name !== action.name,
       );
       return {
         ...state,
-        list,
+        apps,
       };
     }
     default: {

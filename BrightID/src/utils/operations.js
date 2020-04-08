@@ -8,7 +8,7 @@ const time_fudge = 2 * 60 * 1000; // trace operations for 2 minutes
 
 export const pollOperations = async () => {
   const {
-    operations: { list: operations },
+    operations: { operations },
   } = store.getState();
   try {
     for (const op of operations) {

@@ -3,7 +3,7 @@
 import { ADD_OPERATION, REMOVE_OPERATION, RESET_OPERATIONS } from '@/actions';
 
 const initialState = {
-  list: [],
+  operations: [],
 };
 
 export const reducer = (
@@ -12,21 +12,23 @@ export const reducer = (
 ) => {
   switch (action.type) {
     case ADD_OPERATION: {
-      const list: string[] = state.list.concat(action.op);
+      const operations: string[] = state.operations.concat(action.op);
       return {
         ...state,
-        list,
+        operations,
       };
     }
     case REMOVE_OPERATION: {
-      const list: string[] = state.list.filter((op) => op !== action.op);
+      const operations: string[] = state.operations.filter(
+        (op) => op !== action.op,
+      );
       return {
         ...state,
-        list,
+        operations,
       };
     }
     case RESET_OPERATIONS: {
-      return { ...state, list: [] };
+      return { ...state, operations: [] };
     }
     default: {
       return state;
