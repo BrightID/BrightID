@@ -33,7 +33,7 @@ export const groupCirclePhotos = (group) => {
 
 export const getGroupName = (group) => {
   return (
-    // group.name ||
+    group.name ||
     threeKnownMembers(group)
       .map((member) => member.name.substr(0, 13))
       .join(', ')
