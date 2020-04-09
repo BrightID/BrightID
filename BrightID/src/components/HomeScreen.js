@@ -72,7 +72,6 @@ export class HomeScreen extends React.Component<Props, State> {
   componentDidMount() {
     const { navigation, dispatch, photo, name } = this.props;
     navigation.addListener('didFocus', () => {
-      dispatch(getNotifications());
       dispatch(fetchUserInfo());
     });
     retrieveImage(photo.filename).then((profilePhoto) => {

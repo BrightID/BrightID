@@ -3,11 +3,11 @@
 import { assoc, indexOf, update } from 'ramda';
 import {
   CREATE_GROUP,
+  DELETE_GROUP,
   SET_NEW_GROUP_CO_FOUNDERS,
   CLEAR_NEW_GROUP_CO_FOUNDERS,
   SET_GROUPS,
   SET_INVITES,
-  DELETE_GROUP,
   ACCEPT_INVITE,
   REJECT_INVITE,
   JOIN_GROUP,

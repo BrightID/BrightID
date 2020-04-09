@@ -1,8 +1,6 @@
 // @flow
 import { Alert } from 'react-native';
-import nacl from 'tweetnacl';
 import api from '@/Api/BrightId';
-import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 import { saveImage } from '@/utils/filesystem';
 import { addApp, removeApp } from '@/actions';
 import { goBack } from '@/NavigationService';
@@ -64,7 +62,7 @@ const linkVerification = async (baseUrl, context, contextInfo, contextId) => {
   const oldBaseUrl = api.baseUrl;
   try {
     api.baseUrl = baseUrl;
-    api.linkContextId(context, contextId);
+    await api.linkContextId(context, contextId);
   } catch (e) {
     Alert.alert(`App verification failed`, `${e.message}`, [
       {
