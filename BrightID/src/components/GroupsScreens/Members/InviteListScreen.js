@@ -10,6 +10,10 @@ import { connect } from 'react-redux';
 import CryptoJS from 'crypto-js';
 import api from '@/Api/BrightId';
 import MemberCard from './MemberCard';
+import nacl from 'tweetnacl';
+import { b64ToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
+import { convertPublicKey, convertSecretKey } from 'ed2curve';
+
 
 export class InviteListScreen extends Component<Props, State> {
   static navigationOptions = () => ({
@@ -26,12 +30,14 @@ export class InviteListScreen extends Component<Props, State> {
   };
 
   inviteToGroup = async (connection) => {
-    const { group } = this.props.navigation.state.params;
+    const { secretKey, navigation } = this.props;
+    const { group } = navigation.state.params;
+
     try {
-      let data = '';
-      if (connection.aesKey && group.aesKey) {
-        data = CryptoJS.AES.encrypt(group.aesKey, connection.aesKey).toString();
-      }
+      const pub = convertPublicKey(b64ToUint8Array(connection.signingKey));
+      const nonce = new Uint8Array(24);
+      const msg = b64ToUint8Array(group.aesKey);
+      const data = uInt8ArrayToB64(nacl.box(msg, nonce, pub, convertSecretKey(secretKey)));
       await api.invite(connection.id, group.id, data);
       Alert.alert(
         'Successful Invitaion',

@@ -3,6 +3,9 @@
 import CryptoJS from 'crypto-js';
 import { eqProps } from 'ramda';
 import store from '@/store';
+import { uInt8ArrayToB64, b64ToUint8Array } from '@/utils/encoding';
+import nacl from 'tweetnacl';
+import { convertPublicKey, convertSecretKey } from 'ed2curve';
 import { saveImage } from './filesystem';
 import { INVITE_ACTIVE } from './constants';
 
@@ -10,14 +13,18 @@ export const getInviteInfo = async (invite: invite) => {
   try {
     console.log('getting invite info', invite);
     const {
+      user: { secretKey },
       connections: { connections },
     } = store.getState();
     const conn = connections.find((conn) => conn.id === invite.inviter);
-    if (!conn.aesKey || !invite.data) {
+    if (!invite.data) {
       return {};
     }
-    const groupAesKey = CryptoJS.AES.decrypt(invite.data, conn.aesKey).toString(
-      CryptoJS.enc.Utf8,
+    const pub = convertPublicKey(b64ToUint8Array(conn.signingKey));
+    const nonce = new Uint8Array(24);
+    const msg = b64ToUint8Array(invite.data);
+    const groupAesKey = uInt8ArrayToB64(
+      nacl.box.open(msg, nonce, pub, convertSecretKey(secretKey)),
     );
 
     if (!groupAesKey) {

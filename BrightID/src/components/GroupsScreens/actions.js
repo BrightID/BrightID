@@ -7,7 +7,9 @@ import { saveImage } from '@/utils/filesystem';
 import { setNewGroupCoFounders, createGroup } from '@/actions/index';
 import api from '@/Api/BrightId';
 import backupApi from '@/Api/BackupApi';
-import { hash } from '@/utils/encoding';
+import { hash, b64ToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
+import nacl from 'tweetnacl';
+import { convertPublicKey, convertSecretKey } from 'ed2curve';
 import { backupPhoto, backupUser } from '../Recovery/helpers';
 
 const { RNRandomBytes } = NativeModules;
@@ -40,7 +42,7 @@ export const createNewGroup = (
 ) => async (dispatch: dispatch, getState: getState) => {
   try {
     let {
-      user: { id, backupCompleted },
+      user: { id, backupCompleted, secretKey },
       groups: { newGroupCoFounders },
       connections: { connections },
     } = getState();
@@ -98,13 +100,16 @@ export const createNewGroup = (
       type,
     };
 
-    const data1 = founder1.aesKey
-      ? CryptoJS.AES.encrypt(aesKey, founder1.aesKey).toString()
-      : '';
-
-    const data2 = founder2.aesKey
-      ? CryptoJS.AES.encrypt(aesKey, founder2.aesKey).toString()
-      : '';
+    const pub1 = convertPublicKey(b64ToUint8Array(founder1.signingKey));
+    const pub2 = convertPublicKey(b64ToUint8Array(founder2.signingKey));
+    const nonce = new Uint8Array(24);
+    const msg = b64ToUint8Array(aesKey);
+    const data1 = uInt8ArrayToB64(
+      nacl.box(msg, nonce, pub1, convertSecretKey(secretKey)),
+    );
+    const data2 = uInt8ArrayToB64(
+      nacl.box(msg, nonce, pub2, convertSecretKey(secretKey)),
+    );
 
     await api.createGroup(
       groupId,
