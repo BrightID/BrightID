@@ -24,8 +24,6 @@ export const bootstrapAndUpgrade = async () => {
     if (v4) {
       await bootstrap('store@v4');
     } else if (v1) {
-      store.dispatch(setGroups([]));
-      store.dispatch(setInvites([]));
       await bootstrap('store@v1');
     } else if (!v1) {
       await bootstrapV0();

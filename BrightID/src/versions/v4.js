@@ -2,7 +2,13 @@
 
 import AsyncStorage from '@react-native-community/async-storage';
 import { store } from '@/store';
-import { setApps, hydrateConnections, hydrateUser } from '@/actions';
+import {
+  setApps,
+  hydrateConnections,
+  hydrateUser,
+  setGroups,
+  setInvites,
+} from '@/actions';
 import { objToUint8 } from '@/utils/encoding';
 
 // export const bootstrapV4 = hydrateStore('store@v4');
@@ -28,10 +34,26 @@ export const bootstrap = async (version: string) => {
       password,
       hashedId,
       secretKey,
+      groups,
+      invites,
     } = dataObj;
+
+    console.log('groups', groups);
 
     if (apps) {
       store.dispatch(setApps(apps));
+    }
+
+    if (Array.isArray(groups)) {
+      store.dispatch(setGroups(groups));
+    } else {
+      store.dispatch(setGroups([]));
+    }
+
+    if (Array.isArray(invites)) {
+      store.dispatch(setInvites(invites));
+    } else {
+      store.dispatch(setInvites([]));
     }
 
     store.dispatch(
