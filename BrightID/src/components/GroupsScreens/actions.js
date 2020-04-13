@@ -1,25 +1,16 @@
 // @flow
 
-import { Alert, NativeModules } from 'react-native';
+import { Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
 import emitter from '@/emitter';
 import { saveImage } from '@/utils/filesystem';
-import { setNewGroupCoFounders, createGroup, setNonce } from '@/actions/index';
+import { setNewGroupCoFounders, createGroup } from '@/actions/index';
 import api from '@/Api/BrightId';
 import backupApi from '@/Api/BackupApi';
-import { hash, b64ToUint8Array, uInt8ArrayToB64, intToUint8Array24 } from '@/utils/encoding';
+import { hash, b64ToUint8Array, uInt8ArrayToB64, intToUint8Array24, randomKey } from '@/utils/encoding';
 import nacl from 'tweetnacl';
 import { convertPublicKey, convertSecretKey } from 'ed2curve';
 import { backupPhoto, backupUser } from '../Recovery/helpers';
-
-const { RNRandomBytes } = NativeModules;
-
-const randomKey = (size: number) =>
-  new Promise((resolve, reject) => {
-    RNRandomBytes.randomBytes(size, (err, bytes) => {
-      err ? reject(err) : resolve(bytes);
-    });
-  });
 
 export const toggleNewGroupCoFounder = (id: string) => (
   dispatch: dispatch,
@@ -42,7 +33,7 @@ export const createNewGroup = (
 ) => async (dispatch: dispatch, getState: getState) => {
   try {
     let {
-      user: { id, backupCompleted, secretKey, nonce },
+      user: { id, backupCompleted, secretKey },
       groups: { newGroupCoFounders },
       connections: { connections },
     } = getState();
@@ -64,7 +55,7 @@ export const createNewGroup = (
     }
 
     const aesKey = await randomKey(16);
-    let uuidKey = await randomKey(9);
+    const uuidKey = await randomKey(9);
     const groupId = hash(uuidKey);
 
     const groupData = JSON.stringify({ name, photo });
@@ -104,13 +95,15 @@ export const createNewGroup = (
     const pub2 = convertPublicKey(b64ToUint8Array(founder2.signingKey));
     const msg = b64ToUint8Array(aesKey);
 
+    const nonce1 = await randomKey(24);
     const data1 = uInt8ArrayToB64(
-      nacl.box(msg, intToUint8Array24(nonce), pub1, convertSecretKey(secretKey)),
-    ) + '_' + nonce;
+      nacl.box(msg, b64ToUint8Array(nonce1), pub1, convertSecretKey(secretKey)),
+    ) + '_' + nonce1;
+
+    const nonce2 = await randomKey(24);
     const data2 = uInt8ArrayToB64(
-      nacl.box(msg, intToUint8Array24(nonce + 1), pub2, convertSecretKey(secretKey)),
-    ) + '_' + (nonce + 1);
-    dispatch(setNonce(nonce + 2));
+      nacl.box(msg, b64ToUint8Array(nonce2), pub2, convertSecretKey(secretKey)),
+    ) + '_' + nonce2;
     await api.createGroup(
       groupId,
       founder1.id,

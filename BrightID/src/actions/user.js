@@ -7,7 +7,6 @@ export const SEARCH_PARAM = 'SEARCH_PARAM';
 export const SET_USER_DATA = 'SET_USER_DATA';
 export const SET_USER_NAME = 'SET_USER_NAME';
 export const SET_BACKUP_COMPLETED = 'SET_BACKUP_COMPLETED';
-export const SET_NONCE = 'SET_NONCE';
 export const SET_PASSWORD = 'SET_PASSWORD';
 export const SET_HASHED_ID = 'SET_HASHED_ID';
 export const SET_USER_ID = 'SET_USER_ID';
@@ -104,11 +103,6 @@ export const setBackupCompleted = (backupCompleted: boolean) => ({
   backupCompleted,
 });
 
-export const setNonce = (nonce: number) => ({
-  type: SET_NONCE,
-  nonce,
-});
-
 export const setPassword = (password: string) => ({
   type: SET_PASSWORD,
   password,
@@ -140,7 +134,6 @@ export const hydrateUser = (data: {
   backupCompleted: boolean,
   id: string,
   publicKey: string,
-  nonce: number,
   password: string,
   hashedId: string,
   secretKey: Uint8Array,

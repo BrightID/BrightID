@@ -1,19 +1,9 @@
 // @flow
 
-import { NativeModules } from 'react-native';
 import { Buffer } from 'buffer';
-import api from '../../../Api/BrightId';
-import { b64ToUrlSafeB64 } from '../../../utils/encoding';
-import { setConnectQrData } from '../../../actions';
-
-const { RNRandomBytes } = NativeModules;
-
-const randomKey = (size: number) =>
-  new Promise((resolve, reject) => {
-    RNRandomBytes.randomBytes(size, (err, bytes) => {
-      err ? reject(err) : resolve(bytes);
-    });
-  });
+import api from '@/Api/BrightId';
+import { b64ToUrlSafeB64, randomKey } from '@/utils/encoding';
+import { setConnectQrData } from '@/actions';
 
 export const genQrData = () => async (dispatch: dispatch) => {
   try {

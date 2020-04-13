@@ -3,7 +3,7 @@
 import CryptoJS from 'crypto-js';
 import { eqProps } from 'ramda';
 import store from '@/store';
-import { uInt8ArrayToB64, b64ToUint8Array, intToUint8Array24 } from '@/utils/encoding';
+import { uInt8ArrayToB64, b64ToUint8Array } from '@/utils/encoding';
 import nacl from 'tweetnacl';
 import { convertPublicKey, convertSecretKey } from 'ed2curve';
 import { saveImage } from './filesystem';
@@ -22,7 +22,7 @@ export const getInviteInfo = async (invite: invite) => {
     }
     const pub = convertPublicKey(b64ToUint8Array(conn.signingKey));
     const msg = b64ToUint8Array(invite.data.split('_')[0]);
-    const nonce = intToUint8Array24(parseInt(invite.data.split('_')[1]));
+    const nonce = b64ToUint8Array(invite.data.split('_')[1]);
     const groupAesKey = uInt8ArrayToB64(
       nacl.box.open(msg, nonce, pub, convertSecretKey(secretKey)),
     );
