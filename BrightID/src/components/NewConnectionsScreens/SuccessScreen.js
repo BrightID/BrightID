@@ -130,4 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(SuccessScreen);
+export default connect()(SuccessScreen);

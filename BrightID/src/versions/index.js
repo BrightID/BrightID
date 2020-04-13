@@ -3,8 +3,6 @@
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { setGroups, setInvites } from '@/actions';
-import { saveStore } from '@/store/saveStore';
-import { verifyStore } from '@/store/verifyStore';
 import store from '@/store';
 import {
   bootstrapV0,
@@ -15,8 +13,7 @@ import {
   verifyUserData,
   upgradeConnsAndIds,
 } from './v0';
-import { bootstrapV1, deleteV1 } from './v1';
-import { bootstrapV4 } from './v4';
+import { bootstrap } from './v4';
 
 export const bootstrapAndUpgrade = async () => {
   try {
@@ -25,19 +22,9 @@ export const bootstrapAndUpgrade = async () => {
     const v1 = isV1(allKeys);
     const v4 = isV4(allKeys);
     if (v4) {
-      await bootstrapV4();
+      await bootstrap('store@v4');
     } else if (v1) {
-      await bootstrapV1();
-      store.dispatch(setGroups([]));
-      store.dispatch(setInvites([]));
-      const state = store.getState();
-      delete state.eligibleGroups;
-      delete state.currentGroups;
-      if (verifyStore(state)) {
-        await saveStore(state);
-        // lets not delete this just in case
-        // await deleteV1();
-      }
+      await bootstrap('store@v1');
     } else if (!v1) {
       await bootstrapV0();
       await getConnections(allKeys);
@@ -50,12 +37,6 @@ export const bootstrapAndUpgrade = async () => {
         upgradeConnsAndIds();
         store.dispatch(setGroups([]));
         store.dispatch(setInvites([]));
-        const state = store.getState();
-        delete state.eligibleGroups;
-        delete state.currentGroups;
-        if (verifyStore(state)) {
-          await saveStore(state);
-        }
       } else {
         Alert.alert('Error: Please Backup Data and reinstall BrightId');
       }

@@ -30,7 +30,7 @@ export const fakeJoinGroup = ({
     group,
     sig,
     timestamp,
-    v: 4
+    v: 4,
   };
   console.log('joining', op);
   return api.api
@@ -54,9 +54,9 @@ export const fakeJoinGroups = ({
   id: string,
   secretKey: Uint8Array,
 }) => (dispatch: dispatch, getState: getState) => {
-  const { groups } = getState();
+  const {
+    groups: { groups },
+  } = getState();
 
-  groups.map((group) =>
-    fakeJoinGroup({ group: group.id, id, secretKey }),
-  );
+  groups.map((group) => fakeJoinGroup({ group: group.id, id, secretKey }));
 };

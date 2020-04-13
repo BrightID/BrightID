@@ -252,4 +252,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(BackupScreen);
+export default connect(({ connections, groups }) => ({
+  ...connections,
+  ...groups,
+}))(BackupScreen);

@@ -9,10 +9,14 @@ import {
   setVerifications,
   updateConnections,
   setIsSponsored,
+  getNotifications,
 } from './index';
 
 const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
-  const { id, operations } = getState();
+  const {
+    user: { id },
+    operations: { operations },
+  } = getState();
   console.log('refreshing user info', id);
   if (!id) return;
   try {
@@ -37,6 +41,7 @@ const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
     // this can not be done in reducer because it should be in an async function
     const newInvites = await updateInvites(invites);
     dispatch(setInvites(newInvites));
+    dispatch(getNotifications());
   } catch (err) {
     console.log(err.message);
   }

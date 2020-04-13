@@ -30,7 +30,9 @@ import {
 } from '@/utils/encoding';
 
 export const setTrustedConnections = async () => {
-  const { trustedConnections } = store.getState();
+  const {
+    connections: { trustedConnections },
+  } = store.getState();
   await api.setTrusted(trustedConnections);
   return true;
 };
@@ -42,7 +44,9 @@ const hashId = (id: string, password: string) => {
 };
 
 export const encryptAndBackup = async (key: string, data: string) => {
-  let { id, hashedId, password } = store.getState();
+  let {
+    user: { id, hashedId, password },
+  } = store.getState();
   if (!hashedId) hashedId = hashId(id, password);
   try {
     // const cipher = createCipher('aes128', password);
@@ -68,7 +72,11 @@ export const backupPhoto = async (id: string, filename: string) => {
 
 const backupPhotos = async () => {
   try {
-    const { connections, groups, id, photo } = store.getState();
+    const {
+      connections: { connections },
+      groups: { groups },
+      user: { id, photo },
+    } = store.getState();
     for (const item of connections) {
       await backupPhoto(item.id, item.photo?.filename);
     }
@@ -85,7 +93,11 @@ const backupPhotos = async () => {
 
 export const backupUser = async () => {
   try {
-    const { score, name, photo, id, connections, groups } = store.getState();
+    const {
+      user: { score, name, photo, id },
+      connections: { connections },
+      groups: { groups },
+    } = store.getState();
     const userData = {
       id,
       name,
@@ -157,7 +169,9 @@ export const setRecoverySig = async (
   signingKey: string,
   timestamp: number,
 ) => {
-  const { id: userId, secretKey } = store.getState();
+  const {
+    user: { id: userId, secretKey },
+  } = store.getState();
   const message = `Set Signing Key${id}${signingKey}${timestamp}`;
   const sig = uInt8ArrayToB64(
     nacl.sign.detached(strToUint8Array(message), secretKey),

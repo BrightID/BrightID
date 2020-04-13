@@ -286,4 +286,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(PreviewConnectionScreen);
+export default connect(({ connections, connectUserData }) => ({
+  ...connections,
+  connectUserData,
+}))(PreviewConnectionScreen);

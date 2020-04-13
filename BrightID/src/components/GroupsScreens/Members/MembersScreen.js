@@ -305,4 +305,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(MembersScreen);
+export default connect(({ connections, user }) => ({
+  ...connections,
+  ...user,
+}))(MembersScreen);

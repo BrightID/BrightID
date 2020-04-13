@@ -251,4 +251,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(NewGroupScreen);
+export default connect(({ connections, groups, user }) => ({
+  ...connections,
+  ...groups,
+  ...user,
+}))(NewGroupScreen);

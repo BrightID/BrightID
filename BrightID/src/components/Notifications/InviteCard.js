@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
-import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { DEVICE_TYPE } from '@/utils/constants';
@@ -43,10 +42,11 @@ class InviteCard extends React.Component<Props> {
   };
 
   acceptInvite = async () => {
-    const { dispatch, invite, backupCompleted } = this.props;
+    const { dispatch, invite, backupCompleted, id } = this.props;
     try {
       await api.joinGroup(invite.id);
       await dispatch(acceptInvite(invite.inviteId));
+      invite.members.push(id);
       await dispatch(joinGroup(invite));
       Alert.alert('Success', `You joined ${getGroupName(invite)}`);
       if (backupCompleted) {
@@ -70,7 +70,7 @@ class InviteCard extends React.Component<Props> {
         </View>
         <View style={styles.info}>
           <Text style={styles.invitationMsg}>
-            {inviter.name} invited you to join
+            {inviter?.name} invited you to join
           </Text>
           <Text style={styles.name}>{getGroupName(invite)}</Text>
         </View>
@@ -137,4 +137,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(withNavigation(InviteCard));
+export default connect(({ connections }) => ({
+  ...connections,
+}))(InviteCard);

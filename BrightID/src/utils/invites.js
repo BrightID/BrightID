@@ -9,7 +9,9 @@ import { INVITE_ACTIVE } from './constants';
 export const getInviteInfo = async (invite: invite) => {
   try {
     console.log('getting invite info', invite);
-    const { connections } = store.getState();
+    const {
+      connections: { connections },
+    } = store.getState();
     const conn = connections.find((conn) => conn.id === invite.inviter);
     if (!conn.aesKey || !invite.data) {
       return {};
@@ -48,7 +50,9 @@ export const getInviteInfo = async (invite: invite) => {
 
 export const updateInvites = async (invites: invite[]): Promise<invite[]> => {
   try {
-    const { invites: oldInvites = [] } = store.getState();
+    const {
+      groups: { invites: oldInvites = [] },
+    } = store.getState();
     let newInvites = [];
     for (const invite of invites) {
       const oldInvite = oldInvites.find(eqProps('inviteId', invite));

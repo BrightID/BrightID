@@ -16,13 +16,18 @@ export default class AppBootstrap extends React.Component<Props> {
   // Fetch the token from storage then navigate to our appropriate place
   bootstrap = async () => {
     try {
+      let {
+        user: { publicKey },
+      } = store.getState();
       // load redux store from async storage and upgrade async storage is necessary
-      await bootstrapAndUpgrade();
-      // this step above is important
-      const { publicKey } = store.getState();
+      if (!publicKey) await bootstrapAndUpgrade();
       // reset operations
       store.dispatch(resetOperations());
       // fetch user info
+      if (!publicKey) {
+        publicKey = store.getState().user.publicKey;
+      }
+
       if (publicKey) store.dispatch(fetchUserInfo());
       // once everything is set up
       this.props.navigation.navigate(publicKey ? 'App' : 'Onboarding');

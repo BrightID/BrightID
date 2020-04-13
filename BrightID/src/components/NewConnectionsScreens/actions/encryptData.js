@@ -11,12 +11,14 @@ export const encryptAndUploadLocalData = () => async (
   getState: getState,
 ) => {
   const {
-    id,
-    secretKey,
-    photo: { filename },
-    name,
+    user: {
+      id,
+      secretKey,
+      photo: { filename },
+      name,
+      score,
+    },
     connectQrData: { aesKey },
-    score,
     connectUserData,
   } = getState();
   try {

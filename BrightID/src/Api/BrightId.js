@@ -75,7 +75,9 @@ class BrightId {
   }
 
   async removeConnection(id2: string, reason: string) {
-    const { id, secretKey } = store.getState();
+    const {
+      user: { id, secretKey },
+    } = store.getState();
     const timestamp = Date.now();
     const message = `Remove Connection${id}${id2}${reason}${timestamp}`;
 
@@ -106,7 +108,9 @@ class BrightId {
     url: string,
     type: string,
   ) {
-    const { id, secretKey } = store.getState();
+    const {
+      user: { id, secretKey },
+    } = store.getState();
     const timestamp = Date.now();
     const message = `Add Group${group}${id}${id2}${inviteData2}${id3}${inviteData3}${url}${type}${timestamp}`;
 
@@ -135,7 +139,9 @@ class BrightId {
   }
 
   async dismiss(id2: string, group: string) {
-    const { id, secretKey } = store.getState();
+    const {
+      user: { id, secretKey },
+    } = store.getState();
     let timestamp = Date.now();
     let message = `Dismiss${id}${id2}${group}${timestamp}`;
     let sig = uInt8ArrayToB64(
@@ -158,7 +164,9 @@ class BrightId {
   }
 
   async invite(id2: string, group: string, data: string) {
-    const { id, secretKey } = store.getState();
+    const {
+      user: { id, secretKey },
+    } = store.getState();
     let timestamp = Date.now();
     let message = `Invite${id}${id2}${group}${data}${timestamp}`;
     let sig = uInt8ArrayToB64(
@@ -181,7 +189,9 @@ class BrightId {
   }
 
   async deleteGroup(group: string) {
-    let { id, secretKey } = store.getState();
+    const {
+      user: { id, secretKey },
+    } = store.getState();
     let timestamp = Date.now();
     let message = `Remove Group${id}${group}${timestamp}`;
     let sig = uInt8ArrayToB64(
@@ -203,7 +213,9 @@ class BrightId {
   }
 
   async joinGroup(group: string) {
-    const { id, secretKey } = store.getState();
+    const {
+      user: { id, secretKey },
+    } = store.getState();
     let timestamp = Date.now();
     let message = `Add Membership${id}${group}${timestamp}`;
     let sig = uInt8ArrayToB64(
@@ -225,7 +237,9 @@ class BrightId {
   }
 
   async leaveGroup(group: string) {
-    const { id, secretKey } = store.getState();
+    const {
+      user: { id, secretKey },
+    } = store.getState();
     let timestamp = Date.now();
     let message = `Remove Membership${id}${group}${timestamp}`;
     let sig = uInt8ArrayToB64(
@@ -247,7 +261,9 @@ class BrightId {
   }
 
   async setTrusted(trusted: string[]) {
-    let { id, secretKey } = store.getState();
+    const {
+      user: { id, secretKey },
+    } = store.getState();
     let timestamp = Date.now();
     let message = `Set Trusted Connections${id}${trusted.join(
       ',',
@@ -287,7 +303,9 @@ class BrightId {
   }
 
   async linkContextId(context: string, contextId: string) {
-    let { id, secretKey } = store.getState();
+    const {
+      user: { id, secretKey },
+    } = store.getState();
     let timestamp = Date.now();
     let message = `Link ContextId,${context},${contextId},${timestamp}`;
     let sig = uInt8ArrayToB64(

@@ -2,10 +2,11 @@
 
 import * as React from 'react';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import { pollOperations } from './utils/operations';
 import AppRoutes from './AppRoutes';
-import store from './store';
+import { store, persistor } from './store';
 import BottomNav from './BottomNav';
 
 /**
@@ -17,7 +18,7 @@ import BottomNav from './BottomNav';
 type Props = {};
 
 export default class App extends React.Component<Props> {
-  timerId: number;
+  timerId: IntervalID;
 
   componentDidMount() {
     this.timerId = setInterval(() => {
@@ -37,10 +38,12 @@ export default class App extends React.Component<Props> {
           backgroundColor="#F52828"
           translucent={false}
         />
-        <View style={styles.container}>
-          <AppRoutes />
-          <BottomNav />
-        </View>
+        <PersistGate loading={null} persistor={persistor}>
+          <View style={styles.container}>
+            <AppRoutes />
+            <BottomNav />
+          </View>
+        </PersistGate>
       </Provider>
     );
   }

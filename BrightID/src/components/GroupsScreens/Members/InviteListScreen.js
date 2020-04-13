@@ -90,4 +90,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(InviteListScreen);
+export default connect(({ connections }) => ({ ...connections }))(
+  InviteListScreen,
+);

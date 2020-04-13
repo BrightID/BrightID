@@ -23,7 +23,7 @@ export const toggleNewGroupCoFounder = (id: string) => (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  let coFounders = [...getState().newGroupCoFounders];
+  let coFounders = [...getState().groups.newGroupCoFounders];
   const index = coFounders.indexOf(id);
   if (index >= 0) {
     coFounders.splice(index, 1);
@@ -39,7 +39,11 @@ export const createNewGroup = (
   type: string,
 ) => async (dispatch: dispatch, getState: getState) => {
   try {
-    let { id, newGroupCoFounders, connections, backupCompleted } = getState();
+    let {
+      user: { id, backupCompleted },
+      groups: { newGroupCoFounders },
+      connections: { connections },
+    } = getState();
     if (newGroupCoFounders.length < 2) {
       throw new Error('You need two other people to form a group');
     }
