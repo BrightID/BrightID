@@ -10,6 +10,7 @@ import {
   SET_USER_NAME,
   SET_NOTIFICATIONS,
   SET_BACKUP_COMPLETED,
+  SET_NONCE,
   SET_PASSWORD,
   SET_HASHED_ID,
   SET_USER_ID,
@@ -29,6 +30,7 @@ const initialState = {
   backupCompleted: false,
   id: '',
   publicKey: '',
+  nonce: 0,
   password: '',
   hashedId: '',
   secretKey: new Uint8Array([]),
@@ -95,6 +97,12 @@ export const reducer = (state: UserState = initialState, action: action) => {
         backupCompleted: action.backupCompleted,
       };
     }
+    case SET_NONCE: {
+      return {
+        ...state,
+        nonce: action.nonce,
+      };
+    }
     case SET_PASSWORD: {
       return {
         ...state,
@@ -128,6 +136,7 @@ export const reducer = (state: UserState = initialState, action: action) => {
         backupCompleted: action.data.backupCompleted,
         id: action.data.id,
         publicKey: action.data.publicKey,
+        nonce: action.data.nonce,
         password: action.data.password,
         hashedId: action.data.hashedId,
         secretKey: action.data.secretKey,

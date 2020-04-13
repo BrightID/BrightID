@@ -35,6 +35,7 @@ import {
   ADD_TRUSTED_CONNECTION,
   REMOVE_TRUSTED_CONNECTION,
   SET_BACKUP_COMPLETED,
+  SET_NONCE,
   SET_PASSWORD,
   SET_RECOVERY_DATA,
   REMOVE_RECOVERY_DATA,
@@ -76,6 +77,7 @@ export const initialState: State = {
   backupCompleted: false,
   id: '',
   publicKey: '',
+  nonce: 0,
   password: '',
   hashedId: '',
   secretKey: new Uint8Array([]),
@@ -420,6 +422,12 @@ export const reducer = (state: State = initialState, action: action) => {
       return {
         ...state,
         backupCompleted: action.backupCompleted,
+      };
+    }
+    case SET_NONCE: {
+      return {
+        ...state,
+        nonce: action.nonce,
       };
     }
     case SET_PASSWORD: {

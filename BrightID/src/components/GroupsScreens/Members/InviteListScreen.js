@@ -8,10 +8,12 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import CryptoJS from 'crypto-js';
+import store from '@/store';
 import api from '@/Api/BrightId';
+import { setNonce } from '@/actions/index';
 import MemberCard from './MemberCard';
 import nacl from 'tweetnacl';
-import { b64ToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
+import { b64ToUint8Array, uInt8ArrayToB64, intToUint8Array24 } from '@/utils/encoding';
 import { convertPublicKey, convertSecretKey } from 'ed2curve';
 
 
@@ -30,20 +32,23 @@ export class InviteListScreen extends Component<Props, State> {
   };
 
   inviteToGroup = async (connection) => {
-    const { secretKey, navigation } = this.props;
+    const { navigation } = this.props;
     const { group } = navigation.state.params;
+    const { user: { secretKey, nonce } } = store.getState();
 
     try {
       const pub = convertPublicKey(b64ToUint8Array(connection.signingKey));
-      const nonce = new Uint8Array(24);
       const msg = b64ToUint8Array(group.aesKey);
-      const data = uInt8ArrayToB64(nacl.box(msg, nonce, pub, convertSecretKey(secretKey)));
+      const data = uInt8ArrayToB64(
+        nacl.box(msg, intToUint8Array24(nonce), pub, convertSecretKey(secretKey))
+      ) + '_' + nonce;
+      store.dispatch(setNonce(nonce + 1));
       await api.invite(connection.id, group.id, data);
       Alert.alert(
         'Successful Invitaion',
         `You invited ${connection.name} successfully to the group`,
       );
-      this.props.navigation.goBack();
+      navigation.goBack();
     } catch (err) {
       Alert.alert('Error', err.message);
     }

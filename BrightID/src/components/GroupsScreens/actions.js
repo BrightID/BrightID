@@ -4,10 +4,10 @@ import { Alert, NativeModules } from 'react-native';
 import CryptoJS from 'crypto-js';
 import emitter from '@/emitter';
 import { saveImage } from '@/utils/filesystem';
-import { setNewGroupCoFounders, createGroup } from '@/actions/index';
+import { setNewGroupCoFounders, createGroup, setNonce } from '@/actions/index';
 import api from '@/Api/BrightId';
 import backupApi from '@/Api/BackupApi';
-import { hash, b64ToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
+import { hash, b64ToUint8Array, uInt8ArrayToB64, intToUint8Array24 } from '@/utils/encoding';
 import nacl from 'tweetnacl';
 import { convertPublicKey, convertSecretKey } from 'ed2curve';
 import { backupPhoto, backupUser } from '../Recovery/helpers';
@@ -42,7 +42,7 @@ export const createNewGroup = (
 ) => async (dispatch: dispatch, getState: getState) => {
   try {
     let {
-      user: { id, backupCompleted, secretKey },
+      user: { id, backupCompleted, secretKey, nonce },
       groups: { newGroupCoFounders },
       connections: { connections },
     } = getState();
@@ -102,15 +102,15 @@ export const createNewGroup = (
 
     const pub1 = convertPublicKey(b64ToUint8Array(founder1.signingKey));
     const pub2 = convertPublicKey(b64ToUint8Array(founder2.signingKey));
-    const nonce = new Uint8Array(24);
     const msg = b64ToUint8Array(aesKey);
-    const data1 = uInt8ArrayToB64(
-      nacl.box(msg, nonce, pub1, convertSecretKey(secretKey)),
-    );
-    const data2 = uInt8ArrayToB64(
-      nacl.box(msg, nonce, pub2, convertSecretKey(secretKey)),
-    );
 
+    const data1 = uInt8ArrayToB64(
+      nacl.box(msg, intToUint8Array24(nonce), pub1, convertSecretKey(secretKey)),
+    ) + '_' + nonce;
+    const data2 = uInt8ArrayToB64(
+      nacl.box(msg, intToUint8Array24(nonce + 1), pub2, convertSecretKey(secretKey)),
+    ) + '_' + (nonce + 1);
+    dispatch(setNonce(nonce + 2));
     await api.createGroup(
       groupId,
       founder1.id,
