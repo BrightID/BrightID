@@ -20,8 +20,8 @@ import EmptyList from '@/components/Helpers/EmptyList';
 import MemberCard from './MemberCard';
 
 export class MembersScreen extends Component<Props, State> {
-  static navigationOptions = ({ navigation }) => {
-    const { group } = navigation.state.params;
+  static navigationOptions = ({ navigation, route }) => {
+    const { group } = route.params;
     return {
       title: getGroupName(group),
       headerTitleStyle: {
@@ -85,9 +85,9 @@ export class MembersScreen extends Component<Props, State> {
     if (action === 'Leave Group') {
       this.confirmLeaveGroup();
     } else if (action === 'Invite') {
-      const { navigation } = this.props;
+      const { navigation, route } = this.props;
       navigation.navigate('InviteList', {
-        group: navigation.state.params.group,
+        group: route.params.group,
       });
     }
   };
@@ -101,8 +101,8 @@ export class MembersScreen extends Component<Props, State> {
       {
         text: 'OK',
         onPress: async () => {
-          const { navigation, dispatch } = this.props;
-          const { group } = navigation.state.params;
+          const { route, dispatch } = this.props;
+          const { group } = route.params;
           try {
             await api.dismiss(user.id, group.id);
             await dispatch(dismissFromGroup(user.id, group));
@@ -131,8 +131,8 @@ export class MembersScreen extends Component<Props, State> {
       {
         text: 'OK',
         onPress: async () => {
-          const { navigation, dispatch } = this.props;
-          const { group } = navigation.state.params;
+          const { route, navigation, dispatch } = this.props;
+          const { group } = route.params;
           try {
             await api.leaveGroup(group.id);
             await dispatch(leaveGroup(group));
@@ -165,7 +165,7 @@ export class MembersScreen extends Component<Props, State> {
   };
 
   renderMember = ({ item }) => {
-    const { group } = this.props.navigation.state.params;
+    const { group } = this.props.route.params;
     const isAdmin = group.admins?.includes(this.props.id);
     const isItemAdmin = group.admins?.includes(item.id);
     const handler = isAdmin && !isItemAdmin ? this.confirmDismiss : null;
@@ -174,20 +174,20 @@ export class MembersScreen extends Component<Props, State> {
   };
 
   getMembers = () => {
-    const { navigation, connections, name, id, photo, score } = this.props;
+    const { route, connections, name, id, photo, score } = this.props;
     // return a list of connections filtered by the members of this group
     return [{ id, name, photo, score }].concat(
       innerJoin(
         (connection, member) => connection.id === member,
         connections,
-        navigation.state.params.group.members,
+        route.params.group.members,
       ),
     );
   };
 
   render() {
     const { id } = this.props;
-    const { group } = this.props.navigation.state.params;
+    const { group } = this.props.route.params;
     let actions = ['Leave Group', 'cancel'];
     if (group.admins?.includes(id)) {
       actions = ['Invite'].concat(actions);

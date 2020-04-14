@@ -70,8 +70,8 @@ export class NewGroupScreen extends React.Component<Props> {
   createGroup = async () => {
     try {
       this.setState({ creating: true });
-      const { navigation } = this.props;
-      const { photo, name, isPrimary } = navigation.state.params;
+      const { route, navigation } = this.props;
+      const { photo, name, isPrimary } = route.params;
       const type = isPrimary ? 'primary' : 'general';
       const res = await store.dispatch(createNewGroup(photo, name, type));
       if (res) {

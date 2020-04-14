@@ -29,9 +29,7 @@ class RecoveringConnectionScreen extends React.Component<Props> {
   renderConnection = ({ item }) => (
     <RecoveringConnectionCard
       {...item}
-      recoveryRequestCode={
-        this.props.navigation.state.params.recoveryRequestCode
-      }
+      recoveryRequestCode={this.props.route.params.recoveryRequestCode}
       navigation={this.props.navigation}
       style={styles.recoveringConnectionCard}
     />
