@@ -37,10 +37,10 @@ export class NewGroupScreen extends React.Component<Props> {
 
   componentDidMount() {
     const { navigation, dispatch } = this.props;
-    navigation.addListener('willFocus', () => {
+    navigation.addListener('focus', () => {
       emitter.on('creatingGroupChannel', this.updateCreationState);
     });
-    navigation.addListener('willBlur', () => {
+    navigation.addListener('blur', () => {
       dispatch(clearNewGroupCoFounders());
       emitter.off('creatingGroupChannel', this.updateCreationState);
     });

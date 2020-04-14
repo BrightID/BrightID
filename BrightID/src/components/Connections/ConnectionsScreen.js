@@ -45,7 +45,7 @@ export class ConnectionsScreen extends React.Component<Props> {
 
   componentDidMount() {
     const { navigation, dispatch } = this.props;
-    navigation.addListener('willFocus', () => {
+    navigation.addListener('focus', () => {
       dispatch(defaultSort());
       dispatch(fetchUserInfo());
     });

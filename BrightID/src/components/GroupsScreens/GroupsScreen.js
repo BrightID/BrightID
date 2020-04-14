@@ -42,7 +42,7 @@ export class GroupsScreen extends React.Component<Props, State> {
 
   componentDidMount() {
     const { navigation, dispatch } = this.props;
-    navigation.addListener('willFocus', () => {
+    navigation.addListener('focus', () => {
       dispatch(fetchUserInfo());
     });
   }

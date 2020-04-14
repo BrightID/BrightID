@@ -71,7 +71,7 @@ export class HomeScreen extends React.Component<Props, State> {
 
   componentDidMount() {
     const { navigation, dispatch, photo, name } = this.props;
-    navigation.addListener('didFocus', () => {
+    navigation.addListener('focus', () => {
       dispatch(fetchUserInfo());
     });
     retrieveImage(photo.filename).then((profilePhoto) => {
@@ -201,12 +201,15 @@ export class HomeScreen extends React.Component<Props, State> {
             </Text>
             <Text style={styles.countsDescriptionText}>Connections</Text>
           </View>
-          <View style={styles.countsGroup}>
+          <TouchableOpacity
+            style={styles.countsGroup}
+            onPress={delStorage(navigation)}
+          >
             <Text id="groupsCount" style={styles.countsNumberText}>
               {groups ? groups.length : 0}
             </Text>
             <Text style={styles.countsDescriptionText}>Groups</Text>
-          </View>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.verificationsContainer}>

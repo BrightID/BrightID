@@ -43,9 +43,12 @@ class RestoreScreen extends React.Component<Props, State> {
 
   componentDidMount() {
     const { navigation } = this.props;
-    emitter.on('restoreProgress', this.updateRestoreStatus);
-    emitter.on('restoreTotal', this.updateRestoreTotal);
-    navigation.addListener('willBlur', () => {
+    navigation.addListener('focus', () => {
+      emitter.on('restoreProgress', this.updateRestoreStatus);
+      emitter.on('restoreTotal', this.updateRestoreTotal);
+    });
+
+    navigation.addListener('blur', () => {
       emitter.off('restoreProgress', this.updateRestoreStatus);
       emitter.off('restoreTotal', this.updateRestoreTotal);
     });
