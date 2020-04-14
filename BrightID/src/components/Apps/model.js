@@ -77,7 +77,7 @@ const linkVerification = async (baseUrl, context, contextInfo, contextId) => {
     if (contextInfo.isApp) {
       saveApp(context, contextInfo);
     } else {
-      Alert.alert('Success', `Succesfully sent the request of linking ${context} with BrightID`);
+      Alert.alert('Success', `Succesfully sent the request to link ${context} with BrightID`);
       goBack();
     }
   }
