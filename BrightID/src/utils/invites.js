@@ -3,7 +3,7 @@
 import CryptoJS from 'crypto-js';
 import { eqProps } from 'ramda';
 import store from '@/store';
-import { uInt8ArrayToB64, b64ToUint8Array } from '@/utils/encoding';
+import { uInt8ArrayToB64, b64ToUint8Array, randomKey } from '@/utils/encoding';
 import nacl from 'tweetnacl';
 import { convertPublicKey, convertSecretKey } from 'ed2curve';
 import { saveImage } from './filesystem';
@@ -90,5 +90,24 @@ export const updateInvites = async (invites: invite[]): Promise<invite[]> => {
   } catch (err) {
     console.log(`error in getting invite info ${err.message}`);
     return [];
+  }
+};
+
+export const encryptAesKey = async (aesKey: string, signingKey: string) => {
+  try {
+    const {
+      user: { secretKey },
+    } = store.getState();
+
+    const pub = convertPublicKey(b64ToUint8Array(signingKey));
+    const msg = b64ToUint8Array(aesKey);
+    const nonce = await randomKey(24);
+    const data = `${uInt8ArrayToB64(
+      nacl.box(msg, b64ToUint8Array(nonce), pub, convertSecretKey(secretKey)),
+    )}_${nonce}`;
+    return data;
+  } catch (err) {
+    console.log(err.message);
+    return '';
   }
 };

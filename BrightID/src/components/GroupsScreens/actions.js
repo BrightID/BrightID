@@ -4,12 +4,11 @@ import { Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
 import emitter from '@/emitter';
 import { saveImage } from '@/utils/filesystem';
+import { encryptAesKey } from '@/utils/invites';
 import { setNewGroupCoFounders, createGroup } from '@/actions/index';
 import api from '@/Api/BrightId';
 import backupApi from '@/Api/BackupApi';
-import { hash, b64ToUint8Array, uInt8ArrayToB64, intToUint8Array24, randomKey } from '@/utils/encoding';
-import nacl from 'tweetnacl';
-import { convertPublicKey, convertSecretKey } from 'ed2curve';
+import { hash, randomKey } from '@/utils/encoding';
 import { backupPhoto, backupUser } from '../Recovery/helpers';
 
 export const toggleNewGroupCoFounder = (id: string) => (
@@ -33,7 +32,7 @@ export const createNewGroup = (
 ) => async (dispatch: dispatch, getState: getState) => {
   try {
     let {
-      user: { id, backupCompleted, secretKey },
+      user: { id, backupCompleted },
       groups: { newGroupCoFounders },
       connections: { connections },
     } = getState();
@@ -66,7 +65,9 @@ export const createNewGroup = (
     ).toString();
 
     await backupApi.putRecovery('immutable', groupId, encryptedGroupData);
+
     emitter.emit('creatingGroupChannel', 'creating the group');
+
     const url = `https://recovery.brightid.org/backups/immutable/${groupId}`;
 
     let filename = null;
@@ -91,19 +92,10 @@ export const createNewGroup = (
       type,
     };
 
-    const pub1 = convertPublicKey(b64ToUint8Array(founder1.signingKey));
-    const pub2 = convertPublicKey(b64ToUint8Array(founder2.signingKey));
-    const msg = b64ToUint8Array(aesKey);
+    const data1 = await encryptAesKey(aesKey, founder1.signingKey);
 
-    const nonce1 = await randomKey(24);
-    const data1 = uInt8ArrayToB64(
-      nacl.box(msg, b64ToUint8Array(nonce1), pub1, convertSecretKey(secretKey)),
-    ) + '_' + nonce1;
+    const data2 = await encryptAesKey(aesKey, founder2.signingKey);
 
-    const nonce2 = await randomKey(24);
-    const data2 = uInt8ArrayToB64(
-      nacl.box(msg, b64ToUint8Array(nonce2), pub2, convertSecretKey(secretKey)),
-    ) + '_' + nonce2;
     await api.createGroup(
       groupId,
       founder1.id,

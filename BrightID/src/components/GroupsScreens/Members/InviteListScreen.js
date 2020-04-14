@@ -7,14 +7,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { connect } from 'react-redux';
-import CryptoJS from 'crypto-js';
-import store from '@/store';
 import api from '@/Api/BrightId';
+import { encryptAesKey } from '@/utils/invites';
 import MemberCard from './MemberCard';
-import nacl from 'tweetnacl';
-import { b64ToUint8Array, uInt8ArrayToB64, randomKey } from '@/utils/encoding';
-import { convertPublicKey, convertSecretKey } from 'ed2curve';
-
 
 export class InviteListScreen extends Component<Props, State> {
   static navigationOptions = () => ({
@@ -33,15 +28,9 @@ export class InviteListScreen extends Component<Props, State> {
   inviteToGroup = async (connection) => {
     const { navigation } = this.props;
     const { group } = navigation.state.params;
-    const { user: { secretKey } } = store.getState();
 
     try {
-      const pub = convertPublicKey(b64ToUint8Array(connection.signingKey));
-      const msg = b64ToUint8Array(group.aesKey);
-      const nonce = await randomKey(24);
-      const data = uInt8ArrayToB64(
-        nacl.box(msg, b64ToUint8Array(nonce), pub, convertSecretKey(secretKey))
-      ) + '_' + nonce;
+      const data = await encryptAesKey(group.aesKey, connection.signingKey);
       await api.invite(connection.id, group.id, data);
       Alert.alert(
         'Successful Invitaion',
