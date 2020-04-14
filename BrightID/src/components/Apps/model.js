@@ -26,7 +26,6 @@ export const handleAppContext = async (params: Params) => {
   try {
     api.baseUrl = baseUrl;
     contextInfo = await api.getContext(context);
-    console.log('contextInfo', contextInfo);
   } catch (e) {
     Alert.alert('Failed', `Unable to link ${context} with BrightID`);
     console.log(e);
@@ -77,9 +76,8 @@ const linkVerification = async (baseUrl, context, contextInfo, contextId) => {
     api.baseUrl = oldBaseUrl;
     if (contextInfo.isApp) {
       saveApp(context, contextInfo);
-      Alert.alert('Success', `Succesfully linked ${context} with BrightID`);
     } else {
-      Alert.alert('Success', `Succesfully linked ${context} with BrightID`);
+      Alert.alert('Success', `Succesfully sent the request of linking ${context} with BrightID`);
       goBack();
     }
   }
@@ -95,17 +93,18 @@ const saveApp = async (name: string, contextInfo: ContextInfo) => {
       });
     }
 
-    let appInfo: AppInfo = {
-      verified: contextInfo.verified,
+    const appInfo: AppInfo = {
+      verification: contextInfo.verification,
       name,
       url: contextInfo.appUrl,
       logoFile,
       dateAdded: Date.now(),
+      state: 'initiated',
     };
-
     return store.dispatch(addApp(appInfo));
-  } catch (err) {
-    console.log(err);
+
+  } catch (e) {
+    console.log(e);
   }
 };
 

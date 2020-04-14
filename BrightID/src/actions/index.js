@@ -4,9 +4,11 @@ export {
   SET_APPS,
   ADD_APP,
   REMOVE_APP,
+  UPDATE_APP,
   setApps,
   addApp,
   removeApp,
+  updateApp,
 } from './apps';
 
 export {

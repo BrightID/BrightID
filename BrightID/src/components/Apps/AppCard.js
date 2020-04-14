@@ -29,6 +29,25 @@ class AppCard extends React.PureComponent<Props> {
     Linking.openURL(url);
   };
 
+  setStatus = () => {
+    const { state, name } = this.props;
+    if (state === 'initiated') {
+      return (
+        <View style={styles.stateContainer}>
+          <Text style={styles.waitingMessage}>Waiting</Text>
+        </View>
+      );
+    } else if (state === 'failed') {
+      return (
+        <View style={styles.stateContainer}>
+          <Text style={styles.deletedMessage}>Not Linked, try again</Text>
+        </View>
+      );
+    } else {
+      return <View style={styles.stateContainer} />;
+    }
+  };
+
   render() {
     const { logoFile, name, verified, style, handleAction } = this.props;
 
@@ -45,6 +64,7 @@ class AppCard extends React.PureComponent<Props> {
 
         <TouchableOpacity style={styles.link} onPress={this.openApp}>
           <Text style={styles.name}>{name}</Text>
+          <this.setStatus />
         </TouchableOpacity>
 
         {verified && (
@@ -87,6 +107,22 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 24,
     marginLeft: 20,
+  },
+  stateContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginLeft: 20,
+  },
+  waitingMessage: {
+    fontFamily: 'ApexNew-Medium',
+    fontSize: 16,
+    color: '#e39f2f',
+  },
+  deletedMessage: {
+    fontFamily: 'ApexNew-Medium',
+    fontSize: 16,
+    color: '#FF0800',
   },
   verifiedIcon: {
     marginLeft: 10,

@@ -1,6 +1,7 @@
 // @flow
 
-import { SET_APPS, ADD_APP, REMOVE_APP, RESET_STORE } from '@/actions';
+import { SET_APPS, ADD_APP, REMOVE_APP, RESET_STORE, UPDATE_APP } from '@/actions';
+import { find, propEq, mergeRight } from 'ramda';
 
 const initialState = {
   apps: [],
@@ -19,7 +20,18 @@ export const reducer = (state: AppsState = initialState, action: action) => {
       const apps: AppInfo[] = state.apps
         .filter(removeExisting)
         .concat(action.app);
-
+      return {
+        ...state,
+        apps,
+      };
+    }
+    case UPDATE_APP: {
+      const removeExisting = ({ name }) => name !== action.name;
+      const updatedApp = find(propEq('name', action.name))(state.apps);
+      updatedApp.state = (action.state === 'applied') ? 'applied' : 'failed'
+      const apps: AppInfo[] = state.apps
+        .filter(removeExisting)
+        .concat(updatedApp);
       return {
         ...state,
         apps,
