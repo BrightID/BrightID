@@ -1,9 +1,8 @@
 // @flow
-import store from '../store';
-import { removeOperation, resetOperations } from '../actions';
-import fetchUserInfo from '../actions/fetchUserInfo';
-import { updateApp } from '../actions';
 import { Alert } from 'react-native';
+import store from '../store';
+import { removeOperation, resetOperations, updateApp } from '../actions';
+import fetchUserInfo from '../actions/fetchUserInfo';
 
 import api from '../Api/BrightId';
 
@@ -23,7 +22,11 @@ export const pollOperations = async () => {
       ) {
         if (op.name === 'Link ContextId') {
           store.dispatch(updateApp(op.context, state));
-          if (state === 'applied') Alert.alert('Success', `Succesfully linking ${op.context} with BrightID`);
+          if (state === 'applied')
+            Alert.alert(
+              'Success',
+              `Succesfully linked ${op.context} with BrightID`,
+            );
         } else {
           store.dispatch(fetchUserInfo());
         }

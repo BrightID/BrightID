@@ -34,13 +34,12 @@ export const handleAppContext = async (params: Params) => {
   }
   if (contextInfo && contextInfo.verification) {
     Alert.alert(
-      'App Verification?',
+      'Link App?',
       `Do you want to link your account in ${context} to your BrightID?`,
       [
         {
           text: 'Yes',
-          onPress: () =>
-            linkVerification(baseUrl, context, contextInfo, contextId),
+          onPress: () => linkApp(baseUrl, context, contextInfo, contextId),
         },
         {
           text: 'No',
@@ -57,13 +56,13 @@ export const handleAppContext = async (params: Params) => {
   }
 };
 
-const linkVerification = async (baseUrl, context, contextInfo, contextId) => {
+const linkApp = async (baseUrl, context, contextInfo, contextId) => {
   const oldBaseUrl = api.baseUrl;
   try {
     api.baseUrl = baseUrl;
     await api.linkContextId(context, contextId);
   } catch (e) {
-    Alert.alert(`App verification failed`, `${e.message}`, [
+    Alert.alert(`App linking failed`, `${e.message}`, [
       {
         text: 'Dismiss',
         style: 'cancel',
@@ -77,7 +76,10 @@ const linkVerification = async (baseUrl, context, contextInfo, contextId) => {
     if (contextInfo.isApp) {
       saveApp(context, contextInfo);
     } else {
-      Alert.alert('Success', `Succesfully sent the request to link ${context} with BrightID`);
+      Alert.alert(
+        'Success',
+        `Succesfully sent the request to link ${context} with BrightID`,
+      );
       goBack();
     }
   }
