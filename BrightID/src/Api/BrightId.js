@@ -48,8 +48,8 @@ class BrightId {
     throw new Error(response.problem);
   }
 
-  static setOperation(opHash: string) {
-    store.dispatch(addOperation(opHash));
+  static setOperation(op) {
+    store.dispatch(addOperation(op));
   }
 
   async createConnection(
@@ -71,7 +71,7 @@ class BrightId {
     op._key = hash(op.name + op.id1 + op.id2 + op.timestamp);
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
-    BrightId.setOperation(op._key);
+    BrightId.setOperation(op);
   }
 
   async removeConnection(id2: string, reason: string) {
@@ -96,7 +96,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
-    BrightId.setOperation(op._key);
+    BrightId.setOperation(op);
   }
 
   async createGroup(
@@ -135,7 +135,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
-    BrightId.setOperation(op._key);
+    BrightId.setOperation(op);
   }
 
   async dismiss(id2: string, group: string) {
@@ -160,7 +160,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
-    BrightId.setOperation(op._key);
+    BrightId.setOperation(op);
   }
 
   async invite(id2: string, group: string, data: string) {
@@ -209,7 +209,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
-    BrightId.setOperation(op._key);
+    BrightId.setOperation(op);
   }
 
   async joinGroup(group: string) {
@@ -233,7 +233,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
-    BrightId.setOperation(op._key);
+    BrightId.setOperation(op);
   }
 
   async leaveGroup(group: string) {
@@ -257,7 +257,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
-    BrightId.setOperation(op._key);
+    BrightId.setOperation(op);
   }
 
   async setTrusted(trusted: string[]) {
@@ -282,7 +282,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
-    BrightId.setOperation(op._key);
+    BrightId.setOperation(op);
   }
 
   async setSigningKey(op: {
@@ -299,7 +299,7 @@ class BrightId {
     op.v = v;
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
-    BrightId.setOperation(op._key);
+    BrightId.setOperation(op);
   }
 
   async linkContextId(context: string, contextId: string) {
@@ -323,6 +323,7 @@ class BrightId {
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    BrightId.setOperation(op);
   }
 
   async getUserInfo(id: string) {

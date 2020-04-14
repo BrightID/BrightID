@@ -12,15 +12,15 @@ export const reducer = (
 ) => {
   switch (action.type) {
     case ADD_OPERATION: {
-      const operations: string[] = state.operations.concat(action.op);
+      const operations: operation[] = state.operations.concat(action.op);
       return {
         ...state,
         operations,
       };
     }
     case REMOVE_OPERATION: {
-      const operations: string[] = state.operations.filter(
-        (op) => op !== action.op,
+      const operations: operation[] = state.operations.filter(
+        (op: operation) => op._key !== action.opHash,
       );
       return {
         ...state,
