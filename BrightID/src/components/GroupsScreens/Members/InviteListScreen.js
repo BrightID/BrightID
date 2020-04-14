@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { connect } from 'react-redux';
-import CryptoJS from 'crypto-js';
 import api from '@/Api/BrightId';
+import { encryptAesKey } from '@/utils/invites';
 import MemberCard from './MemberCard';
 
 export class InviteListScreen extends Component<Props, State> {
@@ -26,18 +26,17 @@ export class InviteListScreen extends Component<Props, State> {
   };
 
   inviteToGroup = async (connection) => {
-    const { group } = this.props.navigation.state.params;
+    const { navigation } = this.props;
+    const { group } = navigation.state.params;
+
     try {
-      let data = '';
-      if (connection.aesKey && group.aesKey) {
-        data = CryptoJS.AES.encrypt(group.aesKey, connection.aesKey).toString();
-      }
+      const data = await encryptAesKey(group.aesKey, connection.signingKey);
       await api.invite(connection.id, group.id, data);
       Alert.alert(
         'Successful Invitaion',
         `You invited ${connection.name} successfully to the group`,
       );
-      this.props.navigation.goBack();
+      navigation.goBack();
     } catch (err) {
       Alert.alert('Error', err.message);
     }

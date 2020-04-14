@@ -1,23 +1,15 @@
 // @flow
 
-import { Alert, NativeModules } from 'react-native';
+import { Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
 import emitter from '@/emitter';
 import { saveImage } from '@/utils/filesystem';
+import { encryptAesKey } from '@/utils/invites';
 import { setNewGroupCoFounders, createGroup } from '@/actions/index';
 import api from '@/Api/BrightId';
 import backupApi from '@/Api/BackupApi';
-import { hash } from '@/utils/encoding';
+import { hash, randomKey } from '@/utils/encoding';
 import { backupPhoto, backupUser } from '../Recovery/helpers';
-
-const { RNRandomBytes } = NativeModules;
-
-const randomKey = (size: number) =>
-  new Promise((resolve, reject) => {
-    RNRandomBytes.randomBytes(size, (err, bytes) => {
-      err ? reject(err) : resolve(bytes);
-    });
-  });
 
 export const toggleNewGroupCoFounder = (id: string) => (
   dispatch: dispatch,
@@ -62,7 +54,7 @@ export const createNewGroup = (
     }
 
     const aesKey = await randomKey(16);
-    let uuidKey = await randomKey(9);
+    const uuidKey = await randomKey(9);
     const groupId = hash(uuidKey);
 
     const groupData = JSON.stringify({ name, photo });
@@ -73,7 +65,9 @@ export const createNewGroup = (
     ).toString();
 
     await backupApi.putRecovery('immutable', groupId, encryptedGroupData);
+
     emitter.emit('creatingGroupChannel', 'creating the group');
+
     const url = `https://recovery.brightid.org/backups/immutable/${groupId}`;
 
     let filename = null;
@@ -98,13 +92,9 @@ export const createNewGroup = (
       type,
     };
 
-    const data1 = founder1.aesKey
-      ? CryptoJS.AES.encrypt(aesKey, founder1.aesKey).toString()
-      : '';
+    const data1 = await encryptAesKey(aesKey, founder1.signingKey);
 
-    const data2 = founder2.aesKey
-      ? CryptoJS.AES.encrypt(aesKey, founder2.aesKey).toString()
-      : '';
+    const data2 = await encryptAesKey(aesKey, founder2.signingKey);
 
     await api.createGroup(
       groupId,
