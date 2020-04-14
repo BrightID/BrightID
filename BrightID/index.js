@@ -9,10 +9,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+// eslint-disable-next-line import/no-unresolved
+import { enableScreens } from 'react-native-screens';
 import App from './src/App';
 import { name as appName } from './app.json';
 
-// enable react-native-screen
+// enable react-native-screens
 enableScreens();
 
 // Bootstrap fonts

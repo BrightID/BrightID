@@ -1,8 +1,11 @@
+// @flow
+
 import * as React from 'react';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LinearGradient from 'react-native-linear-gradient';
-import Home from './components/HomeScreen';
+import { connect } from 'react-redux';
+import HomeScreen from './components/HomeScreen';
 import ConnectionsScreen from './components/Connections/ConnectionsScreen';
 import SortingConnectionsScreen from './components/Connections/SortingConnectionsScreen';
 import Onboard from './components/OnboardingScreens/Onboard';
@@ -17,15 +20,14 @@ import InviteListScreen from './components/GroupsScreens/Members/InviteListScree
 
 import PreviewConnectionScreen from './components/NewConnectionsScreens/PreviewConnectionScreen';
 import SuccessScreen from './components/NewConnectionsScreens/SuccessScreen';
-import AppBootstrap from './AppBootstrap';
-import Apps from './components/Apps/AppsScreen';
-import Notifications from './components/Notifications/NotificationsScreen';
+// import AppBootstrap from './AppBootstrap';
+import AppsScreen from './components/Apps/AppsScreen';
+import NotificationsScreen from './components/Notifications/NotificationsScreen';
 import TrustedConnectionsScreen from './components/Recovery/TrustedConnectionsScreen';
 import BackupScreen from './components/Recovery/BackupScreen';
 import RestoreScreen from './components/Recovery/RestoreScreen';
 import RecoveringConnectionScreen from './components/Recovery/RecoveringConnectionScreen';
 import RecoveryCodeScreen from './components/Recovery/RecoveryCodeScreen';
-import { setTopLevelNavigator } from './NavigationService';
 
 /**
  * This is BrightID's router, written with React-Navigation
@@ -59,100 +61,189 @@ const defaultNavigationOptions = ({ navigation }) => ({
   // cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 });
 
-const AppStack = createStackNavigator(
-  {
-    Home,
-    NewConnection: {
-      screen: NewConnectionScreen,
-    },
-    ConnectSuccess: {
-      screen: SuccessScreen,
-    },
-    PreviewConnection: {
-      screen: PreviewConnectionScreen,
-    },
-    Connections: {
-      screen: ConnectionsScreen,
-    },
-    SortingConnections: {
-      screen: SortingConnectionsScreen,
-    },
-    Groups: {
-      screen: GroupsScreen,
-    },
-    NewGroup: {
-      screen: NewGroupScreen,
-    },
-    GroupInfo: {
-      screen: GroupInfoScreen,
-    },
-    Members: {
-      screen: MembersScreen,
-    },
-    InviteList: {
-      screen: InviteListScreen,
-    },
-    Notifications,
-    Apps: {
-      screen: Apps,
-      path: 'link-verification/:baseUrl/:context/:contextId',
-    },
-    TrustedConnections: {
-      screen: TrustedConnectionsScreen,
-    },
-    Backup: {
-      screen: BackupScreen,
-    },
-    RecoveringConnection: {
-      screen: RecoveringConnectionScreen,
-    },
-  },
-  {
-    initialRouteName: 'Home',
-    defaultNavigationOptions,
-  },
+// const AppStack = createStackNavigator(
+//   {
+//     Home,
+//     NewConnection: {
+//       screen: NewConnectionScreen,
+//     },
+//     ConnectSuccess: {
+//       screen: SuccessScreen,
+//     },
+//     PreviewConnection: {
+//       screen: PreviewConnectionScreen,
+//     },
+//     Connections: {
+//       screen: ConnectionsScreen,
+//     },
+//     SortingConnections: {
+//       screen: SortingConnectionsScreen,
+//     },
+//     Groups: {
+//       screen: GroupsScreen,
+//     },
+//     NewGroup: {
+//       screen: NewGroupScreen,
+//     },
+//     GroupInfo: {
+//       screen: GroupInfoScreen,
+//     },
+//     Members: {
+//       screen: MembersScreen,
+//     },
+//     InviteList: {
+//       screen: InviteListScreen,
+//     },
+//     Notifications,
+//     Apps: {
+//       screen: Apps,
+//       path: 'link-verification/:baseUrl/:context/:contextId',
+//     },
+//     TrustedConnections: {
+//       screen: TrustedConnectionsScreen,
+//     },
+//     Backup: {
+//       screen: BackupScreen,
+//     },
+//     RecoveringConnection: {
+//       screen: RecoveringConnectionScreen,
+//     },
+//   },
+//   {
+//     initialRouteName: 'Home',
+//     defaultNavigationOptions,
+//   },
+// );
+
+// const OnboardingStack = createStackNavigator(
+//   {
+//     Onboard: {
+//       screen: Onboard,
+//       navigationOptions: {
+//         headerShown: false,
+//       },
+//     },
+//     SignUp,
+//     RecoveryCode: {
+//       screen: RecoveryCodeScreen,
+//     },
+//     Restore: {
+//       screen: RestoreScreen,
+//     },
+//   },
+//   {
+//     initialRouteName: 'Onboard',
+//     defaultNavigationOptions,
+//   },
+// );
+
+// const AppNavigator = createAnimatedSwitchNavigator(
+//   {
+//     AppBootstrap,
+//     App: {
+//       screen: AppStack,
+//       path: '',
+//     },
+//     Onboarding: OnboardingStack,
+//   },
+//   {
+//     initialRouteName: 'AppBootstrap',
+//   },
+// );
+
+const HomeStack = createStackNavigator();
+
+const Home = () => (
+  <HomeStack.Navigator>
+    <HomeStack.Screen name="Home" component={HomeScreen} />
+    <HomeStack.Screen name="NewConnection" component={NewConnectionScreen} />
+    <HomeStack.Screen name="ConnectSuccess" component={SuccessScreen} />
+    <HomeStack.Screen
+      name="PreviewConnection"
+      component={PreviewConnectionScreen}
+    />
+    <HomeStack.Screen
+      name="RecoveringConnection"
+      component={RecoveringConnectionScreen}
+    />
+  </HomeStack.Navigator>
 );
 
-const OnboardingStack = createStackNavigator(
-  {
-    Onboard: {
-      screen: Onboard,
-      navigationOptions: {
-        headerShown: false,
-      },
-    },
-    SignUp,
-    RecoveryCode: {
-      screen: RecoveryCodeScreen,
-    },
-    Restore: {
-      screen: RestoreScreen,
-    },
-  },
-  {
-    initialRouteName: 'Onboard',
-    defaultNavigationOptions,
-  },
+const ConnectionsStack = createStackNavigator();
+
+const Connections = () => (
+  <ConnectionsStack.Navigator>
+    <ConnectionsStack.Screen name="Connections" component={ConnectionsScreen} />
+    <ConnectionsStack.Screen
+      name="SortingConnections"
+      component={SortingConnectionsScreen}
+    />
+  </ConnectionsStack.Navigator>
 );
 
-const AppNavigator = createSwitchNavigator(
-  {
-    AppBootstrap,
-    App: {
-      screen: AppStack,
-      path: '',
-    },
-    Onboarding: OnboardingStack,
-  },
-  {
-    initialRouteName: 'AppBootstrap',
-  },
+const GroupsStack = createStackNavigator();
+
+const Groups = () => (
+  <GroupsStack.Navigator>
+    <GroupsStack.Screen name="Groups" component={GroupsScreen} />
+    <GroupsStack.Screen name="NewGroup" component={NewGroupScreen} />
+    <GroupsStack.Screen name="GroupInfo" component={GroupInfoScreen} />
+    <GroupsStack.Screen name="Members" component={MembersScreen} />
+    <GroupsStack.Screen name="InviteList" component={InviteListScreen} />
+  </GroupsStack.Navigator>
 );
 
-const prefix = 'brightid://';
+const NotificationStack = createStackNavigator();
 
-const App = createAppContainer(AppNavigator);
+const Notifications = () => (
+  <NotificationStack.Navigator>
+    <NotificationStack.Screen
+      name="Notifications"
+      component={NotificationsScreen}
+    />
+    <NotificationStack.Screen
+      name="TrustedConnections"
+      component={TrustedConnectionsScreen}
+    />
+    <NotificationStack.Screen name="Backup" component={BackupScreen} />
+  </NotificationStack.Navigator>
+);
 
-const MainApp = () => <App ref={setTopLevelNavigator} uriPrefix={prefix} />;
+const RestoreStack = createStackNavigator();
 
-export default MainApp;
+const Restore = () => (
+  <RestoreStack.Navigator>
+    <RestoreStack.Screen name="RecoveryCode" component={RecoveryCodeScreen} />
+    <RestoreStack.Screen name="Restore" component={RestoreScreen} />
+  </RestoreStack.Navigator>
+);
+
+const Tab = createBottomTabNavigator();
+
+const MainApp = ({ publicKey }: { publicKey?: string }) => (
+  <Tab.Navigator>
+    {publicKey ? (
+      <>
+        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="Connections" component={Connections} />
+        <Tab.Screen name="Groups" component={Groups} />
+        <Tab.Screen name="Notifications" component={Notifications} />
+        <Tab.Screen name="Apps" component={AppsScreen} />
+      </>
+    ) : (
+      <>
+        <Tab.Screen name="Onboard" component={Onboard} />
+        <Tab.Screen name="SignUp" component={SignUp} />
+        <Tab.Screen name="Restore" component={Restore} />
+      </>
+    )}
+  </Tab.Navigator>
+);
+
+// const prefix = 'brightid://';
+
+// const App = createAppContainer(AppNavigator);
+
+// const MainApp = () => <App ref={setTopLevelNavigator} uriPrefix={prefix} />;
+
+export default connect(({ user: { publicKey } }) => ({ publicKey }))(MainApp);

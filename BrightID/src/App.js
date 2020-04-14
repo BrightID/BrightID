@@ -3,11 +3,14 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { StatusBar, StyleSheet, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { StatusBar, StyleSheet } from 'react-native';
+import { bootstrapAndUpgrade } from './versions';
+import { resetOperations } from './actions';
+import fetchUserInfo from './actions/fetchUserInfo';
 import { pollOperations } from './utils/operations';
 import AppRoutes from './AppRoutes';
 import { store, persistor } from './store';
-import BottomNav from './BottomNav';
 
 /**
  * Central part of the application
@@ -21,6 +24,7 @@ export default class App extends React.Component<Props> {
   timerId: IntervalID;
 
   componentDidMount() {
+    this.bootstrap();
     this.timerId = setInterval(() => {
       pollOperations();
     }, 5000);
@@ -30,19 +34,40 @@ export default class App extends React.Component<Props> {
     clearInterval(this.timerId);
   }
 
+  bootstrap = async () => {
+    try {
+      let {
+        user: { publicKey },
+      } = store.getState();
+      // load redux store from async storage and upgrade async storage is necessary
+      if (!publicKey) await bootstrapAndUpgrade();
+      // reset operations
+      store.dispatch(resetOperations());
+      // fetch user info
+      if (!publicKey) {
+        publicKey = store.getState().user.publicKey;
+      }
+
+      if (publicKey) store.dispatch(fetchUserInfo());
+      // once everything is set up
+      // this.props.navigation.navigate(publicKey ? 'App' : 'Onboarding');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   render() {
     return (
       <Provider store={store}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#F52828"
-          translucent={false}
-        />
         <PersistGate loading={null} persistor={persistor}>
-          <View style={styles.container}>
+          <NavigationContainer style={styles.container}>
+            <StatusBar
+              barStyle="dark-content"
+              backgroundColor="#F52828"
+              translucent={false}
+            />
             <AppRoutes />
-            <BottomNav />
-          </View>
+          </NavigationContainer>
         </PersistGate>
       </Provider>
     );
