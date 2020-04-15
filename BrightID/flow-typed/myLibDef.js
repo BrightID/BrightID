@@ -51,7 +51,6 @@ declare type connection = {
     filename: string,
   },
   status: string,
-
   signingKey: string,
   createdAt: number,
   hasPrimaryGroup: boolean,
@@ -118,7 +117,15 @@ declare type invite = {
 };
 
 declare type OperationsState = {
-  operations: string[],
+  operations: operation[],
+};
+
+declare type operation = {
+  name: string,
+  timestamp: string,
+  v: string,
+  _key: string,
+  [val: string]: string,
 };
 
 declare type RecoveryData = {
