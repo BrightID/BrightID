@@ -28,10 +28,15 @@ export const reducer = (state: AppsState = initialState, action: action) => {
     case UPDATE_APP: {
       const removeExisting = ({ name }) => name !== action.name;
       const updatedApp = find(propEq('name', action.name))(state.apps);
-      updatedApp.state = (action.state === 'applied') ? 'applied' : 'failed'
-      const apps: AppInfo[] = state.apps
-        .filter(removeExisting)
-        .concat(updatedApp);
+      let apps;
+      if (updatedApp !== undefined) {
+        updatedApp.state = (action.state === 'applied') ? 'applied' : 'failed';
+        apps = state.apps
+          .filter(removeExisting)
+          .concat(updatedApp);
+      } else {
+        apps = state.apps;
+      }
       return {
         ...state,
         apps,
