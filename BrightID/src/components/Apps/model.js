@@ -29,6 +29,7 @@ export const handleAppContext = async (params: Params) => {
   } catch (e) {
     Alert.alert('Failed', `Unable to link ${context} with BrightID`);
     console.log(e);
+    return;
   } finally {
     api.baseUrl = oldBaseUrl;
   }
