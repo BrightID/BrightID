@@ -59,6 +59,8 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+package-lock.json
+
 Setting
 core-js-pure@*
 opencollective-postinstall
