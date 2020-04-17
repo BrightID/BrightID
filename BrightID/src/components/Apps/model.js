@@ -61,6 +61,15 @@ const linkApp = async (baseUrl, context, contextInfo, contextId) => {
   try {
     api.baseUrl = baseUrl;
     await api.linkContextId(context, contextId);
+    if (contextInfo.isApp) {
+      saveApp(context, contextInfo);
+    } else {
+      Alert.alert(
+        'Success',
+        `Succesfully sent the request to link ${context} with BrightID`,
+      );
+      goBack();
+    }
   } catch (e) {
     Alert.alert(`App linking failed`, `${e.message}`, [
       {
@@ -73,15 +82,6 @@ const linkApp = async (baseUrl, context, contextInfo, contextId) => {
     ]);
   } finally {
     api.baseUrl = oldBaseUrl;
-    if (contextInfo.isApp) {
-      saveApp(context, contextInfo);
-    } else {
-      Alert.alert(
-        'Success',
-        `Succesfully sent the request to link ${context} with BrightID`,
-      );
-      goBack();
-    }
   }
 };
 
