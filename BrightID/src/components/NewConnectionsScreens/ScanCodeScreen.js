@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import { Alert, StyleSheet, TextInput, View } from 'react-native';
+import { Alert, Linking, StyleSheet, TextInput, View } from 'react-native';
 import { connect } from 'react-redux';
 import { RNCamera } from 'react-native-camera';
 import Spinner from 'react-native-spinkit';
@@ -95,14 +95,8 @@ export class ScanCodeScreen extends React.Component<Props, State> {
       navigation.navigate('RecoveringConnection', {
         recoveryRequestCode: data,
       });
-    } else if (data.startsWith('brightid://link-verification/')) {
-      data = data.replace('brightid://link-verification/', '');
-      const [baseUrl, context, contextId] = data.split('/');
-      navigation.navigate('Apps', {
-        baseUrl: decodeURIComponent(baseUrl),
-        context,
-        contextId
-      });
+    } else if (data.startsWith('brightid://')) {
+      Linking.openURL(data);
     } else if (validQrString(data)) {
       dispatch(parseQrData(data));
       // If the following `fetchdata()` fails, a "connectFailure" will be emitted,
