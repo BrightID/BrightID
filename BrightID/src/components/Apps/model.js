@@ -56,13 +56,14 @@ export const handleAppContext = async (params: Params) => {
 };
 
 const linkApp = async (baseUrl, context, contextInfo, contextId) => {
+  if (contextInfo.isApp) {
+    saveApp(context, contextInfo);
+  }
   const oldBaseUrl = api.baseUrl;
   try {
     api.baseUrl = baseUrl;
     await api.linkContextId(context, contextId);
-    if (contextInfo.isApp) {
-      saveApp(context, contextInfo);
-    } else {
+    if (!contextInfo.isApp) {
       Alert.alert(
         'Success',
         `Succesfully sent the request to link ${context} with BrightID`,
