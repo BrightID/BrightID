@@ -59,3 +59,12 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+package-lock.json
+
+Setting
+core-js-pure@*
+opencollective-postinstall
+Done
+node
+husky@*
+core-js@*

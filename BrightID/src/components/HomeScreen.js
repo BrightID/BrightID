@@ -42,14 +42,14 @@ export class HomeScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }) => ({
     title: 'BrightID',
     headerBackTitle: 'Home',
-    headerRight: () => (
+    headerRight: __DEV__ ? () => (
       <TouchableOpacity
         style={{ marginRight: 11 }}
         onPress={delStorage(navigation)}
       >
         <Material size={32} name="dots-horizontal" color="#fff" />
       </TouchableOpacity>
-    ),
+    ): () => null,
     headerLeft: () => (
       <TouchableOpacity
         style={{ marginLeft: 16 }}
