@@ -1,7 +1,7 @@
 // @flow
 
 import { SET_APPS, ADD_APP, REMOVE_APP, RESET_STORE, UPDATE_APP } from '@/actions';
-import { find, propEq, mergeRight } from 'ramda';
+import { find, propEq } from 'ramda';
 
 const initialState = {
   apps: [],

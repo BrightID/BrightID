@@ -13,6 +13,7 @@ import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { deleteApp } from './model';
+import store from '@/store';
 
 /**
  * App Card in the Apps Screen
@@ -30,7 +31,7 @@ class AppCard extends React.PureComponent<Props> {
   };
 
   setStatus = () => {
-    const { state, name } = this.props;
+    const { state } = this.props;
     if (state === 'initiated') {
       return (
         <View style={styles.stateContainer}>
@@ -40,7 +41,23 @@ class AppCard extends React.PureComponent<Props> {
     } else if (state === 'failed') {
       return (
         <View style={styles.stateContainer}>
-          <Text style={styles.deletedMessage}>Not Linked, try again</Text>
+          <Text style={styles.errorMessage}>Not Linked, try again</Text>
+        </View>
+      );
+    } else {
+      return <View style={styles.stateContainer} />;
+    }
+  };
+
+  setVerification = () => {
+    const {
+      user: { verifications },
+    } = store.getState();
+    const { verification } = this.props;
+    if (!verifications.includes(verification)) {
+      return (
+        <View style={styles.stateContainer}>
+          <Text style={styles.errorMessage}>Not verified for this app</Text>
         </View>
       );
     } else {
@@ -64,6 +81,7 @@ class AppCard extends React.PureComponent<Props> {
 
         <TouchableOpacity style={styles.link} onPress={this.openApp}>
           <Text style={styles.name}>{name}</Text>
+          <this.setVerification />
           <this.setStatus />
         </TouchableOpacity>
 
@@ -119,7 +137,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#e39f2f',
   },
-  deletedMessage: {
+  errorMessage: {
     fontFamily: 'ApexNew-Medium',
     fontSize: 16,
     color: '#FF0800',
