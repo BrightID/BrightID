@@ -30,14 +30,14 @@ import { performAction } from './models/modifyConnections';
 export class ConnectionsScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }: { navigation: navigation }) => ({
     title: 'Connections',
-    headerRight: () => (
+    headerRight: __DEV__ ? () => (
       <TouchableOpacity
         style={{ marginRight: 11 }}
         onPress={createFakeConnection(navigation)}
       >
         <Material name="dots-horizontal" size={32} color="#fff" />
       </TouchableOpacity>
-    ),
+    ): () => null,
     headerShown: DEVICE_TYPE === 'large',
   });
 
