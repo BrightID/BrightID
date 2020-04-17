@@ -1,11 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import { Linking, StyleSheet, View, FlatList } from 'react-native';
+import { Linking, StyleSheet, View, FlatList, Text } from 'react-native';
 import { connect } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
 import AppCard from './AppCard';
 import { handleAppContext, deleteApp } from './model';
+import store from '@/store';
 
 let deleteSheetRef = '';
 
@@ -41,7 +42,6 @@ export class AppsScreen extends React.Component<Prop, State> {
 
   handleDeepLink = (e) => {
     const { navigation } = this.props;
-    console.log('params', navigation.state.params);
     if (navigation.state.params) {
       handleAppContext(navigation.state.params);
     }
@@ -53,10 +53,26 @@ export class AppsScreen extends React.Component<Prop, State> {
     });
   };
 
+  sponsorLabel = () => {
+    const {
+      user: { isSponsored },
+    } = store.getState();
+    if (!isSponsored) {
+      return (
+        <View style={styles.sponsorContainer}>
+          <Text style={styles.sponsorMessage}>You're not sponsored.{"\n"}Please find an app below to sponsor you.</Text>
+        </View>
+      );
+    } else {
+      return <View style={styles.stateContainer} />;
+    }
+  };
+
   render() {
     const { selectedApp } = this.state;
     return (
       <View style={styles.container}>
+        <this.sponsorLabel />
         <FlatList
           style={styles.AppsList}
           data={this.props.apps}
@@ -90,6 +106,18 @@ const styles = StyleSheet.create({
   },
   AppsList: {
     flex: 1,
+  },
+  sponsorContainer: {
+    flexDirection: 'row',
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  sponsorMessage: {
+    fontFamily: 'ApexNew-Medium',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: '#e39f2f',
   },
 });
 
