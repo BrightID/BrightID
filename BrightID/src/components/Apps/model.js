@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import api from '@/Api/BrightId';
 import { saveImage } from '@/utils/filesystem';
 import { addApp, removeApp } from '@/actions';
-import { goBack } from '@/NavigationService';
+import { navigate } from '@/NavigationService';
 import store from '@/store';
 
 type Params = {
@@ -27,8 +27,7 @@ export const handleAppContext = async (params: Params) => {
     api.baseUrl = baseUrl;
     contextInfo = await api.getContext(context);
   } catch (e) {
-    Alert.alert('Failed', `Unable to link ${context} with BrightID`);
-    console.log(e);
+    console.log(e.message);
   } finally {
     api.baseUrl = oldBaseUrl;
   }
@@ -45,14 +44,14 @@ export const handleAppContext = async (params: Params) => {
           text: 'No',
           style: 'cancel',
           onPress: () => {
-            goBack();
+            navigate('Home');
           },
         },
       ],
     );
   } else {
     Alert.alert('Failed', `Unable to link ${context} with BrightID`);
-    goBack();
+    navigate('Home');
   }
 };
 
@@ -68,7 +67,7 @@ const linkApp = async (baseUrl, context, contextInfo, contextId) => {
         'Success',
         `Succesfully sent the request to link ${context} with BrightID`,
       );
-      goBack();
+      navigate('Home');
     }
   } catch (e) {
     Alert.alert(`App linking failed`, `${e.message}`, [
@@ -76,7 +75,7 @@ const linkApp = async (baseUrl, context, contextInfo, contextId) => {
         text: 'Dismiss',
         style: 'cancel',
         onPress: () => {
-          goBack();
+          navigate('Home');
         },
       },
     ]);
@@ -104,7 +103,6 @@ const saveApp = async (name: string, contextInfo: ContextInfo) => {
       state: 'initiated',
     };
     return store.dispatch(addApp(appInfo));
-
   } catch (e) {
     console.log(e);
   }
