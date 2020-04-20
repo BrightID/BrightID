@@ -7,6 +7,7 @@ import { INVITE_ACTIVE } from '@/utils/constants';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import NotificationCard from './NotificationCard';
 import InviteCard from './InviteCard';
+import EmptyNotifications from './EmptyNotifications';
 
 type State = {
   refreshing: boolean,
@@ -51,7 +52,7 @@ class NotificationsScreen extends React.Component<Props, State> {
       : [];
     const notificationData = notifications.concat(activeInvites);
 
-    return (
+    return notificationData.length > 0 ? (
       <View style={styles.container}>
         <FlatList
           data={notificationData}
@@ -75,6 +76,8 @@ class NotificationsScreen extends React.Component<Props, State> {
           }
         />
       </View>
+    ) : (
+      <EmptyNotifications />
     );
   }
 }

@@ -5,6 +5,7 @@ import { Linking, StyleSheet, View, FlatList, Text } from 'react-native';
 import { connect } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
 import AppCard from './AppCard';
+import EmptyApps from './EmptyApps';
 import { handleAppContext, deleteApp } from './model';
 
 let deleteSheetRef = '';
@@ -68,8 +69,9 @@ export class AppsScreen extends React.Component<Prop, State> {
   };
 
   render() {
+    const { apps } = this.props;
     const { selectedApp } = this.state;
-    return (
+    return apps.length > 0 ? (
       <View style={styles.container}>
         <this.sponsorLabel />
         <FlatList
@@ -94,6 +96,8 @@ export class AppsScreen extends React.Component<Prop, State> {
           }}
         />
       </View>
+    ) : (
+      <EmptyApps />
     );
   }
 }
