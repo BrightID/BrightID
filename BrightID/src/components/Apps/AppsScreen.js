@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
 import AppCard from './AppCard';
 import { handleAppContext, deleteApp } from './model';
-import store from '@/store';
 
 let deleteSheetRef = '';
 
@@ -54,13 +53,13 @@ export class AppsScreen extends React.Component<Prop, State> {
   };
 
   sponsorLabel = () => {
-    const {
-      user: { isSponsored },
-    } = store.getState();
+    const { isSponsored } = this.props;
     if (!isSponsored) {
       return (
         <View style={styles.sponsorContainer}>
-          <Text style={styles.sponsorMessage}>You're not sponsored.{"\n"}Please find an app below to sponsor you.</Text>
+          <Text style={styles.sponsorMessage}>
+            You're not sponsored.{'\n'}Please find an app below to sponsor you.
+          </Text>
         </View>
       );
     } else {
@@ -109,7 +108,7 @@ const styles = StyleSheet.create({
   },
   sponsorContainer: {
     flexDirection: 'row',
-    justifyContent: "center",
+    justifyContent: 'center',
     marginTop: 20,
   },
   sponsorMessage: {
@@ -121,4 +120,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => ({ apps: state.apps.apps }))(AppsScreen);
+export default connect(({ apps, user }) => ({ ...apps, ...user }))(AppsScreen);

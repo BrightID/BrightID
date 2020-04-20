@@ -12,7 +12,6 @@ import {
 import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import { deleteApp } from './model';
 import store from '@/store';
 import api from '@/Api/BrightId';
 
@@ -25,12 +24,16 @@ import api from '@/Api/BrightId';
  * @prop url
  */
 
-class AppCard extends React.PureComponent<Props> {
+type State = {
+  hasSponsorships: boolean,
+};
+
+class AppCard extends React.PureComponent<Props, State> {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      hasSponsorships: false
-    }
+      hasSponsorships: false,
+    };
   }
 
   async componentDidMount() {
@@ -38,7 +41,7 @@ class AppCard extends React.PureComponent<Props> {
       const { name } = this.props;
       const contextInfo = await api.getContext(name);
       if (contextInfo.unusedSponsorships > 0) {
-        this.setState({ hasSponsorships: true })
+        this.setState({ hasSponsorships: true });
       }
     } catch (err) {
       console.log(err);
