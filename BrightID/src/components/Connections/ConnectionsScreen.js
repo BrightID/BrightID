@@ -122,7 +122,8 @@ export class ConnectionsScreen extends React.Component<Props> {
       actions.splice(3, 1);
     }
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} 
+                  contentContainerStyle={{ paddingBottom: 20 }}>
         <View style={{ flex: 1 }}>
           <View style={styles.mainContainer}>
             <SearchConnections navigation={navigation} sortable={true} />
@@ -133,6 +134,7 @@ export class ConnectionsScreen extends React.Component<Props> {
                   data={connections}
                   keyExtractor={({ id }, index) => id + index}
                   renderItem={this.renderConnection}
+                  contentContainerStyle={{ paddingBottom: 50 }}
                 />
               ) : (
                 <View>
