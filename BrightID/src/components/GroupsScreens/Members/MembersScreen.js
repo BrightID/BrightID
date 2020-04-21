@@ -19,6 +19,7 @@ import api from '@/Api/BrightId';
 import emitter from '@/emitter';
 import { leaveGroup, dismissFromGroup } from '@/actions';
 import MemberCard from './MemberCard';
+import EmptyList from '../../EmptyList';
 
 export class MembersScreen extends Component<Props, State> {
   static navigationOptions = ({ navigation }) => {
@@ -204,6 +205,9 @@ export class MembersScreen extends Component<Props, State> {
               keyExtractor={({ id }, index) => id + index}
               renderItem={this.renderMember}
               contentContainerStyle={{ paddingBottom: 50 }}
+              ListEmptyComponent={
+                <EmptyList title="No members, invite some..." />
+              }
             />
           </View>
         </View>

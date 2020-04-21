@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { DEVICE_TYPE } from '@/utils/constants';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
+import EmptyList from '../EmptyList';
 
 class RecoveringConnectionScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({
@@ -52,18 +53,15 @@ class RecoveringConnectionScreen extends React.Component<Props> {
           </View>
           <SearchConnections navigation={navigation} />
           <View style={styles.mainContainer}>
-            {connections.length > 0 ? (
               <FlatList
                 style={styles.connectionsContainer}
                 data={connections}
                 keyExtractor={({ id }, index) => id + index}
                 renderItem={this.renderConnection}
+                ListEmptyComponent={
+                  <EmptyList title="No connections..." />
+                }
               />
-            ) : (
-              <View>
-                <Text style={styles.emptyText}>No connections</Text>
-              </View>
-            )}
           </View>
         </View>
       </SafeAreaView>

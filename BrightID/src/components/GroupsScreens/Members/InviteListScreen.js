@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import api from '@/Api/BrightId';
 import { encryptAesKey } from '@/utils/invites';
 import MemberCard from './MemberCard';
+import EmptyList from '../../EmptyList';
 
 export class InviteListScreen extends Component<Props, State> {
   static navigationOptions = () => ({
@@ -63,6 +64,9 @@ export class InviteListScreen extends Component<Props, State> {
               data={this.getEligibles()}
               keyExtractor={({ id }, index) => id + index}
               renderItem={this.renderEligible}
+              ListEmptyComponent={
+                <EmptyList title="No invites, come back later.." />
+              }
             />
           </View>
         </View>
