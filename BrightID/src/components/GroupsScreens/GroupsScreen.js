@@ -84,7 +84,7 @@ export class GroupsScreen extends React.Component<Props, State> {
         // user does have groups, but set a filter that does not match any group
         content = (
           <>
-            <SearchGroups navigation={navigation}/>
+            <SearchGroups navigation={navigation} />
             <View style={styles.mainContainer}>
               <View>
                 <Text style={styles.emptyText}>
@@ -168,11 +168,16 @@ function mapStateToProps(state) {
   if (searchParam !== '') {
     groups = groups.filter((group) => {
       if (group.type === PRIMARY_GROUP_TYPE) {
-        // since primary group does not have a name, match against the default name 'primary Group'
+        // For primary group also match against the generic name 'primary Group'
         // this allows the user to explicitly search for the primary group
-        return PRIMARY_GROUP_NAME.includes(searchParam);
+        return (
+          PRIMARY_GROUP_NAME.includes(searchParam) ||
+          (group.name ? group.name.toLowerCase().includes(searchParam) : false)
+        );
       } else {
-        return group.name.toLowerCase().includes(searchParam);
+        return group.name
+          ? group.name.toLowerCase().includes(searchParam)
+          : false;
       }
     });
   }
