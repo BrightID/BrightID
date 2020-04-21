@@ -6675,10 +6675,10 @@ react-native-safe-area-view@^0.14.1:
   dependencies:
     debounce "^1.2.0"
 
-react-native-screens@^2.0.0-alpha.29:
-  version "2.0.0-alpha.29"
-  resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.0.0-alpha.29.tgz#57811863ea95f21d3d7277b4e5a57d7cc422efd2"
-  integrity sha512-991R3RFd2YDRXdbdFm0t/O1lbYaTIRKxauPI9jQ8fL/J9AtxK4XSmFMRuyEsUUxiWAVjQLPHrE4m7wXsWuq6Eg==
+react-native-screens@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.5.0.tgz#2c5b5a56d3b8be64d459d53da154bde926021a50"
+  integrity sha512-5Ak/J41eZzvU2zvik8YH825ppFdKR4cootbAq9ETwdQoN0fu4GBdOpX7paKW2jFCTsh3OOoyRRW2xYvLczZqVw==
   dependencies:
     debounce "^1.2.0"
 
@@ -6753,11 +6753,6 @@ react-native@0.61.5:
     scheduler "0.15.0"
     stacktrace-parser "^0.1.3"
     whatwg-fetch "^3.0.0"
-
-react-navigation-animated-switch@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/react-navigation-animated-switch/-/react-navigation-animated-switch-0.4.1.tgz#5928d0cff40d2bfcb2a60f1baabebf09ed6c1b09"
-  integrity sha512-p3W/2ecwet2w1mkZzzH3x9KXnnRTLUq3Z4MD+QlsCm/dPSVAz/4UZwT+1iYfqS0D7Zl6K/RXol7aNOrcuDldxA==
 
 react-navigation-stack@^2.0.16:
   version "2.0.16"
