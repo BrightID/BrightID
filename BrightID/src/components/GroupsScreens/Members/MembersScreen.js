@@ -203,6 +203,7 @@ export class MembersScreen extends Component<Props, State> {
               data={this.filterMembers()}
               keyExtractor={({ id }, index) => id + index}
               renderItem={this.renderMember}
+              contentContainerStyle={{ paddingBottom: 50 }}
             />
           </View>
         </View>
