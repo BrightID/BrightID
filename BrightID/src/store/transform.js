@@ -3,7 +3,7 @@
 import { createTransform } from 'redux-persist';
 import { objToUint8 } from '@/utils/encoding';
 
-const transformer = createTransform(
+export const userTransformer = createTransform(
   // transform state on its way to being serialized and persisted.
   (inboundState, key) => {
     return { ...inboundState, searchParam: '' };
@@ -16,4 +16,13 @@ const transformer = createTransform(
   { whitelist: ['user'] },
 );
 
-export default transformer;
+/*
+  clear searchParam of SearchGroups when persisting
+ */
+export const groupsTransformer = createTransform(
+  // transform state on its way to being serialized and persisted.
+  (inboundState, key) => {
+    return { ...inboundState, searchParam: '' };
+  },
+  { whitelist: ['groups'] },
+);
