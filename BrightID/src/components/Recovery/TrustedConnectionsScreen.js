@@ -14,6 +14,7 @@ import { DEVICE_TYPE } from '@/utils/constants';
 import SearchConnections from '../Connections/SearchConnections';
 import TrustedConnectionCard from './TrustedConnectionCard';
 import { setTrustedConnections } from './helpers';
+import EmptyList from '../EmptyList';
 
 /**
  * Backup screen of BrightID
@@ -94,18 +95,15 @@ class TrustedConnectionsScreen extends React.Component<Props> {
             <SearchConnections navigation={navigation} />
           )}
           <View style={styles.mainContainer}>
-            {connections.length > 0 ? (
-              <FlatList
-                style={styles.connectionsContainer}
-                data={connections}
-                keyExtractor={({ id }, index) => id + index}
-                renderItem={this.renderConnection}
-              />
-            ) : (
-              <View>
-                <Text style={styles.emptyText}>No connections</Text>
-              </View>
-            )}
+            <FlatList
+              style={styles.connectionsContainer}
+              data={connections}
+              keyExtractor={({ id }, index) => id + index}
+              renderItem={this.renderConnection}
+              ListEmptyComponent={
+                <EmptyList title="No connections..." />
+              }
+            />
           </View>
         </View>
         <View style={styles.buttonContainer}>
