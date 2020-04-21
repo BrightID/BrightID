@@ -8,18 +8,22 @@ import {
   TouchableOpacity,
   SafeAreaView,
   RefreshControl,
+  Text,
 } from 'react-native';
 import { connect } from 'react-redux';
 import fetchUserInfo from '@/actions/fetchUserInfo';
-import { DEVICE_TYPE } from '@/utils/constants';
 import GroupCard from './GroupCard';
 import FloatingActionButton from '../FloatingActionButton';
 import { NoGroups } from './NoGroups';
+import SearchGroups from './SearchGroups';
 
 /**
  * Group screen of BrightID
  * Displays a search input and list of Group Cards
  */
+
+const PRIMARY_GROUP_TYPE = 'primary';
+const PRIMARY_GROUP_NAME = 'primary group';
 
 type State = {
   refreshing: boolean,
@@ -69,13 +73,32 @@ export class GroupsScreen extends React.Component<Props, State> {
   };
 
   render() {
-    const { navigation, groups } = this.props;
+    const { navigation, groups, hasGroups } = this.props;
 
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={{ flex: 1 }}>
-          <View style={styles.mainContainer}>
-            {groups.length > 0 ? (
+    let content;
+    if (!hasGroups) {
+      // user does not have any groups.
+      content = <NoGroups navigation={navigation} />;
+    } else {
+      if (groups.length === 0) {
+        // user does have groups, but set a filter that does not match any group
+        content = (
+          <>
+            <SearchGroups navigation={navigation}/>
+            <View style={styles.mainContainer}>
+              <View>
+                <Text style={styles.emptyText}>
+                  No group matches your search
+                </Text>
+              </View>
+            </View>
+          </>
+        );
+      } else {
+        content = (
+          <>
+            <SearchGroups navigation={navigation} />
+            <View style={styles.mainContainer}>
               <FlatList
                 style={styles.groupsContainer}
                 contentContainerStyle={{ paddingBottom: 50 }}
@@ -89,10 +112,16 @@ export class GroupsScreen extends React.Component<Props, State> {
                   />
                 }
               />
-            ) : (
-              <NoGroups navigation={navigation} />
-            )}
-          </View>
+            </View>
+          </>
+        );
+      }
+    }
+
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={{ flex: 1 }}>
+          <View style={styles.mainContainer}>{content}</View>
           {groups.length > 0 && (
             <FloatingActionButton
               onPress={() => navigation.navigate('GroupInfo')}
@@ -129,4 +158,26 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ groups }) => ({ ...groups }))(GroupsScreen);
+function mapStateToProps(state) {
+  let { groups } = state.groups;
+  const searchParam = state.groups.searchParam.toLowerCase();
+  const hasGroups = groups.length > 0;
+
+  // apply search filter to groups array
+  // NOTE: If below sorting/filtering gets too expensive at runtime use memoized selectors / reselect
+  if (searchParam !== '') {
+    groups = groups.filter((group) => {
+      if (group.type === PRIMARY_GROUP_TYPE) {
+        // since primary group does not have a name, match against the default name 'primary Group'
+        // this allows the user to explicitly search for the primary group
+        return PRIMARY_GROUP_NAME.includes(searchParam);
+      } else {
+        return group.name.toLowerCase().includes(searchParam);
+      }
+    });
+  }
+
+  return { groups, hasGroups };
+}
+
+export default connect(mapStateToProps)(GroupsScreen);

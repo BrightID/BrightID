@@ -11,6 +11,7 @@ export const REJECT_INVITE = 'REJECT_INVITE';
 export const JOIN_GROUP = 'JOIN_GROUP';
 export const LEAVE_GROUP = 'LEAVE_GROUP';
 export const DISMISS_FROM_GROUP = 'DISMISS_FROM_GROUP';
+export const SET_GROUP_SEARCH = 'SET_GROUP_SEARCH';
 
 /**
  * redux action creator for create new group
@@ -84,4 +85,14 @@ export const rejectInvite = (inviteId: string) => ({
 export const acceptInvite = (inviteId: string) => ({
   type: ACCEPT_INVITE,
   inviteId,
+});
+
+/**
+ * redux action creator for setting the search string used to filter groups
+ * @param searchParam string used to filter groups
+ */
+
+export const setGroupSearch = (searchParam: string) => ({
+  type: SET_GROUP_SEARCH,
+  searchParam,
 });
