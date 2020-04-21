@@ -4,6 +4,7 @@ import * as React from 'react';
 import { TextInput, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import Octicons from 'react-native-vector-icons/Octicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { setGroupSearch } from '../../actions/groups';
 
 /**
@@ -41,6 +42,14 @@ class SearchGroups extends React.Component<Props & LocalProps> {
           placeholderTextColor="#aaa"
           value={searchParam}
         />
+        <TouchableOpacity
+          onPress={() => {
+            this.props.dispatch(setGroupSearch(''));
+          }}
+          style={styles.eraserIcon}
+        >
+          <MaterialCommunityIcons size={30} name="eraser" color="#333" />
+        </TouchableOpacity>
       </View>
     );
   }
@@ -60,6 +69,11 @@ const styles = StyleSheet.create({
   searchIcon: {
     marginLeft: 10,
     marginRight: 12,
+    marginTop: 5,
+  },
+  eraserIcon: {
+    marginLeft: 10,
+    marginRight: 8.8,
     marginTop: 5,
   },
   searchField: {
