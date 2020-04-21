@@ -38,8 +38,6 @@ export const bootstrap = async (version: string) => {
       invites,
     } = dataObj;
 
-    console.log('groups', groups);
-
     if (apps) {
       store.dispatch(setApps(apps));
     }

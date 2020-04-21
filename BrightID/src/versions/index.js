@@ -29,16 +29,20 @@ export const bootstrapAndUpgrade = async () => {
       await bootstrapV0();
       await getConnections(allKeys);
       await getApps(allKeys);
+      store.dispatch(setGroups([]));
+      store.dispatch(setInvites([]));
+      upgradeConnsAndIds();
+
       const connectionsVerified = await verifyConnections(allKeys);
       const userDataVerified = await verifyUserData();
       const appsVerified = await verifyApps(allKeys);
       if (connectionsVerified && userDataVerified && appsVerified) {
         // update connections / user to new Api
-        upgradeConnsAndIds();
-        store.dispatch(setGroups([]));
-        store.dispatch(setInvites([]));
+        // upgradeConnsAndIds();
       } else {
-        Alert.alert('Error: Please Backup Data and reinstall BrightId');
+        Alert.alert(
+          'There was an error migrating your BrightID to this version. Please backup data and reinstall BrightId',
+        );
       }
     }
   } catch (err) {
