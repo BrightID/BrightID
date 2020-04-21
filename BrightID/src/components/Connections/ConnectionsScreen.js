@@ -21,6 +21,7 @@ import { createFakeConnection } from './models/createFakeConnection';
 import FloatingActionButton from '../FloatingActionButton';
 import { defaultSort } from './models/sortingUtility';
 import { performAction } from './models/modifyConnections';
+import EmptyList from '../EmptyList';
 
 /**
  * Connection screen of BrightID
@@ -128,19 +129,16 @@ export class ConnectionsScreen extends React.Component<Props> {
           <View style={styles.mainContainer}>
             <SearchConnections navigation={navigation} sortable={true} />
             <View style={styles.mainContainer}>
-              {connections.length > 0 ? (
-                <FlatList
-                  style={styles.connectionsContainer}
-                  data={connections}
-                  keyExtractor={({ id }, index) => id + index}
-                  renderItem={this.renderConnection}
-                  contentContainerStyle={{ paddingBottom: 50 }}
-                />
-              ) : (
-                <View>
-                  <Text style={styles.emptyText}>No connections</Text>
-                </View>
-              )}
+              <FlatList
+                style={styles.connectionsContainer}
+                data={connections}
+                keyExtractor={({ id }, index) => id + index}
+                renderItem={this.renderConnection}
+                contentContainerStyle={{ paddingBottom: 50 }}
+                ListEmptyComponent={
+                  <EmptyList title="No connections..." />
+                }
+              />
             </View>
           </View>
           <FloatingActionButton onPress={this.handleNewConnection} />

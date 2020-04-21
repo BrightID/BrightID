@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { INVITE_ACTIVE } from '@/utils/constants';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import NotificationCard from './NotificationCard';
+import EmptyList from '../EmptyList';
 import InviteCard from './InviteCard';
 
 type State = {
@@ -54,6 +55,8 @@ class NotificationsScreen extends React.Component<Props, State> {
     return (
       <View style={styles.container}>
         <FlatList
+          style={!notificationData.length && { flex: 1}}
+          contentContainerStyle={notificationData.length ? {} : styles.listContainer}
           data={notificationData}
           keyExtractor={({ inviteId, msg }, index) => (inviteId || msg) + index}
           refreshControl={
@@ -61,6 +64,9 @@ class NotificationsScreen extends React.Component<Props, State> {
               refreshing={this.state.refreshing}
               onRefresh={this.onRefresh}
             />
+          }
+          ListEmptyComponent={
+            <EmptyList title="Nothing here, come back later.." />
           }
           renderItem={({ item }) =>
             item.inviteId ? (
@@ -83,8 +89,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  listContainer: { 
+    height: '100%',
+    flexGrow: 1
   },
 });
 

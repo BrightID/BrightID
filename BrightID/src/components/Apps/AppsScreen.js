@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
 import AppCard from './AppCard';
 import { handleAppContext, deleteApp } from './model';
+import EmptyList from '../EmptyList';
 
 let deleteSheetRef = '';
 
@@ -64,6 +65,9 @@ export class AppsScreen extends React.Component<Prop, State> {
           renderItem={({ item }) => (
             <AppCard {...item} handleAction={this.handleAction} />
           )}
+          ListEmptyComponent={
+            <EmptyList title="No Apps here, come back later.." />
+          }
         />
         <ActionSheet
           ref={(o) => {
