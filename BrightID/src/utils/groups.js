@@ -1,17 +1,23 @@
 import store from '@/store';
 
 const threeKnownMembers = (group) => {
-  const { id, photo, name, connections } = store.getState();
+  const {
+    user: { id, photo, name },
+    connections: { connections },
+  } = store.getState();
   const { founders, members, isNew } = group;
-  const connsWithMe = [...connections, {
-    photo,
-    name,
-    id,
-  }];
+  const connsWithMe = [
+    ...connections,
+    {
+      photo,
+      name,
+      id,
+    },
+  ];
   let list = (isNew ? founders : members)
     .map((u) => connsWithMe.find((conn) => conn.id === u))
-    .filter(u => u)
-    .sort((u1, u2) => founders.includes(u1) ? -1 : 1)
+    .filter((u) => u)
+    .sort((u1, u2) => (founders.includes(u1) ? -1 : 1))
     .slice(0, 3);
 
   return list;
@@ -41,7 +47,10 @@ export const getGroupName = (group) => {
 };
 
 export const ids2connections = (ids) => {
-  const { connections, name, id, photo, score } = store.getState();
+  const {
+    connections: { connections },
+    user: { name, id, photo, score },
+  } = store.getState();
   return ids.map((_id) => {
     if (_id === id) {
       return { id, name, photo, score };

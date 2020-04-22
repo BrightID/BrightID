@@ -3,7 +3,7 @@
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { resetStore } from '../actions';
-import store from '../store';
+import { store, persistor } from '../store';
 
 export const delStorage = (navigation: navigation) => () => {
   if (__DEV__) {
@@ -20,10 +20,10 @@ export const delStorage = (navigation: navigation) => () => {
           text: 'Sure',
           onPress: async () => {
             try {
+              store.dispatch(resetStore());
               navigation.navigate('Onboarding');
               await AsyncStorage.flushGetRequests();
               await AsyncStorage.clear();
-              store.dispatch(resetStore());
             } catch (err) {
               err instanceof Error
                 ? console.warn('delete storage', err.message)

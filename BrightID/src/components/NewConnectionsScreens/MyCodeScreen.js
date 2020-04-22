@@ -17,12 +17,12 @@ import { parseString } from 'xml2js';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { genQrData } from './actions/genQrData';
-import { fetchData } from './actions/fetchData';
-import { encryptAndUploadLocalData } from './actions/encryptData';
 import emitter from '@/emitter';
 import { removeConnectQrData } from '@/actions';
 import { DEVICE_TYPE } from '@/utils/constants';
+import { genQrData } from './actions/genQrData';
+import { fetchData } from './actions/fetchData';
+import { encryptAndUploadLocalData } from './actions/encryptData';
 
 /**
  * My Code screen of BrightID
@@ -292,4 +292,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(MyCodeScreen);
+export default connect(({ user, connectQrData }) => ({
+  ...user,
+  connectQrData,
+}))(MyCodeScreen);

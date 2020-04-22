@@ -31,7 +31,7 @@ export class MembersScreen extends Component<Props, State> {
         paddingRight: 30,
       },
       headerBackTitleVisible: false,
-      headerRight: () => (
+      headerRight:  __DEV__ ? () => (
         <TouchableOpacity
           style={{ marginRight: 11 }}
           onPress={() => {
@@ -40,7 +40,7 @@ export class MembersScreen extends Component<Props, State> {
         >
           <Material name="dots-horizontal" size={32} color="#fff" />
         </TouchableOpacity>
-      ),
+      ): () => null,
       // headerLeft: () => {
       //   const { group } = navigation.state.params;
       //   return (
@@ -203,6 +203,7 @@ export class MembersScreen extends Component<Props, State> {
               data={this.filterMembers()}
               keyExtractor={({ id }, index) => id + index}
               renderItem={this.renderMember}
+              contentContainerStyle={{ paddingBottom: 50 }}
             />
           </View>
         </View>
@@ -305,4 +306,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(MembersScreen);
+export default connect(({ connections, user }) => ({
+  ...connections,
+  ...user,
+}))(MembersScreen);

@@ -19,7 +19,10 @@ export const addNewConnection = () => async (
    * Clear the redux store of all leftoverwebrtc data
    */
   try {
-    const { connectUserData, id, secretKey, backupCompleted } = getState();
+    const {
+      user: { id, secretKey, backupCompleted },
+      connectUserData,
+    } = getState();
     let connectionDate = Date.now();
 
     if (connectUserData.signedMessage) {
@@ -30,7 +33,7 @@ export const addNewConnection = () => async (
         throw "timestamp can't be in the future";
       }
 
-      const message = 'Add Connection' + connectUserData.id + id + connectUserData.timestamp;
+      const message = `Add Connection${connectUserData.id}${id}${connectUserData.timestamp}`;
       const signedMessage = uInt8ArrayToB64(
         nacl.sign.detached(strToUint8Array(message), secretKey),
       );
@@ -61,7 +64,7 @@ export const addNewConnection = () => async (
       aesKey: connectUserData.aesKey,
       connectionDate,
       photo: { filename },
-      status: 'initiated'
+      status: 'initiated',
     };
 
     dispatch(addConnection(connectionData));

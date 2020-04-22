@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { createAppContainer } from 'react-navigation';
-import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import LinearGradient from 'react-native-linear-gradient';
 import Home from './components/HomeScreen';
@@ -136,7 +135,7 @@ const OnboardingStack = createStackNavigator(
   },
 );
 
-const AppNavigator = createAnimatedSwitchNavigator(
+const AppNavigator = createSwitchNavigator(
   {
     AppBootstrap,
     App: {

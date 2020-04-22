@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Alert,
   SafeAreaView,
-  FlatList
+  FlatList,
 } from 'react-native';
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -30,14 +30,14 @@ import { performAction } from './models/modifyConnections';
 export class ConnectionsScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }: { navigation: navigation }) => ({
     title: 'Connections',
-    headerRight: () => (
+    headerRight: __DEV__ ? () => (
       <TouchableOpacity
         style={{ marginRight: 11 }}
         onPress={createFakeConnection(navigation)}
       >
         <Material name="dots-horizontal" size={32} color="#fff" />
       </TouchableOpacity>
-    ),
+    ): () => null,
     headerShown: DEVICE_TYPE === 'large',
   });
 
@@ -127,18 +127,19 @@ export class ConnectionsScreen extends React.Component<Props> {
           <View style={styles.mainContainer}>
             <SearchConnections navigation={navigation} sortable={true} />
             <View style={styles.mainContainer}>
-            {connections.length > 0 ? (
-              <FlatList
-                style={styles.connectionsContainer}
-                data={connections}
-                keyExtractor={({ id }, index) => id + index}
-                renderItem={this.renderConnection}
-              />
-            ) : (
-              <View>
-                <Text style={styles.emptyText}>No connections</Text>
-              </View>
-            )}
+              {connections.length > 0 ? (
+                <FlatList
+                  style={styles.connectionsContainer}
+                  data={connections}
+                  keyExtractor={({ id }, index) => id + index}
+                  renderItem={this.renderConnection}
+                  contentContainerStyle={{ paddingBottom: 50 }}
+                />
+              ) : (
+                <View>
+                  <Text style={styles.emptyText}>No connections</Text>
+                </View>
+              )}
             </View>
           </View>
           <FloatingActionButton onPress={this.handleNewConnection} />
@@ -182,4 +183,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(ConnectionsScreen);
+export default connect(({ connections, user }) => ({
+  ...connections,
+  ...user,
+}))(ConnectionsScreen);

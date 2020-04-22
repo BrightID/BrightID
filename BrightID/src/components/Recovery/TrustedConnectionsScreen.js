@@ -1,7 +1,14 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Alert, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+  FlatList,
+} from 'react-native';
 import { connect } from 'react-redux';
 import { DEVICE_TYPE } from '@/utils/constants';
 import SearchConnections from '../Connections/SearchConnections';
@@ -87,18 +94,18 @@ class TrustedConnectionsScreen extends React.Component<Props> {
             <SearchConnections navigation={navigation} />
           )}
           <View style={styles.mainContainer}>
-          {connections.length > 0 ? (
-            <FlatList
-              style={styles.connectionsContainer}
-              data={connections}
-              keyExtractor={({ id }, index) => id + index}
-              renderItem={this.renderConnection}
-            />
-          ) : (
-            <View>
-              <Text style={styles.emptyText}>No connections</Text>
-            </View>
-          )}
+            {connections.length > 0 ? (
+              <FlatList
+                style={styles.connectionsContainer}
+                data={connections}
+                keyExtractor={({ id }, index) => id + index}
+                renderItem={this.renderConnection}
+              />
+            ) : (
+              <View>
+                <Text style={styles.emptyText}>No connections</Text>
+              </View>
+            )}
           </View>
         </View>
         <View style={styles.buttonContainer}>
@@ -185,4 +192,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(TrustedConnectionsScreen);
+export default connect(({ connections, user }) => ({
+  ...connections,
+  ...user,
+}))(TrustedConnectionsScreen);

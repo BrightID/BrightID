@@ -1,5 +1,6 @@
 // @flow
 
+import { NativeModules } from 'react-native';
 import B64 from 'base64-js';
 import { Buffer } from 'buffer';
 import CryptoJS from 'crypto-js';
@@ -50,3 +51,11 @@ export const hash = (data: string) => {
 };
 
 export const safeHash = compose(b64ToUrlSafeB64, hash);
+
+const { RNRandomBytes } = NativeModules;
+export const randomKey = (size: number) =>
+  new Promise((resolve, reject) => {
+    RNRandomBytes.randomBytes(size, (err, bytes) => {
+      err ? reject(err) : resolve(bytes);
+    });
+  });

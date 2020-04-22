@@ -100,9 +100,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
     const {
       connectUserData: { photo, name },
     } = this.props;
-    const image = photo
-      ? { uri: photo }
-      : require('../../static/default_avatar.jpg');
+    const image = photo ? { uri: photo } : { uri: 'https://picsum.photos/180' };
     return (
       <View style={styles.container}>
         <View style={styles.questionTextContainer}>
@@ -286,4 +284,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(PreviewConnectionScreen);
+export default connect(({ connections, connectUserData }) => ({
+  ...connections,
+  connectUserData,
+}))(PreviewConnectionScreen);

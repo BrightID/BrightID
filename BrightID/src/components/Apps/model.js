@@ -1,11 +1,9 @@
 // @flow
 import { Alert } from 'react-native';
-import nacl from 'tweetnacl';
 import api from '@/Api/BrightId';
-import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 import { saveImage } from '@/utils/filesystem';
 import { addApp, removeApp } from '@/actions';
-import { goBack } from '@/NavigationService';
+import { navigate } from '@/NavigationService';
 import store from '@/store';
 
 type Params = {
@@ -28,62 +26,60 @@ export const handleAppContext = async (params: Params) => {
   try {
     api.baseUrl = baseUrl;
     contextInfo = await api.getContext(context);
-    console.log('contextInfo', contextInfo);
   } catch (e) {
-    Alert.alert('Failed', `Unable to link ${context} with BrightID`);
-    console.log(e);
+    console.log(e.message);
   } finally {
     api.baseUrl = oldBaseUrl;
   }
   if (contextInfo && contextInfo.verification) {
     Alert.alert(
-      'App Verification?',
+      'Link App?',
       `Do you want to link your account in ${context} to your BrightID?`,
       [
         {
           text: 'Yes',
-          onPress: () =>
-            linkVerification(baseUrl, context, contextInfo, contextId),
+          onPress: () => linkApp(baseUrl, context, contextInfo, contextId),
         },
         {
           text: 'No',
           style: 'cancel',
           onPress: () => {
-            goBack();
+            navigate('Home');
           },
         },
       ],
     );
   } else {
     Alert.alert('Failed', `Unable to link ${context} with BrightID`);
-    goBack();
+    navigate('Home');
   }
 };
 
-const linkVerification = async (baseUrl, context, contextInfo, contextId) => {
+const linkApp = async (baseUrl, context, contextInfo, contextId) => {
+  if (contextInfo.isApp) {
+    saveApp(context, contextInfo);
+  }
   const oldBaseUrl = api.baseUrl;
   try {
     api.baseUrl = baseUrl;
-    api.linkContextId(context, contextId);
+    await api.linkContextId(context, contextId);
+    if (!contextInfo.isApp) {
+      Alert.alert(
+        'Success',
+        `Succesfully sent the request to link ${context} with BrightID`,
+      );
+      navigate('Home');
+    }
   } catch (e) {
-    Alert.alert(`App verification failed`, `${e.message}`, [
+    Alert.alert(`App linking failed`, `${e.message}`, [
       {
         text: 'Dismiss',
         style: 'cancel',
-        onPress: () => {
-          goBack();
-        },
+        onPress: () => {},
       },
     ]);
   } finally {
     api.baseUrl = oldBaseUrl;
-    if (contextInfo.isApp) {
-      saveApp(context, contextInfo);
-      Alert.alert('Success', `Succesfully linked ${context} with BrightID`);
-    } else {
-      Alert.alert('Success', `Succesfully linked ${context} with BrightID`);
-      goBack();
-    }
   }
 };
 
@@ -97,17 +93,17 @@ const saveApp = async (name: string, contextInfo: ContextInfo) => {
       });
     }
 
-    let appInfo: AppInfo = {
-      verified: contextInfo.verified,
+    const appInfo: AppInfo = {
+      verification: contextInfo.verification,
       name,
       url: contextInfo.appUrl,
       logoFile,
       dateAdded: Date.now(),
+      state: 'initiated',
     };
-
     return store.dispatch(addApp(appInfo));
-  } catch (err) {
-    console.log(err);
+  } catch (e) {
+    console.log(e);
   }
 };
 

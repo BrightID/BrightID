@@ -10,10 +10,10 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import Simple from 'react-native-vector-icons/SimpleLineIcons';
+import { DEVICE_TYPE } from '@/utils/constants';
 import { shareConnection } from './actions/shareConnection';
 import MyCodeScreen from './MyCodeScreen';
 import ScanCodeScreen from './ScanCodeScreen';
-import { DEVICE_TYPE } from '@/utils/constants';
 
 /**
  * Connection screen of BrightID
@@ -158,4 +158,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(NewConnectionScreen);
+export default connect()(NewConnectionScreen);

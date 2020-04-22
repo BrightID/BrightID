@@ -1,24 +1,30 @@
 // @flow
 
+import AsyncStorage from '@react-native-community/async-storage';
 import thunkMiddleware from 'redux-thunk';
 import { applyMiddleware, createStore, compose } from 'redux';
-import reducer from '../reducer';
-import { saveStore } from './saveStore';
-import { verifyStore } from './verifyStore';
+import { persistStore, persistReducer } from 'redux-persist';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+import reducer from '@/reducer';
+import transformer from './transform';
+
+const persistConfig = {
+  key: 'root',
+  storage: AsyncStorage,
+  stateReconciler: autoMergeLevel2,
+  transforms: [transformer],
+  version: 4,
+};
+
+const persistedReducer = persistReducer(persistConfig, reducer);
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const store = createStore(
-  reducer,
+export const store = createStore(
+  persistedReducer,
   composeEnhancers(applyMiddleware(thunkMiddleware)),
 );
 
-store.subscribe(() => {
-  if (verifyStore(store.getState())) {
-    setTimeout(() => saveStore(store.getState()));
-  } else {
-    console.warn('bad state');
-  }
-});
+export const persistor = persistStore(store);
 
 export default store;

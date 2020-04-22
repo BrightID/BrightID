@@ -12,7 +12,8 @@ import {
 import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import { deleteApp } from './model';
+import store from '@/store';
+import api from '@/Api/BrightId';
 
 /**
  * App Card in the Apps Screen
@@ -23,10 +24,83 @@ import { deleteApp } from './model';
  * @prop url
  */
 
-class AppCard extends React.PureComponent<Props> {
+type State = {
+  hasSponsorships: boolean,
+};
+
+class AppCard extends React.PureComponent<Props, State> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hasSponsorships: false,
+    };
+  }
+
+  async componentDidMount() {
+    try {
+      const { name } = this.props;
+      const contextInfo = await api.getContext(name);
+      if (contextInfo.unusedSponsorships > 0) {
+        this.setState({ hasSponsorships: true });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   openApp = () => {
     const { url } = this.props;
     Linking.openURL(url);
+  };
+
+  linkLabel = () => {
+    const { state } = this.props;
+    if (state === 'initiated') {
+      return (
+        <View style={styles.stateContainer}>
+          <Text style={styles.waitingMessage}>Waiting</Text>
+        </View>
+      );
+    } else if (state === 'failed') {
+      return (
+        <View style={styles.stateContainer}>
+          <Text style={styles.errorMessage}>Not Linked, try again</Text>
+        </View>
+      );
+    } else {
+      return <View style={styles.stateContainer} />;
+    }
+  };
+
+  verificationLabel = () => {
+    const {
+      user: { verifications },
+    } = store.getState();
+    const { verification } = this.props;
+    if (!verifications.includes(verification)) {
+      return (
+        <View style={styles.stateContainer}>
+          <Text style={styles.errorMessage}>Not verified for this app</Text>
+        </View>
+      );
+    } else {
+      return <View style={styles.stateContainer} />;
+    }
+  };
+
+  sponsorshipLabel = () => {
+    const {
+      user: { isSponsored },
+    } = store.getState();
+    if (!isSponsored && this.state.hasSponsorships) {
+      return (
+        <View style={styles.stateContainer}>
+          <Text style={styles.sponsorshipMessage}>Has sponsorships</Text>
+        </View>
+      );
+    } else {
+      return <View style={styles.stateContainer} />;
+    }
   };
 
   render() {
@@ -45,6 +119,9 @@ class AppCard extends React.PureComponent<Props> {
 
         <TouchableOpacity style={styles.link} onPress={this.openApp}>
           <Text style={styles.name}>{name}</Text>
+          <this.sponsorshipLabel />
+          <this.verificationLabel />
+          <this.linkLabel />
         </TouchableOpacity>
 
         {verified && (
@@ -87,6 +164,27 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 24,
     marginLeft: 20,
+  },
+  stateContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginLeft: 20,
+  },
+  sponsorshipMessage: {
+    fontFamily: 'ApexNew-Medium',
+    fontSize: 14,
+    color: '#4a90e2',
+  },
+  waitingMessage: {
+    fontFamily: 'ApexNew-Medium',
+    fontSize: 14,
+    color: '#e39f2f',
+  },
+  errorMessage: {
+    fontFamily: 'ApexNew-Medium',
+    fontSize: 14,
+    color: '#FF0800',
   },
   verifiedIcon: {
     marginLeft: 10,

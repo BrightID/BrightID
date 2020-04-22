@@ -3,65 +3,42 @@
 import { NavigationScreenProp } from 'react-navigation';
 import { Dispatch } from 'redux';
 
-declare type State = {
-  score: number,
-  name: string,
-  photo: {
-    filename: string,
-  },
-  searchParam: string,
-  newGroupCoFounders: string[],
-  invites: invite[],
-  groups: group[],
-  connections: connection[],
-  trustedConnections: string[],
-  notifications: NotificationInfo[],
-  backupCompleted: boolean,
-  apps: AppInfo[],
-  verifications: any[],
-  publicKey: string,
-  id: string,
-  safePublicKey?: string,
-  password: string,
-  hashedId: string,
-  secretKey: Uint8Array,
-  operations: string[],
-  connectionsSort: string,
-  connectQrData: {
-    aesKey: string,
-    ipAddress: string,
-    uuid: string,
-    user: string,
-    qrString: string,
-    channel: string,
-  },
-  connectUserData: {
-    id: string,
-    photo: string,
-    name: string,
-    timestamp: number,
-    signedMessage: string,
-    score: number,
-    secretKey?: Uint8Array,
-  },
-  recoveryData: {
-    publicKey: string,
-    secretKey: string,
-    timestamp: number,
-    id: string,
-    sigs: Signature[],
-  },
-};
-
-declare type state = State;
-
-declare type getState = () => state;
+declare type getState = () => State;
 
 declare type dispatch = Dispatch;
 
 declare type navigation = NavigationScreenProp;
 
 declare type Props = State & navigation & dispatch;
+
+declare type State = {
+  apps: AppState,
+  connections: ConnectionsState,
+  connectQrData: ConnectQrData,
+  connectUserData: ConnectUserData,
+  groups: GroupsState,
+  operations: OperationsState,
+  recoveryData: RecoveryData,
+  user: UserState,
+};
+
+declare type AppsState = {
+  apps: AppInfo[],
+};
+
+declare type AppInfo = {
+  name: string,
+  url: string,
+  logoFile: string,
+  verified: boolean,
+  dateAdded: number,
+};
+
+declare type ConnectionsState = {
+  connections: connection[],
+  trustedConnections: string[],
+  connectionsSort: string,
+};
 
 declare type connection = {
   id: string,
@@ -74,11 +51,35 @@ declare type connection = {
     filename: string,
   },
   status: string,
-
   signingKey: string,
   createdAt: number,
   hasPrimaryGroup: boolean,
   publicKey?: string,
+};
+
+declare type ConnectQrData = {
+  aesKey: string,
+  ipAddress: string,
+  uuid: string,
+  user: string,
+  qrString: string,
+  channel: string,
+};
+
+declare type ConnectUserData = {
+  id: string,
+  photo: string,
+  name: string,
+  timestamp: number,
+  signedMessage: string,
+  score: number,
+  secretKey?: Uint8Array,
+};
+
+declare type GroupsState = {
+  newGroupCoFounders: string[],
+  invites: invite[],
+  groups: group[],
 };
 
 declare type group = {
@@ -97,9 +98,6 @@ declare type group = {
 };
 
 declare type invite = {
-  _key: string,
-  _id: string,
-  _rev: string,
   score: number,
   isNew: boolean,
   admins: string[],
@@ -118,6 +116,44 @@ declare type invite = {
   aesKey: string,
 };
 
+declare type OperationsState = {
+  operations: operation[],
+};
+
+declare type operation = {
+  name: string,
+  timestamp: string,
+  v: string,
+  _key: string,
+  [val: string]: string,
+};
+
+declare type RecoveryData = {
+  publicKey: string,
+  secretKey: string,
+  timestamp: number,
+  id: string,
+  sigs: Signature[],
+};
+
+declare type UserState = {
+  score: number,
+  name: string,
+  photo: {
+    filename: string,
+  },
+  searchParam: string,
+  notifications: NotificationInfo[],
+  backupCompleted: boolean,
+  verifications: any[],
+  publicKey: string,
+  id: string,
+  safePublicKey?: string,
+  password: string,
+  hashedId: string,
+  secretKey: Uint8Array,
+};
+
 declare type NotificationInfo = {
   msg: string,
   icon: string,
@@ -127,14 +163,6 @@ declare type Signature = {
   signer: string,
   sig: string,
   id: string,
-};
-
-declare type AppInfo = {
-  name: string,
-  url: string,
-  logoFile: string,
-  verified: boolean,
-  dateAdded: number,
 };
 
 declare type Uint8Obj = {

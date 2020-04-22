@@ -264,4 +264,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(GroupInfoScreen);
+export default connect(({ groups }) => ({ ...groups }))(GroupInfoScreen);

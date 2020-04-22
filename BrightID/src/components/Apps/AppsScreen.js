@@ -1,15 +1,20 @@
 // @flow
 
 import * as React from 'react';
-import { Linking, StyleSheet, View, FlatList } from 'react-native';
+import { Linking, StyleSheet, View, FlatList, Text } from 'react-native';
 import { connect } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
 import AppCard from './AppCard';
+import EmptyApps from './EmptyApps';
 import { handleAppContext, deleteApp } from './model';
 
 let deleteSheetRef = '';
 
-export class AppsScreen extends React.Component<Props> {
+type State = {
+  selectedApp: string,
+};
+
+export class AppsScreen extends React.Component<Prop, State> {
   static navigationOptions = () => ({
     title: 'Apps',
     headerRight: () => <View />,
@@ -17,7 +22,7 @@ export class AppsScreen extends React.Component<Props> {
 
   deleteSheetRef: string;
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       selectedApp: '',
@@ -48,10 +53,27 @@ export class AppsScreen extends React.Component<Props> {
     });
   };
 
+  sponsorLabel = () => {
+    const { isSponsored } = this.props;
+    if (!isSponsored) {
+      return (
+        <View style={styles.sponsorContainer}>
+          <Text style={styles.sponsorMessage}>
+            You're not sponsored.{'\n'}Please find an app below to sponsor you.
+          </Text>
+        </View>
+      );
+    } else {
+      return <View style={styles.stateContainer} />;
+    }
+  };
+
   render() {
+    const { apps } = this.props;
     const { selectedApp } = this.state;
-    return (
+    return apps.length > 0 ? (
       <View style={styles.container}>
+        <this.sponsorLabel />
         <FlatList
           style={styles.AppsList}
           data={this.props.apps}
@@ -74,6 +96,8 @@ export class AppsScreen extends React.Component<Props> {
           }}
         />
       </View>
+    ) : (
+      <EmptyApps />
     );
   }
 }
@@ -86,6 +110,18 @@ const styles = StyleSheet.create({
   AppsList: {
     flex: 1,
   },
+  sponsorContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  sponsorMessage: {
+    fontFamily: 'ApexNew-Medium',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: '#e39f2f',
+  },
 });
 
-export default connect((state) => state)(AppsScreen);
+export default connect(({ apps, user }) => ({ ...apps, ...user }))(AppsScreen);

@@ -3,9 +3,9 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
 import { connect } from 'react-redux';
+import { DEVICE_TYPE } from '@/utils/constants';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
-import { DEVICE_TYPE } from '@/utils/constants';
 
 class RecoveringConnectionScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }) => ({
@@ -52,18 +52,18 @@ class RecoveringConnectionScreen extends React.Component<Props> {
           </View>
           <SearchConnections navigation={navigation} />
           <View style={styles.mainContainer}>
-          {connections.length > 0 ? (
-            <FlatList
-              style={styles.connectionsContainer}
-              data={connections}
-              keyExtractor={({ id }, index) => id + index}
-              renderItem={this.renderConnection}
-            />
-          ) : (
-            <View>
-              <Text style={styles.emptyText}>No connections</Text>
-            </View>
-          )}
+            {connections.length > 0 ? (
+              <FlatList
+                style={styles.connectionsContainer}
+                data={connections}
+                keyExtractor={({ id }, index) => id + index}
+                renderItem={this.renderConnection}
+              />
+            ) : (
+              <View>
+                <Text style={styles.emptyText}>No connections</Text>
+              </View>
+            )}
           </View>
         </View>
       </SafeAreaView>
@@ -159,4 +159,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(RecoveringConnectionScreen);
+export default connect(({ connections, user }) => ({
+  ...connections,
+  ...user,
+}))(RecoveringConnectionScreen);

@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import { Alert, StyleSheet, TextInput, View } from 'react-native';
+import { Alert, Linking, StyleSheet, TextInput, View } from 'react-native';
 import { connect } from 'react-redux';
 import { RNCamera } from 'react-native-camera';
 import Spinner from 'react-native-spinkit';
@@ -91,10 +91,16 @@ export class ScanCodeScreen extends React.Component<Props, State> {
   handleBarCodeRead = ({ data }) => {
     const { dispatch, navigation } = this.props;
     console.log('barcode data', data);
+    if (!data) return;
+
     if (data.startsWith('Recovery_')) {
       navigation.navigate('RecoveringConnection', {
         recoveryRequestCode: data,
       });
+      this.setState({ scanned: true });
+    } else if (data.startsWith('brightid://')) {
+      Linking.openURL(data);
+      this.setState({ scanned: true });
     } else if (validQrString(data)) {
       dispatch(parseQrData(data));
       // If the following `fetchdata()` fails, a "connectFailure" will be emitted,
@@ -219,4 +225,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect((state) => state)(ScanCodeScreen);
+export default connect()(ScanCodeScreen);
