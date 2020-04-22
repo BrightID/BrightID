@@ -24,5 +24,8 @@ export const groupsTransformer = createTransform(
   (inboundState, key) => {
     return { ...inboundState, searchParam: '' };
   },
+  (outboundState, key) => {
+    return outboundState;
+  },
   { whitelist: ['groups'] },
 );
