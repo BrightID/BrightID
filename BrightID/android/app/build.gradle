@@ -137,8 +137,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         missingDimensionStrategy 'react-native-camera', 'general'
-        versionCode 9
-        versionName "2.5.1"
+        versionCode 10
+        versionName "2.6.0"
         multiDexEnabled true
     }
     signingConfigs {
