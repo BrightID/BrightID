@@ -75,9 +75,7 @@ const linkApp = async (baseUrl, context, contextInfo, contextId) => {
       {
         text: 'Dismiss',
         style: 'cancel',
-        onPress: () => {
-          navigate('Home');
-        },
+        onPress: () => {},
       },
     ]);
   } finally {
