@@ -133,6 +133,7 @@ export class ConnectionsScreen extends React.Component<Props> {
                   data={connections}
                   keyExtractor={({ id }, index) => id + index}
                   renderItem={this.renderConnection}
+                  contentContainerStyle={{ paddingBottom: 50 }}
                 />
               ) : (
                 <View>

@@ -78,6 +78,7 @@ export class GroupsScreen extends React.Component<Props, State> {
             {groups.length > 0 ? (
               <FlatList
                 style={styles.groupsContainer}
+                contentContainerStyle={{ paddingBottom: 50 }}
                 data={groups}
                 keyExtractor={({ id }, index) => id + index}
                 renderItem={this.renderGroup}
