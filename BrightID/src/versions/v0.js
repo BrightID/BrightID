@@ -107,7 +107,7 @@ export const verifyApps = async (allKeys: string[]) => {
       .map((val) => JSON.parse(val[1]))
       .sort((a, b) => b.dateAdded - a.dateAdded);
 
-    const apps = store.getState().apps.list;
+    const { apps } = store.getState().apps;
     console.log(JSON.stringify(appInfos), JSON.stringify(apps));
     return JSON.stringify(appInfos) === JSON.stringify(apps);
   } catch (err) {
