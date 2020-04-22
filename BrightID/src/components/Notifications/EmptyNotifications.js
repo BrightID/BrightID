@@ -16,14 +16,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fdfdfd',
   },
-  AppsList: {
-    flex: 1,
-  },
-  sponsorContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 20,
-  },
   message: {
     fontFamily: 'ApexNew-Medium',
     textAlign: 'center',
