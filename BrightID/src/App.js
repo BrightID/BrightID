@@ -3,13 +3,14 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar, StyleSheet } from 'react-native';
 import { bootstrapAndUpgrade } from './versions';
 import { resetOperations } from './actions';
 import fetchUserInfo from './actions/fetchUserInfo';
 import { pollOperations } from './utils/operations';
-import AppRoutes from './AppRoutes';
+import AppRoutes from './routes';
 import { store, persistor } from './store';
 
 /**
@@ -60,14 +61,16 @@ export default class App extends React.Component<Props> {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <NavigationContainer style={styles.container}>
-            <StatusBar
-              barStyle="dark-content"
-              backgroundColor="#F52828"
-              translucent={false}
-            />
-            <AppRoutes />
-          </NavigationContainer>
+          <SafeAreaProvider>
+            <NavigationContainer style={styles.container}>
+              <StatusBar
+                barStyle="dark-content"
+                backgroundColor="#F52828"
+                translucent={false}
+              />
+              <AppRoutes />
+            </NavigationContainer>
+          </SafeAreaProvider>
         </PersistGate>
       </Provider>
     );
