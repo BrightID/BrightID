@@ -55,8 +55,8 @@ export class AppsScreen extends React.Component<Prop, State> {
   };
 
   sponsorLabel = () => {
-    const { isSponsored } = this.props;
-    if (!isSponsored) {
+    const { isSponsored, apps } = this.props;
+    if (!isSponsored && apps.length > 0) {
       return (
         <View style={styles.sponsorContainer}>
           <Text style={styles.sponsorMessage}>
@@ -72,7 +72,7 @@ export class AppsScreen extends React.Component<Prop, State> {
   render() {
     const { apps } = this.props;
     const { selectedApp } = this.state;
-    return apps.length > 0 ? (
+    return (
       <View style={styles.container}>
         <this.sponsorLabel />
         <FlatList
@@ -105,8 +105,6 @@ export class AppsScreen extends React.Component<Prop, State> {
           }}
         />
       </View>
-    ) : (
-      <EmptyApps />
     );
   }
 }
