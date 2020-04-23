@@ -63,3 +63,20 @@ export const ids2connections = (ids) => {
     }
   });
 };
+
+export const knownMemberIDs = (group) => {
+  const {
+    connections: { connections },
+  } = store.getState();
+  // only members that are in my connections are known
+  let knownMemberIDs = group.members.filter((memberId) =>
+    connections.find((connection) => connection.id === memberId),
+  );
+  if (group.isNew) {
+    // explicitly add founderIDs as they might not have joined yet
+    knownMemberIDs = knownMemberIDs.concat(group.founders);
+    // make sure array is unique
+    knownMemberIDs = [...new Set(knownMemberIDs)];
+  }
+  return knownMemberIDs;
+};
