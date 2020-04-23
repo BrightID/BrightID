@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import fetchUserInfo from '@/actions/fetchUserInfo';
+import { getGroupName } from '@/utils/groups';
 import GroupCard from './GroupCard';
 import FloatingActionButton from '../FloatingActionButton';
 import { NoGroups } from './NoGroups';
@@ -21,9 +22,6 @@ import SearchGroups from './SearchGroups';
  * Group screen of BrightID
  * Displays a search input and list of Group Cards
  */
-
-const PRIMARY_GROUP_TYPE = 'primary';
-const PRIMARY_GROUP_NAME = 'primary group';
 
 type State = {
   refreshing: boolean,
@@ -166,20 +164,11 @@ function mapStateToProps(state) {
   // apply search filter to groups array
   // NOTE: If below sorting/filtering gets too expensive at runtime use memoized selectors / reselect
   if (searchParam !== '') {
-    groups = groups.filter((group) => {
-      if (group.type === PRIMARY_GROUP_TYPE) {
-        // For primary group also match against the generic name 'primary Group'
-        // this allows the user to explicitly search for the primary group
-        return (
-          PRIMARY_GROUP_NAME.includes(searchParam) ||
-          (group.name ? group.name.toLowerCase().includes(searchParam) : false)
-        );
-      } else {
-        return group.name
-          ? group.name.toLowerCase().includes(searchParam)
-          : false;
-      }
-    });
+    groups = groups.filter((group) =>
+      getGroupName(group)
+        .toLowerCase()
+        .includes(searchParam),
+    );
   }
 
   return { groups, hasGroups };
