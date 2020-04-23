@@ -72,23 +72,19 @@ export class AppsScreen extends React.Component<Prop, State> {
   render() {
     const { apps } = this.props;
     const { selectedApp } = this.state;
-    return apps.length > 0 ? (
+    return (
       <View style={styles.container}>
         <this.sponsorLabel />
         <FlatList
           style={styles.AppsList}
-          data={this.props.apps}
+          data={apps}
+          contentContainerStyle={apps.listContainer}
           keyExtractor={({ name }, index) => name + index}
           renderItem={({ item }) => (
             <AppCard {...item} handleAction={this.handleAction} />
           )}
           ListEmptyComponent={
-            <EmptyList
-              title="No Apps."
-              iconSize={46}
-              iconType={"castle"}
-              messageStyle={styles.message}
-             />
+            <EmptyList title="No Apps." iconSize={46} iconType="castle" />
           }
         />
         <ActionSheet
@@ -105,8 +101,6 @@ export class AppsScreen extends React.Component<Prop, State> {
           }}
         />
       </View>
-    ) : (
-      <EmptyApps />
     );
   }
 }
@@ -115,11 +109,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fdfdfd',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
   },
-  AppsList: {
-    flex: 1,
+  centerItem: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-   sponsorContainer: {
+  sponsorContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 20,
@@ -131,12 +129,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#e39f2f',
   },
-  message: {
-    fontFamily: 'ApexNew-Medium',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 18,
-    color: '#ccc',
+  listContainer: {
+    height: '100%',
+    flexGrow: 1,
+  },
+  AppsList: {
+    flex: 1,
+  },
 });
 
 export default connect(({ apps, user }) => ({ ...apps, ...user }))(AppsScreen);
