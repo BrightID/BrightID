@@ -83,7 +83,12 @@ export class AppsScreen extends React.Component<Prop, State> {
             <AppCard {...item} handleAction={this.handleAction} />
           )}
           ListEmptyComponent={
-            <EmptyList title="No Apps here, come back later.." />
+            <EmptyList
+              title="No Apps."
+              iconSize={46}
+              iconType="castle"
+              messageStyle={styles.emptyMessage}
+            />
           }
         />
         <ActionSheet
@@ -125,6 +130,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     color: '#e39f2f',
+  },
+  emptyMessage: {
+    fontFamily: 'ApexNew-Medium',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: '#ccc',
   },
 });
 

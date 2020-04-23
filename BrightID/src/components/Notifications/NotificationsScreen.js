@@ -67,7 +67,12 @@ class NotificationsScreen extends React.Component<Props, State> {
             />
           }
           ListEmptyComponent={
-            <EmptyList title="Nothing here, come back later.." />
+            <EmptyList
+              title="Nothing here, come back later.."
+              iconSize={46}
+              iconType={"bell-off-outline"}
+              messageStyle={styles.message}
+              />
           }
           renderItem={({ item }) =>
             item.inviteId ? (
@@ -95,10 +100,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  listContainer: { 
+  listContainer: {
     height: '100%',
     flexGrow: 1
   },
+  message: {
+   fontFamily: 'ApexNew-Medium',
+   textAlign: 'center',
+   fontWeight: 'bold',
+   fontSize: 18,
+   color: '#ccc',
+ },
 });
 
 export default connect(({ groups, user }) => ({ ...groups, ...user }))(
