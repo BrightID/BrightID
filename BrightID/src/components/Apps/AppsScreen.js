@@ -83,7 +83,12 @@ export class AppsScreen extends React.Component<Prop, State> {
             <AppCard {...item} handleAction={this.handleAction} />
           )}
           ListEmptyComponent={
-            <EmptyList title="No Apps here, come back later.." />
+            <EmptyList
+              title="No Apps."
+              iconSize={46}
+              iconType={"castle"}
+              messageStyle={styles.message}
+             />
           }
         />
         <ActionSheet
@@ -114,7 +119,7 @@ const styles = StyleSheet.create({
   AppsList: {
     flex: 1,
   },
-  sponsorContainer: {
+   sponsorContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 20,
@@ -126,6 +131,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#e39f2f',
   },
+  message: {
+    fontFamily: 'ApexNew-Medium',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: '#ccc',
 });
 
 export default connect(({ apps, user }) => ({ ...apps, ...user }))(AppsScreen);

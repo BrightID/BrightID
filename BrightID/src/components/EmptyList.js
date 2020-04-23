@@ -1,11 +1,11 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-import Octicons from 'react-native-vector-icons/Octicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const EmptyList = ({ title }) => (
+const EmptyList = ({ title, iconType='information-outline' iconSize = 26, messageStyle, iconColor="#ccc"  }) => (
     <View style={styles.emptyContainer}>
-        <Octicons size={26} name="info" color="#333" />
-        <Text style={styles.emptyText}>{title}</Text>
+        <MaterialCommunityIcons size={iconSize} name={iconType} color={iconColor} />
+        <Text style={messageStyle ? messageStyle : styles.emptyText}>{title}</Text>
     </View>
 );
 
@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
     },
     emptyText: {
         fontSize: 15,
+        fontFamily: 'ApexNew-Medium',
         marginLeft: 10
     },
 });
