@@ -75,16 +75,13 @@ export class AppsScreen extends React.Component<Prop, State> {
       <View style={styles.container}>
         <this.sponsorLabel />
         <FlatList
-          style={styles.AppsList}
           data={apps}
-          contentContainerStyle={apps.listContainer}
+          contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
           keyExtractor={({ name }, index) => name + index}
           renderItem={({ item }) => (
             <AppCard {...item} handleAction={this.handleAction} />
           )}
-          ListEmptyComponent={
-            <EmptyList title="No Apps." iconSize={46} iconType="castle" />
-          }
+          ListEmptyComponent={<EmptyList title="No Apps" iconType="castle" />}
         />
         <ActionSheet
           ref={(o) => {
@@ -108,9 +105,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fdfdfd',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
+    height: '100%',
   },
   centerItem: {
     alignItems: 'center',
@@ -127,13 +122,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     color: '#e39f2f',
-  },
-  listContainer: {
-    height: '100%',
-    flexGrow: 1,
-  },
-  AppsList: {
-    flex: 1,
   },
 });
 

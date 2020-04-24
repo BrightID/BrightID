@@ -1,15 +1,17 @@
+// @flow
+
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const EmptyList = ({
-  title,
-  iconType = 'information-outline',
-  iconSize = 26,
-  iconColor = '#ccc',
-}) => (
+type Props = {
+  title: string,
+  iconType?: string,
+};
+
+const EmptyList = ({ title, iconType = 'information-outline' }: Props) => (
   <View style={styles.emptyContainer}>
-    <MaterialCommunityIcons size="#ccc" name={iconType} color={iconColor} />
+    <MaterialCommunityIcons size={48} name={iconType} color="#ccc" />
     <Text style={styles.emptyText}>{title}</Text>
   </View>
 );
@@ -17,16 +19,17 @@ const EmptyList = ({
 const styles = StyleSheet.create({
   emptyContainer: {
     flex: 1,
-    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#fdfdfd',
+    height: '100%',
   },
   emptyText: {
+    fontFamily: 'ApexNew-Medium',
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 18,
     color: '#ccc',
-    marginLeft: 10,
   },
 });
 

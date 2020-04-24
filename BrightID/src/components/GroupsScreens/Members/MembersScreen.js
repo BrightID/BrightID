@@ -6,11 +6,9 @@ import {
   FlatList,
   TouchableOpacity,
   SafeAreaView,
-  Image,
 } from 'react-native';
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import RNFS from 'react-native-fs';
 import ActionSheet from 'react-native-actionsheet';
 import { innerJoin } from 'ramda';
 import { getGroupName } from '@/utils/groups';
@@ -204,9 +202,9 @@ export class MembersScreen extends Component<Props, State> {
               data={this.filterMembers()}
               keyExtractor={({ id }, index) => id + index}
               renderItem={this.renderMember}
-              contentContainerStyle={{ paddingBottom: 50 }}
+              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
               ListEmptyComponent={
-                <EmptyList title="No members, invite some..." />
+                <EmptyList title="No known members, invite some..." />
               }
             />
           </View>

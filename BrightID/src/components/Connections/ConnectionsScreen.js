@@ -4,7 +4,6 @@ import * as React from 'react';
 import {
   StyleSheet,
   View,
-  Text,
   TouchableOpacity,
   Alert,
   SafeAreaView,
@@ -135,8 +134,8 @@ export class ConnectionsScreen extends React.Component<Props> {
                 data={connections}
                 keyExtractor={({ id }, index) => id + index}
                 renderItem={this.renderConnection}
-                contentContainerStyle={{ paddingBottom: 50 }}
-                ListEmptyComponent={<EmptyList title="No connections..." />}
+                contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+                ListEmptyComponent={<EmptyList title="No connections" />}
               />
             </View>
           </View>
@@ -166,7 +165,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fdfdfd',
     alignItems: 'center',
     flexDirection: 'column',
-    justifyContent: 'center',
     marginTop: 8,
   },
   connectionsContainer: {

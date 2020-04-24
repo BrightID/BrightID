@@ -8,7 +8,6 @@ import fetchUserInfo from '@/actions/fetchUserInfo';
 import EmptyList from '@/components/Helpers/EmptyList';
 import NotificationCard from './NotificationCard';
 import InviteCard from './InviteCard';
-import EmptyNotifications from './EmptyNotifications';
 
 type State = {
   refreshing: boolean,
@@ -53,13 +52,10 @@ class NotificationsScreen extends React.Component<Props, State> {
       : [];
     const notificationData = notifications.concat(activeInvites);
 
-    return notificationData.length > 0 ? (
+    return (
       <View style={styles.container}>
         <FlatList
-          style={!notificationData.length && { flex: 1 }}
-          contentContainerStyle={
-            notificationData.length ? {} : styles.listContainer
-          }
+          contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
           data={notificationData}
           keyExtractor={({ inviteId, msg }, index) => (inviteId || msg) + index}
           refreshControl={
@@ -71,7 +67,6 @@ class NotificationsScreen extends React.Component<Props, State> {
           ListEmptyComponent={
             <EmptyList
               title="Nothing here, come back later.."
-              iconSize={46}
               iconType="bell-off-outline"
             />
           }
@@ -88,8 +83,6 @@ class NotificationsScreen extends React.Component<Props, State> {
           }
         />
       </View>
-    ) : (
-      <EmptyNotifications />
     );
   }
 }
@@ -97,13 +90,7 @@ class NotificationsScreen extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  listContainer: {
-    height: '100%',
-    flexGrow: 1,
+    backgroundColor: '#fdfdfd',
   },
 });
 

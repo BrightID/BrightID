@@ -55,6 +55,7 @@ class RecoveringConnectionScreen extends React.Component<Props> {
           <View style={styles.mainContainer}>
             <FlatList
               style={styles.connectionsContainer}
+              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
               data={connections}
               keyExtractor={({ id }, index) => id + index}
               renderItem={this.renderConnection}
