@@ -18,8 +18,8 @@ import { DEVICE_TYPE } from '@/utils/constants';
 import api from '@/Api/BrightId';
 import emitter from '@/emitter';
 import { leaveGroup, dismissFromGroup } from '@/actions';
+import EmptyList from '@/components/Helpers/EmptyList';
 import MemberCard from './MemberCard';
-import EmptyList from '../../EmptyList';
 
 export class MembersScreen extends Component<Props, State> {
   static navigationOptions = ({ navigation }) => {

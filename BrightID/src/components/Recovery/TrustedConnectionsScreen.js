@@ -11,10 +11,10 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { DEVICE_TYPE } from '@/utils/constants';
+import EmptyList from '@/components/Helpers/EmptyList';
 import SearchConnections from '../Connections/SearchConnections';
 import TrustedConnectionCard from './TrustedConnectionCard';
 import { setTrustedConnections } from './helpers';
-import EmptyList from '../EmptyList';
 
 /**
  * Backup screen of BrightID
@@ -100,9 +100,7 @@ class TrustedConnectionsScreen extends React.Component<Props> {
               data={connections}
               keyExtractor={({ id }, index) => id + index}
               renderItem={this.renderConnection}
-              ListEmptyComponent={
-                <EmptyList title="No connections..." />
-              }
+              ListEmptyComponent={<EmptyList title="No connections..." />}
             />
           </View>
         </View>

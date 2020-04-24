@@ -9,8 +9,8 @@ import {
 import { connect } from 'react-redux';
 import api from '@/Api/BrightId';
 import { encryptAesKey } from '@/utils/invites';
+import EmptyList from '@/components/Helpers/EmptyList';
 import MemberCard from './MemberCard';
-import EmptyList from '../../EmptyList';
 
 export class InviteListScreen extends Component<Props, State> {
   static navigationOptions = () => ({

@@ -12,8 +12,8 @@ import {
 import { connect } from 'react-redux';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import { DEVICE_TYPE } from '@/utils/constants';
+import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import GroupCard from './GroupCard';
-import FloatingActionButton from '../FloatingActionButton';
 import { NoGroups } from './NoGroups';
 
 /**

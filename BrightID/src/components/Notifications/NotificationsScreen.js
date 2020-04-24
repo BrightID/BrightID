@@ -5,8 +5,8 @@ import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import { INVITE_ACTIVE } from '@/utils/constants';
 import fetchUserInfo from '@/actions/fetchUserInfo';
+import EmptyList from '@/components/Helpers/EmptyList';
 import NotificationCard from './NotificationCard';
-import EmptyList from '../EmptyList';
 import InviteCard from './InviteCard';
 import EmptyNotifications from './EmptyNotifications';
 
@@ -56,8 +56,10 @@ class NotificationsScreen extends React.Component<Props, State> {
     return notificationData.length > 0 ? (
       <View style={styles.container}>
         <FlatList
-          style={!notificationData.length && { flex: 1}}
-          contentContainerStyle={notificationData.length ? {} : styles.listContainer}
+          style={!notificationData.length && { flex: 1 }}
+          contentContainerStyle={
+            notificationData.length ? {} : styles.listContainer
+          }
           data={notificationData}
           keyExtractor={({ inviteId, msg }, index) => (inviteId || msg) + index}
           refreshControl={
@@ -70,8 +72,8 @@ class NotificationsScreen extends React.Component<Props, State> {
             <EmptyList
               title="Nothing here, come back later.."
               iconSize={46}
-              iconType={"bell-off-outline"}
-              />
+              iconType="bell-off-outline"
+            />
           }
           renderItem={({ item }) =>
             item.inviteId ? (
@@ -101,8 +103,8 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     height: '100%',
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 });
 
 export default connect(({ groups, user }) => ({ ...groups, ...user }))(

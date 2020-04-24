@@ -4,10 +4,9 @@ import * as React from 'react';
 import { Linking, StyleSheet, View, FlatList, Text } from 'react-native';
 import { connect } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
+import EmptyList from '@/components/Helpers/EmptyList';
 import AppCard from './AppCard';
-import EmptyApps from './EmptyApps';
 import { handleAppContext, deleteApp } from './model';
-import EmptyList from '../EmptyList';
 
 let deleteSheetRef = '';
 
@@ -55,8 +54,8 @@ export class AppsScreen extends React.Component<Prop, State> {
   };
 
   sponsorLabel = () => {
-    const { isSponsored } = this.props;
-    if (!isSponsored) {
+    const { isSponsored, apps } = this.props;
+    if (!isSponsored && apps.length > 0) {
       return (
         <View style={styles.sponsorContainer}>
           <Text style={styles.sponsorMessage}>
