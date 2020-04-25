@@ -14,14 +14,14 @@ export const pollOperations = async () => {
   } = store.getState();
   try {
     for (const op of operations) {
-      const { state } = await api.getOperationState(op._key);
+      const { state, result } = await api.getOperationState(op._key);
       if (
         state === 'applied' ||
         state === 'failed' ||
         op.timestamp + time_fudge < Date.now()
       ) {
         if (op.name === 'Link ContextId') {
-          store.dispatch(updateApp(op.context, state));
+          store.dispatch(updateApp(op, state, result));
           if (state === 'applied')
             Alert.alert(
               'Success',
