@@ -20,8 +20,9 @@ export const removeApp = (name: string) => ({
   name,
 });
 
-export const updateApp = (name: string, state: string) => ({
+export const updateApp = (op: Operation, state: string, result: string) => ({
   type: UPDATE_APP,
-  name,
+  op,
   state,
+  result,
 });

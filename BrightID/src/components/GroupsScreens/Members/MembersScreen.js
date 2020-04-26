@@ -31,7 +31,7 @@ export class MembersScreen extends Component<Props, State> {
         paddingRight: 30,
       },
       headerBackTitleVisible: false,
-      headerRight:  __DEV__ ? () => (
+      headerRight: () => (
         <TouchableOpacity
           style={{ marginRight: 11 }}
           onPress={() => {
@@ -40,7 +40,7 @@ export class MembersScreen extends Component<Props, State> {
         >
           <Material name="dots-horizontal" size={32} color="#fff" />
         </TouchableOpacity>
-      ): () => null,
+      ),
       // headerLeft: () => {
       //   const { group } = navigation.state.params;
       //   return (
