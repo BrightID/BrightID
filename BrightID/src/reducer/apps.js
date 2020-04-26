@@ -26,11 +26,19 @@ export const reducer = (state: AppsState = initialState, action: action) => {
       };
     }
     case UPDATE_APP: {
-      const removeExisting = ({ name }) => name !== action.name;
-      const updatedApp = find(propEq('name', action.name))(state.apps);
       let apps;
+      const updatedApp = find(propEq('name', action.op.context))(state.apps);
       if (updatedApp !== undefined) {
-        updatedApp.state = (action.state === 'applied') ? 'applied' : 'failed';
+        const removeExisting = ({ name }) => name !== action.op.context;
+        if (action.state === 'applied') {
+          updatedApp.state = 'applied';
+          updatedApp.contextId = action.op.contextId;
+          updatedApp.linked = true;
+        } else if (updatedApp.linked && action.result.includes("duplicate")) {
+          updatedApp.state = 'applied';
+        } else {
+          updatedApp.state = 'failed';
+        }
         apps = state.apps
           .filter(removeExisting)
           .concat(updatedApp);
