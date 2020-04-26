@@ -8,7 +8,7 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "postinstall": "jetifier -r",
+    "postinstall": "npx jetifier -r",
     "test:watch": "npm test -- --watch",
     "updateSnap": "jest --updateSnapshot",
     "build:release": "android/gradlew assembleRelease"
@@ -85,7 +85,6 @@
     "eslint-plugin-react": "^7.14.3",
     "flow-bin": "0.105.0",
     "jest": "^25.1.0",
-    "jetifier": "^1.6.5",
     "lint-staged": "^10.0.2",
     "metro-react-native-babel-preset": "^0.58.0",
     "mock-async-storage": "^2.2.0",
