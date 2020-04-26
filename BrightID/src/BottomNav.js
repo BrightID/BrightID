@@ -121,7 +121,11 @@ export class BottomNav extends React.Component<Props, State> {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigate('Apps');
+            navigate('Apps', {
+              baseUrl: '',
+              context: '',
+              contextId: '',
+            });
           }}
           accessible={true}
           accessibilityLabel="Apps"
