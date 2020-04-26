@@ -8,7 +8,7 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "postinstall": "npx jetifier -r",
+    "postinstall": "npx jetify",
     "test:watch": "npm test -- --watch",
     "updateSnap": "jest --updateSnapshot",
     "build:release": "android/gradlew assembleRelease"
