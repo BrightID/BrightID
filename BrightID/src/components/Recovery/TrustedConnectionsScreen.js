@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { DEVICE_TYPE } from '@/utils/constants';
+import EmptyList from '@/components/Helpers/EmptyList';
 import SearchConnections from '../Connections/SearchConnections';
 import TrustedConnectionCard from './TrustedConnectionCard';
 import { setTrustedConnections } from './helpers';
@@ -94,18 +95,14 @@ class TrustedConnectionsScreen extends React.Component<Props> {
             <SearchConnections navigation={navigation} />
           )}
           <View style={styles.mainContainer}>
-            {connections.length > 0 ? (
-              <FlatList
-                style={styles.connectionsContainer}
-                data={connections}
-                keyExtractor={({ id }, index) => id + index}
-                renderItem={this.renderConnection}
-              />
-            ) : (
-              <View>
-                <Text style={styles.emptyText}>No connections</Text>
-              </View>
-            )}
+            <FlatList
+              style={styles.connectionsContainer}
+              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+              data={connections}
+              keyExtractor={({ id }, index) => id + index}
+              renderItem={this.renderConnection}
+              ListEmptyComponent={<EmptyList title="No connections..." />}
+            />
           </View>
         </View>
         <View style={styles.buttonContainer}>
@@ -124,7 +121,7 @@ class TrustedConnectionsScreen extends React.Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#fdfdfd',
   },
   mainContainer: {
     marginTop: 8,

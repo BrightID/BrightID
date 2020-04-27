@@ -4,6 +4,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { DEVICE_TYPE } from '@/utils/constants';
+import EmptyList from '@/components/Helpers/EmptyList';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
 
@@ -52,18 +53,14 @@ class RecoveringConnectionScreen extends React.Component<Props> {
           </View>
           <SearchConnections navigation={navigation} />
           <View style={styles.mainContainer}>
-            {connections.length > 0 ? (
-              <FlatList
-                style={styles.connectionsContainer}
-                data={connections}
-                keyExtractor={({ id }, index) => id + index}
-                renderItem={this.renderConnection}
-              />
-            ) : (
-              <View>
-                <Text style={styles.emptyText}>No connections</Text>
-              </View>
-            )}
+            <FlatList
+              style={styles.connectionsContainer}
+              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+              data={connections}
+              keyExtractor={({ id }, index) => id + index}
+              renderItem={this.renderConnection}
+              ListEmptyComponent={<EmptyList title="No connections..." />}
+            />
           </View>
         </View>
       </SafeAreaView>
@@ -74,7 +71,7 @@ class RecoveringConnectionScreen extends React.Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#fdfdfd',
   },
   mainContainer: {
     marginTop: 8,

@@ -9,6 +9,7 @@ import {
 import { connect } from 'react-redux';
 import api from '@/Api/BrightId';
 import { encryptAesKey } from '@/utils/invites';
+import EmptyList from '@/components/Helpers/EmptyList';
 import MemberCard from './MemberCard';
 
 export class InviteListScreen extends Component<Props, State> {
@@ -60,9 +61,13 @@ export class InviteListScreen extends Component<Props, State> {
           <View style={styles.mainContainer}>
             <FlatList
               style={styles.eligiblesContainer}
+              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
               data={this.getEligibles()}
               keyExtractor={({ id }, index) => id + index}
               renderItem={this.renderEligible}
+              ListEmptyComponent={
+                <EmptyList title="No existing connections are eligible for this group, please come back later.." />
+              }
             />
           </View>
         </View>
