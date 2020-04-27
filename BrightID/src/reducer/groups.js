@@ -7,6 +7,7 @@ import {
   SET_NEW_GROUP_CO_FOUNDERS,
   CLEAR_NEW_GROUP_CO_FOUNDERS,
   SET_GROUPS,
+  SET_GROUP_SEARCH,
   SET_INVITES,
   ACCEPT_INVITE,
   REJECT_INVITE,
@@ -47,12 +48,19 @@ export const initialState = {
   newGroupCoFounders: [],
   groups: [],
   invites: [],
+  searchParam: '',
 };
 
 /* ******** REDUCER ****************** */
 
 export const reducer = (state: GroupsState = initialState, action: action) => {
   switch (action.type) {
+    case SET_GROUP_SEARCH: {
+      return {
+        ...state,
+        searchParam: action.searchParam,
+      };
+    }
     case CREATE_GROUP: {
       const groups: group[] = state.groups
         .concat(action.group)
