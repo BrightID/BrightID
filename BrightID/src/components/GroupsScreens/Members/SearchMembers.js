@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
     fontFamily: 'ApexNew-Book',
     fontSize: 14,
     color: '#333',
-    marginTop: 3.1,
     flex: 1,
     fontWeight: 'normal',
     fontStyle: 'normal',
