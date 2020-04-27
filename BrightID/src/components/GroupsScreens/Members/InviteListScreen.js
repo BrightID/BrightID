@@ -61,11 +61,12 @@ export class InviteListScreen extends Component<Props, State> {
           <View style={styles.mainContainer}>
             <FlatList
               style={styles.eligiblesContainer}
+              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
               data={this.getEligibles()}
               keyExtractor={({ id }, index) => id + index}
               renderItem={this.renderEligible}
               ListEmptyComponent={
-                <EmptyList title="No invites, come back later.." />
+                <EmptyList title="No existing connections are eligible for this group, please come back later.." />
               }
             />
           </View>

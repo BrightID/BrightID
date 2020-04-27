@@ -9,7 +9,7 @@ type Props = {
   iconType?: string,
 };
 
-const EmptyList = ({ title, iconType = 'information-outline' }: Props) => (
+const EmptyList = ({ title, iconType = 'alert-outline' }: Props) => (
   <View style={styles.emptyContainer}>
     <MaterialCommunityIcons size={48} name={iconType} color="#ccc" />
     <Text style={styles.emptyText}>{title}</Text>

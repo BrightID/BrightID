@@ -81,7 +81,7 @@ export class AppsScreen extends React.Component<Prop, State> {
           renderItem={({ item }) => (
             <AppCard {...item} handleAction={this.handleAction} />
           )}
-          ListEmptyComponent={<EmptyList title="No Apps" iconType="castle" />}
+          ListEmptyComponent={<EmptyList title="No Apps" iconType="flask" />}
         />
         <ActionSheet
           ref={(o) => {
