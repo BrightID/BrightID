@@ -13,8 +13,8 @@ import {
 import { connect } from 'react-redux';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import { getGroupName } from '@/utils/groups';
+import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import GroupCard from './GroupCard';
-import FloatingActionButton from '../FloatingActionButton';
 import { NoGroups } from './NoGroups';
 import SearchGroups from './SearchGroups';
 

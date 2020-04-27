@@ -1,6 +1,12 @@
 // @flow
 
-import { SET_APPS, ADD_APP, REMOVE_APP, RESET_STORE, UPDATE_APP } from '@/actions';
+import {
+  SET_APPS,
+  ADD_APP,
+  REMOVE_APP,
+  RESET_STORE,
+  UPDATE_APP,
+} from '@/actions';
 import { find, propEq } from 'ramda';
 
 const initialState = {
@@ -26,14 +32,20 @@ export const reducer = (state: AppsState = initialState, action: action) => {
       };
     }
     case UPDATE_APP: {
-      const removeExisting = ({ name }) => name !== action.name;
-      const updatedApp = find(propEq('name', action.name))(state.apps);
       let apps;
+      const updatedApp = find(propEq('name', action.op.context))(state.apps);
       if (updatedApp !== undefined) {
-        updatedApp.state = (action.state === 'applied') ? 'applied' : 'failed';
-        apps = state.apps
-          .filter(removeExisting)
-          .concat(updatedApp);
+        if (action.state === 'applied') {
+          updatedApp.state = 'applied';
+          updatedApp.contextId = action.op.contextId;
+          updatedApp.linked = true;
+        } else if (updatedApp.linked && action.result.includes('duplicate')) {
+          updatedApp.state = 'applied';
+        } else {
+          updatedApp.state = 'failed';
+        }
+        const removeExisting = ({ name }) => name !== action.op.context;
+        apps = state.apps.filter(removeExisting).concat(updatedApp);
       } else {
         apps = state.apps;
       }

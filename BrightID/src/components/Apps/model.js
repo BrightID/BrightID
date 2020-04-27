@@ -5,6 +5,7 @@ import { saveImage } from '@/utils/filesystem';
 import { addApp, removeApp } from '@/actions';
 import { navigate } from '@/NavigationService';
 import store from '@/store';
+import { find, propEq } from 'ramda';
 
 type Params = {
   baseUrl: string,
@@ -85,6 +86,10 @@ const linkApp = async (baseUrl, context, contextInfo, contextId) => {
 
 const saveApp = async (name: string, contextInfo: ContextInfo) => {
   let logoFile = '';
+  const {
+    apps: { apps },
+  } = store.getState();
+  const app = find(propEq('name', name))(apps);
   try {
     if (contextInfo.appLogo) {
       logoFile = await saveImage({
@@ -100,6 +105,8 @@ const saveApp = async (name: string, contextInfo: ContextInfo) => {
       logoFile,
       dateAdded: Date.now(),
       state: 'initiated',
+      contextId: (app) ? app.contextId : null,
+      linked: (app) ? app.linked : false
     };
     return store.dispatch(addApp(appInfo));
   } catch (e) {

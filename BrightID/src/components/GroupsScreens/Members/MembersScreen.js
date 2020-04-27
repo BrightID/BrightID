@@ -6,11 +6,9 @@ import {
   FlatList,
   TouchableOpacity,
   SafeAreaView,
-  Image,
 } from 'react-native';
 import { connect } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import RNFS from 'react-native-fs';
 import ActionSheet from 'react-native-actionsheet';
 import { innerJoin } from 'ramda';
 import { getGroupName } from '@/utils/groups';
@@ -18,6 +16,7 @@ import { DEVICE_TYPE } from '@/utils/constants';
 import api from '@/Api/BrightId';
 import emitter from '@/emitter';
 import { leaveGroup, dismissFromGroup } from '@/actions';
+import EmptyList from '@/components/Helpers/EmptyList';
 import MemberCard from './MemberCard';
 
 export class MembersScreen extends Component<Props, State> {
@@ -31,7 +30,7 @@ export class MembersScreen extends Component<Props, State> {
         paddingRight: 30,
       },
       headerBackTitleVisible: false,
-      headerRight:  __DEV__ ? () => (
+      headerRight: () => (
         <TouchableOpacity
           style={{ marginRight: 11 }}
           onPress={() => {
@@ -40,7 +39,7 @@ export class MembersScreen extends Component<Props, State> {
         >
           <Material name="dots-horizontal" size={32} color="#fff" />
         </TouchableOpacity>
-      ): () => null,
+      ),
       // headerLeft: () => {
       //   const { group } = navigation.state.params;
       //   return (
@@ -203,7 +202,10 @@ export class MembersScreen extends Component<Props, State> {
               data={this.filterMembers()}
               keyExtractor={({ id }, index) => id + index}
               renderItem={this.renderMember}
-              contentContainerStyle={{ paddingBottom: 50 }}
+              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+              ListEmptyComponent={
+                <EmptyList title="No known members, invite some..." />
+              }
             />
           </View>
         </View>
