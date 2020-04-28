@@ -15,11 +15,6 @@ type State = {
 };
 
 export class AppsScreen extends React.Component<Prop, State> {
-  static navigationOptions = () => ({
-    title: 'Apps',
-    headerRight: () => <View />,
-  });
-
   deleteSheetRef: string;
 
   constructor(props: Props) {

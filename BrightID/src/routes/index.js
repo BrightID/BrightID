@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import LinearGradient from 'react-native-linear-gradient';
+
 import { connect } from 'react-redux';
 import Apps from './Apps';
 import Connections from './Connections';

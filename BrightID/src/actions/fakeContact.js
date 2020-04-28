@@ -3,13 +3,14 @@
 import nacl from 'tweetnacl';
 import RNFetchBlob from 'rn-fetch-blob';
 import { Alert, NativeModules } from 'react-native';
-import { names } from '../utils/fakeNames';
-import { setConnectUserData } from './index';
 import {
   strToUint8Array,
   uInt8ArrayToB64,
   b64ToUrlSafeB64,
-} from '../utils/encoding';
+} from '@/utils/encoding';
+import { navigate } from '@/NavigationService';
+import { names } from '../utils/fakeNames';
+import { setConnectUserData } from './index';
 
 const { RNRandomBytes } = NativeModules;
 
@@ -20,7 +21,7 @@ const randomKey = (size: number) =>
     });
   });
 
-export const addFakeConnection = (navigation: navigation) => async (
+export const addFakeConnection = () => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
@@ -62,7 +63,7 @@ export const addFakeConnection = (navigation: navigation) => async (
       if (res.info().status === 200) {
         userData.photo = `data:image/jpeg;base64,${String(res.base64())}`;
         dispatch(setConnectUserData(userData));
-        navigation.navigate('PreviewConnection');
+        navigate('PreviewConnection');
       } else {
         Alert.alert('Error', 'Unable to fetch image');
       }

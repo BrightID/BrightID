@@ -15,19 +15,23 @@ import {
 } from './models/sortingUtility';
 
 class SortingConnectionsScreen extends React.Component<Props> {
-  static navigationOptions = ({ navigation }) => ({
-    title: 'Sorting',
-    headerRight: () => (
-      <TouchableOpacity
-        style={styles.headerSave}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      >
-        <Text style={styles.headerSaveText}>Save</Text>
-      </TouchableOpacity>
-    ),
-  });
+  componentDidMount() {
+    const { navigation } = this.props;
+    navigation.setOptions({
+      title: 'Sorting',
+      headerBackTitleVisible: false,
+      headerRight: () => (
+        <TouchableOpacity
+          style={styles.headerSave}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Text style={styles.headerSaveText}>Save</Text>
+        </TouchableOpacity>
+      ),
+    });
+  }
 
   renderCaret = () => {
     const { connectionsSort } = this.props;

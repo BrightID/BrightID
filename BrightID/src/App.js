@@ -10,6 +10,7 @@ import { pollOperations } from './utils/operations';
 import AppRoutes from './routes';
 import { store, persistor } from './store';
 import { bootstrap } from './bootstrap';
+import { navigationRef } from './NavigationService';
 
 /**
  * Central part of the application
@@ -32,7 +33,7 @@ export const App = () => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <SafeAreaProvider>
-          <NavigationContainer style={styles.container}>
+          <NavigationContainer style={styles.container} ref={navigationRef}>
             <StatusBar
               barStyle="dark-content"
               backgroundColor="#F52828"

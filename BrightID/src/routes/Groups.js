@@ -5,11 +5,12 @@ import NewGroupScreen from '@/components/GroupsScreens/NewGroups/NewGroupScreen'
 import GroupInfoScreen from '@/components/GroupsScreens/NewGroups/GroupInfoScreen';
 import MembersScreen from '@/components/GroupsScreens/Members/MembersScreen';
 import InviteListScreen from '@/components/GroupsScreens/Members/InviteListScreen';
+import { headerOptions } from './helpers';
 
 const Stack = createStackNavigator();
 
 const Groups = () => (
-  <Stack.Navigator>
+  <Stack.Navigator screenOptions={headerOptions}>
     <Stack.Screen name="Groups" component={GroupsScreen} />
     <Stack.Screen name="NewGroup" component={NewGroupScreen} />
     <Stack.Screen name="GroupInfo" component={GroupInfoScreen} />

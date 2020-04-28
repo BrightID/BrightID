@@ -1,19 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Alert,
-  SafeAreaView,
-  FlatList,
-} from 'react-native';
+import { StyleSheet, View, Alert, SafeAreaView, FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import ActionSheet from 'react-native-actionsheet';
 import fetchUserInfo from '@/actions/fetchUserInfo';
-import { DEVICE_TYPE } from '@/utils/constants';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
 import SearchConnections from './SearchConnections';
@@ -28,21 +20,6 @@ import { performAction } from './models/modifyConnections';
  */
 
 export class ConnectionsScreen extends React.Component<Props> {
-  static navigationOptions = ({ navigation }: { navigation: navigation }) => ({
-    title: 'Connections',
-    headerRight: __DEV__
-      ? () => (
-          <TouchableOpacity
-            style={{ marginRight: 11 }}
-            onPress={createFakeConnection(navigation)}
-          >
-            <Material name="dots-horizontal" size={32} color="#fff" />
-          </TouchableOpacity>
-        )
-      : () => null,
-    headerShown: DEVICE_TYPE === 'large',
-  });
-
   componentDidMount() {
     const { navigation, dispatch } = this.props;
     navigation.addListener('focus', () => {
@@ -54,7 +31,7 @@ export class ConnectionsScreen extends React.Component<Props> {
   handleNewConnection = () => {
     const { navigation } = this.props;
     if (__DEV__) {
-      createFakeConnection(navigation)();
+      createFakeConnection();
     } else {
       navigation.navigate('NewConnection');
     }
