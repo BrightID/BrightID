@@ -28,11 +28,6 @@ type State = {
 };
 
 export class GroupsScreen extends React.Component<Props, State> {
-  static navigationOptions = ({ navigation }: { navigation: navigation }) => ({
-    title: 'Groups',
-    headerBackTitleVisible: false,
-  });
-
   constructor(props: Props) {
     super(props);
     this.state = {

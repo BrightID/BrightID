@@ -38,10 +38,6 @@ type State = {
 };
 
 class RecoveryCodeScreen extends React.Component<Props, State> {
-  static navigationOptions = {
-    title: 'Recovery Code',
-  };
-
   checkIntervalId: IntervalID;
 
   sigs = {};

@@ -34,20 +34,6 @@ const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 export class SignUp extends React.Component<Props, State> {
   photoSheetRef: string;
 
-  static navigationOptions = {
-    title: 'BrightID',
-    headerBackTitle: 'SignUp',
-    headerStyle: {
-      backgroundColor: '#f48b1e',
-    },
-    headerRight: () => (
-      <TouchableOpacity style={{ marginRight: 11 }}>
-        <Ionicons name="ios-help-circle-outline" size={32} color="#fff" />
-      </TouchableOpacity>
-    ),
-    headerShown: DEVICE_TYPE === 'large',
-  };
-
   // eslint-disable-next-line react/state-in-constructor
   state = {
     name: '',

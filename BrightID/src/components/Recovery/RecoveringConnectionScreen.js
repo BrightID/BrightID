@@ -3,17 +3,11 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import { DEVICE_TYPE } from '@/utils/constants';
 import EmptyList from '@/components/Helpers/EmptyList';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
 
 class RecoveringConnectionScreen extends React.Component<Props> {
-  static navigationOptions = ({ navigation }) => ({
-    title: 'Account Recovery',
-    headerShown: DEVICE_TYPE === 'large',
-  });
-
   filterConnections = () => {
     const { connections, searchParam } = this.props;
     return connections

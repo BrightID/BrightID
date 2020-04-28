@@ -26,13 +26,6 @@ type State = {
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
 class RestoreScreen extends React.Component<Props, State> {
-  static navigationOptions = {
-    title: 'Restore',
-    headerStyle: {
-      backgroundColor: '#f48b1e',
-    },
-  };
-
   // eslint-disable-next-line react/state-in-constructor
   state = {
     pass: '',

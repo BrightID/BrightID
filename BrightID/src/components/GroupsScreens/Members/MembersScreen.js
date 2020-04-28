@@ -1,18 +1,8 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  View,
-  Alert,
-  FlatList,
-  TouchableOpacity,
-  SafeAreaView,
-} from 'react-native';
+import { StyleSheet, View, Alert, FlatList, SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionSheet from 'react-native-actionsheet';
 import { innerJoin } from 'ramda';
-import { getGroupName } from '@/utils/groups';
-import { DEVICE_TYPE } from '@/utils/constants';
 import api from '@/Api/BrightId';
 import emitter from '@/emitter';
 import { leaveGroup, dismissFromGroup } from '@/actions';
@@ -20,29 +10,6 @@ import EmptyList from '@/components/Helpers/EmptyList';
 import MemberCard from './MemberCard';
 
 export class MembersScreen extends Component<Props, State> {
-  static navigationOptions = ({ navigation, route }) => {
-    const { group } = route.params;
-    return {
-      title: getGroupName(group),
-      headerTitleStyle: {
-        fontSize: DEVICE_TYPE === 'large' ? 20 : 18,
-        paddingLeft: 20,
-        paddingRight: 30,
-      },
-      headerBackTitleVisible: false,
-      headerRight: () => (
-        <TouchableOpacity
-          style={{ marginRight: 11 }}
-          onPress={() => {
-            emitter.emit('optionsSelected');
-          }}
-        >
-          <Material name="dots-horizontal" size={32} color="#fff" />
-        </TouchableOpacity>
-      ),
-    };
-  };
-
   componentDidMount() {
     emitter.on('optionsSelected', this.showOptionsMenu);
   }

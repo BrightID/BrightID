@@ -39,13 +39,6 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
     flagged: false,
   };
 
-  static navigationOptions = {
-    title: 'New Connection',
-    headerRight: () => <View />,
-    headerBackTitleVisible: false,
-    // headerShown: false,
-  };
-
   componentDidMount() {
     this.fetchConnectionInfo().done();
   }

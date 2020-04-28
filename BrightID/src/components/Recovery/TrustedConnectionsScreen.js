@@ -22,11 +22,6 @@ import { setTrustedConnections } from './helpers';
  */
 
 class TrustedConnectionsScreen extends React.Component<Props> {
-  static navigationOptions = ({ navigation }) => ({
-    title: 'Trusted Connections',
-    headerBackTitleVisible: false,
-  });
-
   filterConnections = () => {
     const { connections, searchParam } = this.props;
     return connections

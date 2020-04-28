@@ -14,11 +14,6 @@ type State = {
 };
 
 class NotificationsScreen extends React.Component<Props, State> {
-  static navigationOptions = () => ({
-    title: 'Notifications',
-    headerBackTitleVisible: false,
-  });
-
   constructor(props: Props) {
     super(props);
     this.state = {

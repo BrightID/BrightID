@@ -28,4 +28,5 @@ export const headerOptions = () => ({
   headerBackground,
   headerTintColor: '#fff',
   headerTitleAlign: 'center',
+  headerBackTitleVisible: false,
 });

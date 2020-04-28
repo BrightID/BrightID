@@ -22,11 +22,6 @@ import SearchConnections from './SearchConnections';
 // };
 
 export class NewGroupScreen extends React.Component<Props> {
-  static navigationOptions = ({ navigation }) => ({
-    title: 'New Group',
-    headerShown: DEVICE_TYPE === 'large',
-  });
-
   constructor(props) {
     super(props);
     this.state = {

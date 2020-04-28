@@ -30,13 +30,6 @@ const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 // const Container = KeyboardAvoidingView;
 
 class BackupScreen extends React.Component<Props, State> {
-  static navigationOptions = {
-    title: 'Backup',
-    headerStyle: {
-      backgroundColor: '#f48b1e',
-    },
-  };
-
   // eslint-disable-next-line react/state-in-constructor
   state = {
     pass1: '',
