@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import api from '@/Api/BrightId';
 import { saveImage } from '@/utils/filesystem';
 import { addApp, removeApp } from '@/actions';
-// import { navigate } from '@/NavigationService';
+import { navigate } from '@/NavigationService';
 import store from '@/store';
 import { find, propEq } from 'ramda';
 
@@ -105,8 +105,8 @@ const saveApp = async (name: string, contextInfo: ContextInfo) => {
       logoFile,
       dateAdded: Date.now(),
       state: 'initiated',
-      contextId: (app) ? app.contextId : null,
-      linked: (app) ? app.linked : false
+      contextId: app ? app.contextId : null,
+      linked: app ? app.linked : false,
     };
     return store.dispatch(addApp(appInfo));
   } catch (e) {
