@@ -35,7 +35,7 @@ export class AppsScreen extends React.Component<Prop, State> {
     });
   }
 
-  handleDeepLink = (e) => {
+  handleDeepLink = () => {
     const { route } = this.props;
     console.log('params', route.params);
     if (route.params) {

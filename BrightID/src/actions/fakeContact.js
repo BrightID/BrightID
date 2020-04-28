@@ -63,7 +63,7 @@ export const addFakeConnection = () => async (
       if (res.info().status === 200) {
         userData.photo = `data:image/jpeg;base64,${String(res.base64())}`;
         dispatch(setConnectUserData(userData));
-        navigate('PreviewConnection');
+        navigate('Home', { screen: 'PreviewConnection' });
       } else {
         Alert.alert('Error', 'Unable to fetch image');
       }

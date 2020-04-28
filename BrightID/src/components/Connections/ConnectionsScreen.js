@@ -33,7 +33,7 @@ export class ConnectionsScreen extends React.Component<Props> {
     if (__DEV__) {
       createFakeConnection();
     } else {
-      navigation.navigate('NewConnection');
+      navigation.navigate('Home', { screen: 'NewConnection' });
     }
   };
 
