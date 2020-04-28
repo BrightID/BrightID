@@ -1,17 +1,15 @@
 // @flow
 
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar, StyleSheet } from 'react-native';
-import { bootstrapAndUpgrade } from './versions';
-import { resetOperations } from './actions';
-import fetchUserInfo from './actions/fetchUserInfo';
 import { pollOperations } from './utils/operations';
 import AppRoutes from './routes';
 import { store, persistor } from './store';
+import { bootstrap } from './bootstrap';
 
 /**
  * Central part of the application
@@ -19,63 +17,34 @@ import { store, persistor } from './store';
  * read docs here: https://reactnavigation.org/
  */
 
-type Props = {};
-
-export default class App extends React.Component<Props> {
-  timerId: IntervalID;
-
-  componentDidMount() {
-    this.bootstrap();
-    this.timerId = setInterval(() => {
+export const App = () => {
+  useEffect(() => {
+    bootstrap();
+    const timerId = setInterval(() => {
       pollOperations();
     }, 5000);
-  }
+    return () => {
+      clearInterval(timerId);
+    };
+  }, []);
 
-  componentWillUnmount() {
-    clearInterval(this.timerId);
-  }
-
-  bootstrap = async () => {
-    try {
-      let {
-        user: { publicKey },
-      } = store.getState();
-      // load redux store from async storage and upgrade async storage is necessary
-      if (!publicKey) await bootstrapAndUpgrade();
-      // reset operations
-      store.dispatch(resetOperations());
-      // fetch user info
-      if (!publicKey) {
-        publicKey = store.getState().user.publicKey;
-      }
-
-      if (publicKey) store.dispatch(fetchUserInfo());
-      // once everything is set up
-      // this.props.navigation.navigate(publicKey ? 'App' : 'Onboarding');
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  render() {
-    return (
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <SafeAreaProvider>
-            <NavigationContainer style={styles.container}>
-              <StatusBar
-                barStyle="dark-content"
-                backgroundColor="#F52828"
-                translucent={false}
-              />
-              <AppRoutes />
-            </NavigationContainer>
-          </SafeAreaProvider>
-        </PersistGate>
-      </Provider>
-    );
-  }
-}
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <SafeAreaProvider>
+          <NavigationContainer style={styles.container}>
+            <StatusBar
+              barStyle="dark-content"
+              backgroundColor="#F52828"
+              translucent={false}
+            />
+            <AppRoutes />
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </PersistGate>
+    </Provider>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -84,3 +53,5 @@ const styles = StyleSheet.create({
     height: '100%',
   },
 });
+
+export default App;

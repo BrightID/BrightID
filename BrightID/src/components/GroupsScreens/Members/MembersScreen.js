@@ -40,30 +40,6 @@ export class MembersScreen extends Component<Props, State> {
           <Material name="dots-horizontal" size={32} color="#fff" />
         </TouchableOpacity>
       ),
-      // headerLeft: () => {
-      //   const { group } = navigation.state.params;
-      //   return (
-      //     <View style={{ flexDirection: 'row' }}>
-      //       <Material
-      //         style={styles.backStyle}
-      //         name="arrow-left"
-      //         size={24}
-      //         color="#fff"
-      //         onPress={() => {
-      //           navigation.goBack();
-      //         }}
-      //       />
-      //       {/* {group.photo?.filename ? (
-      //         <Image
-      //           source={{
-      //             uri: `file://${RNFS.DocumentDirectoryPath}/photos/${group.photo.filename}`,
-      //           }}
-      //           style={styles.headerPhoto}
-      //         />
-      //       ) : null} */}
-      //     </View>
-      //   );
-      // },
     };
   };
 
