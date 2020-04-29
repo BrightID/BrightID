@@ -47,7 +47,7 @@ export class MembersScreen extends Component<Props, State> {
           const { route, dispatch } = this.props;
           const group = route.params?.group;
           try {
-            await api.dismiss(user.id, group.id);
+            await api.dismiss(user.id, group?.id);
             await dispatch(dismissFromGroup(user.id, group));
           } catch (err) {
             Alert.alert('Error dismissing member from the group', err.message);
@@ -77,7 +77,7 @@ export class MembersScreen extends Component<Props, State> {
           const { route, navigation, dispatch } = this.props;
           const group = route.params?.group;
           try {
-            await api.leaveGroup(group.id);
+            await api.leaveGroup(group?.id);
             await dispatch(leaveGroup(group));
             navigation.goBack();
           } catch (err) {
@@ -108,9 +108,9 @@ export class MembersScreen extends Component<Props, State> {
   };
 
   renderMember = ({ item }) => {
-    const group = this.props.route.params?.groups;
-    const isAdmin = group.admins?.includes(this.props.id);
-    const isItemAdmin = group.admins?.includes(item.id);
+    const group = this.props.route.params?.group;
+    const isAdmin = group?.admins?.includes(this.props.id);
+    const isItemAdmin = group?.admins?.includes(item.id);
     const handler = isAdmin && !isItemAdmin ? this.confirmDismiss : null;
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <MemberCard {...item} isAdmin={isAdmin} menuHandler={handler} />;
@@ -123,7 +123,7 @@ export class MembersScreen extends Component<Props, State> {
       innerJoin(
         (connection, member) => connection.id === member,
         connections,
-        route.params.group.members,
+        route.params?.group?.members,
       ),
     );
   };
@@ -132,7 +132,7 @@ export class MembersScreen extends Component<Props, State> {
     const { id } = this.props;
     const group = this.props.route.params?.group;
     let actions = ['Leave Group', 'cancel'];
-    if (group.admins?.includes(id)) {
+    if (group?.admins?.includes(id)) {
       actions = ['Invite'].concat(actions);
     }
 

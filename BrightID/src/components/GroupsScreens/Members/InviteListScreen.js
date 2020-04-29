@@ -26,8 +26,8 @@ export class InviteListScreen extends Component<Props, State> {
     const group = route.params?.group;
 
     try {
-      const data = await encryptAesKey(group.aesKey, connection.signingKey);
-      await api.invite(connection.id, group.id, data);
+      const data = await encryptAesKey(group?.aesKey, connection.signingKey);
+      await api.invite(connection.id, group?.id, data);
       Alert.alert(
         'Successful Invitaion',
         `You invited ${connection.name} successfully to the group`,
@@ -43,9 +43,9 @@ export class InviteListScreen extends Component<Props, State> {
     const group = route.params?.group;
     return connections.filter(
       (item) =>
-        !group.members?.includes(item.id) &&
-        item.eligible_groups?.includes(group.id) &&
-        (group.type !== 'primary' || !item.hasPrimaryGroup),
+        !group?.members?.includes(item.id) &&
+        item.eligible_groups?.includes(group?.id) &&
+        (group?.type !== 'primary' || !item.hasPrimaryGroup),
     );
   };
 

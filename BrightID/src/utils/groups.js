@@ -30,7 +30,7 @@ export const groupCirclePhotos = (group) => {
     // If a founder isn't in members, that founder hasn't joined yet and
     // their photo will be faded.
 
-    const faded = group.isNew && !members.includes(member.id);
+    const faded = group?.isNew && !members.includes(member.id);
 
     return { photo: member.photo, faded };
   });
@@ -39,7 +39,7 @@ export const groupCirclePhotos = (group) => {
 
 export const getGroupName = (group) => {
   return (
-    group.name ||
+    group?.name ||
     threeKnownMembers(group)
       .map((member) => member.name.substr(0, 13))
       .join(', ')
