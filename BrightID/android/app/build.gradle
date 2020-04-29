@@ -141,6 +141,8 @@ android {
         versionCode 12
         versionName "2.7.0"
         multiDexEnabled true
+        testBuildType System.getProperty('testBuildType', 'debug')  // This will later be used to control the test apk build type
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     signingConfigs {
         debug {
@@ -231,6 +233,8 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    androidTestImplementation('com.wix:detox:+')
 }
 
 // Run this once to be able to run the application with BUCK
