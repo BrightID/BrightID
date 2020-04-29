@@ -22,15 +22,15 @@ type ContextInfo = {
 export const handleAppContext = async (params: Params) => {
   // if 'params' is defined, the user came through a deep link
   const { baseUrl, context, contextId } = params;
-  // const oldBaseUrl = api.baseUrl;
+  const oldBaseUrl = api.baseUrl;
   let contextInfo;
   try {
-    // api.baseUrl = baseUrl;
+    api.baseUrl = baseUrl;
     contextInfo = await api.getContext(context);
   } catch (e) {
     console.log(e.message);
   } finally {
-    // api.baseUrl = oldBaseUrl;
+    api.baseUrl = oldBaseUrl;
   }
   if (contextInfo && contextInfo.verification) {
     Alert.alert(
@@ -60,9 +60,9 @@ const linkApp = async (baseUrl, context, contextInfo, contextId) => {
   if (contextInfo.isApp) {
     saveApp(context, contextInfo);
   }
-  // const oldBaseUrl = api.baseUrl;
+  const oldBaseUrl = api.baseUrl;
   try {
-    // api.baseUrl = baseUrl;
+    api.baseUrl = baseUrl;
     await api.linkContextId(context, contextId);
     if (!contextInfo.isApp) {
       Alert.alert(
@@ -80,7 +80,7 @@ const linkApp = async (baseUrl, context, contextInfo, contextId) => {
       },
     ]);
   } finally {
-    // api.baseUrl = oldBaseUrl;
+    api.baseUrl = oldBaseUrl;
   }
 };
 
