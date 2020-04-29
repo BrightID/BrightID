@@ -80,7 +80,7 @@ export class Onboard extends React.Component<Props, State> {
           translucent={false}
           animated={true}
         />
-        <View style={styles.carousel}>
+        <View style={styles.carousel} testID="Carousel">
           <Carousel
             data={entries}
             renderItem={this.renderItem}
@@ -104,6 +104,7 @@ export class Onboard extends React.Component<Props, State> {
         </View>
         <View style={styles.center}>
           <TouchableOpacity
+            testID="getStartedBtn"
             onPress={() => this.props.navigation.navigate('SignUp')}
             style={styles.button}
           >
