@@ -16,7 +16,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ActionSheet from 'react-native-actionsheet';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { takePhoto, chooseImage } from '@/utils/images';
 import { DEVICE_TYPE, DEVICE_OS } from '@/utils/constants';
@@ -190,7 +189,7 @@ export class SignUp extends React.Component<Props, State> {
                   <Text style={styles.buttonInnerText}>Create My BrightID</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('RecoveryCode')}
+                  onPress={() => this.props.navigation.navigate('Restore')}
                   style={styles.recoverButton}
                   accessibilityLabel="Recover BrightID"
                 >

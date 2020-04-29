@@ -13,6 +13,9 @@ const Notifications = () => (
     <Stack.Screen
       name="TrustedConnections"
       component={TrustedConnectionsScreen}
+      options={{
+        title: 'Trusted Connections',
+      }}
     />
     <Stack.Screen name="Backup" component={BackupScreen} />
   </Stack.Navigator>
