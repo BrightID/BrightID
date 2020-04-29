@@ -30,14 +30,9 @@ export const App = () => {
   const { getInitialState } = useLinking(navigationRef, {
     prefixes: ['brightid://'],
     config: {
-      App: {
+      Apps: {
         screens: {
-          Apps: {
-            initialRouteName: 'Apps',
-            screens: {
-              Apps: 'link-verification/:baseUrl/:context/:contextId',
-            },
-          },
+          Apps: 'link-verification/:baseUrl/:context/:contextId',
         },
       },
     },

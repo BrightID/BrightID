@@ -7,7 +7,15 @@ const Stack = createStackNavigator();
 
 const Apps = () => (
   <Stack.Navigator screenOptions={headerOptions}>
-    <Stack.Screen name="Apps" component={AppsScreen} />
+    <Stack.Screen
+      name="Apps"
+      component={AppsScreen}
+      initialParams={{
+        baseUrl: '',
+        context: '',
+        contextId: '',
+      }}
+    />
   </Stack.Navigator>
 );
 

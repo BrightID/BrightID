@@ -36,11 +36,17 @@ export class AppsScreen extends React.Component<Prop, State> {
   }
 
   handleDeepLink = () => {
-    const { route } = this.props;
+    const { route, navigation } = this.props;
     console.log('params', route.params);
-    if (route.params) {
+    if (route.params?.context) {
       handleAppContext(route.params);
     }
+    // reset params
+    navigation.setParams({
+      baseUrl: '',
+      context: '',
+      contextId: '',
+    });
   };
 
   handleAction = (selectedApp: string) => () => {
