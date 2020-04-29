@@ -9,6 +9,7 @@ export default class BrightIdOnboard extends React.Component<Props> {
   render() {
     return (
       <View
+        testID="brightIdOnboard"
         style={{
           flex: 1,
           backgroundColor: 'transparent',
