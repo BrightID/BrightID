@@ -17,7 +17,7 @@ import { headerOptions } from './helpers';
 const Stack = createStackNavigator();
 
 const membersScreenOptions = ({ navigation, route }) => {
-  const { group } = route.params;
+  const group = route.params?.group;
   return {
     title: getGroupName(group),
     headerTitleStyle: {

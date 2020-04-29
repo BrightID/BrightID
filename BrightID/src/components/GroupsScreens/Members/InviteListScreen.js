@@ -23,7 +23,7 @@ export class InviteListScreen extends Component<Props, State> {
 
   inviteToGroup = async (connection) => {
     const { navigation, route } = this.props;
-    const { group } = route.params;
+    const group = route.params?.group;
 
     try {
       const data = await encryptAesKey(group.aesKey, connection.signingKey);
@@ -40,7 +40,7 @@ export class InviteListScreen extends Component<Props, State> {
 
   getEligibles = () => {
     const { connections, route } = this.props;
-    const { group } = route.params;
+    const group = route.params?.group;
     return connections.filter(
       (item) =>
         !group.members?.includes(item.id) &&

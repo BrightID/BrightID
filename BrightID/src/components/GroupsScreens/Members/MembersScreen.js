@@ -45,7 +45,7 @@ export class MembersScreen extends Component<Props, State> {
         text: 'OK',
         onPress: async () => {
           const { route, dispatch } = this.props;
-          const { group } = route.params;
+          const group = route.params?.group;
           try {
             await api.dismiss(user.id, group.id);
             await dispatch(dismissFromGroup(user.id, group));
@@ -75,7 +75,7 @@ export class MembersScreen extends Component<Props, State> {
         text: 'OK',
         onPress: async () => {
           const { route, navigation, dispatch } = this.props;
-          const { group } = route.params;
+          const group = route.params?.group;
           try {
             await api.leaveGroup(group.id);
             await dispatch(leaveGroup(group));
@@ -108,7 +108,7 @@ export class MembersScreen extends Component<Props, State> {
   };
 
   renderMember = ({ item }) => {
-    const { group } = this.props.route.params;
+    const group = this.props.route.params?.groups;
     const isAdmin = group.admins?.includes(this.props.id);
     const isItemAdmin = group.admins?.includes(item.id);
     const handler = isAdmin && !isItemAdmin ? this.confirmDismiss : null;
@@ -130,7 +130,7 @@ export class MembersScreen extends Component<Props, State> {
 
   render() {
     const { id } = this.props;
-    const { group } = this.props.route.params;
+    const group = this.props.route.params?.group;
     let actions = ['Leave Group', 'cancel'];
     if (group.admins?.includes(id)) {
       actions = ['Invite'].concat(actions);
