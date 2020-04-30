@@ -33,7 +33,10 @@ const MainTabs = () => {
         name="Connections"
         component={Connections}
         options={{
-          tabBarIcon: Icon('account-heart', 'account-heart-outline'),
+          tabBarIcon: Icon(
+            'account-arrow-right',
+            'account-arrow-right-outline',
+          ),
         }}
       />
       <Tab.Screen
