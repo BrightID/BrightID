@@ -14,11 +14,6 @@ type State = {
 };
 
 class NotificationsScreen extends React.Component<Props, State> {
-  static navigationOptions = () => ({
-    title: 'Notifications',
-    headerBackTitleVisible: false,
-  });
-
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -28,7 +23,7 @@ class NotificationsScreen extends React.Component<Props, State> {
 
   componentDidMount() {
     const { navigation, dispatch } = this.props;
-    navigation.addListener('willFocus', () => {
+    navigation.addListener('focus', () => {
       dispatch(fetchUserInfo());
     });
   }

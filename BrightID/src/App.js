@@ -1,13 +1,16 @@
 // @flow
 
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer, useLinking } from '@react-navigation/native';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import { pollOperations } from './utils/operations';
-import AppRoutes from './AppRoutes';
+import AppRoutes from './routes';
 import { store, persistor } from './store';
-import BottomNav from './BottomNav';
+import { bootstrap } from './bootstrap';
+import { navigationRef } from './NavigationService';
 
 /**
  * Central part of the application
@@ -15,39 +18,79 @@ import BottomNav from './BottomNav';
  * read docs here: https://reactnavigation.org/
  */
 
-type Props = {};
+const deepLinkTimeout = () =>
+  new Promise((resolve) =>
+    // Timeout in 150ms if `getInitialState` doesn't resolve
+    // Workaround for https://github.com/facebook/react-native/issues/25675
+    setTimeout(resolve, 150),
+  );
 
-export default class App extends React.Component<Props> {
-  timerId: IntervalID;
+export const App = () => {
+  // setup deep linking
+  const { getInitialState } = useLinking(navigationRef, {
+    prefixes: ['brightid://'],
+    config: {
+      Apps: {
+        screens: {
+          Apps: 'link-verification/:baseUrl/:context/:contextId',
+        },
+      },
+    },
+  });
 
-  componentDidMount() {
-    this.timerId = setInterval(() => {
+  const [isReady, setIsReady] = React.useState(false);
+  const [initialState, setInitialState] = React.useState();
+
+  useEffect(() => {
+    Promise.race([getInitialState(), deepLinkTimeout()])
+      .catch((e) => {
+        console.log(e.message);
+        setIsReady(true);
+      })
+      .then((state) => {
+        if (state !== undefined) {
+          setInitialState(state);
+        }
+        setIsReady(true);
+      });
+  }, [getInitialState]);
+
+  // bootstrap app
+  useEffect(() => {
+    bootstrap();
+    const timerId = setInterval(() => {
       pollOperations();
     }, 5000);
-  }
+    return () => {
+      clearInterval(timerId);
+    };
+  }, []);
 
-  componentWillUnmount() {
-    clearInterval(this.timerId);
-  }
-
-  render() {
-    return (
-      <Provider store={store}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#F52828"
-          translucent={false}
-        />
-        <PersistGate loading={null} persistor={persistor}>
-          <View style={styles.container}>
-            <AppRoutes />
-            <BottomNav />
-          </View>
-        </PersistGate>
-      </Provider>
-    );
-  }
-}
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <SafeAreaProvider>
+          {isReady ? (
+            <NavigationContainer
+              style={styles.container}
+              ref={navigationRef}
+              initialState={initialState}
+            >
+              <StatusBar
+                barStyle="dark-content"
+                backgroundColor="#F52828"
+                translucent={false}
+              />
+              <AppRoutes />
+            </NavigationContainer>
+          ) : (
+            <View />
+          )}
+        </SafeAreaProvider>
+      </PersistGate>
+    </Provider>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -56,3 +99,5 @@ const styles = StyleSheet.create({
     height: '100%',
   },
 });
+
+export default App;

@@ -15,11 +15,6 @@ type State = {
 };
 
 export class AppsScreen extends React.Component<Prop, State> {
-  static navigationOptions = () => ({
-    title: 'Apps',
-    headerRight: () => <View />,
-  });
-
   deleteSheetRef: string;
 
   constructor(props: Props) {
@@ -31,20 +26,27 @@ export class AppsScreen extends React.Component<Prop, State> {
 
   componentDidMount() {
     const { navigation } = this.props;
-    navigation.addListener('willFocus', async () => {
+    navigation.addListener('focus', async () => {
       this.handleDeepLink();
       Linking.addEventListener('url', this.handleDeepLink);
     });
-    navigation.addListener('willBlur', async () => {
+    navigation.addListener('blur', async () => {
       Linking.removeEventListener('url', this.handleDeepLink);
     });
   }
 
-  handleDeepLink = (e) => {
-    const { navigation } = this.props;
-    if (navigation.state.params?.context) {
-      handleAppContext(navigation.state.params);
+  handleDeepLink = () => {
+    const { route, navigation } = this.props;
+    console.log('params', route.params);
+    if (route.params?.context) {
+      handleAppContext(route.params);
     }
+    // reset params
+    navigation.setParams({
+      baseUrl: '',
+      context: '',
+      contextId: '',
+    });
   };
 
   handleAction = (selectedApp: string) => () => {

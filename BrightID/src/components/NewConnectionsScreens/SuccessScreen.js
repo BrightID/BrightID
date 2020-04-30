@@ -15,11 +15,6 @@ import { removeConnectUserData } from '../../actions';
 type State = {};
 
 export class SuccessScreen extends React.Component<Props, State> {
-  static navigationOptions = {
-    headerBackTitle: ' ',
-    headerShown: false,
-  };
-
   render() {
     return (
       <View style={styles.container}>
