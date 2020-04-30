@@ -39,29 +39,6 @@ let discordUrl = 'https://discord.gg/nTtuB2M';
 export class HomeScreen extends React.Component<Props, State> {
   photoSheetRef: string;
 
-  static navigationOptions = ({ navigation }) => ({
-    title: 'BrightID',
-    headerBackTitle: 'Home',
-    headerRight: __DEV__ ? () => (
-      <TouchableOpacity
-        style={{ marginRight: 11 }}
-        onPress={delStorage(navigation)}
-      >
-        <Material size={32} name="dots-horizontal" color="#fff" />
-      </TouchableOpacity>
-    ): () => null,
-    headerLeft: () => (
-      <TouchableOpacity
-        style={{ marginLeft: 16 }}
-        onPress={() => {
-          chatSheetRef.show();
-        }}
-      >
-        <Ionicons name="ios-chatboxes" size={32} color="#fff" />
-      </TouchableOpacity>
-    ),
-  });
-
   // eslint-disable-next-line react/state-in-constructor
   state = {
     profilePhoto: ' ',
@@ -71,7 +48,7 @@ export class HomeScreen extends React.Component<Props, State> {
 
   componentDidMount() {
     const { navigation, dispatch, photo, name } = this.props;
-    navigation.addListener('didFocus', () => {
+    navigation.addListener('focus', () => {
       dispatch(fetchUserInfo());
     });
     retrieveImage(photo.filename).then((profilePhoto) => {
@@ -79,6 +56,18 @@ export class HomeScreen extends React.Component<Props, State> {
     });
     this.setState({
       name,
+    });
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          style={{ marginLeft: 16 }}
+          onPress={() => {
+            chatSheetRef.show();
+          }}
+        >
+          <Ionicons name="ios-chatboxes" size={32} color="#fff" />
+        </TouchableOpacity>
+      ),
     });
   }
 
@@ -201,12 +190,12 @@ export class HomeScreen extends React.Component<Props, State> {
             </Text>
             <Text style={styles.countsDescriptionText}>Connections</Text>
           </View>
-          <View style={styles.countsGroup}>
+          <TouchableOpacity style={styles.countsGroup} onPress={delStorage}>
             <Text id="groupsCount" style={styles.countsNumberText}>
               {groups ? groups.length : 0}
             </Text>
             <Text style={styles.countsDescriptionText}>Groups</Text>
-          </View>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.verificationsContainer}>

@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import fetchUserInfo from '@/actions/fetchUserInfo';
-import { getGroupName } from '@/utils/groups';
+import { getGroupName, ids2connections, knownMemberIDs } from '@/utils/groups';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import GroupCard from './GroupCard';
 import { NoGroups } from './NoGroups';
@@ -28,11 +28,6 @@ type State = {
 };
 
 export class GroupsScreen extends React.Component<Props, State> {
-  static navigationOptions = ({ navigation }: { navigation: navigation }) => ({
-    title: 'Groups',
-    headerBackTitleVisible: false,
-  });
-
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -42,7 +37,7 @@ export class GroupsScreen extends React.Component<Props, State> {
 
   componentDidMount() {
     const { navigation, dispatch } = this.props;
-    navigation.addListener('willFocus', () => {
+    navigation.addListener('focus', () => {
       dispatch(fetchUserInfo());
     });
   }
@@ -164,11 +159,28 @@ function mapStateToProps(state) {
   // apply search filter to groups array
   // NOTE: If below sorting/filtering gets too expensive at runtime use memoized selectors / reselect
   if (searchParam !== '') {
-    groups = groups.filter((group) =>
-      getGroupName(group)
-        .toLowerCase()
-        .includes(searchParam),
-    );
+    groups = groups.filter((group) => {
+      if (
+        getGroupName(group)
+          .toLowerCase()
+          .includes(searchParam)
+      ) {
+        // direct group name match
+        return true;
+      } else {
+        // check group members
+        const allMemberNames = ids2connections(
+          knownMemberIDs(group),
+        ).map((member) => member.name.toLowerCase());
+        for (const name of allMemberNames) {
+          if (name.includes(searchParam)) {
+            // stop looking if a match is found
+            return true;
+          }
+        }
+        return false;
+      }
+    });
   }
 
   return { groups, hasGroups };

@@ -12,7 +12,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import App from './src/App';
 import { name as appName } from './app.json';
 
-// enable react-native-screen
+// enable react-native-screens
 enableScreens();
 
 // Bootstrap fonts

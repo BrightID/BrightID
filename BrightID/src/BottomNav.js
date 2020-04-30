@@ -11,7 +11,7 @@ import {
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { connect } from 'react-redux';
 import { DEVICE_TYPE, INVITE_ACTIVE } from '@/utils/constants';
-import { navigate } from './NavigationService';
+// import { navigate } from './NavigationService';
 /**
  * list of icons which will navigate between screens inside the app
  * navigate between screens using the react-navigation

@@ -38,10 +38,6 @@ type State = {
 };
 
 class RecoveryCodeScreen extends React.Component<Props, State> {
-  static navigationOptions = {
-    title: 'Recovery Code',
-  };
-
   checkIntervalId: IntervalID;
 
   sigs = {};
@@ -54,12 +50,12 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
   componentDidMount() {
     try {
       const { navigation } = this.props;
-      navigation.addListener('willFocus', async () => {
+      navigation.addListener('focus', async () => {
         await setupRecovery();
         qrcode.toString(recoveryQrStr(), this.handleQrString);
       });
-      navigation.addListener('willFocus', this.waitForSigs);
-      navigation.addListener('willBlur', () => {
+      navigation.addListener('focus', this.waitForSigs);
+      navigation.addListener('blur', () => {
         clearInterval(this.checkIntervalId);
       });
     } catch (err) {

@@ -105,8 +105,8 @@ const saveApp = async (name: string, contextInfo: ContextInfo) => {
       logoFile,
       dateAdded: Date.now(),
       state: 'initiated',
-      contextId: (app) ? app.contextId : null,
-      linked: (app) ? app.linked : false
+      contextId: app ? app.contextId : null,
+      linked: app ? app.linked : false,
     };
     return store.dispatch(addApp(appInfo));
   } catch (e) {

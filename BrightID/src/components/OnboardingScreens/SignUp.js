@@ -12,10 +12,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import ActionSheet from 'react-native-actionsheet';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { takePhoto, chooseImage } from '@/utils/images';
 import { DEVICE_TYPE, DEVICE_OS } from '@/utils/constants';
@@ -32,20 +32,6 @@ const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
 export class SignUp extends React.Component<Props, State> {
   photoSheetRef: string;
-
-  static navigationOptions = {
-    title: 'BrightID',
-    headerBackTitle: 'SignUp',
-    headerStyle: {
-      backgroundColor: '#f48b1e',
-    },
-    headerRight: () => (
-      <TouchableOpacity style={{ marginRight: 11 }}>
-        <Ionicons name="ios-help-circle-outline" size={32} color="#fff" />
-      </TouchableOpacity>
-    ),
-    headerShown: DEVICE_TYPE === 'large',
-  };
 
   // eslint-disable-next-line react/state-in-constructor
   state = {
@@ -135,106 +121,119 @@ export class SignUp extends React.Component<Props, State> {
     const { name, finalBase64, creatingBrightId, editingName } = this.state;
 
     return (
-      <Container style={styles.container} behavior="padding">
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#F52828"
-          translucent={false}
-          animated={true}
-        />
-        <View style={styles.addPhotoContainer}>
-          {finalBase64.uri && !editingName ? (
-            <TouchableOpacity
-              onPress={this.onAddPhoto}
-              accessible={true}
-              accessibilityLabel="edit photo"
-            >
-              <Image style={styles.photo} source={finalBase64} />
-            </TouchableOpacity>
-          ) : !editingName ? (
-            <TouchableOpacity
-              onPress={this.onAddPhoto}
-              style={styles.addPhoto}
-              accessible={true}
-              accessibilityLabel="add photo"
-            >
-              <Text style={styles.addPhotoText}>Add Photo</Text>
-              <SimpleLineIcons size={42} name="camera" color="#979797" />
-            </TouchableOpacity>
-          ) : (
-            <View />
-          )}
-        </View>
-        <View style={styles.textInputContainer}>
-          <Text style={styles.midText}>What do your friends know you by?</Text>
-          <TextInput
-            onChangeText={(name) => this.setState({ name })}
-            value={name}
-            placeholder="Name"
-            placeholderTextColor="#9e9e9e"
-            style={styles.textInput}
-            autoCapitalize="words"
-            autoCorrect={false}
-            textContentType="name"
-            underlineColorAndroid="transparent"
-            onFocus={() => {
-              this.setState({ editingName: true });
-            }}
-            onBlur={() => {
-              this.setState({ editingName: false });
-            }}
-            blurOnSubmit={true}
+      <SafeAreaView style={styles.safeAreaContainer}>
+        <Container style={styles.container} behavior="padding">
+          <StatusBar
+            barStyle="dark-content"
+            backgroundColor="#F52828"
+            translucent={false}
+            animated={true}
           />
-        </View>
-        <View style={styles.buttonContainer}>
-          <Text style={styles.buttonInfoText}>
-            Your name and photo will never be shared with apps or stored on
-            servers
-          </Text>
-          {!creatingBrightId ? (
-            <View>
+          <View style={styles.addPhotoContainer}>
+            {finalBase64.uri && !editingName ? (
               <TouchableOpacity
-                style={styles.createBrightIdButton}
-                onPress={this.createBrightID}
+                onPress={this.onAddPhoto}
+                accessible={true}
+                accessibilityLabel="edit photo"
               >
-                <Text style={styles.buttonInnerText}>Create My BrightID</Text>
+                <Image style={styles.photo} source={finalBase64} />
               </TouchableOpacity>
+            ) : !editingName ? (
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('RecoveryCode')}
-                style={styles.recoverButton}
-                accessibilityLabel="Recover BrightID"
+                onPress={this.onAddPhoto}
+                style={styles.addPhoto}
+                accessible={true}
+                accessibilityLabel="add photo"
               >
-                <Text style={styles.recoverButtonText}>Recover BrightID</Text>
+                <Text style={styles.addPhotoText}>Add Photo</Text>
+                <SimpleLineIcons size={42} name="camera" color="#979797" />
               </TouchableOpacity>
-            </View>
-          ) : (
-            <View style={styles.loader}>
-              <Text>Creating Bright ID...</Text>
-              <Spinner isVisible={true} size={47} type="Wave" color="#4990e2" />
-            </View>
-          )}
-        </View>
-        <ActionSheet
-          ref={(o) => {
-            this.photoSheetRef = o;
-          }}
-          title="Select photo"
-          options={['Take Photo', 'Choose From Library', 'cancel']}
-          cancelButtonIndex={2}
-          onPress={(index) => {
-            if (index === 0) {
-              this.getPhotoFromCamera();
-            } else if (index === 1) {
-              this.getPhotoFromLibrary();
-            }
-          }}
-        />
-      </Container>
+            ) : (
+              <View />
+            )}
+          </View>
+          <View style={styles.textInputContainer}>
+            <Text style={styles.midText}>
+              What do your friends know you by?
+            </Text>
+            <TextInput
+              onChangeText={(name) => this.setState({ name })}
+              value={name}
+              placeholder="Name"
+              placeholderTextColor="#9e9e9e"
+              style={styles.textInput}
+              autoCapitalize="words"
+              autoCorrect={false}
+              textContentType="name"
+              underlineColorAndroid="transparent"
+              onFocus={() => {
+                this.setState({ editingName: true });
+              }}
+              onBlur={() => {
+                this.setState({ editingName: false });
+              }}
+              blurOnSubmit={true}
+            />
+          </View>
+          <View style={styles.buttonContainer}>
+            <Text style={styles.buttonInfoText}>
+              Your name and photo will never be shared with apps or stored on
+              servers
+            </Text>
+            {!creatingBrightId ? (
+              <View>
+                <TouchableOpacity
+                  style={styles.createBrightIdButton}
+                  onPress={this.createBrightID}
+                >
+                  <Text style={styles.buttonInnerText}>Create My BrightID</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Restore')}
+                  style={styles.recoverButton}
+                  accessibilityLabel="Recover BrightID"
+                >
+                  <Text style={styles.recoverButtonText}>Recover BrightID</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={styles.loader}>
+                <Text>Creating Bright ID...</Text>
+                <Spinner
+                  isVisible={true}
+                  size={47}
+                  type="Wave"
+                  color="#4990e2"
+                />
+              </View>
+            )}
+          </View>
+          <ActionSheet
+            ref={(o) => {
+              this.photoSheetRef = o;
+            }}
+            title="Select photo"
+            options={['Take Photo', 'Choose From Library', 'cancel']}
+            cancelButtonIndex={2}
+            onPress={(index) => {
+              if (index === 0) {
+                this.getPhotoFromCamera();
+              } else if (index === 1) {
+                this.getPhotoFromLibrary();
+              }
+            }}
+          />
+        </Container>
+      </SafeAreaView>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  safeAreaContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
