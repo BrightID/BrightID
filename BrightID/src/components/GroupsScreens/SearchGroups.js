@@ -34,7 +34,7 @@ class SearchGroups extends React.Component<Props & LocalProps> {
         <TextInput
           onChangeText={(value) => this.props.dispatch(setGroupSearch(value))}
           style={styles.searchField}
-          placeholder="Search Groups"
+          placeholder="Search by group or member name"
           autoCapitalize="words"
           autoCorrect={false}
           textContentType="name"
