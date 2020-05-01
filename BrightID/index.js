@@ -1,4 +1,5 @@
 /** @format */
+// @flow strict-local
 
 import 'react-native-gesture-handler';
 import { AppRegistry, Text, TextInput } from 'react-native';
