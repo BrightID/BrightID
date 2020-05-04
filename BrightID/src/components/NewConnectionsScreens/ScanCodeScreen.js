@@ -3,9 +3,9 @@
 import * as React from 'react';
 import { Alert, Linking, StyleSheet, TextInput, View } from 'react-native';
 import { connect } from 'react-redux';
-import { RNCamera } from 'react-native-camera';
 import Spinner from 'react-native-spinkit';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import RNCamera from './RNCameraProvider.e2e';
 import { parseQrData } from './actions/parseQrData';
 import { fetchData } from './actions/fetchData';
 import emitter from '../../emitter';
@@ -137,7 +137,7 @@ export class ScanCodeScreen extends React.Component<Props, State> {
       );
     } else {
       return (
-        <View style={styles.cameraPreview}>
+        <View style={styles.cameraPreview} testID="scanCode">
           <View style={styles.scanTextContainer}>
             <TextInput
               ref={(c) => {
