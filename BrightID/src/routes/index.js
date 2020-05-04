@@ -58,6 +58,7 @@ const MainTabs = () => {
         component={Notifications}
         options={{
           tabBarIcon: IconWithBadge('bell', 'bell-outline', notificationCount),
+          unmountOnBlur: true,
         }}
       />
       <Tab.Screen
