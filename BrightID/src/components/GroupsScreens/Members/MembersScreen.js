@@ -30,7 +30,7 @@ export class MembersScreen extends Component<Props, State> {
     } else if (action === 'Invite') {
       const { navigation, route } = this.props;
       navigation.navigate('InviteList', {
-        group: route.params.group,
+        group: route.params?.group,
       });
     }
   };
