@@ -3,9 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
+    "android": "react-native run-android --appIdSuffix debug",
     "ios": "react-native run-ios",
     "start": "react-native start",
+    "start:detox": "RN_SRC_EXT=e2e.js react-native start",
     "test": "jest",
     "lint": "eslint .",
     "postinstall": "npx jetify",
@@ -114,7 +115,7 @@
     "configurations": {
       "android.emu.debug": {
         "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
-        "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+        "build": "cd android && RN_SRC_EXT=e2e.js ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
         "type": "android.emulator",
         "device": {
           "avdName": "Pixel_2_XL_API_28"
@@ -122,7 +123,7 @@
       },
       "android.emu.release": {
         "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",
-        "build": "cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
+        "build": "cd android && RN_SRC_EXT=e2e.js ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
         "type": "android.emulator",
         "device": {
           "avdName": "Pixel_2_XL_API_28"

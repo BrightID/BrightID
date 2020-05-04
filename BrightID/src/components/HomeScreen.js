@@ -60,6 +60,7 @@ export class HomeScreen extends React.Component<Props, State> {
     navigation.setOptions({
       headerLeft: () => (
         <TouchableOpacity
+          testID="chatButton"
           style={{ marginLeft: 16 }}
           onPress={() => {
             chatSheetRef.show();
@@ -124,8 +125,8 @@ export class HomeScreen extends React.Component<Props, State> {
     // let verifications = ['BrightID'];
     const { profilePhoto } = this.state;
     return (
-      <View style={styles.container}>
-        <View style={styles.photoContainer}>
+      <View style={styles.container} testID="homeScreen">
+        <View style={styles.photoContainer} testID="PhotoContainer">
           {!this.state.isEditing ? (
             <TouchableOpacity
               onPress={this.onEditPhoto}
@@ -150,6 +151,7 @@ export class HomeScreen extends React.Component<Props, State> {
           )}
           {this.state.isEditing ? (
             <TextInput
+              testID="EditNameInput"
               value={this.state.name}
               style={{ ...styles.name, ...styles.editingName }}
               onChangeText={(text) => this.setState({ name: text })}
@@ -168,6 +170,7 @@ export class HomeScreen extends React.Component<Props, State> {
             />
           ) : (
             <Text
+              testID="EditNameBtn"
               style={styles.name}
               onPress={() => this.setState({ isEditing: true })}
             >
@@ -176,7 +179,7 @@ export class HomeScreen extends React.Component<Props, State> {
           )}
         </View>
 
-        <View style={styles.scoreContainer}>
+        <View style={styles.scoreContainer} testID="ScoreContainer">
           <Text style={styles.scoreLeft}>Score:</Text>
           <Text id="score" style={styles.scoreRight}>
             {score}
@@ -185,20 +188,31 @@ export class HomeScreen extends React.Component<Props, State> {
 
         <View style={styles.countsContainer}>
           <View style={styles.countsGroup}>
-            <Text id="connectionsCount" style={styles.countsNumberText}>
+            <Text
+              testID="ConnectionsCount"
+              id="connectionsCount"
+              style={styles.countsNumberText}
+            >
               {connections.length}
             </Text>
             <Text style={styles.countsDescriptionText}>Connections</Text>
           </View>
           <TouchableOpacity style={styles.countsGroup} onPress={delStorage}>
-            <Text id="groupsCount" style={styles.countsNumberText}>
+            <Text
+              testID="GroupsCount"
+              id="groupsCount"
+              style={styles.countsNumberText}
+            >
               {groups ? groups.length : 0}
             </Text>
             <Text style={styles.countsDescriptionText}>Groups</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={styles.verificationsContainer}>
+        <View
+          style={styles.verificationsContainer}
+          testID="VerificationsContainer"
+        >
           {verifications.map((name) => (
             <VerificationSticker name={name} key={name} />
           ))}
@@ -206,6 +220,7 @@ export class HomeScreen extends React.Component<Props, State> {
 
         <View style={styles.connectContainer}>
           <TouchableOpacity
+            testID="ConnectButton"
             style={styles.connectButton}
             onPress={() => {
               navigation.navigate('NewConnection');
@@ -219,6 +234,7 @@ export class HomeScreen extends React.Component<Props, State> {
         </View>
 
         <ActionSheet
+          testID="ChatActionSheet"
           ref={(o) => {
             chatSheetRef = o;
           }}
@@ -234,6 +250,7 @@ export class HomeScreen extends React.Component<Props, State> {
           }}
         />
         <ActionSheet
+          testID="PhotoActionSheet"
           ref={(o) => {
             this.photoSheetRef = o;
           }}
