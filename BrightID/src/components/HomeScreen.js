@@ -129,6 +129,7 @@ export class HomeScreen extends React.Component<Props, State> {
         <View style={styles.photoContainer} testID="PhotoContainer">
           {!this.state.isEditing ? (
             <TouchableOpacity
+              testID="editPhoto"
               onPress={this.onEditPhoto}
               accessible={true}
               accessibilityLabel="edit photo"

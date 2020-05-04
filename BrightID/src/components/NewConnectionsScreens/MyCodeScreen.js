@@ -128,7 +128,11 @@ export class MyCodeScreen extends React.Component<Props, State> {
   };
 
   renderCopyQr = () => (
-    <TouchableOpacity style={styles.copyContainer} onPress={this.copyQr}>
+    <TouchableOpacity
+      testID="copyQrButton"
+      style={styles.copyContainer}
+      onPress={this.copyQr}
+    >
       <Material
         size={24}
         name="content-copy"
@@ -202,7 +206,7 @@ export class MyCodeScreen extends React.Component<Props, State> {
             {DEVICE_TYPE === 'large' && <Text style={styles.name}>{name}</Text>}
           </View>
         </View>
-        <View style={styles.bottomHalf}>
+        <View style={styles.bottomHalf} testID="qrCode">
           {qrsvg ? this.renderQrCode() : this.renderSpinner()}
           {qrsvg ? this.renderCopyQr() : <View />}
         </View>

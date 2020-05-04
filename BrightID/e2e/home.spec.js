@@ -1,35 +1,19 @@
-/* global device:false, element:false, by:false, waitFor:false */
+/* global device:false, element:false, by:false */
+
+import { createBrightID } from './testUtils';
 
 describe('Homescreen', () => {
-  const userName = 'Johnny Knoxville';
+  let mainUser = '';
+  let hasBackButton = true;
+
   beforeAll(async () => {
+    const platform = await device.getPlatform();
+    hasBackButton = platform === 'android';
     // Reinstall app before starting tests to make sure all localStorage is cleared
     await device.launchApp({ delete: true });
 
-    // create BrightID for following tests
-    await element(by.id('getStartedBtn')).tap();
-    await element(by.id('editName')).tap();
-    await element(by.id('editName')).typeText(userName);
-    await element(by.id('editName')).tapReturnKey();
-    await element(by.id('addPhoto')).tap();
-    // ActionSheet does not support testID prop, so match based on text.
-    await expect(element(by.text('Select photo'))).toBeVisible();
-    // Following call is mocked through @utils/images.e2e.js to skip OS image picker
-    await element(by.text('Choose From Library')).tap();
-    // Wait until photo is loaded
-    await waitFor(element(by.id('editPhoto')))
-      .toBeVisible()
-      .withTimeout(2000);
-    // create new ID
-    await element(by.id('createBrightIDBtn')).tap();
-    // should end up at home screen
-    await waitFor(element(by.id('homeScreen')))
-      .toBeVisible()
-      .withTimeout(2000);
-  });
-
-  beforeEach(async () => {
-    await device.reloadReactNative();
+    // create identitiy and proceed to main screen
+    mainUser = await createBrightID();
   });
 
   it('should show all elements', async () => {
@@ -41,28 +25,106 @@ describe('Homescreen', () => {
     await expect(element(by.id('ConnectButton'))).toBeVisible();
   });
 
-  /*
-    open chat action sheet, check all options are there and close again
-  */
-  it('should show chat ActionSheet after tap on chat button', async () => {
-    // ActionSheet does not support testID, so try to match based on text.
-    await expect(element(by.text('Like to chat with us?'))).toBeNotVisible();
-    await element(by.id('chatButton')).tap();
-    await expect(element(by.text('Like to chat with us?'))).toBeVisible();
-    await expect(element(by.text('BrightID Discord'))).toBeVisible();
-    await element(by.text('cancel')).tap();
-    await expect(element(by.text('Like to chat with us?'))).toBeNotVisible();
+  describe('Chat ActionSheet', () => {
+    /*
+      open chat action sheet, check all options are there and close again
+    */
+    it('should show chat ActionSheet and close with cancel button', async () => {
+      // ActionSheet does not support testID, so try to match based on text.
+      await expect(element(by.text('Like to chat with us?'))).toBeNotVisible();
+      await element(by.id('chatButton')).tap();
+      await expect(element(by.text('Like to chat with us?'))).toBeVisible();
+      await expect(element(by.text('BrightID Discord'))).toBeVisible();
+      await element(by.text('cancel')).tap();
+      await expect(element(by.text('Like to chat with us?'))).toBeNotVisible();
+    });
+
+    if (hasBackButton) {
+      it('should show chat ActionSheet and close with back button', async () => {
+        // ActionSheet does not support testID, so try to match based on text.
+        await expect(
+          element(by.text('Like to chat with us?')),
+        ).toBeNotVisible();
+        await element(by.id('chatButton')).tap();
+        await expect(element(by.text('Like to chat with us?'))).toBeVisible();
+        await expect(element(by.text('BrightID Discord'))).toBeVisible();
+        await device.pressBack();
+        await expect(
+          element(by.text('Like to chat with us?')),
+        ).toBeNotVisible();
+      });
+    }
   });
 
-  it('should edit profile name', async () => {
-    const newName = 'John Travolta';
-    await expect(element(by.id('EditNameBtn'))).toHaveText(userName);
-    await element(by.id('EditNameBtn')).tap();
-    await element(by.id('EditNameInput')).clearText();
-    await device.disableSynchronization();
-    await element(by.id('EditNameInput')).typeText(newName);
-    await device.enableSynchronization();
-    await element(by.id('EditNameInput')).tapReturnKey();
-    await expect(element(by.id('EditNameBtn'))).toHaveText(newName);
+  describe('Edit Profile', () => {
+    if (hasBackButton) {
+      // excluded due to https://github.com/BrightID/BrightID/issues/408
+      xit('should cancel editing profile name with back button', async () => {
+        const newName = 'Winston Wolfe';
+        await expect(element(by.id('EditNameBtn'))).toHaveText(mainUser);
+        await element(by.id('EditNameBtn')).tap();
+        await element(by.id('EditNameInput')).clearText();
+        await element(by.id('EditNameInput')).typeText(newName);
+        await device.pressBack();
+        await expect(element(by.id('EditNameBtn'))).toHaveText(mainUser);
+      });
+    }
+
+    it('should edit profile name', async () => {
+      const newName = 'Butch Coolidge';
+      await expect(element(by.id('EditNameBtn'))).toHaveText(mainUser);
+      await element(by.id('EditNameBtn')).tap();
+      await element(by.id('EditNameInput')).clearText();
+      await element(by.id('EditNameInput')).typeText(newName);
+      await element(by.id('EditNameInput')).tapReturnKey();
+      await expect(element(by.id('EditNameBtn'))).toHaveText(newName);
+    });
+
+    it('should update profile picture from camera', async () => {
+      await element(by.id('editPhoto')).tap();
+      // ActionSheet does not support testID prop, so match based on text.
+      await expect(element(by.text('Select photo'))).toBeVisible();
+      // Following call is mocked through @utils/images.e2e.js to skip OS image picker
+      await element(by.text('Take Photo')).tap();
+      // TODO: Currently there is no way to check if the photo really changed, so this
+      // testcase is not very useful.
+    });
+
+    it('should update profile picture from library', async () => {
+      await element(by.id('editPhoto')).tap();
+      // ActionSheet does not support testID prop, so match based on text.
+      await expect(element(by.text('Select photo'))).toBeVisible();
+      // Following call is mocked through @utils/images.e2e.js to skip OS image picker
+      await element(by.text('Choose From Library')).tap();
+      // TODO: Currently there is no way to check if the photo really changed, so this
+      // testcase is not very useful.
+    });
+  });
+
+  describe('New Connection screen', () => {
+    it('should open "New Connection" screen by default', async () => {
+      await element(by.id('ConnectButton')).tap();
+      await expect(element(by.id('qrCode'))).toBeVisible();
+      await device.pressBack();
+      await expect(element(by.id('qrCode'))).toBeNotVisible();
+    });
+
+    it('should open "Scan Code" screen when tapping button', async () => {
+      await element(by.id('ConnectButton')).tap();
+      await element(by.id('scanCodeBtn')).tap();
+      await expect(element(by.id('scanCode'))).toBeVisible();
+      await device.pressBack();
+      await expect(element(by.id('scanCode'))).toBeNotVisible();
+    });
+
+    it('should copy to clipboard', async () => {
+      await element(by.id('ConnectButton')).tap();
+      await expect(element(by.id('copyQrButton'))).toBeVisible();
+      await element(by.id('copyQrButton')).tap();
+      // TODO: Verify clipboard content is correct. Currently detox has no way to
+      //  check clipboard contents, see e.g. https://github.com/wix/detox/issues/222
+      await device.pressBack();
+      await expect(element(by.id('copyQrButton'))).toBeNotVisible();
+    });
   });
 });

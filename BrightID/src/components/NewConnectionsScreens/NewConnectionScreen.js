@@ -54,6 +54,7 @@ export class NewConnectionScreen extends React.Component<Props, State> {
       <SafeAreaView style={styles.container}>
         <View style={styles.buttonsContainer}>
           <TouchableOpacity
+            testID="myCodeBtn"
             style={qr ? styles.buttonActive : styles.buttonDefault}
             accessible={true}
             accessibilityLabel="My Code"
@@ -72,6 +73,7 @@ export class NewConnectionScreen extends React.Component<Props, State> {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            testID="scanCodeBtn"
             style={!qr ? styles.buttonActive : styles.buttonDefault}
             accessible={true}
             accessibilityLabel="Scan Code"
