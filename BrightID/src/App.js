@@ -19,16 +19,9 @@ import Loading from './components/Helpers/LoadingScreen';
  * read docs here: https://reactnavigation.org/
  */
 
-const deepLinkTimeout = () =>
-  new Promise((resolve) =>
-    // Timeout in 150ms if `getInitialState` doesn't resolve
-    // Workaround for https://github.com/facebook/react-native/issues/25675
-    setTimeout(resolve, 150),
-  );
-
 export const App = () => {
   // setup deep linking
-  const { getInitialState } = useLinking(navigationRef, {
+  const linking = {
     prefixes: ['brightid://'],
     config: {
       Apps: {
@@ -37,24 +30,7 @@ export const App = () => {
         },
       },
     },
-  });
-
-  const [isReady, setIsReady] = React.useState(false);
-  const [initialState, setInitialState] = React.useState();
-
-  useEffect(() => {
-    Promise.race([getInitialState(), deepLinkTimeout()])
-      .catch((e) => {
-        console.log(e.message);
-        setIsReady(true);
-      })
-      .then((state) => {
-        if (state !== undefined) {
-          setInitialState(state);
-        }
-        setIsReady(true);
-      });
-  }, [getInitialState]);
+  };
 
   // bootstrap app
   useEffect(() => {
@@ -72,22 +48,19 @@ export const App = () => {
     <Provider store={store}>
       <PersistGate loading={<Loading />} persistor={persistor}>
         <SafeAreaProvider>
-          {isReady ? (
-            <NavigationContainer
-              style={styles.container}
-              ref={navigationRef}
-              initialState={initialState}
-            >
-              <StatusBar
-                barStyle="dark-content"
-                backgroundColor="#F52828"
-                translucent={false}
-              />
-              <AppRoutes />
-            </NavigationContainer>
-          ) : (
-            <Loading />
-          )}
+          <NavigationContainer
+            style={styles.container}
+            ref={navigationRef}
+            linking={linking}
+            fallback={<Loading />}
+          >
+            <StatusBar
+              barStyle="dark-content"
+              backgroundColor="#F52828"
+              translucent={false}
+            />
+            <AppRoutes />
+          </NavigationContainer>
         </SafeAreaProvider>
       </PersistGate>
     </Provider>
