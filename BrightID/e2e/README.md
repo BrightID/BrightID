@@ -36,7 +36,10 @@ into 'artifacts' directory.
 
 `--headless` -> starts emulator in headless mode. Useful for CI environments.
 
-`--device-name` -> manually set emulator name (default is 
+`--device-name` -> manually set emulator name 
+
+Pass arbitrary options to jest with `-- <jest options>`. E.g. 
+to run only the `home.spec.js` tests, pass option `-- home.spec`.
 
 #### Further reading
  - [How Detox Works](https://github.com/wix/Detox/blob/master/docs/Introduction.HowDetoxWorks.md)
