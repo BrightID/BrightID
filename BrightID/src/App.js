@@ -5,12 +5,13 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer, useLinking } from '@react-navigation/native';
-import { StatusBar, StyleSheet, View } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
 import { pollOperations } from './utils/operations';
 import AppRoutes from './routes';
 import { store, persistor } from './store';
 import { bootstrap } from './bootstrap';
 import { navigationRef } from './NavigationService';
+import Loading from './components/Helpers/LoadingScreen';
 
 /**
  * Central part of the application
@@ -60,6 +61,7 @@ export const App = () => {
     bootstrap();
     const timerId = setInterval(() => {
       pollOperations();
+      console.log('polling operations');
     }, 5000);
     return () => {
       clearInterval(timerId);
@@ -68,7 +70,7 @@ export const App = () => {
 
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
+      <PersistGate loading={<Loading />} persistor={persistor}>
         <SafeAreaProvider>
           {isReady ? (
             <NavigationContainer
@@ -84,7 +86,7 @@ export const App = () => {
               <AppRoutes />
             </NavigationContainer>
           ) : (
-            <View />
+            <Loading />
           )}
         </SafeAreaProvider>
       </PersistGate>

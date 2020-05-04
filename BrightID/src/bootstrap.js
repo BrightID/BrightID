@@ -16,6 +16,7 @@ export const bootstrap = async () => {
     // fetch user info
     if (!publicKey) {
       publicKey = store.getState().user.publicKey;
+      console.log('secondBootstrap', publicKey);
     }
 
     if (publicKey) store.dispatch(fetchUserInfo());
