@@ -96,6 +96,8 @@ class TrustedConnectionsScreen extends React.Component<Props> {
               data={connections}
               keyExtractor={({ id }, index) => id + index}
               renderItem={this.renderConnection}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
               ListEmptyComponent={<EmptyList title="No connections..." />}
             />
           </View>

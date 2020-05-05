@@ -146,6 +146,8 @@ export class MembersScreen extends Component<Props, State> {
               keyExtractor={({ id }, index) => id + index}
               renderItem={this.renderMember}
               contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
               ListEmptyComponent={
                 <EmptyList title="No known members, invite some..." />
               }

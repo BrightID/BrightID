@@ -60,6 +60,8 @@ export class InviteListScreen extends Component<Props, State> {
               data={this.getEligibles()}
               keyExtractor={({ id }, index) => id + index}
               renderItem={this.renderEligible}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
               ListEmptyComponent={
                 <EmptyList title="No existing connections are eligible for this group, please come back later.." />
               }

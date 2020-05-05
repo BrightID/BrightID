@@ -141,6 +141,8 @@ export class ConnectionsScreen extends React.Component<Props, State> {
                 keyExtractor={({ id }, index) => id + index}
                 renderItem={this.renderConnection}
                 contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
                 refreshControl={
                   <RefreshControl
                     refreshing={this.state.refreshing}

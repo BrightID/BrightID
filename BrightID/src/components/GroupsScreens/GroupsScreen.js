@@ -80,6 +80,8 @@ export class GroupsScreen extends React.Component<Props, State> {
                 data={groups}
                 keyExtractor={({ id }, index) => id + index}
                 renderItem={this.renderGroup}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
                 refreshControl={
                   <RefreshControl
                     refreshing={this.state.refreshing}

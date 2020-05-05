@@ -134,6 +134,8 @@ export class NewGroupScreen extends React.Component<Props> {
                 data={connections}
                 keyExtractor={({ id }, index) => id + index}
                 renderItem={this.renderConnection}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
               />
             ) : (
               <View>

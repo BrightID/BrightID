@@ -53,6 +53,8 @@ class NotificationsScreen extends React.Component<Props, State> {
           contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
           data={notificationData}
           keyExtractor={({ inviteId, msg }, index) => (inviteId || msg) + index}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}
