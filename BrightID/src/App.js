@@ -32,9 +32,7 @@ export const App = () => {
     },
   };
 
-  // bootstrap app
   useEffect(() => {
-    bootstrap();
     const timerId = setInterval(() => {
       pollOperations();
       console.log('polling operations');
@@ -46,7 +44,7 @@ export const App = () => {
 
   return (
     <Provider store={store}>
-      <PersistGate loading={<Loading />} persistor={persistor}>
+      <PersistGate loading={<Loading app={true} />} persistor={persistor}>
         <SafeAreaProvider>
           <NavigationContainer
             style={styles.container}

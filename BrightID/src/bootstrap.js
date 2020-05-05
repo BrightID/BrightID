@@ -4,6 +4,8 @@ import { resetOperations } from './actions';
 import fetchUserInfo from './actions/fetchUserInfo';
 import { store } from './store';
 
+// happens inside of the loading screen
+
 export const bootstrap = async () => {
   try {
     let {
