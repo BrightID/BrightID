@@ -82,6 +82,7 @@ class ConnectionCard extends React.PureComponent<Props> {
           </Text>
         </View>
         <TouchableOpacity
+          testID="flagConnectionBtn"
           style={styles.moreIcon}
           onPress={this.handleUserOptions}
         >

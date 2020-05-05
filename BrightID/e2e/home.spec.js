@@ -1,6 +1,6 @@
 /* global device:false, element:false, by:false */
 
-import { createBrightID } from './testUtils';
+import { createBrightID, expectHomescreen } from './testUtils';
 
 describe('Homescreen', () => {
   let mainUser = '';
@@ -12,11 +12,12 @@ describe('Homescreen', () => {
     // Reinstall app before starting tests to make sure all localStorage is cleared
     await device.launchApp({ delete: true });
 
-    // create identitiy and proceed to main screen
+    // create identity and proceed to main screen
     mainUser = await createBrightID();
   });
 
-  it('should show all elements', async () => {
+  it('should show home screen with all elements', async () => {
+    await expectHomescreen();
     await expect(element(by.id('PhotoContainer'))).toBeVisible();
     await expect(element(by.id('ScoreContainer'))).toBeVisible();
     await expect(element(by.id('ConnectionsCount'))).toBeVisible();

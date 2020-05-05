@@ -14,6 +14,7 @@ const connectionsScreenOptions = {
   headerRight: __DEV__
     ? () => (
         <TouchableOpacity
+          testID="createFakeConnectionBtn"
           style={{ marginRight: 11 }}
           onPress={createFakeConnection}
         >

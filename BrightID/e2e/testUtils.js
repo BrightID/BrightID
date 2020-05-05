@@ -25,4 +25,19 @@ const createBrightID = async (name = testUserName) => {
   return name;
 };
 
-export { testUserName, createBrightID };
+const createFakeConnection = async () => {
+  await element(by.id('createFakeConnectionBtn')).tap();
+  await element(by.text('SURE')).tap();
+  // With automatic sync this test fails intermittent, so use explicit waitFor...
+  await waitFor(element(by.id('previewConnectionScreen')))
+    .toBeVisible()
+    .withTimeout(2000);
+};
+
+const expectHomescreen = async () => {
+  await waitFor(element(by.id('homeScreen')))
+    .toBeVisible()
+    .withTimeout(2000);
+};
+
+export { testUserName, createBrightID, createFakeConnection, expectHomescreen };
