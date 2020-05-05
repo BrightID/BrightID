@@ -17,6 +17,7 @@ import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import GroupCard from './GroupCard';
 import { NoGroups } from './NoGroups';
 import SearchGroups from './SearchGroups';
+import { compareJoinedDesc } from './models/sortingUtility';
 
 /**
  * Group screen of BrightID
@@ -167,6 +168,9 @@ function mapStateToProps(state) {
       }
     });
   }
+
+  // sort groups by joined timestamp, newest first
+  groups.sort(compareJoinedDesc);
 
   return { groups, hasGroups };
 }
