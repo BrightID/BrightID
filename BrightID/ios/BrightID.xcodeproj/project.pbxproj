@@ -62,6 +62,7 @@
 		9287097547A89209ABEBF6B8 /* Pods-BrightID-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOSTests/Pods-BrightID-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		ADC769C2AAA211C5D8B8DF33 /* libPods-BrightID-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B44F817C919F64707D58914D /* Pods-BrightID-BrightIDTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-BrightIDTests.debug.xcconfig"; path = "Target Support Files/Pods-BrightID-BrightIDTests/Pods-BrightID-BrightIDTests.debug.xcconfig"; sourceTree = "<group>"; };
+		D747F5C024627AFC003B4728 /* BrightID.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BrightID.entitlements; path = BrightID/BrightID.entitlements; sourceTree = "<group>"; };
 		DA36631B7793A31EEE28A675 /* Pods-BrightID-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOS.release.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOS/Pods-BrightID-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		E2A03414F226104497C02056 /* Pods-BrightID-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOSTests/Pods-BrightID-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -125,6 +126,7 @@
 		13B07FAE1A68108700A75B9A /* BrightID */ = {
 			isa = PBXGroup;
 			children = (
+				D747F5C024627AFC003B4728 /* BrightID.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -291,6 +293,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = 8YXQK74X6B;
 						LastSwiftMigration = 1120;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -628,7 +631,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = BrightID/BrightID.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8YXQK74X6B;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -646,6 +651,7 @@
 				PRODUCT_NAME = BrightID;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -656,7 +662,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = BrightID/BrightID.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8YXQK74X6B;
 				INFOPLIST_FILE = BrightID/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 2.7.0;
@@ -668,6 +676,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.demo;
 				PRODUCT_NAME = BrightID;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
