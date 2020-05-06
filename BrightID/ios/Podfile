@@ -2,7 +2,7 @@ platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 def add_flipper_pods!(versions = {})
-  versions['Flipper'] ||= '~> 0.37.0'
+  versions['Flipper'] ||= '~> 0.33.1'
   versions['DoubleConversion'] ||= '1.1.7'
   versions['Flipper-Folly'] ||= '~> 2.1'
   versions['Flipper-Glog'] ||= '0.3.6'
@@ -43,7 +43,6 @@ def flipper_post_install(installer)
     end
   end
 end
-
 
 target 'BrightID' do
   # Pods for BrightID
@@ -102,5 +101,4 @@ target 'BrightID-tvOS' do
     inherit! :search_paths
     # Pods for testing
   end
-
 end
