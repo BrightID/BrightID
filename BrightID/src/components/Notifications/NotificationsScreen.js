@@ -5,20 +5,15 @@ import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import { INVITE_ACTIVE } from '@/utils/constants';
 import fetchUserInfo from '@/actions/fetchUserInfo';
+import EmptyList from '@/components/Helpers/EmptyList';
 import NotificationCard from './NotificationCard';
 import InviteCard from './InviteCard';
-import EmptyNotifications from './EmptyNotifications';
 
 type State = {
   refreshing: boolean,
 };
 
 class NotificationsScreen extends React.Component<Props, State> {
-  static navigationOptions = () => ({
-    title: 'Notifications',
-    headerBackTitleVisible: false,
-  });
-
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -28,7 +23,7 @@ class NotificationsScreen extends React.Component<Props, State> {
 
   componentDidMount() {
     const { navigation, dispatch } = this.props;
-    navigation.addListener('willFocus', () => {
+    navigation.addListener('focus', () => {
       dispatch(fetchUserInfo());
     });
   }
@@ -52,15 +47,24 @@ class NotificationsScreen extends React.Component<Props, State> {
       : [];
     const notificationData = notifications.concat(activeInvites);
 
-    return notificationData.length > 0 ? (
+    return (
       <View style={styles.container}>
         <FlatList
+          contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
           data={notificationData}
           keyExtractor={({ inviteId, msg }, index) => (inviteId || msg) + index}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}
               onRefresh={this.onRefresh}
+            />
+          }
+          ListEmptyComponent={
+            <EmptyList
+              title="Nothing here, come back later.."
+              iconType="bell-off-outline"
             />
           }
           renderItem={({ item }) =>
@@ -76,8 +80,6 @@ class NotificationsScreen extends React.Component<Props, State> {
           }
         />
       </View>
-    ) : (
-      <EmptyNotifications />
     );
   }
 }
@@ -85,9 +87,7 @@ class NotificationsScreen extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    backgroundColor: '#fdfdfd',
   },
 });
 

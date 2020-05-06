@@ -9,9 +9,6 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { connect } from 'react-redux';
-import Simple from 'react-native-vector-icons/SimpleLineIcons';
-import { DEVICE_TYPE } from '@/utils/constants';
-import { shareConnection } from './actions/shareConnection';
 import MyCodeScreen from './MyCodeScreen';
 import ScanCodeScreen from './ScanCodeScreen';
 
@@ -31,16 +28,6 @@ type State = {
 };
 
 export class NewConnectionScreen extends React.Component<Props, State> {
-  static navigationOptions = () => ({
-    title: 'New Connection',
-    headerRight: () => (
-      <TouchableOpacity style={{ marginRight: 11 }} onPress={shareConnection}>
-        <Simple name="share-alt" size={25} color="#fff" />
-      </TouchableOpacity>
-    ),
-    headerShown: DEVICE_TYPE === 'large',
-  });
-
   // eslint-disable-next-line react/state-in-constructor
   state = {
     display: 'qrcode',

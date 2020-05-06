@@ -19,14 +19,6 @@ import { DEVICE_TYPE, DEVICE_OS } from '@/utils/constants';
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
 export class GroupInfoScreen extends React.Component<Props> {
-  static navigationOptions = {
-    title: 'New Group',
-    headerStyle: {
-      backgroundColor: '#f48b1e',
-    },
-    // headerShown: DEVICE_TYPE === 'large',
-  };
-
   // eslint-disable-next-line react/state-in-constructor
   state = {
     name: '',
@@ -214,6 +206,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '300',
     fontStyle: 'normal',
+    color: '#000',
     letterSpacing: 0,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#9e9e9e',

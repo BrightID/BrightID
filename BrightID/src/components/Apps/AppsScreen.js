@@ -4,8 +4,8 @@ import * as React from 'react';
 import { Linking, StyleSheet, View, FlatList, Text } from 'react-native';
 import { connect } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
+import EmptyList from '@/components/Helpers/EmptyList';
 import AppCard from './AppCard';
-import EmptyApps from './EmptyApps';
 import { handleAppContext, deleteApp } from './model';
 
 let deleteSheetRef = '';
@@ -15,11 +15,6 @@ type State = {
 };
 
 export class AppsScreen extends React.Component<Prop, State> {
-  static navigationOptions = () => ({
-    title: 'Apps',
-    headerRight: () => <View />,
-  });
-
   deleteSheetRef: string;
 
   constructor(props: Props) {
@@ -31,20 +26,27 @@ export class AppsScreen extends React.Component<Prop, State> {
 
   componentDidMount() {
     const { navigation } = this.props;
-    navigation.addListener('willFocus', async () => {
+    navigation.addListener('focus', async () => {
       this.handleDeepLink();
       Linking.addEventListener('url', this.handleDeepLink);
     });
-    navigation.addListener('willBlur', async () => {
+    navigation.addListener('blur', async () => {
       Linking.removeEventListener('url', this.handleDeepLink);
     });
   }
 
-  handleDeepLink = (e) => {
-    const { navigation } = this.props;
-    if (navigation.state.params?.context) {
-      handleAppContext(navigation.state.params);
+  handleDeepLink = () => {
+    const { route, navigation } = this.props;
+    console.log('params', route.params);
+    if (route.params?.context) {
+      handleAppContext(route.params);
     }
+    // reset params
+    navigation.setParams({
+      baseUrl: '',
+      context: '',
+      contextId: '',
+    });
   };
 
   handleAction = (selectedApp: string) => () => {
@@ -54,8 +56,8 @@ export class AppsScreen extends React.Component<Prop, State> {
   };
 
   sponsorLabel = () => {
-    const { isSponsored } = this.props;
-    if (!isSponsored) {
+    const { isSponsored, apps } = this.props;
+    if (!isSponsored && apps.length > 0) {
       return (
         <View style={styles.sponsorContainer}>
           <Text style={styles.sponsorMessage}>
@@ -71,16 +73,19 @@ export class AppsScreen extends React.Component<Prop, State> {
   render() {
     const { apps } = this.props;
     const { selectedApp } = this.state;
-    return apps.length > 0 ? (
+    return (
       <View style={styles.container}>
         <this.sponsorLabel />
         <FlatList
-          style={styles.AppsList}
-          data={this.props.apps}
+          data={apps}
+          contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
           keyExtractor={({ name }, index) => name + index}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <AppCard {...item} handleAction={this.handleAction} />
           )}
+          ListEmptyComponent={<EmptyList title="No Apps" iconType="flask" />}
         />
         <ActionSheet
           ref={(o) => {
@@ -96,8 +101,6 @@ export class AppsScreen extends React.Component<Prop, State> {
           }}
         />
       </View>
-    ) : (
-      <EmptyApps />
     );
   }
 }
@@ -106,9 +109,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fdfdfd',
+    height: '100%',
   },
-  AppsList: {
-    flex: 1,
+  centerItem: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   sponsorContainer: {
     flexDirection: 'row',

@@ -7,6 +7,7 @@ import {
   SET_NEW_GROUP_CO_FOUNDERS,
   CLEAR_NEW_GROUP_CO_FOUNDERS,
   SET_GROUPS,
+  SET_GROUP_SEARCH,
   SET_INVITES,
   ACCEPT_INVITE,
   REJECT_INVITE,
@@ -17,47 +18,27 @@ import {
 } from '@/actions';
 import { INVITE_ACCEPTED, INVITE_REJECTED } from '@/utils/constants';
 
-/* ******** HELPERS ****************** */
-
-const byPrimaryGroup = (a, b) => {
-  if (a.type === 'primary') {
-    return -1;
-  } else if (b.type === 'primary') {
-    return 1;
-  } else {
-    return 0;
-  }
-};
-
-const byIsNew = (a, b) => {
-  if (a.isNew && b.isNew) {
-    return 0;
-  } else if (a.isNew) {
-    return 1;
-  } else if (b.isNew) {
-    return -1;
-  } else {
-    return 0;
-  }
-};
-
 /* ******** INITIAL STATE ************** */
 
 export const initialState = {
   newGroupCoFounders: [],
   groups: [],
   invites: [],
+  searchParam: '',
 };
 
 /* ******** REDUCER ****************** */
 
 export const reducer = (state: GroupsState = initialState, action: action) => {
   switch (action.type) {
+    case SET_GROUP_SEARCH: {
+      return {
+        ...state,
+        searchParam: action.searchParam,
+      };
+    }
     case CREATE_GROUP: {
-      const groups: group[] = state.groups
-        .concat(action.group)
-        .sort(byPrimaryGroup)
-        .sort(byIsNew);
+      const groups: group[] = state.groups.concat(action.group);
       return {
         ...state,
         groups,
@@ -95,10 +76,7 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
         return group;
       };
 
-      const groups = action.groups
-        .map(mergeWithOld)
-        .sort(byPrimaryGroup)
-        .sort(byIsNew);
+      const groups = action.groups.map(mergeWithOld);
       return {
         ...state,
         groups,
@@ -137,10 +115,7 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
         action.group.isNew = false;
       }
 
-      const groups: group[] = state.groups
-        .concat(action.group)
-        .sort(byPrimaryGroup)
-        .sort(byIsNew);
+      const groups: group[] = state.groups.concat(action.group);
 
       return {
         ...state,

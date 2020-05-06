@@ -19,7 +19,7 @@ import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import emitter from '@/emitter';
 import { removeConnectQrData } from '@/actions';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/constants';
 import { genQrData } from './actions/genQrData';
 import { fetchData } from './actions/fetchData';
 import { encryptAndUploadLocalData } from './actions/encryptData';
@@ -35,6 +35,7 @@ import { encryptAndUploadLocalData } from './actions/encryptData';
 
 type State = {
   copied: boolean,
+  timer: number,
   qrsvg:
     | string
     | {
@@ -47,19 +48,32 @@ type State = {
 };
 
 const COPIED_TIMEOUT = 500;
+const QR_TTL = 900000;
 
 export class MyCodeScreen extends React.Component<Props, State> {
   connectionExpired: TimeoutID;
 
-  state = {
-    qrsvg: '',
-    copied: false,
-  };
+  fetchProfileData: IntervalID;
+
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      qrsvg: '',
+      copied: false,
+      timer: QR_TTL,
+    };
+  }
 
   componentDidMount() {
-    // After 2 minutes, connection attempts expire on the server.
-    //  Let users start the connection over after one minute so there will be
-    //  time for the other user to connect.
+    this.initiateQrCodeGen();
+  }
+
+  componentWillUnmount() {
+    this.resetQrCode();
+  }
+
+  initiateQrCodeGen = () => {
+    // After 15 minutes, connection attempts expire on the server.
     const { dispatch } = this.props;
     this.subscribeToProfileUpload();
     emitter.on('connectDataReady', this.navigateToPreview);
@@ -69,21 +83,33 @@ export class MyCodeScreen extends React.Component<Props, State> {
       this.genQrCode();
       dispatch(encryptAndUploadLocalData());
     });
-  }
+  };
 
-  componentWillUnmount() {
+  resetQrCode = () => {
     const { dispatch } = this.props;
     this.unsubscribeToProfileUpload();
     emitter.off('connectDataReady', this.navigateToPreview);
     emitter.off('recievedProfileData', this.unsubscribeToProfileUpload);
     dispatch(removeConnectQrData());
-  }
+    this.setState({ qrsvg: '', timer: QR_TTL });
+  };
+
+  timerTick = () => {
+    this.setState((prevState) => ({
+      timer: prevState.timer - 1000,
+    }));
+  };
 
   subscribeToProfileUpload = () => {
     const { dispatch } = this.props;
-    this.connectionExpired = setTimeout(this.navigateToHome, 60000);
+    this.connectionExpired = setTimeout(this.navigateToHome, QR_TTL);
     this.fetchProfileData = setInterval(() => {
       dispatch(fetchData());
+      this.timerTick();
+      if (this.state.timer < 60000) {
+        this.resetQrCode();
+        this.initiateQrCodeGen();
+      }
     }, 1000);
   };
 
@@ -98,6 +124,16 @@ export class MyCodeScreen extends React.Component<Props, State> {
 
   navigateToHome = () => {
     this.props.navigation.navigate('Home');
+  };
+
+  displayTime = () => {
+    const { timer } = this.state;
+    const minutes = Math.floor(timer / 60000);
+    let seconds = Math.trunc((timer % 60000) / 1000);
+    if (seconds < 10) {
+      seconds = `0${seconds}`;
+    }
+    return `${minutes}:${seconds}`;
   };
 
   genQrCode = () => {
@@ -151,11 +187,18 @@ export class MyCodeScreen extends React.Component<Props, State> {
     </View>
   );
 
+  renderTimer = () => (
+    <View style={styles.timerContainer}>
+      <Text style={styles.timerTextLeft}>Expires in: </Text>
+      <Text style={styles.timerTextRight}>{this.displayTime()}</Text>
+    </View>
+  );
+
   renderQrCode = () => (
     <View style={[styles.qrsvgContainer]}>
       <Svg
-        height="212"
-        width="212"
+        height={DEVICE_LARGE ? '212' : '180'}
+        width={DEVICE_LARGE ? '212' : '180'}
         xmlns="http://www.w3.org/2000/svg"
         viewBox={path(['svg', '$', 'viewBox'], this.state.qrsvg)}
         shape-rendering="crispEdges"
@@ -199,10 +242,11 @@ export class MyCodeScreen extends React.Component<Props, State> {
               accessible={true}
               accessibilityLabel="user photo"
             />
-            {DEVICE_TYPE === 'large' && <Text style={styles.name}>{name}</Text>}
+            {DEVICE_LARGE && <Text style={styles.name}>{name}</Text>}
           </View>
         </View>
         <View style={styles.bottomHalf}>
+          {qrsvg ? this.renderTimer() : <View />}
           {qrsvg ? this.renderQrCode() : this.renderSpinner()}
           {qrsvg ? this.renderCopyQr() : <View />}
         </View>
@@ -289,6 +333,17 @@ const styles = StyleSheet.create({
   copyText: {
     color: '#333',
     fontFamily: 'ApexNew-Book',
+  },
+  timerContainer: {
+    flexDirection: 'row',
+  },
+  timerTextLeft: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: DEVICE_LARGE ? 16 : 14,
+  },
+  timerTextRight: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: DEVICE_LARGE ? 16 : 14,
   },
 });
 

@@ -45,14 +45,14 @@ export const handleAppContext = async (params: Params) => {
           text: 'No',
           style: 'cancel',
           onPress: () => {
-            navigate('Home');
+            navigate('Home', { screen: 'Home' });
           },
         },
       ],
     );
   } else {
     Alert.alert('Failed', `Unable to link ${context} with BrightID`);
-    navigate('Home');
+    navigate('Home', { screen: 'Home' });
   }
 };
 
@@ -69,7 +69,7 @@ const linkApp = async (baseUrl, context, contextInfo, contextId) => {
         'Success',
         `Succesfully sent the request to link ${context} with BrightID`,
       );
-      navigate('Home');
+      navigate('Home', { screen: 'Home' });
     }
   } catch (e) {
     Alert.alert(`App linking failed`, `${e.message}`, [
@@ -105,8 +105,8 @@ const saveApp = async (name: string, contextInfo: ContextInfo) => {
       logoFile,
       dateAdded: Date.now(),
       state: 'initiated',
-      contextId: (app) ? app.contextId : null,
-      linked: (app) ? app.linked : false
+      contextId: app ? app.contextId : null,
+      linked: app ? app.linked : false,
     };
     return store.dispatch(addApp(appInfo));
   } catch (e) {

@@ -56,6 +56,7 @@ export {
   JOIN_GROUP,
   LEAVE_GROUP,
   DISMISS_FROM_GROUP,
+  SET_GROUP_SEARCH,
   createGroup,
   deleteGroup,
   setNewGroupCoFounders,

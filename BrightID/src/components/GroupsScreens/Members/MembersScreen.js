@@ -1,73 +1,15 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  View,
-  Alert,
-  FlatList,
-  TouchableOpacity,
-  SafeAreaView,
-  Image,
-} from 'react-native';
+import { StyleSheet, View, Alert, FlatList, SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import RNFS from 'react-native-fs';
 import ActionSheet from 'react-native-actionsheet';
 import { innerJoin } from 'ramda';
-import { getGroupName } from '@/utils/groups';
-import { DEVICE_TYPE } from '@/utils/constants';
 import api from '@/Api/BrightId';
 import emitter from '@/emitter';
 import { leaveGroup, dismissFromGroup } from '@/actions';
+import EmptyList from '@/components/Helpers/EmptyList';
 import MemberCard from './MemberCard';
 
 export class MembersScreen extends Component<Props, State> {
-  static navigationOptions = ({ navigation }) => {
-    const { group } = navigation.state.params;
-    return {
-      title: getGroupName(group),
-      headerTitleStyle: {
-        fontSize: DEVICE_TYPE === 'large' ? 20 : 18,
-        paddingLeft: 20,
-        paddingRight: 30,
-      },
-      headerBackTitleVisible: false,
-      headerRight: () => (
-        <TouchableOpacity
-          style={{ marginRight: 11 }}
-          onPress={() => {
-            emitter.emit('optionsSelected');
-          }}
-        >
-          <Material name="dots-horizontal" size={32} color="#fff" />
-        </TouchableOpacity>
-      ),
-      // headerLeft: () => {
-      //   const { group } = navigation.state.params;
-      //   return (
-      //     <View style={{ flexDirection: 'row' }}>
-      //       <Material
-      //         style={styles.backStyle}
-      //         name="arrow-left"
-      //         size={24}
-      //         color="#fff"
-      //         onPress={() => {
-      //           navigation.goBack();
-      //         }}
-      //       />
-      //       {/* {group.photo?.filename ? (
-      //         <Image
-      //           source={{
-      //             uri: `file://${RNFS.DocumentDirectoryPath}/photos/${group.photo.filename}`,
-      //           }}
-      //           style={styles.headerPhoto}
-      //         />
-      //       ) : null} */}
-      //     </View>
-      //   );
-      // },
-    };
-  };
-
   componentDidMount() {
     emitter.on('optionsSelected', this.showOptionsMenu);
   }
@@ -86,9 +28,9 @@ export class MembersScreen extends Component<Props, State> {
     if (action === 'Leave Group') {
       this.confirmLeaveGroup();
     } else if (action === 'Invite') {
-      const { navigation } = this.props;
+      const { navigation, route } = this.props;
       navigation.navigate('InviteList', {
-        group: navigation.state.params.group,
+        group: route.params?.group,
       });
     }
   };
@@ -102,10 +44,10 @@ export class MembersScreen extends Component<Props, State> {
       {
         text: 'OK',
         onPress: async () => {
-          const { navigation, dispatch } = this.props;
-          const { group } = navigation.state.params;
+          const { route, dispatch } = this.props;
+          const group = route.params?.group;
           try {
-            await api.dismiss(user.id, group.id);
+            await api.dismiss(user.id, group?.id);
             await dispatch(dismissFromGroup(user.id, group));
           } catch (err) {
             Alert.alert('Error dismissing member from the group', err.message);
@@ -132,10 +74,10 @@ export class MembersScreen extends Component<Props, State> {
       {
         text: 'OK',
         onPress: async () => {
-          const { navigation, dispatch } = this.props;
-          const { group } = navigation.state.params;
+          const { route, navigation, dispatch } = this.props;
+          const group = route.params?.group;
           try {
-            await api.leaveGroup(group.id);
+            await api.leaveGroup(group?.id);
             await dispatch(leaveGroup(group));
             navigation.goBack();
           } catch (err) {
@@ -166,31 +108,31 @@ export class MembersScreen extends Component<Props, State> {
   };
 
   renderMember = ({ item }) => {
-    const { group } = this.props.navigation.state.params;
-    const isAdmin = group.admins?.includes(this.props.id);
-    const isItemAdmin = group.admins?.includes(item.id);
+    const group = this.props.route.params?.group;
+    const isAdmin = group?.admins?.includes(this.props.id);
+    const isItemAdmin = group?.admins?.includes(item.id);
     const handler = isAdmin && !isItemAdmin ? this.confirmDismiss : null;
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <MemberCard {...item} isAdmin={isAdmin} menuHandler={handler} />;
   };
 
   getMembers = () => {
-    const { navigation, connections, name, id, photo, score } = this.props;
+    const { route, connections, name, id, photo, score } = this.props;
     // return a list of connections filtered by the members of this group
     return [{ id, name, photo, score }].concat(
       innerJoin(
         (connection, member) => connection.id === member,
         connections,
-        navigation.state.params.group.members,
+        route.params?.group?.members,
       ),
     );
   };
 
   render() {
     const { id } = this.props;
-    const { group } = this.props.navigation.state.params;
+    const group = this.props.route.params?.group;
     let actions = ['Leave Group', 'cancel'];
-    if (group.admins?.includes(id)) {
+    if (group?.admins?.includes(id)) {
       actions = ['Invite'].concat(actions);
     }
 
@@ -203,7 +145,12 @@ export class MembersScreen extends Component<Props, State> {
               data={this.filterMembers()}
               keyExtractor={({ id }, index) => id + index}
               renderItem={this.renderMember}
-              contentContainerStyle={{ paddingBottom: 50 }}
+              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+              ListEmptyComponent={
+                <EmptyList title="No known members, invite some..." />
+              }
             />
           </View>
         </View>

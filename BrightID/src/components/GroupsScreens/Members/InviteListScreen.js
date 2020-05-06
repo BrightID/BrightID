@@ -9,14 +9,10 @@ import {
 import { connect } from 'react-redux';
 import api from '@/Api/BrightId';
 import { encryptAesKey } from '@/utils/invites';
+import EmptyList from '@/components/Helpers/EmptyList';
 import MemberCard from './MemberCard';
 
 export class InviteListScreen extends Component<Props, State> {
-  static navigationOptions = () => ({
-    title: 'Invite List',
-    headerBackTitleVisible: false,
-  });
-
   renderEligible = ({ item }) => {
     return (
       <TouchableOpacity onPress={() => this.inviteToGroup(item)}>
@@ -26,12 +22,12 @@ export class InviteListScreen extends Component<Props, State> {
   };
 
   inviteToGroup = async (connection) => {
-    const { navigation } = this.props;
-    const { group } = navigation.state.params;
+    const { navigation, route } = this.props;
+    const group = route.params?.group;
 
     try {
-      const data = await encryptAesKey(group.aesKey, connection.signingKey);
-      await api.invite(connection.id, group.id, data);
+      const data = await encryptAesKey(group?.aesKey, connection.signingKey);
+      await api.invite(connection.id, group?.id, data);
       Alert.alert(
         'Successful Invitaion',
         `You invited ${connection.name} successfully to the group`,
@@ -43,13 +39,13 @@ export class InviteListScreen extends Component<Props, State> {
   };
 
   getEligibles = () => {
-    const { connections, navigation } = this.props;
-    const { group } = navigation.state.params;
+    const { connections, route } = this.props;
+    const group = route.params?.group;
     return connections.filter(
       (item) =>
-        !group.members?.includes(item.id) &&
-        item.eligible_groups?.includes(group.id) &&
-        (group.type !== 'primary' || !item.hasPrimaryGroup),
+        !group?.members?.includes(item.id) &&
+        item.eligible_groups?.includes(group?.id) &&
+        (group?.type !== 'primary' || !item.hasPrimaryGroup),
     );
   };
 
@@ -60,9 +56,15 @@ export class InviteListScreen extends Component<Props, State> {
           <View style={styles.mainContainer}>
             <FlatList
               style={styles.eligiblesContainer}
+              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
               data={this.getEligibles()}
               keyExtractor={({ id }, index) => id + index}
               renderItem={this.renderEligible}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+              ListEmptyComponent={
+                <EmptyList title="No existing connections are eligible for this group, please come back later.." />
+              }
             />
           </View>
         </View>

@@ -22,11 +22,6 @@ import SearchConnections from './SearchConnections';
 // };
 
 export class NewGroupScreen extends React.Component<Props> {
-  static navigationOptions = ({ navigation }) => ({
-    title: 'New Group',
-    headerShown: DEVICE_TYPE === 'large',
-  });
-
   constructor(props) {
     super(props);
     this.state = {
@@ -37,10 +32,10 @@ export class NewGroupScreen extends React.Component<Props> {
 
   componentDidMount() {
     const { navigation, dispatch } = this.props;
-    navigation.addListener('willFocus', () => {
+    navigation.addListener('focus', () => {
       emitter.on('creatingGroupChannel', this.updateCreationState);
     });
-    navigation.addListener('willBlur', () => {
+    navigation.addListener('blur', () => {
       dispatch(clearNewGroupCoFounders());
       emitter.off('creatingGroupChannel', this.updateCreationState);
     });
@@ -70,8 +65,8 @@ export class NewGroupScreen extends React.Component<Props> {
   createGroup = async () => {
     try {
       this.setState({ creating: true });
-      const { navigation } = this.props;
-      const { photo, name, isPrimary } = navigation.state.params;
+      const { route, navigation } = this.props;
+      const { photo, name, isPrimary } = route.params;
       const type = isPrimary ? 'primary' : 'general';
       const res = await store.dispatch(createNewGroup(photo, name, type));
       if (res) {
@@ -139,6 +134,8 @@ export class NewGroupScreen extends React.Component<Props> {
                 data={connections}
                 keyExtractor={({ id }, index) => id + index}
                 renderItem={this.renderConnection}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
               />
             ) : (
               <View>

@@ -1,13 +1,17 @@
 // @flow
 
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { StatusBar, StyleSheet, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer, useLinking } from '@react-navigation/native';
+import { StatusBar, StyleSheet } from 'react-native';
 import { pollOperations } from './utils/operations';
-import AppRoutes from './AppRoutes';
+import AppRoutes from './routes';
 import { store, persistor } from './store';
-import BottomNav from './BottomNav';
+import { bootstrap } from './bootstrap';
+import { navigationRef } from './NavigationService';
+import Loading from './components/Helpers/LoadingScreen';
 
 /**
  * Central part of the application
@@ -15,39 +19,51 @@ import BottomNav from './BottomNav';
  * read docs here: https://reactnavigation.org/
  */
 
-type Props = {};
+export const App = () => {
+  // setup deep linking
+  const linking = {
+    prefixes: ['brightid://'],
+    config: {
+      Apps: {
+        screens: {
+          Apps: 'link-verification/:baseUrl/:context/:contextId',
+        },
+      },
+    },
+  };
 
-export default class App extends React.Component<Props> {
-  timerId: IntervalID;
-
-  componentDidMount() {
-    this.timerId = setInterval(() => {
+  useEffect(() => {
+    const timerId = setInterval(() => {
       pollOperations();
+      console.log('polling operations');
     }, 5000);
-  }
+    return () => {
+      clearInterval(timerId);
+    };
+  }, []);
 
-  componentWillUnmount() {
-    clearInterval(this.timerId);
-  }
-
-  render() {
-    return (
-      <Provider store={store}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#F52828"
-          translucent={false}
-        />
-        <PersistGate loading={null} persistor={persistor}>
-          <View style={styles.container}>
+  return (
+    <Provider store={store}>
+      <PersistGate loading={<Loading app={true} />} persistor={persistor}>
+        <SafeAreaProvider>
+          <NavigationContainer
+            style={styles.container}
+            ref={navigationRef}
+            linking={linking}
+            fallback={<Loading />}
+          >
+            <StatusBar
+              barStyle="dark-content"
+              backgroundColor="#F52828"
+              translucent={false}
+            />
             <AppRoutes />
-            <BottomNav />
-          </View>
-        </PersistGate>
-      </Provider>
-    );
-  }
-}
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </PersistGate>
+    </Provider>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -56,3 +72,5 @@ const styles = StyleSheet.create({
     height: '100%',
   },
 });
+
+export default App;

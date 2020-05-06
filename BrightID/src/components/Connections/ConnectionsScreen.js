@@ -4,21 +4,19 @@ import * as React from 'react';
 import {
   StyleSheet,
   View,
-  Text,
-  TouchableOpacity,
   Alert,
   SafeAreaView,
   FlatList,
+  RefreshControl,
 } from 'react-native';
 import { connect } from 'react-redux';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionSheet from 'react-native-actionsheet';
 import fetchUserInfo from '@/actions/fetchUserInfo';
-import { DEVICE_TYPE } from '@/utils/constants';
+import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
+import EmptyList from '@/components/Helpers/EmptyList';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
 import { createFakeConnection } from './models/createFakeConnection';
-import FloatingActionButton from '../FloatingActionButton';
 import { defaultSort } from './models/sortingUtility';
 import { performAction } from './models/modifyConnections';
 
@@ -27,34 +25,44 @@ import { performAction } from './models/modifyConnections';
  * Displays a search input and list of Connection Cards
  */
 
-export class ConnectionsScreen extends React.Component<Props> {
-  static navigationOptions = ({ navigation }: { navigation: navigation }) => ({
-    title: 'Connections',
-    headerRight: __DEV__ ? () => (
-      <TouchableOpacity
-        style={{ marginRight: 11 }}
-        onPress={createFakeConnection(navigation)}
-      >
-        <Material name="dots-horizontal" size={32} color="#fff" />
-      </TouchableOpacity>
-    ): () => null,
-    headerShown: DEVICE_TYPE === 'large',
-  });
+type State = {
+  refreshing: boolean,
+};
+
+export class ConnectionsScreen extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      refreshing: false,
+    };
+  }
 
   componentDidMount() {
     const { navigation, dispatch } = this.props;
-    navigation.addListener('willFocus', () => {
+    navigation.addListener('focus', () => {
       dispatch(defaultSort());
       dispatch(fetchUserInfo());
     });
   }
 
+  onRefresh = async () => {
+    try {
+      const { dispatch } = this.props;
+      this.setState({ refreshing: true });
+      await dispatch(fetchUserInfo());
+      this.setState({ refreshing: false });
+    } catch (err) {
+      console.log(err.message);
+      this.setState({ refreshing: false });
+    }
+  };
+
   handleNewConnection = () => {
     const { navigation } = this.props;
     if (__DEV__) {
-      createFakeConnection(navigation)();
+      createFakeConnection();
     } else {
-      navigation.navigate('NewConnection');
+      navigation.navigate('Home', { screen: 'NewConnection' });
     }
   };
 
@@ -127,19 +135,27 @@ export class ConnectionsScreen extends React.Component<Props> {
           <View style={styles.mainContainer}>
             <SearchConnections navigation={navigation} sortable={true} />
             <View style={styles.mainContainer}>
-              {connections.length > 0 ? (
-                <FlatList
-                  style={styles.connectionsContainer}
-                  data={connections}
-                  keyExtractor={({ id }, index) => id + index}
-                  renderItem={this.renderConnection}
-                  contentContainerStyle={{ paddingBottom: 50 }}
-                />
-              ) : (
-                <View>
-                  <Text style={styles.emptyText}>No connections</Text>
-                </View>
-              )}
+              <FlatList
+                style={styles.connectionsContainer}
+                data={connections}
+                keyExtractor={({ id }, index) => id + index}
+                renderItem={this.renderConnection}
+                contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={this.state.refreshing}
+                    onRefresh={this.onRefresh}
+                  />
+                }
+                ListEmptyComponent={
+                  <EmptyList
+                    iconType="account-off-outline"
+                    title="No connections"
+                  />
+                }
+              />
             </View>
           </View>
           <FloatingActionButton onPress={this.handleNewConnection} />

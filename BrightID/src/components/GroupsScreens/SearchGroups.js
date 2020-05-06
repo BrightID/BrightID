@@ -3,55 +3,53 @@
 import * as React from 'react';
 import { TextInput, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
-import Ionicon from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
-import { setSearchParam } from '@/actions';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { setGroupSearch } from '../../actions/groups';
 
 /**
- * Search Bar in the Connections Screen
- * TODO: Add functionality for the Ionicons
- * TODO: add search filter in redux actions
+ * Search Bar in the Groups Screen
+ *
+ * TODO: Create a shared search component to use in both Connections and Group view
  */
 
 type LocalProps = {
-  sortable: boolean,
+  navigation: Navigation,
 };
 
-class SearchConnections extends React.Component<Props & LocalProps> {
+class SearchGroups extends React.Component<Props & LocalProps> {
   componentWillUnmount() {
     // reset search Param
     const { dispatch } = this.props;
-    dispatch(setSearchParam(''));
+    dispatch(setGroupSearch(''));
   }
 
   render() {
-    const { sortable } = this.props;
+    const { searchParam } = this.props;
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.searchIcon}>
           <Octicons size={26} name="search" color="#333" />
         </TouchableOpacity>
         <TextInput
-          onChangeText={(value) => this.props.dispatch(setSearchParam(value))}
+          onChangeText={(value) => this.props.dispatch(setGroupSearch(value))}
           style={styles.searchField}
-          placeholder="Search Connections"
+          placeholder="Search by group or member name"
           autoCapitalize="words"
           autoCorrect={false}
           textContentType="name"
           underlineColorAndroid="transparent"
           placeholderTextColor="#aaa"
+          value={searchParam}
         />
-        {sortable && (
-          <TouchableOpacity
-            onPress={() => {
-              const { navigation } = this.props;
-              navigation.navigate('SortingConnections');
-            }}
-            style={styles.optionsIcon}
-          >
-            <Ionicon size={30} name="ios-options" color="#333" />
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity
+          onPress={() => {
+            this.props.dispatch(setGroupSearch(''));
+          }}
+          style={styles.eraserIcon}
+        >
+          <MaterialCommunityIcons size={30} name="eraser" color="#333" />
+        </TouchableOpacity>
       </View>
     );
   }
@@ -73,7 +71,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
     marginTop: 5,
   },
-  optionsIcon: {
+  eraserIcon: {
     marginLeft: 10,
     marginRight: 8.8,
     marginTop: 5,
@@ -87,7 +85,13 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
+    padding: 0,
   },
 });
 
-export default connect()(SearchConnections);
+function mapStateToProps(state) {
+  const { searchParam } = state.groups;
+  return { searchParam };
+}
+
+export default connect(mapStateToProps)(SearchGroups);
