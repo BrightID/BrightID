@@ -318,12 +318,12 @@ PODS:
     - React
   - RNGestureHandler (1.6.1):
     - React
-  - RNImageCropPicker (0.28.0):
+  - RNImageCropPicker (0.30.0):
     - React-Core
     - React-RCTImage
-    - RNImageCropPicker/QBImagePickerController (= 0.28.0)
+    - RNImageCropPicker/QBImagePickerController (= 0.30.0)
     - RSKImageCropper
-  - RNImageCropPicker/QBImagePickerController (0.28.0):
+  - RNImageCropPicker/QBImagePickerController (0.30.0):
     - React-Core
     - React-RCTImage
     - RSKImageCropper
@@ -331,7 +331,7 @@ PODS:
     - React
   - RNScreens (2.7.0):
     - React
-  - RNSVG (11.0.1):
+  - RNSVG (12.1.0):
     - React
   - RNVectorIcons (6.6.0):
     - React
@@ -548,10 +548,10 @@ SPEC CHECKSUMS:
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
-  RNImageCropPicker: cf129d17e042ce3e96fb9ada967c28f21f977c82
+  RNImageCropPicker: a606d65f71c6c05caa3c850c16fb1ba2a4718608
   RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
   RNScreens: cf198f915f8a2bf163de94ca9f5bfc8d326c3706
-  RNSVG: 67f1f12dae2cef6ed59a42cae74a6b8f5a9e7b46
+  RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   RSKImageCropper: a446db0e8444a036b34f3c43db01b2373baa4b2a
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
