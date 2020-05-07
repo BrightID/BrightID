@@ -128,8 +128,17 @@
         "device": {
           "avdName": "Pixel_2_XL_API_28"
         }
+      },
+      "ios.sim.debug": {
+        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/BrightID.app",
+        "build": "xcodebuild -workspace ios/BrightID.xcworkspace -scheme BrightID -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
+        "type": "ios.simulator",
+        "device": {
+          "type": "iPhone 11 Pro Max"
+        }
       }
     },
+   
     "test-runner": "jest"
   }
 }
