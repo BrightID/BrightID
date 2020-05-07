@@ -5,6 +5,7 @@ import { Alert, Linking, StyleSheet, TextInput, View } from 'react-native';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-spinkit';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { DEVICE_LARGE } from '@/utils/constants';
 import RNCamera from './RNCameraProvider.e2e';
 import { parseQrData } from './actions/parseQrData';
 import { fetchData } from './actions/fetchData';
@@ -153,7 +154,7 @@ export class ScanCodeScreen extends React.Component<Props, State> {
               onChangeText={(value) => {
                 this.setState({ value });
               }}
-              placeholder="Scan a BrightID code to make a connection"
+              placeholder="Scan or paste a BrightID code here"
               placeholderTextColor="#333"
               autoCapitalize="none"
               autoCorrect={false}
@@ -216,12 +217,13 @@ const styles = StyleSheet.create({
   },
   searchField: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 16,
+    fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#333',
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
     width: '85%',
+    textAlign: 'center',
   },
 });
 

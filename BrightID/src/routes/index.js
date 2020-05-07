@@ -23,7 +23,14 @@ const MainTabs = () => {
       invites?.filter((invite) => invite.state === INVITE_ACTIVE)?.length,
   );
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      tabBarOptions={{
+        activeTintColor: '#4990e2',
+        labelPosition: 'below-icon',
+        allowFontScaling: false,
+        keyboardHidesTabBar: true,
+      }}
+    >
       <Tab.Screen
         name="Home"
         component={Home}
@@ -56,6 +63,7 @@ const MainTabs = () => {
         component={Notifications}
         options={{
           tabBarIcon: IconWithBadge('bell', 'bell-outline', notificationCount),
+          unmountOnBlur: true,
           tabBarTestID: 'tabBarNotificationsBtn',
         }}
       />

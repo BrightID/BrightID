@@ -1,9 +1,15 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, View, Alert, SafeAreaView, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Alert,
+  SafeAreaView,
+  FlatList,
+  RefreshControl,
+} from 'react-native';
 import { connect } from 'react-redux';
-
 import ActionSheet from 'react-native-actionsheet';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
@@ -19,7 +25,18 @@ import { performAction } from './models/modifyConnections';
  * Displays a search input and list of Connection Cards
  */
 
-export class ConnectionsScreen extends React.Component<Props> {
+type State = {
+  refreshing: boolean,
+};
+
+export class ConnectionsScreen extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      refreshing: false,
+    };
+  }
+
   componentDidMount() {
     const { navigation, dispatch } = this.props;
     navigation.addListener('focus', () => {
@@ -27,6 +44,18 @@ export class ConnectionsScreen extends React.Component<Props> {
       dispatch(fetchUserInfo());
     });
   }
+
+  onRefresh = async () => {
+    try {
+      const { dispatch } = this.props;
+      this.setState({ refreshing: true });
+      await dispatch(fetchUserInfo());
+      this.setState({ refreshing: false });
+    } catch (err) {
+      console.log(err.message);
+      this.setState({ refreshing: false });
+    }
+  };
 
   handleNewConnection = () => {
     const { navigation } = this.props;
@@ -112,6 +141,14 @@ export class ConnectionsScreen extends React.Component<Props> {
                 keyExtractor={({ id }, index) => id + index}
                 renderItem={this.renderConnection}
                 contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={this.state.refreshing}
+                    onRefresh={this.onRefresh}
+                  />
+                }
                 ListEmptyComponent={
                   <EmptyList
                     iconType="account-off-outline"

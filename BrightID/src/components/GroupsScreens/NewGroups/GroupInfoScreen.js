@@ -206,6 +206,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '300',
     fontStyle: 'normal',
+    color: '#000',
     letterSpacing: 0,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#9e9e9e',

@@ -17,6 +17,7 @@ import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import GroupCard from './GroupCard';
 import { NoGroups } from './NoGroups';
 import SearchGroups from './SearchGroups';
+import { compareJoinedDesc } from './models/sortingUtility';
 
 /**
  * Group screen of BrightID
@@ -68,53 +69,38 @@ export class GroupsScreen extends React.Component<Props, State> {
   render() {
     const { navigation, groups, hasGroups } = this.props;
 
-    let content;
-    if (!hasGroups) {
-      // user does not have any groups.
-      content = <NoGroups navigation={navigation} />;
-    } else {
-      if (groups.length === 0) {
-        // user does have groups, but set a filter that does not match any group
-        content = (
-          <>
-            <SearchGroups navigation={navigation} />
-            <View style={styles.mainContainer}>
-              <View>
-                <Text style={styles.emptyText}>
-                  No group matches your search
-                </Text>
-              </View>
-            </View>
-          </>
-        );
-      } else {
-        content = (
-          <>
-            <SearchGroups navigation={navigation} />
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={{ flex: 1 }}>
+          <View style={styles.mainContainer}>
+            {hasGroups && <SearchGroups navigation={navigation} />}
             <View style={styles.mainContainer}>
               <FlatList
                 style={styles.groupsContainer}
-                contentContainerStyle={{ paddingBottom: 50 }}
+                contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
                 data={groups}
                 keyExtractor={({ id }, index) => id + index}
                 renderItem={this.renderGroup}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
                 refreshControl={
                   <RefreshControl
                     refreshing={this.state.refreshing}
                     onRefresh={this.onRefresh}
                   />
                 }
+                ListEmptyComponent={
+                  hasGroups ? (
+                    <Text style={styles.emptyText}>
+                      No group matches your search
+                    </Text>
+                  ) : (
+                    <NoGroups navigation={navigation} />
+                  )
+                }
               />
             </View>
-          </>
-        );
-      }
-    }
-
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={{ flex: 1 }}>
-          <View style={styles.mainContainer}>{content}</View>
+          </View>
           {groups.length > 0 && (
             <FloatingActionButton
               onPress={() => navigation.navigate('GroupInfo')}
@@ -182,6 +168,9 @@ function mapStateToProps(state) {
       }
     });
   }
+
+  // sort groups by joined timestamp, newest first
+  groups.sort(compareJoinedDesc);
 
   return { groups, hasGroups };
 }

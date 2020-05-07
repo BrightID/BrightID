@@ -80,6 +80,8 @@ export class AppsScreen extends React.Component<Prop, State> {
           data={apps}
           contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
           keyExtractor={({ name }, index) => name + index}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <AppCard {...item} handleAction={this.handleAction} />
           )}
