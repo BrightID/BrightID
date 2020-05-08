@@ -25,7 +25,7 @@ export const handleAppContext = async (params: Params) => {
   const oldBaseUrl = api.baseUrl;
   let contextInfo;
   try {
-    api.baseUrl = baseUrl;
+    api.baseUrl = decodeURIComponent(baseUrl);
     contextInfo = await api.getContext(context);
   } catch (e) {
     console.log(e.message);
