@@ -57,7 +57,7 @@ class GroupCard extends React.PureComponent<Props> {
           ) : (
             <View />
           )}
-          <Text style={styles.name}>{getGroupName(group)}</Text>
+          <Text testID="groupName" style={styles.name}>{getGroupName(group)}</Text>
           <this.setStatus />
         </View>
       </View>

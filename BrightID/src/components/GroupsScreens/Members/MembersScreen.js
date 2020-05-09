@@ -138,7 +138,7 @@ export class MembersScreen extends Component<Props, State> {
 
     return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.mainContainer}>
+        <View testID="membersView" style={styles.mainContainer}>
           <View>
             <FlatList
               style={styles.membersContainer}

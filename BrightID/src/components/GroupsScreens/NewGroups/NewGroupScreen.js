@@ -84,6 +84,7 @@ export class NewGroupScreen extends React.Component<Props> {
     return !this.state.creating ? (
       <View style={styles.createGroupButtonContainer}>
         <TouchableOpacity
+          testID="createNewGroupBtn"
           onPress={this.createGroup}
           style={
             buttonDisabled
@@ -117,7 +118,7 @@ export class NewGroupScreen extends React.Component<Props> {
     const connections = this.filterConnections();
     return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.mainContainer}>
+        <View testID="newGroupScreen" style={styles.mainContainer}>
           <View style={styles.titleContainer}>
             <Text style={styles.titleText}>CO-FOUNDERS</Text>
             <Text style={styles.infoText}>

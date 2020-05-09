@@ -28,6 +28,7 @@ const membersScreenOptions = ({ navigation, route }) => {
     // eslint-disable-next-line react/display-name
     headerRight: () => (
       <TouchableOpacity
+        testID="groupOptionsBtn"
         style={{ marginRight: 11 }}
         onPress={() => {
           emitter.emit('optionsSelected');

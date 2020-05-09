@@ -15,13 +15,13 @@ const createBrightID = async (name = testUserName) => {
   // Wait until photo is loaded
   await waitFor(element(by.id('editPhoto')))
     .toBeVisible()
-    .withTimeout(2000);
+    .withTimeout(5000);
   // create new ID
   await element(by.id('createBrightIDBtn')).tap();
   // should end up at home screen
   await waitFor(element(by.id('homeScreen')))
     .toBeVisible()
-    .withTimeout(2000);
+    .withTimeout(5000);
   return name;
 };
 
@@ -31,13 +31,25 @@ const createFakeConnection = async () => {
   // With automatic sync this test fails intermittent, so use explicit waitFor...
   await waitFor(element(by.id('previewConnectionScreen')))
     .toBeVisible()
-    .withTimeout(2000);
+    .withTimeout(5000);
 };
 
 const expectHomescreen = async () => {
   await waitFor(element(by.id('homeScreen')))
     .toBeVisible()
-    .withTimeout(2000);
+    .withTimeout(5000);
 };
 
-export { testUserName, createBrightID, createFakeConnection, expectHomescreen };
+const expectGroupsScreen = async () => {
+  await waitFor(element(by.id('groupsScreen')))
+    .toBeVisible()
+    .withTimeout(5000);
+};
+
+export {
+  testUserName,
+  createBrightID,
+  createFakeConnection,
+  expectHomescreen,
+  expectGroupsScreen,
+};

@@ -1,9 +1,6 @@
 /* global device:false, element:false, by:false, waitFor:false */
 
-import {
-  createBrightID,
-  createFakeConnection,
-} from './testUtils';
+import { createBrightID, createFakeConnection } from './testUtils';
 
 describe('Connections', () => {
   let hasBackButton = true;
