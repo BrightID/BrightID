@@ -1,4 +1,4 @@
-/* global element:false, by:false, waitFor:false */
+/* global element:false, by:false, waitFor:false, device: false */
 
 const testUserName = 'Vincent Vega';
 
@@ -26,8 +26,9 @@ const createBrightID = async (name = testUserName) => {
 };
 
 const createFakeConnection = async () => {
+  const sureText = device.getPlatform() === 'android' ? 'SURE' : 'Sure';
   await element(by.id('createFakeConnectionBtn')).tap();
-  await element(by.text('SURE')).tap();
+  await element(by.text(sureText)).tap();
   // With automatic sync this test fails intermittent, so use explicit waitFor...
   await waitFor(element(by.id('previewConnectionScreen')))
     .toBeVisible()

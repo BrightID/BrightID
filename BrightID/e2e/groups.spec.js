@@ -23,10 +23,12 @@ const secondGroupName = 'Inglourious Basterds';
 
 describe('Groups', () => {
   let hasBackButton = true;
+  let cancelText = 'CANCEL';
 
   beforeAll(async () => {
     const platform = await device.getPlatform();
     hasBackButton = platform === 'android';
+    cancelText = hasBackButton ? 'CANCEL' : 'Cancel';
     // Reinstall app before starting tests to make sure all localStorage is cleared
     await device.launchApp({ delete: true });
     // create identity
@@ -54,14 +56,16 @@ describe('Groups', () => {
       await expect(element(by.id('groupsLearnMoreBtn'))).toBeVisible();
       await expect(element(by.id('groupsCreateGroupBtn'))).toBeVisible();
     });
-    if (hasBackButton) {
-      it('should show initial group and go back (backbutton)', async () => {
-        await element(by.id('groupsCreateGroupBtn')).tap();
-        await expect(element(by.id('groupInfoScreen'))).toBeVisible();
-        await device.pressBack();
-        await expect(element(by.id('noGroupsView'))).toBeVisible();
-      });
-    }
+
+    it('should show initial group and go back (backbutton)', async () => {
+      if (!hasBackButton) return;
+
+      await element(by.id('groupsCreateGroupBtn')).tap();
+      await expect(element(by.id('groupInfoScreen'))).toBeVisible();
+      await device.pressBack();
+      await expect(element(by.id('noGroupsView'))).toBeVisible();
+    });
+
     it('should show initial group and go back', async () => {
       await element(by.id('groupsCreateGroupBtn')).tap();
       await expect(element(by.id('groupInfoScreen'))).toBeVisible();
@@ -134,7 +138,7 @@ describe('Groups', () => {
         await element(by.text('OK')).tap();
         await waitFor(element(by.id('flagConnectionBtn')).atIndex(0))
           .toNotExist()
-          .withTimeout(2000);
+          .withTimeout(10000);
       }
     });
   });
@@ -290,7 +294,7 @@ describe('Groups', () => {
       await expect(element(by.text('Leave Group'))).toBeVisible();
       await element(by.text('Leave Group')).tap();
       // back out with CANCEL button
-      await element(by.text('CANCEL')).tap();
+      await element(by.text(cancelText)).tap();
       await expect(
         element(by.text('What do you want to do?')),
       ).toBeNotVisible();

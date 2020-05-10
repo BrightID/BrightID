@@ -1,5 +1,4 @@
-/** @format */
-// @flow strict-local
+/* eslint-disable import/no-unresolved */
 
 import 'react-native-gesture-handler';
 import { AppRegistry, Text, TextInput } from 'react-native';
@@ -13,6 +12,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import App from './src/App';
 import { name as appName } from './app.json';
 
+console.disableYellowBox = true;
+
 // enable react-native-screens
 enableScreens();
 
@@ -24,7 +25,7 @@ MaterialCommunityIcons.loadFont();
 Octicons.loadFont();
 AntDesign.loadFont();
 
-// Fix Warning Messages
+// Fix Font Scaling
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.allowFontScaling = false;
 

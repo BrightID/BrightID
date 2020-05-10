@@ -10,8 +10,7 @@ describe('Homescreen', () => {
     const platform = await device.getPlatform();
     hasBackButton = platform === 'android';
     // Reinstall app before starting tests to make sure all localStorage is cleared
-    await device.launchApp({ delete: true });
-
+    // await device.launchApp({ delete: true });
     // create identity and proceed to main screen
     mainUser = await createBrightID();
   });
@@ -40,36 +39,30 @@ describe('Homescreen', () => {
       await expect(element(by.text('Like to chat with us?'))).toBeNotVisible();
     });
 
-    if (hasBackButton) {
-      it('should show chat ActionSheet and close with back button', async () => {
-        // ActionSheet does not support testID, so try to match based on text.
-        await expect(
-          element(by.text('Like to chat with us?')),
-        ).toBeNotVisible();
-        await element(by.id('chatButton')).tap();
-        await expect(element(by.text('Like to chat with us?'))).toBeVisible();
-        await expect(element(by.text('BrightID Discord'))).toBeVisible();
-        await device.pressBack();
-        await expect(
-          element(by.text('Like to chat with us?')),
-        ).toBeNotVisible();
-      });
-    }
+    it('should show chat ActionSheet and close with back button', async () => {
+      if (!hasBackButton) return;
+      // ActionSheet does not support testID, so try to match based on text.
+      await expect(element(by.text('Like to chat with us?'))).toBeNotVisible();
+      await element(by.id('chatButton')).tap();
+      await expect(element(by.text('Like to chat with us?'))).toBeVisible();
+      await expect(element(by.text('BrightID Discord'))).toBeVisible();
+      await device.pressBack();
+      await expect(element(by.text('Like to chat with us?'))).toBeNotVisible();
+    });
   });
 
   describe('Edit Profile', () => {
-    if (hasBackButton) {
-      // excluded due to https://github.com/BrightID/BrightID/issues/408
-      xit('should cancel editing profile name with back button', async () => {
-        const newName = 'Winston Wolfe';
-        await expect(element(by.id('EditNameBtn'))).toHaveText(mainUser);
-        await element(by.id('EditNameBtn')).tap();
-        await element(by.id('EditNameInput')).clearText();
-        await element(by.id('EditNameInput')).typeText(newName);
-        await device.pressBack();
-        await expect(element(by.id('EditNameBtn'))).toHaveText(mainUser);
-      });
-    }
+    // excluded due to https://github.com/BrightID/BrightID/issues/408
+    xit('should cancel editing profile name with back button', async () => {
+      if (!hasBackButton) return;
+      const newName = 'Winston Wolfe';
+      await expect(element(by.id('EditNameBtn'))).toHaveText(mainUser);
+      await element(by.id('EditNameBtn')).tap();
+      await element(by.id('EditNameInput')).clearText();
+      await element(by.id('EditNameInput')).typeText(newName);
+      await device.pressBack();
+      await expect(element(by.id('EditNameBtn'))).toHaveText(mainUser);
+    });
 
     it('should edit profile name', async () => {
       const newName = 'Butch Coolidge';
@@ -106,7 +99,9 @@ describe('Homescreen', () => {
     it('should open "New Connection" screen by default', async () => {
       await element(by.id('ConnectButton')).tap();
       await expect(element(by.id('qrCode'))).toBeVisible();
-      await device.pressBack();
+      hasBackButton
+        ? await device.pressBack()
+        : await element(by.id('header-back')).tap();
       await expect(element(by.id('qrCode'))).toBeNotVisible();
     });
 
@@ -114,7 +109,9 @@ describe('Homescreen', () => {
       await element(by.id('ConnectButton')).tap();
       await element(by.id('scanCodeBtn')).tap();
       await expect(element(by.id('scanCode'))).toBeVisible();
-      await device.pressBack();
+      hasBackButton
+        ? await device.pressBack()
+        : await element(by.id('header-back')).tap();
       await expect(element(by.id('scanCode'))).toBeNotVisible();
     });
 
@@ -124,7 +121,9 @@ describe('Homescreen', () => {
       await element(by.id('copyQrButton')).tap();
       // TODO: Verify clipboard content is correct. Currently detox has no way to
       //  check clipboard contents, see e.g. https://github.com/wix/detox/issues/222
-      await device.pressBack();
+      hasBackButton
+        ? await device.pressBack()
+        : await element(by.id('header-back')).tap();
       await expect(element(by.id('copyQrButton'))).toBeNotVisible();
     });
   });

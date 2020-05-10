@@ -11,7 +11,7 @@ describe('Connections', () => {
     const platform = await device.getPlatform();
     hasBackButton = platform === 'android';
     // Reinstall app before starting tests to make sure all localStorage is cleared
-    await device.launchApp({ delete: true });
+    // await device.launchApp({ delete: true });
     // create identity
     await createBrightID();
     await element(by.id('tabBarConnectionsBtn')).tap();
@@ -28,34 +28,33 @@ describe('Connections', () => {
         await element(by.id('tabBarConnectionsBtn')).tap();
       });
 
-      if (hasBackButton) {
-        it(`should cancel ${action} (backButton)`, async () => {
-          // flag the first available connection
-          await waitFor(element(by.id('flagConnectionBtn')).atIndex(0))
-            .toExist()
-            .withTimeout(2000);
-          await element(by.id('flagConnectionBtn'))
-            .atIndex(0)
-            .tap();
-          // ActionSheet does not support testID, so try to match based on text.
-          await expect(element(by.text(flagActionSheetTitle))).toBeVisible();
-          await element(by.text(action)).tap();
-          await device.pressBack();
-          await expect(element(by.text(flagActionSheetTitle))).toBeNotVisible();
-        });
-      }
-      it(`should cancel ${action}`, async () => {
+      it(`should cancel ${action} (backButton)`, async () => {
+        // device is not defined outside of it
+        if (!hasBackButton) return;
         // flag the first available connection
         await waitFor(element(by.id('flagConnectionBtn')).atIndex(0))
           .toExist()
           .withTimeout(2000);
-        await element(by.id('flagConnectionBtn'))
-          .atIndex(0)
-          .tap();
+        await element(by.id('flagConnectionBtn')).atIndex(0).tap();
         // ActionSheet does not support testID, so try to match based on text.
         await expect(element(by.text(flagActionSheetTitle))).toBeVisible();
         await element(by.text(action)).tap();
-        await element(by.text('CANCEL')).tap();
+        await device.pressBack();
+
+        await expect(element(by.text(flagActionSheetTitle))).toBeNotVisible();
+      });
+
+      it(`should cancel ${action}`, async () => {
+        const cancelText = hasBackButton ? 'CANCEL' : 'Cancel';
+        // flag the first available connection
+        await waitFor(element(by.id('flagConnectionBtn')).atIndex(0))
+          .toExist()
+          .withTimeout(2000);
+        await element(by.id('flagConnectionBtn')).atIndex(0).tap();
+        // ActionSheet does not support testID, so try to match based on text.
+        await expect(element(by.text(flagActionSheetTitle))).toBeVisible();
+        await element(by.text(action)).tap();
+        await element(by.text(cancelText)).tap();
         await expect(element(by.text(flagActionSheetTitle))).toBeNotVisible();
       });
       it(`should confirm ${action}`, async () => {
@@ -63,9 +62,7 @@ describe('Connections', () => {
         await waitFor(element(by.id('flagConnectionBtn')).atIndex(0))
           .toExist()
           .withTimeout(2000);
-        await element(by.id('flagConnectionBtn'))
-          .atIndex(0)
-          .tap();
+        await element(by.id('flagConnectionBtn')).atIndex(0).tap();
         // ActionSheet does not support testID, so try to match based on text.
         await expect(element(by.text(flagActionSheetTitle))).toBeVisible();
         await element(by.text(action)).tap();
