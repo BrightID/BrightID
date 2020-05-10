@@ -21,11 +21,12 @@ type ContextInfo = {
 
 export const handleAppContext = async (params: Params) => {
   // if 'params' is defined, the user came through a deep link
+  params.baseUrl = decodeURIComponent(params.baseUrl);
   const { baseUrl, context, contextId } = params;
   const oldBaseUrl = api.baseUrl;
   let contextInfo;
   try {
-    api.baseUrl = decodeURIComponent(baseUrl);
+    api.baseUrl = baseUrl;
     contextInfo = await api.getContext(context);
   } catch (e) {
     console.log(e.message);
