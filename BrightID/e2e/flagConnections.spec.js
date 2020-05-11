@@ -10,8 +10,6 @@ describe('Connections', () => {
   beforeAll(async () => {
     const platform = await device.getPlatform();
     hasBackButton = platform === 'android';
-    // Reinstall app before starting tests to make sure all localStorage is cleared
-    // await device.launchApp({ delete: true });
     // create identity
     await createBrightID();
     await element(by.id('tabBarConnectionsBtn')).tap();
@@ -34,7 +32,7 @@ describe('Connections', () => {
         // flag the first available connection
         await waitFor(element(by.id('flagConnectionBtn')).atIndex(0))
           .toExist()
-          .withTimeout(2000);
+          .withTimeout(20000);
         await element(by.id('flagConnectionBtn')).atIndex(0).tap();
         // ActionSheet does not support testID, so try to match based on text.
         await expect(element(by.text(flagActionSheetTitle))).toBeVisible();
@@ -49,7 +47,7 @@ describe('Connections', () => {
         // flag the first available connection
         await waitFor(element(by.id('flagConnectionBtn')).atIndex(0))
           .toExist()
-          .withTimeout(2000);
+          .withTimeout(20000);
         await element(by.id('flagConnectionBtn')).atIndex(0).tap();
         // ActionSheet does not support testID, so try to match based on text.
         await expect(element(by.text(flagActionSheetTitle))).toBeVisible();
@@ -61,7 +59,7 @@ describe('Connections', () => {
         // flag the first available connection
         await waitFor(element(by.id('flagConnectionBtn')).atIndex(0))
           .toExist()
-          .withTimeout(2000);
+          .withTimeout(20000);
         await element(by.id('flagConnectionBtn')).atIndex(0).tap();
         // ActionSheet does not support testID, so try to match based on text.
         await expect(element(by.text(flagActionSheetTitle))).toBeVisible();
@@ -69,7 +67,7 @@ describe('Connections', () => {
         await element(by.text('OK')).tap();
         await waitFor(element(by.id('flagConnectionBtn')).atIndex(0))
           .toNotExist()
-          .withTimeout(2000);
+          .withTimeout(20000);
       });
     });
   });

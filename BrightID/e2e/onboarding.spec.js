@@ -3,10 +3,6 @@
 import { createBrightID } from './testUtils';
 
 describe('Example', () => {
-  beforeAll(async () => {
-    // Reinstall app before starting tests to make sure all localStorage is cleared
-    await device.launchApp({ delete: true });
-  });
 
   it('should have onboarding carousel screen', async () => {
     // First page should be there at start

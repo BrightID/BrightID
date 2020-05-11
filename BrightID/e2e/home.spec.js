@@ -9,8 +9,6 @@ describe('Homescreen', () => {
   beforeAll(async () => {
     const platform = await device.getPlatform();
     hasBackButton = platform === 'android';
-    // Reinstall app before starting tests to make sure all localStorage is cleared
-    // await device.launchApp({ delete: true });
     // create identity and proceed to main screen
     mainUser = await createBrightID();
   });

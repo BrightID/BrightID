@@ -29,8 +29,6 @@ describe('Groups', () => {
     const platform = await device.getPlatform();
     hasBackButton = platform === 'android';
     cancelText = hasBackButton ? 'CANCEL' : 'Cancel';
-    // Reinstall app before starting tests to make sure all localStorage is cleared
-    await device.launchApp({ delete: true });
     // create identity
     await createBrightID();
     // create 3 fake connections
@@ -73,7 +71,7 @@ describe('Groups', () => {
       // header-back button takes 1-2 seconds to complete switch, so use waitFor() here
       await waitFor(element(by.id('noGroupsView')))
         .toBeVisible()
-        .withTimeout(4000);
+        .withTimeout(20000);
     });
   });
 
@@ -105,7 +103,7 @@ describe('Groups', () => {
       // make the first 2 available connections co-founder
       await waitFor(element(by.id('checkCoFounderBtn')).atIndex(0))
         .toExist()
-        .withTimeout(2000);
+        .withTimeout(20000);
       await element(by.id('checkCoFounderBtn')).atIndex(0).tap();
       await element(by.id('checkCoFounderBtn')).atIndex(1).tap();
     });
@@ -130,7 +128,7 @@ describe('Groups', () => {
       for (const i of [0, 1, 2]) {
         await waitFor(element(by.id('flagConnectionBtn')).atIndex(i))
           .toExist()
-          .withTimeout(2000);
+          .withTimeout(20000);
         await element(by.id('flagConnectionBtn')).atIndex(i).tap();
         // ActionSheet does not support testID, so try to match based on text.
         await expect(element(by.text(actionSheetTitle))).toBeVisible();
@@ -138,7 +136,7 @@ describe('Groups', () => {
         await element(by.text('OK')).tap();
         await waitFor(element(by.id('flagConnectionBtn')).atIndex(0))
           .toNotExist()
-          .withTimeout(10000);
+          .withTimeout(20000);
       }
     });
   });
@@ -174,7 +172,7 @@ describe('Groups', () => {
       // make the 2nd and third available connections co-founder
       await waitFor(element(by.id('checkCoFounderBtn')).atIndex(1))
         .toExist()
-        .withTimeout(2000);
+        .withTimeout(20000);
       await element(by.id('checkCoFounderBtn')).atIndex(1).tap();
       await element(by.id('checkCoFounderBtn')).atIndex(2).tap();
     });
@@ -199,7 +197,7 @@ describe('Groups', () => {
       for (const i of [0, 1, 2]) {
         await waitFor(element(by.id('flagConnectionBtn')).atIndex(i))
           .toExist()
-          .withTimeout(2000);
+          .withTimeout(20000);
         await element(by.id('flagConnectionBtn')).atIndex(i).tap();
         // ActionSheet does not support testID, so try to match based on text.
         await expect(element(by.text(actionSheetTitle))).toBeVisible();
