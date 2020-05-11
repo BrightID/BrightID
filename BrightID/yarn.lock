@@ -6852,6 +6852,11 @@ react-native-modal-overlay@^1.3.1:
   dependencies:
     react-native-animatable "^1.2.4"
 
+react-native-notifications@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-notifications/-/react-native-notifications-3.2.0.tgz#37be09942f205c25d10f11f2384e900573c3213f"
+  integrity sha512-TLzWbjTISXs1fhhtmtvQJ5bvDxquRHY1YXCy90U/XT2hJObla4Y+eSD41uyhQU2wgkseEfbqwCq0kd0Z+bfQ3w==
+
 react-native-popup-menu@^0.15.6:
   version "0.15.7"
   resolved "https://registry.yarnpkg.com/react-native-popup-menu/-/react-native-popup-menu-0.15.7.tgz#ddffa8aa6e5d7d11533947921e9bdf94cd7fc7d0"
