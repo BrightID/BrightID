@@ -1,13 +1,13 @@
 // @flow
 
-export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
+export const SET_BACKUP_PENDING = 'SET_BACKUP_PENDING';
 
-export const setNotifications = (notificationInfos: NotificationInfo[]) => ({
-  type: SET_NOTIFICATIONS,
-  notifications: notificationInfos,
+export const setBackupPending = (backupPending: boolean) => ({
+  type: SET_BACKUP_PENDING,
+  backupPending,
 });
 
-export const getNotifications = () => async (
+export const updateNotifications = () => async (
   dispatch: dispatch,
   getState: () => State,
 ) => {
@@ -16,18 +16,14 @@ export const getNotifications = () => async (
       user: { backupCompleted },
       connections: { connections },
     } = getState();
-    let notifications = [];
     const verifiedConnections = connections.filter(
       (conn) => conn.status === 'verified',
     );
-    // backupCompleted = false;
     if (!backupCompleted && verifiedConnections.length > 2) {
-      notifications.push({
-        icon: 'ios-star-outline',
-        msg: 'Choose trusted connections to backup your BrightID',
-      });
+      dispatch(setBackupPending(true));
+    } else {
+      dispatch(setBackupPending(false));
     }
-    dispatch(setNotifications(notifications));
   } catch (err) {
     console.log(err);
   }

@@ -17,6 +17,7 @@ declare type State = {
   connectQrData: ConnectQrData,
   connectUserData: ConnectUserData,
   groups: GroupsState,
+  notifications: NotificationsState,
   operations: OperationsState,
   recoveryData: RecoveryData,
   user: UserState,
@@ -143,7 +144,6 @@ declare type UserState = {
     filename: string,
   },
   searchParam: string,
-  notifications: NotificationInfo[],
   backupCompleted: boolean,
   verifications: any[],
   publicKey: string,
@@ -154,10 +154,23 @@ declare type UserState = {
   secretKey: Uint8Array,
 };
 
-declare type NotificationInfo = {
+declare type NotificationsState = {
+  notifications: Notification[],
+  invites: invite[],
+  pendingConnections: PendingConnection[],
+  backupPending: boolean,
+};
+
+declare type BackupNotification = {
   msg: string,
   icon: string,
 };
+
+declare type PendingConnection = {
+  id: string,
+};
+
+declare type Notification = BackupNotification & invite & PendingConnection;
 
 declare type Signature = {
   signer: string,

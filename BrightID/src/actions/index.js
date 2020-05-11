@@ -70,11 +70,7 @@ export {
   acceptInvite,
 } from './groups';
 
-export {
-  SET_NOTIFICATIONS,
-  setNotifications,
-  getNotifications,
-} from './notifications';
+export { SET_BACKUP_PENDING, updateNotifications } from './notifications';
 
 export {
   ADD_OPERATION,

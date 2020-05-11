@@ -41,17 +41,13 @@ class NotificationsScreen extends React.Component<Props, State> {
   };
 
   render() {
-    const { navigation, notifications, invites } = this.props;
-    const activeInvites = invites
-      ? invites.filter((invite) => invite.state === INVITE_ACTIVE)
-      : [];
-    const notificationData = notifications.concat(activeInvites);
+    const { navigation, notifications } = this.props;
 
     return (
       <View style={styles.container}>
         <FlatList
           contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-          data={notificationData}
+          data={notifications}
           keyExtractor={({ inviteId, msg }, index) => (inviteId || msg) + index}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
@@ -91,6 +87,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ groups, user }) => ({ ...groups, ...user }))(
-  NotificationsScreen,
-);
+export default connect(({ groups, notifications }) => ({
+  ...groups,
+  ...notifications,
+}))(NotificationsScreen);

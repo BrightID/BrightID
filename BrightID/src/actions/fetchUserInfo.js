@@ -9,7 +9,7 @@ import {
   setVerifications,
   updateConnections,
   setIsSponsored,
-  getNotifications,
+  updateNotifications,
 } from './index';
 
 const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
@@ -41,7 +41,7 @@ const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
     // this can not be done in reducer because it should be in an async function
     const newInvites = await updateInvites(invites);
     dispatch(setInvites(newInvites));
-    dispatch(getNotifications());
+    dispatch(updateNotifications());
   } catch (err) {
     console.log(err.message);
   }
