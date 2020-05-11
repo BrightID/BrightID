@@ -18,9 +18,7 @@ const Tab = createBottomTabNavigator();
 
 const MainTabs = () => {
   const notificationCount = useSelector(
-    ({ user: { notifications }, groups: { invites } }) =>
-      notifications?.length +
-      invites?.filter((invite) => invite.state === INVITE_ACTIVE)?.length,
+    ({ notifications: { notifications } }) => notifications.length,
   );
   return (
     <Tab.Navigator
