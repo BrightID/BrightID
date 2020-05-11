@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Spinner from 'react-native-spinkit';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { DEVICE_LARGE } from '@/utils/constants';
-import RNCamera from './RNCameraProvider.e2e';
+import RNCamera from './RNCameraProvider';
 import { parseQrData } from './actions/parseQrData';
 import { fetchData } from './actions/fetchData';
 import emitter from '../../emitter';
