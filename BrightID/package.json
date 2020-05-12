@@ -7,6 +7,10 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "start:detox": "RN_SRC_EXT=e2e.js react-native start",
+    "build:detox:android": "detox build -c android.emu.debug",
+    "build:detox:ios": "detox build -c ios.sim.debug",
+    "test:android": "detox test -c android.emu.debug",
+    "test:ios": "detox test -c ios.sim.debug",
     "test": "jest",
     "lint": "eslint .",
     "postinstall": "npx jetify",
@@ -138,7 +142,6 @@
         }
       }
     },
-
     "test-runner": "jest"
   }
 }
