@@ -6,5 +6,7 @@
 	<array>
 		<string>webcredentials:explorer.brightid.org</string>
 	</array>
+	<key>com.apple.developer.authentication-services.autofill-credential-provider</key>
+	<true/>
 </dict>
 </plist>
