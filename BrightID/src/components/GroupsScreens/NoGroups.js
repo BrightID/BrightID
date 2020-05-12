@@ -10,7 +10,7 @@ const showWhitePaper = () => {
 };
 
 export const NoGroups = ({ navigation }: Props) => (
-  <View style={styles.noContainer}>
+  <View style={styles.noContainer} testID="noGroupsView">
     <View style={styles.noGroupsInfo}>
       <Image
         source={require('../../static/groups_logo.png')}
@@ -29,10 +29,11 @@ export const NoGroups = ({ navigation }: Props) => (
       </View>
     </View>
     <View style={styles.emptyButtons}>
-      <TouchableOpacity style={styles.learnMoreButton} onPress={showWhitePaper}>
+      <TouchableOpacity testID="groupsLearnMoreBtn" style={styles.learnMoreButton} onPress={showWhitePaper}>
         <Text style={styles.learnMoreText}>Learn More</Text>
       </TouchableOpacity>
       <TouchableOpacity
+        testID="groupsCreateGroupBtn"
         style={styles.createGroupButton}
         onPress={() => {
           navigation.navigate('GroupInfo');

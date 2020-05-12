@@ -9,6 +9,7 @@ export default class MaintainPrivacy extends React.Component<Props> {
   render() {
     return (
       <View
+        testID="MaintainPrivacy"
         style={{
           flex: 1,
           backgroundColor: 'transparent',

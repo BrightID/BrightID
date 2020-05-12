@@ -132,6 +132,7 @@ export class SignUp extends React.Component<Props, State> {
           <View style={styles.addPhotoContainer}>
             {finalBase64.uri && !editingName ? (
               <TouchableOpacity
+                testID="editPhoto"
                 onPress={this.onAddPhoto}
                 accessible={true}
                 accessibilityLabel="edit photo"
@@ -140,6 +141,7 @@ export class SignUp extends React.Component<Props, State> {
               </TouchableOpacity>
             ) : !editingName ? (
               <TouchableOpacity
+                testID="addPhoto"
                 onPress={this.onAddPhoto}
                 style={styles.addPhoto}
                 accessible={true}
@@ -157,6 +159,7 @@ export class SignUp extends React.Component<Props, State> {
               What do your friends know you by?
             </Text>
             <TextInput
+              testID="editName"
               onChangeText={(name) => this.setState({ name })}
               value={name}
               placeholder="Name"
@@ -183,12 +186,14 @@ export class SignUp extends React.Component<Props, State> {
             {!creatingBrightId ? (
               <View>
                 <TouchableOpacity
+                  testID="createBrightIDBtn"
                   style={styles.createBrightIdButton}
                   onPress={this.createBrightID}
                 >
                   <Text style={styles.buttonInnerText}>Create My BrightID</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
+                  testID="recoverBrightIDBtn"
                   onPress={() => this.props.navigation.navigate('Restore')}
                   style={styles.recoverButton}
                   accessibilityLabel="Recover BrightID"
@@ -197,7 +202,7 @@ export class SignUp extends React.Component<Props, State> {
                 </TouchableOpacity>
               </View>
             ) : (
-              <View style={styles.loader}>
+              <View style={styles.loader} testID="creatingIDSpinner">
                 <Text>Creating Bright ID...</Text>
                 <Spinner
                   isVisible={true}

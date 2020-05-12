@@ -43,10 +43,11 @@ export class GroupsScreen extends React.Component<Props, State> {
     });
   }
 
-  renderGroup = ({ item }) => {
+  renderGroup = ({ item, index }) => {
     const { navigation } = this.props;
     return (
       <TouchableOpacity
+        testID={`groupItem-${index}`}
         onPress={() => navigation.navigate('Members', { group: item })}
       >
         <GroupCard group={item} />
@@ -71,7 +72,7 @@ export class GroupsScreen extends React.Component<Props, State> {
 
     return (
       <SafeAreaView style={styles.container}>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 }} testID="groupsScreen">
           <View style={styles.mainContainer}>
             {hasGroups && <SearchGroups navigation={navigation} />}
             <View style={styles.mainContainer}>
@@ -91,7 +92,7 @@ export class GroupsScreen extends React.Component<Props, State> {
                 }
                 ListEmptyComponent={
                   hasGroups ? (
-                    <Text style={styles.emptyText}>
+                    <Text testID="noMatchText" style={styles.emptyText}>
                       No group matches your search
                     </Text>
                   ) : (
@@ -103,6 +104,7 @@ export class GroupsScreen extends React.Component<Props, State> {
           </View>
           {groups.length > 0 && (
             <FloatingActionButton
+              testID="addGroupBtn"
               onPress={() => navigation.navigate('GroupInfo')}
             />
           )}

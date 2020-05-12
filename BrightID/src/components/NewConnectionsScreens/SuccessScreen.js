@@ -17,7 +17,7 @@ type State = {};
 export class SuccessScreen extends React.Component<Props, State> {
   render() {
     return (
-      <View style={styles.container}>
+      <View testID="successScreen" style={styles.container}>
         <View style={styles.successTextContainer}>
           <Text style={styles.successText}>Connection Successful!</Text>
           <Image
@@ -34,6 +34,7 @@ export class SuccessScreen extends React.Component<Props, State> {
 
         <View style={styles.confirmButtonContainer}>
           <TouchableOpacity
+            testID="successDoneBtn"
             onPress={() => {
               const { navigation, dispatch } = this.props;
               dispatch(removeConnectUserData());

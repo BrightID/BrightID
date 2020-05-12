@@ -34,7 +34,10 @@ const MainTabs = () => {
       <Tab.Screen
         name="Home"
         component={Home}
-        options={{ tabBarIcon: Icon('home', 'home-outline') }}
+        options={{
+          tabBarIcon: Icon('home', 'home-outline'),
+          tabBarTestID: 'tabBarHomeBtn',
+        }}
       />
       <Tab.Screen
         name="Connections"
@@ -44,6 +47,7 @@ const MainTabs = () => {
             'account-arrow-right',
             'account-arrow-right-outline',
           ),
+          tabBarTestID: 'tabBarConnectionsBtn',
         }}
       />
       <Tab.Screen
@@ -51,6 +55,7 @@ const MainTabs = () => {
         component={Groups}
         options={{
           tabBarIcon: Icon('account-group', 'account-group-outline'),
+          tabBarTestID: 'tabBarGroupsBtn',
         }}
       />
       <Tab.Screen
@@ -59,12 +64,16 @@ const MainTabs = () => {
         options={{
           tabBarIcon: IconWithBadge('bell', 'bell-outline', notificationCount),
           unmountOnBlur: true,
+          tabBarTestID: 'tabBarNotificationsBtn',
         }}
       />
       <Tab.Screen
         name="Apps"
         component={Apps}
-        options={{ tabBarIcon: Icon('flask', 'flask-outline') }}
+        options={{
+          tabBarIcon: Icon('flask', 'flask-outline'),
+          tabBarTestID: 'tabBarAppsBtn',
+        }}
       />
     </Tab.Navigator>
   );

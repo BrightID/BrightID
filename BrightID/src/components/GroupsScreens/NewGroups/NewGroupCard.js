@@ -41,6 +41,7 @@ class NewGroupCard extends React.PureComponent<Props> {
     if (groups) {
       return (
         <TouchableOpacity
+          testID="checkCoFounderBtn"
           style={styles.moreIcon}
           onPress={this.handleGroupSelect}
         >
