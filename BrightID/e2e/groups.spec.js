@@ -22,13 +22,14 @@ const firstGroupName = 'Reservoir Dogs';
 const secondGroupName = 'Inglourious Basterds';
 
 describe('Groups', () => {
-  let hasBackButton = true;
-  let cancelText = 'CANCEL';
+  let isAndroid, alertCancelText;
+  const actionSheetCancelText = 'cancel';
 
   beforeAll(async () => {
     const platform = await device.getPlatform();
-    hasBackButton = platform === 'android';
-    cancelText = hasBackButton ? 'CANCEL' : 'Cancel';
+    isAndroid = platform === 'android';
+    // Default Alert Button style on Android is UPPERCASE
+    alertCancelText = isAndroid ? 'CANCEL' : 'Cancel';
     // create identity
     await createBrightID();
     // create 3 fake connections
@@ -56,7 +57,7 @@ describe('Groups', () => {
     });
 
     it('should show initial group and go back (backbutton)', async () => {
-      if (!hasBackButton) return;
+      if (!isAndroid) return;
 
       await element(by.id('groupsCreateGroupBtn')).tap();
       await expect(element(by.id('groupInfoScreen'))).toBeVisible();
@@ -119,7 +120,7 @@ describe('Groups', () => {
     });
 
     // this is difficult to test and fails on iOS
-    xit('invited co-founders should join group', async () => {
+    it('invited co-founders should join group', async () => {
       const actionSheetTitle = 'What do you want to do?';
       const actionTitle = 'Join All Groups';
 
@@ -135,9 +136,6 @@ describe('Groups', () => {
         await expect(element(by.text(actionSheetTitle))).toBeVisible();
         await element(by.text(actionTitle)).tap();
         await element(by.text('OK')).tap();
-        await waitFor(element(by.id('flagConnectionBtn')).atIndex(0))
-          .toNotExist()
-          .withTimeout(20000);
       }
     });
   });
@@ -270,8 +268,7 @@ describe('Groups', () => {
       await expectGroupsScreen();
     });
 
-    // this is failing on iOS
-    xit('group should have ellipsis menu', async () => {
+    it('group should have ellipsis menu', async () => {
       // select first group
       await element(by.id('groupItem-0')).tap();
       await expect(element(by.id('membersView'))).toBeVisible();
@@ -281,20 +278,19 @@ describe('Groups', () => {
       await expect(element(by.text('What do you want to do?'))).toBeVisible();
       await expect(element(by.text('Invite'))).toBeVisible();
       await expect(element(by.text('Leave Group'))).toBeVisible();
-      await expect(element(by.text('cancel'))).toBeVisible();
       // close actionsheet without changing anything
-      await element(by.text('cancel')).tap();
+      await element(by.text(actionSheetCancelText)).tap();
       await expect(element(by.id('membersView'))).toBeVisible();
     });
 
-    xit('should leave first group and cancel', async () => {
+    it('should leave first group and cancel', async () => {
       await element(by.id('groupItem-0')).tap();
       await expect(element(by.id('groupOptionsBtn'))).toBeVisible();
       await element(by.id('groupOptionsBtn')).tap();
       await expect(element(by.text('Leave Group'))).toBeVisible();
       await element(by.text('Leave Group')).tap();
-      // back out with CANCEL button
-      await element(by.text(cancelText)).tap();
+      // back out of confirmation alert with CANCEL button
+      await element(by.text(alertCancelText)).tap();
       await expect(
         element(by.text('What do you want to do?')),
       ).toBeNotVisible();
