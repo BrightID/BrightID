@@ -4,14 +4,14 @@ import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { NavigationContainer, useLinking } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar, StyleSheet } from 'react-native';
 import { pollOperations } from './utils/operations';
 import AppRoutes from './routes';
 import { store, persistor } from './store';
-import { bootstrap } from './bootstrap';
 import { navigationRef } from './NavigationService';
 import Loading from './components/Helpers/LoadingScreen';
+import { notificationSubscription } from './NotificationService';
 
 /**
  * Central part of the application
@@ -33,10 +33,14 @@ export const App = () => {
   };
 
   useEffect(() => {
+    // subscribe to notifications
+    notificationSubscription();
+    // subscribe to operations
     const timerId = setInterval(() => {
       pollOperations();
       console.log('polling operations');
     }, 5000);
+
     return () => {
       clearInterval(timerId);
     };
