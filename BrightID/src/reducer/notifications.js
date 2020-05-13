@@ -3,6 +3,7 @@
 import {
   SET_BACKUP_PENDING,
   SET_INVITES,
+  SET_DEVICE_TOKEN,
   ACCEPT_INVITE,
   REJECT_INVITE,
   RESET_STORE,
@@ -13,6 +14,7 @@ const initialState = {
   invites: [],
   pendingConnections: [],
   backupPending: false,
+  deviceToken: '',
 };
 
 const backupNotification = {
@@ -20,6 +22,7 @@ const backupNotification = {
   msg: 'Choose trusted connections to backup your BrightID',
 };
 
+// not sure if this is the best way...
 const setNotifications = (nextState: NotificationsState): Notification[] => [
   ...nextState.pendingConnections,
   ...(nextState.backupPending ? [backupNotification] : []),
@@ -46,6 +49,9 @@ export const reducer = (
     case SET_BACKUP_PENDING: {
       const nextState = { ...state, backupPending: action.backupPending };
       return { ...nextState, notifications: setNotifications(nextState) };
+    }
+    case SET_DEVICE_TOKEN: {
+      return { ...state, deviceToken: action.deviceToken };
     }
     case RESET_STORE: {
       return { ...initialState };

@@ -70,7 +70,12 @@ export {
   acceptInvite,
 } from './groups';
 
-export { SET_BACKUP_PENDING, updateNotifications } from './notifications';
+export {
+  SET_BACKUP_PENDING,
+  SET_DEVICE_TOKEN,
+  updateNotifications,
+  setDeviceToken,
+} from './notifications';
 
 export {
   ADD_OPERATION,

@@ -159,6 +159,7 @@ declare type NotificationsState = {
   invites: invite[],
   pendingConnections: PendingConnection[],
   backupPending: boolean,
+  deviceToken: string,
 };
 
 declare type BackupNotification = {
