@@ -3,7 +3,7 @@ import { StyleSheet, View, Alert, FlatList, SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
 import { innerJoin } from 'ramda';
-import api from '@/Api/BrightId';
+import api from '@/api/node';
 import emitter from '@/emitter';
 import { leaveGroup, dismissFromGroup } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
@@ -100,10 +100,7 @@ export class MembersScreen extends Component<Props, State> {
     const { searchParam } = this.props;
     const searchString = searchParam.toLowerCase().replace(/\s/g, '');
     return this.getMembers().filter((item) =>
-      `${item.name}`
-        .toLowerCase()
-        .replace(/\s/g, '')
-        .includes(searchString),
+      `${item.name}`.toLowerCase().replace(/\s/g, '').includes(searchString),
     );
   };
 

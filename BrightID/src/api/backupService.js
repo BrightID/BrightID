@@ -1,16 +1,17 @@
 // @flow
 
 import { create, ApiSauceInstance, ApiResponse } from 'apisauce';
-import { b64ToUrlSafeB64 } from '../utils/encoding';
-import store from '../store';
+import { b64ToUrlSafeB64 } from '@/utils/encoding';
+import store from '@/store';
 
-let recoveryUrl = 'https://recovery.brightid.org';
+// let recoveryUrl = 'https://recovery.brightid.org';
+let recoveryUrl = 'http://localhost:3000';
 let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
   seedUrl = 'http://test.brightid.org';
 }
 
-class BackupApi {
+class BackupService {
   recoveryApi: ApiSauceInstance;
 
   profileApi: ApiSauceInstance;
@@ -38,7 +39,7 @@ class BackupApi {
     const res = await this.recoveryApi.get(
       `/backups/${b64ToUrlSafeB64(key1)}/${b64ToUrlSafeB64(key2)}`,
     );
-    BackupApi.throwOnError(res);
+    BackupService.throwOnError(res);
     return res;
   }
 
@@ -49,7 +50,7 @@ class BackupApi {
         data,
       },
     );
-    BackupApi.throwOnError(res);
+    BackupService.throwOnError(res);
   }
 
   async getSig() {
@@ -58,7 +59,7 @@ class BackupApi {
       const res = await this.profileApi.get(
         `/profile/download/${b64ToUrlSafeB64(publicKey)}`,
       );
-      BackupApi.throwOnError(res);
+      BackupService.throwOnError(res);
       return res.data.data;
     } catch (err) {
       console.warn(err);
@@ -71,7 +72,7 @@ class BackupApi {
         data,
         uuid: b64ToUrlSafeB64(signingKey),
       });
-      BackupApi.throwOnError(res);
+      BackupService.throwOnError(res);
       console.log('setSig');
     } catch (err) {
       console.warn(err);
@@ -79,6 +80,6 @@ class BackupApi {
   }
 }
 
-const backupApi = new BackupApi();
+const backupService = new BackupService();
 
-export default backupApi;
+export default backupService;

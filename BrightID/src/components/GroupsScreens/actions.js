@@ -6,8 +6,8 @@ import emitter from '@/emitter';
 import { saveImage } from '@/utils/filesystem';
 import { encryptAesKey } from '@/utils/invites';
 import { setNewGroupCoFounders, createGroup } from '@/actions/index';
-import api from '@/Api/BrightId';
-import backupApi from '@/Api/BackupApi';
+import api from '@/api/node';
+import backupApi from '@/api/backupService';
 import { hash, randomKey } from '@/utils/encoding';
 import { backupPhoto, backupUser } from '../Recovery/helpers';
 

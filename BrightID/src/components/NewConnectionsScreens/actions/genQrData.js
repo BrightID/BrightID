@@ -1,7 +1,7 @@
 // @flow
 
 import { Buffer } from 'buffer';
-import api from '@/Api/BrightId';
+import api from '@/api/node';
 import { b64ToUrlSafeB64, randomKey } from '@/utils/encoding';
 import { setConnectQrData } from '@/actions';
 

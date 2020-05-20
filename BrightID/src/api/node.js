@@ -12,7 +12,7 @@ if (__DEV__) {
 }
 const v = 4;
 
-class BrightId {
+class NodeApi {
   api: ApiSauceInstance;
 
   baseUrlInternal: string;
@@ -59,7 +59,9 @@ class BrightId {
     sig2: string,
     timestamp: number,
   ) {
+    const message = `Add Connection${id1}${id2}${timestamp}`;
     const op = {
+      _key: hash(message),
       name: 'Add Connection',
       id1,
       id2,
@@ -68,10 +70,10 @@ class BrightId {
       timestamp,
       v,
     };
-    op._key = hash(op.name + op.id1 + op.id2 + op.timestamp);
+    // op._key = hash(op.name + op.id1 + op.id2 + op.timestamp);
     const res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async removeConnection(id2: string, reason: string) {
@@ -95,8 +97,8 @@ class BrightId {
       v,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async createGroup(
@@ -134,8 +136,8 @@ class BrightId {
       v,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async dismiss(id2: string, group: string) {
@@ -159,8 +161,8 @@ class BrightId {
       v,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async invite(id2: string, group: string, data: string) {
@@ -185,7 +187,7 @@ class BrightId {
       v,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
+    NodeApi.throwOnError(res);
   }
 
   async deleteGroup(group: string) {
@@ -208,8 +210,8 @@ class BrightId {
       v,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async joinGroup(group: string) {
@@ -232,8 +234,8 @@ class BrightId {
       v,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async leaveGroup(group: string) {
@@ -256,8 +258,8 @@ class BrightId {
       v,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async setTrusted(trusted: string[]) {
@@ -281,8 +283,8 @@ class BrightId {
       v,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async setSigningKey(op: {
@@ -298,8 +300,8 @@ class BrightId {
     op._key = hash(op.name + op.id + op.signingKey + op.timestamp);
     op.v = v;
     const res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async linkContextId(context: string, contextId: string) {
@@ -322,35 +324,35 @@ class BrightId {
       v,
     };
     const res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async getUserInfo(id: string) {
     const res = await this.api.get(`/users/${id}`);
-    BrightId.throwOnError(res);
+    NodeApi.throwOnError(res);
     return res.data.data;
   }
 
   async getOperationState(opHash: string) {
     const res = await this.api.get(`/operations/${opHash}`);
-    BrightId.throwOnError(res);
+    NodeApi.throwOnError(res);
     return res.data.data;
   }
 
   async getContext(context: string) {
     const res = await this.api.get(`/contexts/${context}`);
-    BrightId.throwOnError(res);
+    NodeApi.throwOnError(res);
     return res.data.data;
   }
 
   async ip(): string {
     const res = await this.api.get('/ip');
-    BrightId.throwOnError(res);
+    NodeApi.throwOnError(res);
     return res.data.data.ip;
   }
 }
 
-const brightId = new BrightId();
+const nodeApi = new NodeApi();
 
-export default brightId;
+export default nodeApi;

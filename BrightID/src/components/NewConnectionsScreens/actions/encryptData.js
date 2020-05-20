@@ -2,9 +2,10 @@
 
 import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
+import { retrieveImage } from '@/utils/filesystem';
+import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
+import notificationService from '@/api/notificationService';
 import { postData } from './postData';
-import { retrieveImage } from '../../../utils/filesystem';
-import { strToUint8Array, uInt8ArrayToB64 } from '../../../utils/encoding';
 
 export const encryptAndUploadLocalData = () => async (
   dispatch: dispatch,
@@ -23,10 +24,22 @@ export const encryptAndUploadLocalData = () => async (
   } = getState();
   try {
     // retrieve photo
+
     const photo = await retrieveImage(filename);
 
-    let timestamp;
-    let signedMessage;
+    let timestamp, signedMessage, notificationToken;
+
+    try {
+      let { notificationToken: token } = await notificationService.getToken({
+        oneTime: true,
+      });
+      notificationToken = token;
+    } catch (err) {
+      notificationToken = 'unavailable';
+      console.log(err.message);
+    }
+
+    console.log('notificationToken', notificationToken);
 
     if (connectUserData.id && !connectUserData.signedMessage) {
       // The other user sent their id. Sign the message and send it.
@@ -45,6 +58,7 @@ export const encryptAndUploadLocalData = () => async (
       photo,
       name,
       score,
+      notificationToken,
       signedMessage,
       timestamp,
     };
@@ -52,6 +66,7 @@ export const encryptAndUploadLocalData = () => async (
     const dataStr = JSON.stringify(dataObj);
 
     let encrypted = CryptoJS.AES.encrypt(dataStr, aesKey).toString();
+    // dispatch(postData(encrypted));
     dispatch(postData(encrypted));
   } catch (err) {
     err instanceof Error ? console.warn(err.message) : console.log(err);

@@ -12,7 +12,7 @@ import {
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { addNewConnection } from './actions/addNewConnection';
-import api from '../../Api/BrightId';
+import api from '../../api/node';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -64,7 +64,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
         flaggers,
       } = await api.getUserInfo(this.props.connectUserData.id);
       console.log('flaggers', flaggers);
-      const mutualConnections = connections.filter(function(el) {
+      const mutualConnections = connections.filter(function (el) {
         return myConnections.some((x) => x.id === el.id);
       });
       this.setState({

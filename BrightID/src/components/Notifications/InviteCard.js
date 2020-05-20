@@ -7,7 +7,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { DEVICE_TYPE } from '@/utils/constants';
 import { getGroupName } from '@/utils/groups';
 import { acceptInvite, rejectInvite, joinGroup } from '@/actions';
-import api from '@/Api/BrightId';
+import api from '@/api/node';
 import GroupPhoto from '@/components/GroupsScreens/GroupPhoto';
 import { backupUser, backupPhoto } from '@/components/Recovery/helpers';
 

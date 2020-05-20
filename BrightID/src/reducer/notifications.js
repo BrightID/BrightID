@@ -14,7 +14,7 @@ const initialState = {
   invites: [],
   pendingConnections: [],
   backupPending: false,
-  deviceToken: '',
+  deviceToken: 'unavailable',
 };
 
 const backupNotification = {

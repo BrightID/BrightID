@@ -249,7 +249,7 @@ export class MyCodeScreen extends React.Component<Props, State> {
             {DEVICE_LARGE && <Text style={styles.name}>{name}</Text>}
           </View>
         </View>
-        <View style={styles.bottomHalf} testID="qrCode" >
+        <View style={styles.bottomHalf} testID="qrCode">
           {qrsvg ? this.renderTimer() : <View />}
           {qrsvg ? this.renderQrCode() : this.renderSpinner()}
           {qrsvg ? this.renderCopyQr() : <View />}

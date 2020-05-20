@@ -1,7 +1,7 @@
 // @flow
 
 import store from '@/store';
-import api from '@/Api/BrightId';
+import api from '@/api/node';
 import { deleteConnection } from '@/actions';
 import { fakeJoinGroups } from '@/actions/fakeGroup';
 import { backupUser } from '../../Recovery/helpers';

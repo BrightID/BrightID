@@ -19,7 +19,8 @@ export const notificationSubscription = () => {
   Notifications.events().registerRemoteNotificationsRegistered(
     (event: Registered) => {
       // TODO: Send the token to my server so it could send back push notifications...
-      store.dispatch(setDeviceToken(event.deviceToken));
+      if (event.deviceToken) store.dispatch(setDeviceToken(event.deviceToken));
+      console.log('token', event.deviceToken);
     },
   );
   Notifications.events().registerRemoteNotificationsRegistrationFailed(

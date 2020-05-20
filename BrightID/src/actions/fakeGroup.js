@@ -1,7 +1,7 @@
 // @flow
 
 import nacl from 'tweetnacl';
-import api from '../Api/BrightId';
+import api from '../api/node';
 import {
   strToUint8Array,
   uInt8ArrayToB64,
