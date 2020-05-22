@@ -6,14 +6,14 @@ import { applyMiddleware, createStore, compose } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import reducer from '@/reducer';
-import { groupsTransformer, userTransformer } from './transform';
+import {groupsTransformer, qrDataTransformer, userTransformer} from './transform';
 import { migrate } from './migrations';
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   stateReconciler: autoMergeLevel2,
-  transforms: [userTransformer, groupsTransformer],
+  transforms: [userTransformer, groupsTransformer, qrDataTransformer],
   version: 5,
   migrate,
 };

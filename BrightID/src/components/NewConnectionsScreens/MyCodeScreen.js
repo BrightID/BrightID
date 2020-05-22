@@ -10,19 +10,15 @@ import {
   Clipboard,
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import qrcode from 'qrcode';
 import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
-import { parseString } from 'xml2js';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import emitter from '@/emitter';
-import { removeConnectQrData } from '@/actions';
 import { DEVICE_LARGE } from '@/utils/constants';
-import { genQrData } from './actions/genQrData';
-import { fetchData } from './actions/fetchData';
-import { encryptAndUploadLocalData } from './actions/encryptData';
+import { codeToSvg } from '@/utils/qrCodes';
+import { startConnecting } from './actions/connecting';
 
 /**
  * My Code screen of BrightID
@@ -35,7 +31,7 @@ import { encryptAndUploadLocalData } from './actions/encryptData';
 
 type State = {
   copied: boolean,
-  timer: number,
+  countdown: number,
   qrsvg:
     | string
     | {
@@ -48,74 +44,76 @@ type State = {
 };
 
 const COPIED_TIMEOUT = 500;
-const QR_TTL = 900000;
 
 export class MyCodeScreen extends React.Component<Props, State> {
-  connectionExpired: TimeoutID;
-
-  fetchProfileData: IntervalID;
+  countdown: IntervalID;
 
   constructor(props: Props) {
     super(props);
     this.state = {
       qrsvg: '',
       copied: false,
-      timer: QR_TTL,
+      countdown: 0,
     };
   }
 
   componentDidMount() {
-    this.initiateQrCodeGen();
+    console.log(`Mounting MyCodeScreen`);
+    this.checkQrCode();
+
+    // start local timer just for UI
+    this.countdown = setInterval(() => {
+      this.timerTick();
+    }, 100);
+
+    // For now directly jump to preview when a profile is received.
+    // Needs to be replaced by notification system.
+    // Or maybe leave it like that, so as long as the MyCode screen is open the first responder
+    // directly to the preview contact. Any subsequent responders will end up in the
+    // notification area.
+    emitter.on('connectDataReady', this.navigateToPreview);
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    const currentQrString = this.props.myQrData
+      ? this.props.myQrData.qrString
+      : undefined;
+    const prevQrString = prevProps.myQrData
+      ? prevProps.myQrData.qrString
+      : undefined;
+    if (currentQrString !== prevQrString) {
+      this.checkQrCode();
+    }
   }
 
   componentWillUnmount() {
-    this.resetQrCode();
+    console.log(`Unmounting MyCodeScreen`);
+    clearInterval(this.countdown);
+    emitter.off('connectDataReady', this.navigateToPreview);
   }
 
-  initiateQrCodeGen = () => {
-    // After 15 minutes, connection attempts expire on the server.
-    const { dispatch } = this.props;
-    this.subscribeToProfileUpload();
-    emitter.on('connectDataReady', this.navigateToPreview);
-    emitter.on('recievedProfileData', this.unsubscribeToProfileUpload);
-    dispatch(removeConnectQrData());
-    dispatch(genQrData()).then(() => {
-      this.genQrCode();
-      dispatch(encryptAndUploadLocalData());
-    });
-  };
-
-  resetQrCode = () => {
-    const { dispatch } = this.props;
-    this.unsubscribeToProfileUpload();
-    emitter.off('connectDataReady', this.navigateToPreview);
-    emitter.off('recievedProfileData', this.unsubscribeToProfileUpload);
-    dispatch(removeConnectQrData());
-    this.setState({ qrsvg: '', timer: QR_TTL });
+  checkQrCode = () => {
+    if (!this.props.myQrData) {
+      const { dispatch } = this.props;
+      console.log(`Triggering generation of new QRCodeData`);
+      dispatch(startConnecting());
+    } else {
+      // qrData is available, now create actual qrCode image
+      const { qrString } = this.props.myQrData;
+      console.log(`Using QRCodeData (${qrString})`);
+      codeToSvg(qrString, (qrsvg) => this.setState({ qrsvg }));
+    }
   };
 
   timerTick = () => {
-    this.setState((prevState) => ({
-      timer: prevState.timer - 1000,
-    }));
-  };
-
-  subscribeToProfileUpload = () => {
-    const { dispatch } = this.props;
-    this.connectionExpired = setTimeout(this.navigateToHome, QR_TTL);
-    this.fetchProfileData = setInterval(() => {
-      dispatch(fetchData());
-      this.timerTick();
-      if (this.state.timer < 60000) {
-        this.resetQrCode();
-        this.initiateQrCodeGen();
-      }
-    }, 1000);
-  };
-
-  unsubscribeToProfileUpload = () => {
-    clearTimeout(this.connectionExpired);
-    clearInterval(this.fetchProfileData);
+    if (this.props.myQrData) {
+      let timer =
+        this.props.myQrData.ttl - (Date.now() - this.props.myQrData.timestamp);
+      if (timer < 0) timer = 0;
+      this.setState((prevState) => ({
+        timer,
+      }));
+    }
   };
 
   navigateToPreview = () => {
@@ -136,26 +134,9 @@ export class MyCodeScreen extends React.Component<Props, State> {
     return `${minutes}:${seconds}`;
   };
 
-  genQrCode = () => {
-    const {
-      connectQrData: { qrString },
-    } = this.props;
-    qrcode.toString(qrString, this.handleQrString);
-  };
-
-  handleQrString = (err, qr) => {
-    if (err) return console.log(err);
-    parseString(qr, this.parseQrString);
-  };
-
-  parseQrString = (err, qrsvg) => {
-    if (err) return console.log(err);
-    this.setState({ qrsvg });
-  };
-
   copyQr = () => {
     const {
-      connectQrData: { qrString },
+      myQrData: { qrString },
     } = this.props;
     Clipboard.setString(qrString);
     this.setState({ copied: true }, () =>
@@ -351,7 +332,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ user, connectQrData }) => ({
-  ...user,
-  connectQrData,
-}))(MyCodeScreen);
+const mapStateToProps = (state) => {
+  const props = {
+    ...state.user,
+    connectQrData: state.connectQrData.otherCodeData,
+    myQrData: state.connectQrData.myQrData,
+  };
+  return props;
+};
+
+export default connect(mapStateToProps)(MyCodeScreen);
