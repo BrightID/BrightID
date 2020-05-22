@@ -6,6 +6,45 @@ import { postData } from './postData';
 import { retrieveImage } from '../../../utils/filesystem';
 import { strToUint8Array, uInt8ArrayToB64 } from '../../../utils/encoding';
 
+export const encryptAndUploadProfile = (aesKey) => async (
+  dispatch: dispatch,
+  getState: getState,
+) => {
+  const {
+    user: {
+      id,
+      photo: { filename },
+      name,
+      score,
+    },
+  } = getState();
+  try {
+    // retrieve photo
+    const photo = await retrieveImage(filename);
+
+    let timestamp;
+    let signedMessage;
+
+    const dataObj = {
+      id,
+      // publicKey is added to make it compatible with earlier version
+      publicKey: id,
+      photo,
+      name,
+      score,
+      signedMessage,
+      timestamp,
+    };
+
+    const dataStr = JSON.stringify(dataObj);
+
+    let encrypted = CryptoJS.AES.encrypt(dataStr, aesKey).toString();
+    dispatch(postData(encrypted));
+  } catch (err) {
+    err instanceof Error ? console.warn(err.message) : console.log(err);
+  }
+}
+
 export const encryptAndUploadLocalData = () => async (
   dispatch: dispatch,
   getState: getState,
