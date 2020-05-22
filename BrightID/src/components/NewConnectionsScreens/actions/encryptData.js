@@ -4,7 +4,8 @@ import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
 import { retrieveImage } from '@/utils/filesystem';
 import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
-import notificationService from '@/api/notificationService';
+import { oneTimeToken } from './notificationToken';
+
 import { postData } from './postData';
 
 export const encryptAndUploadLocalData = () => async (
@@ -27,19 +28,7 @@ export const encryptAndUploadLocalData = () => async (
 
     const photo = await retrieveImage(filename);
 
-    let timestamp, signedMessage, notificationToken;
-
-    try {
-      let { notificationToken: token } = await notificationService.getToken({
-        oneTime: true,
-      });
-      notificationToken = token;
-    } catch (err) {
-      notificationToken = 'unavailable';
-      console.log(err.message);
-    }
-
-    console.log('notificationToken', notificationToken);
+    let timestamp, signedMessage;
 
     if (connectUserData.id && !connectUserData.signedMessage) {
       // The other user sent their id. Sign the message and send it.
@@ -50,6 +39,8 @@ export const encryptAndUploadLocalData = () => async (
         nacl.sign.detached(strToUint8Array(message), secretKey),
       );
     }
+
+    const notificationToken = await oneTimeToken();
 
     const dataObj = {
       id,

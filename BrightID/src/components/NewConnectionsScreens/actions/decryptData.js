@@ -1,11 +1,9 @@
 // @flow
 
 import CryptoJS from 'crypto-js';
-import {
-  setConnectUserData,
-  removeConnectUserData,
-} from '../../../actions/index';
-import emitter from '../../../emitter';
+import { setConnectUserData, removeConnectUserData } from '@/actions';
+import notificationService from '@/api/notificationService';
+import emitter from '@/emitter';
 
 export const decryptData = (data: string) => async (
   dispatch: dispatch,
@@ -21,6 +19,11 @@ export const decryptData = (data: string) => async (
     );
     const decryptedObj = JSON.parse(decrypted);
     decryptedObj.aesKey = aesKey;
+
+    notificationService.sendNotification({
+      notificationToken: decryptedObj.notificationToken,
+      type: 'CONNECTION_REQUEST',
+    });
 
     dispatch(removeConnectUserData());
     dispatch(setConnectUserData(decryptedObj));

@@ -40,6 +40,25 @@ class NotificationService {
     NotificationService.throwOnError(res);
     return res.data;
   }
+
+  async sendNotification({
+    notificationToken,
+    type,
+  }: {
+    notificationToken: string,
+    type: string,
+  }) {
+    const notificationTokens = [notificationToken];
+    const res = await this.notifyApi.post(`/alert`, {
+      notificationTokens,
+      type,
+    });
+
+    console.log(res.data);
+
+    NotificationService.throwOnError(res);
+    // return res.data;
+  }
 }
 
 const notificationService = new NotificationService();
