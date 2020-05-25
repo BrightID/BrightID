@@ -5,14 +5,15 @@ import { CLEAR_MY_QR_DATA, SET_MY_QR_DATA } from '../actions/connectQrData';
 
 export const initialState = {
   myQrData: undefined,
-  // TODO - enable storing of multiple other data
-  otherCodeData: {
+  // TODO - enable storing data of multiple peers
+  peerQrData: {
     aesKey: '',
     ipAddress: '',
     uuid: '',
     qrString: '',
     channel: '',
     user: '',
+    type: '',
   },
 };
 
@@ -22,18 +23,16 @@ export const reducer = (
 ) => {
   switch (action.type) {
     case SET_CONNECT_QR_DATA: {
-      action.connectQrData.channel =
-        action.connectQrData.uuid +
-        (action.connectQrData.user === '1' ? '2' : '1');
+      action.connectQrData.channel = action.connectQrData.uuid;
       return {
         ...state,
-        otherCodeData: action.connectQrData,
+        peerQrData: action.connectQrData,
       };
     }
     case REMOVE_CONNECT_QR_DATA: {
       return {
         ...state,
-        otherCodeData: initialState.otherCodeData,
+        peerQrData: initialState.peerQrData,
       };
     }
     case SET_MY_QR_DATA: {

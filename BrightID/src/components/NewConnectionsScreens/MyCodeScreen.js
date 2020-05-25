@@ -17,7 +17,7 @@ import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import emitter from '@/emitter';
 import { DEVICE_LARGE } from '@/utils/constants';
-import { codeToSvg } from '@/utils/qrCodes';
+import { qrCodeToSvg } from '@/utils/qrCodes';
 import { startConnecting } from './actions/connecting';
 
 /**
@@ -46,7 +46,7 @@ type State = {
 const COPIED_TIMEOUT = 500;
 
 export class MyCodeScreen extends React.Component<Props, State> {
-  countdown: IntervalID;
+  timer: IntervalID;
 
   constructor(props: Props) {
     super(props);
@@ -58,11 +58,10 @@ export class MyCodeScreen extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    console.log(`Mounting MyCodeScreen`);
     this.checkQrCode();
 
-    // start local timer just for UI
-    this.countdown = setInterval(() => {
+    // start local timer to display countdown
+    this.timer = setInterval(() => {
       this.timerTick();
     }, 100);
 
@@ -87,8 +86,7 @@ export class MyCodeScreen extends React.Component<Props, State> {
   }
 
   componentWillUnmount() {
-    console.log(`Unmounting MyCodeScreen`);
-    clearInterval(this.countdown);
+    clearInterval(this.timer);
     emitter.off('connectDataReady', this.navigateToPreview);
   }
 
@@ -101,17 +99,17 @@ export class MyCodeScreen extends React.Component<Props, State> {
       // qrData is available, now create actual qrCode image
       const { qrString } = this.props.myQrData;
       console.log(`Using QRCodeData (${qrString})`);
-      codeToSvg(qrString, (qrsvg) => this.setState({ qrsvg }));
+      qrCodeToSvg(qrString, (qrsvg) => this.setState({ qrsvg }));
     }
   };
 
   timerTick = () => {
     if (this.props.myQrData) {
-      let timer =
+      let countdown =
         this.props.myQrData.ttl - (Date.now() - this.props.myQrData.timestamp);
-      if (timer < 0) timer = 0;
+      if (countdown < 0) countdown = 0;
       this.setState((prevState) => ({
-        timer,
+        countdown,
       }));
     }
   };
@@ -125,9 +123,9 @@ export class MyCodeScreen extends React.Component<Props, State> {
   };
 
   displayTime = () => {
-    const { timer } = this.state;
-    const minutes = Math.floor(timer / 60000);
-    let seconds = Math.trunc((timer % 60000) / 1000);
+    const { countdown } = this.state;
+    const minutes = Math.floor(countdown / 60000);
+    let seconds = Math.trunc((countdown % 60000) / 1000);
     if (seconds < 10) {
       seconds = `0${seconds}`;
     }
@@ -335,7 +333,6 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   const props = {
     ...state.user,
-    connectQrData: state.connectQrData.otherCodeData,
     myQrData: state.connectQrData.myQrData,
   };
   return props;

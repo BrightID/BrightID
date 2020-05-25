@@ -32,5 +32,7 @@ export const INVITE_REJECTED = 'rejected';
 export const INVITE_ACCEPTED = 'accepted';
 
 // CONNECTION CONSTANTS
-export const QR_TTL = 600000;
+export const QR_TTL = 900000;
 export const PROFILE_POLL_INTERVAL = 1000;
+export const QR_TYPE_INITIATOR = 'initiator';
+export const QR_TYPE_RESPONDER = 'responder';
