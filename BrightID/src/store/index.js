@@ -7,13 +7,15 @@ import { persistStore, persistReducer } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import reducer from '@/reducer';
 import { groupsTransformer, userTransformer } from './transform';
+import { migrate } from './migrations';
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   stateReconciler: autoMergeLevel2,
   transforms: [userTransformer, groupsTransformer],
-  version: 4,
+  version: 5,
+  migrate,
 };
 
 const persistedReducer = persistReducer(persistConfig, reducer);
