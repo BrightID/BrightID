@@ -1,11 +1,12 @@
 import qrcode from 'qrcode';
 import { parseString } from 'xml2js';
 import { Buffer } from 'buffer';
-import { b64ToUrlSafeB64, randomKey } from '@/utils/encoding';
 import api from '@/Api/BrightId';
-import { QR_TTL } from './constants';
+import { b64ToUrlSafeB64, randomKey, b64ToUint8Array } from '@/utils/encoding';
+import { QR_TTL, QR_TYPE_INITIATOR } from './constants';
 
-export const generateQrData = async (aesKey) => {
+export const generateQrData = async () => {
+  const aesKey = await randomKey(16);
   var ipAddress = await api.ip();
   const b64Ip = Buffer.from(
     ipAddress.split('.').map((octet) => parseInt(octet, 10)),
@@ -17,10 +18,11 @@ export const generateQrData = async (aesKey) => {
   const timestamp = Date.now();
   const ttl = QR_TTL;
   const qrString = `${aesKey}${uuid}${b64Ip}`;
-  return { aesKey, uuid, ipAddress, qrString, timestamp, ttl };
+  const type = QR_TYPE_INITIATOR;
+  return { aesKey, uuid, ipAddress, qrString, timestamp, ttl, type };
 };
 
-export const codeToSvg = (qrString, callback) => {
+export const qrCodeToSvg = (qrString, callback) => {
   qrcode.toString(qrString, (err, qr) => {
     if (err) return console.log(err);
     parseString(qr, (err, qrSvg) => {
@@ -28,4 +30,12 @@ export const codeToSvg = (qrString, callback) => {
       callback(qrSvg);
     });
   });
+};
+
+export const parseQrData = (qrString) => {
+  const aesKey = qrString.substr(0, 24);
+  const uuid = qrString.substr(24, 12);
+  const b64ip = `${qrString.substr(36, 6)}==`;
+  const ipAddress = b64ToUint8Array(b64ip).join('.');
+  return { aesKey, uuid, ipAddress, qrString };
 };

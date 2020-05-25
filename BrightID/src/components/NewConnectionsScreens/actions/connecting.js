@@ -1,30 +1,26 @@
 // @flow
 
-import { randomKey } from '@/utils/encoding';
 import { generateQrData } from '@/utils/qrCodes';
 import { PROFILE_POLL_INTERVAL } from '@/utils/constants';
 import { clearMyQrData, setMyQrData } from '@/actions/connectQrData';
-import { encryptAndUploadProfile } from './encryptData';
-import { fetchData } from './fetchData';
+import { encryptAndUploadProfile, fetchProfile } from './profile';
 
 let profile_timer = 0;
 
 export const startConnecting = () => async (dispatch: dispatch) => {
   try {
     // prepare QrCode data
-    const aesKey = await randomKey(16);
-    const qrCodeData = await generateQrData(aesKey);
+    const qrCodeData = await generateQrData();
     console.log(`Created new QRCodeData: ${qrCodeData.qrString}`);
-    // upload my profile encrypted with aesKey
-    dispatch(encryptAndUploadProfile(aesKey));
+    // upload my encrypted profile
+    dispatch(encryptAndUploadProfile(qrCodeData));
     // store my qr data in store
     dispatch(setMyQrData(qrCodeData));
 
-    // start polling for uploaded profiles
-    // TODO: Likely to be replaced with Notifications
+    // start polling for uploaded profiles from people scanning my code
     clearInterval(profile_timer);
     profile_timer = setInterval(() => {
-      dispatch(fetchData());
+      dispatch(fetchProfile(qrCodeData));
     }, PROFILE_POLL_INTERVAL);
 
     // Start timer to expire QRdata and stop polling
