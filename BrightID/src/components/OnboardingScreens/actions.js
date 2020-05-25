@@ -1,9 +1,13 @@
 // @flow
 
 import nacl from 'tweetnacl';
-import { setUserData, setHashedId } from '../../actions';
-import { createImageDirectory, saveImage } from '../../utils/filesystem';
-import { b64ToUrlSafeB64, uInt8ArrayToB64 } from '../../utils/encoding';
+import { setGenericPassword } from 'react-native-keychain';
+import { compose } from 'ramda';
+import { setUserData, setHashedId } from '@/actions';
+import { createImageDirectory, saveImage } from '@/utils/filesystem';
+import { b64ToUrlSafeB64, uInt8ArrayToB64, objToUint8 } from '@/utils/encoding';
+
+const keyToString = compose(uInt8ArrayToB64, objToUint8);
 
 export const handleBrightIdCreation = ({
   name,
@@ -14,16 +18,18 @@ export const handleBrightIdCreation = ({
 }) => async (dispatch: dispatch) => {
   try {
     // create public / private key pair
-    const { publicKey, secretKey } = await nacl.sign.keyPair();
-    const b64PubKey = uInt8ArrayToB64(publicKey);
-    const id = b64ToUrlSafeB64(b64PubKey);
+    let { publicKey, secretKey } = await nacl.sign.keyPair();
+    let b64PubKey = uInt8ArrayToB64(publicKey);
+    let id = b64ToUrlSafeB64(b64PubKey);
+    // save id / secretKey inside of keychain
+    await setGenericPassword(id, keyToString(secretKey));
+    // creates Image Directory
     await createImageDirectory();
-    const filename = await saveImage({ imageName: id, base64Image: photo.uri });
+    let filename = await saveImage({ imageName: id, base64Image: photo.uri });
 
     const userData = {
       publicKey: b64PubKey,
       id,
-      secretKey,
       name,
       photo: { filename },
     };

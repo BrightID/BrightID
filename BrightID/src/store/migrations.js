@@ -1,5 +1,5 @@
 import { createMigrate } from 'redux-persist';
-import * as Keychain from 'react-native-keychain';
+import { setGenericPassword } from 'react-native-keychain';
 import { compose } from 'ramda';
 import { objToUint8, uInt8ArrayToB64 } from '@/utils/encoding';
 
@@ -11,7 +11,7 @@ const migrations = {
     let secretKey = state.user?.secretKey;
     if (Object.keys(secretKey).length) {
       // save secret key in keychain storage
-      await Keychain.setGenericPassword(
+      await setGenericPassword(
         state.user.id ?? 'empty',
         keyToString(secretKey),
       );

@@ -1,7 +1,8 @@
 // @flow
 
 import AsyncStorage from '@react-native-community/async-storage';
-import { objToUint8, b64ToUrlSafeB64 } from '@/utils/encoding';
+import { setGenericPassword } from 'react-native-keychain';
+import { b64ToUrlSafeB64, objToUint8, uInt8ArrayToB64 } from '@/utils/encoding';
 import {
   setUserData,
   setUserId,
@@ -9,10 +10,11 @@ import {
   setApps,
   removeSafePubKey,
 } from '@/actions';
-
 import { defaultSort } from '@/components/Connections/models/sortingUtility';
-
 import store from '@/store';
+import { compose } from 'ramda';
+
+const keyToString = compose(uInt8ArrayToB64, objToUint8);
 
 export const bootstrapV0 = async (navigation: navigation) => {
   try {
@@ -21,7 +23,10 @@ export const bootstrapV0 = async (navigation: navigation) => {
     if (userData !== null) {
       userData = JSON.parse(userData);
       // convert private key to uInt8Array
-      userData.secretKey = objToUint8(userData.secretKey);
+      await setGenericPassword(
+        userData.id ?? 'empty',
+        keyToString(userData.secretKey),
+      );
       // update redux store
       await store.dispatch(setUserData(userData));
     } else {
@@ -121,20 +126,15 @@ export const verifyUserData = async () => {
     let userData = await AsyncStorage.getItem('userData');
     if (userData !== null) {
       userData = JSON.parse(userData);
-      let { publicKey, secretKey, name, photo } = store.getState().user;
+      let { publicKey, name, photo } = store.getState().user;
       console.log(
         JSON.stringify(userData.publicKey),
         JSON.stringify(publicKey),
-      );
-      console.log(
-        JSON.stringify(userData.secretKey),
-        JSON.stringify(secretKey),
       );
       console.log(userData.name, name);
       console.log(JSON.stringify(userData.photo), JSON.stringify(photo));
       return (
         JSON.stringify(userData.publicKey) === JSON.stringify(publicKey) &&
-        JSON.stringify(userData.secretKey) === JSON.stringify(secretKey) &&
         userData.name === name &&
         JSON.stringify(userData.photo) === JSON.stringify(photo)
       );

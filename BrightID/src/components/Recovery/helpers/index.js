@@ -3,6 +3,7 @@
 import { Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
+import { setGenericPassword } from 'react-native-keychain';
 import {
   createImageDirectory,
   retrieveImage,
@@ -22,12 +23,7 @@ import {
   setHashedId,
   setGroups,
 } from '@/actions';
-import {
-  uInt8ArrayToB64,
-  b64ToUint8Array,
-  strToUint8Array,
-  safeHash,
-} from '@/utils/encoding';
+import { uInt8ArrayToB64, safeHash } from '@/utils/encoding';
 
 export const setTrustedConnections = async () => {
   const {
@@ -164,23 +160,6 @@ export const parseRecoveryQr = (
   }
 };
 
-export const setRecoverySig = async (
-  id: string,
-  signingKey: string,
-  timestamp: number,
-) => {
-  const {
-    user: { id: userId, secretKey },
-  } = store.getState();
-  const message = `Set Signing Key${id}${signingKey}${timestamp}`;
-  const sig = uInt8ArrayToB64(
-    nacl.sign.detached(strToUint8Array(message), secretKey),
-  );
-  const data = { signer: userId, id, sig };
-  await backupApi.setSig(data, signingKey);
-  return true;
-};
-
 export const sigExists = (data: Signature) => {
   const { recoveryData } = store.getState();
   return (
@@ -248,6 +227,9 @@ export const fetchBackupData = async (key: string, pass: string) => {
 export const restoreUserData = async (pass: string) => {
   const { id, secretKey, publicKey } = store.getState().recoveryData;
 
+  // save secretKey in keystore
+  await setGenericPassword(id, secretKey);
+
   const decrypted = await fetchBackupData('data', pass);
 
   const { userData, connections, groups = [] } = JSON.parse(decrypted);
@@ -259,7 +241,6 @@ export const restoreUserData = async (pass: string) => {
   emitter.emit('restoreTotal', connections.length + groupsPhotoCount + 2);
   userData.id = id;
   userData.publicKey = publicKey;
-  userData.secretKey = b64ToUint8Array(secretKey);
 
   const userPhoto = await fetchBackupData(id, pass);
   if (userPhoto) {

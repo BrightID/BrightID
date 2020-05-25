@@ -1,12 +1,19 @@
 // @flow
 
 import nacl from 'tweetnacl';
-import { saveImage } from '../../../utils/filesystem';
-import { strToUint8Array, uInt8ArrayToB64 } from '../../../utils/encoding';
+import { getGenericPassword } from 'react-native-keychain';
+import { saveImage } from '@/utils/filesystem';
+import {
+  strToUint8Array,
+  uInt8ArrayToB64,
+  b64ToUint8Array,
+} from '@/utils/encoding';
+
+import api from '@/Api/BrightId';
+import { addConnection } from '@/actions';
+
 import { encryptAndUploadLocalData } from './encryptData';
-import api from '../../../Api/BrightId';
 import { backupPhoto, backupUser } from '../../Recovery/helpers';
-import { addConnection } from '../../../actions';
 
 const TIME_FUDGE = 60 * 60 * 1000; // timestamp can be this far in the future (milliseconds) to accommodate 2 clients clock differences
 
@@ -20,9 +27,11 @@ export const addNewConnection = () => async (
    */
   try {
     const {
-      user: { id, secretKey, backupCompleted },
+      user: { backupCompleted },
       connectUserData,
     } = getState();
+    let { username, password } = await getGenericPassword();
+    let secretKey = b64ToUint8Array(password);
     let connectionDate = Date.now();
 
     if (connectUserData.signedMessage) {
@@ -30,17 +39,17 @@ export const addNewConnection = () => async (
       // make an API call to create the connection.
 
       if (connectUserData.timestamp > connectionDate + TIME_FUDGE) {
-        throw "timestamp can't be in the future";
+        throw new Error("timestamp can't be in the future");
       }
 
-      const message = `Add Connection${connectUserData.id}${id}${connectUserData.timestamp}`;
+      const message = `Add Connection${connectUserData.id}${username}${connectUserData.timestamp}`;
       const signedMessage = uInt8ArrayToB64(
         nacl.sign.detached(strToUint8Array(message), secretKey),
       );
       await api.createConnection(
         connectUserData.id,
         connectUserData.signedMessage,
-        id,
+        username,
         signedMessage,
         connectUserData.timestamp,
       );

@@ -116,8 +116,7 @@ export const createNewGroup = (
     }
     return true;
   } catch (err) {
-    console.log(err);
-    Alert.alert('Cannot create group', err.message);
+    console.log(err.message);
     return false;
   }
 };

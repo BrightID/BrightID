@@ -2,26 +2,31 @@
 
 import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
+import { getGenericPassword } from 'react-native-keychain';
+import { retrieveImage } from '@/utils/filesystem';
+import {
+  strToUint8Array,
+  uInt8ArrayToB64,
+  b64ToUint8Array,
+} from '@/utils/encoding';
 import { postData } from './postData';
-import { retrieveImage } from '../../../utils/filesystem';
-import { strToUint8Array, uInt8ArrayToB64 } from '../../../utils/encoding';
 
 export const encryptAndUploadLocalData = () => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  const {
-    user: {
-      id,
-      secretKey,
-      photo: { filename },
-      name,
-      score,
-    },
-    connectQrData: { aesKey },
-    connectUserData,
-  } = getState();
   try {
+    const {
+      user: {
+        photo: { filename },
+        name,
+        score,
+      },
+      connectQrData: { aesKey },
+      connectUserData,
+    } = getState();
+    let { username, password } = await getGenericPassword();
+    let secretKey = b64ToUint8Array(password);
     // retrieve photo
     const photo = await retrieveImage(filename);
 
@@ -32,16 +37,16 @@ export const encryptAndUploadLocalData = () => async (
       // The other user sent their id. Sign the message and send it.
 
       timestamp = Date.now();
-      const message = `Add Connection${id}${connectUserData.id}${timestamp}`;
+      let message = `Add Connection${username}${connectUserData.id}${timestamp}`;
       signedMessage = uInt8ArrayToB64(
         nacl.sign.detached(strToUint8Array(message), secretKey),
       );
     }
 
     const dataObj = {
-      id,
+      id: username,
       // publicKey is added to make it compatible with earlier version
-      publicKey: id,
+      publicKey: username,
       photo,
       name,
       score,
