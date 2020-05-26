@@ -1,14 +1,13 @@
 // @flow
 
 import { create, ApiSauceInstance, ApiResponse } from 'apisauce';
-import { getGenericPassword } from 'react-native-keychain';
 import nacl from 'tweetnacl';
 import {
   strToUint8Array,
   uInt8ArrayToB64,
-  b64ToUint8Array,
   b64ToUrlSafeB64,
 } from '@/utils/encoding';
+import { obtainKeys } from '@/utils/keychain';
 import store from '@/store';
 
 let recoveryUrl = 'https://recovery.brightid.org';
@@ -82,8 +81,7 @@ class BackupApi {
     signingKey: string,
   }) {
     try {
-      let { username, password } = await getGenericPassword();
-      let secretKey = b64ToUint8Array(password);
+      let { username, secretKey } = await obtainKeys();
 
       let message = `Set Signing Key${id}${signingKey}${timestamp}`;
 

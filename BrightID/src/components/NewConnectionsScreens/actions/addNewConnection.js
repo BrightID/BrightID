@@ -1,14 +1,9 @@
 // @flow
 
 import nacl from 'tweetnacl';
-import { getGenericPassword } from 'react-native-keychain';
 import { saveImage } from '@/utils/filesystem';
-import {
-  strToUint8Array,
-  uInt8ArrayToB64,
-  b64ToUint8Array,
-} from '@/utils/encoding';
-
+import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
+import { obtainKeys } from '@/utils/keychain';
 import api from '@/Api/BrightId';
 import { addConnection } from '@/actions';
 
@@ -30,8 +25,7 @@ export const addNewConnection = () => async (
       user: { backupCompleted },
       connectUserData,
     } = getState();
-    let { username, password } = await getGenericPassword();
-    let secretKey = b64ToUint8Array(password);
+    let { username, secretKey } = await obtainKeys();
     let connectionDate = Date.now();
 
     if (connectUserData.signedMessage) {

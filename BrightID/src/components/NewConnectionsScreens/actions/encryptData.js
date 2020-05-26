@@ -2,13 +2,9 @@
 
 import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
-import { getGenericPassword } from 'react-native-keychain';
 import { retrieveImage } from '@/utils/filesystem';
-import {
-  strToUint8Array,
-  uInt8ArrayToB64,
-  b64ToUint8Array,
-} from '@/utils/encoding';
+import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
+import { obtainKeys } from '@/utils/keychain';
 import { postData } from './postData';
 
 export const encryptAndUploadLocalData = () => async (
@@ -25,8 +21,7 @@ export const encryptAndUploadLocalData = () => async (
       connectQrData: { aesKey },
       connectUserData,
     } = getState();
-    let { username, password } = await getGenericPassword();
-    let secretKey = b64ToUint8Array(password);
+    let { username, secretKey } = await obtainKeys();
     // retrieve photo
     const photo = await retrieveImage(filename);
 

@@ -2,13 +2,8 @@
 
 import { create, ApiSauceInstance } from 'apisauce';
 import nacl from 'tweetnacl';
-import { getGenericPassword } from 'react-native-keychain';
-import {
-  strToUint8Array,
-  uInt8ArrayToB64,
-  hash,
-  b64ToUint8Array,
-} from '@/utils/encoding';
+import { strToUint8Array, uInt8ArrayToB64, hash } from '@/utils/encoding';
+import { obtainKeys } from '@/utils/keychain';
 import store from '@/store';
 import { addOperation } from '@/actions';
 
@@ -85,8 +80,7 @@ class BrightId {
   }
 
   async removeConnection(id2: string, reason: string) {
-    let { username, password } = await getGenericPassword();
-    let secretKey = b64ToUint8Array(password);
+    let { username, secretKey } = await obtainKeys();
 
     let name = 'Remove Connection';
     let timestamp = Date.now();
@@ -121,8 +115,7 @@ class BrightId {
     url: string,
     type: string,
   ) {
-    let { username, password } = await getGenericPassword();
-    let secretKey = b64ToUint8Array(password);
+    let { username, secretKey } = await obtainKeys();
 
     console.log('username', username);
     console.log('secretKey', secretKey);
@@ -167,8 +160,7 @@ class BrightId {
   }
 
   async dismiss(id2: string, group: string) {
-    let { username, password } = await getGenericPassword();
-    let secretKey = b64ToUint8Array(password);
+    let { username, secretKey } = await obtainKeys();
 
     let name = 'Dismiss';
     let timestamp = Date.now();
@@ -195,8 +187,7 @@ class BrightId {
   }
 
   async invite(id2: string, group: string, data: string) {
-    let { username, password } = await getGenericPassword();
-    let secretKey = b64ToUint8Array(password);
+    let { username, secretKey } = await obtainKeys();
 
     let name = 'Invite';
     let timestamp = Date.now();
@@ -223,8 +214,7 @@ class BrightId {
   }
 
   async deleteGroup(group: string) {
-    let { username, password } = await getGenericPassword();
-    let secretKey = b64ToUint8Array(password);
+    let { username, secretKey } = await obtainKeys();
 
     let name = 'Remove Group';
     let timestamp = Date.now();
@@ -250,8 +240,7 @@ class BrightId {
   }
 
   async joinGroup(group: string) {
-    let { username, password } = await getGenericPassword();
-    let secretKey = b64ToUint8Array(password);
+    let { username, secretKey } = await obtainKeys();
 
     let name = 'Add Membership';
     let timestamp = Date.now();
@@ -277,8 +266,7 @@ class BrightId {
   }
 
   async leaveGroup(group: string) {
-    let { username, password } = await getGenericPassword();
-    let secretKey = b64ToUint8Array(password);
+    let { username, secretKey } = await obtainKeys();
 
     let name = 'Remove Membership';
     let timestamp = Date.now();
@@ -304,8 +292,7 @@ class BrightId {
   }
 
   async setTrusted(trusted: string[]) {
-    let { username, password } = await getGenericPassword();
-    let secretKey = b64ToUint8Array(password);
+    let { username, secretKey } = await obtainKeys();
 
     let name = 'Set Trusted Connections';
     let timestamp = Date.now();
@@ -350,8 +337,7 @@ class BrightId {
   }
 
   async linkContextId(context: string, contextId: string) {
-    let { username, password } = await getGenericPassword();
-    let secretKey = b64ToUint8Array(password);
+    let { username, secretKey } = await obtainKeys();
 
     let name = 'Link ContextId';
     let timestamp = Date.now();

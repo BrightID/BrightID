@@ -7,16 +7,21 @@ const keyToString = compose(uInt8ArrayToB64, objToUint8);
 
 const migrations = {
   5: async (state) => {
-    // secret key defaults to empty object
-    let secretKey = state.user?.secretKey;
-    if (Object.keys(secretKey).length) {
-      // save secret key in keychain storage
-      await setGenericPassword(
-        state.user.id ?? 'empty',
-        keyToString(secretKey),
-      );
-      // delete secret key from async storage
-      delete state.user.secretKey;
+    try {
+      // secret key defaults to empty object
+      let secretKey = state.user?.secretKey;
+      if (Object.keys(secretKey).length) {
+        // save secret key in keychain storage
+        await setGenericPassword(
+          state.user.id ?? 'empty',
+          keyToString(secretKey),
+        );
+        // delete secret key from async storage
+        delete state.user.secretKey;
+      }
+    } catch (err) {
+      console.log(err.message);
+      alert('Unable to access device keychain...');
     }
 
     return state;
