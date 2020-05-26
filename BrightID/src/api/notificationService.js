@@ -44,14 +44,17 @@ class NotificationService {
   async sendNotification({
     notificationToken,
     type,
+    payload,
   }: {
     notificationToken: string,
     type: string,
+    payload: { [val: string]: string },
   }) {
     const notificationTokens = [notificationToken];
     const res = await this.notifyApi.post(`/alert`, {
       notificationTokens,
       type,
+      payload,
     });
 
     console.log(res.data);

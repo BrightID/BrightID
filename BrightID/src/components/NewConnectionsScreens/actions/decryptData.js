@@ -12,7 +12,7 @@ export const decryptData = (data: string) => async (
   try {
     const { connectQrData } = getState();
 
-    const { aesKey } = connectQrData;
+    const { aesKey, channel, user } = connectQrData;
 
     const decrypted = CryptoJS.AES.decrypt(data, aesKey).toString(
       CryptoJS.enc.Utf8,
@@ -22,7 +22,10 @@ export const decryptData = (data: string) => async (
 
     notificationService.sendNotification({
       notificationToken: decryptedObj.notificationToken,
-      type: 'CONNECTION_REQUEST',
+      type: user === 2 ? 'CONNECTION_REQUEST' : 'CONNECTION_ACCEPTED',
+      payload: {
+        channel,
+      },
     });
 
     dispatch(removeConnectUserData());
