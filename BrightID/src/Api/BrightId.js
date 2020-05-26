@@ -113,7 +113,7 @@ class BrightId {
   }
 
   async createGroup(
-    group: string,
+    groupId: string,
     id2: string,
     inviteData2: string,
     id3: string,
@@ -131,7 +131,7 @@ class BrightId {
     let timestamp = Date.now();
     let message =
       name +
-      group +
+      groupId +
       username +
       id2 +
       inviteData2 +
@@ -153,7 +153,7 @@ class BrightId {
       inviteData2,
       id3,
       inviteData3,
-      group,
+      group: groupId,
       url,
       sig1,
       type,

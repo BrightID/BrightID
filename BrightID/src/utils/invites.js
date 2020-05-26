@@ -101,9 +101,8 @@ export const updateInvites = async (invites: invite[]): Promise<invite[]> => {
 
 export const encryptAesKey = async (aesKey: string, signingKey: string) => {
   try {
-    const {
-      user: { secretKey },
-    } = store.getState();
+    let { password } = await getGenericPassword();
+    let secretKey = b64ToUint8Array(password);
 
     const pub = convertPublicKey(b64ToUint8Array(signingKey));
     const msg = b64ToUint8Array(aesKey);
