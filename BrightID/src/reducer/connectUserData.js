@@ -9,6 +9,8 @@ export const initialState = {
   timestamp: 0,
   signedMessage: '',
   score: 0,
+  qrData: {},
+  notificationToken: '',
 };
 
 export const reducer = (
@@ -29,6 +31,8 @@ export const reducer = (
         timestamp: 0,
         signedMessage: '',
         score: 0,
+        qrData: {},
+        notificationToken: '',
       };
     }
 

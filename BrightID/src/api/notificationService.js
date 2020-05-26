@@ -6,7 +6,8 @@ import store from '@/store';
 
 let notificationUrl = 'https://notify.brightid.org';
 if (__DEV__) {
-  notificationUrl = 'https://notify-test.brightid.org';
+  // notificationUrl = 'https://notify-test.brightid.org';
+  notificationUrl = 'http://192.168.18.13:3000';
 }
 
 class NotificationService {

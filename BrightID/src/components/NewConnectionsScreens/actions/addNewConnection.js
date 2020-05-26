@@ -1,12 +1,13 @@
 // @flow
 
 import nacl from 'tweetnacl';
-import { saveImage } from '../../../utils/filesystem';
-import { strToUint8Array, uInt8ArrayToB64 } from '../../../utils/encoding';
+import notificationService from '@/api/notificationService';
+import { saveImage } from '@/utils/filesystem';
+import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
+import api from '@/api/node';
+import { addConnection } from '@/actions';
 import { encryptAndUploadLocalData } from './encryptData';
-import api from '../../../api/node';
 import { backupPhoto, backupUser } from '../../Recovery/helpers';
-import { addConnection } from '../../../actions';
 
 const TIME_FUDGE = 60 * 60 * 1000; // timestamp can be this far in the future (milliseconds) to accommodate 2 clients clock differences
 
@@ -73,6 +74,19 @@ export const addNewConnection = () => async (
       await backupUser();
       await backupPhoto(connectUserData.id, filename);
     }
+
+    // we don't care if this fails right now
+    // if we remove polling, we need to make sure this works
+    notificationService.sendNotification({
+      notificationToken: connectUserData.notificationToken,
+      type:
+        connectUserData.qrData.user === '2'
+          ? 'CONNECTION_REQUEST'
+          : 'CONNECTION_ACCEPTED',
+      payload: {
+        uuid: connectUserData.qrData.uuid,
+      },
+    });
     // first backup the connection because if we save the connection first
     // and then we get an error in saving the backup, user will not solve
     // the issue by making the connection again.

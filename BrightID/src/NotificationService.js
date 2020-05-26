@@ -25,7 +25,7 @@ export const notificationSubscription = () => {
   );
   Notifications.events().registerRemoteNotificationsRegistrationFailed(
     (event: RegistrationError) => {
-      console.error(event);
+      console.error('registration error', event);
     },
   );
 
