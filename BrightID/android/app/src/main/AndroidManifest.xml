@@ -17,6 +17,7 @@
     android:windowSoftInputMode="adjustResize"
     android:usesCleartextTraffic="true"
   >
+    <meta-data android:name="asset_statements" android:resource="@string/asset_statements" />
 
     <activity
         android:name=".SplashActivity"

@@ -69,3 +69,5 @@ node
 husky@*
 core-js@*
 /artifacts/
+
+assetlinks.json

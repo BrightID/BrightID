@@ -5,6 +5,7 @@ import {
 } from 'react-native-keychain';
 import { compose } from 'ramda';
 import { objToUint8, uInt8ArrayToB64 } from '@/utils/encoding';
+import { BACKUP_URL } from '@/utils/constants';
 
 const keyToString = compose(uInt8ArrayToB64, objToUint8);
 
@@ -24,6 +25,12 @@ const migrations = {
           'secretKey',
           state.user.id ?? 'empty',
           keyToString(secretKey),
+        );
+        // save backup password
+        await setInternetCredentials(
+          BACKUP_URL,
+          state.user.id,
+          state.user.password,
         );
         // delete secret key from async storage
         delete state.user.secretKey;
