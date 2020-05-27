@@ -30,3 +30,5 @@ export const BOTTOM_NAV_HEIGHT = DEVICE_TYPE === 'small' ? 55 : 63;
 export const INVITE_ACTIVE = 'active';
 export const INVITE_REJECTED = 'rejected';
 export const INVITE_ACCEPTED = 'accepted';
+
+export const BACKUP_URL = 'https://explorer.brightid.org';

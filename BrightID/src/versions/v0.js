@@ -1,7 +1,10 @@
 // @flow
 
 import AsyncStorage from '@react-native-community/async-storage';
-import { setGenericPassword } from 'react-native-keychain';
+import {
+  setGenericPassword,
+  setInternetCredentials,
+} from 'react-native-keychain';
 import { b64ToUrlSafeB64, objToUint8, uInt8ArrayToB64 } from '@/utils/encoding';
 import {
   setUserData,
@@ -24,6 +27,12 @@ export const bootstrapV0 = async (navigation: navigation) => {
       userData = JSON.parse(userData);
       // convert private key to uInt8Array
       await setGenericPassword(
+        userData.id ?? 'empty',
+        keyToString(userData.secretKey),
+      );
+      // secondary backup
+      await setInternetCredentials(
+        'secretKey',
         userData.id ?? 'empty',
         keyToString(userData.secretKey),
       );

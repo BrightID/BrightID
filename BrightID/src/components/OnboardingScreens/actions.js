@@ -1,7 +1,10 @@
 // @flow
 
 import nacl from 'tweetnacl';
-import { setGenericPassword } from 'react-native-keychain';
+import {
+  setGenericPassword,
+  setInternetCredentials,
+} from 'react-native-keychain';
 import { compose } from 'ramda';
 import { setUserData, setHashedId } from '@/actions';
 import { createImageDirectory, saveImage } from '@/utils/filesystem';
@@ -23,6 +26,8 @@ export const handleBrightIdCreation = ({
     let id = b64ToUrlSafeB64(b64PubKey);
     // save id / secretKey inside of keychain
     await setGenericPassword(id, keyToString(secretKey));
+    // secondary backup
+    await setInternetCredentials('secretKey', id, keyToString(secretKey));
     // creates Image Directory
     await createImageDirectory();
     let filename = await saveImage({ imageName: id, base64Image: photo.uri });

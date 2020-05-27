@@ -44,8 +44,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to use your camera for taking a profile picture and scanning QR codes when making a connection</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>This app would like to securely store your BrightID credentials</string>
 	<key>NSMainNibFile</key>
 	<string>LaunchScreenBrightID</string>
 	<key>NSMainNibFile~ipad</key>

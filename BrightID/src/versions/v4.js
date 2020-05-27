@@ -1,7 +1,10 @@
 // @flow
 
 import AsyncStorage from '@react-native-community/async-storage';
-import { setGenericPassword } from 'react-native-keychain';
+import {
+  setGenericPassword,
+  setInternetCredentials,
+} from 'react-native-keychain';
 import { store } from '@/store';
 import {
   setApps,
@@ -23,6 +26,12 @@ export const bootstrap = async (version: string) => {
     const dataObj = JSON.parse(dataStr);
     // save secretKey in keychain
     await setGenericPassword(
+      dataObj.id ?? 'empty',
+      keyToString(dataObj.secretKey),
+    );
+    // secondary backup
+    await setInternetCredentials(
+      'secretKey',
       dataObj.id ?? 'empty',
       keyToString(dataObj.secretKey),
     );
@@ -62,7 +71,11 @@ export const bootstrap = async (version: string) => {
     }
 
     store.dispatch(
-      hydrateConnections({ connections, trustedConnections, connectionsSort }),
+      hydrateConnections({
+        connections,
+        trustedConnections,
+        connectionsSort,
+      }),
     );
 
     store.dispatch(
