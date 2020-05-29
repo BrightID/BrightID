@@ -12,6 +12,7 @@ import { store, persistor } from './store';
 import { navigationRef } from './NavigationService';
 import Loading from './components/Helpers/LoadingScreen';
 import { notificationSubscription } from './NotificationService';
+import { NotificationBanner } from './components/Helpers/NotificationBanner';
 
 /**
  * Central part of the application
@@ -50,6 +51,7 @@ export const App = () => {
     <Provider store={store}>
       <PersistGate loading={<Loading app={true} />} persistor={persistor}>
         <SafeAreaProvider>
+          <NotificationBanner />
           <NavigationContainer
             style={styles.container}
             ref={navigationRef}
