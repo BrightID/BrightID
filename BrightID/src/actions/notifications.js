@@ -2,6 +2,8 @@
 
 export const SET_BACKUP_PENDING = 'SET_BACKUP_PENDING';
 export const SET_DEVICE_TOKEN = 'SET_DEVICE_TOKEN';
+export const SET_ACTIVE_NOTIFICATION = 'SET_ACTIVE_NOTIFICATION';
+export const REMOVE_ACTIVE_NOTIFICATION = 'REMOVE_ACTIVE_NOTIFICATION';
 
 export const setBackupPending = (backupPending: boolean) => ({
   type: SET_BACKUP_PENDING,
@@ -11,6 +13,19 @@ export const setBackupPending = (backupPending: boolean) => ({
 export const setDeviceToken = (deviceToken: string) => ({
   type: SET_DEVICE_TOKEN,
   deviceToken,
+});
+
+export const setActiveNotification = (notification: {
+  title: string,
+  message: string,
+  payload: { [key: string]: string },
+}) => ({
+  type: SET_ACTIVE_NOTIFICATION,
+  notification,
+});
+
+export const removeActiveNotification = () => ({
+  type: REMOVE_ACTIVE_NOTIFICATION,
 });
 
 export const updateNotifications = () => async (

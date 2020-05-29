@@ -4,12 +4,15 @@ import {
   SET_BACKUP_PENDING,
   SET_INVITES,
   SET_DEVICE_TOKEN,
+  SET_ACTIVE_NOTIFICATION,
+  REMOVE_ACTIVE_NOTIFICATION,
   ACCEPT_INVITE,
   REJECT_INVITE,
   RESET_STORE,
 } from '@/actions';
 
 const initialState = {
+  activeNotification: {},
   notifications: [],
   invites: [],
   pendingConnections: [],
@@ -52,6 +55,12 @@ export const reducer = (
     }
     case SET_DEVICE_TOKEN: {
       return { ...state, deviceToken: action.deviceToken };
+    }
+    case SET_ACTIVE_NOTIFICATION: {
+      return { ...state, activeNotification: action.notification };
+    }
+    case REMOVE_ACTIVE_NOTIFICATION: {
+      return { ...state, activeNotification: {} };
     }
     case RESET_STORE: {
       return { ...initialState };

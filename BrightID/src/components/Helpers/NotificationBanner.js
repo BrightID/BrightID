@@ -4,25 +4,19 @@ import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import DropdownAlert from 'react-native-dropdownalert';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { navigate } from '@/NavigationService';
 
-export const NotificationBanner = ({ msg }: { msg: string }) => {
-  let dropDownAlertRef = useRef(null);
-  useEffect(() => {
-    // Animated.timing(fadeAnim, {
-    //   toValue: 1,
-    //   duration: 10000,
-    // }).start();
-    dropDownAlertRef.alertWithType(
-      'custom',
-      'New Connection',
-      'You have one new connection request',
-    );
-  }, []);
+let dropDownAlertRef = null;
 
-  const close = () => {
-    dropDownAlertRef.closeAction();
-  };
+export const alertUser = (notification) => {
+  dropDownAlertRef.alertWithType(
+    'custom',
+    notification.title,
+    notification.message,
+  );
+};
 
+export const NotificationBanner = () => {
   const _onClose = (data) => {
     console.log('close');
     console.log(data);
@@ -34,6 +28,7 @@ export const NotificationBanner = ({ msg }: { msg: string }) => {
   const _onTap = (data) => {
     console.log('tapped');
     console.log(data);
+    navigate('Notifications');
   };
 
   return (
@@ -52,6 +47,7 @@ export const NotificationBanner = ({ msg }: { msg: string }) => {
         }}
         titleStyle={styles.title}
         messageStyle={styles.message}
+        activeStatusBarStyle="dark-content"
         activeStatusBarBackgroundColor="#eee"
         testID="notificationBanner"
         elevation={10}
