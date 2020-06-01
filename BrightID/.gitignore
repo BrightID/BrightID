@@ -72,6 +72,7 @@ core-js@*
 
 assetlinks.json
 Podfile.lock
+yarn.lock
 
 ios/Pods/
 ios/Pods/Target Support Files/Pods-BrightID/

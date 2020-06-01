@@ -21,6 +21,10 @@
 		BB47A70C646B0BAD7D37BD81 /* libPods-BrightID-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9064239AD2685BA39B355DEE /* libPods-BrightID-tvOS.a */; };
 		D7708ACD2484DFB800B5DCAD /* LaunchScreenBrightID.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7708ACB2484DFB800B5DCAD /* LaunchScreenBrightID.xib */; };
 		D7708AD02484DFFB00B5DCAD /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7708ACF2484DFFB00B5DCAD /* AuthenticationServices.framework */; };
+		D7708AD52484E9B100B5DCAD /* EurostileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D7708AD12484E9B100B5DCAD /* EurostileRegular.ttf */; };
+		D7708AD62484E9B100B5DCAD /* ApexNew-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = D7708AD22484E9B100B5DCAD /* ApexNew-Light.otf */; };
+		D7708AD72484E9B100B5DCAD /* ApexNew-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = D7708AD32484E9B100B5DCAD /* ApexNew-Medium.otf */; };
+		D7708AD82484E9B100B5DCAD /* ApexNew-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = D7708AD42484E9B100B5DCAD /* ApexNew-Book.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +69,10 @@
 		D7708ACC2484DFB800B5DCAD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = BrightID/Base.lproj/LaunchScreenBrightID.xib; sourceTree = "<group>"; };
 		D7708ACE2484DFE000B5DCAD /* BrightID.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BrightID.entitlements; path = BrightID/BrightID.entitlements; sourceTree = "<group>"; };
 		D7708ACF2484DFFB00B5DCAD /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
+		D7708AD12484E9B100B5DCAD /* EurostileRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = EurostileRegular.ttf; path = ../assets/fonts/EurostileRegular.ttf; sourceTree = "<group>"; };
+		D7708AD22484E9B100B5DCAD /* ApexNew-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ApexNew-Light.otf"; path = "../assets/fonts/ApexNew-Light.otf"; sourceTree = "<group>"; };
+		D7708AD32484E9B100B5DCAD /* ApexNew-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ApexNew-Medium.otf"; path = "../assets/fonts/ApexNew-Medium.otf"; sourceTree = "<group>"; };
+		D7708AD42484E9B100B5DCAD /* ApexNew-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ApexNew-Book.otf"; path = "../assets/fonts/ApexNew-Book.otf"; sourceTree = "<group>"; };
 		E3F9CD600733163EC8A53606 /* libPods-BrightID.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
@@ -180,6 +188,10 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				D7708AD42484E9B100B5DCAD /* ApexNew-Book.otf */,
+				D7708AD22484E9B100B5DCAD /* ApexNew-Light.otf */,
+				D7708AD32484E9B100B5DCAD /* ApexNew-Medium.otf */,
+				D7708AD12484E9B100B5DCAD /* EurostileRegular.ttf */,
 				13B07FAE1A68108700A75B9A /* BrightID */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* BrightIDTests */,
@@ -346,6 +358,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7708AD52484E9B100B5DCAD /* EurostileRegular.ttf in Resources */,
+				D7708AD62484E9B100B5DCAD /* ApexNew-Light.otf in Resources */,
+				D7708AD72484E9B100B5DCAD /* ApexNew-Medium.otf in Resources */,
+				D7708AD82484E9B100B5DCAD /* ApexNew-Book.otf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				D7708ACD2484DFB800B5DCAD /* LaunchScreenBrightID.xib in Resources */,
 			);

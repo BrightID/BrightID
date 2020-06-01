@@ -74,7 +74,7 @@ export class AppsScreen extends React.Component<Prop, State> {
     const { apps } = this.props;
     const { selectedApp } = this.state;
     return (
-      <View style={styles.container}>
+      <View style={styles.container} testID="appsScreen">
         <this.sponsorLabel />
         <FlatList
           data={apps}
