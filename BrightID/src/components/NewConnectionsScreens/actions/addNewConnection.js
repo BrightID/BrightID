@@ -6,9 +6,8 @@ import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 import { obtainKeys } from '@/utils/keychain';
 import api from '@/Api/BrightId';
 import { addConnection } from '@/actions';
-
-import { encryptAndUploadLocalData } from './encryptData';
 import { backupPhoto, backupUser } from '../../Recovery/helpers';
+import { encryptAndUploadProfile } from './profile';
 
 const TIME_FUDGE = 60 * 60 * 1000; // timestamp can be this far in the future (milliseconds) to accommodate 2 clients clock differences
 
@@ -24,6 +23,7 @@ export const addNewConnection = () => async (
     const {
       user: { backupCompleted },
       connectUserData,
+      connectQrData: { peerQrData },
     } = getState();
     let { username, secretKey } = await obtainKeys();
     let connectionDate = Date.now();
@@ -50,8 +50,12 @@ export const addNewConnection = () => async (
     } else {
       // We will sign a connection request and upload it. The other user will
       // make the API call to create the connection.
-
-      dispatch(encryptAndUploadLocalData());
+      const timestamp = Date.now();
+      const message = `Add Connection${id}${connectUserData.id}${timestamp}`;
+      const signedMessage = uInt8ArrayToB64(
+        nacl.sign.detached(strToUint8Array(message), secretKey),
+      );
+      dispatch(encryptAndUploadProfile(peerQrData, timestamp, signedMessage));
     }
 
     const filename = await saveImage({
