@@ -51,7 +51,7 @@ export const addNewConnection = () => async (
       // We will sign a connection request and upload it. The other user will
       // make the API call to create the connection.
       const timestamp = Date.now();
-      const message = `Add Connection${id}${connectUserData.id}${timestamp}`;
+      const message = `Add Connection${username}${connectUserData.id}${timestamp}`;
       const signedMessage = uInt8ArrayToB64(
         nacl.sign.detached(strToUint8Array(message), secretKey),
       );
