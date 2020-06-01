@@ -1,7 +1,6 @@
 // @flow
 
 import { createTransform } from 'redux-persist';
-import { objToUint8 } from '@/utils/encoding';
 
 export const userTransformer = createTransform(
   // transform state on its way to being serialized and persisted.
@@ -10,8 +9,7 @@ export const userTransformer = createTransform(
   },
   // transform state being rehydrated
   (outboundState, key) => {
-    const secretKey = objToUint8(outboundState.secretKey);
-    return { ...outboundState, secretKey };
+    return outboundState;
   },
   { whitelist: ['user'] },
 );

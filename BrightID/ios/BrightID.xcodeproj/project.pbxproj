@@ -23,6 +23,7 @@
 		D747F5CB24628D92003B4728 /* ApexNew-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = D747F5C724628D91003B4728 /* ApexNew-Book.otf */; };
 		D747F5CC24628D92003B4728 /* EurostileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D747F5C824628D91003B4728 /* EurostileRegular.ttf */; };
 		D747F5CD24628D92003B4728 /* ApexNew-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = D747F5C924628D91003B4728 /* ApexNew-Light.otf */; };
+		D7513A6D247DFD3500EF116F /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7513A6C247DFD3500EF116F /* CloudKit.framework */; };
 		D7EBB9BF246A5EF20015E3F2 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7EBB9BE246A5EF20015E3F2 /* AuthenticationServices.framework */; };
 		EC250CA5437AEFDB48BC76DE /* libPods-BrightID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FCA863F2A41E4AA4BB067FE /* libPods-BrightID.a */; };
 /* End PBXBuildFile section */
@@ -72,6 +73,8 @@
 		D747F5C724628D91003B4728 /* ApexNew-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ApexNew-Book.otf"; path = "../assets/fonts/ApexNew-Book.otf"; sourceTree = "<group>"; };
 		D747F5C824628D91003B4728 /* EurostileRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = EurostileRegular.ttf; path = ../assets/fonts/EurostileRegular.ttf; sourceTree = "<group>"; };
 		D747F5C924628D91003B4728 /* ApexNew-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ApexNew-Light.otf"; path = "../assets/fonts/ApexNew-Light.otf"; sourceTree = "<group>"; };
+		D7513A6B247DFD1D00EF116F /* BrightIDRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BrightIDRelease.entitlements; path = BrightID/BrightIDRelease.entitlements; sourceTree = "<group>"; };
+		D7513A6C247DFD3500EF116F /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		D7EBB9BE246A5EF20015E3F2 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		DC8A4958A608EF965D88DF65 /* Pods-BrightID-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOS/Pods-BrightID-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		EC80B8A527F5254239C7A054 /* Pods-BrightID.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.release.xcconfig"; path = "Target Support Files/Pods-BrightID/Pods-BrightID.release.xcconfig"; sourceTree = "<group>"; };
@@ -93,6 +96,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7513A6D247DFD3500EF116F /* CloudKit.framework in Frameworks */,
 				D7EBB9BF246A5EF20015E3F2 /* AuthenticationServices.framework in Frameworks */,
 				EC250CA5437AEFDB48BC76DE /* libPods-BrightID.a in Frameworks */,
 			);
@@ -137,6 +141,7 @@
 		13B07FAE1A68108700A75B9A /* BrightID */ = {
 			isa = PBXGroup;
 			children = (
+				D7513A6B247DFD1D00EF116F /* BrightIDRelease.entitlements */,
 				D747F5C324628B69003B4728 /* LaunchScreenBrightID.xib */,
 				D747F5C024627AFC003B4728 /* BrightID.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -152,6 +157,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D7513A6C247DFD3500EF116F /* CloudKit.framework */,
 				D7EBB9BE246A5EF20015E3F2 /* AuthenticationServices.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
@@ -780,7 +786,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = BrightID/BrightID.entitlements;
+				CODE_SIGN_ENTITLEMENTS = BrightID/BrightIDRelease.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8YXQK74X6B;
 				INFOPLIST_FILE = BrightID/Info.plist;

@@ -1,6 +1,10 @@
 // @flow
 
 import AsyncStorage from '@react-native-community/async-storage';
+import {
+  setGenericPassword,
+  setInternetCredentials,
+} from 'react-native-keychain';
 import { store } from '@/store';
 import {
   setApps,
@@ -9,7 +13,10 @@ import {
   setGroups,
   setInvites,
 } from '@/actions';
-import { objToUint8 } from '@/utils/encoding';
+import { objToUint8, uInt8ArrayToB64 } from '@/utils/encoding';
+import { compose } from 'ramda';
+
+const keyToString = compose(uInt8ArrayToB64, objToUint8);
 
 // export const bootstrapV4 = hydrateStore('store@v4');
 
@@ -17,7 +24,17 @@ export const bootstrap = async (version: string) => {
   const dataStr = await AsyncStorage.getItem(version);
   if (dataStr !== null) {
     const dataObj = JSON.parse(dataStr);
-    dataObj.secretKey = objToUint8(dataObj.secretKey);
+    // save secretKey in keychain
+    await setGenericPassword(
+      dataObj.id ?? 'empty',
+      keyToString(dataObj.secretKey),
+    );
+    // secondary backup
+    await setInternetCredentials(
+      'secretKey',
+      dataObj.id ?? 'empty',
+      keyToString(dataObj.secretKey),
+    );
     dataObj.searchParam = '';
 
     const {
@@ -33,7 +50,6 @@ export const bootstrap = async (version: string) => {
       publicKey,
       password,
       hashedId,
-      secretKey,
       groups,
       invites,
     } = dataObj;
@@ -55,7 +71,11 @@ export const bootstrap = async (version: string) => {
     }
 
     store.dispatch(
-      hydrateConnections({ connections, trustedConnections, connectionsSort }),
+      hydrateConnections({
+        connections,
+        trustedConnections,
+        connectionsSort,
+      }),
     );
 
     store.dispatch(
@@ -68,7 +88,6 @@ export const bootstrap = async (version: string) => {
         publicKey,
         password,
         hashedId,
-        secretKey,
       }),
     );
   }

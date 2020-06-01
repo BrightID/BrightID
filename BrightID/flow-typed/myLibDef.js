@@ -151,7 +151,6 @@ declare type UserState = {
   safePublicKey?: string,
   password: string,
   hashedId: string,
-  secretKey: Uint8Array,
 };
 
 declare type NotificationInfo = {
