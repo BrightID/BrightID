@@ -8,5 +8,9 @@
 	</array>
 	<key>com.apple.developer.authentication-services.autofill-credential-provider</key>
 	<true/>
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)org.brightid.demo.SharedKeychain</string>
+	</array>
 </dict>
 </plist>
