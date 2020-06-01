@@ -8,10 +8,11 @@ import {
   NotificationCompletion,
   NotificationActionResponse,
 } from 'react-native-notifications';
-import { DEVICE_IOS } from '@/utils/constants';
-import { setDeviceToken } from '@/actions';
+import { DEVICE_IOS, DEVICE_ANDROID } from '@/utils/constants';
+import { setDeviceToken, setActiveNotification } from '@/actions';
 import { store } from '@/store';
 import { navigate } from './NavigationService';
+import { alertUser } from './components/Helpers/NotificationBanner';
 
 export const notificationSubscription = () => {
   Notifications.registerRemoteNotifications();
@@ -34,9 +35,18 @@ export const notificationSubscription = () => {
       notification: Notification,
       completion: (response: NotificationCompletion) => void,
     ) => {
-      console.log('Notification Received - Foreground', notification.payload);
+      // console.log('Notification Received - Foreground', notification);
+      if (DEVICE_ANDROID) {
+        const notificationMsg = {
+          title: notification.payload['gcm.notification.title'],
+          message: notification.payload['gcm.notification.body'],
+        };
+        setActiveNotification(notificationMsg);
+        alertUser(notificationMsg);
+        console.log(notificationMsg);
+      }
       // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
-      completion({ alert: true, sound: true, badge: true });
+      completion({ alert: false, sound: true, badge: true });
     },
   );
 
