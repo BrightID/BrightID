@@ -79,6 +79,7 @@ export class GroupsScreen extends React.Component<Props, State> {
               <FlatList
                 style={styles.groupsContainer}
                 contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
+                testID="groupsFlatList"
                 data={groups}
                 keyExtractor={({ id }, index) => id + index}
                 renderItem={this.renderGroup}
@@ -148,11 +149,7 @@ function mapStateToProps(state) {
   // NOTE: If below sorting/filtering gets too expensive at runtime use memoized selectors / reselect
   if (searchParam !== '') {
     groups = groups.filter((group) => {
-      if (
-        getGroupName(group)
-          .toLowerCase()
-          .includes(searchParam)
-      ) {
+      if (getGroupName(group).toLowerCase().includes(searchParam)) {
         // direct group name match
         return true;
       } else {

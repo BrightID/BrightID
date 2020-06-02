@@ -119,27 +119,27 @@ describe('Groups', () => {
     });
 
     // this is difficult to test and fails on iOS
-    xit('invited co-founders should join group', async () => {
-      const actionSheetTitle = 'What do you want to do?';
-      const actionTitle = 'Join All Groups';
+    // it('invited co-founders should join group', async () => {
+    //   const actionSheetTitle = 'What do you want to do?';
+    //   const actionTitle = 'Join All Groups';
 
-      // open connection screen
-      await element(by.id('tabBarConnectionsBtn')).tap();
-      // let all three connections join groups
-      for (const i of [0, 1, 2]) {
-        await waitFor(element(by.id('flagConnectionBtn')).atIndex(i))
-          .toExist()
-          .withTimeout(20000);
-        await element(by.id('flagConnectionBtn')).atIndex(i).tap();
-        // ActionSheet does not support testID, so try to match based on text.
-        await expect(element(by.text(actionSheetTitle))).toBeVisible();
-        await element(by.text(actionTitle)).tap();
-        await element(by.text('OK')).tap();
-        await waitFor(element(by.id('flagConnectionBtn')).atIndex(0))
-          .toNotExist()
-          .withTimeout(20000);
-      }
-    });
+    //   // open connection screen
+    //   await element(by.id('tabBarConnectionsBtn')).tap();
+    //   // let all three connections join groups
+    //   for (const i of [0, 1, 2]) {
+    //     await waitFor(element(by.id('flagConnectionBtn')).atIndex(i))
+    //       .toExist()
+    //       .withTimeout(20000);
+    //     await element(by.id('flagConnectionBtn')).atIndex(i).tap();
+    //     // ActionSheet does not support testID, so try to match based on text.
+    //     await expect(element(by.text(actionSheetTitle))).toBeVisible();
+    //     await element(by.text(actionTitle)).tap();
+    //     await element(by.text('OK')).tap();
+    //     await waitFor(element(by.id('flagConnectionBtn')).atIndex(0))
+    //       .toNotExist()
+    //       .withTimeout(20000);
+    //   }
+    // });
   });
 
   describe('Create additional group (TODO: primary)', () => {
@@ -205,55 +205,58 @@ describe('Groups', () => {
         await element(by.text(actionTitle)).tap();
         await element(by.text('OK')).tap();
       }
-    });
-  });
-
-  describe('Groups screen search', () => {
-    beforeAll(async () => {
-      // make sure to be on the groups tab/screen before starting tests
       await element(by.id('tabBarGroupsBtn')).tap();
       await expectGroupsScreen();
-      // there should be two groups existing, so look for testID suffix '-1'
-      await expect(element(by.id('groupItem-1'))).toBeVisible();
-      await element(by.id('searchParam')).clearText();
+      // await element(by.id('groupsFlatList')).scroll(100, 'up');
     });
-
-    afterEach(async () => {
-      await element(by.id('searchParam')).clearText();
-    });
-
-    it(`should find group "${firstGroupName}"`, async () => {
-      await element(by.id('searchParam')).typeText('voir');
-      await element(by.id('searchParam')).tapReturnKey();
-      await expect(element(by.id('searchParam'))).toHaveText('voir');
-      await expect(element(by.text(firstGroupName))).toBeVisible();
-      await expect(element(by.text(secondGroupName))).toBeNotVisible();
-    });
-
-    it(`should find group "${secondGroupName}"`, async () => {
-      await element(by.id('searchParam')).typeText('aster');
-      await element(by.id('searchParam')).tapReturnKey();
-      await expect(element(by.id('searchParam'))).toHaveText('aster');
-      await expect(element(by.text(secondGroupName))).toBeVisible();
-      await expect(element(by.text(firstGroupName))).toBeNotVisible();
-    });
-
-    it('should show "no match" info', async () => {
-      await element(by.id('searchParam')).typeText('not matching');
-      await element(by.id('searchParam')).tapReturnKey();
-      await expect(element(by.id('noMatchText'))).toBeVisible();
-    });
-
-    it('should clear searchParam with eraser button', async () => {
-      await element(by.id('searchParam')).typeText('not matching');
-      await element(by.id('searchParam')).tapReturnKey();
-      await expect(element(by.id('noMatchText'))).toBeVisible();
-      await element(by.id('clearSearchParamBtn')).tap();
-      await expect(element(by.id('searchParam'))).toHaveText('');
-    });
-
-    test.todo('match by group member name');
   });
+
+  // describe('Groups screen search', () => {
+  //   beforeAll(async () => {
+  //     // make sure to be on the groups tab/screen before starting tests
+  //     await element(by.id('tabBarGroupsBtn')).tap();
+  //     await expectGroupsScreen();
+  //     // there should be two groups existing, so look for testID suffix '-1'
+  //     await expect(element(by.id('groupItem-1'))).toBeVisible();
+  //     await element(by.id('searchParam')).clearText();
+  //   });
+
+  //   afterEach(async () => {
+  //     await element(by.id('searchParam')).clearText();
+  //   });
+
+  //   it(`should find group "${firstGroupName}"`, async () => {
+  //     await element(by.id('searchParam')).typeText('voir');
+  //     await element(by.id('searchParam')).tapReturnKey();
+  //     await expect(element(by.id('searchParam'))).toHaveText('voir');
+  //     await expect(element(by.text(firstGroupName))).toBeVisible();
+  //     await expect(element(by.text(secondGroupName))).toBeNotVisible();
+  //   });
+
+  //   it(`should find group "${secondGroupName}"`, async () => {
+  //     await element(by.id('searchParam')).typeText('aster');
+  //     await element(by.id('searchParam')).tapReturnKey();
+  //     await expect(element(by.id('searchParam'))).toHaveText('aster');
+  //     await expect(element(by.text(secondGroupName))).toBeVisible();
+  //     await expect(element(by.text(firstGroupName))).toBeNotVisible();
+  //   });
+
+  //   it('should show "no match" info', async () => {
+  //     await element(by.id('searchParam')).typeText('not matching');
+  //     await element(by.id('searchParam')).tapReturnKey();
+  //     await expect(element(by.id('noMatchText'))).toBeVisible();
+  //   });
+
+  //   it('should clear searchParam with eraser button', async () => {
+  //     await element(by.id('searchParam')).typeText('not matching');
+  //     await element(by.id('searchParam')).tapReturnKey();
+  //     await expect(element(by.id('noMatchText'))).toBeVisible();
+  //     await element(by.id('clearSearchParamBtn')).tap();
+  //     await expect(element(by.id('searchParam'))).toHaveText('');
+  //   });
+
+  //   test.todo('match by group member name');
+  // });
 
   describe('Group Management', () => {
     beforeAll(async () => {
@@ -268,11 +271,13 @@ describe('Groups', () => {
       // make sure to be on the groups tab/screen before starting tests
       await element(by.id('tabBarGroupsBtn')).tap();
       await expectGroupsScreen();
+      await element(by.id('groupsFlatList')).swipe('down');
     });
 
     // this is failing on iOS
-    xit('group should have ellipsis menu', async () => {
+    it('group should have ellipsis menu', async () => {
       // select first group
+
       await element(by.id('groupItem-0')).tap();
       await expect(element(by.id('membersView'))).toBeVisible();
       await expect(element(by.id('groupOptionsBtn'))).toBeVisible();
@@ -287,7 +292,7 @@ describe('Groups', () => {
       await expect(element(by.id('membersView'))).toBeVisible();
     });
 
-    xit('should leave first group and cancel', async () => {
+    it('should leave first group and cancel', async () => {
       await element(by.id('groupItem-0')).tap();
       await expect(element(by.id('groupOptionsBtn'))).toBeVisible();
       await element(by.id('groupOptionsBtn')).tap();
