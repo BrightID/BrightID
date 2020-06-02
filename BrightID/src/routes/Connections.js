@@ -11,6 +11,7 @@ import { headerOptions } from './helpers';
 const Stack = createStackNavigator();
 
 const connectionsScreenOptions = {
+  // coment out for test release
   headerRight: __DEV__
     ? () => (
         <TouchableOpacity

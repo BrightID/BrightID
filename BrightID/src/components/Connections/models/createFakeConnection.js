@@ -5,24 +5,22 @@ import store from '@/store';
 import { addFakeConnection } from '@/actions/fakeContact';
 
 export const createFakeConnection = () => {
-  if (__DEV__) {
-    Alert.alert(
-      'New Connection',
-      'Would you like simulate adding a new connection?',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
+  Alert.alert(
+    'New Connection',
+    'Would you like simulate adding a new connection?',
+    [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'Sure',
+        onPress: () => {
+          store.dispatch(addFakeConnection());
         },
-        {
-          text: 'Sure',
-          onPress: () => {
-            store.dispatch(addFakeConnection());
-          },
-        },
-      ],
-      { cancelable: true },
-    );
-  }
+      },
+    ],
+    { cancelable: true },
+  );
 };
