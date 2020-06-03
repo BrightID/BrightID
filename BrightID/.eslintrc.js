@@ -59,6 +59,7 @@ module.exports = {
     'flowtype/space-after-type-colon': 'off',
     'no-await-in-loop': 'off',
     'react-native/no-inline-styles': 'off',
+    'react/display-name': 'off',
   },
   globals: {
     __DEV__: 'readonly',
