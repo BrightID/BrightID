@@ -5,7 +5,7 @@ import { PROFILE_POLL_INTERVAL } from '@/utils/constants';
 import { clearMyQrData, setMyQrData } from '@/actions/connectQrData';
 import { encryptAndUploadProfile, fetchProfile } from './profile';
 
-let profile_timer = 0;
+let profile_timer: IntervalID;
 
 export const startConnecting = () => async (dispatch: dispatch) => {
   try {

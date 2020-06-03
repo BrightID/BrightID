@@ -18,7 +18,7 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import emitter from '@/emitter';
 import { DEVICE_LARGE } from '@/utils/constants';
 import { qrCodeToSvg } from '@/utils/qrCodes';
-import { startConnecting } from './actions/connecting';
+import { startConnecting, stopConnecting } from './actions/connecting';
 
 /**
  * My Code screen of BrightID
@@ -58,8 +58,10 @@ export class MyCodeScreen extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    this.checkQrCode();
-
+    // we need to reload the QR code every mount
+    const { dispatch } = this.props;
+    dispatch(stopConnecting());
+    dispatch(startConnecting());
     // start local timer to display countdown
     this.timer = setInterval(() => {
       this.timerTick();
@@ -228,7 +230,7 @@ export class MyCodeScreen extends React.Component<Props, State> {
             {DEVICE_LARGE && <Text style={styles.name}>{name}</Text>}
           </View>
         </View>
-        <View style={styles.bottomHalf} testID="qrCode" >
+        <View style={styles.bottomHalf} testID="qrCode">
           {qrsvg ? this.renderTimer() : <View />}
           {qrsvg ? this.renderQrCode() : this.renderSpinner()}
           {qrsvg ? this.renderCopyQr() : <View />}

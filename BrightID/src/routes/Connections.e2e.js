@@ -22,7 +22,7 @@ const connectionsScreenOptions = {
     </TouchableOpacity>
   ),
 
-  headerShown: DEVICE_TYPE === 'large',
+  headerShown: true,
 };
 
 const Connections = () => (
