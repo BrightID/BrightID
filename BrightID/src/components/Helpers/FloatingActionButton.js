@@ -63,7 +63,7 @@ export default class FloatActionButton extends Component {
           },
         ]}
       >
-        <TouchableOpacity onPress={this._onPress}>
+        <TouchableOpacity testID={this.props.testID} onPress={this._onPress}>
           <View style={styles.circleButton}>
             <Material
               name="plus"

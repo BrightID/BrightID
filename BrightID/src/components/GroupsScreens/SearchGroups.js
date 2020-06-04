@@ -27,11 +27,12 @@ class SearchGroups extends React.Component<Props & LocalProps> {
   render() {
     const { searchParam } = this.props;
     return (
-      <View style={styles.container}>
+      <View testID="searchView" style={styles.container}>
         <TouchableOpacity style={styles.searchIcon}>
           <Octicons size={26} name="search" color="#333" />
         </TouchableOpacity>
         <TextInput
+          testID="searchParam"
           onChangeText={(value) => this.props.dispatch(setGroupSearch(value))}
           style={styles.searchField}
           placeholder="Search by group or member name"
@@ -43,6 +44,7 @@ class SearchGroups extends React.Component<Props & LocalProps> {
           value={searchParam}
         />
         <TouchableOpacity
+          testID="clearSearchParamBtn"
           onPress={() => {
             this.props.dispatch(setGroupSearch(''));
           }}

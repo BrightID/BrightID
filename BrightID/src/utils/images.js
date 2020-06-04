@@ -1,8 +1,8 @@
 // @flow
 
-import ImagePicker from 'react-native-image-crop-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import { compose } from 'ramda';
+import ImagePicker from './ImagePickerProvider';
 
 const options = {
   cropping: true,

@@ -67,7 +67,7 @@ export class GroupInfoScreen extends React.Component<Props> {
     const { name, finalBase64, isPrimary } = this.state;
 
     return (
-      <Container style={styles.container} behavior="padding">
+      <Container testID="groupInfoScreen" style={styles.container} behavior="padding">
         <StatusBar
           barStyle="dark-content"
           backgroundColor="#F52828"
@@ -78,6 +78,7 @@ export class GroupInfoScreen extends React.Component<Props> {
           <View style={styles.addPhotoContainer}>
             {finalBase64.uri ? (
               <TouchableOpacity
+                testID="editGroupPhoto"
                 onPress={this.getPhotoFromLibrary}
                 accessible={true}
                 accessibilityLabel="edit photo"
@@ -86,6 +87,7 @@ export class GroupInfoScreen extends React.Component<Props> {
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
+                testID="editGroupPhoto"
                 onPress={this.getPhotoFromLibrary}
                 style={styles.addPhoto}
                 accessible={true}
@@ -97,6 +99,7 @@ export class GroupInfoScreen extends React.Component<Props> {
           </View>
           <View style={styles.textInputContainer}>
             <TextInput
+              testID="editGroupName"
               onChangeText={(name) => this.setState({ name })}
               value={name}
               placeholder="What is the group name?"
@@ -110,7 +113,7 @@ export class GroupInfoScreen extends React.Component<Props> {
           </View>
         </View>
         {!this.hasPrimaryGroup() && (
-          <View style={styles.toggleContainer}>
+          <View testID="primaryGroupView" style={styles.toggleContainer}>
             <Text style={styles.primaryGroupText}>
               A primary group represents the closest personal contacts (e.g.
               immediate family members) for a particular person. Each person can
@@ -118,6 +121,7 @@ export class GroupInfoScreen extends React.Component<Props> {
             </Text>
 
             <ToggleSwitch
+              testID="primaryGroupToggle"
               isOn={isPrimary}
               onColor="#428BE5"
               offColor="#979797"
@@ -130,6 +134,7 @@ export class GroupInfoScreen extends React.Component<Props> {
         )}
         <View style={styles.buttonContainer}>
           <TouchableOpacity
+            testID="nextBtn"
             style={styles.nextButton}
             onPress={this.validateInputs}
           >

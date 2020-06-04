@@ -11,9 +11,11 @@ import { headerOptions } from './helpers';
 const Stack = createStackNavigator();
 
 const connectionsScreenOptions = {
+  // coment out for test release
   headerRight: __DEV__
     ? () => (
         <TouchableOpacity
+          testID="createFakeConnectionBtn"
           style={{ marginRight: 11 }}
           onPress={createFakeConnection}
         >

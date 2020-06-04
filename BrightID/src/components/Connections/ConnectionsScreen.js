@@ -70,10 +70,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     const { connections, searchParam } = this.props;
     const searchString = searchParam.toLowerCase().replace(/\s/g, '');
     return connections.filter((item) =>
-      `${item.name}`
-        .toLowerCase()
-        .replace(/\s/g, '')
-        .includes(searchString),
+      `${item.name}`.toLowerCase().replace(/\s/g, '').includes(searchString),
     );
   };
 
@@ -125,6 +122,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
       'Join All Groups',
       'cancel',
     ];
+    // comment out for test release
     if (!__DEV__) {
       // remove 'Join All Groups'
       actions.splice(3, 1);

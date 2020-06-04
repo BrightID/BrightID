@@ -95,7 +95,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
     } = this.props;
     const image = photo ? { uri: photo } : { uri: 'https://picsum.photos/180' };
     return (
-      <View style={styles.container}>
+      <View style={styles.container} testID="previewConnectionScreen">
         <View style={styles.questionTextContainer}>
           <Text style={styles.questionText}>Connect with?</Text>
         </View>
@@ -139,10 +139,15 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={this.reject} style={styles.rejectButton}>
+          <TouchableOpacity
+            testID="rejectConnectionBtn"
+            onPress={this.reject}
+            style={styles.rejectButton}
+          >
             <Text style={styles.buttonText}>Reject</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            testID="confirmConnectionBtn"
             onPress={this.handleConfirmation}
             style={styles.confirmButton}
           >

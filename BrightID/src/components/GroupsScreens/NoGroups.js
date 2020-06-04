@@ -1,16 +1,27 @@
 // @flow
 
 import * as React from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import emitter from '@/emitter';
+import {
+  View,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Linking,
+} from 'react-native';
 import { DEVICE_TYPE } from '@/utils/constants';
 
-const showWhitePaper = () => {
-  emitter.emit('showWhitePaper');
+const learnMoreUrl =
+  'https://docs.google.com/document/d/1CEBWv4ImXsZYQ2Qll7BXojeKI9CGtzRXjB9aFIj00c4/edit#heading=h.nr1odgliy5nk';
+
+const handleLearnMore = () => {
+  Linking.openURL(learnMoreUrl).catch((err) =>
+    console.error(`Failed to open "${learnMoreUrl}", error was: ${err}`),
+  );
 };
 
 export const NoGroups = ({ navigation }: Props) => (
-  <View style={styles.noContainer}>
+  <View style={styles.noContainer} testID="noGroupsView">
     <View style={styles.noGroupsInfo}>
       <Image
         source={require('../../static/groups_logo.png')}
@@ -29,10 +40,15 @@ export const NoGroups = ({ navigation }: Props) => (
       </View>
     </View>
     <View style={styles.emptyButtons}>
-      <TouchableOpacity style={styles.learnMoreButton} onPress={showWhitePaper}>
+      <TouchableOpacity
+        testID="groupsLearnMoreBtn"
+        style={styles.learnMoreButton}
+        onPress={handleLearnMore}
+      >
         <Text style={styles.learnMoreText}>Learn More</Text>
       </TouchableOpacity>
       <TouchableOpacity
+        testID="groupsCreateGroupBtn"
         style={styles.createGroupButton}
         onPress={() => {
           navigation.navigate('GroupInfo');

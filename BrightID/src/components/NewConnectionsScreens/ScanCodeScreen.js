@@ -3,14 +3,18 @@
 import * as React from 'react';
 import { Alert, Linking, StyleSheet, TextInput, View } from 'react-native';
 import { connect } from 'react-redux';
-import { RNCamera } from 'react-native-camera';
 import Spinner from 'react-native-spinkit';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { DEVICE_LARGE } from '@/utils/constants';
-import { parseQrData } from './actions/parseQrData';
-import { fetchData } from './actions/fetchData';
+import {
+  DEVICE_LARGE,
+  PROFILE_POLL_INTERVAL,
+  QR_TYPE_RESPONDER,
+} from '@/utils/constants';
+import { parseQrData } from '@/utils/qrCodes';
+import { RNCamera } from './RNCameraProvider';
 import emitter from '../../emitter';
-import { removeConnectQrData } from '../../actions';
+import { removeConnectQrData, setConnectQrData } from '../../actions';
+import { fetchProfile } from './actions/profile';
 
 /**
  * Returns whether the string is a valid QR identifier
@@ -65,15 +69,17 @@ export class ScanCodeScreen extends React.Component<Props, State> {
     dispatch(removeConnectQrData());
   }
 
-  subscribeToProfileUpload = () => {
+  subscribeToProfileUpload = (peerQrData) => {
+    console.log(`Subscribing to profile Upload for uuid ${peerQrData.uuid}`);
     const { dispatch } = this.props;
     this.connectionExpired = setTimeout(this.showProfileError, 90000);
     this.fetchProfileData = setInterval(() => {
-      dispatch(fetchData());
-    }, 1000);
+      dispatch(fetchProfile(peerQrData));
+    }, PROFILE_POLL_INTERVAL);
   };
 
   unsubscribeToProfileUpload = () => {
+    console.log(`Unsubsubscribing from profile Upload`);
     clearTimeout(this.connectionExpired);
     clearInterval(this.fetchProfileData);
   };
@@ -103,9 +109,11 @@ export class ScanCodeScreen extends React.Component<Props, State> {
       Linking.openURL(data);
       this.setState({ scanned: true });
     } else if (validQrString(data)) {
-      dispatch(parseQrData(data));
+      const peerQrData = parseQrData(data);
+      peerQrData.type = QR_TYPE_RESPONDER;
+      dispatch(setConnectQrData(peerQrData));
       // If the following `fetchdata()` fails, a "connectFailure" will be emitted,
-      this.subscribeToProfileUpload();
+      this.subscribeToProfileUpload(peerQrData);
       this.setState({ scanned: true });
       if (this.textInput) this.textInput.blur();
     }
@@ -138,7 +146,7 @@ export class ScanCodeScreen extends React.Component<Props, State> {
       );
     } else {
       return (
-        <View style={styles.cameraPreview}>
+        <View style={styles.cameraPreview} testID="scanCode">
           <View style={styles.scanTextContainer}>
             <TextInput
               ref={(c) => {
@@ -227,4 +235,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(ScanCodeScreen);
+const mapStateToProps = (state) => {
+  const props = {
+    peerQrData: state.connectQrData.peerQrData,
+  };
+  return props;
+};
+
+export default connect(mapStateToProps)(ScanCodeScreen);

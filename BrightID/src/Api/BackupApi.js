@@ -1,8 +1,14 @@
 // @flow
 
 import { create, ApiSauceInstance, ApiResponse } from 'apisauce';
-import { b64ToUrlSafeB64 } from '../utils/encoding';
-import store from '../store';
+import nacl from 'tweetnacl';
+import {
+  strToUint8Array,
+  uInt8ArrayToB64,
+  b64ToUrlSafeB64,
+} from '@/utils/encoding';
+import { obtainKeys } from '@/utils/keychain';
+import store from '@/store';
 
 let recoveryUrl = 'https://recovery.brightid.org';
 let seedUrl = 'http://node.brightid.org';
@@ -35,7 +41,7 @@ class BackupApi {
   }
 
   async getRecovery(key1: string, key2: string) {
-    const res = await this.recoveryApi.get(
+    let res = await this.recoveryApi.get(
       `/backups/${b64ToUrlSafeB64(key1)}/${b64ToUrlSafeB64(key2)}`,
     );
     BackupApi.throwOnError(res);
@@ -43,7 +49,7 @@ class BackupApi {
   }
 
   async putRecovery(key1: string, key2: string, data: string) {
-    const res = await this.recoveryApi.put(
+    let res = await this.recoveryApi.put(
       `/backups/${b64ToUrlSafeB64(key1)}/${b64ToUrlSafeB64(key2)}`,
       {
         data,
@@ -55,7 +61,7 @@ class BackupApi {
   async getSig() {
     try {
       let { publicKey } = store.getState().recoveryData;
-      const res = await this.profileApi.get(
+      let res = await this.profileApi.get(
         `/profile/download/${b64ToUrlSafeB64(publicKey)}`,
       );
       BackupApi.throwOnError(res);
@@ -65,9 +71,27 @@ class BackupApi {
     }
   }
 
-  async setSig(data: {}, signingKey: string) {
+  async setSig({
+    id,
+    timestamp,
+    signingKey,
+  }: {
+    id: string,
+    timestamp: string,
+    signingKey: string,
+  }) {
     try {
-      const res = await this.profileApi.post(`/profile/upload`, {
+      let { username, secretKey } = await obtainKeys();
+
+      let message = `Set Signing Key${id}${signingKey}${timestamp}`;
+
+      let sig = uInt8ArrayToB64(
+        nacl.sign.detached(strToUint8Array(message), secretKey),
+      );
+
+      let data = { signer: username, id, sig };
+
+      let res = await this.profileApi.post(`/profile/upload`, {
         data,
         uuid: b64ToUrlSafeB64(signingKey),
       });

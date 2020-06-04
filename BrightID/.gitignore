@@ -68,3 +68,17 @@ Done
 node
 husky@*
 core-js@*
+/artifacts/
+
+assetlinks.json
+Podfile.lock
+yarn.lock
+
+ios/Pods/
+ios/Pods/Target Support Files/Pods-BrightID/
+ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID-acknowledgements.markdown
+ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID-acknowledgements.plist
+ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID.debug.xcconfig
+ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID.release.xcconfig
+ios/Pods/Pods.xcodeproj/project.pbxproj
+ios/Pods/Manifest.lock

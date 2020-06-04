@@ -21,7 +21,6 @@ export const bootstrap = async () => {
       console.log('secondBootstrap', publicKey);
     }
 
-    if (publicKey) store.dispatch(fetchUserInfo());
     // once everything is set up
     // this.props.navigation.navigate(publicKey ? 'App' : 'Onboarding');
   } catch (err) {
