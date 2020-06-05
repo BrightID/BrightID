@@ -25,7 +25,6 @@ const membersScreenOptions = ({ navigation, route }) => {
       paddingLeft: 20,
       paddingRight: 30,
     },
-    // eslint-disable-next-line react/display-name
     headerRight: () => (
       <TouchableOpacity
         testID="groupOptionsBtn"

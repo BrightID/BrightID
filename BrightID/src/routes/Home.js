@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { Image, TouchableOpacity, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Simple from 'react-native-vector-icons/SimpleLineIcons';
-import { delStorage } from '@/utils/dev';
+// import { delStorage } from '@/utils/dev';
 import { DEVICE_TYPE } from '@/utils/constants';
 import { shareConnection } from '@/components/NewConnectionsScreens/actions/shareConnection';
 import HomeScreen from '@/components/HomeScreen';
@@ -11,25 +11,33 @@ import NewConnectionScreen from '@/components/NewConnectionsScreens/NewConnectio
 import SuccessScreen from '@/components/NewConnectionsScreens/SuccessScreen';
 import PreviewConnectionScreen from '@/components/NewConnectionsScreens/PreviewConnectionScreen';
 import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnectionScreen';
-import { headerOptions } from './helpers';
 
 const Stack = createStackNavigator();
 
 const homeScreenOptions = {
-  title: 'BrightID',
-  headerBackTitle: 'Home',
-  headerRight: __DEV__
-    ? ({ navigation }) => (
-        <TouchableOpacity style={{ marginRight: 11 }} onPress={delStorage}>
-          <Material size={32} name="dots-horizontal" color="#fff" />
-        </TouchableOpacity>
-      )
-    : () => null,
+  headerTitle: () => (
+    <Image
+      source={require('@/static/brightid-final.png')}
+      accessible={true}
+      accessibilityLabel="Home Header Logo"
+      resizeMode="contain"
+      style={{ width: 104 }}
+    />
+  ),
+  headerRight: () => (
+    <Material name="bell" size={28} color="#000" style={{ marginRight: 25 }} />
+  ),
+  headerStyle: {
+    height: 80,
+    shadowRadius: 0,
+    shadowOffset: {
+      height: 0,
+    },
+  },
 };
 
 const newConnectionOptions = {
   title: 'New Connection',
-  // eslint-disable-next-line react/display-name
   headerRight: () => (
     <TouchableOpacity style={{ marginRight: 11 }} onPress={shareConnection}>
       <Simple name="share-alt" size={25} color="#fff" />
@@ -44,7 +52,7 @@ const recoveringConnectionOptions = {
 };
 
 const Home = () => (
-  <Stack.Navigator screenOptions={headerOptions}>
+  <Stack.Navigator headerMode="screen">
     <Stack.Screen
       name="Home"
       component={HomeScreen}
