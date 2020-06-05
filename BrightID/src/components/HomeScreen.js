@@ -1,6 +1,5 @@
-// @flow
-
-import * as React from 'react';
+/* eslint-disable react/prop-types */
+import React, { useEffect, useState } from 'react';
 import {
   Image,
   Linking,
@@ -10,8 +9,9 @@ import {
   View,
   TextInput,
 } from 'react-native';
+import { SvgXml } from 'react-native-svg';
 import ActionSheet from 'react-native-actionsheet';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { setPhoto, setName } from '@/actions';
@@ -19,62 +19,42 @@ import { getNotifications } from '@/actions/notifications';
 import { delStorage } from '@/utils/dev';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_SMALL } from '@/utils/constants';
 import fetchUserInfo from '@/actions/fetchUserInfo';
-import VerificationSticker from './Verifications/VerificationSticker';
+import verificationSticker from '@/static/verification-sticker.svg';
+
 /**
  * Home screen of BrightID
  * ==========================
  */
 
-type State = {
-  profilePhoto: string,
-  isEditing: boolean,
-  name: string,
-};
-
-let chatSheetRef = '';
+let chatSheetRef = '',
+  photoSheetRef = '';
 let discordUrl = 'https://discord.gg/nTtuB2M';
 
-export class HomeScreen extends React.Component<Props, State> {
-  photoSheetRef: string;
+export const HomeScreen = (props) => {
+  const { navigation } = props;
+  const dispatch = useDispatch();
+  const id = useSelector((state) => state.user.id);
+  const name = useSelector((state) => state.user.name);
+  const photoFilename = useSelector((state) => state.user.photo.filename);
+  const groups = useSelector((state) => state.groups.groups);
+  const apps = useSelector((state) => state.apps.apps);
+  const verifications = useSelector((state) => state.user.verifications);
+  const connections = useSelector((state) => state.connections.connections);
+  const [profilePhoto, setProfilePhoto] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [displayName, setDisplayName] = useState(name);
 
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    profilePhoto: ' ',
-    isEditing: false,
-    name: '',
-  };
-
-  componentDidMount() {
-    const { navigation, dispatch, photo, name } = this.props;
+  useEffect(() => {
     navigation.addListener('focus', () => {
       dispatch(fetchUserInfo());
     });
-    retrieveImage(photo.filename).then((profilePhoto) => {
-      this.setState({ profilePhoto });
-    });
-    this.setState({
-      name,
-    });
-    navigation.setOptions({
-      headerLeft: () => (
-        <TouchableOpacity
-          testID="chatButton"
-          style={{ marginLeft: 16 }}
-          onPress={() => {
-            chatSheetRef.show();
-          }}
-        >
-          <Ionicons name="ios-chatboxes" size={32} color="#fff" />
-        </TouchableOpacity>
-      ),
-    });
-  }
+    retrieveImage(photoFilename).then(setProfilePhoto);
+  }, []); // Only re-run the effect if count changes
 
-  getPhotoFromCamera = async () => {
+  const getPhotoFromCamera = async () => {
     try {
-      const { id } = this.props;
       const { mime, data } = await takePhoto();
       const uri = `data:${mime};base64,${data}`;
       const filename = await saveImage({
@@ -82,18 +62,14 @@ export class HomeScreen extends React.Component<Props, State> {
         base64Image: uri,
       });
       setPhoto({ filename });
-      const profilePhoto = await retrieveImage(filename);
-      this.setState({
-        profilePhoto,
-      });
+      setProfilePhoto(await retrieveImage(filename));
     } catch (err) {
       console.log(err);
     }
   };
 
-  getPhotoFromLibrary = async () => {
+  const getPhotoFromLibrary = async () => {
     try {
-      const { id } = this.props;
       const { mime, data } = await chooseImage();
       const uri = `data:${mime};base64,${data}`;
       const filename = await saveImage({
@@ -101,179 +77,188 @@ export class HomeScreen extends React.Component<Props, State> {
         base64Image: uri,
       });
       setPhoto({ filename });
-      const profilePhoto = await retrieveImage(filename);
-      this.setState({
-        profilePhoto,
-      });
+      setProfilePhoto(await retrieveImage(filename));
     } catch (err) {
       console.log(err);
     }
   };
 
-  onEditPhoto = () => {
-    this.photoSheetRef.show();
+  const handleEditPhoto = () => {
+    photoSheetRef.show();
   };
 
-  render() {
-    const {
-      navigation,
-      score,
-      groups,
-      connections,
-      verifications,
-    } = this.props;
+  return (
     // let verifications = ['BrightID'];
-    const { profilePhoto } = this.state;
-    return (
-      <View style={styles.container} testID="homeScreen">
-        <View style={styles.photoContainer} testID="PhotoContainer">
-          {!this.state.isEditing ? (
-            <TouchableOpacity
-              testID="editPhoto"
-              onPress={this.onEditPhoto}
-              accessible={true}
-              accessibilityLabel="edit photo"
-            >
-              <Image
-                source={{
-                  uri: profilePhoto,
-                }}
-                style={styles.photo}
-                resizeMode="cover"
-                onError={(e) => {
-                  console.log(e.error);
-                }}
-                accessible={true}
-                accessibilityLabel="user photo"
-              />
-            </TouchableOpacity>
-          ) : (
-            <View />
-          )}
-          {this.state.isEditing ? (
-            <TextInput
-              testID="EditNameInput"
-              value={this.state.name}
-              style={{ ...styles.name, ...styles.editingName }}
-              onChangeText={(text) => this.setState({ name: text })}
-              autoFocus
-              onBlur={() => {
-                if (this.state.name.length >= 2) {
-                  this.props.dispatch(setName(this.state.name));
-                  this.setState({ isEditing: false });
-                } else {
-                  this.setState({
-                    isEditing: false,
-                    name: this.props.name,
-                  });
-                }
-              }}
-            />
-          ) : (
-            <Text
-              testID="EditNameBtn"
-              style={styles.name}
-              onPress={() => this.setState({ isEditing: true })}
-            >
-              {this.props.name}
-            </Text>
-          )}
-        </View>
 
-        <View style={styles.scoreContainer} testID="ScoreContainer">
-          <Text style={styles.scoreLeft}>Score:</Text>
-          <Text id="score" style={styles.scoreRight}>
-            {score}
-          </Text>
-        </View>
-
-        <View style={styles.countsContainer}>
-          <View style={styles.countsGroup}>
-            <Text
-              testID="ConnectionsCount"
-              id="connectionsCount"
-              style={styles.countsNumberText}
-            >
-              {connections.length}
-            </Text>
-            <Text style={styles.countsDescriptionText}>Connections</Text>
-          </View>
-          <TouchableOpacity style={styles.countsGroup} onPress={delStorage}>
-            <Text
-              testID="GroupsCount"
-              id="groupsCount"
-              style={styles.countsNumberText}
-            >
-              {groups ? groups.length : 0}
-            </Text>
-            <Text style={styles.countsDescriptionText}>Groups</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View
-          style={styles.verificationsContainer}
-          testID="VerificationsContainer"
+    <View style={styles.container} testID="homeScreen">
+      <View style={styles.profileContainer} testID="PhotoContainer">
+        <TouchableOpacity
+          testID="editPhoto"
+          onPress={handleEditPhoto}
+          accessible={true}
+          accessibilityLabel="edit photo"
         >
-          {verifications.map((name) => (
-            <VerificationSticker name={name} key={name} />
-          ))}
-        </View>
-
-        <View style={styles.connectContainer}>
-          <TouchableOpacity
-            testID="ConnectButton"
-            style={styles.connectButton}
-            onPress={() => {
-              navigation.navigate('NewConnection');
+          <Image
+            source={{
+              uri: profilePhoto,
+            }}
+            style={styles.photo}
+            resizeMode="cover"
+            onError={(e) => {
+              console.log(e.error);
             }}
             accessible={true}
-            accessibilityLabel="Connect"
-          >
-            <Material name="qrcode-scan" size={26} color="#fff" />
-            <Text style={styles.connectText}>New Connection</Text>
-          </TouchableOpacity>
+            accessibilityLabel="user photo"
+          />
+        </TouchableOpacity>
+        <View style={styles.verifyNameContainer}>
+          <View style={styles.nameContainer}>
+            {isEditing ? (
+              <TextInput
+                testID="EditNameInput"
+                value={displayName}
+                style={styles.name}
+                onChangeText={setDisplayName}
+                autoFocus
+                onBlur={() => {
+                  if (displayName.length >= 2) {
+                    dispatch(setName(displayName));
+                    setIsEditing(false);
+                  } else {
+                    setIsEditing(false);
+                    setName(name);
+                  }
+                }}
+              />
+            ) : (
+              <Text
+                testID="EditNameBtn"
+                style={styles.name}
+                onPress={() => setIsEditing(true)}
+              >
+                {name}
+              </Text>
+            )}
+            <SvgXml
+              style={styles.verificationSticker}
+              width="16"
+              height="16"
+              xml={verificationSticker}
+            />
+          </View>
+          <Text style={styles.verified}>verified</Text>
         </View>
-
-        <ActionSheet
-          testID="ChatActionSheet"
-          ref={(o) => {
-            chatSheetRef = o;
-          }}
-          title="Like to chat with us?"
-          options={['BrightID Discord', 'cancel']}
-          cancelButtonIndex={1}
-          onPress={(index) => {
-            if (index === 0) {
-              Linking.openURL(discordUrl).catch((err) =>
-                console.error('An error occurred', err),
-              );
-            }
-          }}
-        />
-        <ActionSheet
-          testID="PhotoActionSheet"
-          ref={(o) => {
-            this.photoSheetRef = o;
-          }}
-          title="Select photo"
-          options={['Take Photo', 'Choose From Library', 'cancel']}
-          cancelButtonIndex={2}
-          onPress={(index) => {
-            if (index === 0) {
-              this.getPhotoFromCamera();
-            } else if (index === 1) {
-              this.getPhotoFromLibrary();
-            }
-          }}
-        />
       </View>
-    );
-  }
-}
 
-const PHOTO_WIDTH = DEVICE_TYPE === 'small' ? 130 : 142;
-const NUMBER_SIZE = DEVICE_TYPE === 'small' ? 16 : 22;
-const DESC_SIZE = DEVICE_TYPE === 'small' ? 12 : 16;
+      <View style={styles.countsContainer}>
+        <TouchableOpacity
+          style={styles.countsCard}
+          onPress={() => {
+            navigation.navigate('Connections');
+          }}
+        >
+          <Text testID="ConnectionsCount" style={styles.countsNumberText}>
+            {connections?.length ?? 0}
+          </Text>
+          <View style={styles.countsBorder} />
+          <Text style={styles.countsDescriptionText}>Connections</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.countsCard}
+          onPress={() => {
+            navigation.navigate('Apps');
+          }}
+        >
+          <Text testID="AppsCount" style={styles.countsNumberText}>
+            {apps?.length ?? 0}
+          </Text>
+          <View style={styles.countsBorder} />
+          <Text style={styles.countsDescriptionText}>Apps</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.countsCard}
+          onPress={() => {
+            navigation.navigate('Groups');
+          }}
+        >
+          <Text testID="GroupsCount" style={styles.countsNumberText}>
+            {groups?.length ?? 0}
+          </Text>
+          <View style={styles.countsBorder} />
+          <Text style={styles.countsDescriptionText}>Groups</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.connectContainer}>
+        <Text style={styles.newConnectionText}>Create a New Connection</Text>
+        <TouchableOpacity
+          testID="ConnectButton"
+          style={styles.connectButton}
+          onPress={() => {
+            navigation.navigate('NewConnection');
+          }}
+          accessible={true}
+          accessibilityLabel="Connect"
+        >
+          <Material name="qrcode-scan" size={26} color="#fff" />
+          <Text style={styles.connectText}>New Connection</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          testID="ConnectButton"
+          style={styles.connectButton}
+          onPress={() => {
+            navigation.navigate('NewConnection');
+          }}
+          accessible={true}
+          accessibilityLabel="Connect"
+        >
+          <Material name="qrcode-scan" size={26} color="#fff" />
+          <Text style={styles.connectText}>New Connection</Text>
+        </TouchableOpacity>
+        <Text style={styles.newConnectionText}>Join the Community</Text>
+      </View>
+
+      <ActionSheet
+        testID="ChatActionSheet"
+        ref={(o) => {
+          chatSheetRef = o;
+        }}
+        title="Like to chat with us?"
+        options={['BrightID Discord', 'cancel']}
+        cancelButtonIndex={1}
+        onPress={(index) => {
+          if (index === 0) {
+            Linking.openURL(discordUrl).catch((err) =>
+              console.error('An error occurred', err),
+            );
+          }
+        }}
+      />
+      <ActionSheet
+        testID="PhotoActionSheet"
+        ref={(o) => {
+          photoSheetRef = o;
+        }}
+        title="Select photo"
+        options={['Take Photo', 'Choose From Library', 'cancel']}
+        cancelButtonIndex={2}
+        onPress={(index) => {
+          if (index === 0) {
+            getPhotoFromCamera();
+          } else if (index === 1) {
+            getPhotoFromLibrary();
+          }
+        }}
+      />
+    </View>
+  );
+};
+
+const PHOTO_WIDTH = DEVICE_LARGE ? 85 : 80;
+const NUMBER_SIZE = DEVICE_LARGE ? 25 : 21;
+const DESC_SIZE = DEVICE_LARGE ? 14 : 12;
+const ORANGE = '#ED7A5D';
 
 const styles = StyleSheet.create({
   container: {
@@ -281,13 +266,35 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
+    backgroundColor: ORANGE,
+  },
+  profileContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    // height: PHOTO_WIDTH,
+    paddingTop: 100,
+    paddingBottom: 30,
+    alignItems: 'center',
+    paddingLeft: 60,
     backgroundColor: '#fff',
   },
-  photoContainer: {
-    marginTop: DEVICE_TYPE === 'small' ? 10 : 24,
+  verifyNameContainer: {
+    flexDirection: 'column',
+    height: PHOTO_WIDTH,
+    marginLeft: 20,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#fff',
+    // borderWidth: 1,
+  },
+  nameContainer: {
+    paddingLeft: 10,
+    paddingRight: 10,
+    flexDirection: 'row',
+    borderBottomWidth: 2,
+    borderBottomColor: ORANGE,
+    paddingBottom: 3,
   },
   photo: {
     width: PHOTO_WIDTH,
@@ -298,25 +305,10 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   name: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_TYPE === 'small' ? 26 : 30,
-    marginTop: 8,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
+    // fontFamily: 'ApexNew-Book',
+    fontSize: DEVICE_LARGE ? 16 : 14,
+
     color: '#000000',
-    textShadowColor: 'rgba(0, 0, 0, 0.32)',
-    textShadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    textShadowRadius: 4,
-    shadowColor: 'rgba(0,0,0,0.32)',
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-  },
-  editingName: {
-    minWidth: 180,
   },
   verificationsContainer: {
     height: 16,
@@ -324,105 +316,108 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
     marginTop: 10,
-    marginBottom: DEVICE_TYPE === 'small' ? 0 : 10,
+    marginBottom: DEVICE_SMALL ? 0 : 10,
     width: '100%',
-  },
-  verificationSticker: {},
-  connectContainer: {
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: '#fff',
-    flex: 1,
-    marginTop: DEVICE_TYPE === 'small' ? 0 : 17,
-    flexDirection: 'row',
   },
-  scoreContainer: {
-    borderBottomColor: '#e3e1e1',
-    borderBottomWidth: 1,
-    width: '80%',
-    marginTop: 10,
-    paddingBottom: 12,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+  verificationSticker: {
+    marginLeft: 5,
+    marginTop: 1.5,
   },
-  scoreLeft: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: DESC_SIZE,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
-    textAlign: 'center',
-    color: '#9b9b9b',
+  verified: {
+    color: ORANGE,
+    borderWidth: 1,
+    borderColor: ORANGE,
+    borderRadius: 10,
+    marginTop: 5,
+    paddingTop: 1,
+    paddingBottom: 1,
+    paddingLeft: 23,
+    paddingRight: 23,
+  },
+  countsCard: {
+    backgroundColor: '#fff',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 5,
-    paddingTop: 3.5,
-  },
-  scoreRight: {
-    fontFamily: 'ApexNew-Medium',
-    fontSize: NUMBER_SIZE,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
-    textAlign: 'center',
-    color: '#139c60',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: 98,
+    height: 103,
+    borderRadius: 10,
+    elevation: 5,
+    shadowColor: 'rgba(221, 179, 169, 0.3)',
+    shadowOpacity: 1,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowRadius: 10,
   },
   countsContainer: {
     justifyContent: 'space-evenly',
     flexDirection: 'row',
-    width: '80%',
-    marginTop: 10,
-    borderBottomColor: '#e3e1e1',
+    width: '100%',
+    paddingTop: 50,
+    paddingBottom: 90,
+    borderBottomLeftRadius: 58,
+    borderBottomRightRadius: 58,
+    backgroundColor: '#fff',
+  },
+  countsBorder: {
     borderBottomWidth: 1,
-    paddingBottom: 10,
+    borderBottomColor: ORANGE,
+    width: 55,
   },
   countsDescriptionText: {
-    fontFamily: 'ApexNew-Book',
+    // fontFamily: 'ApexNew-Book',
     textAlign: 'center',
     fontSize: DESC_SIZE,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
+    fontWeight: '500',
+    marginTop: 6,
   },
   countsNumberText: {
-    fontFamily: 'ApexNew-Book',
+    // fontFamily: 'ApexNew-Book',
     textAlign: 'center',
     fontSize: NUMBER_SIZE,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
+    fontWeight: 'bold',
+    marginBottom: 3,
   },
-  countsGroup: {
-    flex: 1,
+  connectContainer: {
+    flexDirection: 'column',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: ORANGE,
+    marginTop: DEVICE_SMALL ? 0 : 17,
+    zIndex: 10,
+  },
+  newConnectionText: {
+    color: '#fff',
+    fontSize: 18,
+    marginBottom: 44,
   },
   connectButton: {
-    paddingTop: DEVICE_TYPE === 'large' ? 16 : 13,
-    paddingBottom: DEVICE_TYPE === 'large' ? 15 : 13,
-    width: DEVICE_TYPE === 'large' ? '80%' : 260,
-    borderRadius: 6,
-    backgroundColor: '#4a90e2',
+    paddingTop: DEVICE_LARGE ? 16 : 13,
+    paddingBottom: DEVICE_LARGE ? 15 : 13,
+    width: DEVICE_LARGE ? '80%' : 260,
+    borderRadius: 60,
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    shadowColor: '#000',
-    shadowOffset: { width: 20, height: 20 },
-    shadowRadius: 20,
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 10,
     elevation: 1,
+    marginBottom: 22,
   },
   connectText: {
-    fontFamily: 'ApexNew-Medium',
-    fontSize: DEVICE_TYPE === 'small' ? 16 : 22,
-    color: '#fff',
+    // fontFamily: 'ApexNew-Medium',
+    fontSize: DEVICE_SMALL ? 16 : 22,
+    fontWeight: 'bold',
+    color: '#000',
     marginLeft: 18,
   },
 });
 
-export default connect(({ user, connections, groups }) => ({
-  ...user,
-  ...connections,
-  ...groups,
-}))(HomeScreen);
+export default HomeScreen;
