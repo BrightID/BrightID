@@ -245,7 +245,7 @@ PODS:
     - React
   - react-native-randombytes (3.5.3):
     - React
-  - react-native-safe-area-context (1.0.2):
+  - react-native-safe-area-context (3.0.2):
     - React
   - react-native-spinkit (1.4.1):
     - React
@@ -536,7 +536,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 512e560d0e985d0e8c479a54a4e5c147a9c83493
   react-native-camera: 2b74be8edc1103c4c46d1f4e5f41723d9ff052cc
   react-native-randombytes: 3638d24759d67c68f6ccba60c52a7a8a8faa6a23
-  react-native-safe-area-context: 9d9640a9085014864052e38496fc1dfde0b93974
+  react-native-safe-area-context: b11a34881faac509cad5578726c98161ad4d275c
   react-native-spinkit: da294fd828216ad211fe36a5c14c1e09f09e62db
   React-RCTActionSheet: f41ea8a811aac770e0cc6e0ad6b270c644ea8b7c
   React-RCTAnimation: 49ab98b1c1ff4445148b72a3d61554138565bad0
