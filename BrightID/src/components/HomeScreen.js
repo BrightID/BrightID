@@ -19,7 +19,7 @@ import { getNotifications } from '@/actions/notifications';
 import { delStorage } from '@/utils/dev';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
-import { DEVICE_LARGE, DEVICE_SMALL } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_SMALL, DEVICE_IOS } from '@/utils/constants';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import verificationSticker from '@/static/verification-sticker.svg';
 
@@ -31,6 +31,7 @@ import verificationSticker from '@/static/verification-sticker.svg';
 let chatSheetRef = '',
   photoSheetRef = '';
 let discordUrl = 'https://discord.gg/nTtuB2M';
+let JoinCommunity = DEVICE_IOS ? TextInput : Text;
 
 export const HomeScreen = (props) => {
   const { navigation } = props;
@@ -146,6 +147,7 @@ export const HomeScreen = (props) => {
               xml={verificationSticker}
             />
           </View>
+          <View style={styles.profileDivider} />
           <Text style={styles.verified}>verified</Text>
         </View>
       </View>
@@ -189,34 +191,55 @@ export const HomeScreen = (props) => {
           <Text style={styles.countsDescriptionText}>Groups</Text>
         </TouchableOpacity>
       </View>
-
-      <View style={styles.connectContainer}>
-        <Text style={styles.newConnectionText}>Create a New Connection</Text>
-        <TouchableOpacity
-          testID="ConnectButton"
-          style={styles.connectButton}
-          onPress={() => {
-            navigation.navigate('NewConnection');
-          }}
-          accessible={true}
-          accessibilityLabel="Connect"
-        >
-          <Material name="qrcode-scan" size={26} color="#fff" />
-          <Text style={styles.connectText}>New Connection</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          testID="ConnectButton"
-          style={styles.connectButton}
-          onPress={() => {
-            navigation.navigate('NewConnection');
-          }}
-          accessible={true}
-          accessibilityLabel="Connect"
-        >
-          <Material name="qrcode-scan" size={26} color="#fff" />
-          <Text style={styles.connectText}>New Connection</Text>
-        </TouchableOpacity>
-        <Text style={styles.newConnectionText}>Join the Community</Text>
+      <View style={styles.bottomOrangeContainer}>
+        <View style={styles.connectContainer}>
+          <Text style={styles.newConnectionText}>Create a New Connection</Text>
+          <TouchableOpacity
+            testID="ConnectButton"
+            style={styles.connectButton}
+            onPress={() => {
+              navigation.navigate('NewConnection');
+            }}
+            accessible={true}
+            accessibilityLabel="Connect"
+          >
+            <Material
+              name="qrcode"
+              size={DEVICE_LARGE ? 22 : 20}
+              color="#000"
+              style={styles.connectIcon}
+            />
+            <Text style={styles.connectText}>My Code</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            testID="ConnectButton"
+            style={styles.connectButton}
+            onPress={() => {
+              navigation.navigate('NewConnection');
+            }}
+            accessible={true}
+            accessibilityLabel="Connect"
+          >
+            <Material
+              name="camera"
+              size={DEVICE_LARGE ? 22 : 20}
+              color="#000"
+              style={styles.connectIcon}
+            />
+            <Text style={styles.connectText}>Scan a Code</Text>
+          </TouchableOpacity>
+          <View style={styles.communityContainer}>
+            <Ionicons
+              name="ios-chatboxes"
+              size={16}
+              color="#fff"
+              style={styles.communityIcon}
+            />
+            <JoinCommunity editable={false} style={styles.communityLink}>
+              Join the Community
+            </JoinCommunity>
+          </View>
+        </View>
       </View>
 
       <ActionSheet
@@ -255,9 +278,7 @@ export const HomeScreen = (props) => {
   );
 };
 
-const PHOTO_WIDTH = DEVICE_LARGE ? 85 : 80;
-const NUMBER_SIZE = DEVICE_LARGE ? 25 : 21;
-const DESC_SIZE = DEVICE_LARGE ? 14 : 12;
+const PHOTO_WIDTH = DEVICE_LARGE ? 85 : 75;
 const ORANGE = '#ED7A5D';
 
 const styles = StyleSheet.create({
@@ -273,28 +294,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     // height: PHOTO_WIDTH,
-    paddingTop: 100,
+    // flexGrow: 1,
+    paddingTop: 20,
     paddingBottom: 30,
     alignItems: 'center',
-    paddingLeft: 60,
+    paddingLeft: 50,
     backgroundColor: '#fff',
   },
   verifyNameContainer: {
     flexDirection: 'column',
-    height: PHOTO_WIDTH,
-    marginLeft: 20,
+    marginLeft: 30,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
     // borderWidth: 1,
   },
   nameContainer: {
-    paddingLeft: 10,
-    paddingRight: 10,
     flexDirection: 'row',
+    // width: '120%',
+  },
+  profileDivider: {
     borderBottomWidth: 2,
     borderBottomColor: ORANGE,
     paddingBottom: 3,
+    width: '118%',
   },
   photo: {
     width: PHOTO_WIDTH,
@@ -306,7 +329,7 @@ const styles = StyleSheet.create({
   },
   name: {
     // fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: DEVICE_LARGE ? 15 : 13,
 
     color: '#000000',
   },
@@ -316,7 +339,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
     marginTop: 10,
-    marginBottom: DEVICE_SMALL ? 0 : 10,
+    marginBottom: DEVICE_LARGE ? 10 : 0,
     width: '100%',
     backgroundColor: '#fff',
   },
@@ -334,14 +357,15 @@ const styles = StyleSheet.create({
     paddingBottom: 1,
     paddingLeft: 23,
     paddingRight: 23,
+    fontSize: DEVICE_LARGE ? 11 : 10,
   },
   countsCard: {
     backgroundColor: '#fff',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 98,
-    height: 103,
+    width: DEVICE_LARGE ? 90 : 82,
+    height: DEVICE_LARGE ? 100 : 90,
     borderRadius: 10,
     elevation: 5,
     shadowColor: 'rgba(221, 179, 169, 0.3)',
@@ -356,11 +380,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     flexDirection: 'row',
     width: '100%',
-    paddingTop: 50,
-    paddingBottom: 90,
+    paddingTop: DEVICE_LARGE ? 30 : 10,
+    paddingBottom: DEVICE_LARGE ? 70 : 55,
     borderBottomLeftRadius: 58,
     borderBottomRightRadius: 58,
     backgroundColor: '#fff',
+    // flexGrow: 1,
   },
   countsBorder: {
     borderBottomWidth: 1,
@@ -370,34 +395,40 @@ const styles = StyleSheet.create({
   countsDescriptionText: {
     // fontFamily: 'ApexNew-Book',
     textAlign: 'center',
-    fontSize: DESC_SIZE,
+    fontSize: DEVICE_LARGE ? 12 : 11,
     fontWeight: '500',
     marginTop: 6,
   },
   countsNumberText: {
     // fontFamily: 'ApexNew-Book',
     textAlign: 'center',
-    fontSize: NUMBER_SIZE,
+    fontSize: DEVICE_LARGE ? 25 : 21,
     fontWeight: 'bold',
     marginBottom: 3,
+  },
+  bottomOrangeContainer: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: ORANGE,
+    marginTop: DEVICE_SMALL ? 17 : 17,
+    zIndex: 10,
+    flexGrow: 1,
   },
   connectContainer: {
     flexDirection: 'column',
     width: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: ORANGE,
-    marginTop: DEVICE_SMALL ? 0 : 17,
-    zIndex: 10,
+    justifyContent: 'space-evenly',
   },
   newConnectionText: {
     color: '#fff',
-    fontSize: 18,
-    marginBottom: 44,
+    fontSize: DEVICE_LARGE ? 18 : 15,
+    marginBottom: DEVICE_LARGE ? 12 : 11,
   },
   connectButton: {
-    paddingTop: DEVICE_LARGE ? 16 : 13,
-    paddingBottom: DEVICE_LARGE ? 15 : 13,
+    paddingTop: DEVICE_LARGE ? 11 : 7,
+    paddingBottom: DEVICE_LARGE ? 10 : 6,
     width: DEVICE_LARGE ? '80%' : 260,
     borderRadius: 60,
     backgroundColor: '#fff',
@@ -409,14 +440,32 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 10,
     elevation: 1,
-    marginBottom: 22,
+    marginBottom: 12,
   },
   connectText: {
     // fontFamily: 'ApexNew-Medium',
-    fontSize: DEVICE_SMALL ? 16 : 22,
+    fontSize: DEVICE_SMALL ? 13 : 18,
     fontWeight: 'bold',
     color: '#000',
-    marginLeft: 18,
+    marginLeft: DEVICE_LARGE ? 10 : 8,
+  },
+  connectIcon: {
+    marginTop: DEVICE_LARGE ? 3 : 2,
+  },
+  communityIcon: {
+    marginTop: 1,
+    marginRight: 5,
+  },
+  communityContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 2,
+  },
+  communityLink: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#fff',
+    color: '#fff',
   },
 });
 

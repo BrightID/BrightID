@@ -54,7 +54,7 @@ export const App = () => {
           >
             <StatusBar
               barStyle="dark-content"
-              backgroundColor="#F52828"
+              backgroundColor="#fff"
               translucent={false}
             />
             <AppRoutes />
