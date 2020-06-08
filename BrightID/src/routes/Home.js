@@ -4,10 +4,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Simple from 'react-native-vector-icons/SimpleLineIcons';
 // import { delStorage } from '@/utils/dev';
-import { DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
 import { shareConnection } from '@/components/NewConnectionsScreens/actions/shareConnection';
 import HomeScreen from '@/components/HomeScreen';
-import NewConnectionScreen from '@/components/NewConnectionsScreens/NewConnectionScreen';
+import MyCodeScreen from '@/components/NewConnectionsScreens/MyCodeScreen';
 import SuccessScreen from '@/components/NewConnectionsScreens/SuccessScreen';
 import PreviewConnectionScreen from '@/components/NewConnectionsScreens/PreviewConnectionScreen';
 import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnectionScreen';
@@ -34,7 +34,7 @@ const homeScreenOptions = {
     />
   ),
   headerStyle: {
-    height: 80,
+    height: DEVICE_LARGE ? 80 : 70,
     shadowRadius: 0,
     shadowOffset: {
       height: 0,
@@ -45,13 +45,25 @@ const homeScreenOptions = {
 };
 
 const newConnectionOptions = {
-  title: 'New Connection',
-  headerRight: () => (
-    <TouchableOpacity style={{ marginRight: 11 }} onPress={shareConnection}>
-      <Simple name="share-alt" size={25} color="#fff" />
-    </TouchableOpacity>
+  headerLeft: () => (
+    <Material
+      name="chevron-left"
+      size={DEVICE_LARGE ? 42 : 23}
+      color="#fff"
+      style={{ marginLeft: 10 }}
+    />
   ),
-  headerShown: DEVICE_LARGE,
+  headerStyle: {
+    height: DEVICE_LARGE ? 60 : 60,
+    backgroundColor: ORANGE,
+    zIndex: 1,
+    shadowRadius: 0,
+    shadowOffset: {
+      height: 0,
+    },
+    elevation: 0,
+  },
+  title: '',
 };
 
 const recoveringConnectionOptions = {
@@ -67,8 +79,8 @@ const Home = () => (
       options={homeScreenOptions}
     />
     <Stack.Screen
-      name="NewConnection"
-      component={NewConnectionScreen}
+      name="MyCode"
+      component={MyCodeScreen}
       options={newConnectionOptions}
     />
     <Stack.Screen name="ConnectSuccess" component={SuccessScreen} />

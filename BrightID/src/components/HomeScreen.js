@@ -198,7 +198,7 @@ export const HomeScreen = (props) => {
             testID="ConnectButton"
             style={styles.connectButton}
             onPress={() => {
-              navigation.navigate('NewConnection');
+              navigation.navigate('MyCode');
             }}
             accessible={true}
             accessibilityLabel="Connect"

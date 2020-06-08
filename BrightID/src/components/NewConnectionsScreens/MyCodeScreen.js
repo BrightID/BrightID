@@ -1,6 +1,6 @@
 // @flow
 
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Image,
   StyleSheet,
@@ -11,12 +11,12 @@ import {
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import RNFS from 'react-native-fs';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import emitter from '@/emitter';
-import { DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
 import { qrCodeToSvg } from '@/utils/qrCodes';
 import { startConnecting, stopConnecting } from './actions/connecting';
 
@@ -45,26 +45,30 @@ type State = {
 
 const COPIED_TIMEOUT = 500;
 
-export class MyCodeScreen extends React.Component<Props, State> {
-  timer: IntervalID;
+export const MyCodeScreen = (props) => {
+  let timer: IntervalID;
+  const dispatch = useDispatch();
+  const [qrsvg, setQrsvg] = useState('');
+  const [copied, setCopied] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const photoFilename = useSelector((state) => state.user.photo.filename);
+  const name = useSelector((state) => state.user.name);
+  const qrString = useSelector(
+    (state) => state.connectQrData.myQrData?.qrString,
+  );
+  const ttl = useSelector((state) => state.connectQrData.myQrData?.ttl);
+  const timestamp = useSelector(
+    (state) => state.connectQrData.myQrData?.timestamp,
+  );
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      qrsvg: '',
-      copied: false,
-      countdown: 0,
-    };
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     // we need to reload the QR code every mount
-    const { dispatch } = this.props;
+
     dispatch(stopConnecting());
     dispatch(startConnecting());
     // start local timer to display countdown
-    this.timer = setInterval(() => {
-      this.timerTick();
+    timer = setInterval(() => {
+      timerTick();
     }, 100);
 
     // For now directly jump to preview when a profile is received.
@@ -72,60 +76,45 @@ export class MyCodeScreen extends React.Component<Props, State> {
     // Or maybe leave it like that, so as long as the MyCode screen is open the first responder
     // directly to the preview contact. Any subsequent responders will end up in the
     // notification area.
-    emitter.on('connectDataReady', this.navigateToPreview);
-  }
+    emitter.on('connectDataReady', navigateToPreview);
+    return () => {
+      clearInterval(timer);
+      emitter.off('connectDataReady', navigateToPreview);
+    };
+  }, []);
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    const currentQrString = this.props.myQrData
-      ? this.props.myQrData.qrString
-      : undefined;
-    const prevQrString = prevProps.myQrData
-      ? prevProps.myQrData.qrString
-      : undefined;
-    if (currentQrString !== prevQrString) {
-      this.checkQrCode();
-    }
-  }
+  useEffect(() => {
+    checkQrCode();
+  }, [qrString]);
 
-  componentWillUnmount() {
-    clearInterval(this.timer);
-    emitter.off('connectDataReady', this.navigateToPreview);
-  }
-
-  checkQrCode = () => {
-    if (!this.props.myQrData) {
-      const { dispatch } = this.props;
+  const checkQrCode = () => {
+    if (!qrString) {
       console.log(`Triggering generation of new QRCodeData`);
       dispatch(startConnecting());
     } else {
       // qrData is available, now create actual qrCode image
-      const { qrString } = this.props.myQrData;
       console.log(`Using QRCodeData (${qrString})`);
-      qrCodeToSvg(qrString, (qrsvg) => this.setState({ qrsvg }));
+      qrCodeToSvg(qrString, (qrsvg) => setQrsvg(qrsvg));
     }
   };
 
-  timerTick = () => {
-    if (this.props.myQrData) {
-      let countdown =
-        this.props.myQrData.ttl - (Date.now() - this.props.myQrData.timestamp);
+  const timerTick = () => {
+    if (ttl && timestamp) {
+      let countdown = ttl - (Date.now() - timestamp);
       if (countdown < 0) countdown = 0;
-      this.setState((prevState) => ({
-        countdown,
-      }));
+      setCountdown(countdown);
     }
   };
 
-  navigateToPreview = () => {
-    this.props.navigation.navigate('PreviewConnection');
+  const navigateToPreview = () => {
+    props.navigation.navigate('PreviewConnection');
   };
 
-  navigateToHome = () => {
-    this.props.navigation.navigate('Home');
+  const navigateToHome = () => {
+    props.navigation.navigate('Home');
   };
 
-  displayTime = () => {
-    const { countdown } = this.state;
+  const displayTime = () => {
     const minutes = Math.floor(countdown / 60000);
     let seconds = Math.trunc((countdown % 60000) / 1000);
     if (seconds < 10) {
@@ -134,21 +123,17 @@ export class MyCodeScreen extends React.Component<Props, State> {
     return `${minutes}:${seconds}`;
   };
 
-  copyQr = () => {
-    const {
-      myQrData: { qrString },
-    } = this.props;
+  const copyQr = () => {
     Clipboard.setString(qrString);
-    this.setState({ copied: true }, () =>
-      setTimeout(() => this.setState({ copied: false }), COPIED_TIMEOUT),
-    );
+    setCopied(true);
+    setTimeout(() => setCopied(false), COPIED_TIMEOUT);
   };
 
-  renderCopyQr = () => (
+  const renderCopyQr = () => (
     <TouchableOpacity
       testID="copyQrButton"
       style={styles.copyContainer}
-      onPress={this.copyQr}
+      onPress={copyQr}
     >
       <Material
         size={24}
@@ -160,7 +145,7 @@ export class MyCodeScreen extends React.Component<Props, State> {
     </TouchableOpacity>
   );
 
-  renderSpinner = () => (
+  const renderSpinner = () => (
     <View style={styles.qrsvgContainer}>
       <Spinner
         // style={styles.spinner}
@@ -172,38 +157,34 @@ export class MyCodeScreen extends React.Component<Props, State> {
     </View>
   );
 
-  renderTimer = () => (
+  const renderTimer = () => (
     <View style={styles.timerContainer}>
       <Text style={styles.timerTextLeft}>Expires in: </Text>
-      <Text style={styles.timerTextRight}>{this.displayTime()}</Text>
+      <Text style={styles.timerTextRight}>{displayTime()}</Text>
     </View>
   );
 
-  renderQrCode = () => (
+  const renderQrCode = () => (
     <View style={[styles.qrsvgContainer]}>
       <Svg
         height={DEVICE_LARGE ? '212' : '180'}
         width={DEVICE_LARGE ? '212' : '180'}
         xmlns="http://www.w3.org/2000/svg"
-        viewBox={path(['svg', '$', 'viewBox'], this.state.qrsvg)}
+        viewBox={path(['svg', '$', 'viewBox'], qrsvg)}
         shape-rendering="crispEdges"
       >
         <Path
-          fill={this.state.copied ? 'lightblue' : '#fff'}
-          d={path(['svg', 'path', '0', '$', 'd'], this.state.qrsvg)}
+          fill={copied ? 'lightblue' : '#fff'}
+          d={path(['svg', 'path', '0', '$', 'd'], qrsvg)}
         />
-        <Path
-          stroke="#000"
-          d={path(['svg', 'path', '1', '$', 'd'], this.state.qrsvg)}
-        />
+        <Path stroke="#000" d={path(['svg', 'path', '1', '$', 'd'], qrsvg)} />
       </Svg>
     </View>
   );
 
-  render() {
-    const { photo, name } = this.props;
-    const { qrsvg } = this.state;
-    return (
+  return (
+    <>
+      <View style={styles.orangeTop} />
       <View style={styles.container}>
         <View style={styles.topHalf}>
           <View style={styles.myCodeInfoContainer}>
@@ -217,7 +198,7 @@ export class MyCodeScreen extends React.Component<Props, State> {
           <View style={styles.photoContainer}>
             <Image
               source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo.filename}`,
+                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photoFilename}`,
               }}
               style={styles.photo}
               resizeMode="cover"
@@ -231,14 +212,14 @@ export class MyCodeScreen extends React.Component<Props, State> {
           </View>
         </View>
         <View style={styles.bottomHalf} testID="qrCode">
-          {qrsvg ? this.renderTimer() : <View />}
-          {qrsvg ? this.renderQrCode() : this.renderSpinner()}
-          {qrsvg ? this.renderCopyQr() : <View />}
+          {qrsvg ? renderTimer() : <View />}
+          {qrsvg ? renderQrCode() : renderSpinner()}
+          {qrsvg ? renderCopyQr() : <View />}
         </View>
       </View>
-    );
-  }
-}
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -249,6 +230,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'column',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    zIndex: 10,
+    marginTop: -58,
+  },
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 58,
+    width: '100%',
   },
   topHalf: {
     height: '45%',
@@ -332,12 +322,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => {
-  const props = {
-    ...state.user,
-    myQrData: state.connectQrData.myQrData,
-  };
-  return props;
-};
-
-export default connect(mapStateToProps)(MyCodeScreen);
+export default MyCodeScreen;
