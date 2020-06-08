@@ -19,7 +19,7 @@ import { getNotifications } from '@/actions/notifications';
 import { delStorage } from '@/utils/dev';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
-import { DEVICE_LARGE, DEVICE_SMALL, DEVICE_IOS } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import verificationSticker from '@/static/verification-sticker.svg';
 
@@ -293,10 +293,7 @@ const styles = StyleSheet.create({
   profileContainer: {
     flexDirection: 'row',
     width: '100%',
-    // height: PHOTO_WIDTH,
-    // flexGrow: 1,
-    paddingTop: 20,
-    paddingBottom: 30,
+    flexGrow: 1,
     alignItems: 'center',
     paddingLeft: 50,
     backgroundColor: '#fff',
@@ -380,12 +377,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     flexDirection: 'row',
     width: '100%',
-    paddingTop: DEVICE_LARGE ? 30 : 10,
-    paddingBottom: DEVICE_LARGE ? 70 : 55,
     borderBottomLeftRadius: 58,
     borderBottomRightRadius: 58,
     backgroundColor: '#fff',
-    // flexGrow: 1,
+    flexGrow: 1,
   },
   countsBorder: {
     borderBottomWidth: 1,
@@ -411,7 +406,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: ORANGE,
-    marginTop: DEVICE_SMALL ? 17 : 17,
+    marginTop: DEVICE_LARGE ? 17 : 15,
     zIndex: 10,
     flexGrow: 1,
   },
@@ -439,12 +434,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
     shadowRadius: 10,
-    elevation: 1,
+    // elevation: 1,
     marginBottom: 12,
   },
   connectText: {
     // fontFamily: 'ApexNew-Medium',
-    fontSize: DEVICE_SMALL ? 13 : 18,
+    fontSize: DEVICE_LARGE ? 18 : 13,
     fontWeight: 'bold',
     color: '#000',
     marginLeft: DEVICE_LARGE ? 10 : 8,
@@ -466,6 +461,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#fff',
     color: '#fff',
+    fontSize: DEVICE_LARGE ? 14 : 11,
   },
 });
 

@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Simple from 'react-native-vector-icons/SimpleLineIcons';
 // import { delStorage } from '@/utils/dev';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/constants';
 import { shareConnection } from '@/components/NewConnectionsScreens/actions/shareConnection';
 import HomeScreen from '@/components/HomeScreen';
 import NewConnectionScreen from '@/components/NewConnectionsScreens/NewConnectionScreen';
@@ -21,11 +21,17 @@ const homeScreenOptions = {
       accessible={true}
       accessibilityLabel="Home Header Logo"
       resizeMode="contain"
-      style={{ width: 104 }}
+      style={{ width: DEVICE_LARGE ? 104 : 85 }}
     />
   ),
+  headerLeft: () => null,
   headerRight: () => (
-    <Material name="bell" size={28} color="#000" style={{ marginRight: 25 }} />
+    <Material
+      name="bell"
+      size={DEVICE_LARGE ? 28 : 23}
+      color="#000"
+      style={{ marginRight: 25 }}
+    />
   ),
   headerStyle: {
     height: 80,
@@ -33,7 +39,9 @@ const homeScreenOptions = {
     shadowOffset: {
       height: 0,
     },
+    elevation: 0,
   },
+  headerTitleAlign: 'center',
 };
 
 const newConnectionOptions = {
@@ -43,12 +51,12 @@ const newConnectionOptions = {
       <Simple name="share-alt" size={25} color="#fff" />
     </TouchableOpacity>
   ),
-  headerShown: DEVICE_TYPE === 'large',
+  headerShown: DEVICE_LARGE,
 };
 
 const recoveringConnectionOptions = {
   title: 'Account Recovery',
-  headerShown: DEVICE_TYPE === 'large',
+  headerShown: DEVICE_LARGE,
 };
 
 const Home = () => (
