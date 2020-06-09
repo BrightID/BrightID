@@ -66,9 +66,9 @@ export const fetchProfile = (qrCodeData) => async (
   }
 
   const url = `http://${ipAddress}/profile/download/${channel}`;
-  console.log(
-    `fetching profile response data for channel ${channel} from ${url}`,
-  );
+  // console.log(
+  //   `fetching profile response data for channel ${channel} from ${url}`,
+  // );
 
   try {
     const response = await fetch(url);

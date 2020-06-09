@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import {
-  Image,
   StyleSheet,
   Text,
   View,
@@ -10,16 +9,15 @@ import {
   Clipboard,
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import RNFS from 'react-native-fs';
 import { useDispatch, useSelector } from 'react-redux';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import emitter from '@/emitter';
-import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE, ORANGE, QR_TTL } from '@/utils/constants';
 import { qrCodeToSvg } from '@/utils/qrCodes';
+import { useInterval } from '@/utils/hooks';
 import { startConnecting, stopConnecting } from './actions/connecting';
-
 /**
  * My Code screen of BrightID
  *
@@ -29,65 +27,51 @@ import { startConnecting, stopConnecting } from './actions/connecting';
  *
  */
 
-type State = {
-  copied: boolean,
-  countdown: number,
-  qrsvg:
-    | string
-    | {
-        svg: {
-          $: {
-            viewBox: string,
-          },
-        },
-      },
-};
-
 const COPIED_TIMEOUT = 500;
 
 export const MyCodeScreen = (props) => {
-  let timer: IntervalID;
   const dispatch = useDispatch();
-  const [qrsvg, setQrsvg] = useState('');
-  const [copied, setCopied] = useState(false);
-  const [countdown, setCountdown] = useState(0);
-  const photoFilename = useSelector((state) => state.user.photo.filename);
   const name = useSelector((state) => state.user.name);
+  const ttl = useSelector((state) => state.connectQrData.myQrData?.ttl ?? 0);
   const qrString = useSelector(
     (state) => state.connectQrData.myQrData?.qrString,
   );
-  const ttl = useSelector((state) => state.connectQrData.myQrData?.ttl);
   const timestamp = useSelector(
-    (state) => state.connectQrData.myQrData?.timestamp,
+    (state) => state.connectQrData.myQrData?.timestamp ?? Date.now(),
   );
 
+  const [qrsvg, setQrsvg] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  const [countdown, setCountdown] = useState(ttl - (Date.now() - timestamp));
+  console.log('countdown', countdown);
+
+  const timerTick = () => {
+    let countdown = ttl - (Date.now() - timestamp);
+    if (countdown <= 0) {
+      dispatch(startConnecting());
+    }
+    setCountdown(countdown);
+  };
+
+  // start local timer to display countdown
+  useInterval(timerTick, 1000);
+
   useEffect(() => {
-    // we need to reload the QR code every mount
-
-    dispatch(stopConnecting());
-    dispatch(startConnecting());
-    // start local timer to display countdown
-    timer = setInterval(() => {
-      timerTick();
-    }, 100);
-
-    // For now directly jump to preview when a profile is received.
-    // Needs to be replaced by notification system.
-    // Or maybe leave it like that, so as long as the MyCode screen is open the first responder
-    // directly to the preview contact. Any subsequent responders will end up in the
-    // notification area.
+    // reset QRcode when app loads
+    // dispatch(stopConnecting());
+    checkQrCode(qrString);
     emitter.on('connectDataReady', navigateToPreview);
     return () => {
-      clearInterval(timer);
       emitter.off('connectDataReady', navigateToPreview);
     };
-  }, []);
-
-  useEffect(() => {
-    checkQrCode();
   }, [qrString]);
 
-  const checkQrCode = () => {
+  const navigateToPreview = () => {
+    props.navigation.navigate('PreviewConnection');
+  };
+
+  const checkQrCode = (qrString) => {
     if (!qrString) {
       console.log(`Triggering generation of new QRCodeData`);
       dispatch(startConnecting());
@@ -95,23 +79,8 @@ export const MyCodeScreen = (props) => {
       // qrData is available, now create actual qrCode image
       console.log(`Using QRCodeData (${qrString})`);
       qrCodeToSvg(qrString, (qrsvg) => setQrsvg(qrsvg));
+      setCountdown(ttl - (Date.now() - timestamp));
     }
-  };
-
-  const timerTick = () => {
-    if (ttl && timestamp) {
-      let countdown = ttl - (Date.now() - timestamp);
-      if (countdown < 0) countdown = 0;
-      setCountdown(countdown);
-    }
-  };
-
-  const navigateToPreview = () => {
-    props.navigation.navigate('PreviewConnection');
-  };
-
-  const navigateToHome = () => {
-    props.navigation.navigate('Home');
   };
 
   const displayTime = () => {
@@ -130,98 +99,110 @@ export const MyCodeScreen = (props) => {
   };
 
   const renderCopyQr = () => (
-    <TouchableOpacity
-      testID="copyQrButton"
-      style={styles.copyContainer}
-      onPress={copyQr}
-    >
-      <Material
-        size={24}
-        name="content-copy"
-        color="#333"
-        style={{ width: 24, height: 24 }}
-      />
-      <Text style={styles.copyText}> Copy</Text>
-    </TouchableOpacity>
+    <View style={styles.copyContainer}>
+      <TouchableOpacity
+        testID="copyQrButton"
+        style={styles.copyButton}
+        onPress={copyQr}
+      >
+        <Material
+          size={24}
+          name="content-copy"
+          color="#333"
+          style={{ width: 24, height: 24 }}
+        />
+        <Text style={styles.copyText}> Copy</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        testID="copyQrButton"
+        style={styles.copyButton}
+        onPress={() => {
+          setCountdown(ttl);
+          dispatch(stopConnecting());
+        }}
+      >
+        <Material
+          size={24}
+          name="refresh"
+          color="#333"
+          style={{ width: 24, height: 24 }}
+        />
+        <Text style={styles.copyText}> Refresh</Text>
+      </TouchableOpacity>
+    </View>
   );
 
   const renderSpinner = () => (
-    <View style={styles.qrsvgContainer}>
-      <Spinner
-        // style={styles.spinner}
-        isVisible={true}
-        size={47}
-        type="9CubeGrid"
-        color="#4990e2"
-      />
-    </View>
+    <Spinner
+      // style={styles.spinner}
+      isVisible={true}
+      size={47}
+      type="9CubeGrid"
+      color="#4990e2"
+    />
   );
 
-  const renderTimer = () => (
-    <View style={styles.timerContainer}>
-      <Text style={styles.timerTextLeft}>Expires in: </Text>
-      <Text style={styles.timerTextRight}>{displayTime()}</Text>
-    </View>
-  );
+  const renderTimer = () =>
+    countdown > 0 ? (
+      <View style={styles.timerContainer}>
+        <Text style={styles.timerTextLeft}>Expires in: </Text>
+        <Text style={styles.timerTextRight}>{displayTime()}</Text>
+      </View>
+    ) : (
+      <View style={[styles.timerContainer, { height: 20 }]} />
+    );
 
   const renderQrCode = () => (
-    <View style={[styles.qrsvgContainer]}>
-      <Svg
-        height={DEVICE_LARGE ? '212' : '180'}
-        width={DEVICE_LARGE ? '212' : '180'}
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox={path(['svg', '$', 'viewBox'], qrsvg)}
-        shape-rendering="crispEdges"
-      >
-        <Path
-          fill={copied ? 'lightblue' : '#fff'}
-          d={path(['svg', 'path', '0', '$', 'd'], qrsvg)}
-        />
-        <Path stroke="#000" d={path(['svg', 'path', '1', '$', 'd'], qrsvg)} />
-      </Svg>
-    </View>
+    <Svg
+      height={DEVICE_LARGE ? '260' : '180'}
+      width={DEVICE_LARGE ? '260' : '180'}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox={path(['svg', '$', 'viewBox'], qrsvg)}
+      shape-rendering="crispEdges"
+    >
+      <Path
+        fill={copied ? 'lightblue' : '#fff'}
+        d={path(['svg', 'path', '0', '$', 'd'], qrsvg)}
+      />
+      <Path stroke="#000" d={path(['svg', 'path', '1', '$', 'd'], qrsvg)} />
+    </Svg>
   );
-
   return (
     <>
       <View style={styles.orangeTop} />
       <View style={styles.container}>
-        <View style={styles.topHalf}>
-          <View style={styles.myCodeInfoContainer}>
-            <Text style={styles.myCodeInfoText}>
-              To make a new connection, you will share your
-            </Text>
-            <Text style={styles.myCodeInfoText}>
-              name, your photo, your score
-            </Text>
-          </View>
-          <View style={styles.photoContainer}>
-            <Image
-              source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photoFilename}`,
-              }}
-              style={styles.photo}
-              resizeMode="cover"
-              onError={(e) => {
-                console.log(e);
-              }}
-              accessible={true}
-              accessibilityLabel="user photo"
-            />
-            {DEVICE_LARGE && <Text style={styles.name}>{name}</Text>}
-          </View>
+        <View style={styles.infoTopContainer}>
+          <Text style={styles.infoTopText}>
+            Hey {name}, share your code and
+          </Text>
+          <Text style={styles.infoTopText}>make a new connection today</Text>
         </View>
-        <View style={styles.bottomHalf} testID="qrCode">
+        <View style={styles.qrCodeContainer}>
           {qrsvg ? renderTimer() : <View />}
           {qrsvg ? renderQrCode() : renderSpinner()}
           {qrsvg ? renderCopyQr() : <View />}
         </View>
+        <Text style={styles.infoBottomText}>Or you can also...</Text>
+        <TouchableOpacity style={styles.scanCodeButton}>
+          <Material
+            name="camera"
+            color="#fff"
+            size={16}
+            style={styles.cameraIcon}
+          />
+          <Text style={styles.scanCodeText}>Scan a Code</Text>
+        </TouchableOpacity>
       </View>
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+  },
   container: {
     flex: 1,
     width: '100%',
@@ -235,90 +216,75 @@ const styles = StyleSheet.create({
     zIndex: 10,
     marginTop: -58,
   },
-  orangeTop: {
-    backgroundColor: ORANGE,
-    height: 58,
-    width: '100%',
-  },
-  topHalf: {
-    height: '45%',
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  bottomHalf: {
-    height: '55%',
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  myCodeInfoContainer: {
+  infoTopContainer: {
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 24,
-    marginBottom: 36,
+    marginTop: 56,
+    // flexGrow: 1,
   },
-  myCodeInfoText: {
-    fontFamily: 'ApexNew-Book',
+  infoTopText: {
+    // fontFamily: 'ApexNew-Book',
     fontSize: 16,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
     textAlign: 'center',
     color: '#4a4a4a',
   },
-  photoContainer: {
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  photo: {
-    width: 102,
-    height: 102,
-    borderRadius: 51,
-  },
-  name: {
-    fontFamily: 'ApexNew-Book',
-    marginTop: 12,
-    fontSize: 20,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
-    textAlign: 'left',
-    color: '#000000',
-    textShadowColor: 'rgba(0, 0, 0, 0.32)',
-    textShadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    textShadowRadius: 4,
-  },
-  qrsvgContainer: {
+
+  qrCodeContainer: {
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    flexGrow: 1,
   },
   copyContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-evenly',
+    width: '75%',
+  },
+  copyButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 25,
-    minWidth: 100,
+    // minHeight: 25,
+    // minWidth: 100,
   },
   copyText: {
     color: '#333',
-    fontFamily: 'ApexNew-Book',
+    // fontFamily: 'ApexNew-Book',
   },
   timerContainer: {
     flexDirection: 'row',
   },
   timerTextLeft: {
-    fontFamily: 'ApexNew-Book',
+    // fontFamily: 'ApexNew-Book',
     fontSize: DEVICE_LARGE ? 16 : 14,
   },
   timerTextRight: {
-    fontFamily: 'ApexNew-Book',
+    // fontFamily: 'ApexNew-Book',
     fontSize: DEVICE_LARGE ? 16 : 14,
+  },
+  infoBottomText: {
+    fontSize: 12,
+    marginBottom: 10,
+  },
+  scanCodeButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 42,
+    backgroundColor: ORANGE,
+    borderRadius: 60,
+    width: 220,
+    marginBottom: 36,
+  },
+  scanCodeText: {
+    fontSize: 14,
+    color: '#fff',
+  },
+  cameraIcon: {
+    marginTop: 1.5,
+    marginRight: 4,
   },
 });
 

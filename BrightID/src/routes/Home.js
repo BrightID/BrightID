@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Image, TouchableOpacity, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Simple from 'react-native-vector-icons/SimpleLineIcons';
 // import { delStorage } from '@/utils/dev';
@@ -44,19 +45,25 @@ const homeScreenOptions = {
   headerTitleAlign: 'center',
 };
 
+// const BackButton = () => {
+//   const navigation = useNavigation();
+//   return (
+//     <TouchableOpacity onPress={navigation.navigate('Home')}>
+//       <Material
+//         name="chevron-left"
+//         size={DEVICE_LARGE ? 42 : 23}
+//         color="#fff"
+//         style={{ marginLeft: 10 }}
+//       />
+//     </TouchableOpacity>
+//   );
+// };
+
 const newConnectionOptions = {
-  headerLeft: () => (
-    <Material
-      name="chevron-left"
-      size={DEVICE_LARGE ? 42 : 23}
-      color="#fff"
-      style={{ marginLeft: 10 }}
-    />
-  ),
+  // headerLeft: () => <BackButton />,
   headerStyle: {
     height: DEVICE_LARGE ? 60 : 60,
     backgroundColor: ORANGE,
-    zIndex: 1,
     shadowRadius: 0,
     shadowOffset: {
       height: 0,

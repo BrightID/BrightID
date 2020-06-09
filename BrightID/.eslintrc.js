@@ -60,6 +60,8 @@ module.exports = {
     'no-await-in-loop': 'off',
     'react-native/no-inline-styles': 'off',
     'react/display-name': 'off',
+    'react-hooks/exhaustive-deps': 'off',
+    'react/prop-types': 'off',
   },
   globals: {
     __DEV__: 'readonly',
