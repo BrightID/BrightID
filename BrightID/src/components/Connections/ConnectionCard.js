@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_TYPE, MAX_WAITING_SECONDS } from '@/utils/constants';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 /**
  * Connection Card in the Connections Screen
@@ -27,6 +28,10 @@ class ConnectionCard extends React.PureComponent<Props> {
     actionSheet.show();
   };
 
+  handleRemoveStaleConnection = () => {
+    this.props.onRemove(this.props);
+  };
+
   scoreColor = () => {
     const { score } = this.props;
     if (score >= 85) {
@@ -36,13 +41,11 @@ class ConnectionCard extends React.PureComponent<Props> {
     }
   };
 
-  setStatus = () => {
-    const { score, status, connectionDate } = this.props;
+  getStatus = (staleConnection) => {
+    const { score, status } = this.props;
     if (status === 'initiated') {
-      const ageSeconds = Math.floor((Date.now() - connectionDate) / 1000);
-      console.log(`Connection age: ${ageSeconds} seconds`);
       let statusText = 'Waiting';
-      if (ageSeconds > MAX_WAITING_SECONDS) {
+      if (staleConnection) {
         statusText = 'Connection failed. Please try again.';
       }
       return (
@@ -68,8 +71,39 @@ class ConnectionCard extends React.PureComponent<Props> {
     }
   };
 
+  getContextAction = (status, staleConnection) => {
+    if (status === 'verified') {
+      return (
+        <TouchableOpacity
+          testID="flagConnectionBtn"
+          style={styles.moreIcon}
+          onPress={this.handleUserOptions}
+        >
+          <Material size={ICON_SIZE} name="flag-remove" color="#ccc" />
+        </TouchableOpacity>
+      );
+    } else if (status === 'initiated' && staleConnection) {
+      return (
+        <TouchableOpacity
+          testID="deleteConnectionBtn"
+          style={styles.moreIcon}
+          onPress={this.handleRemoveStaleConnection}
+        >
+          <AntDesign size={ICON_SIZE} name="closecircle" color="#ccc" />
+        </TouchableOpacity>
+      );
+    }
+    // default: No context action
+    return null;
+  };
+
   render() {
-    const { photo, name, connectionDate, style } = this.props;
+    const { photo, name, connectionDate, style, status } = this.props;
+    const ageSeconds = Math.floor((Date.now() - connectionDate) / 1000);
+    console.log(`Connection age: ${ageSeconds} seconds`);
+    const staleConnection = ageSeconds > MAX_WAITING_SECONDS;
+    const connectionStatus = this.getStatus(staleConnection);
+    const contextAction = this.getContextAction(status, staleConnection);
 
     return (
       <View style={{ ...styles.container, ...style }}>
@@ -81,19 +115,12 @@ class ConnectionCard extends React.PureComponent<Props> {
         />
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
-
-          <this.setStatus />
+          {connectionStatus}
           <Text style={styles.connectedText}>
             Connected {moment(parseInt(connectionDate, 10)).fromNow()}
           </Text>
         </View>
-        <TouchableOpacity
-          testID="flagConnectionBtn"
-          style={styles.moreIcon}
-          onPress={this.handleUserOptions}
-        >
-          <Material size={ICON_SIZE} name="flag-remove" color="#ccc" />
-        </TouchableOpacity>
+        {contextAction}
       </View>
     );
   }

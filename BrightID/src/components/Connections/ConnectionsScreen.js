@@ -75,23 +75,44 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     );
   };
 
-  handleRemoveWaitingConnection = (connection) => {
-    // show confirmation dialog before actually removing...
+  handleRemoveStaleConnection = (connection) => {
     if (connection.status !== 'initiated') {
       console.log(
         `Cant remove connection ${connection.id} with status ${connection.status}.`,
       );
-    } else {
-      console.log(`Removing connection ${connection.id} (${connection.name})`);
-      const { dispatch } = this.props;
-      dispatch(deleteConnection(connection.id));
+      return;
     }
+
+    const buttons = [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: () => {
+          console.log(
+            `Removing connection ${connection.id} (${connection.name})`,
+          );
+          const { dispatch } = this.props;
+          dispatch(deleteConnection(connection.id));
+        },
+      },
+    ];
+    Alert.alert(
+      `Remove waiting connection`,
+      `Are you sure you want to stop waiting for connection with ${connection.name}? You can retry connecting anytime.`,
+      buttons,
+      {
+        cancelable: true,
+      },
+    );
   };
 
   renderConnection = ({ item }) => (
     <ConnectionCard
       actionSheet={this.actionSheet}
-      onDelete={this.handleRemoveWaitingConnection}
+      onRemove={this.handleRemoveStaleConnection}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...item}
     />
