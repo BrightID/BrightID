@@ -14,6 +14,7 @@ import ActionSheet from 'react-native-actionsheet';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
+import { deleteConnection } from '@/actions';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
 import { createFakeConnection } from './models/createFakeConnection';
@@ -74,9 +75,26 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     );
   };
 
+  handleRemoveWaitingConnection = (connection) => {
+    // show confirmation dialog before actually removing...
+    if (connection.status !== 'initiated') {
+      console.log(
+        `Cant remove connection ${connection.id} with status ${connection.status}.`,
+      );
+    } else {
+      console.log(`Removing connection ${connection.id} (${connection.name})`);
+      const { dispatch } = this.props;
+      dispatch(deleteConnection(connection.id));
+    }
+  };
+
   renderConnection = ({ item }) => (
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    <ConnectionCard actionSheet={this.actionSheet} {...item} />
+    <ConnectionCard
+      actionSheet={this.actionSheet}
+      onDelete={this.handleRemoveWaitingConnection}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...item}
+    />
   );
 
   modifyConnection = (option: string) => {

@@ -6,7 +6,7 @@ import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { DEVICE_TYPE, MAX_WAITING_SECONDS } from '@/utils/constants';
 
 /**
  * Connection Card in the Connections Screen
@@ -37,11 +37,17 @@ class ConnectionCard extends React.PureComponent<Props> {
   };
 
   setStatus = () => {
-    const { score, status } = this.props;
+    const { score, status, connectionDate } = this.props;
     if (status === 'initiated') {
+      const ageSeconds = Math.floor((Date.now() - connectionDate) / 1000);
+      console.log(`Connection age: ${ageSeconds} seconds`);
+      let statusText = 'Waiting';
+      if (ageSeconds > MAX_WAITING_SECONDS) {
+        statusText = 'Connection failed. Please try again.';
+      }
       return (
         <View style={styles.scoreContainer}>
-          <Text style={styles.waitingMessage}>Waiting</Text>
+          <Text style={styles.waitingMessage}>{statusText}</Text>
         </View>
       );
     } else if (status === 'verified') {
