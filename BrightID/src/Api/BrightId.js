@@ -76,6 +76,7 @@ class BrightId {
 
     let res = await this.api.put(`/operations/${op._key}`, op);
     BrightId.throwOnError(res);
+    console.log(`Initiator opMessage: ${message} - hash: ${hash(message)}`);
     BrightId.setOperation(op);
   }
 
@@ -371,6 +372,11 @@ class BrightId {
 
   async getOperationState(opHash: string) {
     let res = await this.api.get(`/operations/${opHash}`);
+    if (res.status === 404) {
+      // operation is not known. Don't throw an error, as a client might try to check
+      // operations sent by other clients without knowing if they have been submitted already
+      return undefined;
+    }
     BrightId.throwOnError(res);
     return res.data.data;
   }

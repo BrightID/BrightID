@@ -11,7 +11,6 @@ export const decryptData = (data, aesKey) => {
   const decrypted = CryptoJS.AES.decrypt(data, aesKey).toString(
     CryptoJS.enc.Utf8,
   );
-  console.log(`Decrypted data: ${decrypted}`);
   const decryptedObj = JSON.parse(decrypted);
   decryptedObj.aesKey = aesKey;
   return decryptedObj;

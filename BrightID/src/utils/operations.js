@@ -14,25 +14,35 @@ export const pollOperations = async () => {
   } = store.getState();
   try {
     for (const op of operations) {
-      const { state, result } = await api.getOperationState(op._key);
-      if (
-        state === 'applied' ||
-        state === 'failed' ||
-        op.timestamp + time_fudge < Date.now()
-      ) {
-        if (op.name === 'Link ContextId') {
-          store.dispatch(updateApp(op, state, result));
-          if (state === 'applied')
-            Alert.alert(
-              'Success',
-              `Succesfully linked ${op.context} with BrightID`,
-            );
-        } else {
-          store.dispatch(fetchUserInfo());
+      const opState = await api.getOperationState(op._key);
+      if (!opState) {
+        console.log(`operation ${op._key} not found on server`);
+        // operation is not known on the api. Just check the timestamp and move on.
+        if (op.timestamp + time_fudge < Date.now()) {
+          // op is expired. Remove from watchlist.
+          store.dispatch(removeOperation(op._key));
         }
-        store.dispatch(removeOperation(op._key));
-      } else if (state !== 'sent') {
-        console.log(`${state} is an invalid state!`);
+      } else {
+        const { state, result } = opState;
+        if (
+          state === 'applied' ||
+          state === 'failed' ||
+          op.timestamp + time_fudge < Date.now()
+        ) {
+          if (op.name === 'Link ContextId') {
+            store.dispatch(updateApp(op, state, result));
+            if (state === 'applied')
+              Alert.alert(
+                'Success',
+                `Succesfully linked ${op.context} with BrightID`,
+              );
+          } else {
+            store.dispatch(fetchUserInfo());
+          }
+          store.dispatch(removeOperation(op._key));
+        } else if (state !== 'sent') {
+          console.log(`${state} is an invalid state!`);
+        }
       }
     }
   } catch (err) {

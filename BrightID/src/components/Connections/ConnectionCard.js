@@ -43,13 +43,13 @@ class ConnectionCard extends React.Component<Props, State> {
         // this is already old. Immediately mark as "stale", no need for a timer.
         this.setState({ isStale: true });
       } else {
+        // start timer to check if connection got verified after MAX_WAITING_TIME
         let checkTime =
           connectionDate + MAX_WAITING_SECONDS * 1000 + 5000 - Date.now(); // add 5 seconds buffer
         if (checkTime < 0) {
           console.log(`Warning - checkTime in past: ${checkTime}`);
           checkTime = 1000; // check in 1 second
         }
-        // start timer to check if connection got verified after MAX_WAITING_TIME
         console.log(`Checking connection state in ${checkTime}ms.`);
         clearTimeout(this.state.stale_check_timer);
         const stale_check_timer = setTimeout(() => {
@@ -64,7 +64,11 @@ class ConnectionCard extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
-    if (prevProps.status === 'initiated' && this.props.status === 'verified') {
+    if (
+      this.state.stale_check_timer &&
+      prevProps.status === 'initiated' &&
+      this.props.status === 'verified'
+    ) {
       console.log(
         `Connection ${this.props.name} changed to 'verified'. Stopping timer.`,
       );
@@ -171,7 +175,6 @@ class ConnectionCard extends React.Component<Props, State> {
 
   render() {
     const { photo, name, connectionDate, style } = this.props;
-    console.log(`Rendering connection ${name}`);
     const connectionStatus = this.getStatus();
     const contextAction = this.getContextAction();
 
