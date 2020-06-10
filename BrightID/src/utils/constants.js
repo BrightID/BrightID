@@ -37,4 +37,4 @@ export const QR_TTL = 900000;
 export const PROFILE_POLL_INTERVAL = 1000;
 export const QR_TYPE_INITIATOR = 'initiator';
 export const QR_TYPE_RESPONDER = 'responder';
-export const MAX_WAITING_SECONDS = 60;
+export const MAX_WAITING_SECONDS = 30;

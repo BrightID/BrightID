@@ -21,7 +21,75 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const ICON_SIZE = DEVICE_TYPE === 'large' ? 36 : 32;
 
-class ConnectionCard extends React.PureComponent<Props> {
+type State = {
+  stale_check_timer: TimeoutID,
+  isStale: boolean,
+};
+
+class ConnectionCard extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      stale_check_timer: 0,
+      isStale: false,
+    };
+  }
+
+  componentDidMount() {
+    // if we have a "waiting" connection, start timer to handle stale connection requests
+    const { status, connectionDate } = this.props;
+    if (status === 'initiated') {
+      if (this.checkStale()) {
+        // this is already old. Immediately mark as "stale", no need for a timer.
+        this.setState({ isStale: true });
+      } else {
+        let checkTime =
+          connectionDate + MAX_WAITING_SECONDS * 1000 + 5000 - Date.now(); // add 5 seconds buffer
+        if (checkTime < 0) {
+          console.log(`Warning - checkTime in past: ${checkTime}`);
+          checkTime = 1000; // check in 1 second
+        }
+        // start timer to check if connection got verified after MAX_WAITING_TIME
+        console.log(`Checking connection state in ${checkTime}ms.`);
+        clearTimeout(this.state.stale_check_timer);
+        const stale_check_timer = setTimeout(() => {
+          if (this.checkStale()) {
+            this.setState({ isStale: true });
+            clearTimeout(this.state.stale_check_timer);
+          }
+        }, checkTime);
+        this.setState({ stale_check_timer });
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    if (prevProps.status === 'initiated' && this.props.status === 'verified') {
+      console.log(
+        `Connection ${this.props.name} changed to 'verified'. Stopping timer.`,
+      );
+      clearTimeout(this.state.stale_check_timer);
+    }
+  }
+
+  componentWillUnmount() {
+    // clear timer if it is set
+    if (this.state.stale_check_timer) {
+      clearTimeout(this.state.stale_check_timer);
+    }
+  }
+
+  checkStale = () => {
+    const { connectionDate, name } = this.props;
+    const ageSeconds = Math.floor((Date.now() - connectionDate) / 1000);
+    console.log(`Connection age: ${ageSeconds} seconds`);
+    if (ageSeconds > MAX_WAITING_SECONDS) {
+      console.log(`Connection ${name} is stale`);
+      return true;
+    }
+    return false;
+  };
+
   handleUserOptions = () => {
     const { actionSheet } = this.props;
     actionSheet.connection = this.props;
@@ -41,11 +109,12 @@ class ConnectionCard extends React.PureComponent<Props> {
     }
   };
 
-  getStatus = (staleConnection) => {
+  getStatus = () => {
+    const { isStale } = this.state;
     const { score, status } = this.props;
     if (status === 'initiated') {
       let statusText = 'Waiting';
-      if (staleConnection) {
+      if (isStale) {
         statusText = 'Connection failed. Please try again.';
       }
       return (
@@ -71,7 +140,9 @@ class ConnectionCard extends React.PureComponent<Props> {
     }
   };
 
-  getContextAction = (status, staleConnection) => {
+  getContextAction = () => {
+    const { status } = this.props;
+    const { isStale } = this.state;
     if (status === 'verified') {
       return (
         <TouchableOpacity
@@ -82,7 +153,8 @@ class ConnectionCard extends React.PureComponent<Props> {
           <Material size={ICON_SIZE} name="flag-remove" color="#ccc" />
         </TouchableOpacity>
       );
-    } else if (status === 'initiated' && staleConnection) {
+    }
+    if (status === 'deleted' || (status === 'initiated' && isStale)) {
       return (
         <TouchableOpacity
           testID="deleteConnectionBtn"
@@ -98,12 +170,10 @@ class ConnectionCard extends React.PureComponent<Props> {
   };
 
   render() {
-    const { photo, name, connectionDate, style, status } = this.props;
-    const ageSeconds = Math.floor((Date.now() - connectionDate) / 1000);
-    console.log(`Connection age: ${ageSeconds} seconds`);
-    const staleConnection = ageSeconds > MAX_WAITING_SECONDS;
-    const connectionStatus = this.getStatus(staleConnection);
-    const contextAction = this.getContextAction(status, staleConnection);
+    const { photo, name, connectionDate, style } = this.props;
+    console.log(`Rendering connection ${name}`);
+    const connectionStatus = this.getStatus();
+    const contextAction = this.getContextAction();
 
     return (
       <View style={{ ...styles.container, ...style }}>

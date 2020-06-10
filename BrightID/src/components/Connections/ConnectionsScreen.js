@@ -75,10 +75,10 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     );
   };
 
-  handleRemoveStaleConnection = (connection) => {
-    if (connection.status !== 'initiated') {
+  handleRemoveConnection = (connection) => {
+    if (connection.status === 'verified') {
       console.log(
-        `Cant remove connection ${connection.id} with status ${connection.status}.`,
+        `Cant remove verified connection ${connection.id} (${connection.name}).`,
       );
       return;
     }
@@ -100,8 +100,8 @@ export class ConnectionsScreen extends React.Component<Props, State> {
       },
     ];
     Alert.alert(
-      `Remove waiting connection`,
-      `Are you sure you want to stop waiting for connection with ${connection.name}? You can retry connecting anytime.`,
+      `Remove connection`,
+      `Are you sure you want to remove connection with ${connection.name}? You can reconnect anytime.`,
       buttons,
       {
         cancelable: true,
@@ -112,7 +112,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
   renderConnection = ({ item }) => (
     <ConnectionCard
       actionSheet={this.actionSheet}
-      onRemove={this.handleRemoveStaleConnection}
+      onRemove={this.handleRemoveConnection}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...item}
     />
