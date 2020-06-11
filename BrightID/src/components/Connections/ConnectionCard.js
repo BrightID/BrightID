@@ -22,7 +22,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 const ICON_SIZE = DEVICE_TYPE === 'large' ? 36 : 32;
 
 type State = {
-  stale_check_timer: TimeoutID,
   isStale: boolean,
 };
 
@@ -30,9 +29,9 @@ class ConnectionCard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      stale_check_timer: 0,
       isStale: false,
     };
+    this.stale_check_timer = 0;
   }
 
   componentDidMount() {
@@ -50,45 +49,44 @@ class ConnectionCard extends React.Component<Props, State> {
           console.log(`Warning - checkTime in past: ${checkTime}`);
           checkTime = 1000; // check in 1 second
         }
-        console.log(`Checking connection state in ${checkTime}ms.`);
-        clearTimeout(this.state.stale_check_timer);
-        const stale_check_timer = setTimeout(() => {
+        console.log(`Marking connection as stale in ${checkTime}ms.`);
+        clearTimeout(this.stale_check_timer);
+        this.stale_check_timer = setTimeout(() => {
           if (this.checkStale()) {
             this.setState({ isStale: true });
-            clearTimeout(this.state.stale_check_timer);
           }
         }, checkTime);
-        this.setState({ stale_check_timer });
       }
     }
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
     if (
-      this.state.stale_check_timer &&
+      this.stale_check_timer &&
       prevProps.status === 'initiated' &&
       this.props.status === 'verified'
     ) {
       console.log(
-        `Connection ${this.props.name} changed to 'verified'. Stopping timer.`,
+        `Connection ${this.props.name} changed 'initiated' -> 'verified'. Stopping stale_check_timer ID ${this.stale_check_timer}.`,
       );
-      clearTimeout(this.state.stale_check_timer);
+      clearTimeout(this.stale_check_timer);
+      this.stale_check_timer = 0;
     }
   }
 
   componentWillUnmount() {
     // clear timer if it is set
-    if (this.state.stale_check_timer) {
+    if (this.stale_check_timer) {
       clearTimeout(this.state.stale_check_timer);
+      this.stale_check_timer = 0;
     }
   }
 
   checkStale = () => {
     const { connectionDate, name } = this.props;
     const ageSeconds = Math.floor((Date.now() - connectionDate) / 1000);
-    console.log(`Connection age: ${ageSeconds} seconds`);
     if (ageSeconds > MAX_WAITING_SECONDS) {
-      console.log(`Connection ${name} is stale`);
+      console.log(`Connection ${name} is stale (age: ${ageSeconds} seconds)`);
       return true;
     }
     return false;
