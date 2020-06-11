@@ -373,9 +373,12 @@ class BrightId {
   async getOperationState(opHash: string) {
     let res = await this.api.get(`/operations/${opHash}`);
     if (res.status === 404) {
-      // operation is not known. Don't throw an error, as a client might try to check
-      // operations sent by other clients without knowing if they have been submitted already
-      return undefined;
+      // operation is not existing on server. Don't throw an error, as a client might try to check
+      // operations sent by other clients without knowing if they have been submitted already.
+      return {
+        state: 'unknown',
+        result: '',
+      };
     }
     BrightId.throwOnError(res);
     return res.data.data;
