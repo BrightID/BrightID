@@ -41,6 +41,12 @@ const expectHomescreen = async () => {
     .withTimeout(20000);
 };
 
+const expectConnectionsScreen = async () => {
+  await waitFor(element(by.id('connectionsScreen')))
+    .toBeVisible()
+    .withTimeout(20000);
+};
+
 const expectGroupsScreen = async () => {
   await waitFor(element(by.id('groupsScreen')))
     .toBeVisible()
@@ -62,6 +68,7 @@ export {
   createBrightID,
   createFakeConnection,
   expectHomescreen,
+  expectConnectionsScreen,
   expectGroupsScreen,
   expectAppsScreen,
 };
