@@ -28,7 +28,6 @@ Many issues have [bounties assigned](https://github.com/orgs/BrightID/projects/2
 * [Mobile App](https://github.com/BrightID/BrightID/projects/4)
 * [Node](https://github.com/BrightID/BrightID-Node/projects/2)
 * [Anti-Sybil](https://github.com/BrightID/BrightID-Node/projects/3)
-* [Documentation](https://github.com/BrightID/BrightID-Docs/projects/1)
 
 ### Repos
 [All repos](https://github.com/BrightID)
