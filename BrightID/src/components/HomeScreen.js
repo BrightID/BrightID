@@ -278,7 +278,7 @@ export const HomeScreen = (props) => {
   );
 };
 
-const PHOTO_WIDTH = DEVICE_LARGE ? 85 : 75;
+const PHOTO_WIDTH = DEVICE_LARGE ? 90 : 78;
 const ORANGE = '#ED7A5D';
 
 const styles = StyleSheet.create({
@@ -297,10 +297,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 50,
     backgroundColor: '#fff',
+    paddingTop: DEVICE_LARGE ? 10 : 0,
   },
   verifyNameContainer: {
     flexDirection: 'column',
-    marginLeft: 30,
+    marginLeft: 40,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
@@ -326,8 +327,7 @@ const styles = StyleSheet.create({
   },
   name: {
     // fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_LARGE ? 15 : 13,
-
+    fontSize: DEVICE_LARGE ? 18 : 15,
     color: '#000000',
   },
   verificationsContainer: {
@@ -381,6 +381,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 58,
     backgroundColor: '#fff',
     flexGrow: 1,
+    paddingTop: DEVICE_LARGE ? 10 : 0,
   },
   countsBorder: {
     borderBottomWidth: 1,
@@ -419,7 +420,7 @@ const styles = StyleSheet.create({
   newConnectionText: {
     color: '#fff',
     fontSize: DEVICE_LARGE ? 18 : 15,
-    marginBottom: DEVICE_LARGE ? 12 : 11,
+    marginBottom: DEVICE_LARGE ? 16 : 11,
   },
   connectButton: {
     paddingTop: DEVICE_LARGE ? 11 : 7,
@@ -434,12 +435,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
     shadowRadius: 10,
-    // elevation: 1,
-    marginBottom: 12,
+    elevation: 1,
+    marginBottom: DEVICE_LARGE ? 16 : 11,
   },
   connectText: {
     // fontFamily: 'ApexNew-Medium',
-    fontSize: DEVICE_LARGE ? 18 : 13,
+    fontSize: DEVICE_LARGE ? 18 : 15,
     fontWeight: 'bold',
     color: '#000',
     marginLeft: DEVICE_LARGE ? 10 : 8,

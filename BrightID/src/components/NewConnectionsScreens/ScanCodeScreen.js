@@ -6,17 +6,17 @@ import {
   Linking,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import BarcodeMask from 'react-native-barcode-mask';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-native-spinkit';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   DEVICE_LARGE,
+  DEVICE_IOS,
   PROFILE_POLL_INTERVAL,
   QR_TYPE_RESPONDER,
   ORANGE,
@@ -44,17 +44,14 @@ function validQrString(qrString) {
  */
 
 let fetchProfileId: IntervalID;
+let connectionExpired: TimeoutID;
+
+const Container = DEVICE_IOS ? SafeAreaView : View;
 
 export const ScanCodeScreen = (props) => {
-  let textInput: null | TextInput;
-
-  let camera: null | RNCamera;
-  let connectionExpired: TimeoutID;
-
   const dispatch = useDispatch();
   const [scanned, setScanned] = useState(false);
   const [connectionAttempts, setConnectionAttempts] = useState(0);
-  const [value, setValue] = useState('');
   const name = useSelector((state) => state.user.name);
 
   useEffect(() => {
@@ -111,8 +108,6 @@ export const ScanCodeScreen = (props) => {
       dispatch(setConnectQrData(peerQrData));
       // If the following `fetchdata()` fails, a "connectFailure" will be emitted,
       subscribeToProfileUpload(peerQrData);
-
-      if (textInput) textInput.blur();
     }
     setScanned(true);
   };
@@ -136,7 +131,7 @@ export const ScanCodeScreen = (props) => {
   return (
     <>
       <View style={styles.orangeTop} />
-      <View style={styles.container}>
+      <Container style={styles.container}>
         <View style={styles.infoTopContainer}>
           <Text style={styles.infoTopText}>
             Hey {name}, share your code and
@@ -145,38 +140,31 @@ export const ScanCodeScreen = (props) => {
         </View>
         <View style={styles.cameraContainer}>
           {!scanned ? (
-            <View style={styles.cameraPreview} testID="scanCode">
-              <RNCamera
-                ref={(ref) => {
-                  camera = ref;
-                }}
-                style={styles.cameraPreview}
-                captureAudio={false}
-                onBarCodeRead={handleBarCodeRead}
-                type={RNCamera.Constants.Type.back}
-                flashMode={RNCamera.Constants.FlashMode.off}
-                androidCameraPermissionOptions={{
-                  title: 'Permission to use camera',
-                  message: 'We need your permission to use your camera',
-                  buttonPositive: 'Ok',
-                  buttonNegative: 'Cancel',
-                }}
-                useNativeZoom={true}
-                // containerStyle
-              >
-                <BarcodeMask
-                  edgeColor={ORANGE}
-                  animatedLineColor={ORANGE}
-                  // outerMaskOpacity={0}
-                  width={230}
-                  height={230}
-                  edgeRadius={5}
-                  edgeBorderWidth={3}
-                  edgeHeight={30}
-                  edgeWidth={30}
-                />
-              </RNCamera>
-            </View>
+            <RNCamera
+              style={styles.cameraPreview}
+              captureAudio={false}
+              onBarCodeRead={handleBarCodeRead}
+              type={RNCamera.Constants.Type.back}
+              flashMode={RNCamera.Constants.FlashMode.off}
+              androidCameraPermissionOptions={{
+                title: 'Permission to use camera',
+                message: 'We need your permission to use your camera',
+                buttonPositive: 'Ok',
+                buttonNegative: 'Cancel',
+              }}
+              useNativeZoom={true}
+            >
+              <BarcodeMask
+                edgeColor={ORANGE}
+                animatedLineColor={ORANGE}
+                width={230}
+                height={230}
+                edgeRadius={5}
+                edgeBorderWidth={3}
+                edgeHeight={30}
+                edgeWidth={30}
+              />
+            </RNCamera>
           ) : (
             <View style={styles.cameraPreview}>
               <Spinner isVisible={true} size={41} type="Wave" color="#4990e2" />
@@ -198,7 +186,7 @@ export const ScanCodeScreen = (props) => {
           />
           <Text style={styles.myCodeText}> Show your QR code</Text>
         </TouchableOpacity>
-      </View>
+      </Container>
     </>
   );
 };
@@ -208,83 +196,58 @@ const styles = StyleSheet.create({
     backgroundColor: ORANGE,
     height: 70,
     width: '100%',
+    zIndex: 1,
   },
   container: {
     flex: 1,
     width: '100%',
-    height: '100%',
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     flexDirection: 'column',
     borderTopLeftRadius: 58,
     borderTopRightRadius: 58,
     zIndex: 10,
     marginTop: -58,
   },
-  cameraContainer: {
-    flexGrow: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  cameraPreview: {
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    width: 280,
-    height: 280,
-    // borderRadius: 10,
-    // borderWidth: 4,
-    // borderColor: '#000',
-  },
-  scanTextContainer: {
-    height: 85,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 10,
-    backgroundColor: '#fff',
-    zIndex: 100,
-  },
-  searchField: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_LARGE ? 16 : 14,
-    color: '#333',
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
-    width: '85%',
-    textAlign: 'center',
-  },
   infoTopContainer: {
     width: '100%',
     justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 56,
-    // flexGrow: 1,
+    flexGrow: 1,
   },
   infoTopText: {
     // fontFamily: 'ApexNew-Book',
-    fontSize: 16,
+    fontSize: DEVICE_LARGE ? 16 : 14,
     textAlign: 'center',
     color: '#4a4a4a',
   },
+  cameraContainer: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '100%',
+    // borderWidth: 1,
+  },
+  cameraPreview: {
+    width: 280,
+    height: 280,
+  },
   infoBottomText: {
-    fontSize: 12,
+    fontSize: DEVICE_LARGE ? 12 : 11,
     marginBottom: 10,
   },
   myCodeButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 42,
+    height: DEVICE_LARGE ? 42 : 36,
     backgroundColor: ORANGE,
     borderRadius: 60,
     width: 220,
     marginBottom: 36,
   },
   myCodeText: {
-    fontSize: 14,
+    fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#fff',
   },
   cameraIcon: {
@@ -292,12 +255,5 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
 });
-
-// const mapStateToProps = (state) => {
-//   const props = {
-//     peerQrData: state.connectQrData.peerQrData,
-//   };
-//   return props;
-// };
 
 export default ScanCodeScreen;

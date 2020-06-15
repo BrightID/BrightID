@@ -8,13 +8,14 @@ import {
   TouchableOpacity,
   Clipboard,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import emitter from '@/emitter';
-import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
 import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
 import { startConnecting, stopConnecting } from './actions/connecting';
@@ -28,6 +29,8 @@ import { startConnecting, stopConnecting } from './actions/connecting';
  */
 
 const COPIED_TIMEOUT = 500;
+
+const Container = DEVICE_IOS ? SafeAreaView : View;
 
 export const MyCodeScreen = (props) => {
   const dispatch = useDispatch();
@@ -154,8 +157,8 @@ export const MyCodeScreen = (props) => {
 
   const renderQrCode = () => (
     <Svg
-      height={DEVICE_LARGE ? '260' : '180'}
-      width={DEVICE_LARGE ? '260' : '180'}
+      height={DEVICE_LARGE ? '260' : '200'}
+      width={DEVICE_LARGE ? '260' : '200'}
       xmlns="http://www.w3.org/2000/svg"
       viewBox={path(['svg', '$', 'viewBox'], qrsvg)}
       shape-rendering="crispEdges"
@@ -170,7 +173,7 @@ export const MyCodeScreen = (props) => {
   return (
     <>
       <View style={styles.orangeTop} />
-      <View style={styles.container}>
+      <Container style={styles.container}>
         <View style={styles.infoTopContainer}>
           <Text style={styles.infoTopText}>
             Hey {name}, share your code and
@@ -197,7 +200,7 @@ export const MyCodeScreen = (props) => {
           />
           <Text style={styles.scanCodeText}>Scan a Code</Text>
         </TouchableOpacity>
-      </View>
+      </Container>
     </>
   );
 };
@@ -207,30 +210,29 @@ const styles = StyleSheet.create({
     backgroundColor: ORANGE,
     height: 70,
     width: '100%',
+    zIndex: 1,
   },
   container: {
     flex: 1,
     width: '100%',
-    height: '100%',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'column',
     borderTopLeftRadius: 58,
     borderTopRightRadius: 58,
-    zIndex: 10,
     marginTop: -58,
+    zIndex: 10,
   },
   infoTopContainer: {
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 56,
-    // flexGrow: 1,
+    flexGrow: 1,
   },
   infoTopText: {
     // fontFamily: 'ApexNew-Book',
-    fontSize: 16,
+    fontSize: DEVICE_LARGE ? 16 : 14,
     textAlign: 'center',
     color: '#4a4a4a',
   },
@@ -240,23 +242,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexGrow: 1,
+    // borderWidth: 1,
   },
   copyContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    width: '75%',
+    width: DEVICE_LARGE ? 260 : 200,
   },
   copyButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    // minHeight: 25,
-    // minWidth: 100,
   },
   copyText: {
     color: '#333',
     // fontFamily: 'ApexNew-Book',
+    fontSize: DEVICE_LARGE ? 14 : 12,
   },
   timerContainer: {
     flexDirection: 'row',
@@ -270,21 +272,21 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 16 : 14,
   },
   infoBottomText: {
-    fontSize: 12,
+    fontSize: DEVICE_LARGE ? 12 : 11,
     marginBottom: 10,
   },
   scanCodeButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 42,
+    height: DEVICE_LARGE ? 42 : 36,
     backgroundColor: ORANGE,
     borderRadius: 60,
     width: 220,
     marginBottom: 36,
   },
   scanCodeText: {
-    fontSize: 14,
+    fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#fff',
   },
   cameraIcon: {
