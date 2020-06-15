@@ -23,11 +23,6 @@ ID creation and connectons to people and apps are managed though the BrightID mo
 
 Many issues have [bounties assigned](https://github.com/orgs/BrightID/projects/2?card_filter_query=label%3A%22bounty+%F0%9F%92%8E%22), paid in [BrightID Subs tokens](https://uniswap.info/token/0x61ceac48136d6782dbd83c09f51e23514d12470a). [Apply to our keybase](https://keybase.io/team/brightid) to start contributing.
 
-### Project Boards
-* [Everything](https://github.com/orgs/BrightID/projects/2)
-* [Mobile App](https://github.com/BrightID/BrightID/projects/4)
-* [Node](https://github.com/BrightID/BrightID-Node/projects/2)
-* [Anti-Sybil](https://github.com/BrightID/BrightID-Node/projects/3)
+### [Project Board](https://github.com/orgs/BrightID/projects/2)
 
-### Repos
-[All repos](https://github.com/BrightID)
+### [All Repos](https://github.com/BrightID)
