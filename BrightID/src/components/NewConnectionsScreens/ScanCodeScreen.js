@@ -231,6 +231,8 @@ const styles = StyleSheet.create({
   cameraPreview: {
     width: 280,
     height: 280,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   infoBottomText: {
     fontSize: DEVICE_LARGE ? 12 : 11,

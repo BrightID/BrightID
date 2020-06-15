@@ -1,18 +1,17 @@
 import * as React from 'react';
 import { Image, TouchableOpacity, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useNavigation } from '@react-navigation/native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import Simple from 'react-native-vector-icons/SimpleLineIcons';
-// import { delStorage } from '@/utils/dev';
-import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
-import { shareConnection } from '@/components/NewConnectionsScreens/actions/shareConnection';
+import { SvgXml } from 'react-native-svg';
+import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
 import HomeScreen from '@/components/HomeScreen';
 import MyCodeScreen from '@/components/NewConnectionsScreens/MyCodeScreen';
 import ScanCodeScreen from '@/components/NewConnectionsScreens/ScanCodeScreen';
 import SuccessScreen from '@/components/NewConnectionsScreens/SuccessScreen';
 import PreviewConnectionScreen from '@/components/NewConnectionsScreens/PreviewConnectionScreen';
 import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnectionScreen';
+import backArrow from '@/static/back_arrow.svg';
+import { navigate } from '@/NavigationService';
 
 const Stack = createStackNavigator();
 
@@ -46,25 +45,38 @@ const homeScreenOptions = {
   headerTitleAlign: 'center',
 };
 
-// const BackButton = () => {
-//   const navigation = useNavigation();
-//   return (
-//     <TouchableOpacity onPress={navigation.navigate('Home')}>
-//       <Material
-//         name="chevron-left"
-//         size={DEVICE_LARGE ? 42 : 23}
-//         color="#fff"
-//         style={{ marginLeft: 10 }}
-//       />
-//     </TouchableOpacity>
-//   );
-// };
-
 const newConnectionOptions = {
-  // headerLeft: () => <BackButton />,
+  headerLeft: () => (
+    <TouchableOpacity
+      style={{
+        marginLeft: DEVICE_IOS ? 25 : 10,
+        marginTop: DEVICE_LARGE ? 15 : 10,
+      }}
+      onPress={() => {
+        navigate('Home');
+      }}
+    >
+      <SvgXml height="25" xml={backArrow} />
+    </TouchableOpacity>
+  ),
+  headerBackTitleVisible: false,
   headerStyle: {
-    height: DEVICE_LARGE ? 60 : 60,
+    height: DEVICE_LARGE ? 80 : 60,
     backgroundColor: ORANGE,
+    shadowRadius: 0,
+    shadowOffset: {
+      height: 0,
+    },
+    elevation: 0,
+  },
+  title: '',
+};
+
+const connectionPreviewOptions = {
+  headerLeft: () => null,
+  headerStyle: {
+    height: DEVICE_LARGE ? 80 : 60,
+    backgroundColor: '#fff',
     shadowRadius: 0,
     shadowOffset: {
       height: 0,
@@ -96,11 +108,15 @@ const Home = () => (
       component={ScanCodeScreen}
       options={newConnectionOptions}
     />
-    <Stack.Screen name="ConnectSuccess" component={SuccessScreen} />
+    <Stack.Screen
+      name="ConnectSuccess"
+      component={SuccessScreen}
+      options={connectionPreviewOptions}
+    />
     <Stack.Screen
       name="PreviewConnection"
       component={PreviewConnectionScreen}
-      options={{ title: 'New Connection' }}
+      options={connectionPreviewOptions}
     />
     <Stack.Screen
       name="RecoveringConnection"

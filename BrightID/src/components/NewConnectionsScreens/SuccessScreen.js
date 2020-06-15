@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   },
   successTextContainer: {
     // flex: 1,
-    marginTop: 131,
+    // marginTop: 131,
     justifyContent: 'center',
     alignItems: 'center',
   },

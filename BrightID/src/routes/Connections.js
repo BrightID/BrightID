@@ -4,8 +4,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ConnectionsScreen from '@/components/Connections/ConnectionsScreen';
 import SortingConnectionsScreen from '@/components/Connections/SortingConnectionsScreen';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { DEVICE_TYPE, DEVICE_IOS } from '@/utils/constants';
 import { createFakeConnection } from '@/components/Connections/models/createFakeConnection';
+import { navigate } from '@/NavigationService';
+import backArrow from '@/static/back_arrow.svg';
+import { SvgXml } from 'react-native-svg';
 import { headerOptions } from './helpers';
 
 const Stack = createStackNavigator();
@@ -24,6 +27,19 @@ const connectionsScreenOptions = {
       )
     : () => null,
   headerShown: DEVICE_TYPE === 'large',
+  headerLeft: () => (
+    <TouchableOpacity
+      style={{
+        marginLeft: DEVICE_IOS ? 20 : 10,
+        // marginTop: DEVICE_LARGE ? 15 : 10,
+      }}
+      onPress={() => {
+        navigate('Home');
+      }}
+    >
+      <SvgXml height="20" xml={backArrow} />
+    </TouchableOpacity>
+  ),
 };
 
 const Connections = () => (

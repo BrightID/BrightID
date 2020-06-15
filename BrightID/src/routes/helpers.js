@@ -1,6 +1,4 @@
-import * as React from 'react';
-
-import LinearGradient from 'react-native-linear-gradient';
+import { ORANGE } from '@/utils/constants';
 
 const headerTitleStyle = {
   fontFamily: 'EurostileRegular',
@@ -8,16 +6,11 @@ const headerTitleStyle = {
   fontSize: 24,
 };
 
-const headerBackground = () => (
-  <LinearGradient
-    colors={['#F52828', '#F76B1C']}
-    style={{ flex: 1, width: '100%' }}
-  />
-);
-
 export const headerOptions = () => ({
   headerTitleStyle,
-  headerBackground,
+  headerStyle: {
+    backgroundColor: ORANGE,
+  },
   headerTintColor: '#fff',
   headerTitleAlign: 'center',
   headerBackTitleVisible: false,
