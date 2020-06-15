@@ -58,12 +58,15 @@ declare type connection = {
 };
 
 declare type ConnectQrData = {
-  aesKey: string,
-  ipAddress: string,
-  uuid: string,
-  user: string,
-  qrString: string,
-  channel: string,
+  // aesKey: string,
+  // ipAddress: string,
+  // uuid: string,
+  // user: string,
+  // qrString: string,
+  // channel: string,
+  // myQrData: any,
+  connectQrData: any,
+  timer: IntervalId,
 };
 
 declare type ConnectUserData = {

@@ -9,6 +9,7 @@ import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
 import { shareConnection } from '@/components/NewConnectionsScreens/actions/shareConnection';
 import HomeScreen from '@/components/HomeScreen';
 import MyCodeScreen from '@/components/NewConnectionsScreens/MyCodeScreen';
+import ScanCodeScreen from '@/components/NewConnectionsScreens/ScanCodeScreen';
 import SuccessScreen from '@/components/NewConnectionsScreens/SuccessScreen';
 import PreviewConnectionScreen from '@/components/NewConnectionsScreens/PreviewConnectionScreen';
 import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnectionScreen';
@@ -88,6 +89,11 @@ const Home = () => (
     <Stack.Screen
       name="MyCode"
       component={MyCodeScreen}
+      options={newConnectionOptions}
+    />
+    <Stack.Screen
+      name="ScanCode"
+      component={ScanCodeScreen}
       options={newConnectionOptions}
     />
     <Stack.Screen name="ConnectSuccess" component={SuccessScreen} />

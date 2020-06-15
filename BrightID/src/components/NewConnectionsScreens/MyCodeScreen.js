@@ -14,7 +14,7 @@ import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import emitter from '@/emitter';
-import { DEVICE_LARGE, ORANGE, QR_TTL } from '@/utils/constants';
+import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
 import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
 import { startConnecting, stopConnecting } from './actions/connecting';
@@ -183,7 +183,12 @@ export const MyCodeScreen = (props) => {
           {qrsvg ? renderCopyQr() : <View />}
         </View>
         <Text style={styles.infoBottomText}>Or you can also...</Text>
-        <TouchableOpacity style={styles.scanCodeButton}>
+        <TouchableOpacity
+          style={styles.scanCodeButton}
+          onPress={() => {
+            props.navigation.navigate('ScanCode');
+          }}
+        >
           <Material
             name="camera"
             color="#fff"

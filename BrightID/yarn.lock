@@ -6761,6 +6761,13 @@ react-native-animatable@^1.2.4:
   dependencies:
     prop-types "^15.7.2"
 
+react-native-barcode-mask@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-barcode-mask/-/react-native-barcode-mask-1.2.2.tgz#f881c58541373bacbb71f2195946c1dde1b85593"
+  integrity sha512-ueAmg76LwbzYyCf5N1g7aA524uB+U0z4j36/nlYj/MIS12jN7bSP9JKxcffjsTA4EmvKQZ5TG4WwYvJ5VbMi8A==
+  dependencies:
+    prop-types "^15.6.2"
+
 react-native-camera@^3.15.1:
   version "3.26.0"
   resolved "https://registry.yarnpkg.com/react-native-camera/-/react-native-camera-3.26.0.tgz#80f37124c524d76ae79f55f3975ed73b6515aa49"
