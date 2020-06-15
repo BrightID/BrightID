@@ -1,6 +1,6 @@
 <img height="120px" src="images/brightid%20final-01.svg"/>
 
-[🌐 www.brightid.org](https://www.brightid.org)
+### [www.brightid.org](https://www.brightid.org)
 
 ## Social Identity Network
 
