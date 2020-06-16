@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
-import { INVITE_ACTIVE } from '@/utils/constants';
 import Apps from './Apps';
 import Connections from './Connections';
 import Groups from './Groups';
@@ -15,11 +14,6 @@ const TopStack = createStackNavigator();
 const Stack = createStackNavigator();
 
 const MainTabs = () => {
-  const notificationCount = useSelector(
-    ({ user: { notifications }, groups: { invites } }) =>
-      notifications?.length +
-      invites?.filter((invite) => invite.state === INVITE_ACTIVE)?.length,
-  );
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={Home} />

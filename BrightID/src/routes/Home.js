@@ -1,9 +1,16 @@
 import * as React from 'react';
 import { Image, TouchableOpacity, View } from 'react-native';
+import { useSelector } from 'react-redux';
+import {
+  INVITE_ACTIVE,
+  DEVICE_LARGE,
+  ORANGE,
+  DEVICE_IOS,
+} from '@/utils/constants';
 import { createStackNavigator } from '@react-navigation/stack';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { SvgXml } from 'react-native-svg';
-import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
+
 import HomeScreen from '@/components/HomeScreen';
 import MyCodeScreen from '@/components/NewConnectionsScreens/MyCodeScreen';
 import ScanCodeScreen from '@/components/NewConnectionsScreens/ScanCodeScreen';
@@ -15,7 +22,7 @@ import { navigate } from '@/NavigationService';
 
 const Stack = createStackNavigator();
 
-const homeScreenOptions = {
+const homeScreenOptions = (notificationCount) => ({
   headerTitle: () => (
     <Image
       source={require('@/static/brightid-final.png')}
@@ -27,12 +34,27 @@ const homeScreenOptions = {
   ),
   headerLeft: () => null,
   headerRight: () => (
-    <Material
-      name="bell"
-      size={DEVICE_LARGE ? 28 : 23}
-      color="#000"
+    <TouchableOpacity
       style={{ marginRight: 25 }}
-    />
+      onPress={() => {
+        navigate('Notifications');
+      }}
+    >
+      <Material name="bell" size={DEVICE_LARGE ? 28 : 23} color="#000" />
+      {notificationCount ? (
+        <View
+          style={{
+            backgroundColor: '#ED1B24',
+            width: 9,
+            height: 9,
+            borderRadius: 5,
+            position: 'absolute',
+            top: 5,
+            left: 17,
+          }}
+        />
+      ) : null}
+    </TouchableOpacity>
   ),
   headerStyle: {
     height: DEVICE_LARGE ? 80 : 70,
@@ -43,7 +65,7 @@ const homeScreenOptions = {
     elevation: 0,
   },
   headerTitleAlign: 'center',
-};
+});
 
 const newConnectionOptions = {
   headerLeft: () => (
@@ -91,39 +113,46 @@ const recoveringConnectionOptions = {
   headerShown: DEVICE_LARGE,
 };
 
-const Home = () => (
-  <Stack.Navigator headerMode="screen">
-    <Stack.Screen
-      name="Home"
-      component={HomeScreen}
-      options={homeScreenOptions}
-    />
-    <Stack.Screen
-      name="MyCode"
-      component={MyCodeScreen}
-      options={newConnectionOptions}
-    />
-    <Stack.Screen
-      name="ScanCode"
-      component={ScanCodeScreen}
-      options={newConnectionOptions}
-    />
-    <Stack.Screen
-      name="ConnectSuccess"
-      component={SuccessScreen}
-      options={connectionPreviewOptions}
-    />
-    <Stack.Screen
-      name="PreviewConnection"
-      component={PreviewConnectionScreen}
-      options={connectionPreviewOptions}
-    />
-    <Stack.Screen
-      name="RecoveringConnection"
-      component={RecoveringConnectionScreen}
-      options={recoveringConnectionOptions}
-    />
-  </Stack.Navigator>
-);
+const Home = () => {
+  const notificationCount = useSelector(
+    ({ user: { notifications }, groups: { invites } }) =>
+      notifications?.length +
+      invites?.filter((invite) => invite.state === INVITE_ACTIVE)?.length,
+  );
+  return (
+    <Stack.Navigator headerMode="screen">
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={homeScreenOptions(notificationCount)}
+      />
+      <Stack.Screen
+        name="MyCode"
+        component={MyCodeScreen}
+        options={newConnectionOptions}
+      />
+      <Stack.Screen
+        name="ScanCode"
+        component={ScanCodeScreen}
+        options={newConnectionOptions}
+      />
+      <Stack.Screen
+        name="ConnectSuccess"
+        component={SuccessScreen}
+        options={connectionPreviewOptions}
+      />
+      <Stack.Screen
+        name="PreviewConnection"
+        component={PreviewConnectionScreen}
+        options={connectionPreviewOptions}
+      />
+      <Stack.Screen
+        name="RecoveringConnection"
+        component={RecoveringConnectionScreen}
+        options={recoveringConnectionOptions}
+      />
+    </Stack.Navigator>
+  );
+};
 
 export default Home;

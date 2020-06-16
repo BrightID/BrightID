@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
   Image,
   Linking,
@@ -16,12 +16,15 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { setPhoto, setName } from '@/actions';
 import { getNotifications } from '@/actions/notifications';
-import { delStorage } from '@/utils/dev';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import verificationSticker from '@/static/verification-sticker.svg';
+
+if (__DEV__) {
+  const { delStorage } = require('@/utils/dev');
+}
 
 /**
  * Home screen of BrightID
@@ -47,12 +50,16 @@ export const HomeScreen = (props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [displayName, setDisplayName] = useState(name);
 
+  const verified = useMemo(() => verifications.includes('BrightID'), [
+    verifications,
+  ]);
+
   useEffect(() => {
     navigation.addListener('focus', () => {
       dispatch(fetchUserInfo());
     });
     retrieveImage(photoFilename).then(setProfilePhoto);
-  }, []); // Only re-run the effect if count changes
+  }, [dispatch, navigation, photoFilename]);
 
   const getPhotoFromCamera = async () => {
     try {
@@ -88,6 +95,10 @@ export const HomeScreen = (props) => {
     photoSheetRef.show();
   };
 
+  const handleChat = () => {
+    chatSheetRef.show();
+  };
+
   return (
     // let verifications = ['BrightID'];
 
@@ -120,7 +131,6 @@ export const HomeScreen = (props) => {
                 value={displayName}
                 style={styles.name}
                 onChangeText={setDisplayName}
-                autoFocus
                 onBlur={() => {
                   if (displayName.length >= 2) {
                     dispatch(setName(displayName));
@@ -130,6 +140,7 @@ export const HomeScreen = (props) => {
                     setName(name);
                   }
                 }}
+                blurOnSubmit={true}
               />
             ) : (
               <Text
@@ -140,15 +151,21 @@ export const HomeScreen = (props) => {
                 {name}
               </Text>
             )}
-            <SvgXml
-              style={styles.verificationSticker}
-              width="16"
-              height="16"
-              xml={verificationSticker}
-            />
+            {verified && (
+              <SvgXml
+                style={styles.verificationSticker}
+                width="16"
+                height="16"
+                xml={verificationSticker}
+              />
+            )}
           </View>
           <View style={styles.profileDivider} />
-          <Text style={styles.verified}>verified</Text>
+          {verified ? (
+            <Text style={styles.verified}>verified</Text>
+          ) : (
+            <Text style={styles.unverified}>unverified</Text>
+          )}
         </View>
       </View>
 
@@ -228,7 +245,10 @@ export const HomeScreen = (props) => {
             />
             <Text style={styles.connectText}>Scan a Code</Text>
           </TouchableOpacity>
-          <View style={styles.communityContainer}>
+          <TouchableOpacity
+            style={styles.communityContainer}
+            onPress={handleChat}
+          >
             <Ionicons
               name="ios-chatboxes"
               size={16}
@@ -238,7 +258,7 @@ export const HomeScreen = (props) => {
             <JoinCommunity editable={false} style={styles.communityLink}>
               Join the Community
             </JoinCommunity>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -349,11 +369,23 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: ORANGE,
     borderRadius: 10,
-    marginTop: 5,
+    marginTop: 6,
     paddingTop: 1,
     paddingBottom: 1,
     paddingLeft: 23,
     paddingRight: 23,
+    fontSize: DEVICE_LARGE ? 11 : 10,
+  },
+  unverified: {
+    color: '#707070',
+    borderWidth: 1,
+    borderColor: '#707070',
+    borderRadius: 10,
+    marginTop: 6,
+    paddingTop: 1,
+    paddingBottom: 1,
+    paddingLeft: 20,
+    paddingRight: 20,
     fontSize: DEVICE_LARGE ? 11 : 10,
   },
   countsCard: {
@@ -456,7 +488,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom: 2,
+    padding: DEVICE_LARGE ? 20 : 12,
   },
   communityLink: {
     borderBottomWidth: 1,
