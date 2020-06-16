@@ -44,6 +44,11 @@ export const reducer = (state: AppsState = initialState, action: action) => {
         } else {
           updatedApp.state = 'failed';
         }
+        // Only store first line of result. BrightID node might attach stack trace
+        // to the failed op result.
+        updatedApp.result = action.result
+          ? action.result.split(/\r?\n/)[0]
+          : undefined;
         const removeExisting = ({ name }) => name !== action.op.context;
         apps = state.apps.filter(removeExisting).concat(updatedApp);
       } else {
