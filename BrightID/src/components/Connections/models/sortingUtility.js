@@ -11,7 +11,7 @@ export const types = {
 };
 
 const verifiedOrWaiting = (status: string) =>
-  status === 'verified' || status === 'waiting';
+  status === 'verified' || status === 'initiated';
 
 export const sortByNameAscending = () => (
   dispatch: dispatch,

@@ -3,6 +3,7 @@
 import {
   createBrightID,
   createFakeConnection,
+  expectConnectionsScreen,
   expectHomescreen,
 } from './testUtils';
 
@@ -38,8 +39,7 @@ describe('Connections', () => {
       await element(by.id('confirmConnectionBtn')).tap();
       await expect(element(by.id('successScreen'))).toBeVisible();
       await element(by.id('successDoneBtn')).tap();
-      await expectHomescreen();
-      await expect(element(by.id('ConnectionsCount'))).toHaveText('1');
+      await expectConnectionsScreen();
     });
   });
 });

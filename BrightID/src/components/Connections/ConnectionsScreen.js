@@ -129,7 +129,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     }
     return (
       <SafeAreaView style={styles.container}>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 }} testID="connectionsScreen">
           <View style={styles.mainContainer}>
             <SearchConnections navigation={navigation} sortable={true} />
             <View style={styles.mainContainer}>
