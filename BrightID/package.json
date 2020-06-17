@@ -16,7 +16,7 @@
     "postinstall": "npx jetify",
     "test:watch": "npm test -- --watch",
     "updateSnap": "jest --updateSnapshot",
-    "build:release": "android/gradlew assembleRelease"
+    "build:release": "cd android && ./gradlew assembleRelease && cd .."
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.7.0",
