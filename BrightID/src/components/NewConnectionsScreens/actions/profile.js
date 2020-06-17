@@ -81,8 +81,6 @@ export const fetchProfile = (qrCodeData) => async (
 
     if (profileData && profileData.data) {
       try {
-        console.log('here');
-        // console.log(`fetched profile: ${profileData.data}`);
         emitter.emit('recievedProfileData');
         // workaround: For now stop polling for profiles after the first profile is received,
         //  otherwise the same profile(s) will be downloaded again and again

@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import { removeConnectUserData } from '../../actions';
+import { sortByDateAddedDescending } from '../Connections/models/sortingUtility';
 
 /**
  * Successfly Added Connection Confirmation Screen of BrightID
@@ -38,7 +39,8 @@ export class SuccessScreen extends React.Component<Props, State> {
             onPress={() => {
               const { navigation, dispatch } = this.props;
               dispatch(removeConnectUserData());
-              navigation.navigate('Home');
+              dispatch(sortByDateAddedDescending());
+              navigation.navigate('Connections');
             }}
             style={styles.confirmButton}
           >

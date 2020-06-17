@@ -40,3 +40,5 @@ export const QR_TYPE_RESPONDER = 'responder';
 
 // theme colors
 export const ORANGE = '#ED7A5D';
+
+export const MAX_WAITING_SECONDS = 60;

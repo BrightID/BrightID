@@ -14,6 +14,7 @@ import ActionSheet from 'react-native-actionsheet';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
+import { deleteConnection } from '@/actions';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
 import { createFakeConnection } from './models/createFakeConnection';
@@ -74,9 +75,47 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     );
   };
 
+  handleRemoveConnection = (connection) => {
+    if (connection.status === 'verified') {
+      console.log(
+        `Cant remove verified connection ${connection.id} (${connection.name}).`,
+      );
+      return;
+    }
+
+    const buttons = [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: () => {
+          console.log(
+            `Removing connection ${connection.id} (${connection.name})`,
+          );
+          const { dispatch } = this.props;
+          dispatch(deleteConnection(connection.id));
+        },
+      },
+    ];
+    Alert.alert(
+      `Remove connection`,
+      `Are you sure you want to remove connection with ${connection.name}? You can reconnect anytime.`,
+      buttons,
+      {
+        cancelable: true,
+      },
+    );
+  };
+
   renderConnection = ({ item }) => (
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    <ConnectionCard actionSheet={this.actionSheet} {...item} />
+    <ConnectionCard
+      actionSheet={this.actionSheet}
+      onRemove={this.handleRemoveConnection}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...item}
+    />
   );
 
   modifyConnection = (option: string) => {
@@ -129,7 +168,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     }
     return (
       <SafeAreaView style={styles.container}>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 }} testID="connectionsScreen">
           <View style={styles.mainContainer}>
             <SearchConnections navigation={navigation} sortable={true} />
             <View style={styles.mainContainer}>

@@ -35,7 +35,6 @@ export const App = () => {
   useEffect(() => {
     const timerId = setInterval(() => {
       pollOperations();
-      console.log('polling operations');
     }, 5000);
     return () => {
       clearInterval(timerId);

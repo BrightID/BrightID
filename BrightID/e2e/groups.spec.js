@@ -3,8 +3,8 @@
 import {
   createBrightID,
   createFakeConnection,
+  expectConnectionsScreen,
   expectGroupsScreen,
-  expectHomescreen,
 } from './testUtils';
 
 /*
@@ -38,8 +38,7 @@ describe('Groups', () => {
       await element(by.id('confirmConnectionBtn')).tap();
       await expect(element(by.id('successScreen'))).toBeVisible();
       await element(by.id('successDoneBtn')).tap();
-      await expectHomescreen();
-      await expect(element(by.id('ConnectionsCount'))).toHaveText(`${i}`);
+      await expectConnectionsScreen();
     }
   });
 
