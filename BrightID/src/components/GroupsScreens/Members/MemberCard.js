@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { DEVICE_TYPE } from '@/utils/constants';
+import store from '@/store';
 
 /**
  * Connection Card in the Connections Screen
@@ -30,6 +31,7 @@ class MemberCard extends React.PureComponent<Props> {
 
   render() {
     const {
+      id,
       photo,
       name,
       score,
@@ -39,6 +41,7 @@ class MemberCard extends React.PureComponent<Props> {
       isAdmin,
       flaggers,
     } = this.props;
+    const { user } = store.getState();
     console.log('flaggers', flaggers);
     const flags = flaggers && Object.keys(flaggers);
     const flagged = isAdmin && flaggers && flags.length > 0;
@@ -63,7 +66,7 @@ class MemberCard extends React.PureComponent<Props> {
             </Text>
           )}
         </View>
-        {isAdmin && menuHandler && (
+        {isAdmin && user.id != id && (
           <TouchableOpacity
             style={styles.moreIcon}
             onPress={() => menuHandler(this.props)}

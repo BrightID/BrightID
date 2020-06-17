@@ -110,10 +110,8 @@ export class MembersScreen extends Component<Props, State> {
   renderMember = ({ item }) => {
     const group = this.props.route.params?.group;
     const isAdmin = group?.admins?.includes(this.props.id);
-    const isItemAdmin = group?.admins?.includes(item.id);
-    const handler = isAdmin && !isItemAdmin ? this.confirmDismiss : null;
     // eslint-disable-next-line react/jsx-props-no-spreading
-    return <MemberCard {...item} isAdmin={isAdmin} menuHandler={handler} />;
+    return <MemberCard {...item} isAdmin={isAdmin} menuHandler={this.confirmDismiss} />;
   };
 
   getMembers = () => {
