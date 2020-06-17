@@ -2,10 +2,10 @@
 
 import nacl from 'tweetnacl';
 import { saveImage } from '@/utils/filesystem';
-import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
+import { strToUint8Array, uInt8ArrayToB64, hash } from '@/utils/encoding';
 import { obtainKeys } from '@/utils/keychain';
 import api from '@/Api/BrightId';
-import { addConnection } from '@/actions';
+import { addConnection, addOperation } from '@/actions';
 import { backupPhoto, backupUser } from '../../Recovery/helpers';
 import { encryptAndUploadProfile } from './profile';
 
@@ -56,6 +56,19 @@ export const addNewConnection = () => async (
         nacl.sign.detached(strToUint8Array(message), secretKey),
       );
       dispatch(encryptAndUploadProfile(peerQrData, timestamp, signedMessage));
+
+      // Listen for add connection operation to be completed by other party
+      let opName = 'Add Connection';
+      let opMessage = opName + username + connectUserData.id + timestamp;
+      console.log(
+        `Responder opMessage: ${opMessage} - hash: ${hash(opMessage)}`,
+      );
+      const op = {
+        _key: hash(opMessage),
+        name: opName,
+        timestamp,
+      };
+      dispatch(addOperation(op));
     }
 
     const filename = await saveImage({
