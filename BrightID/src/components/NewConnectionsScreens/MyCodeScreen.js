@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -33,6 +33,7 @@ const COPIED_TIMEOUT = 500;
 const Container = DEVICE_IOS ? SafeAreaView : View;
 
 export const MyCodeScreen = (props) => {
+  const { navigation } = props;
   const dispatch = useDispatch();
   const name = useSelector((state) => state.user.name);
   const ttl = useSelector((state) => state.connectQrData.myQrData?.ttl ?? 0);
@@ -47,44 +48,37 @@ export const MyCodeScreen = (props) => {
   const [copied, setCopied] = useState(false);
 
   const [countdown, setCountdown] = useState(ttl - (Date.now() - timestamp));
-  console.log('countdown', countdown);
 
-  const timerTick = () => {
+  const timerTick = useCallback(() => {
+    if (!navigation.isFocused()) return;
     let countdown = ttl - (Date.now() - timestamp);
     if (countdown <= 0) {
       dispatch(startConnecting());
     }
     setCountdown(countdown);
-  };
+  }, [ttl, timestamp, dispatch, navigation]);
 
   // start local timer to display countdown
   useInterval(timerTick, 1000);
 
   useEffect(() => {
-    // reset QRcode when app loads
-    // dispatch(stopConnecting());
-    checkQrCode(qrString);
+    if (!navigation.isFocused()) return;
+    if (!qrString) {
+      dispatch(startConnecting());
+    } else {
+      qrCodeToSvg(qrString, (qrsvg) => setQrsvg(qrsvg));
+      setCountdown(ttl - (Date.now() - timestamp));
+    }
+    const navigateToPreview = () => {
+      navigation.navigate('PreviewConnection');
+    };
     emitter.on('connectDataReady', navigateToPreview);
     return () => {
       emitter.off('connectDataReady', navigateToPreview);
     };
-  }, [qrString]);
+  }, [qrString, dispatch, navigation, timestamp, ttl]);
 
-  const navigateToPreview = () => {
-    props.navigation.navigate('PreviewConnection');
-  };
-
-  const checkQrCode = (qrString) => {
-    if (!qrString) {
-      console.log(`Triggering generation of new QRCodeData`);
-      dispatch(startConnecting());
-    } else {
-      // qrData is available, now create actual qrCode image
-      console.log(`Using QRCodeData (${qrString})`);
-      qrCodeToSvg(qrString, (qrsvg) => setQrsvg(qrsvg));
-      setCountdown(ttl - (Date.now() - timestamp));
-    }
-  };
+  // const checkQrCode = (qrString) => {};
 
   const displayTime = () => {
     const minutes = Math.floor(countdown / 60000);

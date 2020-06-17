@@ -24,8 +24,9 @@ import {
 import { parseQrData } from '@/utils/qrCodes';
 import { RNCamera } from './RNCameraProvider';
 import emitter from '../../emitter';
-import { clearMyQrData, setConnectQrData } from '../../actions';
+import { setConnectQrData } from '../../actions';
 import { fetchProfile } from './actions/profile';
+import { stopConnecting } from './actions/connecting';
 
 /**
  * Returns whether the string is a valid QR identifier
@@ -49,24 +50,40 @@ let connectionExpired: TimeoutID;
 const Container = DEVICE_IOS ? SafeAreaView : View;
 
 export const ScanCodeScreen = (props) => {
+  const { navigation } = props;
   const dispatch = useDispatch();
   const [scanned, setScanned] = useState(false);
   const [connectionAttempts, setConnectionAttempts] = useState(0);
   const name = useSelector((state) => state.user.name);
 
   useEffect(() => {
-    dispatch(clearMyQrData());
+    dispatch(stopConnecting());
+    const navigateToPreview = () => {
+      navigation.navigate('PreviewConnection');
+    };
+    const handleDownloadFailure = () => {
+      setConnectionAttempts(connectionAttempts + 1);
+      if (connectionAttempts > 1) {
+        navigation.navigate('Home');
+      }
+    };
+    const unsubscribeToProfileUpload = () => {
+      console.log(`Unsubsubscribing from profile Upload`);
+      clearTimeout(connectionExpired);
+      clearInterval(fetchProfileId);
+    };
+
     emitter.on('connectDataReady', navigateToPreview);
     emitter.on('connectFailure', handleDownloadFailure);
     emitter.on('recievedProfileData', unsubscribeToProfileUpload);
+
     return () => {
-      console.log('HERE, HERE, HERE');
       unsubscribeToProfileUpload();
       emitter.off('connectDataReady', navigateToPreview);
       emitter.off('connectFailure', handleDownloadFailure);
       emitter.off('recievedProfileData', unsubscribeToProfileUpload);
     };
-  }, []);
+  }, [navigation, dispatch, connectionAttempts]);
 
   const subscribeToProfileUpload = (peerQrData) => {
     console.log(`Subscribing to profile Upload for uuid ${peerQrData.uuid}`);
@@ -75,21 +92,6 @@ export const ScanCodeScreen = (props) => {
     fetchProfileId = setInterval(() => {
       dispatch(fetchProfile(peerQrData));
     }, PROFILE_POLL_INTERVAL);
-  };
-
-  const unsubscribeToProfileUpload = () => {
-    console.log(`Unsubsubscribing from profile Upload`);
-    clearTimeout(connectionExpired);
-    clearInterval(fetchProfileId);
-  };
-
-  const handleDownloadFailure = () => {
-    setConnectionAttempts(connectionAttempts + 1);
-    if (connectionAttempts > 1) {
-      navigateToHome();
-    } else {
-      subscribeToProfileUpload();
-    }
   };
 
   const handleBarCodeRead = ({ data }) => {
@@ -106,14 +108,9 @@ export const ScanCodeScreen = (props) => {
       const peerQrData = parseQrData(data);
       peerQrData.type = QR_TYPE_RESPONDER;
       dispatch(setConnectQrData(peerQrData));
-      // If the following `fetchdata()` fails, a "connectFailure" will be emitted,
       subscribeToProfileUpload(peerQrData);
     }
     setScanned(true);
-  };
-
-  const navigateToPreview = () => {
-    props.navigation.navigate('PreviewConnection');
   };
 
   const showProfileError = () => {
@@ -122,10 +119,6 @@ export const ScanCodeScreen = (props) => {
       "There was a problem downloading the other person's profile. Please try again.",
     );
     setScanned(true);
-  };
-
-  const navigateToHome = () => {
-    props.navigation.navigate('Home');
   };
 
   return (
