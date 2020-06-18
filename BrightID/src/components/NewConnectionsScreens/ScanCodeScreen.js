@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SvgXml } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import BarcodeMask from 'react-native-barcode-mask';
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,6 +23,7 @@ import {
   ORANGE,
 } from '@/utils/constants';
 import { parseQrData } from '@/utils/qrCodes';
+import qricon from '@/static/qr_icon_white.svg';
 import { RNCamera } from './RNCameraProvider';
 import emitter from '../../emitter';
 import { setConnectQrData } from '../../actions';
@@ -166,18 +168,17 @@ export const ScanCodeScreen = (props) => {
         </View>
         <Text style={styles.infoBottomText}>Or you can also...</Text>
         <TouchableOpacity
-          style={styles.myCodeButton}
+          style={styles.showQrButton}
           onPress={() => {
             props.navigation.navigate('MyCode');
           }}
         >
-          <Material
-            name="qrcode"
-            color="#fff"
-            size={16}
-            style={styles.cameraIcon}
+          <SvgXml
+            xml={qricon}
+            width={DEVICE_LARGE ? 22 : 20}
+            height={DEVICE_LARGE ? 22 : 20}
           />
-          <Text style={styles.myCodeText}> Show your QR code</Text>
+          <Text style={styles.showQrText}>Show your QR code</Text>
         </TouchableOpacity>
       </Container>
     </>
@@ -209,7 +210,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   infoTopText: {
-    // fontFamily: 'ApexNew-Book',
+    fontFamily: 'Poppins',
+    fontWeight: '500',
     fontSize: DEVICE_LARGE ? 16 : 14,
     textAlign: 'center',
     color: '#4a4a4a',
@@ -228,22 +230,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   infoBottomText: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
     fontSize: DEVICE_LARGE ? 12 : 11,
     marginBottom: 10,
   },
-  myCodeButton: {
+  showQrButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     height: DEVICE_LARGE ? 42 : 36,
     backgroundColor: ORANGE,
     borderRadius: 60,
-    width: 220,
+    width: 260,
     marginBottom: 36,
   },
-  myCodeText: {
+  showQrText: {
+    fontFamily: 'Poppins',
+    fontWeight: 'bold',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#fff',
+    marginLeft: 10,
   },
   cameraIcon: {
     marginTop: 2,

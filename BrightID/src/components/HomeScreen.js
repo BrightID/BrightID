@@ -12,7 +12,6 @@ import {
 import { SvgXml } from 'react-native-svg';
 import ActionSheet from 'react-native-actionsheet';
 import { useDispatch, useSelector } from 'react-redux';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { setPhoto, setName } from '@/actions';
 import { getNotifications } from '@/actions/notifications';
@@ -21,11 +20,8 @@ import { saveImage, retrieveImage } from '@/utils/filesystem';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import verificationSticker from '@/static/verification-sticker.svg';
-
-if (__DEV__) {
-  const { delStorage } = require('@/utils/dev');
-}
-
+import qricon from '@/static/qr_icon_black.svg';
+import cameraIcon from '@/static/camera_icon_black.svg';
 /**
  * Home screen of BrightID
  * ==========================
@@ -96,7 +92,12 @@ export const HomeScreen = (props) => {
   };
 
   const handleChat = () => {
-    chatSheetRef.show();
+    if (__DEV__) {
+      const { delStorage } = require('@/utils/dev');
+      delStorage();
+    } else {
+      chatSheetRef.show();
+    }
   };
 
   return (
@@ -220,11 +221,10 @@ export const HomeScreen = (props) => {
             accessible={true}
             accessibilityLabel="Connect"
           >
-            <Material
-              name="qrcode"
-              size={DEVICE_LARGE ? 22 : 20}
-              color="#000"
-              style={styles.connectIcon}
+            <SvgXml
+              xml={qricon}
+              width={DEVICE_LARGE ? 25 : 20}
+              height={DEVICE_LARGE ? 25 : 20}
             />
             <Text style={styles.connectText}>My Code</Text>
           </TouchableOpacity>
@@ -237,11 +237,10 @@ export const HomeScreen = (props) => {
             accessible={true}
             accessibilityLabel="Connect"
           >
-            <Material
-              name="camera"
-              size={DEVICE_LARGE ? 22 : 20}
-              color="#000"
-              style={styles.connectIcon}
+            <SvgXml
+              xml={cameraIcon}
+              width={DEVICE_LARGE ? 25 : 20}
+              height={DEVICE_LARGE ? 25 : 20}
             />
             <Text style={styles.connectText}>Scan a Code</Text>
           </TouchableOpacity>
@@ -346,7 +345,8 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   name: {
-    // fontFamily: 'ApexNew-Book',
+    fontFamily: 'Poppins',
+    fontWeight: '500',
     fontSize: DEVICE_LARGE ? 18 : 15,
     color: '#000000',
   },
@@ -365,6 +365,8 @@ const styles = StyleSheet.create({
     marginTop: 1.5,
   },
   verified: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
     color: ORANGE,
     borderWidth: 1,
     borderColor: ORANGE,
@@ -377,6 +379,8 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 11 : 10,
   },
   unverified: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
     color: '#707070',
     borderWidth: 1,
     borderColor: '#707070',
@@ -421,17 +425,17 @@ const styles = StyleSheet.create({
     width: 55,
   },
   countsDescriptionText: {
-    // fontFamily: 'ApexNew-Book',
+    fontFamily: 'Poppins',
+    fontWeight: '500',
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 12 : 11,
-    fontWeight: '500',
     marginTop: 6,
   },
   countsNumberText: {
-    // fontFamily: 'ApexNew-Book',
+    fontFamily: 'Poppins',
+    fontWeight: 'bold',
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 25 : 21,
-    fontWeight: 'bold',
     marginBottom: 3,
   },
   bottomOrangeContainer: {
@@ -452,6 +456,8 @@ const styles = StyleSheet.create({
   newConnectionText: {
     color: '#fff',
     fontSize: DEVICE_LARGE ? 18 : 15,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
     marginBottom: DEVICE_LARGE ? 16 : 11,
   },
   connectButton: {
@@ -471,14 +477,14 @@ const styles = StyleSheet.create({
     marginBottom: DEVICE_LARGE ? 16 : 11,
   },
   connectText: {
-    // fontFamily: 'ApexNew-Medium',
-    fontSize: DEVICE_LARGE ? 18 : 15,
+    fontFamily: 'Poppins',
     fontWeight: 'bold',
+    fontSize: DEVICE_LARGE ? 17 : 15,
     color: '#000',
     marginLeft: DEVICE_LARGE ? 10 : 8,
   },
   connectIcon: {
-    marginTop: DEVICE_LARGE ? 3 : 2,
+    marginTop: DEVICE_LARGE ? 2 : 1,
   },
   communityIcon: {
     marginTop: 1,
@@ -495,6 +501,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#fff',
     color: '#fff',
     fontSize: DEVICE_LARGE ? 14 : 11,
+    fontFamily: 'Poppins',
+    fontWeight: 'bold',
   },
 });
 

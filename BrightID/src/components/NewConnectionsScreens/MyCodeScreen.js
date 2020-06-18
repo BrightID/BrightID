@@ -9,7 +9,7 @@ import {
   Clipboard,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Svg, { Path } from 'react-native-svg';
+import Svg, { Path, SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
@@ -18,6 +18,7 @@ import emitter from '@/emitter';
 import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
 import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
+import cameraIcon from '@/static/camera_icon_white.svg';
 import { startConnecting, stopConnecting } from './actions/connecting';
 /**
  * My Code screen of BrightID
@@ -186,11 +187,10 @@ export const MyCodeScreen = (props) => {
             props.navigation.navigate('ScanCode');
           }}
         >
-          <Material
-            name="camera"
-            color="#fff"
-            size={16}
-            style={styles.cameraIcon}
+          <SvgXml
+            xml={cameraIcon}
+            width={DEVICE_LARGE ? 22 : 20}
+            height={DEVICE_LARGE ? 22 : 20}
           />
           <Text style={styles.scanCodeText}>Scan a Code</Text>
         </TouchableOpacity>
@@ -225,7 +225,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   infoTopText: {
-    // fontFamily: 'ApexNew-Book',
+    fontFamily: 'Poppins',
+    fontWeight: '500',
     fontSize: DEVICE_LARGE ? 16 : 14,
     textAlign: 'center',
     color: '#4a4a4a',
@@ -251,21 +252,26 @@ const styles = StyleSheet.create({
   },
   copyText: {
     color: '#333',
-    // fontFamily: 'ApexNew-Book',
+    fontFamily: 'Poppins',
+    fontWeight: '500',
     fontSize: DEVICE_LARGE ? 14 : 12,
   },
   timerContainer: {
     flexDirection: 'row',
   },
   timerTextLeft: {
-    // fontFamily: 'ApexNew-Book',
+    fontFamily: 'Poppins',
+    fontWeight: '500',
     fontSize: DEVICE_LARGE ? 16 : 14,
   },
   timerTextRight: {
-    // fontFamily: 'ApexNew-Book',
+    fontFamily: 'Poppins',
+    fontWeight: '500',
     fontSize: DEVICE_LARGE ? 16 : 14,
   },
   infoBottomText: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
     fontSize: DEVICE_LARGE ? 12 : 11,
     marginBottom: 10,
   },
@@ -276,16 +282,15 @@ const styles = StyleSheet.create({
     height: DEVICE_LARGE ? 42 : 36,
     backgroundColor: ORANGE,
     borderRadius: 60,
-    width: 220,
+    width: 240,
     marginBottom: 36,
   },
   scanCodeText: {
+    fontFamily: 'Poppins',
+    fontWeight: 'bold',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#fff',
-  },
-  cameraIcon: {
-    marginTop: 1.5,
-    marginRight: 4,
+    marginLeft: 10,
   },
 });
 
