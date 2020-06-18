@@ -14,7 +14,7 @@ import { headerOptions } from './helpers';
 const Stack = createStackNavigator();
 
 const connectionsScreenOptions = {
-  // coment out for test release
+  ...headerOptions,
   headerRight: __DEV__
     ? () => (
         <TouchableOpacity
@@ -43,7 +43,7 @@ const connectionsScreenOptions = {
 };
 
 const Connections = () => (
-  <Stack.Navigator screenOptions={headerOptions}>
+  <>
     <Stack.Screen
       name="Connections"
       component={ConnectionsScreen}
@@ -52,8 +52,9 @@ const Connections = () => (
     <Stack.Screen
       name="SortingConnections"
       component={SortingConnectionsScreen}
+      options={headerOptions}
     />
-  </Stack.Navigator>
+  </>
 );
 
 export default Connections;

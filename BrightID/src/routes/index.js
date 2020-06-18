@@ -7,6 +7,7 @@ import Apps from './Apps';
 import Connections from './Connections';
 import Groups from './Groups';
 import Home from './Home';
+import NewConnections from './NewConnections';
 import Notifications from './Notifications';
 import Onboarding from './Onboarding';
 
@@ -15,12 +16,13 @@ const Stack = createStackNavigator();
 
 const MainTabs = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Connections" component={Connections} />
-      <Stack.Screen name="Groups" component={Groups} />
-      <Stack.Screen name="Notifications" component={Notifications} />
-      <Stack.Screen name="Apps" component={Apps} />
+    <Stack.Navigator>
+      {Home()}
+      {NewConnections()}
+      {Connections()}
+      {Groups()}
+      {Notifications()}
+      {Apps()}
     </Stack.Navigator>
   );
 };

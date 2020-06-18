@@ -20,6 +20,7 @@ import { headerOptions } from './helpers';
 const Stack = createStackNavigator();
 
 const topOptions = {
+  ...headerOptions,
   headerLeft: () => (
     <TouchableOpacity
       style={{
@@ -38,6 +39,7 @@ const topOptions = {
 const membersScreenOptions = ({ navigation, route }) => {
   const group = route.params?.group;
   return {
+    ...headerOptions,
     title: getGroupName(group),
     headerTitleStyle: {
       fontSize: DEVICE_TYPE === 'large' ? 20 : 18,
@@ -59,17 +61,21 @@ const membersScreenOptions = ({ navigation, route }) => {
 };
 
 const Groups = () => (
-  <Stack.Navigator screenOptions={headerOptions}>
+  <>
     <Stack.Screen name="Groups" component={GroupsScreen} options={topOptions} />
     <Stack.Screen
       name="NewGroup"
       component={NewGroupScreen}
-      options={{ title: 'New Group', headerShown: DEVICE_TYPE === 'large' }}
+      options={{
+        ...headerOptions,
+        title: 'New Group',
+        headerShown: DEVICE_TYPE === 'large',
+      }}
     />
     <Stack.Screen
       name="GroupInfo"
       component={GroupInfoScreen}
-      options={{ title: 'New Groups' }}
+      options={{ ...headerOptions, title: 'New Groups' }}
     />
     <Stack.Screen
       name="Members"
@@ -79,9 +85,9 @@ const Groups = () => (
     <Stack.Screen
       name="InviteList"
       component={InviteListScreen}
-      options={{ title: 'Invite List' }}
+      options={{ ...headerOptions, title: 'Invite List' }}
     />
-  </Stack.Navigator>
+  </>
 );
 
 export default Groups;

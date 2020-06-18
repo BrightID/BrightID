@@ -13,6 +13,7 @@ import { headerOptions } from './helpers';
 const Stack = createStackNavigator();
 
 const topOptions = {
+  ...headerOptions,
   headerLeft: () => (
     <TouchableOpacity
       style={{
@@ -29,7 +30,7 @@ const topOptions = {
 };
 
 const Notifications = () => (
-  <Stack.Navigator screenOptions={headerOptions}>
+  <>
     <Stack.Screen
       name="Notifications"
       component={NotificationsScreen}
@@ -43,7 +44,7 @@ const Notifications = () => (
       }}
     />
     <Stack.Screen name="Backup" component={BackupScreen} />
-  </Stack.Navigator>
+  </>
 );
 
 export default Notifications;

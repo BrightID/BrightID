@@ -11,6 +11,7 @@ import { headerOptions } from './helpers';
 const Stack = createStackNavigator();
 
 const topOptions = {
+  ...headerOptions,
   headerLeft: () => (
     <TouchableOpacity
       style={{
@@ -27,18 +28,16 @@ const topOptions = {
 };
 
 const Apps = () => (
-  <Stack.Navigator screenOptions={headerOptions}>
-    <Stack.Screen
-      name="Apps"
-      component={AppsScreen}
-      initialParams={{
-        baseUrl: '',
-        context: '',
-        contextId: '',
-      }}
-      options={topOptions}
-    />
-  </Stack.Navigator>
+  <Stack.Screen
+    name="Apps"
+    component={AppsScreen}
+    initialParams={{
+      baseUrl: '',
+      context: '',
+      contextId: '',
+    }}
+    options={topOptions}
+  />
 );
 
 export default Apps;
