@@ -54,7 +54,7 @@ const connectionPreviewOptions = {
     elevation: 0,
   },
   title: '',
-  cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid,
+  cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
 };
 
 const NewConnections = () => (

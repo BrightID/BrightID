@@ -9,26 +9,25 @@ import { headerOptions } from './helpers';
 const Stack = createStackNavigator();
 
 const Onboarding = () => (
-  <>
+  <Stack.Navigator screenOptions={headerOptions}>
     <Stack.Screen
       name="Onboard"
       component={Onboard}
-      options={{ ...headerOptions, headerShown: false }}
+      options={{ headerShown: false }}
     />
     <Stack.Screen
       name="SignUp"
       component={SignUp}
       options={{
-        ...headerOptions,
         headerShown: DEVICE_TYPE === 'large',
       }}
     />
     <Stack.Screen
       name="Restore"
       component={Restore}
-      options={{ ...headerOptions, title: 'Recovery Code' }}
+      options={{ title: 'Recovery Code' }}
     />
-  </>
+  </Stack.Navigator>
 );
 
 export default Onboarding;

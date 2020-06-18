@@ -15,6 +15,7 @@ import { parseString } from 'xml2js';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { DEVICE_LARGE } from '@/utils/constants';
 import backupApi from '../../Api/BackupApi';
 import { setupRecovery, recoveryQrStr, handleSigs } from './helpers';
 
@@ -116,8 +117,8 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
   renderQrCode = () => (
     <View style={[styles.qrsvgContainer]}>
       <Svg
-        height="212"
-        width="212"
+        height={DEVICE_LARGE ? '260' : '200'}
+        width={DEVICE_LARGE ? '260' : '200'}
         xmlns="http://www.w3.org/2000/svg"
         viewBox={path(['svg', '$', 'viewBox'], this.state.qrsvg)}
         shape-rendering="crispEdges"
@@ -163,16 +164,16 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   topHalf: {
-    height: '25%',
+    height: '33%',
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
   bottomHalf: {
-    height: '75%',
     width: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    flex: 1,
   },
   recoveryCodeInfoText: {
     fontFamily: 'ApexNew-Book',
