@@ -58,7 +58,6 @@ const homeScreenOptions = (notificationCount) => ({
 
 const recoveringConnectionOptions = {
   title: 'Account Recovery',
-  headerShown: DEVICE_LARGE,
 };
 
 const Home = () => {

@@ -69,7 +69,6 @@ const Groups = () => (
       options={{
         ...headerOptions,
         title: 'New Group',
-        headerShown: DEVICE_TYPE === 'large',
       }}
     />
     <Stack.Screen

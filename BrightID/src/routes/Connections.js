@@ -26,7 +26,6 @@ const connectionsScreenOptions = {
         </TouchableOpacity>
       )
     : () => null,
-  headerShown: DEVICE_TYPE === 'large',
   headerLeft: () => (
     <TouchableOpacity
       style={{

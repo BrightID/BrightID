@@ -52,7 +52,7 @@ let connectionExpired: TimeoutID;
 const Container = DEVICE_IOS ? SafeAreaView : View;
 
 export const ScanCodeScreen = (props) => {
-  const { navigation } = props;
+  const { navigation, route } = props;
   const dispatch = useDispatch();
   const [scanned, setScanned] = useState(false);
   const [connectionAttempts, setConnectionAttempts] = useState(0);
@@ -85,7 +85,7 @@ export const ScanCodeScreen = (props) => {
       emitter.off('connectFailure', handleDownloadFailure);
       emitter.off('recievedProfileData', unsubscribeToProfileUpload);
     };
-  }, [navigation, dispatch, connectionAttempts]);
+  }, [navigation, dispatch, connectionAttempts, route.params?.qrcode]);
 
   const subscribeToProfileUpload = (peerQrData) => {
     console.log(`Subscribing to profile Upload for uuid ${peerQrData.uuid}`);
@@ -114,6 +114,11 @@ export const ScanCodeScreen = (props) => {
     }
     setScanned(true);
   };
+
+  // handle deep links
+  if (route.params?.qrcode && !scanned) {
+    handleBarCodeRead({ data: route.params?.qrcode });
+  }
 
   const showProfileError = () => {
     Alert.alert(

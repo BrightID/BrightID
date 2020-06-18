@@ -91,7 +91,7 @@ export const MyCodeScreen = (props) => {
   };
 
   const copyQr = () => {
-    Clipboard.setString(qrString);
+    Clipboard.setString(`brightid://connection-code/${qrString}`);
     setCopied(true);
     setTimeout(() => setCopied(false), COPIED_TIMEOUT);
   };
@@ -112,7 +112,7 @@ export const MyCodeScreen = (props) => {
         <Text style={styles.copyText}> Copy</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        testID="copyQrButton"
+        testID="resetQrButton"
         style={styles.copyButton}
         onPress={() => {
           setCountdown(ttl);

@@ -24,11 +24,8 @@ export const App = () => {
   const linking = {
     prefixes: ['brightid://'],
     config: {
-      Apps: {
-        screens: {
-          Apps: 'link-verification/:baseUrl/:context/:contextId',
-        },
-      },
+      Apps: 'link-verification/:baseUrl/:context/:contextId',
+      ScanCode: 'connection-code/:qrcode',
     },
   };
 
