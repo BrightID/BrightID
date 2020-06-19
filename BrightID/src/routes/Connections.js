@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ConnectionsScreen from '@/components/Connections/ConnectionsScreen';
 import SortingConnectionsScreen from '@/components/Connections/SortingConnectionsScreen';
-import { DEVICE_TYPE, DEVICE_IOS } from '@/utils/constants';
+import { DEVICE_IOS } from '@/utils/constants';
 import { createFakeConnection } from '@/components/Connections/models/createFakeConnection';
 import { navigate } from '@/NavigationService';
 import backArrow from '@/static/back_arrow.svg';

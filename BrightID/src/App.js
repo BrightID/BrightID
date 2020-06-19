@@ -4,12 +4,12 @@ import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { NavigationContainer, useLinking } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar, StyleSheet } from 'react-native';
+import { ORANGE } from '@/utils/constants';
 import { pollOperations } from './utils/operations';
 import AppRoutes from './routes';
 import { store, persistor } from './store';
-import { bootstrap } from './bootstrap';
 import { navigationRef } from './NavigationService';
 import Loading from './components/Helpers/LoadingScreen';
 
@@ -18,6 +18,8 @@ import Loading from './components/Helpers/LoadingScreen';
  * react-navigation is used for routing
  * read docs here: https://reactnavigation.org/
  */
+
+// NOTE: BOOTSTRAP happens inside of LoadingScreen
 
 export const App = () => {
   // setup deep linking
@@ -49,9 +51,10 @@ export const App = () => {
             fallback={<Loading />}
           >
             <StatusBar
-              barStyle="dark-content"
-              backgroundColor="#fff"
+              barStyle="light-content"
+              backgroundColor={ORANGE}
               translucent={false}
+              animated={true}
             />
             <AppRoutes />
           </NavigationContainer>

@@ -7,8 +7,9 @@ import {
   Text,
   TouchableOpacity,
   View,
-  SafeAreaView,
+  StatusBar,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import {
@@ -106,66 +107,78 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
     } = this.props;
     const image = photo ? { uri: photo } : { uri: 'https://picsum.photos/180' };
     return (
-      <View style={styles.container} testID="previewConnectionScreen">
-        <View style={styles.questionTextContainer}>
-          <Text style={styles.questionText}>Connect with?</Text>
-        </View>
-        <View style={styles.userContainer}>
-          <Image
-            source={image}
-            style={styles.photo}
-            resizeMode="cover"
-            onError={(e) => {
-              console.log(e);
-            }}
-            accessible={true}
-            accessibilityLabel="user photo"
-          />
-          <Text style={styles.connectName}>
-            {name}
-            {this.state.flagged && (
-              <Text style={styles.flagged}> (flagged)</Text>
-            )}
-          </Text>
-          <Text style={styles.connectedText}>{this.state.connectionDate}</Text>
-        </View>
-        <View style={styles.countsContainer}>
-          <View style={styles.countsGroup}>
-            <Text id="connectionsCount" style={styles.countsNumberText}>
-              {this.state.connections}
-            </Text>
-            <Text style={styles.countsDescriptionText}>Connections</Text>
+      <>
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="#fff"
+          translucent={false}
+          animated={true}
+        />
+        <SafeAreaView style={styles.container} testID="previewConnectionScreen">
+          <View style={styles.questionTextContainer}>
+            <Text style={styles.questionText}>Connect with?</Text>
           </View>
-          <View style={styles.countsGroup}>
-            <Text id="groupsCount" style={styles.countsNumberText}>
-              {this.state.groups}
+          <View style={styles.userContainer}>
+            <Image
+              source={image}
+              style={styles.photo}
+              resizeMode="cover"
+              onError={(e) => {
+                console.log(e);
+              }}
+              accessible={true}
+              accessibilityLabel="user photo"
+            />
+            <Text style={styles.connectName}>
+              {name}
+              {this.state.flagged && (
+                <Text style={styles.flagged}> (flagged)</Text>
+              )}
             </Text>
-            <Text style={styles.countsDescriptionText}>Groups</Text>
-          </View>
-          <View style={styles.countsGroup}>
-            <Text id="groupsCount" style={styles.countsNumberText}>
-              {this.state.mutualConnections}
+            <Text style={styles.connectedText}>
+              {this.state.connectionDate}
             </Text>
-            <Text style={styles.countsDescriptionText}>Mutual Connections</Text>
           </View>
-        </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            testID="rejectConnectionBtn"
-            onPress={this.reject}
-            style={styles.rejectButton}
-          >
-            <Text style={styles.buttonText}>Reject</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            testID="confirmConnectionBtn"
-            onPress={this.handleConfirmation}
-            style={styles.confirmButton}
-          >
-            <Text style={styles.buttonText}>Confirm</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+          <View style={styles.countsContainer}>
+            <View style={styles.countsGroup}>
+              <Text id="connectionsCount" style={styles.countsNumberText}>
+                {this.state.connections}
+              </Text>
+              <Text style={styles.countsDescriptionText}>Connections</Text>
+            </View>
+            <View style={styles.countsGroup}>
+              <Text id="groupsCount" style={styles.countsNumberText}>
+                {this.state.groups}
+              </Text>
+              <Text style={styles.countsDescriptionText}>Groups</Text>
+            </View>
+            <View style={styles.countsGroup}>
+              <Text id="groupsCount" style={styles.countsNumberText}>
+                {this.state.mutualConnections}
+              </Text>
+              <Text style={styles.countsDescriptionText}>
+                Mutual Connections
+              </Text>
+            </View>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              testID="rejectConnectionBtn"
+              onPress={this.reject}
+              style={styles.rejectButton}
+            >
+              <Text style={styles.buttonText}>Reject</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              testID="confirmConnectionBtn"
+              onPress={this.handleConfirmation}
+              style={styles.confirmButton}
+            >
+              <Text style={styles.buttonText}>Confirm</Text>
+            </TouchableOpacity>
+          </View>
+        </SafeAreaView>
+      </>
     );
   }
 }

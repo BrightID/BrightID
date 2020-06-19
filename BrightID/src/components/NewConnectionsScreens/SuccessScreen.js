@@ -1,8 +1,16 @@
 // @flow
 
-import * as React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { connect } from 'react-redux';
+import React from 'react';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  StatusBar,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDispatch } from 'react-redux';
 import { removeConnectUserData } from '../../actions';
 import { sortByDateAddedDescending } from '../Connections/models/sortingUtility';
 
@@ -13,16 +21,21 @@ import { sortByDateAddedDescending } from '../Connections/models/sortingUtility'
  *
  */
 
-type State = {};
-
-export class SuccessScreen extends React.Component<Props, State> {
-  render() {
-    return (
-      <View testID="successScreen" style={styles.container}>
+export const SuccessScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+  return (
+    <>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="#fff"
+        translucent={false}
+        animated={true}
+      />
+      <SafeAreaView testID="successScreen" style={styles.container}>
         <View style={styles.successTextContainer}>
           <Text style={styles.successText}>Connection Successful!</Text>
           <Image
-            source={require('../../static/success.png')}
+            source={require('@/static/success.png')}
             style={styles.successImage}
             resizeMode="cover"
             onError={(e) => {
@@ -37,7 +50,6 @@ export class SuccessScreen extends React.Component<Props, State> {
           <TouchableOpacity
             testID="successDoneBtn"
             onPress={() => {
-              const { navigation, dispatch } = this.props;
               dispatch(removeConnectUserData());
               dispatch(sortByDateAddedDescending());
               navigation.navigate('Connections');
@@ -47,10 +59,10 @@ export class SuccessScreen extends React.Component<Props, State> {
             <Text style={styles.confirmButtonText}>Done</Text>
           </TouchableOpacity>
         </View>
-      </View>
-    );
-  }
-}
+      </SafeAreaView>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -128,4 +140,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(SuccessScreen);
+export default SuccessScreen;

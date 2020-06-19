@@ -1,8 +1,8 @@
-/* eslint-disable react/prop-types */
 import React, { useEffect, useState, useMemo } from 'react';
 import {
   Image,
   Linking,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -14,7 +14,6 @@ import ActionSheet from 'react-native-actionsheet';
 import { useDispatch, useSelector } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { setPhoto, setName } from '@/actions';
-import { getNotifications } from '@/actions/notifications';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
@@ -45,7 +44,6 @@ export const HomeScreen = (props) => {
   const [profilePhoto, setProfilePhoto] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [displayName, setDisplayName] = useState(name);
-
   const verified = useMemo(() => verifications.includes('BrightID'), [
     verifications,
   ]);
@@ -102,198 +100,207 @@ export const HomeScreen = (props) => {
 
   return (
     // let verifications = ['BrightID'];
-
-    <View style={styles.container} testID="homeScreen">
-      <View style={styles.profileContainer} testID="PhotoContainer">
-        <TouchableOpacity
-          testID="editPhoto"
-          onPress={handleEditPhoto}
-          accessible={true}
-          accessibilityLabel="edit photo"
-        >
-          <Image
-            source={{
-              uri: profilePhoto,
-            }}
-            style={styles.photo}
-            resizeMode="cover"
-            onError={(e) => {
-              console.log(e.error);
-            }}
+    <>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="#fff"
+        translucent={false}
+        animated={true}
+      />
+      <View style={styles.container} testID="homeScreen">
+        <View style={styles.profileContainer} testID="PhotoContainer">
+          <TouchableOpacity
+            testID="editPhoto"
+            onPress={handleEditPhoto}
             accessible={true}
-            accessibilityLabel="user photo"
-          />
-        </TouchableOpacity>
-        <View style={styles.verifyNameContainer}>
-          <View style={styles.nameContainer}>
-            {isEditing ? (
-              <TextInput
-                testID="EditNameInput"
-                value={displayName}
-                style={styles.name}
-                onChangeText={setDisplayName}
-                onBlur={() => {
-                  if (displayName.length >= 2) {
-                    dispatch(setName(displayName));
-                    setIsEditing(false);
-                  } else {
-                    setIsEditing(false);
-                    setName(name);
-                  }
-                }}
-                blurOnSubmit={true}
-              />
+            accessibilityLabel="edit photo"
+          >
+            <Image
+              source={{
+                uri: profilePhoto,
+              }}
+              style={styles.photo}
+              resizeMode="cover"
+              onError={(e) => {
+                console.log(e.error);
+              }}
+              accessible={true}
+              accessibilityLabel="user photo"
+            />
+          </TouchableOpacity>
+          <View style={styles.verifyNameContainer}>
+            <View style={styles.nameContainer}>
+              {isEditing ? (
+                <TextInput
+                  testID="EditNameInput"
+                  value={displayName}
+                  style={styles.name}
+                  onChangeText={setDisplayName}
+                  onBlur={() => {
+                    if (displayName.length >= 2) {
+                      dispatch(setName(displayName));
+                      setIsEditing(false);
+                    } else {
+                      setIsEditing(false);
+                      setName(name);
+                    }
+                  }}
+                  blurOnSubmit={true}
+                />
+              ) : (
+                <Text
+                  testID="EditNameBtn"
+                  style={styles.name}
+                  onPress={() => setIsEditing(true)}
+                >
+                  {name}
+                </Text>
+              )}
+              {verified && (
+                <SvgXml
+                  style={styles.verificationSticker}
+                  width="16"
+                  height="16"
+                  xml={verificationSticker}
+                />
+              )}
+            </View>
+            <View style={styles.profileDivider} />
+            {verified ? (
+              <Text style={styles.verified}>verified</Text>
             ) : (
-              <Text
-                testID="EditNameBtn"
-                style={styles.name}
-                onPress={() => setIsEditing(true)}
-              >
-                {name}
-              </Text>
-            )}
-            {verified && (
-              <SvgXml
-                style={styles.verificationSticker}
-                width="16"
-                height="16"
-                xml={verificationSticker}
-              />
+              <Text style={styles.unverified}>unverified</Text>
             )}
           </View>
-          <View style={styles.profileDivider} />
-          {verified ? (
-            <Text style={styles.verified}>verified</Text>
-          ) : (
-            <Text style={styles.unverified}>unverified</Text>
-          )}
         </View>
-      </View>
 
-      <View style={styles.countsContainer}>
-        <TouchableOpacity
-          style={styles.countsCard}
-          onPress={() => {
-            navigation.navigate('Connections');
-          }}
-        >
-          <Text testID="ConnectionsCount" style={styles.countsNumberText}>
-            {connections?.length ?? 0}
-          </Text>
-          <View style={styles.countsBorder} />
-          <Text style={styles.countsDescriptionText}>Connections</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.countsCard}
-          onPress={() => {
-            navigation.navigate('Apps');
-          }}
-        >
-          <Text testID="AppsCount" style={styles.countsNumberText}>
-            {apps?.length ?? 0}
-          </Text>
-          <View style={styles.countsBorder} />
-          <Text style={styles.countsDescriptionText}>Apps</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.countsCard}
-          onPress={() => {
-            navigation.navigate('Groups');
-          }}
-        >
-          <Text testID="GroupsCount" style={styles.countsNumberText}>
-            {groups?.length ?? 0}
-          </Text>
-          <View style={styles.countsBorder} />
-          <Text style={styles.countsDescriptionText}>Groups</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.bottomOrangeContainer}>
-        <View style={styles.connectContainer}>
-          <Text style={styles.newConnectionText}>Create a New Connection</Text>
+        <View style={styles.countsContainer}>
           <TouchableOpacity
-            testID="ConnectButton"
-            style={styles.connectButton}
+            style={styles.countsCard}
             onPress={() => {
-              navigation.navigate('MyCode');
+              navigation.navigate('Connections');
             }}
-            accessible={true}
-            accessibilityLabel="Connect"
           >
-            <SvgXml
-              xml={qricon}
-              width={DEVICE_LARGE ? 25 : 20}
-              height={DEVICE_LARGE ? 25 : 20}
-            />
-            <Text style={styles.connectText}>My Code</Text>
+            <Text testID="ConnectionsCount" style={styles.countsNumberText}>
+              {connections?.length ?? 0}
+            </Text>
+            <View style={styles.countsBorder} />
+            <Text style={styles.countsDescriptionText}>Connections</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            testID="ConnectButton"
-            style={styles.connectButton}
+            style={styles.countsCard}
             onPress={() => {
-              navigation.navigate('ScanCode');
+              navigation.navigate('Apps');
             }}
-            accessible={true}
-            accessibilityLabel="Connect"
           >
-            <SvgXml
-              xml={cameraIcon}
-              width={DEVICE_LARGE ? 25 : 20}
-              height={DEVICE_LARGE ? 25 : 20}
-            />
-            <Text style={styles.connectText}>Scan a Code</Text>
+            <Text testID="AppsCount" style={styles.countsNumberText}>
+              {apps?.length ?? 0}
+            </Text>
+            <View style={styles.countsBorder} />
+            <Text style={styles.countsDescriptionText}>Apps</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
-            style={styles.communityContainer}
-            onPress={handleChat}
+            style={styles.countsCard}
+            onPress={() => {
+              navigation.navigate('Groups');
+            }}
           >
-            <Ionicons
-              name="ios-chatboxes"
-              size={16}
-              color="#fff"
-              style={styles.communityIcon}
-            />
-            <JoinCommunity editable={false} style={styles.communityLink}>
-              Join the Community
-            </JoinCommunity>
+            <Text testID="GroupsCount" style={styles.countsNumberText}>
+              {groups?.length ?? 0}
+            </Text>
+            <View style={styles.countsBorder} />
+            <Text style={styles.countsDescriptionText}>Groups</Text>
           </TouchableOpacity>
         </View>
-      </View>
+        <View style={styles.bottomOrangeContainer}>
+          <View style={styles.connectContainer}>
+            <Text style={styles.newConnectionText}>
+              Create a New Connection
+            </Text>
+            <TouchableOpacity
+              testID="ConnectButton"
+              style={styles.connectButton}
+              onPress={() => {
+                navigation.navigate('MyCode');
+              }}
+              accessible={true}
+              accessibilityLabel="Connect"
+            >
+              <SvgXml
+                xml={qricon}
+                width={DEVICE_LARGE ? 25 : 20}
+                height={DEVICE_LARGE ? 25 : 20}
+              />
+              <Text style={styles.connectText}>My Code</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              testID="ConnectButton"
+              style={styles.connectButton}
+              onPress={() => {
+                navigation.navigate('ScanCode');
+              }}
+              accessible={true}
+              accessibilityLabel="Connect"
+            >
+              <SvgXml
+                xml={cameraIcon}
+                width={DEVICE_LARGE ? 25 : 20}
+                height={DEVICE_LARGE ? 25 : 20}
+              />
+              <Text style={styles.connectText}>Scan a Code</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.communityContainer}
+              onPress={handleChat}
+            >
+              <Ionicons
+                name="ios-chatboxes"
+                size={16}
+                color="#fff"
+                style={styles.communityIcon}
+              />
+              <JoinCommunity editable={false} style={styles.communityLink}>
+                Join the Community
+              </JoinCommunity>
+            </TouchableOpacity>
+          </View>
+        </View>
 
-      <ActionSheet
-        testID="ChatActionSheet"
-        ref={(o) => {
-          chatSheetRef = o;
-        }}
-        title="Like to chat with us?"
-        options={['BrightID Discord', 'cancel']}
-        cancelButtonIndex={1}
-        onPress={(index) => {
-          if (index === 0) {
-            Linking.openURL(discordUrl).catch((err) =>
-              console.error('An error occurred', err),
-            );
-          }
-        }}
-      />
-      <ActionSheet
-        testID="PhotoActionSheet"
-        ref={(o) => {
-          photoSheetRef = o;
-        }}
-        title="Select photo"
-        options={['Take Photo', 'Choose From Library', 'cancel']}
-        cancelButtonIndex={2}
-        onPress={(index) => {
-          if (index === 0) {
-            getPhotoFromCamera();
-          } else if (index === 1) {
-            getPhotoFromLibrary();
-          }
-        }}
-      />
-    </View>
+        <ActionSheet
+          testID="ChatActionSheet"
+          ref={(o) => {
+            chatSheetRef = o;
+          }}
+          title="Like to chat with us?"
+          options={['BrightID Discord', 'cancel']}
+          cancelButtonIndex={1}
+          onPress={(index) => {
+            if (index === 0) {
+              Linking.openURL(discordUrl).catch((err) =>
+                console.error('An error occurred', err),
+              );
+            }
+          }}
+        />
+        <ActionSheet
+          testID="PhotoActionSheet"
+          ref={(o) => {
+            photoSheetRef = o;
+          }}
+          title="Select photo"
+          options={['Take Photo', 'Choose From Library', 'cancel']}
+          cancelButtonIndex={2}
+          onPress={(index) => {
+            if (index === 0) {
+              getPhotoFromCamera();
+            } else if (index === 1) {
+              getPhotoFromLibrary();
+            }
+          }}
+        />
+      </View>
+    </>
   );
 };
 
@@ -482,9 +489,6 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 17 : 15,
     color: '#000',
     marginLeft: DEVICE_LARGE ? 10 : 8,
-  },
-  connectIcon: {
-    marginTop: DEVICE_LARGE ? 2 : 1,
   },
   communityIcon: {
     marginTop: 1,

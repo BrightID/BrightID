@@ -1,4 +1,5 @@
 import React from 'react';
+import { View, StatusBar, Stylesheet } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { ORANGE, DEVICE_IOS } from '@/utils/constants';
 import backArrow from '@/static/back_arrow.svg';
@@ -11,9 +12,22 @@ const headerTitleStyle = {
 
 export const headerOptions = {
   headerTitleStyle,
-  headerStyle: {
-    backgroundColor: ORANGE,
-  },
+  // headerStyle: {
+  //   backgroundColor: ORANGE,
+  // },
+  headerBackground: () => (
+    <>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={ORANGE}
+        translucent={false}
+        animated={true}
+      />
+      <View
+        style={{ width: '100%', height: '100%', backgroundColor: ORANGE }}
+      />
+    </>
+  ),
   headerTintColor: '#fff',
   headerTitleAlign: 'center',
   headerBackTitleVisible: false,
