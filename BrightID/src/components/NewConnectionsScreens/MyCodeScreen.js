@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // @flow
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,6 +9,7 @@ import {
   TouchableOpacity,
   Clipboard,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path, SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
@@ -44,6 +46,7 @@ export const MyCodeScreen = (props) => {
   const timestamp = useSelector(
     (state) => state.connectQrData.myQrData?.timestamp ?? Date.now(),
   );
+  const connectDataExists = useSelector((state) => !!state.connectUserData.id);
 
   const [qrsvg, setQrsvg] = useState('');
   const [copied, setCopied] = useState(false);
@@ -53,31 +56,31 @@ export const MyCodeScreen = (props) => {
   const timerTick = useCallback(() => {
     if (!navigation.isFocused()) return;
     let countdown = ttl - (Date.now() - timestamp);
-    if (countdown <= 0) {
+    if (countdown <= 0 && qrString) {
       dispatch(startConnecting());
     }
     setCountdown(countdown);
-  }, [ttl, timestamp, dispatch, navigation]);
+  }, [ttl, timestamp, qrString]);
 
   // start local timer to display countdown
   useInterval(timerTick, 1000);
 
-  useEffect(() => {
-    if (!navigation.isFocused()) return;
-    if (!qrString) {
-      dispatch(startConnecting());
-    } else {
-      qrCodeToSvg(qrString, (qrsvg) => setQrsvg(qrsvg));
-      setCountdown(ttl - (Date.now() - timestamp));
-    }
-    const navigateToPreview = () => {
-      navigation.navigate('PreviewConnection');
-    };
-    emitter.on('connectDataReady', navigateToPreview);
-    return () => {
-      emitter.off('connectDataReady', navigateToPreview);
-    };
-  }, [qrString, dispatch, navigation, timestamp, ttl]);
+  useFocusEffect(
+    useCallback(() => {
+      console.log('YEAH BUDDY', qrString);
+      if (!navigation.isFocused()) return;
+      if (connectDataExists) {
+        navigation.navigate('PreviewConnection');
+        return;
+      }
+      if (!qrString) {
+        dispatch(startConnecting());
+      } else {
+        qrCodeToSvg(qrString, (qrsvg) => setQrsvg(qrsvg));
+        setCountdown(ttl - (Date.now() - timestamp));
+      }
+    }, [qrString, connectDataExists]),
+  );
 
   // const checkQrCode = (qrString) => {};
 

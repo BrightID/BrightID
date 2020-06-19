@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // @flow
 
 import React, { useEffect, useState } from 'react';
@@ -57,35 +58,30 @@ export const ScanCodeScreen = (props) => {
   const [scanned, setScanned] = useState(false);
   const [connectionAttempts, setConnectionAttempts] = useState(0);
   const name = useSelector((state) => state.user.name);
+  const connectDataExists = useSelector((state) => !!state.connectUserData.id);
 
   useEffect(() => {
     dispatch(stopConnecting());
-    const navigateToPreview = () => {
+    if (connectDataExists) {
+      unsubscribeToProfileUpload();
       navigation.navigate('PreviewConnection');
-    };
+      return;
+    }
     const handleDownloadFailure = () => {
       setConnectionAttempts(connectionAttempts + 1);
       if (connectionAttempts > 1) {
         navigation.navigate('Home');
       }
     };
-    const unsubscribeToProfileUpload = () => {
-      console.log(`Unsubsubscribing from profile Upload`);
-      clearTimeout(connectionExpired);
-      clearInterval(fetchProfileId);
-    };
 
-    emitter.on('connectDataReady', navigateToPreview);
     emitter.on('connectFailure', handleDownloadFailure);
-    emitter.on('recievedProfileData', unsubscribeToProfileUpload);
 
     return () => {
       unsubscribeToProfileUpload();
-      emitter.off('connectDataReady', navigateToPreview);
+
       emitter.off('connectFailure', handleDownloadFailure);
-      emitter.off('recievedProfileData', unsubscribeToProfileUpload);
     };
-  }, [navigation, dispatch, connectionAttempts, route.params?.qrcode]);
+  }, [connectionAttempts, connectDataExists]);
 
   const subscribeToProfileUpload = (peerQrData) => {
     console.log(`Subscribing to profile Upload for uuid ${peerQrData.uuid}`);
@@ -94,6 +90,12 @@ export const ScanCodeScreen = (props) => {
     fetchProfileId = setInterval(() => {
       dispatch(fetchProfile(peerQrData));
     }, PROFILE_POLL_INTERVAL);
+  };
+
+  const unsubscribeToProfileUpload = () => {
+    console.log(`Unsubsubscribing from profile Upload`);
+    clearTimeout(connectionExpired);
+    clearInterval(fetchProfileId);
   };
 
   const handleBarCodeRead = ({ data }) => {
