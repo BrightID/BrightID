@@ -14,6 +14,7 @@ const topOptions = {
   ...headerOptions,
   headerLeft: () => (
     <TouchableOpacity
+      testID="apps-header-back"
       style={{
         marginLeft: DEVICE_IOS ? 20 : 10,
         // marginTop: DEVICE_LARGE ? 15 : 10,

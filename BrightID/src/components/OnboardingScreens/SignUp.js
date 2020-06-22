@@ -121,114 +121,108 @@ export class SignUp extends React.Component<Props, State> {
     const { name, finalBase64, creatingBrightId, editingName } = this.state;
 
     return (
-      <>
-        <SafeAreaView style={styles.safeAreaContainer}>
-          <Container style={styles.container} behavior="padding">
-            <View style={styles.addPhotoContainer}>
-              {finalBase64.uri && !editingName ? (
-                <TouchableOpacity
-                  testID="editPhoto"
-                  onPress={this.onAddPhoto}
-                  accessible={true}
-                  accessibilityLabel="edit photo"
-                >
-                  <Image style={styles.photo} source={finalBase64} />
-                </TouchableOpacity>
-              ) : !editingName ? (
-                <TouchableOpacity
-                  testID="addPhoto"
-                  onPress={this.onAddPhoto}
-                  style={styles.addPhoto}
-                  accessible={true}
-                  accessibilityLabel="add photo"
-                >
-                  <Text style={styles.addPhotoText}>Add Photo</Text>
-                  <SimpleLineIcons size={42} name="camera" color="#979797" />
-                </TouchableOpacity>
-              ) : (
-                <View />
-              )}
-            </View>
-            <View style={styles.textInputContainer}>
-              <Text style={styles.midText}>
-                What do your friends know you by?
-              </Text>
-              <TextInput
-                testID="editName"
-                onChangeText={(name) => this.setState({ name })}
-                value={name}
-                placeholder="Name"
-                placeholderTextColor="#9e9e9e"
-                style={styles.textInput}
-                autoCapitalize="words"
-                autoCorrect={false}
-                textContentType="name"
-                underlineColorAndroid="transparent"
-                onFocus={() => {
-                  this.setState({ editingName: true });
-                }}
-                onBlur={() => {
-                  this.setState({ editingName: false });
-                }}
-                blurOnSubmit={true}
-              />
-            </View>
-            <View style={styles.buttonContainer}>
-              <Text style={styles.buttonInfoText}>
-                Your name and photo will never be shared with apps or stored on
-                servers
-              </Text>
-              {!creatingBrightId ? (
-                <View>
-                  <TouchableOpacity
-                    testID="createBrightIDBtn"
-                    style={styles.createBrightIdButton}
-                    onPress={this.createBrightID}
-                  >
-                    <Text style={styles.buttonInnerText}>
-                      Create My BrightID
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    testID="recoverBrightIDBtn"
-                    onPress={() => this.props.navigation.navigate('Restore')}
-                    style={styles.recoverButton}
-                    accessibilityLabel="Recover BrightID"
-                  >
-                    <Text style={styles.recoverButtonText}>
-                      Recover BrightID
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <View style={styles.loader} testID="creatingIDSpinner">
-                  <Text>Creating Bright ID...</Text>
-                  <Spinner
-                    isVisible={true}
-                    size={47}
-                    type="Wave"
-                    color="#4990e2"
-                  />
-                </View>
-              )}
-            </View>
-            <ActionSheet
-              ref={(o) => {
-                this.photoSheetRef = o;
+      <SafeAreaView style={styles.safeAreaContainer}>
+        <Container style={styles.container} behavior="padding">
+          <View style={styles.addPhotoContainer}>
+            {finalBase64.uri && !editingName ? (
+              <TouchableOpacity
+                testID="editPhoto"
+                onPress={this.onAddPhoto}
+                accessible={true}
+                accessibilityLabel="edit photo"
+              >
+                <Image style={styles.photo} source={finalBase64} />
+              </TouchableOpacity>
+            ) : !editingName ? (
+              <TouchableOpacity
+                testID="addPhoto"
+                onPress={this.onAddPhoto}
+                style={styles.addPhoto}
+                accessible={true}
+                accessibilityLabel="add photo"
+              >
+                <Text style={styles.addPhotoText}>Add Photo</Text>
+                <SimpleLineIcons size={42} name="camera" color="#979797" />
+              </TouchableOpacity>
+            ) : (
+              <View />
+            )}
+          </View>
+          <View style={styles.textInputContainer}>
+            <Text style={styles.midText}>
+              What do your friends know you by?
+            </Text>
+            <TextInput
+              testID="editName"
+              onChangeText={(name) => this.setState({ name })}
+              value={name}
+              placeholder="Name"
+              placeholderTextColor="#9e9e9e"
+              style={styles.textInput}
+              autoCapitalize="words"
+              autoCorrect={false}
+              textContentType="name"
+              underlineColorAndroid="transparent"
+              onFocus={() => {
+                this.setState({ editingName: true });
               }}
-              title="Select photo"
-              options={['Take Photo', 'Choose From Library', 'cancel']}
-              cancelButtonIndex={2}
-              onPress={(index) => {
-                if (index === 0) {
-                  this.getPhotoFromCamera();
-                } else if (index === 1) {
-                  this.getPhotoFromLibrary();
-                }
+              onBlur={() => {
+                this.setState({ editingName: false });
               }}
+              blurOnSubmit={true}
             />
-          </Container>
-        </SafeAreaView>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Text style={styles.buttonInfoText}>
+              Your name and photo will never be shared with apps or stored on
+              servers
+            </Text>
+            {!creatingBrightId ? (
+              <View>
+                <TouchableOpacity
+                  testID="createBrightIDBtn"
+                  style={styles.createBrightIdButton}
+                  onPress={this.createBrightID}
+                >
+                  <Text style={styles.buttonInnerText}>Create My BrightID</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  testID="recoverBrightIDBtn"
+                  onPress={() => this.props.navigation.navigate('Restore')}
+                  style={styles.recoverButton}
+                  accessibilityLabel="Recover BrightID"
+                >
+                  <Text style={styles.recoverButtonText}>Recover BrightID</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={styles.loader} testID="creatingIDSpinner">
+                <Text>Creating Bright ID...</Text>
+                <Spinner
+                  isVisible={true}
+                  size={47}
+                  type="Wave"
+                  color="#4990e2"
+                />
+              </View>
+            )}
+          </View>
+          <ActionSheet
+            ref={(o) => {
+              this.photoSheetRef = o;
+            }}
+            title="Select photo"
+            options={['Take Photo', 'Choose From Library', 'cancel']}
+            cancelButtonIndex={2}
+            onPress={(index) => {
+              if (index === 0) {
+                this.getPhotoFromCamera();
+              } else if (index === 1) {
+                this.getPhotoFromLibrary();
+              }
+            }}
+          />
+        </Container>
         {DEVICE_SMALL && (
           <StatusBar
             barStyle="dark-content"
@@ -237,7 +231,7 @@ export class SignUp extends React.Component<Props, State> {
             animated={true}
           />
         )}
-      </>
+      </SafeAreaView>
     );
   }
 }

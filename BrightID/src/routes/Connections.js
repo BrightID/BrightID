@@ -28,9 +28,9 @@ const connectionsScreenOptions = {
     : () => null,
   headerLeft: () => (
     <TouchableOpacity
+      testID="connections-header-back"
       style={{
         marginLeft: DEVICE_IOS ? 20 : 10,
-        // marginTop: DEVICE_LARGE ? 15 : 10,
       }}
       onPress={() => {
         navigate('Home');

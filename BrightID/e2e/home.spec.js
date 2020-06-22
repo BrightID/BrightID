@@ -93,36 +93,36 @@ describe('Homescreen', () => {
     });
   });
 
-  describe('New Connection screen', () => {
-    it('should open "New Connection" screen by default', async () => {
-      await element(by.id('ConnectButton')).tap();
-      await expect(element(by.id('qrCode'))).toBeVisible();
-      hasBackButton
-        ? await device.pressBack()
-        : await element(by.id('header-back')).tap();
-      await expect(element(by.id('qrCode'))).toBeNotVisible();
-    });
+  // describe('New Connection screen', () => {
+  //   it('should open "New Connection" screen by default', async () => {
+  //     await element(by.id('ConnectButton')).tap();
+  //     await expect(element(by.id('qrCode'))).toBeVisible();
+  //     hasBackButton
+  //       ? await device.pressBack()
+  //       : await element(by.id('header-back')).tap();
+  //     await expect(element(by.id('qrCode'))).toBeNotVisible();
+  //   });
 
-    it('should open "Scan Code" screen when tapping button', async () => {
-      await element(by.id('ConnectButton')).tap();
-      await element(by.id('scanCodeBtn')).tap();
-      await expect(element(by.id('scanCode'))).toBeVisible();
-      hasBackButton
-        ? await device.pressBack()
-        : await element(by.id('header-back')).tap();
-      await expect(element(by.id('scanCode'))).toBeNotVisible();
-    });
+  //   it('should open "Scan Code" screen when tapping button', async () => {
+  //     await element(by.id('ConnectButton')).tap();
+  //     await element(by.id('scanCodeBtn')).tap();
+  //     await expect(element(by.id('scanCode'))).toBeVisible();
+  //     hasBackButton
+  //       ? await device.pressBack()
+  //       : await element(by.id('header-back')).tap();
+  //     await expect(element(by.id('scanCode'))).toBeNotVisible();
+  //   });
 
-    it('should copy to clipboard', async () => {
-      await element(by.id('ConnectButton')).tap();
-      await expect(element(by.id('copyQrButton'))).toBeVisible();
-      await element(by.id('copyQrButton')).tap();
-      // TODO: Verify clipboard content is correct. Currently detox has no way to
-      //  check clipboard contents, see e.g. https://github.com/wix/detox/issues/222
-      hasBackButton
-        ? await device.pressBack()
-        : await element(by.id('header-back')).tap();
-      await expect(element(by.id('copyQrButton'))).toBeNotVisible();
-    });
-  });
+  //   it('should copy to clipboard', async () => {
+  //     await element(by.id('ConnectButton')).tap();
+  //     await expect(element(by.id('copyQrButton'))).toBeVisible();
+  //     await element(by.id('copyQrButton')).tap();
+  //     // TODO: Verify clipboard content is correct. Currently detox has no way to
+  //     //  check clipboard contents, see e.g. https://github.com/wix/detox/issues/222
+  //     hasBackButton
+  //       ? await device.pressBack()
+  //       : await element(by.id('header-back')).tap();
+  //     await expect(element(by.id('copyQrButton'))).toBeNotVisible();
+  //   });
+  // });
 });

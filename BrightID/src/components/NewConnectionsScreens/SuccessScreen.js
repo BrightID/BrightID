@@ -24,43 +24,42 @@ import { sortByDateAddedDescending } from '../Connections/models/sortingUtility'
 export const SuccessScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   return (
-    <>
+    <SafeAreaView testID="successScreen" style={styles.container}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#fff"
         translucent={false}
         animated={true}
       />
-      <SafeAreaView testID="successScreen" style={styles.container}>
-        <View style={styles.successTextContainer}>
-          <Text style={styles.successText}>Connection Successful!</Text>
-          <Image
-            source={require('@/static/success.png')}
-            style={styles.successImage}
-            resizeMode="cover"
-            onError={(e) => {
-              console.log(e);
-            }}
-            accessible={true}
-            accessibilityLabel="success image"
-          />
-        </View>
 
-        <View style={styles.confirmButtonContainer}>
-          <TouchableOpacity
-            testID="successDoneBtn"
-            onPress={() => {
-              dispatch(removeConnectUserData());
-              dispatch(sortByDateAddedDescending());
-              navigation.navigate('Connections');
-            }}
-            style={styles.confirmButton}
-          >
-            <Text style={styles.confirmButtonText}>Done</Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-    </>
+      <View style={styles.successTextContainer}>
+        <Text style={styles.successText}>Connection Successful!</Text>
+        <Image
+          source={require('@/static/success.png')}
+          style={styles.successImage}
+          resizeMode="cover"
+          onError={(e) => {
+            console.log(e);
+          }}
+          accessible={true}
+          accessibilityLabel="success image"
+        />
+      </View>
+
+      <View style={styles.confirmButtonContainer}>
+        <TouchableOpacity
+          testID="successDoneBtn"
+          onPress={() => {
+            dispatch(removeConnectUserData());
+            dispatch(sortByDateAddedDescending());
+            navigation.navigate('Connections');
+          }}
+          style={styles.confirmButton}
+        >
+          <Text style={styles.confirmButtonText}>Done</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 

@@ -19,9 +19,7 @@ const createBrightID = async (name = testUserName) => {
   // create new ID
   await element(by.id('createBrightIDBtn')).tap();
   // should end up at home screen
-  await waitFor(element(by.id('homeScreen')))
-    .toBeVisible()
-    .withTimeout(20000);
+  await expectHomescreen();
   return name;
 };
 
