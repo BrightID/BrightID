@@ -8,6 +8,7 @@ import {
   View,
   TouchableOpacity,
   Clipboard,
+  StatusBar,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -16,7 +17,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import emitter from '@/emitter';
 import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
 import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
@@ -170,6 +170,12 @@ export const MyCodeScreen = (props) => {
   );
   return (
     <>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={ORANGE}
+        translucent={false}
+        animated={true}
+      />
       <View style={styles.orangeTop} />
       <Container style={styles.container}>
         <View style={styles.infoTopContainer}>

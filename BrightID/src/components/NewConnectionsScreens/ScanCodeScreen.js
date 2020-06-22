@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import {
   Alert,
   Linking,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -15,7 +16,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import BarcodeMask from 'react-native-barcode-mask';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-native-spinkit';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   DEVICE_LARGE,
   DEVICE_IOS,
@@ -132,6 +132,12 @@ export const ScanCodeScreen = (props) => {
 
   return (
     <>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={ORANGE}
+        translucent={false}
+        animated={true}
+      />
       <View style={styles.orangeTop} />
       <Container style={styles.container}>
         <View style={styles.infoTopContainer}>
@@ -154,7 +160,6 @@ export const ScanCodeScreen = (props) => {
                 buttonPositive: 'Ok',
                 buttonNegative: 'Cancel',
               }}
-              useNativeZoom={true}
             >
               <BarcodeMask
                 edgeColor={ORANGE}
@@ -231,8 +236,12 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
   },
   cameraPreview: {
+    flex: 0,
+    overflow: 'hidden',
     width: 280,
+
     height: 280,
+    aspectRatio: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
