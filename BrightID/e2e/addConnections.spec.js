@@ -30,6 +30,11 @@ describe('Connections', () => {
       await element(by.id('connectionsBtn')).tap();
       await createFakeConnection();
       await device.pressBack();
+      // Android Back button is based on navigation stack, so it goes back to previous screen instead of
+      // homescreen like the "Reject" button
+      await expectConnectionsScreen();
+      // go back another level to reach home screen
+      await device.pressBack();
       await expectHomescreen();
     });
 
