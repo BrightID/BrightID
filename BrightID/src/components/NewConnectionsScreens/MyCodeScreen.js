@@ -184,13 +184,14 @@ export const MyCodeScreen = (props) => {
           </Text>
           <Text style={styles.infoTopText}>make a new connection today</Text>
         </View>
-        <View style={styles.qrCodeContainer}>
+        <View style={styles.qrCodeContainer} testID="QRCodeContainer">
           {qrsvg ? renderTimer() : <View />}
           {qrsvg ? renderQrCode() : renderSpinner()}
           {qrsvg ? renderCopyQr() : <View />}
         </View>
         <Text style={styles.infoBottomText}>Or you can also...</Text>
         <TouchableOpacity
+          testID="MyCodeToScanCodeBtn"
           style={styles.scanCodeButton}
           onPress={() => {
             props.navigation.navigate('ScanCode');

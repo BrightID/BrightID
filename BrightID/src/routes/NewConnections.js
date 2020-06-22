@@ -18,6 +18,7 @@ const Stack = createStackNavigator();
 const newConnectionOptions = {
   headerLeft: () => (
     <TouchableOpacity
+      testID="NewConnectionBackBtn"
       style={{
         marginLeft: DEVICE_IOS ? 25 : 10,
         marginTop: DEVICE_LARGE ? 15 : 10,

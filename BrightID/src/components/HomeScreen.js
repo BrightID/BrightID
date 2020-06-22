@@ -220,7 +220,7 @@ export const HomeScreen = (props) => {
         <View style={styles.connectContainer}>
           <Text style={styles.newConnectionText}>Create a New Connection</Text>
           <TouchableOpacity
-            testID="ConnectButton"
+            testID="MyCodeBtn"
             style={styles.connectButton}
             onPress={() => {
               navigation.navigate('MyCode');
@@ -236,7 +236,7 @@ export const HomeScreen = (props) => {
             <Text style={styles.connectText}>My Code</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            testID="ConnectButton"
+            testID="ScanCodeBtn"
             style={styles.connectButton}
             onPress={() => {
               navigation.navigate('ScanCode');
@@ -252,6 +252,7 @@ export const HomeScreen = (props) => {
             <Text style={styles.connectText}>Scan a Code</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            testID="JoinCommunityBtn"
             style={styles.communityContainer}
             onPress={handleChat}
           >

@@ -146,7 +146,7 @@ export const ScanCodeScreen = (props) => {
           </Text>
           <Text style={styles.infoTopText}>make a new connection today</Text>
         </View>
-        <View style={styles.cameraContainer}>
+        <View style={styles.cameraContainer} testID="CameraContainer">
           {!scanned ? (
             <RNCamera
               style={styles.cameraPreview}
@@ -180,6 +180,7 @@ export const ScanCodeScreen = (props) => {
         </View>
         <Text style={styles.infoBottomText}>Or you can also...</Text>
         <TouchableOpacity
+          testID="ScanCodeToMyCodeBtn"
           style={styles.showQrButton}
           onPress={() => {
             props.navigation.navigate('MyCode');
