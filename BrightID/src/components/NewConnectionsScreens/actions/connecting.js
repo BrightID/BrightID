@@ -29,7 +29,6 @@ export const startConnecting = () => async (
     // start polling for uploaded profiles from people scanning my code
     clearInterval(fetchProfileID);
     fetchProfileID = setInterval(() => {
-      console.log('profile timer', fetchProfileID);
       dispatch(fetchProfile(qrCodeData));
     }, PROFILE_POLL_INTERVAL);
     // Start timer to expire QRdata and stop polling
@@ -47,7 +46,6 @@ export const stopConnecting = () => (
   getState: () => State,
 ) => {
   // stop polling for profiles
-  console.log('trying to stop', fetchProfileID);
   clearInterval(fetchProfileID);
   // clear local qrCodeData
   dispatch(clearMyQrData());

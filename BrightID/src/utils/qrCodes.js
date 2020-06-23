@@ -17,7 +17,8 @@ export const generateQrData = async () => {
   const uuid = b64ToUrlSafeB64(uuidKey);
   const timestamp = Date.now();
   const ttl = QR_TTL;
-  const qrString = `${aesKey}${uuid}${b64Ip}`;
+  const qrString = encodeURIComponent(`${aesKey}${uuid}${b64Ip}`);
+  // const qrString = `${aesKey}${uuid}${b64Ip}`;
   const type = QR_TYPE_INITIATOR;
   return { aesKey, uuid, ipAddress, qrString, timestamp, ttl, type };
 };
@@ -33,9 +34,11 @@ export const qrCodeToSvg = (qrString, callback) => {
 };
 
 export const parseQrData = (qrString) => {
-  const aesKey = qrString.substr(0, 24);
-  const uuid = qrString.substr(24, 12);
-  const b64ip = `${qrString.substr(36, 6)}==`;
+  const decodedQR = decodeURIComponent(qrString);
+  // const decodedQR = qrString;
+  const aesKey = decodedQR.substr(0, 24);
+  const uuid = decodedQR.substr(24, 12);
+  const b64ip = `${decodedQR.substr(36, 6)}==`;
   const ipAddress = b64ToUint8Array(b64ip).join('.');
   return { aesKey, uuid, ipAddress, qrString };
 };
