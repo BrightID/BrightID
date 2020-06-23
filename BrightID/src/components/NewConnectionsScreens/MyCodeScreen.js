@@ -8,7 +8,6 @@ import {
   View,
   TouchableOpacity,
   Clipboard,
-  StatusBar,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -22,6 +21,7 @@ import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
 import cameraIcon from '@/static/camera_icon_white.svg';
 import { startConnecting, stopConnecting } from './actions/connecting';
+
 /**
  * My Code screen of BrightID
  *
@@ -64,7 +64,6 @@ export const MyCodeScreen = (props) => {
 
   // start local timer to display countdown
   useInterval(timerTick, 1000);
-
   useFocusEffect(
     useCallback(() => {
       console.log('YEAH BUDDY', qrString);
@@ -170,12 +169,6 @@ export const MyCodeScreen = (props) => {
   );
   return (
     <>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor={ORANGE}
-        translucent={false}
-        animated={true}
-      />
       <View style={styles.orangeTop} />
       <Container style={styles.container}>
         <View style={styles.infoTopContainer}>

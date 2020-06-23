@@ -16,7 +16,7 @@ const Stack = createStackNavigator();
 
 const MainTabs = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator headerMode="screen">
       {Home()}
       {NewConnections()}
       {Connections()}

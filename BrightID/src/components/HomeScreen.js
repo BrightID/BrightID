@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import {
   Image,
   Linking,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
   TextInput,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { SvgXml } from 'react-native-svg';
 import ActionSheet from 'react-native-actionsheet';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,6 +21,7 @@ import fetchUserInfo from '@/actions/fetchUserInfo';
 import verificationSticker from '@/static/verification-sticker.svg';
 import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
+import { useStatusBarHome } from '@/utils/hooks';
 /**
  * Home screen of BrightID
  * ==========================
@@ -48,12 +49,13 @@ export const HomeScreen = (props) => {
     verifications,
   ]);
 
-  useEffect(() => {
-    navigation.addListener('focus', () => {
+  useStatusBarHome();
+  useFocusEffect(
+    useCallback(() => {
       dispatch(fetchUserInfo());
-    });
-    retrieveImage(photoFilename).then(setProfilePhoto);
-  }, [dispatch, navigation, photoFilename]);
+      retrieveImage(photoFilename).then(setProfilePhoto);
+    }, [dispatch, photoFilename]),
+  );
 
   const getPhotoFromCamera = async () => {
     try {
@@ -101,13 +103,6 @@ export const HomeScreen = (props) => {
   return (
     // let verifications = ['BrightID'];
     <View style={styles.container}>
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor="#fff"
-        translucent={false}
-        animated={true}
-      />
-
       <View style={styles.profileContainer} testID="PhotoContainer">
         <TouchableOpacity
           testID="editPhoto"

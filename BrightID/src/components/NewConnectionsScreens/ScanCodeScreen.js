@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // @flow
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Alert,
   Linking,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { SvgXml } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import BarcodeMask from 'react-native-barcode-mask';
@@ -60,28 +60,30 @@ export const ScanCodeScreen = (props) => {
   const name = useSelector((state) => state.user.name);
   const connectDataExists = useSelector((state) => !!state.connectUserData.id);
 
-  useEffect(() => {
-    dispatch(stopConnecting());
-    if (connectDataExists) {
-      unsubscribeToProfileUpload();
-      navigation.navigate('PreviewConnection');
-      return;
-    }
-    const handleDownloadFailure = () => {
-      setConnectionAttempts(connectionAttempts + 1);
-      if (connectionAttempts > 1) {
-        navigation.navigate('Home');
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(stopConnecting());
+      if (connectDataExists) {
+        unsubscribeToProfileUpload();
+        navigation.navigate('PreviewConnection');
+        return;
       }
-    };
+      const handleDownloadFailure = () => {
+        setConnectionAttempts(connectionAttempts + 1);
+        if (connectionAttempts > 1) {
+          navigation.navigate('Home');
+        }
+      };
 
-    emitter.on('connectFailure', handleDownloadFailure);
+      emitter.on('connectFailure', handleDownloadFailure);
 
-    return () => {
-      unsubscribeToProfileUpload();
+      return () => {
+        unsubscribeToProfileUpload();
 
-      emitter.off('connectFailure', handleDownloadFailure);
-    };
-  }, [connectionAttempts, connectDataExists]);
+        emitter.off('connectFailure', handleDownloadFailure);
+      };
+    }, [connectionAttempts, connectDataExists]),
+  );
 
   const subscribeToProfileUpload = (peerQrData) => {
     console.log(`Subscribing to profile Upload for uuid ${peerQrData.uuid}`);
@@ -132,18 +134,10 @@ export const ScanCodeScreen = (props) => {
 
   return (
     <>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor={ORANGE}
-        translucent={false}
-        animated={true}
-      />
       <View style={styles.orangeTop} />
       <Container style={styles.container}>
         <View style={styles.infoTopContainer}>
-          <Text style={styles.infoTopText}>
-            Hey {name}, share your code and
-          </Text>
+          <Text style={styles.infoTopText}>Hey {name}, scan a code and</Text>
           <Text style={styles.infoTopText}>make a new connection today</Text>
         </View>
         <View style={styles.cameraContainer} testID="CameraContainer">

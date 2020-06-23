@@ -5,8 +5,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-import { StatusBar, StyleSheet } from 'react-native';
-import { ORANGE } from '@/utils/constants';
+import { StyleSheet } from 'react-native';
 import { pollOperations } from './utils/operations';
 import AppRoutes from './routes';
 import { store, persistor } from './store';
@@ -50,12 +49,6 @@ export const App = () => {
             linking={linking}
             fallback={<Loading />}
           >
-            <StatusBar
-              barStyle="light-content"
-              backgroundColor={ORANGE}
-              translucent={false}
-              animated={true}
-            />
             <AppRoutes />
           </NavigationContainer>
         </SafeAreaProvider>

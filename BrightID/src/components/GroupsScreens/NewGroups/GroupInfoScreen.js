@@ -3,7 +3,6 @@ import {
   Alert,
   Image,
   KeyboardAvoidingView,
-  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -67,13 +66,11 @@ export class GroupInfoScreen extends React.Component<Props> {
     const { name, finalBase64, isPrimary } = this.state;
 
     return (
-      <Container testID="groupInfoScreen" style={styles.container} behavior="padding">
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#F52828"
-          translucent={false}
-          animated={true}
-        />
+      <Container
+        testID="groupInfoScreen"
+        style={styles.container}
+        behavior="padding"
+      >
         <View style={styles.groupNameContainer}>
           <View style={styles.addPhotoContainer}>
             {finalBase64.uri ? (

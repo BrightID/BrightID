@@ -18,7 +18,7 @@ import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { takePhoto, chooseImage } from '@/utils/images';
-import { DEVICE_SMALL, DEVICE_LARGE, DEVICE_OS } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_OS, ORANGE } from '@/utils/constants';
 import { handleBrightIdCreation } from './actions';
 
 type State = {
@@ -122,6 +122,13 @@ export class SignUp extends React.Component<Props, State> {
 
     return (
       <SafeAreaView style={styles.safeAreaContainer}>
+        {DEVICE_LARGE && (
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor={ORANGE}
+            animated={true}
+          />
+        )}
         <Container style={styles.container} behavior="padding">
           <View style={styles.addPhotoContainer}>
             {finalBase64.uri && !editingName ? (
@@ -223,14 +230,6 @@ export class SignUp extends React.Component<Props, State> {
             }}
           />
         </Container>
-        {DEVICE_SMALL && (
-          <StatusBar
-            barStyle="dark-content"
-            backgroundColor="#fff"
-            translucent={false}
-            animated={true}
-          />
-        )}
       </SafeAreaView>
     );
   }
