@@ -60,8 +60,9 @@ class SearchGroups extends React.Component<Props & LocalProps> {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginTop: 10,
-    width: '90%',
+    marginTop: 18,
+    marginBottom: 10,
+    width: '75%',
     borderColor: '#ccc',
     borderWidth: 1,
     justifyContent: 'space-between',

@@ -7,6 +7,7 @@ import api from '@/Api/BrightId';
 import emitter from '@/emitter';
 import { leaveGroup, dismissFromGroup } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
+import { ORANGE } from '@/utils/constants';
 import MemberCard from './MemberCard';
 
 export class MembersScreen extends Component<Props, State> {
@@ -100,10 +101,7 @@ export class MembersScreen extends Component<Props, State> {
     const { searchParam } = this.props;
     const searchString = searchParam.toLowerCase().replace(/\s/g, '');
     return this.getMembers().filter((item) =>
-      `${item.name}`
-        .toLowerCase()
-        .replace(/\s/g, '')
-        .includes(searchString),
+      `${item.name}`.toLowerCase().replace(/\s/g, '').includes(searchString),
     );
   };
 
@@ -137,45 +135,59 @@ export class MembersScreen extends Component<Props, State> {
     }
 
     return (
-      <SafeAreaView style={styles.container}>
-        <View testID="membersView" style={styles.mainContainer}>
-          <View>
-            <FlatList
-              style={styles.membersContainer}
-              data={this.filterMembers()}
-              keyExtractor={({ id }, index) => id + index}
-              renderItem={this.renderMember}
-              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}
-              ListEmptyComponent={
-                <EmptyList title="No known members, invite some..." />
-              }
-            />
+      <>
+        <View style={styles.orangeTop} />
+        <View style={styles.container}>
+          <View testID="membersView" style={styles.mainContainer}>
+            <View>
+              <FlatList
+                style={styles.membersContainer}
+                data={this.filterMembers()}
+                keyExtractor={({ id }, index) => id + index}
+                renderItem={this.renderMember}
+                contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                ListEmptyComponent={
+                  <EmptyList title="No known members, invite some..." />
+                }
+              />
+            </View>
           </View>
+          <ActionSheet
+            ref={(o) => {
+              this.actionSheet = o;
+            }}
+            title="What do you want to do?"
+            options={actions}
+            cancelButtonIndex={actions.indexOf('cancel')}
+            destructiveButtonIndex={actions.indexOf('Leave Group')}
+            onPress={(index) => this.performAction(index)}
+          />
         </View>
-        <ActionSheet
-          ref={(o) => {
-            this.actionSheet = o;
-          }}
-          title="What do you want to do?"
-          options={actions}
-          cancelButtonIndex={actions.indexOf('cancel')}
-          destructiveButtonIndex={actions.indexOf('Leave Group')}
-          onPress={(index) => this.performAction(index)}
-        />
-      </SafeAreaView>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+    zIndex: 1,
+  },
   membersContainer: {
     flex: 1,
   },
   container: {
     flex: 1,
     backgroundColor: '#fdfdfd',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    marginTop: -58,
+    zIndex: 10,
+    overflow: 'hidden',
   },
   mainContainer: {
     flex: 1,

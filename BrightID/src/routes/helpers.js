@@ -14,6 +14,11 @@ export const headerOptions = {
   headerTitleStyle,
   headerStyle: {
     backgroundColor: ORANGE,
+    shadowRadius: 0,
+    shadowOffset: {
+      height: 0,
+    },
+    elevation: 0,
   },
   headerTintColor: '#fff',
   headerTitleAlign: 'center',

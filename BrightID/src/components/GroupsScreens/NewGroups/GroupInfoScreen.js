@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
 import { chooseImage } from '@/utils/images';
-import { DEVICE_TYPE, DEVICE_OS } from '@/utils/constants';
+import { DEVICE_TYPE, DEVICE_OS, ORANGE } from '@/utils/constants';
 
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
@@ -66,90 +66,104 @@ export class GroupInfoScreen extends React.Component<Props> {
     const { name, finalBase64, isPrimary } = this.state;
 
     return (
-      <Container
-        testID="groupInfoScreen"
-        style={styles.container}
-        behavior="padding"
-      >
-        <View style={styles.groupNameContainer}>
-          <View style={styles.addPhotoContainer}>
-            {finalBase64.uri ? (
-              <TouchableOpacity
-                testID="editGroupPhoto"
-                onPress={this.getPhotoFromLibrary}
-                accessible={true}
-                accessibilityLabel="edit photo"
-              >
-                <Image style={styles.photo} source={finalBase64} />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                testID="editGroupPhoto"
-                onPress={this.getPhotoFromLibrary}
-                style={styles.addPhoto}
-                accessible={true}
-                accessibilityLabel="add photo"
-              >
-                <SimpleLineIcons size={26} name="camera" color="#979797" />
-              </TouchableOpacity>
-            )}
+      <>
+        <View style={styles.orangeTop} />
+        <Container
+          testID="groupInfoScreen"
+          style={styles.container}
+          behavior="padding"
+        >
+          <View style={styles.groupNameContainer}>
+            <View style={styles.addPhotoContainer}>
+              {finalBase64.uri ? (
+                <TouchableOpacity
+                  testID="editGroupPhoto"
+                  onPress={this.getPhotoFromLibrary}
+                  accessible={true}
+                  accessibilityLabel="edit photo"
+                >
+                  <Image style={styles.photo} source={finalBase64} />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  testID="editGroupPhoto"
+                  onPress={this.getPhotoFromLibrary}
+                  style={styles.addPhoto}
+                  accessible={true}
+                  accessibilityLabel="add photo"
+                >
+                  <SimpleLineIcons size={26} name="camera" color="#979797" />
+                </TouchableOpacity>
+              )}
+            </View>
+            <View style={styles.textInputContainer}>
+              <TextInput
+                testID="editGroupName"
+                onChangeText={(name) => this.setState({ name })}
+                value={name}
+                placeholder="What is the group name?"
+                placeholderTextColor="#9e9e9e"
+                style={styles.textInput}
+                autoCapitalize="words"
+                autoCorrect={false}
+                textContentType="name"
+                underlineColorAndroid="transparent"
+              />
+            </View>
           </View>
-          <View style={styles.textInputContainer}>
-            <TextInput
-              testID="editGroupName"
-              onChangeText={(name) => this.setState({ name })}
-              value={name}
-              placeholder="What is the group name?"
-              placeholderTextColor="#9e9e9e"
-              style={styles.textInput}
-              autoCapitalize="words"
-              autoCorrect={false}
-              textContentType="name"
-              underlineColorAndroid="transparent"
-            />
-          </View>
-        </View>
-        {!this.hasPrimaryGroup() && (
-          <View testID="primaryGroupView" style={styles.toggleContainer}>
-            <Text style={styles.primaryGroupText}>
-              A primary group represents the closest personal contacts (e.g.
-              immediate family members) for a particular person. Each person can
-              have only one primary group.
-            </Text>
+          {!this.hasPrimaryGroup() && (
+            <View testID="primaryGroupView" style={styles.toggleContainer}>
+              <Text style={styles.primaryGroupText}>
+                A primary group represents the closest personal contacts (e.g.
+                immediate family members) for a particular person. Each person
+                can have only one primary group.
+              </Text>
 
-            <ToggleSwitch
-              testID="primaryGroupToggle"
-              isOn={isPrimary}
-              onColor="#428BE5"
-              offColor="#979797"
-              label="Primary Group"
-              labelStyle={styles.primaryToggleLable}
-              size="large"
-              onToggle={(isPrimary) => this.setState({ isPrimary })}
-            />
+              <ToggleSwitch
+                testID="primaryGroupToggle"
+                isOn={isPrimary}
+                onColor="#428BE5"
+                offColor="#979797"
+                label="Primary Group"
+                labelStyle={styles.primaryToggleLable}
+                size="large"
+                onToggle={(isPrimary) => this.setState({ isPrimary })}
+              />
+            </View>
+          )}
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              testID="nextBtn"
+              style={styles.nextButton}
+              onPress={this.validateInputs}
+            >
+              <Text style={styles.buttonInnerText}>Next</Text>
+            </TouchableOpacity>
           </View>
-        )}
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            testID="nextBtn"
-            style={styles.nextButton}
-            onPress={this.validateInputs}
-          >
-            <Text style={styles.buttonInnerText}>Next</Text>
-          </TouchableOpacity>
-        </View>
-      </Container>
+        </Container>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    marginTop: -58,
+    zIndex: 10,
+    overflow: 'hidden',
   },
   groupNameContainer: {
     flexDirection: 'row',

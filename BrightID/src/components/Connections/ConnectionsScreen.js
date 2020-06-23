@@ -15,6 +15,7 @@ import fetchUserInfo from '@/actions/fetchUserInfo';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { deleteConnection } from '@/actions';
+import { ORANGE } from '@/utils/constants';
 import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
 import { createFakeConnection } from './models/createFakeConnection';
@@ -167,8 +168,9 @@ export class ConnectionsScreen extends React.Component<Props, State> {
       actions.splice(3, 1);
     }
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={{ flex: 1 }} testID="connectionsScreen">
+      <>
+        <View style={styles.orangeTop} />
+        <View style={styles.container} testID="connectionsScreen">
           <View style={styles.mainContainer}>
             <SearchConnections navigation={navigation} sortable={true} />
             <View style={styles.mainContainer}>
@@ -206,19 +208,30 @@ export class ConnectionsScreen extends React.Component<Props, State> {
           cancelButtonIndex={actions.length - 1}
           onPress={(index) => this.modifyConnection(index)}
         />
-      </SafeAreaView>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fdfdfd',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    marginTop: -58,
+    overflow: 'hidden',
+    zIndex: 10,
   },
   mainContainer: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
+    backgroundColor: 'transparent',
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
