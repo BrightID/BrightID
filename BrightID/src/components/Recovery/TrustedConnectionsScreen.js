@@ -10,7 +10,7 @@ import {
   FlatList,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { DEVICE_TYPE, ORANGE } from '@/utils/constants';
 import EmptyList from '@/components/Helpers/EmptyList';
 import SearchConnections from '../Connections/SearchConnections';
 import TrustedConnectionCard from './TrustedConnectionCard';
@@ -73,52 +73,67 @@ class TrustedConnectionsScreen extends React.Component<Props> {
     const connections = this.filterConnections();
 
     return (
-      <View style={styles.container}>
-        <View style={styles.mainContainer}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.infoText}>
-              Choose three or more trusted connections to back up your BrightID.
-            </Text>
-            {DEVICE_TYPE === 'large' && (
-              <Text style={styles.infoText}>
-                If your BrightID is lost or stolen, you can reconnect with two
-                trusted connections to recover it.
-              </Text>
-            )}
-          </View>
-          {DEVICE_TYPE === 'large' && (
-            <SearchConnections navigation={navigation} />
-          )}
+      <>
+        <View style={styles.orangeTop} />
+        <View style={styles.container}>
           <View style={styles.mainContainer}>
-            <FlatList
-              style={styles.connectionsContainer}
-              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-              data={connections}
-              keyExtractor={({ id }, index) => id + index}
-              renderItem={this.renderConnection}
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}
-              ListEmptyComponent={<EmptyList title="No connections..." />}
-            />
+            <View style={styles.titleContainer}>
+              <Text style={styles.infoText}>
+                Choose three or more trusted connections to back up your
+                BrightID.
+              </Text>
+              {DEVICE_TYPE === 'large' && (
+                <Text style={styles.infoText}>
+                  If your BrightID is lost or stolen, you can reconnect with two
+                  trusted connections to recover it.
+                </Text>
+              )}
+            </View>
+            {DEVICE_TYPE === 'large' && (
+              <SearchConnections navigation={navigation} />
+            )}
+            <View style={styles.mainContainer}>
+              <FlatList
+                style={styles.connectionsContainer}
+                contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+                data={connections}
+                keyExtractor={({ id }, index) => id + index}
+                renderItem={this.renderConnection}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                ListEmptyComponent={<EmptyList title="No connections..." />}
+              />
+            </View>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              onPress={this.navigateToBackup}
+              style={styles.nextButton}
+            >
+              <Text style={styles.buttonInnerText}>Next</Text>
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            onPress={this.navigateToBackup}
-            style={styles.nextButton}
-          >
-            <Text style={styles.buttonInnerText}>Next</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fdfdfd',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    marginTop: -58,
+    zIndex: 10,
+    overflow: 'hidden',
   },
   mainContainer: {
     marginTop: 8,

@@ -121,14 +121,8 @@ export class SignUp extends React.Component<Props, State> {
     const { name, finalBase64, creatingBrightId, editingName } = this.state;
 
     return (
-      <SafeAreaView style={styles.safeAreaContainer}>
-        {DEVICE_LARGE && (
-          <StatusBar
-            barStyle="light-content"
-            backgroundColor={ORANGE}
-            animated={true}
-          />
-        )}
+      <>
+        <View style={styles.orangeTop} />
         <Container style={styles.container} behavior="padding">
           <View style={styles.addPhotoContainer}>
             {finalBase64.uri && !editingName ? (
@@ -230,15 +224,17 @@ export class SignUp extends React.Component<Props, State> {
             }}
           />
         </Container>
-      </SafeAreaView>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  safeAreaContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+    zIndex: 1,
   },
   container: {
     flex: 1,
@@ -246,6 +242,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    marginTop: -58,
+    zIndex: 10,
+    overflow: 'hidden',
   },
   addPhotoContainer: {
     alignItems: 'center',

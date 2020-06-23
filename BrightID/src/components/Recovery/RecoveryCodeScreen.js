@@ -15,7 +15,7 @@ import { parseString } from 'xml2js';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
 import backupApi from '../../Api/BackupApi';
 import { setupRecovery, recoveryQrStr, handleSigs } from './helpers';
 
@@ -138,22 +138,31 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
   render() {
     const { qrsvg } = this.state;
     return (
-      <View style={styles.container}>
-        <View style={styles.topHalf}>
-          <Text style={styles.recoveryCodeInfoText}>
-            Ask your trusted connections to scan this code.
-          </Text>
+      <>
+        <View style={styles.orangeTop} />
+        <View style={styles.container}>
+          <View style={styles.topHalf}>
+            <Text style={styles.recoveryCodeInfoText}>
+              Ask your trusted connections to scan this code.
+            </Text>
+          </View>
+          <View style={styles.bottomHalf}>
+            {qrsvg ? this.renderQrCode() : this.renderSpinner()}
+            {qrsvg ? this.renderCopyQr() : <View />}
+          </View>
         </View>
-        <View style={styles.bottomHalf}>
-          {qrsvg ? this.renderQrCode() : this.renderSpinner()}
-          {qrsvg ? this.renderCopyQr() : <View />}
-        </View>
-      </View>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
     width: '100%',
@@ -162,6 +171,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'column',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    marginTop: -58,
+    zIndex: 10,
+    overflow: 'hidden',
   },
   topHalf: {
     height: '33%',
