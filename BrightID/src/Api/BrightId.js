@@ -23,6 +23,7 @@ class BrightId {
     this.baseUrlInternal = seedUrl;
     this.api = create({
       baseURL: this.apiUrl,
+      headers: { 'Cache-Control': 'no-cache' }
     });
   }
 
