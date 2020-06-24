@@ -28,9 +28,9 @@ export class MembersScreen extends Component<Props, State> {
     if (action === 'Leave Group') {
       this.confirmLeaveGroup();
     } else if (action === 'Invite') {
-      const { navigation, route } = this.props;
+      const { navigation, group } = this.props;
       navigation.navigate('InviteList', {
-        group: route.params?.group,
+        group,
       });
     }
   };
@@ -44,8 +44,7 @@ export class MembersScreen extends Component<Props, State> {
       {
         text: 'OK',
         onPress: async () => {
-          const { route, dispatch } = this.props;
-          const group = route.params?.group;
+          const { dispatch, group } = this.props;
           try {
             await api.dismiss(user.id, group?.id);
             await dispatch(dismissFromGroup(user.id, group));
@@ -74,8 +73,7 @@ export class MembersScreen extends Component<Props, State> {
       {
         text: 'OK',
         onPress: async () => {
-          const { route, navigation, dispatch } = this.props;
-          const group = route.params?.group;
+          const { group, navigation, dispatch } = this.props;
           try {
             await api.leaveGroup(group?.id);
             await dispatch(leaveGroup(group));
@@ -100,35 +98,31 @@ export class MembersScreen extends Component<Props, State> {
     const { searchParam } = this.props;
     const searchString = searchParam.toLowerCase().replace(/\s/g, '');
     return this.getMembers().filter((item) =>
-      `${item.name}`
-        .toLowerCase()
-        .replace(/\s/g, '')
-        .includes(searchString),
+      `${item.name}`.toLowerCase().replace(/\s/g, '').includes(searchString),
     );
   };
 
   renderMember = ({ item }) => {
-    const group = this.props.route.params?.group;
+    const { group } = this.props;
     const isAdmin = group?.admins?.includes(this.props.id);
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <MemberCard {...item} isAdmin={isAdmin} menuHandler={this.confirmDismiss} />;
   };
 
   getMembers = () => {
-    const { route, connections, name, id, photo, score } = this.props;
+    const { connections, name, id, photo, score, group } = this.props;
     // return a list of connections filtered by the members of this group
     return [{ id, name, photo, score }].concat(
       innerJoin(
         (connection, member) => connection.id === member,
         connections,
-        route.params?.group?.members,
+        group?.members,
       ),
     );
   };
 
   render() {
-    const { id } = this.props;
-    const group = this.props.route.params?.group;
+    const { id, group } = this.props;
     let actions = ['Leave Group', 'cancel'];
     if (group?.admins?.includes(id)) {
       actions = ['Invite'].concat(actions);
@@ -251,7 +245,19 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ connections, user }) => ({
-  ...connections,
-  ...user,
-}))(MembersScreen);
+function mapStateToProps(state, ownProps) {
+  // Refetch group from state, as the group object passed via route params may be out of date.
+  const groupId = ownProps.route.params.group.id;
+  const group = state.groups.groups.find((entry) => entry.id === groupId);
+  if (!group) {
+    console.log(`Did not find group for groupID ${groupId}`);
+  }
+
+  return {
+    ...state.connections,
+    ...state.user,
+    group,
+  };
+}
+
+export default connect(mapStateToProps)(MembersScreen);
