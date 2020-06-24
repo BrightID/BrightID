@@ -1,10 +1,6 @@
 // @flow
 
 import AsyncStorage from '@react-native-community/async-storage';
-import {
-  setGenericPassword,
-  setInternetCredentials,
-} from 'react-native-keychain';
 import { store } from '@/store';
 import {
   setApps,
@@ -14,6 +10,7 @@ import {
   setInvites,
 } from '@/actions';
 import { objToUint8, uInt8ArrayToB64 } from '@/utils/encoding';
+import { saveSecretKey } from '@/utils/keychain';
 import { compose } from 'ramda';
 
 const keyToString = compose(uInt8ArrayToB64, objToUint8);
@@ -25,16 +22,7 @@ export const bootstrap = async (version: string) => {
   if (dataStr !== null) {
     const dataObj = JSON.parse(dataStr);
     // save secretKey in keychain
-    await setGenericPassword(
-      dataObj.id ?? 'empty',
-      keyToString(dataObj.secretKey),
-    );
-    // secondary backup
-    await setInternetCredentials(
-      'secretKey',
-      dataObj.id ?? 'empty',
-      keyToString(dataObj.secretKey),
-    );
+    await saveSecretKey(dataObj.id ?? 'empty', keyToString(dataObj.secretKey));
     dataObj.searchParam = '';
 
     const {

@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     marginTop: -58,
     zIndex: 10,
     overflow: 'hidden',
+    paddingTop: 32,
   },
 });
 

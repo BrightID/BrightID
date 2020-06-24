@@ -122,6 +122,11 @@ export class SignUp extends React.Component<Props, State> {
 
     return (
       <>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor={ORANGE}
+          animated={true}
+        />
         <View style={styles.orangeTop} />
         <Container style={styles.container} behavior="padding">
           <View style={styles.addPhotoContainer}>

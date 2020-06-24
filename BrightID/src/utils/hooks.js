@@ -27,11 +27,11 @@ export function useInterval(callback, delay) {
 export function useStatusBarHome() {
   useFocusEffect(
     useCallback(() => {
-      StatusBar.setBackgroundColor('#fff', 'fade');
-      StatusBar.setBarStyle('dark-content', 'fade');
+      StatusBar.setBackgroundColor('#fff', true);
+      StatusBar.setBarStyle('dark-content', true);
       return () => {
-        StatusBar.setBackgroundColor(ORANGE, 'fade');
-        StatusBar.setBarStyle('light-content', 'fade');
+        StatusBar.setBackgroundColor(ORANGE, true);
+        StatusBar.setBarStyle('light-content', true);
       };
     }, []),
   );

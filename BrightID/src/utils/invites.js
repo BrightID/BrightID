@@ -2,7 +2,7 @@
 
 import CryptoJS from 'crypto-js';
 import { eqProps } from 'ramda';
-import { getGenericPassword } from 'react-native-keychain';
+import { obtainKeys } from '@/utils/keychain';
 import store from '@/store';
 import { uInt8ArrayToB64, b64ToUint8Array, randomKey } from '@/utils/encoding';
 import nacl from 'tweetnacl';
@@ -17,8 +17,7 @@ export const getInviteInfo = async (invite: invite) => {
       return {};
     }
 
-    let { password } = await getGenericPassword();
-    let secretKey = b64ToUint8Array(password);
+    let { secretKey } = await obtainKeys();
 
     const {
       connections: { connections },
