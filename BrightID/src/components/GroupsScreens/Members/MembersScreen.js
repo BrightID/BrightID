@@ -81,7 +81,10 @@ export class MembersScreen extends Component<Props, State> {
             await api.addAdmin(user.id, group.id);
             await dispatch(addAdmin(user.id, group));
           } catch (err) {
-            Alert.alert('Error dismissing member from the group', err.message);
+            Alert.alert(
+              `Error making ${user.name} admin for group`,
+              err.message,
+            );
           }
         },
       },
