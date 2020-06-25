@@ -40,6 +40,10 @@ declare type ConnectionsState = {
   connectionsSort: string,
 };
 
+declare type Photo = {
+  filename: string,
+};
+
 declare type connection = {
   id: string,
   name: string,
@@ -47,9 +51,7 @@ declare type connection = {
   secretKey?: Uint8Array,
   aesKey: string,
   connectionDate: number,
-  photo: {
-    filename: string,
-  },
+  photo: Photo,
   status: string,
   signingKey: string,
   createdAt: number,
@@ -151,9 +153,7 @@ declare type RecoveryData = {
 declare type UserState = {
   score: number,
   name: string,
-  photo: {
-    filename: string,
-  },
+  photo: Photo,
   searchParam: string,
   notifications: NotificationInfo[],
   backupCompleted: boolean,
