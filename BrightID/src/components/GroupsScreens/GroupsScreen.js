@@ -6,7 +6,6 @@ import {
   FlatList,
   View,
   TouchableOpacity,
-  SafeAreaView,
   RefreshControl,
   Text,
 } from 'react-native';
@@ -17,7 +16,6 @@ import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import { ORANGE } from '@/utils/constants';
 import GroupCard from './GroupCard';
 import { NoGroups } from './NoGroups';
-import SearchGroups from './SearchGroups';
 import { compareJoinedDesc } from './models/sortingUtility';
 
 /**
@@ -76,7 +74,6 @@ export class GroupsScreen extends React.Component<Props, State> {
         <View style={styles.orangeTop} />
         <View style={styles.container} testID="groupsScreen">
           <View style={styles.mainContainer}>
-            {hasGroups && <SearchGroups navigation={navigation} />}
             <View style={styles.mainContainer}>
               <FlatList
                 style={styles.groupsContainer}

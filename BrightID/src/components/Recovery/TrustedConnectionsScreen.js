@@ -73,48 +73,38 @@ class TrustedConnectionsScreen extends React.Component<Props> {
     const connections = this.filterConnections();
 
     return (
-      <>
-        <View style={styles.orangeTop} />
-        <View style={styles.container}>
-          <View style={styles.mainContainer}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.infoText}>
-                Choose three or more trusted connections to back up your
-                BrightID.
-              </Text>
-              {DEVICE_TYPE === 'large' && (
-                <Text style={styles.infoText}>
-                  If your BrightID is lost or stolen, you can reconnect with two
-                  trusted connections to recover it.
-                </Text>
-              )}
-            </View>
-            {DEVICE_TYPE === 'large' && (
-              <SearchConnections navigation={navigation} />
-            )}
-            <View style={styles.mainContainer}>
-              <FlatList
-                style={styles.connectionsContainer}
-                contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-                data={connections}
-                keyExtractor={({ id }, index) => id + index}
-                renderItem={this.renderConnection}
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                ListEmptyComponent={<EmptyList title="No connections..." />}
-              />
-            </View>
+      <View style={styles.container}>
+        <View style={styles.mainContainer}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.infoText}>
+              Choose three or more trusted connections to back up your BrightID.
+            </Text>
           </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              onPress={this.navigateToBackup}
-              style={styles.nextButton}
-            >
-              <Text style={styles.buttonInnerText}>Next</Text>
-            </TouchableOpacity>
+          {DEVICE_TYPE === 'large' && (
+            <SearchConnections navigation={navigation} />
+          )}
+          <View style={styles.mainContainer}>
+            <FlatList
+              style={styles.connectionsContainer}
+              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+              data={connections}
+              keyExtractor={({ id }, index) => id + index}
+              renderItem={this.renderConnection}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+              ListEmptyComponent={<EmptyList title="No connections..." />}
+            />
           </View>
         </View>
-      </>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={this.navigateToBackup}
+            style={styles.nextButton}
+          >
+            <Text style={styles.buttonInnerText}>Next</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     );
   }
 }
@@ -128,12 +118,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
-    borderTopLeftRadius: 58,
-    borderTopRightRadius: 58,
-    marginTop: -58,
-    zIndex: 10,
-    overflow: 'hidden',
+    backgroundColor: '#fff',
   },
   mainContainer: {
     marginTop: 8,
@@ -157,9 +142,6 @@ const styles = StyleSheet.create({
     marginTop: DEVICE_TYPE === 'large' ? 6 : 0,
     backgroundColor: '#fff',
     width: '96.7%',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#e3e1e1',
-    marginBottom: 11,
   },
   infoText: {
     fontFamily: 'ApexNew-Book',

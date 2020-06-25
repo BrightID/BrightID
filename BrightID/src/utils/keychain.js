@@ -31,7 +31,7 @@ export const obtainKeys = async () => {
       alert(
         'Unable to access secret key, please reinstall app and recover BrightID',
       );
-      return;
+      return { username: 'empty', secretKey: [] };
     }
 
     await saveSecretKey(id, keyToString(secretKey));

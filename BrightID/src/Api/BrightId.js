@@ -118,9 +118,6 @@ class BrightId {
   ) {
     let { username, secretKey } = await obtainKeys();
 
-    console.log('username', username);
-    console.log('secretKey', secretKey);
-
     let name = 'Add Group';
     let timestamp = Date.now();
     let message =

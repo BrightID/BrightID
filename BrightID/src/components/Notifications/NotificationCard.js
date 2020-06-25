@@ -19,15 +19,13 @@ class NotificationCard extends React.Component<Props> {
 
     return (
       <TouchableOpacity
+        style={styles.container}
         onPress={() => {
           navigation.navigate('TrustedConnections');
         }}
       >
-        <View style={{ ...styles.container }}>
-          <Ionicon size={32} style={styles.itemIcon} name={icon} color="#ccc" />
-
-          <Text style={styles.msg}>{msg}</Text>
-        </View>
+        <Ionicon size={32} style={styles.itemIcon} name={icon} color="#ccc" />
+        <Text style={styles.msg}>{msg}</Text>
       </TouchableOpacity>
     );
   }
@@ -40,12 +38,12 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 10,
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
     borderBottomColor: '#e3e0e4',
     borderBottomWidth: 1,
     height: DEVICE_TYPE === 'large' ? 94 : 80,
-    marginBottom: DEVICE_TYPE === 'large' ? 11.8 : 6,
+    marginBottom: DEVICE_TYPE === 'large' ? 7 : 3,
   },
   msg: {
     fontFamily: 'ApexNew-Book',
@@ -55,7 +53,7 @@ const styles = StyleSheet.create({
     marginRight: 18,
   },
   itemIcon: {
-    // marginRight: 16,
+    marginLeft: 16,
   },
 });
 

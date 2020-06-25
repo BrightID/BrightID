@@ -1,13 +1,14 @@
 // @flow
 
 import * as React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { getGroupName } from '@/utils/groups';
 import { DEVICE_TYPE, DEVICE_IOS } from '@/utils/constants';
 import emitter from '@/emitter';
 import GroupsScreen from '@/components/GroupsScreens/GroupsScreen';
+import SearchGroups from '@/components/GroupsScreens/SearchGroups';
 import NewGroupScreen from '@/components/GroupsScreens/NewGroups/NewGroupScreen';
 import GroupInfoScreen from '@/components/GroupsScreens/NewGroups/GroupInfoScreen';
 import MembersScreen from '@/components/GroupsScreens/Members/MembersScreen';
@@ -34,6 +35,17 @@ const topOptions = {
     >
       <SvgXml height="20" xml={backArrow} />
     </TouchableOpacity>
+  ),
+  headerTitle: () => (
+    <View
+      style={{
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+      }}
+    >
+      <SearchGroups />
+    </View>
   ),
 };
 

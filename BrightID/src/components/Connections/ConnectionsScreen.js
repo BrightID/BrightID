@@ -5,7 +5,6 @@ import {
   StyleSheet,
   View,
   Alert,
-  SafeAreaView,
   FlatList,
   RefreshControl,
 } from 'react-native';
@@ -16,7 +15,6 @@ import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { deleteConnection } from '@/actions';
 import { ORANGE } from '@/utils/constants';
-import SearchConnections from './SearchConnections';
 import ConnectionCard from './ConnectionCard';
 import { createFakeConnection } from './models/createFakeConnection';
 import { defaultSort } from './models/sortingUtility';
@@ -170,9 +168,9 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     return (
       <>
         <View style={styles.orangeTop} />
+
         <View style={styles.container} testID="connectionsScreen">
           <View style={styles.mainContainer}>
-            <SearchConnections navigation={navigation} sortable={true} />
             <View style={styles.mainContainer}>
               <FlatList
                 style={styles.connectionsContainer}

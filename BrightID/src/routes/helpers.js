@@ -1,13 +1,13 @@
 import React from 'react';
 import { View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import { ORANGE, DEVICE_IOS } from '@/utils/constants';
+import { ORANGE, DEVICE_IOS, DEVICE_LARGE } from '@/utils/constants';
 import backArrow from '@/static/back_arrow.svg';
 
 const headerTitleStyle = {
   fontFamily: 'Poppins',
   fontWeight: '500',
-  fontSize: 20,
+  fontSize: DEVICE_LARGE ? 20 : 17,
 };
 
 export const headerOptions = {

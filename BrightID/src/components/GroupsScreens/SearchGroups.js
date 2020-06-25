@@ -5,19 +5,15 @@ import { TextInput, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import Octicons from 'react-native-vector-icons/Octicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/constants';
 import { setGroupSearch } from '../../actions/groups';
-
 /**
  * Search Bar in the Groups Screen
  *
  * TODO: Create a shared search component to use in both Connections and Group view
  */
 
-type LocalProps = {
-  navigation: Navigation,
-};
-
-class SearchGroups extends React.Component<Props & LocalProps> {
+class SearchGroups extends React.Component<Props> {
   componentWillUnmount() {
     // reset search Param
     const { dispatch } = this.props;
@@ -29,13 +25,16 @@ class SearchGroups extends React.Component<Props & LocalProps> {
     return (
       <View testID="searchView" style={styles.container}>
         <TouchableOpacity style={styles.searchIcon}>
-          <Octicons size={26} name="search" color="#333" />
+          <Octicons size={20} name="search" color="#333" />
         </TouchableOpacity>
         <TextInput
           testID="searchParam"
           onChangeText={(value) => this.props.dispatch(setGroupSearch(value))}
-          style={styles.searchField}
-          placeholder="Search by group or member name"
+          style={[
+            styles.searchField,
+            DEVICE_IOS && { height: DEVICE_LARGE ? 33 : 26 },
+          ]}
+          placeholder="Search Groups"
           autoCapitalize="words"
           autoCorrect={false}
           textContentType="name"
@@ -50,7 +49,7 @@ class SearchGroups extends React.Component<Props & LocalProps> {
           }}
           style={styles.eraserIcon}
         >
-          <MaterialCommunityIcons size={30} name="eraser" color="#333" />
+          <MaterialCommunityIcons size={22} name="eraser" color="#333" />
         </TouchableOpacity>
       </View>
     );
@@ -60,9 +59,7 @@ class SearchGroups extends React.Component<Props & LocalProps> {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginTop: 18,
-    marginBottom: 10,
-    width: '75%',
+    width: DEVICE_LARGE ? 260 : 210,
     borderColor: '#ccc',
     borderWidth: 1,
     justifyContent: 'space-between',
@@ -71,17 +68,17 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     marginLeft: 10,
-    marginRight: 12,
-    marginTop: 5,
+    marginRight: 0,
+    marginTop: 3,
   },
   eraserIcon: {
     marginLeft: 10,
     marginRight: 8.8,
-    marginTop: 5,
+    marginTop: 3,
   },
   searchField: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 16,
+    fontSize: DEVICE_LARGE ? 15 : 13,
     color: '#333',
     marginLeft: 23,
     flex: 1,
@@ -89,6 +86,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     letterSpacing: 0,
     padding: 0,
+    alignItems: 'center',
   },
 });
 
