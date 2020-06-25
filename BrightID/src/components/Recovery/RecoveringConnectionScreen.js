@@ -107,8 +107,6 @@ const styles = StyleSheet.create({
     marginTop: 6,
     backgroundColor: '#fff',
     width: '96.7%',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#e3e1e1',
     marginBottom: 11,
   },
   titleText: {

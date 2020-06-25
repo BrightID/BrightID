@@ -6,8 +6,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeScreen from '@/components/HomeScreen';
 import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnectionScreen';
-
 import { navigate } from '@/NavigationService';
+import { headerOptions } from './helpers';
 
 const Stack = createStackNavigator();
 
@@ -57,6 +57,7 @@ const homeScreenOptions = (notificationCount) => ({
 });
 
 const recoveringConnectionOptions = {
+  ...headerOptions,
   title: 'Account Recovery',
 };
 
