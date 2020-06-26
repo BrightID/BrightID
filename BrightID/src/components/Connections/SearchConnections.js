@@ -5,6 +5,8 @@ import { TextInput, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
+import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
+import { navigate } from '@/NavigationService';
 import { setSearchParam } from '../../actions';
 
 /**
@@ -29,27 +31,29 @@ class SearchConnections extends React.Component<Props & LocalProps> {
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.searchIcon}>
-          <Octicons size={26} name="search" color="#333" />
+          <Octicons size={20} name="search" color="#333" />
         </TouchableOpacity>
         <TextInput
           onChangeText={(value) => this.props.dispatch(setSearchParam(value))}
-          style={styles.searchField}
+          style={[
+            styles.searchField,
+            DEVICE_IOS && { height: DEVICE_LARGE ? 33 : 26 },
+          ]}
           placeholder="Search Connections"
           autoCapitalize="words"
           autoCorrect={false}
-          textContentType="name"
+          textContentType="none"
           underlineColorAndroid="transparent"
           placeholderTextColor="#aaa"
         />
         {sortable && (
           <TouchableOpacity
             onPress={() => {
-              const { navigation } = this.props;
-              navigation.navigate('SortingConnections');
+              navigate('SortingConnections');
             }}
             style={styles.optionsIcon}
           >
-            <Ionicon size={30} name="ios-options" color="#333" />
+            <Ionicon size={22} name="ios-options" color="#333" />
           </TouchableOpacity>
         )}
       </View>
@@ -60,8 +64,7 @@ class SearchConnections extends React.Component<Props & LocalProps> {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginTop: 10,
-    width: '90%',
+    width: DEVICE_LARGE ? 250 : 200,
     borderColor: '#ccc',
     borderWidth: 1,
     justifyContent: 'space-between',
@@ -70,17 +73,17 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     marginLeft: 10,
-    marginRight: 12,
-    marginTop: 5,
+    marginRight: 0,
+    marginTop: 3,
   },
   optionsIcon: {
     marginLeft: 10,
     marginRight: 8.8,
-    marginTop: 5,
+    marginTop: 3,
   },
   searchField: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 16,
+    fontSize: DEVICE_LARGE ? 15 : 13,
     color: '#333',
     marginLeft: 23,
     flex: 1,
@@ -88,6 +91,8 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     letterSpacing: 0,
     padding: 0,
+    alignItems: 'center',
+    // justifyContent: 'center',
   },
 });
 

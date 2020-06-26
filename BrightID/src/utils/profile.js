@@ -18,7 +18,7 @@ export const postProfile = async (data: string, QrCodeData) => {
 
   const url = `http://${ipAddress}/profile/upload`;
   const body = JSON.stringify({ data, uuid });
-  console.log(`Posting profile to ${url}, uuid ${uuid}`);
+  console.log(`POSTING PROFILE profile to ${uuid}`);
   await postData(url, body);
 };
 

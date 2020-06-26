@@ -3,6 +3,7 @@
 import {
   createBrightID,
   createFakeConnection,
+  expectConnectionsScreen,
   expectHomescreen,
 } from './testUtils';
 
@@ -17,7 +18,7 @@ describe('Connections', () => {
 
   describe('Adding connection', () => {
     it('should reject new connection with "reject" button', async () => {
-      await element(by.id('tabBarConnectionsBtn')).tap();
+      await element(by.id('connectionsBtn')).tap();
       await createFakeConnection();
       await element(by.id('rejectConnectionBtn')).tap();
       await expectHomescreen();
@@ -26,20 +27,24 @@ describe('Connections', () => {
     it('should reject new connection with back button', async () => {
       if (!hasBackButton) return;
 
-      await element(by.id('tabBarConnectionsBtn')).tap();
+      await element(by.id('connectionsBtn')).tap();
       await createFakeConnection();
+      await device.pressBack();
+      // Android Back button is based on navigation stack, so it goes back to previous screen instead of
+      // homescreen like the "Reject" button
+      await expectConnectionsScreen();
+      // go back another level to reach home screen
       await device.pressBack();
       await expectHomescreen();
     });
 
     it('should accept new connection', async () => {
-      await element(by.id('tabBarConnectionsBtn')).tap();
+      await element(by.id('connectionsBtn')).tap();
       await createFakeConnection();
       await element(by.id('confirmConnectionBtn')).tap();
       await expect(element(by.id('successScreen'))).toBeVisible();
       await element(by.id('successDoneBtn')).tap();
-      await expectHomescreen();
-      await expect(element(by.id('ConnectionsCount'))).toHaveText('1');
+      await expectConnectionsScreen();
     });
   });
 });

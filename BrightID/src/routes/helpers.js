@@ -1,73 +1,35 @@
-import * as React from 'react';
-import { Text, View } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import LinearGradient from 'react-native-linear-gradient';
-
-export const Icon = (active, passive) => ({ focused, color, size }) => (
-  <MaterialCommunityIcons
-    name={focused ? active : passive}
-    size={size}
-    color={color}
-  />
-);
-
-export const IconWithBadge = (active, passive, badgeCount) => ({
-  focused,
-  color,
-  size,
-}) => {
-  return (
-    <View style={{ width: 24, height: 24, margin: 5 }}>
-      <MaterialCommunityIcons
-        name={focused ? active : passive}
-        size={size}
-        color={color}
-      />
-      {badgeCount > 0 && (
-        <View style={badgeStyle}>
-          <Text style={badgeText}>{badgeCount}</Text>
-        </View>
-      )}
-    </View>
-  );
-};
-
-const badgeStyle = {
-  // On React Native < 0.57 overflow outside of parent will not work on Android, see https://git.io/fhLJ8
-  position: 'absolute',
-  right: -2,
-  top: -1,
-  backgroundColor: 'red',
-  borderRadius: 7,
-  width: 12,
-  height: 12,
-  justifyContent: 'center',
-  alignItems: 'center',
-};
-
-const badgeText = {
-  color: 'white',
-  fontSize: 10,
-  fontWeight: 'bold',
-};
+import React from 'react';
+import { View } from 'react-native';
+import { SvgXml } from 'react-native-svg';
+import { ORANGE, DEVICE_IOS, DEVICE_LARGE } from '@/utils/constants';
+import backArrow from '@/static/back_arrow.svg';
 
 const headerTitleStyle = {
-  fontFamily: 'EurostileRegular',
-  fontWeight: '200',
-  fontSize: 24,
+  fontFamily: 'Poppins',
+  fontWeight: '500',
+  fontSize: DEVICE_LARGE ? 20 : 17,
 };
 
-const headerBackground = () => (
-  <LinearGradient
-    colors={['#F52828', '#F76B1C']}
-    style={{ flex: 1, width: '100%' }}
-  />
-);
-
-export const headerOptions = () => ({
+export const headerOptions = {
   headerTitleStyle,
-  headerBackground,
+  headerStyle: {
+    backgroundColor: ORANGE,
+    shadowRadius: 0,
+    shadowOffset: {
+      height: 0,
+    },
+    elevation: 0,
+  },
   headerTintColor: '#fff',
   headerTitleAlign: 'center',
   headerBackTitleVisible: false,
-});
+  headerBackImage: () => (
+    <SvgXml
+      height="20"
+      xml={backArrow}
+      style={{
+        marginLeft: DEVICE_IOS ? 20 : 10,
+      }}
+    />
+  ),
+};

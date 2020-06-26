@@ -7,6 +7,7 @@ import api from '@/Api/BrightId';
 import emitter from '@/emitter';
 import { leaveGroup, dismissFromGroup } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
+import { ORANGE } from '@/utils/constants';
 import MemberCard from './MemberCard';
 
 export class MembersScreen extends Component<Props, State> {
@@ -28,9 +29,9 @@ export class MembersScreen extends Component<Props, State> {
     if (action === 'Leave Group') {
       this.confirmLeaveGroup();
     } else if (action === 'Invite') {
-      const { navigation, route } = this.props;
+      const { navigation, group } = this.props;
       navigation.navigate('InviteList', {
-        group: route.params?.group,
+        group,
       });
     }
   };
@@ -44,8 +45,7 @@ export class MembersScreen extends Component<Props, State> {
       {
         text: 'OK',
         onPress: async () => {
-          const { route, dispatch } = this.props;
-          const group = route.params?.group;
+          const { dispatch, group } = this.props;
           try {
             await api.dismiss(user.id, group?.id);
             await dispatch(dismissFromGroup(user.id, group));
@@ -74,8 +74,7 @@ export class MembersScreen extends Component<Props, State> {
       {
         text: 'OK',
         onPress: async () => {
-          const { route, navigation, dispatch } = this.props;
-          const group = route.params?.group;
+          const { group, navigation, dispatch } = this.props;
           try {
             await api.leaveGroup(group?.id);
             await dispatch(leaveGroup(group));
@@ -100,82 +99,98 @@ export class MembersScreen extends Component<Props, State> {
     const { searchParam } = this.props;
     const searchString = searchParam.toLowerCase().replace(/\s/g, '');
     return this.getMembers().filter((item) =>
-      `${item.name}`
-        .toLowerCase()
-        .replace(/\s/g, '')
-        .includes(searchString),
+      `${item.name}`.toLowerCase().replace(/\s/g, '').includes(searchString),
     );
   };
 
   renderMember = ({ item }) => {
-    const group = this.props.route.params?.group;
+    const { group } = this.props;
     const isAdmin = group?.admins?.includes(this.props.id);
-    const isItemAdmin = group?.admins?.includes(item.id);
-    const handler = isAdmin && !isItemAdmin ? this.confirmDismiss : null;
     // eslint-disable-next-line react/jsx-props-no-spreading
-    return <MemberCard {...item} isAdmin={isAdmin} menuHandler={handler} />;
+    return (
+      <MemberCard
+        {...item}
+        isAdmin={isAdmin}
+        menuHandler={this.confirmDismiss}
+      />
+    );
   };
 
   getMembers = () => {
-    const { route, connections, name, id, photo, score } = this.props;
+    const { connections, name, id, photo, score, group } = this.props;
     // return a list of connections filtered by the members of this group
+    if (!group) return [];
+
     return [{ id, name, photo, score }].concat(
       innerJoin(
         (connection, member) => connection.id === member,
         connections,
-        route.params?.group?.members,
+        group.members,
       ),
     );
   };
 
   render() {
-    const { id } = this.props;
-    const group = this.props.route.params?.group;
+    const { id, group } = this.props;
     let actions = ['Leave Group', 'cancel'];
     if (group?.admins?.includes(id)) {
       actions = ['Invite'].concat(actions);
     }
 
     return (
-      <SafeAreaView style={styles.container}>
-        <View testID="membersView" style={styles.mainContainer}>
-          <View>
-            <FlatList
-              style={styles.membersContainer}
-              data={this.filterMembers()}
-              keyExtractor={({ id }, index) => id + index}
-              renderItem={this.renderMember}
-              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}
-              ListEmptyComponent={
-                <EmptyList title="No known members, invite some..." />
-              }
-            />
+      <>
+        <View style={styles.orangeTop} />
+        <View style={styles.container}>
+          <View testID="membersView" style={styles.mainContainer}>
+            <View>
+              <FlatList
+                style={styles.membersContainer}
+                data={this.filterMembers()}
+                keyExtractor={({ id }, index) => id + index}
+                renderItem={this.renderMember}
+                contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                ListEmptyComponent={
+                  <EmptyList title="No known members, invite some..." />
+                }
+              />
+            </View>
           </View>
+          <ActionSheet
+            ref={(o) => {
+              this.actionSheet = o;
+            }}
+            title="What do you want to do?"
+            options={actions}
+            cancelButtonIndex={actions.indexOf('cancel')}
+            destructiveButtonIndex={actions.indexOf('Leave Group')}
+            onPress={(index) => this.performAction(index)}
+          />
         </View>
-        <ActionSheet
-          ref={(o) => {
-            this.actionSheet = o;
-          }}
-          title="What do you want to do?"
-          options={actions}
-          cancelButtonIndex={actions.indexOf('cancel')}
-          destructiveButtonIndex={actions.indexOf('Leave Group')}
-          onPress={(index) => this.performAction(index)}
-        />
-      </SafeAreaView>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+    zIndex: 1,
+  },
   membersContainer: {
     flex: 1,
   },
   container: {
     flex: 1,
     backgroundColor: '#fdfdfd',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    marginTop: -58,
+    zIndex: 10,
+    overflow: 'hidden',
   },
   mainContainer: {
     flex: 1,
@@ -253,7 +268,19 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ connections, user }) => ({
-  ...connections,
-  ...user,
-}))(MembersScreen);
+function mapStateToProps(state, ownProps) {
+  // Refetch group from state, as the group object passed via route params may be out of date.
+  const groupId = ownProps.route.params.group.id;
+  const group = state.groups.groups.find((entry) => entry.id === groupId);
+  if (!group) {
+    console.log(`Did not find group for groupID ${groupId}`);
+  }
+
+  return {
+    ...state.connections,
+    ...state.user,
+    group,
+  };
+}
+
+export default connect(mapStateToProps)(MembersScreen);

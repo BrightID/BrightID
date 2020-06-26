@@ -5,14 +5,12 @@ import { CLEAR_MY_QR_DATA, SET_MY_QR_DATA } from '../actions/connectQrData';
 
 export const initialState = {
   myQrData: undefined,
-  // TODO - enable storing data of multiple peers
   peerQrData: {
     aesKey: '',
     ipAddress: '',
     uuid: '',
     qrString: '',
     channel: '',
-    user: '',
     type: '',
   },
 };

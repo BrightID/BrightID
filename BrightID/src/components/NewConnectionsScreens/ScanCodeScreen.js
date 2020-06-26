@@ -1,20 +1,35 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // @flow
 
-import * as React from 'react';
-import { Alert, Linking, StyleSheet, TextInput, View } from 'react-native';
-import { connect } from 'react-redux';
+import React, { useCallback, useState } from 'react';
+import {
+  Alert,
+  Linking,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import { SvgXml } from 'react-native-svg';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import BarcodeMask from 'react-native-barcode-mask';
+import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-native-spinkit';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   DEVICE_LARGE,
+  DEVICE_IOS,
   PROFILE_POLL_INTERVAL,
   QR_TYPE_RESPONDER,
+  ORANGE,
 } from '@/utils/constants';
 import { parseQrData } from '@/utils/qrCodes';
+import qricon from '@/static/qr_icon_white.svg';
 import { RNCamera } from './RNCameraProvider';
 import emitter from '../../emitter';
-import { removeConnectQrData, setConnectQrData } from '../../actions';
+import { setConnectQrData } from '../../actions';
 import { fetchProfile } from './actions/profile';
+import { stopConnecting } from './actions/connecting';
 
 /**
  * Returns whether the string is a valid QR identifier
@@ -32,214 +47,226 @@ function validQrString(qrString) {
  *
  */
 
-type State = {
-  scanned: boolean,
-  connectionAttempts: number,
-  value: string,
-};
+let fetchProfileId: IntervalID;
+let connectionExpired: TimeoutID;
 
-export class ScanCodeScreen extends React.Component<Props, State> {
-  textInput: null | TextInput;
+const Container = DEVICE_IOS ? SafeAreaView : View;
 
-  camera: null | RNCamera;
+export const ScanCodeScreen = (props) => {
+  const { navigation, route } = props;
+  const dispatch = useDispatch();
+  const [scanned, setScanned] = useState(false);
+  const [connectionAttempts, setConnectionAttempts] = useState(0);
+  const name = useSelector((state) => state.user.name);
+  const connectDataExists = useSelector((state) => !!state.connectUserData.id);
 
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    scanned: false,
-    connectionAttempts: 0,
-    value: '',
-  };
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(stopConnecting());
+      if (connectDataExists) {
+        unsubscribeToProfileUpload();
+        navigation.navigate('PreviewConnection');
+        return;
+      }
+      const handleDownloadFailure = () => {
+        setConnectionAttempts(connectionAttempts + 1);
+        if (connectionAttempts > 1) {
+          navigation.navigate('Home');
+        }
+      };
 
-  connectionExpired: TimeoutID;
+      emitter.on('connectFailure', handleDownloadFailure);
 
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(removeConnectQrData());
-    emitter.on('connectDataReady', this.navigateToPreview);
-    emitter.on('connectFailure', this.handleDownloadFailure);
-    emitter.on('recievedProfileData', this.unsubscribeToProfileUpload);
-  }
+      return () => {
+        unsubscribeToProfileUpload();
 
-  componentWillUnmount() {
-    const { dispatch } = this.props;
-    this.unsubscribeToProfileUpload();
-    emitter.off('connectDataReady', this.navigateToPreview);
-    emitter.off('connectFailure', this.handleDownloadFailure);
-    emitter.off('recievedProfileData', this.unsubscribeToProfileUpload);
-    dispatch(removeConnectQrData());
-  }
+        emitter.off('connectFailure', handleDownloadFailure);
+      };
+    }, [connectionAttempts, connectDataExists]),
+  );
 
-  subscribeToProfileUpload = (peerQrData) => {
+  const subscribeToProfileUpload = (peerQrData) => {
     console.log(`Subscribing to profile Upload for uuid ${peerQrData.uuid}`);
-    const { dispatch } = this.props;
-    this.connectionExpired = setTimeout(this.showProfileError, 90000);
-    this.fetchProfileData = setInterval(() => {
+
+    connectionExpired = setTimeout(showProfileError, 90000);
+    fetchProfileId = setInterval(() => {
       dispatch(fetchProfile(peerQrData));
     }, PROFILE_POLL_INTERVAL);
   };
 
-  unsubscribeToProfileUpload = () => {
+  const unsubscribeToProfileUpload = () => {
     console.log(`Unsubsubscribing from profile Upload`);
-    clearTimeout(this.connectionExpired);
-    clearInterval(this.fetchProfileData);
+    clearTimeout(connectionExpired);
+    clearInterval(fetchProfileId);
   };
 
-  handleDownloadFailure = () => {
-    this.setState((prev) => ({
-      connectionAttempts: prev.connectionAttempts + 1,
-    }));
-    if (this.state.connectionAttempts > 1) {
-      this.navigateToHome();
-    } else {
-      this.subscribeToProfileUpload();
-    }
-  };
-
-  handleBarCodeRead = ({ data }) => {
-    const { dispatch, navigation } = this.props;
+  const handleBarCodeRead = ({ data }) => {
     console.log('barcode data', data);
     if (!data) return;
 
     if (data.startsWith('Recovery_')) {
-      navigation.navigate('RecoveringConnection', {
+      props.navigation.navigate('RecoveringConnection', {
         recoveryRequestCode: data,
       });
-      this.setState({ scanned: true });
     } else if (data.startsWith('brightid://')) {
       Linking.openURL(data);
-      this.setState({ scanned: true });
     } else if (validQrString(data)) {
       const peerQrData = parseQrData(data);
       peerQrData.type = QR_TYPE_RESPONDER;
       dispatch(setConnectQrData(peerQrData));
-      // If the following `fetchdata()` fails, a "connectFailure" will be emitted,
-      this.subscribeToProfileUpload(peerQrData);
-      this.setState({ scanned: true });
-      if (this.textInput) this.textInput.blur();
+      subscribeToProfileUpload(peerQrData);
     }
+    setScanned(true);
   };
 
-  navigateToPreview = () => {
-    this.props.navigation.navigate('PreviewConnection');
-  };
+  // handle deep links
+  if (route.params?.qrcode && !scanned) {
+    handleBarCodeRead({ data: route.params?.qrcode });
+  }
 
-  showProfileError = () => {
+  const showProfileError = () => {
     Alert.alert(
       'Timeout reached',
       "There was a problem downloading the other person's profile. Please try again.",
     );
-    this.setState({ scanned: false });
+    setScanned(true);
   };
 
-  navigateToHome = () => {
-    this.props.navigation.navigate('Home');
-  };
-
-  renderCameraOrWave = () => {
-    // either camera is showing or webrtc is connecting
-    const { scanned } = this.state;
-    if (scanned) {
-      return (
-        <View style={styles.cameraPreview}>
-          <Spinner isVisible={true} size={41} type="Wave" color="#4990e2" />
+  return (
+    <>
+      <View style={styles.orangeTop} />
+      <Container style={styles.container}>
+        <View style={styles.infoTopContainer}>
+          <Text style={styles.infoTopText}>Hey {name}, scan a code and</Text>
+          <Text style={styles.infoTopText}>make a new connection today</Text>
         </View>
-      );
-    } else {
-      return (
-        <View style={styles.cameraPreview} testID="scanCode">
-          <View style={styles.scanTextContainer}>
-            <TextInput
-              ref={(c) => {
-                this.textInput = c;
+        <View style={styles.cameraContainer} testID="CameraContainer">
+          {!scanned ? (
+            <RNCamera
+              style={styles.cameraPreview}
+              captureAudio={false}
+              onBarCodeRead={handleBarCodeRead}
+              type={RNCamera.Constants.Type.back}
+              flashMode={RNCamera.Constants.FlashMode.off}
+              androidCameraPermissionOptions={{
+                title: 'Permission to use camera',
+                message: 'We need your permission to use your camera',
+                buttonPositive: 'Ok',
+                buttonNegative: 'Cancel',
               }}
-              style={styles.searchField}
-              onBlur={() => {
-                this.handleBarCodeRead({
-                  type: 'text-input',
-                  data: this.state.value.trim(),
-                });
-              }}
-              onChangeText={(value) => {
-                this.setState({ value });
-              }}
-              placeholder="Scan or paste a BrightID code here"
-              placeholderTextColor="#333"
-              autoCapitalize="none"
-              autoCorrect={false}
-              textContentType="none"
-              underlineColorAndroid="transparent"
-              blurOnSubmit={true}
-            />
-          </View>
-          <RNCamera
-            ref={(ref) => {
-              this.camera = ref;
-            }}
-            style={styles.cameraPreview}
-            captureAudio={false}
-            onBarCodeRead={this.handleBarCodeRead}
-            type={RNCamera.Constants.Type.back}
-            flashMode={RNCamera.Constants.FlashMode.off}
-            androidCameraPermissionOptions={{
-              title: 'Permission to use camera',
-              message: 'We need your permission to use your camera',
-              buttonPositive: 'Ok',
-              buttonNegative: 'Cancel',
-            }}
-          >
-            <Ionicons name="ios-qr-scanner" size={223} color="#F76B1C" />
-          </RNCamera>
+            >
+              <BarcodeMask
+                edgeColor={ORANGE}
+                animatedLineColor={ORANGE}
+                width={230}
+                height={230}
+                edgeRadius={5}
+                edgeBorderWidth={3}
+                edgeHeight={30}
+                edgeWidth={30}
+              />
+            </RNCamera>
+          ) : (
+            <View style={styles.cameraPreview}>
+              <Spinner isVisible={true} size={41} type="Wave" color="#4990e2" />
+            </View>
+          )}
         </View>
-      );
-    }
-  };
-
-  render() {
-    return <View style={styles.container}>{this.renderCameraOrWave()}</View>;
-  }
-}
+        <Text style={styles.infoBottomText}>Or you can also...</Text>
+        <TouchableOpacity
+          testID="ScanCodeToMyCodeBtn"
+          style={styles.showQrButton}
+          onPress={() => {
+            props.navigation.navigate('MyCode');
+          }}
+        >
+          <SvgXml
+            xml={qricon}
+            width={DEVICE_LARGE ? 22 : 20}
+            height={DEVICE_LARGE ? 22 : 20}
+          />
+          <Text style={styles.showQrText}>Show your QR code</Text>
+        </TouchableOpacity>
+      </Container>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
     width: '100%',
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     flexDirection: 'column',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    zIndex: 10,
+    marginTop: -58,
+  },
+  infoTopContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    flexGrow: 1,
+  },
+  infoTopText: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 16 : 14,
+    textAlign: 'center',
+    color: '#4a4a4a',
+  },
+  cameraContainer: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '100%',
+    // borderWidth: 1,
   },
   cameraPreview: {
-    flex: 1,
+    flex: 0,
+    overflow: 'hidden',
+    width: 280,
+
+    height: 280,
+    aspectRatio: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
   },
-  scanTextContainer: {
-    height: 85,
-    width: '100%',
+  infoBottomText: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 12 : 11,
+    marginBottom: 10,
+  },
+  showQrButton: {
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 10,
-    backgroundColor: '#fff',
-    zIndex: 100,
+    height: DEVICE_LARGE ? 42 : 36,
+    backgroundColor: ORANGE,
+    borderRadius: 60,
+    width: 260,
+    marginBottom: 36,
   },
-  searchField: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_LARGE ? 16 : 14,
-    color: '#333',
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
-    width: '85%',
-    textAlign: 'center',
+  showQrText: {
+    fontFamily: 'Poppins',
+    fontWeight: 'bold',
+    fontSize: DEVICE_LARGE ? 14 : 12,
+    color: '#fff',
+    marginLeft: 10,
+  },
+  cameraIcon: {
+    marginTop: 2,
+    marginRight: 4,
   },
 });
 
-const mapStateToProps = (state) => {
-  const props = {
-    peerQrData: state.connectQrData.peerQrData,
-  };
-  return props;
-};
-
-export default connect(mapStateToProps)(ScanCodeScreen);
+export default ScanCodeScreen;

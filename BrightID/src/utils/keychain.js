@@ -1,45 +1,57 @@
 // @flow
 import {
   getGenericPassword,
-  getInternetCredentials,
+  setGenericPassword,
+  getSecurityLevel,
+  STORAGE_TYPE,
 } from 'react-native-keychain';
-import { b64ToUint8Array } from './encoding';
+import { compose } from 'ramda';
+import store from '@/store';
+import { uInt8ArrayToB64, objToUint8, b64ToUint8Array } from './encoding';
+import { DEVICE_ANDROID } from './constants';
+
+const keyToString = compose(uInt8ArrayToB64, objToUint8);
 
 export const obtainKeys = async () => {
   try {
-    let { username, password } = await getGenericPassword();
-    if (!password || !username) {
+    let genericPassword = await getGenericPassword();
+    if (!genericPassword) {
       throw new Error('secret key does not exist');
     }
-
+    let { username, password } = genericPassword;
     let secretKey = b64ToUint8Array(password);
     if (secretKey.length < 10) {
       throw new Error('secret key does not exist');
     }
-
     return { username, secretKey };
   } catch (err) {
     console.log(err.message);
-    let { username, secretKey } = await obtainSecondaryKeys();
-    return { username, secretKey };
+    let { id, secretKey } = store.getState().user;
+    if (!secretKey) {
+      alert(
+        'Unable to access secret key, please reinstall app and recover BrightID',
+      );
+      return { username: 'empty', secretKey: [] };
+    }
+
+    await saveSecretKey(id, keyToString(secretKey));
+
+    return { username: id, secretKey: objToUint8(secretKey) };
   }
 };
 
-const obtainSecondaryKeys = async () => {
+export const saveSecretKey = async (id: string, secretKey: string) => {
   try {
-    let { username, password } = await getInternetCredentials('secretKey');
-    if (!password) {
-      alert('Secret Key is missing from device... please restore BrightID');
+    if (DEVICE_ANDROID) {
+      let opts = {};
+      const SECURITY_LEVEL = await getSecurityLevel();
+      opts.securityLevel = SECURITY_LEVEL;
+      opts.storage = STORAGE_TYPE.AES;
+      await setGenericPassword(id, secretKey, opts);
+    } else {
+      await setGenericPassword(id, secretKey);
     }
-
-    let secretKey = b64ToUint8Array(password);
-    if (secretKey.length < 10) {
-      alert('Secret Key is missing from device... please restore BrightID');
-    }
-    return { username, secretKey };
   } catch (err) {
-    console.log(err.message);
-    alert('Unable to access device keychain...');
-    return { username: '', secretKey: [] };
+    console.log('unable to save secret key', err.message);
   }
 };

@@ -52,6 +52,9 @@
 	<string>$(PRODUCT_NAME) would like access to your photo gallery for choosing a profile picture</string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Poppins.otf</string>
+		<string>Poppins-Medium.otf</string>
+		<string>Poppins-Bold.otf</string>
 		<string>ApexNew-Book.otf</string>
 		<string>ApexNew-Light.otf</string>
 		<string>ApexNew-Medium.otf</string>
@@ -61,7 +64,6 @@
 		<string>MaterialCommunityIcons.ttf</string>
 		<string>MaterialIcons.ttf</string>
 		<string>Octicons.ttf</string>
-		<string>SimpleLineIcons.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreenBrightID</string>

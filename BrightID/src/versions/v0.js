@@ -1,10 +1,6 @@
 // @flow
 
 import AsyncStorage from '@react-native-community/async-storage';
-import {
-  setGenericPassword,
-  setInternetCredentials,
-} from 'react-native-keychain';
 import { b64ToUrlSafeB64, objToUint8, uInt8ArrayToB64 } from '@/utils/encoding';
 import {
   setUserData,
@@ -13,6 +9,7 @@ import {
   setApps,
   removeSafePubKey,
 } from '@/actions';
+import { saveSecretKey } from '@/utils/keychain';
 import { defaultSort } from '@/components/Connections/models/sortingUtility';
 import store from '@/store';
 import { compose } from 'ramda';
@@ -26,13 +23,7 @@ export const bootstrapV0 = async (navigation: navigation) => {
     if (userData !== null) {
       userData = JSON.parse(userData);
       // convert private key to uInt8Array
-      await setGenericPassword(
-        userData.id ?? 'empty',
-        keyToString(userData.secretKey),
-      );
-      // secondary backup
-      await setInternetCredentials(
-        'secretKey',
+      await saveSecretKey(
         userData.id ?? 'empty',
         keyToString(userData.secretKey),
       );

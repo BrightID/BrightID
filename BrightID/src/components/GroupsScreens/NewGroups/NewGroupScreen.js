@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import store from '@/store';
 import emitter from '@/emitter';
 import { clearNewGroupCoFounders } from '@/actions';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { DEVICE_TYPE, ORANGE } from '@/utils/constants';
 import Spinner from 'react-native-spinkit';
 import { createNewGroup } from '../actions';
 import NewGroupCard from './NewGroupCard';
@@ -117,44 +117,58 @@ export class NewGroupScreen extends React.Component<Props> {
   render() {
     const connections = this.filterConnections();
     return (
-      <SafeAreaView style={styles.container}>
-        <View testID="newGroupScreen" style={styles.mainContainer}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>CO-FOUNDERS</Text>
-            <Text style={styles.infoText}>
-              To create a group, you must select two co-founders
-            </Text>
-          </View>
-          {DEVICE_TYPE === 'large' && (
-            <SearchConnections navigation={this.props.navigation} />
-          )}
-          <View style={styles.mainContainer}>
-            {connections.length > 0 ? (
-              <FlatList
-                style={styles.connectionsContainer}
-                data={connections}
-                keyExtractor={({ id }, index) => id + index}
-                renderItem={this.renderConnection}
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-              />
-            ) : (
-              <View>
-                <Text style={styles.emptyText}>No connections</Text>
-              </View>
+      <>
+        <View style={styles.orangeTop} />
+        <View style={styles.container}>
+          <View testID="newGroupScreen" style={styles.mainContainer}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.titleText}>CO-FOUNDERS</Text>
+              <Text style={styles.infoText}>
+                To create a group, you must select two co-founders
+              </Text>
+            </View>
+            {DEVICE_TYPE === 'large' && (
+              <SearchConnections navigation={this.props.navigation} />
             )}
+            <View style={styles.mainContainer}>
+              {connections.length > 0 ? (
+                <FlatList
+                  style={styles.connectionsContainer}
+                  data={connections}
+                  keyExtractor={({ id }, index) => id + index}
+                  renderItem={this.renderConnection}
+                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
+                />
+              ) : (
+                <View>
+                  <Text style={styles.emptyText}>No connections</Text>
+                </View>
+              )}
+            </View>
           </View>
+          {this.renderButtonOrSpinner()}
         </View>
-        {this.renderButtonOrSpinner()}
-      </SafeAreaView>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    marginTop: -58,
+    zIndex: 10,
+    overflow: 'hidden',
   },
   mainContainer: {
     marginTop: 8,
@@ -181,8 +195,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
     backgroundColor: '#fff',
     width: '96.7%',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#e3e1e1',
+
     marginBottom: DEVICE_TYPE === 'large' ? 11 : 0,
   },
   titleText: {

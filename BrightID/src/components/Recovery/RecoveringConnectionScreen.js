@@ -4,6 +4,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import EmptyList from '@/components/Helpers/EmptyList';
+import { ORANGE } from '@/utils/constants';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
 
@@ -34,38 +35,52 @@ class RecoveringConnectionScreen extends React.Component<Props> {
     const connections = this.filterConnections();
 
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.mainContainer}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>Choose Connection</Text>
-            <Text style={styles.infoText}>
-              Please select the connection whose account you are helping to
-              recover.
-            </Text>
-          </View>
-          <SearchConnections navigation={navigation} />
+      <>
+        <View style={styles.orangeTop} />
+        <View style={styles.container}>
           <View style={styles.mainContainer}>
-            <FlatList
-              style={styles.connectionsContainer}
-              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-              data={connections}
-              keyExtractor={({ id }, index) => id + index}
-              renderItem={this.renderConnection}
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}
-              ListEmptyComponent={<EmptyList title="No connections..." />}
-            />
+            <View style={styles.titleContainer}>
+              <Text style={styles.titleText}>Choose Connection</Text>
+              <Text style={styles.infoText}>
+                Please select the connection whose account you are helping to
+                recover.
+              </Text>
+            </View>
+            <SearchConnections navigation={navigation} />
+            <View style={styles.mainContainer}>
+              <FlatList
+                style={styles.connectionsContainer}
+                contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+                data={connections}
+                keyExtractor={({ id }, index) => id + index}
+                renderItem={this.renderConnection}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                ListEmptyComponent={<EmptyList title="No connections..." />}
+              />
+            </View>
           </View>
         </View>
-      </SafeAreaView>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fdfdfd',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    marginTop: -58,
+    zIndex: 10,
+    overflow: 'hidden',
   },
   mainContainer: {
     marginTop: 8,
@@ -92,8 +107,6 @@ const styles = StyleSheet.create({
     marginTop: 6,
     backgroundColor: '#fff',
     width: '96.7%',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#e3e1e1',
     marginBottom: 11,
   },
   titleText: {

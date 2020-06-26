@@ -19,9 +19,7 @@ const createBrightID = async (name = testUserName) => {
   // create new ID
   await element(by.id('createBrightIDBtn')).tap();
   // should end up at home screen
-  await waitFor(element(by.id('homeScreen')))
-    .toBeVisible()
-    .withTimeout(20000);
+  await expectHomescreen();
   return name;
 };
 
@@ -37,6 +35,12 @@ const createFakeConnection = async () => {
 
 const expectHomescreen = async () => {
   await waitFor(element(by.id('homeScreen')))
+    .toBeVisible()
+    .withTimeout(20000);
+};
+
+const expectConnectionsScreen = async () => {
+  await waitFor(element(by.id('connectionsScreen')))
     .toBeVisible()
     .withTimeout(20000);
 };
@@ -62,6 +66,7 @@ export {
   createBrightID,
   createFakeConnection,
   expectHomescreen,
+  expectConnectionsScreen,
   expectGroupsScreen,
   expectAppsScreen,
 };

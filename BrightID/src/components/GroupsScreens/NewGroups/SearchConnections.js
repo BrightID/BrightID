@@ -61,7 +61,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     marginTop: 10,
-    width: '90%',
+    marginBottom: 10,
+    width: '80%',
     borderColor: '#ccc',
     borderWidth: 1,
     justifyContent: 'space-between',

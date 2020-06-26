@@ -2,12 +2,20 @@
 
 import { generateQrData } from '@/utils/qrCodes';
 import { PROFILE_POLL_INTERVAL } from '@/utils/constants';
-import { clearMyQrData, setMyQrData } from '@/actions/connectQrData';
+import {
+  clearMyQrData,
+  setMyQrData,
+  removeConnectQrData,
+} from '@/actions/connectQrData';
+
 import { encryptAndUploadProfile, fetchProfile } from './profile';
 
-let profile_timer: IntervalID;
+let fetchProfileID: IntervalID;
 
-export const startConnecting = () => async (dispatch: dispatch) => {
+export const startConnecting = () => async (
+  dispatch: dispatch,
+  getState: () => State,
+) => {
   try {
     // prepare QrCode data
     const qrCodeData = await generateQrData();
@@ -16,13 +24,13 @@ export const startConnecting = () => async (dispatch: dispatch) => {
     dispatch(encryptAndUploadProfile(qrCodeData));
     // store my qr data in store
     dispatch(setMyQrData(qrCodeData));
-
+    // remove old QR data
+    dispatch(removeConnectQrData());
     // start polling for uploaded profiles from people scanning my code
-    clearInterval(profile_timer);
-    profile_timer = setInterval(() => {
+    clearInterval(fetchProfileID);
+    fetchProfileID = setInterval(() => {
       dispatch(fetchProfile(qrCodeData));
     }, PROFILE_POLL_INTERVAL);
-
     // Start timer to expire QRdata and stop polling
     setTimeout(() => {
       console.log(`QrCode timer expired for qrString ${qrCodeData.qrString}`);
@@ -33,9 +41,13 @@ export const startConnecting = () => async (dispatch: dispatch) => {
   }
 };
 
-export const stopConnecting = () => (dispatch: dispatch) => {
+export const stopConnecting = () => (
+  dispatch: dispatch,
+  getState: () => State,
+) => {
   // stop polling for profiles
-  clearInterval(profile_timer);
+  clearInterval(fetchProfileID);
   // clear local qrCodeData
   dispatch(clearMyQrData());
+  // remove old QR data
 };
