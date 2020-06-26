@@ -62,7 +62,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     if (__DEV__) {
       createFakeConnection();
     } else {
-      navigation.navigate('NewConnection');
+      navigation.navigate('MyCode');
     }
   };
 
