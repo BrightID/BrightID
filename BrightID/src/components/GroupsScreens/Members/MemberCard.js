@@ -44,7 +44,7 @@ class MemberCard extends React.PureComponent<Props> {
     const { user } = store.getState();
     console.log('flaggers', flaggers);
     const flags = flaggers && Object.keys(flaggers);
-    const flagged = isAdmin && flaggers && flags.length > 0;
+    const flagged = isAdmin && flags?.length > 0;
     return (
       <View style={{ ...styles.container, ...style }}>
         <Image

@@ -107,17 +107,25 @@ export class MembersScreen extends Component<Props, State> {
     const { group } = this.props;
     const isAdmin = group?.admins?.includes(this.props.id);
     // eslint-disable-next-line react/jsx-props-no-spreading
-    return <MemberCard {...item} isAdmin={isAdmin} menuHandler={this.confirmDismiss} />;
+    return (
+      <MemberCard
+        {...item}
+        isAdmin={isAdmin}
+        menuHandler={this.confirmDismiss}
+      />
+    );
   };
 
   getMembers = () => {
     const { connections, name, id, photo, score, group } = this.props;
     // return a list of connections filtered by the members of this group
+    if (!group) return [];
+
     return [{ id, name, photo, score }].concat(
       innerJoin(
         (connection, member) => connection.id === member,
         connections,
-        group?.members,
+        group.members,
       ),
     );
   };
