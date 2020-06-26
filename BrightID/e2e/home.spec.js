@@ -16,14 +16,16 @@ describe('Homescreen', () => {
   it('should show home screen with all elements', async () => {
     await expectHomescreen();
     await expect(element(by.id('PhotoContainer'))).toBeVisible();
-    await expect(element(by.id('ScoreContainer'))).toBeVisible();
     await expect(element(by.id('ConnectionsCount'))).toBeVisible();
+    await expect(element(by.id('AppsCount'))).toBeVisible();
     await expect(element(by.id('GroupsCount'))).toBeVisible();
-    await expect(element(by.id('VerificationsContainer'))).toBeVisible();
-    await expect(element(by.id('ConnectButton'))).toBeVisible();
+    await expect(element(by.id('MyCodeBtn'))).toBeVisible();
+    await expect(element(by.id('ScanCodeBtn'))).toBeVisible();
+    await expect(element(by.id('JoinCommunityBtn'))).toBeVisible();
   });
 
-  describe('Chat ActionSheet', () => {
+  // Test disabled for now as JoinCommunityBtn has special meaning in DEV mode
+  xdescribe('Chat ActionSheet', () => {
     /*
       open chat action sheet, check all options are there and close again
     */
@@ -93,35 +95,60 @@ describe('Homescreen', () => {
     });
   });
 
-  describe('New Connection screen', () => {
-    it('should open "New Connection" screen by default', async () => {
-      await element(by.id('ConnectButton')).tap();
-      await expect(element(by.id('qrCode'))).toBeVisible();
+  describe('My Code screen', () => {
+    it('should open "My Code" screen and go back', async () => {
+      await element(by.id('MyCodeBtn')).tap();
+      await expect(element(by.id('QRCodeContainer'))).toBeVisible();
+      await expect(element(by.id('MyCodeToScanCodeBtn'))).toBeVisible();
       hasBackButton
         ? await device.pressBack()
-        : await element(by.id('header-back')).tap();
-      await expect(element(by.id('qrCode'))).toBeNotVisible();
+        : await element(by.id('NewConnectionBackBtn')).tap();
+      await expect(element(by.id('QRCodeContainer'))).toBeNotVisible();
     });
 
-    it('should open "Scan Code" screen when tapping button', async () => {
-      await element(by.id('ConnectButton')).tap();
-      await element(by.id('scanCodeBtn')).tap();
-      await expect(element(by.id('scanCode'))).toBeVisible();
+    it('should open "Scan Code" screen and go back', async () => {
+      await element(by.id('ScanCodeBtn')).tap();
+      await expect(element(by.id('CameraContainer'))).toBeVisible();
+      await expect(element(by.id('ScanCodeToMyCodeBtn'))).toBeVisible();
       hasBackButton
         ? await device.pressBack()
-        : await element(by.id('header-back')).tap();
-      await expect(element(by.id('scanCode'))).toBeNotVisible();
+        : await element(by.id('NewConnectionBackBtn')).tap();
+      await expect(element(by.id('CameraContainer'))).toBeNotVisible();
+    });
+
+    it('should navigate from MyCode screen to ScanCode screen', async () => {
+      await element(by.id('MyCodeBtn')).tap();
+      await expect(element(by.id('QRCodeContainer'))).toBeVisible();
+      await expect(element(by.id('MyCodeToScanCodeBtn'))).toBeVisible();
+      await element(by.id('MyCodeToScanCodeBtn')).tap();
+      await expect(element(by.id('CameraContainer'))).toBeVisible();
+      await expect(element(by.id('QRCodeContainer'))).toBeNotVisible();
+      // Header back button navigates to Home screen
+      await element(by.id('NewConnectionBackBtn')).tap();
+      await expectHomescreen();
+    });
+
+    it('should navigate from ScanCode screen to MyCode screen', async () => {
+      await element(by.id('ScanCodeBtn')).tap();
+      await expect(element(by.id('CameraContainer'))).toBeVisible();
+      await expect(element(by.id('ScanCodeToMyCodeBtn'))).toBeVisible();
+      await element(by.id('ScanCodeToMyCodeBtn')).tap();
+      await expect(element(by.id('QRCodeContainer'))).toBeVisible();
+      await expect(element(by.id('CameraContainer'))).toBeNotVisible();
+      // Header back button navigates to Home screen
+      await element(by.id('NewConnectionBackBtn')).tap();
+      await expectHomescreen();
     });
 
     it('should copy to clipboard', async () => {
-      await element(by.id('ConnectButton')).tap();
-      await expect(element(by.id('copyQrButton'))).toBeVisible();
+      await element(by.id('MyCodeBtn')).tap();
+      await expect(element(by.id('QRCodeContainer'))).toBeVisible();
       await element(by.id('copyQrButton')).tap();
       // TODO: Verify clipboard content is correct. Currently detox has no way to
       //  check clipboard contents, see e.g. https://github.com/wix/detox/issues/222
       hasBackButton
         ? await device.pressBack()
-        : await element(by.id('header-back')).tap();
+        : await element(by.id('NewConnectionBackBtn')).tap();
       await expect(element(by.id('copyQrButton'))).toBeNotVisible();
     });
   });

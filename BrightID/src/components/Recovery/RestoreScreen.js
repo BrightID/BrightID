@@ -13,7 +13,7 @@ import {
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import emitter from '@/emitter';
-import { DEVICE_OS } from '@/utils/constants';
+import { DEVICE_OS, ORANGE } from '@/utils/constants';
 import { recoverData } from './helpers';
 
 type State = {
@@ -123,41 +123,55 @@ class RestoreScreen extends React.Component<Props, State> {
   render() {
     const { pass } = this.state;
     return (
-      <Container style={styles.container} behavior="padding">
-        <View style={styles.textInputContainer}>
-          <Text style={styles.textInfo}>
-            Enter a password that you encrypted your backup data with:
-          </Text>
-          <TextInput
-            // eslint-disable-next-line no-shadow
-            onChangeText={(pass) => this.setState({ pass })}
-            value={pass}
-            placeholder="Password"
-            placeholderTextColor="#9e9e9e"
-            style={styles.textInput}
-            autoCorrect={false}
-            textContentType="password"
-            autoCompleteType="password"
-            underlineColorAndroid="transparent"
-            secureTextEntry={true}
-          />
-        </View>
+      <>
+        <View style={styles.orangeTop} />
+        <Container style={styles.container} behavior="padding">
+          <View style={styles.textInputContainer}>
+            <Text style={styles.textInfo}>
+              Enter a password that you encrypted your backup data with:
+            </Text>
+            <TextInput
+              // eslint-disable-next-line no-shadow
+              onChangeText={(pass) => this.setState({ pass })}
+              value={pass}
+              placeholder="Password"
+              placeholderTextColor="#9e9e9e"
+              style={styles.textInput}
+              autoCorrect={false}
+              textContentType="password"
+              autoCompleteType="password"
+              underlineColorAndroid="transparent"
+              secureTextEntry={true}
+            />
+          </View>
 
-        <View style={styles.buttonContainer}>
-          {this.renderButtonOrSpinner()}
-        </View>
-      </Container>
+          <View style={styles.buttonContainer}>
+            {this.renderButtonOrSpinner()}
+          </View>
+        </Container>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    marginTop: -58,
+    zIndex: 10,
+    overflow: 'hidden',
   },
   textInputContainer: {
     marginTop: 44,

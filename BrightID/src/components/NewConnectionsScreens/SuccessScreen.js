@@ -1,8 +1,16 @@
 // @flow
 
-import * as React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { connect } from 'react-redux';
+import React from 'react';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  StatusBar,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDispatch } from 'react-redux';
 import { removeConnectUserData } from '../../actions';
 import { sortByDateAddedDescending } from '../Connections/models/sortingUtility';
 
@@ -13,44 +21,47 @@ import { sortByDateAddedDescending } from '../Connections/models/sortingUtility'
  *
  */
 
-type State = {};
+export const SuccessScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+  return (
+    <SafeAreaView testID="successScreen" style={styles.container}>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="#fff"
+        translucent={false}
+        animated={true}
+      />
 
-export class SuccessScreen extends React.Component<Props, State> {
-  render() {
-    return (
-      <View testID="successScreen" style={styles.container}>
-        <View style={styles.successTextContainer}>
-          <Text style={styles.successText}>Connection Successful!</Text>
-          <Image
-            source={require('../../static/success.png')}
-            style={styles.successImage}
-            resizeMode="cover"
-            onError={(e) => {
-              console.log(e);
-            }}
-            accessible={true}
-            accessibilityLabel="success image"
-          />
-        </View>
-
-        <View style={styles.confirmButtonContainer}>
-          <TouchableOpacity
-            testID="successDoneBtn"
-            onPress={() => {
-              const { navigation, dispatch } = this.props;
-              dispatch(removeConnectUserData());
-              dispatch(sortByDateAddedDescending());
-              navigation.navigate('Connections');
-            }}
-            style={styles.confirmButton}
-          >
-            <Text style={styles.confirmButtonText}>Done</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.successTextContainer}>
+        <Text style={styles.successText}>Connection Successful!</Text>
+        <Image
+          source={require('@/static/success.png')}
+          style={styles.successImage}
+          resizeMode="cover"
+          onError={(e) => {
+            console.log(e);
+          }}
+          accessible={true}
+          accessibilityLabel="success image"
+        />
       </View>
-    );
-  }
-}
+
+      <View style={styles.confirmButtonContainer}>
+        <TouchableOpacity
+          testID="successDoneBtn"
+          onPress={() => {
+            dispatch(removeConnectUserData());
+            dispatch(sortByDateAddedDescending());
+            navigation.navigate('Connections');
+          }}
+          style={styles.confirmButton}
+        >
+          <Text style={styles.confirmButtonText}>Done</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -63,7 +74,7 @@ const styles = StyleSheet.create({
   },
   successTextContainer: {
     // flex: 1,
-    marginTop: 131,
+    // marginTop: 131,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -128,4 +139,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(SuccessScreen);
+export default SuccessScreen;

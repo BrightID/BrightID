@@ -10,7 +10,7 @@ import {
   FlatList,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { DEVICE_TYPE, ORANGE } from '@/utils/constants';
 import EmptyList from '@/components/Helpers/EmptyList';
 import SearchConnections from '../Connections/SearchConnections';
 import TrustedConnectionCard from './TrustedConnectionCard';
@@ -79,12 +79,6 @@ class TrustedConnectionsScreen extends React.Component<Props> {
             <Text style={styles.infoText}>
               Choose three or more trusted connections to back up your BrightID.
             </Text>
-            {DEVICE_TYPE === 'large' && (
-              <Text style={styles.infoText}>
-                If your BrightID is lost or stolen, you can reconnect with two
-                trusted connections to recover it.
-              </Text>
-            )}
           </View>
           {DEVICE_TYPE === 'large' && (
             <SearchConnections navigation={navigation} />
@@ -116,9 +110,15 @@ class TrustedConnectionsScreen extends React.Component<Props> {
 }
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
+    backgroundColor: '#fff',
   },
   mainContainer: {
     marginTop: 8,
@@ -142,9 +142,6 @@ const styles = StyleSheet.create({
     marginTop: DEVICE_TYPE === 'large' ? 6 : 0,
     backgroundColor: '#fff',
     width: '96.7%',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#e3e1e1',
-    marginBottom: 11,
   },
   infoText: {
     fontFamily: 'ApexNew-Book',

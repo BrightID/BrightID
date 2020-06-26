@@ -1,9 +1,8 @@
 import { createMigrate } from 'redux-persist';
-import {
-  setGenericPassword,
-  setInternetCredentials,
-} from 'react-native-keychain';
+import { setInternetCredentials } from 'react-native-keychain';
 import { compose } from 'ramda';
+import { saveSecretKey } from '@/utils/keychain';
+
 import { objToUint8, uInt8ArrayToB64 } from '@/utils/encoding';
 import { BACKUP_URL } from '@/utils/constants';
 
@@ -14,18 +13,11 @@ const migrations = {
     try {
       // secret key defaults to empty object
       let secretKey = state.user?.secretKey;
-      if (Object.keys(secretKey).length) {
+      if (Object.keys(secretKey).length && state.user.id) {
         // save secret key in keychain storage
-        await setGenericPassword(
-          state.user.id ?? 'empty',
-          keyToString(secretKey),
-        );
-        // secondary backup
-        await setInternetCredentials(
-          'secretKey',
-          state.user.id ?? 'empty',
-          keyToString(secretKey),
-        );
+
+        await saveSecretKey(state.user.id, keyToString(secretKey));
+
         // save backup password
         await setInternetCredentials(
           BACKUP_URL,
@@ -33,11 +25,13 @@ const migrations = {
           state.user.password,
         );
         // delete secret key from async storage
-        delete state.user.secretKey;
+        // delete state.user.secretKey;
       }
     } catch (err) {
       console.log(err.message);
-      alert('Unable to access device keychain...');
+      alert(
+        'Unable to access device keychain, please let BrightID core team know about this issue..',
+      );
     }
 
     return state;

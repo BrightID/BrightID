@@ -20,6 +20,7 @@ import {
   DEVICE_ANDROID,
   BACKUP_URL,
   DEVICE_LARGE,
+  ORANGE,
 } from '@/utils/constants';
 import { backupAppData } from './helpers';
 
@@ -121,89 +122,108 @@ class BackupScreen extends React.Component<Props, State> {
     const { pass1, pass2, isEditing } = this.state;
 
     return (
-      <Container style={styles.container} behavior="padding">
-        <View style={styles.textInputContainer}>
-          {(!isEditing || DEVICE_LARGE) && (
-            <Text style={styles.textInfo}>
-              Enter a password to encrypt your backup data with:
-            </Text>
-          )}
-          <TextInput
-            style={styles.invisibleUsername}
-            placeholder="Username"
-            textContentType="username"
-            autoCompleteType="username"
-            value={this.props.id}
-          />
-
-          <TextInput
-            onChangeText={(pass) => this.setState({ pass1: pass })}
-            value={pass1}
-            placeholder="Password"
-            placeholderTextColor="#9e9e9e"
-            style={styles.textInput}
-            autoCorrect={false}
-            textContentType="newPassword"
-            passwordRules="required: lower; required: upper; required: digit; required: [-]; minlength: 20;"
-            autoCompleteType="password"
-            underlineColorAndroid="transparent"
-            secureTextEntry={true}
-            onFocus={this.handleTextFocus}
-          />
-
-          {DEVICE_ANDROID && (
+      <>
+        <View style={styles.orangeTop} />
+        <Container style={styles.container} behavior="padding">
+          <View style={styles.textInputContainer}>
+            {(!isEditing || DEVICE_LARGE) && (
+              <Text style={styles.textInfo}>
+                Enter a password to encrypt your backup data with:
+              </Text>
+            )}
             <TextInput
-              onChangeText={(pass) => this.setState({ pass2: pass })}
-              value={pass2}
-              placeholder="Confirm Password"
+              style={styles.invisibleUsername}
+              placeholder="Username"
+              textContentType="username"
+              autoCompleteType="username"
+              value={this.props.id}
+            />
+
+            <TextInput
+              onChangeText={(pass) => this.setState({ pass1: pass })}
+              value={pass1}
+              placeholder="Password"
               placeholderTextColor="#9e9e9e"
               style={styles.textInput}
               autoCorrect={false}
+              textContentType="newPassword"
+              passwordRules="required: lower; required: upper; required: digit; required: [-]; minlength: 20;"
               autoCompleteType="password"
               underlineColorAndroid="transparent"
               secureTextEntry={true}
-              onBlur={this.handleTextBlur}
               onFocus={this.handleTextFocus}
-              blurOnSubmit={true}
             />
-          )}
-        </View>
-        <View style={styles.buttonContainer}>
-          {!this.state.backupInProgress ? (
-            <TouchableOpacity
-              style={[
-                styles.startBackupButton,
-                !this.state.pass1 && styles.disabledButton,
-              ]}
-              onPress={this.startBackup}
-              disabled={!this.state.pass1}
-            >
-              <Text style={styles.buttonInnerText}>Start Backup</Text>
-            </TouchableOpacity>
-          ) : (
-            <View style={styles.loader}>
-              <Text style={styles.textInfo}>
-                Uploading encrypted data to backup server ...
-              </Text>
-              <Text style={styles.textInfo}>
-                {this.state.completed}/{this.state.total} completed
-              </Text>
-              <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
-            </View>
-          )}
-        </View>
-      </Container>
+
+            {DEVICE_ANDROID && (
+              <TextInput
+                onChangeText={(pass) => this.setState({ pass2: pass })}
+                value={pass2}
+                placeholder="Confirm Password"
+                placeholderTextColor="#9e9e9e"
+                style={styles.textInput}
+                autoCorrect={false}
+                autoCompleteType="password"
+                underlineColorAndroid="transparent"
+                secureTextEntry={true}
+                onBlur={this.handleTextBlur}
+                onFocus={this.handleTextFocus}
+                blurOnSubmit={true}
+              />
+            )}
+          </View>
+          <View style={styles.buttonContainer}>
+            {!this.state.backupInProgress ? (
+              <TouchableOpacity
+                style={[
+                  styles.startBackupButton,
+                  !this.state.pass1 && styles.disabledButton,
+                ]}
+                onPress={this.startBackup}
+                disabled={!this.state.pass1}
+              >
+                <Text style={styles.buttonInnerText}>Start Backup</Text>
+              </TouchableOpacity>
+            ) : (
+              <View style={styles.loader}>
+                <Text style={styles.textInfo}>
+                  Uploading encrypted data to backup server ...
+                </Text>
+                <Text style={styles.textInfo}>
+                  {this.state.completed}/{this.state.total} completed
+                </Text>
+                <Spinner
+                  isVisible={true}
+                  size={97}
+                  type="Wave"
+                  color="#4990e2"
+                />
+              </View>
+            )}
+          </View>
+        </Container>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    marginTop: -58,
+    zIndex: 10,
+    overflow: 'hidden',
   },
   textInputContainer: {
     marginTop: 44,

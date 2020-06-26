@@ -7,8 +7,7 @@ import {
 } from './testUtils';
 
 describe('App Deep Links', () => {
-  // const platform = await device.getPlatform();
-  // hasBackButton = platform === 'android';
+  let yes, no;
 
   describe('Open Deep Link without Account', () => {
     beforeAll(async () => {
@@ -27,6 +26,10 @@ describe('App Deep Links', () => {
   describe('Open Deep Link', () => {
     beforeAll(async () => {
       // create identity
+      const platform = await device.getPlatform();
+      const android = platform === 'android';
+      no = android ? 'NO' : 'No';
+      yes = android ? 'YES' : 'Yes';
       await device.reloadReactNative();
       await createBrightID();
     });
@@ -39,11 +42,11 @@ describe('App Deep Links', () => {
       });
     });
     it('should not link app and return to home page', async () => {
-      await element(by.text('NO')).tap();
+      await element(by.text(no)).tap();
       await expectHomescreen();
     });
     it('should link app', async () => {
-      await element(by.text('YES')).tap();
+      await element(by.text(yes)).tap();
       await expectAppsScreen(true);
     });
   });

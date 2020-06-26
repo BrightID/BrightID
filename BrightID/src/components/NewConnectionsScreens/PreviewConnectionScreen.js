@@ -7,10 +7,16 @@ import {
   Text,
   TouchableOpacity,
   View,
-  SafeAreaView,
+  StatusBar,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import {
+  removeConnectUserData,
+  removeConnectQrData,
+  clearMyQrData,
+} from '@/actions';
 import { addNewConnection } from './actions/addNewConnection';
 import api from '../../Api/BrightId';
 
@@ -46,11 +52,17 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
   handleConfirmation = async () => {
     const { dispatch, navigation } = this.props;
     await dispatch(addNewConnection());
+    dispatch(removeConnectUserData());
+    dispatch(removeConnectQrData());
+    dispatch(clearMyQrData());
     navigation.navigate('ConnectSuccess');
   };
 
   reject = () => {
-    const { navigation } = this.props;
+    const { navigation, dispatch } = this.props;
+    dispatch(removeConnectUserData());
+    dispatch(removeConnectQrData());
+    dispatch(clearMyQrData());
     navigation.navigate('Home');
   };
 
@@ -64,7 +76,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
         flaggers,
       } = await api.getUserInfo(this.props.connectUserData.id);
       console.log('flaggers', flaggers);
-      const mutualConnections = connections.filter(function(el) {
+      const mutualConnections = connections.filter(function (el) {
         return myConnections.some((x) => x.id === el.id);
       });
       this.setState({
@@ -95,7 +107,13 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
     } = this.props;
     const image = photo ? { uri: photo } : { uri: 'https://picsum.photos/180' };
     return (
-      <View style={styles.container} testID="previewConnectionScreen">
+      <SafeAreaView style={styles.container} testID="previewConnectionScreen">
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="#fff"
+          translucent={false}
+          animated={true}
+        />
         <View style={styles.questionTextContainer}>
           <Text style={styles.questionText}>Connect with?</Text>
         </View>
@@ -154,7 +172,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
             <Text style={styles.buttonText}>Confirm</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }

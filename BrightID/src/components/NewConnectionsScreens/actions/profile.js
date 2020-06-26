@@ -64,11 +64,10 @@ export const fetchProfile = (qrCodeData) => async (
     console.log(`Unexpected qrCodeType ${type}`);
     return;
   }
-
   const url = `http://${ipAddress}/profile/download/${channel}`;
-  console.log(
-    `fetching profile response data for channel ${channel} from ${url}`,
-  );
+  // console.log(
+  //   `fetching profile response data for channel ${channel} from ${url}`,
+  // );
 
   try {
     const response = await fetch(url, {
@@ -83,7 +82,6 @@ export const fetchProfile = (qrCodeData) => async (
 
     if (profileData && profileData.data) {
       try {
-        emitter.emit('recievedProfileData');
         // workaround: For now stop polling for profiles after the first profile is received,
         //  otherwise the same profile(s) will be downloaded again and again
         dispatch(stopConnecting());
@@ -91,7 +89,6 @@ export const fetchProfile = (qrCodeData) => async (
 
         dispatch(removeConnectUserData());
         dispatch(setConnectUserData(decryptedObj));
-        emitter.emit('connectDataReady');
       } catch (err) {
         err instanceof Error ? console.warn(err.message) : console.log(err);
       }

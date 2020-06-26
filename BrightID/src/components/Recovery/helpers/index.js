@@ -3,10 +3,7 @@
 import { Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
-import {
-  setGenericPassword,
-  setInternetCredentials,
-} from 'react-native-keychain';
+import { saveSecretKey } from '@/utils/keychain';
 import {
   createImageDirectory,
   retrieveImage,
@@ -231,9 +228,8 @@ export const restoreUserData = async (pass: string) => {
   const { id, secretKey, publicKey } = store.getState().recoveryData;
 
   // save secretKey in keystore
-  await setGenericPassword(id, secretKey);
 
-  await setInternetCredentials('secretKey', id, secretKey);
+  await saveSecretKey(id, secretKey);
 
   const decrypted = await fetchBackupData('data', pass);
 

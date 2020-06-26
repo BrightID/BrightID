@@ -10,7 +10,7 @@ export const LoadingScreen = ({ app }: { app: boolean }) => {
     return () => {
       if (app) bootstrap();
     };
-  });
+  }, []);
   return (
     <View style={styles.container}>
       <Spinner

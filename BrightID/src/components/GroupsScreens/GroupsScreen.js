@@ -6,7 +6,6 @@ import {
   FlatList,
   View,
   TouchableOpacity,
-  SafeAreaView,
   RefreshControl,
   Text,
 } from 'react-native';
@@ -14,9 +13,9 @@ import { connect } from 'react-redux';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import { getGroupName, ids2connections, knownMemberIDs } from '@/utils/groups';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
+import { ORANGE } from '@/utils/constants';
 import GroupCard from './GroupCard';
 import { NoGroups } from './NoGroups';
-import SearchGroups from './SearchGroups';
 import { compareJoinedDesc } from './models/sortingUtility';
 
 /**
@@ -71,10 +70,10 @@ export class GroupsScreen extends React.Component<Props, State> {
     const { navigation, groups, hasGroups } = this.props;
 
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={{ flex: 1 }} testID="groupsScreen">
+      <>
+        <View style={styles.orangeTop} />
+        <View style={styles.container} testID="groupsScreen">
           <View style={styles.mainContainer}>
-            {hasGroups && <SearchGroups navigation={navigation} />}
             <View style={styles.mainContainer}>
               <FlatList
                 style={styles.groupsContainer}
@@ -110,19 +109,30 @@ export class GroupsScreen extends React.Component<Props, State> {
             />
           )}
         </View>
-      </SafeAreaView>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fdfdfd',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    marginTop: -58,
+    zIndex: 10,
+    overflow: 'hidden',
   },
   mainContainer: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
+    backgroundColor: 'transparent',
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
