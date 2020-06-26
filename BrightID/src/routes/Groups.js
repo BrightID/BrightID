@@ -16,6 +16,7 @@ import InviteListScreen from '@/components/GroupsScreens/Members/InviteListScree
 import { navigate } from '@/NavigationService';
 import backArrow from '@/static/back_arrow.svg';
 import { SvgXml } from 'react-native-svg';
+import { store } from '@/store';
 import { headerOptions } from './helpers';
 
 const Stack = createStackNavigator();
@@ -36,17 +37,20 @@ const topOptions = {
       <SvgXml height="20" xml={backArrow} />
     </TouchableOpacity>
   ),
-  headerTitle: () => (
-    <View
-      style={{
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-      }}
-    >
-      <SearchGroups />
-    </View>
-  ),
+  headerTitle: () => {
+    const { groups } = store.getState().groups;
+    return groups.length ? (
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}
+      >
+        <SearchGroups />
+      </View>
+    ) : null;
+  },
 };
 
 const membersScreenOptions = ({ navigation, route }) => {

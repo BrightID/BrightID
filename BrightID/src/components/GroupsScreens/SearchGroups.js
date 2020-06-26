@@ -37,7 +37,7 @@ class SearchGroups extends React.Component<Props> {
           placeholder="Search Groups"
           autoCapitalize="words"
           autoCorrect={false}
-          textContentType="name"
+          textContentType="none"
           underlineColorAndroid="transparent"
           placeholderTextColor="#aaa"
           value={searchParam}

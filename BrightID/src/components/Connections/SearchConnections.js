@@ -42,7 +42,7 @@ class SearchConnections extends React.Component<Props & LocalProps> {
           placeholder="Search Connections"
           autoCapitalize="words"
           autoCorrect={false}
-          textContentType="name"
+          textContentType="none"
           underlineColorAndroid="transparent"
           placeholderTextColor="#aaa"
         />
