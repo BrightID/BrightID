@@ -23,7 +23,7 @@ import Loading from './components/Helpers/LoadingScreen';
 export const App = () => {
   // setup deep linking
   const linking = {
-    prefixes: ['brightid://'],
+    prefixes: ['brightid://', 'https://app.brightid.org'],
     config: {
       Apps: 'link-verification/:baseUrl/:context/:contextId',
       ScanCode: 'connection-code/:qrcode',
