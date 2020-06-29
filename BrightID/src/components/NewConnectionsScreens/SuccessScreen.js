@@ -52,7 +52,11 @@ export const SuccessScreen = ({ navigation }) => {
           onPress={() => {
             dispatch(removeConnectUserData());
             dispatch(sortByDateAddedDescending());
-            navigation.navigate('Connections');
+            // clear navigation history to prevent going back to confirmation and preview screens with back button
+            navigation.reset({
+              index: 1,
+              routes: [{ name: 'Home' }, { name: 'Connections' }],
+            });
           }}
           style={styles.confirmButton}
         >
