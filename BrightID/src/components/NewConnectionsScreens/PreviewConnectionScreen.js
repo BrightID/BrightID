@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import {
+  Alert,
   Image,
   StyleSheet,
   Text,
@@ -104,8 +105,28 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
   render() {
     const {
       connectUserData: { photo, name },
+      navigation,
     } = this.props;
-    const image = photo ? { uri: photo } : { uri: 'https://picsum.photos/180' };
+    if (!photo) {
+      Alert.alert(
+        'Sorry',
+        'There was a problem creating a connection',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              navigation.navigate('Home');
+            },
+          },
+          {
+            text: 'Cancel',
+            onPress: () => {},
+            style: 'cancel',
+          },
+        ],
+        { cancelable: true },
+      );
+    }
     return (
       <SafeAreaView style={styles.container} testID="previewConnectionScreen">
         <StatusBar
@@ -119,7 +140,7 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
         </View>
         <View style={styles.userContainer}>
           <Image
-            source={image}
+            source={{ uri: photo }}
             style={styles.photo}
             resizeMode="cover"
             onError={(e) => {
