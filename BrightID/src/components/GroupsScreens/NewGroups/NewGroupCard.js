@@ -70,7 +70,7 @@ class NewGroupCard extends React.PureComponent<Props> {
       <View style={{ ...styles.container, ...style }}>
         <Image
           source={{
-            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo.filename}`,
+            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
           }}
           style={styles.photo}
         />
