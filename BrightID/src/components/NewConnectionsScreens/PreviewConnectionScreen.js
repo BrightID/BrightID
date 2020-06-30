@@ -49,7 +49,6 @@ export const PreviewConnectionScreen = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log('HERE');
       if (!connectUserData.photo) {
         Alert.alert(
           'Sorry',
