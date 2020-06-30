@@ -1,8 +1,9 @@
 // @flow
 
-import * as React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Alert,
+  BackHandler,
   Image,
   StyleSheet,
   Text,
@@ -10,8 +11,9 @@ import {
   View,
   StatusBar,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { connect } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import {
   removeConnectUserData,
@@ -28,30 +30,82 @@ import api from '../../Api/BrightId';
  *
  */
 
-type State = {
-  connections: number,
-  groups: number,
-  mutualConnections: number,
-  connectionDate: string,
-  flagged: boolean,
-};
+export const PreviewConnectionScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
 
-export class PreviewConnectionScreen extends React.Component<Props, State> {
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
+  const [userInfo, setUserInfo] = useState({
     connections: 'loading',
     groups: 'loading',
     mutualConnections: 'loading',
     connectionDate: 'loading',
     flagged: false,
-  };
+  });
 
-  componentDidMount() {
-    this.fetchConnectionInfo().done();
-  }
+  const myConnections = useSelector((state) => state.connections.connections);
+  const connectUserData = useSelector(
+    (state) => state.connectUserData,
+    shallowEqual,
+  );
 
-  handleConfirmation = async () => {
-    const { dispatch, navigation } = this.props;
+  useFocusEffect(
+    useCallback(() => {
+      console.log('HERE');
+      if (!connectUserData.photo) {
+        Alert.alert(
+          'Sorry',
+          'There was a problem creating a connection',
+          [
+            {
+              text: 'OK',
+              onPress: reject,
+            },
+          ],
+          { cancelable: true },
+        );
+      }
+      const fetchConnectionInfo = async () => {
+        try {
+          const {
+            createdAt,
+            groups,
+            connections = [],
+            flaggers,
+          } = await api.getUserInfo(connectUserData.id);
+          const mutualConnections = connections.filter(function (el) {
+            return myConnections.some((x) => x.id === el.id);
+          });
+          setUserInfo({
+            connections: connections.length,
+            groups: groups.length,
+            mutualConnections: mutualConnections.length,
+            connectionDate: `Created ${moment(
+              parseInt(createdAt, 10),
+            ).fromNow()}`,
+            flagged: flaggers && Object.keys(flaggers).length > 0,
+          });
+        } catch (err) {
+          if (err instanceof Error && err.message === 'User not found') {
+            setUserInfo({
+              connections: 0,
+              groups: 0,
+              mutualConnections: 0,
+              connectionDate: 'New user',
+              flagged: false,
+            });
+          } else {
+            err instanceof Error ? console.warn(err.message) : console.log(err);
+          }
+        }
+      };
+
+      fetchConnectionInfo();
+
+      BackHandler.addEventListener('hardwareBackPress', reject);
+      return () => BackHandler.removeEventListener('hardwareBackPress', reject);
+    }, []),
+  );
+
+  const handleConfirmation = async () => {
     await dispatch(addNewConnection());
     dispatch(removeConnectUserData());
     dispatch(removeConnectQrData());
@@ -59,144 +113,81 @@ export class PreviewConnectionScreen extends React.Component<Props, State> {
     navigation.navigate('ConnectSuccess');
   };
 
-  reject = () => {
-    const { navigation, dispatch } = this.props;
+  const reject = () => {
     dispatch(removeConnectUserData());
     dispatch(removeConnectQrData());
     dispatch(clearMyQrData());
     navigation.navigate('Home');
+    return true;
   };
 
-  fetchConnectionInfo = async () => {
-    const myConnections = this.props.connections;
-    try {
-      const {
-        createdAt,
-        groups,
-        connections = [],
-        flaggers,
-      } = await api.getUserInfo(this.props.connectUserData.id);
-      console.log('flaggers', flaggers);
-      const mutualConnections = connections.filter(function (el) {
-        return myConnections.some((x) => x.id === el.id);
-      });
-      this.setState({
-        connections: connections.length,
-        groups: groups.length,
-        mutualConnections: mutualConnections.length,
-        connectionDate: `Created ${moment(parseInt(createdAt, 10)).fromNow()}`,
-        flagged: flaggers && Object.keys(flaggers).length > 0,
-      });
-    } catch (err) {
-      if (err instanceof Error && err.message === 'User not found') {
-        this.setState({
-          connections: 0,
-          groups: 0,
-          mutualConnections: 0,
-          connectionDate: 'New user',
-          flagged: false,
-        });
-      } else {
-        err instanceof Error ? console.warn(err.message) : console.log(err);
-      }
-    }
-  };
-
-  render() {
-    const {
-      connectUserData: { photo, name },
-      navigation,
-    } = this.props;
-    if (!photo) {
-      Alert.alert(
-        'Sorry',
-        'There was a problem creating a connection',
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              navigation.navigate('Home');
-            },
-          },
-          {
-            text: 'Cancel',
-            onPress: () => {},
-            style: 'cancel',
-          },
-        ],
-        { cancelable: true },
-      );
-    }
-    return (
-      <SafeAreaView style={styles.container} testID="previewConnectionScreen">
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="#fff"
-          translucent={false}
-          animated={true}
+  return (
+    <SafeAreaView style={styles.container} testID="previewConnectionScreen">
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="#fff"
+        translucent={false}
+        animated={true}
+      />
+      <View style={styles.questionTextContainer}>
+        <Text style={styles.questionText}>Connect with?</Text>
+      </View>
+      <View style={styles.userContainer}>
+        <Image
+          source={{ uri: connectUserData.photo }}
+          style={styles.photo}
+          resizeMode="cover"
+          onError={(e) => {
+            console.log(e);
+          }}
+          accessible={true}
+          accessibilityLabel="user photo"
         />
-        <View style={styles.questionTextContainer}>
-          <Text style={styles.questionText}>Connect with?</Text>
-        </View>
-        <View style={styles.userContainer}>
-          <Image
-            source={{ uri: photo }}
-            style={styles.photo}
-            resizeMode="cover"
-            onError={(e) => {
-              console.log(e);
-            }}
-            accessible={true}
-            accessibilityLabel="user photo"
-          />
-          <Text style={styles.connectName}>
-            {name}
-            {this.state.flagged && (
-              <Text style={styles.flagged}> (flagged)</Text>
-            )}
+        <Text style={styles.connectName}>
+          {connectUserData.name}
+          {userInfo.flagged && <Text style={styles.flagged}> (flagged)</Text>}
+        </Text>
+        <Text style={styles.connectedText}>{userInfo.connectionDate}</Text>
+      </View>
+      <View style={styles.countsContainer}>
+        <View style={styles.countsGroup}>
+          <Text id="connectionsCount" style={styles.countsNumberText}>
+            {userInfo.connections}
           </Text>
-          <Text style={styles.connectedText}>{this.state.connectionDate}</Text>
+          <Text style={styles.countsDescriptionText}>Connections</Text>
         </View>
-        <View style={styles.countsContainer}>
-          <View style={styles.countsGroup}>
-            <Text id="connectionsCount" style={styles.countsNumberText}>
-              {this.state.connections}
-            </Text>
-            <Text style={styles.countsDescriptionText}>Connections</Text>
-          </View>
-          <View style={styles.countsGroup}>
-            <Text id="groupsCount" style={styles.countsNumberText}>
-              {this.state.groups}
-            </Text>
-            <Text style={styles.countsDescriptionText}>Groups</Text>
-          </View>
-          <View style={styles.countsGroup}>
-            <Text id="groupsCount" style={styles.countsNumberText}>
-              {this.state.mutualConnections}
-            </Text>
-            <Text style={styles.countsDescriptionText}>Mutual Connections</Text>
-          </View>
+        <View style={styles.countsGroup}>
+          <Text id="groupsCount" style={styles.countsNumberText}>
+            {userInfo.groups}
+          </Text>
+          <Text style={styles.countsDescriptionText}>Groups</Text>
         </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            testID="rejectConnectionBtn"
-            onPress={this.reject}
-            style={styles.rejectButton}
-          >
-            <Text style={styles.buttonText}>Reject</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            testID="confirmConnectionBtn"
-            onPress={this.handleConfirmation}
-            style={styles.confirmButton}
-          >
-            <Text style={styles.buttonText}>Confirm</Text>
-          </TouchableOpacity>
+        <View style={styles.countsGroup}>
+          <Text id="groupsCount" style={styles.countsNumberText}>
+            {userInfo.mutualConnections}
+          </Text>
+          <Text style={styles.countsDescriptionText}>Mutual Connections</Text>
         </View>
-      </SafeAreaView>
-    );
-  }
-}
+      </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          testID="rejectConnectionBtn"
+          onPress={reject}
+          style={styles.rejectButton}
+        >
+          <Text style={styles.buttonText}>Reject</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          testID="confirmConnectionBtn"
+          onPress={handleConfirmation}
+          style={styles.confirmButton}
+        >
+          <Text style={styles.buttonText}>Confirm</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -321,7 +312,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ connections, connectUserData }) => ({
-  ...connections,
-  connectUserData,
-}))(PreviewConnectionScreen);
+export default PreviewConnectionScreen;
