@@ -57,6 +57,7 @@ declare type connection = {
   createdAt: number,
   hasPrimaryGroup: boolean,
   publicKey?: string,
+  flaggers?: any, // TODO: Proper definition, maybe refactor
 };
 
 declare type ConnectQrData = {
