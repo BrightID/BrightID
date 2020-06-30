@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Alert, FlatList, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Alert, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
 import { innerJoin } from 'ramda';
@@ -143,7 +143,7 @@ export class MembersScreen extends Component<Props, State> {
     const userIsAdmin = group?.admins?.includes(this.props.id);
     return (
       <MemberCard
-        connectionDate={item.conntionDate}
+        connectionDate={item.connectionDate}
         flaggers={item.flaggers}
         memberId={item.id}
         name={item.name}

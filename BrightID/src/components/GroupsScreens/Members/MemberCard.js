@@ -20,7 +20,7 @@ type MemberCardProps = {
   photo: Photo,
   name: string,
   score: number,
-  connectionDate: string,
+  connectionDate: number,
   handleDismiss: (...args: Array<any>) => any,
   handleAddAdmin: (...args: Array<any>) => any,
   userIsAdmin: boolean,
@@ -117,9 +117,9 @@ function MemberCard(props: MemberCardProps) {
             <Text style={[styles.scoreRight, scoreColor]}>{score}</Text>
             {flagged && <Text style={styles.flagged}> (flagged)</Text>}
           </View>
-          {connectionDate && (
+          {connectionDate > 0 && (
             <Text style={styles.connectedText}>
-              Connected {moment(parseInt(connectionDate, 10)).fromNow()}
+              Connected {moment(connectionDate).fromNow()}
             </Text>
           )}
         </View>
