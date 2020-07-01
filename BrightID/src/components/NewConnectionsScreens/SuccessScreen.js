@@ -1,7 +1,8 @@
 // @flow
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
+  BackHandler,
   Image,
   StyleSheet,
   Text,
@@ -11,6 +12,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
 import { removeConnectUserData } from '../../actions';
 import { sortByDateAddedDescending } from '../Connections/models/sortingUtility';
 
@@ -23,6 +25,27 @@ import { sortByDateAddedDescending } from '../Connections/models/sortingUtility'
 
 export const SuccessScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  // clear navigation history to prevent going back to confirmation and preview screens with back button
+  const resetNav = useCallback(() => {
+    navigation.reset({
+      index: 1,
+      routes: [
+        { name: 'Home' },
+        {
+          name: 'Connections',
+        },
+      ],
+    });
+    return true;
+  }, [navigation]);
+
+  useFocusEffect(
+    useCallback(() => {
+      BackHandler.addEventListener('hardwareBackPress', resetNav);
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', resetNav);
+    }, [resetNav]),
+  );
   return (
     <SafeAreaView testID="successScreen" style={styles.container}>
       <StatusBar
@@ -52,11 +75,8 @@ export const SuccessScreen = ({ navigation }) => {
           onPress={() => {
             dispatch(removeConnectUserData());
             dispatch(sortByDateAddedDescending());
-            // clear navigation history to prevent going back to confirmation and preview screens with back button
-            navigation.reset({
-              index: 1,
-              routes: [{ name: 'Home' }, { name: 'Connections' }],
-            });
+
+            resetNav();
           }}
           style={styles.confirmButton}
         >

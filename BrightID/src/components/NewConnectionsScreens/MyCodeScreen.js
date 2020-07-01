@@ -93,7 +93,7 @@ export const MyCodeScreen = (props) => {
   };
 
   const copyQr = () => {
-    Clipboard.setString(`brightid://connection-code/${qrString}`);
+    Clipboard.setString(`https://app.brightid.org/connection-code/${qrString}`);
     setCopied(true);
     setTimeout(() => setCopied(false), COPIED_TIMEOUT);
   };
