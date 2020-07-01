@@ -47,6 +47,22 @@ export const PreviewConnectionScreen = ({ navigation }) => {
     shallowEqual,
   );
 
+  const reject = useCallback(() => {
+    dispatch(removeConnectUserData());
+    dispatch(removeConnectQrData());
+    dispatch(clearMyQrData());
+    navigation.navigate('Home');
+    return true;
+  }, [dispatch, navigation]);
+
+  const handleConfirmation = async () => {
+    await dispatch(addNewConnection());
+    dispatch(removeConnectUserData());
+    dispatch(removeConnectQrData());
+    dispatch(clearMyQrData());
+    navigation.navigate('ConnectSuccess');
+  };
+
   useFocusEffect(
     useCallback(() => {
       if (!connectUserData.photo) {
@@ -61,6 +77,7 @@ export const PreviewConnectionScreen = ({ navigation }) => {
           ],
           { cancelable: true },
         );
+        return;
       }
       const fetchConnectionInfo = async () => {
         try {
@@ -101,24 +118,8 @@ export const PreviewConnectionScreen = ({ navigation }) => {
 
       BackHandler.addEventListener('hardwareBackPress', reject);
       return () => BackHandler.removeEventListener('hardwareBackPress', reject);
-    }, []),
+    }, [reject]),
   );
-
-  const handleConfirmation = async () => {
-    await dispatch(addNewConnection());
-    dispatch(removeConnectUserData());
-    dispatch(removeConnectQrData());
-    dispatch(clearMyQrData());
-    navigation.navigate('ConnectSuccess');
-  };
-
-  const reject = () => {
-    dispatch(removeConnectUserData());
-    dispatch(removeConnectQrData());
-    dispatch(clearMyQrData());
-    navigation.navigate('Home');
-    return true;
-  };
 
   return (
     <SafeAreaView style={styles.container} testID="previewConnectionScreen">
@@ -149,19 +150,19 @@ export const PreviewConnectionScreen = ({ navigation }) => {
         <Text style={styles.connectedText}>{userInfo.connectionDate}</Text>
       </View>
       <View style={styles.countsContainer}>
-        <View style={styles.countsGroup}>
+        <View>
           <Text id="connectionsCount" style={styles.countsNumberText}>
             {userInfo.connections}
           </Text>
           <Text style={styles.countsDescriptionText}>Connections</Text>
         </View>
-        <View style={styles.countsGroup}>
+        <View>
           <Text id="groupsCount" style={styles.countsNumberText}>
             {userInfo.groups}
           </Text>
           <Text style={styles.countsDescriptionText}>Groups</Text>
         </View>
-        <View style={styles.countsGroup}>
+        <View>
           <Text id="groupsCount" style={styles.countsNumberText}>
             {userInfo.mutualConnections}
           </Text>

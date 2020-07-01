@@ -26,7 +26,7 @@ import { sortByDateAddedDescending } from '../Connections/models/sortingUtility'
 export const SuccessScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   // clear navigation history to prevent going back to confirmation and preview screens with back button
-  const resetNav = () => {
+  const resetNav = useCallback(() => {
     navigation.reset({
       index: 1,
       routes: [
@@ -37,14 +37,14 @@ export const SuccessScreen = ({ navigation }) => {
       ],
     });
     return true;
-  };
+  }, [navigation]);
 
   useFocusEffect(
     useCallback(() => {
       BackHandler.addEventListener('hardwareBackPress', resetNav);
       return () =>
         BackHandler.removeEventListener('hardwareBackPress', resetNav);
-    }, []),
+    }, [resetNav]),
   );
   return (
     <SafeAreaView testID="successScreen" style={styles.container}>
