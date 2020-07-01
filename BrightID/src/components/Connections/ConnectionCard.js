@@ -143,7 +143,7 @@ class ConnectionCard extends React.Component<Props, State> {
   };
 
   getContextAction = () => {
-    const { status } = this.props;
+    const { status, photo } = this.props;
     const { isStale } = this.state;
     if (status === 'verified') {
       return (
@@ -156,7 +156,8 @@ class ConnectionCard extends React.Component<Props, State> {
         </TouchableOpacity>
       );
     }
-    if (status === 'deleted' || (status === 'initiated' && isStale)) {
+    // photo is added here due to bug discovered 6/29/20
+    if (status === 'deleted' || (status === 'initiated' && isStale) || !photo) {
       return (
         <TouchableOpacity
           testID="deleteConnectionBtn"
@@ -180,7 +181,7 @@ class ConnectionCard extends React.Component<Props, State> {
       <View style={{ ...styles.container, ...style }}>
         <Image
           source={{
-            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo.filename}`,
+            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
           }}
           style={styles.photo}
         />

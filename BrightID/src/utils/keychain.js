@@ -2,7 +2,6 @@
 import {
   getGenericPassword,
   setGenericPassword,
-  getSecurityLevel,
   STORAGE_TYPE,
 } from 'react-native-keychain';
 import { compose } from 'ramda';
@@ -43,10 +42,7 @@ export const obtainKeys = async () => {
 export const saveSecretKey = async (id: string, secretKey: string) => {
   try {
     if (DEVICE_ANDROID) {
-      let opts = {};
-      const SECURITY_LEVEL = await getSecurityLevel();
-      opts.securityLevel = SECURITY_LEVEL;
-      opts.storage = STORAGE_TYPE.AES;
+      let opts = { storage: STORAGE_TYPE.AES };
       await setGenericPassword(id, secretKey, opts);
     } else {
       await setGenericPassword(id, secretKey);

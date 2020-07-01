@@ -74,7 +74,9 @@ const backupPhotos = async () => {
       user: { id, photo },
     } = store.getState();
     for (const item of connections) {
-      await backupPhoto(item.id, item.photo?.filename);
+      if (item.photo?.filename) {
+        await backupPhoto(item.id, item.photo.filename);
+      }
     }
     for (const item of groups) {
       if (item.photo?.filename) {

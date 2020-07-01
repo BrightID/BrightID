@@ -25,15 +25,10 @@ describe('Connections', () => {
     });
 
     it('should reject new connection with back button', async () => {
-      if (!hasBackButton) return;
+      if (!hasBackButton) return true;
 
       await element(by.id('connectionsBtn')).tap();
       await createFakeConnection();
-      await device.pressBack();
-      // Android Back button is based on navigation stack, so it goes back to previous screen instead of
-      // homescreen like the "Reject" button
-      await expectConnectionsScreen();
-      // go back another level to reach home screen
       await device.pressBack();
       await expectHomescreen();
     });
@@ -45,6 +40,21 @@ describe('Connections', () => {
       await expect(element(by.id('successScreen'))).toBeVisible();
       await element(by.id('successDoneBtn')).tap();
       await expectConnectionsScreen();
+      if (!hasBackButton) return true;
+      await device.pressBack();
+      await expectHomescreen();
+    });
+
+    it('should handle back button correctly during connection flow', async () => {
+      if (!hasBackButton) return true;
+      await element(by.id('connectionsBtn')).tap();
+      await createFakeConnection();
+      await element(by.id('confirmConnectionBtn')).tap();
+      await expect(element(by.id('successScreen'))).toBeVisible();
+      await device.pressBack();
+      await expectConnectionsScreen();
+      await device.pressBack();
+      await expectHomescreen();
     });
   });
 });
