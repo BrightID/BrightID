@@ -9,7 +9,7 @@ import { navigate } from '@/NavigationService';
 let dropDownAlertRef = null;
 
 export const alertUser = (notification) => {
-  dropDownAlertRef.alertWithType(
+  dropDownAlertRef?.alertWithType(
     'custom',
     notification.title,
     notification.message,
@@ -32,39 +32,37 @@ export const NotificationBanner = () => {
   };
 
   return (
-    <View>
-      <DropdownAlert
-        ref={(ref) => {
-          dropDownAlertRef = ref;
-        }}
-        closeInterval={0}
-        containerStyle={styles.container}
-        contentContainerStyle={{
-          flex: 1,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-        titleStyle={styles.title}
-        messageStyle={styles.message}
-        activeStatusBarStyle="dark-content"
-        activeStatusBarBackgroundColor="#eee"
-        testID="notificationBanner"
-        elevation={10}
-        zIndex={10}
-        onCancel={_onCancel}
-        onTap={_onTap}
-        onClose={_onClose}
-        renderImage={() => (
-          <Material
-            name="account-alert"
-            color="#333"
-            size={36}
-            style={{ padding: 8, alignSelf: 'center' }}
-          />
-        )}
-      />
-    </View>
+    <DropdownAlert
+      ref={(ref) => {
+        dropDownAlertRef = ref;
+      }}
+      closeInterval={0}
+      containerStyle={styles.container}
+      contentContainerStyle={{
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+      titleStyle={styles.title}
+      messageStyle={styles.message}
+      activeStatusBarStyle="dark-content"
+      activeStatusBarBackgroundColor="#eee"
+      testID="notificationBanner"
+      elevation={10}
+      zIndex={10}
+      onCancel={_onCancel}
+      onTap={_onTap}
+      onClose={_onClose}
+      renderImage={() => (
+        <Material
+          name="account-alert"
+          color="#333"
+          size={36}
+          style={{ padding: 8, alignSelf: 'center' }}
+        />
+      )}
+    />
   );
 };
 
@@ -72,6 +70,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#eee',
     height: 110,
+    zIndex: 100,
   },
   // defaultContainer: { alignSelf: 'center' },
   title: {

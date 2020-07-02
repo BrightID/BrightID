@@ -76,9 +76,9 @@ class NodeApi {
     };
 
     let res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
+    NodeApi.throwOnError(res);
     console.log(`Initiator opMessage: ${message} - hash: ${hash(message)}`);
-    BrightId.setOperation(op);
+    NodeApi.setOperation(op);
   }
 
   async removeConnection(id2: string, reason: string) {
@@ -104,8 +104,8 @@ class NodeApi {
     };
 
     let res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async createGroup(
@@ -154,8 +154,8 @@ class NodeApi {
     };
 
     let res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async dismiss(id2: string, group: string) {
@@ -181,8 +181,8 @@ class NodeApi {
     };
 
     let res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async invite(id2: string, group: string, data: string) {
@@ -209,7 +209,7 @@ class NodeApi {
     };
 
     let res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
+    NodeApi.throwOnError(res);
   }
 
   async deleteGroup(group: string) {
@@ -234,8 +234,8 @@ class NodeApi {
     };
 
     let res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async joinGroup(group: string) {
@@ -260,8 +260,8 @@ class NodeApi {
     };
 
     let res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async leaveGroup(group: string) {
@@ -286,8 +286,8 @@ class NodeApi {
     };
 
     let res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async setTrusted(trusted: string[]) {
@@ -312,8 +312,8 @@ class NodeApi {
     };
 
     let res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async setSigningKey(op: {
@@ -331,8 +331,8 @@ class NodeApi {
     op.v = v;
 
     let res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async linkContextId(context: string, contextId: string) {
@@ -358,13 +358,13 @@ class NodeApi {
     };
 
     let res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async getUserInfo(id: string) {
     let res = await this.api.get(`/users/${id}`);
-    BrightId.throwOnError(res);
+    NodeApi.throwOnError(res);
     return res.data.data;
   }
 
@@ -378,19 +378,19 @@ class NodeApi {
         result: '',
       };
     }
-    BrightId.throwOnError(res);
+    NodeApi.throwOnError(res);
     return res.data.data;
   }
 
   async getContext(context: string) {
     let res = await this.api.get(`/contexts/${context}`);
-    BrightId.throwOnError(res);
+    NodeApi.throwOnError(res);
     return res.data.data;
   }
 
   async ip(): string {
     let res = await this.api.get('/ip');
-    BrightId.throwOnError(res);
+    NodeApi.throwOnError(res);
     return res.data.data.ip;
   }
 }
