@@ -1,0 +1,15 @@
+stateDiagram
+  S1: WAITING_PROFILE
+  S2: WAITING_USER_CONFIRMATION
+  S3: WAITING_CONNECTION_CONFIRMATION
+  S4: TIMED_OUT
+  S6: ESTABLISHED
+  S8: REJECTED
+
+  [*] --> S1: scan QRCode/DeepLink
+  [*] --> S1: receive push notification
+  S1 --> S2: download profile
+  S2 --> S3: user confirms
+  S2 --> S8: user rejects
+  S3 --> S6: connection established
+  S3 --> S4: timeout
