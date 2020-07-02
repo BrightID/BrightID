@@ -42,7 +42,7 @@ class GroupPhoto extends React.Component<Props> {
             {circlePhotos[0] && (
               <Image
                 source={{
-                  uri: `file://${RNFS.DocumentDirectoryPath}/photos/${circlePhotos[0].photo.filename}`,
+                  uri: `file://${RNFS.DocumentDirectoryPath}/photos/${circlePhotos[0].photo?.filename}`,
                 }}
                 style={this.photoStyle(circlePhotos[0])}
               />
@@ -52,7 +52,7 @@ class GroupPhoto extends React.Component<Props> {
             {circlePhotos[1] && (
               <Image
                 source={{
-                  uri: `file://${RNFS.DocumentDirectoryPath}/photos/${circlePhotos[1].photo.filename}`,
+                  uri: `file://${RNFS.DocumentDirectoryPath}/photos/${circlePhotos[1].photo?.filename}`,
                 }}
                 style={this.photoStyle(circlePhotos[1])}
               />
@@ -60,7 +60,7 @@ class GroupPhoto extends React.Component<Props> {
             {circlePhotos[2] && (
               <Image
                 source={{
-                  uri: `file://${RNFS.DocumentDirectoryPath}/photos/${circlePhotos[2].photo.filename}`,
+                  uri: `file://${RNFS.DocumentDirectoryPath}/photos/${circlePhotos[2].photo?.filename}`,
                 }}
                 style={this.photoStyle(circlePhotos[2])}
               />

@@ -1,9 +1,8 @@
-/* global device:false, element:false, by:false */
+/* global element:false, by:false */
 
 import { createBrightID } from './testUtils';
 
-describe('Example', () => {
-
+describe('Onboarding', () => {
   it('should have onboarding carousel screen', async () => {
     // First page should be there at start
     await expect(element(by.id('brightIdOnboard'))).toBeVisible();

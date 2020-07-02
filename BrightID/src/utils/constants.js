@@ -30,3 +30,15 @@ export const BOTTOM_NAV_HEIGHT = DEVICE_TYPE === 'small' ? 55 : 63;
 export const INVITE_ACTIVE = 'active';
 export const INVITE_REJECTED = 'rejected';
 export const INVITE_ACCEPTED = 'accepted';
+
+export const BACKUP_URL = 'https://explorer.brightid.org';
+// CONNECTION CONSTANTS
+export const QR_TTL = 900000;
+export const PROFILE_POLL_INTERVAL = 1000;
+export const QR_TYPE_INITIATOR = 'initiator';
+export const QR_TYPE_RESPONDER = 'responder';
+
+// theme colors
+export const ORANGE = '#ED7A5D';
+
+export const MAX_WAITING_SECONDS = 60;

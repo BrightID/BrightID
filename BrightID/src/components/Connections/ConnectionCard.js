@@ -6,7 +6,8 @@ import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { DEVICE_TYPE, MAX_WAITING_SECONDS } from '@/utils/constants';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 /**
  * Connection Card in the Connections Screen
@@ -20,11 +21,85 @@ import { DEVICE_TYPE } from '@/utils/constants';
 
 const ICON_SIZE = DEVICE_TYPE === 'large' ? 36 : 32;
 
-class ConnectionCard extends React.PureComponent<Props> {
+type State = {
+  isStale: boolean,
+};
+
+class ConnectionCard extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      isStale: false,
+    };
+    this.stale_check_timer = 0;
+  }
+
+  componentDidMount() {
+    // if we have a "waiting" connection, start timer to handle stale connection requests
+    const { status, connectionDate } = this.props;
+    if (status === 'initiated') {
+      if (this.checkStale()) {
+        // this is already old. Immediately mark as "stale", no need for a timer.
+        this.setState({ isStale: true });
+      } else {
+        // start timer to check if connection got verified after MAX_WAITING_TIME
+        let checkTime =
+          connectionDate + MAX_WAITING_SECONDS * 1000 + 5000 - Date.now(); // add 5 seconds buffer
+        if (checkTime < 0) {
+          console.log(`Warning - checkTime in past: ${checkTime}`);
+          checkTime = 1000; // check in 1 second
+        }
+        console.log(`Marking connection as stale in ${checkTime}ms.`);
+        clearTimeout(this.stale_check_timer);
+        this.stale_check_timer = setTimeout(() => {
+          if (this.checkStale()) {
+            this.setState({ isStale: true });
+          }
+        }, checkTime);
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    if (
+      this.stale_check_timer &&
+      prevProps.status === 'initiated' &&
+      this.props.status === 'verified'
+    ) {
+      console.log(
+        `Connection ${this.props.name} changed 'initiated' -> 'verified'. Stopping stale_check_timer ID ${this.stale_check_timer}.`,
+      );
+      clearTimeout(this.stale_check_timer);
+      this.stale_check_timer = 0;
+    }
+  }
+
+  componentWillUnmount() {
+    // clear timer if it is set
+    if (this.stale_check_timer) {
+      clearTimeout(this.state.stale_check_timer);
+      this.stale_check_timer = 0;
+    }
+  }
+
+  checkStale = () => {
+    const { connectionDate, name } = this.props;
+    const ageSeconds = Math.floor((Date.now() - connectionDate) / 1000);
+    if (ageSeconds > MAX_WAITING_SECONDS) {
+      console.log(`Connection ${name} is stale (age: ${ageSeconds} seconds)`);
+      return true;
+    }
+    return false;
+  };
+
   handleUserOptions = () => {
     const { actionSheet } = this.props;
     actionSheet.connection = this.props;
     actionSheet.show();
+  };
+
+  handleRemoveStaleConnection = () => {
+    this.props.onRemove(this.props);
   };
 
   scoreColor = () => {
@@ -36,12 +111,17 @@ class ConnectionCard extends React.PureComponent<Props> {
     }
   };
 
-  setStatus = () => {
+  getStatus = () => {
+    const { isStale } = this.state;
     const { score, status } = this.props;
     if (status === 'initiated') {
+      let statusText = 'Waiting';
+      if (isStale) {
+        statusText = 'Connection failed. Please try again.';
+      }
       return (
         <View style={styles.scoreContainer}>
-          <Text style={styles.waitingMessage}>Waiting</Text>
+          <Text style={styles.waitingMessage}>{statusText}</Text>
         </View>
       );
     } else if (status === 'verified') {
@@ -62,25 +142,11 @@ class ConnectionCard extends React.PureComponent<Props> {
     }
   };
 
-  render() {
-    const { photo, name, connectionDate, style } = this.props;
-
-    return (
-      <View style={{ ...styles.container, ...style }}>
-        <Image
-          source={{
-            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo.filename}`,
-          }}
-          style={styles.photo}
-        />
-        <View style={styles.info}>
-          <Text style={styles.name}>{name}</Text>
-
-          <this.setStatus />
-          <Text style={styles.connectedText}>
-            Connected {moment(parseInt(connectionDate, 10)).fromNow()}
-          </Text>
-        </View>
+  getContextAction = () => {
+    const { status, photo } = this.props;
+    const { isStale } = this.state;
+    if (status === 'verified') {
+      return (
         <TouchableOpacity
           testID="flagConnectionBtn"
           style={styles.moreIcon}
@@ -88,6 +154,45 @@ class ConnectionCard extends React.PureComponent<Props> {
         >
           <Material size={ICON_SIZE} name="flag-remove" color="#ccc" />
         </TouchableOpacity>
+      );
+    }
+    // photo is added here due to bug discovered 6/29/20
+    if (status === 'deleted' || (status === 'initiated' && isStale) || !photo) {
+      return (
+        <TouchableOpacity
+          testID="deleteConnectionBtn"
+          style={styles.moreIcon}
+          onPress={this.handleRemoveStaleConnection}
+        >
+          <AntDesign size={ICON_SIZE} name="closecircle" color="#ccc" />
+        </TouchableOpacity>
+      );
+    }
+    // default: No context action
+    return null;
+  };
+
+  render() {
+    const { photo, name, connectionDate, style } = this.props;
+    const connectionStatus = this.getStatus();
+    const contextAction = this.getContextAction();
+
+    return (
+      <View style={{ ...styles.container, ...style }}>
+        <Image
+          source={{
+            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
+          }}
+          style={styles.photo}
+        />
+        <View style={styles.info}>
+          <Text style={styles.name}>{name}</Text>
+          {connectionStatus}
+          <Text style={styles.connectedText}>
+            Connected {moment(parseInt(connectionDate, 10)).fromNow()}
+          </Text>
+        </View>
+        {contextAction}
       </View>
     );
   }

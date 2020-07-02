@@ -12,28 +12,29 @@ import {
 import { connect } from 'react-redux';
 import RNFS from 'react-native-fs';
 import moment from 'moment';
-import { parseRecoveryQr, setRecoverySig } from './helpers';
 import { DEVICE_TYPE } from '@/utils/constants';
+import backupApi from '@/Api/BackupApi';
+import { parseRecoveryQr } from './helpers';
 
-class ConnectionCard extends React.PureComponent<Props> {
+class RecoveryConnectionCard extends React.PureComponent<Props> {
   handleConnectionSelect = async () => {
     try {
       const { signingKey, timestamp } = parseRecoveryQr(
         this.props.recoveryRequestCode,
       );
-      const next = await setRecoverySig(this.props.id, signingKey, timestamp);
-      if (next) {
-        Alert.alert(
-          'Info',
-          'Your request to help recovering this account submitted successfully!',
-          [
-            {
-              text: 'OK',
-              onPress: () => this.props.navigation.navigate('Home'),
-            },
-          ],
-        );
-      }
+
+      await backupApi.setSig({ id: this.props.id, timestamp, signingKey });
+
+      Alert.alert(
+        'Info',
+        'Your request to help recovering this account submitted successfully!',
+        [
+          {
+            text: 'OK',
+            onPress: () => this.props.navigation.navigate('Home'),
+          },
+        ],
+      );
     } catch (err) {
       console.warn(err.message);
     }
@@ -56,7 +57,7 @@ class ConnectionCard extends React.PureComponent<Props> {
         <View style={{ ...styles.container, ...style }}>
           <Image
             source={{
-              uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo.filename}`,
+              uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
             }}
             style={styles.photo}
           />
@@ -139,4 +140,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(ConnectionCard);
+export default connect()(RecoveryConnectionCard);

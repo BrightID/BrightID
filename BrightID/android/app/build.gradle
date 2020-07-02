@@ -135,13 +135,21 @@ if (keystorePropertiesFile.exists()){
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
+    // Fix "java.lang.UnsatisfiedLinkError: couldn't find DSO to load: libhermes.so" in release builds
+    // Found at https://github.com/facebook/react-native/issues/25923#issuecomment-626663209
+    configurations.all {
+      resolutionStrategy {
+        force "com.facebook.soloader:soloader:0.8.2"
+      }
+    }
+
     defaultConfig {
         applicationId "org.brightid"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         missingDimensionStrategy 'react-native-camera', 'general'
-        versionCode 13
-        versionName "2.7.1"
+        versionCode 17
+        versionName "2.9.1"
         multiDexEnabled true
         testBuildType System.getProperty('testBuildType', 'debug')  // This will later be used to control the test apk build type
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'

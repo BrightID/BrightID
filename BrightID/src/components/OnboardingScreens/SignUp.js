@@ -18,7 +18,7 @@ import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { takePhoto, chooseImage } from '@/utils/images';
-import { DEVICE_TYPE, DEVICE_OS } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_OS, ORANGE } from '@/utils/constants';
 import { handleBrightIdCreation } from './actions';
 
 type State = {
@@ -121,14 +121,14 @@ export class SignUp extends React.Component<Props, State> {
     const { name, finalBase64, creatingBrightId, editingName } = this.state;
 
     return (
-      <SafeAreaView style={styles.safeAreaContainer}>
+      <>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor={ORANGE}
+          animated={true}
+        />
+        <View style={styles.orangeTop} />
         <Container style={styles.container} behavior="padding">
-          <StatusBar
-            barStyle="dark-content"
-            backgroundColor="#F52828"
-            translucent={false}
-            animated={true}
-          />
           <View style={styles.addPhotoContainer}>
             {finalBase64.uri && !editingName ? (
               <TouchableOpacity
@@ -229,15 +229,17 @@ export class SignUp extends React.Component<Props, State> {
             }}
           />
         </Container>
-      </SafeAreaView>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  safeAreaContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+    zIndex: 1,
   },
   container: {
     flex: 1,
@@ -245,6 +247,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    marginTop: -58,
+    zIndex: 10,
+    overflow: 'hidden',
   },
   addPhotoContainer: {
     alignItems: 'center',
@@ -257,7 +264,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonContainer: {
-    marginTop: DEVICE_TYPE === 'large' ? 35 : 28,
+    marginTop: DEVICE_LARGE ? 35 : 28,
     justifyContent: 'space-evenly',
     alignItems: 'center',
   },
@@ -320,25 +327,25 @@ const styles = StyleSheet.create({
   },
   createBrightIdButton: {
     backgroundColor: '#428BE5',
-    width: DEVICE_TYPE === 'large' ? 285 : 260,
+    width: DEVICE_LARGE ? 285 : 260,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: DEVICE_TYPE === 'large' ? 14 : 10,
-    paddingBottom: DEVICE_TYPE === 'large' ? 13 : 9,
+    paddingTop: DEVICE_LARGE ? 14 : 10,
+    paddingBottom: DEVICE_LARGE ? 13 : 9,
     marginTop: 22,
   },
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',
     color: '#fff',
     fontWeight: '600',
-    fontSize: DEVICE_TYPE === 'large' ? 18 : 16,
+    fontSize: DEVICE_LARGE ? 18 : 16,
   },
   recoverButton: {
-    width: DEVICE_TYPE === 'large' ? 285 : 260,
+    width: DEVICE_LARGE ? 285 : 260,
     borderWidth: 1,
     borderColor: '#4990e2',
-    paddingTop: DEVICE_TYPE === 'large' ? 14 : 10,
-    paddingBottom: DEVICE_TYPE === 'large' ? 13 : 9,
+    paddingTop: DEVICE_LARGE ? 14 : 10,
+    paddingBottom: DEVICE_LARGE ? 13 : 9,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
@@ -346,7 +353,7 @@ const styles = StyleSheet.create({
   recoverButtonText: {
     fontFamily: 'ApexNew-Medium',
     color: '#4990e2',
-    fontSize: DEVICE_TYPE === 'large' ? 18 : 16,
+    fontSize: DEVICE_LARGE ? 18 : 16,
     fontWeight: '500',
     fontStyle: 'normal',
     letterSpacing: 0,

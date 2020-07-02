@@ -12,9 +12,16 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
+import { setInternetCredentials } from 'react-native-keychain';
 import { setBackupCompleted, setPassword } from '@/actions/index';
 import emitter from '@/emitter';
-import { DEVICE_OS } from '@/utils/constants';
+import {
+  DEVICE_IOS,
+  DEVICE_ANDROID,
+  BACKUP_URL,
+  DEVICE_LARGE,
+  ORANGE,
+} from '@/utils/constants';
 import { backupAppData } from './helpers';
 
 type State = {
@@ -26,7 +33,7 @@ type State = {
   isEditing: boolean,
 };
 
-const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
+const Container = DEVICE_IOS ? KeyboardAvoidingView : View;
 // const Container = KeyboardAvoidingView;
 
 class BackupScreen extends React.Component<Props, State> {
@@ -74,13 +81,22 @@ class BackupScreen extends React.Component<Props, State> {
   };
 
   startBackup = async () => {
-    if (!this.validatePass()) return;
+    if (!this.state.pass1 || (DEVICE_ANDROID && !this.validatePass())) return;
+
     try {
-      const { dispatch, connections, groups, navigation } = this.props;
+      const { dispatch, connections, groups, navigation, id } = this.props;
 
       dispatch(setPassword(this.state.pass1));
+
+      try {
+        await setInternetCredentials(BACKUP_URL, id, this.state.pass1);
+      } catch (err) {
+        console.log(err.message);
+      }
+
       const groupsPhotoCount = groups.filter((group) => group.photo?.filename)
         .length;
+
       this.setState({
         backupInProgress: true,
         total: connections.length + groupsPhotoCount + 2,
@@ -106,74 +122,108 @@ class BackupScreen extends React.Component<Props, State> {
     const { pass1, pass2, isEditing } = this.state;
 
     return (
-      <Container style={styles.container} behavior="padding">
-        <View style={styles.textInputContainer}>
-          {!isEditing && (
-            <Text style={styles.textInfo}>
-              Enter a password to encrypt your backup data with:
-            </Text>
-          )}
-          <TextInput
-            onChangeText={(pass) => this.setState({ pass1: pass })}
-            value={pass1}
-            placeholder="Password"
-            placeholderTextColor="#9e9e9e"
-            style={styles.textInput}
-            autoCorrect={false}
-            textContentType="password"
-            autoCompleteType="password"
-            underlineColorAndroid="transparent"
-            secureTextEntry={true}
-            onFocus={this.handleTextFocus}
-          />
-          <TextInput
-            onChangeText={(pass) => this.setState({ pass2: pass })}
-            value={pass2}
-            placeholder="Confirm Password"
-            placeholderTextColor="#9e9e9e"
-            style={styles.textInput}
-            autoCorrect={false}
-            textContentType="password"
-            autoCompleteType="password"
-            underlineColorAndroid="transparent"
-            secureTextEntry={true}
-            onBlur={this.handleTextBlur}
-            onFocus={this.handleTextFocus}
-            blurOnSubmit={true}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          {!this.state.backupInProgress ? (
-            <TouchableOpacity
-              style={styles.startBackupButton}
-              onPress={this.startBackup}
-            >
-              <Text style={styles.buttonInnerText}>Start Backup</Text>
-            </TouchableOpacity>
-          ) : (
-            <View style={styles.loader}>
+      <>
+        <View style={styles.orangeTop} />
+        <Container style={styles.container} behavior="padding">
+          <View style={styles.textInputContainer}>
+            {(!isEditing || DEVICE_LARGE) && (
               <Text style={styles.textInfo}>
-                Uploading encrypted data to backup server ...
+                Enter a password to encrypt your backup data with:
               </Text>
-              <Text style={styles.textInfo}>
-                {this.state.completed}/{this.state.total} completed
-              </Text>
-              <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
-            </View>
-          )}
-        </View>
-      </Container>
+            )}
+            <TextInput
+              style={styles.invisibleUsername}
+              placeholder="Username"
+              textContentType="username"
+              autoCompleteType="username"
+              value={this.props.id}
+            />
+
+            <TextInput
+              onChangeText={(pass) => this.setState({ pass1: pass })}
+              value={pass1}
+              placeholder="Password"
+              placeholderTextColor="#9e9e9e"
+              style={styles.textInput}
+              autoCorrect={false}
+              textContentType="newPassword"
+              passwordRules="required: lower; required: upper; required: digit; required: [-]; minlength: 20;"
+              autoCompleteType="password"
+              underlineColorAndroid="transparent"
+              secureTextEntry={true}
+              onFocus={this.handleTextFocus}
+            />
+
+            {DEVICE_ANDROID && (
+              <TextInput
+                onChangeText={(pass) => this.setState({ pass2: pass })}
+                value={pass2}
+                placeholder="Confirm Password"
+                placeholderTextColor="#9e9e9e"
+                style={styles.textInput}
+                autoCorrect={false}
+                autoCompleteType="password"
+                underlineColorAndroid="transparent"
+                secureTextEntry={true}
+                onBlur={this.handleTextBlur}
+                onFocus={this.handleTextFocus}
+                blurOnSubmit={true}
+              />
+            )}
+          </View>
+          <View style={styles.buttonContainer}>
+            {!this.state.backupInProgress ? (
+              <TouchableOpacity
+                style={[
+                  styles.startBackupButton,
+                  !this.state.pass1 && styles.disabledButton,
+                ]}
+                onPress={this.startBackup}
+                disabled={!this.state.pass1}
+              >
+                <Text style={styles.buttonInnerText}>Start Backup</Text>
+              </TouchableOpacity>
+            ) : (
+              <View style={styles.loader}>
+                <Text style={styles.textInfo}>
+                  Uploading encrypted data to backup server ...
+                </Text>
+                <Text style={styles.textInfo}>
+                  {this.state.completed}/{this.state.total} completed
+                </Text>
+                <Spinner
+                  isVisible={true}
+                  size={97}
+                  type="Wave"
+                  color="#4990e2"
+                />
+              </View>
+            )}
+          </View>
+        </Container>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    marginTop: -58,
+    zIndex: 10,
+    overflow: 'hidden',
   },
   textInputContainer: {
     marginTop: 44,
@@ -204,6 +254,12 @@ const styles = StyleSheet.create({
     width: 275,
     textAlign: 'left',
     paddingBottom: 5,
+  },
+  invisibleUsername: {
+    position: 'absolute',
+    left: -100,
+    width: 1,
+    height: 1,
   },
   buttonInfoText: {
     fontFamily: 'ApexNew-Book',
@@ -238,6 +294,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
   },
+  disabledButton: {
+    opacity: 0.4,
+  },
   loader: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -245,7 +304,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ connections, groups }) => ({
+export default connect(({ connections, groups, user }) => ({
   ...connections,
   ...groups,
+  id: user.id,
 }))(BackupScreen);

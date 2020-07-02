@@ -4,18 +4,21 @@ import AsyncStorage from '@react-native-community/async-storage';
 import thunkMiddleware from 'redux-thunk';
 import { applyMiddleware, createStore, compose } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
-import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import reducer from '@/reducer';
-import { groupsTransformer, userTransformer } from './transform';
 import { migrate } from './migrations';
+import {
+  groupsTransformer,
+  qrDataTransformer,
+  userTransformer,
+} from './transform';
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  stateReconciler: autoMergeLevel2,
-  transforms: [userTransformer, groupsTransformer],
-  version: 5,
+  transforms: [userTransformer, groupsTransformer, qrDataTransformer],
+  version: 6,
   migrate,
+  timeout: null,
 };
 
 const persistedReducer = persistReducer(persistConfig, reducer);

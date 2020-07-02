@@ -45,7 +45,7 @@ class TrustedConnectionCard extends React.PureComponent<Props> {
       <View style={{ ...styles.container, ...style }}>
         <Image
           source={{
-            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo.filename}`,
+            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
           }}
           style={styles.photo}
         />
@@ -66,7 +66,7 @@ class TrustedConnectionCard extends React.PureComponent<Props> {
           <AntDesign
             size={30.4}
             name={this.selected() ? 'checkcircle' : 'checkcircleo'}
-            color="#000"
+            color={this.selected() ? '#28a84a' : '#000'}
           />
         </TouchableOpacity>
       </View>

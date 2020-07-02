@@ -59,11 +59,10 @@ android/keystores/debug.keystore
 .vscode
 
 BrightID/ios/Pods/
-BrightID/ios/Pods/Target Support Files/Pods-BrightID/
-BrightID/ios/Pods/Target Support Files/Pods-BrightID/
-BrightID/ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID-acknowledgements.markdown
-BrightID/ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID-acknowledgements.plist
-BrightID/ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID.debug.xcconfig
-BrightID/ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID.release.xcconfig
+BrightID/ios/Podfile.lock
 BrightID/ios/Pods/Pods.xcodeproj/project.pbxproj
 BrightID/ios/Pods/Manifest.lock
+BrightID/ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID.release.xcconfig
+BrightID/ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID.debug.xcconfig
+BrightID/ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID-acknowledgements.markdown
+BrightID/yarn.lock

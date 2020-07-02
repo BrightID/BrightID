@@ -40,15 +40,15 @@ export const createNewGroup = (
       throw new Error('You need two other people to form a group');
     }
 
-    const [founder1, founder2] = newGroupCoFounders.map((u) =>
+    const [founder2, founder3] = newGroupCoFounders.map((u) =>
       connections.find((c) => c.id === u),
     );
 
-    if (!founder1 || !founder2) return;
+    if (!founder2 || !founder3) return;
 
     if (type === 'primary') {
-      if (founder1.hasPrimaryGroup || founder2.hasPrimaryGroup) {
-        const name = founder1.hasPrimaryGroup ? founder1.name : founder2.name;
+      if (founder2.hasPrimaryGroup || founder3.hasPrimaryGroup) {
+        const name = founder2.hasPrimaryGroup ? founder2.name : founder3.name;
         throw new Error(`${name} already has a primary group`);
       }
     }
@@ -79,8 +79,8 @@ export const createNewGroup = (
     }
 
     const newGroup = {
-      founders: [id, founder1.id, founder2.id],
-      admins: [id, founder1.id, founder2.id],
+      founders: [id, founder2.id, founder3.id],
+      admins: [id, founder2.id, founder3.id],
       members: [id],
       id: groupId,
       isNew: true,
@@ -92,16 +92,16 @@ export const createNewGroup = (
       type,
     };
 
-    const data1 = await encryptAesKey(aesKey, founder1.signingKey);
+    const inviteData2 = await encryptAesKey(aesKey, founder2.signingKey);
 
-    const data2 = await encryptAesKey(aesKey, founder2.signingKey);
+    const inviteData3 = await encryptAesKey(aesKey, founder3.signingKey);
 
     await api.createGroup(
       groupId,
-      founder1.id,
-      data1,
       founder2.id,
-      data2,
+      inviteData2,
+      founder3.id,
+      inviteData3,
       url,
       type,
     );
@@ -116,8 +116,8 @@ export const createNewGroup = (
     }
     return true;
   } catch (err) {
-    console.log(err);
-    Alert.alert('Cannot create group', err.message);
+    console.log(err.message);
+    Alert.alert('Group creation unsuccessful', err.message);
     return false;
   }
 };

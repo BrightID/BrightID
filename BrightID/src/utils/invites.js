@@ -2,6 +2,7 @@
 
 import CryptoJS from 'crypto-js';
 import { eqProps } from 'ramda';
+import { obtainKeys } from '@/utils/keychain';
 import store from '@/store';
 import { uInt8ArrayToB64, b64ToUint8Array, randomKey } from '@/utils/encoding';
 import nacl from 'tweetnacl';
@@ -12,14 +13,18 @@ import { INVITE_ACTIVE } from './constants';
 export const getInviteInfo = async (invite: invite) => {
   try {
     console.log('getting invite info', invite);
-    const {
-      user: { secretKey },
-      connections: { connections },
-    } = store.getState();
-    const conn = connections.find((conn) => conn.id === invite.inviter);
     if (!invite.data) {
       return {};
     }
+
+    let { secretKey } = await obtainKeys();
+
+    const {
+      connections: { connections },
+    } = store.getState();
+
+    const conn = connections.find((conn) => conn.id === invite.inviter);
+
     const pub = convertPublicKey(b64ToUint8Array(conn.signingKey));
     const msg = b64ToUint8Array(invite.data.split('_')[0]);
     const nonce = b64ToUint8Array(invite.data.split('_')[1]);
@@ -95,9 +100,7 @@ export const updateInvites = async (invites: invite[]): Promise<invite[]> => {
 
 export const encryptAesKey = async (aesKey: string, signingKey: string) => {
   try {
-    const {
-      user: { secretKey },
-    } = store.getState();
+    let { secretKey } = await obtainKeys();
 
     const pub = convertPublicKey(b64ToUint8Array(signingKey));
     const msg = b64ToUint8Array(aesKey);

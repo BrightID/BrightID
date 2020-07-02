@@ -33,8 +33,12 @@ export {
 export {
   SET_CONNECT_QR_DATA,
   REMOVE_CONNECT_QR_DATA,
+  SET_MY_QR_DATA,
+  CLEAR_MY_QR_DATA,
   setConnectQrData,
   removeConnectQrData,
+  setMyQrData,
+  clearMyQrData,
 } from './connectQrData';
 
 export {

@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-import { StatusBar, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { pollOperations } from './utils/operations';
 import AppRoutes from './routes';
 import { store, persistor } from './store';
@@ -20,16 +20,15 @@ import { NotificationBanner } from './components/Helpers/NotificationBanner';
  * read docs here: https://reactnavigation.org/
  */
 
+// NOTE: BOOTSTRAP happens inside of LoadingScreen
+
 export const App = () => {
   // setup deep linking
   const linking = {
-    prefixes: ['brightid://'],
+    prefixes: ['brightid://', 'https://app.brightid.org'],
     config: {
-      Apps: {
-        screens: {
-          Apps: 'link-verification/:baseUrl/:context/:contextId',
-        },
-      },
+      Apps: 'link-verification/:baseUrl/:context/:contextId',
+      ScanCode: 'connection-code/:qrcode',
     },
   };
 
@@ -39,7 +38,6 @@ export const App = () => {
     // subscribe to operations
     const timerId = setInterval(() => {
       pollOperations();
-      console.log('polling operations');
     }, 5000);
 
     return () => {
@@ -58,11 +56,6 @@ export const App = () => {
             linking={linking}
             fallback={<Loading />}
           >
-            <StatusBar
-              barStyle="dark-content"
-              backgroundColor="#F52828"
-              translucent={false}
-            />
             <AppRoutes />
           </NavigationContainer>
         </SafeAreaProvider>

@@ -1,9 +1,20 @@
 // @flow
 
-import * as React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { connect } from 'react-redux';
+import React, { useCallback } from 'react';
+import {
+  BackHandler,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  StatusBar,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDispatch } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
 import { removeConnectUserData } from '../../actions';
+import { sortByDateAddedDescending } from '../Connections/models/sortingUtility';
 
 /**
  * Successfly Added Connection Confirmation Screen of BrightID
@@ -12,43 +23,69 @@ import { removeConnectUserData } from '../../actions';
  *
  */
 
-type State = {};
+export const SuccessScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+  // clear navigation history to prevent going back to confirmation and preview screens with back button
+  const resetNav = useCallback(() => {
+    navigation.reset({
+      index: 1,
+      routes: [
+        { name: 'Home' },
+        {
+          name: 'Connections',
+        },
+      ],
+    });
+    return true;
+  }, [navigation]);
 
-export class SuccessScreen extends React.Component<Props, State> {
-  render() {
-    return (
-      <View testID="successScreen" style={styles.container}>
-        <View style={styles.successTextContainer}>
-          <Text style={styles.successText}>Connection Successful!</Text>
-          <Image
-            source={require('../../static/success.png')}
-            style={styles.successImage}
-            resizeMode="cover"
-            onError={(e) => {
-              console.log(e);
-            }}
-            accessible={true}
-            accessibilityLabel="success image"
-          />
-        </View>
+  useFocusEffect(
+    useCallback(() => {
+      BackHandler.addEventListener('hardwareBackPress', resetNav);
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', resetNav);
+    }, [resetNav]),
+  );
+  return (
+    <SafeAreaView testID="successScreen" style={styles.container}>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="#fff"
+        translucent={false}
+        animated={true}
+      />
 
-        <View style={styles.confirmButtonContainer}>
-          <TouchableOpacity
-            testID="successDoneBtn"
-            onPress={() => {
-              const { navigation, dispatch } = this.props;
-              dispatch(removeConnectUserData());
-              navigation.navigate('Home');
-            }}
-            style={styles.confirmButton}
-          >
-            <Text style={styles.confirmButtonText}>Done</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.successTextContainer}>
+        <Text style={styles.successText}>Connection Successful!</Text>
+        <Image
+          source={require('@/static/success.png')}
+          style={styles.successImage}
+          resizeMode="cover"
+          onError={(e) => {
+            console.log(e);
+          }}
+          accessible={true}
+          accessibilityLabel="success image"
+        />
       </View>
-    );
-  }
-}
+
+      <View style={styles.confirmButtonContainer}>
+        <TouchableOpacity
+          testID="successDoneBtn"
+          onPress={() => {
+            dispatch(removeConnectUserData());
+            dispatch(sortByDateAddedDescending());
+
+            resetNav();
+          }}
+          style={styles.confirmButton}
+        >
+          <Text style={styles.confirmButtonText}>Done</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -61,7 +98,7 @@ const styles = StyleSheet.create({
   },
   successTextContainer: {
     // flex: 1,
-    marginTop: 131,
+    // marginTop: 131,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -126,4 +163,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(SuccessScreen);
+export default SuccessScreen;

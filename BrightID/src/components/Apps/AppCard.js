@@ -54,7 +54,7 @@ class AppCard extends React.PureComponent<Props, State> {
   };
 
   linkLabel = () => {
-    const { state } = this.props;
+    const { state, result } = this.props;
     if (state === 'initiated') {
       return (
         <View style={styles.stateContainer}>
@@ -62,9 +62,12 @@ class AppCard extends React.PureComponent<Props, State> {
         </View>
       );
     } else if (state === 'failed') {
+      const errorMessage = result
+        ? `Not linked: ${result}.`
+        : `Not Linked, try again`;
       return (
         <View style={styles.stateContainer}>
-          <Text style={styles.errorMessage}>Not Linked, try again</Text>
+          <Text style={styles.errorMessage}>{errorMessage}</Text>
         </View>
       );
     } else {

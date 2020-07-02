@@ -37,4 +37,4 @@ class RNCamera extends React.Component {
   }
 }
 
-export default RNCamera;
+export { RNCamera };

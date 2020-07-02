@@ -29,7 +29,6 @@ const initialState = {
   publicKey: '',
   password: '',
   hashedId: '',
-  secretKey: new Uint8Array([]),
   verifications: [],
 };
 
@@ -66,7 +65,6 @@ export const reducer = (state: UserState = initialState, action: action) => {
         name: action.name,
         publicKey: action.publicKey,
         id: action.id,
-        secretKey: action.secretKey,
       };
     }
     case SET_USER_NAME: {
@@ -110,8 +108,7 @@ export const reducer = (state: UserState = initialState, action: action) => {
       return dissoc('safePubKey', state);
     }
     case HYDRATE_USER: {
-      if (!action.data.name || !action.data.id || !action.data.secretKey)
-        return state;
+      if (!action.data.name || !action.data.id) return state;
 
       return {
         ...state,
@@ -123,7 +120,6 @@ export const reducer = (state: UserState = initialState, action: action) => {
         publicKey: action.data.publicKey,
         password: action.data.password,
         hashedId: action.data.hashedId,
-        secretKey: action.data.secretKey,
       };
     }
     case RESET_STORE: {

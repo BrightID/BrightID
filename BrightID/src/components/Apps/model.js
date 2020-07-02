@@ -46,14 +46,14 @@ export const handleAppContext = async (params: Params) => {
           text: 'No',
           style: 'cancel',
           onPress: () => {
-            navigate('Home', { screen: 'Home' });
+            navigate('Home');
           },
         },
       ],
     );
   } else {
     Alert.alert('Failed', `Unable to link ${context} with BrightID`);
-    navigate('Home', { screen: 'Home' });
+    navigate('Home');
   }
 };
 
@@ -70,7 +70,7 @@ const linkApp = async (baseUrl, context, contextInfo, contextId) => {
         'Success',
         `Succesfully sent the request to link ${context} with BrightID`,
       );
-      navigate('Home', { screen: 'Home' });
+      navigate('Home');
     }
   } catch (e) {
     Alert.alert(`App linking failed`, `${e.message}`, [

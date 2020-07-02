@@ -5,6 +5,7 @@ import { Linking, StyleSheet, View, FlatList, Text } from 'react-native';
 import { connect } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
 import EmptyList from '@/components/Helpers/EmptyList';
+import { ORANGE } from '@/utils/constants';
 import AppCard from './AppCard';
 import { handleAppContext, deleteApp } from './model';
 
@@ -74,42 +75,55 @@ export class AppsScreen extends React.Component<Prop, State> {
     const { apps } = this.props;
     const { selectedApp } = this.state;
     return (
-      <View style={styles.container}>
-        <this.sponsorLabel />
-        <FlatList
-          data={apps}
-          contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-          keyExtractor={({ name }, index) => name + index}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <AppCard {...item} handleAction={this.handleAction} />
-          )}
-          ListEmptyComponent={<EmptyList title="No Apps" iconType="flask" />}
-        />
-        <ActionSheet
-          ref={(o) => {
-            deleteSheetRef = o;
-          }}
-          title={`Are you sure you want to delete ${selectedApp}`}
-          options={['Delete', 'cancel']}
-          cancelButtonIndex={1}
-          onPress={(index) => {
-            if (index === 0) {
-              deleteApp(selectedApp);
-            }
-          }}
-        />
-      </View>
+      <>
+        <View style={styles.orangeTop} />
+        <View style={styles.container} testID="appsScreen">
+          <this.sponsorLabel />
+          <FlatList
+            data={apps}
+            contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+            keyExtractor={({ name }, index) => name + index}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <AppCard {...item} handleAction={this.handleAction} />
+            )}
+            ListEmptyComponent={<EmptyList title="No Apps" iconType="flask" />}
+          />
+          <ActionSheet
+            ref={(o) => {
+              deleteSheetRef = o;
+            }}
+            title={`Are you sure you want to delete ${selectedApp}`}
+            options={['Delete', 'cancel']}
+            cancelButtonIndex={1}
+            onPress={(index) => {
+              if (index === 0) {
+                deleteApp(selectedApp);
+              }
+            }}
+          />
+        </View>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fdfdfd',
-    height: '100%',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    marginTop: -58,
+    zIndex: 10,
+    overflow: 'hidden',
   },
   centerItem: {
     alignItems: 'center',

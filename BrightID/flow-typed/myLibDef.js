@@ -59,12 +59,24 @@ declare type connection = {
 };
 
 declare type ConnectQrData = {
-  aesKey: string,
-  ipAddress: string,
-  uuid: string,
-  user: string,
-  qrString: string,
-  channel: string,
+  myQrData?: {
+    aesKey: string,
+    uuid: string,
+    ipAddress: string,
+    qrString: string,
+    timestamp: number,
+    ttl: number,
+    type: string,
+    channel: string,
+  },
+  peerQrData: {
+    aesKey: string,
+    ipAddress: string,
+    uuid: string,
+    qrString: string,
+    channel: string,
+    type: string,
+  },
 };
 
 declare type ConnectUserData = {
@@ -151,7 +163,6 @@ declare type UserState = {
   safePublicKey?: string,
   password: string,
   hashedId: string,
-  secretKey: Uint8Array,
 };
 
 declare type NotificationsState = {

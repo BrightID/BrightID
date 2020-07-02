@@ -12,7 +12,7 @@ describe('Connections', () => {
     hasBackButton = platform === 'android';
     // create identity
     await createBrightID();
-    await element(by.id('tabBarConnectionsBtn')).tap();
+    await element(by.id('connectionsBtn')).tap();
   });
 
   actions.forEach((action) => {
@@ -23,7 +23,6 @@ describe('Connections', () => {
         await element(by.id('confirmConnectionBtn')).tap();
         await expect(element(by.id('successScreen'))).toBeVisible();
         await element(by.id('successDoneBtn')).tap();
-        await element(by.id('tabBarConnectionsBtn')).tap();
       });
 
       it(`should cancel ${action} (backButton)`, async () => {

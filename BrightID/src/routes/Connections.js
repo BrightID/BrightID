@@ -1,16 +1,22 @@
 import * as React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ConnectionsScreen from '@/components/Connections/ConnectionsScreen';
 import SortingConnectionsScreen from '@/components/Connections/SortingConnectionsScreen';
-import { DEVICE_TYPE } from '@/utils/constants';
+import SearchConnections from '@/components/Connections/SearchConnections';
+import { DEVICE_IOS } from '@/utils/constants';
 import { createFakeConnection } from '@/components/Connections/models/createFakeConnection';
+import { navigate } from '@/NavigationService';
+import backArrow from '@/static/back_arrow.svg';
+import { SvgXml } from 'react-native-svg';
+import { store } from '@/store';
 import { headerOptions } from './helpers';
 
 const Stack = createStackNavigator();
 
 const connectionsScreenOptions = {
+  ...headerOptions,
   headerRight: __DEV__
     ? () => (
         <TouchableOpacity
@@ -22,11 +28,37 @@ const connectionsScreenOptions = {
         </TouchableOpacity>
       )
     : () => null,
-  headerShown: DEVICE_TYPE === 'large',
+  headerLeft: () => (
+    <TouchableOpacity
+      testID="connections-header-back"
+      style={{
+        marginLeft: DEVICE_IOS ? 20 : 10,
+      }}
+      onPress={() => {
+        navigate('Home');
+      }}
+    >
+      <SvgXml height="20" xml={backArrow} />
+    </TouchableOpacity>
+  ),
+  headerTitle: () => {
+    const { connections } = store.getState().connections;
+    return connections.length ? (
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}
+      >
+        <SearchConnections sortable={true} />
+      </View>
+    ) : null;
+  },
 };
 
 const Connections = () => (
-  <Stack.Navigator screenOptions={headerOptions}>
+  <>
     <Stack.Screen
       name="Connections"
       component={ConnectionsScreen}
@@ -35,8 +67,9 @@ const Connections = () => (
     <Stack.Screen
       name="SortingConnections"
       component={SortingConnectionsScreen}
+      options={headerOptions}
     />
-  </Stack.Navigator>
+  </>
 );
 
 export default Connections;

@@ -23,5 +23,7 @@ module.exports = {
     sourceExts: process.env.RN_SRC_EXT
       ? process.env.RN_SRC_EXT.split(',').concat(defaultSourceExts)
       : defaultSourceExts,
+    // Comment out for test release
+    // sourceExts: ['e2e.js'].concat(defaultSourceExts),
   },
 };

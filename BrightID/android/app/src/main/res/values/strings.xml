@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BrightID</string>
+    <string name="asset_statements" translatable="false">[{ \"include\": \"https://app.brightid.org/.well-known/assetlinks.json\" }]</string>
 </resources>

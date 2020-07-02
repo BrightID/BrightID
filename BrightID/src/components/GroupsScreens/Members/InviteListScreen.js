@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import api from '@/api/node';
 import { encryptAesKey } from '@/utils/invites';
 import EmptyList from '@/components/Helpers/EmptyList';
+import { ORANGE } from '@/utils/constants';
 import MemberCard from './MemberCard';
 
 export class InviteListScreen extends Component<Props, State> {
@@ -51,35 +52,49 @@ export class InviteListScreen extends Component<Props, State> {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.mainContainer}>
+      <>
+        <View style={styles.orangeTop} />
+        <View style={styles.container}>
           <View style={styles.mainContainer}>
-            <FlatList
-              style={styles.eligiblesContainer}
-              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-              data={this.getEligibles()}
-              keyExtractor={({ id }, index) => id + index}
-              renderItem={this.renderEligible}
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}
-              ListEmptyComponent={
-                <EmptyList title="No existing connections are eligible for this group, please come back later.." />
-              }
-            />
+            <View style={styles.mainContainer}>
+              <FlatList
+                style={styles.eligiblesContainer}
+                contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+                data={this.getEligibles()}
+                keyExtractor={({ id }, index) => id + index}
+                renderItem={this.renderEligible}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                ListEmptyComponent={
+                  <EmptyList title="No existing connections are eligible for this group, please come back later.." />
+                }
+              />
+            </View>
           </View>
         </View>
-      </View>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: 70,
+    width: '100%',
+    zIndex: 1,
+  },
   eligiblesContainer: {
     flex: 1,
   },
   container: {
     flex: 1,
     backgroundColor: '#fdfdfd',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    marginTop: -58,
+    zIndex: 10,
+    overflow: 'hidden',
   },
   mainContainer: {
     flex: 1,
