@@ -15,18 +15,18 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* BrightIDTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BrightIDTests.m */; };
-		3BD62E73C52BF0C07D8E0F9C /* libPods-BrightID-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CC08B06CB6D7506A4D2B13A /* libPods-BrightID-tvOSTests.a */; };
-		4714E0D2D63E562503C52D12 /* libPods-BrightID-BrightIDTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E38054BF8683FB49DF9E31 /* libPods-BrightID-BrightIDTests.a */; };
-		53218C307F770DE9C3B3EC82 /* libPods-BrightID-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AD336E4D5E37FF11B7BC312 /* libPods-BrightID-tvOS.a */; };
-		BDA777319EE66FF651BA71CA /* libPods-BrightID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 743D986C5B698601F1F1AEF5 /* libPods-BrightID.a */; };
+		477448EA18C6C94DADF31985 /* libPods-BrightID-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DBEC54C33EE633F36082A067 /* libPods-BrightID-tvOS.a */; };
+		4C5506017824F19B4CEDF11A /* libPods-BrightID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC7D638FFDD5FA55E748288 /* libPods-BrightID.a */; };
+		70AFAA6D5C14AE03155BEEE7 /* libPods-BrightID-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE60E16CABD772C22D12BC80 /* libPods-BrightID-tvOSTests.a */; };
+		9569C4DE2DC17E65206E8BF4 /* libPods-BrightID-BrightIDTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2B8008457D99C6B7DC293BC /* libPods-BrightID-BrightIDTests.a */; };
 		D70F6E98249B0A9D003CEDBF /* Poppins-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D70F6E96249B0A9D003CEDBF /* Poppins-Bold.otf */; };
 		D70F6E99249B0A9D003CEDBF /* Poppins-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = D70F6E97249B0A9D003CEDBF /* Poppins-Medium.otf */; };
-		D7708ACD2484DFB800B5DCAD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7708ACB2484DFB800B5DCAD /* LaunchScreen.xib */; };
 		D7708AD02484DFFB00B5DCAD /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7708ACF2484DFFB00B5DCAD /* AuthenticationServices.framework */; };
 		D7708AD52484E9B100B5DCAD /* EurostileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D7708AD12484E9B100B5DCAD /* EurostileRegular.ttf */; };
 		D7708AD62484E9B100B5DCAD /* ApexNew-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = D7708AD22484E9B100B5DCAD /* ApexNew-Light.otf */; };
 		D7708AD72484E9B100B5DCAD /* ApexNew-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = D7708AD32484E9B100B5DCAD /* ApexNew-Medium.otf */; };
 		D7708AD82484E9B100B5DCAD /* ApexNew-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = D7708AD42484E9B100B5DCAD /* ApexNew-Book.otf */; };
+		D7D4537A24AD90F0004357F0 /* LaunchScreenBrightID.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7D4537824AD90F0004357F0 /* LaunchScreenBrightID.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,37 +51,37 @@
 		00E356EE1AD99517003FC87E /* BrightIDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrightIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* BrightIDTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BrightIDTests.m; sourceTree = "<group>"; };
-		00E38054BF8683FB49DF9E31 /* libPods-BrightID-BrightIDTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID-BrightIDTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* BrightID.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrightID.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = BrightID/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = BrightID/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = BrightID/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = BrightID/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = BrightID/main.m; sourceTree = "<group>"; };
-		1CC08B06CB6D7506A4D2B13A /* libPods-BrightID-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		154377ECB221D733175B5DBF /* Pods-BrightID-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOS/Pods-BrightID-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		175ED2B054CC0441055C56C8 /* Pods-BrightID.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.release.xcconfig"; path = "Target Support Files/Pods-BrightID/Pods-BrightID.release.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* BrightID-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BrightID-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* BrightID-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BrightID-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		30AA8887C33B15990B7B3884 /* Pods-BrightID.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.release.xcconfig"; path = "Target Support Files/Pods-BrightID/Pods-BrightID.release.xcconfig"; sourceTree = "<group>"; };
-		3AD336E4D5E37FF11B7BC312 /* libPods-BrightID-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		587E40A94BA1910957865A95 /* Pods-BrightID-BrightIDTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-BrightIDTests.debug.xcconfig"; path = "Target Support Files/Pods-BrightID-BrightIDTests/Pods-BrightID-BrightIDTests.debug.xcconfig"; sourceTree = "<group>"; };
-		743D986C5B698601F1F1AEF5 /* libPods-BrightID.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		ABE34EAB38A48AF901E301ED /* Pods-BrightID-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOSTests/Pods-BrightID-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		AD33DBD6B6D9023B706DDB57 /* Pods-BrightID-BrightIDTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-BrightIDTests.release.xcconfig"; path = "Target Support Files/Pods-BrightID-BrightIDTests/Pods-BrightID-BrightIDTests.release.xcconfig"; sourceTree = "<group>"; };
-		C581427BF31075F29F229B06 /* Pods-BrightID-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOSTests/Pods-BrightID-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		CE3CE36A3A94D0546F0FE69B /* Pods-BrightID-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOS.release.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOS/Pods-BrightID-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		4F1A211599DC9F7D9F661306 /* Pods-BrightID-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOSTests/Pods-BrightID-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		55CA042B4F883E7076FCD63D /* Pods-BrightID.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.debug.xcconfig"; path = "Target Support Files/Pods-BrightID/Pods-BrightID.debug.xcconfig"; sourceTree = "<group>"; };
+		C3AC7E82842DFACB07AAF5B6 /* Pods-BrightID-BrightIDTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-BrightIDTests.release.xcconfig"; path = "Target Support Files/Pods-BrightID-BrightIDTests/Pods-BrightID-BrightIDTests.release.xcconfig"; sourceTree = "<group>"; };
+		D2B8008457D99C6B7DC293BC /* libPods-BrightID-BrightIDTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID-BrightIDTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D5E23A921255C3E87FD59C0E /* Pods-BrightID-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOSTests/Pods-BrightID-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D70F6E96249B0A9D003CEDBF /* Poppins-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Bold.otf"; path = "../assets/fonts/Poppins-Bold.otf"; sourceTree = "<group>"; };
 		D70F6E97249B0A9D003CEDBF /* Poppins-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Medium.otf"; path = "../assets/fonts/Poppins-Medium.otf"; sourceTree = "<group>"; };
-		D7708ACC2484DFB800B5DCAD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = BrightID/Base.lproj/LaunchScreenBrightID.xib; sourceTree = "<group>"; };
 		D7708ACE2484DFE000B5DCAD /* BrightID.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BrightID.entitlements; path = BrightID/BrightID.entitlements; sourceTree = "<group>"; };
 		D7708ACF2484DFFB00B5DCAD /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		D7708AD12484E9B100B5DCAD /* EurostileRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = EurostileRegular.ttf; path = ../assets/fonts/EurostileRegular.ttf; sourceTree = "<group>"; };
 		D7708AD22484E9B100B5DCAD /* ApexNew-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ApexNew-Light.otf"; path = "../assets/fonts/ApexNew-Light.otf"; sourceTree = "<group>"; };
 		D7708AD32484E9B100B5DCAD /* ApexNew-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ApexNew-Medium.otf"; path = "../assets/fonts/ApexNew-Medium.otf"; sourceTree = "<group>"; };
 		D7708AD42484E9B100B5DCAD /* ApexNew-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ApexNew-Book.otf"; path = "../assets/fonts/ApexNew-Book.otf"; sourceTree = "<group>"; };
-		D77641B38ABC60B82929B504 /* Pods-BrightID-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOS/Pods-BrightID-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		D7D4537924AD90F0004357F0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = BrightID/Base.lproj/LaunchScreenBrightID.xib; sourceTree = "<group>"; };
+		D81478310D75470E3F0B8D1C /* Pods-BrightID-BrightIDTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-BrightIDTests.debug.xcconfig"; path = "Target Support Files/Pods-BrightID-BrightIDTests/Pods-BrightID-BrightIDTests.debug.xcconfig"; sourceTree = "<group>"; };
+		DBEC54C33EE633F36082A067 /* libPods-BrightID-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE60E16CABD772C22D12BC80 /* libPods-BrightID-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		EE1FCE76072E636B3337A045 /* Pods-BrightID.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.debug.xcconfig"; path = "Target Support Files/Pods-BrightID/Pods-BrightID.debug.xcconfig"; sourceTree = "<group>"; };
+		FAC7D638FFDD5FA55E748288 /* libPods-BrightID.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE77560D1ECAFC9F48D7F76B /* Pods-BrightID-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOS.release.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOS/Pods-BrightID-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,7 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4714E0D2D63E562503C52D12 /* libPods-BrightID-BrightIDTests.a in Frameworks */,
+				9569C4DE2DC17E65206E8BF4 /* libPods-BrightID-BrightIDTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,7 +98,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D7708AD02484DFFB00B5DCAD /* AuthenticationServices.framework in Frameworks */,
-				BDA777319EE66FF651BA71CA /* libPods-BrightID.a in Frameworks */,
+				4C5506017824F19B4CEDF11A /* libPods-BrightID.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,7 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53218C307F770DE9C3B3EC82 /* libPods-BrightID-tvOS.a in Frameworks */,
+				477448EA18C6C94DADF31985 /* libPods-BrightID-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,7 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3BD62E73C52BF0C07D8E0F9C /* libPods-BrightID-tvOSTests.a in Frameworks */,
+				70AFAA6D5C14AE03155BEEE7 /* libPods-BrightID-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,7 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				D7708ACE2484DFE000B5DCAD /* BrightID.entitlements */,
-				D7708ACB2484DFB800B5DCAD /* LaunchScreen.xib */,
+				D7D4537824AD90F0004357F0 /* LaunchScreenBrightID.xib */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -159,10 +159,10 @@
 				D7708ACF2484DFFB00B5DCAD /* AuthenticationServices.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				743D986C5B698601F1F1AEF5 /* libPods-BrightID.a */,
-				00E38054BF8683FB49DF9E31 /* libPods-BrightID-BrightIDTests.a */,
-				3AD336E4D5E37FF11B7BC312 /* libPods-BrightID-tvOS.a */,
-				1CC08B06CB6D7506A4D2B13A /* libPods-BrightID-tvOSTests.a */,
+				FAC7D638FFDD5FA55E748288 /* libPods-BrightID.a */,
+				D2B8008457D99C6B7DC293BC /* libPods-BrightID-BrightIDTests.a */,
+				DBEC54C33EE633F36082A067 /* libPods-BrightID-tvOS.a */,
+				DE60E16CABD772C22D12BC80 /* libPods-BrightID-tvOSTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -170,14 +170,14 @@
 		3B38A4DFB4DF178E83F924E9 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				EE1FCE76072E636B3337A045 /* Pods-BrightID.debug.xcconfig */,
-				30AA8887C33B15990B7B3884 /* Pods-BrightID.release.xcconfig */,
-				587E40A94BA1910957865A95 /* Pods-BrightID-BrightIDTests.debug.xcconfig */,
-				AD33DBD6B6D9023B706DDB57 /* Pods-BrightID-BrightIDTests.release.xcconfig */,
-				D77641B38ABC60B82929B504 /* Pods-BrightID-tvOS.debug.xcconfig */,
-				CE3CE36A3A94D0546F0FE69B /* Pods-BrightID-tvOS.release.xcconfig */,
-				ABE34EAB38A48AF901E301ED /* Pods-BrightID-tvOSTests.debug.xcconfig */,
-				C581427BF31075F29F229B06 /* Pods-BrightID-tvOSTests.release.xcconfig */,
+				55CA042B4F883E7076FCD63D /* Pods-BrightID.debug.xcconfig */,
+				175ED2B054CC0441055C56C8 /* Pods-BrightID.release.xcconfig */,
+				D81478310D75470E3F0B8D1C /* Pods-BrightID-BrightIDTests.debug.xcconfig */,
+				C3AC7E82842DFACB07AAF5B6 /* Pods-BrightID-BrightIDTests.release.xcconfig */,
+				154377ECB221D733175B5DBF /* Pods-BrightID-tvOS.debug.xcconfig */,
+				FE77560D1ECAFC9F48D7F76B /* Pods-BrightID-tvOS.release.xcconfig */,
+				D5E23A921255C3E87FD59C0E /* Pods-BrightID-tvOSTests.debug.xcconfig */,
+				4F1A211599DC9F7D9F661306 /* Pods-BrightID-tvOSTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -228,11 +228,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "BrightIDTests" */;
 			buildPhases = (
-				DD95D7D1D8714214542125E9 /* [CP] Check Pods Manifest.lock */,
+				18667BC5F9030842036CB30F /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				726761783FB98D1BB126E6C4 /* [CP] Copy Pods Resources */,
+				A2D061BF1062610039CDF777 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -248,14 +248,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "BrightID" */;
 			buildPhases = (
-				79422030E5E2545DC3A34A1A /* [CP] Check Pods Manifest.lock */,
+				0E315D4323DA1AC6F0F6F423 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				77C13FFC86E224743C35A5B7 /* [CP] Check Pods Manifest.lock */,
-				37E524DBBCC1731BA99B42E4 /* [CP] Copy Pods Resources */,
+				C818C26DC74487F8E21374A6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -270,7 +269,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "BrightID-tvOS" */;
 			buildPhases = (
-				02E213150EFBF498EA508A4D /* [CP] Check Pods Manifest.lock */,
+				5805C3B8FD460BCD1C7F4014 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
 				2D02E4771E0B4A5D006451C7 /* Sources */,
 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
@@ -290,7 +289,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "BrightID-tvOSTests" */;
 			buildPhases = (
-				A51F681C9CCA6AFB7D20FD16 /* [CP] Check Pods Manifest.lock */,
+				38075C46E6CA44FE99F6EC3D /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
 				2D02E48E1E0B4A5D006451C7 /* Resources */,
@@ -366,8 +365,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D70F6E98249B0A9D003CEDBF /* Poppins-Bold.otf in Resources */,
+				D7D4537A24AD90F0004357F0 /* LaunchScreenBrightID.xib in Resources */,
 				D70F6E99249B0A9D003CEDBF /* Poppins-Medium.otf in Resources */,
-				D7708ACD2484DFB800B5DCAD /* LaunchScreen.xib in Resources */,
 				D7708AD52484E9B100B5DCAD /* EurostileRegular.ttf in Resources */,
 				D7708AD62484E9B100B5DCAD /* ApexNew-Light.otf in Resources */,
 				D7708AD72484E9B100B5DCAD /* ApexNew-Medium.otf in Resources */,
@@ -408,7 +407,87 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		02E213150EFBF498EA508A4D /* [CP] Check Pods Manifest.lock */ = {
+		0E315D4323DA1AC6F0F6F423 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BrightID-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		18667BC5F9030842036CB30F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BrightID-BrightIDTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Bundle React Native Code And Images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+		};
+		38075C46E6CA44FE99F6EC3D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BrightID-tvOSTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5805C3B8FD460BCD1C7F4014 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -430,73 +509,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Bundle React Native Code And Images";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
-		};
-		37E524DBBCC1731BA99B42E4 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BrightID/Pods-BrightID-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Feather.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Foundation.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf",
-				"${PODS_CONFIGURATION_BUILD_DIR}/TOCropViewController/TOCropViewControllerBundle.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Feather.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Brands.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Regular.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Solid.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Fontisto.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Foundation.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Ionicons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCommunityIcons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Octicons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SimpleLineIcons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Zocial.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TOCropViewControllerBundle.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BrightID/Pods-BrightID-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		726761783FB98D1BB126E6C4 /* [CP] Copy Pods Resources */ = {
+		A2D061BF1062610039CDF777 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -548,90 +561,56 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BrightID-BrightIDTests/Pods-BrightID-BrightIDTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		77C13FFC86E224743C35A5B7 /* [CP] Check Pods Manifest.lock */ = {
+		C818C26DC74487F8E21374A6 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
+				"${PODS_ROOT}/Target Support Files/Pods-BrightID/Pods-BrightID-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Feather.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Foundation.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf",
+				"${PODS_CONFIGURATION_BUILD_DIR}/TOCropViewController/TOCropViewControllerBundle.bundle",
 			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BrightID-checkManifestLockResult.txt",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Feather.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Brands.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Regular.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Solid.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Fontisto.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Foundation.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Ionicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCommunityIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Octicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SimpleLineIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Zocial.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TOCropViewControllerBundle.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		79422030E5E2545DC3A34A1A /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BrightID-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A51F681C9CCA6AFB7D20FD16 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BrightID-tvOSTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		DD95D7D1D8714214542125E9 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BrightID-BrightIDTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BrightID/Pods-BrightID-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -725,13 +704,12 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		D7708ACB2484DFB800B5DCAD /* LaunchScreen.xib */ = {
+		D7D4537824AD90F0004357F0 /* LaunchScreenBrightID.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				D7708ACC2484DFB800B5DCAD /* Base */,
+				D7D4537924AD90F0004357F0 /* Base */,
 			);
-			name = LaunchScreen.xib;
-			path = BrightID;
+			name = LaunchScreenBrightID.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -739,7 +717,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 587E40A94BA1910957865A95 /* Pods-BrightID-BrightIDTests.debug.xcconfig */;
+			baseConfigurationReference = D81478310D75470E3F0B8D1C /* Pods-BrightID-BrightIDTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -762,7 +740,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AD33DBD6B6D9023B706DDB57 /* Pods-BrightID-BrightIDTests.release.xcconfig */;
+			baseConfigurationReference = C3AC7E82842DFACB07AAF5B6 /* Pods-BrightID-BrightIDTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -782,7 +760,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EE1FCE76072E636B3337A045 /* Pods-BrightID.debug.xcconfig */;
+			baseConfigurationReference = 55CA042B4F883E7076FCD63D /* Pods-BrightID.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -814,7 +792,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 30AA8887C33B15990B7B3884 /* Pods-BrightID.release.xcconfig */;
+			baseConfigurationReference = 175ED2B054CC0441055C56C8 /* Pods-BrightID.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -840,7 +818,7 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D77641B38ABC60B82929B504 /* Pods-BrightID-tvOS.debug.xcconfig */;
+			baseConfigurationReference = 154377ECB221D733175B5DBF /* Pods-BrightID-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -868,7 +846,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CE3CE36A3A94D0546F0FE69B /* Pods-BrightID-tvOS.release.xcconfig */;
+			baseConfigurationReference = FE77560D1ECAFC9F48D7F76B /* Pods-BrightID-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -896,7 +874,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = ABE34EAB38A48AF901E301ED /* Pods-BrightID-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = D5E23A921255C3E87FD59C0E /* Pods-BrightID-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -923,7 +901,7 @@
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C581427BF31075F29F229B06 /* Pods-BrightID-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = 4F1A211599DC9F7D9F661306 /* Pods-BrightID-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
