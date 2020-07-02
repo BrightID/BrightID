@@ -13,7 +13,7 @@ import { SvgXml } from 'react-native-svg';
 import ActionSheet from 'react-native-actionsheet';
 import { useDispatch, useSelector } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { setPhoto, setName } from '@/actions';
+import { setPhoto, setName, setActiveNotification } from '@/actions';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
@@ -22,7 +22,6 @@ import verificationSticker from '@/static/verification-sticker.svg';
 import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
 import { useStatusBarHome } from '@/utils/hooks';
-import { alertUser } from './Helpers/NotificationBanner';
 
 /**
  * Home screen of BrightID
@@ -54,7 +53,12 @@ export const HomeScreen = (props) => {
   useStatusBarHome();
   useFocusEffect(
     useCallback(() => {
-      alertUser({ title: 'Alright', message: 'YEAH BUDDY' });
+      dispatch(
+        setActiveNotification({
+          message: 'Please select your Trusted Connections',
+          type: 'trustedConnections',
+        }),
+      );
       dispatch(fetchUserInfo());
       retrieveImage(photoFilename).then(setProfilePhoto);
     }, [dispatch, photoFilename]),

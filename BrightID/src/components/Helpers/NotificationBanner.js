@@ -1,35 +1,45 @@
 // @flow
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import DropdownAlert from 'react-native-dropdownalert';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { shallowEqual, useSelector } from 'react-redux';
+import { SvgXml } from 'react-native-svg';
 import { navigate } from '@/NavigationService';
+import groupInvite from '@/static/add_group.svg';
+import newConnection from '@/static/add_person.svg';
+import trustedConnections from '@/static/trusted_connections.svg';
 
 let dropDownAlertRef = null;
 
-export const alertUser = (notification) => {
-  dropDownAlertRef?.alertWithType(
-    'custom',
-    notification.title,
-    notification.message,
-  );
+const _onClose = (data) => {
+  console.log('close');
+  console.log(data);
+};
+const _onCancel = (data) => {
+  console.log('cancel');
+  console.log(data);
+};
+const _onTap = (data) => {
+  console.log('tapped');
+  console.log(data);
+  navigate('Notifications');
 };
 
+const icons = { groupInvite, newConnection, trustedConnections };
+
 export const NotificationBanner = () => {
-  const _onClose = (data) => {
-    console.log('close');
-    console.log(data);
-  };
-  const _onCancel = (data) => {
-    console.log('cancel');
-    console.log(data);
-  };
-  const _onTap = (data) => {
-    console.log('tapped');
-    console.log(data);
-    navigate('Notifications');
-  };
+  const activeNotification = useSelector(
+    (state) => state.notifications.activeNotification,
+    shallowEqual,
+  );
+
+  useEffect(() => {
+    dropDownAlertRef?.alertWithType('custom', activeNotification.message);
+  }, [activeNotification]);
+
+  // update default icon
+  const icon = icons[activeNotification?.type] ?? trustedConnections;
 
   return (
     <DropdownAlert
@@ -45,47 +55,36 @@ export const NotificationBanner = () => {
         justifyContent: 'center',
       }}
       titleStyle={styles.title}
-      messageStyle={styles.message}
       activeStatusBarStyle="dark-content"
-      activeStatusBarBackgroundColor="#eee"
+      activeStatusBarBackgroundColor="'#AFFDD0"
       testID="notificationBanner"
       elevation={10}
-      zIndex={10}
+      zIndex={100}
       onCancel={_onCancel}
       onTap={_onTap}
       onClose={_onClose}
       renderImage={() => (
-        <Material
-          name="account-alert"
-          color="#333"
-          size={36}
-          style={{ padding: 8, alignSelf: 'center' }}
-        />
+        <SvgXml style={styles.icon} xml={icon} width={24} height={24} />
       )}
+      panResponderEnabled={activeNotification?.type !== 'newConnection'}
     />
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#eee',
-    height: 110,
-    zIndex: 100,
+    backgroundColor: '#AFFDD0',
+    height: 142,
   },
-  // defaultContainer: { alignSelf: 'center' },
   title: {
-    fontSize: 18,
-    textAlign: 'left',
-    fontWeight: 'bold',
-    color: '#333',
-    backgroundColor: 'transparent',
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    marginLeft: 20,
+    color: '#000',
+    fontSize: 13,
   },
-  message: {
-    fontSize: 16,
-    textAlign: 'left',
-    fontWeight: 'bold',
-    color: '#333',
-    backgroundColor: 'transparent',
+  icon: {
+    marginLeft: 35,
   },
 });
 

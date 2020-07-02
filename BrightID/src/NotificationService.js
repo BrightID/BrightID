@@ -7,12 +7,12 @@ import {
   RegistrationError,
   NotificationCompletion,
   NotificationActionResponse,
+  RegisteredPushKit,
 } from 'react-native-notifications';
 import { DEVICE_IOS, DEVICE_ANDROID } from '@/utils/constants';
 import { setDeviceToken, setActiveNotification } from '@/actions';
 import { store } from '@/store';
 import { navigate } from './NavigationService';
-import { alertUser } from './components/Helpers/NotificationBanner';
 
 export const notificationSubscription = () => {
   Notifications.registerRemoteNotifications();
@@ -42,7 +42,6 @@ export const notificationSubscription = () => {
           message: notification.payload['gcm.notification.body'],
         };
         setActiveNotification(notificationMsg);
-        alertUser(notificationMsg);
         console.log(notificationMsg);
       }
       // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
@@ -78,10 +77,24 @@ export const notificationSubscription = () => {
   );
 
   if (DEVICE_IOS) {
+    Notifications.ios.registerPushKit();
+
     Notifications.ios.checkPermissions().then((currentPermissions) => {
       console.log(`Badges enabled: ${!!currentPermissions.badge}`);
       console.log(`Sounds enabled: ${!!currentPermissions.sound}`);
       console.log(`Alerts enabled: ${!!currentPermissions.alert}`);
     });
+
+    Notifications.ios
+      .events()
+      .registerPushKitRegistered((event: RegisteredPushKit) => {
+        console.log(event.pushKitToken);
+      });
+
+    Notifications.ios
+      .events()
+      .registerPushKitNotificationReceived((payload) => {
+        console.log(JSON.stringify(payload));
+      });
   }
 };
