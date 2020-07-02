@@ -1,7 +1,7 @@
 import qrcode from 'qrcode';
 import { parseString } from 'xml2js';
 import { Buffer } from 'buffer';
-import api from '@/Api/BrightId';
+import api from '@/api/node';
 import { b64ToUrlSafeB64, randomKey, b64ToUint8Array } from '@/utils/encoding';
 import { QR_TTL, QR_TYPE_INITIATOR } from './constants';
 

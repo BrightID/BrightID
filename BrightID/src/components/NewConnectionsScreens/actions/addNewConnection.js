@@ -4,7 +4,7 @@ import nacl from 'tweetnacl';
 import { saveImage } from '@/utils/filesystem';
 import { strToUint8Array, uInt8ArrayToB64, hash } from '@/utils/encoding';
 import { obtainKeys } from '@/utils/keychain';
-import api from '@/Api/BrightId';
+import api from '@/api/node';
 import { addConnection, addOperation } from '@/actions';
 import { backupPhoto, backupUser } from '../../Recovery/helpers';
 import { encryptAndUploadProfile } from './profile';

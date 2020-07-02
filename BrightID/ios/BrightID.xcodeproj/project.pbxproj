@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* BrightIDTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BrightIDTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
-		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -22,7 +21,7 @@
 		BDA777319EE66FF651BA71CA /* libPods-BrightID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 743D986C5B698601F1F1AEF5 /* libPods-BrightID.a */; };
 		D70F6E98249B0A9D003CEDBF /* Poppins-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D70F6E96249B0A9D003CEDBF /* Poppins-Bold.otf */; };
 		D70F6E99249B0A9D003CEDBF /* Poppins-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = D70F6E97249B0A9D003CEDBF /* Poppins-Medium.otf */; };
-		D7708ACD2484DFB800B5DCAD /* LaunchScreenBrightID.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7708ACB2484DFB800B5DCAD /* LaunchScreenBrightID.xib */; };
+		D7708ACD2484DFB800B5DCAD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7708ACB2484DFB800B5DCAD /* LaunchScreen.xib */; };
 		D7708AD02484DFFB00B5DCAD /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7708ACF2484DFFB00B5DCAD /* AuthenticationServices.framework */; };
 		D7708AD52484E9B100B5DCAD /* EurostileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D7708AD12484E9B100B5DCAD /* EurostileRegular.ttf */; };
 		D7708AD62484E9B100B5DCAD /* ApexNew-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = D7708AD22484E9B100B5DCAD /* ApexNew-Light.otf */; };
@@ -56,7 +55,6 @@
 		13B07F961A680F5B00A75B9A /* BrightID.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrightID.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = BrightID/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = BrightID/AppDelegate.m; sourceTree = "<group>"; };
-		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = BrightID/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = BrightID/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = BrightID/main.m; sourceTree = "<group>"; };
@@ -144,13 +142,12 @@
 			isa = PBXGroup;
 			children = (
 				D7708ACE2484DFE000B5DCAD /* BrightID.entitlements */,
-				D7708ACB2484DFB800B5DCAD /* LaunchScreenBrightID.xib */,
+				D7708ACB2484DFB800B5DCAD /* LaunchScreen.xib */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = BrightID;
@@ -257,7 +254,8 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				77C13FFC86E224743C35A5B7 /* [CP] Copy Pods Resources */,
+				77C13FFC86E224743C35A5B7 /* [CP] Check Pods Manifest.lock */,
+				37E524DBBCC1731BA99B42E4 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -369,7 +367,7 @@
 			files = (
 				D70F6E98249B0A9D003CEDBF /* Poppins-Bold.otf in Resources */,
 				D70F6E99249B0A9D003CEDBF /* Poppins-Medium.otf in Resources */,
-				D7708ACD2484DFB800B5DCAD /* LaunchScreenBrightID.xib in Resources */,
+				D7708ACD2484DFB800B5DCAD /* LaunchScreen.xib in Resources */,
 				D7708AD52484E9B100B5DCAD /* EurostileRegular.ttf in Resources */,
 				D7708AD62484E9B100B5DCAD /* ApexNew-Light.otf in Resources */,
 				D7708AD72484E9B100B5DCAD /* ApexNew-Medium.otf in Resources */,
@@ -446,7 +444,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		726761783FB98D1BB126E6C4 /* [CP] Copy Pods Resources */ = {
+		37E524DBBCC1731BA99B42E4 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -498,27 +496,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BrightID/Pods-BrightID-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		77C13FFC86E224743C35A5B7 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BrightID-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EFBF82A3063DA0880D6BD483 /* [CP] Copy Pods Resources */ = {
+		726761783FB98D1BB126E6C4 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -567,7 +545,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BrightID/Pods-BrightID-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BrightID-BrightIDTests/Pods-BrightID-BrightIDTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		77C13FFC86E224743C35A5B7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BrightID-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		79422030E5E2545DC3A34A1A /* [CP] Check Pods Manifest.lock */ = {
@@ -727,7 +725,7 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		D7708ACB2484DFB800B5DCAD /* LaunchScreenBrightID.xib */ = {
+		D7708ACB2484DFB800B5DCAD /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				D7708ACC2484DFB800B5DCAD /* Base */,
