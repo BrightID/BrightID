@@ -16,7 +16,8 @@
     "postinstall": "npx jetify",
     "test:watch": "npm test -- --watch",
     "updateSnap": "jest --updateSnapshot",
-    "build:release": "cd android && ./gradlew assembleRelease && cd .."
+    "build:release": "cd android && ./gradlew assembleRelease && cd ..",
+    "mermaid": "find ./diagrams -type f -name *.mmd -exec mmdc -i {} \\;"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.7.0",
@@ -74,6 +75,7 @@
   "devDependencies": {
     "@babel/core": "^7.8.3",
     "@babel/runtime": "^7.8.3",
+    "@mermaid-js/mermaid-cli": "^8.5.3",
     "@react-native-community/eslint-config": "^0.0.6",
     "@react-native-community/eslint-plugin": "^1.0.0",
     "babel-eslint": "^10.0.3",
