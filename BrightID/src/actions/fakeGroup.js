@@ -33,7 +33,7 @@ export const fakeJoinGroup = ({
   op._key = hash(message);
   console.log('joining', op);
   return api.api
-    .put(`/operations/${op._key}`, op)
+    .post(`/operations`, op)
     .then((response) => ({
       success: response.status === 204,
       ok: response.ok,
