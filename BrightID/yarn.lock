@@ -6856,10 +6856,10 @@ react-native-barcode-mask@^1.2.4:
   dependencies:
     prop-types "^15.6.2"
 
-react-native-camera@^3.30.0:
-  version "3.30.0"
-  resolved "https://registry.yarnpkg.com/react-native-camera/-/react-native-camera-3.30.0.tgz#b81ea540b06b40464a43931e86b870ffbeb280e6"
-  integrity sha512-rZorpBHXnc4MT9N6ddV4iC7h9dSUx4umtXvAKMkdYr3ZONlZcEfWxup7YCeAZ5wu4x43SvhSiTfYd8g0q+V0wg==
+react-native-camera@^3.31.0:
+  version "3.31.0"
+  resolved "https://registry.yarnpkg.com/react-native-camera/-/react-native-camera-3.31.0.tgz#7b9b4dd30b6d1363bdffed4ce0a0bef93c3ebf87"
+  integrity sha512-TTuse7JGVUbh/cj+a4OfyXoPqhwPyYx+63tzJWZT0sWwZX5bvlxjYaEur/U1hiZZjOC03muEIMkTD7nYp6ZVFA==
   dependencies:
     prop-types "^15.6.2"
 
