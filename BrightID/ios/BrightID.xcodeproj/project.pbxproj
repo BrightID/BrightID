@@ -22,7 +22,7 @@
 		D70F6E98249B0A9D003CEDBF /* Poppins-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D70F6E96249B0A9D003CEDBF /* Poppins-Bold.otf */; };
 		D70F6E99249B0A9D003CEDBF /* Poppins-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = D70F6E97249B0A9D003CEDBF /* Poppins-Medium.otf */; };
 		D7708ACD2484DFB800B5DCAD /* LaunchScreenBrightID.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7708ACB2484DFB800B5DCAD /* LaunchScreenBrightID.xib */; };
-		D7708AD02484DFFB00B5DCAD /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7708ACF2484DFFB00B5DCAD /* AuthenticationServices.framework */; };
+		D7708AD02484DFFB00B5DCAD /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7708ACF2484DFFB00B5DCAD /* AuthenticationServices.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		D7708AD52484E9B100B5DCAD /* EurostileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D7708AD12484E9B100B5DCAD /* EurostileRegular.ttf */; };
 		D7708AD62484E9B100B5DCAD /* ApexNew-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = D7708AD22484E9B100B5DCAD /* ApexNew-Light.otf */; };
 		D7708AD72484E9B100B5DCAD /* ApexNew-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = D7708AD32484E9B100B5DCAD /* ApexNew-Medium.otf */; };
