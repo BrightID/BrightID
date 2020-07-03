@@ -2,6 +2,7 @@
 
 import { create, ApiSauceInstance } from 'apisauce';
 import nacl from 'tweetnacl';
+import stringify from 'fast-json-stable-stringify';
 import { strToUint8Array, uInt8ArrayToB64, hash } from '@/utils/encoding';
 import { obtainKeys } from '@/utils/keychain';
 import store from '@/store';
@@ -11,7 +12,7 @@ let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
   seedUrl = 'http://test.brightid.org';
 }
-const v = 4;
+const v = 5;
 
 class NodeApi {
   api: ApiSauceInstance;
@@ -37,7 +38,13 @@ class NodeApi {
   }
 
   get apiUrl() {
-    return `${this.baseUrl}/brightid/v4`;
+    return `${this.baseUrl}/brightid/v5`;
+  }
+
+  static checkHash(response, op) {
+    if (response.data._key != op._key) {
+      throw new Error('Invalid operation hash returned from server');
+    }
   }
 
   static throwOnError(response) {
@@ -62,21 +69,21 @@ class NodeApi {
     timestamp: number,
   ) {
     let name = 'Add Connection';
-    let message = name + id1 + id2 + timestamp;
-
     let op = {
-      _key: hash(message),
       name,
       id1,
       id2,
-      sig1,
-      sig2,
       timestamp,
       v,
     };
 
-    let res = await this.api.put(`/operations/${op._key}`, op);
+    const message = stringify(op);
+    op.sig1 = sig1;
+    op.sig2 = sig2;
+    op._key = hash(message);
+    let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
+    NodeApi.checkHash(res, op);
     console.log(`Initiator opMessage: ${message} - hash: ${hash(message)}`);
     NodeApi.setOperation(op);
   }
@@ -86,25 +93,23 @@ class NodeApi {
 
     let name = 'Remove Connection';
     let timestamp = Date.now();
-    let message = name + username + id2 + reason + timestamp;
-
-    let sig1 = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
-
     let op = {
-      _key: hash(message),
       name,
       id1: username,
       id2,
       reason,
-      sig1,
       timestamp,
       v,
     };
 
-    let res = await this.api.put(`/operations/${op._key}`, op);
+    const message = stringify(op);
+    op.sig1 = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+    op._key = hash(message);
+    let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
+    NodeApi.checkHash(res, op);
     NodeApi.setOperation(op);
   }
 
@@ -121,24 +126,8 @@ class NodeApi {
 
     let name = 'Add Group';
     let timestamp = Date.now();
-    let message =
-      name +
-      groupId +
-      username +
-      id2 +
-      inviteData2 +
-      id3 +
-      inviteData3 +
-      url +
-      type +
-      timestamp;
-
-    let sig1 = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
 
     let op = {
-      _key: hash(message),
       name,
       id1: username,
       id2,
@@ -147,14 +136,19 @@ class NodeApi {
       inviteData3,
       group: groupId,
       url,
-      sig1,
       type,
       timestamp,
       v,
     };
 
-    let res = await this.api.put(`/operations/${op._key}`, op);
+    const message = stringify(op);
+    op.sig1 = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+    op._key = hash(message);
+    let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
+    NodeApi.checkHash(res, op);
     NodeApi.setOperation(op);
   }
 
@@ -163,25 +157,24 @@ class NodeApi {
 
     let name = 'Dismiss';
     let timestamp = Date.now();
-    let message = name + username + id2 + group + timestamp;
-
-    let sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
 
     let op = {
-      _key: hash(message),
       name,
       dismisser: username,
       dismissee: id2,
       group,
-      sig,
       timestamp,
       v,
     };
 
-    let res = await this.api.put(`/operations/${op._key}`, op);
+    const message = stringify(op);
+    op.sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+    op._key = hash(message);
+    let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
+    NodeApi.checkHash(res, op);
     NodeApi.setOperation(op);
   }
 
@@ -190,53 +183,24 @@ class NodeApi {
 
     let name = 'Invite';
     let timestamp = Date.now();
-    let message = name + username + id2 + group + data + timestamp;
-
-    let sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
-
     let op = {
-      _key: hash(message),
       name,
       inviter: username,
       invitee: id2,
       group,
       data,
-      sig,
       timestamp,
       v,
     };
 
-    let res = await this.api.put(`/operations/${op._key}`, op);
-    NodeApi.throwOnError(res);
-  }
-
-  async addAdmin(newAdmin: string, group: string) {
-    let { username, secretKey } = await obtainKeys();
-
-    let opName = 'Add Admin';
-    let timestamp = Date.now();
-    let message = opName + username + newAdmin + group + timestamp;
-
-    let sig = uInt8ArrayToB64(
+    const message = stringify(op);
+    op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-
-    let op = {
-      _key: hash(message),
-      name: opName,
-      id: username,
-      admin: newAdmin,
-      group,
-      sig,
-      timestamp,
-      v,
-    };
-
-    let res = await this.api.put(`/operations/${op._key}`, op);
+    op._key = hash(message);
+    let res = await this.api.post(`/operations`, op);
+    NodeApi.checkHash(res, op);
     NodeApi.throwOnError(res);
-    NodeApi.setOperation(op);
   }
 
   async deleteGroup(group: string) {
@@ -244,24 +208,22 @@ class NodeApi {
 
     let name = 'Remove Group';
     let timestamp = Date.now();
-    let message = name + username + group + timestamp;
-
-    let sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
-
     let op = {
-      _key: hash(message),
       name,
       id: username,
       group,
-      sig,
       timestamp,
       v,
     };
 
-    let res = await this.api.put(`/operations/${op._key}`, op);
+    const message = stringify(op);
+    op.sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+    op._key = hash(message);
+    let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
+    NodeApi.checkHash(res, op);
     NodeApi.setOperation(op);
   }
 
@@ -270,24 +232,22 @@ class NodeApi {
 
     let name = 'Add Membership';
     let timestamp = Date.now();
-    let message = name + username + group + timestamp;
-
-    let sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
-
     let op = {
-      _key: hash(message),
       name,
       id: username,
       group,
-      sig,
       timestamp,
       v,
     };
 
-    let res = await this.api.put(`/operations/${op._key}`, op);
+    const message = stringify(op);
+    op.sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+    op._key = hash(message);
+    let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
+    NodeApi.checkHash(res, op);
     NodeApi.setOperation(op);
   }
 
@@ -296,24 +256,22 @@ class NodeApi {
 
     let name = 'Remove Membership';
     let timestamp = Date.now();
-    let message = name + username + group + timestamp;
-
-    let sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
-
     let op = {
-      _key: hash(message),
       name,
       id: username,
       group,
-      sig,
       timestamp,
       v,
     };
 
-    let res = await this.api.put(`/operations/${op._key}`, op);
+    const message = stringify(op);
+    op.sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+    op._key = hash(message);
+    let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
+    NodeApi.checkHash(res, op);
     NodeApi.setOperation(op);
   }
 
@@ -322,28 +280,26 @@ class NodeApi {
 
     let name = 'Set Trusted Connections';
     let timestamp = Date.now();
-    let message = name + username + trusted.join(',') + timestamp;
-
-    let sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
-
     let op = {
-      _key: hash(message),
       name,
       id: username,
       trusted,
-      sig,
       timestamp,
       v,
     };
 
-    let res = await this.api.put(`/operations/${op._key}`, op);
+    const message = stringify(op);
+    op.sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+    op._key = hash(message);
+    let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
+    NodeApi.checkHash(res, op);
     NodeApi.setOperation(op);
   }
 
-  async setSigningKey(op: {
+  async setSigningKey(params: {
     id: string,
     signingKey: string,
     timestamp: number,
@@ -352,13 +308,23 @@ class NodeApi {
     sig1: string,
     sig2: string,
   }) {
-    // this should be consistent with the other API calls
-    op.name = 'Set Signing Key';
-    op._key = hash(op.name + op.id + op.signingKey + op.timestamp);
-    op.v = v;
+    let op = {
+      name: 'Set Signing Key',
+      id: params.id,
+      signingKey: params.signingKey,
+      timestamp: params.timestamp,
+      v,
+    };
 
-    let res = await this.api.put(`/operations/${op._key}`, op);
+    const message = stringify(op);
+    op._key = hash(message);
+    op.id1 = params.id1;
+    op.id2 = params.id2;
+    op.sig1 = params.sig1;
+    op.sig2 = params.sig2;
+    let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
+    NodeApi.checkHash(res, op);
     NodeApi.setOperation(op);
   }
 
@@ -367,25 +333,23 @@ class NodeApi {
 
     let name = 'Link ContextId';
     let timestamp = Date.now();
-    let message = `${name},${context},${contextId},${timestamp}`;
-
-    let sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
-
     let op = {
-      _key: hash(message),
       name,
       id: username,
       context,
       contextId,
-      sig,
       timestamp,
       v,
     };
 
-    let res = await this.api.put(`/operations/${op._key}`, op);
+    const message = stringify(op);
+    op.sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+    op._key = hash(message);
+    let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
+    NodeApi.checkHash(res, op);
     NodeApi.setOperation(op);
   }
 
