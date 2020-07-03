@@ -1,0 +1,1 @@
+[[File:https://github.com/BrightID/BrightID/blob/master/BrightID/diagrams/connection_states.mmd.svg||Connection States]]
