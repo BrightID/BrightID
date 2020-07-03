@@ -42,7 +42,7 @@ class NodeApi {
   }
 
   static checkHash(response, op) {
-    if (response.data._key != op._key) {
+    if (response.data.data._key != op._key) {
       throw new Error('Invalid operation hash returned from server');
     }
   }
