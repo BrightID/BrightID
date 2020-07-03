@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 // @flow
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -17,10 +16,14 @@ import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
-import { qrCodeToSvg } from '@/utils/qrCodes';
+import { encodeChannelQrData, qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
 import cameraIcon from '@/static/camera_icon_white.svg';
-import { startConnecting, stopConnecting } from './actions/connecting';
+import {
+  removeChannel,
+  selectChannelById,
+} from '@/components/NewConnectionsScreens/channelSlice';
+import { startConnecting } from './actions/connecting';
 
 /**
  * My Code screen of BrightID
@@ -39,49 +42,61 @@ export const MyCodeScreen = (props) => {
   const { navigation } = props;
   const dispatch = useDispatch();
   const name = useSelector((state) => state.user.name);
-  const ttl = useSelector((state) => state.connectQrData.myQrData?.ttl ?? 0);
-  const qrString = useSelector(
-    (state) => state.connectQrData.myQrData?.qrString,
+  const myProfileId = useSelector((state) => state.channels.myProfileId);
+  const myChannelId = useSelector((state) => state.channels.myChannelId);
+  const myChannel = useSelector((state) =>
+    selectChannelById(state, myChannelId),
   );
-  const timestamp = useSelector(
-    (state) => state.connectQrData.myQrData?.timestamp ?? Date.now(),
-  );
-  const connectDataExists = useSelector((state) => !!state.connectUserData.id);
-
+  // const connectDataExists = useSelector((state) => !!state.connectUserData.id);
+  const [qrString, setQrString] = useState('');
   const [qrsvg, setQrsvg] = useState('');
   const [copied, setCopied] = useState(false);
+  const [countdown, setCountdown] = useState(
+    myChannel ? myChannel.ttl - (Date.now() - myChannel.timestamp) : 0,
+  );
 
-  const [countdown, setCountdown] = useState(ttl - (Date.now() - timestamp));
-
-  const timerTick = useCallback(() => {
-    if (!navigation.isFocused()) return;
-    let countdown = ttl - (Date.now() - timestamp);
-    if (countdown <= 0 && qrString) {
-      dispatch(startConnecting());
+  // create QRCode when data is available
+  useEffect(() => {
+    if (myChannel && myProfileId !== '') {
+      console.log(
+        `Creating QRCode profileId ${myProfileId} channel ${myChannel.id}`,
+      );
+      const newQrString = encodeChannelQrData(myChannel, myProfileId);
+      setQrString(newQrString);
+      qrCodeToSvg(newQrString, (qrsvg) => setQrsvg(qrsvg));
+    } else {
+      setQrString('');
+      setQrsvg('');
     }
-    setCountdown(countdown);
-  }, [ttl, timestamp, qrString]);
+  }, [myChannel, myProfileId]);
+
+  const timerTick = () => {
+    if (myChannel) {
+      let countDown = myChannel.ttl - (Date.now() - myChannel.timestamp);
+      setCountdown(countDown);
+    }
+  };
 
   // start local timer to display countdown
-  useInterval(timerTick, 1000);
+  useInterval(timerTick, 100);
+
   useFocusEffect(
     useCallback(() => {
-      console.log('YEAH BUDDY', qrString);
       if (!navigation.isFocused()) return;
+      /*
       if (connectDataExists) {
         navigation.navigate('PreviewConnection');
         return;
-      }
-      if (!qrString) {
+      } */
+      if (!myChannel) {
+        console.log(`No channel, start connecting...`);
         dispatch(startConnecting());
       } else {
-        qrCodeToSvg(qrString, (qrsvg) => setQrsvg(qrsvg));
-        setCountdown(ttl - (Date.now() - timestamp));
+        console.log(`Current channel ${myChannel.id}.`);
+        setCountdown(myChannel.ttl - (Date.now() - myChannel.timestamp));
       }
-    }, [qrString, connectDataExists]),
+    }, [navigation, myChannel, dispatch]),
   );
-
-  // const checkQrCode = (qrString) => {};
 
   const displayTime = () => {
     const minutes = Math.floor(countdown / 60000);
@@ -117,8 +132,8 @@ export const MyCodeScreen = (props) => {
         testID="resetQrButton"
         style={styles.copyButton}
         onPress={() => {
-          setCountdown(ttl);
-          dispatch(stopConnecting());
+          setCountdown(0);
+          dispatch(removeChannel(myChannel.id));
         }}
       >
         <Material

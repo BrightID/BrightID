@@ -1,6 +1,20 @@
 // @flow
 
 import { QR_TYPE_INITIATOR, QR_TYPE_RESPONDER } from '@/utils/constants';
+import { b64ToUrlSafeB64, randomKey } from '@/utils/encoding';
+
+export const postProfileToChannel = async (data: string, channel) => {
+  // create a fresh random profileID for upload
+  const profileIdKey = await randomKey(9);
+  const profileId = b64ToUrlSafeB64(profileIdKey);
+  let { ipAddress, id: channelId } = channel;
+  // const url = `http://${ipAddress}/profile/upload/${channelId}`;
+  const url = `http://192.168.178.145:3000/upload/${channelId}`;
+  const body = JSON.stringify({ data, uuid: profileId });
+  console.log(`posting profile ${profileId} to channel ${channelId} at ${url}`);
+  await postData(url, body);
+  return profileId;
+};
 
 export const postProfile = async (data: string, QrCodeData) => {
   let { ipAddress, uuid, type } = QrCodeData;
@@ -31,7 +45,7 @@ const postData = async (url: string, body: string) => {
         'Content-Type': 'application/json',
       },
     });
-    if (result.status === 200) {
+    if (result.status === 200 || result.status === 201) {
       console.log('successfully uploaded data');
     } else {
       throw Error(`Unexpected http status ${result.status}`);

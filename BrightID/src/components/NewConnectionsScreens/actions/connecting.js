@@ -1,53 +1,38 @@
 // @flow
 
-import { generateQrData } from '@/utils/qrCodes';
-import { PROFILE_POLL_INTERVAL } from '@/utils/constants';
+import { generateChannelData } from '@/utils/qrCodes';
+import { removeConnectQrData } from '@/actions/connectQrData';
 import {
-  clearMyQrData,
-  setMyQrData,
-  removeConnectQrData,
-} from '@/actions/connectQrData';
+  createMyChannel,
+  removeChannel,
+} from '@/components/NewConnectionsScreens/channelSlice';
+import { encryptAndUploadProfileToChannel } from './profile';
 
-import { encryptAndUploadProfile, fetchProfile } from './profile';
-
-let fetchProfileID: IntervalID;
-
+// TODO:
+//  - Rename to "createMyChannel"
+//  - move to channelSlice (using createAsyncThunk() utility function)
+//  - get rid of this file
 export const startConnecting = () => async (
   dispatch: dispatch,
   getState: () => State,
 ) => {
   try {
-    // prepare QrCode data
-    const qrCodeData = await generateQrData();
-    console.log(`Created new QRCodeData: ${qrCodeData.qrString}`);
+    // create new channel
+    const channel = await generateChannelData();
+    dispatch(createMyChannel(channel));
+
     // upload my encrypted profile
-    dispatch(encryptAndUploadProfile(qrCodeData));
-    // store my qr data in store
-    dispatch(setMyQrData(qrCodeData));
+    dispatch(encryptAndUploadProfileToChannel(channel.id));
+
     // remove old QR data
     dispatch(removeConnectQrData());
-    // start polling for uploaded profiles from people scanning my code
-    clearInterval(fetchProfileID);
-    fetchProfileID = setInterval(() => {
-      dispatch(fetchProfile(qrCodeData));
-    }, PROFILE_POLL_INTERVAL);
-    // Start timer to expire QRdata and stop polling
+
+    // Start timer to expire channel
     setTimeout(() => {
-      console.log(`QrCode timer expired for qrString ${qrCodeData.qrString}`);
-      dispatch(stopConnecting());
-    }, qrCodeData.ttl);
+      console.log(`timer expired for channel ${channel.id}`);
+      dispatch(removeChannel(channel.id));
+    }, channel.ttl);
   } catch (err) {
     err instanceof Error ? console.warn(err.message) : console.log(err);
   }
-};
-
-export const stopConnecting = () => (
-  dispatch: dispatch,
-  getState: () => State,
-) => {
-  // stop polling for profiles
-  clearInterval(fetchProfileID);
-  // clear local qrCodeData
-  dispatch(clearMyQrData());
-  // remove old QR data
 };

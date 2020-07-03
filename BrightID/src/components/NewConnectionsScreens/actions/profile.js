@@ -1,12 +1,56 @@
 import { QR_TYPE_INITIATOR, QR_TYPE_RESPONDER } from '@/utils/constants';
 import { decryptData, encryptData } from '@/utils/cryptoHelper';
-import { postProfile } from '@/utils/profile';
+import { postProfile, postProfileToChannel } from '@/utils/profile';
 import { retrieveImage } from '@/utils/filesystem';
 import emitter from '@/emitter';
+import {
+  selectChannelById,
+  setMyProfileId,
+} from '@/components/NewConnectionsScreens/channelSlice';
 import { removeConnectUserData, setConnectUserData } from '../../../actions';
-import { stopConnecting } from './connecting';
+// import { stopConnecting } from './connecting';
 
 // @flow
+
+export const encryptAndUploadProfileToChannel = (
+  channelId,
+  timestamp,
+  signedMessage,
+) => async (dispatch: dispatch, getState: getState) => {
+  // get channel
+  const channel = selectChannelById(getState(), channelId);
+  // get user data
+  const {
+    user: {
+      id,
+      photo: { filename },
+      name,
+      score,
+    },
+  } = getState();
+  try {
+    // retrieve photo
+    const photo = await retrieveImage(filename);
+    const dataObj = {
+      id,
+      photo,
+      name,
+      score,
+      signedMessage,
+      timestamp,
+      // TODO: create notification token!
+      push_token: undefined,
+    };
+
+    console.log(`Encrypting profile data with key ${channel.aesKey}`);
+    let encrypted = encryptData(dataObj, channel.aesKey);
+    console.log(`Posting profile data...`);
+    const profileId = await postProfileToChannel(encrypted, channel);
+    dispatch(setMyProfileId(profileId));
+  } catch (err) {
+    err instanceof Error ? console.warn(err.message) : console.log(err);
+  }
+};
 
 export const encryptAndUploadProfile = (
   qrCodeData,
@@ -71,7 +115,7 @@ export const fetchProfile = (qrCodeData) => async (
 
   try {
     const response = await fetch(url, {
-      headers: { 'Cache-Control': 'no-cache' }
+      headers: { 'Cache-Control': 'no-cache' },
     });
     if (!response.ok) {
       throw new Error(
@@ -84,7 +128,7 @@ export const fetchProfile = (qrCodeData) => async (
       try {
         // workaround: For now stop polling for profiles after the first profile is received,
         //  otherwise the same profile(s) will be downloaded again and again
-        dispatch(stopConnecting());
+        // dispatch(stopConnecting());
         const decryptedObj = decryptData(profileData.data, aesKey);
 
         dispatch(removeConnectUserData());

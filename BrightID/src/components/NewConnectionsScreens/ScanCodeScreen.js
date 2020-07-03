@@ -29,7 +29,6 @@ import { RNCamera } from './RNCameraProvider';
 import emitter from '../../emitter';
 import { setConnectQrData } from '../../actions';
 import { fetchProfile } from './actions/profile';
-import { stopConnecting } from './actions/connecting';
 
 /**
  * Returns whether the string is a valid QR identifier
@@ -62,7 +61,7 @@ export const ScanCodeScreen = (props) => {
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(stopConnecting());
+      // dispatch(stopConnecting());
       if (connectDataExists) {
         unsubscribeToProfileUpload();
         navigation.navigate('PreviewConnection');
