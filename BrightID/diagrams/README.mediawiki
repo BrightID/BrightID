@@ -24,7 +24,9 @@ Once a channel is established, user can share their profile data in the channel.
 
 === Required entities ===
 '''User''' A brightID user
+
 '''Profile Service''' A server that hosts the channels for exchaning profile data. Channels and profiles are short-lived objects kept only in memory. They expire after 15 minutes.
+
 '''Node API''' The brightID API is used for actually recording connections on the brightID graph and IDChain
 
 == One-to-one connection ==
@@ -46,5 +48,7 @@ Sequence diagram to establish connections:
 [[File:https://raw.githubusercontent.com/BrightID/BrightID/diagrams-readme/BrightID/diagrams/connecting-group-make-connections.mmd.svg||establishing connections]]
 
 
-
+= States and transitions =
+=== Connection ===
+A connection starts with obtaining a profileID, either directyl via scanning a QRCode, by getting a list of profiles from a channel or by receiving a push notification. Before the user is asked for confirmation, the profile data needs to be downloaded. When profile data is available, the user can confirm or reject a connection. 
 [[File:https://github.com/BrightID/BrightID/blob/master/BrightID/diagrams/connection_states.mmd.svg||Connection States]]
