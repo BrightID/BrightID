@@ -1,1 +1,50 @@
+= Connecting with peers =
+
+=== Required data ===
+'''Channel'''
+In order to exchange profile data, first a channel needs to be established. A channel consists of:
+* id: A unique identifier for this channel
+* ipAddress: The IP-Address of the nodeAPI server that should be used to exchange data
+* aesKey: The encryption key used for the data exchanged through the channel
+* ttl: Time-to-live for this channel (seconds). 
+
+The channel is created by the person initating the connection process. The channel data is shared peer-to-peer via QR-Code.
+
+'''Profile'''
+Once a channel is established, user can share their profile data in the channel. Profile data consists of:
+* id: A temporary unique identifier of this profile in the channel
+* userdata (encrypted with aesKey of channel)
+** id: The users BrightID
+** name
+** photo
+** score
+** timestamp
+** signedMessage [optional]
+** push_token (token that grants the permission to send push_notifications to the user)
+
+=== Required entities ===
+'''User''' A brightID user
+'''Profile Service''' A server that hosts the channels for exchaning profile data. Channels and profiles are short-lived objects kept only in memory. They expire after 15 minutes.
+'''Node API''' The brightID API is used for actually recording connections on the brightID graph and IDChain
+
+== One-to-one connection ==
+Currently the BrightID app only supports creating one-to-one connections. When Alice and Bob want to connect, one of them has to create a QR-Code that gets scanned by the other party.
+
+Sequence diagram:
+[[File:https://raw.githubusercontent.com/BrightID/BrightID/diagrams-readme/BrightID/diagrams/connecting_one-one.mmd.svg||One-to-one connection]]
+
+== Group connection ==
+To streamline the connection process, multiple participants can communicate and connect simultaneously over the same channel.
+Assming a meeting scenario with 10 participants: Alice initiates the connection process by creating a channel. The channel data is shared via QR-Code with all meeting participants. All participants scan the qrcode of Alice, upload their profile encrypted with the channel's aesKey and download all available profiles from the profile server.
+
+Sequence diagram to find group connections:
+[[File:https://raw.githubusercontent.com/BrightID/BrightID/diagrams-readme/BrightID/diagrams/connecting-group-find-connections.mmd.svg||starting group connection]]
+
+For each peer profile obtained through the channel an entry is created in the pending connections list of the client. The user reviews and confirms/rejects these pending connections individually.
+
+Sequence diagram to establish connections:
+[[File:https://raw.githubusercontent.com/BrightID/BrightID/diagrams-readme/BrightID/diagrams/connecting-group-make-connections.mmd.svg||establishing connections]]
+
+
+
 [[File:https://github.com/BrightID/BrightID/blob/master/BrightID/diagrams/connection_states.mmd.svg||Connection States]]
