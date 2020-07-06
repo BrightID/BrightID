@@ -34,7 +34,7 @@ Once a channel is established, user can share their profile data in the channel.
 When Alice and Bob want to connect, one of them has to create a QR-Code that gets scanned by the other party.
 
 Sequence diagram:
-[[File:https://raw.githubusercontent.com/BrightID/BrightID/diagrams-readme/BrightID/diagrams/connecting_one-one.mmd.svg||One-to-one connection]]
+[[File:connecting_one-one.mmd.svg||One-to-one connection]]
 
 == Group connection ==
 To streamline the connection process, multiple participants can communicate and connect simultaneously over the same channel.
@@ -43,7 +43,7 @@ data is shared via QR-Code with all meeting participants. All participants scan 
 with the channel's aesKey and download all available profiles from the profile server.
 
 Sequence diagram to find group connections:
-[[File:https://raw.githubusercontent.com/BrightID/BrightID/diagrams-readme/BrightID/diagrams/connecting-group-find-connections.mmd.svg||starting group connection]]
+[[File:connecting-group-find-connections.mmd.svg||starting group connection]]
 
 For each peer profile obtained through the channel, an entry is created in the pending connections queue of the client.
 The user reviews and confirms/rejects these pending connections individually.
@@ -62,10 +62,10 @@ connection intent message by the peer. In order to finalize the connection, the 
 credentials and submit the connection request to the Node API.
 
 Sequence diagram to establish connections:
-[[File:https://raw.githubusercontent.com/BrightID/BrightID/diagrams-readme/BrightID/diagrams/connecting-group-make-connections.mmd.svg||establishing connections]]
+[[File:connecting-group-make-connections.mmd.svg||establishing connections]]
 
 
 = States and transitions =
 === Connection ===
 A connection starts with obtaining a profileID, either directyl via scanning a QRCode, by getting a list of profiles from a channel or by receiving a push notification. Before the user is asked for confirmation, the profile data needs to be downloaded. When profile data is available, the user can confirm or reject a connection.
-[[File:https://github.com/BrightID/BrightID/blob/master/BrightID/diagrams/connection_states.mmd.svg||Connection States]]
+[[File:connection_states.mmd.svg||Connection States]]
