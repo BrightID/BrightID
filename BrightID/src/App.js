@@ -34,7 +34,10 @@ export const App = () => {
 
   useEffect(() => {
     // subscribe to notifications
-    notificationSubscription();
+    setTimeout(() => {
+      notificationSubscription();
+    }, 2500);
+
     // subscribe to operations
     const timerId = setInterval(() => {
       pollOperations();

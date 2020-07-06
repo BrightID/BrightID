@@ -111,25 +111,27 @@ export const HomeScreen = (props) => {
     // let verifications = ['BrightID'];
     <View style={styles.container}>
       <View style={styles.profileContainer} testID="PhotoContainer">
-        <TouchableOpacity
-          testID="editPhoto"
-          onPress={handleEditPhoto}
-          accessible={true}
-          accessibilityLabel="edit photo"
-        >
-          <Image
-            source={{
-              uri: profilePhoto,
-            }}
-            style={styles.photo}
-            resizeMode="cover"
-            onError={(e) => {
-              console.log(e.error);
-            }}
+        {profilePhoto ? (
+          <TouchableOpacity
+            testID="editPhoto"
+            onPress={handleEditPhoto}
             accessible={true}
-            accessibilityLabel="user photo"
-          />
-        </TouchableOpacity>
+            accessibilityLabel="edit photo"
+          >
+            <Image
+              source={{
+                uri: profilePhoto,
+              }}
+              style={styles.photo}
+              resizeMode="cover"
+              onError={(e) => {
+                console.log(e.error);
+              }}
+              accessible={true}
+              accessibilityLabel="user photo"
+            />
+          </TouchableOpacity>
+        ) : null}
         <View style={styles.verifyNameContainer} testID="homeScreen">
           <View style={styles.nameContainer}>
             {isEditing ? (

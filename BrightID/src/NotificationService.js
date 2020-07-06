@@ -21,7 +21,7 @@ export const notificationSubscription = () => {
     (event: Registered) => {
       // TODO: Send the token to my server so it could send back push notifications...
       if (event.deviceToken) store.dispatch(setDeviceToken(event.deviceToken));
-      console.log('token', event.deviceToken);
+      console.log('RECIEVED_NOTIFICATION_TOKEN', event.deviceToken);
     },
   );
   Notifications.events().registerRemoteNotificationsRegistrationFailed(
@@ -79,6 +79,8 @@ export const notificationSubscription = () => {
   if (DEVICE_IOS) {
     Notifications.ios.registerPushKit();
 
+    // Notifications.ios.requestPermissions();
+
     Notifications.ios.checkPermissions().then((currentPermissions) => {
       console.log(`Badges enabled: ${!!currentPermissions.badge}`);
       console.log(`Sounds enabled: ${!!currentPermissions.sound}`);
@@ -88,7 +90,7 @@ export const notificationSubscription = () => {
     Notifications.ios
       .events()
       .registerPushKitRegistered((event: RegisteredPushKit) => {
-        console.log(event.pushKitToken);
+        console.log('PUSHKIT TOKEN', event.pushKitToken);
       });
 
     Notifications.ios
