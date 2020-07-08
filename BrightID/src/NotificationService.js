@@ -77,7 +77,7 @@ export const notificationSubscription = () => {
   );
 
   if (DEVICE_IOS) {
-    Notifications.ios.registerPushKit();
+    // Notifications.ios.registerPushKit();
 
     // Notifications.ios.requestPermissions();
 

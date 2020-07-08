@@ -28,6 +28,7 @@ const topOptions = {
       <SvgXml height="20" xml={backArrow} />
     </TouchableOpacity>
   ),
+  headerTitleAlign: 'left',
 };
 
 const Notifications = () => (

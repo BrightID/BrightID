@@ -61,6 +61,7 @@ module.exports = {
     'react-native/no-inline-styles': 'off',
     'react/display-name': 'off',
     'react/prop-types': 'off',
+    'react/jsx-props-no-spreading': 'off',
   },
   globals: {
     __DEV__: 'readonly',

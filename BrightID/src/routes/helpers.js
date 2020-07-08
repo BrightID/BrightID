@@ -6,7 +6,7 @@ import backArrow from '@/static/back_arrow.svg';
 
 const headerTitleStyle = {
   fontFamily: 'Poppins',
-  fontWeight: '500',
+  fontWeight: 'bold',
   fontSize: DEVICE_LARGE ? 20 : 17,
 };
 

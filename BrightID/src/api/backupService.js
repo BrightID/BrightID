@@ -10,8 +10,7 @@ import {
 import { obtainKeys } from '@/utils/keychain';
 import store from '@/store';
 
-// let recoveryUrl = 'https://recovery.brightid.org';
-let recoveryUrl = 'http://localhost:3000';
+let recoveryUrl = 'https://recovery.brightid.org';
 let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
   seedUrl = 'http://test.brightid.org';

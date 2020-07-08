@@ -65,7 +65,6 @@ export const createNewGroup = (
     ).toString();
 
     await backupApi.putRecovery('immutable', groupId, encryptedGroupData);
-
     emitter.emit('creatingGroupChannel', 'creating the group');
 
     const url = `https://recovery.brightid.org/backups/immutable/${groupId}`;

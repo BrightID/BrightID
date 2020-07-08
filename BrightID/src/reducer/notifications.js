@@ -11,7 +11,6 @@ import {
 const initialState = {
   activeNotification: {},
   notifications: [],
-  invites: [],
   pendingConnections: [],
   backupPending: false,
   deviceToken: 'unavailable',
