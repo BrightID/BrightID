@@ -48,7 +48,6 @@ const connectionsScreenOptions = {
       <SvgXml height="20" xml={backArrow} />
     </TouchableOpacity>
   ),
-  headerTitleAlign: 'left',
 };
 
 const Connections = () => {

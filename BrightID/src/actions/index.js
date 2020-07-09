@@ -19,11 +19,11 @@ export {
   ADD_CONNECTION,
   ADD_TRUSTED_CONNECTION,
   REMOVE_TRUSTED_CONNECTION,
-  SET_CONNECTIONS_SEARCH_PARAM,
+  SET_CONNECTIONS_SEARCH,
   SET_CONNECTIONS_SEARCH_OPEN,
   HYDRATE_CONNECTIONS,
   setConnections,
-  setConnectionsSearchParam,
+  setConnectionsSearch,
   setConnectionsSearchOpen,
   setConnectionsSort,
   updateConnections,
@@ -65,6 +65,7 @@ export {
   LEAVE_GROUP,
   DISMISS_FROM_GROUP,
   SET_GROUP_SEARCH,
+  SET_GROUP_SEARCH_OPEN,
   createGroup,
   deleteGroup,
   setNewGroupCoFounders,
@@ -76,6 +77,8 @@ export {
   dismissFromGroup,
   rejectInvite,
   acceptInvite,
+  setGroupSearch,
+  setGroupSearchOpen,
 } from './groups';
 
 export {

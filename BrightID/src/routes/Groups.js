@@ -1,14 +1,15 @@
 // @flow
 
-import * as React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import React, { useRef, useEffect } from 'react';
+import { Animated, TouchableOpacity, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useSelector } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { getGroupName } from '@/utils/groups';
 import { DEVICE_TYPE, DEVICE_IOS } from '@/utils/constants';
 import emitter from '@/emitter';
 import GroupsScreen from '@/components/GroupsScreens/GroupsScreen';
-import SearchGroups from '@/components/GroupsScreens/SearchGroups';
+import SearchGroups from '@/components/Helpers/SearchGroups';
 import NewGroupScreen from '@/components/GroupsScreens/NewGroups/NewGroupScreen';
 import GroupInfoScreen from '@/components/GroupsScreens/NewGroups/GroupInfoScreen';
 import MembersScreen from '@/components/GroupsScreens/Members/MembersScreen';
@@ -16,13 +17,31 @@ import InviteListScreen from '@/components/GroupsScreens/Members/InviteListScree
 import { navigate } from '@/NavigationService';
 import backArrow from '@/static/back_arrow.svg';
 import { SvgXml } from 'react-native-svg';
-import { store } from '@/store';
-import { headerOptions } from './helpers';
+import { headerOptions, headerTitleStyle } from './helpers';
 
 const Stack = createStackNavigator();
 
+const HeaderTitle = ({ title }) => {
+  const searchOpen = useSelector((state) => state.groups.searchOpen);
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: searchOpen ? 0 : 1,
+      useNativeDriver: true,
+      duration: 600,
+    }).start();
+  }, [fadeAnim, searchOpen]);
+
+  return (
+    <Animated.View style={{ opacity: fadeAnim }}>
+      <Text style={headerTitleStyle}>{title}</Text>
+    </Animated.View>
+  );
+};
+
 const topOptions = {
   ...headerOptions,
+  headerRight: () => <SearchGroups />,
   headerLeft: () => (
     <TouchableOpacity
       testID="groups-header-back"
@@ -37,20 +56,7 @@ const topOptions = {
       <SvgXml height="20" xml={backArrow} />
     </TouchableOpacity>
   ),
-  headerTitle: () => {
-    const { groups } = store.getState().groups;
-    return groups.length ? (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'center',
-        }}
-      >
-        <SearchGroups />
-      </View>
-    ) : null;
-  },
+  headerTitle: () => <HeaderTitle title="Groups" />,
 };
 
 const membersScreenOptions = ({ navigation, route }) => {

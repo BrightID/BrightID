@@ -22,7 +22,7 @@ export const headerOptions = {
     elevation: 0,
   },
   headerTintColor: '#fff',
-  headerTitleAlign: 'center',
+  headerTitleAlign: 'left',
   headerBackTitleVisible: false,
   headerBackImage: () => (
     <SvgXml

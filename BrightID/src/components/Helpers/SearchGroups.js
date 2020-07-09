@@ -7,32 +7,29 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
-import { navigate } from '@/NavigationService';
-import { setConnectionsSearch, setConnectionsSearchOpen } from '@/actions';
+import { SvgXml } from 'react-native-svg';
+import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/constants';
+import { setGroupSearch, setGroupSearchOpen } from '@/actions';
 import searchIcon from '@/static/search_icon.svg';
-
 /**
- * Search Bar in the Connections Screen
- * TODO: Add functionality for the Ionicons
- * TODO: add search filter in redux actions
+ * Search Bar in the Groups Screen
+ *
+ * TODO: Create a shared search component to use in both Connections and Group view
  */
 
 const X_TRANSFORM = 250;
 
-const SearchConnections = ({ sortable }) => {
+const SearchGroups = () => {
   const dispatch = useDispatch();
   const textInput = useRef(null);
-  const searchOpen = useSelector((state) => state.connections.searchOpen);
+  const searchOpen = useSelector((state) => state.groups.searchOpen);
   useEffect(() => {
     // reset search Param
     return () => {
       console.log('clearing search param');
-      dispatch(setConnectionsSearch(''));
-      dispatch(setConnectionsSearchOpen(false));
+      dispatch(setGroupSearch(''));
+      dispatch(setGroupSearchOpen(false));
     };
   }, []);
 
@@ -40,21 +37,19 @@ const SearchConnections = ({ sortable }) => {
 
   const getPidded = () => {
     if (searchOpen) {
-      dispatch(setConnectionsSearch(''));
+      dispatch(setGroupSearch(''));
       textInput.current.clear();
       textInput.current.blur();
     } else {
       textInput.current.focus();
     }
 
-    dispatch(setConnectionsSearchOpen(!searchOpen));
+    dispatch(setGroupSearchOpen(!searchOpen));
     Animated.spring(leftAnim, {
       toValue: searchOpen ? X_TRANSFORM : 0,
       useNativeDriver: true,
     }).start(() => {});
   };
-
-  console.log('rendering', leftAnim);
 
   return (
     <Animated.View
@@ -75,13 +70,13 @@ const SearchConnections = ({ sortable }) => {
       <TextInput
         ref={textInput}
         onChangeText={(value) => {
-          dispatch(setConnectionsSearch(value));
+          dispatch(setGroupSearch(value));
         }}
         style={[
           styles.searchField,
           DEVICE_IOS && { height: DEVICE_LARGE ? 33 : 26 },
         ]}
-        placeholder="Search Connections"
+        placeholder="Search Groups"
         autoCapitalize="words"
         autoCorrect={false}
         textContentType="none"
@@ -89,19 +84,9 @@ const SearchConnections = ({ sortable }) => {
         placeholderTextColor="#aaa"
         clearTextOnFocus={true}
         onFocus={() => {
-          dispatch(setConnectionsSearch(''));
+          dispatch(setGroupSearch(''));
         }}
       />
-      {sortable && (
-        <TouchableOpacity
-          onPress={() => {
-            navigate('SortingConnections');
-          }}
-          style={styles.optionsIcon}
-        >
-          <Ionicon size={22} name="ios-options" color="#333" />
-        </TouchableOpacity>
-      )}
     </Animated.View>
   );
 };
@@ -139,4 +124,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchConnections;
+export default SearchGroups;

@@ -9,7 +9,7 @@ import {
   ADD_CONNECTION,
   ADD_TRUSTED_CONNECTION,
   REMOVE_TRUSTED_CONNECTION,
-  SET_CONNECTIONS_SEARCH_PARAM,
+  SET_CONNECTIONS_SEARCH,
   SET_CONNECTIONS_SEARCH_OPEN,
   HYDRATE_CONNECTIONS,
   RESET_STORE,
@@ -93,7 +93,7 @@ export const reducer = (
         trustedConnections,
       };
     }
-    case SET_CONNECTIONS_SEARCH_PARAM: {
+    case SET_CONNECTIONS_SEARCH: {
       return {
         ...state,
         searchParam: action.searchParam,

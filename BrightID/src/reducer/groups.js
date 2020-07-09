@@ -8,6 +8,7 @@ import {
   CLEAR_NEW_GROUP_CO_FOUNDERS,
   SET_GROUPS,
   SET_GROUP_SEARCH,
+  SET_GROUP_SEARCH_OPEN,
   SET_INVITES,
   ACCEPT_INVITE,
   REJECT_INVITE,
@@ -35,6 +36,12 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
       return {
         ...state,
         searchParam: action.searchParam,
+      };
+    }
+    case SET_GROUP_SEARCH_OPEN: {
+      return {
+        ...state,
+        searchOpen: action.searchOpen,
       };
     }
     case CREATE_GROUP: {

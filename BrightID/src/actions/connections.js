@@ -7,7 +7,7 @@ export const DELETE_CONNECTION = 'DELETE_CONNECTION';
 export const ADD_CONNECTION = 'ADD_CONNECTION';
 export const ADD_TRUSTED_CONNECTION = 'ADD_TRUSTED_CONNECTION';
 export const REMOVE_TRUSTED_CONNECTION = 'REMOVE_TRUSTED_CONNECTION';
-export const SET_CONNECTIONS_SEARCH_PARAM = 'SET_CONNECTIONS_SEARCH_PARAM';
+export const SET_CONNECTIONS_SEARCH = 'SET_CONNECTIONS_SEARCH';
 export const SET_CONNECTIONS_SEARCH_OPEN = 'SET_CONNECTIONS_SEARCH_OPEN';
 export const HYDRATE_CONNECTIONS = 'HYDRATE_CONNECTIONS';
 
@@ -22,8 +22,8 @@ export const setConnections = (connections: connection[]) => ({
   connections,
 });
 
-export const setConnectionsSearchParam = (searchParam: string) => ({
-  type: SET_CONNECTIONS_SEARCH_PARAM,
+export const setConnectionsSearch = (searchParam: string) => ({
+  type: SET_CONNECTIONS_SEARCH,
   searchParam,
 });
 
