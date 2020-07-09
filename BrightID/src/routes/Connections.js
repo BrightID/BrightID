@@ -1,22 +1,20 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Text, TouchableOpacity } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ConnectionsScreen from '@/components/Connections/ConnectionsScreen';
 import SortingConnectionsScreen from '@/components/Connections/SortingConnectionsScreen';
 import SearchConnections from '@/components/Helpers/SearchConnections';
+import TrustedConnectionsScreen from '@/components/Recovery/TrustedConnectionsScreen';
 import { DEVICE_IOS } from '@/utils/constants';
-import { createFakeConnection } from '@/components/Connections/models/createFakeConnection';
 import { navigate } from '@/NavigationService';
 import backArrow from '@/static/back_arrow.svg';
 import { SvgXml } from 'react-native-svg';
-import { store } from '@/store';
 import { useSelector } from 'react-redux';
 import { headerOptions, headerTitleStyle } from './helpers';
 
 const Stack = createStackNavigator();
 
-const HeaderTitle = () => {
+const HeaderTitle = ({ title }) => {
   const searchOpen = useSelector((state) => state.connections.searchOpen);
   const fadeAnim = useRef(new Animated.Value(1)).current;
   useEffect(() => {
@@ -26,10 +24,10 @@ const HeaderTitle = () => {
       duration: 600,
     }).start();
   }, [fadeAnim, searchOpen]);
-  console.log('renderingTitle');
+
   return (
     <Animated.View style={{ opacity: fadeAnim }}>
-      <Text style={headerTitleStyle}>Connections</Text>
+      <Text style={headerTitleStyle}>{title}</Text>
     </Animated.View>
   );
 };
@@ -50,7 +48,6 @@ const connectionsScreenOptions = {
       <SvgXml height="20" xml={backArrow} />
     </TouchableOpacity>
   ),
-  headerTitle: () => <HeaderTitle />,
   headerTitleAlign: 'left',
 };
 
@@ -60,12 +57,23 @@ const Connections = () => {
       <Stack.Screen
         name="Connections"
         component={ConnectionsScreen}
-        options={connectionsScreenOptions}
+        options={{
+          ...connectionsScreenOptions,
+          headerTitle: () => <HeaderTitle title="Connections" />,
+        }}
       />
       <Stack.Screen
         name="SortingConnections"
         component={SortingConnectionsScreen}
         options={headerOptions}
+      />
+      <Stack.Screen
+        name="TrustedConnections"
+        component={TrustedConnectionsScreen}
+        options={{
+          ...connectionsScreenOptions,
+          headerTitle: () => <HeaderTitle title="Trusted Connections" />,
+        }}
       />
     </>
   );

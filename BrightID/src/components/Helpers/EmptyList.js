@@ -22,8 +22,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fdfdfd',
+    backgroundColor: '#fff',
     height: '100%',
+    width: '100%',
   },
   emptyText: {
     fontFamily: 'ApexNew-Medium',
