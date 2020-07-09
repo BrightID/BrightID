@@ -1,16 +1,15 @@
 stateDiagram
-  S1: WAITING_PROFILE
-  S2: WAITING_USER_CONFIRMATION
-  S3: WAITING_CONNECTION_CONFIRMATION
-  S4: TIMED_OUT
+  S1: INITIAL
+  S2: DOWNLOADING
+  S3: UNCONFIRMED
+  S4: REJECTED
+  S5: CONFIRMED
   S6: ESTABLISHED
-  S8: REJECTED
 
-  [*] --> S1: scan QRCode/DeepLink
-  [*] --> S1: query channel
-  [*] --> S1: receive push notification
+  [*] --> S1
   S1 --> S2: download profile
-  S2 --> S3: user confirms
-  S2 --> S8: user rejects
-  S3 --> S6: connection established
-  S3 --> S4: timeout
+  S2 --> S3: download complete
+  S2 --> S1: download error
+  S3 --> S4: user rejects
+  S3 --> S5: user confirms
+  S5 --> S6: connection confirms (IDChain)

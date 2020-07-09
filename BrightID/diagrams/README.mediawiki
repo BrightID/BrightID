@@ -66,6 +66,9 @@ Sequence diagram to establish connections:
 
 
 = States and transitions =
-=== Connection ===
-A connection starts with obtaining a profileID, either directyl via scanning a QRCode, by getting a list of profiles from a channel or by receiving a push notification. Before the user is asked for confirmation, the profile data needs to be downloaded. When profile data is available, the user can confirm or reject a connection.
+=== Pending Connection ===
+A connection starts with obtaining a profileID, either directyl via scanning a QRCode, by getting a list of profiles from a channel or by receiving a push notification.
+Before the user is asked for confirmation, the profile data needs to be downloaded.
+When profile data is available, the user can confirm or reject a connection.
+If a connection is confirmed by the user the last state is to be confirmed on IDChain.
 [[File:connection_states.mmd.svg||Connection States]]
