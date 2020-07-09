@@ -10,12 +10,18 @@ import {
   groupsTransformer,
   qrDataTransformer,
   userTransformer,
+  connectionsTransformer,
 } from './transform';
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  transforms: [userTransformer, groupsTransformer, qrDataTransformer],
+  transforms: [
+    userTransformer,
+    groupsTransformer,
+    qrDataTransformer,
+    connectionsTransformer,
+  ],
   version: 6,
   migrate,
   timeout: null,

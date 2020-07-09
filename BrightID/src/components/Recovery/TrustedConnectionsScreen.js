@@ -80,9 +80,6 @@ class TrustedConnectionsScreen extends React.Component<Props> {
               Choose three or more trusted connections to back up your BrightID.
             </Text>
           </View>
-          {DEVICE_TYPE === 'large' && (
-            <SearchConnections navigation={navigation} />
-          )}
           <View style={styles.mainContainer}>
             <FlatList
               style={styles.connectionsContainer}

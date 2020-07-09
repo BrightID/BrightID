@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeScreen from '@/components/HomeScreen';
 import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnectionScreen';
+import TrustedConnectionsScreen from '@/components/Recovery/TrustedConnectionsScreen';
 import { navigate } from '@/NavigationService';
 import { headerOptions } from './helpers';
 
@@ -63,9 +64,15 @@ const recoveringConnectionOptions = {
 
 const Home = () => {
   const notificationCount = useSelector(
-    ({ user: { notifications }, groups: { invites } }) =>
-      notifications?.length +
-      invites?.filter((invite) => invite.state === INVITE_ACTIVE)?.length,
+    ({
+      notifications: { pendingConnections, backupPending },
+      groups: { invites },
+    }) =>
+      backupPending
+        ? 1
+        : 0 +
+          pendingConnections?.length +
+          invites?.filter((invite) => invite.state === INVITE_ACTIVE)?.length,
   );
   return (
     <>
@@ -78,6 +85,15 @@ const Home = () => {
         name="RecoveringConnection"
         component={RecoveringConnectionScreen}
         options={recoveringConnectionOptions}
+      />
+      <Stack.Screen
+        name="TrustedConnections"
+        component={TrustedConnectionsScreen}
+        options={{
+          ...headerOptions,
+          title: 'Trusted Connections',
+          headerTitleAlign: 'left',
+        }}
       />
     </>
   );

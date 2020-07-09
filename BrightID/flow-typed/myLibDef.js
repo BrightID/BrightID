@@ -39,6 +39,8 @@ declare type ConnectionsState = {
   connections: connection[],
   trustedConnections: string[],
   connectionsSort: string,
+  searchParam: string,
+  searchOpen: boolean,
 };
 
 declare type connection = {
@@ -93,6 +95,8 @@ declare type GroupsState = {
   newGroupCoFounders: string[],
   invites: invite[],
   groups: group[],
+  searchParam: string,
+  searchOpen: boolean,
 };
 
 declare type group = {

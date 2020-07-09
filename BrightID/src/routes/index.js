@@ -15,9 +15,6 @@ const TopStack = createStackNavigator();
 const Stack = createStackNavigator();
 
 const MainTabs = () => {
-  const notificationCount = useSelector(
-    ({ notifications: { notifications } }) => notifications.length,
-  );
   return (
     <Stack.Navigator headerMode="screen">
       {Home()}

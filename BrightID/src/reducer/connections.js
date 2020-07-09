@@ -9,6 +9,8 @@ import {
   ADD_CONNECTION,
   ADD_TRUSTED_CONNECTION,
   REMOVE_TRUSTED_CONNECTION,
+  SET_CONNECTIONS_SEARCH_PARAM,
+  SET_CONNECTIONS_SEARCH_OPEN,
   HYDRATE_CONNECTIONS,
   RESET_STORE,
 } from '@/actions';
@@ -17,6 +19,8 @@ export const initialState = {
   connections: [],
   trustedConnections: [],
   connectionsSort: '',
+  searchParam: '',
+  searchOpen: false,
 };
 
 export const reducer = (
@@ -87,6 +91,18 @@ export const reducer = (
       return {
         ...state,
         trustedConnections,
+      };
+    }
+    case SET_CONNECTIONS_SEARCH_PARAM: {
+      return {
+        ...state,
+        searchParam: action.searchParam,
+      };
+    }
+    case SET_CONNECTIONS_SEARCH_OPEN: {
+      return {
+        ...state,
+        searchOpen: action.searchOpen,
       };
     }
     case HYDRATE_CONNECTIONS: {
