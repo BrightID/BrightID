@@ -9,26 +9,43 @@ const createRandomId = async (size = 9) => {
   return b64ToUrlSafeB64(key);
 };
 
-export const generateChannelData = async () => {
+export const generateChannelData = async (
+  channelType: ChannelType,
+): Promise<Channel> => {
   const aesKey = await randomKey(16);
   const ipAddress = await api.ip();
   const id = await createRandomId();
   const timestamp = Date.now();
   const ttl = QR_TTL;
   const myProfileId = await createRandomId();
+  const type = channelType;
+  const pollTimerId = 0;
+  const timeoutId = 0;
+  const initiatorProfileId = '';
 
-  return { id, myProfileId, aesKey, timestamp, ttl, ipAddress };
+  return {
+    aesKey,
+    id,
+    initiatorProfileId,
+    ipAddress,
+    myProfileId,
+    pollTimerId,
+    timestamp,
+    ttl,
+    type,
+    timeoutId,
+  };
 };
 
 export const encodeChannelQrString = (channel: Channel) => {
-  const { aesKey, id, ipAddress, myProfileId, timestamp, ttl } = channel;
+  const { aesKey, id, ipAddress, myProfileId, timestamp, ttl, type } = channel;
   const b64Ip = Buffer.from(
     ipAddress.split('.').map((octet) => parseInt(octet, 10)),
   )
     .toString('base64')
     .substring(0, 6);
   return encodeURIComponent(
-    `${aesKey}${id}${myProfileId}${b64Ip}${timestamp}${ttl}`,
+    `${aesKey}${id}${myProfileId}${b64Ip}${type}${timestamp}${ttl}`,
   );
 };
 
@@ -39,14 +56,16 @@ export const decodeChannelQrString = async (qrString: string) => {
   const initiatorProfileId = decodedQR.substr(36, 12);
   const b64ip = `${decodedQR.substr(48, 6)}==`;
   const ipAddress = b64ToUint8Array(b64ip).join('.');
+  const type = parseInt(decodedQR.substr(54, 1), 10);
   // 13 digits for timestamp will be safe until Saturday, 20. November 2286 17:46:39.999
-  const timestamp = parseInt(decodedQR.substr(54, 13), 10);
+  const timestamp = parseInt(decodedQR.substr(55, 13), 10);
   // ttl has unknown length, so just parse everything till the end
-  const ttl = parseInt(decodedQR.substr(67), 10);
+  const ttl = parseInt(decodedQR.substr(68), 10);
 
   // add local channel data that is not part of qrstring
   const myProfileId = await createRandomId();
   const pollTimerId = 0;
+  const timeoutId = 0;
 
   const channel: Channel = {
     aesKey,
@@ -56,7 +75,9 @@ export const decodeChannelQrString = async (qrString: string) => {
     myProfileId,
     pollTimerId,
     timestamp,
+    timeoutId,
     ttl,
+    type,
   };
   return channel;
 };

@@ -7,6 +7,8 @@ import {
   View,
   TouchableOpacity,
   Clipboard,
+  Switch,
+  FlatList,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -20,8 +22,10 @@ import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
 import cameraIcon from '@/static/camera_icon_white.svg';
 import {
+  CHANNEL_TYPES,
   createChannel,
   removeChannel,
+  removeChannelThunk,
   selectChannelById,
 } from '@/components/NewConnectionsScreens/channelSlice';
 import { encodeChannelQrString } from '@/utils/channels';
@@ -52,6 +56,7 @@ export const MyCodeScreen = (props) => {
   const [countdown, setCountdown] = useState(
     myChannel ? myChannel.ttl - (Date.now() - myChannel.timestamp) : 0,
   );
+  const [isGroup, setIsGroup] = useState(false);
 
   // create QRCode from channel data
   useEffect(() => {
@@ -82,12 +87,28 @@ export const MyCodeScreen = (props) => {
     useCallback(() => {
       if (!navigation.isFocused()) return;
       if (!myChannel) {
-        dispatch(createChannel());
+        dispatch(
+          createChannel(
+            isGroup
+              ? CHANNEL_TYPES.CHANNEL_TYPE_GROUP
+              : CHANNEL_TYPES.CHANNEL_TYPE_ONE,
+          ),
+        );
       } else {
         setCountdown(myChannel.ttl - (Date.now() - myChannel.timestamp));
       }
     }, [navigation, myChannel, dispatch]),
   );
+
+  const toggleGroup = () => {
+    // remove current channel
+    if (myChannel) {
+      dispatch(removeChannelThunk(myChannel.id));
+    }
+    // toggle switch
+    setIsGroup((previousState) => !previousState);
+    // new channel will be created through useFocusEffect
+  };
 
   const displayTime = () => {
     const minutes = Math.floor(countdown / 60000);
@@ -124,7 +145,7 @@ export const MyCodeScreen = (props) => {
         style={styles.copyButton}
         onPress={() => {
           setCountdown(0);
-          dispatch(removeChannel(myChannel.id));
+          dispatch(removeChannelThunk(myChannel.id));
         }}
       >
         <Material
@@ -182,6 +203,16 @@ export const MyCodeScreen = (props) => {
             Hey {name}, share your code and
           </Text>
           <Text style={styles.infoTopText}>make a new connection today</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Text>Group connection</Text>
+            <Switch
+              trackColor={{ false: '#767577', true: '#81b0ff' }}
+              thumbColor={isGroup ? '#f5dd4b' : '#f4f3f4'}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleGroup}
+              value={isGroup}
+            />
+          </View>
         </View>
         <View style={styles.qrCodeContainer} testID="QRCodeContainer">
           {qrsvg ? renderTimer() : <View />}

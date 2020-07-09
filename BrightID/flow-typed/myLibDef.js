@@ -2,6 +2,7 @@
 
 import { NavigationScreenProp } from 'react-navigation';
 import { Dispatch } from 'redux';
+import { CHANNEL_TYPES } from '@/components/NewConnectionsScreens/channelSlice';
 
 declare type getState = () => State;
 
@@ -185,6 +186,8 @@ declare type action = {
   [key: string]: any,
 };
 
+declare type ChannelType = $Keys<typeof CHANNEL_TYPES>;
+
 declare type Channel = {
   id: string,
   initiatorProfileId: string,
@@ -194,6 +197,8 @@ declare type Channel = {
   timestamp: number,
   ttl: number,
   pollTimerId: number,
+  timeoutId: TimeoutID,
+  type: ChannelType,
 };
 
 declare type PendingConnection = {

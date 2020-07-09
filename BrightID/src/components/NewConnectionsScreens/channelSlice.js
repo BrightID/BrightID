@@ -22,13 +22,20 @@ import { generateChannelData } from '@/utils/channels';
   - 'aesKey': encryption key for data transported through channel
   - 'timestamp': timestamp of channel creation time
   - 'ttl': time to live of channel (seconds)
+  - 'type': group or 1:1 connection - see CHANNEL_TYPES below
   - 'myProfileId': my profileId in this channel
   - 'pollTimerId: IntervalId of timer polling for incoming connection requests from this channel
+  - 'timeoutId: Id of timer to expire channel once ttl is reached
 
   The app could hold multiple channels at the same time. E.g. if i scan multiple QRCodes
   in a larger group session.
 
  */
+
+export const CHANNEL_TYPES = {
+  CHANNEL_TYPE_GROUP: 0,
+  CHANNEL_TYPE_ONE: 1,
+};
 
 export const subscribeToConnectionRequests = createAsyncThunk(
   'channels/subscribeToConnectionRequests',
@@ -138,22 +145,21 @@ export const fetchConnectionRequests = createAsyncThunk(
 
 export const createChannel = createAsyncThunk(
   'channels/createChannel',
-  async (_, { getState, dispatch }) => {
+  async (channelType: ChannelType, { getState, dispatch }) => {
     try {
       // create new channel
-      const channel = await generateChannelData();
+      const channel = await generateChannelData(channelType);
+      // Set timeout to expire channel
+      channel.timeoutId = setTimeout(() => {
+        console.log(`timer expired for channel ${channel.id}`);
+        dispatch(removeChannelThunk(channel.id));
+      }, channel.ttl);
       dispatch(addChannel(channel));
       dispatch(setMyChannel(channel.id));
       // upload my profile
       dispatch(encryptAndUploadProfileToChannel(channel.id));
       // start polling for incoming connection requests
       dispatch(subscribeToConnectionRequests(channel.id));
-      // Start timer to expire channel
-      setTimeout(() => {
-        console.log(`timer expired for channel ${channel.id}`);
-        dispatch(unsubscribeFromConnectionRequests(channel.id));
-        dispatch(removeChannel(channel.id));
-      }, channel.ttl);
     } catch (err) {
       err instanceof Error ? console.warn(err.message) : console.log(err);
     }
@@ -163,20 +169,36 @@ export const createChannel = createAsyncThunk(
 export const joinChannel = createAsyncThunk(
   'channels/joinChannel',
   async (channel: Channel, { getState, dispatch }) => {
+    // Start timer to expire channel
+    channel.timeoutId = setTimeout(() => {
+      console.log(`timer expired for channel ${channel.id}`);
+      dispatch(removeChannelThunk(channel.id));
+    }, channel.ttl);
     // add channel to store
     dispatch(addChannel(channel));
-    // upload my profile to channel
-    dispatch(encryptAndUploadProfileToChannel(channel.id));
+
+    if (channel.type === CHANNEL_TYPES.CHANNEL_TYPE_GROUP) {
+      // upload my profile to channel
+      // TODO: Require user confirmation before uploading profile to channel!!!
+      dispatch(encryptAndUploadProfileToChannel(channel.id));
+      // start polling for incoming connection requests
+      dispatch(subscribeToConnectionRequests(channel.id));
+    }
+
     // fetch all profileIDs in channel
     dispatch(fetchChannelProfiles(channel.id));
-    // start polling for incoming connection requests
-    dispatch(subscribeToConnectionRequests(channel.id));
-    // Start timer to expire channel
-    setTimeout(() => {
-      console.log(`timer expired for channel ${channel.id}`);
-      dispatch(unsubscribeFromConnectionRequests(channel.id));
-      dispatch(removeChannel(channel.id));
-    }, channel.ttl);
+  },
+);
+
+export const removeChannelThunk = createAsyncThunk(
+  'channels/removeChannelThunk',
+  async (channelId, { getState, dispatch }) => {
+    const channel = selectChannelById(getState(), channelId);
+    if (channel) {
+      clearTimeout(channel.timeoutId);
+      dispatch(unsubscribeFromConnectionRequests(channelId));
+      dispatch(removeChannel(channelId));
+    }
   },
 );
 
