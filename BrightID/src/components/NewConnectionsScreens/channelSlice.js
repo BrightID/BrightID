@@ -274,9 +274,10 @@ export const {
 } = channelSlice.actions;
 
 // Export channel selectors
-export const { selectById: selectChannelById } = channelsAdapter.getSelectors(
-  (state) => state.channels,
-);
+export const {
+  selectById: selectChannelById,
+  selectAll: selectAllChannels,
+} = channelsAdapter.getSelectors((state) => state.channels);
 
 // Export reducer
 export default channelSlice.reducer;

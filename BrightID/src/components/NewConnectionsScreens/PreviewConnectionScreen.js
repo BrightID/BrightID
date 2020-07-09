@@ -51,6 +51,7 @@ export const PreviewConnectionScreen = () => {
     flagged: false,
   });
 
+  // TODO: Why is this wrapped in useCallback??
   const reject = useCallback(() => {
     dispatch(rejectPendingConnection(pendingConnection.id));
     // navigation.navigate('Home');

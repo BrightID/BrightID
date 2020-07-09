@@ -17,12 +17,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-native-spinkit';
 import { DEVICE_LARGE, DEVICE_IOS, ORANGE } from '@/utils/constants';
 import qricon from '@/static/qr_icon_white.svg';
-import { joinChannel } from '@/components/NewConnectionsScreens/channelSlice';
+import {
+  CHANNEL_TYPES,
+  joinChannel,
+  selectAllChannels,
+} from '@/components/NewConnectionsScreens/channelSlice';
 import { selectAllPendingConnections } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
-import { confirmPendingConnectionThunk } from '@/components/NewConnectionsScreens/actions/addNewConnection';
 import { decodeChannelQrString } from '@/utils/channels';
 import { RNCamera } from './RNCameraProvider';
-import emitter from '../../emitter';
 
 /**
  * Returns whether the string is a valid QR identifier
@@ -46,34 +48,27 @@ export const ScanCodeScreen = (props) => {
   const { navigation, route } = props;
   const dispatch = useDispatch();
   const [scanned, setScanned] = useState(false);
-  const [connectionAttempts, setConnectionAttempts] = useState(0);
   const name = useSelector((state) => state.user.name);
   const pendingConnections = useSelector(selectAllPendingConnections);
+  const channels = useSelector(selectAllChannels);
 
   useFocusEffect(
     useCallback(() => {
-      /*
-      if (connectDataExists) {
-        unsubscribeToProfileUpload();
-        navigation.navigate('PreviewConnection');
-        return;
-      }
-      */
-      const handleDownloadFailure = () => {
-        setConnectionAttempts(connectionAttempts + 1);
-        if (connectionAttempts > 1) {
-          navigation.navigate('Home');
+      if (pendingConnections) {
+        // check all pending connections. If there is a pending connection for a 1:1 channel,
+        // directly open PreviewConnectionScreen.
+        for (const pc of pendingConnections) {
+          const channel = channels.find(
+            (channel) => channel.id === pc.channelId,
+          );
+          if (channel.type === CHANNEL_TYPES.CHANNEL_TYPE_ONE) {
+            navigation.navigate('PreviewConnection', {
+              pendingConnectionId: pc.id,
+            });
+          }
         }
-      };
-
-      emitter.on('connectFailure', handleDownloadFailure);
-
-      return () => {
-        // unsubscribeToProfileUpload();
-
-        emitter.off('connectFailure', handleDownloadFailure);
-      };
-    }, [connectionAttempts /* , connectDataExists */]),
+      }
+    }, [pendingConnections, channels]),
   );
 
   const handleBarCodeRead = async ({ data }) => {
