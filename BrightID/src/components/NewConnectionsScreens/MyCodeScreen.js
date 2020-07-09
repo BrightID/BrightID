@@ -56,7 +56,9 @@ export const MyCodeScreen = (props) => {
   const [countdown, setCountdown] = useState(
     myChannel ? myChannel.ttl - (Date.now() - myChannel.timestamp) : 0,
   );
-  const [isGroup, setIsGroup] = useState(false);
+  const [isGroup, setIsGroup] = useState(
+    myChannel ? myChannel.type === CHANNEL_TYPES.CHANNEL_TYPE_GROUP : false,
+  );
 
   // create QRCode from channel data
   useEffect(() => {
@@ -97,7 +99,7 @@ export const MyCodeScreen = (props) => {
       } else {
         setCountdown(myChannel.ttl - (Date.now() - myChannel.timestamp));
       }
-    }, [navigation, myChannel, dispatch]),
+    }, [navigation, myChannel, dispatch, isGroup]),
   );
 
   const toggleGroup = () => {

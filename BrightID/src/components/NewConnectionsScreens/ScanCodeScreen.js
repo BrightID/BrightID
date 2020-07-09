@@ -105,12 +105,9 @@ export const ScanCodeScreen = (props) => {
       testID="ScanCodeToMyCodeBtn"
       onPress={() => {
         console.log(`Confirm connection ${pc.id}`);
-        dispatch(
-          confirmPendingConnectionThunk({
-            channelId: pc.channelId,
-            profileId: pc.id,
-          }),
-        );
+        navigation.navigate('PreviewConnection', {
+          pendingConnectionId: pc.id,
+        });
       }}
     >
       <Text>{`${pc.name} - ${pc.id} - ${pc.channelId} - ${pc.state}`}</Text>

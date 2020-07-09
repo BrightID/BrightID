@@ -11,16 +11,20 @@ import {
   View,
   StatusBar,
 } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import {
-  removeConnectUserData,
-  removeConnectQrData,
-  clearMyQrData,
-} from '@/actions';
-import { addNewConnection } from './actions/addNewConnection';
+  confirmPendingConnectionThunk,
+  rejectPendingConnection,
+  selectPendingConnectionById,
+} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+
 import api from '../../Api/BrightId';
 
 /**
@@ -30,8 +34,14 @@ import api from '../../Api/BrightId';
  *
  */
 
-export const PreviewConnectionScreen = ({ navigation }) => {
+export const PreviewConnectionScreen = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const route = useRoute();
+  const myConnections = useSelector((state) => state.connections.connections);
+  const pendingConnection: PendingConnection = useSelector((state) =>
+    selectPendingConnectionById(state, route.params.pendingConnectionId),
+  );
 
   const [userInfo, setUserInfo] = useState({
     connections: 'loading',
@@ -41,38 +51,28 @@ export const PreviewConnectionScreen = ({ navigation }) => {
     flagged: false,
   });
 
-  const myConnections = useSelector((state) => state.connections.connections);
-  const connectUserData = useSelector(
-    (state) => state.connectUserData,
-    shallowEqual,
-  );
-
   const reject = useCallback(() => {
-    dispatch(removeConnectUserData());
-    dispatch(removeConnectQrData());
-    dispatch(clearMyQrData());
-    navigation.navigate('Home');
+    dispatch(rejectPendingConnection(pendingConnection.id));
+    // navigation.navigate('Home');
+    navigation.goBack();
     return true;
-  }, [dispatch, navigation]);
+  }, [dispatch, navigation, pendingConnection.id]);
 
   const handleConfirmation = async () => {
-    await dispatch(addNewConnection());
-    dispatch(removeConnectUserData());
-    dispatch(removeConnectQrData());
-    dispatch(clearMyQrData());
+    dispatch(confirmPendingConnectionThunk(pendingConnection.id));
     navigation.navigate('ConnectSuccess');
   };
 
   useFocusEffect(
     useCallback(() => {
-      if (!connectUserData.photo) {
+      if (!pendingConnection) {
         Alert.alert(
           'Sorry',
           'There was a problem creating a connection',
           [
             {
               text: 'OK',
-              onPress: reject,
+              onPress: navigation.goBack,
             },
           ],
           { cancelable: true },
@@ -86,7 +86,7 @@ export const PreviewConnectionScreen = ({ navigation }) => {
             groups,
             connections = [],
             flaggers,
-          } = await api.getUserInfo(connectUserData.id);
+          } = await api.getUserInfo(pendingConnection.brightId);
           const mutualConnections = connections.filter(function (el) {
             return myConnections.some((x) => x.id === el.id);
           });
@@ -118,7 +118,7 @@ export const PreviewConnectionScreen = ({ navigation }) => {
 
       BackHandler.addEventListener('hardwareBackPress', reject);
       return () => BackHandler.removeEventListener('hardwareBackPress', reject);
-    }, [reject]),
+    }, [pendingConnection, reject, navigation.goBack, myConnections]),
   );
 
   return (
@@ -134,7 +134,7 @@ export const PreviewConnectionScreen = ({ navigation }) => {
       </View>
       <View style={styles.userContainer}>
         <Image
-          source={{ uri: connectUserData.photo }}
+          source={{ uri: pendingConnection.photo }}
           style={styles.photo}
           resizeMode="cover"
           onError={(e) => {
@@ -144,26 +144,22 @@ export const PreviewConnectionScreen = ({ navigation }) => {
           accessibilityLabel="user photo"
         />
         <Text style={styles.connectName}>
-          {connectUserData.name}
+          {pendingConnection.name}
           {userInfo.flagged && <Text style={styles.flagged}> (flagged)</Text>}
         </Text>
         <Text style={styles.connectedText}>{userInfo.connectionDate}</Text>
       </View>
       <View style={styles.countsContainer}>
         <View>
-          <Text id="connectionsCount" style={styles.countsNumberText}>
-            {userInfo.connections}
-          </Text>
+          <Text style={styles.countsNumberText}>{userInfo.connections}</Text>
           <Text style={styles.countsDescriptionText}>Connections</Text>
         </View>
         <View>
-          <Text id="groupsCount" style={styles.countsNumberText}>
-            {userInfo.groups}
-          </Text>
+          <Text style={styles.countsNumberText}>{userInfo.groups}</Text>
           <Text style={styles.countsDescriptionText}>Groups</Text>
         </View>
         <View>
-          <Text id="groupsCount" style={styles.countsNumberText}>
+          <Text style={styles.countsNumberText}>
             {userInfo.mutualConnections}
           </Text>
           <Text style={styles.countsDescriptionText}>Mutual Connections</Text>
