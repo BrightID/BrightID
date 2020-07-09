@@ -16,22 +16,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import BarcodeMask from 'react-native-barcode-mask';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-native-spinkit';
-import {
-  DEVICE_LARGE,
-  DEVICE_IOS,
-  PROFILE_POLL_INTERVAL,
-  QR_TYPE_RESPONDER,
-  ORANGE,
-} from '@/utils/constants';
-import { parseChannelQrData, parseQrData } from '@/utils/qrCodes';
+import { DEVICE_LARGE, DEVICE_IOS, ORANGE } from '@/utils/constants';
 import qricon from '@/static/qr_icon_white.svg';
 import { joinChannel } from '@/components/NewConnectionsScreens/channelSlice';
-import { fetchProfile } from '@/components/NewConnectionsScreens/actions/profile';
 import { selectAllPendingConnections } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
-import { confirmPendingConnection } from '@/components/NewConnectionsScreens/actions/addNewConnection';
+import { confirmPendingConnectionThunk } from '@/components/NewConnectionsScreens/actions/addNewConnection';
+import { decodeChannelQrString } from '@/utils/channels';
 import { RNCamera } from './RNCameraProvider';
 import emitter from '../../emitter';
-import { setConnectQrData } from '../../actions';
 
 /**
  * Returns whether the string is a valid QR identifier
@@ -49,9 +41,6 @@ function validQrString(qrString) {
  *
  */
 
-let fetchProfileId: IntervalID;
-let connectionExpired: TimeoutID;
-
 const Container = DEVICE_IOS ? SafeAreaView : View;
 
 export const ScanCodeScreen = (props) => {
@@ -60,13 +49,10 @@ export const ScanCodeScreen = (props) => {
   const [scanned, setScanned] = useState(false);
   const [connectionAttempts, setConnectionAttempts] = useState(0);
   const name = useSelector((state) => state.user.name);
-  const connectDataExists = useSelector((state) => !!state.connectUserData.id);
   const pendingConnections = useSelector(selectAllPendingConnections);
 
   useFocusEffect(
     useCallback(() => {
-      // dispatch(stopConnecting());
-
       /*
       if (connectDataExists) {
         unsubscribeToProfileUpload();
@@ -91,21 +77,6 @@ export const ScanCodeScreen = (props) => {
     }, [connectionAttempts /* , connectDataExists */]),
   );
 
-  const subscribeToProfileUpload = (peerQrData) => {
-    console.log(`Subscribing to profile Upload for uuid ${peerQrData.uuid}`);
-
-    connectionExpired = setTimeout(showProfileError, 90000);
-    fetchProfileId = setInterval(() => {
-      dispatch(fetchProfile(peerQrData));
-    }, PROFILE_POLL_INTERVAL);
-  };
-
-  const unsubscribeToProfileUpload = () => {
-    console.log(`Unsubsubscribing from profile Upload`);
-    clearTimeout(connectionExpired);
-    clearInterval(fetchProfileId);
-  };
-
   const handleBarCodeRead = async ({ data }) => {
     console.log('barcode data', data);
     if (!data) return;
@@ -119,16 +90,8 @@ export const ScanCodeScreen = (props) => {
     } else if (data.startsWith('brightid://')) {
       Linking.openURL(data);
     } else if (validQrString(data)) {
-      // TODO : Move this to dedicated thunk action
-
-      const channel: Channel = await parseChannelQrData(data);
-      console.log(`Parsed channel:`);
-      console.dir(channel);
+      const channel = await decodeChannelQrString(data);
       dispatch(joinChannel(channel));
-      // const peerQrData = parseQrData(data);
-      // peerQrData.type = QR_TYPE_RESPONDER;
-      // dispatch(setConnectQrData(peerQrData));
-      // subscribeToProfileUpload(peerQrData);
     }
   };
 
@@ -137,14 +100,6 @@ export const ScanCodeScreen = (props) => {
     handleBarCodeRead({ data: route.params?.qrcode });
   }
 
-  const showProfileError = () => {
-    Alert.alert(
-      'Timeout reached',
-      "There was a problem downloading the other person's profile. Please try again.",
-    );
-    setScanned(true);
-  };
-
   const pclist = pendingConnections.map((pc) => (
     <TouchableOpacity
       key={pc.id}
@@ -152,7 +107,7 @@ export const ScanCodeScreen = (props) => {
       onPress={() => {
         console.log(`Confirm connection ${pc.id}`);
         dispatch(
-          confirmPendingConnection({
+          confirmPendingConnectionThunk({
             channelId: pc.channelId,
             profileId: pc.id,
           }),

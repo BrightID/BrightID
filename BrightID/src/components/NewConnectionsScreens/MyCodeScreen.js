@@ -16,15 +16,15 @@ import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
-import { encodeChannelQrData, qrCodeToSvg } from '@/utils/qrCodes';
+import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
 import cameraIcon from '@/static/camera_icon_white.svg';
 import {
   createChannel,
   removeChannel,
   selectChannelById,
-  subscribeToConnectionRequests,
 } from '@/components/NewConnectionsScreens/channelSlice';
+import { encodeChannelQrString } from '@/utils/channels';
 
 /**
  * My Code screen of BrightID
@@ -46,7 +46,6 @@ export const MyCodeScreen = (props) => {
   const myChannel = useSelector((state) =>
     selectChannelById(state, state.channels.myChannelId),
   );
-  // const connectDataExists = useSelector((state) => !!state.connectUserData.id);
   const [qrString, setQrString] = useState('');
   const [qrsvg, setQrsvg] = useState('');
   const [copied, setCopied] = useState(false);
@@ -54,13 +53,13 @@ export const MyCodeScreen = (props) => {
     myChannel ? myChannel.ttl - (Date.now() - myChannel.timestamp) : 0,
   );
 
-  // create QRCode when data is available
+  // create QRCode from channel data
   useEffect(() => {
     if (myChannel) {
       console.log(
         `Creating QRCode: profileId ${myChannel.myProfileId} channel ${myChannel.id}`,
       );
-      const newQrString = encodeChannelQrData(myChannel);
+      const newQrString = encodeChannelQrString(myChannel);
       setQrString(newQrString);
       qrCodeToSvg(newQrString, (qrsvg) => setQrsvg(qrsvg));
     } else {
@@ -82,16 +81,9 @@ export const MyCodeScreen = (props) => {
   useFocusEffect(
     useCallback(() => {
       if (!navigation.isFocused()) return;
-      /*
-      if (connectDataExists) {
-        navigation.navigate('PreviewConnection');
-        return;
-      } */
       if (!myChannel) {
-        console.log(`No channel, create one...`);
         dispatch(createChannel());
       } else {
-        console.log(`Current channel ${myChannel.id}.`);
         setCountdown(myChannel.ttl - (Date.now() - myChannel.timestamp));
       }
     }, [navigation, myChannel, dispatch]),

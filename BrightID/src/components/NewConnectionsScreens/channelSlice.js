@@ -9,9 +9,9 @@ import {
   newPendingConnection,
   selectAllPendingConnectionIds,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
-import { generateChannelData } from '@/utils/qrCodes';
 import { encryptAndUploadProfileToChannel } from '@/components/NewConnectionsScreens/actions/profile';
 import { PROFILE_POLL_INTERVAL } from '@/utils/constants';
+import { generateChannelData } from '@/utils/channels';
 
 /*
 
@@ -20,12 +20,12 @@ import { PROFILE_POLL_INTERVAL } from '@/utils/constants';
   - 'initiatorProfileId': profileId of channel initiator
   - 'ipAddress': IP of profile service
   - 'aesKey': encryption key for data transported through channel
-  - 'timestamp': timestamp of creation time
+  - 'timestamp': timestamp of channel creation time
   - 'ttl': time to live of channel (seconds)
   - 'myProfileId': my profileId in this channel
   - 'pollTimerId: IntervalId of timer polling for incoming connection requests from this channel
 
-  The app can hold multiple channels at the same time. E.g. if i scan multiple QRCodes
+  The app could hold multiple channels at the same time. E.g. if i scan multiple QRCodes
   in a larger group session.
 
  */
@@ -83,9 +83,6 @@ export const fetchConnectionRequests = createAsyncThunk(
     const { myProfileId } = channel;
     const Xurl = `http://${channel.ipAddress}/profile/list/${myProfileId}`;
     const url = `http://192.168.178.145:3000/list/${myProfileId}`;
-    console.log(
-      `Fetching incoming connection requests for profile ${myProfileId} at ${url}.`,
-    );
     const response = await fetch(url, {
       headers: { 'Cache-Control': 'no-cache' },
     });
@@ -95,7 +92,6 @@ export const fetchConnectionRequests = createAsyncThunk(
       );
     }
     const responseObj = await response.json();
-    console.dir(responseObj);
     if (responseObj && responseObj.profileIds) {
       const { profileIds } = responseObj;
       // remove known profileIds
@@ -120,7 +116,7 @@ export const fetchConnectionRequests = createAsyncThunk(
           );
         }
         const responseJson = await response.json();
-        const { signedMessage, timestamp } = responseJson.data;
+        const { signedMessage, connectionTimestamp } = responseJson.data;
         if (signedMessage) {
           // add new pendingConnection, including signedMessage and timestamp
           dispatch(
@@ -128,7 +124,7 @@ export const fetchConnectionRequests = createAsyncThunk(
               channelId,
               profileId,
               signedMessage,
-              timestamp,
+              timestamp: connectionTimestamp,
             }),
           );
         } else {
@@ -166,7 +162,7 @@ export const createChannel = createAsyncThunk(
 
 export const joinChannel = createAsyncThunk(
   'channels/joinChannel',
-  async (channel, { getState, dispatch }) => {
+  async (channel: Channel, { getState, dispatch }) => {
     // add channel to store
     dispatch(addChannel(channel));
     // upload my profile to channel

@@ -8,8 +8,8 @@ import api from '@/Api/BrightId';
 import { addConnection, addOperation } from '@/actions';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
+  confirmPendingConnection,
   pendingConnection_states,
-  removePendingConnection,
   selectPendingConnectionById,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import { postConnectionRequest } from '@/utils/profile';
@@ -19,8 +19,8 @@ import { encryptAndUploadProfile } from './profile';
 
 const TIME_FUDGE = 60 * 60 * 1000; // timestamp can be this far in the future (milliseconds) to accommodate 2 clients clock differences
 
-export const confirmPendingConnection = createAsyncThunk(
-  'pendingConnections/confirmPendingConnection',
+export const confirmPendingConnectionThunk = createAsyncThunk(
+  'pendingConnections/confirmPendingConnectionThunk',
   async ({ channelId, profileId }, { getState, dispatch }) => {
     console.log(`confirming connection ${profileId} in channel ${channelId}`);
     const channel = selectChannelById(getState(), channelId);
@@ -33,7 +33,7 @@ export const confirmPendingConnection = createAsyncThunk(
     } = getState();
 
     // validate profile state
-    if (connection.state !== pendingConnection_states.COMPLETE) {
+    if (connection.state !== pendingConnection_states.UNCONFIRMED) {
       console.log(`Can't confirm - Connection is in state ${connection.state}`);
       return;
     }
@@ -116,7 +116,7 @@ export const confirmPendingConnection = createAsyncThunk(
     };
 
     dispatch(addConnection(connectionData));
-    dispatch(removePendingConnection(connection.id));
+    dispatch(confirmPendingConnection(connection.id));
 
     if (backupCompleted) {
       await backupUser();

@@ -4,6 +4,7 @@ import {
   createAsyncThunk,
 } from '@reduxjs/toolkit';
 import { decryptData } from '@/utils/cryptoHelper';
+import { removeChannel } from '@/components/NewConnectionsScreens/channelSlice';
 
 const pendingConnectionsAdapter = createEntityAdapter();
 
@@ -11,10 +12,10 @@ const pendingConnectionsAdapter = createEntityAdapter();
   PendingConnection slice contains all pending connections and their profile info
 
   What is a pendingConnection:
-   - 'id': unique profileId
+   - 'id': unique id of this pending connection. Is also profileId on the profile server.
    - 'channelId': channel this pendingConnection is associated with
    - 'state': state of this pending connection (valid states TBD)
-   - 'brightId': the actual brightId if the connection
+   - 'brightId': the brightId if the connection
    - 'name'
    - 'photo' (base64-encoded)
    - 'score'
@@ -24,7 +25,9 @@ const pendingConnectionsAdapter = createEntityAdapter();
 export const pendingConnection_states = {
   INITIAL: 'INITIAL',
   DOWNLOADING: 'DOWNLOADING',
-  COMPLETE: 'COMPLETE',
+  UNCONFIRMED: 'UNCONFIRMED',
+  REJECTED: 'REJECTED',
+  CONFIRMED: 'CONFIRMED',
   ERROR: 'ERROR',
 };
 
@@ -79,6 +82,24 @@ const pendingConnectionsSlice = createSlice({
   reducers: {
     removePendingConnection: pendingConnectionsAdapter.removeOne,
     updatePendingConnection: pendingConnectionsAdapter.updateOne,
+    confirmPendingConnection(state, action) {
+      const id = action.payload;
+      state = pendingConnectionsAdapter.updateOne(state, {
+        id,
+        changes: {
+          state: pendingConnection_states.CONFIRMED,
+        },
+      });
+    },
+    rejectPendingConnection(state, action) {
+      const id = action.payload;
+      state = pendingConnectionsAdapter.updateOne(state, {
+        id,
+        changes: {
+          state: pendingConnection_states.REJECTED,
+        },
+      });
+    },
   },
   extraReducers: {
     [newPendingConnection.pending]: (state, action) => {
@@ -100,7 +121,7 @@ const pendingConnectionsSlice = createSlice({
       state = pendingConnectionsAdapter.updateOne(state, {
         id: action.meta.arg.profileId,
         changes: {
-          state: pendingConnection_states.ERROR,
+          state: pendingConnection_states.INITIAL,
         },
       });
     },
@@ -122,7 +143,7 @@ const pendingConnectionsSlice = createSlice({
       state = pendingConnectionsAdapter.updateOne(state, {
         id: profileId,
         changes: {
-          state: pendingConnection_states.COMPLETE,
+          state: pendingConnection_states.UNCONFIRMED,
           brightId,
           name,
           photo,
@@ -132,6 +153,12 @@ const pendingConnectionsSlice = createSlice({
         },
       });
     },
+    [removeChannel]: (state, action) => {
+      const channelId = action.payload;
+      console.log(
+        `TODO: remove pending connections associated to channel ${channelId}, abort/ignore any profile download operation.`,
+      );
+    },
   },
 });
 
@@ -140,6 +167,8 @@ export const {
   updatePendingConnection,
   removePendingConnection,
   setPollTimerId,
+  confirmPendingConnection,
+  rejectPendingConnection,
 } = pendingConnectionsSlice.actions;
 
 // channel selectors
