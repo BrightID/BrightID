@@ -18,7 +18,7 @@ const persistConfig = {
   version: 5,
   migrate,
   timeout: 0,
-  blacklist: ['channels', 'profiles'],
+  blacklist: ['channels', 'pendingConnections'],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducer);

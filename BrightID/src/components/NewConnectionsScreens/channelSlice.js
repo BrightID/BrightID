@@ -1,44 +1,230 @@
 // @flow
 
-import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from '@reduxjs/toolkit';
+import {
+  newPendingConnection,
+  selectAllPendingConnectionIds,
+} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+import { generateChannelData } from '@/utils/qrCodes';
+import { encryptAndUploadProfileToChannel } from '@/components/NewConnectionsScreens/actions/profile';
+import { PROFILE_POLL_INTERVAL } from '@/utils/constants';
 
 /*
 
   What is a channel:
   - 'id': unique identifier
+  - 'initiatorProfileId': profileId of channel initiator
   - 'ipAddress': IP of profile service
   - 'aesKey': encryption key for data transported through channel
-  - 'peerIds': Array of peerIds existing in channel
   - 'timestamp': timestamp of creation time
   - 'ttl': time to live of channel (seconds)
-  - 'qrString': concatenated channel info, ready to be used for generating QRCode
+  - 'myProfileId': my profileId in this channel
+  - 'pollTimerId: IntervalId of timer polling for incoming connection requests from this channel
 
   The app can hold multiple channels at the same time. E.g. if i scan multiple QRCodes
-  in a larget group session, while also having created my own code.
-
-  What is a peer:
-  - 'id': unique brightID of user
-  - 'profileId: Id of user's profile
-  - 'timestamp'
-  - 'signedMessage': First part of signed connection message, in case user initiated connection.
-  - 'score'
-  - secretKey:
-
-  What is a profile:
-  - 'id': unique profileId
-  - 'name'
-  - 'photo' (base64-encoded)
-  - 'notificationToken': token that allows pushing notifications to user
+  in a larger group session.
 
  */
 
+export const subscribeToConnectionRequests = createAsyncThunk(
+  'channels/subscribeToConnectionRequests',
+  async (channelId, { getState, dispatch }) => {
+    const channel: Channel = selectChannelById(getState(), channelId);
+
+    let { pollTimerId } = channel;
+    if (pollTimerId) {
+      console.log(`Stopping previous timer ${pollTimerId}`);
+      clearInterval(pollTimerId);
+    }
+
+    pollTimerId = setInterval(() => {
+      dispatch(fetchConnectionRequests(channelId));
+    }, PROFILE_POLL_INTERVAL);
+
+    dispatch(
+      updateChannel({
+        id: channelId,
+        changes: {
+          pollTimerId,
+        },
+      }),
+    );
+  },
+);
+
+export const unsubscribeFromConnectionRequests = createAsyncThunk(
+  'channels/unsubscribeFromConnectionRequests',
+  (channelId, { getState, dispatch }) => {
+    const channel: Channel = selectChannelById(getState(), channelId);
+    let { pollTimerId } = channel;
+    if (pollTimerId) {
+      console.log(`Stop polling channel ${channelId} (timer ${pollTimerId}`);
+      clearInterval(pollTimerId);
+      dispatch(
+        updateChannel({
+          id: channelId,
+          changes: {
+            pollTimerId: 0,
+          },
+        }),
+      );
+    }
+  },
+);
+
+export const fetchConnectionRequests = createAsyncThunk(
+  'channels/fetchConnectionRequests',
+  async (channelId, { getState, dispatch }) => {
+    const channel: Channel = selectChannelById(getState(), channelId);
+    const { myProfileId } = channel;
+    const Xurl = `http://${channel.ipAddress}/profile/list/${myProfileId}`;
+    const url = `http://192.168.178.145:3000/list/${myProfileId}`;
+    console.log(
+      `Fetching incoming connection requests for profile ${myProfileId} at ${url}.`,
+    );
+    const response = await fetch(url, {
+      headers: { 'Cache-Control': 'no-cache' },
+    });
+    if (!response.ok) {
+      throw new Error(
+        `profile server returned ${response.status}: ${response.statusText} for url: ${url}`,
+      );
+    }
+    const responseObj = await response.json();
+    console.dir(responseObj);
+    if (responseObj && responseObj.profileIds) {
+      const { profileIds } = responseObj;
+      // remove known profileIds
+      const knownProfileIds = selectAllPendingConnectionIds(getState());
+      const newProfileIds = profileIds.filter(
+        (id) => !knownProfileIds.includes(id),
+      );
+      for (const profileId of newProfileIds) {
+        console.log(`Got new connection request from profileId ${profileId}.`);
+        // download connectionrequest to get signedMessage
+        const Xurl = `http://${channel.ipAddress}/profile/download/${myProfileId}/${profileId}`;
+        const url = `http://192.168.178.145:3000/download/${myProfileId}/${profileId}`;
+        console.log(
+          `fetching connectionRequest ${profileId} for my profile ${myProfileId} from ${url}`,
+        );
+        const response = await fetch(url, {
+          headers: { 'Cache-Control': 'no-cache' },
+        });
+        if (!response.ok) {
+          throw new Error(
+            `Profile server returned ${response.status}: ${response.statusText} for url: ${url}`,
+          );
+        }
+        const responseJson = await response.json();
+        const { signedMessage, timestamp } = responseJson.data;
+        if (signedMessage) {
+          // add new pendingConnection, including signedMessage and timestamp
+          dispatch(
+            newPendingConnection({
+              channelId,
+              profileId,
+              signedMessage,
+              timestamp,
+            }),
+          );
+        } else {
+          console.dir(responseJson);
+          throw new Error(`Response does not include signedMessage.`);
+        }
+      }
+    }
+  },
+);
+
+export const createChannel = createAsyncThunk(
+  'channels/createChannel',
+  async (_, { getState, dispatch }) => {
+    try {
+      // create new channel
+      const channel = await generateChannelData();
+      dispatch(addChannel(channel));
+      dispatch(setMyChannel(channel.id));
+      // upload my profile
+      dispatch(encryptAndUploadProfileToChannel(channel.id));
+      // start polling for incoming connection requests
+      dispatch(subscribeToConnectionRequests(channel.id));
+      // Start timer to expire channel
+      setTimeout(() => {
+        console.log(`timer expired for channel ${channel.id}`);
+        dispatch(unsubscribeFromConnectionRequests(channel.id));
+        dispatch(removeChannel(channel.id));
+      }, channel.ttl);
+    } catch (err) {
+      err instanceof Error ? console.warn(err.message) : console.log(err);
+    }
+  },
+);
+
+export const joinChannel = createAsyncThunk(
+  'channels/joinChannel',
+  async (channel, { getState, dispatch }) => {
+    // add channel to store
+    dispatch(addChannel(channel));
+    // upload my profile to channel
+    dispatch(encryptAndUploadProfileToChannel(channel.id));
+    // fetch all profileIDs in channel
+    dispatch(fetchChannelProfiles(channel.id));
+    // start polling for incoming connection requests
+    dispatch(subscribeToConnectionRequests(channel.id));
+    // Start timer to expire channel
+    setTimeout(() => {
+      console.log(`timer expired for channel ${channel.id}`);
+      dispatch(unsubscribeFromConnectionRequests(channel.id));
+      dispatch(removeChannel(channel.id));
+    }, channel.ttl);
+  },
+);
+
+export const fetchChannelProfiles = createAsyncThunk(
+  'channels/fetchChannelProfiles',
+  async (channelId, { getState, dispatch }) => {
+    const channel = selectChannelById(getState(), channelId);
+    const Xurl = `http://${channel.ipAddress}/profile/list/${channelId}`;
+    const url = `http://192.168.178.145:3000/list/${channelId}`;
+    console.log(`fetching profiles from channel ${channelId} from ${url}`);
+    const response = await fetch(url, {
+      headers: { 'Cache-Control': 'no-cache' },
+    });
+    if (!response.ok) {
+      throw new Error(
+        `Channel list returned ${response.status}: ${response.statusText} for url: ${url}`,
+      );
+    }
+    const responseObj = await response.json();
+    if (responseObj && responseObj.profileIds) {
+      const { profileIds } = responseObj;
+      console.log(`Got ${profileIds.length} profileIds:`);
+      console.dir(profileIds);
+      profileIds.forEach((profileId) => {
+        dispatch(
+          newPendingConnection({
+            channelId,
+            profileId,
+          }),
+        );
+      });
+    } else {
+      throw new Error(`Response does not include profileIds array.`);
+    }
+  },
+);
+
 export const channelsAdapter = createEntityAdapter();
+
 // By default, `createEntityAdapter` gives you `{ ids: [], entities: {} }`.
 // If you want to track 'loading' or other keys, you would initialize them here:
 // `getInitialState({ loading: false, activeRequestId: null })`
 const initialState = channelsAdapter.getInitialState({
   myChannelId: '',
-  myProfileId: '',
 });
 
 const channelSlice = createSlice({
@@ -46,6 +232,7 @@ const channelSlice = createSlice({
   initialState,
   reducers: {
     addChannel: channelsAdapter.addOne,
+    updateChannel: channelsAdapter.updateOne,
     removeChannel(state, action) {
       const channelId = action.payload;
       state = channelsAdapter.removeOne(state, channelId);
@@ -54,20 +241,8 @@ const channelSlice = createSlice({
         state.myChannelId = initialState.myChannelId;
       }
     },
-    createMyChannel(state, action) {
-      const channel = action.payload;
-      state = channelsAdapter.addOne(state, channel);
-      state.myChannelId = channel.id;
-    },
-    clearMyChannel(state, action) {
-      state = channelsAdapter.removeOne(state, state.myChannelId);
-      state.myChannelId = initialState.myChannelId;
-    },
-    setMyProfileId(state, action) {
-      state.myProfileId = action.payload;
-    },
-    clearMyProfileId(state) {
-      state.myProfileId = initialState.myProfileId;
+    setMyChannel(state, action) {
+      state.myChannelId = action.payload;
     },
   },
 });
@@ -75,11 +250,9 @@ const channelSlice = createSlice({
 // Export channel actions
 export const {
   addChannel,
+  updateChannel,
   removeChannel,
-  createMyChannel,
-  clearMyChannel,
-  setMyProfileId,
-  clearMyProfileId,
+  setMyChannel,
 } = channelSlice.actions;
 
 // Export channel selectors

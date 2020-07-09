@@ -184,3 +184,27 @@ declare type action = {
   type: string,
   [key: string]: any,
 };
+
+declare type Channel = {
+  id: string,
+  initiatorProfileId: string,
+  myProfileId: string,
+  ipAddress: string,
+  aesKey: string,
+  timestamp: number,
+  ttl: number,
+  pollTimerId: number,
+};
+
+declare type PendingConnection = {
+  id: string,
+  channelId: string,
+  state: string,
+  brightId?: string,
+  name?: string,
+  photo?: string,
+  notificationToken?: string,
+  timestamp?: number,
+  signedMessage?: string,
+  score?: number,
+};

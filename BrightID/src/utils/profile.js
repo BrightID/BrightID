@@ -1,19 +1,39 @@
 // @flow
 
 import { QR_TYPE_INITIATOR, QR_TYPE_RESPONDER } from '@/utils/constants';
-import { b64ToUrlSafeB64, randomKey } from '@/utils/encoding';
 
-export const postProfileToChannel = async (data: string, channel) => {
-  // create a fresh random profileID for upload
-  const profileIdKey = await randomKey(9);
-  const profileId = b64ToUrlSafeB64(profileIdKey);
-  let { ipAddress, id: channelId } = channel;
-  // const url = `http://${ipAddress}/profile/upload/${channelId}`;
-  const url = `http://192.168.178.145:3000/upload/${channelId}`;
-  const body = JSON.stringify({ data, uuid: profileId });
-  console.log(`posting profile ${profileId} to channel ${channelId} at ${url}`);
+export const postProfileToChannel = async (data: string, channel: Channel) => {
+  let { ipAddress, id } = channel;
+  const Xurl = `http://${ipAddress}/profile/upload/${id}`;
+  const url = `http://192.168.178.145:3000/upload/${id}`;
+  const body = JSON.stringify({ data, uuid: channel.myProfileId });
+  console.log(
+    `posting profile ${channel.myProfileId} to channel ${id} at ${url}`,
+  );
   await postData(url, body);
-  return profileId;
+};
+
+/*
+  Posts the signed connection message (AddConnection "me"->"peer") to peers personal channel.
+  The UUID is my profileId on the group channel, so peer knows which profile to download in order
+  to confirm and make connection.
+  data contains:
+   - signedMessage
+   - timestamp when signedMessage was created
+ */
+export const postConnectionRequest = async (
+  data,
+  ipAddress: string,
+  peerProfileId: string,
+  myProfileId: string,
+) => {
+  const Xurl = `http://${ipAddress}/profile/upload/${peerProfileId}`;
+  const url = `http://192.168.178.145:3000/upload/${peerProfileId}`;
+  const body = JSON.stringify({ data, uuid: myProfileId });
+  console.log(
+    `posting connection request with UUID ${myProfileId} to channel ${peerProfileId} at ${url}`,
+  );
+  await postData(url, body);
 };
 
 export const postProfile = async (data: string, QrCodeData) => {

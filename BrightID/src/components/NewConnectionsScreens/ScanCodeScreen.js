@@ -23,12 +23,15 @@ import {
   QR_TYPE_RESPONDER,
   ORANGE,
 } from '@/utils/constants';
-import { parseQrData } from '@/utils/qrCodes';
+import { parseChannelQrData, parseQrData } from '@/utils/qrCodes';
 import qricon from '@/static/qr_icon_white.svg';
+import { joinChannel } from '@/components/NewConnectionsScreens/channelSlice';
+import { fetchProfile } from '@/components/NewConnectionsScreens/actions/profile';
+import { selectAllPendingConnections } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+import { confirmPendingConnection } from '@/components/NewConnectionsScreens/actions/addNewConnection';
 import { RNCamera } from './RNCameraProvider';
 import emitter from '../../emitter';
 import { setConnectQrData } from '../../actions';
-import { fetchProfile } from './actions/profile';
 
 /**
  * Returns whether the string is a valid QR identifier
@@ -58,15 +61,19 @@ export const ScanCodeScreen = (props) => {
   const [connectionAttempts, setConnectionAttempts] = useState(0);
   const name = useSelector((state) => state.user.name);
   const connectDataExists = useSelector((state) => !!state.connectUserData.id);
+  const pendingConnections = useSelector(selectAllPendingConnections);
 
   useFocusEffect(
     useCallback(() => {
       // dispatch(stopConnecting());
+
+      /*
       if (connectDataExists) {
         unsubscribeToProfileUpload();
         navigation.navigate('PreviewConnection');
         return;
       }
+      */
       const handleDownloadFailure = () => {
         setConnectionAttempts(connectionAttempts + 1);
         if (connectionAttempts > 1) {
@@ -77,11 +84,11 @@ export const ScanCodeScreen = (props) => {
       emitter.on('connectFailure', handleDownloadFailure);
 
       return () => {
-        unsubscribeToProfileUpload();
+        // unsubscribeToProfileUpload();
 
         emitter.off('connectFailure', handleDownloadFailure);
       };
-    }, [connectionAttempts, connectDataExists]),
+    }, [connectionAttempts /* , connectDataExists */]),
   );
 
   const subscribeToProfileUpload = (peerQrData) => {
@@ -99,9 +106,11 @@ export const ScanCodeScreen = (props) => {
     clearInterval(fetchProfileId);
   };
 
-  const handleBarCodeRead = ({ data }) => {
+  const handleBarCodeRead = async ({ data }) => {
     console.log('barcode data', data);
     if (!data) return;
+
+    setScanned(true);
 
     if (data.startsWith('Recovery_')) {
       props.navigation.navigate('RecoveringConnection', {
@@ -110,12 +119,17 @@ export const ScanCodeScreen = (props) => {
     } else if (data.startsWith('brightid://')) {
       Linking.openURL(data);
     } else if (validQrString(data)) {
-      const peerQrData = parseQrData(data);
-      peerQrData.type = QR_TYPE_RESPONDER;
-      dispatch(setConnectQrData(peerQrData));
-      subscribeToProfileUpload(peerQrData);
+      // TODO : Move this to dedicated thunk action
+
+      const channel: Channel = await parseChannelQrData(data);
+      console.log(`Parsed channel:`);
+      console.dir(channel);
+      dispatch(joinChannel(channel));
+      // const peerQrData = parseQrData(data);
+      // peerQrData.type = QR_TYPE_RESPONDER;
+      // dispatch(setConnectQrData(peerQrData));
+      // subscribeToProfileUpload(peerQrData);
     }
-    setScanned(true);
   };
 
   // handle deep links
@@ -130,6 +144,24 @@ export const ScanCodeScreen = (props) => {
     );
     setScanned(true);
   };
+
+  const pclist = pendingConnections.map((pc) => (
+    <TouchableOpacity
+      key={pc.id}
+      testID="ScanCodeToMyCodeBtn"
+      onPress={() => {
+        console.log(`Confirm connection ${pc.id}`);
+        dispatch(
+          confirmPendingConnection({
+            channelId: pc.channelId,
+            profileId: pc.id,
+          }),
+        );
+      }}
+    >
+      <Text>{`${pc.name} - ${pc.id} - ${pc.channelId} - ${pc.state}`}</Text>
+    </TouchableOpacity>
+  ));
 
   return (
     <>
@@ -171,6 +203,8 @@ export const ScanCodeScreen = (props) => {
             </View>
           )}
         </View>
+        <Text>There are {pendingConnections.length} pending connections</Text>
+        {pclist}
         <Text style={styles.infoBottomText}>Or you can also...</Text>
         <TouchableOpacity
           testID="ScanCodeToMyCodeBtn"

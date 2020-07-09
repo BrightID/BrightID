@@ -6,7 +6,7 @@ import connectQrData from './connectQrData';
 import connectUserData from './connectUserData';
 import groups from './groups';
 import operations from './operations';
-import profiles from '../components/NewConnectionsScreens/profileSlice';
+import pendingConnections from '../components/NewConnectionsScreens/pendingConnectionSlice';
 import recoveryData from './recoveryData';
 import user from './user';
 
@@ -18,7 +18,7 @@ export default combineReducers({
   connectUserData,
   groups,
   operations,
-  profiles,
+  pendingConnections,
   recoveryData,
   user,
 });

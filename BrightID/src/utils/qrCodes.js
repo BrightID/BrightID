@@ -1,24 +1,11 @@
+// @flow
+
 import qrcode from 'qrcode';
 import { parseString } from 'xml2js';
 import { Buffer } from 'buffer';
 import api from '@/Api/BrightId';
-import { b64ToUrlSafeB64, randomKey, b64ToUint8Array } from '@/utils/encoding';
+import { b64ToUint8Array, b64ToUrlSafeB64, randomKey } from '@/utils/encoding';
 import { QR_TTL, QR_TYPE_INITIATOR } from './constants';
-
-export const generateChannelData = async () => {
-  const aesKey = await randomKey(16);
-  const ipAddress = await api.ip();
-  const b64Ip = Buffer.from(
-    ipAddress.split('.').map((octet) => parseInt(octet, 10)),
-  )
-    .toString('base64')
-    .substring(0, 6);
-  const idKey = await randomKey(9);
-  const id = b64ToUrlSafeB64(idKey);
-  const timestamp = Date.now();
-  const ttl = QR_TTL;
-  return { id, aesKey, timestamp, ttl, b64Ip };
-};
 
 export const generateQrData = async () => {
   const aesKey = await randomKey(16);
@@ -56,20 +43,51 @@ export const parseQrData = (qrString) => {
   return { aesKey, uuid, ipAddress, qrString };
 };
 
-export const encodeChannelQrData = (channel, profileId) => {
-  const { aesKey, id: channelId, b64Ip } = channel;
-  const qrString = encodeURIComponent(
-    `${aesKey}${channelId}${profileId}${b64Ip}`,
-  );
-  return qrString;
+export const generateChannelData = async () => {
+  const aesKey = await randomKey(16);
+  const ipAddress = await api.ip();
+  const idKey = await randomKey(9);
+  const id = b64ToUrlSafeB64(idKey);
+  const timestamp = Date.now();
+  const ttl = QR_TTL;
+  // create a random profileID for uploading my profile
+  const profileIdKey = await randomKey(9);
+  const myProfileId = b64ToUrlSafeB64(profileIdKey);
+
+  return { id, myProfileId, aesKey, timestamp, ttl, ipAddress };
 };
 
-export const parseChannelQrData = (qrString) => {
+export const encodeChannelQrData = (channel: Channel) => {
+  const { aesKey, id, ipAddress, myProfileId } = channel;
+  const b64Ip = Buffer.from(
+    ipAddress.split('.').map((octet) => parseInt(octet, 10)),
+  )
+    .toString('base64')
+    .substring(0, 6);
+  return encodeURIComponent(`${aesKey}${id}${myProfileId}${b64Ip}`);
+};
+
+export const parseChannelQrData = async (qrString: string) => {
   const decodedQR = decodeURIComponent(qrString);
   const aesKey = decodedQR.substr(0, 24);
-  const channelId = decodedQR.substr(24, 12);
-  const profileId = decodedQR.substr(36, 12);
+  const id = decodedQR.substr(24, 12);
+  const initiatorProfileId = decodedQR.substr(36, 12);
   const b64ip = `${decodedQR.substr(48, 6)}==`;
   const ipAddress = b64ToUint8Array(b64ip).join('.');
-  return { aesKey, channelId, profileId, ipAddress, qrString };
+
+  // create random myProfileId to use in this channel
+  const profileIdKey = await randomKey(9);
+  const myProfileId = b64ToUrlSafeB64(profileIdKey);
+
+  const channel: Channel = {
+    aesKey,
+    id,
+    initiatorProfileId,
+    ipAddress,
+    myProfileId,
+    timestamp: 0, // TODO
+    ttl: 90000, // TODO
+    pollTimerId: 0,
+  };
+  return channel;
 };
