@@ -11,6 +11,7 @@ import {
   qrDataTransformer,
   userTransformer,
   connectionsTransformer,
+  notificationsTransformer,
 } from './transform';
 
 const persistConfig = {
@@ -21,6 +22,7 @@ const persistConfig = {
     groupsTransformer,
     qrDataTransformer,
     connectionsTransformer,
+    notificationsTransformer,
   ],
   version: 6,
   migrate,

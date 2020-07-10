@@ -12,7 +12,13 @@ import {
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { TabBar, TabView, SceneMap } from 'react-native-tab-view';
-import { INVITE_ACTIVE, ORANGE } from '@/utils/constants';
+import {
+  INVITE_ACTIVE,
+  ORANGE,
+  CONNECTIONS_TYPE,
+  GROUPS_TYPE,
+  MISC_TYPE,
+} from '@/utils/constants';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import EmptyList from '@/components/Helpers/EmptyList';
 import NotificationCard from './NotificationCard';
@@ -182,13 +188,13 @@ export const NotificationsScreen = ({ navigation, route }) => {
   const [index, setIndex] = React.useState(0);
   const routes = [
     {
-      key: 'connections',
+      key: CONNECTIONS_TYPE,
       title: 'connections',
       badge: !!pendingConnections,
     },
-    { key: 'groups', title: 'groups', badge: !!invites },
+    { key: GROUPS_TYPE, title: 'groups', badge: !!invites },
     {
-      key: 'misc',
+      key: MISC_TYPE,
       title: 'miscellaneous',
       badge: backupPending,
       backupPending,
@@ -196,9 +202,9 @@ export const NotificationsScreen = ({ navigation, route }) => {
   ];
 
   const renderScene = SceneMap({
-    connections: ConnectionsList,
-    groups: InviteList,
-    misc: MiscList,
+    [CONNECTIONS_TYPE]: ConnectionsList,
+    [GROUPS_TYPE]: InviteList,
+    [MISC_TYPE]: MiscList,
   });
 
   useFocusEffect(
@@ -208,15 +214,15 @@ export const NotificationsScreen = ({ navigation, route }) => {
       const displayRoute = routes.find(({ badge }) => badge);
 
       switch (route.params?.type || displayRoute?.key) {
-        case 'connections': {
+        case CONNECTIONS_TYPE: {
           setIndex(0);
           break;
         }
-        case 'groups': {
+        case GROUPS_TYPE: {
           setIndex(1);
           break;
         }
-        case 'misc': {
+        case MISC_TYPE: {
           setIndex(2);
           break;
         }

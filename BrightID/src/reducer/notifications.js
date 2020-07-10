@@ -7,6 +7,7 @@ import {
   REMOVE_ACTIVE_NOTIFICATION,
   RESET_STORE,
 } from '@/actions';
+import { CONNECTIONS_TYPE, GROUPS_TYPE, MISC_TYPE } from '@/utils/constants';
 
 const initialState = {
   activeNotification: null,
@@ -14,6 +15,7 @@ const initialState = {
   pendingConnections: [],
   backupPending: false,
   deviceToken: 'unavailable',
+  miscAlreadyNotified: false,
 };
 
 // not sure if this is the best way...
@@ -30,7 +32,30 @@ export const reducer = (
       return { ...state, deviceToken: action.deviceToken };
     }
     case SET_ACTIVE_NOTIFICATION: {
-      return { ...state, activeNotification: action.notification };
+      let miscAlreadyNotified = !!state.miscAlreadyNotified;
+
+      if (
+        state.activeNotification?.type === CONNECTIONS_TYPE &&
+        action.notification?.type !== CONNECTIONS_TYPE
+      )
+        return state;
+
+      if (
+        state.activeNotification?.type === GROUPS_TYPE &&
+        action.notification?.type === MISC_TYPE
+      )
+        return state;
+
+      if (action.notification?.type === MISC_TYPE && miscAlreadyNotified)
+        return state;
+
+      if (action.notification?.type === MISC_TYPE) miscAlreadyNotified = true;
+
+      return {
+        ...state,
+        activeNotification: action.notification,
+        miscAlreadyNotified,
+      };
     }
     case REMOVE_ACTIVE_NOTIFICATION: {
       return { ...state, activeNotification: {} };

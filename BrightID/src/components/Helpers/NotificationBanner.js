@@ -3,12 +3,13 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { StyleSheet } from 'react-native';
 import DropdownAlert from 'react-native-dropdownalert';
-import { shallowEqual, useSelector } from 'react-redux';
+import { shallowEqual, useSelector, useDispatch } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
 import { navigate } from '@/NavigationService';
 import groups from '@/static/add_group.svg';
 import connections from '@/static/add_person.svg';
 import misc from '@/static/trusted_connections.svg';
+import { setActiveNotification } from '@/actions';
 
 /* notification types: 
 @type groups
@@ -18,16 +19,8 @@ import misc from '@/static/trusted_connections.svg';
 
 const icons = { groups, connections, misc };
 
-const _onClose = (data) => {
-  console.log('close');
-  console.log(data);
-};
-const _onCancel = (data) => {
-  console.log('cancel');
-  console.log(data);
-};
-
 export const NotificationBanner = () => {
+  const dispatch = useDispatch();
   const dropDownAlertRef = useRef(null);
   const activeNotification = useSelector(
     (state) => state.notifications.activeNotification,
@@ -35,9 +28,11 @@ export const NotificationBanner = () => {
   );
 
   useEffect(() => {
+    if (!activeNotification) return;
+
     dropDownAlertRef.current?.alertWithType(
       'custom',
-      activeNotification.message,
+      activeNotification?.message,
     );
   }, [activeNotification]);
 
@@ -45,8 +40,13 @@ export const NotificationBanner = () => {
   const icon = icons[activeNotification?.type] ?? misc;
 
   const _onTap = useCallback(() => {
-    navigate('Notifications', { type: activeNotification.type });
-  }, [activeNotification.type]);
+    navigate('Notifications', { type: activeNotification?.type });
+  }, [activeNotification]);
+
+  const _onClose = () => {
+    console.log('_onClose');
+    dispatch(setActiveNotification(null));
+  };
 
   return (
     <DropdownAlert
@@ -65,7 +65,6 @@ export const NotificationBanner = () => {
       testID="notificationBanner"
       elevation={10}
       zIndex={100}
-      onCancel={_onCancel}
       onTap={_onTap}
       onClose={_onClose}
       renderImage={() => (

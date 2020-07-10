@@ -53,12 +53,6 @@ export const HomeScreen = (props) => {
   useStatusBarHome();
   useFocusEffect(
     useCallback(() => {
-      dispatch(
-        setActiveNotification({
-          message: 'Backup your trusted connections',
-          type: 'misc',
-        }),
-      );
       dispatch(fetchUserInfo());
       retrieveImage(photoFilename).then(setProfilePhoto);
     }, [dispatch, photoFilename]),

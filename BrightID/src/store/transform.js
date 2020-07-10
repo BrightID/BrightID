@@ -42,6 +42,21 @@ export const connectionsTransformer = createTransform(
   { whitelist: ['connections'] },
 );
 
+export const notificationsTransformer = createTransform(
+  // transform state on its way to being serialized and persisted.
+  (inboundState, key) => {
+    return {
+      ...inboundState,
+      activeNotification: null,
+      miscAlreadyNotified: false,
+    };
+  },
+  (outboundState, key) => {
+    return outboundState;
+  },
+  { whitelist: ['notifications'] },
+);
+
 /* clear my QRCode when persisting */
 export const qrDataTransformer = createTransform(
   // transform state on its way to being serialized and persisted.
