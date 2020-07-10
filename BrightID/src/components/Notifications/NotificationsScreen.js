@@ -107,7 +107,7 @@ const MiscList = ({ route }) => {
     <FlatList
       contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
       data={data}
-      // keyExtractor={({ inviteId, msg }, index) => (inviteId || msg) + index}
+      keyExtractor={({ msg }, index) => msg + index}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
       refreshControl={
@@ -164,14 +164,8 @@ const renderTabBar = (props) => (
   />
 );
 
-export const NotificationsScreen = ({ navigation }) => {
+export const NotificationsScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
-
-  useFocusEffect(
-    useCallback(() => {
-      dispatch(fetchUserInfo());
-    }, [dispatch]),
-  );
 
   const pendingConnections = useSelector(
     (state) => state.notifications.pendingConnections.length,
@@ -206,6 +200,29 @@ export const NotificationsScreen = ({ navigation }) => {
     groups: InviteList,
     misc: MiscList,
   });
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(fetchUserInfo());
+
+      const displayRoute = routes.find(({ badge }) => badge);
+
+      switch (route.params?.type || displayRoute?.key) {
+        case 'connections': {
+          setIndex(0);
+          break;
+        }
+        case 'groups': {
+          setIndex(1);
+          break;
+        }
+        case 'misc': {
+          setIndex(2);
+          break;
+        }
+      }
+    }, [dispatch, route.params]),
+  );
 
   console.log('renderingNotificationScreen');
 

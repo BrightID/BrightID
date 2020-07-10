@@ -48,6 +48,13 @@ const connectionsScreenOptions = {
       <SvgXml height="20" xml={backArrow} />
     </TouchableOpacity>
   ),
+  headerTitle: () => <HeaderTitle title="Connections" />,
+};
+
+const trustedScreenOptions = {
+  ...headerOptions,
+  headerRight: () => <SearchConnections sortable={true} />,
+  headerTitle: () => <HeaderTitle title="Trusted Connections" />,
 };
 
 const Connections = () => {
@@ -56,10 +63,7 @@ const Connections = () => {
       <Stack.Screen
         name="Connections"
         component={ConnectionsScreen}
-        options={{
-          ...connectionsScreenOptions,
-          headerTitle: () => <HeaderTitle title="Connections" />,
-        }}
+        options={connectionsScreenOptions}
       />
       <Stack.Screen
         name="SortingConnections"
@@ -69,10 +73,7 @@ const Connections = () => {
       <Stack.Screen
         name="TrustedConnections"
         component={TrustedConnectionsScreen}
-        options={{
-          ...connectionsScreenOptions,
-          headerTitle: () => <HeaderTitle title="Trusted Connections" />,
-        }}
+        options={trustedScreenOptions}
       />
     </>
   );

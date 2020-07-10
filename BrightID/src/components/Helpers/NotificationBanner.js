@@ -1,16 +1,22 @@
 // @flow
 
-import React, { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { StyleSheet } from 'react-native';
 import DropdownAlert from 'react-native-dropdownalert';
 import { shallowEqual, useSelector } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
 import { navigate } from '@/NavigationService';
-import groupInvite from '@/static/add_group.svg';
-import newConnection from '@/static/add_person.svg';
-import trustedConnections from '@/static/trusted_connections.svg';
+import groups from '@/static/add_group.svg';
+import connections from '@/static/add_person.svg';
+import misc from '@/static/trusted_connections.svg';
 
-let dropDownAlertRef = null;
+/* notification types: 
+@type groups
+@type connections
+@type misc
+*/
+
+const icons = { groups, connections, misc };
 
 const _onClose = (data) => {
   console.log('close');
@@ -20,32 +26,31 @@ const _onCancel = (data) => {
   console.log('cancel');
   console.log(data);
 };
-const _onTap = (data) => {
-  console.log('tapped');
-  console.log(data);
-  navigate('Notifications');
-};
-
-const icons = { groupInvite, newConnection, trustedConnections };
 
 export const NotificationBanner = () => {
+  const dropDownAlertRef = useRef(null);
   const activeNotification = useSelector(
     (state) => state.notifications.activeNotification,
     shallowEqual,
   );
 
   useEffect(() => {
-    dropDownAlertRef?.alertWithType('custom', activeNotification.message);
+    dropDownAlertRef.current?.alertWithType(
+      'custom',
+      activeNotification.message,
+    );
   }, [activeNotification]);
 
   // update default icon
-  const icon = icons[activeNotification?.type] ?? trustedConnections;
+  const icon = icons[activeNotification?.type] ?? misc;
+
+  const _onTap = useCallback(() => {
+    navigate('Notifications', { type: activeNotification.type });
+  }, [activeNotification.type]);
 
   return (
     <DropdownAlert
-      ref={(ref) => {
-        dropDownAlertRef = ref;
-      }}
+      ref={dropDownAlertRef}
       closeInterval={0}
       containerStyle={styles.container}
       contentContainerStyle={{

@@ -55,8 +55,8 @@ export const HomeScreen = (props) => {
     useCallback(() => {
       dispatch(
         setActiveNotification({
-          message: 'Please select your Trusted Connections',
-          type: 'trustedConnections',
+          message: 'Backup your trusted connections',
+          type: 'misc',
         }),
       );
       dispatch(fetchUserInfo());

@@ -9,7 +9,7 @@ import {
 } from '@/actions';
 
 const initialState = {
-  activeNotification: {},
+  activeNotification: null,
   notifications: [],
   pendingConnections: [],
   backupPending: false,
