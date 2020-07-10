@@ -178,11 +178,15 @@ export const joinChannel = createAsyncThunk(
     dispatch(addChannel(channel));
 
     if (channel.type === CHANNEL_TYPES.CHANNEL_TYPE_GROUP) {
+      // TODO Decide: Require user confirmation before uploading profile to group channel?
       // upload my profile to channel
-      // TODO: Require user confirmation before uploading profile to channel!!!
       dispatch(encryptAndUploadProfileToChannel(channel.id));
       // start polling for incoming connection requests
       dispatch(subscribeToConnectionRequests(channel.id));
+    } else {
+      // for 1:1 connections upload my profile without further confirmation
+      dispatch(encryptAndUploadProfileToChannel(channel.id));
+      // no polling for additional connection requests required
     }
 
     // fetch all profileIDs in channel

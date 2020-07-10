@@ -81,6 +81,7 @@ export const PreviewConnectionScreen = () => {
         return;
       }
       const fetchConnectionInfo = async () => {
+        console.log(`TODO: Move fetchConnectionInfo() to Redux!`);
         try {
           const {
             createdAt,

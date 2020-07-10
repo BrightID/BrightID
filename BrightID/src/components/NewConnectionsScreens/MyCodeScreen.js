@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Clipboard,
   Switch,
-  FlatList,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -24,11 +23,14 @@ import cameraIcon from '@/static/camera_icon_white.svg';
 import {
   CHANNEL_TYPES,
   createChannel,
-  removeChannel,
   removeChannelThunk,
   selectChannelById,
 } from '@/components/NewConnectionsScreens/channelSlice';
 import { encodeChannelQrString } from '@/utils/channels';
+import {
+  pendingConnection_states,
+  selectAllPendingConnections,
+} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 
 /**
  * My Code screen of BrightID
@@ -50,6 +52,16 @@ export const MyCodeScreen = (props) => {
   const myChannel = useSelector((state) =>
     selectChannelById(state, state.channels.myChannelId),
   );
+  // pending connections attached to my channel
+  const pendingChannelConnections = useSelector((state) => {
+    if (myChannel) {
+      return selectAllPendingConnections(state).filter(
+        (pc) => pc.channelId === myChannel.id,
+      );
+    } else {
+      return [];
+    }
+  });
   const [qrString, setQrString] = useState('');
   const [qrsvg, setQrsvg] = useState('');
   const [copied, setCopied] = useState(false);
@@ -102,6 +114,20 @@ export const MyCodeScreen = (props) => {
     }, [navigation, myChannel, dispatch, isGroup]),
   );
 
+  useEffect(() => {
+    if (myChannel && myChannel.type === CHANNEL_TYPES.CHANNEL_TYPE_ONE) {
+      // If i created a 1:1 channel and there is a pending connection in UNCONFIRMED state -> directly open PreviewConnectionScreen.
+      // there should be only one connection, but if multiple people scanned my code, the first one wins
+      for (const pc of pendingChannelConnections) {
+        if (pc.state === pendingConnection_states.UNCONFIRMED) {
+          navigation.navigate('PreviewConnection', {
+            pendingConnectionId: pc.id,
+          });
+        }
+      }
+    }
+  }, [myChannel, navigation, pendingChannelConnections]);
+
   const toggleGroup = () => {
     // remove current channel
     if (myChannel) {
@@ -126,6 +152,21 @@ export const MyCodeScreen = (props) => {
     setCopied(true);
     setTimeout(() => setCopied(false), COPIED_TIMEOUT);
   };
+
+  const pclist = pendingChannelConnections.map((pc) => (
+    <TouchableOpacity
+      key={pc.id}
+      testID="ScanCodeToMyCodeBtn"
+      onPress={() => {
+        console.log(`Confirm connection ${pc.id}`);
+        navigation.navigate('PreviewConnection', {
+          pendingConnectionId: pc.id,
+        });
+      }}
+    >
+      <Text>{`${pc.name} - ${pc.id} - ${pc.channelId} - ${pc.state}`}</Text>
+    </TouchableOpacity>
+  ));
 
   const renderCopyQr = () => (
     <View style={styles.copyContainer}>
@@ -221,6 +262,10 @@ export const MyCodeScreen = (props) => {
           {qrsvg ? renderQrCode() : renderSpinner()}
           {qrsvg ? renderCopyQr() : <View />}
         </View>
+        <Text>
+          There are {pendingChannelConnections.length} pending connections
+        </Text>
+        {pclist}
         <Text style={styles.infoBottomText}>Or you can also...</Text>
         <TouchableOpacity
           testID="MyCodeToScanCodeBtn"

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 // @flow
 
 import React, { useCallback, useState } from 'react';
@@ -22,7 +21,10 @@ import {
   joinChannel,
   selectAllChannels,
 } from '@/components/NewConnectionsScreens/channelSlice';
-import { selectAllPendingConnections } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+import {
+  pendingConnection_states,
+  selectAllPendingConnections,
+} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import { decodeChannelQrString } from '@/utils/channels';
 import { RNCamera } from './RNCameraProvider';
 
@@ -58,17 +60,19 @@ export const ScanCodeScreen = (props) => {
         // check all pending connections. If there is a pending connection for a 1:1 channel,
         // directly open PreviewConnectionScreen.
         for (const pc of pendingConnections) {
-          const channel = channels.find(
-            (channel) => channel.id === pc.channelId,
-          );
-          if (channel.type === CHANNEL_TYPES.CHANNEL_TYPE_ONE) {
-            navigation.navigate('PreviewConnection', {
-              pendingConnectionId: pc.id,
-            });
+          if (pc.state === pendingConnection_states.UNCONFIRMED) {
+            const channel = channels.find(
+              (channel) => channel.id === pc.channelId,
+            );
+            if (channel && channel.type === CHANNEL_TYPES.CHANNEL_TYPE_ONE) {
+              navigation.navigate('PreviewConnection', {
+                pendingConnectionId: pc.id,
+              });
+            }
           }
         }
       }
-    }, [pendingConnections, channels]),
+    }, [pendingConnections, channels, navigation]),
   );
 
   const handleBarCodeRead = async ({ data }) => {

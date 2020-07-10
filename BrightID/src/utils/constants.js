@@ -32,11 +32,14 @@ export const INVITE_REJECTED = 'rejected';
 export const INVITE_ACCEPTED = 'accepted';
 
 export const BACKUP_URL = 'https://explorer.brightid.org';
+
 // CONNECTION CONSTANTS
 export const QR_TTL = 900000;
 export const PROFILE_POLL_INTERVAL = 1000;
 export const QR_TYPE_INITIATOR = 'initiator';
 export const QR_TYPE_RESPONDER = 'responder';
+// timestamp can be this far in the future (milliseconds) to accommodate 2 clients clock differences
+export const TIME_FUDGE = 60 * 60 * 1000;
 
 // theme colors
 export const ORANGE = '#ED7A5D';

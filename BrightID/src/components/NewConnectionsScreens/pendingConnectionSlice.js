@@ -17,6 +17,7 @@ import { postConnectionRequest } from '@/utils/profile';
 import { addConnection, addOperation } from '@/actions';
 import { saveImage } from '@/utils/filesystem';
 import { backupPhoto, backupUser } from '@/components/Recovery/helpers';
+import { TIME_FUDGE } from '@/utils/constants';
 
 const pendingConnectionsAdapter = createEntityAdapter();
 
@@ -290,7 +291,7 @@ export const {
   rejectPendingConnection,
 } = pendingConnectionsSlice.actions;
 
-// channel selectors
+// export selectors
 export const {
   selectAll: selectAllPendingConnections,
   selectById: selectPendingConnectionById,
