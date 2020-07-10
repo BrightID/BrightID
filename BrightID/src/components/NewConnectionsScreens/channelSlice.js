@@ -143,10 +143,10 @@ export const fetchConnectionRequests = createAsyncThunk(
 
 export const createChannel = createAsyncThunk(
   'channels/createChannel',
-  async (channelType: ChannelType, { getState, dispatch }) => {
+  async (channelType: ChannelType, { dispatch }) => {
     try {
       // create new channel
-      const channel = await generateChannelData(channelType);
+      const channel: Channel = await generateChannelData(channelType);
       // Set timeout to expire channel
       channel.timeoutId = setTimeout(() => {
         console.log(`timer expired for channel ${channel.id}`);
@@ -166,7 +166,7 @@ export const createChannel = createAsyncThunk(
 
 export const joinChannel = createAsyncThunk(
   'channels/joinChannel',
-  async (channel: Channel, { getState, dispatch }) => {
+  async (channel: Channel, { dispatch }) => {
     // Start timer to expire channel
     channel.timeoutId = setTimeout(() => {
       console.log(`timer expired for channel ${channel.id}`);

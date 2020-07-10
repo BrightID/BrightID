@@ -196,7 +196,7 @@ declare type Channel = {
   aesKey: string,
   timestamp: number,
   ttl: number,
-  pollTimerId: number,
+  pollTimerId: IntervalID,
   timeoutId: TimeoutID,
   type: ChannelType,
 };

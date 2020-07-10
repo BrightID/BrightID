@@ -1,6 +1,11 @@
 // @flow
 
-import React, { useCallback, useState, useEffect } from 'react';
+import React, {
+  useCallback,
+  useState,
+  useEffect,
+  useLayoutEffect,
+} from 'react';
 import {
   StyleSheet,
   Text,
@@ -31,6 +36,7 @@ import {
   pendingConnection_states,
   selectAllPendingConnections,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+import { createFakeConnection } from '@/components/Connections/models/createFakeConnection';
 
 /**
  * My Code screen of BrightID
@@ -96,6 +102,24 @@ export const MyCodeScreen = (props) => {
 
   // start local timer to display countdown
   useInterval(timerTick, 100);
+
+  // set up top right button in header
+  if (__DEV__) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useLayoutEffect(() => {
+      navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity
+            testID="fakeConnectionBtn"
+            style={{ marginRight: 11 }}
+            onPress={createFakeConnection}
+          >
+            <Material name="ghost" size={32} color="#fff" />
+          </TouchableOpacity>
+        ),
+      });
+    }, [dispatch, navigation]);
+  }
 
   useFocusEffect(
     useCallback(() => {

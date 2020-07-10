@@ -4,7 +4,7 @@ import api from '@/Api/BrightId';
 import { QR_TTL } from '@/utils/constants';
 import { Buffer } from 'buffer';
 
-const createRandomId = async (size = 9) => {
+export const createRandomId = async (size: number = 9) => {
   const key = await randomKey(size);
   return b64ToUrlSafeB64(key);
 };

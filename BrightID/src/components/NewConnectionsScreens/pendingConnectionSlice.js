@@ -46,10 +46,7 @@ export const pendingConnection_states = {
 
 export const newPendingConnection = createAsyncThunk(
   'pendingConnections/newPendingConnection',
-  async (
-    { channelId, profileId, signedMessage, timestamp },
-    { getState, dispatch },
-  ) => {
+  async ({ channelId, profileId, signedMessage, timestamp }, { getState }) => {
     console.log(
       `new pending connection ${profileId} with signedMessage "${signedMessage}" in channel ${channelId}`,
     );
@@ -199,6 +196,7 @@ const pendingConnectionsSlice = createSlice({
   name: 'pendingConnections',
   initialState,
   reducers: {
+    addFakePendingConnection: pendingConnectionsAdapter.addOne,
     removePendingConnection: pendingConnectionsAdapter.removeOne,
     updatePendingConnection: pendingConnectionsAdapter.updateOne,
     confirmPendingConnection(state, action) {
@@ -288,6 +286,7 @@ export const {
   setPollTimerId,
   confirmPendingConnection,
   rejectPendingConnection,
+  addFakePendingConnection,
 } = pendingConnectionsSlice.actions;
 
 // export selectors
