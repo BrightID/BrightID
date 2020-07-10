@@ -5,7 +5,6 @@ import {
 } from '@reduxjs/toolkit';
 import { selectChannelById } from '@/components/NewConnectionsScreens/channelSlice';
 import { decryptData } from '@/utils/cryptoHelper';
-import emitter from '@/emitter';
 
 const profileAdapter = createEntityAdapter();
 
@@ -37,8 +36,7 @@ const initialState = profileAdapter.getInitialState();
 export const fetchProfileById = createAsyncThunk(
   'profiles/fetchProfileById',
   async ({ channelId, profileId }, { getState }) => {
-    const Xurl = `http://${channel.ipAddress}/profile/download/${channelId}/${profileId}`;
-    const url = `http://192.168.178.145:3000/download/${channelId}/${profileId}`;
+    const url = `http://${channel.ipAddress}/profile/download/${channelId}/${profileId}`;
     console.log(
       `fetching profile ${profileId} for channel ${channelId} from ${url}`,
     );
@@ -70,19 +68,6 @@ const profileSlice = createSlice({
   name: 'profiles',
   initialState,
   reducers: {
-    /*
-    addProfile: {
-      reducer: profileAdapter.addOne,
-      prepare: (channelId, profileId) => {
-        return {
-          payload: {
-            id: profileId,
-            state: profile_states.INITIAL,
-            data: {},
-          },
-        };
-      },
-    }, */
     removeProfile: profileAdapter.removeOne,
   },
   extraReducers: {

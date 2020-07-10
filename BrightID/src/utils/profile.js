@@ -4,8 +4,7 @@ import { QR_TYPE_INITIATOR, QR_TYPE_RESPONDER } from '@/utils/constants';
 
 export const postProfileToChannel = async (data: string, channel: Channel) => {
   let { ipAddress, id } = channel;
-  const Xurl = `http://${ipAddress}/profile/upload/${id}`;
-  const url = `http://192.168.178.145:3000/upload/${id}`;
+  const url = `http://${ipAddress}/profile/upload/${id}`;
   const body = JSON.stringify({ data, uuid: channel.myProfileId });
   console.log(
     `posting profile ${channel.myProfileId} to channel ${id} at ${url}`,
@@ -27,8 +26,7 @@ export const postConnectionRequest = async (
   peerProfileId: string,
   myProfileId: string,
 ) => {
-  const Xurl = `http://${ipAddress}/profile/upload/${peerProfileId}`;
-  const url = `http://192.168.178.145:3000/upload/${peerProfileId}`;
+  const url = `http://${ipAddress}/profile/upload/${peerProfileId}`;
   const body = JSON.stringify({ data, uuid: myProfileId });
   console.log(
     `posting connection request with UUID ${myProfileId} to channel ${peerProfileId} at ${url}`,

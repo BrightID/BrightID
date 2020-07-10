@@ -88,8 +88,7 @@ export const fetchConnectionRequests = createAsyncThunk(
   async (channelId, { getState, dispatch }) => {
     const channel: Channel = selectChannelById(getState(), channelId);
     const { myProfileId } = channel;
-    const Xurl = `http://${channel.ipAddress}/profile/list/${myProfileId}`;
-    const url = `http://192.168.178.145:3000/list/${myProfileId}`;
+    const url = `http://${channel.ipAddress}/profile/list/${myProfileId}`;
     const response = await fetch(url, {
       headers: { 'Cache-Control': 'no-cache' },
     });
@@ -109,8 +108,7 @@ export const fetchConnectionRequests = createAsyncThunk(
       for (const profileId of newProfileIds) {
         console.log(`Got new connection request from profileId ${profileId}.`);
         // download connectionrequest to get signedMessage
-        const Xurl = `http://${channel.ipAddress}/profile/download/${myProfileId}/${profileId}`;
-        const url = `http://192.168.178.145:3000/download/${myProfileId}/${profileId}`;
+        const url = `http://${channel.ipAddress}/profile/download/${myProfileId}/${profileId}`;
         console.log(
           `fetching connectionRequest ${profileId} for my profile ${myProfileId} from ${url}`,
         );
@@ -210,8 +208,7 @@ export const fetchChannelProfiles = createAsyncThunk(
   'channels/fetchChannelProfiles',
   async (channelId, { getState, dispatch }) => {
     const channel = selectChannelById(getState(), channelId);
-    const Xurl = `http://${channel.ipAddress}/profile/list/${channelId}`;
-    const url = `http://192.168.178.145:3000/list/${channelId}`;
+    const url = `http://${channel.ipAddress}/profile/list/${channelId}`;
     console.log(`fetching profiles from channel ${channelId} from ${url}`);
     const response = await fetch(url, {
       headers: { 'Cache-Control': 'no-cache' },

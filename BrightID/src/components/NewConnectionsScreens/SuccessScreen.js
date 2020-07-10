@@ -13,7 +13,6 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
-import { removeConnectUserData } from '../../actions';
 import { sortByDateAddedDescending } from '../Connections/models/sortingUtility';
 
 /**
@@ -73,7 +72,6 @@ export const SuccessScreen = ({ navigation }) => {
         <TouchableOpacity
           testID="successDoneBtn"
           onPress={() => {
-            dispatch(removeConnectUserData());
             dispatch(sortByDateAddedDescending());
 
             resetNav();

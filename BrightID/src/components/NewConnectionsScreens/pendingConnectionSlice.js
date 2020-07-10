@@ -58,8 +58,7 @@ export const newPendingConnection = createAsyncThunk(
     //  const channel = selectChannelById(getState(), channelId);
     const channel = getState().channels.entities[channelId];
     // download profile
-    const Xurl = `http://${channel.ipAddress}/profile/download/${channelId}/${profileId}`;
-    const url = `http://192.168.178.145:3000/download/${channelId}/${profileId}`;
+    const url = `http://${channel.ipAddress}/profile/download/${channelId}/${profileId}`;
     console.log(
       `fetching profile ${profileId} for channel ${channelId} from ${url}`,
     );
