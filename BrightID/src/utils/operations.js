@@ -2,20 +2,34 @@
 import { Alert } from 'react-native';
 import api from '@/api/brightId';
 import store from '@/store';
-import { removeOperation, resetOperations, updateApp } from '@/actions';
+import { removeOperation, resetOperations, addLink } from '@/actions';
 import fetchUserInfo from '@/actions/fetchUserInfo';
+import emitter from '@/emitter';
 
 const time_fudge = 2 * 60 * 1000; // trace operations for 2 minutes
 
 const handleOpUpdate = (store, op, state, result) => {
   switch (op.name) {
     case 'Link ContextId':
-      store.dispatch(updateApp(op, state, result));
-      if (state === 'applied')
+      store.dispatch(
+        addLink({
+          context: op.context,
+          contextId: op.contextId,
+          state,
+        }),
+      );
+      emitter.emit('setAppsStatusMessage');
+      if (state === 'applied') {
         Alert.alert(
           'Success',
-          `Succesfully linked ${op.context} with BrightID`,
+          `Succesfully linked your account in ${op.context} to your BrightID`,
         );
+      } else {
+        Alert.alert(
+          'Failed',
+          `Failed to link your account in ${op.context} to your BrightID\n${result}`,
+        );
+      }
       break;
     default:
       store.dispatch(fetchUserInfo());

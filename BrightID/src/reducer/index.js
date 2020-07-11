@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import apps from './apps';
 import channels from '../components/PendingConnectionsScreens/channelSlice';
+import links from './links';
 import connections from './connections';
 import groups from './groups';
 import notifications from './notifications';
@@ -12,6 +13,7 @@ import user from './user';
 export default combineReducers({
   apps,
   channels,
+  links,
   connections,
   groups,
   operations,

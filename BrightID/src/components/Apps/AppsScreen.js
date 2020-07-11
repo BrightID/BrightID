@@ -10,25 +10,25 @@ import {
   StatusBar,
 } from 'react-native';
 import { connect } from 'react-redux';
-import ActionSheet from 'react-native-actionsheet';
 import EmptyList from '@/components/Helpers/EmptyList';
+import Spinner from 'react-native-spinkit';
 import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
+import emitter from '@/emitter';
+import store from '@/store';
 import AppCard from './AppCard';
-import { handleAppContext, deleteApp } from './model';
-
-let deleteSheetRef = '';
+import { handleAppContext } from './model';
 
 type State = {
-  selectedApp: string,
+  statusMessage: string,
+  waiting: boolean,
 };
 
 export class AppsScreen extends React.Component<Prop, State> {
-  deleteSheetRef: string;
-
   constructor(props: Props) {
     super(props);
     this.state = {
-      selectedApp: '',
+      statusMessage: '',
+      waiting: false,
     };
   }
 
@@ -37,10 +37,13 @@ export class AppsScreen extends React.Component<Prop, State> {
     navigation.addListener('focus', async () => {
       this.handleDeepLink();
       Linking.addEventListener('url', this.handleDeepLink);
+      emitter.on('setAppsStatusMessage', this.setAppsStatusMessage);
     });
     navigation.addListener('blur', async () => {
       Linking.removeEventListener('url', this.handleDeepLink);
+      emitter.off('setAppsStatusMessage', this.setAppsStatusMessage);
     });
+    this.setAppsStatusMessage();
   }
 
   handleDeepLink = () => {
@@ -57,30 +60,55 @@ export class AppsScreen extends React.Component<Prop, State> {
     });
   };
 
-  handleAction = (selectedApp: string) => () => {
-    this.setState({ selectedApp }, () => {
-      if (deleteSheetRef) deleteSheetRef.show();
+  setAppsStatusMessage = () => {
+    const { links } = store.getState().links;
+    const { isSponsored } = this.props;
+    let context = null;
+    links.forEach((link) => {
+      if (link.state == 'pending') {
+        context = link.context;
+      }
+    });
+    let msg = '';
+    let waiting = false;
+    if (context) {
+      msg = `Linking your account in ${context}\n to your BrightID ...`;
+      waiting = true;
+    } else if (!isSponsored) {
+      msg = "You're not sponsored.\nPlease find an app below to sponsor you.";
+    }
+    console.log('apps status:', msg);
+    this.setState({
+      statusMessage: msg,
+      waiting,
     });
   };
 
-  sponsorLabel = () => {
-    const { isSponsored, apps } = this.props;
-    if (!isSponsored && apps.length > 0) {
-      return (
-        <View style={styles.sponsorContainer}>
-          <Text style={styles.sponsorMessage}>
-            You're not sponsored.{'\n'}Please find an app below to sponsor you.
-          </Text>
-        </View>
-      );
-    } else {
-      return <View style={styles.stateContainer} />;
-    }
+  statusBar = () => {
+    const { statusMessage: msg, waiting } = this.state;
+    return msg.length > 0 ? (
+      <View style={styles.statusContainer}>
+        <Text style={styles.statusMessage}>{msg}</Text>
+        <Spinner isVisible={waiting} size={48} type="Wave" color="#4a90e2" />
+      </View>
+    ) : (
+      <View />
+    );
+  };
+
+  isLinked = (app) => {
+    const { links } = store.getState().links;
+    let linked = false;
+    links.forEach((link) => {
+      if (link.state == 'applied' && link.context === app.context) {
+        linked = true;
+      }
+    });
+    return linked;
   };
 
   render() {
-    const { apps } = this.props;
-    const { selectedApp } = this.state;
+    const { apps } = store.getState().apps;
     return (
       <>
         <StatusBar
@@ -90,7 +118,7 @@ export class AppsScreen extends React.Component<Prop, State> {
         />
         <View style={styles.orangeTop} />
         <View style={styles.container} testID="appsScreen">
-          <this.sponsorLabel />
+          <this.statusBar />
           <FlatList
             data={apps}
             contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
@@ -98,22 +126,9 @@ export class AppsScreen extends React.Component<Prop, State> {
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
-              <AppCard {...item} handleAction={this.handleAction} />
+              <AppCard {...item} isLinked={this.isLinked(item)} />
             )}
             ListEmptyComponent={<EmptyList title="No Apps" iconType="flask" />}
-          />
-          <ActionSheet
-            ref={(o) => {
-              deleteSheetRef = o;
-            }}
-            title={`Are you sure you want to delete ${selectedApp}`}
-            options={['Delete', 'cancel']}
-            cancelButtonIndex={1}
-            onPress={(index) => {
-              if (index === 0) {
-                deleteApp(selectedApp);
-              }
-            }}
           />
         </View>
       </>
@@ -140,17 +155,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  sponsorContainer: {
+  statusContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  statusMessage: {
+    fontFamily: 'ApexNew-Medium',
+    textAlign: 'center',
+    fontSize: 18,
+    color: '#4a90e2',
+  },
+  linkingContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 20,
-  },
-  sponsorMessage: {
-    fontFamily: 'ApexNew-Medium',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 18,
-    color: '#e39f2f',
   },
 });
 

@@ -373,10 +373,10 @@ class NodeApi {
     return res.data.data;
   }
 
-  async getContext(context: string) {
-    let res = await this.api.get(`/contexts/${context}`);
+  async getApps() {
+    let res = await this.api.get(`/apps`);
     NodeApi.throwOnError(res);
-    return res.data.data;
+    return res.data.data.apps;
   }
 
   async ip(): string {

@@ -30,6 +30,8 @@ const initialState = {
   password: '',
   hashedId: '',
   verifications: [],
+  apps: [],
+  links: [],
 };
 
 export const reducer = (state: UserState = initialState, action: action) => {

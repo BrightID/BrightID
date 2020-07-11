@@ -19,60 +19,18 @@ import api from '@/api/brightId';
  * App Card in the Apps Screen
  * each App should have:
  * @prop name
- * @prop logoFile
- * @prop verified
+ * @prop logo
  * @prop url
  */
-
-type State = {
-  hasSponsorships: boolean,
-};
 
 class AppCard extends React.PureComponent<Props, State> {
   constructor(props) {
     super(props);
-    this.state = {
-      hasSponsorships: false,
-    };
-  }
-
-  async componentDidMount() {
-    try {
-      const { name } = this.props;
-      const contextInfo = await api.getContext(name);
-      if (contextInfo.unusedSponsorships > 0) {
-        this.setState({ hasSponsorships: true });
-      }
-    } catch (err) {
-      console.log(err);
-    }
   }
 
   openApp = () => {
     const { url } = this.props;
     Linking.openURL(url);
-  };
-
-  linkLabel = () => {
-    const { state, result } = this.props;
-    if (state === 'initiated') {
-      return (
-        <View style={styles.stateContainer}>
-          <Text style={styles.waitingMessage}>Waiting</Text>
-        </View>
-      );
-    } else if (state === 'failed') {
-      const errorMessage = result
-        ? `Not linked: ${result}.`
-        : `Not Linked, try again`;
-      return (
-        <View style={styles.stateContainer}>
-          <Text style={styles.errorMessage}>{errorMessage}</Text>
-        </View>
-      );
-    } else {
-      return <View style={styles.stateContainer} />;
-    }
   };
 
   verificationLabel = () => {
@@ -95,7 +53,7 @@ class AppCard extends React.PureComponent<Props, State> {
     const {
       user: { isSponsored },
     } = store.getState();
-    if (!isSponsored && this.state.hasSponsorships) {
+    if (!isSponsored && this.props.unusedSponsorships > 0) {
       return (
         <View style={styles.stateContainer}>
           <Text style={styles.sponsorshipMessage}>Has sponsorships</Text>
@@ -107,14 +65,15 @@ class AppCard extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { logoFile, name, verified, style, handleAction } = this.props;
+    const { id, logo, name, isLinked, style } = this.props;
+    const linkedId = `Linked_${id}`;
 
     return (
       <View style={{ ...styles.container, ...style }}>
         <TouchableOpacity style={styles.link} onPress={this.openApp}>
           <Image
             source={{
-              uri: `file://${RNFS.DocumentDirectoryPath}/photos/${logoFile}`,
+              uri: `${logo}`,
             }}
             style={styles.logo}
           />
@@ -124,24 +83,21 @@ class AppCard extends React.PureComponent<Props, State> {
           <Text style={styles.name}>{name}</Text>
           <this.sponsorshipLabel />
           <this.verificationLabel />
-          <this.linkLabel />
         </TouchableOpacity>
 
-        {verified && (
-          <Ionicon
-            size={24}
-            name="ios-star"
-            color="#de8"
-            style={styles.verifiedIcon}
-          />
+        {isLinked && (
+          <View style={styles.linkedContainer}>
+            <Ionicon
+              size={48}
+              name="md-checkmark"
+              color="#4a90e2"
+            />
+            <Text
+              testID={linkedId}
+              style={styles.linkedMessage}
+            >Linked</Text>
+          </View>
         )}
-
-        <TouchableOpacity
-          style={styles.deleteIcon}
-          onPress={handleAction(name)}
-        >
-          <Ionicon size={24} name="ios-trash" color="#cb9" />
-        </TouchableOpacity>
       </View>
     );
   }
@@ -179,20 +135,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#4a90e2',
   },
-  waitingMessage: {
+  linkedMessage: {
     fontFamily: 'ApexNew-Medium',
     fontSize: 14,
-    color: '#e39f2f',
+    color: '#4a90e2',
   },
   errorMessage: {
     fontFamily: 'ApexNew-Medium',
     fontSize: 14,
     color: '#FF0800',
   },
-  verifiedIcon: {
-    marginLeft: 10,
-  },
-  deleteIcon: {
+  linkedContainer: {
     marginLeft: 'auto',
     marginRight: 20,
   },

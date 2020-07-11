@@ -2,14 +2,13 @@
 
 export {
   SET_APPS,
-  ADD_APP,
-  REMOVE_APP,
-  UPDATE_APP,
   setApps,
-  addApp,
-  removeApp,
-  updateApp,
 } from './apps';
+
+export {
+  ADD_LINK,
+  addLink,
+} from './links';
 
 export {
   SET_CONNECTIONS,
