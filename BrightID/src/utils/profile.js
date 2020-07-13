@@ -1,7 +1,5 @@
 // @flow
 
-import { QR_TYPE_INITIATOR, QR_TYPE_RESPONDER } from '@/utils/constants';
-
 export const postProfileToChannel = async (data: string, channel: Channel) => {
   let { ipAddress, id } = channel;
   const url = `http://${ipAddress}/profile/upload/${id}`;
@@ -21,7 +19,7 @@ export const postProfileToChannel = async (data: string, channel: Channel) => {
    - timestamp when signedMessage was created
  */
 export const postConnectionRequest = async (
-  data,
+  data: any,
   ipAddress: string,
   peerProfileId: string,
   myProfileId: string,
@@ -31,26 +29,6 @@ export const postConnectionRequest = async (
   console.log(
     `posting connection request with UUID ${myProfileId} to channel ${peerProfileId} at ${url}`,
   );
-  await postData(url, body);
-};
-
-export const postProfile = async (data: string, QrCodeData) => {
-  let { ipAddress, uuid, type } = QrCodeData;
-
-  if (type === QR_TYPE_INITIATOR) {
-    // I'm initiator so add extension "1"
-    uuid += '1';
-  } else if (type === QR_TYPE_RESPONDER) {
-    // I'm responder so add extension "2"
-    uuid += '2';
-  } else {
-    console.log(`Unexpected qrCodeType ${type}`);
-    return;
-  }
-
-  const url = `http://${ipAddress}/profile/upload`;
-  const body = JSON.stringify({ data, uuid });
-  console.log(`POSTING PROFILE profile to ${uuid}`);
   await postData(url, body);
 };
 

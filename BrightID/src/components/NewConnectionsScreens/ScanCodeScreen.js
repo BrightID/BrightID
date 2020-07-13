@@ -100,7 +100,8 @@ export const ScanCodeScreen = () => {
 
   // handle deep links
   if (route.params?.qrcode && !scanned) {
-    handleBarCodeRead(route.params?.qrcode);
+    // $FlowFixMe
+    handleBarCodeRead(route.params.qrcode);
   }
 
   const pclist = pendingConnections.map((pc) => (
