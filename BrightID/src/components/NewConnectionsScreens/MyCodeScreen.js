@@ -131,7 +131,7 @@ export const MyCodeScreen = () => {
           createChannel(
             isGroup
               ? CHANNEL_TYPES.CHANNEL_TYPE_GROUP
-              : CHANNEL_TYPES.CHANNEL_TYPE_ONE,
+              : CHANNEL_TYPES.CHANNEL_TYPE_SINGLE,
           ),
         );
       } else {
@@ -141,7 +141,7 @@ export const MyCodeScreen = () => {
   );
 
   useEffect(() => {
-    if (myChannel && myChannel.type === CHANNEL_TYPES.CHANNEL_TYPE_ONE) {
+    if (myChannel && myChannel.type === CHANNEL_TYPES.CHANNEL_TYPE_SINGLE) {
       // If i created a 1:1 channel and there is a pending connection in UNCONFIRMED state -> directly open PreviewConnectionScreen.
       // there should be only one connection, but if multiple people scanned my code, the first one wins
       for (const pc of pendingChannelConnections) {

@@ -69,7 +69,7 @@ export const ScanCodeScreen = () => {
             const channel = channels.find(
               (channel) => channel.id === pc.channelId,
             );
-            if (channel && channel.type === CHANNEL_TYPES.CHANNEL_TYPE_ONE) {
+            if (channel && channel.type === CHANNEL_TYPES.CHANNEL_TYPE_SINGLE) {
               navigation.navigate('PreviewConnection', {
                 pendingConnectionId: pc.id,
               });

@@ -23,7 +23,7 @@ import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 
 export const CHANNEL_TYPES = {
   CHANNEL_TYPE_GROUP: 0,
-  CHANNEL_TYPE_ONE: 1,
+  CHANNEL_TYPE_SINGLE: 1,
 };
 
 export const channelsAdapter = createEntityAdapter();
