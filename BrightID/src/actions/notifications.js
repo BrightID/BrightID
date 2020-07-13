@@ -18,8 +18,7 @@ export const setDeviceToken = (deviceToken: string) => ({
 });
 
 export const setActiveNotification = (notification: {
-  title: string,
-  payload: { [key: string]: string },
+  message: string,
   type: string,
 }) => ({
   type: SET_ACTIVE_NOTIFICATION,

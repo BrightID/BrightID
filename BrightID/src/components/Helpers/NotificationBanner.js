@@ -1,7 +1,7 @@
 // @flow
 
 import React, { useCallback, useEffect, useRef } from 'react';
-import { StyleSheet } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
 import DropdownAlert from 'react-native-dropdownalert';
 import { shallowEqual, useSelector, useDispatch } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
@@ -10,6 +10,7 @@ import groups from '@/static/add_group.svg';
 import connections from '@/static/add_person.svg';
 import misc from '@/static/trusted_connections.svg';
 import { setActiveNotification } from '@/actions';
+import { DEVICE_ANDROID } from '@/utils/constants';
 
 /* notification types: 
 @type groups
@@ -34,17 +35,26 @@ export const NotificationBanner = () => {
       'custom',
       activeNotification?.message,
     );
+
+    if (DEVICE_ANDROID) {
+      StatusBar.setBackgroundColor('#AFFDD0', true);
+    }
   }, [activeNotification]);
 
   // update default icon
   const icon = icons[activeNotification?.type] ?? misc;
 
   const _onTap = useCallback(() => {
+    if (DEVICE_ANDROID) {
+      StatusBar.setBackgroundColor('#fff', true);
+    }
     navigate('Notifications', { type: activeNotification?.type });
   }, [activeNotification]);
 
   const _onClose = () => {
-    console.log('_onClose');
+    if (DEVICE_ANDROID) {
+      StatusBar.setBackgroundColor('#fff', true);
+    }
     dispatch(setActiveNotification(null));
   };
 
@@ -60,8 +70,7 @@ export const NotificationBanner = () => {
         justifyContent: 'center',
       }}
       titleStyle={styles.title}
-      activeStatusBarStyle="dark-content"
-      activeStatusBarBackgroundColor="'#AFFDD0"
+      updateStatusBar={false}
       testID="notificationBanner"
       elevation={10}
       zIndex={100}

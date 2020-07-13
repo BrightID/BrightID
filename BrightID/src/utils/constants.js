@@ -43,3 +43,4 @@ export const ORANGE = '#ED7A5D';
 export const CONNECTIONS_TYPE = 'connections';
 export const GROUPS_TYPE = 'groups';
 export const MISC_TYPE = 'misc';
+export const NONE_TYPE = 'none';

@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
+    backgroundColor: '#fff',
     borderTopLeftRadius: 58,
     marginTop: -58,
     overflow: 'hidden',

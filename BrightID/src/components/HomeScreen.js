@@ -21,6 +21,7 @@ import fetchUserInfo from '@/actions/fetchUserInfo';
 import verificationSticker from '@/static/verification-sticker.svg';
 import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
+import forumIcon from '@/static/forum_icon.svg';
 import { useStatusBarHome } from '@/utils/hooks';
 
 /**
@@ -254,11 +255,10 @@ export const HomeScreen = (props) => {
             style={styles.communityContainer}
             onPress={handleChat}
           >
-            <Ionicons
-              name="ios-chatboxes"
-              size={16}
-              color="#fff"
-              style={styles.communityIcon}
+            <SvgXml
+              width={DEVICE_LARGE ? 28 : 25}
+              height={DEVICE_LARGE ? 28 : 25}
+              xml={forumIcon}
             />
             <JoinCommunity editable={false} style={styles.communityLink}>
               Join the Community

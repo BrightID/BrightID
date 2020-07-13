@@ -170,8 +170,7 @@ declare type UserState = {
 };
 
 declare type NotificationsState = {
-  notifications: Notification[],
-  invites: invite[],
+  activeNotification: { message: string, type: string },
   pendingConnections: PendingConnection[],
   backupPending: boolean,
   deviceToken: string,
