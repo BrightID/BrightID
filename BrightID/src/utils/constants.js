@@ -35,6 +35,7 @@ export const BACKUP_URL = 'https://explorer.brightid.org';
 
 // CONNECTION CONSTANTS
 export const QR_TTL = 900000;
+export const MIN_CHANNEL_JOIN_TTL = 5000;
 export const PROFILE_POLL_INTERVAL = 1000;
 export const QR_TYPE_INITIATOR = 'initiator';
 export const QR_TYPE_RESPONDER = 'responder';

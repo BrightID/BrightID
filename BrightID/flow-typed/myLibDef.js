@@ -186,8 +186,6 @@ declare type action = {
   [key: string]: any,
 };
 
-declare type ChannelType = $Keys<typeof CHANNEL_TYPES>;
-
 declare type Channel = {
   id: string,
   initiatorProfileId: string,
@@ -196,9 +194,9 @@ declare type Channel = {
   aesKey: string,
   timestamp: number,
   ttl: number,
-  pollTimerId: IntervalID,
-  timeoutId: TimeoutID,
-  type: ChannelType,
+  pollTimerId?: IntervalID,
+  timeoutId?: TimeoutID,
+  type: number,
 };
 
 declare type PendingConnection = {

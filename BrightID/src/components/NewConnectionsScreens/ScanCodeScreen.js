@@ -8,7 +8,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useRoute,
+  useNavigation,
+} from '@react-navigation/native';
 import { SvgXml } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import BarcodeMask from 'react-native-barcode-mask';
@@ -18,7 +22,6 @@ import { DEVICE_LARGE, DEVICE_IOS, ORANGE } from '@/utils/constants';
 import qricon from '@/static/qr_icon_white.svg';
 import {
   CHANNEL_TYPES,
-  joinChannel,
   selectAllChannels,
 } from '@/components/NewConnectionsScreens/channelSlice';
 import {
@@ -26,13 +29,14 @@ import {
   selectAllPendingConnections,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import { decodeChannelQrString } from '@/utils/channels';
+import { joinChannel } from '@/components/NewConnectionsScreens/actions/channelThunks';
 import { RNCamera } from './RNCameraProvider';
 
 /**
  * Returns whether the string is a valid QR identifier
  * @param {*} qrString
  */
-function validQrString(qrString) {
+function validQrString(qrString: string) {
   return qrString.length >= 42;
 }
 
@@ -46,8 +50,9 @@ function validQrString(qrString) {
 
 const Container = DEVICE_IOS ? SafeAreaView : View;
 
-export const ScanCodeScreen = (props) => {
-  const { navigation, route } = props;
+export const ScanCodeScreen = () => {
+  const route = useRoute();
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const [scanned, setScanned] = useState(false);
   const name = useSelector((state) => state.user.name);
@@ -75,18 +80,18 @@ export const ScanCodeScreen = (props) => {
     }, [pendingConnections, channels, navigation]),
   );
 
-  const handleBarCodeRead = async ({ data }) => {
+  const handleBarCodeRead = async (data: string) => {
     console.log('barcode data', data);
     if (!data) return;
 
     setScanned(true);
 
     if (data.startsWith('Recovery_')) {
-      props.navigation.navigate('RecoveringConnection', {
+      navigation.navigate('RecoveringConnection', {
         recoveryRequestCode: data,
       });
     } else if (data.startsWith('brightid://')) {
-      Linking.openURL(data);
+      await Linking.openURL(data);
     } else if (validQrString(data)) {
       const channel = await decodeChannelQrString(data);
       dispatch(joinChannel(channel));
@@ -95,7 +100,7 @@ export const ScanCodeScreen = (props) => {
 
   // handle deep links
   if (route.params?.qrcode && !scanned) {
-    handleBarCodeRead({ data: route.params?.qrcode });
+    handleBarCodeRead(route.params?.qrcode);
   }
 
   const pclist = pendingConnections.map((pc) => (
@@ -160,7 +165,7 @@ export const ScanCodeScreen = (props) => {
           testID="ScanCodeToMyCodeBtn"
           style={styles.showQrButton}
           onPress={() => {
-            props.navigation.navigate('MyCode');
+            navigation.navigate('MyCode');
           }}
         >
           <SvgXml

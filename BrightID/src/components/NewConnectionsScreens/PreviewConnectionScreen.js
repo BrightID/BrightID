@@ -20,11 +20,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import {
-  confirmPendingConnectionThunk,
+  pendingConnection_states,
   rejectPendingConnection,
   selectPendingConnectionById,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
-
+import { confirmPendingConnectionThunk } from '@/components/NewConnectionsScreens/actions/pendingConnectionThunks';
 import api from '../../Api/BrightId';
 
 /**
@@ -40,7 +40,7 @@ export const PreviewConnectionScreen = () => {
   const route = useRoute();
   const myConnections = useSelector((state) => state.connections.connections);
   const pendingConnection: PendingConnection = useSelector((state) =>
-    selectPendingConnectionById(state, route.params.pendingConnectionId),
+    selectPendingConnectionById(state, route.params?.pendingConnectionId),
   );
 
   const [userInfo, setUserInfo] = useState({
@@ -88,7 +88,9 @@ export const PreviewConnectionScreen = () => {
             groups,
             connections = [],
             flaggers,
-          } = await api.getUserInfo(pendingConnection.brightId);
+          } = await api.getUserInfo(
+            pendingConnection.brightId ? pendingConnection.brightId : '',
+          );
           const mutualConnections = connections.filter(function (el) {
             return myConnections.some((x) => x.id === el.id);
           });
@@ -122,6 +124,30 @@ export const PreviewConnectionScreen = () => {
       return () => BackHandler.removeEventListener('hardwareBackPress', reject);
     }, [pendingConnection, reject, navigation.goBack, myConnections]),
   );
+
+  let buttonContainer;
+  if (pendingConnection.state === pendingConnection_states.CONFIRMING) {
+    buttonContainer = <Text>Confirming connection...</Text>;
+  } else {
+    buttonContainer = (
+      <>
+        <TouchableOpacity
+          testID="rejectConnectionBtn"
+          onPress={reject}
+          style={styles.rejectButton}
+        >
+          <Text style={styles.buttonText}>Reject</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          testID="confirmConnectionBtn"
+          onPress={handleConfirmation}
+          style={styles.confirmButton}
+        >
+          <Text style={styles.buttonText}>Confirm</Text>
+        </TouchableOpacity>
+      </>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container} testID="previewConnectionScreen">
@@ -167,22 +193,7 @@ export const PreviewConnectionScreen = () => {
           <Text style={styles.countsDescriptionText}>Mutual Connections</Text>
         </View>
       </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          testID="rejectConnectionBtn"
-          onPress={reject}
-          style={styles.rejectButton}
-        >
-          <Text style={styles.buttonText}>Reject</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          testID="confirmConnectionBtn"
-          onPress={handleConfirmation}
-          style={styles.confirmButton}
-        >
-          <Text style={styles.buttonText}>Confirm</Text>
-        </TouchableOpacity>
-      </View>
+      <View style={styles.buttonContainer}>{buttonContainer}</View>
     </SafeAreaView>
   );
 };

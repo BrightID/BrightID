@@ -14,7 +14,7 @@ import {
   Clipboard,
   Switch,
 } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path, SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,8 +27,6 @@ import { useInterval } from '@/utils/hooks';
 import cameraIcon from '@/static/camera_icon_white.svg';
 import {
   CHANNEL_TYPES,
-  createChannel,
-  removeChannelThunk,
   selectChannelById,
 } from '@/components/NewConnectionsScreens/channelSlice';
 import { encodeChannelQrString } from '@/utils/channels';
@@ -37,6 +35,10 @@ import {
   selectAllPendingConnections,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import { createFakeConnection } from '@/components/Connections/models/createFakeConnection';
+import {
+  createChannel,
+  leaveChannel,
+} from '@/components/NewConnectionsScreens/actions/channelThunks';
 
 /**
  * My Code screen of BrightID
@@ -51,8 +53,8 @@ const COPIED_TIMEOUT = 500;
 
 const Container = DEVICE_IOS ? SafeAreaView : View;
 
-export const MyCodeScreen = (props) => {
-  const { navigation } = props;
+export const MyCodeScreen = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const name = useSelector((state) => state.user.name);
   const myChannel = useSelector((state) =>
@@ -104,9 +106,9 @@ export const MyCodeScreen = (props) => {
   useInterval(timerTick, 100);
 
   // set up top right button in header
-  if (__DEV__) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useLayoutEffect(() => {
+  useLayoutEffect(() => {
+    if (__DEV__) {
+      // $FlowFixMe
       navigation.setOptions({
         headerRight: () => (
           <TouchableOpacity
@@ -118,8 +120,8 @@ export const MyCodeScreen = (props) => {
           </TouchableOpacity>
         ),
       });
-    }, [dispatch, navigation]);
-  }
+    }
+  }, [dispatch, navigation]);
 
   useFocusEffect(
     useCallback(() => {
@@ -155,7 +157,7 @@ export const MyCodeScreen = (props) => {
   const toggleGroup = () => {
     // remove current channel
     if (myChannel) {
-      dispatch(removeChannelThunk(myChannel.id));
+      dispatch(leaveChannel(myChannel.id));
     }
     // toggle switch
     setIsGroup((previousState) => !previousState);
@@ -212,7 +214,7 @@ export const MyCodeScreen = (props) => {
         style={styles.copyButton}
         onPress={() => {
           setCountdown(0);
-          dispatch(removeChannelThunk(myChannel.id));
+          dispatch(leaveChannel(myChannel.id));
         }}
       >
         <Material
@@ -295,7 +297,7 @@ export const MyCodeScreen = (props) => {
           testID="MyCodeToScanCodeBtn"
           style={styles.scanCodeButton}
           onPress={() => {
-            props.navigation.navigate('ScanCode');
+            navigation.navigate('ScanCode');
           }}
         >
           <SvgXml

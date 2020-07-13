@@ -10,7 +10,7 @@ export const createRandomId = async (size: number = 9) => {
 };
 
 export const generateChannelData = async (
-  channelType: ChannelType,
+  channelType: number,
 ): Promise<Channel> => {
   const aesKey = await randomKey(16);
   const ipAddress = await api.ip();
@@ -19,8 +19,6 @@ export const generateChannelData = async (
   const ttl = QR_TTL;
   const myProfileId = await createRandomId();
   const type = channelType;
-  const pollTimerId = 0;
-  const timeoutId = 0;
   const initiatorProfileId = '';
 
   return {
@@ -29,11 +27,9 @@ export const generateChannelData = async (
     initiatorProfileId,
     ipAddress,
     myProfileId,
-    pollTimerId,
     timestamp,
     ttl,
     type,
-    timeoutId,
   };
 };
 
@@ -64,8 +60,6 @@ export const decodeChannelQrString = async (qrString: string) => {
 
   // add local channel data that is not part of qrstring
   const myProfileId = await createRandomId();
-  const pollTimerId = 0;
-  const timeoutId = 0;
 
   const channel: Channel = {
     aesKey,
@@ -73,9 +67,7 @@ export const decodeChannelQrString = async (qrString: string) => {
     initiatorProfileId,
     ipAddress,
     myProfileId,
-    pollTimerId,
     timestamp,
-    timeoutId,
     ttl,
     type,
   };
