@@ -1,5 +1,8 @@
 // @flow
-import { selectChannelById } from '@/components/NewConnectionsScreens/channelSlice';
+import {
+  CHANNEL_TYPES,
+  selectChannelById,
+} from '@/components/NewConnectionsScreens/channelSlice';
 import { obtainKeys } from '@/utils/keychain';
 import { TIME_FUDGE } from '@/utils/constants';
 import { hash, strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
@@ -15,6 +18,7 @@ import {
   selectPendingConnectionById,
   updatePendingConnection,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+import { leaveChannel } from '@/components/NewConnectionsScreens/actions/channelThunks';
 
 export const confirmPendingConnectionThunk = (id: string) => async (
   dispatch: dispatch,
@@ -123,6 +127,11 @@ export const confirmPendingConnectionThunk = (id: string) => async (
 
   dispatch(addConnection(connectionData));
   dispatch(confirmPendingConnection(connection.id));
+
+  if (channel.type === CHANNEL_TYPES.CHANNEL_TYPE_SINGLE) {
+    // Connection is established, so the 1:1 channel can be left
+    dispatch(leaveChannel(channel.id));
+  }
 
   if (backupCompleted) {
     await backupUser();
