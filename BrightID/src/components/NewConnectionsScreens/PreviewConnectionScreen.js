@@ -25,6 +25,10 @@ import {
   selectPendingConnectionById,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import { confirmPendingConnectionThunk } from '@/components/NewConnectionsScreens/actions/pendingConnectionThunks';
+import {
+  CHANNEL_TYPES,
+  selectChannelById,
+} from '@/components/NewConnectionsScreens/channelSlice';
 import api from '../../Api/BrightId';
 
 /**
@@ -42,6 +46,13 @@ export const PreviewConnectionScreen = () => {
   const pendingConnection: PendingConnection = useSelector((state) =>
     selectPendingConnectionById(state, route.params?.pendingConnectionId),
   );
+  const channel: Channel | typeof undefined = useSelector((state) => {
+    if (pendingConnection) {
+      return selectChannelById(state, pendingConnection.channelId);
+    } else {
+      return undefined;
+    }
+  });
 
   const [userInfo, setUserInfo] = useState({
     connections: 'loading',
@@ -54,14 +65,21 @@ export const PreviewConnectionScreen = () => {
   // TODO: Why is this wrapped in useCallback??
   const reject = useCallback(() => {
     dispatch(rejectPendingConnection(pendingConnection.id));
-    // navigation.navigate('Home');
-    navigation.goBack();
+    if (channel?.type === CHANNEL_TYPES.CHANNEL_TYPE_GROUP) {
+      navigation.goBack();
+    } else {
+      navigation.navigate('Home');
+    }
     return true;
-  }, [dispatch, navigation, pendingConnection.id]);
+  }, [dispatch, navigation, pendingConnection.id, channel]);
 
   const handleConfirmation = async () => {
     dispatch(confirmPendingConnectionThunk(pendingConnection.id));
-    navigation.navigate('ConnectSuccess');
+    if (channel?.type === CHANNEL_TYPES.CHANNEL_TYPE_GROUP) {
+      navigation.goBack();
+    } else {
+      navigation.navigate('ConnectSuccess');
+    }
   };
 
   useFocusEffect(
