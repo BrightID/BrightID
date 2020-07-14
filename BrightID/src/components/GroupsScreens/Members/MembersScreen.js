@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Alert, FlatList, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Alert, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
 import { innerJoin } from 'ramda';
@@ -7,6 +7,7 @@ import api from '@/Api/BrightId';
 import emitter from '@/emitter';
 import { leaveGroup, dismissFromGroup } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
+import { addAdmin } from '@/actions/groups';
 import { ORANGE } from '@/utils/constants';
 import MemberCard from './MemberCard';
 
@@ -65,6 +66,39 @@ export class MembersScreen extends Component<Props, State> {
     );
   };
 
+  confirmAddAdmin = (user) => {
+    const buttons = [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: async () => {
+          const { route, dispatch } = this.props;
+          const group = route.params?.group;
+          try {
+            await api.addAdmin(user.id, group.id);
+            await dispatch(addAdmin(user.id, group));
+          } catch (err) {
+            Alert.alert(
+              `Error making ${user.name} admin for group`,
+              err.message,
+            );
+          }
+        },
+      },
+    ];
+    Alert.alert(
+      `Add admin`,
+      `Are you sure you want to make ${user.name} an admin for this group?`,
+      buttons,
+      {
+        cancelable: true,
+      },
+    );
+  };
+
   confirmLeaveGroup = () => {
     const buttons = [
       {
@@ -105,13 +139,21 @@ export class MembersScreen extends Component<Props, State> {
 
   renderMember = ({ item }) => {
     const { group } = this.props;
-    const isAdmin = group?.admins?.includes(this.props.id);
-    // eslint-disable-next-line react/jsx-props-no-spreading
+    const memberIsAdmin = group?.admins?.includes(item.id);
+    const userIsAdmin = group?.admins?.includes(this.props.id);
     return (
       <MemberCard
-        {...item}
-        isAdmin={isAdmin}
-        menuHandler={this.confirmDismiss}
+        connectionDate={item.connectionDate}
+        flaggers={item.flaggers}
+        memberId={item.id}
+        name={item.name}
+        photo={item.photo}
+        score={item.score}
+        memberIsAdmin={memberIsAdmin}
+        userIsAdmin={userIsAdmin}
+        userId={this.props.id}
+        handleDismiss={this.confirmDismiss}
+        handleAddAdmin={this.confirmAddAdmin}
       />
     );
   };

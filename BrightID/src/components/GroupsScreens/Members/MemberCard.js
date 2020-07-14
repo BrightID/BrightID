@@ -1,52 +1,109 @@
 // @flow
 
 import * as React from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RNFS from 'react-native-fs';
-import { connect } from 'react-redux';
 import moment from 'moment';
-import Ionicon from 'react-native-vector-icons/Ionicons';
 import { DEVICE_TYPE } from '@/utils/constants';
-import store from '@/store';
+import ActionSheet from 'react-native-actionsheet';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
-/**
- * Connection Card in the Connections Screen
- * is created from an array of connections
- * each connection should have:
- * @prop name
- * @prop score
- * @prop connectionTime
- * @prop photo
- */
+const ICON_SIZE = DEVICE_TYPE === 'large' ? 36 : 32;
+const ACTION_ADD_ADMIN = 'Add Admin';
+const ACTION_DISMISS = 'Dismiss from group';
+const ACTION_CANCEL = 'Cancel';
 
-class MemberCard extends React.PureComponent<Props> {
-  scoreColor = () => {
-    const { score } = this.props;
+type MemberCardProps = {
+  memberId: string,
+  userId: string,
+  photo: Photo,
+  name: string,
+  score: number,
+  connectionDate: number,
+  handleDismiss: (...args: Array<any>) => any,
+  handleAddAdmin: (...args: Array<any>) => any,
+  userIsAdmin: boolean,
+  memberIsAdmin: boolean,
+  flaggers: any,
+};
+
+function MemberCard(props: MemberCardProps) {
+  const {
+    memberId,
+    userId,
+    photo,
+    name,
+    score,
+    connectionDate,
+    handleDismiss,
+    handleAddAdmin,
+    userIsAdmin,
+    memberIsAdmin,
+    flaggers,
+  } = props;
+  const actionSheetRef: ?ActionSheet = useRef(null);
+  const [contextActions, setContextActions] = useState<Array<string>>([]);
+  const [scoreColor, setScoreColor] = useState({ color: '#e39f2f' });
+  const [flagged, setFlagged] = useState(false);
+
+  // set possible actions depending on user and member admin status
+  useEffect(() => {
+    const actions: Array<string> = [];
+    if (userIsAdmin) {
+      if (!memberIsAdmin) {
+        // member can be promoted to admin
+        actions.push(ACTION_ADD_ADMIN);
+      }
+      if (userId !== memberId) {
+        // member can be dismissed from group
+        actions.push(ACTION_DISMISS);
+      }
+    }
+    if (actions.length > 0) {
+      actions.push(ACTION_CANCEL);
+    }
+    setContextActions(actions);
+  }, [userIsAdmin, memberIsAdmin, userId, memberId]);
+
+  // set score color
+  useEffect(() => {
     if (score >= 85) {
-      return { color: '#139c60' };
+      setScoreColor({ color: '#139c60' });
     } else {
-      return { color: '#e39f2f' };
+      setScoreColor({ color: '#e39f2f' });
+    }
+  }, [score]);
+
+  // show flagged status of member?
+  useEffect(() => {
+    if (!userIsAdmin) {
+      // only admins can see flags
+      setFlagged(false);
+    } else {
+      setFlagged(flaggers && Object.keys(flaggers).length);
+    }
+  }, [flaggers, userIsAdmin]);
+
+  const performAction = (index: number) => {
+    const action = contextActions[index];
+    console.log(`Performing action ${action}`);
+    switch (action) {
+      case ACTION_DISMISS:
+        handleDismiss({ id: memberId, name });
+        break;
+      case ACTION_ADD_ADMIN:
+        handleAddAdmin({ id: memberId, name });
+        break;
+      case ACTION_CANCEL:
+      default:
+      // do nothing
     }
   };
 
-  render() {
-    const {
-      id,
-      photo,
-      name,
-      score,
-      connectionDate,
-      style,
-      menuHandler,
-      isAdmin,
-      flaggers,
-    } = this.props;
-    const { user } = store.getState();
-    console.log('flaggers', flaggers);
-    const flags = flaggers && Object.keys(flaggers);
-    const flagged = isAdmin && flags?.length > 0;
-    return (
-      <View style={{ ...styles.container, ...style }}>
+  return (
+    <>
+      <View style={styles.container}>
         <Image
           source={{
             uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
@@ -57,26 +114,38 @@ class MemberCard extends React.PureComponent<Props> {
           <Text style={styles.name}>{name}</Text>
           <View style={styles.scoreContainer}>
             <Text style={styles.scoreLeft}>Score:</Text>
-            <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>
+            <Text style={[styles.scoreRight, scoreColor]}>{score}</Text>
             {flagged && <Text style={styles.flagged}> (flagged)</Text>}
           </View>
-          {connectionDate && (
+          {connectionDate > 0 && (
             <Text style={styles.connectedText}>
-              Connected {moment(parseInt(connectionDate, 10)).fromNow()}
+              Connected {moment(connectionDate).fromNow()}
             </Text>
           )}
         </View>
-        {isAdmin && user.id != id && (
+        {contextActions.length > 0 && (
           <TouchableOpacity
             style={styles.moreIcon}
-            onPress={() => menuHandler(this.props)}
+            onPress={() => {
+              actionSheetRef?.current.show();
+            }}
           >
-            <Ionicon size={48} name="ios-close" color="#ccc" />
+            <Material name="dots-vertical" size={ICON_SIZE} color="#ccc" />
           </TouchableOpacity>
         )}
       </View>
-    );
-  }
+      {contextActions.length > 0 && (
+        <ActionSheet
+          ref={actionSheetRef}
+          title="What do you want to do?"
+          options={contextActions}
+          cancelButtonIndex={contextActions.indexOf(ACTION_CANCEL)}
+          destructiveButtonIndex={contextActions.indexOf(ACTION_DISMISS)}
+          onPress={performAction}
+        />
+      )}
+    </>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -145,4 +214,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(MemberCard);
+export default MemberCard;
