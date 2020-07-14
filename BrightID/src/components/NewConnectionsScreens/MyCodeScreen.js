@@ -108,7 +108,7 @@ export const MyCodeScreen = () => {
 
   // set up top right button in header
   useLayoutEffect(() => {
-    if (__DEV__) {
+    if (__DEV__ && myChannel?.state === channel_states.OPEN) {
       // $FlowFixMe
       navigation.setOptions({
         headerRight: () => (
@@ -122,7 +122,7 @@ export const MyCodeScreen = () => {
         ),
       });
     }
-  }, [dispatch, navigation]);
+  }, [dispatch, myChannel, navigation]);
 
   useFocusEffect(
     useCallback(() => {
