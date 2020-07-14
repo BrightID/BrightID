@@ -3,7 +3,10 @@ import { b64ToUint8Array, b64ToUrlSafeB64, randomKey } from '@/utils/encoding';
 import api from '@/Api/BrightId';
 import { CHANNEL_TTL } from '@/utils/constants';
 import { Buffer } from 'buffer';
-import { channel_states } from '@/components/NewConnectionsScreens/channelSlice';
+import {
+  channel_states,
+  channel_types,
+} from '@/components/NewConnectionsScreens/channelSlice';
 
 export const createRandomId = async (size: number = 9) => {
   const key = await randomKey(size);
@@ -11,7 +14,7 @@ export const createRandomId = async (size: number = 9) => {
 };
 
 export const generateChannelData = async (
-  channelType: number,
+  channelType: ChannelType,
 ): Promise<Channel> => {
   const aesKey = await randomKey(16);
   const ipAddress = await api.ip();
@@ -43,8 +46,19 @@ export const encodeChannelQrString = (channel: Channel) => {
   )
     .toString('base64')
     .substring(0, 6);
+  let intType;
+  switch (type) {
+    case channel_types.GROUP:
+      intType = 0;
+      break;
+    case channel_types.SINGLE:
+      intType = 1;
+      break;
+    default:
+      throw new Error(`Unhandled channel type ${type}`);
+  }
   return encodeURIComponent(
-    `${aesKey}${id}${myProfileId}${b64Ip}${type}${timestamp}${ttl}`,
+    `${aesKey}${id}${myProfileId}${b64Ip}${intType}${timestamp}${ttl}`,
   );
 };
 
@@ -55,7 +69,7 @@ export const decodeChannelQrString = async (qrString: string) => {
   const initiatorProfileId = decodedQR.substr(36, 12);
   const b64ip = `${decodedQR.substr(48, 6)}==`;
   const ipAddress = b64ToUint8Array(b64ip).join('.');
-  const type = parseInt(decodedQR.substr(54, 1), 10);
+  const intType = parseInt(decodedQR.substr(54, 1), 10);
   // 13 digits for timestamp will be safe until Saturday, 20. November 2286 17:46:39.999
   const timestamp = parseInt(decodedQR.substr(55, 13), 10);
   // ttl has unknown length, so just parse everything till the end
@@ -64,6 +78,19 @@ export const decodeChannelQrString = async (qrString: string) => {
   // add local channel data that is not part of qrstring
   const myProfileId = await createRandomId();
   const state = channel_states.OPEN;
+
+  // convert intType to ChannelType
+  let type;
+  switch (intType) {
+    case 0:
+      type = channel_types.GROUP;
+      break;
+    case 1:
+      type = channel_types.SINGLE;
+      break;
+    default:
+      throw new Error(`Unhandled channel intType ${intType}`);
+  }
 
   const channel: Channel = {
     aesKey,

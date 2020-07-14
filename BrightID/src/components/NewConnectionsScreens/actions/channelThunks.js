@@ -23,7 +23,7 @@ import {
   selectAllPendingConnectionIds,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 
-export const createChannel = (channelType: number) => async (
+export const createChannel = (channelType: ChannelType) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
