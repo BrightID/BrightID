@@ -1,8 +1,9 @@
 // @flow
 import { b64ToUint8Array, b64ToUrlSafeB64, randomKey } from '@/utils/encoding';
 import api from '@/Api/BrightId';
-import { QR_TTL } from '@/utils/constants';
+import { CHANNEL_TTL } from '@/utils/constants';
 import { Buffer } from 'buffer';
+import { channel_states } from '@/components/NewConnectionsScreens/channelSlice';
 
 export const createRandomId = async (size: number = 9) => {
   const key = await randomKey(size);
@@ -16,10 +17,11 @@ export const generateChannelData = async (
   const ipAddress = await api.ip();
   const id = await createRandomId();
   const timestamp = Date.now();
-  const ttl = QR_TTL;
+  const ttl = CHANNEL_TTL;
   const myProfileId = await createRandomId();
   const type = channelType;
   const initiatorProfileId = '';
+  const state = channel_states.OPEN;
 
   return {
     aesKey,
@@ -27,6 +29,7 @@ export const generateChannelData = async (
     initiatorProfileId,
     ipAddress,
     myProfileId,
+    state,
     timestamp,
     ttl,
     type,
@@ -60,6 +63,7 @@ export const decodeChannelQrString = async (qrString: string) => {
 
   // add local channel data that is not part of qrstring
   const myProfileId = await createRandomId();
+  const state = channel_states.OPEN;
 
   const channel: Channel = {
     aesKey,
@@ -67,6 +71,7 @@ export const decodeChannelQrString = async (qrString: string) => {
     initiatorProfileId,
     ipAddress,
     myProfileId,
+    state,
     timestamp,
     ttl,
     type,

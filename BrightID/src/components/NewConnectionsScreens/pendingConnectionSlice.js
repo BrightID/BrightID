@@ -155,9 +155,13 @@ const pendingConnectionsSlice = createSlice({
     },
     [removeChannel]: (state, action) => {
       const channelId = action.payload;
-      console.log(
-        `TODO: remove pending connections associated to channel ${channelId}, abort/ignore any profile download operation.`,
+      const deleteIds = state.ids.filter(
+        (id) => state.entities[id].channelId === channelId,
       );
+      console.log(
+        `Channel ${channelId} deleted - removing ${deleteIds.length} pending connections associated to channel`,
+      );
+      state = pendingConnectionsAdapter.removeMany(state, deleteIds);
     },
   },
 });

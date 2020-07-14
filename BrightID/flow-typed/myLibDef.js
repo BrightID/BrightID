@@ -2,7 +2,10 @@
 
 import { NavigationScreenProp } from 'react-navigation';
 import { Dispatch } from 'redux';
-import { CHANNEL_TYPES } from '@/components/NewConnectionsScreens/channelSlice';
+import {
+  channel_states,
+  channel_types,
+} from '@/components/NewConnectionsScreens/channelSlice';
 
 declare type getState = () => State;
 
@@ -15,8 +18,6 @@ declare type Props = State & navigation & dispatch;
 declare type State = {
   apps: AppState,
   connections: ConnectionsState,
-  connectQrData: ConnectQrData,
-  connectUserData: ConnectUserData,
   groups: GroupsState,
   operations: OperationsState,
   recoveryData: RecoveryData,
@@ -58,37 +59,6 @@ declare type connection = {
   createdAt: number,
   hasPrimaryGroup: boolean,
   publicKey?: string,
-};
-
-declare type ConnectQrData = {
-  myQrData?: {
-    aesKey: string,
-    uuid: string,
-    ipAddress: string,
-    qrString: string,
-    timestamp: number,
-    ttl: number,
-    type: string,
-    channel: string,
-  },
-  peerQrData: {
-    aesKey: string,
-    ipAddress: string,
-    uuid: string,
-    qrString: string,
-    channel: string,
-    type: string,
-  },
-};
-
-declare type ConnectUserData = {
-  id: string,
-  photo: string,
-  name: string,
-  timestamp: number,
-  signedMessage: string,
-  score: number,
-  secretKey?: Uint8Array,
 };
 
 declare type GroupsState = {
@@ -186,6 +156,9 @@ declare type action = {
   [key: string]: any,
 };
 
+declare type ChannelState = $Keys<typeof channel_states>;
+declare type ChannelType = $Keys<typeof channel_types>;
+
 declare type Channel = {
   id: string,
   initiatorProfileId: string,
@@ -196,7 +169,8 @@ declare type Channel = {
   ttl: number,
   pollTimerId?: IntervalID,
   timeoutId?: TimeoutID,
-  type: number,
+  type: ChannelType,
+  state: ChannelState,
 };
 
 declare type PendingConnection = {

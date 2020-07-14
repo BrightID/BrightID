@@ -21,7 +21,7 @@ import Spinner from 'react-native-spinkit';
 import { DEVICE_LARGE, DEVICE_IOS, ORANGE } from '@/utils/constants';
 import qricon from '@/static/qr_icon_white.svg';
 import {
-  CHANNEL_TYPES,
+  channel_types,
   selectAllChannels,
 } from '@/components/NewConnectionsScreens/channelSlice';
 import {
@@ -69,7 +69,7 @@ export const ScanCodeScreen = () => {
             const channel = channels.find(
               (channel) => channel.id === pc.channelId,
             );
-            if (channel && channel.type === CHANNEL_TYPES.CHANNEL_TYPE_SINGLE) {
+            if (channel && channel.type === channel_types.SINGLE) {
               navigation.navigate('PreviewConnection', {
                 pendingConnectionId: pc.id,
               });

@@ -34,7 +34,9 @@ export const INVITE_ACCEPTED = 'accepted';
 export const BACKUP_URL = 'https://explorer.brightid.org';
 
 // CONNECTION CONSTANTS
-export const QR_TTL = 900000;
+// export const CHANNEL_TTL = 900000; // 15 minutes
+export const CHANNEL_TTL = 30000; // 30 secs
+export const CHANNEL_CONNECTION_LIMIT = 15; // maximum number of connections allowed in channel.
 export const MIN_CHANNEL_JOIN_TTL = 5000;
 export const PROFILE_POLL_INTERVAL = 1000;
 export const QR_TYPE_INITIATOR = 'initiator';

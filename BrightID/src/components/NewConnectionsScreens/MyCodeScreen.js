@@ -26,7 +26,8 @@ import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
 import cameraIcon from '@/static/camera_icon_white.svg';
 import {
-  CHANNEL_TYPES,
+  channel_states,
+  channel_types,
   selectChannelById,
 } from '@/components/NewConnectionsScreens/channelSlice';
 import { encodeChannelQrString } from '@/utils/channels';
@@ -77,12 +78,12 @@ export const MyCodeScreen = () => {
     myChannel ? myChannel.ttl - (Date.now() - myChannel.timestamp) : 0,
   );
   const [isGroup, setIsGroup] = useState(
-    myChannel ? myChannel.type === CHANNEL_TYPES.CHANNEL_TYPE_GROUP : false,
+    myChannel ? myChannel.type === channel_types.GROUP : false,
   );
 
   // create QRCode from channel data
   useEffect(() => {
-    if (myChannel) {
+    if (myChannel && myChannel.state === channel_states.OPEN) {
       console.log(
         `Creating QRCode: profileId ${myChannel.myProfileId} channel ${myChannel.id}`,
       );
@@ -128,11 +129,7 @@ export const MyCodeScreen = () => {
       if (!navigation.isFocused()) return;
       if (!myChannel) {
         dispatch(
-          createChannel(
-            isGroup
-              ? CHANNEL_TYPES.CHANNEL_TYPE_GROUP
-              : CHANNEL_TYPES.CHANNEL_TYPE_SINGLE,
-          ),
+          createChannel(isGroup ? channel_types.GROUP : channel_types.SINGLE),
         );
       } else {
         setCountdown(myChannel.ttl - (Date.now() - myChannel.timestamp));
@@ -141,7 +138,7 @@ export const MyCodeScreen = () => {
   );
 
   useEffect(() => {
-    if (myChannel && myChannel.type === CHANNEL_TYPES.CHANNEL_TYPE_SINGLE) {
+    if (myChannel && myChannel.type === channel_types.SINGLE) {
       // If i created a 1:1 channel and there is a pending connection in UNCONFIRMED state -> directly open PreviewConnectionScreen.
       // there should be only one connection, but if multiple people scanned my code, the first one wins
       for (const pc of pendingChannelConnections) {
@@ -161,7 +158,10 @@ export const MyCodeScreen = () => {
     }
     // toggle switch
     setIsGroup((previousState) => !previousState);
-    // new channel will be created through useFocusEffect
+    // create new channel. Invert `isGroup` as local state is not yet updated!
+    dispatch(
+      createChannel(!isGroup ? channel_types.GROUP : channel_types.SINGLE),
+    );
   };
 
   const displayTime = () => {
@@ -283,11 +283,37 @@ export const MyCodeScreen = () => {
             />
           </View>
         </View>
-        <View style={styles.qrCodeContainer} testID="QRCodeContainer">
-          {qrsvg ? renderTimer() : <View />}
-          {qrsvg ? renderQrCode() : renderSpinner()}
-          {qrsvg ? renderCopyQr() : <View />}
-        </View>
+        {myChannel?.state === channel_states.OPEN ? (
+          <View style={styles.qrCodeContainer} testID="QRCodeContainer">
+            {qrsvg ? renderTimer() : <View />}
+            {qrsvg ? renderQrCode() : renderSpinner()}
+            {qrsvg ? renderCopyQr() : <View />}
+          </View>
+        ) : (
+          <View style={styles.qrCodeContainer} testID="QRCodeContainer">
+            <Text>Your channel is closed!</Text>
+            <TouchableOpacity
+              testID="resetQrButton"
+              style={styles.copyButton}
+              onPress={() => {
+                setCountdown(0);
+                dispatch(
+                  createChannel(
+                    isGroup ? channel_types.GROUP : channel_types.SINGLE,
+                  ),
+                );
+              }}
+            >
+              <Material
+                size={24}
+                name="refresh"
+                color="#333"
+                style={{ width: 24, height: 24 }}
+              />
+              <Text style={styles.copyText}> Create new channel</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         <Text>
           There are {pendingChannelConnections.length} pending connections
         </Text>

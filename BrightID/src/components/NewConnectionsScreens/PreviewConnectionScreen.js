@@ -26,7 +26,7 @@ import {
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import { confirmPendingConnectionThunk } from '@/components/NewConnectionsScreens/actions/pendingConnectionThunks';
 import {
-  CHANNEL_TYPES,
+  channel_types,
   selectChannelById,
 } from '@/components/NewConnectionsScreens/channelSlice';
 import api from '../../Api/BrightId';
@@ -65,7 +65,7 @@ export const PreviewConnectionScreen = () => {
   // TODO: Why is this wrapped in useCallback??
   const reject = useCallback(() => {
     dispatch(rejectPendingConnection(pendingConnection.id));
-    if (channel?.type === CHANNEL_TYPES.CHANNEL_TYPE_GROUP) {
+    if (channel?.type === channel_types.GROUP) {
       navigation.goBack();
     } else {
       navigation.navigate('Home');
@@ -75,7 +75,7 @@ export const PreviewConnectionScreen = () => {
 
   const handleConfirmation = async () => {
     dispatch(confirmPendingConnectionThunk(pendingConnection.id));
-    if (channel?.type === CHANNEL_TYPES.CHANNEL_TYPE_GROUP) {
+    if (channel?.type === channel_types.GROUP) {
       navigation.goBack();
     } else {
       navigation.navigate('ConnectSuccess');

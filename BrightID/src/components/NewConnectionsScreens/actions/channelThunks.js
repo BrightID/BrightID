@@ -1,7 +1,8 @@
 // @flow
 import {
   addChannel,
-  CHANNEL_TYPES,
+  channel_types,
+  closeChannel,
   removeChannel,
   selectChannelById,
   setMyChannel,
@@ -11,7 +12,11 @@ import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
 import { postProfileToChannel } from '@/utils/profile';
 import { generateChannelData } from '@/utils/channels';
-import { MIN_CHANNEL_JOIN_TTL, PROFILE_POLL_INTERVAL } from '@/utils/constants';
+import {
+  CHANNEL_TTL,
+  MIN_CHANNEL_JOIN_TTL,
+  PROFILE_POLL_INTERVAL,
+} from '@/utils/constants';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   newPendingConnection,
@@ -44,11 +49,18 @@ export const createChannel = (channelType: number) => async (
 export const joinChannel = (channel: Channel) => (dispatch: dispatch) => {
   // check ttl of channel
   const expirationTimestamp = channel.timestamp + channel.ttl;
-  const ttl = expirationTimestamp - Date.now();
+  let ttl = expirationTimestamp - Date.now();
   if (ttl < MIN_CHANNEL_JOIN_TTL) {
     console.log(`Channel ${channel.id} ttl ${ttl} too low. Aborting join.`);
     return;
   }
+  if (ttl > CHANNEL_TTL) {
+    console.log(
+      `WARNING - TTL ${ttl} of ${channel.id} is too high. Limiting to ${CHANNEL_TTL}.`,
+    );
+    ttl = CHANNEL_TTL;
+  }
+
   // Start timer to expire channel
   channel.timeoutId = setTimeout(() => {
     console.log(`timer expired for channel ${channel.id}`);
@@ -58,7 +70,7 @@ export const joinChannel = (channel: Channel) => (dispatch: dispatch) => {
   // add channel to store
   dispatch(addChannel(channel));
 
-  if (channel.type === CHANNEL_TYPES.CHANNEL_TYPE_GROUP) {
+  if (channel.type === channel_types.GROUP) {
     // TODO Decide: Require user confirmation before uploading profile to group channel?
     // upload my profile to channel
     dispatch(encryptAndUploadProfileToChannel(channel.id));
@@ -82,7 +94,7 @@ export const leaveChannel = (channelId: string) => (
   if (channel) {
     clearTimeout(channel.timeoutId);
     dispatch(unsubscribeFromConnectionRequests(channelId));
-    dispatch(removeChannel(channelId));
+    dispatch(closeChannel(channelId));
   }
 };
 

@@ -1,6 +1,6 @@
 // @flow
 import {
-  CHANNEL_TYPES,
+  channel_types,
   selectChannelById,
 } from '@/components/NewConnectionsScreens/channelSlice';
 import { obtainKeys } from '@/utils/keychain';
@@ -128,7 +128,7 @@ export const confirmPendingConnectionThunk = (id: string) => async (
   dispatch(addConnection(connectionData));
   dispatch(confirmPendingConnection(connection.id));
 
-  if (channel.type === CHANNEL_TYPES.CHANNEL_TYPE_SINGLE) {
+  if (channel.type === channel_types.SINGLE) {
     // Connection is established, so the 1:1 channel can be left
     dispatch(leaveChannel(channel.id));
   }
