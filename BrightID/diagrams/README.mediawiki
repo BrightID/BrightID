@@ -42,8 +42,7 @@ Multiple participants can communicate and connect simultaneously over the same c
 Assming a meeting scenario with multiple participants:
 * Alice initiates the connection process by creating a channel.
 * The channel data is shared via QR-Code with all meeting participants.
-* All participants scan the qrcode of Alice, upload their profile encrypted
-with the channel's aesKey and download all available profiles from the profile server.
+* All participants scan the qrcode of Alice, upload their profile encrypted with the channel's aesKey and download all available profiles from the profile server.
 
 Finding connection candidates:
 [[File:connecting-find-connections.mmd.svg||finding connection candidates]]
