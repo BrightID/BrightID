@@ -2,6 +2,7 @@
 
 import {
   ADD_LINK,
+  RESET_STORE,
 } from '@/actions';
 import { find, propEq } from 'ramda';
 
@@ -20,6 +21,9 @@ export const reducer = (state: LinksState = initialState, action: action) => {
         ...state,
         links,
       };
+    }
+    case RESET_STORE: {
+      return { ...initialState };
     }
     default: {
       return state;

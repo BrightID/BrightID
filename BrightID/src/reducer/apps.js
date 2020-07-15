@@ -1,6 +1,9 @@
 // @flow
 
-import { SET_APPS } from '@/actions';
+import {
+  SET_APPS,
+  RESET_STORE
+} from '@/actions';
 import { find, propEq } from 'ramda';
 
 const initialState = {
@@ -14,6 +17,9 @@ export const reducer = (state: AppsState = initialState, action: action) => {
         ...state,
         apps: action.apps,
       };
+    }
+    case RESET_STORE: {
+      return { ...initialState };
     }
     default: {
       return state;
