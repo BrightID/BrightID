@@ -6,19 +6,15 @@ sequenceDiagram
     autonumber
 	participant A as Group Connection Initiator
     participant P as ProfileService
-    participant N as NodeAPI
     participant B as all meeting participants
-    A->>A: create AESKey, profileID, channelID, notificationToken
+    A->>A: create Channel data
+    A->>P: upload profile
     A->>A: create QRCode
-	    A->>P: upload profile with notificationToken
     B->>A: scan QRCode
     activate A
-    A->>B: AESkey, channelID
+    A->>B: Channel data
     deactivate A
-    activate B
-    B->>B: Generate own profileID, notifikationToken
-    deactivate B
-    B->>P: Upload own profile with notificationToken to channel
+    B->>P: Upload own profile to channel
     B->>+P: request list of profileIDs in channel
     P->>-B: list of profileIDs
     loop for each profileID

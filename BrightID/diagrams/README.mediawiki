@@ -1,15 +1,20 @@
 = Connecting with peers =
 
+=== Required entities ===
+'''User''' - A brightID user
+
+'''Profile Service''' - A service that provides the channels for exchanging profile data and connection requests.
+
+'''Node API''' - The brightID API is used for actually recording connections on the brightID graph and IDChain
+
 === Required data ===
 '''Channel'''
-In order to exchange profile data, first a channel needs to be established. A channel consists of:
+In order to exchange profile data, first a shared channel needs to be established. A channel is defined through:
 * id: A unique identifier for this channel
 * profileId: The profileId of the channel initiator
-* ipAddress: The IP-Address of the nodeAPI server that should be used to exchange data
 * aesKey: The encryption key used for the data exchanged through the channel
-* ttl: Time-to-live for this channel (seconds)
 
-The channel is created by the person initating the connection process. The channel data is shared peer-to-peer via QR-Code.
+The channel is created by the person initiating the connection process. The channel data is shared peer-to-peer via QR-Code.
 
 '''Profile'''
 Once a channel is established, user can share their profile data in the channel. Profile data consists of:
@@ -18,32 +23,24 @@ Once a channel is established, user can share their profile data in the channel.
 ** id: The users BrightID
 ** name
 ** photo
-** score
-** timestamp
-** signedMessage [optional]
-** push_token (token that grants the permission to send push_notifications to the user)
 
-=== Required entities ===
-'''User''' - A brightID user
+'''Connection request'''
+In order to establish a connection a "Add Connection" operation needs to be cryptographically signed by both peers
+and sent to the Node API. One user starts this process by sending a connection request to the other user.
+The connection request contains:
+* profileId of connection initiator
+* signed "Add Connection" message
+If the receiving user agrees to make the connection, he also signs the "Add connection" message and sends it to the Node
+API.
 
-'''Profile Service''' - A service that hosts the channels for exchanging profile data. Channels and profiles are short-lived objects kept only in memory. They expire after 15 minutes.
-
-'''Node API''' - The brightID API is used for actually recording connections on the brightID graph and IDChain
-
-== One-to-one connection ==
-When Alice and Bob want to connect, one of them has to create a QR-Code that gets scanned by the other party.
-
-Sequence diagram:
-[[File:connecting_one-one.mmd.svg||One-to-one connection]]
-
-== Group connection ==
-To streamline the connection process, multiple participants can communicate and connect simultaneously over the same channel.
+== Connection sequence ==
+Multiple participants can communicate and connect simultaneously over the same channel.
 Assming a meeting scenario with multiple participants: Alice initiates the connection process by creating a channel. The channel
 data is shared via QR-Code with all meeting participants. All participants scan the qrcode of Alice, upload their profile encrypted
 with the channel's aesKey and download all available profiles from the profile server.
 
-Sequence diagram to find group connections:
-[[File:connecting-group-find-connections.mmd.svg||starting group connection]]
+Sequence diagram to find connection candidates:
+[[File:connecting-find-connections.mmd.svg||finding connection candidates]]
 
 For each peer profile obtained through the channel, an entry is created in the pending connections queue of the client.
 The user reviews and confirms/rejects these pending connections individually.
@@ -53,22 +50,24 @@ Note that there are two types of entries in the connection queue:
 '''Initiator type''':
 
 Peers obtained through getting a list of profiles from channel service are in a 'vanilla' state. In order to start the connection process with
-these peers, the user has to '''initiate''' the connection by cryptographically signing a connection intent message and sending it to the peer
-via push notification.
+these peers, the user has to '''initiate''' the connection by sending a connection request to the candidate.
+
+A connection request contains:
+ - The profileId of the sender
+ - connection intent message, cryptographically signed by the sender
 
 '''Responder type'''
-If a user received the peer entry via push notification, the connection process is already initiated by the peer. The profile contains the signed
+If a user received the peer entry, the connection process is already initiated by the peer. The profile contains the signed
 connection intent message by the peer. In order to finalize the connection, the user has to sign the same connection intent message with his own
 credentials and submit the connection request to the Node API.
 
 Sequence diagram to establish connections:
-[[File:connecting-group-make-connections.mmd.svg||establishing connections]]
-
+[[File:connecting-make-connections.mmd.svg||establishing connections]]
 
 = States and transitions =
 === Pending Connection ===
-A connection starts with obtaining a profileID, either directyl via scanning a QRCode, by getting a list of profiles from a channel or by receiving a push notification.
+A connection starts with obtaining a profileID, either directyl via scanning a QRCode, by getting a list of profiles
+from a channel or by polling for connection requests.
 Before the user is asked for confirmation, the profile data needs to be downloaded.
 When profile data is available, the user can confirm or reject a connection.
-If a connection is confirmed by the user the last state is to be confirmed on IDChain.
-[[File:connection_states.mmd.svg||Connection States]]
+[[File:pendingConnection_states.mmd.svg||Connection States]]
