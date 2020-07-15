@@ -37,7 +37,7 @@ export const channelsAdapter = createEntityAdapter();
 // By default, `createEntityAdapter` gives you `{ ids: [], entities: {} }`.
 // If you want to track 'loading' or other keys, you would initialize them here:
 // `getInitialState({ loading: false, activeRequestId: null })`
-const initialState = channelsAdapter.getInitialState({
+const initialState: ChannelsState = channelsAdapter.getInitialState({
   myChannelId: '',
 });
 
@@ -84,9 +84,6 @@ export const {
   selectById: selectChannelById,
   selectAll: selectAllChannels,
 } = channelsAdapter.getSelectors((state) => state.channels);
-// custom selector
-export const selectOpenChannels = (state) =>
-  state.entities.filter((channel) => channel.state === channel_states.OPEN);
 
 // Export reducer
 export default channelSlice.reducer;

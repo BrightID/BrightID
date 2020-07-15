@@ -73,7 +73,7 @@ export const newPendingConnection = createAsyncThunk(
 // By default, `createEntityAdapter` gives you `{ ids: [], entities: {} }`.
 // If you want to track 'loading' or other keys, you would initialize them here:
 // `getInitialState({ loading: false, activeRequestId: null })`
-const initialState = pendingConnectionsAdapter.getInitialState();
+const initialState: PendingConnectionsState = pendingConnectionsAdapter.getInitialState();
 
 const pendingConnectionsSlice = createSlice({
   name: 'pendingConnections',

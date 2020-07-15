@@ -17,9 +17,11 @@ declare type Props = State & navigation & dispatch;
 
 declare type State = {
   apps: AppState,
+  channels: ChannelsState,
   connections: ConnectionsState,
   groups: GroupsState,
   operations: OperationsState,
+  pendingConnections: PendingConnectionsState,
   recoveryData: RecoveryData,
   user: UserState,
 };
@@ -34,6 +36,29 @@ declare type AppInfo = {
   logoFile: string,
   verified: boolean,
   dateAdded: number,
+};
+
+declare type ChannelsState = {
+  myChannelId: string,
+  ids: string[],
+  entities: Channel[],
+};
+
+declare type ChannelState = $Keys<typeof channel_states>;
+declare type ChannelType = $Keys<typeof channel_types>;
+
+declare type Channel = {
+  id: string,
+  initiatorProfileId: string,
+  myProfileId: string,
+  ipAddress: string,
+  aesKey: string,
+  timestamp: number,
+  ttl: number,
+  pollTimerId?: IntervalID,
+  timeoutId?: TimeoutID,
+  type: ChannelType,
+  state: ChannelState,
 };
 
 declare type ConnectionsState = {
@@ -113,6 +138,24 @@ declare type operation = {
   [val: string]: string,
 };
 
+declare type PendingConnectionsState = {
+  ids: string[],
+  entities: PendingConnection[],
+};
+
+declare type PendingConnection = {
+  id: string,
+  channelId: string,
+  state: string,
+  brightId?: string,
+  name?: string,
+  photo?: string,
+  notificationToken?: string,
+  timestamp?: number,
+  signedMessage?: string,
+  score?: number,
+};
+
 declare type RecoveryData = {
   publicKey: string,
   secretKey: string,
@@ -154,34 +197,4 @@ declare type Uint8Obj = {
 declare type action = {
   type: string,
   [key: string]: any,
-};
-
-declare type ChannelState = $Keys<typeof channel_states>;
-declare type ChannelType = $Keys<typeof channel_types>;
-
-declare type Channel = {
-  id: string,
-  initiatorProfileId: string,
-  myProfileId: string,
-  ipAddress: string,
-  aesKey: string,
-  timestamp: number,
-  ttl: number,
-  pollTimerId?: IntervalID,
-  timeoutId?: TimeoutID,
-  type: ChannelType,
-  state: ChannelState,
-};
-
-declare type PendingConnection = {
-  id: string,
-  channelId: string,
-  state: string,
-  brightId?: string,
-  name?: string,
-  photo?: string,
-  notificationToken?: string,
-  timestamp?: number,
-  signedMessage?: string,
-  score?: number,
 };

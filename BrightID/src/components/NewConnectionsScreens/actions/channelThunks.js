@@ -3,7 +3,6 @@ import {
   addChannel,
   channel_types,
   closeChannel,
-  removeChannel,
   selectChannelById,
   setMyChannel,
   updateChannel,
