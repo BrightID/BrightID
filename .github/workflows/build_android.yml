@@ -1,0 +1,26 @@
+name: Build Android
+on: [push, pull_request]
+
+jobs:
+  build_apk:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: BrightID
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          yarn install
+          echo "::add-path::/home/runner/work/BrightID/BrightID/BrightID/node_modules/.bin"
+      - name: build Android
+        run: |
+          touch ./android/app/src/main/assets/index.android.bundle
+          react-native bundle --dev false --platform android --entry-file index.js --bundle-output ./android/app/src/main/assets/index.android.bundle --assets-dest ./android/app/src/main/res/
+          cd android && ./gradlew assembleDebug && cd ..
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: brightId-debug.apk
+          path: /home/runner/work/BrightID/BrightID/BrightID/android/app/build/outputs/apk/debug/app-debug.apk
