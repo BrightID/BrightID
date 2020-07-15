@@ -55,12 +55,8 @@ Note that there can exist two types of entries in the pending connection queue:
 
 '''Initiator type''':
 Pending connections obtained through getting a list of profiles from channel service are in a 'vanilla' state. In order to start the
-connection process with these peers, the user has to '''initiate''' the connection by sending a connection request to
+connection process with these peers, the user has to '''initiate''' the connection by sending a '''connection request''' to
 the candidate.
-
-A connection request contains:
- - The profileId of the sender
- - connection intent message, cryptographically signed by the sender
 
 '''Responder type'''
 Pending connections obtained by receiving a connection request are already initiated. The connection request
