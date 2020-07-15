@@ -53,12 +53,14 @@ The user reviews and confirms/rejects these pending connections individually.
 
 Note that there can exist two types of entries in the pending connection queue:
 
-'''Initiator type''':
+=== Initiator type ===
+
 Pending connections obtained through getting a list of profiles from channel service are in a 'vanilla' state. In order to start the
 connection process with these peers, the user has to '''initiate''' the connection by sending a '''connection request''' to
 the candidate.
 
-'''Responder type'''
+=== Responder type ===
+
 Pending connections obtained by receiving a connection request are already initiated. The connection request
 contains the signed connection intent message by the peer. In order to finalize the connection, the user has to sign the
 same connection intent message with his own credentials and submit the connection request to the Node API.
