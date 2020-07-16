@@ -42,7 +42,7 @@ export const pollOperations = async () => {
   } = store.getState();
   try {
     for (const op of operations) {
-      const { state, result } = await api.getOperationState(op._key);
+      const { state, result } = await api.getOperationState(op.hash);
 
       // stop polling for op if trace time is expired
       let removeOp = op.timestamp + time_fudge < Date.now();
@@ -50,7 +50,7 @@ export const pollOperations = async () => {
       switch (state) {
         case 'unknown':
           // Op not found on server. It might appear in a future poll cycle, so do nothing.
-          // console.log(`operation ${op.name} (${op._key}) unknown on server`);
+          console.log(`operation ${op.name} (${op.hash}) unknown on server`);
           break;
         case 'init':
         case 'sent':
@@ -63,12 +63,12 @@ export const pollOperations = async () => {
           handleOpUpdate(store, op, state, result);
           break;
         default:
-        // console.log(
-        //   `Op ${op.name} (${op._key}) has invalid state '${state}'!`,
-        // );
+          console.log(
+            `Op ${op.name} (${op.hash}) has invalid state '${state}'!`,
+          );
       }
       if (removeOp) {
-        store.dispatch(removeOperation(op._key));
+        store.dispatch(removeOperation(op.hash));
       }
     }
   } catch (err) {
