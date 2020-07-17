@@ -69,11 +69,12 @@ export const addNewConnection = () => async (
       const signedMessage = uInt8ArrayToB64(
         nacl.sign.detached(strToUint8Array(message), secretKey),
       );
+      op.hash = hash(message);
       dispatch(encryptAndUploadProfile(peerQrData, timestamp, signedMessage));
 
       // Listen for add connection operation to be completed by other party
       console.log(
-        `Responder opMessage: ${message} - hash: ${hash(message)}`,
+        `Responder opMessage: ${message} - hash: ${op.hash}`,
       );
       dispatch(addOperation(op));
     }
