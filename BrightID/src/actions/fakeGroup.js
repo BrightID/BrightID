@@ -30,12 +30,11 @@ export const fakeJoinGroup = ({
   };
   const message = stringify(op);
   op.sig = uInt8ArrayToB64(nacl.sign.detached(strToUint8Array(message), sk));
-  op.hash = hash(message);
   console.log('joining', op);
   return api.api
     .post(`/operations`, op)
     .then((response) => ({
-      success: response.status === 204,
+      success: response.status === 200,
       ok: response.ok,
       status: response.status,
       data: response.data,

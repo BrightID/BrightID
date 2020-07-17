@@ -41,10 +41,11 @@ class NodeApi {
     return `${this.baseUrl}/brightid/v5`;
   }
 
-  static checkHash(response, op) {
-    if (response.data.data.hash != op.hash) {
+  static checkHash(response, message) {
+    if (response.data.data.hash != hash(message)) {
       throw new Error('Invalid operation hash returned from server');
     }
+    return response.data.data.hash;
   }
 
   static throwOnError(response) {
@@ -80,10 +81,9 @@ class NodeApi {
     const message = stringify(op);
     op.sig1 = sig1;
     op.sig2 = sig2;
-    op.hash = hash(message);
     let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
-    NodeApi.checkHash(res, op);
+    op.hash = NodeApi.checkHash(res, message);
     console.log(`Initiator opMessage: ${message} - hash: ${hash(message)}`);
     NodeApi.setOperation(op);
   }
@@ -106,10 +106,9 @@ class NodeApi {
     op.sig1 = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    op.hash = hash(message);
     let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
-    NodeApi.checkHash(res, op);
+    op.hash = NodeApi.checkHash(res, message);
     NodeApi.setOperation(op);
   }
 
@@ -145,10 +144,9 @@ class NodeApi {
     op.sig1 = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    op.hash = hash(message);
     let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
-    NodeApi.checkHash(res, op);
+    op.hash = NodeApi.checkHash(res, message);
     NodeApi.setOperation(op);
   }
 
@@ -171,10 +169,9 @@ class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    op.hash = hash(message);
     let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
-    NodeApi.checkHash(res, op);
+    op.hash = NodeApi.checkHash(res, message);
     NodeApi.setOperation(op);
   }
 
@@ -197,9 +194,8 @@ class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    op.hash = hash(message);
     let res = await this.api.post(`/operations`, op);
-    NodeApi.checkHash(res, op);
+    op.hash = NodeApi.checkHash(res, message);
     NodeApi.throwOnError(res);
   }
 
@@ -220,10 +216,9 @@ class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    op.hash = hash(message);
     let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
-    NodeApi.checkHash(res, op);
+    op.hash = NodeApi.checkHash(res, message);
     NodeApi.setOperation(op);
   }
 
@@ -244,10 +239,9 @@ class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    op.hash = hash(message);
     let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
-    NodeApi.checkHash(res, op);
+    op.hash = NodeApi.checkHash(res, message);
     NodeApi.setOperation(op);
   }
 
@@ -268,11 +262,10 @@ class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    op.hash = hash(message);
     let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
-    NodeApi.checkHash(res, op);
-    NodeApi.setOperation(op);
+    op.hash = NodeApi.checkHash(res, message);
+    BrightId.setOperation(op);
   }
 
   async setTrusted(trusted: string[]) {
@@ -292,10 +285,9 @@ class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    op.hash = hash(message);
     let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
-    NodeApi.checkHash(res, op);
+    op.hash = NodeApi.checkHash(res, message);
     NodeApi.setOperation(op);
   }
 
@@ -317,14 +309,13 @@ class NodeApi {
     };
 
     const message = stringify(op);
-    op.hash = hash(message);
-    op.id1 = params.id1;
-    op.id2 = params.id2;
-    op.sig1 = params.sig1;
-    op.sig2 = params.sig2;
+    op.id1 = id1;
+    op.id2 = id2;
+    op.sig1 = sig1;
+    op.sig2 = sig2;
     let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
-    NodeApi.checkHash(res, op);
+    op.hash = NodeApi.checkHash(res, message);
     NodeApi.setOperation(op);
   }
 
@@ -346,10 +337,9 @@ class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    op.hash = hash(message);
     let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
-    NodeApi.checkHash(res, op);
+    op.hash = NodeApi.checkHash(res, message);
     NodeApi.setOperation(op);
   }
 
