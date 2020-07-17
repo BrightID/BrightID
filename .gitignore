@@ -66,3 +66,4 @@ BrightID/ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID.release.xccon
 BrightID/ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID.debug.xcconfig
 BrightID/ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID-acknowledgements.markdown
 BrightID/yarn.lock
+/BrightID/flow-typed/npm/
