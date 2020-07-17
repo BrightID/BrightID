@@ -2,24 +2,16 @@
 
 import nacl from 'tweetnacl';
 import RNFetchBlob from 'rn-fetch-blob';
-import { Alert, NativeModules } from 'react-native';
+import { Alert } from 'react-native';
 import {
   strToUint8Array,
   uInt8ArrayToB64,
   b64ToUrlSafeB64,
+  randomKey,
 } from '@/utils/encoding';
 import { navigate } from '@/NavigationService';
 import { names } from '../utils/fakeNames';
 import { setConnectUserData } from './index';
-
-const { RNRandomBytes } = NativeModules;
-
-const randomKey = (size: number) =>
-  new Promise((resolve, reject) => {
-    RNRandomBytes.randomBytes(size, (err, bytes) => {
-      err ? reject(err) : resolve(bytes);
-    });
-  });
 
 export const addFakeConnection = () => async (
   dispatch: dispatch,
