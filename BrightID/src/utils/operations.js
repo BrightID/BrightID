@@ -15,10 +15,9 @@ const handleOpUpdate = (store, op, state, result) => {
         addLink({
           context: op.context,
           contextId: op.contextId,
-          state,
+          state: state,
         }),
       );
-      emitter.emit('setAppsStatusMessage');
       if (state === 'applied') {
         Alert.alert(
           'Success',

@@ -17,8 +17,8 @@ declare type navigation = NavigationScreenProp;
 declare type Props = State & navigation & dispatch;
 
 declare type State = {
-  apps: AppState,
   channels: ChannelsState,
+  apps: AppsState,
   connections: ConnectionsState,
   groups: GroupsState,
   notifications: NotificationsState,
@@ -30,14 +30,25 @@ declare type State = {
 
 declare type AppsState = {
   apps: AppInfo[],
+  links: LinkInfo[],
 };
 
 declare type AppInfo = {
+  id: string,
   name: string,
   url: string,
-  logoFile: string,
-  verified: boolean,
-  dateAdded: number,
+  logo: string,
+  context: string,
+  verification: string,
+  url: string,
+  unusedSponsorships: number,
+  assignedSponsorships: number,
+};
+
+declare type LinkInfo = {
+  context: string,
+  contextId: string,
+  state: string,
 };
 
 declare type ChannelsState = {

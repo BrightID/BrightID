@@ -16,20 +16,13 @@ import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
 import emitter from '@/emitter';
 import store from '@/store';
 import AppCard from './AppCard';
+import api from '@/Api/BrightId';
 import { handleAppContext } from './model';
-
-type State = {
-  statusMessage: string,
-  waiting: boolean,
-};
+import { find, propEq } from 'ramda';
 
 export class AppsScreen extends React.Component<Prop, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      statusMessage: '',
-      waiting: false,
-    };
   }
 
   componentDidMount() {
@@ -37,20 +30,28 @@ export class AppsScreen extends React.Component<Prop, State> {
     navigation.addListener('focus', async () => {
       this.handleDeepLink();
       Linking.addEventListener('url', this.handleDeepLink);
-      emitter.on('setAppsStatusMessage', this.setAppsStatusMessage);
     });
     navigation.addListener('blur', async () => {
       Linking.removeEventListener('url', this.handleDeepLink);
-      emitter.off('setAppsStatusMessage', this.setAppsStatusMessage);
     });
-    this.setAppsStatusMessage();
   }
+
+  isValidContext = (context) => {
+    const { apps } = this.props;
+    const app = find(propEq('context', context))(apps);
+    return app !== undefined;
+  };
 
   handleDeepLink = () => {
     const { route, navigation } = this.props;
     console.log('params', route.params);
     if (route.params?.context) {
-      handleAppContext(route.params);
+      const { context } = route.params;
+      if (this.isValidContext(context)) {
+        handleAppContext(route.params);
+      } else {
+        Alert.alert('Failed', `${context} is not a valid context!`);
+      }
     }
     // reset params
     navigation.setParams({
@@ -60,32 +61,20 @@ export class AppsScreen extends React.Component<Prop, State> {
     });
   };
 
-  setAppsStatusMessage = () => {
-    const { links } = store.getState().links;
-    const { isSponsored } = this.props;
-    let context = null;
-    links.forEach((link) => {
-      if (link.state == 'pending') {
-        context = link.context;
-      }
-    });
-    let msg = '';
-    let waiting = false;
-    if (context) {
-      msg = `Linking your account in ${context}\n to your BrightID ...`;
+  statusBar = () => {
+    const { isSponsored, links } = this.props;
+    const pendingLink = find(propEq('state', 'pending'))(links);
+    let msg, waiting;
+    if (pendingLink) {
+      msg = `Linking your account in ${pendingLink.context}\n to your BrightID ...`;
       waiting = true;
     } else if (!isSponsored) {
       msg = "You're not sponsored.\nPlease find an app below to sponsor you.";
+      waiting = false;
+    } else {
+      msg = '';
+      waiting = false;
     }
-    console.log('apps status:', msg);
-    this.setState({
-      statusMessage: msg,
-      waiting,
-    });
-  };
-
-  statusBar = () => {
-    const { statusMessage: msg, waiting } = this.state;
     return msg.length > 0 ? (
       <View style={styles.statusContainer}>
         <Text style={styles.statusMessage}>{msg}</Text>
@@ -97,7 +86,7 @@ export class AppsScreen extends React.Component<Prop, State> {
   };
 
   isLinked = (app) => {
-    const { links } = store.getState().links;
+    const { links } = this.props;
     let linked = false;
     links.forEach((link) => {
       if (link.state == 'applied' && link.context === app.context) {
@@ -108,7 +97,7 @@ export class AppsScreen extends React.Component<Prop, State> {
   };
 
   render() {
-    const { apps } = store.getState().apps;
+    const { apps } = this.props;
     return (
       <>
         <StatusBar
@@ -173,4 +162,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ apps, user }) => ({ ...apps, ...user }))(AppsScreen);
+export default connect(({ apps }) => ({ ...apps }))(AppsScreen);

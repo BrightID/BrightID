@@ -2,6 +2,7 @@
 import { bootstrapAndUpgrade } from './versions';
 import { resetOperations } from './actions';
 import fetchUserInfo from './actions/fetchUserInfo';
+import { fetchApps } from '@/actions/apps';
 import { store } from './store';
 
 // happens inside of the loading screen
@@ -20,7 +21,7 @@ export const bootstrap = async () => {
       publicKey = store.getState().user.publicKey;
       console.log('secondBootstrap', publicKey);
     }
-
+    store.dispatch(fetchApps());
     // once everything is set up
     // this.props.navigation.navigate(publicKey ? 'App' : 'Onboarding');
   } catch (err) {

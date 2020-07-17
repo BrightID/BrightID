@@ -20,7 +20,6 @@ import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
 import fetchUserInfo from '@/actions/fetchUserInfo';
-import { fetchApps } from '@/actions/apps';
 import verificationSticker from '@/static/verification-sticker.svg';
 import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
@@ -52,21 +51,20 @@ export const HomeScreen = (props) => {
   const verified = useMemo(() => verifications.includes('BrightID'), [
     verifications,
   ]);
-
-  const apps = useSelector((state) => state.apps.apps);
-  const links = useSelector((state) => state.links.links);
-  linkedAppsCount = apps.filter((app) => {
-    return (
-      links.filter((link) => {
-        return app.context == link.context && link.state == 'applied';
-      }).length > 0
-    );
-  }).length;
+  const linkedAppsCount = useSelector((state) => {
+    const { apps, links } = state.apps;
+    return apps.filter((app) => {
+      return (
+        links.filter((link) => {
+          return app.context == link.context && link.state == 'applied';
+        }).length > 0
+      );
+    }).length;
+  });
 
   useFocusEffect(
     useCallback(() => {
       dispatch(fetchUserInfo());
-      dispatch(fetchApps());
       retrieveImage(photoFilename).then(setProfilePhoto);
     }, [dispatch, photoFilename]),
   );

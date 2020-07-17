@@ -2,16 +2,28 @@
 
 import {
   SET_APPS,
-  RESET_STORE
+  ADD_LINK,
+  RESET_STORE,
 } from '@/actions';
 import { find, propEq } from 'ramda';
 
 const initialState = {
   apps: [],
+  links: [],
 };
 
 export const reducer = (state: AppsState = initialState, action: action) => {
   switch (action.type) {
+    case ADD_LINK: {
+      const removeExisting = ({ context }) => context !== action.link.context;
+      const links: LinkInfo[] = state.links
+        .filter(removeExisting)
+        .concat(action.link);
+      return {
+        ...state,
+        links,
+      };
+    }
     case SET_APPS: {
       return {
         ...state,
@@ -26,7 +38,5 @@ export const reducer = (state: AppsState = initialState, action: action) => {
     }
   }
 };
-
-// unnecessary for now, but when the app gets larger, combine reducers here
 
 export default reducer;
