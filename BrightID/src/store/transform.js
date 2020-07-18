@@ -27,15 +27,3 @@ export const groupsTransformer = createTransform(
   },
   { whitelist: ['groups'] },
 );
-
-/* clear my QRCode when persisting */
-export const qrDataTransformer = createTransform(
-  // transform state on its way to being serialized and persisted.
-  (inboundState, key) => {
-    return { ...inboundState, myQrData: undefined };
-  },
-  (outboundState, key) => {
-    return outboundState;
-  },
-  { whitelist: ['connectQrData'] },
-);
