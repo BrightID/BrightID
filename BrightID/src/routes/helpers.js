@@ -7,7 +7,7 @@ import backArrow from '@/static/back_arrow.svg';
 export const headerTitleStyle = {
   fontFamily: 'Poppins',
   fontWeight: 'bold',
-  fontSize: DEVICE_LARGE ? 20 : 17,
+  fontSize: DEVICE_LARGE ? 20 : 18,
   color: '#fff',
 };
 

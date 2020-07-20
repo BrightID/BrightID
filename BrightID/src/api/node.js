@@ -235,8 +235,8 @@ class NodeApi {
     };
 
     let res = await this.api.put(`/operations/${op._key}`, op);
-    BrightId.throwOnError(res);
-    BrightId.setOperation(op);
+    NodeApi.throwOnError(res);
+    NodeApi.setOperation(op);
   }
 
   async deleteGroup(group: string) {

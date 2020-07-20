@@ -10,7 +10,7 @@ import groups from '@/static/add_group.svg';
 import connections from '@/static/add_person.svg';
 import misc from '@/static/trusted_connections.svg';
 import { setActiveNotification } from '@/actions';
-import { DEVICE_ANDROID } from '@/utils/constants';
+import { DEVICE_ANDROID, DEVICE_LARGE } from '@/utils/constants';
 
 /* notification types: 
 @type groups
@@ -77,7 +77,12 @@ export const NotificationBanner = () => {
       onTap={_onTap}
       onClose={_onClose}
       renderImage={() => (
-        <SvgXml style={styles.icon} xml={icon} width={24} height={24} />
+        <SvgXml
+          style={styles.icon}
+          xml={icon}
+          width={DEVICE_LARGE ? 24 : 20}
+          height={DEVICE_LARGE ? 24 : 20}
+        />
       )}
       panResponderEnabled={activeNotification?.type !== 'newConnection'}
     />
@@ -87,14 +92,14 @@ export const NotificationBanner = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#AFFDD0',
-    height: 142,
+    height: DEVICE_LARGE ? 142 : 98,
   },
   title: {
     fontFamily: 'Poppins',
     fontWeight: '500',
     marginLeft: 20,
     color: '#000',
-    fontSize: 13,
+    fontSize: DEVICE_LARGE ? 13 : 12,
   },
   icon: {
     marginLeft: 35,

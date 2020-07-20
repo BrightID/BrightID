@@ -1,6 +1,6 @@
 // @flow
 import { b64ToUint8Array, b64ToUrlSafeB64, randomKey } from '@/utils/encoding';
-import api from '@/Api/BrightId';
+import api from '@/api/node';
 import { CHANNEL_TTL } from '@/utils/constants';
 import { Buffer } from 'buffer';
 import {
