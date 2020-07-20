@@ -25,6 +25,7 @@
     "@react-navigation/bottom-tabs": "^5.3.3",
     "@react-navigation/native": "^5.7.0",
     "@react-navigation/stack": "^5.7.0",
+    "@reduxjs/toolkit": "^1.4.0",
     "apisauce": "^1.1.1",
     "base64-js": "^1.3.0",
     "buffer": "^5.2.1",
@@ -96,6 +97,7 @@
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-react": "^7.14.3",
     "flow-bin": "0.113.0",
+    "flow-typed": "^3.2.0",
     "jest": "^25.1.0",
     "lint-staged": "^10.0.2",
     "metro-react-native-babel-preset": "^0.58.0",
@@ -118,7 +120,7 @@
       "./node_modules/react-native-gesture-handler/jestSetup.js"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!(react-native|react-navigation|@react-navigation/.*|react-navigation-stack|react-native-screens|@react-native-community/async-storage|react-native-gesture-handler|react-native-popup-menu|react-native-platform-touchable|react-native-linear-gradient|react-native-vector-icons|react-native-spinkit|react-native-status-bar-height|react-native-snap-carousel|react-native-image-picker|react-native-svg|react-native-camera|react-native-image-crop-picker)/)"
+      "node_modules/(?!(react-native|react-navigation|@react-navigation/.*|react-navigation-stack|react-native-screens|@react-native-community/async-storage|react-native-gesture-handler|react-native-popup-menu|react-native-platform-touchable|react-native-linear-gradient|react-native-vector-icons|react-native-spinkit|react-native-status-bar-height|react-native-snap-carousel|react-native-image-picker|react-native-svg|react-native-camera|react-native-image-crop-picker|react-native-keychain)/)"
     ]
   },
   "detox": {

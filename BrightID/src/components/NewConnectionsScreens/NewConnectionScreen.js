@@ -34,14 +34,13 @@ export class NewConnectionScreen extends React.Component<Props, State> {
   };
 
   renderScreen = () => {
-    const { navigation } = this.props;
     const { display } = this.state;
     // boolean for displaying button styles
     // conditionally render MyCodeScreen
     if (display === 'qrcode') {
-      return <MyCodeScreen navigation={navigation} />;
+      return <MyCodeScreen />;
     } else if (display === 'scanner') {
-      return <ScanCodeScreen navigation={navigation} />;
+      return <ScanCodeScreen />;
     } else if (!display) {
       return <View />;
     }
