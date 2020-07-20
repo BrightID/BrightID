@@ -1,10 +1,9 @@
 // @flow
 
 import AsyncStorage from '@react-native-community/async-storage';
-import thunkMiddleware from 'redux-thunk';
-import { applyMiddleware, createStore, compose } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import reducer from '@/reducer';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { migrate } from './migrations';
 import {
   groupsTransformer,
@@ -26,17 +25,20 @@ const persistConfig = {
   ],
   version: 6,
   migrate,
-  timeout: null,
+  timeout: 0,
+  blacklist: ['channels', 'pendingConnections'],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducer);
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
-export const store = createStore(
-  persistedReducer,
-  composeEnhancers(applyMiddleware(thunkMiddleware)),
-);
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: getDefaultMiddleware({
+    // We have a bunch of non-serializable data like secret key etc.
+    // TODO For now disabled completely. Revisit later for fine-grained configuration.
+    serializableCheck: false,
+  }),
+});
 
 export const persistor = persistStore(store);
 

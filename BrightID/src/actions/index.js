@@ -35,24 +35,6 @@ export {
 } from './connections';
 
 export {
-  SET_CONNECT_QR_DATA,
-  REMOVE_CONNECT_QR_DATA,
-  SET_MY_QR_DATA,
-  CLEAR_MY_QR_DATA,
-  setConnectQrData,
-  removeConnectQrData,
-  setMyQrData,
-  clearMyQrData,
-} from './connectQrData';
-
-export {
-  SET_CONNECT_USER_DATA,
-  REMOVE_CONNECT_USER_DATA,
-  setConnectUserData,
-  removeConnectUserData,
-} from './connectUserData';
-
-export {
   CREATE_GROUP,
   DELETE_GROUP,
   SET_NEW_GROUP_CO_FOUNDERS,

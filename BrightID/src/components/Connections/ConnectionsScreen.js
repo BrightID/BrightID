@@ -16,7 +16,6 @@ import EmptyList from '@/components/Helpers/EmptyList';
 import { deleteConnection } from '@/actions';
 import { ORANGE } from '@/utils/constants';
 import ConnectionCard from './ConnectionCard';
-import { createFakeConnection } from './models/createFakeConnection';
 import { defaultSort } from './models/sortingUtility';
 import { performAction } from './models/modifyConnections';
 
@@ -59,11 +58,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
 
   handleNewConnection = () => {
     const { navigation } = this.props;
-    if (__DEV__) {
-      createFakeConnection();
-    } else {
-      navigation.navigate('MyCode');
-    }
+    navigation.navigate('MyCode');
   };
 
   filterConnections = () => {

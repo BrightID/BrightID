@@ -1,15 +1,20 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 // @flow
 
-import React, { useCallback, useState } from 'react';
+import React, {
+  useCallback,
+  useState,
+  useEffect,
+  useLayoutEffect,
+} from 'react';
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   Clipboard,
+  Switch,
 } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path, SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,7 +25,21 @@ import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
 import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
 import cameraIcon from '@/static/camera_icon_white.svg';
-import { startConnecting, stopConnecting } from './actions/connecting';
+import {
+  channel_states,
+  channel_types,
+  selectChannelById,
+} from '@/components/NewConnectionsScreens/channelSlice';
+import { encodeChannelQrString } from '@/utils/channels';
+import {
+  pendingConnection_states,
+  selectAllPendingConnections,
+} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+import { createFakeConnection } from '@/components/Connections/models/createFakeConnection';
+import {
+  createChannel,
+  leaveChannel,
+} from '@/components/NewConnectionsScreens/actions/channelThunks';
 
 /**
  * My Code screen of BrightID
@@ -35,59 +54,115 @@ const COPIED_TIMEOUT = 500;
 
 const Container = DEVICE_IOS ? SafeAreaView : View;
 
-export const MyCodeScreen = (props) => {
-  const { navigation } = props;
+export const MyCodeScreen = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const name = useSelector((state) => state.user.name);
-  const ttl = useSelector((state) => state.connectQrData.myQrData?.ttl ?? 0);
-  const qrString = useSelector(
-    (state) => state.connectQrData.myQrData?.qrString,
+  const myChannel = useSelector((state) =>
+    selectChannelById(state, state.channels.myChannelId),
   );
-  const timestamp = useSelector(
-    (state) => state.connectQrData.myQrData?.timestamp ?? Date.now(),
-  );
-  const connectDataExists = useSelector((state) => !!state.connectUserData.id);
-
+  // pending connections attached to my channel
+  const pendingChannelConnections = useSelector((state) => {
+    if (myChannel) {
+      return selectAllPendingConnections(state).filter(
+        (pc) => pc.channelId === myChannel.id,
+      );
+    } else {
+      return [];
+    }
+  });
+  const [qrString, setQrString] = useState('');
   const [qrsvg, setQrsvg] = useState('');
   const [copied, setCopied] = useState(false);
-
-  const [countdown, setCountdown] = useState(ttl - (Date.now() - timestamp));
-
-  const timerTick = useCallback(
-    () => {
-      if (!navigation.isFocused()) return;
-      let countdown = ttl - (Date.now() - timestamp);
-      if (countdown <= 0 && qrString) {
-        dispatch(startConnecting());
-      }
-      setCountdown(countdown);
-    },
-    [ttl, timestamp, qrString],
+  const [countdown, setCountdown] = useState(
+    myChannel ? myChannel.ttl - (Date.now() - myChannel.timestamp) : 0,
   );
+  const [isGroup, setIsGroup] = useState(
+    myChannel ? myChannel.type === channel_types.GROUP : false,
+  );
+
+  // create QRCode from channel data
+  useEffect(() => {
+    if (myChannel && myChannel.state === channel_states.OPEN) {
+      console.log(
+        `Creating QRCode: profileId ${myChannel.myProfileId} channel ${myChannel.id}`,
+      );
+      const newQrString = encodeChannelQrString(myChannel);
+      setQrString(newQrString);
+      qrCodeToSvg(newQrString, (qrsvg) => setQrsvg(qrsvg));
+    } else {
+      setQrString('');
+      setQrsvg('');
+    }
+  }, [myChannel]);
+
+  const timerTick = () => {
+    if (myChannel) {
+      let countDown = myChannel.ttl - (Date.now() - myChannel.timestamp);
+      setCountdown(countDown);
+    }
+  };
 
   // start local timer to display countdown
-  useInterval(timerTick, 1000);
+  useInterval(timerTick, 100);
+
+  // set up top right button in header
+  useLayoutEffect(() => {
+    if (__DEV__ && myChannel?.state === channel_states.OPEN) {
+      // $FlowFixMe
+      navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity
+            testID="fakeConnectionBtn"
+            style={{ marginRight: 11 }}
+            onPress={createFakeConnection}
+          >
+            <Material name="ghost" size={32} color="#fff" />
+          </TouchableOpacity>
+        ),
+      });
+    }
+  }, [dispatch, myChannel, navigation]);
+
   useFocusEffect(
-    useCallback(
-      () => {
-        console.log('YEAH BUDDY', qrString);
-        if (!navigation.isFocused()) return;
-        if (connectDataExists) {
-          navigation.navigate('PreviewConnection');
-          return;
-        }
-        if (!qrString) {
-          dispatch(startConnecting());
-        } else {
-          qrCodeToSvg(qrString, (qrsvg) => setQrsvg(qrsvg));
-          setCountdown(ttl - (Date.now() - timestamp));
-        }
-      },
-      [qrString, connectDataExists],
-    ),
+    useCallback(() => {
+      if (!navigation.isFocused()) return;
+      if (!myChannel) {
+        dispatch(
+          createChannel(isGroup ? channel_types.GROUP : channel_types.SINGLE),
+        );
+      } else {
+        setCountdown(myChannel.ttl - (Date.now() - myChannel.timestamp));
+      }
+    }, [navigation, myChannel, dispatch, isGroup]),
   );
 
-  // const checkQrCode = (qrString) => {};
+  useEffect(() => {
+    if (myChannel && myChannel.type === channel_types.SINGLE) {
+      // If i created a 1:1 channel and there is a pending connection in UNCONFIRMED state -> directly open PreviewConnectionScreen.
+      // there should be only one connection, but if multiple people scanned my code, the first one wins
+      for (const pc of pendingChannelConnections) {
+        if (pc.state === pendingConnection_states.UNCONFIRMED) {
+          navigation.navigate('PreviewConnection', {
+            pendingConnectionId: pc.id,
+          });
+        }
+      }
+    }
+  }, [myChannel, navigation, pendingChannelConnections]);
+
+  const toggleGroup = () => {
+    // remove current channel
+    if (myChannel) {
+      dispatch(leaveChannel(myChannel.id));
+    }
+    // toggle switch
+    setIsGroup((previousState) => !previousState);
+    // create new channel. Invert `isGroup` as local state is not yet updated!
+    dispatch(
+      createChannel(!isGroup ? channel_types.GROUP : channel_types.SINGLE),
+    );
+  };
 
   const displayTime = () => {
     const minutes = Math.floor(countdown / 60000);
@@ -103,6 +178,21 @@ export const MyCodeScreen = (props) => {
     setCopied(true);
     setTimeout(() => setCopied(false), COPIED_TIMEOUT);
   };
+
+  const pclist = pendingChannelConnections.map((pc) => (
+    <TouchableOpacity
+      key={pc.id}
+      testID="ScanCodeToMyCodeBtn"
+      onPress={() => {
+        console.log(`Confirm connection ${pc.id}`);
+        navigation.navigate('PreviewConnection', {
+          pendingConnectionId: pc.id,
+        });
+      }}
+    >
+      <Text>{`${pc.name} - ${pc.id} - ${pc.channelId} - ${pc.state}`}</Text>
+    </TouchableOpacity>
+  ));
 
   const renderCopyQr = () => (
     <View style={styles.copyContainer}>
@@ -123,8 +213,8 @@ export const MyCodeScreen = (props) => {
         testID="resetQrButton"
         style={styles.copyButton}
         onPress={() => {
-          setCountdown(ttl);
-          dispatch(stopConnecting());
+          setCountdown(0);
+          dispatch(leaveChannel(myChannel.id));
         }}
       >
         <Material
@@ -182,18 +272,58 @@ export const MyCodeScreen = (props) => {
             Hey {name}, share your code and
           </Text>
           <Text style={styles.infoTopText}>make a new connection today</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Text>Group connection</Text>
+            <Switch
+              trackColor={{ false: '#767577', true: '#81b0ff' }}
+              thumbColor={isGroup ? '#f5dd4b' : '#f4f3f4'}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleGroup}
+              value={isGroup}
+            />
+          </View>
         </View>
-        <View style={styles.qrCodeContainer} testID="QRCodeContainer">
-          {qrsvg ? renderTimer() : <View />}
-          {qrsvg ? renderQrCode() : renderSpinner()}
-          {qrsvg ? renderCopyQr() : <View />}
-        </View>
+        {myChannel?.state === channel_states.OPEN ? (
+          <View style={styles.qrCodeContainer} testID="QRCodeContainer">
+            {qrsvg ? renderTimer() : <View />}
+            {qrsvg ? renderQrCode() : renderSpinner()}
+            {qrsvg ? renderCopyQr() : <View />}
+          </View>
+        ) : (
+          <View style={styles.qrCodeContainer} testID="QRCodeContainer">
+            <Text>Your channel is closed!</Text>
+            <TouchableOpacity
+              testID="resetQrButton"
+              style={styles.copyButton}
+              onPress={() => {
+                setCountdown(0);
+                dispatch(
+                  createChannel(
+                    isGroup ? channel_types.GROUP : channel_types.SINGLE,
+                  ),
+                );
+              }}
+            >
+              <Material
+                size={24}
+                name="refresh"
+                color="#333"
+                style={{ width: 24, height: 24 }}
+              />
+              <Text style={styles.copyText}> Create new channel</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        <Text>
+          There are {pendingChannelConnections.length} pending connections
+        </Text>
+        {pclist}
         <Text style={styles.infoBottomText}>Or you can also...</Text>
         <TouchableOpacity
           testID="MyCodeToScanCodeBtn"
           style={styles.scanCodeButton}
           onPress={() => {
-            props.navigation.navigate('ScanCode');
+            navigation.navigate('ScanCode');
           }}
         >
           <SvgXml

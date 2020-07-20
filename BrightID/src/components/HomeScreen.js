@@ -44,7 +44,7 @@ export const HomeScreen = (props) => {
   const apps = useSelector((state) => state.apps.apps);
   const verifications = useSelector((state) => state.user.verifications);
   const connections = useSelector((state) => state.connections.connections);
-  const [profilePhoto, setProfilePhoto] = useState('');
+  const [profilePhoto, setProfilePhoto] = useState('none');
   const [isEditing, setIsEditing] = useState(false);
   const [displayName, setDisplayName] = useState(name);
   const verified = useMemo(() => verifications.includes('BrightID'), [

@@ -11,6 +11,7 @@ export const REJECT_INVITE = 'REJECT_INVITE';
 export const JOIN_GROUP = 'JOIN_GROUP';
 export const LEAVE_GROUP = 'LEAVE_GROUP';
 export const DISMISS_FROM_GROUP = 'DISMISS_FROM_GROUP';
+export const ADD_ADMIN = 'ADD_ADMIN';
 export const SET_GROUP_SEARCH = 'SET_GROUP_SEARCH';
 export const SET_GROUP_SEARCH_OPEN = 'SET_GROUPS_SEARCH_OPEN';
 
@@ -74,6 +75,12 @@ export const leaveGroup = (group: group) => ({
 
 export const dismissFromGroup = (member: string, group: group) => ({
   type: DISMISS_FROM_GROUP,
+  group,
+  member,
+});
+
+export const addAdmin = (member: string, group: group) => ({
+  type: ADD_ADMIN,
   group,
   member,
 });

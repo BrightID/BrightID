@@ -2,6 +2,10 @@
 
 import { NavigationScreenProp } from 'react-navigation';
 import { Dispatch } from 'redux';
+import {
+  channel_states,
+  channel_types,
+} from '@/components/NewConnectionsScreens/channelSlice';
 
 declare type getState = () => State;
 
@@ -13,12 +17,12 @@ declare type Props = State & navigation & dispatch;
 
 declare type State = {
   apps: AppState,
+  channels: ChannelsState,
   connections: ConnectionsState,
-  connectQrData: ConnectQrData,
-  connectUserData: ConnectUserData,
   groups: GroupsState,
   notifications: NotificationsState,
   operations: OperationsState,
+  pendingConnections: PendingConnectionsState,
   recoveryData: RecoveryData,
   user: UserState,
 };
@@ -35,12 +39,39 @@ declare type AppInfo = {
   dateAdded: number,
 };
 
+declare type ChannelsState = {
+  myChannelId: string,
+  ids: string[],
+  entities: Channel[],
+};
+
+declare type ChannelState = $Keys<typeof channel_states>;
+declare type ChannelType = $Keys<typeof channel_types>;
+
+declare type Channel = {
+  id: string,
+  initiatorProfileId: string,
+  myProfileId: string,
+  ipAddress: string,
+  aesKey: string,
+  timestamp: number,
+  ttl: number,
+  pollTimerId?: IntervalID,
+  timeoutId?: TimeoutID,
+  type: ChannelType,
+  state: ChannelState,
+};
+
 declare type ConnectionsState = {
   connections: connection[],
   trustedConnections: string[],
   connectionsSort: string,
   searchParam: string,
   searchOpen: boolean,
+};
+
+declare type Photo = {
+  filename: string,
 };
 
 declare type connection = {
@@ -50,45 +81,12 @@ declare type connection = {
   secretKey?: Uint8Array,
   aesKey: string,
   connectionDate: number,
-  photo: {
-    filename: string,
-  },
+  photo: Photo,
   status: string,
   signingKey: string,
   createdAt: number,
   hasPrimaryGroup: boolean,
   publicKey?: string,
-};
-
-declare type ConnectQrData = {
-  myQrData?: {
-    aesKey: string,
-    uuid: string,
-    ipAddress: string,
-    qrString: string,
-    timestamp: number,
-    ttl: number,
-    type: string,
-    channel: string,
-  },
-  peerQrData: {
-    aesKey: string,
-    ipAddress: string,
-    uuid: string,
-    qrString: string,
-    channel: string,
-    type: string,
-  },
-};
-
-declare type ConnectUserData = {
-  id: string,
-  photo: string,
-  name: string,
-  timestamp: number,
-  signedMessage: string,
-  score: number,
-  secretKey?: Uint8Array,
 };
 
 declare type GroupsState = {
@@ -145,6 +143,24 @@ declare type operation = {
   [val: string]: string,
 };
 
+declare type PendingConnectionsState = {
+  ids: string[],
+  entities: PendingConnection[],
+};
+
+declare type PendingConnection = {
+  id: string,
+  channelId: string,
+  state: string,
+  brightId?: string,
+  name?: string,
+  photo?: string,
+  notificationToken?: string,
+  timestamp?: number,
+  signedMessage?: string,
+  score?: number,
+};
+
 declare type RecoveryData = {
   publicKey: string,
   secretKey: string,
@@ -156,9 +172,7 @@ declare type RecoveryData = {
 declare type UserState = {
   score: number,
   name: string,
-  photo: {
-    filename: string,
-  },
+  photo: Photo,
   searchParam: string,
   backupCompleted: boolean,
   verifications: any[],

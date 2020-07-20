@@ -212,6 +212,33 @@ class NodeApi {
     NodeApi.throwOnError(res);
   }
 
+  async addAdmin(newAdmin: string, group: string) {
+    let { username, secretKey } = await obtainKeys();
+
+    let opName = 'Add Admin';
+    let timestamp = Date.now();
+    let message = opName + username + newAdmin + group + timestamp;
+
+    let sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+
+    let op = {
+      _key: hash(message),
+      name: opName,
+      id: username,
+      admin: newAdmin,
+      group,
+      sig,
+      timestamp,
+      v,
+    };
+
+    let res = await this.api.put(`/operations/${op._key}`, op);
+    BrightId.throwOnError(res);
+    BrightId.setOperation(op);
+  }
+
   async deleteGroup(group: string) {
     let { username, secretKey } = await obtainKeys();
 
