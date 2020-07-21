@@ -21,6 +21,6 @@ jest.mock(
 NativeModules.RNRandomBytes = {
   randomBytes: (size, cb) => {
     let buf = randomBytes(size);
-    cb(null, buf.toString('hex').slice(size));
+    cb(null, buf.toString('base64'));
   },
 };
