@@ -69,7 +69,6 @@ node
 husky@*
 core-js@*
 /artifacts/
-google-services.json
 *-google-services.json
 Podfile.lock
 assetlinks.json

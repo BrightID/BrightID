@@ -4,11 +4,19 @@ import React, { useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { bootstrap } from '@/bootstrap';
+import { notificationSubscription } from '@/NotificationService';
 
-export const LoadingScreen = ({ app }: { app: boolean }) => {
+export const InitialLoadingScreen = ({ app }: { app: boolean }) => {
   useEffect(() => {
     return () => {
-      if (app) bootstrap();
+      if (app) {
+        console.log('BOOSTRAPING APP');
+        bootstrap();
+        console.log('SUBSCRIBING TO NOTIFICATIONS');
+        setTimeout(() => {
+          notificationSubscription();
+        }, 2500);
+      }
     };
   }, []);
   return (
@@ -31,4 +39,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoadingScreen;
+export default InitialLoadingScreen;
