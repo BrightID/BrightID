@@ -88,35 +88,21 @@ export const newPendingConnection = createAsyncThunk(
     }
 
     // download profile
-    const url = `http://${channel.ipAddress}/profile/download/${channelId}/${profileId}`;
-    console.log(
-      `fetching profile ${profileId} for channel ${channelId} from ${url}`,
-    );
-    const response = await fetch(url, {
-      headers: { 'Cache-Control': 'no-cache' },
+    const profileData = await channel.api.download({
+      channelId,
+      dataId: profileId,
     });
-    if (!response.ok) {
-      throw new Error(
-        `Profile download returned ${response.status}: ${response.statusText} for url: ${url}`,
-      );
-    }
-    const profileData = await response.json();
+    const decryptedObj = decryptData(profileData.data, channel.aesKey);
+    decryptedObj.myself = decryptedObj.id === getState().user.id;
+    // I'm confused about this initiator logic, might change this...
+    decryptedObj.initiator =
+      decryptedObj.profileTimestamp > channel.myProfileTimestamp;
 
-    if (profileData && profileData.data) {
-      const decryptedObj = decryptData(profileData.data, channel.aesKey);
-      decryptedObj.myself = decryptedObj.id === getState().user.id;
-      // I'm confused about this initiator logic, might change this...
-      decryptedObj.initiator =
-        decryptedObj.profileTimestamp > channel.myProfileTimestamp;
-
-      const connectionInfo = await fetchConnectionInfo({
-        brightID: decryptedObj.brightID,
-        myConnections: getState().connections.connections,
-      });
-      return { ...connectionInfo, ...decryptedObj };
-    } else {
-      throw new Error(`Missing data in profile from url: ${url}`);
-    }
+    const connectionInfo = await fetchConnectionInfo({
+      brightID: decryptedObj.brightID,
+      myConnections: getState().connections.connections,
+    });
+    return { ...connectionInfo, ...decryptedObj };
   },
 );
 

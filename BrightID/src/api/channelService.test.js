@@ -31,7 +31,7 @@ describe('ChannelAPI', () => {
     test('upload data to channel', async () => {
       await channelApi.upload({
         channelId: sharedChannelId,
-        id: dataId,
+        dataId,
         data: myData,
       });
     });

@@ -7,6 +7,7 @@ import {
   channel_states,
   channel_types,
 } from '@/components/NewConnectionsScreens/channelSlice';
+import ChannelAPI from '@/api/channelService';
 
 export const createRandomId = async (size: number = 9) => {
   const key = await randomKey(size);
@@ -25,9 +26,11 @@ export const generateChannelData = async (
   const type = channelType;
   const initiatorProfileId = '';
   const state = channel_states.OPEN;
+  const channelApi = new ChannelAPI(`http://${ipAddress}/profile`);
 
   return {
     aesKey,
+    api: channelApi,
     id,
     initiatorProfileId,
     ipAddress,
@@ -78,6 +81,7 @@ export const decodeChannelQrString = async (qrString: string) => {
   // add local channel data that is not part of qrstring
   const myProfileId = await createRandomId();
   const state = channel_states.OPEN;
+  const channelApi = new ChannelAPI(`http://${ipAddress}/profile`);
 
   // convert intType to ChannelType
   let type;
@@ -94,6 +98,7 @@ export const decodeChannelQrString = async (qrString: string) => {
 
   const channel: Channel = {
     aesKey,
+    api: channelApi,
     id,
     initiatorProfileId,
     ipAddress,

@@ -1,14 +1,13 @@
 // @flow
 import {
   addChannel,
-  removeChannel,
   selectChannelById,
+  removeChannel,
   setMyChannel,
   updateChannel,
 } from '@/components/NewConnectionsScreens/channelSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
-import { postProfileToChannel } from '@/utils/profile';
 import { generateChannelData } from '@/utils/channels';
 import {
   CHANNEL_TTL,
@@ -148,111 +147,71 @@ export const fetchChannelProfiles = createAsyncThunk(
   'channels/fetchChannelProfiles',
   async (channelId, { getState, dispatch }) => {
     const channel = selectChannelById(getState(), channelId);
-    const url = `http://${channel.ipAddress}/profile/list/${channelId}`;
-    const response = await fetch(url, {
-      headers: { 'Cache-Control': 'no-cache' },
+    console.log(`fetching profiles from channel ${channelId}`);
+    const profileIds = await channel.api.list(channelId);
+    const knownProfileIds = selectAllPendingConnectionIds(getState());
+    profileIds.forEach((profileId) => {
+      if (
+        profileId !== channel.myProfileId &&
+        !knownProfileIds.includes(profileId)
+      ) {
+        dispatch(
+          newPendingConnection({
+            channelId,
+            profileId,
+          }),
+        );
+      }
+      if (profileIds.length > knownProfileIds.length + 1) {
+        console.log(`Got ${profileIds.length} profileIds:`);
+        console.dir(profileIds);
+      }
     });
-    if (!response.ok) {
-      throw new Error(
-        `Channel list returned ${response.status}: ${response.statusText} for url: ${url}`,
-      );
-    }
-    const responseObj = await response.json();
-    if (responseObj && responseObj.profileIds) {
-      const { profileIds } = responseObj;
-
-      const knownProfileIds = selectAllPendingConnectionIds(getState());
-      profileIds.forEach((profileId) => {
-        if (
-          profileId !== channel.myProfileId &&
-          !knownProfileIds.includes(profileId)
-        ) {
-          dispatch(
-            newPendingConnection({
-              channelId,
-              profileId,
-            }),
-          );
-        }
-
-        if (profileIds.length > knownProfileIds.length + 1) {
-          console.log(`Got ${profileIds.length} profileIds:`);
-          console.dir(profileIds);
-        }
-      });
-    } else {
-      throw new Error(`Response does not include profileIds array.`);
-    }
   },
 );
 
-export const fetchConnectionRequests = createAsyncThunk(
-  'channels/fetchConnectionRequests',
-  async (channelId, { getState, dispatch }) => {
-    const channel: Channel = selectChannelById(getState(), channelId);
-    const { myProfileId } = channel;
-    const url = `http://${channel.ipAddress}/profile/list/${myProfileId}`;
-    const response = await fetch(url, {
-      headers: { 'Cache-Control': 'no-cache' },
-    });
-    if (!response.ok) {
-      throw new Error(
-        `profile server returned ${response.status}: ${response.statusText} for url: ${url}`,
+export const fetchConnectionRequests = (channelId: string) => async (
+  dispatch: dispatch,
+  getState: getState,
+) => {
+  const channel: Channel = selectChannelById(getState(), channelId);
+  const { myProfileId } = channel;
+  const profileIds = await channel.api.list(myProfileId);
+  for (const profileId of profileIds) {
+    // check if signedMessage and profile exists
+    const pendingConnection = selectPendingConnectionById(
+      getState(),
+      profileId,
+    );
+    if (pendingConnection && !pendingConnection.signedMessage) {
+      console.log(
+        `Got new connection request from profileId ${profileId}.`,
       );
-    }
-    const responseObj = await response.json();
-    if (responseObj && responseObj.profileIds) {
-      const { profileIds } = responseObj;
-      for (const profileId of profileIds) {
-        // check if signedMessage and profile exists
-        const pendingConnection = selectPendingConnectionById(
-          getState(),
-          profileId,
-        );
-        if (pendingConnection && !pendingConnection.signedMessage) {
-          console.log(
-            `Got new connection request from profileId ${profileId}.`,
-          );
-          // download connectionrequest to get signedMessage
-          const url = `http://${channel.ipAddress}/profile/download/${myProfileId}/${profileId}`;
-          console.log(
-            `fetching connectionRequest ${profileId} for my profile ${myProfileId} from ${url}`,
-          );
-          const response = await fetch(url, {
-            headers: {
-              'Cache-Control': 'no-cache',
+      // download connectionrequest to get signedMessage
+      const profile = await channel.api.download({
+        channelId: myProfileId,
+        dataId: profileId,
+      });
+      const { signedMessage, connectionTimestamp } = profile;
+      if (signedMessage) {
+        // update existing pendingConnection with signedMessage and timestamp
+        console.log('updating Pending Connection with signed message');
+        dispatch(
+          updatePendingConnection({
+            id: profileId,
+            changes: {
+              signedMessage,
+              timestamp: connectionTimestamp,
             },
-          });
-          if (!response.ok) {
-            throw new Error(
-              `Profile server returned ${response.status}: ${response.statusText} for url: ${url}`,
-            );
-          }
-          const responseJson = await response.json();
-
-          console.log('profileResponse', responseJson);
-          const { signedMessage, connectionTimestamp } = responseJson.data;
-          if (signedMessage) {
-            // update existing pendingConnection with signedMessage and timestamp
-            console.log('updating Pending Connection with signed message');
-            dispatch(
-              updatePendingConnection({
-                id: profileId,
-                changes: {
-                  signedMessage,
-                  timestamp: connectionTimestamp,
-                },
-              }),
-            );
-          } else {
-            console.dir(responseJson);
-            throw new Error(`Response does not include signedMessage.`);
-          }
-        }
+          }),
+        );
+      } else {
+        console.dir(profile);
+        throw new Error(`Response does not include signedMessage.`);
       }
     }
-  },
-);
+  }
+};
 
 // TODO: This should not be a thunk, as no actions are dispatched.
 //  Should be changed to regular function in utils, with channel and user data passed in
@@ -285,8 +244,11 @@ export const encryptAndUploadProfileToChannel = (channelId: string) => async (
     console.log(`Encrypting profile data with key ${channel.aesKey}`);
     let encrypted = encryptData(dataObj, channel.aesKey);
     console.log(`Posting profile data...`);
-    await postProfileToChannel(encrypted, channel);
-
+    await channel.api.upload({
+      channelId,
+      data: encrypted,
+      dataId: channel.myProfileId,
+    });
     dispatch(
       updateChannel({
         id: channelId,

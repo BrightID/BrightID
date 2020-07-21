@@ -7,6 +7,7 @@ import {
   channel_types,
   channel_states,
 } from '@/components/NewConnectionsScreens/channelSlice';
+import ChannelAPI from '@/api/channelService';
 
 describe('Test channel data', () => {
   for (const channel_type of Object.values(channel_types)) {
@@ -14,6 +15,7 @@ describe('Test channel data', () => {
       const channel = await generateChannelData(channel_type);
       // all expected keys there?
       expect(channel).toMatchObject({
+        api: expect.any(ChannelAPI),
         aesKey: expect.any(String),
         id: expect.any(String),
         initiatorProfileId: expect.any(String),
@@ -52,6 +54,8 @@ describe('Test channel data', () => {
       expect(decodedChannel.myProfileId).not.toEqual(
         originalChannel.myProfileId,
       );
+      // decodedChannel should have a ChannelApi instance
+      expect(decodedChannel.api).toBeInstanceOf(ChannelAPI);
     });
   }
 });
