@@ -10,6 +10,7 @@ import { DEVICE_TYPE, DEVICE_IOS } from '@/utils/constants';
 import emitter from '@/emitter';
 import GroupsScreen from '@/components/GroupsScreens/GroupsScreen';
 import SearchGroups from '@/components/Helpers/SearchGroups';
+import SearchConnections from '@/components/Helpers/SearchConnections';
 import NewGroupScreen from '@/components/GroupsScreens/NewGroups/NewGroupScreen';
 import GroupInfoScreen from '@/components/GroupsScreens/NewGroups/GroupInfoScreen';
 import MembersScreen from '@/components/GroupsScreens/Members/MembersScreen';
@@ -22,7 +23,9 @@ import { headerOptions, headerTitleStyle } from './helpers';
 const Stack = createStackNavigator();
 
 const HeaderTitle = ({ title }) => {
-  const searchOpen = useSelector((state) => state.groups.searchOpen);
+  const searchOpen = useSelector(
+    (state) => state.groups.searchOpen || state.connections.searchOpen,
+  );
   const fadeAnim = useRef(new Animated.Value(1)).current;
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -39,7 +42,7 @@ const HeaderTitle = ({ title }) => {
   );
 };
 
-const topOptions = {
+const groupsOptions = {
   ...headerOptions,
   headerRight: () => <SearchGroups />,
   headerLeft: () => (
@@ -57,6 +60,12 @@ const topOptions = {
     </TouchableOpacity>
   ),
   headerTitle: () => <HeaderTitle title="Groups" />,
+};
+
+const newGroupOptions = {
+  ...headerOptions,
+  headerRight: () => <SearchConnections />,
+  headerTitle: () => <HeaderTitle title="New Group" />,
 };
 
 const membersScreenOptions = ({ navigation, route }) => {
@@ -85,14 +94,15 @@ const membersScreenOptions = ({ navigation, route }) => {
 
 const Groups = () => (
   <>
-    <Stack.Screen name="Groups" component={GroupsScreen} options={topOptions} />
+    <Stack.Screen
+      name="Groups"
+      component={GroupsScreen}
+      options={groupsOptions}
+    />
     <Stack.Screen
       name="NewGroup"
       component={NewGroupScreen}
-      options={{
-        ...headerOptions,
-        title: 'New Group',
-      }}
+      options={newGroupOptions}
     />
     <Stack.Screen
       name="GroupInfo"
