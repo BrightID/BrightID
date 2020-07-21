@@ -29,7 +29,7 @@ import {
   channel_types,
   selectChannelById,
 } from '@/components/NewConnectionsScreens/channelSlice';
-import api from '../../Api/BrightId';
+import api from '../../api/brightId';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID

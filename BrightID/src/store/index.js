@@ -5,13 +5,25 @@ import { persistStore, persistReducer } from 'redux-persist';
 import reducer from '@/reducer';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { migrate } from './migrations';
-import { groupsTransformer, userTransformer } from './transform';
+import {
+  groupsTransformer,
+  qrDataTransformer,
+  userTransformer,
+  connectionsTransformer,
+  notificationsTransformer,
+} from './transform';
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  transforms: [userTransformer, groupsTransformer],
-  version: 5,
+  transforms: [
+    userTransformer,
+    groupsTransformer,
+    qrDataTransformer,
+    connectionsTransformer,
+    notificationsTransformer,
+  ],
+  version: 6,
   migrate,
   timeout: 0,
   blacklist: ['channels', 'pendingConnections'],

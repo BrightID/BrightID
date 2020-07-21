@@ -69,11 +69,11 @@ node
 husky@*
 core-js@*
 /artifacts/
-
+*-google-services.json
+Podfile.lock
 assetlinks.json
 Podfile.lock
 yarn.lock
-
 ios/Pods/
 ios/Pods/Target Support Files/Pods-BrightID/
 ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID-acknowledgements.markdown

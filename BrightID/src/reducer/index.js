@@ -3,6 +3,7 @@ import apps from './apps';
 import channels from '../components/NewConnectionsScreens/channelSlice';
 import connections from './connections';
 import groups from './groups';
+import notifications from './notifications';
 import operations from './operations';
 import pendingConnections from '../components/NewConnectionsScreens/pendingConnectionSlice';
 import recoveryData from './recoveryData';
@@ -16,5 +17,6 @@ export default combineReducers({
   operations,
   pendingConnections,
   recoveryData,
+  notifications,
   user,
 });

@@ -1,6 +1,6 @@
 // @flow
 import { Alert } from 'react-native';
-import api from '@/Api/BrightId';
+import api from '@/api/brightId';
 import { saveImage } from '@/utils/filesystem';
 import { addApp, removeApp } from '@/actions';
 import { navigate } from '@/NavigationService';

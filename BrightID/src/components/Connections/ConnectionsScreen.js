@@ -215,9 +215,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
+    backgroundColor: '#fff',
     borderTopLeftRadius: 58,
-    borderTopRightRadius: 58,
     marginTop: -58,
     overflow: 'hidden',
     zIndex: 10,
@@ -243,6 +242,6 @@ const styles = StyleSheet.create({
 });
 
 export default connect(({ connections, user }) => ({
-  ...connections,
   ...user,
+  ...connections,
 }))(ConnectionsScreen);

@@ -19,8 +19,12 @@ export {
   ADD_CONNECTION,
   ADD_TRUSTED_CONNECTION,
   REMOVE_TRUSTED_CONNECTION,
+  SET_CONNECTIONS_SEARCH,
+  SET_CONNECTIONS_SEARCH_OPEN,
   HYDRATE_CONNECTIONS,
   setConnections,
+  setConnectionsSearch,
+  setConnectionsSearchOpen,
   setConnectionsSort,
   updateConnections,
   deleteConnection,
@@ -43,6 +47,7 @@ export {
   LEAVE_GROUP,
   DISMISS_FROM_GROUP,
   SET_GROUP_SEARCH,
+  SET_GROUP_SEARCH_OPEN,
   createGroup,
   deleteGroup,
   setNewGroupCoFounders,
@@ -54,12 +59,19 @@ export {
   dismissFromGroup,
   rejectInvite,
   acceptInvite,
+  setGroupSearch,
+  setGroupSearchOpen,
 } from './groups';
 
 export {
-  SET_NOTIFICATIONS,
-  setNotifications,
-  getNotifications,
+  SET_BACKUP_PENDING,
+  SET_DEVICE_TOKEN,
+  SET_ACTIVE_NOTIFICATION,
+  REMOVE_ACTIVE_NOTIFICATION,
+  updateNotifications,
+  setDeviceToken,
+  setActiveNotification,
+  removeActiveNotification,
 } from './notifications';
 
 export {

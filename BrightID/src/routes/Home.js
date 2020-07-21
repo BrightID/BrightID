@@ -91,9 +91,15 @@ const recoveringConnectionOptions = {
 
 const Home = () => {
   const notificationCount = useSelector(
-    ({ user: { notifications }, groups: { invites } }) =>
-      notifications?.length +
-      invites?.filter((invite) => invite.state === INVITE_ACTIVE)?.length,
+    ({
+      notifications: { pendingConnections, backupPending },
+      groups: { invites },
+    }) =>
+      backupPending
+        ? 1
+        : 0 +
+          pendingConnections?.length +
+          invites?.filter((invite) => invite.state === INVITE_ACTIVE)?.length,
   );
   return (
     <>

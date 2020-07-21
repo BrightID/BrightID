@@ -3,13 +3,15 @@
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { SvgXml } from 'react-native-svg';
+import { DEVICE_LARGE } from '@/utils/constants';
 import { getGroupName } from '@/utils/groups';
 import { acceptInvite, rejectInvite, joinGroup } from '@/actions';
-import api from '@/Api/BrightId';
+import api from '@/api/brightId';
 import GroupPhoto from '@/components/GroupsScreens/GroupPhoto';
 import { backupUser, backupPhoto } from '@/components/Recovery/helpers';
+import checkGreen from '@/static/check_green.svg';
+import xGrey from '@/static/x_grey.svg';
 
 class InviteCard extends React.Component<Props> {
   rejectInvite = () => {
@@ -69,17 +71,31 @@ class InviteCard extends React.Component<Props> {
           <GroupPhoto group={invite} />
         </View>
         <View style={styles.info}>
+          <Text style={styles.name}>{getGroupName(invite)}</Text>
           <Text style={styles.invitationMsg}>
             {inviter?.name} invited you to join
           </Text>
-          <Text style={styles.name}>{getGroupName(invite)}</Text>
         </View>
         <View style={styles.approvalButtonContainer}>
-          <TouchableOpacity style={styles.moreIcon} onPress={this.acceptInvite}>
-            <AntDesign size={30} name="checkcircle" color="#4a90e2" />
+          <TouchableOpacity
+            style={styles.greenCircle}
+            onPress={this.acceptInvite}
+          >
+            <SvgXml
+              xml={checkGreen}
+              width={DEVICE_LARGE ? 20 : 17}
+              height={DEVICE_LARGE ? 20 : 17}
+            />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.moreIcon} onPress={this.rejectInvite}>
-            <AntDesign size={30} name="closecircle" color="#f7651c" />
+          <TouchableOpacity
+            style={styles.greyCircle}
+            onPress={this.rejectInvite}
+          >
+            <SvgXml
+              xml={xGrey}
+              width={DEVICE_LARGE ? 15 : 12}
+              height={DEVICE_LARGE ? 15 : 12}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -98,8 +114,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingBottom: 10,
     paddingTop: 10,
-    height: DEVICE_TYPE === 'large' ? 94 : 80,
-    marginBottom: DEVICE_TYPE === 'large' ? 11.8 : 6,
+    height: DEVICE_LARGE ? 94 : 80,
+    marginBottom: DEVICE_LARGE ? 11.8 : 6,
   },
   photoContainer: {
     minWidth: 85,
@@ -107,28 +123,44 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   info: {
-    marginLeft: 25,
+    marginLeft: DEVICE_LARGE ? 15 : 12,
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    height: DEVICE_TYPE === 'large' ? 71 : 65,
+    justifyContent: 'center',
+    height: DEVICE_LARGE ? 71 : 65,
   },
   name: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_TYPE === 'large' ? 20 : 18,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 20 : 18,
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
   invitationMsg: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_TYPE === 'large' ? 14 : 12,
-    color: '#9b9b9b',
-    marginRight: 3,
-    paddingTop: 1.5,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 12 : 11,
+    color: '#B64B32',
   },
-  moreIcon: {
-    marginRight: 8,
+  greenCircle: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: DEVICE_LARGE ? 40 : 32,
+    height: DEVICE_LARGE ? 40 : 32,
+    borderRadius: 25,
+    borderWidth: 2,
+    borderColor: '#5DEC9A',
+  },
+  greyCircle: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: DEVICE_LARGE ? 40 : 32,
+    height: DEVICE_LARGE ? 40 : 32,
+    borderRadius: 25,
+    borderWidth: 2,
+    borderColor: '#707070',
+    marginLeft: 7,
   },
   approvalButtonContainer: {
     flexDirection: 'row',

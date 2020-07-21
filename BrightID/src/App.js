@@ -14,7 +14,8 @@ import { pollOperations } from '@/utils/operations';
 import AppRoutes from './routes';
 import { store, persistor } from './store';
 import { navigationRef, dispatch } from './NavigationService';
-import Loading from './components/Helpers/LoadingScreen';
+import InitialLoading from './components/Helpers/InitialLoadingScreen';
+import { NotificationBanner } from './components/Helpers/NotificationBanner';
 
 /**
  * Central part of the application
@@ -47,6 +48,7 @@ export const App = () => {
   }, [getInitialState]);
 
   useEffect(() => {
+    // subscribe to operations
     const timerId = setInterval(() => {
       pollOperations();
     }, 5000);
@@ -66,17 +68,25 @@ export const App = () => {
 
   return (
     <Provider store={store}>
-      <PersistGate loading={<Loading app={true} />} persistor={persistor}>
+      <PersistGate
+        loading={<InitialLoading app={true} />}
+        persistor={persistor}
+      >
         <SafeAreaProvider>
           {initialState || typeof initialState === 'undefined' ? (
-            <NavigationContainer
-              initialState={initialState}
-              style={styles.container}
-              ref={navigationRef}
-            >
-              <AppRoutes />
-            </NavigationContainer>
-          ) : null}
+            <>
+              <NotificationBanner />
+              <NavigationContainer
+                initialState={initialState}
+                style={styles.container}
+                ref={navigationRef}
+              >
+                <AppRoutes />
+              </NavigationContainer>
+            </>
+          ) : (
+            <InitialLoading />
+          )}
         </SafeAreaProvider>
       </PersistGate>
     </Provider>

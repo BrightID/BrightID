@@ -20,6 +20,7 @@ declare type State = {
   channels: ChannelsState,
   connections: ConnectionsState,
   groups: GroupsState,
+  notifications: NotificationsState,
   operations: OperationsState,
   pendingConnections: PendingConnectionsState,
   recoveryData: RecoveryData,
@@ -65,6 +66,8 @@ declare type ConnectionsState = {
   connections: connection[],
   trustedConnections: string[],
   connectionsSort: string,
+  searchParam: string,
+  searchOpen: boolean,
 };
 
 declare type Photo = {
@@ -90,6 +93,8 @@ declare type GroupsState = {
   newGroupCoFounders: string[],
   invites: invite[],
   groups: group[],
+  searchParam: string,
+  searchOpen: boolean,
 };
 
 declare type group = {
@@ -169,7 +174,6 @@ declare type UserState = {
   name: string,
   photo: Photo,
   searchParam: string,
-  notifications: NotificationInfo[],
   backupCompleted: boolean,
   verifications: any[],
   publicKey: string,
@@ -179,10 +183,23 @@ declare type UserState = {
   hashedId: string,
 };
 
-declare type NotificationInfo = {
+declare type NotificationsState = {
+  activeNotification: { message: string, type: string },
+  pendingConnections: PendingConnection[],
+  backupPending: boolean,
+  deviceToken: string,
+};
+
+declare type BackupNotification = {
   msg: string,
   icon: string,
 };
+
+declare type PendingConnection = {
+  id: string,
+};
+
+declare type Notification = BackupNotification & invite & PendingConnection;
 
 declare type Signature = {
   signer: string,
