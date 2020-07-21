@@ -7,7 +7,7 @@ import { obtainKeys } from '@/utils/keychain';
 import { TIME_FUDGE } from '@/utils/constants';
 import { hash, strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 import nacl from 'tweetnacl';
-import api from '@/api/node';
+import api from '@/api/brightId';
 import { postConnectionRequest } from '@/utils/profile';
 import { addConnection, addOperation } from '@/actions';
 import { saveImage } from '@/utils/filesystem';

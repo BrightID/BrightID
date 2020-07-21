@@ -422,6 +422,6 @@ class NodeApi {
   }
 }
 
-const nodeApi = new NodeApi();
+const brightId = new NodeApi();
 
-export default nodeApi;
+export default brightId;

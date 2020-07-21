@@ -3,7 +3,7 @@ import { StyleSheet, View, Alert, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
 import { innerJoin } from 'ramda';
-import api from '@/api/node';
+import api from '@/api/brightId';
 import emitter from '@/emitter';
 import { leaveGroup, dismissFromGroup } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';

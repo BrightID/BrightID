@@ -10,7 +10,7 @@ import {
   saveImage,
 } from '@/utils/filesystem';
 import backupApi from '@/api/backupService';
-import api from '@/api/node';
+import api from '@/api/brightId';
 import store from '@/store';
 import emitter from '@/emitter';
 import {

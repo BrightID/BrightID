@@ -7,7 +7,7 @@ import { SvgXml } from 'react-native-svg';
 import { DEVICE_LARGE } from '@/utils/constants';
 import { getGroupName } from '@/utils/groups';
 import { acceptInvite, rejectInvite, joinGroup } from '@/actions';
-import api from '@/api/node';
+import api from '@/api/brightId';
 import GroupPhoto from '@/components/GroupsScreens/GroupPhoto';
 import { backupUser, backupPhoto } from '@/components/Recovery/helpers';
 import checkGreen from '@/static/check_green.svg';

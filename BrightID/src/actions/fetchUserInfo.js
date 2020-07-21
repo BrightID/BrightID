@@ -1,6 +1,6 @@
 // @flow
 
-import api from '@/api/node';
+import api from '@/api/brightId';
 import { updateInvites } from '@/utils/invites';
 import { GROUP_TYPE } from '@/utils/constants';
 import {

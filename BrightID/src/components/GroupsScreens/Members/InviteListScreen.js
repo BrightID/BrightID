@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { connect } from 'react-redux';
-import api from '@/api/node';
+import api from '@/api/brightId';
 import { encryptAesKey } from '@/utils/invites';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE } from '@/utils/constants';
