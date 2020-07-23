@@ -13,7 +13,7 @@ import { SvgXml } from 'react-native-svg';
 import ActionSheet from 'react-native-actionsheet';
 import { useDispatch, useSelector } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { setPhoto, setName } from '@/actions';
+import { setPhoto, setName, setActiveNotification } from '@/actions';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
@@ -21,7 +21,9 @@ import fetchUserInfo from '@/actions/fetchUserInfo';
 import verificationSticker from '@/static/verification-sticker.svg';
 import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
+import forumIcon from '@/static/forum_icon.svg';
 import { useStatusBarHome } from '@/utils/hooks';
+
 /**
  * Home screen of BrightID
  * ==========================
@@ -42,7 +44,7 @@ export const HomeScreen = (props) => {
   const apps = useSelector((state) => state.apps.apps);
   const verifications = useSelector((state) => state.user.verifications);
   const connections = useSelector((state) => state.connections.connections);
-  const [profilePhoto, setProfilePhoto] = useState('');
+  const [profilePhoto, setProfilePhoto] = useState('none');
   const [isEditing, setIsEditing] = useState(false);
   const [displayName, setDisplayName] = useState(name);
   const verified = useMemo(() => verifications.includes('BrightID'), [
@@ -104,25 +106,27 @@ export const HomeScreen = (props) => {
     // let verifications = ['BrightID'];
     <View style={styles.container}>
       <View style={styles.profileContainer} testID="PhotoContainer">
-        <TouchableOpacity
-          testID="editPhoto"
-          onPress={handleEditPhoto}
-          accessible={true}
-          accessibilityLabel="edit photo"
-        >
-          <Image
-            source={{
-              uri: profilePhoto,
-            }}
-            style={styles.photo}
-            resizeMode="cover"
-            onError={(e) => {
-              console.log(e.error);
-            }}
+        {profilePhoto ? (
+          <TouchableOpacity
+            testID="editPhoto"
+            onPress={handleEditPhoto}
             accessible={true}
-            accessibilityLabel="user photo"
-          />
-        </TouchableOpacity>
+            accessibilityLabel="edit photo"
+          >
+            <Image
+              source={{
+                uri: profilePhoto,
+              }}
+              style={styles.photo}
+              resizeMode="cover"
+              onError={(e) => {
+                console.log(e.error);
+              }}
+              accessible={true}
+              accessibilityLabel="user photo"
+            />
+          </TouchableOpacity>
+        ) : null}
         <View style={styles.verifyNameContainer} testID="homeScreen">
           <View style={styles.nameContainer}>
             {isEditing ? (
@@ -251,11 +255,10 @@ export const HomeScreen = (props) => {
             style={styles.communityContainer}
             onPress={handleChat}
           >
-            <Ionicons
-              name="ios-chatboxes"
-              size={16}
-              color="#fff"
-              style={styles.communityIcon}
+            <SvgXml
+              width={DEVICE_LARGE ? 28 : 25}
+              height={DEVICE_LARGE ? 28 : 25}
+              xml={forumIcon}
             />
             <JoinCommunity editable={false} style={styles.communityLink}>
               Join the Community

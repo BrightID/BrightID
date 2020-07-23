@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fdfdfd',
     borderTopLeftRadius: 58,
-    borderTopRightRadius: 58,
+
     marginTop: -58,
     zIndex: 10,
     overflow: 'hidden',

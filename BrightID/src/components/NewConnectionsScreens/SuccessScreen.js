@@ -12,8 +12,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
-import { useFocusEffect } from '@react-navigation/native';
-import { removeConnectUserData } from '../../actions';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { sortByDateAddedDescending } from '../Connections/models/sortingUtility';
 
 /**
@@ -23,7 +22,8 @@ import { sortByDateAddedDescending } from '../Connections/models/sortingUtility'
  *
  */
 
-export const SuccessScreen = ({ navigation }) => {
+export const SuccessScreen = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   // clear navigation history to prevent going back to confirmation and preview screens with back button
   const resetNav = useCallback(() => {
@@ -73,7 +73,6 @@ export const SuccessScreen = ({ navigation }) => {
         <TouchableOpacity
           testID="successDoneBtn"
           onPress={() => {
-            dispatch(removeConnectUserData());
             dispatch(sortByDateAddedDescending());
 
             resetNav();

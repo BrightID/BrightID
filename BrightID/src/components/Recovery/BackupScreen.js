@@ -220,7 +220,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     borderTopLeftRadius: 58,
-    borderTopRightRadius: 58,
     marginTop: -58,
     zIndex: 10,
     overflow: 'hidden',

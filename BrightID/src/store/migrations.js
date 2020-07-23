@@ -36,6 +36,15 @@ const migrations = {
 
     return state;
   },
+  6: (state) => {
+    const nextState = {
+      ...state,
+    };
+
+    delete nextState.user.notifications;
+
+    return nextState;
+  },
 };
 
 export const migrate = createMigrate(migrations);

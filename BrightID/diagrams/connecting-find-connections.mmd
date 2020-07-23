@@ -1,0 +1,24 @@
+sequenceDiagram
+
+    %% Sequence of interconnecting a group
+    %% Profiles are shared through a channel on Profile Server
+
+    autonumber
+	participant A as Group Connection Initiator
+    participant P as ProfileService
+    participant B as all meeting participants
+    A->>A: create Channel data
+    A->>P: upload profile
+    A->>A: create QRCode
+    B->>A: scan QRCode
+    activate A
+    A->>B: Channel data
+    deactivate A
+    B->>P: Upload own profile to channel
+    B->>+P: request list of profileIDs in channel
+    P->>-B: list of profileIDs
+    loop for each profileID
+        B->>+P: request profile from channel
+        P->>-B: profile
+        B->>B: Add candidate to pending connections queue
+    end

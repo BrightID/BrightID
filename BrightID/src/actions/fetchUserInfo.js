@@ -1,7 +1,8 @@
 // @flow
 
-import api from '@/Api/BrightId';
+import api from '@/api/brightId';
 import { updateInvites } from '@/utils/invites';
+import { GROUP_TYPE } from '@/utils/constants';
 import {
   setGroups,
   setInvites,
@@ -9,13 +10,15 @@ import {
   setVerifications,
   updateConnections,
   setIsSponsored,
-  getNotifications,
+  updateNotifications,
+  setActiveNotification,
 } from './index';
 
 const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
   const {
     user: { id },
     operations: { operations },
+    groups: { invites: oldInvites },
   } = getState();
   console.log('refreshing user info', id);
   if (!id) return;
@@ -41,7 +44,21 @@ const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
     // this can not be done in reducer because it should be in an async function
     const newInvites = await updateInvites(invites);
     dispatch(setInvites(newInvites));
-    dispatch(getNotifications());
+
+    if (newInvites.length > oldInvites.length) {
+      const message =
+        newInvites.length < 1
+          ? `You have ${newInvites.length} new group invitations`
+          : `You've been invited to join ${newInvites[0]?.name}`;
+      dispatch(
+        setActiveNotification({
+          message,
+          type: GROUP_TYPE,
+        }),
+      );
+    }
+
+    dispatch(updateNotifications());
   } catch (err) {
     console.log(err.message);
   }

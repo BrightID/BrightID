@@ -7,6 +7,8 @@ export const DELETE_CONNECTION = 'DELETE_CONNECTION';
 export const ADD_CONNECTION = 'ADD_CONNECTION';
 export const ADD_TRUSTED_CONNECTION = 'ADD_TRUSTED_CONNECTION';
 export const REMOVE_TRUSTED_CONNECTION = 'REMOVE_TRUSTED_CONNECTION';
+export const SET_CONNECTIONS_SEARCH = 'SET_CONNECTIONS_SEARCH';
+export const SET_CONNECTIONS_SEARCH_OPEN = 'SET_CONNECTIONS_SEARCH_OPEN';
 export const HYDRATE_CONNECTIONS = 'HYDRATE_CONNECTIONS';
 
 /**
@@ -20,11 +22,15 @@ export const setConnections = (connections: connection[]) => ({
   connections,
 });
 
-/**
- * redux action creator for setting connections array
- * @param type CONNECTIONS_SORT
- * @param connections array of connections obtained from server and stored locally
- */
+export const setConnectionsSearch = (searchParam: string) => ({
+  type: SET_CONNECTIONS_SEARCH,
+  searchParam,
+});
+
+export const setConnectionsSearchOpen = (searchOpen: boolean) => ({
+  type: SET_CONNECTIONS_SEARCH_OPEN,
+  searchOpen,
+});
 
 export const setConnectionsSort = (connectionsSort: string) => ({
   type: CONNECTIONS_SORT,
@@ -41,12 +47,6 @@ export const updateConnections = (connections: connection[]) => ({
   type: UPDATE_CONNECTIONS,
   connections,
 });
-
-/**
- * redux action creator for removing a connection
- * @param type DELETE_CONNECTION
- * @param connection removes a connection object from the array of connections and removes id from connection ids
- */
 
 export const deleteConnection = (id: string) => ({
   type: DELETE_CONNECTION,

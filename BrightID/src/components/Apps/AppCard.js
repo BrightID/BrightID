@@ -13,7 +13,7 @@ import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import store from '@/store';
-import api from '@/Api/BrightId';
+import api from '@/api/brightId';
 
 /**
  * App Card in the Apps Screen

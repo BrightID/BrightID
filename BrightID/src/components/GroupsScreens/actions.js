@@ -6,8 +6,8 @@ import emitter from '@/emitter';
 import { saveImage } from '@/utils/filesystem';
 import { encryptAesKey } from '@/utils/invites';
 import { setNewGroupCoFounders, createGroup } from '@/actions/index';
-import api from '@/Api/BrightId';
-import backupApi from '@/Api/BackupApi';
+import api from '@/api/brightId';
+import backupApi from '@/api/backupService';
 import { hash, randomKey } from '@/utils/encoding';
 import { backupPhoto, backupUser } from '../Recovery/helpers';
 
@@ -65,7 +65,6 @@ export const createNewGroup = (
     ).toString();
 
     await backupApi.putRecovery('immutable', groupId, encryptedGroupData);
-
     emitter.emit('creatingGroupChannel', 'creating the group');
 
     const url = `https://recovery.brightid.org/backups/immutable/${groupId}`;

@@ -9,8 +9,8 @@ import {
   retrieveImage,
   saveImage,
 } from '@/utils/filesystem';
-import backupApi from '@/Api/BackupApi';
-import api from '@/Api/BrightId';
+import backupApi from '@/api/backupService';
+import api from '@/api/brightId';
 import store from '@/store';
 import emitter from '@/emitter';
 import {

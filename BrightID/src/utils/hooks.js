@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { StatusBar } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { ORANGE } from './constants';
+import { ORANGE, DEVICE_ANDROID } from './constants';
 
 export function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -27,10 +27,11 @@ export function useInterval(callback, delay) {
 export function useStatusBarHome() {
   useFocusEffect(
     useCallback(() => {
-      StatusBar.setBackgroundColor('#fff', true);
+      if (DEVICE_ANDROID) StatusBar.setBackgroundColor('#fff', true);
+
       StatusBar.setBarStyle('dark-content', true);
       return () => {
-        StatusBar.setBackgroundColor(ORANGE, true);
+        if (DEVICE_ANDROID) StatusBar.setBackgroundColor(ORANGE, true);
         StatusBar.setBarStyle('light-content', true);
       };
     }, []),

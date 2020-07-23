@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import NotificationsScreen from '@/components/Notifications/NotificationsScreen';
-import TrustedConnectionsScreen from '@/components/Recovery/TrustedConnectionsScreen';
+
 import BackupScreen from '@/components/Recovery/BackupScreen';
 import { navigate } from '@/NavigationService';
 import backArrow from '@/static/back_arrow.svg';
@@ -37,14 +37,7 @@ const Notifications = () => (
       component={NotificationsScreen}
       options={topOptions}
     />
-    <Stack.Screen
-      name="TrustedConnections"
-      component={TrustedConnectionsScreen}
-      options={{
-        ...headerOptions,
-        title: 'Trusted Connections',
-      }}
-    />
+
     <Stack.Screen
       name="Backup"
       component={BackupScreen}

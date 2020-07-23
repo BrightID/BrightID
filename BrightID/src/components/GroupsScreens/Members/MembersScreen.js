@@ -17,7 +17,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
 import { innerJoin } from 'ramda';
-import api from '@/Api/BrightId';
+import api from '@/api/brightId';
 import { leaveGroup, dismissFromGroup } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { addAdmin } from '@/actions/groups';
@@ -293,7 +293,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fdfdfd',
     borderTopLeftRadius: 58,
-    borderTopRightRadius: 58,
     marginTop: -58,
     zIndex: 10,
     overflow: 'hidden',

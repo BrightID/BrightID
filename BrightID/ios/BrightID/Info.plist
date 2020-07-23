@@ -62,8 +62,16 @@
 		<string>AntDesign.ttf</string>
 		<string>Ionicons.ttf</string>
 		<string>MaterialCommunityIcons.ttf</string>
-		<string>MaterialIcons.ttf</string>
 		<string>Octicons.ttf</string>
+	</array>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreenBrightID</string>

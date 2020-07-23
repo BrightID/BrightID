@@ -4,10 +4,11 @@ import { SvgXml } from 'react-native-svg';
 import { ORANGE, DEVICE_IOS, DEVICE_LARGE } from '@/utils/constants';
 import backArrow from '@/static/back_arrow.svg';
 
-const headerTitleStyle = {
+export const headerTitleStyle = {
   fontFamily: 'Poppins',
-  fontWeight: '500',
-  fontSize: DEVICE_LARGE ? 20 : 17,
+  fontWeight: 'bold',
+  fontSize: DEVICE_LARGE ? 20 : 18,
+  color: '#fff',
 };
 
 export const headerOptions = {
@@ -21,7 +22,7 @@ export const headerOptions = {
     elevation: 0,
   },
   headerTintColor: '#fff',
-  headerTitleAlign: 'center',
+  headerTitleAlign: 'left',
   headerBackTitleVisible: false,
   headerBackImage: () => (
     <SvgXml

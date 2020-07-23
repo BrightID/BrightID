@@ -1,13 +1,35 @@
 // @flow
 
-export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
+import { MISC_TYPE } from '@/utils/constants';
 
-export const setNotifications = (notificationInfos: NotificationInfo[]) => ({
-  type: SET_NOTIFICATIONS,
-  notifications: notificationInfos,
+export const SET_BACKUP_PENDING = 'SET_BACKUP_PENDING';
+export const SET_DEVICE_TOKEN = 'SET_DEVICE_TOKEN';
+export const SET_ACTIVE_NOTIFICATION = 'SET_ACTIVE_NOTIFICATION';
+export const REMOVE_ACTIVE_NOTIFICATION = 'REMOVE_ACTIVE_NOTIFICATION';
+
+export const setBackupPending = (backupPending: boolean) => ({
+  type: SET_BACKUP_PENDING,
+  backupPending,
 });
 
-export const getNotifications = () => async (
+export const setDeviceToken = (deviceToken: string) => ({
+  type: SET_DEVICE_TOKEN,
+  deviceToken,
+});
+
+export const setActiveNotification = (notification: {
+  message: string,
+  type: string,
+}) => ({
+  type: SET_ACTIVE_NOTIFICATION,
+  notification,
+});
+
+export const removeActiveNotification = () => ({
+  type: REMOVE_ACTIVE_NOTIFICATION,
+});
+
+export const updateNotifications = () => async (
   dispatch: dispatch,
   getState: () => State,
 ) => {
@@ -15,19 +37,24 @@ export const getNotifications = () => async (
     const {
       user: { backupCompleted },
       connections: { connections },
+      notifications: { activeNotification },
     } = getState();
-    let notifications = [];
     const verifiedConnections = connections.filter(
       (conn) => conn.status === 'verified',
     );
-    // backupCompleted = false;
     if (!backupCompleted && verifiedConnections.length > 2) {
-      notifications.push({
-        icon: 'ios-star-outline',
-        msg: 'Choose trusted connections to backup your BrightID',
-      });
+      dispatch(setBackupPending(true));
+      if (!activeNotification) {
+        dispatch(
+          setActiveNotification({
+            message: 'Please select your Trusted Connections',
+            type: MISC_TYPE,
+          }),
+        );
+      }
+    } else {
+      dispatch(setBackupPending(false));
     }
-    dispatch(setNotifications(notifications));
   } catch (err) {
     console.log(err);
   }

@@ -1,7 +1,13 @@
 import * as React from 'react';
-import { Image, TouchableOpacity, View } from 'react-native';
+import {
+  Clipboard,
+  Image,
+  TouchableOpacity,
+  View,
+  Linking,
+} from 'react-native';
 import { useSelector } from 'react-redux';
-import { INVITE_ACTIVE, DEVICE_LARGE } from '@/utils/constants';
+import { INVITE_ACTIVE, DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
 import { createStackNavigator } from '@react-navigation/stack';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeScreen from '@/components/HomeScreen';
@@ -21,7 +27,29 @@ const homeScreenOptions = (notificationCount) => ({
       style={{ width: DEVICE_LARGE ? 104 : 85 }}
     />
   ),
-  headerLeft: () => null,
+  headerLeft: () => {
+    if (__DEV__) {
+      return (
+        <TouchableOpacity
+          testID="pasteDeeplink"
+          style={{ marginLeft: 10 }}
+          onPress={async () => {
+            const text = await Clipboard.getString();
+            console.log(`Linking.openURL with ${text}`);
+            Linking.openURL(text);
+          }}
+        >
+          <Material
+            name="content-paste"
+            size={DEVICE_LARGE ? 28 : 23}
+            color="#000"
+          />
+        </TouchableOpacity>
+      );
+    } else {
+      return null;
+    }
+  },
   headerRight: () => (
     <TouchableOpacity
       style={{ marginRight: 25 }}
@@ -63,9 +91,15 @@ const recoveringConnectionOptions = {
 
 const Home = () => {
   const notificationCount = useSelector(
-    ({ user: { notifications }, groups: { invites } }) =>
-      notifications?.length +
-      invites?.filter((invite) => invite.state === INVITE_ACTIVE)?.length,
+    ({
+      notifications: { pendingConnections, backupPending },
+      groups: { invites },
+    }) =>
+      backupPending
+        ? 1
+        : 0 +
+          pendingConnections?.length +
+          invites?.filter((invite) => invite.state === INVITE_ACTIVE)?.length,
   );
   return (
     <>

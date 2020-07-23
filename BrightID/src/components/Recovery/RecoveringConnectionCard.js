@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import RNFS from 'react-native-fs';
 import moment from 'moment';
 import { DEVICE_TYPE } from '@/utils/constants';
-import backupApi from '@/Api/BackupApi';
+import backupApi from '@/api/backupService';
 import { parseRecoveryQr } from './helpers';
 
 class RecoveryConnectionCard extends React.PureComponent<Props> {

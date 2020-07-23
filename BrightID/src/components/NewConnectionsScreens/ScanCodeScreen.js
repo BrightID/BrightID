@@ -1,41 +1,42 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 // @flow
 
 import React, { useCallback, useState } from 'react';
 import {
-  Alert,
   Linking,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useRoute,
+  useNavigation,
+} from '@react-navigation/native';
 import { SvgXml } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import BarcodeMask from 'react-native-barcode-mask';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-native-spinkit';
-import {
-  DEVICE_LARGE,
-  DEVICE_IOS,
-  PROFILE_POLL_INTERVAL,
-  QR_TYPE_RESPONDER,
-  ORANGE,
-} from '@/utils/constants';
-import { parseQrData } from '@/utils/qrCodes';
+import { DEVICE_LARGE, DEVICE_IOS, ORANGE } from '@/utils/constants';
 import qricon from '@/static/qr_icon_white.svg';
+import {
+  channel_types,
+  selectAllChannels,
+} from '@/components/NewConnectionsScreens/channelSlice';
+import {
+  pendingConnection_states,
+  selectAllPendingConnections,
+} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+import { decodeChannelQrString } from '@/utils/channels';
+import { joinChannel } from '@/components/NewConnectionsScreens/actions/channelThunks';
 import { RNCamera } from './RNCameraProvider';
-import emitter from '../../emitter';
-import { setConnectQrData } from '../../actions';
-import { fetchProfile } from './actions/profile';
-import { stopConnecting } from './actions/connecting';
 
 /**
  * Returns whether the string is a valid QR identifier
  * @param {*} qrString
  */
-function validQrString(qrString) {
+function validQrString(qrString: string) {
   return qrString.length >= 42;
 }
 
@@ -47,90 +48,76 @@ function validQrString(qrString) {
  *
  */
 
-let fetchProfileId: IntervalID;
-let connectionExpired: TimeoutID;
-
 const Container = DEVICE_IOS ? SafeAreaView : View;
 
-export const ScanCodeScreen = (props) => {
-  const { navigation, route } = props;
+export const ScanCodeScreen = () => {
+  const route = useRoute();
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const [scanned, setScanned] = useState(false);
-  const [connectionAttempts, setConnectionAttempts] = useState(0);
   const name = useSelector((state) => state.user.name);
-  const connectDataExists = useSelector((state) => !!state.connectUserData.id);
+  const pendingConnections = useSelector(selectAllPendingConnections);
+  const channels = useSelector(selectAllChannels);
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(stopConnecting());
-      if (connectDataExists) {
-        unsubscribeToProfileUpload();
-        navigation.navigate('PreviewConnection');
-        return;
-      }
-      const handleDownloadFailure = () => {
-        setConnectionAttempts(connectionAttempts + 1);
-        if (connectionAttempts > 1) {
-          navigation.navigate('Home');
+      if (pendingConnections) {
+        // check all pending connections. If there is a pending connection for a 1:1 channel,
+        // directly open PreviewConnectionScreen.
+        for (const pc of pendingConnections) {
+          if (pc.state === pendingConnection_states.UNCONFIRMED) {
+            const channel = channels.find(
+              (channel) => channel.id === pc.channelId,
+            );
+            if (channel && channel.type === channel_types.SINGLE) {
+              navigation.navigate('PreviewConnection', {
+                pendingConnectionId: pc.id,
+              });
+            }
+          }
         }
-      };
-
-      emitter.on('connectFailure', handleDownloadFailure);
-
-      return () => {
-        unsubscribeToProfileUpload();
-
-        emitter.off('connectFailure', handleDownloadFailure);
-      };
-    }, [connectionAttempts, connectDataExists]),
+      }
+    }, [pendingConnections, channels, navigation]),
   );
 
-  const subscribeToProfileUpload = (peerQrData) => {
-    console.log(`Subscribing to profile Upload for uuid ${peerQrData.uuid}`);
-
-    connectionExpired = setTimeout(showProfileError, 90000);
-    fetchProfileId = setInterval(() => {
-      dispatch(fetchProfile(peerQrData));
-    }, PROFILE_POLL_INTERVAL);
-  };
-
-  const unsubscribeToProfileUpload = () => {
-    console.log(`Unsubsubscribing from profile Upload`);
-    clearTimeout(connectionExpired);
-    clearInterval(fetchProfileId);
-  };
-
-  const handleBarCodeRead = ({ data }) => {
+  const handleBarCodeRead = async (data: string) => {
     console.log('barcode data', data);
     if (!data) return;
 
+    setScanned(true);
+
     if (data.startsWith('Recovery_')) {
-      props.navigation.navigate('RecoveringConnection', {
+      navigation.navigate('RecoveringConnection', {
         recoveryRequestCode: data,
       });
     } else if (data.startsWith('brightid://')) {
-      Linking.openURL(data);
+      await Linking.openURL(data);
     } else if (validQrString(data)) {
-      const peerQrData = parseQrData(data);
-      peerQrData.type = QR_TYPE_RESPONDER;
-      dispatch(setConnectQrData(peerQrData));
-      subscribeToProfileUpload(peerQrData);
+      const channel = await decodeChannelQrString(data);
+      dispatch(joinChannel(channel));
     }
-    setScanned(true);
   };
 
   // handle deep links
   if (route.params?.qrcode && !scanned) {
-    handleBarCodeRead({ data: route.params?.qrcode });
+    // $FlowFixMe
+    handleBarCodeRead(route.params.qrcode);
   }
 
-  const showProfileError = () => {
-    Alert.alert(
-      'Timeout reached',
-      "There was a problem downloading the other person's profile. Please try again.",
-    );
-    setScanned(true);
-  };
+  const pclist = pendingConnections.map((pc) => (
+    <TouchableOpacity
+      key={pc.id}
+      testID="ScanCodeToMyCodeBtn"
+      onPress={() => {
+        console.log(`Confirm connection ${pc.id}`);
+        navigation.navigate('PreviewConnection', {
+          pendingConnectionId: pc.id,
+        });
+      }}
+    >
+      <Text>{`${pc.name} - ${pc.id} - ${pc.channelId} - ${pc.state}`}</Text>
+    </TouchableOpacity>
+  ));
 
   return (
     <>
@@ -172,12 +159,14 @@ export const ScanCodeScreen = (props) => {
             </View>
           )}
         </View>
+        <Text>There are {pendingConnections.length} pending connections</Text>
+        {pclist}
         <Text style={styles.infoBottomText}>Or you can also...</Text>
         <TouchableOpacity
           testID="ScanCodeToMyCodeBtn"
           style={styles.showQrButton}
           onPress={() => {
-            props.navigation.navigate('MyCode');
+            navigation.navigate('MyCode');
           }}
         >
           <SvgXml

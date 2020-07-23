@@ -1,10 +1,9 @@
 // @flow
 import { Alert } from 'react-native';
-import store from '../store';
-import { removeOperation, resetOperations, updateApp } from '../actions';
-import fetchUserInfo from '../actions/fetchUserInfo';
-
-import api from '../Api/BrightId';
+import api from '@/api/brightId';
+import store from '@/store';
+import { removeOperation, resetOperations, updateApp } from '@/actions';
+import fetchUserInfo from '@/actions/fetchUserInfo';
 
 const time_fudge = 2 * 60 * 1000; // trace operations for 2 minutes
 

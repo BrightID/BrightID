@@ -13,6 +13,7 @@ export const LEAVE_GROUP = 'LEAVE_GROUP';
 export const DISMISS_FROM_GROUP = 'DISMISS_FROM_GROUP';
 export const ADD_ADMIN = 'ADD_ADMIN';
 export const SET_GROUP_SEARCH = 'SET_GROUP_SEARCH';
+export const SET_GROUP_SEARCH_OPEN = 'SET_GROUPS_SEARCH_OPEN';
 
 /**
  * redux action creator for create new group
@@ -102,4 +103,9 @@ export const acceptInvite = (inviteId: string) => ({
 export const setGroupSearch = (searchParam: string) => ({
   type: SET_GROUP_SEARCH,
   searchParam,
+});
+
+export const setGroupSearchOpen = (searchOpen: boolean) => ({
+  type: SET_GROUP_SEARCH_OPEN,
+  searchOpen,
 });

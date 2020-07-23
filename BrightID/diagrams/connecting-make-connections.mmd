@@ -1,0 +1,39 @@
+sequenceDiagram
+
+    %% Sequence of interconnecting a group
+    %% Preconditions:
+    %%  - Bob has a queue of pending group connections to establish
+    %%  - Bob has uploaded his profile to the group channel
+
+    autonumber
+	participant B as One participant ("Bob")
+    participant P as Profile Service
+    participant N as NodeAPI
+	participant O as Other participant ("Candidate")
+
+    loop for each candidate in pending connections queue
+        B->>B: confirm connection
+        alt Bob is initiating
+            B->>B: sign connection intent "Bob+Candidate"
+            B->>O: provide connection request
+            activate O
+            O->>P: request profile "Bob"
+            activate P
+            P->>O: provide profile "Bob"
+            deactivate P
+            O->>O: Add Bob to pending connections queue
+            deactivate O
+        else Bob is responding
+            B->>B: Add signature to connection intent from Candidate
+            B->>N: Submit "Add Connection Bob+Candidate" operation
+        end
+
+        B--xN: start polling for "Add connection" operation result
+        B->>B: locally store connection to candidate ("initiated" state)
+        B->>B: remove candidate from pending connections queue
+        N--xB: provide "Add connection" operation result
+        activate B
+        B->>B: change candidate connection state to "established"
+
+    end
+

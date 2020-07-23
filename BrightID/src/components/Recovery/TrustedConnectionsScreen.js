@@ -73,38 +73,44 @@ class TrustedConnectionsScreen extends React.Component<Props> {
     const connections = this.filterConnections();
 
     return (
-      <View style={styles.container}>
-        <View style={styles.mainContainer}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.infoText}>
-              Choose three or more trusted connections to back up your BrightID.
-            </Text>
-          </View>
-          {DEVICE_TYPE === 'large' && (
-            <SearchConnections navigation={navigation} />
-          )}
+      <>
+        <View style={styles.orangeTop} />
+        <View style={styles.container}>
           <View style={styles.mainContainer}>
-            <FlatList
-              style={styles.connectionsContainer}
-              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-              data={connections}
-              keyExtractor={({ id }, index) => id + index}
-              renderItem={this.renderConnection}
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}
-              ListEmptyComponent={<EmptyList title="No connections..." />}
-            />
+            <View style={styles.titleContainer}>
+              <Text style={styles.infoText}>
+                Choose three or more trusted connections to back up your
+                BrightID.
+              </Text>
+            </View>
+            <View style={styles.mainContainer}>
+              <FlatList
+                style={styles.connectionsContainer}
+                contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+                data={connections}
+                keyExtractor={({ id }, index) => id + index}
+                renderItem={this.renderConnection}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                ListEmptyComponent={
+                  <EmptyList
+                    iconType="account-off-outline"
+                    title="No connections"
+                  />
+                }
+              />
+            </View>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              onPress={this.navigateToBackup}
+              style={styles.nextButton}
+            >
+              <Text style={styles.buttonInnerText}>Next</Text>
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            onPress={this.navigateToBackup}
-            style={styles.nextButton}
-          >
-            <Text style={styles.buttonInnerText}>Next</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </>
     );
   }
 }
@@ -119,9 +125,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    borderTopLeftRadius: 58,
+    marginTop: -58,
+    overflow: 'hidden',
+    zIndex: 10,
   },
   mainContainer: {
-    marginTop: 8,
+    marginTop: 4,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -129,8 +139,6 @@ const styles = StyleSheet.create({
   connectionsContainer: {
     flex: 1,
     width: '96.7%',
-    borderTopWidth: 1,
-    borderTopColor: '#e3e1e1',
   },
   emptyText: {
     fontFamily: 'ApexNew-Book',
@@ -142,6 +150,8 @@ const styles = StyleSheet.create({
     marginTop: DEVICE_TYPE === 'large' ? 6 : 0,
     backgroundColor: '#fff',
     width: '96.7%',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e3e1e1',
   },
   infoText: {
     fontFamily: 'ApexNew-Book',
@@ -150,7 +160,8 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     letterSpacing: 0,
     textAlign: 'left',
-    margin: 6,
+    margin: 12,
+    paddingLeft: 10,
   },
   connectionCard: {
     marginBottom: 0,
@@ -184,6 +195,6 @@ const styles = StyleSheet.create({
 });
 
 export default connect(({ connections, user }) => ({
-  ...connections,
   ...user,
+  ...connections,
 }))(TrustedConnectionsScreen);
