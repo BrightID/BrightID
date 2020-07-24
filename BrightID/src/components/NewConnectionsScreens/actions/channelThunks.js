@@ -20,6 +20,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   newPendingConnection,
   selectAllPendingConnectionIds,
+  updatePendingConnection,
+  selectPendingConnectionById,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 
 export const createChannel = (channelType: ChannelType) => async (
@@ -113,6 +115,9 @@ export const subscribeToConnectionRequests = (channelId: string) => (
   }
 
   pollTimerId = setInterval(() => {
+    // fetch all profileIDs in channel
+    dispatch(fetchChannelProfiles(channelId));
+    // fetch connection requests
     dispatch(fetchConnectionRequests(channelId));
   }, PROFILE_POLL_INTERVAL);
 
@@ -151,7 +156,6 @@ export const fetchChannelProfiles = createAsyncThunk(
   async (channelId, { getState, dispatch }) => {
     const channel = selectChannelById(getState(), channelId);
     const url = `http://${channel.ipAddress}/profile/list/${channelId}`;
-    console.log(`fetching profiles from channel ${channelId} from ${url}`);
     const response = await fetch(url, {
       headers: { 'Cache-Control': 'no-cache' },
     });
@@ -163,15 +167,25 @@ export const fetchChannelProfiles = createAsyncThunk(
     const responseObj = await response.json();
     if (responseObj && responseObj.profileIds) {
       const { profileIds } = responseObj;
-      console.log(`Got ${profileIds.length} profileIds:`);
-      console.dir(profileIds);
+
+      const knownProfileIds = selectAllPendingConnectionIds(getState());
       profileIds.forEach((profileId) => {
-        dispatch(
-          newPendingConnection({
-            channelId,
-            profileId,
-          }),
-        );
+        if (
+          profileId !== channel.myProfileId &&
+          !knownProfileIds.includes(profileId)
+        ) {
+          dispatch(
+            newPendingConnection({
+              channelId,
+              profileId,
+            }),
+          );
+        }
+
+        if (profileIds.length > knownProfileIds.length + 1) {
+          console.log(`Got ${profileIds.length} profileIds:`);
+          console.dir(profileIds);
+        }
       });
     } else {
       throw new Error(`Response does not include profileIds array.`);
@@ -196,41 +210,51 @@ export const fetchConnectionRequests = createAsyncThunk(
     const responseObj = await response.json();
     if (responseObj && responseObj.profileIds) {
       const { profileIds } = responseObj;
-      // remove known profileIds
-      const knownProfileIds = selectAllPendingConnectionIds(getState());
-      const newProfileIds = profileIds.filter(
-        (id) => !knownProfileIds.includes(id),
-      );
-      for (const profileId of newProfileIds) {
-        console.log(`Got new connection request from profileId ${profileId}.`);
-        // download connectionrequest to get signedMessage
-        const url = `http://${channel.ipAddress}/profile/download/${myProfileId}/${profileId}`;
-        console.log(
-          `fetching connectionRequest ${profileId} for my profile ${myProfileId} from ${url}`,
+      for (const profileId of profileIds) {
+        // check if signedMessage and profile exists
+        const pendingConnection = selectPendingConnectionById(
+          getState(),
+          profileId,
         );
-        const response = await fetch(url, {
-          headers: { 'Cache-Control': 'no-cache' },
-        });
-        if (!response.ok) {
-          throw new Error(
-            `Profile server returned ${response.status}: ${response.statusText} for url: ${url}`,
+        if (pendingConnection && !pendingConnection.signedMessage) {
+          console.log(
+            `Got new connection request from profileId ${profileId}.`,
           );
-        }
-        const responseJson = await response.json();
-        const { signedMessage, connectionTimestamp } = responseJson.data;
-        if (signedMessage) {
-          // add new pendingConnection, including signedMessage and timestamp
-          dispatch(
-            newPendingConnection({
-              channelId,
-              profileId,
-              signedMessage,
-              timestamp: connectionTimestamp,
-            }),
+          // download connectionrequest to get signedMessage
+          const url = `http://${channel.ipAddress}/profile/download/${myProfileId}/${profileId}`;
+          console.log(
+            `fetching connectionRequest ${profileId} for my profile ${myProfileId} from ${url}`,
           );
-        } else {
-          console.dir(responseJson);
-          throw new Error(`Response does not include signedMessage.`);
+          const response = await fetch(url, {
+            headers: {
+              'Cache-Control': 'no-cache',
+            },
+          });
+          if (!response.ok) {
+            throw new Error(
+              `Profile server returned ${response.status}: ${response.statusText} for url: ${url}`,
+            );
+          }
+          const responseJson = await response.json();
+
+          console.log('profileResponse', responseJson);
+          const { signedMessage, connectionTimestamp } = responseJson.data;
+          if (signedMessage) {
+            // update existing pendingConnection with signedMessage and timestamp
+            console.log('updating Pending Connection with signed messag');
+            dispatch(
+              updatePendingConnection({
+                id: profileId,
+                changes: {
+                  signedMessage,
+                  timestamp: connectionTimestamp,
+                },
+              }),
+            );
+          } else {
+            console.dir(responseJson);
+            throw new Error(`Response does not include signedMessage.`);
+          }
         }
       }
     }
@@ -253,18 +277,29 @@ export const encryptAndUploadProfileToChannel = (channelId: string) => async (
     } = getState().user;
     // retrieve photo
     const photo = await retrieveImage(filename);
+    const profileTimestamp = Date.now();
 
     const dataObj = {
       id,
       photo,
       name,
       score,
+      profileTimestamp,
     };
 
     console.log(`Encrypting profile data with key ${channel.aesKey}`);
     let encrypted = encryptData(dataObj, channel.aesKey);
     console.log(`Posting profile data...`);
     await postProfileToChannel(encrypted, channel);
+
+    dispatch(
+      updateChannel({
+        id: channelId,
+        changes: {
+          myProfileTimestamp: profileTimestamp,
+        },
+      }),
+    );
   } catch (err) {
     err instanceof Error ? console.warn(err.message) : console.log(err);
   }

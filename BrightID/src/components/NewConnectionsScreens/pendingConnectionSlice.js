@@ -43,6 +43,7 @@ export const newPendingConnection = createAsyncThunk(
     console.log(
       `new pending connection ${profileId} with signedMessage "${signedMessage}" in channel ${channelId}`,
     );
+
     const channel = selectChannelById(getState(), channelId);
     // download profile
     const url = `http://${channel.ipAddress}/profile/download/${channelId}/${profileId}`;
@@ -137,6 +138,7 @@ const pendingConnectionsSlice = createSlice({
         score,
         signedMessage,
         timestamp,
+        profileTimestamp,
       } = action.payload;
 
       // Perform the update in redux
@@ -150,6 +152,7 @@ const pendingConnectionsSlice = createSlice({
           score,
           signedMessage,
           timestamp,
+          profileTimestamp,
         },
       });
     },

@@ -60,6 +60,7 @@ declare type Channel = {
   timeoutId?: TimeoutID,
   type: ChannelType,
   state: ChannelState,
+  myProfileTimestamp?: number,
 };
 
 declare type ConnectionsState = {

@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useRef } from 'react';
 import {
   Alert,
   BackHandler,
@@ -16,6 +16,7 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
@@ -23,6 +24,9 @@ import {
   pendingConnection_states,
   rejectPendingConnection,
   selectPendingConnectionById,
+
+  // pendingConnection_states,
+  selectAllPendingConnections,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import { confirmPendingConnectionThunk } from '@/components/NewConnectionsScreens/actions/pendingConnectionThunks';
 import {
@@ -30,6 +34,7 @@ import {
   selectChannelById,
 } from '@/components/NewConnectionsScreens/channelSlice';
 import api from '@/api/brightId';
+import { WIDTH, HEIGHT } from '@/utils/constants';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -38,14 +43,11 @@ import api from '@/api/brightId';
  *
  */
 
-export const PreviewConnectionScreen = () => {
+export const PreviewConnection = ({ pendingConnection, carouselRef }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const route = useRoute();
   const myConnections = useSelector((state) => state.connections.connections);
-  const pendingConnection: PendingConnection = useSelector((state) =>
-    selectPendingConnectionById(state, route.params?.pendingConnectionId),
-  );
+
   const channel: Channel | typeof undefined = useSelector((state) => {
     if (pendingConnection) {
       return selectChannelById(state, pendingConnection.channelId);
@@ -65,39 +67,17 @@ export const PreviewConnectionScreen = () => {
   // TODO: Why is this wrapped in useCallback??
   const reject = useCallback(() => {
     dispatch(rejectPendingConnection(pendingConnection.id));
-    if (channel?.type === channel_types.GROUP) {
-      navigation.goBack();
-    } else {
-      navigation.navigate('Home');
-    }
+    carouselRef.current?.snapToNext();
     return true;
-  }, [dispatch, navigation, pendingConnection.id, channel]);
+  }, [dispatch, pendingConnection.id, carouselRef]);
 
   const handleConfirmation = async () => {
     dispatch(confirmPendingConnectionThunk(pendingConnection.id));
-    if (channel?.type === channel_types.GROUP) {
-      navigation.goBack();
-    } else {
-      navigation.navigate('ConnectSuccess');
-    }
+    carouselRef.current?.snapToNext();
   };
 
   useFocusEffect(
     useCallback(() => {
-      if (!pendingConnection) {
-        Alert.alert(
-          'Sorry',
-          'There was a problem creating a connection',
-          [
-            {
-              text: 'OK',
-              onPress: navigation.goBack,
-            },
-          ],
-          { cancelable: true },
-        );
-        return;
-      }
       const fetchConnectionInfo = async () => {
         console.log(`TODO: Move fetchConnectionInfo() to Redux!`);
         try {
@@ -140,11 +120,18 @@ export const PreviewConnectionScreen = () => {
 
       BackHandler.addEventListener('hardwareBackPress', reject);
       return () => BackHandler.removeEventListener('hardwareBackPress', reject);
-    }, [pendingConnection, reject, navigation.goBack, myConnections]),
+    }, [pendingConnection, reject, myConnections]),
   );
 
   let buttonContainer;
-  if (pendingConnection.state === pendingConnection_states.CONFIRMING) {
+  if (
+    pendingConnection.profileTimestamp < channel?.myProfileTimestamp &&
+    !pendingConnection.signedMessage
+  ) {
+    buttonContainer = (
+      <Text>Waiting for {pendingConnection.name} to confirm...</Text>
+    );
+  } else if (pendingConnection.state === pendingConnection_states.CONFIRMING) {
     buttonContainer = <Text>Confirming connection...</Text>;
   } else {
     buttonContainer = (
@@ -168,7 +155,7 @@ export const PreviewConnectionScreen = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container} testID="previewConnectionScreen">
+    <View style={styles.previewContainer} testID="previewConnectionScreen">
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#fff"
@@ -212,6 +199,52 @@ export const PreviewConnectionScreen = () => {
         </View>
       </View>
       <View style={styles.buttonContainer}>{buttonContainer}</View>
+    </View>
+  );
+};
+
+export const PendingConnectionsScreen = () => {
+  const navigation = useNavigation();
+  const carouselRef = useRef(null);
+  const pendingChannelConnections = useSelector((state) => {
+    return selectAllPendingConnections(state).filter(
+      (pc) =>
+        pc.state === pendingConnection_states.UNCONFIRMED ||
+        pc.state === pendingConnection_states.CONFIRMING,
+    );
+  });
+
+  const renderItem = ({ item }) => (
+    <PreviewConnection pendingConnection={item} carouselRef={carouselRef} />
+  );
+
+  console.log('RENDERING PENDING CONNECTIONS');
+
+  return (
+    <SafeAreaView
+      style={[styles.container]}
+      onPress={() => {
+        navigation.goBack();
+      }}
+    >
+      <TouchableOpacity
+        style={styles.cancelButton}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
+        <Text>X</Text>
+      </TouchableOpacity>
+      <Carousel
+        ref={carouselRef}
+        data={pendingChannelConnections}
+        renderItem={renderItem}
+        layout="stack"
+        lockScrollWhileSnapping={true}
+        itemWidth={WIDTH * 0.9}
+        sliderWidth={WIDTH}
+      />
+      <Text>No new connections...</Text>
     </SafeAreaView>
   );
 };
@@ -219,14 +252,22 @@ export const PreviewConnectionScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#ececec',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  previewContainer: {
     width: '100%',
+    height: HEIGHT - 120,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'column',
+    borderRadius: 10,
+    marginTop: 60,
   },
   questionTextContainer: {
-    marginTop: 20,
+    marginTop: 60,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -337,6 +378,12 @@ const styles = StyleSheet.create({
     color: '#aba9a9',
     fontStyle: 'italic',
   },
+  cancelButton: {
+    position: 'absolute',
+    left: 30,
+    top: 40,
+    zIndex: 20,
+  },
 });
 
-export default PreviewConnectionScreen;
+export default PendingConnectionsScreen;

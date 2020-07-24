@@ -59,21 +59,21 @@ export const ScanCodeScreen = () => {
   const pendingConnections = useSelector(selectAllPendingConnections);
   const channels = useSelector(selectAllChannels);
 
+  console.log('pendingConnections', pendingConnections);
+
   useFocusEffect(
     useCallback(() => {
-      if (pendingConnections) {
+      if (pendingConnections.length) {
         // check all pending connections. If there is a pending connection for a 1:1 channel,
-        // directly open PreviewConnectionScreen.
+        // directly open PendingConnectionsScreen.
         for (const pc of pendingConnections) {
           if (pc.state === pendingConnection_states.UNCONFIRMED) {
             const channel = channels.find(
               (channel) => channel.id === pc.channelId,
             );
-            if (channel && channel.type === channel_types.SINGLE) {
-              navigation.navigate('PreviewConnection', {
-                pendingConnectionId: pc.id,
-              });
-            }
+            channel && channel.type === channel_types.SINGLE
+              ? navigation.navigate('PendingConnections')
+              : navigation.navigate('GroupConnection', { channel });
           }
         }
       }
@@ -110,7 +110,7 @@ export const ScanCodeScreen = () => {
       testID="ScanCodeToMyCodeBtn"
       onPress={() => {
         console.log(`Confirm connection ${pc.id}`);
-        navigation.navigate('PreviewConnection', {
+        navigation.navigate('PendingConnections', {
           pendingConnectionId: pc.id,
         });
       }}
@@ -257,5 +257,4 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
 });
-
 export default ScanCodeScreen;

@@ -10,7 +10,20 @@ import groups from '@/static/add_group.svg';
 import connections from '@/static/add_person.svg';
 import misc from '@/static/trusted_connections.svg';
 import { setActiveNotification } from '@/actions';
-import { DEVICE_ANDROID, DEVICE_LARGE } from '@/utils/constants';
+import {
+  DEVICE_ANDROID,
+  DEVICE_LARGE,
+  CONNECTIONS_TYPE,
+} from '@/utils/constants';
+import {
+  // channel_states,
+  channel_types,
+  selectChannelById,
+} from '@/components/NewConnectionsScreens/channelSlice';
+import {
+  // pendingConnection_states,
+  selectAllPendingConnections,
+} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 
 /* notification types: 
 @type groups
@@ -27,6 +40,39 @@ export const NotificationBanner = () => {
     (state) => state.notifications.activeNotification,
     shallowEqual,
   );
+
+  const myChannel = useSelector(
+    (state) => selectChannelById(state, state.channels.myChannelId),
+    (a, b) => a?.id === b?.id,
+  );
+  // pending connections attached to my channel
+  const pendingChannelConnections = useSelector(
+    (state) => {
+      if (myChannel) {
+        return selectAllPendingConnections(state).filter(
+          (pc) => pc.channelId === myChannel.id,
+        );
+      } else {
+        return [];
+      }
+    },
+    (a, b) => a.length === b.length,
+  );
+
+  useEffect(() => {
+    console.log('IN DAT EFFECT');
+    if (
+      myChannel?.type === channel_types.GROUP &&
+      pendingChannelConnections.length > 0
+    ) {
+      dispatch(
+        setActiveNotification({
+          message: `You have ${pendingChannelConnections.length} pending Connections`,
+          type: CONNECTIONS_TYPE,
+        }),
+      );
+    }
+  }, [myChannel, pendingChannelConnections.length, dispatch]);
 
   useEffect(() => {
     if (!activeNotification) return;
@@ -48,7 +94,12 @@ export const NotificationBanner = () => {
     if (DEVICE_ANDROID) {
       StatusBar.setBackgroundColor('#fff', true);
     }
-    navigate('Notifications', { type: activeNotification?.type });
+
+    if (activeNotification?.type === CONNECTIONS_TYPE) {
+      navigate('PendingConnections');
+    } else {
+      navigate('Notifications', { type: activeNotification?.type });
+    }
   }, [activeNotification]);
 
   const _onClose = () => {
@@ -84,7 +135,9 @@ export const NotificationBanner = () => {
           height={DEVICE_LARGE ? 24 : 20}
         />
       )}
-      panResponderEnabled={activeNotification?.type !== 'newConnection'}
+      panResponderEnabled={
+        activeNotification?.type !== CONNECTIONS_TYPE || __DEV__
+      }
     />
   );
 };

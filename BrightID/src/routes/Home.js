@@ -34,9 +34,10 @@ const homeScreenOptions = (notificationCount) => ({
           testID="pasteDeeplink"
           style={{ marginLeft: 10 }}
           onPress={async () => {
-            const text = await Clipboard.getString();
-            console.log(`Linking.openURL with ${text}`);
-            Linking.openURL(text);
+            let url = await Clipboard.getString();
+            url = url.replace('https://app.brightid.org', 'brightid://');
+            console.log(`Linking.openURL with ${url}`);
+            Linking.openURL(url);
           }}
         >
           <Material

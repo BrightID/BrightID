@@ -44,10 +44,12 @@ const useRefresh = () => {
 
 const ConnectionsList = ({ route }) => {
   const [refreshing, onRefresh] = useRefresh();
-  const pendingConnections = useSelector(
-    (state) => state.notifications.pendingConnections,
-    shallowEqual,
-  );
+  // const pendingConnections = useSelector(
+  //   (state) => state.notifications.pendingConnections,
+  //   shallowEqual,
+  // );
+
+  const pendingConnections = [];
 
   return (
     <FlatList
@@ -173,9 +175,11 @@ const renderTabBar = (props) => (
 export const NotificationsScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
-  const pendingConnections = useSelector(
-    (state) => state.notifications.pendingConnections.length,
-  );
+  // const pendingConnections = useSelector(
+  //   (state) => state.notifications.pendingConnections.length,
+  // );
+
+  const pendingConnections = 0;
   const invites = useSelector(
     (state) =>
       state.groups.invites.filter(({ state }) => state === INVITE_ACTIVE)

@@ -58,19 +58,24 @@ export const MyCodeScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const name = useSelector((state) => state.user.name);
-  const myChannel = useSelector((state) =>
-    selectChannelById(state, state.channels.myChannelId),
+  const myChannel = useSelector(
+    (state) => selectChannelById(state, state.channels.myChannelId),
+    (a, b) => a?.id === b?.id,
   );
   // pending connections attached to my channel
-  const pendingChannelConnections = useSelector((state) => {
-    if (myChannel) {
-      return selectAllPendingConnections(state).filter(
-        (pc) => pc.channelId === myChannel.id,
-      );
-    } else {
-      return [];
-    }
-  });
+  const pendingChannelConnections = useSelector(
+    (state) => {
+      if (myChannel) {
+        return selectAllPendingConnections(state).filter(
+          (pc) => pc.channelId === myChannel.id,
+        );
+      } else {
+        return [];
+      }
+    },
+    (a, b) => a.length === b.length,
+  );
+
   const [qrString, setQrString] = useState('');
   const [qrsvg, setQrsvg] = useState('');
   const [copied, setCopied] = useState(false);
@@ -97,14 +102,14 @@ export const MyCodeScreen = () => {
   }, [myChannel]);
 
   const timerTick = () => {
-    if (myChannel) {
+    if (myChannel && navigation.isFocused()) {
       let countDown = myChannel.ttl - (Date.now() - myChannel.timestamp);
       setCountdown(countDown);
     }
   };
 
   // start local timer to display countdown
-  useInterval(timerTick, 100);
+  // useInterval(timerTick, 100);
 
   // set up top right button in header
   useLayoutEffect(() => {
@@ -139,17 +144,17 @@ export const MyCodeScreen = () => {
 
   useEffect(() => {
     if (myChannel && myChannel.type === channel_types.SINGLE) {
-      // If i created a 1:1 channel and there is a pending connection in UNCONFIRMED state -> directly open PreviewConnectionScreen.
+      // If i created a 1:1 channel and there is a pending connection in UNCONFIRMED state -> directly open PendingonnectionScreen.
       // there should be only one connection, but if multiple people scanned my code, the first one wins
       for (const pc of pendingChannelConnections) {
         if (pc.state === pendingConnection_states.UNCONFIRMED) {
-          navigation.navigate('PreviewConnection', {
+          navigation.navigate('PendingConnections', {
             pendingConnectionId: pc.id,
           });
         }
       }
     }
-  }, [myChannel, navigation, pendingChannelConnections]);
+  }, [myChannel, navigation, pendingChannelConnections.length]);
 
   const toggleGroup = () => {
     // remove current channel
@@ -178,21 +183,6 @@ export const MyCodeScreen = () => {
     setCopied(true);
     setTimeout(() => setCopied(false), COPIED_TIMEOUT);
   };
-
-  const pclist = pendingChannelConnections.map((pc) => (
-    <TouchableOpacity
-      key={pc.id}
-      testID="ScanCodeToMyCodeBtn"
-      onPress={() => {
-        console.log(`Confirm connection ${pc.id}`);
-        navigation.navigate('PreviewConnection', {
-          pendingConnectionId: pc.id,
-        });
-      }}
-    >
-      <Text>{`${pc.name} - ${pc.id} - ${pc.channelId} - ${pc.state}`}</Text>
-    </TouchableOpacity>
-  ));
 
   const renderCopyQr = () => (
     <View style={styles.copyContainer}>
@@ -263,6 +253,7 @@ export const MyCodeScreen = () => {
       <Path stroke="#000" d={path(['svg', 'path', '1', '$', 'd'], qrsvg)} />
     </Svg>
   );
+
   return (
     <>
       <View style={styles.orangeTop} />
@@ -317,7 +308,6 @@ export const MyCodeScreen = () => {
         <Text>
           There are {pendingChannelConnections.length} pending connections
         </Text>
-        {pclist}
         <Text style={styles.infoBottomText}>Or you can also...</Text>
         <TouchableOpacity
           testID="MyCodeToScanCodeBtn"
