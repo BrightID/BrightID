@@ -148,7 +148,11 @@ export class SignUp extends React.Component<Props, State> {
                 accessibilityLabel="add photo"
               >
                 <Text style={styles.addPhotoText}>Add Photo</Text>
-                <SimpleLineIcons size={42} name="camera" color="#979797" />
+                <SimpleLineIcons
+                  size={DEVICE_LARGE ? 42 : 36}
+                  name="camera"
+                  color="#979797"
+                />
               </TouchableOpacity>
             ) : (
               <View />
@@ -237,7 +241,7 @@ export class SignUp extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: DEVICE_LARGE ? 70 : 60,
     width: '100%',
     zIndex: 1,
   },
@@ -256,10 +260,10 @@ const styles = StyleSheet.create({
   addPhotoContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 28,
+    marginTop: DEVICE_LARGE ? 28 : 25,
   },
   textInputContainer: {
-    marginTop: 28,
+    marginTop: DEVICE_LARGE ? 28 : 25,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -271,16 +275,16 @@ const styles = StyleSheet.create({
   addPhoto: {
     borderWidth: 1,
     borderColor: '#979797',
-    height: 160,
-    width: 160,
-    borderRadius: 90,
+    height: DEVICE_LARGE ? 160 : 140,
+    width: DEVICE_LARGE ? 160 : 140,
+    borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
   },
   photo: {
-    width: 160,
-    height: 160,
-    borderRadius: 90,
+    width: DEVICE_LARGE ? 160 : 140,
+    height: DEVICE_LARGE ? 160 : 140,
+    borderRadius: 100,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
@@ -294,34 +298,34 @@ const styles = StyleSheet.create({
     color: '#979797',
     marginBottom: 11,
     marginTop: 11,
-    fontSize: 18,
+    fontSize: DEVICE_LARGE ? 18 : 16,
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
   },
   midText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 16,
+    fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#333',
   },
   textInput: {
     fontFamily: 'ApexNew-Light',
-    fontSize: 28,
+    fontSize: DEVICE_LARGE ? 28 : 25,
     color: '#333',
     fontWeight: '300',
     fontStyle: 'normal',
     letterSpacing: 0,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#9e9e9e',
-    marginTop: 16,
-    width: 275,
+    marginTop: DEVICE_LARGE ? 16 : 14,
+    width: DEVICE_LARGE ? 275 : 250,
     textAlign: 'center',
     height: 60,
   },
   buttonInfoText: {
     fontFamily: 'ApexNew-Book',
     color: '#9e9e9e',
-    fontSize: 14,
+    fontSize: DEVICE_LARGE ? 14 : 12,
     width: 298,
     textAlign: 'center',
   },
@@ -330,8 +334,8 @@ const styles = StyleSheet.create({
     width: DEVICE_LARGE ? 285 : 260,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: DEVICE_LARGE ? 14 : 10,
-    paddingBottom: DEVICE_LARGE ? 13 : 9,
+    paddingTop: DEVICE_LARGE ? 14 : 12,
+    paddingBottom: DEVICE_LARGE ? 13 : 11,
     marginTop: 22,
   },
   buttonInnerText: {
@@ -344,8 +348,8 @@ const styles = StyleSheet.create({
     width: DEVICE_LARGE ? 285 : 260,
     borderWidth: 1,
     borderColor: '#4990e2',
-    paddingTop: DEVICE_LARGE ? 14 : 10,
-    paddingBottom: DEVICE_LARGE ? 13 : 9,
+    paddingTop: DEVICE_LARGE ? 14 : 12,
+    paddingBottom: DEVICE_LARGE ? 13 : 11,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
