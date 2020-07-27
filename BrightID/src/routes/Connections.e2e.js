@@ -20,6 +20,7 @@ const connectionsScreenOptions = {
       testID="connections-header-back"
       style={{
         marginLeft: DEVICE_IOS ? 20 : 10,
+        padding: 10,
       }}
       onPress={() => {
         navigate('Home');
