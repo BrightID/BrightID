@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { getGroupName } from '@/utils/groups';
-import { DEVICE_TYPE, DEVICE_IOS } from '@/utils/constants';
+import { DEVICE_TYPE } from '@/utils/constants';
 import emitter from '@/emitter';
 import GroupsScreen from '@/components/GroupsScreens/GroupsScreen';
 import SearchGroups from '@/components/Helpers/SearchGroups';
@@ -15,10 +15,7 @@ import NewGroupScreen from '@/components/GroupsScreens/NewGroups/NewGroupScreen'
 import GroupInfoScreen from '@/components/GroupsScreens/NewGroups/GroupInfoScreen';
 import MembersScreen from '@/components/GroupsScreens/Members/MembersScreen';
 import InviteListScreen from '@/components/GroupsScreens/Members/InviteListScreen';
-import { navigate } from '@/NavigationService';
-import backArrow from '@/static/back_arrow.svg';
-import { SvgXml } from 'react-native-svg';
-import { headerOptions, headerTitleStyle } from './helpers';
+import { headerOptions, headerTitleStyle, NavHome } from './helpers';
 
 const Stack = createStackNavigator();
 
@@ -45,21 +42,7 @@ const HeaderTitle = ({ title }) => {
 const groupsOptions = {
   ...headerOptions,
   headerRight: () => <SearchGroups />,
-  headerLeft: () => (
-    <TouchableOpacity
-      testID="groups-header-back"
-      style={{
-        marginLeft: DEVICE_IOS ? 20 : 10,
-        // marginTop: DEVICE_LARGE ? 15 : 10,
-        padding: 10,
-      }}
-      onPress={() => {
-        navigate('Home');
-      }}
-    >
-      <SvgXml height="20" xml={backArrow} />
-    </TouchableOpacity>
-  ),
+  headerLeft: () => <NavHome />,
   headerTitle: () => <HeaderTitle title="Groups" />,
 };
 

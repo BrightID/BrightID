@@ -1,16 +1,12 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, Text, TouchableOpacity } from 'react-native';
+import { Animated, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ConnectionsScreen from '@/components/Connections/ConnectionsScreen';
 import SortingConnectionsScreen from '@/components/Connections/SortingConnectionsScreen';
 import SearchConnections from '@/components/Helpers/SearchConnections';
 import TrustedConnectionsScreen from '@/components/Recovery/TrustedConnectionsScreen';
-import { DEVICE_IOS } from '@/utils/constants';
-import { navigate } from '@/NavigationService';
-import backArrow from '@/static/back_arrow.svg';
-import { SvgXml } from 'react-native-svg';
 import { useSelector } from 'react-redux';
-import { headerOptions, headerTitleStyle } from './helpers';
+import { headerOptions, headerTitleStyle, NavHome } from './helpers';
 
 const Stack = createStackNavigator();
 
@@ -35,20 +31,7 @@ const HeaderTitle = ({ title }) => {
 const connectionsScreenOptions = {
   ...headerOptions,
   headerRight: () => <SearchConnections sortable={true} />,
-  headerLeft: () => (
-    <TouchableOpacity
-      testID="connections-header-back"
-      style={{
-        marginLeft: DEVICE_IOS ? 20 : 10,
-        padding: 10,
-      }}
-      onPress={() => {
-        navigate('Home');
-      }}
-    >
-      <SvgXml height="20" xml={backArrow} />
-    </TouchableOpacity>
-  ),
+  headerLeft: () => <NavHome />,
   headerTitle: () => <HeaderTitle title="Connections" />,
 };
 
