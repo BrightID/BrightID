@@ -39,7 +39,7 @@ export const headerOptions = {
 
 export const NavHome = () => (
   <TouchableOpacity
-    testID="NewConnectionBackBtn"
+    testID="NavHomeBtn"
     style={{
       width: DEVICE_LARGE ? 60 : 50,
       alignItems: 'center',
