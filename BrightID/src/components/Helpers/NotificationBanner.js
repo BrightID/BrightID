@@ -41,39 +41,6 @@ export const NotificationBanner = () => {
     shallowEqual,
   );
 
-  const myChannel = useSelector(
-    (state) => selectChannelById(state, state.channels.myChannelId),
-    (a, b) => a?.id === b?.id,
-  );
-  // pending connections attached to my channel
-  const pendingChannelConnections = useSelector(
-    (state) => {
-      if (myChannel) {
-        return selectAllPendingConnections(state).filter(
-          (pc) => pc.channelId === myChannel.id,
-        );
-      } else {
-        return [];
-      }
-    },
-    (a, b) => a.length === b.length,
-  );
-
-  useEffect(() => {
-    console.log('IN DAT EFFECT');
-    if (
-      myChannel?.type === channel_types.GROUP &&
-      pendingChannelConnections.length > 0
-    ) {
-      dispatch(
-        setActiveNotification({
-          message: `You have ${pendingChannelConnections.length} pending Connections`,
-          type: CONNECTIONS_TYPE,
-        }),
-      );
-    }
-  }, [myChannel, pendingChannelConnections.length, dispatch]);
-
   useEffect(() => {
     if (!activeNotification) return;
 

@@ -18,6 +18,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import BarcodeMask from 'react-native-barcode-mask';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-native-spinkit';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import { DEVICE_LARGE, DEVICE_IOS, ORANGE } from '@/utils/constants';
 import qricon from '@/static/qr_icon_white.svg';
 import {
@@ -59,28 +61,26 @@ export const ScanCodeScreen = () => {
   const pendingConnections = useSelector(selectAllPendingConnections);
   const channels = useSelector(selectAllChannels);
 
-  console.log('pendingConnections', pendingConnections);
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     if (pendingConnections.length) {
+  //       // check all pending connections. If there is a pending connection for a 1:1 channel,
+  //       // directly open PendingConnectionsScreen.
+  //       for (const pc of pendingConnections) {
+  //         if (pc.state === pendingConnection_states.UNCONFIRMED) {
+  //           const channel = channels.find(
+  //             (channel) => channel.id === pc.channelId,
+  //           );
+  //           channel && channel.type === channel_types.SINGLE
+  //             ? navigation.navigate('PendingConnections')
+  //             : navigation.navigate('GroupConnection', { channel });
+  //         }
+  //       }
+  //     }
+  //   }, [pendingConnections, channels, navigation]),
+  // );
 
-  useFocusEffect(
-    useCallback(() => {
-      if (pendingConnections.length) {
-        // check all pending connections. If there is a pending connection for a 1:1 channel,
-        // directly open PendingConnectionsScreen.
-        for (const pc of pendingConnections) {
-          if (pc.state === pendingConnection_states.UNCONFIRMED) {
-            const channel = channels.find(
-              (channel) => channel.id === pc.channelId,
-            );
-            channel && channel.type === channel_types.SINGLE
-              ? navigation.navigate('PendingConnections')
-              : navigation.navigate('GroupConnection', { channel });
-          }
-        }
-      }
-    }, [pendingConnections, channels, navigation]),
-  );
-
-  const handleBarCodeRead = async (data: string) => {
+  const handleBarCodeRead = async ({ data }: string) => {
     console.log('barcode data', data);
     if (!data) return;
 
@@ -95,13 +95,16 @@ export const ScanCodeScreen = () => {
     } else if (validQrString(data)) {
       const channel = await decodeChannelQrString(data);
       dispatch(joinChannel(channel));
+      channel.type === channel_types.SINGLE
+        ? navigation.navigate('PendingConnections')
+        : navigation.navigate('GroupConnection', { channel });
     }
   };
 
   // handle deep links
   if (route.params?.qrcode && !scanned) {
     // $FlowFixMe
-    handleBarCodeRead(route.params.qrcode);
+    handleBarCodeRead({ data: route.params.qrcode });
   }
 
   const pclist = pendingConnections.map((pc) => (
@@ -133,6 +136,7 @@ export const ScanCodeScreen = () => {
               style={styles.cameraPreview}
               captureAudio={false}
               onBarCodeRead={handleBarCodeRead}
+              barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
               type={RNCamera.Constants.Type.back}
               flashMode={RNCamera.Constants.FlashMode.off}
               androidCameraPermissionOptions={{
@@ -159,23 +163,51 @@ export const ScanCodeScreen = () => {
             </View>
           )}
         </View>
-        <Text>There are {pendingConnections.length} pending connections</Text>
-        {pclist}
-        <Text style={styles.infoBottomText}>Or you can also...</Text>
-        <TouchableOpacity
-          testID="ScanCodeToMyCodeBtn"
-          style={styles.showQrButton}
-          onPress={() => {
-            navigation.navigate('MyCode');
-          }}
-        >
-          <SvgXml
-            xml={qricon}
-            width={DEVICE_LARGE ? 22 : 20}
-            height={DEVICE_LARGE ? 22 : 20}
-          />
-          <Text style={styles.showQrText}>Show your QR code</Text>
-        </TouchableOpacity>
+
+        <View style={styles.bottomContainer}>
+          {pendingConnections.length < 1 ? (
+            <>
+              <Text style={styles.infoBottomText}>Or you can also...</Text>
+              <TouchableOpacity
+                testID="ScanCodeToMyCodeBtn"
+                style={styles.showQrButton}
+                onPress={() => {
+                  navigation.navigate('MyCode');
+                }}
+              >
+                <SvgXml
+                  xml={qricon}
+                  width={DEVICE_LARGE ? 22 : 20}
+                  height={DEVICE_LARGE ? 22 : 20}
+                />
+                <Text style={styles.showQrText}>Show your QR code</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <>
+              <Text style={styles.infoBottomText}>
+                You have {pendingConnections.length} pending connection
+                {pendingConnections.length > 1 ? 's' : ''}...
+              </Text>
+              <TouchableOpacity
+                testID="ScanCodeToPendingConnectionsBtn"
+                style={styles.confirmConnectionsButton}
+                onPress={() => {
+                  navigation.navigate('PendingConnections');
+                }}
+              >
+                <Material
+                  name="account-multiple-plus-outline"
+                  size={DEVICE_LARGE ? 32 : 26}
+                  color={ORANGE}
+                />
+                <Text style={styles.confirmConnectionsText}>
+                  Confirm Connections
+                </Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
       </Container>
     </>
   );
@@ -242,8 +274,8 @@ const styles = StyleSheet.create({
     height: DEVICE_LARGE ? 42 : 36,
     backgroundColor: ORANGE,
     borderRadius: 60,
-    width: 260,
-    marginBottom: 36,
+    width: DEVICE_LARGE ? 260 : 210,
+    marginBottom: 10,
   },
   showQrText: {
     fontFamily: 'Poppins',
@@ -255,6 +287,28 @@ const styles = StyleSheet.create({
   cameraIcon: {
     marginTop: 2,
     marginRight: 4,
+  },
+  confirmConnectionsButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: DEVICE_LARGE ? 42 : 36,
+    backgroundColor: '#fff',
+    borderRadius: 60,
+    width: DEVICE_LARGE ? 260 : 210,
+    marginBottom: 36,
+    borderWidth: 2,
+    borderColor: ORANGE,
+  },
+  confirmConnectionsText: {
+    fontFamily: 'Poppins',
+    fontWeight: 'bold',
+    fontSize: DEVICE_LARGE ? 14 : 12,
+    color: ORANGE,
+    marginLeft: 10,
+  },
+  bottomContainer: {
+    alignItems: 'center',
   },
 });
 export default ScanCodeScreen;

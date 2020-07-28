@@ -63,16 +63,11 @@ export const MyCodeScreen = () => {
     (a, b) => a?.id === b?.id,
   );
   // pending connections attached to my channel
-  const pendingChannelConnections = useSelector(
-    (state) => {
-      if (myChannel) {
-        return selectAllPendingConnections(state).filter(
-          (pc) => pc.channelId === myChannel.id,
-        );
-      } else {
-        return [];
-      }
-    },
+  const pendingConnections = useSelector(
+    (state) =>
+      selectAllPendingConnections(state).filter(
+        (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
+      ),
     (a, b) => a.length === b.length,
   );
 
@@ -142,19 +137,17 @@ export const MyCodeScreen = () => {
     }, [navigation, myChannel, dispatch, isGroup]),
   );
 
-  useEffect(() => {
-    if (myChannel && myChannel.type === channel_types.SINGLE) {
-      // If i created a 1:1 channel and there is a pending connection in UNCONFIRMED state -> directly open PendingonnectionScreen.
-      // there should be only one connection, but if multiple people scanned my code, the first one wins
-      for (const pc of pendingChannelConnections) {
-        if (pc.state === pendingConnection_states.UNCONFIRMED) {
-          navigation.navigate('PendingConnections', {
-            pendingConnectionId: pc.id,
-          });
-        }
-      }
-    }
-  }, [myChannel, navigation, pendingChannelConnections.length]);
+  // useEffect(() => {
+  //   if (myChannel && myChannel.type === channel_types.SINGLE) {
+  //     // If i created a 1:1 channel and there is a pending connection in UNCONFIRMED state -> directly open PendingonnectionScreen.
+  //     // there should be only one connection, but if multiple people scanned my code, the first one wins
+  //     for (const pc of pendingChannelConnections) {
+  //       if (pc.state === pendingConnection_states.UNCONFIRMED) {
+  //         navigation.navigate('PendingConnections');
+  //       }
+  //     }
+  //   }
+  // }, [myChannel, navigation, pendingChannelConnections.length]);
 
   const toggleGroup = () => {
     // remove current channel
@@ -184,7 +177,7 @@ export const MyCodeScreen = () => {
     setTimeout(() => setCopied(false), COPIED_TIMEOUT);
   };
 
-  const renderCopyQr = () => (
+  const CopyQr = () => (
     <View style={styles.copyContainer}>
       <TouchableOpacity
         testID="copyQrButton"
@@ -199,22 +192,6 @@ export const MyCodeScreen = () => {
         />
         <Text style={styles.copyText}> Copy</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        testID="resetQrButton"
-        style={styles.copyButton}
-        onPress={() => {
-          setCountdown(0);
-          dispatch(leaveChannel(myChannel.id));
-        }}
-      >
-        <Material
-          size={24}
-          name="refresh"
-          color="#333"
-          style={{ width: 24, height: 24 }}
-        />
-        <Text style={styles.copyText}> Refresh</Text>
-      </TouchableOpacity>
     </View>
   );
 
@@ -228,7 +205,7 @@ export const MyCodeScreen = () => {
     />
   );
 
-  const renderTimer = () =>
+  const Timer = () =>
     countdown > 0 ? (
       <View style={styles.timerContainer}>
         <Text style={styles.timerTextLeft}>Expires in: </Text>
@@ -238,7 +215,7 @@ export const MyCodeScreen = () => {
       <View style={[styles.timerContainer, { height: 20 }]} />
     );
 
-  const renderQrCode = () => (
+  const QrCode = () => (
     <Svg
       height={DEVICE_LARGE ? '260' : '200'}
       width={DEVICE_LARGE ? '260' : '200'}
@@ -254,35 +231,38 @@ export const MyCodeScreen = () => {
     </Svg>
   );
 
+  console.log('length', pendingConnections.length);
+
   return (
     <>
       <View style={styles.orangeTop} />
       <Container style={styles.container}>
         <View style={styles.infoTopContainer}>
+          <Switch
+            trackColor={{ false: '#767577', true: ORANGE }}
+            // thumbColor={isGroup ? '#f5dd4b' : '#f4f3f4'}
+            thumbColor="#f4f3f4"
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleGroup}
+            value={isGroup}
+          />
           <Text style={styles.infoTopText}>
-            Hey {name}, share your code and
+            Group connections allow multiple people to connect simultaneously by
+            only scanning one QR code.
           </Text>
-          <Text style={styles.infoTopText}>make a new connection today</Text>
-          <View style={{ flexDirection: 'row' }}>
-            <Text>Group connection</Text>
-            <Switch
-              trackColor={{ false: '#767577', true: '#81b0ff' }}
-              thumbColor={isGroup ? '#f5dd4b' : '#f4f3f4'}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleGroup}
-              value={isGroup}
-            />
-          </View>
+          {/* //Please wait for everyone to finish scanning before proceeding to the
+          next page. */}
         </View>
         {myChannel?.state === channel_states.OPEN ? (
           <View style={styles.qrCodeContainer} testID="QRCodeContainer">
-            {qrsvg ? renderTimer() : <View />}
-            {qrsvg ? renderQrCode() : renderSpinner()}
-            {qrsvg ? renderCopyQr() : <View />}
+            {qrsvg ? <Timer /> : <View />}
+            {qrsvg ? <QrCode /> : renderSpinner()}
+            {qrsvg ? <CopyQr /> : <View />}
           </View>
         ) : (
           <View style={styles.qrCodeContainer} testID="QRCodeContainer">
-            <Text>Your channel is closed!</Text>
+            <View style={styles.emptyQr} />
+            {/* <Text>Your channel is closed!</Text>
             <TouchableOpacity
               testID="resetQrButton"
               style={styles.copyButton}
@@ -302,27 +282,53 @@ export const MyCodeScreen = () => {
                 style={{ width: 24, height: 24 }}
               />
               <Text style={styles.copyText}> Create new channel</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         )}
-        <Text>
-          There are {pendingChannelConnections.length} pending connections
-        </Text>
-        <Text style={styles.infoBottomText}>Or you can also...</Text>
-        <TouchableOpacity
-          testID="MyCodeToScanCodeBtn"
-          style={styles.scanCodeButton}
-          onPress={() => {
-            navigation.navigate('ScanCode');
-          }}
-        >
-          <SvgXml
-            xml={cameraIcon}
-            width={DEVICE_LARGE ? 22 : 20}
-            height={DEVICE_LARGE ? 22 : 20}
-          />
-          <Text style={styles.scanCodeText}>Scan a Code</Text>
-        </TouchableOpacity>
+        <View style={styles.bottomContainer}>
+          {pendingConnections.length < 1 ? (
+            <>
+              <Text style={styles.infoBottomText}>Or you can also...</Text>
+              <TouchableOpacity
+                testID="MyCodeToScanCodeBtn"
+                style={styles.scanCodeButton}
+                onPress={() => {
+                  navigation.navigate('ScanCode');
+                }}
+              >
+                <SvgXml
+                  xml={cameraIcon}
+                  width={DEVICE_LARGE ? 22 : 20}
+                  height={DEVICE_LARGE ? 22 : 20}
+                />
+                <Text style={styles.scanCodeText}>Scan a Code</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <>
+              <Text style={styles.infoBottomText}>
+                You have {pendingConnections.length} pending connection
+                {pendingConnections.length > 1 ? 's' : ''}...
+              </Text>
+              <TouchableOpacity
+                testID="MyCodeToPendingConnections"
+                style={styles.verifyConnectionsButton}
+                onPress={() => {
+                  navigation.navigate('PendingConnections');
+                }}
+              >
+                <Material
+                  name="account-multiple-plus-outline"
+                  size={DEVICE_LARGE ? 32 : 26}
+                  color={ORANGE}
+                />
+                <Text style={styles.verifyConnectionsText}>
+                  Verify Connections
+                </Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
       </Container>
     </>
   );
@@ -351,13 +357,14 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    flexGrow: 1,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   infoTopText: {
     fontFamily: 'Poppins',
     fontWeight: '500',
-    fontSize: DEVICE_LARGE ? 16 : 14,
-    textAlign: 'center',
+    fontSize: DEVICE_LARGE ? 13 : 12,
+    textAlign: 'left',
     color: '#4a4a4a',
   },
 
@@ -398,6 +405,10 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 16 : 14,
   },
+  bottomContainer: {
+    alignItems: 'center',
+    minHeight: 100,
+  },
   infoBottomText: {
     fontFamily: 'Poppins',
     fontWeight: '500',
@@ -411,8 +422,8 @@ const styles = StyleSheet.create({
     height: DEVICE_LARGE ? 42 : 36,
     backgroundColor: ORANGE,
     borderRadius: 60,
-    width: 240,
-    marginBottom: 36,
+    width: DEVICE_LARGE ? 240 : 200,
+    marginBottom: 10,
   },
   scanCodeText: {
     fontFamily: 'Poppins',
@@ -420,6 +431,28 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#fff',
     marginLeft: 10,
+  },
+  verifyConnectionsButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: DEVICE_LARGE ? 42 : 36,
+    backgroundColor: '#fff',
+    borderRadius: 60,
+    width: DEVICE_LARGE ? 240 : 200,
+    marginBottom: 36,
+    borderWidth: 2,
+    borderColor: ORANGE,
+  },
+  verifyConnectionsText: {
+    fontFamily: 'Poppins',
+    fontWeight: 'bold',
+    fontSize: DEVICE_LARGE ? 14 : 12,
+    color: ORANGE,
+    marginLeft: 10,
+  },
+  emptyQr: {
+    height: DEVICE_LARGE ? 308 : 244,
   },
 });
 

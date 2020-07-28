@@ -1,3 +1,5 @@
+// @flow
+
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Animated,
@@ -6,10 +8,13 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import Svg, { Line } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+import Svg, { Line, SvgXml } from 'react-native-svg';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import {
   DEVICE_LARGE,
   ORANGE,
@@ -17,22 +22,26 @@ import {
   WIDTH,
   HEIGHT,
 } from '@/utils/constants';
+
 import {
   // pendingConnection_states,
   selectAllPendingConnections,
   selectPendingConnectionById,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
-import { difference } from 'ramda';
+import backArrow from '@/static/back_arrow_black.svg';
 
 /** HELPERS */
 
-function getRandom(min, max) {
-  return Math.random() * (max - min) + min;
-}
+const radius = WIDTH / 2 - 35;
 
-function isEven(num) {
-  return num % 2 === 0;
-}
+const degreeToRadian = (a: number) => a * (Math.PI / 180);
+
+const isEven = (n: number) => n % 2 === 0;
+
+const calcX = (a: number) =>
+  WIDTH / 2 - 40 + radius * Math.cos(degreeToRadian(a));
+const calcY = (a: number) =>
+  HEIGHT / 2 - 40 + radius * Math.sin(degreeToRadian(a));
 
 /** MAIN */
 
@@ -56,8 +65,6 @@ export const GroupConnectionScreen = () => {
     (pc) =>
       pc.channelId === channel?.id && pc.id !== channel?.initiatorProfileId,
   );
-
-  console.log('groupConnections', groupConnections);
 
   useEffect(() => {
     Animated.stagger(1500, [
@@ -86,11 +93,11 @@ export const GroupConnectionScreen = () => {
     if (diff > 0) {
       let nextCoords = {};
       if (isEven(bubbleCoords.length)) {
-        nextCoords.left = getRandom(50, WIDTH - 50);
-        nextCoords.top = getRandom(HEIGHT / 2 + 100, HEIGHT - 180);
+        nextCoords.left = calcX(90 + bubbleCoords.length * 42);
+        nextCoords.top = calcY(90 + bubbleCoords.length * 42);
       } else {
-        nextCoords.left = getRandom(50, WIDTH - 50);
-        nextCoords.top = getRandom(120, HEIGHT / 2 - 150);
+        nextCoords.left = calcX(270 + bubbleCoords.length * 42);
+        nextCoords.top = calcY(270 + bubbleCoords.length * 42);
       }
       setBubbleCoords(bubbleCoords.concat(nextCoords));
     }
@@ -123,14 +130,10 @@ export const GroupConnectionScreen = () => {
         )}
         <Image
           key={pc.id}
-          style={{
-            position: 'absolute',
-            width: 80,
-            height: 80,
-            left: bubbleCoords[index]?.left,
-            top: bubbleCoords[index]?.top,
-            borderRadius: 40,
-          }}
+          style={[
+            styles.connectionBubble,
+            { left: bubbleCoords[index]?.left, top: bubbleCoords[index]?.top },
+          ]}
           source={{ uri: pc.photo }}
         />
       </>
@@ -144,9 +147,9 @@ export const GroupConnectionScreen = () => {
           navigation.navigate('Home');
         }}
       >
-        <Text>X</Text>
+        <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
       </TouchableOpacity>
-      <Text style={styles.infoTopText}>Group Connection</Text>
+      <Text style={styles.title}>Group Connection</Text>
       <Animated.View
         style={[
           styles.circleArcOne,
@@ -185,7 +188,6 @@ export const GroupConnectionScreen = () => {
           },
         ]}
       />
-
       {initiator?.photo && (
         <Image style={styles.groupFounder} source={{ uri: initiator?.photo }} />
       )}
@@ -193,12 +195,18 @@ export const GroupConnectionScreen = () => {
       <GroupConnectionBubbles />
 
       <TouchableOpacity
-        style={styles.confirmButton}
+        testID="GroupConnectionsToPendingConnectionsBtn"
+        style={styles.confirmConnectionsButton}
         onPress={() => {
           navigation.navigate('PendingConnections');
         }}
       >
-        <Text style={styles.buttonText}>Verify New Connections</Text>
+        <Material
+          name="account-multiple-plus-outline"
+          size={DEVICE_LARGE ? 32 : 26}
+          color={ORANGE}
+        />
+        <Text style={styles.confirmConnectionsText}>Confirm Connections</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -208,10 +216,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: '#fdfdfd',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
+  },
+  title: {
+    position: 'absolute',
+    top: DEVICE_LARGE ? 51 : 32,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 20 : 18,
+    textAlign: 'center',
+    color: '#4a4a4a',
+  },
+  cancelButton: {
+    position: 'absolute',
+    left: 0,
+    top: DEVICE_LARGE ? 55 : 35,
+    zIndex: 20,
+    width: DEVICE_LARGE ? 60 : 50,
+    alignItems: 'center',
   },
   bubbleView: {
     position: 'absolute',
@@ -225,8 +250,8 @@ const styles = StyleSheet.create({
     left: WIDTH / 2 - 45,
     width: 90,
     height: 90,
-    borderWidth: 1,
-    borderColor: 'grey',
+    borderWidth: 2,
+    borderColor: ORANGE,
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
@@ -256,49 +281,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  infoTopText: {
+  connectionBubble: {
     position: 'absolute',
-    top: 60,
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    fontSize: DEVICE_LARGE ? 20 : 18,
-    textAlign: 'center',
-    color: '#4a4a4a',
-  },
-  scanCodeButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: DEVICE_LARGE ? 42 : 36,
-    backgroundColor: ORANGE,
-    borderRadius: 60,
-    width: 240,
-    marginBottom: 36,
-  },
-  scanCodeText: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
-    fontSize: DEVICE_LARGE ? 14 : 12,
-    color: '#fff',
-    marginLeft: 10,
-  },
-  cancelButton: {
-    position: 'absolute',
-    left: 25,
-    top: 25,
-    zIndex: 20,
-  },
-  confirmButton: {
-    position: 'absolute',
-    bottom: 40,
-    borderRadius: 3,
-    backgroundColor: '#4a90e2',
-    margin: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 51,
-    paddingLeft: 40,
-    paddingRight: 40,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderColor: ORANGE,
+    borderWidth: 2,
   },
   buttonText: {
     fontFamily: 'ApexNew-Book',
@@ -308,6 +297,36 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: 'left',
     color: '#ffffff',
+  },
+  rightArrow: {
+    position: 'absolute',
+    right: 0,
+    // borderWidth: 1,
+    // borderColor: 'grey',
+    height: 80,
+    justifyContent: 'center',
+    width: 40,
+  },
+  confirmConnectionsButton: {
+    position: 'absolute',
+    top: HEIGHT * 0.85,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: DEVICE_LARGE ? 42 : 36,
+    backgroundColor: '#fff',
+    borderRadius: 60,
+    width: DEVICE_LARGE ? 260 : 210,
+    marginBottom: 36,
+    borderWidth: 2,
+    borderColor: ORANGE,
+  },
+  confirmConnectionsText: {
+    fontFamily: 'Poppins',
+    fontWeight: 'bold',
+    fontSize: DEVICE_LARGE ? 14 : 12,
+    color: ORANGE,
+    marginLeft: 10,
   },
 });
 

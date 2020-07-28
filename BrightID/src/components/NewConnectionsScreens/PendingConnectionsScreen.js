@@ -1,6 +1,12 @@
 // @flow
 
-import React, { useCallback, useState, useRef } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useRef,
+} from 'react';
 import {
   Alert,
   BackHandler,
@@ -18,7 +24,8 @@ import {
 } from '@react-navigation/native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { SvgXml } from 'react-native-svg';
 import moment from 'moment';
 import {
   pendingConnection_states,
@@ -27,6 +34,7 @@ import {
 
   // pendingConnection_states,
   selectAllPendingConnections,
+  selectAllPendingConnectionIds,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import { confirmPendingConnectionThunk } from '@/components/NewConnectionsScreens/actions/pendingConnectionThunks';
 import {
@@ -34,7 +42,8 @@ import {
   selectChannelById,
 } from '@/components/NewConnectionsScreens/channelSlice';
 import api from '@/api/brightId';
-import { WIDTH, HEIGHT } from '@/utils/constants';
+import { DEVICE_LARGE, WIDTH, HEIGHT } from '@/utils/constants';
+import backArrow from '@/static/back_arrow_black.svg';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -43,18 +52,32 @@ import { WIDTH, HEIGHT } from '@/utils/constants';
  *
  */
 
-export const PreviewConnection = ({ pendingConnection, carouselRef }) => {
+export const PreviewConnection = ({ id, carouselRef }) => {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
-  const myConnections = useSelector((state) => state.connections.connections);
 
-  const channel: Channel | typeof undefined = useSelector((state) => {
-    if (pendingConnection) {
-      return selectChannelById(state, pendingConnection.channelId);
-    } else {
-      return undefined;
-    }
-  });
+  // return true because we never want to re render
+  const myConnections = useSelector(
+    (state) => state.connections.connections,
+    () => true,
+  );
+
+  // we only care about the state the of the pending connection
+  const pendingConnection = useSelector(
+    (state) => selectPendingConnectionById(state, id),
+    (a, b) => a?.state === b?.state,
+  );
+
+  // we are only using the channel's profile timestamp
+  const channel: Channel | typeof undefined = useSelector(
+    (state) => {
+      if (pendingConnection) {
+        return selectChannelById(state, pendingConnection.channelId);
+      } else {
+        return undefined;
+      }
+    },
+    (a, b) => a?.myProfileTimestamp === b?.myProfileTimestamp,
+  );
 
   const [userInfo, setUserInfo] = useState({
     connections: 'loading',
@@ -64,7 +87,6 @@ export const PreviewConnection = ({ pendingConnection, carouselRef }) => {
     flagged: false,
   });
 
-  // TODO: Why is this wrapped in useCallback??
   const reject = useCallback(() => {
     dispatch(rejectPendingConnection(pendingConnection.id));
     carouselRef.current?.snapToNext();
@@ -76,83 +98,98 @@ export const PreviewConnection = ({ pendingConnection, carouselRef }) => {
     carouselRef.current?.snapToNext();
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      const fetchConnectionInfo = async () => {
-        console.log(`TODO: Move fetchConnectionInfo() to Redux!`);
-        try {
-          const {
-            createdAt,
-            groups,
-            connections = [],
-            flaggers,
-          } = await api.getUserInfo(
-            pendingConnection.brightId ? pendingConnection.brightId : '',
-          );
-          const mutualConnections = connections.filter(function (el) {
-            return myConnections.some((x) => x.id === el.id);
-          });
+  useEffect(() => {
+    const fetchConnectionInfo = async () => {
+      console.log(`TODO: Move fetchConnectionInfo() to Redux!`);
+      try {
+        const {
+          createdAt,
+          groups,
+          connections = [],
+          flaggers,
+        } = await api.getUserInfo(
+          pendingConnection.brightId ? pendingConnection.brightId : '',
+        );
+        const mutualConnections = connections.filter(function (el) {
+          return myConnections.some((x) => x.id === el.id);
+        });
+        setUserInfo({
+          connections: connections.length,
+          groups: groups.length,
+          mutualConnections: mutualConnections.length,
+          connectionDate: `Created ${moment(
+            parseInt(createdAt, 10),
+          ).fromNow()}`,
+          flagged: flaggers && Object.keys(flaggers).length > 0,
+        });
+      } catch (err) {
+        if (err instanceof Error && err.message === 'User not found') {
           setUserInfo({
-            connections: connections.length,
-            groups: groups.length,
-            mutualConnections: mutualConnections.length,
-            connectionDate: `Created ${moment(
-              parseInt(createdAt, 10),
-            ).fromNow()}`,
-            flagged: flaggers && Object.keys(flaggers).length > 0,
+            connections: 0,
+            groups: 0,
+            mutualConnections: 0,
+            connectionDate: 'New user',
+            flagged: false,
           });
-        } catch (err) {
-          if (err instanceof Error && err.message === 'User not found') {
-            setUserInfo({
-              connections: 0,
-              groups: 0,
-              mutualConnections: 0,
-              connectionDate: 'New user',
-              flagged: false,
-            });
-          } else {
-            err instanceof Error ? console.warn(err.message) : console.log(err);
-          }
+        } else {
+          err instanceof Error ? console.warn(err.message) : console.log(err);
         }
-      };
+      }
+    };
 
-      fetchConnectionInfo();
+    fetchConnectionInfo();
 
-      BackHandler.addEventListener('hardwareBackPress', reject);
-      return () => BackHandler.removeEventListener('hardwareBackPress', reject);
-    }, [pendingConnection, reject, myConnections]),
-  );
+    BackHandler.addEventListener('hardwareBackPress', reject);
+    return () => BackHandler.removeEventListener('hardwareBackPress', reject);
+  }, [reject, myConnections, pendingConnection.brightId]);
 
-  let buttonContainer;
-  if (
-    pendingConnection.profileTimestamp < channel?.myProfileTimestamp &&
-    !pendingConnection.signedMessage
-  ) {
-    buttonContainer = (
-      <Text>Waiting for {pendingConnection.name} to confirm...</Text>
-    );
-  } else if (pendingConnection.state === pendingConnection_states.CONFIRMING) {
-    buttonContainer = <Text>Confirming connection...</Text>;
-  } else {
-    buttonContainer = (
-      <>
-        <TouchableOpacity
-          testID="rejectConnectionBtn"
-          onPress={reject}
-          style={styles.rejectButton}
-        >
-          <Text style={styles.buttonText}>Reject</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          testID="confirmConnectionBtn"
-          onPress={handleConfirmation}
-          style={styles.confirmButton}
-        >
-          <Text style={styles.buttonText}>Confirm</Text>
-        </TouchableOpacity>
-      </>
-    );
-  }
+  const ConfirmationButtons = () => {
+    switch (pendingConnection.state) {
+      case pendingConnection_states.CONFIRMING:
+      case pendingConnection_states.CONFIRMED: {
+        return <Text>Confirming connection...</Text>;
+      }
+      case pendingConnection_states.DOWNLOADING: {
+        return <Text>Downloading profile ...</Text>;
+      }
+      case pendingConnection_states.REJECTED: {
+        return <Text>{pendingConnection.name} rejected your connection</Text>;
+      }
+
+      case pendingConnection_states.UNCONFIRMED:
+        if (
+          pendingConnection.profileTimestamp < channel?.myProfileTimestamp &&
+          !pendingConnection.signedMessage
+        ) {
+          return (
+            <Text>Waiting for {pendingConnection.name} to confirm ...</Text>
+          );
+        } else {
+          return (
+            <>
+              <TouchableOpacity
+                testID="rejectConnectionBtn"
+                onPress={reject}
+                style={styles.rejectButton}
+              >
+                <Text style={styles.buttonText}>Reject</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                testID="confirmConnectionBtn"
+                onPress={handleConfirmation}
+                style={styles.confirmButton}
+              >
+                <Text style={styles.buttonText}>Confirm</Text>
+              </TouchableOpacity>
+            </>
+          );
+        }
+      case pendingConnection_states.ERROR:
+      default: {
+        return <Text>There was an error, please try again</Text>;
+      }
+    }
+  };
 
   return (
     <View style={styles.previewContainer} testID="previewConnectionScreen">
@@ -162,7 +199,7 @@ export const PreviewConnection = ({ pendingConnection, carouselRef }) => {
         translucent={false}
         animated={true}
       />
-      <View style={styles.questionTextContainer}>
+      <View style={styles.titleContainer}>
         <Text style={styles.questionText}>Connect with?</Text>
       </View>
       <View style={styles.userContainer}>
@@ -195,10 +232,12 @@ export const PreviewConnection = ({ pendingConnection, carouselRef }) => {
           <Text style={styles.countsNumberText}>
             {userInfo.mutualConnections}
           </Text>
-          <Text style={styles.countsDescriptionText}>Mutual Connections</Text>
+          <Text style={styles.countsDescriptionText}>Mutual Connec...</Text>
         </View>
       </View>
-      <View style={styles.buttonContainer}>{buttonContainer}</View>
+      <View style={styles.buttonContainer}>
+        <ConfirmationButtons />
+      </View>
     </View>
   );
 };
@@ -206,19 +245,21 @@ export const PreviewConnection = ({ pendingConnection, carouselRef }) => {
 export const PendingConnectionsScreen = () => {
   const navigation = useNavigation();
   const carouselRef = useRef(null);
-  const pendingChannelConnections = useSelector((state) => {
-    return selectAllPendingConnections(state).filter(
-      (pc) =>
-        pc.state === pendingConnection_states.UNCONFIRMED ||
-        pc.state === pendingConnection_states.CONFIRMING,
-    );
-  });
 
-  const renderItem = ({ item }) => (
-    <PreviewConnection pendingConnection={item} carouselRef={carouselRef} />
+  const pendingConnections = useSelector(
+    (state) => {
+      return selectAllPendingConnections(state);
+    },
+    (a, b) => a.length === b.length,
   );
 
-  console.log('RENDERING PENDING CONNECTIONS');
+  const unconfirmedConnectionIds = pendingConnections
+    .filter((pc) => pc.state === pendingConnection_states.UNCONFIRMED)
+    .map((pc) => pc.id);
+
+  const renderItem = ({ item }) => {
+    return <PreviewConnection id={item} carouselRef={carouselRef} />;
+  };
 
   return (
     <SafeAreaView
@@ -230,21 +271,21 @@ export const PendingConnectionsScreen = () => {
       <TouchableOpacity
         style={styles.cancelButton}
         onPress={() => {
-          navigation.goBack();
+          navigation.navigate('Home');
         }}
       >
-        <Text>X</Text>
+        <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
       </TouchableOpacity>
       <Carousel
+        containerCustomStyle={{ flex: 1 }}
         ref={carouselRef}
-        data={pendingChannelConnections}
+        data={unconfirmedConnectionIds}
         renderItem={renderItem}
         layout="stack"
         lockScrollWhileSnapping={true}
-        itemWidth={WIDTH * 0.9}
+        itemWidth={WIDTH * 0.95}
         sliderWidth={WIDTH}
       />
-      <Text>No new connections...</Text>
     </SafeAreaView>
   );
 };
@@ -252,31 +293,29 @@ export const PendingConnectionsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ececec',
+    backgroundColor: '#fcfcfc',
     alignItems: 'center',
     justifyContent: 'center',
   },
   previewContainer: {
     width: '100%',
-    height: HEIGHT - 120,
+    height: '100%',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'column',
     borderRadius: 10,
-    marginTop: 60,
+    // marginTop: DEVICE_LARGE ? 60 : 50,
   },
-  questionTextContainer: {
-    marginTop: 60,
+  titleContainer: {
+    marginTop: DEVICE_LARGE ? 60 : 50,
     justifyContent: 'center',
     alignItems: 'center',
   },
   questionText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 26,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
+    fontFamily: 'Poppins',
+    fontWeight: '100',
+    fontSize: DEVICE_LARGE ? 22 : 18,
     textAlign: 'center',
     color: '#000000',
   },
@@ -287,28 +326,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   photo: {
-    width: 148,
-    height: 148,
-    borderRadius: 74,
+    width: DEVICE_LARGE ? 148 : 115,
+    height: DEVICE_LARGE ? 148 : 115,
+    borderRadius: 100,
   },
   connectName: {
-    fontFamily: 'ApexNew-Book',
+    fontFamily: 'Poppins',
+    fontWeight: '500',
     marginTop: 10,
-    fontSize: 26,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
+    fontSize: DEVICE_LARGE ? 26 : 21,
     letterSpacing: 0,
     textAlign: 'left',
     color: '#000000',
-    textShadowColor: 'rgba(0, 0, 0, 0.32)',
-    textShadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    textShadowRadius: 4,
   },
   flagged: {
-    fontSize: 20,
+    fontSize: DEVICE_LARGE ? 20 : 18,
     color: 'red',
   },
   buttonContainer: {
@@ -324,7 +356,7 @@ const styles = StyleSheet.create({
     margin: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 51,
+    height: DEVICE_LARGE ? 51 : 40,
   },
   rejectButton: {
     borderRadius: 3,
@@ -333,14 +365,12 @@ const styles = StyleSheet.create({
     margin: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 51,
+    height: DEVICE_LARGE ? 51 : 40,
   },
   buttonText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontFamily: 'Poppins',
     fontWeight: '500',
-    fontStyle: 'normal',
-    letterSpacing: 0,
+    fontSize: DEVICE_LARGE ? 18 : 15,
     textAlign: 'left',
     color: '#ffffff',
   },
@@ -357,20 +387,16 @@ const styles = StyleSheet.create({
     paddingBottom: 11,
   },
   countsDescriptionText: {
-    fontFamily: 'ApexNew-Book',
+    fontFamily: 'Poppins',
+    fontWeight: '500',
     textAlign: 'center',
-    fontSize: 14,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
+    fontSize: DEVICE_LARGE ? 14 : 12,
   },
   countsNumberText: {
-    fontFamily: 'ApexNew-Book',
+    fontFamily: 'Poppins',
+    fontWeight: '500',
     textAlign: 'center',
     fontSize: 18,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
   },
   connectedText: {
     fontFamily: 'ApexNew-Book',
@@ -380,9 +406,11 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     position: 'absolute',
-    left: 30,
-    top: 40,
+    left: 0,
+    top: DEVICE_LARGE ? 55 : 35,
     zIndex: 20,
+    width: DEVICE_LARGE ? 60 : 50,
+    alignItems: 'center',
   },
 });
 
