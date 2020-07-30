@@ -19,10 +19,15 @@ import {
   GROUPS_TYPE,
   MISC_TYPE,
 } from '@/utils/constants';
+import {
+  pendingConnection_states,
+  selectAllPendingConnections,
+} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import EmptyList from '@/components/Helpers/EmptyList';
 import NotificationCard from './NotificationCard';
 import InviteCard from './InviteCard';
+import PendingConnectionCard from './PendingConnectionCard';
 
 let thecount = 0;
 
@@ -44,18 +49,19 @@ const useRefresh = () => {
 
 const ConnectionsList = ({ route }) => {
   const [refreshing, onRefresh] = useRefresh();
-  // const pendingConnections = useSelector(
-  //   (state) => state.notifications.pendingConnections,
-  //   shallowEqual,
-  // );
-
-  const pendingConnections = [];
+  const pendingConnections = useSelector(
+    (state) =>
+      selectAllPendingConnections(state).filter(
+        (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
+      ),
+    (a, b) => a.length === b.length,
+  );
 
   return (
     <FlatList
       contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
       data={pendingConnections}
-      // keyExtractor={({ inviteId, msg }, index) => index}
+      keyExtractor={({ id }, index) => id + index}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
       refreshControl={
@@ -67,7 +73,9 @@ const ConnectionsList = ({ route }) => {
           iconType="bell-off-outline"
         />
       }
-      renderItem={({ item }) => <InviteCard invite={item} />}
+      renderItem={({ item }) => (
+        <PendingConnectionCard pendingConnection={item} />
+      )}
     />
   );
 };
@@ -144,7 +152,7 @@ const renderTabBar = (props) => (
   <TabBar
     {...props}
     indicatorStyle={{ backgroundColor: '#ED7A5D' }}
-    style={{ backgroundColor: '#fff' }}
+    style={styles.tabBar}
     labelStyle={{}}
     renderLabel={({ route, focused, color }) => (
       <View
@@ -175,16 +183,19 @@ const renderTabBar = (props) => (
 export const NotificationsScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
-  // const pendingConnections = useSelector(
-  //   (state) => state.notifications.pendingConnections.length,
-  // );
+  const pendingConnections = useSelector(
+    (state) =>
+      selectAllPendingConnections(state).filter(
+        (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
+      ).length,
+  );
 
-  const pendingConnections = 0;
   const invites = useSelector(
     (state) =>
       state.groups.invites.filter(({ state }) => state === INVITE_ACTIVE)
         .length,
   );
+
   const backupPending = useSelector(
     (state) => state.notifications.backupPending,
   );
@@ -273,6 +284,7 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
   },
+  tabBar: { backgroundColor: '#fff', paddingLeft: 20 },
 });
 
 export default NotificationsScreen;

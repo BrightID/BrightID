@@ -4,11 +4,13 @@ import {
   createEntityAdapter,
   createAsyncThunk,
 } from '@reduxjs/toolkit';
+import moment from 'moment';
 import {
   removeChannel,
   selectChannelById,
 } from '@/components/NewConnectionsScreens/channelSlice';
 import { decryptData } from '@/utils/cryptoHelper';
+import api from '@/api/brightId';
 
 const pendingConnectionsAdapter = createEntityAdapter();
 
@@ -35,14 +37,49 @@ export const pendingConnection_states = {
   REJECTED: 'REJECTED',
   CONFIRMED: 'CONFIRMED',
   ERROR: 'ERROR',
+  MYSELF: 'MYSELF',
 };
+
+const fetchConnectionInfo = async ({ myConnections, brightId }) => {
+  try {
+    const {
+      createdAt,
+      groups,
+      connections = [],
+      flaggers,
+    } = await api.getUserInfo(brightId);
+    const mutualConnections = connections.filter(function (el) {
+      return myConnections.some((x) => x.id === el.id);
+    });
+    return {
+      connections: connections.length,
+      groups: groups.length,
+      mutualConnections: mutualConnections.length,
+      connectionDate: `Created ${moment(parseInt(createdAt, 10)).fromNow()}`,
+      flagged: flaggers && Object.keys(flaggers).length > 0,
+    };
+  } catch (err) {
+    if (err instanceof Error && err.message === 'User not found') {
+      return {
+        connections: 0,
+        groups: 0,
+        mutualConnections: 0,
+        connectionDate: 'New user',
+        flagged: false,
+      };
+    } else {
+      err instanceof Error ? console.warn(err.message) : console.log(err);
+      return {};
+    }
+  }
+};
+
+fetchConnectionInfo();
 
 export const newPendingConnection = createAsyncThunk(
   'pendingConnections/newPendingConnection',
-  async ({ channelId, profileId, signedMessage, timestamp }, { getState }) => {
-    console.log(
-      `new pending connection ${profileId} with signedMessage "${signedMessage}" in channel ${channelId}`,
-    );
+  async ({ channelId, profileId }, { getState }) => {
+    console.log(`new pending connection ${profileId} in channel ${channelId}`);
 
     const channel = selectChannelById(getState(), channelId);
     // download profile
@@ -62,9 +99,16 @@ export const newPendingConnection = createAsyncThunk(
 
     if (profileData && profileData.data) {
       const decryptedObj = decryptData(profileData.data, channel.aesKey);
-      decryptedObj.signedMessage = signedMessage;
-      decryptedObj.timestamp = timestamp;
-      return decryptedObj;
+      decryptedObj.myself = decryptedObj.id === getState().user.id;
+      // I'm confused about this initiator logic, might change this...
+      decryptedObj.initiator =
+        decryptedObj.profileTimestamp > channel.myProfileTimestamp;
+
+      const connectionInfo = await fetchConnectionInfo({
+        brightID: decryptedObj.brightID,
+        myConnections: getState().connections.connections,
+      });
+      return { ...connectionInfo, ...decryptedObj };
     } else {
       throw new Error(`Missing data in profile from url: ${url}`);
     }
@@ -139,21 +183,43 @@ const pendingConnectionsSlice = createSlice({
         signedMessage,
         timestamp,
         profileTimestamp,
+        initiator,
+        connections,
+        groups,
+        mutualConnections,
+        connectionDate,
+        flagged,
       } = action.payload;
+
+      const changes = {
+        state: action.payload.myself
+          ? pendingConnection_states.MYSELF
+          : pendingConnection_states.UNCONFIRMED,
+        brightId,
+        name,
+        photo,
+        score,
+        signedMessage,
+        timestamp,
+        profileTimestamp,
+        initiator,
+        connections,
+        groups,
+        mutualConnections,
+        connectionDate,
+        flagged,
+      };
+
+      // add secret key if dev
+      if (__DEV__) {
+        const { secretKey } = action.payload;
+        changes.secretKey = secretKey;
+      }
 
       // Perform the update in redux
       state = pendingConnectionsAdapter.updateOne(state, {
         id: profileId,
-        changes: {
-          state: pendingConnection_states.UNCONFIRMED,
-          brightId,
-          name,
-          photo,
-          score,
-          signedMessage,
-          timestamp,
-          profileTimestamp,
-        },
+        changes,
       });
     },
     [removeChannel]: (state, action) => {

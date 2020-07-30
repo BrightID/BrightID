@@ -241,7 +241,7 @@ export const fetchConnectionRequests = createAsyncThunk(
           const { signedMessage, connectionTimestamp } = responseJson.data;
           if (signedMessage) {
             // update existing pendingConnection with signedMessage and timestamp
-            console.log('updating Pending Connection with signed messag');
+            console.log('updating Pending Connection with signed message');
             dispatch(
               updatePendingConnection({
                 id: profileId,

@@ -40,7 +40,6 @@ export const addFakeConnection = () => async (
   const signedMessage = uInt8ArrayToB64(
     nacl.sign.detached(strToUint8Array(message), secretKey),
   );
-  const profileId = await randomKey(9);
 
   // load random photo
   let photo;
@@ -66,6 +65,10 @@ export const addFakeConnection = () => async (
     photo,
     name,
     score,
+    profileTimestamp: Date.now(),
+    secretKey,
+    // signedMessage,
+    timestamp,
   };
 
   let encrypted = encryptData(dataObj, channel.aesKey);

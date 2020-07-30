@@ -5,6 +5,7 @@ import React, {
   useState,
   useEffect,
   useLayoutEffect,
+  useMemo,
 } from 'react';
 import {
   StyleSheet,
@@ -54,29 +55,62 @@ const COPIED_TIMEOUT = 500;
 
 const Container = DEVICE_IOS ? SafeAreaView : View;
 
+const Timer = () => {
+  const navigation = useNavigation();
+  const myChannel = useSelector((state) => {
+    return selectChannelById(state, state.channels.myChannelId);
+  });
+  const [countdown, setCountdown] = useState(
+    myChannel ? myChannel.ttl - (Date.now() - myChannel.timestamp) : 0,
+  );
+
+  const timerTick = () => {
+    if (myChannel && navigation.isFocused()) {
+      let countDown = myChannel.ttl - (Date.now() - myChannel.timestamp);
+      setCountdown(countDown);
+    }
+  };
+
+  // start local timer to display countdown
+  useInterval(timerTick, 100);
+  const displayTime = () => {
+    const minutes = Math.floor(countdown / 60000);
+    let seconds = Math.trunc((countdown % 60000) / 1000);
+    if (seconds < 10) {
+      seconds = `0${seconds}`;
+    }
+    return `${minutes}:${seconds}`;
+  };
+
+  return countdown > 0 ? (
+    <View style={styles.timerContainer}>
+      <Text style={styles.timerTextLeft}>Expires in: </Text>
+      <Text style={styles.timerTextRight}>{displayTime()}</Text>
+    </View>
+  ) : (
+    <View style={[styles.timerContainer, { height: 20 }]} />
+  );
+};
+
 export const MyCodeScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const name = useSelector((state) => state.user.name);
-  const myChannel = useSelector(
-    (state) => selectChannelById(state, state.channels.myChannelId),
-    (a, b) => a?.id === b?.id,
-  );
+  const myChannel = useSelector((state) => {
+    return selectChannelById(state, state.channels.myChannelId);
+  });
   // pending connections attached to my channel
-  const pendingConnections = useSelector(
-    (state) =>
-      selectAllPendingConnections(state).filter(
-        (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
-      ),
-    (a, b) => a.length === b.length,
-  );
+  const pendingConnections = useSelector((state) => {
+    return selectAllPendingConnections(state);
+  });
+
+  const unconfirmedConnectionsLength = pendingConnections.filter(
+    (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
+  ).length;
 
   const [qrString, setQrString] = useState('');
   const [qrsvg, setQrsvg] = useState('');
   const [copied, setCopied] = useState(false);
-  const [countdown, setCountdown] = useState(
-    myChannel ? myChannel.ttl - (Date.now() - myChannel.timestamp) : 0,
-  );
+
   const [isGroup, setIsGroup] = useState(
     myChannel ? myChannel.type === channel_types.GROUP : false,
   );
@@ -96,16 +130,6 @@ export const MyCodeScreen = () => {
     }
   }, [myChannel]);
 
-  const timerTick = () => {
-    if (myChannel && navigation.isFocused()) {
-      let countDown = myChannel.ttl - (Date.now() - myChannel.timestamp);
-      setCountdown(countDown);
-    }
-  };
-
-  // start local timer to display countdown
-  // useInterval(timerTick, 100);
-
   // set up top right button in header
   useLayoutEffect(() => {
     if (__DEV__ && myChannel?.state === channel_states.OPEN) {
@@ -122,7 +146,7 @@ export const MyCodeScreen = () => {
         ),
       });
     }
-  }, [dispatch, myChannel, navigation]);
+  }, [myChannel, navigation]);
 
   useFocusEffect(
     useCallback(() => {
@@ -131,9 +155,10 @@ export const MyCodeScreen = () => {
         dispatch(
           createChannel(isGroup ? channel_types.GROUP : channel_types.SINGLE),
         );
-      } else {
-        setCountdown(myChannel.ttl - (Date.now() - myChannel.timestamp));
       }
+      // else {
+      //   setCountdown(myChannel.ttl - (Date.now() - myChannel.timestamp));
+      // }
     }, [navigation, myChannel, dispatch, isGroup]),
   );
 
@@ -160,15 +185,6 @@ export const MyCodeScreen = () => {
     dispatch(
       createChannel(!isGroup ? channel_types.GROUP : channel_types.SINGLE),
     );
-  };
-
-  const displayTime = () => {
-    const minutes = Math.floor(countdown / 60000);
-    let seconds = Math.trunc((countdown % 60000) / 1000);
-    if (seconds < 10) {
-      seconds = `0${seconds}`;
-    }
-    return `${minutes}:${seconds}`;
   };
 
   const copyQr = () => {
@@ -205,33 +221,25 @@ export const MyCodeScreen = () => {
     />
   );
 
-  const Timer = () =>
-    countdown > 0 ? (
-      <View style={styles.timerContainer}>
-        <Text style={styles.timerTextLeft}>Expires in: </Text>
-        <Text style={styles.timerTextRight}>{displayTime()}</Text>
-      </View>
-    ) : (
-      <View style={[styles.timerContainer, { height: 20 }]} />
+  const QrCode = useMemo(() => {
+    return (
+      <Svg
+        height={DEVICE_LARGE ? '260' : '200'}
+        width={DEVICE_LARGE ? '260' : '200'}
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox={path(['svg', '$', 'viewBox'], qrsvg)}
+        shape-rendering="crispEdges"
+      >
+        <Path
+          fill={copied ? 'lightblue' : '#fff'}
+          d={path(['svg', 'path', '0', '$', 'd'], qrsvg)}
+        />
+        <Path stroke="#000" d={path(['svg', 'path', '1', '$', 'd'], qrsvg)} />
+      </Svg>
     );
+  }, [qrsvg, copied]);
 
-  const QrCode = () => (
-    <Svg
-      height={DEVICE_LARGE ? '260' : '200'}
-      width={DEVICE_LARGE ? '260' : '200'}
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox={path(['svg', '$', 'viewBox'], qrsvg)}
-      shape-rendering="crispEdges"
-    >
-      <Path
-        fill={copied ? 'lightblue' : '#fff'}
-        d={path(['svg', 'path', '0', '$', 'd'], qrsvg)}
-      />
-      <Path stroke="#000" d={path(['svg', 'path', '1', '$', 'd'], qrsvg)} />
-    </Svg>
-  );
-
-  console.log('length', pendingConnections.length);
+  console.log('rendering My QRCode');
 
   return (
     <>
@@ -256,7 +264,7 @@ export const MyCodeScreen = () => {
         {myChannel?.state === channel_states.OPEN ? (
           <View style={styles.qrCodeContainer} testID="QRCodeContainer">
             {qrsvg ? <Timer /> : <View />}
-            {qrsvg ? <QrCode /> : renderSpinner()}
+            {qrsvg ? QrCode : renderSpinner()}
             {qrsvg ? <CopyQr /> : <View />}
           </View>
         ) : (
@@ -286,7 +294,7 @@ export const MyCodeScreen = () => {
           </View>
         )}
         <View style={styles.bottomContainer}>
-          {pendingConnections.length < 1 ? (
+          {unconfirmedConnectionsLength < 1 ? (
             <>
               <Text style={styles.infoBottomText}>Or you can also...</Text>
               <TouchableOpacity
@@ -307,8 +315,8 @@ export const MyCodeScreen = () => {
           ) : (
             <>
               <Text style={styles.infoBottomText}>
-                You have {pendingConnections.length} pending connection
-                {pendingConnections.length > 1 ? 's' : ''}...
+                You have {unconfirmedConnectionsLength} pending connection
+                {unconfirmedConnectionsLength > 1 ? 's' : ''}...
               </Text>
               <TouchableOpacity
                 testID="MyCodeToPendingConnections"

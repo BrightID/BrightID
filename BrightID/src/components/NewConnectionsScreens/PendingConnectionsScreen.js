@@ -26,7 +26,6 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
-import moment from 'moment';
 import {
   pendingConnection_states,
   rejectPendingConnection,
@@ -41,9 +40,9 @@ import {
   channel_types,
   selectChannelById,
 } from '@/components/NewConnectionsScreens/channelSlice';
-import api from '@/api/brightId';
 import { DEVICE_LARGE, WIDTH, HEIGHT } from '@/utils/constants';
 import backArrow from '@/static/back_arrow_black.svg';
+import { usePrevious } from '@/utils/hooks';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -52,96 +51,44 @@ import backArrow from '@/static/back_arrow_black.svg';
  *
  */
 
-export const PreviewConnection = ({ id, carouselRef }) => {
+/**  HELPER FUNCTIONS */
+
+const isUnconfirmed = (pc) => pc.state === pendingConnection_states.UNCONFIRMED;
+const isReadyToConfirm = (pc) => pc.initiator || pc.signedMessage;
+// const shouldDisplay = (pc) => isUnconfirmed(pc) && isReadyToConfirm(pc);
+
+/**  COMPONENTS */
+export const PreviewConnection = ({ id, carouselRef, last }) => {
   const dispatch = useDispatch();
 
-  // return true because we never want to re render
-  const myConnections = useSelector(
-    (state) => state.connections.connections,
-    () => true,
-  );
-
-  // we only care about the state the of the pending connection
+  // we only care about the state and signedMessage the of the pending connection
   const pendingConnection = useSelector(
     (state) => selectPendingConnectionById(state, id),
-    (a, b) => a?.state === b?.state,
+    (a, b) => a?.state === b?.state && a?.signedMessage === b?.signedMessage,
   );
-
-  // we are only using the channel's profile timestamp
-  const channel: Channel | typeof undefined = useSelector(
-    (state) => {
-      if (pendingConnection) {
-        return selectChannelById(state, pendingConnection.channelId);
-      } else {
-        return undefined;
-      }
-    },
-    (a, b) => a?.myProfileTimestamp === b?.myProfileTimestamp,
-  );
-
-  const [userInfo, setUserInfo] = useState({
-    connections: 'loading',
-    groups: 'loading',
-    mutualConnections: 'loading',
-    connectionDate: 'loading',
-    flagged: false,
-  });
-
-  const reject = useCallback(() => {
-    dispatch(rejectPendingConnection(pendingConnection.id));
-    carouselRef.current?.snapToNext();
-    return true;
-  }, [dispatch, pendingConnection.id, carouselRef]);
-
-  const handleConfirmation = async () => {
-    dispatch(confirmPendingConnectionThunk(pendingConnection.id));
-    carouselRef.current?.snapToNext();
-  };
 
   useEffect(() => {
-    const fetchConnectionInfo = async () => {
-      console.log(`TODO: Move fetchConnectionInfo() to Redux!`);
-      try {
-        const {
-          createdAt,
-          groups,
-          connections = [],
-          flaggers,
-        } = await api.getUserInfo(
-          pendingConnection.brightId ? pendingConnection.brightId : '',
-        );
-        const mutualConnections = connections.filter(function (el) {
-          return myConnections.some((x) => x.id === el.id);
-        });
-        setUserInfo({
-          connections: connections.length,
-          groups: groups.length,
-          mutualConnections: mutualConnections.length,
-          connectionDate: `Created ${moment(
-            parseInt(createdAt, 10),
-          ).fromNow()}`,
-          flagged: flaggers && Object.keys(flaggers).length > 0,
-        });
-      } catch (err) {
-        if (err instanceof Error && err.message === 'User not found') {
-          setUserInfo({
-            connections: 0,
-            groups: 0,
-            mutualConnections: 0,
-            connectionDate: 'New user',
-            flagged: false,
-          });
-        } else {
-          err instanceof Error ? console.warn(err.message) : console.log(err);
-        }
-      }
+    const goBack = () => {
+      carouselRef.current?.snapToPrev();
+      return true;
     };
+    BackHandler.addEventListener('hardwareBackPress', goBack);
+    return () => BackHandler.removeEventListener('hardwareBackPress', goBack);
+  }, [carouselRef]);
 
-    fetchConnectionInfo();
+  const handleConfirmation = () => {
+    dispatch(confirmPendingConnectionThunk(pendingConnection.id));
+    last
+      ? carouselRef.current?.snapToPrev()
+      : carouselRef.current?.snapToNext();
+  };
 
-    BackHandler.addEventListener('hardwareBackPress', reject);
-    return () => BackHandler.removeEventListener('hardwareBackPress', reject);
-  }, [reject, myConnections, pendingConnection.brightId]);
+  const reject = () => {
+    dispatch(rejectPendingConnection(pendingConnection.id));
+    last
+      ? carouselRef.current?.snapToPrev()
+      : carouselRef.current?.snapToNext();
+  };
 
   const ConfirmationButtons = () => {
     switch (pendingConnection.state) {
@@ -155,16 +102,8 @@ export const PreviewConnection = ({ id, carouselRef }) => {
       case pendingConnection_states.REJECTED: {
         return <Text>{pendingConnection.name} rejected your connection</Text>;
       }
-
       case pendingConnection_states.UNCONFIRMED:
-        if (
-          pendingConnection.profileTimestamp < channel?.myProfileTimestamp &&
-          !pendingConnection.signedMessage
-        ) {
-          return (
-            <Text>Waiting for {pendingConnection.name} to confirm ...</Text>
-          );
-        } else {
+        if (isReadyToConfirm(pendingConnection)) {
           return (
             <>
               <TouchableOpacity
@@ -183,6 +122,10 @@ export const PreviewConnection = ({ id, carouselRef }) => {
               </TouchableOpacity>
             </>
           );
+        } else {
+          return (
+            <Text>Waiting for {pendingConnection.name} to confirm ...</Text>
+          );
         }
       case pendingConnection_states.ERROR:
       default: {
@@ -190,6 +133,12 @@ export const PreviewConnection = ({ id, carouselRef }) => {
       }
     }
   };
+
+  console.log(
+    'rendering',
+    pendingConnection.name,
+    pendingConnection.signedMessage,
+  );
 
   return (
     <View style={styles.previewContainer} testID="previewConnectionScreen">
@@ -215,22 +164,30 @@ export const PreviewConnection = ({ id, carouselRef }) => {
         />
         <Text style={styles.connectName}>
           {pendingConnection.name}
-          {userInfo.flagged && <Text style={styles.flagged}> (flagged)</Text>}
+          {pendingConnection.flagged && (
+            <Text style={styles.flagged}> (flagged)</Text>
+          )}
         </Text>
-        <Text style={styles.connectedText}>{userInfo.connectionDate}</Text>
+        <Text style={styles.connectedText}>
+          {pendingConnection.connectionDate}
+        </Text>
       </View>
       <View style={styles.countsContainer}>
         <View>
-          <Text style={styles.countsNumberText}>{userInfo.connections}</Text>
+          <Text style={styles.countsNumberText}>
+            {pendingConnection.connections}
+          </Text>
           <Text style={styles.countsDescriptionText}>Connections</Text>
         </View>
         <View>
-          <Text style={styles.countsNumberText}>{userInfo.groups}</Text>
+          <Text style={styles.countsNumberText}>
+            {pendingConnection.groups}
+          </Text>
           <Text style={styles.countsDescriptionText}>Groups</Text>
         </View>
         <View>
           <Text style={styles.countsNumberText}>
-            {userInfo.mutualConnections}
+            {pendingConnection.mutualConnections}
           </Text>
           <Text style={styles.countsDescriptionText}>Mutual Connec...</Text>
         </View>
@@ -246,46 +203,73 @@ export const PendingConnectionsScreen = () => {
   const navigation = useNavigation();
   const carouselRef = useRef(null);
 
-  const pendingConnections = useSelector(
-    (state) => {
-      return selectAllPendingConnections(state);
-    },
-    (a, b) => a.length === b.length,
-  );
+  const pendingConnections = useSelector((state) => {
+    return selectAllPendingConnections(state);
+  });
 
-  const unconfirmedConnectionIds = pendingConnections
-    .filter((pc) => pc.state === pendingConnection_states.UNCONFIRMED)
-    .map((pc) => pc.id);
+  console.log('rendering pending connections list');
 
-  const renderItem = ({ item }) => {
-    return <PreviewConnection id={item} carouselRef={carouselRef} />;
-  };
+  const [reRender, setRerender] = useState(0);
 
-  return (
-    <SafeAreaView
-      style={[styles.container]}
-      onPress={() => {
-        navigation.goBack();
-      }}
-    >
-      <TouchableOpacity
-        style={styles.cancelButton}
-        onPress={() => {
-          navigation.navigate('Home');
-        }}
-      >
-        <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
-      </TouchableOpacity>
+  const readyToConfirmConnections = pendingConnections.filter(isReadyToConfirm);
+
+  useEffect(() => {
+    const readyToDisplayConnections = readyToConfirmConnections.filter(
+      isUnconfirmed,
+    );
+    if (readyToDisplayConnections.length === 0) {
+      setRerender((c) => c + 1);
+    }
+  }, [pendingConnections]);
+
+  // the list should only re render sparingly for performance reasons
+  const PendingConnectionList = useMemo(() => {
+    // only display users that we are able to confirm / reject
+    const readyToDisplayConnectionIds = readyToConfirmConnections
+      .filter(isUnconfirmed)
+      .map((pc) => pc.id);
+    const renderItem = ({ item, index }) => {
+      return item ? (
+        <PreviewConnection
+          id={item}
+          carouselRef={carouselRef}
+          last={index === readyToDisplayConnectionIds.length - 1}
+        />
+      ) : null;
+    };
+    return (
       <Carousel
-        containerCustomStyle={{ flex: 1 }}
+        containerCustomStyle={{
+          flex: 1,
+        }}
         ref={carouselRef}
-        data={unconfirmedConnectionIds}
+        data={readyToDisplayConnectionIds}
+        layoutCardOffset={readyToDisplayConnectionIds.length}
         renderItem={renderItem}
         layout="stack"
         lockScrollWhileSnapping={true}
         itemWidth={WIDTH * 0.95}
         sliderWidth={WIDTH}
+        onBeforeSnapToItem={(index) => {
+          if (index === readyToDisplayConnectionIds.length - 1) {
+            setRerender((c) => c + 1);
+          }
+        }}
       />
+    );
+  }, [readyToConfirmConnections.length, reRender]);
+
+  return (
+    <SafeAreaView style={[styles.container]}>
+      <TouchableOpacity
+        style={styles.cancelButton}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
+        <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
+      </TouchableOpacity>
+      {PendingConnectionList}
     </SafeAreaView>
   );
 };

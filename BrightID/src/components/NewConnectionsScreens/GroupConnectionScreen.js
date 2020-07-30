@@ -12,7 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Svg, { Line, SvgXml } from 'react-native-svg';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useSelector, shallowEqual } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {
@@ -24,7 +24,7 @@ import {
 } from '@/utils/constants';
 
 import {
-  // pendingConnection_states,
+  pendingConnection_states,
   selectAllPendingConnections,
   selectPendingConnectionById,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
@@ -57,8 +57,12 @@ export const GroupConnectionScreen = () => {
     selectPendingConnectionById(state, channel?.initiatorProfileId),
   );
 
-  const pendingConnections = useSelector((state) =>
-    selectAllPendingConnections(state),
+  const pendingConnections = useSelector(
+    (state) =>
+      selectAllPendingConnections(state).filter(
+        (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
+      ),
+    (a, b) => a.length === b.length,
   );
 
   const groupConnections = pendingConnections.filter(
@@ -83,7 +87,7 @@ export const GroupConnectionScreen = () => {
         }),
       ),
     ]).start();
-  }, []);
+  }, [circleArcOneOpacity, circleArcTwoOpacity]);
   // waiting rings animation
 
   const [bubbleCoords, setBubbleCoords] = useState([]);
@@ -106,8 +110,6 @@ export const GroupConnectionScreen = () => {
       setBubbleCoords(bubbleCoords.slice(-1));
     }
   }, [groupConnections.length, bubbleCoords]);
-
-  console.log('bubbleCoords', bubbleCoords);
 
   const GroupConnectionBubbles = () =>
     groupConnections.map((pc, index) => (
@@ -138,6 +140,8 @@ export const GroupConnectionScreen = () => {
         />
       </>
     ));
+
+  console.log('rendering Group Connection Screen');
 
   return (
     <SafeAreaView style={styles.container}>
