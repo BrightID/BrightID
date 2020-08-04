@@ -95,7 +95,8 @@ const ConnectionsList = ({ route }) => {
   );
 };
 
-const InviteList = ({ route }) => {
+const InviteList = () => {
+  const navigation = useNavigation();
   const [refreshing, onRefresh] = useRefresh();
   const invites = useSelector((state) => inviteSelector(state));
   thecount++;
@@ -117,7 +118,9 @@ const InviteList = ({ route }) => {
           iconType="account-cancel-outline"
         />
       }
-      renderItem={({ item }) => <InviteCard invite={item} />}
+      renderItem={({ item }) => (
+        <InviteCard navigation={navigation} invite={item} />
+      )}
     />
   );
 };
@@ -181,7 +184,7 @@ const renderTabBar = (props) => (
   />
 );
 
-export const NotificationsScreen = ({ navigation, route }) => {
+export const NotificationsScreen = ({ route }) => {
   const dispatch = useDispatch();
 
   const pendingConnections = useSelector(
