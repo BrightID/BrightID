@@ -43,6 +43,7 @@ import {
 import { DEVICE_LARGE, WIDTH, HEIGHT } from '@/utils/constants';
 import backArrow from '@/static/back_arrow_black.svg';
 import { usePrevious } from '@/utils/hooks';
+import { equals } from 'ramda';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -55,85 +56,74 @@ import { usePrevious } from '@/utils/hooks';
 
 const isUnconfirmed = (pc) => pc.state === pendingConnection_states.UNCONFIRMED;
 const isReadyToConfirm = (pc) => pc.initiator || pc.signedMessage;
-// const shouldDisplay = (pc) => isUnconfirmed(pc) && isReadyToConfirm(pc);
+const shouldDisplay = (pc) => isUnconfirmed(pc) && isReadyToConfirm(pc);
 
 /**  COMPONENTS */
-export const PreviewConnection = ({ id, carouselRef, last }) => {
-  const dispatch = useDispatch();
 
-  // we only care about the state and signedMessage the of the pending connection
+const ConfirmationButtons = ({ pendingConnection: pc, carouselRef, last }) => {
+  const dispatch = useDispatch();
   const pendingConnection = useSelector(
-    (state) => selectPendingConnectionById(state, id),
+    (state) => selectPendingConnectionById(state, pc.id),
     (a, b) => a?.state === b?.state && a?.signedMessage === b?.signedMessage,
   );
-
-  useEffect(() => {
-    const goBack = () => {
-      carouselRef.current?.snapToPrev();
-      return true;
-    };
-    BackHandler.addEventListener('hardwareBackPress', goBack);
-    return () => BackHandler.removeEventListener('hardwareBackPress', goBack);
-  }, [carouselRef]);
-
   const handleConfirmation = () => {
     dispatch(confirmPendingConnectionThunk(pendingConnection.id));
     last
-      ? carouselRef.current?.snapToPrev()
+      ? carouselRef.current?.snapToItem(0)
       : carouselRef.current?.snapToNext();
   };
 
   const reject = () => {
     dispatch(rejectPendingConnection(pendingConnection.id));
     last
-      ? carouselRef.current?.snapToPrev()
+      ? carouselRef.current?.snapToItem(0)
       : carouselRef.current?.snapToNext();
   };
 
-  const ConfirmationButtons = () => {
-    switch (pendingConnection.state) {
-      case pendingConnection_states.CONFIRMING:
-      case pendingConnection_states.CONFIRMED: {
-        return <Text>Confirming connection...</Text>;
-      }
-      case pendingConnection_states.DOWNLOADING: {
-        return <Text>Downloading profile ...</Text>;
-      }
-      case pendingConnection_states.REJECTED: {
-        return <Text>{pendingConnection.name} rejected your connection</Text>;
-      }
-      case pendingConnection_states.UNCONFIRMED:
-        if (isReadyToConfirm(pendingConnection)) {
-          return (
-            <>
-              <TouchableOpacity
-                testID="rejectConnectionBtn"
-                onPress={reject}
-                style={styles.rejectButton}
-              >
-                <Text style={styles.buttonText}>Reject</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                testID="confirmConnectionBtn"
-                onPress={handleConfirmation}
-                style={styles.confirmButton}
-              >
-                <Text style={styles.buttonText}>Confirm</Text>
-              </TouchableOpacity>
-            </>
-          );
-        } else {
-          return (
-            <Text>Waiting for {pendingConnection.name} to confirm ...</Text>
-          );
-        }
-      case pendingConnection_states.ERROR:
-      default: {
-        return <Text>There was an error, please try again</Text>;
-      }
+  switch (pendingConnection.state) {
+    case pendingConnection_states.CONFIRMING:
+    case pendingConnection_states.CONFIRMED: {
+      return <Text>Confirming connection...</Text>;
     }
-  };
+    case pendingConnection_states.DOWNLOADING: {
+      return <Text>Downloading profile ...</Text>;
+    }
+    case pendingConnection_states.REJECTED: {
+      return <Text>{pendingConnection.name} rejected your connection</Text>;
+    }
+    case pendingConnection_states.UNCONFIRMED:
+      if (isReadyToConfirm(pendingConnection)) {
+        return (
+          <>
+            <TouchableOpacity
+              testID="rejectConnectionBtn"
+              onPress={reject}
+              style={styles.rejectButton}
+            >
+              <Text style={styles.buttonText}>Reject</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              testID="confirmConnectionBtn"
+              onPress={handleConfirmation}
+              style={styles.confirmButton}
+            >
+              <Text style={styles.buttonText}>Confirm</Text>
+            </TouchableOpacity>
+          </>
+        );
+      } else {
+        return <Text>Waiting for {pendingConnection.name} to confirm ...</Text>;
+      }
+    case pendingConnection_states.ERROR:
+    default: {
+      return <Text>There was an error, please try again</Text>;
+    }
+  }
+};
 
+export const PreviewConnection = (props) => {
+  // we only care about the state and signedMessage the of the pending connection
+  const { pendingConnection } = props;
   console.log(
     'rendering',
     pendingConnection.name,
@@ -193,7 +183,7 @@ export const PreviewConnection = ({ id, carouselRef, last }) => {
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <ConfirmationButtons />
+        <ConfirmationButtons {...props} />
       </View>
     </View>
   );
@@ -207,35 +197,45 @@ export const PendingConnectionsScreen = () => {
     return selectAllPendingConnections(state);
   });
 
-  console.log('rendering pending connections list');
+  const [pendingConnectionsToDisplay, setPendingConnectionsDisplay] = useState(
+    [],
+  );
 
-  const [reRender, setRerender] = useState(0);
+  const [readyToRender, setReadyToRender] = useState(true);
 
-  const readyToConfirmConnections = pendingConnections.filter(isReadyToConfirm);
+  useFocusEffect(
+    useCallback(() => {
+      console.log('in the callback top');
+      // only update pendingConnectionsToDisplay when we are on the last item in the list
+      if (readyToRender || pendingConnectionsToDisplay.length <= 1) {
+        console.log('in the callback interior');
+        const connectionsToDisplay = pendingConnections.filter(shouldDisplay);
+        setPendingConnectionsDisplay(connectionsToDisplay);
+        setReadyToRender(false);
+      }
+    }, [readyToRender, pendingConnections, pendingConnectionsToDisplay.length]),
+  );
 
+  // better back handling for android
   useEffect(() => {
-    const readyToDisplayConnections = readyToConfirmConnections.filter(
-      isUnconfirmed,
-    );
-    if (readyToDisplayConnections.length === 0) {
-      setRerender((c) => c + 1);
-    }
-  }, [pendingConnections]);
+    const goBack = () => {
+      carouselRef.current?.snapToPrev();
+      return true;
+    };
+    BackHandler.addEventListener('hardwareBackPress', goBack);
+    return () => BackHandler.removeEventListener('hardwareBackPress', goBack);
+  }, [carouselRef]);
 
-  // the list should only re render sparingly for performance reasons
+  // the list should only re render sparingly for performance and continuity
   const PendingConnectionList = useMemo(() => {
-    // only display users that we are able to confirm / reject
-    const readyToDisplayConnectionIds = readyToConfirmConnections
-      .filter(isUnconfirmed)
-      .map((pc) => pc.id);
     const renderItem = ({ item, index }) => {
-      return item ? (
+      return (
         <PreviewConnection
-          id={item}
+          pendingConnection={item}
           carouselRef={carouselRef}
-          last={index === readyToDisplayConnectionIds.length - 1}
+          last={index === pendingConnectionsToDisplay.length - 1}
         />
-      ) : null;
+      );
     };
     return (
       <Carousel
@@ -243,21 +243,22 @@ export const PendingConnectionsScreen = () => {
           flex: 1,
         }}
         ref={carouselRef}
-        data={readyToDisplayConnectionIds}
-        layoutCardOffset={readyToDisplayConnectionIds.length}
+        data={pendingConnectionsToDisplay}
+        layoutCardOffset={pendingConnectionsToDisplay.length}
         renderItem={renderItem}
         layout="stack"
         lockScrollWhileSnapping={true}
         itemWidth={WIDTH * 0.95}
         sliderWidth={WIDTH}
-        onBeforeSnapToItem={(index) => {
-          if (index === readyToDisplayConnectionIds.length - 1) {
-            setRerender((c) => c + 1);
+        onSnapToItem={(index) => {
+          // remove all of the confirmed connections when we reach the end of the list
+          if (index === pendingConnectionsToDisplay.length - 1) {
+            setReadyToRender(true);
           }
         }}
       />
     );
-  }, [readyToConfirmConnections.length, reRender]);
+  }, [pendingConnectionsToDisplay]);
 
   return (
     <SafeAreaView style={[styles.container]}>
