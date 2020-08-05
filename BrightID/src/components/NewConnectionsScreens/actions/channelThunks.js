@@ -57,7 +57,7 @@ export const joinChannel = (channel: Channel) => (dispatch: dispatch) => {
     console.log(
       `WARNING - TTL ${ttl} of ${channel.id} is too high. Limiting to ${CHANNEL_TTL}.`,
     );
-    ttl = CHANNEL_TTL;
+    channel.ttl = CHANNEL_TTL;
   }
 
   // Start timer to expire channel
@@ -237,6 +237,8 @@ export const fetchConnectionRequests = createAsyncThunk(
   },
 );
 
+// TODO: This should not be a thunk, as no actions are dispatched.
+//  Should be changed to regular function in utils, with channel and user data passed in
 export const encryptAndUploadProfileToChannel = (channelId: string) => async (
   dispatch: dispatch,
   getState: getState,
