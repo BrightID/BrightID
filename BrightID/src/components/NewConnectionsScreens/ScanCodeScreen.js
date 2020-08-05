@@ -81,7 +81,6 @@ export const ScanCodeScreen = () => {
   // );
 
   const handleBarCodeRead = async ({ data }: string) => {
-    console.log('barcode data', data);
     if (!data) return;
 
     setScanned(true);

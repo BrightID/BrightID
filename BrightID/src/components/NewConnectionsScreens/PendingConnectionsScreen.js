@@ -66,6 +66,7 @@ const ConfirmationButtons = ({ pendingConnection: pc, carouselRef, last }) => {
     (state) => selectPendingConnectionById(state, pc.id),
     (a, b) => a?.state === b?.state && a?.signedMessage === b?.signedMessage,
   );
+
   const handleConfirmation = () => {
     dispatch(confirmPendingConnectionThunk(pendingConnection.id));
     last
@@ -193,6 +194,7 @@ export const PendingConnectionsScreen = () => {
   const navigation = useNavigation();
   const carouselRef = useRef(null);
 
+  // we want to watch for all changes to pending connections
   const pendingConnections = useSelector((state) => {
     return selectAllPendingConnections(state);
   });
@@ -205,18 +207,22 @@ export const PendingConnectionsScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log('in the callback top');
-      // only update pendingConnectionsToDisplay when we are on the last item in the list
+      /**
+       * first mount
+       * after snapping to last pending connection in the list
+       * if there is only one connectionsToDisplay and  useSelector triggers a re-render
+       */
+      //
       if (readyToRender || pendingConnectionsToDisplay.length <= 1) {
-        console.log('in the callback interior');
         const connectionsToDisplay = pendingConnections.filter(shouldDisplay);
+        // this will cause the PendingConnectionList to re render
         setPendingConnectionsDisplay(connectionsToDisplay);
         setReadyToRender(false);
       }
     }, [readyToRender, pendingConnections, pendingConnectionsToDisplay.length]),
   );
 
-  // better back handling for android
+  // back handling for android
   useEffect(() => {
     const goBack = () => {
       carouselRef.current?.snapToPrev();
@@ -237,6 +243,7 @@ export const PendingConnectionsScreen = () => {
         />
       );
     };
+    console.log('rendering pending connections CAROUSEL');
     return (
       <Carousel
         containerCustomStyle={{
@@ -259,6 +266,8 @@ export const PendingConnectionsScreen = () => {
       />
     );
   }, [pendingConnectionsToDisplay]);
+
+  console.log('rendering pending connections SCREEN');
 
   return (
     <SafeAreaView style={[styles.container]}>

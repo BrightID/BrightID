@@ -12,7 +12,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Svg, { Line, SvgXml } from 'react-native-svg';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useSelector, shallowEqual } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {
@@ -43,11 +44,26 @@ const calcX = (a: number) =>
 const calcY = (a: number) =>
   HEIGHT / 2 - 40 + radius * Math.sin(degreeToRadian(a));
 
+/** SELECTORS */
+
+const selectGroupConnections = createSelector(
+  selectAllPendingConnections,
+  (_, channel) => channel,
+  (pendingConnections, channel) => {
+    console.log('calcing pending connections');
+    return pendingConnections.filter(
+      (pc) =>
+        pc.channelId === channel?.id && pc.id !== channel?.initiatorProfileId,
+    );
+  },
+);
+
 /** MAIN */
 
 export const GroupConnectionScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
+
   const circleArcOneOpacity = useRef(new Animated.Value(0)).current;
   const circleArcTwoOpacity = useRef(new Animated.Value(0)).current;
 
@@ -57,20 +73,12 @@ export const GroupConnectionScreen = () => {
     selectPendingConnectionById(state, channel?.initiatorProfileId),
   );
 
-  const pendingConnections = useSelector(
-    (state) =>
-      selectAllPendingConnections(state).filter(
-        (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
-      ),
-    (a, b) => a.length === b.length,
-  );
-
-  const groupConnections = pendingConnections.filter(
-    (pc) =>
-      pc.channelId === channel?.id && pc.id !== channel?.initiatorProfileId,
+  const groupConnections = useSelector((state) =>
+    selectGroupConnections(state, channel),
   );
 
   useEffect(() => {
+    console.log('in the animation effect');
     Animated.stagger(1500, [
       Animated.loop(
         Animated.timing(circleArcOneOpacity, {
@@ -93,6 +101,7 @@ export const GroupConnectionScreen = () => {
   const [bubbleCoords, setBubbleCoords] = useState([]);
 
   useEffect(() => {
+    console.log('in the diff bubble coord effect');
     const diff = groupConnections.length - bubbleCoords.length;
     if (diff > 0) {
       let nextCoords = {};

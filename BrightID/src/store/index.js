@@ -37,6 +37,7 @@ export const store = configureStore({
     // We have a bunch of non-serializable data like secret key etc.
     // TODO For now disabled completely. Revisit later for fine-grained configuration.
     serializableCheck: false,
+    immutableCheck: false,
   }),
 });
 

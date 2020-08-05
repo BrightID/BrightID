@@ -74,8 +74,6 @@ const fetchConnectionInfo = async ({ myConnections, brightId }) => {
   }
 };
 
-fetchConnectionInfo();
-
 export const newPendingConnection = createAsyncThunk(
   'pendingConnections/newPendingConnection',
   async ({ channelId, profileId }, { getState }) => {
@@ -180,8 +178,6 @@ const pendingConnectionsSlice = createSlice({
         name,
         photo,
         score,
-        signedMessage,
-        timestamp,
         profileTimestamp,
         initiator,
         connections,
@@ -199,8 +195,6 @@ const pendingConnectionsSlice = createSlice({
         name,
         photo,
         score,
-        signedMessage,
-        timestamp,
         profileTimestamp,
         initiator,
         connections,
@@ -210,10 +204,12 @@ const pendingConnectionsSlice = createSlice({
         flagged,
       };
 
-      // add secret key if dev
+      // add secret key, signed message, timestamp if dev
       if (__DEV__) {
-        const { secretKey } = action.payload;
+        const { secretKey, signedMessage, timestamp } = action.payload;
         changes.secretKey = secretKey;
+        changes.signedMessage = signedMessage;
+        changes.timestamp = timestamp;
       }
 
       // Perform the update in redux

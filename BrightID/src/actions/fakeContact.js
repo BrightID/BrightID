@@ -67,7 +67,7 @@ export const addFakeConnection = () => async (
     score,
     profileTimestamp: Date.now(),
     secretKey,
-    // signedMessage,
+    signedMessage,
     timestamp,
   };
 
