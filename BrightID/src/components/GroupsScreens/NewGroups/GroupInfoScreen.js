@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import ToggleSwitch from 'toggle-switch-react-native';
 import { chooseImage } from '@/utils/images';
 import { DEVICE_TYPE, DEVICE_OS, ORANGE } from '@/utils/constants';
 
@@ -63,6 +62,7 @@ export class GroupInfoScreen extends React.Component<Props> {
   };
 
   render() {
+    // eslint-disable-next-line no-unused-vars
     const { name, finalBase64, isPrimary } = this.state;
 
     return (
@@ -111,7 +111,11 @@ export class GroupInfoScreen extends React.Component<Props> {
               />
             </View>
           </View>
-          {!this.hasPrimaryGroup() && (
+          {/*
+
+            Disabled creation of primary groups for now (https://github.com/BrightID/BrightID/issues/474)
+
+            !this.hasPrimaryGroup() && (
             <View testID="primaryGroupView" style={styles.toggleContainer}>
               <Text style={styles.primaryGroupText}>
                 A primary group represents the closest personal contacts (e.g.
@@ -130,7 +134,8 @@ export class GroupInfoScreen extends React.Component<Props> {
                 onToggle={(isPrimary) => this.setState({ isPrimary })}
               />
             </View>
-          )}
+            )
+            */}
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               testID="nextBtn"
