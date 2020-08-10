@@ -188,20 +188,6 @@ export const HomeScreen = (props) => {
           <Text style={styles.countsDescriptionText}>Connections</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          testID="appsBtn"
-          style={styles.countsCard}
-          onPress={() => {
-            navigation.navigate('Apps');
-          }}
-        >
-          <Text testID="AppsCount" style={styles.countsNumberText}>
-            {apps?.length ?? 0}
-          </Text>
-          <View style={styles.countsBorder} />
-          <Text style={styles.countsDescriptionText}>Apps</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
           testID="groupsBtn"
           style={styles.countsCard}
           onPress={() => {
@@ -213,6 +199,19 @@ export const HomeScreen = (props) => {
           </Text>
           <View style={styles.countsBorder} />
           <Text style={styles.countsDescriptionText}>Groups</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          testID="appsBtn"
+          style={styles.countsCard}
+          onPress={() => {
+            navigation.navigate('Apps');
+          }}
+        >
+          <Text testID="AppsCount" style={styles.countsNumberText}>
+            {apps?.length ?? 0}
+          </Text>
+          <View style={styles.countsBorder} />
+          <Text style={styles.countsDescriptionText}>Apps</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.bottomOrangeContainer}>
