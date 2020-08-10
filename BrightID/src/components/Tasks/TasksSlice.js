@@ -71,6 +71,11 @@ export const checkTasks = () => {
     // for each pending task call checkFn and dispatch completeTask() on success.
     for (const task of pendingTasks) {
       if (UserTasks[task.id].checkFn(state)) {
+        console.log(
+          `TODO: create notification "Well done! You have completed the task '${
+            UserTasks[task.id].title
+          }'!"`,
+        );
         dispatch(completeTask(task.id));
       }
     }
