@@ -96,6 +96,7 @@ export const GroupConnectionScreen = () => {
 
   useEffect(() => {
     console.log('in the diff bubble coord effect');
+    if (!navigation.isFocused()) return;
     const diff = groupConnections.length - bubbleCoords.length;
     if (diff > 0) {
       let nextCoords = {};
@@ -112,37 +113,42 @@ export const GroupConnectionScreen = () => {
     if (diff < 0) {
       setBubbleCoords(bubbleCoords.slice(-1));
     }
-  }, [groupConnections.length, bubbleCoords]);
+  }, [groupConnections.length, bubbleCoords, navigation]);
 
   const GroupConnectionBubbles = () =>
-    groupConnections.map((pc, index) => (
-      <>
-        {bubbleCoords[index] && (
-          <Svg
-            style={{ position: 'absolute', top: 0, left: 0 }}
-            height={HEIGHT}
-            width={WIDTH}
-          >
-            <Line
-              x1={WIDTH / 2}
-              y1={HEIGHT / 2}
-              x2={bubbleCoords[index]?.left + 40}
-              y2={bubbleCoords[index]?.top + 40}
-              stroke={ORANGE}
-              strokeWidth="2"
+    navigation.isFocused()
+      ? groupConnections.map((pc, index) => (
+          <>
+            {bubbleCoords[index] && (
+              <Svg
+                style={{ position: 'absolute', top: 0, left: 0 }}
+                height={HEIGHT}
+                width={WIDTH}
+              >
+                <Line
+                  x1={WIDTH / 2}
+                  y1={HEIGHT / 2}
+                  x2={bubbleCoords[index]?.left + 40}
+                  y2={bubbleCoords[index]?.top + 40}
+                  stroke={ORANGE}
+                  strokeWidth="2"
+                />
+              </Svg>
+            )}
+            <Image
+              key={pc.id}
+              style={[
+                styles.connectionBubble,
+                {
+                  left: bubbleCoords[index]?.left,
+                  top: bubbleCoords[index]?.top,
+                },
+              ]}
+              source={{ uri: pc.photo }}
             />
-          </Svg>
-        )}
-        <Image
-          key={pc.id}
-          style={[
-            styles.connectionBubble,
-            { left: bubbleCoords[index]?.left, top: bubbleCoords[index]?.top },
-          ]}
-          source={{ uri: pc.photo }}
-        />
-      </>
-    ));
+          </>
+        ))
+      : null;
 
   console.log('rendering Group Connection Screen');
 

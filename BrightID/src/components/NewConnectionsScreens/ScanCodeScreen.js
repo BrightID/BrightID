@@ -69,12 +69,12 @@ export const ScanCodeScreen = () => {
   );
 
   useEffect(() => {
-    if (channel) {
+    if (channel && navigation.isFocused()) {
       channel.type === channel_types.SINGLE
         ? navigation.navigate('PendingConnections')
         : navigation.navigate('GroupConnection', { channel });
     }
-  }, [pendingConnections]);
+  }, [pendingConnections, navigation]);
 
   const handleBarCodeRead = async ({ data }: string) => {
     if (!data) return;

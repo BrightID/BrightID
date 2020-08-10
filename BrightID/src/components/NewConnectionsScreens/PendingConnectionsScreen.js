@@ -45,8 +45,6 @@ import {
 } from '@/components/NewConnectionsScreens/channelSlice';
 import { DEVICE_LARGE, WIDTH, HEIGHT } from '@/utils/constants';
 import backArrow from '@/static/back_arrow_grey.svg';
-import { usePrevious } from '@/utils/hooks';
-import { equals } from 'ramda';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -57,21 +55,29 @@ import { equals } from 'ramda';
 
 /**  HELPER FUNCTIONS */
 
-const isUnconfirmed = (pc) => pc.state === pendingConnection_states.UNCONFIRMED;
 const isReadyToConfirm = (pc) => pc.initiator || pc.signedMessage;
-const shouldDisplay = (pc) => isUnconfirmed(pc) && isReadyToConfirm(pc);
 
 /**  COMPONENTS */
 
-const ConfirmationButtons = ({ pendingConnection: pc, carouselRef, last }) => {
+const ConfirmationButtons = ({
+  pendingConnection: pc,
+  carouselRef,
+  last,
+  setLastChannelType,
+}) => {
   const dispatch = useDispatch();
   const pendingConnection = useSelector(
     (state) => selectPendingConnectionById(state, pc.id),
     (a, b) => a?.state === b?.state && a?.signedMessage === b?.signedMessage,
   );
 
+  const channelType = useSelector(
+    (state) => selectChannelById(state, pendingConnection.channelId)?.type,
+  );
+
   const accept = () => {
     dispatch(confirmPendingConnectionThunk(pendingConnection.id));
+    setLastChannelType(channelType);
     last
       ? carouselRef.current?.snapToItem(0)
       : carouselRef.current?.snapToNext();
@@ -79,6 +85,7 @@ const ConfirmationButtons = ({ pendingConnection: pc, carouselRef, last }) => {
 
   const reject = () => {
     dispatch(rejectPendingConnection(pendingConnection.id));
+    setLastChannelType(channelType);
     last
       ? carouselRef.current?.snapToItem(0)
       : carouselRef.current?.snapToNext();
@@ -87,13 +94,17 @@ const ConfirmationButtons = ({ pendingConnection: pc, carouselRef, last }) => {
   switch (pendingConnection.state) {
     case pendingConnection_states.CONFIRMING:
     case pendingConnection_states.CONFIRMED: {
-      return <Text>Confirming connection...</Text>;
+      return <Text style={styles.waitingText}>Confirming connection...</Text>;
     }
     case pendingConnection_states.DOWNLOADING: {
-      return <Text>Downloading profile ...</Text>;
+      return <Text style={styles.waitingText}>Downloading profile ...</Text>;
     }
     case pendingConnection_states.REJECTED: {
-      return <Text>{pendingConnection.name} rejected your connection</Text>;
+      return (
+        <Text style={styles.waitingText}>
+          {pendingConnection.name} rejected your connection
+        </Text>
+      );
     }
     case pendingConnection_states.UNCONFIRMED:
       if (isReadyToConfirm(pendingConnection)) {
@@ -215,17 +226,27 @@ export const PendingConnectionsScreen = () => {
 
   const [loading, setLoading] = useState(true);
 
+  const [lastChannelType, setLastChannelType] = useState(channel_types.SINGLE);
+
   useFocusEffect(
     useCallback(() => {
+      let timeout;
       if (pendingConnections.length === 0) {
         setLoading(true);
-        setTimeout(() => {
-          setLoading(false);
+        timeout = setTimeout(() => {
+          if (lastChannelType === channel_types.SINGLE) {
+            navigation.navigate('Connections');
+          } else {
+            setLoading(false);
+          }
         }, 2500);
       } else {
         setLoading(false);
       }
-    }, [pendingConnections.length]),
+      return () => {
+        clearTimeout(timeout);
+      };
+    }, [pendingConnections.length, lastChannelType, navigation]),
   );
 
   useEffect(() => {
@@ -262,6 +283,7 @@ export const PendingConnectionsScreen = () => {
           pendingConnection={item}
           carouselRef={carouselRef}
           last={index === pendingConnectionsToDisplay.length - 1}
+          setLastChannelType={setLastChannelType}
         />
       );
     };
@@ -317,7 +339,12 @@ export const PendingConnectionsScreen = () => {
         }}
       >
         {loading ? (
-          <Spinner isVisible={true} size={60} type="ThreeBounce" color="#aaa" />
+          <Spinner
+            isVisible={true}
+            size={60}
+            type="FadingCircleAlt"
+            color="#aaa"
+          />
         ) : pendingConnections.length ? (
           <>
             <Material

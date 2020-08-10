@@ -97,6 +97,7 @@ export const MyCodeScreen = () => {
   const myChannel = useSelector((state) => {
     return selectChannelById(state, state.channels.myChannelId);
   });
+  const myName = useSelector((state) => state.user.name);
   // pending connections attached to my channel
   const pendingConnectionSizeForChannel = useSelector((state) => {
     return selectAllPendingConnectionsByChannel(state, myChannel)?.length;
@@ -240,11 +241,19 @@ export const MyCodeScreen = () => {
     <>
       <View style={styles.orangeTop} />
       <Container style={styles.container}>
+        <GroupSwitch onValueChange={toggleGroup} value={isGroup} />
         <View style={styles.infoTopContainer}>
-          <GroupSwitch onValueChange={toggleGroup} value={isGroup} />
-          {/* <Text style={styles.infoTopText}>Channel type {myChannel?.type}</Text> */}
-          {/* //Please wait for everyone to finish scanning before proceeding to the
-          next page. */}
+          {myChannel?.type === channel_types.GROUP ? (
+            <Text style={styles.infoTopText}>
+              This is a group connection. If you scan this code, you will
+              connect with {myName} and anyone else who scans this.
+            </Text>
+          ) : (
+            <Text style={styles.infoTopText}>
+              This is a normal connection. Would you like to connect with{' '}
+              {myName}?
+            </Text>
+          )}
         </View>
         {myChannel?.state === channel_states.OPEN ? (
           <View style={styles.qrCodeContainer} testID="QRCodeContainer">
@@ -327,16 +336,17 @@ const styles = StyleSheet.create({
   },
   infoTopContainer: {
     width: '100%',
-    justifyContent: 'center',
+    flexGrow: 1,
+    justifyContent: 'space-evenly',
     alignItems: 'center',
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingLeft: DEVICE_LARGE ? 50 : 20,
+    paddingRight: DEVICE_LARGE ? 50 : 20,
   },
   infoTopText: {
     fontFamily: 'Poppins',
     fontWeight: '500',
-    fontSize: DEVICE_LARGE ? 13 : 12,
-    textAlign: 'left',
+    fontSize: DEVICE_LARGE ? 14 : 12,
+    textAlign: 'center',
     color: '#4a4a4a',
   },
 
@@ -344,13 +354,12 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    flexGrow: 1,
-    // borderWidth: 1,
+    flexGrow: 2,
   },
   copyContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
     width: DEVICE_LARGE ? 260 : 200,
   },
   copyButton: {
