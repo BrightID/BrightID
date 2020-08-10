@@ -25,6 +25,7 @@ declare type State = {
   operations: OperationsState,
   pendingConnections: PendingConnectionsState,
   recoveryData: RecoveryData,
+  tasks: TasksState,
   user: UserState,
 };
 
@@ -176,6 +177,15 @@ declare type RecoveryData = {
   id: string,
   sigs: Signature[],
 };
+
+declare type TasksState = {
+  tasks: {[ taskId: string]: TasksStateEntry},
+}
+
+declare type TasksStateEntry = {
+  completed: boolean,
+  timestamp: number,
+}
 
 declare type UserState = {
   score: number,

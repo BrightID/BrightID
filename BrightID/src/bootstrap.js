@@ -1,8 +1,9 @@
 // @flow
 import { bootstrapAndUpgrade } from './versions';
 import { resetOperations } from './actions';
-import fetchUserInfo from './actions/fetchUserInfo';
 import { store } from './store';
+import { addTask } from './components/Tasks/TasksSlice';
+import { UserTasks } from './components/Tasks/UserTasks';
 
 // happens inside of the loading screen
 
@@ -19,6 +20,10 @@ export const bootstrap = async () => {
     if (!publicKey) {
       publicKey = store.getState().user.publicKey;
       console.log('secondBootstrap', publicKey);
+    }
+    // load UserTasks
+    for (const { id } of Object.values(UserTasks)) {
+      store.dispatch(addTask(id));
     }
 
     // once everything is set up
