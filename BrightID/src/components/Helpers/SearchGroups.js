@@ -18,7 +18,7 @@ import searchIcon from '@/static/search_icon.svg';
  * TODO: Create a shared search component to use in both Connections and Group view
  */
 
-const X_TRANSFORM = 250;
+const X_TRANSFORM = DEVICE_LARGE ? 250 : 195;
 
 const SearchGroups = () => {
   const dispatch = useDispatch();
@@ -65,7 +65,11 @@ const SearchGroups = () => {
       ]}
     >
       <TouchableOpacity style={styles.searchIcon} onPress={getPidded}>
-        <SvgXml width={20} height={20} xml={searchIcon} />
+        <SvgXml
+          width={DEVICE_LARGE ? 20 : 18}
+          height={DEVICE_LARGE ? 20 : 18}
+          xml={searchIcon}
+        />
       </TouchableOpacity>
       <TextInput
         ref={textInput}
@@ -94,8 +98,8 @@ const SearchGroups = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    width: 300,
-    height: 40,
+    width: X_TRANSFORM + 50,
+    height: DEVICE_LARGE ? 40 : 36,
     borderTopLeftRadius: 20,
     borderBottomLeftRadius: 20,
     justifyContent: 'space-between',
@@ -114,7 +118,7 @@ const styles = StyleSheet.create({
     fontFamily: 'ApexNew-Book',
     fontSize: DEVICE_LARGE ? 15 : 13,
     color: '#333',
-    marginLeft: 23,
+    marginLeft: DEVICE_LARGE ? 23 : 20,
     flex: 1,
     fontWeight: 'normal',
     fontStyle: 'normal',
