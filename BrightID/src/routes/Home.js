@@ -19,6 +19,7 @@ import HomeScreen from '@/components/HomeScreen';
 import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnectionScreen';
 import { navigate } from '@/NavigationService';
 import { headerOptions } from './helpers';
+import TasksScreen from '../components/Tasks/TasksScreen';
 
 /** SELECTORS */
 
@@ -51,27 +52,41 @@ const NotificationBell = () => {
   const displayBadge = backupPending || invites || pendingConnections;
 
   return (
-    <TouchableOpacity
-      style={{ marginRight: 25 }}
-      onPress={() => {
-        navigate('Notifications');
-      }}
-    >
-      <Material name="bell" size={DEVICE_LARGE ? 28 : 23} color="#000" />
-      {displayBadge ? (
-        <View
-          style={{
-            backgroundColor: '#ED1B24',
-            width: 9,
-            height: 9,
-            borderRadius: 5,
-            position: 'absolute',
-            top: 5,
-            left: 17,
-          }}
+    <>
+      <TouchableOpacity
+        style={{ marginRight: 25 }}
+        onPress={() => {
+          navigate('Tasks');
+        }}
+      >
+        <Material
+          name="certificate"
+          size={DEVICE_LARGE ? 28 : 23}
+          color="#000"
         />
-      ) : null}
-    </TouchableOpacity>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{ marginRight: 25 }}
+        onPress={() => {
+          navigate('Notifications');
+        }}
+      >
+        <Material name="bell" size={DEVICE_LARGE ? 28 : 23} color="#000" />
+        {displayBadge ? (
+          <View
+            style={{
+              backgroundColor: '#ED1B24',
+              width: 9,
+              height: 9,
+              borderRadius: 5,
+              position: 'absolute',
+              top: 5,
+              left: 17,
+            }}
+          />
+        ) : null}
+      </TouchableOpacity>
+    </>
   );
 };
 
@@ -130,9 +145,15 @@ const recoveringConnectionOptions = {
   title: 'Account Recovery',
 };
 
+const taskScreenOptions = {
+  ...headerOptions,
+  title: 'Tasks and Achievements',
+};
+
 /** SCREENS */
 
 const Stack = createStackNavigator();
+
 
 const Home = () => {
   return (
@@ -146,6 +167,11 @@ const Home = () => {
         name="RecoveringConnection"
         component={RecoveringConnectionScreen}
         options={recoveringConnectionOptions}
+      />
+      <Stack.Screen
+        name="Tasks"
+        component={TasksScreen}
+        options={taskScreenOptions}
       />
     </>
   );
