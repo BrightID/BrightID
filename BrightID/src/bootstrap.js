@@ -2,7 +2,7 @@
 import { bootstrapAndUpgrade } from './versions';
 import { resetOperations } from './actions';
 import { store } from './store';
-import { addTask } from './components/Tasks/TasksSlice';
+import { addTask, checkTasks } from './components/Tasks/TasksSlice';
 import { UserTasks } from './components/Tasks/UserTasks';
 
 // happens inside of the loading screen
@@ -25,6 +25,8 @@ export const bootstrap = async () => {
     for (const { id } of Object.values(UserTasks)) {
       store.dispatch(addTask(id));
     }
+    // Initial check for complete tasks
+    store.dispatch(checkTasks());
 
     // once everything is set up
     // this.props.navigation.navigate(publicKey ? 'App' : 'Onboarding');

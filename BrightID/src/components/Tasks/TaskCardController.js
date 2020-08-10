@@ -26,7 +26,7 @@ function TaskCardController({ taskId }: TaskCardControllerProps) {
   return (
     <TaskCard
       description={extendedTask.description}
-      fulfilled={extendedTask.fulfilled}
+      fulfilled={extendedTask.completed}
       id={extendedTask.id}
       title={extendedTask.title}
     />

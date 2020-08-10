@@ -8,11 +8,8 @@ import TaskCardController from './TaskCardController';
 
 export const TasksScreen = function () {
   const taskIds = useSelector((state: State) => {
-    debugger;
     return Object.keys(state.tasks);
   });
-
-  console.log(taskIds);
 
   const renderItem = ({ item }) => <TaskCardController taskId={item} />;
 

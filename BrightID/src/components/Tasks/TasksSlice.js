@@ -1,6 +1,7 @@
 // @flow
 
 import { createSlice } from '@reduxjs/toolkit';
+import { UserTasks } from './UserTasks';
 
 /*
   Reducer tracking tasks completion. Stores taskID, completion status and timestamp of completion.
@@ -59,5 +60,22 @@ const tasksSlice = createSlice({
 });
 
 export const { addTask, completeTask } = tasksSlice.actions;
+
+export const checkTasks = () => {
+  return (dispatch: dispatch, getState: getState) => {
+    const state = getState();
+    // get pending tasks
+    const pendingTasks = Object.values(state.tasks).filter(
+      (task: TasksStateEntry) => task.completed === false,
+    );
+    // for each pending task call checkFn and dispatch completeTask() on success.
+    for (const task of pendingTasks) {
+      if (UserTasks[task.id].checkFn(state)) {
+        dispatch(completeTask(task.id));
+      }
+    }
+    console.log(`Checked ${pendingTasks.length} tasks`);
+  };
+};
 
 export default tasksSlice.reducer;
