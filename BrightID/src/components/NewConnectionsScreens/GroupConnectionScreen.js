@@ -16,13 +16,7 @@ import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {
-  DEVICE_LARGE,
-  ORANGE,
-  DEVICE_IOS,
-  WIDTH,
-  HEIGHT,
-} from '@/utils/constants';
+import { DEVICE_LARGE, ORANGE, WIDTH, HEIGHT } from '@/utils/constants';
 
 import {
   pendingConnection_states,
@@ -330,7 +324,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 60,
     width: DEVICE_LARGE ? 260 : 210,
-    marginBottom: 36,
     borderWidth: 2,
     borderColor: ORANGE,
   },

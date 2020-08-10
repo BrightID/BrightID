@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   Linking,
   StyleSheet,
@@ -28,7 +28,7 @@ import {
 } from '@/components/NewConnectionsScreens/channelSlice';
 import {
   pendingConnection_states,
-  selectAllPendingConnections,
+  selectAllUnconfirmedConnections,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import { decodeChannelQrString } from '@/utils/channels';
 import { joinChannel } from '@/components/NewConnectionsScreens/actions/channelThunks';
@@ -57,28 +57,24 @@ export const ScanCodeScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [scanned, setScanned] = useState(false);
+  const [channel, setChannel] = useState(null);
   const name = useSelector((state) => state.user.name);
-  const pendingConnections = useSelector(selectAllPendingConnections);
-  const channels = useSelector(selectAllChannels);
+  const pendingConnections = useSelector(selectAllUnconfirmedConnections);
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     if (pendingConnections.length) {
-  //       // check all pending connections. If there is a pending connection for a 1:1 channel,
-  //       // directly open PendingConnectionsScreen.
-  //       for (const pc of pendingConnections) {
-  //         if (pc.state === pendingConnection_states.UNCONFIRMED) {
-  //           const channel = channels.find(
-  //             (channel) => channel.id === pc.channelId,
-  //           );
-  //           channel && channel.type === channel_types.SINGLE
-  //             ? navigation.navigate('PendingConnections')
-  //             : navigation.navigate('GroupConnection', { channel });
-  //         }
-  //       }
-  //     }
-  //   }, [pendingConnections, channels, navigation]),
-  // );
+  useFocusEffect(
+    useCallback(() => {
+      setScanned(false);
+      setChannel(null);
+    }, []),
+  );
+
+  useEffect(() => {
+    if (channel) {
+      channel.type === channel_types.SINGLE
+        ? navigation.navigate('PendingConnections')
+        : navigation.navigate('GroupConnection', { channel });
+    }
+  }, [pendingConnections]);
 
   const handleBarCodeRead = async ({ data }: string) => {
     if (!data) return;
@@ -93,10 +89,8 @@ export const ScanCodeScreen = () => {
       await Linking.openURL(data);
     } else if (validQrString(data)) {
       const channel = await decodeChannelQrString(data);
-      dispatch(joinChannel(channel));
-      channel.type === channel_types.SINGLE
-        ? navigation.navigate('PendingConnections')
-        : navigation.navigate('GroupConnection', { channel });
+      await dispatch(joinChannel(channel));
+      setChannel(channel);
     }
   };
 
@@ -106,62 +100,59 @@ export const ScanCodeScreen = () => {
     handleBarCodeRead({ data: route.params.qrcode });
   }
 
-  const pclist = pendingConnections.map((pc) => (
-    <TouchableOpacity
-      key={pc.id}
-      testID="ScanCodeToMyCodeBtn"
-      onPress={() => {
-        console.log(`Confirm connection ${pc.id}`);
-        navigation.navigate('PendingConnections', {
-          pendingConnectionId: pc.id,
-        });
-      }}
-    >
-      <Text>{`${pc.name} - ${pc.id} - ${pc.channelId} - ${pc.state}`}</Text>
-    </TouchableOpacity>
-  ));
-
   return (
     <>
       <View style={styles.orangeTop} />
       <Container style={styles.container}>
-        <View style={styles.infoTopContainer}>
-          <Text style={styles.infoTopText}>Hey {name}, scan a code and</Text>
-          <Text style={styles.infoTopText}>make a new connection today</Text>
-        </View>
-        <View style={styles.cameraContainer} testID="CameraContainer">
-          {!scanned ? (
-            <RNCamera
-              style={styles.cameraPreview}
-              captureAudio={false}
-              onBarCodeRead={handleBarCodeRead}
-              barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
-              type={RNCamera.Constants.Type.back}
-              flashMode={RNCamera.Constants.FlashMode.off}
-              androidCameraPermissionOptions={{
-                title: 'Permission to use camera',
-                message: 'We need your permission to use your camera',
-                buttonPositive: 'Ok',
-                buttonNegative: 'Cancel',
-              }}
-            >
-              <BarcodeMask
-                edgeColor={ORANGE}
-                animatedLineColor={ORANGE}
-                width={230}
-                height={230}
-                edgeRadius={5}
-                edgeBorderWidth={3}
-                edgeHeight={30}
-                edgeWidth={30}
-              />
-            </RNCamera>
-          ) : (
-            <View style={styles.cameraPreview}>
-              <Spinner isVisible={true} size={41} type="Wave" color="#4990e2" />
+        {!scanned ? (
+          <>
+            <View style={styles.infoTopContainer}>
+              <Text style={styles.infoTopText}>
+                Hey {name}, scan a code and
+              </Text>
+              <Text style={styles.infoTopText}>
+                make a new connection today
+              </Text>
             </View>
-          )}
-        </View>
+            <View style={styles.cameraContainer} testID="CameraContainer">
+              <RNCamera
+                style={styles.cameraPreview}
+                captureAudio={false}
+                onBarCodeRead={handleBarCodeRead}
+                barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
+                type={RNCamera.Constants.Type.back}
+                flashMode={RNCamera.Constants.FlashMode.off}
+                androidCameraPermissionOptions={{
+                  title: 'Permission to use camera',
+                  message: 'We need your permission to use your camera',
+                  buttonPositive: 'Ok',
+                  buttonNegative: 'Cancel',
+                }}
+              >
+                <BarcodeMask
+                  edgeColor={ORANGE}
+                  animatedLineColor={ORANGE}
+                  width={230}
+                  height={230}
+                  edgeRadius={5}
+                  edgeBorderWidth={3}
+                  edgeHeight={30}
+                  edgeWidth={30}
+                />
+              </RNCamera>
+            </View>
+          </>
+        ) : (
+          <View style={styles.cameraPreview}>
+            <Text style={styles.waitingText}>Downloading Connection Data</Text>
+            <Spinner
+              isVisible={true}
+              size={60}
+              type="ThreeBounce"
+              color={ORANGE}
+            />
+          </View>
+        )}
 
         <View style={styles.bottomContainer}>
           {pendingConnections.length < 1 ? (
@@ -308,6 +299,12 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     alignItems: 'center',
+  },
+  waitingText: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 16 : 14,
+    color: '#333',
   },
 });
 export default ScanCodeScreen;

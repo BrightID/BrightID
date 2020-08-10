@@ -3,6 +3,7 @@ import {
   createSlice,
   createEntityAdapter,
   createAsyncThunk,
+  createSelector,
 } from '@reduxjs/toolkit';
 import moment from 'moment';
 import {
@@ -76,10 +77,13 @@ const fetchConnectionInfo = async ({ myConnections, brightId }) => {
 
 export const newPendingConnection = createAsyncThunk(
   'pendingConnections/newPendingConnection',
-  async ({ channelId, profileId }, { getState }) => {
+  async ({ channelId, profileId }, { getState, dispatch }) => {
     console.log(`new pending connection ${profileId} in channel ${channelId}`);
 
     const channel = selectChannelById(getState(), channelId);
+    // close channel if single
+    console.log('channel type', channel.type);
+
     // download profile
     const url = `http://${channel.ipAddress}/profile/download/${channelId}/${profileId}`;
     console.log(
@@ -125,6 +129,7 @@ const pendingConnectionsSlice = createSlice({
     addFakePendingConnection: pendingConnectionsAdapter.addOne,
     removePendingConnection: pendingConnectionsAdapter.removeOne,
     updatePendingConnection: pendingConnectionsAdapter.updateOne,
+    removeAllPendingConnections: pendingConnectionsAdapter.removeAll,
     confirmPendingConnection(state, action) {
       const id = action.payload;
       state = pendingConnectionsAdapter.updateOne(state, {
@@ -231,21 +236,40 @@ const pendingConnectionsSlice = createSlice({
   },
 });
 
-export const {
-  addPendingConnection,
-  updatePendingConnection,
-  removePendingConnection,
-  setPollTimerId,
-  confirmPendingConnection,
-  rejectPendingConnection,
-  addFakePendingConnection,
-} = pendingConnectionsSlice.actions;
-
 // export selectors
+
 export const {
   selectAll: selectAllPendingConnections,
   selectById: selectPendingConnectionById,
   selectIds: selectAllPendingConnectionIds,
 } = pendingConnectionsAdapter.getSelectors((state) => state.pendingConnections);
+
+export const selectAllUnconfirmedConnections = createSelector(
+  selectAllPendingConnections,
+  (pendingConnections) =>
+    pendingConnections.filter(
+      (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
+    ),
+);
+
+export const selectAllPendingConnectionsByChannel = createSelector(
+  selectAllUnconfirmedConnections,
+  (_, channel) => channel,
+  (pendingConnections, channel) =>
+    pendingConnections.filter((pc) => pc.channelId === channel?.id),
+);
+
+// export actions
+
+export const {
+  addPendingConnection,
+  updatePendingConnection,
+  removePendingConnection,
+  removeAllPendingConnections,
+  setPollTimerId,
+  confirmPendingConnection,
+  rejectPendingConnection,
+  addFakePendingConnection,
+} = pendingConnectionsSlice.actions;
 
 export default pendingConnectionsSlice.reducer;

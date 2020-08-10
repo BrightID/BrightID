@@ -18,7 +18,9 @@ import {
   CONNECTIONS_TYPE,
   GROUPS_TYPE,
   MISC_TYPE,
+  DEVICE_LARGE,
 } from '@/utils/constants';
+import { createSelector } from '@reduxjs/toolkit';
 import {
   pendingConnection_states,
   selectAllPendingConnections,
@@ -30,6 +32,23 @@ import InviteCard from './InviteCard';
 import PendingConnectionCard from './PendingConnectionCard';
 
 let thecount = 0;
+
+/** SELECTORS */
+
+const unconfirmedSelector = createSelector(
+  selectAllPendingConnections,
+  (pendingConnections) =>
+    pendingConnections.filter(
+      (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
+    ),
+);
+
+const inviteSelector = createSelector(
+  (state) => state.groups.invites,
+  (invites) => invites.filter(({ state }) => state === INVITE_ACTIVE),
+);
+
+/** HOOKS */
 
 const useRefresh = () => {
   const dispatch = useDispatch();
@@ -47,15 +66,11 @@ const useRefresh = () => {
   return [refreshing, onRefresh];
 };
 
+/** COMPONENTS  */
+
 const ConnectionsList = ({ route }) => {
   const [refreshing, onRefresh] = useRefresh();
-  const pendingConnections = useSelector(
-    (state) =>
-      selectAllPendingConnections(state).filter(
-        (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
-      ),
-    (a, b) => a.length === b.length,
-  );
+  const pendingConnections = useSelector((state) => unconfirmedSelector(state));
 
   return (
     <FlatList
@@ -69,8 +84,8 @@ const ConnectionsList = ({ route }) => {
       }
       ListEmptyComponent={
         <EmptyList
-          title="Nothing here, come back later.."
-          iconType="bell-off-outline"
+          title="Nobody here, come back later.."
+          iconType="account-off-outline"
         />
       }
       renderItem={({ item }) => (
@@ -82,11 +97,7 @@ const ConnectionsList = ({ route }) => {
 
 const InviteList = ({ route }) => {
   const [refreshing, onRefresh] = useRefresh();
-  const invites = useSelector(
-    (state) =>
-      state.groups.invites.filter(({ state }) => state === INVITE_ACTIVE),
-    shallowEqual,
-  );
+  const invites = useSelector((state) => inviteSelector(state));
   thecount++;
   console.log('Rendering Invite List', thecount);
 
@@ -102,8 +113,8 @@ const InviteList = ({ route }) => {
       }
       ListEmptyComponent={
         <EmptyList
-          title="Nothing here, come back later.."
-          iconType="bell-off-outline"
+          title="No group invites.."
+          iconType="account-cancel-outline"
         />
       }
       renderItem={({ item }) => <InviteCard invite={item} />}
@@ -131,7 +142,7 @@ const MiscList = ({ route }) => {
       }
       ListEmptyComponent={
         <EmptyList
-          title="Nothing here, come back later.."
+          title="Nothing to see here ..."
           iconType="bell-off-outline"
         />
       }
@@ -153,23 +164,13 @@ const renderTabBar = (props) => (
     {...props}
     indicatorStyle={{ backgroundColor: '#ED7A5D' }}
     style={styles.tabBar}
-    labelStyle={{}}
     renderLabel={({ route, focused, color }) => (
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}
-      >
+      <View style={styles.tabContainer}>
         {route.badge && <View style={styles.badge} />}
         <Text
-          style={{
-            fontFamily: 'Poppins',
-            fontWeight: '500',
-            fontSize: 12,
-            color,
-            margin: 8,
-          }}
+          style={[styles.tabText, { color }]}
+          adjustsFontSizeToFit={true}
+          numberOfLines={1}
         >
           {route.title}
         </Text>
@@ -184,23 +185,15 @@ export const NotificationsScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   const pendingConnections = useSelector(
-    (state) =>
-      selectAllPendingConnections(state).filter(
-        (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
-      ).length,
+    (state) => unconfirmedSelector(state)?.length,
   );
 
-  const invites = useSelector(
-    (state) =>
-      state.groups.invites.filter(({ state }) => state === INVITE_ACTIVE)
-        .length,
-  );
+  const invites = useSelector((state) => inviteSelector(state)?.length);
 
   const backupPending = useSelector(
     (state) => state.notifications.backupPending,
   );
 
-  const [index, setIndex] = React.useState(0);
   const routes = [
     {
       key: CONNECTIONS_TYPE,
@@ -216,6 +209,10 @@ export const NotificationsScreen = ({ navigation, route }) => {
     },
   ];
 
+  const displayRoute = routes.findIndex(({ badge }) => badge);
+
+  const [index, setIndex] = useState(displayRoute);
+
   const renderScene = SceneMap({
     [CONNECTIONS_TYPE]: ConnectionsList,
     [GROUPS_TYPE]: InviteList,
@@ -225,24 +222,7 @@ export const NotificationsScreen = ({ navigation, route }) => {
   useFocusEffect(
     useCallback(() => {
       dispatch(fetchUserInfo());
-
-      const displayRoute = routes.find(({ badge }) => badge);
-
-      switch (route.params?.type || displayRoute?.key) {
-        case CONNECTIONS_TYPE: {
-          setIndex(0);
-          break;
-        }
-        case GROUPS_TYPE: {
-          setIndex(1);
-          break;
-        }
-        case MISC_TYPE: {
-          setIndex(2);
-          break;
-        }
-      }
-    }, [dispatch, route.params]),
+    }, [dispatch]),
   );
 
   console.log('renderingNotificationScreen');
@@ -266,7 +246,7 @@ export const NotificationsScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: DEVICE_LARGE ? 70 : 62,
     width: '100%',
     zIndex: 1,
   },
@@ -280,11 +260,21 @@ const styles = StyleSheet.create({
   },
   badge: {
     backgroundColor: '#ED1B24',
-    width: 8,
-    height: 8,
+    width: DEVICE_LARGE ? 8 : 6,
+    height: DEVICE_LARGE ? 8 : 6,
     borderRadius: 4,
+    marginRight: DEVICE_LARGE ? 8 : 6,
   },
-  tabBar: { backgroundColor: '#fff', paddingLeft: 20 },
+  tabBar: { backgroundColor: '#fff', paddingLeft: DEVICE_LARGE ? 20 : 18 },
+  tabContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  tabText: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 12 : 10,
+  },
 });
 
 export default NotificationsScreen;

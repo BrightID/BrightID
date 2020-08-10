@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import GroupSwitch from '@/components/Helpers/GroupSwitch';
 import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
 import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
@@ -30,12 +31,10 @@ import {
   channel_states,
   channel_types,
   selectChannelById,
+  closeChannel,
 } from '@/components/NewConnectionsScreens/channelSlice';
 import { encodeChannelQrString } from '@/utils/channels';
-import {
-  pendingConnection_states,
-  selectAllPendingConnections,
-} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+import { selectAllPendingConnectionsByChannel } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import { createFakeConnection } from '@/components/Connections/models/createFakeConnection';
 import {
   createChannel,
@@ -99,13 +98,9 @@ export const MyCodeScreen = () => {
     return selectChannelById(state, state.channels.myChannelId);
   });
   // pending connections attached to my channel
-  const pendingConnections = useSelector((state) => {
-    return selectAllPendingConnections(state);
+  const pendingConnectionSizeForChannel = useSelector((state) => {
+    return selectAllPendingConnectionsByChannel(state, myChannel)?.length;
   });
-
-  const unconfirmedConnectionsLength = pendingConnections.filter(
-    (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
-  ).length;
 
   const [qrString, setQrString] = useState('');
   const [qrsvg, setQrsvg] = useState('');
@@ -156,35 +151,35 @@ export const MyCodeScreen = () => {
           createChannel(isGroup ? channel_types.GROUP : channel_types.SINGLE),
         );
       }
-      // else {
-      //   setCountdown(myChannel.ttl - (Date.now() - myChannel.timestamp));
-      // }
     }, [navigation, myChannel, dispatch, isGroup]),
   );
 
-  // useEffect(() => {
-  //   if (myChannel && myChannel.type === channel_types.SINGLE) {
-  //     // If i created a 1:1 channel and there is a pending connection in UNCONFIRMED state -> directly open PendingonnectionScreen.
-  //     // there should be only one connection, but if multiple people scanned my code, the first one wins
-  //     for (const pc of pendingChannelConnections) {
-  //       if (pc.state === pendingConnection_states.UNCONFIRMED) {
-  //         navigation.navigate('PendingConnections');
-  //       }
-  //     }
-  //   }
-  // }, [myChannel, navigation, pendingChannelConnections.length]);
+  useEffect(() => {
+    if (myChannel && myChannel.type === channel_types.SINGLE) {
+      // If i created a 1:1 channel and there is a pending connection in UNCONFIRMED state -> directly open PendingonnectionScreen.
+      // there should be only one connection, but if multiple people scanned my code, the first one wins
+
+      if (pendingConnectionSizeForChannel > 0) {
+        navigation.navigate('PendingConnections');
+        dispatch(closeChannel(myChannel.id));
+      }
+    }
+  }, [myChannel, navigation, pendingConnectionSizeForChannel, dispatch]);
 
   const toggleGroup = () => {
-    // remove current channel
+    setIsGroup((previousState) => !previousState);
     if (myChannel) {
       dispatch(leaveChannel(myChannel.id));
     }
+
     // toggle switch
-    setIsGroup((previousState) => !previousState);
+
+    // remove current channel
+
     // create new channel. Invert `isGroup` as local state is not yet updated!
-    dispatch(
-      createChannel(!isGroup ? channel_types.GROUP : channel_types.SINGLE),
-    );
+    // dispatch(
+    //   createChannel(!isGroup ? channel_types.GROUP : channel_types.SINGLE),
+    // );
   };
 
   const copyQr = () => {
@@ -246,18 +241,8 @@ export const MyCodeScreen = () => {
       <View style={styles.orangeTop} />
       <Container style={styles.container}>
         <View style={styles.infoTopContainer}>
-          <Switch
-            trackColor={{ false: '#767577', true: ORANGE }}
-            // thumbColor={isGroup ? '#f5dd4b' : '#f4f3f4'}
-            thumbColor="#f4f3f4"
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleGroup}
-            value={isGroup}
-          />
-          <Text style={styles.infoTopText}>
-            Group connections allow multiple people to connect simultaneously by
-            only scanning one QR code.
-          </Text>
+          <GroupSwitch onValueChange={toggleGroup} value={isGroup} />
+          {/* <Text style={styles.infoTopText}>Channel type {myChannel?.type}</Text> */}
           {/* //Please wait for everyone to finish scanning before proceeding to the
           next page. */}
         </View>
@@ -270,31 +255,10 @@ export const MyCodeScreen = () => {
         ) : (
           <View style={styles.qrCodeContainer} testID="QRCodeContainer">
             <View style={styles.emptyQr} />
-            {/* <Text>Your channel is closed!</Text>
-            <TouchableOpacity
-              testID="resetQrButton"
-              style={styles.copyButton}
-              onPress={() => {
-                setCountdown(0);
-                dispatch(
-                  createChannel(
-                    isGroup ? channel_types.GROUP : channel_types.SINGLE,
-                  ),
-                );
-              }}
-            >
-              <Material
-                size={24}
-                name="refresh"
-                color="#333"
-                style={{ width: 24, height: 24 }}
-              />
-              <Text style={styles.copyText}> Create new channel</Text>
-            </TouchableOpacity> */}
           </View>
         )}
         <View style={styles.bottomContainer}>
-          {unconfirmedConnectionsLength < 1 ? (
+          {pendingConnectionSizeForChannel < 1 ? (
             <>
               <Text style={styles.infoBottomText}>Or you can also...</Text>
               <TouchableOpacity
@@ -315,8 +279,8 @@ export const MyCodeScreen = () => {
           ) : (
             <>
               <Text style={styles.infoBottomText}>
-                You have {unconfirmedConnectionsLength} pending connection
-                {unconfirmedConnectionsLength > 1 ? 's' : ''}...
+                You have {pendingConnectionSizeForChannel} pending connection
+                {pendingConnectionSizeForChannel > 1 ? 's' : ''}...
               </Text>
               <TouchableOpacity
                 testID="MyCodeToPendingConnections"

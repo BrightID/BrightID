@@ -7,7 +7,8 @@ import {
   Linking,
 } from 'react-native';
 import { useSelector } from 'react-redux';
-import { INVITE_ACTIVE, DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
+import { INVITE_ACTIVE, DEVICE_LARGE } from '@/utils/constants';
+import { createSelector } from '@reduxjs/toolkit';
 import { createStackNavigator } from '@react-navigation/stack';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
@@ -19,29 +20,35 @@ import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnecti
 import { navigate } from '@/NavigationService';
 import { headerOptions } from './helpers';
 
-const Stack = createStackNavigator();
+/** SELECTORS */
+
+const unconfirmedSelector = createSelector(
+  selectAllPendingConnections,
+  (pendingConnections) =>
+    pendingConnections.filter(
+      (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
+    ),
+);
+
+const inviteSelector = createSelector(
+  (state) => state.groups.invites,
+  (invites) => invites.filter(({ state }) => state === INVITE_ACTIVE),
+);
+
+/** COMPONENTS */
 
 const NotificationBell = () => {
   const pendingConnections = useSelector(
-    (state) =>
-      selectAllPendingConnections(state).filter(
-        (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
-      ).length,
+    (state) => unconfirmedSelector(state)?.length,
   );
 
-  const invites = useSelector(
-    (state) =>
-      state.groups.invites.filter(({ state }) => state === INVITE_ACTIVE)
-        .length,
-  );
+  const invites = useSelector((state) => inviteSelector(state)?.length);
 
   const backupPending = useSelector(
     (state) => state.notifications.backupPending,
   );
 
   const displayBadge = backupPending || invites || pendingConnections;
-
-  console.log('displayBadge', displayBadge);
 
   return (
     <TouchableOpacity
@@ -93,6 +100,8 @@ const DeepPasteLink = () => {
   }
 };
 
+/** OPTIONS */
+
 const homeScreenOptions = {
   headerTitle: () => (
     <Image
@@ -120,6 +129,10 @@ const recoveringConnectionOptions = {
   ...headerOptions,
   title: 'Account Recovery',
 };
+
+/** SCREENS */
+
+const Stack = createStackNavigator();
 
 const Home = () => {
   return (

@@ -55,6 +55,9 @@ const channelSlice = createSlice({
           state: channel_states.CLOSED,
         },
       });
+      if (state.myChannelId === channelId) {
+        state.myChannelId = initialState.myChannelId;
+      }
     },
     removeChannel(state, action) {
       const channelId = action.payload;
