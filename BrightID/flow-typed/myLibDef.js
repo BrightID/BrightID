@@ -183,6 +183,7 @@ declare type TasksState = {
 }
 
 declare type TasksStateEntry = {
+  id: string,
   completed: boolean,
   timestamp: number,
 }

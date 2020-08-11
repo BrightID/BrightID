@@ -46,6 +46,12 @@ const tasksSlice = createSlice({
         };
       }
     },
+    removeTask(state, action) {
+      const taskId = action.payload;
+      if (taskId in state) {
+        delete state[taskId];
+      }
+    },
     completeTask(state, action) {
       const taskId = action.payload;
       let task = state[taskId];
@@ -59,7 +65,26 @@ const tasksSlice = createSlice({
   },
 });
 
-export const { addTask, completeTask } = tasksSlice.actions;
+export const { addTask, removeTask, completeTask } = tasksSlice.actions;
+
+// UserTasks.js may have tasks added or removed with an app update. This action takes care
+// that the persisted store always is up to date with the available tasks.
+export const syncStoreTasks = () => {
+  return (dispatch: dispatch, getState: getState) => {
+    const userTaskIds = Object.keys(UserTasks);
+    const storeTaskIds = Object.keys(getState().tasks);
+    const idsToRemove = storeTaskIds.filter((id) => !userTaskIds.includes(id));
+    const idsToAdd = userTaskIds.filter((id) => !storeTaskIds.includes(id));
+    for (const id of idsToRemove) {
+      console.log(`Removing task ${id} from store`);
+      dispatch(removeTask(id));
+    }
+    for (const id of idsToAdd) {
+      console.log(`Adding task ${id} to store`);
+      dispatch(addTask(id));
+    }
+  };
+};
 
 export const checkTasks = () => {
   return (dispatch: dispatch, getState: getState) => {
