@@ -68,7 +68,7 @@ const linkApp = async (baseUrl, context, contextInfo, contextId) => {
     if (!contextInfo.isApp) {
       Alert.alert(
         'Success',
-        `Succesfully sent the request to link ${context} with BrightID`,
+        `Successfully sent the request to link ${context} with BrightID`,
       );
       navigate('Home');
     }
