@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: 'Poppins',
     fontWeight: '500',
-    fontSize: DEVICE_LARGE ? 18 : 16,
+    fontSize: DEVICE_LARGE ? 18 : 15,
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   invitationMsg: {
     fontFamily: 'Poppins',
     fontWeight: '500',
-    fontSize: DEVICE_LARGE ? 12 : 11,
+    fontSize: DEVICE_LARGE ? 12 : 10,
     color: '#B64B32',
   },
 });

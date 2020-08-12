@@ -2,7 +2,8 @@ import React from 'react';
 import { View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { ORANGE, DEVICE_IOS, DEVICE_LARGE } from '@/utils/constants';
-import backArrow from '@/static/back_arrow.svg';
+import backArrow from '@/static/back_arrow_white.svg';
+import { navigate } from '@/NavigationService';
 
 export const headerTitleStyle = {
   fontFamily: 'Poppins',

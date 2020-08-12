@@ -9,7 +9,8 @@ import {
 import MyCodeScreen from '@/components/NewConnectionsScreens/MyCodeScreen';
 import ScanCodeScreen from '@/components/NewConnectionsScreens/ScanCodeScreen';
 import SuccessScreen from '@/components/NewConnectionsScreens/SuccessScreen';
-import PreviewConnectionScreen from '@/components/NewConnectionsScreens/PreviewConnectionScreen';
+import PendingConnectionsScreen from '@/components/NewConnectionsScreens/PendingConnectionsScreen';
+import GroupConnectionScreen from '@/components/NewConnectionsScreens/GroupConnectionScreen';
 import backArrow from '@/static/back_arrow.svg';
 import { navigate } from '@/NavigationService';
 
@@ -44,17 +45,7 @@ const newConnectionOptions = {
 };
 
 const connectionPreviewOptions = {
-  headerLeft: () => null,
-  headerStyle: {
-    height: DEVICE_LARGE ? 80 : 60,
-    backgroundColor: '#fff',
-    shadowRadius: 0,
-    shadowOffset: {
-      height: 0,
-    },
-    elevation: 0,
-  },
-  title: '',
+  headerShown: false,
   cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
 };
 
@@ -76,8 +67,13 @@ const NewConnections = () => (
       options={connectionPreviewOptions}
     />
     <Stack.Screen
-      name="PreviewConnection"
-      component={PreviewConnectionScreen}
+      name="PendingConnections"
+      component={PendingConnectionsScreen}
+      options={connectionPreviewOptions}
+    />
+    <Stack.Screen
+      name="GroupConnection"
+      component={GroupConnectionScreen}
       options={connectionPreviewOptions}
     />
   </>

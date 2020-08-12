@@ -36,7 +36,7 @@ export const pollOperations = async () => {
       switch (state) {
         case 'unknown':
           // Op not found on server. It might appear in a future poll cycle, so do nothing.
-          console.log(`operation ${op.name} (${op._key}) unknown on server`);
+          // console.log(`operation ${op.name} (${op._key}) unknown on server`);
           break;
         case 'init':
         case 'sent':
@@ -49,9 +49,9 @@ export const pollOperations = async () => {
           handleOpUpdate(store, op, state, result);
           break;
         default:
-          console.log(
-            `Op ${op.name} (${op._key}) has invalid state '${state}'!`,
-          );
+        // console.log(
+        //   `Op ${op.name} (${op._key}) has invalid state '${state}'!`,
+        // );
       }
       if (removeOp) {
         store.dispatch(removeOperation(op._key));
