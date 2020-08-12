@@ -39,6 +39,7 @@ export const pendingConnection_states = {
   CONFIRMED: 'CONFIRMED',
   ERROR: 'ERROR',
   MYSELF: 'MYSELF',
+  EXPIRED: 'EXPIRED',
 };
 
 const fetchConnectionInfo = async ({ myConnections, brightId }) => {
@@ -81,8 +82,10 @@ export const newPendingConnection = createAsyncThunk(
     console.log(`new pending connection ${profileId} in channel ${channelId}`);
 
     const channel = selectChannelById(getState(), channelId);
-    // close channel if single
-    console.log('channel type', channel.type);
+
+    if (!channel) {
+      throw new Error('Channel does not exist');
+    }
 
     // download profile
     const url = `http://${channel.ipAddress}/profile/download/${channelId}/${profileId}`;
@@ -169,7 +172,7 @@ const pendingConnectionsSlice = createSlice({
       state = pendingConnectionsAdapter.updateOne(state, {
         id: action.meta.arg.profileId,
         changes: {
-          state: pendingConnection_states.INITIAL,
+          state: pendingConnection_states.ERROR,
         },
       });
     },

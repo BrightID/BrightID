@@ -36,10 +36,7 @@ import {
 import { encodeChannelQrString } from '@/utils/channels';
 import { selectAllPendingConnectionsByChannel } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import { createFakeConnection } from '@/components/Connections/models/createFakeConnection';
-import {
-  createChannel,
-  leaveChannel,
-} from '@/components/NewConnectionsScreens/actions/channelThunks';
+import { createChannel } from '@/components/NewConnectionsScreens/actions/channelThunks';
 
 /**
  * My Code screen of BrightID
@@ -158,7 +155,7 @@ export const MyCodeScreen = () => {
   useEffect(() => {
     if (myChannel && myChannel.type === channel_types.SINGLE) {
       // If i created a 1:1 channel and there is a pending connection in UNCONFIRMED state -> directly open PendingonnectionScreen.
-      // there should be only one connection, but if multiple people scanned my code, the first one wins
+      // there should be only one connection
 
       if (pendingConnectionSizeForChannel > 0) {
         navigation.navigate('PendingConnections');
@@ -168,19 +165,12 @@ export const MyCodeScreen = () => {
   }, [myChannel, navigation, pendingConnectionSizeForChannel, dispatch]);
 
   const toggleGroup = () => {
-    setIsGroup((previousState) => !previousState);
-    if (myChannel) {
-      dispatch(leaveChannel(myChannel.id));
-    }
-
     // toggle switch
-
+    setIsGroup((previousState) => !previousState);
     // remove current channel
-
-    // create new channel. Invert `isGroup` as local state is not yet updated!
-    // dispatch(
-    //   createChannel(!isGroup ? channel_types.GROUP : channel_types.SINGLE),
-    // );
+    if (myChannel) {
+      dispatch(closeChannel(myChannel.id));
+    }
   };
 
   const copyQr = () => {
@@ -245,13 +235,13 @@ export const MyCodeScreen = () => {
         <View style={styles.infoTopContainer}>
           {myChannel?.type === channel_types.GROUP ? (
             <Text style={styles.infoTopText}>
-              This is a group connection. If you scan this code, you will
-              connect with {myName} and anyone else who scans this.
+              This is a group connection code. Anyone who scans this code will
+              be prompted to connect everybody else who scans this.
             </Text>
           ) : (
             <Text style={styles.infoTopText}>
-              This is a normal connection. Would you like to connect with{' '}
-              {myName}?
+              This code can be used to connect with {myName}. It will expire
+              after being scanned once.
             </Text>
           )}
         </View>

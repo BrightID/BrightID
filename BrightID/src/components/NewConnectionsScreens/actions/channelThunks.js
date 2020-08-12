@@ -1,8 +1,7 @@
 // @flow
 import {
   addChannel,
-  channel_types,
-  closeChannel,
+  removeChannel,
   selectChannelById,
   setMyChannel,
   updateChannel,
@@ -32,6 +31,7 @@ export const createChannel = (channelType: ChannelType) => async (
     // create new channel
     const channel: Channel = await generateChannelData(channelType);
     // Set timeout to expire channel
+
     channel.timeoutId = setTimeout(() => {
       console.log(`timer expired for channel ${channel.id}`);
       dispatch(leaveChannel(channel.id));
@@ -71,20 +71,10 @@ export const joinChannel = (channel: Channel) => (dispatch: dispatch) => {
   // add channel to store
   dispatch(addChannel(channel));
 
-  if (channel.type === channel_types.GROUP) {
-    // TODO Decide: Require user confirmation before uploading profile to group channel?
-    // upload my profile to channel
-    dispatch(encryptAndUploadProfileToChannel(channel.id));
-    // start polling for incoming connection requests
-    dispatch(subscribeToConnectionRequests(channel.id));
-  } else {
-    // for 1:1 connections upload my profile without further confirmation
-    dispatch(encryptAndUploadProfileToChannel(channel.id));
-    // no polling for additional connection requests required
-    // ^ why?
-    // start polling for incoming connection requests
-    dispatch(subscribeToConnectionRequests(channel.id));
-  }
+  // upload my profile to channel
+  dispatch(encryptAndUploadProfileToChannel(channel.id));
+  // start polling for incoming connection requests
+  dispatch(subscribeToConnectionRequests(channel.id));
 
   // fetch all profileIDs in channel
   dispatch(fetchChannelProfiles(channel.id));
@@ -98,7 +88,7 @@ export const leaveChannel = (channelId: string) => (
   if (channel) {
     clearTimeout(channel.timeoutId);
     dispatch(unsubscribeFromConnectionRequests(channelId));
-    dispatch(closeChannel(channelId));
+    dispatch(removeChannel(channelId));
   }
 };
 

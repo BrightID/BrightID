@@ -67,7 +67,10 @@ const ConfirmationButtons = ({
 }) => {
   const dispatch = useDispatch();
   const pendingConnection = useSelector(
-    (state) => selectPendingConnectionById(state, pc.id),
+    (state) =>
+      selectPendingConnectionById(state, pc.id) ?? {
+        state: pendingConnection_states.EXPIRED,
+      },
     (a, b) => a?.state === b?.state && a?.signedMessage === b?.signedMessage,
   );
 
@@ -96,6 +99,7 @@ const ConfirmationButtons = ({
     case pendingConnection_states.CONFIRMED: {
       return <Text style={styles.waitingText}>Confirming connection...</Text>;
     }
+    case pendingConnection_states.INITIAL:
     case pendingConnection_states.DOWNLOADING: {
       return <Text style={styles.waitingText}>Downloading profile ...</Text>;
     }
@@ -131,11 +135,31 @@ const ConfirmationButtons = ({
           </>
         );
       } else {
-        return <Text>Waiting for {pendingConnection.name} to confirm ...</Text>;
+        return (
+          <Text style={styles.waitingText}>
+            Waiting for {pendingConnection.name} to confirm ...
+          </Text>
+        );
       }
-    case pendingConnection_states.ERROR:
+    case pendingConnection_states.ERROR: {
+      return (
+        <Text style={styles.waitingText}>
+          There was an error, please try connecting with{' '}
+          {pendingConnection.name} again...
+        </Text>
+      );
+    }
+    case pendingConnection_states.MYSELF: {
+      return <Text style={styles.waitingText}>OOPS!!! This is you...</Text>;
+    }
+    case pendingConnection_states.EXPIRED:
     default: {
-      return <Text>There was an error, please try again</Text>;
+      return (
+        <Text style={styles.waitingText}>
+          The QRCode used to connect with {pendingConnection.name} has
+          expired... please try connecting again.
+        </Text>
+      );
     }
   }
 };
@@ -226,7 +250,7 @@ export const PendingConnectionsScreen = () => {
 
   const [loading, setLoading] = useState(true);
 
-  const [lastChannelType, setLastChannelType] = useState(channel_types.SINGLE);
+  const [lastChannelType, setLastChannelType] = useState(channel_types.GROUP);
 
   useFocusEffect(
     useCallback(() => {
@@ -257,7 +281,11 @@ export const PendingConnectionsScreen = () => {
      * if there is only one connectionsToDisplay and  useSelector triggers a re-render
      */
     //
-    if (readyToRender || pendingConnectionsToDisplay.length <= 1) {
+    if (
+      readyToRender ||
+      pendingConnectionsToDisplay.length <= 1 ||
+      pendingConnections.length === 0
+    ) {
       const connectionsToDisplay = pendingConnections.filter(isReadyToConfirm);
       // this will cause the PendingConnectionList to re render
       setPendingConnectionsDisplay(connectionsToDisplay);
@@ -341,7 +369,7 @@ export const PendingConnectionsScreen = () => {
         {loading ? (
           <Spinner
             isVisible={true}
-            size={60}
+            size={44}
             type="FadingCircleAlt"
             color="#aaa"
           />
