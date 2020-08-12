@@ -92,7 +92,7 @@ export const newPendingConnection = createAsyncThunk(
       channelId,
       dataId: profileId,
     });
-    const decryptedObj = decryptData(profileData.data, channel.aesKey);
+    const decryptedObj = decryptData(profileData, channel.aesKey);
     decryptedObj.myself = decryptedObj.id === getState().user.id;
     // I'm confused about this initiator logic, might change this...
     decryptedObj.initiator =
