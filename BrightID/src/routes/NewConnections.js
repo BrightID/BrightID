@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
+import { TouchableOpacity } from 'react-native';
+import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
+import { SvgXml } from 'react-native-svg';
 import {
   createStackNavigator,
   CardStyleInterpolators,
@@ -9,12 +11,26 @@ import ScanCodeScreen from '@/components/NewConnectionsScreens/ScanCodeScreen';
 import SuccessScreen from '@/components/NewConnectionsScreens/SuccessScreen';
 import PendingConnectionsScreen from '@/components/NewConnectionsScreens/PendingConnectionsScreen';
 import GroupConnectionScreen from '@/components/NewConnectionsScreens/GroupConnectionScreen';
-import { NavHome } from './helpers';
+import backArrow from '@/static/back_arrow.svg';
+import { navigate } from '@/NavigationService';
 
 const Stack = createStackNavigator();
 
 const newConnectionOptions = {
-  headerLeft: () => <NavHome />,
+  headerLeft: () => (
+    <TouchableOpacity
+      testID="NewConnectionBackBtn"
+      style={{
+        marginLeft: DEVICE_IOS ? 25 : 10,
+        marginTop: DEVICE_LARGE ? 15 : 10,
+      }}
+      onPress={() => {
+        navigate('Home');
+      }}
+    >
+      <SvgXml height="25" xml={backArrow} />
+    </TouchableOpacity>
+  ),
   headerBackTitleVisible: false,
   headerStyle: {
     height: DEVICE_LARGE ? 80 : 60,
