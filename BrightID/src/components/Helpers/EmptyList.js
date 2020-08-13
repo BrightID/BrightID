@@ -12,7 +12,11 @@ type Props = {
 
 const EmptyList = ({ title, iconType = 'alert-outline' }: Props) => (
   <View style={styles.emptyContainer}>
-    <MaterialCommunityIcons size={48} name={iconType} color="#ccc" />
+    <MaterialCommunityIcons
+      size={DEVICE_LARGE ? 48 : 38}
+      name={iconType}
+      color="#ccc"
+    />
     <Text style={styles.emptyText}>{title}</Text>
   </View>
 );
@@ -30,7 +34,7 @@ const styles = StyleSheet.create({
     fontFamily: 'ApexNew-Medium',
     textAlign: 'center',
     fontWeight: 'bold',
-    fontSize: DEVICE_LARGE ? 18 : 16,
+    fontSize: DEVICE_LARGE ? 18 : 15,
     color: '#ccc',
   },
 });

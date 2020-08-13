@@ -60,6 +60,7 @@ declare type Channel = {
   timeoutId?: TimeoutID,
   type: ChannelType,
   state: ChannelState,
+  myProfileTimestamp?: number,
 };
 
 declare type ConnectionsState = {
@@ -185,7 +186,6 @@ declare type UserState = {
 
 declare type NotificationsState = {
   activeNotification: { message: string, type: string },
-  pendingConnections: PendingConnection[],
   backupPending: boolean,
   deviceToken: string,
 };

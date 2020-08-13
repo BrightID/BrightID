@@ -9,10 +9,14 @@ import {
   b64ToUrlSafeB64,
   randomKey,
 } from '@/utils/encoding';
+import { postProfileToChannel } from '@/utils/profile';
+import { encryptData } from '@/utils/cryptoHelper';
+import { createRandomId } from '@/utils/channels';
 import {
   addFakePendingConnection,
   pendingConnection_states,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+import { selectChannelById } from '@/components/NewConnectionsScreens/channelSlice';
 import { names } from '../utils/fakeNames';
 
 export const addFakeConnection = () => async (
@@ -36,7 +40,6 @@ export const addFakeConnection = () => async (
   const signedMessage = uInt8ArrayToB64(
     nacl.sign.detached(strToUint8Array(message), secretKey),
   );
-  const profileId = await randomKey(9);
 
   // load random photo
   let photo;
@@ -52,18 +55,38 @@ export const addFakeConnection = () => async (
     return;
   }
 
-  // add fake user as pending connection, including already signed connection message
-  dispatch(
-    addFakePendingConnection({
-      id: profileId,
-      channelId: getState().channels.myChannelId,
-      state: pendingConnection_states.UNCONFIRMED,
-      brightId: connectId,
-      name,
-      photo,
-      score,
-      signedMessage,
-      timestamp,
-    }),
+  const channel = selectChannelById(
+    getState(),
+    getState().channels.myChannelId,
   );
+
+  const dataObj = {
+    id: connectId,
+    photo,
+    name,
+    score,
+    profileTimestamp: Date.now(),
+    secretKey,
+    signedMessage,
+    timestamp,
+  };
+
+  let encrypted = encryptData(dataObj, channel.aesKey);
+  const fakeChannel = { ...channel, myProfileId: await createRandomId() };
+  await postProfileToChannel(encrypted, fakeChannel);
+
+  // add fake user as pending connection, including already signed connection message
+  // dispatch(
+  //   addFakePendingConnection({
+  //     id: profileId,
+  //     channelId: getState().channels.myChannelId,
+  //     state: pendingConnection_states.UNCONFIRMED,
+  //     brightId: connectId,
+  //     name,
+  //     photo,
+  //     score,
+  //     signedMessage,
+  //     timestamp,
+  //   }),
+  // );
 };

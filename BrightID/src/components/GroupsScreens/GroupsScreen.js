@@ -151,14 +151,16 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
-  let { groups } = state.groups;
+  const { groups: unfilteredGroups } = state.groups;
   const searchParam = state.groups.searchParam.toLowerCase();
-  const hasGroups = groups.length > 0;
+  const hasGroups = unfilteredGroups.length > 0;
 
   // apply search filter to groups array
   // NOTE: If below sorting/filtering gets too expensive at runtime use memoized selectors / reselect
+
+  let groups;
   if (searchParam !== '') {
-    groups = groups.filter((group) => {
+    groups = unfilteredGroups.filter((group) => {
       if (getGroupName(group).toLowerCase().includes(searchParam)) {
         // direct group name match
         return true;
@@ -176,6 +178,8 @@ function mapStateToProps(state) {
         return false;
       }
     });
+  } else {
+    groups = [...unfilteredGroups];
   }
 
   // sort groups by joined timestamp, newest first

@@ -7,50 +7,50 @@ import {
   Linking,
 } from 'react-native';
 import { useSelector } from 'react-redux';
-import { INVITE_ACTIVE, DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
+import { INVITE_ACTIVE, DEVICE_LARGE } from '@/utils/constants';
+import { createSelector } from '@reduxjs/toolkit';
 import { createStackNavigator } from '@react-navigation/stack';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  pendingConnection_states,
+  selectAllPendingConnections,
+} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import HomeScreen from '@/components/HomeScreen';
 import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnectionScreen';
 import { navigate } from '@/NavigationService';
 import { headerOptions } from './helpers';
 
-const Stack = createStackNavigator();
+/** SELECTORS */
 
-const homeScreenOptions = (notificationCount) => ({
-  headerTitle: () => (
-    <Image
-      source={require('@/static/brightid-final.png')}
-      accessible={true}
-      accessibilityLabel="Home Header Logo"
-      resizeMode="contain"
-      style={{ width: DEVICE_LARGE ? 104 : 85 }}
-    />
-  ),
-  headerLeft: () => {
-    if (__DEV__) {
-      return (
-        <TouchableOpacity
-          testID="pasteDeeplink"
-          style={{ marginLeft: 10 }}
-          onPress={async () => {
-            const text = await Clipboard.getString();
-            console.log(`Linking.openURL with ${text}`);
-            Linking.openURL(text);
-          }}
-        >
-          <Material
-            name="content-paste"
-            size={DEVICE_LARGE ? 28 : 23}
-            color="#000"
-          />
-        </TouchableOpacity>
-      );
-    } else {
-      return null;
-    }
-  },
-  headerRight: () => (
+const unconfirmedSelector = createSelector(
+  selectAllPendingConnections,
+  (pendingConnections) =>
+    pendingConnections.filter(
+      (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
+    ),
+);
+
+const inviteSelector = createSelector(
+  (state) => state.groups.invites,
+  (invites) => invites.filter(({ state }) => state === INVITE_ACTIVE),
+);
+
+/** COMPONENTS */
+
+const NotificationBell = () => {
+  const pendingConnections = useSelector(
+    (state) => unconfirmedSelector(state)?.length,
+  );
+
+  const invites = useSelector((state) => inviteSelector(state)?.length);
+
+  const backupPending = useSelector(
+    (state) => state.notifications.backupPending,
+  );
+
+  const displayBadge = backupPending || invites || pendingConnections;
+
+  return (
     <TouchableOpacity
       style={{ marginRight: 25 }}
       onPress={() => {
@@ -58,7 +58,7 @@ const homeScreenOptions = (notificationCount) => ({
       }}
     >
       <Material name="bell" size={DEVICE_LARGE ? 28 : 23} color="#000" />
-      {notificationCount ? (
+      {displayBadge ? (
         <View
           style={{
             backgroundColor: '#ED1B24',
@@ -72,7 +72,48 @@ const homeScreenOptions = (notificationCount) => ({
         />
       ) : null}
     </TouchableOpacity>
+  );
+};
+
+const DeepPasteLink = () => {
+  if (__DEV__) {
+    return (
+      <TouchableOpacity
+        testID="pasteDeeplink"
+        style={{ marginLeft: 10 }}
+        onPress={async () => {
+          let url = await Clipboard.getString();
+          url = url.replace('https://app.brightid.org', 'brightid://');
+          console.log(`Linking.openURL with ${url}`);
+          Linking.openURL(url);
+        }}
+      >
+        <Material
+          name="content-paste"
+          size={DEVICE_LARGE ? 28 : 23}
+          color="#000"
+        />
+      </TouchableOpacity>
+    );
+  } else {
+    return null;
+  }
+};
+
+/** OPTIONS */
+
+const homeScreenOptions = {
+  headerTitle: () => (
+    <Image
+      source={require('@/static/brightid-final.png')}
+      accessible={true}
+      accessibilityLabel="Home Header Logo"
+      resizeMode="contain"
+      style={{ width: DEVICE_LARGE ? 104 : 85 }}
+    />
   ),
+  headerLeft: () => <DeepPasteLink />,
+  headerRight: () => <NotificationBell />,
   headerStyle: {
     height: DEVICE_LARGE ? 80 : 70,
     shadowRadius: 0,
@@ -82,31 +123,24 @@ const homeScreenOptions = (notificationCount) => ({
     elevation: 0,
   },
   headerTitleAlign: 'center',
-});
+};
 
 const recoveringConnectionOptions = {
   ...headerOptions,
   title: 'Account Recovery',
 };
 
+/** SCREENS */
+
+const Stack = createStackNavigator();
+
 const Home = () => {
-  const notificationCount = useSelector(
-    ({
-      notifications: { pendingConnections, backupPending },
-      groups: { invites },
-    }) =>
-      backupPending
-        ? 1
-        : 0 +
-          pendingConnections?.length +
-          invites?.filter((invite) => invite.state === INVITE_ACTIVE)?.length,
-  );
   return (
     <>
       <Stack.Screen
         name="Home"
         component={HomeScreen}
-        options={homeScreenOptions(notificationCount)}
+        options={homeScreenOptions}
       />
       <Stack.Screen
         name="RecoveringConnection"

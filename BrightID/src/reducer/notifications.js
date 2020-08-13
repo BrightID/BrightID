@@ -11,8 +11,6 @@ import { CONNECTIONS_TYPE, GROUPS_TYPE, MISC_TYPE } from '@/utils/constants';
 
 const initialState = {
   activeNotification: null,
-  notifications: [],
-  pendingConnections: [],
   backupPending: false,
   deviceToken: 'unavailable',
   miscAlreadyNotified: false,
