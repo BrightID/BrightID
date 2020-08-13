@@ -37,7 +37,9 @@ export const createChannel = (channelType: ChannelType) => async (
       dispatch(leaveChannel(channel.id));
     }, channel.ttl);
     dispatch(addChannel(channel));
-    dispatch(setMyChannel(channel.id));
+    dispatch(
+      setMyChannel({ channelId: channel.id, channelType: channel.type }),
+    );
     // upload my profile
     dispatch(encryptAndUploadProfileToChannel(channel.id));
     // start polling for incoming connection requests

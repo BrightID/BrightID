@@ -32,6 +32,7 @@ import {
   channel_types,
   selectChannelById,
   closeChannel,
+  setDisplayChannelType,
 } from '@/components/NewConnectionsScreens/channelSlice';
 import { encodeChannelQrString } from '@/utils/channels';
 import { selectAllPendingConnectionsByChannel } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
@@ -54,7 +55,8 @@ const Container = DEVICE_IOS ? SafeAreaView : View;
 const Timer = () => {
   const navigation = useNavigation();
   const myChannel = useSelector((state) => {
-    return selectChannelById(state, state.channels.myChannelId);
+    const { myChannelIds, displayChannelType } = state.channels;
+    return selectChannelById(state, myChannelIds[displayChannelType]);
   });
   const [countdown, setCountdown] = useState(
     myChannel ? myChannel.ttl - (Date.now() - myChannel.timestamp) : 0,
@@ -91,9 +93,13 @@ const Timer = () => {
 export const MyCodeScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const myChannel = useSelector((state) => {
-    return selectChannelById(state, state.channels.myChannelId);
-  });
+  const displayChannelType = useSelector(
+    (state) => state.channels.displayChannelType,
+  );
+  const myChannel = useSelector((state) =>
+    selectChannelById(state, state.channels.myChannelIds[displayChannelType]),
+  );
+
   const myName = useSelector((state) => state.user.name);
   // pending connections attached to my channel
   const pendingConnectionSizeForChannel = useSelector((state) => {
@@ -104,13 +110,9 @@ export const MyCodeScreen = () => {
   const [qrsvg, setQrsvg] = useState('');
   const [copied, setCopied] = useState(false);
 
-  const [isGroup, setIsGroup] = useState(
-    myChannel ? myChannel.type === channel_types.GROUP : false,
-  );
-
   // create QRCode from channel data
   useEffect(() => {
-    if (myChannel && myChannel.state === channel_states.OPEN) {
+    if (myChannel?.state === channel_states.OPEN) {
       console.log(
         `Creating QRCode: profileId ${myChannel.myProfileId} channel ${myChannel.id}`,
       );
@@ -145,32 +147,37 @@ export const MyCodeScreen = () => {
     useCallback(() => {
       if (!navigation.isFocused()) return;
       if (!myChannel) {
-        dispatch(
-          createChannel(isGroup ? channel_types.GROUP : channel_types.SINGLE),
-        );
+        dispatch(createChannel(displayChannelType));
       }
-    }, [navigation, myChannel, dispatch, isGroup]),
+    }, [navigation, myChannel, dispatch, displayChannelType]),
   );
 
   useEffect(() => {
-    if (myChannel && myChannel.type === channel_types.SINGLE) {
+    if (displayChannelType === channel_types.SINGLE) {
       // If i created a 1:1 channel and there is a pending connection in UNCONFIRMED state -> directly open PendingonnectionScreen.
       // there should be only one connection
 
       if (pendingConnectionSizeForChannel > 0) {
         navigation.navigate('PendingConnections');
-        dispatch(closeChannel(myChannel.id));
+        // dispatch(closeChannel(myChannel.id));
       }
     }
-  }, [myChannel, navigation, pendingConnectionSizeForChannel, dispatch]);
+  }, [
+    displayChannelType,
+    navigation,
+    pendingConnectionSizeForChannel,
+    dispatch,
+  ]);
 
   const toggleGroup = () => {
     // toggle switch
-    setIsGroup((previousState) => !previousState);
-    // remove current channel
-    if (myChannel) {
-      dispatch(closeChannel(myChannel.id));
-    }
+    dispatch(
+      setDisplayChannelType(
+        displayChannelType === channel_types.SINGLE
+          ? channel_types.GROUP
+          : channel_types.SINGLE,
+      ),
+    );
   };
 
   const copyQr = () => {
@@ -231,7 +238,10 @@ export const MyCodeScreen = () => {
     <>
       <View style={styles.orangeTop} />
       <Container style={styles.container}>
-        <GroupSwitch onValueChange={toggleGroup} value={isGroup} />
+        <GroupSwitch
+          onValueChange={toggleGroup}
+          value={displayChannelType === channel_types.SINGLE}
+        />
         <View style={styles.infoTopContainer}>
           {myChannel?.type === channel_types.GROUP ? (
             <Text style={styles.infoTopText}>

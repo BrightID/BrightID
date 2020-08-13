@@ -16,10 +16,13 @@ import {
   addFakePendingConnection,
   pendingConnection_states,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
-import { selectChannelById } from '@/components/NewConnectionsScreens/channelSlice';
+import {
+  selectChannelById,
+  channel_types,
+} from '@/components/NewConnectionsScreens/channelSlice';
 import { names } from '../utils/fakeNames';
 
-export const addFakeConnection = () => async (
+export const addFakeConnection = (channelType) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
@@ -57,7 +60,9 @@ export const addFakeConnection = () => async (
 
   const channel = selectChannelById(
     getState(),
-    getState().channels.myChannelId,
+    channelType === channel_types.SINGLE
+      ? getState().channels.mySingleChannelId
+      : getState().channels.myGroupChannelId,
   );
 
   const dataObj = {
