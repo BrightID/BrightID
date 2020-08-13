@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-
 import { SvgXml } from 'react-native-svg';
+import { navigate } from '@/NavigationService';
 import { ORANGE, DEVICE_IOS, DEVICE_LARGE } from '@/utils/constants';
 import backArrow from '@/static/back_arrow_white.svg';
 
