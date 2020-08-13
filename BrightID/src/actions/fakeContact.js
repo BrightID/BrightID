@@ -7,22 +7,14 @@ import {
   strToUint8Array,
   uInt8ArrayToB64,
   b64ToUrlSafeB64,
-  randomKey,
 } from '@/utils/encoding';
 import { postProfileToChannel } from '@/utils/profile';
 import { encryptData } from '@/utils/cryptoHelper';
 import { createRandomId } from '@/utils/channels';
-import {
-  addFakePendingConnection,
-  pendingConnection_states,
-} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
-import {
-  selectChannelById,
-  channel_types,
-} from '@/components/NewConnectionsScreens/channelSlice';
+import { selectChannelById } from '@/components/NewConnectionsScreens/channelSlice';
 import { names } from '../utils/fakeNames';
 
-export const addFakeConnection = (channelType) => async (
+export const addFakeConnection = () => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
@@ -60,9 +52,7 @@ export const addFakeConnection = (channelType) => async (
 
   const channel = selectChannelById(
     getState(),
-    channelType === channel_types.SINGLE
-      ? getState().channels.mySingleChannelId
-      : getState().channels.myGroupChannelId,
+    getState().channels.myChannelIds[getState().channels.displayChannelType],
   );
 
   const dataObj = {
