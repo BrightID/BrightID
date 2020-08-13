@@ -21,10 +21,7 @@ import {
   DEVICE_LARGE,
 } from '@/utils/constants';
 import { createSelector } from '@reduxjs/toolkit';
-import {
-  pendingConnection_states,
-  selectAllPendingConnections,
-} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+import { selectAllUnconfirmedConnections } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import EmptyList from '@/components/Helpers/EmptyList';
 import NotificationCard from './NotificationCard';
@@ -34,14 +31,6 @@ import PendingConnectionCard from './PendingConnectionCard';
 let thecount = 0;
 
 /** SELECTORS */
-
-const unconfirmedSelector = createSelector(
-  selectAllPendingConnections,
-  (pendingConnections) =>
-    pendingConnections.filter(
-      (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
-    ),
-);
 
 const inviteSelector = createSelector(
   (state) => state.groups.invites,
@@ -70,12 +59,16 @@ const useRefresh = () => {
 
 const ConnectionsList = ({ route }) => {
   const [refreshing, onRefresh] = useRefresh();
-  const pendingConnections = useSelector((state) => unconfirmedSelector(state));
+  const pendingConnections = useSelector((state) =>
+    selectAllUnconfirmedConnections(state),
+  );
+  // only display one notification for all pending connections
+  const data = pendingConnections.length > 0 ? [{ id: 'pendingList' }] : [];
 
   return (
     <FlatList
       contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-      data={pendingConnections}
+      data={data}
       keyExtractor={({ id }, index) => id + index}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
@@ -84,12 +77,12 @@ const ConnectionsList = ({ route }) => {
       }
       ListEmptyComponent={
         <EmptyList
-          title="Nobody here, come back later.."
+          title="You have no pending connections.."
           iconType="account-off-outline"
         />
       }
       renderItem={({ item }) => (
-        <PendingConnectionCard pendingConnection={item} />
+        <PendingConnectionCard pendingConnections={pendingConnections} />
       )}
     />
   );
@@ -113,8 +106,8 @@ const InviteList = ({ route }) => {
       }
       ListEmptyComponent={
         <EmptyList
-          title="No group invites.."
-          iconType="account-cancel-outline"
+          title="You have no group invites.."
+          iconType="account-group-outline"
         />
       }
       renderItem={({ item }) => <InviteCard invite={item} />}
@@ -185,7 +178,7 @@ export const NotificationsScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   const pendingConnections = useSelector(
-    (state) => unconfirmedSelector(state)?.length,
+    (state) => selectAllUnconfirmedConnections(state)?.length,
   );
 
   const invites = useSelector((state) => inviteSelector(state)?.length);
@@ -208,8 +201,12 @@ export const NotificationsScreen = ({ navigation, route }) => {
       backupPending,
     },
   ];
+  // if we navigate here from the banner, go to the section from the banner
+  // if we navigate here normally, go to the first route with content, if any
 
-  const displayRoute = routes.findIndex(({ badge }) => badge);
+  const displayRoute = route.params?.type
+    ? routes.findIndex(({ key }) => key === route.params?.type)
+    : routes.findIndex(({ badge }) => badge);
 
   const [index, setIndex] = useState(displayRoute);
 
