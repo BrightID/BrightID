@@ -7,15 +7,9 @@ import {
   strToUint8Array,
   uInt8ArrayToB64,
   b64ToUrlSafeB64,
-  randomKey,
 } from '@/utils/encoding';
-import { postProfileToChannel } from '@/utils/profile';
 import { encryptData } from '@/utils/cryptoHelper';
 import { createRandomId } from '@/utils/channels';
-import {
-  addFakePendingConnection,
-  pendingConnection_states,
-} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import { selectChannelById } from '@/components/NewConnectionsScreens/channelSlice';
 import { names } from '../utils/fakeNames';
 
@@ -73,7 +67,11 @@ export const addFakeConnection = () => async (
 
   let encrypted = encryptData(dataObj, channel.aesKey);
   const fakeChannel = { ...channel, myProfileId: await createRandomId() };
-  await postProfileToChannel(encrypted, fakeChannel);
+  fakeChannel.api.upload({
+    channelId: fakeChannel.id,
+    data: encrypted,
+    dataId: fakeChannel.myProfileId,
+  });
 
   // add fake user as pending connection, including already signed connection message
   // dispatch(

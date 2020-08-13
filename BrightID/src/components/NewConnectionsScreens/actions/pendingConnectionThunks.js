@@ -8,7 +8,6 @@ import { TIME_FUDGE } from '@/utils/constants';
 import { hash, strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 import nacl from 'tweetnacl';
 import api from '@/api/brightId';
-import { postConnectionRequest } from '@/utils/profile';
 import { addConnection, addOperation } from '@/actions';
 import { saveImage } from '@/utils/filesystem';
 import { backupPhoto, backupUser } from '@/components/Recovery/helpers';
@@ -87,12 +86,12 @@ export const confirmPendingConnectionThunk = (id: string) => async (
       signedMessage,
       connectionTimestamp,
     };
-    postConnectionRequest(
+
+    await channel.api.upload({
+      channelId: connection.id,
       data,
-      channel.ipAddress,
-      connection.id,
-      channel.myProfileId,
-    );
+      dataId: channel.myProfileId,
+    });
 
     // Listen for add connection operation to be completed by other party
     let opName = 'Add Connection';
@@ -118,8 +117,6 @@ export const confirmPendingConnectionThunk = (id: string) => async (
     id: connection.brightId,
     name: connection.name,
     score: connection.score,
-    // secretKey: connectUserData.secretKey,
-    // aesKey: connectUserData.aesKey,
     connectionDate: connectionTimestamp,
     photo: { filename },
     status: 'initiated',
