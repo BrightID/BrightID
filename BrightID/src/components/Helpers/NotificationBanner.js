@@ -112,17 +112,17 @@ export const NotificationBanner = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#AFFDD0',
-    height: DEVICE_LARGE ? 142 : 98,
+    height: DEVICE_LARGE ? 142 : 93,
   },
   title: {
     fontFamily: 'Poppins',
     fontWeight: '500',
-    marginLeft: 20,
+    marginLeft: DEVICE_LARGE ? 20 : 10,
     color: '#000',
     fontSize: DEVICE_LARGE ? 13 : 12,
   },
   icon: {
-    marginLeft: 35,
+    marginLeft: DEVICE_LARGE ? 35 : 10,
   },
 });
 
