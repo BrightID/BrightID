@@ -1,43 +1,120 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, Alert, FlatList } from 'react-native';
-import { connect } from 'react-redux';
+// @flow
+
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+} from 'react';
+import {
+  StyleSheet,
+  View,
+  Alert,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
 import { innerJoin } from 'ramda';
 import api from '@/api/brightId';
-import emitter from '@/emitter';
 import { leaveGroup, dismissFromGroup } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { addAdmin } from '@/actions/groups';
 import { ORANGE } from '@/utils/constants';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import MemberCard from './MemberCard';
 
-export class MembersScreen extends Component<Props, State> {
-  componentDidMount() {
-    emitter.on('optionsSelected', this.showOptionsMenu);
-  }
+const ACTION_INVITE = 'Invite user';
+const ACTION_LEAVE = 'Leave group';
+const ACTION_CANCEL = 'Cancel';
 
-  componentWillUnmount() {
-    emitter.off('optionsSelected', this.showOptionsMenu);
-  }
+type MembersScreenProps = {
+  navigation: any,
+  route: any,
+};
 
-  showOptionsMenu = () => {
-    this.actionSheet.show();
-  };
-
-  performAction = (action) => {
-    if (!this.actionSheet) return;
-    action = this.actionSheet.props.options[action];
-    if (action === 'Leave Group') {
-      this.confirmLeaveGroup();
-    } else if (action === 'Invite') {
-      const { navigation, group } = this.props;
-      navigation.navigate('InviteList', {
-        group,
-      });
+function MembersScreen(props: MembersScreenProps) {
+  console.log(`Rendering MembersScreen`);
+  const { navigation, route } = props;
+  const groupID = route.params.group.id;
+  const dispatch = useDispatch();
+  const connections = useSelector(
+    (state: State) => state.connections.connections,
+  );
+  const user = useSelector((state: State) => state.user);
+  const group: group = useSelector((state: State) => {
+    const group = state.groups.groups.find((entry) => entry.id === groupID);
+    if (!group) {
+      console.log(`Did not find group for groupID ${groupID}`);
     }
-  };
+    return group;
+  });
+  const actionSheetRef: ?ActionSheet = useRef(null);
+  const [contextActions, setContextActions] = useState<Array<string>>([]);
 
-  confirmDismiss = (user) => {
+  // set up top right button in header
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          testID="groupOptionsBtn"
+          style={{ marginRight: 11 }}
+          onPress={() => {
+            console.log(`Opening actionSheet`);
+            actionSheetRef?.current.show();
+          }}
+        >
+          <Material name="dots-horizontal" size={32} color="#fff" />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
+
+  // set available actions for group
+  useEffect(() => {
+    const actions: Array<string> = [];
+    if (group.admins.includes(user.id)) {
+      // admins can invite other members to group
+      actions.push(ACTION_INVITE);
+    }
+    if (group.members.includes(user.id)) {
+      // existing member can leave group
+      actions.push(ACTION_LEAVE);
+    }
+    if (actions.length > 0) {
+      actions.push(ACTION_CANCEL);
+    }
+    setContextActions(actions);
+  }, [user.id, group.admins, group.members]);
+
+  // Only include the group members that user knows (is connected with), and the user itself
+  const groupMembers: Array<connection> = useMemo(() => {
+    console.log(`memoizing members`);
+    // TODO: userObj is ugly and just here to satisfy flow typecheck for 'connection' type.
+    //    Define a dedicated type for group member to use here or somehow merge user and connection types.
+    const userobj = {
+      id: user.id,
+      name: user.name,
+      photo: user.photo,
+      score: user.score,
+      aesKey: '',
+      connectionDate: 0,
+      status: '',
+      signingKey: '',
+      createdAt: 0,
+      hasPrimaryGroup: false,
+    };
+    return [userobj].concat(
+      innerJoin(
+        (connection, member) => connection.id === member,
+        connections,
+        group.members,
+      ),
+    );
+  }, [user, connections, group.members]);
+
+  const handleLeaveGroup = () => {
     const buttons = [
       {
         text: 'Cancel',
@@ -46,9 +123,43 @@ export class MembersScreen extends Component<Props, State> {
       {
         text: 'OK',
         onPress: async () => {
-          const { dispatch, group } = this.props;
           try {
-            await api.dismiss(user.id, group?.id);
+            await api.leaveGroup(group.id);
+            await dispatch(leaveGroup(group));
+            navigation.goBack();
+          } catch (err) {
+            Alert.alert('Error leaving group', err.message);
+          }
+        },
+      },
+    ];
+    Alert.alert(
+      `Leave Group`,
+      `Are you sure you want to leave this group?`,
+      buttons,
+      {
+        cancelable: true,
+      },
+    );
+  };
+
+  const handleInvite = () => {
+    navigation.navigate('InviteList', {
+      group,
+    });
+  };
+
+  const handleDismiss = (user) => {
+    const buttons = [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: async () => {
+          try {
+            await api.dismiss(user.id, groupID);
             await dispatch(dismissFromGroup(user.id, group));
           } catch (err) {
             Alert.alert('Error dismissing member from the group', err.message);
@@ -66,7 +177,7 @@ export class MembersScreen extends Component<Props, State> {
     );
   };
 
-  confirmAddAdmin = (user) => {
+  const handleAddAdmin = (user) => {
     const buttons = [
       {
         text: 'Cancel',
@@ -75,10 +186,8 @@ export class MembersScreen extends Component<Props, State> {
       {
         text: 'OK',
         onPress: async () => {
-          const { route, dispatch } = this.props;
-          const group = route.params?.group;
           try {
-            await api.addAdmin(user.id, group.id);
+            await api.addAdmin(user.id, groupID);
             await dispatch(addAdmin(user.id, group));
           } catch (err) {
             Alert.alert(
@@ -99,48 +208,25 @@ export class MembersScreen extends Component<Props, State> {
     );
   };
 
-  confirmLeaveGroup = () => {
-    const buttons = [
-      {
-        text: 'Cancel',
-        style: 'cancel',
-      },
-      {
-        text: 'OK',
-        onPress: async () => {
-          const { group, navigation, dispatch } = this.props;
-          try {
-            await api.leaveGroup(group?.id);
-            await dispatch(leaveGroup(group));
-            navigation.goBack();
-          } catch (err) {
-            Alert.alert('Error leaving group', err.message);
-          }
-        },
-      },
-    ];
-    Alert.alert(
-      `Leave Group`,
-      `Are you sure you want to leave this group?`,
-      buttons,
-      {
-        cancelable: true,
-      },
-    );
+  const performAction = (index: number) => {
+    const action = contextActions[index];
+    console.log(`Performing action ${action}`);
+    switch (action) {
+      case ACTION_INVITE:
+        handleInvite();
+        break;
+      case ACTION_LEAVE:
+        handleLeaveGroup();
+        break;
+      case ACTION_CANCEL:
+      default:
+      // do nothing
+    }
   };
 
-  filterMembers = () => {
-    const { searchParam } = this.props;
-    const searchString = searchParam.toLowerCase().replace(/\s/g, '');
-    return this.getMembers().filter((item) =>
-      `${item.name}`.toLowerCase().replace(/\s/g, '').includes(searchString),
-    );
-  };
-
-  renderMember = ({ item }) => {
-    const { group } = this.props;
+  const renderMember = ({ item }) => {
     const memberIsAdmin = group?.admins?.includes(item.id);
-    const userIsAdmin = group?.admins?.includes(this.props.id);
+    const userIsAdmin = group?.admins?.includes(user.id);
     return (
       <MemberCard
         connectionDate={item.connectionDate}
@@ -151,68 +237,46 @@ export class MembersScreen extends Component<Props, State> {
         score={item.score}
         memberIsAdmin={memberIsAdmin}
         userIsAdmin={userIsAdmin}
-        userId={this.props.id}
-        handleDismiss={this.confirmDismiss}
-        handleAddAdmin={this.confirmAddAdmin}
+        userId={user.id}
+        handleDismiss={handleDismiss}
+        handleAddAdmin={handleAddAdmin}
       />
     );
   };
 
-  getMembers = () => {
-    const { connections, name, id, photo, score, group } = this.props;
-    // return a list of connections filtered by the members of this group
-    if (!group) return [];
-
-    return [{ id, name, photo, score }].concat(
-      innerJoin(
-        (connection, member) => connection.id === member,
-        connections,
-        group.members,
-      ),
-    );
-  };
-
-  render() {
-    const { id, group } = this.props;
-    let actions = ['Leave Group', 'cancel'];
-    if (group?.admins?.includes(id)) {
-      actions = ['Invite'].concat(actions);
-    }
-
-    return (
-      <>
-        <View style={styles.orangeTop} />
-        <View style={styles.container}>
-          <View testID="membersView" style={styles.mainContainer}>
-            <View>
-              <FlatList
-                style={styles.membersContainer}
-                data={this.filterMembers()}
-                keyExtractor={({ id }, index) => id + index}
-                renderItem={this.renderMember}
-                contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                ListEmptyComponent={
-                  <EmptyList title="No known members, invite some..." />
-                }
-              />
-            </View>
+  return (
+    <>
+      <View style={styles.orangeTop} />
+      <View style={styles.container}>
+        <View testID="membersView" style={styles.mainContainer}>
+          <View>
+            <FlatList
+              style={styles.membersContainer}
+              data={groupMembers}
+              keyExtractor={({ id }, index) => id + index}
+              renderItem={renderMember}
+              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+              ListEmptyComponent={
+                <EmptyList title="No known members, invite some..." />
+              }
+            />
           </View>
-          <ActionSheet
-            ref={(o) => {
-              this.actionSheet = o;
-            }}
-            title="What do you want to do?"
-            options={actions}
-            cancelButtonIndex={actions.indexOf('cancel')}
-            destructiveButtonIndex={actions.indexOf('Leave Group')}
-            onPress={(index) => this.performAction(index)}
-          />
         </View>
-      </>
-    );
-  }
+        {contextActions.length > 0 && (
+          <ActionSheet
+            ref={actionSheetRef}
+            title="What do you want to do?"
+            options={contextActions}
+            cancelButtonIndex={contextActions.indexOf(ACTION_CANCEL)}
+            destructiveButtonIndex={contextActions.indexOf(ACTION_LEAVE)}
+            onPress={performAction}
+          />
+        )}
+      </View>
+    </>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -309,19 +373,4 @@ const styles = StyleSheet.create({
   },
 });
 
-function mapStateToProps(state, ownProps) {
-  // Refetch group from state, as the group object passed via route params may be out of date.
-  const groupId = ownProps.route.params.group.id;
-  const group = state.groups.groups.find((entry) => entry.id === groupId);
-  if (!group) {
-    console.log(`Did not find group for groupID ${groupId}`);
-  }
-
-  return {
-    ...state.connections,
-    ...state.user,
-    group,
-  };
-}
-
-export default connect(mapStateToProps)(MembersScreen);
+export default MembersScreen;
