@@ -5,7 +5,7 @@
 
 # Decrypt the keystore with passphrase passed in via Github Action Secret
 gpg --quiet --batch --yes --decrypt --passphrase="$ENCRYPT_PASSWORD" \
---output ./android/app/triplespeeder.keystore ./android/app/triplespeeder.keystore.gpg
+--output ./android/app/brightid.keystore ./android/app/brightid.keystore.gpg
 
 # Decrypt keystore.properties
 gpg --quiet --batch --yes --decrypt --passphrase="$ENCRYPT_PASSWORD" \
