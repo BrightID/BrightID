@@ -98,7 +98,7 @@ export const MyCodeScreen = () => {
     selectChannelById(state, state.channels.myChannelIds[displayChannelType]),
   );
 
-  const myName = useSelector((state) => state.user.name);
+  // const myName = useSelector((state) => state.user.name);
   // pending connections attached to my channel
   const pendingConnectionSizeForChannel = useSelector((state) => {
     return selectAllPendingConnectionsByChannel(state, myChannel)?.length;
@@ -156,7 +156,7 @@ export const MyCodeScreen = () => {
 
       if (pendingConnectionSizeForChannel > 0) {
         navigation.navigate('PendingConnections');
-        dispatch(closeChannel(myChannel?.id));
+        // dispatch(closeChannel(myChannel?.id));
       }
     }
   }, [
@@ -180,12 +180,25 @@ export const MyCodeScreen = () => {
 
   const copyQr = () => {
     const universalLink = `https://app.brightid.org/connection-code/${qrString}`;
-    Clipboard.setString(universalLink);
+
     Alert.alert(
       'Universal Link',
-      `We've copied a url to your clipboard that can be shared with friends who have BrightID installed on their device. Please do not close this app process until they have sent you a request.`,
+      `This will copy a url to your clipboard that can be shared with friends who have BrightID installed on their device. Please do not close this app process until they have sent you a request.`,
+      [
+        {
+          text: 'Copy URL',
+          onPress: () => {
+            Clipboard.setString(universalLink);
+            if (myChannel?.type === channel_types.SINGLE)
+              dispatch(closeChannel(myChannel?.id));
+          },
+        },
+      ],
+      { cancelable: false },
     );
   };
+
+  // we want to replace this QRcode with a different one for single connections
 
   const CopyQr = () => (
     <View style={styles.copyContainer}>
@@ -270,7 +283,7 @@ export const MyCodeScreen = () => {
               onPress={displayOneToOneInfo}
             >
               <Text style={styles.infoTopText}>One to One </Text>
-              <Material name="information-variant" size={18} color="4a4a4a" />
+              <Material name="information-variant" size={18} color="#4a4a4a" />
             </TouchableOpacity>
           )}
         </View>
@@ -407,11 +420,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 16 : 14,
+    color: '#333',
   },
   timerTextRight: {
     fontFamily: 'Poppins',
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 16 : 14,
+    color: '#333',
   },
   bottomContainer: {
     alignItems: 'center',

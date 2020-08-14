@@ -43,9 +43,8 @@ export const PendingConnectionCard = ({ pendingConnections }) => {
           adjustsFontSizeToFit={true}
           numberOfLines={1}
         >
-          {pendingConnections.length} connection
-          {pendingConnections.length > 1 ? 's are' : ' is'} waiting for you to
-          confirm
+          You have {pendingConnections.length} unconfirmed connection
+          {pendingConnections.length > 1 ? 's' : ''}
         </Text>
       </View>
       <View style={styles.approvalButtonContainer} />

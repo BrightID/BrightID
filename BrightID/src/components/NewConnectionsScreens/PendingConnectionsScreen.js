@@ -115,7 +115,7 @@ const ConfirmationButtons = ({
         return (
           <>
             <TouchableOpacity
-              testID="rejectConnectionBtn"
+              testID="rejectConnectionButton"
               onPress={reject}
               style={styles.rejectButton}
               accessibilityLabel={`reject connection with ${pendingConnection.name}`}
@@ -124,7 +124,7 @@ const ConfirmationButtons = ({
               <Text style={styles.buttonText}>Reject</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              testID="confirmConnectionBtn"
+              testID="confirmConnectionButton"
               onPress={accept}
               style={styles.confirmButton}
               accessibilityLabel={`accept connection with ${pendingConnection.name}`}
@@ -173,6 +173,7 @@ export const PreviewConnection = (props) => {
     pendingConnection.signedMessage,
   );
 
+  const navigation = useNavigation();
   return (
     <View style={styles.previewContainer} testID="previewConnectionScreen">
       <StatusBar
@@ -181,6 +182,14 @@ export const PreviewConnection = (props) => {
         translucent={false}
         animated={true}
       />
+      <TouchableOpacity
+        style={styles.cancelButton}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
+        <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
+      </TouchableOpacity>
       <View style={styles.titleContainer}>
         <Text style={styles.questionText}>Connect with?</Text>
       </View>
@@ -242,6 +251,8 @@ export const PendingConnectionsScreen = () => {
     return selectAllUnconfirmedConnections(state);
   });
 
+  const channelsTotal = useSelector((state) => state.channels.ids.length);
+
   const [pendingConnectionsToDisplay, setPendingConnectionsDisplay] = useState(
     [],
   );
@@ -263,14 +274,14 @@ export const PendingConnectionsScreen = () => {
           } else {
             setLoading(false);
           }
-        }, 2500);
+        }, 1500);
       } else {
         setLoading(false);
       }
       return () => {
         clearTimeout(timeout);
       };
-    }, [pendingConnections.length, lastChannelType, navigation]),
+    }, [lastChannelType, navigation]),
   );
 
   useEffect(() => {
@@ -303,6 +314,16 @@ export const PendingConnectionsScreen = () => {
     return () => BackHandler.removeEventListener('hardwareBackPress', goBack);
   }, [carouselRef]);
 
+  const navHome = () => {
+    navigation.navigate('Home');
+  };
+  // return home if there are no channels
+  useEffect(() => {
+    if (navigation.isFocused() && channelsTotal < 1) {
+      navHome('Home');
+    }
+  }, [channelsTotal, navigation, navHome]);
+
   // the list should only re render sparingly for performance and continuity
   const PendingConnectionList = useMemo(() => {
     const renderItem = ({ item, index }) => {
@@ -317,45 +338,33 @@ export const PendingConnectionsScreen = () => {
     };
     // console.log('rendering pending connections CAROUSEL');
     return (
-      <>
-        <TouchableOpacity
-          style={styles.cancelButton}
-          onPress={() => {
-            navigation.goBack();
-          }}
-        >
-          <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
-        </TouchableOpacity>
-        <Carousel
-          containerCustomStyle={{
-            flex: 1,
-          }}
-          ref={carouselRef}
-          data={pendingConnectionsToDisplay}
-          layoutCardOffset={pendingConnectionsToDisplay.length}
-          renderItem={renderItem}
-          layout="stack"
-          lockScrollWhileSnapping={true}
-          itemWidth={WIDTH * 0.95}
-          sliderWidth={WIDTH}
-          onSnapToItem={(index) => {
-            // remove all of the confirmed connections when we reach the end of the list
-            if (index === pendingConnectionsToDisplay.length - 1) {
-              setReadyToRender(true);
-            }
-          }}
-        />
-      </>
+      <Carousel
+        containerCustomStyle={{
+          flex: 1,
+        }}
+        ref={carouselRef}
+        data={pendingConnectionsToDisplay}
+        layoutCardOffset={pendingConnectionsToDisplay.length}
+        renderItem={renderItem}
+        layout="stack"
+        lockScrollWhileSnapping={true}
+        itemWidth={WIDTH * 0.95}
+        sliderWidth={WIDTH}
+        onSnapToItem={(index) => {
+          // remove all of the confirmed connections when we reach the end of the list
+          if (index === pendingConnectionsToDisplay.length - 1) {
+            setReadyToRender(true);
+          }
+        }}
+      />
     );
-  }, [pendingConnectionsToDisplay, navigation]);
+  }, [pendingConnectionsToDisplay]);
 
   const ZeroConnectionsToDisplay = () => {
     const clearAll = () => {
       dispatch(removeAllPendingConnections());
     };
-    const navHome = () => {
-      navigation.navigate('Home');
-    };
+
     return (
       <View
         style={{
@@ -373,35 +382,6 @@ export const PendingConnectionsScreen = () => {
             type="FadingCircleAlt"
             color="#aaa"
           />
-        ) : pendingConnections.length ? (
-          <>
-            <Material
-              name="account-clock-outline"
-              size={DEVICE_LARGE ? 48 : 40}
-              color="#333"
-            />
-            <Text style={styles.waitingText}>
-              Waiting for {pendingConnections.length} connection
-              {pendingConnections.length > 1 && 's'} to confirm you
-            </Text>
-            <Spinner
-              isVisible={true}
-              size={60}
-              type="ThreeBounce"
-              color="#aaa"
-            />
-            <TouchableOpacity
-              style={styles.clearConnectionsBtn}
-              onPress={clearAll}
-            >
-              <Material
-                name="account-multiple-remove-outline"
-                size={DEVICE_LARGE ? 36 : 28}
-                color="#333"
-              />
-              <Text style={styles.clearConnectionsText}>Clear Connections</Text>
-            </TouchableOpacity>
-          </>
         ) : (
           <>
             <Material
@@ -410,15 +390,32 @@ export const PendingConnectionsScreen = () => {
               color="#333"
             />
             <Text style={styles.waitingText}>
-              Waiting for Pending Connections
+              Waiting for{' '}
+              {pendingConnections.length > 1
+                ? pendingConnections.length
+                : 'more'}{' '}
+              connection{pendingConnections.length === 1 ? '' : 's'}
             </Text>
-            <TouchableOpacity style={styles.navHomeBtn} onPress={navHome}>
-              <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
+
+            <Spinner
+              isVisible={true}
+              size={60}
+              type="ThreeBounce"
+              color="#333"
+            />
+
+            <Text style={styles.infoText}>
+              It's safe to leave this page if you are not waiting for additional
+              group connections
+            </Text>
+
+            <TouchableOpacity style={styles.bottomButton} onPress={navHome}>
               <Material
-                name="home"
-                size={DEVICE_LARGE ? 36 : 28}
+                name="card-account-details-outline"
+                size={DEVICE_LARGE ? 36 : 24}
                 color="#333"
               />
+              <Text style={styles.bottomButtonText}>Return Home</Text>
             </TouchableOpacity>
           </>
         )}
@@ -562,13 +559,17 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     position: 'absolute',
-    left: 0,
-    top: DEVICE_LARGE ? 55 : 35,
+    left: -10,
+    top: DEVICE_LARGE ? 20 : 12,
     zIndex: 20,
     width: DEVICE_LARGE ? 60 : 50,
     alignItems: 'center',
   },
-  clearConnectionsBtn: {
+  clearConnectionsButton: {
+    position: 'absolute',
+    bottom: '6%',
+  },
+  bottomButton: {
     position: 'absolute',
     bottom: '6%',
     flexDirection: 'row',
@@ -580,15 +581,26 @@ const styles = StyleSheet.create({
     width: DEVICE_LARGE ? 260 : 210,
     borderWidth: 2,
     borderColor: '#333',
+    marginBottom: 10,
   },
-  clearConnectionsText: {
+  bottomButtonText: {
     fontFamily: 'Poppins',
     fontWeight: 'bold',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#333',
     marginLeft: 10,
   },
-  navHomeBtn: {
+  infoText: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    textAlign: 'center',
+    fontSize: DEVICE_LARGE ? 14 : 12,
+    color: '#333',
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 22,
+  },
+  navHomeButton: {
     position: 'absolute',
     left: 0,
     top: DEVICE_LARGE ? 8 : 6,
@@ -600,6 +612,10 @@ const styles = StyleSheet.create({
     // borderRadius: 60,
     width: DEVICE_LARGE ? 80 : 70,
     height: DEVICE_LARGE ? 42 : 36,
+  },
+  bottomButtonContainer: {
+    position: 'absolute',
+    bottom: 30,
   },
 });
 

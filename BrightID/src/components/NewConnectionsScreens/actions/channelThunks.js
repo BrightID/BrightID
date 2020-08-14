@@ -32,10 +32,6 @@ export const createChannel = (channelType: ChannelType) => async (
     const channel: Channel = await generateChannelData(channelType);
     // Set timeout to expire channel
 
-    // REMOVE FOR DEV
-    channel.ttl = 60000;
-    // REMOVE FOR DEV
-
     channel.timeoutId = setTimeout(() => {
       console.log(`timer expired for channel ${channel.id}`);
       dispatch(leaveChannel(channel.id));

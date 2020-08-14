@@ -61,10 +61,10 @@ const channelSlice = createSlice({
         },
       });
       if (state.myChannelIds[channel_types.SINGLE] === channelId)
-        state.myChannelIds[channel_types.SINGLE] === '';
+        state.myChannelIds[channel_types.SINGLE] = '';
 
       if (state.myChannelIds[channel_types.GROUP] === channelId)
-        state.myChannelIds[channel_types.GROUP] === '';
+        state.myChannelIds[channel_types.GROUP] = '';
     },
     removeChannel(state, action) {
       const channelId = action.payload;
