@@ -53,26 +53,28 @@ const channelSlice = createSlice({
     addChannel: channelsAdapter.addOne,
     updateChannel: channelsAdapter.updateOne,
     closeChannel(state, action) {
-      const { channelId, channelType } = action.payload;
+      const channelId = action.payload;
       state = channelsAdapter.updateOne(state, {
         id: channelId,
         changes: {
           state: channel_states.CLOSED,
         },
       });
-      if (state.myChannelIds[channelType] === channelId) {
-        state.myChannelIds[channelType] =
-          initialState.myChannelIds[channelType];
-      }
+      if (state.myChannelIds[channel_types.SINGLE] === channelId)
+        state.myChannelIds[channel_types.SINGLE] === '';
+
+      if (state.myChannelIds[channel_types.GROUP] === channelId)
+        state.myChannelIds[channel_types.GROUP] === '';
     },
     removeChannel(state, action) {
-      const { channelId, channelType } = action.payload;
+      const channelId = action.payload;
       state = channelsAdapter.removeOne(state, channelId);
       // In case my channel got removed also clear myChannelId
-      if (state.myChannelIds[channelType] === channelId) {
-        state.myChannelIds[channelType] =
-          initialState.myChannelIds[channelType];
-      }
+      if (state.myChannelIds[channel_types.SINGLE] === channelId)
+        state.myChannelIds[channel_types.SINGLE] === '';
+
+      if (state.myChannelIds[channel_types.GROUP] === channelId)
+        state.myChannelIds[channel_types.GROUP] === '';
     },
     setMyChannel(state, action) {
       const { channelType, channelId } = action.payload;

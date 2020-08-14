@@ -13,7 +13,7 @@ import {
   View,
   TouchableOpacity,
   Clipboard,
-  Switch,
+  Alert,
 } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -47,8 +47,6 @@ import { createChannel } from '@/components/NewConnectionsScreens/actions/channe
  * displays a qrcode
  *
  */
-
-const COPIED_TIMEOUT = 500;
 
 const Container = DEVICE_IOS ? SafeAreaView : View;
 
@@ -108,11 +106,10 @@ export const MyCodeScreen = () => {
 
   const [qrString, setQrString] = useState('');
   const [qrsvg, setQrsvg] = useState('');
-  const [copied, setCopied] = useState(false);
 
   // create QRCode from channel data
   useEffect(() => {
-    if (myChannel?.state === channel_states.OPEN) {
+    if (myChannel && myChannel.state === channel_states.OPEN) {
       console.log(
         `Creating QRCode: profileId ${myChannel.myProfileId} channel ${myChannel.id}`,
       );
@@ -159,7 +156,7 @@ export const MyCodeScreen = () => {
 
       if (pendingConnectionSizeForChannel > 0) {
         navigation.navigate('PendingConnections');
-        // dispatch(closeChannel(myChannel.id));
+        dispatch(closeChannel(myChannel?.id));
       }
     }
   }, [
@@ -167,6 +164,7 @@ export const MyCodeScreen = () => {
     navigation,
     pendingConnectionSizeForChannel,
     dispatch,
+    myChannel,
   ]);
 
   const toggleGroup = () => {
@@ -181,9 +179,12 @@ export const MyCodeScreen = () => {
   };
 
   const copyQr = () => {
-    Clipboard.setString(`https://app.brightid.org/connection-code/${qrString}`);
-    setCopied(true);
-    setTimeout(() => setCopied(false), COPIED_TIMEOUT);
+    const universalLink = `https://app.brightid.org/connection-code/${qrString}`;
+    Clipboard.setString(universalLink);
+    Alert.alert(
+      'Universal Link',
+      `We've copied a url to your clipboard that can be shared with friends who have BrightID installed on their device. Please do not close this app process until they have sent you a request.`,
+    );
   };
 
   const CopyQr = () => (
@@ -199,10 +200,24 @@ export const MyCodeScreen = () => {
           color="#333"
           style={{ width: 24, height: 24 }}
         />
-        <Text style={styles.copyText}> Copy</Text>
+        <Text style={styles.copyText}> Copy Link</Text>
       </TouchableOpacity>
     </View>
   );
+
+  const displayOneToOneInfo = () => {
+    Alert.alert(
+      'One to One',
+      `This QR code can be used to connect with a single user before it expires. We will automatically generate a new code for you after you make a connection or press 'Copy Link'`,
+    );
+  };
+
+  const displayManyToManyInfo = () => {
+    Alert.alert(
+      'Many to Many',
+      'This QR code is designed for group connections. Everyone who scans this code will be prompted to connect with everyone else who scaned this code before the time expires. ',
+    );
+  };
 
   const renderSpinner = () => (
     <Spinner
@@ -223,14 +238,11 @@ export const MyCodeScreen = () => {
         viewBox={path(['svg', '$', 'viewBox'], qrsvg)}
         shape-rendering="crispEdges"
       >
-        <Path
-          fill={copied ? 'lightblue' : '#fff'}
-          d={path(['svg', 'path', '0', '$', 'd'], qrsvg)}
-        />
+        <Path fill="#fff" d={path(['svg', 'path', '0', '$', 'd'], qrsvg)} />
         <Path stroke="#000" d={path(['svg', 'path', '1', '$', 'd'], qrsvg)} />
       </Svg>
     );
-  }, [qrsvg, copied]);
+  }, [qrsvg]);
 
   console.log('rendering My QRCode');
 
@@ -243,19 +255,26 @@ export const MyCodeScreen = () => {
           value={displayChannelType === channel_types.SINGLE}
         />
         <View style={styles.infoTopContainer}>
-          {myChannel?.type === channel_types.GROUP ? (
-            <Text style={styles.infoTopText}>
-              This is a group connection code. Anyone who scans this code will
-              be prompted to connect everybody else who scans this.
-            </Text>
+          <Text style={styles.infoTopText}>Connection Type: </Text>
+          {displayChannelType === channel_types.GROUP ? (
+            <TouchableOpacity
+              style={{ flexDirection: 'row' }}
+              onPress={displayManyToManyInfo}
+            >
+              <Text style={styles.infoTopText}>Many to Many </Text>
+              <Material name="information-variant" size={18} color="#4a4a4a" />
+            </TouchableOpacity>
           ) : (
-            <Text style={styles.infoTopText}>
-              This code can be used to connect with {myName}. It will expire
-              after being scanned once.
-            </Text>
+            <TouchableOpacity
+              style={{ flexDirection: 'row' }}
+              onPress={displayOneToOneInfo}
+            >
+              <Text style={styles.infoTopText}>One to One </Text>
+              <Material name="information-variant" size={18} color="4a4a4a" />
+            </TouchableOpacity>
           )}
         </View>
-        {myChannel?.state === channel_states.OPEN ? (
+        {myChannel && myChannel.state === channel_states.OPEN ? (
           <View style={styles.qrCodeContainer} testID="QRCodeContainer">
             {qrsvg ? <Timer /> : <View />}
             {qrsvg ? QrCode : renderSpinner()}
@@ -263,7 +282,15 @@ export const MyCodeScreen = () => {
           </View>
         ) : (
           <View style={styles.qrCodeContainer} testID="QRCodeContainer">
-            <View style={styles.emptyQr} />
+            <View style={styles.emptyQr}>
+              <Spinner
+                // style={styles.spinner}
+                isVisible={true}
+                size={47}
+                type="FadingCircle"
+                color="#333"
+              />
+            </View>
           </View>
         )}
         <View style={styles.bottomContainer}>
@@ -337,10 +364,11 @@ const styles = StyleSheet.create({
   infoTopContainer: {
     width: '100%',
     flexGrow: 1,
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
     alignItems: 'center',
     paddingLeft: DEVICE_LARGE ? 50 : 20,
     paddingRight: DEVICE_LARGE ? 50 : 20,
+    paddingTop: DEVICE_LARGE ? 20 : 10,
   },
   infoTopText: {
     fontFamily: 'Poppins',
@@ -349,7 +377,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#4a4a4a',
   },
-
   qrCodeContainer: {
     width: '100%',
     justifyContent: 'center',
@@ -433,6 +460,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   emptyQr: {
+    justifyContent: 'center',
+    alignItems: 'center',
     height: DEVICE_LARGE ? 308 : 244,
   },
 });
