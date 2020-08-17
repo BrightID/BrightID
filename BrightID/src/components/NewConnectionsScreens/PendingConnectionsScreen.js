@@ -247,9 +247,10 @@ export const PendingConnectionsScreen = () => {
   const carouselRef = useRef(null);
 
   // we want to watch for all changes to pending connections
-  const pendingConnections = useSelector((state) => {
-    return selectAllUnconfirmedConnections(state);
-  });
+  const pendingConnections =
+    useSelector((state) => {
+      return selectAllUnconfirmedConnections(state);
+    }) ?? [];
 
   const channelsTotal = useSelector((state) => state.channels.ids.length);
 
@@ -281,7 +282,7 @@ export const PendingConnectionsScreen = () => {
       return () => {
         clearTimeout(timeout);
       };
-    }, [lastChannelType, navigation]),
+    }, [pendingConnections.length, lastChannelType, navigation]),
   );
 
   useEffect(() => {
@@ -320,9 +321,11 @@ export const PendingConnectionsScreen = () => {
   // return home if there are no channels
   useEffect(() => {
     if (navigation.isFocused() && channelsTotal < 1) {
-      navHome('Home');
+      lastChannelType === channel_types.SINGLE
+        ? navigation.navigate('Connections')
+        : navigation.navigate('Home');
     }
-  }, [channelsTotal, navigation, navHome]);
+  }, [channelsTotal, navigation, lastChannelType]);
 
   // the list should only re render sparingly for performance and continuity
   const PendingConnectionList = useMemo(() => {
@@ -361,10 +364,6 @@ export const PendingConnectionsScreen = () => {
   }, [pendingConnectionsToDisplay]);
 
   const ZeroConnectionsToDisplay = () => {
-    const clearAll = () => {
-      dispatch(removeAllPendingConnections());
-    };
-
     return (
       <View
         style={{
@@ -391,10 +390,14 @@ export const PendingConnectionsScreen = () => {
             />
             <Text style={styles.waitingText}>
               Waiting for{' '}
-              {pendingConnections.length > 1
-                ? pendingConnections.length
-                : 'more'}{' '}
-              connection{pendingConnections.length === 1 ? '' : 's'}
+              {pendingConnections.length === 0
+                ? 'more '
+                : pendingConnections.length > 1 &&
+                  `${pendingConnections.length} `}
+              {pendingConnections.length === 1
+                ? pendingConnections[0].name
+                : 'connections'}{' '}
+              {pendingConnections.length ? 'to confirm you.' : ''}
             </Text>
 
             <Spinner
@@ -403,11 +406,6 @@ export const PendingConnectionsScreen = () => {
               type="ThreeBounce"
               color="#333"
             />
-
-            <Text style={styles.infoText}>
-              It's safe to leave this page if you are not waiting for additional
-              group connections
-            </Text>
 
             <TouchableOpacity style={styles.bottomButton} onPress={navHome}>
               <Material

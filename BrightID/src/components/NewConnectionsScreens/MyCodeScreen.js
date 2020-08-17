@@ -35,7 +35,7 @@ import {
   setDisplayChannelType,
 } from '@/components/NewConnectionsScreens/channelSlice';
 import { encodeChannelQrString } from '@/utils/channels';
-import { selectAllPendingConnectionsByChannel } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+import { selectAllPendingConnectionsByChannelId } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import { createFakeConnection } from '@/components/Connections/models/createFakeConnection';
 import { createChannel } from '@/components/NewConnectionsScreens/actions/channelThunks';
 
@@ -98,10 +98,12 @@ export const MyCodeScreen = () => {
     selectChannelById(state, state.channels.myChannelIds[displayChannelType]),
   );
 
+  const myName = useSelector((state) => state.user.name);
+
   // const myName = useSelector((state) => state.user.name);
   // pending connections attached to my channel
   const pendingConnectionSizeForChannel = useSelector((state) => {
-    return selectAllPendingConnectionsByChannel(state, myChannel)?.length;
+    return selectAllPendingConnectionsByChannelId(state, myChannel?.id)?.length;
   });
 
   const [qrString, setQrString] = useState('');
@@ -180,15 +182,21 @@ export const MyCodeScreen = () => {
 
   const copyQr = () => {
     const universalLink = `https://app.brightid.org/connection-code/${qrString}`;
-
+    const clipboardMsg = __DEV__
+      ? universalLink
+      : `Connect with ${myName} on BrightID: ${universalLink}`;
+    const alertMsg =
+      myChannel?.type === channel_types.SINGLE
+        ? `Share this link with one friend to connect with them.`
+        : `Share this link with friends so that everyone can connect with one another.`;
     Alert.alert(
       'Universal Link',
-      `This will copy a url to your clipboard that can be shared with friends who have BrightID installed on their device. Please do not close this app process until they have sent you a request.`,
+      alertMsg,
       [
         {
-          text: 'Copy URL',
+          text: 'Copy to Clipboard',
           onPress: () => {
-            Clipboard.setString(universalLink);
+            Clipboard.setString(clipboardMsg);
             if (myChannel?.type === channel_types.SINGLE)
               dispatch(closeChannel(myChannel?.id));
           },
@@ -221,14 +229,14 @@ export const MyCodeScreen = () => {
   const displayOneToOneInfo = () => {
     Alert.alert(
       'One to One',
-      `This QR code can be used to connect with a single user before it expires. We will automatically generate a new code for you after you make a connection or press 'Copy Link'`,
+      `This QR code can be used to connect with a single user before it expires.`,
     );
   };
 
   const displayManyToManyInfo = () => {
     Alert.alert(
       'Many to Many',
-      'This QR code is designed for group connections. Everyone who scans this code will be prompted to connect with everyone else who scaned this code before the time expires. ',
+      'This QR code is designed for group connections. Everyone who scans this code will be prompted to connect with everyone else who scaned this code.',
     );
   };
 

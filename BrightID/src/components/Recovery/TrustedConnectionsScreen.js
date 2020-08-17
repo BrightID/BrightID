@@ -12,7 +12,6 @@ import {
 import { connect } from 'react-redux';
 import { DEVICE_TYPE, ORANGE } from '@/utils/constants';
 import EmptyList from '@/components/Helpers/EmptyList';
-import SearchConnections from '../Connections/SearchConnections';
 import TrustedConnectionCard from './TrustedConnectionCard';
 import { setTrustedConnections } from './helpers';
 
@@ -69,7 +68,6 @@ class TrustedConnectionsScreen extends React.Component<Props> {
   };
 
   render() {
-    const { navigation } = this.props;
     const connections = this.filterConnections();
 
     return (

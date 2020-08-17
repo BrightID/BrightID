@@ -193,9 +193,9 @@ class BackupScreen extends React.Component<Props, State> {
                 </Text>
                 <Spinner
                   isVisible={true}
-                  size={97}
+                  size={DEVICE_LARGE ? 80 : 65}
                   type="Wave"
-                  color="#4990e2"
+                  color="#333"
                 />
               </View>
             )}

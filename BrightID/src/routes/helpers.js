@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { navigate } from '@/NavigationService';
 import { ORANGE, DEVICE_IOS, DEVICE_LARGE } from '@/utils/constants';
@@ -8,7 +8,7 @@ import backArrow from '@/static/back_arrow_white.svg';
 export const headerTitleStyle = {
   fontFamily: 'Poppins',
   fontWeight: 'bold',
-  fontSize: DEVICE_LARGE ? 20 : 18,
+  fontSize: DEVICE_LARGE ? 20 : 16,
   color: '#fff',
 };
 
@@ -26,13 +26,14 @@ export const headerOptions = {
   headerTitleAlign: 'left',
   headerBackTitleVisible: false,
   headerBackImage: () => (
-    <SvgXml
-      height={DEVICE_LARGE ? '22' : '20'}
-      xml={backArrow}
+    <View
       style={{
-        marginLeft: DEVICE_IOS ? 20 : 10,
+        width: DEVICE_LARGE ? 60 : 50,
+        alignItems: 'center',
       }}
-    />
+    >
+      <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
+    </View>
   ),
 };
 

@@ -22,14 +22,8 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { DEVICE_LARGE, DEVICE_IOS, ORANGE } from '@/utils/constants';
 import qricon from '@/static/qr_icon_white.svg';
-import {
-  channel_types,
-  selectAllChannels,
-} from '@/components/NewConnectionsScreens/channelSlice';
-import {
-  pendingConnection_states,
-  selectAllUnconfirmedConnections,
-} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+import { channel_types } from '@/components/NewConnectionsScreens/channelSlice';
+import { selectAllPendingConnectionsByChannelId } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import { decodeChannelQrString } from '@/utils/channels';
 import { joinChannel } from '@/components/NewConnectionsScreens/actions/channelThunks';
 import { RNCamera } from './RNCameraProvider';
@@ -52,6 +46,14 @@ function validQrString(qrString: string) {
 
 const Container = DEVICE_IOS ? SafeAreaView : View;
 
+const NotAuthorizedView = () => (
+  <View style={styles.cameraPreview}>
+    <Text style={{ fontFamily: 'Poppins', fontWeight: '500', color: '#aaa' }}>
+      Camera not Authorized
+    </Text>
+  </View>
+);
+
 export const ScanCodeScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
@@ -59,7 +61,16 @@ export const ScanCodeScreen = () => {
   const [scanned, setScanned] = useState(false);
   const [channel, setChannel] = useState(null);
   const name = useSelector((state) => state.user.name);
-  const pendingConnections = useSelector(selectAllUnconfirmedConnections);
+
+  const pendingConnectionSizeForChannel = useSelector((state) => {
+    return selectAllPendingConnectionsByChannelId(state, channel?.id)?.length;
+  });
+
+  console.log(
+    'pendingConnectionSizeForChannel',
+    pendingConnectionSizeForChannel,
+  );
+  console.log('channel', channel);
 
   useFocusEffect(
     useCallback(() => {
@@ -69,12 +80,16 @@ export const ScanCodeScreen = () => {
   );
 
   useEffect(() => {
-    if (channel && navigation.isFocused()) {
+    if (
+      channel &&
+      pendingConnectionSizeForChannel > 0 &&
+      navigation.isFocused()
+    ) {
       channel.type === channel_types.SINGLE
         ? navigation.navigate('PendingConnections')
         : navigation.navigate('GroupConnection', { channel });
     }
-  }, [pendingConnections, navigation]);
+  }, [channel, pendingConnectionSizeForChannel, navigation]);
 
   const handleBarCodeRead = async ({ data }: string) => {
     if (!data) return;
@@ -128,34 +143,39 @@ export const ScanCodeScreen = () => {
                   buttonPositive: 'Ok',
                   buttonNegative: 'Cancel',
                 }}
+                notAuthorizedView={<NotAuthorizedView />}
               >
                 <BarcodeMask
                   edgeColor={ORANGE}
                   animatedLineColor={ORANGE}
-                  width={230}
-                  height={230}
+                  width={DEVICE_LARGE ? 230 : 190}
+                  height={DEVICE_LARGE ? 230 : 190}
                   edgeRadius={5}
-                  edgeBorderWidth={3}
-                  edgeHeight={30}
-                  edgeWidth={30}
+                  edgeBorderWidth={DEVICE_LARGE ? 3 : 2}
+                  edgeHeight={DEVICE_LARGE ? 30 : 25}
+                  edgeWidth={DEVICE_LARGE ? 30 : 25}
                 />
               </RNCamera>
             </View>
           </>
         ) : (
-          <View style={styles.cameraPreview}>
-            <Text style={styles.waitingText}>Downloading Connection Data</Text>
-            <Spinner
-              isVisible={true}
-              size={60}
-              type="ThreeBounce"
-              color={ORANGE}
-            />
+          <View style={styles.cameraContainer} testID="CameraContainer">
+            <View style={styles.downloadingDataContainer}>
+              <Text style={styles.waitingText}>
+                Downloading Connection Data
+              </Text>
+              <Spinner
+                isVisible={true}
+                size={DEVICE_LARGE ? 65 : 52}
+                type="ThreeBounce"
+                color={ORANGE}
+              />
+            </View>
           </View>
         )}
 
         <View style={styles.bottomContainer}>
-          {pendingConnections.length < 1 ? (
+          {pendingConnectionSizeForChannel < 1 ? (
             <>
               <Text style={styles.infoBottomText}>Or you can also...</Text>
               <TouchableOpacity
@@ -176,12 +196,12 @@ export const ScanCodeScreen = () => {
           ) : (
             <>
               <Text style={styles.infoBottomText}>
-                You have {pendingConnections.length} pending connection
-                {pendingConnections.length > 1 ? 's' : ''}...
+                You have {pendingConnectionSizeForChannel} pending connection
+                {pendingConnectionSizeForChannel > 1 ? 's' : ''}...
               </Text>
               <TouchableOpacity
                 testID="ScanCodeToPendingConnectionsBtn"
-                style={styles.confirmConnectionsButton}
+                style={styles.verifyConnectionsButton}
                 onPress={() => {
                   navigation.navigate('PendingConnections');
                 }}
@@ -191,7 +211,7 @@ export const ScanCodeScreen = () => {
                   size={DEVICE_LARGE ? 32 : 26}
                   color={ORANGE}
                 />
-                <Text style={styles.confirmConnectionsText}>
+                <Text style={styles.verifyConnectionsText}>
                   Confirm Connections
                 </Text>
               </TouchableOpacity>
@@ -224,8 +244,9 @@ const styles = StyleSheet.create({
   },
   infoTopContainer: {
     width: '100%',
-    justifyContent: 'center',
-    flexGrow: 1,
+    justifyContent: 'flex-start',
+    flexGrow: 0.6,
+    paddingTop: DEVICE_LARGE ? 40 : 25,
   },
   infoTopText: {
     fontFamily: 'Poppins',
@@ -239,14 +260,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
-    // borderWidth: 1,
   },
   cameraPreview: {
     flex: 0,
     overflow: 'hidden',
-    width: 280,
-
-    height: 280,
+    width: DEVICE_LARGE ? 280 : 230,
+    height: DEVICE_LARGE ? 280 : 230,
     aspectRatio: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -264,7 +283,7 @@ const styles = StyleSheet.create({
     height: DEVICE_LARGE ? 42 : 36,
     backgroundColor: ORANGE,
     borderRadius: 60,
-    width: DEVICE_LARGE ? 260 : 210,
+    width: DEVICE_LARGE ? 240 : 200,
     marginBottom: 10,
   },
   showQrText: {
@@ -278,19 +297,19 @@ const styles = StyleSheet.create({
     marginTop: 2,
     marginRight: 4,
   },
-  confirmConnectionsButton: {
+  verifyConnectionsButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     height: DEVICE_LARGE ? 42 : 36,
     backgroundColor: '#fff',
     borderRadius: 60,
-    width: DEVICE_LARGE ? 260 : 210,
+    width: DEVICE_LARGE ? 240 : 200,
     marginBottom: 36,
     borderWidth: 2,
     borderColor: ORANGE,
   },
-  confirmConnectionsText: {
+  verifyConnectionsText: {
     fontFamily: 'Poppins',
     fontWeight: 'bold',
     fontSize: DEVICE_LARGE ? 14 : 12,
@@ -299,12 +318,19 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     alignItems: 'center',
+    minHeight: 100,
   },
   waitingText: {
     fontFamily: 'Poppins',
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#333',
+  },
+  downloadingDataContainer: {
+    width: '100%',
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 export default ScanCodeScreen;
