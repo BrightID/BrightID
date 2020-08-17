@@ -16,6 +16,7 @@ import {
   TouchableOpacity,
   View,
   StatusBar,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import {
@@ -194,16 +195,25 @@ export const PreviewConnection = (props) => {
         <Text style={styles.questionText}>Connect with?</Text>
       </View>
       <View style={styles.userContainer}>
-        <Image
-          source={{ uri: pendingConnection.photo }}
-          style={styles.photo}
-          resizeMode="cover"
-          onError={(e) => {
-            console.log(e);
+        <TouchableWithoutFeedback
+          onPress={() => {
+            navigation.navigate('FullScreenPhoto', {
+              photo: pendingConnection.photo,
+              base64: true,
+            });
           }}
-          accessible={true}
-          accessibilityLabel="user photo"
-        />
+        >
+          <Image
+            source={{ uri: pendingConnection.photo }}
+            style={styles.photo}
+            resizeMode="cover"
+            onError={(e) => {
+              console.log(e);
+            }}
+            accessible={true}
+            accessibilityLabel="user photo"
+          />
+        </TouchableWithoutFeedback>
         <Text style={styles.connectName}>
           {pendingConnection.name}
           {pendingConnection.flagged && (

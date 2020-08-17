@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -135,17 +136,26 @@ export const GroupConnectionScreen = () => {
                 />
               </Svg>
             )}
-            <Image
-              key={pc.id}
-              style={[
-                styles.connectionBubble,
-                {
-                  left: bubbleCoords[index]?.left,
-                  top: bubbleCoords[index]?.top,
-                },
-              ]}
-              source={{ uri: pc.photo }}
-            />
+            <TouchableWithoutFeedback
+              onPress={() => {
+                navigation.navigate('FullScreenPhoto', {
+                  photo: pc.photo,
+                  base64: true,
+                });
+              }}
+            >
+              <Image
+                key={pc.id}
+                style={[
+                  styles.connectionBubble,
+                  {
+                    left: bubbleCoords[index]?.left,
+                    top: bubbleCoords[index]?.top,
+                  },
+                ]}
+                source={{ uri: pc.photo }}
+              />
+            </TouchableWithoutFeedback>
           </>
         ))
       : null;
@@ -202,7 +212,20 @@ export const GroupConnectionScreen = () => {
         ]}
       />
       {initiator?.photo && (
-        <Image style={styles.groupFounder} source={{ uri: initiator?.photo }} />
+        <TouchableWithoutFeedback
+          // style={styles.cancelButton}
+          onPress={() => {
+            navigation.navigate('FullScreenPhoto', {
+              photo: initiator.photo,
+              base64: true,
+            });
+          }}
+        >
+          <Image
+            style={styles.groupFounder}
+            source={{ uri: initiator.photo }}
+          />
+        </TouchableWithoutFeedback>
       )}
 
       <GroupConnectionBubbles />

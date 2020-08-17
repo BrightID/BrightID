@@ -107,7 +107,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     <ConnectionCard
       actionSheet={this.actionSheet}
       onRemove={this.handleRemoveConnection}
-      // eslint-disable-next-line react/jsx-props-no-spreading
+      navigation={this.props.navigation}
       {...item}
     />
   );
