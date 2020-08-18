@@ -255,11 +255,12 @@ export const selectAllUnconfirmedConnections = createSelector(
     ),
 );
 
-export const selectAllPendingConnectionsByChannelId = createSelector(
+// uses channelId's to search for users
+export const selectAllPendingConnectionsByChannelIds = createSelector(
   selectAllUnconfirmedConnections,
-  (_, channelId) => channelId,
-  (pendingConnections, channelId) =>
-    pendingConnections.filter((pc) => pc.channelId === channelId),
+  (_, channelIds: string[]) => channelIds,
+  (pendingConnections, channelIds) =>
+    pendingConnections.filter((pc) => channelIds.includes(pc.channelId)),
 );
 
 // export actions

@@ -1,6 +1,10 @@
 // @flow
 
-import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
+import {
+  createSelector,
+  createSlice,
+  createEntityAdapter,
+} from '@reduxjs/toolkit';
 
 /*
 
@@ -27,11 +31,15 @@ export const channel_types = {
   SINGLE: 'SINGLE',
 };
 
+export type ChannelType = $Keys<typeof channel_types>;
+
 export const channel_states = {
   OPEN: 'OPEN',
   CLOSED: 'CLOSED',
   BACKGROUND: 'BACKGROUND',
 };
+
+export type ChannelState = $Keys<typeof channel_states>;
 
 export const channelsAdapter = createEntityAdapter();
 
@@ -53,11 +61,11 @@ const channelSlice = createSlice({
     addChannel: channelsAdapter.addOne,
     updateChannel: channelsAdapter.updateOne,
     closeChannel(state, action) {
-      const channelId = action.payload;
+      const { channelId, background } = action.payload;
       state = channelsAdapter.updateOne(state, {
         id: channelId,
         changes: {
-          state: channel_states.CLOSED,
+          state: background ? channel_states.BACKGROUND : channel_states.CLOSED,
         },
       });
       if (state.myChannelIds[channel_types.SINGLE] === channelId)
@@ -102,6 +110,28 @@ export const {
   selectById: selectChannelById,
   selectAll: selectAllChannels,
 } = channelsAdapter.getSelectors((state) => state.channels);
+
+// additional selectors
+export const selectAllActiveChannelIds = createSelector(
+  selectAllChannels,
+  (_, type: ChannelType) => type,
+  (channels, type) =>
+    channels.filter((pc) => pc.type === type).map((pc) => pc.id),
+);
+
+export const selectAllActiveChannelIdsByType = createSelector(
+  selectAllChannels,
+  (_, type: ChannelType) => type,
+  (channels, type) =>
+    channels
+      .filter(
+        (pc) =>
+          pc.type === type &&
+          (pc.state === channel_states.OPEN ||
+            pc.state === channel_states.BACKGROUND),
+      )
+      .map((pc) => pc.id),
+);
 
 // Export reducer
 export default channelSlice.reducer;

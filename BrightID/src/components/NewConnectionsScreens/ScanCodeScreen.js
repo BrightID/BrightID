@@ -23,7 +23,7 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE, DEVICE_IOS, ORANGE } from '@/utils/constants';
 import qricon from '@/static/qr_icon_white.svg';
 import { channel_types } from '@/components/NewConnectionsScreens/channelSlice';
-import { selectAllPendingConnectionsByChannelId } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+import { selectAllPendingConnectionsByChannelIds } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import { decodeChannelQrString } from '@/utils/channels';
 import { joinChannel } from '@/components/NewConnectionsScreens/actions/channelThunks';
 import { RNCamera } from './RNCameraProvider';
@@ -63,7 +63,7 @@ export const ScanCodeScreen = () => {
   const name = useSelector((state) => state.user.name);
 
   const pendingConnectionSizeForChannel = useSelector((state) => {
-    return selectAllPendingConnectionsByChannelId(state, channel?.id)?.length;
+    return selectAllPendingConnectionsByChannelIds(state, [channel?.id]).length;
   });
 
   console.log(

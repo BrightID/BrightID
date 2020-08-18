@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
   TextInput,
 } from 'react-native';
@@ -147,13 +148,14 @@ export const HomeScreen = (props) => {
                 blurOnSubmit={true}
               />
             ) : (
-              <Text
-                testID="EditNameBtn"
-                style={styles.name}
+              <TouchableWithoutFeedback
                 onPress={() => setIsEditing(true)}
+                accessibilityLabel="edit name"
               >
-                {name}
-              </Text>
+                <Text testID="EditNameBtn" style={styles.name}>
+                  {name}
+                </Text>
+              </TouchableWithoutFeedback>
             )}
             {verified && (
               <SvgXml
