@@ -18,7 +18,7 @@ import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
 const X_TRANSFORM = DEVICE_LARGE ? 45 : 40;
 const ANIMATION_DURATION = 150;
 
-const GroupSwitch = ({ value, onValueChange }) => {
+const ChannelSwitch = ({ value, onValueChange }) => {
   // const dispatch = useDispatch();
 
   const toggleAnim = useRef(new Animated.Value(value ? 0 : X_TRANSFORM))
@@ -47,7 +47,7 @@ const GroupSwitch = ({ value, onValueChange }) => {
     });
   };
 
-  console.log('rendering group switch');
+  console.log('rendering channel switch');
 
   return (
     <TouchableWithoutFeedback onPress={getPidded}>
@@ -139,4 +139,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GroupSwitch;
+export default ChannelSwitch;

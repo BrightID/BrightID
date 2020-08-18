@@ -66,12 +66,7 @@ export const ScanCodeScreen = () => {
     return selectAllPendingConnectionsByChannelIds(state, [channel?.id]).length;
   });
 
-  console.log(
-    'pendingConnectionSizeForChannel',
-    pendingConnectionSizeForChannel,
-  );
-  console.log('channel', channel);
-
+  // always show scanner when navigating to this page
   useFocusEffect(
     useCallback(() => {
       setScanned(false);
@@ -79,6 +74,7 @@ export const ScanCodeScreen = () => {
     }, []),
   );
 
+  // navigate to next page if channel has pending connections
   useEffect(() => {
     if (
       channel &&

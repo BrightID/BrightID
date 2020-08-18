@@ -22,7 +22,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import GroupSwitch from '@/components/Helpers/GroupSwitch';
+import ChannelSwitch from '@/components/Helpers/ChannelSwitch';
 import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
 import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
@@ -50,6 +50,8 @@ import { createChannel } from '@/components/NewConnectionsScreens/actions/channe
  */
 
 const Container = DEVICE_IOS ? SafeAreaView : View;
+
+let count = 0;
 
 const Timer = () => {
   const navigation = useNavigation();
@@ -92,16 +94,19 @@ const Timer = () => {
 export const MyCodeScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
+  // GROUP / SINGLE
   const displayChannelType = useSelector(
     (state) => state.channels.displayChannelType,
   );
-
+  // current channel displayed by QRCode
   const myChannel = useSelector(
     (state) =>
       selectChannelById(state, state.channels.myChannelIds[displayChannelType]),
     shallowEqual,
   );
 
+  // All channels with current displayChannelType actively polling profile service
   const activeChannelIds = useSelector((state) =>
     selectAllActiveChannelIdsByType(state, displayChannelType),
   );
@@ -129,31 +134,33 @@ export const MyCodeScreen = () => {
 
   // create QRCode from channel data
   useEffect(() => {
-    if (myChannel && myChannel.state === channel_states.OPEN && !qrsvg) {
-      console.log(
-        `Creating QRCode: profileId ${myChannel.myProfileId} channel ${myChannel.id}`,
-      );
+    if (myChannel && myChannel.state === channel_states.OPEN) {
       const newQrString = encodeChannelQrString(myChannel);
-      setQrString(newQrString);
-      qrCodeToSvg(newQrString, (qrsvg) => setQrsvg(qrsvg));
+      // do not re-render svg if we already have the string
+      if (newQrString !== qrString) {
+        console.log(
+          `Creating QRCode: profileId ${myChannel.myProfileId} channel ${myChannel.id}`,
+        );
+        setQrString(newQrString);
+        qrCodeToSvg(newQrString, (qrsvg) => setQrsvg(qrsvg));
+      }
     } else if (!myChannel || myChannel?.state !== channel_states.OPEN) {
       setQrString('');
       setQrsvg('');
     }
-  }, [myChannel, qrsvg]);
+  }, [myChannel, qrString]);
 
   // Navigate to next screen if SINGLE channel
   useEffect(() => {
     if (displayChannelType === channel_types.SINGLE) {
-      // If i created a 1:1 channel and there is a pending connection in UNCONFIRMED state -> directly open PendingonnectionScreen.
-      // there should be only one connection
-
+      // pendingConnectionSize for ALL active channels
       if (pendingConnectionSize > 0) {
         navigation.navigate('PendingConnections');
       }
     }
   }, [displayChannelType, navigation, pendingConnectionSize, myChannel]);
 
+  // dev button
   useLayoutEffect(() => {
     if (__DEV__ && myChannel?.state === channel_states.OPEN) {
       // $FlowFixMe
@@ -171,7 +178,8 @@ export const MyCodeScreen = () => {
     }
   }, [myChannel, navigation]);
 
-  const toggleGroup = () => {
+  // when
+  const toggleChannelType = () => {
     // toggle switch
     dispatch(
       setDisplayChannelType(
@@ -180,9 +188,6 @@ export const MyCodeScreen = () => {
           : channel_types.SINGLE,
       ),
     );
-    // reset qrCode
-    setQrString('');
-    setQrsvg('');
   };
 
   const copyQr = () => {
@@ -271,8 +276,8 @@ export const MyCodeScreen = () => {
     <>
       <View style={styles.orangeTop} />
       <Container style={styles.container}>
-        <GroupSwitch
-          onValueChange={toggleGroup}
+        <ChannelSwitch
+          onValueChange={toggleChannelType}
           value={displayChannelType === channel_types.SINGLE}
         />
         <View style={styles.infoTopContainer}>
