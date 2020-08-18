@@ -156,9 +156,17 @@ export const MyCodeScreen = () => {
       // pendingConnectionSize for ALL active channels
       if (pendingConnectionSize > 0) {
         navigation.navigate('PendingConnections');
+        // close channel to prevent navigation loop
+        dispatch(closeChannel({ channelId: myChannel?.id, background: false }));
       }
     }
-  }, [displayChannelType, navigation, pendingConnectionSize, myChannel]);
+  }, [
+    displayChannelType,
+    dispatch,
+    navigation,
+    pendingConnectionSize,
+    myChannel,
+  ]);
 
   // dev button
   useLayoutEffect(() => {

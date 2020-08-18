@@ -19,10 +19,12 @@ import BarcodeMask from 'react-native-barcode-mask';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import { DEVICE_LARGE, DEVICE_IOS, ORANGE } from '@/utils/constants';
 import qricon from '@/static/qr_icon_white.svg';
-import { channel_types } from '@/components/NewConnectionsScreens/channelSlice';
+import {
+  channel_types,
+  closeChannel,
+} from '@/components/NewConnectionsScreens/channelSlice';
 import { selectAllPendingConnectionsByChannelIds } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import { decodeChannelQrString } from '@/utils/channels';
 import { joinChannel } from '@/components/NewConnectionsScreens/actions/channelThunks';
@@ -81,11 +83,15 @@ export const ScanCodeScreen = () => {
       pendingConnectionSizeForChannel > 0 &&
       navigation.isFocused()
     ) {
-      channel.type === channel_types.SINGLE
-        ? navigation.navigate('PendingConnections')
-        : navigation.navigate('GroupConnection', { channel });
+      if (channel.type === channel_types.SINGLE) {
+        navigation.navigate('PendingConnections');
+        // close single channels to prevent navigation loop
+        dispatch(closeChannel({ channelId: channel.id, background: false }));
+      } else {
+        navigation.navigate('GroupConnection', { channel });
+      }
     }
-  }, [channel, pendingConnectionSizeForChannel, navigation]);
+  }, [channel, pendingConnectionSizeForChannel, navigation, dispatch]);
 
   const handleBarCodeRead = async ({ data }: string) => {
     if (!data) return;

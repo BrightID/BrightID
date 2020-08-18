@@ -253,21 +253,23 @@ export const PreviewConnection = (props) => {
 
 export const PendingConnectionsScreen = () => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
   const carouselRef = useRef(null);
 
   // we want to watch for all changes to pending connections
-  const pendingConnections =
-    useSelector((state) => {
-      return selectAllUnconfirmedConnections(state);
-    }) ?? [];
+  const pendingConnections = useSelector((state) => {
+    return selectAllUnconfirmedConnections(state);
+  });
 
+  // total length of all channels
+  // TODO - change this to group channels
   const channelsTotal = useSelector((state) => state.channels.ids.length);
 
+  // pending connections to display
   const [pendingConnectionsToDisplay, setPendingConnectionsDisplay] = useState(
     [],
   );
 
+  // we only re-render the list when the user reaches the end
   const [readyToRender, setReadyToRender] = useState(true);
 
   const [loading, setLoading] = useState(true);
@@ -300,7 +302,7 @@ export const PendingConnectionsScreen = () => {
      * This will be called for the following reasons:
      * first mount
      * after snapping to last pending connection in the list
-     * if there is only one connectionsToDisplay and  useSelector triggers a re-render
+     * if there is only one connectionsToDisplay and useSelector triggers a re-render
      */
     //
     if (
@@ -328,6 +330,7 @@ export const PendingConnectionsScreen = () => {
   const navHome = () => {
     navigation.navigate('Home');
   };
+
   // return home if there are no channels
   useEffect(() => {
     if (navigation.isFocused() && channelsTotal < 1) {
