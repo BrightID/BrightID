@@ -157,7 +157,7 @@ class RestoreScreen extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: 60,
     width: '100%',
     zIndex: 1,
   },

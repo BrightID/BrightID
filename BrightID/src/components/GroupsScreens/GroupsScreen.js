@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   RefreshControl,
   Text,
+  StatusBar,
 } from 'react-native';
 import { connect } from 'react-redux';
 import fetchUserInfo from '@/actions/fetchUserInfo';
@@ -71,6 +72,11 @@ export class GroupsScreen extends React.Component<Props, State> {
 
     return (
       <>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor={ORANGE}
+          animated={true}
+        />
         <View style={styles.orangeTop} />
         <View style={styles.container} testID="groupsScreen">
           <View style={styles.mainContainer}>
@@ -117,7 +123,7 @@ export class GroupsScreen extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: 60,
     width: '100%',
     zIndex: 1,
   },

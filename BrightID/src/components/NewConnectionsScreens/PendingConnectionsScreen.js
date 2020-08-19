@@ -177,12 +177,6 @@ export const PreviewConnection = (props) => {
   const navigation = useNavigation();
   return (
     <View style={styles.previewContainer} testID="previewConnectionScreen">
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor="#fff"
-        translucent={false}
-        animated={true}
-      />
       <TouchableOpacity
         style={styles.cancelButton}
         onPress={() => {
@@ -275,6 +269,9 @@ export const PendingConnectionsScreen = () => {
   const [loading, setLoading] = useState(true);
 
   const [lastChannelType, setLastChannelType] = useState(channel_types.GROUP);
+
+  // white status bar hook
+  // useWhiteStatusBar();
 
   useFocusEffect(
     useCallback(() => {
@@ -439,6 +436,8 @@ export const PendingConnectionsScreen = () => {
 
   return (
     <SafeAreaView style={[styles.container]}>
+      barStyle="dark-content" backgroundColor="#fff" animated={true}
+      />
       {pendingConnectionsToDisplay.length ? (
         PendingConnectionList
       ) : (

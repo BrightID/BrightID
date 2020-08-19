@@ -1,7 +1,14 @@
 // @flow
 
 import * as React from 'react';
-import { Linking, StyleSheet, View, FlatList, Text } from 'react-native';
+import {
+  Linking,
+  StyleSheet,
+  View,
+  FlatList,
+  Text,
+  StatusBar,
+} from 'react-native';
 import { connect } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
 import EmptyList from '@/components/Helpers/EmptyList';
@@ -76,6 +83,11 @@ export class AppsScreen extends React.Component<Prop, State> {
     const { selectedApp } = this.state;
     return (
       <>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor={ORANGE}
+          animated={true}
+        />
         <View style={styles.orangeTop} />
         <View style={styles.container} testID="appsScreen">
           <this.sponsorLabel />
@@ -112,7 +124,7 @@ export class AppsScreen extends React.Component<Prop, State> {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: 60,
     width: '100%',
     zIndex: 1,
   },

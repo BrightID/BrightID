@@ -8,8 +8,9 @@ import {
   FlatList,
   Text,
   RefreshControl,
+  StatusBar,
 } from 'react-native';
-import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { TabBar, TabView, SceneMap } from 'react-native-tab-view';
 import {
@@ -226,6 +227,11 @@ export const NotificationsScreen = ({ navigation, route }) => {
 
   return (
     <>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={ORANGE}
+        animated={true}
+      />
       <View style={styles.orangeTop} />
       <View style={styles.container}>
         <TabView

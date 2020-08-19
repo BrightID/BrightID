@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
 import {
   createStackNavigator,
   CardStyleInterpolators,
@@ -9,22 +8,14 @@ import ScanCodeScreen from '@/components/NewConnectionsScreens/ScanCodeScreen';
 import SuccessScreen from '@/components/NewConnectionsScreens/SuccessScreen';
 import PendingConnectionsScreen from '@/components/NewConnectionsScreens/PendingConnectionsScreen';
 import GroupConnectionScreen from '@/components/NewConnectionsScreens/GroupConnectionScreen';
-import { NavHome } from './helpers';
+import { NavHome, headerOptions } from './helpers';
 
 const Stack = createStackNavigator();
 
 const newConnectionOptions = {
+  ...headerOptions,
   headerLeft: () => <NavHome />,
   headerBackTitleVisible: false,
-  headerStyle: {
-    height: DEVICE_LARGE ? 80 : 60,
-    backgroundColor: ORANGE,
-    shadowRadius: 0,
-    shadowOffset: {
-      height: 0,
-    },
-    elevation: 0,
-  },
   title: '',
 };
 

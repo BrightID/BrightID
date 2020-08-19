@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  StatusBar,
 } from 'react-native';
 import {
   useFocusEffect,
@@ -119,6 +120,11 @@ export const ScanCodeScreen = () => {
 
   return (
     <>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={ORANGE}
+        animated={true}
+      />
       <View style={styles.orangeTop} />
       <Container style={styles.container}>
         {!scanned ? (
@@ -228,7 +234,7 @@ export const ScanCodeScreen = () => {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: 60,
     width: '100%',
     zIndex: 1,
   },

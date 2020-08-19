@@ -14,6 +14,7 @@ import {
   TouchableOpacity,
   Clipboard,
   Alert,
+  StatusBar,
 } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -50,8 +51,6 @@ import { createChannel } from '@/components/NewConnectionsScreens/actions/channe
  */
 
 const Container = DEVICE_IOS ? SafeAreaView : View;
-
-let count = 0;
 
 const Timer = () => {
   const navigation = useNavigation();
@@ -282,12 +281,19 @@ export const MyCodeScreen = () => {
 
   return (
     <>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={ORANGE}
+        animated={true}
+      />
       <View style={styles.orangeTop} />
       <Container style={styles.container}>
-        <ChannelSwitch
-          onValueChange={toggleChannelType}
-          value={displayChannelType === channel_types.SINGLE}
-        />
+        <View style={styles.infoTopContainer}>
+          <ChannelSwitch
+            onValueChange={toggleChannelType}
+            value={displayChannelType === channel_types.SINGLE}
+          />
+        </View>
         <View style={styles.infoTopContainer}>
           <Text style={styles.infoTopText}>Connection Type: </Text>
           {displayChannelType === channel_types.GROUP ? (
@@ -321,7 +327,7 @@ export const MyCodeScreen = () => {
                 // style={styles.spinner}
                 isVisible={true}
                 size={47}
-                type="FadingCircle"
+                type="FadingCircleAlt"
                 color="#333"
               />
             </View>
@@ -380,7 +386,7 @@ export const MyCodeScreen = () => {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: 60,
     width: '100%',
     zIndex: 1,
   },
@@ -395,15 +401,13 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 58,
     marginTop: -58,
     zIndex: 10,
+    overflow: 'hidden',
   },
   infoTopContainer: {
     width: '100%',
-    flexGrow: 1,
+    flexGrow: 0.6,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingLeft: DEVICE_LARGE ? 50 : 20,
-    paddingRight: DEVICE_LARGE ? 50 : 20,
-    paddingTop: DEVICE_LARGE ? 20 : 10,
   },
   infoTopText: {
     fontFamily: 'Poppins',
