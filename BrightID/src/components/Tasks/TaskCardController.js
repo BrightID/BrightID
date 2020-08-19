@@ -31,6 +31,7 @@ function TaskCardController({ taskId }: TaskCardControllerProps) {
       fulfilled={extendedTask.completed}
       id={extendedTask.id}
       title={extendedTask.title}
+      url={extendedTask.url}
     />
   );
 }

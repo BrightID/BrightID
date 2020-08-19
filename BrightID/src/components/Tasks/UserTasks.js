@@ -1,45 +1,49 @@
 export const UserTasks = {
-  task1: {
-    id: 'task1',
+  create_your_brightid: {
+    id: 'create_your_brightid',
     title: 'Create your BrightID',
     description: 'Complete the Signup process',
     sortValue: 10,
+    url: 'https://brightid.gitbook.io/brightid/#create-your-brightid',
     checkFn(state) {
       return !!state.user.publicKey;
     },
   },
-  task2: {
-    id: 'task2',
+  add_a_picture: {
+    id: 'add_a_picture',
     title: 'Add a picture',
     description: 'Add a picture to your BrightID',
     sortValue: 20,
+    url: 'https://brightid.gitbook.io/brightid/#create-your-brightid',
     checkFn(state) {
       const { filename } = state.user.photo;
       return filename && filename !== '';
     },
   },
-  task3: {
-    id: 'task3',
+  make_first_connection: {
+    id: 'make_first_connection',
     title: 'Make your first connection',
     description: 'Create one confirmed connection',
     sortValue: 30,
+    url: 'https://brightid.gitbook.io/brightid/#making-connections',
     checkFn(state) {
       return state.connections.connections.length > 0;
     },
   },
-  task4: {
-    id: 'task4',
+  make_second_connection: {
+    id: 'make_second_connection',
     title: 'Make your second connection',
     description: 'Create 2 confirmed connections',
     sortValue: 40,
+    url: 'https://brightid.gitbook.io/brightid/#making-connections',
     checkFn(state) {
       return state.connections.connections.length > 1;
     },
   },
-  task5: {
-    id: 'task5',
+  join_group: {
+    id: 'join_group',
     title: 'Join a group',
-    description: 'Be invited to a group where you are not founder',
+    description: 'Be invited to a group',
     sortValue: 50,
     checkFn(state) {
       // is there a group where I am not the founder?
@@ -49,11 +53,12 @@ export const UserTasks = {
       return joinedGroups.length > 0;
     },
   },
-  task6: {
-    id: 'task6',
+  create_group: {
+    id: 'create_group',
     title: 'Create a group',
-    description: 'Successfully create a group with at least 2 founders',
+    description: 'Successfully create a group',
     sortValue: 60,
+    url: 'https://brightid.gitbook.io/brightid/#creating-groups',
     checkFn(state) {
       // is there a group where I am the founder and at least 2 other founders have joined?
       const createdGroups = state.groups.groups.filter(
@@ -63,28 +68,30 @@ export const UserTasks = {
       return createdGroups.length > 0;
     },
   },
-  task7: {
-    id: 'task7',
+  get_verified: {
+    id: 'get_verified',
     title: 'Get verified',
     description: 'Become a verified BrightID identity',
     sortValue: 70,
+    url: 'https://brightid.gitbook.io/brightid/#verify-your-brightid',
     checkFn(state) {
       return state.user.verifications.includes('BrightID');
     },
   },
-  task8: {
-    id: 'task8',
+  enable_social_recovery: {
+    id: 'enable_social_recovery',
     title: 'Enable social recovery',
     description: 'Setup trusted connections to enable social account recovery',
     sortValue: 80,
+    url: 'https://brightid.gitbook.io/brightid/#backup-your-brightid',
     checkFn(state) {
       // Are my trusted connections set up correctly?
       // TODO Not sure if this is the correct condition
       return state.user.backupCompleted;
     },
   },
-  task9: {
-    id: 'task9',
+  link_app: {
+    id: 'link_app',
     title: 'Link an app',
     description: 'Link your brightID to an app context',
     sortValue: 90,

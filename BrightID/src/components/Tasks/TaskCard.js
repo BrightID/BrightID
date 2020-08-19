@@ -1,6 +1,12 @@
 // @flow
 
-import { View, Text, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+} from 'react-native';
 import React from 'react';
 import { DEVICE_TYPE } from '@/utils/constants';
 import { TaskState } from './TaskState';
@@ -10,16 +16,29 @@ type TaskCardProps = {
   title: string,
   description: string,
   fulfilled: boolean,
+  url: ?string,
 };
 
 function TaskCard(props: TaskCardProps) {
-  const { title, description, fulfilled } = props;
+  const { title, description, fulfilled, url } = props;
+
+  const desc = url ? (
+    <TouchableOpacity
+      onPress={() => {
+        Linking.openURL(url);
+      }}
+    >
+      <Text style={styles.linkifiedDescription}>{description}</Text>
+    </TouchableOpacity>
+  ) : (
+    <Text style={styles.description}>{description}</Text>
+  );
 
   return (
     <View style={styles.container}>
       <View style={styles.taskInfo}>
         <Text style={styles.title}>{title}</Text>
-        <Text style={styles.description}>{description}</Text>
+        {desc}
       </View>
       <TaskState complete={fulfilled} />
     </View>
@@ -48,6 +67,10 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: DEVICE_TYPE === 'large' ? 15 : 12,
+  },
+  linkifiedDescription: {
+    fontSize: DEVICE_TYPE === 'large' ? 15 : 12,
+    color: '#2185D0',
   },
 });
 
