@@ -6,7 +6,8 @@ import TaskCard from './TaskCard';
 import { UserTasks } from './UserTasks';
 
 /*
-  Purpose: Combine static Task descriptions with current Task state from Redux
+  Purpose: Setup required data for rendering TaskCard by
+  combining static Task descriptions with current Task state from Redux
  */
 type TaskCardControllerProps = {
   taskId: string,
@@ -18,12 +19,6 @@ function TaskCardController({ taskId }: TaskCardControllerProps) {
     ...storeTask,
     ...UserTasks[taskId],
   };
-
-  /*
-  console.log(
-    `Rendering TaskCardController for Task ${extendedTask.id} (${extendedTask.title})`,
-  );
-*/
 
   return (
     <TaskCard

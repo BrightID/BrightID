@@ -1,11 +1,5 @@
 import * as React from 'react';
-import {
-  Clipboard,
-  Image,
-  TouchableOpacity,
-  View,
-  Linking,
-} from 'react-native';
+import { Image, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { INVITE_ACTIVE, DEVICE_LARGE } from '@/utils/constants';
 import { createSelector } from '@reduxjs/toolkit';
@@ -52,68 +46,40 @@ const NotificationBell = () => {
   const displayBadge = backupPending || invites || pendingConnections;
 
   return (
-    <>
-      <TouchableOpacity
-        style={{ marginRight: 25 }}
-        onPress={() => {
-          navigate('Tasks');
-        }}
-      >
-        <Material
-          name="certificate"
-          size={DEVICE_LARGE ? 28 : 23}
-          color="#000"
+    <TouchableOpacity
+      style={{ marginRight: 25 }}
+      onPress={() => {
+        navigate('Notifications');
+      }}
+    >
+      <Material name="bell" size={DEVICE_LARGE ? 28 : 23} color="#000" />
+      {displayBadge ? (
+        <View
+          style={{
+            backgroundColor: '#ED1B24',
+            width: 9,
+            height: 9,
+            borderRadius: 5,
+            position: 'absolute',
+            top: 5,
+            left: 17,
+          }}
         />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{ marginRight: 25 }}
-        onPress={() => {
-          navigate('Notifications');
-        }}
-      >
-        <Material name="bell" size={DEVICE_LARGE ? 28 : 23} color="#000" />
-        {displayBadge ? (
-          <View
-            style={{
-              backgroundColor: '#ED1B24',
-              width: 9,
-              height: 9,
-              borderRadius: 5,
-              position: 'absolute',
-              top: 5,
-              left: 17,
-            }}
-          />
-        ) : null}
-      </TouchableOpacity>
-    </>
+      ) : null}
+    </TouchableOpacity>
   );
 };
 
-const DeepPasteLink = () => {
-  if (__DEV__) {
-    return (
-      <TouchableOpacity
-        testID="pasteDeeplink"
-        style={{ marginLeft: 10 }}
-        onPress={async () => {
-          let url = await Clipboard.getString();
-          url = url.replace('https://app.brightid.org', 'brightid://');
-          console.log(`Pasted deeplink -> Linking.openURL with ${url}`);
-          await Linking.openURL(url);
-        }}
-      >
-        <Material
-          name="content-paste"
-          size={DEVICE_LARGE ? 28 : 23}
-          color="#000"
-        />
-      </TouchableOpacity>
-    );
-  } else {
-    return null;
-  }
-};
+const AchievementsLink = () => (
+  <TouchableOpacity
+    style={{ marginLeft: 40 }}
+    onPress={() => {
+      navigate('Tasks');
+    }}
+  >
+    <Material name="certificate" size={DEVICE_LARGE ? 31 : 27} color="#000" />
+  </TouchableOpacity>
+);
 
 /** OPTIONS */
 
@@ -127,7 +93,7 @@ const homeScreenOptions = {
       style={{ width: DEVICE_LARGE ? 104 : 85 }}
     />
   ),
-  headerLeft: () => <DeepPasteLink />,
+  headerLeft: () => <AchievementsLink />,
   headerRight: () => <NotificationBell />,
   headerStyle: {
     height: DEVICE_LARGE ? 80 : 70,
@@ -147,13 +113,12 @@ const recoveringConnectionOptions = {
 
 const taskScreenOptions = {
   ...headerOptions,
-  title: 'Tasks and Achievements',
+  title: 'Achievements',
 };
 
 /** SCREENS */
 
 const Stack = createStackNavigator();
-
 
 const Home = () => {
   return (
