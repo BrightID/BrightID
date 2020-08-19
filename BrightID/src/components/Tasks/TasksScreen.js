@@ -8,6 +8,17 @@ import TaskCardController from './TaskCardController';
 import { UserTasks } from './UserTasks';
 import { TasksProgress } from './TasksProgress';
 
+const FlatListItemSeparator = () => {
+  return (
+    <View
+      style={{
+        height: StyleSheet.hairlineWidth,
+        backgroundColor: '#C4C4C4',
+      }}
+    />
+  );
+};
+
 export const TasksScreen = function () {
   const taskIds = useSelector((state: State) =>
     Object.keys(state.tasks).sort(
@@ -35,6 +46,7 @@ export const TasksScreen = function () {
           keyExtractor={(item) => item}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
+          ItemSeparatorComponent={FlatListItemSeparator}
           renderItem={renderItem}
         />
       </View>
@@ -56,6 +68,8 @@ const styles = StyleSheet.create({
     marginTop: -58,
     zIndex: 10,
     overflow: 'hidden',
+    paddingLeft: 42,
+    paddingRight: 18,
   },
 });
 
