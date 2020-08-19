@@ -3,6 +3,7 @@
 import { View, Text, StyleSheet } from 'react-native';
 import React from 'react';
 import { DEVICE_TYPE } from '@/utils/constants';
+import { TaskState } from './TaskState';
 
 type TaskCardProps = {
   id: string,
@@ -20,7 +21,7 @@ function TaskCard(props: TaskCardProps) {
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.description}>{description}</Text>
       </View>
-      <Text style={styles.taskStatus}>{fulfilled ? 'OK' : 'NOK'}</Text>
+      <TaskState complete={fulfilled} />
     </View>
   );
 }
@@ -47,12 +48,6 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: DEVICE_TYPE === 'large' ? 15 : 12,
-  },
-  taskStatus: {
-    borderRadius: 30,
-    width: 30,
-    height: 30,
-    marginRight: 14,
   },
 });
 
