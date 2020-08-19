@@ -19,9 +19,11 @@ function TaskCardController({ taskId }: TaskCardControllerProps) {
     ...UserTasks[taskId],
   };
 
+  /*
   console.log(
     `Rendering TaskCardController for Task ${extendedTask.id} (${extendedTask.title})`,
   );
+*/
 
   return (
     <TaskCard
