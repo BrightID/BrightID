@@ -15,6 +15,7 @@ import {
   DEVICE_LARGE,
   CONNECTIONS_TYPE,
   HEIGHT,
+  DEVICE_IOS,
 } from '@/utils/constants';
 import {
   // channel_states,
@@ -99,9 +100,8 @@ export const NotificationBanner = () => {
           height={DEVICE_LARGE ? 24 : 20}
         />
       )}
-      panResponderEnabled={
-        activeNotification?.type !== CONNECTIONS_TYPE || __DEV__
-      }
+      panResponderEnabled={false}
+      tapToCloseEnabled={true}
     />
   );
 };
