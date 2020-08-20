@@ -280,6 +280,8 @@ export const PendingConnectionsScreen = () => {
 
   const [reRender, setReRender] = useState(true);
 
+  const [activeIndex, setActiveIndex] = useState(0);
+
   // give our app some time to download new connections when we have zero connections pending
   useFocusEffect(
     useCallback(() => {
@@ -323,8 +325,10 @@ export const PendingConnectionsScreen = () => {
   // back handling for android
   useEffect(() => {
     const goBack = () => {
-      carouselRef.current?.snapToPrev();
-      return true;
+      if (carouselRef.current?.currentIndex > 0) {
+        carouselRef.current?.snapToPrev();
+        return true;
+      }
     };
     BackHandler.addEventListener('hardwareBackPress', goBack);
     return () => BackHandler.removeEventListener('hardwareBackPress', goBack);
@@ -365,19 +369,13 @@ export const PendingConnectionsScreen = () => {
         ref={carouselRef}
         data={pendingConnectionsToDisplay}
         renderItem={renderItem}
-        // layout="stack"
-        // layoutCardOffset={pendingConnectionsToDisplay.length}
-        // activeSlideAlignment="start"
+        layout="stack"
+        layoutCardOffset={pendingConnectionsToDisplay.length}
         lockScrollWhileSnapping={true}
         itemWidth={WIDTH * 0.95}
         sliderWidth={WIDTH}
         onSnapToItem={(index) => {
-          // remove all of the confirmed connections when we reach the end of the list
-        }}
-        removeClippedSubviews={true}
-        activeSlideAlignment="start"
-        onLayout={() => {
-          console.log('ON LAYOUT');
+          setActiveIndex(index);
         }}
       />
     );
@@ -452,7 +450,17 @@ export const PendingConnectionsScreen = () => {
         animated={true}
       />
       {pendingConnectionsToDisplay.length ? (
-        PendingConnectionList
+        <>
+          {PendingConnectionList}
+          <Pagination
+            dotsLength={pendingConnectionsToDisplay.length}
+            activeDotIndex={activeIndex}
+            inactiveDotOpacity={0.4}
+            inactiveDotScale={1}
+            carouselRef={carouselRef.current}
+            tappableDots={true}
+          />
+        </>
       ) : (
         <ZeroConnectionsToDisplay />
       )}
