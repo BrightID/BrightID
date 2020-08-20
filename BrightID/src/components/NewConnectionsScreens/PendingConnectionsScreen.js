@@ -46,6 +46,7 @@ import {
 } from '@/components/NewConnectionsScreens/channelSlice';
 import { DEVICE_LARGE, WIDTH, HEIGHT } from '@/utils/constants';
 import backArrow from '@/static/back_arrow_grey.svg';
+import { transduce } from 'ramda';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -65,6 +66,7 @@ const ConfirmationButtons = ({
   carouselRef,
   last,
   setLastChannelType,
+  setReRender,
 }) => {
   const dispatch = useDispatch();
   const pendingConnection = useSelector(
@@ -81,18 +83,27 @@ const ConfirmationButtons = ({
 
   const accept = () => {
     dispatch(confirmPendingConnectionThunk(pendingConnection.id));
-    setLastChannelType(channelType);
-    last
-      ? carouselRef.current?.snapToItem(0)
-      : carouselRef.current?.snapToNext();
+
+    if (last) {
+      carouselRef.current?.snapToItem(0);
+      setReRender(true);
+      setLastChannelType(channelType);
+    } else {
+      carouselRef.current?.snapToNext();
+    }
   };
 
   const reject = () => {
     dispatch(rejectPendingConnection(pendingConnection.id));
     setLastChannelType(channelType);
-    last
-      ? carouselRef.current?.snapToItem(0)
-      : carouselRef.current?.snapToNext();
+
+    if (last) {
+      carouselRef.current?.snapToItem(0);
+      setReRender(true);
+      setLastChannelType(channelType);
+    } else {
+      carouselRef.current?.snapToNext();
+    }
   };
 
   switch (pendingConnection.state) {
@@ -263,20 +274,18 @@ export const PendingConnectionsScreen = () => {
     [],
   );
 
-  // we only re-render the list when the user reaches the end
-  const [readyToRender, setReadyToRender] = useState(true);
-
   const [loading, setLoading] = useState(true);
 
   const [lastChannelType, setLastChannelType] = useState(channel_types.GROUP);
 
-  // white status bar hook
-  // useWhiteStatusBar();
+  const [reRender, setReRender] = useState(true);
 
+  // give our app some time to download new connections when we have zero connections pending
   useFocusEffect(
     useCallback(() => {
       let timeout;
       if (pendingConnections.length === 0) {
+        console.log('SET LOADING TRUE');
         setLoading(true);
         timeout = setTimeout(() => {
           if (lastChannelType === channel_types.SINGLE) {
@@ -294,26 +303,23 @@ export const PendingConnectionsScreen = () => {
     }, [pendingConnections.length, lastChannelType, navigation]),
   );
 
-  useEffect(() => {
-    /**
-     * This will be called for the following reasons:
-     * first mount
-     * after snapping to last pending connection in the list
-     * if there is only one connectionsToDisplay and useSelector triggers a re-render
-     */
-    //
-    if (
-      readyToRender ||
-      pendingConnectionsToDisplay.length <= 1 ||
-      pendingConnections.length === 0
-    ) {
-      const connectionsToDisplay = pendingConnections.filter(isReadyToConfirm);
-      // this will cause the PendingConnectionList to re render
-      setPendingConnectionsDisplay(connectionsToDisplay);
-      setReadyToRender(false);
-    }
-  }, [readyToRender, pendingConnections, pendingConnectionsToDisplay.length]);
+  // this will trigger a re-render of the carousel
+  // causes a glitch in the UI on Android
+  const resetDisplayConnections = useCallback(() => {
+    const connectionsToDisplay = pendingConnections.filter(isReadyToConfirm);
+    // this will cause the PendingConnectionList to re render
+    setPendingConnectionsDisplay(connectionsToDisplay);
+  }, [pendingConnections]);
 
+  // setupList on first render
+  useFocusEffect(
+    useCallback(() => {
+      if (reRender) {
+        resetDisplayConnections();
+        setReRender(false);
+      }
+    }, [reRender, resetDisplayConnections]),
+  );
   // back handling for android
   useEffect(() => {
     const goBack = () => {
@@ -346,6 +352,7 @@ export const PendingConnectionsScreen = () => {
           carouselRef={carouselRef}
           last={index === pendingConnectionsToDisplay.length - 1}
           setLastChannelType={setLastChannelType}
+          setReRender={setReRender}
         />
       );
     };
@@ -357,17 +364,20 @@ export const PendingConnectionsScreen = () => {
         }}
         ref={carouselRef}
         data={pendingConnectionsToDisplay}
-        layoutCardOffset={pendingConnectionsToDisplay.length}
         renderItem={renderItem}
-        layout="stack"
+        // layout="stack"
+        // layoutCardOffset={pendingConnectionsToDisplay.length}
+        // activeSlideAlignment="start"
         lockScrollWhileSnapping={true}
         itemWidth={WIDTH * 0.95}
         sliderWidth={WIDTH}
         onSnapToItem={(index) => {
           // remove all of the confirmed connections when we reach the end of the list
-          if (index === pendingConnectionsToDisplay.length - 1) {
-            setReadyToRender(true);
-          }
+        }}
+        removeClippedSubviews={true}
+        activeSlideAlignment="start"
+        onLayout={() => {
+          console.log('ON LAYOUT');
         }}
       />
     );
@@ -436,7 +446,10 @@ export const PendingConnectionsScreen = () => {
 
   return (
     <SafeAreaView style={[styles.container]}>
-      barStyle="dark-content" backgroundColor="#fff" animated={true}
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="#fff"
+        animated={true}
       />
       {pendingConnectionsToDisplay.length ? (
         PendingConnectionList
