@@ -69,7 +69,7 @@ class RecoveringConnectionScreen extends React.Component<Props> {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 60,
+    height: 70,
     width: '100%',
     zIndex: 1,
   },
