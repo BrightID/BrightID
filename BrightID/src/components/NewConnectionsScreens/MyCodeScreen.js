@@ -386,7 +386,7 @@ export const MyCodeScreen = () => {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: DEVICE_LARGE ? 70 : 65,
     width: '100%',
     zIndex: 1,
   },
@@ -418,9 +418,10 @@ const styles = StyleSheet.create({
   },
   qrCodeContainer: {
     width: '100%',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     flexGrow: 2,
+    paddingTop: DEVICE_LARGE ? 35 : 20,
   },
   copyContainer: {
     flexDirection: 'row',

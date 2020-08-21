@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import store from '@/store';
 import emitter from '@/emitter';
 import { clearNewGroupCoFounders } from '@/actions';
-import { DEVICE_TYPE, ORANGE } from '@/utils/constants';
+import { DEVICE_TYPE, ORANGE, DEVICE_LARGE } from '@/utils/constants';
 import Spinner from 'react-native-spinkit';
 import { createNewGroup } from '../actions';
 import NewGroupCard from './NewGroupCard';
@@ -152,7 +152,7 @@ export class NewGroupScreen extends React.Component<Props> {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: DEVICE_LARGE ? 70 : 65,
     width: '100%',
     zIndex: 1,
   },

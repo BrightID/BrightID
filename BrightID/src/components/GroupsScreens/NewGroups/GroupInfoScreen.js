@@ -12,7 +12,12 @@ import {
 import { connect } from 'react-redux';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { chooseImage } from '@/utils/images';
-import { DEVICE_TYPE, DEVICE_OS, ORANGE } from '@/utils/constants';
+import {
+  DEVICE_TYPE,
+  DEVICE_OS,
+  ORANGE,
+  DEVICE_LARGE,
+} from '@/utils/constants';
 
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
@@ -154,7 +159,7 @@ export class GroupInfoScreen extends React.Component<Props> {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: DEVICE_LARGE ? 70 : 65,
     width: '100%',
     zIndex: 1,
   },
