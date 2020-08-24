@@ -84,8 +84,8 @@ const DeepPasteLink = () => {
         onPress={async () => {
           let url = await Clipboard.getString();
           url = url.replace('https://app.brightid.org', 'brightid://');
-          console.log(`Linking.openURL with ${url}`);
-          Linking.openURL(url);
+          console.log(`Pasted deeplink -> Linking.openURL with ${url}`);
+          await Linking.openURL(url);
         }}
       >
         <Material

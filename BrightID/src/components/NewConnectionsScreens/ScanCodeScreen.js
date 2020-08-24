@@ -61,8 +61,8 @@ export const ScanCodeScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [scanned, setScanned] = useState(false);
   const [channel, setChannel] = useState(null);
+  const [qrData, setQrData] = useState(undefined);
   const name = useSelector((state) => state.user.name);
 
   const pendingConnectionSizeForChannel = useSelector((state) => {
@@ -72,7 +72,7 @@ export const ScanCodeScreen = () => {
   // always show scanner when navigating to this page
   useFocusEffect(
     useCallback(() => {
-      setScanned(false);
+      setQrData(undefined);
       setChannel(null);
     }, []),
   );
@@ -94,29 +94,42 @@ export const ScanCodeScreen = () => {
     }
   }, [channel, pendingConnectionSizeForChannel, navigation, dispatch]);
 
-  const handleBarCodeRead = async ({ data }: string) => {
-    if (!data) return;
-
-    setScanned(true);
-
-    if (data.startsWith('Recovery_')) {
-      navigation.navigate('RecoveringConnection', {
-        recoveryRequestCode: data,
-      });
-    } else if (data.startsWith('brightid://')) {
-      await Linking.openURL(data);
-    } else if (validQrString(data)) {
-      const channel = await decodeChannelQrString(data);
-      await dispatch(joinChannel(channel));
-      setChannel(channel);
-    }
-  };
-
   // handle deep links
-  if (route.params?.qrcode && !scanned) {
-    // $FlowFixMe
-    handleBarCodeRead({ data: route.params.qrcode });
-  }
+  useEffect(() => {
+    if (route.params?.qrcode) {
+      console.log(`Got qrcode ${route.params.qrcode} from Deeplink`);
+      setQrData(route.params.qrcode);
+    }
+  }, [route.params, setQrData]);
+
+  // handle qrcode data
+  useEffect(() => {
+    const handleQrData = async (qrData) => {
+      if (qrData.startsWith('Recovery_')) {
+        navigation.navigate('RecoveringConnection', {
+          recoveryRequestCode: qrData,
+        });
+      } else if (qrData.startsWith('brightid://')) {
+        console.log(`handleQrData: calling Linking.openURL() with ${qrData}`);
+        await Linking.openURL(qrData);
+      } else if (validQrString(qrData)) {
+        const channel = await decodeChannelQrString(qrData);
+        console.log(
+          `handleQrData: valid qrdata, joining channel ${channel.id}`,
+        );
+        await dispatch(joinChannel(channel));
+        setChannel(channel);
+      }
+    };
+    if (qrData) {
+      handleQrData(qrData);
+    }
+  }, [dispatch, navigation, qrData]);
+
+  const handleBarCodeRead = ({ data }: string) => {
+    console.log(`Scanned QRCode: ${data}`);
+    setQrData(data);
+  };
 
   return (
     <>
@@ -127,7 +140,7 @@ export const ScanCodeScreen = () => {
       />
       <View style={styles.orangeTop} />
       <Container style={styles.container}>
-        {!scanned ? (
+        {!qrData ? (
           <>
             <View style={styles.infoTopContainer}>
               <Text style={styles.infoTopText}>
