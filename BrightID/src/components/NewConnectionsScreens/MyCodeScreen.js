@@ -15,6 +15,7 @@ import {
   Clipboard,
   Alert,
   StatusBar,
+  InteractionManager,
 } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -70,7 +71,7 @@ const Timer = () => {
   };
 
   // start local timer to display countdown
-  useInterval(timerTick, 100);
+  useInterval(timerTick, 1000);
   const displayTime = () => {
     const minutes = Math.floor(countdown / 60000);
     let seconds = Math.trunc((countdown % 60000) / 1000);
@@ -126,7 +127,9 @@ export const MyCodeScreen = () => {
     useCallback(() => {
       if (!navigation.isFocused()) return;
       if (!myChannel || myChannel?.state !== channel_states.OPEN) {
-        dispatch(createChannel(displayChannelType));
+        InteractionManager.runAfterInteractions(() => {
+          dispatch(createChannel(displayChannelType));
+        });
       }
     }, [navigation, myChannel, dispatch, displayChannelType]),
   );

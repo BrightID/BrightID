@@ -75,7 +75,7 @@ export const GroupConnectionScreen = () => {
 
   useEffect(() => {
     console.log('in the animation effect');
-    Animated.stagger(1500, [
+    const circleAnim = Animated.stagger(1500, [
       Animated.loop(
         Animated.timing(circleArcOneOpacity, {
           toValue: 1,
@@ -90,8 +90,16 @@ export const GroupConnectionScreen = () => {
           useNativeDriver: true,
         }),
       ),
-    ]).start();
-  }, [circleArcOneOpacity, circleArcTwoOpacity]);
+    ]);
+
+    if (navigation.isFocused()) {
+      circleAnim.start();
+    }
+
+    return () => {
+      circleAnim.stop();
+    };
+  }, [circleArcOneOpacity, circleArcTwoOpacity, navigation]);
   // waiting rings animation
 
   const [bubbleCoords, setBubbleCoords] = useState([]);
@@ -163,7 +171,7 @@ export const GroupConnectionScreen = () => {
 
   console.log('rendering Group Connection Screen');
 
-  return (
+  return navigation.isFocused() ? (
     <SafeAreaView style={styles.container}>
       <StatusBar
         barStyle="dark-content"
@@ -251,7 +259,7 @@ export const GroupConnectionScreen = () => {
         <Text style={styles.confirmConnectionsText}>Confirm Connections</Text>
       </TouchableOpacity>
     </SafeAreaView>
-  );
+  ) : null;
 };
 
 const styles = StyleSheet.create({

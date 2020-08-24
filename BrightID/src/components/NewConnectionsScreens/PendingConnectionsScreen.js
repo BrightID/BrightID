@@ -118,7 +118,7 @@ const ConfirmationButtons = ({
     case pendingConnection_states.REJECTED: {
       return (
         <Text style={styles.waitingText}>
-          {pendingConnection.name} rejected your connection
+          Connection with {pendingConnection.name} has been rejected ...
         </Text>
       );
     }
@@ -164,12 +164,22 @@ const ConfirmationButtons = ({
     case pendingConnection_states.MYSELF: {
       return <Text style={styles.waitingText}>OOPS!!! This is you...</Text>;
     }
-    case pendingConnection_states.EXPIRED:
-    default: {
+    case pendingConnection_states.EXPIRED: {
+      Alert.alert(
+        'Try connecting again...',
+        `The QRCode used to connect has expired...`,
+      );
       return (
         <Text style={styles.waitingText}>
           The QRCode used to connect with {pendingConnection.name} has
           expired... please try connecting again.
+        </Text>
+      );
+    }
+    default: {
+      return (
+        <Text style={styles.waitingText}>
+          Waiting for data from the profile service
         </Text>
       );
     }
@@ -280,14 +290,13 @@ export const PendingConnectionsScreen = () => {
 
   const [reRender, setReRender] = useState(true);
 
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(null);
 
   // give our app some time to download new connections when we have zero connections pending
   useFocusEffect(
     useCallback(() => {
       let timeout;
       if (pendingConnections.length === 0) {
-        console.log('SET LOADING TRUE');
         setLoading(true);
         timeout = setTimeout(() => {
           if (lastChannelType === channel_types.SINGLE) {
@@ -322,6 +331,14 @@ export const PendingConnectionsScreen = () => {
       }
     }, [reRender, resetDisplayConnections]),
   );
+
+  // re-render list if no connections are displayed
+  useEffect(() => {
+    if (pendingConnectionsToDisplay.length === 0 && !reRender) {
+      resetDisplayConnections();
+    }
+  }, [resetDisplayConnections, pendingConnectionsToDisplay.length, reRender]);
+
   // back handling for android
   useEffect(() => {
     const goBack = () => {
@@ -361,6 +378,7 @@ export const PendingConnectionsScreen = () => {
       );
     };
     // console.log('rendering pending connections CAROUSEL');
+
     return (
       <Carousel
         containerCustomStyle={{
@@ -376,6 +394,9 @@ export const PendingConnectionsScreen = () => {
         sliderWidth={WIDTH}
         onSnapToItem={(index) => {
           setActiveIndex(index);
+        }}
+        onLayout={() => {
+          setActiveIndex((prev) => !prev && 0);
         }}
       />
     );
@@ -452,7 +473,18 @@ export const PendingConnectionsScreen = () => {
       {pendingConnectionsToDisplay.length ? (
         <>
           {PendingConnectionList}
+
           <Pagination
+            containerStyle={{
+              maxWidth: '85%',
+              display: 'flex',
+              overflow: 'hidden',
+              flexWrap: 'wrap',
+              justifyContent: 'flex-start',
+            }}
+            dotContainerStyle={{
+              paddingTop: 5,
+            }}
             dotsLength={pendingConnectionsToDisplay.length}
             activeDotIndex={activeIndex}
             inactiveDotOpacity={0.4}
