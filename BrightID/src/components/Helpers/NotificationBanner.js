@@ -14,6 +14,8 @@ import {
   DEVICE_ANDROID,
   DEVICE_LARGE,
   CONNECTIONS_TYPE,
+  HEIGHT,
+  DEVICE_IOS,
 } from '@/utils/constants';
 import {
   // channel_states,
@@ -49,19 +51,16 @@ export const NotificationBanner = () => {
       activeNotification?.message,
     );
 
-    if (DEVICE_ANDROID) {
-      StatusBar.setBackgroundColor('#AFFDD0', true);
-    }
+    // if (DEVICE_ANDROID) {
+    //   StatusBar.setBackgroundColor('#AFFDD0', true);
+    // }
+    // StatusBar.setBarStyle('dark-content', true);
   }, [activeNotification]);
 
   // update default icon
   const icon = icons[activeNotification?.type] ?? misc;
 
   const _onTap = useCallback(() => {
-    if (DEVICE_ANDROID) {
-      StatusBar.setBackgroundColor('#fff', true);
-    }
-
     if (activeNotification?.type === CONNECTIONS_TYPE) {
       navigate('PendingConnections');
     } else {
@@ -70,9 +69,6 @@ export const NotificationBanner = () => {
   }, [activeNotification]);
 
   const _onClose = () => {
-    if (DEVICE_ANDROID) {
-      StatusBar.setBackgroundColor('#fff', true);
-    }
     dispatch(setActiveNotification(null));
   };
 
@@ -88,7 +84,9 @@ export const NotificationBanner = () => {
         justifyContent: 'center',
       }}
       titleStyle={styles.title}
-      updateStatusBar={false}
+      updateStatusBar={true}
+      activeStatusBarBackgroundColor="#AFFDD0"
+      activeStatusBarStyle="dark-content"
       testID="notificationBanner"
       elevation={10}
       zIndex={100}
@@ -102,9 +100,8 @@ export const NotificationBanner = () => {
           height={DEVICE_LARGE ? 24 : 20}
         />
       )}
-      panResponderEnabled={
-        activeNotification?.type !== CONNECTIONS_TYPE || __DEV__
-      }
+      panResponderEnabled={false}
+      tapToCloseEnabled={true}
     />
   );
 };
@@ -112,17 +109,17 @@ export const NotificationBanner = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#AFFDD0',
-    height: DEVICE_LARGE ? 142 : 98,
+    height: HEIGHT * 0.15,
   },
   title: {
     fontFamily: 'Poppins',
     fontWeight: '500',
-    marginLeft: 20,
+    marginLeft: DEVICE_LARGE ? 20 : 10,
     color: '#000',
     fontSize: DEVICE_LARGE ? 13 : 12,
   },
   icon: {
-    marginLeft: 35,
+    marginLeft: DEVICE_LARGE ? 35 : 10,
   },
 });
 

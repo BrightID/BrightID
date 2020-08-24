@@ -1,9 +1,10 @@
 // @flow
 
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { connect } from 'react-redux';
-import Ionicon from 'react-native-vector-icons/Ionicons';
+import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { useSelector } from 'react-redux';
+import RNFS from 'react-native-fs';
+import { useNavigation } from '@react-navigation/native';
 import { DEVICE_LARGE } from '@/utils/constants';
 
 /**
@@ -14,7 +15,8 @@ import { DEVICE_LARGE } from '@/utils/constants';
  */
 
 const NotificationCard = (props) => {
-  const { navigation, msg, icon } = props;
+  const navigation = useNavigation();
+  const photoFilename = useSelector((state) => state.user.photo.filename);
 
   return (
     <TouchableOpacity
@@ -23,7 +25,20 @@ const NotificationCard = (props) => {
         navigation.navigate('TrustedConnections');
       }}
     >
-      <View style={styles.photoContainer} />
+      <View style={styles.photoContainer}>
+        <Image
+          source={{
+            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photoFilename}`,
+          }}
+          style={styles.photo}
+          resizeMode="cover"
+          onError={(e) => {
+            console.log(e);
+          }}
+          accessible={true}
+          accessibilityLabel="user photo"
+        />
+      </View>
       <View style={styles.info}>
         <Text style={styles.name}>Backup BrightID</Text>
         <Text style={styles.invitationMsg}>
@@ -43,18 +58,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderBottomColor: '#e3e0e4',
     borderBottomWidth: 1,
-    paddingBottom: 10,
-    paddingTop: 10,
+    paddingBottom: DEVICE_LARGE ? 10 : 8,
+    paddingTop: DEVICE_LARGE ? 10 : 8,
     height: DEVICE_LARGE ? 94 : 80,
     marginBottom: DEVICE_LARGE ? 11.8 : 6,
   },
   photoContainer: {
-    minWidth: 85,
+    minWidth: DEVICE_LARGE ? 85 : 70,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  photo: {
+    borderRadius: 100,
+    width: DEVICE_LARGE ? 60 : 48,
+    height: DEVICE_LARGE ? 60 : 48,
+    backgroundColor: '#d8d8d8',
+  },
   info: {
-    marginLeft: DEVICE_LARGE ? 15 : 12,
+    marginLeft: DEVICE_LARGE ? 10 : 7,
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
@@ -63,7 +84,7 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: 'Poppins',
     fontWeight: '500',
-    fontSize: DEVICE_LARGE ? 18 : 15,
+    fontSize: DEVICE_LARGE ? 20 : 18,
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
@@ -76,4 +97,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(NotificationCard);
+export default NotificationCard;

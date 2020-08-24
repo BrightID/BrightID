@@ -13,16 +13,18 @@ import {
   View,
   TouchableOpacity,
   Clipboard,
-  Switch,
+  Alert,
+  StatusBar,
+  InteractionManager,
 } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path, SvgXml } from 'react-native-svg';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import GroupSwitch from '@/components/Helpers/GroupSwitch';
+import ChannelSwitch from '@/components/Helpers/ChannelSwitch';
 import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
 import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
@@ -32,9 +34,11 @@ import {
   channel_types,
   selectChannelById,
   closeChannel,
+  setDisplayChannelType,
+  selectAllActiveChannelIdsByType,
 } from '@/components/NewConnectionsScreens/channelSlice';
 import { encodeChannelQrString } from '@/utils/channels';
-import { selectAllPendingConnectionsByChannel } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+import { selectAllPendingConnectionsByChannelIds } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import { createFakeConnection } from '@/components/Connections/models/createFakeConnection';
 import { createChannel } from '@/components/NewConnectionsScreens/actions/channelThunks';
 
@@ -47,14 +51,13 @@ import { createChannel } from '@/components/NewConnectionsScreens/actions/channe
  *
  */
 
-const COPIED_TIMEOUT = 500;
-
 const Container = DEVICE_IOS ? SafeAreaView : View;
 
 const Timer = () => {
   const navigation = useNavigation();
   const myChannel = useSelector((state) => {
-    return selectChannelById(state, state.channels.myChannelId);
+    const { myChannelIds, displayChannelType } = state.channels;
+    return selectChannelById(state, myChannelIds[displayChannelType]);
   });
   const [countdown, setCountdown] = useState(
     myChannel ? myChannel.ttl - (Date.now() - myChannel.timestamp) : 0,
@@ -68,7 +71,7 @@ const Timer = () => {
   };
 
   // start local timer to display countdown
-  useInterval(timerTick, 100);
+  useInterval(timerTick, 1000);
   const displayTime = () => {
     const minutes = Math.floor(countdown / 60000);
     let seconds = Math.trunc((countdown % 60000) / 1000);
@@ -91,39 +94,83 @@ const Timer = () => {
 export const MyCodeScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const myChannel = useSelector((state) => {
-    return selectChannelById(state, state.channels.myChannelId);
-  });
+
+  // GROUP / SINGLE
+  const displayChannelType = useSelector(
+    (state) => state.channels.displayChannelType,
+  );
+  // current channel displayed by QRCode
+  const myChannel = useSelector(
+    (state) =>
+      selectChannelById(state, state.channels.myChannelIds[displayChannelType]),
+    shallowEqual,
+  );
+
+  // All channels with current displayChannelType actively polling profile service
+  const activeChannelIds = useSelector((state) =>
+    selectAllActiveChannelIdsByType(state, displayChannelType),
+  );
+
   const myName = useSelector((state) => state.user.name);
-  // pending connections attached to my channel
-  const pendingConnectionSizeForChannel = useSelector((state) => {
-    return selectAllPendingConnectionsByChannel(state, myChannel)?.length;
-  });
+
+  // pending connections attached to active channel
+  const pendingConnectionSize = useSelector(
+    (state) =>
+      selectAllPendingConnectionsByChannelIds(state, activeChannelIds).length,
+  );
 
   const [qrString, setQrString] = useState('');
   const [qrsvg, setQrsvg] = useState('');
-  const [copied, setCopied] = useState(false);
 
-  const [isGroup, setIsGroup] = useState(
-    myChannel ? myChannel.type === channel_types.GROUP : false,
+  // create channel if none exists
+  useFocusEffect(
+    useCallback(() => {
+      if (!navigation.isFocused()) return;
+      if (!myChannel || myChannel?.state !== channel_states.OPEN) {
+        InteractionManager.runAfterInteractions(() => {
+          dispatch(createChannel(displayChannelType));
+        });
+      }
+    }, [navigation, myChannel, dispatch, displayChannelType]),
   );
 
   // create QRCode from channel data
   useEffect(() => {
     if (myChannel && myChannel.state === channel_states.OPEN) {
-      console.log(
-        `Creating QRCode: profileId ${myChannel.myProfileId} channel ${myChannel.id}`,
-      );
       const newQrString = encodeChannelQrString(myChannel);
-      setQrString(newQrString);
-      qrCodeToSvg(newQrString, (qrsvg) => setQrsvg(qrsvg));
-    } else {
+      // do not re-render svg if we already have the string
+      if (newQrString !== qrString) {
+        console.log(
+          `Creating QRCode: profileId ${myChannel.myProfileId} channel ${myChannel.id}`,
+        );
+        setQrString(newQrString);
+        qrCodeToSvg(newQrString, (qrsvg) => setQrsvg(qrsvg));
+      }
+    } else if (!myChannel || myChannel?.state !== channel_states.OPEN) {
       setQrString('');
       setQrsvg('');
     }
-  }, [myChannel]);
+  }, [myChannel, qrString]);
 
-  // set up top right button in header
+  // Navigate to next screen if SINGLE channel
+  useEffect(() => {
+    if (displayChannelType === channel_types.SINGLE) {
+      // pendingConnectionSize for ALL active channels
+      if (pendingConnectionSize > 0) {
+        navigation.navigate('PendingConnections');
+        // close channel to prevent navigation loop
+        dispatch(closeChannel({ channelId: myChannel?.id, background: false }));
+      }
+    }
+  }, [
+    displayChannelType,
+    dispatch,
+    navigation,
+    pendingConnectionSize,
+    myChannel,
+  ]);
+
+  // dev button
   useLayoutEffect(() => {
     if (__DEV__ && myChannel?.state === channel_states.OPEN) {
       // $FlowFixMe
@@ -141,43 +188,47 @@ export const MyCodeScreen = () => {
     }
   }, [myChannel, navigation]);
 
-  useFocusEffect(
-    useCallback(() => {
-      if (!navigation.isFocused()) return;
-      if (!myChannel) {
-        dispatch(
-          createChannel(isGroup ? channel_types.GROUP : channel_types.SINGLE),
-        );
-      }
-    }, [navigation, myChannel, dispatch, isGroup]),
-  );
-
-  useEffect(() => {
-    if (myChannel && myChannel.type === channel_types.SINGLE) {
-      // If i created a 1:1 channel and there is a pending connection in UNCONFIRMED state -> directly open PendingonnectionScreen.
-      // there should be only one connection
-
-      if (pendingConnectionSizeForChannel > 0) {
-        navigation.navigate('PendingConnections');
-        dispatch(closeChannel(myChannel.id));
-      }
-    }
-  }, [myChannel, navigation, pendingConnectionSizeForChannel, dispatch]);
-
-  const toggleGroup = () => {
+  // when
+  const toggleChannelType = () => {
     // toggle switch
-    setIsGroup((previousState) => !previousState);
-    // remove current channel
-    if (myChannel) {
-      dispatch(closeChannel(myChannel.id));
-    }
+    dispatch(
+      setDisplayChannelType(
+        displayChannelType === channel_types.SINGLE
+          ? channel_types.GROUP
+          : channel_types.SINGLE,
+      ),
+    );
   };
 
   const copyQr = () => {
-    Clipboard.setString(`https://app.brightid.org/connection-code/${qrString}`);
-    setCopied(true);
-    setTimeout(() => setCopied(false), COPIED_TIMEOUT);
+    const universalLink = `https://app.brightid.org/connection-code/${qrString}`;
+    const clipboardMsg = __DEV__
+      ? universalLink
+      : `Connect with ${myName} on BrightID: ${universalLink}`;
+    const alertMsg =
+      myChannel?.type === channel_types.SINGLE
+        ? `Share this link with one friend so they can connect to you.`
+        : `Share this link with a group of people so everyone can connect.`;
+    Alert.alert(
+      'Universal Link',
+      alertMsg,
+      [
+        {
+          text: 'Copy to Clipboard',
+          onPress: () => {
+            Clipboard.setString(clipboardMsg);
+            if (myChannel?.type === channel_types.SINGLE)
+              dispatch(
+                closeChannel({ channelId: myChannel?.id, background: true }),
+              );
+          },
+        },
+      ],
+      { cancelable: false },
+    );
   };
+
+  // we want to replace this QRcode with a different one for single connections
 
   const CopyQr = () => (
     <View style={styles.copyContainer}>
@@ -192,22 +243,27 @@ export const MyCodeScreen = () => {
           color="#333"
           style={{ width: 24, height: 24 }}
         />
-        <Text style={styles.copyText}> Copy</Text>
+        <Text style={styles.copyText}> Copy Link</Text>
       </TouchableOpacity>
     </View>
   );
 
-  const renderSpinner = () => (
-    <Spinner
-      // style={styles.spinner}
-      isVisible={true}
-      size={47}
-      type="9CubeGrid"
-      color="#4990e2"
-    />
-  );
+  const displayOneToOneInfo = () => {
+    Alert.alert(
+      'One to One',
+      `This QR code can be used to connect with a single user before it expires.`,
+    );
+  };
+
+  const displayManyToManyInfo = () => {
+    Alert.alert(
+      'Many to Many',
+      'This QR code is designed for many people to connect simultaneously.',
+    );
+  };
 
   const QrCode = useMemo(() => {
+    console.log('rendering QR Code');
     return (
       <Svg
         height={DEVICE_LARGE ? '260' : '200'}
@@ -216,48 +272,72 @@ export const MyCodeScreen = () => {
         viewBox={path(['svg', '$', 'viewBox'], qrsvg)}
         shape-rendering="crispEdges"
       >
-        <Path
-          fill={copied ? 'lightblue' : '#fff'}
-          d={path(['svg', 'path', '0', '$', 'd'], qrsvg)}
-        />
+        <Path fill="#fff" d={path(['svg', 'path', '0', '$', 'd'], qrsvg)} />
         <Path stroke="#000" d={path(['svg', 'path', '1', '$', 'd'], qrsvg)} />
       </Svg>
     );
-  }, [qrsvg, copied]);
+  }, [qrsvg]);
 
-  console.log('rendering My QRCode');
+  console.log('rendering My QRCode Screen');
+  console.log(`pendingConnectionSize: ${pendingConnectionSize}`);
+  console.log(`- ActiveChannels ${activeChannelIds.length}`);
 
   return (
     <>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={ORANGE}
+        animated={true}
+      />
       <View style={styles.orangeTop} />
       <Container style={styles.container}>
-        <GroupSwitch onValueChange={toggleGroup} value={isGroup} />
         <View style={styles.infoTopContainer}>
-          {myChannel?.type === channel_types.GROUP ? (
-            <Text style={styles.infoTopText}>
-              This is a group connection code. Anyone who scans this code will
-              be prompted to connect everybody else who scans this.
-            </Text>
+          <ChannelSwitch
+            onValueChange={toggleChannelType}
+            value={displayChannelType === channel_types.SINGLE}
+          />
+        </View>
+        <View style={styles.infoTopContainer}>
+          <Text style={styles.infoTopText}>Connection Type: </Text>
+          {displayChannelType === channel_types.GROUP ? (
+            <TouchableOpacity
+              style={{ flexDirection: 'row' }}
+              onPress={displayManyToManyInfo}
+            >
+              <Text style={styles.infoTopText}>Many to Many </Text>
+              <Material name="information-variant" size={18} color="#4a4a4a" />
+            </TouchableOpacity>
           ) : (
-            <Text style={styles.infoTopText}>
-              This code can be used to connect with {myName}. It will expire
-              after being scanned once.
-            </Text>
+            <TouchableOpacity
+              style={{ flexDirection: 'row' }}
+              onPress={displayOneToOneInfo}
+            >
+              <Text style={styles.infoTopText}>One to One </Text>
+              <Material name="information-variant" size={18} color="#4a4a4a" />
+            </TouchableOpacity>
           )}
         </View>
-        {myChannel?.state === channel_states.OPEN ? (
+        {qrsvg ? (
           <View style={styles.qrCodeContainer} testID="QRCodeContainer">
-            {qrsvg ? <Timer /> : <View />}
-            {qrsvg ? QrCode : renderSpinner()}
-            {qrsvg ? <CopyQr /> : <View />}
+            <Timer />
+            {QrCode}
+            <CopyQr />
           </View>
         ) : (
           <View style={styles.qrCodeContainer} testID="QRCodeContainer">
-            <View style={styles.emptyQr} />
+            <View style={styles.emptyQr}>
+              <Spinner
+                // style={styles.spinner}
+                isVisible={true}
+                size={47}
+                type="FadingCircleAlt"
+                color="#333"
+              />
+            </View>
           </View>
         )}
         <View style={styles.bottomContainer}>
-          {pendingConnectionSizeForChannel < 1 ? (
+          {pendingConnectionSize < 1 ? (
             <>
               <Text style={styles.infoBottomText}>Or you can also...</Text>
               <TouchableOpacity
@@ -278,8 +358,9 @@ export const MyCodeScreen = () => {
           ) : (
             <>
               <Text style={styles.infoBottomText}>
-                You have {pendingConnectionSizeForChannel} pending connection
-                {pendingConnectionSizeForChannel > 1 ? 's' : ''}...
+                You have {pendingConnectionSize} pending connection
+                {pendingConnectionSize > 1 ? 's' : ''}
+                ...
               </Text>
               <TouchableOpacity
                 testID="MyCodeToPendingConnections"
@@ -308,7 +389,7 @@ export const MyCodeScreen = () => {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: DEVICE_LARGE ? 70 : 65,
     width: '100%',
     zIndex: 1,
   },
@@ -323,14 +404,13 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 58,
     marginTop: -58,
     zIndex: 10,
+    overflow: 'hidden',
   },
   infoTopContainer: {
     width: '100%',
-    flexGrow: 1,
-    justifyContent: 'space-evenly',
+    flexGrow: 0.6,
+    justifyContent: 'center',
     alignItems: 'center',
-    paddingLeft: DEVICE_LARGE ? 50 : 20,
-    paddingRight: DEVICE_LARGE ? 50 : 20,
   },
   infoTopText: {
     fontFamily: 'Poppins',
@@ -339,12 +419,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#4a4a4a',
   },
-
   qrCodeContainer: {
     width: '100%',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     flexGrow: 2,
+    paddingTop: DEVICE_LARGE ? 35 : 20,
   },
   copyContainer: {
     flexDirection: 'row',
@@ -370,11 +450,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 16 : 14,
+    color: '#333',
   },
   timerTextRight: {
     fontFamily: 'Poppins',
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 16 : 14,
+    color: '#333',
   },
   bottomContainer: {
     alignItems: 'center',
@@ -423,6 +505,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   emptyQr: {
+    justifyContent: 'center',
+    alignItems: 'center',
     height: DEVICE_LARGE ? 308 : 244,
   },
 });

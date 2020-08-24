@@ -41,7 +41,11 @@ declare type AppInfo = {
 };
 
 declare type ChannelsState = {
-  myChannelId: string,
+  displayChannelType: string,
+  myChannelIds: {
+    [channel_types.SINGLE]: string,
+    [channel_types.GROUP]: string,
+  },
   ids: string[],
   entities: Channel[],
 };

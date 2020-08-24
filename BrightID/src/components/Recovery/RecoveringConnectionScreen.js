@@ -1,10 +1,10 @@
 // @flow
 
 import * as React from 'react';
-import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
 
@@ -69,7 +69,7 @@ class RecoveringConnectionScreen extends React.Component<Props> {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: DEVICE_LARGE ? 70 : 65,
     width: '100%',
     zIndex: 1,
   },

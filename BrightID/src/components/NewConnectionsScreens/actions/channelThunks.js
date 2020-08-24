@@ -36,9 +36,11 @@ export const createChannel = (channelType: ChannelType) => async (
       dispatch(leaveChannel(channel.id));
     }, channel.ttl);
     dispatch(addChannel(channel));
-    dispatch(setMyChannel(channel.id));
+    dispatch(
+      setMyChannel({ channelId: channel.id, channelType: channel.type }),
+    );
     // upload my profile
-    dispatch(encryptAndUploadProfileToChannel(channel.id));
+    await dispatch(encryptAndUploadProfileToChannel(channel.id));
     // start polling for incoming connection requests
     dispatch(subscribeToConnectionRequests(channel.id));
   } catch (err) {
@@ -46,7 +48,7 @@ export const createChannel = (channelType: ChannelType) => async (
   }
 };
 
-export const joinChannel = (channel: Channel) => (dispatch: dispatch) => {
+export const joinChannel = (channel: Channel) => async (dispatch: dispatch) => {
   // check ttl of channel
   const expirationTimestamp = channel.timestamp + channel.ttl;
   let ttl = expirationTimestamp - Date.now();
@@ -68,15 +70,13 @@ export const joinChannel = (channel: Channel) => (dispatch: dispatch) => {
   }, ttl);
 
   // add channel to store
-  dispatch(addChannel(channel));
+  // we need channel to exist prior to uploadingProfileToChannel
+  await dispatch(addChannel(channel));
 
   // upload my profile to channel
-  dispatch(encryptAndUploadProfileToChannel(channel.id));
+  await dispatch(encryptAndUploadProfileToChannel(channel.id));
   // start polling for incoming connection requests
   dispatch(subscribeToConnectionRequests(channel.id));
-
-  // fetch all profileIDs in channel
-  dispatch(fetchChannelProfiles(channel.id));
 };
 
 export const leaveChannel = (channelId: string) => (

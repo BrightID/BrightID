@@ -6,7 +6,9 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   Image,
+  StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -73,7 +75,7 @@ export const GroupConnectionScreen = () => {
 
   useEffect(() => {
     console.log('in the animation effect');
-    Animated.stagger(1500, [
+    const circleAnim = Animated.stagger(1500, [
       Animated.loop(
         Animated.timing(circleArcOneOpacity, {
           toValue: 1,
@@ -88,8 +90,16 @@ export const GroupConnectionScreen = () => {
           useNativeDriver: true,
         }),
       ),
-    ]).start();
-  }, [circleArcOneOpacity, circleArcTwoOpacity]);
+    ]);
+
+    if (navigation.isFocused()) {
+      circleAnim.start();
+    }
+
+    return () => {
+      circleAnim.stop();
+    };
+  }, [circleArcOneOpacity, circleArcTwoOpacity, navigation]);
   // waiting rings animation
 
   const [bubbleCoords, setBubbleCoords] = useState([]);
@@ -135,25 +145,39 @@ export const GroupConnectionScreen = () => {
                 />
               </Svg>
             )}
-            <Image
-              key={pc.id}
-              style={[
-                styles.connectionBubble,
-                {
-                  left: bubbleCoords[index]?.left,
-                  top: bubbleCoords[index]?.top,
-                },
-              ]}
-              source={{ uri: pc.photo }}
-            />
+            <TouchableWithoutFeedback
+              onPress={() => {
+                navigation.navigate('FullScreenPhoto', {
+                  photo: pc.photo,
+                  base64: true,
+                });
+              }}
+            >
+              <Image
+                key={pc.id}
+                style={[
+                  styles.connectionBubble,
+                  {
+                    left: bubbleCoords[index]?.left,
+                    top: bubbleCoords[index]?.top,
+                  },
+                ]}
+                source={{ uri: pc.photo }}
+              />
+            </TouchableWithoutFeedback>
           </>
         ))
       : null;
 
   console.log('rendering Group Connection Screen');
 
-  return (
+  return navigation.isFocused() ? (
     <SafeAreaView style={styles.container}>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="#fff"
+        animated={true}
+      />
       <TouchableOpacity
         style={styles.cancelButton}
         onPress={() => {
@@ -202,7 +226,20 @@ export const GroupConnectionScreen = () => {
         ]}
       />
       {initiator?.photo && (
-        <Image style={styles.groupFounder} source={{ uri: initiator?.photo }} />
+        <TouchableWithoutFeedback
+          // style={styles.cancelButton}
+          onPress={() => {
+            navigation.navigate('FullScreenPhoto', {
+              photo: initiator.photo,
+              base64: true,
+            });
+          }}
+        >
+          <Image
+            style={styles.groupFounder}
+            source={{ uri: initiator.photo }}
+          />
+        </TouchableWithoutFeedback>
       )}
 
       <GroupConnectionBubbles />
@@ -222,7 +259,7 @@ export const GroupConnectionScreen = () => {
         <Text style={styles.confirmConnectionsText}>Confirm Connections</Text>
       </TouchableOpacity>
     </SafeAreaView>
-  );
+  ) : null;
 };
 
 const styles = StyleSheet.create({

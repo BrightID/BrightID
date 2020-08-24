@@ -9,7 +9,7 @@ import {
   getActionFromState,
   useLinking,
 } from '@react-navigation/native';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, InteractionManager } from 'react-native';
 import { pollOperations } from '@/utils/operations';
 import AppRoutes from './routes';
 import { store, persistor } from './store';
@@ -50,7 +50,9 @@ export const App = () => {
   useEffect(() => {
     // subscribe to operations
     const timerId = setInterval(() => {
-      pollOperations();
+      InteractionManager.runAfterInteractions(() => {
+        pollOperations();
+      });
     }, 5000);
 
     return () => {

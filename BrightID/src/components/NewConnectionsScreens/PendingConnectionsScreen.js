@@ -16,6 +16,7 @@ import {
   TouchableOpacity,
   View,
   StatusBar,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import {
@@ -45,6 +46,7 @@ import {
 } from '@/components/NewConnectionsScreens/channelSlice';
 import { DEVICE_LARGE, WIDTH, HEIGHT } from '@/utils/constants';
 import backArrow from '@/static/back_arrow_grey.svg';
+import { transduce } from 'ramda';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -64,6 +66,7 @@ const ConfirmationButtons = ({
   carouselRef,
   last,
   setLastChannelType,
+  setReRender,
 }) => {
   const dispatch = useDispatch();
   const pendingConnection = useSelector(
@@ -80,18 +83,27 @@ const ConfirmationButtons = ({
 
   const accept = () => {
     dispatch(confirmPendingConnectionThunk(pendingConnection.id));
-    setLastChannelType(channelType);
-    last
-      ? carouselRef.current?.snapToItem(0)
-      : carouselRef.current?.snapToNext();
+
+    if (last) {
+      carouselRef.current?.snapToItem(0);
+      setReRender(true);
+      setLastChannelType(channelType);
+    } else {
+      carouselRef.current?.snapToNext();
+    }
   };
 
   const reject = () => {
     dispatch(rejectPendingConnection(pendingConnection.id));
     setLastChannelType(channelType);
-    last
-      ? carouselRef.current?.snapToItem(0)
-      : carouselRef.current?.snapToNext();
+
+    if (last) {
+      carouselRef.current?.snapToItem(0);
+      setReRender(true);
+      setLastChannelType(channelType);
+    } else {
+      carouselRef.current?.snapToNext();
+    }
   };
 
   switch (pendingConnection.state) {
@@ -106,7 +118,7 @@ const ConfirmationButtons = ({
     case pendingConnection_states.REJECTED: {
       return (
         <Text style={styles.waitingText}>
-          {pendingConnection.name} rejected your connection
+          Connection with {pendingConnection.name} has been rejected ...
         </Text>
       );
     }
@@ -115,7 +127,7 @@ const ConfirmationButtons = ({
         return (
           <>
             <TouchableOpacity
-              testID="rejectConnectionBtn"
+              testID="rejectConnectionButton"
               onPress={reject}
               style={styles.rejectButton}
               accessibilityLabel={`reject connection with ${pendingConnection.name}`}
@@ -124,7 +136,7 @@ const ConfirmationButtons = ({
               <Text style={styles.buttonText}>Reject</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              testID="confirmConnectionBtn"
+              testID="confirmConnectionButton"
               onPress={accept}
               style={styles.confirmButton}
               accessibilityLabel={`accept connection with ${pendingConnection.name}`}
@@ -152,12 +164,22 @@ const ConfirmationButtons = ({
     case pendingConnection_states.MYSELF: {
       return <Text style={styles.waitingText}>OOPS!!! This is you...</Text>;
     }
-    case pendingConnection_states.EXPIRED:
-    default: {
+    case pendingConnection_states.EXPIRED: {
+      Alert.alert(
+        'Try connecting again...',
+        `The QRCode used to connect has expired...`,
+      );
       return (
         <Text style={styles.waitingText}>
           The QRCode used to connect with {pendingConnection.name} has
           expired... please try connecting again.
+        </Text>
+      );
+    }
+    default: {
+      return (
+        <Text style={styles.waitingText}>
+          Waiting for data from the profile service
         </Text>
       );
     }
@@ -173,28 +195,40 @@ export const PreviewConnection = (props) => {
     pendingConnection.signedMessage,
   );
 
+  const navigation = useNavigation();
   return (
     <View style={styles.previewContainer} testID="previewConnectionScreen">
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor="#fff"
-        translucent={false}
-        animated={true}
-      />
+      <TouchableOpacity
+        style={styles.cancelButton}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
+        <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
+      </TouchableOpacity>
       <View style={styles.titleContainer}>
         <Text style={styles.questionText}>Connect with?</Text>
       </View>
       <View style={styles.userContainer}>
-        <Image
-          source={{ uri: pendingConnection.photo }}
-          style={styles.photo}
-          resizeMode="cover"
-          onError={(e) => {
-            console.log(e);
+        <TouchableWithoutFeedback
+          onPress={() => {
+            navigation.navigate('FullScreenPhoto', {
+              photo: pendingConnection.photo,
+              base64: true,
+            });
           }}
-          accessible={true}
-          accessibilityLabel="user photo"
-        />
+        >
+          <Image
+            source={{ uri: pendingConnection.photo }}
+            style={styles.photo}
+            resizeMode="cover"
+            onError={(e) => {
+              console.log(e);
+            }}
+            accessible={true}
+            accessibilityLabel="user photo"
+          />
+        </TouchableWithoutFeedback>
         <Text style={styles.connectName}>
           {pendingConnection.name}
           {pendingConnection.flagged && (
@@ -234,7 +268,6 @@ export const PreviewConnection = (props) => {
 
 export const PendingConnectionsScreen = () => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
   const carouselRef = useRef(null);
 
   // we want to watch for all changes to pending connections
@@ -242,16 +275,24 @@ export const PendingConnectionsScreen = () => {
     return selectAllUnconfirmedConnections(state);
   });
 
+  // total length of all channels
+  // TODO - change this to group channels
+  const channelsTotal = useSelector((state) => state.channels.ids.length);
+
+  // pending connections to display
   const [pendingConnectionsToDisplay, setPendingConnectionsDisplay] = useState(
     [],
   );
-
-  const [readyToRender, setReadyToRender] = useState(true);
 
   const [loading, setLoading] = useState(true);
 
   const [lastChannelType, setLastChannelType] = useState(channel_types.GROUP);
 
+  const [reRender, setReRender] = useState(true);
+
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  // give our app some time to download new connections when we have zero connections pending
   useFocusEffect(
     useCallback(() => {
       let timeout;
@@ -263,7 +304,7 @@ export const PendingConnectionsScreen = () => {
           } else {
             setLoading(false);
           }
-        }, 2500);
+        }, 1500);
       } else {
         setLoading(false);
       }
@@ -273,35 +314,55 @@ export const PendingConnectionsScreen = () => {
     }, [pendingConnections.length, lastChannelType, navigation]),
   );
 
+  // this will trigger a re-render of the carousel
+  // causes a glitch in the UI on Android
+  const resetDisplayConnections = useCallback(() => {
+    const connectionsToDisplay = pendingConnections.filter(isReadyToConfirm);
+    // this will cause the PendingConnectionList to re render
+    setPendingConnectionsDisplay(connectionsToDisplay);
+  }, [pendingConnections]);
+
+  // setupList on first render
+  useFocusEffect(
+    useCallback(() => {
+      if (reRender) {
+        resetDisplayConnections();
+        setReRender(false);
+      }
+    }, [reRender, resetDisplayConnections]),
+  );
+
+  // re-render list if no connections are displayed
   useEffect(() => {
-    /**
-     * This will be called for the following reasons:
-     * first mount
-     * after snapping to last pending connection in the list
-     * if there is only one connectionsToDisplay and  useSelector triggers a re-render
-     */
-    //
-    if (
-      readyToRender ||
-      pendingConnectionsToDisplay.length <= 1 ||
-      pendingConnections.length === 0
-    ) {
-      const connectionsToDisplay = pendingConnections.filter(isReadyToConfirm);
-      // this will cause the PendingConnectionList to re render
-      setPendingConnectionsDisplay(connectionsToDisplay);
-      setReadyToRender(false);
+    if (pendingConnectionsToDisplay.length === 0 && !reRender) {
+      resetDisplayConnections();
     }
-  }, [readyToRender, pendingConnections, pendingConnectionsToDisplay.length]);
+  }, [resetDisplayConnections, pendingConnectionsToDisplay.length, reRender]);
 
   // back handling for android
   useEffect(() => {
     const goBack = () => {
-      carouselRef.current?.snapToPrev();
-      return true;
+      if (carouselRef.current?.currentIndex > 0) {
+        carouselRef.current?.snapToPrev();
+        return true;
+      }
     };
     BackHandler.addEventListener('hardwareBackPress', goBack);
     return () => BackHandler.removeEventListener('hardwareBackPress', goBack);
   }, [carouselRef]);
+
+  const navHome = () => {
+    navigation.navigate('Home');
+  };
+
+  // return home if there are no channels
+  useEffect(() => {
+    if (navigation.isFocused() && channelsTotal < 1) {
+      lastChannelType === channel_types.SINGLE
+        ? navigation.navigate('Connections')
+        : navigation.navigate('Home');
+    }
+  }, [channelsTotal, navigation, lastChannelType]);
 
   // the list should only re render sparingly for performance and continuity
   const PendingConnectionList = useMemo(() => {
@@ -312,50 +373,36 @@ export const PendingConnectionsScreen = () => {
           carouselRef={carouselRef}
           last={index === pendingConnectionsToDisplay.length - 1}
           setLastChannelType={setLastChannelType}
+          setReRender={setReRender}
         />
       );
     };
     // console.log('rendering pending connections CAROUSEL');
+
     return (
-      <>
-        <TouchableOpacity
-          style={styles.cancelButton}
-          onPress={() => {
-            navigation.goBack();
-          }}
-        >
-          <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
-        </TouchableOpacity>
-        <Carousel
-          containerCustomStyle={{
-            flex: 1,
-          }}
-          ref={carouselRef}
-          data={pendingConnectionsToDisplay}
-          layoutCardOffset={pendingConnectionsToDisplay.length}
-          renderItem={renderItem}
-          layout="stack"
-          lockScrollWhileSnapping={true}
-          itemWidth={WIDTH * 0.95}
-          sliderWidth={WIDTH}
-          onSnapToItem={(index) => {
-            // remove all of the confirmed connections when we reach the end of the list
-            if (index === pendingConnectionsToDisplay.length - 1) {
-              setReadyToRender(true);
-            }
-          }}
-        />
-      </>
+      <Carousel
+        containerCustomStyle={{
+          flex: 1,
+        }}
+        ref={carouselRef}
+        data={pendingConnectionsToDisplay}
+        renderItem={renderItem}
+        layout="stack"
+        layoutCardOffset={pendingConnectionsToDisplay.length}
+        lockScrollWhileSnapping={true}
+        itemWidth={WIDTH * 0.95}
+        sliderWidth={WIDTH}
+        onSnapToItem={(index) => {
+          setActiveIndex(index);
+        }}
+        onLayout={() => {
+          setActiveIndex((prev) => !prev && 0);
+        }}
+      />
     );
-  }, [pendingConnectionsToDisplay, navigation]);
+  }, [pendingConnectionsToDisplay]);
 
   const ZeroConnectionsToDisplay = () => {
-    const clearAll = () => {
-      dispatch(removeAllPendingConnections());
-    };
-    const navHome = () => {
-      navigation.navigate('Home');
-    };
     return (
       <View
         style={{
@@ -373,35 +420,6 @@ export const PendingConnectionsScreen = () => {
             type="FadingCircleAlt"
             color="#aaa"
           />
-        ) : pendingConnections.length ? (
-          <>
-            <Material
-              name="account-clock-outline"
-              size={DEVICE_LARGE ? 48 : 40}
-              color="#333"
-            />
-            <Text style={styles.waitingText}>
-              Waiting for {pendingConnections.length} connection
-              {pendingConnections.length > 1 && 's'} to confirm you
-            </Text>
-            <Spinner
-              isVisible={true}
-              size={60}
-              type="ThreeBounce"
-              color="#aaa"
-            />
-            <TouchableOpacity
-              style={styles.clearConnectionsBtn}
-              onPress={clearAll}
-            >
-              <Material
-                name="account-multiple-remove-outline"
-                size={DEVICE_LARGE ? 36 : 28}
-                color="#333"
-              />
-              <Text style={styles.clearConnectionsText}>Clear Connections</Text>
-            </TouchableOpacity>
-          </>
         ) : (
           <>
             <Material
@@ -410,15 +428,31 @@ export const PendingConnectionsScreen = () => {
               color="#333"
             />
             <Text style={styles.waitingText}>
-              Waiting for Pending Connections
+              Waiting for{' '}
+              {pendingConnections.length === 0
+                ? 'more '
+                : pendingConnections.length > 1 &&
+                  `${pendingConnections.length} `}
+              {pendingConnections.length === 1
+                ? pendingConnections[0].name
+                : 'connections'}{' '}
+              {pendingConnections.length ? 'to confirm you.' : ''}
             </Text>
-            <TouchableOpacity style={styles.navHomeBtn} onPress={navHome}>
-              <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
+
+            <Spinner
+              isVisible={true}
+              size={60}
+              type="ThreeBounce"
+              color="#333"
+            />
+
+            <TouchableOpacity style={styles.bottomButton} onPress={navHome}>
               <Material
-                name="home"
-                size={DEVICE_LARGE ? 36 : 28}
+                name="card-account-details-outline"
+                size={DEVICE_LARGE ? 36 : 24}
                 color="#333"
               />
+              <Text style={styles.bottomButtonText}>Return Home</Text>
             </TouchableOpacity>
           </>
         )}
@@ -431,8 +465,34 @@ export const PendingConnectionsScreen = () => {
 
   return (
     <SafeAreaView style={[styles.container]}>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="#fff"
+        animated={true}
+      />
       {pendingConnectionsToDisplay.length ? (
-        PendingConnectionList
+        <>
+          {PendingConnectionList}
+
+          <Pagination
+            containerStyle={{
+              maxWidth: '85%',
+              display: 'flex',
+              overflow: 'hidden',
+              flexWrap: 'wrap',
+              justifyContent: 'flex-start',
+            }}
+            dotContainerStyle={{
+              paddingTop: 5,
+            }}
+            dotsLength={pendingConnectionsToDisplay.length}
+            activeDotIndex={activeIndex}
+            inactiveDotOpacity={0.4}
+            inactiveDotScale={1}
+            carouselRef={carouselRef.current}
+            tappableDots={true}
+          />
+        </>
       ) : (
         <ZeroConnectionsToDisplay />
       )}
@@ -562,13 +622,17 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     position: 'absolute',
-    left: 0,
-    top: DEVICE_LARGE ? 55 : 35,
+    left: -10,
+    top: DEVICE_LARGE ? 20 : 12,
     zIndex: 20,
     width: DEVICE_LARGE ? 60 : 50,
     alignItems: 'center',
   },
-  clearConnectionsBtn: {
+  clearConnectionsButton: {
+    position: 'absolute',
+    bottom: '6%',
+  },
+  bottomButton: {
     position: 'absolute',
     bottom: '6%',
     flexDirection: 'row',
@@ -580,15 +644,26 @@ const styles = StyleSheet.create({
     width: DEVICE_LARGE ? 260 : 210,
     borderWidth: 2,
     borderColor: '#333',
+    marginBottom: 10,
   },
-  clearConnectionsText: {
+  bottomButtonText: {
     fontFamily: 'Poppins',
     fontWeight: 'bold',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#333',
     marginLeft: 10,
   },
-  navHomeBtn: {
+  infoText: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    textAlign: 'center',
+    fontSize: DEVICE_LARGE ? 14 : 12,
+    color: '#333',
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 22,
+  },
+  navHomeButton: {
     position: 'absolute',
     left: 0,
     top: DEVICE_LARGE ? 8 : 6,
@@ -600,6 +675,10 @@ const styles = StyleSheet.create({
     // borderRadius: 60,
     width: DEVICE_LARGE ? 80 : 70,
     height: DEVICE_LARGE ? 42 : 36,
+  },
+  bottomButtonContainer: {
+    position: 'absolute',
+    bottom: 30,
   },
 });
 

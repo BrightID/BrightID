@@ -1,9 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, Text } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+} from '@react-navigation/stack';
 import ConnectionsScreen from '@/components/Connections/ConnectionsScreen';
 import SortingConnectionsScreen from '@/components/Connections/SortingConnectionsScreen';
 import SearchConnections from '@/components/Helpers/SearchConnections';
+import FullScreenPhoto from '@/components/Helpers/FullScreenPhoto';
 import TrustedConnectionsScreen from '@/components/Recovery/TrustedConnectionsScreen';
 import { useSelector } from 'react-redux';
 import { headerOptions, headerTitleStyle, NavHome } from './helpers';
@@ -41,6 +45,11 @@ const trustedScreenOptions = {
   headerTitle: () => <HeaderTitle title="Trusted Connections" />,
 };
 
+const fullScreenPhotoOptions = {
+  headerShown: false,
+  cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+};
+
 const Connections = () => {
   return (
     <>
@@ -58,6 +67,11 @@ const Connections = () => {
         name="TrustedConnections"
         component={TrustedConnectionsScreen}
         options={trustedScreenOptions}
+      />
+      <Stack.Screen
+        name="FullScreenPhoto"
+        component={FullScreenPhoto}
+        options={fullScreenPhotoOptions}
       />
     </>
   );

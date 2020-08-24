@@ -1,6 +1,10 @@
 // @flow
 
-import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
+import {
+  createSelector,
+  createSlice,
+  createEntityAdapter,
+} from '@reduxjs/toolkit';
 
 /*
 
@@ -28,10 +32,15 @@ export const channel_types = {
   SINGLE: 'SINGLE',
 };
 
+export type ChannelType = $Keys<typeof channel_types>;
+
 export const channel_states = {
   OPEN: 'OPEN',
   CLOSED: 'CLOSED',
+  BACKGROUND: 'BACKGROUND',
 };
+
+export type ChannelState = $Keys<typeof channel_states>;
 
 export const channelsAdapter = createEntityAdapter();
 
@@ -39,7 +48,11 @@ export const channelsAdapter = createEntityAdapter();
 // If you want to track 'loading' or other keys, you would initialize them here:
 // `getInitialState({ loading: false, activeRequestId: null })`
 const initialState: ChannelsState = channelsAdapter.getInitialState({
-  myChannelId: '',
+  displayChannelType: channel_types.SINGLE,
+  myChannelIds: {
+    [channel_types.SINGLE]: '',
+    [channel_types.GROUP]: '',
+  },
 });
 
 const channelSlice = createSlice({
@@ -49,27 +62,36 @@ const channelSlice = createSlice({
     addChannel: channelsAdapter.addOne,
     updateChannel: channelsAdapter.updateOne,
     closeChannel(state, action) {
-      const channelId = action.payload;
+      const { channelId, background } = action.payload;
       state = channelsAdapter.updateOne(state, {
         id: channelId,
         changes: {
-          state: channel_states.CLOSED,
+          state: background ? channel_states.BACKGROUND : channel_states.CLOSED,
         },
       });
-      if (state.myChannelId === channelId) {
-        state.myChannelId = initialState.myChannelId;
-      }
+      if (state.myChannelIds[channel_types.SINGLE] === channelId)
+        state.myChannelIds[channel_types.SINGLE] = '';
+
+      if (state.myChannelIds[channel_types.GROUP] === channelId)
+        state.myChannelIds[channel_types.GROUP] = '';
     },
     removeChannel(state, action) {
       const channelId = action.payload;
       state = channelsAdapter.removeOne(state, channelId);
       // In case my channel got removed also clear myChannelId
-      if (state.myChannelId === channelId) {
-        state.myChannelId = initialState.myChannelId;
-      }
+      if (state.myChannelIds[channel_types.SINGLE] === channelId)
+        state.myChannelIds[channel_types.SINGLE] === '';
+
+      if (state.myChannelIds[channel_types.GROUP] === channelId)
+        state.myChannelIds[channel_types.GROUP] === '';
     },
     setMyChannel(state, action) {
-      state.myChannelId = action.payload;
+      const { channelType, channelId } = action.payload;
+      state.myChannelIds[channelType] = channelId;
+    },
+    setDisplayChannelType(state, action) {
+      const channelType = action.payload;
+      state.displayChannelType = channelType;
     },
   },
 });
@@ -81,6 +103,7 @@ export const {
   removeChannel,
   setMyChannel,
   closeChannel,
+  setDisplayChannelType,
 } = channelSlice.actions;
 
 // Export channel selectors
@@ -88,6 +111,28 @@ export const {
   selectById: selectChannelById,
   selectAll: selectAllChannels,
 } = channelsAdapter.getSelectors((state) => state.channels);
+
+// additional selectors
+export const selectAllActiveChannelIds = createSelector(
+  selectAllChannels,
+  (_, type: ChannelType) => type,
+  (channels, type) =>
+    channels.filter((pc) => pc.type === type).map((pc) => pc.id),
+);
+
+export const selectAllActiveChannelIdsByType = createSelector(
+  selectAllChannels,
+  (_, type: ChannelType) => type,
+  (channels, type) =>
+    channels
+      .filter(
+        (pc) =>
+          pc.type === type &&
+          (pc.state === channel_states.OPEN ||
+            pc.state === channel_states.BACKGROUND),
+      )
+      .map((pc) => pc.id),
+);
 
 // Export reducer
 export default channelSlice.reducer;

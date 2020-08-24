@@ -18,25 +18,25 @@ import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
 const X_TRANSFORM = DEVICE_LARGE ? 45 : 40;
 const ANIMATION_DURATION = 150;
 
-const GroupSwitch = ({ value, onValueChange }) => {
+const ChannelSwitch = ({ value, onValueChange }) => {
   // const dispatch = useDispatch();
 
-  const toggleAnim = useRef(new Animated.Value(value ? X_TRANSFORM : 0))
+  const toggleAnim = useRef(new Animated.Value(value ? 0 : X_TRANSFORM))
     .current;
-  const backgroundAnim = useRef(new Animated.Value(value ? X_TRANSFORM : 0))
+  const backgroundAnim = useRef(new Animated.Value(value ? 0 : X_TRANSFORM))
     .current;
 
   const getPidded = () => {
     Animated.parallel([
       Animated.timing(toggleAnim, {
-        toValue: value ? 0 : X_TRANSFORM,
+        toValue: value ? X_TRANSFORM : 0,
         useNativeDriver: true,
         duration: ANIMATION_DURATION,
         // ease out
         easing: Easing.bezier(0.39, -0.01, 1, 1),
       }),
       Animated.timing(backgroundAnim, {
-        toValue: value ? 0 : X_TRANSFORM,
+        toValue: value ? X_TRANSFORM : 0,
         useNativeDriver: false,
         duration: ANIMATION_DURATION,
         // ease out
@@ -47,7 +47,7 @@ const GroupSwitch = ({ value, onValueChange }) => {
     });
   };
 
-  console.log('rendering group switch');
+  console.log('rendering channel switch');
 
   return (
     <TouchableWithoutFeedback onPress={getPidded}>
@@ -139,4 +139,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GroupSwitch;
+export default ChannelSwitch;

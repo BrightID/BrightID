@@ -21,7 +21,7 @@ import api from '@/api/brightId';
 import { leaveGroup, dismissFromGroup } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { addAdmin } from '@/actions/groups';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import MemberCard from './MemberCard';
 
@@ -282,7 +282,7 @@ function MembersScreen(props: MembersScreenProps) {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: DEVICE_LARGE ? 70 : 65,
     width: '100%',
     zIndex: 1,
   },

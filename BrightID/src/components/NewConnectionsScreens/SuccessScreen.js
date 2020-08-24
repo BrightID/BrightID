@@ -51,7 +51,6 @@ export const SuccessScreen = () => {
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#fff"
-        translucent={false}
         animated={true}
       />
 

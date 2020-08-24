@@ -98,11 +98,28 @@ export const newPendingConnection = createAsyncThunk(
     decryptedObj.initiator =
       decryptedObj.profileTimestamp > channel.myProfileTimestamp;
 
-    const connectionInfo = await fetchConnectionInfo({
-      brightID: decryptedObj.brightID,
-      myConnections: getState().connections.connections,
-    });
-    return { ...connectionInfo, ...decryptedObj };
+    if (profileData && profileData.data) {
+      const decryptedObj = decryptData(profileData.data, channel.aesKey);
+      decryptedObj.myself = decryptedObj.id === getState().user.id;
+      // I'm confused about this initiator logic, might change this...
+      decryptedObj.initiator =
+        decryptedObj.profileTimestamp <= channel.myProfileTimestamp;
+
+      console.log(
+        'decryptedObj.profileTimestamp',
+        decryptedObj.profileTimestamp,
+      );
+
+      console.log('channel.myProfileTimestamp', channel.myProfileTimestamp);
+
+      const connectionInfo = await fetchConnectionInfo({
+        brightID: decryptedObj.brightID,
+        myConnections: getState().connections.connections,
+      });
+      return { ...connectionInfo, ...decryptedObj };
+    } else {
+      throw new Error(`Missing data in profile from url: ${url}`);
+    }
   },
 );
 
@@ -241,11 +258,12 @@ export const selectAllUnconfirmedConnections = createSelector(
     ),
 );
 
-export const selectAllPendingConnectionsByChannel = createSelector(
+// uses channelId's to search for users
+export const selectAllPendingConnectionsByChannelIds = createSelector(
   selectAllUnconfirmedConnections,
-  (_, channel) => channel,
-  (pendingConnections, channel) =>
-    pendingConnections.filter((pc) => pc.channelId === channel?.id),
+  (_, channelIds: string[]) => channelIds,
+  (pendingConnections, channelIds) =>
+    pendingConnections.filter((pc) => channelIds.includes(pc.channelId)),
 );
 
 // export actions

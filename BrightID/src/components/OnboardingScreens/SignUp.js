@@ -33,6 +33,8 @@ const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 export class SignUp extends React.Component<Props, State> {
   photoSheetRef: string;
 
+  textBoxRef: string;
+
   // eslint-disable-next-line react/state-in-constructor
   state = {
     name: '',
@@ -77,6 +79,7 @@ export class SignUp extends React.Component<Props, State> {
     try {
       const { finalBase64, name } = this.state;
       const { navigation, dispatch } = this.props;
+      this.textBoxRef?.blur();
       this.setState({
         creatingBrightId: true,
       });
@@ -164,6 +167,9 @@ export class SignUp extends React.Component<Props, State> {
             </Text>
             <TextInput
               testID="editName"
+              ref={(o) => {
+                this.textBoxRef = o;
+              }}
               onChangeText={(name) => this.setState({ name })}
               value={name}
               placeholder="Name"
@@ -252,7 +258,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     borderTopLeftRadius: 58,
-    borderTopRightRadius: 58,
     marginTop: -58,
     zIndex: 10,
     overflow: 'hidden',

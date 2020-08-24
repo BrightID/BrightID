@@ -2,75 +2,53 @@
 
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
-import { SvgXml } from 'react-native-svg';
-import { useDispatch } from 'react-redux';
-import { rejectPendingConnection } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
-import { confirmPendingConnectionThunk } from '@/components/NewConnectionsScreens/actions/pendingConnectionThunks';
+import RNFS from 'react-native-fs';
+import { useNavigation } from '@react-navigation/native';
 import { DEVICE_LARGE } from '@/utils/constants';
-import checkGreen from '@/static/check_green.svg';
-import xGrey from '@/static/x_grey.svg';
+import CirclePhoto from '@/components/Helpers/CirclePhoto';
 
-export const PendingConnectionCard = ({ pendingConnection }) => {
-  const dispatch = useDispatch();
-  const accept = () => {
-    dispatch(confirmPendingConnectionThunk(pendingConnection.id));
+export const PendingConnectionCard = ({ pendingConnections }) => {
+  const { navigate } = useNavigation();
+  const circlePhotos = pendingConnections.map(({ photo }) => ({ uri: photo }));
+  const firstNames = pendingConnections
+    .map(({ name }) => name.split(' ')[0])
+    .join(', ');
+  const navToPending = () => {
+    navigate('PendingConnections');
   };
-
-  const reject = () => {
-    dispatch(rejectPendingConnection(pendingConnection.id));
-  };
-
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={navToPending}>
       <View style={styles.photoContainer}>
-        <Image
-          source={{ uri: pendingConnection.photo }}
-          style={styles.photo}
-          resizeMode="cover"
-          onError={(e) => {
-            console.log(e);
-          }}
-          accessible={true}
-          accessibilityLabel="user photo"
-        />
+        {circlePhotos.length > 1 ? (
+          <CirclePhoto circlePhotos={circlePhotos} />
+        ) : (
+          <Image
+            source={circlePhotos[0]}
+            style={styles.photo}
+            resizeMode="cover"
+            onError={(e) => {
+              console.log(e);
+            }}
+            accessible={true}
+            accessibilityLabel="user photo"
+          />
+        )}
       </View>
       <View style={styles.info}>
-        <Text style={styles.name}>{pendingConnection.name}</Text>
+        <Text style={styles.name} numberOfLines={1}>
+          {firstNames}
+        </Text>
         <Text
           style={styles.invitationMsg}
           adjustsFontSizeToFit={true}
           numberOfLines={1}
         >
-          sent you a connection request
+          You have {pendingConnections.length} unconfirmed connection
+          {pendingConnections.length > 1 ? 's' : ''}
         </Text>
       </View>
-      <View style={styles.approvalButtonContainer}>
-        <TouchableOpacity
-          style={styles.greenCircle}
-          onPress={accept}
-          accessibilityLabel={`accept connection with ${pendingConnection.name}`}
-          accessibilityRole="button"
-        >
-          <SvgXml
-            xml={checkGreen}
-            width={DEVICE_LARGE ? 20 : 17}
-            height={DEVICE_LARGE ? 20 : 17}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.greyCircle}
-          onPress={reject}
-          accessibilityLabel={`reject connection with ${pendingConnection.name}`}
-          accessibilityRole="button"
-        >
-          <SvgXml
-            xml={xGrey}
-            width={DEVICE_LARGE ? 15 : 12}
-            height={DEVICE_LARGE ? 15 : 12}
-          />
-        </TouchableOpacity>
-      </View>
-    </View>
+      <View style={styles.approvalButtonContainer} />
+    </TouchableOpacity>
   );
 };
 

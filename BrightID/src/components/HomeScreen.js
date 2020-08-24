@@ -5,8 +5,10 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
   TextInput,
+  StatusBar,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { SvgXml } from 'react-native-svg';
@@ -22,7 +24,7 @@ import verificationSticker from '@/static/verification-sticker.svg';
 import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
 import forumIcon from '@/static/forum_icon.svg';
-import { useStatusBarHome } from '@/utils/hooks';
+import { useWhiteStatusBar } from '@/utils/hooks';
 
 /**
  * Home screen of BrightID
@@ -51,7 +53,7 @@ export const HomeScreen = (props) => {
     verifications,
   ]);
 
-  useStatusBarHome();
+  // useWhiteStatusBar();
   useFocusEffect(
     useCallback(() => {
       dispatch(fetchUserInfo());
@@ -105,6 +107,11 @@ export const HomeScreen = (props) => {
   return (
     // let verifications = ['BrightID'];
     <View style={styles.container}>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="#fff"
+        animated={true}
+      />
       <View style={styles.profileContainer} testID="PhotoContainer">
         {profilePhoto ? (
           <TouchableOpacity
@@ -147,13 +154,14 @@ export const HomeScreen = (props) => {
                 blurOnSubmit={true}
               />
             ) : (
-              <Text
-                testID="EditNameBtn"
-                style={styles.name}
+              <TouchableWithoutFeedback
                 onPress={() => setIsEditing(true)}
+                accessibilityLabel="edit name"
               >
-                {name}
-              </Text>
+                <Text testID="EditNameBtn" style={styles.name}>
+                  {name}
+                </Text>
+              </TouchableWithoutFeedback>
             )}
             {verified && (
               <SvgXml

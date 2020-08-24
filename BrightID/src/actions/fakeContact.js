@@ -51,7 +51,7 @@ export const addFakeConnection = () => async (
 
   const channel = selectChannelById(
     getState(),
-    getState().channels.myChannelId,
+    getState().channels.myChannelIds[getState().channels.displayChannelType],
   );
 
   const dataObj = {

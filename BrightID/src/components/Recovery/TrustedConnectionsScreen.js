@@ -10,9 +10,8 @@ import {
   FlatList,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { DEVICE_TYPE, ORANGE } from '@/utils/constants';
+import { DEVICE_TYPE, ORANGE, DEVICE_LARGE } from '@/utils/constants';
 import EmptyList from '@/components/Helpers/EmptyList';
-import SearchConnections from '../Connections/SearchConnections';
 import TrustedConnectionCard from './TrustedConnectionCard';
 import { setTrustedConnections } from './helpers';
 
@@ -69,7 +68,6 @@ class TrustedConnectionsScreen extends React.Component<Props> {
   };
 
   render() {
-    const { navigation } = this.props;
     const connections = this.filterConnections();
 
     return (
@@ -118,7 +116,7 @@ class TrustedConnectionsScreen extends React.Component<Props> {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: DEVICE_LARGE ? 70 : 65,
     width: '100%',
     zIndex: 1,
   },
