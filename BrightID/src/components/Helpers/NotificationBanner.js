@@ -50,11 +50,6 @@ export const NotificationBanner = () => {
       'custom',
       activeNotification?.message,
     );
-
-    // if (DEVICE_ANDROID) {
-    //   StatusBar.setBackgroundColor('#AFFDD0', true);
-    // }
-    // StatusBar.setBarStyle('dark-content', true);
   }, [activeNotification]);
 
   // update default icon

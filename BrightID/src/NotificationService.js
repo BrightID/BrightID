@@ -9,8 +9,13 @@ import {
   NotificationActionResponse,
 } from 'react-native-notifications';
 import { DEVICE_IOS, DEVICE_ANDROID } from '@/utils/constants';
-import { setDeviceToken, setActiveNotification } from '@/actions';
+import {
+  setDeviceToken,
+  setActiveNotification,
+  setNotificationToken,
+} from '@/actions';
 import { store } from '@/store';
+import notificationService from '@/api/notificationService';
 import { navigate } from './NavigationService';
 
 export const notificationSubscription = () => {
@@ -19,7 +24,24 @@ export const notificationSubscription = () => {
   Notifications.events().registerRemoteNotificationsRegistered(
     (event: Registered) => {
       // TODO: Send the token to my server so it could send back push notifications...
-      if (event.deviceToken) store.dispatch(setDeviceToken(event.deviceToken));
+      const { notifications } = store.getState();
+
+      if (
+        !notifications.notificationToken ||
+        !notifications.deviceToken ||
+        (event.deviceToken && event.deviceToken !== notifications.deviceToken)
+      ) {
+        notificationService
+          .getToken(event.deviceToken)
+          .then(({ notificationToken }) => {
+            store.dispatch(setNotificationToken(notificationToken));
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+        store.dispatch(setDeviceToken(event.deviceToken));
+      }
+
       console.log('RECIEVED_NOTIFICATION_TOKEN', event.deviceToken);
     },
   );

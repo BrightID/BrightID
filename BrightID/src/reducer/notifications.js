@@ -4,6 +4,7 @@ import {
   SET_BACKUP_PENDING,
   SET_DEVICE_TOKEN,
   SET_ACTIVE_NOTIFICATION,
+  SET_NOTIFICATION_TOKEN,
   REMOVE_ACTIVE_NOTIFICATION,
   RESET_STORE,
 } from '@/actions';
@@ -12,7 +13,8 @@ import { CONNECTIONS_TYPE, GROUPS_TYPE, MISC_TYPE } from '@/utils/constants';
 const initialState = {
   activeNotification: null,
   backupPending: false,
-  deviceToken: 'unavailable',
+  deviceToken: '',
+  notificationToken: '',
   miscAlreadyNotified: false,
 };
 
@@ -28,6 +30,9 @@ export const reducer = (
     }
     case SET_DEVICE_TOKEN: {
       return { ...state, deviceToken: action.deviceToken };
+    }
+    case SET_NOTIFICATION_TOKEN: {
+      return { ...state, notificationToken: action.notificationToken };
     }
     case SET_ACTIVE_NOTIFICATION: {
       // we only want to notify the user to backup once per session
