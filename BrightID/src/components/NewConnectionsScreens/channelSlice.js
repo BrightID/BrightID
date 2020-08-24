@@ -10,6 +10,7 @@ import {
 
   What is a channel:
   - 'aesKey': encryption key for data transported through channel
+  - 'api': instance of ChannelAPI for this channel
   - 'id': unique identifier
   - 'initiatorProfileId': profileId of channel initiator
   - 'ipAddress': IP of profile service

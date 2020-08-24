@@ -101,7 +101,7 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
         ...state,
         invites: state.invites.map<invite>((invite) => {
           if (invite.inviteId === action.inviteId) {
-            invite.state = INVITE_ACCEPTED;
+            return { ...invite, state: INVITE_ACCEPTED };
           }
           return invite;
         }),
@@ -112,7 +112,7 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
         ...state,
         invites: state.invites.map<invite>((invite) => {
           if (invite.inviteId === action.inviteId) {
-            invite.state = INVITE_REJECTED;
+            return { ...invite, state: INVITE_REJECTED };
           }
           return invite;
         }),

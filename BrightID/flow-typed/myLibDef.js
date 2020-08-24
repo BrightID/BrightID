@@ -6,6 +6,7 @@ import {
   channel_states,
   channel_types,
 } from '@/components/NewConnectionsScreens/channelSlice';
+import ChannelAPI from '@/api/channelService';
 
 declare type getState = () => State;
 
@@ -65,6 +66,7 @@ declare type Channel = {
   type: ChannelType,
   state: ChannelState,
   myProfileTimestamp?: number,
+  api: ChannelAPI,
 };
 
 declare type ConnectionsState = {
@@ -92,6 +94,7 @@ declare type connection = {
   createdAt: number,
   hasPrimaryGroup: boolean,
   publicKey?: string,
+  flaggers?: any, // TODO: Proper definition, maybe refactor
 };
 
 declare type GroupsState = {
@@ -190,6 +193,7 @@ declare type UserState = {
 
 declare type NotificationsState = {
   activeNotification: { message: string, type: string },
+  pendingConnections: PendingConnection[],
   backupPending: boolean,
   deviceToken: string,
 };

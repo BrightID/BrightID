@@ -62,17 +62,6 @@ const membersScreenOptions = ({ navigation, route }) => {
       paddingLeft: 20,
       paddingRight: 30,
     },
-    headerRight: () => (
-      <TouchableOpacity
-        testID="groupOptionsBtn"
-        style={{ marginRight: 11 }}
-        onPress={() => {
-          emitter.emit('optionsSelected');
-        }}
-      >
-        <Material name="dots-horizontal" size={32} color="#fff" />
-      </TouchableOpacity>
-    ),
   };
 };
 
