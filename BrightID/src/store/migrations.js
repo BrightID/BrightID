@@ -42,7 +42,8 @@ const migrations = {
     };
 
     delete nextState.user.notifications;
-
+    delete nextState.connectQrData;
+    delete nextState.connectUserData;
     return nextState;
   },
 };
