@@ -98,28 +98,15 @@ export const newPendingConnection = createAsyncThunk(
     decryptedObj.initiator =
       decryptedObj.profileTimestamp > channel.myProfileTimestamp;
 
-    if (profileData && profileData.data) {
-      const decryptedObj = decryptData(profileData.data, channel.aesKey);
-      decryptedObj.myself = decryptedObj.id === getState().user.id;
-      // I'm confused about this initiator logic, might change this...
-      decryptedObj.initiator =
-        decryptedObj.profileTimestamp <= channel.myProfileTimestamp;
+    console.log('decryptedObj.profileTimestamp', decryptedObj.profileTimestamp);
 
-      console.log(
-        'decryptedObj.profileTimestamp',
-        decryptedObj.profileTimestamp,
-      );
+    console.log('channel.myProfileTimestamp', channel.myProfileTimestamp);
 
-      console.log('channel.myProfileTimestamp', channel.myProfileTimestamp);
-
-      const connectionInfo = await fetchConnectionInfo({
-        brightID: decryptedObj.brightID,
-        myConnections: getState().connections.connections,
-      });
-      return { ...connectionInfo, ...decryptedObj };
-    } else {
-      throw new Error(`Missing data in profile from url: ${url}`);
-    }
+    const connectionInfo = await fetchConnectionInfo({
+      brightID: decryptedObj.brightID,
+      myConnections: getState().connections.connections,
+    });
+    return { ...connectionInfo, ...decryptedObj };
   },
 );
 

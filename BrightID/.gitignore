@@ -82,3 +82,4 @@ ios/Pods/Manifest.lock
 /android/app/src/main/res/draw*/
 /android/app/src/main/res/mipmap*/
 /android/app/src/main/res/raw/
+keystore.properties
