@@ -5,6 +5,7 @@ import {
   removeChannel,
   setMyChannel,
   updateChannel,
+  selectAllChannelIds,
 } from '@/components/NewConnectionsScreens/channelSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
@@ -48,8 +49,16 @@ export const createChannel = (channelType: ChannelType) => async (
   }
 };
 
-export const joinChannel = (channel: Channel) => async (dispatch: dispatch) => {
+export const joinChannel = (channel: Channel) => async (
+  dispatch: dispatch,
+  getState: getState,
+) => {
   console.log(`Joining channel ${channel.id} at ${channel.ipAddress}`);
+  // check to see if channel exists
+  const channelIds = selectAllChannelIds(getState());
+  if (channelIds.includes(channel.id)) {
+    throw new Error('Channel already exists');
+  }
   // check ttl of channel
   const expirationTimestamp = channel.timestamp + channel.ttl;
   let ttl = expirationTimestamp - Date.now();

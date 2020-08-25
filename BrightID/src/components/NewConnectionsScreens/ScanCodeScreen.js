@@ -105,20 +105,24 @@ export const ScanCodeScreen = () => {
   // handle qrcode data
   useEffect(() => {
     const handleQrData = async (qrData) => {
-      if (qrData.startsWith('Recovery_')) {
-        navigation.navigate('RecoveringConnection', {
-          recoveryRequestCode: qrData,
-        });
-      } else if (qrData.startsWith('brightid://')) {
-        console.log(`handleQrData: calling Linking.openURL() with ${qrData}`);
-        await Linking.openURL(qrData);
-      } else if (validQrString(qrData)) {
-        const channel = await decodeChannelQrString(qrData);
-        console.log(
-          `handleQrData: valid qrdata, joining channel ${channel.id}`,
-        );
-        await dispatch(joinChannel(channel));
-        setChannel(channel);
+      try {
+        if (qrData.startsWith('Recovery_')) {
+          navigation.navigate('RecoveringConnection', {
+            recoveryRequestCode: qrData,
+          });
+        } else if (qrData.startsWith('brightid://')) {
+          console.log(`handleQrData: calling Linking.openURL() with ${qrData}`);
+          await Linking.openURL(qrData);
+        } else if (validQrString(qrData)) {
+          const channel = await decodeChannelQrString(qrData);
+          setChannel(channel);
+          console.log(
+            `handleQrData: valid qrdata, joining channel ${channel.id}`,
+          );
+          await dispatch(joinChannel(channel));
+        }
+      } catch (err) {
+        console.log(err.message);
       }
     };
     if (qrData) {
