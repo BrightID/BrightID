@@ -29,15 +29,14 @@ class NotificationService {
     throw new Error(response.problem);
   }
 
-  async getToken({ oneTime }: { oneTime: boolean }) {
-    let { deviceToken } = store.getState().notifications;
-    if (!deviceToken) deviceToken = 'unavailable';
+  async getToken(deviceToken: string) {
+    if (!deviceToken) {
+      throw Error('No Device Token');
+    }
     const res = await this.notifyApi.post(`/token`, {
       deviceToken,
       deviceOS: DEVICE_OS,
-      oneTime,
     });
-
     NotificationService.throwOnError(res);
     return res.data;
   }
@@ -52,7 +51,7 @@ class NotificationService {
     payload: { [val: string]: string },
   }) {
     const notificationTokens = [notificationToken];
-    const res = await this.notifyApi.post(`/alert`, {
+    const res = await this.notifyApi.post(`/push`, {
       notificationTokens,
       type,
       payload,

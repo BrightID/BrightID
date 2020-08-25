@@ -4,6 +4,7 @@ import { MISC_TYPE } from '@/utils/constants';
 
 export const SET_BACKUP_PENDING = 'SET_BACKUP_PENDING';
 export const SET_DEVICE_TOKEN = 'SET_DEVICE_TOKEN';
+export const SET_NOTIFICATION_TOKEN = 'SET_NOTIFICATION_TOKEN';
 export const SET_ACTIVE_NOTIFICATION = 'SET_ACTIVE_NOTIFICATION';
 export const REMOVE_ACTIVE_NOTIFICATION = 'REMOVE_ACTIVE_NOTIFICATION';
 
@@ -15,6 +16,11 @@ export const setBackupPending = (backupPending: boolean) => ({
 export const setDeviceToken = (deviceToken: string) => ({
   type: SET_DEVICE_TOKEN,
   deviceToken,
+});
+
+export const setNotificationToken = (notificationToken: string) => ({
+  type: SET_NOTIFICATION_TOKEN,
+  notificationToken,
 });
 
 export const setActiveNotification = (notification: {
@@ -42,7 +48,7 @@ export const updateNotifications = () => async (
     const verifiedConnections = connections.filter(
       (conn) => conn.status === 'verified',
     );
-    if (!backupCompleted && verifiedConnections.length > 2) {
+    if (!backupCompleted && verifiedConnections.length > 6) {
       dispatch(setBackupPending(true));
       if (!activeNotification) {
         dispatch(
@@ -51,6 +57,10 @@ export const updateNotifications = () => async (
             type: MISC_TYPE,
           }),
         );
+        // remove notification after a few seconds
+        setTimeout(() => {
+          dispatch(setActiveNotification(null));
+        }, 6000);
       }
     } else {
       dispatch(setBackupPending(false));

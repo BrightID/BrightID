@@ -780,7 +780,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.testing;
+				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.demo;
 				PRODUCT_NAME = "BrightID Testing";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -807,7 +807,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.testing;
+				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.demo;
 				PRODUCT_NAME = "BrightID Testing";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;

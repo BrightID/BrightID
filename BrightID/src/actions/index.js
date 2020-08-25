@@ -66,10 +66,12 @@ export {
 export {
   SET_BACKUP_PENDING,
   SET_DEVICE_TOKEN,
+  SET_NOTIFICATION_TOKEN,
   SET_ACTIVE_NOTIFICATION,
   REMOVE_ACTIVE_NOTIFICATION,
   updateNotifications,
   setDeviceToken,
+  setNotificationToken,
   setActiveNotification,
   removeActiveNotification,
 } from './notifications';
