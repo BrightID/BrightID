@@ -77,7 +77,6 @@ const ConfirmationButtons = ({
     dispatch(confirmPendingConnectionThunk(pendingConnection.id));
 
     if (last) {
-      // if (DEVICE_ANDROID) carouselRef.current?.snapToItem(0);
       setReRender(true);
       setLastChannelType(channelType);
     } else {
@@ -90,7 +89,6 @@ const ConfirmationButtons = ({
     setLastChannelType(channelType);
 
     if (last) {
-      // if (DEVICE_ANDROID) carouselRef.current?.snapToItem(0);
       setReRender(true);
       setLastChannelType(channelType);
     } else {
@@ -319,7 +317,9 @@ export const PendingConnectionsScreen = () => {
   useFocusEffect(
     useCallback(() => {
       if (reRender) {
+        // refresh list
         resetDisplayConnections();
+        // we wait 500ms before showing the pendingConnection screen at the first connection
         setTimeout(() => {
           setReRender(false);
           setActiveIndex(0);
