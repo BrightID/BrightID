@@ -5,6 +5,7 @@ import {
   removeChannel,
   setMyChannel,
   updateChannel,
+  selectAllChannelIds,
 } from '@/components/NewConnectionsScreens/channelSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
@@ -48,7 +49,16 @@ export const createChannel = (channelType: ChannelType) => async (
   }
 };
 
-export const joinChannel = (channel: Channel) => async (dispatch: dispatch) => {
+export const joinChannel = (channel: Channel) => async (
+  dispatch: dispatch,
+  getState: getState,
+) => {
+  console.log(`Joining channel ${channel.id} at ${channel.ipAddress}`);
+  // check to see if channel exists
+  const channelIds = selectAllChannelIds(getState());
+  if (channelIds.includes(channel.id)) {
+    throw new Error('Channel already exists');
+  }
   // check ttl of channel
   const expirationTimestamp = channel.timestamp + channel.ttl;
   let ttl = expirationTimestamp - Date.now();
@@ -102,7 +112,9 @@ export const subscribeToConnectionRequests = (channelId: string) => (
   );
 
   if (pollTimerId) {
-    console.log(`Stopping previous timer ${(pollTimerId: any)}`);
+    console.log(
+      `Stopping previous timer ${(pollTimerId: any)} for channel ${channelId}`,
+    );
     clearInterval(pollTimerId);
   }
 
@@ -112,6 +124,8 @@ export const subscribeToConnectionRequests = (channelId: string) => (
     // fetch connection requests
     dispatch(fetchConnectionRequests(channelId));
   }, PROFILE_POLL_INTERVAL);
+
+  console.log(`Start polling channel ${channelId}, pollTImerId ${pollTimerId}`);
 
   dispatch(
     updateChannel({
@@ -147,7 +161,7 @@ export const fetchChannelProfiles = createAsyncThunk(
   'channels/fetchChannelProfiles',
   async (channelId, { getState, dispatch }) => {
     const channel = selectChannelById(getState(), channelId);
-    console.log(`fetching profiles from channel ${channelId}`);
+    // console.log(`fetching profiles from channel ${channelId}`);
     const profileIds = await channel.api.list(channelId);
     const knownProfileIds = selectAllPendingConnectionIds(getState());
     profileIds.forEach((profileId) => {
@@ -184,9 +198,7 @@ export const fetchConnectionRequests = (channelId: string) => async (
       profileId,
     );
     if (pendingConnection && !pendingConnection.signedMessage) {
-      console.log(
-        `Got new connection request from profileId ${profileId}.`,
-      );
+      console.log(`Got new connection request from profileId ${profileId}.`);
       // download connectionrequest to get signedMessage
       const profile = await channel.api.download({
         channelId: myProfileId,
