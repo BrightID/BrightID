@@ -96,7 +96,7 @@ export const newPendingConnection = createAsyncThunk(
     decryptedObj.myself = decryptedObj.id === getState().user.id;
     // I'm confused about this initiator logic, might change this...
     decryptedObj.initiator =
-      decryptedObj.profileTimestamp > channel.myProfileTimestamp;
+      decryptedObj.profileTimestamp <= channel.myProfileTimestamp;
 
     console.log('decryptedObj.profileTimestamp', decryptedObj.profileTimestamp);
 
