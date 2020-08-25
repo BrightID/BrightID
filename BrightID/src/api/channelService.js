@@ -42,8 +42,8 @@ class ChannelAPI {
     if (response.ok) {
       return;
     }
-    if (response.data && response.data.errorMessage) {
-      throw new Error(response.data.errorMessage);
+    if (response.data && response.data.error) {
+      throw new Error(response.data.error);
     }
     throw new Error(response.problem);
   }
