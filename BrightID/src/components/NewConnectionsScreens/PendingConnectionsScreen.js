@@ -19,34 +19,26 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
-import {
-  useFocusEffect,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
 import {
   pendingConnection_states,
   rejectPendingConnection,
   selectPendingConnectionById,
-  selectAllPendingConnections,
   selectAllUnconfirmedConnections,
-  selectAllPendingConnectionIds,
-  removeAllPendingConnections,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
 import { confirmPendingConnectionThunk } from '@/components/NewConnectionsScreens/actions/pendingConnectionThunks';
 import {
   channel_types,
   selectChannelById,
 } from '@/components/NewConnectionsScreens/channelSlice';
-import { DEVICE_LARGE, WIDTH, HEIGHT } from '@/utils/constants';
+import { DEVICE_LARGE, WIDTH } from '@/utils/constants';
 import backArrow from '@/static/back_arrow_grey.svg';
-import { transduce } from 'ramda';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -85,7 +77,7 @@ const ConfirmationButtons = ({
     dispatch(confirmPendingConnectionThunk(pendingConnection.id));
 
     if (last) {
-      carouselRef.current?.snapToItem(0);
+      // if (DEVICE_ANDROID) carouselRef.current?.snapToItem(0);
       setReRender(true);
       setLastChannelType(channelType);
     } else {
@@ -98,7 +90,7 @@ const ConfirmationButtons = ({
     setLastChannelType(channelType);
 
     if (last) {
-      carouselRef.current?.snapToItem(0);
+      // if (DEVICE_ANDROID) carouselRef.current?.snapToItem(0);
       setReRender(true);
       setLastChannelType(channelType);
     } else {
@@ -320,6 +312,7 @@ export const PendingConnectionsScreen = () => {
     const connectionsToDisplay = pendingConnections.filter(isReadyToConfirm);
     // this will cause the PendingConnectionList to re render
     setPendingConnectionsDisplay(connectionsToDisplay);
+    // setTimeout(() => {});
   }, [pendingConnections]);
 
   // setupList on first render
@@ -327,7 +320,10 @@ export const PendingConnectionsScreen = () => {
     useCallback(() => {
       if (reRender) {
         resetDisplayConnections();
-        setReRender(false);
+        setTimeout(() => {
+          setReRender(false);
+          setActiveIndex(0);
+        }, 500);
       }
     }, [reRender, resetDisplayConnections]),
   );
@@ -390,13 +386,14 @@ export const PendingConnectionsScreen = () => {
         layout="stack"
         layoutCardOffset={pendingConnectionsToDisplay.length}
         lockScrollWhileSnapping={true}
+        firstItem={0}
         itemWidth={WIDTH * 0.95}
         sliderWidth={WIDTH}
         onSnapToItem={(index) => {
           setActiveIndex(index);
         }}
         onLayout={() => {
-          setActiveIndex((prev) => !prev && 0);
+          setActiveIndex((prev) => prev || 0);
         }}
       />
     );
@@ -471,28 +468,36 @@ export const PendingConnectionsScreen = () => {
         animated={true}
       />
       {pendingConnectionsToDisplay.length ? (
-        <>
-          {PendingConnectionList}
-
-          <Pagination
-            containerStyle={{
-              maxWidth: '85%',
-              display: 'flex',
-              overflow: 'hidden',
-              flexWrap: 'wrap',
-              justifyContent: 'flex-start',
-            }}
-            dotContainerStyle={{
-              paddingTop: 5,
-            }}
-            dotsLength={pendingConnectionsToDisplay.length}
-            activeDotIndex={activeIndex}
-            inactiveDotOpacity={0.4}
-            inactiveDotScale={1}
-            carouselRef={carouselRef.current}
-            tappableDots={true}
+        !reRender ? (
+          <>
+            {PendingConnectionList}
+            <Pagination
+              containerStyle={{
+                maxWidth: '85%',
+                display: 'flex',
+                overflow: 'hidden',
+                flexWrap: 'wrap',
+                justifyContent: 'flex-start',
+              }}
+              dotContainerStyle={{
+                paddingTop: 5,
+              }}
+              dotsLength={pendingConnectionsToDisplay.length}
+              activeDotIndex={activeIndex}
+              inactiveDotOpacity={0.4}
+              inactiveDotScale={1}
+              carouselRef={carouselRef.current}
+              tappableDots={true}
+            />
+          </>
+        ) : (
+          <Spinner
+            isVisible={true}
+            size={44}
+            type="FadingCircleAlt"
+            color="#aaa"
           />
-        </>
+        )
       ) : (
         <ZeroConnectionsToDisplay />
       )}

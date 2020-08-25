@@ -208,7 +208,7 @@ export const MyCodeScreen = () => {
     const alertMsg =
       myChannel?.type === channel_types.SINGLE
         ? `Share this link with one friend so they can connect to you.`
-        : `Share this link with a group of people so everyone can connect.`;
+        : `Share this link with people who cannot scan the QRCode`;
     Alert.alert(
       'Universal Link',
       alertMsg,

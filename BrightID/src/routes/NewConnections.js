@@ -19,6 +19,11 @@ const newConnectionOptions = {
   title: '',
 };
 
+const groupConnectionOptions = {
+  ...headerOptions,
+  title: 'Group Connection',
+};
+
 const connectionPreviewOptions = {
   headerShown: false,
   cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
@@ -49,7 +54,7 @@ const NewConnections = () => (
     <Stack.Screen
       name="GroupConnection"
       component={GroupConnectionScreen}
-      options={connectionPreviewOptions}
+      options={groupConnectionOptions}
     />
   </>
 );
