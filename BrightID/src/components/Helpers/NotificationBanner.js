@@ -35,6 +35,8 @@ import {
 
 const icons = { groups, connections, misc };
 
+const NOTIFICATION_TIMEOUT = 10000;
+
 export const NotificationBanner = () => {
   const dispatch = useDispatch();
   const dropDownAlertRef = useRef(null);
@@ -45,12 +47,20 @@ export const NotificationBanner = () => {
 
   useEffect(() => {
     if (!activeNotification) return;
-
+    // display banner
     dropDownAlertRef.current?.alertWithType(
       'custom',
       activeNotification?.message,
     );
-  }, [activeNotification]);
+    // automatically close banner after timeout
+    const timer = setTimeout(() => {
+      dropDownAlertRef.current?.closeAction('automatic');
+    }, NOTIFICATION_TIMEOUT);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [activeNotification, dispatch]);
 
   // update default icon
   const icon = icons[activeNotification?.type] ?? misc;
@@ -64,6 +74,7 @@ export const NotificationBanner = () => {
   }, [activeNotification]);
 
   const _onClose = () => {
+    console.log('_onClose');
     dispatch(setActiveNotification(null));
   };
 
