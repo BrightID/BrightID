@@ -51,6 +51,8 @@ import backArrow from '@/static/back_arrow_grey.svg';
 
 const isReadyToConfirm = (pc) => pc.initiator || pc.signedMessage;
 
+const ZERO_CONNECTIONS_TIMEOUT = 5000;
+
 /**  COMPONENTS */
 
 const ConfirmationButtons = ({
@@ -289,19 +291,15 @@ export const PendingConnectionsScreen = () => {
       if (pendingConnections.length === 0) {
         setLoading(true);
         timeout = setTimeout(() => {
-          if (lastChannelType === channel_types.SINGLE) {
-            navigation.navigate('Connections');
-          } else {
-            setLoading(false);
-          }
-        }, 1500);
+          navigation.navigate('Connections');
+        }, ZERO_CONNECTIONS_TIMEOUT);
       } else {
         setLoading(false);
       }
       return () => {
-        clearTimeout(timeout);
+        if (timeout) clearTimeout(timeout);
       };
-    }, [pendingConnections.length, lastChannelType, navigation]),
+    }, [pendingConnections.length, navigation]),
   );
 
   // this will trigger a re-render of the carousel
@@ -468,6 +466,7 @@ export const PendingConnectionsScreen = () => {
         animated={true}
       />
       {pendingConnectionsToDisplay.length ? (
+        // reRender will only be true for 500ms
         !reRender ? (
           <>
             {PendingConnectionList}

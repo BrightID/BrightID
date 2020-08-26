@@ -51,6 +51,8 @@ import { createChannel } from '@/components/NewConnectionsScreens/actions/channe
  *
  */
 
+const GROUP_TIMEOUT = 35000;
+
 const Container = DEVICE_IOS ? SafeAreaView : View;
 
 const Timer = () => {
@@ -154,14 +156,23 @@ export const MyCodeScreen = () => {
 
   // Navigate to next screen if SINGLE channel
   useEffect(() => {
-    if (displayChannelType === channel_types.SINGLE) {
-      // pendingConnectionSize for ALL active channels
-      if (pendingConnectionSize > 0) {
+    let timer;
+    if (pendingConnectionSize > 0) {
+      if (displayChannelType === channel_types.SINGLE) {
+        // navigate immediately to pending connections
         navigation.navigate('PendingConnections');
         // close channel to prevent navigation loop
         dispatch(closeChannel({ channelId: myChannel?.id, background: false }));
+      } else if (displayChannelType === channel_types.GROUP) {
+        // wait 35 seconds after the last connection before navigating
+        timer = setTimeout(() => {
+          navigation.navigate('PendingConnections');
+        }, GROUP_TIMEOUT);
       }
     }
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [
     displayChannelType,
     dispatch,

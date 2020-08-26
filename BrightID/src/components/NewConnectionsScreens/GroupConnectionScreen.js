@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   Animated,
   StyleSheet,
@@ -14,7 +14,11 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Svg, { Line, SvgXml } from 'react-native-svg';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  useNavigation,
+  useRoute,
+  useFocusEffect,
+} from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -29,6 +33,8 @@ import {
 import backArrow from '@/static/back_arrow_black.svg';
 
 /** HELPERS */
+
+const GROUP_TIMEOUT = 35000;
 
 const radius = WIDTH / 2 - 35;
 
@@ -72,6 +78,18 @@ export const GroupConnectionScreen = () => {
 
   const groupConnections = useSelector((state) =>
     selectGroupConnections(state, channel),
+  );
+
+  // automatically nav to the next screen after timeout
+  useFocusEffect(
+    useCallback(() => {
+      const timer = setTimeout(() => {
+        navigation.navigate('PendingConnections');
+      }, GROUP_TIMEOUT);
+      return () => {
+        clearTimeout(timer);
+      };
+    }, [navigation]),
   );
 
   useEffect(() => {
