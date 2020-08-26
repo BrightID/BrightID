@@ -11,6 +11,7 @@ import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
 import { generateChannelData } from '@/utils/channels';
 import {
+  CHANNEL_CONNECTION_LIMIT,
   CHANNEL_TTL,
   MIN_CHANNEL_JOIN_TTL,
   PROFILE_POLL_INTERVAL,
@@ -48,14 +49,14 @@ export const createChannel = (channelType: ChannelType) => async (
     dispatch(subscribeToConnectionRequests(channel.id));
   } catch (e) {
     // Something went wrong while creating channel.
+    if (channel && channel.id) {
+      dispatch(leaveChannel(channel.id));
+    }
     console.log(`Error while crating channel: ${e}`);
     Alert.alert(
       'Error',
       `Could not create connection channel. Error message: ${e.message}`,
     );
-    if (channel && channel.id) {
-      dispatch(leaveChannel(channel.id));
-    }
   }
 };
 
@@ -106,12 +107,12 @@ export const joinChannel = (channel: Channel) => async (
     dispatch(subscribeToConnectionRequests(channel.id));
   } catch (e) {
     // Something went wrong while trying to join channel.
+    dispatch(leaveChannel(channel.id));
     console.log(`Error while joining channel: ${e}`);
     Alert.alert(
       'Error',
       `Could not join connection channel. Error message: ${e.message}`,
     );
-    dispatch(leaveChannel(channel.id));
   }
 };
 
@@ -187,8 +188,9 @@ export const fetchChannelProfiles = createAsyncThunk(
   'channels/fetchChannelProfiles',
   async (channelId, { getState, dispatch }) => {
     const channel = selectChannelById(getState(), channelId);
-    // console.log(`fetching profiles from channel ${channelId}`);
-    const profileIds = await channel.api.list(channelId);
+    let profileIds = await channel.api.list(channelId);
+    // Only get up to CHANNEL_CONNECTION_LIMIT profiles
+    profileIds = profileIds.slice(0, CHANNEL_CONNECTION_LIMIT);
     const knownProfileIds = selectAllPendingConnectionIds(getState());
     profileIds.forEach((profileId) => {
       if (
@@ -216,7 +218,9 @@ export const fetchConnectionRequests = (channelId: string) => async (
 ) => {
   const channel: Channel = selectChannelById(getState(), channelId);
   const { myProfileId } = channel;
-  const profileIds = await channel.api.list(myProfileId);
+  let profileIds = await channel.api.list(myProfileId);
+  // Only get up to CHANNEL_CONNECTION_LIMIT profiles
+  profileIds = profileIds.slice(0, CHANNEL_CONNECTION_LIMIT);
   for (const profileId of profileIds) {
     // check if signedMessage and profile exists
     const pendingConnection = selectPendingConnectionById(
