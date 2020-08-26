@@ -218,8 +218,8 @@ export const MyCodeScreen = () => {
       : `Connect with ${myName} on BrightID: ${universalLink}`;
     const alertMsg =
       myChannel?.type === channel_types.SINGLE
-        ? `Share this link with one friend so they can connect to you.`
-        : `Share this link with people who cannot scan the QRCode`;
+        ? `Share this link with one friend`
+        : `Share this link`;
     Alert.alert(
       'Universal Link',
       alertMsg,
