@@ -39,6 +39,7 @@ import {
 } from '@/components/NewConnectionsScreens/channelSlice';
 import { DEVICE_LARGE, WIDTH } from '@/utils/constants';
 import backArrow from '@/static/back_arrow_grey.svg';
+import { setActiveNotification } from '@/actions';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -51,7 +52,7 @@ import backArrow from '@/static/back_arrow_grey.svg';
 
 const isReadyToConfirm = (pc) => pc.initiator || pc.signedMessage;
 
-const ZERO_CONNECTIONS_TIMEOUT = 5000;
+const ZERO_CONNECTIONS_TIMEOUT = 3500;
 
 /**  COMPONENTS */
 
@@ -59,7 +60,6 @@ const ConfirmationButtons = ({
   pendingConnection: pc,
   carouselRef,
   last,
-  setLastChannelType,
   setReRender,
 }) => {
   const dispatch = useDispatch();
@@ -71,16 +71,11 @@ const ConfirmationButtons = ({
     (a, b) => a?.state === b?.state && a?.signedMessage === b?.signedMessage,
   );
 
-  const channelType = useSelector(
-    (state) => selectChannelById(state, pendingConnection.channelId)?.type,
-  );
-
   const accept = () => {
     dispatch(confirmPendingConnectionThunk(pendingConnection.id));
 
     if (last) {
       setReRender(true);
-      setLastChannelType(channelType);
     } else {
       carouselRef.current?.snapToNext();
     }
@@ -88,11 +83,9 @@ const ConfirmationButtons = ({
 
   const reject = () => {
     dispatch(rejectPendingConnection(pendingConnection.id));
-    setLastChannelType(channelType);
 
     if (last) {
       setReRender(true);
-      setLastChannelType(channelType);
     } else {
       carouselRef.current?.snapToNext();
     }
@@ -260,16 +253,13 @@ export const PreviewConnection = (props) => {
 
 export const PendingConnectionsScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const carouselRef = useRef(null);
 
   // we want to watch for all changes to pending connections
   const pendingConnections = useSelector((state) => {
     return selectAllUnconfirmedConnections(state);
   });
-
-  // total length of all channels
-  // TODO - change this to group channels
-  const channelsTotal = useSelector((state) => state.channels.ids.length);
 
   // pending connections to display
   const [pendingConnectionsToDisplay, setPendingConnectionsDisplay] = useState(
@@ -278,29 +268,9 @@ export const PendingConnectionsScreen = () => {
 
   const [loading, setLoading] = useState(true);
 
-  const [lastChannelType, setLastChannelType] = useState(channel_types.GROUP);
-
   const [reRender, setReRender] = useState(true);
 
   const [activeIndex, setActiveIndex] = useState(null);
-
-  // give our app some time to download new connections when we have zero connections pending
-  useFocusEffect(
-    useCallback(() => {
-      let timeout;
-      if (pendingConnections.length === 0) {
-        setLoading(true);
-        timeout = setTimeout(() => {
-          navigation.navigate('Connections');
-        }, ZERO_CONNECTIONS_TIMEOUT);
-      } else {
-        setLoading(false);
-      }
-      return () => {
-        if (timeout) clearTimeout(timeout);
-      };
-    }, [pendingConnections.length, navigation]),
-  );
 
   // this will trigger a re-render of the carousel
   // causes a glitch in the UI on Android
@@ -311,20 +281,26 @@ export const PendingConnectionsScreen = () => {
     // setTimeout(() => {});
   }, [pendingConnections]);
 
-  // setupList on first render
   useFocusEffect(
     useCallback(() => {
-      if (reRender) {
-        // refresh list
-        resetDisplayConnections();
-        // we wait 500ms before showing the pendingConnection screen at the first connection
-        setTimeout(() => {
-          setReRender(false);
-          setActiveIndex(0);
-        }, 500);
-      }
-    }, [reRender, resetDisplayConnections]),
+      setReRender(true);
+      console.log('SETTING ACTIVE NOTIFICATION?');
+      dispatch(setActiveNotification(null));
+    }, [dispatch]),
   );
+
+  // setupList on first render
+  useEffect(() => {
+    if (reRender) {
+      // refresh list
+      resetDisplayConnections();
+      // we wait 500ms before showing the pendingConnection screen
+      setTimeout(() => {
+        setReRender(false);
+        setActiveIndex(0);
+      }, 500);
+    }
+  }, [reRender, resetDisplayConnections]);
 
   // re-render list if no connections are displayed
   useEffect(() => {
@@ -345,18 +321,21 @@ export const PendingConnectionsScreen = () => {
     return () => BackHandler.removeEventListener('hardwareBackPress', goBack);
   }, [carouselRef]);
 
-  const navHome = () => {
-    navigation.navigate('Home');
-  };
-
-  // return home if there are no channels
+  // leave page if zero pending connections
   useEffect(() => {
-    if (navigation.isFocused() && channelsTotal < 1) {
-      lastChannelType === channel_types.SINGLE
-        ? navigation.navigate('Connections')
-        : navigation.navigate('Home');
+    let timeout;
+    if (pendingConnections.length === 0) {
+      setLoading(true);
+      timeout = setTimeout(() => {
+        navigation.navigate('Connections');
+      }, ZERO_CONNECTIONS_TIMEOUT);
+    } else {
+      setLoading(false);
     }
-  }, [channelsTotal, navigation, lastChannelType]);
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [pendingConnections.length, navigation]);
 
   // the list should only re render sparingly for performance and continuity
   const PendingConnectionList = useMemo(() => {
@@ -366,7 +345,6 @@ export const PendingConnectionsScreen = () => {
           pendingConnection={item}
           carouselRef={carouselRef}
           last={index === pendingConnectionsToDisplay.length - 1}
-          setLastChannelType={setLastChannelType}
           setReRender={setReRender}
         />
       );
@@ -383,7 +361,6 @@ export const PendingConnectionsScreen = () => {
         renderItem={renderItem}
         layout="stack"
         layoutCardOffset={pendingConnectionsToDisplay.length}
-        lockScrollWhileSnapping={true}
         firstItem={0}
         itemWidth={WIDTH * 0.95}
         sliderWidth={WIDTH}
@@ -408,49 +385,35 @@ export const PendingConnectionsScreen = () => {
           height: '100%',
         }}
       >
-        {loading ? (
-          <Spinner
-            isVisible={true}
-            size={44}
-            type="FadingCircleAlt"
-            color="#aaa"
+        <Material
+          name="account-clock-outline"
+          size={DEVICE_LARGE ? 48 : 40}
+          color="#333"
+        />
+        <Text style={styles.waitingText}>
+          Waiting for{' '}
+          {pendingConnections.length === 0
+            ? 'more '
+            : pendingConnections.length > 1 && `${pendingConnections.length} `}
+          {pendingConnections.length === 1
+            ? pendingConnections[0].name
+            : 'connections'}{' '}
+          {pendingConnections.length ? 'to confirm you.' : ''}
+        </Text>
+        <Spinner isVisible={true} size={60} type="ThreeBounce" color="#333" />
+        <TouchableOpacity
+          style={styles.bottomButton}
+          onPress={() => {
+            navigation.navigate('Home');
+          }}
+        >
+          <Material
+            name="card-account-details-outline"
+            size={DEVICE_LARGE ? 36 : 24}
+            color="#333"
           />
-        ) : (
-          <>
-            <Material
-              name="account-clock-outline"
-              size={DEVICE_LARGE ? 48 : 40}
-              color="#333"
-            />
-            <Text style={styles.waitingText}>
-              Waiting for{' '}
-              {pendingConnections.length === 0
-                ? 'more '
-                : pendingConnections.length > 1 &&
-                  `${pendingConnections.length} `}
-              {pendingConnections.length === 1
-                ? pendingConnections[0].name
-                : 'connections'}{' '}
-              {pendingConnections.length ? 'to confirm you.' : ''}
-            </Text>
-
-            <Spinner
-              isVisible={true}
-              size={60}
-              type="ThreeBounce"
-              color="#333"
-            />
-
-            <TouchableOpacity style={styles.bottomButton} onPress={navHome}>
-              <Material
-                name="card-account-details-outline"
-                size={DEVICE_LARGE ? 36 : 24}
-                color="#333"
-              />
-              <Text style={styles.bottomButtonText}>Return Home</Text>
-            </TouchableOpacity>
-          </>
-        )}
+          <Text style={styles.bottomButtonText}>Return Home</Text>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -465,38 +428,36 @@ export const PendingConnectionsScreen = () => {
         backgroundColor="#fff"
         animated={true}
       />
-      {pendingConnectionsToDisplay.length ? (
-        // reRender will only be true for 500ms
-        !reRender ? (
-          <>
-            {PendingConnectionList}
-            <Pagination
-              containerStyle={{
-                maxWidth: '85%',
-                display: 'flex',
-                overflow: 'hidden',
-                flexWrap: 'wrap',
-                justifyContent: 'flex-start',
-              }}
-              dotContainerStyle={{
-                paddingTop: 5,
-              }}
-              dotsLength={pendingConnectionsToDisplay.length}
-              activeDotIndex={activeIndex}
-              inactiveDotOpacity={0.4}
-              inactiveDotScale={1}
-              carouselRef={carouselRef.current}
-              tappableDots={true}
-            />
-          </>
-        ) : (
-          <Spinner
-            isVisible={true}
-            size={44}
-            type="FadingCircleAlt"
-            color="#aaa"
+      {}
+      {loading || reRender ? (
+        <Spinner
+          isVisible={true}
+          size={44}
+          type="FadingCircleAlt"
+          color="#aaa"
+        />
+      ) : pendingConnectionsToDisplay.length ? (
+        <>
+          {PendingConnectionList}
+          <Pagination
+            containerStyle={{
+              maxWidth: '85%',
+              display: 'flex',
+              overflow: 'hidden',
+              flexWrap: 'wrap',
+              justifyContent: 'flex-start',
+            }}
+            dotContainerStyle={{
+              paddingTop: 5,
+            }}
+            dotsLength={pendingConnectionsToDisplay.length}
+            activeDotIndex={activeIndex ?? 0}
+            inactiveDotOpacity={0.4}
+            inactiveDotScale={1}
+            carouselRef={carouselRef.current}
+            tappableDots={true}
           />
-        )
+        </>
       ) : (
         <ZeroConnectionsToDisplay />
       )}

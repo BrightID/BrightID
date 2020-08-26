@@ -186,6 +186,7 @@ export const HomeScreen = (props) => {
           testID="connectionsBtn"
           style={styles.countsCard}
           onPress={() => {
+            dispatch(setActiveNotification(null));
             navigation.navigate('Connections');
           }}
         >
@@ -199,6 +200,7 @@ export const HomeScreen = (props) => {
           testID="groupsBtn"
           style={styles.countsCard}
           onPress={() => {
+            dispatch(setActiveNotification(null));
             navigation.navigate('Groups');
           }}
         >
@@ -212,6 +214,7 @@ export const HomeScreen = (props) => {
           testID="appsBtn"
           style={styles.countsCard}
           onPress={() => {
+            dispatch(setActiveNotification(null));
             navigation.navigate('Apps');
           }}
         >
@@ -229,6 +232,7 @@ export const HomeScreen = (props) => {
             testID="MyCodeBtn"
             style={styles.connectButton}
             onPress={() => {
+              dispatch(setActiveNotification(null));
               navigation.navigate('MyCode');
             }}
             accessible={true}
@@ -245,6 +249,7 @@ export const HomeScreen = (props) => {
             testID="ScanCodeBtn"
             style={styles.connectButton}
             onPress={() => {
+              dispatch(setActiveNotification(null));
               navigation.navigate('ScanCode');
             }}
             accessible={true}

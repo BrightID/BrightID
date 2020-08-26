@@ -79,7 +79,6 @@ export class Onboard extends React.Component<Props, State> {
             data={entries}
             renderItem={this.renderItem}
             layout="default"
-            lockScrollWhileSnapping={true}
             autoplay={true}
             sliderWidth={winWidth}
             itemWidth={winWidth - 40}
