@@ -25,10 +25,10 @@ import qricon from '@/static/qr_icon_white.svg';
 import {
   channel_types,
   closeChannel,
-} from '@/components/NewConnectionsScreens/channelSlice';
-import { selectAllPendingConnectionsByChannelIds } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+} from '@/components/PendingConnectionsScreens/channelSlice';
+import { selectAllPendingConnectionsByChannelIds } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import { decodeChannelQrString } from '@/utils/channels';
-import { joinChannel } from '@/components/NewConnectionsScreens/actions/channelThunks';
+import { joinChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
 import { RNCamera } from './RNCameraProvider';
 
 /**

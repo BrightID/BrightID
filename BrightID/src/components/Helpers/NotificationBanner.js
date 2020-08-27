@@ -21,11 +21,11 @@ import {
   // channel_states,
   channel_types,
   selectChannelById,
-} from '@/components/NewConnectionsScreens/channelSlice';
+} from '@/components/PendingConnectionsScreens/channelSlice';
 import {
   // pendingConnection_states,
   selectAllUnconfirmedConnections,
-} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+} from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 
 /* notification types: 
 @type groups

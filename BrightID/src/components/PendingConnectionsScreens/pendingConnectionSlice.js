@@ -9,7 +9,7 @@ import moment from 'moment';
 import {
   removeChannel,
   selectChannelById,
-} from '@/components/NewConnectionsScreens/channelSlice';
+} from '@/components/PendingConnectionsScreens/channelSlice';
 import { decryptData } from '@/utils/cryptoHelper';
 import api from '@/api/brightId';
 

@@ -14,7 +14,7 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   pendingConnection_states,
   selectAllPendingConnections,
-} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+} from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import HomeScreen from '@/components/HomeScreen';
 import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnectionScreen';
 import { navigate } from '@/NavigationService';

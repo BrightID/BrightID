@@ -29,7 +29,7 @@ import {
   pendingConnection_states,
   selectAllPendingConnections,
   selectPendingConnectionById,
-} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+} from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import backArrow from '@/static/back_arrow_black.svg';
 
 /** HELPERS */

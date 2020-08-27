@@ -36,11 +36,11 @@ import {
   closeChannel,
   setDisplayChannelType,
   selectAllActiveChannelIdsByType,
-} from '@/components/NewConnectionsScreens/channelSlice';
+} from '@/components/PendingConnectionsScreens/channelSlice';
 import { encodeChannelQrString } from '@/utils/channels';
-import { selectAllPendingConnectionsByChannelIds } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+import { selectAllPendingConnectionsByChannelIds } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import { createFakeConnection } from '@/components/Connections/models/createFakeConnection';
-import { createChannel } from '@/components/NewConnectionsScreens/actions/channelThunks';
+import { createChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
 
 /**
  * My Code screen of BrightID

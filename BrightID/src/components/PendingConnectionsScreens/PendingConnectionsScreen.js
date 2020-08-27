@@ -31,12 +31,12 @@ import {
   rejectPendingConnection,
   selectPendingConnectionById,
   selectAllUnconfirmedConnections,
-} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
-import { confirmPendingConnectionThunk } from '@/components/NewConnectionsScreens/actions/pendingConnectionThunks';
+} from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+import { confirmPendingConnectionThunk } from '@/components/PendingConnectionsScreens/actions/pendingConnectionThunks';
 import {
   channel_types,
   selectChannelById,
-} from '@/components/NewConnectionsScreens/channelSlice';
+} from '@/components/PendingConnectionsScreens/channelSlice';
 import { DEVICE_LARGE, WIDTH } from '@/utils/constants';
 import backArrow from '@/static/back_arrow_grey.svg';
 import { setActiveNotification } from '@/actions';
