@@ -50,4 +50,37 @@ describe('ChannelAPI', () => {
       expect(data).toMatchObject(myData);
     });
   });
+
+  describe(`Channel limit`, () => {
+    const channel_limit = 30;
+    const channelId = generateRandomString();
+
+    beforeAll(async () => {
+      // fill channel up to limit
+      for (let i = 0; i < channel_limit; i++) {
+        await channelApi.upload({
+          channelId,
+          dataId: generateRandomString(),
+          data: {
+            somekey: `value ${i}`,
+          },
+        });
+      }
+      // check if all entries are there
+      const list = await channelApi.list(channelId);
+      expect(list).toHaveLength(channel_limit);
+    });
+
+    test(`Adding more than ${channel_limit} entries to channel fails`, async () => {
+      await expect(
+        channelApi.upload({
+          channelId,
+          dataId: generateRandomString(),
+          data: {
+            somekey: `random data`,
+          },
+        }),
+      ).rejects.toThrow('Channel full');
+    });
+  });
 });

@@ -11,6 +11,7 @@ import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
 import { generateChannelData } from '@/utils/channels';
 import {
+  CHANNEL_CONNECTION_LIMIT,
   CHANNEL_TTL,
   MIN_CHANNEL_JOIN_TTL,
   PROFILE_POLL_INTERVAL,
@@ -22,14 +23,16 @@ import {
   updatePendingConnection,
   selectPendingConnectionById,
 } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+import { Alert } from 'react-native';
 
 export const createChannel = (channelType: ChannelType) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
+  let channel: Channel;
   try {
     // create new channel
-    const channel: Channel = await generateChannelData(channelType);
+    channel = await generateChannelData(channelType);
     // Set timeout to expire channel
 
     channel.timeoutId = setTimeout(() => {
@@ -44,8 +47,16 @@ export const createChannel = (channelType: ChannelType) => async (
     await dispatch(encryptAndUploadProfileToChannel(channel.id));
     // start polling for incoming connection requests
     dispatch(subscribeToConnectionRequests(channel.id));
-  } catch (err) {
-    err instanceof Error ? console.warn(err.message) : console.log(err);
+  } catch (e) {
+    // Something went wrong while creating channel.
+    if (channel && channel.id) {
+      dispatch(leaveChannel(channel.id));
+    }
+    console.log(`Error while crating channel: ${e}`);
+    Alert.alert(
+      'Error',
+      `Could not create connection channel. Error message: ${e.message}`,
+    );
   }
 };
 
@@ -59,34 +70,50 @@ export const joinChannel = (channel: Channel) => async (
   if (channelIds.includes(channel.id)) {
     throw new Error('Channel already exists');
   }
-  // check ttl of channel
-  const expirationTimestamp = channel.timestamp + channel.ttl;
-  let ttl = expirationTimestamp - Date.now();
-  if (ttl < MIN_CHANNEL_JOIN_TTL) {
-    console.log(`Channel ${channel.id} ttl ${ttl} too low. Aborting join.`);
-    return;
-  }
-  if (ttl > CHANNEL_TTL) {
+
+  // limit too high channel Time-To-Live
+  if (channel.ttl > CHANNEL_TTL) {
     console.log(
-      `WARNING - TTL ${ttl} of ${channel.id} is too high. Limiting to ${CHANNEL_TTL}.`,
+      `WARNING - TTL ${channel.ttl} of ${channel.id} is too high. Limiting to ${CHANNEL_TTL}.`,
     );
     channel.ttl = CHANNEL_TTL;
   }
 
-  // Start timer to expire channel
-  channel.timeoutId = setTimeout(() => {
-    console.log(`timer expired for channel ${channel.id}`);
+  // calc remaining lifetime of channel
+  let ttl_remain = channel.timestamp + channel.ttl - Date.now();
+
+  try {
+    // don't join channel if it is/is about to expired
+    if (ttl_remain < MIN_CHANNEL_JOIN_TTL) {
+      console.log(
+        `Remaining ttl ${ttl_remain} of channel ${channel.id} too low. Aborting join.`,
+      );
+      throw new Error('Channel expired');
+    }
+
+    // Start timer to expire channel
+    channel.timeoutId = setTimeout(() => {
+      console.log(`timer expired for channel ${channel.id}`);
+      dispatch(leaveChannel(channel.id));
+    }, ttl_remain);
+
+    // add channel to store
+    // we need channel to exist prior to uploadingProfileToChannel
+    await dispatch(addChannel(channel));
+
+    // upload my profile to channel
+    await dispatch(encryptAndUploadProfileToChannel(channel.id));
+    // start polling for incoming connection requests
+    dispatch(subscribeToConnectionRequests(channel.id));
+  } catch (e) {
+    // Something went wrong while trying to join channel.
     dispatch(leaveChannel(channel.id));
-  }, ttl);
-
-  // add channel to store
-  // we need channel to exist prior to uploadingProfileToChannel
-  await dispatch(addChannel(channel));
-
-  // upload my profile to channel
-  await dispatch(encryptAndUploadProfileToChannel(channel.id));
-  // start polling for incoming connection requests
-  dispatch(subscribeToConnectionRequests(channel.id));
+    console.log(`Error while joining channel: ${e}`);
+    Alert.alert(
+      'Error',
+      `Could not join connection channel. Error message: ${e.message}`,
+    );
+  }
 };
 
 export const leaveChannel = (channelId: string) => (
@@ -161,8 +188,9 @@ export const fetchChannelProfiles = createAsyncThunk(
   'channels/fetchChannelProfiles',
   async (channelId, { getState, dispatch }) => {
     const channel = selectChannelById(getState(), channelId);
-    // console.log(`fetching profiles from channel ${channelId}`);
-    const profileIds = await channel.api.list(channelId);
+    let profileIds = await channel.api.list(channelId);
+    // Only get up to CHANNEL_CONNECTION_LIMIT profiles
+    profileIds = profileIds.slice(0, CHANNEL_CONNECTION_LIMIT);
     const knownProfileIds = selectAllPendingConnectionIds(getState());
     profileIds.forEach((profileId) => {
       if (
@@ -190,7 +218,9 @@ export const fetchConnectionRequests = (channelId: string) => async (
 ) => {
   const channel: Channel = selectChannelById(getState(), channelId);
   const { myProfileId } = channel;
-  const profileIds = await channel.api.list(myProfileId);
+  let profileIds = await channel.api.list(myProfileId);
+  // Only get up to CHANNEL_CONNECTION_LIMIT profiles
+  profileIds = profileIds.slice(0, CHANNEL_CONNECTION_LIMIT);
   for (const profileId of profileIds) {
     // check if signedMessage and profile exists
     const pendingConnection = selectPendingConnectionById(
@@ -231,45 +261,41 @@ export const encryptAndUploadProfileToChannel = (channelId: string) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  try {
-    // get channel
-    const channel = selectChannelById(getState(), channelId);
-    // get user data
-    const {
-      id,
-      photo: { filename },
-      name,
-      score,
-    } = getState().user;
-    // retrieve photo
-    const photo = await retrieveImage(filename);
-    const profileTimestamp = Date.now();
+  // get channel
+  const channel = selectChannelById(getState(), channelId);
+  // get user data
+  const {
+    id,
+    photo: { filename },
+    name,
+    score,
+  } = getState().user;
+  // retrieve photo
+  const photo = await retrieveImage(filename);
+  const profileTimestamp = Date.now();
 
-    const dataObj = {
-      id,
-      photo,
-      name,
-      score,
-      profileTimestamp,
-    };
+  const dataObj = {
+    id,
+    photo,
+    name,
+    score,
+    profileTimestamp,
+  };
 
-    console.log(`Encrypting profile data with key ${channel.aesKey}`);
-    let encrypted = encryptData(dataObj, channel.aesKey);
-    console.log(`Posting profile data...`);
-    await channel.api.upload({
-      channelId,
-      data: encrypted,
-      dataId: channel.myProfileId,
-    });
-    dispatch(
-      updateChannel({
-        id: channelId,
-        changes: {
-          myProfileTimestamp: profileTimestamp,
-        },
-      }),
-    );
-  } catch (err) {
-    err instanceof Error ? console.warn(err.message) : console.log(err);
-  }
+  console.log(`Encrypting profile data with key ${channel.aesKey}`);
+  let encrypted = encryptData(dataObj, channel.aesKey);
+  console.log(`Posting profile data...`);
+  await channel.api.upload({
+    channelId,
+    data: encrypted,
+    dataId: channel.myProfileId,
+  });
+  dispatch(
+    updateChannel({
+      id: channelId,
+      changes: {
+        myProfileTimestamp: profileTimestamp,
+      },
+    }),
+  );
 };
