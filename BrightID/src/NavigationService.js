@@ -15,3 +15,8 @@ export const goBack = () => {
 export const dispatch = (action) => {
   navigationRef.current?.dispatch(action);
 };
+
+export const getRoute = () => {
+  const route = navigationRef.current?.getCurrentRoute();
+  return route;
+};

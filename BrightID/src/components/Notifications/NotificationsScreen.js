@@ -22,7 +22,7 @@ import {
   DEVICE_LARGE,
 } from '@/utils/constants';
 import { createSelector } from '@reduxjs/toolkit';
-import { selectAllUnconfirmedConnections } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import EmptyList from '@/components/Helpers/EmptyList';
 import NotificationCard from './NotificationCard';

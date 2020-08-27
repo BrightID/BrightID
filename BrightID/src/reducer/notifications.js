@@ -38,6 +38,11 @@ export const reducer = (
       // we only want to notify the user to backup once per session
       let miscAlreadyNotified = !!state.miscAlreadyNotified;
 
+      // set null activeNotifications
+      if (!action.notification) {
+        return { ...state, activeNotification: null };
+      }
+
       // do not update the notification banner if the active is set as a new connection
       if (
         state.activeNotification?.type === CONNECTIONS_TYPE &&

@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   Animated,
   StyleSheet,
@@ -9,11 +9,16 @@ import {
   TouchableWithoutFeedback,
   Image,
   StatusBar,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Svg, { Line, SvgXml } from 'react-native-svg';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  useNavigation,
+  useRoute,
+  useFocusEffect,
+} from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -24,10 +29,12 @@ import {
   pendingConnection_states,
   selectAllPendingConnections,
   selectPendingConnectionById,
-} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+} from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import backArrow from '@/static/back_arrow_black.svg';
 
 /** HELPERS */
+
+const GROUP_TIMEOUT = 35000;
 
 const radius = WIDTH / 2 - 35;
 
@@ -38,7 +45,7 @@ const isEven = (n: number) => n % 2 === 0;
 const calcX = (a: number) =>
   WIDTH / 2 - 40 + radius * Math.cos(degreeToRadian(a));
 const calcY = (a: number) =>
-  HEIGHT / 2 - 40 + radius * Math.sin(degreeToRadian(a));
+  HEIGHT / 2 - 120 + radius * Math.sin(degreeToRadian(a));
 
 /** SELECTORS */
 
@@ -71,6 +78,18 @@ export const GroupConnectionScreen = () => {
 
   const groupConnections = useSelector((state) =>
     selectGroupConnections(state, channel),
+  );
+
+  // automatically nav to the next screen after timeout
+  useFocusEffect(
+    useCallback(() => {
+      const timer = setTimeout(() => {
+        navigation.navigate('PendingConnections');
+      }, GROUP_TIMEOUT);
+      return () => {
+        clearTimeout(timer);
+      };
+    }, [navigation]),
   );
 
   useEffect(() => {
@@ -137,7 +156,7 @@ export const GroupConnectionScreen = () => {
               >
                 <Line
                   x1={WIDTH / 2}
-                  y1={HEIGHT / 2}
+                  y1={HEIGHT / 2 - 100}
                   x2={bubbleCoords[index]?.left + 40}
                   y2={bubbleCoords[index]?.top + 40}
                   stroke={ORANGE}
@@ -172,97 +191,97 @@ export const GroupConnectionScreen = () => {
   console.log('rendering Group Connection Screen');
 
   return navigation.isFocused() ? (
-    <SafeAreaView style={styles.container}>
+    <>
       <StatusBar
-        barStyle="dark-content"
-        backgroundColor="#fff"
+        barStyle="light-content"
+        backgroundColor={ORANGE}
         animated={true}
       />
-      <TouchableOpacity
-        style={styles.cancelButton}
-        onPress={() => {
-          navigation.navigate('Home');
-        }}
-      >
-        <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
-      </TouchableOpacity>
-      <Text style={styles.title}>Group Connection</Text>
-      <Animated.View
-        style={[
-          styles.circleArcOne,
-          {
-            opacity: circleArcOneOpacity.interpolate({
-              inputRange: [0, 0.5, 1],
-              outputRange: [0, 0.9, 0],
-            }),
-            transform: [
-              {
-                scale: circleArcOneOpacity.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [1, 2],
-                }),
-              },
-            ],
-          },
-        ]}
-      />
-      <Animated.View
-        style={[
-          styles.circleArcTwo,
-          {
-            opacity: circleArcTwoOpacity.interpolate({
-              inputRange: [0, 0.5, 1],
-              outputRange: [0, 0.9, 0],
-            }),
-            transform: [
-              {
-                scale: circleArcTwoOpacity.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [1, 2],
-                }),
-              },
-            ],
-          },
-        ]}
-      />
-      {initiator?.photo && (
-        <TouchableWithoutFeedback
-          // style={styles.cancelButton}
+      <View style={styles.orangeTop} />
+      <SafeAreaView style={styles.container}>
+        <Animated.View
+          style={[
+            styles.circleArcOne,
+            {
+              opacity: circleArcOneOpacity.interpolate({
+                inputRange: [0, 0.5, 1],
+                outputRange: [0, 0.9, 0],
+              }),
+              transform: [
+                {
+                  scale: circleArcOneOpacity.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [1, 2],
+                  }),
+                },
+              ],
+            },
+          ]}
+        />
+        <Animated.View
+          style={[
+            styles.circleArcTwo,
+            {
+              opacity: circleArcTwoOpacity.interpolate({
+                inputRange: [0, 0.5, 1],
+                outputRange: [0, 0.9, 0],
+              }),
+              transform: [
+                {
+                  scale: circleArcTwoOpacity.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [1, 2],
+                  }),
+                },
+              ],
+            },
+          ]}
+        />
+        {initiator?.photo && (
+          <TouchableWithoutFeedback
+            // style={styles.cancelButton}
+            onPress={() => {
+              navigation.navigate('FullScreenPhoto', {
+                photo: initiator.photo,
+                base64: true,
+              });
+            }}
+          >
+            <Image
+              style={styles.groupFounder}
+              source={{ uri: initiator.photo }}
+            />
+          </TouchableWithoutFeedback>
+        )}
+
+        <GroupConnectionBubbles />
+
+        <TouchableOpacity
+          testID="GroupConnectionsToPendingConnectionsBtn"
+          style={styles.confirmConnectionsButton}
           onPress={() => {
-            navigation.navigate('FullScreenPhoto', {
-              photo: initiator.photo,
-              base64: true,
-            });
+            navigation.navigate('PendingConnections');
           }}
         >
-          <Image
-            style={styles.groupFounder}
-            source={{ uri: initiator.photo }}
+          <Material
+            name="account-multiple-plus-outline"
+            size={DEVICE_LARGE ? 32 : 26}
+            color={ORANGE}
           />
-        </TouchableWithoutFeedback>
-      )}
-
-      <GroupConnectionBubbles />
-
-      <TouchableOpacity
-        testID="GroupConnectionsToPendingConnectionsBtn"
-        style={styles.confirmConnectionsButton}
-        onPress={() => {
-          navigation.navigate('PendingConnections');
-        }}
-      >
-        <Material
-          name="account-multiple-plus-outline"
-          size={DEVICE_LARGE ? 32 : 26}
-          color={ORANGE}
-        />
-        <Text style={styles.confirmConnectionsText}>Confirm Connections</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+          <Text style={styles.confirmConnectionsText}>Confirm Connections</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    </>
   ) : null;
 };
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: DEVICE_LARGE ? 70 : 65,
+    width: '100%',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
     width: '100%',
@@ -270,24 +289,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
+    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
+    zIndex: 10,
+    marginTop: -58,
   },
-  title: {
-    position: 'absolute',
-    top: DEVICE_LARGE ? 51 : 32,
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    fontSize: DEVICE_LARGE ? 20 : 18,
-    textAlign: 'center',
-    color: '#4a4a4a',
-  },
-  cancelButton: {
-    position: 'absolute',
-    left: 0,
-    top: DEVICE_LARGE ? 55 : 35,
-    zIndex: 20,
-    width: DEVICE_LARGE ? 60 : 50,
-    alignItems: 'center',
-  },
+
   bubbleView: {
     position: 'absolute',
     top: 0,
@@ -298,6 +305,7 @@ const styles = StyleSheet.create({
   groupFounder: {
     position: 'absolute',
     left: WIDTH / 2 - 45,
+    top: HEIGHT / 2 - 140,
     width: 90,
     height: 90,
     borderWidth: 2,
@@ -310,6 +318,7 @@ const styles = StyleSheet.create({
   circleArcOne: {
     position: 'absolute',
     left: WIDTH / 2 - 45,
+    top: HEIGHT / 2 - 140,
     width: 90,
     height: 90,
     backgroundColor: 'transparent',
@@ -322,6 +331,7 @@ const styles = StyleSheet.create({
   circleArcTwo: {
     position: 'absolute',
     left: WIDTH / 2 - 45,
+    top: HEIGHT / 2 - 140,
     width: 90,
     height: 90,
     backgroundColor: 'transparent',
@@ -359,7 +369,7 @@ const styles = StyleSheet.create({
   },
   confirmConnectionsButton: {
     position: 'absolute',
-    top: HEIGHT * 0.85,
+    bottom: '8%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

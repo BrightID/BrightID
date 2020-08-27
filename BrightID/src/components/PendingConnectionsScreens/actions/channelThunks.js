@@ -6,7 +6,7 @@ import {
   setMyChannel,
   updateChannel,
   selectAllChannelIds,
-} from '@/components/NewConnectionsScreens/channelSlice';
+} from '@/components/PendingConnectionsScreens/channelSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
 import { generateChannelData } from '@/utils/channels';
@@ -22,7 +22,7 @@ import {
   selectAllPendingConnectionIds,
   updatePendingConnection,
   selectPendingConnectionById,
-} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+} from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import { Alert } from 'react-native';
 
 export const createChannel = (channelType: ChannelType) => async (

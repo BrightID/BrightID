@@ -59,7 +59,7 @@
     "react-native-reanimated": "^1.8.0",
     "react-native-safe-area-context": "^3.0.6",
     "react-native-screens": "^2.9.0",
-    "react-native-snap-carousel": "^3.8.4",
+    "react-native-snap-carousel": "^4.0.0-beta.5",
     "react-native-spinkit": "^1.5.0",
     "react-native-status-bar-height": "^2.4.0",
     "react-native-svg": "^12.1.0",
@@ -125,7 +125,9 @@
     "transformIgnorePatterns": [
       "node_modules/(?!(react-native|react-navigation|@react-navigation/.*|react-navigation-stack|react-native-screens|@react-native-community/async-storage|react-native-gesture-handler|react-native-popup-menu|react-native-platform-touchable|react-native-linear-gradient|react-native-vector-icons|react-native-spinkit|react-native-status-bar-height|react-native-snap-carousel|react-native-image-picker|react-native-svg|react-native-camera|react-native-image-crop-picker|react-native-keychain)/)"
     ],
-    "testPathIgnorePatterns": ["./e2e/"]
+    "testPathIgnorePatterns": [
+      "./e2e/"
+    ]
   },
   "detox": {
     "configurations": {

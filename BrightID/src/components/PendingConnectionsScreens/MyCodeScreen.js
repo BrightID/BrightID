@@ -36,11 +36,11 @@ import {
   closeChannel,
   setDisplayChannelType,
   selectAllActiveChannelIdsByType,
-} from '@/components/NewConnectionsScreens/channelSlice';
+} from '@/components/PendingConnectionsScreens/channelSlice';
 import { encodeChannelQrString } from '@/utils/channels';
-import { selectAllPendingConnectionsByChannelIds } from '@/components/NewConnectionsScreens/pendingConnectionSlice';
+import { selectAllPendingConnectionsByChannelIds } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import { createFakeConnection } from '@/components/Connections/models/createFakeConnection';
-import { createChannel } from '@/components/NewConnectionsScreens/actions/channelThunks';
+import { createChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
 
 /**
  * My Code screen of BrightID
@@ -50,6 +50,8 @@ import { createChannel } from '@/components/NewConnectionsScreens/actions/channe
  * displays a qrcode
  *
  */
+
+const GROUP_TIMEOUT = 35000;
 
 const Container = DEVICE_IOS ? SafeAreaView : View;
 
@@ -154,14 +156,23 @@ export const MyCodeScreen = () => {
 
   // Navigate to next screen if SINGLE channel
   useEffect(() => {
-    if (displayChannelType === channel_types.SINGLE) {
-      // pendingConnectionSize for ALL active channels
-      if (pendingConnectionSize > 0) {
+    let timer;
+    if (pendingConnectionSize > 0) {
+      if (displayChannelType === channel_types.SINGLE) {
+        // navigate immediately to pending connections
         navigation.navigate('PendingConnections');
         // close channel to prevent navigation loop
         dispatch(closeChannel({ channelId: myChannel?.id, background: false }));
+      } else if (displayChannelType === channel_types.GROUP) {
+        // wait 35 seconds after the last connection before navigating
+        timer = setTimeout(() => {
+          navigation.navigate('PendingConnections');
+        }, GROUP_TIMEOUT);
       }
     }
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [
     displayChannelType,
     dispatch,
@@ -207,8 +218,8 @@ export const MyCodeScreen = () => {
       : `Connect with ${myName} on BrightID: ${universalLink}`;
     const alertMsg =
       myChannel?.type === channel_types.SINGLE
-        ? `Share this link with one friend so they can connect to you.`
-        : `Share this link with a group of people so everyone can connect.`;
+        ? `Share this link with one friend`
+        : `Share this link`;
     Alert.alert(
       'Universal Link',
       alertMsg,

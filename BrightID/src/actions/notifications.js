@@ -57,10 +57,6 @@ export const updateNotifications = () => async (
             type: MISC_TYPE,
           }),
         );
-        // remove notification after a few seconds
-        setTimeout(() => {
-          dispatch(setActiveNotification(null));
-        }, 6000);
       }
     } else {
       dispatch(setBackupPending(false));

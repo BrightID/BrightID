@@ -2,7 +2,7 @@
 import {
   channel_types,
   selectChannelById,
-} from '@/components/NewConnectionsScreens/channelSlice';
+} from '@/components/PendingConnectionsScreens/channelSlice';
 import { obtainKeys } from '@/utils/keychain';
 import { TIME_FUDGE } from '@/utils/constants';
 import { hash, strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
@@ -16,8 +16,8 @@ import {
   pendingConnection_states,
   selectPendingConnectionById,
   updatePendingConnection,
-} from '@/components/NewConnectionsScreens/pendingConnectionSlice';
-import { leaveChannel } from '@/components/NewConnectionsScreens/actions/channelThunks';
+} from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+import { leaveChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
 
 export const confirmPendingConnectionThunk = (id: string) => async (
   dispatch: dispatch,

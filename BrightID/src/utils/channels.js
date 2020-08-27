@@ -6,7 +6,7 @@ import { Buffer } from 'buffer';
 import {
   channel_states,
   channel_types,
-} from '@/components/NewConnectionsScreens/channelSlice';
+} from '@/components/PendingConnectionsScreens/channelSlice';
 import ChannelAPI from '@/api/channelService';
 
 export const createRandomId = async (size: number = 9) => {

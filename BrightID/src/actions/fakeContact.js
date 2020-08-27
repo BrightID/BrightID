@@ -10,7 +10,7 @@ import {
 } from '@/utils/encoding';
 import { encryptData } from '@/utils/cryptoHelper';
 import { createRandomId } from '@/utils/channels';
-import { selectChannelById } from '@/components/NewConnectionsScreens/channelSlice';
+import { selectChannelById } from '@/components/PendingConnectionsScreens/channelSlice';
 import { names } from '../utils/fakeNames';
 
 export const addFakeConnection = () => async (

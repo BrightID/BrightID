@@ -5,7 +5,7 @@ import { Dispatch } from 'redux';
 import {
   channel_states,
   channel_types,
-} from '@/components/NewConnectionsScreens/channelSlice';
+} from '@/components/PendingConnectionsScreens/channelSlice';
 import ChannelAPI from '@/api/channelService';
 
 declare type getState = () => State;

@@ -6,7 +6,7 @@ import {
 import {
   channel_types,
   channel_states,
-} from '@/components/NewConnectionsScreens/channelSlice';
+} from '@/components/PendingConnectionsScreens/channelSlice';
 import ChannelAPI from '@/api/channelService';
 
 describe('Test channel data', () => {
