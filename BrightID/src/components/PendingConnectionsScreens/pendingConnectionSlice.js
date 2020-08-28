@@ -183,6 +183,7 @@ const pendingConnectionsSlice = createSlice({
         mutualConnections,
         connectionDate,
         flagged,
+        notificationToken,
       } = action.payload;
 
       const changes = {
@@ -200,6 +201,7 @@ const pendingConnectionsSlice = createSlice({
         mutualConnections,
         connectionDate,
         flagged,
+        notificationToken,
       };
 
       // add secret key, signed message, timestamp if dev

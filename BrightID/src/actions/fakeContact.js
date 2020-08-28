@@ -65,6 +65,7 @@ export const addFakeConnection = () => async (
       secretKey,
       signedMessage,
       timestamp,
+      notificationToken: null,
     };
 
     let encrypted = encryptData(dataObj, channel.aesKey);

@@ -26,13 +26,15 @@ export const notificationSubscription = () => {
       // TODO: Send the token to my server so it could send back push notifications...
       const { notifications } = store.getState();
 
-      if (
-        !notifications.notificationToken ||
-        !notifications.deviceToken ||
-        (event.deviceToken && event.deviceToken !== notifications.deviceToken)
-      ) {
+      if (event.deviceToken) {
+        // always update the server with our device token.
+        // if notificationToken exists, then our connections already have it
+        // so we need to make sure that the notification server is also synced
         notificationService
-          .getToken(event.deviceToken)
+          .getToken({
+            deviceToken: event.deviceToken,
+            notificationToken: notifications.notificationToken,
+          })
           .then(({ notificationToken }) => {
             store.dispatch(setNotificationToken(notificationToken));
           })

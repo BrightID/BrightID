@@ -270,6 +270,8 @@ export const encryptAndUploadProfileToChannel = (channelId: string) => async (
     name,
     score,
   } = getState().user;
+
+  const { notificationToken } = getState().notifications;
   // retrieve photo
   const photo = await retrieveImage(filename);
   const profileTimestamp = Date.now();
@@ -280,6 +282,7 @@ export const encryptAndUploadProfileToChannel = (channelId: string) => async (
     name,
     score,
     profileTimestamp,
+    notificationToken,
   };
 
   console.log(`Encrypting profile data with key ${channel.aesKey}`);
