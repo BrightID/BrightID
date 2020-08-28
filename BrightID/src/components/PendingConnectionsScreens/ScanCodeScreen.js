@@ -26,9 +26,10 @@ import {
   channel_types,
   closeChannel,
 } from '@/components/PendingConnectionsScreens/channelSlice';
-import { selectAllPendingConnectionsByChannelIds } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+import { selectAlUnconfirmedConnectionsByChannelIds } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import { decodeChannelQrString } from '@/utils/channels';
 import { joinChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
+import { setActiveNotification } from '@/actions';
 import { RNCamera } from './RNCameraProvider';
 
 /**
@@ -66,7 +67,8 @@ export const ScanCodeScreen = () => {
   const name = useSelector((state) => state.user.name);
 
   const pendingConnectionSizeForChannel = useSelector((state) => {
-    return selectAllPendingConnectionsByChannelIds(state, [channel?.id]).length;
+    return selectAlUnconfirmedConnectionsByChannelIds(state, [channel?.id])
+      .length;
   });
 
   // always show scanner when navigating to this page
@@ -74,6 +76,7 @@ export const ScanCodeScreen = () => {
     useCallback(() => {
       setQrData(undefined);
       setChannel(null);
+      dispatch(setActiveNotification(null));
     }, []),
   );
 
@@ -87,7 +90,7 @@ export const ScanCodeScreen = () => {
       if (channel.type === channel_types.SINGLE) {
         navigation.navigate('PendingConnections');
         // close single channels to prevent navigation loop
-        dispatch(closeChannel({ channelId: channel.id, background: false }));
+        dispatch(closeChannel({ channelId: channel.id, background: true }));
       } else {
         navigation.navigate('GroupConnection', { channel });
       }
