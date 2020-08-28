@@ -59,6 +59,8 @@ if (__DEV__) {
   );
 }
 
+const PENDING_GROUP_TIMEOUT = 45000;
+
 export const MyCodeScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -82,7 +84,7 @@ export const MyCodeScreen = () => {
   // pending connections attached to active channel
   const pendingConnectionSize = useSelector(
     (state) =>
-      selectAllPendingConnectionsByChannelIds(state, activeChannelIds).length,
+      selectAllPendingConnectionsByChannelIds(state, [myChannel?.id]).length,
   );
 
   const unconfirmedConnectionSize = useSelector(
@@ -106,7 +108,7 @@ export const MyCodeScreen = () => {
 
   // Navigate to next screen if QRCode has been scanned
   useEffect(() => {
-    console.log('my channel state', myChannel?.state);
+    let timer;
     if (
       unconfirmedConnectionSize > 0 &&
       myChannel?.state === channel_states.OPEN
@@ -118,8 +120,14 @@ export const MyCodeScreen = () => {
         dispatch(closeChannel({ channelId: myChannel?.id, background: true }));
       } else if (displayChannelType === channel_types.GROUP) {
         // navigation.navigate('GroupQr', { channel: myChannel });
+        timer = setTimeout(() => {
+          navigation.navigate('PendingConnections');
+        }, PENDING_GROUP_TIMEOUT);
       }
     }
+    return () => {
+      clearTimeout(timer);
+    };
   }, [
     displayChannelType,
     dispatch,

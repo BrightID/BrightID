@@ -37,7 +37,12 @@ const icons = { groups, connections, misc };
 
 const NOTIFICATION_TIMEOUT = 10000;
 
-const screenBlackList = ['ScanCode', 'PendingConnections', 'MyCode'];
+const screenBlackList = [
+  'ScanCode',
+  'PendingConnections',
+  'MyCode',
+  'GroupConnection',
+];
 
 export const NotificationBanner = () => {
   const dispatch = useDispatch();
