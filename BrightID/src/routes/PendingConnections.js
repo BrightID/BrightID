@@ -28,7 +28,7 @@ const connectionPreviewOptions = {
   cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
 };
 
-const NewConnections = () => (
+const PendingConnections = () => (
   <>
     <Stack.Screen
       name="MyCode"
@@ -53,4 +53,4 @@ const NewConnections = () => (
   </>
 );
 
-export default NewConnections;
+export default PendingConnections;

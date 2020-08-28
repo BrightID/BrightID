@@ -94,7 +94,7 @@ const ConfirmationButtons = ({
   switch (pendingConnection.state) {
     case pendingConnection_states.CONFIRMING:
     case pendingConnection_states.CONFIRMED: {
-      return <Text style={styles.waitingText}>Confirming connection...</Text>;
+      return <Text style={styles.waitingText}>Confirmed connection.</Text>;
     }
     case pendingConnection_states.INITIAL:
     case pendingConnection_states.DOWNLOADING: {

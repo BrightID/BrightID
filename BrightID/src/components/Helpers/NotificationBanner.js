@@ -37,7 +37,7 @@ const icons = { groups, connections, misc };
 
 const NOTIFICATION_TIMEOUT = 10000;
 
-const screenBlackList = ['ScanCode', 'PendingConnections'];
+const screenBlackList = ['ScanCode', 'PendingConnections', 'MyCode'];
 
 export const NotificationBanner = () => {
   const dispatch = useDispatch();
@@ -51,7 +51,6 @@ export const NotificationBanner = () => {
   const pendingConnections = useSelector(selectAllUnconfirmedConnections);
 
   useEffect(() => {
-    console.log('IN THE BANNER EFFECT');
     dropDownAlertRef.current?.closeAction('automatic');
     if (!activeNotification) {
       return;
@@ -61,6 +60,7 @@ export const NotificationBanner = () => {
 
     InteractionManager.runAfterInteractions(() => {
       let route = getRoute();
+      console.log('ROUTE', route);
       if (!screenBlackList.includes(route?.name)) {
         dropDownAlertRef.current?.alertWithType(
           'custom',
@@ -81,7 +81,6 @@ export const NotificationBanner = () => {
   useEffect(() => {
     // always close the banner first
     // dropDownAlertRef.current?.closeAction('automatic');
-    console.log('Pending length', pendingConnections.length);
 
     if (pendingConnections.length) {
       dispatch(
@@ -107,7 +106,6 @@ export const NotificationBanner = () => {
   };
 
   const _onClose = () => {
-    console.log('_onClose');
     dispatch(setActiveNotification(null));
   };
 
