@@ -26,6 +26,7 @@ const pendingConnectionsAdapter = createEntityAdapter();
    - 'name'
    - 'photo' (base64-encoded)
    - 'score'
+   - 'type': Am i the initiator or responder
    - 'signedMessage': optional - First part of signed connection message, in case user initiated connection.
    - 'timestamp': optional - Timestamp when signed message was created
  */
@@ -97,6 +98,7 @@ export const newPendingConnection = createAsyncThunk(
     // I'm confused about this initiator logic, might change this...
     decryptedObj.initiator =
       decryptedObj.profileTimestamp <= channel.myProfileTimestamp;
+    decryptedObj.wantsToConfirm = false;
 
     console.log('decryptedObj.profileTimestamp', decryptedObj.profileTimestamp);
 

@@ -6,6 +6,7 @@ import {
   setMyChannel,
   updateChannel,
   selectAllChannelIds,
+  channel_types,
 } from '@/components/PendingConnectionsScreens/channelSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
@@ -24,6 +25,8 @@ import {
   selectPendingConnectionById,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import { Alert } from 'react-native';
+import { obtainKeys } from '@/utils/keychain';
+import { respondToConnectionRequest } from '@/utils/connections';
 
 export const createChannel = (channelType: ChannelType) => async (
   dispatch: dispatch,
@@ -226,29 +229,48 @@ export const fetchConnectionRequests = (channelId: string) => async (
       getState(),
       profileId,
     );
-    if (pendingConnection && !pendingConnection.signedMessage) {
-      console.log(`Got new connection request from profileId ${profileId}.`);
-      // download connectionrequest to get signedMessage
-      const profile = await channel.api.download({
-        channelId: myProfileId,
-        dataId: profileId,
-      });
-      const { signedMessage, connectionTimestamp } = profile;
-      if (signedMessage) {
-        // update existing pendingConnection with signedMessage and timestamp
-        console.log('updating Pending Connection with signed message');
-        dispatch(
-          updatePendingConnection({
-            id: profileId,
-            changes: {
-              signedMessage,
+    if (pendingConnection) {
+      if (!pendingConnection.signedMessage) {
+        console.log(`Got new connection request from profileId ${profileId}.`);
+        // download connectionrequest to get signedMessage
+        const profile = await channel.api.download({
+          channelId: myProfileId,
+          dataId: profileId,
+        });
+        const { signedMessage, connectionTimestamp } = profile;
+        if (signedMessage) {
+          // update existing pendingConnection with signedMessage and timestamp
+          console.log('updating Pending Connection with signed message');
+          dispatch(
+            updatePendingConnection({
+              id: profileId,
+              changes: {
+                signedMessage,
+                timestamp: connectionTimestamp,
+              },
+            }),
+          );
+          if (pendingConnection.wantsToConfirm) {
+            console.log(
+              `Got initiators signed message for preconfirmed connection. Submitting operation now!`,
+            );
+            const { username, secretKey } = await obtainKeys();
+            respondToConnectionRequest({
               timestamp: connectionTimestamp,
-            },
-          }),
-        );
-      } else {
-        console.dir(profile);
-        throw new Error(`Response does not include signedMessage.`);
+              signedMessage,
+              brightId: pendingConnection.brightID,
+              secretKey,
+              userName: username,
+            });
+            if (channel.type === channel_types.SINGLE) {
+              // Connection is established, so the 1:1 channel can be left
+              dispatch(leaveChannel(channel.id));
+            }
+          }
+        } else {
+          console.dir(profile);
+          throw new Error(`Response does not include signedMessage.`);
+        }
       }
     }
   }

@@ -49,7 +49,7 @@ import { setActiveNotification } from '@/actions';
 
 /**  HELPER FUNCTIONS */
 
-const isReadyToConfirm = (pc) => pc.initiator || pc.signedMessage;
+const isReadyToConfirm = (pc) => true //pc.initiator || pc.signedMessage;
 
 const ZERO_CONNECTIONS_TIMEOUT = 3500;
 
