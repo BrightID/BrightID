@@ -79,7 +79,5 @@ ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID.debug.xcconfig
 ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID.release.xcconfig
 ios/Pods/Pods.xcodeproj/project.pbxproj
 ios/Pods/Manifest.lock
-/android/app/src/main/res/draw*/
-/android/app/src/main/res/mipmap*/
-/android/app/src/main/res/raw/
 keystore.properties
+BrightID/android/app/google-services.json
