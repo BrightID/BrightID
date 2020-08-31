@@ -172,11 +172,15 @@ export const MyCodeScreen = () => {
           </Text>
         );
         return myChannel?.type === channel_types.GROUP ? (
-          <TouchableWithoutFeedback onPress={createFakeConnection}>
-            <Animated.View>
-              <ConnectionTitle />
-            </Animated.View>
-          </TouchableWithoutFeedback>
+          __DEV__ ? (
+            <TouchableWithoutFeedback onPress={createFakeConnection}>
+              <View>
+                <ConnectionTitle />
+              </View>
+            </TouchableWithoutFeedback>
+          ) : (
+            <ConnectionTitle />
+          )
         ) : null;
       },
       headerTitleAlign: 'center',

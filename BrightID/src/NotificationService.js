@@ -23,18 +23,31 @@ export const notificationSubscription = () => {
 
   Notifications.events().registerRemoteNotificationsRegistered(
     (event: Registered) => {
-      // TODO: Send the token to my server so it could send back push notifications...
       const { notifications } = store.getState();
 
-      if (
-        !notifications.notificationToken ||
-        !notifications.deviceToken ||
-        (event.deviceToken && event.deviceToken !== notifications.deviceToken)
-      ) {
+      if (event.deviceToken) {
+        // always update the server with our device token.
+        // if notificationToken exists, then our connections already have it
+        // so we need to make sure that the notification server is also synced
+
+        let oldDeviceToken =
+          notifications.deviceToken &&
+          notifications.deviceToken !== event.deviceToken
+            ? notifications.deviceToken
+            : null;
+
         notificationService
-          .getToken(event.deviceToken)
+          .getToken({
+            deviceToken: event.deviceToken,
+            notificationToken: notifications.notificationToken,
+            oldDeviceToken,
+          })
           .then(({ notificationToken }) => {
-            store.dispatch(setNotificationToken(notificationToken));
+            if (
+              notificationToken &&
+              notificationToken !== notifications.notificationToken
+            )
+              store.dispatch(setNotificationToken(notificationToken));
           })
           .catch((err) => {
             console.log(err.message);

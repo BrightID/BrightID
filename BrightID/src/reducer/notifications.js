@@ -13,8 +13,8 @@ import { CONNECTIONS_TYPE, GROUPS_TYPE, MISC_TYPE } from '@/utils/constants';
 const initialState = {
   activeNotification: null,
   backupPending: false,
-  deviceToken: '',
-  notificationToken: '',
+  deviceToken: null,
+  notificationToken: null,
   miscAlreadyNotified: false,
 };
 

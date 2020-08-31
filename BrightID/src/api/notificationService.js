@@ -2,7 +2,6 @@
 
 import { create, ApiSauceInstance, ApiResponse } from 'apisauce';
 import { DEVICE_OS } from '@/utils/constants';
-import store from '@/store';
 
 let notificationUrl = 'https://notify.brightid.org';
 if (__DEV__) {
@@ -29,13 +28,12 @@ class NotificationService {
     throw new Error(response.problem);
   }
 
-  async getToken(deviceToken: string) {
-    if (!deviceToken) {
-      throw Error('No Device Token');
-    }
+  async getToken({ deviceToken, notificationToken, oldDeviceToken }) {
     const res = await this.notifyApi.post(`/token`, {
       deviceToken,
       deviceOS: DEVICE_OS,
+      notificationToken,
+      oldDeviceToken,
     });
     NotificationService.throwOnError(res);
     return res.data;
