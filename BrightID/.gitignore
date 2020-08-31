@@ -80,4 +80,4 @@ ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID.release.xcconfig
 ios/Pods/Pods.xcodeproj/project.pbxproj
 ios/Pods/Manifest.lock
 keystore.properties
-BrightID/android/app/google-services.json
+BrightID/android/app/google-services.json-prod

@@ -68,4 +68,4 @@ BrightID/ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID-acknowledgeme
 BrightID/yarn.lock
 /BrightID/flow-typed/npm/
 BrightID/yarn.lock
-BrightID/android/app/google-services.json
+BrightID/android/app/google-services.json-prod
