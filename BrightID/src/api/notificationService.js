@@ -28,11 +28,12 @@ class NotificationService {
     throw new Error(response.problem);
   }
 
-  async getToken({ deviceToken, notificationToken }) {
+  async getToken({ deviceToken, notificationToken, oldDeviceToken }) {
     const res = await this.notifyApi.post(`/token`, {
       deviceToken,
-      notificationToken,
       deviceOS: DEVICE_OS,
+      notificationToken,
+      oldDeviceToken,
     });
     NotificationService.throwOnError(res);
     return res.data;
