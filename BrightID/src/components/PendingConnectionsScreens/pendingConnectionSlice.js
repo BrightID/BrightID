@@ -70,7 +70,7 @@ const fetchConnectionInfo = async ({ myConnections, brightId }) => {
         flagged: false,
       };
     } else {
-      err instanceof Error ? console.warn(err.message) : console.log(err);
+      console.error(err.message);
       return {};
     }
   }

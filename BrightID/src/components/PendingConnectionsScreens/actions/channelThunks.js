@@ -192,23 +192,22 @@ export const fetchChannelProfiles = createAsyncThunk(
     // Only get up to CHANNEL_CONNECTION_LIMIT profiles
     profileIds = profileIds.slice(0, CHANNEL_CONNECTION_LIMIT);
     const knownProfileIds = selectAllPendingConnectionIds(getState());
-    profileIds.forEach((profileId) => {
+    if (__DEV__ && profileIds.length > knownProfileIds.length + 1) {
+      console.log(`Got ${profileIds.length} profileIds:`, profileIds);
+    }
+    for (const profileId of profileIds) {
       if (
         profileId !== channel.myProfileId &&
         !knownProfileIds.includes(profileId)
       ) {
-        dispatch(
+        await dispatch(
           newPendingConnection({
             channelId,
             profileId,
           }),
         );
       }
-      if (profileIds.length > knownProfileIds.length + 1) {
-        console.log(`Got ${profileIds.length} profileIds:`);
-        console.dir(profileIds);
-      }
-    });
+    }
   },
 );
 

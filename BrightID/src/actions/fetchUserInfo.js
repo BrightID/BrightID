@@ -36,7 +36,7 @@ const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
       // don't update data when there are pending operations
       dispatch(setGroups(groups));
     }
-    dispatch(setUserScore(__DEV__ ? 100 : score));
+    dispatch(setUserScore(score));
     dispatch(setVerifications(verifications));
     dispatch(updateConnections(connections));
     dispatch(setIsSponsored(isSponsored));

@@ -19,7 +19,7 @@ import {
 } from '@/actions';
 
 const initialState = {
-  score: __DEV__ ? 100 : 0,
+  score: 0,
   isSponsored: false,
   name: '',
   photo: { filename: '' },

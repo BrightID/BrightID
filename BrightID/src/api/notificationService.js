@@ -5,8 +5,7 @@ import { DEVICE_OS } from '@/utils/constants';
 
 let notificationUrl = 'https://notify.brightid.org';
 if (__DEV__) {
-  // notificationUrl = 'https://notify-test.brightid.org';
-  notificationUrl = 'http://192.168.18.13:3000';
+  notificationUrl = 'https://notify-test.brightid.org';
 }
 
 class NotificationService {

@@ -40,6 +40,4 @@ if (!__DEV__) {
   console.error = () => {};
 }
 
-console.disableYellowBox = true;
-
 AppRegistry.registerComponent(appName, () => App);
