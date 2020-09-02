@@ -13,7 +13,7 @@ import {
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import emitter from '@/emitter';
-import { DEVICE_OS, ORANGE } from '@/utils/constants';
+import { DEVICE_OS, ORANGE, DEVICE_LARGE } from '@/utils/constants';
 import { recoverData } from './helpers';
 
 type State = {
@@ -157,7 +157,7 @@ class RestoreScreen extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: DEVICE_LARGE ? 70 : 65,
     width: '100%',
     zIndex: 1,
   },

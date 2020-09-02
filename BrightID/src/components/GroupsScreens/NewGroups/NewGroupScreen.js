@@ -4,18 +4,16 @@ import {
   Text,
   TouchableOpacity,
   View,
-  SafeAreaView,
   FlatList,
 } from 'react-native';
 import { connect } from 'react-redux';
 import store from '@/store';
 import emitter from '@/emitter';
 import { clearNewGroupCoFounders } from '@/actions';
-import { DEVICE_TYPE, ORANGE } from '@/utils/constants';
+import { DEVICE_TYPE, ORANGE, DEVICE_LARGE } from '@/utils/constants';
 import Spinner from 'react-native-spinkit';
 import { createNewGroup } from '../actions';
 import NewGroupCard from './NewGroupCard';
-import SearchConnections from './SearchConnections';
 
 // type State = {
 //   creating: boolean,
@@ -127,9 +125,6 @@ export class NewGroupScreen extends React.Component<Props> {
                 To create a group, you must select two co-founders
               </Text>
             </View>
-            {DEVICE_TYPE === 'large' && (
-              <SearchConnections navigation={this.props.navigation} />
-            )}
             <View style={styles.mainContainer}>
               {connections.length > 0 ? (
                 <FlatList
@@ -157,7 +152,7 @@ export class NewGroupScreen extends React.Component<Props> {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: DEVICE_LARGE ? 70 : 65,
     width: '100%',
     zIndex: 1,
   },
@@ -165,7 +160,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     borderTopLeftRadius: 58,
-    borderTopRightRadius: 58,
+
     marginTop: -58,
     zIndex: 10,
     overflow: 'hidden',
@@ -262,8 +257,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ connections, groups, user }) => ({
-  ...connections,
-  ...groups,
-  ...user,
+export default connect(({ connections, groups }) => ({
+  newGroupCoFounders: groups.newGroupCoFounders,
+  connections: connections.connections,
+  searchParam: connections.searchParam,
 }))(NewGroupScreen);

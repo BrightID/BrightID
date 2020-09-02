@@ -7,6 +7,7 @@ import {
   Alert,
   FlatList,
   RefreshControl,
+  StatusBar,
 } from 'react-native';
 import { connect } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
@@ -14,9 +15,8 @@ import fetchUserInfo from '@/actions/fetchUserInfo';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { deleteConnection } from '@/actions';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
 import ConnectionCard from './ConnectionCard';
-import { createFakeConnection } from './models/createFakeConnection';
 import { defaultSort } from './models/sortingUtility';
 import { performAction } from './models/modifyConnections';
 
@@ -59,11 +59,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
 
   handleNewConnection = () => {
     const { navigation } = this.props;
-    if (__DEV__) {
-      createFakeConnection();
-    } else {
-      navigation.navigate('MyCode');
-    }
+    navigation.navigate('MyCode');
   };
 
   filterConnections = () => {
@@ -112,7 +108,7 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     <ConnectionCard
       actionSheet={this.actionSheet}
       onRemove={this.handleRemoveConnection}
-      // eslint-disable-next-line react/jsx-props-no-spreading
+      navigation={this.props.navigation}
       {...item}
     />
   );
@@ -167,6 +163,11 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     }
     return (
       <>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor={ORANGE}
+          animated={true}
+        />
         <View style={styles.orangeTop} />
 
         <View style={styles.container} testID="connectionsScreen">
@@ -214,15 +215,14 @@ export class ConnectionsScreen extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: DEVICE_LARGE ? 70 : 65,
     width: '100%',
     zIndex: 1,
   },
   container: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
+    backgroundColor: '#fff',
     borderTopLeftRadius: 58,
-    borderTopRightRadius: 58,
     marginTop: -58,
     overflow: 'hidden',
     zIndex: 10,
@@ -248,6 +248,6 @@ const styles = StyleSheet.create({
 });
 
 export default connect(({ connections, user }) => ({
-  ...connections,
   ...user,
+  ...connections,
 }))(ConnectionsScreen);

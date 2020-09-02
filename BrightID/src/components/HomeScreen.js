@@ -5,15 +5,17 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
   TextInput,
+  StatusBar,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { SvgXml } from 'react-native-svg';
 import ActionSheet from 'react-native-actionsheet';
 import { useDispatch, useSelector } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { setPhoto, setName } from '@/actions';
+import { setPhoto, setName, setActiveNotification } from '@/actions';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
@@ -21,7 +23,9 @@ import fetchUserInfo from '@/actions/fetchUserInfo';
 import verificationSticker from '@/static/verification-sticker.svg';
 import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
-import { useStatusBarHome } from '@/utils/hooks';
+import forumIcon from '@/static/forum_icon.svg';
+import { useWhiteStatusBar } from '@/utils/hooks';
+
 /**
  * Home screen of BrightID
  * ==========================
@@ -42,14 +46,14 @@ export const HomeScreen = (props) => {
   const apps = useSelector((state) => state.apps.apps);
   const verifications = useSelector((state) => state.user.verifications);
   const connections = useSelector((state) => state.connections.connections);
-  const [profilePhoto, setProfilePhoto] = useState('');
+  const [profilePhoto, setProfilePhoto] = useState('none');
   const [isEditing, setIsEditing] = useState(false);
   const [displayName, setDisplayName] = useState(name);
   const verified = useMemo(() => verifications.includes('BrightID'), [
     verifications,
   ]);
 
-  useStatusBarHome();
+  // useWhiteStatusBar();
   useFocusEffect(
     useCallback(() => {
       dispatch(fetchUserInfo());
@@ -103,26 +107,33 @@ export const HomeScreen = (props) => {
   return (
     // let verifications = ['BrightID'];
     <View style={styles.container}>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="#fff"
+        animated={true}
+      />
       <View style={styles.profileContainer} testID="PhotoContainer">
-        <TouchableOpacity
-          testID="editPhoto"
-          onPress={handleEditPhoto}
-          accessible={true}
-          accessibilityLabel="edit photo"
-        >
-          <Image
-            source={{
-              uri: profilePhoto,
-            }}
-            style={styles.photo}
-            resizeMode="cover"
-            onError={(e) => {
-              console.log(e.error);
-            }}
+        {profilePhoto ? (
+          <TouchableOpacity
+            testID="editPhoto"
+            onPress={handleEditPhoto}
             accessible={true}
-            accessibilityLabel="user photo"
-          />
-        </TouchableOpacity>
+            accessibilityLabel="edit photo"
+          >
+            <Image
+              source={{
+                uri: profilePhoto,
+              }}
+              style={styles.photo}
+              resizeMode="cover"
+              onError={(e) => {
+                console.log(e.error);
+              }}
+              accessible={true}
+              accessibilityLabel="user photo"
+            />
+          </TouchableOpacity>
+        ) : null}
         <View style={styles.verifyNameContainer} testID="homeScreen">
           <View style={styles.nameContainer}>
             {isEditing ? (
@@ -143,13 +154,14 @@ export const HomeScreen = (props) => {
                 blurOnSubmit={true}
               />
             ) : (
-              <Text
-                testID="EditNameBtn"
-                style={styles.name}
+              <TouchableWithoutFeedback
                 onPress={() => setIsEditing(true)}
+                accessibilityLabel="edit name"
               >
-                {name}
-              </Text>
+                <Text testID="EditNameBtn" style={styles.name}>
+                  {name}
+                </Text>
+              </TouchableWithoutFeedback>
             )}
             {verified && (
               <SvgXml
@@ -174,6 +186,7 @@ export const HomeScreen = (props) => {
           testID="connectionsBtn"
           style={styles.countsCard}
           onPress={() => {
+            dispatch(setActiveNotification(null));
             navigation.navigate('Connections');
           }}
         >
@@ -184,23 +197,10 @@ export const HomeScreen = (props) => {
           <Text style={styles.countsDescriptionText}>Connections</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          testID="appsBtn"
-          style={styles.countsCard}
-          onPress={() => {
-            navigation.navigate('Apps');
-          }}
-        >
-          <Text testID="AppsCount" style={styles.countsNumberText}>
-            {apps?.length ?? 0}
-          </Text>
-          <View style={styles.countsBorder} />
-          <Text style={styles.countsDescriptionText}>Apps</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
           testID="groupsBtn"
           style={styles.countsCard}
           onPress={() => {
+            dispatch(setActiveNotification(null));
             navigation.navigate('Groups');
           }}
         >
@@ -210,6 +210,20 @@ export const HomeScreen = (props) => {
           <View style={styles.countsBorder} />
           <Text style={styles.countsDescriptionText}>Groups</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          testID="appsBtn"
+          style={styles.countsCard}
+          onPress={() => {
+            dispatch(setActiveNotification(null));
+            navigation.navigate('Apps');
+          }}
+        >
+          <Text testID="AppsCount" style={styles.countsNumberText}>
+            {apps?.length ?? 0}
+          </Text>
+          <View style={styles.countsBorder} />
+          <Text style={styles.countsDescriptionText}>Apps</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.bottomOrangeContainer}>
         <View style={styles.connectContainer}>
@@ -218,6 +232,7 @@ export const HomeScreen = (props) => {
             testID="MyCodeBtn"
             style={styles.connectButton}
             onPress={() => {
+              dispatch(setActiveNotification(null));
               navigation.navigate('MyCode');
             }}
             accessible={true}
@@ -234,6 +249,7 @@ export const HomeScreen = (props) => {
             testID="ScanCodeBtn"
             style={styles.connectButton}
             onPress={() => {
+              dispatch(setActiveNotification(null));
               navigation.navigate('ScanCode');
             }}
             accessible={true}
@@ -251,11 +267,10 @@ export const HomeScreen = (props) => {
             style={styles.communityContainer}
             onPress={handleChat}
           >
-            <Ionicons
-              name="ios-chatboxes"
-              size={16}
-              color="#fff"
-              style={styles.communityIcon}
+            <SvgXml
+              width={DEVICE_LARGE ? 28 : 25}
+              height={DEVICE_LARGE ? 28 : 25}
+              xml={forumIcon}
             />
             <JoinCommunity editable={false} style={styles.communityLink}>
               Join the Community
@@ -317,13 +332,13 @@ const styles = StyleSheet.create({
     width: '100%',
     flexGrow: 1,
     alignItems: 'center',
-    paddingLeft: 50,
+    paddingLeft: DEVICE_LARGE ? '15%' : '12%',
     backgroundColor: '#fff',
     paddingTop: DEVICE_LARGE ? 10 : 0,
   },
   verifyNameContainer: {
     flexDirection: 'column',
-    marginLeft: 40,
+    marginLeft: DEVICE_LARGE ? 40 : 30,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',

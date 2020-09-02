@@ -193,9 +193,9 @@ class BackupScreen extends React.Component<Props, State> {
                 </Text>
                 <Spinner
                   isVisible={true}
-                  size={97}
+                  size={DEVICE_LARGE ? 80 : 65}
                   type="Wave"
-                  color="#4990e2"
+                  color="#333"
                 />
               </View>
             )}
@@ -209,7 +209,7 @@ class BackupScreen extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: DEVICE_LARGE ? 70 : 65,
     width: '100%',
     zIndex: 1,
   },
@@ -220,7 +220,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     borderTopLeftRadius: 58,
-    borderTopRightRadius: 58,
     marginTop: -58,
     zIndex: 10,
     overflow: 'hidden',

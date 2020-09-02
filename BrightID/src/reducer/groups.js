@@ -8,6 +8,7 @@ import {
   CLEAR_NEW_GROUP_CO_FOUNDERS,
   SET_GROUPS,
   SET_GROUP_SEARCH,
+  SET_GROUP_SEARCH_OPEN,
   SET_INVITES,
   ACCEPT_INVITE,
   REJECT_INVITE,
@@ -17,6 +18,7 @@ import {
   RESET_STORE,
 } from '@/actions';
 import { INVITE_ACCEPTED, INVITE_REJECTED } from '@/utils/constants';
+import { ADD_ADMIN } from '@/actions/groups';
 
 /* ******** INITIAL STATE ************** */
 
@@ -35,6 +37,12 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
       return {
         ...state,
         searchParam: action.searchParam,
+      };
+    }
+    case SET_GROUP_SEARCH_OPEN: {
+      return {
+        ...state,
+        searchOpen: action.searchOpen,
       };
     }
     case CREATE_GROUP: {
@@ -93,7 +101,7 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
         ...state,
         invites: state.invites.map<invite>((invite) => {
           if (invite.inviteId === action.inviteId) {
-            invite.state = INVITE_ACCEPTED;
+            return { ...invite, state: INVITE_ACCEPTED };
           }
           return invite;
         }),
@@ -104,7 +112,7 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
         ...state,
         invites: state.invites.map<invite>((invite) => {
           if (invite.inviteId === action.inviteId) {
-            invite.state = INVITE_REJECTED;
+            return { ...invite, state: INVITE_REJECTED };
           }
           return invite;
         }),
@@ -149,6 +157,35 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
       return {
         ...state,
         groups: update(index, updatedGroup, state.groups),
+      };
+    }
+    case ADD_ADMIN: {
+      // find group to update
+      const groupIndex = indexOf(action.group, state.groups);
+      if (groupIndex === -1) {
+        return state;
+      }
+      const group = state.groups[groupIndex];
+
+      // check if member to promote is member of group
+      const isMember = group.members.includes(action.member);
+      if (!isMember) {
+        return state;
+      }
+
+      // check if member to promote is already admin
+      const isAdmin = group.admins.includes(action.member);
+      if (isAdmin) {
+        return state;
+      }
+
+      // add member to promote to 'admins' array
+      const updatedAdmins = group.admins.concat([action.member]);
+      const updatedGroup = assoc('admins', updatedAdmins, group);
+
+      return {
+        ...state,
+        groups: update(groupIndex, updatedGroup, state.groups),
       };
     }
     case RESET_STORE: {

@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { connect } from 'react-redux';
-import api from '@/Api/BrightId';
+import api from '@/api/brightId';
 import { encryptAesKey } from '@/utils/invites';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
 import MemberCard from './MemberCard';
 
 export class InviteListScreen extends Component<Props, State> {
@@ -80,7 +80,7 @@ export class InviteListScreen extends Component<Props, State> {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: DEVICE_LARGE ? 70 : 65,
     width: '100%',
     zIndex: 1,
   },

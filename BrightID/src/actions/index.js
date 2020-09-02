@@ -19,8 +19,12 @@ export {
   ADD_CONNECTION,
   ADD_TRUSTED_CONNECTION,
   REMOVE_TRUSTED_CONNECTION,
+  SET_CONNECTIONS_SEARCH,
+  SET_CONNECTIONS_SEARCH_OPEN,
   HYDRATE_CONNECTIONS,
   setConnections,
+  setConnectionsSearch,
+  setConnectionsSearchOpen,
   setConnectionsSort,
   updateConnections,
   deleteConnection,
@@ -29,24 +33,6 @@ export {
   removeTrustedConnection,
   hydrateConnections,
 } from './connections';
-
-export {
-  SET_CONNECT_QR_DATA,
-  REMOVE_CONNECT_QR_DATA,
-  SET_MY_QR_DATA,
-  CLEAR_MY_QR_DATA,
-  setConnectQrData,
-  removeConnectQrData,
-  setMyQrData,
-  clearMyQrData,
-} from './connectQrData';
-
-export {
-  SET_CONNECT_USER_DATA,
-  REMOVE_CONNECT_USER_DATA,
-  setConnectUserData,
-  removeConnectUserData,
-} from './connectUserData';
 
 export {
   CREATE_GROUP,
@@ -61,6 +47,7 @@ export {
   LEAVE_GROUP,
   DISMISS_FROM_GROUP,
   SET_GROUP_SEARCH,
+  SET_GROUP_SEARCH_OPEN,
   createGroup,
   deleteGroup,
   setNewGroupCoFounders,
@@ -72,12 +59,21 @@ export {
   dismissFromGroup,
   rejectInvite,
   acceptInvite,
+  setGroupSearch,
+  setGroupSearchOpen,
 } from './groups';
 
 export {
-  SET_NOTIFICATIONS,
-  setNotifications,
-  getNotifications,
+  SET_BACKUP_PENDING,
+  SET_DEVICE_TOKEN,
+  SET_NOTIFICATION_TOKEN,
+  SET_ACTIVE_NOTIFICATION,
+  REMOVE_ACTIVE_NOTIFICATION,
+  updateNotifications,
+  setDeviceToken,
+  setNotificationToken,
+  setActiveNotification,
+  removeActiveNotification,
 } from './notifications';
 
 export {

@@ -1,56 +1,55 @@
 // @flow
 
-import * as React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import React, { useRef, useEffect } from 'react';
+import { Animated, TouchableOpacity, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useSelector } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { getGroupName } from '@/utils/groups';
-import { DEVICE_TYPE, DEVICE_IOS } from '@/utils/constants';
+import { DEVICE_TYPE } from '@/utils/constants';
 import emitter from '@/emitter';
 import GroupsScreen from '@/components/GroupsScreens/GroupsScreen';
-import SearchGroups from '@/components/GroupsScreens/SearchGroups';
+import SearchGroups from '@/components/Helpers/SearchGroups';
+import SearchConnections from '@/components/Helpers/SearchConnections';
 import NewGroupScreen from '@/components/GroupsScreens/NewGroups/NewGroupScreen';
 import GroupInfoScreen from '@/components/GroupsScreens/NewGroups/GroupInfoScreen';
 import MembersScreen from '@/components/GroupsScreens/Members/MembersScreen';
 import InviteListScreen from '@/components/GroupsScreens/Members/InviteListScreen';
-import { navigate } from '@/NavigationService';
-import backArrow from '@/static/back_arrow.svg';
-import { SvgXml } from 'react-native-svg';
-import { store } from '@/store';
-import { headerOptions } from './helpers';
+import { headerOptions, headerTitleStyle, NavHome } from './helpers';
 
 const Stack = createStackNavigator();
 
-const topOptions = {
+const HeaderTitle = ({ title }) => {
+  const searchOpen = useSelector(
+    (state) => state.groups.searchOpen || state.connections.searchOpen,
+  );
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: searchOpen ? 0 : 1,
+      useNativeDriver: true,
+      duration: 600,
+    }).start();
+  }, [fadeAnim, searchOpen]);
+
+  return (
+    <Animated.View style={{ opacity: fadeAnim }}>
+      <Text style={headerTitleStyle}>{title}</Text>
+    </Animated.View>
+  );
+};
+
+const groupsOptions = {
   ...headerOptions,
-  headerLeft: () => (
-    <TouchableOpacity
-      testID="groups-header-back"
-      style={{
-        marginLeft: DEVICE_IOS ? 20 : 10,
-        // marginTop: DEVICE_LARGE ? 15 : 10,
-      }}
-      onPress={() => {
-        navigate('Home');
-      }}
-    >
-      <SvgXml height="20" xml={backArrow} />
-    </TouchableOpacity>
-  ),
-  headerTitle: () => {
-    const { groups } = store.getState().groups;
-    return groups.length ? (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'center',
-        }}
-      >
-        <SearchGroups />
-      </View>
-    ) : null;
-  },
+  headerRight: () => <SearchGroups />,
+  headerLeft: () => <NavHome />,
+  headerTitle: () => <HeaderTitle title="Groups" />,
+};
+
+const newGroupOptions = {
+  ...headerOptions,
+  headerRight: () => <SearchConnections />,
+  headerTitle: () => <HeaderTitle title="New Group" />,
 };
 
 const membersScreenOptions = ({ navigation, route }) => {
@@ -63,30 +62,20 @@ const membersScreenOptions = ({ navigation, route }) => {
       paddingLeft: 20,
       paddingRight: 30,
     },
-    headerRight: () => (
-      <TouchableOpacity
-        testID="groupOptionsBtn"
-        style={{ marginRight: 11 }}
-        onPress={() => {
-          emitter.emit('optionsSelected');
-        }}
-      >
-        <Material name="dots-horizontal" size={32} color="#fff" />
-      </TouchableOpacity>
-    ),
   };
 };
 
 const Groups = () => (
   <>
-    <Stack.Screen name="Groups" component={GroupsScreen} options={topOptions} />
+    <Stack.Screen
+      name="Groups"
+      component={GroupsScreen}
+      options={groupsOptions}
+    />
     <Stack.Screen
       name="NewGroup"
       component={NewGroupScreen}
-      options={{
-        ...headerOptions,
-        title: 'New Group',
-      }}
+      options={newGroupOptions}
     />
     <Stack.Screen
       name="GroupInfo"

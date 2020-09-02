@@ -1,10 +1,11 @@
 // @flow
 
-import * as React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { connect } from 'react-redux';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import { DEVICE_TYPE } from '@/utils/constants';
+import React from 'react';
+import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { useSelector } from 'react-redux';
+import RNFS from 'react-native-fs';
+import { useNavigation } from '@react-navigation/native';
+import { DEVICE_LARGE } from '@/utils/constants';
 
 /**
  * Notification Card in the Notifications Screen
@@ -13,48 +14,87 @@ import { DEVICE_TYPE } from '@/utils/constants';
  * @prop icon
  */
 
-class NotificationCard extends React.Component<Props> {
-  render() {
-    const { navigation, msg, icon } = this.props;
+const NotificationCard = (props) => {
+  const navigation = useNavigation();
+  const photoFilename = useSelector((state) => state.user.photo.filename);
 
-    return (
-      <TouchableOpacity
-        style={styles.container}
-        onPress={() => {
-          navigation.navigate('TrustedConnections');
-        }}
-      >
-        <Ionicon size={32} style={styles.itemIcon} name={icon} color="#ccc" />
-        <Text style={styles.msg}>{msg}</Text>
-      </TouchableOpacity>
-    );
-  }
-}
+  return (
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => {
+        navigation.navigate('TrustedConnections');
+      }}
+    >
+      <View style={styles.photoContainer}>
+        <Image
+          source={{
+            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photoFilename}`,
+          }}
+          style={styles.photo}
+          resizeMode="cover"
+          onError={(e) => {
+            console.log(e);
+          }}
+          accessible={true}
+          accessibilityLabel="user photo"
+        />
+      </View>
+      <View style={styles.info}>
+        <Text style={styles.name}>Backup BrightID</Text>
+        <Text style={styles.invitationMsg}>
+          Choose your trusted connections
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    backgroundColor: '#fff',
-    paddingVertical: 15,
-    paddingHorizontal: 10,
+    alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    alignItems: 'center',
+    backgroundColor: '#fff',
     borderBottomColor: '#e3e0e4',
     borderBottomWidth: 1,
-    height: DEVICE_TYPE === 'large' ? 94 : 80,
-    marginBottom: DEVICE_TYPE === 'large' ? 7 : 3,
+    paddingBottom: DEVICE_LARGE ? 10 : 8,
+    paddingTop: DEVICE_LARGE ? 10 : 8,
+    height: DEVICE_LARGE ? 94 : 80,
+    marginBottom: DEVICE_LARGE ? 11.8 : 6,
   },
-  msg: {
-    fontFamily: 'ApexNew-Book',
-    color: 'black',
-    fontSize: 18,
-    marginLeft: 18,
-    marginRight: 18,
+  photoContainer: {
+    minWidth: DEVICE_LARGE ? 85 : 70,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  itemIcon: {
-    marginLeft: 16,
+  photo: {
+    borderRadius: 100,
+    width: DEVICE_LARGE ? 60 : 48,
+    height: DEVICE_LARGE ? 60 : 48,
+    backgroundColor: '#d8d8d8',
+  },
+  info: {
+    marginLeft: DEVICE_LARGE ? 10 : 7,
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    height: DEVICE_LARGE ? 71 : 65,
+  },
+  name: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 20 : 18,
+    shadowColor: 'rgba(0,0,0,0.32)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+  },
+  invitationMsg: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 12 : 10,
+    color: '#B64B32',
   },
 });
 
-export default connect()(NotificationCard);
+export default NotificationCard;

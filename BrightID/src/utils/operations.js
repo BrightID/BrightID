@@ -1,10 +1,9 @@
 // @flow
 import { Alert } from 'react-native';
-import store from '../store';
-import { removeOperation, resetOperations, updateApp } from '../actions';
-import fetchUserInfo from '../actions/fetchUserInfo';
-
-import api from '../Api/BrightId';
+import api from '@/api/brightId';
+import store from '@/store';
+import { removeOperation, resetOperations, updateApp } from '@/actions';
+import fetchUserInfo from '@/actions/fetchUserInfo';
 
 const time_fudge = 2 * 60 * 1000; // trace operations for 2 minutes
 
@@ -37,7 +36,7 @@ export const pollOperations = async () => {
       switch (state) {
         case 'unknown':
           // Op not found on server. It might appear in a future poll cycle, so do nothing.
-          console.log(`operation ${op.name} (${op._key}) unknown on server`);
+          // console.log(`operation ${op.name} (${op._key}) unknown on server`);
           break;
         case 'init':
         case 'sent':
@@ -50,9 +49,9 @@ export const pollOperations = async () => {
           handleOpUpdate(store, op, state, result);
           break;
         default:
-          console.log(
-            `Op ${op.name} (${op._key}) has invalid state '${state}'!`,
-          );
+        // console.log(
+        //   `Op ${op.name} (${op._key}) has invalid state '${state}'!`,
+        // );
       }
       if (removeOp) {
         store.dispatch(removeOperation(op._key));

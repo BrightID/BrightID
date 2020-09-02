@@ -5,72 +5,66 @@ import { Image, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import RNFS from 'react-native-fs';
 import { groupCirclePhotos } from '@/utils/groups';
+import { DEVICE_LARGE } from '@/utils/constants';
 
-class GroupPhoto extends React.Component<Props> {
-  photoStyle(photo) {
-    const { radius = 20 } = this.props;
-    const style = { ...styles.photo };
-    if (photo.faded) {
-      style.opacity = 0.25;
-    }
-    return {
-      ...style,
-      borderRadius: radius,
-      width: radius * 2,
-      height: radius * 2,
-    };
+const photoStyle = (photo) => {
+  const style = { ...styles.photo };
+  if (photo.faded) {
+    style.opacity = 0.25;
   }
+  return {
+    ...style,
+  };
+};
 
-  render() {
-    const { group } = this.props;
-    if (group.photo?.filename) {
-      return (
-        <View style={styles.container}>
-          <Image
-            source={{
-              uri: `file://${RNFS.DocumentDirectoryPath}/photos/${group.photo.filename}`,
-            }}
-            style={styles.bigPhoto}
-          />
+const GroupPhoto = ({ group }) => {
+  if (group.photo?.filename) {
+    return (
+      <View style={styles.container}>
+        <Image
+          source={{
+            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${group.photo.filename}`,
+          }}
+          style={styles.bigPhoto}
+        />
+      </View>
+    );
+  } else {
+    const circlePhotos = groupCirclePhotos(group);
+    return (
+      <View style={styles.container}>
+        <View style={styles.topPhotos}>
+          {circlePhotos[0] && (
+            <Image
+              source={{
+                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${circlePhotos[0].photo?.filename}`,
+              }}
+              style={photoStyle(circlePhotos[0])}
+            />
+          )}
         </View>
-      );
-    } else {
-      const circlePhotos = groupCirclePhotos(group);
-      return (
-        <View style={styles.container}>
-          <View style={styles.topPhotos}>
-            {circlePhotos[0] && (
-              <Image
-                source={{
-                  uri: `file://${RNFS.DocumentDirectoryPath}/photos/${circlePhotos[0].photo?.filename}`,
-                }}
-                style={this.photoStyle(circlePhotos[0])}
-              />
-            )}
-          </View>
-          <View style={styles.bottomPhotos}>
-            {circlePhotos[1] && (
-              <Image
-                source={{
-                  uri: `file://${RNFS.DocumentDirectoryPath}/photos/${circlePhotos[1].photo?.filename}`,
-                }}
-                style={this.photoStyle(circlePhotos[1])}
-              />
-            )}
-            {circlePhotos[2] && (
-              <Image
-                source={{
-                  uri: `file://${RNFS.DocumentDirectoryPath}/photos/${circlePhotos[2].photo?.filename}`,
-                }}
-                style={this.photoStyle(circlePhotos[2])}
-              />
-            )}
-          </View>
+        <View style={styles.bottomPhotos}>
+          {circlePhotos[1] && (
+            <Image
+              source={{
+                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${circlePhotos[1].photo?.filename}`,
+              }}
+              style={photoStyle(circlePhotos[1])}
+            />
+          )}
+          {circlePhotos[2] && (
+            <Image
+              source={{
+                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${circlePhotos[2].photo?.filename}`,
+              }}
+              style={photoStyle(circlePhotos[2])}
+            />
+          )}
         </View>
-      );
-    }
+      </View>
+    );
   }
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -86,8 +80,8 @@ const styles = StyleSheet.create({
   },
   photo: {
     borderRadius: 20,
-    width: 40,
-    height: 40,
+    width: DEVICE_LARGE ? 40 : 32,
+    height: DEVICE_LARGE ? 40 : 32,
     backgroundColor: '#d8d8d8',
   },
   faded: {

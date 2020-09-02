@@ -1,13 +1,21 @@
 // @flow
 
 import * as React from 'react';
-import { TextInput, TouchableOpacity, StyleSheet, View } from 'react-native';
+import {
+  Animated,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  View,
+} from 'react-native';
+import { SvgXml } from 'react-native-svg';
 import { connect } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
 import { navigate } from '@/NavigationService';
-import { setSearchParam } from '../../actions';
+import { setSearchParam } from '@/actions';
+import searchIcon from '@/static/search_icon.svg';
 
 /**
  * Search Bar in the Connections Screen
@@ -29,9 +37,9 @@ class SearchConnections extends React.Component<Props & LocalProps> {
   render() {
     const { sortable } = this.props;
     return (
-      <View style={styles.container}>
+      <Animated.View style={styles.container}>
         <TouchableOpacity style={styles.searchIcon}>
-          <Octicons size={20} name="search" color="#333" />
+          <SvgXml width={20} height={20} xml={searchIcon} />
         </TouchableOpacity>
         <TextInput
           onChangeText={(value) => this.props.dispatch(setSearchParam(value))}
@@ -56,7 +64,7 @@ class SearchConnections extends React.Component<Props & LocalProps> {
             <Ionicon size={22} name="ios-options" color="#333" />
           </TouchableOpacity>
         )}
-      </View>
+      </Animated.View>
     );
   }
 }

@@ -16,7 +16,7 @@ import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
-import backupApi from '../../Api/BackupApi';
+import backupApi from '../../api/backupService';
 import { setupRecovery, recoveryQrStr, handleSigs } from './helpers';
 
 /**
@@ -159,7 +159,7 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: DEVICE_LARGE ? 70 : 65,
     width: '100%',
     zIndex: 1,
   },

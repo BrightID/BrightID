@@ -1,75 +1,80 @@
-import * as React from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import React, { useEffect, useRef } from 'react';
+import { Animated, Text } from 'react-native';
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+} from '@react-navigation/stack';
 import ConnectionsScreen from '@/components/Connections/ConnectionsScreen';
 import SortingConnectionsScreen from '@/components/Connections/SortingConnectionsScreen';
-import SearchConnections from '@/components/Connections/SearchConnections';
-import { DEVICE_IOS } from '@/utils/constants';
-import { createFakeConnection } from '@/components/Connections/models/createFakeConnection';
-import { navigate } from '@/NavigationService';
-import backArrow from '@/static/back_arrow.svg';
-import { SvgXml } from 'react-native-svg';
-import { store } from '@/store';
-import { headerOptions } from './helpers';
+import SearchConnections from '@/components/Helpers/SearchConnections';
+import FullScreenPhoto from '@/components/Helpers/FullScreenPhoto';
+import TrustedConnectionsScreen from '@/components/Recovery/TrustedConnectionsScreen';
+import { useSelector } from 'react-redux';
+import { headerOptions, headerTitleStyle, NavHome } from './helpers';
 
 const Stack = createStackNavigator();
 
-const connectionsScreenOptions = {
-  ...headerOptions,
-  headerRight: __DEV__
-    ? () => (
-        <TouchableOpacity
-          testID="createFakeConnectionBtn"
-          style={{ marginRight: 11 }}
-          onPress={createFakeConnection}
-        >
-          <Material name="dots-horizontal" size={32} color="#fff" />
-        </TouchableOpacity>
-      )
-    : () => null,
-  headerLeft: () => (
-    <TouchableOpacity
-      testID="connections-header-back"
-      style={{
-        marginLeft: DEVICE_IOS ? 20 : 10,
-      }}
-      onPress={() => {
-        navigate('Home');
-      }}
-    >
-      <SvgXml height="20" xml={backArrow} />
-    </TouchableOpacity>
-  ),
-  headerTitle: () => {
-    const { connections } = store.getState().connections;
-    return connections.length ? (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'center',
-        }}
-      >
-        <SearchConnections sortable={true} />
-      </View>
-    ) : null;
-  },
+const HeaderTitle = ({ title }) => {
+  const searchOpen = useSelector((state) => state.connections.searchOpen);
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: searchOpen ? 0 : 1,
+      useNativeDriver: true,
+      duration: 600,
+    }).start();
+  }, [fadeAnim, searchOpen]);
+
+  return (
+    <Animated.View style={{ opacity: fadeAnim }}>
+      <Text style={headerTitleStyle}>{title}</Text>
+    </Animated.View>
+  );
 };
 
-const Connections = () => (
-  <>
-    <Stack.Screen
-      name="Connections"
-      component={ConnectionsScreen}
-      options={connectionsScreenOptions}
-    />
-    <Stack.Screen
-      name="SortingConnections"
-      component={SortingConnectionsScreen}
-      options={headerOptions}
-    />
-  </>
-);
+const connectionsScreenOptions = {
+  ...headerOptions,
+  headerRight: () => <SearchConnections sortable={true} />,
+  headerLeft: () => <NavHome />,
+  headerTitle: () => <HeaderTitle title="Connections" />,
+};
+
+const trustedScreenOptions = {
+  ...headerOptions,
+  headerRight: () => <SearchConnections sortable={true} />,
+  headerTitle: () => <HeaderTitle title="Trusted Connections" />,
+};
+
+const fullScreenPhotoOptions = {
+  headerShown: false,
+  cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+};
+
+const Connections = () => {
+  return (
+    <>
+      <Stack.Screen
+        name="Connections"
+        component={ConnectionsScreen}
+        options={connectionsScreenOptions}
+      />
+      <Stack.Screen
+        name="SortingConnections"
+        component={SortingConnectionsScreen}
+        options={headerOptions}
+      />
+      <Stack.Screen
+        name="TrustedConnections"
+        component={TrustedConnectionsScreen}
+        options={trustedScreenOptions}
+      />
+      <Stack.Screen
+        name="FullScreenPhoto"
+        component={FullScreenPhoto}
+        options={fullScreenPhotoOptions}
+      />
+    </>
+  );
+};
 
 export default Connections;

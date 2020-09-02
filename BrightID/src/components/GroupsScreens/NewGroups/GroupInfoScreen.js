@@ -11,9 +11,13 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import ToggleSwitch from 'toggle-switch-react-native';
 import { chooseImage } from '@/utils/images';
-import { DEVICE_TYPE, DEVICE_OS, ORANGE } from '@/utils/constants';
+import {
+  DEVICE_TYPE,
+  DEVICE_OS,
+  ORANGE,
+  DEVICE_LARGE,
+} from '@/utils/constants';
 
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
@@ -63,6 +67,7 @@ export class GroupInfoScreen extends React.Component<Props> {
   };
 
   render() {
+    // eslint-disable-next-line no-unused-vars
     const { name, finalBase64, isPrimary } = this.state;
 
     return (
@@ -111,7 +116,11 @@ export class GroupInfoScreen extends React.Component<Props> {
               />
             </View>
           </View>
-          {!this.hasPrimaryGroup() && (
+          {/*
+
+            Disabled creation of primary groups for now (https://github.com/BrightID/BrightID/issues/474)
+
+            !this.hasPrimaryGroup() && (
             <View testID="primaryGroupView" style={styles.toggleContainer}>
               <Text style={styles.primaryGroupText}>
                 A primary group represents the closest personal contacts (e.g.
@@ -130,7 +139,8 @@ export class GroupInfoScreen extends React.Component<Props> {
                 onToggle={(isPrimary) => this.setState({ isPrimary })}
               />
             </View>
-          )}
+            )
+            */}
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               testID="nextBtn"
@@ -149,7 +159,7 @@ export class GroupInfoScreen extends React.Component<Props> {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: DEVICE_LARGE ? 70 : 65,
     width: '100%',
     zIndex: 1,
   },
@@ -160,7 +170,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     borderTopLeftRadius: 58,
-    borderTopRightRadius: 58,
     marginTop: -58,
     zIndex: 10,
     overflow: 'hidden',

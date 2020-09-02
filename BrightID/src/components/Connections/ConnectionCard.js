@@ -173,18 +173,27 @@ class ConnectionCard extends React.Component<Props, State> {
   };
 
   render() {
-    const { photo, name, connectionDate, style } = this.props;
+    const { photo, name, connectionDate, style, navigation } = this.props;
     const connectionStatus = this.getStatus();
     const contextAction = this.getContextAction();
 
     return (
       <View style={{ ...styles.container, ...style }}>
-        <Image
-          source={{
-            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('FullScreenPhoto', { photo });
           }}
-          style={styles.photo}
-        />
+          accessibilityLabel="View Photo Full Screen"
+          accessibilityRole="imagebutton"
+        >
+          <Image
+            source={{
+              uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
+            }}
+            style={styles.photo}
+            accessibilityLabel="ConnectionPhoto"
+          />
+        </TouchableOpacity>
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
           {connectionStatus}

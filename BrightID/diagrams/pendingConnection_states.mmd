@@ -1,0 +1,13 @@
+stateDiagram
+  S1: INITIAL
+  S2: DOWNLOADING
+  S3: UNCONFIRMED
+  S4: REJECTED
+  S5: CONFIRMED
+
+  [*] --> S1
+  S1 --> S2: download profile
+  S2 --> S3: download complete
+  S2 --> S1: download error
+  S3 --> S4: user rejects
+  S3 --> S5: user confirms

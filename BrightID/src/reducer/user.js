@@ -8,7 +8,6 @@ import {
   SEARCH_PARAM,
   SET_USER_DATA,
   SET_USER_NAME,
-  SET_NOTIFICATIONS,
   SET_BACKUP_COMPLETED,
   SET_PASSWORD,
   SET_HASHED_ID,
@@ -20,12 +19,11 @@ import {
 } from '@/actions';
 
 const initialState = {
-  score: __DEV__ ? 100 : 0,
+  score: 0,
   isSponsored: false,
   name: '',
   photo: { filename: '' },
   searchParam: '',
-  notifications: [],
   backupCompleted: false,
   id: '',
   publicKey: '',
@@ -81,12 +79,7 @@ export const reducer = (state: UserState = initialState, action: action) => {
         verifications: action.verifications,
       };
     }
-    case SET_NOTIFICATIONS: {
-      return {
-        ...state,
-        notifications: action.notifications,
-      };
-    }
+
     case SET_BACKUP_COMPLETED: {
       return {
         ...state,

@@ -10,9 +10,8 @@ import {
   FlatList,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { DEVICE_TYPE, ORANGE } from '@/utils/constants';
+import { DEVICE_TYPE, ORANGE, DEVICE_LARGE } from '@/utils/constants';
 import EmptyList from '@/components/Helpers/EmptyList';
-import SearchConnections from '../Connections/SearchConnections';
 import TrustedConnectionCard from './TrustedConnectionCard';
 import { setTrustedConnections } from './helpers';
 
@@ -69,42 +68,47 @@ class TrustedConnectionsScreen extends React.Component<Props> {
   };
 
   render() {
-    const { navigation } = this.props;
     const connections = this.filterConnections();
 
     return (
-      <View style={styles.container}>
-        <View style={styles.mainContainer}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.infoText}>
-              Choose three or more trusted connections to back up your BrightID.
-            </Text>
-          </View>
-          {DEVICE_TYPE === 'large' && (
-            <SearchConnections navigation={navigation} />
-          )}
+      <>
+        <View style={styles.orangeTop} />
+        <View style={styles.container}>
           <View style={styles.mainContainer}>
-            <FlatList
-              style={styles.connectionsContainer}
-              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-              data={connections}
-              keyExtractor={({ id }, index) => id + index}
-              renderItem={this.renderConnection}
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}
-              ListEmptyComponent={<EmptyList title="No connections..." />}
-            />
+            <View style={styles.titleContainer}>
+              <Text style={styles.infoText}>
+                Choose three or more trusted connections to back up your
+                BrightID.
+              </Text>
+            </View>
+            <View style={styles.mainContainer}>
+              <FlatList
+                style={styles.connectionsContainer}
+                contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+                data={connections}
+                keyExtractor={({ id }, index) => id + index}
+                renderItem={this.renderConnection}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                ListEmptyComponent={
+                  <EmptyList
+                    iconType="account-off-outline"
+                    title="No connections"
+                  />
+                }
+              />
+            </View>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              onPress={this.navigateToBackup}
+              style={styles.nextButton}
+            >
+              <Text style={styles.buttonInnerText}>Next</Text>
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            onPress={this.navigateToBackup}
-            style={styles.nextButton}
-          >
-            <Text style={styles.buttonInnerText}>Next</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </>
     );
   }
 }
@@ -112,16 +116,20 @@ class TrustedConnectionsScreen extends React.Component<Props> {
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
-    height: 70,
+    height: DEVICE_LARGE ? 70 : 65,
     width: '100%',
     zIndex: 1,
   },
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    borderTopLeftRadius: 58,
+    marginTop: -58,
+    overflow: 'hidden',
+    zIndex: 10,
   },
   mainContainer: {
-    marginTop: 8,
+    marginTop: 4,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -129,8 +137,6 @@ const styles = StyleSheet.create({
   connectionsContainer: {
     flex: 1,
     width: '96.7%',
-    borderTopWidth: 1,
-    borderTopColor: '#e3e1e1',
   },
   emptyText: {
     fontFamily: 'ApexNew-Book',
@@ -142,6 +148,8 @@ const styles = StyleSheet.create({
     marginTop: DEVICE_TYPE === 'large' ? 6 : 0,
     backgroundColor: '#fff',
     width: '96.7%',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e3e1e1',
   },
   infoText: {
     fontFamily: 'ApexNew-Book',
@@ -150,7 +158,8 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     letterSpacing: 0,
     textAlign: 'left',
-    margin: 6,
+    margin: 12,
+    paddingLeft: 10,
   },
   connectionCard: {
     marginBottom: 0,
@@ -184,6 +193,6 @@ const styles = StyleSheet.create({
 });
 
 export default connect(({ connections, user }) => ({
-  ...connections,
   ...user,
+  ...connections,
 }))(TrustedConnectionsScreen);

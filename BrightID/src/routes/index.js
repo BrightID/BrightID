@@ -7,7 +7,7 @@ import Apps from './Apps';
 import Connections from './Connections';
 import Groups from './Groups';
 import Home from './Home';
-import NewConnections from './NewConnections';
+import PendingConnections from './PendingConnections';
 import Notifications from './Notifications';
 import Onboarding from './Onboarding';
 
@@ -18,7 +18,7 @@ const MainTabs = () => {
   return (
     <Stack.Navigator headerMode="screen">
       {Home()}
-      {NewConnections()}
+      {PendingConnections()}
       {Connections()}
       {Groups()}
       {Notifications()}
