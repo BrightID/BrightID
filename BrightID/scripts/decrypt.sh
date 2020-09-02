@@ -13,7 +13,7 @@ gpg --quiet --batch --yes --decrypt --passphrase="$ENCRYPT_PASSWORD" \
 
 # Decrypt google-services.json
 gpg --quiet --batch --yes --decrypt --passphrase="$ENCRYPT_PASSWORD" \
---output ./android/google-services.json ./android/google-services.json-prod.gpg
+--output ./android/app/google-services.json ./android/app/google-services.json-prod.gpg
 
 
 # Decrypt google key for publishing in app store
