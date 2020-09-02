@@ -63,6 +63,7 @@ export const respondToConnectionRequest = async ({
   }
 
   const message = `Add Connection${otherBrightId}${myBrightId}${timestamp}`;
+  console.log(`Signing connection message: ${message}`)
   const mySignedMessage = uInt8ArrayToB64(
     nacl.sign.detached(strToUint8Array(message), secretKey),
   );

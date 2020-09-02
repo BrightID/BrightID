@@ -225,7 +225,7 @@ export const fetchConnectionRequests = (channelId: string) => async (
   profileIds = profileIds.slice(0, CHANNEL_CONNECTION_LIMIT);
   for (const profileId of profileIds) {
     // check if signedMessage and profile exists
-    const pendingConnection = selectPendingConnectionById(
+    const pendingConnection: PendingConnection = selectPendingConnectionById(
       getState(),
       profileId,
     );
@@ -256,11 +256,11 @@ export const fetchConnectionRequests = (channelId: string) => async (
             );
             const { username, secretKey } = await obtainKeys();
             respondToConnectionRequest({
-              timestamp: connectionTimestamp,
+              otherBrightId: pendingConnection.brightId,
               signedMessage,
-              brightId: pendingConnection.brightID,
+              timestamp: connectionTimestamp,
+              myBrightId: username,
               secretKey,
-              userName: username,
             });
             if (channel.type === channel_types.SINGLE) {
               // Connection is established, so the 1:1 channel can be left
