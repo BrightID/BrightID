@@ -18,6 +18,7 @@ jobs:
       - name: debug build
         run: |
           touch ./android/app/src/main/assets/index.android.bundle
+          mv ./android/app/google-services.json-dev ./android/app/google-services.json
           react-native bundle --dev false --platform android --entry-file index.js --bundle-output ./android/app/src/main/assets/index.android.bundle --assets-dest ./android/app/src/main/res/
           cd android && ./gradlew assembleDebug && cd ..
       - name: Upload Artifact
