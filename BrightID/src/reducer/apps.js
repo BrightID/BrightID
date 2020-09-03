@@ -1,11 +1,6 @@
 // @flow
 
-import {
-  SET_APPS,
-  ADD_LINK,
-  RESET_STORE,
-} from '@/actions';
-import { find, propEq } from 'ramda';
+import { SET_APPS, ADD_LINK, RESET_STORE } from '@/actions';
 
 const initialState = {
   apps: [],

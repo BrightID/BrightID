@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import {
+  Alert,
   Linking,
   StyleSheet,
   View,
@@ -13,18 +14,11 @@ import { connect } from 'react-redux';
 import EmptyList from '@/components/Helpers/EmptyList';
 import Spinner from 'react-native-spinkit';
 import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
-import emitter from '@/emitter';
-import store from '@/store';
-import AppCard from './AppCard';
-import api from '@/Api/BrightId';
-import { handleAppContext } from './model';
 import { find, propEq } from 'ramda';
+import AppCard from './AppCard';
+import { handleAppContext } from './model';
 
 export class AppsScreen extends React.Component<Prop, State> {
-  constructor(props: Props) {
-    super(props);
-  }
-
   componentDidMount() {
     const { navigation } = this.props;
     navigation.addListener('focus', async () => {

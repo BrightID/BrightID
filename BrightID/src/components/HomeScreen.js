@@ -14,7 +14,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import { SvgXml } from 'react-native-svg';
 import ActionSheet from 'react-native-actionsheet';
 import { useDispatch, useSelector } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { setPhoto, setName, setActiveNotification } from '@/actions';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
@@ -24,7 +23,6 @@ import verificationSticker from '@/static/verification-sticker.svg';
 import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
 import forumIcon from '@/static/forum_icon.svg';
-import { useWhiteStatusBar } from '@/utils/hooks';
 
 /**
  * Home screen of BrightID
@@ -55,8 +53,8 @@ export const HomeScreen = (props) => {
     const { apps, links } = state.apps;
     return apps.filter((app) => {
       return (
-        links.filter((link) => {
-          return app.context == link.context && link.state == 'applied';
+        links?.filter((link) => {
+          return app.context === link.context && link.state === 'applied';
         }).length > 0
       );
     }).length;

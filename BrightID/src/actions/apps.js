@@ -1,6 +1,6 @@
 // @flow
 
-import api from '@/Api/BrightId';
+import api from '@/api/brightId';
 
 export const SET_APPS = 'SET_APPS';
 export const ADD_LINK = 'ADD_LINK';
@@ -15,7 +15,10 @@ export const addLink = (linkInfo: LinkInfo) => ({
   link: linkInfo,
 });
 
-export const fetchApps = () => async (dispatch: dispatch, getState: getState) => {
+export const fetchApps = () => async (
+  dispatch: dispatch,
+  getState: getState,
+) => {
   try {
     const apps = await api.getApps();
     dispatch(setApps(apps));
