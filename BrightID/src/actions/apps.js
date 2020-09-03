@@ -3,15 +3,15 @@
 import api from '@/api/brightId';
 
 export const SET_APPS = 'SET_APPS';
-export const ADD_LINK = 'ADD_LINK';
+export const ADD_LINKED_APP = 'ADD_LINKED_APP';
 
 export const setApps = (appInfos: AppInfo[]) => ({
   type: SET_APPS,
   apps: appInfos,
 });
 
-export const addLink = (linkInfo: LinkInfo) => ({
-  type: ADD_LINK,
+export const addLinkedApp = (linkInfo: LinkInfo) => ({
+  type: ADD_LINKED_APP,
   link: linkInfo,
 });
 

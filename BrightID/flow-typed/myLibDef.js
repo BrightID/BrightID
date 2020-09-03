@@ -30,7 +30,7 @@ declare type State = {
 
 declare type AppsState = {
   apps: AppInfo[],
-  links: LinkInfo[],
+  linkedApps: LinkedAppInfo[],
 };
 
 declare type AppInfo = {
@@ -45,7 +45,7 @@ declare type AppInfo = {
   assignedSponsorships: number,
 };
 
-declare type LinkInfo = {
+declare type LinkedAppInfo = {
   context: string,
   contextId: string,
   state: string,

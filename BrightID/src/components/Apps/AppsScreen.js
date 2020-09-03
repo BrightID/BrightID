@@ -56,8 +56,8 @@ export class AppsScreen extends React.Component<Prop, State> {
   };
 
   statusBar = () => {
-    const { isSponsored, links } = this.props;
-    const pendingLink = find(propEq('state', 'pending'))(links);
+    const { isSponsored, linkedApps } = this.props;
+    const pendingLink = find(propEq('state', 'pending'))(linkedApps);
     let msg, waiting;
     if (pendingLink) {
       msg = `Linking your account in ${pendingLink.context}\n to your BrightID ...`;
@@ -80,10 +80,10 @@ export class AppsScreen extends React.Component<Prop, State> {
   };
 
   isLinked = (app) => {
-    const { links } = this.props;
+    const { linkedApps } = this.props;
     let linked = false;
-    links.forEach((link) => {
-      if (link.state == 'applied' && link.context === app.context) {
+    linkedApps.forEach((link) => {
+      if (link.state === 'applied' && link.context === app.context) {
         linked = true;
       }
     });

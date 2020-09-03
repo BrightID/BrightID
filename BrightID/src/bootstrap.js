@@ -1,8 +1,7 @@
 // @flow
+import { fetchApps } from '@/actions/apps';
 import { bootstrapAndUpgrade } from './versions';
 import { resetOperations } from './actions';
-import fetchUserInfo from './actions/fetchUserInfo';
-import { fetchApps } from '@/actions/apps';
 import { store } from './store';
 
 // happens inside of the loading screen

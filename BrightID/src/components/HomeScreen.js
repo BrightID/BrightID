@@ -50,10 +50,10 @@ export const HomeScreen = (props) => {
     verifications,
   ]);
   const linkedAppsCount = useSelector((state) => {
-    const { apps, links } = state.apps;
+    const { apps, linkedApps } = state.apps;
     return apps.filter((app) => {
       return (
-        links?.filter((link) => {
+        linkedApps?.filter((link) => {
           return app.context === link.context && link.state === 'applied';
         }).length > 0
       );

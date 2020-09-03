@@ -1,11 +1,6 @@
 // @flow
 
-export {
-  SET_APPS,
-  ADD_LINK,
-  setApps,
-  addLink,
-} from './apps';
+export { SET_APPS, ADD_LINKED_APP, setApps, addLinkedApp } from './apps';
 
 export {
   SET_CONNECTIONS,
