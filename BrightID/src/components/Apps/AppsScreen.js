@@ -15,13 +15,15 @@ import EmptyList from '@/components/Helpers/EmptyList';
 import Spinner from 'react-native-spinkit';
 import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
 import { find, propEq } from 'ramda';
+import { fetchApps } from '@/actions';
 import AppCard from './AppCard';
 import { handleAppContext } from './model';
 
 export class AppsScreen extends React.Component<Prop, State> {
   componentDidMount() {
-    const { navigation } = this.props;
+    const { navigation, dispatch } = this.props;
     navigation.addListener('focus', async () => {
+      dispatch(fetchApps());
       this.handleDeepLink();
       Linking.addEventListener('url', this.handleDeepLink);
     });

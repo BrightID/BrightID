@@ -84,7 +84,7 @@ class NodeApi {
     let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
     op.hash = NodeApi.checkHash(res, message);
-    console.log(`Initiator opMessage: ${message} - hash: ${hash(message)}`);
+    console.log(`Initiator opMessage: ${message} - hash: ${op.hash}`);
     NodeApi.setOperation(op);
   }
 

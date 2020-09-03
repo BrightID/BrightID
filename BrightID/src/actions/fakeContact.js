@@ -1,7 +1,6 @@
 // @flow
 
 import nacl from 'tweetnacl';
-import stringify from 'fast-json-stable-stringify';
 import RNFetchBlob from 'rn-fetch-blob';
 import { Alert } from 'react-native';
 import {
