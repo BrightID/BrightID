@@ -13,9 +13,8 @@ export const InitialLoadingScreen = ({ app }: { app: boolean }) => {
         console.log('BOOSTRAPING APP');
         bootstrap();
         console.log('SUBSCRIBING TO NOTIFICATIONS');
-        setTimeout(() => {
-          notificationSubscription();
-        }, 2500);
+
+        notificationSubscription();
       }
     };
   }, []);
