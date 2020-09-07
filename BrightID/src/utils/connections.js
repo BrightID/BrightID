@@ -11,8 +11,8 @@ export const initiateConnectionRequest = async ({
   channel,
   connection,
 }) => {
-  const message = `Add Connection${myBrightId}${connection.brightID}${connectionTimestamp}`;
-  console.log(message);
+  const message = `Add Connection${myBrightId}${connection.brightId}${connectionTimestamp}`;
+  console.log(`Initiator: Signing connection message: ${message}`);
   const signedMessage = uInt8ArrayToB64(
     nacl.sign.detached(strToUint8Array(message), secretKey),
   );
@@ -34,7 +34,7 @@ export const initiateConnectionRequest = async ({
 
   let opName = 'Add Connection';
   let opMessage =
-    opName + myBrightId + connection.brightID + connectionTimestamp;
+    opName + myBrightId + connection.brightId + connectionTimestamp;
   return {
     opName,
     opMessage,
@@ -63,7 +63,7 @@ export const respondToConnectionRequest = async ({
   }
 
   const message = `Add Connection${otherBrightId}${myBrightId}${timestamp}`;
-  console.log(`Signing connection message: ${message}`)
+  console.log(`Responder: Signing connection message: ${message}`);
   const mySignedMessage = uInt8ArrayToB64(
     nacl.sign.detached(strToUint8Array(message), secretKey),
   );

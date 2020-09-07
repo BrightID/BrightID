@@ -250,21 +250,27 @@ export const fetchConnectionRequests = (channelId: string) => async (
               },
             }),
           );
-          if (pendingConnection.wantsToConfirm) {
+          if (pendingConnection.preConfirmed) {
             console.log(
               `Got initiators signed message for preconfirmed connection. Submitting operation now!`,
             );
             const { username, secretKey } = await obtainKeys();
-            respondToConnectionRequest({
-              otherBrightId: pendingConnection.brightId,
-              signedMessage,
-              timestamp: connectionTimestamp,
-              myBrightId: username,
-              secretKey,
-            });
-            if (channel.type === channel_types.SINGLE) {
-              // Connection is established, so the 1:1 channel can be left
-              dispatch(leaveChannel(channel.id));
+            try {
+              respondToConnectionRequest({
+                otherBrightId: pendingConnection.brightId,
+                signedMessage,
+                timestamp: connectionTimestamp,
+                myBrightId: username,
+                secretKey,
+              });
+              if (channel.type === channel_types.SINGLE) {
+                // Connection is established, so the 1:1 channel can be left
+                dispatch(leaveChannel(channel.id));
+              }
+            } catch (e) {
+              console.log(
+                `Error responding preConfirmed pendingConnection: ${e}`,
+              );
             }
           }
         } else {

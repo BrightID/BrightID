@@ -32,10 +32,6 @@ import {
   selectAllUnconfirmedConnections,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import { confirmPendingConnectionThunk } from '@/components/PendingConnectionsScreens/actions/pendingConnectionThunks';
-import {
-  channel_types,
-  selectChannelById,
-} from '@/components/PendingConnectionsScreens/channelSlice';
 import { DEVICE_LARGE, WIDTH } from '@/utils/constants';
 import backArrow from '@/static/back_arrow_grey.svg';
 import { setActiveNotification } from '@/actions';
@@ -48,8 +44,6 @@ import { setActiveNotification } from '@/actions';
  */
 
 /**  HELPER FUNCTIONS */
-
-const isReadyToConfirm = (pc) => true //pc.initiator || pc.signedMessage;
 
 const ZERO_CONNECTIONS_TIMEOUT = 3500;
 
@@ -112,41 +106,34 @@ const ConfirmationButtons = ({
         </Text>
       );
     }
-    case pendingConnection_states.UNCONFIRMED:
-      if (isReadyToConfirm(pendingConnection)) {
-        return (
-          <>
-            <TouchableOpacity
-              testID="rejectConnectionButton"
-              onPress={reject}
-              style={styles.rejectButton}
-              accessibilityLabel={`reject connection with ${pendingConnection.name}`}
-              accessibilityRole="button"
-            >
-              <Text style={styles.buttonText}>
-                {alreadyExists ? 'Ignore' : 'Reject'}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              testID="confirmConnectionButton"
-              onPress={accept}
-              style={styles.confirmButton}
-              accessibilityLabel={`accept connection with ${pendingConnection.name}`}
-              accessibilityRole="button"
-            >
-              <Text style={styles.buttonText}>
-                {alreadyExists ? 'Update Profile' : 'Confirm'}
-              </Text>
-            </TouchableOpacity>
-          </>
-        );
-      } else {
-        return (
-          <Text style={styles.waitingText}>
-            Waiting for {pendingConnection.name} to confirm ...
-          </Text>
-        );
-      }
+    case pendingConnection_states.UNCONFIRMED: {
+      return (
+        <>
+          <TouchableOpacity
+            testID="rejectConnectionButton"
+            onPress={reject}
+            style={styles.rejectButton}
+            accessibilityLabel={`reject connection with ${pendingConnection.name}`}
+            accessibilityRole="button"
+          >
+            <Text style={styles.buttonText}>
+              {alreadyExists ? 'Ignore' : 'Reject'}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            testID="confirmConnectionButton"
+            onPress={accept}
+            style={styles.confirmButton}
+            accessibilityLabel={`accept connection with ${pendingConnection.name}`}
+            accessibilityRole="button"
+          >
+            <Text style={styles.buttonText}>
+              {alreadyExists ? 'Update Profile' : 'Confirm'}
+            </Text>
+          </TouchableOpacity>
+        </>
+      );
+    }
     case pendingConnection_states.ERROR: {
       return (
         <Text style={styles.waitingText}>
@@ -280,25 +267,11 @@ export const PendingConnectionsScreen = () => {
     return selectAllUnconfirmedConnections(state);
   });
 
-  // pending connections to display
-  const [pendingConnectionsToDisplay, setPendingConnectionsDisplay] = useState(
-    [],
-  );
-
   const [loading, setLoading] = useState(true);
 
   const [reRender, setReRender] = useState(true);
 
   const [activeIndex, setActiveIndex] = useState(null);
-
-  // this will trigger a re-render of the carousel
-  // causes a glitch in the UI on Android
-  const resetDisplayConnections = useCallback(() => {
-    const connectionsToDisplay = pendingConnections.filter(isReadyToConfirm);
-    // this will cause the PendingConnectionList to re render
-    setPendingConnectionsDisplay(connectionsToDisplay);
-    // setTimeout(() => {});
-  }, [pendingConnections]);
 
   useFocusEffect(
     useCallback(() => {
@@ -311,22 +284,13 @@ export const PendingConnectionsScreen = () => {
   // setupList on first render
   useEffect(() => {
     if (reRender) {
-      // refresh list
-      resetDisplayConnections();
       // we wait 500ms before showing the pendingConnection screen
       setTimeout(() => {
         setReRender(false);
         setActiveIndex(0);
       }, 500);
     }
-  }, [reRender, resetDisplayConnections]);
-
-  // re-render list if no connections are displayed
-  useEffect(() => {
-    if (pendingConnectionsToDisplay.length === 0 && !reRender) {
-      resetDisplayConnections();
-    }
-  }, [resetDisplayConnections, pendingConnectionsToDisplay.length, reRender]);
+  }, [reRender]);
 
   // back handling for android
   useEffect(() => {
@@ -363,12 +327,11 @@ export const PendingConnectionsScreen = () => {
         <PreviewConnection
           pendingConnection={item}
           carouselRef={carouselRef}
-          last={index === pendingConnectionsToDisplay.length - 1}
+          last={index === pendingConnections.length - 1}
           setReRender={setReRender}
         />
       );
     };
-    // console.log('rendering pending connections CAROUSEL');
 
     return (
       <Carousel
@@ -376,10 +339,10 @@ export const PendingConnectionsScreen = () => {
           flex: 1,
         }}
         ref={carouselRef}
-        data={pendingConnectionsToDisplay}
+        data={pendingConnections}
         renderItem={renderItem}
         layout="stack"
-        layoutCardOffset={pendingConnectionsToDisplay.length}
+        layoutCardOffset={pendingConnections.length}
         firstItem={0}
         itemWidth={WIDTH * 0.95}
         sliderWidth={WIDTH}
@@ -391,7 +354,7 @@ export const PendingConnectionsScreen = () => {
         }}
       />
     );
-  }, [pendingConnectionsToDisplay]);
+  }, [pendingConnections]);
 
   const ZeroConnectionsToDisplay = () => {
     return (
@@ -409,16 +372,7 @@ export const PendingConnectionsScreen = () => {
           size={DEVICE_LARGE ? 48 : 40}
           color="#333"
         />
-        <Text style={styles.waitingText}>
-          Waiting for{' '}
-          {pendingConnections.length === 0
-            ? 'more '
-            : pendingConnections.length > 1 && `${pendingConnections.length} `}
-          {pendingConnections.length === 1
-            ? pendingConnections[0].name
-            : 'connections'}{' '}
-          {pendingConnections.length ? 'to confirm you.' : ''}
-        </Text>
+        <Text style={styles.waitingText}>Waiting for more connections</Text>
         <Spinner isVisible={true} size={60} type="ThreeBounce" color="#333" />
         <TouchableOpacity
           style={styles.bottomButton}
@@ -455,7 +409,7 @@ export const PendingConnectionsScreen = () => {
           type="FadingCircleAlt"
           color="#aaa"
         />
-      ) : pendingConnectionsToDisplay.length ? (
+      ) : pendingConnections.length ? (
         <>
           {PendingConnectionList}
           <Pagination
@@ -469,7 +423,7 @@ export const PendingConnectionsScreen = () => {
             dotContainerStyle={{
               paddingTop: 5,
             }}
-            dotsLength={pendingConnectionsToDisplay.length}
+            dotsLength={pendingConnections.length}
             activeDotIndex={activeIndex ?? 0}
             inactiveDotOpacity={0.4}
             inactiveDotScale={1}

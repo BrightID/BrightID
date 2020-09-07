@@ -98,7 +98,7 @@ export const newPendingConnection = createAsyncThunk(
     // I'm confused about this initiator logic, might change this...
     decryptedObj.initiator =
       decryptedObj.profileTimestamp <= channel.myProfileTimestamp;
-    decryptedObj.wantsToConfirm = false;
+    decryptedObj.preConfirmed = false;
 
     console.log('decryptedObj.profileTimestamp', decryptedObj.profileTimestamp);
 
