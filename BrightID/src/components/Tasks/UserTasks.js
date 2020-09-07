@@ -40,19 +40,6 @@ export const UserTasks = {
       return state.connections.connections.length > 1;
     },
   },
-  join_group: {
-    id: 'join_group',
-    title: 'Join a group',
-    description: 'Be invited to a group',
-    sortValue: 50,
-    checkFn(state) {
-      // is there a group where I am not the founder?
-      const joinedGroups = state.groups.groups.filter(
-        (group) => !group.founders.includes(state.user.id),
-      );
-      return joinedGroups.length > 0;
-    },
-  },
   create_group: {
     id: 'create_group',
     title: 'Create a group',
@@ -78,16 +65,17 @@ export const UserTasks = {
       return state.user.verifications.includes('BrightID');
     },
   },
-  enable_social_recovery: {
-    id: 'enable_social_recovery',
-    title: 'Enable social recovery',
-    description: 'Setup trusted connections to enable social account recovery',
+  setup_trusted_connections: {
+    id: 'setup_trusted_connections',
+    title: 'Setup trusted connections',
+    description:
+      'Setup your trusted connections to enable social account recovery',
     sortValue: 80,
     url: 'https://brightid.gitbook.io/brightid/#backup-your-brightid',
     checkFn(state) {
-      // Are my trusted connections set up correctly?
       // TODO Not sure if this is the correct condition
-      return state.user.backupCompleted;
+      // I need at least 3 trusted connections
+      return state.connections.trustedConnections.length > 2;
     },
   },
   link_app: {
