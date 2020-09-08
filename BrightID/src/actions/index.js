@@ -2,10 +2,10 @@
 
 export {
   SET_APPS,
-  ADD_LINKED_APP,
+  ADD_LINKED_CONTEXT,
   fetchApps,
   setApps,
-  addLinkedApp,
+  addLinkedContext,
 } from './apps';
 
 export {

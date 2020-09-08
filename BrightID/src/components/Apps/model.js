@@ -1,7 +1,7 @@
 // @flow
 import { Alert } from 'react-native';
 import api from '@/api/brightId';
-import { addLinkedApp } from '@/actions';
+import { addLinkedContext } from '@/actions';
 import { navigate } from '@/NavigationService';
 import store from '@/store';
 
@@ -39,7 +39,7 @@ const linkContextId = async (baseUrl, context, contextId) => {
   try {
     api.baseUrl = baseUrl;
     await api.linkContextId(context, contextId);
-    store.dispatch(addLinkedApp({ context, contextId, state: 'pending' }));
+    store.dispatch(addLinkedContext({ context, contextId, state: 'pending' }));
   } catch (e) {
     Alert.alert(`App linking failed`, `${e.message}`, [
       {

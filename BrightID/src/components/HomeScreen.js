@@ -49,11 +49,12 @@ export const HomeScreen = (props) => {
   const verified = useMemo(() => verifications.includes('BrightID'), [
     verifications,
   ]);
-  const linkedAppsCount = useSelector((state) => {
-    const { apps, linkedApps } = state.apps;
+
+  const linkedContextsCount = useSelector((state) => {
+    const { apps, linkedContexts } = state.apps;
     return apps.filter((app) => {
       return (
-        linkedApps?.filter((link) => {
+        linkedContexts?.filter((link) => {
           return app.context === link.context && link.state === 'applied';
         }).length > 0
       );
@@ -225,7 +226,7 @@ export const HomeScreen = (props) => {
           }}
         >
           <Text testID="AppsCount" style={styles.countsNumberText}>
-            {linkedAppsCount}
+            {linkedContextsCount}
           </Text>
           <View style={styles.countsBorder} />
           <Text style={styles.countsDescriptionText}>Apps</Text>

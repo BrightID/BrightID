@@ -2,7 +2,7 @@
 import { Alert } from 'react-native';
 import api from '@/api/brightId';
 import store from '@/store';
-import { removeOperation, resetOperations, addLinkedApp } from '@/actions';
+import { removeOperation, resetOperations, addLinkedContext } from '@/actions';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 
 const time_fudge = 2 * 60 * 1000; // trace operations for 2 minutes
@@ -11,7 +11,7 @@ const handleOpUpdate = (store, op, state, result) => {
   switch (op.name) {
     case 'Link ContextId':
       store.dispatch(
-        addLinkedApp({
+        addLinkedContext({
           context: op.context,
           contextId: op.contextId,
           state,
