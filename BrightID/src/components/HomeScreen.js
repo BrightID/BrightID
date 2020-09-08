@@ -10,6 +10,7 @@ import {
   TextInput,
   StatusBar,
 } from 'react-native';
+import { createSelector } from '@reduxjs/toolkit';
 import { useFocusEffect } from '@react-navigation/native';
 import { SvgXml } from 'react-native-svg';
 import ActionSheet from 'react-native-actionsheet';
@@ -34,32 +35,36 @@ let chatSheetRef = '',
 let discordUrl = 'https://discord.gg/nTtuB2M';
 let JoinCommunity = DEVICE_IOS ? TextInput : Text;
 
+/** Selectors */
+
+const linkedContextCountSelector = createSelector(
+  (state) => state.apps.linkedContexts,
+  (contexts) => contexts.filter((link) => link.state === 'applied').length,
+);
+
+const verifiedSelector = createSelector(
+  (state) => state.user.verifications,
+  (verifications) => verifications.includes('BrightID'),
+);
+
+/** HomeScreen Component */
+
 export const HomeScreen = (props) => {
   const { navigation } = props;
   const dispatch = useDispatch();
   const id = useSelector((state) => state.user.id);
   const name = useSelector((state) => state.user.name);
   const photoFilename = useSelector((state) => state.user.photo.filename);
-  const groups = useSelector((state) => state.groups.groups);
-  const verifications = useSelector((state) => state.user.verifications);
-  const connections = useSelector((state) => state.connections.connections);
+  const groupsCount = useSelector((state) => state.groups.groups.length);
+  const connectionsCount = useSelector(
+    (state) => state.connections.connections.length,
+  );
+  const linkedContextsCount = useSelector(linkedContextCountSelector);
+  const verified = useSelector(verifiedSelector);
+
   const [profilePhoto, setProfilePhoto] = useState('none');
   const [isEditing, setIsEditing] = useState(false);
   const [displayName, setDisplayName] = useState(name);
-  const verified = useMemo(() => verifications.includes('BrightID'), [
-    verifications,
-  ]);
-
-  const linkedContextsCount = useSelector((state) => {
-    const { apps, linkedContexts } = state.apps;
-    return apps.filter((app) => {
-      return (
-        linkedContexts?.filter((link) => {
-          return app.context === link.context && link.state === 'applied';
-        }).length > 0
-      );
-    }).length;
-  });
 
   useFocusEffect(
     useCallback(() => {
@@ -198,7 +203,7 @@ export const HomeScreen = (props) => {
           }}
         >
           <Text testID="ConnectionsCount" style={styles.countsNumberText}>
-            {connections?.length ?? 0}
+            {connectionsCount}
           </Text>
           <View style={styles.countsBorder} />
           <Text style={styles.countsDescriptionText}>Connections</Text>
@@ -212,7 +217,7 @@ export const HomeScreen = (props) => {
           }}
         >
           <Text testID="GroupsCount" style={styles.countsNumberText}>
-            {groups?.length ?? 0}
+            {groupsCount}
           </Text>
           <View style={styles.countsBorder} />
           <Text style={styles.countsDescriptionText}>Groups</Text>

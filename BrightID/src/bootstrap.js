@@ -1,5 +1,4 @@
 // @flow
-import { fetchApps } from '@/actions/apps';
 import { bootstrapAndUpgrade } from './versions';
 import { resetOperations } from './actions';
 import { store } from './store';
@@ -20,7 +19,6 @@ export const bootstrap = async () => {
       publicKey = store.getState().user.publicKey;
       console.log('secondBootstrap', publicKey);
     }
-    store.dispatch(fetchApps());
     // once everything is set up
     // this.props.navigation.navigate(publicKey ? 'App' : 'Onboarding');
   } catch (err) {

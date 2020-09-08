@@ -31,6 +31,7 @@ declare type State = {
 declare type AppsState = {
   apps: AppInfo[],
   linkedContexts: ContextInfo[],
+  oldLinkedContexts: ContextInfo[],
 };
 
 declare type AppInfo = {
