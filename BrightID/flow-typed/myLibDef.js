@@ -158,9 +158,9 @@ declare type OperationsState = {
 
 declare type operation = {
   name: string,
-  timestamp: string,
+  timestamp: number,
   v: string,
-  _key: string,
+  hash: string,
   [val: string]: string,
 };
 
