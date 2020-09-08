@@ -4,6 +4,7 @@ import api from '@/api/brightId';
 import store from '@/store';
 import { removeOperation, resetOperations, updateApp } from '@/actions';
 import fetchUserInfo from '@/actions/fetchUserInfo';
+import { checkTasks } from '../components/Tasks/TasksSlice';
 
 const time_fudge = 2 * 60 * 1000; // trace operations for 2 minutes
 
@@ -20,6 +21,7 @@ const handleOpUpdate = (store, op, state, result) => {
     default:
       store.dispatch(fetchUserInfo());
   }
+  store.dispatch(checkTasks());
 };
 
 export const pollOperations = async () => {

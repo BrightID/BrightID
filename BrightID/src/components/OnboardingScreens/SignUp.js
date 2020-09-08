@@ -12,7 +12,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import ActionSheet from 'react-native-actionsheet';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
@@ -20,6 +19,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { takePhoto, chooseImage } from '@/utils/images';
 import { DEVICE_LARGE, DEVICE_OS, ORANGE } from '@/utils/constants';
 import { handleBrightIdCreation } from './actions';
+import { checkTasks } from '../Tasks/TasksSlice';
 
 type State = {
   name: string,
@@ -107,6 +107,7 @@ export class SignUp extends React.Component<Props, State> {
         handleBrightIdCreation({ photo: finalBase64, name }),
       );
       if (result) {
+        dispatch(checkTasks());
         navigation.navigate('App');
       } else {
         this.setState({
