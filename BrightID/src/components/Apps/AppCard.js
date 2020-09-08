@@ -136,7 +136,11 @@ const AppCard = (props) => {
     if (isLinked) {
       return (
         <View style={styles.linkedContainer}>
-          <Ionicon size={48} name="md-checkmark" color="#4a90e2" />
+          <Ionicon
+            size={DEVICE_LARGE ? 48 : 44}
+            name="md-checkmark"
+            color="#4a90e2"
+          />
           <Text testID={`Linked_${id}`} style={styles.linkedMessage}>
             Linked
           </Text>
@@ -144,8 +148,12 @@ const AppCard = (props) => {
       );
     } else if (isFailed) {
       return (
-        <View style={styles.linkedContainer}>
-          <Ionicon size={48} name="alert-circle-outline" color="#FF0800" />
+        <View style={styles.failedContainer}>
+          <Ionicon
+            size={DEVICE_LARGE ? 40 : 36}
+            name="alert-circle-outline"
+            color="#FF0800"
+          />
           <Text testID={`Linked_${id}`} style={styles.errorMessage}>
             Try Again
           </Text>
@@ -199,19 +207,19 @@ const styles = StyleSheet.create({
     width: DEVICE_LARGE ? 64 : 55,
     height: DEVICE_LARGE ? 64 : 55,
     resizeMode: 'contain',
-    marginLeft: 20,
+    marginLeft: DEVICE_LARGE ? 20 : 12,
   },
   name: {
     fontFamily: 'Poppins',
     color: 'black',
     fontSize: DEVICE_LARGE ? 24 : 22,
-    marginLeft: 20,
+    marginLeft: DEVICE_LARGE ? 20 : 12,
   },
   stateContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginLeft: 20,
+    marginLeft: DEVICE_LARGE ? 20 : 12,
   },
   sponsorshipMessage: {
     fontFamily: 'Poppins',
@@ -233,7 +241,13 @@ const styles = StyleSheet.create({
   },
   linkedContainer: {
     marginLeft: 'auto',
-    marginRight: 20,
+    marginRight: DEVICE_LARGE ? 20 : 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  failedContainer: {
+    marginLeft: DEVICE_LARGE ? 20 : 14,
+    marginRight: 'auto',
     alignItems: 'center',
     justifyContent: 'center',
   },
