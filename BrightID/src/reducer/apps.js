@@ -39,7 +39,7 @@ export const reducer = (state: AppsState = initialState, action: action) => {
         contexts.includes(context),
       );
       let oldLinkedContexts;
-      if (linkedContexts.length !== state.linkedContexts.lenght) {
+      if (linkedContexts.length !== state.linkedContexts.length) {
         oldLinkedContexts = state.linkedContexts
           .filter(({ context }) => !contexts.includes(context))
           .concat(state.oldLinkedContexts);
