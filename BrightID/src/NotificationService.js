@@ -1,14 +1,7 @@
 // @flow
 
-import {
-  Notification,
-  Notifications,
-  Registered,
-  RegistrationError,
-  NotificationCompletion,
-  NotificationActionResponse,
-} from 'react-native-notifications';
-import { DEVICE_IOS, DEVICE_ANDROID } from '@/utils/constants';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import * as PushNotification from 'react-native-push-notification';
 import {
   setDeviceToken,
   setActiveNotification,
@@ -16,29 +9,28 @@ import {
 } from '@/actions';
 import { store } from '@/store';
 import notificationService from '@/api/notificationService';
-import { navigate } from './NavigationService';
 
-export const notificationSubscription = () => {
-  Notifications.registerRemoteNotifications();
-
-  Notifications.events().registerRemoteNotificationsRegistered(
-    (event: Registered) => {
+export function notificationSubscription() {
+  // Must be outside of any component LifeCycle (such as `componentDidMount`).
+  PushNotification.configure({
+    // (optional) Called when Token is generated (iOS and Android)
+    onRegister({ token }) {
       const { notifications } = store.getState();
 
-      if (event.deviceToken) {
+      if (token) {
+        console.log('RECIEVED_NOTIFICATION_TOKEN', token);
         // always update the server with our device token.
         // if notificationToken exists, then our connections already have it
         // so we need to make sure that the notification server is also synced
 
         let oldDeviceToken =
-          notifications.deviceToken &&
-          notifications.deviceToken !== event.deviceToken
+          notifications.deviceToken && notifications.deviceToken !== token
             ? notifications.deviceToken
             : null;
 
         notificationService
           .getToken({
-            deviceToken: event.deviceToken,
+            deviceToken: token,
             notificationToken: notifications.notificationToken,
             oldDeviceToken,
           })
@@ -52,47 +44,51 @@ export const notificationSubscription = () => {
           .catch((err) => {
             console.log(err.message);
           });
-        store.dispatch(setDeviceToken(event.deviceToken));
+        store.dispatch(setDeviceToken(token));
       }
-
-      console.log('RECIEVED_NOTIFICATION_TOKEN', event.deviceToken);
     },
-  );
-  Notifications.events().registerRemoteNotificationsRegistrationFailed(
-    (event: RegistrationError) => {
-      console.error('registration error', event);
-    },
-  );
 
-  Notifications.events().registerNotificationReceivedForeground(
-    (
-      notification: Notification,
-      completion: (response: NotificationCompletion) => void,
-    ) => {
-      console.log('Notification Received - Foreground', notification);
+    // (required) Called when a remote is received or opened, or local notification is opened
+    onNotification(notification) {
+      console.log('NOTIFICATION:', notification);
 
-      completion({ alert: false, sound: true, badge: true });
-    },
-  );
+      // process the notification
 
-  Notifications.events().registerNotificationOpened(
-    (
-      notification: Notification,
-      completion: () => void,
-      action: NotificationActionResponse,
-    ) => {
-      navigate('Notifications', { type: notification.payload?.type });
-      completion();
+      // (required) Called when a remote is received or opened, or local notification is opened
+      notification.finish(PushNotificationIOS.FetchResult.NoData);
     },
-  );
 
-  Notifications.events().registerNotificationReceivedBackground(
-    (
-      notification: Notification,
-      completion: (response: NotificationCompletion) => void,
-    ) => {
-      console.log('Notification Received - Background', notification.payload);
-      completion({ alert: true, sound: true, badge: true });
+    // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
+    onAction(notification) {
+      console.log('ACTION:', notification.action);
+      console.log('NOTIFICATION:', notification);
+
+      // process the action
     },
-  );
-};
+
+    // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
+    onRegistrationError(err) {
+      console.error(err.message, err);
+    },
+
+    // IOS ONLY (optional): default: all - Permissions to register.
+    permissions: {
+      alert: true,
+      badge: true,
+      sound: true,
+    },
+
+    // Should the initial notification be popped automatically
+    // default: true
+    popInitialNotification: true,
+
+    /**
+     * (optional) default: true
+     * - Specified if permissions (ios) and token (android and ios) will requested or not,
+     * - if not, you must call PushNotificationsHandler.requestPermissions() later
+     * - if you are not using remote notification or do not have Firebase installed, use this:
+     *     requestPermissions: Platform.OS === 'ios'
+     */
+    requestPermissions: true,
+  });
+}
