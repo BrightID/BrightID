@@ -39,7 +39,14 @@ const linkContextId = async (baseUrl, context, contextId) => {
   try {
     api.baseUrl = baseUrl;
     await api.linkContextId(context, contextId);
-    store.dispatch(addLinkedContext({ context, contextId, state: 'pending' }));
+    store.dispatch(
+      addLinkedContext({
+        context,
+        contextId,
+        dateAdded: Date.now(),
+        state: 'pending',
+      }),
+    );
   } catch (e) {
     Alert.alert(`App linking failed`, `${e.message}`, [
       {

@@ -1,6 +1,11 @@
 // @flow
 
-import { SET_APPS, ADD_LINKED_CONTEXT, RESET_STORE } from '@/actions';
+import {
+  SET_APPS,
+  ADD_LINKED_CONTEXT,
+  REMOVE_LINKED_CONTEXT,
+  RESET_STORE,
+} from '@/actions';
 
 const initialState = {
   apps: [],
@@ -19,6 +24,14 @@ export const reducer = (state: AppsState = initialState, action: action) => {
         ...state,
         linkedContexts,
       };
+    }
+    case REMOVE_LINKED_CONTEXT: {
+      const removeExisting = ({ context }) => context !== action.context;
+      const linkedContexts: ContextInfo[] = state.linkedContexts.filter(
+        removeExisting,
+      );
+
+      return { ...state, linkedContexts };
     }
     case SET_APPS: {
       const contexts = action.apps.map((app) => app.context);

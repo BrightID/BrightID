@@ -3,9 +3,11 @@
 export {
   SET_APPS,
   ADD_LINKED_CONTEXT,
+  REMOVE_LINKED_CONTEXT,
   fetchApps,
   setApps,
   addLinkedContext,
+  removeLinkedContext,
 } from './apps';
 
 export {

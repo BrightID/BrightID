@@ -49,6 +49,7 @@ declare type AppInfo = {
 declare type ContextInfo = {
   context: string,
   contextId: string,
+  dateAdded: number,
   state: string,
 };
 

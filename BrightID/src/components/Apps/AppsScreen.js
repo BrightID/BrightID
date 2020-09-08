@@ -1,6 +1,6 @@
 // @flow
 
-import * as React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
   Alert,
   Linking,
@@ -10,55 +10,67 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import EmptyList from '@/components/Helpers/EmptyList';
 import Spinner from 'react-native-spinkit';
 import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
-import { find, propEq } from 'ramda';
+import { any, find, propEq } from 'ramda';
 import { fetchApps } from '@/actions';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import AppCard from './AppCard';
 import { handleAppContext } from './model';
 
-export class AppsScreen extends React.Component<Prop, State> {
-  componentDidMount() {
-    const { navigation, dispatch } = this.props;
-    navigation.addListener('focus', async () => {
+export const AppsScreen = () => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const route = useRoute();
+
+  const apps = useSelector((state) => state.apps.apps);
+  const isSponsored = useSelector((state) => state.user.isSponsored);
+  const linkedContexts = useSelector((state) => state.apps.linkedContexts);
+
+  useFocusEffect(
+    useCallback(() => {
       dispatch(fetchApps());
-      this.handleDeepLink();
-      Linking.addEventListener('url', this.handleDeepLink);
-    });
-    navigation.addListener('blur', async () => {
-      Linking.removeEventListener('url', this.handleDeepLink);
-    });
-  }
+    }, [dispatch]),
+  );
 
-  isValidContext = (context) => {
-    const { apps } = this.props;
-    const app = find(propEq('context', context))(apps);
-    return app !== undefined;
-  };
+  useEffect(() => {
+    if (apps.length > 0) {
+      handleDeepLink();
+      Linking.addEventListener('url', handleDeepLink);
+      return () => {
+        Linking.removeEventListener('url', handleDeepLink);
+      };
+    }
+  }, [apps, handleDeepLink]);
 
-  handleDeepLink = () => {
-    const { route, navigation } = this.props;
-    console.log('params', route.params);
+  const handleDeepLink = useCallback(() => {
+    const isValidContext = (context) => {
+      return any(propEq('context', context))(apps);
+    };
+
     if (route.params?.context) {
       const { context } = route.params;
-      if (this.isValidContext(context)) {
+      if (isValidContext(context)) {
         handleAppContext(route.params);
       } else {
         Alert.alert('Failed', `${context} is not a valid context!`);
       }
+      // reset params
+      navigation.setParams({
+        baseUrl: '',
+        context: '',
+        contextId: '',
+      });
     }
-    // reset params
-    navigation.setParams({
-      baseUrl: '',
-      context: '',
-      contextId: '',
-    });
-  };
+  }, [navigation, route.params, apps]);
 
-  statusBar = () => {
-    const { isSponsored, linkedContexts } = this.props;
+  const AppStatus = () => {
     const pendingLink = find(propEq('state', 'pending'))(linkedContexts);
     let msg, waiting;
     if (pendingLink) {
@@ -71,7 +83,7 @@ export class AppsScreen extends React.Component<Prop, State> {
       msg = '';
       waiting = false;
     }
-    return msg.length > 0 ? (
+    return msg ? (
       <View style={styles.statusContainer}>
         <Text style={styles.statusMessage}>{msg}</Text>
         <Spinner isVisible={waiting} size={48} type="Wave" color="#4a90e2" />
@@ -81,45 +93,29 @@ export class AppsScreen extends React.Component<Prop, State> {
     );
   };
 
-  isLinked = (app) => {
-    const { linkedContexts } = this.props;
-    let linked = false;
-    linkedContexts.forEach((link) => {
-      if (link.state === 'applied' && link.context === app.context) {
-        linked = true;
-      }
-    });
-    return linked;
-  };
-
-  render() {
-    const { apps } = this.props;
-    return (
-      <>
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor={ORANGE}
-          animated={true}
+  return (
+    <>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={ORANGE}
+        animated={true}
+      />
+      <View style={styles.orangeTop} />
+      <View style={styles.container} testID="appsScreen">
+        <AppStatus />
+        <FlatList
+          data={apps}
+          contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+          keyExtractor={({ name }, index) => name + index}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => <AppCard {...item} />}
+          ListEmptyComponent={<EmptyList title="No Apps" iconType="flask" />}
         />
-        <View style={styles.orangeTop} />
-        <View style={styles.container} testID="appsScreen">
-          <this.statusBar />
-          <FlatList
-            data={apps}
-            contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-            keyExtractor={({ name }, index) => name + index}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <AppCard {...item} isLinked={this.isLinked(item)} />
-            )}
-            ListEmptyComponent={<EmptyList title="No Apps" iconType="flask" />}
-          />
-        </View>
-      </>
-    );
-  }
-}
+      </View>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   orangeTop: {
@@ -144,11 +140,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
+    paddingBottom: 20,
   },
   statusMessage: {
-    fontFamily: 'ApexNew-Medium',
+    fontFamily: 'Poppins',
+    fontWeight: '500',
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#4a90e2',
   },
   linkingContainer: {
@@ -158,4 +156,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ apps }) => ({ ...apps }))(AppsScreen);
+export default AppsScreen;
