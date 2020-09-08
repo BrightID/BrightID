@@ -130,6 +130,7 @@ export const confirmPendingConnectionThunk = (id: string) => async (
     photo: { filename },
     status: 'initiated',
     notificationToken: connection.notificationToken,
+    secretKey: connection.secretKey,
   };
 
   dispatch(addConnection(connectionData));
