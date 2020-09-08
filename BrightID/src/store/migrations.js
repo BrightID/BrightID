@@ -9,15 +9,19 @@ import { BACKUP_URL } from '@/utils/constants';
 const keyToString = compose(uInt8ArrayToB64, objToUint8);
 
 const migrations = {
-  6: (state) => {
-    const nextState = {
-      ...state,
+  7: (state) => {
+    state.apps = {
+      apps: [],
+      linkedContexts: [],
+      oldLinkedContexts: [],
     };
-
-    delete nextState.user.notifications;
-    delete nextState.connectQrData;
-    delete nextState.connectUserData;
-    return nextState;
+    return state;
+  },
+  6: (state) => {
+    delete state.user.notifications;
+    delete state.connectQrData;
+    delete state.connectUserData;
+    return state;
   },
   5: async (state) => {
     try {
