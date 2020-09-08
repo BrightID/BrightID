@@ -17,8 +17,8 @@ declare type navigation = NavigationScreenProp;
 declare type Props = State & navigation & dispatch;
 
 declare type State = {
+  apps: AppState,
   channels: ChannelsState,
-  apps: AppsState,
   connections: ConnectionsState,
   groups: GroupsState,
   notifications: NotificationsState,
@@ -160,6 +160,7 @@ declare type OperationsState = {
 declare type operation = {
   name: string,
   timestamp: number,
+  tracetime: number,
   v: string,
   hash: string,
   [val: string]: string,

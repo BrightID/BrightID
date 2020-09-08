@@ -13,6 +13,7 @@ export const reducer = (
   switch (action.type) {
     case ADD_OPERATION: {
       const operations: operation[] = state.operations.concat(action.op);
+      console.log(`Adding op ${action.op.name} with ${action.op.tracetime}ms tracetime`);
       return {
         ...state,
         operations,

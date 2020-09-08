@@ -6,8 +6,6 @@ import { removeOperation, resetOperations, addLinkedContext } from '@/actions';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import { checkTasks } from '../components/Tasks/TasksSlice';
 
-const time_fudge = 2 * 60 * 1000; // trace operations for 2 minutes
-
 const handleOpUpdate = (store, op, state, result) => {
   switch (op.name) {
     case 'Link ContextId':
@@ -42,16 +40,16 @@ export const pollOperations = async () => {
     operations: { operations },
   } = store.getState();
   try {
-    for (const op of operations) {
+    for (const op: operation of operations) {
       const { state, result } = await api.getOperationState(op.hash);
 
       // stop polling for op if trace time is expired
-      let removeOp = op.timestamp + time_fudge < Date.now();
+      let removeOp = op.timestamp + op.tracetime < Date.now();
 
       switch (state) {
         case 'unknown':
           // Op not found on server. It might appear in a future poll cycle, so do nothing.
-          console.log(`operation ${op.name} (${op.hash}) unknown on server`);
+          // console.log(`operation ${op.name} (${op.hash}) unknown on server`);
           break;
         case 'init':
         case 'sent':
@@ -64,9 +62,9 @@ export const pollOperations = async () => {
           handleOpUpdate(store, op, state, result);
           break;
         default:
-          console.log(
-            `Op ${op.name} (${op.hash}) has invalid state '${state}'!`,
-          );
+        // console.log(
+        //   `Op ${op.name} (${op.hash}) has invalid state '${state}'!`,
+        // );
       }
       if (removeOp) {
         store.dispatch(removeOperation(op.hash));

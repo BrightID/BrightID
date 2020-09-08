@@ -36,6 +36,10 @@ export const PROFILE_POLL_INTERVAL = 1000;
 // timestamp can be this far in the future (milliseconds) to accommodate 2 clients clock differences
 export const TIME_FUDGE = 60 * 60 * 1000;
 
+// OPERATION TRACING CONSTANTS
+export const DEFAULT_OP_TRACE_TIME = 2 * 60 * 1000; // 2 minutes
+export const MAX_OP_TRACE_TIME = 900 * 1000; // 15 minutes, based on maximum channel ttl
+
 /** ** THEME CONSTANTS  *** */
 export const ORANGE = '#ED7A5D';
 export const LIGHTBLUE = '#4A90E2';
