@@ -9,6 +9,42 @@ import { BACKUP_URL } from '@/utils/constants';
 const keyToString = compose(uInt8ArrayToB64, objToUint8);
 
 const migrations = {
+  7: (state) => {
+    delete state.channels;
+    delete state.pendingConnections;
+    delete state.notifications;
+    state.user.notifications = [];
+    state.connectQrData = {
+      myQrData: undefined,
+      peerQrData: {
+        aesKey: '',
+        ipAddress: '',
+        uuid: '',
+        qrString: '',
+        channel: '',
+        type: '',
+      },
+    };
+    state.connectUserData = {
+      id: '',
+      photo: '',
+      name: '',
+      timestamp: 0,
+      signedMessage: '',
+      score: 0,
+    };
+    return state;
+  },
+  6: (state) => {
+    const nextState = {
+      ...state,
+    };
+
+    delete nextState.user.notifications;
+    delete nextState.connectQrData;
+    delete nextState.connectUserData;
+    return nextState;
+  },
   5: async (state) => {
     try {
       // secret key defaults to empty object
