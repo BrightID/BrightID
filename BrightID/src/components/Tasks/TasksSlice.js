@@ -1,5 +1,7 @@
 // @flow
 
+import { setActiveNotification } from '@/actions';
+import { MISC_TYPE } from '@/utils/constants';
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { UserTasks } from './UserTasks';
 
@@ -105,12 +107,16 @@ export const checkTasks = () => {
     for (const task of pendingTasks) {
       try {
         if (UserTasks[task.id].checkFn(state)) {
-          console.log(
-            `TODO: create notification "Well done! You have completed the task '${
-              UserTasks[task.id].title
-            }'!"`,
-          );
+          console.log(`Task '${UserTasks[task.id].title}' completed."`);
           dispatch(completeTask(task.id));
+          dispatch(
+            setActiveNotification({
+              type: MISC_TYPE,
+              message: `Achievement unlocked!\nYou completed the task "${
+                UserTasks[task.id].title
+              }".`,
+            }),
+          );
         }
       } catch (err) {
         console.log(`Error while checking task ${task.id}: ${err.message}`);
