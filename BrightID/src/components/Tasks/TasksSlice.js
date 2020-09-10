@@ -63,6 +63,14 @@ const tasksSlice = createSlice({
       }
     },
   },
+  extraReducers: {
+    RESET_STORE: (state, action) => {
+      for (const task of Object.values(state)) {
+        task.completed = false;
+        task.timestamp = 0;
+      }
+    },
+  },
 });
 
 export const { addTask, removeTask, completeTask } = tasksSlice.actions;
