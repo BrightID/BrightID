@@ -8,7 +8,7 @@ import {
   Linking,
 } from 'react-native';
 import React from 'react';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/constants';
 import { TaskState } from './TaskState';
 
 type TaskCardProps = {
@@ -47,9 +47,9 @@ function TaskCard(props: TaskCardProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 15,
+    paddingTop: DEVICE_LARGE ? 15 : 12,
     paddingRight: 0,
-    paddingBottom: 15,
+    paddingBottom: DEVICE_LARGE ? 15 : 12,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
   },
@@ -63,13 +63,13 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   title: {
-    fontSize: DEVICE_TYPE === 'large' ? 20 : 18,
+    fontSize: DEVICE_LARGE ? 20 : 17,
   },
   description: {
-    fontSize: DEVICE_TYPE === 'large' ? 15 : 12,
+    fontSize: DEVICE_LARGE ? 15 : 12,
   },
   linkifiedDescription: {
-    fontSize: DEVICE_TYPE === 'large' ? 15 : 12,
+    fontSize: DEVICE_LARGE ? 15 : 12,
     color: '#2185D0',
   },
 });
