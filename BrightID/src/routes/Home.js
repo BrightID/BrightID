@@ -1,11 +1,5 @@
 import * as React from 'react';
-import {
-  Clipboard,
-  Image,
-  TouchableOpacity,
-  View,
-  Linking,
-} from 'react-native';
+import { Image, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { INVITE_ACTIVE, DEVICE_LARGE } from '@/utils/constants';
 import { createSelector } from '@reduxjs/toolkit';
@@ -19,6 +13,7 @@ import HomeScreen from '@/components/HomeScreen';
 import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnectionScreen';
 import { navigate } from '@/NavigationService';
 import { headerOptions } from './helpers';
+import TasksScreen from '../components/Tasks/TasksScreen';
 
 /** SELECTORS */
 
@@ -75,30 +70,16 @@ const NotificationBell = () => {
   );
 };
 
-const DeepPasteLink = () => {
-  if (__DEV__) {
-    return (
-      <TouchableOpacity
-        testID="pasteDeeplink"
-        style={{ marginLeft: 10 }}
-        onPress={async () => {
-          let url = await Clipboard.getString();
-          url = url.replace('https://app.brightid.org', 'brightid://');
-          console.log(`Pasted deeplink -> Linking.openURL with ${url}`);
-          await Linking.openURL(url);
-        }}
-      >
-        <Material
-          name="content-paste"
-          size={DEVICE_LARGE ? 28 : 23}
-          color="#000"
-        />
-      </TouchableOpacity>
-    );
-  } else {
-    return null;
-  }
-};
+const AchievementsLink = () => (
+  <TouchableOpacity
+    style={{ marginLeft: 40 }}
+    onPress={() => {
+      navigate('Tasks');
+    }}
+  >
+    <Material name="certificate" size={DEVICE_LARGE ? 31 : 27} color="#000" />
+  </TouchableOpacity>
+);
 
 /** OPTIONS */
 
@@ -112,7 +93,7 @@ const homeScreenOptions = {
       style={{ width: DEVICE_LARGE ? 104 : 85 }}
     />
   ),
-  headerLeft: () => <DeepPasteLink />,
+  headerLeft: () => <AchievementsLink />,
   headerRight: () => <NotificationBell />,
   headerStyle: {
     height: DEVICE_LARGE ? 80 : 70,
@@ -128,6 +109,11 @@ const homeScreenOptions = {
 const recoveringConnectionOptions = {
   ...headerOptions,
   title: 'Account Recovery',
+};
+
+const taskScreenOptions = {
+  ...headerOptions,
+  title: 'Achievements',
 };
 
 /** SCREENS */
@@ -146,6 +132,11 @@ const Home = () => {
         name="RecoveringConnection"
         component={RecoveringConnectionScreen}
         options={recoveringConnectionOptions}
+      />
+      <Stack.Screen
+        name="Tasks"
+        component={TasksScreen}
+        options={taskScreenOptions}
       />
     </>
   );

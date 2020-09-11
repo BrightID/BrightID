@@ -9,6 +9,7 @@ import {
   View,
   TextInput,
   StatusBar,
+  Clipboard,
 } from 'react-native';
 import { createSelector } from '@reduxjs/toolkit';
 import { useFocusEffect } from '@react-navigation/native';
@@ -24,6 +25,7 @@ import verificationSticker from '@/static/verification-sticker.svg';
 import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
 import forumIcon from '@/static/forum_icon.svg';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
 /**
  * Home screen of BrightID
@@ -113,6 +115,35 @@ export const HomeScreen = (props) => {
       delStorage();
     } else {
       chatSheetRef.show();
+    }
+  };
+
+  const DeepPasteLink = () => {
+    if (__DEV__) {
+      return (
+        <TouchableOpacity
+          testID="pasteDeeplink"
+          style={{
+            position: 'absolute',
+            left: 10,
+            bottom: 10,
+          }}
+          onPress={async () => {
+            let url = await Clipboard.getString();
+            url = url.replace('https://app.brightid.org', 'brightid://');
+            console.log(`Linking.openURL with ${url}`);
+            Linking.openURL(url);
+          }}
+        >
+          <Material
+            name="content-paste"
+            size={DEVICE_LARGE ? 28 : 23}
+            color="white"
+          />
+        </TouchableOpacity>
+      );
+    } else {
+      return null;
     }
   };
 
@@ -289,6 +320,7 @@ export const HomeScreen = (props) => {
             </JoinCommunity>
           </TouchableOpacity>
         </View>
+        <DeepPasteLink />
       </View>
 
       <ActionSheet

@@ -115,7 +115,7 @@ function MemberCard(props: MemberCardProps) {
           <View style={styles.scoreContainer}>
             <Text style={styles.scoreLeft}>Score:</Text>
             <Text style={[styles.scoreRight, scoreColor]}>{score}</Text>
-            {flagged && <Text style={styles.flagged}> (flagged)</Text>}
+            {flagged ? <Text style={styles.flagged}> (flagged)</Text> : null}
           </View>
           {connectionDate > 0 && (
             <Text style={styles.connectedText}>
