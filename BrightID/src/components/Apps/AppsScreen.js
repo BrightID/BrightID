@@ -76,7 +76,7 @@ export const AppsScreen = () => {
     if (pendingLink) {
       msg = `Linking your account in ${pendingLink.context}\n to your BrightID ...`;
       waiting = true;
-    } else if (isSponsored) {
+    } else if (!isSponsored) {
       msg = "You're not sponsored.\nPlease find an app below to sponsor you.";
       waiting = false;
     } else {
