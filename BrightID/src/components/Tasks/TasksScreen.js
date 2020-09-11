@@ -5,8 +5,8 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import { ORANGE } from '@/utils/constants';
 import { useSelector } from 'react-redux';
 import TaskCardController from './TaskCardController';
-import { UserTasks } from './UserTasks';
 import { TasksProgress } from './TasksProgress';
+import { selectTaskIds, selectCompletedTaskIds } from './TasksSlice';
 
 const FlatListItemSeparator = () => {
   return (
@@ -20,14 +20,8 @@ const FlatListItemSeparator = () => {
 };
 
 export const TasksScreen = function () {
-  const taskIds = useSelector((state: State) =>
-    Object.keys(state.tasks).sort(
-      (a, b) => UserTasks[a].sortValue - UserTasks[b].sortValue,
-    ),
-  );
-  const completedTaskIds = useSelector((state: State) => {
-    return taskIds.filter((taskId: string) => state.tasks[taskId].completed);
-  });
+  const taskIds = useSelector(selectTaskIds);
+  const completedTaskIds = useSelector(selectCompletedTaskIds);
 
   const renderItem = ({ item }) => <TaskCardController taskId={item} />;
 
