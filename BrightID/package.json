@@ -35,6 +35,7 @@
     "ed2curve": "^0.3.0",
     "emittery": "^0.6.0",
     "events": "^3.1.0",
+    "fast-json-stable-stringify": "^2.1.0",
     "husky": "^4.2.1",
     "moment": "^2.27.0",
     "prop-types": "^15.6.2",

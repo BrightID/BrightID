@@ -5,6 +5,16 @@ import {
   expectAppsScreen,
   expectHomescreen,
 } from './testUtils';
+import fetch from "node-fetch";
+
+function getRandomAddres() {
+  var letters = '0123456789ABCDEF';
+  var a = '0x';
+  for (var i = 0; i < 40; i++) {
+    a += letters[Math.floor(Math.random() * 16)];
+  }
+  return a;
+}
 
 describe('App Deep Links', () => {
   let yes, no;
@@ -15,7 +25,7 @@ describe('App Deep Links', () => {
       await device.launchApp({
         newInstance: false,
         url:
-          'brightid://link-verification/http:%2f%2fnode.brightid.org/ethereum/0xdC2681C2cef66649045E3eB2B2bb505D2D1564ba',
+          `brightid://link-verification/http:%2f%2ftest.brightid.org/ethereum/${getRandomAddres()}`,
       });
     });
     it('should not open apps page', async () => {
@@ -38,16 +48,43 @@ describe('App Deep Links', () => {
       await device.launchApp({
         newInstance: false,
         url:
-          'brightid://link-verification/http:%2f%2fnode.brightid.org/ethereum/0xdC2681C2cef66649045E3eB2B2bb505D2D1564ba',
+          `brightid://link-verification/http:%2f%2ftest.brightid.org/ethereum/${getRandomAddres()}`,
       });
     });
     it('should not link app and return to home page', async () => {
       await element(by.text(no)).tap();
       await expectHomescreen();
     });
-    it('should link app', async () => {
+    it('should link app and see Linked label in front of app', async () => {
       await element(by.text(yes)).tap();
       await expectAppsScreen(true);
+      expect(element(by.id('Linked_ethereum'))).toNotExist();
+      await waitFor(element(by.text('OK')))
+        .toExist()
+        .withTimeout(20000);
+      await element(by.text('OK')).tap();
+      expect(element(by.id('Linked_ethereum'))).toBeVisible();
+    });
+  });
+});
+
+describe('Apps Screen', () => {
+  beforeAll(async () => {
+    await device.reloadReactNative();
+  //   await createBrightID();
+  });
+  it('should open apps screen', async () => {
+    await element(by.id('appsBtn')).tap();
+    await expectAppsScreen(true);
+  });
+  it('should show all apps', async () => {
+    let response = await fetch(
+      'http://test.brightid.org/brightid/v5/apps'
+    );
+    let json = await response.json();
+    const apps = json.data.apps;
+    apps.forEach(app => {
+      expect(element(by.text(app.name))).toBeVisible()
     });
   });
 });

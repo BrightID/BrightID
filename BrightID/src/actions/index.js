@@ -2,13 +2,12 @@
 
 export {
   SET_APPS,
-  ADD_APP,
-  REMOVE_APP,
-  UPDATE_APP,
+  ADD_LINKED_CONTEXT,
+  REMOVE_LINKED_CONTEXT,
+  fetchApps,
   setApps,
-  addApp,
-  removeApp,
-  updateApp,
+  addLinkedContext,
+  removeLinkedContext,
 } from './apps';
 
 export {

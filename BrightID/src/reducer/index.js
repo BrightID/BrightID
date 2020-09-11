@@ -1,3 +1,5 @@
+// @flow
+
 import { combineReducers } from 'redux';
 import apps from './apps';
 import channels from '../components/PendingConnectionsScreens/channelSlice';

@@ -23,7 +23,7 @@ const persistConfig = {
     connectionsTransformer,
     notificationsTransformer,
   ],
-  version: 6,
+  version: 8,
   migrate,
   timeout: 0,
   blacklist: ['channels', 'pendingConnections'],

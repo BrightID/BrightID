@@ -1,28 +1,34 @@
 // @flow
 
+import api from '@/api/brightId';
+
 export const SET_APPS = 'SET_APPS';
-export const ADD_APP = 'ADD_APP';
-export const REMOVE_APP = 'REMOVE_APP';
-export const UPDATE_APP = 'UPDATE_APP';
+export const ADD_LINKED_CONTEXT = 'ADD_LINKED_CONTEXT';
+export const REMOVE_LINKED_CONTEXT = 'REMOVE_LINKED_CONTEXT';
 
-export const setApps = (appInfos: AppInfo[]) => ({
+export const setApps = (apps: AppInfo[]) => ({
   type: SET_APPS,
-  apps: appInfos,
+  apps,
 });
 
-export const addApp = (appInfo: AppInfo) => ({
-  type: ADD_APP,
-  app: appInfo,
+export const addLinkedContext = (link: LinkInfo) => ({
+  type: ADD_LINKED_CONTEXT,
+  link,
 });
 
-export const removeApp = (name: string) => ({
-  type: REMOVE_APP,
-  name,
+export const removeLinkedContext = (context: string) => ({
+  type: REMOVE_LINKED_CONTEXT,
+  context,
 });
 
-export const updateApp = (op: Operation, state: string, result: string) => ({
-  type: UPDATE_APP,
-  op,
-  state,
-  result,
-});
+export const fetchApps = () => async (
+  dispatch: dispatch,
+  getState: getState,
+) => {
+  try {
+    const apps = await api.getApps();
+    dispatch(setApps(apps));
+  } catch (err) {
+    console.log(err.message);
+  }
+};
