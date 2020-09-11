@@ -1,14 +1,14 @@
 // @flow
 
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
-  Linking,
   StyleSheet,
   View,
   FlatList,
   Text,
   StatusBar,
+  RefreshControl,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import EmptyList from '@/components/Helpers/EmptyList';
@@ -32,42 +32,42 @@ export const AppsScreen = () => {
   const apps = useSelector((state) => state.apps.apps);
   const isSponsored = useSelector((state) => state.user.isSponsored);
   const linkedContexts = useSelector((state) => state.apps.linkedContexts);
+  const [refreshing, setRefreshing] = useState(false);
 
-  useFocusEffect(
-    useCallback(() => {
-      dispatch(fetchApps());
-    }, [dispatch]),
-  );
+  const refreshApps = useCallback(() => {
+    setRefreshing(true);
+    dispatch(fetchApps())
+      .then(() => {
+        setRefreshing(false);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setRefreshing(false);
+      });
+  }, [dispatch]);
+
+  useFocusEffect(refreshApps);
 
   useEffect(() => {
-    if (apps.length > 0) {
+    if (apps.length > 0 && route.params?.context) {
       handleDeepLink();
-      Linking.addEventListener('url', handleDeepLink);
-      return () => {
-        Linking.removeEventListener('url', handleDeepLink);
-      };
     }
-  }, [apps, handleDeepLink]);
+  }, [apps, handleDeepLink, route.params]);
 
   const handleDeepLink = useCallback(() => {
-    const isValidContext = (context) => {
-      return any(propEq('context', context))(apps);
-    };
-
-    if (route.params?.context) {
-      const { context } = route.params;
-      if (isValidContext(context)) {
-        handleAppContext(route.params);
-      } else {
-        Alert.alert('Failed', `${context} is not a valid context!`);
-      }
-      // reset params
-      navigation.setParams({
-        baseUrl: '',
-        context: '',
-        contextId: '',
-      });
+    const { context } = route.params;
+    const isValidContext = any(propEq('context', context))(apps);
+    if (isValidContext) {
+      handleAppContext(route.params);
+    } else {
+      Alert.alert('Failed', `${context} is not a valid context!`);
     }
+    // reset params
+    navigation.setParams({
+      baseUrl: '',
+      context: '',
+      contextId: '',
+    });
   }, [navigation, route.params, apps]);
 
   const AppStatus = () => {
@@ -76,7 +76,7 @@ export const AppsScreen = () => {
     if (pendingLink) {
       msg = `Linking your account in ${pendingLink.context}\n to your BrightID ...`;
       waiting = true;
-    } else if (!isSponsored) {
+    } else if (isSponsored) {
       msg = "You're not sponsored.\nPlease find an app below to sponsor you.";
       waiting = false;
     } else {
@@ -86,10 +86,15 @@ export const AppsScreen = () => {
     return msg ? (
       <View style={styles.statusContainer}>
         <Text style={styles.statusMessage}>{msg}</Text>
-        <Spinner isVisible={waiting} size={48} type="Wave" color="#4a90e2" />
+        <Spinner
+          isVisible={waiting}
+          size={DEVICE_LARGE ? 48 : 42}
+          type="Wave"
+          color="#4a90e2"
+        />
       </View>
     ) : (
-      <View />
+      <View style={{ height: DEVICE_LARGE ? 12 : 10 }} />
     );
   };
 
@@ -111,6 +116,9 @@ export const AppsScreen = () => {
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => <AppCard {...item} />}
           ListEmptyComponent={<EmptyList title="No Apps" iconType="flask" />}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={refreshApps} />
+          }
         />
       </View>
     </>

@@ -2,7 +2,6 @@
 import { Alert } from 'react-native';
 import api from '@/api/brightId';
 import { addLinkedContext } from '@/actions';
-import { navigate } from '@/NavigationService';
 import store from '@/store';
 
 type Params = {
@@ -26,9 +25,7 @@ export const handleAppContext = async (params: Params) => {
       {
         text: 'No',
         style: 'cancel',
-        onPress: () => {
-          navigate('Home');
-        },
+        onPress: () => {},
       },
     ],
   );

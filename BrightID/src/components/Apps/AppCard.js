@@ -13,6 +13,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { MAX_WAITING_SECONDS, DEVICE_LARGE } from '@/utils/constants';
 import { addLinkedContext, removeLinkedContext } from '@/actions';
 
@@ -86,7 +87,7 @@ const AppCard = (props) => {
   const openApp = () => {
     Alert.alert(
       '',
-      `Would you like to know more about ${context}?`,
+      `To find out more about ${context}, check out their website!`,
       [
         {
           text: 'Sure',
@@ -110,25 +111,19 @@ const AppCard = (props) => {
 
   const SponsorshipLabel = () => {
     if (!isSponsored && unusedSponsorships > 0) {
-      return (
-        <View style={styles.stateContainer}>
-          <Text style={styles.sponsorshipMessage}>Has sponsorships</Text>
-        </View>
-      );
+      return <Text style={styles.sponsorshipMessage}>Has sponsorships</Text>;
     } else {
-      return <View style={styles.stateContainer} />;
+      return <View />;
     }
   };
 
   const VerificationLabel = () => {
     if (!verifications.includes(verification)) {
       return (
-        <View style={styles.stateContainer}>
-          <Text style={styles.errorMessage}>Not verified for this app</Text>
-        </View>
+        <Text style={styles.unverifiedMessage}>Not verified for this app</Text>
       );
     } else {
-      return <View style={styles.stateContainer} />;
+      return <View />;
     }
   };
 
@@ -137,7 +132,7 @@ const AppCard = (props) => {
       return (
         <View style={styles.linkedContainer}>
           <Ionicon
-            size={DEVICE_LARGE ? 48 : 44}
+            size={DEVICE_LARGE ? 48 : 42}
             name="md-checkmark"
             color="#4a90e2"
           />
@@ -148,16 +143,19 @@ const AppCard = (props) => {
       );
     } else if (isFailed) {
       return (
-        <View style={styles.failedContainer}>
-          <Ionicon
+        <TouchableOpacity
+          style={styles.linkedContainer}
+          onPress={removeContext}
+        >
+          <Material
             size={DEVICE_LARGE ? 40 : 36}
-            name="alert-circle-outline"
+            name="alert-remove-outline"
             color="#FF0800"
           />
           <Text testID={`Linked_${id}`} style={styles.errorMessage}>
             Try Again
           </Text>
-        </View>
+        </TouchableOpacity>
       );
     } else {
       return null;
@@ -176,16 +174,13 @@ const AppCard = (props) => {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.link} onPress={openApp}>
-        <Text style={styles.name}>{name}</Text>
-        <SponsorshipLabel />
-        <VerificationLabel />
+        <View style={styles.labelContainer}>
+          <Text style={styles.appName}>{name}</Text>
+          <SponsorshipLabel />
+          <VerificationLabel />
+        </View>
       </TouchableOpacity>
       <StatusLabel />
-      {isFailed ? (
-        <TouchableOpacity style={{ marginRight: 10 }} onPress={removeContext}>
-          <Ionicon size={DEVICE_LARGE ? 26 : 22} name="close" color="#333" />
-        </TouchableOpacity>
-      ) : null}
     </View>
   );
 };
@@ -204,21 +199,20 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   logo: {
-    width: DEVICE_LARGE ? 64 : 55,
-    height: DEVICE_LARGE ? 64 : 55,
+    width: DEVICE_LARGE ? 64 : 48,
+    height: DEVICE_LARGE ? 64 : 48,
     resizeMode: 'contain',
     marginLeft: DEVICE_LARGE ? 20 : 12,
   },
-  name: {
+  appName: {
     fontFamily: 'Poppins',
     color: 'black',
-    fontSize: DEVICE_LARGE ? 24 : 22,
-    marginLeft: DEVICE_LARGE ? 20 : 12,
+    fontSize: DEVICE_LARGE ? 22 : 19,
   },
-  stateContainer: {
-    flexDirection: 'row',
+  labelContainer: {
+    flexDirection: 'column',
     justifyContent: 'flex-start',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginLeft: DEVICE_LARGE ? 20 : 12,
   },
   sponsorshipMessage: {
@@ -239,17 +233,18 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#FF0800',
   },
+  unverifiedMessage: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 14 : 12,
+    color: '#707070',
+  },
   linkedContainer: {
     marginLeft: 'auto',
-    marginRight: DEVICE_LARGE ? 20 : 18,
+    marginRight: DEVICE_LARGE ? 20 : 16,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  failedContainer: {
-    marginLeft: DEVICE_LARGE ? 20 : 14,
-    marginRight: 'auto',
-    alignItems: 'center',
-    justifyContent: 'center',
+    // height: '100%',
   },
   link: {},
 });
