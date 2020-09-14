@@ -53,9 +53,11 @@ export const updateNotifications = () => async (
       if (!activeNotification) {
         dispatch(
           setActiveNotification({
-            title: 'Social Recovery',
-            message: 'Please select your Trusted Connections',
+            title: 'Backup & Social Recovery',
+            message:
+              'Please select your Trusted Connections to enable social recovery of your BrightID',
             type: MISC_TYPE,
+            oncePerSession: true,
           }),
         );
       }

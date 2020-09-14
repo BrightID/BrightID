@@ -15,7 +15,7 @@ const initialState = {
   backupPending: false,
   deviceToken: null,
   notificationToken: null,
-  miscAlreadyNotified: false,
+  sessionNotifications: [],
 };
 
 // not sure if this is the best way...
@@ -35,18 +35,24 @@ export const reducer = (
       return { ...state, notificationToken: action.notificationToken };
     }
     case SET_ACTIVE_NOTIFICATION: {
-      // we only want to notify the user to backup once per session
-      let miscAlreadyNotified = !!state.miscAlreadyNotified;
-
+      const { notification } = action;
       // set null activeNotifications
-      if (!action.notification) {
+      if (!notification) {
         return { ...state, activeNotification: null };
+      }
+
+      // handle once-per-session notifications
+      if (notification.oncePerSession) {
+        if (state.sessionNotifications.includes(notification.title)) {
+          // Ignore if already notified before
+          return state;
+        }
       }
 
       // do not update the notification banner if the active is set as a new connection
       if (
         state.activeNotification?.type === CONNECTIONS_TYPE &&
-        action.notification?.type !== CONNECTIONS_TYPE
+        notification?.type !== CONNECTIONS_TYPE
       )
         return state;
 
@@ -54,20 +60,19 @@ export const reducer = (
       // and a notification is already displayed
       if (
         state.activeNotification?.type === GROUPS_TYPE &&
-        action.notification?.type === MISC_TYPE
+        notification?.type === MISC_TYPE
       )
         return state;
 
-      // do not notify the user to backup their brightid if they've already been notified
-      if (action.notification?.type === MISC_TYPE && miscAlreadyNotified)
-        return state;
-
-      if (action.notification?.type === MISC_TYPE) miscAlreadyNotified = true;
+      const sessionNotifications = [...state.sessionNotifications];
+      if (notification?.oncePerSession) {
+        sessionNotifications.push(notification.title);
+      }
 
       return {
         ...state,
-        activeNotification: action.notification,
-        miscAlreadyNotified,
+        activeNotification: notification,
+        sessionNotifications,
       };
     }
     case REMOVE_ACTIVE_NOTIFICATION: {
@@ -81,7 +86,5 @@ export const reducer = (
     }
   }
 };
-
-// unnecessary for now, but when the app gets larger, combine reducers here
 
 export default reducer;

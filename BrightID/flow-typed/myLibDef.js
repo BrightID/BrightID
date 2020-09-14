@@ -192,14 +192,14 @@ declare type RecoveryData = {
 };
 
 declare type TasksState = {
-  tasks: {[ taskId: string]: TasksStateEntry},
-}
+  tasks: { [taskId: string]: TasksStateEntry },
+};
 
 declare type TasksStateEntry = {
   id: string,
   completed: boolean,
   timestamp: number,
-}
+};
 
 declare type UserState = {
   score: number,
@@ -216,10 +216,19 @@ declare type UserState = {
 };
 
 declare type NotificationsState = {
-  activeNotification: { message: string, type: string, navigationTarget?: string, xmlIcon?: string },
+  activeNotification?: BannerNotification,
   pendingConnections: PendingConnection[],
   backupPending: boolean,
   deviceToken: string,
+  sessionNotifications: Array<String>,
+};
+
+declare type BannerNotification = {
+  message: string,
+  type: string,
+  navigationTarget?: string,
+  xmlIcon?: string,
+  oncePerSession?: boolean,
 };
 
 declare type BackupNotification = {
@@ -227,11 +236,13 @@ declare type BackupNotification = {
   icon: string,
 };
 
-declare type PendingConnection = {
+declare type PendingConnectionNotification = {
   id: string,
 };
 
-declare type Notification = BackupNotification & invite & PendingConnection;
+declare type Notification = BackupNotification &
+  invite &
+  PendingConnectionNotification;
 
 declare type Signature = {
   signer: string,
