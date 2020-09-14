@@ -216,7 +216,7 @@ declare type UserState = {
 };
 
 declare type NotificationsState = {
-  activeNotification: { message: string, type: string, navigationTarget?: string },
+  activeNotification: { message: string, type: string, navigationTarget?: string, xmlIcon?: string },
   pendingConnections: PendingConnection[],
   backupPending: boolean,
   deviceToken: string,

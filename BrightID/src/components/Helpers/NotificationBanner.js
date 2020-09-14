@@ -19,7 +19,8 @@ import { selectAllUnconfirmedConnections } from '@/components/PendingConnections
 @type misc
 */
 
-const icons = { groups, connections, misc };
+// default icons
+const icons = { connections, groups, misc };
 
 const NOTIFICATION_TIMEOUT = 10000;
 
@@ -47,30 +48,16 @@ export const NotificationBanner = () => {
       return;
     }
 
-    let timer;
-
     InteractionManager.runAfterInteractions(() => {
       let route = getRoute();
-      console.log('ROUTE', route);
       if (!screenBlackList.includes(route?.name)) {
         dropDownAlertRef.current?.alertWithType(
           'custom',
           activeNotification?.title,
           activeNotification?.message,
         );
-        /*
-        // automatically close banner after timeout
-        timer = setTimeout(() => {
-          dropDownAlertRef.current?.closeAction('automatic');
-        }, NOTIFICATION_TIMEOUT);
-
-         */
       }
     });
-
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
   }, [activeNotification, dispatch]);
 
   useEffect(() => {
@@ -91,11 +78,12 @@ export const NotificationBanner = () => {
     }
   }, [pendingConnections.length, dispatch]);
 
-  // update default icon
-  const icon = icons[activeNotification?.type] ?? misc;
+  // icon fallback: activeNotification prop 'xmlIcon' -> default icon for notification type -> default 'misc'
+  const icon =
+    activeNotification?.xmlIcon ?? icons[activeNotification?.type] ?? misc;
 
   const _onTap = () => {
-    if (activeNotification.navigationTarget) {
+    if (activeNotification?.navigationTarget) {
       navigate(activeNotification.navigationTarget);
     } else {
       navigate('Notifications', { type: activeNotification?.type });
@@ -109,7 +97,7 @@ export const NotificationBanner = () => {
   return (
     <DropdownAlert
       ref={dropDownAlertRef}
-      closeInterval={0}
+      closeInterval={NOTIFICATION_TIMEOUT}
       containerStyle={styles.container}
       contentContainerStyle={{
         flex: 1,
