@@ -1,6 +1,6 @@
 // @flow
 
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { UserTasks } from './UserTasks';
 
 /*
@@ -112,3 +112,18 @@ export const checkTasks = () => {
 };
 
 export default tasksSlice.reducer;
+
+export const selectTaskIds = createSelector(
+  (state) => state.tasks,
+  (tasks) =>
+    Object.keys(tasks).sort(
+      (a, b) => UserTasks[a].sortValue - UserTasks[b].sortValue,
+    ),
+);
+
+export const selectCompletedTaskIds = createSelector(
+  selectTaskIds,
+  (state) => state.tasks,
+  (taskIds, tasks) =>
+    taskIds.filter((taskId: string) => tasks[taskId].completed),
+);
