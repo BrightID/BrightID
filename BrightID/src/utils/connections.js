@@ -3,6 +3,7 @@ import { TIME_FUDGE } from '@/utils/constants';
 import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 import nacl from 'tweetnacl';
 import api from '@/api/brightId';
+import stringify from 'fast-json-stable-stringify';
 
 export const initiateConnectionRequest = async ({
   myBrightId,
@@ -32,9 +33,17 @@ export const initiateConnectionRequest = async ({
     dataId: channel.myProfileId,
   });
 
-  let opName = 'Add Connection';
-  let opMessage =
-    opName + myBrightId + connection.brightId + connectionTimestamp;
+  const apiVersion = 5;
+  const opName = 'Add Connection';
+  const op = {
+    name: opName,
+    id1: myBrightId,
+    id2: connection.brightId,
+    timestamp: connectionTimestamp,
+    v: apiVersion,
+  };
+  const opMessage = stringify(op);
+
   return {
     opName,
     opMessage,

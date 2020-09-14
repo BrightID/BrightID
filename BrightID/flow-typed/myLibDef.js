@@ -161,7 +161,7 @@ declare type operation = {
   name: string,
   timestamp: number,
   tracetime: number,
-  v: string,
+  v: number,
   hash: string,
   [val: string]: string,
 };
