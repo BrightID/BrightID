@@ -1,12 +1,17 @@
 // @flow
 
-import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { FlatList, StyleSheet, View, RefreshControl } from 'react-native';
 import { ORANGE } from '@/utils/constants';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
 import TaskCardController from './TaskCardController';
 import { TasksProgress } from './TasksProgress';
-import { selectTaskIds, selectCompletedTaskIds } from './TasksSlice';
+import {
+  selectTaskIds,
+  selectCompletedTaskIds,
+  checkTasks,
+} from './TasksSlice';
 
 const FlatListItemSeparator = () => {
   return (
@@ -20,8 +25,15 @@ const FlatListItemSeparator = () => {
 };
 
 export const TasksScreen = function () {
+  const dispatch = useDispatch();
   const taskIds = useSelector(selectTaskIds);
   const completedTaskIds = useSelector(selectCompletedTaskIds);
+
+  const refreshTasks = useCallback(() => {
+    dispatch(checkTasks());
+  }, [dispatch]);
+
+  useFocusEffect(refreshTasks);
 
   const renderItem = ({ item }) => <TaskCardController taskId={item} />;
 
@@ -42,6 +54,9 @@ export const TasksScreen = function () {
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={FlatListItemSeparator}
           renderItem={renderItem}
+          refreshControl={
+            <RefreshControl refreshing={false} onRefresh={refreshTasks} />
+          }
         />
       </View>
     </>
