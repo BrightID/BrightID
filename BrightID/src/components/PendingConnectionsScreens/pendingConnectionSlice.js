@@ -103,7 +103,7 @@ export const newPendingConnection = createAsyncThunk(
     console.log('channel.myProfileTimestamp', channel.myProfileTimestamp);
 
     const connectionInfo = await fetchConnectionInfo({
-      brightID: decryptedObj.brightID,
+      brightId: decryptedObj.id,
       myConnections: getState().connections.connections,
     });
     return { ...connectionInfo, ...decryptedObj };

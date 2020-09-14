@@ -11,11 +11,11 @@ import {
   StatusBar,
   Clipboard,
 } from 'react-native';
+import { createSelector } from '@reduxjs/toolkit';
 import { useFocusEffect } from '@react-navigation/native';
 import { SvgXml } from 'react-native-svg';
 import ActionSheet from 'react-native-actionsheet';
 import { useDispatch, useSelector } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { setPhoto, setName, setActiveNotification } from '@/actions';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
@@ -25,7 +25,6 @@ import verificationSticker from '@/static/verification-sticker.svg';
 import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
 import forumIcon from '@/static/forum_icon.svg';
-import { useWhiteStatusBar } from '@/utils/hooks';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
 /**
@@ -38,24 +37,37 @@ let chatSheetRef = '',
 let discordUrl = 'https://discord.gg/nTtuB2M';
 let JoinCommunity = DEVICE_IOS ? TextInput : Text;
 
+/** Selectors */
+
+const linkedContextCountSelector = createSelector(
+  (state) => state.apps.linkedContexts,
+  (contexts) => contexts.filter((link) => link.state === 'applied').length,
+);
+
+const verifiedSelector = createSelector(
+  (state) => state.user.verifications,
+  (verifications) => verifications.includes('BrightID'),
+);
+
+/** HomeScreen Component */
+
 export const HomeScreen = (props) => {
   const { navigation } = props;
   const dispatch = useDispatch();
   const id = useSelector((state) => state.user.id);
   const name = useSelector((state) => state.user.name);
   const photoFilename = useSelector((state) => state.user.photo.filename);
-  const groups = useSelector((state) => state.groups.groups);
-  const apps = useSelector((state) => state.apps.apps);
-  const verifications = useSelector((state) => state.user.verifications);
-  const connections = useSelector((state) => state.connections.connections);
+  const groupsCount = useSelector((state) => state.groups.groups.length);
+  const connectionsCount = useSelector(
+    (state) => state.connections.connections.length,
+  );
+  const linkedContextsCount = useSelector(linkedContextCountSelector);
+  const verified = useSelector(verifiedSelector);
+
   const [profilePhoto, setProfilePhoto] = useState('none');
   const [isEditing, setIsEditing] = useState(false);
   const [displayName, setDisplayName] = useState(name);
-  const verified = useMemo(() => verifications.includes('BrightID'), [
-    verifications,
-  ]);
 
-  // useWhiteStatusBar();
   useFocusEffect(
     useCallback(() => {
       dispatch(fetchUserInfo());
@@ -222,7 +234,7 @@ export const HomeScreen = (props) => {
           }}
         >
           <Text testID="ConnectionsCount" style={styles.countsNumberText}>
-            {connections?.length ?? 0}
+            {connectionsCount}
           </Text>
           <View style={styles.countsBorder} />
           <Text style={styles.countsDescriptionText}>Connections</Text>
@@ -236,7 +248,7 @@ export const HomeScreen = (props) => {
           }}
         >
           <Text testID="GroupsCount" style={styles.countsNumberText}>
-            {groups?.length ?? 0}
+            {groupsCount}
           </Text>
           <View style={styles.countsBorder} />
           <Text style={styles.countsDescriptionText}>Groups</Text>
@@ -250,7 +262,7 @@ export const HomeScreen = (props) => {
           }}
         >
           <Text testID="AppsCount" style={styles.countsNumberText}>
-            {apps?.length ?? 0}
+            {linkedContextsCount}
           </Text>
           <View style={styles.countsBorder} />
           <Text style={styles.countsDescriptionText}>Apps</Text>

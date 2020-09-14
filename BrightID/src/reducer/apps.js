@@ -2,70 +2,55 @@
 
 import {
   SET_APPS,
-  ADD_APP,
-  REMOVE_APP,
+  ADD_LINKED_CONTEXT,
+  REMOVE_LINKED_CONTEXT,
   RESET_STORE,
-  UPDATE_APP,
 } from '@/actions';
-import { find, propEq } from 'ramda';
 
 const initialState = {
   apps: [],
+  linkedContexts: [],
+  oldLinkedContexts: [],
 };
 
 export const reducer = (state: AppsState = initialState, action: action) => {
   switch (action.type) {
-    case SET_APPS: {
-      return {
-        ...state,
-        apps: action.apps,
-      };
-    }
-    case ADD_APP: {
-      const removeExisting = ({ name }) => name !== action.app.name;
-      const apps: AppInfo[] = state.apps
+    case ADD_LINKED_CONTEXT: {
+      const removeExisting = ({ context }) => context !== action.link.context;
+      const linkedContexts: ContextInfo[] = state.linkedContexts
         .filter(removeExisting)
-        .concat(action.app);
+        .concat(action.link);
       return {
         ...state,
-        apps,
+        linkedContexts,
       };
     }
-    case UPDATE_APP: {
-      let apps;
-      const updatedApp = find(propEq('name', action.op.context))(state.apps);
-      if (updatedApp !== undefined) {
-        if (action.state === 'applied') {
-          updatedApp.state = 'applied';
-          updatedApp.contextId = action.op.contextId;
-          updatedApp.linked = true;
-        } else if (updatedApp.linked && action.result.includes('duplicate')) {
-          updatedApp.state = 'applied';
-        } else {
-          updatedApp.state = 'failed';
-        }
-        // Only store first line of result. BrightID node might attach stack trace
-        // to the failed op result.
-        updatedApp.result = action.result
-          ? action.result.split(/\r?\n/)[0]
-          : undefined;
-        const removeExisting = ({ name }) => name !== action.op.context;
-        apps = state.apps.filter(removeExisting).concat(updatedApp);
+    case REMOVE_LINKED_CONTEXT: {
+      const removeExisting = ({ context }) => context !== action.context;
+      const linkedContexts: ContextInfo[] = state.linkedContexts.filter(
+        removeExisting,
+      );
+
+      return { ...state, linkedContexts };
+    }
+    case SET_APPS: {
+      const contexts = action.apps.map((app) => app.context);
+      const linkedContexts = state.linkedContexts.filter(({ context }) =>
+        contexts.includes(context),
+      );
+      let oldLinkedContexts;
+      if (linkedContexts.length !== state.linkedContexts.length) {
+        oldLinkedContexts = state.linkedContexts
+          .filter(({ context }) => !contexts.includes(context))
+          .concat(state.oldLinkedContexts);
       } else {
-        apps = state.apps;
+        oldLinkedContexts = state.oldLinkedContexts;
       }
       return {
         ...state,
-        apps,
-      };
-    }
-    case REMOVE_APP: {
-      const apps: AppInfo[] = state.apps.filter(
-        (app) => app.name !== action.name,
-      );
-      return {
-        ...state,
-        apps,
+        apps: action.apps,
+        linkedContexts,
+        oldLinkedContexts,
       };
     }
     case RESET_STORE: {
@@ -76,7 +61,5 @@ export const reducer = (state: AppsState = initialState, action: action) => {
     }
   }
 };
-
-// unnecessary for now, but when the app gets larger, combine reducers here
 
 export default reducer;

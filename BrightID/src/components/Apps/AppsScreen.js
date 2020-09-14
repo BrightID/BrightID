@@ -1,53 +1,66 @@
 // @flow
 
-import * as React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Linking,
+  Alert,
   StyleSheet,
   View,
   FlatList,
   Text,
   StatusBar,
+  RefreshControl,
 } from 'react-native';
-import { connect } from 'react-redux';
-import ActionSheet from 'react-native-actionsheet';
+import { useDispatch, useSelector } from 'react-redux';
 import EmptyList from '@/components/Helpers/EmptyList';
+import Spinner from 'react-native-spinkit';
 import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
+import { any, find, propEq } from 'ramda';
+import { fetchApps } from '@/actions';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import AppCard from './AppCard';
-import { handleAppContext, deleteApp } from './model';
+import { handleAppContext } from './model';
 
-let deleteSheetRef = '';
+export const AppsScreen = () => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const route = useRoute();
 
-type State = {
-  selectedApp: string,
-};
+  const apps = useSelector((state) => state.apps.apps);
+  const isSponsored = useSelector((state) => state.user.isSponsored);
+  const linkedContexts = useSelector((state) => state.apps.linkedContexts);
+  const [refreshing, setRefreshing] = useState(false);
 
-export class AppsScreen extends React.Component<Prop, State> {
-  deleteSheetRef: string;
+  const refreshApps = useCallback(() => {
+    setRefreshing(true);
+    dispatch(fetchApps())
+      .then(() => {
+        setRefreshing(false);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setRefreshing(false);
+      });
+  }, [dispatch]);
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      selectedApp: '',
-    };
-  }
+  useFocusEffect(refreshApps);
 
-  componentDidMount() {
-    const { navigation } = this.props;
-    navigation.addListener('focus', async () => {
-      this.handleDeepLink();
-      Linking.addEventListener('url', this.handleDeepLink);
-    });
-    navigation.addListener('blur', async () => {
-      Linking.removeEventListener('url', this.handleDeepLink);
-    });
-  }
+  useEffect(() => {
+    if (apps.length > 0 && route.params?.context) {
+      handleDeepLink();
+    }
+  }, [apps, handleDeepLink, route.params]);
 
-  handleDeepLink = () => {
-    const { route, navigation } = this.props;
-    console.log('params', route.params);
-    if (route.params?.context) {
+  const handleDeepLink = useCallback(() => {
+    const { context } = route.params;
+    const isValidContext = any(propEq('context', context))(apps);
+    if (isValidContext) {
       handleAppContext(route.params);
+    } else {
+      Alert.alert('Failed', `${context} is not a valid context!`);
     }
     // reset params
     navigation.setParams({
@@ -55,71 +68,62 @@ export class AppsScreen extends React.Component<Prop, State> {
       context: '',
       contextId: '',
     });
-  };
+  }, [navigation, route.params, apps]);
 
-  handleAction = (selectedApp: string) => () => {
-    this.setState({ selectedApp }, () => {
-      if (deleteSheetRef) deleteSheetRef.show();
-    });
-  };
-
-  sponsorLabel = () => {
-    const { isSponsored, apps } = this.props;
-    if (!isSponsored && apps.length > 0) {
-      return (
-        <View style={styles.sponsorContainer}>
-          <Text style={styles.sponsorMessage}>
-            You're not sponsored.{'\n'}Please find an app below to sponsor you.
-          </Text>
-        </View>
-      );
+  const AppStatus = () => {
+    const pendingLink = find(propEq('state', 'pending'))(linkedContexts);
+    let msg, waiting;
+    if (pendingLink) {
+      msg = `Linking your account in ${pendingLink.context}\n to your BrightID ...`;
+      waiting = true;
+    } else if (!isSponsored) {
+      msg = "You're not sponsored.\nPlease find an app below to sponsor you.";
+      waiting = false;
     } else {
-      return <View style={styles.stateContainer} />;
+      msg = '';
+      waiting = false;
     }
+    return msg ? (
+      <View style={styles.statusContainer}>
+        <Text style={styles.statusMessage}>{msg}</Text>
+        <Spinner
+          isVisible={waiting}
+          size={DEVICE_LARGE ? 48 : 42}
+          type="Wave"
+          color="#4a90e2"
+        />
+      </View>
+    ) : (
+      <View style={{ height: DEVICE_LARGE ? 12 : 10 }} />
+    );
   };
 
-  render() {
-    const { apps } = this.props;
-    const { selectedApp } = this.state;
-    return (
-      <>
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor={ORANGE}
-          animated={true}
+  return (
+    <>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={ORANGE}
+        animated={true}
+      />
+      <View style={styles.orangeTop} />
+      <View style={styles.container} testID="appsScreen">
+        <AppStatus />
+        <FlatList
+          data={apps}
+          contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+          keyExtractor={({ name }, index) => name + index}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => <AppCard {...item} />}
+          ListEmptyComponent={<EmptyList title="No Apps" iconType="flask" />}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={refreshApps} />
+          }
         />
-        <View style={styles.orangeTop} />
-        <View style={styles.container} testID="appsScreen">
-          <this.sponsorLabel />
-          <FlatList
-            data={apps}
-            contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-            keyExtractor={({ name }, index) => name + index}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <AppCard {...item} handleAction={this.handleAction} />
-            )}
-            ListEmptyComponent={<EmptyList title="No Apps" iconType="flask" />}
-          />
-          <ActionSheet
-            ref={(o) => {
-              deleteSheetRef = o;
-            }}
-            title={`Are you sure you want to delete ${selectedApp}`}
-            options={['Delete', 'cancel']}
-            cancelButtonIndex={1}
-            onPress={(index) => {
-              if (index === 0) {
-                deleteApp(selectedApp);
-              }
-            }}
-          />
-        </View>
-      </>
-    );
-  }
-}
+      </View>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   orangeTop: {
@@ -140,18 +144,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  sponsorContainer: {
+  statusContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    paddingBottom: 20,
+  },
+  statusMessage: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    textAlign: 'center',
+    fontSize: DEVICE_LARGE ? 16 : 14,
+    color: '#4a90e2',
+  },
+  linkingContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 20,
   },
-  sponsorMessage: {
-    fontFamily: 'ApexNew-Medium',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 18,
-    color: '#e39f2f',
-  },
 });
 
-export default connect(({ apps, user }) => ({ ...apps, ...user }))(AppsScreen);
+export default AppsScreen;

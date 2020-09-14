@@ -20,7 +20,12 @@ export const userTransformer = createTransform(
 export const groupsTransformer = createTransform(
   // transform state on its way to being serialized and persisted.
   (inboundState, key) => {
-    return { ...inboundState, searchParam: '', searchOpen: false };
+    return {
+      ...inboundState,
+      searchParam: '',
+      searchOpen: false,
+      newGroupCoFounders: [],
+    };
   },
   (outboundState, key) => {
     return outboundState;

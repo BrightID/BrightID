@@ -104,7 +104,6 @@ export class NewGroupScreen extends React.Component<Props> {
 
   renderConnection = ({ item }) => (
     <NewGroupCard
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...item}
       selected={this.cardIsSelected(item)}
       groups={true}

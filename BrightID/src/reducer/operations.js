@@ -20,7 +20,7 @@ export const reducer = (
     }
     case REMOVE_OPERATION: {
       const operations: operation[] = state.operations.filter(
-        (op: operation) => op._key !== action.opHash,
+        (op: operation) => op.hash !== action.opHash,
       );
       return {
         ...state,
