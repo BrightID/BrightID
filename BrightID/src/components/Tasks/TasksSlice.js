@@ -54,6 +54,13 @@ const tasksSlice = createSlice({
         delete state[taskId];
       }
     },
+    resetTask(state, action) {
+      const taskId = action.payload;
+      if (taskId in state) {
+        state[taskId].completed = false;
+        state[taskId].timestamp = 0;
+      }
+    },
     completeTask(state, action) {
       const taskId = action.payload;
       let task = state[taskId];
@@ -75,7 +82,12 @@ const tasksSlice = createSlice({
   },
 });
 
-export const { addTask, removeTask, completeTask } = tasksSlice.actions;
+export const {
+  addTask,
+  removeTask,
+  completeTask,
+  resetTask,
+} = tasksSlice.actions;
 
 // UserTasks.js may have tasks added or removed with an app update. This action takes care
 // that the persisted store always is up to date with the available tasks.
@@ -112,9 +124,10 @@ export const checkTasks = () => {
           dispatch(
             setActiveNotification({
               type: MISC_TYPE,
-              message: `Achievement unlocked!\nYou completed the task "${
+              message: `Achievement unlocked! You completed the task "${
                 UserTasks[task.id].title
               }".`,
+              navigationTarget: 'Tasks',
             }),
           );
         }

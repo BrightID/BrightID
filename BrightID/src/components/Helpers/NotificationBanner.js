@@ -1,33 +1,19 @@
 // @flow
 
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { InteractionManager, StyleSheet } from 'react-native';
 import DropdownAlert from 'react-native-dropdownalert';
-import { shallowEqual, useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
 import { navigate, getRoute } from '@/NavigationService';
 import groups from '@/static/add_group.svg';
 import connections from '@/static/add_person.svg';
 import misc from '@/static/trusted_connections.svg';
 import { setActiveNotification } from '@/actions';
-import {
-  DEVICE_ANDROID,
-  DEVICE_LARGE,
-  CONNECTIONS_TYPE,
-  HEIGHT,
-  DEVICE_IOS,
-} from '@/utils/constants';
-import {
-  // channel_states,
-  channel_types,
-  selectChannelById,
-} from '@/components/PendingConnectionsScreens/channelSlice';
-import {
-  // pendingConnection_states,
-  selectAllUnconfirmedConnections,
-} from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+import { DEVICE_LARGE, CONNECTIONS_TYPE, HEIGHT } from '@/utils/constants';
+import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 
-/* notification types: 
+/* notification types:
 @type groups
 @type connections
 @type misc
@@ -71,10 +57,13 @@ export const NotificationBanner = () => {
           'custom',
           activeNotification?.message,
         );
+        /*
         // automatically close banner after timeout
         timer = setTimeout(() => {
           dropDownAlertRef.current?.closeAction('automatic');
         }, NOTIFICATION_TIMEOUT);
+
+         */
       }
     });
 
@@ -94,6 +83,7 @@ export const NotificationBanner = () => {
           message: `You have ${pendingConnections.length} pending connection${
             pendingConnections.length > 1 ? 's' : ''
           }`,
+          navigationTarget: 'PendingConnections',
         }),
       );
     }
@@ -103,8 +93,8 @@ export const NotificationBanner = () => {
   const icon = icons[activeNotification?.type] ?? misc;
 
   const _onTap = () => {
-    if (activeNotification?.type === CONNECTIONS_TYPE) {
-      navigate('PendingConnections');
+    if (activeNotification.navigationTarget) {
+      navigate(activeNotification.navigationTarget);
     } else {
       navigate('Notifications', { type: activeNotification?.type });
     }
