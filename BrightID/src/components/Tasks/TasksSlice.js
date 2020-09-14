@@ -124,9 +124,8 @@ export const checkTasks = () => {
           dispatch(
             setActiveNotification({
               type: MISC_TYPE,
-              message: `Achievement unlocked! You completed the task "${
-                UserTasks[task.id].title
-              }".`,
+              title: 'Achievement unlocked!',
+              message: `You completed the task "${UserTasks[task.id].title}".`,
               navigationTarget: 'Tasks',
             }),
           );

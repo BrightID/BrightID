@@ -53,6 +53,7 @@ export const updateNotifications = () => async (
       if (!activeNotification) {
         dispatch(
           setActiveNotification({
+            title: 'Social Recovery',
             message: 'Please select your Trusted Connections',
             type: MISC_TYPE,
           }),

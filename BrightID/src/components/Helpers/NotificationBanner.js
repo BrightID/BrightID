@@ -55,6 +55,7 @@ export const NotificationBanner = () => {
       if (!screenBlackList.includes(route?.name)) {
         dropDownAlertRef.current?.alertWithType(
           'custom',
+          activeNotification?.title,
           activeNotification?.message,
         );
         /*
@@ -80,6 +81,7 @@ export const NotificationBanner = () => {
       dispatch(
         setActiveNotification({
           type: CONNECTIONS_TYPE,
+          title: 'Confirm connections',
           message: `You have ${pendingConnections.length} pending connection${
             pendingConnections.length > 1 ? 's' : ''
           }`,
@@ -116,6 +118,7 @@ export const NotificationBanner = () => {
         justifyContent: 'center',
       }}
       titleStyle={styles.title}
+      messageStyle={styles.message}
       updateStatusBar={true}
       activeStatusBarBackgroundColor="#AFFDD0"
       activeStatusBarStyle="dark-content"
@@ -144,6 +147,13 @@ const styles = StyleSheet.create({
     height: HEIGHT * 0.15,
   },
   title: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    marginLeft: DEVICE_LARGE ? 20 : 10,
+    color: '#000',
+    fontSize: DEVICE_LARGE ? 16 : 15,
+  },
+  message: {
     fontFamily: 'Poppins',
     fontWeight: '500',
     marginLeft: DEVICE_LARGE ? 20 : 10,

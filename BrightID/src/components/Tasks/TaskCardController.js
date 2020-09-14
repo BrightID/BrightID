@@ -1,9 +1,10 @@
 // @flow
 
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import TaskCard from './TaskCard';
 import { UserTasks } from './UserTasks';
+import { resetTask } from './TasksSlice';
 
 /*
   Purpose: Setup required data for rendering TaskCard by
@@ -14,10 +15,15 @@ type TaskCardControllerProps = {
 };
 
 function TaskCardController({ taskId }: TaskCardControllerProps) {
+  const dispatch = useDispatch();
   const storeTask = useSelector((state: State) => state.tasks[taskId]);
   const extendedTask = {
     ...storeTask,
     ...UserTasks[taskId],
+  };
+
+  const reset = () => {
+    dispatch(resetTask(taskId));
   };
 
   return (
@@ -27,6 +33,7 @@ function TaskCardController({ taskId }: TaskCardControllerProps) {
       id={extendedTask.id}
       title={extendedTask.title}
       url={extendedTask.url}
+      onClick={__DEV__ ? reset : null}
     />
   );
 }
