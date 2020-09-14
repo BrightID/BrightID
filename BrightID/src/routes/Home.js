@@ -5,12 +5,14 @@ import { INVITE_ACTIVE, DEVICE_LARGE } from '@/utils/constants';
 import { createSelector } from '@reduxjs/toolkit';
 import { createStackNavigator } from '@react-navigation/stack';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { SvgXml } from 'react-native-svg';
 import {
   pendingConnection_states,
   selectAllPendingConnections,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnectionScreen';
 import { navigate, toggleDrawer } from '@/NavigationService';
+import menuBar from '@/static/menu_bar.svg';
 import { headerOptions } from './helpers';
 import TasksScreen from '../components/Tasks/TasksScreen';
 import { HomeDrawer } from './HomeDrawer';
@@ -86,10 +88,14 @@ const homeScreenOptions = {
     return (
       <TouchableOpacity
         testID="toggleDrawer"
-        style={{ marginLeft: 10 }}
+        style={{
+          width: DEVICE_LARGE ? 80 : 70,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
         onPress={() => toggleDrawer()}
       >
-        <Material name="menu" size={DEVICE_LARGE ? 36 : 28} color="#000" />
+        <SvgXml xml={menuBar} width={DEVICE_LARGE ? 30 : 25} />
       </TouchableOpacity>
     );
   },

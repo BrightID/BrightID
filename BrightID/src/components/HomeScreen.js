@@ -44,7 +44,7 @@ const linkedContextCountSelector = createSelector(
   (contexts) => contexts.filter((link) => link.state === 'applied').length,
 );
 
-const verifiedSelector = createSelector(
+export const verifiedSelector = createSelector(
   (state) => state.user.verifications,
   (verifications) => verifications.includes('BrightID'),
 );
