@@ -17,10 +17,11 @@ type TaskCardProps = {
   description: string,
   fulfilled: boolean,
   url: ?string,
+  onClick: ?() => any,
 };
 
 function TaskCard(props: TaskCardProps) {
-  const { title, description, fulfilled, url } = props;
+  const { title, description, fulfilled, url, onClick } = props;
 
   const desc = url ? (
     <TouchableOpacity
@@ -40,7 +41,7 @@ function TaskCard(props: TaskCardProps) {
         <Text style={styles.title}>{title}</Text>
         {desc}
       </View>
-      <TaskState complete={fulfilled} />
+      <TaskState complete={fulfilled} onClick={onClick} />
     </View>
   );
 }

@@ -52,6 +52,7 @@ const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
           : `You've been invited to join ${newInvites[0]?.name}`;
       dispatch(
         setActiveNotification({
+          title: 'Group Invitation',
           message,
           type: GROUP_TYPE,
         }),

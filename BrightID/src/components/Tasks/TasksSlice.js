@@ -1,6 +1,9 @@
 // @flow
 
+import { setActiveNotification } from '@/actions';
+import { MISC_TYPE } from '@/utils/constants';
 import { createSlice, createSelector } from '@reduxjs/toolkit';
+import certificate from '@/static/certificate.svg';
 import { UserTasks } from './UserTasks';
 
 /*
@@ -52,6 +55,13 @@ const tasksSlice = createSlice({
         delete state[taskId];
       }
     },
+    resetTask(state, action) {
+      const taskId = action.payload;
+      if (taskId in state) {
+        state[taskId].completed = false;
+        state[taskId].timestamp = 0;
+      }
+    },
     completeTask(state, action) {
       const taskId = action.payload;
       let task = state[taskId];
@@ -63,9 +73,22 @@ const tasksSlice = createSlice({
       }
     },
   },
+  extraReducers: {
+    RESET_STORE: (state, action) => {
+      for (const task of Object.values(state)) {
+        task.completed = false;
+        task.timestamp = 0;
+      }
+    },
+  },
 });
 
-export const { addTask, removeTask, completeTask } = tasksSlice.actions;
+export const {
+  addTask,
+  removeTask,
+  completeTask,
+  resetTask,
+} = tasksSlice.actions;
 
 // UserTasks.js may have tasks added or removed with an app update. This action takes care
 // that the persisted store always is up to date with the available tasks.
@@ -97,12 +120,17 @@ export const checkTasks = () => {
     for (const task of pendingTasks) {
       try {
         if (UserTasks[task.id].checkFn(state)) {
-          console.log(
-            `TODO: create notification "Well done! You have completed the task '${
-              UserTasks[task.id].title
-            }'!"`,
-          );
+          console.log(`Task '${UserTasks[task.id].title}' completed."`);
           dispatch(completeTask(task.id));
+          dispatch(
+            setActiveNotification({
+              type: MISC_TYPE,
+              title: 'Achievement unlocked!',
+              message: `You completed the task "${UserTasks[task.id].title}".`,
+              navigationTarget: 'Tasks',
+              xmlIcon: certificate,
+            }),
+          );
         }
       } catch (err) {
         console.log(`Error while checking task ${task.id}: ${err.message}`);
