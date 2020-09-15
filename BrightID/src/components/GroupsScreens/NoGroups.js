@@ -34,9 +34,9 @@ export const NoGroups = ({ navigation }: Props) => (
         accessibilityLabel="groups logo"
       />
       <View>
-        <Text style={styles.emptyGroupsText}>By creating and joining</Text>
-        <Text style={styles.emptyGroupsText}>groups, you can increase </Text>
-        <Text style={styles.emptyGroupsText}>your score</Text>
+        <Text style={styles.emptyGroupsText}>Get verified faster</Text>
+        <Text style={styles.emptyGroupsText}>by creating and</Text>
+        <Text style={styles.emptyGroupsText}>joining groups</Text>
       </View>
     </View>
     <View style={styles.emptyButtons}>

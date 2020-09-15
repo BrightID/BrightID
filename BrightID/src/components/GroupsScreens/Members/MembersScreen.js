@@ -234,7 +234,6 @@ function MembersScreen(props: MembersScreenProps) {
         memberId={item.id}
         name={item.name}
         photo={item.photo}
-        score={item.score}
         memberIsAdmin={memberIsAdmin}
         userIsAdmin={userIsAdmin}
         userId={user.id}

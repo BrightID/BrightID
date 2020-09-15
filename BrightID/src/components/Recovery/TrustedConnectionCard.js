@@ -21,15 +21,6 @@ class TrustedConnectionCard extends React.PureComponent<Props> {
       : store.dispatch(addTrustedConnection(id));
   };
 
-  scoreColor = () => {
-    const { score } = this.props;
-    if (score >= 85) {
-      return { color: '#139c60' };
-    } else {
-      return { color: '#e39f2f' };
-    }
-  };
-
   selected = () => {
     const { id } = this.props;
     const {
@@ -39,7 +30,7 @@ class TrustedConnectionCard extends React.PureComponent<Props> {
   };
 
   render() {
-    const { photo, name, score, connectionDate, style } = this.props;
+    const { photo, name, connectionDate, style } = this.props;
 
     return (
       <View style={{ ...styles.container, ...style }}>
@@ -51,10 +42,6 @@ class TrustedConnectionCard extends React.PureComponent<Props> {
         />
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
-          <View style={styles.scoreContainer}>
-            <Text style={styles.scoreLeft}>Score:</Text>
-            <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>
-          </View>
           <Text style={styles.connectedText}>
             Connected {moment(parseInt(connectionDate, 10)).fromNow()}
           </Text>
@@ -107,22 +94,6 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
-  },
-  scoreContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  scoreLeft: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 14,
-    color: '#9b9b9b',
-    marginRight: 3,
-    paddingTop: 1.5,
-  },
-  scoreRight: {
-    fontFamily: 'ApexNew-Medium',
-    fontSize: 16,
   },
   connectedText: {
     fontFamily: 'ApexNew-Book',
