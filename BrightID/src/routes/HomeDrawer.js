@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
 import { Image, View, Text, Clipboard, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeScreen, { verifiedSelector } from '@/components/HomeScreen';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItem,
-  DrawerItemList,
 } from '@react-navigation/drawer';
 import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
 import { SvgXml } from 'react-native-svg';
 import verificationSticker from '@/static/verification-sticker.svg';
 import { retrieveImage } from '@/utils/filesystem';
-import { getExplorerCode } from '@/utils/explorer';
 import { navigate } from '@/NavigationService';
 import editProfile from '@/static/edit_profile_inactive.svg';
 import trustedConnections from '@/static/trusted_connections_sidebar_inactive.svg';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, TouchableOpacity, View } from 'react-native';
+import { Keyboard, Image, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { INVITE_ACTIVE, DEVICE_LARGE } from '@/utils/constants';
 import { createSelector } from '@reduxjs/toolkit';
@@ -92,7 +92,10 @@ const homeScreenOptions = {
           alignItems: 'center',
           justifyContent: 'center',
         }}
-        onPress={() => toggleDrawer()}
+        onPress={() => {
+          Keyboard.dismiss();
+          toggleDrawer();
+        }}
       >
         <SvgXml xml={menuBar} width={DEVICE_LARGE ? 30 : 24} />
       </TouchableOpacity>
