@@ -7,8 +7,9 @@ import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItem,
+  DrawerItemList,
 } from '@react-navigation/drawer';
-import { DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
 import { SvgXml } from 'react-native-svg';
 import verificationSticker from '@/static/verification-sticker.svg';
 import { retrieveImage } from '@/utils/filesystem';
@@ -17,39 +18,41 @@ import { navigate } from '@/NavigationService';
 import editProfile from '@/static/edit_profile_inactive.svg';
 import trustedConnections from '@/static/trusted_connections_sidebar_inactive.svg';
 import contactUs from '@/static/contact_us.svg';
+import explorerCode from '@/static/explorer_code_icon.svg';
+import explorerCodeFocused from '@/static/explorer_code_icon_focused.svg';
+import homeIcon from '@/static/home_icon_side_menu.svg';
+import taskList from '@/static/task_list_icon.svg';
+import taskListFocused from '@/static/task_list_icon_focused.svg';
+
+import TasksScreen from '@/components/SideMenu/Tasks/TasksScreen';
+import GraphExplorerScreen from '@/components/SideMenu/GraphExplorerScreen';
+import { useHeaderHeight } from '@react-navigation/stack';
 
 const iconMap = {
   editProfile,
   trustedConnections,
   contactUs,
+  explorerCode,
+  homeIcon,
+  taskList,
+  explorerCodeFocused,
+  taskListFocused,
 };
 
 const getIcon = (name) => {
   return ({ focused, color }) => {
-    switch (name) {
-      case 'certificate':
-      case 'graphql': {
-        return (
-          <Material name={name} size={DEVICE_LARGE ? 28 : 23} color={color} />
-        );
-      }
-      default: {
-        return (
-          <SvgXml
-            xml={iconMap[name]}
-            width={DEVICE_LARGE ? 28 : 24}
-            height={DEVICE_LARGE ? 28 : 24}
-          />
-        );
-      }
-    }
+    let icon = `${name}${focused ? 'Focused' : ''}`;
+    return (
+      <SvgXml
+        xml={iconMap[icon]}
+        width={DEVICE_LARGE ? 28 : 24}
+        height={DEVICE_LARGE ? 28 : 24}
+      />
+    );
   };
 };
 
 const CustomDrawerContent = (props) => {
-  const hasPassword = useSelector(
-    ({ user: { password } }) => password.length > 0,
-  );
   const photoFilename = useSelector((state) => state.user.photo.filename);
   const name = useSelector((state) => state.user.name);
   const verified = useSelector(verifiedSelector);
@@ -57,6 +60,8 @@ const CustomDrawerContent = (props) => {
   retrieveImage(photoFilename).then((profilePhoto) => {
     setProfilePhoto(profilePhoto);
   });
+
+  const { state, navigation } = props;
 
   return (
     <DrawerContentScrollView {...props}>
@@ -79,30 +84,42 @@ const CustomDrawerContent = (props) => {
         )}
       </View>
       <DrawerItem
+        inactiveTintColor="#000"
+        label="Home"
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
-        inactiveTintColor="#000"
-        label="Achievements"
-        icon={getIcon('certificate')}
+        icon={getIcon('homeIcon')}
         onPress={() => {
-          navigate('Tasks');
-          props.navigation.closeDrawer();
+          props.navigation.navigate('Home');
         }}
       />
-
       <DrawerItem
-        inactiveTintColor={hasPassword ? '#000' : '#aaa'}
+        focused={state.routeNames[state.index] === 'Achievements'}
+        inactiveTintColor="#000"
+        inactiveBackgroundColor="#fff"
+        activeTintColor="#fff"
+        activeBackgroundColor={ORANGE}
+        label="Achievements"
+        style={styles.drawerItem}
+        labelStyle={styles.labelStyle}
+        icon={getIcon('taskList')}
+        onPress={() => {
+          navigation.navigate('Achievements');
+        }}
+      />
+      <DrawerItem
+        focused={state.routeNames[state.index] === 'Copy Explorer Code'}
+        inactiveTintColor="#000"
+        inactiveBackgroundColor="#fff"
+        activeTintColor="#fff"
+        activeBackgroundColor={ORANGE}
         label="Copy Explorer Code"
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
+        icon={getIcon('explorerCode')}
         onPress={() => {
-          if (hasPassword) {
-            const code = getExplorerCode();
-            Clipboard.setString(code);
-            props.navigation.closeDrawer();
-          }
+          navigation.navigate('Copy Explorer Code');
         }}
-        icon={getIcon('graphql')}
       />
       <DrawerItem
         inactiveTintColor="#aaa"
@@ -136,40 +153,65 @@ const CustomDrawerContent = (props) => {
 const Drawer = createDrawerNavigator();
 
 export const HomeDrawer = () => {
+  const headerHeight = useHeaderHeight();
+
   return (
     <Drawer.Navigator
-      drawerStyle={styles.drawer}
-      sceneContainerStyle={styles.sceneContainer}
+      drawerType="front"
+      sceneContainerStyle={[styles.sceneContainer]}
+      drawerStyle={[styles.drawer, { marginTop: headerHeight }]}
+      drawerContentOptions={{
+        activeTintColor: '#FFF',
+        inactiveTintColor: '#000',
+        activeBackgroundColor: ORANGE,
+        inactiveBackgroundColor: '#fff',
+        itemStyle: styles.drawerItem,
+        labelStyle: styles.labelStyle,
+      }}
       overlayColor="transparent"
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
       <Drawer.Screen
         name="Home"
         options={{
-          drawerIcon: getIcon('home'),
+          drawerIcon: getIcon('homeIcon'),
+          inactiveTintColor: '#000',
         }}
         component={HomeScreen}
+      />
+      <Drawer.Screen
+        name="Achievements"
+        options={{
+          drawerIcon: getIcon('taskList'),
+        }}
+        component={TasksScreen}
+      />
+      <Drawer.Screen
+        name="Copy Explorer Code"
+        options={{
+          drawerIcon: getIcon('explorerCode'),
+        }}
+        component={GraphExplorerScreen}
       />
     </Drawer.Navigator>
   );
 };
 
 const styles = StyleSheet.create({
+  sceneContainer: {
+    backgroundColor: '#fff',
+  },
   drawer: {
     width: '85%',
     borderTopRightRadius: 40,
     shadowColor: 'rgba(196, 196, 196, 0.25)',
     shadowOpacity: 1,
     shadowRadius: 15,
-    elevation: 2,
+    elevation: 15,
     shadowOffset: {
       width: 0,
       height: 2,
     },
-  },
-  sceneContainer: {
-    backgroundColor: 'blue',
-    opacity: 1,
   },
   drawerPhoto: {
     width: DEVICE_LARGE ? 48 : 42,

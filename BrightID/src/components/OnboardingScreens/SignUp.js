@@ -19,7 +19,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { takePhoto, chooseImage } from '@/utils/images';
 import { DEVICE_LARGE, DEVICE_OS, ORANGE } from '@/utils/constants';
 import { handleBrightIdCreation } from './actions';
-import { checkTasks } from '../Tasks/TasksSlice';
+import { checkTasks } from '../SideMenu/Tasks/TasksSlice';
 
 type State = {
   name: string,

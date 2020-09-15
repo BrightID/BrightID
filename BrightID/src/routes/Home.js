@@ -14,7 +14,6 @@ import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnecti
 import { navigate, toggleDrawer } from '@/NavigationService';
 import menuBar from '@/static/menu_bar.svg';
 import { headerOptions } from './helpers';
-import TasksScreen from '../components/Tasks/TasksScreen';
 import { HomeDrawer } from './HomeDrawer';
 
 /** SELECTORS */
@@ -95,7 +94,7 @@ const homeScreenOptions = {
         }}
         onPress={() => toggleDrawer()}
       >
-        <SvgXml xml={menuBar} width={DEVICE_LARGE ? 30 : 25} />
+        <SvgXml xml={menuBar} width={DEVICE_LARGE ? 30 : 24} />
       </TouchableOpacity>
     );
   },
@@ -106,19 +105,16 @@ const homeScreenOptions = {
     shadowOffset: {
       height: 0,
     },
-    elevation: 0,
+    elevation: -1,
   },
   headerTitleAlign: 'center',
+  headerTintColor: 'transparent',
+  headerTransparent: true,
 };
 
 const recoveringConnectionOptions = {
   ...headerOptions,
   title: 'Account Recovery',
-};
-
-const taskScreenOptions = {
-  ...headerOptions,
-  title: 'Achievements',
 };
 
 /** SCREENS */
@@ -137,11 +133,6 @@ const Home = () => {
         name="RecoveringConnection"
         component={RecoveringConnectionScreen}
         options={recoveringConnectionOptions}
-      />
-      <Stack.Screen
-        name="Tasks"
-        component={TasksScreen}
-        options={taskScreenOptions}
       />
     </>
   );

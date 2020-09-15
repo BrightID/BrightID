@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { createSelector } from '@reduxjs/toolkit';
 import { useFocusEffect } from '@react-navigation/native';
+import { useHeaderHeight } from '@react-navigation/stack';
 import { SvgXml } from 'react-native-svg';
 import ActionSheet from 'react-native-actionsheet';
 import { useDispatch, useSelector } from 'react-redux';
@@ -54,6 +55,7 @@ export const verifiedSelector = createSelector(
 export const HomeScreen = (props) => {
   const { navigation } = props;
   const dispatch = useDispatch();
+  const headerHeight = useHeaderHeight();
   const id = useSelector((state) => state.user.id);
   const name = useSelector((state) => state.user.name);
   const photoFilename = useSelector((state) => state.user.photo.filename);
@@ -149,7 +151,7 @@ export const HomeScreen = (props) => {
 
   return (
     // let verifications = ['BrightID'];
-    <View style={styles.container}>
+    <View style={[styles.container, { marginTop: headerHeight }]}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#fff"

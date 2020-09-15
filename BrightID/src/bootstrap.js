@@ -2,7 +2,10 @@
 import { bootstrapAndUpgrade } from './versions';
 import { resetOperations } from './actions';
 import { store } from './store';
-import { checkTasks, syncStoreTasks } from './components/Tasks/TasksSlice';
+import {
+  checkTasks,
+  syncStoreTasks,
+} from './components/SideMenu/Tasks/TasksSlice';
 
 // happens inside of the loading screen
 
