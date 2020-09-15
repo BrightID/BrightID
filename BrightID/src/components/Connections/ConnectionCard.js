@@ -14,7 +14,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
  * is created from an array of connections
  * each connection should have:
  * @prop name
- * @prop score
  * @prop connectionTime
  * @prop photo
  */
@@ -102,43 +101,24 @@ class ConnectionCard extends React.Component<Props, State> {
     this.props.onRemove(this.props);
   };
 
-  scoreColor = () => {
-    const { score } = this.props;
-    if (score >= 85) {
-      return { color: '#139c60' };
-    } else {
-      return { color: '#e39f2f' };
-    }
-  };
-
   getStatus = () => {
     const { isStale } = this.state;
-    const { score, status } = this.props;
+    const { status } = this.props;
     if (status === 'initiated') {
-      let statusText = 'Waiting';
-      if (isStale) {
-        statusText = 'Connection failed. Please try again.';
-      }
+      const statusText = isStale
+        ? 'Connection failed. Please try again.'
+        : 'Waiting';
       return (
-        <View style={styles.scoreContainer}>
+        <View style={styles.statusContainer}>
           <Text style={styles.waitingMessage}>{statusText}</Text>
-        </View>
-      );
-    } else if (status === 'verified') {
-      return (
-        <View style={styles.scoreContainer}>
-          <Text style={styles.scoreLeft}>Score:</Text>
-          <Text style={[styles.scoreRight, this.scoreColor()]}>{score}</Text>
         </View>
       );
     } else if (status === 'deleted') {
       return (
-        <View style={styles.scoreContainer}>
+        <View style={styles.statusContainer}>
           <Text style={styles.deletedMessage}>Deleted</Text>
         </View>
       );
-    } else {
-      return <View style={styles.scoreContainer} />;
     }
   };
 
@@ -241,21 +221,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
-  scoreContainer: {
+  statusContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-  },
-  scoreLeft: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 14,
-    color: '#9b9b9b',
-    marginRight: 3,
-    paddingTop: 1.5,
-  },
-  scoreRight: {
-    fontFamily: 'ApexNew-Medium',
-    fontSize: 16,
   },
   flagged: {
     fontFamily: 'ApexNew-Medium',
