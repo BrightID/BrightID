@@ -35,7 +35,6 @@ type MembersScreenProps = {
 };
 
 function MembersScreen(props: MembersScreenProps) {
-  console.log(`Rendering MembersScreen`);
   const { navigation, route } = props;
   const groupID = route.params.group.id;
   const dispatch = useDispatch();
@@ -43,12 +42,13 @@ function MembersScreen(props: MembersScreenProps) {
     (state: State) => state.connections.connections,
   );
   const user = useSelector((state: State) => state.user);
-  const group: group = useSelector((state: State) => {
+  const { group, admins, members } = useSelector((state: State) => {
     const group = state.groups.groups.find((entry) => entry.id === groupID);
-    if (!group) {
-      console.log(`Did not find group for groupID ${groupID}`);
-    }
-    return group;
+    return {
+      group,
+      admins: group ? group.admins : [],
+      members: group ? group.members : [],
+    };
   });
   const actionSheetRef: ?ActionSheet = useRef(null);
   const [contextActions, setContextActions] = useState<Array<string>>([]);
@@ -74,11 +74,11 @@ function MembersScreen(props: MembersScreenProps) {
   // set available actions for group
   useEffect(() => {
     const actions: Array<string> = [];
-    if (group.admins.includes(user.id)) {
+    if (admins.includes(user.id)) {
       // admins can invite other members to group
       actions.push(ACTION_INVITE);
     }
-    if (group.members.includes(user.id)) {
+    if (members.includes(user.id)) {
       // existing member can leave group
       actions.push(ACTION_LEAVE);
     }
@@ -86,11 +86,10 @@ function MembersScreen(props: MembersScreenProps) {
       actions.push(ACTION_CANCEL);
     }
     setContextActions(actions);
-  }, [user.id, group.admins, group.members]);
+  }, [user.id, admins, members]);
 
   // Only include the group members that user knows (is connected with), and the user itself
   const groupMembers: Array<connection> = useMemo(() => {
-    console.log(`memoizing members`);
     // TODO: userObj is ugly and just here to satisfy flow typecheck for 'connection' type.
     //    Define a dedicated type for group member to use here or somehow merge user and connection types.
     const userobj = {
@@ -109,10 +108,10 @@ function MembersScreen(props: MembersScreenProps) {
       innerJoin(
         (connection, member) => connection.id === member,
         connections,
-        group.members,
+        members,
       ),
     );
-  }, [user, connections, group.members]);
+  }, [user, connections, members]);
 
   const handleLeaveGroup = () => {
     const buttons = [
@@ -124,7 +123,7 @@ function MembersScreen(props: MembersScreenProps) {
         text: 'OK',
         onPress: async () => {
           try {
-            await api.leaveGroup(group.id);
+            await api.leaveGroup(groupID);
             await dispatch(leaveGroup(group));
             navigation.goBack();
           } catch (err) {
@@ -225,8 +224,8 @@ function MembersScreen(props: MembersScreenProps) {
   };
 
   const renderMember = ({ item }) => {
-    const memberIsAdmin = group?.admins?.includes(item.id);
-    const userIsAdmin = group?.admins?.includes(user.id);
+    const memberIsAdmin = admins.includes(item.id);
+    const userIsAdmin = admins.includes(user.id);
     return (
       <MemberCard
         connectionDate={item.connectionDate}
