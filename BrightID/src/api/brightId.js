@@ -265,7 +265,7 @@ class NodeApi {
     let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
     op.hash = NodeApi.checkHash(res, message);
-    BrightId.setOperation(op);
+    NodeApi.setOperation(op);
   }
 
   async setTrusted(trusted: string[]) {
