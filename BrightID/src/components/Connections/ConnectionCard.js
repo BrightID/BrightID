@@ -106,7 +106,7 @@ class ConnectionCard extends React.Component<Props, State> {
     const { status, connectionDate } = this.props;
     if (status === 'initiated') {
       const statusText = isStale
-        ? 'Connection failed. Please try again.'
+        ? 'Connection failed.\nPlease try again.'
         : 'Waiting';
       return (
         <View style={styles.statusContainer}>
@@ -196,13 +196,14 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     width: '100%',
-    height: DEVICE_LARGE ? 100 : 86,
+    height: DEVICE_LARGE ? 100 : 92,
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
     backgroundColor: 'transparent',
   },
   card: {
     width: '90%',
+    paddingVertical: 3,
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -234,7 +235,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 16 : 14,
-    marginBottom: DEVICE_LARGE ? 6 : 5,
   },
   statusContainer: {
     flexDirection: 'row',
@@ -244,8 +244,9 @@ const styles = StyleSheet.create({
   connectedText: {
     fontFamily: 'Poppins',
     fontWeight: '400',
-    fontSize: DEVICE_LARGE ? 10 : 9,
+    fontSize: 10,
     color: '#B64B32',
+    marginTop: DEVICE_LARGE ? 5 : 2,
   },
   moreIcon: {
     marginRight: DEVICE_LARGE ? 26 : 23,
@@ -255,11 +256,14 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#e39f2f',
+    marginTop: DEVICE_LARGE ? 2 : 0,
   },
   deletedMessage: {
     fontFamily: 'Poppins',
+    fontWeight: '500',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#FF0800',
+    marginTop: DEVICE_LARGE ? 5 : 2,
   },
 });
 

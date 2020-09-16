@@ -171,33 +171,29 @@ export class ConnectionsScreen extends React.Component<Props, State> {
 
         <View style={styles.container} testID="connectionsScreen">
           <View style={styles.mainContainer}>
-            <View style={styles.mainContainer}>
-              <FlatList
-                style={styles.connectionsContainer}
-                data={connections}
-                keyExtractor={({ id }, index) => id + index}
-                renderItem={this.renderConnection}
-                contentContainerStyle={{
-                  paddingBottom: 50,
-                  flexGrow: 1,
-                }}
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={this.state.refreshing}
-                    onRefresh={this.onRefresh}
-                  />
-                }
-                ListEmptyComponent={
-                  <EmptyList
-                    iconType="account-off-outline"
-                    title="No connections"
-                  />
-                }
-              />
-            </View>
+            <FlatList
+              style={styles.connectionsContainer}
+              data={connections}
+              keyExtractor={({ id }, index) => id + index}
+              renderItem={this.renderConnection}
+              contentContainerStyle={{
+                paddingBottom: 70,
+                paddingTop: DEVICE_LARGE ? 23 : 20,
+                flexGrow: 1,
+              }}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+              refreshing={this.state.refreshing}
+              onRefresh={this.onRefresh}
+              ListEmptyComponent={
+                <EmptyList
+                  iconType="account-off-outline"
+                  title="No connections"
+                />
+              }
+            />
           </View>
+
           <FloatingActionButton onPress={this.handleNewConnection} />
         </View>
         <ActionSheet
@@ -235,7 +231,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
-    marginTop: 8,
   },
   connectionsContainer: {
     flex: 1,
