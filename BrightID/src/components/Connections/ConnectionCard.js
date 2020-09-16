@@ -6,7 +6,7 @@ import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { DEVICE_TYPE, MAX_WAITING_SECONDS } from '@/utils/constants';
+import { DEVICE_LARGE, MAX_WAITING_SECONDS } from '@/utils/constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 /**
@@ -18,7 +18,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
  * @prop photo
  */
 
-const ICON_SIZE = DEVICE_TYPE === 'large' ? 36 : 32;
+const ICON_SIZE = DEVICE_LARGE ? 22 : 18;
 
 type State = {
   isStale: boolean,
@@ -103,7 +103,7 @@ class ConnectionCard extends React.Component<Props, State> {
 
   getStatus = () => {
     const { isStale } = this.state;
-    const { status } = this.props;
+    const { status, connectionDate } = this.props;
     if (status === 'initiated') {
       const statusText = isStale
         ? 'Connection failed. Please try again.'
@@ -119,6 +119,12 @@ class ConnectionCard extends React.Component<Props, State> {
           <Text style={styles.deletedMessage}>Deleted</Text>
         </View>
       );
+    } else {
+      return (
+        <Text style={styles.connectedText}>
+          Connected {moment(parseInt(connectionDate, 10)).fromNow()}
+        </Text>
+      );
     }
   };
 
@@ -132,7 +138,7 @@ class ConnectionCard extends React.Component<Props, State> {
           style={styles.moreIcon}
           onPress={this.handleUserOptions}
         >
-          <Material size={ICON_SIZE} name="flag-remove" color="#ccc" />
+          <Material size={ICON_SIZE} name="close" color="#aaa" />
         </TouchableOpacity>
       );
     }
@@ -153,35 +159,34 @@ class ConnectionCard extends React.Component<Props, State> {
   };
 
   render() {
-    const { photo, name, connectionDate, style, navigation } = this.props;
+    const { photo, name, style, navigation } = this.props;
     const connectionStatus = this.getStatus();
     const contextAction = this.getContextAction();
 
     return (
       <View style={{ ...styles.container, ...style }}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('FullScreenPhoto', { photo });
-          }}
-          accessibilityLabel="View Photo Full Screen"
-          accessibilityRole="imagebutton"
-        >
-          <Image
-            source={{
-              uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
+        <View style={styles.card}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('FullScreenPhoto', { photo });
             }}
-            style={styles.photo}
-            accessibilityLabel="ConnectionPhoto"
-          />
-        </TouchableOpacity>
-        <View style={styles.info}>
-          <Text style={styles.name}>{name}</Text>
-          {connectionStatus}
-          <Text style={styles.connectedText}>
-            Connected {moment(parseInt(connectionDate, 10)).fromNow()}
-          </Text>
+            accessibilityLabel="View Photo Full Screen"
+            accessibilityRole="imagebutton"
+          >
+            <Image
+              source={{
+                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
+              }}
+              style={styles.photo}
+              accessibilityLabel="ConnectionPhoto"
+            />
+          </TouchableOpacity>
+          <View style={styles.info}>
+            <Text style={styles.name}>{name}</Text>
+            {connectionStatus}
+          </View>
+          {contextAction}
         </View>
-        {contextAction}
       </View>
     );
   }
@@ -189,66 +194,71 @@ class ConnectionCard extends React.Component<Props, State> {
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'row',
     width: '100%',
+    height: DEVICE_LARGE ? 100 : 86,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    backgroundColor: 'transparent',
+  },
+  card: {
+    width: '90%',
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'flex-start',
     backgroundColor: '#fff',
-    height: DEVICE_TYPE === 'large' ? 94 : 80,
-    marginBottom: DEVICE_TYPE === 'large' ? 11.8 : 6,
-    shadowColor: 'rgba(0,0,0,0.32)',
+    shadowColor: 'rgba(221, 179, 169, 0.3)',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.43,
-    shadowRadius: 4,
+    shadowOpacity: 1,
+    shadowRadius: 5,
+    elevation: 5,
+    borderTopLeftRadius: DEVICE_LARGE ? 12 : 10,
+    borderBottomLeftRadius: DEVICE_LARGE ? 12 : 10,
   },
   photo: {
-    borderRadius: 30,
-    width: 60,
-    height: 60,
-    marginLeft: 14,
+    borderRadius: 55,
+    width: DEVICE_LARGE ? 65 : 55,
+    height: DEVICE_LARGE ? 65 : 55,
+    marginLeft: DEVICE_LARGE ? 14 : 12,
+    marginTop: -30,
   },
   info: {
-    marginLeft: 25,
+    marginLeft: DEVICE_LARGE ? 22 : 19,
     flex: 1,
-    height: DEVICE_TYPE === 'large' ? 71 : 65,
+    height: DEVICE_LARGE ? 71 : 65,
     flexDirection: 'column',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   name: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_TYPE === 'large' ? 20 : 18,
-    shadowColor: 'rgba(0,0,0,0.32)',
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 16 : 14,
+    marginBottom: DEVICE_LARGE ? 6 : 5,
   },
   statusContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  flagged: {
-    fontFamily: 'ApexNew-Medium',
-    fontSize: 16,
-    color: '#FF0800',
-    marginLeft: 15,
-  },
   connectedText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 12,
-    color: '#aba9a9',
-    fontStyle: 'italic',
+    fontFamily: 'Poppins',
+    fontWeight: '400',
+    fontSize: DEVICE_LARGE ? 10 : 9,
+    color: '#B64B32',
   },
   moreIcon: {
-    marginRight: 26,
+    marginRight: DEVICE_LARGE ? 26 : 23,
   },
   waitingMessage: {
-    fontFamily: 'ApexNew-Medium',
-    fontSize: 16,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#e39f2f',
   },
   deletedMessage: {
-    fontFamily: 'ApexNew-Medium',
-    fontSize: 16,
+    fontFamily: 'Poppins',
+    fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#FF0800',
   },
 });

@@ -20,12 +20,15 @@
 		BAEB27BE1FAFFA8899CF13C4 /* libPods-BrightID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA2E5346A76CDFB6D80CC9D7 /* libPods-BrightID.a */; };
 		D70F6E98249B0A9D003CEDBF /* Poppins-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D70F6E96249B0A9D003CEDBF /* Poppins-Bold.otf */; };
 		D70F6E99249B0A9D003CEDBF /* Poppins-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = D70F6E97249B0A9D003CEDBF /* Poppins-Medium.otf */; };
+		D71BD4282511BEFD00EF4349 /* Poppins-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D71BD4272511BEFD00EF4349 /* Poppins-Regular.otf */; };
 		D7708AD02484DFFB00B5DCAD /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7708ACF2484DFFB00B5DCAD /* AuthenticationServices.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		D7708AD52484E9B100B5DCAD /* EurostileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D7708AD12484E9B100B5DCAD /* EurostileRegular.ttf */; };
 		D7708AD62484E9B100B5DCAD /* ApexNew-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = D7708AD22484E9B100B5DCAD /* ApexNew-Light.otf */; };
 		D7708AD72484E9B100B5DCAD /* ApexNew-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = D7708AD32484E9B100B5DCAD /* ApexNew-Medium.otf */; };
 		D7708AD82484E9B100B5DCAD /* ApexNew-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = D7708AD42484E9B100B5DCAD /* ApexNew-Book.otf */; };
+		D7A9A0F12511BBD200D63CDA /* Poppins-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = D7A9A0F02511BBD200D63CDA /* Poppins-Light.otf */; };
 		D7CDDF3D24B2D247006913E2 /* LaunchScreenBrightID.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7CDDF3B24B2D247006913E2 /* LaunchScreenBrightID.xib */; };
+		D7E674552511B87C005A1798 /* Poppins-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = D7E674542511B87C005A1798 /* Poppins-ExtraLight.otf */; };
 		F8137249DC94571EC57542C0 /* libPods-BrightID-BrightIDTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C189438F1D1504071DEA4B0 /* libPods-BrightID-BrightIDTests.a */; };
 /* End PBXBuildFile section */
 
@@ -72,13 +75,16 @@
 		D671ED8BB047547C178AEDD8 /* libPods-BrightID-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D70F6E96249B0A9D003CEDBF /* Poppins-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Bold.otf"; path = "../assets/fonts/Poppins-Bold.otf"; sourceTree = "<group>"; };
 		D70F6E97249B0A9D003CEDBF /* Poppins-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Medium.otf"; path = "../assets/fonts/Poppins-Medium.otf"; sourceTree = "<group>"; };
+		D71BD4272511BEFD00EF4349 /* Poppins-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Regular.otf"; path = "../assets/fonts/Poppins-Regular.otf"; sourceTree = "<group>"; };
 		D7708ACE2484DFE000B5DCAD /* BrightID.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BrightID.entitlements; path = BrightID/BrightID.entitlements; sourceTree = "<group>"; };
 		D7708ACF2484DFFB00B5DCAD /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		D7708AD12484E9B100B5DCAD /* EurostileRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = EurostileRegular.ttf; path = ../assets/fonts/EurostileRegular.ttf; sourceTree = "<group>"; };
 		D7708AD22484E9B100B5DCAD /* ApexNew-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ApexNew-Light.otf"; path = "../assets/fonts/ApexNew-Light.otf"; sourceTree = "<group>"; };
 		D7708AD32484E9B100B5DCAD /* ApexNew-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ApexNew-Medium.otf"; path = "../assets/fonts/ApexNew-Medium.otf"; sourceTree = "<group>"; };
 		D7708AD42484E9B100B5DCAD /* ApexNew-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ApexNew-Book.otf"; path = "../assets/fonts/ApexNew-Book.otf"; sourceTree = "<group>"; };
+		D7A9A0F02511BBD200D63CDA /* Poppins-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Light.otf"; path = "../assets/fonts/Poppins-Light.otf"; sourceTree = "<group>"; };
 		D7CDDF3C24B2D247006913E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = BrightID/Base.lproj/LaunchScreenBrightID.xib; sourceTree = "<group>"; };
+		D7E674542511B87C005A1798 /* Poppins-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-ExtraLight.otf"; path = "../assets/fonts/Poppins-ExtraLight.otf"; sourceTree = "<group>"; };
 		DA84378159ABE6CE01431AA9 /* Pods-BrightID.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.debug.xcconfig"; path = "Target Support Files/Pods-BrightID/Pods-BrightID.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
@@ -192,6 +198,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				D71BD4272511BEFD00EF4349 /* Poppins-Regular.otf */,
+				D7A9A0F02511BBD200D63CDA /* Poppins-Light.otf */,
+				D7E674542511B87C005A1798 /* Poppins-ExtraLight.otf */,
 				D70F6E96249B0A9D003CEDBF /* Poppins-Bold.otf */,
 				D70F6E97249B0A9D003CEDBF /* Poppins-Medium.otf */,
 				D7708AD42484E9B100B5DCAD /* ApexNew-Book.otf */,
@@ -364,6 +373,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D71BD4282511BEFD00EF4349 /* Poppins-Regular.otf in Resources */,
+				D7A9A0F12511BBD200D63CDA /* Poppins-Light.otf in Resources */,
+				D7E674552511B87C005A1798 /* Poppins-ExtraLight.otf in Resources */,
 				D70F6E98249B0A9D003CEDBF /* Poppins-Bold.otf in Resources */,
 				D7CDDF3D24B2D247006913E2 /* LaunchScreenBrightID.xib in Resources */,
 				D70F6E99249B0A9D003CEDBF /* Poppins-Medium.otf in Resources */,

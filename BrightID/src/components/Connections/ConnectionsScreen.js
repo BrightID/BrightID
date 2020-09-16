@@ -147,7 +147,6 @@ export class ConnectionsScreen extends React.Component<Props, State> {
   };
 
   render() {
-    const { navigation } = this.props;
     const connections = this.filterConnections();
     const actions = [
       'Flag as Duplicate',
@@ -178,7 +177,10 @@ export class ConnectionsScreen extends React.Component<Props, State> {
                 data={connections}
                 keyExtractor={({ id }, index) => id + index}
                 renderItem={this.renderConnection}
-                contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+                contentContainerStyle={{
+                  paddingBottom: 50,
+                  flexGrow: 1,
+                }}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 refreshControl={
@@ -237,6 +239,7 @@ const styles = StyleSheet.create({
   },
   connectionsContainer: {
     flex: 1,
+    width: '100%',
   },
   moreIcon: {
     marginRight: 16,
