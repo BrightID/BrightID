@@ -199,6 +199,31 @@ class NodeApi {
     NodeApi.throwOnError(res);
   }
 
+  async addAdmin(newAdmin: string, group: string) {
+    let { username, secretKey } = await obtainKeys();
+
+    let name = 'Add Admin';
+    let timestamp = Date.now();
+    let op = {
+      name,
+      id: username,
+      admin: newAdmin,
+      group,
+      timestamp,
+      v,
+    };
+
+    const message = stringify(op);
+    op.sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+
+    const res = await this.api.post(`/operations`, op);
+    NodeApi.throwOnError(res);
+    op.hash = NodeApi.checkHash(res, message);
+    NodeApi.setOperation(op);
+  }
+
   async deleteGroup(group: string) {
     let { username, secretKey } = await obtainKeys();
 
