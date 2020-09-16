@@ -185,7 +185,7 @@ class ConnectionCard extends React.Component<Props, State> {
             <Text style={styles.name}>{name}</Text>
             {connectionStatus}
           </View>
-          {contextAction}
+          {/* {contextAction} */}
         </View>
       </View>
     );
@@ -195,7 +195,6 @@ class ConnectionCard extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    width: '100%',
     height: DEVICE_LARGE ? 100 : 92,
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
@@ -203,7 +202,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '90%',
-    paddingVertical: 3,
+    height: 71,
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'flex-start',

@@ -5,10 +5,11 @@ import {
   StyleSheet,
   View,
   Alert,
-  FlatList,
-  RefreshControl,
+  TouchableOpacity,
+  Text,
   StatusBar,
 } from 'react-native';
+import { SwipeListView } from 'react-native-swipe-list-view';
 import { connect } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
 import fetchUserInfo from '@/actions/fetchUserInfo';
@@ -16,6 +17,7 @@ import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { deleteConnection } from '@/actions';
 import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ConnectionCard from './ConnectionCard';
 import { defaultSort } from './models/sortingUtility';
 import { performAction } from './models/modifyConnections';
@@ -28,6 +30,31 @@ import { performAction } from './models/modifyConnections';
 type State = {
   refreshing: boolean,
 };
+
+/** Helper Component */
+
+const ICON_SIZE = 26;
+
+const ActionComponent = (props) => {
+  return (
+    <View style={styles.actionContainer}>
+      <TouchableOpacity
+        style={[styles.actionCard, { backgroundColor: '#F28C33' }]}
+      >
+        <Material size={ICON_SIZE} name="flag" color="#fff" />
+        <Text style={styles.actionText}>Flag</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.actionCard, { backgroundColor: '#ED4634' }]}
+      >
+        <Material size={ICON_SIZE} name="delete-forever" color="#fff" />
+        <Text style={styles.actionText}>Remove</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+/** Main Component */
 
 export class ConnectionsScreen extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -104,15 +131,6 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     );
   };
 
-  renderConnection = ({ item }) => (
-    <ConnectionCard
-      actionSheet={this.actionSheet}
-      onRemove={this.handleRemoveConnection}
-      navigation={this.props.navigation}
-      {...item}
-    />
-  );
-
   modifyConnection = (option: string) => {
     if (!this.actionSheet || !this.actionSheet.connection) return;
 
@@ -171,14 +189,29 @@ export class ConnectionsScreen extends React.Component<Props, State> {
 
         <View style={styles.container} testID="connectionsScreen">
           <View style={styles.mainContainer}>
-            <FlatList
+            <SwipeListView
               style={styles.connectionsContainer}
               data={connections}
               keyExtractor={({ id }, index) => id + index}
-              renderItem={this.renderConnection}
+              renderItem={({ item }) => {
+                return (
+                  <ConnectionCard
+                    actionSheet={this.actionSheet}
+                    onRemove={this.handleRemoveConnection}
+                    navigation={this.props.navigation}
+                    {...item}
+                  />
+                );
+              }}
+              renderHiddenItem={({ item }, rowMap) => (
+                <ActionComponent {...item} />
+              )}
+              leftOpenValue={0}
+              rightOpenValue={-110}
+              swipeToOpenPercent={22}
               contentContainerStyle={{
                 paddingBottom: 70,
-                paddingTop: DEVICE_LARGE ? 23 : 20,
+                paddingTop: 20,
                 flexGrow: 1,
               }}
               showsHorizontalScrollIndicator={false}
@@ -242,6 +275,25 @@ const styles = StyleSheet.create({
   emptyText: {
     fontFamily: 'ApexNew-Book',
     fontSize: 20,
+  },
+  actionContainer: {
+    flexDirection: 'row',
+    height: DEVICE_LARGE ? 100 : 92,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    backgroundColor: 'transparent',
+  },
+  actionCard: {
+    height: 71,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 55,
+  },
+  actionText: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    color: '#fff',
+    fontSize: 11,
   },
 });
 
