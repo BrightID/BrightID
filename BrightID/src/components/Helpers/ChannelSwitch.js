@@ -18,7 +18,7 @@ import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
 const X_TRANSFORM = DEVICE_LARGE ? 45 : 40;
 const ANIMATION_DURATION = 150;
 
-const ChannelSwitch = ({ value, onValueChange }) => {
+const ChannelSwitch = ({ value, onValueChange, testID }) => {
   // const dispatch = useDispatch();
 
   const toggleAnim = useRef(new Animated.Value(value ? 0 : X_TRANSFORM))
@@ -50,7 +50,7 @@ const ChannelSwitch = ({ value, onValueChange }) => {
   console.log('rendering channel switch');
 
   return (
-    <TouchableWithoutFeedback onPress={getPidded}>
+    <TouchableWithoutFeedback onPress={getPidded} testID={testID}>
       <Animated.View
         style={[
           styles.container,
