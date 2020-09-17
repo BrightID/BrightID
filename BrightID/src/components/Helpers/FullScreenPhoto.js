@@ -1,14 +1,10 @@
 // @flow
 
-import React from 'react';
-import {
-  View,
-  StyleSheet,
-  Image,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import React, { useRef } from 'react';
+import { Animated, StyleSheet, PanResponder } from 'react-native';
 import RNFS from 'react-native-fs';
-import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
+import { BlurView } from '@react-native-community/blur';
+
 /**
  * Search Bar in the Groups Screen
  *
@@ -22,34 +18,52 @@ const FullScreenPhoto = ({ route, navigation }) => {
   const uri = base64
     ? photo
     : `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`;
+  const pan = useRef(new Animated.ValueXY()).current;
+
+  const panResponder = useRef(
+    PanResponder.create({
+      // Ask to be the responder:
+      onStartShouldSetPanResponder: (evt, gestureState) => true,
+      onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onMoveShouldSetPanResponder: (evt, gestureState) => true,
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onPanResponderGrant: () => {
+        pan.setOffset({
+          x: pan.x._value,
+          y: pan.y._value,
+        });
+      },
+      onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
+        useNativeDriver: false,
+      }),
+      onPanResponderRelease: () => {
+        navigation.goBack();
+      },
+    }),
+  ).current;
 
   return (
-    <View style={styles.container}>
-      <TouchableWithoutFeedback
-        onPress={() => {
-          navigation.goBack();
-        }}
-        accessibilityLabel="go back"
-      >
-        <View style={styles.blackScreen} />
-      </TouchableWithoutFeedback>
-      <Image
+    <BlurView
+      style={[styles.container]}
+      blurType="dark"
+      blurAmount={10}
+      reducedTransparencyFallbackColor="black"
+      {...panResponder.panHandlers}
+    >
+      <Animated.Image
         source={{
           uri,
         }}
-        style={styles.photo}
+        style={[
+          styles.photo,
+          {
+            transform: [{ translateX: pan.x }, { translateY: pan.y }],
+          },
+        ]}
         resizeMethod="scale"
         resizeMode="contain"
       />
-      <TouchableWithoutFeedback
-        onPress={() => {
-          navigation.goBack();
-        }}
-        accessibilityLabel="go back"
-      >
-        <View style={styles.blackScreen} />
-      </TouchableWithoutFeedback>
-    </View>
+    </BlurView>
   );
 };
 
@@ -60,13 +74,7 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#000',
-  },
-  blackScreen: {
-    // minHeight: PADDING,
-    width: '100%',
-    // flex: 1,
-    flex: DEVICE_LARGE ? 0.5 : 0.35,
+    backgroundColor: 'transparent',
   },
   photo: {
     width: '100%',
