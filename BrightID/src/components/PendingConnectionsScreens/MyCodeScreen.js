@@ -149,7 +149,6 @@ export const MyCodeScreen = () => {
       headerRight: () =>
         unconfirmedConnectionSize > 0 ? (
           <TouchableOpacity
-            testID="fakeConnectionBtn"
             style={{ width: DEVICE_LARGE ? 60 : 50 }}
             onPress={() => {
               navigation.navigate('PendingConnections');

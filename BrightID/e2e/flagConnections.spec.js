@@ -1,6 +1,11 @@
 /* global device:false, element:false, by:false, waitFor:false */
 
-import { createBrightID, createFakeConnection } from './testUtils';
+import {
+  createBrightID,
+  createFakeConnection,
+  expectConnectionsScreen,
+  navigateHome,
+} from './testUtils';
 
 describe('Connections', () => {
   let hasBackButton = true;
@@ -12,7 +17,6 @@ describe('Connections', () => {
     hasBackButton = platform === 'android';
     // create identity
     await createBrightID();
-    await element(by.id('connectionsBtn')).tap();
   });
 
   actions.forEach((action) => {
@@ -20,9 +24,13 @@ describe('Connections', () => {
       // create new fake connection and navigate to Connections screen
       beforeAll(async () => {
         await createFakeConnection();
-        await element(by.id('confirmConnectionBtn')).tap();
-        await expect(element(by.id('successScreen'))).toBeVisible();
-        await element(by.id('successDoneBtn')).tap();
+        // go to connections screen
+        await element(by.id('connectionsBtn')).tap();
+        await expectConnectionsScreen();
+      });
+
+      afterAll(async () => {
+        await navigateHome();
       });
 
       it(`should cancel ${action} (backButton)`, async () => {
@@ -54,6 +62,7 @@ describe('Connections', () => {
         await element(by.text(cancelText)).tap();
         await expect(element(by.text(flagActionSheetTitle))).toBeNotVisible();
       });
+
       it(`should confirm ${action}`, async () => {
         // flag the first available connection
         await waitFor(element(by.id('flagConnectionBtn')).atIndex(0))
