@@ -5,9 +5,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE, MAX_WAITING_SECONDS } from '@/utils/constants';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 
 /**
  * Connection Card in the Connections Screen
@@ -17,8 +15,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
  * @prop connectionTime
  * @prop photo
  */
-
-const ICON_SIZE = DEVICE_LARGE ? 22 : 18;
 
 type State = {
   isStale: boolean,
@@ -91,16 +87,6 @@ class ConnectionCard extends React.Component<Props, State> {
     return false;
   };
 
-  handleUserOptions = () => {
-    const { actionSheet } = this.props;
-    actionSheet.connection = this.props;
-    actionSheet.show();
-  };
-
-  handleRemoveStaleConnection = () => {
-    this.props.onRemove(this.props);
-  };
-
   getStatus = () => {
     const { isStale } = this.state;
     const { status, connectionDate } = this.props;
@@ -128,47 +114,16 @@ class ConnectionCard extends React.Component<Props, State> {
     }
   };
 
-  getContextAction = () => {
-    const { status, photo } = this.props;
-    const { isStale } = this.state;
-    if (status === 'verified') {
-      return (
-        <TouchableOpacity
-          testID="flagConnectionBtn"
-          style={styles.moreIcon}
-          onPress={this.handleUserOptions}
-        >
-          <Material size={ICON_SIZE} name="close" color="#aaa" />
-        </TouchableOpacity>
-      );
-    }
-    // photo is added here due to bug discovered 6/29/20
-    if (status === 'deleted' || (status === 'initiated' && isStale) || !photo) {
-      return (
-        <TouchableOpacity
-          testID="deleteConnectionBtn"
-          style={styles.moreIcon}
-          onPress={this.handleRemoveStaleConnection}
-        >
-          <AntDesign size={ICON_SIZE} name="closecircle" color="#ccc" />
-        </TouchableOpacity>
-      );
-    }
-    // default: No context action
-    return null;
-  };
-
   render() {
-    const { photo, name, style, navigation } = this.props;
+    const { photo, name, style } = this.props;
     const connectionStatus = this.getStatus();
-    const contextAction = this.getContextAction();
 
     return (
       <View style={{ ...styles.container, ...style }}>
         <View style={styles.card}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('FullScreenPhoto', { photo });
+              // navigation.navigate('FullScreenPhoto', { photo });
             }}
             accessibilityLabel="View Photo Full Screen"
             accessibilityRole="imagebutton"
@@ -185,7 +140,6 @@ class ConnectionCard extends React.Component<Props, State> {
             <Text style={styles.name}>{name}</Text>
             {connectionStatus}
           </View>
-          {/* {contextAction} */}
         </View>
       </View>
     );
@@ -195,14 +149,14 @@ class ConnectionCard extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    height: DEVICE_LARGE ? 100 : 92,
+    height: DEVICE_LARGE ? 102 : 92,
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
     backgroundColor: 'transparent',
   },
   card: {
     width: '90%',
-    height: 71,
+    height: DEVICE_LARGE ? 76 : 71,
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -243,7 +197,7 @@ const styles = StyleSheet.create({
   connectedText: {
     fontFamily: 'Poppins',
     fontWeight: '400',
-    fontSize: 10,
+    fontSize: DEVICE_LARGE ? 11 : 10,
     color: '#B64B32',
     marginTop: DEVICE_LARGE ? 5 : 2,
   },

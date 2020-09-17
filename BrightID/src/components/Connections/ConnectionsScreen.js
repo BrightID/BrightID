@@ -1,6 +1,6 @@
 // @flow
 
-import * as React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -10,42 +10,87 @@ import {
   StatusBar,
 } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit';
 import ActionSheet from 'react-native-actionsheet';
 import fetchUserInfo from '@/actions/fetchUserInfo';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { deleteConnection } from '@/actions';
 import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import { useActionSheet } from '@expo/react-native-action-sheet';
 import ConnectionCard from './ConnectionCard';
 import { defaultSort } from './models/sortingUtility';
-import { performAction } from './models/modifyConnections';
+import {
+  handleFlagging,
+  flagAndDeleteConnection,
+} from './models/flagConnection';
 
 /**
  * Connection screen of BrightID
  * Displays a search input and list of Connection Cards
  */
 
-type State = {
-  refreshing: boolean,
-};
-
 /** Helper Component */
 
 const ICON_SIZE = 26;
 
-const ActionComponent = (props) => {
+const ActionComponent = ({ id, name, secretKey, status }) => {
+  const dispatch = useDispatch();
+  const { showActionSheetWithOptions } = useActionSheet();
+  let flaggingOptions = [
+    'Flag as Duplicate',
+    'Flag as Fake',
+    'Flag as Deceased',
+    'Join All Groups',
+    'cancel',
+  ];
+  // comment out for test release
+  if (!__DEV__) {
+    // remove 'Join All Groups'
+    flaggingOptions.splice(3, 1);
+  }
+
+  let removeOptions = ['Remove', 'cancel'];
+
   return (
     <View style={styles.actionContainer}>
       <TouchableOpacity
         style={[styles.actionCard, { backgroundColor: '#F28C33' }]}
+        disabled={status === 'initiated'}
+        onPress={() => {
+          showActionSheetWithOptions(
+            {
+              options: flaggingOptions,
+              cancelButtonIndex: flaggingOptions.length - 1,
+              title: 'What do you want to do?',
+            },
+            handleFlagging({ id, name, dispatch, secretKey }),
+          );
+        }}
       >
         <Material size={ICON_SIZE} name="flag" color="#fff" />
         <Text style={styles.actionText}>Flag</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.actionCard, { backgroundColor: '#ED4634' }]}
+        onPress={() => {
+          showActionSheetWithOptions(
+            {
+              options: removeOptions,
+              cancelButtonIndex: removeOptions.length - 1,
+              destructiveButtonIndex: 0,
+              title: `Are you sure you want to remove ${name}?`,
+              message: `This will not effect you're connection with ${name} on the BrightID social graph. If you have reason to believe that ${name} is fake or a duplicate, please flag them instead.`,
+            },
+            (index) => {
+              if (index === 0) dispatch(deleteConnection(id));
+            },
+          );
+        }}
       >
         <Material size={ICON_SIZE} name="delete-forever" color="#fff" />
         <Text style={styles.actionText}>Remove</Text>
@@ -54,56 +99,60 @@ const ActionComponent = (props) => {
   );
 };
 
-/** Main Component */
+/** Selectors */
 
-export class ConnectionsScreen extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      refreshing: false,
-    };
-  }
+const searchParamSelector = (state) => state.connections.searchParam;
+const connectionsSelector = (state) => state.connections.connections;
 
-  componentDidMount() {
-    const { navigation, dispatch } = this.props;
-    navigation.addListener('focus', () => {
-      dispatch(defaultSort());
-      dispatch(fetchUserInfo());
-    });
-  }
-
-  onRefresh = async () => {
-    try {
-      const { dispatch } = this.props;
-      this.setState({ refreshing: true });
-      await dispatch(fetchUserInfo());
-      this.setState({ refreshing: false });
-    } catch (err) {
-      console.log(err.message);
-      this.setState({ refreshing: false });
-    }
-  };
-
-  handleNewConnection = () => {
-    const { navigation } = this.props;
-    navigation.navigate('MyCode');
-  };
-
-  filterConnections = () => {
-    const { connections, searchParam } = this.props;
+const filterConnectionsSelector = createSelector(
+  connectionsSelector,
+  searchParamSelector,
+  (connections, searchParam) => {
     const searchString = searchParam.toLowerCase().replace(/\s/g, '');
     return connections.filter((item) =>
       `${item.name}`.toLowerCase().replace(/\s/g, '').includes(searchString),
     );
+  },
+);
+
+/** Main Component */
+
+export const ConnectionsScreen = () => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  const [refreshing, setRefreshing] = useState(false);
+  const connections = useSelector(filterConnectionsSelector);
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(defaultSort());
+      dispatch(fetchUserInfo());
+    }, [dispatch]),
+  );
+
+  const onRefresh = async () => {
+    try {
+      setRefreshing(true);
+      await dispatch(fetchUserInfo());
+      setRefreshing(false);
+    } catch (err) {
+      console.log(err.message);
+      setRefreshing(false);
+    }
   };
 
-  handleRemoveConnection = (connection) => {
-    if (connection.status === 'verified') {
-      console.log(
-        `Cant remove verified connection ${connection.id} (${connection.name}).`,
-      );
-      return;
-    }
+  const handleNewConnection = () => {
+    navigation.navigate('MyCode');
+  };
+
+  const handleRemoveConnection = (connection) => {
+    // if (connection.status === 'verified') {
+    //   console.log(
+    //     `Cant remove verified connection ${connection.id} (${connection.name}).`,
+    //   );
+    //   return;
+    // }
 
     const buttons = [
       {
@@ -116,7 +165,6 @@ export class ConnectionsScreen extends React.Component<Props, State> {
           console.log(
             `Removing connection ${connection.id} (${connection.name})`,
           );
-          const { dispatch } = this.props;
           dispatch(deleteConnection(connection.id));
         },
       },
@@ -131,117 +179,53 @@ export class ConnectionsScreen extends React.Component<Props, State> {
     );
   };
 
-  modifyConnection = (option: string) => {
-    if (!this.actionSheet || !this.actionSheet.connection) return;
+  return (
+    <>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={ORANGE}
+        animated={true}
+      />
+      <View style={styles.orangeTop} />
 
-    const action = this.actionSheet.props.options[option];
-
-    if (action === 'cancel') return;
-
-    const { title, msg, handler } = performAction(
-      action,
-      this.actionSheet.connection,
-    );
-
-    const { dispatch } = this.props;
-
-    const buttons = [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {
-        text: 'OK',
-        onPress: () => {
-          handler().then(() => {
-            dispatch(defaultSort());
-          });
-        },
-      },
-    ];
-
-    Alert.alert(title, msg, buttons, { cancelable: true });
-  };
-
-  render() {
-    const connections = this.filterConnections();
-    const actions = [
-      'Flag as Duplicate',
-      'Flag as Fake',
-      'Flag as Deceased',
-      'Join All Groups',
-      'cancel',
-    ];
-    // comment out for test release
-    if (!__DEV__) {
-      // remove 'Join All Groups'
-      actions.splice(3, 1);
-    }
-    return (
-      <>
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor={ORANGE}
-          animated={true}
-        />
-        <View style={styles.orangeTop} />
-
-        <View style={styles.container} testID="connectionsScreen">
-          <View style={styles.mainContainer}>
-            <SwipeListView
-              style={styles.connectionsContainer}
-              data={connections}
-              keyExtractor={({ id }, index) => id + index}
-              renderItem={({ item }) => {
-                return (
-                  <ConnectionCard
-                    actionSheet={this.actionSheet}
-                    onRemove={this.handleRemoveConnection}
-                    navigation={this.props.navigation}
-                    {...item}
-                  />
-                );
-              }}
-              renderHiddenItem={({ item }, rowMap) => (
-                <ActionComponent {...item} />
-              )}
-              leftOpenValue={0}
-              rightOpenValue={-110}
-              swipeToOpenPercent={22}
-              contentContainerStyle={{
-                paddingBottom: 70,
-                paddingTop: 20,
-                flexGrow: 1,
-              }}
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}
-              refreshing={this.state.refreshing}
-              onRefresh={this.onRefresh}
-              ListEmptyComponent={
-                <EmptyList
-                  iconType="account-off-outline"
-                  title="No connections"
-                />
-              }
-            />
-          </View>
-
-          <FloatingActionButton onPress={this.handleNewConnection} />
+      <View style={styles.container} testID="connectionsScreen">
+        <View style={styles.mainContainer}>
+          <SwipeListView
+            style={styles.connectionsContainer}
+            data={connections}
+            keyExtractor={({ id }, index) => id + index}
+            renderItem={({ item }) => {
+              return <ConnectionCard {...item} />;
+            }}
+            renderHiddenItem={({ item }, rowMap) => (
+              <ActionComponent {...item} />
+            )}
+            leftOpenValue={0}
+            rightOpenValue={DEVICE_LARGE ? -120 : -110}
+            swipeToOpenPercent={22}
+            contentContainerStyle={{
+              paddingBottom: 70,
+              paddingTop: 20,
+              flexGrow: 1,
+            }}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            ListEmptyComponent={
+              <EmptyList
+                iconType="account-off-outline"
+                title="No connections"
+              />
+            }
+          />
         </View>
-        <ActionSheet
-          ref={(o) => {
-            this.actionSheet = o;
-          }}
-          title="What do you want to do?"
-          options={actions}
-          cancelButtonIndex={actions.length - 1}
-          onPress={(index) => this.modifyConnection(index)}
-        />
-      </>
-    );
-  }
-}
+
+        <FloatingActionButton onPress={handleNewConnection} />
+      </View>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   orangeTop: {
@@ -278,16 +262,16 @@ const styles = StyleSheet.create({
   },
   actionContainer: {
     flexDirection: 'row',
-    height: DEVICE_LARGE ? 100 : 92,
+    height: DEVICE_LARGE ? 102 : 92,
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
     backgroundColor: 'transparent',
   },
   actionCard: {
-    height: 71,
+    height: DEVICE_LARGE ? 76 : 71,
     alignItems: 'center',
     justifyContent: 'center',
-    width: 55,
+    width: DEVICE_LARGE ? 60 : 55,
   },
   actionText: {
     fontFamily: 'Poppins',
@@ -297,7 +281,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ connections, user }) => ({
-  ...user,
-  ...connections,
-}))(ConnectionsScreen);
+export default ConnectionsScreen;

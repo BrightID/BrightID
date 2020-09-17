@@ -21,6 +21,7 @@
     "mermaid": "find ./diagrams -type f -name *.mmd -exec mmdc -i {} \\;"
   },
   "dependencies": {
+    "@expo/react-native-action-sheet": "^3.8.0",
     "@react-native-community/async-storage": "^1.7.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/push-notification-ios": "^1.4.1",
