@@ -5,7 +5,7 @@ const testUserName = 'Vincent Vega';
 const createBrightID = async (name = testUserName) => {
   await element(by.id('getStartedBtn')).tap();
   await element(by.id('editName')).tap();
-  await element(by.id('editName')).typeText(name);
+  await element(by.id('editName')).replaceText(name);
   await element(by.id('editName')).tapReturnKey();
   await element(by.id('addPhoto')).tap();
   // ActionSheet does not support testID prop, so match based on text.
