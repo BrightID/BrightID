@@ -489,7 +489,7 @@ const styles = StyleSheet.create({
   },
   questionText: {
     fontFamily: 'Poppins',
-    fontWeight: '100',
+    fontWeight: '400',
     fontSize: DEVICE_LARGE ? 22 : 18,
     textAlign: 'center',
     color: '#000000',
