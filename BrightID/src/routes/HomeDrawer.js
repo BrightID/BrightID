@@ -21,7 +21,7 @@ import homeIcon from '@/static/home_icon_side_menu.svg';
 import taskList from '@/static/task_list_icon.svg';
 import taskListFocused from '@/static/task_list_icon_focused.svg';
 
-import TasksScreen from '@/components/SideMenu/Tasks/TasksScreen';
+import TasksScreen from '@/components/Tasks/TasksScreen';
 import GraphExplorerScreen from '@/components/SideMenu/GraphExplorerScreen';
 import { useHeaderHeight } from '@react-navigation/stack';
 

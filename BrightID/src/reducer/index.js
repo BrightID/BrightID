@@ -10,7 +10,7 @@ import operations from './operations';
 import pendingConnections from '../components/PendingConnectionsScreens/pendingConnectionSlice';
 import recoveryData from './recoveryData';
 import user from './user';
-import tasks from '../components/SideMenu/Tasks/TasksSlice';
+import tasks from '../components/Tasks/TasksSlice';
 
 export default combineReducers({
   apps,
