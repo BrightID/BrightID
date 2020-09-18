@@ -22,8 +22,7 @@ const ConnectionCard = (props) => {
   let stale_check_timer = useRef(0);
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { status, connectionDate, id, name, photo } = props;
-  const isHidden = status === 'hidden';
+  const { status, connectionDate, id, name, photo, hiddenFlag } = props;
 
   useFocusEffect(
     useCallback(() => {
@@ -97,7 +96,9 @@ const ConnectionCard = (props) => {
     } else if (status === 'hidden') {
       return (
         <View style={styles.statusContainer}>
-          <Text style={[styles.deletedMessage, { marginTop: 1 }]}>Hidden</Text>
+          <Text style={[styles.deletedMessage, { marginTop: 1 }]}>
+            {hiddenFlag ? `Flagged as ${hiddenFlag}` : 'Hidden'}
+          </Text>
           <Text style={[styles.connectedText, { marginTop: 1 }]}>
             Connected {moment(parseInt(connectionDate, 10)).fromNow()}
           </Text>
@@ -120,9 +121,7 @@ const ConnectionCard = (props) => {
 
   return (
     <View style={styles.container}>
-      <View
-        style={[styles.card, isHidden ? { backgroundColor: '#dedede' } : {}]}
-      >
+      <View style={styles.card}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('FullScreenPhoto', { photo });
@@ -224,6 +223,7 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#FF0800',
     marginTop: DEVICE_LARGE ? 5 : 2,
+    textTransform: 'capitalize',
   },
 });
 

@@ -1,10 +1,9 @@
 // @flow
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   StyleSheet,
   View,
-  Alert,
   TouchableOpacity,
   Text,
   StatusBar,
@@ -12,15 +11,13 @@ import {
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
-import ActionSheet from 'react-native-actionsheet';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { deleteConnection, flagAndHideConnection } from '@/actions';
+import { deleteConnection } from '@/actions';
 import { ORANGE, DEVICE_LARGE, LIGHTBLUE } from '@/utils/constants';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import ConnectionCard from './ConnectionCard';
 import { defaultSort } from './models/sortingUtility';
@@ -65,6 +62,7 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
             options: flaggingOptions,
             cancelButtonIndex: flaggingOptions.length - 1,
             title: 'What do you want to do?',
+            message: `Flagging ${name} will negatively effect their BrightID score, and this flag might be shown to other users.`,
           },
           handleFlagging({ id, name, dispatch, secretKey }),
         );
@@ -75,23 +73,26 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
     </TouchableOpacity>
   );
 
+  const unflagOptions = ['cancel'];
+
   const UnFlagButton = () => (
     <TouchableOpacity
-      style={[styles.actionCard, { backgroundColor: '#F28C33' }]}
+      style={[styles.actionCard, { backgroundColor: '#aaa' }]}
       disabled={disabled}
       onPress={() => {
         showActionSheetWithOptions(
           {
-            options: flaggingOptions,
-            cancelButtonIndex: flaggingOptions.length - 1,
-            title: 'What do you want to do?',
+            options: unflagOptions,
+            cancelButtonIndex: unflagOptions.length - 1,
+            title: 'Try Again Later!',
+            message: 'This feature is not ready yet.',
           },
-          handleFlagging({ id, name, dispatch, secretKey }),
+          () => {},
         );
       }}
     >
-      <Material size={ICON_SIZE} name="flag" color="#fff" />
-      <Text style={styles.actionText}>Flag</Text>
+      <Material size={ICON_SIZE} name="flag-remove" color="#fff" />
+      <Text style={styles.actionText}>Unflag</Text>
     </TouchableOpacity>
   );
 
@@ -178,9 +179,9 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
       {isStale ? (
         <RemoveButton />
       ) : isHidden ? (
-        <FlagButton />
-      ) : (
         <UnFlagButton />
+      ) : (
+        <FlagButton />
       )}
     </View>
   );
@@ -220,11 +221,9 @@ export const ConnectionsScreen = () => {
     filterConnectionsSelector(state, showHidden),
   );
 
-  // const hiddenConnectionCount = useSelector(
-  //   (state) => state.connections.connections.length - connections,
-  // );
-
-  const hiddenConnectionCount = 0;
+  const hiddenConnectionCount = useSelector(
+    (state) => state.connections.connections.length - connections.length,
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -289,7 +288,7 @@ export const ConnectionsScreen = () => {
               />
             }
             ListFooterComponent={() =>
-              hiddenConnectionCount > 0 ? (
+              hiddenConnectionCount > 0 || showHidden ? (
                 <TouchableOpacity
                   style={styles.listFooter}
                   onPress={() => {

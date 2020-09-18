@@ -84,6 +84,7 @@ export const reducer = (
         (conn: connection) => {
           if (conn.id === action.id) {
             conn.status = 'hidden';
+            conn.hiddenFlag = action.flag;
           }
           return conn;
         },

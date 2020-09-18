@@ -82,9 +82,10 @@ export const hydrateConnections = (data: ConnectionsState) => ({
   data,
 });
 
-export const flagAndHideConnection = (id: string) => ({
+export const flagAndHideConnection = (id: string, flag: string) => ({
   type: FLAG_AND_HIDE_CONNECTION,
   id,
+  flag,
 });
 
 export const showConnection = (id: string) => ({

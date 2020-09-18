@@ -5,6 +5,7 @@ import api from '@/api/brightId';
 import { flagAndHideConnection } from '@/actions';
 import { fakeJoinGroups } from '@/actions/fakeGroup';
 import { backupUser } from '@/components//Recovery/helpers';
+import { defaultSort } from './sortingUtility';
 
 const flagMap = ['duplicate', 'fake', 'deceased'];
 
@@ -31,8 +32,8 @@ export const handleFlagging = ({ name, id, dispatch, secretKey }) => (
     },
   ];
   Alert.alert(
-    'Flag and Delete Connection',
-    `Are you sure you want to flag ${name} as ${flag} and remove the connection?`,
+    'Flag and Hide Connection',
+    `Are you sure you want to flag ${name} as ${flag}?`,
     buttons,
     { cancelable: true },
   );
@@ -45,7 +46,8 @@ export const flagConnection = (id, flag) => async (dispatch, getState) => {
 
     await api.removeConnection(id, flag);
     // hide connection in redux
-    dispatch(flagAndHideConnection(id));
+    dispatch(flagAndHideConnection(id, flag));
+    dispatch(defaultSort());
     if (backupCompleted) {
       await backupUser();
     }
