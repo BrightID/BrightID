@@ -73,7 +73,11 @@ const AnimatedTopSearchBar = ({
         },
       ]}
     >
-      <TouchableOpacity style={styles.searchIcon} onPress={getPidded}>
+      <TouchableOpacity
+        style={styles.searchIcon}
+        onPress={getPidded}
+        testID="SearchBarBtn"
+      >
         <SvgXml
           width={DEVICE_LARGE ? 20 : 18}
           height={DEVICE_LARGE ? 20 : 18}
@@ -81,6 +85,7 @@ const AnimatedTopSearchBar = ({
         />
       </TouchableOpacity>
       <TextInput
+        testID="SearchParam"
         ref={textInput}
         onChangeText={(value) => {
           dispatch(setSearchValue(value));
