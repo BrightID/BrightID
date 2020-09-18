@@ -206,6 +206,7 @@ const styles = StyleSheet.create({
   },
   appName: {
     fontFamily: 'Poppins',
+    fontWeight: '500',
     color: 'black',
     fontSize: DEVICE_LARGE ? 22 : 19,
   },
