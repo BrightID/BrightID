@@ -17,17 +17,14 @@ import fetchUserInfo from '@/actions/fetchUserInfo';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { deleteConnection } from '@/actions';
-import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
+import { deleteConnection, flagAndHideConnection } from '@/actions';
+import { ORANGE, DEVICE_LARGE, LIGHTBLUE } from '@/utils/constants';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import ConnectionCard from './ConnectionCard';
 import { defaultSort } from './models/sortingUtility';
-import {
-  handleFlagging,
-  flagAndDeleteConnection,
-} from './models/flagConnection';
+import { handleFlagging } from './models/flagConnection';
 
 /**
  * Connection screen of BrightID
@@ -41,6 +38,10 @@ const ICON_SIZE = 26;
 const ActionComponent = ({ id, name, secretKey, status }) => {
   const dispatch = useDispatch();
   const { showActionSheetWithOptions } = useActionSheet();
+  const disabled = status === 'initiated';
+  const isHidden = status === 'hidden';
+  const isStale = status === 'stale';
+
   let flaggingOptions = [
     'Flag as Duplicate',
     'Flag as Fake',
@@ -54,47 +55,133 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
     flaggingOptions.splice(3, 1);
   }
 
-  let removeOptions = ['Remove', 'cancel'];
+  const FlagButton = () => (
+    <TouchableOpacity
+      style={[styles.actionCard, { backgroundColor: '#F28C33' }]}
+      disabled={disabled}
+      onPress={() => {
+        showActionSheetWithOptions(
+          {
+            options: flaggingOptions,
+            cancelButtonIndex: flaggingOptions.length - 1,
+            title: 'What do you want to do?',
+          },
+          handleFlagging({ id, name, dispatch, secretKey }),
+        );
+      }}
+    >
+      <Material size={ICON_SIZE} name="flag" color="#fff" />
+      <Text style={styles.actionText}>Flag</Text>
+    </TouchableOpacity>
+  );
+
+  const UnFlagButton = () => (
+    <TouchableOpacity
+      style={[styles.actionCard, { backgroundColor: '#F28C33' }]}
+      disabled={disabled}
+      onPress={() => {
+        showActionSheetWithOptions(
+          {
+            options: flaggingOptions,
+            cancelButtonIndex: flaggingOptions.length - 1,
+            title: 'What do you want to do?',
+          },
+          handleFlagging({ id, name, dispatch, secretKey }),
+        );
+      }}
+    >
+      <Material size={ICON_SIZE} name="flag" color="#fff" />
+      <Text style={styles.actionText}>Flag</Text>
+    </TouchableOpacity>
+  );
+
+  const removeOptions = ['Remove', 'cancel'];
+
+  const RemoveButton = () => (
+    <TouchableOpacity
+      style={[styles.actionCard, { backgroundColor: '#FF0000' }]}
+      disabled={disabled}
+      onPress={() => {
+        showActionSheetWithOptions(
+          {
+            options: removeOptions,
+            cancelButtonIndex: removeOptions.length - 1,
+            destructiveButtonIndex: 0,
+            title: `Remove connection`,
+            message: `Are you sure you want to remove connection with ${name}? You can reconnect anytime.`,
+          },
+          (index) => {
+            if (index === 0) dispatch(deleteConnection(id));
+          },
+        );
+      }}
+    >
+      <Material size={ICON_SIZE} name="delete-forever" color="#fff" />
+      <Text style={styles.actionText}>Remove</Text>
+    </TouchableOpacity>
+  );
+
+  // let hideOptions = ['Hide', 'cancel'];
+
+  // const HideButton = () => (
+  //   <TouchableOpacity
+  //     style={[styles.actionCard, { backgroundColor: '#a5a5a5' }]}
+  //     disabled={disabled}
+  //     onPress={() => {
+  //       showActionSheetWithOptions(
+  //         {
+  //           options: hideOptions,
+  //           cancelButtonIndex: hideOptions.length - 1,
+  //           destructiveButtonIndex: 0,
+  //           title: `Are you sure you want to hide ${name}?`,
+  //           message: `This will not effect you're connection with ${name} on the BrightID social graph.`,
+  //         },
+  //         (index) => {
+  //           if (index === 0) dispatch(hideConnection(id));
+  //         },
+  //       );
+  //     }}
+  //   >
+  //     <Material size={ICON_SIZE} name="eye-off" color="#fff" />
+  //     <Text style={styles.actionText}>Hide</Text>
+  //   </TouchableOpacity>
+  // );
+
+  // let unHideOptions = ['UnHide', 'cancel'];
+
+  // const UnHideButton = () => (
+  //   <TouchableOpacity
+  //     style={[styles.actionCard, { backgroundColor: '#a5a5a5' }]}
+  //     disabled={disabled}
+  //     onPress={() => {
+  //       showActionSheetWithOptions(
+  //         {
+  //           options: unHideOptions,
+  //           cancelButtonIndex: unHideOptions.length - 1,
+  //           // destructiveButtonIndex: 0,
+  //           title: `Are you sure you want to unhide ${name}?`,
+  //           message: `This will not effect you're connection with ${name} on the BrightID social graph.`,
+  //         },
+  //         (index) => {
+  //           if (index === 0) dispatch(showConnection(id));
+  //         },
+  //       );
+  //     }}
+  //   >
+  //     <Material size={ICON_SIZE} name="eye" color="#fff" />
+  //     <Text style={styles.actionText}>Show</Text>
+  //   </TouchableOpacity>
+  // );
 
   return (
     <View style={styles.actionContainer}>
-      <TouchableOpacity
-        style={[styles.actionCard, { backgroundColor: '#F28C33' }]}
-        disabled={status === 'initiated'}
-        onPress={() => {
-          showActionSheetWithOptions(
-            {
-              options: flaggingOptions,
-              cancelButtonIndex: flaggingOptions.length - 1,
-              title: 'What do you want to do?',
-            },
-            handleFlagging({ id, name, dispatch, secretKey }),
-          );
-        }}
-      >
-        <Material size={ICON_SIZE} name="flag" color="#fff" />
-        <Text style={styles.actionText}>Flag</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.actionCard, { backgroundColor: '#ED4634' }]}
-        onPress={() => {
-          showActionSheetWithOptions(
-            {
-              options: removeOptions,
-              cancelButtonIndex: removeOptions.length - 1,
-              destructiveButtonIndex: 0,
-              title: `Are you sure you want to remove ${name}?`,
-              message: `This will not effect you're connection with ${name} on the BrightID social graph. If you have reason to believe that ${name} is fake or a duplicate, please flag them instead.`,
-            },
-            (index) => {
-              if (index === 0) dispatch(deleteConnection(id));
-            },
-          );
-        }}
-      >
-        <Material size={ICON_SIZE} name="delete-forever" color="#fff" />
-        <Text style={styles.actionText}>Remove</Text>
-      </TouchableOpacity>
+      {isStale ? (
+        <RemoveButton />
+      ) : isHidden ? (
+        <FlagButton />
+      ) : (
+        <UnFlagButton />
+      )}
     </View>
   );
 };
@@ -107,10 +194,16 @@ const connectionsSelector = (state) => state.connections.connections;
 const filterConnectionsSelector = createSelector(
   connectionsSelector,
   searchParamSelector,
-  (connections, searchParam) => {
+  (_, showHidden) => showHidden,
+  (connections, searchParam, showHidden) => {
     const searchString = searchParam.toLowerCase().replace(/\s/g, '');
-    return connections.filter((item) =>
-      `${item.name}`.toLowerCase().replace(/\s/g, '').includes(searchString),
+    return connections.filter(
+      (item) =>
+        `${item.name}`
+          .toLowerCase()
+          .replace(/\s/g, '')
+          .includes(searchString) &&
+        (showHidden || item.status !== 'hidden'),
     );
   },
 );
@@ -122,7 +215,16 @@ export const ConnectionsScreen = () => {
   const navigation = useNavigation();
 
   const [refreshing, setRefreshing] = useState(false);
-  const connections = useSelector(filterConnectionsSelector);
+  const [showHidden, setShowHidden] = useState(false);
+  const connections = useSelector((state) =>
+    filterConnectionsSelector(state, showHidden),
+  );
+
+  // const hiddenConnectionCount = useSelector(
+  //   (state) => state.connections.connections.length - connections,
+  // );
+
+  const hiddenConnectionCount = 0;
 
   useFocusEffect(
     useCallback(() => {
@@ -135,6 +237,7 @@ export const ConnectionsScreen = () => {
     try {
       setRefreshing(true);
       await dispatch(fetchUserInfo());
+      dispatch(defaultSort());
       setRefreshing(false);
     } catch (err) {
       console.log(err.message);
@@ -144,39 +247,6 @@ export const ConnectionsScreen = () => {
 
   const handleNewConnection = () => {
     navigation.navigate('MyCode');
-  };
-
-  const handleRemoveConnection = (connection) => {
-    // if (connection.status === 'verified') {
-    //   console.log(
-    //     `Cant remove verified connection ${connection.id} (${connection.name}).`,
-    //   );
-    //   return;
-    // }
-
-    const buttons = [
-      {
-        text: 'Cancel',
-        style: 'cancel',
-      },
-      {
-        text: 'OK',
-        onPress: () => {
-          console.log(
-            `Removing connection ${connection.id} (${connection.name})`,
-          );
-          dispatch(deleteConnection(connection.id));
-        },
-      },
-    ];
-    Alert.alert(
-      `Remove connection`,
-      `Are you sure you want to remove connection with ${connection.name}? You can reconnect anytime.`,
-      buttons,
-      {
-        cancelable: true,
-      },
-    );
   };
 
   return (
@@ -201,7 +271,7 @@ export const ConnectionsScreen = () => {
               <ActionComponent {...item} />
             )}
             leftOpenValue={0}
-            rightOpenValue={DEVICE_LARGE ? -120 : -110}
+            rightOpenValue={DEVICE_LARGE ? -60 : -55}
             swipeToOpenPercent={22}
             contentContainerStyle={{
               paddingBottom: 70,
@@ -217,6 +287,20 @@ export const ConnectionsScreen = () => {
                 iconType="account-off-outline"
                 title="No connections"
               />
+            }
+            ListFooterComponent={() =>
+              hiddenConnectionCount > 0 ? (
+                <TouchableOpacity
+                  style={styles.listFooter}
+                  onPress={() => {
+                    setShowHidden((showHiden) => !showHiden);
+                  }}
+                >
+                  <Text style={styles.listFooterText}>
+                    {showHidden ? 'Hide' : 'Show'} Hidden Connections
+                  </Text>
+                </TouchableOpacity>
+              ) : null
             }
           />
         </View>
@@ -278,6 +362,18 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#fff',
     fontSize: 11,
+  },
+  listFooter: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 30,
+  },
+  listFooterText: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 14 : 12,
+    color: LIGHTBLUE,
   },
 });
 

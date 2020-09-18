@@ -1,11 +1,13 @@
 // @flow
 
-import * as React from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RNFS from 'react-native-fs';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { DEVICE_LARGE, MAX_WAITING_SECONDS } from '@/utils/constants';
+import { staleConnection } from '@/actions';
 
 /**
  * Connection Card in the Connections Screen
@@ -16,87 +18,89 @@ import { DEVICE_LARGE, MAX_WAITING_SECONDS } from '@/utils/constants';
  * @prop photo
  */
 
-type State = {
-  isStale: boolean,
-};
+const ConnectionCard = (props) => {
+  let stale_check_timer = useRef(0);
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const { status, connectionDate, id, name, photo } = props;
+  const isHidden = status === 'hidden';
 
-class ConnectionCard extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      isStale: false,
-    };
-    this.stale_check_timer = 0;
-  }
-
-  componentDidMount() {
-    // if we have a "waiting" connection, start timer to handle stale connection requests
-    const { status, connectionDate } = this.props;
-    if (status === 'initiated') {
-      if (this.checkStale()) {
-        // this is already old. Immediately mark as "stale", no need for a timer.
-        this.setState({ isStale: true });
-      } else {
-        // start timer to check if connection got verified after MAX_WAITING_TIME
-        let checkTime =
-          connectionDate + MAX_WAITING_SECONDS * 1000 + 5000 - Date.now(); // add 5 seconds buffer
-        if (checkTime < 0) {
-          console.log(`Warning - checkTime in past: ${checkTime}`);
-          checkTime = 1000; // check in 1 second
-        }
-        console.log(`Marking connection as stale in ${checkTime}ms.`);
-        clearTimeout(this.stale_check_timer);
-        this.stale_check_timer = setTimeout(() => {
-          if (this.checkStale()) {
-            this.setState({ isStale: true });
+  useFocusEffect(
+    useCallback(() => {
+      // if we have a "waiting" connection, start timer to handle stale connection requests
+      if (status === 'initiated') {
+        const checkStale = () => {
+          const ageSeconds = Math.floor((Date.now() - connectionDate) / 1000);
+          if (ageSeconds > MAX_WAITING_SECONDS && status !== 'verified') {
+            console.log(
+              `Connection ${name} is stale (age: ${ageSeconds} seconds)`,
+            );
+            return true;
           }
-        }, checkTime);
+          return false;
+        };
+        if (checkStale()) {
+          // this is already old. Immediately mark as "stale", no need for a timer.
+          dispatch(staleConnection(id));
+        } else {
+          // start timer to check if connection got verified after MAX_WAITING_TIME
+          let checkTime =
+            connectionDate + MAX_WAITING_SECONDS * 1000 + 5000 - Date.now(); // add 5 seconds buffer
+          if (checkTime < 0) {
+            console.log(`Warning - checkTime in past: ${checkTime}`);
+            checkTime = 1000; // check in 1 second
+          }
+          console.log(`Marking connection as stale in ${checkTime}ms.`);
+          clearTimeout(stale_check_timer.current);
+          stale_check_timer.current = setTimeout(() => {
+            if (checkStale()) {
+              dispatch(staleConnection(id));
+            }
+          }, checkTime);
+        }
       }
-    }
-  }
+      return () => {
+        // clear timer if it is set
+        if (stale_check_timer.current) {
+          clearTimeout(stale_check_timer.current);
+          stale_check_timer.current = 0;
+        }
+      };
+    }, [connectionDate, dispatch, id, name, status]),
+  );
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    if (
-      this.stale_check_timer &&
-      prevProps.status === 'initiated' &&
-      this.props.status === 'verified'
-    ) {
+  useEffect(() => {
+    if (stale_check_timer.current && status === 'verified') {
       console.log(
-        `Connection ${this.props.name} changed 'initiated' -> 'verified'. Stopping stale_check_timer ID ${this.stale_check_timer}.`,
+        `Connection ${name} changed 'initiated' -> 'verified'. Stopping stale_check_timer ID ${stale_check_timer.current}.`,
       );
-      clearTimeout(this.stale_check_timer);
-      this.stale_check_timer = 0;
+      clearTimeout(stale_check_timer.current);
+      stale_check_timer.current = 0;
     }
-  }
+  }, [name, status]);
 
-  componentWillUnmount() {
-    // clear timer if it is set
-    if (this.stale_check_timer) {
-      clearTimeout(this.state.stale_check_timer);
-      this.stale_check_timer = 0;
-    }
-  }
-
-  checkStale = () => {
-    const { connectionDate, name } = this.props;
-    const ageSeconds = Math.floor((Date.now() - connectionDate) / 1000);
-    if (ageSeconds > MAX_WAITING_SECONDS) {
-      console.log(`Connection ${name} is stale (age: ${ageSeconds} seconds)`);
-      return true;
-    }
-    return false;
-  };
-
-  getStatus = () => {
-    const { isStale } = this.state;
-    const { status, connectionDate } = this.props;
+  const ConnectionStatus = () => {
     if (status === 'initiated') {
-      const statusText = isStale
-        ? 'Connection failed.\nPlease try again.'
-        : 'Waiting';
       return (
         <View style={styles.statusContainer}>
-          <Text style={styles.waitingMessage}>{statusText}</Text>
+          <Text style={styles.waitingMessage}>Waiting</Text>
+        </View>
+      );
+    } else if (status === 'stale') {
+      return (
+        <View style={styles.statusContainer}>
+          <Text style={styles.waitingMessage}>
+            {`Connection failed.\nPlease try again.`}
+          </Text>
+        </View>
+      );
+    } else if (status === 'hidden') {
+      return (
+        <View style={styles.statusContainer}>
+          <Text style={[styles.deletedMessage, { marginTop: 1 }]}>Hidden</Text>
+          <Text style={[styles.connectedText, { marginTop: 1 }]}>
+            Connected {moment(parseInt(connectionDate, 10)).fromNow()}
+          </Text>
         </View>
       );
     } else if (status === 'deleted') {
@@ -114,37 +118,40 @@ class ConnectionCard extends React.Component<Props, State> {
     }
   };
 
-  render() {
-    const { photo, name, style } = this.props;
-    const connectionStatus = this.getStatus();
-
-    return (
-      <View style={{ ...styles.container, ...style }}>
-        <View style={styles.card}>
-          <TouchableOpacity
-            onPress={() => {
-              // navigation.navigate('FullScreenPhoto', { photo });
+  return (
+    <View style={styles.container}>
+      <View
+        style={[styles.card, isHidden ? { backgroundColor: '#dedede' } : {}]}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('FullScreenPhoto', { photo });
+          }}
+          accessibilityLabel="View Photo Full Screen"
+          accessibilityRole="imagebutton"
+        >
+          <Image
+            source={{
+              uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
             }}
-            accessibilityLabel="View Photo Full Screen"
-            accessibilityRole="imagebutton"
+            style={styles.photo}
+            accessibilityLabel="ConnectionPhoto"
+          />
+        </TouchableOpacity>
+        <View style={styles.info}>
+          <Text
+            adjustsFontSizeToFit={true}
+            numberOfLines={1}
+            style={styles.name}
           >
-            <Image
-              source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
-              }}
-              style={styles.photo}
-              accessibilityLabel="ConnectionPhoto"
-            />
-          </TouchableOpacity>
-          <View style={styles.info}>
-            <Text style={styles.name}>{name}</Text>
-            {connectionStatus}
-          </View>
+            {name}
+          </Text>
+          <ConnectionStatus />
         </View>
       </View>
-    );
-  }
-}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -190,9 +197,9 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 16 : 14,
   },
   statusContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   connectedText: {
     fontFamily: 'Poppins',
@@ -220,4 +227,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(ConnectionCard);
+export default ConnectionCard;

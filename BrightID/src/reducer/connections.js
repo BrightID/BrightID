@@ -13,6 +13,9 @@ import {
   SET_CONNECTIONS_SEARCH_OPEN,
   HYDRATE_CONNECTIONS,
   RESET_STORE,
+  FLAG_AND_HIDE_CONNECTION,
+  SHOW_CONNECTION,
+  STALE_CONNECTION,
 } from '@/actions';
 
 export const initialState = {
@@ -43,7 +46,11 @@ export const reducer = (
             if (conn.status === 'verified') conn.status = 'deleted';
             return conn;
           } else {
-            if (conn.status === 'initiated' || !conn.status)
+            if (
+              conn.status === 'initiated' ||
+              conn.status === 'stale' ||
+              !conn.status
+            )
               conn.status = 'verified';
             return mergeRight(conn, updatedConn);
           }
@@ -66,6 +73,48 @@ export const reducer = (
     case DELETE_CONNECTION: {
       const connections: connection[] = state.connections.filter(
         (conn: connection) => conn.id !== action.id,
+      );
+      return {
+        ...state,
+        connections,
+      };
+    }
+    case FLAG_AND_HIDE_CONNECTION: {
+      const connections: connection[] = state.connections.map(
+        (conn: connection) => {
+          if (conn.id === action.id) {
+            conn.status = 'hidden';
+          }
+          return conn;
+        },
+      );
+      return {
+        ...state,
+        connections,
+      };
+    }
+    case SHOW_CONNECTION: {
+      const connections: connection[] = state.connections.map(
+        (conn: connection) => {
+          if (conn.id === action.id) {
+            conn.status = 'verified';
+          }
+          return conn;
+        },
+      );
+      return {
+        ...state,
+        connections,
+      };
+    }
+    case STALE_CONNECTION: {
+      const connections: connection[] = state.connections.map(
+        (conn: connection) => {
+          if (conn.id === action.id) {
+            conn.status = 'stale';
+          }
+          return conn;
+        },
       );
       return {
         ...state,

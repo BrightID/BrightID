@@ -10,6 +10,9 @@ export const REMOVE_TRUSTED_CONNECTION = 'REMOVE_TRUSTED_CONNECTION';
 export const SET_CONNECTIONS_SEARCH = 'SET_CONNECTIONS_SEARCH';
 export const SET_CONNECTIONS_SEARCH_OPEN = 'SET_CONNECTIONS_SEARCH_OPEN';
 export const HYDRATE_CONNECTIONS = 'HYDRATE_CONNECTIONS';
+export const FLAG_AND_HIDE_CONNECTION = 'HIDE_CONNECTION';
+export const SHOW_CONNECTION = 'SHOW_CONNECTION';
+export const STALE_CONNECTION = 'STALE_CONNECTION';
 
 /**
  * redux action creator for setting connections array
@@ -77,4 +80,19 @@ export const removeTrustedConnection = (id: string) => ({
 export const hydrateConnections = (data: ConnectionsState) => ({
   type: HYDRATE_CONNECTIONS,
   data,
+});
+
+export const flagAndHideConnection = (id: string) => ({
+  type: FLAG_AND_HIDE_CONNECTION,
+  id,
+});
+
+export const showConnection = (id: string) => ({
+  type: SHOW_CONNECTION,
+  id,
+});
+
+export const staleConnection = (id: string) => ({
+  type: STALE_CONNECTION,
+  id,
 });

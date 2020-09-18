@@ -2,7 +2,7 @@
 
 import { Alert } from 'react-native';
 import api from '@/api/brightId';
-import { deleteConnection } from '@/actions';
+import { flagAndHideConnection } from '@/actions';
 import { fakeJoinGroups } from '@/actions/fakeGroup';
 import { backupUser } from '@/components//Recovery/helpers';
 
@@ -26,7 +26,7 @@ export const handleFlagging = ({ name, id, dispatch, secretKey }) => (
     {
       text: 'OK',
       onPress: () => {
-        dispatch(flagAndDeleteConnection(id, flag));
+        dispatch(flagConnection(id, flag));
       },
     },
   ];
@@ -38,17 +38,14 @@ export const handleFlagging = ({ name, id, dispatch, secretKey }) => (
   );
 };
 
-export const flagAndDeleteConnection = (id, flag) => async (
-  dispatch,
-  getState,
-) => {
+export const flagConnection = (id, flag) => async (dispatch, getState) => {
   try {
     const { backupCompleted } = getState().user;
     console.log('backupCompleted', backupCompleted);
 
     await api.removeConnection(id, flag);
-    // remove connection from redux
-    dispatch(deleteConnection(id));
+    // hide connection in redux
+    dispatch(flagAndHideConnection(id));
     if (backupCompleted) {
       await backupUser();
     }

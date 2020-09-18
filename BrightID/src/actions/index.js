@@ -21,6 +21,9 @@ export {
   SET_CONNECTIONS_SEARCH,
   SET_CONNECTIONS_SEARCH_OPEN,
   HYDRATE_CONNECTIONS,
+  FLAG_AND_HIDE_CONNECTION,
+  SHOW_CONNECTION,
+  STALE_CONNECTION,
   setConnections,
   setConnectionsSearch,
   setConnectionsSearchOpen,
@@ -31,6 +34,9 @@ export {
   addTrustedConnection,
   removeTrustedConnection,
   hydrateConnections,
+  flagAndHideConnection,
+  showConnection,
+  staleConnection,
 } from './connections';
 
 export {
