@@ -1,19 +1,20 @@
-import * as React from 'react';
-import { Image, TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import { Keyboard, Image, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { INVITE_ACTIVE, DEVICE_LARGE } from '@/utils/constants';
 import { createSelector } from '@reduxjs/toolkit';
 import { createStackNavigator } from '@react-navigation/stack';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { SvgXml } from 'react-native-svg';
 import {
   pendingConnection_states,
   selectAllPendingConnections,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
-import HomeScreen from '@/components/HomeScreen';
 import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnectionScreen';
-import { navigate } from '@/NavigationService';
+import { navigate, toggleDrawer } from '@/NavigationService';
+import menuBar from '@/static/menu_bar.svg';
 import { headerOptions } from './helpers';
-import TasksScreen from '../components/Tasks/TasksScreen';
+import { HomeDrawer } from './HomeDrawer';
 
 /** SELECTORS */
 
@@ -70,17 +71,6 @@ const NotificationBell = () => {
   );
 };
 
-const AchievementsLink = () => (
-  <TouchableOpacity
-    style={{ marginLeft: 40 }}
-    onPress={() => {
-      navigate('Tasks');
-    }}
-  >
-    <Material name="certificate" size={DEVICE_LARGE ? 31 : 27} color="#000" />
-  </TouchableOpacity>
-);
-
 /** OPTIONS */
 
 const homeScreenOptions = {
@@ -93,7 +83,24 @@ const homeScreenOptions = {
       style={{ width: DEVICE_LARGE ? 104 : 85 }}
     />
   ),
-  headerLeft: () => <AchievementsLink />,
+  headerLeft: () => {
+    return (
+      <TouchableOpacity
+        testID="toggleDrawer"
+        style={{
+          width: DEVICE_LARGE ? 80 : 70,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        onPress={() => {
+          Keyboard.dismiss();
+          toggleDrawer();
+        }}
+      >
+        <SvgXml xml={menuBar} width={DEVICE_LARGE ? 30 : 24} />
+      </TouchableOpacity>
+    );
+  },
   headerRight: () => <NotificationBell />,
   headerStyle: {
     height: DEVICE_LARGE ? 80 : 70,
@@ -101,19 +108,16 @@ const homeScreenOptions = {
     shadowOffset: {
       height: 0,
     },
-    elevation: 0,
+    elevation: -1,
   },
   headerTitleAlign: 'center',
+  headerTintColor: 'transparent',
+  headerTransparent: true,
 };
 
 const recoveringConnectionOptions = {
   ...headerOptions,
   title: 'Account Recovery',
-};
-
-const taskScreenOptions = {
-  ...headerOptions,
-  title: 'Achievements',
 };
 
 /** SCREENS */
@@ -125,18 +129,13 @@ const Home = () => {
     <>
       <Stack.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeDrawer}
         options={homeScreenOptions}
       />
       <Stack.Screen
         name="RecoveringConnection"
         component={RecoveringConnectionScreen}
         options={recoveringConnectionOptions}
-      />
-      <Stack.Screen
-        name="Tasks"
-        component={TasksScreen}
-        options={taskScreenOptions}
       />
     </>
   );

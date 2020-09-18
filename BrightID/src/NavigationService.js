@@ -1,6 +1,7 @@
 // NavigationService.js
 
 import * as React from 'react';
+import { DrawerActions } from '@react-navigation/native';
 
 export const navigationRef = React.createRef();
 
@@ -10,6 +11,10 @@ export const navigate = (name, params) => {
 
 export const goBack = () => {
   navigationRef.current?.goBack();
+};
+
+export const toggleDrawer = () => {
+  navigationRef.current?.dispatch(DrawerActions.toggleDrawer());
 };
 
 export const dispatch = (action) => {
