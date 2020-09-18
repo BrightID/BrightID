@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Animated, Text } from 'react-native';
 import {
   createStackNavigator,
-  CardStyleInterpolators,
+  TransitionPresets,
 } from '@react-navigation/stack';
 import ConnectionsScreen from '@/components/Connections/ConnectionsScreen';
 import SortingConnectionsScreen from '@/components/Connections/SortingConnectionsScreen';
@@ -47,7 +47,11 @@ const trustedScreenOptions = {
 
 const fullScreenPhotoOptions = {
   headerShown: false,
-  cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+  cardOverlayEnabled: true,
+  mode: 'modal',
+  gestureEnabled: true,
+  ...TransitionPresets.FadeFromBottomAndroid,
+  cardStyle: { backgroundColor: 'transparent' },
 };
 
 const Connections = () => {

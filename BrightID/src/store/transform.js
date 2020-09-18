@@ -53,10 +53,14 @@ export const notificationsTransformer = createTransform(
     return {
       ...inboundState,
       activeNotification: null,
-      miscAlreadyNotified: false,
+      sessionNotifications: [],
     };
   },
   (outboundState, key) => {
+    // remove deprecated state property
+    if (outboundState.hasOwnProperty('miscAlreadyNotified')) {
+      delete outboundState.miscAlreadyNotified;
+    }
     return outboundState;
   },
   { whitelist: ['notifications'] },

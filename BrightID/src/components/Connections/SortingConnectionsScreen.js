@@ -9,8 +9,6 @@ import {
   sortByNameDescending,
   sortByDateAddedAscending,
   sortByDateAddedDescending,
-  sortByScoreAscending,
-  sortByScoreDescending,
   types,
 } from './models/sortingUtility';
 
@@ -37,13 +35,11 @@ class SortingConnectionsScreen extends React.Component<Props> {
     const { connectionsSort } = this.props;
     switch (connectionsSort) {
       case types.byDateAddedAscending:
-      case types.byScoreAscending:
       case types.byNameAscending:
         return (
           <MaterialCommunityIcons size={26} name="chevron-up" color="#4990e2" />
         );
       case types.byDateAddedDescending:
-      case types.byScoreDescending:
       case types.byNameDescending:
         return (
           <MaterialCommunityIcons
@@ -72,14 +68,6 @@ class SortingConnectionsScreen extends React.Component<Props> {
     return (
       connectionsSort === types.byDateAddedAscending ||
       connectionsSort === types.byDateAddedDescending
-    );
-  };
-
-  sortByScore = () => {
-    const { connectionsSort } = this.props;
-    return (
-      connectionsSort === types.byScoreAscending ||
-      connectionsSort === types.byScoreDescending
     );
   };
 
@@ -127,21 +115,6 @@ class SortingConnectionsScreen extends React.Component<Props> {
           >
             <Text style={styles.sortingText}>Sort by name </Text>
             {this.sortByName() ? this.renderCaret() : <View />}
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={
-              this.sortByScore() ? this.selectedStyle() : styles.sortingOption
-            }
-            onPress={() => {
-              if (connectionsSort !== types.byScoreDescending) {
-                dispatch(sortByScoreDescending());
-              } else {
-                dispatch(sortByScoreAscending());
-              }
-            }}
-          >
-            <Text style={styles.sortingText}>Sort by score </Text>
-            {this.sortByScore() ? this.renderCaret() : <View />}
           </TouchableOpacity>
         </View>
       </View>

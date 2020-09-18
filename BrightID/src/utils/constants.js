@@ -41,6 +41,7 @@ export const TIME_FUDGE = 60 * 60 * 1000;
 
 /** ** THEME CONSTANTS  *** */
 export const ORANGE = '#ED7A5D';
+export const LIGHTBLUE = '#4A90E2';
 
 /** ** NOTIFICATION CONSTANTS  *** */
 

@@ -21,8 +21,10 @@
     "mermaid": "find ./diagrams -type f -name *.mmd -exec mmdc -i {} \\;"
   },
   "dependencies": {
+    "@expo/react-native-action-sheet": "^3.8.0",
     "@react-native-community/async-storage": "^1.7.0",
     "@react-native-community/clipboard": "^1.2.3",
+    "@react-native-community/blur": "^3.6.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/push-notification-ios": "^1.4.1",
     "@react-navigation/bottom-tabs": "^5.3.3",
@@ -68,6 +70,7 @@
     "react-native-spinkit": "^1.5.0",
     "react-native-status-bar-height": "^2.4.0",
     "react-native-svg": "^12.1.0",
+    "react-native-swipe-list-view": "^3.2.4",
     "react-native-tab-view": "^2.14.4",
     "react-native-vector-icons": "^7.0.0",
     "react-redux": "^7.2.0",

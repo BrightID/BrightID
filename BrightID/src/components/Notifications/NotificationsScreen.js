@@ -120,7 +120,6 @@ const InviteList = () => {
 };
 
 const MiscList = ({ route }) => {
-  const navigation = useNavigation();
   const [refreshing, onRefresh] = useRefresh();
   const data = route.backupPending
     ? [{ msg: 'Backup Pending', icon: 'star' }]
@@ -144,11 +143,7 @@ const MiscList = ({ route }) => {
         />
       }
       renderItem={({ item }) => (
-        <NotificationCard
-          navigation={navigation}
-          msg={item.msg}
-          icon={item.icon}
-        />
+        <NotificationCard msg={item.msg} icon={item.icon} />
       )}
     />
   );
