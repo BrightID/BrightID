@@ -36,7 +36,6 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 let chatSheetRef = '',
   photoSheetRef = '';
 let discordUrl = 'https://discord.gg/nTtuB2M';
-let JoinCommunity = DEVICE_IOS ? TextInput : Text;
 
 /** Selectors */
 
@@ -321,9 +320,9 @@ export const HomeScreen = (props) => {
               height={DEVICE_LARGE ? 28 : 25}
               xml={forumIcon}
             />
-            <JoinCommunity editable={false} style={styles.communityLink}>
-              Join the Community
-            </JoinCommunity>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }}>
+              <Text style={styles.communityLink}>Join the Community</Text>
+            </View>
           </TouchableOpacity>
         </View>
         <DeepPasteLink />
@@ -562,8 +561,6 @@ const styles = StyleSheet.create({
     padding: DEVICE_LARGE ? 20 : 12,
   },
   communityLink: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#fff',
     color: '#fff',
     fontSize: DEVICE_LARGE ? 14 : 11,
     fontFamily: 'Poppins',

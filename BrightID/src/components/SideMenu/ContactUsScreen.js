@@ -1,23 +1,29 @@
 // @flow
 
-import React from 'react';
-import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
+import React, { useCallback, useState, useRef } from 'react';
+import {
+  Text,
+  StyleSheet,
+  View,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Linking,
+  Pressable,
+} from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { DEVICE_LARGE } from '@/utils/constants';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
+import { useNavigation } from '@react-navigation/native';
 import { getExplorerCode } from '@/utils/explorer';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export const GraphExplorerScreen = function () {
+export const ContactUsScreen = function () {
   const headerHeight = useHeaderHeight();
   const isDrawerOpen = useIsDrawerOpen();
-  const explorerCode = getExplorerCode();
-
-  const copyText = () => {
-    Clipboard.setString(explorerCode);
-    alert('Copied to clipboard!');
-  };
 
   return (
     <View
@@ -28,54 +34,7 @@ export const GraphExplorerScreen = function () {
       ]}
       testID="graphExplorerScreen"
     >
-      {explorerCode ? (
-        <TouchableOpacity
-          onPressOut={copyText}
-          style={styles.copyCodeContainer}
-        >
-          <View style={styles.codeBox}>
-            <Text style={styles.copyText} numberOfLines={1}>
-              {explorerCode}
-            </Text>
-          </View>
-          <View style={styles.copyButton}>
-            <Material
-              name="content-copy"
-              size={DEVICE_LARGE ? 28 : 24}
-              color="#000"
-            />
-            <Text style={styles.copyText}> Copy Code</Text>
-          </View>
-        </TouchableOpacity>
-      ) : (
-        <View style={styles.noExplorerCode}>
-          <Material
-            name="boom-gate-alert-outline"
-            size={30}
-            color="#000"
-            style={styles.alertIcon}
-          />
-          <Text style={styles.setupText}>
-            Setting up backup and recovery is required to access your graph
-            explorer code. Check your notifications or connect to more users to
-            be eligible for backup and recovery.
-          </Text>
-        </View>
-      )}
-      <View style={styles.infoTextContainer}>
-        <Text style={styles.infoText}>
-          <Text
-            onPress={() => {
-              alert('pressed!');
-            }}
-            style={styles.linkText}
-          >
-            https://explorer.brightid.org{' '}
-          </Text>
-          is a website designed to explore the entire BrightID social graph. Use
-          the code above to see your connections in the graph.
-        </Text>
-      </View>
+      <Text>Contact Us</Text>
     </View>
   );
 };
@@ -100,6 +59,8 @@ const styles = StyleSheet.create({
   },
 
   copyCodeContainer: {
+    // borderWidth: 1,
+    // zIndex: 10,
     flexDirection: 'column',
     width: '80%',
     height: 100,
@@ -109,6 +70,7 @@ const styles = StyleSheet.create({
   },
   codeBox: {
     width: '100%',
+    // overflow: 'hidden',
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: 'black',
     padding: 10,
@@ -118,6 +80,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
+    zIndex: 0,
   },
   setupText: {
     fontFamily: 'Poppins',
@@ -155,10 +118,10 @@ const styles = StyleSheet.create({
     padding: 0,
   },
   copyText: {
-    // fontFamily: 'Poppins',
-    // fontWeight: '400',
-    // fontSize: DEVICE_LARGE ? 14 : 13,
+    fontFamily: 'Poppins',
+    fontWeight: '400',
+    fontSize: DEVICE_LARGE ? 14 : 13,
   },
 });
 
-export default GraphExplorerScreen;
+export default ContactUsScreen;

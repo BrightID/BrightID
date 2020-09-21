@@ -73,16 +73,20 @@ const NotificationBell = () => {
 
 /** OPTIONS */
 
-const homeScreenOptions = {
-  headerTitle: () => (
+const BrightIdLogo = () => {
+  return (
     <Image
       source={require('@/static/brightid-final.png')}
       accessible={true}
       accessibilityLabel="Home Header Logo"
       resizeMode="contain"
-      style={{ width: DEVICE_LARGE ? 104 : 85 }}
+      style={{ width: DEVICE_LARGE ? 104 : 85, maxHeight: 80 }}
     />
-  ),
+  );
+};
+
+const homeScreenOptions = {
+  headerTitle: () => <BrightIdLogo />,
   headerLeft: () => {
     return (
       <TouchableOpacity
