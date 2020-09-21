@@ -127,7 +127,7 @@ export const checkTasks = () => {
               type: MISC_TYPE,
               title: 'Achievement unlocked!',
               message: `You completed the task "${UserTasks[task.id].title}".`,
-              navigationTarget: 'Tasks',
+              navigationTarget: 'Achievements',
               xmlIcon: certificate,
             }),
           );
