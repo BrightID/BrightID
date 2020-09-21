@@ -28,18 +28,25 @@ const migrations = {
       }));
     }
 
-    // transfer secret key as backup
-    let genericPassword = await getGenericPassword();
-    let { username, password } = genericPassword;
-    if (password) {
-      state.user.id = username;
-      state.user.secretKey = password;
-    }
-
     state.apps = {
       apps: [],
       linkedContexts,
     };
+
+    // transfer secret key as backup
+    try {
+      let genericPassword = await getGenericPassword();
+      let { username, password } = genericPassword;
+      if (password) {
+        state.user.id = username;
+        state.user.secretKey = password;
+      }
+    } catch (err) {
+      console.log(err.message);
+      if (state.user.secretKey) {
+        state.user.secretKey = keyToString(state.user.secretKey);
+      }
+    }
 
     return state;
   },

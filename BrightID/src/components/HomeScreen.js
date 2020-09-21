@@ -50,6 +50,12 @@ export const verifiedSelector = createSelector(
   (verifications) => verifications.includes('BrightID'),
 );
 
+export const verifiedConnections = createSelector(
+  (state) => state.connections.connections,
+  (connections) =>
+    connections.filter((conn) => conn.status === 'verified').length,
+);
+
 /** HomeScreen Component */
 
 export const HomeScreen = (props) => {
@@ -60,9 +66,7 @@ export const HomeScreen = (props) => {
   const name = useSelector((state) => state.user.name);
   const photoFilename = useSelector((state) => state.user.photo.filename);
   const groupsCount = useSelector((state) => state.groups.groups.length);
-  const connectionsCount = useSelector(
-    (state) => state.connections.connections.length,
-  );
+  const connectionsCount = useSelector(verifiedConnections);
   const linkedContextsCount = useSelector(linkedContextCountSelector);
   const verified = useSelector(verifiedSelector);
 
