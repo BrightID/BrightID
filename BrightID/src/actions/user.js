@@ -71,17 +71,20 @@ export const setUserData = ({
   publicKey,
   name,
   photo,
+  secretKey,
 }: {
   id: string,
   publicKey: string,
   name: string,
   photo: { filename: string },
+  secretKey: string,
 }) => ({
   type: SET_USER_DATA,
   id,
   publicKey,
   name,
   photo,
+  secretKey,
 });
 
 /**
@@ -133,6 +136,7 @@ export const hydrateUser = (data: {
   publicKey: string,
   password: string,
   hashedId: string,
+  secretKey: string,
 }) => ({
   type: HYDRATE_USER,
   data,

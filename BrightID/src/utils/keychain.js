@@ -9,8 +9,6 @@ import store from '@/store';
 import { uInt8ArrayToB64, objToUint8, b64ToUint8Array } from './encoding';
 import { DEVICE_ANDROID } from './constants';
 
-const keyToString = compose(uInt8ArrayToB64, objToUint8);
-
 export const obtainKeys = async () => {
   try {
     let genericPassword = await getGenericPassword();
@@ -26,28 +24,15 @@ export const obtainKeys = async () => {
   } catch (err) {
     console.log(err.message);
     let { id, secretKey } = store.getState().user;
-    if (!secretKey) {
-      alert(
-        'Unable to access secret key, please reinstall app and recover BrightID',
-      );
-      return { username: 'empty', secretKey: [] };
-    }
-
-    await saveSecretKey(id, keyToString(secretKey));
-
-    return { username: id, secretKey: objToUint8(secretKey) };
+    return { username: id, secretKey: b64ToUint8Array(secretKey) };
   }
 };
 
 export const saveSecretKey = async (id: string, secretKey: string) => {
-  try {
-    if (DEVICE_ANDROID) {
-      let opts = { storage: STORAGE_TYPE.AES };
-      await setGenericPassword(id, secretKey, opts);
-    } else {
-      await setGenericPassword(id, secretKey);
-    }
-  } catch (err) {
-    console.log('unable to save secret key', err.message);
+  if (DEVICE_ANDROID) {
+    let opts = { storage: STORAGE_TYPE.AES };
+    await setGenericPassword(id, secretKey, opts);
+  } else {
+    await setGenericPassword(id, secretKey);
   }
 };

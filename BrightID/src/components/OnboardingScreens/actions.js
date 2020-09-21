@@ -21,8 +21,7 @@ export const handleBrightIdCreation = ({
     let { publicKey, secretKey } = await nacl.sign.keyPair();
     let b64PubKey = uInt8ArrayToB64(publicKey);
     let id = b64ToUrlSafeB64(b64PubKey);
-    // save id / secretKey inside of keychain
-    await saveSecretKey(id, keyToString(secretKey));
+
     // creates Image Directory
     await createImageDirectory();
     let filename = await saveImage({ imageName: id, base64Image: photo.uri });
@@ -32,6 +31,7 @@ export const handleBrightIdCreation = ({
       id,
       name,
       photo: { filename },
+      secretKey: keyToString(secretKey),
     };
 
     // We have no createUser anymore
@@ -42,6 +42,8 @@ export const handleBrightIdCreation = ({
     await dispatch(setUserData(userData));
     // to fix bug while testing
     dispatch(setHashedId(''));
+    // save id / secretKey inside of keychain
+    await saveSecretKey(id, keyToString(secretKey));
 
     console.log('brightid creation success');
 

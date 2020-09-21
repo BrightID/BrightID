@@ -22,7 +22,12 @@ export const bootstrap = async (version: string) => {
   if (dataStr !== null) {
     const dataObj = JSON.parse(dataStr);
     // save secretKey in keychain
-    await saveSecretKey(dataObj.id ?? 'empty', keyToString(dataObj.secretKey));
+    if (!dataObj.id) {
+      dataObj.id = uInt8ArrayToB64(objToUint8(dataObj.publicKey));
+    }
+
+    const secretKey = keyToString(dataObj.secretKey);
+    await saveSecretKey(dataObj.id, secretKey);
     dataObj.searchParam = '';
 
     const {
@@ -76,6 +81,7 @@ export const bootstrap = async (version: string) => {
         publicKey,
         password,
         hashedId,
+        secretKey,
       }),
     );
   }
