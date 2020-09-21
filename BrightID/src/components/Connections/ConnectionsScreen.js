@@ -63,6 +63,16 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
             cancelButtonIndex: flaggingOptions.length - 1,
             title: 'What do you want to do?',
             message: `Flagging ${name} will negatively effect their BrightID score, and this flag might be shown to other users.`,
+            showSeparators: true,
+            textStyle: {
+              color: '#2185D0',
+            },
+            titleTextStyle: {
+              fontSize: DEVICE_LARGE ? 20 : 17,
+            },
+            messageTextStyle: {
+              fontSize: DEVICE_LARGE ? 15 : 12,
+            },
           },
           handleFlagging({ id, name, dispatch, secretKey }),
         );
