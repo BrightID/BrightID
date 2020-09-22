@@ -119,6 +119,12 @@ const ConnectionCard = (props) => {
     }
   };
 
+  const imageSource = photo?.filename
+    ? {
+        uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
+      }
+    : require('@/static/default_profile.jpg');
+
   return (
     <View style={styles.container}>
       <View style={styles.card}>
@@ -130,9 +136,7 @@ const ConnectionCard = (props) => {
           accessibilityRole="imagebutton"
         >
           <Image
-            source={{
-              uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
-            }}
+            source={imageSource}
             style={styles.photo}
             accessibilityLabel="ConnectionPhoto"
           />
