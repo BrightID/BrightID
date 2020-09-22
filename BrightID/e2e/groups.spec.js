@@ -21,12 +21,12 @@ const secondGroupName = 'Inglourious Basterds';
 
 describe('Groups', () => {
   let hasBackButton = true;
-  let cancelText = 'CANCEL';
+  let cancelText = 'Cancel';
+  let leaveGroupText = 'Leave group';
 
   beforeAll(async () => {
     const platform = await device.getPlatform();
     hasBackButton = platform === 'android';
-    cancelText = hasBackButton ? 'CANCEL' : 'Cancel';
     // create identity
     await createBrightID();
   });
@@ -270,8 +270,8 @@ describe('Groups', () => {
       await element(by.id('groupItem-0')).tap();
       await expect(element(by.id('groupOptionsBtn'))).toBeVisible();
       await element(by.id('groupOptionsBtn')).tap();
-      await expect(element(by.text('Leave Group'))).toBeVisible();
-      await element(by.text('Leave Group')).tap();
+      await expect(element(by.text(leaveGroupText))).toBeVisible();
+      await element(by.text(leaveGroupText)).tap();
       // back out with CANCEL button
       await element(by.text(cancelText)).tap();
       await expect(
@@ -285,7 +285,7 @@ describe('Groups', () => {
       await element(by.id('groupItem-0')).tap();
       await expect(element(by.id('groupOptionsBtn'))).toBeVisible();
       await element(by.id('groupOptionsBtn')).tap();
-      await element(by.text('Leave group')).tap();
+      await element(by.text(leaveGroupText)).tap();
       // confirm with OK button
       await element(by.text('OK')).tap();
       // should be back at groups screen
