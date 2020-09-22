@@ -334,10 +334,10 @@ class NodeApi {
     };
 
     const message = stringify(op);
-    op.id1 = id1;
-    op.id2 = id2;
-    op.sig1 = sig1;
-    op.sig2 = sig2;
+    op.id1 = params.id1;
+    op.id2 = params.id2;
+    op.sig1 = params.sig1;
+    op.sig2 = params.sig2;
     let res = await this.api.post(`/operations`, op);
     NodeApi.throwOnError(res);
     op.hash = NodeApi.checkHash(res, message);
