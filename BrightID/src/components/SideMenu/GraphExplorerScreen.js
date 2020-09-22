@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   linkText: {
     fontFamily: 'Poppins',
     fontWeight: '400',
-    color: 'blue',
+    color: '#2185D0',
     fontSize: DEVICE_LARGE ? 14 : 13,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: 'blue',

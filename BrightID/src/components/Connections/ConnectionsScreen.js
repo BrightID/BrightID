@@ -66,6 +66,8 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
             showSeparators: true,
             textStyle: {
               color: '#2185D0',
+              textAlign: 'center',
+              width: '100%',
             },
             titleTextStyle: {
               fontSize: DEVICE_LARGE ? 20 : 17,
