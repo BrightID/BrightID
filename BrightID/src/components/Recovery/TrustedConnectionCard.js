@@ -31,15 +31,15 @@ class TrustedConnectionCard extends React.PureComponent<Props> {
 
   render() {
     const { photo, name, connectionDate, style } = this.props;
+    const imageSource = photo?.filename
+      ? {
+          uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
+        }
+      : require('@/static/default_profile.jpg');
 
     return (
       <View style={{ ...styles.container, ...style }}>
-        <Image
-          source={{
-            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
-          }}
-          style={styles.photo}
-        />
+        <Image source={imageSource} style={styles.photo} />
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.connectedText}>

@@ -18,6 +18,14 @@ const FullScreenPhoto = ({ route, navigation }) => {
   const uri = base64
     ? photo
     : `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`;
+
+  const imageSource =
+    photo?.filename || base64
+      ? {
+          uri,
+        }
+      : require('@/static/default_profile.jpg');
+
   const pan = useRef(new Animated.ValueXY()).current;
 
   const panResponder = useRef(
@@ -51,9 +59,7 @@ const FullScreenPhoto = ({ route, navigation }) => {
       {...panResponder.panHandlers}
     >
       <Animated.Image
-        source={{
-          uri,
-        }}
+        source={imageSource}
         style={[
           styles.photo,
           {

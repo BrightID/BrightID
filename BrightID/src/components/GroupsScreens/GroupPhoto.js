@@ -30,15 +30,23 @@ const GroupPhoto = ({ group }) => {
       </View>
     );
   } else {
-    const circlePhotos = groupCirclePhotos(group);
+    const circlePhotos = groupCirclePhotos(group).map((item) => {
+      if (item.photo?.filename) {
+        item.source = {
+          uri: `file://${RNFS.DocumentDirectoryPath}/photos/${item.photo?.filename}`,
+        };
+      } else {
+        item.source = require('@/static/default_profile.jpg');
+      }
+      return item;
+    });
+
     return (
       <View style={styles.container}>
         <View style={styles.topPhotos}>
           {circlePhotos[0] && (
             <Image
-              source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${circlePhotos[0].photo?.filename}`,
-              }}
+              source={circlePhotos[0].source}
               style={photoStyle(circlePhotos[0])}
             />
           )}
@@ -46,17 +54,13 @@ const GroupPhoto = ({ group }) => {
         <View style={styles.bottomPhotos}>
           {circlePhotos[1] && (
             <Image
-              source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${circlePhotos[1].photo?.filename}`,
-              }}
+              source={circlePhotos[1].source}
               style={photoStyle(circlePhotos[1])}
             />
           )}
           {circlePhotos[2] && (
             <Image
-              source={{
-                uri: `file://${RNFS.DocumentDirectoryPath}/photos/${circlePhotos[2].photo?.filename}`,
-              }}
+              source={circlePhotos[2].source}
               style={photoStyle(circlePhotos[2])}
             />
           )}

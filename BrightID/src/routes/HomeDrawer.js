@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
-import { Image, View, Text, Clipboard, StyleSheet } from 'react-native';
+import { Image, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import HomeScreen, { verifiedSelector } from '@/components/HomeScreen';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
-  DrawerItem,
 } from '@react-navigation/drawer';
 import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
 import { SvgXml } from 'react-native-svg';
 import verificationSticker from '@/static/verification-sticker.svg';
 import { retrieveImage } from '@/utils/filesystem';
-import { navigate } from '@/NavigationService';
 import editProfile from '@/static/edit_profile_inactive.svg';
 import trustedConnections from '@/static/trusted_connections_sidebar_inactive.svg';
 import contactUs from '@/static/contact_us.svg';
@@ -51,6 +49,44 @@ const getIcon = (name) => {
   };
 };
 
+const CustomItem = ({
+  onPress,
+  label,
+  icon: Icon,
+  focused,
+  inactiveTintColor,
+  activeTintColor,
+  activeBackgroundColor,
+  inactiveBackgroundColor,
+}) => {
+  return (
+    <TouchableOpacity
+      activeOpacity={0.3}
+      style={[
+        styles.drawerItem,
+        {
+          backgroundColor: focused
+            ? activeBackgroundColor
+            : inactiveBackgroundColor,
+        },
+      ]}
+      onPress={onPress}
+    >
+      <Icon focused={focused} />
+      <Text
+        style={[
+          styles.labelStyle,
+          {
+            color: focused ? activeTintColor : inactiveTintColor,
+          },
+        ]}
+      >
+        {label}
+      </Text>
+    </TouchableOpacity>
+  );
+};
+
 const CustomDrawerContent = (props) => {
   const photoFilename = useSelector((state) => state.user.photo.filename);
   const name = useSelector((state) => state.user.name);
@@ -82,7 +118,7 @@ const CustomDrawerContent = (props) => {
           />
         )}
       </View>
-      <DrawerItem
+      <CustomItem
         inactiveTintColor="#000"
         label="Home"
         style={styles.drawerItem}
@@ -92,7 +128,7 @@ const CustomDrawerContent = (props) => {
           navigation.navigate('Home');
         }}
       />
-      <DrawerItem
+      <CustomItem
         focused={state.routeNames[state.index] === 'Achievements'}
         inactiveTintColor="#000"
         inactiveBackgroundColor="#fff"
@@ -106,7 +142,7 @@ const CustomDrawerContent = (props) => {
           navigation.navigate('Achievements');
         }}
       />
-      <DrawerItem
+      <CustomItem
         focused={state.routeNames[state.index] === 'Copy Explorer Code'}
         inactiveTintColor="#000"
         inactiveBackgroundColor="#fff"
@@ -120,21 +156,21 @@ const CustomDrawerContent = (props) => {
           navigation.navigate('Copy Explorer Code');
         }}
       />
-      <DrawerItem
+      <CustomItem
         inactiveTintColor="#aaa"
         label="Edit Profile"
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
         icon={getIcon('editProfile')}
       />
-      <DrawerItem
+      <CustomItem
         inactiveTintColor="#aaa"
         label="Trusted Connections"
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
         icon={getIcon('trustedConnections')}
       />
-      <DrawerItem
+      <CustomItem
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
         inactiveTintColor="#000"
@@ -242,14 +278,19 @@ const styles = StyleSheet.create({
     marginTop: 1.5,
   },
   drawerItem: {
-    paddingLeft: DEVICE_LARGE ? 35 : 25,
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'flex-start',
+    flexDirection: 'row',
+    marginVertical: 4,
+    marginHorizontal: 10,
+    overflow: 'hidden',
+    paddingLeft: DEVICE_LARGE ? 43 : 34,
+    paddingVertical: 10,
   },
   labelStyle: {
     fontFamily: 'Poppins',
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 16 : 14,
-    marginLeft: -15,
+    marginLeft: 16,
   },
 });

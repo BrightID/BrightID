@@ -144,7 +144,9 @@ export const setupRecovery = async () => {
 
 export const recoveryQrStr = () => {
   const { publicKey: signingKey, timestamp } = store.getState().recoveryData;
-  return `Recovery_${JSON.stringify({ signingKey, timestamp })}`;
+  return encodeURIComponent(
+    `Recovery_${JSON.stringify({ signingKey, timestamp })}`,
+  );
 };
 
 export const parseRecoveryQr = (
@@ -230,8 +232,11 @@ export const restoreUserData = async (pass: string) => {
   const { id, secretKey, publicKey } = store.getState().recoveryData;
 
   // save secretKey in keystore
-
-  await saveSecretKey(id, secretKey);
+  try {
+    await saveSecretKey(id, secretKey);
+  } catch (err) {
+    console.error('unable to save secret key', err.message);
+  }
 
   const decrypted = await fetchBackupData('data', pass);
 
@@ -271,21 +276,30 @@ export const recoverData = async (pass: string) => {
   store.dispatch(setGroups(groups));
 
   for (const conn of connections) {
-    let decrypted = await fetchBackupData(conn.id, pass);
-    const filename = await saveImage({
-      imageName: conn.id,
-      base64Image: decrypted,
-    });
-    conn.photo = { filename };
+    try {
+      let decrypted = await fetchBackupData(conn.id, pass);
+      const filename = await saveImage({
+        imageName: conn.id,
+        base64Image: decrypted,
+      });
+      conn.photo = { filename };
+    } catch (err) {
+      console.log('image not found', err.message);
+      conn.photo = { filename: '' };
+    }
   }
 
   for (const group of groups) {
     if (group.photo?.filename) {
-      let decrypted = await fetchBackupData(group.id, pass);
-      await saveImage({
-        imageName: group.id,
-        base64Image: decrypted,
-      });
+      try {
+        let decrypted = await fetchBackupData(group.id, pass);
+        await saveImage({
+          imageName: group.id,
+          base64Image: decrypted,
+        });
+      } catch (err) {
+        console.log('image not found', err.message);
+      }
     }
   }
 

@@ -136,8 +136,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     marginTop: DEVICE_LARGE ? 100 : 80,
-    paddingHorizontal: DEVICE_LARGE ? 20 : 10,
-    width: '100%',
+    paddingHorizontal: DEVICE_LARGE ? 22 : 20,
+    // width: '80%',
   },
   infoText: {
     fontFamily: 'Poppins',
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   linkText: {
     fontFamily: 'Poppins',
     fontWeight: '400',
-    color: 'blue',
+    color: '#2185D0',
     fontSize: DEVICE_LARGE ? 14 : 13,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: 'blue',

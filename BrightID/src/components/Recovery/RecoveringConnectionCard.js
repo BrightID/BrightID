@@ -51,16 +51,16 @@ class RecoveryConnectionCard extends React.PureComponent<Props> {
 
   render() {
     const { photo, name, score, connectionDate, style } = this.props;
+    const imageSource = photo?.filename
+      ? {
+          uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
+        }
+      : require('@/static/default_profile.jpg');
 
     return (
       <TouchableOpacity onPress={this.handleConnectionSelect}>
         <View style={{ ...styles.container, ...style }}>
-          <Image
-            source={{
-              uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
-            }}
-            style={styles.photo}
-          />
+          <Image source={imageSource} style={styles.photo} />
           <View style={styles.info}>
             <Text style={styles.name}>{name}</Text>
             <View style={styles.scoreContainer}>
