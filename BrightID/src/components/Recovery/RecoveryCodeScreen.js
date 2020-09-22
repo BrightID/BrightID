@@ -86,7 +86,9 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
   };
 
   copyQr = () => {
-    Clipboard.setString(recoveryQrStr());
+    const recoveryCode = recoveryQrStr();
+    const universalLink = `https://app.brightid.org/connection-code/${recoveryCode}`;
+    Clipboard.setString(universalLink);
     this.setState({ copied: true });
   };
 

@@ -111,7 +111,7 @@ export const ScanCodeScreen = () => {
       try {
         if (qrData.startsWith('Recovery_')) {
           navigation.navigate('RecoveringConnection', {
-            recoveryRequestCode: qrData,
+            recoveryRequestCode: decodeURIComponent(qrData),
           });
         } else if (qrData.startsWith('brightid://')) {
           console.log(`handleQrData: calling Linking.openURL() with ${qrData}`);

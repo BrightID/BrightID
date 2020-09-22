@@ -144,7 +144,9 @@ export const setupRecovery = async () => {
 
 export const recoveryQrStr = () => {
   const { publicKey: signingKey, timestamp } = store.getState().recoveryData;
-  return `Recovery_${JSON.stringify({ signingKey, timestamp })}`;
+  return encodeURIComponent(
+    `Recovery_${JSON.stringify({ signingKey, timestamp })}`,
+  );
 };
 
 export const parseRecoveryQr = (
