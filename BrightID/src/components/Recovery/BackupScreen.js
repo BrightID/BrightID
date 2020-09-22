@@ -102,6 +102,7 @@ class BackupScreen extends React.Component<Props, State> {
         total: connections.length + groupsPhotoCount + 2,
       });
 
+      // TODO: Any error happening inside backupAppData() is caught and just logged to console. Should this be changed?
       await backupAppData();
 
       this.setState({
