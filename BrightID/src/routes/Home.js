@@ -1,5 +1,11 @@
 import React from 'react';
-import { Keyboard, Image, TouchableOpacity, View } from 'react-native';
+import {
+  TouchableWithoutFeedback,
+  Keyboard,
+  Image,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useSelector } from 'react-redux';
 import { INVITE_ACTIVE, DEVICE_LARGE } from '@/utils/constants';
 import { createSelector } from '@reduxjs/toolkit';
@@ -75,13 +81,19 @@ const NotificationBell = () => {
 
 const BrightIdLogo = () => {
   return (
-    <Image
-      source={require('@/static/brightid-final.png')}
-      accessible={true}
-      accessibilityLabel="Home Header Logo"
-      resizeMode="contain"
-      style={{ width: DEVICE_LARGE ? 104 : 85, maxHeight: 80 }}
-    />
+    <TouchableWithoutFeedback
+      onPress={() => {
+        navigate('Home');
+      }}
+    >
+      <Image
+        source={require('@/static/brightid-final.png')}
+        accessible={true}
+        accessibilityLabel="Home Header Logo"
+        resizeMode="contain"
+        style={{ width: DEVICE_LARGE ? 104 : 85, maxHeight: 80 }}
+      />
+    </TouchableWithoutFeedback>
   );
 };
 
