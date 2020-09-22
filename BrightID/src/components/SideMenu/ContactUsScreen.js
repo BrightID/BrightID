@@ -108,7 +108,7 @@ export const ContactUsScreen = function () {
             name="twitter"
             icon="twitter"
             color="#52A7E7"
-            url="https://discord.gg/GkYM5Jy"
+            url="https://twitter.com/BrightIDProject"
           />
         </View>
 
