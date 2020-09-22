@@ -23,6 +23,8 @@ import taskListFocused from '@/static/task_list_icon_focused.svg';
 
 import TasksScreen from '@/components/Tasks/TasksScreen';
 import GraphExplorerScreen from '@/components/SideMenu/GraphExplorerScreen';
+import ContactUsScreen from '@/components/SideMenu/ContactUsScreen';
+
 import { useHeaderHeight } from '@react-navigation/stack';
 
 const iconMap = {
@@ -87,7 +89,7 @@ const CustomDrawerContent = (props) => {
         labelStyle={styles.labelStyle}
         icon={getIcon('homeIcon')}
         onPress={() => {
-          props.navigation.navigate('Home');
+          navigation.navigate('Home');
         }}
       />
       <DrawerItem
@@ -139,8 +141,7 @@ const CustomDrawerContent = (props) => {
         label="Contact Us"
         icon={getIcon('contactUs')}
         onPress={() => {
-          navigate('Tasks');
-          props.navigation.closeDrawer();
+          navigation.navigate('ContactUs');
         }}
       />
     </DrawerContentScrollView>
@@ -189,6 +190,13 @@ export const HomeDrawer = () => {
           drawerIcon: getIcon('explorerCode'),
         }}
         component={GraphExplorerScreen}
+      />
+      <Drawer.Screen
+        name="ContactUs"
+        options={{
+          drawerIcon: getIcon('explorerCode'),
+        }}
+        component={ContactUsScreen}
       />
     </Drawer.Navigator>
   );

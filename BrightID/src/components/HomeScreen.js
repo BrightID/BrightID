@@ -36,7 +36,6 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 let chatSheetRef = '',
   photoSheetRef = '';
 let discordUrl = 'https://discord.gg/nTtuB2M';
-let JoinCommunity = DEVICE_IOS ? TextInput : Text;
 
 /** Selectors */
 
@@ -50,6 +49,12 @@ export const verifiedSelector = createSelector(
   (verifications) => verifications.includes('BrightID'),
 );
 
+export const verifiedConnections = createSelector(
+  (state) => state.connections.connections,
+  (connections) =>
+    connections.filter((conn) => conn.status === 'verified').length,
+);
+
 /** HomeScreen Component */
 
 export const HomeScreen = (props) => {
@@ -60,9 +65,7 @@ export const HomeScreen = (props) => {
   const name = useSelector((state) => state.user.name);
   const photoFilename = useSelector((state) => state.user.photo.filename);
   const groupsCount = useSelector((state) => state.groups.groups.length);
-  const connectionsCount = useSelector(
-    (state) => state.connections.connections.length,
-  );
+  const connectionsCount = useSelector(verifiedConnections);
   const linkedContextsCount = useSelector(linkedContextCountSelector);
   const verified = useSelector(verifiedSelector);
 
@@ -317,9 +320,9 @@ export const HomeScreen = (props) => {
               height={DEVICE_LARGE ? 28 : 25}
               xml={forumIcon}
             />
-            <JoinCommunity editable={false} style={styles.communityLink}>
-              Join the Community
-            </JoinCommunity>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }}>
+              <Text style={styles.communityLink}>Join the Community</Text>
+            </View>
           </TouchableOpacity>
         </View>
         <DeepPasteLink />
@@ -558,8 +561,6 @@ const styles = StyleSheet.create({
     padding: DEVICE_LARGE ? 20 : 12,
   },
   communityLink: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#fff',
     color: '#fff',
     fontSize: DEVICE_LARGE ? 14 : 11,
     fontFamily: 'Poppins',

@@ -32,7 +32,6 @@ declare type State = {
 declare type AppsState = {
   apps: AppInfo[],
   linkedContexts: ContextInfo[],
-  oldLinkedContexts: ContextInfo[],
 };
 
 declare type AppInfo = {
@@ -213,6 +212,7 @@ declare type UserState = {
   safePublicKey?: string,
   password: string,
   hashedId: string,
+  secretKey: string,
 };
 
 declare type NotificationsState = {

@@ -20,13 +20,15 @@ export const bootstrapV0 = async (navigation: navigation) => {
   try {
     // load user data from async storage
     let userData = await AsyncStorage.getItem('userData');
+
     if (userData !== null) {
       userData = JSON.parse(userData);
       // convert private key to uInt8Array
-      await saveSecretKey(
-        userData.id ?? 'empty',
-        keyToString(userData.secretKey),
-      );
+      if (!userData.id) {
+        userData.id = uInt8ArrayToB64(objToUint8(userData.publicKey));
+      }
+      userData.secretKey = keyToString(userData.secretKey);
+      await saveSecretKey(userData.id, userData.secretKey);
       // update redux store
       await store.dispatch(setUserData(userData));
     } else {

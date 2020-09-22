@@ -10,7 +10,6 @@ import {
 const initialState = {
   apps: [],
   linkedContexts: [],
-  oldLinkedContexts: [],
 };
 
 export const reducer = (state: AppsState = initialState, action: action) => {
@@ -34,23 +33,9 @@ export const reducer = (state: AppsState = initialState, action: action) => {
       return { ...state, linkedContexts };
     }
     case SET_APPS: {
-      const contexts = action.apps.map((app) => app.context);
-      const linkedContexts = state.linkedContexts.filter(({ context }) =>
-        contexts.includes(context),
-      );
-      let oldLinkedContexts;
-      if (linkedContexts.length !== state.linkedContexts.length) {
-        oldLinkedContexts = state.linkedContexts
-          .filter(({ context }) => !contexts.includes(context))
-          .concat(state.oldLinkedContexts);
-      } else {
-        oldLinkedContexts = state.oldLinkedContexts;
-      }
       return {
         ...state,
         apps: action.apps,
-        linkedContexts,
-        oldLinkedContexts,
       };
     }
     case RESET_STORE: {

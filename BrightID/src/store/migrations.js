@@ -1,23 +1,53 @@
 import { createMigrate } from 'redux-persist';
-import { setInternetCredentials } from 'react-native-keychain';
+import {
+  setInternetCredentials,
+  getGenericPassword,
+  STORAGE_TYPE,
+  setGenericPassword,
+} from 'react-native-keychain';
 import { compose } from 'ramda';
-import { saveSecretKey } from '@/utils/keychain';
 
 import { objToUint8, uInt8ArrayToB64 } from '@/utils/encoding';
-import { BACKUP_URL } from '@/utils/constants';
+import { BACKUP_URL, DEVICE_ANDROID } from '@/utils/constants';
 
 const keyToString = compose(uInt8ArrayToB64, objToUint8);
 
 const migrations = {
-  8: (state) => {
+  8: async (state) => {
     delete state.user.notifications;
     delete state.connectQrData;
     delete state.connectUserData;
+    // transfer linked contexts
+    let linkedContexts = [];
+    if (state.apps.apps) {
+      linkedContexts = state.apps.apps.map((app) => ({
+        dateAdded: Date.now(),
+        contextId: app.contextId,
+        context: app.context,
+        state: app.state,
+      }));
+    }
+
     state.apps = {
       apps: [],
-      linkedContexts: [],
-      oldLinkedContexts: [],
+      linkedContexts,
     };
+
+    // transfer secret key as backup
+    try {
+      let genericPassword = await getGenericPassword();
+      let { username, password } = genericPassword;
+      if (password) {
+        state.user.id = username;
+        state.user.secretKey = password;
+      }
+    } catch (err) {
+      console.log(err.message);
+      if (state.user.secretKey) {
+        state.user.secretKey = keyToString(state.user.secretKey);
+      }
+    }
+
     return state;
   },
   7: (state) => {
@@ -56,10 +86,15 @@ const migrations = {
     try {
       // secret key defaults to empty object
       let secretKey = state.user?.secretKey;
-      if (Object.keys(secretKey).length && state.user.id) {
+      if (secretKey && Object.keys(secretKey).length && state.user?.id) {
         // save secret key in keychain storage
 
-        await saveSecretKey(state.user.id, keyToString(secretKey));
+        if (DEVICE_ANDROID) {
+          let opts = { storage: STORAGE_TYPE.AES };
+          await setGenericPassword(state.user.id, keyToString(secretKey), opts);
+        } else {
+          await setGenericPassword(state.user.id, keyToString(secretKey));
+        }
 
         // save backup password
         await setInternetCredentials(
@@ -67,8 +102,6 @@ const migrations = {
           state.user.id,
           state.user.password,
         );
-        // delete secret key from async storage
-        // delete state.user.secretKey;
       }
     } catch (err) {
       console.log(err.message);
@@ -76,7 +109,7 @@ const migrations = {
         'Unable to access device keychain, please let BrightID core team know about this issue..',
       );
     }
-
+    state.user.secretKey = keyToString(state.user.secretKey);
     return state;
   },
 };
