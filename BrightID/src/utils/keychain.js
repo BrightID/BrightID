@@ -4,9 +4,8 @@ import {
   setGenericPassword,
   STORAGE_TYPE,
 } from 'react-native-keychain';
-import { compose } from 'ramda';
 import store from '@/store';
-import { uInt8ArrayToB64, objToUint8, b64ToUint8Array } from './encoding';
+import { objToB64, b64ToUint8Array } from './encoding';
 import { DEVICE_ANDROID } from './constants';
 
 export const obtainKeys = async () => {
@@ -20,6 +19,7 @@ export const obtainKeys = async () => {
     if (secretKey.length < 10) {
       throw new Error('secret key does not exist');
     }
+
     return { username, secretKey };
   } catch (err) {
     console.log(err.message);
@@ -29,10 +29,14 @@ export const obtainKeys = async () => {
 };
 
 export const saveSecretKey = async (id: string, secretKey: string) => {
-  if (DEVICE_ANDROID) {
-    let opts = { storage: STORAGE_TYPE.AES };
-    await setGenericPassword(id, secretKey, opts);
-  } else {
-    await setGenericPassword(id, secretKey);
+  try {
+    if (DEVICE_ANDROID) {
+      let opts = { storage: STORAGE_TYPE.AES };
+      await setGenericPassword(id, objToB64(secretKey), opts);
+    } else {
+      await setGenericPassword(id, objToB64(secretKey));
+    }
+  } catch (err) {
+    console.error(err.message);
   }
 };

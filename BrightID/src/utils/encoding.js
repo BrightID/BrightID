@@ -44,6 +44,8 @@ export function b64ToUrlSafeB64(s: string) {
   return s.replace(/[/+=]/g, (c) => alts[c]);
 }
 
+export const objToB64 = compose(uInt8ArrayToB64, objToUint8);
+
 export const hash = (data: string) => {
   const h = CryptoJS.SHA256(data);
   const b = h.toString(CryptoJS.enc.Base64);

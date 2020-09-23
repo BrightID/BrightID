@@ -4,10 +4,13 @@ import nacl from 'tweetnacl';
 import { compose } from 'ramda';
 import { setUserData, setHashedId } from '@/actions';
 import { createImageDirectory, saveImage } from '@/utils/filesystem';
-import { b64ToUrlSafeB64, uInt8ArrayToB64, objToUint8 } from '@/utils/encoding';
+import {
+  b64ToUrlSafeB64,
+  uInt8ArrayToB64,
+  objToUint8,
+  objToB64,
+} from '@/utils/encoding';
 import { saveSecretKey } from '@/utils/keychain';
-
-const keyToString = compose(uInt8ArrayToB64, objToUint8);
 
 export const handleBrightIdCreation = ({
   name,
@@ -31,7 +34,7 @@ export const handleBrightIdCreation = ({
       id,
       name,
       photo: { filename },
-      secretKey: keyToString(secretKey),
+      secretKey: objToB64(secretKey),
     };
 
     // We have no createUser anymore
@@ -43,7 +46,7 @@ export const handleBrightIdCreation = ({
     // to fix bug while testing
     dispatch(setHashedId(''));
     // save id / secretKey inside of keychain
-    await saveSecretKey(id, keyToString(secretKey));
+    await saveSecretKey(id, secretKey);
 
     console.log('brightid creation success');
 

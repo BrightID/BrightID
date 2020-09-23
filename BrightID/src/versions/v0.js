@@ -1,7 +1,12 @@
 // @flow
 
 import AsyncStorage from '@react-native-community/async-storage';
-import { b64ToUrlSafeB64, objToUint8, uInt8ArrayToB64 } from '@/utils/encoding';
+import {
+  b64ToUrlSafeB64,
+  objToUint8,
+  uInt8ArrayToB64,
+  objToB64,
+} from '@/utils/encoding';
 import {
   setUserData,
   setUserId,
@@ -12,9 +17,6 @@ import {
 import { saveSecretKey } from '@/utils/keychain';
 import { defaultSort } from '@/components/Connections/models/sortingUtility';
 import store from '@/store';
-import { compose } from 'ramda';
-
-const keyToString = compose(uInt8ArrayToB64, objToUint8);
 
 export const bootstrapV0 = async (navigation: navigation) => {
   try {
@@ -27,8 +29,9 @@ export const bootstrapV0 = async (navigation: navigation) => {
       if (!userData.id) {
         userData.id = uInt8ArrayToB64(objToUint8(userData.publicKey));
       }
-      userData.secretKey = keyToString(userData.secretKey);
+
       await saveSecretKey(userData.id, userData.secretKey);
+      userData.secretKey = objToB64(userData.secretKey);
       // update redux store
       await store.dispatch(setUserData(userData));
     } else {

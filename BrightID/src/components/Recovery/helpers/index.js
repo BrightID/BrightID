@@ -3,7 +3,7 @@
 import { Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
-import { saveSecretKey } from '@/utils/keychain';
+import { obtainKeys, saveSecretKey } from '@/utils/keychain';
 import {
   createImageDirectory,
   retrieveImage,
@@ -23,7 +23,12 @@ import {
   setHashedId,
   setGroups,
 } from '@/actions';
-import { uInt8ArrayToB64, safeHash } from '@/utils/encoding';
+import {
+  uInt8ArrayToB64,
+  b64ToUint8Array,
+  safeHash,
+  objToB64,
+} from '@/utils/encoding';
 
 export const setTrustedConnections = async () => {
   const {
@@ -131,6 +136,7 @@ export const setupRecovery = async () => {
   if (recoveryData.timestamp) return;
 
   const { publicKey, secretKey } = await nacl.sign.keyPair();
+
   recoveryData = {
     publicKey: uInt8ArrayToB64(publicKey),
     secretKey: uInt8ArrayToB64(secretKey),
@@ -144,6 +150,7 @@ export const setupRecovery = async () => {
 
 export const recoveryQrStr = () => {
   const { publicKey: signingKey, timestamp } = store.getState().recoveryData;
+
   return encodeURIComponent(
     `Recovery_${JSON.stringify({ signingKey, timestamp })}`,
   );
@@ -233,7 +240,7 @@ export const restoreUserData = async (pass: string) => {
 
   // save secretKey in keystore
   try {
-    await saveSecretKey(id, secretKey);
+    await saveSecretKey(id, b64ToUint8Array(secretKey));
   } catch (err) {
     console.error('unable to save secret key', err.message);
   }
@@ -249,6 +256,7 @@ export const restoreUserData = async (pass: string) => {
   emitter.emit('restoreTotal', connections.length + groupsPhotoCount + 2);
   userData.id = id;
   userData.publicKey = publicKey;
+  userData.secretKey = secretKey;
 
   const userPhoto = await fetchBackupData(id, pass);
   if (userPhoto) {
