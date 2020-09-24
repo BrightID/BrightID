@@ -36,7 +36,6 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
   const dispatch = useDispatch();
   const { showActionSheetWithOptions } = useActionSheet();
   const disabled = status === 'initiated';
-  const isHidden = status === 'hidden';
   const isStale = status === 'stale';
 
   let flaggingOptions = [
@@ -188,13 +187,7 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
 
   return (
     <View style={styles.actionContainer}>
-      {isStale ? (
-        <RemoveButton />
-      ) : isHidden ? (
-        <UnFlagButton />
-      ) : (
-        <FlagButton />
-      )}
+      {isStale ? <RemoveButton /> : <FlagButton />}
     </View>
   );
 };
@@ -207,16 +200,10 @@ const connectionsSelector = (state) => state.connections.connections;
 const filterConnectionsSelector = createSelector(
   connectionsSelector,
   searchParamSelector,
-  (_, showHidden) => showHidden,
-  (connections, searchParam, showHidden) => {
+  (connections, searchParam) => {
     const searchString = searchParam.toLowerCase().replace(/\s/g, '');
-    return connections.filter(
-      (item) =>
-        `${item.name}`
-          .toLowerCase()
-          .replace(/\s/g, '')
-          .includes(searchString) &&
-        (showHidden || item.status !== 'hidden'),
+    return connections.filter((item) =>
+      `${item.name}`.toLowerCase().replace(/\s/g, '').includes(searchString),
     );
   },
 );
@@ -228,14 +215,7 @@ export const ConnectionsScreen = () => {
   const navigation = useNavigation();
 
   const [refreshing, setRefreshing] = useState(false);
-  const [showHidden, setShowHidden] = useState(false);
-  const connections = useSelector((state) =>
-    filterConnectionsSelector(state, showHidden),
-  );
-
-  const hiddenConnectionCount = useSelector(
-    (state) => state.connections.connections.length - connections.length,
-  );
+  const connections = useSelector((state) => filterConnectionsSelector(state));
 
   useFocusEffect(
     useCallback(() => {
@@ -299,20 +279,20 @@ export const ConnectionsScreen = () => {
                 title="No connections"
               />
             }
-            ListFooterComponent={() =>
-              hiddenConnectionCount > 0 || showHidden ? (
-                <TouchableOpacity
-                  style={styles.listFooter}
-                  onPress={() => {
-                    setShowHidden((showHiden) => !showHiden);
-                  }}
-                >
-                  <Text style={styles.listFooterText}>
-                    {showHidden ? 'Hide' : 'Show'} Hidden Connections
-                  </Text>
-                </TouchableOpacity>
-              ) : null
-            }
+            // ListFooterComponent={() =>
+            //   hiddenConnectionCount > 0 || showHidden ? (
+            //     <TouchableOpacity
+            //       style={styles.listFooter}
+            //       onPress={() => {
+            //         setShowHidden((showHiden) => !showHiden);
+            //       }}
+            //     >
+            //       <Text style={styles.listFooterText}>
+            //         {showHidden ? 'Hide' : 'Show'} Hidden Connections
+            //       </Text>
+            //     </TouchableOpacity>
+            //   ) : null
+            // }
           />
         </View>
 

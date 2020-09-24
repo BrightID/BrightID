@@ -2,7 +2,7 @@
 
 import { Alert } from 'react-native';
 import api from '@/api/brightId';
-import { flagAndHideConnection } from '@/actions';
+import { deleteConnection } from '@/actions';
 import { fakeJoinGroups } from '@/actions/fakeGroup';
 import { backupUser } from '@/components//Recovery/helpers';
 import { defaultSort } from './sortingUtility';
@@ -32,7 +32,7 @@ export const handleFlagging = ({ name, id, dispatch, secretKey }) => (
     },
   ];
   Alert.alert(
-    'Flag and Hide Connection',
+    'Flag and Delete Connection',
     `Are you sure you want to flag ${name} as ${flag}?`,
     buttons,
     { cancelable: true },
@@ -46,7 +46,7 @@ export const flagConnection = (id, flag) => async (dispatch, getState) => {
 
     await api.removeConnection(id, flag);
     // hide connection in redux
-    dispatch(flagAndHideConnection(id, flag));
+    dispatch(deleteConnection(id));
     dispatch(defaultSort());
     if (backupCompleted) {
       await backupUser();
