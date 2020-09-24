@@ -85,8 +85,6 @@ export const NotificationBanner = () => {
   const _onTap = () => {
     if (activeNotification?.navigationTarget) {
       navigate(activeNotification.navigationTarget);
-    } else {
-      navigate('Notifications', { type: activeNotification?.type });
     }
   };
 
