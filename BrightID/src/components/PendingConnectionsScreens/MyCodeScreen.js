@@ -69,6 +69,8 @@ if (__DEV__) {
 
 const PENDING_GROUP_TIMEOUT = 45000;
 
+const Container = DEVICE_IOS ? SafeAreaView : View;
+
 export const MyCodeScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -270,7 +272,7 @@ export const MyCodeScreen = () => {
           <QrCode channel={myChannel} />
         </View>
 
-        <View style={styles.bottomContainer}>
+        <Container style={styles.bottomContainer}>
           <Text style={styles.infoBottomText}>Or you can also...</Text>
           <TouchableOpacity
             testID="MyCodeToScanCodeBtn"
@@ -286,7 +288,7 @@ export const MyCodeScreen = () => {
             />
             <Text style={styles.scanCodeText}>Scan a Code</Text>
           </TouchableOpacity>
-        </View>
+        </Container>
       </View>
     </>
   );

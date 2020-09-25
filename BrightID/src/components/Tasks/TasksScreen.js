@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
-import { DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
 import TaskCardController from './TaskCardController';
 import { TasksProgress } from './TasksProgress';
 import {
@@ -30,7 +30,10 @@ export const TasksScreen = function () {
   const dispatch = useDispatch();
   const taskIds = useSelector(selectTaskIds);
   const completedTaskIds = useSelector(selectCompletedTaskIds);
-  const headerHeight = useHeaderHeight();
+  let headerHeight = useHeaderHeight();
+  if (DEVICE_IOS && DEVICE_LARGE) {
+    headerHeight += 7;
+  }
   const isDrawerOpen = useIsDrawerOpen();
 
   const refreshTasks = useCallback(() => {

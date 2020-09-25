@@ -29,8 +29,8 @@
 		D752DD92251C97E3002622A9 /* Poppins-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = D752DD89251C97E3002622A9 /* Poppins-Light.otf */; };
 		D752DD93251C97E3002622A9 /* EurostileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D752DD8A251C97E3002622A9 /* EurostileRegular.ttf */; };
 		D752DD98251CACBB002622A9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D752DD97251CACBB002622A9 /* LaunchScreen.storyboard */; };
-		D752DD9A251D9174002622A9 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = D752DD99251D9173002622A9 /* main.jsbundle */; };
-		D752DD9C251D91A9002622A9 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = D752DD9B251D91A9002622A9 /* assets */; };
+		D752DDA2251D97ED002622A9 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = D752DDA1251D97ED002622A9 /* assets */; };
+		D752DDA4251D97FD002622A9 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = D752DDA3251D97FD002622A9 /* main.jsbundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,8 +83,8 @@
 		D752DD89251C97E3002622A9 /* Poppins-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Light.otf"; path = "../assets/fonts/Poppins-Light.otf"; sourceTree = "<group>"; };
 		D752DD8A251C97E3002622A9 /* EurostileRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = EurostileRegular.ttf; path = ../assets/fonts/EurostileRegular.ttf; sourceTree = "<group>"; };
 		D752DD97251CACBB002622A9 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
-		D752DD99251D9173002622A9 /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		D752DD9B251D91A9002622A9 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
+		D752DDA1251D97ED002622A9 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
+		D752DDA3251D97FD002622A9 /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		DD731C0C091AA3F89CDE54EC /* Pods-BrightID-BrightIDTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-BrightIDTests.release.xcconfig"; path = "Target Support Files/Pods-BrightID-BrightIDTests/Pods-BrightID-BrightIDTests.release.xcconfig"; sourceTree = "<group>"; };
 		E9292E8EE44B18B13D6F3A00 /* Pods-BrightID-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOSTests/Pods-BrightID-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -196,8 +196,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				D752DD9B251D91A9002622A9 /* assets */,
-				D752DD99251D9173002622A9 /* main.jsbundle */,
+				D752DDA3251D97FD002622A9 /* main.jsbundle */,
+				D752DDA1251D97ED002622A9 /* assets */,
 				D752DD87251C97E2002622A9 /* ApexNew-Book.otf */,
 				D752DD82251C97E1002622A9 /* ApexNew-Light.otf */,
 				D752DD88251C97E2002622A9 /* ApexNew-Medium.otf */,
@@ -373,8 +373,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D752DD9C251D91A9002622A9 /* assets in Resources */,
-				D752DD9A251D9174002622A9 /* main.jsbundle in Resources */,
+				D752DDA4251D97FD002622A9 /* main.jsbundle in Resources */,
+				D752DDA2251D97ED002622A9 /* assets in Resources */,
 				D752DD8B251C97E3002622A9 /* ApexNew-Light.otf in Resources */,
 				D752DD8C251C97E3002622A9 /* Poppins-Regular.otf in Resources */,
 				D752DD8D251C97E3002622A9 /* Poppins-Medium.otf in Resources */,

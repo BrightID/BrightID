@@ -1,26 +1,17 @@
 // @flow
 
-import React, { useCallback, useState, useRef } from 'react';
+import React from 'react';
 import {
   Text,
   StyleSheet,
   View,
-  TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback,
-  Keyboard,
   Linking,
-  Pressable,
-  Button,
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import Clipboard from '@react-native-community/clipboard';
-import { DEVICE_LARGE, ORANGE, DARK_ORANGE } from '@/utils/constants';
-import { useDispatch, useSelector } from 'react-redux';
+import { DEVICE_LARGE, DARK_ORANGE, DEVICE_IOS } from '@/utils/constants';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
-import { useNavigation } from '@react-navigation/native';
-import { getExplorerCode } from '@/utils/explorer';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import keybaseLogo from '@/static/keybase_logo.svg';
 
@@ -49,7 +40,10 @@ const KeybaseItem = () => (
 );
 
 export const ContactUsScreen = function () {
-  const headerHeight = useHeaderHeight();
+  let headerHeight = useHeaderHeight();
+  if (DEVICE_IOS && DEVICE_LARGE) {
+    headerHeight += 7;
+  }
   const isDrawerOpen = useIsDrawerOpen();
 
   return (

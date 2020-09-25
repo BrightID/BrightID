@@ -6,7 +6,7 @@ import {
   createDrawerNavigator,
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
-import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
 import { SvgXml } from 'react-native-svg';
 import verificationSticker from '@/static/verification-sticker.svg';
 import { retrieveImage } from '@/utils/filesystem';
@@ -187,7 +187,10 @@ const CustomDrawerContent = (props) => {
 const Drawer = createDrawerNavigator();
 
 export const HomeDrawer = () => {
-  const headerHeight = useHeaderHeight();
+  let headerHeight = useHeaderHeight();
+  if (DEVICE_IOS && DEVICE_LARGE) {
+    headerHeight += 7;
+  }
 
   return (
     <Drawer.Navigator
