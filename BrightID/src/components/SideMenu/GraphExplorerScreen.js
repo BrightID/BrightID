@@ -3,14 +3,17 @@
 import React from 'react';
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
-import { DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { getExplorerCode } from '@/utils/explorer';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export const GraphExplorerScreen = function () {
-  const headerHeight = useHeaderHeight();
+  let headerHeight = useHeaderHeight();
+  if (DEVICE_IOS && DEVICE_LARGE) {
+    headerHeight += 7;
+  }
   const isDrawerOpen = useIsDrawerOpen();
   const explorerCode = getExplorerCode();
 

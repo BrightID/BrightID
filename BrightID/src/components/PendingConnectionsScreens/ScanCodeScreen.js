@@ -15,7 +15,6 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import { SvgXml } from 'react-native-svg';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import BarcodeMask from 'react-native-barcode-mask';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-native-spinkit';
@@ -47,8 +46,6 @@ function validQrString(qrString: string) {
  * after scanning qrcode - the rtc id is set
  *
  */
-
-const Container = DEVICE_IOS ? SafeAreaView : View;
 
 const NotAuthorizedView = () => (
   <View style={styles.cameraPreview}>
@@ -146,7 +143,7 @@ export const ScanCodeScreen = () => {
         animated={true}
       />
       <View style={styles.orangeTop} />
-      <Container style={styles.container}>
+      <View style={styles.container}>
         {!qrData ? (
           <>
             <View style={styles.infoTopContainer}>
@@ -246,7 +243,7 @@ export const ScanCodeScreen = () => {
             </>
           )}
         </View>
-      </Container>
+      </View>
     </>
   );
 };

@@ -1,7 +1,7 @@
 // @flow
 
 import React, { useRef } from 'react';
-import { Animated, StyleSheet, PanResponder } from 'react-native';
+import { View, Animated, StyleSheet, PanResponder } from 'react-native';
 import RNFS from 'react-native-fs';
 import { BlurView } from '@react-native-community/blur';
 
@@ -56,7 +56,6 @@ const FullScreenPhoto = ({ route, navigation }) => {
       blurType="dark"
       blurAmount={10}
       reducedTransparencyFallbackColor="black"
-      {...panResponder.panHandlers}
     >
       <Animated.Image
         source={imageSource}
@@ -68,6 +67,7 @@ const FullScreenPhoto = ({ route, navigation }) => {
         ]}
         resizeMethod="scale"
         resizeMode="contain"
+        {...panResponder.panHandlers}
       />
     </BlurView>
   );
