@@ -13,7 +13,6 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -68,8 +67,6 @@ if (__DEV__) {
 }
 
 const PENDING_GROUP_TIMEOUT = 45000;
-
-const Container = DEVICE_IOS ? SafeAreaView : View;
 
 export const MyCodeScreen = () => {
   const navigation = useNavigation();
@@ -272,7 +269,7 @@ export const MyCodeScreen = () => {
           <QrCode channel={myChannel} />
         </View>
 
-        <Container style={styles.bottomContainer}>
+        <View style={styles.bottomContainer}>
           <Text style={styles.infoBottomText}>Or you can also...</Text>
           <TouchableOpacity
             testID="MyCodeToScanCodeBtn"
@@ -288,7 +285,7 @@ export const MyCodeScreen = () => {
             />
             <Text style={styles.scanCodeText}>Scan a Code</Text>
           </TouchableOpacity>
-        </Container>
+        </View>
       </View>
     </>
   );
