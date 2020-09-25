@@ -569,11 +569,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   versionInfo: {
-    fontSize: DEVICE_LARGE ? 10 : 8,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 12 : 10,
     color: '#fff',
     position: 'absolute',
-    right: 7,
-    bottom: 7,
+    right: DEVICE_LARGE ? 12 : 7,
+    bottom: DEVICE_LARGE ? 12 : 7,
   },
 });
 
