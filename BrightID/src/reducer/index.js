@@ -1,3 +1,5 @@
+// @flow
+
 import { combineReducers } from 'redux';
 import apps from './apps';
 import channels from '../components/PendingConnectionsScreens/channelSlice';
@@ -8,6 +10,7 @@ import operations from './operations';
 import pendingConnections from '../components/PendingConnectionsScreens/pendingConnectionSlice';
 import recoveryData from './recoveryData';
 import user from './user';
+import tasks from '../components/Tasks/TasksSlice';
 
 export default combineReducers({
   apps,
@@ -19,4 +22,5 @@ export default combineReducers({
   recoveryData,
   notifications,
   user,
+  tasks,
 });

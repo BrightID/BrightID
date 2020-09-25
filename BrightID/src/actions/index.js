@@ -2,13 +2,12 @@
 
 export {
   SET_APPS,
-  ADD_APP,
-  REMOVE_APP,
-  UPDATE_APP,
+  ADD_LINKED_CONTEXT,
+  REMOVE_LINKED_CONTEXT,
+  fetchApps,
   setApps,
-  addApp,
-  removeApp,
-  updateApp,
+  addLinkedContext,
+  removeLinkedContext,
 } from './apps';
 
 export {
@@ -22,6 +21,9 @@ export {
   SET_CONNECTIONS_SEARCH,
   SET_CONNECTIONS_SEARCH_OPEN,
   HYDRATE_CONNECTIONS,
+  FLAG_AND_HIDE_CONNECTION,
+  SHOW_CONNECTION,
+  STALE_CONNECTION,
   setConnections,
   setConnectionsSearch,
   setConnectionsSearchOpen,
@@ -32,6 +34,9 @@ export {
   addTrustedConnection,
   removeTrustedConnection,
   hydrateConnections,
+  flagAndHideConnection,
+  showConnection,
+  staleConnection,
 } from './connections';
 
 export {

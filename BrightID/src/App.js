@@ -10,6 +10,7 @@ import {
   useLinking,
 } from '@react-navigation/native';
 import { StyleSheet, InteractionManager } from 'react-native';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { pollOperations } from '@/utils/operations';
 import AppRoutes from './routes';
 import { store, persistor } from './store';
@@ -74,22 +75,24 @@ export const App = () => {
         loading={<InitialLoading app={true} />}
         persistor={persistor}
       >
-        <SafeAreaProvider>
-          {initialState || typeof initialState === 'undefined' ? (
-            <>
-              <NotificationBanner />
-              <NavigationContainer
-                initialState={initialState}
-                style={styles.container}
-                ref={navigationRef}
-              >
-                <AppRoutes />
-              </NavigationContainer>
-            </>
-          ) : (
-            <InitialLoading />
-          )}
-        </SafeAreaProvider>
+        <ActionSheetProvider>
+          <SafeAreaProvider>
+            {initialState || typeof initialState === 'undefined' ? (
+              <>
+                <NotificationBanner />
+                <NavigationContainer
+                  initialState={initialState}
+                  style={styles.container}
+                  ref={navigationRef}
+                >
+                  <AppRoutes />
+                </NavigationContainer>
+              </>
+            ) : (
+              <InitialLoading />
+            )}
+          </SafeAreaProvider>
+        </ActionSheetProvider>
       </PersistGate>
     </Provider>
   );
@@ -100,6 +103,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
+    backgroundColor: '#fff',
   },
 });
 

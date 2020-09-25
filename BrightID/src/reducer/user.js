@@ -30,6 +30,7 @@ const initialState = {
   password: '',
   hashedId: '',
   verifications: [],
+  secretKey: '',
 };
 
 export const reducer = (state: UserState = initialState, action: action) => {
@@ -65,6 +66,7 @@ export const reducer = (state: UserState = initialState, action: action) => {
         name: action.name,
         publicKey: action.publicKey,
         id: action.id,
+        secretKey: action.secretKey,
       };
     }
     case SET_USER_NAME: {

@@ -9,11 +9,8 @@ import {
   setGroups,
   setInvites,
 } from '@/actions';
-import { objToUint8, uInt8ArrayToB64 } from '@/utils/encoding';
+import { objToUint8, uInt8ArrayToB64, objToB64 } from '@/utils/encoding';
 import { saveSecretKey } from '@/utils/keychain';
-import { compose } from 'ramda';
-
-const keyToString = compose(uInt8ArrayToB64, objToUint8);
 
 // export const bootstrapV4 = hydrateStore('store@v4');
 
@@ -22,8 +19,13 @@ export const bootstrap = async (version: string) => {
   if (dataStr !== null) {
     const dataObj = JSON.parse(dataStr);
     // save secretKey in keychain
-    await saveSecretKey(dataObj.id ?? 'empty', keyToString(dataObj.secretKey));
+    if (!dataObj.id) {
+      dataObj.id = uInt8ArrayToB64(objToUint8(dataObj.publicKey));
+    }
+
     dataObj.searchParam = '';
+    await saveSecretKey(dataObj.id, secretKey);
+    const secretKey = objToB64(dataObj.secretKey);
 
     const {
       apps,
@@ -76,6 +78,7 @@ export const bootstrap = async (version: string) => {
         publicKey,
         password,
         hashedId,
+        secretKey,
       }),
     );
   }

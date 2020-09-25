@@ -1,6 +1,6 @@
 {
   "name": "BrightID",
-  "version": "0.0.1",
+  "version": "2.11.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android --appIdSuffix debug",
@@ -9,7 +9,7 @@
     "start:detox": "RN_SRC_EXT=e2e.js react-native start",
     "build:detox:android": "detox build -c android.emu.debug",
     "build:detox:ios": "detox build -c ios.sim.debug",
-    "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'",
+    "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'  --assets-dest='./ios'",
     "test:android": "detox test -c android.emu.debug",
     "test:ios": "detox test -c ios.sim.debug",
     "test": "jest",
@@ -21,10 +21,14 @@
     "mermaid": "find ./diagrams -type f -name *.mmd -exec mmdc -i {} \\;"
   },
   "dependencies": {
+    "@expo/react-native-action-sheet": "^3.8.0",
     "@react-native-community/async-storage": "^1.7.0",
+    "@react-native-community/clipboard": "^1.2.3",
+    "@react-native-community/blur": "^3.6.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/push-notification-ios": "^1.4.1",
     "@react-navigation/bottom-tabs": "^5.3.3",
+    "@react-navigation/drawer": "^5.8.5",
     "@react-navigation/native": "^5.7.0",
     "@react-navigation/stack": "^5.7.0",
     "@reduxjs/toolkit": "^1.4.0",
@@ -36,6 +40,7 @@
     "ed2curve": "^0.3.0",
     "emittery": "^0.6.0",
     "events": "^3.1.0",
+    "fast-json-stable-stringify": "^2.1.0",
     "husky": "^4.2.1",
     "moment": "^2.27.0",
     "prop-types": "^15.6.2",
@@ -65,6 +70,7 @@
     "react-native-spinkit": "^1.5.0",
     "react-native-status-bar-height": "^2.4.0",
     "react-native-svg": "^12.1.0",
+    "react-native-swipe-list-view": "^3.2.4",
     "react-native-tab-view": "^2.14.4",
     "react-native-vector-icons": "^7.0.0",
     "react-redux": "^7.2.0",

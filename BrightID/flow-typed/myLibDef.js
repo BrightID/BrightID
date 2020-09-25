@@ -17,27 +17,40 @@ declare type navigation = NavigationScreenProp;
 declare type Props = State & navigation & dispatch;
 
 declare type State = {
-  apps: AppState,
   channels: ChannelsState,
+  apps: AppsState,
   connections: ConnectionsState,
   groups: GroupsState,
   notifications: NotificationsState,
   operations: OperationsState,
   pendingConnections: PendingConnectionsState,
   recoveryData: RecoveryData,
+  tasks: TasksState,
   user: UserState,
 };
 
 declare type AppsState = {
   apps: AppInfo[],
+  linkedContexts: ContextInfo[],
 };
 
 declare type AppInfo = {
+  id: string,
   name: string,
   url: string,
-  logoFile: string,
-  verified: boolean,
+  logo: string,
+  context: string,
+  verification: string,
+  url: string,
+  unusedSponsorships: number,
+  assignedSponsorships: number,
+};
+
+declare type ContextInfo = {
+  context: string,
+  contextId: string,
   dateAdded: number,
+  state: string,
 };
 
 declare type ChannelsState = {
@@ -145,9 +158,9 @@ declare type OperationsState = {
 
 declare type operation = {
   name: string,
-  timestamp: string,
+  timestamp: number,
   v: string,
-  _key: string,
+  hash: string,
   [val: string]: string,
 };
 
@@ -177,6 +190,16 @@ declare type RecoveryData = {
   sigs: Signature[],
 };
 
+declare type TasksState = {
+  tasks: { [taskId: string]: TasksStateEntry },
+};
+
+declare type TasksStateEntry = {
+  id: string,
+  completed: boolean,
+  timestamp: number,
+};
+
 declare type UserState = {
   score: number,
   name: string,
@@ -189,13 +212,23 @@ declare type UserState = {
   safePublicKey?: string,
   password: string,
   hashedId: string,
+  secretKey: string,
 };
 
 declare type NotificationsState = {
-  activeNotification: { message: string, type: string },
+  activeNotification?: BannerNotification,
   pendingConnections: PendingConnection[],
   backupPending: boolean,
   deviceToken: string,
+  sessionNotifications: Array<String>,
+};
+
+declare type BannerNotification = {
+  message: string,
+  type: string,
+  navigationTarget?: string,
+  xmlIcon?: string,
+  oncePerSession?: boolean,
 };
 
 declare type BackupNotification = {
@@ -203,11 +236,13 @@ declare type BackupNotification = {
   icon: string,
 };
 
-declare type PendingConnection = {
+declare type PendingConnectionNotification = {
   id: string,
 };
 
-declare type Notification = BackupNotification & invite & PendingConnection;
+declare type Notification = BackupNotification &
+  invite &
+  PendingConnectionNotification;
 
 declare type Signature = {
   signer: string,

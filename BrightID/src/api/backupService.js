@@ -2,6 +2,7 @@
 
 import { create, ApiSauceInstance, ApiResponse } from 'apisauce';
 import nacl from 'tweetnacl';
+import stringify from 'fast-json-stable-stringify';
 import {
   strToUint8Array,
   uInt8ArrayToB64,
@@ -83,8 +84,14 @@ class BackupService {
     try {
       let { username, secretKey } = await obtainKeys();
 
-      let message = `Set Signing Key${id}${signingKey}${timestamp}`;
-
+      let op = {
+        name: 'Set Signing Key',
+        id,
+        signingKey,
+        timestamp,
+        v: 5
+      };
+      const message = stringify(op);
       let sig = uInt8ArrayToB64(
         nacl.sign.detached(strToUint8Array(message), secretKey),
       );

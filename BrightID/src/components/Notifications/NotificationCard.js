@@ -17,6 +17,11 @@ import { DEVICE_LARGE } from '@/utils/constants';
 const NotificationCard = (props) => {
   const navigation = useNavigation();
   const photoFilename = useSelector((state) => state.user.photo.filename);
+  const imageSource = photoFilename
+    ? {
+        uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photoFilename}`,
+      }
+    : require('@/static/default_profile.jpg');
 
   return (
     <TouchableOpacity
@@ -27,9 +32,7 @@ const NotificationCard = (props) => {
     >
       <View style={styles.photoContainer}>
         <Image
-          source={{
-            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photoFilename}`,
-          }}
+          source={imageSource}
           style={styles.photo}
           resizeMode="cover"
           onError={(e) => {

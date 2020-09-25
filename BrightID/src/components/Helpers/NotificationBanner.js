@@ -1,39 +1,26 @@
 // @flow
 
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { InteractionManager, StyleSheet } from 'react-native';
 import DropdownAlert from 'react-native-dropdownalert';
-import { shallowEqual, useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
 import { navigate, getRoute } from '@/NavigationService';
 import groups from '@/static/add_group.svg';
 import connections from '@/static/add_person.svg';
 import misc from '@/static/trusted_connections.svg';
 import { setActiveNotification } from '@/actions';
-import {
-  DEVICE_ANDROID,
-  DEVICE_LARGE,
-  CONNECTIONS_TYPE,
-  HEIGHT,
-  DEVICE_IOS,
-} from '@/utils/constants';
-import {
-  // channel_states,
-  channel_types,
-  selectChannelById,
-} from '@/components/PendingConnectionsScreens/channelSlice';
-import {
-  // pendingConnection_states,
-  selectAllUnconfirmedConnections,
-} from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+import { DEVICE_LARGE, CONNECTIONS_TYPE, HEIGHT } from '@/utils/constants';
+import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 
-/* notification types: 
+/* notification types:
 @type groups
 @type connections
 @type misc
 */
 
-const icons = { groups, connections, misc };
+// default icons
+const icons = { connections, groups, misc };
 
 const NOTIFICATION_TIMEOUT = 10000;
 
@@ -61,26 +48,16 @@ export const NotificationBanner = () => {
       return;
     }
 
-    let timer;
-
     InteractionManager.runAfterInteractions(() => {
       let route = getRoute();
-      console.log('ROUTE', route);
       if (!screenBlackList.includes(route?.name)) {
         dropDownAlertRef.current?.alertWithType(
           'custom',
+          activeNotification?.title,
           activeNotification?.message,
         );
-        // automatically close banner after timeout
-        timer = setTimeout(() => {
-          dropDownAlertRef.current?.closeAction('automatic');
-        }, NOTIFICATION_TIMEOUT);
       }
     });
-
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
   }, [activeNotification, dispatch]);
 
   useEffect(() => {
@@ -91,22 +68,23 @@ export const NotificationBanner = () => {
       dispatch(
         setActiveNotification({
           type: CONNECTIONS_TYPE,
+          title: 'Confirm connections',
           message: `You have ${pendingConnections.length} pending connection${
             pendingConnections.length > 1 ? 's' : ''
           }`,
+          navigationTarget: 'PendingConnections',
         }),
       );
     }
   }, [pendingConnections.length, dispatch]);
 
-  // update default icon
-  const icon = icons[activeNotification?.type] ?? misc;
+  // icon fallback: activeNotification prop 'xmlIcon' -> default icon for notification type -> default 'misc'
+  const icon =
+    activeNotification?.xmlIcon ?? icons[activeNotification?.type] ?? misc;
 
   const _onTap = () => {
-    if (activeNotification?.type === CONNECTIONS_TYPE) {
-      navigate('PendingConnections');
-    } else {
-      navigate('Notifications', { type: activeNotification?.type });
+    if (activeNotification?.navigationTarget) {
+      navigate(activeNotification.navigationTarget);
     }
   };
 
@@ -117,7 +95,7 @@ export const NotificationBanner = () => {
   return (
     <DropdownAlert
       ref={dropDownAlertRef}
-      closeInterval={0}
+      closeInterval={NOTIFICATION_TIMEOUT}
       containerStyle={styles.container}
       contentContainerStyle={{
         flex: 1,
@@ -126,6 +104,7 @@ export const NotificationBanner = () => {
         justifyContent: 'center',
       }}
       titleStyle={styles.title}
+      messageStyle={styles.message}
       updateStatusBar={true}
       activeStatusBarBackgroundColor="#AFFDD0"
       activeStatusBarStyle="dark-content"
@@ -154,6 +133,13 @@ const styles = StyleSheet.create({
     height: HEIGHT * 0.15,
   },
   title: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    marginLeft: DEVICE_LARGE ? 20 : 10,
+    color: '#000',
+    fontSize: DEVICE_LARGE ? 16 : 15,
+  },
+  message: {
     fontFamily: 'Poppins',
     fontWeight: '500',
     marginLeft: DEVICE_LARGE ? 20 : 10,

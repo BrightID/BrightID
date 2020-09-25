@@ -3,7 +3,7 @@
 import { Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
-import { saveSecretKey } from '@/utils/keychain';
+import { obtainKeys, saveSecretKey } from '@/utils/keychain';
 import {
   createImageDirectory,
   retrieveImage,
@@ -23,7 +23,12 @@ import {
   setHashedId,
   setGroups,
 } from '@/actions';
-import { uInt8ArrayToB64, safeHash } from '@/utils/encoding';
+import {
+  uInt8ArrayToB64,
+  b64ToUint8Array,
+  safeHash,
+  objToB64,
+} from '@/utils/encoding';
 
 export const setTrustedConnections = async () => {
   const {
@@ -131,6 +136,7 @@ export const setupRecovery = async () => {
   if (recoveryData.timestamp) return;
 
   const { publicKey, secretKey } = await nacl.sign.keyPair();
+
   recoveryData = {
     publicKey: uInt8ArrayToB64(publicKey),
     secretKey: uInt8ArrayToB64(secretKey),
@@ -144,7 +150,10 @@ export const setupRecovery = async () => {
 
 export const recoveryQrStr = () => {
   const { publicKey: signingKey, timestamp } = store.getState().recoveryData;
-  return `Recovery_${JSON.stringify({ signingKey, timestamp })}`;
+
+  return encodeURIComponent(
+    `Recovery_${JSON.stringify({ signingKey, timestamp })}`,
+  );
 };
 
 export const parseRecoveryQr = (
@@ -230,8 +239,11 @@ export const restoreUserData = async (pass: string) => {
   const { id, secretKey, publicKey } = store.getState().recoveryData;
 
   // save secretKey in keystore
-
-  await saveSecretKey(id, secretKey);
+  try {
+    await saveSecretKey(id, b64ToUint8Array(secretKey));
+  } catch (err) {
+    console.error('unable to save secret key', err.message);
+  }
 
   const decrypted = await fetchBackupData('data', pass);
 
@@ -244,6 +256,7 @@ export const restoreUserData = async (pass: string) => {
   emitter.emit('restoreTotal', connections.length + groupsPhotoCount + 2);
   userData.id = id;
   userData.publicKey = publicKey;
+  userData.secretKey = secretKey;
 
   const userPhoto = await fetchBackupData(id, pass);
   if (userPhoto) {
@@ -271,21 +284,30 @@ export const recoverData = async (pass: string) => {
   store.dispatch(setGroups(groups));
 
   for (const conn of connections) {
-    let decrypted = await fetchBackupData(conn.id, pass);
-    const filename = await saveImage({
-      imageName: conn.id,
-      base64Image: decrypted,
-    });
-    conn.photo = { filename };
+    try {
+      let decrypted = await fetchBackupData(conn.id, pass);
+      const filename = await saveImage({
+        imageName: conn.id,
+        base64Image: decrypted,
+      });
+      conn.photo = { filename };
+    } catch (err) {
+      console.log('image not found', err.message);
+      conn.photo = { filename: '' };
+    }
   }
 
   for (const group of groups) {
     if (group.photo?.filename) {
-      let decrypted = await fetchBackupData(group.id, pass);
-      await saveImage({
-        imageName: group.id,
-        base64Image: decrypted,
-      });
+      try {
+        let decrypted = await fetchBackupData(group.id, pass);
+        await saveImage({
+          imageName: group.id,
+          base64Image: decrypted,
+        });
+      } catch (err) {
+        console.log('image not found', err.message);
+      }
     }
   }
 

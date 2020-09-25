@@ -18,6 +18,7 @@ import {
   updatePendingConnection,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import { leaveChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
+import stringify from 'fast-json-stable-stringify';
 
 export const confirmPendingConnectionThunk = (id: string) => async (
   dispatch: dispatch,
@@ -94,16 +95,24 @@ export const confirmPendingConnectionThunk = (id: string) => async (
     });
 
     // Listen for add connection operation to be completed by other party
-    let opName = 'Add Connection';
-    let opMessage =
-      opName + username + connection.brightId + connectionTimestamp;
-    console.log(`Responder opMessage: ${opMessage} - hash: ${hash(opMessage)}`);
+    const apiVersion = 5;
+    const opName = 'Add Connection';
     const op = {
-      _key: hash(opMessage),
       name: opName,
-      connectionTimestamp,
+      id1: username,
+      id2: connection.brightId,
+      timestamp: connectionTimestamp,
+      v: apiVersion,
     };
-    dispatch(addOperation(op));
+    const opMessage = stringify(op);
+    console.log(`Responder opMessage: ${opMessage} - hash: ${hash(opMessage)}`);
+    const watchOp = {
+      hash: hash(opMessage),
+      name: opName,
+      timestamp: connectionTimestamp,
+      v: apiVersion,
+    };
+    dispatch(addOperation(watchOp));
   }
 
   // save connection photo
@@ -121,6 +130,7 @@ export const confirmPendingConnectionThunk = (id: string) => async (
     photo: { filename },
     status: 'initiated',
     notificationToken: connection.notificationToken,
+    secretKey: connection.secretKey,
   };
 
   dispatch(addConnection(connectionData));

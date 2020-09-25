@@ -19,7 +19,6 @@ type MemberCardProps = {
   userId: string,
   photo: Photo,
   name: string,
-  score: number,
   connectionDate: number,
   handleDismiss: (...args: Array<any>) => any,
   handleAddAdmin: (...args: Array<any>) => any,
@@ -34,7 +33,6 @@ function MemberCard(props: MemberCardProps) {
     userId,
     photo,
     name,
-    score,
     connectionDate,
     handleDismiss,
     handleAddAdmin,
@@ -44,7 +42,6 @@ function MemberCard(props: MemberCardProps) {
   } = props;
   const actionSheetRef: ?ActionSheet = useRef(null);
   const [contextActions, setContextActions] = useState<Array<string>>([]);
-  const [scoreColor, setScoreColor] = useState({ color: '#e39f2f' });
   const [flagged, setFlagged] = useState(false);
 
   // set possible actions depending on user and member admin status
@@ -65,15 +62,6 @@ function MemberCard(props: MemberCardProps) {
     }
     setContextActions(actions);
   }, [userIsAdmin, memberIsAdmin, userId, memberId]);
-
-  // set score color
-  useEffect(() => {
-    if (score >= 85) {
-      setScoreColor({ color: '#139c60' });
-    } else {
-      setScoreColor({ color: '#e39f2f' });
-    }
-  }, [score]);
 
   // show flagged status of member?
   useEffect(() => {
@@ -101,21 +89,20 @@ function MemberCard(props: MemberCardProps) {
     }
   };
 
+  const imageSource = photo?.filename
+    ? {
+        uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
+      }
+    : require('@/static/default_profile.jpg');
+
   return (
     <>
       <View style={styles.container}>
-        <Image
-          source={{
-            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
-          }}
-          style={styles.photo}
-        />
+        <Image source={imageSource} style={styles.photo} />
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
-          <View style={styles.scoreContainer}>
-            <Text style={styles.scoreLeft}>Score:</Text>
-            <Text style={[styles.scoreRight, scoreColor]}>{score}</Text>
-            {flagged && <Text style={styles.flagged}> (flagged)</Text>}
+          <View style={styles.statusContainer}>
+            {flagged ? <Text style={styles.flagged}>(flagged)</Text> : null}
           </View>
           {connectionDate > 0 && (
             <Text style={styles.connectedText}>
@@ -187,21 +174,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'red',
   },
-  scoreContainer: {
+  statusContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-  },
-  scoreLeft: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 14,
-    color: '#9b9b9b',
-    marginRight: 3,
-    paddingTop: 1.5,
-  },
-  scoreRight: {
-    fontFamily: 'ApexNew-Medium',
-    fontSize: 16,
   },
   connectedText: {
     fontFamily: 'ApexNew-Book',

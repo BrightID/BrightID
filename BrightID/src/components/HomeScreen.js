@@ -9,12 +9,14 @@ import {
   View,
   TextInput,
   StatusBar,
+  Clipboard,
 } from 'react-native';
+import { createSelector } from '@reduxjs/toolkit';
 import { useFocusEffect } from '@react-navigation/native';
+import { useHeaderHeight } from '@react-navigation/stack';
 import { SvgXml } from 'react-native-svg';
 import ActionSheet from 'react-native-actionsheet';
 import { useDispatch, useSelector } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { setPhoto, setName, setActiveNotification } from '@/actions';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
@@ -24,7 +26,8 @@ import verificationSticker from '@/static/verification-sticker.svg';
 import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
 import forumIcon from '@/static/forum_icon.svg';
-import { useWhiteStatusBar } from '@/utils/hooks';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { version as app_version } from '../../package.json';
 
 /**
  * Home screen of BrightID
@@ -34,26 +37,43 @@ import { useWhiteStatusBar } from '@/utils/hooks';
 let chatSheetRef = '',
   photoSheetRef = '';
 let discordUrl = 'https://discord.gg/nTtuB2M';
-let JoinCommunity = DEVICE_IOS ? TextInput : Text;
+
+/** Selectors */
+
+const linkedContextCountSelector = createSelector(
+  (state) => state.apps.linkedContexts,
+  (contexts) => contexts.filter((link) => link.state === 'applied').length,
+);
+
+export const verifiedSelector = createSelector(
+  (state) => state.user.verifications,
+  (verifications) => verifications.includes('BrightID'),
+);
+
+export const verifiedConnections = createSelector(
+  (state) => state.connections.connections,
+  (connections) =>
+    connections.filter((conn) => conn.status === 'verified').length,
+);
+
+/** HomeScreen Component */
 
 export const HomeScreen = (props) => {
   const { navigation } = props;
   const dispatch = useDispatch();
+  const headerHeight = useHeaderHeight();
   const id = useSelector((state) => state.user.id);
   const name = useSelector((state) => state.user.name);
   const photoFilename = useSelector((state) => state.user.photo.filename);
-  const groups = useSelector((state) => state.groups.groups);
-  const apps = useSelector((state) => state.apps.apps);
-  const verifications = useSelector((state) => state.user.verifications);
-  const connections = useSelector((state) => state.connections.connections);
+  const groupsCount = useSelector((state) => state.groups.groups.length);
+  const connectionsCount = useSelector(verifiedConnections);
+  const linkedContextsCount = useSelector(linkedContextCountSelector);
+  const verified = useSelector(verifiedSelector);
+
   const [profilePhoto, setProfilePhoto] = useState('none');
   const [isEditing, setIsEditing] = useState(false);
   const [displayName, setDisplayName] = useState(name);
-  const verified = useMemo(() => verifications.includes('BrightID'), [
-    verifications,
-  ]);
 
-  // useWhiteStatusBar();
   useFocusEffect(
     useCallback(() => {
       dispatch(fetchUserInfo());
@@ -104,9 +124,38 @@ export const HomeScreen = (props) => {
     }
   };
 
+  const DeepPasteLink = () => {
+    if (__DEV__) {
+      return (
+        <TouchableOpacity
+          testID="pasteDeeplink"
+          style={{
+            position: 'absolute',
+            left: 10,
+            bottom: 10,
+          }}
+          onPress={async () => {
+            let url = await Clipboard.getString();
+            url = url.replace('https://app.brightid.org', 'brightid://');
+            console.log(`Linking.openURL with ${url}`);
+            Linking.openURL(url);
+          }}
+        >
+          <Material
+            name="content-paste"
+            size={DEVICE_LARGE ? 28 : 23}
+            color="white"
+          />
+        </TouchableOpacity>
+      );
+    } else {
+      return null;
+    }
+  };
+
   return (
     // let verifications = ['BrightID'];
-    <View style={styles.container}>
+    <View style={[styles.container, { marginTop: headerHeight }]}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#fff"
@@ -191,7 +240,7 @@ export const HomeScreen = (props) => {
           }}
         >
           <Text testID="ConnectionsCount" style={styles.countsNumberText}>
-            {connections?.length ?? 0}
+            {connectionsCount}
           </Text>
           <View style={styles.countsBorder} />
           <Text style={styles.countsDescriptionText}>Connections</Text>
@@ -205,7 +254,7 @@ export const HomeScreen = (props) => {
           }}
         >
           <Text testID="GroupsCount" style={styles.countsNumberText}>
-            {groups?.length ?? 0}
+            {groupsCount}
           </Text>
           <View style={styles.countsBorder} />
           <Text style={styles.countsDescriptionText}>Groups</Text>
@@ -219,7 +268,7 @@ export const HomeScreen = (props) => {
           }}
         >
           <Text testID="AppsCount" style={styles.countsNumberText}>
-            {apps?.length ?? 0}
+            {linkedContextsCount}
           </Text>
           <View style={styles.countsBorder} />
           <Text style={styles.countsDescriptionText}>Apps</Text>
@@ -272,11 +321,13 @@ export const HomeScreen = (props) => {
               height={DEVICE_LARGE ? 28 : 25}
               xml={forumIcon}
             />
-            <JoinCommunity editable={false} style={styles.communityLink}>
-              Join the Community
-            </JoinCommunity>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }}>
+              <Text style={styles.communityLink}>Join the Community</Text>
+            </View>
           </TouchableOpacity>
         </View>
+        <DeepPasteLink />
+        <Text style={styles.versionInfo}>v{app_version}</Text>
       </View>
 
       <ActionSheet
@@ -512,12 +563,19 @@ const styles = StyleSheet.create({
     padding: DEVICE_LARGE ? 20 : 12,
   },
   communityLink: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#fff',
     color: '#fff',
     fontSize: DEVICE_LARGE ? 14 : 11,
     fontFamily: 'Poppins',
     fontWeight: 'bold',
+  },
+  versionInfo: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 12 : 10,
+    color: '#fff',
+    position: 'absolute',
+    right: DEVICE_LARGE ? 12 : 7,
+    bottom: DEVICE_LARGE ? 12 : 7,
   },
 });
 

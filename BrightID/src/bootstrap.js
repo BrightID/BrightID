@@ -1,8 +1,8 @@
 // @flow
 import { bootstrapAndUpgrade } from './versions';
 import { resetOperations } from './actions';
-import fetchUserInfo from './actions/fetchUserInfo';
 import { store } from './store';
+import { checkTasks, syncStoreTasks } from './components/Tasks/TasksSlice';
 
 // happens inside of the loading screen
 
@@ -20,6 +20,11 @@ export const bootstrap = async () => {
       publicKey = store.getState().user.publicKey;
       console.log('secondBootstrap', publicKey);
     }
+
+    // update available usertasks
+    store.dispatch(syncStoreTasks());
+    // Initial check for completed tasks
+    store.dispatch(checkTasks());
 
     // once everything is set up
     // this.props.navigation.navigate(publicKey ? 'App' : 'Onboarding');

@@ -1,24 +1,26 @@
-import * as React from 'react';
+import React from 'react';
 import {
-  Clipboard,
+  TouchableWithoutFeedback,
+  Keyboard,
   Image,
   TouchableOpacity,
   View,
-  Linking,
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import { INVITE_ACTIVE, DEVICE_LARGE } from '@/utils/constants';
 import { createSelector } from '@reduxjs/toolkit';
 import { createStackNavigator } from '@react-navigation/stack';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { SvgXml } from 'react-native-svg';
 import {
   pendingConnection_states,
   selectAllPendingConnections,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
-import HomeScreen from '@/components/HomeScreen';
 import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnectionScreen';
-import { navigate } from '@/NavigationService';
+import { navigate, toggleDrawer } from '@/NavigationService';
+import menuBar from '@/static/menu_bar.svg';
 import { headerOptions } from './helpers';
+import { HomeDrawer } from './HomeDrawer';
 
 /** SELECTORS */
 
@@ -75,44 +77,46 @@ const NotificationBell = () => {
   );
 };
 
-const DeepPasteLink = () => {
-  if (__DEV__) {
-    return (
-      <TouchableOpacity
-        testID="pasteDeeplink"
-        style={{ marginLeft: 10 }}
-        onPress={async () => {
-          let url = await Clipboard.getString();
-          url = url.replace('https://app.brightid.org', 'brightid://');
-          console.log(`Pasted deeplink -> Linking.openURL with ${url}`);
-          await Linking.openURL(url);
-        }}
-      >
-        <Material
-          name="content-paste"
-          size={DEVICE_LARGE ? 28 : 23}
-          color="#000"
-        />
-      </TouchableOpacity>
-    );
-  } else {
-    return null;
-  }
-};
-
 /** OPTIONS */
 
+const BrightIdLogo = () => {
+  return (
+    <TouchableWithoutFeedback
+      onPress={() => {
+        navigate('Home');
+      }}
+    >
+      <Image
+        source={require('@/static/brightid-final.png')}
+        accessible={true}
+        accessibilityLabel="Home Header Logo"
+        resizeMode="contain"
+        style={{ width: DEVICE_LARGE ? 104 : 85, maxHeight: 80 }}
+      />
+    </TouchableWithoutFeedback>
+  );
+};
+
 const homeScreenOptions = {
-  headerTitle: () => (
-    <Image
-      source={require('@/static/brightid-final.png')}
-      accessible={true}
-      accessibilityLabel="Home Header Logo"
-      resizeMode="contain"
-      style={{ width: DEVICE_LARGE ? 104 : 85 }}
-    />
-  ),
-  headerLeft: () => <DeepPasteLink />,
+  headerTitle: () => <BrightIdLogo />,
+  headerLeft: () => {
+    return (
+      <TouchableOpacity
+        testID="toggleDrawer"
+        style={{
+          width: DEVICE_LARGE ? 80 : 70,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        onPress={() => {
+          Keyboard.dismiss();
+          toggleDrawer();
+        }}
+      >
+        <SvgXml xml={menuBar} width={DEVICE_LARGE ? 30 : 24} />
+      </TouchableOpacity>
+    );
+  },
   headerRight: () => <NotificationBell />,
   headerStyle: {
     height: DEVICE_LARGE ? 80 : 70,
@@ -120,9 +124,11 @@ const homeScreenOptions = {
     shadowOffset: {
       height: 0,
     },
-    elevation: 0,
+    elevation: -1,
   },
   headerTitleAlign: 'center',
+  headerTintColor: 'transparent',
+  headerTransparent: true,
 };
 
 const recoveringConnectionOptions = {
@@ -139,7 +145,7 @@ const Home = () => {
     <>
       <Stack.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeDrawer}
         options={homeScreenOptions}
       />
       <Stack.Screen

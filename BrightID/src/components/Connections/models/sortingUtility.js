@@ -4,8 +4,6 @@ import { setConnections, setConnectionsSort } from '../../../actions';
 export const types = {
   byNameAscending: 'BY_NAME_ASCENDING',
   byNameDescending: 'BY_NAME_DESCENDING',
-  byScoreAscending: 'BY_SCORE_ASCENDING',
-  byScoreDescending: 'BY_SCORE_DECENDING',
   byDateAddedAscending: 'BY_DATE_ADDED_ASCENDING',
   byDateAddedDescending: 'BY_DATE_ADDED_DESCENDING',
 };
@@ -45,40 +43,6 @@ export const sortByNameDescending = () => (
     ),
   );
   dispatch(setConnectionsSort(types.byNameDescending));
-};
-
-export const sortByScoreAscending = () => (
-  dispatch: dispatch,
-  getState: getState,
-) => {
-  const {
-    connections: { connections },
-  } = getState();
-  let list = connections.filter((c) => verifiedOrWaiting(c.status));
-  list.sort((a, b) => a.score - b.score);
-  dispatch(
-    setConnections(
-      list.concat(connections.filter((c) => !verifiedOrWaiting(c.status))),
-    ),
-  );
-  dispatch(setConnectionsSort(types.byScoreAscending));
-};
-
-export const sortByScoreDescending = () => (
-  dispatch: dispatch,
-  getState: getState,
-) => {
-  const {
-    connections: { connections },
-  } = getState();
-  let list = connections.filter((c) => verifiedOrWaiting(c.status));
-  list.sort((a, b) => b.score - a.score);
-  dispatch(
-    setConnections(
-      list.concat(connections.filter((c) => !verifiedOrWaiting(c.status))),
-    ),
-  );
-  dispatch(setConnectionsSort(types.byScoreDescending));
 };
 
 export const sortByDateAddedAscending = () => (
@@ -131,12 +95,6 @@ export const defaultSort = () => (dispatch: dispatch, getState: getState) => {
       break;
     case types.byDateAddedDescending:
       dispatch(sortByDateAddedDescending());
-      break;
-    case types.byScoreAscending:
-      dispatch(sortByScoreAscending());
-      break;
-    case types.byScoreDescending:
-      dispatch(sortByScoreDescending());
       break;
     default:
       dispatch(sortByDateAddedDescending());

@@ -13,7 +13,6 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -32,7 +31,7 @@ import {
   selectAllPendingConnectionsByChannelIds,
   selectAlUnconfirmedConnectionsByChannelIds,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
-import { createFakeConnection } from '@/components/Connections/models/createFakeConnection';
+
 import { createChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
 import { QrCode } from './QrCode';
@@ -46,17 +45,25 @@ import { QrCode } from './QrCode';
  *
  */
 
-let FakeConnectionBtn;
+let FakeConnectionBtn = () => null;
+let addFakeConnection = () => {};
 if (__DEV__) {
-  FakeConnectionBtn = () => (
-    <TouchableOpacity
-      testID="fakeConnectionBtn"
-      style={{ marginRight: 11 }}
-      onPress={createFakeConnection}
-    >
-      <Material name="ghost" size={32} color="#fff" />
-    </TouchableOpacity>
-  );
+  addFakeConnection = require('@/actions/fakeContact').addFakeConnection;
+
+  FakeConnectionBtn = () => {
+    const dispatch = useDispatch();
+    return (
+      <TouchableOpacity
+        testID="fakeConnectionBtn"
+        style={{ marginRight: 11 }}
+        onPress={() => {
+          dispatch(addFakeConnection());
+        }}
+      >
+        <Material name="ghost" size={32} color="#fff" />
+      </TouchableOpacity>
+    );
+  };
 }
 
 const PENDING_GROUP_TIMEOUT = 45000;
@@ -162,9 +169,9 @@ export const MyCodeScreen = () => {
               }}
             />
           </TouchableOpacity>
-        ) : __DEV__ ? (
+        ) : (
           <FakeConnectionBtn />
-        ) : null,
+        ),
       headerTitle: () => {
         const ConnectionTitle = () => (
           <Text style={styles.headerTitle}>
@@ -173,7 +180,11 @@ export const MyCodeScreen = () => {
         );
         return myChannel?.type === channel_types.GROUP ? (
           __DEV__ ? (
-            <TouchableWithoutFeedback onPress={createFakeConnection}>
+            <TouchableWithoutFeedback
+              onPress={() => {
+                dispatch(addFakeConnection());
+              }}
+            >
               <View>
                 <ConnectionTitle />
               </View>
@@ -185,7 +196,13 @@ export const MyCodeScreen = () => {
       },
       headerTitleAlign: 'center',
     });
-  }, [myChannel, navigation, pendingConnectionSize, unconfirmedConnectionSize]);
+  }, [
+    myChannel,
+    dispatch,
+    navigation,
+    pendingConnectionSize,
+    unconfirmedConnectionSize,
+  ]);
 
   // when
   const toggleChannelType = () => {
