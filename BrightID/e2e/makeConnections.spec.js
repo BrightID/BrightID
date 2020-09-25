@@ -22,7 +22,7 @@ describe('make Connections', () => {
 
     it('should display qrcode', async () => {
       await expect(element(by.id('ChannelSwitch'))).toBeVisible();
-      await expect(element(by.id('ConnectionInfoBtn'))).toBeVisible();
+      await expect(element(by.id('ConnectionInfoSingleBtn'))).toBeVisible();
       await expect(element(by.id('TimerContainer'))).toBeVisible();
       await expect(element(by.id('QRCodeContainer'))).toBeVisible();
       await expect(element(by.id('CopyQrBtn'))).toBeVisible();
@@ -32,8 +32,6 @@ describe('make Connections', () => {
     it('should navigate from MyCode screen to ScanCode screen', async () => {
       await element(by.id('MyCodeToScanCodeBtn')).tap();
       await expect(element(by.id('CameraContainer'))).toBeVisible();
-      // This test consistently fails, not sure why
-      // await expect(element(by.id('QRCodeContainer'))).not.toBeVisible();
     });
 
     it('should navigate from ScanCode screen back to MyCode screen', async () => {
@@ -51,11 +49,11 @@ describe('make Connections', () => {
 
     it('should toggle connection type', async () => {
       // text should read "One to One" initially
-      await expect(element(by.text('One to One '))).toExist();
+      await expect(element(by.id('ConnectionInfoSingleBtn'))).toExist();
       await element(by.id('ChannelSwitch')).tap();
-      await expect(element(by.text('Many to Many '))).toExist();
+      await expect(element(by.id('ConnectionInfoGroupBtn'))).toExist();
       await element(by.id('ChannelSwitch')).tap();
-      await expect(element(by.text('One to One '))).toExist();
+      await expect(element(by.id('ConnectionInfoSingleBtn'))).toExist();
     });
   });
 });

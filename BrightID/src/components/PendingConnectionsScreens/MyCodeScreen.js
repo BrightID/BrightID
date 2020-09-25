@@ -251,7 +251,7 @@ export const MyCodeScreen = () => {
             <TouchableOpacity
               style={{ flexDirection: 'row' }}
               onPress={displayManyToManyInfo}
-              testID="ConnectionInfoBtn"
+              testID="ConnectionInfoGroupBtn"
             >
               <Text style={styles.infoTopText}>Many to Many </Text>
               <Material name="information-variant" size={18} color="#4a4a4a" />
@@ -260,7 +260,7 @@ export const MyCodeScreen = () => {
             <TouchableOpacity
               style={{ flexDirection: 'row' }}
               onPress={displayOneToOneInfo}
-              testID="ConnectionInfoBtn"
+              testID="ConnectionInfoSingleBtn"
             >
               <Text style={styles.infoTopText}>One to One </Text>
               <Material name="information-variant" size={18} color="#4a4a4a" />
