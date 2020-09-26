@@ -29,51 +29,45 @@ describe('Connections', () => {
         await expectConnectionsScreen();
       });
 
+      beforeEach(async () => {
+        // wait upto 30 seconds till connection is established
+        await waitFor(element(by.text('Connected a few seconds ago')))
+          .toBeVisible()
+          .withTimeout(30000);
+        // swipe to reach flagBtn
+        await element(by.id('connectionCardText')).swipe('left');
+        await waitFor(element(by.id('flagBtn')))
+          .toBeVisible()
+          .withTimeout(10000);
+        await element(by.id('flagBtn')).tap();
+        // ActionSheet does not support testID, so match based on text.
+        await waitFor(element(by.text(flagActionSheetTitle)))
+          .toBeVisible()
+          .withTimeout(10000);
+      });
+
       afterAll(async () => {
         await navigateHome();
       });
 
-      it(`should cancel ${action} (backButton)`, async () => {
-        // device is not defined outside of it
+      it(`should cancel ${action} with backButton (Android)`, async () => {
         if (!hasBackButton) return;
-        // flag the first available connection
-        await waitFor(element(by.id('flagConnectionBtn')).atIndex(0))
-          .toExist()
-          .withTimeout(20000);
-        await element(by.id('flagConnectionBtn')).atIndex(0).tap();
-        // ActionSheet does not support testID, so try to match based on text.
-        await expect(element(by.text(flagActionSheetTitle))).toBeVisible();
         await element(by.text(action)).tap();
         await device.pressBack();
-
         await expect(element(by.text(flagActionSheetTitle))).toBeNotVisible();
       });
 
-      it(`should cancel ${action}`, async () => {
+      it(`should cancel ${action} with Cancel button `, async () => {
         const cancelText = hasBackButton ? 'CANCEL' : 'Cancel';
-        // flag the first available connection
-        await waitFor(element(by.id('flagConnectionBtn')).atIndex(0))
-          .toExist()
-          .withTimeout(20000);
-        await element(by.id('flagConnectionBtn')).atIndex(0).tap();
-        // ActionSheet does not support testID, so try to match based on text.
-        await expect(element(by.text(flagActionSheetTitle))).toBeVisible();
         await element(by.text(action)).tap();
         await element(by.text(cancelText)).tap();
         await expect(element(by.text(flagActionSheetTitle))).toBeNotVisible();
       });
 
       it(`should confirm ${action}`, async () => {
-        // flag the first available connection
-        await waitFor(element(by.id('flagConnectionBtn')).atIndex(0))
-          .toExist()
-          .withTimeout(20000);
-        await element(by.id('flagConnectionBtn')).atIndex(0).tap();
-        // ActionSheet does not support testID, so try to match based on text.
-        await expect(element(by.text(flagActionSheetTitle))).toBeVisible();
         await element(by.text(action)).tap();
         await element(by.text('OK')).tap();
-        await waitFor(element(by.id('flagConnectionBtn')).atIndex(0))
+        await waitFor(element(by.id('flagConnectionBtn')))
           .toNotExist()
           .withTimeout(20000);
       });

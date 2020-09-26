@@ -188,6 +188,7 @@ describe('Groups', () => {
         await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
         await element(by.text(actionTitle)).tap();
       }
+      // TODO: Check if cofounders actually joined the groups
     });
   });
 

@@ -146,6 +146,7 @@ const ConnectionCard = (props) => {
             adjustsFontSizeToFit={true}
             numberOfLines={1}
             style={styles.name}
+            testID="connectionCardText"
           >
             {name}
           </Text>
