@@ -126,7 +126,7 @@ const ConnectionCard = (props) => {
     : require('@/static/default_profile.jpg');
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="connectionCardContainer">
       <View style={styles.card}>
         <TouchableOpacity
           onPress={() => {
@@ -146,6 +146,7 @@ const ConnectionCard = (props) => {
             adjustsFontSizeToFit={true}
             numberOfLines={1}
             style={styles.name}
+            testID="connectionCardText"
           >
             {name}
           </Text>

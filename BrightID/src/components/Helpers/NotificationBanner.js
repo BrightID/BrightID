@@ -12,6 +12,7 @@ import misc from '@/static/trusted_connections.svg';
 import { setActiveNotification } from '@/actions';
 import { DEVICE_LARGE, CONNECTIONS_TYPE, HEIGHT } from '@/utils/constants';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+import DropDownAlertEnabled from '@/utils/DropDownAlertEnabler';
 
 /* notification types:
 @type groups
@@ -51,11 +52,13 @@ export const NotificationBanner = () => {
     InteractionManager.runAfterInteractions(() => {
       let route = getRoute();
       if (!screenBlackList.includes(route?.name)) {
-        dropDownAlertRef.current?.alertWithType(
-          'custom',
-          activeNotification?.title,
-          activeNotification?.message,
-        );
+        if (DropDownAlertEnabled) {
+          dropDownAlertRef.current?.alertWithType(
+            'custom',
+            activeNotification?.title,
+            activeNotification?.message,
+          );
+        }
       }
     });
   }, [activeNotification, dispatch]);

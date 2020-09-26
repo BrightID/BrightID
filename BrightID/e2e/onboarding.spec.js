@@ -1,7 +1,5 @@
 /* global element:false, by:false */
 
-import { createBrightID } from './testUtils';
-
 describe('Onboarding', () => {
   it('should have onboarding carousel screen', async () => {
     // First page should be there at start
@@ -14,9 +12,5 @@ describe('Onboarding', () => {
     await element(by.id('Carousel')).swipe('right');
     // First page should be visible again
     await expect(element(by.id('brightIdOnboard'))).toBeVisible();
-  });
-
-  it('should create a new identity', async () => {
-    await createBrightID();
   });
 });

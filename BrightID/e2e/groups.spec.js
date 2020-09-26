@@ -3,8 +3,8 @@
 import {
   createBrightID,
   createFakeConnection,
-  expectConnectionsScreen,
   expectGroupsScreen,
+  navigateHome,
 } from './testUtils';
 
 /*
@@ -13,8 +13,6 @@ import {
     for the "being invited" flow.
   - Inviting additional connections to a group is not tested (Can we get a fake connection
     being eligible to be invited?)
-  - Creation and specific tests for primary groups are missing (Can't set the "primary"
-    toggle to true from detox as it is a custom component without testID)
   - Group search is not tested against member name matches, as member names are random
  */
 
@@ -23,39 +21,34 @@ const secondGroupName = 'Inglourious Basterds';
 
 describe('Groups', () => {
   let hasBackButton = true;
-  let cancelText = 'CANCEL';
+  let cancelText = 'Cancel';
+  let leaveGroupText = 'Leave group';
 
   beforeAll(async () => {
     const platform = await device.getPlatform();
     hasBackButton = platform === 'android';
-    cancelText = hasBackButton ? 'CANCEL' : 'Cancel';
     // create identity
     await createBrightID();
-    await element(by.id('connectionsBtn')).tap();
-    // create 3 fake connections
-    for (let i of [1, 2, 3]) {
-      await createFakeConnection();
-      await element(by.id('confirmConnectionBtn')).tap();
-      await expect(element(by.id('successScreen'))).toBeVisible();
-      await element(by.id('successDoneBtn')).tap();
-      await expectConnectionsScreen();
-    }
   });
 
   describe('Show initial group screen', () => {
     beforeAll(async () => {
-      // make sure to be on the groups tab/screen before starting tests
-      await element(by.id('connections-header-back')).tap();
+      // make sure to be on the groups screen before starting tests
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
     });
+
+    afterAll(async () => {
+      await navigateHome();
+    });
+
     it('should show "noGroups" screen', async () => {
       await expect(element(by.id('noGroupsView'))).toBeVisible();
       await expect(element(by.id('groupsLearnMoreBtn'))).toBeVisible();
       await expect(element(by.id('groupsCreateGroupBtn'))).toBeVisible();
     });
 
-    it('should show initial group and go back (backbutton)', async () => {
+    it('should show group creation screen and go back (backbutton)', async () => {
       if (!hasBackButton) return;
 
       await element(by.id('groupsCreateGroupBtn')).tap();
@@ -64,7 +57,7 @@ describe('Groups', () => {
       await expect(element(by.id('noGroupsView'))).toBeVisible();
     });
 
-    it('should show initial group and go back', async () => {
+    it('should show group creation screen and go back', async () => {
       await element(by.id('groupsCreateGroupBtn')).tap();
       await expect(element(by.id('groupInfoScreen'))).toBeVisible();
       await element(by.id('header-back')).tap();
@@ -75,15 +68,22 @@ describe('Groups', () => {
     });
   });
 
-  describe('Create initial group (non-primary)', () => {
+  describe('Create initial group', () => {
     beforeAll(async () => {
-      // make sure to be on the groups tab/screen before starting tests
-      await element(by.id('groups-header-back')).tap();
+      // create 3 fake connections
+      for (let i of [1, 2, 3]) {
+        await createFakeConnection();
+      }
+
+      // navigate to group creation screen
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
       await element(by.id('groupsCreateGroupBtn')).tap();
       await expect(element(by.id('groupInfoScreen'))).toBeVisible();
-      await expect(element(by.id('primaryGroupView'))).toBeVisible();
+    });
+
+    afterAll(async () => {
+      await navigateHome();
     });
 
     it('should set group info', async () => {
@@ -92,8 +92,6 @@ describe('Groups', () => {
       await element(by.id('editGroupName')).tapReturnKey();
       await expect(element(by.id('editGroupName'))).toHaveText(firstGroupName);
       await element(by.id('editGroupPhoto')).tap();
-      // TODO: make this a primary group. Unfortunately detox can't match ToggleSwitch instance :-(
-      // await element(by.id('primaryGroupToggle')).tap();
     });
 
     it('should set group Co-Founders', async () => {
@@ -101,10 +99,11 @@ describe('Groups', () => {
       await expect(element(by.id('nextBtn'))).toBeVisible();
       await element(by.id('nextBtn')).tap();
       await expect(element(by.id('newGroupScreen'))).toBeVisible();
-      // make the first 2 available connections co-founder
-      await waitFor(element(by.id('checkCoFounderBtn')).atIndex(0))
+      // wait until 3 connections are there, sometimes they appear only after a few seconds
+      await waitFor(element(by.id('checkCoFounderBtn')).atIndex(2))
         .toExist()
         .withTimeout(20000);
+      // make the first 2 available connections co-founder
       await element(by.id('checkCoFounderBtn')).atIndex(0).tap();
       await element(by.id('checkCoFounderBtn')).atIndex(1).tap();
     });
@@ -120,10 +119,9 @@ describe('Groups', () => {
     });
   });
 
-  describe('Create additional group (TODO: primary)', () => {
+  describe('Create additional group', () => {
     beforeAll(async () => {
-      // make sure to be on the groups tab/screen before starting tests
-      await element(by.id('groups-header-back')).tap();
+      // navigate to group creation screen
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
       // there should be at least one group existing
@@ -131,7 +129,10 @@ describe('Groups', () => {
       // add group
       await element(by.id('addGroupBtn')).tap();
       await expect(element(by.id('groupInfoScreen'))).toBeVisible();
-      await expect(element(by.id('primaryGroupView'))).toBeVisible();
+    });
+
+    afterAll(async () => {
+      await navigateHome();
     });
 
     it('should set group info', async () => {
@@ -140,8 +141,6 @@ describe('Groups', () => {
       await element(by.id('editGroupName')).tapReturnKey();
       await expect(element(by.id('editGroupName'))).toHaveText(secondGroupName);
       await element(by.id('editGroupPhoto')).tap();
-      // TODO: figure out how to toggle the "primary" switch with detox and make this
-      //   the primary group
     });
 
     it('should set group Co-Founders', async () => {
@@ -171,69 +170,66 @@ describe('Groups', () => {
       const actionSheetTitle = 'What do you want to do?';
       const actionTitle = 'Join All Groups';
 
+      await navigateHome();
       // open connection screen
-      await element(by.id('groups-header-back')).tap();
       await element(by.id('connectionsBtn')).tap();
       // let all three connections join groups
       for (const i of [0, 1, 2]) {
-        await waitFor(element(by.id('flagConnectionBtn')).atIndex(i))
-          .toExist()
+        // swipe left to reach flagBtn
+        await element(by.id('connectionCardContainer'))
+          .atIndex(i)
+          .swipe('left');
+        await waitFor(element(by.id('flagBtn')).atIndex(i))
+          .toBeVisible()
           .withTimeout(20000);
-        await element(by.id('flagConnectionBtn')).atIndex(i).tap();
-        // ActionSheet does not support testID, so try to match based on text.
-        await expect(element(by.text(actionSheetTitle))).toBeVisible();
+        await element(by.id('flagBtn')).atIndex(i).tap();
+
+        // ActionSheet does not support testID, so match based on text.
+        await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
         await element(by.text(actionTitle)).tap();
-        await element(by.text('OK')).tap();
       }
-      await element(by.id('connections-header-back')).tap();
-      await element(by.id('groupsBtn')).tap();
-      await expectGroupsScreen();
+      // TODO: Check if cofounders actually joined the groups
     });
   });
 
   describe('Groups screen search', () => {
     beforeAll(async () => {
-      // make sure to be on the groups tab/screen before starting tests
-      await element(by.id('groups-header-back')).tap();
+      // navigate to groups screen
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
       // there should be two groups existing, so look for testID suffix '-1'
       await expect(element(by.id('groupItem-1'))).toBeVisible();
-      await element(by.id('searchParam')).clearText();
+      // open search bar
+      await element(by.id('SearchBarBtn')).tap();
     });
 
     afterEach(async () => {
-      await element(by.id('searchParam')).clearText();
+      await element(by.id('SearchParam')).clearText();
+    });
+
+    afterAll(async () => {
+      await navigateHome();
     });
 
     it(`should find group "${firstGroupName}"`, async () => {
-      await element(by.id('searchParam')).typeText('voir');
-      await element(by.id('searchParam')).tapReturnKey();
-      await expect(element(by.id('searchParam'))).toHaveText('voir');
+      await element(by.id('SearchParam')).typeText('voir');
+      await element(by.id('SearchParam')).tapReturnKey();
       await expect(element(by.text(firstGroupName))).toBeVisible();
       await expect(element(by.text(secondGroupName))).toBeNotVisible();
     });
 
     it(`should find group "${secondGroupName}"`, async () => {
-      await element(by.id('searchParam')).typeText('aster');
-      await element(by.id('searchParam')).tapReturnKey();
-      await expect(element(by.id('searchParam'))).toHaveText('aster');
+      await element(by.id('SearchParam')).typeText('aster');
+      await element(by.id('SearchParam')).tapReturnKey();
+      await expect(element(by.id('SearchParam'))).toHaveText('aster');
       await expect(element(by.text(secondGroupName))).toBeVisible();
       await expect(element(by.text(firstGroupName))).toBeNotVisible();
     });
 
     it('should show "no match" info', async () => {
-      await element(by.id('searchParam')).typeText('not matching');
-      await element(by.id('searchParam')).tapReturnKey();
+      await element(by.id('SearchParam')).typeText('not matching');
+      await element(by.id('SearchParam')).tapReturnKey();
       await expect(element(by.id('noMatchText'))).toBeVisible();
-    });
-
-    it('should clear searchParam with eraser button', async () => {
-      await element(by.id('searchParam')).typeText('not matching');
-      await element(by.id('searchParam')).tapReturnKey();
-      await expect(element(by.id('noMatchText'))).toBeVisible();
-      await element(by.id('clearSearchParamBtn')).tap();
-      await expect(element(by.id('searchParam'))).toHaveText('');
     });
 
     test.todo('match by group member name');
@@ -241,7 +237,8 @@ describe('Groups', () => {
 
   describe('Group Management', () => {
     beforeAll(async () => {
-      // make sure to be on the groups tab/screen before starting tests
+      // navigate to groups screen
+      await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
       // there should be two groups existing, so look for testID suffix '-1'
       await expect(element(by.id('groupItem-1'))).toBeVisible();
@@ -250,33 +247,21 @@ describe('Groups', () => {
     beforeEach(async () => {
       // make sure to be on the groups tab/screen before starting tests
       await expectGroupsScreen();
+      // reload groups
       await element(by.id('groupsFlatList')).swipe('down');
       await expectGroupsScreen();
     });
 
-    // this is failing on iOS
-    // it('group should have ellipsis menu', async () => {
-    //   // select first group
-    //   await element(by.id('groupItem-0')).tap();
-    //   await expect(element(by.id('groupOptionsBtn'))).toBeVisible();
-    //   await element(by.id('groupOptionsBtn')).tap();
-    //   // now actionsheet should be open
-    //   await expect(element(by.text('What do you want to do?'))).toBeVisible();
-    //   await expect(element(by.text('Invite'))).toBeVisible();
-    //   await expect(element(by.text('Leave Group'))).toBeVisible();
-    //   await expect(element(by.text('cancel'))).toBeVisible();
-    //   // close actionsheet without changing anything
-    //   await element(by.text('cancel')).tap();
-    //   await expect(element(by.id('membersView'))).toBeVisible();
-    //   await element(by.id('header-back')).tap();
-    // });
+    afterAll(async () => {
+      await navigateHome();
+    });
 
     it('should leave first group and cancel', async () => {
       await element(by.id('groupItem-0')).tap();
       await expect(element(by.id('groupOptionsBtn'))).toBeVisible();
       await element(by.id('groupOptionsBtn')).tap();
-      await expect(element(by.text('Leave Group'))).toBeVisible();
-      await element(by.text('Leave Group')).tap();
+      await expect(element(by.text(leaveGroupText))).toBeVisible();
+      await element(by.text(leaveGroupText)).tap();
       // back out with CANCEL button
       await element(by.text(cancelText)).tap();
       await expect(
@@ -286,18 +271,26 @@ describe('Groups', () => {
       await element(by.id('header-back')).tap();
     });
 
-    it('should leave first group and confirm', async () => {
+    // Commented out as this test hangs forever after clicking OK :-(
+    test.todo(
+      'should leave first group and confirm',
+    ); /* , async () => {
       await element(by.id('groupItem-0')).tap();
       await expect(element(by.id('groupOptionsBtn'))).toBeVisible();
       await element(by.id('groupOptionsBtn')).tap();
-      await element(by.text('Leave Group')).tap();
+      await expect(element(by.text(leaveGroupText))).toBeVisible();
+      await element(by.text(leaveGroupText)).tap();
       // confirm with OK button
-      await element(by.text('OK')).tap();
+      await expect(element(by.text('OK'))).toBeVisible();
+      await element(by.text('OK')).tap(); // <-- this tap action hangs forever in detox
       // should be back at groups screen
       await expectGroupsScreen();
-    });
+      // only one group should be left
+      await expect(element(by.id('groupItem-1'))).not.toExist();
+    }); */
 
     test.todo('should invite connection to group');
-    test.todo('should leave primary group');
+    test.todo('should dismiss member from group');
+    test.todo('should promote member of group to admin');
   });
 });

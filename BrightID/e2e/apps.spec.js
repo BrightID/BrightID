@@ -1,11 +1,11 @@
 /* global device:false, element:false, by:false */
 
+import fetch from 'node-fetch';
 import {
   createBrightID,
   expectAppsScreen,
   expectHomescreen,
 } from './testUtils';
-import fetch from "node-fetch";
 
 function getRandomAddres() {
   var letters = '0123456789ABCDEF';
@@ -24,8 +24,7 @@ describe('App Deep Links', () => {
       await device.sendToHome();
       await device.launchApp({
         newInstance: false,
-        url:
-          `brightid://link-verification/http:%2f%2ftest.brightid.org/ethereum/${getRandomAddres()}`,
+        url: `brightid://link-verification/http:%2f%2ftest.brightid.org/ethereum/${getRandomAddres()}`,
       });
     });
     it('should not open apps page', async () => {
@@ -33,7 +32,7 @@ describe('App Deep Links', () => {
     });
   });
 
-  describe('Open Deep Link', () => {
+  xdescribe('Open Deep Link', () => {
     beforeAll(async () => {
       // create identity
       const platform = await device.getPlatform();
@@ -47,8 +46,7 @@ describe('App Deep Links', () => {
       await device.sendToHome();
       await device.launchApp({
         newInstance: false,
-        url:
-          `brightid://link-verification/http:%2f%2ftest.brightid.org/ethereum/${getRandomAddres()}`,
+        url: `brightid://link-verification/http:%2f%2ftest.brightid.org/ethereum/${getRandomAddres()}`,
       });
     });
     it('should not link app and return to home page', async () => {
@@ -68,23 +66,21 @@ describe('App Deep Links', () => {
   });
 });
 
-describe('Apps Screen', () => {
+xdescribe('Apps Screen', () => {
   beforeAll(async () => {
     await device.reloadReactNative();
-  //   await createBrightID();
+    // await createBrightID();
   });
   it('should open apps screen', async () => {
     await element(by.id('appsBtn')).tap();
     await expectAppsScreen(true);
   });
   it('should show all apps', async () => {
-    let response = await fetch(
-      'http://test.brightid.org/brightid/v5/apps'
-    );
+    let response = await fetch('http://test.brightid.org/brightid/v5/apps');
     let json = await response.json();
-    const apps = json.data.apps;
-    apps.forEach(app => {
-      expect(element(by.text(app.name))).toBeVisible()
+    const { apps } = json.data;
+    apps.forEach((app) => {
+      expect(element(by.text(app.name))).toBeVisible();
     });
   });
 });

@@ -53,6 +53,7 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
 
   const FlagButton = () => (
     <TouchableOpacity
+      testID="flagBtn"
       style={[styles.actionCard, { backgroundColor: '#F28C33' }]}
       disabled={disabled}
       onPress={() => {
@@ -88,6 +89,7 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
 
   const UnFlagButton = () => (
     <TouchableOpacity
+      testID="unFlagBtn"
       style={[styles.actionCard, { backgroundColor: '#aaa' }]}
       disabled={disabled}
       onPress={() => {
@@ -111,6 +113,7 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
 
   const RemoveButton = () => (
     <TouchableOpacity
+      testID="removeBtn"
       style={[styles.actionCard, { backgroundColor: '#FF0000' }]}
       disabled={disabled}
       onPress={() => {
