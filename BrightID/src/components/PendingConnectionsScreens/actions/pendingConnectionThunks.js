@@ -105,7 +105,11 @@ export const confirmPendingConnectionThunk = (id: string) => async (
       v: apiVersion,
     };
     const opMessage = stringify(op);
-    console.log(`Responder opMessage: ${opMessage} - hash: ${hash(opMessage)}`);
+    console.log(
+      `Watching for responder opMessage: ${opMessage} - hash: ${hash(
+        opMessage,
+      )}`,
+    );
     const watchOp = {
       hash: hash(opMessage),
       name: opName,

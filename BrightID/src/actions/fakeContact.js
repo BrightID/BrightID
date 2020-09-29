@@ -12,6 +12,7 @@ import { encryptData } from '@/utils/cryptoHelper';
 import { createRandomId } from '@/utils/channels';
 import { selectChannelById } from '@/components/PendingConnectionsScreens/channelSlice';
 import { names } from '../utils/fakeNames';
+import { connectFakeUsers } from '../utils/fakeHelper';
 
 export const addFakeConnection = () => async (
   dispatch: dispatch,
@@ -62,7 +63,7 @@ export const addFakeConnection = () => async (
       name,
       score,
       profileTimestamp: Date.now(),
-      secretKey,
+      secretKey: uInt8ArrayToB64(secretKey),
       signedMessage,
       timestamp,
       notificationToken: null,
@@ -79,19 +80,34 @@ export const addFakeConnection = () => async (
   } catch (err) {
     console.log(err.message);
   }
+};
 
-  // add fake user as pending connection, including already signed connection message
-  // dispatch(
-  //   addFakePendingConnection({
-  //     id: profileId,
-  //     channelId: getState().channels.myChannelId,
-  //     state: pendingConnection_states.UNCONFIRMED,
-  //     brightId: connectId,
-  //     name,
-  //     photo,
-  //     score,
-  //     signedMessage,
-  //     timestamp,
-  //   }),
-  // );
+export const connectWithOtherFakeConnections = (id: string) => async (
+  dispatch: dispatch,
+  getState: getState,
+) => {
+  // get fakeUser by ID
+  const fakeUser1 = getState().connections.connections.find(
+    (entry) => entry.id === id,
+  );
+  if (!fakeUser1) {
+    console.log(`Failed to get fake connection id ${id}`);
+    return;
+  }
+  if (!fakeUser1.secretKey) {
+    console.log(`Fake connection ${id} does not have a secretKey!`);
+    return;
+  }
+
+  // get all other fakeUser that we should connect to
+  const otherFakeUser = getState().connections.connections.filter(
+    (entry) => entry.secretKey && entry.id !== id,
+  );
+  console.log(`Connecting ${id} with ${otherFakeUser.length} fake connections`);
+  for (const otherUser of otherFakeUser) {
+    await connectFakeUsers(
+      { id: fakeUser1.id, secretKey: fakeUser1.secretKey },
+      { id: otherUser.id, secretKey: otherUser.secretKey },
+    );
+  }
 };

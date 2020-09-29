@@ -6,8 +6,7 @@ import stringify from 'fast-json-stable-stringify';
 import {
   strToUint8Array,
   uInt8ArrayToB64,
-  hash,
-  objToUint8,
+  b64ToUint8Array,
 } from '../utils/encoding';
 
 export const fakeJoinGroup = ({
@@ -17,10 +16,10 @@ export const fakeJoinGroup = ({
 }: {
   group: string,
   id: string,
-  secretKey: {},
+  secretKey: string,
 }) => {
   let timestamp = Date.now();
-  let sk = objToUint8(secretKey);
+  let sk = b64ToUint8Array(secretKey);
   let op = {
     name: 'Add Membership',
     id,
