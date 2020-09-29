@@ -21,9 +21,9 @@ const migrations = {
     let linkedContexts = [];
     if (state.apps.apps) {
       linkedContexts = state.apps.apps.map((app) => ({
-        dateAdded: Date.now(),
+        dateAdded: app.dateAdded || Date.now(),
         contextId: app.contextId,
-        context: app.context,
+        context: app.name,
         state: app.state,
       }));
     }
