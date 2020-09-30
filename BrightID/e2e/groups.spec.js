@@ -5,6 +5,9 @@ import {
   createFakeConnection,
   expectConnectionsScreen,
   expectGroupsScreen,
+  expectHomescreen,
+  interConnect,
+  joinAllGroups,
   navigateHome,
 } from './testUtils';
 
@@ -24,10 +27,26 @@ describe('Groups', () => {
     hasBackButton = platform === 'android';
     // create identity
     await createBrightID();
+
     // create 3 fake connections
-    for (let m of [1, 2, 3]) {
-      await createFakeConnection();
-    }
+    await createFakeConnection();
+    await createFakeConnection();
+    await createFakeConnection();
+
+    // make sure all connections are established
+    await element(by.id('connectionsBtn')).tap();
+    await expectConnectionsScreen();
+    await waitFor(element(by.id('connection-0')))
+      .toExist()
+      .withTimeout(20000);
+    await waitFor(element(by.id('connection-1')))
+      .toExist()
+      .withTimeout(20000);
+    await waitFor(element(by.id('connection-2')))
+      .toExist()
+      .withTimeout(20000);
+
+    await navigateHome();
   });
 
   describe('Show initial group screen', () => {
@@ -69,29 +88,8 @@ describe('Groups', () => {
 
   describe('Create initial group', () => {
     beforeAll(async () => {
-      // wait till all 3 connections are established
-      await element(by.id('connectionsBtn')).tap();
-      await expectConnectionsScreen();
-
-      // interconnect all fake connections with each other
-      const actionSheetTitle = 'What do you want to do?';
-      const actionTitle = 'Connect to other fake connections';
-      for (let i of [0, 1, 2]) {
-        // swipe left to reach flagBtn
-        await element(by.id('connectionCardContainer'))
-          .atIndex(i)
-          .swipe('left');
-        await waitFor(element(by.id('flagBtn')).atIndex(i))
-          .toBeVisible()
-          .withTimeout(5000);
-        await element(by.id('flagBtn')).atIndex(i).tap();
-
-        // ActionSheet does not support testID, so match based on text.
-        await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
-        await waitFor(element(by.text(actionTitle))).toBeVisible();
-        await element(by.text(actionTitle)).tap();
-      }
-      await navigateHome();
+      // Connect all fake connections with each other
+      await interConnect(3);
 
       // navigate to group creation screen
       await element(by.id('groupsBtn')).tap();
@@ -182,31 +180,28 @@ describe('Groups', () => {
       // there should be exactly two groups now
       await expect(element(by.id('groupItem-0'))).toBeVisible();
       await expect(element(by.id('groupItem-1'))).toBeVisible();
+      await navigateHome();
     });
 
     it('invited co-founders should join group', async () => {
-      const actionSheetTitle = 'What do you want to do?';
-      const actionTitle = 'Join All Groups';
+      // accept invitation
+      await joinAllGroups(3);
 
-      await navigateHome();
-      // open connection screen
-      await element(by.id('connectionsBtn')).tap();
-      // let all three connections join groups
-      for (const i of [0, 1, 2]) {
-        // swipe left to reach flagBtn
-        await element(by.id('connectionCardContainer'))
-          .atIndex(i)
-          .swipe('left');
-        await waitFor(element(by.id('flagBtn')).atIndex(i))
-          .toBeVisible()
-          .withTimeout(20000);
-        await element(by.id('flagBtn')).atIndex(i).tap();
-
-        // ActionSheet does not support testID, so match based on text.
-        await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
-        await element(by.text(actionTitle)).tap();
-      }
-      // TODO: Check if cofounders actually joined the groups
+      // Check if cofounders actually joined the groups
+      await expectHomescreen();
+      // navigate to groups screen
+      await element(by.id('groupsBtn')).tap();
+      // wait 30 seconds until all join ops should be done on the backend
+      await new Promise((r) => setTimeout(r, 30000));
+      // refresh
+      await element(by.id('groupsFlatList')).swipe('down');
+      // Text changes to "Known members: " when all invited people have joined
+      await waitFor(element(by.text('Known members: ')).atIndex(0))
+        .toBeVisible()
+        .withTimeout(30000);
+      await waitFor(element(by.text('Known members: ')).atIndex(1))
+        .toBeVisible()
+        .withTimeout(30000);
     });
   });
 

@@ -92,35 +92,15 @@ describe('Group Management', () => {
       // there should be exactly one group now
       await expect(element(by.id('groupItem-0'))).toBeVisible();
       await expect(element(by.id('groupName'))).toHaveText(GroupName);
+      await navigateHome();
     });
 
     it('invited co-founders should join group', async () => {
-      const actionSheetTitle = 'What do you want to do?';
-      const actionTitle = 'Join All Groups';
-
-      await navigateHome();
-      // open connection screen
-      await element(by.id('connectionsBtn')).tap();
-      await expectConnectionsScreen();
-
-      // let all three connections join groups
-      for (const i of [0, 1, 2]) {
-        // swipe left to reach flagBtn
-        await element(by.id('connectionCardContainer'))
-          .atIndex(i)
-          .swipe('left');
-        await waitFor(element(by.id('flagBtn')).atIndex(i))
-          .toBeVisible()
-          .withTimeout(20000);
-        await element(by.id('flagBtn')).atIndex(i).tap();
-
-        // ActionSheet does not support testID, so match based on text.
-        await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
-        await element(by.text(actionTitle)).tap();
-      }
+      // accept invitation
+      await joinAllGroups(3);
 
       // Check if cofounders actually joined the groups
-      await navigateHome();
+      await expectHomescreen();
       // navigate to groups screen
       await element(by.id('groupsBtn')).tap();
       // wait 30 seconds until all join ops should be done on the backend
