@@ -94,11 +94,12 @@ declare type Photo = {
   filename: string,
 };
 
+// TODO: extract DEV properties to separate type and join them conditionally depending on __DEV__
 declare type connection = {
   id: string,
   name: string,
   score: number,
-  secretKey?: Uint8Array,
+  secretKey?: string,
   aesKey: string,
   connectionDate: number,
   photo: Photo,
@@ -179,6 +180,7 @@ declare type PendingConnection = {
   notificationToken?: string,
   timestamp?: number,
   signedMessage?: string,
+  secretKey?: string,
   score?: number,
 };
 
@@ -257,4 +259,9 @@ declare type Uint8Obj = {
 declare type action = {
   type: string,
   [key: string]: any,
+};
+
+declare type FakeUser = {
+  id: string,
+  secretKey: string, // Base64 encoded secretkey
 };

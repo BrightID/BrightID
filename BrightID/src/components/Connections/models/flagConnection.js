@@ -3,20 +3,36 @@
 import { Alert } from 'react-native';
 import api from '@/api/brightId';
 import { deleteConnection } from '@/actions';
-import { fakeJoinGroups } from '@/actions/fakeGroup';
 import { backupUser } from '@/components//Recovery/helpers';
+import {
+  connectWithOtherFakeConnections,
+  joinAllGroups,
+} from '@/actions/fakeContact';
 import { defaultSort } from './sortingUtility';
 
 const flagMap = ['duplicate', 'fake', 'deceased'];
 
-export const handleFlagging = ({ name, id, dispatch, secretKey }) => (
-  index,
-) => {
-  if (__DEV__ && index === 3) {
-    console.log('joining all groups');
-    dispatch(fakeJoinGroups({ id, secretKey }));
+export const handleFlagging = ({ name, id, dispatch }) => (index) => {
+  if (__DEV__) {
+    switch (index) {
+      case 3: {
+        console.log('joining all groups');
+        dispatch(joinAllGroups(id));
+        return;
+      }
+      case 4: {
+        console.log('connecting fake connections');
+        dispatch(connectWithOtherFakeConnections(id));
+        return;
+      }
+    }
+  }
+
+  // sanity check
+  if (index > 2) {
+    console.log(`Unhandled flag index ${index}!`);
     return;
-  } else if (index > 2) return;
+  }
 
   const flag = flagMap[index];
   const buttons = [

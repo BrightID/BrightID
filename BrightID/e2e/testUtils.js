@@ -82,6 +82,96 @@ const expectAppsScreen = async (bool = true) => {
         .withTimeout(5000);
 };
 
+const inviteConnectionToGroup = async (groupName: string) => {
+  const inviteUserText = 'Invite user';
+
+  // should start on home screen
+  await expectHomescreen();
+  // navigate to groups screen
+  await element(by.id('groupsBtn')).tap();
+  await expectGroupsScreen();
+  // open group
+  await element(by.text(groupName)).tap();
+  // open group context menu
+  await expect(element(by.id('groupOptionsBtn'))).toBeVisible();
+  await element(by.id('groupOptionsBtn')).tap();
+  // click on "invite"
+  await expect(element(by.text(inviteUserText))).toBeVisible();
+  await element(by.text(inviteUserText)).tap();
+  // should be on invitescreen now
+  await waitFor(element(by.id('inviteListScreen')))
+    .toBeVisible()
+    .withTimeout(10000);
+  // find the first eligible candidate for this group
+  await waitFor(element(by.id('eligibleItem-0')))
+    .toBeVisible()
+    .withTimeout(10000);
+  // invite user
+  await element(by.id('eligibleItem-0')).tap();
+  // dismiss success notification
+  await waitFor(element(by.text('Successful Invitation')))
+    .toBeVisible()
+    .withTimeout(20000);
+  await element(by.text('OK')).tap();
+  // Now on members screen again. Go back to homescreen.
+  // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
+  await navigateHome();
+  await navigateHome();
+  await expectHomescreen();
+};
+
+const joinAllGroups = async (connectionCount: number) => {
+  await expectHomescreen();
+  // navigate to connections screen to make invited user join the group
+  await element(by.id('connectionsBtn')).tap();
+  await expectConnectionsScreen();
+  // to simplify test script just click on all flagBtns and join groups
+  const actionSheetTitle = 'What do you want to do?';
+  const actionTitle = 'Join All Groups';
+  // let connections join groups
+  for (let i = 0; i < connectionCount; i++) {
+    // swipe left to reach flagBtn
+    await element(by.id('connectionCardContainer')).atIndex(i).swipe('left');
+    await waitFor(element(by.id('flagBtn')).atIndex(i))
+      .toBeVisible()
+      .withTimeout(20000);
+    await element(by.id('flagBtn')).atIndex(i).tap();
+
+    // ActionSheet does not support testID, so match based on text.
+    await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
+    await element(by.text(actionTitle)).tap();
+  }
+  await navigateHome();
+  await expectHomescreen();
+};
+
+/* Connect fake connections with each other */
+const interConnect = async (connectionCount: number) => {
+  await expectHomescreen();
+  await element(by.id('connectionsBtn')).tap();
+  await expectConnectionsScreen();
+
+  // interconnect fake connections with each other
+  const actionSheetTitle = 'What do you want to do?';
+  const actionTitle = 'Connect to other fake connections';
+  for (let i = 0; i < connectionCount; i++) {
+    // swipe left to reach flagBtn
+    await element(by.id('connectionCardContainer')).atIndex(i).swipe('left');
+    await waitFor(element(by.id('flagBtn')).atIndex(i))
+      .toBeVisible()
+      .withTimeout(5000);
+    await element(by.id('flagBtn')).atIndex(i).tap();
+
+    // ActionSheet does not support testID, so match based on text.
+    await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
+    await waitFor(element(by.text(actionTitle))).toBeVisible();
+    await element(by.text(actionTitle)).tap();
+  }
+
+  await navigateHome();
+  await expectHomescreen();
+};
+
 export {
   testUserName,
   createBrightID,
@@ -90,5 +180,8 @@ export {
   expectConnectionsScreen,
   expectGroupsScreen,
   expectAppsScreen,
+  interConnect,
+  inviteConnectionToGroup,
+  joinAllGroups,
   navigateHome,
 };

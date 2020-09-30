@@ -39,6 +39,7 @@ function MemberCard(props: MemberCardProps) {
     userIsAdmin,
     memberIsAdmin,
     flaggers,
+    testID,
   } = props;
   const actionSheetRef: ?ActionSheet = useRef(null);
   const [contextActions, setContextActions] = useState<Array<string>>([]);
@@ -95,9 +96,10 @@ function MemberCard(props: MemberCardProps) {
       }
     : require('@/static/default_profile.jpg');
 
+  const memberTestID = memberIsAdmin ? 'admin' : 'regular';
   return (
-    <>
-      <View style={styles.container}>
+    <View testID={memberTestID}>
+      <View style={styles.container} testID={testID}>
         <Image source={imageSource} style={styles.photo} />
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
@@ -112,6 +114,7 @@ function MemberCard(props: MemberCardProps) {
         </View>
         {contextActions.length > 0 && (
           <TouchableOpacity
+            testID="memberContextBtn"
             style={styles.moreIcon}
             onPress={() => {
               actionSheetRef?.current.show();
@@ -131,7 +134,7 @@ function MemberCard(props: MemberCardProps) {
           onPress={performAction}
         />
       )}
-    </>
+    </View>
   );
 }
 

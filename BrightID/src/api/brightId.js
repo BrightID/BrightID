@@ -3,7 +3,12 @@
 import { create, ApiSauceInstance } from 'apisauce';
 import nacl from 'tweetnacl';
 import stringify from 'fast-json-stable-stringify';
-import { strToUint8Array, uInt8ArrayToB64, hash } from '@/utils/encoding';
+import {
+  strToUint8Array,
+  uInt8ArrayToB64,
+  hash,
+  b64ToUint8Array,
+} from '@/utils/encoding';
 import { obtainKeys } from '@/utils/keychain';
 import store from '@/store';
 import { addOperation } from '@/actions';
@@ -247,14 +252,23 @@ class NodeApi {
     NodeApi.setOperation(op);
   }
 
-  async joinGroup(group: string) {
-    let { username, secretKey } = await obtainKeys();
+  async joinGroup(group: string, fakeUser?: FakeUser) {
+    let brightId, secretKey;
+    if (fakeUser) {
+      brightId = fakeUser.id;
+      secretKey = b64ToUint8Array(fakeUser.secretKey);
+    } else {
+      // use real user data
+      const credentials = await obtainKeys();
+      brightId = credentials.username;
+      secretKey = credentials.secretKey;
+    }
 
     let name = 'Add Membership';
     let timestamp = Date.now();
     let op = {
       name,
-      id: username,
+      id: brightId,
       group,
       timestamp,
       v,

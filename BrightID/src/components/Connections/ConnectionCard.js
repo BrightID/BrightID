@@ -22,7 +22,7 @@ const ConnectionCard = (props) => {
   let stale_check_timer = useRef(0);
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { status, connectionDate, id, name, photo, hiddenFlag } = props;
+  const { status, connectionDate, id, name, photo, hiddenFlag, index } = props;
 
   useFocusEffect(
     useCallback(() => {
@@ -111,8 +111,9 @@ const ConnectionCard = (props) => {
         </View>
       );
     } else {
+      const testID = `connection-${index}`;
       return (
-        <Text style={styles.connectedText}>
+        <Text style={styles.connectedText} testID={testID}>
           Connected {moment(parseInt(connectionDate, 10)).fromNow()}
         </Text>
       );
