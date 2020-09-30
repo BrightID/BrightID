@@ -5,15 +5,15 @@ import {
   createFakeConnection,
   expectConnectionsScreen,
   expectGroupsScreen,
+  expectHomescreen,
+  interConnect,
+  inviteConnectionToGroup,
+  joinAllGroups,
   navigateHome,
 } from './testUtils';
 
 /*
   Limitations:
-  - All group tests are from group creator/admin perspective. There is no test
-    for the "being invited" flow.
-  - Inviting additional connections to a group is not tested (Can we get a fake connection
-    being eligible to be invited?)
   - Group search is not tested against member name matches, as member names are random
  */
 
@@ -21,18 +21,15 @@ const GroupName = 'Reservoir Dogs';
 
 describe('Group Management', () => {
   let hasBackButton = true;
-  let cancelText = 'Cancel';
   let leaveGroupText = 'Leave group';
-  let inviteUserText = 'Invite user';
 
   beforeAll(async () => {
     const platform = await device.getPlatform();
     hasBackButton = platform === 'android';
+
     // create identity
     await createBrightID();
-  });
 
-  it(`prepare connections`, async () => {
     // create 3 fake connections
     await createFakeConnection();
     await createFakeConnection();
@@ -50,30 +47,11 @@ describe('Group Management', () => {
     await waitFor(element(by.id('connection-2')))
       .toExist()
       .withTimeout(20000);
+
     await navigateHome();
-  });
 
-  it(`Interconnect all connections`, async () => {
-    await element(by.id('connectionsBtn')).tap();
-    await expectConnectionsScreen();
-
-    // interconnect all fake connections with each other
-    const actionSheetTitle = 'What do you want to do?';
-    const actionTitle = 'Connect to other fake connections';
-    for (let i of [0, 1, 2]) {
-      // swipe left to reach flagBtn
-      await element(by.id('connectionCardContainer')).atIndex(i).swipe('left');
-      await waitFor(element(by.id('flagBtn')).atIndex(i))
-        .toBeVisible()
-        .withTimeout(5000);
-      await element(by.id('flagBtn')).atIndex(i).tap();
-
-      // ActionSheet does not support testID, so match based on text.
-      await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
-      await waitFor(element(by.text(actionTitle))).toBeVisible();
-      await element(by.text(actionTitle)).tap();
-    }
-    await navigateHome();
+    // Connect all fake connections with each other
+    await interConnect(3);
   });
 
   describe('Create group', () => {
@@ -161,82 +139,17 @@ describe('Group Management', () => {
     });
   });
 
-  describe('Invite user', () => {
+  describe('dismiss user from group', () => {
+    const actionSheetTitle = 'What do you want to do?';
+    const actionTitle = 'Dismiss from group';
+
     beforeAll(async () => {
-      // navigate to groups screen
-      // await element(by.id('groupsBtn')).tap();
-    });
-
-    beforeEach(async () => {
-      // make sure to be on the groups tab/screen before starting tests
-      // await expectGroupsScreen();
-      // reload groups
-      // await element(by.id('groupsFlatList')).swipe('down');
-      // await expectGroupsScreen();
-    });
-
-    afterAll(async () => {
-      await navigateHome();
-    });
-
-    it('should invite connection to group', async () => {
-      // navigate to groups screen
-      await element(by.id('groupsBtn')).tap();
-      await expectGroupsScreen();
-      // open group
-      await element(by.text(GroupName)).tap();
-      // open group context menu
-      await expect(element(by.id('groupOptionsBtn'))).toBeVisible();
-      await element(by.id('groupOptionsBtn')).tap();
-      // click on "invite"
-      await expect(element(by.text(inviteUserText))).toBeVisible();
-      await element(by.text(inviteUserText)).tap();
-      // should be on invitescreen now
-      await waitFor(element(by.id('inviteListScreen')))
-        .toBeVisible()
-        .withTimeout(10000);
-      // there should be one eligible candidate for this group
-      await waitFor(element(by.id('eligibleItem-0')))
-        .toBeVisible()
-        .withTimeout(10000);
-      // invite user
-      await element(by.id('eligibleItem-0')).tap();
-      // dismiss success notification
-      await waitFor(element(by.text('Successful Invitation')))
-        .toBeVisible()
-        .withTimeout(20000);
-      await element(by.text('OK')).tap();
-      // Now on members screen again
-    });
-
-    it(`Invited connection should join group`, async () => {
-      // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-      await navigateHome();
-      await navigateHome();
-      // navigate to connections screen to make invited user join the group
-      await element(by.id('connectionsBtn')).tap();
-      await expectConnectionsScreen();
-      // to simplify test script just click on all flagBtns and join groups
-      const actionSheetTitle = 'What do you want to do?';
-      const actionTitle = 'Join All Groups';
-      // let all three connections join groups
-      for (const i of [0, 1, 2]) {
-        // swipe left to reach flagBtn
-        await element(by.id('connectionCardContainer'))
-          .atIndex(i)
-          .swipe('left');
-        await waitFor(element(by.id('flagBtn')).atIndex(i))
-          .toBeVisible()
-          .withTimeout(20000);
-        await element(by.id('flagBtn')).atIndex(i).tap();
-
-        // ActionSheet does not support testID, so match based on text.
-        await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
-        await element(by.text(actionTitle)).tap();
-      }
+      // invite
+      await inviteConnectionToGroup(GroupName);
+      // accept invitation
+      await joinAllGroups(3);
 
       // check group members
-      await navigateHome();
       // navigate to groups screen
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
@@ -252,25 +165,141 @@ describe('Group Management', () => {
       await element(by.text(GroupName)).tap();
       // Group should now have 4 members, so check for memberItem with index 3
       await expect(element(by.id('memberItem-3'))).toBeVisible();
+      // Now on members screen. Go back to homescreen.
+      // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
+      await navigateHome();
+      await navigateHome();
     });
 
-    test.todo('should dismiss member from group');
-    test.todo('should promote member of group to admin');
+    it('should dismiss admin member from group', async () => {
+      // navigate to groups screen
+      await expectHomescreen();
+      await element(by.id('groupsBtn')).tap();
+      await expectGroupsScreen();
+      // open group
+      await element(by.text(GroupName)).tap();
+      // Group should have 4 members, so check for memberItem with index 3
+      await expect(element(by.id('memberItem-3'))).toBeVisible();
 
-    // Commented out as this test hangs forever after clicking OK :-(
-    // it('should leave group', async () => {
-    //   await element(by.id('groupItem-0')).tap();
-    //   await expect(element(by.id('groupOptionsBtn'))).toBeVisible();
-    //   await element(by.id('groupOptionsBtn')).tap();
-    //   await expect(element(by.text(leaveGroupText))).toBeVisible();
-    //   await element(by.text(leaveGroupText)).tap();
-    //   // confirm with OK button
-    //   await expect(element(by.text('OK'))).toBeVisible();
-    //   await element(by.text('OK')).tap(); // <-- this tap action hangs forever in detox
-    //   // should be back at groups screen
-    //   await expectGroupsScreen();
-    //   // only one group should be left
-    //   await expect(element(by.id('groupItem-1'))).not.toExist();
-    // });
+      // Open context menu of first member that is admin
+      await element(by.id('memberContextBtn').withAncestor(by.id('admin')))
+        .atIndex(0)
+        .tap();
+
+      // ActionSheet does not support testID, so match based on text.
+      await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
+      await element(by.text(actionTitle)).tap();
+      // dismiss confirmation screen
+      await element(by.text('OK')).tap();
+      // should be back on groups members screen, dismissed member should be removed
+      // so the last index should be 2
+      await expect(element(by.id('memberItem-3'))).not.toBeVisible();
+      // Now on members screen. Go back to homescreen.
+      // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
+      await navigateHome();
+      await navigateHome();
+    });
+
+    it('should dismiss regular member from group', async () => {
+      // navigate to groups screen
+      await expectHomescreen();
+      await element(by.id('groupsBtn')).tap();
+      await expectGroupsScreen();
+      // open group
+      await element(by.text(GroupName)).tap();
+      // Group should have 3 members, so check for memberItem with index 2
+      await expect(element(by.id('memberItem-2'))).toBeVisible();
+
+      // Open context menu of first regular user
+      await element(by.id('memberContextBtn').withAncestor(by.id('regular')))
+        .atIndex(0)
+        .tap();
+
+      // ActionSheet does not support testID, so match based on text.
+      await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
+      await element(by.text(actionTitle)).tap();
+      // dismiss confirmation screen
+      await element(by.text('OK')).tap();
+      // should be back on groups members screen, dismissed member should be removed
+      // so the last index should be 1
+      await expect(element(by.id('memberItem-2'))).not.toBeVisible();
+      // Now on members screen. Go back to homescreen.
+      // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
+      await navigateHome();
+      await navigateHome();
+    });
   });
+
+  describe('Promote regular member to admin', () => {
+    beforeAll(async () => {
+      // invite
+      await inviteConnectionToGroup(GroupName);
+      // accept invitation
+      await joinAllGroups(3);
+
+      // check group members
+      // navigate to groups screen
+      await element(by.id('groupsBtn')).tap();
+      await expectGroupsScreen();
+      // wait 30 seconds until all join ops should be done on the backend
+      await new Promise((r) => setTimeout(r, 30000));
+      // refresh
+      await element(by.id('groupsFlatList')).swipe('down');
+      // Text changes to "Known members: " when all invited people have joined
+      await waitFor(element(by.text('Known members: ')))
+        .toBeVisible()
+        .withTimeout(30000);
+      // open group
+      await element(by.text(GroupName)).tap();
+      // Group should now have 3 members, so check for memberItem with index 2
+      await expect(element(by.id('memberItem-2'))).toBeVisible();
+      // Now on members screen. Go back to homescreen.
+      // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
+      await navigateHome();
+      await navigateHome();
+    });
+
+    it('should promote member of group to admin', async () => {
+      const actionSheetTitle = 'What do you want to do?';
+      const actionTitle = 'Add Admin';
+
+      // navigate to groups screen
+      await element(by.id('groupsBtn')).tap();
+      await expectGroupsScreen();
+      // open group
+      await element(by.text(GroupName)).tap();
+
+      // Open context menu of first member that is not admin
+      await element(by.id('memberContextBtn').withAncestor(by.id('regular')))
+        .atIndex(0)
+        .tap();
+
+      // ActionSheet does not support testID, so match based on text.
+      await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
+      await element(by.text(actionTitle)).tap();
+      // dismiss confirmation screen
+      await element(by.text('OK')).tap();
+      // All members should be admin now
+      await expect(
+        element(by.id('memberContextBtn').withAncestor(by.id('regular'))),
+      ).not.toExist();
+    });
+  });
+
+  test.todo('Leave group');
+  // Commented out as this test hangs forever after clicking OK :-(
+  // it('should leave group', async () => {
+  //   await element(by.id('groupItem-0')).tap();
+  //   await expect(element(by.id('groupOptionsBtn'))).toBeVisible();
+  //   await element(by.id('groupOptionsBtn')).tap();
+  //   await expect(element(by.text(leaveGroupText))).toBeVisible();
+  //   await element(by.text(leaveGroupText)).tap();
+  //   // confirm with OK button
+  //   await expect(element(by.text('OK'))).toBeVisible();
+  //   await element(by.text('OK')).tap(); // <-- this tap action hangs forever in detox
+  //   // should be back at groups screen
+  //   await expectGroupsScreen();
+  //   // only one group should be left
+  //   await expect(element(by.id('groupItem-1'))).not.toExist();
+  // });
 });
