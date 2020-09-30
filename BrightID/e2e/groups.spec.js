@@ -10,10 +10,6 @@ import {
 
 /*
   Limitations:
-  - All group tests are from group creator/admin perspective. There is no test
-    for the "being invited" flow.
-  - Inviting additional connections to a group is not tested (Can we get a fake connection
-    being eligible to be invited?)
   - Group search is not tested against member name matches, as member names are random
  */
 

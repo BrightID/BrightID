@@ -12,11 +12,6 @@ import {
   navigateHome,
 } from './testUtils';
 
-/*
-  Limitations:
-  - Group search is not tested against member name matches, as member names are random
- */
-
 const GroupName = 'Reservoir Dogs';
 
 describe('Group Management', () => {
@@ -286,20 +281,31 @@ describe('Group Management', () => {
     });
   });
 
-  test.todo('Leave group');
-  // Commented out as this test hangs forever after clicking OK :-(
-  // it('should leave group', async () => {
-  //   await element(by.id('groupItem-0')).tap();
-  //   await expect(element(by.id('groupOptionsBtn'))).toBeVisible();
-  //   await element(by.id('groupOptionsBtn')).tap();
-  //   await expect(element(by.text(leaveGroupText))).toBeVisible();
-  //   await element(by.text(leaveGroupText)).tap();
-  //   // confirm with OK button
-  //   await expect(element(by.text('OK'))).toBeVisible();
-  //   await element(by.text('OK')).tap(); // <-- this tap action hangs forever in detox
-  //   // should be back at groups screen
-  //   await expectGroupsScreen();
-  //   // only one group should be left
-  //   await expect(element(by.id('groupItem-1'))).not.toExist();
-  // });
+  describe('Leave group', () => {
+    // Skipping, as this test hangs forever after clicking OK :-(
+    xit('should leave group', async () => {
+      await expectHomescreen();
+      // navigate to groups screen
+      await element(by.id('groupsBtn')).tap();
+      await expectGroupsScreen();
+      // select first group
+      await element(by.id('groupItem-0')).tap();
+      await expect(element(by.id('groupOptionsBtn'))).toBeVisible();
+      await element(by.id('groupOptionsBtn')).tap();
+      await expect(element(by.text(leaveGroupText))).toBeVisible();
+      await element(by.text(leaveGroupText)).tap();
+      // confirm with OK button
+      await expect(element(by.text('OK'))).toBeVisible();
+
+      // following tap action fails in detox with error
+      // "Test Failed: Error performing 'com.wix.detox.espresso.action.detoxsingletap@c26e546 click - At Coordinates: 1192, 1573 and precision: 16, 16' on view '(with text: is "OK" and view has effective visibility=VISIBLE)'."
+      await element(by.text('OK')).tap();
+
+      // should be back at groups screen
+      await expectGroupsScreen();
+      // go back to home screen
+      await navigateHome();
+      await expectHomescreen();
+    });
+  });
 });
