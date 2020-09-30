@@ -39,6 +39,7 @@ function MemberCard(props: MemberCardProps) {
     userIsAdmin,
     memberIsAdmin,
     flaggers,
+    testID,
   } = props;
   const actionSheetRef: ?ActionSheet = useRef(null);
   const [contextActions, setContextActions] = useState<Array<string>>([]);
@@ -97,7 +98,7 @@ function MemberCard(props: MemberCardProps) {
 
   return (
     <>
-      <View style={styles.container}>
+      <View style={styles.container} testID={testID}>
         <Image source={imageSource} style={styles.photo} />
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>

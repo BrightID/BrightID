@@ -3,21 +3,21 @@
 import { Alert } from 'react-native';
 import api from '@/api/brightId';
 import { deleteConnection } from '@/actions';
-import { fakeJoinGroups } from '@/actions/fakeGroup';
 import { backupUser } from '@/components//Recovery/helpers';
-import { connectWithOtherFakeConnections } from '@/actions/fakeContact';
+import {
+  connectWithOtherFakeConnections,
+  joinAllGroups,
+} from '@/actions/fakeContact';
 import { defaultSort } from './sortingUtility';
 
 const flagMap = ['duplicate', 'fake', 'deceased'];
 
-export const handleFlagging = ({ name, id, dispatch, secretKey }) => (
-  index,
-) => {
+export const handleFlagging = ({ name, id, dispatch }) => (index) => {
   if (__DEV__) {
     switch (index) {
       case 3: {
         console.log('joining all groups');
-        dispatch(fakeJoinGroups({ id, secretKey }));
+        dispatch(joinAllGroups(id));
         return;
       }
       case 4: {

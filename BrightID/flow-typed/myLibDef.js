@@ -260,3 +260,8 @@ declare type action = {
   type: string,
   [key: string]: any,
 };
+
+declare type FakeUser = {
+  id: string,
+  secretKey: string, // Base64 encoded secretkey
+};

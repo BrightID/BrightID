@@ -4,14 +4,9 @@ import api from '@/api/brightId';
 import nacl from 'tweetnacl';
 import { b64ToUint8Array, strToUint8Array, uInt8ArrayToB64 } from './encoding';
 
-type fakeUser = {
-  id: string,
-  secretKey: string,
-};
-
 export const connectFakeUsers = async (
-  fakeUser1: fakeUser,
-  fakeUser2: fakeUser,
+  fakeUser1: FakeUser,
+  fakeUser2: FakeUser,
 ) => {
   let connectionTimestamp = Date.now();
   const message = `Add Connection${fakeUser1.id}${fakeUser2.id}${connectionTimestamp}`;

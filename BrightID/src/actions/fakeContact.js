@@ -11,8 +11,9 @@ import {
 import { encryptData } from '@/utils/cryptoHelper';
 import { createRandomId } from '@/utils/channels';
 import { selectChannelById } from '@/components/PendingConnectionsScreens/channelSlice';
-import { names } from '../utils/fakeNames';
-import { connectFakeUsers } from '../utils/fakeHelper';
+import { names } from '@/utils/fakeNames';
+import { connectFakeUsers } from '@/utils/fakeHelper';
+import api from '@/api/brightId';
 
 export const addFakeConnection = () => async (
   dispatch: dispatch,
@@ -110,4 +111,28 @@ export const connectWithOtherFakeConnections = (id: string) => async (
       { id: otherUser.id, secretKey: otherUser.secretKey },
     );
   }
+};
+
+export const joinAllGroups = (id: string) => async (
+  dispatch: dispatch,
+  getState: getState,
+) => {
+  // get fakeUser by ID
+  const fakeUser = getState().connections.connections.find(
+    (entry) => entry.id === id,
+  );
+  if (!fakeUser) {
+    console.log(`Failed to get fake connection id ${id}`);
+    return;
+  }
+  if (!fakeUser.secretKey) {
+    console.log(`Fake connection ${id} does not have a secretKey!`);
+    return;
+  }
+
+  // join all groups
+  const { groups } = getState().groups;
+  groups.map((group) =>
+    api.joinGroup(group.id, { id, secretKey: fakeUser.secretKey }),
+  );
 };

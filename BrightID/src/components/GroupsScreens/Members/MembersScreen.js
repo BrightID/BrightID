@@ -223,11 +223,12 @@ function MembersScreen(props: MembersScreenProps) {
     }
   };
 
-  const renderMember = ({ item }) => {
+  const renderMember = ({ item, index }) => {
     const memberIsAdmin = admins.includes(item.id);
     const userIsAdmin = admins.includes(user.id);
     return (
       <MemberCard
+        testID={`memberItem-${index}`}
         connectionDate={item.connectionDate}
         flaggers={item.flaggers}
         memberId={item.id}

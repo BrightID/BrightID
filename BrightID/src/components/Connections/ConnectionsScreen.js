@@ -259,7 +259,8 @@ export const ConnectionsScreen = () => {
             style={styles.connectionsContainer}
             data={connections}
             keyExtractor={({ id }, index) => id + index}
-            renderItem={({ item }) => {
+            renderItem={({ item, index }) => {
+              item.index = index;
               return <ConnectionCard {...item} />;
             }}
             renderHiddenItem={({ item }, rowMap) => (
