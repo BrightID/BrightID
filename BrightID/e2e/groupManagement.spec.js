@@ -128,6 +128,8 @@ describe('Group Management', () => {
       await navigateHome();
       // open connection screen
       await element(by.id('connectionsBtn')).tap();
+      await expectConnectionsScreen();
+
       // let all three connections join groups
       for (const i of [0, 1, 2]) {
         // swipe left to reach flagBtn
@@ -148,27 +150,29 @@ describe('Group Management', () => {
       await navigateHome();
       // navigate to groups screen
       await element(by.id('groupsBtn')).tap();
-      // wait 20 seconds until all join ops should be done on the backend
-      await new Promise((r) => setTimeout(r, 2000));
+      // wait 30 seconds until all join ops should be done on the backend
+      await new Promise((r) => setTimeout(r, 30000));
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
       // Text changes to "Known members: " when all invited people have joined
-      await waitFor(element(by.text('Known members: '))).toBeVisible();
+      await waitFor(element(by.text('Known members: ')))
+        .toBeVisible()
+        .withTimeout(30000);
     });
   });
 
   describe('Invite user', () => {
     beforeAll(async () => {
       // navigate to groups screen
-      await element(by.id('groupsBtn')).tap();
+      // await element(by.id('groupsBtn')).tap();
     });
 
     beforeEach(async () => {
       // make sure to be on the groups tab/screen before starting tests
-      await expectGroupsScreen();
+      // await expectGroupsScreen();
       // reload groups
-      await element(by.id('groupsFlatList')).swipe('down');
-      await expectGroupsScreen();
+      // await element(by.id('groupsFlatList')).swipe('down');
+      // await expectGroupsScreen();
     });
 
     afterAll(async () => {
@@ -176,6 +180,9 @@ describe('Group Management', () => {
     });
 
     it('should invite connection to group', async () => {
+      // navigate to groups screen
+      await element(by.id('groupsBtn')).tap();
+      await expectGroupsScreen();
       // open group
       await element(by.text(GroupName)).tap();
       // open group context menu
@@ -199,11 +206,16 @@ describe('Group Management', () => {
         .toBeVisible()
         .withTimeout(20000);
       await element(by.text('OK')).tap();
-      // should still be on group members screen, so go back
+      // Now on members screen again
+    });
+
+    it(`Invited connection should join group`, async () => {
+      // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
+      await navigateHome();
       await navigateHome();
       // navigate to connections screen to make invited user join the group
       await element(by.id('connectionsBtn')).tap();
-
+      await expectConnectionsScreen();
       // to simplify test script just click on all flagBtns and join groups
       const actionSheetTitle = 'What do you want to do?';
       const actionTitle = 'Join All Groups';
@@ -227,11 +239,18 @@ describe('Group Management', () => {
       await navigateHome();
       // navigate to groups screen
       await element(by.id('groupsBtn')).tap();
-      // reload groups
+      await expectGroupsScreen();
+      // wait 30 seconds until all join ops should be done on the backend
+      await new Promise((r) => setTimeout(r, 30000));
+      // refresh
       await element(by.id('groupsFlatList')).swipe('down');
+      // Text changes to "Known members: " when all invited people have joined
+      await waitFor(element(by.text('Known members: ')))
+        .toBeVisible()
+        .withTimeout(30000);
       // open group
       await element(by.text(GroupName)).tap();
-      // Group should now have 4 members
+      // Group should now have 4 members, so check for memberItem with index 3
       await expect(element(by.id('memberItem-3'))).toBeVisible();
     });
 
