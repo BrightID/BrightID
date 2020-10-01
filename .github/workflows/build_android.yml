@@ -37,6 +37,7 @@ jobs:
 
       - name: debug build
         run: |
+          echo "::add-path::/home/runner/work/BrightID/BrightID/BrightID/node_modules/.bin"
           touch ./android/app/src/main/assets/index.android.bundle
           mv ./android/app/google-services.json-dev ./android/app/google-services.json
           react-native bundle --dev false --platform android --entry-file index.js --bundle-output ./android/app/src/main/assets/index.android.bundle --assets-dest ./android/app/src/main/res/
@@ -84,8 +85,10 @@ jobs:
         run: ./scripts/decrypt.sh
         env:
           ENCRYPT_PASSWORD: ${{ secrets.ENCRYPT_PASSWORD }}
+
       - name: release build
         run: cd android && ./gradlew assembleRelease && cd ..
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
