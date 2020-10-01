@@ -1,0 +1,25 @@
+name: unittest
+
+on: [push]
+
+jobs:
+  unittest:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: install dependencies
+        run: yarn --frozen-lockfile
+      - name: execute tests
+        run: npm run test
+        env:
+          CI: true
