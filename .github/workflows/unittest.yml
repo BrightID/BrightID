@@ -7,6 +7,11 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        shell: bash
+        working-directory: BrightID
+
     strategy:
       matrix:
         node-version: [12.x]
