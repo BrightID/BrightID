@@ -27,8 +27,8 @@ jobs:
       - name: Cache node modules
         uses: actions/cache@v2
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-${{ matrix.node-version }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: './BrightID/node_modules'
+          key: ${{ runner.os }}-${{ matrix.node-version }}-modules-${{ hashFiles('./BrightID/yarn.lock') }}
 
       - name: install dependencies
         run: yarn --frozen-lockfile
