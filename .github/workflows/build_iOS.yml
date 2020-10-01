@@ -41,7 +41,6 @@ jobs:
 
       - name: debug build
         run: |
-          echo "::add-path::/home/runner/work/BrightID/BrightID/BrightID/node_modules/.bin"
           echo "TODO: Insert iOS Debug build instructions here :-)"
 
       - name: Upload Artifact
