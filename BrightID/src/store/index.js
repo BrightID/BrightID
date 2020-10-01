@@ -1,46 +1,70 @@
 // @flow
 
 import AsyncStorage from '@react-native-community/async-storage';
-import FilesystemStorage from 'redux-persist-filesystem-storage';
-import { persistStore, persistReducer, getStoredState } from 'redux-persist';
-import reducer from '@/reducer';
+import { combineReducers } from 'redux';
+
+import { persistStore, persistReducer } from 'redux-persist';
+import reducers from '@/reducer';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import FilesystemStorage from 'redux-persist-filesystem-storage';
+
 import { migrate } from './migrations';
 import {
-  groupsTransformer,
-  qrDataTransformer,
-  userTransformer,
-  connectionsTransformer,
+  newGroupCoFoundersTransform,
+  searchParamTransform,
+  searchOpenTransform,
   notificationsTransformer,
 } from './transform';
 
-const persistConfig = {
+const rootPersistConfig = {
   key: 'root',
-  storage: FilesystemStorage,
-  transforms: [
-    userTransformer,
-    groupsTransformer,
-    qrDataTransformer,
-    connectionsTransformer,
-    notificationsTransformer,
-  ],
+  storage: AsyncStorage,
+  transforms: [notificationsTransformer],
   version: 8,
   migrate,
   timeout: 0,
-  blacklist: ['channels', 'pendingConnections'],
+  blacklist: [
+    'channels',
+    'pendingConnections',
+    'user',
+    'connections',
+    'groups',
+  ],
 };
 
-// migrate storage from AsyncStorage to FilesystemStorage
-persistConfig.getStoredState = async (config) => {
-  return getStoredState(config).catch((err) => {
-    console.log(
-      `failed to hydrate from FilesystemStorage. Trying to load from AsyncStorage`,
-    );
-    return getStoredState({ ...config, storage: AsyncStorage });
-  });
+const connectionsPersistConfig = {
+  key: 'connections',
+  storage: FilesystemStorage,
+  timeout: 0,
+  transforms: [searchParamTransform, searchOpenTransform],
 };
 
-const persistedReducer = persistReducer(persistConfig, reducer);
+const groupsPersistConfig = {
+  key: 'groups',
+  storage: FilesystemStorage,
+  timeout: 0,
+  transforms: [
+    searchParamTransform,
+    searchOpenTransform,
+    newGroupCoFoundersTransform,
+  ],
+};
+
+const userPersistConfig = {
+  key: 'user',
+  storage: AsyncStorage,
+  timeout: 0,
+  transforms: [searchParamTransform],
+};
+
+const rootReducer = combineReducers({
+  ...reducers,
+  connections: persistReducer(connectionsPersistConfig, reducers.connections),
+  groups: persistReducer(groupsPersistConfig, reducers.groups),
+  user: persistReducer(userPersistConfig, reducers.user),
+});
+
+const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,

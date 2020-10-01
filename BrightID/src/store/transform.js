@@ -2,49 +2,40 @@
 
 import { createTransform } from 'redux-persist';
 
-export const userTransformer = createTransform(
+export const searchParamTransform = createTransform(
   // transform state on its way to being serialized and persisted.
   (inboundState, key) => {
-    return { ...inboundState, searchParam: '' };
+    return '';
   },
   // transform state being rehydrated
   (outboundState, key) => {
     return outboundState;
   },
-  { whitelist: ['user'] },
+  { whitelist: ['searchParam'] },
 );
 
-/*
-  clear searchParam of SearchGroups when persisting
- */
-export const groupsTransformer = createTransform(
+export const searchOpenTransform = createTransform(
   // transform state on its way to being serialized and persisted.
   (inboundState, key) => {
-    return {
-      ...inboundState,
-      searchParam: '',
-      searchOpen: false,
-      newGroupCoFounders: [],
-    };
+    return false;
   },
+  // transform state being rehydrated
   (outboundState, key) => {
     return outboundState;
   },
-  { whitelist: ['groups'] },
+  { whitelist: ['searchOpen'] },
 );
 
-/*
-  clear searchParam of SearchConnections when persisting
- */
-export const connectionsTransformer = createTransform(
+export const newGroupCoFoundersTransform = createTransform(
   // transform state on its way to being serialized and persisted.
   (inboundState, key) => {
-    return { ...inboundState, searchParam: '', searchOpen: false };
+    return [];
   },
+  // transform state being rehydrated
   (outboundState, key) => {
     return outboundState;
   },
-  { whitelist: ['connections'] },
+  { whitelist: ['newGroupCoFounders'] },
 );
 
 export const notificationsTransformer = createTransform(
@@ -64,16 +55,4 @@ export const notificationsTransformer = createTransform(
     return outboundState;
   },
   { whitelist: ['notifications'] },
-);
-
-/* clear my QRCode when persisting */
-export const qrDataTransformer = createTransform(
-  // transform state on its way to being serialized and persisted.
-  (inboundState, key) => {
-    return { ...inboundState, myQrData: undefined };
-  },
-  (outboundState, key) => {
-    return outboundState;
-  },
-  { whitelist: ['connectQrData'] },
 );
