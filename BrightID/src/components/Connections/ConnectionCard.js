@@ -6,7 +6,7 @@ import RNFS from 'react-native-fs';
 import { useDispatch } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
-import { DEVICE_LARGE, MAX_WAITING_SECONDS } from '@/utils/constants';
+import { DEVICE_LARGE, CHANNEL_TTL } from '@/utils/constants';
 import { staleConnection } from '@/actions';
 
 /**
@@ -40,7 +40,7 @@ const ConnectionCard = (props) => {
       if (status === 'initiated') {
         const checkStale = () => {
           const ageSeconds = Math.floor((Date.now() - connectionDate) / 1000);
-          if (ageSeconds > MAX_WAITING_SECONDS && status !== 'verified') {
+          if (ageSeconds > CHANNEL_TTL && status !== 'verified') {
             console.log(
               `Connection ${name} is stale (age: ${ageSeconds} seconds)`,
             );
@@ -54,7 +54,7 @@ const ConnectionCard = (props) => {
         } else {
           // start timer to check if connection got verified after MAX_WAITING_TIME
           let checkTime =
-            connectionDate + MAX_WAITING_SECONDS * 1000 + 5000 - Date.now(); // add 5 seconds buffer
+            connectionDate + CHANNEL_TTL * 1000 + 5000 - Date.now(); // add 5 seconds buffer
           if (checkTime < 0) {
             console.log(`Warning - checkTime in past: ${checkTime}`);
             checkTime = 1000; // check in 1 second

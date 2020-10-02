@@ -5,13 +5,21 @@ import nacl from 'tweetnacl';
 import api from '@/api/brightId';
 import stringify from 'fast-json-stable-stringify';
 
+type initiateConnectionParams = {
+  myBrightId: string,
+  secretKey: string,
+  connection: PendingConnection,
+  connectionTimestamp: number,
+  channel: Channel,
+};
+
 export const initiateConnectionRequest = async ({
   myBrightId,
   secretKey,
   connectionTimestamp,
   channel,
   connection,
-}) => {
+}: initiateConnectionParams) => {
   const message = `Add Connection${myBrightId}${connection.brightId}${connectionTimestamp}`;
   console.log(`Initiator: Signing connection message: ${message}`);
   const signedMessage = uInt8ArrayToB64(

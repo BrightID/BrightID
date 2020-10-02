@@ -4,10 +4,7 @@ import {
   selectChannelById,
 } from '@/components/PendingConnectionsScreens/channelSlice';
 import { obtainKeys } from '@/utils/keychain';
-import { TIME_FUDGE } from '@/utils/constants';
-import { hash, strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
-import nacl from 'tweetnacl';
-import api from '@/api/brightId';
+import { hash } from '@/utils/encoding';
 import { addConnection, addOperation } from '@/actions';
 import { saveImage } from '@/utils/filesystem';
 import { backupPhoto, backupUser } from '@/components/Recovery/helpers';
@@ -18,19 +15,30 @@ import {
   updatePendingConnection,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import { leaveChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
-import stringify from 'fast-json-stable-stringify';
+import {
+  initiateConnectionRequest,
+  respondToConnectionRequest,
+} from '../../../utils/connections';
+import { DEFAULT_OP_TRACE_TIME } from '../../../utils/constants';
 
 export const confirmPendingConnectionThunk = (id: string) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  const connection: PendingConnection = selectPendingConnectionById(
+  const pendingConnection: PendingConnection = selectPendingConnectionById(
     getState(),
     id,
   );
+
+  if (!pendingConnection) {
+    throw new Error(`Can't confirm - pendingConnection ${id} not found`);
+  }
+
   // validate pendingConnection state
-  if (connection.state !== pendingConnection_states.UNCONFIRMED) {
-    console.log(`Can't confirm - Connection is in state ${connection.state}`);
+  if (pendingConnection.state !== pendingConnection_states.UNCONFIRMED) {
+    console.log(
+      `Can't confirm - PendingConnection is in state ${pendingConnection.state}`,
+    );
     return;
   }
 
@@ -43,110 +51,93 @@ export const confirmPendingConnectionThunk = (id: string) => async (
     }),
   );
 
-  const channel = selectChannelById(getState(), connection.channelId);
+  const channel: Channel = selectChannelById(
+    getState(),
+    pendingConnection.channelId,
+  );
   console.log(`confirming connection ${id} in channel ${channel.id}`);
 
   const {
     user: { backupCompleted },
   } = getState();
 
-  let { username, secretKey } = await obtainKeys();
+  let { username: myBrightId, secretKey } = await obtainKeys();
   let connectionTimestamp = Date.now();
 
-  if (connection.signedMessage) {
-    // I'm responding
-    // The other user signed a connection request; we have enough info to
-    // make an API call to create the connection.
-    if (connection.timestamp > connectionTimestamp + TIME_FUDGE) {
-      throw new Error("timestamp can't be in the future");
-    }
-
-    const message = `Add Connection${connection.brightId}${username}${connection.timestamp}`;
-    const signedMessage = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
-    api.createConnection(
-      connection.brightId,
-      connection.signedMessage,
-      username,
-      signedMessage,
-      connection.timestamp,
-    );
-  } else {
-    // I'm initiating
-    const message = `Add Connection${username}${connection.brightId}${connectionTimestamp}`;
-    const signedMessage = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
-
-    // bring signedmessage to peer so he knows i want to connect with him...
-    console.log(
-      `Uploading signed connection string for ${connection.name} to channel ${connection.id}`,
-    );
-    const data = {
-      signedMessage,
+  if (pendingConnection.initiator) {
+    const { opName, opMessage } = await initiateConnectionRequest({
+      myBrightId,
+      secretKey,
+      channel,
+      connection: pendingConnection,
       connectionTimestamp,
-    };
-
-    await channel.api.upload({
-      channelId: connection.id,
-      data,
-      dataId: channel.myProfileId,
     });
 
-    // Listen for add connection operation to be completed by other party
+    // Start listening for peer to complete connection operation.
+    // Set op tracetime to remaining channel lifetime + default tracetime as buffer
+    const tracetime =
+      channel.timestamp + channel.ttl + DEFAULT_OP_TRACE_TIME - Date.now();
     const apiVersion = 5;
-    const opName = 'Add Connection';
-    const op = {
-      name: opName,
-      id1: username,
-      id2: connection.brightId,
-      timestamp: connectionTimestamp,
-      v: apiVersion,
-    };
-    const opMessage = stringify(op);
-    console.log(
-      `Watching for responder opMessage: ${opMessage} - hash: ${hash(
-        opMessage,
-      )}`,
-    );
     const watchOp = {
       hash: hash(opMessage),
       name: opName,
       timestamp: connectionTimestamp,
       v: apiVersion,
+      tracetime,
     };
     dispatch(addOperation(watchOp));
+  } else {
+    if (pendingConnection.signedMessage) {
+      // signedmessage from initiator is already available. Can respond immediately.
+      await respondToConnectionRequest({
+        otherBrightId: pendingConnection.brightId,
+        signedMessage: pendingConnection.signedMessage,
+        timestamp: pendingConnection.timestamp,
+        myBrightId,
+        secretKey,
+      });
+      if (channel.type === channel_types.SINGLE) {
+        // Connection is established, so the 1:1 channel can be left
+        dispatch(leaveChannel(channel.id));
+      }
+    } else {
+      // signedMessage from initiator is still pending.
+      // Remember that I want to confirm this pendingConnection. As soon as
+      // the connectionRequest with signedMessage comes in, connection operation will be created.
+      dispatch(
+        updatePendingConnection({
+          id,
+          changes: {
+            preConfirmed: true,
+          },
+        }),
+      );
+    }
   }
 
   // save connection photo
   const filename = await saveImage({
-    imageName: connection.brightId,
-    base64Image: connection.photo,
+    imageName: pendingConnection.brightId,
+    base64Image: pendingConnection.photo,
   });
 
   // create established connection from pendingConnection
   const connectionData = {
-    id: connection.brightId,
-    name: connection.name,
-    score: connection.score,
+    id: pendingConnection.brightId,
+    name: pendingConnection.name,
+    score: pendingConnection.score,
     connectionDate: connectionTimestamp,
     photo: { filename },
     status: 'initiated',
-    notificationToken: connection.notificationToken,
-    secretKey: connection.secretKey,
+    notificationToken: pendingConnection.notificationToken,
+    secretKey: pendingConnection.secretKey,
   };
 
   dispatch(addConnection(connectionData));
-  dispatch(confirmPendingConnection(connection.id));
-
-  if (channel.type === channel_types.SINGLE) {
-    // Connection is established, so the 1:1 channel can be left
-    dispatch(leaveChannel(channel.id));
-  }
+  dispatch(confirmPendingConnection(pendingConnection.id));
 
   if (backupCompleted) {
     await backupUser();
-    await backupPhoto(connection.brightId, filename);
+    await backupPhoto(pendingConnection.brightId, filename);
   }
 };
