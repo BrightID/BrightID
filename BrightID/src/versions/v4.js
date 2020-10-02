@@ -9,7 +9,12 @@ import {
   setGroups,
   setInvites,
 } from '@/actions';
-import { objToUint8, uInt8ArrayToB64, objToB64 } from '@/utils/encoding';
+import {
+  objToUint8,
+  uInt8ArrayToB64,
+  objToB64,
+  b64ToUrlSafeB64,
+} from '@/utils/encoding';
 import { saveSecretKey } from '@/utils/keychain';
 
 // export const bootstrapV4 = hydrateStore('store@v4');
@@ -20,7 +25,9 @@ export const bootstrap = async (version: string) => {
     const dataObj = JSON.parse(dataStr);
     // save secretKey in keychain
     if (!dataObj.id) {
-      dataObj.id = uInt8ArrayToB64(objToUint8(dataObj.publicKey));
+      dataObj.id = b64ToUrlSafeB64(
+        uInt8ArrayToB64(objToUint8(dataObj.publicKey)),
+      );
     }
 
     dataObj.searchParam = '';
