@@ -30,7 +30,7 @@ export const bootstrapV0 = async (navigation: navigation) => {
         userData.id = uInt8ArrayToB64(objToUint8(userData.publicKey));
       }
 
-      await saveSecretKey(userData.id, userData.secretKey);
+      await saveSecretKey(b64ToUrlSafeB64(userData.id), userData.secretKey);
       userData.secretKey = objToB64(userData.secretKey);
       // update redux store
       await store.dispatch(setUserData(userData));
