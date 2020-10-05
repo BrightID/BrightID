@@ -21,7 +21,6 @@ import {
 import Spinner from 'react-native-spinkit';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
@@ -71,6 +70,12 @@ const ConfirmationButtons = ({
     (a, b) => a?.state === b?.state && a?.signedMessage === b?.signedMessage,
   );
 
+  const alreadyExists = useSelector((state) =>
+    state.connections.connections.some(
+      (conn) => conn.id === pendingConnection.brightId,
+    ),
+  );
+
   const accept = () => {
     dispatch(confirmPendingConnectionThunk(pendingConnection.id));
 
@@ -118,7 +123,9 @@ const ConfirmationButtons = ({
               accessibilityLabel={`reject connection with ${pendingConnection.name}`}
               accessibilityRole="button"
             >
-              <Text style={styles.buttonText}>Reject</Text>
+              <Text style={styles.buttonText}>
+                {alreadyExists ? 'Ignore' : 'Reject'}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               testID="confirmConnectionButton"
@@ -127,7 +134,9 @@ const ConfirmationButtons = ({
               accessibilityLabel={`accept connection with ${pendingConnection.name}`}
               accessibilityRole="button"
             >
-              <Text style={styles.buttonText}>Confirm</Text>
+              <Text style={styles.buttonText}>
+                {alreadyExists ? 'Update Profile' : 'Confirm'}
+              </Text>
             </TouchableOpacity>
           </>
         );
@@ -180,6 +189,12 @@ export const PreviewConnection = (props) => {
     pendingConnection.signedMessage,
   );
 
+  const alreadyExists = useSelector((state) =>
+    state.connections.connections.some(
+      (conn) => conn.id === pendingConnection.brightId,
+    ),
+  );
+
   const navigation = useNavigation();
   return (
     <View style={styles.previewContainer} testID="previewConnectionScreen">
@@ -220,9 +235,13 @@ export const PreviewConnection = (props) => {
             <Text style={styles.flagged}> (flagged)</Text>
           )}
         </Text>
-        <Text style={styles.connectedText}>
-          {pendingConnection.connectionDate}
-        </Text>
+        {alreadyExists ? (
+          <Text style={styles.flagged}>(already connected)</Text>
+        ) : (
+          <Text style={styles.connectedText}>
+            {pendingConnection.connectionDate}
+          </Text>
+        )}
       </View>
       <View style={styles.countsContainer}>
         <View>
