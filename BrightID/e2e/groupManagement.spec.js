@@ -21,7 +21,6 @@ describe('Group Management', () => {
   beforeAll(async () => {
     const platform = await device.getPlatform();
     hasBackButton = platform === 'android';
-
     // create identity
     await createBrightID();
 

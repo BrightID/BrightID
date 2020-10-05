@@ -44,6 +44,7 @@ const createFakeConnection = async (doConfirm = true) => {
     await element(by.id('confirmConnectionButton')).tap();
     // Should end up in the connection list
     await expectConnectionsScreen();
+
     await navigateHome();
   }
 };
@@ -55,8 +56,13 @@ const expectHomescreen = async () => {
 };
 
 const navigateHome = async () => {
-  // there might be several "navHomeBtn" instances in the view hierarchy, just take the first one
-  await element(by.id('NavHomeBtn')).atIndex(0).tap();
+  // there might be several "navHomeBtn" instances in the view hierarchy
+  try {
+    await element(by.id('NavHomeBtn')).atIndex(0).tap();
+    await element(by.id('NavHomeBtn')).atIndex(1).tap();
+    await element(by.id('NavHomeBtn')).atIndex(2).tap();
+  } catch (err) {}
+
   await expectHomescreen();
 };
 
