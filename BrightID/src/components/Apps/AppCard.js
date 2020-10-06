@@ -87,7 +87,7 @@ const AppCard = (props) => {
   const openApp = () => {
     Alert.alert(
       '',
-      `To find out more about ${context}, check out their website!`,
+      `To find out more about ${name}, check out their website!`,
       [
         {
           text: 'Sure',
