@@ -7,14 +7,10 @@ import { combineReducers } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import reducers from '@/reducer';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import KeychainStorage from './keychainAdapater';
 
 import { migrate } from './migrations';
-import {
-  newGroupCoFoundersTransform,
-  searchParamTransform,
-  searchOpenTransform,
-  notificationsTransformer,
-} from './transform';
+import { notificationsTransformer } from './transform';
 
 const version = 8;
 
@@ -42,7 +38,7 @@ const connectionsPersistConfig = {
   timeout: 0,
   debug: __DEV__,
   version,
-  transforms: [searchParamTransform, searchOpenTransform],
+  blacklist: ['searchParam', 'searchOpen'],
 };
 
 const groupsPersistConfig = {
@@ -51,11 +47,7 @@ const groupsPersistConfig = {
   timeout: 0,
   debug: __DEV__,
   version,
-  transforms: [
-    searchParamTransform,
-    searchOpenTransform,
-    newGroupCoFoundersTransform,
-  ],
+  blacklist: ['searchParam', 'searchOpen', 'newGroupCoFounders'],
 };
 
 const userPersistConfig = {
@@ -64,7 +56,17 @@ const userPersistConfig = {
   timeout: 0,
   debug: __DEV__,
   version,
-  transforms: [searchParamTransform],
+  blacklist: ['searchParam'],
+};
+
+const keypairPersistConfig = {
+  key: 'keypair',
+  storage: KeychainStorage,
+  timeout: 0,
+  debug: __DEV__,
+  version,
+  serialize: false,
+  deserialize: false,
 };
 
 const rootReducer = combineReducers({
