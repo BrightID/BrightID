@@ -1268,10 +1268,10 @@
     sudo-prompt "^9.0.0"
     wcwidth "^1.0.1"
 
-"@react-native-community/clipboard@^1.2.3":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@react-native-community/clipboard/-/clipboard-1.3.0.tgz#9aec68e39403c936288db8bf73d1980b9f908cc4"
-  integrity sha512-HshaSOfKwfrgc5V4sl2/enFXru8650wF3LNGOd9c+B8xFAJGtr2O6W139nsGIc7iUngIx2lQfD2E7sDoDZysHw==
+"@react-native-community/clipboard@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/clipboard/-/clipboard-1.4.0.tgz#1262741ef6a0917aa37a82392badd1586951c7e8"
+  integrity sha512-71P3SgbWxwzQo/i+tHospcLdvjF9iMlPxgjWP2LgIMDY0gbwuSrtYtdnxaCraZ0S/K7FiBI7SmUrY8kl2lTDVg==
 
 "@react-native-community/eslint-config@^1.1.0":
   version "1.1.0"
@@ -7699,7 +7699,7 @@ react-native-keyboard-aware-scroll-view@^0.9.1:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
 
-react-native-keychain@^6.1.1:
+react-native-keychain@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-6.2.0.tgz#8f4cff503aad367141db5aea0189ead9240c28ff"
   integrity sha512-U6fnOQRJPq+c0Abl+FoYy9v0H3kQU587tMamU/o+MoBSUScFLE3DQpkyT1PW4NF5IObgiGuqQdmjC2KgtBpjGA==
@@ -7759,10 +7759,10 @@ react-native-snap-carousel@^4.0.0-beta.5:
     "@types/react-addons-shallow-compare" "^0.14.22"
     react-addons-shallow-compare "15.6.2"
 
-react-native-spinkit@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/react-native-spinkit/-/react-native-spinkit-1.5.0.tgz#598b4b138b1e95cc232dfb2fc7e64dcdd45de574"
-  integrity sha512-HHOIH3Lq+oFsmhPBO9Y2hcxkKNm955gmNBaFgNUrshhGU4Dqp8qWj3bbVrwjBJOC5W+cvHSqyTsfgmpMPoUoTA==
+react-native-spinkit@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/react-native-spinkit/-/react-native-spinkit-1.5.1.tgz#5b770ce93e1f892b3d1983fd3ce2d7375335eb6b"
+  integrity sha512-XkTgP4e+/MZpbI1GdZTIEQ+6WeMWQT4duWnSiXaaVW7py0rtaBLswtAEA6uXQGUhnxMnPWZhbLz7QponpH3ciQ==
   dependencies:
     prop-types "^15.5.8"
 
@@ -7942,6 +7942,13 @@ redux-mock-store@^1.5.4:
   integrity sha512-xmcA0O/tjCLXhh9Fuiq6pMrJCwFRaouA8436zcikdIpYWWCjU76CRk+i2bHx8EeiSiMGnB85/lZdU3wIJVXHTA==
   dependencies:
     lodash.isplainobject "^4.0.6"
+
+redux-persist-filesystem-storage@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/redux-persist-filesystem-storage/-/redux-persist-filesystem-storage-2.2.0.tgz#9c7c241e90588689f69a493774c9fa2d957656c1"
+  integrity sha512-LoJx4PHPnMIbqby4vGyCH7S2UPTBl7vf4iTh0L9WZ8f8uGGgCUKFolVFjlhNsJxiGu3zFyRTqgfXC1ZAgJKV2Q==
+  dependencies:
+    rn-fetch-blob "^0.12.0"
 
 redux-persist@^6.0.0:
   version "6.0.0"

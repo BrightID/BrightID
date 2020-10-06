@@ -223,6 +223,9 @@ dependencies {
     // Add the SDK for Firebase Cloud Messaging
     implementation 'com.google.firebase:firebase-messaging:20.1.7'
 
+    // react-native-keychain
+    implementation project(':react-native-keychain')
+
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
     }
