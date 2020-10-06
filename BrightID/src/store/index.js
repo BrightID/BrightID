@@ -1,12 +1,12 @@
 // @flow
 
 import AsyncStorage from '@react-native-community/async-storage';
+import FilesystemStorage from 'redux-persist-filesystem-storage';
 import { combineReducers } from 'redux';
 
 import { persistStore, persistReducer } from 'redux-persist';
 import reducers from '@/reducer';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import FilesystemStorage from 'redux-persist-filesystem-storage';
 
 import { migrate } from './migrations';
 import {
@@ -16,11 +16,14 @@ import {
   notificationsTransformer,
 } from './transform';
 
+const version = 8;
+
 const rootPersistConfig = {
   key: 'root',
   storage: AsyncStorage,
+  debug: __DEV__,
   transforms: [notificationsTransformer],
-  version: 8,
+  version,
   migrate,
   timeout: 0,
   blacklist: [
@@ -29,6 +32,7 @@ const rootPersistConfig = {
     'user',
     'connections',
     'groups',
+    'recoveryData',
   ],
 };
 
@@ -36,6 +40,8 @@ const connectionsPersistConfig = {
   key: 'connections',
   storage: FilesystemStorage,
   timeout: 0,
+  debug: __DEV__,
+  version,
   transforms: [searchParamTransform, searchOpenTransform],
 };
 
@@ -43,6 +49,8 @@ const groupsPersistConfig = {
   key: 'groups',
   storage: FilesystemStorage,
   timeout: 0,
+  debug: __DEV__,
+  version,
   transforms: [
     searchParamTransform,
     searchOpenTransform,
@@ -54,6 +62,8 @@ const userPersistConfig = {
   key: 'user',
   storage: AsyncStorage,
   timeout: 0,
+  debug: __DEV__,
+  version,
   transforms: [searchParamTransform],
 };
 
