@@ -1,35 +1,80 @@
 // @flow
 
 import AsyncStorage from '@react-native-community/async-storage';
+import FilesystemStorage from 'redux-persist-filesystem-storage';
+import { combineReducers } from 'redux';
+
 import { persistStore, persistReducer } from 'redux-persist';
-import reducer from '@/reducer';
+import reducers from '@/reducer';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+
 import { migrate } from './migrations';
 import {
-  groupsTransformer,
-  qrDataTransformer,
-  userTransformer,
-  connectionsTransformer,
+  newGroupCoFoundersTransform,
+  searchParamTransform,
+  searchOpenTransform,
   notificationsTransformer,
 } from './transform';
 
-const persistConfig = {
+const version = 8;
+
+const rootPersistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  transforms: [
-    userTransformer,
-    groupsTransformer,
-    qrDataTransformer,
-    connectionsTransformer,
-    notificationsTransformer,
-  ],
-  version: 8,
+  debug: __DEV__,
+  transforms: [notificationsTransformer],
+  version,
   migrate,
   timeout: 0,
-  blacklist: ['channels', 'pendingConnections'],
+  blacklist: [
+    'channels',
+    'pendingConnections',
+    'user',
+    'connections',
+    'groups',
+    'recoveryData',
+  ],
 };
 
-const persistedReducer = persistReducer(persistConfig, reducer);
+const connectionsPersistConfig = {
+  key: 'connections',
+  storage: FilesystemStorage,
+  timeout: 0,
+  debug: __DEV__,
+  version,
+  transforms: [searchParamTransform, searchOpenTransform],
+};
+
+const groupsPersistConfig = {
+  key: 'groups',
+  storage: FilesystemStorage,
+  timeout: 0,
+  debug: __DEV__,
+  version,
+  transforms: [
+    searchParamTransform,
+    searchOpenTransform,
+    newGroupCoFoundersTransform,
+  ],
+};
+
+const userPersistConfig = {
+  key: 'user',
+  storage: AsyncStorage,
+  timeout: 0,
+  debug: __DEV__,
+  version,
+  transforms: [searchParamTransform],
+};
+
+const rootReducer = combineReducers({
+  ...reducers,
+  connections: persistReducer(connectionsPersistConfig, reducers.connections),
+  groups: persistReducer(groupsPersistConfig, reducers.groups),
+  user: persistReducer(userPersistConfig, reducers.user),
+});
+
+const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,

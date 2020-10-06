@@ -5,6 +5,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { navigate } from '@/NavigationService';
 import { resetStore } from '@/actions';
 import { store } from '@/store';
+import RNFetchBlob from 'rn-fetch-blob';
+
+const defaultStoragePath = `${RNFetchBlob.fs.dirs.DocumentDir}/persistStore`;
 
 export const delStorage = () => {
   if (__DEV__) {
@@ -25,6 +28,7 @@ export const delStorage = () => {
               navigate('Onboarding');
               await AsyncStorage.flushGetRequests();
               await AsyncStorage.clear();
+              await RNFetchBlob.fs.unlink(defaultStoragePath);
             } catch (err) {
               err instanceof Error
                 ? console.warn('delete storage', err.message)
