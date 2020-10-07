@@ -217,14 +217,14 @@ export const MyCodeScreen = () => {
 
   const displayOneToOneInfo = () => {
     Alert.alert(
-      'One to One',
+      'Single-use code',
       `This QR code can be used to connect with a single user before it expires.`,
     );
   };
 
   const displayManyToManyInfo = () => {
     Alert.alert(
-      'Many to Many',
+      'Group code',
       'This QR code is designed for many people to connect simultaneously.',
     );
   };
@@ -253,7 +253,7 @@ export const MyCodeScreen = () => {
               onPress={displayManyToManyInfo}
               testID="ConnectionInfoGroupBtn"
             >
-              <Text style={styles.infoTopText}>Many to Many </Text>
+              <Text style={styles.infoTopText}>Group code </Text>
               <Material name="information-variant" size={18} color="#4a4a4a" />
             </TouchableOpacity>
           ) : (
@@ -262,7 +262,7 @@ export const MyCodeScreen = () => {
               onPress={displayOneToOneInfo}
               testID="ConnectionInfoSingleBtn"
             >
-              <Text style={styles.infoTopText}>One to One </Text>
+              <Text style={styles.infoTopText}>Single-use code </Text>
               <Material name="information-variant" size={18} color="#4a4a4a" />
             </TouchableOpacity>
           )}
