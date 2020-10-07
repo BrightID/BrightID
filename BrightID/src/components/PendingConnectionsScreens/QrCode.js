@@ -101,7 +101,9 @@ export const QrCode = ({ channel }) => {
     const universalLink = `https://app.brightid.org/connection-code/${qrString}`;
     const clipboardMsg = __DEV__
       ? universalLink
-      : `Connect with ${myName} on BrightID: ${universalLink}`;
+      : channel?.type === channel_types.GROUP 
+        ? `Make a group connection with ${myName} on BrightID: ${universalLink}`
+        : `Connect with ${myName} on BrightID: ${universalLink}`;
     const alertMsg =
       channel?.type === channel_types.SINGLE
         ? `Share this link with one friend`
