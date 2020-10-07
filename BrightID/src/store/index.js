@@ -7,7 +7,7 @@ import { combineReducers } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import reducers from '@/reducer';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import KeychainStorage from './keychainAdapater';
+import KeychainStorage from './keychainAdapter';
 
 import { migrate } from './migrations';
 import { notificationsTransformer } from './transform';
@@ -73,6 +73,7 @@ const rootReducer = combineReducers({
   ...reducers,
   connections: persistReducer(connectionsPersistConfig, reducers.connections),
   groups: persistReducer(groupsPersistConfig, reducers.groups),
+  keypair: persistReducer(keypairPersistConfig, reducers.keypair),
   user: persistReducer(userPersistConfig, reducers.user),
 });
 

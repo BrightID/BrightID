@@ -9,16 +9,16 @@ import { checkTasks, syncStoreTasks } from './components/Tasks/TasksSlice';
 export const bootstrap = async () => {
   try {
     let {
-      user: { publicKey },
+      user: { id },
     } = store.getState();
     // load redux store from async storage and upgrade async storage is necessary
-    if (!publicKey) await bootstrapAndUpgrade();
+    if (!id) await bootstrapAndUpgrade();
     // reset operations
     store.dispatch(resetOperations());
     // fetch user info
-    if (!publicKey) {
-      publicKey = store.getState().user.publicKey;
-      console.log('secondBootstrap', publicKey);
+    if (!id) {
+      id = store.getState().user.id;
+      console.log('secondBootstrap', id);
     }
 
     // update available usertasks

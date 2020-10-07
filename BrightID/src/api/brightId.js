@@ -9,7 +9,6 @@ import {
   hash,
   b64ToUint8Array,
 } from '@/utils/encoding';
-import { obtainKeys } from '@/utils/keychain';
 import store from '@/store';
 import { addOperation } from '@/actions';
 
@@ -94,13 +93,16 @@ class NodeApi {
   }
 
   async removeConnection(id2: string, reason: string) {
-    let { username, secretKey } = await obtainKeys();
+    let {
+      user: { id },
+      keypair: { secretKey },
+    } = store.getState();
 
     let name = 'Remove Connection';
     let timestamp = Date.now();
     let op = {
       name,
-      id1: username,
+      id1: id,
       id2,
       reason,
       timestamp,
@@ -126,14 +128,14 @@ class NodeApi {
     url: string,
     type: string,
   ) {
-    let { username, secretKey } = await obtainKeys();
+    let { user: id, keypair: secretKey } = store.getState();
 
     let name = 'Add Group';
     let timestamp = Date.now();
 
     let op = {
       name,
-      id1: username,
+      id1: id,
       id2,
       inviteData2,
       id3,
@@ -156,14 +158,14 @@ class NodeApi {
   }
 
   async dismiss(id2: string, group: string) {
-    let { username, secretKey } = await obtainKeys();
+    let { user: id, keypair: secretKey } = store.getState();
 
     let name = 'Dismiss';
     let timestamp = Date.now();
 
     let op = {
       name,
-      dismisser: username,
+      dismisser: id,
       dismissee: id2,
       group,
       timestamp,
@@ -181,13 +183,13 @@ class NodeApi {
   }
 
   async invite(id2: string, group: string, data: string) {
-    let { username, secretKey } = await obtainKeys();
+    let { user: id, keypair: secretKey } = store.getState();
 
     let name = 'Invite';
     let timestamp = Date.now();
     let op = {
       name,
-      inviter: username,
+      inviter: id,
       invitee: id2,
       group,
       data,
@@ -205,13 +207,13 @@ class NodeApi {
   }
 
   async addAdmin(newAdmin: string, group: string) {
-    let { username, secretKey } = await obtainKeys();
+    let { user: id, keypair: secretKey } = store.getState();
 
     let name = 'Add Admin';
     let timestamp = Date.now();
     let op = {
       name,
-      id: username,
+      id,
       admin: newAdmin,
       group,
       timestamp,
@@ -230,13 +232,13 @@ class NodeApi {
   }
 
   async deleteGroup(group: string) {
-    let { username, secretKey } = await obtainKeys();
+    let { user: id, keypair: secretKey } = store.getState();
 
     let name = 'Remove Group';
     let timestamp = Date.now();
     let op = {
       name,
-      id: username,
+      id,
       group,
       timestamp,
       v,
@@ -259,9 +261,8 @@ class NodeApi {
       secretKey = b64ToUint8Array(fakeUser.secretKey);
     } else {
       // use real user data
-      const credentials = await obtainKeys();
-      brightId = credentials.username;
-      secretKey = credentials.secretKey;
+      brightId = store.getState().user.id;
+      secretKey = store.getState().keypair.secretKey;
     }
 
     let name = 'Add Membership';
@@ -285,13 +286,13 @@ class NodeApi {
   }
 
   async leaveGroup(group: string) {
-    let { username, secretKey } = await obtainKeys();
+    let { user: id, keypair: secretKey } = store.getState();
 
     let name = 'Remove Membership';
     let timestamp = Date.now();
     let op = {
       name,
-      id: username,
+      id,
       group,
       timestamp,
       v,
@@ -308,13 +309,13 @@ class NodeApi {
   }
 
   async setTrusted(trusted: string[]) {
-    let { username, secretKey } = await obtainKeys();
+    let { user: id, keypair: secretKey } = store.getState();
 
     let name = 'Set Trusted Connections';
     let timestamp = Date.now();
     let op = {
       name,
-      id: username,
+      id,
       trusted,
       timestamp,
       v,
@@ -359,13 +360,13 @@ class NodeApi {
   }
 
   async linkContextId(context: string, contextId: string) {
-    let { username, secretKey } = await obtainKeys();
+    let { user: id, keypair: secretKey } = store.getState();
 
     let name = 'Link ContextId';
     let timestamp = Date.now();
     let op = {
       name,
-      id: username,
+      id,
       context,
       contextId,
       timestamp,

@@ -8,7 +8,7 @@ import {
 } from 'react-native-keychain';
 import AsyncStorage from '@react-native-community/async-storage';
 import { DEVICE_ANDROID } from '@/utils/constants';
-import { objToB64, b64ToUint8Array } from '@/utils/encoding';
+import { b64ToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 
 const getItem = async (key: string) => {
   console.log('keypair get item', key);
@@ -19,41 +19,43 @@ const getItem = async (key: string) => {
       throw new Error(`keypair does not exist in keychain!`);
     }
 
-    return { id: username, secretKey: b64ToUint8Array(password) };
+    return { publicKey: username, secretKey: b64ToUint8Array(password) };
   } catch (err) {
-    console.error(err.message);
     let data = await AsyncStorage.getItem(key);
     if (data) {
-      let { id, secretKey } = JSON.parse(data);
+      console.error(`react-native-keychain is not accessible`);
+      let { publicKey, secretKey } = JSON.parse(data);
       secretKey = b64ToUint8Array(secretKey);
-      return { id, secretKey };
+      return { publicKey, secretKey };
     } else {
-      // handle data loss
+      throw err;
     }
   }
 };
 
 const setItem = async (
   key: string,
-  keypair: { id: string, secretKey: Uint8Array },
+  keypair: { publicKey: string, secretKey: Uint8Array },
 ) => {
-  console.log('keypair set item', key, keypair);
-  if (typeof keypair.secretKey !== 'string') {
-    keypair.secretKey = objToB64(keypair.secretKey);
-  }
-
+  let b64SecretKey = uInt8ArrayToB64(keypair.secretKey);
   try {
     if (DEVICE_ANDROID) {
       let opts = { rules: SECURITY_RULES.NONE };
-      await setGenericPassword(keypair.id, keypair.secretKey, opts);
+      await setGenericPassword(keypair.publicKey, b64SecretKey, opts);
     } else {
-      await setGenericPassword(keypair.id, keypair.secretKey);
+      await setGenericPassword(keypair.publicKey, b64SecretKey);
     }
     // we can remove this later once we have better metrics for react-native-keychain
-    await AsyncStorage.setItem('keypair', JSON.stringify(keypair));
+    await AsyncStorage.setItem(
+      'keypair',
+      JSON.stringify({ publicKey: keypair.publicKey, secretKey: b64SecretKey }),
+    );
   } catch (err) {
     console.error(err.message);
-    await AsyncStorage.setItem('keypair', JSON.stringify(keypair));
+    await AsyncStorage.setItem(
+      'keypair',
+      JSON.stringify({ publicKey: keypair.publicKey, secretKey: b64SecretKey }),
+    );
   }
 };
 

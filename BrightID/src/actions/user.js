@@ -68,20 +68,17 @@ export const setSearchParam = (searchParam: string) => ({
 
 export const setUserData = ({
   id,
-  publicKey,
   name,
   photo,
   secretKey,
 }: {
   id: string,
-  publicKey: string,
   name: string,
   photo: { filename: string },
   secretKey: string,
 }) => ({
   type: SET_USER_DATA,
   id,
-  publicKey,
   name,
   photo,
   secretKey,
@@ -133,7 +130,6 @@ export const hydrateUser = (data: {
   photo: { filename: string },
   backupCompleted: boolean,
   id: string,
-  publicKey: string,
   password: string,
   hashedId: string,
   secretKey: string,

@@ -6,7 +6,7 @@ export const UserTasks = {
     sortValue: 10,
     url: 'https://brightid.gitbook.io/brightid/#create-your-brightid',
     checkFn(state) {
-      return !!state.user.publicKey;
+      return !!state.user.id;
     },
   },
   add_a_picture: {
