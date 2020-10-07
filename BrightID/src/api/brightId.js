@@ -128,7 +128,10 @@ class NodeApi {
     url: string,
     type: string,
   ) {
-    let { user: id, keypair: secretKey } = store.getState();
+    let {
+      user: { id },
+      keypair: { secretKey },
+    } = store.getState();
 
     let name = 'Add Group';
     let timestamp = Date.now();
@@ -158,7 +161,10 @@ class NodeApi {
   }
 
   async dismiss(id2: string, group: string) {
-    let { user: id, keypair: secretKey } = store.getState();
+    let {
+      user: { id },
+      keypair: { secretKey },
+    } = store.getState();
 
     let name = 'Dismiss';
     let timestamp = Date.now();
@@ -183,7 +189,10 @@ class NodeApi {
   }
 
   async invite(id2: string, group: string, data: string) {
-    let { user: id, keypair: secretKey } = store.getState();
+    let {
+      user: { id },
+      keypair: { secretKey },
+    } = store.getState();
 
     let name = 'Invite';
     let timestamp = Date.now();
@@ -207,7 +216,10 @@ class NodeApi {
   }
 
   async addAdmin(newAdmin: string, group: string) {
-    let { user: id, keypair: secretKey } = store.getState();
+    let {
+      user: { id },
+      keypair: { secretKey },
+    } = store.getState();
 
     let name = 'Add Admin';
     let timestamp = Date.now();
@@ -232,7 +244,10 @@ class NodeApi {
   }
 
   async deleteGroup(group: string) {
-    let { user: id, keypair: secretKey } = store.getState();
+    let {
+      user: { id },
+      keypair: { secretKey },
+    } = store.getState();
 
     let name = 'Remove Group';
     let timestamp = Date.now();
@@ -286,7 +301,10 @@ class NodeApi {
   }
 
   async leaveGroup(group: string) {
-    let { user: id, keypair: secretKey } = store.getState();
+    let {
+      user: { id },
+      keypair: { secretKey },
+    } = store.getState();
 
     let name = 'Remove Membership';
     let timestamp = Date.now();
@@ -309,7 +327,10 @@ class NodeApi {
   }
 
   async setTrusted(trusted: string[]) {
-    let { user: id, keypair: secretKey } = store.getState();
+    let {
+      user: { id },
+      keypair: { secretKey },
+    } = store.getState();
 
     let name = 'Set Trusted Connections';
     let timestamp = Date.now();
@@ -360,7 +381,10 @@ class NodeApi {
   }
 
   async linkContextId(context: string, contextId: string) {
-    let { user: id, keypair: secretKey } = store.getState();
+    let {
+      user: { id },
+      keypair: { secretKey },
+    } = store.getState();
 
     let name = 'Link ContextId';
     let timestamp = Date.now();
