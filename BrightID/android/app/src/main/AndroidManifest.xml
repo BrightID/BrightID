@@ -16,10 +16,13 @@
     android:label="@string/app_name"
     android:icon="@mipmap/ic_launcher"
     android:roundIcon="@mipmap/ic_launcher_round"
-    android:allowBackup="false"
     android:theme="@style/AppTheme"
     android:windowSoftInputMode="adjustResize"
-    android:usesCleartextTraffic="true"
+    android:allowBackup="true"
+    android:restoreAnyVersion="true"
+    android:usesCleartextTraffic="true"=
+    android:hasFragileUserData="true"
+    android:largeHeap="true"
   >
 
     <!-- Change the value to true to enable pop-up for in foreground (remote-only, for local use ignoreInForeground) -->
