@@ -15,6 +15,7 @@ import { parseString } from 'xml2js';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { withTranslation } from 'react-i18next';
 import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
 import backupApi from '../../api/backupService';
 import { setupRecovery, recoveryQrStr, handleSigs } from './helpers';
@@ -92,17 +93,20 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
     this.setState({ copied: true });
   };
 
-  renderCopyQr = () => (
-    <TouchableOpacity style={styles.copyContainer} onPress={this.copyQr}>
-      <Material
-        size={24}
-        name="content-copy"
-        color="#333"
-        style={{ width: 24, height: 24 }}
-      />
-      <Text style={styles.copyText}> Copy</Text>
-    </TouchableOpacity>
-  );
+  renderCopyQr = () => {
+    const { t } = this.props;
+    return (
+      <TouchableOpacity style={styles.copyContainer} onPress={this.copyQr}>
+        <Material
+          size={24}
+          name="content-copy"
+          color="#333"
+          style={{ width: 24, height: 24 }}
+        />
+        <Text style={styles.copyText}> {t('common.button.copy')}</Text>
+      </TouchableOpacity>
+    )
+  }
 
   renderSpinner = () => (
     <View style={styles.qrsvgContainer}>
@@ -139,13 +143,14 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
 
   render() {
     const { qrsvg } = this.state;
+    const { t } = this.props;
     return (
       <>
         <View style={styles.orangeTop} />
         <View style={styles.container}>
           <View style={styles.topHalf}>
             <Text style={styles.recoveryCodeInfoText}>
-              Ask your trusted connections to scan this code.
+              {t('recovery.text.askTrustedConnections')}
             </Text>
           </View>
           <View style={styles.bottomHalf}>
@@ -220,4 +225,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(RecoveryCodeScreen);
+export default connect()(withTranslation()(RecoveryCodeScreen));

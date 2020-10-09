@@ -17,6 +17,7 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { SvgXml } from 'react-native-svg';
 import ActionSheet from 'react-native-actionsheet';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { setPhoto, setName, setActiveNotification } from '@/actions';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
@@ -73,6 +74,8 @@ export const HomeScreen = (props) => {
   const [profilePhoto, setProfilePhoto] = useState('none');
   const [isEditing, setIsEditing] = useState(false);
   const [displayName, setDisplayName] = useState(name);
+
+  const { t } = useTranslation();
 
   useFocusEffect(
     useCallback(() => {
@@ -167,7 +170,7 @@ export const HomeScreen = (props) => {
             testID="editPhoto"
             onPress={handleEditPhoto}
             accessible={true}
-            accessibilityLabel="edit photo"
+            accessibilityLabel={t('home.accessibilityLabel.editPhoto')}
           >
             <Image
               source={{
@@ -179,7 +182,7 @@ export const HomeScreen = (props) => {
                 console.log(e.error);
               }}
               accessible={true}
-              accessibilityLabel="user photo"
+              accessibilityLabel={('home.accessibilityLabel.userPhoto')}
             />
           </TouchableOpacity>
         ) : null}
@@ -205,7 +208,7 @@ export const HomeScreen = (props) => {
             ) : (
               <TouchableWithoutFeedback
                 onPress={() => setIsEditing(true)}
-                accessibilityLabel="edit name"
+                accessibilityLabel={t('home.accessibilityLabel.editName')}
               >
                 <Text testID="EditNameBtn" style={styles.name}>
                   {name}
@@ -223,9 +226,9 @@ export const HomeScreen = (props) => {
           </View>
           <View style={styles.profileDivider} />
           {verified ? (
-            <Text style={styles.verified}>verified</Text>
+            <Text style={styles.verified}>{t('home.label.statusVerified')}</Text>
           ) : (
-            <Text style={styles.unverified}>unverified</Text>
+            <Text style={styles.unverified}>{t('home.label.statusUnverified')}</Text>
           )}
         </View>
       </View>
@@ -243,7 +246,7 @@ export const HomeScreen = (props) => {
             {connectionsCount}
           </Text>
           <View style={styles.countsBorder} />
-          <Text style={styles.countsDescriptionText}>Connections</Text>
+          <Text style={styles.countsDescriptionText}>{t('home.button.connections')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           testID="groupsBtn"
@@ -257,7 +260,7 @@ export const HomeScreen = (props) => {
             {groupsCount}
           </Text>
           <View style={styles.countsBorder} />
-          <Text style={styles.countsDescriptionText}>Groups</Text>
+          <Text style={styles.countsDescriptionText}>{t('home.button.groups')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           testID="appsBtn"
@@ -271,12 +274,12 @@ export const HomeScreen = (props) => {
             {linkedContextsCount}
           </Text>
           <View style={styles.countsBorder} />
-          <Text style={styles.countsDescriptionText}>Apps</Text>
+          <Text style={styles.countsDescriptionText}>{t('home.button.apps')}</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.bottomOrangeContainer}>
         <View style={styles.connectContainer}>
-          <Text style={styles.newConnectionText}>Create a New Connection</Text>
+          <Text style={styles.newConnectionText}>{t('home.label.createNewConnection')}</Text>
           <TouchableOpacity
             testID="MyCodeBtn"
             style={styles.connectButton}
@@ -285,14 +288,14 @@ export const HomeScreen = (props) => {
               navigation.navigate('MyCode');
             }}
             accessible={true}
-            accessibilityLabel="Connect"
+            accessibilityLabel={t('home.accessibilityLabel.connect')}
           >
             <SvgXml
               xml={qricon}
               width={DEVICE_LARGE ? 25 : 20}
               height={DEVICE_LARGE ? 25 : 20}
             />
-            <Text style={styles.connectText}>My Code</Text>
+            <Text style={styles.connectText}>{t('home.button.myCode')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             testID="ScanCodeBtn"
@@ -302,14 +305,14 @@ export const HomeScreen = (props) => {
               navigation.navigate('ScanCode');
             }}
             accessible={true}
-            accessibilityLabel="Connect"
+            accessibilityLabel={t('home.accessibilityLabel.connect')}
           >
             <SvgXml
               xml={cameraIcon}
               width={DEVICE_LARGE ? 25 : 20}
               height={DEVICE_LARGE ? 25 : 20}
             />
-            <Text style={styles.connectText}>Scan a Code</Text>
+            <Text style={styles.connectText}>{t('home.button.scanCode')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             testID="JoinCommunityBtn"
@@ -322,7 +325,7 @@ export const HomeScreen = (props) => {
               xml={forumIcon}
             />
             <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }}>
-              <Text style={styles.communityLink}>Join the Community</Text>
+              <Text style={styles.communityLink}>{t('home.link.community')}</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -336,7 +339,7 @@ export const HomeScreen = (props) => {
           chatSheetRef = o;
         }}
         title="Like to chat with us?"
-        options={['BrightID Discord', 'cancel']}
+        options={[t('home.chatActionSheet.discord'), t('common.actionSheet.cancel')]}
         cancelButtonIndex={1}
         onPress={(index) => {
           if (index === 0) {
@@ -351,8 +354,8 @@ export const HomeScreen = (props) => {
         ref={(o) => {
           photoSheetRef = o;
         }}
-        title="Select photo"
-        options={['Take Photo', 'Choose From Library', 'cancel']}
+        title={t('common.photoActionSheet.title')}
+        options={[t('common.photoActionSheet.takePhoto'), t('common.photoActionSheet.choosePhoto'), t('common.actionSheet.cancel')]}
         cancelButtonIndex={2}
         onPress={(index) => {
           if (index === 0) {

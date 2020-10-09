@@ -16,6 +16,7 @@ import ActionSheet from 'react-native-actionsheet';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import { withTranslation } from 'react-i18next';
 import { takePhoto, chooseImage } from '@/utils/images';
 import { DEVICE_LARGE, DEVICE_OS, ORANGE } from '@/utils/constants';
 import { handleBrightIdCreation } from './actions';
@@ -76,6 +77,7 @@ export class SignUp extends React.Component<Props, State> {
   };
 
   createBrightID = async () => {
+    const { t } = this.props;
     try {
       const { finalBase64, name } = this.state;
       const { navigation, dispatch } = this.props;
@@ -88,10 +90,10 @@ export class SignUp extends React.Component<Props, State> {
           creatingBrightId: false,
         });
         return Alert.alert(
-          'BrightID Form Incomplete',
+          t('common.alert.formIncomplete'),
           name.length === 0
-            ? 'Please add your name'
-            : 'Your name must be at least 2 characters',
+            ? t('signup.alert.nameMissing')
+            : t('signup.alert.nameTooShort'),
         );
       }
       if (!finalBase64.uri) {
@@ -99,8 +101,8 @@ export class SignUp extends React.Component<Props, State> {
           creatingBrightId: false,
         });
         return Alert.alert(
-          'BrightID Form Incomplete',
-          'A photo is required. Please press enter on the keyboard.',
+          t('common.alert.formIncomplete'),
+          t('signup.alert.photoMissing'),
         );
       }
       const result = await dispatch(
@@ -123,6 +125,7 @@ export class SignUp extends React.Component<Props, State> {
 
   render() {
     const { name, finalBase64, creatingBrightId, editingName } = this.state;
+    const { t } = this.props;
 
     return (
       <>
@@ -139,7 +142,7 @@ export class SignUp extends React.Component<Props, State> {
                 testID="editPhoto"
                 onPress={this.onAddPhoto}
                 accessible={true}
-                accessibilityLabel="edit photo"
+                accessibilityLabel={t('common.accessibilityLabel.editPhoto')}
               >
                 <Image style={styles.photo} source={finalBase64} />
               </TouchableOpacity>
@@ -149,9 +152,9 @@ export class SignUp extends React.Component<Props, State> {
                 onPress={this.onAddPhoto}
                 style={styles.addPhoto}
                 accessible={true}
-                accessibilityLabel="add photo"
+                accessibilityLabel={t('signup.accessibilityLabel.addPhoto')}
               >
-                <Text style={styles.addPhotoText}>Add Photo</Text>
+                <Text style={styles.addPhotoText}>{t('signup.button.addPhoto')}</Text>
                 <SimpleLineIcons
                   size={DEVICE_LARGE ? 42 : 36}
                   name="camera"
@@ -164,7 +167,7 @@ export class SignUp extends React.Component<Props, State> {
           </View>
           <View style={styles.textInputContainer}>
             <Text style={styles.midText}>
-              What do your friends know you by?
+              {t('signup.text.whatsYouName')}
             </Text>
             <TextInput
               testID="editName"
@@ -173,7 +176,7 @@ export class SignUp extends React.Component<Props, State> {
               }}
               onChangeText={(name) => this.setState({ name })}
               value={name}
-              placeholder="Name"
+              placeholder={t('signup.placeholder.name')}
               placeholderTextColor="#9e9e9e"
               style={styles.textInput}
               autoCapitalize="words"
@@ -191,8 +194,7 @@ export class SignUp extends React.Component<Props, State> {
           </View>
           <View style={styles.buttonContainer}>
             <Text style={styles.buttonInfoText}>
-              Your name and photo will never be shared with apps or stored on
-              servers
+              {t('signup.text.infoNotShared')}
             </Text>
             {!creatingBrightId ? (
               <View>
@@ -201,7 +203,7 @@ export class SignUp extends React.Component<Props, State> {
                   style={styles.createBrightIdButton}
                   onPress={this.createBrightID}
                 >
-                  <Text style={styles.buttonInnerText}>Create My BrightID</Text>
+                  <Text style={styles.buttonInnerText}>{t('signup.button.createAccount')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   testID="recoverBrightIDBtn"
@@ -209,12 +211,12 @@ export class SignUp extends React.Component<Props, State> {
                   style={styles.recoverButton}
                   accessibilityLabel="Recover BrightID"
                 >
-                  <Text style={styles.recoverButtonText}>Recover BrightID</Text>
+                  <Text style={styles.recoverButtonText}>{t('signup.button.recoverAccount')}</Text>
                 </TouchableOpacity>
               </View>
             ) : (
               <View style={styles.loader} testID="creatingIDSpinner">
-                <Text>Creating Bright ID...</Text>
+                <Text>{t('signup.text.creatingAccount')}</Text>
                 <Spinner
                   isVisible={true}
                   size={47}
@@ -228,8 +230,8 @@ export class SignUp extends React.Component<Props, State> {
             ref={(o) => {
               this.photoSheetRef = o;
             }}
-            title="Select photo"
-            options={['Take Photo', 'Choose From Library', 'cancel']}
+            title={t('common.photoActionSheet.title')}
+            options={[t('common.photoActionSheet.takePhoto'), t('common.photoActionSheet.choosePhoto'), t('common.actionSheet.cancel')]}
             cancelButtonIndex={2}
             onPress={(index) => {
               if (index === 0) {
@@ -375,4 +377,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(SignUp);
+export default connect()(withTranslation()(SignUp));

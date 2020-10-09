@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { withTranslation } from 'react-i18next';
 import MaintainPrivacy from './onboardingCards/MaintainPrivacy';
 import BrightIdOnboard from './onboardingCards/BrightIdOnboard';
 
@@ -67,6 +68,7 @@ export class Onboard extends React.Component<Props, State> {
 
   render() {
     const { activeSlide, entries } = this.state;
+    const { t } = this.props;
     return (
       <SafeAreaView style={styles.container}>
         <StatusBar
@@ -101,7 +103,7 @@ export class Onboard extends React.Component<Props, State> {
             onPress={() => this.props.navigation.navigate('SignUp')}
             style={styles.button}
           >
-            <Text style={styles.buttonText}>Get Started</Text>
+            <Text style={styles.buttonText}>{t('onboarding.button.getStarted')}</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -159,4 +161,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Onboard;
+export default withTranslation()(Onboard);
