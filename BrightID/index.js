@@ -9,6 +9,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Octicons from 'react-native-vector-icons/Octicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { DEVICE_IOS } from '@/utils/constants';
+import './i18n';
 import App from './src/App';
 import { name as appName } from './app.json';
 
