@@ -13,11 +13,13 @@
   "home.accessibilityLabel.userPhoto": "user photo",
   "home.accessibilityLabel.connect": "connect",
   
+
   "onboarding.text.intro": "<text>BrightID uses the people you know</text><text>to enforce one-account-per-person</text><text>for important applications like</text><text>voting and universal basic income.</text>",
   "onboarding.label.maintainPrivacy": "Maintain Privacy",
   "onboarding.text.privacy": "<text>Prove you're a unique person</text><text>while preserving your privacy.</text>",
   "onboarding.button.getStarted": "Get Started",
   
+
   "signup.header.title": "SignUp",
   "signup.button.addPhoto": "Add Photo",
   "signup.text.whatsYouName": "What do your friends know you by?",
@@ -31,9 +33,38 @@
   "signup.alert.photoMissing": "A photo is required. Please press enter on the keyboard.",
   "signup.accessibilityLabel.addPhoto": "add photo",
 
+
   "recovery.header.title": "Recovery Code",
   "recovery.text.askTrustedConnections": "Ask your trusted connections to scan this code.",
   
+
+  "qrcode.header.connections": "{{count}} / 30 Connections",
+  "qrcode.text.scanCode": "<text>Hey {{name}}, scan a code and</text><text>make a new connection today</text>",
+  "qrcode.button.showCode": "Show your QR code",
+  "qrcode.label.connectionType": "Connection Type:",
+  "qrcode.text.codeSingle": "Single-use code",
+  "qrcode.text.codeGroup": "Group code",
+  "qrcode.text.expiresIn": "Expires in:",
+  "qrcode.button.copyLink": "Copy Link",
+  "qrcode.text.canAlso": "Or you can also...",
+  "qrcode.button.scanCode": "Scan a Code",
+
+  "qrcode.alert.title.codeSingle": "Singe-use code",
+  "qrcode.alert.text.codeSingle": "This QR code can be used to connect with a single user before it expires.",
+  "qrcode.alert.title.codeGroup": "Group code",
+  "qrcode.alert.text.codeGroup": "This QR code is designed for many people to connect simultaneously.",
+  "qrcode.alert.universalLink": "Universal Link",
+  "qrcode.alert.shareLinkSingle": "Share this link with one friend",
+  "qrcode.alert.shareLinkGroup": "Share this link",
+  "qrcode.alert.connectSingle": "Connect with {{name}} on BrightID: {{link}}",
+  "qrcode.alert.connectGroup": "Make a group connection with {{name}} on BrightID: {{link}}",
+  
+  "qrcode.text.downloadingConnectionData": "Downloading Connection Data",
+  "qrcode.text.pendingConnections": "You have {{count}} pending connection",
+  "qrcode.text.pendingConnections_plural": "You have {{count}} pending connections",
+  "qrcode.text.confirmConnections": "Confirm Connections",
+  
+
   "common.alert.formIncomplete": "BrightID Form Incomplete",
   "common.photoActionSheet.title": "Select photo",
   "common.photoActionSheet.takePhoto": "Take Photo",
@@ -41,5 +72,9 @@
   "common.actionSheet.cancel": "cancel",
   "common.accessibilityLabel.editName": "edit name",
   "common.accessibilityLabel.editPhoto": "edit photo",
-  "common.button.copy": "Copy"
+  "common.button.copy": "Copy",
+  "common.camera.title": "Permission to use camera",
+  "common.camera.message": "We need your permission to use your camera",
+  "common.camera.ok": "Ok",
+  "common.camera.cancel": "Cancel"
 }

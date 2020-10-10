@@ -18,6 +18,7 @@
   "onboarding.text.privacy": "<text>Prouvez que vous êtes vous</text><text>en préservant votre vie privée.</text>",
   "onboarding.button.getStarted": "Démarrer",
 
+
   "signup.header.title": "S'enregistrer",
   "signup.button.addPhoto": "Ajouter une photo",
   "signup.text.whatsYouName": "Comment vous appellez-vous ?",
@@ -31,8 +32,37 @@
   "signup.alert.photoMissing": "Une photo est requise",
   "signup.accessibilityLabel.addPhoto": "Ajouter une photo",
 
+
   "recovery.header.title": "Code de Restauration",
   "recovery.text.askTrustedConnections": "Demandez à vos contacts de confiance de scanner ce code.",
+
+
+  "qrcode.header.connections": "{{count}} / 30 Connexions",
+  "qrcode.text.scanCode": "<text>Bonjour {{name}}, scannez un code et</text><text>créez une nouvelle connexion aujourd'hui</text>",
+  "qrcode.button.showCode": "Afficher votre code QR",
+  "qrcode.label.connectionType": "Type de connexion :",
+  "qrcode.text.codeSingle": "Code à usage unique",
+  "qrcode.text.codeGroup": "Code de groupe",
+  "qrcode.text.expiresIn": "Expire dans :",
+  "qrcode.button.copyLink": "Copier le Lien",
+  "qrcode.text.canAlso": "Vous pouvez également...",
+  "qrcode.button.scanCode": "Scanner un Code",
+
+  "qrcode.alert.title.codeSingle": "Code à usage unique",
+  "qrcode.alert.text.codeSingle": "Ce code QR peut être utilisé pour vous connecter à un seul autre utilisateur",
+  "qrcode.alert.title.codeGroup": "Code de groupe",
+  "qrcode.alert.text.codeGroup": "Ce code QR est conçu pour permettre à différentes personnes de se connecter entre-elles simultanément.",
+  "qrcode.alert.universalLink": "Lien Universel",
+  "qrcode.alert.shareLinkSingle": "Partagez ce lien avec un ami",
+  "qrcode.alert.shareLinkGroup": "Partagez ce lien",
+  "qrcode.alert.connectSingle": "Connectez vous avec {{name}} sur BrightID : {{link}}",
+  "qrcode.alert.connectGroup": "Créez une connexion de groupe avec {{name}} sur BrightID : {{link}}",
+  
+  "qrcode.text.downloadingConnectionData": "Téléchargement des données de connexion",
+  "qrcode.text.pendingConnections": "Vous avez {{count}} connexion en attente...",
+  "qrcode.text.pendingConnections_plural": "Vous avez {{count}} connexions en attente...",
+  "qrcode.text.confirmConnections": "Confirmation des connexions",
+
 
   "common.alert.formIncomplete": "Formulaire incomplet",
   "common.photoActionSheet.title": "Sélectionner une photo",
@@ -41,5 +71,9 @@
   "common.actionSheet.cancel": "annuler",
   "common.accessibilityLabel.editName": "éditer le nom",
   "common.accessibilityLabel.editPhoto": "éditer la photo",
-  "common.button.copy": "Copier"
+  "common.button.copy": "Copier",
+  "common.camera.title": "Permission d'utiliser l'appareil photo",
+  "common.camera.message": "Nous avons besoin de votre permission pour utiliser l'appareil photo",
+  "common.camera.ok": "Ok",
+  "common.camera.cancel": "Annuler"
 }

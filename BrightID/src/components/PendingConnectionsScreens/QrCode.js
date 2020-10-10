@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/constants';
 import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
@@ -36,6 +37,7 @@ import { encodeChannelQrString } from '@/utils/channels';
 
 const Timer = ({ channel }) => {
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   const [countdown, setCountdown] = useState(
     channel ? channel.ttl - (Date.now() - channel.timestamp) : 0,
@@ -61,7 +63,7 @@ const Timer = ({ channel }) => {
 
   return countdown > 0 ? (
     <View style={styles.timerContainer} testID="TimerContainer">
-      <Text style={styles.timerTextLeft}>Expires in: </Text>
+      <Text style={styles.timerTextLeft}>{t('qrcode.text.expiresIn')} </Text>
       <Text style={styles.timerTextRight}>{displayTime()}</Text>
     </View>
   ) : (
@@ -71,7 +73,7 @@ const Timer = ({ channel }) => {
 
 export const QrCode = ({ channel }) => {
   const dispatch = useDispatch();
-
+  const { t } = useTranslation();
   // current channel displayed by QRCode
 
   const myName = useSelector((state) => state.user.name);
@@ -101,19 +103,22 @@ export const QrCode = ({ channel }) => {
     const universalLink = `https://app.brightid.org/connection-code/${qrString}`;
     const clipboardMsg = __DEV__
       ? universalLink
-      : channel?.type === channel_types.GROUP 
-        ? `Make a group connection with ${myName} on BrightID: ${universalLink}`
-        : `Connect with ${myName} on BrightID: ${universalLink}`;
+      : t(channel?.type === channel_types.GROUP 
+        ? 'qrcode.alert.connectGroup'
+        : 'qrcode.alert.connectSingle', {
+          name: myName,
+          link: universalLink,
+        });
     const alertMsg =
-      channel?.type === channel_types.SINGLE
-        ? `Share this link with one friend`
-        : `Share this link`;
+      t(channel?.type === channel_types.SINGLE
+        ? 'qrcode.alert.shareLinkSingle' 
+        : 'qrcode.alert.shareLinkGroup');
     Alert.alert(
-      'Universal Link',
+      t('qrcode.alert.universalLink'),
       alertMsg,
       [
         {
-          text: 'Copy to Clipboard',
+          text: t('common.button.copy'),
           onPress: () => {
             Clipboard.setString(clipboardMsg);
             if (channel?.type === channel_types.SINGLE)
@@ -142,7 +147,7 @@ export const QrCode = ({ channel }) => {
           color="#333"
           style={{ width: 24, height: 24 }}
         />
-        <Text style={styles.copyText}> Copy Link</Text>
+        <Text style={styles.copyText}> {t('qrcode.button.copyLink')}</Text>
       </TouchableOpacity>
     </View>
   );
