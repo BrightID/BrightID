@@ -69,7 +69,7 @@ export const GraphExplorerScreen = function () {
         <Text style={styles.infoText}>
           <Text
             onPress={() => {
-              Linking.openURL("https://explorer.brightid.org/");
+              Linking.openURL('https://explorer.brightid.org/');
             }}
             style={styles.linkText}
           >
