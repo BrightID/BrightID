@@ -25,10 +25,6 @@ export const bootstrap = async () => {
       throw new Error('id is empty');
     }
 
-    // delete old async storage is storage is successfully migrated
-    if (!migrated) {
-      await AsyncStorage.removeItem('persist:root');
-    }
     // load redux store from async storage and upgrade async storage is necessary
     if (!id) await bootstrapAndUpgrade();
     // reset operations
@@ -43,6 +39,11 @@ export const bootstrap = async () => {
     store.dispatch(syncStoreTasks());
     // Initial check for completed tasks
     store.dispatch(checkTasks());
+
+    // delete old async storage is storage is successfully migrated
+    if (!migrated) {
+      await AsyncStorage.removeItem('persist:root');
+    }
   } catch (err) {
     console.error(err);
   }

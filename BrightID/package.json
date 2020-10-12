@@ -76,7 +76,6 @@
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
-    "redux-persist-filesystem-storage": "^2.2.0",
     "redux-thunk": "^2.3.0",
     "rn-fetch-blob": "^0.12.0",
     "stream": "^0.0.2",

@@ -1,6 +1,6 @@
 // @flow
 import { getStoredState } from 'redux-persist';
-import { AsyncStorage } from './storage';
+import AsyncStorage from '@react-native-community/async-storage';
 import { rootMigrate } from './migrations';
 
 const getRootState = async (config) => {
@@ -14,8 +14,8 @@ const getRootState = async (config) => {
     });
 
     let migratedState = await rootMigrate(restoredState, config.version);
-    console.log('migratedState', migratedState);
-    return migratedState[config.key];
+
+    return migratedState ? migratedState[config.key] : undefined;
   } catch (error) {
     console.error(`failed restoring state for ${config.key}`, error.message);
   }
@@ -24,6 +24,9 @@ const getRootState = async (config) => {
 export default async (config) => {
   try {
     let restoredState = await getStoredState(config);
+    if (config.migrate) {
+      restoredState = await config.migrate(restoredState, config.version);
+    }
     return Promise.resolve(restoredState);
   } catch (err) {
     console.log(

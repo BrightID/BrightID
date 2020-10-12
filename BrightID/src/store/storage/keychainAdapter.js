@@ -12,6 +12,7 @@ import { b64ToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 const getItem = async (key: string) => {
   try {
     let { username, password } = await getGenericPassword();
+    console.log('getKeychain', username, password);
     let { publicKey, version } = JSON.parse(username);
     if (!publicKey || !password) {
       throw new Error(`keypair does not exist in keychain!`);
@@ -43,7 +44,6 @@ const setItem = async (
     _persist: { version: number },
   },
 ) => {
-  console.log('setItem: keypair', keypair);
   let password = uInt8ArrayToB64(keypair.secretKey);
   try {
     let username = JSON.stringify({
@@ -84,6 +84,7 @@ const removeItem = async (key) => {
   try {
     await resetGenericPassword();
     await AsyncStorage.removeItem(key);
+    return true;
   } catch (err) {
     console.error(err.message);
     await AsyncStorage.removeItem(key);
