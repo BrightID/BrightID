@@ -2,11 +2,11 @@
 
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import RNFS from 'react-native-fs';
 import { useDispatch } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { DEVICE_LARGE, MAX_WAITING_SECONDS } from '@/utils/constants';
+import { photoDirectory } from '@/utils/filesystem';
 import { staleConnection } from '@/actions';
 
 /**
@@ -122,7 +122,7 @@ const ConnectionCard = (props) => {
 
   const imageSource = photo?.filename
     ? {
-        uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
+        uri: `file://${photoDirectory()}/${photo?.filename}`,
       }
     : require('@/static/default_profile.jpg');
 

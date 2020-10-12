@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import RNFS from 'react-native-fs';
+import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
 import { DEVICE_TYPE } from '@/utils/constants';
 import backupApi from '@/api/backupService';
@@ -53,7 +53,7 @@ class RecoveryConnectionCard extends React.PureComponent<Props> {
     const { photo, name, score, connectionDate, style } = this.props;
     const imageSource = photo?.filename
       ? {
-          uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
+          uri: `file://${photoDirectory()}/${photo?.filename}`,
         }
       : require('@/static/default_profile.jpg');
 

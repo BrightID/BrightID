@@ -18,15 +18,17 @@ const onStorageReadyFactory = (storagePath: string) => (func: Function) => {
   return (...args: Array<any>) => storage.then(() => func(...args));
 };
 
-const defaultStoragePath = `${RNFetchBlob.fs.dirs.DocumentDir}/persistStore`;
+const defaultStoragePath = () =>
+  `${RNFetchBlob.fs.dirs.DocumentDir}/persistStore`;
 
-let onStorageReady = onStorageReadyFactory(defaultStoragePath);
+let onStorageReady = onStorageReadyFactory(defaultStoragePath());
 
 let encoding = 'utf8';
 
 let toFileName = (key: string) => key.replace(/[^a-z0-9.\-_]/gi, '-');
 
-const pathForKey = (key: string) => `${defaultStoragePath}/${toFileName(key)}`;
+const pathForKey = (key: string) =>
+  `${defaultStoragePath()}/${toFileName(key)}`;
 
 const FilesystemStorage = {
   setItem: (key: string, value: string) => {
@@ -49,7 +51,7 @@ const FilesystemStorage = {
     return RNFetchBlob.fs.unlink(pathForKey(key));
   },
   clear: () => {
-    return RNFetchBlob.fs.unlink(defaultStoragePath);
+    return RNFetchBlob.fs.unlink(defaultStoragePath());
   },
 };
 

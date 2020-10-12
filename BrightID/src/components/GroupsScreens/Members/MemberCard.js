@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { useRef, useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import RNFS from 'react-native-fs';
+import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
 import { DEVICE_TYPE } from '@/utils/constants';
 import ActionSheet from 'react-native-actionsheet';
@@ -92,7 +92,7 @@ function MemberCard(props: MemberCardProps) {
 
   const imageSource = photo?.filename
     ? {
-        uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
+        uri: `file://${photoDirectory()}/${photo?.filename}`,
       }
     : require('@/static/default_profile.jpg');
 

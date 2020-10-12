@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
-import RNFS from 'react-native-fs';
+import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -57,7 +57,7 @@ class NewGroupCard extends React.PureComponent<Props> {
     const { photo, name, connectionDate, style } = this.props;
     const imageSource = photo?.filename
       ? {
-          uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
+          uri: `file://${photoDirectory()}/${photo?.filename}`,
         }
       : require('@/static/default_profile.jpg');
 
