@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { createSelector } from '@reduxjs/toolkit';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -35,16 +36,17 @@ const ICON_SIZE = 26;
 const ActionComponent = ({ id, name, secretKey, status }) => {
   const dispatch = useDispatch();
   const { showActionSheetWithOptions } = useActionSheet();
+  const { t } = useTranslation();
   const disabled = status === 'initiated';
   const isStale = status === 'stale';
 
   let flaggingOptions = [
-    'Flag as Duplicate',
-    'Flag as Fake',
-    'Flag as Deceased',
-    'Join All Groups',
-    'Connect to other fake connections',
-    'cancel',
+    t('connections.flagActionSheet.duplicate'),
+    t('connections.flagActionSheet.fake'),
+    t('connections.flagActionSheet.deceased'),
+    t('connections.flagActionSheet.joinAllGroups'),
+    t('connections.flagActionSheet.connectsToFake'),
+    t('common.actionSheet.cancel'),
   ];
   // comment out for test release
   if (!__DEV__) {
@@ -62,8 +64,8 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
           {
             options: flaggingOptions,
             cancelButtonIndex: flaggingOptions.length - 1,
-            title: 'What do you want to do?',
-            message: `Flagging ${name} will negatively effect their BrightID score, and this flag might be shown to other users.`,
+            title: t('common.actionSheet.title'),
+            message: t('connections.flagActionSheet.infoFlagImpact', {name: name}),
             showSeparators: true,
             textStyle: {
               color: '#2185D0',
@@ -82,11 +84,13 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
       }}
     >
       <Material size={ICON_SIZE} name="flag" color="#fff" />
-      <Text style={styles.actionText}>Flag</Text>
+      <Text style={styles.actionText}>{t('connections.button.flag')}</Text>
     </TouchableOpacity>
   );
 
-  const unflagOptions = ['cancel'];
+  const unflagOptions = [
+    t('common.actionSheet.cancel')
+  ];
 
   const UnFlagButton = () => (
     <TouchableOpacity
@@ -98,19 +102,21 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
           {
             options: unflagOptions,
             cancelButtonIndex: unflagOptions.length - 1,
-            title: 'Try Again Later!',
-            message: 'This feature is not ready yet.',
+            title: t('connection.unflagActionSheet.title'),
+            message: t('connection.unflagActionSheet.info'),
           },
           () => {},
         );
       }}
     >
       <Material size={ICON_SIZE} name="flag-remove" color="#fff" />
-      <Text style={styles.actionText}>Unflag</Text>
+      <Text style={styles.actionText}>{t('connections.button.unflag')}</Text>
     </TouchableOpacity>
   );
 
-  const removeOptions = ['Remove', 'cancel'];
+  const removeOptions = [
+    t('connections.removeActionSheet.remove'), 
+    t('common.actionSheet.cancel')];
 
   const RemoveButton = () => (
     <TouchableOpacity
@@ -123,8 +129,8 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
             options: removeOptions,
             cancelButtonIndex: removeOptions.length - 1,
             destructiveButtonIndex: 0,
-            title: `Remove connection`,
-            message: `Are you sure you want to remove connection with ${name}? You can reconnect anytime.`,
+            title: t('connections.removeActionSheet.title'),
+            message: t('connections.removeActionSheet.info', {name: name}),
           },
           (index) => {
             if (index === 0) dispatch(deleteConnection(id));
@@ -133,7 +139,7 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
       }}
     >
       <Material size={ICON_SIZE} name="delete-forever" color="#fff" />
-      <Text style={styles.actionText}>Remove</Text>
+      <Text style={styles.actionText}>{t('connections.button.remove')}</Text>
     </TouchableOpacity>
   );
 
@@ -220,6 +226,7 @@ export const ConnectionsScreen = () => {
 
   const [refreshing, setRefreshing] = useState(false);
   const connections = useSelector((state) => filterConnectionsSelector(state));
+  const { t } = useTranslation();
 
   useFocusEffect(
     useCallback(() => {
@@ -281,7 +288,7 @@ export const ConnectionsScreen = () => {
             ListEmptyComponent={
               <EmptyList
                 iconType="account-off-outline"
-                title="No connections"
+                title={t('connections.text.noConnections')}
               />
             }
             // ListFooterComponent={() =>

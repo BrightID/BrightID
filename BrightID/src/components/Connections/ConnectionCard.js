@@ -5,6 +5,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RNFS from 'react-native-fs';
 import { useDispatch } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import { DEVICE_LARGE, MAX_WAITING_SECONDS } from '@/utils/constants';
 import { staleConnection } from '@/actions';
@@ -22,6 +23,7 @@ const ConnectionCard = (props) => {
   let stale_check_timer = useRef(0);
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { status, connectionDate, id, name, photo, hiddenFlag, index } = props;
 
   useFocusEffect(
@@ -100,7 +102,7 @@ const ConnectionCard = (props) => {
             {hiddenFlag ? `Flagged as ${hiddenFlag}` : 'Hidden'}
           </Text>
           <Text style={[styles.connectedText, { marginTop: 1 }]}>
-            Connected {moment(parseInt(connectionDate, 10)).fromNow()}
+            {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
           </Text>
         </View>
       );
@@ -114,7 +116,7 @@ const ConnectionCard = (props) => {
       const testID = `connection-${index}`;
       return (
         <Text style={styles.connectedText} testID={testID}>
-          Connected {moment(parseInt(connectionDate, 10)).fromNow()}
+          {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
         </Text>
       );
     }

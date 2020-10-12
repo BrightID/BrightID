@@ -122,22 +122,22 @@ const ConfirmationButtons = ({
               testID="rejectConnectionButton"
               onPress={reject}
               style={styles.rejectButton}
-              accessibilityLabel={t('connections.accessibilityLabel.reject', {name: pendingConnection.name})}
+              accessibilityLabel={t('pendingConnections.accessibilityLabel.reject', {name: pendingConnection.name})}
               accessibilityRole="button"
             >
               <Text style={styles.buttonText}>
-                {alreadyExists ? t('connections.button.ignore') : t('connections.button.reject')}
+                {alreadyExists ? t('pendingConnections.button.ignore') : t('pendingConnections.button.reject')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               testID="confirmConnectionButton"
               onPress={accept}
               style={styles.confirmButton}
-              accessibilityLabel={t('connections.accessibilityLabel.confirm', {name: pendingConnection.name})}
+              accessibilityLabel={t('pendingConnections.accessibilityLabel.confirm', {name: pendingConnection.name})}
               accessibilityRole="button"
             >
               <Text style={styles.buttonText}>
-                {alreadyExists ? t('connections.button.updateProfile') : t('connections.button.confirm')}
+                {alreadyExists ? t('pendingConnections.button.updateProfile') : t('pendingConnections.button.confirm')}
               </Text>
             </TouchableOpacity>
           </>
@@ -145,35 +145,35 @@ const ConfirmationButtons = ({
       } else {
         return (
           <Text style={styles.waitingText}>
-            {t('connections.text.waitingConfirmation', {name: pendingConnection.name})}
+            {t('pendingConnections.text.waitingConfirmation', {name: pendingConnection.name})}
           </Text>
         );
       }
     case pendingConnection_states.ERROR: {
       return (
         <Text style={styles.waitingText}>
-          {t('connections.text.errorGeneric', {name: pendingConnection.name})}
+          {t('pendingConnections.text.errorGeneric', {name: pendingConnection.name})}
         </Text>
       );
     }
     case pendingConnection_states.MYSELF: {
-      return <Text style={styles.waitingText}>{t('connections.text.errorMyself')}</Text>;
+      return <Text style={styles.waitingText}>{t('pendingConnections.text.errorMyself')}</Text>;
     }
     case pendingConnection_states.EXPIRED: {
       Alert.alert(
-        t('connections.alert.title.expired'),
-        t('connections.alert.text.expired'),
+        t('pendingConnections.alert.title.expired'),
+        t('pendingConnections.alert.text.expired'),
       );
       return (
         <Text style={styles.waitingText}>
-          {t('connections.text.errorExpired', {name: pendingConnection.name})}
+          {t('pendingConnections.text.errorExpired', {name: pendingConnection.name})}
         </Text>
       );
     }
     default: {
       return (
         <Text style={styles.waitingText}>
-          {t('connections.text.waiting')}
+          {t('pendingConnections.text.waiting')}
         </Text>
       );
     }
@@ -208,7 +208,7 @@ export const PreviewConnection = (props) => {
         <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
       </TouchableOpacity>
       <View style={styles.titleContainer}>
-        <Text style={styles.questionText}>{t('connections.text.connectWith')}</Text>
+        <Text style={styles.questionText}>{t('pendingConnections.text.connectWith')}</Text>
       </View>
       <View style={styles.userContainer}>
         <TouchableWithoutFeedback
@@ -237,7 +237,7 @@ export const PreviewConnection = (props) => {
           )}
         </Text>
         {alreadyExists ? (
-          <Text style={styles.flagged}>{t('connections.tag.alreadyConnected')}</Text>
+          <Text style={styles.flagged}>{t('pendingConnections.tag.alreadyConnected')}</Text>
         ) : (
           <Text style={styles.connectedText}>
             {pendingConnection.connectionDate}
@@ -249,19 +249,19 @@ export const PreviewConnection = (props) => {
           <Text style={styles.countsNumberText}>
             {pendingConnection.connections}
           </Text>
-        <Text style={styles.countsDescriptionText}>{t('connections.label.connections')}</Text>
+        <Text style={styles.countsDescriptionText}>{t('pendingConnections.label.connections')}</Text>
         </View>
         <View>
           <Text style={styles.countsNumberText}>
             {pendingConnection.groups}
           </Text>
-          <Text style={styles.countsDescriptionText}>{t('connections.label.groups')}</Text>
+          <Text style={styles.countsDescriptionText}>{t('pendingConnections.label.groups')}</Text>
         </View>
         <View>
           <Text style={styles.countsNumberText}>
             {pendingConnection.mutualConnections}
           </Text>
-          <Text style={styles.countsDescriptionText}>{t('connections.label.mutualConnections')}</Text>
+          <Text style={styles.countsDescriptionText}>{t('pendingConnections.label.mutualConnections')}</Text>
         </View>
       </View>
       <View style={styles.buttonContainer}>
@@ -413,8 +413,8 @@ export const PendingConnectionsScreen = () => {
         />
         <Text style={styles.waitingText}>
           {pendingConnections.length === 0
-            ? t('connections.text.zeroPendingConnections')
-            : t('connections.text.pendingConnections', {count: pendingConnections.length, name: pendingConnections[0].name})}
+            ? t('pendingConnections.text.zeroPendingConnections')
+            : t('pendingConnections.text.pendingConnections', {count: pendingConnections.length, name: pendingConnections[0].name})}
         </Text>
         <Spinner isVisible={true} size={60} type="ThreeBounce" color="#333" />
         <TouchableOpacity
@@ -428,7 +428,7 @@ export const PendingConnectionsScreen = () => {
             size={DEVICE_LARGE ? 36 : 24}
             color="#333"
           />
-          <Text style={styles.bottomButtonText}>{t('connections.button.returnHome')}</Text>
+          <Text style={styles.bottomButtonText}>{t('pendingConnections.button.returnHome')}</Text>
         </TouchableOpacity>
       </View>
     );

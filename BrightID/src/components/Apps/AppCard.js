@@ -11,6 +11,7 @@ import {
   Linking,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { createSelector } from '@reduxjs/toolkit';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -49,6 +50,7 @@ const AppCard = (props) => {
   const linkedContext = useSelector((state) =>
     linkedContextSelector(state, context),
   );
+  const { t } = useTranslation();
 
   const isLinked = linkedContext && linkedContext.state === 'applied';
   const isFailed = linkedContext && linkedContext.state === 'failed';
@@ -87,16 +89,16 @@ const AppCard = (props) => {
   const openApp = () => {
     Alert.alert(
       '',
-      `To find out more about ${name}, check out their website!`,
+      t('apps.alert.text.checkWebsite', {name: name}),
       [
         {
-          text: 'Sure',
+          text: t('apps.alert.sure'),
           onPress: () => {
             Linking.openURL(url);
           },
         },
         {
-          text: 'Cancel',
+          text: t('common.alert.cancel'),
           style: 'cancel',
           onPress: () => {},
         },
@@ -111,7 +113,7 @@ const AppCard = (props) => {
 
   const SponsorshipLabel = () => {
     if (!isSponsored && unusedSponsorships > 0) {
-      return <Text style={styles.sponsorshipMessage}>Has sponsorships</Text>;
+      return <Text style={styles.sponsorshipMessage}>{t('Has sponsorships')}</Text>;
     } else {
       return <View />;
     }
@@ -120,7 +122,7 @@ const AppCard = (props) => {
   const VerificationLabel = () => {
     if (!verifications.includes(verification)) {
       return (
-        <Text style={styles.unverifiedMessage}>Not verified for this app</Text>
+        <Text style={styles.unverifiedMessage}>{t('apps.tag.notVerifiedForApp')}</Text>
       );
     } else {
       return <View />;
@@ -137,7 +139,7 @@ const AppCard = (props) => {
             color="#4a90e2"
           />
           <Text testID={`Linked_${id}`} style={styles.linkedMessage}>
-            Linked
+            {t('apps.tag.linked')}
           </Text>
         </View>
       );
@@ -153,7 +155,7 @@ const AppCard = (props) => {
             color="#FF0800"
           />
           <Text testID={`Linked_${id}`} style={styles.errorMessage}>
-            Try Again
+            {t('apps.tag.tryAgain')}
           </Text>
         </TouchableOpacity>
       );
