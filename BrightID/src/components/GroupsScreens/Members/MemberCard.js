@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { useRef, useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RNFS from 'react-native-fs';
 import moment from 'moment';
@@ -44,6 +45,7 @@ function MemberCard(props: MemberCardProps) {
   const actionSheetRef: ?ActionSheet = useRef(null);
   const [contextActions, setContextActions] = useState<Array<string>>([]);
   const [flagged, setFlagged] = useState(false);
+  const { t } = useTranslation();
 
   // set possible actions depending on user and member admin status
   useEffect(() => {
@@ -104,11 +106,11 @@ function MemberCard(props: MemberCardProps) {
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
           <View style={styles.statusContainer}>
-            {flagged ? <Text style={styles.flagged}>(flagged)</Text> : null}
+            {flagged ? <Text style={styles.flagged}>{t('common.tag.flagged')}</Text> : null}
           </View>
           {connectionDate > 0 && (
             <Text style={styles.connectedText}>
-              Connected {moment(connectionDate).fromNow()}
+              {t('common.tag.connectionDate', {date: moment(connectionDate).fromNow()})}
             </Text>
           )}
         </View>
@@ -127,7 +129,7 @@ function MemberCard(props: MemberCardProps) {
       {contextActions.length > 0 && (
         <ActionSheet
           ref={actionSheetRef}
-          title="What do you want to do?"
+          title={t('common.actionSheet.title')}
           options={contextActions}
           cancelButtonIndex={contextActions.indexOf(ACTION_CANCEL)}
           destructiveButtonIndex={contextActions.indexOf(ACTION_DISMISS)}

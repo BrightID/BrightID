@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import api from '@/api/brightId';
 import { encryptAesKey } from '@/utils/invites';
 import EmptyList from '@/components/Helpers/EmptyList';
@@ -33,12 +34,12 @@ export class InviteListScreen extends Component<Props, State> {
       const data = await encryptAesKey(group?.aesKey, connection.signingKey);
       await api.invite(connection.id, group?.id, data);
       Alert.alert(
-        'Successful Invitation',
-        `You invited ${connection.name} successfully to the group`,
+        t('groups.alert.title.inviteSuccess'),
+        t('groups.alert.text.inviteSuccess', {name: connection.name})
       );
       navigation.goBack();
     } catch (err) {
-      Alert.alert('Error', err.message);
+      Alert.alert(t('common.alert.error'), err.message);
     }
   };
 
@@ -54,6 +55,7 @@ export class InviteListScreen extends Component<Props, State> {
   };
 
   render() {
+    const { t } = this.props;
     return (
       <>
         <View style={styles.orangeTop} />
@@ -68,7 +70,7 @@ export class InviteListScreen extends Component<Props, State> {
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}
               ListEmptyComponent={
-                <EmptyList title="No existing connections are eligible for this group, please come back later.." />
+                <EmptyList title={t('groups.text.noEligibleConnection')} />
               }
             />
           </View>
@@ -108,5 +110,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(({ connections }) => ({ ...connections }))(
-  InviteListScreen,
+  withTranslation()(InviteListScreen),
 );

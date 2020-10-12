@@ -17,6 +17,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import ActionSheet from 'react-native-actionsheet';
 import { innerJoin } from 'ramda';
+import { useTranslation } from 'react-i18next';
 import api from '@/api/brightId';
 import { leaveGroup, dismissFromGroup } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
@@ -52,6 +53,7 @@ function MembersScreen(props: MembersScreenProps) {
   });
   const actionSheetRef: ?ActionSheet = useRef(null);
   const [contextActions, setContextActions] = useState<Array<string>>([]);
+  const { t } = useTranslation();
 
   // set up top right button in header
   useLayoutEffect(() => {
@@ -116,25 +118,25 @@ function MembersScreen(props: MembersScreenProps) {
   const handleLeaveGroup = () => {
     const buttons = [
       {
-        text: 'Cancel',
+        text: t('common.alert.cancel'),
         style: 'cancel',
       },
       {
-        text: 'OK',
+        text: t('common.alert.ok'),
         onPress: async () => {
           try {
             await api.leaveGroup(groupID);
             await dispatch(leaveGroup(group));
             navigation.goBack();
           } catch (err) {
-            Alert.alert('Error leaving group', err.message);
+            Alert.alert(t('groups.alert.title.errorLeaveGroup'), err.message);
           }
         },
       },
     ];
     Alert.alert(
-      `Leave Group`,
-      `Are you sure you want to leave this group?`,
+      t('groups.alert.title.leaveGroup'),
+      t('groups.alert.text.leaveGroup'),
       buttons,
       {
         cancelable: true,
@@ -151,24 +153,27 @@ function MembersScreen(props: MembersScreenProps) {
   const handleDismiss = (user) => {
     const buttons = [
       {
-        text: 'Cancel',
+        text: t('common.alert.cancel'),
         style: 'cancel',
       },
       {
-        text: 'OK',
+        text: t('common.alert.ok'),
         onPress: async () => {
           try {
             await api.dismiss(user.id, groupID);
             await dispatch(dismissFromGroup(user.id, group));
           } catch (err) {
-            Alert.alert('Error dismissing member from the group', err.message);
+            Alert.alert(
+              t('groups.alert.title.errorDismissMember'), 
+              err.message
+            );
           }
         },
       },
     ];
     Alert.alert(
-      `Dismiss Member`,
-      `Are you sure you want to dismiss ${user.name} from this group?`,
+      t('groups.alert.title.dismissMember'),
+      t('groups.alert.text.dismissMember', {name: user.name}),
       buttons,
       {
         cancelable: true,
@@ -179,18 +184,18 @@ function MembersScreen(props: MembersScreenProps) {
   const handleAddAdmin = (user) => {
     const buttons = [
       {
-        text: 'Cancel',
+        text: t('common.alert.cancel'),
         style: 'cancel',
       },
       {
-        text: 'OK',
+        text: t('common.alert.ok'),
         onPress: async () => {
           try {
             await api.addAdmin(user.id, groupID);
             await dispatch(addAdmin(user.id, group));
           } catch (err) {
             Alert.alert(
-              `Error making ${user.name} admin for group`,
+              t('groups.alert.text.addAdmin', {name: user.name}),
               err.message,
             );
           }
@@ -198,8 +203,8 @@ function MembersScreen(props: MembersScreenProps) {
       },
     ];
     Alert.alert(
-      `Add admin`,
-      `Are you sure you want to make ${user.name} an admin for this group?`,
+      t('groups.alert.title.addAdmin'),
+      t('groups.alert.text.addAdmin', {name: user.name}),
       buttons,
       {
         cancelable: true,
@@ -258,7 +263,7 @@ function MembersScreen(props: MembersScreenProps) {
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}
               ListEmptyComponent={
-                <EmptyList title="No known members, invite some..." />
+                <EmptyList title={t('groups.text.noMembers')} />
               }
             />
           </View>
@@ -266,7 +271,7 @@ function MembersScreen(props: MembersScreenProps) {
         {contextActions.length > 0 && (
           <ActionSheet
             ref={actionSheetRef}
-            title="What do you want to do?"
+            title={t('common.actionSheet.title')}
             options={contextActions}
             cancelButtonIndex={contextActions.indexOf(ACTION_CANCEL)}
             destructiveButtonIndex={contextActions.indexOf(ACTION_LEAVE)}

@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
+import { useTranslation, Trans } from 'react-i18next';
 import { DEVICE_TYPE } from '@/utils/constants';
 
 const learnMoreUrl =
@@ -20,45 +21,50 @@ const handleLearnMore = () => {
   );
 };
 
-export const NoGroups = ({ navigation }: Props) => (
-  <View style={styles.noContainer} testID="noGroupsView">
-    <View style={styles.noGroupsInfo}>
-      <Image
-        source={require('../../static/groups_logo.png')}
-        style={styles.smallGroupsLogo}
-        resizeMode="cover"
-        onError={(e) => {
-          console.log(e);
-        }}
-        accessible={true}
-        accessibilityLabel="groups logo"
-      />
-      <View>
-        <Text style={styles.emptyGroupsText}>Get verified faster</Text>
-        <Text style={styles.emptyGroupsText}>by creating and</Text>
-        <Text style={styles.emptyGroupsText}>joining groups</Text>
+export const NoGroups = ({ navigation }: Props) => {
+  
+  const { t } = useTranslation();
+  return (
+    <View style={styles.noContainer} testID="noGroupsView">
+      <View style={styles.noGroupsInfo}>
+        <Image
+          source={require('../../static/groups_logo.png')}
+          style={styles.smallGroupsLogo}
+          resizeMode="cover"
+          onError={(e) => {
+            console.log(e);
+          }}
+          accessible={true}
+          accessibilityLabel={t('groups.accessibilityLabel.groupsLogo')}
+        />
+        <View>
+          <Trans
+            i18nKey="groups.text.noGroups"
+            components={{text: <Text style={styles.emptyGroupsText}/>}}
+          />
+        </View>
+      </View>
+      <View style={styles.emptyButtons}>
+        <TouchableOpacity
+          testID="groupsLearnMoreBtn"
+          style={styles.learnMoreButton}
+          onPress={handleLearnMore}
+        >
+          <Text style={styles.learnMoreText}>{t('groups.button.learnMore')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          testID="groupsCreateGroupBtn"
+          style={styles.createGroupButton}
+          onPress={() => {
+            navigation.navigate('GroupInfo');
+          }}
+        >
+          <Text style={styles.createGroupText}>{t('groups.button.createGroup')}</Text>
+        </TouchableOpacity>
       </View>
     </View>
-    <View style={styles.emptyButtons}>
-      <TouchableOpacity
-        testID="groupsLearnMoreBtn"
-        style={styles.learnMoreButton}
-        onPress={handleLearnMore}
-      >
-        <Text style={styles.learnMoreText}>Learn More</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        testID="groupsCreateGroupBtn"
-        style={styles.createGroupButton}
-        onPress={() => {
-          navigation.navigate('GroupInfo');
-        }}
-      >
-        <Text style={styles.createGroupText}>Create Group</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-);
+  )
+};
 
 const styles = StyleSheet.create({
   noContainer: {

@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import { DEVICE_TYPE } from '@/utils/constants';
 import { getGroupName, ids2connections } from '@/utils/groups';
 import GroupPhoto from './GroupPhoto';
@@ -12,7 +13,7 @@ import GroupPhoto from './GroupPhoto';
 
 class GroupCard extends React.PureComponent<Props> {
   setStatus = () => {
-    const { group } = this.props;
+    const { group, t } = this.props;
     if (group.isNew) {
       const notJoinedIds = group.founders.filter(
         (founder) => !group.members.includes(founder),
@@ -21,7 +22,7 @@ class GroupCard extends React.PureComponent<Props> {
       return (
         <View style={styles.waitingContainer}>
           <Text style={styles.waitingMessage}>
-            Waiting for {notJoinedNames.join(' and ')} to join
+            {t('groups.text.waitingForMembers', {list: notJoinedNames.join(` ${t('common.language.and')} `)})}
           </Text>
         </View>
       );
@@ -32,11 +33,11 @@ class GroupCard extends React.PureComponent<Props> {
       return (
         <View>
           <View style={styles.membersContainer}>
-            <Text style={styles.membersLabel}>Known members: </Text>
+            <Text style={styles.membersLabel}>{t('groups.label.knownMembers')}</Text>
             <Text style={styles.membersKnown}>
               {group.members.length - unknowsCount}{' '}
             </Text>
-            <Text style={styles.membersLabel}>Unknown: </Text>
+            <Text style={styles.membersLabel}>{t('groups.label.unknownMembers')}</Text>
             <Text style={styles.membersUnknown}>{unknowsCount}</Text>
           </View>
         </View>
@@ -45,7 +46,7 @@ class GroupCard extends React.PureComponent<Props> {
   };
 
   render() {
-    const { group } = this.props;
+    const { group, t } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.photoContainer}>
@@ -53,7 +54,7 @@ class GroupCard extends React.PureComponent<Props> {
         </View>
         <View style={styles.info}>
           {group.type === 'primary' ? (
-            <Text style={styles.primary}>Primary Group</Text>
+            <Text style={styles.primary}>{t('groups.tag.primaryGroup')}</Text>
           ) : (
             <View />
           )}
@@ -130,4 +131,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(GroupCard);
+export default connect()(withTranslation()(GroupCard));

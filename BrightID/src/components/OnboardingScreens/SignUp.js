@@ -152,7 +152,7 @@ export class SignUp extends React.Component<Props, State> {
                 onPress={this.onAddPhoto}
                 style={styles.addPhoto}
                 accessible={true}
-                accessibilityLabel={t('signup.accessibilityLabel.addPhoto')}
+                accessibilityLabel={t('common.accessibilityLabel.addPhoto')}
               >
                 <Text style={styles.addPhotoText}>{t('signup.button.addPhoto')}</Text>
                 <SimpleLineIcons

@@ -233,7 +233,7 @@ export const PreviewConnection = (props) => {
         <Text style={styles.connectName}>
           {pendingConnection.name}
           {pendingConnection.flagged && (
-            <Text style={styles.flagged}> {t('connections.tag.flagged')}</Text>
+            <Text style={styles.flagged}> {t('common.tag.flagged')}</Text>
           )}
         </Text>
         {alreadyExists ? (
