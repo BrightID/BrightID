@@ -1,62 +1,54 @@
 // @flow
 
-import AsyncStorage from '@react-native-community/async-storage';
-import FilesystemStorage from 'redux-persist-filesystem-storage';
 import { combineReducers } from 'redux';
-
 import { persistStore, persistReducer } from 'redux-persist';
 import reducers from '@/reducer';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import KeychainStorage from './keychainAdapter';
+import { FsStorage, KeychainStorage } from './storage';
+import getStoredState from './getStoredState';
 
-import { migrate } from './migrations';
-import { notificationsTransformer } from './transform';
+const version = 9;
 
-const version = 8;
-
-const rootPersistConfig = {
-  key: 'root',
-  storage: AsyncStorage,
-  debug: __DEV__,
-  transforms: [notificationsTransformer],
-  version,
-  migrate,
+const fsPersistConfig = {
+  storage: FsStorage,
   timeout: 0,
-  blacklist: [
-    'channels',
-    'pendingConnections',
-    'user',
-    'connections',
-    'groups',
-    'recoveryData',
-  ],
+  debug: __DEV__,
+  version,
+  getStoredState,
+};
+
+const appsPersistConfig = {
+  ...fsPersistConfig,
+  key: 'apps',
 };
 
 const connectionsPersistConfig = {
+  ...fsPersistConfig,
   key: 'connections',
-  storage: FilesystemStorage,
-  timeout: 0,
-  debug: __DEV__,
-  version,
   blacklist: ['searchParam', 'searchOpen'],
 };
 
 const groupsPersistConfig = {
+  ...fsPersistConfig,
   key: 'groups',
-  storage: FilesystemStorage,
-  timeout: 0,
-  debug: __DEV__,
-  version,
   blacklist: ['searchParam', 'searchOpen', 'newGroupCoFounders'],
 };
 
+const notificationsPersistConfig = {
+  ...fsPersistConfig,
+  key: 'notifications',
+  blacklist: ['activeNotification', 'sessionNotifications'],
+};
+
+const tasksPersistConfig = {
+  ...fsPersistConfig,
+  key: 'tasks',
+};
+
 const userPersistConfig = {
+  ...fsPersistConfig,
   key: 'user',
-  storage: AsyncStorage,
-  timeout: 0,
-  debug: __DEV__,
-  version,
-  blacklist: ['searchParam'],
+  blacklist: ['searchParam', 'migrated'],
 };
 
 const keypairPersistConfig = {
@@ -65,22 +57,27 @@ const keypairPersistConfig = {
   timeout: 0,
   debug: __DEV__,
   version,
+  getStoredState,
   serialize: false,
   deserialize: false,
 };
 
 const rootReducer = combineReducers({
   ...reducers,
+  apps: persistReducer(appsPersistConfig, reducers.apps),
   connections: persistReducer(connectionsPersistConfig, reducers.connections),
   groups: persistReducer(groupsPersistConfig, reducers.groups),
   keypair: persistReducer(keypairPersistConfig, reducers.keypair),
+  notifications: persistReducer(
+    notificationsPersistConfig,
+    reducers.notifications,
+  ),
+  tasks: persistReducer(tasksPersistConfig, reducers.tasks),
   user: persistReducer(userPersistConfig, reducers.user),
 });
 
-const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
-
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: rootReducer,
   middleware: getDefaultMiddleware({
     // We have a bunch of non-serializable data like secret key etc.
     // TODO For now disabled completely. Revisit later for fine-grained configuration.
