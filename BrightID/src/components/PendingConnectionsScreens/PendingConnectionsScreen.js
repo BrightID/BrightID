@@ -24,6 +24,7 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { SvgXml } from 'react-native-svg';
 import {
   pendingConnection_states,
@@ -62,6 +63,7 @@ const ConfirmationButtons = ({
   setReRender,
 }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const pendingConnection = useSelector(
     (state) =>
       selectPendingConnectionById(state, pc.id) ?? {
@@ -120,22 +122,22 @@ const ConfirmationButtons = ({
               testID="rejectConnectionButton"
               onPress={reject}
               style={styles.rejectButton}
-              accessibilityLabel={`reject connection with ${pendingConnection.name}`}
+              accessibilityLabel={t('connections.accessibilityLabel.reject', {name: pendingConnection.name})}
               accessibilityRole="button"
             >
               <Text style={styles.buttonText}>
-                {alreadyExists ? 'Ignore' : 'Reject'}
+                {alreadyExists ? t('connections.button.ignore') : t('connections.button.reject')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               testID="confirmConnectionButton"
               onPress={accept}
               style={styles.confirmButton}
-              accessibilityLabel={`accept connection with ${pendingConnection.name}`}
+              accessibilityLabel={t('connections.accessibilityLabel.confirm', {name: pendingConnection.name})}
               accessibilityRole="button"
             >
               <Text style={styles.buttonText}>
-                {alreadyExists ? 'Update Profile' : 'Confirm'}
+                {alreadyExists ? t('connections.button.updateProfile') : t('connections.button.confirm')}
               </Text>
             </TouchableOpacity>
           </>
@@ -143,37 +145,35 @@ const ConfirmationButtons = ({
       } else {
         return (
           <Text style={styles.waitingText}>
-            Waiting for {pendingConnection.name} to confirm ...
+            {t('connections.text.waitingConfirmation', {name: pendingConnection.name})}
           </Text>
         );
       }
     case pendingConnection_states.ERROR: {
       return (
         <Text style={styles.waitingText}>
-          There was an error, please try connecting with{' '}
-          {pendingConnection.name} again...
+          {t('connections.text.errorGeneric', {name: pendingConnection.name})}
         </Text>
       );
     }
     case pendingConnection_states.MYSELF: {
-      return <Text style={styles.waitingText}>OOPS!!! This is you...</Text>;
+      return <Text style={styles.waitingText}>{t('connections.text.errorMyself')}</Text>;
     }
     case pendingConnection_states.EXPIRED: {
       Alert.alert(
-        'Try connecting again...',
-        `The QRCode used to connect has expired...`,
+        t('connections.alert.title.expired'),
+        t('connections.alert.text.expired'),
       );
       return (
         <Text style={styles.waitingText}>
-          The QRCode used to connect with {pendingConnection.name} has
-          expired... please try connecting again.
+          {t('connections.text.errorExpired', {name: pendingConnection.name})}
         </Text>
       );
     }
     default: {
       return (
         <Text style={styles.waitingText}>
-          Waiting for data from the profile service
+          {t('connections.text.waiting')}
         </Text>
       );
     }
@@ -183,6 +183,7 @@ const ConfirmationButtons = ({
 export const PreviewConnection = (props) => {
   // we only care about the state and signedMessage the of the pending connection
   const { pendingConnection } = props;
+  const { t } = useTranslation();
   console.log(
     'rendering',
     pendingConnection.name,
@@ -207,7 +208,7 @@ export const PreviewConnection = (props) => {
         <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
       </TouchableOpacity>
       <View style={styles.titleContainer}>
-        <Text style={styles.questionText}>Connect with?</Text>
+        <Text style={styles.questionText}>{t('connections.text.connectWith')}</Text>
       </View>
       <View style={styles.userContainer}>
         <TouchableWithoutFeedback
@@ -226,17 +227,17 @@ export const PreviewConnection = (props) => {
               console.log(e);
             }}
             accessible={true}
-            accessibilityLabel="user photo"
+            accessibilityLabel={t('common.accessibilityLabel.userPhoto')}
           />
         </TouchableWithoutFeedback>
         <Text style={styles.connectName}>
           {pendingConnection.name}
           {pendingConnection.flagged && (
-            <Text style={styles.flagged}> (flagged)</Text>
+            <Text style={styles.flagged}> {t('connections.tag.flagged')}</Text>
           )}
         </Text>
         {alreadyExists ? (
-          <Text style={styles.flagged}>(already connected)</Text>
+          <Text style={styles.flagged}>{t('connections.tag.alreadyConnected')}</Text>
         ) : (
           <Text style={styles.connectedText}>
             {pendingConnection.connectionDate}
@@ -248,19 +249,19 @@ export const PreviewConnection = (props) => {
           <Text style={styles.countsNumberText}>
             {pendingConnection.connections}
           </Text>
-          <Text style={styles.countsDescriptionText}>Connections</Text>
+        <Text style={styles.countsDescriptionText}>{t('connections.label.connections')}</Text>
         </View>
         <View>
           <Text style={styles.countsNumberText}>
             {pendingConnection.groups}
           </Text>
-          <Text style={styles.countsDescriptionText}>Groups</Text>
+          <Text style={styles.countsDescriptionText}>{t('connections.label.groups')}</Text>
         </View>
         <View>
           <Text style={styles.countsNumberText}>
             {pendingConnection.mutualConnections}
           </Text>
-          <Text style={styles.countsDescriptionText}>Mutual Connec...</Text>
+          <Text style={styles.countsDescriptionText}>{t('connections.label.mutualConnections')}</Text>
         </View>
       </View>
       <View style={styles.buttonContainer}>
@@ -274,6 +275,7 @@ export const PendingConnectionsScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const carouselRef = useRef(null);
+  const { t } = useTranslation();
 
   // we want to watch for all changes to pending connections
   const pendingConnections = useSelector((state) => {
@@ -410,14 +412,9 @@ export const PendingConnectionsScreen = () => {
           color="#333"
         />
         <Text style={styles.waitingText}>
-          Waiting for{' '}
           {pendingConnections.length === 0
-            ? 'more '
-            : pendingConnections.length > 1 && `${pendingConnections.length} `}
-          {pendingConnections.length === 1
-            ? pendingConnections[0].name
-            : 'connections'}{' '}
-          {pendingConnections.length ? 'to confirm you.' : ''}
+            ? t('connections.text.zeroPendingConnections')
+            : t('connections.text.pendingConnections', {count: pendingConnections.length, name: pendingConnections[0].name})}
         </Text>
         <Spinner isVisible={true} size={60} type="ThreeBounce" color="#333" />
         <TouchableOpacity
@@ -431,7 +428,7 @@ export const PendingConnectionsScreen = () => {
             size={DEVICE_LARGE ? 36 : 24}
             color="#333"
           />
-          <Text style={styles.bottomButtonText}>Return Home</Text>
+          <Text style={styles.bottomButtonText}>{t('connections.button.returnHome')}</Text>
         </TouchableOpacity>
       </View>
     );

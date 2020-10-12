@@ -170,7 +170,7 @@ export const HomeScreen = (props) => {
             testID="editPhoto"
             onPress={handleEditPhoto}
             accessible={true}
-            accessibilityLabel={t('home.accessibilityLabel.editPhoto')}
+            accessibilityLabel={t('common.accessibilityLabel.editPhoto')}
           >
             <Image
               source={{
@@ -182,7 +182,7 @@ export const HomeScreen = (props) => {
                 console.log(e.error);
               }}
               accessible={true}
-              accessibilityLabel={('home.accessibilityLabel.userPhoto')}
+              accessibilityLabel={('common.accessibilityLabel.userPhoto')}
             />
           </TouchableOpacity>
         ) : null}
@@ -208,7 +208,7 @@ export const HomeScreen = (props) => {
             ) : (
               <TouchableWithoutFeedback
                 onPress={() => setIsEditing(true)}
-                accessibilityLabel={t('home.accessibilityLabel.editName')}
+                accessibilityLabel={t('common.accessibilityLabel.editName')}
               >
                 <Text testID="EditNameBtn" style={styles.name}>
                   {name}
