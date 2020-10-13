@@ -92,7 +92,7 @@ const AppCard = (props) => {
       t('apps.alert.text.checkWebsite', {name: name}),
       [
         {
-          text: t('apps.alert.sure'),
+          text: t('apps.alert.button.visitWebsite'),
           onPress: () => {
             Linking.openURL(url);
           },

@@ -6,6 +6,7 @@ import DropdownAlert from 'react-native-dropdownalert';
 import { useSelector, useDispatch } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
 import { navigate, getRoute } from '@/NavigationService';
+import { useTranslation } from 'react-i18next';
 import groups from '@/static/add_group.svg';
 import connections from '@/static/add_person.svg';
 import misc from '@/static/trusted_connections.svg';
@@ -34,6 +35,7 @@ const screenBlackList = [
 
 export const NotificationBanner = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   // const route = useRoute();
   const dropDownAlertRef = useRef(null);
@@ -71,10 +73,8 @@ export const NotificationBanner = () => {
       dispatch(
         setActiveNotification({
           type: CONNECTIONS_TYPE,
-          title: 'Confirm connections',
-          message: `You have ${pendingConnections.length} pending connection${
-            pendingConnections.length > 1 ? 's' : ''
-          }`,
+          title: t('notificationBar.title.pendingConnection'),
+          message: t('notificationBar.text.pendingConnections', {count: pendingConnections.length}),
           navigationTarget: 'PendingConnections',
         }),
       );

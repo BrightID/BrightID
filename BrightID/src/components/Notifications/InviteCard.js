@@ -4,6 +4,7 @@ import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
+import { withTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/constants';
 import { getGroupName } from '@/utils/groups';
 import { acceptInvite, rejectInvite, joinGroup } from '@/actions';
@@ -15,18 +16,18 @@ import xGrey from '@/static/x_grey.svg';
 
 class InviteCard extends React.Component<Props> {
   rejectInvite = () => {
-    const { invite, dispatch } = this.props;
+    const { invite, dispatch, t } = this.props;
     Alert.alert(
-      'Reject',
-      'Are you sure you want to reject joining this group?',
+      t('notifications.alert.title.rejectGroupInvite'),
+      t('notifications.alert.text.rejectGroupInvite'),
       [
         {
-          text: 'Cancel',
+          text: t('common.alert.cancel'),
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
         {
-          text: 'Sure',
+          text: t('common.alert.sure'),
           onPress: async () => {
             try {
               await dispatch(rejectInvite(invite.inviteId));
@@ -34,7 +35,7 @@ class InviteCard extends React.Component<Props> {
                 await api.deleteGroup(invite.id);
               }
             } catch (err) {
-              Alert.alert('Failed to reject the invite', err.message);
+              Alert.alert(t('notifications.alert.title.failureRejectGroupInvite'), err.message);
             }
           },
         },
@@ -44,13 +45,16 @@ class InviteCard extends React.Component<Props> {
   };
 
   acceptInvite = async () => {
-    const { dispatch, invite, backupCompleted, id, navigation } = this.props;
+    const { dispatch, invite, backupCompleted, id, navigation, t } = this.props;
     try {
       await api.joinGroup(invite.id);
       await dispatch(acceptInvite(invite.inviteId));
       invite.members.push(id);
       await dispatch(joinGroup(invite));
-      Alert.alert('Success', `You joined ${getGroupName(invite)}`);
+      Alert.alert(
+        t('common.alert.success'), 
+        t('notifications.alert.text.successGroupInvite', {groupName: getGroupName(invite)})
+      );
       if (backupCompleted) {
         await backupUser();
         if (invite.photo && invite.photo.filename) {
@@ -59,12 +63,12 @@ class InviteCard extends React.Component<Props> {
       }
       navigation.navigate('Members', { group: invite });
     } catch (err) {
-      Alert.alert('Failed to join the group', err.message);
+      Alert.alert(t('notifications.alert.text.failureAcceptGroupInvite'), err.message);
     }
   };
 
   render() {
-    const { invite, connections } = this.props;
+    const { invite, connections, t } = this.props;
     const inviter = connections.find((conn) => invite.inviter === conn.id);
     return (
       <View style={styles.container}>
@@ -74,7 +78,7 @@ class InviteCard extends React.Component<Props> {
         <View style={styles.info}>
           <Text style={styles.name}>{getGroupName(invite)}</Text>
           <Text style={styles.invitationMsg}>
-            {inviter?.name} invited you to join
+            {t('notifications.item.text.pendingGroupInvite', {name: inviter?.name})}
           </Text>
         </View>
         <View style={styles.approvalButtonContainer}>
@@ -172,4 +176,4 @@ const styles = StyleSheet.create({
 
 export default connect(({ connections }) => ({
   ...connections,
-}))(InviteCard);
+}))(withTranslation()(InviteCard));
