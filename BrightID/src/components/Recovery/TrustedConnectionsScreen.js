@@ -20,6 +20,15 @@ import { setTrustedConnections } from './helpers';
  * Displays a search input and list of Connection Cards
  */
 
+const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
+const ITEM_MARGIN = DEVICE_LARGE ? 11.8 : 6;
+
+const getItemLayout = (data, index) => ({
+  length: ITEM_HEIGHT + ITEM_MARGIN,
+  offset: (ITEM_HEIGHT + ITEM_MARGIN) * index,
+  index,
+});
+
 class TrustedConnectionsScreen extends React.Component<Props> {
   filterConnections = () => {
     const { connections, searchParam } = this.props;
@@ -90,6 +99,7 @@ class TrustedConnectionsScreen extends React.Component<Props> {
                 renderItem={this.renderConnection}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
+                getItemLayout={getItemLayout}
                 ListEmptyComponent={
                   <EmptyList
                     iconType="account-off-outline"

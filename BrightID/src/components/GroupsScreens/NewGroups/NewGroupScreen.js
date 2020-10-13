@@ -19,6 +19,15 @@ import NewGroupCard from './NewGroupCard';
 //   creating: boolean,
 // };
 
+const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
+const ITEM_MARGIN = DEVICE_LARGE ? 11.8 : 6;
+
+const getItemLayout = (data, index) => ({
+  length: ITEM_HEIGHT + ITEM_MARGIN,
+  offset: (ITEM_HEIGHT + ITEM_MARGIN) * index,
+  index,
+});
+
 export class NewGroupScreen extends React.Component<Props> {
   constructor(props) {
     super(props);
@@ -128,11 +137,13 @@ export class NewGroupScreen extends React.Component<Props> {
               {connections.length > 0 ? (
                 <FlatList
                   style={styles.connectionsContainer}
+                  contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
                   data={connections}
                   keyExtractor={({ id }, index) => id + index}
                   renderItem={this.renderConnection}
                   showsHorizontalScrollIndicator={false}
                   showsVerticalScrollIndicator={false}
+                  getItemLayout={getItemLayout}
                 />
               ) : (
                 <View>
