@@ -24,6 +24,7 @@ import GraphExplorerScreen from '@/components/SideMenu/GraphExplorerScreen';
 import ContactUsScreen from '@/components/SideMenu/ContactUsScreen';
 
 import { useHeaderHeight } from '@react-navigation/stack';
+import { useTranslation } from 'react-i18next';
 
 const iconMap = {
   editProfile,
@@ -91,6 +92,7 @@ const CustomDrawerContent = (props) => {
   const photoFilename = useSelector((state) => state.user.photo.filename);
   const name = useSelector((state) => state.user.name);
   const verified = useSelector(verifiedSelector);
+  const { t } = useTranslation();
   const [profilePhoto, setProfilePhoto] = useState('none');
   retrieveImage(photoFilename).then((profilePhoto) => {
     setProfilePhoto(profilePhoto);
@@ -120,7 +122,7 @@ const CustomDrawerContent = (props) => {
       </View>
       <CustomItem
         inactiveTintColor="#000"
-        label="Home"
+        label={t('drawer.label.home')}
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
         icon={getIcon('homeIcon')}
@@ -134,7 +136,7 @@ const CustomDrawerContent = (props) => {
         inactiveBackgroundColor="#fff"
         activeTintColor="#fff"
         activeBackgroundColor={ORANGE}
-        label="Achievements"
+        label={t('drawer.label.achievements')}
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
         icon={getIcon('taskList')}
@@ -148,7 +150,7 @@ const CustomDrawerContent = (props) => {
         inactiveBackgroundColor="#fff"
         activeTintColor="#fff"
         activeBackgroundColor={ORANGE}
-        label="Copy Explorer Code"
+        label={t('drawer.label.copyExplorerCode')}
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
         icon={getIcon('explorerCode')}
@@ -158,14 +160,14 @@ const CustomDrawerContent = (props) => {
       />
       <CustomItem
         inactiveTintColor="#aaa"
-        label="Edit Profile"
+        label={t('drawer.label.editProfile')}
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
         icon={getIcon('editProfile')}
       />
       <CustomItem
         inactiveTintColor="#aaa"
-        label="Trusted Connections"
+        label={t('drawer.label.trustedConnections')}
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
         icon={getIcon('trustedConnections')}
@@ -174,7 +176,7 @@ const CustomDrawerContent = (props) => {
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
         inactiveTintColor="#000"
-        label="Contact Us"
+        label={t('drawer.label.contactUs')}
         icon={getIcon('contactUs')}
         onPress={() => {
           navigation.navigate('ContactUs');

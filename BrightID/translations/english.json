@@ -210,6 +210,14 @@
   "restore.alert.text.requestRecovering": "Your request to help recovering this account submitted successfully!",
 
 
+  "drawer.label.home": "Home",
+  "drawer.label.achievements": "Achievements",
+  "drawer.label.copyExplorerCode": "Copy Explorer Code",
+  "drawer.label.editProfile": "Edit Profile",
+  "drawer.label.trustedConnections": "Trusted Connections",
+  "drawer.label.contactUs": "Contact Us",
+
+
   "common.alert.error": "Error",
   "common.alert.success": "Success",
   "common.alert.info": "Info",

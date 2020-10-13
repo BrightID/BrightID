@@ -210,6 +210,14 @@
   "restore.alert.text.requestRecovering": "Votre requête pour aider à la restauraton de ce compte a été soumise avec succès !",
 
 
+  "drawer.label.home": "Accueil",
+  "drawer.label.achievements": "Objectifs Remplis",
+  "drawer.label.copyExplorerCode": "Copier le Code Explorer",
+  "drawer.label.editProfile": "Éditer le Profil",
+  "drawer.label.trustedConnections": "Connexions de Confiance",
+  "drawer.label.contactUs": "Nous Contacter",
+
+
   "common.alert.error": "Erreur",
   "common.alert.success": "Succès",
   "common.alert.info": "Info",
