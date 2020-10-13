@@ -12,7 +12,7 @@ const version = 9;
 const fsPersistConfig = {
   storage: FsStorage,
   timeout: 0,
-  debug: __DEV__,
+  // debug: __DEV__,
   version,
   getStoredState,
 };
@@ -40,11 +40,6 @@ const notificationsPersistConfig = {
   blacklist: ['activeNotification', 'sessionNotifications'],
 };
 
-const tasksPersistConfig = {
-  ...fsPersistConfig,
-  key: 'tasks',
-};
-
 const userPersistConfig = {
   ...fsPersistConfig,
   key: 'user',
@@ -55,7 +50,7 @@ const keypairPersistConfig = {
   key: 'keypair',
   storage: KeychainStorage,
   timeout: 0,
-  debug: __DEV__,
+  // debug: __DEV__,
   version,
   getStoredState,
   serialize: false,
@@ -72,7 +67,6 @@ const rootReducer = combineReducers({
     notificationsPersistConfig,
     reducers.notifications,
   ),
-  tasks: persistReducer(tasksPersistConfig, reducers.tasks),
   user: persistReducer(userPersistConfig, reducers.user),
 });
 

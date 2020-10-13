@@ -23,10 +23,15 @@ const getRootState = async (config) => {
 
 export default async (config) => {
   try {
+    let initialTime = Date.now();
     let restoredState = await getStoredState(config);
     if (config.migrate) {
       restoredState = await config.migrate(restoredState, config.version);
     }
+    let finalTime = Date.now();
+    console.log(
+      `getStoredState for ${config.key} took ${finalTime - initialTime}ms`,
+    );
     return Promise.resolve(restoredState);
   } catch (err) {
     console.log(

@@ -32,7 +32,15 @@ const pathForKey = (key: string) =>
 
 const FilesystemStorage = {
   setItem: (key: string, value: string) => {
-    return RNFetchBlob.fs.writeFile(pathForKey(key), value, encoding);
+    value = JSON.parse(value);
+    let initialTime = Date.now();
+    value = JSON.stringify(value);
+    return RNFetchBlob.fs
+      .writeFile(pathForKey(key), value, encoding)
+      .then(() => {
+        let finalTime = Date.now();
+        console.log(`fsWrite for ${key} took ${finalTime - initialTime} ms`);
+      });
   },
 
   getItem: onStorageReady((key: string) => {
