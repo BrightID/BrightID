@@ -32,6 +32,21 @@ import { handleFlagging } from './models/flagConnection';
 
 const ICON_SIZE = 26;
 
+const ITEM_HEIGHT = DEVICE_LARGE ? 102 : 92;
+
+const getItemLayout = (data, index) => ({
+  length: ITEM_HEIGHT,
+  offset: ITEM_HEIGHT * index,
+  index,
+});
+
+const renderItem = ({ item, index }) => {
+  item.index = index;
+  return <ConnectionCard {...item} />;
+};
+
+const renderHiddenItem = ({ item }, rowMap) => <ActionComponent {...item} />;
+
 const ActionComponent = ({ id, name, secretKey, status }) => {
   const dispatch = useDispatch();
   const { showActionSheetWithOptions } = useActionSheet();
@@ -86,29 +101,29 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
     </TouchableOpacity>
   );
 
-  const unflagOptions = ['cancel'];
+  // const unflagOptions = ['cancel'];
 
-  const UnFlagButton = () => (
-    <TouchableOpacity
-      testID="unFlagBtn"
-      style={[styles.actionCard, { backgroundColor: '#aaa' }]}
-      disabled={disabled}
-      onPress={() => {
-        showActionSheetWithOptions(
-          {
-            options: unflagOptions,
-            cancelButtonIndex: unflagOptions.length - 1,
-            title: 'Try Again Later!',
-            message: 'This feature is not ready yet.',
-          },
-          () => {},
-        );
-      }}
-    >
-      <Material size={ICON_SIZE} name="flag-remove" color="#fff" />
-      <Text style={styles.actionText}>Unflag</Text>
-    </TouchableOpacity>
-  );
+  // const UnFlagButton = () => (
+  //   <TouchableOpacity
+  //     testID="unFlagBtn"
+  //     style={[styles.actionCard, { backgroundColor: '#aaa' }]}
+  //     disabled={disabled}
+  //     onPress={() => {
+  //       showActionSheetWithOptions(
+  //         {
+  //           options: unflagOptions,
+  //           cancelButtonIndex: unflagOptions.length - 1,
+  //           title: 'Try Again Later!',
+  //           message: 'This feature is not ready yet.',
+  //         },
+  //         () => {},
+  //       );
+  //     }}
+  //   >
+  //     <Material size={ICON_SIZE} name="flag-remove" color="#fff" />
+  //     <Text style={styles.actionText}>Unflag</Text>
+  //   </TouchableOpacity>
+  // );
 
   const removeOptions = ['Remove', 'cancel'];
 
@@ -259,13 +274,10 @@ export const ConnectionsScreen = () => {
             style={styles.connectionsContainer}
             data={connections}
             keyExtractor={({ id }, index) => id + index}
-            renderItem={({ item, index }) => {
-              item.index = index;
-              return <ConnectionCard {...item} />;
-            }}
-            renderHiddenItem={({ item }, rowMap) => (
-              <ActionComponent {...item} />
-            )}
+            renderItem={renderItem}
+            renderHiddenItem={renderHiddenItem}
+            disableHiddenLayoutCalculation={true}
+            getItemLayout={getItemLayout}
             leftOpenValue={0}
             rightOpenValue={DEVICE_LARGE ? -60 : -55}
             swipeToOpenPercent={22}
