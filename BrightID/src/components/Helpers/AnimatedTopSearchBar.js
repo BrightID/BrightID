@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
 import { navigate } from '@/NavigationService';
@@ -31,6 +32,8 @@ const AnimatedTopSearchBar = ({
   const dispatch = useDispatch();
   const textInput = useRef(null);
   const searchOpen = useSelector(searchOpenSelector);
+  const { t } = useTranslation();
+
   useEffect(() => {
     // reset search Param
     return () => {
@@ -94,7 +97,7 @@ const AnimatedTopSearchBar = ({
           styles.searchField,
           DEVICE_IOS && { height: DEVICE_LARGE ? 33 : 26 },
         ]}
-        placeholder="Search Connections"
+        placeholder={t('common.placeholder.searchConnections')}
         autoCapitalize="words"
         autoCorrect={false}
         textContentType="none"

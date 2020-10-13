@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
 import SearchConnections from '../Connections/SearchConnections';
@@ -31,7 +32,7 @@ class RecoveringConnectionScreen extends React.Component<Props> {
   );
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, t } = this.props;
     const connections = this.filterConnections();
 
     return (
@@ -40,10 +41,9 @@ class RecoveringConnectionScreen extends React.Component<Props> {
         <View style={styles.container}>
           <View style={styles.mainContainer}>
             <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>Choose Connection</Text>
+              <Text style={styles.titleText}>{t('restore.title.chooseConnection')}</Text>
               <Text style={styles.infoText}>
-                Please select the connection whose account you are helping to
-                recover.
+                {t('restore.text.chooseConnectionToHelp')}
               </Text>
             </View>
             <SearchConnections navigation={navigation} />
@@ -56,7 +56,7 @@ class RecoveringConnectionScreen extends React.Component<Props> {
                 renderItem={this.renderConnection}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
-                ListEmptyComponent={<EmptyList title="No connections..." />}
+                ListEmptyComponent={<EmptyList title={t('restore.text.noConnections')} />}
               />
             </View>
           </View>
@@ -165,4 +165,4 @@ const styles = StyleSheet.create({
 export default connect(({ connections, user }) => ({
   ...connections,
   ...user,
-}))(RecoveringConnectionScreen);
+}))(withTranslation()(RecoveringConnectionScreen));

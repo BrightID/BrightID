@@ -89,7 +89,6 @@
 
 
   "connections.text.noConnections": "Aucune connexion",
-  "connections.placeholder.searchConnections": "Rechercher des Connexions",
   "connections.button.flag": "Signaler",
   "connections.flagActionSheet.infoFlagImpact": "Signaler {{name}} impactera négativement leur score BrightID, et ce signalement pourrait être vu par d'autres utilisateurs.",
   "connections.flagActionSheet.duplicate": "Signaler en tant que double compte",
@@ -190,14 +189,25 @@
   "backup.text.noConnections": "Aucune connexion",
   "backup.button.next": "Suivant",
   "backup.text.enterPassword": "Entrez un mot de passe avec lequel votre sauvegarde sera chiffrée",
-  "backup.placeholder.password": "Mot de passe",
   "backup.placeholder.confirmPassword": "Confirmation de Mot de Passe",
   "backup.button.startBackup": "Commencer la Sauvegarde",
   "backup.text.uploadingData": "Envoi des données chiffrées vers le serveur de sauvegarde ...",
-  "backup.text.progress": "{{completed}}/{{total}} effectué",
   "backup.alert.text.backupSuccess": "Sauvegarde effectuée avec succès !",
   "backup.alert.text.passwordConfirmNoMatch": "Le mot de passe et la confirmation de mot de passe ne correspondent pas.",
   "backup.alert.text.passwordTooShort": "Votre mot de passe doit comporter au moins 8 caractères.",
+  "backup.alert.text.needThreeTrusted": "Vous devez définir au moins trois connexions de confiance pour effectuer une sauvegarde.",
+
+
+  "restore.button.startRestore": "Démarrer la Restauration",
+  "restore.text.downloadingData": "Téléchargement des données depuis le serveur de sauvegarde ...",
+  "restore.text.enterPassword": "Entrez le mot de passe avec lequel vous avez chiffré votre sauvegarde :",
+  "restore.alert.text.restoreSuccess": "Votre compte a été restauré avec succès !",
+  "restore.alert.title.notTrusted": "Oh Oh...",
+  "restore.alert.text.notTrusted": "L'un de vos amis ne figure pas dans votre liste de connexions de confiance",
+  "restore.title.chooseConnection": "Choissez la Connexion",
+  "restore.text.chooseConnectionToHelp": "Veuillez sélectionner dans vos connexions le compte que vous souhaitez aider à restaurer.",
+  "restore.text.noConnections": "Aucune connexions...",
+  "restore.alert.text.requestRecovering": "Votre requête pour aider à la restauraton de ce compte a été soumise avec succès !",
 
 
   "common.alert.error": "Erreur",
@@ -225,5 +235,8 @@
   "common.camera.cancel": "Annuler",
   "common.tag.flagged": "(signalé)",
   "common.tag.connectionDate": "Connecté {{date}}",
-  "common.language.and": "et"
+  "common.language.and": "et",
+  "common.placeholder.password": "Mot de passe",
+  "common.placeholder.searchConnections": "Rechercher des Connexions",
+  "common.text.progress": "{{completed}}/{{total}} effectué"
 }

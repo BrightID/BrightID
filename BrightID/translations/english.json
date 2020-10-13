@@ -89,7 +89,6 @@
 
 
   "connections.text.noConnections": "No connections",
-  "connections.placeholder.searchConnections": "Search Connections",
   "connections.button.flag": "Flag",
   "connections.flagActionSheet.infoFlagImpact": "Flagging {{name}} will negatively effect their BrightID score, and this flag might be shown to other users.",
   "connections.flagActionSheet.duplicate": "Flag as Duplicate",
@@ -190,14 +189,25 @@
   "backup.text.noConnections": "No connections",
   "backup.button.next": "Next",
   "backup.text.enterPassword": "Enter a password to encrypt your backup data with:",
-  "backup.placeholder.password": "Password",
   "backup.placeholder.confirmPassword": "Confirm Password",
   "backup.button.startBackup": "Start Backup",
   "backup.text.uploadingData": "Uploading encrypted data to backup server ...",
-  "backup.text.progress": "{{completed}}/{{total}} completed",
   "backup.alert.text.backupSuccess": "Backup completed successfully!",
   "backup.alert.text.passwordConfirmNoMatch": "Password and confirm password does not match.",
   "backup.alert.text.passwordTooShort": "Your password must be at least 8 characters long.",
+  "backup.alert.text.needThreeTrusted": "You need at least three trusted connections for backup.",
+
+
+  "restore.button.startRestore": "Start Restore",
+  "restore.text.downloadingData": "Downloading data from backup server ...",
+  "restore.text.enterPassword": "Enter a password that you encrypted your backup data with:",
+  "restore.alert.text.restoreSuccess": "Your account recovered successfully!",
+  "restore.alert.title.notTrusted": "Uh Oh",
+  "restore.alert.text.notTrusted": "One of your friends is not in your list of trusted connections",
+  "restore.title.chooseConnection": "Choose Connection",
+  "restore.text.chooseConnectionToHelp": "Please select the connection whose account you are helping to recover.",
+  "restore.text.noConnections": "No connections...",
+  "restore.alert.text.requestRecovering": "Your request to help recovering this account submitted successfully!",
 
 
   "common.alert.error": "Error",
@@ -225,5 +235,8 @@
   "common.camera.cancel": "Cancel",
   "common.tag.flagged": "(flagged)",
   "common.tag.connectionDate": "Connected {{date}}",
-  "common.language.and": "and"
+  "common.language.and": "and",
+  "common.placeholder.password": "Password",
+  "common.placeholder.searchConnections": "Search Connections",
+  "common.text.progress": "{{completed}}/{{total}} completed"
 }
