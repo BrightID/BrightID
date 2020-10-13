@@ -3,6 +3,7 @@
  */
 
 import RNFetchBlob from 'rn-fetch-blob';
+import { InteractionManager } from 'react-native';
 
 const createStoragePathIfNeeded = (path) =>
   RNFetchBlob.fs
@@ -32,15 +33,23 @@ const pathForKey = (key: string) =>
 
 const FilesystemStorage = {
   setItem: (key: string, value: string) => {
-    value = JSON.parse(value);
-    let initialTime = Date.now();
-    value = JSON.stringify(value);
-    return RNFetchBlob.fs
-      .writeFile(pathForKey(key), value, encoding)
-      .then(() => {
-        let finalTime = Date.now();
-        console.log(`fsWrite for ${key} took ${finalTime - initialTime} ms`);
+    return new Promise((resolve, reject) => {
+      InteractionManager.runAfterInteractions(() => {
+        value = JSON.parse(value);
+        let initialTime = Date.now();
+        value = JSON.stringify(value);
+        resolve(
+          RNFetchBlob.fs
+            .writeFile(pathForKey(key), value, encoding)
+            .then(() => {
+              let finalTime = Date.now();
+              console.log(
+                `fsWrite for ${key} took ${finalTime - initialTime} ms`,
+              );
+            }),
+        );
       });
+    });
   },
 
   getItem: onStorageReady((key: string) => {
