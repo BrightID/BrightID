@@ -10,6 +10,7 @@ import {
   FlatList,
 } from 'react-native';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import { DEVICE_TYPE, ORANGE, DEVICE_LARGE } from '@/utils/constants';
 import EmptyList from '@/components/Helpers/EmptyList';
 import TrustedConnectionCard from './TrustedConnectionCard';
@@ -68,6 +69,7 @@ class TrustedConnectionsScreen extends React.Component<Props> {
   };
 
   render() {
+    const { t } = this.props;
     const connections = this.filterConnections();
 
     return (
@@ -77,8 +79,7 @@ class TrustedConnectionsScreen extends React.Component<Props> {
           <View style={styles.mainContainer}>
             <View style={styles.titleContainer}>
               <Text style={styles.infoText}>
-                Choose three or more trusted connections to back up your
-                BrightID.
+                {(t('backup.text.chooseTrustedConnections'))}
               </Text>
             </View>
             <View style={styles.mainContainer}>
@@ -93,7 +94,7 @@ class TrustedConnectionsScreen extends React.Component<Props> {
                 ListEmptyComponent={
                   <EmptyList
                     iconType="account-off-outline"
-                    title="No connections"
+                    title={t('backup.text.noConnections')}
                   />
                 }
               />
@@ -104,7 +105,7 @@ class TrustedConnectionsScreen extends React.Component<Props> {
               onPress={this.navigateToBackup}
               style={styles.nextButton}
             >
-              <Text style={styles.buttonInnerText}>Next</Text>
+              <Text style={styles.buttonInnerText}>{t('backup.button.next')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -195,4 +196,4 @@ const styles = StyleSheet.create({
 export default connect(({ connections, user }) => ({
   ...user,
   ...connections,
-}))(TrustedConnectionsScreen);
+}))(withTranslation()(TrustedConnectionsScreen));

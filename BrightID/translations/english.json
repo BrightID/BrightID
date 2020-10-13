@@ -180,14 +180,29 @@
   "notifications.alert.text.successAcceptGroupInvite": "You joined {{groupName}}",
   "notifications.alert.text.failureAcceptGroupInvite": "Failed to join the group",
 
-  
+
   "notificationBar.title.pendingConnection": "Confirm connections",
   "notificationBar.text.pendingConnections": "You have {{count}} pending connection",
   "notificationBar.text.pendingConnections_plural": "You have {{count}} pending connections",
 
 
+  "backup.text.chooseTrustedConnections": "Choose three or more trusted connections to back up your BrightID.",
+  "backup.text.noConnections": "No connections",
+  "backup.button.next": "Next",
+  "backup.text.enterPassword": "Enter a password to encrypt your backup data with:",
+  "backup.placeholder.password": "Password",
+  "backup.placeholder.confirmPassword": "Confirm Password",
+  "backup.button.startBackup": "Start Backup",
+  "backup.text.uploadingData": "Uploading encrypted data to backup server ...",
+  "backup.text.progress": "{{completed}}/{{total}} completed",
+  "backup.alert.text.backupSuccess": "Backup completed successfully!",
+  "backup.alert.text.passwordConfirmNoMatch": "Password and confirm password does not match.",
+  "backup.alert.text.passwordTooShort": "Your password must be at least 8 characters long.",
+
+
   "common.alert.error": "Error",
   "common.alert.success": "Success",
+  "common.alert.info": "Info",
   "common.alert.formIncomplete": "BrightID Form Incomplete",
   "common.alert.ok": "OK",
   "common.alert.cancel": "Cancel",

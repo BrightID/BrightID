@@ -13,6 +13,7 @@ import {
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import { setInternetCredentials } from 'react-native-keychain';
+import { withTranslation } from 'react-i18next';
 import { setBackupCompleted, setPassword } from '@/actions/index';
 import emitter from '@/emitter';
 import {
@@ -63,10 +64,17 @@ class BackupScreen extends React.Component<Props, State> {
 
   validatePass = () => {
     const { pass1, pass2 } = this.state;
+    const { t } = this.props;
     if (pass1 !== pass2) {
-      Alert.alert('Error', 'Password and confirm password does not match.');
+      Alert.alert(
+        t('common.alert.error'), 
+        t('backup.alert.text.passwordConfirmNoMatch')
+      );
     } else if (pass1.length < 8) {
-      Alert.alert('Error', 'Your password must be at least 8 characters long.');
+      Alert.alert(
+        t('common.alert.error'), 
+        t('backup.alert.text.passwordTooShort')
+      );
     } else {
       return true;
     }
@@ -82,6 +90,8 @@ class BackupScreen extends React.Component<Props, State> {
 
   startBackup = async () => {
     if (!this.state.pass1 || (DEVICE_ANDROID && !this.validatePass())) return;
+
+    const { t } = this.props;
 
     try {
       const { dispatch, connections, groups, navigation, id } = this.props;
@@ -111,9 +121,13 @@ class BackupScreen extends React.Component<Props, State> {
 
       dispatch(setBackupCompleted(true));
 
-      Alert.alert('Info', 'Backup completed successfully!', [
-        { text: 'OK', onPress: () => navigation.navigate('Home') },
-      ]);
+      Alert.alert(
+        t('common.alert.info'), 
+        t('backup.alert.text.backupSuccess'), 
+        [
+          { text: t('common.alert.ok'), onPress: () => navigation.navigate('Home') },
+        ]
+      );
     } catch (err) {
       console.warn(err);
     }
@@ -121,7 +135,7 @@ class BackupScreen extends React.Component<Props, State> {
 
   render() {
     const { pass1, pass2, isEditing } = this.state;
-
+    const { t } = this.props;
     return (
       <>
         <View style={styles.orangeTop} />
@@ -129,7 +143,7 @@ class BackupScreen extends React.Component<Props, State> {
           <View style={styles.textInputContainer}>
             {(!isEditing || DEVICE_LARGE) && (
               <Text style={styles.textInfo}>
-                Enter a password to encrypt your backup data with:
+                {t('backup.text.enterPassword')}
               </Text>
             )}
             <TextInput
@@ -143,7 +157,7 @@ class BackupScreen extends React.Component<Props, State> {
             <TextInput
               onChangeText={(pass) => this.setState({ pass1: pass })}
               value={pass1}
-              placeholder="Password"
+              placeholder={t('backup.placeholder.password')}
               placeholderTextColor="#9e9e9e"
               style={styles.textInput}
               autoCorrect={false}
@@ -159,7 +173,7 @@ class BackupScreen extends React.Component<Props, State> {
               <TextInput
                 onChangeText={(pass) => this.setState({ pass2: pass })}
                 value={pass2}
-                placeholder="Confirm Password"
+                placeholder={t('backup.placeholder.confirmPassword')}
                 placeholderTextColor="#9e9e9e"
                 style={styles.textInput}
                 autoCorrect={false}
@@ -182,15 +196,15 @@ class BackupScreen extends React.Component<Props, State> {
                 onPress={this.startBackup}
                 disabled={!this.state.pass1}
               >
-                <Text style={styles.buttonInnerText}>Start Backup</Text>
+                <Text style={styles.buttonInnerText}>{t('backup.button.startBackup')}</Text>
               </TouchableOpacity>
             ) : (
               <View style={styles.loader}>
                 <Text style={styles.textInfo}>
-                  Uploading encrypted data to backup server ...
+                  {t('backup.text.uploadingData')}
                 </Text>
                 <Text style={styles.textInfo}>
-                  {this.state.completed}/{this.state.total} completed
+                  {t('backup.text.progress', {completed: this.state.completed, total: this.state.total})}
                 </Text>
                 <Spinner
                   isVisible={true}
@@ -308,4 +322,4 @@ export default connect(({ connections, groups, user }) => ({
   ...connections,
   ...groups,
   id: user.id,
-}))(BackupScreen);
+}))(withTranslation()(BackupScreen));

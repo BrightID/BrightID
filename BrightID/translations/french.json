@@ -185,9 +185,24 @@
   "notificationBar.text.pendingConnections": "Vous avez {{count}} connexion en attente",
   "notificationBar.text.pendingConnections_plural": "Vous avez {{count}} connexions en attente",
   
-  
+
+  "backup.text.chooseTrustedConnections": "Choisissez trois connexions de confiance ou plus pour sauvegarder votre BrightID",
+  "backup.text.noConnections": "Aucune connexion",
+  "backup.button.next": "Suivant",
+  "backup.text.enterPassword": "Entrez un mot de passe avec lequel votre sauvegarde sera chiffrée",
+  "backup.placeholder.password": "Mot de passe",
+  "backup.placeholder.confirmPassword": "Confirmation de Mot de Passe",
+  "backup.button.startBackup": "Commencer la Sauvegarde",
+  "backup.text.uploadingData": "Envoi des données chiffrées vers le serveur de sauvegarde ...",
+  "backup.text.progress": "{{completed}}/{{total}} effectué",
+  "backup.alert.text.backupSuccess": "Sauvegarde effectuée avec succès !",
+  "backup.alert.text.passwordConfirmNoMatch": "Le mot de passe et la confirmation de mot de passe ne correspondent pas.",
+  "backup.alert.text.passwordTooShort": "Votre mot de passe doit comporter au moins 8 caractères.",
+
+
   "common.alert.error": "Erreur",
   "common.alert.success": "Succès",
+  "common.alert.info": "Info",
   "common.alert.formIncomplete": "Formulaire incomplet",
   "common.alert.ok": "OK",
   "common.alert.cancel": "Annuler",
