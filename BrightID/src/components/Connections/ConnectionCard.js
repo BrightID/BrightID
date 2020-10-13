@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RNFS from 'react-native-fs';
 import { useDispatch } from 'react-redux';
@@ -22,7 +22,17 @@ const ConnectionCard = (props) => {
   let stale_check_timer = useRef(0);
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { status, connectionDate, id, name, photo, hiddenFlag, index } = props;
+  const [verified, setVerified] = useState(false);
+  const {
+    status,
+    connectionDate,
+    id,
+    name,
+    photo,
+    hiddenFlag,
+    index,
+    verifications,
+  } = props;
 
   useFocusEffect(
     useCallback(() => {
@@ -78,6 +88,12 @@ const ConnectionCard = (props) => {
     }
   }, [name, status]);
 
+  useEffect(() => {
+    if (verifications) {
+      setVerified(verifications.includes('BrightID'));
+    }
+  }, [verifications]);
+
   const ConnectionStatus = () => {
     if (status === 'initiated') {
       return (
@@ -112,10 +128,18 @@ const ConnectionCard = (props) => {
       );
     } else {
       const testID = `connection-${index}`;
+      const stickerTestID = `${testID}-verified`;
       return (
-        <Text style={styles.connectedText} testID={testID}>
-          Connected {moment(parseInt(connectionDate, 10)).fromNow()}
-        </Text>
+        <View style={styles.statusContainer}>
+          {verified && (
+            <Text testID={stickerTestID} style={styles.verified}>
+              verified
+            </Text>
+          )}
+          <Text style={styles.connectedText} testID={testID}>
+            Connected {moment(parseInt(connectionDate, 10)).fromNow()}
+          </Text>
+        </View>
       );
     }
   };
@@ -158,6 +182,7 @@ const ConnectionCard = (props) => {
   );
 };
 
+const ORANGE = '#ED7A5D';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -202,7 +227,7 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 16 : 14,
   },
   statusContainer: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
@@ -230,6 +255,21 @@ const styles = StyleSheet.create({
     color: '#FF0800',
     marginTop: DEVICE_LARGE ? 5 : 2,
     textTransform: 'capitalize',
+  },
+  verified: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    color: ORANGE,
+    borderWidth: 1,
+    borderColor: ORANGE,
+    borderRadius: 10,
+    marginTop: 6,
+    marginRight: 8,
+    paddingTop: 1,
+    paddingBottom: 1,
+    paddingLeft: 10,
+    paddingRight: 7,
+    fontSize: DEVICE_LARGE ? 9 : 7,
   },
 });
 
