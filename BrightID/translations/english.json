@@ -183,6 +183,8 @@
   "notificationBar.title.pendingConnection": "Confirm connections",
   "notificationBar.text.pendingConnections": "You have {{count}} pending connection",
   "notificationBar.text.pendingConnections_plural": "You have {{count}} pending connections",
+  "notificationBar.title.achievementUnlocked": "Achievement unlocked!",
+  "notificationBar.text.achievementUnlocked": "You completed the task \"{{taskName}}\"",
 
 
   "backup.text.chooseTrustedConnections": "Choose three or more trusted connections to back up your BrightID.",
@@ -216,6 +218,25 @@
   "drawer.label.editProfile": "Edit Profile",
   "drawer.label.trustedConnections": "Trusted Connections",
   "drawer.label.contactUs": "Contact Us",
+
+
+  "achievements.label.completion": "Completion:",
+
+
+  "graphExplorer.text.backupRequired": "Setting up backup and recovery is required to access your graph explorer code. Check your notifications or connect to more users to be eligible for backup and recovery.",
+  "graphExplorer.text.explorerWebsiteDescription": "is a website designed to explore the entire BrightID social graph. Use the code above to see your connections in the graph.",
+  "graphExplorer.button.copyCode": "Copy Code",
+  "graphExplorer.alert.text.copied": "Copied to clipboard!",
+
+
+  "contact.title.contactUs": "Contact Us",
+  "contact.label.email": "Email",
+  "contact.label.website": "Website",
+  "contact.label.meet": "Make Connections",
+  "contact.text.meet": "Join a BrightID verification party!",
+  "contact.label.socialMedia": "Social Media",
+  "contact.text.weAre": "We are ",
+  "contact.text.openSource": "open source!",
 
 
   "common.alert.error": "Error",

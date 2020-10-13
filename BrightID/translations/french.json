@@ -183,7 +183,9 @@
   "notificationBar.title.pendingConnection": "Confirmez vos connexions",
   "notificationBar.text.pendingConnections": "Vous avez {{count}} connexion en attente",
   "notificationBar.text.pendingConnections_plural": "Vous avez {{count}} connexions en attente",
-  
+  "notificationBar.title.achievementUnlocked": "Objectif rempli !",
+  "notificationBar.text.achievementUnlocked": "Vous avez completé la tâche \"{{taskName}}\"",
+
 
   "backup.text.chooseTrustedConnections": "Choisissez trois connexions de confiance ou plus pour sauvegarder votre BrightID",
   "backup.text.noConnections": "Aucune connexion",
@@ -216,6 +218,25 @@
   "drawer.label.editProfile": "Éditer le Profil",
   "drawer.label.trustedConnections": "Connexions de Confiance",
   "drawer.label.contactUs": "Nous Contacter",
+
+
+  "achievements.label.completion": "Avancement :",
+
+
+  "graphExplorer.text.backupRequired": "Configurer une Sauvegarde du Compte est requis pour accéder à votre Code Explorer. Vérifiez vos notifications ou connectez vous à davantage d'utilisateurs afin d'être éligible à la Sauvegarde du Compte.",
+  "graphExplorer.text.explorerWebsiteDescription": "est un site web conçu pour explorer l'intégralité du Social Graph de BrightID. Utilisez le code ci-dessus pour voir vos connexions dans le Graph.",
+  "graphExplorer.button.copyCode": "Copier le Code",
+  "graphExplorer.alert.text.copied": "Code copié !",
+
+
+  "contact.title.contactUs": "Nous Contacter",
+  "contact.label.email": "Email",
+  "contact.label.website": "Site Web",
+  "contact.label.meet": "Rencontrez des Connexions",
+  "contact.text.meet": "Rejoignez des rendez-vous virtuels BrightID!",
+  "contact.label.socialMedia": "Réseaux Sociaux",
+  "contact.text.weAre": "Nous sommes ",
+  "contact.text.openSource": "open source!",
 
 
   "common.alert.error": "Erreur",

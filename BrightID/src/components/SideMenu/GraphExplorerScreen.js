@@ -3,6 +3,7 @@
 import React from 'react';
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
+import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
@@ -10,6 +11,7 @@ import { getExplorerCode } from '@/utils/explorer';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export const GraphExplorerScreen = function () {
+  const { t } = useTranslation();
   let headerHeight = useHeaderHeight();
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
@@ -19,7 +21,7 @@ export const GraphExplorerScreen = function () {
 
   const copyText = () => {
     Clipboard.setString(explorerCode);
-    alert('Copied to clipboard!');
+    alert(t('graphExplorer.alert.text.copied'));
   };
 
   return (
@@ -47,7 +49,7 @@ export const GraphExplorerScreen = function () {
               size={DEVICE_LARGE ? 28 : 24}
               color="#000"
             />
-            <Text style={styles.copyText}> Copy Code</Text>
+            <Text style={styles.copyText}>{t('graphExplorer.button.copyCode')}</Text>
           </View>
         </TouchableOpacity>
       ) : (
@@ -59,9 +61,7 @@ export const GraphExplorerScreen = function () {
             style={styles.alertIcon}
           />
           <Text style={styles.setupText}>
-            Setting up backup and recovery is required to access your graph
-            explorer code. Check your notifications or connect to more users to
-            be eligible for backup and recovery.
+            {t('graphExplorer.text.backupRequired')}
           </Text>
         </View>
       )}
@@ -75,8 +75,7 @@ export const GraphExplorerScreen = function () {
           >
             https://explorer.brightid.org{' '}
           </Text>
-          is a website designed to explore the entire BrightID social graph. Use
-          the code above to see your connections in the graph.
+          {t('graphExplorer.text.explorerWebsiteDescription')}
         </Text>
       </View>
     </View>

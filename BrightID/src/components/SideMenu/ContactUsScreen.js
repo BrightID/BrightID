@@ -14,6 +14,7 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import keybaseLogo from '@/static/keybase_logo.svg';
+import { useTranslation } from 'react-i18next';
 
 const SocialItem = ({ name, icon, color, url }) => {
   return (
@@ -40,6 +41,7 @@ const KeybaseItem = () => (
 );
 
 export const ContactUsScreen = function () {
+  const { t } = useTranslation();
   let headerHeight = useHeaderHeight();
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
@@ -55,29 +57,29 @@ export const ContactUsScreen = function () {
       ]}
       testID="graphExplorerScreen"
     >
-      <Text style={styles.title}>Contact Us</Text>
+      <Text style={styles.title}>{t('contact.title.contactUs')}</Text>
       <View style={styles.itemList}>
-        <Text style={styles.listHeader}>Email</Text>
+        <Text style={styles.listHeader}>{t('contact.label.email')}</Text>
         <TouchableOpacity
           onPress={() => Linking.openURL('mailto:support@brightid.org')}
         >
           <Text style={styles.link}>support@brightid.org</Text>
         </TouchableOpacity>
-        <Text style={styles.listHeader}>Website</Text>
+        <Text style={styles.listHeader}>{t('contact.label.website')}</Text>
         <TouchableOpacity
           onPress={() => Linking.openURL('https://brightid.org')}
         >
           <Text style={styles.link}>https://brightid.org</Text>
         </TouchableOpacity>
-        <Text style={styles.listHeader}>Make Connections</Text>
+        <Text style={styles.listHeader}>{t('contact.label.meet')}</Text>
         <TouchableOpacity
           onPress={() => {
             Linking.openURL('https://www.brightid.org/meet');
           }}
         >
-          <Text style={styles.link}>Join a BrightID verification party!</Text>
+          <Text style={styles.link}>{t('contact.text.meet')}</Text>
         </TouchableOpacity>
-        <Text style={styles.listHeader}>Social Media</Text>
+        <Text style={styles.listHeader}>{t('contact.label.socialMedia')}</Text>
         <View style={styles.socialMedia}>
           <SocialItem
             name="github"
@@ -107,14 +109,14 @@ export const ContactUsScreen = function () {
         </View>
 
         <Text style={styles.bottomText}>
-          We are{' '}
+          {t('contact.text.weAre')}
           <Text
             onPress={() => {
               Linking.openURL('https://github.com/BrightID/BrightID/releases');
             }}
             style={styles.link}
           >
-            open source!
+            {t('contact.text.openSource')}
           </Text>
         </Text>
       </View>

@@ -14,6 +14,7 @@ import {
   selectCompletedTaskIds,
   checkTasks,
 } from './TasksSlice';
+import { useTranslation } from 'react-i18next';
 
 const FlatListItemSeparator = () => {
   return (
@@ -28,6 +29,7 @@ const FlatListItemSeparator = () => {
 
 export const TasksScreen = function () {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const taskIds = useSelector(selectTaskIds);
   const completedTaskIds = useSelector(selectCompletedTaskIds);
   let headerHeight = useHeaderHeight();
@@ -56,7 +58,7 @@ export const TasksScreen = function () {
       <TasksProgress
         currentSteps={completedTaskIds.length}
         totalSteps={taskIds.length}
-        label="Completion:"
+        label={t('achievements.label.completion')}
       />
       <FlatList
         data={taskIds}
