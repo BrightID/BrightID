@@ -35,19 +35,7 @@ const FilesystemStorage = {
   setItem: (key: string, value: string) => {
     return new Promise((resolve, reject) => {
       InteractionManager.runAfterInteractions(() => {
-        value = JSON.parse(value);
-        let initialTime = Date.now();
-        value = JSON.stringify(value);
-        resolve(
-          RNFetchBlob.fs
-            .writeFile(pathForKey(key), value, encoding)
-            .then(() => {
-              let finalTime = Date.now();
-              console.log(
-                `fsWrite for ${key} took ${finalTime - initialTime} ms`,
-              );
-            }),
-        );
+        resolve(RNFetchBlob.fs.writeFile(pathForKey(key), value, encoding));
       });
     });
   },
