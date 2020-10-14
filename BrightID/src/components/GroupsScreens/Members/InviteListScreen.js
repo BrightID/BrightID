@@ -13,10 +13,22 @@ import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
 import MemberCard from './MemberCard';
 
+const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
+const ITEM_MARGIN = DEVICE_LARGE ? 11.8 : 6;
+
+const getItemLayout = (data, index) => ({
+  length: ITEM_HEIGHT + ITEM_MARGIN,
+  offset: (ITEM_HEIGHT + ITEM_MARGIN) * index,
+  index,
+});
+
 export class InviteListScreen extends Component<Props, State> {
-  renderEligible = ({ item }) => {
+  renderEligible = ({ item, index }) => {
     return (
-      <TouchableOpacity onPress={() => this.inviteToGroup(item)}>
+      <TouchableOpacity
+        testID={`eligibleItem-${index}`}
+        onPress={() => this.inviteToGroup(item)}
+      >
         <MemberCard {...item} isAdmin={true} />
       </TouchableOpacity>
     );
@@ -30,7 +42,7 @@ export class InviteListScreen extends Component<Props, State> {
       const data = await encryptAesKey(group?.aesKey, connection.signingKey);
       await api.invite(connection.id, group?.id, data);
       Alert.alert(
-        'Successful Invitaion',
+        'Successful Invitation',
         `You invited ${connection.name} successfully to the group`,
       );
       navigation.goBack();
@@ -55,21 +67,20 @@ export class InviteListScreen extends Component<Props, State> {
       <>
         <View style={styles.orangeTop} />
         <View style={styles.container}>
-          <View style={styles.mainContainer}>
-            <View style={styles.mainContainer}>
-              <FlatList
-                style={styles.eligiblesContainer}
-                contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-                data={this.getEligibles()}
-                keyExtractor={({ id }, index) => id + index}
-                renderItem={this.renderEligible}
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                ListEmptyComponent={
-                  <EmptyList title="No existing connections are eligible for this group, please come back later.." />
-                }
-              />
-            </View>
+          <View style={styles.mainContainer} testID="inviteListScreen">
+            <FlatList
+              style={styles.eligiblesContainer}
+              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+              data={this.getEligibles()}
+              keyExtractor={({ id }, index) => id + index}
+              renderItem={this.renderEligible}
+              getItemLayout={getItemLayout}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+              ListEmptyComponent={
+                <EmptyList title="No existing connections are eligible for this group, please come back later.." />
+              }
+            />
           </View>
         </View>
       </>

@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
-import RNFS from 'react-native-fs';
+import { photoDirectory } from '@/utils/filesystem';
 import { groupCirclePhotos } from '@/utils/groups';
 import { DEVICE_LARGE } from '@/utils/constants';
 
@@ -23,7 +23,7 @@ const GroupPhoto = ({ group }) => {
       <View style={styles.container}>
         <Image
           source={{
-            uri: `file://${RNFS.DocumentDirectoryPath}/photos/${group.photo.filename}`,
+            uri: `file://${photoDirectory()}/${group.photo.filename}`,
           }}
           style={styles.bigPhoto}
         />
@@ -33,7 +33,7 @@ const GroupPhoto = ({ group }) => {
     const circlePhotos = groupCirclePhotos(group).map((item) => {
       if (item.photo?.filename) {
         item.source = {
-          uri: `file://${RNFS.DocumentDirectoryPath}/photos/${item.photo?.filename}`,
+          uri: `file://${photoDirectory()}/${item.photo?.filename}`,
         };
       } else {
         item.source = require('@/static/default_profile.jpg');

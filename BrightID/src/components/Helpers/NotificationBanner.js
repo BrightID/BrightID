@@ -12,6 +12,7 @@ import misc from '@/static/trusted_connections.svg';
 import { setActiveNotification } from '@/actions';
 import { DEVICE_LARGE, CONNECTIONS_TYPE, HEIGHT } from '@/utils/constants';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+import DropDownAlertEnabled from '@/utils/DropDownAlertEnabler';
 
 /* notification types:
 @type groups
@@ -43,21 +44,23 @@ export const NotificationBanner = () => {
   const pendingConnections = useSelector(selectAllUnconfirmedConnections);
 
   useEffect(() => {
-    dropDownAlertRef.current?.closeAction('automatic');
     if (!activeNotification) {
       return;
     }
 
-    InteractionManager.runAfterInteractions(() => {
-      let route = getRoute();
-      if (!screenBlackList.includes(route?.name)) {
+    let route = getRoute();
+
+    dropDownAlertRef.current?.closeAction('cancel');
+
+    if (!screenBlackList.includes(route?.name)) {
+      if (DropDownAlertEnabled) {
         dropDownAlertRef.current?.alertWithType(
           'custom',
           activeNotification?.title,
           activeNotification?.message,
         );
       }
-    });
+    }
   }, [activeNotification, dispatch]);
 
   useEffect(() => {
@@ -83,12 +86,14 @@ export const NotificationBanner = () => {
     activeNotification?.xmlIcon ?? icons[activeNotification?.type] ?? misc;
 
   const _onTap = () => {
+    console.log('onTap', activeNotification);
     if (activeNotification?.navigationTarget) {
       navigate(activeNotification.navigationTarget);
     }
   };
 
   const _onClose = () => {
+    console.log('onClose, setting null');
     dispatch(setActiveNotification(null));
   };
 

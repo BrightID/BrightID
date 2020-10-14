@@ -1,13 +1,15 @@
 // @flow
 
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import RNFS from 'react-native-fs';
 import { useDispatch } from 'react-redux';
+import { SvgXml } from 'react-native-svg';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { DEVICE_LARGE, MAX_WAITING_SECONDS } from '@/utils/constants';
+import { photoDirectory } from '@/utils/filesystem';
 import { staleConnection } from '@/actions';
+import verificationSticker from '@/static/verification-sticker.svg';
 
 /**
  * Connection Card in the Connections Screen
@@ -22,7 +24,19 @@ const ConnectionCard = (props) => {
   let stale_check_timer = useRef(0);
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { status, connectionDate, id, name, photo, hiddenFlag } = props;
+  const {
+    status,
+    verifications,
+    connectionDate,
+    id,
+    name,
+    photo,
+    hiddenFlag,
+    index,
+  } = props;
+
+  const brightidVerified = verifications?.includes('BrightID');
+  const [imgErr, setImgErr] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -111,22 +125,27 @@ const ConnectionCard = (props) => {
         </View>
       );
     } else {
+      const testID = `connection-${index}`;
+      const stickerTestID = `${testID}-verified`;
       return (
-        <Text style={styles.connectedText}>
-          Connected {moment(parseInt(connectionDate, 10)).fromNow()}
-        </Text>
+        <View style={styles.statusContainer}>
+          <Text style={styles.connectedText} testID={testID}>
+            Connected {moment(parseInt(connectionDate, 10)).fromNow()}
+          </Text>
+        </View>
       );
     }
   };
 
-  const imageSource = photo?.filename
-    ? {
-        uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
-      }
-    : require('@/static/default_profile.jpg');
+  const imageSource =
+    photo?.filename && !imgErr
+      ? {
+          uri: `file://${photoDirectory()}/${photo?.filename}`,
+        }
+      : require('@/static/default_profile.jpg');
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="connectionCardContainer">
       <View style={styles.card}>
         <TouchableOpacity
           onPress={() => {
@@ -139,16 +158,31 @@ const ConnectionCard = (props) => {
             source={imageSource}
             style={styles.photo}
             accessibilityLabel="ConnectionPhoto"
+            onError={() => {
+              console.log('settingImgErr');
+              setImgErr(true);
+            }}
           />
         </TouchableOpacity>
         <View style={styles.info}>
-          <Text
-            adjustsFontSizeToFit={true}
-            numberOfLines={1}
-            style={styles.name}
-          >
-            {name}
-          </Text>
+          <View style={styles.nameContainer}>
+            <Text
+              adjustsFontSizeToFit={true}
+              numberOfLines={1}
+              style={styles.name}
+              testID="connectionCardText"
+            >
+              {name}
+            </Text>
+            {brightidVerified && (
+              <SvgXml
+                style={styles.verificationSticker}
+                width="16"
+                height="16"
+                xml={verificationSticker}
+              />
+            )}
+          </View>
           <ConnectionStatus />
         </View>
       </View>
@@ -156,6 +190,7 @@ const ConnectionCard = (props) => {
   );
 };
 
+const ORANGE = '#ED7A5D';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -194,13 +229,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
+  nameContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   name: {
     fontFamily: 'Poppins',
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 16 : 14,
   },
   statusContainer: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
@@ -228,6 +267,10 @@ const styles = StyleSheet.create({
     color: '#FF0800',
     marginTop: DEVICE_LARGE ? 5 : 2,
     textTransform: 'capitalize',
+  },
+
+  verificationSticker: {
+    marginLeft: DEVICE_LARGE ? 5 : 3.5,
   },
 });
 

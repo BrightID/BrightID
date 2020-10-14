@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { useRef, useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import RNFS from 'react-native-fs';
+import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
 import { DEVICE_TYPE } from '@/utils/constants';
 import ActionSheet from 'react-native-actionsheet';
@@ -39,10 +39,12 @@ function MemberCard(props: MemberCardProps) {
     userIsAdmin,
     memberIsAdmin,
     flaggers,
+    testID,
   } = props;
   const actionSheetRef: ?ActionSheet = useRef(null);
   const [contextActions, setContextActions] = useState<Array<string>>([]);
   const [flagged, setFlagged] = useState(false);
+  const [imgErr, setImgErr] = useState(false);
 
   // set possible actions depending on user and member admin status
   useEffect(() => {
@@ -89,16 +91,26 @@ function MemberCard(props: MemberCardProps) {
     }
   };
 
-  const imageSource = photo?.filename
-    ? {
-        uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
-      }
-    : require('@/static/default_profile.jpg');
+  const imageSource =
+    photo?.filename && !imgErr
+      ? {
+          uri: `file://${photoDirectory()}/${photo?.filename}`,
+        }
+      : require('@/static/default_profile.jpg');
 
+  const memberTestID = memberIsAdmin ? 'admin' : 'regular';
   return (
-    <>
-      <View style={styles.container}>
-        <Image source={imageSource} style={styles.photo} />
+    <View testID={memberTestID}>
+      <View style={styles.container} testID={testID}>
+        <Image
+          source={imageSource}
+          style={styles.photo}
+          onError={() => {
+            console.log('settingImgErr');
+            setImgErr(true);
+          }}
+          accessibilityLabel="profile picture"
+        />
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
           <View style={styles.statusContainer}>
@@ -112,6 +124,7 @@ function MemberCard(props: MemberCardProps) {
         </View>
         {contextActions.length > 0 && (
           <TouchableOpacity
+            testID="memberContextBtn"
             style={styles.moreIcon}
             onPress={() => {
               actionSheetRef?.current.show();
@@ -131,7 +144,7 @@ function MemberCard(props: MemberCardProps) {
           onPress={performAction}
         />
       )}
-    </>
+    </View>
   );
 }
 

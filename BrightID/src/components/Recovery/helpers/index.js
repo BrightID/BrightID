@@ -3,7 +3,6 @@
 import { Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
-import { obtainKeys, saveSecretKey } from '@/utils/keychain';
 import {
   createImageDirectory,
   retrieveImage,
@@ -22,13 +21,9 @@ import {
   setPassword,
   setHashedId,
   setGroups,
+  setKeypair,
 } from '@/actions';
-import {
-  uInt8ArrayToB64,
-  b64ToUint8Array,
-  safeHash,
-  objToB64,
-} from '@/utils/encoding';
+import { uInt8ArrayToB64, safeHash } from '@/utils/encoding';
 
 export const setTrustedConnections = async () => {
   const {
@@ -97,7 +92,7 @@ const backupPhotos = async () => {
 export const backupUser = async () => {
   try {
     const {
-      user: { score, name, photo, id },
+      user: { id, score, name, photo },
       connections: { connections },
       groups: { groups },
     } = store.getState();
@@ -139,7 +134,7 @@ export const setupRecovery = async () => {
 
   recoveryData = {
     publicKey: uInt8ArrayToB64(publicKey),
-    secretKey: uInt8ArrayToB64(secretKey),
+    secretKey,
     id: '',
     timestamp: Date.now(),
     sigs: [],
@@ -236,29 +231,25 @@ export const fetchBackupData = async (key: string, pass: string) => {
 };
 
 export const restoreUserData = async (pass: string) => {
-  const { id, secretKey, publicKey } = store.getState().recoveryData;
-
-  // save secretKey in keystore
-  try {
-    await saveSecretKey(id, b64ToUint8Array(secretKey));
-  } catch (err) {
-    console.error('unable to save secret key', err.message);
-  }
+  const { id } = store.getState().recoveryData;
 
   const decrypted = await fetchBackupData('data', pass);
 
   const { userData, connections, groups = [] } = JSON.parse(decrypted);
+
   if (!userData || !connections) {
     throw new Error('bad password');
   }
+
   const groupsPhotoCount = groups.filter((group) => group.photo?.filename)
     .length;
+
   emitter.emit('restoreTotal', connections.length + groupsPhotoCount + 2);
+
   userData.id = id;
-  userData.publicKey = publicKey;
-  userData.secretKey = secretKey;
 
   const userPhoto = await fetchBackupData(id, pass);
+
   if (userPhoto) {
     const filename = await saveImage({
       imageName: id,
@@ -279,6 +270,9 @@ export const recoverData = async (pass: string) => {
   // set new signing key on the backend
   await setSigningKey();
 
+  const { publicKey, secretKey } = store.getState().recoveryData;
+
+  store.dispatch(setKeypair(publicKey, secretKey));
   store.dispatch(setUserData(userData));
   store.dispatch(setConnections(connections));
   store.dispatch(setGroups(groups));

@@ -28,6 +28,15 @@ type State = {
   refreshing: boolean,
 };
 
+const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
+const ITEM_MARGIN = DEVICE_LARGE ? 11.8 : 6;
+
+const getItemLayout = (data, index) => ({
+  length: ITEM_HEIGHT + ITEM_MARGIN,
+  offset: (ITEM_HEIGHT + ITEM_MARGIN) * index,
+  index,
+});
+
 export class GroupsScreen extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -90,6 +99,7 @@ export class GroupsScreen extends React.Component<Props, State> {
                 renderItem={this.renderGroup}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
+                getItemLayout={getItemLayout}
                 refreshControl={
                   <RefreshControl
                     refreshing={this.state.refreshing}

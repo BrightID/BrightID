@@ -88,6 +88,9 @@ const mediaTypeToFileExtension = ([mediaType = 'jpeg', image = ' ']): {
   if (mediaType.includes('gif')) {
     return { filetype: 'gif', image };
   }
+  if (mediaType.includes('svg')) {
+    return { filetype: 'svg', image };
+  }
   return { filetype: 'jpg', image };
 };
 
@@ -107,6 +110,8 @@ const normalizeType = (t: string): string => {
       return 'image/png';
     case 'gif':
       return 'image/gif';
+    case 'svg':
+      return 'image/svg+xml';
     default:
       return 'image/jpeg';
   }

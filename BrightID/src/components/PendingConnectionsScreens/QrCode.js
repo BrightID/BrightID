@@ -60,7 +60,7 @@ const Timer = ({ channel }) => {
   };
 
   return countdown > 0 ? (
-    <View style={styles.timerContainer}>
+    <View style={styles.timerContainer} testID="TimerContainer">
       <Text style={styles.timerTextLeft}>Expires in: </Text>
       <Text style={styles.timerTextRight}>{displayTime()}</Text>
     </View>
@@ -101,7 +101,9 @@ export const QrCode = ({ channel }) => {
     const universalLink = `https://app.brightid.org/connection-code/${qrString}`;
     const clipboardMsg = __DEV__
       ? universalLink
-      : `Connect with ${myName} on BrightID: ${universalLink}`;
+      : channel?.type === channel_types.GROUP 
+        ? `Make a group connection with ${myName} on BrightID: ${universalLink}`
+        : `Connect with ${myName} on BrightID: ${universalLink}`;
     const alertMsg =
       channel?.type === channel_types.SINGLE
         ? `Share this link with one friend`
@@ -130,7 +132,7 @@ export const QrCode = ({ channel }) => {
   const CopyQr = () => (
     <View style={styles.copyContainer}>
       <TouchableOpacity
-        testID="copyQrButton"
+        testID="CopyQrBtn"
         style={styles.copyButton}
         onPress={copyQr}
       >
@@ -163,7 +165,7 @@ export const QrCode = ({ channel }) => {
       <CopyQr />
     </View>
   ) : (
-    <View style={styles.qrCodeContainer} testID="QRCodeContainer">
+    <View style={styles.qrCodeContainer}>
       <View style={styles.emptyQr}>
         <Spinner
           isVisible={true}

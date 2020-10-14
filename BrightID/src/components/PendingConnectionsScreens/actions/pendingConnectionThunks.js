@@ -3,7 +3,6 @@ import {
   channel_types,
   selectChannelById,
 } from '@/components/PendingConnectionsScreens/channelSlice';
-import { obtainKeys } from '@/utils/keychain';
 import { TIME_FUDGE } from '@/utils/constants';
 import { hash, strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 import nacl from 'tweetnacl';
@@ -47,10 +46,10 @@ export const confirmPendingConnectionThunk = (id: string) => async (
   console.log(`confirming connection ${id} in channel ${channel.id}`);
 
   const {
-    user: { backupCompleted },
+    user: { id: brightid, backupCompleted },
+    keypair: { secretKey },
   } = getState();
 
-  let { username, secretKey } = await obtainKeys();
   let connectionTimestamp = Date.now();
 
   if (connection.signedMessage) {
@@ -61,20 +60,20 @@ export const confirmPendingConnectionThunk = (id: string) => async (
       throw new Error("timestamp can't be in the future");
     }
 
-    const message = `Add Connection${connection.brightId}${username}${connection.timestamp}`;
+    const message = `Add Connection${connection.brightId}${brightid}${connection.timestamp}`;
     const signedMessage = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
     api.createConnection(
       connection.brightId,
       connection.signedMessage,
-      username,
+      brightid,
       signedMessage,
       connection.timestamp,
     );
   } else {
     // I'm initiating
-    const message = `Add Connection${username}${connection.brightId}${connectionTimestamp}`;
+    const message = `Add Connection${brightid}${connection.brightId}${connectionTimestamp}`;
     const signedMessage = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
@@ -99,13 +98,17 @@ export const confirmPendingConnectionThunk = (id: string) => async (
     const opName = 'Add Connection';
     const op = {
       name: opName,
-      id1: username,
+      id1: brightid,
       id2: connection.brightId,
       timestamp: connectionTimestamp,
       v: apiVersion,
     };
     const opMessage = stringify(op);
-    console.log(`Responder opMessage: ${opMessage} - hash: ${hash(opMessage)}`);
+    console.log(
+      `Watching for responder opMessage: ${opMessage} - hash: ${hash(
+        opMessage,
+      )}`,
+    );
     const watchOp = {
       hash: hash(opMessage),
       name: opName,

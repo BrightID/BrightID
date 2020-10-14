@@ -70,7 +70,6 @@ core-js@*
 *-google-services.json
 Podfile.lock
 assetlinks.json
-yarn.lock
 ios/Pods/
 keystore.properties
 android/app/google-services.json-prod

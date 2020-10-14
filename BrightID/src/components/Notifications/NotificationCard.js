@@ -3,7 +3,7 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
-import RNFS from 'react-native-fs';
+import { photoDirectory } from '@/utils/filesystem';
 import { useNavigation } from '@react-navigation/native';
 import { DEVICE_LARGE } from '@/utils/constants';
 
@@ -19,7 +19,7 @@ const NotificationCard = (props) => {
   const photoFilename = useSelector((state) => state.user.photo.filename);
   const imageSource = photoFilename
     ? {
-        uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photoFilename}`,
+        uri: `file://${photoDirectory()}/${photoFilename}`,
       }
     : require('@/static/default_profile.jpg');
 

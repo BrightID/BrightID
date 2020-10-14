@@ -21,6 +21,7 @@ declare type State = {
   apps: AppsState,
   connections: ConnectionsState,
   groups: GroupsState,
+  keypair: Keypair,
   notifications: NotificationsState,
   operations: OperationsState,
   pendingConnections: PendingConnectionsState,
@@ -94,11 +95,12 @@ declare type Photo = {
   filename: string,
 };
 
+// TODO: extract DEV properties to separate type and join them conditionally depending on __DEV__
 declare type connection = {
   id: string,
   name: string,
   score: number,
-  secretKey?: Uint8Array,
+  secretKey?: string,
   aesKey: string,
   connectionDate: number,
   photo: Photo,
@@ -116,6 +118,11 @@ declare type GroupsState = {
   groups: group[],
   searchParam: string,
   searchOpen: boolean,
+};
+
+declare type Keypair = {
+  publicKey: string,
+  secretKey: Uint8Array,
 };
 
 declare type group = {
@@ -179,6 +186,7 @@ declare type PendingConnection = {
   notificationToken?: string,
   timestamp?: number,
   signedMessage?: string,
+  secretKey?: string,
   score?: number,
 };
 
@@ -207,9 +215,7 @@ declare type UserState = {
   searchParam: string,
   backupCompleted: boolean,
   verifications: any[],
-  publicKey: string,
   id: string,
-  safePublicKey?: string,
   password: string,
   hashedId: string,
   secretKey: string,
@@ -257,4 +263,9 @@ declare type Uint8Obj = {
 declare type action = {
   type: string,
   [key: string]: any,
+};
+
+declare type FakeUser = {
+  id: string,
+  secretKey: string, // Base64 encoded secretkey
 };

@@ -28,10 +28,10 @@ const MainTabs = () => {
 };
 
 const MainApp = () => {
-  const publicKey = useSelector((state) => state.user.publicKey);
+  const id = useSelector((state) => state.user.id);
   return (
     <TopStack.Navigator>
-      {publicKey ? (
+      {id ? (
         <TopStack.Screen
           name="App"
           component={MainTabs}

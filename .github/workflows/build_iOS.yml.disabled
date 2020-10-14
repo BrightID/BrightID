@@ -1,0 +1,97 @@
+name: Build iOS
+on: [push, pull_request]
+
+jobs:
+
+  build_debug_ipa:
+
+    runs-on: macos-latest
+
+    defaults:
+      run:
+        working-directory: BrightID
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache node modules
+        id: yarn-cache-debug # needed below to check for cache hit or miss
+        uses: actions/cache@v2
+        with:
+          path: './BrightID/node_modules'
+          key: ${{ runner.os }}-${{ matrix.node-version }}-modules-${{ hashFiles('./BrightID/yarn.lock') }}
+
+      - name: Install npm dependencies
+        if: steps.yarn-cache-debug.outputs.cache-hit != 'true'  # only install when no cache found
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: Install pod dependencies
+        run: |
+          cd ios && pod install && cd ..
+
+      - name: debug build
+        run: |
+          echo "TODO: Insert iOS Debug build instructions here :-)"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: brightId-debug.ipa
+          path: /home/runner/work/BrightID/BrightID/BrightID/ios/path/to/brightID-debug.ipa
+
+  build_release_ipa:
+
+    runs-on: macos-latest
+
+    defaults:
+      run:
+        working-directory: BrightID
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache node modules
+        id: yarn-cache-release # needed below to check for cache hit or miss
+        uses: actions/cache@v2
+        with:
+          path: './BrightID/node_modules'
+          key: ${{ runner.os }}-${{ matrix.node-version }}-modules-${{ hashFiles('./BrightID/yarn.lock') }}
+
+      - name: Install npm dependencies
+        if: steps.yarn-cache-release.outputs.cache-hit != 'true'  # only install when no cache found
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: Install pod dependencies
+        run: |
+          cd ios && pod install && cd ..
+
+      - name: release build
+        run: |
+          echo "TODO: Insert iOS Release build instructions here :-)"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: brightId-release.ipa
+          path: /home/runner/work/BrightID/BrightID/BrightID/ios/path/to/brightID-release.ipa
