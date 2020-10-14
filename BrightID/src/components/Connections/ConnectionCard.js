@@ -35,7 +35,7 @@ const ConnectionCard = (props) => {
     index,
   } = props;
 
-  const brightidVerified = verifications?.includes('BrightID') || true;
+  const brightidVerified = verifications?.includes('BrightID');
   const [imgErr, setImgErr] = useState(false);
 
   useFocusEffect(
