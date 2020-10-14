@@ -48,6 +48,11 @@ const userPersistConfig = {
   blacklist: ['searchParam', 'migrated'],
 };
 
+const tasksPersistConfig = {
+  ...fsPersistConfig,
+  key: 'tasks',
+};
+
 const keypairPersistConfig = {
   key: 'keypair',
   storage: KeychainStorage,
@@ -69,6 +74,7 @@ const rootReducer = combineReducers({
     notificationsPersistConfig,
     reducers.notifications,
   ),
+  tasks: persistReducer(tasksPersistConfig, reducers.tasks),
   user: persistReducer(userPersistConfig, reducers.user),
 });
 

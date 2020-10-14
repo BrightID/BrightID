@@ -61,6 +61,7 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
               title: 'Group Invitation',
               message,
               type: GROUPS_TYPE,
+              navigationTarget: 'Notifications',
             }),
           );
         }
