@@ -50,18 +50,16 @@ export const updateNotifications = () => async (
     );
     if (!backupCompleted && verifiedConnections.length > 6) {
       dispatch(setBackupPending(true));
-      if (!activeNotification) {
-        dispatch(
-          setActiveNotification({
-            title: 'Backup & Social Recovery',
-            message:
-              'Please select your Trusted Connections to enable social recovery of your BrightID',
-            type: MISC_TYPE,
-            oncePerSession: true,
-            navigationTarget: 'Notifications',
-          }),
-        );
-      }
+      dispatch(
+        setActiveNotification({
+          title: 'Backup & Social Recovery',
+          message:
+            'Please select your Trusted Connections to enable social recovery of your BrightID',
+          type: MISC_TYPE,
+          oncePerSession: true,
+          navigationTarget: 'Notifications',
+        }),
+      );
     } else {
       dispatch(setBackupPending(false));
     }
