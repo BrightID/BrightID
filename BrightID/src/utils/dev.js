@@ -9,6 +9,14 @@ import RNFetchBlob from 'rn-fetch-blob';
 
 const defaultStoragePath = `${RNFetchBlob.fs.dirs.DocumentDir}/persistStore`;
 
+export const dangerouslyDeleteStorage = async () => {
+  store.dispatch(resetStore());
+  navigate('Onboarding');
+  await AsyncStorage.flushGetRequests();
+  await AsyncStorage.clear();
+  await RNFetchBlob.fs.unlink(defaultStoragePath);
+};
+
 export const delStorage = () => {
   if (__DEV__) {
     Alert.alert(
@@ -24,11 +32,7 @@ export const delStorage = () => {
           text: 'Sure',
           onPress: async () => {
             try {
-              store.dispatch(resetStore());
-              navigate('Onboarding');
-              await AsyncStorage.flushGetRequests();
-              await AsyncStorage.clear();
-              await RNFetchBlob.fs.unlink(defaultStoragePath);
+              await dangerouslyDeleteStorage();
             } catch (err) {
               err instanceof Error
                 ? console.warn('delete storage', err.message)

@@ -1,4 +1,5 @@
 // @flow
+import api from '@/api/brightId';
 import {
   addChannel,
   selectChannelById,
@@ -27,12 +28,12 @@ import { Alert } from 'react-native';
 
 export const createChannel = (channelType: ChannelType) => async (
   dispatch: dispatch,
-  getState: getState,
 ) => {
   let channel: Channel;
   try {
     // create new channel
-    channel = await generateChannelData(channelType);
+    const ipAddress = await api.ip();
+    channel = await generateChannelData(channelType, ipAddress);
     // Set timeout to expire channel
 
     channel.timeoutId = setTimeout(() => {

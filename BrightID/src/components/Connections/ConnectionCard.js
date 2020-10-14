@@ -2,11 +2,11 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import RNFS from 'react-native-fs';
 import { useDispatch } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { DEVICE_LARGE, MAX_WAITING_SECONDS } from '@/utils/constants';
+import { photoDirectory } from '@/utils/filesystem';
 import { staleConnection } from '@/actions';
 
 /**
@@ -23,16 +23,8 @@ const ConnectionCard = (props) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [verified, setVerified] = useState(false);
-  const {
-    status,
-    connectionDate,
-    id,
-    name,
-    photo,
-    hiddenFlag,
-    index,
-    verifications,
-  } = props;
+  const { status, connectionDate, id, name, photo, hiddenFlag, index } = props;
+  const [imgErr, setImgErr] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -144,11 +136,12 @@ const ConnectionCard = (props) => {
     }
   };
 
-  const imageSource = photo?.filename
-    ? {
-        uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
-      }
-    : require('@/static/default_profile.jpg');
+  const imageSource =
+    photo?.filename && !imgErr
+      ? {
+          uri: `file://${photoDirectory()}/${photo?.filename}`,
+        }
+      : require('@/static/default_profile.jpg');
 
   return (
     <View style={styles.container} testID="connectionCardContainer">
@@ -164,6 +157,10 @@ const ConnectionCard = (props) => {
             source={imageSource}
             style={styles.photo}
             accessibilityLabel="ConnectionPhoto"
+            onError={() => {
+              console.log('settingImgErr');
+              setImgErr(true);
+            }}
           />
         </TouchableOpacity>
         <View style={styles.info}>

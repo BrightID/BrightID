@@ -2,7 +2,6 @@
 
 import CryptoJS from 'crypto-js';
 import { eqProps } from 'ramda';
-import { obtainKeys } from '@/utils/keychain';
 import store from '@/store';
 import { uInt8ArrayToB64, b64ToUint8Array, randomKey } from '@/utils/encoding';
 import nacl from 'tweetnacl';
@@ -17,7 +16,7 @@ export const getInviteInfo = async (invite: invite) => {
       return {};
     }
 
-    let { secretKey } = await obtainKeys();
+    let { secretKey } = store.getState().keypair;
 
     const {
       connections: { connections },
@@ -100,7 +99,7 @@ export const updateInvites = async (invites: invite[]): Promise<invite[]> => {
 
 export const encryptAesKey = async (aesKey: string, signingKey: string) => {
   try {
-    let { secretKey } = await obtainKeys();
+    let { secretKey } = store.getState().keypair;
 
     const pub = convertPublicKey(b64ToUint8Array(signingKey));
     const msg = b64ToUint8Array(aesKey);

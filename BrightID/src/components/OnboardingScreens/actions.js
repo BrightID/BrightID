@@ -1,16 +1,9 @@
 // @flow
 
 import nacl from 'tweetnacl';
-import { compose } from 'ramda';
-import { setUserData, setHashedId } from '@/actions';
+import { setKeypair, setUserData, setHashedId } from '@/actions';
 import { createImageDirectory, saveImage } from '@/utils/filesystem';
-import {
-  b64ToUrlSafeB64,
-  uInt8ArrayToB64,
-  objToUint8,
-  objToB64,
-} from '@/utils/encoding';
-import { saveSecretKey } from '@/utils/keychain';
+import { b64ToUrlSafeB64, uInt8ArrayToB64 } from '@/utils/encoding';
 
 export const handleBrightIdCreation = ({
   name,
@@ -30,11 +23,9 @@ export const handleBrightIdCreation = ({
     let filename = await saveImage({ imageName: id, base64Image: photo.uri });
 
     const userData = {
-      publicKey: b64PubKey,
       id,
       name,
       photo: { filename },
-      secretKey: objToB64(secretKey),
     };
 
     // We have no createUser anymore
@@ -42,11 +33,11 @@ export const handleBrightIdCreation = ({
     // await api.createUser(id, b64PubKey);
 
     // // update redux store
-    await dispatch(setUserData(userData));
+    dispatch(setUserData(userData));
+    dispatch(setKeypair(b64PubKey, secretKey));
+
     // to fix bug while testing
     dispatch(setHashedId(''));
-    // save id / secretKey inside of keychain
-    await saveSecretKey(id, secretKey);
 
     console.log('brightid creation success');
 

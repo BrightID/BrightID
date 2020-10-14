@@ -8,6 +8,15 @@ import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
 
+const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
+const ITEM_MARGIN = DEVICE_LARGE ? 11.8 : 6;
+
+const getItemLayout = (data, index) => ({
+  length: ITEM_HEIGHT + ITEM_MARGIN,
+  offset: (ITEM_HEIGHT + ITEM_MARGIN) * index,
+  index,
+});
+
 class RecoveringConnectionScreen extends React.Component<Props> {
   filterConnections = () => {
     const { connections, searchParam } = this.props;
@@ -57,6 +66,7 @@ class RecoveringConnectionScreen extends React.Component<Props> {
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={<EmptyList title="No connections..." />}
+                getItemLayout={getItemLayout}
               />
             </View>
           </View>

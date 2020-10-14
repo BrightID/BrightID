@@ -68,6 +68,8 @@ export {
   setGroupSearchOpen,
 } from './groups';
 
+export { SET_KEYPAIR, setKeypair } from './keypair';
+
 export {
   SET_BACKUP_PENDING,
   SET_DEVICE_TOKEN,
