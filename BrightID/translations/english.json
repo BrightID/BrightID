@@ -88,6 +88,7 @@
   "pendingConnections.accessibilityLabel.confirm": "accept connection with {{name}}",
 
 
+  "connections.header.connections": "Connections",
   "connections.text.noConnections": "No connections",
   "connections.button.flag": "Flag",
   "connections.flagActionSheet.infoFlagImpact": "Flagging {{name}} will negatively effect their BrightID score, and this flag might be shown to other users.",
@@ -112,8 +113,11 @@
   "connectionsSearch.button.sortByName": "Sort by name",
 
 
+  "groups.header.groups": "Groups",
+  "groups.header.newGroup": "New Group",
   "groups.title.groups": "Groups",
   "groups.title.newGroup": "New Group",
+  "groups.header.inviteList": "Invite List",
   "groups.text.noGroups": "<text>Get verified faster</text><text>by creating and</text><text>joining groups</text>",
   "groups.text.noGroupsMatchSearch": "No group matches your search",
   "groups.button.learnMore": "Learn More",
@@ -194,7 +198,8 @@
   "notificationBar.title.achievementUnlocked": "Achievement unlocked!",
   "notificationBar.text.achievementUnlocked": "You completed the task \"{{taskName}}\"",
 
-
+  "backup.header.backup": "Backup",
+  "backup.header.trustedConnections": "Trusted Connections",
   "backup.text.chooseTrustedConnections": "Choose three or more trusted connections to back up your BrightID.",
   "backup.text.noConnections": "No connections",
   "backup.button.next": "Next",
@@ -208,6 +213,7 @@
   "backup.alert.text.needThreeTrusted": "You need at least three trusted connections for backup.",
 
 
+  "restore.header.accountRecovery": "Account Recovery",
   "restore.button.startRestore": "Start Restore",
   "restore.text.downloadingData": "Downloading data from backup server ...",
   "restore.text.enterPassword": "Enter a password that you encrypted your backup data with:",

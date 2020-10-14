@@ -88,6 +88,7 @@
   "pendingConnections.accessibilityLabel.confirm": "accepter la connexion avec {{name}}",
 
 
+  "connections.header.connections": "Connexions",
   "connections.text.noConnections": "Aucune connexion",
   "connections.button.flag": "Signaler",
   "connections.flagActionSheet.infoFlagImpact": "Signaler {{name}} impactera négativement leur score BrightID, et ce signalement pourrait être vu par d'autres utilisateurs.",
@@ -112,8 +113,11 @@
   "connectionsSearch.button.sortByName": "Trier par nom",
 
 
+  "groups.header.groups": "Groupes",
+  "groups.header.newGroup": "Nouveau Groupe",
   "groups.title.groups": "Groupes",
   "groups.title.newGroup": "Nouveau Groupe",
+  "groups.header.inviteList": "Liste d'Invitation",
   "groups.text.noGroups": "<text>Devenez vérifié plus facilement</text><text>en créant et</text><text>rejoignant des groupes</text>",
   "groups.text.noGroupsMatchSearch": "Aucun groupe ne correspond à votre recherche",
   "groups.button.learnMore": "Informations",
@@ -195,6 +199,8 @@
   "notificationBar.text.achievementUnlocked": "Vous avez completé la tâche \"{{taskName}}\"",
 
 
+  "backup.header.backup": "Sauvegarde",
+  "backup.header.trustedConnections": "Connexions de Confiance",
   "backup.text.chooseTrustedConnections": "Choisissez trois connexions de confiance ou plus pour sauvegarder votre BrightID",
   "backup.text.noConnections": "Aucune connexion",
   "backup.button.next": "Suivant",
@@ -208,6 +214,7 @@
   "backup.alert.text.needThreeTrusted": "Vous devez définir au moins trois connexions de confiance pour effectuer une sauvegarde.",
 
 
+  "restore.header.accountRecovery": "Restauration du Compte",
   "restore.button.startRestore": "Démarrer la Restauration",
   "restore.text.downloadingData": "Téléchargement des données depuis le serveur de sauvegarde ...",
   "restore.text.enterPassword": "Entrez le mot de passe avec lequel vous avez chiffré votre sauvegarde :",

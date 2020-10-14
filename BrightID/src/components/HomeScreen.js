@@ -338,7 +338,7 @@ export const HomeScreen = (props) => {
         ref={(o) => {
           chatSheetRef = o;
         }}
-        title="Like to chat with us?"
+        title={t('home.chatActionSheet.title')}
         options={[t('home.chatActionSheet.discord'), t('common.actionSheet.cancel')]}
         cancelButtonIndex={1}
         onPress={(index) => {

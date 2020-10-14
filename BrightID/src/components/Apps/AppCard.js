@@ -113,7 +113,7 @@ const AppCard = (props) => {
 
   const SponsorshipLabel = () => {
     if (!isSponsored && unusedSponsorships > 0) {
-      return <Text style={styles.sponsorshipMessage}>{t('Has sponsorships')}</Text>;
+      return <Text style={styles.sponsorshipMessage}>{t('apps.tag.hasSponsorships')}</Text>;
     } else {
       return <View />;
     }
