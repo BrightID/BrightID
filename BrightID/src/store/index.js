@@ -7,6 +7,8 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { FsStorage, KeychainStorage } from './storage';
 import getStoredState from './getStoredState';
 
+// update this in async migrate if changed to prevent require cycle
+
 const version = 9;
 
 const fsPersistConfig = {

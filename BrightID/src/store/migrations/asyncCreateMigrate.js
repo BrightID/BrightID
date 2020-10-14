@@ -1,7 +1,8 @@
 // @flow
 
 import type { PersistedState, MigrationManifest } from 'redux-persist';
-import { VERSION } from '@/utils/constants';
+
+const VERSION = 9;
 
 export function asyncCreateMigrate(
   migrations: MigrationManifest,

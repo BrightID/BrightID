@@ -120,7 +120,7 @@ declare type GroupsState = {
   searchOpen: boolean,
 };
 
-declare type KeyPair = {
+declare type Keypair = {
   publicKey: string,
   secretKey: Uint8Array,
 };
