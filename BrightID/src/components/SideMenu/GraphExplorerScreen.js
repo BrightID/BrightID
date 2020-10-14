@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, View, TouchableOpacity, Linking } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
 import { useHeaderHeight } from '@react-navigation/stack';
@@ -69,7 +69,7 @@ export const GraphExplorerScreen = function () {
         <Text style={styles.infoText}>
           <Text
             onPress={() => {
-              alert('pressed!');
+              Linking.openURL('https://explorer.brightid.org/');
             }}
             style={styles.linkText}
           >
