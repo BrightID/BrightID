@@ -11,9 +11,6 @@ import ActionSheet from 'react-native-actionsheet';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ICON_SIZE = DEVICE_TYPE === 'large' ? 36 : 32;
-const ACTION_ADD_ADMIN = 'Add Admin';
-const ACTION_DISMISS = 'Dismiss from group';
-const ACTION_CANCEL = 'Cancel';
 
 type MemberCardProps = {
   memberId: string,
@@ -46,6 +43,11 @@ function MemberCard(props: MemberCardProps) {
   const [contextActions, setContextActions] = useState<Array<string>>([]);
   const [flagged, setFlagged] = useState(false);
   const { t } = useTranslation();
+  
+  const ACTION_ADD_ADMIN = t('groups.memberActionSheet.addAdmin');
+  const ACTION_DISMISS = t('groups.memberActionSheet.dismissMember');
+  // Not using 'common.actionSheet.cancel' because 'Cancel' instead of 'cancel' (making sure printed text doesn't change after i18n)
+  const ACTION_CANCEL = t('groups.memberActionSheet.cancel');
 
   // set possible actions depending on user and member admin status
   useEffect(() => {
