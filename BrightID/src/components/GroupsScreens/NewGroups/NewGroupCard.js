@@ -7,6 +7,7 @@ import RNFS from 'react-native-fs';
 import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { withTranslation } from 'react-i18next';
 import { DEVICE_TYPE } from '@/utils/constants';
 import { toggleNewGroupCoFounder } from '../actions';
 
@@ -54,7 +55,7 @@ class NewGroupCard extends React.PureComponent<Props> {
   };
 
   render() {
-    const { photo, name, connectionDate, style } = this.props;
+    const { photo, name, connectionDate, style, t } = this.props;
     const imageSource = photo?.filename
       ? {
           uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
@@ -67,7 +68,7 @@ class NewGroupCard extends React.PureComponent<Props> {
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.connectedText}>
-            Connected {moment(parseInt(connectionDate, 10)).fromNow()}
+            {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
           </Text>
         </View>
         {this.renderActionButton()}
@@ -123,4 +124,4 @@ const styles = StyleSheet.create({
 
 export default connect(null, (dispatch) => ({
   toggleCoFounder: (id) => dispatch(toggleNewGroupCoFounder(id)),
-}))(NewGroupCard);
+}))(withTranslation()(NewGroupCard));
