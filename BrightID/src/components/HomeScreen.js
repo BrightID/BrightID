@@ -89,7 +89,7 @@ export const HomeScreen = (props) => {
         imageName: id,
         base64Image: uri,
       });
-      setPhoto({ filename });
+      dispatch(setPhoto({ filename }));
       setProfilePhoto(await retrieveImage(filename));
     } catch (err) {
       console.log(err);
@@ -104,7 +104,7 @@ export const HomeScreen = (props) => {
         imageName: id,
         base64Image: uri,
       });
-      setPhoto({ filename });
+      dispatch(setPhoto({ filename }));
       setProfilePhoto(await retrieveImage(filename));
     } catch (err) {
       console.log(err);

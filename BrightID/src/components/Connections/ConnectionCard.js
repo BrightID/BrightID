@@ -3,11 +3,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
+import { SvgXml } from 'react-native-svg';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { DEVICE_LARGE, MAX_WAITING_SECONDS } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
 import { staleConnection } from '@/actions';
+import verificationSticker from '@/static/verification-sticker.svg';
 
 /**
  * Connection Card in the Connections Screen
@@ -22,8 +24,18 @@ const ConnectionCard = (props) => {
   let stale_check_timer = useRef(0);
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [verified, setVerified] = useState(false);
-  const { status, connectionDate, id, name, photo, hiddenFlag, index } = props;
+  const {
+    status,
+    verifications,
+    connectionDate,
+    id,
+    name,
+    photo,
+    hiddenFlag,
+    index,
+  } = props;
+
+  const brightidVerified = verifications?.includes('BrightID') || true;
   const [imgErr, setImgErr] = useState(false);
 
   useFocusEffect(
@@ -80,12 +92,6 @@ const ConnectionCard = (props) => {
     }
   }, [name, status]);
 
-  useEffect(() => {
-    if (verifications) {
-      setVerified(verifications.includes('BrightID'));
-    }
-  }, [verifications]);
-
   const ConnectionStatus = () => {
     if (status === 'initiated') {
       return (
@@ -123,11 +129,6 @@ const ConnectionCard = (props) => {
       const stickerTestID = `${testID}-verified`;
       return (
         <View style={styles.statusContainer}>
-          {verified && (
-            <Text testID={stickerTestID} style={styles.verified}>
-              verified
-            </Text>
-          )}
           <Text style={styles.connectedText} testID={testID}>
             Connected {moment(parseInt(connectionDate, 10)).fromNow()}
           </Text>
@@ -164,14 +165,24 @@ const ConnectionCard = (props) => {
           />
         </TouchableOpacity>
         <View style={styles.info}>
-          <Text
-            adjustsFontSizeToFit={true}
-            numberOfLines={1}
-            style={styles.name}
-            testID="connectionCardText"
-          >
-            {name}
-          </Text>
+          <View style={styles.nameContainer}>
+            <Text
+              adjustsFontSizeToFit={true}
+              numberOfLines={1}
+              style={styles.name}
+              testID="connectionCardText"
+            >
+              {name}
+            </Text>
+            {brightidVerified && (
+              <SvgXml
+                style={styles.verificationSticker}
+                width="16"
+                height="16"
+                xml={verificationSticker}
+              />
+            )}
+          </View>
           <ConnectionStatus />
         </View>
       </View>
@@ -218,6 +229,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
+  nameContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   name: {
     fontFamily: 'Poppins',
     fontWeight: '500',
@@ -253,20 +268,9 @@ const styles = StyleSheet.create({
     marginTop: DEVICE_LARGE ? 5 : 2,
     textTransform: 'capitalize',
   },
-  verified: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    color: ORANGE,
-    borderWidth: 1,
-    borderColor: ORANGE,
-    borderRadius: 10,
-    marginTop: 6,
-    marginRight: 8,
-    paddingTop: 1,
-    paddingBottom: 1,
-    paddingLeft: 10,
-    paddingRight: 7,
-    fontSize: DEVICE_LARGE ? 9 : 7,
+
+  verificationSticker: {
+    marginLeft: DEVICE_LARGE ? 5 : 3.5,
   },
 });
 
