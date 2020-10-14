@@ -1,9 +1,20 @@
 import i18n from 'i18next';
+import moment from 'moment';
 import { initReactI18next } from 'react-i18next';
 import * as RNLocalize from "react-native-localize";
 
+/**
+ * For each supported language, import the corresponding language file.
+ * Consumed by i18next.
+ */
 import * as englishTranslation from './translations/english.json';
 import * as frenchTranslation from './translations/french.json';
+
+/**
+ * For each supported language other than English, import the corresponding moment locale
+ * Used for time formatting and things like `fromNow()` ("[...] ago")
+ */
+import 'moment/locale/fr';
 
 /**
  * RNLocalize : Detection of user locale preference and formats (currency, dates, reading direction, ...)
@@ -20,6 +31,11 @@ const translations = {
 };
 
 const { languageTag } = RNLocalize.findBestAvailableLanguage(Object.keys(translations));
+
+/**
+ * Moment will use detected language throughout the app.
+ */
+moment.locale(languageTag);
 
 i18n
   .use(initReactI18next)
