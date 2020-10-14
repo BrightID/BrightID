@@ -58,6 +58,7 @@ export const updateNotifications = () => async (
               'Please select your Trusted Connections to enable social recovery of your BrightID',
             type: MISC_TYPE,
             oncePerSession: true,
+            navigationTarget: 'Notifications',
           }),
         );
       }
