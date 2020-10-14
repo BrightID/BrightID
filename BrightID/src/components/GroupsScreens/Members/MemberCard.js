@@ -44,6 +44,7 @@ function MemberCard(props: MemberCardProps) {
   const actionSheetRef: ?ActionSheet = useRef(null);
   const [contextActions, setContextActions] = useState<Array<string>>([]);
   const [flagged, setFlagged] = useState(false);
+  const [imgErr, setImgErr] = useState(false);
 
   // set possible actions depending on user and member admin status
   useEffect(() => {
@@ -90,17 +91,26 @@ function MemberCard(props: MemberCardProps) {
     }
   };
 
-  const imageSource = photo?.filename
-    ? {
-        uri: `file://${photoDirectory()}/${photo?.filename}`,
-      }
-    : require('@/static/default_profile.jpg');
+  const imageSource =
+    photo?.filename && !imgErr
+      ? {
+          uri: `file://${photoDirectory()}/${photo?.filename}`,
+        }
+      : require('@/static/default_profile.jpg');
 
   const memberTestID = memberIsAdmin ? 'admin' : 'regular';
   return (
     <View testID={memberTestID}>
       <View style={styles.container} testID={testID}>
-        <Image source={imageSource} style={styles.photo} />
+        <Image
+          source={imageSource}
+          style={styles.photo}
+          onError={() => {
+            console.log('settingImgErr');
+            setImgErr(true);
+          }}
+          accessibilityLabel="profile picture"
+        />
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
           <View style={styles.statusContainer}>

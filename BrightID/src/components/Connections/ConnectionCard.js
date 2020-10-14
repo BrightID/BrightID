@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -23,6 +23,7 @@ const ConnectionCard = (props) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { status, connectionDate, id, name, photo, hiddenFlag, index } = props;
+  const [imgErr, setImgErr] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -120,11 +121,12 @@ const ConnectionCard = (props) => {
     }
   };
 
-  const imageSource = photo?.filename
-    ? {
-        uri: `file://${photoDirectory()}/${photo?.filename}`,
-      }
-    : require('@/static/default_profile.jpg');
+  const imageSource =
+    photo?.filename && !imgErr
+      ? {
+          uri: `file://${photoDirectory()}/${photo?.filename}`,
+        }
+      : require('@/static/default_profile.jpg');
 
   return (
     <View style={styles.container} testID="connectionCardContainer">
@@ -140,6 +142,10 @@ const ConnectionCard = (props) => {
             source={imageSource}
             style={styles.photo}
             accessibilityLabel="ConnectionPhoto"
+            onError={() => {
+              console.log('settingImgErr');
+              setImgErr(true);
+            }}
           />
         </TouchableOpacity>
         <View style={styles.info}>

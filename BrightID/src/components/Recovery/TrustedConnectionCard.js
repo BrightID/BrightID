@@ -11,6 +11,13 @@ import store from '@/store';
 import { DEVICE_TYPE } from '@/utils/constants';
 
 class TrustedConnectionCard extends React.PureComponent<Props> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      imgErr: false,
+    };
+  }
+
   toggleConnectionSelect = () => {
     const { id } = this.props;
     const {
@@ -31,15 +38,24 @@ class TrustedConnectionCard extends React.PureComponent<Props> {
 
   render() {
     const { photo, name, connectionDate, style } = this.props;
-    const imageSource = photo?.filename
-      ? {
-          uri: `file://${photoDirectory()}/${photo?.filename}`,
-        }
-      : require('@/static/default_profile.jpg');
+    const imageSource =
+      photo?.filename && !this.state.imgErr
+        ? {
+            uri: `file://${photoDirectory()}/${photo?.filename}`,
+          }
+        : require('@/static/default_profile.jpg');
 
     return (
       <View style={{ ...styles.container, ...style }}>
-        <Image source={imageSource} style={styles.photo} />
+        <Image
+          source={imageSource}
+          style={styles.photo}
+          onError={() => {
+            console.log('settingImgErr');
+            this.setState({ imgErr: true });
+          }}
+          accessibilityLabel="profile picture"
+        />
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.connectedText}>
