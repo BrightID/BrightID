@@ -35,6 +35,7 @@ const rootMigrations = {
 
     // add migration key for deleting AsyncStorage(persist:root)
     state.user.migrated = true;
+    state.tasks = undefined;
     return state;
   },
   8: async (state) => {

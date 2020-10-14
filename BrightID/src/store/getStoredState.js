@@ -15,7 +15,13 @@ const getRootState = async (config) => {
 
     let migratedState = await rootMigrate(restoredState, config.version);
 
-    return migratedState ? migratedState[config.key] : undefined;
+    let nextState = migratedState && migratedState[config.key];
+
+    if (!nextState) {
+      throw new Error('migrated state does not exist');
+    }
+
+    return nextState;
   } catch (error) {
     console.error(`failed restoring state for ${config.key}`, error.message);
   }
