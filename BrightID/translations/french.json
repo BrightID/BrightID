@@ -73,6 +73,7 @@
   "pendingConnections.text.errorExpired": "Le code QR utilisé pour vous connecter avec {{name}} a expiré... veuillez réessayer de vous connecter.",
   "pendingConnections.text.waiting": "En attente de données du service de profiles",
   "pendingConnections.text.connectWith": "Vous connecter avec ?",
+  "pendingConnections.tag.createdAt": "Créé {{date}}",
   "pendingConnections.tag.newUser": "Nouvel Utilisateur",
   "pendingConnections.tag.alreadyConnected": "(déjà connecté)",
   "pendingConnections.label.connections": "Connexions",

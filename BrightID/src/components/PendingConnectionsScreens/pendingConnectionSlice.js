@@ -5,6 +5,7 @@ import {
   createAsyncThunk,
   createSelector,
 } from '@reduxjs/toolkit';
+import i18next from 'i18next';
 import moment from 'moment';
 import {
   removeChannel,
@@ -57,7 +58,7 @@ const fetchConnectionInfo = async ({ myConnections, brightId }) => {
       connections: connections.length,
       groups: groups.length,
       mutualConnections: mutualConnections.length,
-      connectionDate: `Created ${moment(parseInt(createdAt, 10)).fromNow()}`,
+      connectionDate: i18next.t('pendingConnections.tag.createdAt', {date: moment(parseInt(createdAt, 10)).fromNow()}),
       flagged: flaggers && Object.keys(flaggers).length > 0,
     };
   } catch (err) {
@@ -66,7 +67,7 @@ const fetchConnectionInfo = async ({ myConnections, brightId }) => {
         connections: 0,
         groups: 0,
         mutualConnections: 0,
-        connectionDate: 'New user',
+        connectionDate: i18next.t('pendingConnections.tag.newUser'),
         flagged: false,
       };
     } else {
