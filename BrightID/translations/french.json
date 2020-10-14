@@ -142,6 +142,8 @@
   "groups.alert.text.addAdmin": "Êtes-vous sûr de vouloir définir {{name}} comme administrateur de ce groupe ?",
   "groups.alert.text.errorAddAdmin": "Erreur en essayant de définir {{name}} comme administrateur du groupe",
   "groups.accessibilityLabel.groupsLogo": "logo pour les groupes",
+  "groups.state.creatingGroup": "création du groupe",
+  "groups.state.uploadingGroupPhoto": "envoi de la photo du groupe",
 
 
   "createGroup.placeholder.groupName": "Quel est le nom du groupe ?",

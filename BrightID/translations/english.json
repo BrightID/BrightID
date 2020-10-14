@@ -142,6 +142,8 @@
   "groups.alert.text.addAdmin": "Are you sure you want to make {{name}} an admin for this group?",
   "groups.alert.text.errorAddAdmin": "Error making {{name}} admin for group",
   "groups.accessibilityLabel.groupsLogo": "groups logo",
+  "groups.state.creatingGroup": "creating the group",
+  "groups.state.uploadingGroupPhoto": "uploading group photo",
 
 
   "createGroup.placeholder.groupName": "What is the group name?",
