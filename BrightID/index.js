@@ -7,10 +7,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Octicons from 'react-native-vector-icons/Octicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { DEVICE_IOS } from '@/utils/constants';
+import codePush from 'react-native-code-push';
+import codePushOptions from './codepush.config.js';
 import App from './src/App';
 import { name as appName } from './app.json';
-
-console.disableYellowBox = true;
 
 // enable react-native-screens
 // enableScreens is causing some android devices to crash
@@ -35,4 +35,4 @@ TextInput.defaultProps.allowFontScaling = false;
 FlatList.defaultProps = FlatList.defaultProps || {};
 FlatList.defaultProps.windowSize = 5;
 
-AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent(appName, () => codePush(codePushOptions)(App));
