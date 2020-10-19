@@ -6,7 +6,7 @@ import {
   REMOVE_OPERATION,
   RESET_OPERATIONS,
 } from '@/actions';
-import { version } from '../../package.json';
+import { version, latestCodePushLabel } from '../../package.json';
 
 const initialState = {
   operations: [],
@@ -35,13 +35,19 @@ export const reducer = (
       };
     }
     case APP_VERSION: {
-      let versionCode = state.mobileVersion.split('.');
-      // action.version is the codepush label v(n), we need to remove the v
-      let incomingPatch = action.version.substring(1);
+      // appVersion returned by code-push is more accurate than package.json
+      // codepush labels increment indefinitely, but we only want to update the patch for the latest version
+      // so we subtract the latest codepush label to obtain accurate patch version
+      let incomingPatch =
+        parseInt(action.label.substring(1), 10) -
+        parseInt(latestCodePushLabel, 10);
 
-      versionCode.splice(versionCode.length - 1, 1, incomingPatch);
+      if (incomingPatch < 0) incomingPatch = 0;
 
-      return { ...state, mobileVersion: versionCode.join('.') };
+      let appVersion = action.appVersion.split('.');
+      appVersion.splice(appVersion.length - 1, 1, incomingPatch);
+
+      return { ...state, mobileVersion: appVersion.join('.') };
     }
     case RESET_OPERATIONS: {
       return { ...state, operations: [] };

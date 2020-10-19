@@ -44,7 +44,8 @@ export const bootstrap = async () => {
       .getUpdateMetadata(codePush.UpdateState.RUNNING)
       .then((metaData) => {
         console.log('updateMetaData', metaData);
-        if (metaData.label) store.dispatch(setAppVersion(metaData.label));
+        if (metaData.label && metaData.appVersion)
+          store.dispatch(setAppVersion(metaData.appVersion, metaData.label));
       });
 
     // delete old async storage is storage is successfully migrated

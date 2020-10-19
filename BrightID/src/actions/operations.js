@@ -19,7 +19,8 @@ export const resetOperations = () => ({
   type: RESET_OPERATIONS,
 });
 
-export const setAppVersion = (version) => ({
+export const setAppVersion = (appVersion, label) => ({
   type: APP_VERSION,
-  version,
+  appVersion,
+  label,
 });
