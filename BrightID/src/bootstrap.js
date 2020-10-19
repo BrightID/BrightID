@@ -3,9 +3,10 @@ import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { dangerouslyDeleteStorage } from '@/utils/dev';
 import { bootstrapAndUpgrade } from './versions';
-import { resetOperations } from './actions';
+import { resetOperations, setAppVersion } from './actions';
 import { store } from './store';
 import { checkTasks, syncStoreTasks } from './components/Tasks/TasksSlice';
+import codePush from 'react-native-code-push';
 
 // happens inside of the loading screen
 
@@ -32,13 +33,19 @@ export const bootstrap = async () => {
     // fetch user info
     if (!id) {
       id = store.getState().user.id;
-      console.log('secondBootstrap', id);
     }
 
     // update available usertasks
     store.dispatch(syncStoreTasks());
     // Initial check for completed tasks
     store.dispatch(checkTasks());
+    // check for codepush version and update the app's local version
+    codePush
+      .getUpdateMetadata(codePush.UpdateState.RUNNING)
+      .then((metaData) => {
+        console.log('updateMetaData', metaData);
+        if (metaData.label) store.dispatch(setAppVersion(metaData.label));
+      });
 
     // delete old async storage is storage is successfully migrated
     if (!migrated) {
