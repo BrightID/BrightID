@@ -11,6 +11,7 @@ import {
   StatusBar,
   InteractionManager,
   TouchableWithoutFeedback,
+  Vibration,
 } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SvgXml } from 'react-native-svg';
@@ -122,13 +123,13 @@ export const MyCodeScreen = () => {
     ) {
       if (displayChannelType === channel_types.SINGLE) {
         // navigate immediately to pending connections
-        navigation.navigate('PendingConnections');
+        vibrateAndDisplayPendingConnections();
         // close channel to prevent navigation loop
         dispatch(closeChannel({ channelId: myChannel?.id, background: true }));
       } else if (displayChannelType === channel_types.GROUP) {
         // navigation.navigate('GroupQr', { channel: myChannel });
         timer = setTimeout(() => {
-          navigation.navigate('PendingConnections');
+          vibrateAndDisplayPendingConnections();
         }, PENDING_GROUP_TIMEOUT);
       }
     }
@@ -227,6 +228,11 @@ export const MyCodeScreen = () => {
       'Group code',
       'This QR code is designed for many people to connect simultaneously.',
     );
+  };
+
+  const vibrateAndDisplayPendingConnections = () => {
+    Vibration.vibrate();
+    navigation.navigate('PendingConnections');
   };
 
   return (
