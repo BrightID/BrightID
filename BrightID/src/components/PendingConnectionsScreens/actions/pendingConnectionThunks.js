@@ -3,11 +3,8 @@ import {
   channel_types,
   selectChannelById,
 } from '@/components/PendingConnectionsScreens/channelSlice';
-import { TIME_FUDGE } from '@/utils/constants';
-import { hash, strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
-import nacl from 'tweetnacl';
 import api from '@/api/brightId';
-import { addConnection, addOperation } from '@/actions';
+import { addConnection } from '@/actions';
 import { saveImage } from '@/utils/filesystem';
 import { backupPhoto, backupUser } from '@/components/Recovery/helpers';
 import {
@@ -17,7 +14,6 @@ import {
   updatePendingConnection,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import { leaveChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
-import stringify from 'fast-json-stable-stringify';
 
 export const confirmPendingConnectionThunk = (id: string) => async (
   dispatch: dispatch,
@@ -46,76 +42,35 @@ export const confirmPendingConnectionThunk = (id: string) => async (
   console.log(`confirming connection ${id} in channel ${channel.id}`);
 
   const {
-    user: { id: brightid, backupCompleted },
-    keypair: { secretKey },
+    user: { id: brightId, backupCompleted },
   } = getState();
 
   let connectionTimestamp = Date.now();
+  let flagReason;
 
-  if (connection.signedMessage) {
-    // I'm responding
-    // The other user signed a connection request; we have enough info to
-    // make an API call to create the connection.
-    if (connection.timestamp > connectionTimestamp + TIME_FUDGE) {
-      throw new Error("timestamp can't be in the future");
+  await api.addConnection(
+    brightId,
+    connection.brightId,
+    'just met',
+    flagReason,
+    connectionTimestamp,
+  );
+
+  if (__DEV__) {
+    // if peer is a fake connection also submit opposite addConnection operation
+    if (connection.secretKey) {
+      await api.addConnection(
+        connection.brightId,
+        brightId,
+        'just met',
+        flagReason,
+        connectionTimestamp,
+        {
+          id: connection.brightId,
+          secretKey: connection.secretKey,
+        },
+      );
     }
-
-    const message = `Add Connection${connection.brightId}${brightid}${connection.timestamp}`;
-    const signedMessage = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
-    api.createConnection(
-      connection.brightId,
-      connection.signedMessage,
-      brightid,
-      signedMessage,
-      connection.timestamp,
-    );
-  } else {
-    // I'm initiating
-    const message = `Add Connection${brightid}${connection.brightId}${connectionTimestamp}`;
-    const signedMessage = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
-
-    // bring signedmessage to peer so he knows i want to connect with him...
-    console.log(
-      `Uploading signed connection string for ${connection.name} to channel ${connection.id}`,
-    );
-    const data = {
-      signedMessage,
-      connectionTimestamp,
-    };
-
-    await channel.api.upload({
-      channelId: connection.id,
-      data,
-      dataId: channel.myProfileId,
-    });
-
-    // Listen for add connection operation to be completed by other party
-    const apiVersion = 5;
-    const opName = 'Add Connection';
-    const op = {
-      name: opName,
-      id1: brightid,
-      id2: connection.brightId,
-      timestamp: connectionTimestamp,
-      v: apiVersion,
-    };
-    const opMessage = stringify(op);
-    console.log(
-      `Watching for responder opMessage: ${opMessage} - hash: ${hash(
-        opMessage,
-      )}`,
-    );
-    const watchOp = {
-      hash: hash(opMessage),
-      name: opName,
-      timestamp: connectionTimestamp,
-      v: apiVersion,
-    };
-    dispatch(addOperation(watchOp));
   }
 
   // save connection photo

@@ -106,32 +106,6 @@ class NodeApi {
     NodeApi.setOperation(op);
   }
 
-  async createConnection(
-    id1: string,
-    sig1: string,
-    id2: string,
-    sig2: string,
-    timestamp: number,
-  ) {
-    let name = 'Add Connection';
-    let op = {
-      name,
-      id1,
-      id2,
-      timestamp,
-      v,
-    };
-
-    const message = stringify(op);
-    op.sig1 = sig1;
-    op.sig2 = sig2;
-    let res = await this.api.post(`/operations`, op);
-    NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res, message);
-    console.log(`Initiator opMessage: ${message} - hash: ${op.hash}`);
-    NodeApi.setOperation(op);
-  }
-
   async removeConnection(id2: string, reason: string) {
     let {
       user: { id },
