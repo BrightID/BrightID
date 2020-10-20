@@ -184,8 +184,6 @@ declare type PendingConnection = {
   name?: string,
   photo?: string,
   notificationToken?: string,
-  timestamp?: number,
-  signedMessage?: string,
   secretKey?: string,
   score?: number,
 };

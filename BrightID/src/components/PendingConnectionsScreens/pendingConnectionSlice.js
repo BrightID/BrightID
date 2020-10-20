@@ -26,8 +26,6 @@ const pendingConnectionsAdapter = createEntityAdapter();
    - 'name'
    - 'photo' (base64-encoded)
    - 'score'
-   - 'signedMessage': optional - First part of signed connection message, in case user initiated connection.
-   - 'timestamp': optional - Timestamp when signed message was created
  */
 
 export const pendingConnection_states = {
@@ -94,13 +92,6 @@ export const newPendingConnection = createAsyncThunk(
     });
     const decryptedObj = decryptData(profileData, channel.aesKey);
     decryptedObj.myself = decryptedObj.id === getState().user.id;
-    // I'm confused about this initiator logic, might change this...
-    decryptedObj.initiator =
-      decryptedObj.profileTimestamp <= channel.myProfileTimestamp;
-
-    console.log('decryptedObj.profileTimestamp', decryptedObj.profileTimestamp);
-
-    console.log('channel.myProfileTimestamp', channel.myProfileTimestamp);
 
     const connectionInfo = await fetchConnectionInfo({
       brightId: decryptedObj.id,
@@ -204,12 +195,10 @@ const pendingConnectionsSlice = createSlice({
         notificationToken,
       };
 
-      // add secret key, signed message, timestamp if dev
+      // add secret key if dev
       if (__DEV__) {
-        const { secretKey, signedMessage, timestamp } = action.payload;
+        const { secretKey } = action.payload;
         changes.secretKey = secretKey;
-        changes.signedMessage = signedMessage;
-        changes.timestamp = timestamp;
       }
 
       // Perform the update in redux

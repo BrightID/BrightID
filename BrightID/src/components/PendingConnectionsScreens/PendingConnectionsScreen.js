@@ -60,7 +60,7 @@ const ConfirmationButtons = ({
       selectPendingConnectionById(state, pc.id) ?? {
         state: pendingConnection_states.EXPIRED,
       },
-    (a, b) => a?.state === b?.state && a?.signedMessage === b?.signedMessage,
+    // (a, b) => a?.state === b?.state && a?.signedMessage === b?.signedMessage,
   );
 
   const alreadyExists = useSelector((state) =>
@@ -166,13 +166,9 @@ const ConfirmationButtons = ({
 };
 
 export const PreviewConnection = (props) => {
-  // we only care about the state and signedMessage the of the pending connection
+  // we only care about the state of the pending connection
   const { pendingConnection } = props;
-  console.log(
-    'rendering',
-    pendingConnection.name,
-    pendingConnection.signedMessage,
-  );
+  console.log('rendering', pendingConnection.name);
 
   const alreadyExists = useSelector((state) =>
     state.connections.connections.some(
