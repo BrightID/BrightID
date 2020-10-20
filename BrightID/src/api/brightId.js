@@ -66,6 +66,46 @@ class NodeApi {
     store.dispatch(addOperation(op));
   }
 
+  async addConnection(
+    id1: string,
+    id2: string,
+    level: string,
+    flagReason?: string,
+    timestamp: number,
+    fakeUser?: FakeUser,
+  ) {
+    let secretKey;
+    if (fakeUser) {
+      secretKey = b64ToUint8Array(fakeUser.secretKey);
+    } else {
+      // use real user data
+      secretKey = store.getState().keypair.secretKey;
+    }
+
+    let name = 'Connect';
+    let op = {
+      name,
+      id1,
+      id2,
+      level,
+      timestamp,
+      v,
+    };
+    if (flagReason) {
+      op.flagReason = flagReason;
+    }
+
+    const message = stringify(op);
+    console.log(`Connect message: ${message}`);
+    op.sig1 = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+    let res = await this.api.post(`/operations`, op);
+    NodeApi.throwOnError(res);
+    op.hash = NodeApi.checkHash(res, message);
+    NodeApi.setOperation(op);
+  }
+
   async createConnection(
     id1: string,
     sig1: string,
