@@ -7,6 +7,7 @@ import {
   channel_types,
 } from '@/components/PendingConnectionsScreens/channelSlice';
 import ChannelAPI from '@/api/channelService';
+import { connection_levels } from '../src/utils/constants';
 
 declare type getState = () => State;
 
@@ -267,3 +268,5 @@ declare type FakeUser = {
   id: string,
   secretKey: string, // Base64 encoded secretkey
 };
+
+declare type ConnectionLevel = $Keys<typeof connection_levels>;

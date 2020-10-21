@@ -15,10 +15,10 @@ import {
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import { leaveChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
 
-export const confirmPendingConnectionThunk = (id: string) => async (
-  dispatch: dispatch,
-  getState: getState,
-) => {
+export const confirmPendingConnectionThunk = (
+  id: string,
+  level: ConnectionLevel,
+) => async (dispatch: dispatch, getState: getState) => {
   const connection: PendingConnection = selectPendingConnectionById(
     getState(),
     id,
@@ -39,7 +39,9 @@ export const confirmPendingConnectionThunk = (id: string) => async (
   );
 
   const channel = selectChannelById(getState(), connection.channelId);
-  console.log(`confirming connection ${id} in channel ${channel.id}`);
+  console.log(
+    `confirming connection ${id} in channel ${channel.id} with level '${level}'`,
+  );
 
   const {
     user: { id: brightId, backupCompleted },
@@ -51,7 +53,7 @@ export const confirmPendingConnectionThunk = (id: string) => async (
   await api.addConnection(
     brightId,
     connection.brightId,
-    'just met',
+    level,
     flagReason,
     connectionTimestamp,
   );
@@ -62,7 +64,7 @@ export const confirmPendingConnectionThunk = (id: string) => async (
       await api.addConnection(
         connection.brightId,
         brightId,
-        'just met',
+        level,
         flagReason,
         connectionTimestamp,
         {

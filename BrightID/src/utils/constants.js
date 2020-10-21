@@ -15,9 +15,6 @@ export const DEVICE_OS = Platform.OS;
 export const DEVICE_ANDROID = DEVICE_OS === 'android';
 export const DEVICE_IOS = DEVICE_OS === 'ios';
 
-// console.log('width, height, area', WIDTH, HEIGHT, WIDTH * HEIGHT);
-// console.log('deviceType', DEVICE_TYPE);
-
 export const BOTTOM_NAV_HEIGHT = DEVICE_TYPE === 'small' ? 55 : 63;
 
 /** ** INVITE CONSTANTS  *** */
@@ -47,3 +44,12 @@ export const CONNECTIONS_TYPE = 'connections';
 export const GROUPS_TYPE = 'groups';
 export const MISC_TYPE = 'misc';
 export const NONE_TYPE = 'none';
+
+/** ** CONNECTION CONFIDENCE LEVELS *** */
+export const connection_levels = {
+  SPAM: 'spam',
+  SUSPICIOUS: 'suspicious',
+  JUST_MET: 'just met',
+  ALREADY_KNOW: 'already know',
+  RECOVERY: 'recovery',
+};
