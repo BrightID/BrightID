@@ -184,16 +184,6 @@ const CustomDrawerContent = (props) => {
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
         inactiveTintColor="#000"
-        label="Contact Us"
-        icon={getIcon('contactUs')}
-        onPress={() => {
-          navigation.navigate('ContactUs');
-        }}
-      />
-      <CustomItem
-        style={styles.drawerItem}
-        labelStyle={styles.labelStyle}
-        inactiveTintColor="#000"
         label="Check for Updates"
         icon={getIcon('faqIcon')}
         onPress={() => {
@@ -204,10 +194,20 @@ const CustomDrawerContent = (props) => {
             },
             (status) => {
               if (status === codePush.SyncStatus.UP_TO_DATE) {
-                Alert.alert('BrightID is up to date.');
+                Alert.alert('Check for Update', 'BrightID is up to date.');
               }
             },
           );
+        }}
+      />
+      <CustomItem
+        style={styles.drawerItem}
+        labelStyle={styles.labelStyle}
+        inactiveTintColor="#000"
+        label="Contact Us"
+        icon={getIcon('contactUs')}
+        onPress={() => {
+          navigation.navigate('ContactUs');
         }}
       />
     </DrawerContentScrollView>
