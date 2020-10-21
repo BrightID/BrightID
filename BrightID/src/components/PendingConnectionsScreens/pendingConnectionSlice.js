@@ -33,7 +33,6 @@ export const pendingConnection_states = {
   DOWNLOADING: 'DOWNLOADING',
   UNCONFIRMED: 'UNCONFIRMED',
   CONFIRMING: 'CONFIRMING',
-  REJECTED: 'REJECTED',
   CONFIRMED: 'CONFIRMED',
   ERROR: 'ERROR',
   MYSELF: 'MYSELF',
@@ -123,15 +122,6 @@ const pendingConnectionsSlice = createSlice({
         id,
         changes: {
           state: pendingConnection_states.CONFIRMED,
-        },
-      });
-    },
-    rejectPendingConnection(state, action) {
-      const id = action.payload;
-      state = pendingConnectionsAdapter.updateOne(state, {
-        id,
-        changes: {
-          state: pendingConnection_states.REJECTED,
         },
       });
     },
