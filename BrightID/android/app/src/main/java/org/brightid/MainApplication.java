@@ -42,6 +42,11 @@ public class MainApplication
       return packages;
     }
 
+    @Override
+    protected String getJSMainModuleName() {
+      return "index";
+    }
+
     // 2. Override the getJSBundleFile method in order to let
     // the CodePush runtime determine where to get the JS
     // bundle location from on each app start

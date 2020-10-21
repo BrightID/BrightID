@@ -22,6 +22,9 @@ import com.android.build.OutputFile
  *   // default. Can be overridden with ENTRY_FILE environment variable.
  *   entryFile: "index.android.js",
  *
+ *   // https://reactnative.dev/docs/performance#enable-the-ram-format
+ *   bundleCommand: "ram-bundle",
+ *
  *   // whether to bundle JS and assets in debug mode
  *   bundleInDebug: false,
  *
@@ -78,18 +81,11 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     enableHermes: true,  // clean and rebuild if changing
-    bundleInDebug: false,
     bundleInStaging: true,
-    bundleInRelease: true,
+    devDisabledInStaging: true,
     resourcesDirStaging: 
         "$buildDir/intermediates/res/merged/staging",
-    devDisabledInDebug: false,
-    devDisabledInStaging: true,
-    devDisabledInRelease: true,
-    jsBundleDirRelease: "$buildDir/intermediates/merged_assets/release/mergeReleaseAssets/out",
-    jsBundleDirDebug: "$buildDir/intermediates/merged_assets/debug/mergeDebugAssets/out",
-    jsBundleDirStaging: "$buildDir/intermediates/merged_assets/staging/mergeStagingAssets/out",
-    entryFile: "index.js",
+    jsBundleDirStaging: "$buildDir/intermediates/assets/staging",
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -157,6 +153,11 @@ if (stagingPropertiesFile.exists()){
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
+
+     compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     // Fix "java.lang.UnsatisfiedLinkError: couldn't find DSO to load: libhermes.so" in release builds
     // Found at https://github.com/facebook/react-native/issues/25923#issuecomment-626663209
@@ -246,10 +247,6 @@ android {
                         versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
             }
         }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
