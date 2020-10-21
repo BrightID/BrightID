@@ -12,6 +12,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptExecutorFactory;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.microsoft.codepush.react.CodePush;
 import com.oblador.keychain.KeychainModuleBuilder;
 import com.oblador.keychain.KeychainPackage;
 import java.lang.reflect.InvocationTargetException;
@@ -41,9 +42,12 @@ public class MainApplication
       return packages;
     }
 
+    // 2. Override the getJSBundleFile method in order to let
+    // the CodePush runtime determine where to get the JS
+    // bundle location from on each app start
     @Override
-    protected String getJSMainModuleName() {
-      return "index";
+    protected String getJSBundleFile() {
+      return CodePush.getJSBundleFile();
     }
   };
 

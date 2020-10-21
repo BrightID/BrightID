@@ -78,9 +78,22 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     enableHermes: true,  // clean and rebuild if changing
+    bundleInDebug: false,
+    bundleInStaging: true,
+    bundleInRelease: true,
+    resourcesDirStaging: 
+        "$buildDir/intermediates/res/merged/staging",
+    devDisabledInDebug: false,
+    devDisabledInStaging: true,
+    devDisabledInRelease: true,
+    jsBundleDirRelease: "$buildDir/intermediates/merged_assets/release/out",
+    jsBundleDirDebug: "$buildDir/intermediates/merged_assets/debug/out",
+    jsBundleDirStaging: "$buildDir/intermediates/merged_assets/staging/out",
+    entryFile: "index.js",
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -132,6 +145,16 @@ if (keystorePropertiesFile.exists()){
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+def stagingPropertiesFile = rootProject.file("staging.properties")
+
+// Initialize a new Properties() object called keystoreProperties.
+def stagingProperties = new Properties()
+
+if (stagingPropertiesFile.exists()){
+    // Load your keystore.properties file into the keystoreProperties object.
+    stagingProperties.load(new FileInputStream(stagingPropertiesFile))
+}
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -161,6 +184,14 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        staging {
+            if (stagingProperties['keyAlias']){
+                keyAlias stagingProperties['keyAlias']
+                keyPassword stagingProperties['keyPassword']
+                storeFile file(stagingProperties['storeFile'])
+                storePassword stagingProperties['storePassword']
+            }
+        }
         release {
             if (keystoreProperties['keyAlias']){
                 keyAlias keystoreProperties['keyAlias']
@@ -183,11 +214,23 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
+            resValue "string", "CodePushDeploymentKey", "G8q6_0EW9AkaXAy3hO7Ye_LAhDfisOHpFPvRF"
+        }
+        staging {
+            signingConfig signingConfigs.staging
+            applicationIdSuffix ".staging"
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
+            resValue "string", "CodePushDeploymentKey", "oCnsVbQLVhCjd_xE1BAsPYMRApddDWiwqiuhl"
+            matchingFallbacks = ['release']
+            
         }
         debug {
             signingConfig signingConfigs.debug
             applicationIdSuffix ".debug"
             versionNameSuffix '-DEBUG'
+            resValue "string", "CodePushDeploymentKey", '""'
         }
     }
 
@@ -244,6 +287,7 @@ dependencies {
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")
+        stagingImplementation files(hermesPath + "hermes-release.aar")
         releaseImplementation files(hermesPath + "hermes-release.aar")
     } else {
         implementation jscFlavor

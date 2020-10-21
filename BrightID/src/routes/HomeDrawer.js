@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { Image, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  Alert,
+  Image,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import { useSelector } from 'react-redux';
 import HomeScreen, { verifiedSelector } from '@/components/HomeScreen';
 import {
@@ -8,6 +15,7 @@ import {
 } from '@react-navigation/drawer';
 import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
 import { SvgXml } from 'react-native-svg';
+import codePush from 'react-native-code-push';
 import verificationSticker from '@/static/verification-sticker.svg';
 import { retrieveImage } from '@/utils/filesystem';
 import editProfile from '@/static/edit_profile_inactive.svg';
@@ -18,6 +26,7 @@ import explorerCodeFocused from '@/static/explorer_code_icon_focused.svg';
 import homeIcon from '@/static/home_icon_side_menu.svg';
 import taskList from '@/static/task_list_icon.svg';
 import taskListFocused from '@/static/task_list_icon_focused.svg';
+import faqIcon from '@/static/faq_icon.svg';
 
 import TasksScreen from '@/components/Tasks/TasksScreen';
 import GraphExplorerScreen from '@/components/SideMenu/GraphExplorerScreen';
@@ -34,6 +43,7 @@ const iconMap = {
   taskList,
   explorerCodeFocused,
   taskListFocused,
+  faqIcon,
 };
 
 const getIcon = (name) => {
@@ -169,6 +179,26 @@ const CustomDrawerContent = (props) => {
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
         icon={getIcon('trustedConnections')}
+      />
+      <CustomItem
+        style={styles.drawerItem}
+        labelStyle={styles.labelStyle}
+        inactiveTintColor="#000"
+        label="Check for Updates"
+        icon={getIcon('faqIcon')}
+        onPress={() => {
+          codePush.sync(
+            {
+              updateDialog: true,
+              installMode: codePush.InstallMode.IMMEDIATE,
+            },
+            (status) => {
+              if (status === codePush.SyncStatus.UP_TO_DATE) {
+                Alert.alert('Check for Update', 'BrightID is up to date.');
+              }
+            },
+          );
+        }}
       />
       <CustomItem
         style={styles.drawerItem}
