@@ -86,9 +86,9 @@ project.ext.react = [
     devDisabledInDebug: false,
     devDisabledInStaging: true,
     devDisabledInRelease: true,
-    jsBundleDirRelease: "$buildDir/intermediates/merged_assets/release/out",
-    jsBundleDirDebug: "$buildDir/intermediates/merged_assets/debug/out",
-    jsBundleDirStaging: "$buildDir/intermediates/merged_assets/staging/out",
+    jsBundleDirRelease: "$buildDir/intermediates/merged_assets/release/mergeReleaseAssets/out",
+    jsBundleDirDebug: "$buildDir/intermediates/merged_assets/debug/mergeDebugAssets/out",
+    jsBundleDirStaging: "$buildDir/intermediates/merged_assets/staging/mergeStagingAssets/out",
     entryFile: "index.js",
 ]
 
