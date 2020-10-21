@@ -40,8 +40,8 @@ const createFakeConnection = async (doConfirm = true) => {
 
   if (doConfirm) {
     // confirm connection and navigate back to home screen
-    await expect(element(by.id('confirmConnectionButton'))).toBeVisible();
-    await element(by.id('confirmConnectionButton')).tap();
+    await expect(element(by.id('JustMetBtn'))).toBeVisible();
+    await element(by.id('JustMetBtn')).tap();
     // Should end up in the connection list
     await expectConnectionsScreen();
 

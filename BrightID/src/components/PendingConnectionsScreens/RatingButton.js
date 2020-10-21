@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/accessible-emoji */
 // @flow
 
 import React from 'react';
@@ -10,14 +9,16 @@ type RatingButtonProps = {
   color: 'red' | 'yellow' | 'green',
   label: string,
   handleClick: (...args: Array<any>) => any,
+  testID: string,
 };
 
 export const RatingButton = (props: RatingButtonProps) => {
-  const { level, color, label, handleClick } = props;
+  const { level, color, label, handleClick, testID } = props;
   return (
     <TouchableOpacity
       style={[styles.rateButton, styles[color]]}
       onPress={() => handleClick(level)}
+      testID={testID}
     >
       <Text style={[styles.rateButtonLabel, styles[color]]}>{label}</Text>
     </TouchableOpacity>
