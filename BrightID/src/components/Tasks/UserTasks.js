@@ -6,7 +6,7 @@ export const UserTasks = {
     sortValue: 10,
     url: 'https://brightid.gitbook.io/brightid/#create-your-brightid',
     checkFn(state) {
-      return !!state.user.publicKey;
+      return !!state.user.id;
     },
   },
   add_a_picture: {
@@ -84,9 +84,11 @@ export const UserTasks = {
     description: 'Link your brightID to an app context',
     sortValue: 90,
     checkFn(state) {
-      // is there at least one app that is linked?
-      const linkedApps = state.apps.apps.filter((app) => app.linked === true);
-      return linkedApps.length > 0;
+      // is there at least one linked context?
+      const linkedContexts = state.apps.linkedContexts.filter(
+        (linkedContext) => linkedContext.state === 'applied',
+      );
+      return linkedContexts.length > 0;
     },
   },
 };

@@ -1,6 +1,5 @@
 // @flow
 import { b64ToUint8Array, b64ToUrlSafeB64, randomKey } from '@/utils/encoding';
-import api from '@/api/brightId';
 import { CHANNEL_TTL } from '@/utils/constants';
 import { Buffer } from 'buffer';
 import {
@@ -16,9 +15,9 @@ export const createRandomId = async (size: number = 9) => {
 
 export const generateChannelData = async (
   channelType: ChannelType,
+  ipAddress: string,
 ): Promise<Channel> => {
   const aesKey = await randomKey(16);
-  const ipAddress = await api.ip();
   const id = await createRandomId();
   const timestamp = Date.now();
   const ttl = CHANNEL_TTL;

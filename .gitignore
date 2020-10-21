@@ -67,3 +67,5 @@ BrightID/ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID.debug.xcconfi
 BrightID/ios/Pods/Target Support Files/Pods-BrightID/Pods-BrightID-acknowledgements.markdown
 BrightID/flow-typed/npm/
 BrightID/android/app/google-services.json-prod
+BrightID/android/staging.properties
+BrightID/android/app/google-services.json-staging

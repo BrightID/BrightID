@@ -4,15 +4,7 @@ import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { setGroups, setInvites } from '@/actions';
 import store from '@/store';
-import {
-  bootstrapV0,
-  getConnections,
-  getApps,
-  verifyConnections,
-  verifyApps,
-  verifyUserData,
-  upgradeConnsAndIds,
-} from './v0';
+import { bootstrapV0, getConnections, getApps, upgradeConnsAndIds } from './v0';
 import { bootstrap } from './v4';
 
 export const bootstrapAndUpgrade = async () => {
@@ -32,18 +24,6 @@ export const bootstrapAndUpgrade = async () => {
       store.dispatch(setGroups([]));
       store.dispatch(setInvites([]));
       upgradeConnsAndIds();
-
-      const connectionsVerified = await verifyConnections(allKeys);
-      const userDataVerified = await verifyUserData();
-      const appsVerified = await verifyApps(allKeys);
-      if (connectionsVerified && userDataVerified && appsVerified) {
-        // update connections / user to new Api
-        // upgradeConnsAndIds();
-      } else {
-        Alert.alert(
-          'There was an error migrating your BrightID to this version. Please backup data and reinstall BrightId',
-        );
-      }
     }
   } catch (err) {
     err instanceof Error ? console.warn(err.message) : console.log(err);

@@ -21,6 +21,7 @@ declare type State = {
   apps: AppsState,
   connections: ConnectionsState,
   groups: GroupsState,
+  keypair: Keypair,
   notifications: NotificationsState,
   operations: OperationsState,
   pendingConnections: PendingConnectionsState,
@@ -119,6 +120,11 @@ declare type GroupsState = {
   searchOpen: boolean,
 };
 
+declare type Keypair = {
+  publicKey: string,
+  secretKey: Uint8Array,
+};
+
 declare type group = {
   score: number,
   isNew: boolean,
@@ -209,9 +215,7 @@ declare type UserState = {
   searchParam: string,
   backupCompleted: boolean,
   verifications: any[],
-  publicKey: string,
   id: string,
-  safePublicKey?: string,
   password: string,
   hashedId: string,
   secretKey: string,

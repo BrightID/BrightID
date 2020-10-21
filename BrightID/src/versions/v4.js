@@ -8,14 +8,9 @@ import {
   hydrateUser,
   setGroups,
   setInvites,
+  setKeypair,
 } from '@/actions';
-import {
-  objToUint8,
-  uInt8ArrayToB64,
-  objToB64,
-  b64ToUrlSafeB64,
-} from '@/utils/encoding';
-import { saveSecretKey } from '@/utils/keychain';
+import { objToUint8, uInt8ArrayToB64, b64ToUrlSafeB64 } from '@/utils/encoding';
 
 // export const bootstrapV4 = hydrateStore('store@v4');
 
@@ -24,15 +19,16 @@ export const bootstrap = async (version: string) => {
   if (dataStr !== null) {
     const dataObj = JSON.parse(dataStr);
     // save secretKey in keychain
+    if (typeof dataObj.publicKey === 'object') {
+      dataObj.publicKey = uInt8ArrayToB64(objToUint8(dataObj.publicKey));
+    }
     if (!dataObj.id) {
-      dataObj.id = b64ToUrlSafeB64(
-        uInt8ArrayToB64(objToUint8(dataObj.publicKey)),
-      );
+      dataObj.id = b64ToUrlSafeB64(dataObj.publicKey);
     }
 
     dataObj.searchParam = '';
-    await saveSecretKey(dataObj.id, secretKey);
-    const secretKey = objToB64(dataObj.secretKey);
+
+    const secretKey = objToUint8(dataObj.secretKey);
 
     const {
       apps,
@@ -50,6 +46,8 @@ export const bootstrap = async (version: string) => {
       groups,
       invites,
     } = dataObj;
+
+    store.dispatch(setKeypair(publicKey, secretKey));
 
     if (apps) {
       store.dispatch(setApps(apps));
@@ -82,10 +80,8 @@ export const bootstrap = async (version: string) => {
         photo,
         backupCompleted,
         id,
-        publicKey,
         password,
         hashedId,
-        secretKey,
       }),
     );
   }
