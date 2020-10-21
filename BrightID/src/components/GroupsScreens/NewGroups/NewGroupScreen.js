@@ -11,6 +11,7 @@ import store from '@/store';
 import emitter from '@/emitter';
 import { clearNewGroupCoFounders } from '@/actions';
 import { DEVICE_TYPE, ORANGE, DEVICE_LARGE } from '@/utils/constants';
+import { toSearchString } from '@/utils/strings';
 import Spinner from 'react-native-spinkit';
 import { createNewGroup } from '../actions';
 import NewGroupCard from './NewGroupCard';
@@ -55,11 +56,9 @@ export class NewGroupScreen extends React.Component<Props> {
   filterConnections = () => {
     const { connections, searchParam } = this.props;
     return connections
-      .filter((item) =>
-        `${item.name}`
-          .toLowerCase()
-          .replace(/\s/g, '')
-          .includes(searchParam.toLowerCase().replace(/\s/g, '')),
+      .filter((item) => 
+        toSearchString(`${item.name}`)
+        .includes(toSearchString(searchParam)),
       )
       .filter((item) => item.status === 'verified');
   };
