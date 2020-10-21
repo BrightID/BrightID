@@ -47,6 +47,7 @@ const fetchConnectionInfo = async ({ myConnections, brightId }) => {
       groups,
       connections = [],
       flaggers,
+      verifications,
     } = await api.getUserInfo(brightId);
     const mutualConnections = connections.filter(function (el) {
       return myConnections.some((x) => x.id === el.id);
@@ -57,6 +58,7 @@ const fetchConnectionInfo = async ({ myConnections, brightId }) => {
       mutualConnections: mutualConnections.length,
       connectionDate: `Created ${moment(parseInt(createdAt, 10)).fromNow()}`,
       flagged: flaggers && Object.keys(flaggers).length > 0,
+      verifications,
     };
   } catch (err) {
     if (err instanceof Error && err.message === 'User not found') {
@@ -66,6 +68,7 @@ const fetchConnectionInfo = async ({ myConnections, brightId }) => {
         mutualConnections: 0,
         connectionDate: 'New user',
         flagged: false,
+        verifications: [],
       };
     } else {
       console.error(err.message);
@@ -175,6 +178,7 @@ const pendingConnectionsSlice = createSlice({
         connectionDate,
         flagged,
         notificationToken,
+        verifications,
       } = action.payload;
 
       const changes = {
@@ -193,6 +197,7 @@ const pendingConnectionsSlice = createSlice({
         connectionDate,
         flagged,
         notificationToken,
+        verifications,
       };
 
       // add secret key if dev
