@@ -1,6 +1,12 @@
 /* global element:false, by:false */
 
-import { createBrightID, expectHomescreen } from './testUtils';
+import {
+  createBrightID,
+  createFakeConnection,
+  expectConnectionsScreen,
+  expectHomescreen,
+  navigateHome,
+} from './testUtils';
 
 describe('make Connections', () => {
   beforeAll(async () => {
@@ -42,9 +48,11 @@ describe('make Connections', () => {
 
     it('should copy to clipboard', async () => {
       await element(by.id('CopyQrBtn')).tap();
+      await expect(element(by.text('COPY TO CLIPBOARD'))).toBeVisible();
       await element(by.text('COPY TO CLIPBOARD')).tap();
       // TODO: Verify clipboard content is correct. Currently detox has no way to
       //  check clipboard contents, see e.g. https://github.com/wix/detox/issues/222
+      await expect(element(by.text('COPY TO CLIPBOARD'))).not.toBeVisible();
     });
 
     it('should toggle connection type', async () => {
@@ -54,6 +62,26 @@ describe('make Connections', () => {
       await expect(element(by.id('ConnectionInfoGroupBtn'))).toExist();
       await element(by.id('ChannelSwitch')).tap();
       await expect(element(by.id('ConnectionInfoSingleBtn'))).toExist();
+    });
+  });
+
+  describe('Connect with different Connection levels', () => {
+    const levels = ['suspicious', 'just met', 'already know'];
+
+    afterEach(async () => {
+      await navigateHome();
+    });
+
+    levels.forEach((level) => {
+      it(`should create a connection with level "${level}"`, async () => {
+        const testID = `${level}Btn`;
+        await createFakeConnection(false);
+        // confirm connection with specified level and navigate back to home screen
+        await expect(element(by.id(testID))).toBeVisible();
+        await element(by.id(testID)).tap();
+        // Should end up in the connection list
+        await expectConnectionsScreen();
+      });
     });
   });
 });

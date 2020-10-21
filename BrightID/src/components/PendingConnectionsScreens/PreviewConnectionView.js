@@ -71,21 +71,21 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
               label="🤔 Suspicious"
               level={connection_levels.SUSPICIOUS}
               handleClick={buttonHandler}
-              testID="SuspiciousBtn"
+              testID={`${connection_levels.SUSPICIOUS}Btn`}
             />
             <RatingButton
               color="yellow"
               label="👋 Just met"
               level={connection_levels.JUST_MET}
               handleClick={buttonHandler}
-              testID="JustMetBtn"
+              testID={`${connection_levels.JUST_MET}Btn`}
             />
             <RatingButton
               color="green"
               label="😎 Already know"
               level={connection_levels.ALREADY_KNOW}
               handleClick={buttonHandler}
-              testID="AlreadyKnowBtn"
+              testID={`${connection_levels.ALREADY_KNOW}Btn`}
             />
           </View>
           <View>
