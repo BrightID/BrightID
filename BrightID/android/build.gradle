@@ -23,6 +23,13 @@ buildscript {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force "com.facebook.soloader:soloader:0.8.2"
+    }
+}
+
+
 allprojects {
     repositories {
         mavenLocal()
