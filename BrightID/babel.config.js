@@ -17,5 +17,6 @@ module.exports = {
         extensions: ['.svg'],
       },
     ],
+    ['transform-remove-console'],
   ],
 };

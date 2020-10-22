@@ -23,7 +23,9 @@ const getRootState = async (config) => {
 
     return nextState;
   } catch (error) {
-    console.error(`failed restoring state for ${config.key}`, error.message);
+    if (error.message !== 'migrated state does not exist') {
+      console.error(`failed restoring state for ${config.key}`, error.message);
+    }
   }
 };
 

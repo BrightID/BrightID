@@ -27,7 +27,6 @@ import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
 import forumIcon from '@/static/forum_icon.svg';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { version as app_version } from '../../package.json';
 
 /**
  * Home screen of BrightID
@@ -69,6 +68,7 @@ export const HomeScreen = (props) => {
   const connectionsCount = useSelector(verifiedConnections);
   const linkedContextsCount = useSelector(linkedContextCountSelector);
   const verified = useSelector(verifiedSelector);
+  const mobileVersion = useSelector((state) => state.operations.mobileVersion);
 
   const [profilePhoto, setProfilePhoto] = useState('none');
   const [isEditing, setIsEditing] = useState(false);
@@ -327,7 +327,7 @@ export const HomeScreen = (props) => {
           </TouchableOpacity>
         </View>
         <DeepPasteLink />
-        <Text style={styles.versionInfo}>v{app_version}</Text>
+        <Text style={styles.versionInfo}>v{mobileVersion}</Text>
       </View>
 
       <ActionSheet
@@ -341,7 +341,7 @@ export const HomeScreen = (props) => {
         onPress={(index) => {
           if (index === 0) {
             Linking.openURL(discordUrl).catch((err) =>
-              console.error('An error occurred', err),
+              console.log('An error occurred', err),
             );
           }
         }}

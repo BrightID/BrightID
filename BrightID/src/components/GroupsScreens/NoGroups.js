@@ -16,7 +16,7 @@ const learnMoreUrl =
 
 const handleLearnMore = () => {
   Linking.openURL(learnMoreUrl).catch((err) =>
-    console.error(`Failed to open "${learnMoreUrl}", error was: ${err}`),
+    console.log(`Failed to open "${learnMoreUrl}", error was: ${err}`),
   );
 };
 

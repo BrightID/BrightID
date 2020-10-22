@@ -27,7 +27,7 @@ export function asyncCreateMigrate(
     }
     if (inboundVersion > currentVersion) {
       if (debug)
-        console.error('redux-persist: downgrading version is not supported');
+        console.log('redux-persist: downgrading version is not supported');
       return Promise.resolve(state);
     }
 
