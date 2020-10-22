@@ -29,7 +29,7 @@ const createFakeConnection = async (doConfirm = true) => {
   // open MyCode screen
   await element(by.id('MyCodeBtn')).tap();
   // make sure SINGLE connection mode is active
-  await expect(element(by.text('One to One '))).toExist();
+  await expect(element(by.id('single-use-code'))).toExist();
   await expect(element(by.id('fakeConnectionBtn'))).toBeVisible();
   await element(by.id('fakeConnectionBtn')).tap();
   // With automatic sync this test fails intermittent, so use explicit waitFor...
@@ -40,11 +40,10 @@ const createFakeConnection = async (doConfirm = true) => {
 
   if (doConfirm) {
     // confirm connection and navigate back to home screen
-    await expect(element(by.id('confirmConnectionButton'))).toBeVisible();
-    await element(by.id('confirmConnectionButton')).tap();
+    await expect(element(by.id('just metBtn'))).toBeVisible();
+    await element(by.id('just metBtn')).tap();
     // Should end up in the connection list
     await expectConnectionsScreen();
-
     await navigateHome();
   }
 };

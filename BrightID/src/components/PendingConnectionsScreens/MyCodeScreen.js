@@ -255,7 +255,9 @@ export const MyCodeScreen = () => {
               onPress={displayManyToManyInfo}
               testID="ConnectionInfoGroupBtn"
             >
-              <Text style={styles.infoTopText}>{t('qrcode.text.codeGroup')} </Text>
+              <Text testID="group-code" style={styles.infoTopText}>
+                {t('qrcode.text.codeGroup')}
+              </Text>
               <Material name="information-variant" size={18} color="#4a4a4a" />
             </TouchableOpacity>
           ) : (
@@ -264,7 +266,9 @@ export const MyCodeScreen = () => {
               onPress={displayOneToOneInfo}
               testID="ConnectionInfoSingleBtn"
             >
-              <Text style={styles.infoTopText}>{t('qrcode.text.codeSingle')} </Text>
+              <Text testID="single-use-code" style={styles.infoTopText}>
+              {t('qrcode.text.codeSingle')}
+              </Text>
               <Material name="information-variant" size={18} color="#4a4a4a" />
             </TouchableOpacity>
           )}

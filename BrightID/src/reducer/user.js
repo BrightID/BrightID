@@ -26,7 +26,6 @@ const initialState = {
   searchParam: '',
   backupCompleted: false,
   id: '',
-  publicKey: '',
   password: '',
   hashedId: '',
   verifications: [],
@@ -64,7 +63,6 @@ export const reducer = (state: UserState = initialState, action: action) => {
         ...state,
         photo: action.photo,
         name: action.name,
-        publicKey: action.publicKey,
         id: action.id,
         secretKey: action.secretKey,
       };
@@ -119,7 +117,6 @@ export const reducer = (state: UserState = initialState, action: action) => {
         photo: action.data.photo,
         backupCompleted: action.data.backupCompleted,
         id: action.data.id,
-        publicKey: action.data.publicKey,
         password: action.data.password,
         hashedId: action.data.hashedId,
       };

@@ -1,7 +1,5 @@
-/* eslint-disable import/no-unresolved */
-
 import 'react-native-gesture-handler';
-import { AppRegistry, Text, TextInput } from 'react-native';
+import { AppRegistry, FlatList, Text, TextInput } from 'react-native';
 import { enableScreens } from 'react-native-screens';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -10,9 +8,12 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { DEVICE_IOS } from '@/utils/constants';
 import './i18n';
+import codePush from 'react-native-code-push';
+import codePushOptions from './codepush.config.js';
 import App from './src/App';
 import { name as appName } from './app.json';
 
+// detox e2e tests fail when yellowboxes come up
 console.disableYellowBox = true;
 
 // enable react-native-screens
@@ -35,10 +36,7 @@ Text.defaultProps.allowFontScaling = false;
 TextInput.defaultProps = TextInput.defaultProps || {};
 TextInput.defaultProps.allowFontScaling = false;
 
-if (!__DEV__) {
-  console.log = () => {};
-  console.warn = () => {};
-  console.error = () => {};
-}
+FlatList.defaultProps = FlatList.defaultProps || {};
+FlatList.defaultProps.windowSize = 5;
 
-AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent(appName, () => codePush(codePushOptions)(App));

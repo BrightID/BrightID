@@ -1,18 +1,43 @@
-import { createMigrate } from 'redux-persist';
+// @flow
+
 import {
   setInternetCredentials,
   getGenericPassword,
-  STORAGE_TYPE,
   setGenericPassword,
 } from 'react-native-keychain';
 import { compose } from 'ramda';
-
-import { objToUint8, uInt8ArrayToB64 } from '@/utils/encoding';
+import { objToUint8, uInt8ArrayToB64, b64ToUint8Array } from '@/utils/encoding';
 import { BACKUP_URL, DEVICE_ANDROID } from '@/utils/constants';
+import { asyncCreateMigrate } from './asyncCreateMigrate';
 
 const keyToString = compose(uInt8ArrayToB64, objToUint8);
 
-const migrations = {
+/** Async migration creators require every version to return a promiseß */
+
+const rootMigrations = {
+  9: async (state) => {
+    // extract secretKey if not present
+    if (!state.user.secretKey || typeof state.user.secretKey !== 'string') {
+      let { password } = await getGenericPassword();
+      state.user.secretKey = password;
+    }
+
+    state.keypair = {
+      publicKey: state.user.publicKey,
+      secretKey: b64ToUint8Array(state.user.secretKey),
+    };
+
+    delete state.user.publicKey;
+    delete state.user.secretKey;
+    if (state.notifications) {
+      delete state.notifications.miscAlreadyNotified;
+    }
+
+    // add migration key for deleting AsyncStorage(persist:root)
+    state.user.migrated = true;
+    state.tasks = undefined;
+    return state;
+  },
   8: async (state) => {
     delete state.user.notifications;
     delete state.connectQrData;
@@ -36,9 +61,8 @@ const migrations = {
     // transfer secret key as backup
     try {
       let genericPassword = await getGenericPassword();
-      let { username, password } = genericPassword;
+      let { password } = genericPassword;
       if (password) {
-        state.user.id = username;
         state.user.secretKey = password;
       }
     } catch (err) {
@@ -50,7 +74,7 @@ const migrations = {
 
     return state;
   },
-  7: (state) => {
+  7: async (state) => {
     delete state.channels;
     delete state.pendingConnections;
     delete state.notifications;
@@ -76,8 +100,11 @@ const migrations = {
     };
     return state;
   },
-  6: (state) => {
-    delete state.user.notifications;
+  6: async (state) => {
+    if (state.user) {
+      delete state.user.notifications;
+    }
+
     delete state.connectQrData;
     delete state.connectUserData;
     return state;
@@ -90,7 +117,7 @@ const migrations = {
         // save secret key in keychain storage
 
         if (DEVICE_ANDROID) {
-          let opts = { storage: STORAGE_TYPE.AES };
+          let opts = { rules: 'none' };
           await setGenericPassword(state.user.id, keyToString(secretKey), opts);
         } else {
           await setGenericPassword(state.user.id, keyToString(secretKey));
@@ -114,4 +141,6 @@ const migrations = {
   },
 };
 
-export const migrate = createMigrate(migrations);
+export const rootMigrate = asyncCreateMigrate(rootMigrations, {
+  debug: __DEV__,
+});

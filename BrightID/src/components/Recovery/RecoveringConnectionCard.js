@@ -10,13 +10,19 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import RNFS from 'react-native-fs';
+import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
 import { DEVICE_TYPE } from '@/utils/constants';
 import backupApi from '@/api/backupService';
 import { parseRecoveryQr } from './helpers';
 
 class RecoveryConnectionCard extends React.PureComponent<Props> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      imgErr: false,
+    };
+  }
   handleConnectionSelect = async () => {
     try {
       const { signingKey, timestamp } = parseRecoveryQr(
@@ -51,16 +57,25 @@ class RecoveryConnectionCard extends React.PureComponent<Props> {
 
   render() {
     const { photo, name, score, connectionDate, style } = this.props;
-    const imageSource = photo?.filename
-      ? {
-          uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
-        }
-      : require('@/static/default_profile.jpg');
+    const imageSource =
+      photo?.filename && !this.state.imgErr
+        ? {
+            uri: `file://${photoDirectory()}/${photo?.filename}`,
+          }
+        : require('@/static/default_profile.jpg');
 
     return (
       <TouchableOpacity onPress={this.handleConnectionSelect}>
         <View style={{ ...styles.container, ...style }}>
-          <Image source={imageSource} style={styles.photo} />
+          <Image
+            source={imageSource}
+            style={styles.photo}
+            onError={() => {
+              console.log('settingImgErr');
+              this.setState({ imgErr: true });
+            }}
+            accessibilityLabel="profile picture"
+          />
           <View style={styles.info}>
             <Text style={styles.name}>{name}</Text>
             <View style={styles.scoreContainer}>

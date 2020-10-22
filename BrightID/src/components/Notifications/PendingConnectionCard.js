@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
-import RNFS from 'react-native-fs';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/constants';

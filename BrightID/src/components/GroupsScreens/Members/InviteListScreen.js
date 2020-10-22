@@ -14,6 +14,15 @@ import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
 import MemberCard from './MemberCard';
 
+const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
+const ITEM_MARGIN = DEVICE_LARGE ? 11.8 : 6;
+
+const getItemLayout = (data, index) => ({
+  length: ITEM_HEIGHT + ITEM_MARGIN,
+  offset: (ITEM_HEIGHT + ITEM_MARGIN) * index,
+  index,
+});
+
 export class InviteListScreen extends Component<Props, State> {
   renderEligible = ({ item, index }) => {
     return (
@@ -67,6 +76,7 @@ export class InviteListScreen extends Component<Props, State> {
               data={this.getEligibles()}
               keyExtractor={({ id }, index) => id + index}
               renderItem={this.renderEligible}
+              getItemLayout={getItemLayout}
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}
               ListEmptyComponent={

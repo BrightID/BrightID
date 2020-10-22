@@ -7,39 +7,17 @@ import React, {
   useState,
   useRef,
 } from 'react';
-import {
-  Alert,
-  BackHandler,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  StatusBar,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { BackHandler, StyleSheet, StatusBar } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
-import { SvgXml } from 'react-native-svg';
-import {
-  pendingConnection_states,
-  rejectPendingConnection,
-  selectPendingConnectionById,
-  selectAllUnconfirmedConnections,
-} from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
-import { confirmPendingConnectionThunk } from '@/components/PendingConnectionsScreens/actions/pendingConnectionThunks';
-import {
-  channel_types,
-  selectChannelById,
-} from '@/components/PendingConnectionsScreens/channelSlice';
+import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import { DEVICE_LARGE, WIDTH } from '@/utils/constants';
-import backArrow from '@/static/back_arrow_grey.svg';
 import { setActiveNotification } from '@/actions';
+import { confirmPendingConnectionThunk } from './actions/pendingConnectionThunks';
+import { PreviewConnectionView } from './PreviewConnectionView';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -47,265 +25,35 @@ import { setActiveNotification } from '@/actions';
 ==================================================================
  *
  */
-
-/**  HELPER FUNCTIONS */
-
-const isReadyToConfirm = (pc) => pc.initiator || pc.signedMessage;
-
 const ZERO_CONNECTIONS_TIMEOUT = 3500;
-
-/**  COMPONENTS */
-
-const ConfirmationButtons = ({
-  pendingConnection: pc,
-  carouselRef,
-  last,
-  setReRender,
-}) => {
-  const dispatch = useDispatch();
-  const { t } = useTranslation();
-  const pendingConnection = useSelector(
-    (state) =>
-      selectPendingConnectionById(state, pc.id) ?? {
-        state: pendingConnection_states.EXPIRED,
-      },
-    (a, b) => a?.state === b?.state && a?.signedMessage === b?.signedMessage,
-  );
-
-  const alreadyExists = useSelector((state) =>
-    state.connections.connections.some(
-      (conn) => conn.id === pendingConnection.brightId,
-    ),
-  );
-
-  const accept = () => {
-    dispatch(confirmPendingConnectionThunk(pendingConnection.id));
-
-    if (last) {
-      setReRender(true);
-    } else {
-      carouselRef.current?.snapToNext();
-    }
-  };
-
-  const reject = () => {
-    dispatch(rejectPendingConnection(pendingConnection.id));
-
-    if (last) {
-      setReRender(true);
-    } else {
-      carouselRef.current?.snapToNext();
-    }
-  };
-
-  switch (pendingConnection.state) {
-    case pendingConnection_states.CONFIRMING:
-    case pendingConnection_states.CONFIRMED: {
-      return <Text style={styles.waitingText}>Confirmed connection.</Text>;
-    }
-    case pendingConnection_states.INITIAL:
-    case pendingConnection_states.DOWNLOADING: {
-      return <Text style={styles.waitingText}>Downloading profile ...</Text>;
-    }
-    case pendingConnection_states.REJECTED: {
-      return (
-        <Text style={styles.waitingText}>
-          Connection with {pendingConnection.name} has been rejected ...
-        </Text>
-      );
-    }
-    case pendingConnection_states.UNCONFIRMED:
-      if (isReadyToConfirm(pendingConnection)) {
-        return (
-          <>
-            <TouchableOpacity
-              testID="rejectConnectionButton"
-              onPress={reject}
-              style={styles.rejectButton}
-              accessibilityLabel={t('pendingConnections.accessibilityLabel.reject', {name: pendingConnection.name})}
-              accessibilityRole="button"
-            >
-              <Text style={styles.buttonText}>
-                {alreadyExists ? t('pendingConnections.button.ignore') : t('pendingConnections.button.reject')}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              testID="confirmConnectionButton"
-              onPress={accept}
-              style={styles.confirmButton}
-              accessibilityLabel={t('pendingConnections.accessibilityLabel.confirm', {name: pendingConnection.name})}
-              accessibilityRole="button"
-            >
-              <Text style={styles.buttonText}>
-                {alreadyExists ? t('pendingConnections.button.updateProfile') : t('pendingConnections.button.confirm')}
-              </Text>
-            </TouchableOpacity>
-          </>
-        );
-      } else {
-        return (
-          <Text style={styles.waitingText}>
-            {t('pendingConnections.text.waitingConfirmation', {name: pendingConnection.name})}
-          </Text>
-        );
-      }
-    case pendingConnection_states.ERROR: {
-      return (
-        <Text style={styles.waitingText}>
-          {t('pendingConnections.text.errorGeneric', {name: pendingConnection.name})}
-        </Text>
-      );
-    }
-    case pendingConnection_states.MYSELF: {
-      return <Text style={styles.waitingText}>{t('pendingConnections.text.errorMyself')}</Text>;
-    }
-    case pendingConnection_states.EXPIRED: {
-      Alert.alert(
-        t('pendingConnections.alert.title.expired'),
-        t('pendingConnections.alert.text.expired'),
-      );
-      return (
-        <Text style={styles.waitingText}>
-          {t('pendingConnections.text.errorExpired', {name: pendingConnection.name})}
-        </Text>
-      );
-    }
-    default: {
-      return (
-        <Text style={styles.waitingText}>
-          {t('pendingConnections.text.waiting')}
-        </Text>
-      );
-    }
-  }
-};
-
-export const PreviewConnection = (props) => {
-  // we only care about the state and signedMessage the of the pending connection
-  const { pendingConnection } = props;
-  const { t } = useTranslation();
-  console.log(
-    'rendering',
-    pendingConnection.name,
-    pendingConnection.signedMessage,
-  );
-
-  const alreadyExists = useSelector((state) =>
-    state.connections.connections.some(
-      (conn) => conn.id === pendingConnection.brightId,
-    ),
-  );
-
-  const navigation = useNavigation();
-  return (
-    <View style={styles.previewContainer} testID="previewConnectionScreen">
-      <TouchableOpacity
-        style={styles.cancelButton}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      >
-        <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
-      </TouchableOpacity>
-      <View style={styles.titleContainer}>
-        <Text style={styles.questionText}>{t('pendingConnections.text.connectWith')}</Text>
-      </View>
-      <View style={styles.userContainer}>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            navigation.navigate('FullScreenPhoto', {
-              photo: pendingConnection.photo,
-              base64: true,
-            });
-          }}
-        >
-          <Image
-            source={{ uri: pendingConnection.photo }}
-            style={styles.photo}
-            resizeMode="cover"
-            onError={(e) => {
-              console.log(e);
-            }}
-            accessible={true}
-            accessibilityLabel={t('common.accessibilityLabel.userPhoto')}
-          />
-        </TouchableWithoutFeedback>
-        <Text style={styles.connectName}>
-          {pendingConnection.name}
-          {pendingConnection.flagged && (
-            <Text style={styles.flagged}> {t('common.tag.flagged')}</Text>
-          )}
-        </Text>
-        {alreadyExists ? (
-          <Text style={styles.flagged}>{t('pendingConnections.tag.alreadyConnected')}</Text>
-        ) : (
-          <Text style={styles.connectedText}>
-            {pendingConnection.connectionDate}
-          </Text>
-        )}
-      </View>
-      <View style={styles.countsContainer}>
-        <View>
-          <Text style={styles.countsNumberText}>
-            {pendingConnection.connections}
-          </Text>
-        <Text style={styles.countsDescriptionText}>{t('pendingConnections.label.connections')}</Text>
-        </View>
-        <View>
-          <Text style={styles.countsNumberText}>
-            {pendingConnection.groups}
-          </Text>
-          <Text style={styles.countsDescriptionText}>{t('pendingConnections.label.groups')}</Text>
-        </View>
-        <View>
-          <Text style={styles.countsNumberText}>
-            {pendingConnection.mutualConnections}
-          </Text>
-          <Text style={styles.countsDescriptionText}>{t('pendingConnections.label.mutualConnections')}</Text>
-        </View>
-      </View>
-      <View style={styles.buttonContainer}>
-        <ConfirmationButtons {...props} />
-      </View>
-    </View>
-  );
-};
 
 export const PendingConnectionsScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const carouselRef = useRef(null);
-  const { t } = useTranslation();
 
-  // we want to watch for all changes to pending connections
   const pendingConnections = useSelector((state) => {
     return selectAllUnconfirmedConnections(state);
   });
-
   // pending connections to display
   const [pendingConnectionsToDisplay, setPendingConnectionsDisplay] = useState(
     [],
   );
-
   const [loading, setLoading] = useState(true);
-
   const [reRender, setReRender] = useState(true);
-
   const [activeIndex, setActiveIndex] = useState(null);
 
   // this will trigger a re-render of the carousel
   // causes a glitch in the UI on Android
   const resetDisplayConnections = useCallback(() => {
-    const connectionsToDisplay = pendingConnections.filter(isReadyToConfirm);
+    const connectionsToDisplay = pendingConnections;
     // this will cause the PendingConnectionList to re render
     setPendingConnectionsDisplay(connectionsToDisplay);
-    // setTimeout(() => {});
   }, [pendingConnections]);
 
   useFocusEffect(
     useCallback(() => {
       setReRender(true);
-      console.log('SETTING ACTIVE NOTIFICATION?');
       dispatch(setActiveNotification(null));
     }, [dispatch]),
   );
@@ -321,7 +69,7 @@ export const PendingConnectionsScreen = () => {
         setActiveIndex(0);
       }, 500);
     }
-  }, [reRender, resetDisplayConnections]);
+  }, [reRender]);
 
   // re-render list if no connections are displayed
   useEffect(() => {
@@ -360,17 +108,34 @@ export const PendingConnectionsScreen = () => {
 
   // the list should only re render sparingly for performance and continuity
   const PendingConnectionList = useMemo(() => {
+    const ratingHandler = (
+      pendingConnectionId: string,
+      level: ConnectionLevel,
+      index: number,
+    ) => {
+      dispatch(confirmPendingConnectionThunk(pendingConnectionId, level));
+
+      if (index === pendingConnectionsToDisplay.length - 1) {
+        // last list item handled? Then reload list
+        setReRender(true);
+      } else {
+        // move to next item
+        carouselRef.current?.snapToNext();
+      }
+    };
+
     const renderItem = ({ item, index }) => {
       return (
-        <PreviewConnection
-          pendingConnection={item}
+        <PreviewConnectionView
+          pendingConnectionId={item.id}
           carouselRef={carouselRef}
-          last={index === pendingConnectionsToDisplay.length - 1}
           setReRender={setReRender}
+          ratingHandler={ratingHandler}
+          index={index}
         />
       );
     };
-    // console.log('rendering pending connections CAROUSEL');
+    console.log('rendering pending connections CAROUSEL');
 
     return (
       <Carousel
@@ -393,49 +158,7 @@ export const PendingConnectionsScreen = () => {
         }}
       />
     );
-  }, [pendingConnectionsToDisplay]);
-
-  const ZeroConnectionsToDisplay = () => {
-    return (
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          flex: 1,
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        <Material
-          name="account-clock-outline"
-          size={DEVICE_LARGE ? 48 : 40}
-          color="#333"
-        />
-        <Text style={styles.waitingText}>
-          {pendingConnections.length === 0
-            ? t('pendingConnections.text.zeroPendingConnections')
-            : t('pendingConnections.text.pendingConnections', {count: pendingConnections.length, name: pendingConnections[0].name})}
-        </Text>
-        <Spinner isVisible={true} size={60} type="ThreeBounce" color="#333" />
-        <TouchableOpacity
-          style={styles.bottomButton}
-          onPress={() => {
-            navigation.navigate('Home');
-          }}
-        >
-          <Material
-            name="card-account-details-outline"
-            size={DEVICE_LARGE ? 36 : 24}
-            color="#333"
-          />
-          <Text style={styles.bottomButtonText}>{t('pendingConnections.button.returnHome')}</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
-  if (!DEVICE_LARGE) {
-    console.log('rendering pending connections SCREEN');
-  }
+  }, [dispatch, pendingConnectionsToDisplay]);
 
   return (
     <SafeAreaView style={[styles.container]}>
@@ -452,7 +175,7 @@ export const PendingConnectionsScreen = () => {
           type="FadingCircleAlt"
           color="#aaa"
         />
-      ) : pendingConnectionsToDisplay.length ? (
+      ) : (
         <>
           {PendingConnectionList}
           <Pagination
@@ -474,8 +197,6 @@ export const PendingConnectionsScreen = () => {
             tappableDots={true}
           />
         </>
-      ) : (
-        <ZeroConnectionsToDisplay />
       )}
     </SafeAreaView>
   );
@@ -540,66 +261,12 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 20 : 18,
     color: 'red',
   },
-  buttonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  confirmButton: {
-    borderRadius: 3,
-    backgroundColor: '#4a90e2',
-    flex: 1,
-    margin: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: DEVICE_LARGE ? 51 : 40,
-  },
-  rejectButton: {
-    borderRadius: 3,
-    backgroundColor: '#f7651c',
-    flex: 1,
-    margin: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: DEVICE_LARGE ? 51 : 40,
-  },
   buttonText: {
     fontFamily: 'Poppins',
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 18 : 15,
     textAlign: 'left',
     color: '#ffffff',
-  },
-  countsContainer: {
-    borderTopColor: '#e3e1e1',
-    borderTopWidth: 1,
-    paddingTop: 11,
-    justifyContent: 'space-evenly',
-    flexDirection: 'row',
-    width: '100%',
-    marginTop: 8,
-    borderBottomColor: '#e3e1e1',
-    borderBottomWidth: 1,
-    paddingBottom: 11,
-  },
-  countsDescriptionText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 14 : 12,
-  },
-  countsNumberText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    textAlign: 'center',
-    fontSize: 18,
-  },
-  connectedText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 14,
-    color: '#aba9a9',
-    fontStyle: 'italic',
   },
   cancelButton: {
     position: 'absolute',

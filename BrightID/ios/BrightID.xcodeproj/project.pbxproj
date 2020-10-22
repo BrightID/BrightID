@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* BrightIDTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BrightIDTests.m */; };
+		121120CA9F035CF45365ED1B /* libPods-BrightID-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 69264ED8ACD3D2CCF8A317B6 /* libPods-BrightID-tvOSTests.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -15,11 +16,10 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* BrightIDTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BrightIDTests.m */; };
-		59C38A8912E2704B0CE6F302 /* libPods-BrightID-BrightIDTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A9A3406C760EE3F3D5DE9FD /* libPods-BrightID-BrightIDTests.a */; };
-		AF9F0A56031E57CCD242975C /* libPods-BrightID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14E63EC740A2A41BDBA3ED34 /* libPods-BrightID.a */; };
-		C70DCDBA20E376467ED51859 /* libPods-BrightID-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 010DADE7EFB7485332EC274B /* libPods-BrightID-tvOS.a */; };
-		D00FCA688809617621500C11 /* libPods-BrightID-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E481BC11785E9B414DE4A8A /* libPods-BrightID-tvOSTests.a */; };
-		D73AA996251DC4F600F2BEAE /* assets in Resources */ = {isa = PBXBuildFile; fileRef = D73AA995251DC4F600F2BEAE /* assets */; };
+		8AC522726E5060591E433046 /* libPods-BrightID-BrightIDTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5A9A29A2418F6B513BAF59D /* libPods-BrightID-BrightIDTests.a */; };
+		A5E8A6E93AEE9F9F35987EE9 /* libPods-BrightID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C5DFD22A7C0C9B1B94BF95B /* libPods-BrightID.a */; };
+		D6AEFFBBCD585997B9910CD3 /* libPods-BrightID-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D0000788C82E7785DD8D09 /* libPods-BrightID-tvOS.a */; };
+		D736B38525394EAB0097A6A6 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = D736B38425394EAB0097A6A6 /* AppCenter-Config.plist */; };
 		D752DD8B251C97E3002622A9 /* ApexNew-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = D752DD82251C97E1002622A9 /* ApexNew-Light.otf */; };
 		D752DD8C251C97E3002622A9 /* Poppins-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D752DD83251C97E1002622A9 /* Poppins-Regular.otf */; };
 		D752DD8D251C97E3002622A9 /* Poppins-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = D752DD84251C97E1002622A9 /* Poppins-Medium.otf */; };
@@ -30,7 +30,6 @@
 		D752DD92251C97E3002622A9 /* Poppins-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = D752DD89251C97E3002622A9 /* Poppins-Light.otf */; };
 		D752DD93251C97E3002622A9 /* EurostileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D752DD8A251C97E3002622A9 /* EurostileRegular.ttf */; };
 		D752DD98251CACBB002622A9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D752DD97251CACBB002622A9 /* LaunchScreen.storyboard */; };
-		D7B8E6AF2522EBE2002D7964 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = D7B8E6AE2522EBE2002D7964 /* main.jsbundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,25 +53,29 @@
 		00E356EE1AD99517003FC87E /* BrightIDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrightIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* BrightIDTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BrightIDTests.m; sourceTree = "<group>"; };
-		010DADE7EFB7485332EC274B /* libPods-BrightID-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* BrightID.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrightID.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = BrightID/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = BrightID/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = BrightID/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = BrightID/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = BrightID/main.m; sourceTree = "<group>"; };
-		14E63EC740A2A41BDBA3ED34 /* libPods-BrightID.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		201A3D903E8513515C9B9349 /* Pods-BrightID.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.debug.xcconfig"; path = "Target Support Files/Pods-BrightID/Pods-BrightID.debug.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* BrightID-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BrightID-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* BrightID-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BrightID-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5A9A3406C760EE3F3D5DE9FD /* libPods-BrightID-BrightIDTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID-BrightIDTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5E481BC11785E9B414DE4A8A /* libPods-BrightID-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6D7F2E7A5EFC9164823805BE /* Pods-BrightID-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOS/Pods-BrightID-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		8D7F905AE8AAFDA5576F39E7 /* Pods-BrightID.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.release.xcconfig"; path = "Target Support Files/Pods-BrightID/Pods-BrightID.release.xcconfig"; sourceTree = "<group>"; };
-		8D8F25C000E929980741582B /* Pods-BrightID-BrightIDTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-BrightIDTests.debug.xcconfig"; path = "Target Support Files/Pods-BrightID-BrightIDTests/Pods-BrightID-BrightIDTests.debug.xcconfig"; sourceTree = "<group>"; };
-		BDB74B93E66ABEEE622D933D /* Pods-BrightID.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.debug.xcconfig"; path = "Target Support Files/Pods-BrightID/Pods-BrightID.debug.xcconfig"; sourceTree = "<group>"; };
-		C71CE1472E0ACE289410E22E /* Pods-BrightID-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOSTests/Pods-BrightID-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		D34FAF1E77E10787959B20DE /* Pods-BrightID-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOS.release.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOS/Pods-BrightID-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		D73AA995251DC4F600F2BEAE /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
+		5C5DFD22A7C0C9B1B94BF95B /* libPods-BrightID.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		67D86899276874A105218951 /* Pods-BrightID-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOSTests/Pods-BrightID-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		69264ED8ACD3D2CCF8A317B6 /* libPods-BrightID-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AC3FA1B3F4934694CAA5C4A /* Pods-BrightID-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOS.release.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOS/Pods-BrightID-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		7D8E9E0C7F64D8F4E371F7C4 /* Pods-BrightID-BrightIDTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-BrightIDTests.release.xcconfig"; path = "Target Support Files/Pods-BrightID-BrightIDTests/Pods-BrightID-BrightIDTests.release.xcconfig"; sourceTree = "<group>"; };
+		86982997DC3ED54C7842A1C4 /* Pods-BrightID-tvOS.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOS.staging.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOS/Pods-BrightID-tvOS.staging.xcconfig"; sourceTree = "<group>"; };
+		89D0000788C82E7785DD8D09 /* libPods-BrightID-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9102DACDA2F0EEC531D3CCD7 /* Pods-BrightID-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOS/Pods-BrightID-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		A2A64BB85B9F64D37E674F61 /* Pods-BrightID-BrightIDTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-BrightIDTests.debug.xcconfig"; path = "Target Support Files/Pods-BrightID-BrightIDTests/Pods-BrightID-BrightIDTests.debug.xcconfig"; sourceTree = "<group>"; };
+		A772DC2140C217883F9F1EF5 /* Pods-BrightID.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.staging.xcconfig"; path = "Target Support Files/Pods-BrightID/Pods-BrightID.staging.xcconfig"; sourceTree = "<group>"; };
+		C40940EFBC11AD8CF74507B8 /* Pods-BrightID-BrightIDTests.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-BrightIDTests.staging.xcconfig"; path = "Target Support Files/Pods-BrightID-BrightIDTests/Pods-BrightID-BrightIDTests.staging.xcconfig"; sourceTree = "<group>"; };
+		C5A9A29A2418F6B513BAF59D /* libPods-BrightID-BrightIDTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID-BrightIDTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C90DA842334548987F6ED27C /* Pods-BrightID.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.release.xcconfig"; path = "Target Support Files/Pods-BrightID/Pods-BrightID.release.xcconfig"; sourceTree = "<group>"; };
+		D736B38425394EAB0097A6A6 /* AppCenter-Config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AppCenter-Config.plist"; sourceTree = "<group>"; };
 		D752DD81251C9714002622A9 /* BrightID.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BrightID.entitlements; path = BrightID/BrightID.entitlements; sourceTree = "<group>"; };
 		D752DD82251C97E1002622A9 /* ApexNew-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ApexNew-Light.otf"; path = "../assets/fonts/ApexNew-Light.otf"; sourceTree = "<group>"; };
 		D752DD83251C97E1002622A9 /* Poppins-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Regular.otf"; path = "../assets/fonts/Poppins-Regular.otf"; sourceTree = "<group>"; };
@@ -84,9 +87,8 @@
 		D752DD89251C97E3002622A9 /* Poppins-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Light.otf"; path = "../assets/fonts/Poppins-Light.otf"; sourceTree = "<group>"; };
 		D752DD8A251C97E3002622A9 /* EurostileRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = EurostileRegular.ttf; path = ../assets/fonts/EurostileRegular.ttf; sourceTree = "<group>"; };
 		D752DD97251CACBB002622A9 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
-		D7B8E6AE2522EBE2002D7964 /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		DD731C0C091AA3F89CDE54EC /* Pods-BrightID-BrightIDTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-BrightIDTests.release.xcconfig"; path = "Target Support Files/Pods-BrightID-BrightIDTests/Pods-BrightID-BrightIDTests.release.xcconfig"; sourceTree = "<group>"; };
-		E9292E8EE44B18B13D6F3A00 /* Pods-BrightID-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOSTests/Pods-BrightID-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		E9FDBE0A11C1B1CE7F7A8D4B /* Pods-BrightID-tvOSTests.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOSTests.staging.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOSTests/Pods-BrightID-tvOSTests.staging.xcconfig"; sourceTree = "<group>"; };
+		ECF854DBA5AB061315D27491 /* Pods-BrightID-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-BrightID-tvOSTests/Pods-BrightID-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
@@ -96,7 +98,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				59C38A8912E2704B0CE6F302 /* libPods-BrightID-BrightIDTests.a in Frameworks */,
+				8AC522726E5060591E433046 /* libPods-BrightID-BrightIDTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,7 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AF9F0A56031E57CCD242975C /* libPods-BrightID.a in Frameworks */,
+				A5E8A6E93AEE9F9F35987EE9 /* libPods-BrightID.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,7 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C70DCDBA20E376467ED51859 /* libPods-BrightID-tvOS.a in Frameworks */,
+				D6AEFFBBCD585997B9910CD3 /* libPods-BrightID-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,7 +122,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D00FCA688809617621500C11 /* libPods-BrightID-tvOSTests.a in Frameworks */,
+				121120CA9F035CF45365ED1B /* libPods-BrightID-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,14 +149,18 @@
 		0A52900DF84229B4AEDF64F1 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				BDB74B93E66ABEEE622D933D /* Pods-BrightID.debug.xcconfig */,
-				8D7F905AE8AAFDA5576F39E7 /* Pods-BrightID.release.xcconfig */,
-				8D8F25C000E929980741582B /* Pods-BrightID-BrightIDTests.debug.xcconfig */,
-				DD731C0C091AA3F89CDE54EC /* Pods-BrightID-BrightIDTests.release.xcconfig */,
-				6D7F2E7A5EFC9164823805BE /* Pods-BrightID-tvOS.debug.xcconfig */,
-				D34FAF1E77E10787959B20DE /* Pods-BrightID-tvOS.release.xcconfig */,
-				C71CE1472E0ACE289410E22E /* Pods-BrightID-tvOSTests.debug.xcconfig */,
-				E9292E8EE44B18B13D6F3A00 /* Pods-BrightID-tvOSTests.release.xcconfig */,
+				201A3D903E8513515C9B9349 /* Pods-BrightID.debug.xcconfig */,
+				C90DA842334548987F6ED27C /* Pods-BrightID.release.xcconfig */,
+				A772DC2140C217883F9F1EF5 /* Pods-BrightID.staging.xcconfig */,
+				A2A64BB85B9F64D37E674F61 /* Pods-BrightID-BrightIDTests.debug.xcconfig */,
+				7D8E9E0C7F64D8F4E371F7C4 /* Pods-BrightID-BrightIDTests.release.xcconfig */,
+				C40940EFBC11AD8CF74507B8 /* Pods-BrightID-BrightIDTests.staging.xcconfig */,
+				9102DACDA2F0EEC531D3CCD7 /* Pods-BrightID-tvOS.debug.xcconfig */,
+				7AC3FA1B3F4934694CAA5C4A /* Pods-BrightID-tvOS.release.xcconfig */,
+				86982997DC3ED54C7842A1C4 /* Pods-BrightID-tvOS.staging.xcconfig */,
+				ECF854DBA5AB061315D27491 /* Pods-BrightID-tvOSTests.debug.xcconfig */,
+				67D86899276874A105218951 /* Pods-BrightID-tvOSTests.release.xcconfig */,
+				E9FDBE0A11C1B1CE7F7A8D4B /* Pods-BrightID-tvOSTests.staging.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -178,10 +184,10 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				14E63EC740A2A41BDBA3ED34 /* libPods-BrightID.a */,
-				5A9A3406C760EE3F3D5DE9FD /* libPods-BrightID-BrightIDTests.a */,
-				010DADE7EFB7485332EC274B /* libPods-BrightID-tvOS.a */,
-				5E481BC11785E9B414DE4A8A /* libPods-BrightID-tvOSTests.a */,
+				5C5DFD22A7C0C9B1B94BF95B /* libPods-BrightID.a */,
+				C5A9A29A2418F6B513BAF59D /* libPods-BrightID-BrightIDTests.a */,
+				89D0000788C82E7785DD8D09 /* libPods-BrightID-tvOS.a */,
+				69264ED8ACD3D2CCF8A317B6 /* libPods-BrightID-tvOSTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -196,8 +202,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				D7B8E6AE2522EBE2002D7964 /* main.jsbundle */,
-				D73AA995251DC4F600F2BEAE /* assets */,
+				D736B38425394EAB0097A6A6 /* AppCenter-Config.plist */,
 				D752DD87251C97E2002622A9 /* ApexNew-Book.otf */,
 				D752DD82251C97E1002622A9 /* ApexNew-Light.otf */,
 				D752DD88251C97E2002622A9 /* ApexNew-Medium.otf */,
@@ -237,11 +242,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "BrightIDTests" */;
 			buildPhases = (
-				193463CAA4BA6E85429673F0 /* [CP] Check Pods Manifest.lock */,
+				EA889479DEACB19488E9083D /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				58CCD241910BBA60B3D37B70 /* [CP] Copy Pods Resources */,
+				3027CFB060E627EC51FBCE33 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -257,13 +262,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "BrightID" */;
 			buildPhases = (
-				807B96BF4967288FCB686820 /* [CP] Check Pods Manifest.lock */,
+				570108660D4CD1F3C39ADBD1 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				8DC5C36E7E489B224FA68A72 /* [CP] Copy Pods Resources */,
+				441D1D8F1E20D3FFB13B8CD3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -278,7 +283,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "BrightID-tvOS" */;
 			buildPhases = (
-				B49839BCFEB65AE34033AE19 /* [CP] Check Pods Manifest.lock */,
+				AE5B4A6A54C4E9DAA5D5569E /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
 				2D02E4771E0B4A5D006451C7 /* Sources */,
 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
@@ -298,7 +303,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "BrightID-tvOSTests" */;
 			buildPhases = (
-				8D3A729CE5B1D0D7BF03CC63 /* [CP] Check Pods Manifest.lock */,
+				63B35DB8B8D2272493BC9B99 /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
 				2D02E48E1E0B4A5D006451C7 /* Resources */,
@@ -373,13 +378,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D7B8E6AF2522EBE2002D7964 /* main.jsbundle in Resources */,
-				D73AA996251DC4F600F2BEAE /* assets in Resources */,
 				D752DD8B251C97E3002622A9 /* ApexNew-Light.otf in Resources */,
 				D752DD8C251C97E3002622A9 /* Poppins-Regular.otf in Resources */,
 				D752DD8D251C97E3002622A9 /* Poppins-Medium.otf in Resources */,
 				D752DD8E251C97E3002622A9 /* Poppins-Bold.otf in Resources */,
 				D752DD8F251C97E3002622A9 /* Poppins-ExtraLight.otf in Resources */,
+				D736B38525394EAB0097A6A6 /* AppCenter-Config.plist in Resources */,
 				D752DD90251C97E3002622A9 /* ApexNew-Book.otf in Resources */,
 				D752DD91251C97E3002622A9 /* ApexNew-Medium.otf in Resources */,
 				D752DD92251C97E3002622A9 /* Poppins-Light.otf in Resources */,
@@ -421,28 +425,6 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		193463CAA4BA6E85429673F0 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BrightID-BrightIDTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -457,7 +439,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		58CCD241910BBA60B3D37B70 /* [CP] Copy Pods Resources */ = {
+		3027CFB060E627EC51FBCE33 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -511,51 +493,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BrightID-BrightIDTests/Pods-BrightID-BrightIDTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		807B96BF4967288FCB686820 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BrightID-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8D3A729CE5B1D0D7BF03CC63 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BrightID-tvOSTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8DC5C36E7E489B224FA68A72 /* [CP] Copy Pods Resources */ = {
+		441D1D8F1E20D3FFB13B8CD3 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -609,7 +547,51 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BrightID/Pods-BrightID-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B49839BCFEB65AE34033AE19 /* [CP] Check Pods Manifest.lock */ = {
+		570108660D4CD1F3C39ADBD1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BrightID-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		63B35DB8B8D2272493BC9B99 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BrightID-tvOSTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AE5B4A6A54C4E9DAA5D5569E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -625,6 +607,28 @@
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-BrightID-tvOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EA889479DEACB19488E9083D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BrightID-BrightIDTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -724,7 +728,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8D8F25C000E929980741582B /* Pods-BrightID-BrightIDTests.debug.xcconfig */;
+			baseConfigurationReference = A2A64BB85B9F64D37E674F61 /* Pods-BrightID-BrightIDTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -747,7 +751,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DD731C0C091AA3F89CDE54EC /* Pods-BrightID-BrightIDTests.release.xcconfig */;
+			baseConfigurationReference = 7D8E9E0C7F64D8F4E371F7C4 /* Pods-BrightID-BrightIDTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -767,7 +771,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BDB74B93E66ABEEE622D933D /* Pods-BrightID.debug.xcconfig */;
+			baseConfigurationReference = 201A3D903E8513515C9B9349 /* Pods-BrightID.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -777,8 +781,9 @@
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = BrightID/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.11.1;
+				MARKETING_VERSION = 3.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -795,7 +800,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8D7F905AE8AAFDA5576F39E7 /* Pods-BrightID.release.xcconfig */;
+			baseConfigurationReference = C90DA842334548987F6ED27C /* Pods-BrightID.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -804,8 +809,9 @@
 				DEVELOPMENT_TEAM = 8YXQK74X6B;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = BrightID/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.11.1;
+				MARKETING_VERSION = 3.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -821,7 +827,7 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6D7F2E7A5EFC9164823805BE /* Pods-BrightID-tvOS.debug.xcconfig */;
+			baseConfigurationReference = 9102DACDA2F0EEC531D3CCD7 /* Pods-BrightID-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -849,7 +855,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D34FAF1E77E10787959B20DE /* Pods-BrightID-tvOS.release.xcconfig */;
+			baseConfigurationReference = 7AC3FA1B3F4934694CAA5C4A /* Pods-BrightID-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -877,7 +883,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C71CE1472E0ACE289410E22E /* Pods-BrightID-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = ECF854DBA5AB061315D27491 /* Pods-BrightID-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -904,7 +910,7 @@
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E9292E8EE44B18B13D6F3A00 /* Pods-BrightID-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = 67D86899276874A105218951 /* Pods-BrightID-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -957,6 +963,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODEPUSH_KEY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -984,6 +991,7 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
+				MULTI_DEPLOYMENT_CONFIG = "";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -1017,6 +1025,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODEPUSH_KEY = "TexIXu5MO3ouWAjZRH2nZ754rQuDX2-SU_Dmg";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1037,10 +1046,168 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
+				MULTI_DEPLOYMENT_CONFIG = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
+		};
+		D7E77FF62539749D003EB6A3 /* Staging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODEPUSH_KEY = RHAO3mGY0FeUPn3CJGn0bzw_F6Sdoy4zwHbku;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MULTI_DEPLOYMENT_CONFIG = "$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Staging;
+		};
+		D7E77FF72539749D003EB6A3 /* Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A772DC2140C217883F9F1EF5 /* Pods-BrightID.staging.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = BrightID/BrightID.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8YXQK74X6B;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				INFOPLIST_FILE = BrightID/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 3.0.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.demo;
+				PRODUCT_NAME = BrightID;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Staging;
+		};
+		D7E77FF82539749D003EB6A3 /* Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C40940EFBC11AD8CF74507B8 /* Pods-BrightID-BrightIDTests.staging.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COPY_PHASE_STRIP = NO;
+				INFOPLIST_FILE = BrightIDTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BrightID.app/BrightID";
+			};
+			name = Staging;
+		};
+		D7E77FF92539749D003EB6A3 /* Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 86982997DC3ED54C7842A1C4 /* Pods-BrightID-tvOS.staging.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "BrightID-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.BrightID-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Staging;
+		};
+		D7E77FFA2539749D003EB6A3 /* Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E9FDBE0A11C1B1CE7F7A8D4B /* Pods-BrightID-tvOSTests.staging.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "BrightID-tvOSTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.BrightID-tvOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BrightID-tvOS.app/BrightID-tvOS";
+				TVOS_DEPLOYMENT_TARGET = 10.1;
+			};
+			name = Staging;
 		};
 /* End XCBuildConfiguration section */
 
@@ -1050,6 +1217,7 @@
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
 				00E356F71AD99517003FC87E /* Release */,
+				D7E77FF82539749D003EB6A3 /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1059,6 +1227,7 @@
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
 				13B07F951A680F5B00A75B9A /* Release */,
+				D7E77FF72539749D003EB6A3 /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1068,6 +1237,7 @@
 			buildConfigurations = (
 				2D02E4971E0B4A5E006451C7 /* Debug */,
 				2D02E4981E0B4A5E006451C7 /* Release */,
+				D7E77FF92539749D003EB6A3 /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1077,6 +1247,7 @@
 			buildConfigurations = (
 				2D02E4991E0B4A5E006451C7 /* Debug */,
 				2D02E49A1E0B4A5E006451C7 /* Release */,
+				D7E77FFA2539749D003EB6A3 /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1086,6 +1257,7 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+				D7E77FF62539749D003EB6A3 /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

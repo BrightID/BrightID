@@ -46,23 +46,23 @@ export const NotificationBanner = () => {
   const pendingConnections = useSelector(selectAllUnconfirmedConnections);
 
   useEffect(() => {
-    dropDownAlertRef.current?.closeAction('automatic');
     if (!activeNotification) {
       return;
     }
 
-    InteractionManager.runAfterInteractions(() => {
-      let route = getRoute();
-      if (!screenBlackList.includes(route?.name)) {
-        if (DropDownAlertEnabled) {
-          dropDownAlertRef.current?.alertWithType(
-            'custom',
-            activeNotification?.title,
-            activeNotification?.message,
-          );
-        }
+    let route = getRoute();
+
+    dropDownAlertRef.current?.closeAction('cancel');
+
+    if (!screenBlackList.includes(route?.name)) {
+      if (DropDownAlertEnabled) {
+        dropDownAlertRef.current?.alertWithType(
+          'custom',
+          activeNotification?.title,
+          activeNotification?.message,
+        );
       }
-    });
+    }
   }, [activeNotification, dispatch]);
 
   useEffect(() => {
@@ -86,12 +86,14 @@ export const NotificationBanner = () => {
     activeNotification?.xmlIcon ?? icons[activeNotification?.type] ?? misc;
 
   const _onTap = () => {
+    console.log('onTap', activeNotification);
     if (activeNotification?.navigationTarget) {
       navigate(activeNotification.navigationTarget);
     }
   };
 
   const _onClose = () => {
+    console.log('onClose, setting null');
     dispatch(setActiveNotification(null));
   };
 

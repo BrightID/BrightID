@@ -7,8 +7,7 @@ import CryptoJS from 'crypto-js';
 import { compose } from 'ramda';
 
 export function uInt8ArrayToB64(array: Uint8Array) {
-  const b = Buffer.from(array);
-  return b.toString('base64');
+  return B64.fromByteArray(array);
 }
 
 export function b64ToUint8Array(str: string) {

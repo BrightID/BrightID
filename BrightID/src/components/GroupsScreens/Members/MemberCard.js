@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useRef, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import RNFS from 'react-native-fs';
+import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
 import { DEVICE_TYPE } from '@/utils/constants';
 import ActionSheet from 'react-native-actionsheet';
@@ -45,6 +45,7 @@ function MemberCard(props: MemberCardProps) {
   const actionSheetRef: ?ActionSheet = useRef(null);
   const [contextActions, setContextActions] = useState<Array<string>>([]);
   const [flagged, setFlagged] = useState(false);
+  const [imgErr, setImgErr] = useState(false);
   const { t } = useTranslation();
 
   // set possible actions depending on user and member admin status
@@ -92,17 +93,26 @@ function MemberCard(props: MemberCardProps) {
     }
   };
 
-  const imageSource = photo?.filename
-    ? {
-        uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
-      }
-    : require('@/static/default_profile.jpg');
+  const imageSource =
+    photo?.filename && !imgErr
+      ? {
+          uri: `file://${photoDirectory()}/${photo?.filename}`,
+        }
+      : require('@/static/default_profile.jpg');
 
   const memberTestID = memberIsAdmin ? 'admin' : 'regular';
   return (
     <View testID={memberTestID}>
       <View style={styles.container} testID={testID}>
-        <Image source={imageSource} style={styles.photo} />
+        <Image
+          source={imageSource}
+          style={styles.photo}
+          onError={() => {
+            console.log('settingImgErr');
+            setImgErr(true);
+          }}
+          accessibilityLabel="profile picture"
+        />
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
           <View style={styles.statusContainer}>
