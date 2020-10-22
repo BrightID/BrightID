@@ -18,7 +18,8 @@ import { SvgXml } from 'react-native-svg';
 import codePush from 'react-native-code-push';
 import verificationSticker from '@/static/verification-sticker.svg';
 import { retrieveImage } from '@/utils/filesystem';
-import editProfile from '@/static/edit_profile_inactive.svg';
+import editProfile from '@/static/edit_profile.svg';
+import editProfileFocused from '@/static/edit_profile_focused.svg';
 import trustedConnections from '@/static/trusted_connections_sidebar_inactive.svg';
 import contactUs from '@/static/contact_us.svg';
 import explorerCode from '@/static/explorer_code_icon.svg';
@@ -27,23 +28,24 @@ import homeIcon from '@/static/home_icon_side_menu.svg';
 import taskList from '@/static/task_list_icon.svg';
 import taskListFocused from '@/static/task_list_icon_focused.svg';
 import faqIcon from '@/static/faq_icon.svg';
-
 import TasksScreen from '@/components/Tasks/TasksScreen';
 import GraphExplorerScreen from '@/components/SideMenu/GraphExplorerScreen';
 import ContactUsScreen from '@/components/SideMenu/ContactUsScreen';
+import EditProfileScreen from '@/components/SideMenu/EditProfileScreen';
 
 import { useHeaderHeight } from '@react-navigation/stack';
 
 const iconMap = {
   editProfile,
-  trustedConnections,
+  editProfileFocused,
   contactUs,
   explorerCode,
+  explorerCodeFocused,
   homeIcon,
   taskList,
-  explorerCodeFocused,
   taskListFocused,
   faqIcon,
+  trustedConnections,
 };
 
 const getIcon = (name) => {
@@ -139,6 +141,20 @@ const CustomDrawerContent = (props) => {
         }}
       />
       <CustomItem
+        focused={state.routeNames[state.index] === 'Edit Profile'}
+        inactiveTintColor="#000"
+        inactiveBackgroundColor="#fff"
+        activeTintColor="#fff"
+        activeBackgroundColor={ORANGE}
+        label="Edit Profile"
+        style={styles.drawerItem}
+        labelStyle={styles.labelStyle}
+        icon={getIcon('editProfile')}
+        onPress={() => {
+          navigation.navigate('Edit Profile');
+        }}
+      />
+      <CustomItem
         focused={state.routeNames[state.index] === 'Achievements'}
         inactiveTintColor="#000"
         inactiveBackgroundColor="#fff"
@@ -152,6 +168,7 @@ const CustomDrawerContent = (props) => {
           navigation.navigate('Achievements');
         }}
       />
+
       <CustomItem
         focused={state.routeNames[state.index] === 'Copy Explorer Code'}
         inactiveTintColor="#000"
@@ -165,13 +182,6 @@ const CustomDrawerContent = (props) => {
         onPress={() => {
           navigation.navigate('Copy Explorer Code');
         }}
-      />
-      <CustomItem
-        inactiveTintColor="#aaa"
-        label="Edit Profile"
-        style={styles.drawerItem}
-        labelStyle={styles.labelStyle}
-        icon={getIcon('editProfile')}
       />
       <CustomItem
         inactiveTintColor="#aaa"
@@ -252,6 +262,13 @@ export const HomeDrawer = () => {
           drawerIcon: getIcon('taskList'),
         }}
         component={TasksScreen}
+      />
+      <Drawer.Screen
+        name="Edit Profile"
+        options={{
+          drawerIcon: getIcon('editProfile'),
+        }}
+        component={EditProfileScreen}
       />
       <Drawer.Screen
         name="Copy Explorer Code"

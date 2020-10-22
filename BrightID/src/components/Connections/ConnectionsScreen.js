@@ -222,7 +222,7 @@ const filterConnectionsSelector = createSelector(
   searchParamSelector,
   (connections, searchParam) => {
     const searchString = toSearchString(searchParam);
-    return connections.filter((item) => 
+    return connections.filter((item) =>
       toSearchString(`${item.name}`).includes(searchString),
     );
   },
