@@ -17,6 +17,7 @@ import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { deleteConnection } from '@/actions';
 import { ORANGE, DEVICE_LARGE, LIGHTBLUE } from '@/utils/constants';
+import { toSearchString } from '@/utils/strings';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import ConnectionCard from './ConnectionCard';
@@ -220,9 +221,9 @@ const filterConnectionsSelector = createSelector(
   connectionsSelector,
   searchParamSelector,
   (connections, searchParam) => {
-    const searchString = searchParam.toLowerCase().replace(/\s/g, '');
-    return connections.filter((item) =>
-      `${item.name}`.toLowerCase().replace(/\s/g, '').includes(searchString),
+    const searchString = toSearchString(searchParam);
+    return connections.filter((item) => 
+      toSearchString(`${item.name}`).includes(searchString),
     );
   },
 );

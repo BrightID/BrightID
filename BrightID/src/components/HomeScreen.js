@@ -341,7 +341,7 @@ export const HomeScreen = (props) => {
         onPress={(index) => {
           if (index === 0) {
             Linking.openURL(discordUrl).catch((err) =>
-              console.error('An error occurred', err),
+              console.log('An error occurred', err),
             );
           }
         }}

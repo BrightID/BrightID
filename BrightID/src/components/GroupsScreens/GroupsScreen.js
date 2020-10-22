@@ -15,6 +15,7 @@ import fetchUserInfo from '@/actions/fetchUserInfo';
 import { getGroupName, ids2connections, knownMemberIDs } from '@/utils/groups';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
+import { toSearchString } from '@/utils/strings';
 import GroupCard from './GroupCard';
 import { NoGroups } from './NoGroups';
 import { compareJoinedDesc } from './models/sortingUtility';
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   const { groups: unfilteredGroups } = state.groups;
-  const searchParam = state.groups.searchParam.toLowerCase();
+  const searchParam = toSearchString(state.groups.searchParam);
   const hasGroups = unfilteredGroups.length > 0;
 
   // apply search filter to groups array
@@ -177,14 +178,14 @@ function mapStateToProps(state) {
   let groups;
   if (searchParam !== '') {
     groups = unfilteredGroups.filter((group) => {
-      if (getGroupName(group).toLowerCase().includes(searchParam)) {
+      if (toSearchString(getGroupName(group)).includes(searchParam)) {
         // direct group name match
         return true;
       } else {
         // check group members
         const allMemberNames = ids2connections(
           knownMemberIDs(group),
-        ).map((member) => member.name.toLowerCase());
+        ).map((member) => toSearchString(member.name));
         for (const name of allMemberNames) {
           if (name.includes(searchParam)) {
             // stop looking if a match is found
