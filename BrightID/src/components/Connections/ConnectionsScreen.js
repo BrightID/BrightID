@@ -52,7 +52,7 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
   const dispatch = useDispatch();
   const { showActionSheetWithOptions } = useActionSheet();
   const disabled = status === 'initiated';
-  const isStale = status === 'stale';
+  const canRemove = status === 'stale' || status === 'deleted';
 
   let flaggingOptions = [
     'Flag as Duplicate',
@@ -207,7 +207,7 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
 
   return (
     <View style={styles.actionContainer}>
-      {isStale ? <RemoveButton /> : <FlagButton />}
+      {canRemove ? <RemoveButton /> : <FlagButton />}
     </View>
   );
 };

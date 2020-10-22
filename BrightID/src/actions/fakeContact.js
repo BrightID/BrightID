@@ -3,11 +3,7 @@
 import nacl from 'tweetnacl';
 import RNFetchBlob from 'rn-fetch-blob';
 import { Alert } from 'react-native';
-import {
-  strToUint8Array,
-  uInt8ArrayToB64,
-  b64ToUrlSafeB64,
-} from '@/utils/encoding';
+import { uInt8ArrayToB64, b64ToUrlSafeB64 } from '@/utils/encoding';
 import { encryptData } from '@/utils/cryptoHelper';
 import { createRandomId } from '@/utils/channels';
 import { selectChannelById } from '@/components/PendingConnectionsScreens/channelSlice';
@@ -23,9 +19,6 @@ export const addFakeConnection = () => async (
     // create a fake user
     console.log('creating fake user');
     const { publicKey, secretKey } = await nacl.sign.keyPair();
-    const {
-      user: { id },
-    } = getState();
     const b64PubKey = uInt8ArrayToB64(publicKey);
     const connectId = b64ToUrlSafeB64(b64PubKey);
     const { firstName, lastName } = names[
@@ -33,11 +26,6 @@ export const addFakeConnection = () => async (
     ];
     const name = `${firstName} ${lastName}`;
     const score = Math.floor(Math.random() * 99);
-    const timestamp = Date.now();
-    const message = `Add Connection${connectId}${id}${timestamp}`;
-    const signedMessage = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
 
     // load random photo
     let photo;
@@ -65,8 +53,6 @@ export const addFakeConnection = () => async (
       score,
       profileTimestamp: Date.now(),
       secretKey: uInt8ArrayToB64(secretKey),
-      signedMessage,
-      timestamp,
       notificationToken: null,
     };
 

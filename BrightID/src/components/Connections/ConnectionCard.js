@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
-import { DEVICE_LARGE, MAX_WAITING_SECONDS } from '@/utils/constants';
+import { DEVICE_LARGE, CHANNEL_TTL } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
 import { staleConnection } from '@/actions';
 import verificationSticker from '@/static/verification-sticker.svg';
@@ -43,11 +43,9 @@ const ConnectionCard = (props) => {
       // if we have a "waiting" connection, start timer to handle stale connection requests
       if (status === 'initiated') {
         const checkStale = () => {
-          const ageSeconds = Math.floor((Date.now() - connectionDate) / 1000);
-          if (ageSeconds > MAX_WAITING_SECONDS && status !== 'verified') {
-            console.log(
-              `Connection ${name} is stale (age: ${ageSeconds} seconds)`,
-            );
+          const ageMs = Date.now() - connectionDate;
+          if (ageMs > CHANNEL_TTL && status !== 'verified') {
+            console.log(`Connection ${name} is stale (age: ${ageMs} ms)`);
             return true;
           }
           return false;
@@ -56,9 +54,8 @@ const ConnectionCard = (props) => {
           // this is already old. Immediately mark as "stale", no need for a timer.
           dispatch(staleConnection(id));
         } else {
-          // start timer to check if connection got verified after MAX_WAITING_TIME
-          let checkTime =
-            connectionDate + MAX_WAITING_SECONDS * 1000 + 5000 - Date.now(); // add 5 seconds buffer
+          // start timer to check if connection got verified after maximum channel lifetime
+          let checkTime = connectionDate + CHANNEL_TTL + 5000 - Date.now(); // add 5 seconds buffer
           if (checkTime < 0) {
             console.log(`Warning - checkTime in past: ${checkTime}`);
             checkTime = 1000; // check in 1 second
@@ -126,7 +123,6 @@ const ConnectionCard = (props) => {
       );
     } else {
       const testID = `connection-${index}`;
-      const stickerTestID = `${testID}-verified`;
       return (
         <View style={styles.statusContainer}>
           <Text style={styles.connectedText} testID={testID}>
@@ -190,7 +186,6 @@ const ConnectionCard = (props) => {
   );
 };
 
-const ORANGE = '#ED7A5D';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
