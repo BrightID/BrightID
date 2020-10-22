@@ -1,16 +1,9 @@
 // @flow
 
-import {
-  APP_VERSION,
-  ADD_OPERATION,
-  REMOVE_OPERATION,
-  RESET_OPERATIONS,
-} from '@/actions';
-import { version } from '../../package.json';
+import { ADD_OPERATION, REMOVE_OPERATION, RESET_OPERATIONS } from '@/actions';
 
 const initialState = {
   operations: [],
-  mobileVersion: version,
 };
 
 export const reducer = (
@@ -33,15 +26,6 @@ export const reducer = (
         ...state,
         operations,
       };
-    }
-    case APP_VERSION: {
-      let versionCode = state.mobileVersion.split('.');
-      // action.version is the codepush label v(n), we need to remove the v
-      let incomingPatch = action.version.substring(1);
-
-      versionCode.splice(versionCode.length - 1, 1, incomingPatch);
-
-      return { ...state, mobileVersion: versionCode.join('.') };
     }
     case RESET_OPERATIONS: {
       return { ...state, operations: [] };
