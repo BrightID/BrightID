@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { SvgXml } from 'react-native-svg';
 import backArrow from '@/static/back_arrow_grey.svg';
 import verificationSticker from '@/static/verification-sticker.svg';
@@ -29,6 +30,7 @@ type PreviewConnectionProps = {
 
 export const PreviewConnectionView = (props: PreviewConnectionProps) => {
   const { pendingConnectionId, ratingHandler, index } = props;
+  const { t } = useTranslation();
 
   const pendingConnection = useSelector(
     (state) =>
@@ -62,27 +64,27 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
         <>
           <View>
             <Text style={styles.ratingHeader}>
-              How well do you know this connection?
+              {t('pendingConnections.label.rating')}
             </Text>
           </View>
           <View style={styles.rateButtonContainer}>
             <RatingButton
               color="red"
-              label="🤔 Suspicious"
+              label={'🤔 ' + t('pendingConnections.button.suspicious')}
               level={connection_levels.SUSPICIOUS}
               handleClick={buttonHandler}
               testID={`${connection_levels.SUSPICIOUS}Btn`}
             />
             <RatingButton
               color="yellow"
-              label="👋 Just met"
+              label={'👋 ' + t('pendingConnections.button.justMet')}
               level={connection_levels.JUST_MET}
               handleClick={buttonHandler}
               testID={`${connection_levels.JUST_MET}Btn`}
             />
             <RatingButton
               color="green"
-              label="😎 Already know"
+              label={'😎 ' + t('pendingConnections.button.alreadyKnow')}
               level={connection_levels.ALREADY_KNOW}
               handleClick={buttonHandler}
               testID={`${connection_levels.ALREADY_KNOW}Btn`}
@@ -90,7 +92,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
           </View>
           <View>
             <Text style={styles.ratingFooter}>
-              Your answer will help us prevent attacks
+              {t('pendingConnections.text.rating')}
             </Text>
           </View>
         </>
@@ -101,14 +103,14 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
     case pendingConnection_states.CONFIRMED: {
       // user already handled this connection request
       ratingView = (
-        <Text style={styles.infoText}>You already rated this connection</Text>
+        <Text style={styles.infoText}>{t('pendingConnection.text.alreadyRated')}</Text>
       );
       break;
     }
     case pendingConnection_states.ERROR: {
       ratingView = (
         <Text style={styles.infoText}>
-          Error while connecting. Please try to reconnect.
+          {t('Error while connecting. Please try to reconnect.')}
         </Text>
       );
       break;
@@ -116,20 +118,20 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
     case pendingConnection_states.EXPIRED: {
       ratingView = (
         <Text style={styles.infoText}>
-          The connection expired. Please try to reconnect.
+          {t('pendingConnection.text.errorExpired')}
         </Text>
       );
       break;
     }
     case pendingConnection_states.MYSELF: {
       ratingView = (
-        <Text style={styles.infoText}>You can not connect to yourself.</Text>
+        <Text style={styles.infoText}>{t('pendingConnection.text.errorMyself')}</Text>
       );
       break;
     }
     default:
       ratingView = (
-        <Text style={styles.infoText}>Unhandled connection state</Text>
+        <Text style={styles.infoText}>{t('pendingConnection.text.errorUnhandled')}</Text>
       );
   }
 
@@ -145,7 +147,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
       </TouchableOpacity>
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>
-          {alreadyExists ? 'Reconnect with' : 'Connection Request'}
+          {alreadyExists ? t('pendingConnections.title.reconnectWith') : t('pendingConnections.title.connectionRequest')}
         </Text>
       </View>
       <View style={styles.userContainer}>
@@ -165,13 +167,13 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
               console.log(e);
             }}
             accessible={true}
-            accessibilityLabel="user photo"
+            accessibilityLabel={t('common.accessibilityLabel.userPhoto')}
           />
         </TouchableWithoutFeedback>
         <View style={styles.connectNameContainer}>
           <Text style={styles.connectName}>{pendingConnection.name}</Text>
           {pendingConnection.flagged && (
-            <Text style={styles.flagged}> (flagged)</Text>
+            <Text style={styles.flagged}> {t('common.tag.flagged')}</Text>
           )}
           {brightidVerified && (
             <View style={styles.verificationSticker}>
@@ -180,7 +182,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
           )}
         </View>
         {alreadyExists ? (
-          <Text style={styles.flagged}>(already connected)</Text>
+          <Text style={styles.flagged}>{t('pendingConnections.tag.alreadyConnected')}</Text>
         ) : (
           <Text style={styles.connectedText}>
             {pendingConnection.connectionDate}
@@ -192,19 +194,19 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
           <Text style={styles.countsNumberText}>
             {pendingConnection.connections}
           </Text>
-          <Text style={styles.countsDescriptionText}>Connections</Text>
+          <Text style={styles.countsDescriptionText}>{t('pendingConnections.label.connections')}</Text>
         </View>
         <View>
           <Text style={styles.countsNumberText}>
             {pendingConnection.groups}
           </Text>
-          <Text style={styles.countsDescriptionText}>Groups</Text>
+          <Text style={styles.countsDescriptionText}>{t('pendingConnections.label.groups')}</Text>
         </View>
         <View>
           <Text style={styles.countsNumberText}>
             {pendingConnection.mutualConnections}
           </Text>
-          <Text style={styles.countsDescriptionText}>Mutual Connections</Text>
+          <Text style={styles.countsDescriptionText}>{t('pendingConnections.label.mutualConnections')}</Text>
         </View>
       </View>
       <View style={styles.ratingView}>{ratingView}</View>
