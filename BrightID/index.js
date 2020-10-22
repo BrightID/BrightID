@@ -13,6 +13,9 @@ import codePushOptions from './codepush.config.js';
 import App from './src/App';
 import { name as appName } from './app.json';
 
+// detox e2e tests fail when yellowboxes come up
+console.disableYellowBox = true;
+
 // enable react-native-screens
 // enableScreens is causing some android devices to crash
 if (DEVICE_IOS) {
