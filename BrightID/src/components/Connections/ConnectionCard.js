@@ -160,27 +160,34 @@ const ConnectionCard = (props) => {
             }}
           />
         </TouchableOpacity>
-        <View style={styles.info}>
-          <View style={styles.nameContainer}>
-            <Text
-              adjustsFontSizeToFit={true}
-              numberOfLines={1}
-              style={styles.name}
-              testID="connectionCardText"
-            >
-              {name}
-            </Text>
-            {brightidVerified && (
-              <SvgXml
-                style={styles.verificationSticker}
-                width="16"
-                height="16"
-                xml={verificationSticker}
-              />
-            )}
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Connection', { connectionId: id });
+          }}
+          accessibilityLabel="View Connection details"
+        >
+          <View style={styles.info}>
+            <View style={styles.nameContainer}>
+              <Text
+                adjustsFontSizeToFit={true}
+                numberOfLines={1}
+                style={styles.name}
+                testID="connectionCardText"
+              >
+                {name}
+              </Text>
+              {brightidVerified && (
+                <SvgXml
+                  style={styles.verificationSticker}
+                  width="16"
+                  height="16"
+                  xml={verificationSticker}
+                />
+              )}
+            </View>
+            <ConnectionStatus />
           </View>
-          <ConnectionStatus />
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
