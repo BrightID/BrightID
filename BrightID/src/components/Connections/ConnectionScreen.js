@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useCallback, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Image,
   StyleSheet,
@@ -8,130 +8,83 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-  ScrollView,
+  SectionList,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
-import { useActionSheet } from '@expo/react-native-action-sheet';
 import verificationSticker from '@/static/verification-sticker.svg';
-import { useFocusEffect } from '@react-navigation/native';
-import api from '@/api/brightId';
 import moment from 'moment';
-import { photoDirectory } from '../../utils/filesystem';
-import { DEVICE_LARGE } from '../../utils/constants';
-import { handleFlagging } from './models/flagConnection';
-import { fetchConnectionInfo } from '../../utils/fetchConnectionInfo';
-import MutualItems from './MutualItems';
+import default_group from '@/static/default_group.svg';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { photoDirectory } from '@/utils/filesystem';
+import { DEVICE_LARGE } from '@/utils/constants';
 import TrustLevelView from './TrustLevelView';
-import { setConnectionLevel } from '../../actions/connections';
 
-type ConnectionScreenProps = {
-  route: any,
+/**
+ Connection details screen
+ To make maximum use of the performance optimization from Flatlist/SectionList, the whole
+ screen is rendered as SectionList. The Profile information (Photo, Name etc.) is rendered
+ via ListHeaderComponent, the "Flag" button on the bottom via ListFooterComponent.
+* */
+
+type Props = {
   navigation: any,
+  connection: connection,
+  brightIdVerified: boolean,
+  mutualGroups: Array<group>,
+  mutualConnections: Array<connection>,
+  handleTrustlevelChange: (level: string) => any,
+  handleFlagBtn: () => any,
 };
 
-function ConnectionScreen(props: ConnectionScreenProps) {
-  const { route, navigation } = props;
-  const { connectionId } = route.params;
-  const { showActionSheetWithOptions } = useActionSheet();
-  const dispatch = useDispatch();
-  const myId = useSelector((state) => state.user.id);
-  const connection: connection = useSelector((state: State) =>
-    state.connections.connections.find((conn) => conn.id === connectionId),
-  );
-  const myConnections = useSelector((state) => state.connections.connections);
-  const myGroups = useSelector((state) => state.groups.groups);
-  const [mutualGroups, setMutualGroups] = useState<Array<group>>([]);
-  const [mutualConnections, setMutualConnections] = useState<Array<connection>>(
-    [],
-  );
-  const [verifications, setVerifications] = useState<Array<string>>([]);
+function ConnectionScreen(props: Props) {
+  const {
+    navigation,
+    connection,
+    brightIdVerified,
+    mutualGroups,
+    mutualConnections,
+    handleTrustlevelChange,
+    handleFlagBtn,
+  } = props;
 
-  useFocusEffect(
-    useCallback(() => {
-      const fetchData = async (connectionId) => {
-        console.log(`fetching connection info for ${connectionId}`);
-        const connectionData = await fetchConnectionInfo({
-          brightId: connectionId,
-          myConnections,
-          myGroups,
-        });
-        setMutualGroups(connectionData.mutualGroups);
-        setMutualConnections(connectionData.mutualConnections);
-        setVerifications(connectionData.verifications);
-      };
-      if (connection) {
-        fetchData(connection.id);
-      } else {
-        setMutualGroups([]);
-        setMutualConnections([]);
-        setVerifications([]);
-      }
-    }, [connection, myConnections, myGroups]),
-  );
+  const [groupsCollapsed, setGroupsCollapsed] = useState(true);
+  const [connectionsCollapsed, setConnectionsCollapsed] = useState(true);
 
-  if (!connection) {
-    // connection not there anymore.
-    return <Text>connection vanished.</Text>;
-  }
+  const toggleSection = (key) => {
+    switch (key) {
+      case 'connections':
+        setConnectionsCollapsed(!connectionsCollapsed);
+        break;
+      case 'groups':
+        setGroupsCollapsed(!groupsCollapsed);
+        break;
+    }
+  };
 
   const imageSource = {
-    uri: `file://${photoDirectory()}/${connection.photo.filename}`,
+    uri: `file://${photoDirectory()}/${connection?.photo?.filename}`,
   };
 
-  const brightIdVerified = verifications.includes('BrightID');
-
-  const handleTrustLevelChange = async (level: ConnectionLevel) => {
-    console.log(`Setting trust level '${level}' for ${connection.name}`);
-    await api.addConnection(myId, connection.id, level, undefined, Date.now());
-    dispatch(setConnectionLevel(connection.id, level));
-  };
-
-  let flaggingOptions = [
-    'Flag as Duplicate',
-    'Flag as Fake',
-    'Flag as Deceased',
-    'Join All Groups',
-    'Connect to other fake connections',
-    'cancel',
-  ];
-  if (!__DEV__) {
-    // remove debug functionality
-    flaggingOptions.splice(3, 2);
-  }
-
-  const handleFlagBtnClick = () => {
-    showActionSheetWithOptions(
+  const getSections = useMemo(() => {
+    const data = [
       {
-        options: flaggingOptions,
-        cancelButtonIndex: flaggingOptions.length - 1,
-        title: 'What do you want to do?',
-        message: `Flagging ${connection.name} will negatively effect their BrightID score, and this flag might be shown to other users.`,
-        showSeparators: true,
-        textStyle: {
-          color: '#2185D0',
-          textAlign: 'center',
-          width: '100%',
-        },
-        titleTextStyle: {
-          fontSize: DEVICE_LARGE ? 20 : 17,
-        },
-        messageTextStyle: {
-          fontSize: DEVICE_LARGE ? 15 : 12,
-        },
+        title: 'Mutual Connections',
+        data: connectionsCollapsed ? [] : mutualConnections,
+        key: 'connections',
+        numEntries: mutualConnections.length,
       },
-      handleFlagging({
-        id: connection.id,
-        name: connection.name,
-        dispatch,
-        secretKey: connection.secretKey,
-        callback: () => navigation.goBack(),
-      }),
-    );
-  };
+      {
+        title: 'Mutual Groups',
+        data: groupsCollapsed ? [] : mutualGroups,
+        key: 'groups',
+        numEntries: mutualGroups.length,
+      },
+    ];
+    return data;
+  }, [connectionsCollapsed, groupsCollapsed, mutualConnections, mutualGroups]);
 
-  return (
-    <View style={styles.container}>
+  const connectionHeader = (
+    <>
       <View style={styles.profile}>
         <View style={styles.photoContainer}>
           <TouchableWithoutFeedback
@@ -144,7 +97,7 @@ function ConnectionScreen(props: ConnectionScreenProps) {
           >
             <Image
               source={imageSource}
-              style={styles.photo}
+              style={styles.profilePhoto}
               resizeMode="cover"
               onError={(e) => {
                 console.log(e);
@@ -167,9 +120,9 @@ function ConnectionScreen(props: ConnectionScreenProps) {
           <View style={styles.profileDivider} />
           <View style={styles.badges}>
             {brightIdVerified ? (
-              <Text style={styles.verified}>verified</Text>
+              <Text style={[styles.badge, styles.verified]}>verified</Text>
             ) : (
-              <Text style={styles.unverified}>unverified</Text>
+              <Text style={[styles.badge, styles.unverified]}>unverified</Text>
             )}
           </View>
         </View>
@@ -186,27 +139,114 @@ function ConnectionScreen(props: ConnectionScreenProps) {
       <View style={styles.trustLevelContainer}>
         <TrustLevelView
           level={connection.level}
-          handleChange={handleTrustLevelChange}
+          handleChange={handleTrustlevelChange}
         />
       </View>
-      <ScrollView>
-        <View style={styles.mutualInfoContainer}>
-          <MutualItems items={mutualGroups} header="Mutual Groups" />
+    </>
+  );
+
+  const connectionFooter = (
+    <TouchableOpacity
+      testID="FlagBtn"
+      style={styles.flagBtn}
+      onPress={handleFlagBtn}
+    >
+      <Text style={styles.flagBtnText}>Flag this person</Text>
+    </TouchableOpacity>
+  );
+
+  const renderItem = ({ item, index }) => {
+    console.log(`Rendering item ${index} (${item.name})`);
+    return (
+      <View style={styles.itemContainer}>
+        <View style={styles.itemPhoto}>{renderPhoto(item)}</View>
+        <View style={styles.itemLabel}>
+          <Text style={styles.itemLabelText}>{item.name}</Text>
         </View>
-        <View style={styles.mutualInfoContainer}>
-          <MutualItems items={mutualConnections} header="Mutual Connections" />
+      </View>
+    );
+  };
+
+  const renderPhoto = (item) => {
+    if (item?.photo?.filename) {
+      return (
+        <Image
+          source={{ uri: `file://${photoDirectory()}/${item.photo.filename}` }}
+          style={styles.photo}
+          resizeMode="cover"
+          onError={(e) => {
+            console.log(e);
+          }}
+          accessible={true}
+          accessibilityLabel="photo"
+        />
+      );
+    } else {
+      return <SvgXml xml={default_group} width={40} height={40} />;
+    }
+  };
+
+  const renderSectionHeader = ({ section }) => {
+    let collapsed;
+    switch (section.key) {
+      case 'connections':
+        collapsed = connectionsCollapsed;
+        break;
+      case 'groups':
+        collapsed = groupsCollapsed;
+        break;
+    }
+    return (
+      <View style={styles.header}>
+        <View style={styles.headerLabel}>
+          <Text style={styles.headerLabelText}>{section.title}</Text>
         </View>
-        <TouchableOpacity
-          testID="FlagBtn"
-          style={styles.flagBtn}
-          onPress={handleFlagBtnClick}
-        >
-          <Text style={styles.flagBtnText}>Flag this person</Text>
-        </TouchableOpacity>
-      </ScrollView>
+        <View style={styles.headerContent}>
+          <View style={styles.headerCount}>
+            <Text style={styles.headerContentText}>{section.numEntries}</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.collapseButton}
+            onPress={() => toggleSection(section.key)}
+            disabled={section.numEntries < 1}
+          >
+            <MaterialCommunityIcons
+              style={styles.chevron}
+              size={50}
+              name={collapsed ? 'chevron-down' : 'chevron-up'}
+              color={section.numEntries ? '#0064AE' : '#C4C4C4'}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      <SectionList
+        sections={getSections}
+        keyExtractor={(item, index) => item.id}
+        renderItem={renderItem}
+        renderSectionHeader={renderSectionHeader}
+        ListHeaderComponent={connectionHeader}
+        ListFooterComponent={connectionFooter}
+        ItemSeparatorComponent={ItemSeparator}
+      />
     </View>
   );
 }
+
+const ItemSeparator = () => {
+  return (
+    <View
+      style={{
+        height: StyleSheet.hairlineWidth,
+        backgroundColor: ORANGE,
+      }}
+    />
+  );
+};
 
 const ORANGE = '#ED7A5D';
 
@@ -228,7 +268,7 @@ const styles = StyleSheet.create({
   photoContainer: {
     margin: 10,
   },
-  photo: {
+  profilePhoto: {
     borderRadius: 50,
     width: 100,
     height: 100,
@@ -240,7 +280,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontWeight: '500',
     fontSize: 17,
     color: '#000',
   },
@@ -254,12 +294,10 @@ const styles = StyleSheet.create({
     marginLeft: DEVICE_LARGE ? 8 : 5,
   },
   badges: {},
-  verified: {
+  badge: {
     fontFamily: 'Poppins',
     fontWeight: '500',
-    color: ORANGE,
     borderWidth: 1,
-    borderColor: ORANGE,
     borderRadius: 10,
     marginTop: 6,
     paddingTop: 1,
@@ -268,19 +306,13 @@ const styles = StyleSheet.create({
     paddingRight: 23,
     fontSize: DEVICE_LARGE ? 11 : 10,
   },
+  verified: {
+    color: ORANGE,
+    borderColor: ORANGE,
+  },
   unverified: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
     color: '#707070',
-    borderWidth: 1,
     borderColor: '#707070',
-    borderRadius: 10,
-    marginTop: 6,
-    paddingTop: 1,
-    paddingBottom: 1,
-    paddingLeft: 20,
-    paddingRight: 20,
-    fontSize: DEVICE_LARGE ? 11 : 10,
   },
   connectionInfo: {
     flexDirection: 'row',
@@ -293,16 +325,13 @@ const styles = StyleSheet.create({
   },
   connectionTimestampText: {
     fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontWeight: '500',
     fontSize: 10,
     color: ORANGE,
   },
   trustLevelContainer: {
     marginTop: 15,
     marginBottom: 10,
-  },
-  mutualInfoContainer: {
-    marginTop: 10,
   },
   flagBtn: {
     width: '100%',
@@ -315,7 +344,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: 12,
     paddingBottom: 12,
-    marginTop: 10,
+    marginTop: 15,
   },
   flagBtnText: {
     fontFamily: 'Poppins',
@@ -323,6 +352,57 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 17 : 15,
     color: ORANGE,
     marginLeft: DEVICE_LARGE ? 10 : 8,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerLabel: {
+    flex: 2,
+  },
+  headerLabelText: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: 17,
+    color: '#000',
+  },
+  headerContent: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  headerCount: {},
+  headerContentText: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: 17,
+    color: ORANGE,
+  },
+  collapseButton: {
+    paddingLeft: 5,
+    paddingBottom: 5,
+    paddingTop: 5,
+  },
+  chevron: {},
+  itemContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  itemPhoto: {
+    margin: 10,
+  },
+  photo: {
+    borderRadius: 20,
+    width: 40,
+    height: 40,
+  },
+  itemLabel: {},
+  itemLabelText: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: 15,
+    color: '#000',
   },
 });
 

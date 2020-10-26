@@ -42,7 +42,7 @@ function TrustLevelView({ level, handleChange }: props) {
         break;
       case connection_levels.RECOVERY:
         color = 'green';
-        label = '💪 Recovery';
+        label = '🔐 Recovery';
         break;
       case connection_levels.JUST_MET:
       default:
@@ -59,7 +59,7 @@ function TrustLevelView({ level, handleChange }: props) {
           '🤔 Suspicious',
           '👋 Just met',
           '😎 Already know',
-          '💪 Recovery',
+          '🔐 Recovery',
           'Cancel',
         ],
         cancelButtonIndex: 4,
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   trustLevelLabelText: {
     fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontWeight: '500',
     fontSize: 17,
     color: '#000',
   },
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   },
   trustLevelText: {
     fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontWeight: '500',
     fontSize: 17,
   },
   trustLevelButton: {
