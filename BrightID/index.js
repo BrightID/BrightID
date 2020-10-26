@@ -7,7 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Octicons from 'react-native-vector-icons/Octicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { DEVICE_IOS } from '@/utils/constants';
-import './i18n';
+// import './i18n';
 import codePush from 'react-native-code-push';
 import codePushOptions from './codepush.config.js';
 import App from './src/App';
