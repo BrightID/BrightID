@@ -183,7 +183,7 @@ function ConnectionScreen(props: ConnectionScreenProps) {
           </Text>
         </View>
       </View>
-      <View style={styles.mutualInfoContainer}>
+      <View style={styles.trustLevelContainer}>
         <TrustLevelView
           level={connection.level}
           handleChange={handleTrustLevelChange}
@@ -191,20 +191,10 @@ function ConnectionScreen(props: ConnectionScreenProps) {
       </View>
       <ScrollView>
         <View style={styles.mutualInfoContainer}>
-          <MutualItems
-            mutualItems={mutualGroups}
-            header="Mutual Groups"
-            pluralItemName="groups"
-            singularItemName="group"
-          />
+          <MutualItems items={mutualGroups} header="Mutual Groups" />
         </View>
         <View style={styles.mutualInfoContainer}>
-          <MutualItems
-            mutualItems={mutualConnections}
-            header="Mutual Connections"
-            pluralItemName="connections"
-            singularItemName="connection"
-          />
+          <MutualItems items={mutualConnections} header="Mutual Connections" />
         </View>
         <TouchableOpacity
           testID="FlagBtn"
@@ -224,7 +214,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    padding: '8%',
+    paddingLeft: '8%',
+    paddingRight: '8%',
+    paddingTop: 10,
+    marginBottom: 5,
   },
   profile: {
     flexDirection: 'row',
@@ -304,9 +297,12 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: ORANGE,
   },
+  trustLevelContainer: {
+    marginTop: 15,
+    marginBottom: 10,
+  },
   mutualInfoContainer: {
     marginTop: 10,
-    marginBottom: 10,
   },
   flagBtn: {
     width: '100%',
@@ -319,6 +315,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: 12,
     paddingBottom: 12,
+    marginTop: 10,
   },
   flagBtnText: {
     fontFamily: 'Poppins',

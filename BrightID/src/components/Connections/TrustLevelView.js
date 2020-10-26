@@ -126,6 +126,7 @@ function TrustLevelView({ level, handleChange }: props) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   trustLevelLabel: {
     width: '50%',
@@ -144,7 +145,11 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 17,
   },
-  trustLevelButton: {},
+  trustLevelButton: {
+    paddingLeft: 5,
+    paddingBottom: 5,
+    paddingTop: 5,
+  },
 });
 
 export default TrustLevelView;

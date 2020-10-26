@@ -15,18 +15,11 @@ import { SvgXml } from 'react-native-svg';
 import { photoDirectory } from '../../utils/filesystem';
 
 type props = {
-  mutualItems: Array<connection> | Array<group>,
+  items: Array<connection> | Array<group>,
   header: string,
-  singularItemName: string,
-  pluralItemName: string,
 };
 
-function MutualItems({
-  mutualItems,
-  header,
-  singularItemName,
-  pluralItemName,
-}: props) {
+function MutualItems({ items, header }: props) {
   const [collapsed, setCollapsed] = useState(true);
 
   const toggleList = () => {
@@ -61,49 +54,16 @@ function MutualItems({
     </View>
   );
 
-  let listContent, listFooter;
-  if (mutualItems.length) {
-    if (collapsed) {
-      listContent = renderItem({ item: mutualItems[0] });
-    } else {
-      listContent = (
-        <FlatList
-          data={mutualItems}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-        />
-      );
-    }
-  }
-
-  if (mutualItems.length > 1) {
-    const remainingItems = mutualItems.length - 1;
-    if (collapsed) {
-      listFooter = (
-        <TouchableOpacity style={styles.moreItemsBtn} onPress={toggleList}>
-          <MaterialCommunityIcons
-            size={60}
-            name="chevron-down"
-            color="#c4c4c4"
-          />
-          <Text style={styles.moreItemsText}>
-            {remainingItems} more{' '}
-            {remainingItems > 1 ? pluralItemName : singularItemName}
-          </Text>
-        </TouchableOpacity>
-      );
-    } else {
-      listFooter = (
-        <TouchableOpacity style={styles.moreItemsBtn} onPress={toggleList}>
-          <MaterialCommunityIcons
-            style={styles.chevron}
-            size={70}
-            name="chevron-up"
-            color="#c4c4c4"
-          />
-        </TouchableOpacity>
-      );
-    }
+  let listContent;
+  if (items.length > 0 && !collapsed) {
+    listContent = (
+      <FlatList
+        ItemSeparatorComponent={itemSeparator}
+        data={items}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+      />
+    );
   }
 
   return (
@@ -113,23 +73,48 @@ function MutualItems({
           <Text style={styles.headerLabelText}>{header}</Text>
         </View>
         <View style={styles.headerContent}>
-          <Text style={styles.headerContentText}>{mutualItems.length}</Text>
+          <View style={styles.headerCount}>
+            <Text style={styles.headerContentText}>{items.length}</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.collapseButton}
+            onPress={toggleList}
+            disabled={items.length < 1}
+          >
+            <MaterialCommunityIcons
+              style={styles.chevron}
+              size={50}
+              name={collapsed ? 'chevron-down' : 'chevron-up'}
+              color={items.length ? '#0064AE' : '#C4C4C4'}
+            />
+          </TouchableOpacity>
         </View>
       </View>
       {listContent}
-      {listFooter}
     </View>
   );
 }
+
+const itemSeparator = () => {
+  return (
+    <View
+      style={{
+        height: StyleSheet.hairlineWidth,
+        backgroundColor: ORANGE,
+      }}
+    />
+  );
+};
 
 const ORANGE = '#ED7A5D';
 
 const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   headerLabel: {
-    width: '80%',
+    flex: 2,
   },
   headerLabelText: {
     fontFamily: 'Poppins',
@@ -137,18 +122,28 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: '#000',
   },
-  headerContent: {},
+  headerContent: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  headerCount: {},
   headerContentText: {
     fontFamily: 'Poppins',
     fontWeight: '500',
     fontSize: 17,
     color: ORANGE,
   },
+  collapseButton: {
+    paddingLeft: 5,
+    paddingBottom: 5,
+    paddingTop: 5,
+  },
+  chevron: {},
   itemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: ORANGE,
   },
   itemPhoto: {
     margin: 10,
@@ -164,21 +159,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 15,
     color: '#000',
-  },
-  moreItemsBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: 0,
-    marginRight: 0,
-  },
-  chevron: {
-    width: 60,
-  },
-  moreItemsText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    fontSize: 17,
-    color: '#C4C4C4',
   },
 });
 
