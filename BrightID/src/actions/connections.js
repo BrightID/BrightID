@@ -9,6 +9,7 @@ export const ADD_TRUSTED_CONNECTION = 'ADD_TRUSTED_CONNECTION';
 export const REMOVE_TRUSTED_CONNECTION = 'REMOVE_TRUSTED_CONNECTION';
 export const SET_CONNECTIONS_SEARCH = 'SET_CONNECTIONS_SEARCH';
 export const SET_CONNECTIONS_SEARCH_OPEN = 'SET_CONNECTIONS_SEARCH_OPEN';
+export const SET_CONNECTION_LEVEL = 'SET_CONNECTION_LEVEL';
 export const HYDRATE_CONNECTIONS = 'HYDRATE_CONNECTIONS';
 export const FLAG_AND_HIDE_CONNECTION = 'HIDE_CONNECTION';
 export const SHOW_CONNECTION = 'SHOW_CONNECTION';
@@ -96,4 +97,10 @@ export const showConnection = (id: string) => ({
 export const staleConnection = (id: string) => ({
   type: STALE_CONNECTION,
   id,
+});
+
+export const setConnectionLevel = (id: string, level: ConnectionLevel) => ({
+  type: SET_CONNECTION_LEVEL,
+  id,
+  level,
 });
