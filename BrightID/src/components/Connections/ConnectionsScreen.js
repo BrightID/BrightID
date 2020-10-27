@@ -55,6 +55,7 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
   const canRemove = status === 'stale' || status === 'deleted';
 
   let flaggingOptions = [
+    'Flag as Spammer',
     'Flag as Duplicate',
     'Flag as Fake',
     'Flag as Deceased',
@@ -65,7 +66,7 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
   // comment out for test release
   if (!__DEV__) {
     // remove debug functionality
-    flaggingOptions.splice(3, 2);
+    flaggingOptions.splice(4, 2);
   }
 
   const FlagButton = () => (
@@ -222,7 +223,7 @@ const filterConnectionsSelector = createSelector(
   searchParamSelector,
   (connections, searchParam) => {
     const searchString = toSearchString(searchParam);
-    return connections.filter((item) => 
+    return connections.filter((item) =>
       toSearchString(`${item.name}`).includes(searchString),
     );
   },

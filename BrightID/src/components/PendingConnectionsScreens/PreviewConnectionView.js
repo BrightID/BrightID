@@ -83,9 +83,9 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
             <RatingButton
               color="green"
               label="😎 Already know"
-              level={connection_levels.ALREADY_KNOW}
+              level={connection_levels.ALREADY_KNOWN}
               handleClick={buttonHandler}
-              testID={`${connection_levels.ALREADY_KNOW}Btn`}
+              testID={`${connection_levels.ALREADY_KNOWN}Btn`}
             />
           </View>
           <View>
