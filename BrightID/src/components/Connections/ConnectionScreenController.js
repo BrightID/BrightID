@@ -71,7 +71,6 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
   };
 
   let flaggingOptions = [
-    'Flag as Spammer',
     'Flag as Duplicate',
     'Flag as Fake',
     'Flag as Deceased',
@@ -81,7 +80,7 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
   ];
   if (!__DEV__) {
     // remove debug functionality
-    flaggingOptions.splice(4, 2);
+    flaggingOptions.splice(3, 2);
   }
 
   const handleFlagBtnClick = () => {

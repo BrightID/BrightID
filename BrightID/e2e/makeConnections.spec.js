@@ -66,7 +66,7 @@ describe('make Connections', () => {
   });
 
   describe('Connect with different Connection levels', () => {
-    const levels = ['suspicious', 'just met', 'already known'];
+    const levels = ['suspicious', 'just met', 'already know'];
 
     afterEach(async () => {
       await navigateHome();
