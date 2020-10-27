@@ -70,7 +70,7 @@ class NodeApi {
     id1: string,
     id2: string,
     level: string,
-    flagReason?: string,
+    reportReason?: string,
     timestamp: number,
     fakeUser?: FakeUser,
   ) {
@@ -91,8 +91,8 @@ class NodeApi {
       timestamp,
       v,
     };
-    if (flagReason) {
-      op.flagReason = flagReason;
+    if (reportReason) {
+      op.reportReason = reportReason;
     }
 
     const message = stringify(op);
