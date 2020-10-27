@@ -11,17 +11,17 @@ import {
 import { connection_levels } from '../../../utils/constants';
 import { defaultSort } from './sortingUtility';
 
-const flagMap = ['duplicate', 'fake', 'deceased'];
+const flagMap = ['spammer', 'duplicate', 'fake', 'deceased'];
 
 export const handleFlagging = ({ name, id, dispatch, callback }) => (index) => {
   if (__DEV__) {
     switch (index) {
-      case 3: {
+      case 4: {
         console.log('joining all groups');
         dispatch(joinAllGroups(id));
         return;
       }
-      case 4: {
+      case 5: {
         console.log('connecting fake connections');
         dispatch(connectWithOtherFakeConnections(id));
         return;
@@ -30,7 +30,7 @@ export const handleFlagging = ({ name, id, dispatch, callback }) => (index) => {
   }
 
   // sanity check
-  if (index > 2) {
+  if (index > 3) {
     console.log(`Unhandled flag index ${index}!`);
     return;
   }
@@ -66,11 +66,11 @@ export const flagConnection = (id, flag) => async (dispatch, getState) => {
     } = getState();
     console.log('backupCompleted', backupCompleted);
 
-    // Change connection to SPAM level
+    // Change connection to REPORTED level
     await api.addConnection(
       brightId,
       id,
-      connection_levels.SPAM,
+      connection_levels.REPORTED,
       flag,
       Date.now(),
     );

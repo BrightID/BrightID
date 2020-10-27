@@ -28,7 +28,7 @@ function TrustLevelView({ level, handleChange }: props) {
     let color, label;
     let testID = `${level}Btn`;
     switch (level) {
-      case connection_levels.SPAM:
+      case connection_levels.REPORTED:
         color = 'red';
         label = '✋ Flagged';
         break;
@@ -36,9 +36,9 @@ function TrustLevelView({ level, handleChange }: props) {
         color = 'red';
         label = '🤔 Suspicious';
         break;
-      case connection_levels.ALREADY_KNOW:
+      case connection_levels.ALREADY_KNOWN:
         color = 'green';
-        label = '😎 Already know';
+        label = '😎 Already known';
         break;
       case connection_levels.RECOVERY:
         color = 'green';
@@ -58,7 +58,7 @@ function TrustLevelView({ level, handleChange }: props) {
         options: [
           '🤔 Suspicious',
           '👋 Just met',
-          '😎 Already know',
+          '😎 Already known',
           '🔐 Recovery',
           'Cancel',
         ],
@@ -87,7 +87,7 @@ function TrustLevelView({ level, handleChange }: props) {
             handleChange(connection_levels.JUST_MET);
             break;
           case 2:
-            handleChange(connection_levels.ALREADY_KNOW);
+            handleChange(connection_levels.ALREADY_KNOWN);
             break;
           case 3:
             handleChange(connection_levels.RECOVERY);

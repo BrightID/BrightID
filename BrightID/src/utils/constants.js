@@ -47,9 +47,9 @@ export const NONE_TYPE = 'none';
 
 /** ** CONNECTION CONFIDENCE LEVELS *** */
 export const connection_levels = {
-  SPAM: 'spam',
+  REPORTED: 'reported',
   SUSPICIOUS: 'suspicious',
   JUST_MET: 'just met',
-  ALREADY_KNOW: 'already know',
+  ALREADY_KNOWN: 'already known',
   RECOVERY: 'recovery',
 };
