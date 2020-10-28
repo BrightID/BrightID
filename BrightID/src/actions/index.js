@@ -87,11 +87,9 @@ export {
   ADD_OPERATION,
   REMOVE_OPERATION,
   RESET_OPERATIONS,
-  APP_VERSION,
   addOperation,
   removeOperation,
   resetOperations,
-  setAppVersion,
 } from './operations';
 
 export {
