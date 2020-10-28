@@ -22,6 +22,7 @@ import {
   DEVICE_LARGE,
   ORANGE,
 } from '@/utils/constants';
+import { validatePass } from '@/utils/password';
 import { backupAppData } from './helpers';
 
 type State = {
@@ -61,17 +62,6 @@ class BackupScreen extends React.Component<Props, State> {
     }));
   };
 
-  validatePass = () => {
-    const { pass1, pass2 } = this.state;
-    if (pass1 !== pass2) {
-      Alert.alert('Error', 'Password and confirm password does not match.');
-    } else if (pass1.length < 8) {
-      Alert.alert('Error', 'Your password must be at least 8 characters long.');
-    } else {
-      return true;
-    }
-  };
-
   handleTextBlur = () => {
     this.setState({ isEditing: false });
   };
@@ -81,7 +71,11 @@ class BackupScreen extends React.Component<Props, State> {
   };
 
   startBackup = async () => {
-    if (!this.state.pass1 || (DEVICE_ANDROID && !this.validatePass())) return;
+    if (
+      !this.state.pass1 ||
+      (DEVICE_ANDROID && !validatePass(this.state.pass1, this.state.pass2))
+    )
+      return;
 
     try {
       const { dispatch, connections, groups, navigation, id } = this.props;

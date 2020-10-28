@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Image,
   Text,
@@ -13,13 +13,12 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
 import { setPhoto, setName } from '@/actions';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const EditProfilePhoto = () => {
   const dispatch = useDispatch();
@@ -170,6 +169,13 @@ const SocialMediaLinks = () => {
 const ShowEditPassword = () => {
   const password = useSelector((state) => state.user.password);
   const [hidePassword, setHidePassword] = useState(true);
+  const navigation = useNavigation();
+
+  useFocusEffect(
+    useCallback(() => {
+      setHidePassword(true);
+    }, []),
+  );
 
   // don't show this option if user does not have password
   if (!password) {
@@ -180,7 +186,7 @@ const ShowEditPassword = () => {
   if (hidePassword) {
     displayPassword = '*'.repeat(password.length);
   }
-  console.log('displayPassword', displayPassword);
+
   return (
     <View style={styles.showEditPasswordContainer}>
       <View style={styles.viewPasswordContainer}>
@@ -191,9 +197,14 @@ const ShowEditPassword = () => {
         >
           <Text style={styles.passwordText}>View Password</Text>
         </TouchableOpacity>
-        <Text>{displayPassword}</Text>
+        <Text selectable={true}>{displayPassword}</Text>
       </View>
-      <TouchableOpacity style={styles.changePasswordButton}>
+      <TouchableOpacity
+        style={styles.changePasswordButton}
+        onPress={() => {
+          navigation.navigate('ChangePassword');
+        }}
+      >
         <Text style={styles.passwordText}>Change Password</Text>
       </TouchableOpacity>
     </View>
@@ -293,14 +304,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 16 : 14,
-    marginTop: 2,
+    marginTop: DEVICE_LARGE ? 4 : 2,
     width: '100%',
   },
   bottomDivider: {
     width: '100%',
     borderBottomColor: '#C4C4C4',
     borderBottomWidth: 1,
-    marginTop: DEVICE_LARGE ? 20 : 18,
+    marginTop: DEVICE_LARGE ? 16 : 12,
   },
   socialMediaContainer: {
     width: '100%',
@@ -314,21 +325,22 @@ const styles = StyleSheet.create({
   },
   showEditPasswordContainer: {
     width: '100%',
-    marginTop: DEVICE_LARGE ? 18 : 16,
+    marginTop: DEVICE_LARGE ? 10 : 8,
   },
   viewPasswordContainer: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginTop: DEVICE_LARGE ? 12 : 8,
   },
   changePasswordButton: {
-    marginTop: 8,
+    marginTop: DEVICE_LARGE ? 12 : 8,
   },
   passwordText: {
     fontFamily: 'Poppins',
     fontWeight: '500',
-    fontSize: DEVICE_LARGE ? 12 : 10,
+    fontSize: DEVICE_LARGE ? 13 : 11,
     color: '#2185D0',
   },
   saveContainer: {
