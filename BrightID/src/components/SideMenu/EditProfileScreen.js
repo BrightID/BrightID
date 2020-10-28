@@ -10,6 +10,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
+import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
@@ -19,6 +20,7 @@ import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
 import { setPhoto, setName } from '@/actions';
+import downCaret from '@/static/down_caret_blue.svg';
 
 const EditProfilePhoto = () => {
   const dispatch = useDispatch();
@@ -126,6 +128,12 @@ const EditName = () => {
   const dispatch = useDispatch();
   const name = useSelector((state) => state.user.name);
   const [displayName, setDisplayName] = useState(name);
+  useFocusEffect(
+    useCallback(() => {
+      setDisplayName(name);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []),
+  );
 
   return (
     <View style={styles.editNameContainer}>
@@ -142,8 +150,11 @@ const EditName = () => {
           }
         }}
         blurOnSubmit={true}
+        textContentType="name"
+        placeholder="Enter Name"
+        placeholderTextColor="#707070"
       />
-      <View style={styles.bottomDivider} />
+      {/* <View style={styles.bottomDivider} /> */}
     </View>
   );
 };
@@ -152,16 +163,55 @@ const SocialMediaLinks = () => {
   return (
     <View style={styles.socialMediaContainer}>
       <Text style={styles.label}>Social Media Link</Text>
-      <View style={styles.socialMediaContainer}>
-        <Text style={styles.socialMediaLink}>LinkedIn</Text>
+      <View style={styles.socialMediaLinkContainer}>
+        <TouchableOpacity style={styles.socialMediaSelect}>
+          <Text style={styles.socialMediaType}>LinkedIn</Text>
+          <SvgXml
+            width={DEVICE_LARGE ? 14 : 12}
+            height={DEVICE_LARGE ? 14 : 12}
+            xml={downCaret}
+          />
+        </TouchableOpacity>
+        <TextInput
+          style={styles.socialMediaInput}
+          blurOnSubmit={true}
+          placeholder="Add Link"
+          placeholderTextColor="#707070"
+        />
       </View>
-      <View style={styles.socialMediaContainer}>
-        <Text style={styles.socialMediaLink}>Twitter</Text>
+      <View style={styles.socialMediaLinkContainer}>
+        <TouchableOpacity style={styles.socialMediaSelect}>
+          <Text style={styles.socialMediaType}>LinkedIn</Text>
+          <SvgXml
+            width={DEVICE_LARGE ? 14 : 12}
+            height={DEVICE_LARGE ? 14 : 12}
+            xml={downCaret}
+          />
+        </TouchableOpacity>
+        <TextInput
+          style={styles.socialMediaInput}
+          blurOnSubmit={true}
+          placeholder="Add Link"
+          placeholderTextColor="#707070"
+        />
       </View>
-      <View style={styles.socialMediaContainer}>
-        <Text style={styles.socialMediaLink}>Medium</Text>
+      <View style={styles.socialMediaLinkContainer}>
+        <TouchableOpacity style={styles.socialMediaSelect}>
+          <Text style={styles.socialMediaType}>LinkedIn</Text>
+          <SvgXml
+            width={DEVICE_LARGE ? 14 : 12}
+            height={DEVICE_LARGE ? 14 : 12}
+            xml={downCaret}
+          />
+        </TouchableOpacity>
+        <TextInput
+          style={styles.socialMediaInput}
+          blurOnSubmit={true}
+          placeholder="Add Link"
+          placeholderTextColor="#707070"
+        />
       </View>
-      <View style={styles.bottomDivider} />
+      {/* <View style={styles.bottomDivider} /> */}
     </View>
   );
 };
@@ -197,7 +247,9 @@ const ShowEditPassword = () => {
         >
           <Text style={styles.passwordText}>View Password</Text>
         </TouchableOpacity>
-        <Text selectable={true}>{displayPassword}</Text>
+        <Text style={styles.displayPassword} selectable={true}>
+          {displayPassword}
+        </Text>
       </View>
       <TouchableOpacity
         style={styles.changePasswordButton}
@@ -306,6 +358,7 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 16 : 14,
     marginTop: DEVICE_LARGE ? 4 : 2,
     width: '100%',
+    color: '#000',
   },
   bottomDivider: {
     width: '100%',
@@ -317,11 +370,30 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: DEVICE_LARGE ? 18 : 16,
   },
-  socialMediaLink: {
+  socialMediaLinkContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: DEVICE_LARGE ? 10 : 8,
+  },
+  socialMediaSelect: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: DEVICE_LARGE ? 18 : 15,
+  },
+  socialMediaType: {
     fontFamily: 'Poppins',
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#2185D0',
+    marginRight: DEVICE_LARGE ? 8 : 6,
+  },
+  socialMediaInput: {
+    width: '100%',
+    fontFamily: 'Poppins',
+    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontWeight: '300',
+    color: '#000',
   },
   showEditPasswordContainer: {
     width: '100%',
@@ -332,7 +404,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: DEVICE_LARGE ? 12 : 8,
+    marginTop: DEVICE_LARGE ? 26 : 18,
   },
   changePasswordButton: {
     marginTop: DEVICE_LARGE ? 12 : 8,
@@ -343,6 +415,12 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 13 : 11,
     color: '#2185D0',
   },
+  displayPassword: {
+    fontFamily: 'Poppins',
+    fontWeight: '400',
+    fontSize: DEVICE_LARGE ? 13 : 11,
+    color: '#000',
+  },
   saveContainer: {
     width: '100%',
     flexDirection: 'row',
@@ -351,9 +429,9 @@ const styles = StyleSheet.create({
     marginTop: DEVICE_LARGE ? 44 : 36,
   },
   saveButton: {
-    width: DEVICE_LARGE ? 92 : 80,
-    paddingTop: 8,
-    paddingBottom: 7,
+    width: DEVICE_LARGE ? 100 : 88,
+    paddingTop: 10,
+    paddingBottom: 9,
     backgroundColor: '#5DEC9A',
     alignItems: 'center',
     justifyContent: 'center',
@@ -366,9 +444,9 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 12 : 10,
   },
   cancelButton: {
-    width: DEVICE_LARGE ? 92 : 80,
-    paddingTop: 8,
-    paddingBottom: 7,
+    width: DEVICE_LARGE ? 100 : 88,
+    paddingTop: 10,
+    paddingBottom: 9,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
