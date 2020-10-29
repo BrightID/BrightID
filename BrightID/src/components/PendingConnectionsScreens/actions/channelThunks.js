@@ -7,6 +7,7 @@ import {
   setMyChannel,
   updateChannel,
   selectAllChannelIds,
+  channel_types,
 } from '@/components/PendingConnectionsScreens/channelSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
@@ -203,6 +204,23 @@ export const fetchChannelProfiles = createAsyncThunk(
           }),
         );
       }
+    }
+    // can we stop polling?
+    let expectedProfiles;
+    switch (channel.type) {
+      case channel_types.SINGLE:
+        expectedProfiles = 2; // my profile and peer profile
+        break;
+      case channel_types.GROUP:
+      default:
+        expectedProfiles = CHANNEL_CONNECTION_LIMIT;
+        break;
+    }
+    if (profileIds.length >= expectedProfiles) {
+      console.log(
+        `Got expected number of profiles (${expectedProfiles}) for channel ${channel.id}`,
+      );
+      dispatch(unsubscribeFromConnectionRequests(channel.id));
     }
   },
 );
