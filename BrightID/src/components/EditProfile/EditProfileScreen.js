@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
@@ -160,10 +161,41 @@ const EditName = () => {
 };
 
 const SocialMediaLinks = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.socialMediaContainer}>
       <Text style={styles.label}>Social Media Link</Text>
       <View style={styles.socialMediaLinkContainer}>
+        <TouchableOpacity
+          style={styles.socialMediaSelect}
+          onPress={() => {
+            navigation.navigate('SelectSocialMedia', {
+              order: 0,
+              currentValue: null,
+            });
+          }}
+        >
+          <Text style={styles.addSocialMedia}>+ Add Link</Text>
+        </TouchableOpacity>
+      </View>
+      {/* <View style={styles.socialMediaLinkContainer}>
+        <TouchableOpacity style={styles.socialMediaSelect}>
+          <Text style={styles.socialMediaType}>LinkedIn</Text>
+          <SvgXml
+            width={DEVICE_LARGE ? 14 : 12}
+            height={DEVICE_LARGE ? 14 : 12}
+            xml={downCaret}
+          />
+        </TouchableOpacity> */}
+
+      {/* <TextInput
+          style={styles.socialMediaInput}
+          blurOnSubmit={true}
+          placeholder="Add URL"
+          placeholderTextColor="#707070"
+        />
+      </View> */}
+      {/* <View style={styles.socialMediaLinkContainer}>
         <TouchableOpacity style={styles.socialMediaSelect}>
           <Text style={styles.socialMediaType}>LinkedIn</Text>
           <SvgXml
@@ -175,7 +207,7 @@ const SocialMediaLinks = () => {
         <TextInput
           style={styles.socialMediaInput}
           blurOnSubmit={true}
-          placeholder="Add Link"
+          placeholder="Add URL"
           placeholderTextColor="#707070"
         />
       </View>
@@ -191,27 +223,11 @@ const SocialMediaLinks = () => {
         <TextInput
           style={styles.socialMediaInput}
           blurOnSubmit={true}
-          placeholder="Add Link"
+          placeholder="Add URL"
           placeholderTextColor="#707070"
         />
-      </View>
-      <View style={styles.socialMediaLinkContainer}>
-        <TouchableOpacity style={styles.socialMediaSelect}>
-          <Text style={styles.socialMediaType}>LinkedIn</Text>
-          <SvgXml
-            width={DEVICE_LARGE ? 14 : 12}
-            height={DEVICE_LARGE ? 14 : 12}
-            xml={downCaret}
-          />
-        </TouchableOpacity>
-        <TextInput
-          style={styles.socialMediaInput}
-          blurOnSubmit={true}
-          placeholder="Add Link"
-          placeholderTextColor="#707070"
-        />
-      </View>
-      {/* <View style={styles.bottomDivider} /> */}
+      </View> */}
+      <View style={styles.bottomDivider} />
     </View>
   );
 };
@@ -387,6 +403,12 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#2185D0',
     marginRight: DEVICE_LARGE ? 8 : 6,
+  },
+  addSocialMedia: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 14 : 12,
+    color: '#2185D0',
   },
   socialMediaInput: {
     width: '100%',

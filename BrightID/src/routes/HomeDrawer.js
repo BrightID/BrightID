@@ -32,7 +32,7 @@ import faqIcon from '@/static/faq_icon.svg';
 import TasksScreen from '@/components/Tasks/TasksScreen';
 import GraphExplorerScreen from '@/components/SideMenu/GraphExplorerScreen';
 import ContactUsScreen from '@/components/SideMenu/ContactUsScreen';
-import EditProfileScreen from '@/components/SideMenu/EditProfileScreen';
+import EditProfileScreen from '@/components/EditProfile/EditProfileScreen';
 
 const iconMap = {
   editProfile,

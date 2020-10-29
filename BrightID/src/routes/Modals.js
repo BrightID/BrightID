@@ -4,7 +4,8 @@ import {
   TransitionPresets,
 } from '@react-navigation/stack';
 import FullScreenPhoto from '@/components/Helpers/FullScreenPhoto';
-import ChangePasswordModal from '@/components/SideMenu/ChangePasswordModal';
+import ChangePasswordModal from '@/components/EditProfile/ChangePasswordModal';
+import SelectSocialMediaModal from '@/components/EditProfile/SelectSocialMediaModal';
 
 const Stack = createStackNavigator();
 
@@ -27,15 +28,13 @@ const Modals = () => {
       />
       <Stack.Screen
         name="ChangePassword"
-        options={{
-          headerShown: false,
-          cardOverlayEnabled: true,
-          mode: 'modal',
-          gestureEnabled: true,
-          ...TransitionPresets.FadeFromBottomAndroid,
-          cardStyle: { backgroundColor: 'transparent' },
-        }}
+        options={modalOptions}
         component={ChangePasswordModal}
+      />
+      <Stack.Screen
+        name="SelectSocialMedia"
+        options={modalOptions}
+        component={SelectSocialMediaModal}
       />
     </>
   );
