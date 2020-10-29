@@ -8,6 +8,7 @@ import {
 } from '@/components/PendingConnectionsScreens/channelSlice';
 import ChannelAPI from '@/api/channelService';
 import { connection_levels } from '../src/utils/constants';
+import { pendingConnection_states } from '../src/components/PendingConnectionsScreens/pendingConnectionSlice';
 
 declare type getState = () => State;
 
@@ -270,3 +271,4 @@ declare type FakeUser = {
 };
 
 declare type ConnectionLevel = $Keys<typeof connection_levels>;
+declare type PendingConnectionState = $Keys<typeof pendingConnection_states>;
