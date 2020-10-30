@@ -1,10 +1,14 @@
 // @flow
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { connection_levels, DEVICE_LARGE } from '../../utils/constants';
+import {
+  connectionLevelColors,
+  connectionLevelStrings,
+} from '../../utils/connectionLevelStrings';
 
 type props = {
   level: ConnectionLevel,
@@ -14,52 +18,14 @@ type props = {
 function TrustLevelView({ level, handleChange }: props) {
   const { showActionSheetWithOptions } = useActionSheet();
 
-  const [levelProps, setLevelProps] = useState<{
-    color: string,
-    label: string,
-    testID: string,
-  }>({
-    color: '#F6BF08',
-    label: '',
-    testID: '',
-  });
-
-  useEffect(() => {
-    let color, label;
-    let testID = `${level}Btn`;
-    switch (level) {
-      case connection_levels.REPORTED:
-        color = 'red';
-        label = '✋ Flagged';
-        break;
-      case connection_levels.SUSPICIOUS:
-        color = 'red';
-        label = '🤔 Suspicious';
-        break;
-      case connection_levels.ALREADY_KNOWN:
-        color = 'green';
-        label = '😎 Already known';
-        break;
-      case connection_levels.RECOVERY:
-        color = 'green';
-        label = '🔐 Recovery';
-        break;
-      case connection_levels.JUST_MET:
-      default:
-        color = '#F6BF08';
-        label = '👋 Just met';
-    }
-    setLevelProps({ color, label, testID });
-  }, [level]);
-
   const setLevel = () => {
     showActionSheetWithOptions(
       {
         options: [
-          '🤔 Suspicious',
-          '👋 Just met',
-          '😎 Already known',
-          '🔐 Recovery',
+          connectionLevelStrings[connection_levels.SUSPICIOUS],
+          connectionLevelStrings[connection_levels.JUST_MET],
+          connectionLevelStrings[connection_levels.ALREADY_KNOWN],
+          connectionLevelStrings[connection_levels.RECOVERY],
           'Cancel',
         ],
         cancelButtonIndex: 4,
@@ -108,13 +74,18 @@ function TrustLevelView({ level, handleChange }: props) {
         <Text style={styles.trustLevelLabelText}>Connection Level</Text>
       </View>
       <View style={styles.trustLevel}>
-        <Text style={[styles.trustLevelText, { color: levelProps.color }]}>
-          {levelProps.label}
+        <Text
+          style={[
+            styles.trustLevelText,
+            { color: connectionLevelColors[level] },
+          ]}
+        >
+          {connectionLevelStrings[level]}
         </Text>
       </View>
       <TouchableOpacity
         style={styles.trustLevelButton}
-        testID={levelProps.testID}
+        testID={`${level}Btn`}
         onPress={setLevel}
       >
         <Material name="edit" size={23} color="#2185D0" />

@@ -122,3 +122,72 @@ export const joinAllGroups = (id: string) => async (
     api.joinGroup(group.id, { id, secretKey: fakeUser.secretKey }),
   );
 };
+
+export const reconnectFakeConnection = (id: string) => async (
+  dispatch: dispatch,
+  getState: getState,
+) => {
+  // get fakeUser by ID
+  const fakeUser1 = getState().connections.connections.find(
+    (entry) => entry.id === id,
+  );
+  if (!fakeUser1) {
+    console.log(`Failed to get fake connection id ${id}`);
+    return;
+  }
+  if (!fakeUser1.secretKey) {
+    console.log(`Fake connection ${id} does not have a secretKey!`);
+    return;
+  }
+  const channel = selectChannelById(
+    getState(),
+    getState().channels.myChannelIds[getState().channels.displayChannelType],
+  );
+  if (!channel) {
+    Alert.alert(
+      'Error',
+      'No open channel. Go to MyCodeScreen before attempting fake reconnect to have an open channel.',
+    );
+    return;
+  }
+
+  // load a new random photo
+  let photo;
+  const photoResponse = await RNFetchBlob.fetch(
+    'GET',
+    'https://picsum.photos/180',
+    {},
+  );
+  if (photoResponse.info().status === 200) {
+    photo = `data:image/jpeg;base64,${String(photoResponse.base64())}`;
+  } else {
+    Alert.alert('Error', 'Unable to fetch image');
+    return;
+  }
+
+  // create new name
+  const { firstName, lastName } = names[
+    Math.floor(Math.random() * (names.length - 1))
+  ];
+  const name = `${firstName} ${lastName}`;
+  const score = Math.floor(Math.random() * 99);
+
+  const dataObj = {
+    id,
+    photo,
+    name,
+    score,
+    profileTimestamp: Date.now(),
+    secretKey: fakeUser1.secretKey,
+    notificationToken: null,
+  };
+
+  let encrypted = encryptData(dataObj, channel.aesKey);
+  const fakeChannel = { ...channel, myProfileId: await createRandomId() };
+
+  await fakeChannel.api.upload({
+    channelId: fakeChannel.id,
+    data: encrypted,
+    dataId: fakeChannel.myProfileId,
+  });
+};

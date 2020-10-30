@@ -1,6 +1,7 @@
 // @flow
 
 import api from '@/api/brightId';
+import { connection_levels } from './constants';
 
 export const connectFakeUsers = async (
   fakeUser1: FakeUser,
@@ -8,7 +9,7 @@ export const connectFakeUsers = async (
 ) => {
   let timestamp = Date.now();
 
-  let level = 'just met';
+  let level = connection_levels.JUST_MET;
   let flagReason;
 
   // Connect user1 -> user2
