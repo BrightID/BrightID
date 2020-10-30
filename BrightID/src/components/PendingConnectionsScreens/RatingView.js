@@ -4,6 +4,10 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { RatingButton } from './RatingButton';
 import { connection_levels, DEVICE_LARGE } from '../../utils/constants';
+import {
+  connectionLevelColors,
+  connectionLevelStrings,
+} from '../../utils/connectionLevelStrings';
 
 type RatingViewProps = {
   setLevelHandler: (level) => any,
@@ -19,22 +23,22 @@ export const RatingView = ({ setLevelHandler }: RatingViewProps) => {
       </View>
       <View style={styles.rateButtonContainer}>
         <RatingButton
-          color="red"
-          label="🤔 Suspicious"
+          color={connectionLevelColors[connection_levels.SUSPICIOUS]}
+          label={connectionLevelStrings[connection_levels.SUSPICIOUS]}
           level={connection_levels.SUSPICIOUS}
           handleClick={() => setLevelHandler(connection_levels.SUSPICIOUS)}
           testID={`${connection_levels.SUSPICIOUS}Btn`}
         />
         <RatingButton
-          color="yellow"
-          label="👋 Just met"
+          color={connectionLevelColors[connection_levels.JUST_MET]}
+          label={connectionLevelStrings[connection_levels.JUST_MET]}
           level={connection_levels.JUST_MET}
           handleClick={() => setLevelHandler(connection_levels.JUST_MET)}
           testID={`${connection_levels.JUST_MET}Btn`}
         />
         <RatingButton
-          color="green"
-          label="😎 Already know"
+          color={connectionLevelColors[connection_levels.ALREADY_KNOWN]}
+          label={connectionLevelStrings[connection_levels.ALREADY_KNOWN]}
           level={connection_levels.ALREADY_KNOWN}
           handleClick={() => setLevelHandler(connection_levels.ALREADY_KNOWN)}
           testID={`${connection_levels.ALREADY_KNOWN}Btn`}

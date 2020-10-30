@@ -10,7 +10,7 @@ export const connectionLevelStrings = {
 
 export const connectionLevelColors = {
   [connection_levels.REPORTED]: '#ED1B24',
-  [connection_levels.SUSPICIOUS]: '#FFC918',
+  [connection_levels.SUSPICIOUS]: '#ED1B24',
   [connection_levels.JUST_MET]: '#F6BF08',
   [connection_levels.ALREADY_KNOWN]: '#4EC580',
   [connection_levels.RECOVERY]: '#4EC580',
