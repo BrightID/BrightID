@@ -10,7 +10,7 @@ import {
 } from '../../utils/connectionLevelStrings';
 
 type RatingViewProps = {
-  setLevelHandler: (level) => any,
+  setLevelHandler: (level: ConnectionLevel) => any,
 };
 
 export const RatingView = ({ setLevelHandler }: RatingViewProps) => {
@@ -25,21 +25,18 @@ export const RatingView = ({ setLevelHandler }: RatingViewProps) => {
         <RatingButton
           color={connectionLevelColors[connection_levels.SUSPICIOUS]}
           label={connectionLevelStrings[connection_levels.SUSPICIOUS]}
-          level={connection_levels.SUSPICIOUS}
           handleClick={() => setLevelHandler(connection_levels.SUSPICIOUS)}
           testID={`${connection_levels.SUSPICIOUS}Btn`}
         />
         <RatingButton
           color={connectionLevelColors[connection_levels.JUST_MET]}
           label={connectionLevelStrings[connection_levels.JUST_MET]}
-          level={connection_levels.JUST_MET}
           handleClick={() => setLevelHandler(connection_levels.JUST_MET)}
           testID={`${connection_levels.JUST_MET}Btn`}
         />
         <RatingButton
           color={connectionLevelColors[connection_levels.ALREADY_KNOWN]}
           label={connectionLevelStrings[connection_levels.ALREADY_KNOWN]}
-          level={connection_levels.ALREADY_KNOWN}
           handleClick={() => setLevelHandler(connection_levels.ALREADY_KNOWN)}
           testID={`${connection_levels.ALREADY_KNOWN}Btn`}
         />
