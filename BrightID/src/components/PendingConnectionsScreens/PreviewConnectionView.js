@@ -74,7 +74,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
 
   return (
     <>
-      <View style={styles.titleContainer}>
+      <View testID="previewConnectionScreen" style={styles.titleContainer}>
         <Text style={styles.titleText}>Connection Request </Text>
       </View>
       <View style={styles.userContainer}>

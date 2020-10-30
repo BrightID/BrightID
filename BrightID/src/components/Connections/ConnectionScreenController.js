@@ -77,11 +77,12 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
     'Flag as Deceased',
     'Join All Groups',
     'Connect to other fake connections',
+    'Reconnect',
     'cancel',
   ];
   if (!__DEV__) {
     // remove debug functionality
-    flaggingOptions.splice(4, 2);
+    flaggingOptions.splice(4, 3);
   }
 
   const handleFlagBtnClick = () => {

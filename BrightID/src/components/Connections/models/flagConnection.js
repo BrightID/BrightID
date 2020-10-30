@@ -7,6 +7,7 @@ import { backupUser } from '@/components//Recovery/helpers';
 import {
   connectWithOtherFakeConnections,
   joinAllGroups,
+  reconnectFakeConnection,
 } from '@/actions/fakeContact';
 import { connection_levels } from '../../../utils/constants';
 import { defaultSort } from './sortingUtility';
@@ -24,6 +25,11 @@ export const handleFlagging = ({ name, id, dispatch, callback }) => (index) => {
       case 5: {
         console.log('connecting fake connections');
         dispatch(connectWithOtherFakeConnections(id));
+        return;
+      }
+      case 6: {
+        console.log('Reconnecting fake connection');
+        dispatch(reconnectFakeConnection(id));
         return;
       }
     }

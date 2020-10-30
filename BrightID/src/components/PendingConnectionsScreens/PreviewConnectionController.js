@@ -75,7 +75,7 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
   };
 
   return (
-    <View style={styles.previewContainer} testID="previewConnectionScreen">
+    <View style={styles.previewContainer}>
       <TouchableOpacity
         style={styles.cancelButton}
         onPress={() => {

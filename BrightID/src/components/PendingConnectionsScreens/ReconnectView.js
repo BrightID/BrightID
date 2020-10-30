@@ -38,7 +38,7 @@ export const ReconnectView = ({
 
   return (
     <>
-      <View style={styles.header}>
+      <View style={styles.header} testID="ReconnectScreen">
         <Text style={styles.headerText}>Connection Request</Text>
         <Text style={styles.subheaderText}>
           You already connected with this account
@@ -49,7 +49,10 @@ export const ReconnectView = ({
         </Text>
       </View>
       <View style={styles.profiles}>
-        <View style={[styles.profile, styles.verticalDivider]}>
+        <View
+          testID="oldProfileView"
+          style={[styles.profile, styles.verticalDivider]}
+        >
           <View style={styles.profileHeader}>
             <Text style={styles.profileHeaderText}>Old Profile</Text>
           </View>
@@ -62,7 +65,7 @@ export const ReconnectView = ({
             flagged={pendingConnection.flagged}
           />
         </View>
-        <View style={styles.profile}>
+        <View testID="newProfileView" style={styles.profile}>
           <View style={styles.profileHeader}>
             <Text style={styles.profileHeaderText}>New Profile</Text>
           </View>
