@@ -1,35 +1,51 @@
 // @flow
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Picker, PickerIOS } from '@react-native-picker/picker';
 import { BlurView } from '@react-native-community/blur';
-
 import { DEVICE_LARGE, DEVICE_ANDROID, BACKUP_URL } from '@/utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { compose, map, toPairs } from 'ramda';
 import { useFocusEffect } from '@react-navigation/native';
 import socialMediaList from './socialMediaList';
 import { addSocialMedia, updateOrder } from './socialMediaSlice';
 
 /** Helper functions */
 
+// value is the social media id, label is the name
 const toPickerItem = ([value, label]) => (
   <Picker.Item key={value} value={value} label={label} />
 );
 
-const toPickerItemList = compose(map(toPickerItem), toPairs);
-
-const PickerItems = toPickerItemList(socialMediaList);
-
-// make sure this is up to date
-const defaultItem = 'd750bd42-e2d3-465f-a3fd-40fde0080022';
+const socialMediaKeyValues = Object.entries(socialMediaList);
 
 /** Main Component */
 
 const SelectMediaModal = ({ route, navigation }) => {
   const dispatch = useDispatch();
-  const firstItem = route.params?.currentValue ?? defaultItem;
+  const currentValue = route.params?.currentValue;
+  const existingSocialMediaIds = useSelector((state) => state.socialMedia.ids);
+
+  // only display social media not already selected by user when adding a new one to the list
+  // or allow the user to switch order if editing the social media from the list
+  const socialMediaToDisplay = useMemo(
+    () =>
+      currentValue
+        ? socialMediaKeyValues
+        : socialMediaKeyValues.filter(
+            ([id]) => !existingSocialMediaIds.includes(id),
+          ),
+    [existingSocialMediaIds, currentValue],
+  );
+
+  const PickerItems = useMemo(() => socialMediaToDisplay.map(toPickerItem), [
+    socialMediaToDisplay,
+  ]);
+
+  const defaultItem = socialMediaToDisplay[0] && socialMediaToDisplay[0][0];
+
+  const firstItem = currentValue ?? defaultItem;
+
   const [selectedValue, setSelectedValue] = useState(firstItem);
 
   useFocusEffect(
@@ -45,6 +61,7 @@ const SelectMediaModal = ({ route, navigation }) => {
       order: route.params?.order ?? 0,
     };
     dispatch(addSocialMedia(socialMedia));
+    navigation.navigate('Edit Profile');
   };
 
   return (

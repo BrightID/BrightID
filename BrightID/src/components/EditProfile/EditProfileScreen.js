@@ -11,7 +11,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
@@ -22,6 +21,7 @@ import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
 import { setPhoto, setName } from '@/actions';
 import downCaret from '@/static/down_caret_blue.svg';
+import { selectAllSocialMedia } from './socialMediaSlice';
 
 const EditProfilePhoto = () => {
   const dispatch = useDispatch();
@@ -162,71 +162,54 @@ const EditName = () => {
 
 const SocialMediaLinks = () => {
   const navigation = useNavigation();
+  const socialMediaItems = useSelector(selectAllSocialMedia);
+  console.log('socialMediaItems', socialMediaItems);
+
+  const SocialMediaLinks = socialMediaItems.map((item) => (
+    <View key={item.id} style={styles.socialMediaLinkContainer}>
+      <TouchableOpacity
+        style={styles.socialMediaSelect}
+        onPress={() => {
+          navigation.navigate('SelectSocialMedia', {
+            order: item.order,
+            currentValue: item.id,
+          });
+        }}
+      >
+        <Text style={styles.socialMediaType}>{item.name}</Text>
+        <SvgXml
+          width={DEVICE_LARGE ? 14 : 12}
+          height={DEVICE_LARGE ? 14 : 12}
+          xml={downCaret}
+        />
+      </TouchableOpacity>
+      <TextInput
+        style={styles.socialMediaInput}
+        blurOnSubmit={true}
+        placeholder="Add URL"
+        placeholderTextColor="#707070"
+      />
+    </View>
+  ));
+
   return (
     <View style={styles.socialMediaContainer}>
-      <Text style={styles.label}>Social Media Link</Text>
-      <View style={styles.socialMediaLinkContainer}>
+      <View style={styles.socialMediaLinkLabel}>
+        <Text style={styles.label}>Social Media Link</Text>
         <TouchableOpacity
-          style={styles.socialMediaSelect}
           onPress={() => {
             navigation.navigate('SelectSocialMedia', {
-              order: 0,
+              order: socialMediaItems.length,
               currentValue: null,
             });
           }}
         >
-          <Text style={styles.addSocialMedia}>+ Add Link</Text>
+          <Text style={styles.addSocialMedia}>+</Text>
         </TouchableOpacity>
       </View>
-      {/* <View style={styles.socialMediaLinkContainer}>
-        <TouchableOpacity style={styles.socialMediaSelect}>
-          <Text style={styles.socialMediaType}>LinkedIn</Text>
-          <SvgXml
-            width={DEVICE_LARGE ? 14 : 12}
-            height={DEVICE_LARGE ? 14 : 12}
-            xml={downCaret}
-          />
-        </TouchableOpacity> */}
 
-      {/* <TextInput
-          style={styles.socialMediaInput}
-          blurOnSubmit={true}
-          placeholder="Add URL"
-          placeholderTextColor="#707070"
-        />
-      </View> */}
-      {/* <View style={styles.socialMediaLinkContainer}>
-        <TouchableOpacity style={styles.socialMediaSelect}>
-          <Text style={styles.socialMediaType}>LinkedIn</Text>
-          <SvgXml
-            width={DEVICE_LARGE ? 14 : 12}
-            height={DEVICE_LARGE ? 14 : 12}
-            xml={downCaret}
-          />
-        </TouchableOpacity>
-        <TextInput
-          style={styles.socialMediaInput}
-          blurOnSubmit={true}
-          placeholder="Add URL"
-          placeholderTextColor="#707070"
-        />
-      </View>
-      <View style={styles.socialMediaLinkContainer}>
-        <TouchableOpacity style={styles.socialMediaSelect}>
-          <Text style={styles.socialMediaType}>LinkedIn</Text>
-          <SvgXml
-            width={DEVICE_LARGE ? 14 : 12}
-            height={DEVICE_LARGE ? 14 : 12}
-            xml={downCaret}
-          />
-        </TouchableOpacity>
-        <TextInput
-          style={styles.socialMediaInput}
-          blurOnSubmit={true}
-          placeholder="Add URL"
-          placeholderTextColor="#707070"
-        />
-      </View> */}
+      {SocialMediaLinks}
+
       <View style={styles.bottomDivider} />
     </View>
   );
@@ -392,6 +375,10 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: DEVICE_LARGE ? 10 : 8,
   },
+  socialMediaLinkLabel: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   socialMediaSelect: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -409,6 +396,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#2185D0',
+    marginLeft: DEVICE_LARGE ? 6 : 4,
   },
   socialMediaInput: {
     width: '100%',
