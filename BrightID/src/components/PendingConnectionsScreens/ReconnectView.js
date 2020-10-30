@@ -39,10 +39,13 @@ export const ReconnectView = ({
   return (
     <>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Update existing connection</Text>
+        <Text style={styles.headerText}>Connection Request</Text>
         <Text style={styles.subheaderText}>
-          Last connection with {pendingConnection.name}:{' '}
-          {moment(parseInt(existingConnection.createdAt, 10)).fromNow()}
+          You already connected with this account
+        </Text>
+        <Text style={styles.lastConnectedText}>
+          Last connected{' '}
+          {moment(parseInt(existingConnection.createdAt, 10)).fromNow()} ago
         </Text>
       </View>
       <View style={styles.profiles}>
@@ -130,11 +133,18 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 22 : 18,
     textAlign: 'center',
     color: '#000000',
-    marginBottom: 24,
+    marginBottom: 20,
   },
   subheaderText: {
     fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 15 : 12,
+    textAlign: 'center',
+    color: '#827F7F',
+  },
+  lastConnectedText: {
+    fontFamily: 'Poppins',
+    fontWeight: '700',
     fontSize: DEVICE_LARGE ? 15 : 12,
     textAlign: 'center',
     color: '#827F7F',
@@ -180,7 +190,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   connectionLevelLabel: {
-    marginBottom: 5,
+    marginBottom: 10,
   },
   connectionLevelLabelText: {
     fontFamily: 'Poppins',
@@ -192,6 +202,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 15 : 13,
+    marginBottom: 10,
   },
   actionButtons: {
     flexDirection: 'row',
