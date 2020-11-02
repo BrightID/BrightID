@@ -19,7 +19,12 @@ const translations = {
   }
 };
 
-const { languageTag } = RNLocalize.findBestAvailableLanguage(Object.keys(translations));
+const defaultLanguage = {
+  languageTag: "en-US",
+  isRTL: false,
+};
+
+const { languageTag } = RNLocalize.findBestAvailableLanguage(Object.keys(translations)) || defaultLanguage;
 
 i18n
   .use(initReactI18next)
