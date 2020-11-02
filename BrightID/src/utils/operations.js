@@ -32,14 +32,15 @@ const handleOpUpdate = (store, op, state, result) => {
       }
       break;
     default:
+      store.dispatch(fetchUserInfo());
   }
+  store.dispatch(checkTasks());
 };
 
 export const pollOperations = async () => {
   const {
     operations: { operations },
   } = store.getState();
-  let shouldUpdateLocalState = false;
   try {
     for (const op of operations) {
       const { state, result } = await api.getOperationState(op.hash);
@@ -61,7 +62,6 @@ export const pollOperations = async () => {
           // op is done, so stop polling for it
           removeOp = true;
           handleOpUpdate(store, op, state, result);
-          shouldUpdateLocalState = true;
           break;
         default:
           console.log(
@@ -71,10 +71,6 @@ export const pollOperations = async () => {
       if (removeOp) {
         store.dispatch(removeOperation(op.hash));
       }
-    }
-    if (shouldUpdateLocalState) {
-      store.dispatch(fetchUserInfo());
-      store.dispatch(checkTasks());
     }
   } catch (err) {
     console.warn(err.message);

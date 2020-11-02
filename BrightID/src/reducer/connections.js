@@ -46,7 +46,12 @@ export const reducer = (
             if (conn.status === 'verified') conn.status = 'deleted';
             return conn;
           } else {
-            conn.status = 'verified';
+            if (
+              conn.status === 'initiated' ||
+              conn.status === 'stale' ||
+              !conn.status
+            )
+              conn.status = 'verified';
             return mergeRight(conn, updatedConn);
           }
         }),
