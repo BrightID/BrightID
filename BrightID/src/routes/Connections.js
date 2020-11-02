@@ -11,6 +11,7 @@ import FullScreenPhoto from '@/components/Helpers/FullScreenPhoto';
 import TrustedConnectionsScreen from '@/components/Recovery/TrustedConnectionsScreen';
 import { useSelector } from 'react-redux';
 import { headerOptions, headerTitleStyle, NavHome } from './helpers';
+import ConnectionScreenController from '../components/Connections/ConnectionScreenController';
 
 const Stack = createStackNavigator();
 
@@ -37,6 +38,11 @@ const connectionsScreenOptions = {
   headerRight: () => <SearchConnections sortable={true} />,
   headerLeft: () => <NavHome />,
   headerTitle: () => <HeaderTitle title="Connections" />,
+};
+
+const connectionScreenOptions = {
+  ...headerOptions,
+  headerTitle: () => <HeaderTitle title="Connection Details" />,
 };
 
 const trustedScreenOptions = {
@@ -76,6 +82,11 @@ const Connections = () => {
         name="FullScreenPhoto"
         component={FullScreenPhoto}
         options={fullScreenPhotoOptions}
+      />
+      <Stack.Screen
+        name="Connection"
+        component={ConnectionScreenController}
+        options={connectionScreenOptions}
       />
     </>
   );

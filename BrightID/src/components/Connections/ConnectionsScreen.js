@@ -57,17 +57,19 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
   const canRemove = status === 'stale' || status === 'deleted';
 
   let flaggingOptions = [
+    t('connections.flagActionSheet.spammer'),
     t('connections.flagActionSheet.duplicate'),
     t('connections.flagActionSheet.fake'),
     t('connections.flagActionSheet.deceased'),
-    t('connections.flagActionSheet.joinAllGroups'),
-    t('connections.flagActionSheet.connectsToFake'),
+    'Join All Groups',
+    'Connect to other fake connections',
+    'Reconnect',
     t('common.actionSheet.cancel'),
   ];
   // comment out for test release
   if (!__DEV__) {
     // remove debug functionality
-    flaggingOptions.splice(3, 2);
+    flaggingOptions.splice(4, 3);
   }
 
   const FlagButton = () => (
@@ -200,7 +202,7 @@ const filterConnectionsSelector = createSelector(
   searchParamSelector,
   (connections, searchParam) => {
     const searchString = toSearchString(searchParam);
-    return connections.filter((item) => 
+    return connections.filter((item) =>
       toSearchString(`${item.name}`).includes(searchString),
     );
   },

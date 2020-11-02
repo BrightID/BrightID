@@ -17,7 +17,7 @@ import { selectAllUnconfirmedConnections } from '@/components/PendingConnections
 import { DEVICE_LARGE, WIDTH } from '@/utils/constants';
 import { setActiveNotification } from '@/actions';
 import { confirmPendingConnectionThunk } from './actions/pendingConnectionThunks';
-import { PreviewConnectionView } from './PreviewConnectionView';
+import { PreviewConnectionController } from './PreviewConnectionController';
 
 /**
  * Confirm / Preview Connection  Screen of BrightID
@@ -126,7 +126,7 @@ export const PendingConnectionsScreen = () => {
 
     const renderItem = ({ item, index }) => {
       return (
-        <PreviewConnectionView
+        <PreviewConnectionController
           pendingConnectionId={item.id}
           carouselRef={carouselRef}
           setReRender={setReRender}
@@ -208,125 +208,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  previewContainer: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flexDirection: 'column',
-    borderRadius: 10,
-    // marginTop: DEVICE_LARGE ? 60 : 50,
-  },
-  titleContainer: {
-    marginTop: DEVICE_LARGE ? 60 : 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  questionText: {
-    fontFamily: 'Poppins',
-    fontWeight: '400',
-    fontSize: DEVICE_LARGE ? 22 : 18,
-    textAlign: 'center',
-    color: '#000000',
-  },
-  waitingText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    fontSize: DEVICE_LARGE ? 16 : 14,
-    color: '#333',
-  },
-  userContainer: {
-    marginTop: 10,
-    paddingBottom: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  photo: {
-    width: DEVICE_LARGE ? 148 : 115,
-    height: DEVICE_LARGE ? 148 : 115,
-    borderRadius: 100,
-  },
-  connectName: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    marginTop: 10,
-    fontSize: DEVICE_LARGE ? 26 : 21,
-    letterSpacing: 0,
-    textAlign: 'left',
-    color: '#000000',
-  },
-  flagged: {
-    fontSize: DEVICE_LARGE ? 20 : 18,
-    color: 'red',
-  },
-  buttonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    fontSize: DEVICE_LARGE ? 18 : 15,
-    textAlign: 'left',
-    color: '#ffffff',
-  },
-  cancelButton: {
-    position: 'absolute',
-    left: -10,
-    top: DEVICE_LARGE ? 20 : 12,
-    zIndex: 20,
-    width: DEVICE_LARGE ? 60 : 50,
-    alignItems: 'center',
-  },
-  clearConnectionsButton: {
-    position: 'absolute',
-    bottom: '6%',
-  },
-  bottomButton: {
-    position: 'absolute',
-    bottom: '6%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: DEVICE_LARGE ? 42 : 36,
-    backgroundColor: '#fff',
-    borderRadius: 60,
-    width: DEVICE_LARGE ? 260 : 210,
-    borderWidth: 2,
-    borderColor: '#333',
-    marginBottom: 10,
-  },
-  bottomButtonText: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
-    fontSize: DEVICE_LARGE ? 14 : 12,
-    color: '#333',
-    marginLeft: 10,
-  },
-  infoText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 14 : 12,
-    color: '#333',
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingTop: 22,
-  },
-  navHomeButton: {
-    position: 'absolute',
-    left: 0,
-    top: DEVICE_LARGE ? 8 : 6,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    // borderWidth: 2,
-    // borderColor: '#333',
-    // borderRadius: 60,
-    width: DEVICE_LARGE ? 80 : 70,
-    height: DEVICE_LARGE ? 42 : 36,
-  },
-  bottomButtonContainer: {
-    position: 'absolute',
-    bottom: 30,
   },
 });
 

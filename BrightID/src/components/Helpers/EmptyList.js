@@ -11,7 +11,7 @@ type Props = {
 };
 
 const EmptyList = ({ title, iconType = 'alert-outline' }: Props) => (
-  <View style={styles.emptyContainer}>
+  <View style={styles.emptyContainer} testID="EmptyListView">
     <MaterialCommunityIcons
       size={DEVICE_LARGE ? 48 : 38}
       name={iconType}

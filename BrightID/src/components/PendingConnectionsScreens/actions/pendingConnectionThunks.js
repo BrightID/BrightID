@@ -91,6 +91,7 @@ export const confirmPendingConnectionThunk = (
     status: 'initiated',
     notificationToken: connection.notificationToken,
     secretKey: connection.secretKey,
+    level,
   };
 
   dispatch(addConnection(connectionData));

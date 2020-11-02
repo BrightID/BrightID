@@ -1,102 +1,41 @@
 // @flow
 
 import React from 'react';
-import { useSelector } from 'react-redux';
 import {
   Image,
   StyleSheet,
   Text,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { SvgXml } from 'react-native-svg';
-import backArrow from '@/static/back_arrow_grey.svg';
 import verificationSticker from '@/static/verification-sticker.svg';
-import { connection_levels, DEVICE_LARGE } from '../../utils/constants';
-import { RatingButton } from './RatingButton';
-import {
-  pendingConnection_states,
-  selectPendingConnectionById,
-} from './pendingConnectionSlice';
+import { DEVICE_LARGE } from '../../utils/constants';
+import { pendingConnection_states } from './pendingConnectionSlice';
+import { RatingView } from './RatingView';
+import { ConnectionStats } from './ConnectionStats';
 
 type PreviewConnectionProps = {
-  pendingConnectionId: any,
-  ratingHandler: (...args: Array<any>) => any,
-  index: number,
+  pendingConnection: PendingConnection,
+  setLevelHandler: (level: ConnectionLevel) => any,
+  photoTouchHandler: () => any,
+  brightIdVerified: boolean,
 };
 
 export const PreviewConnectionView = (props: PreviewConnectionProps) => {
-  const { pendingConnectionId, ratingHandler, index } = props;
   const { t } = useTranslation();
-
-  const pendingConnection = useSelector(
-    (state) =>
-      selectPendingConnectionById(state, pendingConnectionId) ?? {
-        state: pendingConnection_states.EXPIRED,
-      },
-    (a, b) => a?.state === b?.state,
-  );
-
-  const alreadyExists = useSelector(
-    (state) =>
-      state.connections.connections.some(
-        (conn) => conn.id === pendingConnection.brightId,
-      ) && pendingConnection.state === pendingConnection_states.UNCONFIRMED,
-  );
-
-  const navigation = useNavigation();
-
-  const brightidVerified = pendingConnection.verifications?.includes(
-    'BrightID',
-  );
-
-  const buttonHandler = (level: ConnectionLevel) => {
-    ratingHandler(pendingConnection.id, level, index);
-  };
+  const {
+    pendingConnection,
+    setLevelHandler,
+    brightIdVerified,
+    photoTouchHandler,
+  } = props;
 
   let ratingView;
   switch (pendingConnection.state) {
     case pendingConnection_states.UNCONFIRMED: {
-      ratingView = (
-        <>
-          <View>
-            <Text style={styles.ratingHeader}>
-              {t('pendingConnections.label.rating')}
-            </Text>
-          </View>
-          <View style={styles.rateButtonContainer}>
-            <RatingButton
-              color="red"
-              label={'🤔 ' + t('pendingConnections.button.suspicious')}
-              level={connection_levels.SUSPICIOUS}
-              handleClick={buttonHandler}
-              testID={`${connection_levels.SUSPICIOUS}Btn`}
-            />
-            <RatingButton
-              color="yellow"
-              label={'👋 ' + t('pendingConnections.button.justMet')}
-              level={connection_levels.JUST_MET}
-              handleClick={buttonHandler}
-              testID={`${connection_levels.JUST_MET}Btn`}
-            />
-            <RatingButton
-              color="green"
-              label={'😎 ' + t('pendingConnections.button.alreadyKnow')}
-              level={connection_levels.ALREADY_KNOW}
-              handleClick={buttonHandler}
-              testID={`${connection_levels.ALREADY_KNOW}Btn`}
-            />
-          </View>
-          <View>
-            <Text style={styles.ratingFooter}>
-              {t('pendingConnections.text.rating')}
-            </Text>
-          </View>
-        </>
-      );
+      ratingView = <RatingView setLevelHandler={setLevelHandler} />;
       break;
     }
     case pendingConnection_states.CONFIRMING:
@@ -136,29 +75,12 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
   }
 
   return (
-    <View style={styles.previewContainer} testID="previewConnectionScreen">
-      <TouchableOpacity
-        style={styles.cancelButton}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      >
-        <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
-      </TouchableOpacity>
-      <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>
-          {alreadyExists ? t('pendingConnections.title.reconnectWith') : t('pendingConnections.title.connectionRequest')}
-        </Text>
+    <>
+      <View testID="previewConnectionScreen" style={styles.titleContainer}>
+        <Text style={styles.titleText}>{t('pendingConnections.title.connectionRequest')} </Text>
       </View>
       <View style={styles.userContainer}>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            navigation.navigate('FullScreenPhoto', {
-              photo: pendingConnection.photo,
-              base64: true,
-            });
-          }}
-        >
+        <TouchableWithoutFeedback onPress={photoTouchHandler}>
           <Image
             source={{ uri: pendingConnection.photo }}
             style={styles.photo}
@@ -175,42 +97,22 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
           {pendingConnection.flagged && (
             <Text style={styles.flagged}> {t('common.tag.flagged')}</Text>
           )}
-          {brightidVerified && (
+          {brightIdVerified && (
             <View style={styles.verificationSticker}>
               <SvgXml width="16" height="16" xml={verificationSticker} />
             </View>
           )}
         </View>
-        {alreadyExists ? (
-          <Text style={styles.flagged}>{t('pendingConnections.tag.alreadyConnected')}</Text>
-        ) : (
-          <Text style={styles.connectedText}>
-            {pendingConnection.connectionDate}
-          </Text>
-        )}
       </View>
       <View style={styles.countsContainer}>
-        <View>
-          <Text style={styles.countsNumberText}>
-            {pendingConnection.connections}
-          </Text>
-          <Text style={styles.countsDescriptionText}>{t('pendingConnections.label.connections')}</Text>
-        </View>
-        <View>
-          <Text style={styles.countsNumberText}>
-            {pendingConnection.groups}
-          </Text>
-          <Text style={styles.countsDescriptionText}>{t('pendingConnections.label.groups')}</Text>
-        </View>
-        <View>
-          <Text style={styles.countsNumberText}>
-            {pendingConnection.mutualConnections}
-          </Text>
-          <Text style={styles.countsDescriptionText}>{t('pendingConnections.label.mutualConnections')}</Text>
-        </View>
+        <ConnectionStats
+          numConnections={pendingConnection.connections}
+          numGroups={pendingConnection.groups}
+          numMutualConnections={pendingConnection.mutualConnections}
+        />
       </View>
       <View style={styles.ratingView}>{ratingView}</View>
-    </View>
+    </>
   );
 };
 
@@ -227,23 +129,6 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 18 : 15,
     textAlign: 'left',
     color: '#ffffff',
-  },
-  previewContainer: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flexDirection: 'column',
-    borderRadius: 10,
-  },
-  cancelButton: {
-    position: 'absolute',
-    left: -10,
-    top: DEVICE_LARGE ? 20 : 12,
-    zIndex: 20,
-    width: DEVICE_LARGE ? 60 : 50,
-    alignItems: 'center',
   },
   titleContainer: {
     marginTop: DEVICE_LARGE ? 18 : 12,
@@ -297,18 +182,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     flexDirection: 'row',
   },
-  countsDescriptionText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 14 : 12,
-  },
-  countsNumberText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
-    textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 17 : 15,
-  },
   connectedText: {
     fontFamily: 'ApexNew-Book',
     fontSize: 14,
@@ -331,23 +204,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 17 : 15,
     marginTop: 32,
-  },
-  ratingHeader: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
-    textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 17 : 15,
-    marginBottom: 12,
-  },
-  rateButtonContainer: {
-    width: '65%',
-  },
-  ratingFooter: {
-    paddingTop: 18,
-    fontFamily: 'Poppins',
-    fontWeight: 'normal',
-    textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 12 : 10,
-    color: '#827F7F',
   },
 });

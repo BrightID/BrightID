@@ -56,7 +56,6 @@ describe('make Connections', () => {
     });
 
     it('should toggle connection type', async () => {
-      // text should read "One to One" initially
       await expect(element(by.id('ConnectionInfoSingleBtn'))).toExist();
       await element(by.id('ChannelSwitch')).tap();
       await expect(element(by.id('ConnectionInfoGroupBtn'))).toExist();
@@ -66,7 +65,7 @@ describe('make Connections', () => {
   });
 
   describe('Connect with different Connection levels', () => {
-    const levels = ['suspicious', 'just met', 'already know'];
+    const levels = ['suspicious', 'just met', 'already known'];
 
     afterEach(async () => {
       await navigateHome();
