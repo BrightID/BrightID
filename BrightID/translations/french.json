@@ -97,6 +97,13 @@
   "connections.removeActionSheet.title": "Supprimer la connexion",
   "connections.removeActionSheet.info": "Êtes-vous sûr de vouloir supprimer la connexion avec {{name}}? Vous pouvez vous reconnecter à tout moment.",
   "connections.removeActionSheet.remove": "Supprimer",
+  "connections.text.alreadyConnected": "Vous êtes déjà connecté avec ce compte",
+  "connections.tag.lastConnected": "Connecté il y a {{date}}",
+  "connections.label.oldProfile": "Ancien Profil",
+  "connections.label.newProfile": "Nouveau Profil",
+  "connections.label.currentConnectionLevel": "Niveau de connexion actuel",
+  "connections.button.reportAbuse": "Signaler",
+  "connections.button.updateConnection": "Mettre à jour",
 
 
   "connectionsSearch.header.sorting": "Tri",
