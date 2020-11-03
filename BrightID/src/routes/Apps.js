@@ -18,6 +18,11 @@ const Apps = () => (
       baseUrl: '',
       context: '',
       contextId: '',
+      params: {
+        baseUrl: '',
+        context: '',
+        contextId: '',
+      },
     }}
     options={topOptions}
   />
