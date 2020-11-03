@@ -1,10 +1,10 @@
-/* global device:false, element:false, by:false */
+/* global device:false, element:false, by:false, waitFor:false */
 
-import fetch from 'node-fetch';
 import {
   createBrightID,
   expectAppsScreen,
   expectHomescreen,
+  navigateHome,
 } from './testUtils';
 
 function getRandomAddres() {
@@ -16,71 +16,130 @@ function getRandomAddres() {
   return a;
 }
 
-describe('App Deep Links', () => {
-  let yes, no;
+const apps = [
+  {
+    name: 'Gitcoin',
+    context: 'Gitcoin',
+  },
+  {
+    name: 'idchain',
+    context: 'idchain',
+  },
+  {
+    name: 'Ethereum',
+    context: 'ethereum',
+  },
+  {
+    name: 'DollarForEveryone',
+    context: 'DollarForEveryone',
+  },
+  {
+    name: 'clr.fund',
+    context: 'clr.fund',
+  },
+];
 
-  describe('Open Deep Link without Account', () => {
-    beforeAll(async () => {
-      await device.sendToHome();
-      await device.launchApp({
-        newInstance: false,
-        url: `brightid://link-verification/http:%2f%2ftest.brightid.org/ethereum/${getRandomAddres()}`,
-      });
+describe('Linking without account', () => {
+  it('should ignore deep link when running in background', async () => {
+    // sends app to background and simulate being pulled to foreground again by clicking on deeplink
+    await device.sendToHome();
+    await device.launchApp({
+      newInstance: false,
+      url: `brightid://link-verification/http:%2f%2ftest.brightid.org/ethereum/${getRandomAddres()}`,
     });
-    it('should not open apps page', async () => {
-      await expectAppsScreen(false);
-    });
+    // app should show onboarding carousel screen
+    await waitFor(element(by.id('brightIdOnboard'))).toBeVisible();
   });
-
-  xdescribe('Open Deep Link', () => {
-    beforeAll(async () => {
-      // create identity
-      const platform = await device.getPlatform();
-      const android = platform === 'android';
-      no = android ? 'NO' : 'No';
-      yes = android ? 'YES' : 'Yes';
-      await device.reloadReactNative();
-      await createBrightID();
+  it('should ignore deep link when not running', async () => {
+    await device.launchApp({
+      newInstance: true,
+      url: `brightid://link-verification/http:%2f%2ftest.brightid.org/ethereum/${getRandomAddres()}`,
     });
-    beforeEach(async () => {
-      await device.sendToHome();
-      await device.launchApp({
-        newInstance: false,
-        url: `brightid://link-verification/http:%2f%2ftest.brightid.org/ethereum/${getRandomAddres()}`,
-      });
-    });
-    it('should not link app and return to home page', async () => {
-      await element(by.text(no)).tap();
-      await expectHomescreen();
-    });
-    it('should link app and see Linked label in front of app', async () => {
-      await element(by.text(yes)).tap();
-      await expectAppsScreen(true);
-      expect(element(by.id('Linked_ethereum'))).toNotExist();
-      await waitFor(element(by.text('OK')))
-        .toExist()
-        .withTimeout(20000);
-      await element(by.text('OK')).tap();
-      expect(element(by.id('Linked_ethereum'))).toBeVisible();
-    });
+    // app should show onboarding carousel screen
+    await waitFor(element(by.id('brightIdOnboard'))).toBeVisible();
   });
 });
 
-xdescribe('Apps Screen', () => {
+describe('Linking with account', () => {
+  let yes, no;
+
   beforeAll(async () => {
-    await device.reloadReactNative();
-    // await createBrightID();
+    const platform = await device.getPlatform();
+    const android = platform === 'android';
+    no = android ? 'NO' : 'No';
+    yes = android ? 'YES' : 'Yes';
+    await createBrightID();
   });
-  it('should open apps screen', async () => {
-    await element(by.id('appsBtn')).tap();
-    await expectAppsScreen(true);
+
+  it('should start linking process when running in background', async () => {
+    await device.sendToHome();
+    await device.launchApp({
+      newInstance: false,
+      url: `brightid://link-verification/http:%2f%2ftest.brightid.org/${
+        apps[0].context
+      }/${getRandomAddres()}`,
+    });
+    // Alert should be open
+    await expect(element(by.text('Link App?'))).toBeVisible();
+    // cancel linking
+    await element(by.text(no)).tap();
+    await expectAppsScreen();
   });
-  it('should show all apps', async () => {
-    let response = await fetch('http://test.brightid.org/brightid/v5/apps');
-    let json = await response.json();
-    const { apps } = json.data;
-    apps.forEach((app) => {
-      expect(element(by.text(app.name))).toBeVisible();
+
+  it('should start linking process when not running', async () => {
+    await device.launchApp({
+      newInstance: true,
+      url: `brightid://link-verification/http:%2f%2ftest.brightid.org/${
+        apps[0].context
+      }/${getRandomAddres()}`,
+    });
+    // Alert should be open
+    await expect(element(by.text('Link App?'))).toBeVisible();
+    // cancel linking
+    await element(by.text(no)).tap();
+    await expectAppsScreen();
+  });
+
+  apps.forEach((app) => {
+    describe(`App ${app.name}`, () => {
+      beforeAll(async () => {
+        await navigateHome();
+        await expectHomescreen();
+        await element(by.id('appsBtn')).tap();
+        await expectAppsScreen();
+      });
+
+      it('should be listed on apps screen', async () => {
+        await expect(element(by.id(`app-${app.name}`))).toBeVisible();
+      });
+
+      it('should not be linked', async () => {
+        await expect(element(by.id(`app-${app.name}`))).toBeVisible();
+      });
+
+      it(`should successfully link ${app.name}`, async () => {
+        await device.sendToHome();
+        await device.launchApp({
+          newInstance: false,
+          url: `brightid://link-verification/http:%2f%2ftest.brightid.org/${
+            app.context
+          }/${getRandomAddres()}`,
+        });
+        // Alert should be open
+        await expect(element(by.text('Link App?'))).toBeVisible();
+        await element(by.text(yes)).tap();
+        await expectAppsScreen();
+        // Success alert should pop up when operation confirms. Wait up to 30 seconds.
+        await waitFor(element(by.text('Success')))
+          .toBeVisible()
+          .withTimeout(30000);
+        // dismiss success alert
+        await element(by.text('OK')).tap();
+        // should show apps screen
+        await expectAppsScreen();
+        // app context should now be linked
+        expect(element(by.id(`Linked_${app.context}`))).toBeVisible();
+      });
     });
   });
 });
