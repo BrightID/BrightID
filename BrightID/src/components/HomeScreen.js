@@ -264,7 +264,11 @@ export const HomeScreen = (props) => {
           style={styles.countsCard}
           onPress={() => {
             dispatch(setActiveNotification(null));
-            navigation.navigate('Apps');
+            navigation.navigate('Apps', {
+              baseUrl: '',
+              context: '',
+              contextId: '',
+            });
           }}
         >
           <Text testID="AppsCount" style={styles.countsNumberText}>

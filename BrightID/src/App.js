@@ -33,8 +33,18 @@ export const App = () => {
     prefixes: ['brightid://', 'https://app.brightid.org'],
     config: {
       screens: {
-        Apps: 'link-verification/:baseUrl/:context/:contextId',
-        ScanCode: 'connection-code/:qrcode',
+        App: {
+          screens: {
+            Apps: {
+              path: 'link-verification/:baseUrl/:context/:contextId',
+              exact: true,
+            },
+            ScanCode: {
+              path: 'connection-code/:qrcode',
+              exact: true,
+            },
+          },
+        },
       },
     },
   };
