@@ -34,7 +34,7 @@ export const AppsScreen = () => {
   const linkedContexts = useSelector((state) => state.apps.linkedContexts);
   const [refreshing, setRefreshing] = useState(false);
 
-  const params = route.params?.params;
+  const params = route.params;
 
   const refreshApps = useCallback(() => {
     setRefreshing(true);
@@ -69,11 +69,6 @@ export const AppsScreen = () => {
       baseUrl: '',
       context: '',
       contextId: '',
-      params: {
-        baseUrl: '',
-        context: '',
-        contextId: '',
-      },
     });
   }, [navigation, params, apps]);
 
