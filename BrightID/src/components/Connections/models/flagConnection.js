@@ -28,8 +28,13 @@ export const handleFlagging = ({ name, id, dispatch, callback }) => (index) => {
         return;
       }
       case 6: {
-        console.log('Reconnecting fake connection');
-        dispatch(reconnectFakeConnection(id));
+        console.log('Reconnecting fake connection with changed profile');
+        dispatch(reconnectFakeConnection(id, true));
+        return;
+      }
+      case 7: {
+        console.log('Reconnecting fake connection with identical profile');
+        dispatch(reconnectFakeConnection(id, false));
         return;
       }
     }
