@@ -10,6 +10,7 @@ import { selectChannelById } from '@/components/PendingConnectionsScreens/channe
 import { names } from '@/utils/fakeNames';
 import { connectFakeUsers } from '@/utils/fakeHelper';
 import api from '@/api/brightId';
+import { retrieveImage } from '../utils/filesystem';
 
 export const addFakeConnection = () => async (
   dispatch: dispatch,
@@ -123,10 +124,10 @@ export const joinAllGroups = (id: string) => async (
   );
 };
 
-export const reconnectFakeConnection = (id: string) => async (
-  dispatch: dispatch,
-  getState: getState,
-) => {
+export const reconnectFakeConnection = (
+  id: string,
+  changeProfile: boolean,
+) => async (dispatch: dispatch, getState: getState) => {
   // get fakeUser by ID
   const fakeUser1 = getState().connections.connections.find(
     (entry) => entry.id === id,
@@ -151,25 +152,31 @@ export const reconnectFakeConnection = (id: string) => async (
     return;
   }
 
-  // load a new random photo
-  let photo;
-  const photoResponse = await RNFetchBlob.fetch(
-    'GET',
-    'https://picsum.photos/180',
-    {},
-  );
-  if (photoResponse.info().status === 200) {
-    photo = `data:image/jpeg;base64,${String(photoResponse.base64())}`;
+  let photo, name;
+  if (changeProfile) {
+    // load a new random photo
+    const photoResponse = await RNFetchBlob.fetch(
+      'GET',
+      'https://picsum.photos/180',
+      {},
+    );
+    if (photoResponse.info().status === 200) {
+      photo = `data:image/jpeg;base64,${String(photoResponse.base64())}`;
+    } else {
+      Alert.alert('Error', 'Unable to fetch image');
+      return;
+    }
+    // create new name
+    const { firstName, lastName } = names[
+      Math.floor(Math.random() * (names.length - 1))
+    ];
+    name = `${firstName} ${lastName}`;
   } else {
-    Alert.alert('Error', 'Unable to fetch image');
-    return;
+    // use existing photo and name
+    name = fakeUser1.name;
+    // retrieve photo
+    photo = await retrieveImage(fakeUser1.photo.filename);
   }
-
-  // create new name
-  const { firstName, lastName } = names[
-    Math.floor(Math.random() * (names.length - 1))
-  ];
-  const name = `${firstName} ${lastName}`;
   const score = Math.floor(Math.random() * 99);
 
   const dataObj = {

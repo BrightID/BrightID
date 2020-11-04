@@ -61,13 +61,14 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
     'Flag as Deceased',
     'Join All Groups',
     'Connect to other fake connections',
-    'Reconnect',
+    'Reconnect - changed profile',
+    'Reconnect - identical profile',
     'cancel',
   ];
   // comment out for test release
   if (!__DEV__) {
     // remove debug functionality
-    flaggingOptions.splice(4, 3);
+    flaggingOptions.splice(4, 4);
   }
 
   const FlagButton = () => (
