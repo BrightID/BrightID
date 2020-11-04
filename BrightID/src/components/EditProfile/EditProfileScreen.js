@@ -21,6 +21,7 @@ import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage } from '@/utils/filesystem';
 import { setPhoto, setName } from '@/actions';
 import downCaret from '@/static/down_caret_blue.svg';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { selectAllSocialMedia } from './socialMediaSlice';
 
 const EditProfilePhoto = () => {
@@ -203,8 +204,13 @@ const SocialMediaLinks = () => {
               currentValue: null,
             });
           }}
+          style={styles.addSocialMediaBtn}
         >
-          <Text style={styles.addSocialMedia}>+</Text>
+          <Material
+            name="plus-thick"
+            size={DEVICE_LARGE ? 18 : 16}
+            color={'#2185D0'}
+          />
         </TouchableOpacity>
       </View>
 
@@ -391,11 +397,9 @@ const styles = StyleSheet.create({
     color: '#2185D0',
     marginRight: DEVICE_LARGE ? 8 : 6,
   },
-  addSocialMedia: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    fontSize: DEVICE_LARGE ? 14 : 12,
-    color: '#2185D0',
+  addSocialMediaBtn: {
+    justifyContent: 'center',
+    alignItems: 'center',
     marginLeft: DEVICE_LARGE ? 6 : 4,
   },
   socialMediaInput: {
