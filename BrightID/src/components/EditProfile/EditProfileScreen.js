@@ -22,7 +22,8 @@ import { saveImage, retrieveImage } from '@/utils/filesystem';
 import { setPhoto, setName } from '@/actions';
 import downCaret from '@/static/down_caret_blue.svg';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { selectAllSocialMedia } from './socialMediaSlice';
+import { selectAllSocialMedia, removeSocialMedia } from './socialMediaSlice';
+import socialMediaList from './socialMediaList';
 
 const EditProfilePhoto = () => {
   const dispatch = useDispatch();
@@ -162,36 +163,53 @@ const EditName = () => {
 };
 
 const SocialMediaLinks = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const socialMediaItems = useSelector(selectAllSocialMedia);
-  console.log('socialMediaItems', socialMediaItems);
 
-  const SocialMediaLinks = socialMediaItems.map((item) => (
-    <View key={item.id} style={styles.socialMediaLinkContainer}>
-      <TouchableOpacity
-        style={styles.socialMediaSelect}
-        onPress={() => {
-          navigation.navigate('SelectSocialMedia', {
-            order: item.order,
-            currentValue: item.id,
-          });
-        }}
-      >
-        <Text style={styles.socialMediaType}>{item.name}</Text>
-        <SvgXml
-          width={DEVICE_LARGE ? 14 : 12}
-          height={DEVICE_LARGE ? 14 : 12}
-          xml={downCaret}
-        />
-      </TouchableOpacity>
-      <TextInput
-        style={styles.socialMediaInput}
-        blurOnSubmit={true}
-        placeholder="Add URL"
-        placeholderTextColor="#707070"
-      />
-    </View>
-  ));
+  const SocialMediaLinks = socialMediaItems.map((item) => {
+    const socialMedia = socialMediaList[item.id];
+    return (
+      <View key={item.id} style={styles.socialMediaLinkContainer}>
+        <TouchableOpacity
+          style={styles.socialMediaSelect}
+          onPress={() => {
+            navigation.navigate('SelectSocialMedia', {
+              order: item.order,
+              prevId: item.id,
+              page: 0,
+            });
+          }}
+        >
+          <Text style={styles.socialMediaType}>{socialMedia.name}</Text>
+          <SvgXml
+            width={DEVICE_LARGE ? 14 : 12}
+            height={DEVICE_LARGE ? 14 : 12}
+            xml={downCaret}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ flexGrow: 1 }}
+          onPress={() => {
+            navigation.navigate('SelectSocialMedia', {
+              order: item.order,
+              prevId: item.id,
+              page: 1,
+            });
+          }}
+        >
+          <Text style={styles.socialMediaInput}>{item.profile}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(removeSocialMedia(item.id));
+          }}
+        >
+          <Material name="close" size={DEVICE_LARGE ? 18 : 16} color={'#000'} />
+        </TouchableOpacity>
+      </View>
+    );
+  });
 
   return (
     <View style={styles.socialMediaContainer}>
@@ -201,7 +219,8 @@ const SocialMediaLinks = () => {
           onPress={() => {
             navigation.navigate('SelectSocialMedia', {
               order: socialMediaItems.length,
-              currentValue: null,
+              prevId: null,
+              page: 0,
             });
           }}
           style={styles.addSocialMediaBtn}
@@ -403,7 +422,6 @@ const styles = StyleSheet.create({
     marginLeft: DEVICE_LARGE ? 6 : 4,
   },
   socialMediaInput: {
-    width: '100%',
     fontFamily: 'Poppins',
     fontSize: DEVICE_LARGE ? 14 : 12,
     fontWeight: '300',

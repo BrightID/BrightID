@@ -1,41 +1,62 @@
 // @flow
 
-import React, { useCallback, useMemo, useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  TextInput,
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import { Picker, PickerIOS } from '@react-native-picker/picker';
 import { BlurView } from '@react-native-community/blur';
-import { DEVICE_LARGE, DEVICE_ANDROID, BACKUP_URL } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import socialMediaList from './socialMediaList';
-import { addSocialMedia, updateOrder } from './socialMediaSlice';
+import { saveSocialMedia, selectSocialMediaById } from './socialMediaSlice';
 
 /** Helper functions */
 
 // value is the social media id, label is the name
-const toPickerItem = ([value, label]) => (
-  <Picker.Item key={value} value={value} label={label} />
+const toPickerItem = ([value, { name }]) => (
+  <Picker.Item key={value} value={value} label={name} />
 );
 
 const socialMediaKeyValues = Object.entries(socialMediaList);
+
+const keyboardTypes = {
+  username: 'default',
+  'telephone #': 'phone-pad',
+  email: 'email-address',
+  url: DEVICE_IOS ? 'url' : 'default',
+};
+
+const textContentTypes = {
+  username: 'username',
+  'telephone #': 'telephoneNumber',
+  email: 'emailAddress',
+  url: 'URL',
+};
 
 /** Main Component */
 
 const SelectMediaModal = ({ route, navigation }) => {
   const dispatch = useDispatch();
-  const currentValue = route.params?.currentValue;
+  const prevId = route.params?.prevId;
+
   const existingSocialMediaIds = useSelector((state) => state.socialMedia.ids);
 
   // only display social media not already selected by user when adding a new one to the list
   // or allow the user to switch order if editing the social media from the list
   const socialMediaToDisplay = useMemo(
     () =>
-      currentValue
+      prevId
         ? socialMediaKeyValues
         : socialMediaKeyValues.filter(
             ([id]) => !existingSocialMediaIds.includes(id),
           ),
-    [existingSocialMediaIds, currentValue],
+    [existingSocialMediaIds, prevId],
   );
 
   const PickerItems = useMemo(() => socialMediaToDisplay.map(toPickerItem), [
@@ -44,23 +65,43 @@ const SelectMediaModal = ({ route, navigation }) => {
 
   const defaultItem = socialMediaToDisplay[0] && socialMediaToDisplay[0][0];
 
-  const firstItem = currentValue ?? defaultItem;
+  // if the user is clicking on an existing social media, select that first
+  // or display the first item in the picker if the user is adding a new social media
+  const firstItem = prevId ?? defaultItem;
 
-  const [selectedValue, setSelectedValue] = useState(firstItem);
+  // selectedId tracks state of the picker, will always be an id from socialMediaList.js
+  const [selectedId, setSelectedId] = useState(firstItem);
 
+  const prevProfile = useSelector((state) =>
+    selectSocialMediaById(state, selectedId),
+  );
+
+  // social media profile value
+  const [profile, setProfile] = useState(prevProfile?.profile);
+
+  // update profile when social media changes
+  useEffect(() => {
+    setProfile(prevProfile?.profile);
+  }, [prevProfile]);
+
+  // which page of the modal are we on
+  // user can directly start editing profile if they click on their profile
+  const [page, setPage] = useState(route.params?.page ?? 0);
+
+  // refresh state when the modal opens
   useFocusEffect(
     useCallback(() => {
-      setSelectedValue(firstItem);
+      setSelectedId(firstItem);
     }, [firstItem]),
   );
 
-  const saveSelection = () => {
+  const saveProfile = () => {
     const socialMedia = {
-      id: selectedValue,
-      name: socialMediaList[selectedValue],
+      id: selectedId,
       order: route.params?.order ?? 0,
+      profile,
     };
-    dispatch(addSocialMedia(socialMedia));
+    dispatch(saveSocialMedia(socialMedia));
     navigation.navigate('Edit Profile');
   };
 
@@ -72,30 +113,67 @@ const SelectMediaModal = ({ route, navigation }) => {
       reducedTransparencyFallbackColor="black"
     >
       <View style={styles.modalContainer}>
-        <Picker
-          selectedValue={selectedValue}
-          style={styles.pickerStyle}
-          itemStyle={styles.pickerItemStyle}
-          onValueChange={(itemValue, itemIndex) => {
-            setSelectedValue(itemValue);
-          }}
-        >
-          {PickerItems}
-        </Picker>
+        {page === 0 ? (
+          <Picker
+            selectedValue={selectedId}
+            style={styles.pickerStyle}
+            itemStyle={styles.pickerItemStyle}
+            onValueChange={(itemValue, itemIndex) => {
+              setSelectedId(itemValue);
+            }}
+          >
+            {PickerItems}
+          </Picker>
+        ) : (
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>
+              {socialMediaList[selectedId].shareType}
+            </Text>
+            <TextInput
+              style={styles.socialMediaInput}
+              autoCapitalize="none"
+              autoCompleteType="off"
+              autoCorrect={false}
+              autoFocus={true}
+              blurOnSubmit={true}
+              keyboardType={
+                keyboardTypes[socialMediaList[selectedId].shareType]
+              }
+              placeholder={`add ${socialMediaList[selectedId].shareType}`}
+              placeholderTextColor="#707070"
+              textContentType={
+                textContentTypes[socialMediaList[selectedId].shareType]
+              }
+              onChangeText={setProfile}
+              value={profile}
+            />
+          </View>
+        )}
         <View style={styles.saveContainer}>
-          <TouchableOpacity style={styles.saveButton} onPress={saveSelection}>
-            <Text style={styles.saveButtonText}>Save</Text>
+          <TouchableOpacity
+            style={styles.saveButton}
+            onPress={() => {
+              page === 1 ? saveProfile() : setPage(1);
+            }}
+          >
+            <Text style={styles.saveButtonText}>
+              {page === 1 ? 'Save' : 'Next'}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.cancelButton}
             onPress={() => {
-              navigation.navigate('Edit Profile');
+              page === 1 ? setPage(0) : navigation.navigate('Edit Profile');
             }}
           >
-            <Text style={styles.cancelButtonText}>Cancel</Text>
+            <Text style={styles.cancelButtonText}>
+              {page === 1 ? 'Prev' : 'Cancel'}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
+
+      {/* */}
     </BlurView>
   );
 };
@@ -160,6 +238,24 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 12 : 10,
     color: '#707070',
+  },
+  socialMediaInput: {
+    flexGrow: 1,
+    fontFamily: 'Poppins',
+    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontWeight: '300',
+    color: '#000',
+  },
+  inputContainer: {
+    width: '100%',
+    paddingTop: DEVICE_LARGE ? 36 : 30,
+  },
+  label: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 11 : 10,
+    color: '#B64B32',
+    marginBottom: DEVICE_LARGE ? 5 : 3,
   },
 });
 
