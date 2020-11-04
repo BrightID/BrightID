@@ -108,15 +108,17 @@ function ConnectionScreen(props: Props) {
           </TouchableWithoutFeedback>
         </View>
         <View style={styles.nameContainer}>
-          <Text style={styles.name}>{connection.name}</Text>
-          {brightIdVerified && (
-            <SvgXml
-              style={styles.verificationSticker}
-              width="16"
-              height="16"
-              xml={verificationSticker}
-            />
-          )}
+          <View style={styles.nameLabel}>
+            <Text style={styles.name}>{connection.name}</Text>
+            {brightIdVerified && (
+              <SvgXml
+                style={styles.verificationSticker}
+                width="16"
+                height="16"
+                xml={verificationSticker}
+              />
+            )}
+          </View>
           <View style={styles.profileDivider} />
           <View style={styles.badges}>
             {brightIdVerified ? (
@@ -278,20 +280,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 20,
   },
+  nameLabel: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   name: {
     fontFamily: 'Poppins',
     fontWeight: '500',
     fontSize: 17,
     color: '#000',
   },
+  verificationSticker: {
+    marginLeft: DEVICE_LARGE ? 8 : 5,
+  },
   profileDivider: {
     borderBottomWidth: 2,
     borderBottomColor: ORANGE,
     paddingBottom: 3,
     width: '118%',
-  },
-  verificationSticker: {
-    marginLeft: DEVICE_LARGE ? 8 : 5,
   },
   badges: {},
   badge: {
