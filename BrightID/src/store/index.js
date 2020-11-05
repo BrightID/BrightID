@@ -53,6 +53,11 @@ const tasksPersistConfig = {
   key: 'tasks',
 };
 
+const socialMediaPersistConfig = {
+  ...fsPersistConfig,
+  key: 'socialMedia',
+};
+
 const keypairPersistConfig = {
   key: 'keypair',
   storage: KeychainStorage,
@@ -74,6 +79,7 @@ const rootReducer = combineReducers({
     notificationsPersistConfig,
     reducers.notifications,
   ),
+  socialMedia: persistReducer(socialMediaPersistConfig, reducers.socialMedia),
   tasks: persistReducer(tasksPersistConfig, reducers.tasks),
   user: persistReducer(userPersistConfig, reducers.user),
 });
