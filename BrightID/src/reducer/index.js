@@ -11,6 +11,7 @@ import pendingConnections from '../components/PendingConnectionsScreens/pendingC
 import recoveryData from './recoveryData';
 import user from './user';
 import tasks from '../components/Tasks/TasksSlice';
+import socialMedia from '../components/EditProfile/socialMediaSlice';
 
 export default {
   apps,
@@ -24,4 +25,5 @@ export default {
   notifications,
   user,
   tasks,
+  socialMedia,
 };

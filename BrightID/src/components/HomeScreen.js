@@ -5,9 +5,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
-  TextInput,
   StatusBar,
   Clipboard,
 } from 'react-native';
@@ -18,10 +16,9 @@ import { SvgXml } from 'react-native-svg';
 import ActionSheet from 'react-native-actionsheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { setPhoto, setName, setActiveNotification } from '@/actions';
-import { chooseImage, takePhoto } from '@/utils/images';
-import { saveImage, retrieveImage } from '@/utils/filesystem';
-import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
+import { setActiveNotification } from '@/actions';
+import { retrieveImage } from '@/utils/filesystem';
+import { DEVICE_LARGE } from '@/utils/constants';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import verificationSticker from '@/static/verification-sticker.svg';
 import qricon from '@/static/qr_icon_black.svg';
@@ -35,8 +32,7 @@ import { version as app_version } from '../../package.json';
  * ==========================
  */
 
-let chatSheetRef = '',
-  photoSheetRef = '';
+let chatSheetRef = '';
 let discordUrl = 'https://discord.gg/nTtuB2M';
 
 /** Selectors */
@@ -63,7 +59,6 @@ export const HomeScreen = (props) => {
   const { navigation } = props;
   const dispatch = useDispatch();
   const headerHeight = useHeaderHeight();
-  const id = useSelector((state) => state.user.id);
   const name = useSelector((state) => state.user.name);
   const photoFilename = useSelector((state) => state.user.photo.filename);
   const groupsCount = useSelector((state) => state.groups.groups.length);
@@ -71,9 +66,7 @@ export const HomeScreen = (props) => {
   const linkedContextsCount = useSelector(linkedContextCountSelector);
   const verified = useSelector(verifiedSelector);
 
-  const [profilePhoto, setProfilePhoto] = useState('none');
-  const [isEditing, setIsEditing] = useState(false);
-  const [displayName, setDisplayName] = useState(name);
+  const [profilePhoto, setProfilePhoto] = useState('');
 
   const { t } = useTranslation();
 
@@ -83,40 +76,6 @@ export const HomeScreen = (props) => {
       retrieveImage(photoFilename).then(setProfilePhoto);
     }, [dispatch, photoFilename]),
   );
-
-  const getPhotoFromCamera = async () => {
-    try {
-      const { mime, data } = await takePhoto();
-      const uri = `data:${mime};base64,${data}`;
-      const filename = await saveImage({
-        imageName: id,
-        base64Image: uri,
-      });
-      dispatch(setPhoto({ filename }));
-      setProfilePhoto(await retrieveImage(filename));
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const getPhotoFromLibrary = async () => {
-    try {
-      const { mime, data } = await chooseImage();
-      const uri = `data:${mime};base64,${data}`;
-      const filename = await saveImage({
-        imageName: id,
-        base64Image: uri,
-      });
-      dispatch(setPhoto({ filename }));
-      setProfilePhoto(await retrieveImage(filename));
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const handleEditPhoto = () => {
-    photoSheetRef.show();
-  };
 
   const handleChat = () => {
     if (__DEV__) {
@@ -166,55 +125,24 @@ export const HomeScreen = (props) => {
       />
       <View style={styles.profileContainer} testID="PhotoContainer">
         {profilePhoto ? (
-          <TouchableOpacity
-            testID="editPhoto"
-            onPress={handleEditPhoto}
+          <Image
+            source={{
+              uri: profilePhoto,
+            }}
+            style={styles.photo}
+            resizeMode="cover"
+            onError={(e) => {
+              console.log(e.error);
+            }}
             accessible={true}
-            accessibilityLabel={t('common.accessibilityLabel.editPhoto')}
-          >
-            <Image
-              source={{
-                uri: profilePhoto,
-              }}
-              style={styles.photo}
-              resizeMode="cover"
-              onError={(e) => {
-                console.log(e.error);
-              }}
-              accessible={true}
-              accessibilityLabel={('common.accessibilityLabel.userPhoto')}
-            />
-          </TouchableOpacity>
+            accessibilityLabel={t('common.accessibilityLabel.profilePhoto')}
+          />
         ) : null}
         <View style={styles.verifyNameContainer} testID="homeScreen">
           <View style={styles.nameContainer}>
-            {isEditing ? (
-              <TextInput
-                testID="EditNameInput"
-                value={displayName}
-                style={styles.name}
-                onChangeText={setDisplayName}
-                onBlur={() => {
-                  if (displayName.length >= 2) {
-                    dispatch(setName(displayName));
-                    setIsEditing(false);
-                  } else {
-                    setIsEditing(false);
-                    setName(name);
-                  }
-                }}
-                blurOnSubmit={true}
-              />
-            ) : (
-              <TouchableWithoutFeedback
-                onPress={() => setIsEditing(true)}
-                accessibilityLabel={t('common.accessibilityLabel.editName')}
-              >
-                <Text testID="EditNameBtn" style={styles.name}>
-                  {name}
-                </Text>
-              </TouchableWithoutFeedback>
-            )}
+            <Text testID="EditNameBtn" style={styles.name}>
+              {name}
+            </Text>
             {verified && (
               <SvgXml
                 style={styles.verificationSticker}
@@ -342,7 +270,7 @@ export const HomeScreen = (props) => {
         ref={(o) => {
           chatSheetRef = o;
         }}
-        title="Like to chat with us?"
+        title={t('home.chatActionSheet.title')}
         options={[t('home.chatActionSheet.discord'), t('common.actionSheet.cancel')]}
         cancelButtonIndex={1}
         onPress={(index) => {
@@ -350,22 +278,6 @@ export const HomeScreen = (props) => {
             Linking.openURL(discordUrl).catch((err) =>
               console.log('An error occurred', err),
             );
-          }
-        }}
-      />
-      <ActionSheet
-        testID="PhotoActionSheet"
-        ref={(o) => {
-          photoSheetRef = o;
-        }}
-        title={t('common.photoActionSheet.title')}
-        options={[t('common.photoActionSheet.takePhoto'), t('common.photoActionSheet.choosePhoto'), t('common.actionSheet.cancel')]}
-        cancelButtonIndex={2}
-        onPress={(index) => {
-          if (index === 0) {
-            getPhotoFromCamera();
-          } else if (index === 1) {
-            getPhotoFromLibrary();
           }
         }}
       />

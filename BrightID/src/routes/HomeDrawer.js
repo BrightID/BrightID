@@ -13,12 +13,14 @@ import {
   createDrawerNavigator,
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
+import { useHeaderHeight } from '@react-navigation/stack';
 import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
 import { SvgXml } from 'react-native-svg';
 import codePush from 'react-native-code-push';
 import verificationSticker from '@/static/verification-sticker.svg';
 import { retrieveImage } from '@/utils/filesystem';
-import editProfile from '@/static/edit_profile_inactive.svg';
+import editProfile from '@/static/edit_profile.svg';
+import editProfileFocused from '@/static/edit_profile_focused.svg';
 import trustedConnections from '@/static/trusted_connections_sidebar_inactive.svg';
 import contactUs from '@/static/contact_us.svg';
 import explorerCode from '@/static/explorer_code_icon.svg';
@@ -27,23 +29,22 @@ import homeIcon from '@/static/home_icon_side_menu.svg';
 import taskList from '@/static/task_list_icon.svg';
 import taskListFocused from '@/static/task_list_icon_focused.svg';
 import faqIcon from '@/static/faq_icon.svg';
-
 import TasksScreen from '@/components/Tasks/TasksScreen';
 import GraphExplorerScreen from '@/components/SideMenu/GraphExplorerScreen';
 import ContactUsScreen from '@/components/SideMenu/ContactUsScreen';
-
-import { useHeaderHeight } from '@react-navigation/stack';
+import EditProfileScreen from '@/components/EditProfile/EditProfileScreen';
 
 const iconMap = {
   editProfile,
-  trustedConnections,
+  editProfileFocused,
   contactUs,
   explorerCode,
+  explorerCodeFocused,
   homeIcon,
   taskList,
-  explorerCodeFocused,
   taskListFocused,
   faqIcon,
+  trustedConnections,
 };
 
 const getIcon = (name) => {
@@ -139,6 +140,20 @@ const CustomDrawerContent = (props) => {
         }}
       />
       <CustomItem
+        focused={state.routeNames[state.index] === 'Edit Profile'}
+        inactiveTintColor="#000"
+        inactiveBackgroundColor="#fff"
+        activeTintColor="#fff"
+        activeBackgroundColor={ORANGE}
+        label="Edit Profile"
+        style={styles.drawerItem}
+        labelStyle={styles.labelStyle}
+        icon={getIcon('editProfile')}
+        onPress={() => {
+          navigation.navigate('Edit Profile');
+        }}
+      />
+      <CustomItem
         focused={state.routeNames[state.index] === 'Achievements'}
         inactiveTintColor="#000"
         inactiveBackgroundColor="#fff"
@@ -152,6 +167,7 @@ const CustomDrawerContent = (props) => {
           navigation.navigate('Achievements');
         }}
       />
+
       <CustomItem
         focused={state.routeNames[state.index] === 'Copy Explorer Code'}
         inactiveTintColor="#000"
@@ -165,20 +181,6 @@ const CustomDrawerContent = (props) => {
         onPress={() => {
           navigation.navigate('Copy Explorer Code');
         }}
-      />
-      <CustomItem
-        inactiveTintColor="#aaa"
-        label="Edit Profile"
-        style={styles.drawerItem}
-        labelStyle={styles.labelStyle}
-        icon={getIcon('editProfile')}
-      />
-      <CustomItem
-        inactiveTintColor="#aaa"
-        label="Trusted Connections"
-        style={styles.drawerItem}
-        labelStyle={styles.labelStyle}
-        icon={getIcon('trustedConnections')}
       />
       <CustomItem
         style={styles.drawerItem}
@@ -238,35 +240,14 @@ export const HomeDrawer = () => {
       overlayColor="transparent"
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
-      <Drawer.Screen
-        name="Home"
-        options={{
-          drawerIcon: getIcon('homeIcon'),
-          inactiveTintColor: '#000',
-        }}
-        component={HomeScreen}
-      />
-      <Drawer.Screen
-        name="Achievements"
-        options={{
-          drawerIcon: getIcon('taskList'),
-        }}
-        component={TasksScreen}
-      />
+      <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen name="Achievements" component={TasksScreen} />
+      <Drawer.Screen name="Edit Profile" component={EditProfileScreen} />
       <Drawer.Screen
         name="Copy Explorer Code"
-        options={{
-          drawerIcon: getIcon('explorerCode'),
-        }}
         component={GraphExplorerScreen}
       />
-      <Drawer.Screen
-        name="ContactUs"
-        options={{
-          drawerIcon: getIcon('explorerCode'),
-        }}
-        component={ContactUsScreen}
-      />
+      <Drawer.Screen name="ContactUs" component={ContactUsScreen} />
     </Drawer.Navigator>
   );
 };

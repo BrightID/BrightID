@@ -23,6 +23,7 @@ import {
   DEVICE_LARGE,
   ORANGE,
 } from '@/utils/constants';
+import { validatePass } from '@/utils/password';
 import { backupAppData } from './helpers';
 
 type State = {
@@ -62,24 +63,6 @@ class BackupScreen extends React.Component<Props, State> {
     }));
   };
 
-  validatePass = () => {
-    const { pass1, pass2 } = this.state;
-    const { t } = this.props;
-    if (pass1 !== pass2) {
-      Alert.alert(
-        t('common.alert.error'), 
-        t('backup.alert.text.passwordConfirmNoMatch')
-      );
-    } else if (pass1.length < 8) {
-      Alert.alert(
-        t('common.alert.error'), 
-        t('backup.alert.text.passwordTooShort')
-      );
-    } else {
-      return true;
-    }
-  };
-
   handleTextBlur = () => {
     this.setState({ isEditing: false });
   };
@@ -89,7 +72,11 @@ class BackupScreen extends React.Component<Props, State> {
   };
 
   startBackup = async () => {
-    if (!this.state.pass1 || (DEVICE_ANDROID && !this.validatePass())) return;
+    if (
+      !this.state.pass1 ||
+      (DEVICE_ANDROID && !validatePass(this.state.pass1, this.state.pass2))
+    )
+      return;
 
     const { t } = this.props;
 

@@ -202,6 +202,16 @@
   "backup.alert.text.passwordTooShort": "Votre mot de passe doit comporter au moins 8 caractères.",
 
 
+  "profile.label.name": "Nom",
+  "profile.label.socialMediaLink": "Liens Réseaux Sociaux",
+  "profile.placeholder.name": "Entrez un Nom",
+  "profile.text.changeProfilePicture": "Changer la Photo de Profil",
+  "profile.text.viewPassword": "Voir le Mot de Passe",
+  "profile.text.changePassword": "Modifier le Mot de Passe",
+  "profile.button.save": "Valider",
+  "profile.button.cancel": "Annuler",
+
+
   "common.alert.error": "Erreur",
   "common.alert.success": "Succès",
   "common.alert.info": "Info",
@@ -216,6 +226,7 @@
   "common.photoActionSheet.choosePhoto": "Sélectionner depuis l'Album",
   "common.actionSheet.cancel": "annuler",
   "common.actionSheet.title": "Que souhaitez-vous faire ?",
+  "common.accessibilityLabel.profilePhoto": "profile photo",
   "common.accessibilityLabel.editName": "éditer le nom",
   "common.accessibilityLabel.addPhoto": "Ajouter une photo",
   "common.accessibilityLabel.editPhoto": "éditer la photo",

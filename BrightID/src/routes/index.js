@@ -7,6 +7,7 @@ import Apps from './Apps';
 import Connections from './Connections';
 import Groups from './Groups';
 import Home from './Home';
+import Modals from './Modals';
 import PendingConnections from './PendingConnections';
 import Notifications from './Notifications';
 import Onboarding from './Onboarding';
@@ -23,6 +24,7 @@ const MainTabs = () => {
       {Groups()}
       {Notifications()}
       {Apps()}
+      {Modals()}
     </Stack.Navigator>
   );
 };

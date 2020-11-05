@@ -202,6 +202,16 @@
   "backup.alert.text.passwordTooShort": "Your password must be at least 8 characters long.",
 
 
+  "profile.label.name": "Name",
+  "profile.label.socialMediaLink": "Social Media Link",
+  "profile.placeholder.name": "Enter Name",
+  "profile.text.changeProfilePicture": "Change Profile Picture",
+  "profile.text.viewPassword": "View Password",
+  "profile.text.changePassword": "Change Password",
+  "profile.button.save": "Save",
+  "profile.button.cancel": "Cancel",
+
+
   "common.alert.error": "Error",
   "common.alert.success": "Success",
   "common.alert.info": "Info",
@@ -216,6 +226,7 @@
   "common.photoActionSheet.choosePhoto": "Choose From Library",
   "common.actionSheet.cancel": "cancel",
   "common.actionSheet.title": "What do you want to do?",
+  "common.accessibilityLabel.profilePhoto": "profile photo",
   "common.accessibilityLabel.editName": "edit name",
   "common.accessibilityLabel.addPhoto": "add photo",
   "common.accessibilityLabel.editPhoto": "edit photo",
