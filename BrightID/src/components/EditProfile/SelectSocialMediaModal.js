@@ -7,10 +7,17 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { Picker, PickerIOS } from '@react-native-picker/picker';
 import { BlurView } from '@react-native-community/blur';
-import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
+import {
+  DEVICE_LARGE,
+  DEVICE_IOS,
+  DEVICE_ANDROID,
+  WIDTH,
+  HEIGHT,
+} from '@/utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import socialMediaList from './socialMediaList';
@@ -106,13 +113,14 @@ const SelectMediaModal = ({ route, navigation }) => {
   };
 
   return (
-    <BlurView
-      style={[styles.container]}
-      blurType="dark"
-      blurAmount={5}
-      reducedTransparencyFallbackColor="black"
-    >
-      <View style={styles.modalContainer}>
+    <View style={styles.container}>
+      <BlurView
+        style={styles.blurView}
+        blurType="dark"
+        blurAmount={5}
+        reducedTransparencyFallbackColor="black"
+      />
+      <KeyboardAvoidingView style={styles.modalContainer}>
         {page === 0 ? (
           <Picker
             selectedValue={selectedId}
@@ -171,28 +179,33 @@ const SelectMediaModal = ({ route, navigation }) => {
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
-
-      {/* */}
-    </BlurView>
+      </KeyboardAvoidingView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  blurView: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+  },
   container: {
     flex: 1,
-    width: '100%',
-    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
   },
   modalContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#fff',
-    width: '75%',
+    width: WIDTH * 0.75,
     borderRadius: 25,
     paddingHorizontal: DEVICE_LARGE ? 36 : 30,
     paddingBottom: DEVICE_LARGE ? 36 : 30,
+    paddingTop: DEVICE_ANDROID ? (DEVICE_LARGE ? 36 : 30) : 0,
   },
   pickerStyle: { width: '100%' },
   pickerItemStyle: {
@@ -248,7 +261,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: '100%',
-    paddingTop: DEVICE_LARGE ? 36 : 30,
+    paddingTop: DEVICE_IOS ? (DEVICE_LARGE ? 36 : 30) : 0,
   },
   label: {
     fontFamily: 'Poppins',
