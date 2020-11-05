@@ -52,20 +52,23 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
   const dispatch = useDispatch();
   const { showActionSheetWithOptions } = useActionSheet();
   const disabled = status === 'initiated';
-  const isStale = status === 'stale';
+  const canRemove = status === 'stale' || status === 'deleted';
 
   let flaggingOptions = [
+    'Flag as Spammer',
     'Flag as Duplicate',
     'Flag as Fake',
     'Flag as Deceased',
     'Join All Groups',
     'Connect to other fake connections',
+    'Reconnect - changed profile',
+    'Reconnect - identical profile',
     'cancel',
   ];
   // comment out for test release
   if (!__DEV__) {
     // remove debug functionality
-    flaggingOptions.splice(3, 2);
+    flaggingOptions.splice(4, 4);
   }
 
   const FlagButton = () => (
@@ -207,7 +210,7 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
 
   return (
     <View style={styles.actionContainer}>
-      {isStale ? <RemoveButton /> : <FlagButton />}
+      {canRemove ? <RemoveButton /> : <FlagButton />}
     </View>
   );
 };

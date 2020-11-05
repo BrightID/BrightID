@@ -11,16 +11,7 @@ const topOptions = {
 };
 
 const Apps = () => (
-  <Stack.Screen
-    name="Apps"
-    component={AppsScreen}
-    initialParams={{
-      baseUrl: '',
-      context: '',
-      contextId: '',
-    }}
-    options={topOptions}
-  />
+  <Stack.Screen name="Apps" component={AppsScreen} options={topOptions} />
 );
 
 export default Apps;

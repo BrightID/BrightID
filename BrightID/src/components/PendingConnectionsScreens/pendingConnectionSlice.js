@@ -26,8 +26,6 @@ const pendingConnectionsAdapter = createEntityAdapter();
    - 'name'
    - 'photo' (base64-encoded)
    - 'score'
-   - 'signedMessage': optional - First part of signed connection message, in case user initiated connection.
-   - 'timestamp': optional - Timestamp when signed message was created
  */
 
 export const pendingConnection_states = {
@@ -35,7 +33,6 @@ export const pendingConnection_states = {
   DOWNLOADING: 'DOWNLOADING',
   UNCONFIRMED: 'UNCONFIRMED',
   CONFIRMING: 'CONFIRMING',
-  REJECTED: 'REJECTED',
   CONFIRMED: 'CONFIRMED',
   ERROR: 'ERROR',
   MYSELF: 'MYSELF',
@@ -49,6 +46,7 @@ const fetchConnectionInfo = async ({ myConnections, brightId }) => {
       groups,
       connections = [],
       flaggers,
+      verifications,
     } = await api.getUserInfo(brightId);
     const mutualConnections = connections.filter(function (el) {
       return myConnections.some((x) => x.id === el.id);
@@ -59,6 +57,7 @@ const fetchConnectionInfo = async ({ myConnections, brightId }) => {
       mutualConnections: mutualConnections.length,
       connectionDate: `Created ${moment(parseInt(createdAt, 10)).fromNow()}`,
       flagged: flaggers && Object.keys(flaggers).length > 0,
+      verifications,
     };
   } catch (err) {
     if (err instanceof Error && err.message === 'User not found') {
@@ -68,6 +67,7 @@ const fetchConnectionInfo = async ({ myConnections, brightId }) => {
         mutualConnections: 0,
         connectionDate: 'New user',
         flagged: false,
+        verifications: [],
       };
     } else {
       console.error(err.message);
@@ -94,13 +94,6 @@ export const newPendingConnection = createAsyncThunk(
     });
     const decryptedObj = decryptData(profileData, channel.aesKey);
     decryptedObj.myself = decryptedObj.id === getState().user.id;
-    // I'm confused about this initiator logic, might change this...
-    decryptedObj.initiator =
-      decryptedObj.profileTimestamp <= channel.myProfileTimestamp;
-
-    console.log('decryptedObj.profileTimestamp', decryptedObj.profileTimestamp);
-
-    console.log('channel.myProfileTimestamp', channel.myProfileTimestamp);
 
     const connectionInfo = await fetchConnectionInfo({
       brightId: decryptedObj.id,
@@ -129,15 +122,6 @@ const pendingConnectionsSlice = createSlice({
         id,
         changes: {
           state: pendingConnection_states.CONFIRMED,
-        },
-      });
-    },
-    rejectPendingConnection(state, action) {
-      const id = action.payload;
-      state = pendingConnectionsAdapter.updateOne(state, {
-        id,
-        changes: {
-          state: pendingConnection_states.REJECTED,
         },
       });
     },
@@ -184,6 +168,7 @@ const pendingConnectionsSlice = createSlice({
         connectionDate,
         flagged,
         notificationToken,
+        verifications,
       } = action.payload;
 
       const changes = {
@@ -202,14 +187,13 @@ const pendingConnectionsSlice = createSlice({
         connectionDate,
         flagged,
         notificationToken,
+        verifications,
       };
 
-      // add secret key, signed message, timestamp if dev
+      // add secret key if dev
       if (__DEV__) {
-        const { secretKey, signedMessage, timestamp } = action.payload;
+        const { secretKey } = action.payload;
         changes.secretKey = secretKey;
-        changes.signedMessage = signedMessage;
-        changes.timestamp = timestamp;
       }
 
       // Perform the update in redux

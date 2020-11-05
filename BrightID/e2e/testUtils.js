@@ -40,11 +40,10 @@ const createFakeConnection = async (doConfirm = true) => {
 
   if (doConfirm) {
     // confirm connection and navigate back to home screen
-    await expect(element(by.id('confirmConnectionButton'))).toBeVisible();
-    await element(by.id('confirmConnectionButton')).tap();
+    await expect(element(by.id('just metBtn'))).toBeVisible();
+    await element(by.id('just metBtn')).tap();
     // Should end up in the connection list
     await expectConnectionsScreen();
-
     await navigateHome();
   }
 };
@@ -178,6 +177,54 @@ const interConnect = async (connectionCount: number) => {
   await expectHomescreen();
 };
 
+/*
+  starts at home screen,
+  opens connection screen and triggers reconnect,
+  ends at preview connection screen
+ */
+const reconnect = async (changeProfile: boolean) => {
+  const action = changeProfile
+    ? 'Reconnect - changed profile'
+    : 'Reconnect - identical profile';
+  const flagActionSheetTitle = 'What do you want to do?';
+  // In order to have an open channel need to visit MyCodeScreen before attempting reconnect
+  // open MyCode screen
+  await element(by.id('MyCodeBtn')).tap();
+  // make sure SINGLE connection mode is active
+  await expect(element(by.id('single-use-code'))).toExist();
+  // go to connections screen
+  await navigateHome();
+  await element(by.id('connectionsBtn')).tap();
+
+  // should be on connectionsscreen
+  await expectConnectionsScreen();
+
+  // wait upto 30 seconds till connection is established
+  await waitFor(element(by.text('Connected a few seconds ago')))
+    .toBeVisible()
+    .withTimeout(30000);
+
+  // swipe to reach flagBtn
+  await element(by.id('connectionCardText')).swipe('left');
+  await waitFor(element(by.id('flagBtn')))
+    .toBeVisible()
+    .withTimeout(10000);
+  await element(by.id('flagBtn')).tap();
+
+  // ActionSheet does not support testID, so match based on text.
+  await waitFor(element(by.text(flagActionSheetTitle)))
+    .toBeVisible()
+    .withTimeout(10000);
+
+  // trigger reconnect
+  await element(by.text(action)).tap();
+
+  // navigate to MyCodeScreen, there it will pick up the incoming connection profile
+  await navigateHome();
+  await element(by.id('MyCodeBtn')).tap();
+  await expect(element(by.id('ReconnectScreen'))).toBeVisible();
+};
+
 export {
   testUserName,
   createBrightID,
@@ -190,4 +237,5 @@ export {
   inviteConnectionToGroup,
   joinAllGroups,
   navigateHome,
+  reconnect,
 };

@@ -24,6 +24,7 @@ export {
   FLAG_AND_HIDE_CONNECTION,
   SHOW_CONNECTION,
   STALE_CONNECTION,
+  SET_CONNECTION_LEVEL,
   setConnections,
   setConnectionsSearch,
   setConnectionsSearchOpen,

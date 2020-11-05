@@ -1,35 +1,36 @@
 // @flow
 
 import api from '@/api/brightId';
-import nacl from 'tweetnacl';
-import { b64ToUint8Array, strToUint8Array, uInt8ArrayToB64 } from './encoding';
+import { connection_levels } from './constants';
 
 export const connectFakeUsers = async (
   fakeUser1: FakeUser,
   fakeUser2: FakeUser,
 ) => {
-  let connectionTimestamp = Date.now();
-  const message = `Add Connection${fakeUser1.id}${fakeUser2.id}${connectionTimestamp}`;
+  let timestamp = Date.now();
 
-  // let both users sign the connection message
-  const signedMessage1 = uInt8ArrayToB64(
-    nacl.sign.detached(
-      strToUint8Array(message),
-      b64ToUint8Array(fakeUser1.secretKey),
-    ),
-  );
-  const signedMessage2 = uInt8ArrayToB64(
-    nacl.sign.detached(
-      strToUint8Array(message),
-      b64ToUint8Array(fakeUser2.secretKey),
-    ),
-  );
+  let level = connection_levels.JUST_MET;
+  let flagReason;
 
-  await api.createConnection(
+  // Connect user1 -> user2
+  const user1Promise = api.addConnection(
     fakeUser1.id,
-    signedMessage1,
     fakeUser2.id,
-    signedMessage2,
-    connectionTimestamp,
+    level,
+    flagReason,
+    timestamp,
+    fakeUser1,
   );
+
+  // Connect user2 -> user1
+  const user2Promise = api.addConnection(
+    fakeUser2.id,
+    fakeUser1.id,
+    level,
+    flagReason,
+    timestamp,
+    fakeUser2,
+  );
+
+  await Promise.all([user1Promise, user2Promise]);
 };

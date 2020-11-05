@@ -7,6 +7,7 @@ import SearchConnections from '@/components/Helpers/SearchConnections';
 import TrustedConnectionsScreen from '@/components/Recovery/TrustedConnectionsScreen';
 import { useSelector } from 'react-redux';
 import { headerOptions, headerTitleStyle, NavHome } from './helpers';
+import ConnectionScreenController from '../components/Connections/ConnectionScreenController';
 
 const Stack = createStackNavigator();
 
@@ -35,6 +36,11 @@ const connectionsScreenOptions = {
   headerTitle: () => <HeaderTitle title="Connections" />,
 };
 
+const connectionScreenOptions = {
+  ...headerOptions,
+  headerTitle: () => <HeaderTitle title="Connection Details" />,
+};
+
 const trustedScreenOptions = {
   ...headerOptions,
   headerRight: () => <SearchConnections sortable={true} />,
@@ -58,6 +64,11 @@ const Connections = () => {
         name="TrustedConnections"
         component={TrustedConnectionsScreen}
         options={trustedScreenOptions}
+      />
+      <Stack.Screen
+        name="Connection"
+        component={ConnectionScreenController}
+        options={connectionScreenOptions}
       />
     </>
   );
