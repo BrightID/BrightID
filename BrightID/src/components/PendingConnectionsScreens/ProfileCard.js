@@ -22,10 +22,18 @@ type ProfileCardProps = {
   photoTouchHandler: (photo: string, type: 'base64' | 'file') => any,
   name: string,
   brightIdVerified: boolean,
+  photoSize: 'small' | 'large',
 };
 
 export const ProfileCard = (props: ProfileCardProps) => {
-  const { brightIdVerified, name, photoTouchHandler, photo, photoType } = props;
+  const {
+    brightIdVerified,
+    name,
+    photoTouchHandler,
+    photo,
+    photoType,
+    photoSize,
+  } = props;
 
   // build photo uri depending on type
   const photoUri =
@@ -38,7 +46,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
       >
         <Image
           source={{ uri: photoUri }}
-          style={styles.photo}
+          style={styles[`photo_${photoSize}`]}
           resizeMode="cover"
           onError={(e) => {
             console.log(e);
@@ -71,10 +79,15 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 17 : 14,
     color: '#000000',
   },
-  photo: {
+  photo_small: {
     borderRadius: 50,
     width: 100,
     height: 100,
+  },
+  photo_large: {
+    borderRadius: 75,
+    width: 150,
+    height: 150,
   },
   verificationSticker: {
     marginLeft: DEVICE_LARGE ? 8 : 5,

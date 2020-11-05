@@ -4,12 +4,10 @@ import {
   createFakeConnection,
   expectConnectionsScreen,
   navigateHome,
+  reconnect,
 } from './testUtils';
 
 describe('Reconnect existing connection', () => {
-  const flagActionSheetTitle = 'What do you want to do?';
-  const action = 'Reconnect';
-
   beforeAll(async () => {
     // create identity
     await createBrightID();
@@ -26,44 +24,7 @@ describe('Reconnect existing connection', () => {
     });
 
     beforeEach(async () => {
-      // Note: In order to have an open channel visit MyCodeScreen before attempting reconnect
-
-      // open MyCode screen
-      await element(by.id('MyCodeBtn')).tap();
-      // make sure SINGLE connection mode is active
-      await expect(element(by.id('single-use-code'))).toExist();
-      // go to connections screen
-      await navigateHome();
-      await element(by.id('connectionsBtn')).tap();
-
-      // should be on connectionsscreen
-      await expectConnectionsScreen();
-
-      // wait upto 30 seconds till connection is established
-      await waitFor(element(by.text('Connected a few seconds ago')))
-        .toBeVisible()
-        .withTimeout(30000);
-
-      // swipe to reach flagBtn
-      await element(by.id('connectionCardText')).swipe('left');
-      await waitFor(element(by.id('flagBtn')))
-        .toBeVisible()
-        .withTimeout(10000);
-      await element(by.id('flagBtn')).tap();
-
-      // ActionSheet does not support testID, so match based on text.
-      await waitFor(element(by.text(flagActionSheetTitle)))
-        .toBeVisible()
-        .withTimeout(10000);
-
-      // trigger reconnect
-      await element(by.text(action)).tap();
-
-      // navigate to MyCodeScreen, there it will pick up the incoming connection profile
-      await navigateHome();
-      await element(by.id('MyCodeBtn')).tap();
-      await expect(element(by.id('ReconnectScreen'))).toBeVisible();
-
+      await reconnect(true);
       // Reconnect screen should have old + new profile and abuse + Update buttons
       await expect(element(by.id('oldProfileView'))).toExist();
       await expect(element(by.id('newProfileView'))).toExist();
@@ -90,6 +51,29 @@ describe('Reconnect existing connection', () => {
   });
 
   describe('Identical profile', () => {
-    test.todo('should accept connection');
+    beforeAll(async () => {
+      // create a fake connection
+      await createFakeConnection();
+      await reconnect(false);
+    });
+
+    afterEach(async () => {
+      await navigateHome();
+    });
+
+    it('should recognize the profile is not changed', async () => {
+      // Reconnect screen should have one profile view and the update buttons
+      await expect(element(by.id('identicalProfileView'))).toExist();
+      await expect(element(by.id('updateBtn'))).toExist();
+      // abuse button should not exist
+      await expect(element(by.id('reportAbuseBtn'))).not.toExist();
+    });
+
+    it('should update connection', async () => {
+      await expect(element(by.id('updateBtn'))).toExist();
+      await element(by.id('updateBtn')).tap();
+      // should move to connections screen
+      await expectConnectionsScreen();
+    });
   });
 });

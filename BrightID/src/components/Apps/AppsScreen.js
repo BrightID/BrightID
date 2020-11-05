@@ -36,6 +36,8 @@ export const AppsScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const { t } = useTranslation();
 
+  const params = route.params;
+
   const refreshApps = useCallback(() => {
     setRefreshing(true);
     dispatch(fetchApps())
@@ -51,16 +53,16 @@ export const AppsScreen = () => {
   useFocusEffect(refreshApps);
 
   useEffect(() => {
-    if (apps.length > 0 && route.params?.context) {
+    if (apps.length > 0 && params?.context) {
       handleDeepLink();
     }
-  }, [apps, handleDeepLink, route.params]);
+  }, [apps, handleDeepLink, params]);
 
   const handleDeepLink = useCallback(() => {
-    const { context } = route.params;
+    const context = params?.context;
     const isValidContext = any(propEq('context', context))(apps);
     if (isValidContext) {
-      handleAppContext(route.params);
+      handleAppContext(params);
     } else {
       Alert.alert(
         t('apps.alert.title.invalidContext'), 
@@ -73,7 +75,7 @@ export const AppsScreen = () => {
       context: '',
       contextId: '',
     });
-  }, [navigation, route.params, apps]);
+  }, [navigation, params, apps]);
 
   const AppStatus = () => {
     const pendingLink = find(propEq('state', 'pending'))(linkedContexts);

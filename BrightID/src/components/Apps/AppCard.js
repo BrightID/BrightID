@@ -165,7 +165,7 @@ const AppCard = (props) => {
   };
 
   return (
-    <View style={{ ...styles.container, ...style }}>
+    <View style={{ ...styles.container, ...style }} testID={`app-${name}`}>
       <TouchableOpacity style={styles.link} onPress={openApp}>
         <Image
           source={{

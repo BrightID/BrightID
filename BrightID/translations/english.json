@@ -97,8 +97,10 @@
   "connections.removeActionSheet.title": "Remove connection",
   "connections.removeActionSheet.info": "Are you sure you want to remove connection with {{name}}? You can reconnect anytime.",
   "connections.removeActionSheet.remove": "Remove",
-  "connections.text.alreadyConnected": "You already connected with this account",
-  "connections.tag.lastConnected": "Last connected {{date}} ago",
+
+  "connections.text.alreadyConnectedWith": "You already connected with {{name}}",
+  "connections.tag.lastConnected": "Last connected {{date}}",
+  "connections.button.reconnect": "Reconnect",
   "connections.label.oldProfile": "Old Profile",
   "connections.label.newProfile": "New Profile",
   "connections.label.currentConnectionLevel": "Current connection level",

@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
@@ -12,6 +12,7 @@ import {
   connectionLevelColors,
   connectionLevelStrings,
 } from '../../utils/connectionLevelStrings';
+import { retrieveImage } from '../../utils/filesystem';
 
 type ReconnectViewProps = {
   pendingConnection: PendingConnection,
@@ -29,7 +30,27 @@ export const ReconnectView = ({
   abuseHandler,
 }: ReconnectViewProps) => {
   const navigation = useNavigation();
+  const [identicalProfile, setIdenticalProfile] = useState(true);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const compareProfiles = async () => {
+      if (pendingConnection.name !== existingConnection.name) {
+        setIdenticalProfile(false);
+        return;
+      }
+      const existingPhoto = await retrieveImage(
+        existingConnection.photo.filename,
+      );
+      if (existingPhoto !== pendingConnection.photo) {
+        setIdenticalProfile(false);
+        return;
+      }
+      // name and photo are equal
+      setIdenticalProfile(true);
+    };
+    compareProfiles();
+  }, [pendingConnection, existingConnection]);
 
   const photoTouchHandler = (photo: string, type: 'base64' | 'file') => {
     navigation.navigate('FullScreenPhoto', {
@@ -38,92 +59,155 @@ export const ReconnectView = ({
     });
   };
 
-  return (
-    <>
-      <View style={styles.header} testID="ReconnectScreen">
-        <Text style={styles.headerText}>{t('pendingConnections.title.connectionRequest')}</Text>
-        <Text style={styles.subheaderText}>
-          {t('connections.text.alreadyConnected')}
-        </Text>
-        <Text style={styles.lastConnectedText}>
-          {/* Last connected{' '}
-          {moment(parseInt(existingConnection.createdAt, 10)).fromNow()} ago */}
-          {t('connections.tag.lastConnected', {date: moment(parseInt(existingConnection.createdAt, 10)).fromNow()})}
-        </Text>
-      </View>
-      <View style={styles.profiles}>
-        <View
-          testID="oldProfileView"
-          style={[styles.profile, styles.verticalDivider]}
-        >
-          <View style={styles.profileHeader}>
-            <Text style={styles.profileHeaderText}>{t('connections.label.oldProfile')}</Text>
-          </View>
-          <ProfileCard
-            name={existingConnection.name}
-            photo={existingConnection.photo.filename}
-            photoType="file"
-            brightIdVerified={brightIdVerified}
-            photoTouchHandler={photoTouchHandler}
-            flagged={pendingConnection.flagged}
-          />
-        </View>
-        <View testID="newProfileView" style={styles.profile}>
-          <View style={styles.profileHeader}>
-            <Text style={styles.profileHeaderText}>{t('connections.label.newProfile')}</Text>
-          </View>
-          <ProfileCard
-            name={pendingConnection.name}
-            photo={pendingConnection.photo}
-            photoType="base64"
-            brightIdVerified={brightIdVerified}
-            photoTouchHandler={photoTouchHandler}
-            flagged={pendingConnection.flagged}
-          />
-        </View>
-      </View>
-      <View style={styles.countsContainer}>
-        <ConnectionStats
-          numConnections={pendingConnection.connections}
-          numGroups={pendingConnection.groups}
-          numMutualConnections={pendingConnection.mutualConnections}
-        />
-      </View>
-      <View style={styles.connectionLevel}>
-        <View style={styles.connectionLevelLabel}>
-          <Text style={styles.connectionLevelLabelText}>
-            {t('connections.label.currentConnectionLevel')}
+  if (identicalProfile) {
+    return (
+      <>
+        <View style={styles.header} testID="ReconnectScreen">
+          <Text style={styles.headerText}>{t('pendingConnections.title.connectionRequest')}</Text>
+          <Text style={styles.subheaderText}>
+            {t('connections.text.alreadyConnectedWith', {name: pendingConnection.name})}
           </Text>
+          <Text style={styles.lastConnectedText}>
+            {t('connections.tag.lastConnected', {date: moment(parseInt(existingConnection.createdAt, 10)).fromNow()})}
+          </Text>
+        </View>
+        <View style={styles.profiles}>
+          <View testID="identicalProfileView" style={styles.profile}>
+            <ProfileCard
+              name={pendingConnection.name}
+              photo={pendingConnection.photo}
+              photoSize="large"
+              photoType="base64"
+              brightIdVerified={brightIdVerified}
+              photoTouchHandler={photoTouchHandler}
+              flagged={pendingConnection.flagged}
+            />
+          </View>
+        </View>
+        <View style={styles.countsContainer}>
+          <ConnectionStats
+            numConnections={pendingConnection.connections}
+            numGroups={pendingConnection.groups}
+            numMutualConnections={pendingConnection.mutualConnections}
+          />
         </View>
         <View style={styles.connectionLevel}>
-          <Text
-            style={[
-              styles.connectionLevelText,
-              { color: connectionLevelColors[existingConnection.level] },
-            ]}
+          <View style={styles.connectionLevelLabel}>
+            <Text style={styles.connectionLevelLabelText}>
+              {t('connections.label.currentConnectionLevel')}
+            </Text>
+          </View>
+          <View style={styles.connectionLevel}>
+            <Text
+              style={[
+                styles.connectionLevelText,
+                { color: connectionLevelColors[existingConnection.level] },
+              ]}
+            >
+              {connectionLevelStrings[existingConnection.level]}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.actionButtons}>
+          <TouchableOpacity
+            style={styles.updateButton}
+            onPress={() => setLevelHandler(existingConnection.level)}
+            testID="updateBtn"
           >
-            {connectionLevelStrings[existingConnection.level]}
+            <Text style={styles.updateButtonLabel}>{t('connections.button.reconnect')}</Text>
+          </TouchableOpacity>
+        </View>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <View style={styles.header} testID="ReconnectScreen">
+          <Text style={styles.headerText}>{t('pendingConnections.title.connectionRequest')}</Text>
+          <Text style={styles.subheaderText}>
+            {t('connections.text.alreadyConnectedWith')}
+          </Text>
+          <Text style={styles.lastConnectedText}>
+            {t('connections.tag.lastConnected', {date: moment(parseInt(existingConnection.createdAt, 10)).fromNow()})}
           </Text>
         </View>
-      </View>
-      <View style={styles.actionButtons}>
-        <TouchableOpacity
-          style={styles.abuseButton}
-          onPress={abuseHandler}
-          testID="reportAbuseBtn"
-        >
-          <Text style={styles.abuseButtonLabel}>{t('connections.button.reportAbuse')}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.updateButton}
-          onPress={() => setLevelHandler(existingConnection.level)}
-          testID="updateBtn"
-        >
-          <Text style={styles.updateButtonLabel}>{t('connections.button.updateConnection')}</Text>
-        </TouchableOpacity>
-      </View>
-    </>
-  );
+
+        <View style={styles.profiles}>
+          <View
+            testID="oldProfileView"
+            style={[styles.profile, styles.verticalDivider]}
+          >
+            <View style={styles.profileHeader}>
+              <Text style={styles.profileHeaderText}>{t('connections.label.oldProfile')}</Text>
+            </View>
+            <ProfileCard
+              name={existingConnection.name}
+              photo={existingConnection.photo.filename}
+              photoSize="small"
+              photoType="file"
+              brightIdVerified={brightIdVerified}
+              photoTouchHandler={photoTouchHandler}
+              flagged={pendingConnection.flagged}
+            />
+          </View>
+          <View testID="newProfileView" style={styles.profile}>
+            <View style={styles.profileHeader}>
+              <Text style={styles.profileHeaderText}>{t('connections.label.newProfile')}</Text>
+            </View>
+            <ProfileCard
+              name={pendingConnection.name}
+              photo={pendingConnection.photo}
+              photoSize="small"
+              photoType="base64"
+              brightIdVerified={brightIdVerified}
+              photoTouchHandler={photoTouchHandler}
+              flagged={pendingConnection.flagged}
+            />
+          </View>
+        </View>
+        <View style={styles.countsContainer}>
+          <ConnectionStats
+            numConnections={pendingConnection.connections}
+            numGroups={pendingConnection.groups}
+            numMutualConnections={pendingConnection.mutualConnections}
+          />
+        </View>
+        <View style={styles.connectionLevel}>
+          <View style={styles.connectionLevelLabel}>
+            <Text style={styles.connectionLevelLabelText}>
+              {t('connections.label.currentConnectionLevel')}
+            </Text>
+          </View>
+          <View style={styles.connectionLevel}>
+            <Text
+              style={[
+                styles.connectionLevelText,
+                { color: connectionLevelColors[existingConnection.level] },
+              ]}
+            >
+              {connectionLevelStrings[existingConnection.level]}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.actionButtons}>
+          <TouchableOpacity
+            style={styles.abuseButton}
+            onPress={abuseHandler}
+            testID="reportAbuseBtn"
+          >
+            <Text style={styles.abuseButtonLabel}>{t('connections.button.reportAbuse')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.updateButton}
+            onPress={() => setLevelHandler(existingConnection.level)}
+            testID="updateBtn"
+          >
+            <Text style={styles.updateButtonLabel}>{t('connections.button.updateConnection')}</Text>
+          </TouchableOpacity>
+        </View>
+      </>
+    );
+  }
 };
 
 const styles = StyleSheet.create({

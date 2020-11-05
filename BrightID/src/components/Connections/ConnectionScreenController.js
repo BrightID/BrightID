@@ -79,12 +79,13 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
     t('connections.flagActionSheet.deceased'),
     'Join All Groups',
     'Connect to other fake connections',
-    'Reconnect',
+    'Reconnect - changed profile',
+    'Reconnect - identical profile',
     t('common.actionSheet.cancel'),
   ];
   if (!__DEV__) {
     // remove debug functionality
-    flaggingOptions.splice(4, 3);
+    flaggingOptions.splice(4, 4);
   }
 
   const handleFlagBtnClick = () => {

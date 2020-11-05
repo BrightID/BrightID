@@ -63,13 +63,14 @@ const ActionComponent = ({ id, name, secretKey, status }) => {
     t('connections.flagActionSheet.deceased'),
     'Join All Groups',
     'Connect to other fake connections',
-    'Reconnect',
+    'Reconnect - changed profile',
+    'Reconnect - identical profile',
     t('common.actionSheet.cancel'),
   ];
   // comment out for test release
   if (!__DEV__) {
     // remove debug functionality
-    flaggingOptions.splice(4, 3);
+    flaggingOptions.splice(4, 4);
   }
 
   const FlagButton = () => (
