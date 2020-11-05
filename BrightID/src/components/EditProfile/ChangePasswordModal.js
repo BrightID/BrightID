@@ -12,7 +12,12 @@ import {
 import { BlurView } from '@react-native-community/blur';
 import Spinner from 'react-native-spinkit';
 import { setInternetCredentials } from 'react-native-keychain';
-import { DEVICE_LARGE, DEVICE_ANDROID, BACKUP_URL } from '@/utils/constants';
+import {
+  DEVICE_LARGE,
+  DEVICE_ANDROID,
+  BACKUP_URL,
+  DEVICE_IOS,
+} from '@/utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { validatePass } from '@/utils/password';
@@ -109,12 +114,13 @@ const ChangePasswordModal = ({ route, navigation }) => {
   };
 
   return (
-    <BlurView
-      style={[styles.container]}
-      blurType="dark"
-      blurAmount={5}
-      reducedTransparencyFallbackColor="black"
-    >
+    <View style={styles.container}>
+      <BlurView
+        style={styles.blurView}
+        blurType="dark"
+        blurAmount={5}
+        reducedTransparencyFallbackColor="black"
+      />
       <View style={styles.modalContainer}>
         {backupInProgress ? (
           <UploadAnimation />
@@ -125,7 +131,6 @@ const ChangePasswordModal = ({ route, navigation }) => {
               <TextInput
                 autoCompleteType="password"
                 autoCorrect={false}
-                keyboardType={DEVICE_ANDROID ? 'visible-password' : 'default'}
                 onChangeText={setOldPassword}
                 value={oldPassword}
                 placeholder={password}
@@ -141,7 +146,6 @@ const ChangePasswordModal = ({ route, navigation }) => {
               <TextInput
                 autoCompleteType="password"
                 autoCorrect={false}
-                keyboardType={DEVICE_ANDROID ? 'visible-password' : 'default'}
                 onChangeText={setNewPassword}
                 value={newPassword}
                 placeholder="new password"
@@ -157,7 +161,6 @@ const ChangePasswordModal = ({ route, navigation }) => {
               <TextInput
                 autoCompleteType="password"
                 autoCorrect={false}
-                keyboardType={DEVICE_ANDROID ? 'visible-password' : 'default'}
                 onChangeText={setNewPasswordAgain}
                 value={newPasswordAgain}
                 placeholder="new password again"
@@ -184,18 +187,22 @@ const ChangePasswordModal = ({ route, navigation }) => {
           </>
         )}
       </View>
-    </BlurView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
-    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
+  },
+  blurView: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
   },
   photo: {
     width: '100%',
@@ -217,11 +224,11 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 13 : 11,
     color: '#B64B32',
-    marginBottom: DEVICE_LARGE ? 15 : 13,
+    marginBottom: DEVICE_IOS ? (DEVICE_LARGE ? 15 : 13) : 0,
   },
   textInput: {
     fontSize: DEVICE_LARGE ? 12 : 11,
-    marginBottom: DEVICE_LARGE ? 10 : 8,
+    marginBottom: DEVICE_IOS ? (DEVICE_LARGE ? 10 : 8) : 0,
   },
   saveContainer: {
     width: '100%',
