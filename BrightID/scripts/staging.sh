@@ -5,15 +5,15 @@
 
 # Decrypt the keystore with passphrase passed in via Github Action Secret
 gpg --quiet --batch --yes --decrypt --passphrase="$ENCRYPT_PASSWORD" \
---output ./android/app/brightid.keystore ./android/app/brightid.keystore.gpg
+--output ./android/app/staging.keystore ./android/app/staging.keystore.gpg
 
 # Decrypt keystore.properties
 gpg --quiet --batch --yes --decrypt --passphrase="$ENCRYPT_PASSWORD" \
---output ./android/keystore.properties ./android/keystore.properties.gpg
+--output ./android/staging.properties ./android/staging.properties.gpg
 
 # Decrypt google-services.json
 gpg --quiet --batch --yes --decrypt --passphrase="$ENCRYPT_PASSWORD" \
---output ./android/app/google-services.json ./android/app/google-services.json-prod.gpg
+--output ./android/app/google-services.json ./android/app/google-services.json-staging.gpg
 
 
 # Decrypt google key for publishing in app store
