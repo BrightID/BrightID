@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   Image,
   Text,
@@ -18,38 +18,31 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { chooseImage, takePhoto } from '@/utils/images';
-import { saveImage, retrieveImage } from '@/utils/filesystem';
+import { saveImage, retrieveImage, photoDirectory } from '@/utils/filesystem';
 import { setPhoto, setName } from '@/actions';
 import downCaret from '@/static/down_caret_blue.svg';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { selectAllSocialMedia, removeSocialMedia } from './socialMediaSlice';
 import socialMediaList from './socialMediaList';
 
-const EditProfilePhoto = () => {
-  const dispatch = useDispatch();
+const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
   const { showActionSheetWithOptions } = useActionSheet();
 
-  const id = useSelector((state) => state.user.id);
+  const prevPhotoFilename = useSelector((state) => state.user.photo.filename);
 
-  const [profilePhoto, setProfilePhoto] = useState('');
-  const photoFilename = useSelector((state) => state.user.photo.filename);
-
-  useEffect(() => {
-    if (!profilePhoto) {
-      retrieveImage(photoFilename).then(setProfilePhoto);
-    }
-  }, [profilePhoto, photoFilename]);
+  const profileSource = profilePhoto
+    ? {
+        uri: profilePhoto,
+      }
+    : {
+        uri: `file://${photoDirectory()}/${prevPhotoFilename}`,
+      };
 
   const getPhotoFromCamera = async () => {
     try {
       const { mime, data } = await takePhoto();
       const uri = `data:${mime};base64,${data}`;
-      const filename = await saveImage({
-        imageName: id,
-        base64Image: uri,
-      });
-      dispatch(setPhoto({ filename }));
-      setProfilePhoto(await retrieveImage(filename));
+      setProfilePhoto(uri);
     } catch (err) {
       console.log(err);
     }
@@ -59,12 +52,7 @@ const EditProfilePhoto = () => {
     try {
       const { mime, data } = await chooseImage();
       const uri = `data:${mime};base64,${data}`;
-      const filename = await saveImage({
-        imageName: id,
-        base64Image: uri,
-      });
-      dispatch(setPhoto({ filename }));
-      setProfilePhoto(await retrieveImage(filename));
+      setProfilePhoto(uri);
     } catch (err) {
       console.log(err);
     }
@@ -76,7 +64,6 @@ const EditProfilePhoto = () => {
         options: ['Take Photo', 'Choose From Library', 'cancel'],
         cancelButtonIndex: 2,
         title: 'Select photo',
-        // message: `Flagging ${name} will negatively effect their BrightID score, and this flag might be shown to other users.`,
         showSeparators: true,
         textStyle: {
           color: '#2185D0',
@@ -84,9 +71,11 @@ const EditProfilePhoto = () => {
           width: '100%',
         },
         titleTextStyle: {
+          textAlign: 'center',
           fontSize: DEVICE_LARGE ? 20 : 17,
         },
         messageTextStyle: {
+          textAlign: 'center',
           fontSize: DEVICE_LARGE ? 15 : 12,
         },
       },
@@ -110,9 +99,7 @@ const EditProfilePhoto = () => {
         style={styles.changePhotoButton}
       >
         <Image
-          source={{
-            uri: profilePhoto,
-          }}
+          source={profileSource}
           style={styles.photo}
           resizeMode="cover"
           onError={(e) => {
@@ -127,37 +114,18 @@ const EditProfilePhoto = () => {
   );
 };
 
-const EditName = () => {
-  const dispatch = useDispatch();
-  const name = useSelector((state) => state.user.name);
-  const [displayName, setDisplayName] = useState(name);
-  useFocusEffect(
-    useCallback(() => {
-      setDisplayName(name);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []),
-  );
-
+const EditName = ({ nextName, setNextName }) => {
   return (
     <View style={styles.editNameContainer}>
       <Text style={styles.label}>Name</Text>
       <TextInput
         style={styles.editNameInput}
-        value={displayName}
-        onChangeText={setDisplayName}
-        onBlur={() => {
-          if (displayName.length >= 2) {
-            dispatch(setName(displayName));
-          } else {
-            setName(name);
-          }
-        }}
-        blurOnSubmit={true}
+        value={nextName}
+        onChangeText={setNextName}
         textContentType="name"
         placeholder="Enter Name"
         placeholderTextColor="#707070"
       />
-      {/* <View style={styles.bottomDivider} /> */}
     </View>
   );
 };
@@ -205,7 +173,7 @@ const SocialMediaLinks = () => {
             dispatch(removeSocialMedia(item.id));
           }}
         >
-          <Material name="close" size={DEVICE_LARGE ? 18 : 16} color={'#000'} />
+          <Material name="close" size={DEVICE_LARGE ? 18 : 16} color="#000" />
         </TouchableOpacity>
       </View>
     );
@@ -228,7 +196,7 @@ const SocialMediaLinks = () => {
           <Material
             name="plus-thick"
             size={DEVICE_LARGE ? 18 : 16}
-            color={'#2185D0'}
+            color="#2185D0"
           />
         </TouchableOpacity>
       </View>
@@ -288,12 +256,61 @@ const ShowEditPassword = () => {
 };
 
 export const EditProfileScreen = function () {
+  const dispatch = useDispatch();
   let headerHeight = useHeaderHeight();
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
   }
-
   const isDrawerOpen = useIsDrawerOpen();
+
+  // selectors
+  const id = useSelector((state) => state.user.id);
+  const prevPhotoFilename = useSelector((state) => state.user.photo.filename);
+  const prevName = useSelector((state) => state.user.name);
+  const prevPhoto = useRef(null);
+  // state passed down to children
+  const [profilePhoto, setProfilePhoto] = useState(prevPhoto?.current);
+  const [nextName, setNextName] = useState(prevName);
+
+  const saveDisabled =
+    (prevPhoto.current === profilePhoto && prevName === nextName) ||
+    nextName.length < 2;
+
+  const saveData = async () => {
+    if (nextName.length >= 2) {
+      dispatch(setName(nextName));
+    }
+
+    if (prevPhoto.current !== profilePhoto) {
+      const filename = await saveImage({
+        imageName: id,
+        base64Image: profilePhoto,
+      });
+      dispatch(setPhoto({ filename }));
+      // reset state to disable save button
+      setProfilePhoto('');
+    }
+  };
+
+  const clearData = useCallback(() => {
+    setNextName(prevName);
+    setProfilePhoto(prevPhoto?.current);
+  }, [prevName, setProfilePhoto, setNextName]);
+
+  // clear data on focus
+  useFocusEffect(clearData);
+
+  // convert prevPhoto to base64 uri on focus
+  useFocusEffect(
+    useCallback(() => {
+      if (!profilePhoto) {
+        retrieveImage(prevPhotoFilename).then((base64Img) => {
+          prevPhoto.current = base64Img;
+          setProfilePhoto(base64Img);
+        });
+      }
+    }, [profilePhoto, prevPhotoFilename]),
+  );
 
   return (
     <View
@@ -305,15 +322,27 @@ export const EditProfileScreen = function () {
       testID="graphExplorerScreen"
     >
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <EditProfilePhoto />
-        <EditName />
+        <EditProfilePhoto
+          profilePhoto={profilePhoto}
+          setProfilePhoto={setProfilePhoto}
+        />
+        <EditName nextName={nextName} setNextName={setNextName} />
         <SocialMediaLinks />
         <ShowEditPassword />
         <View style={styles.saveContainer}>
-          <TouchableOpacity style={styles.saveButton}>
+          <TouchableOpacity
+            style={[
+              styles.saveButton,
+              {
+                opacity: saveDisabled ? 0.5 : 1,
+              },
+            ]}
+            disabled={saveDisabled}
+            onPress={saveData}
+          >
             <Text style={styles.saveButtonText}>Save</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cancelButton}>
+          <TouchableOpacity style={styles.cancelButton} onPress={clearData}>
             <Text style={styles.cancelButtonText}>Cancel</Text>
           </TouchableOpacity>
         </View>

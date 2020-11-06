@@ -18,7 +18,7 @@ import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
 import { SvgXml } from 'react-native-svg';
 import codePush from 'react-native-code-push';
 import verificationSticker from '@/static/verification-sticker.svg';
-import { retrieveImage } from '@/utils/filesystem';
+import { retrieveImage, photoDirectory } from '@/utils/filesystem';
 import editProfile from '@/static/edit_profile.svg';
 import editProfileFocused from '@/static/edit_profile_focused.svg';
 import trustedConnections from '@/static/trusted_connections_sidebar_inactive.svg';
@@ -99,23 +99,30 @@ const CustomItem = ({
 };
 
 const CustomDrawerContent = (props) => {
+  const { state, navigation } = props;
+  // selectors
   const photoFilename = useSelector((state) => state.user.photo.filename);
   const name = useSelector((state) => state.user.name);
   const verified = useSelector(verifiedSelector);
-  const [profilePhoto, setProfilePhoto] = useState('none');
-  retrieveImage(photoFilename).then((profilePhoto) => {
-    setProfilePhoto(profilePhoto);
-  });
+  // keep profile photo up to date
+  const [profilePhoto, setProfilePhoto] = useState('');
 
-  const { state, navigation } = props;
+  retrieveImage(photoFilename).then(setProfilePhoto);
+
+  // prevent console error and blank photo
+  const profileSource = profilePhoto
+    ? {
+        uri: profilePhoto,
+      }
+    : {
+        uri: `file://${photoDirectory()}/${photoFilename}`,
+      };
 
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.profileContainer}>
         <Image
-          source={{
-            uri: profilePhoto,
-          }}
+          source={profileSource}
           style={styles.drawerPhoto}
           accessibilityLabel="user photo"
         />
