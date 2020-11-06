@@ -188,6 +188,7 @@ declare type PendingConnection = {
   notificationToken?: string,
   secretKey?: string,
   score?: number,
+  requestProof?: string,
 };
 
 declare type RecoveryData = {

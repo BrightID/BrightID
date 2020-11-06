@@ -23,7 +23,7 @@ export const generateChannelData = async (
   const ttl = CHANNEL_TTL;
   const myProfileId = await createRandomId();
   const type = channelType;
-  const initiatorProfileId = '';
+  const initiatorProfileId = myProfileId;
   const state = channel_states.OPEN;
   const channelApi = new ChannelAPI(`http://${ipAddress}/profile`);
 

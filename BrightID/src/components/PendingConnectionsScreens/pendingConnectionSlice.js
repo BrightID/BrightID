@@ -169,6 +169,7 @@ const pendingConnectionsSlice = createSlice({
         flagged,
         notificationToken,
         verifications,
+        requestProof,
       } = action.payload;
 
       const changes = {
@@ -188,6 +189,7 @@ const pendingConnectionsSlice = createSlice({
         flagged,
         notificationToken,
         verifications,
+        requestProof,
       };
 
       // add secret key if dev

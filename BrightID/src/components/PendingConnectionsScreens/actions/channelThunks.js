@@ -23,6 +23,12 @@ import {
   newPendingConnection,
   selectAllPendingConnectionIds,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+import {
+  strToUint8Array,
+  uInt8ArrayToB64
+} from '@/utils/encoding';
+
+import nacl from 'tweetnacl';
 import { Alert } from 'react-native';
 
 export const createChannel = (channelType: ChannelType) => async (
@@ -252,6 +258,16 @@ export const encryptAndUploadProfileToChannel = (channelId: string) => async (
     profileTimestamp,
     notificationToken,
   };
+
+  if (channel.initiatorProfileId === channel.myProfileId) {
+    // create request proof that proves the user requested
+    // the connection by creating the qr code
+    const message = `${id}|${profileTimestamp}`;
+    const secretKey = getState().keypair.secretKey;
+    dataObj.requestProof = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+  }
 
   console.log(`Encrypting profile data with key ${channel.aesKey}`);
   let encrypted = encryptData(dataObj, channel.aesKey);

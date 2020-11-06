@@ -47,15 +47,15 @@ export const confirmPendingConnectionThunk = (
     user: { id: brightId, backupCompleted },
   } = getState();
 
-  let connectionTimestamp = Date.now();
+  let connectionTimestamp = connection.profileTimestamp;
   let flagReason;
-
   await api.addConnection(
     brightId,
     connection.brightId,
     level,
     flagReason,
     connectionTimestamp,
+    connection.requestProof
   );
 
   if (__DEV__) {
@@ -67,6 +67,7 @@ export const confirmPendingConnectionThunk = (
         level,
         flagReason,
         connectionTimestamp,
+        connection.requestProof,
         {
           id: connection.brightId,
           secretKey: connection.secretKey,

@@ -72,6 +72,7 @@ class NodeApi {
     level: string,
     reportReason?: string,
     timestamp: number,
+    requestProof?: string,
     fakeUser?: FakeUser,
   ) {
     let secretKey;
@@ -93,6 +94,9 @@ class NodeApi {
     };
     if (reportReason) {
       op.reportReason = reportReason;
+    }
+    if (requestProof) {
+      op.requestProof = requestProof;
     }
 
     const message = stringify(op);
