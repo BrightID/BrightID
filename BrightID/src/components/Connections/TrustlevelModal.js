@@ -26,9 +26,17 @@ const TrustlevelModal = ({ route, navigation }: props) => {
   );
 
   const saveLevelHandler = async () => {
-    console.log(`Setting trust level '${level}' for ${connection.name}`);
-    await api.addConnection(myId, connection.id, level, undefined, Date.now());
-    dispatch(setConnectionLevel(connection.id, level));
+    if (connection.level !== level) {
+      console.log(`Setting connection level '${level}' for ${connection.name}`);
+      await api.addConnection(
+        myId,
+        connection.id,
+        level,
+        undefined,
+        Date.now(),
+      );
+      dispatch(setConnectionLevel(connection.id, level));
+    }
     // close modal
     navigation.goBack();
   };
