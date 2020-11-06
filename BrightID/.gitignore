@@ -69,7 +69,6 @@ core-js@*
 /artifacts/
 *-google-services.json
 Podfile.lock
-assetlinks.json
 ios/Pods/
 keystore.properties
 android/app/google-services.json-prod

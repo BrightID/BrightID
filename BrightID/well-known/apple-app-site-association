@@ -1,0 +1,22 @@
+{
+    "applinks": {
+      "details": [
+           {
+             "appIDs": ["8YXQK74X6B.org.brightid.demo"],
+             "components": [
+               {
+                  "/": "/link-verification/*",
+                  "comment": "app links"
+               },
+               {
+                  "/": "/connection-code/*",
+                  "comment": "new connections"
+               }
+             ]
+           }
+       ]
+   },
+   "webcredentials": {
+      "apps": [ "8YXQK74X6B.org.brightid.demo" ]
+   }
+}
