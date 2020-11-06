@@ -13,19 +13,15 @@ import {
 const trustLevelDetails = {
   [connection_levels.SUSPICIOUS]: {
     description: "I don't know this person at all",
-    icon: undefined,
   },
   [connection_levels.JUST_MET]: {
     description: 'This person is a stranger I just met',
-    icon: undefined,
   },
   [connection_levels.ALREADY_KNOWN]: {
     description: 'This person is my friend',
-    icon: undefined,
   },
   [connection_levels.RECOVERY]: {
     description: 'This person is a family member',
-    icon: undefined,
   },
 };
 
