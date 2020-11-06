@@ -143,7 +143,10 @@ const CustomDrawerContent = (props) => {
         labelStyle={styles.labelStyle}
         icon={getIcon('homeIcon')}
         onPress={() => {
-          navigation.navigate('Home');
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+          });
         }}
       />
       <CustomItem
@@ -157,7 +160,10 @@ const CustomDrawerContent = (props) => {
         labelStyle={styles.labelStyle}
         icon={getIcon('editProfile')}
         onPress={() => {
-          navigation.navigate('Edit Profile');
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'Edit Profile' }],
+          });
         }}
       />
       <CustomItem
@@ -171,7 +177,10 @@ const CustomDrawerContent = (props) => {
         labelStyle={styles.labelStyle}
         icon={getIcon('taskList')}
         onPress={() => {
-          navigation.navigate('Achievements');
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'Achievements' }],
+          });
         }}
       />
 
@@ -186,7 +195,10 @@ const CustomDrawerContent = (props) => {
         labelStyle={styles.labelStyle}
         icon={getIcon('explorerCode')}
         onPress={() => {
-          navigation.navigate('Copy Explorer Code');
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'Copy Explorer Code' }],
+          });
         }}
       />
       <CustomItem
@@ -216,7 +228,10 @@ const CustomDrawerContent = (props) => {
         label="Contact Us"
         icon={getIcon('contactUs')}
         onPress={() => {
-          navigation.navigate('ContactUs');
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'ContactUs' }],
+          });
         }}
       />
     </DrawerContentScrollView>

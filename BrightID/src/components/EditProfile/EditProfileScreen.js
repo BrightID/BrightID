@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Image,
   Text,
@@ -9,6 +9,7 @@ import {
   ScrollView,
   View,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
@@ -255,8 +256,9 @@ const ShowEditPassword = () => {
   );
 };
 
-export const EditProfileScreen = function () {
+export const EditProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  // const navigation = useNavigation();
   let headerHeight = useHeaderHeight();
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
@@ -310,6 +312,34 @@ export const EditProfileScreen = function () {
         });
       }
     }, [profilePhoto, prevPhotoFilename]),
+  );
+
+  useEffect(
+    () =>
+      navigation.addListener('beforeRemove', (e) => {
+        if (saveDisabled) {
+          // If we don't have unsaved changes, then we don't need to do anything
+          return;
+        }
+
+        // Prevent default behavior of leaving the screen
+        e.preventDefault();
+
+        // Prompt the user before leaving the screen
+        Alert.alert(
+          'Discard changes?',
+          'You have unsaved changes. Are you sure you want to discard them and leave the screen?',
+          [
+            { text: "Don't leave", style: 'cancel', onPress: () => {} },
+            {
+              text: 'Discard',
+              style: 'destructive',
+              onPress: () => navigation.dispatch(e.data.action),
+            },
+          ],
+        );
+      }),
+    [navigation, saveDisabled],
   );
 
   return (
