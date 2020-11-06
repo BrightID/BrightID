@@ -51,6 +51,7 @@ const textContentTypes = {
 const SelectMediaModal = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const prevId = route.params?.prevId;
+  const initialPage = route.params?.page;
 
   const existingSocialMediaIds = useSelector((state) => state.socialMedia.ids);
 
@@ -84,16 +85,16 @@ const SelectMediaModal = ({ route, navigation }) => {
   );
 
   // social media profile value
-  const [profile, setProfile] = useState(prevProfile?.profile);
+  const [profile, setProfile] = useState(prevProfile?.profile ?? '');
 
-  // update profile when social media changes
+  // update profile when modal is re-opened or new profile selected
   useEffect(() => {
-    setProfile(prevProfile?.profile);
+    setProfile(prevProfile?.profile ?? '');
   }, [prevProfile]);
 
   // which page of the modal are we on
   // user can directly start editing profile if they click on their profile
-  const [page, setPage] = useState(route.params?.page ?? 0);
+  const [page, setPage] = useState(initialPage ?? 0);
 
   // refresh state when the modal opens
   useFocusEffect(
@@ -159,10 +160,14 @@ const SelectMediaModal = ({ route, navigation }) => {
         )}
         <View style={styles.saveContainer}>
           <TouchableOpacity
-            style={styles.saveButton}
+            style={[
+              styles.saveButton,
+              { opacity: page === 1 && profile.length === 0 ? 0.5 : 1 },
+            ]}
             onPress={() => {
               page === 1 ? saveProfile() : setPage(1);
             }}
+            disabled={page === 1 && profile.length === 0}
           >
             <Text style={styles.saveButtonText}>
               {page === 1 ? 'Save' : 'Next'}
@@ -171,11 +176,14 @@ const SelectMediaModal = ({ route, navigation }) => {
           <TouchableOpacity
             style={styles.cancelButton}
             onPress={() => {
-              page === 1 ? setPage(0) : navigation.navigate('Edit Profile');
+              // if initial page is 1, users only want to edit text
+              page === 1 && initialPage !== 1
+                ? setPage(0)
+                : navigation.navigate('Edit Profile');
             }}
           >
             <Text style={styles.cancelButtonText}>
-              {page === 1 ? 'Prev' : 'Cancel'}
+              {page === 1 && initialPage !== 1 ? 'Prev' : 'Cancel'}
             </Text>
           </TouchableOpacity>
         </View>

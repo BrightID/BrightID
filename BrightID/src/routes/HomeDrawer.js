@@ -18,7 +18,7 @@ import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
 import { SvgXml } from 'react-native-svg';
 import codePush from 'react-native-code-push';
 import verificationSticker from '@/static/verification-sticker.svg';
-import { retrieveImage } from '@/utils/filesystem';
+import { retrieveImage, photoDirectory } from '@/utils/filesystem';
 import editProfile from '@/static/edit_profile.svg';
 import editProfileFocused from '@/static/edit_profile_focused.svg';
 import trustedConnections from '@/static/trusted_connections_sidebar_inactive.svg';
@@ -99,23 +99,30 @@ const CustomItem = ({
 };
 
 const CustomDrawerContent = (props) => {
+  const { state, navigation } = props;
+  // selectors
   const photoFilename = useSelector((state) => state.user.photo.filename);
   const name = useSelector((state) => state.user.name);
   const verified = useSelector(verifiedSelector);
-  const [profilePhoto, setProfilePhoto] = useState('none');
-  retrieveImage(photoFilename).then((profilePhoto) => {
-    setProfilePhoto(profilePhoto);
-  });
+  // keep profile photo up to date
+  const [profilePhoto, setProfilePhoto] = useState('');
 
-  const { state, navigation } = props;
+  retrieveImage(photoFilename).then(setProfilePhoto);
+
+  // prevent console error and blank photo
+  const profileSource = profilePhoto
+    ? {
+        uri: profilePhoto,
+      }
+    : {
+        uri: `file://${photoDirectory()}/${photoFilename}`,
+      };
 
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.profileContainer}>
         <Image
-          source={{
-            uri: profilePhoto,
-          }}
+          source={profileSource}
           style={styles.drawerPhoto}
           accessibilityLabel="user photo"
         />
@@ -136,7 +143,10 @@ const CustomDrawerContent = (props) => {
         labelStyle={styles.labelStyle}
         icon={getIcon('homeIcon')}
         onPress={() => {
-          navigation.navigate('Home');
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+          });
         }}
       />
       <CustomItem
@@ -150,7 +160,10 @@ const CustomDrawerContent = (props) => {
         labelStyle={styles.labelStyle}
         icon={getIcon('editProfile')}
         onPress={() => {
-          navigation.navigate('Edit Profile');
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'Edit Profile' }],
+          });
         }}
       />
       <CustomItem
@@ -164,7 +177,10 @@ const CustomDrawerContent = (props) => {
         labelStyle={styles.labelStyle}
         icon={getIcon('taskList')}
         onPress={() => {
-          navigation.navigate('Achievements');
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'Achievements' }],
+          });
         }}
       />
 
@@ -179,7 +195,10 @@ const CustomDrawerContent = (props) => {
         labelStyle={styles.labelStyle}
         icon={getIcon('explorerCode')}
         onPress={() => {
-          navigation.navigate('Copy Explorer Code');
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'Copy Explorer Code' }],
+          });
         }}
       />
       <CustomItem
@@ -209,7 +228,10 @@ const CustomDrawerContent = (props) => {
         label="Contact Us"
         icon={getIcon('contactUs')}
         onPress={() => {
-          navigation.navigate('ContactUs');
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'ContactUs' }],
+          });
         }}
       />
     </DrawerContentScrollView>
