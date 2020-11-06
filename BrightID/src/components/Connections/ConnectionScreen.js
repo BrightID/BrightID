@@ -32,7 +32,6 @@ type Props = {
   brightIdVerified: boolean,
   mutualGroups: Array<group>,
   mutualConnections: Array<connection>,
-  handleTrustlevelChange: (level: string) => any,
   handleFlagBtn: () => any,
 };
 
@@ -43,7 +42,6 @@ function ConnectionScreen(props: Props) {
     brightIdVerified,
     mutualGroups,
     mutualConnections,
-    handleTrustlevelChange,
     handleFlagBtn,
   } = props;
 
@@ -139,10 +137,7 @@ function ConnectionScreen(props: Props) {
         </View>
       </View>
       <View style={styles.trustLevelContainer}>
-        <TrustLevelView
-          level={connection.level}
-          handleChange={handleTrustlevelChange}
-        />
+        <TrustLevelView level={connection.level} connectionId={connection.id} />
       </View>
     </>
   );

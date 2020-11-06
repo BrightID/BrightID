@@ -5,6 +5,7 @@ import {
 } from '@react-navigation/stack';
 import FullScreenPhoto from '@/components/Helpers/FullScreenPhoto';
 import ChangePasswordModal from '@/components/EditProfile/ChangePasswordModal';
+import TrustlevelModal from '@/components/Connections/TrustlevelModal';
 import SelectSocialMediaModal from '@/components/EditProfile/SelectSocialMediaModal';
 
 const Stack = createStackNavigator();
@@ -35,6 +36,11 @@ const Modals = () => {
         name="SelectSocialMedia"
         options={modalOptions}
         component={SelectSocialMediaModal}
+      />
+      <Stack.Screen
+        name="SetTrustlevel"
+        options={modalOptions}
+        component={TrustlevelModal}
       />
     </>
   );
