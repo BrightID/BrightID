@@ -170,6 +170,7 @@ const SocialMediaLinks = () => {
           <Text style={styles.socialMediaInput}>{item.profile}</Text>
         </TouchableOpacity>
         <TouchableOpacity
+          style={styles.closeButton}
           onPress={() => {
             dispatch(removeSocialMedia(item.id));
           }}
@@ -550,6 +551,10 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 12 : 10,
     color: '#707070',
+  },
+  closeButton: {
+    paddingHorizontal: DEVICE_LARGE ? 10 : 8,
+    marginRight: DEVICE_LARGE ? -10 : -8,
   },
 });
 
