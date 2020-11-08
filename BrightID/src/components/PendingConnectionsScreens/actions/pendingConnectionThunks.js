@@ -13,7 +13,10 @@ import {
   selectPendingConnectionById,
   updatePendingConnection,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
-import { leaveChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
+import {
+  encryptAndUploadProfileToChannel,
+  leaveChannel
+} from '@/components/PendingConnectionsScreens/actions/channelThunks';
 
 export const confirmPendingConnectionThunk = (
   id: string,
@@ -74,6 +77,7 @@ export const confirmPendingConnectionThunk = (
         },
       );
     }
+
   }
 
   // save connection photo
@@ -99,6 +103,12 @@ export const confirmPendingConnectionThunk = (
   dispatch(confirmPendingConnection(connection.id));
 
   if (channel.type === channel_types.SINGLE) {
+    if (channel.initiatorProfileId !== channel.myProfileId &&
+      level != 'suspicious' && level != 'reported') {
+      // for 1:1 channel upload profile of joiner to channel for creator
+      // only after accepting the connection with creator
+      await dispatch(encryptAndUploadProfileToChannel(channel.id));
+    }
     // Connection is established, so the 1:1 channel can be left
     dispatch(leaveChannel(channel.id));
   }
