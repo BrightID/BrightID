@@ -14,7 +14,8 @@ import {
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
 import { useHeaderHeight } from '@react-navigation/stack';
-import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { SvgXml } from 'react-native-svg';
 import codePush from 'react-native-code-push';
 import verificationSticker from '@/static/verification-sticker.svg';

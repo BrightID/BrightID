@@ -6,10 +6,11 @@ import { useDispatch } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
-import { DEVICE_LARGE, CHANNEL_TTL } from '@/utils/constants';
+import { CHANNEL_TTL } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
 import { staleConnection } from '@/actions';
 import verificationSticker from '@/static/verification-sticker.svg';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
 /**
  * Connection Card in the Connections Screen
@@ -161,6 +162,7 @@ const ConnectionCard = (props) => {
           />
         </TouchableOpacity>
         <TouchableOpacity
+          testID={`ConnectionCard-${index}`}
           onPress={() => {
             navigation.navigate('Connection', { connectionId: id });
           }}

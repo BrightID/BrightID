@@ -4,7 +4,7 @@ import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
-import { DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { getGroupName } from '@/utils/groups';
 import { acceptInvite, rejectInvite, joinGroup } from '@/actions';
 import api from '@/api/brightId';

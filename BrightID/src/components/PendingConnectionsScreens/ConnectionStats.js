@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { DEVICE_LARGE } from '../../utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
 type ConnectionStatsProps = {
   numConnections: number,

@@ -8,7 +8,9 @@ import {
   Easing,
 } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
+
 /**
  * Search Bar in the Groups Screen
  *

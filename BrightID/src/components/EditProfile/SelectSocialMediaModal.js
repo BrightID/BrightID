@@ -16,8 +16,7 @@ import {
   DEVICE_IOS,
   DEVICE_ANDROID,
   WIDTH,
-  HEIGHT,
-} from '@/utils/constants';
+} from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import socialMediaList from './socialMediaList';

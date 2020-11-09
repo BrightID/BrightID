@@ -22,8 +22,8 @@ import {
 import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import { DEVICE_LARGE, ORANGE, WIDTH, HEIGHT } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE, WIDTH, HEIGHT } from '@/utils/deviceConstants';
 
 import {
   pendingConnection_states,

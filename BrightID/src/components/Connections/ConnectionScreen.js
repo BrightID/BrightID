@@ -16,7 +16,7 @@ import moment from 'moment';
 import default_group from '@/static/default_group.svg';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { photoDirectory } from '@/utils/filesystem';
-import { DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import TrustLevelView from './TrustLevelView';
 
 /**
@@ -32,7 +32,6 @@ type Props = {
   brightIdVerified: boolean,
   mutualGroups: Array<group>,
   mutualConnections: Array<connection>,
-  handleTrustlevelChange: (level: string) => any,
   handleFlagBtn: () => any,
 };
 
@@ -43,7 +42,6 @@ function ConnectionScreen(props: Props) {
     brightIdVerified,
     mutualGroups,
     mutualConnections,
-    handleTrustlevelChange,
     handleFlagBtn,
   } = props;
 
@@ -139,28 +137,28 @@ function ConnectionScreen(props: Props) {
         </View>
       </View>
       <View style={styles.trustLevelContainer}>
-        <TrustLevelView
-          level={connection.level}
-          handleChange={handleTrustlevelChange}
-        />
+        <TrustLevelView level={connection.level} connectionId={connection.id} />
       </View>
     </>
   );
 
   const connectionFooter = (
     <TouchableOpacity
-      testID="FlagBtn"
+      testID="ReportBtn"
       style={styles.flagBtn}
       onPress={handleFlagBtn}
     >
-      <Text style={styles.flagBtnText}>Flag this person</Text>
+      <Text style={styles.flagBtnText}>Report this person</Text>
     </TouchableOpacity>
   );
 
-  const renderItem = ({ item, index }) => {
-    console.log(`Rendering item ${index} (${item.name})`);
+  const renderItem = ({ item, index, section }) => {
+    const testID = `${section.key}-${index}`;
+    console.log(
+      `Rendering Section ${section.key} item ${index} (${item.name}) - testID ${testID}`,
+    );
     return (
-      <View style={styles.itemContainer}>
+      <View testID={testID} style={styles.itemContainer}>
         <View style={styles.itemPhoto}>{renderPhoto(item)}</View>
         <View style={styles.itemLabel}>
           <Text style={styles.itemLabelText}>{item.name}</Text>
@@ -205,9 +203,15 @@ function ConnectionScreen(props: Props) {
         </View>
         <View style={styles.headerContent}>
           <View style={styles.headerCount}>
-            <Text style={styles.headerContentText}>{section.numEntries}</Text>
+            <Text
+              testID={`${section.key}-count`}
+              style={styles.headerContentText}
+            >
+              {section.numEntries}
+            </Text>
           </View>
           <TouchableOpacity
+            testID={`${section.key}-toggleBtn`}
             style={styles.collapseButton}
             onPress={() => toggleSection(section.key)}
             disabled={section.numEntries < 1}
@@ -225,7 +229,7 @@ function ConnectionScreen(props: Props) {
   };
 
   return (
-    <View style={styles.container}>
+    <View testID="ConnectionScreen" style={styles.container}>
       <SectionList
         sections={getSections}
         keyExtractor={(item, index) => item.id}

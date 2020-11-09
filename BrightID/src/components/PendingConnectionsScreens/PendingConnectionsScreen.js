@@ -14,7 +14,7 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
-import { DEVICE_LARGE, WIDTH } from '@/utils/constants';
+import { WIDTH } from '@/utils/deviceConstants';
 import { setActiveNotification } from '@/actions';
 import { confirmPendingConnectionThunk } from './actions/pendingConnectionThunks';
 import { PreviewConnectionController } from './PreviewConnectionController';

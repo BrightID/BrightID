@@ -5,11 +5,9 @@ import { Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useFocusEffect } from '@react-navigation/native';
-import api from '@/api/brightId';
-import { DEVICE_LARGE } from '../../utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { handleFlagging } from './models/flagConnection';
 import { fetchConnectionInfo } from '../../utils/fetchConnectionInfo';
-import { setConnectionLevel } from '../../actions/connections';
 import ConnectionScreen from './ConnectionScreen';
 
 type ConnectionScreenProps = {
@@ -22,7 +20,6 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
   const { connectionId } = route.params;
   const { showActionSheetWithOptions } = useActionSheet();
   const dispatch = useDispatch();
-  const myId = useSelector((state) => state.user.id);
   const connection: connection = useSelector((state: State) =>
     state.connections.connections.find((conn) => conn.id === connectionId),
   );
@@ -63,12 +60,6 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
   }
 
   const brightIdVerified = verifications.includes('BrightID');
-
-  const handleTrustLevelChange = async (level: ConnectionLevel) => {
-    console.log(`Setting trust level '${level}' for ${connection.name}`);
-    await api.addConnection(myId, connection.id, level, undefined, Date.now());
-    dispatch(setConnectionLevel(connection.id, level));
-  };
 
   let flaggingOptions = [
     'Flag as Spammer',
@@ -124,7 +115,6 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
       mutualConnections={mutualConnections}
       mutualGroups={mutualGroups}
       handleFlagBtn={handleFlagBtnClick}
-      handleTrustlevelChange={handleTrustLevelChange}
     />
   );
 }

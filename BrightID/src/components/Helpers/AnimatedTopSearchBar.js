@@ -10,7 +10,7 @@ import {
 import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { navigate } from '@/NavigationService';
 import searchIcon from '@/static/search_icon.svg';
 
