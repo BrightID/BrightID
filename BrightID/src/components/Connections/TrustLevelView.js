@@ -28,6 +28,7 @@ function TrustLevelView({ level, connectionId }: props) {
       </View>
       <View style={styles.trustLevel}>
         <Text
+          testID="ConnectionLevelText"
           style={[
             styles.trustLevelText,
             { color: connectionLevelColors[level] },
@@ -38,7 +39,7 @@ function TrustLevelView({ level, connectionId }: props) {
       </View>
       <TouchableOpacity
         style={styles.trustLevelButton}
-        testID={`${level}Btn`}
+        testID="EditConnectionLevelBtn"
         onPress={setLevel}
       >
         <Material name="edit" size={23} color="#2185D0" />

@@ -46,9 +46,10 @@ const TrustlevelSlider = ({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="ConnectionLevelSliderPopup">
       <View style={styles.label}>
         <Text
+          testID="ConnectionLevelSliderText"
           style={[
             styles.labelText,
             { color: connectionLevelColors[currentLevel] },
@@ -63,7 +64,7 @@ const TrustlevelSlider = ({
         </Text>
       </View>
       <Slider
-        testID="trustLevelSlider"
+        testID="ConnectionLevelSlider"
         style={styles.slider}
         value={initialValue}
         minimumValue={minValue}

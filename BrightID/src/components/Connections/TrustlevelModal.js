@@ -72,6 +72,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
           changeLevelHandler={changeLevelHandler}
         />
         <TouchableOpacity
+          testID="SaveLevelBtn"
           style={styles.confirmButton}
           onPress={saveLevelHandler}
         >
