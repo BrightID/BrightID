@@ -783,13 +783,13 @@
 				INFOPLIST_FILE = BrightID/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 3.1.0;
+				MARKETING_VERSION = 3.1.10;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.demo;
+				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.staging;
 				PRODUCT_NAME = BrightID;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -811,13 +811,13 @@
 				INFOPLIST_FILE = BrightID/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 3.1.0;
+				MARKETING_VERSION = 3.1.10;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.demo;
+				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.staging;
 				PRODUCT_NAME = BrightID;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1120,13 +1120,13 @@
 				INFOPLIST_FILE = BrightID/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 3.1.0;
+				MARKETING_VERSION = 3.1.10;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.demo;
+				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.staging;
 				PRODUCT_NAME = BrightID;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
