@@ -27,7 +27,7 @@
     "@react-native-community/clipboard": "1.5.1",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-community/push-notification-ios": "1.7.1",
-    "@react-native-community/slider": "^3.0.3",
+    "@react-native-community/slider": "3.0.3",
     "@react-native-picker/picker": "1.9.2",
     "@react-navigation/drawer": "5.10.7",
     "@react-navigation/native": "5.8.7",
