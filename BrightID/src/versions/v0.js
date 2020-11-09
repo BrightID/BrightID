@@ -1,6 +1,6 @@
 // @flow
 
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { b64ToUrlSafeB64, objToUint8, uInt8ArrayToB64 } from '@/utils/encoding';
 import {
   setUserData,
