@@ -4,7 +4,7 @@ export const connectionLevelStrings = {
   [connection_levels.REPORTED]: '✋ Flagged',
   [connection_levels.SUSPICIOUS]: '🤔 Suspicious',
   [connection_levels.JUST_MET]: '👋 Just met',
-  [connection_levels.ALREADY_KNOWN]: '😎 Already know',
+  [connection_levels.ALREADY_KNOWN]: '😎 Already known',
   [connection_levels.RECOVERY]: '🔐 Recovery',
 };
 

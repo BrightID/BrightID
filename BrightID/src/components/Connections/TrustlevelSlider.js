@@ -18,10 +18,10 @@ const trustLevelDetails = {
     description: 'This person is a stranger I just met',
   },
   [connection_levels.ALREADY_KNOWN]: {
-    description: 'This person is my friend',
+    description: 'I already know this person',
   },
   [connection_levels.RECOVERY]: {
-    description: 'This person is a family member',
+    description: 'I trust this person to recover my BrightID for me',
   },
 };
 
@@ -96,15 +96,20 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: '#000',
   },
-  description: {},
+  description: {
+    // set minimum height so the slider does not jump when the description
+    // text changes between 1 and 2 lines
+    minHeight: 50,
+  },
   descriptionText: {
     fontFamily: 'Poppins',
     fontWeight: '500',
     fontSize: 17,
     color: '#000',
+    textAlign: 'center',
   },
   slider: {
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 15,
     // slider only supports absolute width, so have to calculate manually:
     // width = deviceWidth * modalWidth (90%) * sliderWidth (80% of modal width)

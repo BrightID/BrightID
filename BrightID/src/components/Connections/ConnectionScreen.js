@@ -148,7 +148,7 @@ function ConnectionScreen(props: Props) {
       style={styles.flagBtn}
       onPress={handleFlagBtn}
     >
-      <Text style={styles.flagBtnText}>Flag this person</Text>
+      <Text style={styles.flagBtnText}>Report this person</Text>
     </TouchableOpacity>
   );
 
