@@ -106,11 +106,6 @@ export const joinChannel = (channel: Channel) => async (
     // we need channel to exist prior to uploadingProfileToChannel
     await dispatch(addChannel(channel));
 
-    if (channel.channelType === channel_types.GROUP) {
-      // upload my profile to channel here only for n:n channels
-      // for 1:1 channels, joiner upload profile after accepting connection
-      await dispatch(encryptAndUploadProfileToChannel(channel.id));
-    }
     // start polling for profiles
     dispatch(subscribeToConnectionRequests(channel.id));
   } catch (e) {
