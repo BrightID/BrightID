@@ -3,7 +3,6 @@ module.exports = {
     ios: {},
     android: {},
   },
-  assets: ['./assets/fonts/'],
   dependencies: {
     'react-native-keychain': {
       platforms: {
