@@ -1,11 +1,12 @@
 // @flow
 import { Alert } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { dangerouslyDeleteStorage } from '@/utils/dev';
 import { bootstrapAndUpgrade } from './versions';
 import { resetOperations } from './actions';
 import { store } from './store';
 import { checkTasks, syncStoreTasks } from './components/Tasks/TasksSlice';
+// import { fakeData } from './fakeData';
 
 // happens inside of the loading screen
 
@@ -40,9 +41,27 @@ export const bootstrap = async () => {
     // Initial check for completed tasks
     store.dispatch(checkTasks());
 
+    // fake data
+
+    // store.dispatch(
+    //   setConnections(
+    //     fakeData.map((data) => {
+    //       data.status = 'verified';
+    //       data.verifications = [data.verifications.list, 'BrightID'];
+    //       return data;
+    //     }),
+    //   ),
+    // );
+
     // delete old async storage is storage is successfully migrated
     if (!migrated) {
-      await AsyncStorage.removeItem('persist:root');
+      AsyncStorage.getItem('persist:root').then((data) => {
+        if (data) {
+          AsyncStorage.removeItem('persist:root').catch((err) => {
+            console.log(err.message);
+          });
+        }
+      });
     }
   } catch (err) {
     console.error(err);

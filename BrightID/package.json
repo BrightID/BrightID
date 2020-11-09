@@ -22,11 +22,12 @@
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "3.8.0",
-    "@react-native-community/async-storage": "1.12.1",
+    "@react-native-async-storage/async-storage": "^1.13.2",
     "@react-native-community/blur": "3.6.0",
     "@react-native-community/clipboard": "1.5.1",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-community/push-notification-ios": "1.7.2",
+    "@react-native-community/slider": "^3.0.3",
     "@react-native-picker/picker": "1.9.2",
     "@react-navigation/drawer": "5.10.7",
     "@react-navigation/native": "5.8.7",
@@ -138,7 +139,7 @@
       "./node_modules/react-native-gesture-handler/jestSetup.js"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!(react-native|react-navigation|@react-navigation/.*|react-navigation-stack|react-native-screens|@react-native-community/async-storage|react-native-gesture-handler|react-native-popup-menu|react-native-platform-touchable|react-native-linear-gradient|react-native-vector-icons|react-native-spinkit|react-native-status-bar-height|react-native-snap-carousel|react-native-image-picker|react-native-svg|react-native-camera|react-native-image-crop-picker|react-native-keychain)/)"
+      "node_modules/(?!(react-native|react-navigation|@react-navigation/.*|react-navigation-stack|react-native-screens|@react-native-async-storage/async-storage|react-native-gesture-handler|react-native-popup-menu|react-native-platform-touchable|react-native-linear-gradient|react-native-vector-icons|react-native-spinkit|react-native-status-bar-height|react-native-snap-carousel|react-native-image-picker|react-native-svg|react-native-camera|react-native-image-crop-picker|react-native-keychain)/)"
     ],
     "testPathIgnorePatterns": [
       "./e2e/"
