@@ -23,7 +23,7 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import ConnectionCard from './ConnectionCard';
 import { defaultSort } from './models/sortingUtility';
-import { handleFlagging } from './models/flagConnection';
+import { handleFlagging } from './models/reportConnection';
 
 /**
  * Connection screen of BrightID

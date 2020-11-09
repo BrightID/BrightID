@@ -32,7 +32,6 @@ type Props = {
   brightIdVerified: boolean,
   mutualGroups: Array<group>,
   mutualConnections: Array<connection>,
-  handleFlagBtn: () => any,
 };
 
 function ConnectionScreen(props: Props) {
@@ -42,7 +41,6 @@ function ConnectionScreen(props: Props) {
     brightIdVerified,
     mutualGroups,
     mutualConnections,
-    handleFlagBtn,
   } = props;
 
   const [groupsCollapsed, setGroupsCollapsed] = useState(true);
@@ -146,7 +144,11 @@ function ConnectionScreen(props: Props) {
     <TouchableOpacity
       testID="ReportBtn"
       style={styles.flagBtn}
-      onPress={handleFlagBtn}
+      onPress={() => {
+        navigation.navigate('ReportReason', {
+          connectionId: connection.id,
+        });
+      }}
     >
       <Text style={styles.flagBtnText}>Report this person</Text>
     </TouchableOpacity>

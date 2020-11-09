@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SvgXml } from 'react-native-svg';
 import backArrow from '@/static/back_arrow_grey.svg';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { report_reasons } from '@/utils/constants';
 import {
   pendingConnection_states,
   selectPendingConnectionById,
@@ -14,7 +15,7 @@ import {
 } from './pendingConnectionSlice';
 import { ReconnectView } from './ReconnectView';
 import { PreviewConnectionView } from './PreviewConnectionView';
-import { flagConnection } from '../Connections/models/flagConnection';
+import { reportConnection } from '../Connections/models/reportConnection';
 
 type PreviewConnectionProps = {
   pendingConnectionId: any,
@@ -55,16 +56,23 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
   };
 
   const abuseHandler = () => {
-    dispatch(flagConnection(existingConnection.id, 'fake'));
-    // Set pending connection to "CONFIRMED" to indicate it has been handled by the user
-    dispatch(
-      updatePendingConnection({
-        id: pendingConnection.id,
-        changes: {
-          state: pendingConnection_states.CONFIRMED,
-        },
-      }),
-    );
+    if (existingConnection) {
+      dispatch(
+        reportConnection({
+          id: existingConnection.id,
+          reason: report_reasons.FAKE,
+        }),
+      );
+      // Set pending connection to "CONFIRMED" to indicate it has been handled by the user
+      dispatch(
+        updatePendingConnection({
+          id: pendingConnection.id,
+          changes: {
+            state: pendingConnection_states.CONFIRMED,
+          },
+        }),
+      );
+    }
   };
 
   const photoTouchHandler = () => {

@@ -1,7 +1,5 @@
 // @flow
-
 /* global element:false, by:false, waitFor:false, device: false */
-
 import {
   createBrightID,
   createFakeConnection,

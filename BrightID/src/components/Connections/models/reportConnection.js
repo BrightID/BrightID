@@ -55,7 +55,7 @@ export const handleFlagging = ({ name, id, dispatch, callback }) => (index) => {
     {
       text: 'OK',
       onPress: () => {
-        dispatch(flagConnection(id, flag));
+        dispatch(reportConnection({ id, reason: flag }));
         if (callback) {
           callback();
         }
@@ -70,19 +70,24 @@ export const handleFlagging = ({ name, id, dispatch, callback }) => (index) => {
   );
 };
 
-export const flagConnection = (id, flag) => async (dispatch, getState) => {
+export const reportConnection = ({
+  id,
+  reason,
+}: {
+  id: string,
+  reason: string,
+}) => async (dispatch, getState) => {
   try {
     const {
       user: { id: brightId, backupCompleted },
     } = getState();
-    console.log('backupCompleted', backupCompleted);
 
     // Change connection to REPORTED level
     await api.addConnection(
       brightId,
       id,
       connection_levels.REPORTED,
-      flag,
+      reason,
       Date.now(),
     );
     // remove connection from local storage
