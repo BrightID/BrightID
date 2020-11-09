@@ -6,7 +6,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SvgXml } from 'react-native-svg';
 import backArrow from '@/static/back_arrow_grey.svg';
-import { DEVICE_LARGE } from '../../utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import {
   pendingConnection_states,
   selectPendingConnectionById,

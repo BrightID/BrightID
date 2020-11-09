@@ -9,7 +9,8 @@ import {
   Linking,
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import { DEVICE_LARGE, DARK_ORANGE, DEVICE_IOS } from '@/utils/constants';
+import { DARK_ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';

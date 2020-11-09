@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import verificationSticker from '@/static/verification-sticker.svg';
-import { DEVICE_LARGE } from '../../utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { pendingConnection_states } from './pendingConnectionSlice';
 import { RatingView } from './RatingView';
 import { ConnectionStats } from './ConnectionStats';

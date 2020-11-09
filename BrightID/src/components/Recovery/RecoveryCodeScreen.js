@@ -15,7 +15,8 @@ import { parseString } from 'xml2js';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import backupApi from '../../api/backupService';
 import { setupRecovery, recoveryQrStr, handleSigs } from './helpers';
 

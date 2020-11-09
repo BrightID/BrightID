@@ -5,7 +5,7 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { photoDirectory } from '@/utils/filesystem';
 import { useNavigation } from '@react-navigation/native';
-import { DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
 /**
  * Notification Card in the Notifications Screen

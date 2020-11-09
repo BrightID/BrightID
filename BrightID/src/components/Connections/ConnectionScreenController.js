@@ -5,7 +5,7 @@ import { Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useFocusEffect } from '@react-navigation/native';
-import { DEVICE_LARGE } from '../../utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { handleFlagging } from './models/flagConnection';
 import { fetchConnectionInfo } from '../../utils/fetchConnectionInfo';
 import ConnectionScreen from './ConnectionScreen';

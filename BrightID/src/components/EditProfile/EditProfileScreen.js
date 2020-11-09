@@ -14,7 +14,7 @@ import {
 import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';

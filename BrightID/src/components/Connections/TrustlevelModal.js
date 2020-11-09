@@ -3,7 +3,8 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
-import { DEVICE_LARGE, connection_levels } from '@/utils/constants';
+import { connection_levels } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import api from '@/api/brightId';
 import { setConnectionLevel } from '@/actions/connections';

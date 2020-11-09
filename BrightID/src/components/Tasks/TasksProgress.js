@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
 type TasksProgressProps = {
   totalSteps: number,

@@ -10,8 +10,8 @@ import {
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import verificationSticker from '@/static/verification-sticker.svg';
-import { DEVICE_LARGE } from '../../utils/constants';
-import { photoDirectory } from '../../utils/filesystem';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { photoDirectory } from '@/utils/filesystem';
 
 /*
 Displays profile photo, name and verified status
