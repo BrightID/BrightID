@@ -101,14 +101,22 @@ export const confirmPendingConnectionThunk = (
 
   dispatch(addConnection(connectionData));
   dispatch(confirmPendingConnection(connection.id));
+  if (
+    // the user is not creator of channel
+    channel.initiatorProfileId !== channel.myProfileId &&
+    // and the user accepted the connection
+    level != 'suspicious' && level != 'reported' && (
+      // and the channel is 1:1
+      channel.type === channel_types.SINGLE ||
+      // or the user is accepting connection with the initiator
+      channel.initiatorProfileId === connection.id
+    )) {
+    // upload profile of joiner to channel
+    // only after accepting the connection with creator
+    await dispatch(encryptAndUploadProfileToChannel(channel.id));
+  }
 
   if (channel.type === channel_types.SINGLE) {
-    if (channel.initiatorProfileId !== channel.myProfileId &&
-      level != 'suspicious' && level != 'reported') {
-      // for 1:1 channel upload profile of joiner to channel for creator
-      // only after accepting the connection with creator
-      await dispatch(encryptAndUploadProfileToChannel(channel.id));
-    }
     // Connection is established, so the 1:1 channel can be left
     dispatch(leaveChannel(channel.id));
   }
