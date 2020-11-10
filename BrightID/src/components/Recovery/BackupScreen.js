@@ -72,10 +72,7 @@ class BackupScreen extends React.Component<Props, State> {
   };
 
   startBackup = async () => {
-    if (
-      !this.state.pass1 ||
-      (DEVICE_ANDROID && !validatePass(this.state.pass1, this.state.pass2))
-    )
+    if (!this.state.pass1 || !validatePass(this.state.pass1, this.state.pass2))
       return;
 
     const { t } = this.props;
@@ -155,23 +152,21 @@ class BackupScreen extends React.Component<Props, State> {
               secureTextEntry={true}
               onFocus={this.handleTextFocus}
             />
-
-            {DEVICE_ANDROID && (
-              <TextInput
-                onChangeText={(pass) => this.setState({ pass2: pass })}
-                value={pass2}
-                placeholder={t('backup.placeholder.confirmPassword')}
-                placeholderTextColor="#9e9e9e"
-                style={styles.textInput}
-                autoCorrect={false}
-                autoCompleteType="password"
-                underlineColorAndroid="transparent"
-                secureTextEntry={true}
-                onBlur={this.handleTextBlur}
-                onFocus={this.handleTextFocus}
-                blurOnSubmit={true}
-              />
-            )}
+            <TextInput
+              onChangeText={(pass) => this.setState({ pass2: pass })}
+              value={pass2}
+              placeholder={t('backup.placeholder.confirmPassword')}
+              textContentType="newPassword"
+              placeholderTextColor="#9e9e9e"
+              style={styles.textInput}
+              autoCorrect={false}
+              autoCompleteType="password"
+              underlineColorAndroid="transparent"
+              secureTextEntry={true}
+              onBlur={this.handleTextBlur}
+              onFocus={this.handleTextFocus}
+              blurOnSubmit={true}
+            />
           </View>
           <View style={styles.buttonContainer}>
             {!this.state.backupInProgress ? (
@@ -238,13 +233,13 @@ const styles = StyleSheet.create({
   },
   textInfo: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: DEVICE_LARGE ? 18 : 16,
     color: '#333',
     margin: 18,
   },
   textInput: {
     fontFamily: 'ApexNew-Light',
-    fontSize: 30,
+    fontSize: DEVICE_LARGE ? 24 : 20,
     color: '#333',
     fontWeight: '300',
     fontStyle: 'normal',
@@ -265,7 +260,7 @@ const styles = StyleSheet.create({
   buttonInfoText: {
     fontFamily: 'ApexNew-Book',
     color: '#9e9e9e',
-    fontSize: 14,
+    fontSize: DEVICE_LARGE ? 14 : 12,
     width: 298,
     textAlign: 'center',
   },
@@ -282,7 +277,7 @@ const styles = StyleSheet.create({
     fontFamily: 'ApexNew-Medium',
     color: '#fff',
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: DEVICE_LARGE ? 18 : 16,
   },
   button: {
     width: 300,

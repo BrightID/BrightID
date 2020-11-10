@@ -3,7 +3,7 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import IonIcons from 'react-native-vector-icons/Ionicons';
-import { DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
 type TaskStateProps = {
   complete: boolean,

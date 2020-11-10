@@ -18,13 +18,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { setActiveNotification } from '@/actions';
 import { retrieveImage } from '@/utils/filesystem';
-import { DEVICE_LARGE } from '@/utils/constants';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import verificationSticker from '@/static/verification-sticker.svg';
 import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
 import forumIcon from '@/static/forum_icon.svg';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { version as app_version } from '../../package.json';
 
 /**

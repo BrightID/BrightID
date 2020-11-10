@@ -1,9 +1,15 @@
 // @flow
 
 import React from 'react';
-import { Text, StyleSheet, View, TouchableOpacity, Linking } from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Linking,
+} from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
-import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { getExplorerCode } from '@/utils/explorer';

@@ -72,7 +72,7 @@
   "pendingConnections.button.flagged": "Flagged",
   "pendingConnections.button.suspicious": "Suspicious",
   "pendingConnections.button.justMet": "Just met",
-  "pendingConnections.button.alreadyKnown": "Already know",
+  "pendingConnections.button.alreadyKnown": "Already known",
   "pendingConnections.button.recovery": "Recovery",
   "pendingConnections.text.rating": "Your answer will help us prevent attacks",
   "pendingConnection.text.alreadyRated": "You already rated this connection",

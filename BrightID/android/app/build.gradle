@@ -218,14 +218,13 @@ android {
             resValue "string", "CodePushDeploymentKey", "G8q6_0EW9AkaXAy3hO7Ye_LAhDfisOHpFPvRF"
         }
         staging {
-            signingConfig signingConfigs.staging
             applicationIdSuffix ".staging"
+            versionNameSuffix '-STAGING'
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.staging
             resValue "string", "CodePushDeploymentKey", "oCnsVbQLVhCjd_xE1BAsPYMRApddDWiwqiuhl"
             matchingFallbacks = ['release']
-            
         }
         debug {
             signingConfig signingConfigs.debug

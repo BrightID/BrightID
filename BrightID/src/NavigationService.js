@@ -17,6 +17,20 @@ export const toggleDrawer = () => {
   navigationRef.current?.dispatch(DrawerActions.toggleDrawer());
 };
 
+export const resetHome = () => {
+  navigationRef.current?.reset({
+    index: 0,
+    routes: [{ name: 'Home' }],
+  });
+};
+
+export const resetNotifications = () => {
+  navigationRef.current?.reset({
+    index: 1,
+    routes: [{ name: 'Home' }, { name: 'Notifications' }],
+  });
+};
+
 export const dispatch = (action) => {
   navigationRef.current?.dispatch(action);
 };

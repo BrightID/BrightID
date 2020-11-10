@@ -5,8 +5,8 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { ConnectionStats } from './ConnectionStats';
-import { DEVICE_LARGE } from '../../utils/constants';
 import { ProfileCard } from './ProfileCard';
 import {
   connectionLevelColors,

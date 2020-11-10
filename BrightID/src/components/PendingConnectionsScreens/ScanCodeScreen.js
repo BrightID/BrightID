@@ -19,7 +19,7 @@ import BarcodeMask from 'react-native-barcode-mask';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { DEVICE_LARGE, DEVICE_IOS, ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import qricon from '@/static/qr_icon_white.svg';
 import {
   channel_types,
@@ -29,6 +29,7 @@ import { selectAlUnconfirmedConnectionsByChannelIds } from '@/components/Pending
 import { decodeChannelQrString } from '@/utils/channels';
 import { joinChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
+import { ORANGE } from '@/utils/constants';
 import { RNCamera } from './RNCameraProvider';
 import { Trans, useTranslation } from 'react-i18next';
 

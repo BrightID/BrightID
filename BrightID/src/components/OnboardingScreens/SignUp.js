@@ -18,7 +18,8 @@ import { connect } from 'react-redux';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { withTranslation } from 'react-i18next';
 import { takePhoto, chooseImage } from '@/utils/images';
-import { DEVICE_LARGE, DEVICE_OS, ORANGE } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_OS } from '@/utils/deviceConstants';
 import { handleBrightIdCreation } from './actions';
 import { checkTasks } from '../Tasks/TasksSlice';
 

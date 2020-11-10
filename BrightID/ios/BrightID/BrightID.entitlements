@@ -5,7 +5,7 @@
 	<key>aps-environment</key>
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
-  <array>
+	<array>
 		<string>webcredentials:explorer.brightid.org</string>
 		<string>applinks:app.brightid.org</string>
 	</array>
