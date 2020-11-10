@@ -4,6 +4,7 @@
 import {
   createBrightID,
   createFakeConnection,
+  expectConnectionScreen,
   expectConnectionsScreen,
   navigateHome,
 } from './testUtils';
@@ -42,7 +43,7 @@ describe('Report Connections', () => {
       // open connection details of first connection
       await expect(element(by.id('ConnectionCard-0'))).toBeVisible();
       await element(by.id('ConnectionCard-0')).tap();
-      await expect(element(by.id('ConnectionScreen'))).toBeVisible();
+      await expectConnectionScreen();
       // click report button
       await element(by.id('ReportBtn')).tap();
       // modal should be open now
@@ -57,7 +58,7 @@ describe('Report Connections', () => {
       // modal should be closed
       await expect(element(by.id('ReportReasonModal'))).not.toBeVisible();
       // should still be on Connection Screen
-      await expect(element(by.id('ConnectionScreen'))).toBeVisible();
+      await expectConnectionScreen();
       // all 4 connections should still exist
       await expect(
         element(by.id(`ConnectionCard-${remainingConnections - 1}`)),
@@ -69,7 +70,7 @@ describe('Report Connections', () => {
       // modal should be closed
       await expect(element(by.id('ReportReasonModal'))).not.toBeVisible();
       // should still be on Connection Screen
-      await expect(element(by.id('ConnectionScreen'))).toBeVisible();
+      await expectConnectionScreen();
       // all 4 connections should still exist
       await expect(
         element(by.id(`ConnectionCard-${remainingConnections - 1}`)),
@@ -97,7 +98,7 @@ describe('Report Connections', () => {
         // open connection details of first connection
         await expect(element(by.id('ConnectionCard-0'))).toBeVisible();
         await element(by.id('ConnectionCard-0')).tap();
-        await expect(element(by.id('ConnectionScreen'))).toBeVisible();
+        await expectConnectionScreen();
         // click report button
         await element(by.id('ReportBtn')).tap();
         // modal should be open now
