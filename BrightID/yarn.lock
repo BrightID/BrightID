@@ -1174,7 +1174,7 @@
   dependencies:
     "@types/node" ">= 8"
 
-"@react-native-async-storage/async-storage@^1.13.2":
+"@react-native-async-storage/async-storage@1.13.2":
   version "1.13.2"
   resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.13.2.tgz#649f78527f16cd5a87071a888219ef7a35ef5c79"
   integrity sha512-isTDvUApRJPVWFxV15yrQSOGqarX7cIedq/y4N5yWSnotf68D9qvDEv1I7rCXhkBDi0u4OJt6GA9dksUT0D3wg==
