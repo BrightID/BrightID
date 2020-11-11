@@ -39,11 +39,11 @@ const ReportReasonModal = ({ route, navigation }: props) => {
       `Reporting connection ${connection.name} with reason ${reason}`,
     );
     dispatch(reportConnection({ id: connectionId, reason }));
+    // close modal
+    navigation.goBack();
     if (successCallback) {
       successCallback();
     }
-    // close modal
-    navigation.goBack();
   };
 
   const cancelReport = async () => {
