@@ -15,7 +15,6 @@ import {
 } from './pendingConnectionSlice';
 import { ReconnectView } from './ReconnectView';
 import { PreviewConnectionView } from './PreviewConnectionView';
-import { reportConnection } from '../Connections/models/reportConnection';
 
 type PreviewConnectionProps = {
   pendingConnectionId: any,
@@ -57,21 +56,20 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
 
   const abuseHandler = () => {
     if (existingConnection) {
-      dispatch(
-        reportConnection({
-          id: existingConnection.id,
-          reason: report_reasons.FAKE,
-        }),
-      );
-      // Set pending connection to "CONFIRMED" to indicate it has been handled by the user
-      dispatch(
-        updatePendingConnection({
-          id: pendingConnection.id,
-          changes: {
-            state: pendingConnection_states.CONFIRMED,
-          },
-        }),
-      );
+      navigation.navigate('ReportReason', {
+        connectionId: existingConnection.id,
+        successCallback: () => {
+          // Set pending connection to "CONFIRMED" to indicate it has been handled by the user
+          dispatch(
+            updatePendingConnection({
+              id: pendingConnection.id,
+              changes: {
+                state: pendingConnection_states.CONFIRMED,
+              },
+            }),
+          );
+        },
+      });
     }
   };
 
