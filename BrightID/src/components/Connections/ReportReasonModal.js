@@ -21,7 +21,7 @@ const reasonStrings = {
 };
 
 const ReportReasonModal = ({ route, navigation }: props) => {
-  const { connectionId } = route.params;
+  const { connectionId, successCallback } = route.params;
   const connection: connection = useSelector((state: State) =>
     state.connections.connections.find((conn) => conn.id === connectionId),
   );
@@ -39,6 +39,9 @@ const ReportReasonModal = ({ route, navigation }: props) => {
       `Reporting connection ${connection.name} with reason ${reason}`,
     );
     dispatch(reportConnection({ id: connectionId, reason }));
+    if (successCallback) {
+      successCallback();
+    }
     // close modal
     navigation.goBack();
   };
