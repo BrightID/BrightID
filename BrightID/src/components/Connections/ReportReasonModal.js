@@ -27,10 +27,9 @@ const ReportReasonModal = ({ route, navigation }: props) => {
   );
   const dispatch = useDispatch();
 
-  // go back silently if connection does not exist. Should never happen.
+  // Don't crash when connection does not exist. Should never happen.
   if (!connection) {
     console.log(`Connection ${connectionId} not found!`);
-    navigation.goBack();
     return null;
   }
 
@@ -38,9 +37,9 @@ const ReportReasonModal = ({ route, navigation }: props) => {
     console.log(
       `Reporting connection ${connection.name} with reason ${reason}`,
     );
-    dispatch(reportConnection({ id: connectionId, reason }));
     // close modal
     navigation.goBack();
+    dispatch(reportConnection({ id: connectionId, reason }));
     if (successCallback) {
       successCallback();
     }
