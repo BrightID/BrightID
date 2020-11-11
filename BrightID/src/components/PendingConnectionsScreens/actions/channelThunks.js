@@ -17,6 +17,7 @@ import {
   CHANNEL_TTL,
   MIN_CHANNEL_JOIN_TTL,
   PROFILE_POLL_INTERVAL,
+  PROFILE_VERSION,
 } from '@/utils/constants';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
@@ -251,6 +252,7 @@ export const encryptAndUploadProfileToChannel = (channelId: string) => async (
     score,
     profileTimestamp,
     notificationToken,
+    version: PROFILE_VERSION,
   };
 
   console.log(`Encrypting profile data with key ${channel.aesKey}`);

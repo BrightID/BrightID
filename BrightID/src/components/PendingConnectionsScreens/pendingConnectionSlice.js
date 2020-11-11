@@ -12,6 +12,8 @@ import {
 } from '@/components/PendingConnectionsScreens/channelSlice';
 import { decryptData } from '@/utils/cryptoHelper';
 import api from '@/api/brightId';
+import { Alert } from 'react-native';
+import { PROFILE_VERSION } from '../../utils/constants';
 
 const pendingConnectionsAdapter = createEntityAdapter();
 
@@ -93,6 +95,23 @@ export const newPendingConnection = createAsyncThunk(
       dataId: profileId,
     });
     const decryptedObj = decryptData(profileData, channel.aesKey);
+
+    // compare profile version
+    if (
+      decryptedObj.version === undefined || // very old client version
+      decryptedObj.version < PROFILE_VERSION // old client version
+    ) {
+      // other user needs to update his client
+      throw new Error(
+        `Can't connect with ${decryptedObj.name} - profile version too old. Please ask ${decryptedObj.name} to update and restart the brightID app.`,
+      );
+    } else if (decryptedObj.version > PROFILE_VERSION) {
+      // I need to update my client
+      throw new Error(
+        `Can't connect with ${decryptedObj.name} - profile version too old. Please update and restart your brightID app.`,
+      );
+    }
+
     decryptedObj.myself = decryptedObj.id === getState().user.id;
 
     const connectionInfo = await fetchConnectionInfo({
@@ -142,6 +161,7 @@ const pendingConnectionsSlice = createSlice({
       // This is called if anything goes wrong
       console.log(`Error adding pending connection:`);
       console.log(action.error.message);
+      Alert.alert('Connection not possible', action.error.message);
 
       state = pendingConnectionsAdapter.updateOne(state, {
         id: action.meta.arg.profileId,
