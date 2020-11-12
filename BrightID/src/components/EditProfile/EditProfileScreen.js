@@ -23,7 +23,11 @@ import { saveImage, retrieveImage, photoDirectory } from '@/utils/filesystem';
 import { setPhoto, setName } from '@/actions';
 import downCaret from '@/static/down_caret_blue.svg';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { selectAllSocialMedia, removeSocialMedia } from './socialMediaSlice';
+import {
+  selectAllSocialMedia,
+  removeSocialMedia,
+  setProfileDisplayWidth,
+} from './socialMediaSlice';
 import socialMediaList from './socialMediaList';
 
 const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
@@ -132,33 +136,50 @@ const EditName = ({ nextName, setNextName }) => {
 };
 
 const SocialMediaLink = (props) => {
-  const navigation = useNavigation();
-  const dispatch = useDispatch();
-  const socialMedia = socialMediaList[props.id];
+  const {
+    navigation,
+    dispatch,
+    id,
+    profile,
+    profileDisplayWidth,
+    order,
+  } = props;
 
-  const [innerTextStyle, setInnerTextStyle] = useState({ flexGrow: 1 });
+  const socialMedia = socialMediaList[id];
+
   // perfectly center profile text with max length
-  const updateInnerTextLayout = useCallback(
-    (e) => {
-      if (!innerTextStyle.width) {
-        if (e.nativeEvent?.layout?.width) {
-          setInnerTextStyle({ width: e.nativeEvent.layout.width });
-        } else {
-          setInnerTextStyle({ width: '50%' });
-        }
+  const updateInnerTextLayout = (e) => {
+    if (!profileDisplayWidth) {
+      if (e.nativeEvent?.layout?.width) {
+        dispatch(
+          setProfileDisplayWidth({
+            id,
+            width: e.nativeEvent.layout.width,
+          }),
+        );
+      } else {
+        dispatch(
+          setProfileDisplayWidth({
+            id,
+            width: '50%',
+          }),
+        );
       }
-    },
-    [innerTextStyle, setInnerTextStyle],
-  );
+    }
+  };
+
+  const innerTextStyle = profileDisplayWidth
+    ? { width: profileDisplayWidth }
+    : { flexGrow: 1 };
 
   return (
-    <View key={props.id} style={styles.socialMediaLinkContainer}>
+    <View style={styles.socialMediaLinkContainer}>
       <TouchableOpacity
         style={styles.socialMediaSelect}
         onPress={() => {
           navigation.navigate('SelectSocialMedia', {
-            order: props.order,
-            prevId: props.id,
+            order,
+            prevId: id,
             page: 0,
           });
         }}
@@ -175,8 +196,8 @@ const SocialMediaLink = (props) => {
         onLayout={updateInnerTextLayout}
         onPress={() => {
           navigation.navigate('SelectSocialMedia', {
-            order: props.order,
-            prevId: props.id,
+            order,
+            prevId: id,
             page: 1,
           });
         }}
@@ -186,13 +207,13 @@ const SocialMediaLink = (props) => {
           numberOfLines={1}
           ellipsizeMode="head"
         >
-          {innerTextStyle.width ? props.profile : ''}
+          {innerTextStyle.width ? profile : ''}
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.closeButton}
         onPress={() => {
-          dispatch(removeSocialMedia(props.id));
+          dispatch(removeSocialMedia(id));
         }}
       >
         <Material name="close" size={DEVICE_LARGE ? 18 : 16} color="#000" />
@@ -203,9 +224,17 @@ const SocialMediaLink = (props) => {
 
 const SocialMediaLinks = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const socialMediaItems = useSelector(selectAllSocialMedia);
 
-  const SocialMediaList = socialMediaItems.map(SocialMediaLink);
+  const SocialMediaList = socialMediaItems.map((item) => (
+    <SocialMediaLink
+      key={item.id}
+      navigation={navigation}
+      dispatch={dispatch}
+      {...item}
+    />
+  ));
 
   return (
     <View style={styles.socialMediaContainer}>
