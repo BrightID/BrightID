@@ -13,6 +13,9 @@ import {
 import { decryptData } from '@/utils/cryptoHelper';
 import api from '@/api/brightId';
 
+// percentage determines flagged warning
+const FLAG_PERCENTAGE = 0.1;
+
 const pendingConnectionsAdapter = createEntityAdapter();
 
 /*
@@ -45,8 +48,8 @@ const fetchConnectionInfo = async ({ myConnections, brightId }) => {
       createdAt,
       groups,
       connections = [],
-      flaggers,
       verifications,
+      flaggers = {},
     } = await api.getUserInfo(brightId);
     const mutualConnections = connections.filter(function (el) {
       return myConnections.some((x) => x.id === el.id);
@@ -56,8 +59,9 @@ const fetchConnectionInfo = async ({ myConnections, brightId }) => {
       groups: groups.length,
       mutualConnections: mutualConnections.length,
       connectionDate: `Created ${moment(parseInt(createdAt, 10)).fromNow()}`,
-      flagged: flaggers && Object.keys(flaggers).length > 0,
       verifications,
+      flagged:
+        Object.keys(flaggers).length / connections.length >= FLAG_PERCENTAGE,
     };
   } catch (err) {
     if (err instanceof Error && err.message === 'User not found') {
