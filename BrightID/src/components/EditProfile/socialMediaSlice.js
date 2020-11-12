@@ -89,7 +89,14 @@ const socialMediaSlice = createSlice({
         socialMediaAdapter.updateMany(state, updateList);
       }
     },
-
+    setProfileDisplayWidth: (state, action) => {
+      socialMediaAdapter.updateOne(state, {
+        id: action.payload.id,
+        changes: {
+          profileDisplayWidth: action.payload.width,
+        },
+      });
+    },
     removeSocialMedia: socialMediaAdapter.removeOne,
   },
 });
@@ -99,6 +106,7 @@ export const {
   updateUrl,
   updateOrder,
   removeSocialMedia,
+  setProfileDisplayWidth,
 } = socialMediaSlice.actions;
 
 export const {
