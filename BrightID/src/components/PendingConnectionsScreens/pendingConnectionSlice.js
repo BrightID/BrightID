@@ -102,14 +102,14 @@ export const newPendingConnection = createAsyncThunk(
       decryptedObj.version < PROFILE_VERSION // old client version
     ) {
       // other user needs to update his client
-      throw new Error(
-        `Can't connect with ${decryptedObj.name} - profile version too old. Please ask ${decryptedObj.name} to update and restart the brightID app.`,
-      );
+      const msg = `Can't connect with ${decryptedObj.name} due to incompatible client version. Please ask ${decryptedObj.name} to update and restart the brightID app.`;
+      Alert.alert('Connection not possible', msg);
+      throw new Error(msg);
     } else if (decryptedObj.version > PROFILE_VERSION) {
       // I need to update my client
-      throw new Error(
-        `Can't connect with ${decryptedObj.name} - profile version too old. Please update and restart your brightID app.`,
-      );
+      const msg = `Can't connect with ${decryptedObj.name} due to incompatible client version. Please update and restart your brightID app.`;
+      Alert.alert('Connection not possible', msg);
+      throw new Error(msg);
     }
 
     decryptedObj.myself = decryptedObj.id === getState().user.id;
@@ -161,7 +161,6 @@ const pendingConnectionsSlice = createSlice({
       // This is called if anything goes wrong
       console.log(`Error adding pending connection:`);
       console.log(action.error.message);
-      Alert.alert('Connection not possible', action.error.message);
 
       state = pendingConnectionsAdapter.updateOne(state, {
         id: action.meta.arg.profileId,
