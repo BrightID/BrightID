@@ -18,22 +18,27 @@ function getRandomAddres() {
 
 const apps = [
   {
+    id: 'Gitcoin',
     name: 'Gitcoin',
     context: 'Gitcoin',
   },
   {
-    name: 'idchain',
+    id: 'idchain',
+    name: 'IDChain Eidi Faucet',
     context: 'idchain',
   },
   {
-    name: 'Ethereum',
+    id: 'ethereum',
+    name: 'Burn Signal',
     context: 'ethereum',
   },
   {
-    name: 'DollarForEveryone',
+    id: 'DollarForEveryone',
+    name: 'Hedge for Humanity',
     context: 'DollarForEveryone',
   },
   {
+    id: 'clr.fund',
     name: 'clr.fund',
     context: 'clr.fund',
   },
@@ -110,11 +115,14 @@ describe('Linking with account', () => {
       });
 
       it('should be listed on apps screen', async () => {
-        await expect(element(by.id(`app-${app.name}`))).toBeVisible();
+        await waitFor(
+          element(by.id(`app-${app.id}`))
+        ).toBeVisible().whileElement(by.id('appsList')).scroll(50, 'down');
+        await expect(element(by.text(app.name))).toExist();
       });
 
       it('should not be linked', async () => {
-        await expect(element(by.id(`app-${app.name}`))).toBeVisible();
+        await expect(element(by.id(`Linked_${app.id}`))).toNotExist();
       });
 
       it(`should successfully link ${app.name}`, async () => {
@@ -138,7 +146,7 @@ describe('Linking with account', () => {
         // should show apps screen
         await expectAppsScreen();
         // app context should now be linked
-        expect(element(by.id(`Linked_${app.context}`))).toBeVisible();
+        expect(element(by.id(`Linked_${app.id}`))).toBeVisible();
       });
     });
   });

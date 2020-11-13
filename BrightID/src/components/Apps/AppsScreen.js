@@ -109,6 +109,7 @@ export const AppsScreen = () => {
       <View style={styles.container} testID="appsScreen">
         <AppStatus />
         <FlatList
+          testID="appsList"
           data={apps}
           contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
           keyExtractor={({ name }, index) => name + index}
