@@ -12,6 +12,8 @@ import {
 } from '@/components/PendingConnectionsScreens/channelSlice';
 import { decryptData } from '@/utils/cryptoHelper';
 import api from '@/api/brightId';
+import { Alert } from 'react-native';
+import { PROFILE_VERSION } from '../../utils/constants';
 
 // percentage determines flagged warning
 const FLAG_PERCENTAGE = 0.1;
@@ -97,6 +99,23 @@ export const newPendingConnection = createAsyncThunk(
       dataId: profileId,
     });
     const decryptedObj = decryptData(profileData, channel.aesKey);
+
+    // compare profile version
+    if (
+      decryptedObj.version === undefined || // very old client version
+      decryptedObj.version < PROFILE_VERSION // old client version
+    ) {
+      // other user needs to update his client
+      const msg = `Can't connect with ${decryptedObj.name} due to incompatible client version. Please ask ${decryptedObj.name} to update and restart the brightID app.`;
+      Alert.alert('Connection not possible', msg);
+      throw new Error(msg);
+    } else if (decryptedObj.version > PROFILE_VERSION) {
+      // I need to update my client
+      const msg = `Can't connect with ${decryptedObj.name} due to incompatible client version. Please update and restart your brightID app.`;
+      Alert.alert('Connection not possible', msg);
+      throw new Error(msg);
+    }
+
     decryptedObj.myself = decryptedObj.id === getState().user.id;
 
     const connectionInfo = await fetchConnectionInfo({
