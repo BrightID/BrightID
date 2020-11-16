@@ -15,8 +15,9 @@ import api from '@/api/brightId';
 import { leaveGroup, dismissFromGroup } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { addAdmin } from '@/actions/groups';
-import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import MemberCard from './MemberCard';
 
 const ACTION_INVITE = 'Invite user';

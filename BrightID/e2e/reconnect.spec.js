@@ -25,7 +25,7 @@ describe('Reconnect existing connection', () => {
     });
 
     beforeEach(async () => {
-      await reconnect(true);
+      await reconnect(0, true);
       // Reconnect screen should have old + new profile and abuse + Update buttons
       await expect(element(by.id('oldProfileView'))).toExist();
       await expect(element(by.id('newProfileView'))).toExist();
@@ -34,14 +34,12 @@ describe('Reconnect existing connection', () => {
     });
 
     it('should update connection', async () => {
-      await expect(element(by.id('updateBtn'))).toExist();
       await element(by.id('updateBtn')).tap();
       // should move to connections screen
       await expectConnectionsScreen();
     });
 
     it('should report abuse on connection', async () => {
-      await expect(element(by.id('reportAbuseBtn'))).toExist();
       await element(by.id('reportAbuseBtn')).tap();
       // should open ReportReason modal
       await expect(element(by.id('ReportReasonModal'))).toBeVisible();
@@ -66,7 +64,7 @@ describe('Reconnect existing connection', () => {
     beforeAll(async () => {
       // create a fake connection
       await createFakeConnection();
-      await reconnect(false);
+      await reconnect(0, false);
     });
 
     afterEach(async () => {

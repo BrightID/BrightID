@@ -41,11 +41,12 @@ describe('Group Management', () => {
     await waitFor(element(by.id('connection-2')))
       .toExist()
       .withTimeout(20000);
-
     await navigateHome();
 
     // Connect all fake connections with each other
-    await interConnect(3);
+    await interConnect(0);
+    await interConnect(1);
+    await interConnect(2);
   });
 
   describe('Create group', () => {
@@ -96,7 +97,8 @@ describe('Group Management', () => {
 
     it('invited co-founders should join group', async () => {
       // accept invitation
-      await joinAllGroups(3);
+      await joinAllGroups(0);
+      await joinAllGroups(1);
 
       // Check if cofounders actually joined the groups
       await expectHomescreen();
@@ -121,7 +123,9 @@ describe('Group Management', () => {
       // invite
       await inviteConnectionToGroup(GroupName);
       // accept invitation
-      await joinAllGroups(3);
+      await joinAllGroups(0);
+      await joinAllGroups(1);
+      await joinAllGroups(2);
 
       // check group members
       // navigate to groups screen
@@ -209,7 +213,9 @@ describe('Group Management', () => {
       // invite
       await inviteConnectionToGroup(GroupName);
       // accept invitation
-      await joinAllGroups(3);
+      await joinAllGroups(0);
+      await joinAllGroups(1);
+      await joinAllGroups(2);
 
       // check group members
       // navigate to groups screen
