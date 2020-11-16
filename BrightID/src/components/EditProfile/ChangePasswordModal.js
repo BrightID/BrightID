@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
     color: '#707070',
   },
   textInfo: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#333',
     margin: DEVICE_LARGE ? 12 : 10,

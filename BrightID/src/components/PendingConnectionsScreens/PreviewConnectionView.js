@@ -193,8 +193,7 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   infoText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 17 : 15,
     marginTop: 32,

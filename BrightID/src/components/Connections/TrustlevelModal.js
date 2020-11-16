@@ -110,8 +110,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   headerText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 20 : 17,
     textAlign: 'center',
   },

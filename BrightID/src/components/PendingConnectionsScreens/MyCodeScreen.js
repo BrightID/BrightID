@@ -356,8 +356,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   scanCodeText: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#fff',
     marginLeft: 10,
@@ -375,8 +374,7 @@ const styles = StyleSheet.create({
   //   borderColor: ORANGE,
   // },
   // verifyConnectionsText: {
-  //   fontFamily: 'Poppins',
-  //   fontWeight: 'bold',
+  //   fontFamily: 'Poppins-Bold',
   //   fontSize: DEVICE_LARGE ? 14 : 12,
   //   color: ORANGE,
   //   marginLeft: 10,

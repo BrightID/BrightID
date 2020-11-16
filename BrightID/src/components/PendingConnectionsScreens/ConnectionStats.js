@@ -40,8 +40,7 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 14 : 12,
   },
   countsNumberText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 17 : 15,
   },

@@ -231,8 +231,7 @@ const styles = StyleSheet.create({
     color: '#827F7F',
   },
   lastConnectedText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 15 : 12,
     textAlign: 'center',
     color: '#827F7F',
@@ -247,8 +246,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   profileHeaderText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 15 : 12,
     color: '#000',
   },
@@ -281,8 +279,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   connectionLevelLabelText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 15 : 13,
     color: '#000000',
   },
@@ -305,8 +302,7 @@ const styles = StyleSheet.create({
     paddingBottom: 9,
   },
   abuseButtonLabel: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 15 : 13,
     color: '#FFFFFF',
   },
@@ -322,8 +318,7 @@ const styles = StyleSheet.create({
     paddingBottom: 9,
   },
   updateButtonLabel: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 15 : 13,
     color: '#ED7A5D',
   },

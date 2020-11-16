@@ -543,9 +543,8 @@ const styles = StyleSheet.create({
     marginLeft: DEVICE_LARGE ? 6 : 4,
   },
   socialMediaInput: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Light',
     fontSize: DEVICE_LARGE ? 14 : 12,
-    fontWeight: '300',
     color: '#000',
   },
   showEditPasswordContainer: {
@@ -568,8 +567,7 @@ const styles = StyleSheet.create({
     color: '#2185D0',
   },
   displayPassword: {
-    fontFamily: 'Poppins',
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 13 : 11,
     color: '#000',
   },

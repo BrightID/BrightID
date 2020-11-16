@@ -258,9 +258,8 @@ const styles = StyleSheet.create({
   },
   socialMediaInput: {
     flexGrow: 1,
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Light',
     fontSize: DEVICE_LARGE ? 14 : 12,
-    fontWeight: '300',
     color: '#000',
   },
   inputContainer: {

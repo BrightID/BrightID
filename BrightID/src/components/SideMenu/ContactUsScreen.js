@@ -161,8 +161,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   socialName: {
-    fontFamily: 'Poppins',
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 14 : 13,
     marginLeft: DEVICE_LARGE ? 15 : 12,
   },
@@ -177,8 +176,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   bottomText: {
-    fontFamily: 'Poppins',
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 14 : 13,
     marginVertical: DEVICE_LARGE ? 20 : 18,
   },

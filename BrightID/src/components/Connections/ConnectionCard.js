@@ -285,8 +285,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   connectedText: {
-    fontFamily: 'Poppins',
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 11 : 10,
     color: '#B64B32',
     marginTop: DEVICE_LARGE ? 5 : 2,

@@ -93,8 +93,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   labelText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     fontSize: 17,
     color: '#000',
   },

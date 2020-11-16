@@ -354,8 +354,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   flagBtnText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 17 : 15,
     color: ORANGE,
     marginLeft: DEVICE_LARGE ? 10 : 8,
