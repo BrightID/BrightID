@@ -305,8 +305,7 @@ const styles = StyleSheet.create({
     paddingBottom: DEVICE_LARGE ? 30 : 25,
   },
   userName: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     marginLeft: DEVICE_LARGE ? 20 : 18,
   },
@@ -325,8 +324,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   labelStyle: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     marginLeft: 16,
   },

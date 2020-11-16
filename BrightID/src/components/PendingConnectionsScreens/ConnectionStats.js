@@ -35,14 +35,12 @@ export const ConnectionStats = ({
 
 const styles = StyleSheet.create({
   countsDescriptionText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 14 : 12,
   },
   countsNumberText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 17 : 15,
   },

@@ -116,14 +116,12 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
 
 const styles = StyleSheet.create({
   waitingText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#333',
   },
   buttonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 18 : 15,
     textAlign: 'left',
     color: '#ffffff',
@@ -134,8 +132,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleText: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 22 : 18,
     textAlign: 'center',
     color: '#000000',
@@ -157,8 +154,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   connectName: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 20 : 16,
     letterSpacing: 0,
     textAlign: 'left',
@@ -197,8 +193,7 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   infoText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 17 : 15,
     marginTop: 32,

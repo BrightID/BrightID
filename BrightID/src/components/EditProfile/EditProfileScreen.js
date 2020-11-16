@@ -74,14 +74,12 @@ const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
           color: '#2185D0',
           textAlign: 'center',
           width: '100%',
+          fontSize: DEVICE_LARGE ? 18 : 16,
         },
         titleTextStyle: {
           textAlign: 'center',
           fontSize: DEVICE_LARGE ? 20 : 17,
-        },
-        messageTextStyle: {
-          textAlign: 'center',
-          fontSize: DEVICE_LARGE ? 15 : 12,
+          width: '100%',
         },
       },
       (buttonIndex) => {
@@ -477,8 +475,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   profilePhotoText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#2185D0',
     marginTop: DEVICE_LARGE ? 6 : 5,
@@ -496,14 +493,12 @@ const styles = StyleSheet.create({
     marginTop: DEVICE_LARGE ? 36 : 30,
   },
   label: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 11 : 10,
     color: '#B64B32',
   },
   editNameInput: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     marginTop: DEVICE_LARGE ? 4 : 2,
     width: '100%',
@@ -537,8 +532,7 @@ const styles = StyleSheet.create({
     marginRight: DEVICE_LARGE ? 14 : 12,
   },
   socialMediaType: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#2185D0',
     marginRight: DEVICE_LARGE ? 8 : 6,
@@ -549,9 +543,8 @@ const styles = StyleSheet.create({
     marginLeft: DEVICE_LARGE ? 6 : 4,
   },
   socialMediaInput: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Light',
     fontSize: DEVICE_LARGE ? 14 : 12,
-    fontWeight: '300',
     color: '#000',
   },
   showEditPasswordContainer: {
@@ -569,14 +562,12 @@ const styles = StyleSheet.create({
     marginTop: DEVICE_LARGE ? 12 : 8,
   },
   passwordText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 13 : 11,
     color: '#2185D0',
   },
   displayPassword: {
-    fontFamily: 'Poppins',
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 13 : 11,
     color: '#000',
   },
@@ -598,8 +589,7 @@ const styles = StyleSheet.create({
     marginRight: DEVICE_LARGE ? 22 : 18,
   },
   saveButtonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 10,
   },
   cancelButton: {
@@ -614,8 +604,7 @@ const styles = StyleSheet.create({
     borderColor: '#707070',
   },
   cancelButtonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 10,
     color: '#707070',
   },

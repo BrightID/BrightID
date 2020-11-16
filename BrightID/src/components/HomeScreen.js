@@ -13,7 +13,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import { useFocusEffect } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { SvgXml } from 'react-native-svg';
-import ActionSheet from 'react-native-actionsheet';
+import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveNotification } from '@/actions';
 import { retrieveImage } from '@/utils/filesystem';
@@ -31,7 +31,6 @@ import { version as app_version } from '../../package.json';
  * ==========================
  */
 
-let chatSheetRef = '';
 let discordUrl = 'https://discord.gg/nTtuB2M';
 
 /** Selectors */
@@ -74,12 +73,37 @@ export const HomeScreen = (props) => {
     }, [dispatch, photoFilename]),
   );
 
+  const { showActionSheetWithOptions } = useActionSheet();
+
   const handleChat = () => {
-    if (__DEV__) {
+    if (!__DEV__) {
       const { delStorage } = require('@/utils/dev');
       delStorage();
     } else {
-      chatSheetRef.show();
+      showActionSheetWithOptions(
+        {
+          options: ['BrightID Discord', 'cancel'],
+          cancelButtonIndex: 1,
+          title: `Like to chat with us?`,
+          showSeparators: true,
+          textStyle: {
+            color: '#2185D0',
+            textAlign: 'center',
+            width: '100%',
+          },
+          titleTextStyle: {
+            textAlign: 'center',
+            width: '100%',
+          },
+        },
+        (index) => {
+          if (index === 0) {
+            Linking.openURL(discordUrl).catch((err) =>
+              console.log('An error occurred', err),
+            );
+          }
+        },
+      );
     }
   };
 
@@ -262,23 +286,6 @@ export const HomeScreen = (props) => {
         <DeepPasteLink />
         <Text style={styles.versionInfo}>v{app_version}</Text>
       </View>
-
-      <ActionSheet
-        testID="ChatActionSheet"
-        ref={(o) => {
-          chatSheetRef = o;
-        }}
-        title="Like to chat with us?"
-        options={['BrightID Discord', 'cancel']}
-        cancelButtonIndex={1}
-        onPress={(index) => {
-          if (index === 0) {
-            Linking.openURL(discordUrl).catch((err) =>
-              console.log('An error occurred', err),
-            );
-          }
-        }}
-      />
     </View>
   );
 };
@@ -331,8 +338,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   name: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 18 : 15,
     color: '#000000',
   },
@@ -351,8 +357,7 @@ const styles = StyleSheet.create({
     marginTop: 1.5,
   },
   verified: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     color: ORANGE,
     borderWidth: 1,
     borderColor: ORANGE,
@@ -365,8 +370,7 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 11 : 10,
   },
   unverified: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     color: '#707070',
     borderWidth: 1,
     borderColor: '#707070',
@@ -411,15 +415,13 @@ const styles = StyleSheet.create({
     width: 55,
   },
   countsDescriptionText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 12 : 11,
     marginTop: 6,
   },
   countsNumberText: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 25 : 21,
     marginBottom: 3,
@@ -442,8 +444,7 @@ const styles = StyleSheet.create({
   newConnectionText: {
     color: '#fff',
     fontSize: DEVICE_LARGE ? 18 : 15,
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     marginBottom: DEVICE_LARGE ? 16 : 11,
   },
   connectButton: {
@@ -463,8 +464,7 @@ const styles = StyleSheet.create({
     marginBottom: DEVICE_LARGE ? 16 : 11,
   },
   connectText: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 17 : 15,
     color: '#000',
     marginLeft: DEVICE_LARGE ? 10 : 8,
@@ -482,12 +482,10 @@ const styles = StyleSheet.create({
   communityLink: {
     color: '#fff',
     fontSize: DEVICE_LARGE ? 14 : 11,
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
   },
   versionInfo: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 10,
     color: '#fff',
     position: 'absolute',

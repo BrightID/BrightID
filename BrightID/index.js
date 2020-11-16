@@ -5,9 +5,10 @@ import { AppRegistry, FlatList, Text, TextInput } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { DEVICE_IOS } from '@/utils/constants';
+// import { DEVICE_IOS } from '@/utils/constants';
 
 import codePush from 'react-native-code-push';
 import codePushOptions from './codepush.config.js';
@@ -28,6 +29,7 @@ SimpleLineIcons.loadFont();
 MaterialCommunityIcons.loadFont();
 Octicons.loadFont();
 AntDesign.loadFont();
+MaterialIcons.loadFont();
 
 // Fix Font Scaling
 Text.defaultProps = Text.defaultProps || {};

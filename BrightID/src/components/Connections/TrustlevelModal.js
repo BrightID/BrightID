@@ -110,8 +110,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   headerText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 20 : 17,
     textAlign: 'center',
   },
@@ -126,8 +125,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   confirmButtonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 17 : 15,
   },
 });
