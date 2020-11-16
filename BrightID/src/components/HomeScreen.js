@@ -331,8 +331,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   name: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 18 : 15,
     color: '#000000',
   },
@@ -351,8 +350,7 @@ const styles = StyleSheet.create({
     marginTop: 1.5,
   },
   verified: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     color: ORANGE,
     borderWidth: 1,
     borderColor: ORANGE,
@@ -365,8 +363,7 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 11 : 10,
   },
   unverified: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     color: '#707070',
     borderWidth: 1,
     borderColor: '#707070',
@@ -411,8 +408,7 @@ const styles = StyleSheet.create({
     width: 55,
   },
   countsDescriptionText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 12 : 11,
     marginTop: 6,
@@ -442,8 +438,7 @@ const styles = StyleSheet.create({
   newConnectionText: {
     color: '#fff',
     fontSize: DEVICE_LARGE ? 18 : 15,
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     marginBottom: DEVICE_LARGE ? 16 : 11,
   },
   connectButton: {
@@ -486,8 +481,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   versionInfo: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 10,
     color: '#fff',
     position: 'absolute',

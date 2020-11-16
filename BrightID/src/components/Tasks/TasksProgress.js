@@ -44,9 +44,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   label: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Medium',
     fontStyle: 'normal',
-    fontWeight: '500',
     fontSize: DEVICE_LARGE ? 13 : 12,
   },
   progressBar: {
@@ -70,9 +69,8 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   steps: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Medium',
     fontStyle: 'normal',
-    fontWeight: '500',
     fontSize: DEVICE_LARGE ? 14 : 12,
   },
 });

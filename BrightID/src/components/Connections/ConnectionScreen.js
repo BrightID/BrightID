@@ -289,8 +289,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   name: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: 17,
     color: '#000',
   },
@@ -305,8 +304,7 @@ const styles = StyleSheet.create({
   },
   badges: {},
   badge: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     borderWidth: 1,
     borderRadius: 10,
     marginTop: 6,
@@ -334,8 +332,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   connectionTimestampText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: 10,
     color: ORANGE,
   },
@@ -371,8 +368,7 @@ const styles = StyleSheet.create({
     flex: 2,
   },
   headerLabelText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: 17,
     color: '#000',
   },
@@ -384,8 +380,7 @@ const styles = StyleSheet.create({
   },
   headerCount: {},
   headerContentText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: 17,
     color: ORANGE,
   },
@@ -409,8 +404,7 @@ const styles = StyleSheet.create({
   },
   itemLabel: {},
   itemLabelText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: 15,
     color: '#000',
   },

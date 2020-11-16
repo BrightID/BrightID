@@ -142,8 +142,7 @@ const styles = StyleSheet.create({
     },
   },
   title: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     marginTop: DEVICE_LARGE ? 23 : 20,
   },
@@ -168,8 +167,7 @@ const styles = StyleSheet.create({
     marginLeft: DEVICE_LARGE ? 15 : 12,
   },
   listHeader: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 11,
     color: DARK_ORANGE,
     marginVertical: DEVICE_LARGE ? 20 : 18,
@@ -185,8 +183,7 @@ const styles = StyleSheet.create({
     marginVertical: DEVICE_LARGE ? 20 : 18,
   },
   link: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 13,
     color: '#2185D0',
   },

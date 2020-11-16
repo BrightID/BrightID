@@ -116,14 +116,12 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
 
 const styles = StyleSheet.create({
   waitingText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#333',
   },
   buttonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 18 : 15,
     textAlign: 'left',
     color: '#ffffff',

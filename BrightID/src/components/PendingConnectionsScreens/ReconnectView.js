@@ -226,8 +226,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   subheaderText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 15 : 12,
     textAlign: 'center',
     color: '#827F7F',
@@ -289,8 +288,7 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   connectionLevelText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 15 : 13,
     marginBottom: 10,
   },

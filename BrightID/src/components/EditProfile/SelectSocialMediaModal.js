@@ -216,8 +216,7 @@ const styles = StyleSheet.create({
   },
   pickerStyle: { width: '100%' },
   pickerItemStyle: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 15 : 13,
   },
   saveContainer: {
@@ -238,8 +237,7 @@ const styles = StyleSheet.create({
     marginRight: DEVICE_LARGE ? 22 : 18,
   },
   saveButtonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 10,
   },
   cancelButton: {
@@ -254,8 +252,7 @@ const styles = StyleSheet.create({
     borderColor: '#707070',
   },
   cancelButtonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 10,
     color: '#707070',
   },
@@ -271,8 +268,7 @@ const styles = StyleSheet.create({
     paddingTop: DEVICE_IOS ? (DEVICE_LARGE ? 36 : 30) : 0,
   },
   label: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 11 : 10,
     color: '#B64B32',
     marginBottom: DEVICE_LARGE ? 5 : 3,

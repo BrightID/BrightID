@@ -238,8 +238,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   name: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
   },
   statusContainer: {
@@ -258,15 +257,13 @@ const styles = StyleSheet.create({
     marginRight: DEVICE_LARGE ? 26 : 23,
   },
   waitingMessage: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#e39f2f',
     marginTop: DEVICE_LARGE ? 2 : 0,
   },
   deletedMessage: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#FF0800',
     marginTop: DEVICE_LARGE ? 5 : 2,

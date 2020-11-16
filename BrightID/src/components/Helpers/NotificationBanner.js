@@ -140,15 +140,13 @@ const styles = StyleSheet.create({
     height: HEIGHT * 0.15,
   },
   title: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     marginLeft: DEVICE_LARGE ? 20 : 10,
     color: '#000',
     fontSize: DEVICE_LARGE ? 16 : 15,
   },
   message: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     marginLeft: DEVICE_LARGE ? 20 : 10,
     color: '#000',
     fontSize: DEVICE_LARGE ? 13 : 12,

@@ -35,8 +35,7 @@ export const ConnectionStats = ({
 
 const styles = StyleSheet.create({
   countsDescriptionText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 14 : 12,
   },

@@ -59,9 +59,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-evenly',
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Medium',
     fontStyle: 'normal',
-    fontWeight: '500',
   },
   title: {
     fontSize: DEVICE_LARGE ? 20 : 17,

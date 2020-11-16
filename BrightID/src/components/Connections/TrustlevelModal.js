@@ -126,8 +126,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   confirmButtonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 17 : 15,
   },
 });

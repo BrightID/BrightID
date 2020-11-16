@@ -104,8 +104,7 @@ const styles = StyleSheet.create({
     minHeight: 50,
   },
   descriptionText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: 17,
     color: '#000',
     textAlign: 'center',

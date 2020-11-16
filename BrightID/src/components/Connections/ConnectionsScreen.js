@@ -371,8 +371,7 @@ const styles = StyleSheet.create({
     width: DEVICE_LARGE ? 60 : 55,
   },
   actionText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     color: '#fff',
     fontSize: 11,
   },
@@ -383,8 +382,7 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
   },
   listFooterText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: LIGHTBLUE,
   },

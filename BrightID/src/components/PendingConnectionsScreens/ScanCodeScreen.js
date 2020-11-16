@@ -50,7 +50,7 @@ function validQrString(qrString: string) {
 
 const NotAuthorizedView = () => (
   <View style={styles.cameraPreview}>
-    <Text style={{ fontFamily: 'Poppins', fontWeight: '500', color: '#aaa' }}>
+    <Text style={{ fontFamily: 'Poppins-Medium', color: '#aaa' }}>
       Camera not Authorized
     </Text>
   </View>
@@ -275,8 +275,7 @@ const styles = StyleSheet.create({
     paddingTop: DEVICE_LARGE ? 40 : 25,
   },
   infoTopText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     textAlign: 'center',
     color: '#4a4a4a',
@@ -297,8 +296,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   infoBottomText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 11,
     marginBottom: 10,
   },
@@ -347,8 +345,7 @@ const styles = StyleSheet.create({
     minHeight: 100,
   },
   waitingText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#333',
   },
