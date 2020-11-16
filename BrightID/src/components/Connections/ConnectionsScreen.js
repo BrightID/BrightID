@@ -13,7 +13,6 @@ import { toSearchString } from '@/utils/strings';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import ConnectionCard from './ConnectionCard';
 import { defaultSort } from './models/sortingUtility';
-import { handleFlagging } from './models/reportConnection';
 
 /**
  * Connection screen of BrightID

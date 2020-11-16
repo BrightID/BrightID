@@ -1,10 +1,16 @@
 // @flow
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { fetchConnectionInfo } from '../../utils/fetchConnectionInfo';
 import ConnectionScreen from './ConnectionScreen';
+import ConnectionTestButton from '../../utils/connectionTestButton';
 
 type ConnectionScreenProps = {
   route: any,
@@ -54,6 +60,15 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
       navigation.goBack();
     }
   }, [navigation, connection]);
+
+  // Add fake user functionality in DEV mode
+  useLayoutEffect(() => {
+    if (__DEV__) {
+      navigation.setOptions({
+        headerRight: () => <ConnectionTestButton connectionId={connectionId} />,
+      });
+    }
+  }, [navigation, connectionId]);
 
   if (!connection) {
     return null;
