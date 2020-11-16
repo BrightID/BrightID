@@ -46,9 +46,11 @@ describe('Reconnect existing connection', () => {
       // should open ReportReason modal
       await expect(element(by.id('ReportReasonModal'))).toBeVisible();
       // report as "fake"
-      const reasonButton = element(by.id(`${report_reasons.FAKE}-ReportBtn`));
-      await expect(reasonButton).toBeVisible();
+      const reasonButton = element(by.id(`${report_reasons.FAKE}-RadioBtn`));
       await reasonButton.tap();
+      // click Submit button
+      const submitButton = element(by.id('SubmitReportBtn'));
+      await submitButton.tap();
       // should be at MyCodeScreen
       await expect(element(by.id('MyCodeScreen'))).toBeVisible();
       // go to connections screen

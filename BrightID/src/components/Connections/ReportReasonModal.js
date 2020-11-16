@@ -1,10 +1,11 @@
 // @flow
 
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from 'react-redux';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ORANGE, report_reasons } from '../../utils/constants';
 import { reportConnection } from './models/reportConnection';
 
@@ -14,10 +15,18 @@ type props = {
 };
 
 const reasonStrings = {
-  [report_reasons.FAKE]: 'Fake account',
-  [report_reasons.DUPLICATE]: 'Duplicate account',
-  [report_reasons.SPAMMER]: 'Spammer',
-  [report_reasons.DECEASED]: 'Deceased',
+  [report_reasons.SPAMMER]: {
+    description: 'This person sent me unwanted connection request',
+  },
+  [report_reasons.DUPLICATE]: {
+    description: 'I know this person created multiple accounts',
+  },
+  [report_reasons.FAKE]: {
+    description: 'This person does not exist',
+  },
+  [report_reasons.DECEASED]: {
+    description: 'This person has deceased',
+  },
 };
 
 const ReportReasonModal = ({ route, navigation }: props) => {
@@ -26,6 +35,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
     state.connections.connections.find((conn) => conn.id === connectionId),
   );
   const dispatch = useDispatch();
+  const [reason, setReason] = useState(undefined);
 
   // Don't crash when connection does not exist. Should never happen.
   if (!connection) {
@@ -33,31 +43,41 @@ const ReportReasonModal = ({ route, navigation }: props) => {
     return null;
   }
 
-  const confirmReport = async (reason: string) => {
-    console.log(
-      `Reporting connection ${connection.name} with reason ${reason}`,
-    );
-    // close modal
-    navigation.goBack();
-    dispatch(reportConnection({ id: connectionId, reason }));
-    if (successCallback) {
-      successCallback();
+  const confirmReport = () => {
+    if (reason) {
+      console.log(
+        `Reporting connection ${connection.name} with reason ${reason}`,
+      );
+      // close modal
+      navigation.goBack();
+      dispatch(reportConnection({ id: connectionId, reason }));
+      if (successCallback) {
+        successCallback();
+      }
     }
   };
 
-  const cancelReport = async () => {
+  const cancelReport = () => {
     navigation.goBack();
   };
 
-  const renderReportButton = (reason: string) => {
+  const renderReasonButton = (btnReason: string) => {
+    const active = btnReason === reason;
     return (
       <TouchableOpacity
-        testID={`${reason}-ReportBtn`}
-        key={reason}
-        style={styles.reportButton}
-        onPress={() => confirmReport(reason)}
+        testID={`${btnReason}-RadioBtn`}
+        key={btnReason}
+        onPress={() => setReason(btnReason)}
+        style={styles.radioButton}
       >
-        <Text style={styles.reportButtonText}>{reasonStrings[reason]}</Text>
+        <View style={styles.radioCircle}>
+          {active && <View style={styles.radioInnerCircle} />}
+        </View>
+        <View style={styles.radioLabel}>
+          <Text style={styles.radioLabelText}>
+            {reasonStrings[btnReason].description}
+          </Text>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -78,38 +98,59 @@ const ReportReasonModal = ({ route, navigation }: props) => {
           <Text style={styles.headerText}>Report {connection.name}</Text>
         </View>
         <View style={styles.message}>
+          <Material name="information" size={26} color="#2185D0" />
           <Text style={styles.messageText}>
             {`Note that reporting ${connection.name} will negatively affect their BrightID verification, and the report might be shown to other users.`}
           </Text>
         </View>
-        {Object.values(report_reasons).map((reason) =>
-          renderReportButton(reason),
-        )}
-        <TouchableOpacity
-          testID="CancelReportBtn"
-          style={styles.cancelButton}
-          onPress={cancelReport}
-        >
-          <Text style={styles.cancelButtonText}>Cancel</Text>
-        </TouchableOpacity>
+        <View style={styles.divider} />
+        <View style={styles.radioButtonsContainer}>
+          {Object.values(report_reasons).map((reason) =>
+            renderReasonButton(reason),
+          )}
+        </View>
+        <View style={styles.modalButtons}>
+          <TouchableOpacity
+            testID="SubmitReportBtn"
+            style={[styles.modalButton, styles.submitButton]}
+            onPress={confirmReport}
+            disabled={!reason}
+          >
+            <Text
+              style={
+                reason
+                  ? styles.submitButtonText
+                  : styles.submitButtonDisabledText
+              }
+            >
+              Submit
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            testID="CancelReportBtn"
+            style={[styles.modalButton, styles.cancelButton]}
+            onPress={cancelReport}
+          >
+            <Text style={styles.cancelButtonText}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   blurView: {
     position: 'absolute',
     left: 0,
     right: 0,
     top: 0,
     bottom: 0,
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   modalContainer: {
     alignItems: 'center',
@@ -121,60 +162,123 @@ const styles = StyleSheet.create({
   },
   header: {
     marginTop: 5,
-    marginBottom: 10,
+    marginBottom: 25,
   },
   headerText: {
     fontFamily: 'Poppins',
     fontWeight: '700',
-    fontSize: DEVICE_LARGE ? 20 : 17,
+    fontSize: DEVICE_LARGE ? 24 : 20,
     textAlign: 'center',
   },
-  message: {},
+  message: {
+    flexDirection: 'row',
+    marginLeft: 12,
+  },
   messageText: {
     fontFamily: 'Poppins',
     fontWeight: '500',
     fontSize: DEVICE_LARGE ? 15 : 13,
     textAlign: 'left',
+    marginLeft: 10,
+    color: '#827F7F',
+  },
+  divider: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: ORANGE,
+    width: '105%',
+    height: 1,
+    marginTop: 24,
+    marginBottom: 24,
   },
   buttonContainer: {
     alignItems: 'center',
     justifyContent: 'center',
   },
-  reportButton: {
-    width: '90%',
-    borderRadius: 100,
-    borderColor: ORANGE,
-    borderWidth: 1,
-    backgroundColor: '#fff',
-    paddingTop: 12,
-    paddingBottom: 12,
-    marginTop: 15,
+  radioButtonsContainer: {
+    marginLeft: 10,
+    marginBottom: 20,
+  },
+  radioButton: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    marginTop: 8,
+    marginBottom: 8,
+  },
+  radioCircle: {
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    borderWidth: 3,
+    borderColor: ORANGE,
+    alignItems: 'center', // To center the checked circle…
     justifyContent: 'center',
   },
-  reportButtonText: {
+  radioInnerCircle: {
+    height: 10,
+    width: 10,
+    borderRadius: 10,
+    backgroundColor: ORANGE,
+  },
+  radioLabel: {
+    marginLeft: 12,
+    marginRight: 25,
+  },
+  radioLabelText: {
     fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontWeight: '500',
     fontSize: DEVICE_LARGE ? 17 : 15,
-    color: ORANGE,
+    color: '#000',
+  },
+  description: {},
+  descriptionText: {
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: DEVICE_LARGE ? 15 : 13,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  modalButton: {
+    flex: 1,
+    paddingTop: 10,
+    paddingBottom: 10,
+    marginLeft: 10,
+    marginRight: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   cancelButton: {
-    width: '90%',
-    paddingTop: 12,
-    paddingBottom: 12,
-    marginTop: 20,
     backgroundColor: '#fff',
     borderRadius: 50,
-    borderColor: '#000',
+    borderColor: '#707070',
     borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   cancelButtonText: {
     fontFamily: 'Poppins',
     fontWeight: '700',
     fontSize: DEVICE_LARGE ? 17 : 15,
+    color: '#707070',
+  },
+  submitButton: {
+    backgroundColor: '#5DEC9A',
+    borderRadius: 50,
+    borderColor: '#5DEC9A',
+    borderWidth: 1,
+  },
+  submitButtonText: {
+    fontFamily: 'Poppins',
+    fontWeight: '700',
+    fontSize: DEVICE_LARGE ? 17 : 15,
     color: '#000',
+  },
+  submitButtonDisabledText: {
+    fontFamily: 'Poppins',
+    fontWeight: '700',
+    fontSize: DEVICE_LARGE ? 17 : 15,
+    color: '#707070',
   },
 });
 

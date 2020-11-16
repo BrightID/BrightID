@@ -51,9 +51,6 @@ describe('Report Connections', () => {
     });
 
     it(`should cancel report with Cancel button `, async () => {
-      if (!hasBackButton) {
-        return;
-      }
       await element(by.id('CancelReportBtn')).tap();
       // modal should be closed
       await expect(element(by.id('ReportReasonModal'))).not.toBeVisible();
@@ -66,6 +63,9 @@ describe('Report Connections', () => {
     });
 
     it(`should cancel report with backbutton `, async () => {
+      if (!hasBackButton) {
+        return;
+      }
       await device.pressBack();
       // modal should be closed
       await expect(element(by.id('ReportReasonModal'))).not.toBeVisible();
@@ -106,9 +106,12 @@ describe('Report Connections', () => {
       });
 
       it(`should confirm ${reason}`, async () => {
-        const reasonButton = element(by.id(`${reason}-ReportBtn`));
+        const reasonButton = element(by.id(`${reason}-RadioBtn`));
+        const submitButton = element(by.id('SubmitReportBtn'));
         await expect(reasonButton).toBeVisible();
         await reasonButton.tap();
+        // click Submit button
+        await submitButton.tap();
         // modal should be closed
         await expect(element(by.id('ReportReasonModal'))).not.toBeVisible();
         // should be back on Connections Screen

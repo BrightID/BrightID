@@ -1,12 +1,8 @@
 // @flow
 
-import React, { useCallback, useState } from 'react';
-import { Text } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { useActionSheet } from '@expo/react-native-action-sheet';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { handleFlagging } from './models/reportConnection';
 import { fetchConnectionInfo } from '../../utils/fetchConnectionInfo';
 import ConnectionScreen from './ConnectionScreen';
 
@@ -18,8 +14,6 @@ type ConnectionScreenProps = {
 function ConnectionScreenController(props: ConnectionScreenProps) {
   const { route, navigation } = props;
   const { connectionId } = route.params;
-  const { showActionSheetWithOptions } = useActionSheet();
-  const dispatch = useDispatch();
   const connection: connection = useSelector((state: State) =>
     state.connections.connections.find((conn) => conn.id === connectionId),
   );
@@ -54,9 +48,15 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
     }, [connection, myConnections, myGroups]),
   );
 
+  useEffect(() => {
+    if (!connection) {
+      // connection not there anymore.
+      navigation.goBack();
+    }
+  }, [navigation, connection]);
+
   if (!connection) {
-    // connection not there anymore.
-    return <Text>connection vanished.</Text>;
+    return null;
   }
 
   const brightIdVerified = verifications.includes('BrightID');
