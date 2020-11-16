@@ -92,6 +92,8 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
         },
         titleTextStyle: {
           fontSize: DEVICE_LARGE ? 20 : 17,
+          width: '100%',
+          textAlign: 'center',
         },
         messageTextStyle: {
           fontSize: DEVICE_LARGE ? 15 : 12,

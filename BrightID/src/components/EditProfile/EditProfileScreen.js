@@ -74,14 +74,12 @@ const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
           color: '#2185D0',
           textAlign: 'center',
           width: '100%',
+          fontSize: DEVICE_LARGE ? 18 : 16,
         },
         titleTextStyle: {
           textAlign: 'center',
           fontSize: DEVICE_LARGE ? 20 : 17,
-        },
-        messageTextStyle: {
-          textAlign: 'center',
-          fontSize: DEVICE_LARGE ? 15 : 12,
+          width: '100%',
         },
       },
       (buttonIndex) => {

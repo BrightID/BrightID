@@ -13,7 +13,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import { useFocusEffect } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { SvgXml } from 'react-native-svg';
-import ActionSheet from 'react-native-actionsheet';
+import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveNotification } from '@/actions';
 import { retrieveImage } from '@/utils/filesystem';
@@ -31,7 +31,6 @@ import { version as app_version } from '../../package.json';
  * ==========================
  */
 
-let chatSheetRef = '';
 let discordUrl = 'https://discord.gg/nTtuB2M';
 
 /** Selectors */
@@ -74,12 +73,37 @@ export const HomeScreen = (props) => {
     }, [dispatch, photoFilename]),
   );
 
+  const { showActionSheetWithOptions } = useActionSheet();
+
   const handleChat = () => {
-    if (__DEV__) {
+    if (!__DEV__) {
       const { delStorage } = require('@/utils/dev');
       delStorage();
     } else {
-      chatSheetRef.show();
+      showActionSheetWithOptions(
+        {
+          options: ['BrightID Discord', 'cancel'],
+          cancelButtonIndex: 1,
+          title: `Like to chat with us?`,
+          showSeparators: true,
+          textStyle: {
+            color: '#2185D0',
+            textAlign: 'center',
+            width: '100%',
+          },
+          titleTextStyle: {
+            textAlign: 'center',
+            width: '100%',
+          },
+        },
+        (index) => {
+          if (index === 0) {
+            Linking.openURL(discordUrl).catch((err) =>
+              console.log('An error occurred', err),
+            );
+          }
+        },
+      );
     }
   };
 
@@ -262,23 +286,6 @@ export const HomeScreen = (props) => {
         <DeepPasteLink />
         <Text style={styles.versionInfo}>v{app_version}</Text>
       </View>
-
-      <ActionSheet
-        testID="ChatActionSheet"
-        ref={(o) => {
-          chatSheetRef = o;
-        }}
-        title="Like to chat with us?"
-        options={['BrightID Discord', 'cancel']}
-        cancelButtonIndex={1}
-        onPress={(index) => {
-          if (index === 0) {
-            Linking.openURL(discordUrl).catch((err) =>
-              console.log('An error occurred', err),
-            );
-          }
-        }}
-      />
     </View>
   );
 };

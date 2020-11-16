@@ -136,10 +136,10 @@ const ConnectionCard = (props) => {
     }
   };
 
-  const showRemove = status === 'deleted' || status === 'stale';
-
   const { showActionSheetWithOptions } = useActionSheet();
   const removeOptions = ['Remove', 'cancel'];
+
+  const showRemove = status === 'deleted' || status === 'stale';
 
   const RemoveConnection = () =>
     showRemove ? (
@@ -153,6 +153,11 @@ const ConnectionCard = (props) => {
               destructiveButtonIndex: 0,
               title: `Remove connection`,
               message: `Are you sure you want to remove connection with ${name}? You can reconnect anytime.`,
+              showSeparators: true,
+              textStyle: {
+                textAlign: 'center',
+                width: '100%',
+              },
             },
             (index) => {
               if (index === 0) dispatch(deleteConnection(id));
