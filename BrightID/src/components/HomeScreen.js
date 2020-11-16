@@ -421,8 +421,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   countsNumberText: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 25 : 21,
     marginBottom: 3,
@@ -465,8 +464,7 @@ const styles = StyleSheet.create({
     marginBottom: DEVICE_LARGE ? 16 : 11,
   },
   connectText: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 17 : 15,
     color: '#000',
     marginLeft: DEVICE_LARGE ? 10 : 8,
@@ -484,8 +482,7 @@ const styles = StyleSheet.create({
   communityLink: {
     color: '#fff',
     fontSize: DEVICE_LARGE ? 14 : 11,
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
   },
   versionInfo: {
     fontFamily: 'Poppins-Medium',

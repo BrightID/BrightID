@@ -132,8 +132,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleText: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 22 : 18,
     textAlign: 'center',
     color: '#000000',
@@ -155,8 +154,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   connectName: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 20 : 16,
     letterSpacing: 0,
     textAlign: 'left',

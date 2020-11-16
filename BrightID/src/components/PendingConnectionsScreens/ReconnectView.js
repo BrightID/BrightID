@@ -218,8 +218,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   headerText: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 22 : 18,
     textAlign: 'center',
     color: '#000000',

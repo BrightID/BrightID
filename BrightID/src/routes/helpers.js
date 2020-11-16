@@ -6,8 +6,7 @@ import { ORANGE, DEVICE_IOS, DEVICE_LARGE } from '@/utils/constants';
 import backArrow from '@/static/back_arrow_white.svg';
 
 export const headerTitleStyle = {
-  fontFamily: 'Poppins',
-  fontWeight: 'bold',
+  fontFamily: 'Poppins-Bold',
   fontSize: DEVICE_LARGE ? 20 : 18,
   color: '#fff',
 };
