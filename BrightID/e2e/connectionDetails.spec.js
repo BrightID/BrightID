@@ -1,10 +1,9 @@
 // @flow
-
 /* global element:false, by:false, waitFor:false, device: false */
-
 import {
   createBrightID,
   createFakeConnection,
+  expectConnectionScreen,
   expectConnectionsScreen,
   expectGroupsScreen,
   expectHomescreen,
@@ -36,6 +35,15 @@ describe('Connection details', () => {
       .toExist()
       .withTimeout(20000);
     await waitFor(element(by.id('connection-1')))
+      .toExist()
+      .withTimeout(20000);
+    await waitFor(element(by.id('connection-2')))
+      .toExist()
+      .withTimeout(20000);
+    await waitFor(element(by.id('connection-3')))
+      .toExist()
+      .withTimeout(20000);
+    await waitFor(element(by.id('connection-4')))
       .toExist()
       .withTimeout(20000);
 
@@ -101,7 +109,7 @@ describe('Connection details', () => {
       // open connection details of first connection
       await expect(element(by.id('ConnectionCard-0'))).toBeVisible();
       await element(by.id('ConnectionCard-0')).tap();
-      await expect(element(by.id('ConnectionScreen'))).toBeVisible();
+      await expectConnectionScreen();
     });
     afterAll(async () => {
       await navigateHome();
@@ -161,7 +169,7 @@ describe('Connection details', () => {
       // open connection details of first connection
       await expect(element(by.id('ConnectionCard-0'))).toBeVisible();
       await element(by.id('ConnectionCard-0')).tap();
-      await expect(element(by.id('ConnectionScreen'))).toBeVisible();
+      await expectConnectionScreen();
     });
 
     afterAll(async () => {
@@ -230,7 +238,7 @@ describe('Connection details', () => {
           // open connection details of first connection
           await expect(element(by.id('ConnectionCard-0'))).toBeVisible();
           await element(by.id('ConnectionCard-0')).tap();
-          await expect(element(by.id('ConnectionScreen'))).toBeVisible();
+          await expectConnectionScreen();
           await element(by.id('ReportBtn')).tap();
           // ActionSheet does not support testID, so match based on text.
           await waitFor(element(by.text(actionSheetTitle)))

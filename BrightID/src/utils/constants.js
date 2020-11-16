@@ -34,3 +34,10 @@ export const connection_levels = {
   ALREADY_KNOWN: 'already known',
   RECOVERY: 'recovery',
 };
+
+export const report_reasons = {
+  FAKE: 'fake',
+  DUPLICATE: 'duplicate',
+  SPAMMER: 'spammer',
+  DECEASED: 'deceased',
+};

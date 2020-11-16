@@ -6,6 +6,7 @@ import {
   navigateHome,
   reconnect,
 } from './testUtils';
+import { report_reasons } from '../src/utils/constants';
 
 describe('Reconnect existing connection', () => {
   beforeAll(async () => {
@@ -42,8 +43,19 @@ describe('Reconnect existing connection', () => {
     it('should report abuse on connection', async () => {
       await expect(element(by.id('reportAbuseBtn'))).toExist();
       await element(by.id('reportAbuseBtn')).tap();
-
-      // should move to connections screen
+      // should open ReportReason modal
+      await expect(element(by.id('ReportReasonModal'))).toBeVisible();
+      // report as "fake"
+      const reasonButton = element(by.id(`${report_reasons.FAKE}-RadioBtn`));
+      await reasonButton.tap();
+      // click Submit button
+      const submitButton = element(by.id('SubmitReportBtn'));
+      await submitButton.tap();
+      // should be at MyCodeScreen
+      await expect(element(by.id('MyCodeScreen'))).toBeVisible();
+      // go to connections screen
+      await navigateHome();
+      await element(by.id('connectionsBtn')).tap();
       await expectConnectionsScreen();
       // there should be no connection entry
       await expect(element(by.id('EmptyListView'))).toExist();

@@ -195,7 +195,7 @@ export const ReconnectView = ({
             onPress={abuseHandler}
             testID="reportAbuseBtn"
           >
-            <Text style={styles.abuseButtonLabel}>Report abuse</Text>
+            <Text style={styles.abuseButtonLabel}>Report connection</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.updateButton}

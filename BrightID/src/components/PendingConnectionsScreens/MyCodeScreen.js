@@ -238,7 +238,7 @@ export const MyCodeScreen = () => {
         animated={true}
       />
       <View style={styles.orangeTop} />
-      <View style={styles.container}>
+      <View style={styles.container} testID="MyCodeScreen">
         <View style={styles.infoTopContainer}>
           <ChannelSwitch
             onValueChange={toggleChannelType}

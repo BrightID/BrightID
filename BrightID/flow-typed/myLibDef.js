@@ -1,6 +1,5 @@
 // @flow
 
-import { NavigationScreenProp } from 'react-navigation';
 import { Dispatch } from 'redux';
 import {
   channel_states,
@@ -59,8 +58,7 @@ declare type ContextInfo = {
 declare type ChannelsState = {
   displayChannelType: string,
   myChannelIds: {
-    [channel_types.SINGLE]: string,
-    [channel_types.GROUP]: string,
+    [string]: string,
   },
   ids: string[],
   entities: Channel[],
@@ -272,3 +270,9 @@ declare type FakeUser = {
 
 declare type ConnectionLevel = $Keys<typeof connection_levels>;
 declare type PendingConnectionState = $Keys<typeof pendingConnection_states>;
+
+// Jest global functions
+declare var element: any;
+declare var by: any;
+declare var waitFor: any;
+declare var device: any;
