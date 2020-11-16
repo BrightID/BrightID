@@ -14,7 +14,7 @@ import {
 import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
+import { DEVICE_LARGE, DEVICE_IOS, WIDTH } from '@/utils/deviceConstants';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
@@ -23,7 +23,11 @@ import { saveImage, retrieveImage, photoDirectory } from '@/utils/filesystem';
 import { setPhoto, setName } from '@/actions';
 import downCaret from '@/static/down_caret_blue.svg';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { selectAllSocialMedia, removeSocialMedia } from './socialMediaSlice';
+import {
+  selectAllSocialMedia,
+  removeSocialMedia,
+  setProfileDisplayWidth,
+} from './socialMediaSlice';
 import socialMediaList from './socialMediaList';
 
 const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
@@ -70,14 +74,12 @@ const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
           color: '#2185D0',
           textAlign: 'center',
           width: '100%',
+          fontSize: DEVICE_LARGE ? 18 : 16,
         },
         titleTextStyle: {
           textAlign: 'center',
           fontSize: DEVICE_LARGE ? 20 : 17,
-        },
-        messageTextStyle: {
-          textAlign: 'center',
-          fontSize: DEVICE_LARGE ? 15 : 12,
+          width: '100%',
         },
       },
       (buttonIndex) => {
@@ -131,55 +133,106 @@ const EditName = ({ nextName, setNextName }) => {
   );
 };
 
+const SocialMediaLink = (props) => {
+  const {
+    navigation,
+    dispatch,
+    id,
+    profile,
+    profileDisplayWidth,
+    order,
+  } = props;
+
+  const socialMedia = socialMediaList[id];
+
+  // perfectly center profile text with max length
+  const updateInnerTextLayout = (e) => {
+    if (!profileDisplayWidth) {
+      if (e.nativeEvent?.layout?.width) {
+        dispatch(
+          setProfileDisplayWidth({
+            id,
+            width: e.nativeEvent.layout.width,
+          }),
+        );
+      } else {
+        dispatch(
+          setProfileDisplayWidth({
+            id,
+            width: '50%',
+          }),
+        );
+      }
+    }
+  };
+
+  const innerTextStyle = profileDisplayWidth
+    ? { width: profileDisplayWidth }
+    : { flexGrow: 1 };
+
+  return (
+    <View style={styles.socialMediaLinkContainer}>
+      <TouchableOpacity
+        style={styles.socialMediaSelect}
+        onPress={() => {
+          navigation.navigate('SelectSocialMedia', {
+            order,
+            prevId: id,
+            page: 0,
+          });
+        }}
+      >
+        <Text style={styles.socialMediaType}>{socialMedia.name}</Text>
+        <SvgXml
+          width={DEVICE_LARGE ? 14 : 12}
+          height={DEVICE_LARGE ? 14 : 12}
+          xml={downCaret}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={innerTextStyle}
+        onLayout={updateInnerTextLayout}
+        onPress={() => {
+          navigation.navigate('SelectSocialMedia', {
+            order,
+            prevId: id,
+            page: 1,
+          });
+        }}
+      >
+        <Text
+          style={styles.socialMediaInput}
+          numberOfLines={1}
+          ellipsizeMode="head"
+        >
+          {innerTextStyle.width ? profile : ''}
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.closeButton}
+        onPress={() => {
+          dispatch(removeSocialMedia(id));
+        }}
+      >
+        <Material name="close" size={DEVICE_LARGE ? 18 : 16} color="#000" />
+      </TouchableOpacity>
+    </View>
+  );
+};
+
 const SocialMediaLinks = () => {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const socialMediaItems = useSelector(selectAllSocialMedia);
 
-  const SocialMediaLinks = socialMediaItems.map((item) => {
-    const socialMedia = socialMediaList[item.id];
-    return (
-      <View key={item.id} style={styles.socialMediaLinkContainer}>
-        <TouchableOpacity
-          style={styles.socialMediaSelect}
-          onPress={() => {
-            navigation.navigate('SelectSocialMedia', {
-              order: item.order,
-              prevId: item.id,
-              page: 0,
-            });
-          }}
-        >
-          <Text style={styles.socialMediaType}>{socialMedia.name}</Text>
-          <SvgXml
-            width={DEVICE_LARGE ? 14 : 12}
-            height={DEVICE_LARGE ? 14 : 12}
-            xml={downCaret}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{ flexGrow: 1 }}
-          onPress={() => {
-            navigation.navigate('SelectSocialMedia', {
-              order: item.order,
-              prevId: item.id,
-              page: 1,
-            });
-          }}
-        >
-          <Text style={styles.socialMediaInput}>{item.profile}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={() => {
-            dispatch(removeSocialMedia(item.id));
-          }}
-        >
-          <Material name="close" size={DEVICE_LARGE ? 18 : 16} color="#000" />
-        </TouchableOpacity>
-      </View>
-    );
-  });
+  const SocialMediaList = socialMediaItems.map((item) => (
+    <SocialMediaLink
+      key={item.id}
+      navigation={navigation}
+      dispatch={dispatch}
+      {...item}
+    />
+  ));
 
   return (
     <View style={styles.socialMediaContainer}>
@@ -203,7 +256,7 @@ const SocialMediaLinks = () => {
         </TouchableOpacity>
       </View>
 
-      {SocialMediaLinks}
+      {SocialMediaList}
 
       <View style={styles.bottomDivider} />
     </View>
@@ -259,7 +312,6 @@ const ShowEditPassword = () => {
 
 export const EditProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  // const navigation = useNavigation();
   let headerHeight = useHeaderHeight();
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
@@ -275,10 +327,12 @@ export const EditProfileScreen = ({ navigation }) => {
   const [profilePhoto, setProfilePhoto] = useState(prevPhoto?.current);
   const [nextName, setNextName] = useState(prevName);
 
+  // allow user to save changes if profilePhoto or name has changed
   const saveDisabled =
     (prevPhoto.current === profilePhoto && prevName === nextName) ||
     nextName.length < 2;
 
+  // profilePhoto / name is only saved to filesystem / redux if the user presses save
   const saveData = async () => {
     if (nextName.length >= 2) {
       dispatch(setName(nextName));
@@ -373,7 +427,16 @@ export const EditProfileScreen = ({ navigation }) => {
           >
             <Text style={styles.saveButtonText}>Save</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cancelButton} onPress={clearData}>
+          <TouchableOpacity
+            style={[
+              styles.cancelButton,
+              {
+                opacity: saveDisabled ? 0.5 : 1,
+              },
+            ]}
+            disabled={saveDisabled}
+            onPress={clearData}
+          >
             <Text style={styles.cancelButtonText}>Cancel</Text>
           </TouchableOpacity>
         </View>
@@ -412,8 +475,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   profilePhotoText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#2185D0',
     marginTop: DEVICE_LARGE ? 6 : 5,
@@ -431,14 +493,12 @@ const styles = StyleSheet.create({
     marginTop: DEVICE_LARGE ? 36 : 30,
   },
   label: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 11 : 10,
     color: '#B64B32',
   },
   editNameInput: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     marginTop: DEVICE_LARGE ? 4 : 2,
     width: '100%',
@@ -455,9 +515,11 @@ const styles = StyleSheet.create({
     marginTop: DEVICE_LARGE ? 18 : 16,
   },
   socialMediaLinkContainer: {
+    width: WIDTH - (DEVICE_LARGE ? 80 : 60),
+    maxWidth: WIDTH - (DEVICE_LARGE ? 80 : 60),
     flexDirection: 'row',
     alignItems: 'center',
-    width: '100%',
+    justifyContent: 'space-between',
     marginTop: DEVICE_LARGE ? 10 : 8,
   },
   socialMediaLinkLabel: {
@@ -467,11 +529,10 @@ const styles = StyleSheet.create({
   socialMediaSelect: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: DEVICE_LARGE ? 18 : 15,
+    marginRight: DEVICE_LARGE ? 14 : 12,
   },
   socialMediaType: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#2185D0',
     marginRight: DEVICE_LARGE ? 8 : 6,
@@ -482,9 +543,8 @@ const styles = StyleSheet.create({
     marginLeft: DEVICE_LARGE ? 6 : 4,
   },
   socialMediaInput: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Light',
     fontSize: DEVICE_LARGE ? 14 : 12,
-    fontWeight: '300',
     color: '#000',
   },
   showEditPasswordContainer: {
@@ -502,14 +562,12 @@ const styles = StyleSheet.create({
     marginTop: DEVICE_LARGE ? 12 : 8,
   },
   passwordText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 13 : 11,
     color: '#2185D0',
   },
   displayPassword: {
-    fontFamily: 'Poppins',
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 13 : 11,
     color: '#000',
   },
@@ -531,8 +589,7 @@ const styles = StyleSheet.create({
     marginRight: DEVICE_LARGE ? 22 : 18,
   },
   saveButtonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 10,
   },
   cancelButton: {
@@ -547,8 +604,7 @@ const styles = StyleSheet.create({
     borderColor: '#707070',
   },
   cancelButtonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 10,
     color: '#707070',
   },

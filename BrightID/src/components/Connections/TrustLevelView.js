@@ -57,8 +57,7 @@ const styles = StyleSheet.create({
     width: '50%',
   },
   trustLevelLabelText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: 17,
     color: '#000',
   },
@@ -66,8 +65,7 @@ const styles = StyleSheet.create({
     width: '40%',
   },
   trustLevelText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: 17,
   },
   trustLevelButton: {

@@ -93,8 +93,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   labelText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     fontSize: 17,
     color: '#000',
   },
@@ -104,8 +103,7 @@ const styles = StyleSheet.create({
     minHeight: 50,
   },
   descriptionText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: 17,
     color: '#000',
     textAlign: 'center',

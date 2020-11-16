@@ -74,8 +74,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   connectName: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 17 : 14,
     color: '#000000',
   },

@@ -35,8 +35,7 @@ const styles = StyleSheet.create({
     marginBottom: 9,
   },
   rateButtonLabel: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 17 : 14,
     textAlign: 'center',
   },

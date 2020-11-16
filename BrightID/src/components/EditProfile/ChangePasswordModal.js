@@ -220,8 +220,7 @@ const styles = StyleSheet.create({
     marginBottom: DEVICE_LARGE ? 12 : 10,
   },
   label: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 13 : 11,
     color: '#B64B32',
     marginBottom: DEVICE_IOS ? (DEVICE_LARGE ? 15 : 13) : 0,
@@ -248,8 +247,7 @@ const styles = StyleSheet.create({
     marginRight: DEVICE_LARGE ? 22 : 18,
   },
   saveButtonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 10,
   },
   cancelButton: {
@@ -264,13 +262,12 @@ const styles = StyleSheet.create({
     borderColor: '#707070',
   },
   cancelButtonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 10,
     color: '#707070',
   },
   textInfo: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#333',
     margin: DEVICE_LARGE ? 12 : 10,

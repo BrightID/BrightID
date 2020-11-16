@@ -163,7 +163,7 @@ const AppCard = (props) => {
   };
 
   return (
-    <View style={{ ...styles.container, ...style }} testID={`app-${name}`}>
+    <View style={{ ...styles.container, ...style }} testID={`app-${id}`}>
       <TouchableOpacity style={styles.link} onPress={openApp}>
         <Image
           source={{
@@ -205,8 +205,7 @@ const styles = StyleSheet.create({
     marginLeft: DEVICE_LARGE ? 20 : 12,
   },
   appName: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     color: 'black',
     fontSize: DEVICE_LARGE ? 22 : 19,
   },
@@ -217,26 +216,22 @@ const styles = StyleSheet.create({
     marginLeft: DEVICE_LARGE ? 20 : 12,
   },
   sponsorshipMessage: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#4a90e2',
   },
   linkedMessage: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#4a90e2',
   },
   errorMessage: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#FF0800',
   },
   unverifiedMessage: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#707070',
   },

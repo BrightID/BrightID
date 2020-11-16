@@ -52,8 +52,7 @@ export const RatingView = ({ setLevelHandler }: RatingViewProps) => {
 
 const styles = StyleSheet.create({
   ratingHeader: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 17 : 15,
     marginBottom: 12,
@@ -63,8 +62,7 @@ const styles = StyleSheet.create({
   },
   ratingFooter: {
     paddingTop: 18,
-    fontFamily: 'Poppins',
-    fontWeight: 'normal',
+    fontFamily: 'Poppins-Regular',
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 12 : 10,
     color: '#827F7F',

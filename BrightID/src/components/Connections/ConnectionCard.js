@@ -8,9 +8,11 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { CHANNEL_TTL } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
-import { staleConnection } from '@/actions';
+import { staleConnection, deleteConnection } from '@/actions';
 import verificationSticker from '@/static/verification-sticker.svg';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useActionSheet } from '@expo/react-native-action-sheet';
 
 /**
  * Connection Card in the Connections Screen
@@ -134,6 +136,41 @@ const ConnectionCard = (props) => {
     }
   };
 
+  const { showActionSheetWithOptions } = useActionSheet();
+  const removeOptions = ['Remove', 'cancel'];
+
+  const showRemove = status === 'deleted' || status === 'stale';
+
+  const RemoveConnection = () =>
+    showRemove ? (
+      <TouchableOpacity
+        style={styles.removeButton}
+        onPress={() => {
+          showActionSheetWithOptions(
+            {
+              options: removeOptions,
+              cancelButtonIndex: removeOptions.length - 1,
+              destructiveButtonIndex: 0,
+              title: `Remove connection`,
+              message: `Are you sure you want to remove connection with ${name}? You can reconnect anytime.`,
+              showSeparators: true,
+              textStyle: {
+                textAlign: 'center',
+                width: '100%',
+              },
+            },
+            (index) => {
+              if (index === 0) dispatch(deleteConnection(id));
+            },
+          );
+        }}
+      >
+        <Material color="#333" name="close" size={DEVICE_LARGE ? 22 : 18} />
+      </TouchableOpacity>
+    ) : (
+      <View />
+    );
+
   const imageSource =
     photo?.filename && !imgErr
       ? {
@@ -168,10 +205,10 @@ const ConnectionCard = (props) => {
           }}
           accessibilityLabel="View Connection details"
         >
-          <View style={styles.info}>
-            <View style={styles.nameContainer}>
+          <View style={[styles.info, { maxWidth: WIDTH * 0.56 }]}>
+            <View style={[styles.nameContainer]}>
               <Text
-                adjustsFontSizeToFit={true}
+                // adjustsFontSizeToFit={true}
                 numberOfLines={1}
                 style={styles.name}
                 testID="connectionCardText"
@@ -190,6 +227,7 @@ const ConnectionCard = (props) => {
             <ConnectionStatus />
           </View>
         </TouchableOpacity>
+        <RemoveConnection />
       </View>
     </View>
   );
@@ -238,8 +276,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   name: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
   },
   statusContainer: {
@@ -248,8 +285,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   connectedText: {
-    fontFamily: 'Poppins',
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 11 : 10,
     color: '#B64B32',
     marginTop: DEVICE_LARGE ? 5 : 2,
@@ -258,23 +294,25 @@ const styles = StyleSheet.create({
     marginRight: DEVICE_LARGE ? 26 : 23,
   },
   waitingMessage: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontFamily: 'Poppins-Medium',
+    fontSize: DEVICE_LARGE ? 13 : 11,
     color: '#e39f2f',
     marginTop: DEVICE_LARGE ? 2 : 0,
   },
   deletedMessage: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#FF0800',
     marginTop: DEVICE_LARGE ? 5 : 2,
     textTransform: 'capitalize',
   },
-
   verificationSticker: {
     marginLeft: DEVICE_LARGE ? 5 : 3.5,
+  },
+  removeButton: {
+    width: DEVICE_LARGE ? 36 : 32,
+    position: 'absolute',
+    right: 0,
   },
 });
 
