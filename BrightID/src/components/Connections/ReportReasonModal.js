@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ORANGE, report_reasons } from '../../utils/constants';
@@ -72,7 +72,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
         </View>
         <View style={styles.radioLabel}>
           <Text style={styles.radioLabelText}>
-            {reasonStrings[btnReason].description}
+            {reasonStrings[btnReason]?.description}
           </Text>
         </View>
       </TouchableOpacity>
@@ -87,7 +87,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
         blurAmount={5}
         reducedTransparencyFallbackColor={
           // eslint-disable-next-line no-new-wrappers
-          new String('black') // BlurView lib flow definition expects Wrapper String type
+          DEVICE_ANDROID ? new String('black') : 'black' // BlurView lib flow definition expects Wrapper String type
         }
       />
       <View style={styles.modalContainer}>
@@ -102,7 +102,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
         </View>
         <View style={styles.divider} />
         <View style={styles.radioButtonsContainer}>
-          {Object.values(report_reasons).map((reason) =>
+          {Object.keys(reasonStrings).map((reason) =>
             renderReasonButton(reason),
           )}
         </View>
@@ -162,19 +162,16 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   headerText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
-    fontSize: DEVICE_LARGE ? 24 : 20,
+    fontFamily: 'Poppins-Bold',
+    fontSize: DEVICE_LARGE ? 22 : 19,
     textAlign: 'center',
   },
   message: {
     flexDirection: 'row',
-    marginLeft: 12,
   },
   messageText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    fontSize: DEVICE_LARGE ? 15 : 13,
+    fontFamily: 'Poppins-Medium',
+    fontSize: DEVICE_LARGE ? 13 : 12,
     textAlign: 'left',
     marginLeft: 10,
     color: '#827F7F',
@@ -184,8 +181,8 @@ const styles = StyleSheet.create({
     borderTopColor: ORANGE,
     width: '105%',
     height: 1,
-    marginTop: 24,
-    marginBottom: 24,
+    marginTop: DEVICE_LARGE ? 24 : 22,
+    marginBottom: DEVICE_LARGE ? 24 : 22,
   },
   buttonContainer: {
     alignItems: 'center',
@@ -218,20 +215,13 @@ const styles = StyleSheet.create({
     backgroundColor: ORANGE,
   },
   radioLabel: {
-    marginLeft: 12,
-    marginRight: 25,
+    marginLeft: DEVICE_LARGE ? 12 : 10,
+    marginRight: DEVICE_LARGE ? 12 : 10,
   },
   radioLabelText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    fontSize: DEVICE_LARGE ? 17 : 15,
-    color: '#000',
-  },
-  description: {},
-  descriptionText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 15 : 13,
+    color: '#000',
   },
   modalButtons: {
     flexDirection: 'row',
@@ -254,9 +244,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   cancelButtonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
-    fontSize: DEVICE_LARGE ? 17 : 15,
+    fontFamily: 'Poppins-Bold',
+    fontSize: DEVICE_LARGE ? 15 : 13,
     color: '#707070',
   },
   submitButton: {
@@ -266,15 +255,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   submitButtonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
-    fontSize: DEVICE_LARGE ? 17 : 15,
+    fontFamily: 'Poppins-Bold',
+    fontSize: DEVICE_LARGE ? 15 : 13,
     color: '#000',
   },
   submitButtonDisabledText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
-    fontSize: DEVICE_LARGE ? 17 : 15,
+    fontFamily: 'Poppins-Bold',
+    fontSize: DEVICE_LARGE ? 15 : 13,
     color: '#707070',
   },
 });

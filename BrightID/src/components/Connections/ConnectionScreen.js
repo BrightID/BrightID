@@ -87,7 +87,6 @@ function ConnectionScreen(props: Props) {
             onPress={() => {
               navigation.navigate('FullScreenPhoto', {
                 photo: connection.photo,
-                base64: true,
               });
             }}
           >
@@ -102,10 +101,21 @@ function ConnectionScreen(props: Props) {
               accessibilityLabel="user photo"
             />
           </TouchableWithoutFeedback>
+          <View style={styles.connectionInfo}>
+            <View style={styles.connectionTimestamp}>
+              <Text style={styles.connectionTimestampText}>
+                {`Connected ${moment(
+                  parseInt(connection.createdAt, 10),
+                ).fromNow()}`}
+              </Text>
+            </View>
+          </View>
         </View>
         <View style={styles.nameContainer}>
           <View style={styles.nameLabel}>
-            <Text style={styles.name}>{connection.name}</Text>
+            <Text style={styles.name} numberOfLines={1}>
+              {connection.name}
+            </Text>
             {brightIdVerified && (
               <SvgXml
                 style={styles.verificationSticker}
@@ -125,15 +135,7 @@ function ConnectionScreen(props: Props) {
           </View>
         </View>
       </View>
-      <View style={styles.connectionInfo}>
-        <View style={styles.connectionTimestamp}>
-          <Text style={styles.connectionTimestampText}>
-            {`Connected ${moment(
-              parseInt(connection.createdAt, 10),
-            ).fromNow()}`}
-          </Text>
-        </View>
-      </View>
+
       <View style={styles.trustLevelContainer}>
         <TrustLevelView level={connection.level} connectionId={connection.id} />
       </View>
@@ -220,7 +222,7 @@ function ConnectionScreen(props: Props) {
           >
             <MaterialCommunityIcons
               style={styles.chevron}
-              size={50}
+              size={DEVICE_LARGE ? 40 : 36}
               name={collapsed ? 'chevron-down' : 'chevron-up'}
               color={section.numEntries ? '#0064AE' : '#C4C4C4'}
             />
@@ -233,12 +235,14 @@ function ConnectionScreen(props: Props) {
   return (
     <View testID="ConnectionScreen" style={styles.container}>
       <SectionList
+        contentContainerStyle={{ flexGrow: 1 }}
         sections={getSections}
         keyExtractor={(item, index) => item.id}
         renderItem={renderItem}
         renderSectionHeader={renderSectionHeader}
         ListHeaderComponent={connectionHeader}
         ListFooterComponent={connectionFooter}
+        ListFooterComponentStyle={styles.connectionFooter}
         ItemSeparatorComponent={ItemSeparator}
       />
     </View>
@@ -264,27 +268,30 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingLeft: '8%',
     paddingRight: '8%',
-    paddingTop: 10,
+    paddingTop: DEVICE_LARGE ? 20 : 18,
     marginBottom: 5,
   },
   profile: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: '5%',
-    paddingRight: '5%',
+    justifyContent: 'flex-start',
   },
   photoContainer: {
-    margin: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
   },
   profilePhoto: {
-    borderRadius: 50,
-    width: 100,
-    height: 100,
+    borderRadius: DEVICE_LARGE ? 45 : 39,
+    width: DEVICE_LARGE ? 90 : 78,
+    height: DEVICE_LARGE ? 90 : 78,
+    marginLeft: DEVICE_LARGE ? -5 : -4,
   },
   nameContainer: {
     flexDirection: 'column',
     alignItems: 'center',
-    marginLeft: 20,
+    marginLeft: -3,
+    flexGrow: 1,
   },
   nameLabel: {
     flexDirection: 'row',
@@ -292,8 +299,9 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'Poppins-Medium',
-    fontSize: 17,
+    fontSize: DEVICE_LARGE ? 17 : 15,
     color: '#000',
+    maxWidth: '100%',
   },
   verificationSticker: {
     marginLeft: DEVICE_LARGE ? 8 : 5,
@@ -302,7 +310,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: ORANGE,
     paddingBottom: 3,
-    width: '118%',
+    width: '100%',
   },
   badges: {},
   badge: {
@@ -325,17 +333,17 @@ const styles = StyleSheet.create({
     borderColor: '#707070',
   },
   connectionInfo: {
+    marginTop: 10,
     flexDirection: 'row',
-    flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
   },
   connectionTimestamp: {
-    width: '100%',
+    // width: '100%',
   },
   connectionTimestampText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: 10,
+    fontSize: DEVICE_LARGE ? 10 : 9,
     color: ORANGE,
   },
   trustLevelContainer: {
@@ -343,7 +351,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   flagBtn: {
-    width: '100%',
+    width: '90%',
     borderRadius: 100,
     borderColor: ORANGE,
     borderWidth: 1,
@@ -357,7 +365,7 @@ const styles = StyleSheet.create({
   },
   flagBtnText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 17 : 15,
+    fontSize: DEVICE_LARGE ? 16 : 14,
     color: ORANGE,
     marginLeft: DEVICE_LARGE ? 10 : 8,
   },
@@ -366,11 +374,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerLabel: {
-    flex: 2,
+    // flex: 2,
   },
   headerLabelText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: 17,
+    fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#000',
   },
   headerContent: {
@@ -382,7 +390,7 @@ const styles = StyleSheet.create({
   headerCount: {},
   headerContentText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: 17,
+    fontSize: DEVICE_LARGE ? 17 : 15,
     color: ORANGE,
   },
   collapseButton: {
@@ -408,6 +416,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: 15,
     color: '#000',
+  },
+  connectionFooter: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: '7%',
   },
 });
 
