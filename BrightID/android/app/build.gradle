@@ -83,9 +83,9 @@ project.ext.react = [
     enableHermes: true,  // clean and rebuild if changing
     bundleInStaging: true,
     devDisabledInStaging: true,
-    resourcesDirStaging: 
-        "$buildDir/intermediates/res/merged/staging",
-    jsBundleDirStaging: "$buildDir/intermediates/assets/staging",
+    // resourcesDirStaging:
+    //    "$buildDir/intermediates/res/merged/staging",
+    // jsBundleDirStaging: "$buildDir/intermediates/assets/staging",
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -253,7 +253,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersio
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    
+
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -274,7 +274,7 @@ dependencies {
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.flipper'
     }
-    
+
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.flipper'
         exclude group:'com.squareup.okhttp3', module:'okhttp'
