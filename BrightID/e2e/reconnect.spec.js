@@ -43,8 +43,8 @@ describe('Reconnect existing connection', () => {
       await element(by.id('reportAbuseBtn')).tap();
       // should open ReportReason modal
       await expect(element(by.id('ReportReasonModal'))).toBeVisible();
-      // report as "fake"
-      const reasonButton = element(by.id(`${report_reasons.FAKE}-RadioBtn`));
+      // report as "spammer"
+      const reasonButton = element(by.id(`${report_reasons.SPAMMER}-RadioBtn`));
       await reasonButton.tap();
       // click Submit button
       const submitButton = element(by.id('SubmitReportBtn'));

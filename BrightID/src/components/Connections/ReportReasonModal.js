@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
-import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ORANGE, report_reasons } from '../../utils/constants';
@@ -16,13 +16,13 @@ type props = {
 
 const reasonStrings = {
   [report_reasons.SPAMMER]: {
-    description: 'This person sent me unwanted connection request',
+    description: 'This person sent me an unwanted connection request',
   },
   [report_reasons.DUPLICATE]: {
-    description: 'I know this person created multiple accounts',
+    description: 'This person created multiple accounts',
   },
-  [report_reasons.FAKE]: {
-    description: 'This person does not exist',
+  [report_reasons.OTHER]: {
+    description: 'Other reason',
   },
 };
 

@@ -41,4 +41,5 @@ export const report_reasons = {
   DUPLICATE: 'duplicate',
   SPAMMER: 'spammer',
   DECEASED: 'deceased',
+  OTHER: 'other',
 };

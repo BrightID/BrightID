@@ -12,8 +12,11 @@ import { report_reasons } from '../src/utils/constants';
 
 describe('Report Connections', () => {
   let hasBackButton = true;
-  // $FlowIssue[incompatible-type]
-  const reasons: Array<string> = Object.values(report_reasons);
+  const reasons = [
+    report_reasons.SPAMMER,
+    report_reasons.DUPLICATE,
+    report_reasons.OTHER,
+  ];
   let remainingConnections = 4;
 
   beforeAll(async () => {
