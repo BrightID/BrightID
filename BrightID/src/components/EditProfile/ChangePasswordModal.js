@@ -12,12 +12,8 @@ import {
 import { BlurView } from '@react-native-community/blur';
 import Spinner from 'react-native-spinkit';
 import { setInternetCredentials } from 'react-native-keychain';
-import {
-  DEVICE_LARGE,
-  DEVICE_ANDROID,
-  BACKUP_URL,
-  DEVICE_IOS,
-} from '@/utils/constants';
+import { BACKUP_URL } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { validatePass } from '@/utils/password';

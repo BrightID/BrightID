@@ -10,7 +10,8 @@ import {
   FlatList,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { DEVICE_TYPE, ORANGE, DEVICE_LARGE } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import EmptyList from '@/components/Helpers/EmptyList';
 import TrustedConnectionCard from './TrustedConnectionCard';
 import { setTrustedConnections } from './helpers';

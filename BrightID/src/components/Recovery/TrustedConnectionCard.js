@@ -8,7 +8,7 @@ import moment from 'moment';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { addTrustedConnection, removeTrustedConnection } from '@/actions/index';
 import store from '@/store';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
 class TrustedConnectionCard extends React.PureComponent<Props> {
   constructor(props: Props) {

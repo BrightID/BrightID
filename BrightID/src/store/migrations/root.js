@@ -7,7 +7,8 @@ import {
 } from 'react-native-keychain';
 import { compose } from 'ramda';
 import { objToUint8, uInt8ArrayToB64, b64ToUint8Array } from '@/utils/encoding';
-import { BACKUP_URL, DEVICE_ANDROID } from '@/utils/constants';
+import { BACKUP_URL } from '@/utils/constants';
+import { DEVICE_ANDROID } from '@/utils/deviceConstants';
 import { asyncCreateMigrate } from './asyncCreateMigrate';
 
 const keyToString = compose(uInt8ArrayToB64, objToUint8);

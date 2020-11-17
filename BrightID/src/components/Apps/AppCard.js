@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { MAX_WAITING_SECONDS, DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { addLinkedContext, removeLinkedContext } from '@/actions';
 
 /**
@@ -24,6 +24,8 @@ import { addLinkedContext, removeLinkedContext } from '@/actions';
  * @prop logo
  * @prop url
  */
+
+const MAX_WAITING_SECONDS = 60;
 
 const linkedContextSelector = createSelector(
   (state) => state.apps.linkedContexts,

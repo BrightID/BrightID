@@ -5,7 +5,7 @@ import { Animated, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
 import { getGroupName } from '@/utils/groups';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { DEVICE_TYPE } from '@/utils/deviceConstants';
 import GroupsScreen from '@/components/GroupsScreens/GroupsScreen';
 import SearchGroups from '@/components/Helpers/SearchGroups';
 import SearchConnections from '@/components/Helpers/SearchConnections';

@@ -13,7 +13,8 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import EmptyList from '@/components/Helpers/EmptyList';
 import Spinner from 'react-native-spinkit';
-import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { any, find, propEq } from 'ramda';
 import { fetchApps } from '@/actions';
 import {

@@ -7,7 +7,8 @@ import {
   View,
 } from 'react-native';
 import { useSelector } from 'react-redux';
-import { INVITE_ACTIVE, DEVICE_LARGE } from '@/utils/constants';
+import { INVITE_ACTIVE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { createSelector } from '@reduxjs/toolkit';
 import { createStackNavigator } from '@react-navigation/stack';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
