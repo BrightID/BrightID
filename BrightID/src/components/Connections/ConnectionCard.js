@@ -14,6 +14,11 @@ import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 
+import {
+  connectionLevelColors,
+  connectionLevelStrings,
+} from '../../utils/connectionLevelStrings';
+
 /**
  * Connection Card in the Connections Screen
  * is created from an array of connections
@@ -36,6 +41,7 @@ const ConnectionCard = (props) => {
     photo,
     hiddenFlag,
     index,
+    level,
   } = props;
 
   const brightidVerified = verifications?.includes('BrightID');
@@ -125,10 +131,21 @@ const ConnectionCard = (props) => {
         </View>
       );
     } else {
-      const testID = `connection-${index}`;
       return (
-        <View style={styles.statusContainer}>
-          <Text style={styles.connectedText} testID={testID}>
+        <View style={styles.statusContainer} testID={`connection-${index}`}>
+          <Text
+            testID={`connection_level-${index}`}
+            style={[
+              styles.connectionLevel,
+              { color: connectionLevelColors[level] },
+            ]}
+          >
+            {connectionLevelStrings[level]}
+          </Text>
+          <Text
+            style={styles.connectionTime}
+            testID={`connection_time-${index}`}
+          >
             Connected {moment(parseInt(connectionDate, 10)).fromNow()}
           </Text>
         </View>
@@ -206,7 +223,10 @@ const ConnectionCard = (props) => {
           accessibilityLabel="View Connection details"
         >
           <View style={[styles.info, { maxWidth: WIDTH * 0.56 }]}>
-            <View style={[styles.nameContainer]}>
+            <View
+              style={[styles.nameContainer]}
+              testID={`connection_name-${index}`}
+            >
               <Text
                 // adjustsFontSizeToFit={true}
                 numberOfLines={1}
@@ -280,15 +300,19 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 16 : 14,
   },
   statusContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
-  connectedText: {
+  connectionLevel: {
     fontFamily: 'Poppins-Regular',
-    fontSize: DEVICE_LARGE ? 11 : 10,
+    fontSize: DEVICE_LARGE ? 12 : 11,
+    marginTop: DEVICE_LARGE ? 3 : 1,
+  },
+  connectionTime: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: DEVICE_LARGE ? 10 : 9,
     color: '#B64B32',
-    marginTop: DEVICE_LARGE ? 5 : 2,
   },
   moreIcon: {
     marginRight: DEVICE_LARGE ? 26 : 23,
