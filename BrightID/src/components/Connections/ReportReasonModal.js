@@ -24,9 +24,6 @@ const reasonStrings = {
   [report_reasons.FAKE]: {
     description: 'This person does not exist',
   },
-  [report_reasons.DECEASED]: {
-    description: 'This person has deceased',
-  },
 };
 
 const ReportReasonModal = ({ route, navigation }: props) => {
