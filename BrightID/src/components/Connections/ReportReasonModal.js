@@ -85,10 +85,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
         style={styles.blurView}
         blurType="dark"
         blurAmount={5}
-        reducedTransparencyFallbackColor={
-          // eslint-disable-next-line no-new-wrappers
-          DEVICE_ANDROID ? new String('black') : 'black' // BlurView lib flow definition expects Wrapper String type
-        }
+        reducedTransparencyFallbackColor="black"
       />
       <View style={styles.modalContainer}>
         <View style={styles.header}>
