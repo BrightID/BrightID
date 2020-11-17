@@ -107,11 +107,11 @@ const styles = StyleSheet.create({
   },
   header: {
     marginTop: 5,
-    marginBottom: 25,
+    marginBottom: DEVICE_LARGE ? 22 : 20,
   },
   headerText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 20 : 17,
+    fontSize: DEVICE_LARGE ? 19 : 16.5,
     textAlign: 'center',
   },
   confirmButton: {

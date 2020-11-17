@@ -79,7 +79,7 @@ const ConnectionTestButton = ({ connectionId }: { connectionId: string }) => {
       style={{ marginRight: 11 }}
       onPress={handleButton}
     >
-      <Material name="ghost" size={32} color="#fff" />
+      <Material name="ghost" size={30} color="#fff" />
     </TouchableOpacity>
   );
 };

@@ -5,7 +5,7 @@ import { StyleSheet, View, Text } from 'react-native';
 
 import Slider from '@react-native-community/slider';
 import { connection_levels } from '@/utils/constants';
-import { WIDTH } from '@/utils/deviceConstants';
+import { WIDTH, DEVICE_LARGE } from '@/utils/deviceConstants';
 import {
   connectionLevelColors,
   connectionLevelStrings,
@@ -90,11 +90,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   label: {
-    marginBottom: 5,
+    marginBottom: DEVICE_LARGE ? 10 : 8,
   },
   labelText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 17,
+    fontSize: DEVICE_LARGE ? 17 : 15,
     color: '#000',
   },
   description: {
@@ -104,17 +104,17 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: 17,
+    fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#000',
     textAlign: 'center',
   },
   slider: {
-    marginTop: 10,
-    marginBottom: 15,
+    marginTop: DEVICE_LARGE ? 10 : 5,
+    marginBottom: DEVICE_LARGE ? 13 : 11,
     // slider only supports absolute width, so have to calculate manually:
     // width = deviceWidth * modalWidth (90%) * sliderWidth (80% of modal width)
     width: WIDTH * 0.9 * 0.8,
-    height: 50,
+    height: DEVICE_LARGE ? 50 : 45,
   },
 });
 
