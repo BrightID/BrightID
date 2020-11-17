@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
     color: ORANGE,
   },
   trustLevelContainer: {
-    marginTop: 15,
+    marginTop: DEVICE_LARGE ? 16 : 15,
     marginBottom: 10,
   },
   flagBtn: {
@@ -372,9 +372,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 12,
-    paddingBottom: 12,
-    marginTop: 15,
+    paddingTop: DEVICE_LARGE ? 13 : 12,
+    paddingBottom: DEVICE_LARGE ? 13 : 12,
   },
   flagBtnText: {
     fontFamily: 'Poppins-Bold',
@@ -434,7 +433,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom: '7%',
   },
 });
 

@@ -7,7 +7,6 @@ import { useNavigation } from '@react-navigation/native';
 import { SvgXml } from 'react-native-svg';
 import backArrow from '@/static/back_arrow_grey.svg';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { report_reasons } from '@/utils/constants';
 import {
   pendingConnection_states,
   selectPendingConnectionById,
