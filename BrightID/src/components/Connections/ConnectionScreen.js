@@ -233,19 +233,22 @@ function ConnectionScreen(props: Props) {
   };
 
   return (
-    <View testID="ConnectionScreen" style={styles.container}>
-      <SectionList
-        contentContainerStyle={{ flexGrow: 1 }}
-        sections={getSections}
-        keyExtractor={(item, index) => item.id}
-        renderItem={renderItem}
-        renderSectionHeader={renderSectionHeader}
-        ListHeaderComponent={connectionHeader}
-        ListFooterComponent={connectionFooter}
-        ListFooterComponentStyle={styles.connectionFooter}
-        ItemSeparatorComponent={ItemSeparator}
-      />
-    </View>
+    <>
+      <View style={styles.orangeTop} />
+      <View testID="ConnectionScreen" style={styles.container}>
+        <SectionList
+          contentContainerStyle={{ flexGrow: 1 }}
+          sections={getSections}
+          keyExtractor={(item, index) => item.id}
+          renderItem={renderItem}
+          renderSectionHeader={renderSectionHeader}
+          ListHeaderComponent={connectionHeader}
+          ListFooterComponent={connectionFooter}
+          ListFooterComponentStyle={styles.connectionFooter}
+          ItemSeparatorComponent={ItemSeparator}
+        />
+      </View>
+    </>
   );
 }
 
@@ -263,13 +266,23 @@ const ItemSeparator = () => {
 const ORANGE = '#ED7A5D';
 
 const styles = StyleSheet.create({
+  orangeTop: {
+    backgroundColor: ORANGE,
+    height: DEVICE_LARGE ? 70 : 65,
+    width: '100%',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 58,
+    marginTop: -58,
+    marginBottom: 5,
     paddingLeft: '8%',
     paddingRight: '8%',
     paddingTop: DEVICE_LARGE ? 20 : 18,
-    marginBottom: 5,
+    overflow: 'hidden',
+    zIndex: 10,
   },
   profile: {
     flexDirection: 'row',
@@ -292,6 +305,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: -3,
     flexGrow: 1,
+    maxWidth: '66%',
   },
   nameLabel: {
     flexDirection: 'row',
@@ -301,7 +315,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 17 : 15,
     color: '#000',
-    maxWidth: '100%',
   },
   verificationSticker: {
     marginLeft: DEVICE_LARGE ? 8 : 5,
@@ -310,7 +323,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: ORANGE,
     paddingBottom: 3,
-    width: '100%',
+    width: '98%',
   },
   badges: {},
   badge: {

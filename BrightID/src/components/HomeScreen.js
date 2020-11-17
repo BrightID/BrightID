@@ -161,7 +161,7 @@ export const HomeScreen = (props) => {
         ) : null}
         <View style={styles.verifyNameContainer} testID="homeScreen">
           <View style={styles.nameContainer}>
-            <Text testID="EditNameBtn" style={styles.name}>
+            <Text testID="EditNameBtn" style={styles.name} numberOfLines={1}>
               {name}
             </Text>
 
@@ -317,11 +317,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    // borderWidth: 1,
+    maxWidth: '50%',
   },
   nameContainer: {
     flexDirection: 'row',
-    // width: '120%',
   },
   profileDivider: {
     borderBottomWidth: 2,
