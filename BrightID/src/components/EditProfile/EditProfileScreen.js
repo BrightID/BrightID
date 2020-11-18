@@ -28,7 +28,6 @@ import {
   removeSocialMedia,
   setProfileDisplayWidth,
 } from './socialMediaSlice';
-import socialMediaList from './socialMediaList';
 
 const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
   const { showActionSheetWithOptions } = useActionSheet();
@@ -141,9 +140,8 @@ const SocialMediaLink = (props) => {
     profile,
     profileDisplayWidth,
     order,
+    company,
   } = props;
-
-  const socialMedia = socialMediaList[id];
 
   // perfectly center profile text with max length
   const updateInnerTextLayout = (e) => {
@@ -182,7 +180,7 @@ const SocialMediaLink = (props) => {
           });
         }}
       >
-        <Text style={styles.socialMediaType}>{socialMedia.name}</Text>
+        <Text style={styles.socialMediaType}>{company.name}</Text>
         <SvgXml
           width={DEVICE_LARGE ? 14 : 12}
           height={DEVICE_LARGE ? 14 : 12}
@@ -224,6 +222,8 @@ const SocialMediaLinks = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const socialMediaItems = useSelector(selectAllSocialMedia);
+
+  console.log('socialMedia', socialMediaItems);
 
   const SocialMediaList = socialMediaItems.map((item) => (
     <SocialMediaLink
