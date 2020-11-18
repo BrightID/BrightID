@@ -117,7 +117,7 @@ const ConnectionCard = (props) => {
       return (
         <View style={styles.statusContainer}>
           <Text style={[styles.deletedMessage, { marginTop: 1 }]}>
-            {hiddenFlag ? `Flagged as ${hiddenFlag}` : 'Hidden'}
+            {hiddenFlag ? `Reported as ${hiddenFlag}` : 'Hidden'}
           </Text>
           <Text style={[styles.connectedText, { marginTop: 1 }]}>
             Connected {moment(parseInt(connectionDate, 10)).fromNow()}

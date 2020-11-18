@@ -24,7 +24,7 @@ import TrustLevelView from './TrustLevelView';
  Connection details screen
  To make maximum use of the performance optimization from Flatlist/SectionList, the whole
  screen is rendered as SectionList. The Profile information (Photo, Name etc.) is rendered
- via ListHeaderComponent, the "Flag" button on the bottom via ListFooterComponent.
+ via ListHeaderComponent, the "Report" button on the bottom via ListFooterComponent.
 * */
 
 type Props = {
