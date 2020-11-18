@@ -30,10 +30,12 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
     [],
   );
   const [verifications, setVerifications] = useState<Array<string>>([]);
+  const [loading, setLoading] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
       const fetchData = async (connectionId) => {
+        setLoading(true);
         console.log(`fetching connection info for ${connectionId}`);
         const connectionData = await fetchConnectionInfo({
           brightId: connectionId,
@@ -43,6 +45,7 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
         setMutualGroups(connectionData.mutualGroups);
         setMutualConnections(connectionData.mutualConnections);
         setVerifications(connectionData.verifications);
+        setLoading(false);
       };
       if (connection) {
         fetchData(connection.id);
@@ -83,6 +86,7 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
       connection={connection}
       mutualConnections={mutualConnections}
       mutualGroups={mutualGroups}
+      loading={loading}
     />
   );
 }

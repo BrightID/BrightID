@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from 'react';
 import {
+  ActivityIndicator,
   Image,
   StyleSheet,
   Text,
@@ -32,6 +33,7 @@ type Props = {
   brightIdVerified: boolean,
   mutualGroups: Array<group>,
   mutualConnections: Array<connection>,
+  loading: boolean,
 };
 
 function ConnectionScreen(props: Props) {
@@ -41,6 +43,7 @@ function ConnectionScreen(props: Props) {
     brightIdVerified,
     mutualGroups,
     mutualConnections,
+    loading,
   } = props;
 
   const [groupsCollapsed, setGroupsCollapsed] = useState(true);
@@ -79,6 +82,20 @@ function ConnectionScreen(props: Props) {
     return data;
   }, [connectionsCollapsed, groupsCollapsed, mutualConnections, mutualGroups]);
 
+  const renderBadge = () => {
+    if (loading) {
+      return <ActivityIndicator size="small" color="#707070" animating />;
+    } else {
+      if (brightIdVerified) {
+        return <Text style={[styles.badge, styles.verified]}>verified</Text>;
+      } else {
+        return (
+          <Text style={[styles.badge, styles.unverified]}>unverified</Text>
+        );
+      }
+    }
+  };
+
   const connectionHeader = (
     <>
       <View style={styles.profile}>
@@ -104,9 +121,11 @@ function ConnectionScreen(props: Props) {
           <View style={styles.connectionInfo}>
             <View style={styles.connectionTimestamp}>
               <Text style={styles.connectionTimestampText}>
-                {`Connected ${moment(
-                  parseInt(connection.createdAt, 10),
-                ).fromNow()}`}
+                {loading
+                  ? `Loading...`
+                  : `Connected ${moment(
+                      parseInt(connection.createdAt, 10),
+                    ).fromNow()}`}
               </Text>
             </View>
           </View>
@@ -126,13 +145,7 @@ function ConnectionScreen(props: Props) {
             )}
           </View>
           <View style={styles.profileDivider} />
-          <View style={styles.badges}>
-            {brightIdVerified ? (
-              <Text style={[styles.badge, styles.verified]}>verified</Text>
-            ) : (
-              <Text style={[styles.badge, styles.unverified]}>unverified</Text>
-            )}
-          </View>
+          <View style={styles.badges}>{renderBadge()}</View>
         </View>
       </View>
 
@@ -329,10 +342,10 @@ const styles = StyleSheet.create({
   badge: {
     fontFamily: 'Poppins-Medium',
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 15,
     marginTop: 6,
-    paddingTop: 1,
-    paddingBottom: 1,
+    paddingTop: 2,
+    paddingBottom: 0,
     paddingLeft: 23,
     paddingRight: 23,
     fontSize: DEVICE_LARGE ? 11 : 10,
