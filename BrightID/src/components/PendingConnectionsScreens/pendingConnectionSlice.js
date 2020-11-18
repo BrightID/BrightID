@@ -192,6 +192,7 @@ const pendingConnectionsSlice = createSlice({
         flagged,
         notificationToken,
         verifications,
+        socialMedia,
       } = action.payload;
 
       const changes = {
@@ -211,6 +212,7 @@ const pendingConnectionsSlice = createSlice({
         flagged,
         notificationToken,
         verifications,
+        socialMedia,
       };
 
       // add secret key if dev

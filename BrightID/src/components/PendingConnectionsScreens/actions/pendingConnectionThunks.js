@@ -85,13 +85,13 @@ export const confirmPendingConnectionThunk = (
   const connectionData = {
     id: connection.brightId,
     name: connection.name,
-    score: connection.score,
     connectionDate: connectionTimestamp,
     photo: { filename },
     status: 'initiated',
     notificationToken: connection.notificationToken,
     secretKey: connection.secretKey,
     level,
+    socialMedia: connection.socialMedia,
   };
 
   dispatch(addConnection(connectionData));

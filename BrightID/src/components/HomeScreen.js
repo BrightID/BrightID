@@ -76,7 +76,7 @@ export const HomeScreen = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
 
   const handleChat = () => {
-    if (!__DEV__) {
+    if (__DEV__) {
       const { delStorage } = require('@/utils/dev');
       delStorage();
     } else {

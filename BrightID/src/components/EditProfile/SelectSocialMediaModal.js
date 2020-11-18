@@ -107,6 +107,7 @@ const SelectMediaModal = ({ route, navigation }) => {
       id: selectedId,
       order: route.params?.order ?? 0,
       profile,
+      company: socialMediaList[selectedId],
     };
     dispatch(saveSocialMedia(socialMedia));
     navigation.navigate('Edit Profile');
