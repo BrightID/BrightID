@@ -93,7 +93,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
         <View style={styles.connectNameContainer}>
           <Text style={styles.connectName}>{pendingConnection.name}</Text>
           {pendingConnection.flagged && (
-            <Text style={styles.flagged}> (flagged)</Text>
+            <Text style={styles.flagged}> (reported)</Text>
           )}
           {brightIdVerified && (
             <View style={styles.verificationSticker}>

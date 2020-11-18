@@ -1,7 +1,7 @@
 import { connection_levels } from './constants';
 
 export const connectionLevelStrings = {
-  [connection_levels.REPORTED]: '✋ Flagged',
+  [connection_levels.REPORTED]: '✋ Reported',
   [connection_levels.SUSPICIOUS]: '🤔 Suspicious',
   [connection_levels.JUST_MET]: '👋 Just met',
   [connection_levels.ALREADY_KNOWN]: '😎 Already known',

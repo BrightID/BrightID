@@ -67,10 +67,10 @@ function MemberCard(props: MemberCardProps) {
     setContextActions(actions);
   }, [userIsAdmin, memberIsAdmin, userId, memberId]);
 
-  // show flagged status of member?
+  // show reported status of member?
   useEffect(() => {
     if (!userIsAdmin) {
-      // only admins can see flags
+      // only admins can see reported state
       setFlagged(false);
     } else {
       setFlagged(flaggers && Object.keys(flaggers).length);
@@ -148,7 +148,7 @@ function MemberCard(props: MemberCardProps) {
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
           <View style={styles.statusContainer}>
-            {flagged ? <Text style={styles.flagged}>(flagged)</Text> : null}
+            {flagged ? <Text style={styles.flagged}>(reported)</Text> : null}
           </View>
           {connectionDate > 0 && (
             <Text style={styles.connectedText}>
