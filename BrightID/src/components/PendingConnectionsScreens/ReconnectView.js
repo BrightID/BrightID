@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
   },
   abuseButtonLabel: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 15 : 13,
+    fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#FFFFFF',
   },
   updateButton: {
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
   },
   updateButtonLabel: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 15 : 13,
+    fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#ED7A5D',
   },
 });
