@@ -21,8 +21,6 @@ import { defaultSort } from './models/sortingUtility';
 
 /** Helper Component */
 
-const ICON_SIZE = 26;
-
 const ITEM_HEIGHT = DEVICE_LARGE ? 102 : 92;
 
 const getItemLayout = (data, index) => ({
@@ -100,7 +98,7 @@ export const ConnectionsScreen = () => {
             data={connections}
             keyExtractor={({ id }, index) => id + index}
             renderItem={renderItem}
-            // getItemLayout={getItemLayout}
+            getItemLayout={getItemLayout}
             contentContainerStyle={{
               paddingBottom: 70,
               paddingTop: 20,
