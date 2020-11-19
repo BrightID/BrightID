@@ -23,7 +23,7 @@ import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
 import forumIcon from '@/static/forum_icon.svg';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
 import { version as app_version } from '../../package.json';
 
 /**
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 6,
     paddingTop: 1,
-    paddingBottom: 1,
+    paddingBottom: DEVICE_ANDROID ? 0 : 1,
     paddingLeft: 23,
     paddingRight: 23,
     fontSize: DEVICE_LARGE ? 11 : 10,
@@ -376,7 +376,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 6,
     paddingTop: 1,
-    paddingBottom: 1,
+    paddingBottom: DEVICE_ANDROID ? 0 : 1,
     paddingLeft: 20,
     paddingRight: 20,
     fontSize: DEVICE_LARGE ? 11 : 10,
