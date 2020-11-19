@@ -8,7 +8,7 @@ import {
   Linking,
 } from 'react-native';
 import React from 'react';
-import { DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { TaskState } from './TaskState';
 
 type TaskCardProps = {
@@ -59,9 +59,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-evenly',
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Medium',
     fontStyle: 'normal',
-    fontWeight: '500',
   },
   title: {
     fontSize: DEVICE_LARGE ? 20 : 17,

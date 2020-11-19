@@ -4,7 +4,8 @@ import * as React from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
 

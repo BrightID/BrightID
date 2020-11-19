@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
 const photoStyle = (photo) => ({
   ...styles.photo,

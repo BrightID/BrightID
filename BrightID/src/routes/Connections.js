@@ -1,16 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, Text } from 'react-native';
-import {
-  createStackNavigator,
-  TransitionPresets,
-} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import ConnectionsScreen from '@/components/Connections/ConnectionsScreen';
 import SortingConnectionsScreen from '@/components/Connections/SortingConnectionsScreen';
 import SearchConnections from '@/components/Helpers/SearchConnections';
-import FullScreenPhoto from '@/components/Helpers/FullScreenPhoto';
 import TrustedConnectionsScreen from '@/components/Recovery/TrustedConnectionsScreen';
 import { useSelector } from 'react-redux';
 import { headerOptions, headerTitleStyle, NavHome } from './helpers';
+import ConnectionScreenController from '../components/Connections/ConnectionScreenController';
 
 const Stack = createStackNavigator();
 
@@ -39,19 +36,15 @@ const connectionsScreenOptions = {
   headerTitle: () => <HeaderTitle title="Connections" />,
 };
 
+const connectionScreenOptions = {
+  ...headerOptions,
+  headerTitle: () => <HeaderTitle title="Connection Details" />,
+};
+
 const trustedScreenOptions = {
   ...headerOptions,
   headerRight: () => <SearchConnections sortable={true} />,
   headerTitle: () => <HeaderTitle title="Trusted Connections" />,
-};
-
-const fullScreenPhotoOptions = {
-  headerShown: false,
-  cardOverlayEnabled: true,
-  mode: 'modal',
-  gestureEnabled: true,
-  ...TransitionPresets.FadeFromBottomAndroid,
-  cardStyle: { backgroundColor: 'transparent' },
 };
 
 const Connections = () => {
@@ -73,9 +66,9 @@ const Connections = () => {
         options={trustedScreenOptions}
       />
       <Stack.Screen
-        name="FullScreenPhoto"
-        component={FullScreenPhoto}
-        options={fullScreenPhotoOptions}
+        name="Connection"
+        component={ConnectionScreenController}
+        options={connectionScreenOptions}
       />
     </>
   );

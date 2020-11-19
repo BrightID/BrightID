@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
 import {
@@ -101,9 +101,9 @@ export const QrCode = ({ channel }) => {
     const universalLink = `https://app.brightid.org/connection-code/${qrString}`;
     const clipboardMsg = __DEV__
       ? universalLink
-      : channel?.type === channel_types.GROUP 
-        ? `Make a group connection with ${myName} on BrightID: ${universalLink}`
-        : `Connect with ${myName} on BrightID: ${universalLink}`;
+      : channel?.type === channel_types.GROUP
+      ? `Make a group connection with ${myName} on BrightID: ${universalLink}`
+      : `Connect with ${myName} on BrightID: ${universalLink}`;
     const alertMsg =
       channel?.type === channel_types.SINGLE
         ? `Share this link with one friend`
@@ -199,22 +199,19 @@ const styles = StyleSheet.create({
   },
   copyText: {
     color: '#333',
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 12,
   },
   timerContainer: {
     flexDirection: 'row',
   },
   timerTextLeft: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#333',
   },
   timerTextRight: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#333',
   },

@@ -5,7 +5,7 @@ import { Image, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import { photoDirectory } from '@/utils/filesystem';
 import { groupCirclePhotos } from '@/utils/groups';
-import { DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
 const photoStyle = (photo) => {
   const style = { ...styles.photo };

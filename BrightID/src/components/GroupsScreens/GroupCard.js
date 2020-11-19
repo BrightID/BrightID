@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { DEVICE_TYPE } from '@/utils/deviceConstants';
 import { getGroupName, ids2connections } from '@/utils/groups';
 import GroupPhoto from './GroupPhoto';
 /**
@@ -57,7 +57,9 @@ class GroupCard extends React.PureComponent<Props> {
           ) : (
             <View />
           )}
-          <Text testID="groupName" style={styles.name}>{getGroupName(group)}</Text>
+          <Text testID="groupName" style={styles.name}>
+            {getGroupName(group)}
+          </Text>
           <this.setStatus />
         </View>
       </View>

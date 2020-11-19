@@ -7,7 +7,8 @@ import {
   View,
 } from 'react-native';
 import { useSelector } from 'react-redux';
-import { INVITE_ACTIVE, DEVICE_LARGE } from '@/utils/constants';
+import { INVITE_ACTIVE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { createSelector } from '@reduxjs/toolkit';
 import { createStackNavigator } from '@react-navigation/stack';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -17,7 +18,11 @@ import {
   selectAllPendingConnections,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnectionScreen';
-import { navigate, toggleDrawer } from '@/NavigationService';
+import {
+  toggleDrawer,
+  resetHome,
+  resetNotifications,
+} from '@/NavigationService';
 import menuBar from '@/static/menu_bar.svg';
 import { headerOptions } from './helpers';
 import { HomeDrawer } from './HomeDrawer';
@@ -56,7 +61,8 @@ const NotificationBell = () => {
     <TouchableOpacity
       style={{ marginRight: 25 }}
       onPress={() => {
-        navigate('Notifications');
+        Keyboard.dismiss();
+        resetNotifications();
       }}
     >
       <Material name="bell" size={DEVICE_LARGE ? 28 : 23} color="#000" />
@@ -83,7 +89,8 @@ const BrightIdLogo = () => {
   return (
     <TouchableWithoutFeedback
       onPress={() => {
-        navigate('Home');
+        Keyboard.dismiss();
+        resetHome();
       }}
     >
       <Image

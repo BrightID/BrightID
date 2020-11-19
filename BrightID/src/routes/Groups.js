@@ -1,13 +1,11 @@
 // @flow
 
 import React, { useRef, useEffect } from 'react';
-import { Animated, TouchableOpacity, Text } from 'react-native';
+import { Animated, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { getGroupName } from '@/utils/groups';
-import { DEVICE_TYPE } from '@/utils/constants';
-import emitter from '@/emitter';
+import { DEVICE_TYPE } from '@/utils/deviceConstants';
 import GroupsScreen from '@/components/GroupsScreens/GroupsScreen';
 import SearchGroups from '@/components/Helpers/SearchGroups';
 import SearchConnections from '@/components/Helpers/SearchConnections';

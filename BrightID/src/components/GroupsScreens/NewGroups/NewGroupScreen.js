@@ -10,7 +10,9 @@ import { connect } from 'react-redux';
 import store from '@/store';
 import emitter from '@/emitter';
 import { clearNewGroupCoFounders } from '@/actions';
-import { DEVICE_TYPE, ORANGE, DEVICE_LARGE } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
+import { toSearchString } from '@/utils/strings';
 import Spinner from 'react-native-spinkit';
 import { createNewGroup } from '../actions';
 import NewGroupCard from './NewGroupCard';
@@ -56,10 +58,7 @@ export class NewGroupScreen extends React.Component<Props> {
     const { connections, searchParam } = this.props;
     return connections
       .filter((item) =>
-        `${item.name}`
-          .toLowerCase()
-          .replace(/\s/g, '')
-          .includes(searchParam.toLowerCase().replace(/\s/g, '')),
+        toSearchString(`${item.name}`).includes(toSearchString(searchParam)),
       )
       .filter((item) => item.status === 'verified');
   };

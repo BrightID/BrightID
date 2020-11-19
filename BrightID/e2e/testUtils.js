@@ -1,8 +1,9 @@
+// @flow
 /* global element:false, by:false, waitFor:false, device: false */
 
 const testUserName = 'Vincent Vega';
 
-const createBrightID = async (name = testUserName) => {
+const createBrightID = async (name: string = testUserName) => {
   await element(by.id('getStartedBtn')).tap();
   await element(by.id('editName')).tap();
   await element(by.id('editName')).replaceText(name);
@@ -23,7 +24,7 @@ const createBrightID = async (name = testUserName) => {
   return name;
 };
 
-const createFakeConnection = async (doConfirm = true) => {
+const createFakeConnection = async (doConfirm: boolean = true) => {
   // need to be on Homescreen to continue
   await expectHomescreen();
   // open MyCode screen
@@ -40,11 +41,10 @@ const createFakeConnection = async (doConfirm = true) => {
 
   if (doConfirm) {
     // confirm connection and navigate back to home screen
-    await expect(element(by.id('confirmConnectionButton'))).toBeVisible();
-    await element(by.id('confirmConnectionButton')).tap();
+    await expect(element(by.id('just metBtn'))).toBeVisible();
+    await element(by.id('just metBtn')).tap();
     // Should end up in the connection list
     await expectConnectionsScreen();
-
     await navigateHome();
   }
 };
@@ -59,9 +59,15 @@ const navigateHome = async () => {
   // there might be several "navHomeBtn" instances in the view hierarchy
   try {
     await element(by.id('NavHomeBtn')).atIndex(0).tap();
-    await element(by.id('NavHomeBtn')).atIndex(1).tap();
-    await element(by.id('NavHomeBtn')).atIndex(2).tap();
-  } catch (err) {}
+  } catch (err) {
+    try {
+      await element(by.id('NavHomeBtn')).atIndex(1).tap();
+    } catch (err) {
+      try {
+        await element(by.id('NavHomeBtn')).atIndex(2).tap();
+      } catch (err) {}
+    }
+  }
 
   await expectHomescreen();
 };
@@ -72,13 +78,19 @@ const expectConnectionsScreen = async () => {
     .withTimeout(20000);
 };
 
+const expectConnectionScreen = async () => {
+  await waitFor(element(by.id('ConnectionScreen')))
+    .toBeVisible()
+    .withTimeout(20000);
+};
+
 const expectGroupsScreen = async () => {
   await waitFor(element(by.id('groupsScreen')))
     .toBeVisible()
     .withTimeout(20000);
 };
 
-const expectAppsScreen = async (bool = true) => {
+const expectAppsScreen = async (bool: boolean = true) => {
   bool
     ? await waitFor(element(by.id('appsScreen')))
         .toBeVisible()
@@ -121,61 +133,111 @@ const inviteConnectionToGroup = async (groupName: string) => {
   await element(by.text('OK')).tap();
   // Now on members screen again. Go back to homescreen.
   // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-  await navigateHome();
+  await element(by.id('header-back')).tap();
   await navigateHome();
   await expectHomescreen();
 };
 
-const joinAllGroups = async (connectionCount: number) => {
+const joinAllGroups = async (connectionIndex: number) => {
   await expectHomescreen();
   // navigate to connections screen to make invited user join the group
   await element(by.id('connectionsBtn')).tap();
   await expectConnectionsScreen();
-  // to simplify test script just click on all flagBtns and join groups
-  const actionSheetTitle = 'What do you want to do?';
-  const actionTitle = 'Join All Groups';
-  // let connections join groups
-  for (let i = 0; i < connectionCount; i++) {
-    // swipe left to reach flagBtn
-    await element(by.id('connectionCardContainer')).atIndex(i).swipe('left');
-    await waitFor(element(by.id('flagBtn')).atIndex(i))
-      .toBeVisible()
-      .withTimeout(20000);
-    await element(by.id('flagBtn')).atIndex(i).tap();
 
-    // ActionSheet does not support testID, so match based on text.
-    await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
-    await element(by.text(actionTitle)).tap();
-  }
+  // open connection detail screen of specified connection index
+  const connectionCardBtn = element(by.id(`ConnectionCard-${connectionIndex}`));
+  await expect(connectionCardBtn).toBeVisible();
+  await connectionCardBtn.tap();
+  await expectConnectionScreen();
+
+  // open connection test ActionSheet
+  const actionSheetTitle = 'Connection Test options';
+  const actionTitle = 'Accept all group invites';
+  await element(by.id('connectionTestBtn')).tap();
+  await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
+  await waitFor(element(by.text(actionTitle))).toBeVisible();
+  await element(by.text(actionTitle)).tap();
+
+  // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
+  await element(by.id('header-back')).tap();
   await navigateHome();
   await expectHomescreen();
 };
 
-/* Connect fake connections with each other */
-const interConnect = async (connectionCount: number) => {
+/* Connect a fake connection with all other fake connections */
+const interConnect = async (connectionIndex: number) => {
   await expectHomescreen();
   await element(by.id('connectionsBtn')).tap();
   await expectConnectionsScreen();
 
-  // interconnect fake connections with each other
-  const actionSheetTitle = 'What do you want to do?';
-  const actionTitle = 'Connect to other fake connections';
-  for (let i = 0; i < connectionCount; i++) {
-    // swipe left to reach flagBtn
-    await element(by.id('connectionCardContainer')).atIndex(i).swipe('left');
-    await waitFor(element(by.id('flagBtn')).atIndex(i))
-      .toBeVisible()
-      .withTimeout(5000);
-    await element(by.id('flagBtn')).atIndex(i).tap();
+  // open connection detail screen of specified connection index
+  const connectionCardBtn = element(by.id(`ConnectionCard-${connectionIndex}`));
+  await expect(connectionCardBtn).toBeVisible();
+  await connectionCardBtn.tap();
+  await expectConnectionScreen();
 
-    // ActionSheet does not support testID, so match based on text.
-    await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
-    await waitFor(element(by.text(actionTitle))).toBeVisible();
-    await element(by.text(actionTitle)).tap();
-  }
+  // open connection test ActionSheet
+  const actionSheetTitle = 'Connection Test options';
+  const actionTitle = 'Connect with all other fake connections';
 
+  await element(by.id('connectionTestBtn')).tap();
+  // ActionSheet does not support testID, so match based on text.
+  await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
+  await waitFor(element(by.text(actionTitle))).toBeVisible();
+  await element(by.text(actionTitle)).tap();
+
+  // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
+  await element(by.id('header-back')).tap();
   await navigateHome();
   await expectHomescreen();
+};
+
+/*
+  starts at home screen,
+  opens connection screen and triggers reconnect,
+  ends at preview connection screen
+ */
+const reconnect = async (connectionIndex: number, changeProfile: boolean) => {
+  const action = changeProfile
+    ? 'Reconnect with changed profile'
+    : 'Reconnect with identical profile';
+  // In order to have an open channel need to visit MyCodeScreen before attempting reconnect
+  // open MyCode screen
+  await element(by.id('MyCodeBtn')).tap();
+  // make sure SINGLE connection mode is active
+  await expect(element(by.id('single-use-code'))).toExist();
+  // go to connections screen
+  await navigateHome();
+  await element(by.id('connectionsBtn')).tap();
+
+  // should be on connectionsscreen
+  await expectConnectionsScreen();
+
+  // wait upto 30 seconds till connection is established
+  await waitFor(element(by.text('Connected a few seconds ago')))
+    .toBeVisible()
+    .withTimeout(30000);
+
+  // open connection detail screen of specified connection index
+  const connectionCardBtn = element(by.id(`ConnectionCard-${connectionIndex}`));
+  await expect(connectionCardBtn).toBeVisible();
+  await connectionCardBtn.tap();
+  await expectConnectionScreen();
+
+  // open connection test ActionSheet
+  const actionSheetTitle = 'Connection Test options';
+
+  await element(by.id('connectionTestBtn')).tap();
+  // ActionSheet does not support testID, so match based on text.
+  await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
+  await waitFor(element(by.text(action))).toBeVisible();
+  await element(by.text(action)).tap();
+
+  // navigate to MyCodeScreen, there it will pick up the incoming connection profile
+  await element(by.id('header-back')).tap();
+  await navigateHome();
+  await element(by.id('MyCodeBtn')).tap();
+  await expect(element(by.id('ReconnectScreen'))).toBeVisible();
 };
 
 export {
@@ -184,10 +246,12 @@ export {
   createFakeConnection,
   expectHomescreen,
   expectConnectionsScreen,
+  expectConnectionScreen,
   expectGroupsScreen,
   expectAppsScreen,
   interConnect,
   inviteConnectionToGroup,
   joinAllGroups,
   navigateHome,
+  reconnect,
 };

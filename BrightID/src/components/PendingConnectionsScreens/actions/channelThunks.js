@@ -7,7 +7,9 @@ import {
   setMyChannel,
   updateChannel,
   selectAllChannelIds,
+  channel_types,
 } from '@/components/PendingConnectionsScreens/channelSlice';
+import { selectAllSocialMedia } from '@/components/EditProfile/socialMediaSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
 import { generateChannelData } from '@/utils/channels';
@@ -16,13 +18,12 @@ import {
   CHANNEL_TTL,
   MIN_CHANNEL_JOIN_TTL,
   PROFILE_POLL_INTERVAL,
+  PROFILE_VERSION,
 } from '@/utils/constants';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   newPendingConnection,
   selectAllPendingConnectionIds,
-  updatePendingConnection,
-  selectPendingConnectionById,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import { Alert } from 'react-native';
 
@@ -35,7 +36,6 @@ export const createChannel = (channelType: ChannelType) => async (
     const ipAddress = await api.ip();
     channel = await generateChannelData(channelType, ipAddress);
     // Set timeout to expire channel
-
     channel.timeoutId = setTimeout(() => {
       console.log(`timer expired for channel ${channel.id}`);
       dispatch(leaveChannel(channel.id));
@@ -46,7 +46,7 @@ export const createChannel = (channelType: ChannelType) => async (
     );
     // upload my profile
     await dispatch(encryptAndUploadProfileToChannel(channel.id));
-    // start polling for incoming connection requests
+    // start polling for profiles
     dispatch(subscribeToConnectionRequests(channel.id));
   } catch (e) {
     // Something went wrong while creating channel.
@@ -104,7 +104,7 @@ export const joinChannel = (channel: Channel) => async (
 
     // upload my profile to channel
     await dispatch(encryptAndUploadProfileToChannel(channel.id));
-    // start polling for incoming connection requests
+    // start polling for profiles
     dispatch(subscribeToConnectionRequests(channel.id));
   } catch (e) {
     // Something went wrong while trying to join channel.
@@ -149,8 +149,6 @@ export const subscribeToConnectionRequests = (channelId: string) => (
   pollTimerId = setInterval(() => {
     // fetch all profileIDs in channel
     dispatch(fetchChannelProfiles(channelId));
-    // fetch connection requests
-    dispatch(fetchConnectionRequests(channelId));
   }, PROFILE_POLL_INTERVAL);
 
   console.log(`Start polling channel ${channelId}, pollTImerId ${pollTimerId}`);
@@ -209,54 +207,26 @@ export const fetchChannelProfiles = createAsyncThunk(
         );
       }
     }
+    // can we stop polling?
+    let expectedProfiles;
+    switch (channel.type) {
+      case channel_types.SINGLE:
+        expectedProfiles = 2; // my profile and peer profile
+        break;
+      case channel_types.GROUP:
+      default:
+        expectedProfiles = CHANNEL_CONNECTION_LIMIT;
+        break;
+    }
+    if (profileIds.length >= expectedProfiles) {
+      console.log(
+        `Got expected number of profiles (${expectedProfiles}) for channel ${channel.id}`,
+      );
+      dispatch(unsubscribeFromConnectionRequests(channel.id));
+    }
   },
 );
 
-export const fetchConnectionRequests = (channelId: string) => async (
-  dispatch: dispatch,
-  getState: getState,
-) => {
-  const channel: Channel = selectChannelById(getState(), channelId);
-  const { myProfileId } = channel;
-  let profileIds = await channel.api.list(myProfileId);
-  // Only get up to CHANNEL_CONNECTION_LIMIT profiles
-  profileIds = profileIds.slice(0, CHANNEL_CONNECTION_LIMIT);
-  for (const profileId of profileIds) {
-    // check if signedMessage and profile exists
-    const pendingConnection = selectPendingConnectionById(
-      getState(),
-      profileId,
-    );
-    if (pendingConnection && !pendingConnection.signedMessage) {
-      console.log(`Got new connection request from profileId ${profileId}.`);
-      // download connectionrequest to get signedMessage
-      const profile = await channel.api.download({
-        channelId: myProfileId,
-        dataId: profileId,
-      });
-      const { signedMessage, connectionTimestamp } = profile;
-      if (signedMessage) {
-        // update existing pendingConnection with signedMessage and timestamp
-        console.log('updating Pending Connection with signed message');
-        dispatch(
-          updatePendingConnection({
-            id: profileId,
-            changes: {
-              signedMessage,
-              timestamp: connectionTimestamp,
-            },
-          }),
-        );
-      } else {
-        console.dir(profile);
-        throw new Error(`Response does not include signedMessage.`);
-      }
-    }
-  }
-};
-
-// TODO: This should not be a thunk, as no actions are dispatched.
-//  Should be changed to regular function in utils, with channel and user data passed in
 export const encryptAndUploadProfileToChannel = (channelId: string) => async (
   dispatch: dispatch,
   getState: getState,
@@ -268,10 +238,12 @@ export const encryptAndUploadProfileToChannel = (channelId: string) => async (
     id,
     photo: { filename },
     name,
-    score,
   } = getState().user;
 
   const { notificationToken } = getState().notifications;
+
+  let socialMedia = selectAllSocialMedia(getState());
+
   // retrieve photo
   const photo = await retrieveImage(filename);
   const profileTimestamp = Date.now();
@@ -280,9 +252,10 @@ export const encryptAndUploadProfileToChannel = (channelId: string) => async (
     id,
     photo,
     name,
-    score,
+    socialMedia,
     profileTimestamp,
     notificationToken,
+    version: PROFILE_VERSION,
   };
 
   console.log(`Encrypting profile data with key ${channel.aesKey}`);

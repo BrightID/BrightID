@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
 type TasksProgressProps = {
   totalSteps: number,
@@ -44,9 +44,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   label: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Medium',
     fontStyle: 'normal',
-    fontWeight: '500',
     fontSize: DEVICE_LARGE ? 13 : 12,
   },
   progressBar: {
@@ -70,9 +69,8 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   steps: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Medium',
     fontStyle: 'normal',
-    fontWeight: '500',
     fontSize: DEVICE_LARGE ? 14 : 12,
   },
 });

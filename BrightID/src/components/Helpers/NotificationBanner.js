@@ -10,7 +10,9 @@ import groups from '@/static/add_group.svg';
 import connections from '@/static/add_person.svg';
 import misc from '@/static/trusted_connections.svg';
 import { setActiveNotification } from '@/actions';
-import { DEVICE_LARGE, CONNECTIONS_TYPE, HEIGHT } from '@/utils/constants';
+import { CONNECTIONS_TYPE } from '@/utils/constants';
+import { DEVICE_LARGE, HEIGHT } from '@/utils/deviceConstants';
+
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import DropDownAlertEnabled from '@/utils/DropDownAlertEnabler';
 
@@ -138,15 +140,13 @@ const styles = StyleSheet.create({
     height: HEIGHT * 0.15,
   },
   title: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     marginLeft: DEVICE_LARGE ? 20 : 10,
     color: '#000',
     fontSize: DEVICE_LARGE ? 16 : 15,
   },
   message: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     marginLeft: DEVICE_LARGE ? 20 : 10,
     color: '#000',
     fontSize: DEVICE_LARGE ? 13 : 12,

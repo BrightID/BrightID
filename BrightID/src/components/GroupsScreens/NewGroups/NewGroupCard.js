@@ -7,7 +7,7 @@ import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { toggleNewGroupCoFounder } from '../actions';
 
 /**
@@ -99,8 +99,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     backgroundColor: '#fff',
-    height: DEVICE_TYPE === 'large' ? 94 : 80,
-    marginBottom: DEVICE_TYPE === 'large' ? 11.8 : 6,
+    height: DEVICE_LARGE ? 94 : 80,
+    marginBottom: DEVICE_LARGE ? 11.8 : 6,
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.43,
@@ -115,13 +115,13 @@ const styles = StyleSheet.create({
   info: {
     marginLeft: 25,
     flex: 1,
-    height: DEVICE_TYPE === 'large' ? 71 : 65,
+    height: DEVICE_LARGE ? 71 : 65,
     flexDirection: 'column',
     justifyContent: 'space-evenly',
   },
   name: {
     fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_TYPE === 'large' ? 20 : 18,
+    fontSize: DEVICE_LARGE ? 20 : 18,
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,

@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { MAX_WAITING_SECONDS, DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { addLinkedContext, removeLinkedContext } from '@/actions';
 
 /**
@@ -24,6 +24,8 @@ import { addLinkedContext, removeLinkedContext } from '@/actions';
  * @prop logo
  * @prop url
  */
+
+const MAX_WAITING_SECONDS = 60;
 
 const linkedContextSelector = createSelector(
   (state) => state.apps.linkedContexts,
@@ -163,7 +165,7 @@ const AppCard = (props) => {
   };
 
   return (
-    <View style={{ ...styles.container, ...style }}>
+    <View style={{ ...styles.container, ...style }} testID={`app-${id}`}>
       <TouchableOpacity style={styles.link} onPress={openApp}>
         <Image
           source={{
@@ -205,8 +207,7 @@ const styles = StyleSheet.create({
     marginLeft: DEVICE_LARGE ? 20 : 12,
   },
   appName: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     color: 'black',
     fontSize: DEVICE_LARGE ? 22 : 19,
   },
@@ -217,26 +218,22 @@ const styles = StyleSheet.create({
     marginLeft: DEVICE_LARGE ? 20 : 12,
   },
   sponsorshipMessage: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#4a90e2',
   },
   linkedMessage: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#4a90e2',
   },
   errorMessage: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#FF0800',
   },
   unverifiedMessage: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#707070',
   },

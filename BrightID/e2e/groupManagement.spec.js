@@ -41,11 +41,12 @@ describe('Group Management', () => {
     await waitFor(element(by.id('connection-2')))
       .toExist()
       .withTimeout(20000);
-
     await navigateHome();
 
     // Connect all fake connections with each other
-    await interConnect(3);
+    await interConnect(0);
+    await interConnect(1);
+    await interConnect(2);
   });
 
   describe('Create group', () => {
@@ -96,7 +97,8 @@ describe('Group Management', () => {
 
     it('invited co-founders should join group', async () => {
       // accept invitation
-      await joinAllGroups(3);
+      await joinAllGroups(0);
+      await joinAllGroups(1);
 
       // Check if cofounders actually joined the groups
       await expectHomescreen();
@@ -121,7 +123,9 @@ describe('Group Management', () => {
       // invite
       await inviteConnectionToGroup(GroupName);
       // accept invitation
-      await joinAllGroups(3);
+      await joinAllGroups(0);
+      await joinAllGroups(1);
+      await joinAllGroups(2);
 
       // check group members
       // navigate to groups screen
@@ -141,7 +145,7 @@ describe('Group Management', () => {
       await expect(element(by.id('memberItem-3'))).toBeVisible();
       // Now on members screen. Go back to homescreen.
       // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-      await navigateHome();
+      await element(by.id('header-back')).tap();
       await navigateHome();
     });
 
@@ -170,7 +174,7 @@ describe('Group Management', () => {
       await expect(element(by.id('memberItem-3'))).not.toBeVisible();
       // Now on members screen. Go back to homescreen.
       // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-      await navigateHome();
+      await element(by.id('header-back')).tap();
       await navigateHome();
     });
 
@@ -199,7 +203,7 @@ describe('Group Management', () => {
       await expect(element(by.id('memberItem-2'))).not.toBeVisible();
       // Now on members screen. Go back to homescreen.
       // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-      await navigateHome();
+      await element(by.id('header-back')).tap();
       await navigateHome();
     });
   });
@@ -209,7 +213,9 @@ describe('Group Management', () => {
       // invite
       await inviteConnectionToGroup(GroupName);
       // accept invitation
-      await joinAllGroups(3);
+      await joinAllGroups(0);
+      await joinAllGroups(1);
+      await joinAllGroups(2);
 
       // check group members
       // navigate to groups screen
@@ -229,7 +235,7 @@ describe('Group Management', () => {
       await expect(element(by.id('memberItem-2'))).toBeVisible();
       // Now on members screen. Go back to homescreen.
       // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-      await navigateHome();
+      await element(by.id('header-back')).tap();
       await navigateHome();
     });
 
