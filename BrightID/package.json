@@ -166,7 +166,7 @@
         "build": "xcodebuild -workspace ios/BrightID.xcworkspace -scheme BrightID -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
         "type": "ios.simulator",
         "device": {
-          "type": "iPhone 11 Pro Max"
+          "type": "iPhone SE (2nd generation)"
         }
       },
       "ios.sim.release": {
@@ -174,7 +174,7 @@
         "build": "xcodebuild -workspace ios/BrightID.xcworkspace -scheme BrightID -configuration Release -sdk iphonesimulator -derivedDataPath ios/build",
         "type": "ios.simulator",
         "device": {
-          "type": "iPhone 11 Pro Max"
+          "type": "iPhone SE (2nd generation)"
         }
       }
     },

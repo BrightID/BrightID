@@ -145,7 +145,7 @@ describe('Group Management', () => {
       await expect(element(by.id('memberItem-3'))).toBeVisible();
       // Now on members screen. Go back to homescreen.
       // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-      await navigateHome();
+      await element(by.id('header-back')).tap();
       await navigateHome();
     });
 
@@ -174,7 +174,7 @@ describe('Group Management', () => {
       await expect(element(by.id('memberItem-3'))).not.toBeVisible();
       // Now on members screen. Go back to homescreen.
       // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-      await navigateHome();
+      await element(by.id('header-back')).tap();
       await navigateHome();
     });
 
@@ -203,7 +203,7 @@ describe('Group Management', () => {
       await expect(element(by.id('memberItem-2'))).not.toBeVisible();
       // Now on members screen. Go back to homescreen.
       // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-      await navigateHome();
+      await element(by.id('header-back')).tap();
       await navigateHome();
     });
   });
@@ -235,7 +235,7 @@ describe('Group Management', () => {
       await expect(element(by.id('memberItem-2'))).toBeVisible();
       // Now on members screen. Go back to homescreen.
       // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-      await navigateHome();
+      await element(by.id('header-back')).tap();
       await navigateHome();
     });
 

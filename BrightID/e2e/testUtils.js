@@ -59,9 +59,15 @@ const navigateHome = async () => {
   // there might be several "navHomeBtn" instances in the view hierarchy
   try {
     await element(by.id('NavHomeBtn')).atIndex(0).tap();
-    await element(by.id('NavHomeBtn')).atIndex(1).tap();
-    await element(by.id('NavHomeBtn')).atIndex(2).tap();
-  } catch (err) {}
+  } catch (err) {
+    try {
+      await element(by.id('NavHomeBtn')).atIndex(1).tap();
+    } catch (err) {
+      try {
+        await element(by.id('NavHomeBtn')).atIndex(2).tap();
+      } catch (err) {}
+    }
+  }
 
   await expectHomescreen();
 };
@@ -127,7 +133,7 @@ const inviteConnectionToGroup = async (groupName: string) => {
   await element(by.text('OK')).tap();
   // Now on members screen again. Go back to homescreen.
   // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-  await navigateHome();
+  await element(by.id('header-back')).tap();
   await navigateHome();
   await expectHomescreen();
 };
@@ -153,7 +159,7 @@ const joinAllGroups = async (connectionIndex: number) => {
   await element(by.text(actionTitle)).tap();
 
   // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-  await navigateHome();
+  await element(by.id('header-back')).tap();
   await navigateHome();
   await expectHomescreen();
 };
@@ -181,7 +187,7 @@ const interConnect = async (connectionIndex: number) => {
   await element(by.text(actionTitle)).tap();
 
   // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-  await navigateHome();
+  await element(by.id('header-back')).tap();
   await navigateHome();
   await expectHomescreen();
 };
@@ -228,7 +234,7 @@ const reconnect = async (connectionIndex: number, changeProfile: boolean) => {
   await element(by.text(action)).tap();
 
   // navigate to MyCodeScreen, there it will pick up the incoming connection profile
-  await navigateHome();
+  await element(by.id('header-back')).tap();
   await navigateHome();
   await element(by.id('MyCodeBtn')).tap();
   await expect(element(by.id('ReconnectScreen'))).toBeVisible();
