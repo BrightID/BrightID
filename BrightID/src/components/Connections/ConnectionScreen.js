@@ -17,7 +17,7 @@ import moment from 'moment';
 import default_group from '@/static/default_group.svg';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { photoDirectory } from '@/utils/filesystem';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
 import TrustLevelView from './TrustLevelView';
 
 /**
@@ -345,8 +345,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     marginTop: 6,
-    paddingTop: 1,
-    paddingBottom: 1,
+    paddingTop: DEVICE_ANDROID ? 2 : 1,
+    paddingBottom: DEVICE_ANDROID ? 0 : 1,
     paddingLeft: 20,
     paddingRight: 20,
     fontSize: DEVICE_LARGE ? 11 : 10,
