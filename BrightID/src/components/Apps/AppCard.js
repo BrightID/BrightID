@@ -16,6 +16,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { addLinkedContext, removeLinkedContext } from '@/actions';
+const parser = require('expr-eval').Parser;
 
 /**
  * App Card in the Apps Screen
@@ -46,7 +47,7 @@ const AppCard = (props) => {
     context,
   } = props;
   const dispatch = useDispatch();
-  const verifications = useSelector((state) => state.user.verifications);
+  let verifications = useSelector((state) => Object.assign({}, ...state.user.verifications.map(o => ({[o.name]: o}))));
   const isSponsored = useSelector((state) => state.user.isSponsored);
   const linkedContext = useSelector((state) =>
     linkedContextSelector(state, context),
@@ -120,7 +121,13 @@ const AppCard = (props) => {
   };
 
   const VerificationLabel = () => {
-    if (!verifications.includes(verification)) {
+    let expr = parser.parse(verification);
+    for(let v of expr.variables()) {
+      if (!verifications[v]) {
+        verifications[v] = false;
+      }
+    }
+    if (!expr.evaluate(verifications)) {
       return (
         <Text style={styles.unverifiedMessage}>Not verified for this app</Text>
       );
