@@ -8,6 +8,13 @@ target 'BrightID' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  # manually install appcenter dependencies
+
+  pod 'AppCenter', '~> 3.3.4'
+  # pod 'AppCenter/Crashes', '~> 3.3.4'
+  # pod 'AppCenter/Analytics', '~> 3.3.4'
+  # pod 'AppCenterReactNativeShared', '~> 3.1.2'
+
   target 'BrightIDTests' do
     inherit! :complete
     # Pods for testing
