@@ -39,12 +39,12 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
         } = await api.getUserInfo(id);
 
         if (operations.length === 0) {
-          // don't update data when there are pending operations
+          // don't update data when there are pending operations.
           dispatch(setGroups(groups));
+          dispatch(updateConnections(connections));
         }
         dispatch(setUserScore(score));
         dispatch(setVerifications(verifications));
-        dispatch(updateConnections(connections));
         dispatch(setIsSponsored(isSponsored));
 
         // this can not be done in reducer because it should be in an async function

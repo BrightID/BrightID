@@ -37,6 +37,14 @@ const TrustlevelSlider = ({
 }: TrustlevelSliderProps) => {
   const minValue = 0;
   const maxValue = Object.keys(trustLevelDetails).length - 1;
+
+  // TODO - Quick workaround to catch connections that just changed from "REPORTED" to something else, but are not
+  // confirmed on the backend yet. This can happen when you report someone and later reconnect. Proper solution is
+  // to not allow changing level again until the last operation actually confirmed.
+  if (currentLevel === connection_levels.REPORTED) {
+    currentLevel = connection_levels.JUST_MET;
+  }
+
   // map connectionLevel to index value
   const initialValue = Object.keys(trustLevelDetails).indexOf(currentLevel);
   const valueChangeHandler = (value) => {
