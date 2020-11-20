@@ -17,7 +17,7 @@ import moment from 'moment';
 import default_group from '@/static/default_group.svg';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { photoDirectory } from '@/utils/filesystem';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
 import TrustLevelView from './TrustLevelView';
 
 /**
@@ -306,6 +306,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
+    minWidth: '45%',
   },
   profilePhoto: {
     borderRadius: DEVICE_LARGE ? 45 : 39,
@@ -318,7 +319,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: -3,
     flexGrow: 1,
-    maxWidth: '66%',
+    maxWidth: '60%',
   },
   nameLabel: {
     flexDirection: 'row',
@@ -342,12 +343,12 @@ const styles = StyleSheet.create({
   badge: {
     fontFamily: 'Poppins-Medium',
     borderWidth: 1,
-    borderRadius: 15,
+    borderRadius: 10,
     marginTop: 6,
-    paddingTop: 2,
-    paddingBottom: 0,
-    paddingLeft: 23,
-    paddingRight: 23,
+    paddingTop: DEVICE_ANDROID ? 2 : 1,
+    paddingBottom: DEVICE_ANDROID ? 0 : 1,
+    paddingLeft: 20,
+    paddingRight: 20,
     fontSize: DEVICE_LARGE ? 11 : 10,
   },
   verified: {
