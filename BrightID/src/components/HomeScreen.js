@@ -15,7 +15,7 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { SvgXml } from 'react-native-svg';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveNotification } from '@/actions';
+import { setActiveNotification, fetchVerifications } from '@/actions';
 import { retrieveImage } from '@/utils/filesystem';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import verificationSticker from '@/static/verification-sticker.svg';
@@ -42,7 +42,7 @@ const linkedContextCountSelector = createSelector(
 
 export const verifiedSelector = createSelector(
   (state) => state.user.verifications,
-  (verifications) => verifications.includes('BrightID'),
+  (verifications) => verifications.map(v => v.name).includes('BrightID'),
 );
 
 export const verifiedConnections = createSelector(
@@ -69,6 +69,7 @@ export const HomeScreen = (props) => {
   useFocusEffect(
     useCallback(() => {
       dispatch(fetchUserInfo());
+      dispatch(fetchVerifications());
       retrieveImage(photoFilename).then(setProfilePhoto);
     }, [dispatch, photoFilename]),
   );

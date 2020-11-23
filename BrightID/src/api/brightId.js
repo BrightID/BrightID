@@ -427,6 +427,12 @@ class NodeApi {
     return res.data.data;
   }
 
+  async getVerifications(id: string) {
+    let res = await this.api.get(`/users/${id}/verifications`);
+    NodeApi.throwOnError(res);
+    return res.data.data.verifications;
+  }
+
   async getOperationState(opHash: string) {
     let res = await this.api.get(`/operations/${opHash}`);
     if (res.status === 404) {

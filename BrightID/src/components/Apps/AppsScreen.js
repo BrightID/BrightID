@@ -16,7 +16,7 @@ import Spinner from 'react-native-spinkit';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { any, find, propEq } from 'ramda';
-import { fetchApps } from '@/actions';
+import { fetchApps, fetchVerifications } from '@/actions';
 import {
   useFocusEffect,
   useNavigation,
@@ -48,6 +48,7 @@ export const AppsScreen = () => {
   }, [dispatch]);
 
   useFocusEffect(refreshApps);
+  dispatch(fetchVerifications());
 
   useEffect(() => {
     if (apps.length > 0 && route.params?.context) {

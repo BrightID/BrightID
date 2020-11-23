@@ -47,7 +47,9 @@ const AppCard = (props) => {
     context,
   } = props;
   const dispatch = useDispatch();
-  let verifications = useSelector((state) => Object.assign({}, ...state.user.verifications.map(o => ({[o.name]: o}))));
+  const verifications = useSelector((state) => Object.assign({},
+    ...state.user.verifications.map(o => ({[o.name]: o}))
+  ));
   const isSponsored = useSelector((state) => state.user.isSponsored);
   const linkedContext = useSelector((state) =>
     linkedContextSelector(state, context),

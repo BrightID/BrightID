@@ -62,7 +62,7 @@ export const UserTasks = {
     sortValue: 70,
     url: 'https://brightid.gitbook.io/brightid/#verify-your-brightid',
     checkFn(state) {
-      return state.user.verifications.includes('BrightID');
+      return state.user.verifications.map(v => v.name).includes('BrightID');
     },
   },
   setup_trusted_connections: {

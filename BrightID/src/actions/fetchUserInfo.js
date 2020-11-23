@@ -8,7 +8,6 @@ import {
   setGroups,
   setInvites,
   setUserScore,
-  setVerifications,
   updateConnections,
   setIsSponsored,
   updateNotifications,
@@ -32,7 +31,6 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
         const {
           groups,
           score,
-          verifications = [],
           connections = [],
           isSponsored,
           invites,
@@ -43,7 +41,6 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
           dispatch(setGroups(groups));
         }
         dispatch(setUserScore(score));
-        dispatch(setVerifications(verifications));
         dispatch(updateConnections(connections));
         dispatch(setIsSponsored(isSponsored));
 

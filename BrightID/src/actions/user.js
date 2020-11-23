@@ -1,5 +1,7 @@
 // @flow
 
+import api from '@/api/brightId';
+
 export const USER_SCORE = 'USER_SCORE';
 export const SET_IS_SPONSORED = 'SET_IS_SPONSORED';
 export const SET_USER_PHOTO = 'SET_USER_PHOTO';
@@ -123,6 +125,19 @@ export const setVerifications = (verifications: string[]) => ({
   type: SET_VERIFICATIONS,
   verifications,
 });
+
+export const fetchVerifications = () => async (
+  dispatch: dispatch,
+  getState: getState,
+) => {
+  try {
+    const id = getState().user.id;
+    const verifications = await api.getVerifications(id);
+    dispatch(setVerifications(verifications));
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 
 export const hydrateUser = (data: {
   score: number,

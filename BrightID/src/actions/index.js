@@ -128,5 +128,6 @@ export {
   setUserId,
   removeSafePubKey,
   setVerifications,
+  fetchVerifications,
   hydrateUser,
 } from './user';
