@@ -14,7 +14,6 @@ import {
 } from './pendingConnectionSlice';
 import { ReconnectView } from './ReconnectView';
 import { PreviewConnectionView } from './PreviewConnectionView';
-import { flagConnection } from '../Connections/models/flagConnection';
 
 type PreviewConnectionProps = {
   pendingConnectionId: any,
@@ -55,16 +54,22 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
   };
 
   const abuseHandler = () => {
-    dispatch(flagConnection(existingConnection.id, 'fake'));
-    // Set pending connection to "CONFIRMED" to indicate it has been handled by the user
-    dispatch(
-      updatePendingConnection({
-        id: pendingConnection.id,
-        changes: {
-          state: pendingConnection_states.CONFIRMED,
+    if (existingConnection) {
+      navigation.navigate('ReportReason', {
+        connectionId: existingConnection.id,
+        successCallback: () => {
+          // Set pending connection to "CONFIRMED" to indicate it has been handled by the user
+          dispatch(
+            updatePendingConnection({
+              id: pendingConnection.id,
+              changes: {
+                state: pendingConnection_states.CONFIRMED,
+              },
+            }),
+          );
         },
-      }),
-    );
+      });
+    }
   };
 
   const photoTouchHandler = () => {

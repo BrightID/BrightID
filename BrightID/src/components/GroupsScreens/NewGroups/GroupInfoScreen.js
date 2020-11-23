@@ -13,12 +13,8 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { chooseImage } from '@/utils/images';
-import {
-  DEVICE_TYPE,
-  DEVICE_OS,
-  ORANGE,
-  DEVICE_LARGE,
-} from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_TYPE, DEVICE_OS, DEVICE_LARGE } from '@/utils/deviceConstants';
 
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 

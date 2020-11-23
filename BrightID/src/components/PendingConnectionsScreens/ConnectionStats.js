@@ -37,15 +37,13 @@ export const ConnectionStats = ({
 
 const styles = StyleSheet.create({
   countsDescriptionText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: DEVICE_LARGE ? 13 : 11.5,
   },
   countsNumberText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 17 : 15,
+    fontSize: DEVICE_LARGE ? 16 : 14,
   },
 });

@@ -14,7 +14,7 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
-import { WIDTH } from '@/utils/deviceConstants';
+import { WIDTH, DEVICE_LARGE } from '@/utils/deviceConstants';
 import { setActiveNotification } from '@/actions';
 import { confirmPendingConnectionThunk } from './actions/pendingConnectionThunks';
 import { PreviewConnectionController } from './PreviewConnectionController';
@@ -145,8 +145,7 @@ export const PendingConnectionsScreen = () => {
         ref={carouselRef}
         data={pendingConnectionsToDisplay}
         renderItem={renderItem}
-        layout="stack"
-        layoutCardOffset={pendingConnectionsToDisplay.length}
+        // layout="stack"
         firstItem={0}
         itemWidth={WIDTH * 0.95}
         sliderWidth={WIDTH}
@@ -171,7 +170,7 @@ export const PendingConnectionsScreen = () => {
       {loading || reRender ? (
         <Spinner
           isVisible={true}
-          size={44}
+          size={DEVICE_LARGE ? 44 : 40}
           type="FadingCircleAlt"
           color="#aaa"
         />
@@ -185,6 +184,7 @@ export const PendingConnectionsScreen = () => {
               overflow: 'hidden',
               flexWrap: 'wrap',
               justifyContent: 'flex-start',
+              marginTop: DEVICE_LARGE ? -33 : -30,
             }}
             dotContainerStyle={{
               paddingTop: 5,

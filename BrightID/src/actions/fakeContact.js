@@ -10,7 +10,8 @@ import { selectChannelById } from '@/components/PendingConnectionsScreens/channe
 import { names } from '@/utils/fakeNames';
 import { connectFakeUsers } from '@/utils/fakeHelper';
 import api from '@/api/brightId';
-import { retrieveImage } from '../utils/filesystem';
+import { retrieveImage } from '@/utils/filesystem';
+import { PROFILE_VERSION } from '@/utils/constants';
 
 export const addFakeConnection = () => async (
   dispatch: dispatch,
@@ -55,6 +56,7 @@ export const addFakeConnection = () => async (
       profileTimestamp: Date.now(),
       secretKey: uInt8ArrayToB64(secretKey),
       notificationToken: null,
+      version: PROFILE_VERSION,
     };
 
     let encrypted = encryptData(dataObj, channel.aesKey);
@@ -187,6 +189,7 @@ export const reconnectFakeConnection = (
     profileTimestamp: Date.now(),
     secretKey: fakeUser1.secretKey,
     notificationToken: null,
+    version: PROFILE_VERSION,
   };
 
   let encrypted = encryptData(dataObj, channel.aesKey);

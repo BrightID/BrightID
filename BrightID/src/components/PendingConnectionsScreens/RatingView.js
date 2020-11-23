@@ -3,12 +3,13 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { RatingButton } from './RatingButton';
-import { connection_levels, DEVICE_LARGE } from '../../utils/constants';
+import { connection_levels } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import {
   connectionLevelColors,
   connectionLevelStrings,
-} from '../../utils/connectionLevelStrings';
+} from '@/utils/connectionLevelStrings';
+import { RatingButton } from './RatingButton';
 
 type RatingViewProps = {
   setLevelHandler: (level: ConnectionLevel) => any,
@@ -17,58 +18,56 @@ type RatingViewProps = {
 export const RatingView = ({ setLevelHandler }: RatingViewProps) => {
   const { t } = useTranslation();
   return (
-    <>
-      <View>
-        <Text style={styles.ratingHeader}>
-          {t('pendingConnections.label.rating')}
-        </Text>
-      </View>
-      <View style={styles.rateButtonContainer}>
-        <RatingButton
-          color={connectionLevelColors[connection_levels.SUSPICIOUS]}
-          label={connectionLevelStrings[connection_levels.SUSPICIOUS]}
-          handleClick={() => setLevelHandler(connection_levels.SUSPICIOUS)}
-          testID={`${connection_levels.SUSPICIOUS}Btn`}
-        />
-        <RatingButton
-          color={connectionLevelColors[connection_levels.JUST_MET]}
-          label={connectionLevelStrings[connection_levels.JUST_MET]}
-          handleClick={() => setLevelHandler(connection_levels.JUST_MET)}
-          testID={`${connection_levels.JUST_MET}Btn`}
-        />
-        <RatingButton
-          color={connectionLevelColors[connection_levels.ALREADY_KNOWN]}
-          label={connectionLevelStrings[connection_levels.ALREADY_KNOWN]}
-          handleClick={() => setLevelHandler(connection_levels.ALREADY_KNOWN)}
-          testID={`${connection_levels.ALREADY_KNOWN}Btn`}
-        />
-      </View>
-      <View>
-        <Text style={styles.ratingFooter}>
-          {t('pendingConnections.text.rating')}
-        </Text>
-      </View>
-    </>
+    <View style={styles.container}>
+      <Text style={styles.ratingHeader}>
+        {t('pendingConnections.label.rating')}
+      </Text>
+
+      <RatingButton
+        color={connectionLevelColors[connection_levels.SUSPICIOUS]}
+        label={connectionLevelStrings[connection_levels.SUSPICIOUS]}
+        handleClick={() => setLevelHandler(connection_levels.SUSPICIOUS)}
+        testID={`${connection_levels.SUSPICIOUS}Btn`}
+      />
+      <RatingButton
+        color={connectionLevelColors[connection_levels.JUST_MET]}
+        label={connectionLevelStrings[connection_levels.JUST_MET]}
+        handleClick={() => setLevelHandler(connection_levels.JUST_MET)}
+        testID={`${connection_levels.JUST_MET}Btn`}
+      />
+      <RatingButton
+        color={connectionLevelColors[connection_levels.ALREADY_KNOWN]}
+        label={connectionLevelStrings[connection_levels.ALREADY_KNOWN]}
+        handleClick={() => setLevelHandler(connection_levels.ALREADY_KNOWN)}
+        testID={`${connection_levels.ALREADY_KNOWN}Btn`}
+      />
+
+      <Text style={styles.ratingFooter}>
+        {t('pendingConnections.text.rating')}
+      </Text>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
   ratingHeader: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 17 : 15,
-    marginBottom: 12,
+    fontSize: DEVICE_LARGE ? 16 : 13,
+    marginBottom: DEVICE_LARGE ? 5 : 4,
   },
-  rateButtonContainer: {
-    width: '65%',
-  },
+
   ratingFooter: {
-    paddingTop: 18,
-    fontFamily: 'Poppins',
-    fontWeight: 'normal',
+    paddingTop: DEVICE_LARGE ? 8 : 7,
+    fontFamily: 'Poppins-Regular',
     textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 12 : 10,
+    fontSize: DEVICE_LARGE ? 12 : 11,
     color: '#827F7F',
   },
 });

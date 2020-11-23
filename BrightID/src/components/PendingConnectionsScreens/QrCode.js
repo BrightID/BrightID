@@ -204,22 +204,19 @@ const styles = StyleSheet.create({
   },
   copyText: {
     color: '#333',
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 12,
   },
   timerContainer: {
     flexDirection: 'row',
   },
   timerTextLeft: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#333',
   },
   timerTextRight: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#333',
   },

@@ -6,6 +6,7 @@ import {
   navigateHome,
   reconnect,
 } from './testUtils';
+import { report_reasons } from '../src/utils/constants';
 
 describe('Reconnect existing connection', () => {
   beforeAll(async () => {
@@ -24,7 +25,7 @@ describe('Reconnect existing connection', () => {
     });
 
     beforeEach(async () => {
-      await reconnect(true);
+      await reconnect(0, true);
       // Reconnect screen should have old + new profile and abuse + Update buttons
       await expect(element(by.id('oldProfileView'))).toExist();
       await expect(element(by.id('newProfileView'))).toExist();
@@ -33,17 +34,26 @@ describe('Reconnect existing connection', () => {
     });
 
     it('should update connection', async () => {
-      await expect(element(by.id('updateBtn'))).toExist();
       await element(by.id('updateBtn')).tap();
       // should move to connections screen
       await expectConnectionsScreen();
     });
 
     it('should report abuse on connection', async () => {
-      await expect(element(by.id('reportAbuseBtn'))).toExist();
       await element(by.id('reportAbuseBtn')).tap();
-
-      // should move to connections screen
+      // should open ReportReason modal
+      await expect(element(by.id('ReportReasonModal'))).toBeVisible();
+      // report as "spammer"
+      const reasonButton = element(by.id(`${report_reasons.SPAMMER}-RadioBtn`));
+      await reasonButton.tap();
+      // click Submit button
+      const submitButton = element(by.id('SubmitReportBtn'));
+      await submitButton.tap();
+      // should be at MyCodeScreen
+      await expect(element(by.id('MyCodeScreen'))).toBeVisible();
+      // go to connections screen
+      await navigateHome();
+      await element(by.id('connectionsBtn')).tap();
       await expectConnectionsScreen();
       // there should be no connection entry
       await expect(element(by.id('EmptyListView'))).toExist();
@@ -54,7 +64,7 @@ describe('Reconnect existing connection', () => {
     beforeAll(async () => {
       // create a fake connection
       await createFakeConnection();
-      await reconnect(false);
+      await reconnect(0, false);
     });
 
     afterEach(async () => {

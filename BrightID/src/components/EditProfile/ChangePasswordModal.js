@@ -12,12 +12,8 @@ import {
 import { BlurView } from '@react-native-community/blur';
 import Spinner from 'react-native-spinkit';
 import { setInternetCredentials } from 'react-native-keychain';
-import {
-  DEVICE_LARGE,
-  DEVICE_ANDROID,
-  BACKUP_URL,
-  DEVICE_IOS,
-} from '@/utils/constants';
+import { BACKUP_URL } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { validatePass } from '@/utils/password';
@@ -220,8 +216,7 @@ const styles = StyleSheet.create({
     marginBottom: DEVICE_LARGE ? 12 : 10,
   },
   label: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 13 : 11,
     color: '#B64B32',
     marginBottom: DEVICE_IOS ? (DEVICE_LARGE ? 15 : 13) : 0,
@@ -248,8 +243,7 @@ const styles = StyleSheet.create({
     marginRight: DEVICE_LARGE ? 22 : 18,
   },
   saveButtonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 10,
   },
   cancelButton: {
@@ -264,13 +258,12 @@ const styles = StyleSheet.create({
     borderColor: '#707070',
   },
   cancelButtonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 10,
     color: '#707070',
   },
   textInfo: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#333',
     margin: DEVICE_LARGE ? 12 : 10,

@@ -5,7 +5,7 @@ import { StyleSheet, View, Text } from 'react-native';
 
 import Slider from '@react-native-community/slider';
 import { connection_levels } from '@/utils/constants';
-import { WIDTH } from '@/utils/deviceConstants';
+import { WIDTH, DEVICE_LARGE } from '@/utils/deviceConstants';
 import {
   connectionLevelColors,
   connectionLevelStrings,
@@ -37,6 +37,14 @@ const TrustlevelSlider = ({
 }: TrustlevelSliderProps) => {
   const minValue = 0;
   const maxValue = Object.keys(trustLevelDetails).length - 1;
+
+  // TODO - Quick workaround to catch connections that just changed from "REPORTED" to something else, but are not
+  // confirmed on the backend yet. This can happen when you report someone and later reconnect. Proper solution is
+  // to not allow changing level again until the last operation actually confirmed.
+  if (currentLevel === connection_levels.REPORTED) {
+    currentLevel = connection_levels.JUST_MET;
+  }
+
   // map connectionLevel to index value
   const initialValue = Object.keys(trustLevelDetails).indexOf(currentLevel);
   const valueChangeHandler = (value) => {
@@ -90,12 +98,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   label: {
-    marginBottom: 5,
+    marginBottom: DEVICE_LARGE ? 10 : 8,
   },
   labelText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
-    fontSize: 17,
+    fontFamily: 'Poppins-Bold',
+    fontSize: DEVICE_LARGE ? 17 : 15,
     color: '#000',
   },
   description: {
@@ -104,19 +111,18 @@ const styles = StyleSheet.create({
     minHeight: 50,
   },
   descriptionText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    fontSize: 17,
+    fontFamily: 'Poppins-Medium',
+    fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#000',
     textAlign: 'center',
   },
   slider: {
-    marginTop: 10,
-    marginBottom: 15,
+    marginTop: DEVICE_LARGE ? 10 : 5,
+    marginBottom: DEVICE_LARGE ? 13 : 11,
     // slider only supports absolute width, so have to calculate manually:
     // width = deviceWidth * modalWidth (90%) * sliderWidth (80% of modal width)
     width: WIDTH * 0.9 * 0.8,
-    height: 50,
+    height: DEVICE_LARGE ? 50 : 45,
   },
 });
 

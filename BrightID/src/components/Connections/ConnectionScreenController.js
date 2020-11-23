@@ -1,15 +1,16 @@
 // @flow
 
-import React, { useCallback, useState } from 'react';
-import { Text } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { useActionSheet } from '@expo/react-native-action-sheet';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
+import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { handleFlagging } from './models/flagConnection';
 import { fetchConnectionInfo } from '../../utils/fetchConnectionInfo';
 import ConnectionScreen from './ConnectionScreen';
-import { useTranslation } from 'react-i18next';
+import ConnectionTestButton from '../../utils/connectionTestButton';
 
 type ConnectionScreenProps = {
   route: any,
@@ -19,8 +20,6 @@ type ConnectionScreenProps = {
 function ConnectionScreenController(props: ConnectionScreenProps) {
   const { route, navigation } = props;
   const { connectionId } = route.params;
-  const { showActionSheetWithOptions } = useActionSheet();
-  const dispatch = useDispatch();
   const connection: connection = useSelector((state: State) =>
     state.connections.connections.find((conn) => conn.id === connectionId),
   );
@@ -31,11 +30,12 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
     [],
   );
   const [verifications, setVerifications] = useState<Array<string>>([]);
-  const { t } = useTranslation();
+  const [loading, setLoading] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
       const fetchData = async (connectionId) => {
+        setLoading(true);
         console.log(`fetching connection info for ${connectionId}`);
         const connectionData = await fetchConnectionInfo({
           brightId: connectionId,
@@ -45,6 +45,7 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
         setMutualGroups(connectionData.mutualGroups);
         setMutualConnections(connectionData.mutualConnections);
         setVerifications(connectionData.verifications);
+        setLoading(false);
       };
       if (connection) {
         fetchData(connection.id);
@@ -56,58 +57,27 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
     }, [connection, myConnections, myGroups]),
   );
 
+  useEffect(() => {
+    if (!connection) {
+      // connection not there anymore.
+      navigation.goBack();
+    }
+  }, [navigation, connection]);
+
+  // Add fake user functionality in DEV mode
+  useLayoutEffect(() => {
+    if (__DEV__) {
+      navigation.setOptions({
+        headerRight: () => <ConnectionTestButton connectionId={connectionId} />,
+      });
+    }
+  }, [navigation, connectionId]);
+
   if (!connection) {
-    // connection not there anymore.
-    return <Text>connection vanished.</Text>;
+    return null;
   }
 
   const brightIdVerified = verifications.includes('BrightID');
-
-  let flaggingOptions = [
-    t('connections.flagActionSheet.spammer'),
-    t('connections.flagActionSheet.duplicate'),
-    t('connections.flagActionSheet.fake'),
-    t('connections.flagActionSheet.deceased'),
-    'Join All Groups',
-    'Connect to other fake connections',
-    'Reconnect - changed profile',
-    'Reconnect - identical profile',
-    t('common.actionSheet.cancel'),
-  ];
-  if (!__DEV__) {
-    // remove debug functionality
-    flaggingOptions.splice(4, 4);
-  }
-
-  const handleFlagBtnClick = () => {
-    showActionSheetWithOptions(
-      {
-        options: flaggingOptions,
-        cancelButtonIndex: flaggingOptions.length - 1,
-        title: t('common.actionSheet.title'),
-        message: t('connections.flagActionSheet.infoFlagImpact', {name: `${connection.name}`}),
-        showSeparators: true,
-        textStyle: {
-          color: '#2185D0',
-          textAlign: 'center',
-          width: '100%',
-        },
-        titleTextStyle: {
-          fontSize: DEVICE_LARGE ? 20 : 17,
-        },
-        messageTextStyle: {
-          fontSize: DEVICE_LARGE ? 15 : 12,
-        },
-      },
-      handleFlagging({
-        id: connection.id,
-        name: connection.name,
-        dispatch,
-        secretKey: connection.secretKey,
-        callback: () => navigation.goBack(),
-      }),
-    );
-  };
 
   return (
     <ConnectionScreen
@@ -116,7 +86,7 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
       connection={connection}
       mutualConnections={mutualConnections}
       mutualGroups={mutualGroups}
-      handleFlagBtn={handleFlagBtnClick}
+      loading={loading}
     />
   );
 }

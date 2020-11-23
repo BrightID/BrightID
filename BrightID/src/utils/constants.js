@@ -13,6 +13,7 @@ export const MIN_CHANNEL_JOIN_TTL = 5000;
 export const PROFILE_POLL_INTERVAL = 1000;
 // timestamp can be this far in the future (milliseconds) to accommodate 2 clients clock differences
 export const TIME_FUDGE = 60 * 60 * 1000;
+export const PROFILE_VERSION = 1;
 
 /** ** THEME CONSTANTS  *** */
 export const ORANGE = '#ED7A5D';
@@ -33,4 +34,12 @@ export const connection_levels = {
   JUST_MET: 'just met',
   ALREADY_KNOWN: 'already known',
   RECOVERY: 'recovery',
+};
+
+export const report_reasons = {
+  FAKE: 'fake',
+  DUPLICATE: 'duplicate',
+  SPAMMER: 'spammer',
+  DECEASED: 'deceased',
+  OTHER: 'other',
 };

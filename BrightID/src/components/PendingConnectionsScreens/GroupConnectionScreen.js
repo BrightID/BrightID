@@ -381,8 +381,7 @@ const styles = StyleSheet.create({
     borderColor: ORANGE,
   },
   confirmConnectionsText: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: ORANGE,
     marginLeft: 10,

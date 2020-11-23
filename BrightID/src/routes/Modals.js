@@ -7,6 +7,7 @@ import FullScreenPhoto from '@/components/Helpers/FullScreenPhoto';
 import ChangePasswordModal from '@/components/EditProfile/ChangePasswordModal';
 import TrustlevelModal from '@/components/Connections/TrustlevelModal';
 import SelectSocialMediaModal from '@/components/EditProfile/SelectSocialMediaModal';
+import ReportReasonModal from '@/components/Connections/ReportReasonModal';
 
 const Stack = createStackNavigator();
 
@@ -41,6 +42,11 @@ const Modals = () => {
         name="SetTrustlevel"
         options={modalOptions}
         component={TrustlevelModal}
+      />
+      <Stack.Screen
+        name="ReportReason"
+        options={modalOptions}
+        component={ReportReasonModal}
       />
     </>
   );

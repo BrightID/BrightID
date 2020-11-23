@@ -16,13 +16,8 @@ import { setInternetCredentials } from 'react-native-keychain';
 import { withTranslation } from 'react-i18next';
 import { setBackupCompleted, setPassword } from '@/actions/index';
 import emitter from '@/emitter';
-import {
-  DEVICE_IOS,
-  DEVICE_ANDROID,
-  BACKUP_URL,
-  DEVICE_LARGE,
-  ORANGE,
-} from '@/utils/constants';
+import { BACKUP_URL, ORANGE } from '@/utils/constants';
+import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/deviceConstants';
 import { validatePass } from '@/utils/password';
 import { backupAppData } from './helpers';
 

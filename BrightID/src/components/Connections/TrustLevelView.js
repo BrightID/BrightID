@@ -8,6 +8,7 @@ import {
   connectionLevelColors,
   connectionLevelStrings,
 } from '@/utils/connectionLevelStrings';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
 type props = {
   level: ConnectionLevel,
@@ -26,6 +27,7 @@ function TrustLevelView({ level, connectionId }: props) {
       <View style={styles.trustLevelLabel}>
         <Text style={styles.trustLevelLabelText}>Connection Level</Text>
       </View>
+
       <View style={styles.trustLevel}>
         <Text
           testID="ConnectionLevelText"
@@ -42,7 +44,7 @@ function TrustLevelView({ level, connectionId }: props) {
         testID="EditConnectionLevelBtn"
         onPress={setLevel}
       >
-        <Material name="edit" size={23} color="#2185D0" />
+        <Material name="edit" size={DEVICE_LARGE ? 23 : 20} color="#2185D0" />
       </TouchableOpacity>
     </View>
   );
@@ -54,26 +56,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   trustLevelLabel: {
-    width: '50%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   trustLevelLabelText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    fontSize: 17,
+    fontFamily: 'Poppins-Medium',
+    fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#000',
   },
   trustLevel: {
-    width: '40%',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   trustLevelText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    fontSize: 17,
+    fontFamily: 'Poppins-Medium',
+    fontSize: DEVICE_LARGE ? 14 : 12,
   },
   trustLevelButton: {
     paddingLeft: 5,
     paddingBottom: 5,
     paddingTop: 5,
+    paddingRight: 5,
   },
 });
 

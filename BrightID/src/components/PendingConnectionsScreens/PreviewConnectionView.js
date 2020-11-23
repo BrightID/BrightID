@@ -95,7 +95,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
         <View style={styles.connectNameContainer}>
           <Text style={styles.connectName}>{pendingConnection.name}</Text>
           {pendingConnection.flagged && (
-            <Text style={styles.flagged}> {t('common.tag.flagged')}</Text>
+            <Text style={styles.flagged}> {t('common.tag.reported')}</Text>
           )}
           {brightIdVerified && (
             <View style={styles.verificationSticker}>
@@ -118,14 +118,12 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
 
 const styles = StyleSheet.create({
   waitingText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#333',
   },
   buttonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 18 : 15,
     textAlign: 'left',
     color: '#ffffff',
@@ -136,46 +134,44 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleText: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 22 : 18,
     textAlign: 'center',
     color: '#000000',
   },
   userContainer: {
-    marginTop: 20,
+    marginTop: DEVICE_LARGE ? 12 : 10,
     paddingBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
   photo: {
-    width: DEVICE_LARGE ? 150 : 108,
-    height: DEVICE_LARGE ? 150 : 108,
+    width: DEVICE_LARGE ? 120 : 100,
+    height: DEVICE_LARGE ? 120 : 100,
     borderRadius: 100,
   },
   connectNameContainer: {
-    marginTop: 15,
+    marginTop: DEVICE_LARGE ? 12 : 10,
     alignItems: 'center',
     flexDirection: 'row',
   },
   connectName: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
-    fontSize: DEVICE_LARGE ? 20 : 16,
+    fontFamily: 'Poppins-Bold',
+    fontSize: DEVICE_LARGE ? 18 : 16,
     letterSpacing: 0,
     textAlign: 'left',
     color: '#000000',
   },
   flagged: {
-    fontSize: DEVICE_LARGE ? 20 : 18,
+    fontSize: DEVICE_LARGE ? 18 : 16,
     color: 'red',
   },
   countsContainer: {
     width: '88%',
     paddingTop: 6,
     paddingBottom: 6,
-    marginTop: 8,
-    marginBottom: 28,
+    marginTop: 4,
+    marginBottom: DEVICE_LARGE ? 12 : 10,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderColor: '#ed7a5d',
@@ -199,8 +195,7 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   infoText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 17 : 15,
     marginTop: 32,

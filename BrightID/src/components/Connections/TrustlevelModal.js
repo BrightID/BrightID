@@ -107,12 +107,11 @@ const styles = StyleSheet.create({
   },
   header: {
     marginTop: 5,
-    marginBottom: 25,
+    marginBottom: DEVICE_LARGE ? 22 : 20,
   },
   headerText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
-    fontSize: DEVICE_LARGE ? 20 : 17,
+    fontFamily: 'Poppins-Bold',
+    fontSize: DEVICE_LARGE ? 19 : 16.5,
     textAlign: 'center',
   },
   confirmButton: {
@@ -126,8 +125,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   confirmButtonText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 17 : 15,
   },
 });

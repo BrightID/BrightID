@@ -1,10 +1,9 @@
 // @flow
-
 /* global element:false, by:false, waitFor:false, device: false */
-
 import {
   createBrightID,
   createFakeConnection,
+  expectConnectionScreen,
   expectConnectionsScreen,
   expectGroupsScreen,
   expectHomescreen,
@@ -38,11 +37,21 @@ describe('Connection details', () => {
     await waitFor(element(by.id('connection-1')))
       .toExist()
       .withTimeout(20000);
+    await waitFor(element(by.id('connection-2')))
+      .toExist()
+      .withTimeout(20000);
+    await waitFor(element(by.id('connection-3')))
+      .toExist()
+      .withTimeout(20000);
+    await waitFor(element(by.id('connection-4')))
+      .toExist()
+      .withTimeout(20000);
 
     await navigateHome();
 
     // interconnect first 2 fake accounts to have mutual connections
-    await interConnect(2);
+    await interConnect(0);
+    await interConnect(1);
 
     // create a group - enter group info
     await element(by.id('groupsBtn')).tap();
@@ -75,12 +84,12 @@ describe('Connection details', () => {
     await expect(element(by.id('groupItem-0'))).toBeVisible();
     await expect(element(by.id('groupName'))).toHaveText(groupName);
 
-    // invite fake accounts to common group to have mutual group
+    // Have first 2 accounts accept group invites
     await navigateHome();
-    await joinAllGroups(2);
+    await joinAllGroups(0);
+    await joinAllGroups(1);
 
     // Check if cofounders actually joined the groups
-    await expectHomescreen();
     // navigate to groups screen
     await element(by.id('groupsBtn')).tap();
     // wait 30 seconds until all join ops should be done on the backend
@@ -101,7 +110,7 @@ describe('Connection details', () => {
       // open connection details of first connection
       await expect(element(by.id('ConnectionCard-0'))).toBeVisible();
       await element(by.id('ConnectionCard-0')).tap();
-      await expect(element(by.id('ConnectionScreen'))).toBeVisible();
+      await expectConnectionScreen();
     });
     afterAll(async () => {
       await navigateHome();
@@ -111,6 +120,7 @@ describe('Connection details', () => {
         connectionLevelStrings[connection_levels.JUST_MET],
       );
     });
+
     test('should show correct mutual connections count', async () => {
       await expect(element(by.id('connections-count'))).toBeVisible();
       await expect(element(by.id('connections-count'))).toHaveText('4');
@@ -161,7 +171,7 @@ describe('Connection details', () => {
       // open connection details of first connection
       await expect(element(by.id('ConnectionCard-0'))).toBeVisible();
       await element(by.id('ConnectionCard-0')).tap();
-      await expect(element(by.id('ConnectionScreen'))).toBeVisible();
+      await expectConnectionScreen();
     });
 
     afterAll(async () => {
@@ -180,7 +190,7 @@ describe('Connection details', () => {
         connectionLevelStrings[connection_levels.JUST_MET],
       );
       // set new value by swiping right
-      // "adjustSliderToPosition" is only available on iOS, so we have to use the not-so-exact swipe method
+      // "adjustSliderToPosition" is only available on iOS, so we have to use the not-so-exact "swipe" method
       // This will swipe all the way to the right, so the new expected level is RECOVERY
       await slider.swipe('right', 'fast');
       await expect(sliderText).toHaveText(
@@ -203,75 +213,6 @@ describe('Connection details', () => {
       await expect(element(by.id('ConnectionLevelText'))).toHaveText(
         connectionLevelStrings[connection_levels.RECOVERY],
       );
-    });
-  });
-
-  describe('Report', () => {
-    const actions = [
-      'Flag as Spammer',
-      'Flag as Duplicate',
-      'Flag as Fake',
-      'Flag as Deceased',
-    ];
-    const actionSheetTitle = 'What do you want to do?';
-    let remainingConnectionCount = 5;
-    let hasBackButton = true;
-
-    beforeAll(async () => {
-      const platform = await device.getPlatform();
-      hasBackButton = platform === 'android';
-    });
-
-    actions.forEach((action) => {
-      describe(action, () => {
-        beforeAll(async () => {
-          await element(by.id('connectionsBtn')).tap();
-          await expectConnectionsScreen();
-          // open connection details of first connection
-          await expect(element(by.id('ConnectionCard-0'))).toBeVisible();
-          await element(by.id('ConnectionCard-0')).tap();
-          await expect(element(by.id('ConnectionScreen'))).toBeVisible();
-          await element(by.id('ReportBtn')).tap();
-          // ActionSheet does not support testID, so match based on text.
-          await waitFor(element(by.text(actionSheetTitle)))
-            .toBeVisible()
-            .withTimeout(10000);
-        });
-
-        afterAll(async () => {
-          await navigateHome();
-        });
-
-        test(`should start and cancel ${action} with Cancel button `, async () => {
-          const cancelText = hasBackButton ? 'CANCEL' : 'cancel';
-          await element(by.text(action)).tap();
-          await element(by.text(cancelText)).tap();
-          await expect(element(by.text(actionSheetTitle))).not.toBeVisible();
-        });
-
-        test(`should start and confirm ${action}`, async () => {
-          await element(by.id('ReportBtn')).tap();
-          // ActionSheet does not support testID, so match based on text.
-          await waitFor(element(by.text(actionSheetTitle)))
-            .toBeVisible()
-            .withTimeout(10000);
-          await element(by.text(action)).tap();
-          await element(by.text('OK')).tap();
-          await waitFor(element(by.id('flagConnectionBtn')))
-            .toNotExist()
-            .withTimeout(20000);
-        });
-
-        test(`should have correct number of remaining connections`, async () => {
-          remainingConnectionCount -= 1;
-          await expect(
-            element(by.id(`ConnectionCard-${remainingConnectionCount - 1}`)),
-          ).toBeVisible();
-          await expect(
-            element(by.id(`ConnectionCard-${remainingConnectionCount}`)),
-          ).not.toBeVisible();
-        });
-      });
     });
   });
 });

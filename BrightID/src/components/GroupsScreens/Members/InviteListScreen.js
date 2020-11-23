@@ -11,7 +11,9 @@ import { withTranslation } from 'react-i18next';
 import api from '@/api/brightId';
 import { encryptAesKey } from '@/utils/invites';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
+
 import MemberCard from './MemberCard';
 
 const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;

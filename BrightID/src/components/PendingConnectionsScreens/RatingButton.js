@@ -28,16 +28,13 @@ const styles = StyleSheet.create({
   rateButton: {
     borderWidth: 2,
     borderRadius: 100,
-    paddingTop: 11,
-    paddingBottom: 11,
-    width: '100%',
-    marginTop: 9,
-    marginBottom: 9,
+    paddingTop: DEVICE_LARGE ? 8 : 7,
+    paddingBottom: DEVICE_LARGE ? 8 : 7,
+    width: '80%',
   },
   rateButtonLabel: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
-    fontSize: DEVICE_LARGE ? 17 : 14,
+    fontFamily: 'Poppins-Bold',
+    fontSize: DEVICE_LARGE ? 15 : 13,
     textAlign: 'center',
   },
 });

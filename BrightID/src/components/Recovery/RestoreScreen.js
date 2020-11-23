@@ -13,7 +13,8 @@ import {
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import emitter from '@/emitter';
-import { DEVICE_OS, ORANGE, DEVICE_LARGE } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_OS } from '@/utils/deviceConstants';
 import { recoverData } from './helpers';
 
 type State = {

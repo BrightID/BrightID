@@ -1,7 +1,7 @@
 // @flow
 
 import { create, ApiSauceInstance, ApiResponse } from 'apisauce';
-import { DEVICE_OS } from '@/utils/constants';
+import { DEVICE_OS } from '@/utils/deviceConstants';
 
 let notificationUrl = 'https://notify.brightid.org';
 if (__DEV__) {

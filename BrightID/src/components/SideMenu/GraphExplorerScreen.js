@@ -129,8 +129,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   setupText: {
-    fontFamily: 'Poppins',
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 14 : 13,
   },
   noExplorerCode: {
@@ -149,13 +148,11 @@ const styles = StyleSheet.create({
     // width: '80%',
   },
   infoText: {
-    fontFamily: 'Poppins',
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 14 : 13,
   },
   linkText: {
-    fontFamily: 'Poppins',
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
     color: '#2185D0',
     fontSize: DEVICE_LARGE ? 14 : 13,
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -164,9 +161,8 @@ const styles = StyleSheet.create({
     padding: 0,
   },
   copyText: {
-    // fontFamily: 'Poppins',
-    // fontWeight: '400',
-    // fontSize: DEVICE_LARGE ? 14 : 13,
+    fontFamily: 'Poppins-Regular',
+    fontSize: DEVICE_LARGE ? 14 : 13,
   },
 });
 

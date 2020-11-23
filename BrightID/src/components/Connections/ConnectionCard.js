@@ -9,9 +9,16 @@ import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import { CHANNEL_TTL } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
-import { staleConnection } from '@/actions';
+import { staleConnection, deleteConnection } from '@/actions';
 import verificationSticker from '@/static/verification-sticker.svg';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useActionSheet } from '@expo/react-native-action-sheet';
+
+import {
+  connectionLevelColors,
+  connectionLevelStrings,
+} from '../../utils/connectionLevelStrings';
 
 /**
  * Connection Card in the Connections Screen
@@ -35,6 +42,7 @@ const ConnectionCard = (props) => {
     photo,
     hiddenFlag,
     index,
+    level,
   } = props;
   const { t } = useTranslation();
 
@@ -111,7 +119,7 @@ const ConnectionCard = (props) => {
       return (
         <View style={styles.statusContainer}>
           <Text style={[styles.deletedMessage, { marginTop: 1 }]}>
-            {hiddenFlag ? `Flagged as ${hiddenFlag}` : 'Hidden'}
+            {hiddenFlag ? `Reported as ${hiddenFlag}` : 'Hidden'}
           </Text>
           <Text style={[styles.connectedText, { marginTop: 1 }]}>
             {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
@@ -125,16 +133,62 @@ const ConnectionCard = (props) => {
         </View>
       );
     } else {
-      const testID = `connection-${index}`;
       return (
-        <View style={styles.statusContainer}>
-          <Text style={styles.connectedText} testID={testID}>
-          {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
+        <View style={styles.statusContainer} testID={`connection-${index}`}>
+          <Text
+            testID={`connection_level-${index}`}
+            style={[
+              styles.connectionLevel,
+              { color: connectionLevelColors[level] },
+            ]}
+          >
+            {connectionLevelStrings[level]}
+          </Text>
+          <Text
+            style={styles.connectionTime}
+            testID={`connection_time-${index}`}
+          >
+            {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
           </Text>
         </View>
       );
     }
   };
+
+  const { showActionSheetWithOptions } = useActionSheet();
+  const removeOptions = [t('connections.removeActionSheet.remove'), t('common.actionSheet.cancel')];
+
+  const showRemove = status === 'deleted' || status === 'stale';
+
+  const RemoveConnection = () =>
+    showRemove ? (
+      <TouchableOpacity
+        style={styles.removeButton}
+        onPress={() => {
+          showActionSheetWithOptions(
+            {
+              options: removeOptions,
+              cancelButtonIndex: removeOptions.length - 1,
+              destructiveButtonIndex: 0,
+              title: t('connections.removeActionSheet.title'),
+              message: t('connections.removeActionSheet.info', {name: name}),
+              showSeparators: true,
+              textStyle: {
+                textAlign: 'center',
+                width: '100%',
+              },
+            },
+            (index) => {
+              if (index === 0) dispatch(deleteConnection(id));
+            },
+          );
+        }}
+      >
+        <Material color="#333" name="close" size={DEVICE_LARGE ? 22 : 18} />
+      </TouchableOpacity>
+    ) : (
+      <View />
+    );
 
   const imageSource =
     photo?.filename && !imgErr
@@ -170,10 +224,13 @@ const ConnectionCard = (props) => {
           }}
           accessibilityLabel="View Connection details"
         >
-          <View style={styles.info}>
-            <View style={styles.nameContainer}>
+          <View style={[styles.info, { maxWidth: WIDTH * 0.56 }]}>
+            <View
+              style={[styles.nameContainer]}
+              testID={`connection_name-${index}`}
+            >
               <Text
-                adjustsFontSizeToFit={true}
+                // adjustsFontSizeToFit={true}
                 numberOfLines={1}
                 style={styles.name}
                 testID="connectionCardText"
@@ -192,6 +249,7 @@ const ConnectionCard = (props) => {
             <ConnectionStatus />
           </View>
         </TouchableOpacity>
+        <RemoveConnection />
       </View>
     </View>
   );
@@ -240,43 +298,47 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   name: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
   },
   statusContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
-  connectedText: {
-    fontFamily: 'Poppins',
-    fontWeight: '400',
-    fontSize: DEVICE_LARGE ? 11 : 10,
+  connectionLevel: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: DEVICE_LARGE ? 12 : 11,
+    marginTop: DEVICE_LARGE ? 3 : 1,
+  },
+  connectionTime: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: DEVICE_LARGE ? 10 : 9,
     color: '#B64B32',
-    marginTop: DEVICE_LARGE ? 5 : 2,
   },
   moreIcon: {
     marginRight: DEVICE_LARGE ? 26 : 23,
   },
   waitingMessage: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontFamily: 'Poppins-Medium',
+    fontSize: DEVICE_LARGE ? 13 : 11,
     color: '#e39f2f',
     marginTop: DEVICE_LARGE ? 2 : 0,
   },
   deletedMessage: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#FF0800',
     marginTop: DEVICE_LARGE ? 5 : 2,
     textTransform: 'capitalize',
   },
-
   verificationSticker: {
     marginLeft: DEVICE_LARGE ? 5 : 3.5,
+  },
+  removeButton: {
+    width: DEVICE_LARGE ? 36 : 32,
+    position: 'absolute',
+    right: 0,
   },
 });
 

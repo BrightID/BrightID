@@ -9,6 +9,7 @@ import {
   selectAllChannelIds,
   channel_types,
 } from '@/components/PendingConnectionsScreens/channelSlice';
+import { selectAllSocialMedia } from '@/components/EditProfile/socialMediaSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
 import { generateChannelData } from '@/utils/channels';
@@ -17,6 +18,7 @@ import {
   CHANNEL_TTL,
   MIN_CHANNEL_JOIN_TTL,
   PROFILE_POLL_INTERVAL,
+  PROFILE_VERSION,
 } from '@/utils/constants';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
@@ -236,10 +238,12 @@ export const encryptAndUploadProfileToChannel = (channelId: string) => async (
     id,
     photo: { filename },
     name,
-    score,
   } = getState().user;
 
   const { notificationToken } = getState().notifications;
+
+  let socialMedia = selectAllSocialMedia(getState());
+
   // retrieve photo
   const photo = await retrieveImage(filename);
   const profileTimestamp = Date.now();
@@ -248,9 +252,10 @@ export const encryptAndUploadProfileToChannel = (channelId: string) => async (
     id,
     photo,
     name,
-    score,
+    socialMedia,
     profileTimestamp,
     notificationToken,
+    version: PROFILE_VERSION,
   };
 
   console.log(`Encrypting profile data with key ${channel.aesKey}`);

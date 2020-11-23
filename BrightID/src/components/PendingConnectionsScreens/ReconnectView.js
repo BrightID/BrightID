@@ -195,7 +195,7 @@ export const ReconnectView = ({
             onPress={abuseHandler}
             testID="reportAbuseBtn"
           >
-            <Text style={styles.abuseButtonLabel}>{t('connections.button.reportAbuse')}</Text>
+            <Text style={styles.abuseButtonLabel}>{t('connections.button.reportConnection')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.updateButton}
@@ -218,23 +218,20 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   headerText: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 22 : 18,
     textAlign: 'center',
     color: '#000000',
     marginBottom: 20,
   },
   subheaderText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 15 : 12,
     textAlign: 'center',
     color: '#827F7F',
   },
   lastConnectedText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 15 : 12,
     textAlign: 'center',
     color: '#827F7F',
@@ -249,8 +246,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   profileHeaderText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 15 : 12,
     color: '#000',
   },
@@ -283,14 +279,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   connectionLevelLabelText: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 15 : 13,
     color: '#000000',
   },
   connectionLevelText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 15 : 13,
     marginBottom: 10,
   },
@@ -308,9 +302,8 @@ const styles = StyleSheet.create({
     paddingBottom: 9,
   },
   abuseButtonLabel: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
-    fontSize: DEVICE_LARGE ? 15 : 13,
+    fontFamily: 'Poppins-Bold',
+    fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#FFFFFF',
   },
   updateButton: {
@@ -325,9 +318,8 @@ const styles = StyleSheet.create({
     paddingBottom: 9,
   },
   updateButtonLabel: {
-    fontFamily: 'Poppins',
-    fontWeight: '700',
-    fontSize: DEVICE_LARGE ? 15 : 13,
+    fontFamily: 'Poppins-Bold',
+    fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#ED7A5D',
   },
 });
