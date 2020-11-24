@@ -5,28 +5,28 @@ import { StyleSheet, Text, View } from 'react-native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
 type ConnectionStatsProps = {
-  numConnections: number,
-  numGroups: number,
-  numMutualConnections: number,
+  connectionsNum: number,
+  groupsNum: number,
+  mutualConnectionsNum: number,
 };
 
 export const ConnectionStats = ({
-  numConnections,
-  numGroups,
-  numMutualConnections,
+  connectionsNum,
+  groupsNum,
+  mutualConnectionsNum,
 }: ConnectionStatsProps) => {
   return (
     <>
       <View>
-        <Text style={styles.countsNumberText}>{numConnections}</Text>
+        <Text style={styles.countsNumberText}>{connectionsNum}</Text>
         <Text style={styles.countsDescriptionText}>Connections</Text>
       </View>
       <View>
-        <Text style={styles.countsNumberText}>{numGroups}</Text>
+        <Text style={styles.countsNumberText}>{groupsNum}</Text>
         <Text style={styles.countsDescriptionText}>Groups</Text>
       </View>
       <View>
-        <Text style={styles.countsNumberText}>{numMutualConnections}</Text>
+        <Text style={styles.countsNumberText}>{mutualConnectionsNum}</Text>
         <Text style={styles.countsDescriptionText}>Mutual Connections</Text>
       </View>
     </>

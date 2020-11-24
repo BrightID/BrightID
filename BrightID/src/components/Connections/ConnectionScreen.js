@@ -30,7 +30,11 @@ import TrustLevelView from './TrustLevelView';
 type Props = {
   navigation: any,
   connection: connection,
-  brightIdVerified: boolean,
+  verified: boolean,
+  connectedAt: number,
+  createdAt: number,
+  connectionsNum: number,
+  groupsNum: number,
   mutualGroups: Array<group>,
   mutualConnections: Array<connection>,
   loading: boolean,
@@ -40,7 +44,11 @@ function ConnectionScreen(props: Props) {
   const {
     navigation,
     connection,
-    brightIdVerified,
+    verified,
+    connectedAt,
+    createdAt,
+    connectionsNum,
+    groupsNum,
     mutualGroups,
     mutualConnections,
     loading,
@@ -86,7 +94,7 @@ function ConnectionScreen(props: Props) {
     if (loading) {
       return <ActivityIndicator size="small" color="#707070" animating />;
     } else {
-      if (brightIdVerified) {
+      if (verified) {
         return <Text style={[styles.badge, styles.verified]}>verified</Text>;
       } else {
         return (
@@ -124,7 +132,7 @@ function ConnectionScreen(props: Props) {
                 {loading
                   ? `Loading...`
                   : `Connected ${moment(
-                      parseInt(connection.createdAt, 10),
+                      parseInt(connectedAt, 10),
                     ).fromNow()}`}
               </Text>
             </View>
@@ -135,7 +143,7 @@ function ConnectionScreen(props: Props) {
             <Text style={styles.name} numberOfLines={1}>
               {connection.name}
             </Text>
-            {brightIdVerified && (
+            {verified && (
               <SvgXml
                 style={styles.verificationSticker}
                 width="16"
@@ -158,14 +166,14 @@ function ConnectionScreen(props: Props) {
   const connectionFooter = (
     <TouchableOpacity
       testID="ReportBtn"
-      style={styles.flagBtn}
+      style={styles.reportBtn}
       onPress={() => {
         navigation.navigate('ReportReason', {
           connectionId: connection.id,
         });
       }}
     >
-      <Text style={styles.flagBtnText}>Report this person</Text>
+      <Text style={styles.reportBtnText}>Report this person</Text>
     </TouchableOpacity>
   );
 
@@ -377,7 +385,7 @@ const styles = StyleSheet.create({
     marginTop: DEVICE_LARGE ? 16 : 15,
     marginBottom: 10,
   },
-  flagBtn: {
+  reportBtn: {
     width: '90%',
     borderRadius: 100,
     borderColor: ORANGE,
@@ -389,7 +397,7 @@ const styles = StyleSheet.create({
     paddingTop: DEVICE_LARGE ? 13 : 12,
     paddingBottom: DEVICE_LARGE ? 13 : 12,
   },
-  flagBtnText: {
+  reportBtnText: {
     fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: ORANGE,

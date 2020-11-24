@@ -13,10 +13,12 @@ import {
 } from '../../utils/connectionLevelStrings';
 import { retrieveImage } from '../../utils/filesystem';
 
+// percentage determines reported warning
+const REPORTED_PERCENTAGE = 0.1;
+
 type ReconnectViewProps = {
   pendingConnection: PendingConnection,
   existingConnection: connection,
-  brightIdVerified: boolean,
   setLevelHandler: (level: ConnectionLevel) => any,
   abuseHandler: () => any,
 };
@@ -24,12 +26,12 @@ type ReconnectViewProps = {
 export const ReconnectView = ({
   pendingConnection,
   existingConnection,
-  brightIdVerified,
   setLevelHandler,
   abuseHandler,
 }: ReconnectViewProps) => {
   const navigation = useNavigation();
   const [identicalProfile, setIdenticalProfile] = useState(true);
+  const reported = pendingConnection.reports.length / (pendingConnection.connectionsNum || 1) >= REPORTED_PERCENTAGE;
 
   useEffect(() => {
     const compareProfiles = async () => {
@@ -67,7 +69,7 @@ export const ReconnectView = ({
           </Text>
           <Text style={styles.lastConnectedText}>
             Last connected{' '}
-            {moment(parseInt(existingConnection.createdAt, 10)).fromNow()}
+            {moment(parseInt(pendingConnection.connectedAt, 10)).fromNow()}
           </Text>
         </View>
         <View style={styles.profiles}>
@@ -77,17 +79,17 @@ export const ReconnectView = ({
               photo={pendingConnection.photo}
               photoSize="large"
               photoType="base64"
-              brightIdVerified={brightIdVerified}
+              verified={pendingConnection.verified}
               photoTouchHandler={photoTouchHandler}
-              flagged={pendingConnection.flagged}
+              reported={reported}
             />
           </View>
         </View>
         <View style={styles.countsContainer}>
           <ConnectionStats
-            numConnections={pendingConnection.connections}
-            numGroups={pendingConnection.groups}
-            numMutualConnections={pendingConnection.mutualConnections}
+            connectionsNum={pendingConnection.connectionsNum}
+            groupsNum={pendingConnection.groupsNum}
+            mutualConnectionsNum={pendingConnection.mutualConnections.length}
           />
         </View>
         <View style={styles.connectionLevel}>
@@ -145,9 +147,9 @@ export const ReconnectView = ({
               photo={existingConnection.photo.filename}
               photoSize="small"
               photoType="file"
-              brightIdVerified={brightIdVerified}
+              verified={pendingConnection.verified}
               photoTouchHandler={photoTouchHandler}
-              flagged={pendingConnection.flagged}
+              reported={reported}
             />
           </View>
           <View testID="newProfileView" style={styles.profile}>
@@ -159,17 +161,17 @@ export const ReconnectView = ({
               photo={pendingConnection.photo}
               photoSize="small"
               photoType="base64"
-              brightIdVerified={brightIdVerified}
+              verified={pendingConnection.verified}
               photoTouchHandler={photoTouchHandler}
-              flagged={pendingConnection.flagged}
+              reported={reported}
             />
           </View>
         </View>
         <View style={styles.countsContainer}>
           <ConnectionStats
-            numConnections={pendingConnection.connections}
-            numGroups={pendingConnection.groups}
-            numMutualConnections={pendingConnection.mutualConnections}
+            connectionsNum={pendingConnection.connectionsNum}
+            groupsNum={pendingConnection.groupsNum}
+            mutualConnectionsNum={pendingConnection.mutualConnections.length}
           />
         </View>
         <View style={styles.connectionLevel}>

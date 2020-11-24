@@ -8,9 +8,9 @@ import React, {
 } from 'react';
 import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
-import { fetchConnectionInfo } from '../../utils/fetchConnectionInfo';
 import ConnectionScreen from './ConnectionScreen';
-import ConnectionTestButton from '../../utils/connectionTestButton';
+import ConnectionTestButton from '@/utils/connectionTestButton';
+import api from '@/api/brightId';
 
 type ConnectionScreenProps = {
   route: any,
@@ -25,11 +25,13 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
   );
   const myConnections = useSelector((state) => state.connections.connections);
   const myGroups = useSelector((state) => state.groups.groups);
+  const [connectionsNum, setConnectionsNum] = useState(0);
+  const [groupsNum, setGroupsNum] = useState(0);
   const [mutualGroups, setMutualGroups] = useState<Array<group>>([]);
-  const [mutualConnections, setMutualConnections] = useState<Array<connection>>(
-    [],
-  );
-  const [verifications, setVerifications] = useState<Array<string>>([]);
+  const [mutualConnections, setMutualConnections] = useState<Array<connection>>([]);
+  const [verified, setVerified] = useState(false);
+  const [createdAt, setCreatedAt] = useState(0);
+  const [connectedAt, setConnectedAt] = useState(0);
   const [loading, setLoading] = useState(false);
 
   useFocusEffect(
@@ -37,23 +39,24 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
       const fetchData = async (connectionId) => {
         setLoading(true);
         console.log(`fetching connection info for ${connectionId}`);
-        const connectionData = await fetchConnectionInfo({
-          brightId: connectionId,
-          myConnections,
-          myGroups,
+        const profile = await api.getUserProfile(connectionId);
+        console.log(profile, 22);
+        setConnectionsNum(profile.connectionsNum);
+        setGroupsNum(profile.groupsNum);
+        setVerified(profile.verified);
+        setCreatedAt(profile.createdAt);
+        setConnectedAt(profile.connectedAt);
+        profile.mutualConnections = myConnections.filter(function (conn) {
+          return profile.mutualConnections.includes(conn.id);
         });
-        setMutualGroups(connectionData.mutualGroups);
-        setMutualConnections(connectionData.mutualConnections);
-        setVerifications(connectionData.verifications);
+        setMutualConnections(profile.mutualConnections);
+        profile.mutualGroups = myGroups.filter(function (group) {
+          return profile.mutualGroups.includes(group.id);
+        });
+        setMutualGroups(profile.mutualGroups);
         setLoading(false);
       };
-      if (connection) {
-        fetchData(connection.id);
-      } else {
-        setMutualGroups([]);
-        setMutualConnections([]);
-        setVerifications([]);
-      }
+      fetchData(connectionId);
     }, [connection, myConnections, myGroups]),
   );
 
@@ -77,16 +80,18 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
     return null;
   }
 
-  const brightIdVerified = verifications.includes('BrightID');
-
   return (
     <ConnectionScreen
       navigation={navigation}
-      brightIdVerified={brightIdVerified}
       connection={connection}
+      verified={verified}
+      loading={loading}
+      createdAt={createdAt}
+      connectedAt={connectedAt}
+      connectionsNum={connectionsNum}
+      groupsNum={groupsNum}
       mutualConnections={mutualConnections}
       mutualGroups={mutualGroups}
-      loading={loading}
     />
   );
 }

@@ -15,9 +15,6 @@ import api from '@/api/brightId';
 import { Alert } from 'react-native';
 import { PROFILE_VERSION } from '../../utils/constants';
 
-// percentage determines flagged warning
-const FLAG_PERCENTAGE = 0.1;
-
 const pendingConnectionsAdapter = createEntityAdapter();
 
 /*
@@ -42,44 +39,6 @@ export const pendingConnection_states = {
   ERROR: 'ERROR',
   MYSELF: 'MYSELF',
   EXPIRED: 'EXPIRED',
-};
-
-const fetchConnectionInfo = async ({ myConnections, brightId }) => {
-  try {
-    const {
-      createdAt,
-      groups,
-      connections = [],
-      verifications,
-      flaggers = {},
-    } = await api.getUserInfo(brightId);
-    const mutualConnections = connections.filter(function (el) {
-      return myConnections.some((x) => x.id === el.id);
-    });
-    return {
-      connections: connections.length,
-      groups: groups.length,
-      mutualConnections: mutualConnections.length,
-      connectionDate: `Created ${moment(parseInt(createdAt, 10)).fromNow()}`,
-      verifications,
-      flagged:
-        Object.keys(flaggers).length / connections.length >= FLAG_PERCENTAGE,
-    };
-  } catch (err) {
-    if (err instanceof Error && err.message === 'User not found') {
-      return {
-        connections: 0,
-        groups: 0,
-        mutualConnections: 0,
-        connectionDate: 'New user',
-        flagged: false,
-        verifications: [],
-      };
-    } else {
-      console.error(err.message);
-      return {};
-    }
-  }
 };
 
 export const newPendingConnection = createAsyncThunk(
@@ -117,11 +76,23 @@ export const newPendingConnection = createAsyncThunk(
     }
 
     decryptedObj.myself = decryptedObj.id === getState().user.id;
-
-    const connectionInfo = await fetchConnectionInfo({
-      brightId: decryptedObj.id,
-      myConnections: getState().connections.connections,
-    });
+    let connectionInfo = {};
+    try {
+      connectionInfo = await api.getUserProfile(decryptedObj.id);
+    } catch (err) {
+      if (err instanceof Error && err.message === 'User not found') {
+        connectionInfo = {
+          connectionsNum: 0,
+          groupsNum: 0,
+          mutualConnections: [],
+          mutualGroups: [],
+          createdAt: 0,
+          connectedAt: 0,
+          verfied: false,
+          reports: [],
+        };
+      }
+    }
     return { ...connectionInfo, ...decryptedObj };
   },
 );
@@ -185,13 +156,15 @@ const pendingConnectionsSlice = createSlice({
         score,
         profileTimestamp,
         initiator,
-        connections,
-        groups,
+        connectionsNum,
+        groupsNum,
         mutualConnections,
-        connectionDate,
-        flagged,
+        mutualGroups,
+        createdAt,
+        connectedAt,
+        reports,
+        verified,
         notificationToken,
-        verifications,
         socialMedia,
       } = action.payload;
 
@@ -205,13 +178,15 @@ const pendingConnectionsSlice = createSlice({
         score,
         profileTimestamp,
         initiator,
-        connections,
-        groups,
+        connectionsNum,
+        groupsNum,
         mutualConnections,
-        connectionDate,
-        flagged,
+        mutualGroups,
+        createdAt,
+        connectedAt,
+        reports,
+        verified,
         notificationToken,
-        verifications,
         socialMedia,
       };
 
