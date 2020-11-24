@@ -1,5 +1,6 @@
 /* global element:false, by:false */
 
+import i18next from 'i18next';
 import {
   createBrightID,
   createFakeConnection,
@@ -48,11 +49,12 @@ describe('make Connections', () => {
 
     it('should copy to clipboard', async () => {
       await element(by.id('CopyQrBtn')).tap();
-      await expect(element(by.text('COPY TO CLIPBOARD'))).toBeVisible();
-      await element(by.text('COPY TO CLIPBOARD')).tap();
+      const copyBtn = element(by.text(i18next.t('common.button.copy')));
+      await expect(copyBtn).toBeVisible();
+      await copyBtn.tap();
       // TODO: Verify clipboard content is correct. Currently detox has no way to
       //  check clipboard contents, see e.g. https://github.com/wix/detox/issues/222
-      await expect(element(by.text('COPY TO CLIPBOARD'))).not.toBeVisible();
+      await expect(copyBtn).not.toBeVisible();
     });
 
     it('should toggle connection type', async () => {
