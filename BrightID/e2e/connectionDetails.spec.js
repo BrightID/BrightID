@@ -1,12 +1,12 @@
 // @flow
 /* global element:false, by:false, waitFor:false, device: false */
+import i18next from 'i18next';
 import {
   createBrightID,
   createFakeConnection,
   expectConnectionScreen,
   expectConnectionsScreen,
   expectGroupsScreen,
-  expectHomescreen,
   interConnect,
   joinAllGroups,
   navigateHome,
@@ -96,8 +96,11 @@ describe('Connection details', () => {
     await new Promise((r) => setTimeout(r, 30000));
     // refresh
     await element(by.id('groupsFlatList')).swipe('down');
-    // Text changes to "Known members: " when all invited people have joined
-    await waitFor(element(by.text('Known members: ')).atIndex(0))
+
+    // Text changes to "Known members" when all invited people have joined
+    await waitFor(
+      element(by.text(i18next.t('groups.label.knownMembers'))).atIndex(0),
+    )
       .toBeVisible()
       .withTimeout(30000);
     await navigateHome();
