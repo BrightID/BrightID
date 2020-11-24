@@ -13,7 +13,7 @@ import { encryptAesKey } from '@/utils/invites';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-
+import i18next from 'i18next';
 import MemberCard from './MemberCard';
 
 const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
@@ -45,12 +45,12 @@ export class InviteListScreen extends Component<Props, State> {
       const data = await encryptAesKey(group?.aesKey, connection.signingKey);
       await api.invite(connection.id, group?.id, data);
       Alert.alert(
-        t('groups.alert.title.inviteSuccess'),
-        t('groups.alert.text.inviteSuccess', {name: connection.name})
+        i18next.t('groups.alert.title.inviteSuccess'),
+        i18next.t('groups.alert.text.inviteSuccess', { name: connection.name }),
       );
       navigation.goBack();
     } catch (err) {
-      Alert.alert(t('common.alert.error'), err.message);
+      Alert.alert(i18next.t('common.alert.error'), err.message);
     }
   };
 
