@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { DEVICE_LARGE, DEVICE_IOS, WIDTH } from '@/utils/deviceConstants';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -31,8 +32,8 @@ import {
 
 const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
   const { showActionSheetWithOptions } = useActionSheet();
-
   const prevPhotoFilename = useSelector((state) => state.user.photo.filename);
+  const { t } = useTranslation();
 
   const profileSource = profilePhoto
     ? {
@@ -65,9 +66,13 @@ const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
   const handleEditPhoto = () => {
     showActionSheetWithOptions(
       {
-        options: ['Take Photo', 'Choose From Library', 'cancel'],
+        options: [
+          t('common.photoActionSheet.takePhoto'), 
+          t('common.photoActionSheet.choosePhoto'), 
+          t('common.actionSheet.cancel')
+        ],
         cancelButtonIndex: 2,
-        title: 'Select photo',
+        title: t('common.photoActionSheet.title'),
         showSeparators: true,
         textStyle: {
           color: '#2185D0',
@@ -97,7 +102,7 @@ const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
         testID="editPhoto"
         onPress={handleEditPhoto}
         accessible={true}
-        accessibilityLabel="edit photo"
+        accessibilityLabel={t('common.accessibilityLabel.editPhoto')}
         style={styles.changePhotoButton}
       >
         <Image
@@ -110,22 +115,23 @@ const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
           accessible={true}
           accessibilityLabel="profile photo"
         />
-        <Text style={styles.profilePhotoText}>Change Profile Picture</Text>
+        <Text style={styles.profilePhotoText}>{t('profile.text.changeProfilePicture')}</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 const EditName = ({ nextName, setNextName }) => {
+  const { t } = useTranslation();
   return (
     <View style={styles.editNameContainer}>
-      <Text style={styles.label}>Name</Text>
+      <Text style={styles.label}>{t('profile.label.name')}</Text>
       <TextInput
         style={styles.editNameInput}
         value={nextName}
         onChangeText={setNextName}
         textContentType="name"
-        placeholder="Enter Name"
+        placeholder={t('profile.placeholder.name')}
         placeholderTextColor="#707070"
       />
     </View>
@@ -222,6 +228,7 @@ const SocialMediaLinks = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const socialMediaItems = useSelector(selectAllSocialMedia);
+  const { t } = useTranslation();
 
   console.log('socialMedia', socialMediaItems);
 
@@ -237,7 +244,7 @@ const SocialMediaLinks = () => {
   return (
     <View style={styles.socialMediaContainer}>
       <View style={styles.socialMediaLinkLabel}>
-        <Text style={styles.label}>Social Media Link</Text>
+        <Text style={styles.label}>{t('profile.label.socialMediaLink')}</Text>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('SelectSocialMedia', {
@@ -267,6 +274,7 @@ const ShowEditPassword = () => {
   const password = useSelector((state) => state.user.password);
   const [hidePassword, setHidePassword] = useState(true);
   const navigation = useNavigation();
+  const { t } = useTranslation()
 
   useFocusEffect(
     useCallback(() => {
@@ -292,7 +300,7 @@ const ShowEditPassword = () => {
             setHidePassword(!hidePassword);
           }}
         >
-          <Text style={styles.passwordText}>View Password</Text>
+          <Text style={styles.passwordText}>{t('profile.text.viewPassword')}</Text>
         </TouchableOpacity>
         <Text style={styles.displayPassword} selectable={true}>
           {displayPassword}
@@ -304,7 +312,7 @@ const ShowEditPassword = () => {
           navigation.navigate('ChangePassword');
         }}
       >
-        <Text style={styles.passwordText}>Change Password</Text>
+        <Text style={styles.passwordText}>{t('profile.text.changePassword')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -312,6 +320,7 @@ const ShowEditPassword = () => {
 
 export const EditProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   let headerHeight = useHeaderHeight();
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
@@ -425,7 +434,7 @@ export const EditProfileScreen = ({ navigation }) => {
             disabled={saveDisabled}
             onPress={saveData}
           >
-            <Text style={styles.saveButtonText}>Save</Text>
+            <Text style={styles.saveButtonText}>{t('profile.button.save')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[
@@ -437,7 +446,7 @@ export const EditProfileScreen = ({ navigation }) => {
             disabled={saveDisabled}
             onPress={clearData}
           >
-            <Text style={styles.cancelButtonText}>Cancel</Text>
+            <Text style={styles.cancelButtonText}>{t('profile.button.cancel')}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
