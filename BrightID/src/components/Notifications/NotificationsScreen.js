@@ -20,8 +20,8 @@ import {
   CONNECTIONS_TYPE,
   GROUPS_TYPE,
   MISC_TYPE,
-  DEVICE_LARGE,
 } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { createSelector } from '@reduxjs/toolkit';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import fetchUserInfo from '@/actions/fetchUserInfo';
@@ -281,8 +281,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tabText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 10,
   },
 });

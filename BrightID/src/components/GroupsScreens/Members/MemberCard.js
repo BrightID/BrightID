@@ -1,16 +1,22 @@
 // @flow
 
 import * as React from 'react';
-import { useRef, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
+import { useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import RNFS from 'react-native-fs';
+import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
-import { DEVICE_TYPE } from '@/utils/constants';
-import ActionSheet from 'react-native-actionsheet';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { useActionSheet } from '@expo/react-native-action-sheet';
+import { useNavigation } from '@react-navigation/native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const ICON_SIZE = DEVICE_TYPE === 'large' ? 36 : 32;
+const ICON_SIZE = DEVICE_LARGE ? 36 : 32;
+const ACTION_ADD_ADMIN = i18next.t('groups.memberActionSheet.addAdmin');
+const ACTION_DISMISS = i18next.t('groups.memberActionSheet.dismissMember');
+// Not using 'common.actionSheet.cancel' because 'Cancel' instead of 'cancel' (making sure printed text doesn't change after i18n)
+const ACTION_CANCEL = i18next.t('groups.memberActionSheet.cancel');
 
 type MemberCardProps = {
   memberId: string,
@@ -39,15 +45,12 @@ function MemberCard(props: MemberCardProps) {
     flaggers,
     testID,
   } = props;
-  const actionSheetRef: ?ActionSheet = useRef(null);
+  const navigation = useNavigation();
   const [contextActions, setContextActions] = useState<Array<string>>([]);
   const [flagged, setFlagged] = useState(false);
+  const [imgErr, setImgErr] = useState(false);
   const { t } = useTranslation();
-  
-  const ACTION_ADD_ADMIN = t('groups.memberActionSheet.addAdmin');
-  const ACTION_DISMISS = t('groups.memberActionSheet.dismissMember');
-  // Not using 'common.actionSheet.cancel' because 'Cancel' instead of 'cancel' (making sure printed text doesn't change after i18n)
-  const ACTION_CANCEL = t('groups.memberActionSheet.cancel');
+  const { showActionSheetWithOptions } = useActionSheet();
 
   // set possible actions depending on user and member admin status
   useEffect(() => {
@@ -68,10 +71,10 @@ function MemberCard(props: MemberCardProps) {
     setContextActions(actions);
   }, [userIsAdmin, memberIsAdmin, userId, memberId]);
 
-  // show flagged status of member?
+  // show reported status of member?
   useEffect(() => {
     if (!userIsAdmin) {
-      // only admins can see flags
+      // only admins can see reported state
       setFlagged(false);
     } else {
       setFlagged(flaggers && Object.keys(flaggers).length);
@@ -79,6 +82,8 @@ function MemberCard(props: MemberCardProps) {
   }, [flaggers, userIsAdmin]);
 
   const performAction = (index: number) => {
+    if (contextActions.length === 0) return;
+
     const action = contextActions[index];
     console.log(`Performing action ${action}`);
     switch (action) {
@@ -94,21 +99,60 @@ function MemberCard(props: MemberCardProps) {
     }
   };
 
-  const imageSource = photo?.filename
-    ? {
-        uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
-      }
-    : require('@/static/default_profile.jpg');
+  const handleActionSheet = () => {
+    if (contextActions.length === 0) return;
+
+    showActionSheetWithOptions(
+      {
+        options: contextActions,
+        cancelButtonIndex: contextActions.indexOf(ACTION_CANCEL),
+        destructiveButtonIndex: contextActions.indexOf(ACTION_DISMISS),
+        title: t('common.actionSheet.title'),
+        showSeparators: true,
+        textStyle: {
+          color: '#2185D0',
+          textAlign: 'center',
+          width: '100%',
+        },
+        titleTextStyle: {
+          textAlign: 'center',
+          width: '100%',
+        },
+      },
+      performAction,
+    );
+  };
+
+  const imageSource =
+    photo?.filename && !imgErr
+      ? {
+          uri: `file://${photoDirectory()}/${photo?.filename}`,
+        }
+      : require('@/static/default_profile.jpg');
 
   const memberTestID = memberIsAdmin ? 'admin' : 'regular';
   return (
     <View testID={memberTestID}>
       <View style={styles.container} testID={testID}>
-        <Image source={imageSource} style={styles.photo} />
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('FullScreenPhoto', { photo });
+          }}
+        >
+          <Image
+            source={imageSource}
+            style={styles.photo}
+            onError={() => {
+              console.log('settingImgErr');
+              setImgErr(true);
+            }}
+            accessibilityLabel="profile picture"
+          />
+        </TouchableOpacity>
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
           <View style={styles.statusContainer}>
-            {flagged ? <Text style={styles.flagged}>{t('common.tag.flagged')}</Text> : null}
+            {flagged ? <Text style={styles.flagged}>{t('common.tag.reported')}</Text> : null}
           </View>
           {connectionDate > 0 && (
             <Text style={styles.connectedText}>
@@ -120,24 +164,12 @@ function MemberCard(props: MemberCardProps) {
           <TouchableOpacity
             testID="memberContextBtn"
             style={styles.moreIcon}
-            onPress={() => {
-              actionSheetRef?.current.show();
-            }}
+            onPress={handleActionSheet}
           >
             <Material name="dots-vertical" size={ICON_SIZE} color="#ccc" />
           </TouchableOpacity>
         )}
       </View>
-      {contextActions.length > 0 && (
-        <ActionSheet
-          ref={actionSheetRef}
-          title={t('common.actionSheet.title')}
-          options={contextActions}
-          cancelButtonIndex={contextActions.indexOf(ACTION_CANCEL)}
-          destructiveButtonIndex={contextActions.indexOf(ACTION_DISMISS)}
-          onPress={performAction}
-        />
-      )}
     </View>
   );
 }
@@ -149,8 +181,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     backgroundColor: '#fff',
-    height: DEVICE_TYPE === 'large' ? 94 : 80,
-    marginBottom: DEVICE_TYPE === 'large' ? 11.8 : 6,
+    height: DEVICE_LARGE ? 94 : 80,
+    marginBottom: DEVICE_LARGE ? 11.8 : 6,
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.43,
@@ -165,13 +197,13 @@ const styles = StyleSheet.create({
   info: {
     marginLeft: 25,
     flex: 1,
-    height: DEVICE_TYPE === 'large' ? 71 : 65,
+    height: DEVICE_LARGE ? 71 : 65,
     flexDirection: 'column',
     justifyContent: 'space-evenly',
   },
   name: {
     fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_TYPE === 'large' ? 20 : 18,
+    fontSize: DEVICE_LARGE ? 20 : 18,
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,

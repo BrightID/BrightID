@@ -1,14 +1,24 @@
 // @flow
 
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import RNFS from 'react-native-fs';
 import { useDispatch } from 'react-redux';
+import { SvgXml } from 'react-native-svg';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
-import { DEVICE_LARGE, MAX_WAITING_SECONDS } from '@/utils/constants';
-import { staleConnection } from '@/actions';
+import { CHANNEL_TTL } from '@/utils/constants';
+import { photoDirectory } from '@/utils/filesystem';
+import { staleConnection, deleteConnection } from '@/actions';
+import verificationSticker from '@/static/verification-sticker.svg';
+import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useActionSheet } from '@expo/react-native-action-sheet';
+
+import {
+  connectionLevelColors,
+  connectionLevelStrings,
+} from '../../utils/connectionLevelStrings';
 
 /**
  * Connection Card in the Connections Screen
@@ -23,19 +33,30 @@ const ConnectionCard = (props) => {
   let stale_check_timer = useRef(0);
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const {
+    status,
+    verifications,
+    connectionDate,
+    id,
+    name,
+    photo,
+    hiddenFlag,
+    index,
+    level,
+  } = props;
   const { t } = useTranslation();
-  const { status, connectionDate, id, name, photo, hiddenFlag, index } = props;
+
+  const brightidVerified = verifications?.includes('BrightID');
+  const [imgErr, setImgErr] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
       // if we have a "waiting" connection, start timer to handle stale connection requests
       if (status === 'initiated') {
         const checkStale = () => {
-          const ageSeconds = Math.floor((Date.now() - connectionDate) / 1000);
-          if (ageSeconds > MAX_WAITING_SECONDS && status !== 'verified') {
-            console.log(
-              `Connection ${name} is stale (age: ${ageSeconds} seconds)`,
-            );
+          const ageMs = Date.now() - connectionDate;
+          if (ageMs > CHANNEL_TTL && status !== 'verified') {
+            console.log(`Connection ${name} is stale (age: ${ageMs} ms)`);
             return true;
           }
           return false;
@@ -44,9 +65,8 @@ const ConnectionCard = (props) => {
           // this is already old. Immediately mark as "stale", no need for a timer.
           dispatch(staleConnection(id));
         } else {
-          // start timer to check if connection got verified after MAX_WAITING_TIME
-          let checkTime =
-            connectionDate + MAX_WAITING_SECONDS * 1000 + 5000 - Date.now(); // add 5 seconds buffer
+          // start timer to check if connection got verified after maximum channel lifetime
+          let checkTime = connectionDate + CHANNEL_TTL + 5000 - Date.now(); // add 5 seconds buffer
           if (checkTime < 0) {
             console.log(`Warning - checkTime in past: ${checkTime}`);
             checkTime = 1000; // check in 1 second
@@ -99,7 +119,7 @@ const ConnectionCard = (props) => {
       return (
         <View style={styles.statusContainer}>
           <Text style={[styles.deletedMessage, { marginTop: 1 }]}>
-            {hiddenFlag ? `Flagged as ${hiddenFlag}` : 'Hidden'}
+            {hiddenFlag ? `Reported as ${hiddenFlag}` : 'Hidden'}
           </Text>
           <Text style={[styles.connectedText, { marginTop: 1 }]}>
             {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
@@ -113,20 +133,69 @@ const ConnectionCard = (props) => {
         </View>
       );
     } else {
-      const testID = `connection-${index}`;
       return (
-        <Text style={styles.connectedText} testID={testID}>
-          {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
-        </Text>
+        <View style={styles.statusContainer} testID={`connection-${index}`}>
+          <Text
+            testID={`connection_level-${index}`}
+            style={[
+              styles.connectionLevel,
+              { color: connectionLevelColors[level] },
+            ]}
+          >
+            {connectionLevelStrings[level]}
+          </Text>
+          <Text
+            style={styles.connectionTime}
+            testID={`connection_time-${index}`}
+          >
+            {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
+          </Text>
+        </View>
       );
     }
   };
 
-  const imageSource = photo?.filename
-    ? {
-        uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
-      }
-    : require('@/static/default_profile.jpg');
+  const { showActionSheetWithOptions } = useActionSheet();
+  const removeOptions = [t('connections.removeActionSheet.remove'), t('common.actionSheet.cancel')];
+
+  const showRemove = status === 'deleted' || status === 'stale';
+
+  const RemoveConnection = () =>
+    showRemove ? (
+      <TouchableOpacity
+        style={styles.removeButton}
+        onPress={() => {
+          showActionSheetWithOptions(
+            {
+              options: removeOptions,
+              cancelButtonIndex: removeOptions.length - 1,
+              destructiveButtonIndex: 0,
+              title: t('connections.removeActionSheet.title'),
+              message: t('connections.removeActionSheet.info', {name: name}),
+              showSeparators: true,
+              textStyle: {
+                textAlign: 'center',
+                width: '100%',
+              },
+            },
+            (index) => {
+              if (index === 0) dispatch(deleteConnection(id));
+            },
+          );
+        }}
+      >
+        <Material color="#333" name="close" size={DEVICE_LARGE ? 22 : 18} />
+      </TouchableOpacity>
+    ) : (
+      <View />
+    );
+
+  const imageSource =
+    photo?.filename && !imgErr
+      ? {
+          uri: `file://${photoDirectory()}/${photo?.filename}`,
+        }
+      : require('@/static/default_profile.jpg');
 
   return (
     <View style={styles.container} testID="connectionCardContainer">
@@ -142,19 +211,45 @@ const ConnectionCard = (props) => {
             source={imageSource}
             style={styles.photo}
             accessibilityLabel="ConnectionPhoto"
+            onError={() => {
+              console.log('settingImgErr');
+              setImgErr(true);
+            }}
           />
         </TouchableOpacity>
-        <View style={styles.info}>
-          <Text
-            adjustsFontSizeToFit={true}
-            numberOfLines={1}
-            style={styles.name}
-            testID="connectionCardText"
-          >
-            {name}
-          </Text>
-          <ConnectionStatus />
-        </View>
+        <TouchableOpacity
+          testID={`ConnectionCard-${index}`}
+          onPress={() => {
+            navigation.navigate('Connection', { connectionId: id });
+          }}
+          accessibilityLabel="View Connection details"
+        >
+          <View style={[styles.info, { maxWidth: WIDTH * 0.56 }]}>
+            <View
+              style={[styles.nameContainer]}
+              testID={`connection_name-${index}`}
+            >
+              <Text
+                // adjustsFontSizeToFit={true}
+                numberOfLines={1}
+                style={styles.name}
+                testID="connectionCardText"
+              >
+                {name}
+              </Text>
+              {brightidVerified && (
+                <SvgXml
+                  style={styles.verificationSticker}
+                  width="16"
+                  height="16"
+                  xml={verificationSticker}
+                />
+              )}
+            </View>
+            <ConnectionStatus />
+          </View>
+        </TouchableOpacity>
+        <RemoveConnection />
       </View>
     </View>
   );
@@ -198,9 +293,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
+  nameContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   name: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
   },
   statusContainer: {
@@ -208,30 +306,39 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
-  connectedText: {
-    fontFamily: 'Poppins',
-    fontWeight: '400',
-    fontSize: DEVICE_LARGE ? 11 : 10,
+  connectionLevel: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: DEVICE_LARGE ? 12 : 11,
+    marginTop: DEVICE_LARGE ? 3 : 1,
+  },
+  connectionTime: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: DEVICE_LARGE ? 10 : 9,
     color: '#B64B32',
-    marginTop: DEVICE_LARGE ? 5 : 2,
   },
   moreIcon: {
     marginRight: DEVICE_LARGE ? 26 : 23,
   },
   waitingMessage: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontFamily: 'Poppins-Medium',
+    fontSize: DEVICE_LARGE ? 13 : 11,
     color: '#e39f2f',
     marginTop: DEVICE_LARGE ? 2 : 0,
   },
   deletedMessage: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#FF0800',
     marginTop: DEVICE_LARGE ? 5 : 2,
     textTransform: 'capitalize',
+  },
+  verificationSticker: {
+    marginLeft: DEVICE_LARGE ? 5 : 3.5,
+  },
+  removeButton: {
+    width: DEVICE_LARGE ? 36 : 32,
+    position: 'absolute',
+    right: 0,
   },
 });
 

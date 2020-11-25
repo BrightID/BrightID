@@ -3,12 +3,12 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
-import RNFS from 'react-native-fs';
+import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { withTranslation } from 'react-i18next';
-import { DEVICE_TYPE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { toggleNewGroupCoFounder } from '../actions';
 
 /**
@@ -21,6 +21,13 @@ import { toggleNewGroupCoFounder } from '../actions';
  */
 
 class NewGroupCard extends React.PureComponent<Props> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      imgErr: false,
+    };
+  }
+
   handleGroupSelect = () => {
     console.log('pressed');
     let { toggleCoFounder, id } = this.props;
@@ -56,15 +63,24 @@ class NewGroupCard extends React.PureComponent<Props> {
 
   render() {
     const { photo, name, connectionDate, style, t } = this.props;
-    const imageSource = photo?.filename
-      ? {
-          uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photo?.filename}`,
-        }
-      : require('@/static/default_profile.jpg');
+    const imageSource =
+      photo?.filename && !this.state.imgErr
+        ? {
+            uri: `file://${photoDirectory()}/${photo?.filename}`,
+          }
+        : require('@/static/default_profile.jpg');
 
     return (
       <View style={{ ...styles.container, ...style }}>
-        <Image source={imageSource} style={styles.photo} />
+        <Image
+          source={imageSource}
+          style={styles.photo}
+          onError={() => {
+            console.log('settingImgErr');
+            this.setState({ imgErr: true });
+          }}
+          accessibilityLabel="profile picture"
+        />
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.connectedText}>
@@ -84,8 +100,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     backgroundColor: '#fff',
-    height: DEVICE_TYPE === 'large' ? 94 : 80,
-    marginBottom: DEVICE_TYPE === 'large' ? 11.8 : 6,
+    height: DEVICE_LARGE ? 94 : 80,
+    marginBottom: DEVICE_LARGE ? 11.8 : 6,
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.43,
@@ -100,13 +116,13 @@ const styles = StyleSheet.create({
   info: {
     marginLeft: 25,
     flex: 1,
-    height: DEVICE_TYPE === 'large' ? 71 : 65,
+    height: DEVICE_LARGE ? 71 : 65,
     flexDirection: 'column',
     justifyContent: 'space-evenly',
   },
   name: {
     fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_TYPE === 'large' ? 20 : 18,
+    fontSize: DEVICE_LARGE ? 20 : 18,
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,

@@ -1,0 +1,25 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "org.brightid",
+    "sha256_cert_fingerprints":
+    ["03:19:2B:46:F8:08:BC:33:0D:6E:43:BD:07:B3:3C:CE:AC:D9:C5:AE:BA:B9:26:9E:56:AA:0C:57:EC:3D:49:C2"]
+  }
+},
+{
+  "relation": ["delegate_permission/common.get_login_creds"],
+  "target": {
+    "namespace": "web",
+    "site": "https://explorer.brightid.org"
+  }
+},
+{
+  "relation": ["delegate_permission/common.get_login_creds"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "org.brightid",
+    "sha256_cert_fingerprints":
+    ["03:19:2B:46:F8:08:BC:33:0D:6E:43:BD:07:B3:3C:CE:AC:D9:C5:AE:BA:B9:26:9E:56:AA:0C:57:EC:3D:49:C2"]
+  }
+}]

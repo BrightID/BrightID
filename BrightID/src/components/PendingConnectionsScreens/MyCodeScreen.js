@@ -17,7 +17,8 @@ import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ChannelSwitch from '@/components/Helpers/ChannelSwitch';
-import { DEVICE_LARGE, ORANGE } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import cameraIcon from '@/static/camera_icon_white.svg';
 import {
   channel_states,
@@ -239,7 +240,7 @@ export const MyCodeScreen = () => {
         animated={true}
       />
       <View style={styles.orangeTop} />
-      <View style={styles.container}>
+      <View style={styles.container} testID="MyCodeScreen">
         <View style={styles.infoTopContainer}>
           <ChannelSwitch
             onValueChange={toggleChannelType}
@@ -255,7 +256,9 @@ export const MyCodeScreen = () => {
               onPress={displayManyToManyInfo}
               testID="ConnectionInfoGroupBtn"
             >
-              <Text style={styles.infoTopText}>{t('qrcode.text.codeGroup')} </Text>
+              <Text testID="group-code" style={styles.infoTopText}>
+                {t('qrcode.text.codeGroup')}
+              </Text>
               <Material name="information-variant" size={18} color="#4a4a4a" />
             </TouchableOpacity>
           ) : (
@@ -264,7 +267,9 @@ export const MyCodeScreen = () => {
               onPress={displayOneToOneInfo}
               testID="ConnectionInfoSingleBtn"
             >
-              <Text style={styles.infoTopText}>{t('qrcode.text.codeSingle')} </Text>
+              <Text testID="single-use-code" style={styles.infoTopText}>
+              {t('qrcode.text.codeSingle')}
+              </Text>
               <Material name="information-variant" size={18} color="#4a4a4a" />
             </TouchableOpacity>
           )}
@@ -318,8 +323,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: '#fff',
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 15,
   },
   infoTopContainer: {
@@ -329,8 +333,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   infoTopText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 12,
     textAlign: 'center',
     color: '#4a4a4a',
@@ -340,8 +343,7 @@ const styles = StyleSheet.create({
     minHeight: 100,
   },
   infoBottomText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 11,
     marginBottom: 10,
   },
@@ -356,8 +358,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   scanCodeText: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 14 : 12,
     color: '#fff',
     marginLeft: 10,
@@ -375,8 +376,7 @@ const styles = StyleSheet.create({
   //   borderColor: ORANGE,
   // },
   // verifyConnectionsText: {
-  //   fontFamily: 'Poppins',
-  //   fontWeight: 'bold',
+  //   fontFamily: 'Poppins-Bold',
   //   fontSize: DEVICE_LARGE ? 14 : 12,
   //   color: ORANGE,
   //   marginLeft: 10,

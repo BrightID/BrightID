@@ -14,7 +14,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import EmptyList from '@/components/Helpers/EmptyList';
 import Spinner from 'react-native-spinkit';
-import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { any, find, propEq } from 'ramda';
 import { fetchApps } from '@/actions';
 import {
@@ -57,7 +58,7 @@ export const AppsScreen = () => {
   }, [apps, handleDeepLink, route.params]);
 
   const handleDeepLink = useCallback(() => {
-    const { context } = route.params;
+    const context = route.params?.context;
     const isValidContext = any(propEq('context', context))(apps);
     if (isValidContext) {
       handleAppContext(route.params);
@@ -114,6 +115,7 @@ export const AppsScreen = () => {
       <View style={styles.container} testID="appsScreen">
         <AppStatus />
         <FlatList
+          testID="appsList"
           data={apps}
           contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
           keyExtractor={({ name }, index) => name + index}
@@ -156,8 +158,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   statusMessage: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: '#4a90e2',

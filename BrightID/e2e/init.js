@@ -1,3 +1,5 @@
+import './i18n_for_tests';
+
 const detox = require('detox');
 const adapter = require('detox/runners/jest/adapter');
 const specReporter = require('detox/runners/jest/specReporter');
@@ -6,7 +8,7 @@ const config = require('../package.json').detox;
 /* global jasmine, device */
 
 // Set the default timeout
-jest.setTimeout(120000);
+jest.setTimeout(180000);
 
 jasmine.getEnv().addReporter(adapter);
 

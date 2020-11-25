@@ -51,9 +51,10 @@ describe('Homescreen', () => {
     });
   });
 
+  // TODO: Edit profile functionality moved to own screen (https://github.com/BrightID/BrightID/issues/633)
   describe('Edit Profile', () => {
     // excluded due to https://github.com/BrightID/BrightID/issues/408
-    xit('should cancel editing profile name with back button', async () => {
+    test.skip('should cancel editing profile name with back button', async () => {
       if (!hasBackButton) return;
       const newName = 'Winston Wolfe';
       await expect(element(by.id('EditNameBtn'))).toHaveText(mainUser);
@@ -64,7 +65,7 @@ describe('Homescreen', () => {
       await expect(element(by.id('EditNameBtn'))).toHaveText(mainUser);
     });
 
-    it('should edit profile name', async () => {
+    test.skip('should edit profile name', async () => {
       const newName = 'Butch Coolidge';
       await expect(element(by.id('EditNameBtn'))).toHaveText(mainUser);
       await element(by.id('EditNameBtn')).tap();
@@ -73,7 +74,7 @@ describe('Homescreen', () => {
       await expect(element(by.id('EditNameBtn'))).toHaveText(newName);
     });
 
-    it('should update profile picture from camera', async () => {
+    test.skip('should update profile picture from camera', async () => {
       await element(by.id('editPhoto')).tap();
       // ActionSheet does not support testID prop, so match based on text.
       await expect(element(by.text('Select photo'))).toBeVisible();
@@ -83,7 +84,7 @@ describe('Homescreen', () => {
       // testcase is not very useful.
     });
 
-    it('should update profile picture from library', async () => {
+    test.skip('should update profile picture from library', async () => {
       await element(by.id('editPhoto')).tap();
       // ActionSheet does not support testID prop, so match based on text.
       await expect(element(by.text('Select photo'))).toBeVisible();

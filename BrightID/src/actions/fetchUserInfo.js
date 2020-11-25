@@ -1,8 +1,9 @@
 // @flow
 
+import { InteractionManager } from 'react-native';
 import api from '@/api/brightId';
 import { updateInvites } from '@/utils/invites';
-import { GROUP_TYPE } from '@/utils/constants';
+import { GROUPS_TYPE } from '@/utils/constants';
 import {
   setGroups,
   setInvites,
@@ -14,55 +15,64 @@ import {
   setActiveNotification,
 } from './index';
 
-const fetchUserInfo = () => async (dispatch: dispatch, getState: getState) => {
-  const {
-    user: { id },
-    operations: { operations },
-    groups: { invites: oldInvites },
-  } = getState();
-  console.log('refreshing user info', id);
-  if (!id) return;
-  try {
-    const {
-      groups,
-      score,
-      verifications = [],
-      connections = [],
-      isSponsored,
-      invites,
-    } = await api.getUserInfo(id);
+const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
+  return new Promise((resolve, reject) => {
+    InteractionManager.runAfterInteractions(async () => {
+      const {
+        user: { id },
+        operations: { operations },
+        groups: { invites: oldInvites },
+      } = getState();
+      console.log('refreshing user info', id);
+      if (!id) {
+        throw new Error('id missing');
+      }
 
-    if (operations.length === 0) {
-      // don't update data when there are pending operations
-      dispatch(setGroups(groups));
-    }
-    dispatch(setUserScore(score));
-    dispatch(setVerifications(verifications));
-    dispatch(updateConnections(connections));
-    dispatch(setIsSponsored(isSponsored));
+      try {
+        const {
+          groups,
+          score,
+          verifications = [],
+          connections = [],
+          isSponsored,
+          invites,
+        } = await api.getUserInfo(id);
 
-    // this can not be done in reducer because it should be in an async function
-    const newInvites = await updateInvites(invites);
-    dispatch(setInvites(newInvites));
+        if (operations.length === 0) {
+          // don't update data when there are pending operations.
+          dispatch(setGroups(groups));
+          dispatch(updateConnections(connections));
+        }
+        dispatch(setUserScore(score));
+        dispatch(setVerifications(verifications));
+        dispatch(setIsSponsored(isSponsored));
 
-    if (newInvites.length > oldInvites.length) {
-      const message =
-        newInvites.length < 1
-          ? `You have ${newInvites.length} new group invitations`
-          : `You've been invited to join ${newInvites[0]?.name}`;
-      dispatch(
-        setActiveNotification({
-          title: 'Group Invitation',
-          message,
-          type: GROUP_TYPE,
-        }),
-      );
-    }
+        // this can not be done in reducer because it should be in an async function
+        const newInvites = await updateInvites(invites);
+        dispatch(setInvites(newInvites));
 
-    dispatch(updateNotifications());
-  } catch (err) {
-    console.log(err.message);
-  }
+        if (newInvites.length > oldInvites.length) {
+          const message =
+            newInvites.length < 1
+              ? `You have ${newInvites.length} new group invitations`
+              : `You've been invited to join ${newInvites[0]?.name}`;
+          dispatch(
+            setActiveNotification({
+              title: 'Group Invitation',
+              message,
+              type: GROUPS_TYPE,
+              navigationTarget: 'Notifications',
+            }),
+          );
+        }
+
+        dispatch(updateNotifications());
+        resolve();
+      } catch (err) {
+        console.log(err.message);
+      }
+    });
+  });
 };
 
 export default fetchUserInfo;

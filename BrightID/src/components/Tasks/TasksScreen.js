@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
-import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import TaskCardController from './TaskCardController';
 import { TasksProgress } from './TasksProgress';
 import {

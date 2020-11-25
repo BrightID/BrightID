@@ -16,6 +16,7 @@ import {
   FLAG_AND_HIDE_CONNECTION,
   SHOW_CONNECTION,
   STALE_CONNECTION,
+  SET_CONNECTION_LEVEL,
 } from '@/actions';
 
 export const initialState = {
@@ -46,12 +47,7 @@ export const reducer = (
             if (conn.status === 'verified') conn.status = 'deleted';
             return conn;
           } else {
-            if (
-              conn.status === 'initiated' ||
-              conn.status === 'stale' ||
-              !conn.status
-            )
-              conn.status = 'verified';
+            conn.status = 'verified';
             return mergeRight(conn, updatedConn);
           }
         }),
@@ -153,6 +149,20 @@ export const reducer = (
       return {
         ...state,
         searchOpen: action.searchOpen,
+      };
+    }
+    case SET_CONNECTION_LEVEL: {
+      const connections: connection[] = state.connections.map(
+        (conn: connection) => {
+          if (conn.id === action.id) {
+            conn.level = action.level;
+          }
+          return conn;
+        },
+      );
+      return {
+        ...state,
+        connections,
       };
     }
     case HYDRATE_CONNECTIONS: {

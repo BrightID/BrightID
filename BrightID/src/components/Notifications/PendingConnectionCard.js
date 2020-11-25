@@ -2,10 +2,9 @@
 
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
-import RNFS from 'react-native-fs';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import CirclePhoto from '@/components/Helpers/CirclePhoto';
 
 export const PendingConnectionCard = ({ pendingConnections }) => {
@@ -86,16 +85,14 @@ const styles = StyleSheet.create({
     height: DEVICE_LARGE ? 71 : 65,
   },
   name: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 20 : 18,
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
   invitationMsg: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 10,
     color: '#B64B32',
   },

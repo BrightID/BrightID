@@ -1,12 +1,13 @@
 // @flow
 
-import { NavigationScreenProp } from 'react-navigation';
 import { Dispatch } from 'redux';
 import {
   channel_states,
   channel_types,
 } from '@/components/PendingConnectionsScreens/channelSlice';
 import ChannelAPI from '@/api/channelService';
+import { connection_levels } from '../src/utils/constants';
+import { pendingConnection_states } from '../src/components/PendingConnectionsScreens/pendingConnectionSlice';
 
 declare type getState = () => State;
 
@@ -21,6 +22,7 @@ declare type State = {
   apps: AppsState,
   connections: ConnectionsState,
   groups: GroupsState,
+  keypair: Keypair,
   notifications: NotificationsState,
   operations: OperationsState,
   pendingConnections: PendingConnectionsState,
@@ -56,8 +58,7 @@ declare type ContextInfo = {
 declare type ChannelsState = {
   displayChannelType: string,
   myChannelIds: {
-    [channel_types.SINGLE]: string,
-    [channel_types.GROUP]: string,
+    [string]: string,
   },
   ids: string[],
   entities: Channel[],
@@ -119,6 +120,11 @@ declare type GroupsState = {
   searchOpen: boolean,
 };
 
+declare type Keypair = {
+  publicKey: string,
+  secretKey: Uint8Array,
+};
+
 declare type group = {
   score: number,
   isNew: boolean,
@@ -178,8 +184,6 @@ declare type PendingConnection = {
   name?: string,
   photo?: string,
   notificationToken?: string,
-  timestamp?: number,
-  signedMessage?: string,
   secretKey?: string,
   score?: number,
 };
@@ -209,9 +213,7 @@ declare type UserState = {
   searchParam: string,
   backupCompleted: boolean,
   verifications: any[],
-  publicKey: string,
   id: string,
-  safePublicKey?: string,
   password: string,
   hashedId: string,
   secretKey: string,
@@ -265,3 +267,12 @@ declare type FakeUser = {
   id: string,
   secretKey: string, // Base64 encoded secretkey
 };
+
+declare type ConnectionLevel = $Keys<typeof connection_levels>;
+declare type PendingConnectionState = $Keys<typeof pendingConnection_states>;
+
+// Jest global functions
+declare var element: any;
+declare var by: any;
+declare var waitFor: any;
+declare var device: any;

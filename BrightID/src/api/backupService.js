@@ -8,7 +8,6 @@ import {
   uInt8ArrayToB64,
   b64ToUrlSafeB64,
 } from '@/utils/encoding';
-import { obtainKeys } from '@/utils/keychain';
 import store from '@/store';
 
 let recoveryUrl = 'https://recovery.brightid.org';
@@ -82,21 +81,24 @@ class BackupService {
     signingKey: string,
   }) {
     try {
-      let { username, secretKey } = await obtainKeys();
+      let {
+        keypair: { secretKey },
+        user: { id: signer },
+      } = store.getState();
 
       let op = {
         name: 'Set Signing Key',
         id,
         signingKey,
         timestamp,
-        v: 5
+        v: 5,
       };
       const message = stringify(op);
       let sig = uInt8ArrayToB64(
         nacl.sign.detached(strToUint8Array(message), secretKey),
       );
 
-      let data = { signer: username, id, sig };
+      let data = { signer, id, sig };
 
       let res = await this.profileApi.post(`/profile/upload`, {
         data,

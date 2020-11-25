@@ -5,9 +5,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
-  TextInput,
   StatusBar,
   Clipboard,
 } from 'react-native';
@@ -15,19 +13,18 @@ import { createSelector } from '@reduxjs/toolkit';
 import { useFocusEffect } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { SvgXml } from 'react-native-svg';
-import ActionSheet from 'react-native-actionsheet';
+import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { setPhoto, setName, setActiveNotification } from '@/actions';
-import { chooseImage, takePhoto } from '@/utils/images';
-import { saveImage, retrieveImage } from '@/utils/filesystem';
-import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
+import { setActiveNotification } from '@/actions';
+import { retrieveImage } from '@/utils/filesystem';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import verificationSticker from '@/static/verification-sticker.svg';
 import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
 import forumIcon from '@/static/forum_icon.svg';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
 import { version as app_version } from '../../package.json';
 
 /**
@@ -35,8 +32,6 @@ import { version as app_version } from '../../package.json';
  * ==========================
  */
 
-let chatSheetRef = '',
-  photoSheetRef = '';
 let discordUrl = 'https://discord.gg/nTtuB2M';
 
 /** Selectors */
@@ -63,7 +58,6 @@ export const HomeScreen = (props) => {
   const { navigation } = props;
   const dispatch = useDispatch();
   const headerHeight = useHeaderHeight();
-  const id = useSelector((state) => state.user.id);
   const name = useSelector((state) => state.user.name);
   const photoFilename = useSelector((state) => state.user.photo.filename);
   const groupsCount = useSelector((state) => state.groups.groups.length);
@@ -71,9 +65,7 @@ export const HomeScreen = (props) => {
   const linkedContextsCount = useSelector(linkedContextCountSelector);
   const verified = useSelector(verifiedSelector);
 
-  const [profilePhoto, setProfilePhoto] = useState('none');
-  const [isEditing, setIsEditing] = useState(false);
-  const [displayName, setDisplayName] = useState(name);
+  const [profilePhoto, setProfilePhoto] = useState('');
 
   const { t } = useTranslation();
 
@@ -84,46 +76,37 @@ export const HomeScreen = (props) => {
     }, [dispatch, photoFilename]),
   );
 
-  const getPhotoFromCamera = async () => {
-    try {
-      const { mime, data } = await takePhoto();
-      const uri = `data:${mime};base64,${data}`;
-      const filename = await saveImage({
-        imageName: id,
-        base64Image: uri,
-      });
-      setPhoto({ filename });
-      setProfilePhoto(await retrieveImage(filename));
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const getPhotoFromLibrary = async () => {
-    try {
-      const { mime, data } = await chooseImage();
-      const uri = `data:${mime};base64,${data}`;
-      const filename = await saveImage({
-        imageName: id,
-        base64Image: uri,
-      });
-      setPhoto({ filename });
-      setProfilePhoto(await retrieveImage(filename));
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const handleEditPhoto = () => {
-    photoSheetRef.show();
-  };
+  const { showActionSheetWithOptions } = useActionSheet();
 
   const handleChat = () => {
     if (__DEV__) {
       const { delStorage } = require('@/utils/dev');
       delStorage();
     } else {
-      chatSheetRef.show();
+      showActionSheetWithOptions(
+        {
+          options: [t('home.chatActionSheet.discord'), t('common.actionSheet.cancel')],
+          cancelButtonIndex: 1,
+          title: t('home.chatActionSheet.title'),
+          showSeparators: true,
+          textStyle: {
+            color: '#2185D0',
+            textAlign: 'center',
+            width: '100%',
+          },
+          titleTextStyle: {
+            textAlign: 'center',
+            width: '100%',
+          },
+        },
+        (index) => {
+          if (index === 0) {
+            Linking.openURL(discordUrl).catch((err) =>
+              console.log('An error occurred', err),
+            );
+          }
+        },
+      );
     }
   };
 
@@ -166,55 +149,24 @@ export const HomeScreen = (props) => {
       />
       <View style={styles.profileContainer} testID="PhotoContainer">
         {profilePhoto ? (
-          <TouchableOpacity
-            testID="editPhoto"
-            onPress={handleEditPhoto}
+          <Image
+            source={{
+              uri: profilePhoto,
+            }}
+            style={styles.photo}
+            resizeMode="cover"
+            onError={(e) => {
+              console.log(e.error);
+            }}
             accessible={true}
-            accessibilityLabel={t('common.accessibilityLabel.editPhoto')}
-          >
-            <Image
-              source={{
-                uri: profilePhoto,
-              }}
-              style={styles.photo}
-              resizeMode="cover"
-              onError={(e) => {
-                console.log(e.error);
-              }}
-              accessible={true}
-              accessibilityLabel={('common.accessibilityLabel.userPhoto')}
-            />
-          </TouchableOpacity>
+            accessibilityLabel={t('common.accessibilityLabel.profilePhoto')}
+          />
         ) : null}
         <View style={styles.verifyNameContainer} testID="homeScreen">
           <View style={styles.nameContainer}>
-            {isEditing ? (
-              <TextInput
-                testID="EditNameInput"
-                value={displayName}
-                style={styles.name}
-                onChangeText={setDisplayName}
-                onBlur={() => {
-                  if (displayName.length >= 2) {
-                    dispatch(setName(displayName));
-                    setIsEditing(false);
-                  } else {
-                    setIsEditing(false);
-                    setName(name);
-                  }
-                }}
-                blurOnSubmit={true}
-              />
-            ) : (
-              <TouchableWithoutFeedback
-                onPress={() => setIsEditing(true)}
-                accessibilityLabel={t('common.accessibilityLabel.editName')}
-              >
-                <Text testID="EditNameBtn" style={styles.name}>
-                  {name}
-                </Text>
-              </TouchableWithoutFeedback>
-            )}
+            <Text testID="EditNameBtn" style={styles.name} numberOfLines={1}>
+              {name}
+            </Text>
             {verified && (
               <SvgXml
                 style={styles.verificationSticker}
@@ -267,7 +219,11 @@ export const HomeScreen = (props) => {
           style={styles.countsCard}
           onPress={() => {
             dispatch(setActiveNotification(null));
-            navigation.navigate('Apps');
+            navigation.navigate('Apps', {
+              baseUrl: '',
+              context: '',
+              contextId: '',
+            });
           }}
         >
           <Text testID="AppsCount" style={styles.countsNumberText}>
@@ -332,39 +288,6 @@ export const HomeScreen = (props) => {
         <DeepPasteLink />
         <Text style={styles.versionInfo}>v{app_version}</Text>
       </View>
-
-      <ActionSheet
-        testID="ChatActionSheet"
-        ref={(o) => {
-          chatSheetRef = o;
-        }}
-        title={t('home.chatActionSheet.title')}
-        options={[t('home.chatActionSheet.discord'), t('common.actionSheet.cancel')]}
-        cancelButtonIndex={1}
-        onPress={(index) => {
-          if (index === 0) {
-            Linking.openURL(discordUrl).catch((err) =>
-              console.error('An error occurred', err),
-            );
-          }
-        }}
-      />
-      <ActionSheet
-        testID="PhotoActionSheet"
-        ref={(o) => {
-          photoSheetRef = o;
-        }}
-        title={t('common.photoActionSheet.title')}
-        options={[t('common.photoActionSheet.takePhoto'), t('common.photoActionSheet.choosePhoto'), t('common.actionSheet.cancel')]}
-        cancelButtonIndex={2}
-        onPress={(index) => {
-          if (index === 0) {
-            getPhotoFromCamera();
-          } else if (index === 1) {
-            getPhotoFromLibrary();
-          }
-        }}
-      />
     </View>
   );
 };
@@ -396,11 +319,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    // borderWidth: 1,
+    maxWidth: '50%',
   },
   nameContainer: {
     flexDirection: 'row',
-    // width: '120%',
   },
   profileDivider: {
     borderBottomWidth: 2,
@@ -417,8 +339,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   name: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 18 : 15,
     color: '#000000',
   },
@@ -437,29 +358,27 @@ const styles = StyleSheet.create({
     marginTop: 1.5,
   },
   verified: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     color: ORANGE,
     borderWidth: 1,
     borderColor: ORANGE,
     borderRadius: 10,
     marginTop: 6,
-    paddingTop: 1,
-    paddingBottom: 1,
+    paddingTop: DEVICE_ANDROID ? 2 : 1,
+    paddingBottom: DEVICE_ANDROID ? 0 : 1,
     paddingLeft: 23,
     paddingRight: 23,
     fontSize: DEVICE_LARGE ? 11 : 10,
   },
   unverified: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     color: '#707070',
     borderWidth: 1,
     borderColor: '#707070',
     borderRadius: 10,
     marginTop: 6,
-    paddingTop: 1,
-    paddingBottom: 1,
+    paddingTop: DEVICE_ANDROID ? 2 : 1,
+    paddingBottom: DEVICE_ANDROID ? 0 : 1,
     paddingLeft: 20,
     paddingRight: 20,
     fontSize: DEVICE_LARGE ? 11 : 10,
@@ -497,15 +416,13 @@ const styles = StyleSheet.create({
     width: 55,
   },
   countsDescriptionText: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 12 : 11,
     marginTop: 6,
   },
   countsNumberText: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'center',
     fontSize: DEVICE_LARGE ? 25 : 21,
     marginBottom: 3,
@@ -528,8 +445,7 @@ const styles = StyleSheet.create({
   newConnectionText: {
     color: '#fff',
     fontSize: DEVICE_LARGE ? 18 : 15,
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     marginBottom: DEVICE_LARGE ? 16 : 11,
   },
   connectButton: {
@@ -549,8 +465,7 @@ const styles = StyleSheet.create({
     marginBottom: DEVICE_LARGE ? 16 : 11,
   },
   connectText: {
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 17 : 15,
     color: '#000',
     marginLeft: DEVICE_LARGE ? 10 : 8,
@@ -568,12 +483,10 @@ const styles = StyleSheet.create({
   communityLink: {
     color: '#fff',
     fontSize: DEVICE_LARGE ? 14 : 11,
-    fontFamily: 'Poppins',
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
   },
   versionInfo: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 10,
     color: '#fff',
     position: 'absolute',

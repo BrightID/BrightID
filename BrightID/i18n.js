@@ -30,7 +30,12 @@ const translations = {
   }
 };
 
-const { languageTag } = RNLocalize.findBestAvailableLanguage(Object.keys(translations));
+const defaultLanguage = {
+  languageTag: "en-US",
+  isRTL: false,
+};
+
+const { languageTag } = RNLocalize.findBestAvailableLanguage(Object.keys(translations)) || defaultLanguage;
 
 /**
  * Moment will use detected language throughout the app.
@@ -48,6 +53,5 @@ i18n
       escapeValue: false,
     }
   });
-
 
 export default i18n;

@@ -11,7 +11,8 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { DEVICE_TYPE, ORANGE, DEVICE_LARGE } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import EmptyList from '@/components/Helpers/EmptyList';
 import TrustedConnectionCard from './TrustedConnectionCard';
 import { setTrustedConnections } from './helpers';
@@ -20,6 +21,15 @@ import { setTrustedConnections } from './helpers';
  * Backup screen of BrightID
  * Displays a search input and list of Connection Cards
  */
+
+const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
+const ITEM_MARGIN = DEVICE_LARGE ? 11.8 : 6;
+
+const getItemLayout = (data, index) => ({
+  length: ITEM_HEIGHT + ITEM_MARGIN,
+  offset: (ITEM_HEIGHT + ITEM_MARGIN) * index,
+  index,
+});
 
 class TrustedConnectionsScreen extends React.Component<Props> {
   filterConnections = () => {
@@ -91,6 +101,7 @@ class TrustedConnectionsScreen extends React.Component<Props> {
                 renderItem={this.renderConnection}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
+                getItemLayout={getItemLayout}
                 ListEmptyComponent={
                   <EmptyList
                     iconType="account-off-outline"

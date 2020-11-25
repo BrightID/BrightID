@@ -15,7 +15,9 @@ import { withTranslation } from 'react-i18next';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import { getGroupName, ids2connections, knownMemberIDs } from '@/utils/groups';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
-import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { toSearchString } from '@/utils/strings';
 import GroupCard from './GroupCard';
 import { NoGroups } from './NoGroups';
 import { compareJoinedDesc } from './models/sortingUtility';
@@ -28,6 +30,15 @@ import { compareJoinedDesc } from './models/sortingUtility';
 type State = {
   refreshing: boolean,
 };
+
+const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
+const ITEM_MARGIN = DEVICE_LARGE ? 11.8 : 6;
+
+const getItemLayout = (data, index) => ({
+  length: ITEM_HEIGHT + ITEM_MARGIN,
+  offset: (ITEM_HEIGHT + ITEM_MARGIN) * index,
+  index,
+});
 
 export class GroupsScreen extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -91,6 +102,7 @@ export class GroupsScreen extends React.Component<Props, State> {
                 renderItem={this.renderGroup}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
+                getItemLayout={getItemLayout}
                 refreshControl={
                   <RefreshControl
                     refreshing={this.state.refreshing}
@@ -159,7 +171,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   const { groups: unfilteredGroups } = state.groups;
-  const searchParam = state.groups.searchParam.toLowerCase();
+  const searchParam = toSearchString(state.groups.searchParam);
   const hasGroups = unfilteredGroups.length > 0;
 
   // apply search filter to groups array
@@ -168,14 +180,14 @@ function mapStateToProps(state) {
   let groups;
   if (searchParam !== '') {
     groups = unfilteredGroups.filter((group) => {
-      if (getGroupName(group).toLowerCase().includes(searchParam)) {
+      if (toSearchString(getGroupName(group)).includes(searchParam)) {
         // direct group name match
         return true;
       } else {
         // check group members
         const allMemberNames = ids2connections(
           knownMemberIDs(group),
-        ).map((member) => member.name.toLowerCase());
+        ).map((member) => toSearchString(member.name));
         for (const name of allMemberNames) {
           if (name.includes(searchParam)) {
             // stop looking if a match is found

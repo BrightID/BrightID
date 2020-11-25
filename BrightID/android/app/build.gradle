@@ -22,6 +22,9 @@ import com.android.build.OutputFile
  *   // default. Can be overridden with ENTRY_FILE environment variable.
  *   entryFile: "index.android.js",
  *
+ *   // https://reactnative.dev/docs/performance#enable-the-ram-format
+ *   bundleCommand: "ram-bundle",
+ *
  *   // whether to bundle JS and assets in debug mode
  *   bundleInDebug: false,
  *
@@ -78,9 +81,15 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     enableHermes: true,  // clean and rebuild if changing
+    bundleInStaging: true,
+    devDisabledInStaging: true,
+    // resourcesDirStaging:
+    //    "$buildDir/intermediates/res/merged/staging",
+    // jsBundleDirStaging: "$buildDir/intermediates/assets/staging",
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -132,8 +141,23 @@ if (keystorePropertiesFile.exists()){
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+def stagingPropertiesFile = rootProject.file("staging.properties")
+
+// Initialize a new Properties() object called keystoreProperties.
+def stagingProperties = new Properties()
+
+if (stagingPropertiesFile.exists()){
+    // Load your keystore.properties file into the keystoreProperties object.
+    stagingProperties.load(new FileInputStream(stagingPropertiesFile))
+}
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
+
+     compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     // Fix "java.lang.UnsatisfiedLinkError: couldn't find DSO to load: libhermes.so" in release builds
     // Found at https://github.com/facebook/react-native/issues/25923#issuecomment-626663209
@@ -148,8 +172,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         missingDimensionStrategy 'react-native-camera', 'general'
-        versionCode 27
-        versionName "2.11.1"
+        versionCode 35
+        versionName "4.0.0"
         multiDexEnabled true
         testBuildType System.getProperty('testBuildType', 'debug')  // This will later be used to control the test apk build type
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
@@ -160,6 +184,14 @@ android {
             storePassword 'android'
             keyAlias 'androiddebugkey'
             keyPassword 'android'
+        }
+        staging {
+            if (stagingProperties['keyAlias']){
+                keyAlias stagingProperties['keyAlias']
+                keyPassword stagingProperties['keyPassword']
+                storeFile file(stagingProperties['storeFile'])
+                storePassword stagingProperties['storePassword']
+            }
         }
         release {
             if (keystoreProperties['keyAlias']){
@@ -183,11 +215,22 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
+            resValue "string", "CodePushDeploymentKey", "G8q6_0EW9AkaXAy3hO7Ye_LAhDfisOHpFPvRF"
+        }
+        staging {
+            applicationIdSuffix ".staging"
+            versionNameSuffix '-STAGING'
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.staging
+            resValue "string", "CodePushDeploymentKey", "oCnsVbQLVhCjd_xE1BAsPYMRApddDWiwqiuhl"
+            matchingFallbacks = ['release']
         }
         debug {
             signingConfig signingConfigs.debug
             applicationIdSuffix ".debug"
             versionNameSuffix '-DEBUG'
+            resValue "string", "CodePushDeploymentKey", '""'
         }
     }
 
@@ -204,24 +247,25 @@ android {
             }
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersio
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    
+
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+
+    implementation 'androidx.multidex:multidex:2.0.1'
 
       // Add the Firebase SDK for Google Analytics
     implementation 'com.google.firebase:firebase-analytics:17.4.1'
 
     // Add the SDK for Firebase Cloud Messaging
     implementation 'com.google.firebase:firebase-messaging:20.1.7'
+
+    // react-native-keychain
+    implementation project(':react-native-keychain')
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
@@ -230,7 +274,7 @@ dependencies {
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.flipper'
     }
-    
+
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.flipper'
         exclude group:'com.squareup.okhttp3', module:'okhttp'
@@ -239,6 +283,7 @@ dependencies {
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")
+        stagingImplementation files(hermesPath + "hermes-release.aar")
         releaseImplementation files(hermesPath + "hermes-release.aar")
     } else {
         implementation jscFlavor

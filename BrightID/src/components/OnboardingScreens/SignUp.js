@@ -1,6 +1,6 @@
 // @flow
 
-import * as React from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Alert,
   Image,
@@ -12,83 +12,85 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import ActionSheet from 'react-native-actionsheet';
+import { useActionSheet } from '@expo/react-native-action-sheet';
 import Spinner from 'react-native-spinkit';
-import { connect } from 'react-redux';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { takePhoto, chooseImage } from '@/utils/images';
-import { DEVICE_LARGE, DEVICE_OS, ORANGE } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_OS } from '@/utils/deviceConstants';
 import { handleBrightIdCreation } from './actions';
 import { checkTasks } from '../Tasks/TasksSlice';
 
-type State = {
-  name: string,
-  finalBase64: { uri: string },
-  creatingBrightId: boolean,
-  editingName: boolean,
-};
-
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
-export class SignUp extends React.Component<Props, State> {
-  photoSheetRef: string;
+export const SignUp = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const textBoxRef = useRef(null);
+  const [name, setName] = useState('');
+  const [finalBase64, setfinalBase64] = useState('');
+  const [creatingBrightId, setCreatingBrightId] = useState(false);
+  const [editingName, setEditingName] = useState(false);
+  const { showActionSheetWithOptions } = useActionSheet();
+  const { t } = useTranslation();
 
-  textBoxRef: string;
-
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    name: '',
-    finalBase64: { uri: '' },
-    creatingBrightId: false,
-    editingName: false,
-  };
-
-  getPhotoFromCamera = async () => {
+  const getPhotoFromCamera = async () => {
     try {
       const { mime, data } = await takePhoto();
-      const finalBase64 = {
-        uri: `data:${mime};base64,${data}`,
-      };
-      this.setState({
-        finalBase64,
-      });
+      const uri = `data:${mime};base64,${data}`;
+      setfinalBase64(uri);
     } catch (err) {
       console.log(err);
     }
   };
 
-  getPhotoFromLibrary = async () => {
+  const getPhotoFromLibrary = async () => {
     try {
       const { mime, data } = await chooseImage();
-      const finalBase64 = {
-        uri: `data:${mime};base64,${data}`,
-      };
-      this.setState({
-        finalBase64,
-      });
+      const uri = `data:${mime};base64,${data}`;
+      setfinalBase64(uri);
     } catch (err) {
       console.log(err);
     }
   };
 
-  onAddPhoto = () => {
-    this.photoSheetRef.show();
+  const handleAddPhoto = () => {
+    showActionSheetWithOptions(
+      {
+        options: [t('common.photoActionSheet.takePhoto'), t('common.photoActionSheet.choosePhoto'), t('common.actionSheet.cancel')],
+        cancelButtonIndex: 2,
+        title: t('common.photoActionSheet.title'),
+        showSeparators: true,
+        textStyle: {
+          color: '#2185D0',
+          textAlign: 'center',
+          width: '100%',
+          fontSize: DEVICE_LARGE ? 18 : 16,
+        },
+        titleTextStyle: {
+          textAlign: 'center',
+          fontSize: DEVICE_LARGE ? 20 : 17,
+          width: '100%',
+        },
+      },
+      (buttonIndex) => {
+        if (buttonIndex === 0) {
+          getPhotoFromCamera();
+        } else if (buttonIndex === 1) {
+          getPhotoFromLibrary();
+        }
+      },
+    );
   };
 
-  createBrightID = async () => {
-    const { t } = this.props;
+  const createBrightID = async () => {
     try {
-      const { finalBase64, name } = this.state;
-      const { navigation, dispatch } = this.props;
-      this.textBoxRef?.blur();
-      this.setState({
-        creatingBrightId: true,
-      });
+      console.log('HERE');
+      textBoxRef.current?.blur();
+      setCreatingBrightId(true);
       if (name.length < 2) {
-        this.setState({
-          creatingBrightId: false,
-        });
+        setCreatingBrightId(false);
         return Alert.alert(
           t('common.alert.formIncomplete'),
           name.length === 0
@@ -96,156 +98,123 @@ export class SignUp extends React.Component<Props, State> {
             : t('signup.alert.nameTooShort'),
         );
       }
-      if (!finalBase64.uri) {
-        this.setState({
-          creatingBrightId: false,
-        });
+      if (!finalBase64) {
+        setCreatingBrightId(false);
         return Alert.alert(
           t('common.alert.formIncomplete'),
           t('signup.alert.photoMissing'),
         );
       }
       const result = await dispatch(
-        handleBrightIdCreation({ photo: finalBase64, name }),
+        handleBrightIdCreation({ photo: { uri: finalBase64 }, name }),
       );
       if (result) {
         dispatch(checkTasks());
         navigation.navigate('App');
       } else {
-        this.setState({
-          creatingBrightId: false,
-        });
+        setCreatingBrightId(false);
       }
     } catch (err) {
-      this.setState({
-        creatingBrightId: false,
-      });
+      setCreatingBrightId(false);
     }
   };
 
-  render() {
-    const { name, finalBase64, creatingBrightId, editingName } = this.state;
-    const { t } = this.props;
-
-    return (
-      <>
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor={ORANGE}
-          animated={true}
-        />
-        <View style={styles.orangeTop} />
-        <Container style={styles.container} behavior="padding">
-          <View style={styles.addPhotoContainer}>
-            {finalBase64.uri && !editingName ? (
-              <TouchableOpacity
-                testID="editPhoto"
-                onPress={this.onAddPhoto}
-                accessible={true}
-                accessibilityLabel={t('common.accessibilityLabel.editPhoto')}
-              >
-                <Image style={styles.photo} source={finalBase64} />
-              </TouchableOpacity>
-            ) : !editingName ? (
-              <TouchableOpacity
-                testID="addPhoto"
-                onPress={this.onAddPhoto}
-                style={styles.addPhoto}
-                accessible={true}
-                accessibilityLabel={t('common.accessibilityLabel.addPhoto')}
-              >
-                <Text style={styles.addPhotoText}>{t('signup.button.addPhoto')}</Text>
-                <SimpleLineIcons
-                  size={DEVICE_LARGE ? 42 : 36}
-                  name="camera"
-                  color="#979797"
-                />
-              </TouchableOpacity>
-            ) : (
-              <View />
-            )}
-          </View>
-          <View style={styles.textInputContainer}>
-            <Text style={styles.midText}>
-              {t('signup.text.whatsYouName')}
-            </Text>
-            <TextInput
-              testID="editName"
-              ref={(o) => {
-                this.textBoxRef = o;
-              }}
-              onChangeText={(name) => this.setState({ name })}
-              value={name}
-              placeholder={t('signup.placeholder.name')}
-              placeholderTextColor="#9e9e9e"
-              style={styles.textInput}
-              autoCapitalize="words"
-              autoCorrect={false}
-              textContentType="name"
-              underlineColorAndroid="transparent"
-              onFocus={() => {
-                this.setState({ editingName: true });
-              }}
-              onBlur={() => {
-                this.setState({ editingName: false });
-              }}
-              blurOnSubmit={true}
-            />
-          </View>
-          <View style={styles.buttonContainer}>
-            <Text style={styles.buttonInfoText}>
-              {t('signup.text.infoNotShared')}
-            </Text>
-            {!creatingBrightId ? (
-              <View>
-                <TouchableOpacity
-                  testID="createBrightIDBtn"
-                  style={styles.createBrightIdButton}
-                  onPress={this.createBrightID}
-                >
-                  <Text style={styles.buttonInnerText}>{t('signup.button.createAccount')}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  testID="recoverBrightIDBtn"
-                  onPress={() => this.props.navigation.navigate('Restore')}
-                  style={styles.recoverButton}
-                  accessibilityLabel="Recover BrightID"
-                >
-                  <Text style={styles.recoverButtonText}>{t('signup.button.recoverAccount')}</Text>
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <View style={styles.loader} testID="creatingIDSpinner">
-                <Text>{t('signup.text.creatingAccount')}</Text>
-                <Spinner
-                  isVisible={true}
-                  size={47}
-                  type="Wave"
-                  color="#4990e2"
-                />
-              </View>
-            )}
-          </View>
-          <ActionSheet
-            ref={(o) => {
-              this.photoSheetRef = o;
+  return (
+    <>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={ORANGE}
+        animated={true}
+      />
+      <View style={styles.orangeTop} />
+      <Container style={styles.container} behavior="padding">
+        <View style={styles.addPhotoContainer}>
+          {finalBase64 && !editingName ? (
+            <TouchableOpacity
+              testID="editPhoto"
+              onPress={handleAddPhoto}
+              accessible={true}
+              accessibilityLabel={t('common.accessibilityLabel.editPhoto')}
+            >
+              <Image style={styles.photo} source={{ uri: finalBase64 }} />
+            </TouchableOpacity>
+          ) : !editingName ? (
+            <TouchableOpacity
+              testID="addPhoto"
+              onPress={handleAddPhoto}
+              style={styles.addPhoto}
+              accessible={true}
+              accessibilityLabel={t('common.accessibilityLabel.addPhoto')}
+            >
+              <Text style={styles.addPhotoText}>{t('signup.button.addPhoto')}</Text>
+              <SimpleLineIcons
+                size={DEVICE_LARGE ? 42 : 36}
+                name="camera"
+                color="#979797"
+              />
+            </TouchableOpacity>
+          ) : (
+            <View />
+          )}
+        </View>
+        <View style={styles.textInputContainer}>
+          <Text style={styles.midText}>{t('signup.text.whatsYouName')}</Text>
+          <TextInput
+            testID="editName"
+            ref={textBoxRef}
+            onChangeText={setName}
+            value={name}
+            placeholder={t('signup.placeholder.name')}
+            placeholderTextColor="#9e9e9e"
+            style={styles.textInput}
+            autoCapitalize="words"
+            autoCorrect={false}
+            textContentType="name"
+            underlineColorAndroid="transparent"
+            onFocus={() => {
+              setEditingName(true);
             }}
-            title={t('common.photoActionSheet.title')}
-            options={[t('common.photoActionSheet.takePhoto'), t('common.photoActionSheet.choosePhoto'), t('common.actionSheet.cancel')]}
-            cancelButtonIndex={2}
-            onPress={(index) => {
-              if (index === 0) {
-                this.getPhotoFromCamera();
-              } else if (index === 1) {
-                this.getPhotoFromLibrary();
-              }
+            onBlur={() => {
+              setEditingName(false);
             }}
+            blurOnSubmit={true}
           />
-        </Container>
-      </>
-    );
-  }
-}
+        </View>
+        <View style={styles.buttonContainer}>
+          <Text style={styles.buttonInfoText}>
+            {t('signup.text.infoNotShared')}
+          </Text>
+          {!creatingBrightId ? (
+            <View>
+              <TouchableOpacity
+                testID="createBrightIDBtn"
+                style={styles.createBrightIdButton}
+                onPress={() => {
+                  createBrightID();
+                }}
+              >
+                <Text style={styles.buttonInnerText}>{t('signup.button.createAccount')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                testID="recoverBrightIDBtn"
+                onPress={() => navigation.navigate('Restore')}
+                style={styles.recoverButton}
+                accessibilityLabel={t('signup.button.recoverAccount')}
+              >
+                <Text style={styles.recoverButtonText}>{t('signup.button.recoverAccount')}</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View style={styles.loader} testID="creatingIDSpinner">
+              <Text>{t('signup.text.creatingAccount')}</Text>
+              <Spinner isVisible={true} size={47} type="Wave" color="#4990e2" />
+            </View>
+          )}
+        </View>
+      </Container>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   orangeTop: {
@@ -377,4 +346,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(withTranslation()(SignUp));
+export default SignUp;

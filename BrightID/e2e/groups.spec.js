@@ -1,5 +1,6 @@
 /* global device:false, element:false, by:false, waitFor:false */
 
+import i18next from 'i18next';
 import {
   createBrightID,
   createFakeConnection,
@@ -89,7 +90,9 @@ describe('Groups', () => {
   describe('Create initial group', () => {
     beforeAll(async () => {
       // Connect all fake connections with each other
-      await interConnect(3);
+      await interConnect(0);
+      await interConnect(1);
+      await interConnect(2);
 
       // navigate to group creation screen
       await element(by.id('groupsBtn')).tap();
@@ -185,7 +188,9 @@ describe('Groups', () => {
 
     it('invited co-founders should join group', async () => {
       // accept invitation
-      await joinAllGroups(3);
+      await joinAllGroups(0);
+      await joinAllGroups(1);
+      await joinAllGroups(2);
 
       // Check if cofounders actually joined the groups
       await expectHomescreen();
@@ -196,10 +201,14 @@ describe('Groups', () => {
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
       // Text changes to "Known members: " when all invited people have joined
-      await waitFor(element(by.text('Known members: ')).atIndex(0))
+      await waitFor(
+        element(by.text(i18next.t('groups.label.knownMembers'))).atIndex(0),
+      )
         .toBeVisible()
         .withTimeout(30000);
-      await waitFor(element(by.text('Known members: ')).atIndex(1))
+      await waitFor(
+        element(by.text(i18next.t('groups.label.knownMembers'))).atIndex(1),
+      )
         .toBeVisible()
         .withTimeout(30000);
     });

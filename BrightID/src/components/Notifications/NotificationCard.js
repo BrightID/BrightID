@@ -4,9 +4,9 @@ import React from 'react';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import RNFS from 'react-native-fs';
+import { photoDirectory } from '@/utils/filesystem';
 import { useNavigation } from '@react-navigation/native';
-import { DEVICE_LARGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
 /**
  * Notification Card in the Notifications Screen
@@ -21,7 +21,7 @@ const NotificationCard = (props) => {
   const photoFilename = useSelector((state) => state.user.photo.filename);
   const imageSource = photoFilename
     ? {
-        uri: `file://${RNFS.DocumentDirectoryPath}/photos/${photoFilename}`,
+        uri: `file://${photoDirectory()}/${photoFilename}`,
       }
     : require('@/static/default_profile.jpg');
 
@@ -87,16 +87,14 @@ const styles = StyleSheet.create({
     height: DEVICE_LARGE ? 71 : 65,
   },
   name: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 20 : 18,
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
   invitationMsg: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 10,
     color: '#B64B32',
   },

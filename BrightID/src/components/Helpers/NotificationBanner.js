@@ -11,7 +11,9 @@ import groups from '@/static/add_group.svg';
 import connections from '@/static/add_person.svg';
 import misc from '@/static/trusted_connections.svg';
 import { setActiveNotification } from '@/actions';
-import { DEVICE_LARGE, CONNECTIONS_TYPE, HEIGHT } from '@/utils/constants';
+import { CONNECTIONS_TYPE } from '@/utils/constants';
+import { DEVICE_LARGE, HEIGHT } from '@/utils/deviceConstants';
+
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import DropDownAlertEnabled from '@/utils/DropDownAlertEnabler';
 
@@ -46,23 +48,23 @@ export const NotificationBanner = () => {
   const pendingConnections = useSelector(selectAllUnconfirmedConnections);
 
   useEffect(() => {
-    dropDownAlertRef.current?.closeAction('automatic');
     if (!activeNotification) {
       return;
     }
 
-    InteractionManager.runAfterInteractions(() => {
-      let route = getRoute();
-      if (!screenBlackList.includes(route?.name)) {
-        if (DropDownAlertEnabled) {
-          dropDownAlertRef.current?.alertWithType(
-            'custom',
-            activeNotification?.title,
-            activeNotification?.message,
-          );
-        }
+    let route = getRoute();
+
+    dropDownAlertRef.current?.closeAction('cancel');
+
+    if (!screenBlackList.includes(route?.name)) {
+      if (DropDownAlertEnabled) {
+        dropDownAlertRef.current?.alertWithType(
+          'custom',
+          activeNotification?.title,
+          activeNotification?.message,
+        );
       }
-    });
+    }
   }, [activeNotification, dispatch]);
 
   useEffect(() => {
@@ -86,12 +88,14 @@ export const NotificationBanner = () => {
     activeNotification?.xmlIcon ?? icons[activeNotification?.type] ?? misc;
 
   const _onTap = () => {
+    console.log('onTap', activeNotification);
     if (activeNotification?.navigationTarget) {
       navigate(activeNotification.navigationTarget);
     }
   };
 
   const _onClose = () => {
+    console.log('onClose, setting null');
     dispatch(setActiveNotification(null));
   };
 
@@ -136,15 +140,13 @@ const styles = StyleSheet.create({
     height: HEIGHT * 0.15,
   },
   title: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     marginLeft: DEVICE_LARGE ? 20 : 10,
     color: '#000',
     fontSize: DEVICE_LARGE ? 16 : 15,
   },
   message: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     marginLeft: DEVICE_LARGE ? 20 : 10,
     color: '#000',
     fontSize: DEVICE_LARGE ? 13 : 12,

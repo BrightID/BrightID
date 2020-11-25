@@ -1,12 +1,19 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '10.0'
+platform :ios, '11.0'
 
 target 'BrightID' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
+
+  # manually install appcenter dependencies
+
+  pod 'AppCenter', '~> 3.3.4'
+  # pod 'AppCenter/Crashes', '~> 3.3.4'
+  # pod 'AppCenter/Analytics', '~> 3.3.4'
+  # pod 'AppCenterReactNativeShared', '~> 3.1.2'
 
   target 'BrightIDTests' do
     inherit! :complete
@@ -20,7 +27,13 @@ target 'BrightID' do
   use_flipper!
   post_install do |installer|
     flipper_post_install(installer)
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
+      end
+    end
   end
+    
 end
 
 target 'BrightID-tvOS' do

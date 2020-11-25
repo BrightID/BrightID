@@ -5,9 +5,19 @@ import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
+
+const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
+const ITEM_MARGIN = DEVICE_LARGE ? 11.8 : 6;
+
+const getItemLayout = (data, index) => ({
+  length: ITEM_HEIGHT + ITEM_MARGIN,
+  offset: (ITEM_HEIGHT + ITEM_MARGIN) * index,
+  index,
+});
 
 class RecoveringConnectionScreen extends React.Component<Props> {
   filterConnections = () => {
@@ -57,6 +67,7 @@ class RecoveringConnectionScreen extends React.Component<Props> {
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={<EmptyList title={t('restore.text.noConnections')} />}
+                getItemLayout={getItemLayout}
               />
             </View>
           </View>

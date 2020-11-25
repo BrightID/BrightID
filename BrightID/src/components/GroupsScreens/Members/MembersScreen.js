@@ -1,12 +1,6 @@
 // @flow
 
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-} from 'react';
+import React, { useState, useEffect, useLayoutEffect, useMemo } from 'react';
 import {
   StyleSheet,
   View,
@@ -15,15 +9,16 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import ActionSheet from 'react-native-actionsheet';
+import { useActionSheet } from '@expo/react-native-action-sheet';
 import { innerJoin } from 'ramda';
 import { useTranslation } from 'react-i18next';
 import api from '@/api/brightId';
 import { leaveGroup, dismissFromGroup } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { addAdmin } from '@/actions/groups';
-import { ORANGE, DEVICE_LARGE } from '@/utils/constants';
+import { ORANGE } from '@/utils/constants';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import MemberCard from './MemberCard';
 
 
@@ -48,9 +43,10 @@ function MembersScreen(props: MembersScreenProps) {
       members: group ? group.members : [],
     };
   });
-  const actionSheetRef: ?ActionSheet = useRef(null);
+
   const [contextActions, setContextActions] = useState<Array<string>>([]);
   const { t } = useTranslation();
+  const { showActionSheetWithOptions } = useActionSheet();
 
   const ACTION_INVITE = t('groups.groupActionSheet.inviteUser');
   const ACTION_LEAVE = t('groups.groupActionSheet.leaveGroup');
@@ -59,21 +55,99 @@ function MembersScreen(props: MembersScreenProps) {
 
   // set up top right button in header
   useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity
-          testID="groupOptionsBtn"
-          style={{ marginRight: 11 }}
-          onPress={() => {
-            console.log(`Opening actionSheet`);
-            actionSheetRef?.current.show();
-          }}
-        >
-          <Material name="dots-horizontal" size={32} color="#fff" />
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation]);
+    if (contextActions.length > 0) {
+      // action sheet actions
+      const handleLeaveGroup = () => {
+        const buttons = [
+          {
+            text: t('common.alert.cancel'),
+            style: 'cancel',
+          },
+          {
+            text: t('common.alert.ok'),
+            onPress: async () => {
+              try {
+                await api.leaveGroup(groupID);
+                await dispatch(leaveGroup(group));
+                navigation.goBack();
+              } catch (err) {
+                Alert.alert(t('groups.alert.title.errorLeaveGroup'), err.message);
+              }
+            },
+          },
+        ];
+        Alert.alert(
+          t('groups.alert.title.leaveGroup'),
+          t('groups.alert.text.leaveGroup'),
+          buttons,
+          {
+            cancelable: true,
+          },
+        );
+      };
+
+      const handleInvite = () => {
+        navigation.navigate('InviteList', {
+          group,
+        });
+      };
+
+      const performAction = (index: number) => {
+        const action = contextActions[index];
+        console.log(`Performing action ${action}`);
+        switch (action) {
+          case ACTION_INVITE:
+            handleInvite();
+            break;
+          case ACTION_LEAVE:
+            handleLeaveGroup();
+            break;
+          case ACTION_CANCEL:
+          default:
+          // do nothing
+        }
+      };
+
+      navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity
+            testID="groupOptionsBtn"
+            style={{ marginRight: 11 }}
+            onPress={() => {
+              showActionSheetWithOptions(
+                {
+                  options: contextActions,
+                  cancelButtonIndex: contextActions.indexOf(ACTION_CANCEL),
+                  destructiveButtonIndex: contextActions.indexOf(ACTION_LEAVE),
+                  title: t('common.actionSheet.title'),
+                  showSeparators: true,
+                  textStyle: {
+                    color: '#2185D0',
+                    textAlign: 'center',
+                    width: '100%',
+                  },
+                  titleTextStyle: {
+                    textAlign: 'center',
+                    width: '100%',
+                  },
+                },
+                performAction,
+              );
+            }}
+          >
+            <Material name="dots-horizontal" size={32} color="#fff" />
+          </TouchableOpacity>
+        ),
+      });
+    }
+  }, [
+    navigation,
+    contextActions,
+    showActionSheetWithOptions,
+    dispatch,
+    group,
+    groupID,
+  ]);
 
   // set available actions for group
   useEffect(() => {
@@ -116,41 +190,6 @@ function MembersScreen(props: MembersScreenProps) {
       ),
     );
   }, [user, connections, members]);
-
-  const handleLeaveGroup = () => {
-    const buttons = [
-      {
-        text: t('common.alert.cancel'),
-        style: 'cancel',
-      },
-      {
-        text: t('common.alert.ok'),
-        onPress: async () => {
-          try {
-            await api.leaveGroup(groupID);
-            await dispatch(leaveGroup(group));
-            navigation.goBack();
-          } catch (err) {
-            Alert.alert(t('groups.alert.title.errorLeaveGroup'), err.message);
-          }
-        },
-      },
-    ];
-    Alert.alert(
-      t('groups.alert.title.leaveGroup'),
-      t('groups.alert.text.leaveGroup'),
-      buttons,
-      {
-        cancelable: true,
-      },
-    );
-  };
-
-  const handleInvite = () => {
-    navigation.navigate('InviteList', {
-      group,
-    });
-  };
 
   const handleDismiss = (user) => {
     const buttons = [
@@ -214,22 +253,6 @@ function MembersScreen(props: MembersScreenProps) {
     );
   };
 
-  const performAction = (index: number) => {
-    const action = contextActions[index];
-    console.log(`Performing action ${action}`);
-    switch (action) {
-      case ACTION_INVITE:
-        handleInvite();
-        break;
-      case ACTION_LEAVE:
-        handleLeaveGroup();
-        break;
-      case ACTION_CANCEL:
-      default:
-      // do nothing
-    }
-  };
-
   const renderMember = ({ item, index }) => {
     const memberIsAdmin = admins.includes(item.id);
     const userIsAdmin = admins.includes(user.id);
@@ -270,16 +293,6 @@ function MembersScreen(props: MembersScreenProps) {
             />
           </View>
         </View>
-        {contextActions.length > 0 && (
-          <ActionSheet
-            ref={actionSheetRef}
-            title={t('common.actionSheet.title')}
-            options={contextActions}
-            cancelButtonIndex={contextActions.indexOf(ACTION_CANCEL)}
-            destructiveButtonIndex={contextActions.indexOf(ACTION_LEAVE)}
-            onPress={performAction}
-          />
-        )}
       </View>
     </>
   );

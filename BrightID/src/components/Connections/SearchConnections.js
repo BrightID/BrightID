@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import { withTranslation } from 'react-i18next';
-import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { navigate } from '@/NavigationService';
 import { setSearchParam } from '@/actions';
 import searchIcon from '@/static/search_icon.svg';

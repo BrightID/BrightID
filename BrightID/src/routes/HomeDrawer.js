@@ -1,16 +1,28 @@
 import React, { useState } from 'react';
-import { Image, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  Alert,
+  Image,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import { useSelector } from 'react-redux';
 import HomeScreen, { verifiedSelector } from '@/components/HomeScreen';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
-import { DEVICE_LARGE, ORANGE, DEVICE_IOS } from '@/utils/constants';
+import { useHeaderHeight } from '@react-navigation/stack';
+import { ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { SvgXml } from 'react-native-svg';
+import { useTranslation } from 'react-i18next';
+import codePush from 'react-native-code-push';
 import verificationSticker from '@/static/verification-sticker.svg';
-import { retrieveImage } from '@/utils/filesystem';
-import editProfile from '@/static/edit_profile_inactive.svg';
+import { retrieveImage, photoDirectory } from '@/utils/filesystem';
+import editProfile from '@/static/edit_profile.svg';
+import editProfileFocused from '@/static/edit_profile_focused.svg';
 import trustedConnections from '@/static/trusted_connections_sidebar_inactive.svg';
 import contactUs from '@/static/contact_us.svg';
 import explorerCode from '@/static/explorer_code_icon.svg';
@@ -18,23 +30,23 @@ import explorerCodeFocused from '@/static/explorer_code_icon_focused.svg';
 import homeIcon from '@/static/home_icon_side_menu.svg';
 import taskList from '@/static/task_list_icon.svg';
 import taskListFocused from '@/static/task_list_icon_focused.svg';
-
+import faqIcon from '@/static/faq_icon.svg';
 import TasksScreen from '@/components/Tasks/TasksScreen';
 import GraphExplorerScreen from '@/components/SideMenu/GraphExplorerScreen';
 import ContactUsScreen from '@/components/SideMenu/ContactUsScreen';
-
-import { useHeaderHeight } from '@react-navigation/stack';
-import { useTranslation } from 'react-i18next';
+import EditProfileScreen from '@/components/EditProfile/EditProfileScreen';
 
 const iconMap = {
   editProfile,
-  trustedConnections,
+  editProfileFocused,
   contactUs,
   explorerCode,
+  explorerCodeFocused,
   homeIcon,
   taskList,
-  explorerCodeFocused,
   taskListFocused,
+  faqIcon,
+  trustedConnections,
 };
 
 const getIcon = (name) => {
@@ -89,24 +101,31 @@ const CustomItem = ({
 };
 
 const CustomDrawerContent = (props) => {
+  const { state, navigation } = props;
+  // selectors
   const photoFilename = useSelector((state) => state.user.photo.filename);
   const name = useSelector((state) => state.user.name);
   const verified = useSelector(verifiedSelector);
+  // keep profile photo up to date
+  const [profilePhoto, setProfilePhoto] = useState('');
   const { t } = useTranslation();
-  const [profilePhoto, setProfilePhoto] = useState('none');
-  retrieveImage(photoFilename).then((profilePhoto) => {
-    setProfilePhoto(profilePhoto);
-  });
 
-  const { state, navigation } = props;
+  retrieveImage(photoFilename).then(setProfilePhoto);
+
+  // prevent console error and blank photo
+  const profileSource = profilePhoto
+    ? {
+        uri: profilePhoto,
+      }
+    : {
+        uri: `file://${photoDirectory()}/${photoFilename}`,
+      };
 
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.profileContainer}>
         <Image
-          source={{
-            uri: profilePhoto,
-          }}
+          source={profileSource}
           style={styles.drawerPhoto}
           accessibilityLabel="user photo"
         />
@@ -127,7 +146,27 @@ const CustomDrawerContent = (props) => {
         labelStyle={styles.labelStyle}
         icon={getIcon('homeIcon')}
         onPress={() => {
-          navigation.navigate('Home');
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+          });
+        }}
+      />
+      <CustomItem
+        focused={state.routeNames[state.index] === 'Edit Profile'}
+        inactiveTintColor="#000"
+        inactiveBackgroundColor="#fff"
+        activeTintColor="#fff"
+        activeBackgroundColor={ORANGE}
+        label={t('drawer.label.editProfile')}
+        style={styles.drawerItem}
+        labelStyle={styles.labelStyle}
+        icon={getIcon('editProfile')}
+        onPress={() => {
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'Edit Profile' }],
+          });
         }}
       />
       <CustomItem
@@ -141,9 +180,13 @@ const CustomDrawerContent = (props) => {
         labelStyle={styles.labelStyle}
         icon={getIcon('taskList')}
         onPress={() => {
-          navigation.navigate('Achievements');
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'Achievements' }],
+          });
         }}
       />
+
       <CustomItem
         focused={state.routeNames[state.index] === 'Copy Explorer Code'}
         inactiveTintColor="#000"
@@ -155,22 +198,31 @@ const CustomDrawerContent = (props) => {
         labelStyle={styles.labelStyle}
         icon={getIcon('explorerCode')}
         onPress={() => {
-          navigation.navigate('Copy Explorer Code');
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'Copy Explorer Code' }],
+          });
         }}
       />
       <CustomItem
-        inactiveTintColor="#aaa"
-        label={t('drawer.label.editProfile')}
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
-        icon={getIcon('editProfile')}
-      />
-      <CustomItem
-        inactiveTintColor="#aaa"
-        label={t('drawer.label.trustedConnections')}
-        style={styles.drawerItem}
-        labelStyle={styles.labelStyle}
-        icon={getIcon('trustedConnections')}
+        inactiveTintColor="#000"
+        label="Check for Updates"
+        icon={getIcon('faqIcon')}
+        onPress={() => {
+          codePush.sync(
+            {
+              updateDialog: true,
+              installMode: codePush.InstallMode.IMMEDIATE,
+            },
+            (status) => {
+              if (status === codePush.SyncStatus.UP_TO_DATE) {
+                Alert.alert('Check for Update', 'BrightID is up to date.');
+              }
+            },
+          );
+        }}
       />
       <CustomItem
         style={styles.drawerItem}
@@ -179,7 +231,10 @@ const CustomDrawerContent = (props) => {
         label={t('drawer.label.contactUs')}
         icon={getIcon('contactUs')}
         onPress={() => {
-          navigation.navigate('ContactUs');
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'ContactUs' }],
+          });
         }}
       />
     </DrawerContentScrollView>
@@ -210,35 +265,14 @@ export const HomeDrawer = () => {
       overlayColor="transparent"
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
-      <Drawer.Screen
-        name="Home"
-        options={{
-          drawerIcon: getIcon('homeIcon'),
-          inactiveTintColor: '#000',
-        }}
-        component={HomeScreen}
-      />
-      <Drawer.Screen
-        name="Achievements"
-        options={{
-          drawerIcon: getIcon('taskList'),
-        }}
-        component={TasksScreen}
-      />
+      <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen name="Achievements" component={TasksScreen} />
+      <Drawer.Screen name="Edit Profile" component={EditProfileScreen} />
       <Drawer.Screen
         name="Copy Explorer Code"
-        options={{
-          drawerIcon: getIcon('explorerCode'),
-        }}
         component={GraphExplorerScreen}
       />
-      <Drawer.Screen
-        name="ContactUs"
-        options={{
-          drawerIcon: getIcon('explorerCode'),
-        }}
-        component={ContactUsScreen}
-      />
+      <Drawer.Screen name="ContactUs" component={ContactUsScreen} />
     </Drawer.Navigator>
   );
 };
@@ -273,8 +307,7 @@ const styles = StyleSheet.create({
     paddingBottom: DEVICE_LARGE ? 30 : 25,
   },
   userName: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     marginLeft: DEVICE_LARGE ? 20 : 18,
   },
@@ -293,8 +326,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   labelStyle: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     marginLeft: 16,
   },

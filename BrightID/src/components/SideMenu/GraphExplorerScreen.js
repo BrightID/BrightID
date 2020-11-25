@@ -1,23 +1,29 @@
 // @flow
 
 import React from 'react';
-import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
-import Clipboard from '@react-native-community/clipboard';
+import {
+  Text,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Linking,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/constants';
+import Clipboard from '@react-native-community/clipboard';
+import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { getExplorerCode } from '@/utils/explorer';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export const GraphExplorerScreen = function () {
-  const { t } = useTranslation();
   let headerHeight = useHeaderHeight();
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
   }
   const isDrawerOpen = useIsDrawerOpen();
   const explorerCode = getExplorerCode();
+  const { t } = useTranslation();
 
   const copyText = () => {
     Clipboard.setString(explorerCode);
@@ -69,7 +75,7 @@ export const GraphExplorerScreen = function () {
         <Text style={styles.infoText}>
           <Text
             onPress={() => {
-              alert('pressed!');
+              Linking.openURL('https://explorer.brightid.org/');
             }}
             style={styles.linkText}
           >
@@ -122,8 +128,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   setupText: {
-    fontFamily: 'Poppins',
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 14 : 13,
   },
   noExplorerCode: {
@@ -142,13 +147,11 @@ const styles = StyleSheet.create({
     // width: '80%',
   },
   infoText: {
-    fontFamily: 'Poppins',
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 14 : 13,
   },
   linkText: {
-    fontFamily: 'Poppins',
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
     color: '#2185D0',
     fontSize: DEVICE_LARGE ? 14 : 13,
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -157,9 +160,8 @@ const styles = StyleSheet.create({
     padding: 0,
   },
   copyText: {
-    // fontFamily: 'Poppins',
-    // fontWeight: '400',
-    // fontSize: DEVICE_LARGE ? 14 : 13,
+    fontFamily: 'Poppins-Regular',
+    fontSize: DEVICE_LARGE ? 14 : 13,
   },
 });
 

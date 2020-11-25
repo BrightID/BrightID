@@ -13,6 +13,11 @@ import {
 } from '@/components/PendingConnectionsScreens/channelSlice';
 import { decryptData } from '@/utils/cryptoHelper';
 import api from '@/api/brightId';
+import { Alert } from 'react-native';
+import { PROFILE_VERSION } from '../../utils/constants';
+
+// percentage determines flagged warning
+const FLAG_PERCENTAGE = 0.1;
 
 const pendingConnectionsAdapter = createEntityAdapter();
 
@@ -27,8 +32,6 @@ const pendingConnectionsAdapter = createEntityAdapter();
    - 'name'
    - 'photo' (base64-encoded)
    - 'score'
-   - 'signedMessage': optional - First part of signed connection message, in case user initiated connection.
-   - 'timestamp': optional - Timestamp when signed message was created
  */
 
 export const pendingConnection_states = {
@@ -36,7 +39,6 @@ export const pendingConnection_states = {
   DOWNLOADING: 'DOWNLOADING',
   UNCONFIRMED: 'UNCONFIRMED',
   CONFIRMING: 'CONFIRMING',
-  REJECTED: 'REJECTED',
   CONFIRMED: 'CONFIRMED',
   ERROR: 'ERROR',
   MYSELF: 'MYSELF',
@@ -49,7 +51,8 @@ const fetchConnectionInfo = async ({ myConnections, brightId }) => {
       createdAt,
       groups,
       connections = [],
-      flaggers,
+      verifications,
+      flaggers = {},
     } = await api.getUserInfo(brightId);
     const mutualConnections = connections.filter(function (el) {
       return myConnections.some((x) => x.id === el.id);
@@ -59,7 +62,9 @@ const fetchConnectionInfo = async ({ myConnections, brightId }) => {
       groups: groups.length,
       mutualConnections: mutualConnections.length,
       connectionDate: i18next.t('pendingConnections.tag.createdAt', {date: moment(parseInt(createdAt, 10)).fromNow()}),
-      flagged: flaggers && Object.keys(flaggers).length > 0,
+      verifications,
+      flagged:
+        Object.keys(flaggers).length / connections.length >= FLAG_PERCENTAGE,
     };
   } catch (err) {
     if (err instanceof Error && err.message === 'User not found') {
@@ -69,6 +74,7 @@ const fetchConnectionInfo = async ({ myConnections, brightId }) => {
         mutualConnections: 0,
         connectionDate: i18next.t('pendingConnections.tag.newUser'),
         flagged: false,
+        verifications: [],
       };
     } else {
       console.error(err.message);
@@ -94,14 +100,24 @@ export const newPendingConnection = createAsyncThunk(
       dataId: profileId,
     });
     const decryptedObj = decryptData(profileData, channel.aesKey);
+
+    // compare profile version
+    if (
+      decryptedObj.version === undefined || // very old client version
+      decryptedObj.version < PROFILE_VERSION // old client version
+    ) {
+      // other user needs to update his client
+      const msg = `Can't connect with ${decryptedObj.name} due to incompatible client version. Please ask ${decryptedObj.name} to update and restart the brightID app.`;
+      Alert.alert('Connection not possible', msg);
+      throw new Error(msg);
+    } else if (decryptedObj.version > PROFILE_VERSION) {
+      // I need to update my client
+      const msg = `Can't connect with ${decryptedObj.name} due to incompatible client version. Please update and restart your brightID app.`;
+      Alert.alert('Connection not possible', msg);
+      throw new Error(msg);
+    }
+
     decryptedObj.myself = decryptedObj.id === getState().user.id;
-    // I'm confused about this initiator logic, might change this...
-    decryptedObj.initiator =
-      decryptedObj.profileTimestamp <= channel.myProfileTimestamp;
-
-    console.log('decryptedObj.profileTimestamp', decryptedObj.profileTimestamp);
-
-    console.log('channel.myProfileTimestamp', channel.myProfileTimestamp);
 
     const connectionInfo = await fetchConnectionInfo({
       brightId: decryptedObj.id,
@@ -130,15 +146,6 @@ const pendingConnectionsSlice = createSlice({
         id,
         changes: {
           state: pendingConnection_states.CONFIRMED,
-        },
-      });
-    },
-    rejectPendingConnection(state, action) {
-      const id = action.payload;
-      state = pendingConnectionsAdapter.updateOne(state, {
-        id,
-        changes: {
-          state: pendingConnection_states.REJECTED,
         },
       });
     },
@@ -185,6 +192,8 @@ const pendingConnectionsSlice = createSlice({
         connectionDate,
         flagged,
         notificationToken,
+        verifications,
+        socialMedia,
       } = action.payload;
 
       const changes = {
@@ -203,14 +212,14 @@ const pendingConnectionsSlice = createSlice({
         connectionDate,
         flagged,
         notificationToken,
+        verifications,
+        socialMedia,
       };
 
-      // add secret key, signed message, timestamp if dev
+      // add secret key if dev
       if (__DEV__) {
-        const { secretKey, signedMessage, timestamp } = action.payload;
+        const { secretKey } = action.payload;
         changes.secretKey = secretKey;
-        changes.signedMessage = signedMessage;
-        changes.timestamp = timestamp;
       }
 
       // Perform the update in redux

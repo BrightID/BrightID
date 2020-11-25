@@ -10,16 +10,17 @@ import {
 import ChannelAPI from '@/api/channelService';
 
 describe('Test channel data', () => {
+  const ipAddress = '192.168.2.2';
   for (const channel_type of Object.values(channel_types)) {
     test(`creates channel type ${channel_type}`, async () => {
-      const channel = await generateChannelData(channel_type);
+      const channel = await generateChannelData(channel_type, ipAddress);
       // all expected keys there?
       expect(channel).toMatchObject({
         api: expect.any(ChannelAPI),
         aesKey: expect.any(String),
         id: expect.any(String),
         initiatorProfileId: expect.any(String),
-        ipAddress: expect.any(String),
+        ipAddress,
         myProfileId: expect.any(String),
         state: expect.any(String),
         timestamp: expect.any(Number),
@@ -33,7 +34,10 @@ describe('Test channel data', () => {
     });
 
     test(`encodes and decodes qrdata for type ${channel_type}`, async () => {
-      const originalChannel = await generateChannelData(channel_types.SINGLE);
+      const originalChannel = await generateChannelData(
+        channel_types.SINGLE,
+        ipAddress,
+      );
       const qrString = encodeChannelQrString(originalChannel);
       const decodedChannel = await decodeChannelQrString(qrString);
       // check properties that should be equal:

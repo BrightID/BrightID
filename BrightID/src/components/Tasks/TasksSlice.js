@@ -101,7 +101,9 @@ export const syncStoreTasks = () => {
     const idsToAdd = userTaskIds.filter((id) => !storeTaskIds.includes(id));
     for (const id of idsToRemove) {
       console.log(`Removing task ${id} from store`);
-      dispatch(removeTask(id));
+      if (id !== '_persist') {
+        dispatch(removeTask(id));
+      }
     }
     for (const id of idsToAdd) {
       console.log(`Adding task ${id} to store`);
@@ -144,10 +146,11 @@ export default tasksSlice.reducer;
 
 export const selectTaskIds = createSelector(
   (state) => state.tasks,
-  (tasks) =>
-    Object.keys(tasks).sort(
-      (a, b) => UserTasks[a].sortValue - UserTasks[b].sortValue,
-    ),
+  (tasks) => {
+    return Object.keys(tasks)
+      .filter((id) => id !== '_persist')
+      .sort((a, b) => UserTasks[a].sortValue - UserTasks[b].sortValue);
+  },
 );
 
 export const selectCompletedTaskIds = createSelector(

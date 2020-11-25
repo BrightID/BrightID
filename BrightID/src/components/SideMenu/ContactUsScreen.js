@@ -9,7 +9,8 @@ import {
   Linking,
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import { DEVICE_LARGE, DARK_ORANGE, DEVICE_IOS } from '@/utils/constants';
+import { DARK_ORANGE } from '@/utils/constants';
+import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -143,8 +144,7 @@ const styles = StyleSheet.create({
     },
   },
   title: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
     marginTop: DEVICE_LARGE ? 23 : 20,
   },
@@ -163,14 +163,12 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   socialName: {
-    fontFamily: 'Poppins',
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 14 : 13,
     marginLeft: DEVICE_LARGE ? 15 : 12,
   },
   listHeader: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 11,
     color: DARK_ORANGE,
     marginVertical: DEVICE_LARGE ? 20 : 18,
@@ -180,14 +178,12 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   bottomText: {
-    fontFamily: 'Poppins',
-    fontWeight: '400',
+    fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 14 : 13,
     marginVertical: DEVICE_LARGE ? 20 : 18,
   },
   link: {
-    fontFamily: 'Poppins',
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 14 : 13,
     color: '#2185D0',
   },
