@@ -29,7 +29,7 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
   const [groupsNum, setGroupsNum] = useState(0);
   const [mutualGroups, setMutualGroups] = useState<Array<group>>([]);
   const [mutualConnections, setMutualConnections] = useState<Array<connection>>([]);
-  const [verified, setVerified] = useState(false);
+  const [verifications, setVerifications] = useState<Array<any>>([]);
   const [createdAt, setCreatedAt] = useState(0);
   const [connectedAt, setConnectedAt] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -40,24 +40,23 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
         setLoading(true);
         console.log(`fetching connection info for ${connectionId}`);
         const profile = await api.getUserProfile(connectionId);
-        console.log(profile, 22);
         setConnectionsNum(profile.connectionsNum);
         setGroupsNum(profile.groupsNum);
-        setVerified(profile.verified);
+        setVerifications(profile.verifications);
         setCreatedAt(profile.createdAt);
         setConnectedAt(profile.connectedAt);
-        profile.mutualConnections = myConnections.filter(function (conn) {
+        setMutualConnections(myConnections.filter((conn) => {
           return profile.mutualConnections.includes(conn.id);
-        });
-        setMutualConnections(profile.mutualConnections);
-        profile.mutualGroups = myGroups.filter(function (group) {
-          return profile.mutualGroups.includes(group.id);
-        });
-        setMutualGroups(profile.mutualGroups);
+        }));
+        setMutualGroups(myGroups.filter((g) => {
+          return profile.mutualGroups.includes(g.id);
+        }));
         setLoading(false);
       };
-      fetchData(connectionId);
-    }, [connection, myConnections, myGroups]),
+      if (connectionId !== undefined) {
+        fetchData(connectionId);
+      }
+    }, [connection, myConnections, myGroups, connectionId]),
   );
 
   useEffect(() => {
@@ -80,11 +79,13 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
     return null;
   }
 
+  const brightIdVerified = verifications.map(v => v.name).includes('BrightID');
+
   return (
     <ConnectionScreen
       navigation={navigation}
       connection={connection}
-      verified={verified}
+      brightIdVerified={brightIdVerified}
       loading={loading}
       createdAt={createdAt}
       connectedAt={connectedAt}

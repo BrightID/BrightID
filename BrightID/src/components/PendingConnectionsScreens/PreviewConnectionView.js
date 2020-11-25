@@ -32,6 +32,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
   } = props;
 
   const reported = pendingConnection.reports.length / (pendingConnection.connectionsNum || 1) >= REPORTED_PERCENTAGE;
+  const brightIdVerified = pendingConnection.verifications.map(v => v.name).includes('BrightID');
   let ratingView;
   switch (pendingConnection.state) {
     case pendingConnection_states.UNCONFIRMED: {
@@ -97,7 +98,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
           {reported && (
             <Text style={styles.reported}> (reported)</Text>
           )}
-          {pendingConnection.verified && (
+          {brightIdVerified && (
             <View style={styles.verificationSticker}>
               <SvgXml width="16" height="16" xml={verificationSticker} />
             </View>

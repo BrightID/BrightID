@@ -30,7 +30,7 @@ import TrustLevelView from './TrustLevelView';
 type Props = {
   navigation: any,
   connection: connection,
-  verified: boolean,
+  brightIdVerified: boolean,
   connectedAt: number,
   createdAt: number,
   connectionsNum: number,
@@ -44,7 +44,7 @@ function ConnectionScreen(props: Props) {
   const {
     navigation,
     connection,
-    verified,
+    brightIdVerified,
     connectedAt,
     createdAt,
     connectionsNum,
@@ -94,7 +94,7 @@ function ConnectionScreen(props: Props) {
     if (loading) {
       return <ActivityIndicator size="small" color="#707070" animating />;
     } else {
-      if (verified) {
+      if (brightIdVerified) {
         return <Text style={[styles.badge, styles.verified]}>verified</Text>;
       } else {
         return (
@@ -143,7 +143,7 @@ function ConnectionScreen(props: Props) {
             <Text style={styles.name} numberOfLines={1}>
               {connection.name}
             </Text>
-            {verified && (
+            {brightIdVerified && (
               <SvgXml
                 style={styles.verificationSticker}
                 width="16"

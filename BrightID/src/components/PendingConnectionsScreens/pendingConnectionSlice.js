@@ -88,7 +88,7 @@ export const newPendingConnection = createAsyncThunk(
           mutualGroups: [],
           createdAt: 0,
           connectedAt: 0,
-          verfied: false,
+          verifications: [],
           reports: [],
         };
       }
@@ -163,7 +163,7 @@ const pendingConnectionsSlice = createSlice({
         createdAt,
         connectedAt,
         reports,
-        verified,
+        verifications,
         notificationToken,
         socialMedia,
       } = action.payload;
@@ -185,7 +185,7 @@ const pendingConnectionsSlice = createSlice({
         createdAt,
         connectedAt,
         reports,
-        verified,
+        verifications,
         notificationToken,
         socialMedia,
       };
