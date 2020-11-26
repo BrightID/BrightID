@@ -101,6 +101,14 @@
   "connections.label.currentConnectionLevel": "Current connection level",
   "connections.button.reportConnection": "Report connection",
   "connections.button.updateConnection": "Update connection",
+  "connections.tag.reportedAs": "Reported as {{flag}}",
+  "connections.tag.waiting": "Waiting",
+  "connections.tag.failed": "Connection failed.\nPlease try again.",
+  "connections.tag.hidden": "Hidden",
+  "connections.tag.deleted": "Deleted",
+  "connections.accessibilityLabel.viewPhoto": "View Photo Full Screen",
+  "connections.accessibilityLabel.connectionPhoto": "Connection Photo",
+  "connections.accessibilityLabel.viewConnectionDetails": "View Connection details",
 
 
   "connectionsSearch.header.sorting": "Sorting",
@@ -231,7 +239,6 @@
   "drawer.label.achievements": "Achievements",
   "drawer.label.copyExplorerCode": "Copy Explorer Code",
   "drawer.label.editProfile": "Edit Profile",
-  "drawer.label.trustedConnections": "Trusted Connections",
   "drawer.label.contactUs": "Contact Us",
 
 

@@ -101,6 +101,14 @@
   "connections.label.currentConnectionLevel": "Niveau de connexion actuel",
   "connections.button.reportConnection": "Signaler",
   "connections.button.updateConnection": "Mettre à jour",
+  "connections.tag.reportedAs": "Signalé en tant que {{flag}}",
+  "connections.tag.waiting": "En attente",
+  "connections.tag.failed": "Écec de la connexion.\nVeuillez réessayer.",
+  "connections.tag.hidden": "Caché(e)",
+  "connections.tag.deleted": "Deleted",
+  "connections.accessibilityLabel.viewPhoto": "Voir la Photo en Plein Écran",
+  "connections.accessibilityLabel.connectionPhoto": "Photo de la Connexion",
+  "connections.accessibilityLabel.viewConnectionDetails": "Voir les détails de la Connexion",
 
 
   "connectionsSearch.header.sorting": "Tri",
@@ -231,7 +239,6 @@
   "drawer.label.achievements": "Objectifs Remplis",
   "drawer.label.copyExplorerCode": "Copier le Code Explorer",
   "drawer.label.editProfile": "Éditer le Profil",
-  "drawer.label.trustedConnections": "Connexions de Confiance",
   "drawer.label.contactUs": "Nous Contacter",
 
 
