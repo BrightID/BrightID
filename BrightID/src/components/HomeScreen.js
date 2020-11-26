@@ -178,9 +178,9 @@ export const HomeScreen = (props) => {
           </View>
           <View style={styles.profileDivider} />
           {verified ? (
-            <Text style={styles.verified}>{t('home.label.statusVerified')}</Text>
+            <Text style={styles.verified}>{t('common.tag.statusVerified')}</Text>
           ) : (
-            <Text style={styles.unverified}>{t('home.label.statusUnverified')}</Text>
+            <Text style={styles.unverified}>{t('common.tag.statusUnverified')}</Text>
           )}
         </View>
       </View>

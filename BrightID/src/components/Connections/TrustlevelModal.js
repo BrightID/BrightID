@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { BlurView } from '@react-native-community/blur';
 import { connection_levels } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -25,6 +26,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
   const [level, setLevel] = useState(
     connection ? connection.level : connection_levels.JUST_MET,
   );
+  const { t } = useTranslation();
 
   const saveLevelHandler = async () => {
     if (connection.level !== level) {
@@ -64,7 +66,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
       <View style={styles.modalContainer}>
         <View style={styles.header}>
           <Text style={styles.headerText}>
-            How well do you know {connection.name}?
+            {t('connectionDetails.text.level', {name: connection.name})}
           </Text>
         </View>
         <TrustlevelSlider
@@ -76,7 +78,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
           style={styles.confirmButton}
           onPress={saveLevelHandler}
         >
-          <Text style={styles.confirmButtonText}>Save</Text>
+          <Text style={styles.confirmButtonText}>{t('connectionDetails.button.levelSave')}</Text>
         </TouchableOpacity>
       </View>
     </View>

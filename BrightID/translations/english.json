@@ -1,6 +1,4 @@
 {
-  "home.label.statusVerified": "verified",
-  "home.label.statusUnverified": "unverified",
   "home.button.connections": "Connections",
   "home.button.groups": "Groups",
   "home.button.apps": "Apps",
@@ -88,7 +86,6 @@
   
   "connections.header.connections": "Connections",
   "connections.text.noConnections": "No connections",
-  "connections.flagActionSheet.infoFlagImpact": "Flagging {{name}} will negatively effect their BrightID score, and this flag might be shown to other users.",
   "connections.removeActionSheet.title": "Remove connection",
   "connections.removeActionSheet.info": "Are you sure you want to remove connection with {{name}}? You can reconnect anytime.",
   "connections.removeActionSheet.remove": "Remove",
@@ -109,6 +106,28 @@
   "connections.accessibilityLabel.viewPhoto": "View Photo Full Screen",
   "connections.accessibilityLabel.connectionPhoto": "Connection Photo",
   "connections.accessibilityLabel.viewConnectionDetails": "View Connection details",
+
+
+  "connectionDetails.header.connectionDetails": "Connection Details",
+  "connectionDetails.tags.loading": "Loading...",
+  "connectionDetails.tags.connectedAt": "Connected {{date}}",
+  "connectionDetails.label.connectionLevel": "Connection Level",
+  "connectionDetails.label.mutualConnections": "Mutual Connections",
+  "connectionDetails.label.mutualGroups": "Mutual Groups",
+  "connectionDetails.text.level": "How well do you know {{name}}?",
+  "connectionDetails.text.levelSuspicious": "I don't know this person at all",
+  "connectionDetails.text.levelJustMet": "This person is a stranger I just met",
+  "connectionDetails.text.levelAlreadyKnown": "I already know this person",
+  "connectionDetails.text.levelRecovery": "I trust this person to recover my BrightID for me",
+  "connectionDetails.button.levelSave": "Save",
+  "connectionDetails.button.report": "Report this person",
+  "connectionDetails.text.reportConnection": "Report {{name}}",
+  "connectionDetails.text.reportImpact": "Flagging {{name}} will negatively effect their BrightID score, and this flag might be shown to other users.",
+  "connectionDetails.text.reportSpammer": "This person sent me an unwanted connection request",
+  "connectionDetails.text.reportDuplicate": "This person created multiple accounts",
+  "connectionDetails.text.reportOther": "Other reason",
+  "connectionDetails.button.reportSubmit": "Submit",
+  "connectionDetails.button.reportCancel": "Cancel",
 
 
   "connectionsSearch.header.sorting": "Sorting",
@@ -312,6 +331,8 @@
   "common.camera.message": "We need your permission to use your camera",
   "common.camera.ok": "Ok",
   "common.camera.cancel": "Cancel",
+  "common.tag.statusVerified": "verified",
+  "common.tag.statusUnverified": "unverified",
   "common.tag.reported": "(reported)",
   "common.tag.connectionDate": "Connected {{date}}",
   "common.language.and": "and",

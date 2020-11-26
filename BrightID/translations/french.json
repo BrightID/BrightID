@@ -1,6 +1,4 @@
 {
-  "home.label.statusVerified": "vérifié",
-  "home.label.statusUnverified": "non-vérifié",
   "home.button.connections": "Connexions",
   "home.button.groups": "Groupes",
   "home.button.apps": "Apps",
@@ -88,7 +86,6 @@
 
   "connections.header.connections": "Connexions",
   "connections.text.noConnections": "Aucune connexion",
-  "connections.flagActionSheet.infoFlagImpact": "Signaler {{name}} impactera négativement leur score BrightID, et ce signalement pourrait être vu par d'autres utilisateurs.",
   "connections.removeActionSheet.title": "Supprimer la connexion",
   "connections.removeActionSheet.info": "Êtes-vous sûr de vouloir supprimer la connexion avec {{name}}? Vous pouvez vous reconnecter à tout moment.",
   "connections.removeActionSheet.remove": "Supprimer",
@@ -109,6 +106,28 @@
   "connections.accessibilityLabel.viewPhoto": "Voir la Photo en Plein Écran",
   "connections.accessibilityLabel.connectionPhoto": "Photo de la Connexion",
   "connections.accessibilityLabel.viewConnectionDetails": "Voir les détails de la Connexion",
+
+
+  "connectionDetails.header.connectionDetails": "Détails de la Connexion",
+  "connectionDetails.tags.loading": "Chargement...",
+  "connectionDetails.tags.connectedAt": "Connecté {{date}}",
+  "connectionDetails.label.connectionLevel": "Niveau de Connexion",
+  "connectionDetails.label.mutualConnections": "Connexions en Commun",
+  "connectionDetails.label.mutualGroups": "Groupes en Commun",
+  "connectionDetails.text.level": "A quel point connaissez-vous {{name}} ?",
+  "connectionDetails.text.levelSuspicious": "Je ne connais pas du tout cette personne",
+  "connectionDetails.text.levelJustMet": "Je viens de rencontrer cette personne",
+  "connectionDetails.text.levelAlreadyKnown": "Je connais cette personne",
+  "connectionDetails.text.levelRecovery": "Je fais confiance à cette personne pour m'aider si je perds mon BrightID",
+  "connectionDetails.button.levelSave": "Valider",
+  "connectionDetails.button.report": "Signaler cette personne",
+  "connectionDetails.text.reportConnection": "Signaler {{name}}",
+  "connectionDetails.text.reportImpact": "Signaler {{name}} impactera négativement son score BrightID, et ce signalement pourrait être vu par d'autres utilisateurs.",
+  "connectionDetails.text.reportSpammer": "Cette personne m'a envoyé une connexion indésirable",
+  "connectionDetails.text.reportDuplicate": "Cette personne utilise plusieurs comptes",
+  "connectionDetails.text.reportOther": "Autre raison",
+  "connectionDetails.button.reportSubmit": "Signaler",
+  "connectionDetails.button.reportCancel": "Annuler",
 
 
   "connectionsSearch.header.sorting": "Tri",
@@ -312,6 +331,8 @@
   "common.camera.message": "Nous avons besoin de votre permission pour utiliser l'appareil photo",
   "common.camera.ok": "Ok",
   "common.camera.cancel": "Annuler",
+  "common.tag.statusVerified": "vérifié",
+  "common.tag.statusUnverified": "non-vérifié",
   "common.tag.reported": "(signalé)",
   "common.tag.connectionDate": "Connecté {{date}}",
   "common.language.and": "et",

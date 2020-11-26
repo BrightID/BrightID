@@ -45,7 +45,7 @@ const connectionsScreenOptions = {
 
 const connectionScreenOptions = {
   ...headerOptions,
-  headerTitle: () => <HeaderTitle title="Connection Details" />,
+  headerTitle: () => <HeaderTitleI18N i18key="connectionDetails.header.connectionDetails" />,
 };
 
 const trustedScreenOptions = {
