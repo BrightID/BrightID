@@ -42,7 +42,6 @@ const handleSort = (connectionsSort, connections) => (dispatch) => {
       dispatch(setConnectionsSort(types.byDateDescending));
       break;
   }
-  console.log('connections', connections);
   dispatch(setConnections(connections));
 };
 
