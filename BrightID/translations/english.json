@@ -224,7 +224,9 @@
   "notificationBar.text.pendingConnections_plural": "You have {{count}} pending connections",
   "notificationBar.title.achievementUnlocked": "Achievement unlocked!",
   "notificationBar.text.achievementUnlocked": "You completed the task \"{{taskName}}\"",
-
+  "notificationBar.title.socialRecovery": "Backup & Social Recovery",
+  "notificationBar.text.socialRecovery": "Please select your Trusted Connections to enable social recovery of your BrightID",
+  
 
   "backup.header.backup": "Backup",
   "backup.header.trustedConnections": "Trusted Connections",
@@ -311,8 +313,12 @@
   "profile.button.socialNext": "Next",
   "profile.button.socialSave": "Save",
   "profile.button.socialCancel": "Cancel",
-  
+  "profile.alert.title.discardChanges": "Discard changes?",
+  "profile.alert.text.discardChanges": "You have unsaved changes. Are you sure you want to discard them and leave the screen?",
+  "profile.alert.button.dontLeave": "Don't leave",
+  "profile.alert.button.discard": "Discard",
 
+  
   "common.alert.error": "Error",
   "common.alert.success": "Success",
   "common.alert.info": "Info",

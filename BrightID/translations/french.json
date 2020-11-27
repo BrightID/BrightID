@@ -90,8 +90,8 @@
   "connections.removeActionSheet.info": "Êtes-vous sûr de vouloir supprimer la connexion avec {{name}}? Vous pouvez vous reconnecter à tout moment.",
   "connections.removeActionSheet.remove": "Supprimer",
 
-  "connections.text.alreadyConnectedWith": "Vous êtes déjà connecté avec {{name}}",
-  "connections.tag.lastConnected": "Connecté {{date}}",
+  "connections.text.alreadyConnectedWith": "Vous êtes déjà connecté(e) avec {{name}}",
+  "connections.tag.lastConnected": "Connecté(e) {{date}}",
   "connections.button.reconnect": "Reconnecter",
   "connections.label.oldProfile": "Ancien Profil",
   "connections.label.newProfile": "Nouveau Profil",
@@ -110,7 +110,7 @@
 
   "connectionDetails.header.connectionDetails": "Détails de la Connexion",
   "connectionDetails.tags.loading": "Chargement...",
-  "connectionDetails.tags.connectedAt": "Connecté {{date}}",
+  "connectionDetails.tags.connectedAt": "Connecté(e) {{date}}",
   "connectionDetails.label.connectionLevel": "Niveau de Connexion",
   "connectionDetails.label.mutualConnections": "Connexions en Commun",
   "connectionDetails.label.mutualGroups": "Groupes en Commun",
@@ -224,7 +224,9 @@
   "notificationBar.text.pendingConnections_plural": "Vous avez {{count}} connexions en attente",
   "notificationBar.title.achievementUnlocked": "Objectif rempli !",
   "notificationBar.text.achievementUnlocked": "Vous avez complété la tâche \"{{taskName}}\"",
-
+  "notificationBar.title.socialRecovery": "Sauvegarde & Restauration Sociale",
+  "notificationBar.text.socialRecovery": "Veuillez sélectionner vos connexions de confiance afin d'activer la Restauration Sociale BrightID",
+    
 
   "backup.header.backup": "Sauvegarde",
   "backup.header.trustedConnections": "Connexions de Confiance",
@@ -311,6 +313,10 @@
   "profile.button.socialNext": "Suivant",
   "profile.button.socialSave": "Valider",
   "profile.button.socialCancel": "Annuler",
+  "profile.alert.title.discardChanges": "Annuler les changements ?",
+  "profile.alert.text.discardChanges": "Vous avez des changements non sauvegardés. Êtes-vous sûr de vouloir les annuler en quittant l'écran ?",
+  "profile.alert.button.dontLeave": "Rester",
+  "profile.alert.button.discard": "Ne pas enregistrer",
 
 
   "common.alert.error": "Erreur",
@@ -341,7 +347,7 @@
   "common.tag.statusVerified": "vérifié",
   "common.tag.statusUnverified": "non-vérifié",
   "common.tag.reported": "(signalé)",
-  "common.tag.connectionDate": "Connecté {{date}}",
+  "common.tag.connectionDate": "Connecté(e) {{date}}",
   "common.language.and": "et",
   "common.placeholder.password": "Mot de passe",
   "common.placeholder.searchConnections": "Rechercher des Connexions",
