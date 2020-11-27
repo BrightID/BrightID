@@ -434,7 +434,7 @@ export const EditProfileScreen = ({ navigation }) => {
             disabled={saveDisabled}
             onPress={saveData}
           >
-            <Text style={styles.saveButtonText}>{t('profile.button.save')}</Text>
+            <Text style={styles.saveButtonText}>{t('common.button.save')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[
@@ -446,7 +446,7 @@ export const EditProfileScreen = ({ navigation }) => {
             disabled={saveDisabled}
             onPress={clearData}
           >
-            <Text style={styles.cancelButtonText}>{t('profile.button.cancel')}</Text>
+            <Text style={styles.cancelButtonText}>{t('common.button.cancel')}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

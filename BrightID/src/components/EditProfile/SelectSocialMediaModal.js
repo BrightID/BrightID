@@ -173,7 +173,7 @@ const SelectMediaModal = ({ route, navigation }) => {
             disabled={page === 1 && profile.length === 0}
           >
             <Text style={styles.saveButtonText}>
-              {page === 1 ? t('profile.button.socialSave') : t('profile.button.socialNext')}
+              {page === 1 ? t('common.button.save') : t('profile.button.socialNext')}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -186,7 +186,7 @@ const SelectMediaModal = ({ route, navigation }) => {
             }}
           >
             <Text style={styles.cancelButtonText}>
-              {page === 1 && initialPage !== 1 ? t('profile.button.socialPrevious') : t('profile.button.socialCancel')}
+              {page === 1 && initialPage !== 1 ? t('profile.button.socialPrevious') : t('common.button.cancel')}
             </Text>
           </TouchableOpacity>
         </View>

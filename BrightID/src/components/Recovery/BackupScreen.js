@@ -178,7 +178,7 @@ class BackupScreen extends React.Component<Props, State> {
             ) : (
               <View style={styles.loader}>
                 <Text style={styles.textInfo}>
-                  {t('backup.text.uploadingData')}
+                  {t('common.text.uploadingData')}
                 </Text>
                 <Text style={styles.textInfo}>
                   {t('common.text.progress', {completed: this.state.completed, total: this.state.total})}

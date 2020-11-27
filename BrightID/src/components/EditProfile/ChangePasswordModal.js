@@ -12,6 +12,7 @@ import {
 import { BlurView } from '@react-native-community/blur';
 import Spinner from 'react-native-spinkit';
 import { setInternetCredentials } from 'react-native-keychain';
+import { useTranslation } from 'react-i18next';
 import { BACKUP_URL } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from 'react-redux';
@@ -36,6 +37,8 @@ const UploadAnimation = () => {
       state.groups.groups.filter((group) => group.photo?.filename).length,
   );
 
+  const { t } = useTranslation();
+
   useFocusEffect(
     useCallback(() => {
       const updateProgress = (num) => {
@@ -53,10 +56,10 @@ const UploadAnimation = () => {
   return (
     <View style={styles.uploadAnimationContainer}>
       <Text style={styles.textInfo}>
-        Uploading encrypted data to backup server ...
+        {t('common.text.uploadingData')}
       </Text>
       <Text style={styles.textInfo}>
-        {completed}/{backupTotal} completed
+        {t('common.text.progress', {completed: completed, total: backupTotal})}
       </Text>
       <Spinner
         isVisible={true}
@@ -78,6 +81,8 @@ const ChangePasswordModal = ({ route, navigation }) => {
 
   const password = useSelector((state) => state.user.password);
   const id = useSelector((state) => state.user.id);
+
+  const { t } = useTranslation();
 
   // backupTotal is used to display the upload animation
 
@@ -123,7 +128,7 @@ const ChangePasswordModal = ({ route, navigation }) => {
         ) : (
           <>
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Current password</Text>
+              <Text style={styles.label}>{t('profile.label.currentPassword')}</Text>
               <TextInput
                 autoCompleteType="password"
                 autoCorrect={false}
@@ -138,13 +143,13 @@ const ChangePasswordModal = ({ route, navigation }) => {
               />
             </View>
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>New password</Text>
+              <Text style={styles.label}>{t('profile.label.newPassword')}</Text>
               <TextInput
                 autoCompleteType="password"
                 autoCorrect={false}
                 onChangeText={setNewPassword}
                 value={newPassword}
-                placeholder="new password"
+                placeholder={t('profile.placeholder.newPassword')}
                 placeholderTextColor="#9e9e9e"
                 secureTextEntry={true}
                 style={styles.textInput}
@@ -153,13 +158,13 @@ const ChangePasswordModal = ({ route, navigation }) => {
               />
             </View>
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>New password again</Text>
+              <Text style={styles.label}>{t('profile.label.newPasswordAgain')}</Text>
               <TextInput
                 autoCompleteType="password"
                 autoCorrect={false}
                 onChangeText={setNewPasswordAgain}
                 value={newPasswordAgain}
-                placeholder="new password again"
+                placeholder={t('profile.placeholder.newPasswordAgain')}
                 placeholderTextColor="#9e9e9e"
                 secureTextEntry={true}
                 style={styles.textInput}
@@ -169,7 +174,7 @@ const ChangePasswordModal = ({ route, navigation }) => {
             </View>
             <View style={styles.saveContainer}>
               <TouchableOpacity style={styles.saveButton} onPress={startBackup}>
-                <Text style={styles.saveButtonText}>Save</Text>
+                <Text style={styles.saveButtonText}>{t('common.button.save')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.cancelButton}
@@ -177,7 +182,7 @@ const ChangePasswordModal = ({ route, navigation }) => {
                   navigation.navigate('Edit Profile');
                 }}
               >
-                <Text style={styles.cancelButtonText}>Cancel</Text>
+                <Text style={styles.cancelButtonText}>{t('common.button.cancel')}</Text>
               </TouchableOpacity>
             </View>
           </>
