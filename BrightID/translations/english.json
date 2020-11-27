@@ -307,7 +307,11 @@
   "profile.text.changePassword": "Change Password",
   "profile.button.save": "Save",
   "profile.button.cancel": "Cancel",
-
+  "profile.button.socialPrevious": "Prev",
+  "profile.button.socialNext": "Next",
+  "profile.button.socialSave": "Save",
+  "profile.button.socialCancel": "Cancel",
+  
 
   "common.alert.error": "Error",
   "common.alert.success": "Success",

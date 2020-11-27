@@ -307,6 +307,10 @@
   "profile.text.changePassword": "Modifier le Mot de Passe",
   "profile.button.save": "Valider",
   "profile.button.cancel": "Annuler",
+  "profile.button.socialPrevious": "Retour",
+  "profile.button.socialNext": "Suivant",
+  "profile.button.socialSave": "Valider",
+  "profile.button.socialCancel": "Annuler",
 
 
   "common.alert.error": "Erreur",
