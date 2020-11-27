@@ -255,10 +255,13 @@
 
 
   "drawer.label.home": "Home",
+  "drawer.label.editProfile": "Edit Profile",
   "drawer.label.achievements": "Achievements",
   "drawer.label.copyExplorerCode": "Copy Explorer Code",
-  "drawer.label.editProfile": "Edit Profile",
+  "drawer.label.checkForUpdates": "Check for Updates",
   "drawer.label.contactUs": "Contact Us",
+  "drawer.alert.title.upToDate": "Check for Update",
+  "drawer.alert.text.upToDate": "BrightID is up to date.",
 
 
   "tasks.label.completion": "Completion:",

@@ -208,7 +208,7 @@ const CustomDrawerContent = (props) => {
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
         inactiveTintColor="#000"
-        label="Check for Updates"
+        label={t('drawer.label.checkForUpdates')}
         icon={getIcon('faqIcon')}
         onPress={() => {
           codePush.sync(
@@ -218,7 +218,7 @@ const CustomDrawerContent = (props) => {
             },
             (status) => {
               if (status === codePush.SyncStatus.UP_TO_DATE) {
-                Alert.alert('Check for Update', 'BrightID is up to date.');
+                Alert.alert(t('drawer.alert.title.upToDate'), t('drawer.alert.text.upToDate'));
               }
             },
           );
