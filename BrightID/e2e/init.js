@@ -8,7 +8,7 @@ const config = require('../package.json').detox;
 /* global jasmine, device */
 
 // Set the default timeout
-jest.setTimeout(180000);
+jest.setTimeout(360000);
 
 jasmine.getEnv().addReporter(adapter);
 
