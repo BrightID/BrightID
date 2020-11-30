@@ -235,6 +235,21 @@ const CustomDrawerContent = (props) => {
           });
         }}
       />
+      {__DEV__ && (
+        <CustomItem
+          style={styles.drawerItem}
+          labelStyle={styles.labelStyle}
+          inactiveTintColor="#000"
+          label="Sample Icon Page"
+          icon={getIcon('taskList')}
+          onPress={() => {
+            navigation.reset({
+              index: 1,
+              routes: [{ name: 'Home' }, { name: 'SampleIconPage' }],
+            });
+          }}
+        />
+      )}
     </DrawerContentScrollView>
   );
 };
@@ -271,6 +286,12 @@ export const HomeDrawer = () => {
         component={GraphExplorerScreen}
       />
       <Drawer.Screen name="ContactUs" component={ContactUsScreen} />
+      {__DEV__ && (
+        <Drawer.Screen
+          name="SampleIconPage"
+          component={require('@/components/Icons/SamplePage').default}
+        />
+      )}
     </Drawer.Navigator>
   );
 };
