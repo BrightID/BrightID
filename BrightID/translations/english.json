@@ -82,6 +82,11 @@
   "pendingConnection.text.errorExpired": "The connection expired. Please try to reconnect.",
   "pendingConnection.text.errorMyself": "You can not connect to yourself.",
   "pendingConnection.text.errorUnhandled": "Unhandled connection state",
+  "pendingConnection.alert.title.connectionImpossible": "Connection not possible",
+  "pendingConnection.alert.text.otherOutdated": "Can't connect with {{name}} due to incompatible client version. Please ask {{name}} to update and restart the brightID app.",
+  "pendingConnection.alert.text.localOutdated": "Can't connect with {{name}} due to incompatible client version. Please update and restart your brightID app.",
+  "pendingConnection.alert.text.errorCreateChannel": "Could not create connection channel. Error message: {{message}}",
+  "pendingConnection.alert.text.errorJoinChannel": "Could not join connection channel. Error message: {{message}}",
 
   
   "connections.header.connections": "Connections",
@@ -172,8 +177,8 @@
   "groups.accessibilityLabel.groupsLogo": "groups logo",
   "groups.state.creatingGroup": "creating the group",
   "groups.state.uploadingGroupPhoto": "uploading group photo",
-
-
+  
+  
   "createGroup.placeholder.groupName": "What is the group name?",
   "createGroup.button.next": "Next",
   "createGroup.label.cofounders": "CO-FOUNDERS",
@@ -183,7 +188,8 @@
   "createGroup.alert.title.formIncomplete": "Group Form Incomplete",
   "createGroup.alert.text.nameMissing": "Please add a name for group",
   "createGroup.alert.text.nameTooShort": "The group name must be at least 2 characters",
-
+  "createGroup.alert.title.createFailed": "Group creation unsuccessful",
+  
 
   "apps.text.noApps": "No Apps",
   "apps.text.pendingLink": "Linking your account in {{context}}\n to your BrightID ...",
@@ -199,6 +205,10 @@
   "apps.alert.text.invalidContext": "{{context}} is not a valid context!",
   "apps.alert.text.checkWebsite": "To find out more about {{name}}, check out their website!",
   "apps.alert.button.visitWebsite": "Sure",
+  "apps.alert.title.linkSuccess": "Success",
+  "apps.alert.text.linkSuccess": "Succesfully linked your account in {{context}} to your BrightID",
+  "apps.alert.title.linkFailure": "Failed",
+  "apps.alert.text.linkFailure": "Failed to link your account in {{context}} to your BrightID\n{{result}}",
 
 
   "notifications.tab.connections": "connections",
@@ -317,6 +327,8 @@
   "profile.alert.text.discardChanges": "You have unsaved changes. Are you sure you want to discard them and leave the screen?",
   "profile.alert.button.dontLeave": "Don't leave",
   "profile.alert.button.discard": "Discard",
+  "profile.alert.title.passwordMatch": "Please try again",
+  "profile.alert.text.passwordMatch": "Current password does not match.",
 
   
   "common.alert.error": "Error",
@@ -329,6 +341,12 @@
   "common.alert.yes": "Yes",
   "common.alert.no": "No",
   "common.alert.sure": "Sure",
+  "common.alert.text.passwordMatch": "Password and confirm password does not match.",
+  "common.alert.text.passwordShort": "Your password must be at least 8 characters long.",
+  "common.alert.text.incorrectPassword": "Incorrect password!",
+  "common.alert.text.trustedSigned": "One of your trusted connections signed your request",
+  "common.alert.title.lostKeys": "We've lost the BrightID keypair from the device",
+  "common.alert.text.lostKeys": "Please create a new BrightID or try recovering your previous BrightID",
   "common.button.save": "Save",
   "common.button.cancel": "Cancel",
   "common.photoActionSheet.title": "Select photo",

@@ -107,13 +107,13 @@ export const newPendingConnection = createAsyncThunk(
       decryptedObj.version < PROFILE_VERSION // old client version
     ) {
       // other user needs to update his client
-      const msg = `Can't connect with ${decryptedObj.name} due to incompatible client version. Please ask ${decryptedObj.name} to update and restart the brightID app.`;
-      Alert.alert('Connection not possible', msg);
+      const msg = i18next.t('pendingConnection.alert.text.otherOutdated', {name: `${decryptedObj.name}`});
+      Alert.alert(i18next.t('pendingConnection.alert.title.connectionImpossible'), msg);
       throw new Error(msg);
     } else if (decryptedObj.version > PROFILE_VERSION) {
       // I need to update my client
-      const msg = `Can't connect with ${decryptedObj.name} due to incompatible client version. Please update and restart your brightID app.`;
-      Alert.alert('Connection not possible', msg);
+      const msg = i18next.t('pendingConnection.alert.text.localOutdated', {name: `${decryptedObj.name}`});
+      Alert.alert(i18next.t('pendingConnection.alert.title.connectionImpossible'), msg);
       throw new Error(msg);
     }
 

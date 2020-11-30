@@ -82,6 +82,11 @@
   "pendingConnection.text.errorExpired": "La connexion a expiré. Veuillez essayer à nouveau de vous connecter.",
   "pendingConnection.text.errorMyself": "Vous ne pouvez pas vous connecter à vous-même.",
   "pendingConnection.text.errorUnhandled": "État de connexion non supporté.",
+  "pendingConnection.alert.title.connectionImpossible": "Connexion impossible",
+  "pendingConnection.alert.text.otherOutdated": "Impossible de se connecter avec {{name}} car vous utilisez des versions différentes de l'application. Veuillez demander à {{name}} de mettre à jour son application BrightID.",
+  "pendingConnection.alert.text.localOutdated": "Impossible de se connecter avec {{name}} car vous utilisez des versions différentes de l'application. Veuillez mettre à jour votre application BrightID.",
+  "pendingConnection.alert.text.errorCreateChannel": "Impossible de créer un canal de connexion. Message d'erreur : {{message}}",
+  "pendingConnection.alert.text.errorJoinChannel": "Impossible de rejoindre un canal de connexion. Message d'erreur : {{message}}",
 
 
   "connections.header.connections": "Connexions",
@@ -172,8 +177,8 @@
   "groups.accessibilityLabel.groupsLogo": "logo pour les groupes",
   "groups.state.creatingGroup": "création du groupe",
   "groups.state.uploadingGroupPhoto": "envoi de la photo du groupe",
-
-
+  
+  
   "createGroup.placeholder.groupName": "Quel est le nom du groupe ?",
   "createGroup.button.next": "Suivant",
   "createGroup.label.cofounders": "COFONDATEURS",
@@ -183,6 +188,7 @@
   "createGroup.alert.title.formIncomplete": "Formulaire incomplet",
   "createGroup.alert.text.nameMissing": "Veuillez entrer un nom pour le groupe",
   "createGroup.alert.text.nameTooShort": "Le nom du groupe doit contenir au moins 2 caractères",
+  "createGroup.alert.title.createFailed": "Échec de la création du groupe",
 
 
   "apps.text.noApps": "Pas d'Application",
@@ -199,6 +205,10 @@
   "apps.alert.text.invalidContext": "{{context}} n'est pas un contexte valide !",
   "apps.alert.text.checkWebsite": "Pour en savoir davantage à propos de {{name}}, visitez leur site web !",
   "apps.alert.button.visitWebsite": "Visiter",
+  "apps.alert.title.linkSuccess": "Succès",
+  "apps.alert.text.linkSuccess": "Votre compte BrightID est désormais lié à {{context}}",
+  "apps.alert.title.linkFailure": "Échec",
+  "apps.alert.text.linkFailure": "Impossible de lier votre compte BrightID avec {{context}}\n{{result}}",
 
 
   "notifications.tab.connections": "connexions",
@@ -317,6 +327,8 @@
   "profile.alert.text.discardChanges": "Vous avez des changements non sauvegardés. Êtes-vous sûr de vouloir les annuler en quittant l'écran ?",
   "profile.alert.button.dontLeave": "Rester",
   "profile.alert.button.discard": "Ne pas enregistrer",
+  "profile.alert.title.passwordMatch": "Veuillez réessayer",
+  "profile.alert.text.passwordMatch": "Le mot de passe actuelle ne correspond pas.",
 
 
   "common.alert.error": "Erreur",
@@ -329,6 +341,12 @@
   "common.alert.yes": "Oui",
   "common.alert.no": "Non",
   "common.alert.sure": "Oui",
+  "common.alert.text.passwordMatch": "Le mot de passe et la confirmation de mot de passe ne correspondent pas.",
+  "common.alert.text.passwordShort": "Votre motre de passe doit comporter au moins 8 caractères.",
+  "common.alert.text.incorrectPassword": "Mot de passe incorrect !",
+  "common.alert.text.trustedSigned": "Une de vos connexions de confiance a signé votre requête",
+  "common.alert.title.lostKeys": "Impossible de trouver vos clés BrightID sur cet appareil",
+  "common.alert.text.lostKeys": "Veuillez créer un nouveau BrightID ou essayer de restaurer votre compte BrightID",
   "common.button.save": "Valider",
   "common.button.cancel": "Annuler",
   "common.photoActionSheet.title": "Sélectionner une photo",

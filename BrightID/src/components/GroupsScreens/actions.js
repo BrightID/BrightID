@@ -2,6 +2,7 @@
 
 import { Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
+import i18next from 'i18next';
 import emitter from '@/emitter';
 import { saveImage } from '@/utils/filesystem';
 import { encryptAesKey } from '@/utils/invites';
@@ -116,7 +117,10 @@ export const createNewGroup = (
     return true;
   } catch (err) {
     console.log(err.message);
-    Alert.alert('Group creation unsuccessful', err.message);
+    Alert.alert(
+      i18next.t('createGroup.alert.title.createFailed'), 
+      err.message
+    );
     return false;
   }
 };

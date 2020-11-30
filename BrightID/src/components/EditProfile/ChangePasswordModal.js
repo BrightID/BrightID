@@ -88,7 +88,10 @@ const ChangePasswordModal = ({ route, navigation }) => {
 
   const startBackup = async () => {
     if (oldPassword !== password) {
-      Alert.alert('Please try again', 'Current password does not match.');
+      Alert.alert(
+        t('profile.alert.title.passwordMatch'), 
+        t('profile.alert.text.passwordMatch')
+      );
       return;
     }
     if (!validatePass(newPassword, newPasswordAgain)) return;
