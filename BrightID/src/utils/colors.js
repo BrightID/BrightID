@@ -3,8 +3,9 @@
 // todo - update for dark mode
 export const BLACK = '#000';
 export const WHITE = '#fff';
-export const DARK_GREY = '#707070';
-export const GREY = '#C4C4C4';
+export const DARKER_GREY = '#707070';
+export const DARK_GREY = 'rgba(112, 112, 112, 0.8)';
+export const GREY = '#A8A8A8';
 export const LIGHT_GREY = '#E5E5E5';
 export const DARK_ORANGE = '#B64B32';
 export const ORANGE = '#ED795D';

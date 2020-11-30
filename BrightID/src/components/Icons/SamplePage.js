@@ -5,20 +5,29 @@ import { StyleSheet, View } from 'react-native';
 
 import AddGroup from './AddGroup';
 import AddPerson from './AddPerson';
+import Avatar from './Avatar';
 import BackArrow from './BackArrow';
 import Camera from './Camera';
-import Caret from './Caret';
 import Certificate from './Certificate';
+import ChatBox from './ChatBox';
 import Check from './Check';
-import Mail from './Mail';
+import Chevron from './Chevron';
+import Delete from './Delete';
 import Faq from './Faq';
+import Filter from './Filter';
 import GraphQl from './GraphQl';
-import Pencil from './Pencil';
 import Home from './Home';
-import Menu from './Menu';
+import Info from './Info';
 import List from './List';
-import VerifiedSticker from './VerifiedSticker';
+import Mail from './Mail';
+import NotificationBell from './NotificationBell';
+import Pencil from './Pencil';
+import PhoneLock from './PhoneLock';
+import Menu from './Menu';
 import Search from './Search';
+import UnverifiedSticker from './UnverifiedSticker';
+import VerifiedBadge from './VerifiedBadge';
+import VerifiedSticker from './VerifiedSticker';
 
 const SamplePage = () => {
   return (
@@ -26,24 +35,37 @@ const SamplePage = () => {
       <View style={styles.midContainer}>
         <AddGroup />
         <AddPerson />
-        <BackArrow />
-        <Camera />
-        <Caret />
+        <PhoneLock />
+
         <Certificate />
-        <Check />
+
         <Mail />
         <Faq />
-      </View>
-      <View style={styles.midContainer}>
         <GraphQl />
         <Pencil />
         <Home />
-        <Menu />
-        <List />
-        <VerifiedSticker />
       </View>
       <View style={styles.midContainer}>
+        <Menu />
+        <List />
+        <Filter />
+        <VerifiedBadge />
         <Search />
+        <Camera />
+      </View>
+      <View style={styles.midContainer}>
+        <Chevron />
+        <Check />
+        <BackArrow />
+        <Delete />
+        <ChatBox />
+        <NotificationBell />
+        <Info />
+      </View>
+      <View style={styles.midContainer}>
+        <Avatar width={150} height={150} addPicture={true} />
+        <UnverifiedSticker />
+        <VerifiedSticker />
       </View>
     </View>
   );
