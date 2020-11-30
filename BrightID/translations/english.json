@@ -9,13 +9,13 @@
   "home.chatActionSheet.title": "Like to chat with us?",
   "home.chatActionSheet.discord": "BrightID Discord",
   "home.accessibilityLabel.connect": "connect",
-  
+
 
   "onboarding.text.intro": "<text>BrightID uses the people you know</text><text>to enforce one-account-per-person</text><text>for important applications like</text><text>voting and universal basic income.</text>",
   "onboarding.label.maintainPrivacy": "Maintain Privacy",
   "onboarding.text.privacy": "<text>Prove you're a unique person</text><text>while preserving your privacy.</text>",
   "onboarding.button.getStarted": "Get Started",
-  
+
 
   "signup.header.title": "SignUp",
   "signup.button.addPhoto": "Add Photo",
@@ -32,7 +32,7 @@
 
   "recovery.header.title": "Recovery Code",
   "recovery.text.askTrustedConnections": "Ask your trusted connections to scan this code.",
-  
+
 
   "qrcode.header.connections": "{{count}} / 30 Connections",
   "qrcode.text.scanCode": "<text>Hey {{name}}, scan a code and</text><text>make a new connection today</text>",
@@ -54,12 +54,12 @@
   "qrcode.alert.shareLinkGroup": "Share this link",
   "qrcode.alert.connectSingle": "Connect with {{name}} on BrightID: {{link}}",
   "qrcode.alert.connectGroup": "Make a group connection with {{name}} on BrightID: {{link}}",
-  
+
   "qrcode.text.downloadingConnectionData": "Downloading Connection Data",
   "qrcode.text.pendingConnections": "You have {{count}} pending connection",
   "qrcode.text.pendingConnections_plural": "You have {{count}} pending connections",
   "qrcode.text.confirmConnections": "Confirm Connections",
-  
+
 
   "pendingConnections.text.errorGeneric": "Error while connecting. Please try to reconnect.",
   "pendingConnections.text.errorMyself": "OOPS!!! This is you...",
@@ -88,7 +88,7 @@
   "pendingConnection.alert.text.errorCreateChannel": "Could not create connection channel. Error message: {{message}}",
   "pendingConnection.alert.text.errorJoinChannel": "Could not join connection channel. Error message: {{message}}",
 
-  
+
   "connections.header.connections": "Connections",
   "connections.text.noConnections": "No connections",
   "connections.removeActionSheet.title": "Remove connection",
@@ -195,7 +195,7 @@
   "apps.text.pendingLink": "Linking your account in {{context}}\n to your BrightID ...",
   "apps.text.notSponsored": "You're not sponsored.\nPlease find an app below to sponsor you.",
   "apps.tag.hasSponsorships": "Has sponsorships",
-  "apps.tag.notVerifiedForApp": "Non-vérifié pour cette application",
+  "apps.tag.notVerifiedForApp": "Not verified for this app",
   "apps.tag.linked": "Linked",
   "apps.tag.tryAgain": "Try Again",
   "apps.alert.title.linkApp": "Link App?",

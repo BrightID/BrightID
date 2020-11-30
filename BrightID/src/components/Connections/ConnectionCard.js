@@ -233,7 +233,7 @@ const ConnectionCard = (props) => {
                 // adjustsFontSizeToFit={true}
                 numberOfLines={1}
                 style={styles.name}
-                testID="connectionCardText"
+                testID={`connectionCardText-${index}`}
               >
                 {name}
               </Text>
