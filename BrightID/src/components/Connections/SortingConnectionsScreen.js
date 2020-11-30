@@ -4,6 +4,7 @@ import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import {
   sortByNameAscending,
   sortByNameDescending,
@@ -14,9 +15,9 @@ import {
 
 class SortingConnectionsScreen extends React.Component<Props> {
   componentDidMount() {
-    const { navigation } = this.props;
+    const { navigation, t } = this.props;
     navigation.setOptions({
-      title: 'Sorting',
+      title: t('connectionsSearch.header.sorting'),
       headerBackTitleVisible: false,
       headerRight: () => (
         <TouchableOpacity
@@ -25,7 +26,7 @@ class SortingConnectionsScreen extends React.Component<Props> {
             navigation.goBack();
           }}
         >
-          <Text style={styles.headerSaveText}>Save</Text>
+          <Text style={styles.headerSaveText}>{t('connectionsSearch.button.save')}</Text>
         </TouchableOpacity>
       ),
     });
@@ -77,11 +78,11 @@ class SortingConnectionsScreen extends React.Component<Props> {
   });
 
   render() {
-    const { dispatch, connectionsSort } = this.props;
+    const { dispatch, connectionsSort, t } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.titleContainer}>
-          <Text style={styles.infoText}>Choose one of the methods below</Text>
+          <Text style={styles.infoText}>{t('connectionsSearch.text.chooseSortMethod')}</Text>
         </View>
         <View style={styles.optionsContainer}>
           <TouchableOpacity
@@ -98,7 +99,7 @@ class SortingConnectionsScreen extends React.Component<Props> {
               }
             }}
           >
-            <Text style={styles.sortingText}>Sort by date added </Text>
+            <Text style={styles.sortingText}>{t('connectionsSearch.button.sortByDate')}</Text>
             {this.sortByDateAdded() ? this.renderCaret() : <View />}
           </TouchableOpacity>
           <TouchableOpacity
@@ -113,7 +114,7 @@ class SortingConnectionsScreen extends React.Component<Props> {
               }
             }}
           >
-            <Text style={styles.sortingText}>Sort by name </Text>
+            <Text style={styles.sortingText}>{t('connectionsSearch.button.sortByName')}</Text>
             {this.sortByName() ? this.renderCaret() : <View />}
           </TouchableOpacity>
         </View>
@@ -189,5 +190,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(({ connections }) => ({ ...connections }))(
-  SortingConnectionsScreen,
+  withTranslation()(SortingConnectionsScreen),
 );

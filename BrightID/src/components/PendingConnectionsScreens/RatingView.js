@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { connection_levels } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import {
@@ -15,10 +16,11 @@ type RatingViewProps = {
 };
 
 export const RatingView = ({ setLevelHandler }: RatingViewProps) => {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
       <Text style={styles.ratingHeader}>
-        How well do you know this connection?
+        {t('pendingConnections.label.rating')}
       </Text>
 
       <RatingButton
@@ -41,7 +43,7 @@ export const RatingView = ({ setLevelHandler }: RatingViewProps) => {
       />
 
       <Text style={styles.ratingFooter}>
-        Your answer will help us prevent attacks
+        {t('pendingConnections.text.rating')}
       </Text>
     </View>
   );

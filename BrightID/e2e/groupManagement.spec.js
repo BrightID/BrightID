@@ -1,5 +1,6 @@
 /* global device:false, element:false, by:false, waitFor:false */
 
+import i18next from 'i18next';
 import {
   createBrightID,
   createFakeConnection,
@@ -17,6 +18,7 @@ const GroupName = 'Reservoir Dogs';
 describe('Group Management', () => {
   let hasBackButton = true;
   let leaveGroupText = 'Leave group';
+  const actionOK = i18next.t('common.alert.ok');
 
   beforeAll(async () => {
     const platform = await device.getPlatform();
@@ -109,14 +111,14 @@ describe('Group Management', () => {
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
       // Text changes to "Known members: " when all invited people have joined
-      await waitFor(element(by.text('Known members: ')))
+      await waitFor(element(by.text(i18next.t('groups.label.knownMembers'))))
         .toBeVisible()
         .withTimeout(30000);
     });
   });
 
   describe('dismiss user from group', () => {
-    const actionSheetTitle = 'What do you want to do?';
+    const actionSheetTitle = i18next.t('common.actionSheet.title');
     const actionTitle = 'Dismiss from group';
 
     beforeAll(async () => {
@@ -136,7 +138,7 @@ describe('Group Management', () => {
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
       // Text changes to "Known members: " when all invited people have joined
-      await waitFor(element(by.text('Known members: ')))
+      await waitFor(element(by.text(i18next.t('groups.label.knownMembers'))))
         .toBeVisible()
         .withTimeout(30000);
       // open group
@@ -168,7 +170,7 @@ describe('Group Management', () => {
       await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
       await element(by.text(actionTitle)).tap();
       // dismiss confirmation screen
-      await element(by.text('OK')).tap();
+      await element(by.text(actionOK)).tap();
       // should be back on groups members screen, dismissed member should be removed
       // so the last index should be 2
       await expect(element(by.id('memberItem-3'))).not.toBeVisible();
@@ -197,7 +199,7 @@ describe('Group Management', () => {
       await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
       await element(by.text(actionTitle)).tap();
       // dismiss confirmation screen
-      await element(by.text('OK')).tap();
+      await element(by.text(actionOK)).tap();
       // should be back on groups members screen, dismissed member should be removed
       // so the last index should be 1
       await expect(element(by.id('memberItem-2'))).not.toBeVisible();
@@ -226,7 +228,7 @@ describe('Group Management', () => {
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
       // Text changes to "Known members: " when all invited people have joined
-      await waitFor(element(by.text('Known members: ')))
+      await waitFor(element(by.text(i18next.t('groups.label.knownMembers'))))
         .toBeVisible()
         .withTimeout(30000);
       // open group
@@ -258,7 +260,7 @@ describe('Group Management', () => {
       await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
       await element(by.text(actionTitle)).tap();
       // dismiss confirmation screen
-      await element(by.text('OK')).tap();
+      await element(by.text(actionOK)).tap();
       // All members should be admin now
       await expect(
         element(by.id('memberContextBtn').withAncestor(by.id('regular'))),
@@ -280,11 +282,11 @@ describe('Group Management', () => {
       await expect(element(by.text(leaveGroupText))).toBeVisible();
       await element(by.text(leaveGroupText)).tap();
       // confirm with OK button
-      await expect(element(by.text('OK'))).toBeVisible();
+      await expect(element(by.text(actionOK))).toBeVisible();
 
       // following tap action fails in detox with error
       // "Test Failed: Error performing 'com.wix.detox.espresso.action.detoxsingletap@c26e546 click - At Coordinates: 1192, 1573 and precision: 16, 16' on view '(with text: is "OK" and view has effective visibility=VISIBLE)'."
-      await element(by.text('OK')).tap();
+      await element(by.text(actionOK)).tap();
 
       // should be back at groups screen
       await expectGroupsScreen();

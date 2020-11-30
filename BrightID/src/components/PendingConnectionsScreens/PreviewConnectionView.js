@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { SvgXml } from 'react-native-svg';
 import verificationSticker from '@/static/verification-sticker.svg';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -23,6 +24,7 @@ type PreviewConnectionProps = {
 };
 
 export const PreviewConnectionView = (props: PreviewConnectionProps) => {
+  const { t } = useTranslation();
   const {
     pendingConnection,
     setLevelHandler,
@@ -40,14 +42,14 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
     case pendingConnection_states.CONFIRMED: {
       // user already handled this connection request
       ratingView = (
-        <Text style={styles.infoText}>You already rated this connection</Text>
+        <Text style={styles.infoText}>{t('pendingConnection.text.alreadyRated')}</Text>
       );
       break;
     }
     case pendingConnection_states.ERROR: {
       ratingView = (
         <Text style={styles.infoText}>
-          Error while connecting. Please try to reconnect.
+          {t('Error while connecting. Please try to reconnect.')}
         </Text>
       );
       break;
@@ -55,27 +57,27 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
     case pendingConnection_states.EXPIRED: {
       ratingView = (
         <Text style={styles.infoText}>
-          The connection expired. Please try to reconnect.
+          {t('pendingConnection.text.errorExpired')}
         </Text>
       );
       break;
     }
     case pendingConnection_states.MYSELF: {
       ratingView = (
-        <Text style={styles.infoText}>You can not connect to yourself.</Text>
+        <Text style={styles.infoText}>{t('pendingConnection.text.errorMyself')}</Text>
       );
       break;
     }
     default:
       ratingView = (
-        <Text style={styles.infoText}>Unhandled connection state</Text>
+        <Text style={styles.infoText}>{t('pendingConnection.text.errorUnhandled')}</Text>
       );
   }
 
   return (
     <>
       <View testID="previewConnectionScreen" style={styles.titleContainer}>
-        <Text style={styles.titleText}>Connection Request </Text>
+        <Text style={styles.titleText}>{t('pendingConnections.title.connectionRequest')} </Text>
       </View>
       <View style={styles.userContainer}>
         <TouchableWithoutFeedback onPress={photoTouchHandler}>
@@ -87,13 +89,13 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
               console.log(e);
             }}
             accessible={true}
-            accessibilityLabel="user photo"
+            accessibilityLabel={t('common.accessibilityLabel.userPhoto')}
           />
         </TouchableWithoutFeedback>
         <View style={styles.connectNameContainer}>
           <Text style={styles.connectName}>{pendingConnection.name}</Text>
           {pendingConnection.flagged && (
-            <Text style={styles.flagged}> (reported)</Text>
+            <Text style={styles.flagged}> {t('common.tag.reported')}</Text>
           )}
           {brightIdVerified && (
             <View style={styles.verificationSticker}>
