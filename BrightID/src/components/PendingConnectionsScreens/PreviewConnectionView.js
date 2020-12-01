@@ -16,11 +16,13 @@ import { pendingConnection_states } from './pendingConnectionSlice';
 import { RatingView } from './RatingView';
 import { ConnectionStats } from './ConnectionStats';
 
+// percentage determines reported warning
+const REPORTED_PERCENTAGE = 0.1;
+
 type PreviewConnectionProps = {
   pendingConnection: PendingConnection,
   setLevelHandler: (level: ConnectionLevel) => any,
   photoTouchHandler: () => any,
-  brightIdVerified: boolean,
 };
 
 export const PreviewConnectionView = (props: PreviewConnectionProps) => {
@@ -28,10 +30,11 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
   const {
     pendingConnection,
     setLevelHandler,
-    brightIdVerified,
     photoTouchHandler,
   } = props;
 
+  const reported = pendingConnection.reports.length / (pendingConnection.connectionsNum || 1) >= REPORTED_PERCENTAGE;
+  const brightIdVerified = pendingConnection.verifications.map(v => v.name).includes('BrightID');
   let ratingView;
   switch (pendingConnection.state) {
     case pendingConnection_states.UNCONFIRMED: {
@@ -94,8 +97,8 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
         </TouchableWithoutFeedback>
         <View style={styles.connectNameContainer}>
           <Text style={styles.connectName}>{pendingConnection.name}</Text>
-          {pendingConnection.flagged && (
-            <Text style={styles.flagged}> {t('common.tag.reported')}</Text>
+          {reported && (
+            <Text style={styles.reported}> {t('common.tag.reported')}</Text>
           )}
           {brightIdVerified && (
             <View style={styles.verificationSticker}>
@@ -106,9 +109,9 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
       </View>
       <View style={styles.countsContainer}>
         <ConnectionStats
-          numConnections={pendingConnection.connections}
-          numGroups={pendingConnection.groups}
-          numMutualConnections={pendingConnection.mutualConnections}
+          connectionsNum={pendingConnection.connectionsNum}
+          groupsNum={pendingConnection.groupsNum}
+          mutualConnectionsNum={pendingConnection.mutualConnections.length}
         />
       </View>
       <View style={styles.ratingView}>{ratingView}</View>
@@ -162,7 +165,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     color: '#000000',
   },
-  flagged: {
+  reported: {
     fontSize: DEVICE_LARGE ? 18 : 16,
     color: 'red',
   },
