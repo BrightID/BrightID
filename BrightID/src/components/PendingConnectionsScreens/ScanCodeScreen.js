@@ -31,6 +31,7 @@ import { joinChannel } from '@/components/PendingConnectionsScreens/actions/chan
 import { setActiveNotification } from '@/actions';
 import { ORANGE } from '@/utils/constants';
 import { RNCamera } from './RNCameraProvider';
+import { Trans, useTranslation } from 'react-i18next';
 
 /**
  * Returns whether the string is a valid QR identifier
@@ -63,6 +64,7 @@ export const ScanCodeScreen = () => {
   const [channel, setChannel] = useState(null);
   const [qrData, setQrData] = useState(undefined);
   const name = useSelector((state) => state.user.name);
+  const { t } = useTranslation();
 
   const pendingConnectionSizeForChannel = useSelector((state) => {
     return selectAlUnconfirmedConnectionsByChannelIds(state, [channel?.id])
@@ -148,12 +150,11 @@ export const ScanCodeScreen = () => {
         {!qrData ? (
           <>
             <View style={styles.infoTopContainer}>
-              <Text style={styles.infoTopText}>
-                Hey {name}, scan a code and
-              </Text>
-              <Text style={styles.infoTopText}>
-                make a new connection today
-              </Text>
+              <Trans
+                i18nKey="qrcode.text.scanCode"
+                components={{text: <Text style={styles.infoTopText}/>}}
+                values={{name}}
+              />
             </View>
             <View style={styles.cameraContainer} testID="CameraContainer">
               <RNCamera
@@ -164,10 +165,10 @@ export const ScanCodeScreen = () => {
                 type={RNCamera.Constants.Type.back}
                 flashMode={RNCamera.Constants.FlashMode.off}
                 androidCameraPermissionOptions={{
-                  title: 'Permission to use camera',
-                  message: 'We need your permission to use your camera',
-                  buttonPositive: 'Ok',
-                  buttonNegative: 'Cancel',
+                  title: t('common.camera.title'),
+                  message: t('common.camera.message'),
+                  buttonPositive: t('common.camera.ok'),
+                  buttonNegative: t('common.camera.cancel'),
                 }}
                 notAuthorizedView={<NotAuthorizedView />}
               >
@@ -188,7 +189,7 @@ export const ScanCodeScreen = () => {
           <View style={styles.cameraContainer} testID="CameraContainer">
             <View style={styles.downloadingDataContainer}>
               <Text style={styles.waitingText}>
-                Downloading Connection Data
+                {t('qrcode.text.downloadingConnectionData')}
               </Text>
               <Spinner
                 isVisible={true}
@@ -203,7 +204,7 @@ export const ScanCodeScreen = () => {
         <View style={styles.bottomContainer}>
           {pendingConnectionSizeForChannel < 1 ? (
             <>
-              <Text style={styles.infoBottomText}>Or you can also...</Text>
+              <Text style={styles.infoBottomText}>{t('qrcode.text.canAlso')}</Text>
               <TouchableOpacity
                 testID="ScanCodeToMyCodeBtn"
                 style={styles.showQrButton}
@@ -216,14 +217,13 @@ export const ScanCodeScreen = () => {
                   width={DEVICE_LARGE ? 22 : 20}
                   height={DEVICE_LARGE ? 22 : 20}
                 />
-                <Text style={styles.showQrText}>Show your QR code</Text>
+                <Text style={styles.showQrText}>{t('qrcode.button.showCode')}</Text>
               </TouchableOpacity>
             </>
           ) : (
             <>
               <Text style={styles.infoBottomText}>
-                You have {pendingConnectionSizeForChannel} pending connection
-                {pendingConnectionSizeForChannel > 1 ? 's' : ''}...
+                {t('qrcode.text.pendingConnections', {count: pendingConnectionSizeForChannel})}
               </Text>
               <TouchableOpacity
                 testID="ScanCodeToPendingConnectionsBtn"
@@ -238,7 +238,7 @@ export const ScanCodeScreen = () => {
                   color={ORANGE}
                 />
                 <Text style={styles.verifyConnectionsText}>
-                  Confirm Connections
+                  {t('qrcode.text.confirmConnections')}
                 </Text>
               </TouchableOpacity>
             </>

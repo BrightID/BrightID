@@ -2,11 +2,13 @@
 
 import * as React from 'react';
 import { StyleSheet, Image, Text, View } from 'react-native';
+import { Trans, withTranslation } from 'react-i18next';
 
 type Props = {};
 
-export default class MaintainPrivacy extends React.Component<Props> {
+class MaintainPrivacy extends React.Component<Props> {
   render() {
+    const { t } = this.props;
     return (
       <View
         testID="MaintainPrivacy"
@@ -23,13 +25,13 @@ export default class MaintainPrivacy extends React.Component<Props> {
             source={require('../../../static/icons8-anonymous-mask-96.png')}
             style={styles.guyFox}
           />
-          <Text style={styles.mainText}>Maintain Privacy</Text>
+          <Text style={styles.mainText}>{t('onboarding.label.maintainPrivacy')}</Text>
         </View>
         <View style={styles.top}>
-          <Text style={styles.secondaryText}>Prove you're a unique person</Text>
-          <Text style={styles.secondaryText}>
-            while preserving your privacy.
-          </Text>
+          <Trans
+            i18nKey="onboarding.text.privacy"
+            components={{text: <Text style={styles.secondaryText}/>}}
+          />
         </View>
       </View>
     );
@@ -77,3 +79,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
   },
 });
+
+export default withTranslation()(MaintainPrivacy);

@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { chooseImage } from '@/utils/images';
 import { ORANGE } from '@/utils/constants';
@@ -46,13 +47,13 @@ export class GroupInfoScreen extends React.Component<Props> {
 
   validateInputs = async () => {
     const { finalBase64, name, isPrimary } = this.state;
-    const { navigation } = this.props;
+    const { navigation, t } = this.props;
     if (name.length < 2) {
       return Alert.alert(
-        'Group Form Incomplete',
+        t('createGroup.alert.title.formIncomplete'),
         name.length === 0
-          ? 'Please add a name for group'
-          : 'The group name must be at least 2 characters',
+          ? t('createGroup.alert.text.nameMissing')
+          : t('createGroup.alert.text.nameTooShort'),
       );
     }
     navigation.navigate('NewGroup', {
@@ -65,6 +66,7 @@ export class GroupInfoScreen extends React.Component<Props> {
   render() {
     // eslint-disable-next-line no-unused-vars
     const { name, finalBase64, isPrimary } = this.state;
+    const { t } = this.props;
 
     return (
       <>
@@ -81,7 +83,7 @@ export class GroupInfoScreen extends React.Component<Props> {
                   testID="editGroupPhoto"
                   onPress={this.getPhotoFromLibrary}
                   accessible={true}
-                  accessibilityLabel="edit photo"
+                  accessibilityLabel={t('common.accessibilityLabel.editPhoto')}
                 >
                   <Image style={styles.photo} source={finalBase64} />
                 </TouchableOpacity>
@@ -91,7 +93,7 @@ export class GroupInfoScreen extends React.Component<Props> {
                   onPress={this.getPhotoFromLibrary}
                   style={styles.addPhoto}
                   accessible={true}
-                  accessibilityLabel="add photo"
+                  accessibilityLabel={t('common.accessibilityLabel.addPhoto')}
                 >
                   <SimpleLineIcons size={26} name="camera" color="#979797" />
                 </TouchableOpacity>
@@ -102,7 +104,7 @@ export class GroupInfoScreen extends React.Component<Props> {
                 testID="editGroupName"
                 onChangeText={(name) => this.setState({ name })}
                 value={name}
-                placeholder="What is the group name?"
+                placeholder={t('createGroup.placeholder.groupName')}
                 placeholderTextColor="#9e9e9e"
                 style={styles.textInput}
                 autoCapitalize="words"
@@ -143,7 +145,7 @@ export class GroupInfoScreen extends React.Component<Props> {
               style={styles.nextButton}
               onPress={this.validateInputs}
             >
-              <Text style={styles.buttonInnerText}>Next</Text>
+              <Text style={styles.buttonInnerText}>{t('createGroup.button.next')}</Text>
             </TouchableOpacity>
           </View>
         </Container>
@@ -278,4 +280,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ groups }) => ({ ...groups }))(GroupInfoScreen);
+export default connect(({ groups }) => ({ ...groups }))(withTranslation()(GroupInfoScreen));
