@@ -1,10 +1,8 @@
-import i18next from 'i18next';
-
 export const UserTasks = {
   create_your_brightid: {
     id: 'create_your_brightid',
-    title: i18next.t('tasks.title.createYourBrightId'),
-    description: i18next.t('tasks.text.createYourBrightId'),
+    title: 'Create your BrightID',
+    description: 'Complete the Signup process',
     sortValue: 10,
     url: 'https://brightid.gitbook.io/brightid/#create-your-brightid',
     checkFn(state) {
@@ -13,8 +11,8 @@ export const UserTasks = {
   },
   add_a_picture: {
     id: 'add_a_picture',
-    title: i18next.t('tasks.title.addPicture'),
-    description: i18next.t('tasks.text.addPicture'),
+    title: 'Add a picture',
+    description: 'Add a picture to your BrightID',
     sortValue: 20,
     url: 'https://brightid.gitbook.io/brightid/#create-your-brightid',
     checkFn(state) {
@@ -24,8 +22,8 @@ export const UserTasks = {
   },
   make_first_connection: {
     id: 'make_first_connection',
-    title: i18next.t('tasks.title.makeFirstConnection'),
-    description: i18next.t('tasks.text.makeFirstConnection'),
+    title: 'Make your first connection',
+    description: 'Create one confirmed connection',
     sortValue: 30,
     url: 'https://brightid.gitbook.io/brightid/#making-connections',
     checkFn(state) {
@@ -34,8 +32,8 @@ export const UserTasks = {
   },
   make_second_connection: {
     id: 'make_second_connection',
-    title: i18next.t('tasks.title.makeSecondConnection'),
-    description: i18next.t('tasks.text.makeSecondConnection'),
+    title: 'Make your second connection',
+    description: 'Create 2 confirmed connections',
     sortValue: 40,
     url: 'https://brightid.gitbook.io/brightid/#making-connections',
     checkFn(state) {
@@ -44,8 +42,8 @@ export const UserTasks = {
   },
   create_group: {
     id: 'create_group',
-    title: i18next.t('tasks.title.createGroup'),
-    description: i18next.t('tasks.text.createGroup'),
+    title: 'Create a group',
+    description: 'Successfully create a group',
     sortValue: 60,
     url: 'https://brightid.gitbook.io/brightid/#creating-groups',
     checkFn(state) {
@@ -59,8 +57,8 @@ export const UserTasks = {
   },
   get_verified: {
     id: 'get_verified',
-    title: i18next.t('tasks.title.getVerified'),
-    description: i18next.t('tasks.text.getVerified'),
+    title: 'Get verified',
+    description: 'Become a verified BrightID identity',
     sortValue: 70,
     url: 'https://brightid.gitbook.io/brightid/#verify-your-brightid',
     checkFn(state) {
@@ -69,8 +67,9 @@ export const UserTasks = {
   },
   setup_trusted_connections: {
     id: 'setup_trusted_connections',
-    title: i18next.t('tasks.title.setupTrusteConnections'),
-    description: i18next.t('tasks.text.setupTrusteConnections'),
+    title: 'Setup trusted connections',
+    description:
+      'Setup your trusted connections to enable social account recovery',
     sortValue: 80,
     url: 'https://brightid.gitbook.io/brightid/#backup-your-brightid',
     checkFn(state) {
@@ -81,8 +80,8 @@ export const UserTasks = {
   },
   link_app: {
     id: 'link_app',
-    title: i18next.t('tasks.title.linkApp'),
-    description: i18next.t('tasks.text.linkApp'),
+    title: 'Link an app',
+    description: 'Link your brightID to an app context',
     sortValue: 90,
     checkFn(state) {
       // is there at least one linked context?

@@ -1,6 +1,5 @@
 // @flow
 
-import i18next from 'i18next';
 import { setActiveNotification } from '@/actions';
 import { MISC_TYPE } from '@/utils/constants';
 import { createSlice, createSelector } from '@reduxjs/toolkit';
@@ -128,8 +127,8 @@ export const checkTasks = () => {
           dispatch(
             setActiveNotification({
               type: MISC_TYPE,
-              title: i18next.t('notificationBar.title.achievementUnlocked'),
-              message: i18next.t('notificationBar.text.achievementUnlocked', {taskName: i18next.t(UserTasks[task.id].title)}),
+              title: 'Achievement unlocked!',
+              message: `You completed the task "${UserTasks[task.id].title}".`,
               navigationTarget: null,
               xmlIcon: certificate,
             }),

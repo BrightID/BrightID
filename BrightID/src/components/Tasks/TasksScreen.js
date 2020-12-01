@@ -58,7 +58,7 @@ export const TasksScreen = function () {
       <TasksProgress
         currentSteps={completedTaskIds.length}
         totalSteps={taskIds.length}
-        label={t('tasks.label.completion')}
+        label={t('achievements.label.completion')}
       />
       <FlatList
         data={taskIds}

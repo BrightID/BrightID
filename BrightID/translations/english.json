@@ -236,7 +236,7 @@
   "notificationBar.text.achievementUnlocked": "You completed the task \"{{taskName}}\"",
   "notificationBar.title.socialRecovery": "Backup & Social Recovery",
   "notificationBar.text.socialRecovery": "Please select your Trusted Connections to enable social recovery of your BrightID",
-  
+
 
   "backup.header.backup": "Backup",
   "backup.header.trustedConnections": "Trusted Connections",
@@ -275,23 +275,7 @@
   "drawer.alert.text.upToDate": "BrightID is up to date.",
 
 
-  "tasks.label.completion": "Completion:",
-  "tasks.title.createYourBrightId": "Create your BrightID",
-  "tasks.text.createYourBrightId": "Complete the Signup process",
-  "tasks.title.addPicture": "Add a picture",
-  "tasks.text.addPicture": "Add a picture to your BrightID",
-  "tasks.title.makeFirstConnection": "Make your first connection",
-  "tasks.text.makeFirstConnection": "Create one confirmed connection",
-  "tasks.title.makeSecondConnection": "Make your second connection",
-  "tasks.text.makeSecondConnection": "Create 2 confirmed connection",
-  "tasks.title.createGroup": "Create a group",
-  "tasks.text.createGroup": "Successfully create a group",
-  "tasks.title.getVerified": "Get verified",
-  "tasks.text.getVerified": "Become a verified BrightID identity",
-  "tasks.title.setupTrusteConnections": "Setup trusted connections",
-  "tasks.text.setupTrusteConnections": "Setup your trusted connections to enable social account recovery",
-  "tasks.title.linkApp": "Link an app",
-  "tasks.text.linkApp": "Link your brightID to an app context",
+  "achievements.label.completion": "Completion:",
 
 
   "graphExplorer.text.backupRequired": "Setting up backup and recovery is required to access your graph explorer code. Check your notifications or connect to more users to be eligible for backup and recovery.",

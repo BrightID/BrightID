@@ -232,11 +232,11 @@
   "notificationBar.title.pendingConnection": "Confirmez vos connexions",
   "notificationBar.text.pendingConnections": "Vous avez {{count}} connexion en attente",
   "notificationBar.text.pendingConnections_plural": "Vous avez {{count}} connexions en attente",
-  "notificationBar.title.achievementUnlocked": "Objectif rempli !",
+  "notificationBar.title.achievementUnlocked": "Objectif rempli !",  
   "notificationBar.text.achievementUnlocked": "Vous avez complété la tâche \"{{taskName}}\"",
   "notificationBar.title.socialRecovery": "Sauvegarde & Restauration Sociale",
   "notificationBar.text.socialRecovery": "Veuillez sélectionner vos connexions de confiance afin d'activer la Restauration Sociale BrightID",
-    
+
 
   "backup.header.backup": "Sauvegarde",
   "backup.header.trustedConnections": "Connexions de Confiance",
@@ -275,23 +275,7 @@
   "drawer.alert.text.upToDate": "BrightID est à jour.",
 
 
-  "tasks.label.completion": "Avancement :",
-  "tasks.title.createYourBrightId": "Créer votre BrightID",
-  "tasks.text.createYourBrightId": "Compléter le processus d'enregistrement",
-  "tasks.title.addPicture": "Ajouter une photo",
-  "tasks.text.addPicture": "Ajouter une photo à votre BrightID",
-  "tasks.title.makeFirstConnection": "Établir votre première connexion",
-  "tasks.text.makeFirstConnection": "Créer une connexion validée",
-  "tasks.title.makeSecondConnection": "Établir une deuxième connexion",
-  "tasks.text.makeSecondConnection": "Créer 2 connexions validées",
-  "tasks.title.createGroup": "Créer un groupe",
-  "tasks.text.createGroup": "Créer un groupe avec succès",
-  "tasks.title.getVerified": "Être vérifié",
-  "tasks.text.getVerified": "Devenir une identité BrightID vérifiée",
-  "tasks.title.setupTrusteConnections": "Configurer les Connexions de Confiance",
-  "tasks.text.setupTrusteConnections": "Configurer vos Connexions de Confiance pour activer la Restauration Sociale",
-  "tasks.title.linkApp": "Lier une application",
-  "tasks.text.linkApp": "Lier votre compte BrightID à une application",
+  "achievements.label.completion": "Avancement :",
 
 
   "graphExplorer.text.backupRequired": "Configurer une Sauvegarde du Compte est requis pour accéder à votre Code Explorer. Vérifiez vos notifications ou connectez vous à davantage d'utilisateurs afin d'être éligible à la Sauvegarde du Compte.",
