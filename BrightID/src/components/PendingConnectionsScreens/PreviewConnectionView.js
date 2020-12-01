@@ -8,8 +8,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { SvgXml } from 'react-native-svg';
-import verificationSticker from '@/static/verification-sticker.svg';
+import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { pendingConnection_states } from './pendingConnectionSlice';
 import { RatingView } from './RatingView';
@@ -97,7 +96,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
           )}
           {brightIdVerified && (
             <View style={styles.verificationSticker}>
-              <SvgXml width="16" height="16" xml={verificationSticker} />
+              <VerifiedBadge width={16} height={16} />
             </View>
           )}
         </View>
@@ -183,7 +182,7 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   verificationSticker: {
-    marginLeft: DEVICE_LARGE ? 8 : 5,
+    marginLeft: DEVICE_LARGE ? 7 : 5,
   },
   ratingView: {
     flex: 1,

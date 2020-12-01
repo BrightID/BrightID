@@ -3,13 +3,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { SvgXml } from 'react-native-svg';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { CHANNEL_TTL } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
 import { staleConnection, deleteConnection } from '@/actions';
-import verificationSticker from '@/static/verification-sticker.svg';
+import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
@@ -236,12 +235,9 @@ const ConnectionCard = (props) => {
                 {name}
               </Text>
               {brightidVerified && (
-                <SvgXml
-                  style={styles.verificationSticker}
-                  width="16"
-                  height="16"
-                  xml={verificationSticker}
-                />
+                <View style={styles.verificationSticker}>
+                  <VerifiedBadge width={16} height={16} />
+                </View>
               )}
             </View>
             <ConnectionStatus />
@@ -331,7 +327,7 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
   verificationSticker: {
-    marginLeft: DEVICE_LARGE ? 5 : 3.5,
+    marginLeft: DEVICE_LARGE ? 7 : 3.5,
   },
   removeButton: {
     width: DEVICE_LARGE ? 36 : 32,

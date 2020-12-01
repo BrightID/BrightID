@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Image,
   Linking,
@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setActiveNotification } from '@/actions';
 import { retrieveImage } from '@/utils/filesystem';
 import fetchUserInfo from '@/actions/fetchUserInfo';
-import verificationSticker from '@/static/verification-sticker.svg';
+import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
 import forumIcon from '@/static/forum_icon.svg';
@@ -166,12 +166,9 @@ export const HomeScreen = (props) => {
             </Text>
 
             {verified && (
-              <SvgXml
-                style={styles.verificationSticker}
-                width="16"
-                height="16"
-                xml={verificationSticker}
-              />
+              <View style={styles.verificationSticker}>
+                <VerifiedBadge width={16} height={16} />
+              </View>
             )}
           </View>
           <View style={styles.profileDivider} />

@@ -8,8 +8,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { SvgXml } from 'react-native-svg';
-import verificationSticker from '@/static/verification-sticker.svg';
+import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { photoDirectory } from '@/utils/filesystem';
 
@@ -59,7 +58,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
         <Text style={styles.connectName}>{name}</Text>
         {brightIdVerified && (
           <View style={styles.verificationSticker}>
-            <SvgXml width="16" height="16" xml={verificationSticker} />
+            <VerifiedBadge width={16} height={16} />
           </View>
         )}
       </View>
@@ -89,6 +88,6 @@ const styles = StyleSheet.create({
     height: 150,
   },
   verificationSticker: {
-    marginLeft: DEVICE_LARGE ? 8 : 5,
+    marginLeft: DEVICE_LARGE ? 7 : 5,
   },
 });

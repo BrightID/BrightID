@@ -12,7 +12,7 @@ import {
   SectionList,
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import verificationSticker from '@/static/verification-sticker.svg';
+import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import moment from 'moment';
 import default_group from '@/static/default_group.svg';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -136,12 +136,9 @@ function ConnectionScreen(props: Props) {
               {connection.name}
             </Text>
             {brightIdVerified && (
-              <SvgXml
-                style={styles.verificationSticker}
-                width="16"
-                height="16"
-                xml={verificationSticker}
-              />
+              <View style={styles.verificationSticker}>
+                <VerifiedBadge width={16} height={16} />
+              </View>
             )}
           </View>
           <View style={styles.profileDivider} />
@@ -331,7 +328,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   verificationSticker: {
-    marginLeft: DEVICE_LARGE ? 8 : 5,
+    marginLeft: DEVICE_LARGE ? 7 : 5,
   },
   profileDivider: {
     borderBottomWidth: 2,
