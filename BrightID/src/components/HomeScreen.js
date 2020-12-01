@@ -18,12 +18,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setActiveNotification } from '@/actions';
 import { retrieveImage } from '@/utils/filesystem';
 import fetchUserInfo from '@/actions/fetchUserInfo';
+import ChatBox from '@/components/Icons/ChatBox';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
-import forumIcon from '@/static/forum_icon.svg';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
+import { WHITE } from '@/utils/colors';
 import { version as app_version } from '../../package.json';
 
 /**
@@ -270,12 +271,18 @@ export const HomeScreen = (props) => {
             style={styles.communityContainer}
             onPress={handleChat}
           >
-            <SvgXml
-              width={DEVICE_LARGE ? 28 : 25}
-              height={DEVICE_LARGE ? 28 : 25}
-              xml={forumIcon}
+            <ChatBox
+              width={DEVICE_LARGE ? 22 : 20}
+              height={DEVICE_LARGE ? 22 : 20}
+              color={WHITE}
             />
-            <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }}>
+            <View
+              style={{
+                borderBottomWidth: 1,
+                borderBottomColor: '#fff',
+                marginLeft: 5,
+              }}
+            >
               <Text style={styles.communityLink}>Join the Community</Text>
             </View>
           </TouchableOpacity>
