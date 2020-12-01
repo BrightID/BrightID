@@ -15,7 +15,6 @@ import {
   selectCompletedTaskIds,
   checkTasks,
 } from './TasksSlice';
-import { useTranslation } from 'react-i18next';
 
 const FlatListItemSeparator = () => {
   return (

@@ -232,8 +232,6 @@
   "notificationBar.title.pendingConnection": "Confirm connections",
   "notificationBar.text.pendingConnections": "You have {{count}} pending connection",
   "notificationBar.text.pendingConnections_plural": "You have {{count}} pending connections",
-  "notificationBar.title.achievementUnlocked": "Achievement unlocked!",
-  "notificationBar.text.achievementUnlocked": "You completed the task \"{{taskName}}\"",
   "notificationBar.title.socialRecovery": "Backup & Social Recovery",
   "notificationBar.text.socialRecovery": "Please select your Trusted Connections to enable social recovery of your BrightID",
 
@@ -273,9 +271,6 @@
   "drawer.label.contactUs": "Contact Us",
   "drawer.alert.title.upToDate": "Check for Update",
   "drawer.alert.text.upToDate": "BrightID is up to date.",
-
-
-  "achievements.label.completion": "Completion:",
 
 
   "graphExplorer.text.backupRequired": "Setting up backup and recovery is required to access your graph explorer code. Check your notifications or connect to more users to be eligible for backup and recovery.",

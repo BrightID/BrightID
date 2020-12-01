@@ -232,8 +232,6 @@
   "notificationBar.title.pendingConnection": "Confirmez vos connexions",
   "notificationBar.text.pendingConnections": "Vous avez {{count}} connexion en attente",
   "notificationBar.text.pendingConnections_plural": "Vous avez {{count}} connexions en attente",
-  "notificationBar.title.achievementUnlocked": "Objectif rempli !",  
-  "notificationBar.text.achievementUnlocked": "Vous avez complété la tâche \"{{taskName}}\"",
   "notificationBar.title.socialRecovery": "Sauvegarde & Restauration Sociale",
   "notificationBar.text.socialRecovery": "Veuillez sélectionner vos connexions de confiance afin d'activer la Restauration Sociale BrightID",
 
@@ -275,9 +273,6 @@
   "drawer.alert.text.upToDate": "BrightID est à jour.",
 
 
-  "achievements.label.completion": "Avancement :",
-
-
   "graphExplorer.text.backupRequired": "Configurer une Sauvegarde du Compte est requis pour accéder à votre Code Explorer. Vérifiez vos notifications ou connectez vous à davantage d'utilisateurs afin d'être éligible à la Sauvegarde du Compte.",
   "graphExplorer.text.explorerWebsiteDescription": "est un site web conçu pour explorer l'intégralité du Social Graph de BrightID. Utilisez le code ci-dessus pour voir vos connexions dans le Graph.",
   "graphExplorer.button.copyCode": "Copier le Code",
@@ -313,6 +308,27 @@
   "profile.alert.button.discard": "Ne pas enregistrer",
   "profile.alert.title.passwordMatch": "Veuillez réessayer",
   "profile.alert.text.passwordMatch": "Le mot de passe actuel est incorrect.",
+
+
+  "achievements.progress.title": "Avancement :",
+  "achievements.notification.title": "Objectif rempli !",
+  "achievements.notification.message": "Vous avez complété la tâche \"{{title}}\".",
+  "achievements.make_first_connection.title": "Première connexion",
+  "achievements.make_first_connection.description": "Vous connecter avec un autre utilisateur BrightID",
+  "achievements.make_two_connection.title": "Deux connexions",
+  "achievements.make_two_connection.description": "Vous connecter avec 2 autres utilisateurs BrightID",
+  "achievements.make_three_connection.title": "Trois connexions",
+  "achievements.make_three_connection.description": "Vous connecter avec 3 autres utilisateurs BrightID",
+  "achievements.join_connection_party.title": "Rendez-vous virtuel",
+  "achievements.join_connection_party.description": "Participer à un rendez-vous virtuel BrightID",
+  "achievements.join_connection_party_with_friend.title": "Rendez-vous virtuel avec amis ou famille",
+  "achievements.join_connection_party_with_friend.description": "Participer à un rendez-vous virtuel BrightID avec des amis proches ou des membres de votre famille",
+  "achievements.link_app.title": "Lier une application",
+  "achievements.link_app.description": "Lier votre compte BrightID à une application",
+  "achievements.get_sponsored.title": "Devenir sponsorisé",
+  "achievements.get_sponsored.description": "Vous faire sponsoriser en liant votre compte BrightID à une application sponsor",
+  "achievements.setup_trusted_connections.title": "Configurer la Restauration Sociale",
+  "achievements.setup_trusted_connections.description": "Définir vos connexions de confiance pour activer la Restauration Sociale",
 
 
   "common.alert.error": "Erreur",
