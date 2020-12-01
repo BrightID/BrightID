@@ -13,7 +13,7 @@ type Props = {
 
 const NotificationBell = ({
   color = BLACK,
-  alert = true,
+  alert = false,
   width = 27,
   height = 28,
 }: Props) => (

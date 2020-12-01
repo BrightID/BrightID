@@ -16,6 +16,7 @@ import Delete from './Delete';
 import Faq from './Faq';
 import Filter from './Filter';
 import GraphQl from './GraphQl';
+import GroupAvatar from './GroupAvatar';
 import Home from './Home';
 import Info from './Info';
 import List from './List';
@@ -59,11 +60,14 @@ const SamplePage = () => {
         <BackArrow />
         <Delete />
         <ChatBox />
-        <NotificationBell />
+        <NotificationBell alert={true} />
         <Info />
       </View>
       <View style={styles.midContainer}>
-        <Avatar width={150} height={150} addPicture={true} />
+        <Avatar width={120} height={120} addPicture={true} />
+        <GroupAvatar width={120} height={120} addPicture={true} />
+      </View>
+      <View style={styles.midContainer}>
         <UnverifiedSticker />
         <VerifiedSticker />
       </View>
