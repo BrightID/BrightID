@@ -13,6 +13,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { navigate } from '@/NavigationService';
 import searchIcon from '@/static/search_icon.svg';
+import Search from '@/components/Icons/Search';
 
 /**
  * Search Bar in the Connections Screen
@@ -78,10 +79,9 @@ const AnimatedTopSearchBar = ({
         onPress={getPidded}
         testID="SearchBarBtn"
       >
-        <SvgXml
+        <Search
           width={DEVICE_LARGE ? 20 : 18}
           height={DEVICE_LARGE ? 20 : 18}
-          xml={searchIcon}
         />
       </TouchableOpacity>
       <TextInput

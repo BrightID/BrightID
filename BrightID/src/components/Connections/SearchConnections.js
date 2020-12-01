@@ -6,16 +6,13 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  View,
 } from 'react-native';
-import { SvgXml } from 'react-native-svg';
 import { connect } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import Octicons from 'react-native-vector-icons/Octicons';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { navigate } from '@/NavigationService';
 import { setSearchParam } from '@/actions';
-import searchIcon from '@/static/search_icon.svg';
+import Search from '@/components/Icons/Search';
 
 /**
  * Search Bar in the Connections Screen
@@ -39,7 +36,7 @@ class SearchConnections extends React.Component<Props & LocalProps> {
     return (
       <Animated.View style={styles.container}>
         <TouchableOpacity style={styles.searchIcon}>
-          <SvgXml width={20} height={20} xml={searchIcon} />
+          <Search width={20} height={20} />
         </TouchableOpacity>
         <TextInput
           onChangeText={(value) => this.props.dispatch(setSearchParam(value))}
