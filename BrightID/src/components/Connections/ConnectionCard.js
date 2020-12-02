@@ -5,7 +5,6 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import { CHANNEL_TTL } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
@@ -44,7 +43,6 @@ const ConnectionCard = (props) => {
     index,
     level,
   } = props;
-  const { t } = useTranslation();
 
   const brightidVerified = verifications?.includes('BrightID');
   const [imgErr, setImgErr] = useState(false);
@@ -122,7 +120,7 @@ const ConnectionCard = (props) => {
             {hiddenFlag ? `Reported as ${hiddenFlag}` : 'Hidden'}
           </Text>
           <Text style={[styles.connectedText, { marginTop: 1 }]}>
-            {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
+            Connected {moment(parseInt(connectionDate, 10)).fromNow()}
           </Text>
         </View>
       );
@@ -148,7 +146,7 @@ const ConnectionCard = (props) => {
             style={styles.connectionTime}
             testID={`connection_time-${index}`}
           >
-            {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
+            Connected {moment(parseInt(connectionDate, 10)).fromNow()}
           </Text>
         </View>
       );
@@ -156,7 +154,7 @@ const ConnectionCard = (props) => {
   };
 
   const { showActionSheetWithOptions } = useActionSheet();
-  const removeOptions = [t('connections.removeActionSheet.remove'), t('common.actionSheet.cancel')];
+  const removeOptions = ['Remove', 'cancel'];
 
   const showRemove = status === 'deleted' || status === 'stale';
 
@@ -170,8 +168,8 @@ const ConnectionCard = (props) => {
               options: removeOptions,
               cancelButtonIndex: removeOptions.length - 1,
               destructiveButtonIndex: 0,
-              title: t('connections.removeActionSheet.title'),
-              message: t('connections.removeActionSheet.info', {name: name}),
+              title: `Remove connection`,
+              message: `Are you sure you want to remove connection with ${name}? You can reconnect anytime.`,
               showSeparators: true,
               textStyle: {
                 textAlign: 'center',
@@ -233,7 +231,7 @@ const ConnectionCard = (props) => {
                 // adjustsFontSizeToFit={true}
                 numberOfLines={1}
                 style={styles.name}
-                testID={`connectionCardText-${index}`}
+                testID="connectionCardText"
               >
                 {name}
               </Text>

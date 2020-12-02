@@ -7,13 +7,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import api from '@/api/brightId';
 import { encryptAesKey } from '@/utils/invites';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import i18next from 'i18next';
+
 import MemberCard from './MemberCard';
 
 const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
@@ -45,12 +44,12 @@ export class InviteListScreen extends Component<Props, State> {
       const data = await encryptAesKey(group?.aesKey, connection.signingKey);
       await api.invite(connection.id, group?.id, data);
       Alert.alert(
-        i18next.t('groups.alert.title.inviteSuccess'),
-        i18next.t('groups.alert.text.inviteSuccess', { name: connection.name }),
+        'Successful Invitation',
+        `You invited ${connection.name} successfully to the group`,
       );
       navigation.goBack();
     } catch (err) {
-      Alert.alert(i18next.t('common.alert.error'), err.message);
+      Alert.alert('Error', err.message);
     }
   };
 
@@ -66,7 +65,6 @@ export class InviteListScreen extends Component<Props, State> {
   };
 
   render() {
-    const { t } = this.props;
     return (
       <>
         <View style={styles.orangeTop} />
@@ -82,7 +80,7 @@ export class InviteListScreen extends Component<Props, State> {
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}
               ListEmptyComponent={
-                <EmptyList title={t('groups.text.noEligibleConnection')} />
+                <EmptyList title="No existing connections are eligible for this group, please come back later.." />
               }
             />
           </View>
@@ -122,5 +120,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(({ connections }) => ({ ...connections }))(
-  withTranslation()(InviteListScreen),
+  InviteListScreen,
 );

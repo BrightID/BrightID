@@ -3,7 +3,6 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import { photoDirectory } from '@/utils/filesystem';
 import { useNavigation } from '@react-navigation/native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -17,7 +16,6 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
 const NotificationCard = (props) => {
   const navigation = useNavigation();
-  const { t } = useTranslation();
   const photoFilename = useSelector((state) => state.user.photo.filename);
   const imageSource = photoFilename
     ? {
@@ -41,13 +39,13 @@ const NotificationCard = (props) => {
             console.log(e);
           }}
           accessible={true}
-          accessibilityLabel={t('common.accessibilityLabel.userPhoto')}
+          accessibilityLabel="user photo"
         />
       </View>
       <View style={styles.info}>
-        <Text style={styles.name}>{t('notifications.item.title.backupBrightId')}</Text>
+        <Text style={styles.name}>Backup BrightID</Text>
         <Text style={styles.invitationMsg}>
-          {t('notifications.item.text.backupBrightId')}
+          Choose your trusted connections
         </Text>
       </View>
     </TouchableOpacity>

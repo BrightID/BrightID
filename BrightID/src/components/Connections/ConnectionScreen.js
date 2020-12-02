@@ -31,10 +31,6 @@ type Props = {
   navigation: any,
   connection: connection,
   brightIdVerified: boolean,
-  connectedAt: number,
-  createdAt: number,
-  connectionsNum: number,
-  groupsNum: number,
   mutualGroups: Array<group>,
   mutualConnections: Array<connection>,
   loading: boolean,
@@ -45,10 +41,6 @@ function ConnectionScreen(props: Props) {
     navigation,
     connection,
     brightIdVerified,
-    connectedAt,
-    createdAt,
-    connectionsNum,
-    groupsNum,
     mutualGroups,
     mutualConnections,
     loading,
@@ -132,7 +124,7 @@ function ConnectionScreen(props: Props) {
                 {loading
                   ? `Loading...`
                   : `Connected ${moment(
-                      parseInt(connectedAt, 10),
+                      parseInt(connection.createdAt, 10),
                     ).fromNow()}`}
               </Text>
             </View>
@@ -166,14 +158,14 @@ function ConnectionScreen(props: Props) {
   const connectionFooter = (
     <TouchableOpacity
       testID="ReportBtn"
-      style={styles.reportBtn}
+      style={styles.flagBtn}
       onPress={() => {
         navigation.navigate('ReportReason', {
           connectionId: connection.id,
         });
       }}
     >
-      <Text style={styles.reportBtnText}>Report this person</Text>
+      <Text style={styles.flagBtnText}>Report this person</Text>
     </TouchableOpacity>
   );
 
@@ -385,7 +377,7 @@ const styles = StyleSheet.create({
     marginTop: DEVICE_LARGE ? 16 : 15,
     marginBottom: 10,
   },
-  reportBtn: {
+  flagBtn: {
     width: '90%',
     borderRadius: 100,
     borderColor: ORANGE,
@@ -397,7 +389,7 @@ const styles = StyleSheet.create({
     paddingTop: DEVICE_LARGE ? 13 : 12,
     paddingBottom: DEVICE_LARGE ? 13 : 12,
   },
-  reportBtnText: {
+  flagBtnText: {
     fontFamily: 'Poppins-Bold',
     fontSize: DEVICE_LARGE ? 16 : 14,
     color: ORANGE,

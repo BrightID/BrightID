@@ -11,7 +11,6 @@ import {
   RefreshControl,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import EmptyList from '@/components/Helpers/EmptyList';
 import Spinner from 'react-native-spinkit';
 import { ORANGE } from '@/utils/constants';
@@ -35,7 +34,6 @@ export const AppsScreen = () => {
   const isSponsored = useSelector((state) => state.user.isSponsored);
   const linkedContexts = useSelector((state) => state.apps.linkedContexts);
   const [refreshing, setRefreshing] = useState(false);
-  const { t } = useTranslation();
 
   const refreshApps = useCallback(() => {
     setRefreshing(true);
@@ -63,10 +61,7 @@ export const AppsScreen = () => {
     if (isValidContext) {
       handleAppContext(route.params);
     } else {
-      Alert.alert(
-        t('apps.alert.title.invalidContext'), 
-        t('apps.alert.text.invalidContext', {context: `${context}`})
-      )
+      Alert.alert('Failed', `${context} is not a valid context!`);
     }
     // reset params
     navigation.setParams({
@@ -80,10 +75,10 @@ export const AppsScreen = () => {
     const pendingLink = find(propEq('state', 'pending'))(linkedContexts);
     let msg, waiting;
     if (pendingLink) {
-      msg = t('apps.text.pendingLink', {context: `${pendingLink.context}`});
+      msg = `Linking your account in ${pendingLink.context}\n to your BrightID ...`;
       waiting = true;
     } else if (!isSponsored) {
-      msg = t('apps.text.notSponsored');
+      msg = "You're not sponsored.\nPlease find an app below to sponsor you.";
       waiting = false;
     } else {
       msg = '';
@@ -122,7 +117,7 @@ export const AppsScreen = () => {
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => <AppCard {...item} />}
-          ListEmptyComponent={<EmptyList title={t('apps.text.noApps')} iconType="flask" />}
+          ListEmptyComponent={<EmptyList title="No Apps" iconType="flask" />}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={refreshApps} />
           }

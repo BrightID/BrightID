@@ -1,6 +1,5 @@
 // @flow
 /* global element:false, by:false, waitFor:false, device: false */
-import i18next from 'i18next';
 import {
   createBrightID,
   createFakeConnection,
@@ -49,7 +48,6 @@ describe('Connection details', () => {
       .withTimeout(20000);
 
     await navigateHome();
-    await expectHomescreen();
 
     // interconnect first 2 fake accounts to have mutual connections
     await interConnect(0);
@@ -64,8 +62,6 @@ describe('Connection details', () => {
     await element(by.id('editGroupName')).typeText(groupName);
     await element(by.id('editGroupName')).tapReturnKey();
     await element(by.id('editGroupPhoto')).tap();
-    // wait 5 seconds until group photo be loaded
-    await new Promise((r) => setTimeout(r, 5000));
 
     // invite cofounder
     await expect(element(by.id('nextBtn'))).toBeVisible();
@@ -78,6 +74,7 @@ describe('Connection details', () => {
     // make the first 2 available connections co-founder
     await element(by.id('checkCoFounderBtn')).atIndex(0).tap();
     await element(by.id('checkCoFounderBtn')).atIndex(1).tap();
+
     // create group
     await element(by.id('createNewGroupBtn')).tap();
     await expect(element(by.id('createNewGroupBtn'))).not.toBeVisible();
@@ -89,7 +86,6 @@ describe('Connection details', () => {
 
     // Have first 2 accounts accept group invites
     await navigateHome();
-    await expectHomescreen();
     await joinAllGroups(0);
     await joinAllGroups(1);
 
@@ -100,15 +96,11 @@ describe('Connection details', () => {
     await new Promise((r) => setTimeout(r, 30000));
     // refresh
     await element(by.id('groupsFlatList')).swipe('down');
-
-    // Text changes to "Known members" when all invited people have joined
-    await waitFor(
-      element(by.text(i18next.t('groups.label.knownMembers'))).atIndex(0),
-    )
+    // Text changes to "Known members: " when all invited people have joined
+    await waitFor(element(by.text('Known members: ')).atIndex(0))
       .toBeVisible()
       .withTimeout(30000);
     await navigateHome();
-    await expectHomescreen();
   });
 
   describe('Information', () => {
@@ -121,9 +113,7 @@ describe('Connection details', () => {
       await expectConnectionScreen();
     });
     afterAll(async () => {
-      await element(by.id('header-back')).tap();
       await navigateHome();
-      await expectHomescreen();
     });
     test('should show correct connection level', async () => {
       await expect(element(by.id('ConnectionLevelText'))).toHaveText(
@@ -185,9 +175,7 @@ describe('Connection details', () => {
     });
 
     afterAll(async () => {
-      await element(by.id('header-back')).tap();
       await navigateHome();
-      await expectHomescreen();
     });
 
     test('should change connection level', async () => {

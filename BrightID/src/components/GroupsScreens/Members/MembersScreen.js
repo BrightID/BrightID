@@ -11,7 +11,6 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { innerJoin } from 'ramda';
-import { useTranslation } from 'react-i18next';
 import api from '@/api/brightId';
 import { leaveGroup, dismissFromGroup } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
@@ -48,7 +47,6 @@ function MembersScreen(props: MembersScreenProps) {
   });
 
   const [contextActions, setContextActions] = useState<Array<string>>([]);
-  const { t } = useTranslation();
   const { showActionSheetWithOptions } = useActionSheet();
 
   // set up top right button in header
@@ -58,25 +56,25 @@ function MembersScreen(props: MembersScreenProps) {
       const handleLeaveGroup = () => {
         const buttons = [
           {
-            text: t('common.alert.cancel'),
+            text: 'Cancel',
             style: 'cancel',
           },
           {
-            text: t('common.alert.ok'),
+            text: 'OK',
             onPress: async () => {
               try {
                 await api.leaveGroup(groupID);
                 await dispatch(leaveGroup(group));
                 navigation.goBack();
               } catch (err) {
-                Alert.alert(t('groups.alert.title.errorLeaveGroup'), err.message);
+                Alert.alert('Error leaving group', err.message);
               }
             },
           },
         ];
         Alert.alert(
-          t('groups.alert.title.leaveGroup'),
-          t('groups.alert.text.leaveGroup'),
+          `Leave Group`,
+          `Are you sure you want to leave this group?`,
           buttons,
           {
             cancelable: true,
@@ -117,7 +115,7 @@ function MembersScreen(props: MembersScreenProps) {
                   options: contextActions,
                   cancelButtonIndex: contextActions.indexOf(ACTION_CANCEL),
                   destructiveButtonIndex: contextActions.indexOf(ACTION_LEAVE),
-                  title: t('common.actionSheet.title'),
+                  title: `What do you want to do?`,
                   showSeparators: true,
                   textStyle: {
                     color: '#2185D0',
@@ -192,27 +190,24 @@ function MembersScreen(props: MembersScreenProps) {
   const handleDismiss = (user) => {
     const buttons = [
       {
-        text: t('common.alert.cancel'),
+        text: 'Cancel',
         style: 'cancel',
       },
       {
-        text: t('common.alert.ok'),
+        text: 'OK',
         onPress: async () => {
           try {
             await api.dismiss(user.id, groupID);
             await dispatch(dismissFromGroup(user.id, group));
           } catch (err) {
-            Alert.alert(
-              t('groups.alert.title.errorDismissMember'), 
-              err.message
-            );
+            Alert.alert('Error dismissing member from the group', err.message);
           }
         },
       },
     ];
     Alert.alert(
-      t('groups.alert.title.dismissMember'),
-      t('groups.alert.text.dismissMember', {name: user.name}),
+      `Dismiss Member`,
+      `Are you sure you want to dismiss ${user.name} from this group?`,
       buttons,
       {
         cancelable: true,
@@ -223,18 +218,18 @@ function MembersScreen(props: MembersScreenProps) {
   const handleAddAdmin = (user) => {
     const buttons = [
       {
-        text: t('common.alert.cancel'),
+        text: 'Cancel',
         style: 'cancel',
       },
       {
-        text: t('common.alert.ok'),
+        text: 'OK',
         onPress: async () => {
           try {
             await api.addAdmin(user.id, groupID);
             await dispatch(addAdmin(user.id, group));
           } catch (err) {
             Alert.alert(
-              t('groups.alert.text.addAdmin', {name: user.name}),
+              `Error making ${user.name} admin for group`,
               err.message,
             );
           }
@@ -242,8 +237,8 @@ function MembersScreen(props: MembersScreenProps) {
       },
     ];
     Alert.alert(
-      t('groups.alert.title.addAdmin'),
-      t('groups.alert.text.addAdmin', {name: user.name}),
+      `Add admin`,
+      `Are you sure you want to make ${user.name} an admin for this group?`,
       buttons,
       {
         cancelable: true,
@@ -286,7 +281,7 @@ function MembersScreen(props: MembersScreenProps) {
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}
               ListEmptyComponent={
-                <EmptyList title={t('groups.text.noMembers')} />
+                <EmptyList title="No known members, invite some..." />
               }
             />
           </View>

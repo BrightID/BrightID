@@ -11,7 +11,6 @@ import {
   StatusBar,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import { getGroupName, ids2connections, knownMemberIDs } from '@/utils/groups';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
@@ -80,7 +79,7 @@ export class GroupsScreen extends React.Component<Props, State> {
   };
 
   render() {
-    const { navigation, groups, hasGroups, t } = this.props;
+    const { navigation, groups, hasGroups } = this.props;
 
     return (
       <>
@@ -112,7 +111,7 @@ export class GroupsScreen extends React.Component<Props, State> {
                 ListEmptyComponent={
                   hasGroups ? (
                     <Text testID="noMatchText" style={styles.emptyText}>
-                      {t('groups.text.noGroupsMatchSearch')}
+                      No group matches your search
                     </Text>
                   ) : (
                     <NoGroups navigation={navigation} />
@@ -207,4 +206,4 @@ function mapStateToProps(state) {
   return { groups, hasGroups };
 }
 
-export default connect(mapStateToProps)(withTranslation()(GroupsScreen));
+export default connect(mapStateToProps)(GroupsScreen);

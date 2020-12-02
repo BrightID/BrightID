@@ -1,22 +1,11 @@
-import i18next from 'i18next';
 import { connection_levels } from './constants';
 
 export const connectionLevelStrings = {
-  [connection_levels.REPORTED]: `✋ ${i18next.t(
-    'pendingConnections.label.reported',
-  )}`,
-  [connection_levels.SUSPICIOUS]: `🤔 ${i18next.t(
-    'pendingConnections.label.suspicious',
-  )}`,
-  [connection_levels.JUST_MET]: `👋 ${i18next.t(
-    'pendingConnections.label.justMet',
-  )}`,
-  [connection_levels.ALREADY_KNOWN]: `😎 ${i18next.t(
-    'pendingConnections.label.alreadyKnown',
-  )}`,
-  [connection_levels.RECOVERY]: `🔐 ${i18next.t(
-    'pendingConnections.label.recovery',
-  )}`,
+  [connection_levels.REPORTED]: '✋ Reported',
+  [connection_levels.SUSPICIOUS]: '🤔 Suspicious',
+  [connection_levels.JUST_MET]: '👋 Just met',
+  [connection_levels.ALREADY_KNOWN]: '😎 Already known',
+  [connection_levels.RECOVERY]: '🔐 Recovery',
 };
 
 export const connectionLevelColors = {

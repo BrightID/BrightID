@@ -36,7 +36,6 @@ import {
 import { createChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
 import { QrCode } from './QrCode';
-import { useTranslation } from 'react-i18next';
 
 /**
  * My Code screen of BrightID
@@ -73,7 +72,6 @@ const PENDING_GROUP_TIMEOUT = 45000;
 export const MyCodeScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { t } = useTranslation();
 
   // GROUP / SINGLE
   const displayChannelType = useSelector(
@@ -177,7 +175,7 @@ export const MyCodeScreen = () => {
       headerTitle: () => {
         const ConnectionTitle = () => (
           <Text style={styles.headerTitle}>
-            {t('qrcode.header.connections', {count: pendingConnectionSize + 1})}
+            {pendingConnectionSize + 1} / 30 Connections
           </Text>
         );
         return myChannel?.type === channel_types.GROUP ? (
@@ -220,15 +218,15 @@ export const MyCodeScreen = () => {
 
   const displayOneToOneInfo = () => {
     Alert.alert(
-      t('qrcode.alert.title.codeSingle'),
-      t('qrcode.alert.text.codeSingle'),
+      'Single-use code',
+      `This QR code can be used to connect with a single user before it expires.`,
     );
   };
 
   const displayManyToManyInfo = () => {
     Alert.alert(
-      t('qrcode.alert.title.codeGroup'),
-      t('qrcode.alert.text.codeGroup'),
+      'Group code',
+      'This QR code is designed for many people to connect simultaneously.',
     );
   };
 
@@ -249,7 +247,7 @@ export const MyCodeScreen = () => {
           />
         </View>
         <View style={styles.infoTopContainer}>
-          <Text style={styles.infoTopText}>{t('qrcode.label.connectionType')} </Text>
+          <Text style={styles.infoTopText}>Connection Type: </Text>
           {displayChannelType === channel_types.GROUP ? (
             <TouchableOpacity
               style={{ flexDirection: 'row' }}
@@ -257,7 +255,7 @@ export const MyCodeScreen = () => {
               testID="ConnectionInfoGroupBtn"
             >
               <Text testID="group-code" style={styles.infoTopText}>
-                {t('qrcode.text.codeGroup')}
+                Group code{' '}
               </Text>
               <Material name="information-variant" size={18} color="#4a4a4a" />
             </TouchableOpacity>
@@ -268,7 +266,7 @@ export const MyCodeScreen = () => {
               testID="ConnectionInfoSingleBtn"
             >
               <Text testID="single-use-code" style={styles.infoTopText}>
-              {t('qrcode.text.codeSingle')}
+                Single-use code{' '}
               </Text>
               <Material name="information-variant" size={18} color="#4a4a4a" />
             </TouchableOpacity>
@@ -279,7 +277,7 @@ export const MyCodeScreen = () => {
         </View>
 
         <View style={styles.bottomContainer}>
-          <Text style={styles.infoBottomText}>{t('qrcode.text.canAlso')}</Text>
+          <Text style={styles.infoBottomText}>Or you can also...</Text>
           <TouchableOpacity
             testID="MyCodeToScanCodeBtn"
             style={styles.scanCodeButton}
@@ -292,7 +290,7 @@ export const MyCodeScreen = () => {
               width={DEVICE_LARGE ? 22 : 20}
               height={DEVICE_LARGE ? 22 : 20}
             />
-            <Text style={styles.scanCodeText}>{t('qrcode.button.scanCode')}</Text>
+            <Text style={styles.scanCodeText}>Scan a Code</Text>
           </TouchableOpacity>
         </View>
       </View>

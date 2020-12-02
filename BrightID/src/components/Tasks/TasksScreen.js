@@ -7,7 +7,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
-import { useTranslation } from 'react-i18next';
 import TaskCardController from './TaskCardController';
 import { TasksProgress } from './TasksProgress';
 import {
@@ -29,7 +28,6 @@ const FlatListItemSeparator = () => {
 
 export const TasksScreen = function () {
   const dispatch = useDispatch();
-  const { t } = useTranslation();
   const taskIds = useSelector(selectTaskIds);
   const completedTaskIds = useSelector(selectCompletedTaskIds);
   let headerHeight = useHeaderHeight();
@@ -58,7 +56,7 @@ export const TasksScreen = function () {
       <TasksProgress
         currentSteps={completedTaskIds.length}
         totalSteps={taskIds.length}
-        label={t('achievements.progress.title')}
+        label="Completion:"
       />
       <FlatList
         data={taskIds}

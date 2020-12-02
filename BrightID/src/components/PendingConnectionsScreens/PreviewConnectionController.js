@@ -45,6 +45,10 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
 
   const navigation = useNavigation();
 
+  const brightidVerified = pendingConnection.verifications?.includes(
+    'BrightID',
+  );
+
   const setLevelHandler = (level: ConnectionLevel) => {
     ratingHandler(pendingConnection.id, level, index);
   };
@@ -89,6 +93,7 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
         <ReconnectView
           pendingConnection={pendingConnection}
           existingConnection={existingConnection}
+          brightIdVerified={brightidVerified}
           setLevelHandler={setLevelHandler}
           abuseHandler={abuseHandler}
         />
@@ -96,6 +101,7 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
         <PreviewConnectionView
           index={index}
           pendingConnection={pendingConnection}
+          brightIdVerified={brightidVerified}
           setLevelHandler={setLevelHandler}
           photoTouchHandler={photoTouchHandler}
         />

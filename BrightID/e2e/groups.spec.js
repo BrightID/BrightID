@@ -1,6 +1,5 @@
 /* global device:false, element:false, by:false, waitFor:false */
 
-import i18next from 'i18next';
 import {
   createBrightID,
   createFakeConnection,
@@ -201,14 +200,10 @@ describe('Groups', () => {
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
       // Text changes to "Known members: " when all invited people have joined
-      await waitFor(
-        element(by.text(i18next.t('groups.label.knownMembers'))).atIndex(0),
-      )
+      await waitFor(element(by.text('Known members: ')).atIndex(0))
         .toBeVisible()
         .withTimeout(30000);
-      await waitFor(
-        element(by.text(i18next.t('groups.label.knownMembers'))).atIndex(1),
-      )
+      await waitFor(element(by.text('Known members: ')).atIndex(1))
         .toBeVisible()
         .withTimeout(30000);
     });

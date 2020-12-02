@@ -1,7 +1,6 @@
 // @flow
 
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { photoDirectory } from '@/utils/filesystem';
@@ -47,7 +46,6 @@ function MemberCard(props: MemberCardProps) {
   const [contextActions, setContextActions] = useState<Array<string>>([]);
   const [flagged, setFlagged] = useState(false);
   const [imgErr, setImgErr] = useState(false);
-  const { t } = useTranslation();
   const { showActionSheetWithOptions } = useActionSheet();
 
   // set possible actions depending on user and member admin status
@@ -105,7 +103,7 @@ function MemberCard(props: MemberCardProps) {
         options: contextActions,
         cancelButtonIndex: contextActions.indexOf(ACTION_CANCEL),
         destructiveButtonIndex: contextActions.indexOf(ACTION_DISMISS),
-        title: t('common.actionSheet.title'),
+        title: `What do you want to do?`,
         showSeparators: true,
         textStyle: {
           color: '#2185D0',
@@ -150,11 +148,11 @@ function MemberCard(props: MemberCardProps) {
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
           <View style={styles.statusContainer}>
-            {flagged ? <Text style={styles.flagged}>{t('common.tag.reported')}</Text> : null}
+            {flagged ? <Text style={styles.flagged}>(reported)</Text> : null}
           </View>
           {connectionDate > 0 && (
             <Text style={styles.connectedText}>
-              {t('common.tag.connectionDate', {date: moment(connectionDate).fromNow()})}
+              Connected {moment(connectionDate).fromNow()}
             </Text>
           )}
         </View>

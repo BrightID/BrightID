@@ -7,7 +7,6 @@ import {
   FlatList,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import store from '@/store';
 import emitter from '@/emitter';
 import { clearNewGroupCoFounders } from '@/actions';
@@ -87,7 +86,6 @@ export class NewGroupScreen extends React.Component<Props> {
   };
 
   renderButtonOrSpinner = () => {
-    const { t } = this.props;
     const buttonDisabled = this.props.newGroupCoFounders.length < 2;
     return !this.state.creating ? (
       <View style={styles.createGroupButtonContainer}>
@@ -101,7 +99,7 @@ export class NewGroupScreen extends React.Component<Props> {
           }
           disabled={buttonDisabled}
         >
-          <Text style={styles.buttonInnerText}>{t('createGroup.button.createGroup')}</Text>
+          <Text style={styles.buttonInnerText}>Create Group</Text>
         </TouchableOpacity>
       </View>
     ) : (
@@ -122,7 +120,6 @@ export class NewGroupScreen extends React.Component<Props> {
   );
 
   render() {
-    const { t } = this.props;
     const connections = this.filterConnections();
     return (
       <>
@@ -130,9 +127,9 @@ export class NewGroupScreen extends React.Component<Props> {
         <View style={styles.container}>
           <View testID="newGroupScreen" style={styles.mainContainer}>
             <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>{t('createGroup.label.cofounders')}</Text>
+              <Text style={styles.titleText}>CO-FOUNDERS</Text>
               <Text style={styles.infoText}>
-                {t('createGroup.text.cofounders')}
+                To create a group, you must select two co-founders
               </Text>
             </View>
             <View style={styles.mainContainer}>
@@ -149,7 +146,7 @@ export class NewGroupScreen extends React.Component<Props> {
                 />
               ) : (
                 <View>
-                  <Text style={styles.emptyText}>{t('createGroup.text.noConnections')}</Text>
+                  <Text style={styles.emptyText}>No connections</Text>
                 </View>
               )}
             </View>
@@ -273,4 +270,4 @@ export default connect(({ connections, groups }) => ({
   newGroupCoFounders: groups.newGroupCoFounders,
   connections: connections.connections,
   searchParam: connections.searchParam,
-}))(withTranslation()(NewGroupScreen));
+}))(NewGroupScreen);

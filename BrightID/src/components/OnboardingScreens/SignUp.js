@@ -15,7 +15,6 @@ import {
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import Spinner from 'react-native-spinkit';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { takePhoto, chooseImage } from '@/utils/images';
 import { ORANGE } from '@/utils/constants';
@@ -33,7 +32,6 @@ export const SignUp = ({ navigation }) => {
   const [creatingBrightId, setCreatingBrightId] = useState(false);
   const [editingName, setEditingName] = useState(false);
   const { showActionSheetWithOptions } = useActionSheet();
-  const { t } = useTranslation();
 
   const getPhotoFromCamera = async () => {
     try {
@@ -58,9 +56,9 @@ export const SignUp = ({ navigation }) => {
   const handleAddPhoto = () => {
     showActionSheetWithOptions(
       {
-        options: [t('common.photoActionSheet.takePhoto'), t('common.photoActionSheet.choosePhoto'), t('common.actionSheet.cancel')],
+        options: ['Take Photo', 'Choose From Library', 'cancel'],
         cancelButtonIndex: 2,
-        title: t('common.photoActionSheet.title'),
+        title: 'Select photo',
         showSeparators: true,
         textStyle: {
           color: '#2185D0',
@@ -92,17 +90,17 @@ export const SignUp = ({ navigation }) => {
       if (name.length < 2) {
         setCreatingBrightId(false);
         return Alert.alert(
-          t('common.alert.formIncomplete'),
+          'BrightID Form Incomplete',
           name.length === 0
-            ? t('signup.alert.nameMissing')
-            : t('signup.alert.nameTooShort'),
+            ? 'Please add your name'
+            : 'Your name must be at least 2 characters',
         );
       }
       if (!finalBase64) {
         setCreatingBrightId(false);
         return Alert.alert(
-          t('common.alert.formIncomplete'),
-          t('signup.alert.photoMissing'),
+          'BrightID Form Incomplete',
+          'A photo is required. Please press enter on the keyboard.',
         );
       }
       const result = await dispatch(
@@ -134,7 +132,7 @@ export const SignUp = ({ navigation }) => {
               testID="editPhoto"
               onPress={handleAddPhoto}
               accessible={true}
-              accessibilityLabel={t('common.accessibilityLabel.editPhoto')}
+              accessibilityLabel="edit photo"
             >
               <Image style={styles.photo} source={{ uri: finalBase64 }} />
             </TouchableOpacity>
@@ -144,9 +142,9 @@ export const SignUp = ({ navigation }) => {
               onPress={handleAddPhoto}
               style={styles.addPhoto}
               accessible={true}
-              accessibilityLabel={t('common.accessibilityLabel.addPhoto')}
+              accessibilityLabel="add photo"
             >
-              <Text style={styles.addPhotoText}>{t('signup.button.addPhoto')}</Text>
+              <Text style={styles.addPhotoText}>Add Photo</Text>
               <SimpleLineIcons
                 size={DEVICE_LARGE ? 42 : 36}
                 name="camera"
@@ -158,13 +156,13 @@ export const SignUp = ({ navigation }) => {
           )}
         </View>
         <View style={styles.textInputContainer}>
-          <Text style={styles.midText}>{t('signup.text.whatsYouName')}</Text>
+          <Text style={styles.midText}>What do your friends know you by?</Text>
           <TextInput
             testID="editName"
             ref={textBoxRef}
             onChangeText={setName}
             value={name}
-            placeholder={t('signup.placeholder.name')}
+            placeholder="Name"
             placeholderTextColor="#9e9e9e"
             style={styles.textInput}
             autoCapitalize="words"
@@ -182,7 +180,8 @@ export const SignUp = ({ navigation }) => {
         </View>
         <View style={styles.buttonContainer}>
           <Text style={styles.buttonInfoText}>
-            {t('signup.text.infoNotShared')}
+            Your name and photo will never be shared with apps or stored on
+            servers
           </Text>
           {!creatingBrightId ? (
             <View>
@@ -193,20 +192,20 @@ export const SignUp = ({ navigation }) => {
                   createBrightID();
                 }}
               >
-                <Text style={styles.buttonInnerText}>{t('signup.button.createAccount')}</Text>
+                <Text style={styles.buttonInnerText}>Create My BrightID</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 testID="recoverBrightIDBtn"
                 onPress={() => navigation.navigate('Restore')}
                 style={styles.recoverButton}
-                accessibilityLabel={t('signup.button.recoverAccount')}
+                accessibilityLabel="Recover BrightID"
               >
-                <Text style={styles.recoverButtonText}>{t('signup.button.recoverAccount')}</Text>
+                <Text style={styles.recoverButtonText}>Recover BrightID</Text>
               </TouchableOpacity>
             </View>
           ) : (
             <View style={styles.loader} testID="creatingIDSpinner">
-              <Text>{t('signup.text.creatingAccount')}</Text>
+              <Text>Creating Bright ID...</Text>
               <Spinner isVisible={true} size={47} type="Wave" color="#4990e2" />
             </View>
           )}

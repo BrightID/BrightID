@@ -6,7 +6,6 @@ import { BlurView } from '@react-native-community/blur';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useTranslation } from 'react-i18next';
 import { ORANGE, report_reasons } from '../../utils/constants';
 import { reportConnection } from './models/reportConnection';
 
@@ -29,7 +28,6 @@ const reasonStrings = {
 
 const ReportReasonModal = ({ route, navigation }: props) => {
   const { connectionId, successCallback } = route.params;
-  const { t } = useTranslation();
   const connection: connection = useSelector((state: State) =>
     state.connections.connections.find((conn) => conn.id === connectionId),
   );
@@ -96,9 +94,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
         <View style={styles.message}>
           <Material name="information" size={26} color="#2185D0" />
           <Text style={styles.messageText}>
-            {t('connections.flagActionSheet.infoFlagImpact', {
-              name: connection.name,
-            })}
+            {`Note that reporting ${connection.name} will negatively affect their BrightID verification, and the report might be shown to other users.`}
           </Text>
         </View>
         <View style={styles.divider} />

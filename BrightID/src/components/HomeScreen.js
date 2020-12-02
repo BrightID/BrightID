@@ -15,7 +15,6 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { SvgXml } from 'react-native-svg';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import { setActiveNotification } from '@/actions';
 import { retrieveImage } from '@/utils/filesystem';
 import fetchUserInfo from '@/actions/fetchUserInfo';
@@ -67,8 +66,6 @@ export const HomeScreen = (props) => {
 
   const [profilePhoto, setProfilePhoto] = useState('');
 
-  const { t } = useTranslation();
-
   useFocusEffect(
     useCallback(() => {
       dispatch(fetchUserInfo());
@@ -85,9 +82,9 @@ export const HomeScreen = (props) => {
     } else {
       showActionSheetWithOptions(
         {
-          options: [t('home.chatActionSheet.discord'), t('common.actionSheet.cancel')],
+          options: ['BrightID Discord', 'cancel'],
           cancelButtonIndex: 1,
-          title: t('home.chatActionSheet.title'),
+          title: `Like to chat with us?`,
           showSeparators: true,
           textStyle: {
             color: '#2185D0',
@@ -159,7 +156,7 @@ export const HomeScreen = (props) => {
               console.log(e.error);
             }}
             accessible={true}
-            accessibilityLabel={t('common.accessibilityLabel.profilePhoto')}
+            accessibilityLabel="profile photo"
           />
         ) : null}
         <View style={styles.verifyNameContainer} testID="homeScreen">
@@ -167,6 +164,7 @@ export const HomeScreen = (props) => {
             <Text testID="EditNameBtn" style={styles.name} numberOfLines={1}>
               {name}
             </Text>
+
             {verified && (
               <SvgXml
                 style={styles.verificationSticker}
@@ -178,9 +176,9 @@ export const HomeScreen = (props) => {
           </View>
           <View style={styles.profileDivider} />
           {verified ? (
-            <Text style={styles.verified}>{t('home.label.statusVerified')}</Text>
+            <Text style={styles.verified}>verified</Text>
           ) : (
-            <Text style={styles.unverified}>{t('home.label.statusUnverified')}</Text>
+            <Text style={styles.unverified}>unverified</Text>
           )}
         </View>
       </View>
@@ -198,7 +196,7 @@ export const HomeScreen = (props) => {
             {connectionsCount}
           </Text>
           <View style={styles.countsBorder} />
-          <Text style={styles.countsDescriptionText}>{t('home.button.connections')}</Text>
+          <Text style={styles.countsDescriptionText}>Connections</Text>
         </TouchableOpacity>
         <TouchableOpacity
           testID="groupsBtn"
@@ -212,7 +210,7 @@ export const HomeScreen = (props) => {
             {groupsCount}
           </Text>
           <View style={styles.countsBorder} />
-          <Text style={styles.countsDescriptionText}>{t('home.button.groups')}</Text>
+          <Text style={styles.countsDescriptionText}>Groups</Text>
         </TouchableOpacity>
         <TouchableOpacity
           testID="appsBtn"
@@ -230,12 +228,12 @@ export const HomeScreen = (props) => {
             {linkedContextsCount}
           </Text>
           <View style={styles.countsBorder} />
-          <Text style={styles.countsDescriptionText}>{t('home.button.apps')}</Text>
+          <Text style={styles.countsDescriptionText}>Apps</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.bottomOrangeContainer}>
         <View style={styles.connectContainer}>
-          <Text style={styles.newConnectionText}>{t('home.label.createNewConnection')}</Text>
+          <Text style={styles.newConnectionText}>Create a New Connection</Text>
           <TouchableOpacity
             testID="MyCodeBtn"
             style={styles.connectButton}
@@ -244,14 +242,14 @@ export const HomeScreen = (props) => {
               navigation.navigate('MyCode');
             }}
             accessible={true}
-            accessibilityLabel={t('home.accessibilityLabel.connect')}
+            accessibilityLabel="Connect"
           >
             <SvgXml
               xml={qricon}
               width={DEVICE_LARGE ? 25 : 20}
               height={DEVICE_LARGE ? 25 : 20}
             />
-            <Text style={styles.connectText}>{t('home.button.myCode')}</Text>
+            <Text style={styles.connectText}>My Code</Text>
           </TouchableOpacity>
           <TouchableOpacity
             testID="ScanCodeBtn"
@@ -261,14 +259,14 @@ export const HomeScreen = (props) => {
               navigation.navigate('ScanCode');
             }}
             accessible={true}
-            accessibilityLabel={t('home.accessibilityLabel.connect')}
+            accessibilityLabel="Connect"
           >
             <SvgXml
               xml={cameraIcon}
               width={DEVICE_LARGE ? 25 : 20}
               height={DEVICE_LARGE ? 25 : 20}
             />
-            <Text style={styles.connectText}>{t('home.button.scanCode')}</Text>
+            <Text style={styles.connectText}>Scan a Code</Text>
           </TouchableOpacity>
           <TouchableOpacity
             testID="JoinCommunityBtn"
@@ -281,7 +279,7 @@ export const HomeScreen = (props) => {
               xml={forumIcon}
             />
             <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }}>
-              <Text style={styles.communityLink}>{t('home.link.community')}</Text>
+              <Text style={styles.communityLink}>Join the Community</Text>
             </View>
           </TouchableOpacity>
         </View>

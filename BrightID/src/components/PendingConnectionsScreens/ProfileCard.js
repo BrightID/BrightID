@@ -21,13 +21,13 @@ type ProfileCardProps = {
   photoType: 'base64' | 'file',
   photoTouchHandler: (photo: string, type: 'base64' | 'file') => any,
   name: string,
-  verified: boolean,
+  brightIdVerified: boolean,
   photoSize: 'small' | 'large',
 };
 
 export const ProfileCard = (props: ProfileCardProps) => {
   const {
-    verified,
+    brightIdVerified,
     name,
     photoTouchHandler,
     photo,
@@ -57,7 +57,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
       </TouchableWithoutFeedback>
       <View style={styles.connectNameContainer}>
         <Text style={styles.connectName}>{name}</Text>
-        {verified && (
+        {brightIdVerified && (
           <View style={styles.verificationSticker}>
             <SvgXml width="16" height="16" xml={verificationSticker} />
           </View>

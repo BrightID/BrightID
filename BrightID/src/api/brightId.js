@@ -427,13 +427,6 @@ class NodeApi {
     return res.data.data;
   }
 
-  async getUserProfile(id: string) {
-    const requester = store.getState().user.id;
-    let res = await this.api.get(`/users/${id}/profile/${requester}`);
-    NodeApi.throwOnError(res);
-    return res.data.data;
-  }
-
   async getOperationState(opHash: string) {
     let res = await this.api.get(`/operations/${opHash}`);
     if (res.status === 404) {

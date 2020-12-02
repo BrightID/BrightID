@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { StyleSheet, Image, Text, View } from 'react-native';
-import { Trans } from 'react-i18next';
 
 type Props = {};
 
@@ -26,10 +25,18 @@ export default class BrightIdOnboard extends React.Component<Props> {
           />
         </View>
         <View style={styles.top}>
-          <Trans
-            i18nKey="onboarding.text.intro"
-            components={{text: <Text style={styles.secondaryText}/>}}
-          />
+          <Text style={styles.secondaryText}>
+            BrightID uses the people you know{' '}
+          </Text>
+          <Text style={styles.secondaryText}>
+            to enforce one-account-per-person
+          </Text>
+          <Text style={styles.secondaryText}>
+            for important applications like
+          </Text>
+          <Text style={styles.secondaryText}>
+            voting and universal basic income.
+          </Text>
         </View>
       </View>
     );

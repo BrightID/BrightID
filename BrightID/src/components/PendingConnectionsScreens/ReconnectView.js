@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { ConnectionStats } from './ConnectionStats';
 import { ProfileCard } from './ProfileCard';
@@ -14,12 +13,10 @@ import {
 } from '../../utils/connectionLevelStrings';
 import { retrieveImage } from '../../utils/filesystem';
 
-// percentage determines reported warning
-const REPORTED_PERCENTAGE = 0.1;
-
 type ReconnectViewProps = {
   pendingConnection: PendingConnection,
   existingConnection: connection,
+  brightIdVerified: boolean,
   setLevelHandler: (level: ConnectionLevel) => any,
   abuseHandler: () => any,
 };
@@ -27,16 +24,12 @@ type ReconnectViewProps = {
 export const ReconnectView = ({
   pendingConnection,
   existingConnection,
+  brightIdVerified,
   setLevelHandler,
   abuseHandler,
 }: ReconnectViewProps) => {
   const navigation = useNavigation();
   const [identicalProfile, setIdenticalProfile] = useState(true);
-  const { t } = useTranslation();
-
-  const reported = pendingConnection.reports.length / (pendingConnection.connectionsNum || 1) >= REPORTED_PERCENTAGE;
-  const brightIdVerified = pendingConnection.verifications.map(v => v.name).includes('BrightID');
-
 
   useEffect(() => {
     const compareProfiles = async () => {
@@ -68,12 +61,13 @@ export const ReconnectView = ({
     return (
       <>
         <View style={styles.header} testID="ReconnectScreen">
-          <Text style={styles.headerText}>{t('pendingConnections.title.connectionRequest')}</Text>
+          <Text style={styles.headerText}>Connection Request</Text>
           <Text style={styles.subheaderText}>
-            {t('connections.text.alreadyConnectedWith', {name: pendingConnection.name})}
+            You already connected with {pendingConnection.name}
           </Text>
           <Text style={styles.lastConnectedText}>
-            {t('connections.tag.lastConnected', {date: moment(parseInt(pendingConnection.connectedAt, 10)).fromNow()})}
+            Last connected{' '}
+            {moment(parseInt(existingConnection.createdAt, 10)).fromNow()}
           </Text>
         </View>
         <View style={styles.profiles}>
@@ -83,23 +77,23 @@ export const ReconnectView = ({
               photo={pendingConnection.photo}
               photoSize="large"
               photoType="base64"
-              verified={brightIdVerified}
+              brightIdVerified={brightIdVerified}
               photoTouchHandler={photoTouchHandler}
-              reported={reported}
+              flagged={pendingConnection.flagged}
             />
           </View>
         </View>
         <View style={styles.countsContainer}>
           <ConnectionStats
-            connectionsNum={pendingConnection.connectionsNum}
-            groupsNum={pendingConnection.groupsNum}
-            mutualConnectionsNum={pendingConnection.mutualConnections.length}
+            numConnections={pendingConnection.connections}
+            numGroups={pendingConnection.groups}
+            numMutualConnections={pendingConnection.mutualConnections}
           />
         </View>
         <View style={styles.connectionLevel}>
           <View style={styles.connectionLevelLabel}>
             <Text style={styles.connectionLevelLabelText}>
-              {t('connections.label.currentConnectionLevel')}
+              Current connection level
             </Text>
           </View>
           <View style={styles.connectionLevel}>
@@ -119,7 +113,7 @@ export const ReconnectView = ({
             onPress={() => setLevelHandler(existingConnection.level)}
             testID="updateBtn"
           >
-            <Text style={styles.updateButtonLabel}>{t('connections.button.reconnect')}</Text>
+            <Text style={styles.updateButtonLabel}>Reconnect</Text>
           </TouchableOpacity>
         </View>
       </>
@@ -128,12 +122,13 @@ export const ReconnectView = ({
     return (
       <>
         <View style={styles.header} testID="ReconnectScreen">
-          <Text style={styles.headerText}>{t('pendingConnections.title.connectionRequest')}</Text>
+          <Text style={styles.headerText}>Connection Request</Text>
           <Text style={styles.subheaderText}>
-            {t('connections.text.alreadyConnectedWith')}
+            You already connected with this account
           </Text>
           <Text style={styles.lastConnectedText}>
-            {t('connections.tag.lastConnected', {date: moment(parseInt(existingConnection.createdAt, 10)).fromNow()})}
+            Last connected{' '}
+            {moment(parseInt(existingConnection.createdAt, 10)).fromNow()}
           </Text>
         </View>
 
@@ -143,44 +138,44 @@ export const ReconnectView = ({
             style={[styles.profile, styles.verticalDivider]}
           >
             <View style={styles.profileHeader}>
-              <Text style={styles.profileHeaderText}>{t('connections.label.oldProfile')}</Text>
+              <Text style={styles.profileHeaderText}>Old Profile</Text>
             </View>
             <ProfileCard
               name={existingConnection.name}
               photo={existingConnection.photo.filename}
               photoSize="small"
               photoType="file"
-              verified={brightIdVerified}
+              brightIdVerified={brightIdVerified}
               photoTouchHandler={photoTouchHandler}
-              reported={reported}
+              flagged={pendingConnection.flagged}
             />
           </View>
           <View testID="newProfileView" style={styles.profile}>
             <View style={styles.profileHeader}>
-              <Text style={styles.profileHeaderText}>{t('connections.label.newProfile')}</Text>
+              <Text style={styles.profileHeaderText}>New Profile</Text>
             </View>
             <ProfileCard
               name={pendingConnection.name}
               photo={pendingConnection.photo}
               photoSize="small"
               photoType="base64"
-              verified={brightIdVerified}
+              brightIdVerified={brightIdVerified}
               photoTouchHandler={photoTouchHandler}
-              reported={reported}
+              flagged={pendingConnection.flagged}
             />
           </View>
         </View>
         <View style={styles.countsContainer}>
           <ConnectionStats
-            connectionsNum={pendingConnection.connectionsNum}
-            groupsNum={pendingConnection.groupsNum}
-            mutualConnectionsNum={pendingConnection.mutualConnections.length}
+            numConnections={pendingConnection.connections}
+            numGroups={pendingConnection.groups}
+            numMutualConnections={pendingConnection.mutualConnections}
           />
         </View>
         <View style={styles.connectionLevel}>
           <View style={styles.connectionLevelLabel}>
             <Text style={styles.connectionLevelLabelText}>
-              {t('connections.label.currentConnectionLevel')}
+              Current connection level
             </Text>
           </View>
           <View style={styles.connectionLevel}>
@@ -200,14 +195,14 @@ export const ReconnectView = ({
             onPress={abuseHandler}
             testID="reportAbuseBtn"
           >
-            <Text style={styles.abuseButtonLabel}>{t('connections.button.reportConnection')}</Text>
+            <Text style={styles.abuseButtonLabel}>Report connection</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.updateButton}
             onPress={() => setLevelHandler(existingConnection.level)}
             testID="updateBtn"
           >
-            <Text style={styles.updateButtonLabel}>{t('connections.button.updateConnection')}</Text>
+            <Text style={styles.updateButtonLabel}>Update connection</Text>
           </TouchableOpacity>
         </View>
       </>

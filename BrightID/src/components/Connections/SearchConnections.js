@@ -12,7 +12,6 @@ import { SvgXml } from 'react-native-svg';
 import { connect } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
-import { withTranslation } from 'react-i18next';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { navigate } from '@/NavigationService';
 import { setSearchParam } from '@/actions';
@@ -36,7 +35,7 @@ class SearchConnections extends React.Component<Props & LocalProps> {
   }
 
   render() {
-    const { sortable, t } = this.props;
+    const { sortable } = this.props;
     return (
       <Animated.View style={styles.container}>
         <TouchableOpacity style={styles.searchIcon}>
@@ -48,7 +47,7 @@ class SearchConnections extends React.Component<Props & LocalProps> {
             styles.searchField,
             DEVICE_IOS && { height: DEVICE_LARGE ? 33 : 26 },
           ]}
-          placeholder={t('Search Connections')}
+          placeholder="Search Connections"
           autoCapitalize="words"
           autoCorrect={false}
           textContentType="none"
@@ -105,4 +104,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(withTranslation()(SearchConnections));
+export default connect()(SearchConnections);
