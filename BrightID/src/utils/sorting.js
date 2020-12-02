@@ -49,6 +49,6 @@ export const defaultSort = () => (dispatch: dispatch, getState: getState) => {
   const {
     connections: { connectionsSort, connections },
   } = getState();
-  let list = connections.slice(0);
+  let list = [...connections];
   dispatch(handleSort(connectionsSort, list));
 };
