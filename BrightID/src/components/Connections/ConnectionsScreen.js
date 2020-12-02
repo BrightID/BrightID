@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 import { StyleSheet, View, StatusBar, FlatList } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
+import { useTranslation } from 'react-i18next';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import { useNavigation } from '@react-navigation/native';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
@@ -35,7 +36,6 @@ const renderItem = ({ item, index }) => {
 };
 
 /** Selectors */
-
 const searchParamSelector = (state) => state.connections.searchParam;
 const connectionsSelector = (state) => state.connections.connections;
 const filtersSelector = (state) => state.connections.filters;
@@ -59,6 +59,7 @@ export const ConnectionsScreen = () => {
   const navigation = useNavigation();
 
   const connections = useSelector((state) => filterConnectionsSelector(state));
+  const { t } = useTranslation();
 
   const handleNewConnection = () => {
     navigation.navigate('MyCode');
@@ -91,7 +92,10 @@ export const ConnectionsScreen = () => {
         refreshing={false}
         onRefresh={onRefresh}
         ListEmptyComponent={
-          <EmptyList iconType="account-off-outline" title="No connections" />
+          <EmptyList
+            iconType="account-off-outline"
+            title={t('connections.text.noConnections')}
+          />
         }
       />
     );
@@ -109,7 +113,6 @@ export const ConnectionsScreen = () => {
 
       <View style={styles.container} testID="connectionsScreen">
         <View style={styles.mainContainer}>{ConnectionList}</View>
-
         <FloatingActionButton onPress={handleNewConnection} />
       </View>
     </>

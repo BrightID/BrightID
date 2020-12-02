@@ -3,11 +3,13 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import CirclePhoto from '@/components/Helpers/CirclePhoto';
 
 export const PendingConnectionCard = ({ pendingConnections }) => {
   const { navigate } = useNavigation();
+  const { t } = useTranslation();
   const circlePhotos = pendingConnections.map(({ photo }) => ({ uri: photo }));
   const firstNames = pendingConnections
     .map(({ name }) => name.split(' ')[0])
@@ -29,7 +31,7 @@ export const PendingConnectionCard = ({ pendingConnections }) => {
               console.log(e);
             }}
             accessible={true}
-            accessibilityLabel="user photo"
+            accessibilityLabel={t('common.accessibilityLabel.userPhoto')}
           />
         )}
       </View>
@@ -42,8 +44,7 @@ export const PendingConnectionCard = ({ pendingConnections }) => {
           adjustsFontSizeToFit={true}
           numberOfLines={1}
         >
-          You have {pendingConnections.length} unconfirmed connection
-          {pendingConnections.length > 1 ? 's' : ''}
+          {t('notifications.item.text.pendingConnections', {count: pendingConnections.length})}
         </Text>
       </View>
       <View style={styles.approvalButtonContainer} />
