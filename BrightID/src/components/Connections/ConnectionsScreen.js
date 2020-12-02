@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react';
 import { StyleSheet, View, StatusBar, FlatList } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import { useNavigation } from '@react-navigation/native';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
@@ -60,6 +60,25 @@ export const ConnectionsScreen = () => {
 
   const connections = useSelector((state) => filterConnectionsSelector(state));
 
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(defaultSort());
+      dispatch(fetchUserInfo());
+    }, [dispatch]),
+  );
+
+  const onRefresh = async () => {
+    try {
+      setRefreshing(true);
+      await dispatch(fetchUserInfo());
+      dispatch(defaultSort());
+      setRefreshing(false);
+    } catch (err) {
+      console.log(err.message);
+      setRefreshing(false);
+    }
+  };
+
   const handleNewConnection = () => {
     navigation.navigate('MyCode');
   };
@@ -108,7 +127,30 @@ export const ConnectionsScreen = () => {
       <View style={styles.orangeTop} />
 
       <View style={styles.container} testID="connectionsScreen">
-        <View style={styles.mainContainer}>{ConnectionList}</View>
+        <View style={styles.mainContainer}>
+          <FlatList
+            style={styles.connectionsContainer}
+            data={connections}
+            keyExtractor={({ id }, index) => id + index}
+            renderItem={renderItem}
+            getItemLayout={getItemLayout}
+            contentContainerStyle={{
+              paddingBottom: 70,
+              paddingTop: 20,
+              flexGrow: 1,
+            }}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            ListEmptyComponent={
+              <EmptyList
+                iconType="account-off-outline"
+                title="No connections"
+              />
+            }
+          />
+        </View>
 
         <FloatingActionButton onPress={handleNewConnection} />
       </View>
