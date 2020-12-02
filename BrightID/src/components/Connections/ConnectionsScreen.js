@@ -3,6 +3,7 @@
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, View, StatusBar, FlatList } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { createSelector } from '@reduxjs/toolkit';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -35,7 +36,6 @@ const renderItem = ({ item, index }) => {
 };
 
 /** Selectors */
-
 const searchParamSelector = (state) => state.connections.searchParam;
 const connectionsSelector = (state) => state.connections.connections;
 const filtersSelector = (state) => state.connections.filters;
@@ -62,6 +62,7 @@ export const ConnectionsScreen = () => {
 
   const [refreshing, setRefreshing] = useState(false);
   const connections = useSelector((state) => filterConnectionsSelector(state));
+  const { t } = useTranslation();
 
   useFocusEffect(
     useCallback(() => {
@@ -115,7 +116,7 @@ export const ConnectionsScreen = () => {
             ListEmptyComponent={
               <EmptyList
                 iconType="account-off-outline"
-                title="No connections"
+                title={t('connections.text.noConnections')}
               />
             }
           />
