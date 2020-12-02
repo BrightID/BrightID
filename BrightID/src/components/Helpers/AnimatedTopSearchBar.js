@@ -25,6 +25,7 @@ const X_TRANSFORM = DEVICE_LARGE ? 250 : 195;
 
 const AnimatedTopSearchBar = ({
   sortable,
+  handleSort,
   setSearchValue,
   setSearchOpen,
   searchOpenSelector,
@@ -109,12 +110,7 @@ const AnimatedTopSearchBar = ({
         }}
       />
       {sortable && (
-        <TouchableOpacity
-          onPress={() => {
-            navigate('SortingConnections');
-          }}
-          style={styles.optionsIcon}
-        >
+        <TouchableOpacity onPress={handleSort} style={styles.optionsIcon}>
           <Ionicon
             size={DEVICE_LARGE ? 22 : 20}
             name="ios-options"

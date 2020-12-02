@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { Animated, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ConnectionsScreen from '@/components/Connections/ConnectionsScreen';
-import SortingConnectionsScreen from '@/components/Connections/SortingConnectionsScreen';
 import SearchConnections from '@/components/Helpers/SearchConnections';
 import TrustedConnectionsScreen from '@/components/Recovery/TrustedConnectionsScreen';
 import { useSelector } from 'react-redux';
@@ -61,11 +60,6 @@ const Connections = () => {
         name="Connections"
         component={ConnectionsScreen}
         options={connectionsScreenOptions}
-      />
-      <Stack.Screen
-        name="SortingConnections"
-        component={SortingConnectionsScreen}
-        options={headerOptions}
       />
       <Stack.Screen
         name="TrustedConnections"

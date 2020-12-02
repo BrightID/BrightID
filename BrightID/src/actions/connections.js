@@ -14,6 +14,7 @@ export const HYDRATE_CONNECTIONS = 'HYDRATE_CONNECTIONS';
 export const FLAG_AND_HIDE_CONNECTION = 'HIDE_CONNECTION';
 export const SHOW_CONNECTION = 'SHOW_CONNECTION';
 export const STALE_CONNECTION = 'STALE_CONNECTION';
+export const SET_FILTERS = 'SET_FILTERS';
 
 /**
  * redux action creator for setting connections array
@@ -103,4 +104,9 @@ export const setConnectionLevel = (id: string, level: ConnectionLevel) => ({
   type: SET_CONNECTION_LEVEL,
   id,
   level,
+});
+
+export const setFilters = (filters: string[]) => ({
+  type: SET_FILTERS,
+  filters,
 });

@@ -46,7 +46,7 @@ function TrustLevelView({ level, connectionId }: props) {
         testID="EditConnectionLevelBtn"
         onPress={setLevel}
       >
-        <Material name="edit" size={DEVICE_LARGE ? 23 : 20} color="#2185D0" />
+        <Material name="edit" size={DEVICE_LARGE ? 22 : 20} color="#2185D0" />
       </TouchableOpacity>
     </View>
   );
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: DEVICE_LARGE ? 22 : 20,
   },
   trustLevelLabel: {
     alignItems: 'center',
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   },
   trustLevel: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'center',
   },
   trustLevelText: {
@@ -76,10 +77,7 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 14 : 12,
   },
   trustLevelButton: {
-    paddingLeft: 5,
-    paddingBottom: 5,
-    paddingTop: 5,
-    paddingRight: 5,
+    padding: 5,
   },
 });
 

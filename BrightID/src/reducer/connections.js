@@ -17,7 +17,9 @@ import {
   SHOW_CONNECTION,
   STALE_CONNECTION,
   SET_CONNECTION_LEVEL,
+  SET_FILTERS,
 } from '@/actions';
+import { connection_levels } from '@/utils/constants';
 
 export const initialState = {
   connections: [],
@@ -25,6 +27,12 @@ export const initialState = {
   connectionsSort: '',
   searchParam: '',
   searchOpen: false,
+  filters: [
+    connection_levels.SUSPICIOUS,
+    connection_levels.JUST_MET,
+    connection_levels.ALREADY_KNOWN,
+    connection_levels.RECOVERY,
+  ],
 };
 
 export const reducer = (
@@ -38,6 +46,7 @@ export const reducer = (
         connections: action.connections.slice(0),
       };
     }
+
     case UPDATE_CONNECTIONS: {
       return {
         ...state,
@@ -163,6 +172,12 @@ export const reducer = (
       return {
         ...state,
         connections,
+      };
+    }
+    case SET_FILTERS: {
+      return {
+        ...state,
+        filters: action.filters,
       };
     }
     case HYDRATE_CONNECTIONS: {
