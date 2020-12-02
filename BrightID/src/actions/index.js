@@ -25,6 +25,7 @@ export {
   SHOW_CONNECTION,
   STALE_CONNECTION,
   SET_CONNECTION_LEVEL,
+  SET_FILTERS,
   setConnections,
   setConnectionsSearch,
   setConnectionsSearchOpen,
@@ -38,6 +39,7 @@ export {
   flagAndHideConnection,
   showConnection,
   staleConnection,
+  setFilters,
 } from './connections';
 
 export {

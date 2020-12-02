@@ -3,8 +3,8 @@
 import api from '@/api/brightId';
 import { deleteConnection } from '@/actions';
 import { backupUser } from '@/components//Recovery/helpers';
-import { connection_levels } from '../../../utils/constants';
-import { defaultSort } from './sortingUtility';
+import { connection_levels } from '@/utils/constants';
+import { defaultSort } from '@/utils/sorting';
 
 export const reportConnection = ({
   id,

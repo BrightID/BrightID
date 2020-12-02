@@ -15,9 +15,9 @@ import { SvgXml } from 'react-native-svg';
 import verificationSticker from '@/static/verification-sticker.svg';
 import moment from 'moment';
 import default_group from '@/static/default_group.svg';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { photoDirectory } from '@/utils/filesystem';
 import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
+import Chevron from '../Icons/Chevron';
 import TrustLevelView from './TrustLevelView';
 
 /**
@@ -241,11 +241,11 @@ function ConnectionScreen(props: Props) {
             onPress={() => toggleSection(section.key)}
             disabled={section.numEntries < 1}
           >
-            <MaterialCommunityIcons
-              style={styles.chevron}
-              size={DEVICE_LARGE ? 40 : 36}
-              name={collapsed ? 'chevron-down' : 'chevron-up'}
+            <Chevron
+              width={DEVICE_LARGE ? 18 : 16}
+              height={DEVICE_LARGE ? 18 : 16}
               color={section.numEntries ? '#0064AE' : '#C4C4C4'}
+              direction={collapsed ? 'down' : 'up'}
             />
           </TouchableOpacity>
         </View>
@@ -258,7 +258,7 @@ function ConnectionScreen(props: Props) {
       <View style={styles.orangeTop} />
       <View testID="ConnectionScreen" style={styles.container}>
         <SectionList
-          contentContainerStyle={{ flexGrow: 1 }}
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
           sections={getSections}
           keyExtractor={(item, index) => item.id}
           renderItem={renderItem}
@@ -404,6 +404,7 @@ const styles = StyleSheet.create({
     marginLeft: DEVICE_LARGE ? 10 : 8,
   },
   header: {
+    marginBottom: 5,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -421,7 +422,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
-  headerCount: {},
+  headerCount: {
+    minWidth: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   headerContentText: {
     fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 17 : 15,
@@ -432,7 +437,9 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     paddingTop: 5,
   },
-  chevron: {},
+  chevron: {
+    margin: DEVICE_LARGE ? 7 : 6,
+  },
   itemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -448,6 +455,7 @@ const styles = StyleSheet.create({
   itemLabel: {},
   itemLabelText: {
     fontFamily: 'Poppins-Medium',
+    // fontSize: DEVICE_LARGE ? 16 : 14,
     fontSize: 15,
     color: '#000',
   },

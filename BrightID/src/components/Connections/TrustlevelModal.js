@@ -1,7 +1,13 @@
 // @flow
 
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { BlurView } from '@react-native-community/blur';
 import { connection_levels } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -61,6 +67,9 @@ const TrustlevelModal = ({ route, navigation }: props) => {
         blurAmount={5}
         reducedTransparencyFallbackColor="black"
       />
+      <TouchableWithoutFeedback onPress={navigation.goBack}>
+        <View style={styles.blurView} />
+      </TouchableWithoutFeedback>
       <View style={styles.modalContainer}>
         <View style={styles.header}>
           <Text style={styles.headerText}>
