@@ -42,7 +42,7 @@ const Avatar = ({
         fill={color}
       />
     </G>
-    {addPicture && (
+    {addPicture ? (
       <>
         <Circle
           cx="34.1378"
@@ -60,7 +60,7 @@ const Avatar = ({
           fill={WHITE}
         />
       </>
-    )}
+    ) : null}
   </Svg>
 );
 

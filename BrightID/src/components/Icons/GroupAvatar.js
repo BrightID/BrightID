@@ -60,7 +60,7 @@ const GroupAvatar = ({
         fill={color}
       />
     </G>
-    {addPicture && (
+    {addPicture ? (
       <>
         <Circle
           cx="48.1034"
@@ -78,7 +78,7 @@ const GroupAvatar = ({
           fill={WHITE}
         />
       </>
-    )}
+    ) : null}
   </Svg>
 );
 
