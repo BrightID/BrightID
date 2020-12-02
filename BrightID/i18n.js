@@ -16,6 +16,7 @@ import * as germanTranslation from './translations/german.json';
  * Used for time formatting and things like `fromNow()` ("[...] ago")
  */
 import 'moment/locale/fr';
+import 'moment/locale/de';
 
 /**
  * RNLocalize : Detection of user locale preference and formats (currency, dates, reading direction, ...)
