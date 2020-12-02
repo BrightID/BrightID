@@ -52,7 +52,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
     case pendingConnection_states.ERROR: {
       ratingView = (
         <Text style={styles.infoText}>
-          {t('Error while connecting. Please try to reconnect.')}
+          {t('pendingConnections.text.errorGeneric')}
         </Text>
       );
       break;

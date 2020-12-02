@@ -17,6 +17,7 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { SvgXml } from 'react-native-svg';
+import { useTranslation } from 'react-i18next';
 import codePush from 'react-native-code-push';
 import verificationSticker from '@/static/verification-sticker.svg';
 import { retrieveImage, photoDirectory } from '@/utils/filesystem';
@@ -107,6 +108,7 @@ const CustomDrawerContent = (props) => {
   const verified = useSelector(verifiedSelector);
   // keep profile photo up to date
   const [profilePhoto, setProfilePhoto] = useState('');
+  const { t } = useTranslation();
 
   retrieveImage(photoFilename).then(setProfilePhoto);
 
@@ -139,7 +141,7 @@ const CustomDrawerContent = (props) => {
       </View>
       <CustomItem
         inactiveTintColor="#000"
-        label="Home"
+        label={t('drawer.label.home')}
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
         icon={getIcon('homeIcon')}
@@ -156,7 +158,7 @@ const CustomDrawerContent = (props) => {
         inactiveBackgroundColor="#fff"
         activeTintColor="#fff"
         activeBackgroundColor={ORANGE}
-        label="Edit Profile"
+        label={t('drawer.label.editProfile')}
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
         icon={getIcon('editProfile')}
@@ -173,7 +175,7 @@ const CustomDrawerContent = (props) => {
         inactiveBackgroundColor="#fff"
         activeTintColor="#fff"
         activeBackgroundColor={ORANGE}
-        label="Achievements"
+        label={t('drawer.label.achievements')}
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
         icon={getIcon('taskList')}
@@ -191,7 +193,7 @@ const CustomDrawerContent = (props) => {
         inactiveBackgroundColor="#fff"
         activeTintColor="#fff"
         activeBackgroundColor={ORANGE}
-        label="Copy Explorer Code"
+        label={t('drawer.label.copyExplorerCode')}
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
         icon={getIcon('explorerCode')}
@@ -206,7 +208,7 @@ const CustomDrawerContent = (props) => {
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
         inactiveTintColor="#000"
-        label="Check for Updates"
+        label={t('drawer.label.checkForUpdates')}
         icon={getIcon('faqIcon')}
         onPress={() => {
           codePush.sync(
@@ -216,7 +218,7 @@ const CustomDrawerContent = (props) => {
             },
             (status) => {
               if (status === codePush.SyncStatus.UP_TO_DATE) {
-                Alert.alert('Check for Update', 'BrightID is up to date.');
+                Alert.alert(t('drawer.alert.title.upToDate'), t('drawer.alert.text.upToDate'));
               }
             },
           );
@@ -226,7 +228,7 @@ const CustomDrawerContent = (props) => {
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
         inactiveTintColor="#000"
-        label="Contact Us"
+        label={t('drawer.label.contactUs')}
         icon={getIcon('contactUs')}
         onPress={() => {
           navigation.reset({

@@ -36,7 +36,7 @@ export class NewGroupScreen extends React.Component<Props> {
     super(props);
     this.state = {
       creating: false,
-      creationState: 'uploading group photo',
+      creationState: 'groups.state.uploadingGroupPhoto',
     };
   }
 
@@ -106,7 +106,7 @@ export class NewGroupScreen extends React.Component<Props> {
       </View>
     ) : (
       <View style={styles.loader}>
-        <Text style={styles.textInfo}>{this.state.creationState} ...</Text>
+        <Text style={styles.textInfo}>{t(this.state.creationState)} ...</Text>
         <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
       </View>
     );

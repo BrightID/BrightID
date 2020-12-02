@@ -21,9 +21,6 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import MemberCard from './MemberCard';
 
-const ACTION_INVITE = 'Invite user';
-const ACTION_LEAVE = 'Leave group';
-const ACTION_CANCEL = 'Cancel';
 
 type MembersScreenProps = {
   navigation: any,
@@ -35,7 +32,7 @@ function MembersScreen(props: MembersScreenProps) {
   const groupID = route.params.group.id;
   const dispatch = useDispatch();
   const connections = useSelector(
-    (state: State) => state.connections.connections,
+  (state: State) => state.connections.connections,
   );
   const user = useSelector((state: State) => state.user);
   const { group, admins, members } = useSelector((state: State) => {
@@ -50,6 +47,11 @@ function MembersScreen(props: MembersScreenProps) {
   const [contextActions, setContextActions] = useState<Array<string>>([]);
   const { t } = useTranslation();
   const { showActionSheetWithOptions } = useActionSheet();
+
+  const ACTION_INVITE = t('groups.groupActionSheet.inviteUser');
+  const ACTION_LEAVE = t('groups.groupActionSheet.leaveGroup');
+  // Not using 'common.actionSheet.cancel' because 'Cancel' instead of 'cancel' (making sure printed text doesn't change after i18n)
+  const ACTION_CANCEL = t('groups.groupActionSheet.cancel');
 
   // set up top right button in header
   useLayoutEffect(() => {

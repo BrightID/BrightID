@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 import { useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { photoDirectory } from '@/utils/filesystem';
@@ -12,9 +13,10 @@ import { useNavigation } from '@react-navigation/native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ICON_SIZE = DEVICE_LARGE ? 36 : 32;
-const ACTION_ADD_ADMIN = 'Add Admin';
-const ACTION_DISMISS = 'Dismiss from group';
-const ACTION_CANCEL = 'Cancel';
+const ACTION_ADD_ADMIN = i18next.t('groups.memberActionSheet.addAdmin');
+const ACTION_DISMISS = i18next.t('groups.memberActionSheet.dismissMember');
+// Not using 'common.actionSheet.cancel' because 'Cancel' instead of 'cancel' (making sure printed text doesn't change after i18n)
+const ACTION_CANCEL = i18next.t('groups.memberActionSheet.cancel');
 
 type MemberCardProps = {
   memberId: string,

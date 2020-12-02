@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import i18next from 'i18next';
 import { BlurView } from '@react-native-community/blur';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,13 +18,13 @@ type props = {
 
 const reasonStrings = {
   [report_reasons.SPAMMER]: {
-    description: 'This person sent me an unwanted connection request',
+    description: i18next.t('connectionDetails.text.reportSpammer'),
   },
   [report_reasons.DUPLICATE]: {
-    description: 'This person created multiple accounts',
+    description: i18next.t('connectionDetails.text.reportDuplicate'),
   },
   [report_reasons.OTHER]: {
-    description: 'Other reason',
+    description: i18next.t('connectionDetails.text.reportOther'),
   },
 };
 
@@ -91,12 +92,12 @@ const ReportReasonModal = ({ route, navigation }: props) => {
       />
       <View style={styles.modalContainer}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Report {connection.name}</Text>
+          <Text style={styles.headerText}>{t('connectionDetails.text.reportConnection', {name: connection.name})}</Text>
         </View>
         <View style={styles.message}>
           <Material name="information" size={26} color="#2185D0" />
           <Text style={styles.messageText}>
-            {t('connections.flagActionSheet.infoFlagImpact', {
+            {t('connectionDetails.text.reportImpact', {
               name: connection.name,
             })}
           </Text>
@@ -121,7 +122,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
                   : styles.submitButtonDisabledText
               }
             >
-              Submit
+              {t('connectionDetails.button.reportSubmit')}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -129,7 +130,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
             style={[styles.modalButton, styles.cancelButton]}
             onPress={cancelReport}
           >
-            <Text style={styles.cancelButtonText}>Cancel</Text>
+            <Text style={styles.cancelButtonText}>{t('connectionDetails.button.reportCancel')}</Text>
           </TouchableOpacity>
         </View>
       </View>

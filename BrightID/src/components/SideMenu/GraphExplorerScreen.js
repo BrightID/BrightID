@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import Clipboard from '@react-native-community/clipboard';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { useHeaderHeight } from '@react-navigation/stack';
@@ -22,10 +23,11 @@ export const GraphExplorerScreen = function () {
   }
   const isDrawerOpen = useIsDrawerOpen();
   const explorerCode = getExplorerCode();
+  const { t } = useTranslation();
 
   const copyText = () => {
     Clipboard.setString(explorerCode);
-    alert('Copied to clipboard!');
+    alert(t('graphExplorer.alert.text.copied'));
   };
 
   return (
@@ -53,7 +55,7 @@ export const GraphExplorerScreen = function () {
               size={DEVICE_LARGE ? 28 : 24}
               color="#000"
             />
-            <Text style={styles.copyText}> Copy Code</Text>
+            <Text style={styles.copyText}>{t('graphExplorer.button.copyCode')}</Text>
           </View>
         </TouchableOpacity>
       ) : (
@@ -65,9 +67,7 @@ export const GraphExplorerScreen = function () {
             style={styles.alertIcon}
           />
           <Text style={styles.setupText}>
-            Setting up backup and recovery is required to access your graph
-            explorer code. Check your notifications or connect to more users to
-            be eligible for backup and recovery.
+            {t('graphExplorer.text.backupRequired')}
           </Text>
         </View>
       )}
@@ -81,8 +81,7 @@ export const GraphExplorerScreen = function () {
           >
             https://explorer.brightid.org{' '}
           </Text>
-          is a website designed to explore the entire BrightID social graph. Use
-          the code above to see your connections in the graph.
+          {t('graphExplorer.text.explorerWebsiteDescription')}
         </Text>
       </View>
     </View>

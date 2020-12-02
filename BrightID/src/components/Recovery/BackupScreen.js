@@ -136,7 +136,7 @@ class BackupScreen extends React.Component<Props, State> {
             <TextInput
               onChangeText={(pass) => this.setState({ pass1: pass })}
               value={pass1}
-              placeholder={t('backup.placeholder.password')}
+              placeholder={t('common.placeholder.password')}
               placeholderTextColor="#9e9e9e"
               style={styles.textInput}
               autoCorrect={false}
@@ -178,10 +178,10 @@ class BackupScreen extends React.Component<Props, State> {
             ) : (
               <View style={styles.loader}>
                 <Text style={styles.textInfo}>
-                  {t('backup.text.uploadingData')}
+                  {t('common.text.uploadingData')}
                 </Text>
                 <Text style={styles.textInfo}>
-                  {t('backup.text.progress', {completed: this.state.completed, total: this.state.total})}
+                  {t('common.text.progress', {completed: this.state.completed, total: this.state.total})}
                 </Text>
                 <Spinner
                   isVisible={true}

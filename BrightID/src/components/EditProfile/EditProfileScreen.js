@@ -391,12 +391,12 @@ export const EditProfileScreen = ({ navigation }) => {
 
         // Prompt the user before leaving the screen
         Alert.alert(
-          'Discard changes?',
-          'You have unsaved changes. Are you sure you want to discard them and leave the screen?',
+          t('profile.alert.title.discardChanges'),
+          t('profile.alert.text.discardChanges'),
           [
-            { text: "Don't leave", style: 'cancel', onPress: () => {} },
+            { text: t('profile.alert.button.dontLeave'), style: 'cancel', onPress: () => {} },
             {
-              text: 'Discard',
+              text: t('profile.alert.button.discard'),
               style: 'destructive',
               onPress: () => navigation.dispatch(e.data.action),
             },
@@ -434,7 +434,7 @@ export const EditProfileScreen = ({ navigation }) => {
             disabled={saveDisabled}
             onPress={saveData}
           >
-            <Text style={styles.saveButtonText}>{t('profile.button.save')}</Text>
+            <Text style={styles.saveButtonText}>{t('common.button.save')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[
@@ -446,7 +446,7 @@ export const EditProfileScreen = ({ navigation }) => {
             disabled={saveDisabled}
             onPress={clearData}
           >
-            <Text style={styles.cancelButtonText}>{t('profile.button.cancel')}</Text>
+            <Text style={styles.cancelButtonText}>{t('common.button.cancel')}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

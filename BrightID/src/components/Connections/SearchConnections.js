@@ -48,7 +48,7 @@ class SearchConnections extends React.Component<Props & LocalProps> {
             styles.searchField,
             DEVICE_IOS && { height: DEVICE_LARGE ? 33 : 26 },
           ]}
-          placeholder={t('Search Connections')}
+          placeholder={t('common.placeholder.searchConnections')}
           autoCapitalize="words"
           autoCorrect={false}
           textContentType="none"

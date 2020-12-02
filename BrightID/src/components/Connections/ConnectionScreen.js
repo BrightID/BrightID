@@ -12,6 +12,7 @@ import {
   SectionList,
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
+import { useTranslation } from 'react-i18next';
 import verificationSticker from '@/static/verification-sticker.svg';
 import moment from 'moment';
 import default_group from '@/static/default_group.svg';
@@ -56,6 +57,7 @@ function ConnectionScreen(props: Props) {
 
   const [groupsCollapsed, setGroupsCollapsed] = useState(true);
   const [connectionsCollapsed, setConnectionsCollapsed] = useState(true);
+  const { t } = useTranslation();
 
   const toggleSection = (key) => {
     switch (key) {
@@ -75,13 +77,13 @@ function ConnectionScreen(props: Props) {
   const getSections = useMemo(() => {
     const data = [
       {
-        title: 'Mutual Connections',
+        title: t('connectionDetails.label.mutualConnections'),
         data: connectionsCollapsed ? [] : mutualConnections,
         key: 'connections',
         numEntries: mutualConnections.length,
       },
       {
-        title: 'Mutual Groups',
+        title: t('connectionDetails.label.mutualGroups'),
         data: groupsCollapsed ? [] : mutualGroups,
         key: 'groups',
         numEntries: mutualGroups.length,
@@ -95,10 +97,10 @@ function ConnectionScreen(props: Props) {
       return <ActivityIndicator size="small" color="#707070" animating />;
     } else {
       if (brightIdVerified) {
-        return <Text style={[styles.badge, styles.verified]}>verified</Text>;
+        return <Text style={[styles.badge, styles.verified]}>{t('common.tag.statusVerified')}</Text>;
       } else {
         return (
-          <Text style={[styles.badge, styles.unverified]}>unverified</Text>
+          <Text style={[styles.badge, styles.unverified]}>{t('common.tag.statusUnverified')}</Text>
         );
       }
     }
@@ -123,17 +125,17 @@ function ConnectionScreen(props: Props) {
                 console.log(e);
               }}
               accessible={true}
-              accessibilityLabel="user photo"
+              accessibilityLabel={t('common.accessibilityLabel.userPhoto')}
             />
           </TouchableWithoutFeedback>
           <View style={styles.connectionInfo}>
             <View style={styles.connectionTimestamp}>
               <Text style={styles.connectionTimestampText}>
                 {loading
-                  ? `Loading...`
-                  : `Connected ${moment(
+                  ? t('connectionDetails.tags.loading')
+                  : t('connectionDetails.tags.connectedAt', {date: `${moment(
                       parseInt(connectedAt, 10),
-                    ).fromNow()}`}
+                    ).fromNow()}`})}
               </Text>
             </View>
           </View>
@@ -173,7 +175,7 @@ function ConnectionScreen(props: Props) {
         });
       }}
     >
-      <Text style={styles.reportBtnText}>Report this person</Text>
+      <Text style={styles.reportBtnText}>{t('connectionDetails.button.report')}</Text>
     </TouchableOpacity>
   );
 

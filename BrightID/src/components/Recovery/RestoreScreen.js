@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import emitter from '@/emitter';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_OS } from '@/utils/deviceConstants';
@@ -61,12 +62,14 @@ class RestoreScreen extends React.Component<Props, State> {
   };
 
   restoreCompleted = async () => {
-    const { navigation } = this.props;
+    const { navigation, t } = this.props;
     this.setState({
       restoreInProgress: false,
     });
-    Alert.alert('Info', 'Your account recovered successfully!', [
-      { text: 'OK', onPress: () => navigation.navigate('Home') },
+    Alert.alert(
+      t('common.alert.info'), 
+      t('restore.alert.text.restoreSuccess'), 
+      [{ text: t('common.alert.ok'), onPress: () => navigation.navigate('Home') },
     ]);
   };
 
@@ -80,7 +83,7 @@ class RestoreScreen extends React.Component<Props, State> {
   };
 
   restore = () => {
-    const { navigation } = this.props;
+    const { navigation, t } = this.props;
     this.setState({ restoreInProgress: true });
     recoverData(this.state.pass)
       .then((result) => {
@@ -91,51 +94,55 @@ class RestoreScreen extends React.Component<Props, State> {
         err instanceof Error ? console.warn(err.message) : console.log(err);
         if (err instanceof Error && err.message === 'bad sigs') {
           Alert.alert(
-            'Uh Oh',
-            'One of your friends is not in your list of trusted connections',
-            [{ text: 'OK', onPress: () => navigation.goBack() }],
+            t('restore.alert.title.notTrusted'),
+            t('restore.alert.text.notTrusted'),
+            [{ text: t('common.alert.ok'), onPress: () => navigation.goBack() }],
           );
         }
       });
   };
 
-  renderButtonOrSpinner = () =>
-    !this.state.restoreInProgress ? (
+  renderButtonOrSpinner = () => {
+    const { t } = this.props;
+    
+    return !this.state.restoreInProgress ? (
       <TouchableOpacity
         style={styles.startRestoreButton}
         onPress={this.restore}
       >
-        <Text style={styles.buttonInnerText}>Start Restore</Text>
+        <Text style={styles.buttonInnerText}>{t('restore.button.startRestore')}</Text>
       </TouchableOpacity>
     ) : (
       <View style={styles.loader}>
         <Text style={styles.textInfo}>
-          Downloading data from backup server ...
+          {t('restore.text.downloadingData')}
         </Text>
         {this.state.total !== 0 && (
           <Text style={styles.textInfo}>
-            {this.state.completed}/{this.state.total} completed
+            {t('common.text.progress', {completed: this.state.completed, total: this.state.total})}
           </Text>
         )}
         <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
       </View>
-    );
+    )
+  };
 
   render() {
     const { pass } = this.state;
+    const { t } = this.props;
     return (
       <>
         <View style={styles.orangeTop} />
         <Container style={styles.container} behavior="padding">
           <View style={styles.textInputContainer}>
             <Text style={styles.textInfo}>
-              Enter a password that you encrypted your backup data with:
+              {t('restore.text.enterPassword')}
             </Text>
             <TextInput
               // eslint-disable-next-line no-shadow
               onChangeText={(pass) => this.setState({ pass })}
               value={pass}
-              placeholder="Password"
+              placeholder={t('common.placeholder.password')}
               placeholderTextColor="#9e9e9e"
               style={styles.textInput}
               autoCorrect={false}
@@ -244,4 +251,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(RestoreScreen);
+export default connect()(withTranslation()(RestoreScreen));

@@ -3,6 +3,7 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialIcons';
+import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import {
   connectionLevelColors,
@@ -17,6 +18,7 @@ type props = {
 
 function TrustLevelView({ level, connectionId }: props) {
   const navigation = useNavigation();
+  const { t } = useTranslation();
   const setLevel = () => {
     navigation.navigate('SetTrustlevel', {
       connectionId,
@@ -25,7 +27,7 @@ function TrustLevelView({ level, connectionId }: props) {
   return (
     <View style={styles.container}>
       <View style={styles.trustLevelLabel}>
-        <Text style={styles.trustLevelLabelText}>Connection Level</Text>
+        <Text style={styles.trustLevelLabelText}>{t('connectionDetails.label.connectionLevel')}</Text>
       </View>
 
       <View style={styles.trustLevel}>

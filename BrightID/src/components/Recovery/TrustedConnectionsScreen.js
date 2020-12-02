@@ -58,11 +58,11 @@ class TrustedConnectionsScreen extends React.Component<Props> {
   );
 
   navigateToBackup = async () => {
-    let { navigation, trustedConnections } = this.props;
+    let { navigation, trustedConnections, t } = this.props;
     if (trustedConnections.length < 3) {
       Alert.alert(
-        'Error',
-        'You need at least three trusted connections for backup.',
+        t('common.alert.error'),
+        t('backup.alert.text.needThreeTrusted'),
       );
     } else {
       setTrustedConnections()
