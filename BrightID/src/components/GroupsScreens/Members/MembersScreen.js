@@ -11,6 +11,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { innerJoin } from 'ramda';
+import { useTranslation } from 'react-i18next';
 import api from '@/api/brightId';
 import { leaveGroup, dismissFromGroup } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
@@ -20,9 +21,6 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import MemberCard from './MemberCard';
 
-const ACTION_INVITE = 'Invite user';
-const ACTION_LEAVE = 'Leave group';
-const ACTION_CANCEL = 'Cancel';
 
 type MembersScreenProps = {
   navigation: any,
@@ -34,7 +32,7 @@ function MembersScreen(props: MembersScreenProps) {
   const groupID = route.params.group.id;
   const dispatch = useDispatch();
   const connections = useSelector(
-    (state: State) => state.connections.connections,
+  (state: State) => state.connections.connections,
   );
   const user = useSelector((state: State) => state.user);
   const { group, admins, members } = useSelector((state: State) => {
@@ -47,7 +45,13 @@ function MembersScreen(props: MembersScreenProps) {
   });
 
   const [contextActions, setContextActions] = useState<Array<string>>([]);
+  const { t } = useTranslation();
   const { showActionSheetWithOptions } = useActionSheet();
+
+  const ACTION_INVITE = t('groups.groupActionSheet.inviteUser');
+  const ACTION_LEAVE = t('groups.groupActionSheet.leaveGroup');
+  // Not using 'common.actionSheet.cancel' because 'Cancel' instead of 'cancel' (making sure printed text doesn't change after i18n)
+  const ACTION_CANCEL = t('groups.groupActionSheet.cancel');
 
   // set up top right button in header
   useLayoutEffect(() => {
@@ -56,25 +60,25 @@ function MembersScreen(props: MembersScreenProps) {
       const handleLeaveGroup = () => {
         const buttons = [
           {
-            text: 'Cancel',
+            text: t('common.alert.cancel'),
             style: 'cancel',
           },
           {
-            text: 'OK',
+            text: t('common.alert.ok'),
             onPress: async () => {
               try {
                 await api.leaveGroup(groupID);
                 await dispatch(leaveGroup(group));
                 navigation.goBack();
               } catch (err) {
-                Alert.alert('Error leaving group', err.message);
+                Alert.alert(t('groups.alert.title.errorLeaveGroup'), err.message);
               }
             },
           },
         ];
         Alert.alert(
-          `Leave Group`,
-          `Are you sure you want to leave this group?`,
+          t('groups.alert.title.leaveGroup'),
+          t('groups.alert.text.leaveGroup'),
           buttons,
           {
             cancelable: true,
@@ -115,7 +119,7 @@ function MembersScreen(props: MembersScreenProps) {
                   options: contextActions,
                   cancelButtonIndex: contextActions.indexOf(ACTION_CANCEL),
                   destructiveButtonIndex: contextActions.indexOf(ACTION_LEAVE),
-                  title: `What do you want to do?`,
+                  title: t('common.actionSheet.title'),
                   showSeparators: true,
                   textStyle: {
                     color: '#2185D0',
@@ -190,24 +194,27 @@ function MembersScreen(props: MembersScreenProps) {
   const handleDismiss = (user) => {
     const buttons = [
       {
-        text: 'Cancel',
+        text: t('common.alert.cancel'),
         style: 'cancel',
       },
       {
-        text: 'OK',
+        text: t('common.alert.ok'),
         onPress: async () => {
           try {
             await api.dismiss(user.id, groupID);
             await dispatch(dismissFromGroup(user.id, group));
           } catch (err) {
-            Alert.alert('Error dismissing member from the group', err.message);
+            Alert.alert(
+              t('groups.alert.title.errorDismissMember'), 
+              err.message
+            );
           }
         },
       },
     ];
     Alert.alert(
-      `Dismiss Member`,
-      `Are you sure you want to dismiss ${user.name} from this group?`,
+      t('groups.alert.title.dismissMember'),
+      t('groups.alert.text.dismissMember', {name: user.name}),
       buttons,
       {
         cancelable: true,
@@ -218,18 +225,18 @@ function MembersScreen(props: MembersScreenProps) {
   const handleAddAdmin = (user) => {
     const buttons = [
       {
-        text: 'Cancel',
+        text: t('common.alert.cancel'),
         style: 'cancel',
       },
       {
-        text: 'OK',
+        text: t('common.alert.ok'),
         onPress: async () => {
           try {
             await api.addAdmin(user.id, groupID);
             await dispatch(addAdmin(user.id, group));
           } catch (err) {
             Alert.alert(
-              `Error making ${user.name} admin for group`,
+              t('groups.alert.text.addAdmin', {name: user.name}),
               err.message,
             );
           }
@@ -237,8 +244,8 @@ function MembersScreen(props: MembersScreenProps) {
       },
     ];
     Alert.alert(
-      `Add admin`,
-      `Are you sure you want to make ${user.name} an admin for this group?`,
+      t('groups.alert.title.addAdmin'),
+      t('groups.alert.text.addAdmin', {name: user.name}),
       buttons,
       {
         cancelable: true,
@@ -281,7 +288,7 @@ function MembersScreen(props: MembersScreenProps) {
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}
               ListEmptyComponent={
-                <EmptyList title="No known members, invite some..." />
+                <EmptyList title={t('groups.text.noMembers')} />
               }
             />
           </View>

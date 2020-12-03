@@ -1,36 +1,62 @@
-// import i18n from 'i18next';
-// import { initReactI18next } from 'react-i18next';
-// import * as RNLocalize from "react-native-localize";
+import i18n from 'i18next';
+import moment from 'moment';
+import { initReactI18next } from 'react-i18next';
+import * as RNLocalize from 'react-native-localize';
 
-// import * as englishTranslation from './translations/english.json';
-// import * as frenchTranslation from './translations/french.json';
+/**
+ * For each supported language, import the corresponding language file.
+ * Consumed by i18next.
+ */
+import * as englishTranslation from './translations/english.json';
+import * as frenchTranslation from './translations/french.json';
+import * as germanTranslation from './translations/german.json';
 
-// /**
-//  * RNLocalize : Detection of user locale preference and formats (currency, dates, reading direction, ...)
-//  * i18next : Execution of the translations through the app given specified language preference
-//  */
+/**
+ * For each supported language other than English, import the corresponding moment locale
+ * Used for time formatting and things like `fromNow()` ("[...] ago")
+ */
+import 'moment/locale/fr';
+import 'moment/locale/de';
 
-// const translations = {
-//   en: {
-//     translation: englishTranslation
-//   },
-//   fr: {
-//     translation: frenchTranslation
-//   }
-// };
+/**
+ * RNLocalize : Detection of user locale preference and formats (currency, dates, reading direction, ...)
+ * i18next : Execution of the translations through the app given specified language preference
+ */
 
-// const { languageTag } = RNLocalize.findBestAvailableLanguage(Object.keys(translations));
+const translations = {
+  de: {
+    translation: germanTranslation,
+  },
+  en: {
+    translation: englishTranslation,
+  },
+  fr: {
+    translation: frenchTranslation,
+  },
+};
 
-// i18n
-//   .use(initReactI18next)
-//   .init({
-//     resources: translations,
-//     lng: languageTag,
-//     fallbackLng: 'en',
-//     keySeparator: false,
-//     interpolation: {
-//       escapeValue: false,
-//     }
-//   });
+const defaultLanguage = {
+  languageTag: 'en-US',
+  isRTL: false,
+};
 
-// export default i18n;
+const { languageTag } =
+  RNLocalize.findBestAvailableLanguage(Object.keys(translations)) ||
+  defaultLanguage;
+
+/**
+ * Moment will use detected language throughout the app.
+ */
+moment.locale(languageTag);
+
+i18n.use(initReactI18next).init({
+  resources: translations,
+  lng: languageTag,
+  fallbackLng: 'en',
+  keySeparator: false,
+  interpolation: {
+    escapeValue: false,
+  },
+});
+
+export default i18n;

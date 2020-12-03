@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { setConnectionsSearch, setConnectionsSearchOpen } from '@/actions';
+import { useNavigation } from '@react-navigation/native';
 import AnimatedTopSearchBar from './AnimatedTopSearchBar';
 
 /**
@@ -10,13 +11,22 @@ import AnimatedTopSearchBar from './AnimatedTopSearchBar';
  * TODO: add search filter in redux actions
  */
 
-const SearchConnections = () => (
-  <AnimatedTopSearchBar
-    sortable={true}
-    setSearchValue={setConnectionsSearch}
-    setSearchOpen={setConnectionsSearchOpen}
-    searchOpenSelector={(state) => state.connections.searchOpen}
-  />
-);
+const SearchConnections = () => {
+  const navigation = useNavigation();
+
+  const handleSort = () => {
+    navigation.navigate('SortConnections');
+  };
+
+  return (
+    <AnimatedTopSearchBar
+      sortable={true}
+      handleSort={handleSort}
+      setSearchValue={setConnectionsSearch}
+      setSearchOpen={setConnectionsSearchOpen}
+      searchOpenSelector={(state) => state.connections.searchOpen}
+    />
+  );
+};
 
 export default SearchConnections;

@@ -81,6 +81,7 @@ describe('Report Connections', () => {
     });
 
     afterAll(async () => {
+      await element(by.id('header-back')).tap();
       await navigateHome();
     });
   });

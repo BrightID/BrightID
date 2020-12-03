@@ -1,33 +1,35 @@
 // @flow
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
 type ConnectionStatsProps = {
-  numConnections: number,
-  numGroups: number,
-  numMutualConnections: number,
+  connectionsNum: number,
+  groupsNum: number,
+  mutualConnectionsNum: number,
 };
 
 export const ConnectionStats = ({
-  numConnections,
-  numGroups,
-  numMutualConnections,
+  connectionsNum,
+  groupsNum,
+  mutualConnectionsNum,
 }: ConnectionStatsProps) => {
+  const { t } = useTranslation();
   return (
     <>
       <View>
-        <Text style={styles.countsNumberText}>{numConnections}</Text>
-        <Text style={styles.countsDescriptionText}>Connections</Text>
+        <Text style={styles.countsNumberText}>{connectionsNum}</Text>
+        <Text style={styles.countsDescriptionText}>{t('pendingConnections.label.connections')}</Text>
       </View>
       <View>
-        <Text style={styles.countsNumberText}>{numGroups}</Text>
-        <Text style={styles.countsDescriptionText}>Groups</Text>
+        <Text style={styles.countsNumberText}>{groupsNum}</Text>
+        <Text style={styles.countsDescriptionText}>{t('pendingConnections.label.groups')}</Text>
       </View>
       <View>
-        <Text style={styles.countsNumberText}>{numMutualConnections}</Text>
-        <Text style={styles.countsDescriptionText}>Mutual Connections</Text>
+        <Text style={styles.countsNumberText}>{mutualConnectionsNum}</Text>
+        <Text style={styles.countsDescriptionText}>{t('pendingConnections.label.mutualConnections')}</Text>
       </View>
     </>
   );
