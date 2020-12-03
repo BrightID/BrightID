@@ -219,7 +219,6 @@ android {
         }
         staging {
             applicationIdSuffix ".staging"
-            versionNameSuffix '-STAGING'
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.staging
