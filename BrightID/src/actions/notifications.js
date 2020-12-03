@@ -1,6 +1,7 @@
 // @flow
 
 import { MISC_TYPE } from '@/utils/constants';
+import i18next from 'i18next';
 
 export const SET_BACKUP_PENDING = 'SET_BACKUP_PENDING';
 export const SET_DEVICE_TOKEN = 'SET_DEVICE_TOKEN';
@@ -52,9 +53,8 @@ export const updateNotifications = () => async (
       dispatch(setBackupPending(true));
       dispatch(
         setActiveNotification({
-          title: 'Backup & Social Recovery',
-          message:
-            'Please select your Trusted Connections to enable social recovery of your BrightID',
+          title: i18next.t('notificationBar.title.socialRecovery'),
+          message: i18next.t('notificationBar.text.socialRecovery'),
           type: MISC_TYPE,
           oncePerSession: true,
           navigationTarget: 'Notifications',

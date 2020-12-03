@@ -18,6 +18,7 @@ import {
   WIDTH,
 } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { useFocusEffect } from '@react-navigation/native';
 import socialMediaList from './socialMediaList';
 import { saveSocialMedia, selectSocialMediaById } from './socialMediaSlice';
@@ -95,6 +96,8 @@ const SelectMediaModal = ({ route, navigation }) => {
   // user can directly start editing profile if they click on their profile
   const [page, setPage] = useState(initialPage ?? 0);
 
+  const { t } = useTranslation();
+
   // refresh state when the modal opens
   useFocusEffect(
     useCallback(() => {
@@ -170,7 +173,7 @@ const SelectMediaModal = ({ route, navigation }) => {
             disabled={page === 1 && profile.length === 0}
           >
             <Text style={styles.saveButtonText}>
-              {page === 1 ? 'Save' : 'Next'}
+              {page === 1 ? t('common.button.save') : t('profile.button.socialNext')}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -183,7 +186,7 @@ const SelectMediaModal = ({ route, navigation }) => {
             }}
           >
             <Text style={styles.cancelButtonText}>
-              {page === 1 && initialPage !== 1 ? 'Prev' : 'Cancel'}
+              {page === 1 && initialPage !== 1 ? t('profile.button.socialPrevious') : t('common.button.cancel')}
             </Text>
           </TouchableOpacity>
         </View>

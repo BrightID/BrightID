@@ -1,11 +1,18 @@
 // @flow
+import i18next from 'i18next';
 import { Alert } from 'react-native';
 
 export const validatePass = (pass1, pass2) => {
   if (pass1 !== pass2) {
-    Alert.alert('Error', 'Password and confirm password does not match.');
+    Alert.alert(
+      i18next.t('common.alert.error'), 
+      i18next.t('common.alert.text.passwordMatch')
+    );
   } else if (pass1.length < 8) {
-    Alert.alert('Error', 'Your password must be at least 8 characters long.');
+    Alert.alert(
+      i18next.t('common.alert.error'), 
+      i18next.t('common.alert.text.passwordShort')
+    );
   } else {
     return true;
   }

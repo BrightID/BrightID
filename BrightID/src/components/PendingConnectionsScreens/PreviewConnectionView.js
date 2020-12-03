@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { SvgXml } from 'react-native-svg';
 import verificationSticker from '@/static/verification-sticker.svg';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -15,21 +16,25 @@ import { pendingConnection_states } from './pendingConnectionSlice';
 import { RatingView } from './RatingView';
 import { ConnectionStats } from './ConnectionStats';
 
+// percentage determines reported warning
+const REPORTED_PERCENTAGE = 0.1;
+
 type PreviewConnectionProps = {
   pendingConnection: PendingConnection,
   setLevelHandler: (level: ConnectionLevel) => any,
   photoTouchHandler: () => any,
-  brightIdVerified: boolean,
 };
 
 export const PreviewConnectionView = (props: PreviewConnectionProps) => {
+  const { t } = useTranslation();
   const {
     pendingConnection,
     setLevelHandler,
-    brightIdVerified,
     photoTouchHandler,
   } = props;
 
+  const reported = pendingConnection.reports.length / (pendingConnection.connectionsNum || 1) >= REPORTED_PERCENTAGE;
+  const brightIdVerified = pendingConnection.verifications.map(v => v.name).includes('BrightID');
   let ratingView;
   switch (pendingConnection.state) {
     case pendingConnection_states.UNCONFIRMED: {
@@ -40,14 +45,14 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
     case pendingConnection_states.CONFIRMED: {
       // user already handled this connection request
       ratingView = (
-        <Text style={styles.infoText}>You already rated this connection</Text>
+        <Text style={styles.infoText}>{t('pendingConnection.text.alreadyRated')}</Text>
       );
       break;
     }
     case pendingConnection_states.ERROR: {
       ratingView = (
         <Text style={styles.infoText}>
-          Error while connecting. Please try to reconnect.
+          {t('pendingConnections.text.errorGeneric')}
         </Text>
       );
       break;
@@ -55,27 +60,27 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
     case pendingConnection_states.EXPIRED: {
       ratingView = (
         <Text style={styles.infoText}>
-          The connection expired. Please try to reconnect.
+          {t('pendingConnection.text.errorExpired')}
         </Text>
       );
       break;
     }
     case pendingConnection_states.MYSELF: {
       ratingView = (
-        <Text style={styles.infoText}>You can not connect to yourself.</Text>
+        <Text style={styles.infoText}>{t('pendingConnection.text.errorMyself')}</Text>
       );
       break;
     }
     default:
       ratingView = (
-        <Text style={styles.infoText}>Unhandled connection state</Text>
+        <Text style={styles.infoText}>{t('pendingConnection.text.errorUnhandled')}</Text>
       );
   }
 
   return (
     <>
       <View testID="previewConnectionScreen" style={styles.titleContainer}>
-        <Text style={styles.titleText}>Connection Request </Text>
+        <Text style={styles.titleText}>{t('pendingConnections.title.connectionRequest')} </Text>
       </View>
       <View style={styles.userContainer}>
         <TouchableWithoutFeedback onPress={photoTouchHandler}>
@@ -87,13 +92,13 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
               console.log(e);
             }}
             accessible={true}
-            accessibilityLabel="user photo"
+            accessibilityLabel={t('common.accessibilityLabel.userPhoto')}
           />
         </TouchableWithoutFeedback>
         <View style={styles.connectNameContainer}>
           <Text style={styles.connectName}>{pendingConnection.name}</Text>
-          {pendingConnection.flagged && (
-            <Text style={styles.flagged}> (reported)</Text>
+          {reported && (
+            <Text style={styles.reported}> {t('common.tag.reported')}</Text>
           )}
           {brightIdVerified && (
             <View style={styles.verificationSticker}>
@@ -104,9 +109,9 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
       </View>
       <View style={styles.countsContainer}>
         <ConnectionStats
-          numConnections={pendingConnection.connections}
-          numGroups={pendingConnection.groups}
-          numMutualConnections={pendingConnection.mutualConnections}
+          connectionsNum={pendingConnection.connectionsNum}
+          groupsNum={pendingConnection.groupsNum}
+          mutualConnectionsNum={pendingConnection.mutualConnections.length}
         />
       </View>
       <View style={styles.ratingView}>{ratingView}</View>
@@ -160,7 +165,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     color: '#000000',
   },
-  flagged: {
+  reported: {
     fontSize: DEVICE_LARGE ? 18 : 16,
     color: 'red',
   },

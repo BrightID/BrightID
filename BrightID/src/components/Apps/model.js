@@ -3,6 +3,7 @@ import { Alert } from 'react-native';
 import api from '@/api/brightId';
 import { addLinkedContext } from '@/actions';
 import store from '@/store';
+import i18next from 'i18next';
 
 type Params = {
   baseUrl: string,
@@ -15,15 +16,15 @@ export const handleAppContext = async (params: Params) => {
   params.baseUrl = decodeURIComponent(params.baseUrl);
   const { baseUrl, context, contextId } = params;
   Alert.alert(
-    'Link App?',
-    `Do you want to link your account in ${context} to your BrightID?`,
+    i18next.t('apps.alert.title.linkApp'),
+    i18next.t('apps.alert.text.linkApp', {context: `${context}`}),
     [
       {
-        text: 'Yes',
+        text: i18next.t('common.alert.yes'),
         onPress: () => linkContextId(baseUrl, context, contextId),
       },
       {
-        text: 'No',
+        text: i18next.t('common.alert.no'),
         style: 'cancel',
         onPress: () => {},
       },
@@ -45,9 +46,11 @@ const linkContextId = async (baseUrl, context, contextId) => {
       }),
     );
   } catch (e) {
-    Alert.alert(`App linking failed`, `${e.message}`, [
+    Alert.alert(
+      i18next.t('apps.alert.title.linkingFailed'), 
+      `${e.message}`, [
       {
-        text: 'Dismiss',
+        text: i18next.t('common.alert.dismiss'),
         style: 'cancel',
         onPress: () => {},
       },

@@ -5,6 +5,7 @@ import {
   createAsyncThunk,
   createSelector,
 } from '@reduxjs/toolkit';
+import i18next from 'i18next';
 import moment from 'moment';
 import {
   removeChannel,
@@ -14,9 +15,6 @@ import { decryptData } from '@/utils/cryptoHelper';
 import api from '@/api/brightId';
 import { Alert } from 'react-native';
 import { PROFILE_VERSION } from '../../utils/constants';
-
-// percentage determines flagged warning
-const FLAG_PERCENTAGE = 0.1;
 
 const pendingConnectionsAdapter = createEntityAdapter();
 
@@ -44,44 +42,6 @@ export const pendingConnection_states = {
   EXPIRED: 'EXPIRED',
 };
 
-const fetchConnectionInfo = async ({ myConnections, brightId }) => {
-  try {
-    const {
-      createdAt,
-      groups,
-      connections = [],
-      verifications,
-      flaggers = {},
-    } = await api.getUserInfo(brightId);
-    const mutualConnections = connections.filter(function (el) {
-      return myConnections.some((x) => x.id === el.id);
-    });
-    return {
-      connections: connections.length,
-      groups: groups.length,
-      mutualConnections: mutualConnections.length,
-      connectionDate: `Created ${moment(parseInt(createdAt, 10)).fromNow()}`,
-      verifications,
-      flagged:
-        Object.keys(flaggers).length / connections.length >= FLAG_PERCENTAGE,
-    };
-  } catch (err) {
-    if (err instanceof Error && err.message === 'User not found') {
-      return {
-        connections: 0,
-        groups: 0,
-        mutualConnections: 0,
-        connectionDate: 'New user',
-        flagged: false,
-        verifications: [],
-      };
-    } else {
-      console.error(err.message);
-      return {};
-    }
-  }
-};
-
 export const newPendingConnection = createAsyncThunk(
   'pendingConnections/newPendingConnection',
   async ({ channelId, profileId }, { getState, dispatch }) => {
@@ -106,22 +66,34 @@ export const newPendingConnection = createAsyncThunk(
       decryptedObj.version < PROFILE_VERSION // old client version
     ) {
       // other user needs to update his client
-      const msg = `Can't connect with ${decryptedObj.name} due to incompatible client version. Please ask ${decryptedObj.name} to update and restart the brightID app.`;
-      Alert.alert('Connection not possible', msg);
+      const msg = i18next.t('pendingConnection.alert.text.otherOutdated', {name: `${decryptedObj.name}`});
+      Alert.alert(i18next.t('pendingConnection.alert.title.connectionImpossible'), msg);
       throw new Error(msg);
     } else if (decryptedObj.version > PROFILE_VERSION) {
       // I need to update my client
-      const msg = `Can't connect with ${decryptedObj.name} due to incompatible client version. Please update and restart your brightID app.`;
-      Alert.alert('Connection not possible', msg);
+      const msg = i18next.t('pendingConnection.alert.text.localOutdated', {name: `${decryptedObj.name}`});
+      Alert.alert(i18next.t('pendingConnection.alert.title.connectionImpossible'), msg);
       throw new Error(msg);
     }
 
     decryptedObj.myself = decryptedObj.id === getState().user.id;
-
-    const connectionInfo = await fetchConnectionInfo({
-      brightId: decryptedObj.id,
-      myConnections: getState().connections.connections,
-    });
+    let connectionInfo = {};
+    try {
+      connectionInfo = await api.getUserProfile(decryptedObj.id);
+    } catch (err) {
+      if (err instanceof Error && err.message === 'User not found') {
+        connectionInfo = {
+          connectionsNum: 0,
+          groupsNum: 0,
+          mutualConnections: [],
+          mutualGroups: [],
+          createdAt: 0,
+          connectedAt: 0,
+          verifications: [],
+          reports: [],
+        };
+      }
+    }
     return { ...connectionInfo, ...decryptedObj };
   },
 );
@@ -185,13 +157,15 @@ const pendingConnectionsSlice = createSlice({
         score,
         profileTimestamp,
         initiator,
-        connections,
-        groups,
+        connectionsNum,
+        groupsNum,
         mutualConnections,
-        connectionDate,
-        flagged,
-        notificationToken,
+        mutualGroups,
+        createdAt,
+        connectedAt,
+        reports,
         verifications,
+        notificationToken,
         socialMedia,
       } = action.payload;
 
@@ -205,13 +179,15 @@ const pendingConnectionsSlice = createSlice({
         score,
         profileTimestamp,
         initiator,
-        connections,
-        groups,
+        connectionsNum,
+        groupsNum,
         mutualConnections,
-        connectionDate,
-        flagged,
-        notificationToken,
+        mutualGroups,
+        createdAt,
+        connectedAt,
+        reports,
         verifications,
+        notificationToken,
         socialMedia,
       };
 

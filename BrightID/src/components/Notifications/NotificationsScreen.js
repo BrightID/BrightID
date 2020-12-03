@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { TabBar, TabView, SceneMap } from 'react-native-tab-view';
 import {
   INVITE_ACTIVE,
@@ -63,6 +64,7 @@ const ConnectionsList = ({ route }) => {
   const pendingConnections = useSelector((state) =>
     selectAllUnconfirmedConnections(state),
   );
+  const { t } = useTranslation();
   // only display one notification for all pending connections
   const data = pendingConnections.length > 0 ? [{ id: 'pendingList' }] : [];
 
@@ -78,7 +80,7 @@ const ConnectionsList = ({ route }) => {
       }
       ListEmptyComponent={
         <EmptyList
-          title="You have no pending connections.."
+          title={t('notifications.text.noPendingConnections')}
           iconType="account-off-outline"
         />
       }
@@ -91,6 +93,7 @@ const ConnectionsList = ({ route }) => {
 
 const InviteList = () => {
   const navigation = useNavigation();
+  const { t } = useTranslation();
   const [refreshing, onRefresh] = useRefresh();
   const invites = useSelector((state) => inviteSelector(state));
   thecount++;
@@ -108,7 +111,7 @@ const InviteList = () => {
       }
       ListEmptyComponent={
         <EmptyList
-          title="You have no group invites.."
+          title={t('notifications.text.noGroupInvites')}
           iconType="account-group-outline"
         />
       }
@@ -120,6 +123,7 @@ const InviteList = () => {
 };
 
 const MiscList = ({ route }) => {
+  const { t } = useTranslation();
   const [refreshing, onRefresh] = useRefresh();
   const data = route.backupPending
     ? [{ msg: 'Backup Pending', icon: 'star' }]
@@ -138,7 +142,7 @@ const MiscList = ({ route }) => {
       }
       ListEmptyComponent={
         <EmptyList
-          title="Nothing to see here ..."
+          title={t('notifications.text.noMiscellaneous')}
           iconType="bell-off-outline"
         />
       }
@@ -175,6 +179,7 @@ const renderTabBar = (props) => (
 
 export const NotificationsScreen = ({ route }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const pendingConnections = useSelector(
     (state) => selectAllUnconfirmedConnections(state)?.length,
@@ -189,13 +194,17 @@ export const NotificationsScreen = ({ route }) => {
   const routes = [
     {
       key: CONNECTIONS_TYPE,
-      title: 'connections',
+      title: t('notifications.tab.connections'),
       badge: !!pendingConnections,
     },
-    { key: GROUPS_TYPE, title: 'groups', badge: !!invites },
+    { 
+      key: GROUPS_TYPE, 
+      title: t('notifications.tab.groups'), 
+      badge: !!invites 
+    },
     {
       key: MISC_TYPE,
-      title: 'miscellaneous',
+      title: t('notifications.tab.miscellaneous'), 
       badge: backupPending,
       backupPending,
     },

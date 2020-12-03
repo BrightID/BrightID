@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { INVITE_ACTIVE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { createSelector } from '@reduxjs/toolkit';
@@ -138,16 +139,14 @@ const homeScreenOptions = {
   headerTransparent: true,
 };
 
-const recoveringConnectionOptions = {
-  ...headerOptions,
-  title: 'Account Recovery',
-};
 
 /** SCREENS */
 
 const Stack = createStackNavigator();
 
 const Home = () => {
+  /* /!\ Moved 'RecoveringConnection' options to the component in order to access to useTranslation() */ 
+  const { t } = useTranslation();
   return (
     <>
       <Stack.Screen
@@ -158,7 +157,10 @@ const Home = () => {
       <Stack.Screen
         name="RecoveringConnection"
         component={RecoveringConnectionScreen}
-        options={recoveringConnectionOptions}
+        options={{
+          ...headerOptions,
+          title: t('restore.header.accountRecovery')
+        }}
       />
     </>
   );

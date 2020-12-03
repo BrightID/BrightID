@@ -8,6 +8,7 @@ import ChangePasswordModal from '@/components/EditProfile/ChangePasswordModal';
 import TrustlevelModal from '@/components/Connections/TrustlevelModal';
 import SelectSocialMediaModal from '@/components/EditProfile/SelectSocialMediaModal';
 import ReportReasonModal from '@/components/Connections/ReportReasonModal';
+import SortConnectionsModal from '@/components/Helpers/SortConnectionsModal';
 
 const Stack = createStackNavigator();
 
@@ -47,6 +48,11 @@ const Modals = () => {
         name="ReportReason"
         options={modalOptions}
         component={ReportReasonModal}
+      />
+      <Stack.Screen
+        name="SortConnections"
+        options={modalOptions}
+        component={SortConnectionsModal}
       />
     </>
   );

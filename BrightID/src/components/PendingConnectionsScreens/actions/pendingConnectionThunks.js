@@ -48,13 +48,13 @@ export const confirmPendingConnectionThunk = (
   } = getState();
 
   let connectionTimestamp = Date.now();
-  let flagReason;
+  let reportReason;
 
   await api.addConnection(
     brightId,
     connection.brightId,
     level,
-    flagReason,
+    reportReason,
     connectionTimestamp,
   );
 
@@ -65,7 +65,7 @@ export const confirmPendingConnectionThunk = (
         connection.brightId,
         brightId,
         level,
-        flagReason,
+        reportReason,
         connectionTimestamp,
         {
           id: connection.brightId,

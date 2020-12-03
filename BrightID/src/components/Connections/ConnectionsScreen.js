@@ -1,18 +1,19 @@
 // @flow
 
-import React, { useCallback, useState } from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet, View, StatusBar, FlatList } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { createSelector } from '@reduxjs/toolkit';
 import fetchUserInfo from '@/actions/fetchUserInfo';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE } from '@/utils/constants';
 import { toSearchString } from '@/utils/strings';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { sortConnectionsBy } from '@/utils/sorting';
 import ConnectionCard from './ConnectionCard';
-import { defaultSort } from './models/sortingUtility';
 
 /**
  * Connection screen of BrightID
@@ -35,18 +36,27 @@ const renderItem = ({ item, index }) => {
 };
 
 /** Selectors */
-
 const searchParamSelector = (state) => state.connections.searchParam;
 const connectionsSelector = (state) => state.connections.connections;
+const connectionsSortSelector = (state) => state.connections.connectionsSort;
+const filtersSelector = (state) => state.connections.filters;
 
 const filterConnectionsSelector = createSelector(
-  connectionsSelector,
-  searchParamSelector,
-  (connections, searchParam) => {
+  [
+    connectionsSelector,
+    searchParamSelector,
+    filtersSelector,
+    connectionsSortSelector,
+  ],
+  (connections, searchParam, filters, connectionsSort) => {
     const searchString = toSearchString(searchParam);
-    return connections.filter((item) =>
-      toSearchString(`${item.name}`).includes(searchString),
-    );
+    return connections
+      .filter(
+        (item) =>
+          toSearchString(`${item.name}`).includes(searchString) &&
+          filters.includes(item.level),
+      )
+      .sort(sortConnectionsBy(connectionsSort));
   },
 );
 
@@ -56,31 +66,48 @@ export const ConnectionsScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const [refreshing, setRefreshing] = useState(false);
   const connections = useSelector((state) => filterConnectionsSelector(state));
-
-  useFocusEffect(
-    useCallback(() => {
-      dispatch(defaultSort());
-      dispatch(fetchUserInfo());
-    }, [dispatch]),
-  );
-
-  const onRefresh = async () => {
-    try {
-      setRefreshing(true);
-      await dispatch(fetchUserInfo());
-      dispatch(defaultSort());
-      setRefreshing(false);
-    } catch (err) {
-      console.log(err.message);
-      setRefreshing(false);
-    }
-  };
+  const { t } = useTranslation();
 
   const handleNewConnection = () => {
     navigation.navigate('MyCode');
   };
+
+  const ConnectionList = useMemo(() => {
+    const onRefresh = async () => {
+      try {
+        await dispatch(fetchUserInfo());
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    console.log('Rendering Connections List');
+    return (
+      <FlatList
+        style={styles.connectionsContainer}
+        data={connections}
+        keyExtractor={({ id }, index) => id + index}
+        renderItem={renderItem}
+        getItemLayout={getItemLayout}
+        contentContainerStyle={{
+          paddingBottom: 70,
+          paddingTop: 20,
+          flexGrow: 1,
+        }}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        refreshing={false}
+        onRefresh={onRefresh}
+        ListEmptyComponent={
+          <EmptyList
+            iconType="account-off-outline"
+            title={t('connections.text.noConnections')}
+          />
+        }
+      />
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connections]);
 
   return (
     <>
@@ -92,31 +119,7 @@ export const ConnectionsScreen = () => {
       <View style={styles.orangeTop} />
 
       <View style={styles.container} testID="connectionsScreen">
-        <View style={styles.mainContainer}>
-          <FlatList
-            style={styles.connectionsContainer}
-            data={connections}
-            keyExtractor={({ id }, index) => id + index}
-            renderItem={renderItem}
-            getItemLayout={getItemLayout}
-            contentContainerStyle={{
-              paddingBottom: 70,
-              paddingTop: 20,
-              flexGrow: 1,
-            }}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            ListEmptyComponent={
-              <EmptyList
-                iconType="account-off-outline"
-                title="No connections"
-              />
-            }
-          />
-        </View>
-
+        <View style={styles.mainContainer}>{ConnectionList}</View>
         <FloatingActionButton onPress={handleNewConnection} />
       </View>
     </>
