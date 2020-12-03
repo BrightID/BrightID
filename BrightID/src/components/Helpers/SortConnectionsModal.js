@@ -292,6 +292,7 @@ const styles = StyleSheet.create({
   },
 
   sortButtonText: {
+    color: '#000',
     fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 14 : 12.5,
     marginRight: DEVICE_LARGE ? 5 : 4,
