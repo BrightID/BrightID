@@ -1,12 +1,12 @@
 // @flow
 
-import React, { useCallback, useState } from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet, View, StatusBar, FlatList } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { createSelector } from '@reduxjs/toolkit';
 import fetchUserInfo from '@/actions/fetchUserInfo';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE } from '@/utils/constants';
@@ -41,9 +41,7 @@ const connectionsSelector = (state) => state.connections.connections;
 const filtersSelector = (state) => state.connections.filters;
 
 const filterConnectionsSelector = createSelector(
-  connectionsSelector,
-  searchParamSelector,
-  filtersSelector,
+  [connectionsSelector, searchParamSelector, filtersSelector],
   (connections, searchParam, filters) => {
     const searchString = toSearchString(searchParam);
     return connections.filter(
@@ -60,32 +58,49 @@ export const ConnectionsScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const [refreshing, setRefreshing] = useState(false);
   const connections = useSelector((state) => filterConnectionsSelector(state));
   const { t } = useTranslation();
-
-  useFocusEffect(
-    useCallback(() => {
-      dispatch(defaultSort());
-      dispatch(fetchUserInfo());
-    }, [dispatch]),
-  );
-
-  const onRefresh = async () => {
-    try {
-      setRefreshing(true);
-      await dispatch(fetchUserInfo());
-      dispatch(defaultSort());
-      setRefreshing(false);
-    } catch (err) {
-      console.log(err.message);
-      setRefreshing(false);
-    }
-  };
 
   const handleNewConnection = () => {
     navigation.navigate('MyCode');
   };
+
+  const ConnectionList = useMemo(() => {
+    const onRefresh = async () => {
+      try {
+        await dispatch(fetchUserInfo());
+        dispatch(defaultSort());
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    console.log('Rendering Connections List');
+    return (
+      <FlatList
+        style={styles.connectionsContainer}
+        data={connections}
+        keyExtractor={({ id }, index) => id + index}
+        renderItem={renderItem}
+        getItemLayout={getItemLayout}
+        contentContainerStyle={{
+          paddingBottom: 70,
+          paddingTop: 20,
+          flexGrow: 1,
+        }}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        refreshing={false}
+        onRefresh={onRefresh}
+        ListEmptyComponent={
+          <EmptyList
+                iconType="account-off-outline"
+                title={t('connections.text.noConnections')}
+              />
+        }
+      />
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connections]);
 
   return (
     <>
@@ -97,31 +112,7 @@ export const ConnectionsScreen = () => {
       <View style={styles.orangeTop} />
 
       <View style={styles.container} testID="connectionsScreen">
-        <View style={styles.mainContainer}>
-          <FlatList
-            style={styles.connectionsContainer}
-            data={connections}
-            keyExtractor={({ id }, index) => id + index}
-            renderItem={renderItem}
-            getItemLayout={getItemLayout}
-            contentContainerStyle={{
-              paddingBottom: 70,
-              paddingTop: 20,
-              flexGrow: 1,
-            }}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            ListEmptyComponent={
-              <EmptyList
-                iconType="account-off-outline"
-                title={t('connections.text.noConnections')}
-              />
-            }
-          />
-        </View>
-
+        <View style={styles.mainContainer}>{ConnectionList}</View>
         <FloatingActionButton onPress={handleNewConnection} />
       </View>
     </>
