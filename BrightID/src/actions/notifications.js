@@ -43,12 +43,11 @@ export const updateNotifications = () => async (
     const {
       user: { backupCompleted },
       connections: { connections },
-      notifications: { activeNotification },
     } = getState();
     const verifiedConnections = connections.filter(
       (conn) => conn.status === 'verified',
     );
-    if (!backupCompleted && verifiedConnections.length > 6) {
+    if (!backupCompleted && verifiedConnections.length > 5) {
       dispatch(setBackupPending(true));
       dispatch(
         setActiveNotification({
@@ -58,6 +57,7 @@ export const updateNotifications = () => async (
           type: MISC_TYPE,
           oncePerSession: true,
           navigationTarget: 'Notifications',
+          icon: 'PhoneLock',
         }),
       );
     } else {

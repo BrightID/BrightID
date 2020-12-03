@@ -24,9 +24,9 @@ import DropDownAlertEnabled from '@/utils/DropDownAlertEnabler';
 
 // default icons
 const Icons = {
-  [GROUPS_TYPE]: AddGroup,
-  [CONNECTIONS_TYPE]: AddPerson,
-  [MISC_TYPE]: PhoneLock,
+  AddGroup,
+  AddPerson,
+  PhoneLock,
   Certificate,
 };
 
@@ -83,14 +83,14 @@ export const NotificationBanner = () => {
             pendingConnections.length > 1 ? 's' : ''
           }`,
           navigationTarget: 'PendingConnections',
+          icon: 'AddPerson',
         }),
       );
     }
   }, [pendingConnections.length, dispatch]);
 
-  // icon fallback: activeNotification prop 'xmlIcon' -> default icon for notification type -> default 'misc'
-  const Icon =
-    Icons[activeNotification?.icon || activeNotification?.type || MISC_TYPE];
+  // icon fallback: activeNotification prop 'icon' -> default icon for notification type -> default 'Certificate'
+  const Icon = Icons[activeNotification?.icon || 'Certificate'];
 
   const _onTap = () => {
     console.log('onTap', activeNotification);
