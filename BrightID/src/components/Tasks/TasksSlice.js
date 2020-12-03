@@ -3,7 +3,6 @@
 import { setActiveNotification } from '@/actions';
 import { MISC_TYPE } from '@/utils/constants';
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import certificate from '@/static/certificate.svg';
 import { UserTasks } from './UserTasks';
 
 /*
@@ -130,7 +129,7 @@ export const checkTasks = () => {
               title: 'Achievement unlocked!',
               message: `You completed the task "${UserTasks[task.id].title}".`,
               navigationTarget: null,
-              xmlIcon: certificate,
+              icon: 'Certificate',
             }),
           );
         }

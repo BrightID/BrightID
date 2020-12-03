@@ -4,9 +4,8 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { SvgXml } from 'react-native-svg';
-import backArrow from '@/static/back_arrow_grey.svg';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { DARK_GREY } from '@/utils/colors';
 import {
   pendingConnection_states,
   selectPendingConnectionById,
@@ -14,6 +13,7 @@ import {
 } from './pendingConnectionSlice';
 import { ReconnectView } from './ReconnectView';
 import { PreviewConnectionView } from './PreviewConnectionView';
+import BackArrow from '../Icons/BackArrow';
 
 type PreviewConnectionProps = {
   pendingConnectionId: any,
@@ -87,7 +87,7 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
           navigation.goBack();
         }}
       >
-        <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
+        <BackArrow height={DEVICE_LARGE ? '22' : '20'} color={DARK_GREY} />
       </TouchableOpacity>
       {existingConnection ? (
         <ReconnectView

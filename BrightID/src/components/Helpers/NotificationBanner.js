@@ -1,16 +1,16 @@
 // @flow
 
 import React, { useEffect, useRef } from 'react';
-import { InteractionManager, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import DropdownAlert from 'react-native-dropdownalert';
 import { useSelector, useDispatch } from 'react-redux';
-import { SvgXml } from 'react-native-svg';
 import { navigate, getRoute } from '@/NavigationService';
-import groups from '@/static/add_group.svg';
-import connections from '@/static/add_person.svg';
-import misc from '@/static/trusted_connections.svg';
+import AddGroup from '@/components/Icons/AddGroup';
+import AddPerson from '@/components/Icons/AddPerson';
+import Certificate from '@/components/Icons/Certificate';
+import PhoneLock from '@/components/Icons/PhoneLock';
 import { setActiveNotification } from '@/actions';
-import { CONNECTIONS_TYPE } from '@/utils/constants';
+import { CONNECTIONS_TYPE, GROUPS_TYPE, MISC_TYPE } from '@/utils/constants';
 import { DEVICE_LARGE, HEIGHT } from '@/utils/deviceConstants';
 
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
@@ -23,7 +23,12 @@ import DropDownAlertEnabled from '@/utils/DropDownAlertEnabler';
 */
 
 // default icons
-const icons = { connections, groups, misc };
+const Icons = {
+  [GROUPS_TYPE]: AddGroup,
+  [CONNECTIONS_TYPE]: AddPerson,
+  [MISC_TYPE]: PhoneLock,
+  Certificate,
+};
 
 const NOTIFICATION_TIMEOUT = 10000;
 
@@ -84,8 +89,8 @@ export const NotificationBanner = () => {
   }, [pendingConnections.length, dispatch]);
 
   // icon fallback: activeNotification prop 'xmlIcon' -> default icon for notification type -> default 'misc'
-  const icon =
-    activeNotification?.xmlIcon ?? icons[activeNotification?.type] ?? misc;
+  const Icon =
+    Icons[activeNotification?.icon || activeNotification?.type || MISC_TYPE];
 
   const _onTap = () => {
     console.log('onTap', activeNotification);
@@ -121,12 +126,12 @@ export const NotificationBanner = () => {
       onTap={_onTap}
       onClose={_onClose}
       renderImage={() => (
-        <SvgXml
-          style={styles.icon}
-          xml={icon}
-          width={DEVICE_LARGE ? 24 : 20}
-          height={DEVICE_LARGE ? 24 : 20}
-        />
+        <View style={styles.icon}>
+          <Icon
+            width={DEVICE_LARGE ? 24 : 20}
+            height={DEVICE_LARGE ? 24 : 20}
+          />
+        </View>
       )}
       panResponderEnabled={false}
       tapToCloseEnabled={true}
@@ -152,7 +157,7 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 13 : 12,
   },
   icon: {
-    marginLeft: DEVICE_LARGE ? 35 : 10,
+    marginLeft: DEVICE_LARGE ? 20 : 10,
   },
 });
 

@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import Svg, { Line, SvgXml } from 'react-native-svg';
+import Svg, { Line } from 'react-native-svg';
 import {
   useNavigation,
   useRoute,
@@ -26,11 +26,9 @@ import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE, WIDTH, HEIGHT } from '@/utils/deviceConstants';
 
 import {
-  pendingConnection_states,
   selectAllPendingConnections,
   selectPendingConnectionById,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
-import backArrow from '@/static/back_arrow_black.svg';
 
 /** HELPERS */
 
