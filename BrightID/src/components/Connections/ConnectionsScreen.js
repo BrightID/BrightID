@@ -12,7 +12,7 @@ import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE } from '@/utils/constants';
 import { toSearchString } from '@/utils/strings';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { defaultSort } from '@/utils/sorting';
+import { sortConnectionsBy } from '@/utils/sorting';
 import ConnectionCard from './ConnectionCard';
 
 /**
@@ -38,17 +38,25 @@ const renderItem = ({ item, index }) => {
 /** Selectors */
 const searchParamSelector = (state) => state.connections.searchParam;
 const connectionsSelector = (state) => state.connections.connections;
+const connectionsSortSelector = (state) => state.connections.connectionsSort;
 const filtersSelector = (state) => state.connections.filters;
 
 const filterConnectionsSelector = createSelector(
-  [connectionsSelector, searchParamSelector, filtersSelector],
-  (connections, searchParam, filters) => {
+  [
+    connectionsSelector,
+    searchParamSelector,
+    filtersSelector,
+    connectionsSortSelector,
+  ],
+  (connections, searchParam, filters, connectionsSort) => {
     const searchString = toSearchString(searchParam);
-    return connections.filter(
-      (item) =>
-        toSearchString(`${item.name}`).includes(searchString) &&
-        filters.includes(item.level),
-    );
+    return connections
+      .filter(
+        (item) =>
+          toSearchString(`${item.name}`).includes(searchString) &&
+          filters.includes(item.level),
+      )
+      .sort(sortConnectionsBy(connectionsSort));
   },
 );
 
@@ -69,7 +77,6 @@ export const ConnectionsScreen = () => {
     const onRefresh = async () => {
       try {
         await dispatch(fetchUserInfo());
-        dispatch(defaultSort());
       } catch (err) {
         console.log(err.message);
       }
@@ -93,9 +100,9 @@ export const ConnectionsScreen = () => {
         onRefresh={onRefresh}
         ListEmptyComponent={
           <EmptyList
-                iconType="account-off-outline"
-                title={t('connections.text.noConnections')}
-              />
+            iconType="account-off-outline"
+            title={t('connections.text.noConnections')}
+          />
         }
       />
     );

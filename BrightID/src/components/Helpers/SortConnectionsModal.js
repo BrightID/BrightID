@@ -48,9 +48,9 @@ const SortConnectionsModal = ({ route, navigation }: props) => {
   const dispatch = useDispatch();
 
   const filters: string[] = useSelector((state) => state.connections.filters);
-  const connectionsSort: string = useSelector(
-    (state) => state.connections.connectionsSort,
-  );
+  const connectionsSort: string =
+    useSelector((state) => state.connections.connectionsSort) ||
+    types.byDateAddedDescending;
 
   const [newFilters, setNewFilters] = useState(filters || []);
   const [newConnectionsSort, setNewConnectionsSort] = useState(connectionsSort);
@@ -117,8 +117,39 @@ const SortConnectionsModal = ({ route, navigation }: props) => {
           <TouchableOpacity
             style={styles.sortButton}
             onPress={() => {
-              // return first method, which is always descending, OR
-              // return different method if sortType is already selected
+              // toggles sort method
+              const sortMethod = byDate
+                .filter((n) => n !== newConnectionsSort)
+                .shift();
+              setNewConnectionsSort(sortMethod);
+            }}
+          >
+            <Text
+              style={[
+                styles.sortButtonText,
+                byDate.includes(newConnectionsSort)
+                  ? styles.activeButtonText
+                  : {},
+              ]}
+            >
+              Date
+            </Text>
+            <Chevron
+              width={16}
+              height={16}
+              strokeWidth={byDate.includes(newConnectionsSort) ? 3 : 1.5}
+              color={byDate.includes(newConnectionsSort) ? ORANGE : '#000'}
+              direction={
+                byDate.includes(newConnectionsSort) &&
+                ascending.includes(newConnectionsSort)
+                  ? 'up'
+                  : 'down'
+              }
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.sortButton}
+            onPress={() => {
               const sortMethod = byName
                 .filter((n) => n !== newConnectionsSort)
                 .shift();
@@ -139,7 +170,7 @@ const SortConnectionsModal = ({ route, navigation }: props) => {
               width={16}
               height={16}
               strokeWidth={byName.includes(newConnectionsSort) ? 3 : 1.5}
-              color={byName.includes(newConnectionsSort) ? ORANGE : 'black'}
+              color={byName.includes(newConnectionsSort) ? ORANGE : '#000'}
               direction={
                 byName.includes(newConnectionsSort) &&
                 ascending.includes(newConnectionsSort)
@@ -148,38 +179,7 @@ const SortConnectionsModal = ({ route, navigation }: props) => {
               }
             />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.sortButton}
-            onPress={() => {
-              const sortMethod = byDate
-                .filter((n) => n !== newConnectionsSort)
-                .shift();
-              setNewConnectionsSort(sortMethod);
-            }}
-          >
-            <Text
-              style={[
-                styles.sortButtonText,
-                byDate.includes(newConnectionsSort)
-                  ? styles.activeButtonText
-                  : {},
-              ]}
-            >
-              Date
-            </Text>
-            <Chevron
-              // width={16}
-              // height={16}
-              strokeWidth={byDate.includes(newConnectionsSort) ? 3 : 1.5}
-              color={byDate.includes(newConnectionsSort) ? ORANGE : 'black'}
-              direction={
-                byDate.includes(newConnectionsSort) &&
-                ascending.includes(newConnectionsSort)
-                  ? 'up'
-                  : 'down'
-              }
-            />
-          </TouchableOpacity>
+
           <TouchableOpacity
             style={styles.sortButton}
             onPress={() => {

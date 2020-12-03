@@ -1,5 +1,4 @@
 // @flow
-import { setConnections, setConnectionsSort } from '@/actions';
 import { connection_levels } from './constants';
 
 export const types = {
@@ -15,40 +14,27 @@ const trustLevels = Object.values(connection_levels);
 
 const trustLevel = (level) => trustLevels.indexOf(level);
 
-const handleSort = (connectionsSort, connections) => (dispatch) => {
+export const sortConnectionsBy = (connectionsSort) => {
   switch (connectionsSort) {
     case types.byNameAscending:
-      connections.sort((a, b) => b.name.localeCompare(a.name));
-      break;
-    case types.byNameDescending:
-      connections.sort((a, b) => a.name.localeCompare(b.name));
-      break;
-    case types.byDateAddedAscending:
-      connections.sort((a, b) => a.connectionDate - b.connectionDate);
-      break;
-    case types.byDateAddedDescending:
-      connections.sort((a, b) => b.connectionDate - a.connectionDate);
-      break;
-    case types.byTrustLevelAscending:
-      connections.sort((a, b) => {
-        return trustLevel(a.level) - trustLevel(b.level);
-      });
-      break;
-    case types.byTrustLevelDescending:
-      connections.sort((a, b) => trustLevel(b.level) - trustLevel(a.level));
-      break;
-    default:
-      connections.sort((a, b) => b.connectionDate - a.connectionDate);
-      dispatch(setConnectionsSort(types.byDateDescending));
-      break;
-  }
-  dispatch(setConnections(connections));
-};
+      return (a, b) => b.name.localeCompare(a.name);
 
-export const defaultSort = () => (dispatch: dispatch, getState: getState) => {
-  const {
-    connections: { connectionsSort, connections },
-  } = getState();
-  let list = connections.slice(0);
-  dispatch(handleSort(connectionsSort, list));
+    case types.byNameDescending:
+      return (a, b) => a.name.localeCompare(b.name);
+
+    case types.byDateAddedAscending:
+      return (a, b) => a.connectionDate - b.connectionDate;
+
+    case types.byDateAddedDescending:
+      return (a, b) => b.connectionDate - a.connectionDate;
+
+    case types.byTrustLevelAscending:
+      return (a, b) => trustLevel(a.level) - trustLevel(b.level);
+
+    case types.byTrustLevelDescending:
+      return (a, b) => trustLevel(b.level) - trustLevel(a.level);
+
+    default:
+      return (a, b) => b.connectionDate - a.connectionDate;
+  }
 };

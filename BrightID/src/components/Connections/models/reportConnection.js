@@ -4,7 +4,6 @@ import api from '@/api/brightId';
 import { deleteConnection } from '@/actions';
 import { backupUser } from '@/components//Recovery/helpers';
 import { connection_levels } from '@/utils/constants';
-import { defaultSort } from '@/utils/sorting';
 
 export const reportConnection = ({
   id,
@@ -28,7 +27,6 @@ export const reportConnection = ({
     );
     // remove connection from local storage
     dispatch(deleteConnection(id));
-    dispatch(defaultSort());
     if (backupCompleted) {
       await backupUser();
     }
