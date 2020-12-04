@@ -3,6 +3,7 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 
 type TasksProgressProps = {
   totalSteps: number,
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: 'Poppins-Medium',
     fontStyle: 'normal',
-    fontSize: DEVICE_LARGE ? 13 : 12,
+    fontSize: fontSize[13],
   },
   progressBar: {
     flexGrow: 1,
@@ -71,6 +72,6 @@ const styles = StyleSheet.create({
   steps: {
     fontFamily: 'Poppins-Medium',
     fontStyle: 'normal',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
   },
 });

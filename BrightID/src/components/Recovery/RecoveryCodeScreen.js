@@ -16,7 +16,8 @@ import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { withTranslation } from 'react-i18next';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import backupApi from '../../api/backupService';
 import { setupRecovery, recoveryQrStr, handleSigs } from './helpers';
@@ -106,8 +107,8 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
         />
         <Text style={styles.copyText}> {t('common.button.copy')}</Text>
       </TouchableOpacity>
-    )
-  }
+    );
+  };
 
   renderSpinner = () => (
     <View style={styles.qrsvgContainer}>
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
   },
   recoveryCodeInfoText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: fontSize[18],
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,

@@ -2,12 +2,13 @@ import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { navigate } from '@/NavigationService';
 import { ORANGE, WHITE } from '@/theme/colors';
-import { TWENTY, TWENTY_TWO, SIXTY } from '@/theme/sizes';
+import { fontSize } from '@/theme/fonts';
+import { TWENTY_TWO, SIXTY } from '@/theme/sizes';
 import BackArrow from '@/components/Icons/BackArrow';
 
 export const headerTitleStyle = {
   fontFamily: 'Poppins-Bold',
-  fontSize: TWENTY,
+  fontSize: fontSize[20],
   color: '#fff',
 };
 

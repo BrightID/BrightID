@@ -11,7 +11,8 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import EmptyList from '@/components/Helpers/EmptyList';
 import TrustedConnectionCard from './TrustedConnectionCard';
@@ -89,7 +90,7 @@ class TrustedConnectionsScreen extends React.Component<Props> {
           <View style={styles.mainContainer}>
             <View style={styles.titleContainer}>
               <Text style={styles.infoText}>
-                {(t('backup.text.chooseTrustedConnections'))}
+                {t('backup.text.chooseTrustedConnections')}
               </Text>
             </View>
             <View style={styles.mainContainer}>
@@ -116,7 +117,9 @@ class TrustedConnectionsScreen extends React.Component<Props> {
               onPress={this.navigateToBackup}
               style={styles.nextButton}
             >
-              <Text style={styles.buttonInnerText}>{t('backup.button.next')}</Text>
+              <Text style={styles.buttonInnerText}>
+                {t('backup.button.next')}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -152,7 +155,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 20,
+    fontSize: fontSize[20],
   },
   titleContainer: {
     alignItems: 'center',
@@ -165,7 +168,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: fontSize[18],
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -200,7 +203,7 @@ const styles = StyleSheet.create({
     fontFamily: 'ApexNew-Medium',
     color: '#fff',
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: fontSize[18],
   },
 });
 

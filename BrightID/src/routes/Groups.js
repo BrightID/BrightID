@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
 import { getGroupName } from '@/utils/groups';
 import { DEVICE_TYPE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import GroupsScreen from '@/components/GroupsScreens/GroupsScreen';
 import SearchGroups from '@/components/Helpers/SearchGroups';
 import SearchConnections from '@/components/Helpers/SearchConnections';
@@ -40,7 +41,7 @@ const HeaderTitle = ({ title }) => {
 
 const HeaderTitleI18N = ({ i18key }) => {
   const { t } = useTranslation();
-  return (<HeaderTitle title={t(i18key)}/>);
+  return <HeaderTitle title={t(i18key)} />;
 };
 
 const groupsOptions = {
@@ -62,7 +63,7 @@ const membersScreenOptions = ({ navigation, route }) => {
     ...headerOptions,
     title: getGroupName(group),
     headerTitleStyle: {
-      fontSize: DEVICE_TYPE === 'large' ? 20 : 18,
+      fontSize: fontSize[20],
       paddingLeft: 20,
       paddingRight: 30,
     },
@@ -91,7 +92,7 @@ const Groups = () => {
       <Stack.Screen
         name="Members"
         component={MembersScreen}
-        options={membersScreenOptions}  
+        options={membersScreenOptions}
       />
       <Stack.Screen
         name="InviteList"
@@ -99,7 +100,7 @@ const Groups = () => {
         options={{ ...headerOptions, title: t('groups.header.inviteList') }}
       />
     </>
-  )
+  );
 };
 
 export default Groups;

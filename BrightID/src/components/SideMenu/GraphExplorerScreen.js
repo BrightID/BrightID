@@ -11,6 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import Clipboard from '@react-native-community/clipboard';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { getExplorerCode } from '@/utils/explorer';
@@ -55,7 +56,9 @@ export const GraphExplorerScreen = function () {
               size={DEVICE_LARGE ? 28 : 24}
               color="#000"
             />
-            <Text style={styles.copyText}>{t('graphExplorer.button.copyCode')}</Text>
+            <Text style={styles.copyText}>
+              {t('graphExplorer.button.copyCode')}
+            </Text>
           </View>
         </TouchableOpacity>
       ) : (
@@ -129,7 +132,7 @@ const styles = StyleSheet.create({
   },
   setupText: {
     fontFamily: 'Poppins-Regular',
-    fontSize: DEVICE_LARGE ? 14 : 13,
+    fontSize: fontSize[14],
   },
   noExplorerCode: {
     alignItems: 'center',
@@ -148,12 +151,12 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontFamily: 'Poppins-Regular',
-    fontSize: DEVICE_LARGE ? 14 : 13,
+    fontSize: fontSize[14],
   },
   linkText: {
     fontFamily: 'Poppins-Regular',
     color: '#2185D0',
-    fontSize: DEVICE_LARGE ? 14 : 13,
+    fontSize: fontSize[14],
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: 'blue',
     margin: 0,
@@ -161,7 +164,7 @@ const styles = StyleSheet.create({
   },
   copyText: {
     fontFamily: 'Poppins-Regular',
-    fontSize: DEVICE_LARGE ? 14 : 13,
+    fontSize: fontSize[14],
   },
 });
 

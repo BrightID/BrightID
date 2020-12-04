@@ -15,6 +15,7 @@ import {
 } from '@react-navigation/drawer';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { BLACK, ORANGE, WHITE, GREY } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { useTranslation } from 'react-i18next';
 import codePush from 'react-native-code-push';
@@ -355,7 +356,7 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     marginLeft: DEVICE_LARGE ? 20 : 18,
   },
   verificationSticker: {
@@ -374,7 +375,7 @@ const styles = StyleSheet.create({
   },
   labelStyle: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     marginLeft: 16,
   },
 });
