@@ -1,6 +1,8 @@
 // @flow
 /* global element:false, by:false, waitFor:false, device: false */
 
+import i18next from 'i18next';
+
 const testUserName = 'Vincent Vega';
 
 const createBrightID = async (name: string = testUserName) => {
@@ -10,9 +12,13 @@ const createBrightID = async (name: string = testUserName) => {
   await element(by.id('editName')).tapReturnKey();
   await element(by.id('addPhoto')).tap();
   // ActionSheet does not support testID prop, so match based on text.
-  await expect(element(by.text('Select photo'))).toBeVisible();
+  await expect(
+    element(by.text(i18next.t('common.photoActionSheet.title'))),
+  ).toBeVisible();
   // Following call is mocked through @utils/images.e2e.js to skip OS image picker
-  await element(by.text('Choose From Library')).tap();
+  await element(
+    by.text(i18next.t('common.photoActionSheet.choosePhoto')),
+  ).tap();
   // Wait until photo is loaded
   await waitFor(element(by.id('editPhoto')))
     .toBeVisible()
@@ -127,10 +133,10 @@ const inviteConnectionToGroup = async (groupName: string) => {
   // invite user
   await element(by.id('eligibleItem-0')).tap();
   // dismiss success notification
-  await waitFor(element(by.text('Successful Invitation')))
+  await waitFor(element(by.text(i18next.t('groups.alert.title.inviteSuccess'))))
     .toBeVisible()
     .withTimeout(20000);
-  await element(by.text('OK')).tap();
+  await element(by.text(i18next.t('common.alert.ok'))).tap();
   // Now on members screen again. Go back to homescreen.
   // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
   await element(by.id('header-back')).tap();
@@ -213,10 +219,13 @@ const reconnect = async (connectionIndex: number, changeProfile: boolean) => {
   // should be on connectionsscreen
   await expectConnectionsScreen();
 
+  /* Is this necessary??
   // wait upto 30 seconds till connection is established
   await waitFor(element(by.text('Connected a few seconds ago')))
     .toBeVisible()
     .withTimeout(30000);
+
+   */
 
   // open connection detail screen of specified connection index
   const connectionCardBtn = element(by.id(`ConnectionCard-${connectionIndex}`));

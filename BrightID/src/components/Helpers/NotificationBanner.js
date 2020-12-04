@@ -9,8 +9,9 @@ import AddGroup from '@/components/Icons/AddGroup';
 import AddPerson from '@/components/Icons/AddPerson';
 import Certificate from '@/components/Icons/Certificate';
 import PhoneLock from '@/components/Icons/PhoneLock';
+import { useTranslation } from 'react-i18next';
 import { setActiveNotification } from '@/actions';
-import { CONNECTIONS_TYPE, GROUPS_TYPE, MISC_TYPE } from '@/utils/constants';
+import { CONNECTIONS_TYPE } from '@/utils/constants';
 import { DEVICE_LARGE, HEIGHT } from '@/utils/deviceConstants';
 
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
@@ -41,6 +42,7 @@ const screenBlackList = [
 
 export const NotificationBanner = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   // const route = useRoute();
   const dropDownAlertRef = useRef(null);
@@ -78,10 +80,10 @@ export const NotificationBanner = () => {
       dispatch(
         setActiveNotification({
           type: CONNECTIONS_TYPE,
-          title: 'Confirm connections',
-          message: `You have ${pendingConnections.length} pending connection${
-            pendingConnections.length > 1 ? 's' : ''
-          }`,
+          title: t('notificationBar.title.pendingConnection'),
+          message: t('notificationBar.text.pendingConnections', {
+            count: pendingConnections.length,
+          }),
           navigationTarget: 'PendingConnections',
           icon: 'AddPerson',
         }),

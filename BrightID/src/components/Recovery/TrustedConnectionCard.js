@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -37,7 +38,7 @@ class TrustedConnectionCard extends React.PureComponent<Props> {
   };
 
   render() {
-    const { photo, name, connectionDate, style } = this.props;
+    const { photo, name, connectionDate, style, t } = this.props;
     const imageSource =
       photo?.filename && !this.state.imgErr
         ? {
@@ -59,7 +60,7 @@ class TrustedConnectionCard extends React.PureComponent<Props> {
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.connectedText}>
-            Connected {moment(parseInt(connectionDate, 10)).fromNow()}
+            {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
           </Text>
         </View>
         <TouchableOpacity
@@ -122,4 +123,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(TrustedConnectionCard);
+export default connect()(withTranslation()(TrustedConnectionCard));

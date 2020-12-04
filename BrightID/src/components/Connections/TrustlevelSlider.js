@@ -3,6 +3,7 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
+import i18next from 'i18next';
 import Slider from '@react-native-community/slider';
 import { connection_levels } from '@/utils/constants';
 import { WIDTH, DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -13,16 +14,16 @@ import {
 
 const trustLevelDetails = {
   [connection_levels.SUSPICIOUS]: {
-    description: "I don't know this person at all",
+    description: i18next.t('connectionDetails.text.levelSuspicious'),
   },
   [connection_levels.JUST_MET]: {
-    description: 'This person is a stranger I just met',
+    description: i18next.t('connectionDetails.text.levelJustMet'),
   },
   [connection_levels.ALREADY_KNOWN]: {
-    description: 'I already know this person',
+    description: i18next.t('connectionDetails.text.levelAlreadyKnown'),
   },
   [connection_levels.RECOVERY]: {
-    description: 'I trust this person to recover my BrightID for me',
+    description: i18next.t('connectionDetails.text.levelRecovery'),
   },
 };
 

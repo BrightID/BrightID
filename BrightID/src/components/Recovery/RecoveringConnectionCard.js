@@ -12,6 +12,7 @@ import {
 import { connect } from 'react-redux';
 import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
+import { withTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import backupApi from '@/api/backupService';
 import { parseRecoveryQr } from './helpers';
@@ -24,6 +25,7 @@ class RecoveryConnectionCard extends React.PureComponent<Props> {
     };
   }
   handleConnectionSelect = async () => {
+    const { t } = this.props;
     try {
       const { signingKey, timestamp } = parseRecoveryQr(
         this.props.recoveryRequestCode,
@@ -32,11 +34,11 @@ class RecoveryConnectionCard extends React.PureComponent<Props> {
       await backupApi.setSig({ id: this.props.id, timestamp, signingKey });
 
       Alert.alert(
-        'Info',
-        'Your request to help recovering this account submitted successfully!',
+        t('common.alert.info'),
+        t('restore.alert.text.requestRecovering'),
         [
           {
-            text: 'OK',
+            text: t('common.alert.ok'),
             onPress: () => this.props.navigation.navigate('Home'),
           },
         ],
@@ -56,7 +58,7 @@ class RecoveryConnectionCard extends React.PureComponent<Props> {
   };
 
   render() {
-    const { photo, name, score, connectionDate, style } = this.props;
+    const { photo, name, score, connectionDate, style, t } = this.props;
     const imageSource =
       photo?.filename && !this.state.imgErr
         ? {
@@ -85,7 +87,7 @@ class RecoveryConnectionCard extends React.PureComponent<Props> {
               </Text>
             </View>
             <Text style={styles.connectedText}>
-              Connected {moment(parseInt(connectionDate, 10)).fromNow()}
+              {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
             </Text>
           </View>
         </View>
@@ -155,4 +157,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(RecoveryConnectionCard);
+export default connect()(withTranslation()(RecoveryConnectionCard));

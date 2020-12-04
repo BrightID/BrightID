@@ -1,5 +1,6 @@
 // @flow
 import { Alert } from 'react-native';
+import i18next from 'i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { dangerouslyDeleteStorage } from '@/utils/dev';
 import { resetOperations } from './actions';
@@ -25,8 +26,8 @@ export const bootstrap = async () => {
     if (id === 'empty') {
       await dangerouslyDeleteStorage();
       Alert.alert(
-        `We've lost the BrightID keypair from the device`,
-        `Please create a new BrightID or try recovering your previous BrightID`,
+        i18next.t('common.alert.title.lostKeys'),
+        i18next.t('common.alert.text.lostKeys'),
       );
       throw new Error('id is empty');
     }

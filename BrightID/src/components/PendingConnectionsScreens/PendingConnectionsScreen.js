@@ -25,7 +25,6 @@ import { PreviewConnectionController } from './PreviewConnectionController';
 ==================================================================
  *
  */
-
 const ZERO_CONNECTIONS_TIMEOUT = 3500;
 
 export const PendingConnectionsScreen = () => {

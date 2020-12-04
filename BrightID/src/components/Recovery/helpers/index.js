@@ -3,6 +3,7 @@
 import { Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
+import i18next from 'i18next';
 import {
   createImageDirectory,
   retrieveImage,
@@ -186,7 +187,10 @@ export const handleSigs = async (data?: Signature) => {
     recoveryData.id = data.id;
     recoveryData.sigs = [data];
     store.dispatch(setRecoveryData(recoveryData));
-    Alert.alert('Info', 'One of your trusted connections signed your request');
+    Alert.alert(
+      i18next.t('common.alert.info'), 
+      i18next.t('common.alert.text.trustedSigned')
+    );
   } else {
     recoveryData.sigs[1] = data;
     store.dispatch(setRecoveryData(recoveryData));
@@ -225,7 +229,10 @@ export const fetchBackupData = async (key: string, pass: string) => {
     return decrypted;
   } catch (err) {
     emitter.emit('restoreProgress', 0);
-    Alert.alert('Error', 'Incorrect password!');
+    Alert.alert(
+      i18next.t('common.alert.error'), 
+      i18next.t('common.alert.text.incorrectPassword')
+    );
     throw new Error('bad password');
   }
 };

@@ -3,6 +3,7 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialIcons';
+import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import {
   connectionLevelColors,
@@ -17,6 +18,7 @@ type props = {
 
 function TrustLevelView({ level, connectionId }: props) {
   const navigation = useNavigation();
+  const { t } = useTranslation();
   const setLevel = () => {
     navigation.navigate('SetTrustlevel', {
       connectionId,
@@ -25,7 +27,7 @@ function TrustLevelView({ level, connectionId }: props) {
   return (
     <View style={styles.container}>
       <View style={styles.trustLevelLabel}>
-        <Text style={styles.trustLevelLabelText}>Connection Level</Text>
+        <Text style={styles.trustLevelLabelText}>{t('connectionDetails.label.connectionLevel')}</Text>
       </View>
 
       <View style={styles.trustLevel}>
@@ -44,7 +46,7 @@ function TrustLevelView({ level, connectionId }: props) {
         testID="EditConnectionLevelBtn"
         onPress={setLevel}
       >
-        <Material name="edit" size={DEVICE_LARGE ? 23 : 20} color="#2185D0" />
+        <Material name="edit" size={DEVICE_LARGE ? 22 : 20} color="#2185D0" />
       </TouchableOpacity>
     </View>
   );
@@ -54,6 +56,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: DEVICE_LARGE ? 22 : 20,
   },
   trustLevelLabel: {
     alignItems: 'center',
@@ -66,7 +69,7 @@ const styles = StyleSheet.create({
   },
   trustLevel: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'center',
   },
   trustLevelText: {
@@ -74,10 +77,7 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 14 : 12,
   },
   trustLevelButton: {
-    paddingLeft: 5,
-    paddingBottom: 5,
-    paddingTop: 5,
-    paddingRight: 5,
+    padding: 5,
   },
 });
 

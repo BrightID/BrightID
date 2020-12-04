@@ -9,19 +9,19 @@ import {
 } from 'react-native';
 import React from 'react';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { useTranslation } from 'react-i18next';
 import { TaskState } from './TaskState';
 
 type TaskCardProps = {
   id: string,
-  title: string,
-  description: string,
   fulfilled: boolean,
   url: ?string,
   onClick: ?() => any,
 };
 
 function TaskCard(props: TaskCardProps) {
-  const { title, description, fulfilled, url, onClick } = props;
+  const { id, fulfilled, url, onClick } = props;
+  const { t } = useTranslation();
 
   const desc = url ? (
     <TouchableOpacity
@@ -29,16 +29,20 @@ function TaskCard(props: TaskCardProps) {
         Linking.openURL(url);
       }}
     >
-      <Text style={styles.linkifiedDescription}>{description}</Text>
+      <Text style={styles.linkifiedDescription}>
+        {t(`achievements.${id}.description`)}
+      </Text>
     </TouchableOpacity>
   ) : (
-    <Text style={styles.description}>{description}</Text>
+    <Text style={styles.description}>
+      {t(`achievements.${id}.description`)}
+    </Text>
   );
 
   return (
     <View style={styles.container}>
       <View style={styles.taskInfo}>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title}>{t(`achievements.${id}.title`)}</Text>
         {desc}
       </View>
       <TaskState complete={fulfilled} onClick={onClick} />
@@ -59,16 +63,20 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-evenly',
-    fontFamily: 'Poppins-Medium',
-    fontStyle: 'normal',
   },
   title: {
+    fontFamily: 'Poppins-Medium',
+    fontStyle: 'normal',
     fontSize: DEVICE_LARGE ? 20 : 17,
   },
   description: {
+    fontFamily: 'Poppins-Medium',
+    fontStyle: 'normal',
     fontSize: DEVICE_LARGE ? 15 : 12,
   },
   linkifiedDescription: {
+    fontFamily: 'Poppins-Medium',
+    fontStyle: 'normal',
     fontSize: DEVICE_LARGE ? 15 : 12,
     color: '#2185D0',
   },

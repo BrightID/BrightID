@@ -26,6 +26,7 @@ import {
   selectAllPendingConnectionIds,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import { Alert } from 'react-native';
+import i18next from 'i18next';
 
 export const createChannel = (channelType: ChannelType) => async (
   dispatch: dispatch,
@@ -55,8 +56,8 @@ export const createChannel = (channelType: ChannelType) => async (
     }
     console.log(`Error while crating channel: ${e}`);
     Alert.alert(
-      'Error',
-      `Could not create connection channel. Error message: ${e.message}`,
+      i18next.t('common.alert.error'),
+      i18next.t('pendingConnection.alert.text.errorCreateChannel', {message: `${e.message}`})
     );
   }
 };
@@ -111,8 +112,8 @@ export const joinChannel = (channel: Channel) => async (
     dispatch(leaveChannel(channel.id));
     console.log(`Error while joining channel: ${e}`);
     Alert.alert(
-      'Error',
-      `Could not join connection channel. Error message: ${e.message}`,
+      i18next.t('common.alert.error'),
+      i18next.t('pendingConnection.alert.text.errorJoinChannel', {message: `${e.message}`})
     );
   }
 };

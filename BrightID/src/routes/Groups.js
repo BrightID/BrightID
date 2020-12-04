@@ -14,6 +14,7 @@ import GroupInfoScreen from '@/components/GroupsScreens/NewGroups/GroupInfoScree
 import MembersScreen from '@/components/GroupsScreens/Members/MembersScreen';
 import InviteListScreen from '@/components/GroupsScreens/Members/InviteListScreen';
 import { headerOptions, headerTitleStyle, NavHome } from './helpers';
+import { useTranslation } from 'react-i18next';
 
 const Stack = createStackNavigator();
 
@@ -37,17 +38,22 @@ const HeaderTitle = ({ title }) => {
   );
 };
 
+const HeaderTitleI18N = ({ i18key }) => {
+  const { t } = useTranslation();
+  return (<HeaderTitle title={t(i18key)}/>);
+};
+
 const groupsOptions = {
   ...headerOptions,
   headerRight: () => <SearchGroups />,
   headerLeft: () => <NavHome />,
-  headerTitle: () => <HeaderTitle title="Groups" />,
+  headerTitle: () => <HeaderTitleI18N i18key="groups.header.groups" />,
 };
 
 const newGroupOptions = {
   ...headerOptions,
   headerRight: () => <SearchConnections />,
-  headerTitle: () => <HeaderTitle title="New Group" />,
+  headerTitle: () => <HeaderTitleI18N i18key="groups.header.newGroup" />,
 };
 
 const membersScreenOptions = ({ navigation, route }) => {
@@ -63,34 +69,37 @@ const membersScreenOptions = ({ navigation, route }) => {
   };
 };
 
-const Groups = () => (
-  <>
-    <Stack.Screen
-      name="Groups"
-      component={GroupsScreen}
-      options={groupsOptions}
-    />
-    <Stack.Screen
-      name="NewGroup"
-      component={NewGroupScreen}
-      options={newGroupOptions}
-    />
-    <Stack.Screen
-      name="GroupInfo"
-      component={GroupInfoScreen}
-      options={{ ...headerOptions, title: 'New Groups' }}
-    />
-    <Stack.Screen
-      name="Members"
-      component={MembersScreen}
-      options={membersScreenOptions}
-    />
-    <Stack.Screen
-      name="InviteList"
-      component={InviteListScreen}
-      options={{ ...headerOptions, title: 'Invite List' }}
-    />
-  </>
-);
+const Groups = () => {
+  const { t } = useTranslation();
+  return (
+    <>
+      <Stack.Screen
+        name="Groups"
+        component={GroupsScreen}
+        options={groupsOptions}
+      />
+      <Stack.Screen
+        name="NewGroup"
+        component={NewGroupScreen}
+        options={newGroupOptions}
+      />
+      <Stack.Screen
+        name="GroupInfo"
+        component={GroupInfoScreen}
+        options={{ ...headerOptions, title: t('groups.header.newGroup') }}
+      />
+      <Stack.Screen
+        name="Members"
+        component={MembersScreen}
+        options={membersScreenOptions}  
+      />
+      <Stack.Screen
+        name="InviteList"
+        component={InviteListScreen}
+        options={{ ...headerOptions, title: t('groups.header.inviteList') }}
+      />
+    </>
+  )
+};
 
 export default Groups;

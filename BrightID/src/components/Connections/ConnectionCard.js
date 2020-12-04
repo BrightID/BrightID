@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import { CHANNEL_TTL } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
@@ -42,6 +43,7 @@ const ConnectionCard = (props) => {
     index,
     level,
   } = props;
+  const { t } = useTranslation();
 
   const brightidVerified = verifications?.includes('BrightID');
   const [imgErr, setImgErr] = useState(false);
@@ -101,14 +103,14 @@ const ConnectionCard = (props) => {
     if (status === 'initiated') {
       return (
         <View style={styles.statusContainer}>
-          <Text style={styles.waitingMessage}>Waiting</Text>
+          <Text style={styles.waitingMessage}>{t('connections.tag.waiting')}</Text>
         </View>
       );
     } else if (status === 'stale') {
       return (
         <View style={styles.statusContainer}>
           <Text style={styles.waitingMessage}>
-            {`Connection failed.\nPlease try again.`}
+            {t('connections.tag.failed')}
           </Text>
         </View>
       );
@@ -116,17 +118,17 @@ const ConnectionCard = (props) => {
       return (
         <View style={styles.statusContainer}>
           <Text style={[styles.deletedMessage, { marginTop: 1 }]}>
-            {hiddenFlag ? `Reported as ${hiddenFlag}` : 'Hidden'}
+            {hiddenFlag ? t('connections.tag.reportedAs', {flag: `Reported as ${hiddenFlag}`}) : t('connections.tag.hidden')}
           </Text>
           <Text style={[styles.connectedText, { marginTop: 1 }]}>
-            Connected {moment(parseInt(connectionDate, 10)).fromNow()}
+            {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
           </Text>
         </View>
       );
     } else if (status === 'deleted') {
       return (
         <View style={styles.statusContainer}>
-          <Text style={styles.deletedMessage}>Deleted</Text>
+          <Text style={styles.deletedMessage}>{t('connections.tag.deleted')}</Text>
         </View>
       );
     } else {
@@ -145,7 +147,7 @@ const ConnectionCard = (props) => {
             style={styles.connectionTime}
             testID={`connection_time-${index}`}
           >
-            Connected {moment(parseInt(connectionDate, 10)).fromNow()}
+            {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
           </Text>
         </View>
       );
@@ -153,7 +155,7 @@ const ConnectionCard = (props) => {
   };
 
   const { showActionSheetWithOptions } = useActionSheet();
-  const removeOptions = ['Remove', 'cancel'];
+  const removeOptions = [t('connections.removeActionSheet.remove'), t('common.actionSheet.cancel')];
 
   const showRemove = status === 'deleted' || status === 'stale';
 
@@ -167,8 +169,8 @@ const ConnectionCard = (props) => {
               options: removeOptions,
               cancelButtonIndex: removeOptions.length - 1,
               destructiveButtonIndex: 0,
-              title: `Remove connection`,
-              message: `Are you sure you want to remove connection with ${name}? You can reconnect anytime.`,
+              title: t('connections.removeActionSheet.title'),
+              message: t('connections.removeActionSheet.info', {name: name}),
               showSeparators: true,
               textStyle: {
                 textAlign: 'center',
@@ -201,13 +203,13 @@ const ConnectionCard = (props) => {
           onPress={() => {
             navigation.navigate('FullScreenPhoto', { photo });
           }}
-          accessibilityLabel="View Photo Full Screen"
+          accessibilityLabel={t('connections.accessibilityLabel.viewPhoto')}
           accessibilityRole="imagebutton"
         >
           <Image
             source={imageSource}
             style={styles.photo}
-            accessibilityLabel="ConnectionPhoto"
+            accessibilityLabel={t('connections.accessibilityLabel.connectionPhoto')}
             onError={() => {
               console.log('settingImgErr');
               setImgErr(true);
@@ -219,7 +221,7 @@ const ConnectionCard = (props) => {
           onPress={() => {
             navigation.navigate('Connection', { connectionId: id });
           }}
-          accessibilityLabel="View Connection details"
+          accessibilityLabel={t('connections.accessibilityLabel.viewConnectionDetails')}
         >
           <View style={[styles.info, { maxWidth: WIDTH * 0.56 }]}>
             <View
@@ -230,7 +232,7 @@ const ConnectionCard = (props) => {
                 // adjustsFontSizeToFit={true}
                 numberOfLines={1}
                 style={styles.name}
-                testID="connectionCardText"
+                testID={`connectionCardText-${index}`}
               >
                 {name}
               </Text>
