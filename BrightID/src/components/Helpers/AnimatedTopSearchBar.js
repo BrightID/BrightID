@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
-import { navigate } from '@/NavigationService';
+import { fontSize } from '@/theme/fonts';
 import Search from '@/components/Icons/Search';
 
 /**
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   },
   searchField: {
     fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_LARGE ? 15 : 13,
+    fontSize: fontSize[15],
     color: '#333',
     marginLeft: DEVICE_LARGE ? 23 : 20,
     flex: 1,

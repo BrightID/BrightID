@@ -5,7 +5,8 @@ import { TextInput, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
-import { setSearchParam } from '../../../actions';
+import { fontSize } from '@/theme/fonts';
+import { setSearchParam } from '@/actions';
 
 class SearchMembers extends React.Component<Props> {
   componentWillUnmount() {
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
   },
   searchField: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 14,
+    fontSize: fontSize[14],
     color: '#333',
     flex: 1,
     fontWeight: 'normal',

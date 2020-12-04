@@ -7,6 +7,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import { withTranslation } from 'react-i18next';
 import { setSearchParam } from '@/actions';
+import { fontSize } from '@/theme/fonts';
 
 /**
  * Search Bar in the Connections Screen
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
   },
   searchField: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 16,
+    fontSize: fontSize[16],
     color: '#333',
     marginLeft: 23,
     flex: 1,

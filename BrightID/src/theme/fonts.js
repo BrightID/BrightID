@@ -4,8 +4,12 @@ import { DEVICE_LARGE } from '../utils/deviceConstants';
 
 export const fontSize = {
   28: DEVICE_LARGE ? 28 : 24,
-  25: DEVICE_LARGE ? 25 : 21,
+  26: DEVICE_LARGE ? 26 : 22,
+  25: DEVICE_LARGE ? 25 : 21.5,
+  24: DEVICE_LARGE ? 24 : 21,
+  23: DEVICE_LARGE ? 23 : 20,
   22: DEVICE_LARGE ? 22 : 19,
+  21: DEVICE_LARGE ? 21 : 18,
   20: DEVICE_LARGE ? 20 : 17,
   19: DEVICE_LARGE ? 19 : 16.5,
   18: DEVICE_LARGE ? 18 : 15.5,

@@ -5,6 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { DEVICE_TYPE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { getGroupName, ids2connections } from '@/utils/groups';
 import GroupPhoto from './GroupPhoto';
 /**
@@ -22,7 +23,9 @@ class GroupCard extends React.PureComponent<Props> {
       return (
         <View style={styles.waitingContainer}>
           <Text style={styles.waitingMessage}>
-            {t('groups.text.waitingForMembers', {list: notJoinedNames.join(` ${t('common.language.and')} `)})}
+            {t('groups.text.waitingForMembers', {
+              list: notJoinedNames.join(` ${t('common.language.and')} `),
+            })}
           </Text>
         </View>
       );
@@ -33,11 +36,15 @@ class GroupCard extends React.PureComponent<Props> {
       return (
         <View>
           <View style={styles.membersContainer}>
-            <Text style={styles.membersLabel}>{t('groups.label.knownMembers')}</Text>
+            <Text style={styles.membersLabel}>
+              {t('groups.label.knownMembers')}
+            </Text>
             <Text style={styles.membersKnown}>
               {group.members.length - unknowsCount}{' '}
             </Text>
-            <Text style={styles.membersLabel}>{t('groups.label.unknownMembers')}</Text>
+            <Text style={styles.membersLabel}>
+              {t('groups.label.unknownMembers')}
+            </Text>
             <Text style={styles.membersUnknown}>{unknowsCount}</Text>
           </View>
         </View>
@@ -96,7 +103,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_TYPE === 'large' ? 20 : 18,
+    fontSize: fontSize[20],
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
@@ -108,27 +115,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   primary: {
-    fontSize: DEVICE_TYPE === 'large' ? 14 : 12,
+    fontSize: fontSize[14],
     color: '#139c60',
   },
   membersLabel: {
     fontFamily: 'ApexNew-Medium',
-    fontSize: DEVICE_TYPE === 'large' ? 14 : 12,
+    fontSize: fontSize[14],
     color: '#9b9b9b',
     marginRight: 3,
     paddingTop: 1.5,
   },
   membersKnown: {
     color: '#139c60',
-    fontSize: DEVICE_TYPE === 'large' ? 16 : 12,
+    fontSize: fontSize[16],
   },
   membersUnknown: {
     color: '#e39f2f',
-    fontSize: DEVICE_TYPE === 'large' ? 16 : 12,
+    fontSize: fontSize[16],
   },
   waitingMessage: {
     fontFamily: 'ApexNew-Medium',
-    fontSize: DEVICE_TYPE === 'large' ? 16 : 12,
+    fontSize: fontSize[16],
     color: '#e39f2f',
   },
 });

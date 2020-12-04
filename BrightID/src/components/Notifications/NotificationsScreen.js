@@ -16,11 +16,12 @@ import { useTranslation } from 'react-i18next';
 import { TabBar, TabView, SceneMap } from 'react-native-tab-view';
 import {
   INVITE_ACTIVE,
-  ORANGE,
   CONNECTIONS_TYPE,
   GROUPS_TYPE,
   MISC_TYPE,
 } from '@/utils/constants';
+import { ORANGE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { createSelector } from '@reduxjs/toolkit';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
@@ -197,14 +198,14 @@ export const NotificationsScreen = ({ route }) => {
       title: t('notifications.tab.connections'),
       badge: !!pendingConnections,
     },
-    { 
-      key: GROUPS_TYPE, 
-      title: t('notifications.tab.groups'), 
-      badge: !!invites 
+    {
+      key: GROUPS_TYPE,
+      title: t('notifications.tab.groups'),
+      badge: !!invites,
     },
     {
       key: MISC_TYPE,
-      title: t('notifications.tab.miscellaneous'), 
+      title: t('notifications.tab.miscellaneous'),
       badge: backupPending,
       backupPending,
     },
@@ -282,7 +283,7 @@ const styles = StyleSheet.create({
   },
   tabText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 10,
+    fontSize: fontSize[12],
   },
 });
 

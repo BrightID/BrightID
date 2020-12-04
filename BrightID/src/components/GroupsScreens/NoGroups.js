@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useTranslation, Trans } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 
 const learnMoreUrl =
   'https://docs.google.com/document/d/1CEBWv4ImXsZYQ2Qll7BXojeKI9CGtzRXjB9aFIj00c4/edit#heading=h.nr1odgliy5nk';
@@ -22,7 +23,6 @@ const handleLearnMore = () => {
 };
 
 export const NoGroups = ({ navigation }: Props) => {
-  
   const { t } = useTranslation();
   return (
     <View style={styles.noContainer} testID="noGroupsView">
@@ -40,7 +40,7 @@ export const NoGroups = ({ navigation }: Props) => {
         <View>
           <Trans
             i18nKey="groups.text.noGroups"
-            components={{text: <Text style={styles.emptyGroupsText}/>}}
+            components={{ text: <Text style={styles.emptyGroupsText} /> }}
           />
         </View>
       </View>
@@ -50,7 +50,9 @@ export const NoGroups = ({ navigation }: Props) => {
           style={styles.learnMoreButton}
           onPress={handleLearnMore}
         >
-          <Text style={styles.learnMoreText}>{t('groups.button.learnMore')}</Text>
+          <Text style={styles.learnMoreText}>
+            {t('groups.button.learnMore')}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           testID="groupsCreateGroupBtn"
@@ -59,11 +61,13 @@ export const NoGroups = ({ navigation }: Props) => {
             navigation.navigate('GroupInfo');
           }}
         >
-          <Text style={styles.createGroupText}>{t('groups.button.createGroup')}</Text>
+          <Text style={styles.createGroupText}>
+            {t('groups.button.createGroup')}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
-  )
+  );
 };
 
 const styles = StyleSheet.create({
@@ -90,7 +94,7 @@ const styles = StyleSheet.create({
   },
   emptyGroupsText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_LARGE ? 18 : 16,
+    fontSize: fontSize[18],
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -108,7 +112,7 @@ const styles = StyleSheet.create({
   },
   learnMoreText: {
     fontFamily: 'ApexNew-Medium',
-    fontSize: DEVICE_LARGE ? 18 : 16,
+    fontSize: fontSize[18],
     fontWeight: '500',
     textAlign: 'center',
     color: '#4a90e2',
@@ -125,7 +129,7 @@ const styles = StyleSheet.create({
   },
   createGroupText: {
     fontFamily: 'ApexNew-Medium',
-    fontSize: DEVICE_LARGE ? 18 : 16,
+    fontSize: fontSize[18],
     fontWeight: '500',
     color: '#fff',
     textAlign: 'center',

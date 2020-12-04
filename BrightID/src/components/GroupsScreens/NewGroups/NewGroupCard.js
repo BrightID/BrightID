@@ -9,6 +9,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { withTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { toggleNewGroupCoFounder } from '../actions';
 
 /**
@@ -84,7 +85,9 @@ class NewGroupCard extends React.PureComponent<Props> {
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.connectedText}>
-            {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
+            {t('common.tag.connectionDate', {
+              date: moment(parseInt(connectionDate, 10)).fromNow(),
+            })}
           </Text>
         </View>
         {this.renderActionButton()}
@@ -122,14 +125,14 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_LARGE ? 20 : 18,
+    fontSize: fontSize[20],
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
   connectedText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 12,
+    fontSize: fontSize[12],
     color: '#aba9a9',
     fontStyle: 'italic',
   },

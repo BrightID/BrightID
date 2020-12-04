@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { StyleSheet, Image, Text, View } from 'react-native';
 import { Trans, withTranslation } from 'react-i18next';
+import { fontSize } from '@/theme/fonts';
 
 type Props = {};
 
@@ -25,12 +26,14 @@ class MaintainPrivacy extends React.Component<Props> {
             source={require('../../../static/icons8-anonymous-mask-96.png')}
             style={styles.guyFox}
           />
-          <Text style={styles.mainText}>{t('onboarding.label.maintainPrivacy')}</Text>
+          <Text style={styles.mainText}>
+            {t('onboarding.label.maintainPrivacy')}
+          </Text>
         </View>
         <View style={styles.top}>
           <Trans
             i18nKey="onboarding.text.privacy"
-            components={{text: <Text style={styles.secondaryText}/>}}
+            components={{ text: <Text style={styles.secondaryText} /> }}
           />
         </View>
       </View>
@@ -56,7 +59,7 @@ const styles = StyleSheet.create({
   },
   mainText: {
     fontFamily: 'ApexNew-Medium',
-    fontSize: 24,
+    fontSize: fontSize[24],
     fontWeight: '500',
     fontStyle: 'normal',
     color: '#222',
@@ -71,7 +74,7 @@ const styles = StyleSheet.create({
   },
   secondaryText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: fontSize[18],
     lineHeight: 22,
     color: '#222',
     fontWeight: 'normal',

@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { StyleSheet, Image, Text, View } from 'react-native';
+import { fontSize } from '@/theme/fonts';
 
 type Props = {};
 
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
   },
   mainText: {
     fontFamily: 'ApexNew-Medium',
-    fontSize: 24,
+    fontSize: fontSize[24],
     fontWeight: '500',
     fontStyle: 'normal',
     color: '#222',
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   },
   secondaryText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: fontSize[18],
     lineHeight: 22,
     color: '#222',
     fontWeight: 'normal',

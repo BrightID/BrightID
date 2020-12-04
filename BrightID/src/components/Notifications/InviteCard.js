@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
 import { withTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { getGroupName } from '@/utils/groups';
 import { acceptInvite, rejectInvite, joinGroup } from '@/actions';
 import api from '@/api/brightId';
@@ -35,7 +36,10 @@ class InviteCard extends React.Component<Props> {
                 await api.deleteGroup(invite.id);
               }
             } catch (err) {
-              Alert.alert(t('notifications.alert.title.failureRejectGroupInvite'), err.message);
+              Alert.alert(
+                t('notifications.alert.title.failureRejectGroupInvite'),
+                err.message,
+              );
             }
           },
         },
@@ -52,8 +56,10 @@ class InviteCard extends React.Component<Props> {
       invite.members.push(id);
       await dispatch(joinGroup(invite));
       Alert.alert(
-        t('common.alert.success'), 
-        t('notifications.alert.text.successGroupInvite', {groupName: getGroupName(invite)})
+        t('common.alert.success'),
+        t('notifications.alert.text.successGroupInvite', {
+          groupName: getGroupName(invite),
+        }),
       );
       if (backupCompleted) {
         await backupUser();
@@ -63,7 +69,10 @@ class InviteCard extends React.Component<Props> {
       }
       navigation.navigate('Members', { group: invite });
     } catch (err) {
-      Alert.alert(t('notifications.alert.text.failureAcceptGroupInvite'), err.message);
+      Alert.alert(
+        t('notifications.alert.text.failureAcceptGroupInvite'),
+        err.message,
+      );
     }
   };
 
@@ -78,7 +87,9 @@ class InviteCard extends React.Component<Props> {
         <View style={styles.info}>
           <Text style={styles.name}>{getGroupName(invite)}</Text>
           <Text style={styles.invitationMsg}>
-            {t('notifications.item.text.pendingGroupInvite', {name: inviter?.name})}
+            {t('notifications.item.text.pendingGroupInvite', {
+              name: inviter?.name,
+            })}
           </Text>
         </View>
         <View style={styles.approvalButtonContainer}>
@@ -136,14 +147,14 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 20 : 18,
+    fontSize: fontSize[20],
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
   invitationMsg: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 11,
+    fontSize: fontSize[12],
     color: '#B64B32',
   },
   greenCircle: {

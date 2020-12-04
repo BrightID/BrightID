@@ -11,8 +11,9 @@ import { withTranslation } from 'react-i18next';
 import store from '@/store';
 import emitter from '@/emitter';
 import { clearNewGroupCoFounders } from '@/actions';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { toSearchString } from '@/utils/strings';
 import Spinner from 'react-native-spinkit';
 import { createNewGroup } from '../actions';
@@ -101,7 +102,9 @@ export class NewGroupScreen extends React.Component<Props> {
           }
           disabled={buttonDisabled}
         >
-          <Text style={styles.buttonInnerText}>{t('createGroup.button.createGroup')}</Text>
+          <Text style={styles.buttonInnerText}>
+            {t('createGroup.button.createGroup')}
+          </Text>
         </TouchableOpacity>
       </View>
     ) : (
@@ -130,7 +133,9 @@ export class NewGroupScreen extends React.Component<Props> {
         <View style={styles.container}>
           <View testID="newGroupScreen" style={styles.mainContainer}>
             <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>{t('createGroup.label.cofounders')}</Text>
+              <Text style={styles.titleText}>
+                {t('createGroup.label.cofounders')}
+              </Text>
               <Text style={styles.infoText}>
                 {t('createGroup.text.cofounders')}
               </Text>
@@ -149,7 +154,9 @@ export class NewGroupScreen extends React.Component<Props> {
                 />
               ) : (
                 <View>
-                  <Text style={styles.emptyText}>{t('createGroup.text.noConnections')}</Text>
+                  <Text style={styles.emptyText}>
+                    {t('createGroup.text.noConnections')}
+                  </Text>
                 </View>
               )}
             </View>
@@ -191,7 +198,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 20,
+    fontSize: fontSize[20],
   },
   moreIcon: {
     marginRight: 16,
@@ -207,7 +214,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: fontSize[18],
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -222,7 +229,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 14,
+    fontSize: fontSize[14],
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -255,11 +262,11 @@ const styles = StyleSheet.create({
     fontFamily: 'ApexNew-Medium',
     color: '#fff',
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: fontSize[18],
   },
   textInfo: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: fontSize[18],
     margin: 18,
   },
   loader: {

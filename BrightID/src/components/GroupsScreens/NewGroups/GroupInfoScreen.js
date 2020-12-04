@@ -13,7 +13,8 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { chooseImage } from '@/utils/images';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { DEVICE_TYPE, DEVICE_OS, DEVICE_LARGE } from '@/utils/deviceConstants';
 
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
@@ -145,7 +146,9 @@ export class GroupInfoScreen extends React.Component<Props> {
               style={styles.nextButton}
               onPress={this.validateInputs}
             >
-              <Text style={styles.buttonInnerText}>{t('createGroup.button.next')}</Text>
+              <Text style={styles.buttonInnerText}>
+                {t('createGroup.button.next')}
+              </Text>
             </TouchableOpacity>
           </View>
         </Container>
@@ -219,14 +222,14 @@ const styles = StyleSheet.create({
     color: '#979797',
     marginBottom: 8,
     marginTop: 8,
-    fontSize: 12,
+    fontSize: fontSize[12],
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
   },
   textInput: {
     fontFamily: 'ApexNew-Light',
-    fontSize: 20,
+    fontSize: fontSize[20],
     fontWeight: '300',
     fontStyle: 'normal',
     color: '#000',
@@ -238,7 +241,7 @@ const styles = StyleSheet.create({
   },
   buttonInfoText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 16,
+    fontSize: fontSize[16],
     width: 300,
     textAlign: 'center',
   },
@@ -255,7 +258,7 @@ const styles = StyleSheet.create({
     fontFamily: 'ApexNew-Medium',
     color: '#fff',
     fontWeight: '600',
-    fontSize: DEVICE_TYPE === 'large' ? 18 : 16,
+    fontSize: fontSize[18],
   },
   loader: {
     justifyContent: 'center',
@@ -265,7 +268,7 @@ const styles = StyleSheet.create({
   primaryToggleLable: {
     color: '#555555',
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: fontSize[18],
     width: 200,
   },
   toggleContainer: {
@@ -280,4 +283,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ groups }) => ({ ...groups }))(withTranslation()(GroupInfoScreen));
+export default connect(({ groups }) => ({ ...groups }))(
+  withTranslation()(GroupInfoScreen),
+);

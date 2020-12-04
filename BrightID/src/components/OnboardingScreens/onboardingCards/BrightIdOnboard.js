@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { StyleSheet, Image, Text, View } from 'react-native';
 import { Trans } from 'react-i18next';
+import { fontSize } from '@/theme/fonts';
 
 type Props = {};
 
@@ -28,7 +29,7 @@ export default class BrightIdOnboard extends React.Component<Props> {
         <View style={styles.top}>
           <Trans
             i18nKey="onboarding.text.intro"
-            components={{text: <Text style={styles.secondaryText}/>}}
+            components={{ text: <Text style={styles.secondaryText} /> }}
           />
         </View>
       </View>
@@ -54,8 +55,7 @@ const styles = StyleSheet.create({
   },
   mainText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
-    fontWeight: '500',
+    fontSize: fontSize[18],
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   },
   secondaryText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: fontSize[18],
     lineHeight: 22,
     fontWeight: 'normal',
     fontStyle: 'normal',

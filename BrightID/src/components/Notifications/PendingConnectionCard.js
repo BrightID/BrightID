@@ -5,6 +5,7 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import CirclePhoto from '@/components/Helpers/CirclePhoto';
 
 export const PendingConnectionCard = ({ pendingConnections }) => {
@@ -44,7 +45,9 @@ export const PendingConnectionCard = ({ pendingConnections }) => {
           adjustsFontSizeToFit={true}
           numberOfLines={1}
         >
-          {t('notifications.item.text.pendingConnections', {count: pendingConnections.length})}
+          {t('notifications.item.text.pendingConnections', {
+            count: pendingConnections.length,
+          })}
         </Text>
       </View>
       <View style={styles.approvalButtonContainer} />
@@ -86,14 +89,14 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 20 : 18,
+    fontSize: fontSize[20],
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
   invitationMsg: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 10,
+    fontSize: fontSize[12],
     color: '#B64B32',
   },
   greenCircle: {

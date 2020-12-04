@@ -8,6 +8,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useNavigation } from '@react-navigation/native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -152,11 +153,15 @@ function MemberCard(props: MemberCardProps) {
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
           <View style={styles.statusContainer}>
-            {flagged ? <Text style={styles.flagged}>{t('common.tag.reported')}</Text> : null}
+            {flagged ? (
+              <Text style={styles.flagged}>{t('common.tag.reported')}</Text>
+            ) : null}
           </View>
           {connectionDate > 0 && (
             <Text style={styles.connectedText}>
-              {t('common.tag.connectionDate', {date: moment(connectionDate).fromNow()})}
+              {t('common.tag.connectionDate', {
+                date: moment(connectionDate).fromNow(),
+              })}
             </Text>
           )}
         </View>
@@ -203,14 +208,14 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_LARGE ? 20 : 18,
+    fontSize: fontSize[20],
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
   flagged: {
     fontFamily: 'ApexNew-Medium',
-    fontSize: 14,
+    fontSize: fontSize[14],
     color: 'red',
   },
   statusContainer: {
@@ -220,7 +225,7 @@ const styles = StyleSheet.create({
   },
   connectedText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 12,
+    fontSize: fontSize[12],
     color: '#aba9a9',
     fontStyle: 'italic',
   },

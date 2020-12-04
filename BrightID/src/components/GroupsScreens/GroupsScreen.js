@@ -17,6 +17,7 @@ import { getGroupName, ids2connections, knownMemberIDs } from '@/utils/groups';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { toSearchString } from '@/utils/strings';
 import GroupCard from './GroupCard';
 import { NoGroups } from './NoGroups';
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 20,
+    fontSize: fontSize[20],
   },
 });
 

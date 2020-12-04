@@ -11,7 +11,9 @@ import {
 import { BlurView } from '@react-native-community/blur';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from 'react-redux';
-import { ORANGE, connection_levels } from '@/utils/constants';
+import { connection_levels } from '@/utils/constants';
+import { ORANGE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { types } from '@/utils/sorting';
 import { setFilters, setConnectionsSort } from '@/actions';
 import Chevron from '../Icons/Chevron';
@@ -260,8 +262,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 16 : 14,
-    // textAlign: 'center',
+    fontSize: fontSize[16],
   },
 
   divider: {
@@ -294,7 +295,7 @@ const styles = StyleSheet.create({
   sortButtonText: {
     color: '#000',
     fontFamily: 'Poppins-Regular',
-    fontSize: DEVICE_LARGE ? 14 : 12.5,
+    fontSize: fontSize[14],
     marginRight: DEVICE_LARGE ? 5 : 4,
   },
   activeButtonText: {
@@ -336,7 +337,7 @@ const styles = StyleSheet.create({
   },
   radioLabelText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 15 : 13,
+    fontSize: fontSize[15],
     color: '#000',
     textTransform: 'capitalize',
   },
@@ -363,12 +364,12 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 15 : 13,
+    fontSize: fontSize[15],
     color: '#000',
   },
   submitButtonDisabledText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 15 : 13,
+    fontSize: fontSize[15],
     color: '#707070',
   },
 });

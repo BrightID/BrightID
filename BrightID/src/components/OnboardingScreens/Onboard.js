@@ -13,6 +13,7 @@ import {
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { withTranslation } from 'react-i18next';
+import { fontSize } from '@/theme/fonts';
 import MaintainPrivacy from './onboardingCards/MaintainPrivacy';
 import BrightIdOnboard from './onboardingCards/BrightIdOnboard';
 
@@ -103,7 +104,9 @@ export class Onboard extends React.Component<Props, State> {
             onPress={() => this.props.navigation.navigate('SignUp')}
             style={styles.button}
           >
-            <Text style={styles.buttonText}>{t('onboarding.button.getStarted')}</Text>
+            <Text style={styles.buttonText}>
+              {t('onboarding.button.getStarted')}
+            </Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -147,7 +150,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: 'ApexNew-Medium',
     color: '#4990e2',
-    fontSize: 18,
+    fontSize: fontSize[18],
     fontWeight: '500',
     fontStyle: 'normal',
     letterSpacing: 0,

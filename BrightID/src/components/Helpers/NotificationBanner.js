@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { setActiveNotification } from '@/actions';
 import { CONNECTIONS_TYPE } from '@/utils/constants';
 import { DEVICE_LARGE, HEIGHT } from '@/utils/deviceConstants';
-
+import { fontSize } from '@/theme/fonts';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import DropDownAlertEnabled from '@/utils/DropDownAlertEnabler';
 
@@ -150,13 +150,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     marginLeft: DEVICE_LARGE ? 20 : 10,
     color: '#000',
-    fontSize: DEVICE_LARGE ? 16 : 15,
+    fontSize: fontSize[16],
   },
   message: {
     fontFamily: 'Poppins-Medium',
     marginLeft: DEVICE_LARGE ? 20 : 10,
     color: '#000',
-    fontSize: DEVICE_LARGE ? 13 : 12,
+    fontSize: fontSize[13],
   },
   icon: {
     marginLeft: DEVICE_LARGE ? 20 : 10,

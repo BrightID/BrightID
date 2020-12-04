@@ -18,8 +18,9 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { takePhoto, chooseImage } from '@/utils/images';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE, DEVICE_OS } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { handleBrightIdCreation } from './actions';
 import { checkTasks } from '../Tasks/TasksSlice';
 
@@ -58,7 +59,11 @@ export const SignUp = ({ navigation }) => {
   const handleAddPhoto = () => {
     showActionSheetWithOptions(
       {
-        options: [t('common.photoActionSheet.takePhoto'), t('common.photoActionSheet.choosePhoto'), t('common.actionSheet.cancel')],
+        options: [
+          t('common.photoActionSheet.takePhoto'),
+          t('common.photoActionSheet.choosePhoto'),
+          t('common.actionSheet.cancel'),
+        ],
         cancelButtonIndex: 2,
         title: t('common.photoActionSheet.title'),
         showSeparators: true,
@@ -66,11 +71,11 @@ export const SignUp = ({ navigation }) => {
           color: '#2185D0',
           textAlign: 'center',
           width: '100%',
-          fontSize: DEVICE_LARGE ? 18 : 16,
+          fontSize: fontSize[18],
         },
         titleTextStyle: {
           textAlign: 'center',
-          fontSize: DEVICE_LARGE ? 20 : 17,
+          fontSize: fontSize[20],
           width: '100%',
         },
       },
@@ -146,7 +151,9 @@ export const SignUp = ({ navigation }) => {
               accessible={true}
               accessibilityLabel={t('common.accessibilityLabel.addPhoto')}
             >
-              <Text style={styles.addPhotoText}>{t('signup.button.addPhoto')}</Text>
+              <Text style={styles.addPhotoText}>
+                {t('signup.button.addPhoto')}
+              </Text>
               <SimpleLineIcons
                 size={DEVICE_LARGE ? 42 : 36}
                 name="camera"
@@ -193,7 +200,9 @@ export const SignUp = ({ navigation }) => {
                   createBrightID();
                 }}
               >
-                <Text style={styles.buttonInnerText}>{t('signup.button.createAccount')}</Text>
+                <Text style={styles.buttonInnerText}>
+                  {t('signup.button.createAccount')}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 testID="recoverBrightIDBtn"
@@ -201,7 +210,9 @@ export const SignUp = ({ navigation }) => {
                 style={styles.recoverButton}
                 accessibilityLabel={t('signup.button.recoverAccount')}
               >
-                <Text style={styles.recoverButtonText}>{t('signup.button.recoverAccount')}</Text>
+                <Text style={styles.recoverButtonText}>
+                  {t('signup.button.recoverAccount')}
+                </Text>
               </TouchableOpacity>
             </View>
           ) : (
@@ -275,19 +286,19 @@ const styles = StyleSheet.create({
     color: '#979797',
     marginBottom: 11,
     marginTop: 11,
-    fontSize: DEVICE_LARGE ? 18 : 16,
+    fontSize: fontSize[18],
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
   },
   midText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     color: '#333',
   },
   textInput: {
     fontFamily: 'ApexNew-Light',
-    fontSize: DEVICE_LARGE ? 28 : 25,
+    fontSize: fontSize[28],
     color: '#333',
     fontWeight: '300',
     fontStyle: 'normal',
@@ -302,7 +313,7 @@ const styles = StyleSheet.create({
   buttonInfoText: {
     fontFamily: 'ApexNew-Book',
     color: '#9e9e9e',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
     width: 298,
     textAlign: 'center',
   },
@@ -319,7 +330,7 @@ const styles = StyleSheet.create({
     fontFamily: 'ApexNew-Medium',
     color: '#fff',
     fontWeight: '600',
-    fontSize: DEVICE_LARGE ? 18 : 16,
+    fontSize: fontSize[18],
   },
   recoverButton: {
     width: DEVICE_LARGE ? 285 : 260,
@@ -334,7 +345,7 @@ const styles = StyleSheet.create({
   recoverButtonText: {
     fontFamily: 'ApexNew-Medium',
     color: '#4990e2',
-    fontSize: DEVICE_LARGE ? 18 : 16,
+    fontSize: fontSize[18],
     fontWeight: '500',
     fontStyle: 'normal',
     letterSpacing: 0,
