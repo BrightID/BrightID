@@ -14,12 +14,14 @@ import {
   useRoute,
   useNavigation,
 } from '@react-navigation/native';
+import { Trans, useTranslation } from 'react-i18next';
 import { SvgXml } from 'react-native-svg';
 import BarcodeMask from 'react-native-barcode-mask';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import qricon from '@/static/qr_icon_white.svg';
 import {
   channel_types,
@@ -31,7 +33,6 @@ import { joinChannel } from '@/components/PendingConnectionsScreens/actions/chan
 import { setActiveNotification } from '@/actions';
 import { ORANGE } from '@/utils/constants';
 import { RNCamera } from './RNCameraProvider';
-import { Trans, useTranslation } from 'react-i18next';
 
 /**
  * Returns whether the string is a valid QR identifier
@@ -152,8 +153,8 @@ export const ScanCodeScreen = () => {
             <View style={styles.infoTopContainer}>
               <Trans
                 i18nKey="qrcode.text.scanCode"
-                components={{text: <Text style={styles.infoTopText}/>}}
-                values={{name}}
+                components={{ text: <Text style={styles.infoTopText} /> }}
+                values={{ name }}
               />
             </View>
             <View style={styles.cameraContainer} testID="CameraContainer">
@@ -204,7 +205,9 @@ export const ScanCodeScreen = () => {
         <View style={styles.bottomContainer}>
           {pendingConnectionSizeForChannel < 1 ? (
             <>
-              <Text style={styles.infoBottomText}>{t('qrcode.text.canAlso')}</Text>
+              <Text style={styles.infoBottomText}>
+                {t('qrcode.text.canAlso')}
+              </Text>
               <TouchableOpacity
                 testID="ScanCodeToMyCodeBtn"
                 style={styles.showQrButton}
@@ -217,13 +220,17 @@ export const ScanCodeScreen = () => {
                   width={DEVICE_LARGE ? 22 : 20}
                   height={DEVICE_LARGE ? 22 : 20}
                 />
-                <Text style={styles.showQrText}>{t('qrcode.button.showCode')}</Text>
+                <Text style={styles.showQrText}>
+                  {t('qrcode.button.showCode')}
+                </Text>
               </TouchableOpacity>
             </>
           ) : (
             <>
               <Text style={styles.infoBottomText}>
-                {t('qrcode.text.pendingConnections', {count: pendingConnectionSizeForChannel})}
+                {t('qrcode.text.pendingConnections', {
+                  count: pendingConnectionSizeForChannel,
+                })}
               </Text>
               <TouchableOpacity
                 testID="ScanCodeToPendingConnectionsBtn"
@@ -276,7 +283,7 @@ const styles = StyleSheet.create({
   },
   infoTopText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     textAlign: 'center',
     color: '#4a4a4a',
   },
@@ -297,7 +304,7 @@ const styles = StyleSheet.create({
   },
   infoBottomText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 11,
+    fontSize: fontSize[12],
     marginBottom: 10,
   },
   showQrButton: {
@@ -312,7 +319,7 @@ const styles = StyleSheet.create({
   },
   showQrText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
     color: '#fff',
     marginLeft: 10,
   },
@@ -334,7 +341,7 @@ const styles = StyleSheet.create({
   },
   verifyConnectionsText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
     color: ORANGE,
     marginLeft: 10,
   },
@@ -344,7 +351,7 @@ const styles = StyleSheet.create({
   },
   waitingText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     color: '#333',
   },
   downloadingDataContainer: {

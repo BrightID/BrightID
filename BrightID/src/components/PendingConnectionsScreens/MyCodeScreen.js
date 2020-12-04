@@ -2,7 +2,6 @@
 
 import React, { useCallback, useEffect, useLayoutEffect } from 'react';
 import {
-  Animated,
   StyleSheet,
   Text,
   View,
@@ -15,10 +14,12 @@ import {
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ChannelSwitch from '@/components/Helpers/ChannelSwitch';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import cameraIcon from '@/static/camera_icon_white.svg';
 import {
   channel_states,
@@ -36,7 +37,6 @@ import {
 import { createChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
 import { QrCode } from './QrCode';
-import { useTranslation } from 'react-i18next';
 
 /**
  * My Code screen of BrightID
@@ -177,7 +177,9 @@ export const MyCodeScreen = () => {
       headerTitle: () => {
         const ConnectionTitle = () => (
           <Text style={styles.headerTitle}>
-            {t('qrcode.header.connections', {count: pendingConnectionSize + 1})}
+            {t('qrcode.header.connections', {
+              count: pendingConnectionSize + 1,
+            })}
           </Text>
         );
         return myChannel?.type === channel_types.GROUP ? (
@@ -249,7 +251,9 @@ export const MyCodeScreen = () => {
           />
         </View>
         <View style={styles.infoTopContainer}>
-          <Text style={styles.infoTopText}>{t('qrcode.label.connectionType')} </Text>
+          <Text style={styles.infoTopText}>
+            {t('qrcode.label.connectionType')}{' '}
+          </Text>
           {displayChannelType === channel_types.GROUP ? (
             <TouchableOpacity
               style={{ flexDirection: 'row' }}
@@ -268,7 +272,7 @@ export const MyCodeScreen = () => {
               testID="ConnectionInfoSingleBtn"
             >
               <Text testID="single-use-code" style={styles.infoTopText}>
-              {t('qrcode.text.codeSingle')}
+                {t('qrcode.text.codeSingle')}
               </Text>
               <Material name="information-variant" size={18} color="#4a4a4a" />
             </TouchableOpacity>
@@ -292,7 +296,9 @@ export const MyCodeScreen = () => {
               width={DEVICE_LARGE ? 22 : 20}
               height={DEVICE_LARGE ? 22 : 20}
             />
-            <Text style={styles.scanCodeText}>{t('qrcode.button.scanCode')}</Text>
+            <Text style={styles.scanCodeText}>
+              {t('qrcode.button.scanCode')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -324,7 +330,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     color: '#fff',
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 15,
+    fontSize: fontSize[16],
   },
   infoTopContainer: {
     width: '100%',
@@ -334,7 +340,7 @@ const styles = StyleSheet.create({
   },
   infoTopText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
     textAlign: 'center',
     color: '#4a4a4a',
   },
@@ -344,7 +350,7 @@ const styles = StyleSheet.create({
   },
   infoBottomText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 11,
+    fontSize: fontSize[12],
     marginBottom: 10,
   },
   scanCodeButton: {
@@ -359,7 +365,7 @@ const styles = StyleSheet.create({
   },
   scanCodeText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
     color: '#fff',
     marginLeft: 10,
   },
@@ -377,7 +383,7 @@ const styles = StyleSheet.create({
   // },
   // verifyConnectionsText: {
   //   fontFamily: 'Poppins-Bold',
-  //   fontSize: DEVICE_LARGE ? 14 : 12,
+  //   fontSize: fontSize[14],
   //   color: ORANGE,
   //   marginLeft: 10,
   // },

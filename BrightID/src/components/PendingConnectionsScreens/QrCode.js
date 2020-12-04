@@ -17,6 +17,7 @@ import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
 import {
@@ -103,16 +104,20 @@ export const QrCode = ({ channel }) => {
     const universalLink = `https://app.brightid.org/connection-code/${qrString}`;
     const clipboardMsg = __DEV__
       ? universalLink
-      : t(channel?.type === channel_types.GROUP 
-        ? 'qrcode.alert.connectGroup'
-        : 'qrcode.alert.connectSingle', {
-          name: myName,
-          link: universalLink,
-        });
-    const alertMsg =
-      t(channel?.type === channel_types.SINGLE
-        ? 'qrcode.alert.shareLinkSingle' 
-        : 'qrcode.alert.shareLinkGroup');
+      : t(
+          channel?.type === channel_types.GROUP
+            ? 'qrcode.alert.connectGroup'
+            : 'qrcode.alert.connectSingle',
+          {
+            name: myName,
+            link: universalLink,
+          },
+        );
+    const alertMsg = t(
+      channel?.type === channel_types.SINGLE
+        ? 'qrcode.alert.shareLinkSingle'
+        : 'qrcode.alert.shareLinkGroup',
+    );
     Alert.alert(
       t('qrcode.alert.universalLink'),
       alertMsg,
@@ -205,19 +210,19 @@ const styles = StyleSheet.create({
   copyText: {
     color: '#333',
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
   },
   timerContainer: {
     flexDirection: 'row',
   },
   timerTextLeft: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     color: '#333',
   },
   timerTextRight: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     color: '#333',
   },
   emptyQr: {

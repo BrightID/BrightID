@@ -16,8 +16,10 @@ import { setInternetCredentials } from 'react-native-keychain';
 import { withTranslation } from 'react-i18next';
 import { setBackupCompleted, setPassword } from '@/actions/index';
 import emitter from '@/emitter';
-import { BACKUP_URL, ORANGE } from '@/utils/constants';
+import { BACKUP_URL } from '@/utils/constants';
 import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/deviceConstants';
+import { ORANGE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { validatePass } from '@/utils/password';
 import { backupAppData } from './helpers';
 
@@ -101,11 +103,14 @@ class BackupScreen extends React.Component<Props, State> {
       dispatch(setBackupCompleted(true));
 
       Alert.alert(
-        t('common.alert.info'), 
-        t('backup.alert.text.backupSuccess'), 
+        t('common.alert.info'),
+        t('backup.alert.text.backupSuccess'),
         [
-          { text: t('common.alert.ok'), onPress: () => navigation.navigate('Home') },
-        ]
+          {
+            text: t('common.alert.ok'),
+            onPress: () => navigation.navigate('Home'),
+          },
+        ],
       );
     } catch (err) {
       console.warn(err);
@@ -173,7 +178,9 @@ class BackupScreen extends React.Component<Props, State> {
                 onPress={this.startBackup}
                 disabled={!this.state.pass1}
               >
-                <Text style={styles.buttonInnerText}>{t('backup.button.startBackup')}</Text>
+                <Text style={styles.buttonInnerText}>
+                  {t('backup.button.startBackup')}
+                </Text>
               </TouchableOpacity>
             ) : (
               <View style={styles.loader}>
@@ -181,7 +188,10 @@ class BackupScreen extends React.Component<Props, State> {
                   {t('common.text.uploadingData')}
                 </Text>
                 <Text style={styles.textInfo}>
-                  {t('common.text.progress', {completed: this.state.completed, total: this.state.total})}
+                  {t('common.text.progress', {
+                    completed: this.state.completed,
+                    total: this.state.total,
+                  })}
                 </Text>
                 <Spinner
                   isVisible={true}
@@ -228,13 +238,13 @@ const styles = StyleSheet.create({
   },
   textInfo: {
     fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_LARGE ? 18 : 16,
+    fontSize: fontSize[18],
     color: '#333',
     margin: 18,
   },
   textInput: {
     fontFamily: 'ApexNew-Light',
-    fontSize: DEVICE_LARGE ? 24 : 20,
+    fontSize: fontSize[24],
     color: '#333',
     fontWeight: '300',
     fontStyle: 'normal',
@@ -255,7 +265,7 @@ const styles = StyleSheet.create({
   buttonInfoText: {
     fontFamily: 'ApexNew-Book',
     color: '#9e9e9e',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
     width: 298,
     textAlign: 'center',
   },
@@ -272,7 +282,7 @@ const styles = StyleSheet.create({
     fontFamily: 'ApexNew-Medium',
     color: '#fff',
     fontWeight: '600',
-    fontSize: DEVICE_LARGE ? 18 : 16,
+    fontSize: fontSize[18],
   },
   button: {
     width: 300,

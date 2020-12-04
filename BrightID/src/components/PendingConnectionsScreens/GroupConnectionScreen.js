@@ -22,9 +22,9 @@ import {
 import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE, WIDTH, HEIGHT } from '@/utils/deviceConstants';
-
+import { fontSize } from '@/theme/fonts';
 import {
   selectAllPendingConnections,
   selectPendingConnectionById,
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: fontSize[18],
     fontWeight: '500',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
   },
   confirmConnectionsText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
     color: ORANGE,
     marginLeft: 10,
   },

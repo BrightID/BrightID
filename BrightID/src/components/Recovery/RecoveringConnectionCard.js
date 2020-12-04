@@ -14,6 +14,7 @@ import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
 import { withTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import backupApi from '@/api/backupService';
 import { parseRecoveryQr } from './helpers';
 
@@ -87,7 +88,9 @@ class RecoveryConnectionCard extends React.PureComponent<Props> {
               </Text>
             </View>
             <Text style={styles.connectedText}>
-              {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
+              {t('common.tag.connectionDate', {
+                date: moment(parseInt(connectionDate, 10)).fromNow(),
+              })}
             </Text>
           </View>
         </View>
@@ -125,7 +128,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_LARGE ? 20 : 18,
+    fontSize: fontSize[20],
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
@@ -137,18 +140,18 @@ const styles = StyleSheet.create({
   },
   scoreLeft: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 14,
+    fontSize: fontSize[14],
     color: '#9b9b9b',
     marginRight: 3,
     paddingTop: 1.5,
   },
   scoreRight: {
     fontFamily: 'ApexNew-Medium',
-    fontSize: 16,
+    fontSize: fontSize[16],
   },
   connectedText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 12,
+    fontSize: fontSize[12],
     color: '#aba9a9',
     fontStyle: 'italic',
   },

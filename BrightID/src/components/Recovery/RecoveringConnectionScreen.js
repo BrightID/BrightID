@@ -7,6 +7,7 @@ import { withTranslation } from 'react-i18next';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
 
@@ -51,7 +52,9 @@ class RecoveringConnectionScreen extends React.Component<Props> {
         <View style={styles.container}>
           <View style={styles.mainContainer}>
             <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>{t('restore.title.chooseConnection')}</Text>
+              <Text style={styles.titleText}>
+                {t('restore.title.chooseConnection')}
+              </Text>
               <Text style={styles.infoText}>
                 {t('restore.text.chooseConnectionToHelp')}
               </Text>
@@ -66,7 +69,9 @@ class RecoveringConnectionScreen extends React.Component<Props> {
                 renderItem={this.renderConnection}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
-                ListEmptyComponent={<EmptyList title={t('restore.text.noConnections')} />}
+                ListEmptyComponent={
+                  <EmptyList title={t('restore.text.noConnections')} />
+                }
                 getItemLayout={getItemLayout}
               />
             </View>
@@ -100,7 +105,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 20,
+    fontSize: fontSize[20],
   },
   connectionsContainer: {
     flex: 1,
@@ -121,7 +126,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: fontSize[18],
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -136,7 +141,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 14,
+    fontSize: fontSize[14],
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -169,7 +174,7 @@ const styles = StyleSheet.create({
     fontFamily: 'ApexNew-Medium',
     color: '#fff',
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: fontSize[18],
   },
 });
 

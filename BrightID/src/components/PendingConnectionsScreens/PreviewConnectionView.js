@@ -11,6 +11,7 @@ import {
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { pendingConnection_states } from './pendingConnectionSlice';
 import { RatingView } from './RatingView';
 import { ConnectionStats } from './ConnectionStats';
@@ -130,12 +131,12 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
 const styles = StyleSheet.create({
   waitingText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     color: '#333',
   },
   buttonText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 18 : 15,
+    fontSize: fontSize[18],
     textAlign: 'left',
     color: '#ffffff',
   },
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 22 : 18,
+    fontSize: fontSize[22],
     textAlign: 'center',
     color: '#000000',
   },
@@ -168,13 +169,13 @@ const styles = StyleSheet.create({
   },
   connectName: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 18 : 16,
+    fontSize: fontSize[18],
     letterSpacing: 0,
     textAlign: 'left',
     color: '#000000',
   },
   reported: {
-    fontSize: DEVICE_LARGE ? 18 : 16,
+    fontSize: fontSize[18],
     color: 'red',
   },
   countsContainer: {
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
   },
   connectedText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 14,
+    fontSize: fontSize[14],
     color: '#aba9a9',
     fontStyle: 'italic',
   },
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
   infoText: {
     fontFamily: 'Poppins-Bold',
     textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 17 : 15,
+    fontSize: fontSize[17],
     marginTop: 32,
   },
 });
