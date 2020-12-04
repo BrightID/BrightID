@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Svg, { Path } from 'react-native-svg';
-import { BLACK } from '@/utils/colors';
+import { BLACK } from '@/theme/colors';
 
 type Props = {
   direction: 'down',

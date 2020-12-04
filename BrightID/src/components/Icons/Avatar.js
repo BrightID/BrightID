@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Svg, { Circle, G, Path, Mask } from 'react-native-svg';
-import { DARKER_GREY, LIGHT_GREY, GREY, WHITE } from '@/utils/colors';
+import { DARKER_GREY, LIGHT_GREY, GREY, WHITE } from '@/theme/colors';
 
 type Props = {
   color: string,

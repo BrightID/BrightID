@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Svg, { Path } from 'react-native-svg';
-import { BLACK, ORANGE } from '@/utils/colors';
+import { BLACK, ORANGE } from '@/theme/colors';
 
 type Props = {
   color: string,

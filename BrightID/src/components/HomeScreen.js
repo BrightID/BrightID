@@ -25,7 +25,7 @@ import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
-import { WHITE } from '@/utils/colors';
+import { WHITE } from '@/theme/colors';
 import { version as app_version } from '../../package.json';
 
 /**

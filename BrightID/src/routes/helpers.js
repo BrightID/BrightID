@@ -1,8 +1,8 @@
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { navigate } from '@/NavigationService';
-import { ORANGE, WHITE } from '@/utils/colors';
-import { TWENTY, TWENTY_TWO, SIXTY } from '@/utils/sizes';
+import { ORANGE, WHITE } from '@/theme/colors';
+import { TWENTY, TWENTY_TWO, SIXTY } from '@/theme/sizes';
 import BackArrow from '@/components/Icons/BackArrow';
 
 export const headerTitleStyle = {

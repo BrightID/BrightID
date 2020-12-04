@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Svg, { ClipPath, Defs, G, Path, Rect } from 'react-native-svg';
-import { BLACK, ORANGE, WHITE } from '@/utils/colors';
+import { BLACK, ORANGE, WHITE } from '@/theme/colors';
 
 type Props = {
   color: string,

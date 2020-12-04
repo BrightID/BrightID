@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { DARK_GREY } from '@/utils/colors';
+import { DARK_GREY } from '@/theme/colors';
 import {
   pendingConnection_states,
   selectPendingConnectionById,

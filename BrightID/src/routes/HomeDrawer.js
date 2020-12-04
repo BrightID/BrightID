@@ -14,7 +14,7 @@ import {
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
 import { useHeaderHeight } from '@react-navigation/stack';
-import { BLACK, ORANGE, WHITE, GREY } from '@/utils/colors';
+import { BLACK, ORANGE, WHITE, GREY } from '@/theme/colors';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { useTranslation } from 'react-i18next';
 import codePush from 'react-native-code-push';
