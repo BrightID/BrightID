@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
 } from 'react-native';
-import { Picker, PickerIOS } from '@react-native-picker/picker';
+import { Picker } from '@react-native-picker/picker';
 import { BlurView } from '@react-native-community/blur';
 import {
   DEVICE_LARGE,
@@ -17,6 +17,7 @@ import {
   DEVICE_ANDROID,
   WIDTH,
 } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useFocusEffect } from '@react-navigation/native';
@@ -173,7 +174,9 @@ const SelectMediaModal = ({ route, navigation }) => {
             disabled={page === 1 && profile.length === 0}
           >
             <Text style={styles.saveButtonText}>
-              {page === 1 ? t('common.button.save') : t('profile.button.socialNext')}
+              {page === 1
+                ? t('common.button.save')
+                : t('profile.button.socialNext')}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -186,7 +189,9 @@ const SelectMediaModal = ({ route, navigation }) => {
             }}
           >
             <Text style={styles.cancelButtonText}>
-              {page === 1 && initialPage !== 1 ? t('profile.button.socialPrevious') : t('common.button.cancel')}
+              {page === 1 && initialPage !== 1
+                ? t('profile.button.socialPrevious')
+                : t('common.button.cancel')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -221,7 +226,7 @@ const styles = StyleSheet.create({
   pickerStyle: { width: '100%' },
   pickerItemStyle: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 15 : 13,
+    fontSize: fontSize[15],
   },
   saveContainer: {
     width: '100%',
@@ -242,7 +247,7 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 10,
+    fontSize: fontSize[12],
   },
   cancelButton: {
     width: DEVICE_LARGE ? 92 : 80,
@@ -257,13 +262,13 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 10,
+    fontSize: fontSize[12],
     color: '#707070',
   },
   socialMediaInput: {
     flexGrow: 1,
     fontFamily: 'Poppins-Light',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
     color: '#000',
   },
   inputContainer: {
@@ -272,7 +277,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 11 : 10,
+    fontSize: fontSize[11],
     color: '#B64B32',
     marginBottom: DEVICE_LARGE ? 5 : 3,
   },

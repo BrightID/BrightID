@@ -23,6 +23,7 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
+import { fontSize } from '@/theme/fonts';
 import AppCard from './AppCard';
 import { handleAppContext } from './model';
 
@@ -64,9 +65,9 @@ export const AppsScreen = () => {
       handleAppContext(route.params);
     } else {
       Alert.alert(
-        t('apps.alert.title.invalidContext'), 
-        t('apps.alert.text.invalidContext', {context: `${context}`})
-      )
+        t('apps.alert.title.invalidContext'),
+        t('apps.alert.text.invalidContext', { context: `${context}` }),
+      );
     }
     // reset params
     navigation.setParams({
@@ -80,7 +81,7 @@ export const AppsScreen = () => {
     const pendingLink = find(propEq('state', 'pending'))(linkedContexts);
     let msg, waiting;
     if (pendingLink) {
-      msg = t('apps.text.pendingLink', {context: `${pendingLink.context}`});
+      msg = t('apps.text.pendingLink', { context: `${pendingLink.context}` });
       waiting = true;
     } else if (!isSponsored) {
       msg = t('apps.text.notSponsored');
@@ -122,7 +123,9 @@ export const AppsScreen = () => {
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => <AppCard {...item} />}
-          ListEmptyComponent={<EmptyList title={t('apps.text.noApps')} iconType="flask" />}
+          ListEmptyComponent={
+            <EmptyList title={t('apps.text.noApps')} iconType="flask" />
+          }
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={refreshApps} />
           }
@@ -160,7 +163,7 @@ const styles = StyleSheet.create({
   statusMessage: {
     fontFamily: 'Poppins-Medium',
     textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     color: '#4a90e2',
   },
   linkingContainer: {

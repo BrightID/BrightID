@@ -8,7 +8,9 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
-import { ORANGE, report_reasons } from '../../utils/constants';
+import { report_reasons } from '@/utils/constants';
+import { ORANGE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { reportConnection } from './models/reportConnection';
 
 type props = {
@@ -92,7 +94,11 @@ const ReportReasonModal = ({ route, navigation }: props) => {
       />
       <View style={styles.modalContainer}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>{t('connectionDetails.text.reportConnection', {name: connection.name})}</Text>
+          <Text style={styles.headerText}>
+            {t('connectionDetails.text.reportConnection', {
+              name: connection.name,
+            })}
+          </Text>
         </View>
         <View style={styles.message}>
           <Material name="information" size={26} color="#2185D0" />
@@ -130,7 +136,9 @@ const ReportReasonModal = ({ route, navigation }: props) => {
             style={[styles.modalButton, styles.cancelButton]}
             onPress={cancelReport}
           >
-            <Text style={styles.cancelButtonText}>{t('connectionDetails.button.reportCancel')}</Text>
+            <Text style={styles.cancelButtonText}>
+              {t('connectionDetails.button.reportCancel')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -165,7 +173,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 22 : 19,
+    fontSize: fontSize[22],
     textAlign: 'center',
   },
   message: {
@@ -173,7 +181,7 @@ const styles = StyleSheet.create({
   },
   messageText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 13 : 12,
+    fontSize: fontSize[13],
     textAlign: 'left',
     marginLeft: 10,
     color: '#827F7F',
@@ -222,7 +230,7 @@ const styles = StyleSheet.create({
   },
   radioLabelText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 15 : 13,
+    fontSize: fontSize[15],
     color: '#000',
   },
   modalButtons: {
@@ -247,7 +255,7 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 15 : 13,
+    fontSize: fontSize[15],
     color: '#707070',
   },
   submitButton: {
@@ -258,12 +266,12 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 15 : 13,
+    fontSize: fontSize[15],
     color: '#000',
   },
   submitButtonDisabledText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 15 : 13,
+    fontSize: fontSize[15],
     color: '#707070',
   },
 });

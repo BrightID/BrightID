@@ -13,6 +13,7 @@ import { withTranslation } from 'react-i18next';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { navigate } from '@/NavigationService';
 import { setSearchParam } from '@/actions';
+import { fontSize } from '@/theme/fonts';
 import Search from '@/components/Icons/Search';
 
 /**
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
   },
   searchField: {
     fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_LARGE ? 15 : 13,
+    fontSize: fontSize[15],
     color: '#333',
     marginLeft: 23,
     flex: 1,
@@ -98,7 +99,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     padding: 0,
     alignItems: 'center',
-    // justifyContent: 'center',
   },
 });
 

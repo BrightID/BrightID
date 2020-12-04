@@ -10,6 +10,7 @@ import {
   connectionLevelStrings,
 } from '@/utils/connectionLevelStrings';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 
 type props = {
   level: ConnectionLevel,
@@ -27,7 +28,9 @@ function TrustLevelView({ level, connectionId }: props) {
   return (
     <View style={styles.container}>
       <View style={styles.trustLevelLabel}>
-        <Text style={styles.trustLevelLabelText}>{t('connectionDetails.label.connectionLevel')}</Text>
+        <Text style={styles.trustLevelLabelText}>
+          {t('connectionDetails.label.connectionLevel')}
+        </Text>
       </View>
 
       <View style={styles.trustLevel}>
@@ -64,7 +67,7 @@ const styles = StyleSheet.create({
   },
   trustLevelLabelText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     color: '#000',
   },
   trustLevel: {
@@ -74,7 +77,7 @@ const styles = StyleSheet.create({
   },
   trustLevelText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
   },
   trustLevelButton: {
     padding: 5,

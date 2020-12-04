@@ -18,6 +18,7 @@ import moment from 'moment';
 import default_group from '@/static/default_group.svg';
 import { photoDirectory } from '@/utils/filesystem';
 import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import Chevron from '../Icons/Chevron';
 import TrustLevelView from './TrustLevelView';
 
@@ -342,7 +343,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 17 : 15,
+    fontSize: fontSize[17],
     color: '#000',
   },
   verificationSticker: {
@@ -364,7 +365,7 @@ const styles = StyleSheet.create({
     paddingBottom: DEVICE_ANDROID ? 0 : 1,
     paddingLeft: 20,
     paddingRight: 20,
-    fontSize: DEVICE_LARGE ? 11 : 10,
+    fontSize: fontSize[11],
   },
   verified: {
     color: ORANGE,
@@ -385,7 +386,7 @@ const styles = StyleSheet.create({
   },
   connectionTimestampText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 10 : 9,
+    fontSize: fontSize[10],
     color: ORANGE,
   },
   trustLevelContainer: {
@@ -406,7 +407,7 @@ const styles = StyleSheet.create({
   },
   reportBtnText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     color: ORANGE,
     marginLeft: DEVICE_LARGE ? 10 : 8,
   },
@@ -420,7 +421,7 @@ const styles = StyleSheet.create({
   },
   headerLabelText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     color: '#000',
   },
   headerContent: {
@@ -436,7 +437,7 @@ const styles = StyleSheet.create({
   },
   headerContentText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 17 : 15,
+    fontSize: fontSize[17],
     color: ORANGE,
   },
   collapseButton: {
@@ -462,8 +463,7 @@ const styles = StyleSheet.create({
   itemLabel: {},
   itemLabelText: {
     fontFamily: 'Poppins-Medium',
-    // fontSize: DEVICE_LARGE ? 16 : 14,
-    fontSize: 15,
+    fontSize: fontSize[15],
     color: '#000',
   },
   connectionFooter: {

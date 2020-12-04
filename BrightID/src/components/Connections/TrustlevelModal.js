@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { BlurView } from '@react-native-community/blur';
 import { connection_levels } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from 'react-redux';
 import api from '@/api/brightId';
 import { setConnectionLevel } from '@/actions/connections';
@@ -75,7 +76,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
       <View style={styles.modalContainer}>
         <View style={styles.header}>
           <Text style={styles.headerText}>
-            {t('connectionDetails.text.level', {name: connection.name})}
+            {t('connectionDetails.text.level', { name: connection.name })}
           </Text>
         </View>
         <TrustlevelSlider
@@ -87,7 +88,9 @@ const TrustlevelModal = ({ route, navigation }: props) => {
           style={styles.confirmButton}
           onPress={saveLevelHandler}
         >
-          <Text style={styles.confirmButtonText}>{t('connectionDetails.button.levelSave')}</Text>
+          <Text style={styles.confirmButtonText}>
+            {t('connectionDetails.button.levelSave')}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -122,7 +125,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 19 : 16.5,
+    fontSize: fontSize[19],
     textAlign: 'center',
   },
   confirmButton: {
@@ -137,7 +140,7 @@ const styles = StyleSheet.create({
   },
   confirmButtonText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 17 : 15,
+    fontSize: fontSize[17],
   },
 });
 

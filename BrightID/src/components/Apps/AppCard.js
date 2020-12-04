@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   Alert,
   Image,
@@ -16,6 +16,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { addLinkedContext, removeLinkedContext } from '@/actions';
 
 /**
@@ -91,7 +92,7 @@ const AppCard = (props) => {
   const openApp = () => {
     Alert.alert(
       '',
-      t('apps.alert.text.checkWebsite', {name: name}),
+      t('apps.alert.text.checkWebsite', { name }),
       [
         {
           text: t('apps.alert.button.visitWebsite'),
@@ -115,7 +116,11 @@ const AppCard = (props) => {
 
   const SponsorshipLabel = () => {
     if (!isSponsored && unusedSponsorships > 0) {
-      return <Text style={styles.sponsorshipMessage}>{t('apps.tag.hasSponsorships')}</Text>;
+      return (
+        <Text style={styles.sponsorshipMessage}>
+          {t('apps.tag.hasSponsorships')}
+        </Text>
+      );
     } else {
       return <View />;
     }
@@ -124,7 +129,9 @@ const AppCard = (props) => {
   const VerificationLabel = () => {
     if (!verifications.includes(verification)) {
       return (
-        <Text style={styles.unverifiedMessage}>{t('apps.tag.notVerifiedForApp')}</Text>
+        <Text style={styles.unverifiedMessage}>
+          {t('apps.tag.notVerifiedForApp')}
+        </Text>
       );
     } else {
       return <View />;
@@ -211,7 +218,7 @@ const styles = StyleSheet.create({
   appName: {
     fontFamily: 'Poppins-Medium',
     color: 'black',
-    fontSize: DEVICE_LARGE ? 22 : 19,
+    fontSize: fontSize[22],
   },
   labelContainer: {
     flexDirection: 'column',
@@ -221,22 +228,22 @@ const styles = StyleSheet.create({
   },
   sponsorshipMessage: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
     color: '#4a90e2',
   },
   linkedMessage: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
     color: '#4a90e2',
   },
   errorMessage: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
     color: '#FF0800',
   },
   unverifiedMessage: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
     color: '#707070',
   },
   linkedContainer: {
@@ -244,7 +251,6 @@ const styles = StyleSheet.create({
     marginRight: DEVICE_LARGE ? 20 : 16,
     alignItems: 'center',
     justifyContent: 'center',
-    // height: '100%',
   },
   link: {},
 });

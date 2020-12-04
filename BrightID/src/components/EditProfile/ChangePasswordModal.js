@@ -15,6 +15,7 @@ import { setInternetCredentials } from 'react-native-keychain';
 import { useTranslation } from 'react-i18next';
 import { BACKUP_URL } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { validatePass } from '@/utils/password';
@@ -55,11 +56,12 @@ const UploadAnimation = () => {
 
   return (
     <View style={styles.uploadAnimationContainer}>
+      <Text style={styles.textInfo}>{t('common.text.uploadingData')}</Text>
       <Text style={styles.textInfo}>
-        {t('common.text.uploadingData')}
-      </Text>
-      <Text style={styles.textInfo}>
-        {t('common.text.progress', {completed: completed, total: backupTotal})}
+        {t('common.text.progress', {
+          completed,
+          total: backupTotal,
+        })}
       </Text>
       <Spinner
         isVisible={true}
@@ -89,8 +91,8 @@ const ChangePasswordModal = ({ route, navigation }) => {
   const startBackup = async () => {
     if (oldPassword !== password) {
       Alert.alert(
-        t('profile.alert.title.passwordMatch'), 
-        t('profile.alert.text.passwordMatch')
+        t('profile.alert.title.passwordMatch'),
+        t('profile.alert.text.passwordMatch'),
       );
       return;
     }
@@ -131,7 +133,9 @@ const ChangePasswordModal = ({ route, navigation }) => {
         ) : (
           <>
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>{t('profile.label.currentPassword')}</Text>
+              <Text style={styles.label}>
+                {t('profile.label.currentPassword')}
+              </Text>
               <TextInput
                 autoCompleteType="password"
                 autoCorrect={false}
@@ -161,7 +165,9 @@ const ChangePasswordModal = ({ route, navigation }) => {
               />
             </View>
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>{t('profile.label.newPasswordAgain')}</Text>
+              <Text style={styles.label}>
+                {t('profile.label.newPasswordAgain')}
+              </Text>
               <TextInput
                 autoCompleteType="password"
                 autoCorrect={false}
@@ -177,7 +183,9 @@ const ChangePasswordModal = ({ route, navigation }) => {
             </View>
             <View style={styles.saveContainer}>
               <TouchableOpacity style={styles.saveButton} onPress={startBackup}>
-                <Text style={styles.saveButtonText}>{t('common.button.save')}</Text>
+                <Text style={styles.saveButtonText}>
+                  {t('common.button.save')}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.cancelButton}
@@ -185,7 +193,9 @@ const ChangePasswordModal = ({ route, navigation }) => {
                   navigation.navigate('Edit Profile');
                 }}
               >
-                <Text style={styles.cancelButtonText}>{t('common.button.cancel')}</Text>
+                <Text style={styles.cancelButtonText}>
+                  {t('common.button.cancel')}
+                </Text>
               </TouchableOpacity>
             </View>
           </>
@@ -225,12 +235,12 @@ const styles = StyleSheet.create({
   },
   label: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 13 : 11,
+    fontSize: fontSize[13],
     color: '#B64B32',
     marginBottom: DEVICE_IOS ? (DEVICE_LARGE ? 15 : 13) : 0,
   },
   textInput: {
-    fontSize: DEVICE_LARGE ? 12 : 11,
+    fontSize: fontSize[12],
     marginBottom: DEVICE_IOS ? (DEVICE_LARGE ? 10 : 8) : 0,
   },
   saveContainer: {
@@ -252,7 +262,7 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 10,
+    fontSize: fontSize[12],
   },
   cancelButton: {
     width: DEVICE_LARGE ? 92 : 80,
@@ -267,12 +277,12 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 10,
+    fontSize: fontSize[12],
     color: '#707070',
   },
   textInfo: {
     fontFamily: 'Poppins-Regular',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     color: '#333',
     margin: DEVICE_LARGE ? 12 : 10,
   },

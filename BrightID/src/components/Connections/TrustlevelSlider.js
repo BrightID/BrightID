@@ -7,6 +7,7 @@ import i18next from 'i18next';
 import Slider from '@react-native-community/slider';
 import { connection_levels } from '@/utils/constants';
 import { WIDTH, DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import {
   connectionLevelColors,
   connectionLevelStrings,
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
   },
   labelText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 17 : 15,
+    fontSize: fontSize[17],
     color: '#000',
   },
   description: {
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     color: '#000',
     textAlign: 'center',
   },
