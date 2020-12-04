@@ -25,6 +25,7 @@ import qricon from '@/static/qr_icon_black.svg';
 import cameraIcon from '@/static/camera_icon_black.svg';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { WHITE } from '@/theme/colors';
 import { version as app_version } from '../../package.json';
 
@@ -361,7 +362,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 18 : 15,
+    fontSize: fontSize[18],
     color: '#000000',
   },
   verificationsContainer: {
@@ -389,7 +390,7 @@ const styles = StyleSheet.create({
     paddingBottom: DEVICE_ANDROID ? 0 : 1,
     paddingLeft: 23,
     paddingRight: 23,
-    fontSize: DEVICE_LARGE ? 11 : 10,
+    fontSize: fontSize[11],
   },
   unverified: {
     fontFamily: 'Poppins-Medium',
@@ -402,7 +403,7 @@ const styles = StyleSheet.create({
     paddingBottom: DEVICE_ANDROID ? 0 : 1,
     paddingLeft: 20,
     paddingRight: 20,
-    fontSize: DEVICE_LARGE ? 11 : 10,
+    fontSize: fontSize[11],
   },
   countsCard: {
     backgroundColor: '#fff',
@@ -439,13 +440,13 @@ const styles = StyleSheet.create({
   countsDescriptionText: {
     fontFamily: 'Poppins-Medium',
     textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 12 : 11,
+    fontSize: fontSize[12],
     marginTop: 6,
   },
   countsNumberText: {
     fontFamily: 'Poppins-Bold',
     textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 25 : 21,
+    fontSize: fontSize[25],
     marginBottom: 3,
   },
   bottomOrangeContainer: {
@@ -465,7 +466,7 @@ const styles = StyleSheet.create({
   },
   newConnectionText: {
     color: '#fff',
-    fontSize: DEVICE_LARGE ? 18 : 15,
+    fontSize: fontSize[18],
     fontFamily: 'Poppins-Medium',
     marginBottom: DEVICE_LARGE ? 16 : 11,
   },
@@ -487,7 +488,7 @@ const styles = StyleSheet.create({
   },
   connectText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 17 : 15,
+    fontSize: fontSize[17],
     color: '#000',
     marginLeft: DEVICE_LARGE ? 10 : 8,
   },
@@ -503,12 +504,12 @@ const styles = StyleSheet.create({
   },
   communityLink: {
     color: '#fff',
-    fontSize: DEVICE_LARGE ? 14 : 11,
+    fontSize: fontSize[14],
     fontFamily: 'Poppins-Bold',
   },
   versionInfo: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 10,
+    fontSize: fontSize[12],
     color: '#fff',
     position: 'absolute',
     right: DEVICE_LARGE ? 12 : 7,

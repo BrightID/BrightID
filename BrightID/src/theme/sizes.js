@@ -1,6 +1,6 @@
 // @flow
 
-import { DEVICE_LARGE } from './deviceConstants';
+import { DEVICE_LARGE } from '../utils/deviceConstants';
 
 export const TWENTY_TWO = DEVICE_LARGE ? 22 : 20;
 
