@@ -8,6 +8,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { WHITE, BLUE, GREY, RED } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useNavigation } from '@react-navigation/native';
@@ -111,7 +112,7 @@ function MemberCard(props: MemberCardProps) {
         title: t('common.actionSheet.title'),
         showSeparators: true,
         textStyle: {
-          color: '#2185D0',
+          color: BLUE,
           textAlign: 'center',
           width: '100%',
         },
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     height: DEVICE_LARGE ? 94 : 80,
     marginBottom: DEVICE_LARGE ? 11.8 : 6,
     shadowColor: 'rgba(0,0,0,0.32)',
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
   flagged: {
     fontFamily: 'ApexNew-Medium',
     fontSize: fontSize[14],
-    color: 'red',
+    color: RED,
   },
   statusContainer: {
     flexDirection: 'row',
@@ -226,7 +227,7 @@ const styles = StyleSheet.create({
   connectedText: {
     fontFamily: 'ApexNew-Book',
     fontSize: fontSize[12],
-    color: '#aba9a9',
+    color: GREY,
     fontStyle: 'italic',
   },
   moreIcon: {

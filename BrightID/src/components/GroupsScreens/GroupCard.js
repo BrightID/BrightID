@@ -5,6 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { DEVICE_TYPE } from '@/utils/deviceConstants';
+import { DARK_ORANGE, WHITE, DARK_GREEN, DARK_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { getGroupName, ids2connections } from '@/utils/groups';
 import GroupPhoto from './GroupPhoto';
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     height: DEVICE_TYPE === 'large' ? 94 : 80,
     marginBottom: DEVICE_TYPE === 'large' ? 11.8 : 6,
     shadowColor: 'rgba(0,0,0,0.32)',
@@ -116,27 +117,27 @@ const styles = StyleSheet.create({
   },
   primary: {
     fontSize: fontSize[14],
-    color: '#139c60',
+    color: DARK_GREEN,
   },
   membersLabel: {
     fontFamily: 'ApexNew-Medium',
     fontSize: fontSize[14],
-    color: '#9b9b9b',
+    color: DARK_GREY,
     marginRight: 3,
     paddingTop: 1.5,
   },
   membersKnown: {
-    color: '#139c60',
+    color: DARK_GREEN,
     fontSize: fontSize[16],
   },
   membersUnknown: {
-    color: '#e39f2f',
+    color: DARK_ORANGE,
     fontSize: fontSize[16],
   },
   waitingMessage: {
     fontFamily: 'ApexNew-Medium',
     fontSize: fontSize[16],
-    color: '#e39f2f',
+    color: DARK_ORANGE,
   },
 });
 

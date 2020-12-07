@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useTranslation, Trans } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { WHITE, BLUE, DARKER_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 
 const learnMoreUrl =
@@ -75,9 +76,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    // height: 280,
     flex: 1,
-    backgroundColor: '#fcfcfc',
+    backgroundColor: WHITE,
   },
   noGroupsInfo: {
     flexDirection: 'row',
@@ -98,11 +98,11 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
-    color: '#4a4a4a',
+    color: DARKER_GREY,
   },
   learnMoreButton: {
     borderRadius: 3,
-    borderColor: '#4a90e2',
+    borderColor: BLUE,
     borderWidth: 1,
     width: DEVICE_LARGE ? 150 : 125,
     paddingTop: 15,
@@ -115,12 +115,12 @@ const styles = StyleSheet.create({
     fontSize: fontSize[18],
     fontWeight: '500',
     textAlign: 'center',
-    color: '#4a90e2',
+    color: BLUE,
   },
   createGroupButton: {
     marginLeft: 14.5,
     borderRadius: 3,
-    backgroundColor: '#4a90e2',
+    backgroundColor: BLUE,
     width: DEVICE_LARGE ? 150 : 125,
     paddingTop: 16,
     paddingBottom: 16,
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     fontFamily: 'ApexNew-Medium',
     fontSize: fontSize[18],
     fontWeight: '500',
-    color: '#fff',
+    color: WHITE,
     textAlign: 'center',
   },
   smallGroupsLogo: {

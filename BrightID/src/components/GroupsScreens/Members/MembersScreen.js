@@ -16,7 +16,7 @@ import api from '@/api/brightId';
 import { leaveGroup, dismissFromGroup } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { addAdmin } from '@/actions/groups';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE, WHITE, BLUE, DARK_GREY } from '@/theme/colors';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
@@ -125,7 +125,7 @@ function MembersScreen(props: MembersScreenProps) {
                   title: t('common.actionSheet.title'),
                   showSeparators: true,
                   textStyle: {
-                    color: '#2185D0',
+                    color: BLUE,
                     textAlign: 'center',
                     width: '100%',
                   },
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
+    backgroundColor: WHITE,
     borderTopLeftRadius: 58,
     marginTop: -58,
     zIndex: 10,
@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
+    backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -339,10 +339,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   optionsOverlay: {
-    backgroundColor: 'rgba(62,34,24,0.4)',
+    backgroundColor: DARK_GREY,
   },
   optionsContainer: {
-    backgroundColor: '#fdfdfd',
+    backgroundColor: WHITE,
     height: '12%',
     width: '105%',
     borderRadius: 5,
@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 18,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderBottomColor: '#fdfdfd',
+    borderBottomColor: WHITE,
     position: 'absolute',
     top: -18,
     right: 20,

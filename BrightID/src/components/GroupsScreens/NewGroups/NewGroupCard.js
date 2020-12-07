@@ -9,6 +9,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { withTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { GREY, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { toggleNewGroupCoFounder } from '../actions';
 
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     height: DEVICE_LARGE ? 94 : 80,
     marginBottom: DEVICE_LARGE ? 11.8 : 6,
     shadowColor: 'rgba(0,0,0,0.32)',
@@ -133,7 +134,7 @@ const styles = StyleSheet.create({
   connectedText: {
     fontFamily: 'ApexNew-Book',
     fontSize: fontSize[12],
-    color: '#aba9a9',
+    color: GREY,
     fontStyle: 'italic',
   },
   moreIcon: {

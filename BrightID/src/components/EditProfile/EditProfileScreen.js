@@ -16,6 +16,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { DEVICE_LARGE, DEVICE_IOS, WIDTH } from '@/utils/deviceConstants';
+import {
+  DARK_ORANGE,
+  LIGHT_GREY,
+  DARKER_GREY,
+  WHITE,
+  BLACK,
+  GREEN,
+  BLUE,
+} from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
@@ -76,7 +85,7 @@ const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
         title: t('common.photoActionSheet.title'),
         showSeparators: true,
         textStyle: {
-          color: '#2185D0',
+          color: BLUE,
           textAlign: 'center',
           width: '100%',
           fontSize: fontSize[18],
@@ -469,7 +478,7 @@ export const EditProfileScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     flex: 1,
     width: '100%',
     borderTopLeftRadius: DEVICE_LARGE ? 50 : 40,
@@ -499,7 +508,7 @@ const styles = StyleSheet.create({
   profilePhotoText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
-    color: '#2185D0',
+    color: BLUE,
     marginTop: DEVICE_LARGE ? 6 : 5,
   },
   photo: {
@@ -517,18 +526,18 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[11],
-    color: '#B64B32',
+    color: DARK_ORANGE,
   },
   editNameInput: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
     marginTop: DEVICE_LARGE ? 4 : 2,
     width: '100%',
-    color: '#000',
+    color: BLACK,
   },
   bottomDivider: {
     width: '100%',
-    borderBottomColor: '#C4C4C4',
+    borderBottomColor: LIGHT_GREY,
     borderBottomWidth: 1,
     marginTop: DEVICE_LARGE ? 16 : 12,
   },
@@ -556,7 +565,7 @@ const styles = StyleSheet.create({
   socialMediaType: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
-    color: '#2185D0',
+    color: BLUE,
     marginRight: DEVICE_LARGE ? 8 : 6,
   },
   addSocialMediaBtn: {
@@ -567,7 +576,7 @@ const styles = StyleSheet.create({
   socialMediaInput: {
     fontFamily: 'Poppins-Light',
     fontSize: fontSize[14],
-    color: '#000',
+    color: BLACK,
   },
   showEditPasswordContainer: {
     width: '100%',
@@ -586,12 +595,12 @@ const styles = StyleSheet.create({
   passwordText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[13],
-    color: '#2185D0',
+    color: BLUE,
   },
   displayPassword: {
     fontFamily: 'Poppins-Regular',
     fontSize: fontSize[13],
-    color: '#000',
+    color: BLACK,
   },
   saveContainer: {
     width: '100%',
@@ -604,7 +613,7 @@ const styles = StyleSheet.create({
     width: DEVICE_LARGE ? 100 : 88,
     paddingTop: 10,
     paddingBottom: 9,
-    backgroundColor: '#5DEC9A',
+    backgroundColor: GREEN,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
@@ -618,17 +627,17 @@ const styles = StyleSheet.create({
     width: DEVICE_LARGE ? 100 : 88,
     paddingTop: 10,
     paddingBottom: 9,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#707070',
+    borderColor: DARKER_GREY,
   },
   cancelButtonText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[12],
-    color: '#707070',
+    color: DARKER_GREY,
   },
   closeButton: {
     paddingHorizontal: DEVICE_LARGE ? 10 : 8,

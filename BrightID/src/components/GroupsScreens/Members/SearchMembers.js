@@ -7,6 +7,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import { fontSize } from '@/theme/fonts';
 import { setSearchParam } from '@/actions';
+import { GREY, WHITE, LIGHT_BLACK } from '@/theme/colors';
 
 class SearchMembers extends React.Component<Props> {
   componentWillUnmount() {
@@ -48,11 +49,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 10,
     width: '90%',
-    borderColor: '#ccc',
+    borderColor: GREY,
     borderWidth: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
   },
   searchIcon: {
     marginLeft: 10,
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
   searchField: {
     fontFamily: 'ApexNew-Book',
     fontSize: fontSize[14],
-    color: '#333',
+    color: LIGHT_BLACK,
     flex: 1,
     fontWeight: 'normal',
     fontStyle: 'normal',

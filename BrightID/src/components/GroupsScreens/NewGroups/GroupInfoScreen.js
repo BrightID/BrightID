@@ -13,7 +13,15 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { chooseImage } from '@/utils/images';
-import { ORANGE } from '@/theme/colors';
+import {
+  ORANGE,
+  GREY,
+  WHITE,
+  DARKER_GREY,
+  DARK_GREY,
+  BLACK,
+  BLUE,
+} from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_TYPE, DEVICE_OS, DEVICE_LARGE } from '@/utils/deviceConstants';
 
@@ -166,7 +174,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -198,7 +206,7 @@ const styles = StyleSheet.create({
   },
   addPhoto: {
     borderWidth: 1,
-    borderColor: '#979797',
+    borderColor: DARK_GREY,
     height: 72,
     width: 72,
     borderRadius: 36,
@@ -209,7 +217,7 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: 36,
-    shadowColor: '#000',
+    shadowColor: BLACK,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
@@ -219,7 +227,7 @@ const styles = StyleSheet.create({
   },
   addPhotoText: {
     fontFamily: 'ApexNew-Book',
-    color: '#979797',
+    color: DARK_GREY,
     marginBottom: 8,
     marginTop: 8,
     fontSize: fontSize[12],
@@ -232,10 +240,10 @@ const styles = StyleSheet.create({
     fontSize: fontSize[20],
     fontWeight: '300',
     fontStyle: 'normal',
-    color: '#000',
+    color: BLACK,
     letterSpacing: 0,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#9e9e9e',
+    borderBottomColor: GREY,
     width: '100%',
     height: 45,
   },
@@ -246,7 +254,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   nextButton: {
-    backgroundColor: '#428BE5',
+    backgroundColor: BLUE,
     width: DEVICE_TYPE === 'large' ? 285 : 260,
     justifyContent: 'center',
     alignItems: 'center',
@@ -256,7 +264,7 @@ const styles = StyleSheet.create({
   },
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',
-    color: '#fff',
+    color: WHITE,
     fontWeight: '600',
     fontSize: fontSize[18],
   },
@@ -266,7 +274,7 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   primaryToggleLable: {
-    color: '#555555',
+    color: DARKER_GREY,
     fontFamily: 'ApexNew-Book',
     fontSize: fontSize[18],
     width: 200,

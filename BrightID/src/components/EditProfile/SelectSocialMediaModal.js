@@ -17,6 +17,7 @@ import {
   DEVICE_ANDROID,
   WIDTH,
 } from '@/utils/deviceConstants';
+import { DARK_ORANGE, DARKER_GREY, WHITE, BLACK, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     width: WIDTH * 0.75,
     borderRadius: 25,
     paddingHorizontal: DEVICE_LARGE ? 36 : 30,
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
     width: DEVICE_LARGE ? 92 : 80,
     paddingTop: 8,
     paddingBottom: 7,
-    backgroundColor: '#5DEC9A',
+    backgroundColor: GREEN,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
@@ -253,23 +254,23 @@ const styles = StyleSheet.create({
     width: DEVICE_LARGE ? 92 : 80,
     paddingTop: 8,
     paddingBottom: 7,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#707070',
+    borderColor: DARKER_GREY,
   },
   cancelButtonText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[12],
-    color: '#707070',
+    color: DARKER_GREY,
   },
   socialMediaInput: {
     flexGrow: 1,
     fontFamily: 'Poppins-Light',
     fontSize: fontSize[14],
-    color: '#000',
+    color: BLACK,
   },
   inputContainer: {
     width: '100%',
@@ -278,7 +279,7 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[11],
-    color: '#B64B32',
+    color: DARK_ORANGE,
     marginBottom: DEVICE_LARGE ? 5 : 3,
   },
 });
