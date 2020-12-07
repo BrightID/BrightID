@@ -7,6 +7,7 @@ import i18next from 'i18next';
 import Slider from '@react-native-community/slider';
 import { connection_levels } from '@/utils/constants';
 import { WIDTH, DEVICE_LARGE } from '@/utils/deviceConstants';
+import { BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import {
   connectionLevelColors,
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
   labelText: {
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[17],
-    color: '#000',
+    color: BLACK,
   },
   description: {
     // set minimum height so the slider does not jump when the description
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
   descriptionText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
-    color: '#000',
+    color: BLACK,
     textAlign: 'center',
   },
   slider: {

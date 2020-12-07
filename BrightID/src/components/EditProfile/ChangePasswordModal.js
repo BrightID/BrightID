@@ -15,6 +15,14 @@ import { setInternetCredentials } from 'react-native-keychain';
 import { useTranslation } from 'react-i18next';
 import { BACKUP_URL } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
+import {
+  DARK_ORANGE,
+  LIGHT_GREY,
+  DARKER_GREY,
+  WHITE,
+  LIGHT_BLACK,
+  GREEN,
+} from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
@@ -223,20 +231,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modalContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     width: '75%',
     borderRadius: 25,
     padding: DEVICE_LARGE ? 36 : 30,
   },
   inputGroup: {
-    borderBottomColor: '#C4C4C4',
+    borderBottomColor: LIGHT_GREY,
     borderBottomWidth: 1,
     marginBottom: DEVICE_LARGE ? 12 : 10,
   },
   label: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[13],
-    color: '#B64B32',
+    color: DARK_ORANGE,
     marginBottom: DEVICE_IOS ? (DEVICE_LARGE ? 15 : 13) : 0,
   },
   textInput: {
@@ -254,7 +262,7 @@ const styles = StyleSheet.create({
     width: DEVICE_LARGE ? 92 : 80,
     paddingTop: 8,
     paddingBottom: 7,
-    backgroundColor: '#5DEC9A',
+    backgroundColor: GREEN,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
@@ -268,22 +276,22 @@ const styles = StyleSheet.create({
     width: DEVICE_LARGE ? 92 : 80,
     paddingTop: 8,
     paddingBottom: 7,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#707070',
+    borderColor: DARKER_GREY,
   },
   cancelButtonText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[12],
-    color: '#707070',
+    color: DARKER_GREY,
   },
   textInfo: {
     fontFamily: 'Poppins-Regular',
     fontSize: fontSize[16],
-    color: '#333',
+    color: LIGHT_BLACK,
     margin: DEVICE_LARGE ? 12 : 10,
   },
   uploadAnimationContainer: {

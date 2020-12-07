@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { withTranslation } from 'react-i18next';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
+import { WHITE, LIGHT_BLACK, GREY } from '@/theme/colors';
 import { navigate } from '@/NavigationService';
 import { setSearchParam } from '@/actions';
 import { fontSize } from '@/theme/fonts';
@@ -72,11 +73,11 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     width: DEVICE_LARGE ? 250 : 200,
-    borderColor: '#ccc',
+    borderColor: GREY,
     borderWidth: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
   },
   searchIcon: {
     marginLeft: 10,
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
   searchField: {
     fontFamily: 'ApexNew-Book',
     fontSize: fontSize[15],
-    color: '#333',
+    color: LIGHT_BLACK,
     marginLeft: 23,
     flex: 1,
     fontWeight: 'normal',

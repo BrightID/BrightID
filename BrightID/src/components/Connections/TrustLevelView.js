@@ -10,6 +10,7 @@ import {
   connectionLevelStrings,
 } from '@/utils/connectionLevelStrings';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 
 type props = {
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   trustLevelLabelText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
-    color: '#000',
+    color: BLACK,
   },
   trustLevel: {
     flex: 1,
@@ -78,6 +79,7 @@ const styles = StyleSheet.create({
   trustLevelText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[14],
+    color: BLACK,
   },
   trustLevelButton: {
     padding: 5,

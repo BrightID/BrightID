@@ -18,6 +18,7 @@ import moment from 'moment';
 import default_group from '@/static/default_group.svg';
 import { photoDirectory } from '@/utils/filesystem';
 import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
+import { ORANGE, WHITE, BLACK, DARKER_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import Chevron from '../Icons/Chevron';
 import TrustLevelView from './TrustLevelView';
@@ -292,8 +293,6 @@ const ItemSeparator = () => {
   );
 };
 
-const ORANGE = '#ED7A5D';
-
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
@@ -303,7 +302,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     borderTopLeftRadius: 58,
     marginTop: -58,
     marginBottom: 5,
@@ -344,7 +343,7 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[17],
-    color: '#000',
+    color: BLACK,
   },
   verificationSticker: {
     marginLeft: DEVICE_LARGE ? 7 : 5,
@@ -372,8 +371,8 @@ const styles = StyleSheet.create({
     borderColor: ORANGE,
   },
   unverified: {
-    color: '#707070',
-    borderColor: '#707070',
+    color: DARKER_GREY,
+    borderColor: DARKER_GREY,
   },
   connectionInfo: {
     marginTop: 10,
@@ -398,7 +397,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderColor: ORANGE,
     borderWidth: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -422,7 +421,7 @@ const styles = StyleSheet.create({
   headerLabelText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
-    color: '#000',
+    color: BLACK,
   },
   headerContent: {
     flex: 1,
@@ -464,7 +463,7 @@ const styles = StyleSheet.create({
   itemLabelText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[15],
-    color: '#000',
+    color: BLACK,
   },
   connectionFooter: {
     flexGrow: 1,

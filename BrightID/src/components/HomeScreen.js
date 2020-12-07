@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { setActiveNotification } from '@/actions';
 import { retrieveImage } from '@/utils/filesystem';
+import { WHITE, ORANGE, DARKER_GREY, BLACK, BLUE } from '@/theme/colors';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import ChatBox from '@/components/Icons/ChatBox';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
@@ -26,7 +27,6 @@ import cameraIcon from '@/static/camera_icon_black.svg';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { WHITE } from '@/theme/colors';
 import { version as app_version } from '../../package.json';
 
 /**
@@ -95,7 +95,7 @@ export const HomeScreen = (props) => {
           title: t('home.chatActionSheet.title'),
           showSeparators: true,
           textStyle: {
-            color: '#2185D0',
+            color: BLUE,
             textAlign: 'center',
             width: '100%',
           },
@@ -297,7 +297,7 @@ export const HomeScreen = (props) => {
             <View
               style={{
                 borderBottomWidth: 1,
-                borderBottomColor: '#fff',
+                borderBottomColor: WHITE,
                 marginLeft: 5,
               }}
             >
@@ -315,7 +315,6 @@ export const HomeScreen = (props) => {
 };
 
 const PHOTO_WIDTH = DEVICE_LARGE ? 90 : 78;
-const ORANGE = '#ED7A5D';
 
 const styles = StyleSheet.create({
   container: {
@@ -332,7 +331,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: 'center',
     paddingLeft: DEVICE_LARGE ? '15%' : '12%',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     paddingTop: DEVICE_LARGE ? 10 : 0,
   },
   verifyNameContainer: {
@@ -340,7 +339,7 @@ const styles = StyleSheet.create({
     marginLeft: DEVICE_LARGE ? 40 : 30,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     maxWidth: '50%',
   },
   nameContainer: {
@@ -363,7 +362,7 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[18],
-    color: '#000000',
+    color: BLACK,
   },
   verificationsContainer: {
     height: 16,
@@ -373,7 +372,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: DEVICE_LARGE ? 10 : 0,
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
   },
   verificationSticker: {
     marginLeft: 5,
@@ -394,9 +393,9 @@ const styles = StyleSheet.create({
   },
   unverified: {
     fontFamily: 'Poppins-Medium',
-    color: '#707070',
+    color: DARKER_GREY,
     borderWidth: 1,
-    borderColor: '#707070',
+    borderColor: DARKER_GREY,
     borderRadius: 10,
     marginTop: 6,
     paddingTop: DEVICE_ANDROID ? 2 : 1,
@@ -406,7 +405,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize[11],
   },
   countsCard: {
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -428,7 +427,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderBottomLeftRadius: 58,
     borderBottomRightRadius: 58,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     flexGrow: 1,
     paddingTop: DEVICE_LARGE ? 10 : 0,
   },
@@ -465,7 +464,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   newConnectionText: {
-    color: '#fff',
+    color: WHITE,
     fontSize: fontSize[18],
     fontFamily: 'Poppins-Medium',
     marginBottom: DEVICE_LARGE ? 16 : 11,
@@ -475,7 +474,7 @@ const styles = StyleSheet.create({
     paddingBottom: DEVICE_LARGE ? 10 : 6,
     width: DEVICE_LARGE ? '80%' : 260,
     borderRadius: 60,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
@@ -489,7 +488,7 @@ const styles = StyleSheet.create({
   connectText: {
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[17],
-    color: '#000',
+    color: BLACK,
     marginLeft: DEVICE_LARGE ? 10 : 8,
   },
   communityIcon: {
@@ -503,14 +502,14 @@ const styles = StyleSheet.create({
     padding: DEVICE_LARGE ? 20 : 12,
   },
   communityLink: {
-    color: '#fff',
+    color: WHITE,
     fontSize: fontSize[14],
     fontFamily: 'Poppins-Bold',
   },
   versionInfo: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[12],
-    color: '#fff',
+    color: WHITE,
     position: 'absolute',
     right: DEVICE_LARGE ? 12 : 7,
     bottom: DEVICE_LARGE ? 12 : 7,

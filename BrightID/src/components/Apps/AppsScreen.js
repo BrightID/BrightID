@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import EmptyList from '@/components/Helpers/EmptyList';
 import Spinner from 'react-native-spinkit';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE, LIGHT_BLUE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { any, find, propEq } from 'ramda';
 import { fetchApps } from '@/actions';
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
+    backgroundColor: WHITE,
     borderTopLeftRadius: 58,
     marginTop: -58,
     zIndex: 10,
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     textAlign: 'center',
     fontSize: fontSize[16],
-    color: '#4a90e2',
+    color: LIGHT_BLUE,
   },
   linkingContainer: {
     flexDirection: 'row',

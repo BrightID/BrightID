@@ -17,6 +17,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
+import { WHITE, DARKER_GREY, BLACK, LIGHT_BLUE, RED } from '@/theme/colors';
 import { addLinkedContext, removeLinkedContext } from '@/actions';
 
 /**
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     height: DEVICE_LARGE ? 94 : 80,
     marginBottom: DEVICE_LARGE ? 11.8 : 6,
     shadowColor: 'rgba(0,0,0,0.32)',
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
   },
   appName: {
     fontFamily: 'Poppins-Medium',
-    color: 'black',
+    color: BLACK,
     fontSize: fontSize[22],
   },
   labelContainer: {
@@ -229,22 +230,22 @@ const styles = StyleSheet.create({
   sponsorshipMessage: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[14],
-    color: '#4a90e2',
+    color: LIGHT_BLUE,
   },
   linkedMessage: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[14],
-    color: '#4a90e2',
+    color: LIGHT_BLUE,
   },
   errorMessage: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[14],
-    color: '#FF0800',
+    color: RED,
   },
   unverifiedMessage: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[14],
-    color: '#707070',
+    color: DARKER_GREY,
   },
   linkedContainer: {
     marginLeft: 'auto',

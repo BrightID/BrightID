@@ -11,6 +11,7 @@ import { photoDirectory } from '@/utils/filesystem';
 import { staleConnection, deleteConnection } from '@/actions';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
+import { WHITE, LIGHT_ORANGE, DARK_ORANGE, RED } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     shadowColor: 'rgba(221, 179, 169, 0.3)',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
@@ -329,7 +330,7 @@ const styles = StyleSheet.create({
   connectionTime: {
     fontFamily: 'Poppins-Regular',
     fontSize: fontSize[10],
-    color: '#B64B32',
+    color: DARK_ORANGE,
   },
   moreIcon: {
     marginRight: DEVICE_LARGE ? 26 : 23,
@@ -337,13 +338,13 @@ const styles = StyleSheet.create({
   waitingMessage: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[13],
-    color: '#e39f2f',
+    color: LIGHT_ORANGE,
     marginTop: DEVICE_LARGE ? 2 : 0,
   },
   deletedMessage: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[14],
-    color: '#FF0800',
+    color: RED,
     marginTop: DEVICE_LARGE ? 5 : 2,
     textTransform: 'capitalize',
   },

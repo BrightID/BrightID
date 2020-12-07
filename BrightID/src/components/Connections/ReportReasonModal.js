@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { report_reasons } from '@/utils/constants';
-import { ORANGE } from '@/theme/colors';
+import { ORANGE, WHITE, BLACK, DARKER_GREY, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { reportConnection } from './models/reportConnection';
 
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     width: '90%',
     borderRadius: 25,
     padding: DEVICE_LARGE ? 30 : 25,
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize[13],
     textAlign: 'left',
     marginLeft: 10,
-    color: '#827F7F',
+    color: DARKER_GREY,
   },
   divider: {
     borderTopWidth: StyleSheet.hairlineWidth,
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   radioLabelText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[15],
-    color: '#000',
+    color: BLACK,
   },
   modalButtons: {
     flexDirection: 'row',
@@ -248,31 +248,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cancelButton: {
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     borderRadius: 50,
-    borderColor: '#707070',
+    borderColor: DARKER_GREY,
     borderWidth: 1,
   },
   cancelButtonText: {
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[15],
-    color: '#707070',
+    color: DARKER_GREY,
   },
   submitButton: {
-    backgroundColor: '#5DEC9A',
+    backgroundColor: GREEN,
     borderRadius: 50,
-    borderColor: '#5DEC9A',
+    borderColor: GREEN,
     borderWidth: 1,
   },
   submitButtonText: {
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[15],
-    color: '#000',
+    color: BLACK,
   },
   submitButtonDisabledText: {
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[15],
-    color: '#707070',
+    color: DARKER_GREY,
   },
 });
 

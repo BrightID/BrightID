@@ -11,6 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { BlurView } from '@react-native-community/blur';
 import { connection_levels } from '@/utils/constants';
+import { WHITE, GREEN } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from 'react-redux';
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     width: '90%',
     borderRadius: 25,
     padding: DEVICE_LARGE ? 30 : 25,
@@ -133,7 +134,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 8,
     marginTop: 10,
-    backgroundColor: '#5DEC9A',
+    backgroundColor: GREEN,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
