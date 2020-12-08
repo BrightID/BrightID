@@ -35,16 +35,16 @@ const MainApp = () => {
   const eula = useSelector((state) => state.user.eula);
   return (
     <TopStack.Navigator>
-      {!id ? (
-        <TopStack.Screen
-          name="Onboarding"
-          component={Onboarding}
-          options={{ headerShown: false }}
-        />
-      ) : !eula ? (
+      {!eula ? (
         <TopStack.Screen
           name="Eula"
           component={Eula}
+          options={{ headerShown: false }}
+        />
+      ) : !id ? (
+        <TopStack.Screen
+          name="Onboarding"
+          component={Onboarding}
           options={{ headerShown: false }}
         />
       ) : (
