@@ -7,6 +7,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { DARK_GREY, WHITE } from '@/theme/colors';
+import { confirmPendingConnectionThunk } from './actions/pendingConnectionThunks';
 import {
   pendingConnection_states,
   selectPendingConnectionById,
@@ -39,7 +40,7 @@ type PreviewConnectionProps = {
 };
 
 export const PreviewConnectionController = (props: PreviewConnectionProps) => {
-  const { pendingConnectionId, ratingHandler, index } = props;
+  const { pendingConnectionId, viewPagerRef, last, index } = props;
   const dispatch = useDispatch();
 
   const pendingConnection = useSelector((state) =>
@@ -71,7 +72,9 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
   }
 
   const setLevelHandler = (level: ConnectionLevel) => {
-    ratingHandler(pendingConnection.id, level, index);
+    dispatch(confirmPendingConnectionThunk(pendingConnection.id, level));
+    // if last page nav back to index 0
+    viewPagerRef.current?.setPage(last ? 0 : index + 1);
   };
 
   const abuseHandler = () => {

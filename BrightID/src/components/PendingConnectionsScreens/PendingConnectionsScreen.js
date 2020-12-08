@@ -7,17 +7,17 @@ import React, {
   useState,
   useRef,
 } from 'react';
-import { BackHandler, StyleSheet, StatusBar } from 'react-native';
+import { BackHandler, StyleSheet, StatusBar, View } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { Pagination } from 'react-native-snap-carousel';
+import ViewPager from '@react-native-community/viewpager';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
-import { WIDTH, DEVICE_LARGE } from '@/utils/deviceConstants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { WHITE, GREY } from '@/theme/colors';
 import { setActiveNotification } from '@/actions';
-import { confirmPendingConnectionThunk } from './actions/pendingConnectionThunks';
 import { PreviewConnectionController } from './PreviewConnectionController';
 
 /**
@@ -26,12 +26,12 @@ import { PreviewConnectionController } from './PreviewConnectionController';
 ==================================================================
  *
  */
-const ZERO_CONNECTIONS_TIMEOUT = 3500;
+const ZERO_CONNECTIONS_TIMEOUT = 2000;
 
 export const PendingConnectionsScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const carouselRef = useRef(null);
+  const viewPagerRef = useRef(null);
 
   const pendingConnections = useSelector((state) => {
     return selectAllUnconfirmedConnections(state);
@@ -41,8 +41,7 @@ export const PendingConnectionsScreen = () => {
     [],
   );
   const [loading, setLoading] = useState(true);
-  const [reRender, setReRender] = useState(true);
-  const [activeIndex, setActiveIndex] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   // this will trigger a re-render of the carousel
   // causes a glitch in the UI on Android
@@ -54,42 +53,34 @@ export const PendingConnectionsScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      setReRender(true);
+      resetDisplayConnections();
       dispatch(setActiveNotification(null));
-    }, [dispatch]),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []),
   );
 
-  // setupList on first render
+  // re-render list if no connections are displayed or end of list
   useEffect(() => {
-    if (reRender) {
-      // refresh list
-      resetDisplayConnections();
-      // we wait 500ms before showing the pendingConnection screen
-      setTimeout(() => {
-        setReRender(false);
-        setActiveIndex(0);
-      }, 500);
-    }
-  }, [reRender]);
-
-  // re-render list if no connections are displayed
-  useEffect(() => {
-    if (pendingConnectionsToDisplay.length === 0 && !reRender) {
+    if (activeIndex === pendingConnectionsToDisplay.length - 1) {
       resetDisplayConnections();
     }
-  }, [resetDisplayConnections, pendingConnectionsToDisplay.length, reRender]);
+  }, [
+    resetDisplayConnections,
+    pendingConnectionsToDisplay.length,
+    activeIndex,
+  ]);
 
   // back handling for android
   useEffect(() => {
     const goBack = () => {
-      if (carouselRef.current?.currentIndex > 0) {
-        carouselRef.current?.snapToPrev();
+      if (activeIndex > 0) {
+        viewPagerRef.current?.setPage(activeIndex - 1);
         return true;
       }
     };
     BackHandler.addEventListener('hardwareBackPress', goBack);
     return () => BackHandler.removeEventListener('hardwareBackPress', goBack);
-  }, [carouselRef]);
+  }, [viewPagerRef, activeIndex]);
 
   // leave page if zero pending connections
   useEffect(() => {
@@ -109,56 +100,42 @@ export const PendingConnectionsScreen = () => {
 
   // the list should only re render sparingly for performance and continuity
   const PendingConnectionList = useMemo(() => {
-    const ratingHandler = (
-      pendingConnectionId: string,
-      level: ConnectionLevel,
-      index: number,
-    ) => {
-      dispatch(confirmPendingConnectionThunk(pendingConnectionId, level));
-
-      if (index === pendingConnectionsToDisplay.length - 1) {
-        // last list item handled? Then reload list
-        setReRender(true);
-      } else {
-        // move to next item
-        carouselRef.current?.snapToNext();
-      }
-    };
-
-    const renderItem = ({ item, index }) => {
+    const renderView = (item, index) => {
       return (
-        <PreviewConnectionController
-          pendingConnectionId={item.id}
-          carouselRef={carouselRef}
-          setReRender={setReRender}
-          ratingHandler={ratingHandler}
-          index={index}
-        />
+        <View
+          style={{ flex: 1, width: '100%' }}
+          collapsable={false}
+          key={index}
+        >
+          <PreviewConnectionController
+            pendingConnectionId={item.id}
+            viewPagerRef={viewPagerRef}
+            index={index}
+            last={index === pendingConnectionsToDisplay.length - 1}
+          />
+        </View>
       );
     };
-    console.log('rendering pending connections CAROUSEL');
+    console.log('rendering pending connections VIEWPAGER');
+
+    const Views = pendingConnectionsToDisplay.map(renderView);
 
     return (
-      <Carousel
-        containerCustomStyle={{
-          flex: 1,
+      <ViewPager
+        ref={viewPagerRef}
+        style={{ flex: 1, width: '100%' }}
+        initialPage={0}
+        onPageSelected={(e) => {
+          setActiveIndex(e.nativeEvent.position);
         }}
-        ref={carouselRef}
-        data={pendingConnectionsToDisplay}
-        renderItem={renderItem}
-        // layout="stack"
-        firstItem={0}
-        itemWidth={WIDTH * 0.95}
-        sliderWidth={WIDTH}
-        onSnapToItem={(index) => {
-          setActiveIndex(index);
-        }}
-        onLayout={() => {
-          setActiveIndex((prev) => prev || 0);
-        }}
-      />
+        orientation="horizontal"
+        transitionStyle="scroll"
+        showPageIndicator={false}
+      >
+        {Views}
+      </ViewPager>
     );
-  }, [dispatch, pendingConnectionsToDisplay]);
+  }, [pendingConnectionsToDisplay]);
 
   return (
     <SafeAreaView style={[styles.container]}>
@@ -168,7 +145,7 @@ export const PendingConnectionsScreen = () => {
         animated={true}
       />
       {}
-      {loading || reRender ? (
+      {loading ? (
         <Spinner
           isVisible={true}
           size={DEVICE_LARGE ? 44 : 40}
@@ -194,8 +171,7 @@ export const PendingConnectionsScreen = () => {
             activeDotIndex={activeIndex ?? 0}
             inactiveDotOpacity={0.4}
             inactiveDotScale={1}
-            carouselRef={carouselRef.current}
-            tappableDots={true}
+            tappableDots={false}
           />
         </>
       )}
