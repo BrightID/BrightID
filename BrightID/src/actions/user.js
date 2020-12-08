@@ -12,6 +12,7 @@ export const SET_HASHED_ID = 'SET_HASHED_ID';
 export const SET_USER_ID = 'SET_USER_ID';
 export const REMOVE_SAFE_PUB_KEY = 'REMOVE_SAFE_PUB_KEY';
 export const SET_VERIFICATIONS = 'SET_VERIFICATIONS';
+export const SET_EULA = 'SET_EULA';
 export const HYDRATE_USER = 'HYDRATE_USER';
 
 /**
@@ -58,6 +59,17 @@ export const setPhoto = (photo: { filename: string }) => ({
 export const setSearchParam = (searchParam: string) => ({
   type: SEARCH_PARAM,
   searchParam,
+});
+
+/**
+ * redux action creator for setting the EULA agreement
+ * @param type SET_EULA
+ * @param eula boolean used for EULA status
+ */
+
+export const setEula = (eula: string) => ({
+  type: SET_EULA,
+  eula,
 });
 
 /**
