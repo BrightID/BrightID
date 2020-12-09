@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import { setEula } from '@/actions';
+import L from './License.json';
 
 export const Eula = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -55,30 +56,29 @@ export const Eula = ({ navigation }) => {
           contentContainerStyle={styles.scrollViewContent}
           showsVerticalScrollIndicator={true}
         >
-          <Text style={styles.header}>{t('eula.header.eula')}</Text>
-          <Text style={styles.paragraph}>{t('eula.text.eula')}</Text>
-          <Text style={styles.header}>{t('eula.header.privacyPolicy')}</Text>
-          <Text style={styles.paragraph}>{t('eula.text.privacyPolicy')}</Text>
-          <Text style={styles.subheader}>{t('eula.subheader.collection')}</Text>
-          <Text style={styles.paragraph}>{t('eula.text.collection')}</Text>
-          <Text style={styles.subheader}>
-            {t('eula.description.collection.link')}
+          <Text style={styles.header}>{L.title}</Text>
+          <Text style={styles.paragraph}>{L.intro}</Text>
+          <Text style={styles.header}>{L['header.parties']}</Text>
+          <Text style={styles.paragraph}>{L['text.parties']}</Text>
+          <Text style={styles.header}>{L['header.privacy']}</Text>
+          <Text style={styles.paragraph}>{L['text.privacy']}</Text>
+          <Text style={styles.link}>{L['link.privacy']}</Text>
+          <Text style={styles.header}>{L['header.content']}</Text>
+          <Text style={styles.paragraph}>{L['text.content']}</Text>
+          <Text style={styles.header}>{L['header.conduct']}</Text>
+          <Text style={styles.paragraph}>{L['text.conduct']}</Text>
+          <Text style={styles.header}>{L['header.license']}</Text>
+          <Text style={styles.paragraph}>{L['text.license']}</Text>
+          <Text style={styles.header}>BrightID Contact</Text>
+          <Text style={styles.paragraph}>
+            This is the website for BrightID{' '}
+            <Text style={styles.link}>https://www.brightid.org</Text>
           </Text>
-          <Text style={styles.link}>{t('eula.text.collection.link')}</Text>
-          <Text style={styles.subheader}>{t('eula.subheader.log')}</Text>
-          <Text style={styles.paragraph}>{t('eula.text.log')}</Text>
-          <Text style={styles.subheader}>{t('eula.subheader.cookies')}</Text>
-          <Text style={styles.paragraph}>{t('eula.text.cookies')}</Text>
-          <Text style={styles.subheader}>{t('eula.subheader.security')}</Text>
-          <Text style={styles.paragraph}>{t('eula.text.security')}</Text>
-          <Text style={styles.subheader}>{t('eula.subheader.links')}</Text>
-          <Text style={styles.paragraph}>{t('eula.text.links')}</Text>
-          <Text style={styles.subheader}>{t('eula.subheader.children')}</Text>
-          <Text style={styles.paragraph}>{t('eula.text.children')}</Text>
-          <Text style={styles.subheader}>{t('eula.subheader.changes')}</Text>
-          <Text style={styles.paragraph}>{t('eula.text.changes')}</Text>
-          <Text style={styles.header}>{t('eula.header.terms')}</Text>
-          <Text style={styles.paragraph}>{t('eula.text.terms')}</Text>
+          <Text style={styles.paragraph}>
+            We can be reached via e-mail at{' '}
+            <Text style={styles.link}>support@brightid.org</Text>
+            {'\n\n'}
+          </Text>
         </ScrollView>
       </View>
     </>
@@ -112,17 +112,12 @@ const styles = StyleSheet.create({
     fontSize: DEVICE_LARGE ? 16 : 14,
     marginBottom: DEVICE_LARGE ? 14 : 12.5,
   },
-  subheader: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 14 : 12.5,
-    marginBottom: DEVICE_LARGE ? 12 : 11,
-  },
   paragraph: {
     fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 12 : 11,
   },
   link: {
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 11,
     color: '#2185D0',
     marginBottom: DEVICE_LARGE ? 12 : 11,
