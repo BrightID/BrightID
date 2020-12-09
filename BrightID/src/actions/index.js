@@ -117,6 +117,7 @@ export {
   SET_USER_ID,
   REMOVE_SAFE_PUB_KEY,
   SET_VERIFICATIONS,
+  SET_EULA,
   HYDRATE_USER,
   setUserScore,
   setIsSponsored,
@@ -130,5 +131,6 @@ export {
   setUserId,
   removeSafePubKey,
   setVerifications,
+  setEula,
   hydrateUser,
 } from './user';

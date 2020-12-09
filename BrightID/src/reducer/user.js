@@ -12,6 +12,7 @@ import {
   SET_PASSWORD,
   SET_HASHED_ID,
   SET_USER_ID,
+  SET_EULA,
   REMOVE_SAFE_PUB_KEY,
   SET_VERIFICATIONS,
   HYDRATE_USER,
@@ -30,6 +31,7 @@ const initialState = {
   hashedId: '',
   verifications: [],
   secretKey: '',
+  eula: false,
 };
 
 export const reducer = (state: UserState = initialState, action: action) => {
@@ -79,7 +81,6 @@ export const reducer = (state: UserState = initialState, action: action) => {
         verifications: action.verifications,
       };
     }
-
     case SET_BACKUP_COMPLETED: {
       return {
         ...state,
@@ -90,6 +91,12 @@ export const reducer = (state: UserState = initialState, action: action) => {
       return {
         ...state,
         password: action.password,
+      };
+    }
+    case SET_EULA: {
+      return {
+        ...state,
+        eula: action.eula,
       };
     }
     case SET_HASHED_ID: {

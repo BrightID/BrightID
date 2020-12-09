@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
 import Apps from './Apps';
 import Connections from './Connections';
+import Eula from './Eula';
 import Groups from './Groups';
 import Home from './Home';
 import Modals from './Modals';
@@ -31,18 +32,25 @@ const MainTabs = () => {
 
 const MainApp = () => {
   const id = useSelector((state) => state.user.id);
+  const eula = useSelector((state) => state.user.eula);
   return (
     <TopStack.Navigator>
-      {id ? (
+      {!eula ? (
         <TopStack.Screen
-          name="App"
-          component={MainTabs}
+          name="Eula"
+          component={Eula}
+          options={{ headerShown: false }}
+        />
+      ) : !id ? (
+        <TopStack.Screen
+          name="Onboarding"
+          component={Onboarding}
           options={{ headerShown: false }}
         />
       ) : (
         <TopStack.Screen
-          name="Onboarding"
-          component={Onboarding}
+          name="App"
+          component={MainTabs}
           options={{ headerShown: false }}
         />
       )}

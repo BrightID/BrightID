@@ -10,12 +10,10 @@
   "home.chatActionSheet.discord": "Discord BrightID",
   "home.accessibilityLabel.connect": "se connecter",
 
-
   "onboarding.text.intro": "<text>BrightID utilise les personnes</text><text> que vous connaissez</text><text>pour assurer qu'il n'existe</text><text>qu'un seul compte par personne pour les usages important</text><text>tels que le vote et le revenu de base.</text>",
   "onboarding.label.maintainPrivacy": "Préservez votre vie privée",
   "onboarding.text.privacy": "<text>Prouvez que vous êtes vous</text><text>en préservant votre vie privée.</text>",
   "onboarding.button.getStarted": "Démarrer",
-
 
   "signup.header.title": "S'enregistrer",
   "signup.button.addPhoto": "Ajouter une photo",
@@ -29,10 +27,10 @@
   "signup.alert.nameTooShort": "Votre nom doit contenir au moins 2 caractères",
   "signup.alert.photoMissing": "Une photo est requise",
 
-
   "recovery.header.title": "Code de Restauration",
   "recovery.text.askTrustedConnections": "Demandez à vos contacts de confiance de scanner ce code.",
 
+  "eula.header.title": "Accord de Licence",
 
   "qrcode.header.connections": "{{count}} / 30 Connexions",
   "qrcode.text.scanCode": "<text>Bonjour {{name}}, scannez un code et</text><text>créez une nouvelle connexion aujourd'hui</text>",
@@ -54,12 +52,11 @@
   "qrcode.alert.shareLinkGroup": "Partagez ce lien",
   "qrcode.alert.connectSingle": "Connectez vous avec {{name}} sur BrightID : {{link}}",
   "qrcode.alert.connectGroup": "Créez une connexion de groupe avec {{name}} sur BrightID : {{link}}",
-  
+
   "qrcode.text.downloadingConnectionData": "Téléchargement des données de connexion",
   "qrcode.text.pendingConnections": "Vous avez {{count}} connexion en attente...",
   "qrcode.text.pendingConnections_plural": "Vous avez {{count}} connexions en attente...",
   "qrcode.text.confirmConnections": "Confirmation des connexions",
-
 
   "pendingConnections.text.errorGeneric": "Une erreur est survenue, veuillez essayer à nouveau de vous connecter avec {{name}}...",
   "pendingConnections.text.errorMyself": "OUPS!!! On dirait que c'est vous...",
@@ -88,7 +85,6 @@
   "pendingConnection.alert.text.errorCreateChannel": "Impossible de créer un canal de connexion. Message d'erreur : {{message}}",
   "pendingConnection.alert.text.errorJoinChannel": "Impossible de rejoindre un canal de connexion. Message d'erreur : {{message}}",
 
-
   "connections.header.connections": "Connexions",
   "connections.text.noConnections": "Aucune connexion",
   "connections.removeActionSheet.title": "Supprimer la connexion",
@@ -112,7 +108,6 @@
   "connections.accessibilityLabel.connectionPhoto": "Photo de la Connexion",
   "connections.accessibilityLabel.viewConnectionDetails": "Voir les détails de la Connexion",
 
-
   "connectionDetails.header.connectionDetails": "Détails de la Connexion",
   "connectionDetails.tags.loading": "Chargement...",
   "connectionDetails.tags.connectedAt": "Connecté(e) {{date}}",
@@ -134,13 +129,11 @@
   "connectionDetails.button.reportSubmit": "Signaler",
   "connectionDetails.button.reportCancel": "Annuler",
 
-
   "connectionsSearch.header.sorting": "Tri",
   "connectionsSearch.button.save": "Valider",
   "connectionsSearch.text.chooseSortMethod": "Choisissez une des méthodes ci-dessous",
   "connectionsSearch.button.sortByDate": "Trier par date ajoutée",
   "connectionsSearch.button.sortByName": "Trier par nom",
-
 
   "groups.header.groups": "Groupes",
   "groups.header.newGroup": "Nouveau Groupe",
@@ -164,7 +157,7 @@
   "groups.memberActionSheet.dismissMember": "Retirer du Groupe",
   "groups.memberActionSheet.cancel": "Annuler",
   "groups.alert.title.inviteSuccess": "Invitation Envoyée",
-  "groups.alert.text.inviteSuccess":"Vous avez invité {{name}} avec succès",
+  "groups.alert.text.inviteSuccess": "Vous avez invité {{name}} avec succès",
   "groups.alert.title.leaveGroup": "Quitter le Groupe",
   "groups.alert.text.leaveGroup": "Êtes-vous sûr de vouloir quitter ce groupe ?",
   "groups.alert.title.errorLeaveGroup": "Erreur en quittant le groupe",
@@ -177,8 +170,7 @@
   "groups.accessibilityLabel.groupsLogo": "logo pour les groupes",
   "groups.state.creatingGroup": "création du groupe",
   "groups.state.uploadingGroupPhoto": "envoi de la photo du groupe",
-  
-  
+
   "createGroup.placeholder.groupName": "Quel est le nom du groupe ?",
   "createGroup.button.next": "Suivant",
   "createGroup.label.cofounders": "COFONDATEURS",
@@ -189,7 +181,6 @@
   "createGroup.alert.text.nameMissing": "Veuillez entrer un nom pour le groupe",
   "createGroup.alert.text.nameTooShort": "Le nom du groupe doit contenir au moins 2 caractères",
   "createGroup.alert.title.createFailed": "Échec de la création du groupe",
-
 
   "apps.text.noApps": "Pas d'Application",
   "apps.text.pendingLink": "Compte BrightID en cours de liaison avec {{context}} ...",
@@ -210,7 +201,6 @@
   "apps.alert.title.linkFailure": "Échec",
   "apps.alert.text.linkFailure": "Impossible de lier votre compte BrightID avec {{context}}\n{{result}}",
 
-
   "notifications.tab.connections": "connexions",
   "notifications.tab.groups": "groupes",
   "notifications.tab.miscellaneous": "divers",
@@ -228,13 +218,11 @@
   "notifications.alert.text.successAcceptGroupInvite": "Vous avez rejoint {{groupName}}",
   "notifications.alert.text.failureAcceptGroupInvite": "Erreur lors de la tentative de rejoindre le groupe",
 
-  
   "notificationBar.title.pendingConnection": "Confirmez vos connexions",
   "notificationBar.text.pendingConnections": "Vous avez {{count}} connexion en attente",
   "notificationBar.text.pendingConnections_plural": "Vous avez {{count}} connexions en attente",
   "notificationBar.title.socialRecovery": "Sauvegarde & Restauration Sociale",
   "notificationBar.text.socialRecovery": "Veuillez sélectionner vos connexions de confiance afin d'activer la Restauration Sociale BrightID",
-
 
   "backup.header.backup": "Sauvegarde",
   "backup.header.trustedConnections": "Connexions de Confiance",
@@ -249,7 +237,6 @@
   "backup.alert.text.passwordTooShort": "Votre mot de passe doit comporter au moins 8 caractères.",
   "backup.alert.text.needThreeTrusted": "Vous devez définir au moins trois connexions de confiance pour effectuer une sauvegarde.",
 
-
   "restore.header.accountRecovery": "Restauration du Compte",
   "restore.button.startRestore": "Démarrer la Restauration",
   "restore.text.downloadingData": "Téléchargement des données depuis le serveur de sauvegarde ...",
@@ -262,7 +249,6 @@
   "restore.text.noConnections": "Aucune connexions...",
   "restore.alert.text.requestRecovering": "Votre requête pour aider à la restauration de ce compte a été soumise avec succès !",
 
-
   "drawer.label.home": "Accueil",
   "drawer.label.editProfile": "Éditer le Profil",
   "drawer.label.achievements": "Objectifs Remplis",
@@ -272,12 +258,10 @@
   "drawer.alert.title.upToDate": "Rechercher des Mises à Jour",
   "drawer.alert.text.upToDate": "BrightID est à jour.",
 
-
   "graphExplorer.text.backupRequired": "Configurer une Sauvegarde du Compte est requis pour accéder à votre Code Explorer. Vérifiez vos notifications ou connectez vous à davantage d'utilisateurs afin d'être éligible à la Sauvegarde du Compte.",
   "graphExplorer.text.explorerWebsiteDescription": "est un site web conçu pour explorer l'intégralité du Social Graph de BrightID. Utilisez le code ci-dessus pour voir vos connexions dans le Graph.",
   "graphExplorer.button.copyCode": "Copier le Code",
   "graphExplorer.alert.text.copied": "Code copié !",
-
 
   "contact.title.contactUs": "Nous Contacter",
   "contact.label.email": "Email",
@@ -287,7 +271,6 @@
   "contact.label.socialMedia": "Réseaux Sociaux",
   "contact.text.weAre": "Nous sommes ",
   "contact.text.openSource": "open source !",
-
 
   "profile.label.name": "Nom",
   "profile.label.socialMediaLink": "Liens Réseaux Sociaux",
@@ -309,7 +292,6 @@
   "profile.alert.title.passwordMatch": "Veuillez réessayer",
   "profile.alert.text.passwordMatch": "Le mot de passe actuel est incorrect.",
 
-
   "achievements.progress.title": "Avancement :",
   "achievements.notification.title": "Objectif rempli !",
   "achievements.notification.message": "Vous avez complété la tâche \"{{title}}\".",
@@ -329,7 +311,6 @@
   "achievements.get_sponsored.description": "Vous faire sponsoriser en liant votre compte BrightID à une application sponsor",
   "achievements.setup_trusted_connections.title": "Configurer la Restauration Sociale",
   "achievements.setup_trusted_connections.description": "Définir vos connexions de confiance pour activer la Restauration Sociale",
-
 
   "common.alert.error": "Erreur",
   "common.alert.success": "Succès",
