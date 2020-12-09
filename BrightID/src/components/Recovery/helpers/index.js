@@ -2,14 +2,18 @@
 
 import { Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
+import _  from 'lodash';
 import nacl from 'tweetnacl';
+import stringify from 'fast-json-stable-stringify';
 import i18next from 'i18next';
 import {
   createImageDirectory,
   retrieveImage,
   saveImage,
 } from '@/utils/filesystem';
+import { encryptData, decryptData } from '@/utils/cryptoHelper';
 import backupApi from '@/api/backupService';
+import ChannelAPI from '@/api/channelService';
 import api from '@/api/brightId';
 import store from '@/store';
 import emitter from '@/emitter';
@@ -23,8 +27,17 @@ import {
   setHashedId,
   setGroups,
   setKeypair,
+  addConnection,
+  createGroup,
+  updateConnections,
 } from '@/actions';
-import { uInt8ArrayToB64, safeHash } from '@/utils/encoding';
+import {
+  strToUint8Array,
+  uInt8ArrayToB64,
+  b64ToUrlSafeB64,
+  hash,
+  randomKey
+} from '@/utils/encoding';
 
 export const setTrustedConnections = async () => {
   const {
@@ -35,7 +48,7 @@ export const setTrustedConnections = async () => {
 };
 
 const hashId = (id: string, password: string) => {
-  const hash = safeHash(id + password);
+  const hash = hash(id + password);
   store.dispatch(setHashedId(hash));
   return hash;
 };
@@ -125,38 +138,295 @@ export const backupAppData = async () => {
   }
 };
 
-export const setupRecovery = async () => {
-  let { recoveryData } = store.getState();
-  recoveryData.sigs = [];
+export const checkChannel = async (channelApi) => {
+  try {
+    let {
+      recoveryData,
+      connections: { connections },
+      groups: { groups }
+    } = store.getState();
+    let { aesKey, id, sigs } = recoveryData;
+    const channelId = hash(aesKey);
+    let dataIds = await channelApi.list(channelId);
+
+    // process signatures uploaded to the channel
+    const sigDataIds = dataIds.filter(
+      dataId => dataId.startsWith('sig_') &&
+      !sigs[dataId.replace('sig_', '')]
+    );
+    for (let dataId of sigDataIds) {
+      let signer = dataId.replace('sig_', '');
+      sigs[signer] = await channelApi.download({ channelId, dataId });
+      recoveryData.id = sigs[signer].id;
+      Alert.alert(
+        i18next.t('common.alert.info'),
+        i18next.t('common.alert.text.trustedSigned')
+      );
+    }
+
+    // process connections uploaded to the channel
+    connections = _.keyBy(connections, 'id');
+    const connectionDataIds = dataIds.filter( dataId =>
+      dataId.startsWith('connection_') &&
+      !connections[dataId.replace('connection_', '')] &&
+      (dataId.replace('connection_', '') != id || !recoveryData.name)
+    );
+    for (let dataId of connectionDataIds) {
+      let connectionData = await downloadConnection(dataId, channelApi, aesKey);
+      if (connectionData.id !== id) {
+        store.dispatch(addConnection(connectionData));
+      } else {
+        recoveryData.name = connectionData.name;
+        recoveryData.photo = connectionData.photo;
+        store.dispatch(setRecoveryData(recoveryData));
+      }
+    }
+
+    // process groups uploaded to the channel
+    groups = _.keyBy(groups, 'id');
+    const groupDataIds = dataIds.filter( dataId =>
+      dataId.startsWith('group_') &&
+      !groups[dataId.replace('group_', '')]
+    );
+    for (let dataId of groupDataIds) {
+      let groupData = await downloadGroup(dataId, channelApi, aesKey);
+      store.dispatch(createGroup(groupData));
+    }
+
+    // return true if sigs loaded and no new connection/group is comming
+    if (sigDataIds.length || connectionDataIds.length || groupDataIds.length) {
+      recoveryData.updateTimestamp = Date.now();
+      store.dispatch(setRecoveryData(recoveryData));
+      return false;
+    } else if (Object.keys(sigs).length < 2) {
+      return false;
+    } else {
+      return Date.now() - recoveryData.updateTimestamp > 5000;
+    }
+  } catch (err) {
+    console.warn(err);
+    throw err;
+  }
+};
+
+const downloadConnection = async (dataId, channelApi, aesKey) => {
+  const channelId = hash(aesKey);
+  const encrypted = await channelApi.download({ channelId, dataId });
+  const connectionData = decryptData(encrypted, aesKey);
+  const filename = await saveImage({
+    imageName: connectionData.id,
+    base64Image: connectionData.photo,
+  });
+  connectionData.photo = { filename };
+  return connectionData;
+};
+
+const downloadGroup = async (dataId, channelApi, aesKey) => {
+  const channelId = hash(aesKey);
+  const encrypted = await channelApi.download({ channelId, dataId });
+  const groupData = decryptData(encrypted, aesKey);
+  const filename = await saveImage({
+    imageName: groupData.id,
+    base64Image: groupData.photo,
+  });
+  groupData.photo = { filename };
+  return groupData;
+};
+
+export const uploadSigRequest = async (channelApi, recoveryData) => {
+  const data = {
+    signingKey: recoveryData.publicKey,
+    timestamp: recoveryData.timestamp
+  };
+  try {
+    await channelApi.upload({
+      channelId: hash(recoveryData.aesKey),
+      data,
+      dataId: 'data',
+    });
+  } catch (e) {
+    const msg = 'Profile data already exists in channel';
+    if (!e.message || e.message.indexOf(msg) == -1) {
+      throw e;
+    }
+  }
+};
+
+export const uploadSig = async ({
+  id,
+  timestamp,
+  signingKey,
+  channelApi,
+  aesKey
+}) => {
+  try {
+    let {
+      keypair: { secretKey },
+      user: { id: signer },
+    } = store.getState();
+
+    let op = {
+      name: 'Set Signing Key',
+      id,
+      signingKey,
+      timestamp,
+      v: 5,
+    };
+    const message = stringify(op);
+    let sig = uInt8ArrayToB64(
+      nacl.sign.detached(strToUint8Array(message), secretKey),
+    );
+
+    let data = { signer, id, sig };
+
+    let res = await channelApi.upload({
+      channelId: hash(aesKey),
+      dataId: `sig_${signer}`,
+      data
+    });
+  } catch (err) {
+    console.warn(err);
+  }
+}
+
+
+const uploadConnection = async (conn, channelApi, aesKey) => {
+  const {
+    id,
+    name,
+    photo: { filename },
+  } = conn;
+
+  // retrieve photo
+  let photo = await retrieveImage(filename);
+  let profileTimestamp = Date.now();
+
+  let dataObj = {
+    id,
+    photo,
+    name,
+    profileTimestamp,
+  };
+
+  console.log(`Encrypting profile data with key ${aesKey}`);
+  let encrypted = encryptData(dataObj, aesKey);
+  console.log(`Posting profile data of ${id} ...`);
+  await channelApi.upload({
+    channelId: hash(aesKey),
+    data: encrypted,
+    dataId: `connection_${id}`,
+  });
+};
+
+const uploadGroup = async (group, channelApi, aesKey) => {
+  const {
+    id,
+    name,
+    photo: { filename },
+    aesKey: groupKey,
+  } = group;
+
+  // retrieve photo
+  let photo = await retrieveImage(filename);
+  let profileTimestamp = Date.now();
+
+  let dataObj = {
+    id,
+    photo,
+    name,
+    profileTimestamp,
+    aesKey: groupKey,
+  };
+
+  console.log(`Encrypting profile data with key ${aesKey}`);
+  let encrypted = encryptData(dataObj, aesKey);
+  console.log(`Posting profile data of ${id} ...`);
+  await channelApi.upload({
+    channelId: hash(aesKey),
+    data: encrypted,
+    dataId: `group_${id}`,
+  });
+};
+
+export const uploadMutualInfo = async (conn, channelApi, aesKey) => {
+  const dataIds = await channelApi.list(hash(aesKey));
+  if (!dataIds.includes(`connection_${conn.id}`)) {
+    await uploadConnection(conn, channelApi, aesKey);
+  }
+
+  let {
+    connections: { connections },
+    groups: { groups },
+    user,
+    recoveryData,
+  } = store.getState();
+  connections = _.keyBy(connections, 'id');
+  groups = _.keyBy(groups, 'id');
+
+  let otherSideConnections = await api.getConnections(conn.id, 'inbound');
+  const knownLevels = ['just met', 'already known', 'recovery'];
+  let mutualConnections = otherSideConnections.filter( c =>
+    knownLevels.includes(c.level) &&
+    connections[c.id] &&
+    !dataIds.includes(`connection_${c.id}`)
+  ).map( c => connections[c.id] );
+  mutualConnections.push(user);
+
+  let otherSideGroups = (await api.getUserInfo(conn.id)).groups;
+  let mutualGroups = otherSideGroups.filter(
+    g => groups[g.id]
+  ).map(g => groups[g.id]);
+
+  recoveryData.totalItems = mutualConnections.length + mutualGroups.length;
   store.dispatch(setRecoveryData(recoveryData));
-  if (recoveryData.timestamp) return;
+  for (let c of mutualConnections) {
+    await uploadConnection(c, channelApi, aesKey);
+    recoveryData.completedItems += 1;
+    store.dispatch(setRecoveryData(recoveryData));
+  }
+  for (let g of mutualGroups) {
+    await uploadGroup(g, channelApi, aesKey);
+    recoveryData.completedItems += 1;
+    store.dispatch(setRecoveryData(recoveryData));
+  }
+}
 
+export const setupRecovery = async () => {
+  await createImageDirectory();
   const { publicKey, secretKey } = await nacl.sign.keyPair();
-
+  const aesKey = await randomKey(16);
   recoveryData = {
     publicKey: uInt8ArrayToB64(publicKey),
     secretKey,
     id: '',
+    name: '',
+    photo: '',
+    aesKey,
     timestamp: Date.now(),
-    sigs: [],
+    updateTimestamp: Date.now(),
+    sigs: {},
   };
   store.dispatch(setRecoveryData(recoveryData));
   return recoveryData;
 };
 
 export const recoveryQrStr = () => {
-  const { publicKey: signingKey, timestamp } = store.getState().recoveryData;
+  const { aesKey } = store.getState().recoveryData;
 
   return encodeURIComponent(
-    `Recovery_${JSON.stringify({ signingKey, timestamp })}`,
+    `Recovery2_${aesKey}`,
   );
 };
 
-export const parseRecoveryQr = (
-  qrString: string,
+export const loadRecoveryData = async (
+  channelApi: any,
+  aesKey: string
 ): { signingKey: string, timestamp: number } => {
   try {
-    const data = JSON.parse(qrString.replace('Recovery_', ''));
+    let data = await channelApi.download({
+      channelId: hash(aesKey),
+      dataId: 'data'
+    });
     if (!data.signingKey || !data.timestamp) {
       throw new Error('Bad QR Data');
     } else {
@@ -167,52 +437,22 @@ export const parseRecoveryQr = (
   }
 };
 
-export const sigExists = (data: Signature) => {
-  const { recoveryData } = store.getState();
-  return (
-    recoveryData.sigs.length === 1 &&
-    recoveryData.sigs[0].sig === data.sig &&
-    recoveryData.sigs[0].signer === data.signer &&
-    recoveryData.sigs[0].id === data.id
-  );
-};
-
-export const handleSigs = async (data?: Signature) => {
-  if (!data || sigExists(data)) return;
-  const { recoveryData } = store.getState();
-  if (
-    (recoveryData.sigs[0] && recoveryData.sigs[0].id !== data.id) ||
-    recoveryData.sigs.length === 0
-  ) {
-    recoveryData.id = data.id;
-    recoveryData.sigs = [data];
-    store.dispatch(setRecoveryData(recoveryData));
-    Alert.alert(
-      i18next.t('common.alert.info'), 
-      i18next.t('common.alert.text.trustedSigned')
-    );
-  } else {
-    recoveryData.sigs[1] = data;
-    store.dispatch(setRecoveryData(recoveryData));
-    return true;
-  }
-};
-
 export const setSigningKey = async () => {
   const { recoveryData } = store.getState();
+  const sigs = Object.values(recoveryData.sigs);
   console.log('setting signing key');
   try {
     await api.setSigningKey({
       id: recoveryData.id,
       signingKey: recoveryData.publicKey,
       timestamp: recoveryData.timestamp,
-      id1: recoveryData.sigs[0].signer,
-      id2: recoveryData.sigs[1].signer,
-      sig1: recoveryData.sigs[0].sig,
-      sig2: recoveryData.sigs[1].sig,
+      id1: sigs[0].signer,
+      id2: sigs[1].signer,
+      sig1: sigs[0].sig,
+      sig2: sigs[1].sig,
     });
   } catch (err) {
-    recoveryData.sigs = [];
+    recoveryData.sigs = {};
     store.dispatch(setRecoveryData(recoveryData));
     throw new Error('bad sigs');
   }
@@ -230,7 +470,7 @@ export const fetchBackupData = async (key: string, pass: string) => {
   } catch (err) {
     emitter.emit('restoreProgress', 0);
     Alert.alert(
-      i18next.t('common.alert.error'), 
+      i18next.t('common.alert.error'),
       i18next.t('common.alert.text.incorrectPassword')
     );
     throw new Error('bad password');
@@ -269,22 +509,22 @@ export const restoreUserData = async (pass: string) => {
 };
 
 export const recoverData = async (pass: string) => {
-  // fetch user data / save photo
-  await createImageDirectory();
-  // throws if data is bad
-  const { userData, connections, groups } = await restoreUserData(pass);
+  const { id, name, photo, publicKey, secretKey } = store.getState().recoveryData;
+  if (pass) {
+    // throws if data is bad
+    var { userData, connections, groups } = await restoreUserData(pass);
+    store.dispatch(setConnections(connections));
+    store.dispatch(setGroups(groups));
 
-  // set new signing key on the backend
-  await setSigningKey();
-
-  const { publicKey, secretKey } = store.getState().recoveryData;
-
+  } else {
+    var userData = { id, publicKey, secretKey, name, photo };
+    var connections = [];
+    var groups = [];
+  }
   store.dispatch(setKeypair(publicKey, secretKey));
-  store.dispatch(setUserData(userData));
-  store.dispatch(setConnections(connections));
-  store.dispatch(setGroups(groups));
 
-  for (const conn of connections) {
+
+  for (let conn of connections) {
     try {
       let decrypted = await fetchBackupData(conn.id, pass);
       const filename = await saveImage({
@@ -311,10 +551,15 @@ export const recoverData = async (pass: string) => {
       }
     }
   }
-
-  store.dispatch(setBackupCompleted(true));
+  const userInfo = await api.getUserInfo(id);
+  await store.dispatch(setGroups(userInfo.groups));
+  await store.dispatch(updateConnections(userInfo.connections));
+  await store.dispatch(setUserData(userData));
+  // set new signing key on the backend
+  await setSigningKey();
+  await store.dispatch(setBackupCompleted(pass != ''));
   // password is required to update backup when user makes new connections
-  store.dispatch(setPassword(pass));
-  store.dispatch(removeRecoveryData());
+  await store.dispatch(setPassword(pass));
+  await store.dispatch(removeRecoveryData());
   return true;
 };

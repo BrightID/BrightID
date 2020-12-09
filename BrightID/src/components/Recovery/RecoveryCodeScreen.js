@@ -18,8 +18,16 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { withTranslation } from 'react-i18next';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import backupApi from '../../api/backupService';
-import { setupRecovery, recoveryQrStr, handleSigs } from './helpers';
+import store from '@/store';
+import api from '@/api/brightId';
+import ChannelAPI from '@/api/channelService';
+import {
+  setupRecovery,
+  uploadSigRequest,
+  checkChannel,
+  recoveryQrStr,
+  handleSigs
+} from './helpers';
 
 /**
  * Recovery Code screen of BrightID
@@ -50,27 +58,32 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
     copied: false,
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     try {
       const { navigation } = this.props;
-      navigation.addListener('focus', async () => {
-        await setupRecovery();
-        qrcode.toString(recoveryQrStr(), this.handleQrString);
-      });
-      navigation.addListener('focus', this.waitForSigs);
-      navigation.addListener('blur', () => {
-        clearInterval(this.checkIntervalId);
-      });
+      let { recoveryData } = store.getState();
+      if (!recoveryData.timestamp) {
+        // setup recovery only if it's not set up before
+        recoveryData = await setupRecovery();
+      }
+      const ipAddress = await api.ip();
+      this.channelApi = new ChannelAPI(`http://${ipAddress}/profile`);
+      uploadSigRequest(this.channelApi, recoveryData);
+      qrcode.toString(recoveryQrStr(), this.handleQrString);
+      this.waitForSigs();
     } catch (err) {
       console.warn(err.message);
     }
   }
 
+  componentWillUnmount() {
+    console.log('stop waiting for sigs');
+    clearInterval(this.checkIntervalId);
+  }
+
   waitForSigs = () => {
     this.checkIntervalId = setInterval(() => {
-      backupApi
-        .getSig()
-        .then(handleSigs)
+      checkChannel(this.channelApi)
         .then((ready) => {
           if (ready) this.props.navigation.navigate('Restore');
         });
@@ -145,6 +158,11 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
   render() {
     const { qrsvg } = this.state;
     const { t } = this.props;
+    let {
+      connections: { connections },
+      groups: { groups },
+    } = store.getState();
+    const n = connections.length + groups.length;
     return (
       <>
         <View style={styles.orangeTop} />
@@ -152,6 +170,9 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
           <View style={styles.topHalf}>
             <Text style={styles.recoveryCodeInfoText}>
               {t('recovery.text.askTrustedConnections')}
+            </Text>
+            <Text style={styles.recoveryCodeInfoText}>
+              {n} connections/groups recovered
             </Text>
           </View>
           <View style={styles.bottomHalf}>
@@ -226,4 +247,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(withTranslation()(RecoveryCodeScreen));
+export default connect(({ connections, groups }) => ({
+  ...connections,
+  ...groups
+}))(withTranslation()(RecoveryCodeScreen));

@@ -51,8 +51,6 @@ export const hash = (data: string) => {
   return b64ToUrlSafeB64(b);
 };
 
-export const safeHash = compose(b64ToUrlSafeB64, hash);
-
 const { RNRandomBytes } = NativeModules;
 export const randomKey = (size: number) =>
   new Promise((resolve, reject) => {

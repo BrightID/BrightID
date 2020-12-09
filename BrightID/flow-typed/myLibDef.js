@@ -193,7 +193,7 @@ declare type RecoveryData = {
   secretKey: string,
   timestamp: number,
   id: string,
-  sigs: Signature[],
+  sigs: { [string]: Signature },
 };
 
 declare type TasksState = {

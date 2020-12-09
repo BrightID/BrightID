@@ -2,11 +2,13 @@
 
 import * as React from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
+import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import store from '@/store';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
 
@@ -20,6 +22,7 @@ const getItemLayout = (data, index) => ({
 });
 
 class RecoveringConnectionScreen extends React.Component<Props> {
+
   filterConnections = () => {
     const { connections, searchParam } = this.props;
     return connections
@@ -35,7 +38,7 @@ class RecoveringConnectionScreen extends React.Component<Props> {
   renderConnection = ({ item }) => (
     <RecoveringConnectionCard
       {...item}
-      recoveryRequestCode={this.props.route.params?.recoveryRequestCode}
+      aesKey={this.props.route.params?.aesKey}
       navigation={this.props.navigation}
       style={styles.recoveringConnectionCard}
     />
@@ -44,7 +47,16 @@ class RecoveringConnectionScreen extends React.Component<Props> {
   render() {
     const { navigation, t } = this.props;
     const connections = this.filterConnections();
-
+    const {
+      recoveryData: { totalItems, completedItems }
+    } = store.getState();
+    const waiting = totalItems > 0 && completedItems < totalItems;
+    let msg;
+    if (waiting) {
+      msg = `Sending ${completedItems}/${totalItems} completed`;
+    } else {
+      msg = t('restore.text.chooseConnectionToHelp');
+    }
     return (
       <>
         <View style={styles.orangeTop} />
@@ -53,8 +65,14 @@ class RecoveringConnectionScreen extends React.Component<Props> {
             <View style={styles.titleContainer}>
               <Text style={styles.titleText}>{t('restore.title.chooseConnection')}</Text>
               <Text style={styles.infoText}>
-                {t('restore.text.chooseConnectionToHelp')}
+                {msg}
               </Text>
+              <Spinner
+                isVisible={waiting}
+                size={DEVICE_LARGE ? 48 : 42}
+                type="Wave"
+                color="#4a90e2"
+              />
             </View>
             <SearchConnections navigation={navigation} />
             <View style={styles.mainContainer}>
@@ -173,7 +191,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ connections, user }) => ({
+export default connect(({ connections, user, recoveryData }) => ({
   ...connections,
   ...user,
+  ...recoveryData
 }))(withTranslation()(RecoveringConnectionScreen));

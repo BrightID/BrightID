@@ -109,9 +109,9 @@ export const ScanCodeScreen = () => {
   useEffect(() => {
     const handleQrData = async (qrData) => {
       try {
-        if (qrData.startsWith('Recovery_')) {
+        if (qrData.startsWith('Recovery2_')) {
           navigation.navigate('RecoveringConnection', {
-            recoveryRequestCode: decodeURIComponent(qrData),
+            aesKey: decodeURIComponent(qrData.replace('Recovery2_', '')),
           });
         } else if (qrData.startsWith('brightid://')) {
           console.log(`handleQrData: calling Linking.openURL() with ${qrData}`);

@@ -1,13 +1,19 @@
 // @flow
 
-import { SET_RECOVERY_DATA, REMOVE_RECOVERY_DATA } from '@/actions';
+import { SET_RECOVERY_DATA, REMOVE_RECOVERY_DATA, RESET_STORE } from '@/actions';
 
 export const initialState = {
   id: '',
+  name: '',
+  photo: '',
   publicKey: '',
   secretKey: '',
+  aesKey: '',
   timestamp: 0,
-  sigs: [],
+  updateTimestamp: 0,
+  sigs: {},
+  completedItems: 0,
+  totalItems: 0,
 };
 
 export const reducer = (state: RecoveryData = initialState, action: action) => {
@@ -21,10 +27,20 @@ export const reducer = (state: RecoveryData = initialState, action: action) => {
       return {
         publicKey: '',
         secretKey: '',
+        aesKey: '',
         id: '',
+        name: '',
+        photo: '',
         timestamp: 0,
-        sigs: [],
+        updateTimestamp: 0,
+        sigs: {},
+        completedItems: 0,
+        totalItems: 0,
       };
+    }
+
+    case RESET_STORE: {
+      return { ...initialState };
     }
 
     default: {

@@ -14,8 +14,13 @@ import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
 import { withTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import backupApi from '@/api/backupService';
-import { parseRecoveryQr } from './helpers';
+import ChannelAPI from '@/api/channelService';
+import api from '@/api/brightId';
+import {
+  loadRecoveryData,
+  uploadSig,
+  uploadMutualInfo
+} from './helpers';
 
 class RecoveryConnectionCard extends React.PureComponent<Props> {
   constructor(props: Props) {
@@ -25,24 +30,24 @@ class RecoveryConnectionCard extends React.PureComponent<Props> {
     };
   }
   handleConnectionSelect = async () => {
-    const { t } = this.props;
+    const { t, id, aesKey, navigation } = this.props;
     try {
-      const { signingKey, timestamp } = parseRecoveryQr(
-        this.props.recoveryRequestCode,
-      );
-
-      await backupApi.setSig({ id: this.props.id, timestamp, signingKey });
-
-      Alert.alert(
-        t('common.alert.info'),
-        t('restore.alert.text.requestRecovering'),
-        [
-          {
-            text: t('common.alert.ok'),
-            onPress: () => this.props.navigation.navigate('Home'),
-          },
-        ],
-      );
+      const ipAddress = await api.ip();
+      const channelApi = new ChannelAPI(`http://${ipAddress}/profile`);
+      const { signingKey, timestamp } = await loadRecoveryData(channelApi, aesKey);
+      await uploadSig({ id, timestamp, signingKey, channelApi, aesKey });
+      uploadMutualInfo(this.props, channelApi, aesKey).then(() => {
+        Alert.alert(
+          t('common.alert.info'),
+          t('restore.alert.text.requestRecovering'),
+          [
+            {
+              text: t('common.alert.ok'),
+              onPress: () => navigation.navigate('Home'),
+            },
+          ],
+        );
+      });
     } catch (err) {
       console.warn(err.message);
     }
