@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import {
   Alert,
   StatusBar,
@@ -10,7 +10,6 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
@@ -19,15 +18,10 @@ import L from './License.json';
 
 export const Eula = ({ navigation }) => {
   const dispatch = useDispatch();
-
-  const { t } = useTranslation();
-
   const handleReject = () => {
     Alert.alert(
       'Oh No!',
       'You cannot use this app without first accepting the terms and conditions.',
-      [],
-      { cancelable: false },
     );
   };
 
@@ -38,11 +32,10 @@ export const Eula = ({ navigation }) => {
   return (
     <>
       <StatusBar
-        barStyle="light-content"
-        backgroundColor={ORANGE}
+        barStyle="dark-content"
+        backgroundColor="#fff"
         animated={true}
       />
-      <View style={styles.orangeTop} />
       <View style={styles.container} behavior="padding">
         <View style={styles.confirmationButtons}>
           <TouchableOpacity style={styles.rejectButton} onPress={handleReject}>
@@ -77,35 +70,43 @@ export const Eula = ({ navigation }) => {
           <Text style={styles.paragraph}>
             We can be reached via e-mail at{' '}
             <Text style={styles.link}>support@brightid.org</Text>
-            {'\n\n'}
           </Text>
         </ScrollView>
       </View>
+      <View style={styles.orangeBottom} />
     </>
   );
 };
 
+const CONFIRMATION_HEIGHT = DEVICE_LARGE ? 60 : 55;
+
 const styles = StyleSheet.create({
-  orangeTop: {
-    backgroundColor: ORANGE,
-    height: DEVICE_LARGE ? 70 : 60,
-    width: '100%',
-    zIndex: 1,
-  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    borderTopLeftRadius: 58,
-    marginTop: -58,
+    borderBottomLeftRadius: 58,
+    borderBottomRightRadius: 58,
+    marginBottom: 10,
     zIndex: 2,
     overflow: 'hidden',
   },
+  orangeBottom: {
+    backgroundColor: ORANGE,
+    width: '100%',
+    height: 70,
+    zIndex: 1,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
   scrollViewContent: {
     paddingHorizontal: DEVICE_LARGE ? 20 : 18,
-    paddingVertical: 30,
+    paddingTop: 30,
+    paddingBottom: CONFIRMATION_HEIGHT,
   },
   header: {
     fontFamily: 'Poppins-Bold',
@@ -128,43 +129,37 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    height: DEVICE_LARGE ? 50 : 45,
+    height: CONFIRMATION_HEIGHT,
     width: WIDTH,
     backgroundColor: '#fff',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    // borderTopWidth: 1,
-    // borderTopColor: '#A8A8A8',
+    justifyContent: 'center',
   },
   acceptButton: {
-    // width: DEVICE_LARGE ? 92 : 80,
-    paddingTop: 8,
-    paddingBottom: 7,
-    width: '50%',
-    height: '100%',
+    width: '33%',
+    height: DEVICE_LARGE ? 32 : 29,
+
     backgroundColor: '#5DEC9A',
     alignItems: 'center',
     justifyContent: 'center',
-    // borderRadius: 20,
-    // marginRight: DEVICE_LARGE ? 22 : 18,
+    borderRadius: 20,
+    marginLeft: DEVICE_LARGE ? 22 : 18,
   },
   acceptButtonText: {
     fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 12 : 10,
   },
   rejectButton: {
-    // width: DEVICE_LARGE ? 92 : 80,
-    paddingTop: 8,
-    paddingBottom: 7,
-    width: '50%',
-    height: '100%',
+    width: '33%',
+    height: DEVICE_LARGE ? 32 : 29,
+
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    // borderRadius: 20,
-    // borderWidth: 1,
-    // borderColor: '#707070',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#707070',
   },
   rejectButtonText: {
     fontFamily: 'Poppins-Medium',
