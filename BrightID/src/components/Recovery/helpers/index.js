@@ -145,7 +145,7 @@ export const checkChannel = async (channelApi) => {
       connections: { connections },
       groups: { groups }
     } = store.getState();
-    let { aesKey, id, sigs } = recoveryData;
+    let { aesKey, sigs } = recoveryData;
     const channelId = hash(aesKey);
     let dataIds = await channelApi.list(channelId);
 
@@ -169,16 +169,16 @@ export const checkChannel = async (channelApi) => {
     const connectionDataIds = dataIds.filter( dataId =>
       dataId.startsWith('connection_') &&
       !connections[dataId.replace('connection_', '')] &&
-      (dataId.replace('connection_', '') != id || !recoveryData.name)
+      (dataId.replace('connection_', '') != recoveryData.id || !recoveryData.name)
     );
     for (let dataId of connectionDataIds) {
       let connectionData = await downloadConnection(dataId, channelApi, aesKey);
-      if (connectionData.id !== id) {
-        store.dispatch(addConnection(connectionData));
+      if (connectionData.id !== recoveryData.id) {
+        await store.dispatch(addConnection(connectionData));
       } else {
         recoveryData.name = connectionData.name;
         recoveryData.photo = connectionData.photo;
-        store.dispatch(setRecoveryData(recoveryData));
+        await store.dispatch(setRecoveryData(recoveryData));
       }
     }
 
@@ -203,6 +203,7 @@ export const checkChannel = async (channelApi) => {
     } else {
       return Date.now() - recoveryData.updateTimestamp > 5000;
     }
+
   } catch (err) {
     console.warn(err);
     throw err;
@@ -469,10 +470,6 @@ export const fetchBackupData = async (key: string, pass: string) => {
     return decrypted;
   } catch (err) {
     emitter.emit('restoreProgress', 0);
-    Alert.alert(
-      i18next.t('common.alert.error'),
-      i18next.t('common.alert.text.incorrectPassword')
-    );
     throw new Error('bad password');
   }
 };
