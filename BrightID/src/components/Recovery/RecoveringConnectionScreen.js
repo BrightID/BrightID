@@ -53,7 +53,7 @@ class RecoveringConnectionScreen extends React.Component<Props> {
     const waiting = totalItems > 0 && completedItems < totalItems;
     let msg;
     if (waiting) {
-      msg = `Sending ${completedItems}/${totalItems} completed`;
+      msg = t('restore.text.sendingProgress', { completedItems, totalItems });
     } else {
       msg = t('restore.text.chooseConnectionToHelp');
     }

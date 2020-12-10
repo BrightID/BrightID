@@ -162,7 +162,7 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
       connections: { connections },
       groups: { groups },
     } = store.getState();
-    const n = connections.length + groups.length;
+    const count = connections.length + groups.length;
     return (
       <>
         <View style={styles.orangeTop} />
@@ -172,7 +172,7 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
               {t('recovery.text.askTrustedConnections')}
             </Text>
             <Text style={styles.recoveryCodeInfoText}>
-              {n} connections/groups recovered
+              {t('recovery.text.recoveredItems', { count })}
             </Text>
           </View>
           <View style={styles.bottomHalf}>

@@ -97,8 +97,8 @@ class RestoreScreen extends React.Component<Props, State> {
         err instanceof Error ? console.warn(err.message) : console.log(err);
         if (err instanceof Error && err.message === 'bad password') {
           Alert.alert(
-            'Uh Oh',
-            'Incorrect password!',
+            i18next.t('common.alert.error'),
+            i18next.t('common.alert.text.incorrectPassword'),
             [{ text: t('common.alert.ok'), onPress: () => navigation.goBack() }],
           );
         }
