@@ -29,7 +29,7 @@ export const NoGroups = ({ navigation }: Props) => {
     <View style={styles.noContainer} testID="noGroupsView">
       <View style={styles.noGroupsInfo}>
         <Image
-          source={require('../../static/groups_logo.png')}
+          source={require('../../static/groups.png')}
           style={styles.smallGroupsLogo}
           resizeMode="cover"
           onError={(e) => {
@@ -135,7 +135,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   smallGroupsLogo: {
-    width: DEVICE_LARGE ? 150 : 135,
-    height: DEVICE_LARGE ? 150 : 135,
+    width: 135,
+    height: 135,
+    marginRight: 20,
   },
 });
