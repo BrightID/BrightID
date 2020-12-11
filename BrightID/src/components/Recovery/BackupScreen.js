@@ -16,8 +16,10 @@ import { setInternetCredentials } from 'react-native-keychain';
 import { withTranslation } from 'react-i18next';
 import { setBackupCompleted, setPassword } from '@/actions/index';
 import emitter from '@/emitter';
-import { BACKUP_URL, ORANGE } from '@/utils/constants';
+import { BACKUP_URL } from '@/utils/constants';
 import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/deviceConstants';
+import { ORANGE, BLUE, WHITE, LIGHT_BLACK, GREY } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { validatePass } from '@/utils/password';
 import { backupAppData } from './helpers';
 
@@ -101,11 +103,14 @@ class BackupScreen extends React.Component<Props, State> {
       dispatch(setBackupCompleted(true));
 
       Alert.alert(
-        t('common.alert.info'), 
-        t('backup.alert.text.backupSuccess'), 
+        t('common.alert.info'),
+        t('backup.alert.text.backupSuccess'),
         [
-          { text: t('common.alert.ok'), onPress: () => navigation.navigate('Home') },
-        ]
+          {
+            text: t('common.alert.ok'),
+            onPress: () => navigation.navigate('Home'),
+          },
+        ],
       );
     } catch (err) {
       console.warn(err);
@@ -137,7 +142,7 @@ class BackupScreen extends React.Component<Props, State> {
               onChangeText={(pass) => this.setState({ pass1: pass })}
               value={pass1}
               placeholder={t('common.placeholder.password')}
-              placeholderTextColor="#9e9e9e"
+              placeholderTextColor={GREY}
               style={styles.textInput}
               autoCorrect={false}
               textContentType="newPassword"
@@ -152,7 +157,7 @@ class BackupScreen extends React.Component<Props, State> {
               value={pass2}
               placeholder={t('backup.placeholder.confirmPassword')}
               textContentType="newPassword"
-              placeholderTextColor="#9e9e9e"
+              placeholderTextColor={GREY}
               style={styles.textInput}
               autoCorrect={false}
               autoCompleteType="password"
@@ -173,7 +178,9 @@ class BackupScreen extends React.Component<Props, State> {
                 onPress={this.startBackup}
                 disabled={!this.state.pass1}
               >
-                <Text style={styles.buttonInnerText}>{t('backup.button.startBackup')}</Text>
+                <Text style={styles.buttonInnerText}>
+                  {t('backup.button.startBackup')}
+                </Text>
               </TouchableOpacity>
             ) : (
               <View style={styles.loader}>
@@ -181,13 +188,16 @@ class BackupScreen extends React.Component<Props, State> {
                   {t('common.text.uploadingData')}
                 </Text>
                 <Text style={styles.textInfo}>
-                  {t('common.text.progress', {completed: this.state.completed, total: this.state.total})}
+                  {t('common.text.progress', {
+                    completed: this.state.completed,
+                    total: this.state.total,
+                  })}
                 </Text>
                 <Spinner
                   isVisible={true}
                   size={DEVICE_LARGE ? 80 : 65}
                   type="Wave"
-                  color="#333"
+                  color={LIGHT_BLACK}
                 />
               </View>
             )}
@@ -207,7 +217,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -228,19 +238,19 @@ const styles = StyleSheet.create({
   },
   textInfo: {
     fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_LARGE ? 18 : 16,
-    color: '#333',
+    fontSize: fontSize[18],
+    color: LIGHT_BLACK,
     margin: 18,
   },
   textInput: {
     fontFamily: 'ApexNew-Light',
-    fontSize: DEVICE_LARGE ? 24 : 20,
-    color: '#333',
+    fontSize: fontSize[24],
+    color: LIGHT_BLACK,
     fontWeight: '300',
     fontStyle: 'normal',
     letterSpacing: 0,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#9e9e9e',
+    borderBottomColor: GREY,
     marginTop: 22,
     width: 275,
     textAlign: 'left',
@@ -254,13 +264,13 @@ const styles = StyleSheet.create({
   },
   buttonInfoText: {
     fontFamily: 'ApexNew-Book',
-    color: '#9e9e9e',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    color: GREY,
+    fontSize: fontSize[14],
     width: 298,
     textAlign: 'center',
   },
   startBackupButton: {
-    backgroundColor: '#428BE5',
+    backgroundColor: BLUE,
     width: 300,
     justifyContent: 'center',
     alignItems: 'center',
@@ -270,14 +280,14 @@ const styles = StyleSheet.create({
   },
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',
-    color: '#fff',
+    color: WHITE,
     fontWeight: '600',
-    fontSize: DEVICE_LARGE ? 18 : 16,
+    fontSize: fontSize[18],
   },
   button: {
     width: 300,
     borderWidth: 1,
-    borderColor: '#4990e2',
+    borderColor: BLUE,
     paddingTop: 13,
     paddingBottom: 12,
     alignItems: 'center',

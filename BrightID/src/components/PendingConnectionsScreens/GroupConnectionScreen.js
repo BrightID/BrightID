@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import Svg, { Line, SvgXml } from 'react-native-svg';
+import Svg, { Line } from 'react-native-svg';
 import {
   useNavigation,
   useRoute,
@@ -22,15 +22,13 @@ import {
 import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE, WIDTH, HEIGHT } from '@/utils/deviceConstants';
-
+import { fontSize } from '@/theme/fonts';
 import {
-  pendingConnection_states,
   selectAllPendingConnections,
   selectPendingConnectionById,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
-import backArrow from '@/static/back_arrow_black.svg';
 
 /** HELPERS */
 
@@ -285,7 +283,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#fdfdfd',
+    backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
@@ -351,18 +349,16 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: fontSize[18],
     fontWeight: '500',
     fontStyle: 'normal',
     letterSpacing: 0,
     textAlign: 'left',
-    color: '#ffffff',
+    color: WHITE,
   },
   rightArrow: {
     position: 'absolute',
     right: 0,
-    // borderWidth: 1,
-    // borderColor: 'grey',
     height: 80,
     justifyContent: 'center',
     width: 40,
@@ -374,7 +370,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: DEVICE_LARGE ? 42 : 36,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     borderRadius: 60,
     width: DEVICE_LARGE ? 260 : 210,
     borderWidth: 2,
@@ -382,7 +378,7 @@ const styles = StyleSheet.create({
   },
   confirmConnectionsText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
     color: ORANGE,
     marginLeft: 10,
   },

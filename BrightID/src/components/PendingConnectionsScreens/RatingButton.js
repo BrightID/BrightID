@@ -3,6 +3,7 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 
 type RatingButtonProps = {
   color: string,
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
   },
   rateButtonLabel: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 15 : 13,
+    fontSize: fontSize[15],
     textAlign: 'center',
   },
 });

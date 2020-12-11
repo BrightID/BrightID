@@ -2,7 +2,6 @@
 
 import React, { useCallback, useEffect, useLayoutEffect } from 'react';
 import {
-  Animated,
   StyleSheet,
   Text,
   View,
@@ -13,13 +12,14 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ChannelSwitch from '@/components/Helpers/ChannelSwitch';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE, WHITE, LIGHT_BLACK } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import cameraIcon from '@/static/camera_icon_white.svg';
+import { fontSize } from '@/theme/fonts';
+import Camera from '@/components/Icons/Camera';
 import {
   channel_states,
   channel_types,
@@ -36,7 +36,6 @@ import {
 import { createChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
 import { QrCode } from './QrCode';
-import { useTranslation } from 'react-i18next';
 
 /**
  * My Code screen of BrightID
@@ -62,7 +61,7 @@ if (__DEV__) {
           dispatch(addFakeConnection());
         }}
       >
-        <Material name="ghost" size={32} color="#fff" />
+        <Material name="ghost" size={32} color={WHITE} />
       </TouchableOpacity>
     );
   };
@@ -157,11 +156,15 @@ export const MyCodeScreen = () => {
               navigation.navigate('PendingConnections');
             }}
           >
-            <Material name="account-supervisor-circle" size={32} color="#fff" />
+            <Material
+              name="account-supervisor-circle"
+              size={32}
+              color={WHITE}
+            />
 
             <View
               style={{
-                backgroundColor: '#ED1B24',
+                backgroundColor: ORANGE,
                 width: 9,
                 height: 9,
                 borderRadius: 5,
@@ -177,7 +180,9 @@ export const MyCodeScreen = () => {
       headerTitle: () => {
         const ConnectionTitle = () => (
           <Text style={styles.headerTitle}>
-            {t('qrcode.header.connections', {count: pendingConnectionSize + 1})}
+            {t('qrcode.header.connections', {
+              count: pendingConnectionSize + 1,
+            })}
           </Text>
         );
         return myChannel?.type === channel_types.GROUP ? (
@@ -249,7 +254,9 @@ export const MyCodeScreen = () => {
           />
         </View>
         <View style={styles.infoTopContainer}>
-          <Text style={styles.infoTopText}>{t('qrcode.label.connectionType')} </Text>
+          <Text style={styles.infoTopText}>
+            {t('qrcode.label.connectionType')}{' '}
+          </Text>
           {displayChannelType === channel_types.GROUP ? (
             <TouchableOpacity
               style={{ flexDirection: 'row' }}
@@ -259,7 +266,11 @@ export const MyCodeScreen = () => {
               <Text testID="group-code" style={styles.infoTopText}>
                 {t('qrcode.text.codeGroup')}
               </Text>
-              <Material name="information-variant" size={18} color="#4a4a4a" />
+              <Material
+                name="information-variant"
+                size={18}
+                color={LIGHT_BLACK}
+              />
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
@@ -268,9 +279,13 @@ export const MyCodeScreen = () => {
               testID="ConnectionInfoSingleBtn"
             >
               <Text testID="single-use-code" style={styles.infoTopText}>
-              {t('qrcode.text.codeSingle')}
+                {t('qrcode.text.codeSingle')}
               </Text>
-              <Material name="information-variant" size={18} color="#4a4a4a" />
+              <Material
+                name="information-variant"
+                size={18}
+                color={LIGHT_BLACK}
+              />
             </TouchableOpacity>
           )}
         </View>
@@ -287,12 +302,14 @@ export const MyCodeScreen = () => {
               navigation.navigate('ScanCode');
             }}
           >
-            <SvgXml
-              xml={cameraIcon}
+            <Camera
+              color={WHITE}
               width={DEVICE_LARGE ? 22 : 20}
               height={DEVICE_LARGE ? 22 : 20}
             />
-            <Text style={styles.scanCodeText}>{t('qrcode.button.scanCode')}</Text>
+            <Text style={styles.scanCodeText}>
+              {t('qrcode.button.scanCode')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -310,7 +327,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'column',
@@ -322,9 +339,9 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   headerTitle: {
-    color: '#fff',
+    color: WHITE,
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 15,
+    fontSize: fontSize[16],
   },
   infoTopContainer: {
     width: '100%',
@@ -334,9 +351,9 @@ const styles = StyleSheet.create({
   },
   infoTopText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
     textAlign: 'center',
-    color: '#4a4a4a',
+    color: LIGHT_BLACK,
   },
   bottomContainer: {
     alignItems: 'center',
@@ -344,7 +361,7 @@ const styles = StyleSheet.create({
   },
   infoBottomText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 11,
+    fontSize: fontSize[12],
     marginBottom: 10,
   },
   scanCodeButton: {
@@ -359,28 +376,10 @@ const styles = StyleSheet.create({
   },
   scanCodeText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 14 : 12,
-    color: '#fff',
+    fontSize: fontSize[14],
+    color: WHITE,
     marginLeft: 10,
   },
-  // verifyConnectionsButton: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   height: DEVICE_LARGE ? 42 : 36,
-  //   backgroundColor: '#fff',
-  //   borderRadius: 60,
-  //   width: DEVICE_LARGE ? 240 : 200,
-  //   marginBottom: 36,
-  //   borderWidth: 2,
-  //   borderColor: ORANGE,
-  // },
-  // verifyConnectionsText: {
-  //   fontFamily: 'Poppins-Bold',
-  //   fontSize: DEVICE_LARGE ? 14 : 12,
-  //   color: ORANGE,
-  //   marginLeft: 10,
-  // },
   emptyQr: {
     justifyContent: 'center',
     alignItems: 'center',

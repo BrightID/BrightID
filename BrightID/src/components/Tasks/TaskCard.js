@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import React from 'react';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { BLACK, BLUE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { useTranslation } from 'react-i18next';
 import { TaskState } from './TaskState';
 
@@ -67,18 +69,20 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'Poppins-Medium',
     fontStyle: 'normal',
-    fontSize: DEVICE_LARGE ? 20 : 17,
+    fontSize: fontSize[20],
+    color: BLACK,
   },
   description: {
     fontFamily: 'Poppins-Medium',
     fontStyle: 'normal',
-    fontSize: DEVICE_LARGE ? 15 : 12,
+    fontSize: fontSize[15],
+    color: BLACK,
   },
   linkifiedDescription: {
     fontFamily: 'Poppins-Medium',
     fontStyle: 'normal',
-    fontSize: DEVICE_LARGE ? 15 : 12,
-    color: '#2185D0',
+    fontSize: fontSize[15],
+    color: BLUE,
   },
 });
 

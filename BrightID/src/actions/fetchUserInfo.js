@@ -62,6 +62,7 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
               message,
               type: GROUPS_TYPE,
               navigationTarget: 'Notifications',
+              icon: 'AddGroup',
             }),
           );
         }

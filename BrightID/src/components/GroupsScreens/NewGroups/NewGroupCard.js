@@ -9,6 +9,8 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { withTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { GREY, WHITE, GREEN, BLACK } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { toggleNewGroupCoFounder } from '../actions';
 
 /**
@@ -46,7 +48,7 @@ class NewGroupCard extends React.PureComponent<Props> {
           <AntDesign
             size={30.4}
             name={selected ? 'checkcircle' : 'checkcircleo'}
-            color={selected ? '#28a84a' : '#000'}
+            color={selected ? GREEN : BLACK}
           />
         </TouchableOpacity>
       );
@@ -56,7 +58,7 @@ class NewGroupCard extends React.PureComponent<Props> {
         style={styles.moreIcon}
         onPress={this.handleUserOptions}
       >
-        <Ionicon size={48} name="ios-more" color="#ccc" />
+        <Ionicon size={48} name="ios-more" color={GREY} />
       </TouchableOpacity>
     );
   };
@@ -84,7 +86,9 @@ class NewGroupCard extends React.PureComponent<Props> {
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.connectedText}>
-            {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
+            {t('common.tag.connectionDate', {
+              date: moment(parseInt(connectionDate, 10)).fromNow(),
+            })}
           </Text>
         </View>
         {this.renderActionButton()}
@@ -99,7 +103,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     height: DEVICE_LARGE ? 94 : 80,
     marginBottom: DEVICE_LARGE ? 11.8 : 6,
     shadowColor: 'rgba(0,0,0,0.32)',
@@ -122,15 +126,15 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_LARGE ? 20 : 18,
+    fontSize: fontSize[20],
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
   connectedText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 12,
-    color: '#aba9a9',
+    fontSize: fontSize[12],
+    color: GREY,
     fontStyle: 'italic',
   },
   moreIcon: {

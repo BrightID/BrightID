@@ -15,8 +15,9 @@ import { withTranslation } from 'react-i18next';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import { getGroupName, ids2connections, knownMemberIDs } from '@/utils/groups';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
-import { ORANGE } from '@/utils/constants';
+import { WHITE, ORANGE, BLACK } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { toSearchString } from '@/utils/strings';
 import GroupCard from './GroupCard';
 import { NoGroups } from './NoGroups';
@@ -142,9 +143,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
+    backgroundColor: WHITE,
     borderTopLeftRadius: 58,
-
     marginTop: -58,
     zIndex: 10,
     overflow: 'hidden',
@@ -165,7 +165,8 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 20,
+    fontSize: fontSize[20],
+    color: BLACK,
   },
 });
 

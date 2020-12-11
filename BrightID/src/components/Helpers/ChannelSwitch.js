@@ -8,7 +8,7 @@ import {
   Easing,
 } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { ORANGE } from '@/utils/constants';
+import { DARK_GREY, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
 /**
@@ -59,7 +59,7 @@ const ChannelSwitch = ({ value, onValueChange, testID }) => {
           {
             backgroundColor: backgroundAnim.interpolate({
               inputRange: [0, X_TRANSFORM],
-              outputRange: ['grey', ORANGE],
+              outputRange: [DARK_GREY, ORANGE],
             }),
           },
         ]}
@@ -87,7 +87,7 @@ const ChannelSwitch = ({ value, onValueChange, testID }) => {
           <Material
             name="account-multiple"
             size={DEVICE_LARGE ? 22 : 18}
-            color="#fff"
+            color={WHITE}
           />
         </Animated.View>
         <Animated.View
@@ -98,7 +98,11 @@ const ChannelSwitch = ({ value, onValueChange, testID }) => {
             },
           ]}
         >
-          <Material name="account" size={DEVICE_LARGE ? 22 : 18} color="#fff" />
+          <Material
+            name="account"
+            size={DEVICE_LARGE ? 22 : 18}
+            color={WHITE}
+          />
         </Animated.View>
       </Animated.View>
     </TouchableWithoutFeedback>
@@ -114,15 +118,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: ORANGE,
-    borderColor: '#aaa',
-    // borderWidth: 2,
+    borderColor: DARK_GREY,
   },
   toggle: {
     position: 'absolute',
     left: 1,
     width: DEVICE_LARGE ? 33 : 28,
     height: '95%',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     zIndex: 10,
     elevation: 2,
     borderRadius: 3,

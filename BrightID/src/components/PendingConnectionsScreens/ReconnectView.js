@@ -6,6 +6,8 @@ import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { BLACK, DARKER_GREY, ORANGE, RED, WHITE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { ConnectionStats } from './ConnectionStats';
 import { ProfileCard } from './ProfileCard';
 import {
@@ -34,9 +36,13 @@ export const ReconnectView = ({
   const [identicalProfile, setIdenticalProfile] = useState(true);
   const { t } = useTranslation();
 
-  const reported = pendingConnection.reports.length / (pendingConnection.connectionsNum || 1) >= REPORTED_PERCENTAGE;
-  const brightIdVerified = pendingConnection.verifications.map(v => v.name).includes('BrightID');
-
+  const reported =
+    pendingConnection.reports.length /
+      (pendingConnection.connectionsNum || 1) >=
+    REPORTED_PERCENTAGE;
+  const brightIdVerified = pendingConnection.verifications
+    .map((v) => v.name)
+    .includes('BrightID');
 
   useEffect(() => {
     const compareProfiles = async () => {
@@ -68,12 +74,20 @@ export const ReconnectView = ({
     return (
       <>
         <View style={styles.header} testID="ReconnectScreen">
-          <Text style={styles.headerText}>{t('pendingConnections.title.connectionRequest')}</Text>
+          <Text style={styles.headerText}>
+            {t('pendingConnections.title.connectionRequest')}
+          </Text>
           <Text style={styles.subheaderText}>
-            {t('connections.text.alreadyConnectedWith', {name: pendingConnection.name})}
+            {t('connections.text.alreadyConnectedWith', {
+              name: pendingConnection.name,
+            })}
           </Text>
           <Text style={styles.lastConnectedText}>
-            {t('connections.tag.lastConnected', {date: moment(parseInt(pendingConnection.connectedAt, 10)).fromNow()})}
+            {t('connections.tag.lastConnected', {
+              date: moment(
+                parseInt(pendingConnection.connectedAt, 10),
+              ).fromNow(),
+            })}
           </Text>
         </View>
         <View style={styles.profiles}>
@@ -119,7 +133,9 @@ export const ReconnectView = ({
             onPress={() => setLevelHandler(existingConnection.level)}
             testID="updateBtn"
           >
-            <Text style={styles.updateButtonLabel}>{t('connections.button.reconnect')}</Text>
+            <Text style={styles.updateButtonLabel}>
+              {t('connections.button.reconnect')}
+            </Text>
           </TouchableOpacity>
         </View>
       </>
@@ -128,12 +144,18 @@ export const ReconnectView = ({
     return (
       <>
         <View style={styles.header} testID="ReconnectScreen">
-          <Text style={styles.headerText}>{t('pendingConnections.title.connectionRequest')}</Text>
+          <Text style={styles.headerText}>
+            {t('pendingConnections.title.connectionRequest')}
+          </Text>
           <Text style={styles.subheaderText}>
             {t('connections.text.alreadyConnectedWith')}
           </Text>
           <Text style={styles.lastConnectedText}>
-            {t('connections.tag.lastConnected', {date: moment(parseInt(existingConnection.createdAt, 10)).fromNow()})}
+            {t('connections.tag.lastConnected', {
+              date: moment(
+                parseInt(existingConnection.createdAt, 10),
+              ).fromNow(),
+            })}
           </Text>
         </View>
 
@@ -143,7 +165,9 @@ export const ReconnectView = ({
             style={[styles.profile, styles.verticalDivider]}
           >
             <View style={styles.profileHeader}>
-              <Text style={styles.profileHeaderText}>{t('connections.label.oldProfile')}</Text>
+              <Text style={styles.profileHeaderText}>
+                {t('connections.label.oldProfile')}
+              </Text>
             </View>
             <ProfileCard
               name={existingConnection.name}
@@ -157,7 +181,9 @@ export const ReconnectView = ({
           </View>
           <View testID="newProfileView" style={styles.profile}>
             <View style={styles.profileHeader}>
-              <Text style={styles.profileHeaderText}>{t('connections.label.newProfile')}</Text>
+              <Text style={styles.profileHeaderText}>
+                {t('connections.label.newProfile')}
+              </Text>
             </View>
             <ProfileCard
               name={pendingConnection.name}
@@ -200,14 +226,18 @@ export const ReconnectView = ({
             onPress={abuseHandler}
             testID="reportAbuseBtn"
           >
-            <Text style={styles.abuseButtonLabel}>{t('connections.button.reportConnection')}</Text>
+            <Text style={styles.abuseButtonLabel}>
+              {t('connections.button.reportConnection')}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.updateButton}
             onPress={() => setLevelHandler(existingConnection.level)}
             testID="updateBtn"
           >
-            <Text style={styles.updateButtonLabel}>{t('connections.button.updateConnection')}</Text>
+            <Text style={styles.updateButtonLabel}>
+              {t('connections.button.updateConnection')}
+            </Text>
           </TouchableOpacity>
         </View>
       </>
@@ -224,22 +254,22 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 22 : 18,
+    fontSize: fontSize[22],
     textAlign: 'center',
-    color: '#000000',
+    color: BLACK,
     marginBottom: 20,
   },
   subheaderText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 15 : 12,
+    fontSize: fontSize[15],
     textAlign: 'center',
-    color: '#827F7F',
+    color: DARKER_GREY,
   },
   lastConnectedText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 15 : 12,
+    fontSize: fontSize[15],
     textAlign: 'center',
-    color: '#827F7F',
+    color: DARKER_GREY,
   },
   profiles: {
     flexDirection: 'row',
@@ -252,8 +282,8 @@ const styles = StyleSheet.create({
   },
   profileHeaderText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 15 : 12,
-    color: '#000',
+    fontSize: fontSize[15],
+    color: BLACK,
   },
   profile: {
     flex: 1,
@@ -261,7 +291,7 @@ const styles = StyleSheet.create({
   },
   verticalDivider: {
     borderRightWidth: StyleSheet.hairlineWidth,
-    borderColor: '#ED7A5D',
+    borderColor: ORANGE,
     height: '100%',
   },
   countsContainer: {
@@ -272,7 +302,7 @@ const styles = StyleSheet.create({
     marginBottom: 28,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: '#ed7a5d',
+    borderColor: ORANGE,
     justifyContent: 'space-evenly',
     flexDirection: 'row',
   },
@@ -285,12 +315,12 @@ const styles = StyleSheet.create({
   },
   connectionLevelLabelText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 15 : 13,
-    color: '#000000',
+    fontSize: fontSize[15],
+    color: BLACK,
   },
   connectionLevelText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 15 : 13,
+    fontSize: fontSize[15],
     marginBottom: 10,
   },
   actionButtons: {
@@ -298,7 +328,7 @@ const styles = StyleSheet.create({
     width: '88%',
   },
   abuseButton: {
-    backgroundColor: '#ED1B24',
+    backgroundColor: RED,
     flex: 1,
     marginRight: 5,
     borderRadius: 60,
@@ -308,12 +338,12 @@ const styles = StyleSheet.create({
   },
   abuseButtonLabel: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 14 : 12,
-    color: '#FFFFFF',
+    fontSize: fontSize[14],
+    color: WHITE,
   },
   updateButton: {
-    backgroundColor: '#FFFFFF',
-    borderColor: '#ED7A5D',
+    backgroundColor: WHITE,
+    borderColor: ORANGE,
     borderWidth: 1,
     borderRadius: 60,
     flex: 1,
@@ -324,7 +354,7 @@ const styles = StyleSheet.create({
   },
   updateButtonLabel: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 14 : 12,
-    color: '#ED7A5D',
+    fontSize: fontSize[14],
+    color: ORANGE,
   },
 });

@@ -15,6 +15,17 @@ import { setInternetCredentials } from 'react-native-keychain';
 import { useTranslation } from 'react-i18next';
 import { BACKUP_URL } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
+import {
+  DARK_ORANGE,
+  LIGHT_GREY,
+  DARKER_GREY,
+  WHITE,
+  BLACK,
+  LIGHT_BLACK,
+  GREEN,
+  GREY,
+} from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { validatePass } from '@/utils/password';
@@ -55,17 +66,18 @@ const UploadAnimation = () => {
 
   return (
     <View style={styles.uploadAnimationContainer}>
+      <Text style={styles.textInfo}>{t('common.text.uploadingData')}</Text>
       <Text style={styles.textInfo}>
-        {t('common.text.uploadingData')}
-      </Text>
-      <Text style={styles.textInfo}>
-        {t('common.text.progress', {completed: completed, total: backupTotal})}
+        {t('common.text.progress', {
+          completed,
+          total: backupTotal,
+        })}
       </Text>
       <Spinner
         isVisible={true}
         size={DEVICE_LARGE ? 80 : 65}
         type="Wave"
-        color="#333"
+        color={LIGHT_BLACK}
       />
     </View>
   );
@@ -89,8 +101,8 @@ const ChangePasswordModal = ({ route, navigation }) => {
   const startBackup = async () => {
     if (oldPassword !== password) {
       Alert.alert(
-        t('profile.alert.title.passwordMatch'), 
-        t('profile.alert.text.passwordMatch')
+        t('profile.alert.title.passwordMatch'),
+        t('profile.alert.text.passwordMatch'),
       );
       return;
     }
@@ -123,7 +135,7 @@ const ChangePasswordModal = ({ route, navigation }) => {
         style={styles.blurView}
         blurType="dark"
         blurAmount={5}
-        reducedTransparencyFallbackColor="black"
+        reducedTransparencyFallbackColor={BLACK}
       />
       <View style={styles.modalContainer}>
         {backupInProgress ? (
@@ -131,14 +143,16 @@ const ChangePasswordModal = ({ route, navigation }) => {
         ) : (
           <>
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>{t('profile.label.currentPassword')}</Text>
+              <Text style={styles.label}>
+                {t('profile.label.currentPassword')}
+              </Text>
               <TextInput
                 autoCompleteType="password"
                 autoCorrect={false}
                 onChangeText={setOldPassword}
                 value={oldPassword}
                 placeholder={password}
-                placeholderTextColor="#9e9e9e"
+                placeholderTextColor={GREY}
                 secureTextEntry={true}
                 style={styles.textInput}
                 textContentType="password"
@@ -153,7 +167,7 @@ const ChangePasswordModal = ({ route, navigation }) => {
                 onChangeText={setNewPassword}
                 value={newPassword}
                 placeholder={t('profile.placeholder.newPassword')}
-                placeholderTextColor="#9e9e9e"
+                placeholderTextColor={GREY}
                 secureTextEntry={true}
                 style={styles.textInput}
                 textContentType="password"
@@ -161,14 +175,16 @@ const ChangePasswordModal = ({ route, navigation }) => {
               />
             </View>
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>{t('profile.label.newPasswordAgain')}</Text>
+              <Text style={styles.label}>
+                {t('profile.label.newPasswordAgain')}
+              </Text>
               <TextInput
                 autoCompleteType="password"
                 autoCorrect={false}
                 onChangeText={setNewPasswordAgain}
                 value={newPasswordAgain}
                 placeholder={t('profile.placeholder.newPasswordAgain')}
-                placeholderTextColor="#9e9e9e"
+                placeholderTextColor={GREY}
                 secureTextEntry={true}
                 style={styles.textInput}
                 textContentType="password"
@@ -177,7 +193,9 @@ const ChangePasswordModal = ({ route, navigation }) => {
             </View>
             <View style={styles.saveContainer}>
               <TouchableOpacity style={styles.saveButton} onPress={startBackup}>
-                <Text style={styles.saveButtonText}>{t('common.button.save')}</Text>
+                <Text style={styles.saveButtonText}>
+                  {t('common.button.save')}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.cancelButton}
@@ -185,7 +203,9 @@ const ChangePasswordModal = ({ route, navigation }) => {
                   navigation.navigate('Edit Profile');
                 }}
               >
-                <Text style={styles.cancelButtonText}>{t('common.button.cancel')}</Text>
+                <Text style={styles.cancelButtonText}>
+                  {t('common.button.cancel')}
+                </Text>
               </TouchableOpacity>
             </View>
           </>
@@ -213,24 +233,24 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modalContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     width: '75%',
     borderRadius: 25,
     padding: DEVICE_LARGE ? 36 : 30,
   },
   inputGroup: {
-    borderBottomColor: '#C4C4C4',
+    borderBottomColor: LIGHT_GREY,
     borderBottomWidth: 1,
     marginBottom: DEVICE_LARGE ? 12 : 10,
   },
   label: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 13 : 11,
-    color: '#B64B32',
+    fontSize: fontSize[13],
+    color: DARK_ORANGE,
     marginBottom: DEVICE_IOS ? (DEVICE_LARGE ? 15 : 13) : 0,
   },
   textInput: {
-    fontSize: DEVICE_LARGE ? 12 : 11,
+    fontSize: fontSize[12],
     marginBottom: DEVICE_IOS ? (DEVICE_LARGE ? 10 : 8) : 0,
   },
   saveContainer: {
@@ -244,7 +264,7 @@ const styles = StyleSheet.create({
     width: DEVICE_LARGE ? 92 : 80,
     paddingTop: 8,
     paddingBottom: 7,
-    backgroundColor: '#5DEC9A',
+    backgroundColor: GREEN,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
@@ -252,28 +272,28 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 10,
+    fontSize: fontSize[12],
   },
   cancelButton: {
     width: DEVICE_LARGE ? 92 : 80,
     paddingTop: 8,
     paddingBottom: 7,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#707070',
+    borderColor: DARKER_GREY,
   },
   cancelButtonText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 10,
-    color: '#707070',
+    fontSize: fontSize[12],
+    color: DARKER_GREY,
   },
   textInfo: {
     fontFamily: 'Poppins-Regular',
-    fontSize: DEVICE_LARGE ? 16 : 14,
-    color: '#333',
+    fontSize: fontSize[16],
+    color: LIGHT_BLACK,
     margin: DEVICE_LARGE ? 12 : 10,
   },
   uploadAnimationContainer: {

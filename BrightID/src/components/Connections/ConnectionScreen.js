@@ -11,13 +11,23 @@ import {
   View,
   SectionList,
 } from 'react-native';
-import { SvgXml } from 'react-native-svg';
+import VerifiedBadge from '@/components/Icons/VerifiedBadge';
+import VerifiedSticker from '@/components/Icons/VerifiedSticker';
+import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
+import GroupAvatar from '@/components/Icons/GroupAvatar';
 import { useTranslation } from 'react-i18next';
-import verificationSticker from '@/static/verification-sticker.svg';
 import moment from 'moment';
-import default_group from '@/static/default_group.svg';
 import { photoDirectory } from '@/utils/filesystem';
-import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import {
+  ORANGE,
+  WHITE,
+  BLACK,
+  DARKER_GREY,
+  DARK_BLUE,
+  LIGHT_GREY,
+} from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import Chevron from '../Icons/Chevron';
 import TrustLevelView from './TrustLevelView';
 
@@ -94,13 +104,19 @@ function ConnectionScreen(props: Props) {
 
   const renderBadge = () => {
     if (loading) {
-      return <ActivityIndicator size="small" color="#707070" animating />;
+      return <ActivityIndicator size="small" color={DARKER_GREY} animating />;
     } else {
       if (brightIdVerified) {
-        return <Text style={[styles.badge, styles.verified]}>{t('common.tag.statusVerified')}</Text>;
+        return (
+          <View style={styles.badge}>
+            <VerifiedSticker width={100} height={20} />
+          </View>
+        );
       } else {
         return (
-          <Text style={[styles.badge, styles.unverified]}>{t('common.tag.statusUnverified')}</Text>
+          <View style={styles.badge}>
+            <UnverifiedSticker width={100} height={19} />
+          </View>
         );
       }
     }
@@ -133,9 +149,9 @@ function ConnectionScreen(props: Props) {
               <Text style={styles.connectionTimestampText}>
                 {loading
                   ? t('connectionDetails.tags.loading')
-                  : t('connectionDetails.tags.connectedAt', {date: `${moment(
-                      parseInt(connectedAt, 10),
-                    ).fromNow()}`})}
+                  : t('connectionDetails.tags.connectedAt', {
+                      date: `${moment(parseInt(connectedAt, 10)).fromNow()}`,
+                    })}
               </Text>
             </View>
           </View>
@@ -146,12 +162,9 @@ function ConnectionScreen(props: Props) {
               {connection.name}
             </Text>
             {brightIdVerified && (
-              <SvgXml
-                style={styles.verificationSticker}
-                width="16"
-                height="16"
-                xml={verificationSticker}
-              />
+              <View style={styles.verificationSticker}>
+                <VerifiedBadge width={16} height={16} />
+              </View>
             )}
           </View>
           <View style={styles.profileDivider} />
@@ -175,7 +188,9 @@ function ConnectionScreen(props: Props) {
         });
       }}
     >
-      <Text style={styles.reportBtnText}>{t('connectionDetails.button.report')}</Text>
+      <Text style={styles.reportBtnText}>
+        {t('connectionDetails.button.report')}
+      </Text>
     </TouchableOpacity>
   );
 
@@ -209,7 +224,12 @@ function ConnectionScreen(props: Props) {
         />
       );
     } else {
-      return <SvgXml xml={default_group} width={40} height={40} />;
+      return (
+        <GroupAvatar
+          width={DEVICE_LARGE ? 40 : 36}
+          height={DEVICE_LARGE ? 40 : 36}
+        />
+      );
     }
   };
 
@@ -246,7 +266,7 @@ function ConnectionScreen(props: Props) {
             <Chevron
               width={DEVICE_LARGE ? 18 : 16}
               height={DEVICE_LARGE ? 18 : 16}
-              color={section.numEntries ? '#0064AE' : '#C4C4C4'}
+              color={section.numEntries ? DARK_BLUE : LIGHT_GREY}
               direction={collapsed ? 'down' : 'up'}
             />
           </TouchableOpacity>
@@ -286,8 +306,6 @@ const ItemSeparator = () => {
   );
 };
 
-const ORANGE = '#ED7A5D';
-
 const styles = StyleSheet.create({
   orangeTop: {
     backgroundColor: ORANGE,
@@ -297,7 +315,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     borderTopLeftRadius: 58,
     marginTop: -58,
     marginBottom: 5,
@@ -337,11 +355,11 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 17 : 15,
-    color: '#000',
+    fontSize: fontSize[17],
+    color: BLACK,
   },
   verificationSticker: {
-    marginLeft: DEVICE_LARGE ? 8 : 5,
+    marginLeft: DEVICE_LARGE ? 7 : 5,
   },
   profileDivider: {
     borderBottomWidth: 2,
@@ -349,25 +367,8 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
     width: '98%',
   },
-  badges: {},
   badge: {
-    fontFamily: 'Poppins-Medium',
-    borderWidth: 1,
-    borderRadius: 10,
     marginTop: 6,
-    paddingTop: DEVICE_ANDROID ? 2 : 1,
-    paddingBottom: DEVICE_ANDROID ? 0 : 1,
-    paddingLeft: 20,
-    paddingRight: 20,
-    fontSize: DEVICE_LARGE ? 11 : 10,
-  },
-  verified: {
-    color: ORANGE,
-    borderColor: ORANGE,
-  },
-  unverified: {
-    color: '#707070',
-    borderColor: '#707070',
   },
   connectionInfo: {
     marginTop: 10,
@@ -380,7 +381,7 @@ const styles = StyleSheet.create({
   },
   connectionTimestampText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 10 : 9,
+    fontSize: fontSize[10],
     color: ORANGE,
   },
   trustLevelContainer: {
@@ -392,7 +393,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderColor: ORANGE,
     borderWidth: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -401,7 +402,7 @@ const styles = StyleSheet.create({
   },
   reportBtnText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     color: ORANGE,
     marginLeft: DEVICE_LARGE ? 10 : 8,
   },
@@ -415,8 +416,8 @@ const styles = StyleSheet.create({
   },
   headerLabelText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
-    color: '#000',
+    fontSize: fontSize[16],
+    color: BLACK,
   },
   headerContent: {
     flex: 1,
@@ -431,7 +432,7 @@ const styles = StyleSheet.create({
   },
   headerContentText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 17 : 15,
+    fontSize: fontSize[17],
     color: ORANGE,
   },
   collapseButton: {
@@ -457,9 +458,8 @@ const styles = StyleSheet.create({
   itemLabel: {},
   itemLabelText: {
     fontFamily: 'Poppins-Medium',
-    // fontSize: DEVICE_LARGE ? 16 : 14,
-    fontSize: 15,
-    color: '#000',
+    fontSize: fontSize[15],
+    color: BLACK,
   },
   connectionFooter: {
     flexGrow: 1,

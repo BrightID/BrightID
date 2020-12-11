@@ -8,7 +8,9 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
-import { ORANGE, report_reasons } from '../../utils/constants';
+import { report_reasons } from '@/utils/constants';
+import { ORANGE, WHITE, BLUE, BLACK, DARKER_GREY, GREEN } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { reportConnection } from './models/reportConnection';
 
 type props = {
@@ -88,14 +90,18 @@ const ReportReasonModal = ({ route, navigation }: props) => {
         style={styles.blurView}
         blurType="dark"
         blurAmount={5}
-        reducedTransparencyFallbackColor="black"
+        reducedTransparencyFallbackColor={BLACK}
       />
       <View style={styles.modalContainer}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>{t('connectionDetails.text.reportConnection', {name: connection.name})}</Text>
+          <Text style={styles.headerText}>
+            {t('connectionDetails.text.reportConnection', {
+              name: connection.name,
+            })}
+          </Text>
         </View>
         <View style={styles.message}>
-          <Material name="information" size={26} color="#2185D0" />
+          <Material name="information" size={26} color={BLUE} />
           <Text style={styles.messageText}>
             {t('connectionDetails.text.reportImpact', {
               name: connection.name,
@@ -130,7 +136,9 @@ const ReportReasonModal = ({ route, navigation }: props) => {
             style={[styles.modalButton, styles.cancelButton]}
             onPress={cancelReport}
           >
-            <Text style={styles.cancelButtonText}>{t('connectionDetails.button.reportCancel')}</Text>
+            <Text style={styles.cancelButtonText}>
+              {t('connectionDetails.button.reportCancel')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -154,7 +162,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     width: '90%',
     borderRadius: 25,
     padding: DEVICE_LARGE ? 30 : 25,
@@ -165,7 +173,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 22 : 19,
+    fontSize: fontSize[22],
     textAlign: 'center',
   },
   message: {
@@ -173,10 +181,10 @@ const styles = StyleSheet.create({
   },
   messageText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 13 : 12,
+    fontSize: fontSize[13],
     textAlign: 'left',
     marginLeft: 10,
-    color: '#827F7F',
+    color: DARKER_GREY,
   },
   divider: {
     borderTopWidth: StyleSheet.hairlineWidth,
@@ -222,8 +230,8 @@ const styles = StyleSheet.create({
   },
   radioLabelText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 15 : 13,
-    color: '#000',
+    fontSize: fontSize[15],
+    color: BLACK,
   },
   modalButtons: {
     flexDirection: 'row',
@@ -240,31 +248,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cancelButton: {
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     borderRadius: 50,
-    borderColor: '#707070',
+    borderColor: DARKER_GREY,
     borderWidth: 1,
   },
   cancelButtonText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 15 : 13,
-    color: '#707070',
+    fontSize: fontSize[15],
+    color: DARKER_GREY,
   },
   submitButton: {
-    backgroundColor: '#5DEC9A',
+    backgroundColor: GREEN,
     borderRadius: 50,
-    borderColor: '#5DEC9A',
+    borderColor: GREEN,
     borderWidth: 1,
   },
   submitButtonText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 15 : 13,
-    color: '#000',
+    fontSize: fontSize[15],
+    color: BLACK,
   },
   submitButtonDisabledText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 15 : 13,
-    color: '#707070',
+    fontSize: fontSize[15],
+    color: DARKER_GREY,
   },
 });
 

@@ -2,17 +2,18 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import Eula from '@/components/OnboardingScreens/Eula';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
+import { BLACK } from '@/theme/colors';
 
 export const headerTitleStyle = {
   fontFamily: 'Poppins-Medium',
-  fontSize: DEVICE_LARGE ? 20 : 17,
-  color: '#000',
+  fontSize: fontSize[20],
+  color: BLACK,
 };
 
 export const headerOptions = {
   headerTitleStyle,
-  headerTintColor: '#000',
+  headerTintColor: BLACK,
   headerTitleAlign: 'left',
   headerBackTitleVisible: false,
 };
