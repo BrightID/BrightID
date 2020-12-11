@@ -1353,7 +1353,7 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-3.0.3.tgz#830167fd757ba70ac638747ba3169b2dbae60330"
   integrity sha512-8IeHfDwJ9/CTUwFs6x90VlobV3BfuPgNLjTgC6dRZovfCWigaZwVNIFFJnHBakK3pW2xErAPwhdvNR4JeNoYbw==
 
-"@react-native-community/viewpager@^4.2.1":
+"@react-native-community/viewpager@4.2.1":
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/viewpager/-/viewpager-4.2.1.tgz#9886d17a04a3a2f260ec246eb52750439e2064b9"
   integrity sha512-VX2tkN0nv7PRem7iS++4tblLKf7RLWemqucDnD6ZIKKBE0s3n7T5vOSAFJyJBH6WucwoUz6HE+0vm8AC3tZDbw==
@@ -8286,7 +8286,7 @@ react-native-modal-overlay@1.3.1:
   dependencies:
     react-native-animatable "^1.2.4"
 
-react-native-navigation-bar-color@^2.0.1:
+react-native-navigation-bar-color@2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/react-native-navigation-bar-color/-/react-native-navigation-bar-color-2.0.1.tgz#ee2be25cc37105f7da355717b0a9a32c9c059ae6"
   integrity sha512-1kE/oxWt+HYjRxdZdvke9tJ365xaee5n3+euOQA1En8zQuSbOxiE4SYEGM7TeaWnmLJ0l37mRnPHaB2H4mGh0A==
