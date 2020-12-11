@@ -4,6 +4,7 @@ import * as React from 'react';
 import { StyleSheet, Image, Text, View } from 'react-native';
 import { Trans } from 'react-i18next';
 import { fontSize } from '@/theme/fonts';
+import { WHITE, BLACK } from '@/theme/colors';
 
 type Props = {};
 
@@ -40,7 +41,7 @@ export default class BrightIdOnboard extends React.Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -70,6 +71,6 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     letterSpacing: 0,
     textAlign: 'center',
-    color: '#000000',
+    color: BLACK,
   },
 });

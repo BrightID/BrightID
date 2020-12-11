@@ -18,7 +18,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { takePhoto, chooseImage } from '@/utils/images';
-import { ORANGE } from '@/theme/colors';
+import { ORANGE, BLUE, WHITE, GREY, LIGHT_BLACK, BLACK } from '@/theme/colors';
 import { DEVICE_LARGE, DEVICE_OS } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { handleBrightIdCreation } from './actions';
@@ -68,7 +68,7 @@ export const SignUp = ({ navigation }) => {
         title: t('common.photoActionSheet.title'),
         showSeparators: true,
         textStyle: {
-          color: '#2185D0',
+          color: BLUE,
           textAlign: 'center',
           width: '100%',
           fontSize: fontSize[18],
@@ -157,7 +157,7 @@ export const SignUp = ({ navigation }) => {
               <SimpleLineIcons
                 size={DEVICE_LARGE ? 42 : 36}
                 name="camera"
-                color="#979797"
+                color={GREY}
               />
             </TouchableOpacity>
           ) : (
@@ -172,7 +172,7 @@ export const SignUp = ({ navigation }) => {
             onChangeText={setName}
             value={name}
             placeholder={t('signup.placeholder.name')}
-            placeholderTextColor="#9e9e9e"
+            placeholderTextColor={GREY}
             style={styles.textInput}
             autoCapitalize="words"
             autoCorrect={false}
@@ -218,7 +218,7 @@ export const SignUp = ({ navigation }) => {
           ) : (
             <View style={styles.loader} testID="creatingIDSpinner">
               <Text>{t('signup.text.creatingAccount')}</Text>
-              <Spinner isVisible={true} size={47} type="Wave" color="#4990e2" />
+              <Spinner isVisible={true} size={47} type="Wave" color={BLUE} />
             </View>
           )}
         </View>
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
   },
   addPhoto: {
     borderWidth: 1,
-    borderColor: '#979797',
+    borderColor: GREY,
     height: DEVICE_LARGE ? 160 : 140,
     width: DEVICE_LARGE ? 160 : 140,
     borderRadius: 100,
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
     width: DEVICE_LARGE ? 160 : 140,
     height: DEVICE_LARGE ? 160 : 140,
     borderRadius: 100,
-    shadowColor: '#000',
+    shadowColor: BLACK,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
   },
   addPhotoText: {
     fontFamily: 'ApexNew-Book',
-    color: '#979797',
+    color: GREY,
     marginBottom: 11,
     marginTop: 11,
     fontSize: fontSize[18],
@@ -294,17 +294,17 @@ const styles = StyleSheet.create({
   midText: {
     fontFamily: 'ApexNew-Book',
     fontSize: fontSize[16],
-    color: '#333',
+    color: LIGHT_BLACK,
   },
   textInput: {
     fontFamily: 'ApexNew-Light',
     fontSize: fontSize[28],
-    color: '#333',
+    color: LIGHT_BLACK,
     fontWeight: '300',
     fontStyle: 'normal',
     letterSpacing: 0,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#9e9e9e',
+    borderBottomColor: GREY,
     marginTop: DEVICE_LARGE ? 16 : 14,
     width: DEVICE_LARGE ? 275 : 250,
     textAlign: 'center',
@@ -312,13 +312,13 @@ const styles = StyleSheet.create({
   },
   buttonInfoText: {
     fontFamily: 'ApexNew-Book',
-    color: '#9e9e9e',
+    color: GREY,
     fontSize: fontSize[14],
     width: 298,
     textAlign: 'center',
   },
   createBrightIdButton: {
-    backgroundColor: '#428BE5',
+    backgroundColor: BLUE,
     width: DEVICE_LARGE ? 285 : 260,
     justifyContent: 'center',
     alignItems: 'center',
@@ -328,14 +328,14 @@ const styles = StyleSheet.create({
   },
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',
-    color: '#fff',
+    color: WHITE,
     fontWeight: '600',
     fontSize: fontSize[18],
   },
   recoverButton: {
     width: DEVICE_LARGE ? 285 : 260,
     borderWidth: 1,
-    borderColor: '#4990e2',
+    borderColor: BLUE,
     paddingTop: DEVICE_LARGE ? 14 : 12,
     paddingBottom: DEVICE_LARGE ? 13 : 11,
     alignItems: 'center',
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
   },
   recoverButtonText: {
     fontFamily: 'ApexNew-Medium',
-    color: '#4990e2',
+    color: BLUE,
     fontSize: fontSize[18],
     fontWeight: '500',
     fontStyle: 'normal',

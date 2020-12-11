@@ -22,7 +22,7 @@ import {
 import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { ORANGE } from '@/theme/colors';
+import { ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE, WIDTH, HEIGHT } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import {
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#fdfdfd',
+    backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
@@ -354,13 +354,11 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     letterSpacing: 0,
     textAlign: 'left',
-    color: '#ffffff',
+    color: WHITE,
   },
   rightArrow: {
     position: 'absolute',
     right: 0,
-    // borderWidth: 1,
-    // borderColor: 'grey',
     height: 80,
     justifyContent: 'center',
     width: 40,
@@ -372,7 +370,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: DEVICE_LARGE ? 42 : 36,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     borderRadius: 60,
     width: DEVICE_LARGE ? 260 : 210,
     borderWidth: 2,

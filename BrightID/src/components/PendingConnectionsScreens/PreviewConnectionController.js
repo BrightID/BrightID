@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { DARK_GREY } from '@/theme/colors';
+import { DARK_GREY, WHITE } from '@/theme/colors';
 import {
   pendingConnection_states,
   selectPendingConnectionById,
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   previewContainer: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'column',

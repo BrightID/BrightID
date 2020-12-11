@@ -17,6 +17,7 @@ import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { LIGHT_BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { qrCodeToSvg } from '@/utils/qrCodes';
 import { useInterval } from '@/utils/hooks';
@@ -149,7 +150,7 @@ export const QrCode = ({ channel }) => {
         <Material
           size={24}
           name="content-copy"
-          color="#333"
+          color={LIGHT_BLACK}
           style={{ width: 24, height: 24 }}
         />
         <Text style={styles.copyText}> {t('qrcode.button.copyLink')}</Text>
@@ -181,7 +182,7 @@ export const QrCode = ({ channel }) => {
           isVisible={true}
           size={47}
           type="FadingCircleAlt"
-          color="#333"
+          color={LIGHT_BLACK}
         />
       </View>
     </View>
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   copyText: {
-    color: '#333',
+    color: LIGHT_BLACK,
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[14],
   },
@@ -218,12 +219,12 @@ const styles = StyleSheet.create({
   timerTextLeft: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
-    color: '#333',
+    color: LIGHT_BLACK,
   },
   timerTextRight: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
-    color: '#333',
+    color: LIGHT_BLACK,
   },
   emptyQr: {
     justifyContent: 'center',

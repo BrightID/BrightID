@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { ORANGE } from '@/theme/colors';
+import { ORANGE, DARKER_GREY, GREEN, WHITE, BLUE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import { setEula } from '@/actions';
@@ -34,7 +34,7 @@ export const Eula = ({ navigation }) => {
     <>
       <StatusBar
         barStyle="dark-content"
-        backgroundColor="#fff"
+        backgroundColor={WHITE}
         animated={true}
       />
       <View style={styles.container} behavior="padding">
@@ -84,7 +84,7 @@ const CONFIRMATION_HEIGHT = DEVICE_LARGE ? 60 : 55;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   link: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[12],
-    color: '#2185D0',
+    color: BLUE,
     marginBottom: fontSize[12],
   },
   confirmationButtons: {
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     height: CONFIRMATION_HEIGHT,
     width: WIDTH,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   acceptButton: {
     width: '33%',
     height: DEVICE_LARGE ? 32 : 29,
-    backgroundColor: '#5DEC9A',
+    backgroundColor: GREEN,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
@@ -154,17 +154,17 @@ const styles = StyleSheet.create({
     width: '33%',
     height: DEVICE_LARGE ? 32 : 29,
 
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#707070',
+    borderColor: DARKER_GREY,
   },
   rejectButtonText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[12],
-    color: '#707070',
+    color: DARKER_GREY,
   },
 });
 

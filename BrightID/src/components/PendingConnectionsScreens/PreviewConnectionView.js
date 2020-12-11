@@ -11,6 +11,7 @@ import {
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { GREY, ORANGE, BLACK, WHITE, RED, LIGHT_BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { pendingConnection_states } from './pendingConnectionSlice';
 import { RatingView } from './RatingView';
@@ -132,13 +133,13 @@ const styles = StyleSheet.create({
   waitingText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
-    color: '#333',
+    color: LIGHT_BLACK,
   },
   buttonText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[18],
     textAlign: 'left',
-    color: '#ffffff',
+    color: WHITE,
   },
   titleContainer: {
     marginTop: DEVICE_LARGE ? 18 : 12,
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[22],
     textAlign: 'center',
-    color: '#000000',
+    color: BLACK,
   },
   userContainer: {
     marginTop: DEVICE_LARGE ? 12 : 10,
@@ -172,11 +173,11 @@ const styles = StyleSheet.create({
     fontSize: fontSize[18],
     letterSpacing: 0,
     textAlign: 'left',
-    color: '#000000',
+    color: BLACK,
   },
   reported: {
     fontSize: fontSize[18],
-    color: 'red',
+    color: RED,
   },
   countsContainer: {
     width: '88%',
@@ -186,14 +187,14 @@ const styles = StyleSheet.create({
     marginBottom: DEVICE_LARGE ? 12 : 10,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: '#ed7a5d',
+    borderColor: ORANGE,
     justifyContent: 'space-evenly',
     flexDirection: 'row',
   },
   connectedText: {
     fontFamily: 'ApexNew-Book',
     fontSize: fontSize[14],
-    color: '#aba9a9',
+    color: GREY,
     fontStyle: 'italic',
   },
   verificationSticker: {

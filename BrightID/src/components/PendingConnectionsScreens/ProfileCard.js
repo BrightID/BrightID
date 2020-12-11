@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { photoDirectory } from '@/utils/filesystem';
 
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
   connectName: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[17],
-    color: '#000000',
+    color: BLACK,
   },
   photo_small: {
     borderRadius: 50,

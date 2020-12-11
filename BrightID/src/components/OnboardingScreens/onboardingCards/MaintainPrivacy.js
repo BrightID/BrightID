@@ -4,6 +4,7 @@ import * as React from 'react';
 import { StyleSheet, Image, Text, View } from 'react-native';
 import { Trans, withTranslation } from 'react-i18next';
 import { fontSize } from '@/theme/fonts';
+import { WHITE, LIGHT_BLACK } from '@/theme/colors';
 
 type Props = {};
 
@@ -44,7 +45,7 @@ class MaintainPrivacy extends React.Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize[24],
     fontWeight: '500',
     fontStyle: 'normal',
-    color: '#222',
+    color: LIGHT_BLACK,
     letterSpacing: 0,
     textShadowColor: 'rgba(0, 0, 0, 0.09)',
     textShadowOffset: {
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
     fontFamily: 'ApexNew-Book',
     fontSize: fontSize[18],
     lineHeight: 22,
-    color: '#222',
+    color: LIGHT_BLACK,
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,

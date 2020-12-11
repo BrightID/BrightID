@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ChannelSwitch from '@/components/Helpers/ChannelSwitch';
-import { ORANGE } from '@/theme/colors';
+import { ORANGE, WHITE, LIGHT_BLACK } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import cameraIcon from '@/static/camera_icon_white.svg';
@@ -62,7 +62,7 @@ if (__DEV__) {
           dispatch(addFakeConnection());
         }}
       >
-        <Material name="ghost" size={32} color="#fff" />
+        <Material name="ghost" size={32} color={WHITE} />
       </TouchableOpacity>
     );
   };
@@ -157,11 +157,15 @@ export const MyCodeScreen = () => {
               navigation.navigate('PendingConnections');
             }}
           >
-            <Material name="account-supervisor-circle" size={32} color="#fff" />
+            <Material
+              name="account-supervisor-circle"
+              size={32}
+              color={WHITE}
+            />
 
             <View
               style={{
-                backgroundColor: '#ED1B24',
+                backgroundColor: ORANGE,
                 width: 9,
                 height: 9,
                 borderRadius: 5,
@@ -263,7 +267,11 @@ export const MyCodeScreen = () => {
               <Text testID="group-code" style={styles.infoTopText}>
                 {t('qrcode.text.codeGroup')}
               </Text>
-              <Material name="information-variant" size={18} color="#4a4a4a" />
+              <Material
+                name="information-variant"
+                size={18}
+                color={LIGHT_BLACK}
+              />
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
@@ -274,7 +282,11 @@ export const MyCodeScreen = () => {
               <Text testID="single-use-code" style={styles.infoTopText}>
                 {t('qrcode.text.codeSingle')}
               </Text>
-              <Material name="information-variant" size={18} color="#4a4a4a" />
+              <Material
+                name="information-variant"
+                size={18}
+                color={LIGHT_BLACK}
+              />
             </TouchableOpacity>
           )}
         </View>
@@ -316,7 +328,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'column',
@@ -328,7 +340,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   headerTitle: {
-    color: '#fff',
+    color: WHITE,
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
   },
@@ -342,7 +354,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[14],
     textAlign: 'center',
-    color: '#4a4a4a',
+    color: LIGHT_BLACK,
   },
   bottomContainer: {
     alignItems: 'center',
@@ -366,27 +378,9 @@ const styles = StyleSheet.create({
   scanCodeText: {
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[14],
-    color: '#fff',
+    color: WHITE,
     marginLeft: 10,
   },
-  // verifyConnectionsButton: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   height: DEVICE_LARGE ? 42 : 36,
-  //   backgroundColor: '#fff',
-  //   borderRadius: 60,
-  //   width: DEVICE_LARGE ? 240 : 200,
-  //   marginBottom: 36,
-  //   borderWidth: 2,
-  //   borderColor: ORANGE,
-  // },
-  // verifyConnectionsText: {
-  //   fontFamily: 'Poppins-Bold',
-  //   fontSize: fontSize[14],
-  //   color: ORANGE,
-  //   marginLeft: 10,
-  // },
   emptyQr: {
     justifyContent: 'center',
     alignItems: 'center',
