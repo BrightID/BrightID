@@ -11,11 +11,10 @@ import {
   View,
   SectionList,
 } from 'react-native';
-import { SvgXml } from 'react-native-svg';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
+import GroupAvatar from '@/components/Icons/GroupAvatar';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
-import default_group from '@/static/default_group.svg';
 import { photoDirectory } from '@/utils/filesystem';
 import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
 import {
@@ -223,7 +222,12 @@ function ConnectionScreen(props: Props) {
         />
       );
     } else {
-      return <SvgXml xml={default_group} width={40} height={40} />;
+      return (
+        <GroupAvatar
+          width={DEVICE_LARGE ? 40 : 36}
+          height={DEVICE_LARGE ? 40 : 36}
+        />
+      );
     }
   };
 

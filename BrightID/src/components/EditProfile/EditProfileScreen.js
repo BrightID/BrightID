@@ -11,7 +11,6 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useActionSheet } from '@expo/react-native-action-sheet';
@@ -23,6 +22,7 @@ import {
   WHITE,
   BLACK,
   GREEN,
+  DARK_BLUE,
   BLUE,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
@@ -32,7 +32,7 @@ import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage, photoDirectory } from '@/utils/filesystem';
 import { setPhoto, setName } from '@/actions';
-import downCaret from '@/static/down_caret_blue.svg';
+import Chevron from '@/components/Icons/Chevron';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   selectAllSocialMedia,
@@ -199,10 +199,11 @@ const SocialMediaLink = (props) => {
         }}
       >
         <Text style={styles.socialMediaType}>{company.name}</Text>
-        <SvgXml
+        <Chevron
           width={DEVICE_LARGE ? 14 : 12}
           height={DEVICE_LARGE ? 14 : 12}
-          xml={downCaret}
+          color={DARK_BLUE}
+          strokeWidth={2}
         />
       </TouchableOpacity>
       <TouchableOpacity
@@ -270,7 +271,7 @@ const SocialMediaLinks = () => {
           <Material
             name="plus-thick"
             size={DEVICE_LARGE ? 18 : 16}
-            color={BLUE}
+            color={DARK_BLUE}
           />
         </TouchableOpacity>
       </View>
@@ -565,7 +566,7 @@ const styles = StyleSheet.create({
   socialMediaType: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
-    color: BLUE,
+    color: DARK_BLUE,
     marginRight: DEVICE_LARGE ? 8 : 6,
   },
   addSocialMediaBtn: {
@@ -595,7 +596,7 @@ const styles = StyleSheet.create({
   passwordText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[13],
-    color: BLUE,
+    color: DARK_BLUE,
   },
   displayPassword: {
     fontFamily: 'Poppins-Regular',

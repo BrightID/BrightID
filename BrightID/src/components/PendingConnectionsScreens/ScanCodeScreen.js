@@ -15,7 +15,6 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import { Trans, useTranslation } from 'react-i18next';
-import { SvgXml } from 'react-native-svg';
 import BarcodeMask from 'react-native-barcode-mask';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-native-spinkit';
@@ -23,7 +22,6 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { ORANGE, WHITE, LIGHT_BLACK, GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import qricon from '@/static/qr_icon_white.svg';
 import {
   channel_types,
   closeChannel,
@@ -216,11 +214,12 @@ export const ScanCodeScreen = () => {
                   navigation.navigate('MyCode');
                 }}
               >
-                <SvgXml
-                  xml={qricon}
-                  width={DEVICE_LARGE ? 22 : 20}
-                  height={DEVICE_LARGE ? 22 : 20}
+                <Material
+                  name="qrcode"
+                  size={DEVICE_LARGE ? 22 : 20}
+                  color={WHITE}
                 />
+
                 <Text style={styles.showQrText}>
                   {t('qrcode.button.showCode')}
                 </Text>

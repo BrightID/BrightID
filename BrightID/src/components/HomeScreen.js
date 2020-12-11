@@ -12,7 +12,6 @@ import {
 import { createSelector } from '@reduxjs/toolkit';
 import { useFocusEffect } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
-import { SvgXml } from 'react-native-svg';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -22,8 +21,7 @@ import { WHITE, ORANGE, DARKER_GREY, BLACK, BLUE } from '@/theme/colors';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import ChatBox from '@/components/Icons/ChatBox';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
-import qricon from '@/static/qr_icon_black.svg';
-import cameraIcon from '@/static/camera_icon_black.svg';
+import Camera from '@/components/Icons/Camera';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
@@ -135,7 +133,7 @@ export const HomeScreen = (props) => {
           <Material
             name="content-paste"
             size={DEVICE_LARGE ? 28 : 23}
-            color="white"
+            color={WHITE}
           />
         </TouchableOpacity>
       );
@@ -260,10 +258,10 @@ export const HomeScreen = (props) => {
             accessible={true}
             accessibilityLabel={t('home.accessibilityLabel.connect')}
           >
-            <SvgXml
-              xml={qricon}
-              width={DEVICE_LARGE ? 25 : 20}
-              height={DEVICE_LARGE ? 25 : 20}
+            <Material
+              name="qrcode"
+              color={BLACK}
+              size={DEVICE_LARGE ? 25 : 20}
             />
             <Text style={styles.connectText}>{t('home.button.myCode')}</Text>
           </TouchableOpacity>
@@ -277,8 +275,7 @@ export const HomeScreen = (props) => {
             accessible={true}
             accessibilityLabel={t('home.accessibilityLabel.connect')}
           >
-            <SvgXml
-              xml={cameraIcon}
+            <Camera
               width={DEVICE_LARGE ? 25 : 20}
               height={DEVICE_LARGE ? 25 : 20}
             />

@@ -5,7 +5,7 @@ import { View, StyleSheet } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { bootstrap } from '@/bootstrap';
 import { notificationSubscription } from '@/NotificationService';
-import { BLUE } from '@/theme/colors';
+import { ORANGE } from '@/theme/colors';
 
 export const InitialLoadingScreen = ({ app }: { app: boolean }) => {
   useEffect(() => {
@@ -21,7 +21,12 @@ export const InitialLoadingScreen = ({ app }: { app: boolean }) => {
   }, []);
   return (
     <View style={styles.container}>
-      <Spinner isVisible={true} size={47} type="FadingCircleAlt" color={BLUE} />
+      <Spinner
+        isVisible={true}
+        size={47}
+        type="FadingCircleAlt"
+        color={ORANGE}
+      />
     </View>
   );
 };

@@ -12,7 +12,6 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -20,7 +19,7 @@ import ChannelSwitch from '@/components/Helpers/ChannelSwitch';
 import { ORANGE, WHITE, LIGHT_BLACK } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import cameraIcon from '@/static/camera_icon_white.svg';
+import Camera from '@/components/Icons/Camera';
 import {
   channel_states,
   channel_types,
@@ -303,8 +302,8 @@ export const MyCodeScreen = () => {
               navigation.navigate('ScanCode');
             }}
           >
-            <SvgXml
-              xml={cameraIcon}
+            <Camera
+              color={WHITE}
               width={DEVICE_LARGE ? 22 : 20}
               height={DEVICE_LARGE ? 22 : 20}
             />

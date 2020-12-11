@@ -19,7 +19,7 @@ import { acceptInvite, rejectInvite, joinGroup } from '@/actions';
 import api from '@/api/brightId';
 import GroupPhoto from '@/components/GroupsScreens/GroupPhoto';
 import { backupUser, backupPhoto } from '@/components/Recovery/helpers';
-import checkGreen from '@/static/check_green.svg';
+import Check from '@/components/Icons/Check';
 import xGrey from '@/static/x_grey.svg';
 
 class InviteCard extends React.Component<Props> {
@@ -104,8 +104,8 @@ class InviteCard extends React.Component<Props> {
             style={styles.greenCircle}
             onPress={this.acceptInvite}
           >
-            <SvgXml
-              xml={checkGreen}
+            <Check
+              color={GREEN}
               width={DEVICE_LARGE ? 20 : 17}
               height={DEVICE_LARGE ? 20 : 17}
             />
