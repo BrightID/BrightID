@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { Trans, withTranslation } from 'react-i18next';
 import emitter from '@/emitter';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_OS } from '@/utils/deviceConstants';
@@ -65,7 +65,7 @@ class RestoreScreen extends React.Component<Props, State> {
     const { t } = this.props;
     Alert.alert(
       t('common.alert.info'), 
-      t('restore.alert.text.restoreSuccess'), 
+      t('restore.alert.text.restoreSuccess'),
       [{ text: t('common.alert.ok') }]
     );
   };
@@ -97,8 +97,8 @@ class RestoreScreen extends React.Component<Props, State> {
         err instanceof Error ? console.warn(err.message) : console.log(err);
         if (err instanceof Error && err.message === 'bad password') {
           Alert.alert(
-            i18next.t('common.alert.error'),
-            i18next.t('common.alert.text.incorrectPassword'),
+            t('common.alert.error'),
+            t('common.alert.text.incorrectPassword'),
             [{ text: t('common.alert.ok'), onPress: () => navigation.goBack() }],
           );
         }
@@ -176,10 +176,15 @@ class RestoreScreen extends React.Component<Props, State> {
           {!this.state.restoreInProgress && (
             <View style={styles.skipContainer}>
               <Text>
-                You can
-                <Text style={styles.skipLink} onPress={this.skip}> skip </Text>
-                loading connections and groups names and photos,
-                but you will not able to see those connections and groups anymore!
+                <Trans
+                  i18nKey="restore.text.skipLoadingBackup"
+                  components={[
+                    <Text style={styles.skipLink} onPress={this.skip}>
+                      dummyLink
+                    </Text>
+                  ]}
+                  values={{skipLink: t("restore.text.skipLink")}}
+                />
               </Text>
             </View>
           )}

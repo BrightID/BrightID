@@ -262,6 +262,8 @@
   "restore.text.chooseConnectionToHelp": "Please select the connection whose account you are helping to recover.",
   "restore.text.sendingProgress": "Sending {{completedItems}}/{{totalItems}} completed",
   "restore.text.noConnections": "No connections...",
+  "restore.text.skipLoadingBackup": "You can <0>{{skipLink}}</0> restoring connections and groups names and photos from backup server and only load mutual ones from your recovery connections!",
+  "restore.text.skipLink": "skip",
   "restore.alert.text.requestRecovering": "Your request to help recovering this account submitted successfully!",
 
 
