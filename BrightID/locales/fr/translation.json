@@ -56,8 +56,8 @@
         "invalidContext": "Échec",
         "linkApp": "Lier l'Application ?",
         "linkFailure": "Échec",
-        "linkingFailed": "Échec de la liaison de l'Application",
-        "linkSuccess": "Succès"
+        "linkSuccess": "Succès",
+        "linkingFailed": "Échec de la liaison de l'Application"
       }
     },
     "tag": {
@@ -84,8 +84,7 @@
       "startBackup": "Commencer la Sauvegarde"
     },
     "header": {
-      "backup": "Sauvegarde",
-      "trustedConnections": ""
+      "backup": "Sauvegarde"
     },
     "placeholder": {
       "confirmPassword": "Confirmation de Mot de Passe"
@@ -151,13 +150,7 @@
     },
     "tag": {
       "connectionDate": "Connecté(e) {{date}}",
-      "reported": "(signalé)",
-      "statusUnverified": "non-vérifié",
-      "statusVerified": "vérifié"
-    },
-    "text": {
-      "progress": "{{completed}}/{{total}} effectué",
-      "uploadingData": "Envoi des données chiffrées vers le serveur de sauvegarde ..."
+      "reported": "(signalé)"
     }
   },
   "connectionDetails": {
@@ -166,9 +159,6 @@
       "report": "Signaler cette personne",
       "reportCancel": "Annuler",
       "reportSubmit": "Signaler"
-    },
-    "header": {
-      "connectionDetails": ""
     },
     "label": {
       "connectionLevel": "Niveau de Connexion",
@@ -202,9 +192,6 @@
       "reconnect": "Reconnecter",
       "reportConnection": "Signaler",
       "updateConnection": "Mettre à jour"
-    },
-    "header": {
-      "connections": ""
     },
     "label": {
       "currentConnectionLevel": "Niveau de connexion actuel",
@@ -393,8 +380,7 @@
     "alert": {
       "text": {
         "failureAcceptGroupInvite": "Erreur lors de la tentative de rejoindre le groupe",
-        "rejectGroupInvite": "Êtes-vous sûr de vouloir refuser de rejoindre ce groupe ?",
-        "successGroupInvite": ""
+        "rejectGroupInvite": "Êtes-vous sûr de vouloir refuser de rejoindre ce groupe ?"
       },
       "title": {
         "failureRejectGroupInvite": "Echec du refus de l'invitation",
@@ -529,8 +515,7 @@
       "showCode": "Afficher votre code QR"
     },
     "header": {
-      "connections": "{{count}} / 30 Connexions",
-      "connections_plural": ""
+      "connections": "{{count}} / 30 Connexions"
     },
     "label": {
       "connectionType": "Type de connexion :"

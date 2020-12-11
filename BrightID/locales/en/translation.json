@@ -56,8 +56,8 @@
         "invalidContext": "Failed",
         "linkApp": "Link App?",
         "linkFailure": "Failed",
-        "linkingFailed": "App linking failed",
-        "linkSuccess": "Success"
+        "linkSuccess": "Success",
+        "linkingFailed": "App linking failed"
       }
     },
     "tag": {
@@ -84,8 +84,7 @@
       "startBackup": "Start Backup"
     },
     "header": {
-      "backup": "Backup",
-      "trustedConnections": ""
+      "backup": "Backup"
     },
     "placeholder": {
       "confirmPassword": "Confirm Password"
@@ -151,9 +150,7 @@
     },
     "tag": {
       "connectionDate": "Connected {{date}}",
-      "reported": "(reported)",
-      "statusUnverified": "unverified",
-      "statusVerified": "verified"
+      "reported": "(reported)"
     },
     "text": {
       "progress": "{{completed}}/{{total}} completed",
@@ -168,7 +165,7 @@
       "reportSubmit": "Submit"
     },
     "header": {
-      "connectionDetails": ""
+      "connectionDetails": "Connection details"
     },
     "label": {
       "connectionLevel": "Connection Level",
@@ -204,7 +201,7 @@
       "updateConnection": "Update connection"
     },
     "header": {
-      "connections": ""
+      "connections": "Connections"
     },
     "label": {
       "currentConnectionLevel": "Current connection level",
@@ -287,6 +284,11 @@
       "copyExplorerCode": "Copy Explorer Code",
       "editProfile": "Edit Profile",
       "home": "Home"
+    }
+  },
+  "eula": {
+    "header": {
+      "title": "License Agreement"
     }
   },
   "graphExplorer": {
@@ -393,8 +395,7 @@
     "alert": {
       "text": {
         "failureAcceptGroupInvite": "Failed to join the group",
-        "rejectGroupInvite": "Are you sure you want to reject joining this group?",
-        "successGroupInvite": ""
+        "rejectGroupInvite": "Are you sure you want to reject joining this group?"
       },
       "title": {
         "failureRejectGroupInvite": "Failed to reject the invite",
@@ -529,8 +530,7 @@
       "showCode": "Show your QR code"
     },
     "header": {
-      "connections": "{{count}} / 30 Connections",
-      "connections_plural": ""
+      "connections": "{{count}} / 30 Connections"
     },
     "label": {
       "connectionType": "Connection Type:"

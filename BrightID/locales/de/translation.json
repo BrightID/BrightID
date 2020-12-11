@@ -47,17 +47,10 @@
       },
       "text": {
         "checkWebsite": "Besuche die Website von {{name}} für mehr Informationen!",
-        "invalidContext": "{{context}} ist kein korrekter Kontext!",
-        "linkApp": "",
-        "linkFailure": "",
-        "linkSuccess": ""
+        "invalidContext": "{{context}} ist kein korrekter Kontext!"
       },
       "title": {
-        "invalidContext": "Fehlgeschlagen",
-        "linkApp": "",
-        "linkFailure": "",
-        "linkingFailed": "",
-        "linkSuccess": ""
+        "invalidContext": "Fehlgeschlagen"
       }
     },
     "tag": {
@@ -75,25 +68,23 @@
   "backup": {
     "alert": {
       "text": {
-        "backupSuccess": "Sicherung erfolgreich erstellt!",
-        "needThreeTrusted": ""
+        "backupSuccess": "Sicherung erfolgreich erstellt!"
       }
     },
     "button": {
       "next": "Weiter",
       "startBackup": "Sicherung starten"
     },
-    "header": {
-      "backup": "",
-      "trustedConnections": ""
-    },
     "placeholder": {
-      "confirmPassword": "Passwort bestätigen"
+      "confirmPassword": "Passwort bestätigen",
+      "password": "Passwort"
     },
     "text": {
       "chooseTrustedConnections": "Wähle mindestens drei vertrauenswürdige Verbindungen um deine BrightID zu sichern.",
       "enterPassword": "Gib ein Passwort ein mit dem das Backup verschlüsselt wird:",
-      "noConnections": "Keine Verbindungen"
+      "noConnections": "Keine Verbindungen",
+      "progress": "Fortschritt {{completed}}/{{total}}",
+      "uploadingData": "Lade verschlüsselte Daten auf den Sicherungsserver..."
     }
   },
   "common": {
@@ -109,7 +100,6 @@
     },
     "alert": {
       "cancel": "Abbrechen",
-      "dismiss": "",
       "error": "Fehler",
       "formIncomplete": "Formular unvollständig",
       "info": "Info",
@@ -117,22 +107,10 @@
       "ok": "OK",
       "success": "Erfolg",
       "sure": "Ja",
-      "text": {
-        "incorrectPassword": "",
-        "lostKeys": "",
-        "passwordMatch": "",
-        "passwordShort": "",
-        "trustedSigned": ""
-      },
-      "title": {
-        "lostKeys": ""
-      },
       "yes": "Ja"
     },
     "button": {
-      "cancel": "",
-      "copy": "Kopieren",
-      "save": ""
+      "copy": "Kopieren"
     },
     "camera": {
       "cancel": "Abbrechen",
@@ -145,71 +123,27 @@
       "takePhoto": "Neues Foto aufnehmen",
       "title": "Wähle Foto"
     },
-    "placeholder": {
-      "password": "",
-      "searchConnections": ""
-    },
     "tag": {
       "connectionDate": "Verbunden {{date}}",
-      "reported": "(gemeldet)",
-      "statusUnverified": "",
-      "statusVerified": ""
-    },
-    "text": {
-      "progress": "",
-      "uploadingData": ""
-    }
-  },
-  "connectionDetails": {
-    "button": {
-      "levelSave": "",
-      "report": "",
-      "reportCancel": "",
-      "reportSubmit": ""
-    },
-    "header": {
-      "connectionDetails": ""
-    },
-    "label": {
-      "connectionLevel": "",
-      "mutualConnections": "",
-      "mutualGroups": ""
-    },
-    "tags": {
-      "connectedAt": "",
-      "loading": ""
-    },
-    "text": {
-      "level": "",
-      "levelAlreadyKnown": "",
-      "levelJustMet": "",
-      "levelRecovery": "",
-      "levelSuspicious": "",
-      "reportConnection": "",
-      "reportDuplicate": "",
-      "reportImpact": "",
-      "reportOther": "",
-      "reportSpammer": ""
+      "reported": "(gemeldet)"
     }
   },
   "connections": {
-    "accessibilityLabel": {
-      "connectionPhoto": "",
-      "viewConnectionDetails": "",
-      "viewPhoto": ""
-    },
     "button": {
       "reconnect": "Verbindung erneuern",
       "reportConnection": "Kontakt melden",
       "updateConnection": "Verbindung erneuern"
     },
-    "header": {
-      "connections": ""
+    "flagActionSheet": {
+      "infoFlagImpact": "Note that reporting {{name}} will negatively affect their BrightID verification, and the report might be shown to other users."
     },
     "label": {
       "currentConnectionLevel": "Aktuelle Verbindungsstufe",
       "newProfile": "Neues Profil",
       "oldProfile": "Altes Profil"
+    },
+    "placeholder": {
+      "searchConnections": "Verbindung suchen"
     },
     "removeActionSheet": {
       "info": "Willst du die Verbindung mit {{name}} wirklich löschen? Du kannst dich jederzeit erneut verbinden.",
@@ -217,32 +151,11 @@
       "title": "Verbindung löschen"
     },
     "tag": {
-      "deleted": "",
-      "failed": "",
-      "hidden": "",
-      "lastConnected": "Letzte Verbindung: {{date}}",
-      "reportedAs": "",
-      "waiting": ""
+      "lastConnected": "Letzte Verbindung: {{date}}"
     },
     "text": {
       "alreadyConnectedWith": "Du hast schon eine Verbindung mit {{name}}",
       "noConnections": "Keine Verbindungen"
-    }
-  },
-  "contact": {
-    "label": {
-      "email": "",
-      "meet": "",
-      "socialMedia": "",
-      "website": ""
-    },
-    "text": {
-      "meet": "",
-      "openSource": "",
-      "weAre": ""
-    },
-    "title": {
-      "contactUs": ""
     }
   },
   "createGroup": {
@@ -252,7 +165,6 @@
         "nameTooShort": "Der Gruppenname muss aus mindestens zwei Buchstaben bestehen"
       },
       "title": {
-        "createFailed": "",
         "formIncomplete": "Unvollständige Informationen"
       }
     },
@@ -272,35 +184,14 @@
     }
   },
   "drawer": {
-    "alert": {
-      "text": {
-        "upToDate": ""
-      },
-      "title": {
-        "upToDate": ""
-      }
-    },
     "label": {
-      "achievements": "",
-      "checkForUpdates": "",
-      "contactUs": "",
-      "copyExplorerCode": "",
-      "editProfile": "",
-      "home": ""
+      "editProfile": "Profil bearbeiten",
+      "home": "Startseite"
     }
   },
-  "graphExplorer": {
-    "alert": {
-      "text": {
-        "copied": ""
-      }
-    },
-    "button": {
-      "copyCode": ""
-    },
-    "text": {
-      "backupRequired": "",
-      "explorerWebsiteDescription": ""
+  "eula": {
+    "header": {
+      "title": "Lizenzvereinbarung"
     }
   },
   "groups": {
@@ -327,23 +218,9 @@
       "createGroup": "Gruppe anlegen",
       "learnMore": "Mehr Informationen"
     },
-    "groupActionSheet": {
-      "cancel": "",
-      "inviteUser": "",
-      "leaveGroup": ""
-    },
-    "header": {
-      "inviteList": "",
-      "newGroup": ""
-    },
     "label": {
       "knownMembers": "Bekannte Mitglieder:",
       "unknownMembers": "Unbekannte:"
-    },
-    "memberActionSheet": {
-      "addAdmin": "",
-      "cancel": "",
-      "dismissMember": ""
     },
     "tag": {
       "primaryGroup": "Primäre Gruppe"
@@ -372,7 +249,9 @@
       "title": "Willst du mit uns chatten?"
     },
     "label": {
-      "createNewConnection": "Neue Verbindung"
+      "createNewConnection": "Neue Verbindung",
+      "statusUnverified": "unbestätigt",
+      "statusVerified": "bestätigt"
     },
     "link": {
       "community": "Der Community beitreten"
@@ -381,20 +260,17 @@
   "notificationBar": {
     "text": {
       "pendingConnections": "Du hast {{count}} Verbindungsanfrage",
-      "pendingConnections_plural": "Du hast {{count}} Verbindungsanfragen",
-      "socialRecovery": ""
+      "pendingConnections_plural": "Du hast {{count}} Verbindungsanfragen"
     },
     "title": {
-      "pendingConnection": "Verbindung bestätigen",
-      "socialRecovery": ""
+      "pendingConnection": "Verbindung bestätigen"
     }
   },
   "notifications": {
     "alert": {
       "text": {
         "failureAcceptGroupInvite": "Beitreten zur Gruppe fehlgeschlagen",
-        "rejectGroupInvite": "Willst Du die Gruppeneinladung wirklich ablehnen?",
-        "successGroupInvite": ""
+        "rejectGroupInvite": "Willst Du die Gruppeneinladung wirklich ablehnen?"
       },
       "title": {
         "failureRejectGroupInvite": "Ablehnung der Einladung fehlgeschlagen",
@@ -436,17 +312,6 @@
     }
   },
   "pendingConnection": {
-    "alert": {
-      "text": {
-        "errorCreateChannel": "",
-        "errorJoinChannel": "",
-        "localOutdated": "",
-        "otherOutdated": ""
-      },
-      "title": {
-        "connectionImpossible": ""
-      }
-    },
     "text": {
       "alreadyRated": "Diesen Kontakt hast du schon bewertet",
       "errorExpired": "Die Verbindungsanfrage ist abgelaufen. Bitte versuche eine neue Verbindung.",
@@ -467,7 +332,6 @@
       "suspicious": "Suspicious"
     },
     "text": {
-      "errorGeneric": "",
       "rating": "Diese Info hilft uns BrightID sicherer zu machen"
     },
     "title": {
@@ -475,35 +339,16 @@
     }
   },
   "profile": {
-    "alert": {
-      "button": {
-        "discard": "",
-        "dontLeave": ""
-      },
-      "text": {
-        "discardChanges": "",
-        "passwordMatch": ""
-      },
-      "title": {
-        "discardChanges": "",
-        "passwordMatch": ""
-      }
-    },
     "button": {
-      "socialNext": "",
-      "socialPrevious": ""
+      "cancel": "Abbrechen",
+      "save": "Speichern"
     },
     "label": {
-      "currentPassword": "",
       "name": "Name",
-      "newPassword": "",
-      "newPasswordAgain": "",
       "socialMediaLink": "Social Media Verknüpfung"
     },
     "placeholder": {
-      "name": "Namen eingeben",
-      "newPassword": "",
-      "newPasswordAgain": ""
+      "name": "Namen eingeben"
     },
     "text": {
       "changePassword": "Passwort ändern",
@@ -529,8 +374,7 @@
       "showCode": "Deinen Code anzeigen"
     },
     "header": {
-      "connections": "{{count}} / 30 Verbindungen",
-      "connections_plural": ""
+      "connections": "{{count}} / 30 Verbindungen"
     },
     "label": {
       "connectionType": "Verbindungstyp:"
@@ -553,33 +397,6 @@
     },
     "text": {
       "askTrustedConnections": "Lass deine vertrauenswürdigen Verbindungen diesen Code scannen."
-    }
-  },
-  "restore": {
-    "alert": {
-      "text": {
-        "notTrusted": "",
-        "requestRecovering": "",
-        "restoreSuccess": ""
-      },
-      "title": {
-        "notTrusted": ""
-      }
-    },
-    "button": {
-      "startRestore": ""
-    },
-    "header": {
-      "accountRecovery": ""
-    },
-    "text": {
-      "chooseConnectionToHelp": "",
-      "downloadingData": "",
-      "enterPassword": "",
-      "noConnections": ""
-    },
-    "title": {
-      "chooseConnection": ""
     }
   },
   "signup": {
