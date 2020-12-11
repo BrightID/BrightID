@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { setActiveNotification } from '@/actions';
 import { CONNECTIONS_TYPE } from '@/utils/constants';
 import { DEVICE_LARGE, HEIGHT } from '@/utils/deviceConstants';
+import { LIGHT_GREEN, BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import DropDownAlertEnabled from '@/utils/DropDownAlertEnabler';
@@ -120,7 +121,7 @@ export const NotificationBanner = () => {
       titleStyle={styles.title}
       messageStyle={styles.message}
       updateStatusBar={true}
-      activeStatusBarBackgroundColor="#AFFDD0"
+      activeStatusBarBackgroundColor={LIGHT_GREEN}
       activeStatusBarStyle="dark-content"
       testID="notificationBanner"
       elevation={10}
@@ -143,19 +144,19 @@ export const NotificationBanner = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#AFFDD0',
+    backgroundColor: LIGHT_GREEN,
     height: HEIGHT * 0.15,
   },
   title: {
     fontFamily: 'Poppins-Medium',
     marginLeft: DEVICE_LARGE ? 20 : 10,
-    color: '#000',
+    color: BLACK,
     fontSize: fontSize[16],
   },
   message: {
     fontFamily: 'Poppins-Medium',
     marginLeft: DEVICE_LARGE ? 20 : 10,
-    color: '#000',
+    color: BLACK,
     fontSize: fontSize[13],
   },
   icon: {

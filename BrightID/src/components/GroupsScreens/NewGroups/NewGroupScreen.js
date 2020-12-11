@@ -110,7 +110,7 @@ export class NewGroupScreen extends React.Component<Props> {
     ) : (
       <View style={styles.loader}>
         <Text style={styles.textInfo}>{t(this.state.creationState)} ...</Text>
-        <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
+        <Spinner isVisible={true} size={97} type="Wave" color={BLUE} />
       </View>
     );
   };

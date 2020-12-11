@@ -20,7 +20,7 @@ import {
   GROUPS_TYPE,
   MISC_TYPE,
 } from '@/utils/constants';
-import { ORANGE } from '@/theme/colors';
+import { ORANGE, WHITE, GREY, BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { createSelector } from '@reduxjs/toolkit';
@@ -159,7 +159,7 @@ const initialLayout = { width: Dimensions.get('window').width };
 const renderTabBar = (props) => (
   <TabBar
     {...props}
-    indicatorStyle={{ backgroundColor: '#ED7A5D' }}
+    indicatorStyle={{ backgroundColor: ORANGE }}
     style={styles.tabBar}
     renderLabel={({ route, focused, color }) => (
       <View style={styles.tabContainer}>
@@ -173,8 +173,8 @@ const renderTabBar = (props) => (
         </Text>
       </View>
     )}
-    inactiveColor="#C4C4C4"
-    activeColor="#000"
+    inactiveColor={GREY}
+    activeColor={BLACK}
   />
 );
 
@@ -263,20 +263,20 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     borderTopLeftRadius: 58,
     marginTop: -58,
     zIndex: 10,
     overflow: 'hidden',
   },
   badge: {
-    backgroundColor: '#ED1B24',
+    backgroundColor: ORANGE,
     width: DEVICE_LARGE ? 8 : 6,
     height: DEVICE_LARGE ? 8 : 6,
     borderRadius: 4,
     marginRight: DEVICE_LARGE ? 8 : 6,
   },
-  tabBar: { backgroundColor: '#fff', paddingLeft: DEVICE_LARGE ? 20 : 18 },
+  tabBar: { backgroundColor: WHITE, paddingLeft: DEVICE_LARGE ? 20 : 18 },
   tabContainer: {
     flexDirection: 'row',
     alignItems: 'center',

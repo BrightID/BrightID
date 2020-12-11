@@ -6,6 +6,13 @@ import { connect } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
 import { withTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import {
+  DARK_ORANGE,
+  GREEN,
+  DARKER_GREY,
+  LIGHT_GREY,
+  WHITE,
+} from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { getGroupName } from '@/utils/groups';
 import { acceptInvite, rejectInvite, joinGroup } from '@/actions';
@@ -125,8 +132,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    backgroundColor: '#fff',
-    borderBottomColor: '#e3e0e4',
+    backgroundColor: WHITE,
+    borderBottomColor: LIGHT_GREY,
     borderBottomWidth: 1,
     paddingBottom: 10,
     paddingTop: 10,
@@ -155,7 +162,7 @@ const styles = StyleSheet.create({
   invitationMsg: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[12],
-    color: '#B64B32',
+    color: DARK_ORANGE,
   },
   greenCircle: {
     alignItems: 'center',
@@ -164,7 +171,7 @@ const styles = StyleSheet.create({
     height: DEVICE_LARGE ? 40 : 32,
     borderRadius: 25,
     borderWidth: 2,
-    borderColor: '#5DEC9A',
+    borderColor: GREEN,
   },
   greyCircle: {
     alignItems: 'center',
@@ -173,7 +180,7 @@ const styles = StyleSheet.create({
     height: DEVICE_LARGE ? 40 : 32,
     borderRadius: 25,
     borderWidth: 2,
-    borderColor: '#707070',
+    borderColor: DARKER_GREY,
     marginLeft: 7,
   },
   approvalButtonContainer: {

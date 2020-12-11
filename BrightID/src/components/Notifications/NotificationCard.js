@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { photoDirectory } from '@/utils/filesystem';
 import { useNavigation } from '@react-navigation/native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { DARK_ORANGE, WHITE, LIGHT_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 
 /**
@@ -63,8 +64,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    backgroundColor: '#fff',
-    borderBottomColor: '#e3e0e4',
+    backgroundColor: WHITE,
+    borderBottomColor: LIGHT_GREY,
     borderBottomWidth: 1,
     paddingBottom: DEVICE_LARGE ? 10 : 8,
     paddingTop: DEVICE_LARGE ? 10 : 8,
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     width: DEVICE_LARGE ? 60 : 48,
     height: DEVICE_LARGE ? 60 : 48,
-    backgroundColor: '#d8d8d8',
+    backgroundColor: LIGHT_GREY,
   },
   info: {
     marginLeft: DEVICE_LARGE ? 10 : 7,
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
   invitationMsg: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[12],
-    color: '#B64B32',
+    color: DARK_ORANGE,
   },
 });
 

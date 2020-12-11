@@ -14,6 +14,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import Search from '@/components/Icons/Search';
+import { GREY, LIGHT_BLACK, WHITE } from '@/theme/colors';
 
 /**
  * Search Bar in the Connections Screen
@@ -102,7 +103,7 @@ const AnimatedTopSearchBar = ({
         autoCorrect={false}
         textContentType="none"
         underlineColorAndroid="transparent"
-        placeholderTextColor="#aaa"
+        placeholderTextColor={GREY}
         clearTextOnFocus={true}
         onFocus={() => {
           dispatch(setSearchValue(''));
@@ -113,7 +114,7 @@ const AnimatedTopSearchBar = ({
           <Ionicon
             size={DEVICE_LARGE ? 22 : 20}
             name="ios-options"
-            color="#333"
+            color={LIGHT_BLACK}
           />
         </TouchableOpacity>
       )}
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
   },
   searchIcon: {
     marginLeft: 15,
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
   searchField: {
     fontFamily: 'ApexNew-Book',
     fontSize: fontSize[15],
-    color: '#333',
+    color: LIGHT_BLACK,
     marginLeft: DEVICE_LARGE ? 23 : 20,
     flex: 1,
     fontWeight: 'normal',

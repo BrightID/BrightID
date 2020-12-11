@@ -12,7 +12,7 @@ import { BlurView } from '@react-native-community/blur';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import { connection_levels } from '@/utils/constants';
-import { ORANGE } from '@/theme/colors';
+import { ORANGE, BLACK, WHITE, GREEN, DARKER_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { types } from '@/utils/sorting';
 import { setFilters, setConnectionsSort } from '@/actions';
@@ -101,7 +101,7 @@ const SortConnectionsModal = ({ route, navigation }: props) => {
         style={styles.blurView}
         blurType="dark"
         blurAmount={5}
-        reducedTransparencyFallbackColor="black"
+        reducedTransparencyFallbackColor={BLACK}
       />
       <TouchableWithoutFeedback
         onPress={() => {
@@ -140,7 +140,7 @@ const SortConnectionsModal = ({ route, navigation }: props) => {
               width={16}
               height={16}
               strokeWidth={byDate.includes(newConnectionsSort) ? 3 : 1.5}
-              color={byDate.includes(newConnectionsSort) ? ORANGE : '#000'}
+              color={byDate.includes(newConnectionsSort) ? ORANGE : BLACK}
               direction={
                 byDate.includes(newConnectionsSort) &&
                 ascending.includes(newConnectionsSort)
@@ -172,7 +172,7 @@ const SortConnectionsModal = ({ route, navigation }: props) => {
               width={16}
               height={16}
               strokeWidth={byName.includes(newConnectionsSort) ? 3 : 1.5}
-              color={byName.includes(newConnectionsSort) ? ORANGE : '#000'}
+              color={byName.includes(newConnectionsSort) ? ORANGE : BLACK}
               direction={
                 byName.includes(newConnectionsSort) &&
                 ascending.includes(newConnectionsSort)
@@ -205,7 +205,7 @@ const SortConnectionsModal = ({ route, navigation }: props) => {
               width={16}
               height={16}
               strokeWidth={byTrust.includes(newConnectionsSort) ? 3 : 1.5}
-              color={byTrust.includes(newConnectionsSort) ? ORANGE : 'black'}
+              color={byTrust.includes(newConnectionsSort) ? ORANGE : BLACK}
               direction={
                 byTrust.includes(newConnectionsSort) &&
                 ascending.includes(newConnectionsSort)
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     width: '90%',
     borderRadius: 25,
     padding: DEVICE_LARGE ? 30 : 25,
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
   },
 
   sortButtonText: {
-    color: '#000',
+    color: BLACK,
     fontFamily: 'Poppins-Regular',
     fontSize: fontSize[14],
     marginRight: DEVICE_LARGE ? 5 : 4,
@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
   radioLabelText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[15],
-    color: '#000',
+    color: BLACK,
     textTransform: 'capitalize',
   },
   modalButtons: {
@@ -357,20 +357,20 @@ const styles = StyleSheet.create({
   },
 
   submitButton: {
-    backgroundColor: '#5DEC9A',
+    backgroundColor: GREEN,
     borderRadius: 50,
-    borderColor: '#5DEC9A',
+    borderColor: GREEN,
     borderWidth: 1,
   },
   submitButtonText: {
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[15],
-    color: '#000',
+    color: BLACK,
   },
   submitButtonDisabledText: {
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[15],
-    color: '#707070',
+    color: DARKER_GREY,
   },
 });
 

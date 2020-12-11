@@ -9,7 +9,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { withTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { GREY, WHITE } from '@/theme/colors';
+import { GREY, WHITE, GREEN, BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { toggleNewGroupCoFounder } from '../actions';
 
@@ -48,7 +48,7 @@ class NewGroupCard extends React.PureComponent<Props> {
           <AntDesign
             size={30.4}
             name={selected ? 'checkcircle' : 'checkcircleo'}
-            color={selected ? '#28a84a' : '#000'}
+            color={selected ? GREEN : BLACK}
           />
         </TouchableOpacity>
       );
@@ -58,7 +58,7 @@ class NewGroupCard extends React.PureComponent<Props> {
         style={styles.moreIcon}
         onPress={this.handleUserOptions}
       >
-        <Ionicon size={48} name="ios-more" color="#ccc" />
+        <Ionicon size={48} name="ios-more" color={GREY} />
       </TouchableOpacity>
     );
   };
