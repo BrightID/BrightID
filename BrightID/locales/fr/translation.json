@@ -56,8 +56,8 @@
         "invalidContext": "Échec",
         "linkApp": "Lier l'Application ?",
         "linkFailure": "Échec",
-        "linkSuccess": "Succès",
-        "linkingFailed": "Échec de la liaison de l'Application"
+        "linkingFailed": "Échec de la liaison de l'Application",
+        "linkSuccess": "Succès"
       }
     },
     "tag": {
@@ -76,9 +76,7 @@
     "alert": {
       "text": {
         "backupSuccess": "Sauvegarde effectuée avec succès !",
-        "needThreeTrusted": "Vous devez définir au moins trois connexions de confiance pour effectuer une sauvegarde.",
-        "passwordConfirmNoMatch": "Le mot de passe et la confirmation de mot de passe ne correspondent pas.",
-        "passwordTooShort": "Votre mot de passe doit comporter au moins 8 caractères."
+        "needThreeTrusted": "Vous devez définir au moins trois connexions de confiance pour effectuer une sauvegarde."
       }
     },
     "button": {
@@ -87,7 +85,7 @@
     },
     "header": {
       "backup": "Sauvegarde",
-      "trustedConnections": "Connexions de Confiance"
+      "trustedConnections": ""
     },
     "placeholder": {
       "confirmPassword": "Confirmation de Mot de Passe"
@@ -101,7 +99,6 @@
   "common": {
     "accessibilityLabel": {
       "addPhoto": "Ajouter une photo",
-      "editName": "éditer le nom",
       "editPhoto": "éditer la photo",
       "profilePhoto": "profile photo",
       "userPhoto": "photo de l'utilisateur"
@@ -143,9 +140,6 @@
       "ok": "Ok",
       "title": "Permission d'utiliser l'appareil photo"
     },
-    "language": {
-      "and": "et"
-    },
     "photoActionSheet": {
       "choosePhoto": "Sélectionner depuis l'Album",
       "takePhoto": "Prendre une Photo",
@@ -174,7 +168,7 @@
       "reportSubmit": "Signaler"
     },
     "header": {
-      "connectionDetails": "Détails de la Connexion"
+      "connectionDetails": ""
     },
     "label": {
       "connectionLevel": "Niveau de Connexion",
@@ -210,7 +204,7 @@
       "updateConnection": "Mettre à jour"
     },
     "header": {
-      "connections": "Connexions"
+      "connections": ""
     },
     "label": {
       "currentConnectionLevel": "Niveau de connexion actuel",
@@ -233,19 +227,6 @@
     "text": {
       "alreadyConnectedWith": "Vous êtes déjà connecté(e) avec {{name}}",
       "noConnections": "Aucune connexion"
-    }
-  },
-  "connectionsSearch": {
-    "button": {
-      "save": "Valider",
-      "sortByDate": "Trier par date ajoutée",
-      "sortByName": "Trier par nom"
-    },
-    "header": {
-      "sorting": "Tri"
-    },
-    "text": {
-      "chooseSortMethod": "Choisissez une des méthodes ci-dessous"
     }
   },
   "contact": {
@@ -330,7 +311,6 @@
       "text": {
         "addAdmin": "Êtes-vous sûr de vouloir définir {{name}} comme administrateur de ce groupe ?",
         "dismissMember": "Êtes-vous sûr de vouloir retirer {{name}} de ce groupe ?",
-        "errorAddAdmin": "Erreur en essayant de définir {{name}} comme administrateur du groupe",
         "inviteSuccess": "Vous avez invité {{name}} avec succès",
         "leaveGroup": "Êtes-vous sûr de vouloir quitter ce groupe ?"
       },
@@ -353,7 +333,6 @@
       "leaveGroup": "Quitter le groupe"
     },
     "header": {
-      "groups": "Groupes",
       "inviteList": "Liste d'Invitation",
       "newGroup": "Nouveau Groupe"
     },
@@ -366,10 +345,6 @@
       "cancel": "Annuler",
       "dismissMember": "Retirer du Groupe"
     },
-    "state": {
-      "creatingGroup": "création du groupe",
-      "uploadingGroupPhoto": "envoi de la photo du groupe"
-    },
     "tag": {
       "primaryGroup": "Groupe Principal"
     },
@@ -379,10 +354,6 @@
       "noGroupsMatchSearch": "Aucun groupe ne correspond à votre recherche",
       "noMembers": "Pas de membre connu, invitez quelqu'un...",
       "waitingForMembers": "En attente de validation de {{list}}"
-    },
-    "title": {
-      "groups": "Groupes",
-      "newGroup": "Nouveau Groupe"
     }
   },
   "home": {
@@ -423,7 +394,7 @@
       "text": {
         "failureAcceptGroupInvite": "Erreur lors de la tentative de rejoindre le groupe",
         "rejectGroupInvite": "Êtes-vous sûr de vouloir refuser de rejoindre ce groupe ?",
-        "successAcceptGroupInvite": "Vous avez rejoint {{groupName}}"
+        "successGroupInvite": ""
       },
       "title": {
         "failureRejectGroupInvite": "Echec du refus de l'invitation",
@@ -478,7 +449,6 @@
     },
     "text": {
       "alreadyRated": "Vous avez déjà évalué cette connexion.",
-      "errorConnecting": "Une erreur est survenue. Veuillez essayer à nouveau de vous connecter.",
       "errorExpired": "La connexion a expiré. Veuillez essayer à nouveau de vous connecter.",
       "errorMyself": "Vous ne pouvez pas vous connecter à vous-même.",
       "errorUnhandled": "État de connexion non supporté."
@@ -496,14 +466,8 @@
       "reported": "Signalé(e)",
       "suspicious": "Suspect(e)"
     },
-    "tag": {
-      "createdAt": "Créé {{date}}",
-      "newUser": "Nouvel Utilisateur"
-    },
     "text": {
-      "errorExpired": "Le code QR utilisé pour vous connecter avec {{name}} a expiré... veuillez réessayer de vous connecter.",
       "errorGeneric": "Une erreur est survenue, veuillez essayer à nouveau de vous connecter avec {{name}}...",
-      "errorMyself": "OUPS!!! On dirait que c'est vous...",
       "rating": "Votre réponse nous aide à prévenir les fraudes."
     },
     "title": {
@@ -549,10 +513,6 @@
   },
   "qrcode": {
     "alert": {
-      "connectGroup": "Créez une connexion de groupe avec {{name}} sur BrightID : {{link}}",
-      "connectSingle": "Connectez vous avec {{name}} sur BrightID : {{link}}",
-      "shareLinkGroup": "Partagez ce lien",
-      "shareLinkSingle": "Partagez ce lien avec un ami",
       "text": {
         "codeGroup": "Ce code QR est conçu pour permettre à différentes personnes de se connecter entre-elles simultanément.",
         "codeSingle": "Ce code QR peut être utilisé pour vous connecter à un seul autre utilisateur"
@@ -569,7 +529,8 @@
       "showCode": "Afficher votre code QR"
     },
     "header": {
-      "connections": "{{count}} / 30 Connexions"
+      "connections": "{{count}} / 30 Connexions",
+      "connections_plural": ""
     },
     "label": {
       "connectionType": "Type de connexion :"

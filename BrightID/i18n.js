@@ -7,9 +7,10 @@ import * as RNLocalize from 'react-native-localize';
  * For each supported language, import the corresponding language file.
  * Consumed by i18next.
  */
-import * as englishTranslation from './translations/english.json';
-import * as frenchTranslation from './translations/french.json';
-import * as germanTranslation from './translations/german.json';
+import * as englishTranslation from './locales/en/translation.json';
+import * as frenchTranslation from './locales/fr/translation.json';
+import * as germanTranslation from './locales/de/translation.json';
+import * as spanishTranslation from './locales/es/translation.json';
 
 /**
  * For each supported language other than English, import the corresponding moment locale
@@ -17,11 +18,7 @@ import * as germanTranslation from './translations/german.json';
  */
 import 'moment/locale/fr';
 import 'moment/locale/de';
-
-/**
- * RNLocalize : Detection of user locale preference and formats (currency, dates, reading direction, ...)
- * i18next : Execution of the translations through the app given specified language preference
- */
+import 'moment/locale/es';
 
 const translations = {
   de: {
@@ -32,6 +29,9 @@ const translations = {
   },
   fr: {
     translation: frenchTranslation,
+  },
+  es: {
+    translation: spanishTranslation,
   },
 };
 
@@ -49,14 +49,16 @@ const { languageTag } =
  */
 moment.locale(languageTag);
 
-i18n.use(initReactI18next).init({
-  resources: translations,
-  lng: languageTag,
-  fallbackLng: 'en',
-  keySeparator: false,
-  interpolation: {
-    escapeValue: false,
-  },
-});
+i18n
+  .use(initReactI18next) // bind react-i18next to the instance
+  .init({
+    resources: translations,
+    lng: languageTag,
+    fallbackLng: 'en',
+    returnEmptyString: false,
+    interpolation: {
+      escapeValue: false,
+    },
+  });
 
 export default i18n;

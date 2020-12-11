@@ -122,15 +122,14 @@ export const checkTasks = () => {
     for (const task of pendingTasks) {
       try {
         if (UserTasks[task.id].checkFn(state)) {
-          const title = i18next.t(`achievements.${task.id}.title`);
-          console.log(`Task '${title}' completed."`);
+          console.log(`Task '${UserTasks[task.id].title}' completed.`);
           dispatch(completeTask(task.id));
           dispatch(
             setActiveNotification({
               type: MISC_TYPE,
               title: i18next.t('achievements.notification.title'),
               message: i18next.t('achievements.notification.message', {
-                title,
+                title: UserTasks[task.id].title,
               }),
               navigationTarget: null,
               icon: 'Certificate',

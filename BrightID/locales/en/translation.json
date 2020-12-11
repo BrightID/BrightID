@@ -56,8 +56,8 @@
         "invalidContext": "Failed",
         "linkApp": "Link App?",
         "linkFailure": "Failed",
-        "linkSuccess": "Success",
-        "linkingFailed": "App linking failed"
+        "linkingFailed": "App linking failed",
+        "linkSuccess": "Success"
       }
     },
     "tag": {
@@ -76,9 +76,7 @@
     "alert": {
       "text": {
         "backupSuccess": "Backup completed successfully!",
-        "needThreeTrusted": "You need at least three trusted connections for backup.",
-        "passwordConfirmNoMatch": "Password and confirm password does not match.",
-        "passwordTooShort": "Your password must be at least 8 characters long."
+        "needThreeTrusted": "You need at least three trusted connections for backup."
       }
     },
     "button": {
@@ -87,7 +85,7 @@
     },
     "header": {
       "backup": "Backup",
-      "trustedConnections": "Trusted Connections"
+      "trustedConnections": ""
     },
     "placeholder": {
       "confirmPassword": "Confirm Password"
@@ -101,7 +99,6 @@
   "common": {
     "accessibilityLabel": {
       "addPhoto": "add photo",
-      "editName": "edit name",
       "editPhoto": "edit photo",
       "profilePhoto": "profile photo",
       "userPhoto": "user photo"
@@ -143,9 +140,6 @@
       "ok": "Ok",
       "title": "Permission to use camera"
     },
-    "language": {
-      "and": "and"
-    },
     "photoActionSheet": {
       "choosePhoto": "Choose From Library",
       "takePhoto": "Take Photo",
@@ -174,7 +168,7 @@
       "reportSubmit": "Submit"
     },
     "header": {
-      "connectionDetails": "Connection Details"
+      "connectionDetails": ""
     },
     "label": {
       "connectionLevel": "Connection Level",
@@ -210,7 +204,7 @@
       "updateConnection": "Update connection"
     },
     "header": {
-      "connections": "Connections"
+      "connections": ""
     },
     "label": {
       "currentConnectionLevel": "Current connection level",
@@ -233,19 +227,6 @@
     "text": {
       "alreadyConnectedWith": "You already connected with {{name}}",
       "noConnections": "No connections"
-    }
-  },
-  "connectionsSearch": {
-    "button": {
-      "save": "Save",
-      "sortByDate": "Sort by date added",
-      "sortByName": "Sort by name"
-    },
-    "header": {
-      "sorting": "Sorting"
-    },
-    "text": {
-      "chooseSortMethod": "Choose one of the methods below"
     }
   },
   "contact": {
@@ -330,7 +311,6 @@
       "text": {
         "addAdmin": "Are you sure you want to make {{name}} an admin for this group?",
         "dismissMember": "Are you sure you want to dismiss {{name}} from this group?",
-        "errorAddAdmin": "Error making {{name}} admin for group",
         "inviteSuccess": "You invited {{name}} successfully to the group",
         "leaveGroup": "Are you sure you want to leave this group?"
       },
@@ -353,7 +333,6 @@
       "leaveGroup": "Leave group"
     },
     "header": {
-      "groups": "Groups",
       "inviteList": "Invite List",
       "newGroup": "New Group"
     },
@@ -366,10 +345,6 @@
       "cancel": "Cancel",
       "dismissMember": "Dismiss from group"
     },
-    "state": {
-      "creatingGroup": "creating the group",
-      "uploadingGroupPhoto": "uploading group photo"
-    },
     "tag": {
       "primaryGroup": "Primary Group"
     },
@@ -379,10 +354,6 @@
       "noGroupsMatchSearch": "No group matches your search",
       "noMembers": "No known members, invite some...",
       "waitingForMembers": "Waiting for {{list}} to join"
-    },
-    "title": {
-      "groups": "Groups",
-      "newGroup": "New Group"
     }
   },
   "home": {
@@ -423,7 +394,7 @@
       "text": {
         "failureAcceptGroupInvite": "Failed to join the group",
         "rejectGroupInvite": "Are you sure you want to reject joining this group?",
-        "successAcceptGroupInvite": "You joined {{groupName}}"
+        "successGroupInvite": ""
       },
       "title": {
         "failureRejectGroupInvite": "Failed to reject the invite",
@@ -478,7 +449,6 @@
     },
     "text": {
       "alreadyRated": "You already rated this connection",
-      "errorConnecting": "Error while connecting. Please try to reconnect.",
       "errorExpired": "The connection expired. Please try to reconnect.",
       "errorMyself": "You can not connect to yourself.",
       "errorUnhandled": "Unhandled connection state"
@@ -496,14 +466,8 @@
       "reported": "Reported",
       "suspicious": "Suspicious"
     },
-    "tag": {
-      "createdAt": "Created {{date}}",
-      "newUser": "New user"
-    },
     "text": {
-      "errorExpired": "The QRCode used to connect with {{name}} has expired... please try connecting again.",
       "errorGeneric": "Error while connecting. Please try to reconnect.",
-      "errorMyself": "OOPS!!! This is you...",
       "rating": "Your answer will help us prevent attacks"
     },
     "title": {
@@ -549,10 +513,6 @@
   },
   "qrcode": {
     "alert": {
-      "connectGroup": "Make a group connection with {{name}} on BrightID: {{link}}",
-      "connectSingle": "Connect with {{name}} on BrightID: {{link}}",
-      "shareLinkGroup": "Share this link",
-      "shareLinkSingle": "Share this link with one friend",
       "text": {
         "codeGroup": "This QR code is designed for many people to connect simultaneously.",
         "codeSingle": "This QR code can be used to connect with a single user before it expires."
@@ -569,7 +529,8 @@
       "showCode": "Show your QR code"
     },
     "header": {
-      "connections": "{{count}} / 30 Connections"
+      "connections": "{{count}} / 30 Connections",
+      "connections_plural": ""
     },
     "label": {
       "connectionType": "Connection Type:"

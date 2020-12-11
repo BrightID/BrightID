@@ -11,19 +11,19 @@ import React from 'react';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { BLACK, BLUE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { useTranslation } from 'react-i18next';
 import { TaskState } from './TaskState';
 
 type TaskCardProps = {
   id: string,
+  title: string,
+  description: string,
   fulfilled: boolean,
   url: ?string,
   onClick: ?() => any,
 };
 
 function TaskCard(props: TaskCardProps) {
-  const { id, fulfilled, url, onClick } = props;
-  const { t } = useTranslation();
+  const { title, description, fulfilled, url, onClick } = props;
 
   const desc = url ? (
     <TouchableOpacity
@@ -31,20 +31,16 @@ function TaskCard(props: TaskCardProps) {
         Linking.openURL(url);
       }}
     >
-      <Text style={styles.linkifiedDescription}>
-        {t(`achievements.${id}.description`)}
-      </Text>
+      <Text style={styles.linkifiedDescription}>{description}</Text>
     </TouchableOpacity>
   ) : (
-    <Text style={styles.description}>
-      {t(`achievements.${id}.description`)}
-    </Text>
+    <Text style={styles.description}>{description}</Text>
   );
 
   return (
     <View style={styles.container}>
       <View style={styles.taskInfo}>
-        <Text style={styles.title}>{t(`achievements.${id}.title`)}</Text>
+        <Text style={styles.title}>{title}</Text>
         {desc}
       </View>
       <TaskState complete={fulfilled} onClick={onClick} />
