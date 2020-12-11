@@ -12,11 +12,13 @@ import {
   SectionList,
 } from 'react-native';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
+import VerifiedSticker from '@/components/Icons/VerifiedSticker';
+import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
 import GroupAvatar from '@/components/Icons/GroupAvatar';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import { photoDirectory } from '@/utils/filesystem';
-import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import {
   ORANGE,
   WHITE,
@@ -106,15 +108,15 @@ function ConnectionScreen(props: Props) {
     } else {
       if (brightIdVerified) {
         return (
-          <Text style={[styles.badge, styles.verified]}>
-            {t('common.tag.statusVerified')}
-          </Text>
+          <View style={styles.badge}>
+            <VerifiedSticker width={100} height={20} />
+          </View>
         );
       } else {
         return (
-          <Text style={[styles.badge, styles.unverified]}>
-            {t('common.tag.statusUnverified')}
-          </Text>
+          <View style={styles.badge}>
+            <UnverifiedSticker width={100} height={19} />
+          </View>
         );
       }
     }
@@ -365,25 +367,8 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
     width: '98%',
   },
-  badges: {},
   badge: {
-    fontFamily: 'Poppins-Medium',
-    borderWidth: 1,
-    borderRadius: 10,
     marginTop: 6,
-    paddingTop: DEVICE_ANDROID ? 2 : 1,
-    paddingBottom: DEVICE_ANDROID ? 0 : 1,
-    paddingLeft: 20,
-    paddingRight: 20,
-    fontSize: fontSize[11],
-  },
-  verified: {
-    color: ORANGE,
-    borderColor: ORANGE,
-  },
-  unverified: {
-    color: DARKER_GREY,
-    borderColor: DARKER_GREY,
   },
   connectionInfo: {
     marginTop: 10,

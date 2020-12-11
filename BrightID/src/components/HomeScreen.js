@@ -17,13 +17,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { setActiveNotification } from '@/actions';
 import { retrieveImage } from '@/utils/filesystem';
-import { WHITE, ORANGE, DARKER_GREY, BLACK, BLUE } from '@/theme/colors';
+import { WHITE, ORANGE, BLACK, BLUE } from '@/theme/colors';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import ChatBox from '@/components/Icons/ChatBox';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
+import VerifiedSticker from '@/components/Icons/VerifiedSticker';
+import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
 import Camera from '@/components/Icons/Camera';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { version as app_version } from '../../package.json';
 
@@ -178,13 +180,13 @@ export const HomeScreen = (props) => {
           </View>
           <View style={styles.profileDivider} />
           {verified ? (
-            <Text style={styles.verified}>
-              {t('common.tag.statusVerified')}
-            </Text>
+            <View style={styles.verified}>
+              <VerifiedSticker width={100} height={20} />
+            </View>
           ) : (
-            <Text style={styles.unverified}>
-              {t('common.tag.statusUnverified')}
-            </Text>
+            <View style={styles.verified}>
+              <UnverifiedSticker width={100} height={19} />
+            </View>
           )}
         </View>
       </View>
@@ -376,30 +378,11 @@ const styles = StyleSheet.create({
     marginTop: 1.5,
   },
   verified: {
-    fontFamily: 'Poppins-Medium',
-    color: ORANGE,
-    borderWidth: 1,
-    borderColor: ORANGE,
-    borderRadius: 10,
     marginTop: 6,
-    paddingTop: DEVICE_ANDROID ? 2 : 1,
-    paddingBottom: DEVICE_ANDROID ? 0 : 1,
-    paddingLeft: 23,
-    paddingRight: 23,
-    fontSize: fontSize[11],
-  },
-  unverified: {
-    fontFamily: 'Poppins-Medium',
-    color: DARKER_GREY,
-    borderWidth: 1,
-    borderColor: DARKER_GREY,
-    borderRadius: 10,
-    marginTop: 6,
-    paddingTop: DEVICE_ANDROID ? 2 : 1,
-    paddingBottom: DEVICE_ANDROID ? 0 : 1,
-    paddingLeft: 20,
-    paddingRight: 20,
-    fontSize: fontSize[11],
+    // paddingTop: DEVICE_ANDROID ? 2 : 1,
+    // paddingBottom: DEVICE_ANDROID ? 0 : 1,
+    // paddingLeft: 23,
+    // paddingRight: 23,
   },
   countsCard: {
     backgroundColor: WHITE,
