@@ -9,7 +9,7 @@ import {
   Linking,
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import { DARK_ORANGE } from '@/theme/colors';
+import { DARK_ORANGE, BLUE, WHITE, BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { useHeaderHeight } from '@react-navigation/stack';
@@ -86,7 +86,7 @@ export const ContactUsScreen = function () {
           <SocialItem
             name="github"
             icon="github"
-            color="#000"
+            color={BLACK}
             url="https://github.com/brightid"
           />
           <KeybaseItem />
@@ -128,7 +128,7 @@ export const ContactUsScreen = function () {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   link: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[14],
-    color: '#2185D0',
+    color: BLUE,
   },
 });
 

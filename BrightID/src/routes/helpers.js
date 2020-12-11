@@ -9,7 +9,7 @@ import BackArrow from '@/components/Icons/BackArrow';
 export const headerTitleStyle = {
   fontFamily: 'Poppins-Bold',
   fontSize: fontSize[20],
-  color: '#fff',
+  color: WHITE,
 };
 
 export const headerOptions = {
@@ -22,7 +22,7 @@ export const headerOptions = {
     },
     elevation: 0,
   },
-  headerTintColor: '#fff',
+  headerTintColor: WHITE,
   headerTitleAlign: 'left',
   headerBackTitleVisible: false,
   headerBackImage: () => (

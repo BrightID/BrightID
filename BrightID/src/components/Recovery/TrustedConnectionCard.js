@@ -10,6 +10,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { addTrustedConnection, removeTrustedConnection } from '@/actions/index';
 import store from '@/store';
 import { DEVICE_TYPE } from '@/utils/deviceConstants';
+import { DARK_GREY, GREEN, BLACK, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 
 class TrustedConnectionCard extends React.PureComponent<Props> {
@@ -73,7 +74,7 @@ class TrustedConnectionCard extends React.PureComponent<Props> {
           <AntDesign
             size={30.4}
             name={this.selected() ? 'checkcircle' : 'checkcircleo'}
-            color={this.selected() ? '#28a84a' : '#000'}
+            color={this.selected() ? GREEN : BLACK}
           />
         </TouchableOpacity>
       </View>
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     height: DEVICE_TYPE === 'large' ? 94 : 80,
     marginBottom: DEVICE_TYPE === 'large' ? 11.8 : 6,
     shadowColor: 'rgba(0,0,0,0.32)',
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
   connectedText: {
     fontFamily: 'ApexNew-Book',
     fontSize: fontSize[12],
-    color: '#aba9a9',
+    color: DARK_GREY,
     fontStyle: 'italic',
   },
   moreIcon: {

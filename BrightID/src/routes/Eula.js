@@ -3,16 +3,17 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import Eula from '@/components/OnboardingScreens/Eula';
 import { fontSize } from '@/theme/fonts';
+import { BLACK } from '@/theme/colors';
 
 export const headerTitleStyle = {
   fontFamily: 'Poppins-Medium',
   fontSize: fontSize[20],
-  color: '#000',
+  color: BLACK,
 };
 
 export const headerOptions = {
   headerTitleStyle,
-  headerTintColor: '#000',
+  headerTintColor: BLACK,
   headerTitleAlign: 'left',
   headerBackTitleVisible: false,
 };

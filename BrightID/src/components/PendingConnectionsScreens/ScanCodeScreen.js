@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { ORANGE, WHITE, LIGHT_BLACK, GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import qricon from '@/static/qr_icon_white.svg';
 import {
@@ -31,7 +32,7 @@ import { selectAlUnconfirmedConnectionsByChannelIds } from '@/components/Pending
 import { decodeChannelQrString } from '@/utils/channels';
 import { joinChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
-import { ORANGE } from '@/utils/constants';
+
 import { RNCamera } from './RNCameraProvider';
 
 /**
@@ -52,7 +53,7 @@ function validQrString(qrString: string) {
 
 const NotAuthorizedView = () => (
   <View style={styles.cameraPreview}>
-    <Text style={{ fontFamily: 'Poppins-Medium', color: '#aaa' }}>
+    <Text style={{ fontFamily: 'Poppins-Medium', color: GREY }}>
       Camera not Authorized
     </Text>
   </View>
@@ -266,7 +267,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'column',
@@ -285,7 +286,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
     textAlign: 'center',
-    color: '#4a4a4a',
+    color: LIGHT_BLACK,
   },
   cameraContainer: {
     flexGrow: 1,
@@ -320,7 +321,7 @@ const styles = StyleSheet.create({
   showQrText: {
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[14],
-    color: '#fff',
+    color: WHITE,
     marginLeft: 10,
   },
   cameraIcon: {
@@ -332,7 +333,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: DEVICE_LARGE ? 42 : 36,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     borderRadius: 60,
     width: DEVICE_LARGE ? 240 : 200,
     marginBottom: 36,
@@ -352,7 +353,7 @@ const styles = StyleSheet.create({
   waitingText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
-    color: '#333',
+    color: LIGHT_BLACK,
   },
   downloadingDataContainer: {
     width: '100%',

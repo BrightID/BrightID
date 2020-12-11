@@ -8,7 +8,7 @@ import {
   Easing,
 } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { GREY, ORANGE, WHITE } from '@/theme/colors';
+import { DARK_GREY, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
 /**
@@ -59,7 +59,7 @@ const ChannelSwitch = ({ value, onValueChange, testID }) => {
           {
             backgroundColor: backgroundAnim.interpolate({
               inputRange: [0, X_TRANSFORM],
-              outputRange: [GREY, ORANGE],
+              outputRange: [DARK_GREY, ORANGE],
             }),
           },
         ]}
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: ORANGE,
-    borderColor: GREY,
+    borderColor: DARK_GREY,
   },
   toggle: {
     position: 'absolute',

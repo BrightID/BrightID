@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { INVITE_ACTIVE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { BLACK } from '@/theme/colors';
 import { createSelector } from '@reduxjs/toolkit';
 import { createStackNavigator } from '@react-navigation/stack';
 import Bell from '@/components/Icons/NotificationBell';
@@ -64,7 +65,7 @@ const NotificationBell = () => {
         resetNotifications();
       }}
     >
-      <Bell size={DEVICE_LARGE ? 28 : 23} color="#000" alert={displayBadge} />
+      <Bell size={DEVICE_LARGE ? 28 : 23} color={BLACK} alert={displayBadge} />
     </TouchableOpacity>
   );
 };
@@ -124,13 +125,12 @@ const homeScreenOptions = {
   headerTransparent: true,
 };
 
-
 /** SCREENS */
 
 const Stack = createStackNavigator();
 
 const Home = () => {
-  /* /!\ Moved 'RecoveringConnection' options to the component in order to access to useTranslation() */ 
+  /* /!\ Moved 'RecoveringConnection' options to the component in order to access to useTranslation() */
   const { t } = useTranslation();
   return (
     <>
@@ -144,7 +144,7 @@ const Home = () => {
         component={RecoveringConnectionScreen}
         options={{
           ...headerOptions,
-          title: t('restore.header.accountRecovery')
+          title: t('restore.header.accountRecovery'),
         }}
       />
     </>

@@ -16,7 +16,7 @@ import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { withTranslation } from 'react-i18next';
-import { ORANGE } from '@/theme/colors';
+import { ORANGE, LIGHT_BLACK, BLUE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import backupApi from '../../api/backupService';
@@ -102,7 +102,7 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
         <Material
           size={24}
           name="content-copy"
-          color="#333"
+          color={LIGHT_BLACK}
           style={{ width: 24, height: 24 }}
         />
         <Text style={styles.copyText}> {t('common.button.copy')}</Text>
@@ -117,7 +117,7 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
         isVisible={true}
         size={47}
         type="9CubeGrid"
-        color="#4990e2"
+        color={BLUE}
       />
     </View>
   );
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'column',
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     letterSpacing: 0,
     textAlign: 'center',
-    color: '#4a4a4a',
+    color: LIGHT_BLACK,
     marginLeft: 4,
     marginRight: 4,
   },
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     minWidth: 100,
   },
   copyText: {
-    color: '#333',
+    color: LIGHT_BLACK,
     fontFamily: 'ApexNew-Book',
   },
 });

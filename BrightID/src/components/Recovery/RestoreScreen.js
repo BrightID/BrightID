@@ -14,7 +14,7 @@ import Spinner from 'react-native-spinkit';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import emitter from '@/emitter';
-import { ORANGE } from '@/theme/colors';
+import { ORANGE, BLUE, WHITE, GREY, LIGHT_BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_OS } from '@/utils/deviceConstants';
 import { recoverData } from './helpers';
@@ -136,7 +136,7 @@ class RestoreScreen extends React.Component<Props, State> {
             })}
           </Text>
         )}
-        <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
+        <Spinner isVisible={true} size={97} type="Wave" color={BLUE} />
       </View>
     );
   };
@@ -157,7 +157,7 @@ class RestoreScreen extends React.Component<Props, State> {
               onChangeText={(pass) => this.setState({ pass })}
               value={pass}
               placeholder={t('common.placeholder.password')}
-              placeholderTextColor="#9e9e9e"
+              placeholderTextColor={GREY}
               style={styles.textInput}
               autoCorrect={false}
               textContentType="password"
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -208,18 +208,18 @@ const styles = StyleSheet.create({
   textInfo: {
     fontFamily: 'ApexNew-Book',
     fontSize: fontSize[18],
-    color: '#333',
+    color: LIGHT_BLACK,
     margin: 18,
   },
   textInput: {
     fontFamily: 'ApexNew-Light',
     fontSize: fontSize[30],
-    color: '#333',
+    color: LIGHT_BLACK,
     fontWeight: '300',
     fontStyle: 'normal',
     letterSpacing: 0,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#9e9e9e',
+    borderBottomColor: GREY,
     marginTop: 22,
     width: 275,
     textAlign: 'left',
@@ -227,13 +227,13 @@ const styles = StyleSheet.create({
   },
   buttonInfoText: {
     fontFamily: 'ApexNew-Book',
-    color: '#9e9e9e',
+    color: GREY,
     fontSize: fontSize[14],
     width: 298,
     textAlign: 'center',
   },
   startRestoreButton: {
-    backgroundColor: '#428BE5',
+    backgroundColor: BLUE,
     width: 300,
     justifyContent: 'center',
     alignItems: 'center',
@@ -243,14 +243,14 @@ const styles = StyleSheet.create({
   },
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',
-    color: '#fff',
+    color: WHITE,
     fontWeight: '600',
     fontSize: fontSize[18],
   },
   button: {
     width: 300,
     borderWidth: 1,
-    borderColor: '#4990e2',
+    borderColor: BLUE,
     paddingTop: 13,
     paddingBottom: 12,
     alignItems: 'center',

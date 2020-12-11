@@ -7,6 +7,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
+import { GREY, WHITE } from '@/theme/colors';
 import { useTranslation } from 'react-i18next';
 import TaskCardController from './TaskCardController';
 import { TasksProgress } from './TasksProgress';
@@ -21,7 +22,7 @@ const FlatListItemSeparator = () => {
     <View
       style={{
         height: StyleSheet.hairlineWidth,
-        backgroundColor: '#C4C4C4',
+        backgroundColor: GREY,
       }}
     />
   );
@@ -79,7 +80,7 @@ export const TasksScreen = function () {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     borderTopLeftRadius: DEVICE_LARGE ? 50 : 40,
     paddingLeft: 42,
     paddingRight: 18,

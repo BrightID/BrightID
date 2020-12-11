@@ -5,6 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { connection_levels } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { DARKER_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import {
   connectionLevelColors,
@@ -69,6 +70,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     textAlign: 'center',
     fontSize: fontSize[12],
-    color: '#827F7F',
+    color: DARKER_GREY,
   },
 });

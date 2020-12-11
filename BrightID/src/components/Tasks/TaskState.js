@@ -4,6 +4,7 @@ import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { GREY, GREEN } from '@/theme/colors';
 
 type TaskStateProps = {
   complete: boolean,
@@ -19,7 +20,7 @@ export const TaskState = ({ complete, onClick }: TaskStateProps) => {
         name={
           complete ? 'checkmark-circle-outline' : 'radio-button-off-outline'
         }
-        color={complete ? '#5DEC9A' : '#707070'}
+        color={complete ? GREEN : GREY}
       />
     </TouchableOpacity>
   );
