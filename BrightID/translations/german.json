@@ -12,12 +12,10 @@
   "home.chatActionSheet.discord": "BrightID Discord",
   "home.accessibilityLabel.connect": "verbinden",
 
-
   "onboarding.text.intro": "<text>BrightID uses the people you know</text><text>to enforce one-account-per-person</text><text>for important applications like</text><text>voting and universal basic income.</text>",
   "onboarding.label.maintainPrivacy": "Schutz der Privatsphäre",
   "onboarding.text.privacy": "<text>Zeige dass du ein einzigartiger Mensch bist, </text><text>ohne Preisgabe persönlicher Daten.</text>",
   "onboarding.button.getStarted": "Los Gehts",
-
 
   "signup.header.title": "Anmelden",
   "signup.button.addPhoto": "Foto erstellen",
@@ -31,10 +29,10 @@
   "signup.alert.nameTooShort": "Dein Name muss mindestens 2 Zeichen lang sein",
   "signup.alert.photoMissing": "Bitte gib ein Foto an",
 
-
   "recovery.header.title": "Recovery Code",
   "recovery.text.askTrustedConnections": "Lass deine vertrauenswürdigen Verbindungen diesen Code scannen.",
 
+  "eula.header.title": "Lizenzvereinbarung",
 
   "qrcode.header.connections": "{{count}} / 30 Verbindungen",
   "qrcode.text.scanCode": "<text>Hey {{name}}, scanne einen Code und</text><text>mach eine neue Verbindung</text>",
@@ -62,7 +60,6 @@
   "qrcode.text.pendingConnections_plural": "Du hast {{count}} wartende Verbindungen",
   "qrcode.text.confirmConnections": "Verbindung bestätigen",
 
-
   "pendingConnections.tag.newUser": "Neuer Nutzer",
   "pendingConnections.label.connections": "Verbindungen",
   "pendingConnections.label.groups": "Gruppen",
@@ -81,7 +78,6 @@
   "pendingConnection.text.errorMyself": "Du kannst dich nicht mit dir selbst verbinden.",
   "pendingConnection.text.errorUnhandled": "Unhandled connection state",
 
-
   "connections.text.noConnections": "Keine Verbindungen",
   "connections.placeholder.searchConnections": "Verbindung suchen",
   "connections.flagActionSheet.infoFlagImpact": "Note that reporting {{name}} will negatively affect their BrightID verification, and the report might be shown to other users.",
@@ -98,13 +94,11 @@
   "connections.button.reportConnection": "Kontakt melden",
   "connections.button.updateConnection": "Verbindung erneuern",
 
-
   "connectionsSearch.header.sorting": "Sortierung",
   "connectionsSearch.button.save": "Speichern",
   "connectionsSearch.text.chooseSortMethod": "Wähle eine Sortierreihenfolge",
   "connectionsSearch.button.sortByDate": "Sortiere nach Verbindungsdatum",
   "connectionsSearch.button.sortByName": "Sortiere nach Name",
-
 
   "groups.title.groups": "Gruppen",
   "groups.title.newGroup": "Neue Gruppe",
@@ -119,7 +113,7 @@
   "groups.text.noMembers": "Keine bekannten Mitglieder - Lade jemanden ein",
   "groups.text.noEligibleConnection": "Keine deiner Verbindungen kann dieser Gruppe beitreten. Versuche es später noch einmal...",
   "groups.alert.title.inviteSuccess": "Einladung abgeschickt",
-  "groups.alert.text.inviteSuccess":"Du hast {{name}} in die Gruppe eingeladen",
+  "groups.alert.text.inviteSuccess": "Du hast {{name}} in die Gruppe eingeladen",
   "groups.alert.title.leaveGroup": "Gruppe verlassen",
   "groups.alert.text.leaveGroup": "Willst du die Gruppe wirklich verlassen?",
   "groups.alert.title.errorLeaveGroup": "Verlassen der Gruppe fehlgeschlagen",
@@ -131,7 +125,6 @@
   "groups.alert.text.errorAddAdmin": "Administrator {{name}} hinzufügen fehlgeschlagen",
   "groups.accessibilityLabel.groupsLogo": "Gruppenlogo",
 
-
   "createGroup.placeholder.groupName": "Wie ist der Gruppenname?",
   "createGroup.button.next": "Weiter",
   "createGroup.label.cofounders": "Gründungsmitglieder",
@@ -141,7 +134,6 @@
   "createGroup.alert.title.formIncomplete": "Unvollständige Informationen",
   "createGroup.alert.text.nameMissing": "Bitte lege einen Namen für die Gruppe fest",
   "createGroup.alert.text.nameTooShort": "Der Gruppenname muss aus mindestens zwei Buchstaben bestehen",
-
 
   "apps.text.noApps": "Keine Apps",
   "apps.text.pendingLink": "Verknüpfe deinen {{context}} Account mit deiner BrightID...",
@@ -154,7 +146,6 @@
   "apps.alert.text.invalidContext": "{{context}} ist kein korrekter Kontext!",
   "apps.alert.text.checkWebsite": "Besuche die Website von {{name}} für mehr Informationen!",
   "apps.alert.button.visitWebsite": "Ja",
-
 
   "notifications.tab.connections": "Verbindungen",
   "notifications.tab.groups": "Gruppen",
@@ -173,11 +164,9 @@
   "notifications.alert.text.successAcceptGroupInvite": "Du bist der Gruppe {{groupName}} beigetreten",
   "notifications.alert.text.failureAcceptGroupInvite": "Beitreten zur Gruppe fehlgeschlagen",
 
-
   "notificationBar.title.pendingConnection": "Verbindung bestätigen",
   "notificationBar.text.pendingConnections": "Du hast {{count}} Verbindungsanfrage",
   "notificationBar.text.pendingConnections_plural": "Du hast {{count}} Verbindungsanfragen",
-
 
   "backup.text.chooseTrustedConnections": "Wähle mindestens drei vertrauenswürdige Verbindungen um deine BrightID zu sichern.",
   "backup.text.noConnections": "Keine Verbindungen",
@@ -191,7 +180,6 @@
   "backup.alert.text.backupSuccess": "Sicherung erfolgreich erstellt!",
   "backup.alert.text.passwordConfirmNoMatch": "Passwörter stimmen nicht überein",
   "backup.alert.text.passwordTooShort": "Mindestlänge des Passwortes beträgt 8 Zeichen",
-
 
   "profile.label.name": "Name",
   "profile.label.socialMediaLink": "Social Media Verknüpfung",
