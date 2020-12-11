@@ -11,7 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { BlurView } from '@react-native-community/blur';
 import { connection_levels } from '@/utils/constants';
-import { WHITE, GREEN } from '@/theme/colors';
+import { BLACK, WHITE, GREEN } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from 'react-redux';
@@ -69,7 +69,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
         style={styles.blurView}
         blurType="dark"
         blurAmount={5}
-        reducedTransparencyFallbackColor="black"
+        reducedTransparencyFallbackColor={BLACK}
       />
       <TouchableWithoutFeedback onPress={navigation.goBack}>
         <View style={styles.blurView} />

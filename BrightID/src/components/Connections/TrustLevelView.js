@@ -10,7 +10,7 @@ import {
   connectionLevelStrings,
 } from '@/utils/connectionLevelStrings';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { BLACK } from '@/theme/colors';
+import { BLUE, BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 
 type props = {
@@ -50,7 +50,7 @@ function TrustLevelView({ level, connectionId }: props) {
         testID="EditConnectionLevelBtn"
         onPress={setLevel}
       >
-        <Material name="edit" size={DEVICE_LARGE ? 22 : 20} color="#2185D0" />
+        <Material name="edit" size={DEVICE_LARGE ? 22 : 20} color={BLUE} />
       </TouchableOpacity>
     </View>
   );

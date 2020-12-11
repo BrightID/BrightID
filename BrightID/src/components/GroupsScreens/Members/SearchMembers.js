@@ -18,7 +18,7 @@ class SearchMembers extends React.Component<Props> {
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.searchIcon}>
-          <Octicons size={26} name="search" color="#333" />
+          <Octicons size={26} name="search" color={LIGHT_BLACK} />
         </TouchableOpacity>
         <TextInput
           onChangeText={(value) => this.props.dispatch(setSearchParam(value))}
@@ -28,7 +28,7 @@ class SearchMembers extends React.Component<Props> {
           autoCorrect={false}
           textContentType="name"
           underlineColorAndroid="transparent"
-          placeholderTextColor="#aaa"
+          placeholderTextColor={GREY}
         />
         <TouchableOpacity
           onPress={() => {
@@ -37,7 +37,7 @@ class SearchMembers extends React.Component<Props> {
           }}
           style={styles.optionsIcon}
         >
-          <Ionicon size={30} name="ios-options" color="#333" />
+          <Ionicon size={30} name="ios-options" color={LIGHT_BLACK} />
         </TouchableOpacity>
       </View>
     );

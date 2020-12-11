@@ -124,7 +124,7 @@ const SelectMediaModal = ({ route, navigation }) => {
         style={styles.blurView}
         blurType="dark"
         blurAmount={5}
-        reducedTransparencyFallbackColor="black"
+        reducedTransparencyFallbackColor={BLACK}
       />
       <KeyboardAvoidingView style={styles.modalContainer}>
         {page === 0 ? (
@@ -154,7 +154,7 @@ const SelectMediaModal = ({ route, navigation }) => {
                 keyboardTypes[socialMediaList[selectedId].shareType]
               }
               placeholder={`add ${socialMediaList[selectedId].shareType}`}
-              placeholderTextColor="#707070"
+              placeholderTextColor={DARKER_GREY}
               textContentType={
                 textContentTypes[socialMediaList[selectedId].shareType]
               }

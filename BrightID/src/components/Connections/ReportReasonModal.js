@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { report_reasons } from '@/utils/constants';
-import { ORANGE, WHITE, BLACK, DARKER_GREY, GREEN } from '@/theme/colors';
+import { ORANGE, WHITE, BLUE, BLACK, DARKER_GREY, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { reportConnection } from './models/reportConnection';
 
@@ -90,7 +90,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
         style={styles.blurView}
         blurType="dark"
         blurAmount={5}
-        reducedTransparencyFallbackColor="black"
+        reducedTransparencyFallbackColor={BLACK}
       />
       <View style={styles.modalContainer}>
         <View style={styles.header}>
@@ -101,7 +101,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
           </Text>
         </View>
         <View style={styles.message}>
-          <Material name="information" size={26} color="#2185D0" />
+          <Material name="information" size={26} color={BLUE} />
           <Text style={styles.messageText}>
             {t('connectionDetails.text.reportImpact', {
               name: connection.name,

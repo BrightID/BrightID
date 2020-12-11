@@ -18,7 +18,14 @@ import moment from 'moment';
 import default_group from '@/static/default_group.svg';
 import { photoDirectory } from '@/utils/filesystem';
 import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
-import { ORANGE, WHITE, BLACK, DARKER_GREY } from '@/theme/colors';
+import {
+  ORANGE,
+  WHITE,
+  BLACK,
+  DARKER_GREY,
+  DARK_BLUE,
+  LIGHT_GREY,
+} from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import Chevron from '../Icons/Chevron';
 import TrustLevelView from './TrustLevelView';
@@ -96,7 +103,7 @@ function ConnectionScreen(props: Props) {
 
   const renderBadge = () => {
     if (loading) {
-      return <ActivityIndicator size="small" color="#707070" animating />;
+      return <ActivityIndicator size="small" color={DARKER_GREY} animating />;
     } else {
       if (brightIdVerified) {
         return (
@@ -253,7 +260,7 @@ function ConnectionScreen(props: Props) {
             <Chevron
               width={DEVICE_LARGE ? 18 : 16}
               height={DEVICE_LARGE ? 18 : 16}
-              color={section.numEntries ? '#0064AE' : '#C4C4C4'}
+              color={section.numEntries ? DARK_BLUE : LIGHT_GREY}
               direction={collapsed ? 'down' : 'up'}
             />
           </TouchableOpacity>

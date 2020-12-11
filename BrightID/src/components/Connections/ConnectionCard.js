@@ -11,7 +11,13 @@ import { photoDirectory } from '@/utils/filesystem';
 import { staleConnection, deleteConnection } from '@/actions';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
-import { WHITE, LIGHT_ORANGE, DARK_ORANGE, RED } from '@/theme/colors';
+import {
+  WHITE,
+  LIGHT_ORANGE,
+  LIGHT_BLACK,
+  DARK_ORANGE,
+  RED,
+} from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
@@ -187,7 +193,7 @@ const ConnectionCard = (props) => {
               cancelButtonIndex: removeOptions.length - 1,
               destructiveButtonIndex: 0,
               title: t('connections.removeActionSheet.title'),
-              message: t('connections.removeActionSheet.info', { name: name }),
+              message: t('connections.removeActionSheet.info', { name }),
               showSeparators: true,
               textStyle: {
                 textAlign: 'center',
@@ -200,7 +206,11 @@ const ConnectionCard = (props) => {
           );
         }}
       >
-        <Material color="#333" name="close" size={DEVICE_LARGE ? 22 : 18} />
+        <Material
+          color={LIGHT_BLACK}
+          name="close"
+          size={DEVICE_LARGE ? 22 : 18}
+        />
       </TouchableOpacity>
     ) : (
       <View />

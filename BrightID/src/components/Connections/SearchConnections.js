@@ -52,7 +52,7 @@ class SearchConnections extends React.Component<Props & LocalProps> {
           autoCorrect={false}
           textContentType="none"
           underlineColorAndroid="transparent"
-          placeholderTextColor="#aaa"
+          placeholderTextColor={GREY}
         />
         {sortable && (
           <TouchableOpacity
@@ -61,7 +61,7 @@ class SearchConnections extends React.Component<Props & LocalProps> {
             }}
             style={styles.optionsIcon}
           >
-            <Ionicon size={22} name="ios-options" color="#333" />
+            <Ionicon size={22} name="ios-options" color={LIGHT_BLACK} />
           </TouchableOpacity>
         )}
       </Animated.View>

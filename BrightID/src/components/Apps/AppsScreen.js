@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import EmptyList from '@/components/Helpers/EmptyList';
 import Spinner from 'react-native-spinkit';
-import { ORANGE, LIGHT_BLUE, WHITE } from '@/theme/colors';
+import { ORANGE, BLUE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { any, find, propEq } from 'ramda';
 import { fetchApps } from '@/actions';
@@ -97,7 +97,7 @@ export const AppsScreen = () => {
           isVisible={waiting}
           size={DEVICE_LARGE ? 48 : 42}
           type="Wave"
-          color="#4a90e2"
+          color={BLUE}
         />
       </View>
     ) : (
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     textAlign: 'center',
     fontSize: fontSize[16],
-    color: LIGHT_BLUE,
+    color: BLUE,
   },
   linkingContainer: {
     flexDirection: 'row',

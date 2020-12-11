@@ -144,7 +144,7 @@ const EditName = ({ nextName, setNextName }) => {
         onChangeText={setNextName}
         textContentType="name"
         placeholder={t('profile.placeholder.name')}
-        placeholderTextColor="#707070"
+        placeholderTextColor={DARKER_GREY}
       />
     </View>
   );
@@ -270,7 +270,7 @@ const SocialMediaLinks = () => {
           <Material
             name="plus-thick"
             size={DEVICE_LARGE ? 18 : 16}
-            color="#2185D0"
+            color={BLUE}
           />
         </TouchableOpacity>
       </View>

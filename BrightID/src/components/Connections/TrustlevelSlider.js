@@ -7,7 +7,7 @@ import i18next from 'i18next';
 import Slider from '@react-native-community/slider';
 import { connection_levels } from '@/utils/constants';
 import { WIDTH, DEVICE_LARGE } from '@/utils/deviceConstants';
-import { BLACK } from '@/theme/colors';
+import { ORANGE, BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import {
   connectionLevelColors,
@@ -87,7 +87,7 @@ const TrustlevelSlider = ({
         maximumTrackTintColor={
           connectionLevelColors[connection_levels.REPORTED]
         }
-        thumbTintColor="orange"
+        thumbTintColor={ORANGE}
         onValueChange={valueChangeHandler}
       />
     </View>

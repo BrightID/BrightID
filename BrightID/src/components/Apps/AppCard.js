@@ -17,7 +17,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { WHITE, DARKER_GREY, BLACK, LIGHT_BLUE, RED } from '@/theme/colors';
+import { WHITE, DARKER_GREY, BLACK, BLUE, RED } from '@/theme/colors';
 import { addLinkedContext, removeLinkedContext } from '@/actions';
 
 /**
@@ -146,7 +146,7 @@ const AppCard = (props) => {
           <Ionicon
             size={DEVICE_LARGE ? 48 : 42}
             name="md-checkmark"
-            color="#4a90e2"
+            color={BLUE}
           />
           <Text testID={`Linked_${id}`} style={styles.linkedMessage}>
             {t('apps.tag.linked')}
@@ -162,7 +162,7 @@ const AppCard = (props) => {
           <Material
             size={DEVICE_LARGE ? 40 : 36}
             name="alert-remove-outline"
-            color="#FF0800"
+            color={RED}
           />
           <Text testID={`Linked_${id}`} style={styles.errorMessage}>
             {t('apps.tag.tryAgain')}
@@ -230,12 +230,12 @@ const styles = StyleSheet.create({
   sponsorshipMessage: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[14],
-    color: LIGHT_BLUE,
+    color: BLUE,
   },
   linkedMessage: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[14],
-    color: LIGHT_BLUE,
+    color: BLUE,
   },
   errorMessage: {
     fontFamily: 'Poppins-Medium',

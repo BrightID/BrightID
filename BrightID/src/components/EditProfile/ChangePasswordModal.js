@@ -20,8 +20,10 @@ import {
   LIGHT_GREY,
   DARKER_GREY,
   WHITE,
+  BLACK,
   LIGHT_BLACK,
   GREEN,
+  GREY,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from 'react-redux';
@@ -75,7 +77,7 @@ const UploadAnimation = () => {
         isVisible={true}
         size={DEVICE_LARGE ? 80 : 65}
         type="Wave"
-        color="#333"
+        color={LIGHT_BLACK}
       />
     </View>
   );
@@ -133,7 +135,7 @@ const ChangePasswordModal = ({ route, navigation }) => {
         style={styles.blurView}
         blurType="dark"
         blurAmount={5}
-        reducedTransparencyFallbackColor="black"
+        reducedTransparencyFallbackColor={BLACK}
       />
       <View style={styles.modalContainer}>
         {backupInProgress ? (
@@ -150,7 +152,7 @@ const ChangePasswordModal = ({ route, navigation }) => {
                 onChangeText={setOldPassword}
                 value={oldPassword}
                 placeholder={password}
-                placeholderTextColor="#9e9e9e"
+                placeholderTextColor={GREY}
                 secureTextEntry={true}
                 style={styles.textInput}
                 textContentType="password"
@@ -165,7 +167,7 @@ const ChangePasswordModal = ({ route, navigation }) => {
                 onChangeText={setNewPassword}
                 value={newPassword}
                 placeholder={t('profile.placeholder.newPassword')}
-                placeholderTextColor="#9e9e9e"
+                placeholderTextColor={GREY}
                 secureTextEntry={true}
                 style={styles.textInput}
                 textContentType="password"
@@ -182,7 +184,7 @@ const ChangePasswordModal = ({ route, navigation }) => {
                 onChangeText={setNewPasswordAgain}
                 value={newPasswordAgain}
                 placeholder={t('profile.placeholder.newPasswordAgain')}
-                placeholderTextColor="#9e9e9e"
+                placeholderTextColor={GREY}
                 secureTextEntry={true}
                 style={styles.textInput}
                 textContentType="password"

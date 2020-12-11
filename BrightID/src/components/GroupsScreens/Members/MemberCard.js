@@ -8,7 +8,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { WHITE, BLUE, GREY, RED } from '@/theme/colors';
+import { WHITE, BLUE, GREY, RED, LIGHT_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useNavigation } from '@react-navigation/native';
@@ -172,7 +172,11 @@ function MemberCard(props: MemberCardProps) {
             style={styles.moreIcon}
             onPress={handleActionSheet}
           >
-            <Material name="dots-vertical" size={ICON_SIZE} color="#ccc" />
+            <Material
+              name="dots-vertical"
+              size={ICON_SIZE}
+              color={LIGHT_GREY}
+            />
           </TouchableOpacity>
         )}
       </View>

@@ -138,7 +138,7 @@ function MembersScreen(props: MembersScreenProps) {
               );
             }}
           >
-            <Material name="dots-horizontal" size={32} color="#fff" />
+            <Material name="dots-horizontal" size={32} color={WHITE} />
           </TouchableOpacity>
         ),
       });
