@@ -11,7 +11,8 @@ import {
   View,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import { setEula } from '@/actions';
 import L from './License.json';
@@ -89,14 +90,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     borderBottomLeftRadius: 58,
     borderBottomRightRadius: 58,
-    marginBottom: 10,
+    marginBottom: DEVICE_LARGE ? 22 : 10,
     zIndex: 2,
     overflow: 'hidden',
   },
   orangeBottom: {
     backgroundColor: ORANGE,
     width: '100%',
-    height: 70,
+    height: DEVICE_LARGE ? 100 : 70,
     zIndex: 1,
     position: 'absolute',
     bottom: 0,
@@ -110,18 +111,18 @@ const styles = StyleSheet.create({
   },
   header: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     marginBottom: DEVICE_LARGE ? 14 : 12.5,
   },
   paragraph: {
     fontFamily: 'Poppins-Regular',
-    fontSize: DEVICE_LARGE ? 12 : 11,
+    fontSize: fontSize[12],
   },
   link: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 11,
+    fontSize: fontSize[12],
     color: '#2185D0',
-    marginBottom: DEVICE_LARGE ? 12 : 11,
+    marginBottom: fontSize[12],
   },
   confirmationButtons: {
     position: 'absolute',
@@ -139,7 +140,6 @@ const styles = StyleSheet.create({
   acceptButton: {
     width: '33%',
     height: DEVICE_LARGE ? 32 : 29,
-
     backgroundColor: '#5DEC9A',
     alignItems: 'center',
     justifyContent: 'center',
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   },
   acceptButtonText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 10,
+    fontSize: fontSize[12],
   },
   rejectButton: {
     width: '33%',
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   },
   rejectButtonText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 10,
+    fontSize: fontSize[12],
     color: '#707070',
   },
 });

@@ -2,11 +2,11 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import Eula from '@/components/OnboardingScreens/Eula';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 
 export const headerTitleStyle = {
   fontFamily: 'Poppins-Medium',
-  fontSize: DEVICE_LARGE ? 20 : 17,
+  fontSize: fontSize[20],
   color: '#000',
 };
 
