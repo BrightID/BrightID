@@ -48,9 +48,9 @@ export const setTrustedConnections = async () => {
 };
 
 const hashId = (id: string, password: string) => {
-  const hash = hash(id + password);
-  store.dispatch(setHashedId(hash));
-  return hash;
+  const h = hash(id + password);
+  store.dispatch(setHashedId(h));
+  return h;
 };
 
 export const encryptAndBackup = async (key: string, data: string) => {
@@ -139,74 +139,69 @@ export const backupAppData = async () => {
 };
 
 export const checkChannel = async (channelApi) => {
-  try {
-    let {
-      recoveryData,
-      connections: { connections },
-      groups: { groups }
-    } = store.getState();
-    let { aesKey, sigs } = recoveryData;
-    const channelId = hash(aesKey);
-    let dataIds = await channelApi.list(channelId);
+  let {
+    recoveryData,
+    connections: { connections },
+    groups: { groups }
+  } = store.getState();
+  let { aesKey, sigs } = recoveryData;
+  const channelId = hash(aesKey);
+  let dataIds = await channelApi.list(channelId);
 
-    // process signatures uploaded to the channel
-    const sigDataIds = dataIds.filter(
-      dataId => dataId.startsWith('sig_') &&
-      !sigs[dataId.replace('sig_', '')]
+  // process signatures uploaded to the channel
+  const sigDataIds = dataIds.filter(
+    dataId => dataId.startsWith('sig_') &&
+    !sigs[dataId.replace('sig_', '')]
+  );
+  for (let dataId of sigDataIds) {
+    let signer = dataId.replace('sig_', '');
+    sigs[signer] = await channelApi.download({ channelId, dataId });
+    recoveryData.id = sigs[signer].id;
+    await store.dispatch(setRecoveryData(recoveryData));
+    Alert.alert(
+      i18next.t('common.alert.info'),
+      i18next.t('common.alert.text.trustedSigned')
     );
-    for (let dataId of sigDataIds) {
-      let signer = dataId.replace('sig_', '');
-      sigs[signer] = await channelApi.download({ channelId, dataId });
-      recoveryData.id = sigs[signer].id;
-      Alert.alert(
-        i18next.t('common.alert.info'),
-        i18next.t('common.alert.text.trustedSigned')
-      );
-    }
+  }
 
-    // process connections uploaded to the channel
-    connections = _.keyBy(connections, 'id');
-    const connectionDataIds = dataIds.filter( dataId =>
-      dataId.startsWith('connection_') &&
-      !connections[dataId.replace('connection_', '')] &&
-      (dataId.replace('connection_', '') != recoveryData.id || !recoveryData.name)
-    );
-    for (let dataId of connectionDataIds) {
-      let connectionData = await downloadConnection(dataId, channelApi, aesKey);
-      if (connectionData.id !== recoveryData.id) {
-        await store.dispatch(addConnection(connectionData));
-      } else {
-        recoveryData.name = connectionData.name;
-        recoveryData.photo = connectionData.photo;
-        await store.dispatch(setRecoveryData(recoveryData));
-      }
-    }
-
-    // process groups uploaded to the channel
-    groups = _.keyBy(groups, 'id');
-    const groupDataIds = dataIds.filter( dataId =>
-      dataId.startsWith('group_') &&
-      !groups[dataId.replace('group_', '')]
-    );
-    for (let dataId of groupDataIds) {
-      let groupData = await downloadGroup(dataId, channelApi, aesKey);
-      store.dispatch(createGroup(groupData));
-    }
-
-    // return true if sigs loaded and no new connection/group is comming
-    if (sigDataIds.length || connectionDataIds.length || groupDataIds.length) {
-      recoveryData.updateTimestamp = Date.now();
-      store.dispatch(setRecoveryData(recoveryData));
-      return false;
-    } else if (Object.keys(sigs).length < 2) {
-      return false;
+  // process connections uploaded to the channel
+  connections = _.keyBy(connections, 'id');
+  const connectionDataIds = dataIds.filter( dataId =>
+    dataId.startsWith('connection_') &&
+    !connections[dataId.replace('connection_', '')] &&
+    (dataId.replace('connection_', '') != recoveryData.id || !recoveryData.name)
+  );
+  for (let dataId of connectionDataIds) {
+    let connectionData = await downloadConnection(dataId, channelApi, aesKey);
+    if (connectionData.id !== recoveryData.id) {
+      await store.dispatch(addConnection(connectionData));
     } else {
-      return Date.now() - recoveryData.updateTimestamp > 5000;
+      recoveryData.name = connectionData.name;
+      recoveryData.photo = connectionData.photo;
+      await store.dispatch(setRecoveryData(recoveryData));
     }
+  }
 
-  } catch (err) {
-    console.warn(err);
-    throw err;
+  // process groups uploaded to the channel
+  groups = _.keyBy(groups, 'id');
+  const groupDataIds = dataIds.filter( dataId =>
+    dataId.startsWith('group_') &&
+    !groups[dataId.replace('group_', '')]
+  );
+  for (let dataId of groupDataIds) {
+    let groupData = await downloadGroup(dataId, channelApi, aesKey);
+    store.dispatch(createGroup(groupData));
+  }
+
+  // return true if sigs loaded and no new connection/group is comming
+  if (sigDataIds.length || connectionDataIds.length || groupDataIds.length) {
+    recoveryData.updateTimestamp = Date.now();
+    store.dispatch(setRecoveryData(recoveryData));
+    return false;
+  } else if (Object.keys(sigs).length < 2) {
+    return false;
+  } else {
+    return Date.now() - recoveryData.updateTimestamp > 5000;
   }
 };
 
@@ -371,7 +366,9 @@ export const uploadMutualInfo = async (conn, channelApi, aesKey) => {
     connections[c.id] &&
     !dataIds.includes(`connection_${c.id}`)
   ).map( c => connections[c.id] );
-  mutualConnections.push(user);
+  if (!dataIds.includes(`connection_${user.id}`)) {
+    mutualConnections.push(user);
+  }
 
   let otherSideGroups = (await api.getUserInfo(conn.id)).groups;
   let mutualGroups = otherSideGroups.filter(

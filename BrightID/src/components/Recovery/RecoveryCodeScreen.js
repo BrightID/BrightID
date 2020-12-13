@@ -71,21 +71,35 @@ class RecoveryCodeScreen extends React.Component<Props, State> {
       uploadSigRequest(this.channelApi, recoveryData);
       qrcode.toString(recoveryQrStr(), this.handleQrString);
       this.waitForSigs();
+      console.log('start waiting for sigs', this.checkIntervalId);
     } catch (err) {
       console.warn(err.message);
     }
   }
 
   componentWillUnmount() {
-    console.log('stop waiting for sigs');
+    console.log('stop waiting for sigs', this.checkIntervalId);
     clearInterval(this.checkIntervalId);
   }
 
   waitForSigs = () => {
+    this.checkInProgress = false;
     this.checkIntervalId = setInterval(() => {
+      if (this.checkInProgress) {
+        console.log('checkChannel in progress');
+        return;
+      }
+      console.log('checkChannel started');
+      this.checkInProgress = true;
       checkChannel(this.channelApi)
         .then((ready) => {
+          console.log('checkChannel finished');
+          this.checkInProgress = false;
           if (ready) this.props.navigation.navigate('Restore');
+        })
+        .catch(err => {
+          this.checkInProgress = false;
+          console.warn(err);
         });
     }, 3000);
   };
