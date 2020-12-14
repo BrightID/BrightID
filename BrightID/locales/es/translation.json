@@ -354,5 +354,10 @@
                 "visitWebsite": "Si"
             }
         }
+    },
+    "contact": {
+        "label": {
+            "email": "Correo electrónico"
+        }
     }
 }
