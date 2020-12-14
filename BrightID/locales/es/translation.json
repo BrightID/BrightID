@@ -348,7 +348,7 @@
             },
             "text": {
                 "invalidContext": "{{context}} no es un contexto válido!",
-                "checkWebsite": "Para obtener más información sobre {{name}}, visite su sitio web."
+                "checkWebsite": "Para obtener más información sobre {{name}}, visite su sitio web!"
             },
             "button": {
                 "visitWebsite": "Si"
