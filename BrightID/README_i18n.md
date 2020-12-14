@@ -15,31 +15,15 @@
 ## Manual translation
 Just edit the according strings in `locales/<locale>/translation.js` and commit the file as usual.
 
-# Integration with locize.com
+# Integration with weblate
+Weblate has direct integration with github. The Weblate project is available at https://hosted.weblate.org/projects/brightid/.
 
-## Preconditions
-To sync translations with locize website you need to install [locize cli](https://github.com/locize/locize-cli) tool:
-`npm install -g locize-cli`
-With every command you need to specify apiKey and projectID, some commands require default language. You can store
-this information in a config file or ENV to save typing. See https://github.com/locize/locize-cli#other-information for instructions.
+## Integrating updated translations
+When translations are modified in weblate, a PR will be automatically created with the changes. 
+Example: https://github.com/BrightID/BrightID/pull/678
 
-## Upload translations to locize
-If you added new keys, new language or updated translations locally, you need to add these changes to the locize website:
+## Adding translation keys to weblate
+Weblate scans the brightID repo for new strings. After adding new keys, go to https://hosted.weblate.org/projects/brightid/mobile-client/#repository.
+Weblate should show the missing commits in the UI, so you just need to click "Update".
 
-Execute `locize sync <language>`.
-
-This will add any new keys and translations of the specified
-language to the locize website, so they are ready to translate.
-
-**Important:** If you made local changes to **existing** translations you need to sync with parameter `--update-values true`.
-Otherwise your local changes will be ignored.
-
-## download translations from locize
-When new translations have been created on the locize website they need to be integrated into the app.
-
-Execute `locize download -l <language> -p <language path>` in folder `locales`. This
-will update `locales/<language>/translation.json` with the latest data from locize.
-
-_Example:_ `locize download -l de -p de` will download german translations and save them as
-`locales/de/translation.json`.
-
+In future this can be automated by adding a github action as described in https://docs.weblate.org/en/latest/admin/continuous.html#update-vcs.
