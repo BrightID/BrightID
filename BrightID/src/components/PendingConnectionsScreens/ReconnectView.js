@@ -34,9 +34,21 @@ export const ReconnectView = ({
   const [identicalProfile, setIdenticalProfile] = useState(true);
   const { t } = useTranslation();
 
-  const reported = pendingConnection.reports.length / (pendingConnection.connectionsNum || 1) >= REPORTED_PERCENTAGE;
-  const brightIdVerified = pendingConnection.verifications.map(v => v.name).includes('BrightID');
+  // Potential workaround for crashes reported in AppCenter with message
+  // "TypeError: undefined is not an object (evaluating 'L.reports.length')"
+  let reported = false;
+  if (pendingConnection && pendingConnection.reports) {
+    reported =
+      pendingConnection.reports.length /
+        (pendingConnection.connectionsNum || 1) >=
+      REPORTED_PERCENTAGE;
+  } else {
+    console.log(`Failed to get reports.length!`);
+  }
 
+  const brightIdVerified = pendingConnection.verifications
+    .map((v) => v.name)
+    .includes('BrightID');
 
   useEffect(() => {
     const compareProfiles = async () => {
@@ -68,12 +80,20 @@ export const ReconnectView = ({
     return (
       <>
         <View style={styles.header} testID="ReconnectScreen">
-          <Text style={styles.headerText}>{t('pendingConnections.title.connectionRequest')}</Text>
+          <Text style={styles.headerText}>
+            {t('pendingConnections.title.connectionRequest')}
+          </Text>
           <Text style={styles.subheaderText}>
-            {t('connections.text.alreadyConnectedWith', {name: pendingConnection.name})}
+            {t('connections.text.alreadyConnectedWith', {
+              name: pendingConnection.name,
+            })}
           </Text>
           <Text style={styles.lastConnectedText}>
-            {t('connections.tag.lastConnected', {date: moment(parseInt(pendingConnection.connectedAt, 10)).fromNow()})}
+            {t('connections.tag.lastConnected', {
+              date: moment(
+                parseInt(pendingConnection.connectedAt, 10),
+              ).fromNow(),
+            })}
           </Text>
         </View>
         <View style={styles.profiles}>
@@ -119,7 +139,9 @@ export const ReconnectView = ({
             onPress={() => setLevelHandler(existingConnection.level)}
             testID="updateBtn"
           >
-            <Text style={styles.updateButtonLabel}>{t('connections.button.reconnect')}</Text>
+            <Text style={styles.updateButtonLabel}>
+              {t('connections.button.reconnect')}
+            </Text>
           </TouchableOpacity>
         </View>
       </>
@@ -128,12 +150,18 @@ export const ReconnectView = ({
     return (
       <>
         <View style={styles.header} testID="ReconnectScreen">
-          <Text style={styles.headerText}>{t('pendingConnections.title.connectionRequest')}</Text>
+          <Text style={styles.headerText}>
+            {t('pendingConnections.title.connectionRequest')}
+          </Text>
           <Text style={styles.subheaderText}>
             {t('connections.text.alreadyConnectedWith')}
           </Text>
           <Text style={styles.lastConnectedText}>
-            {t('connections.tag.lastConnected', {date: moment(parseInt(existingConnection.createdAt, 10)).fromNow()})}
+            {t('connections.tag.lastConnected', {
+              date: moment(
+                parseInt(existingConnection.createdAt, 10),
+              ).fromNow(),
+            })}
           </Text>
         </View>
 
@@ -143,7 +171,9 @@ export const ReconnectView = ({
             style={[styles.profile, styles.verticalDivider]}
           >
             <View style={styles.profileHeader}>
-              <Text style={styles.profileHeaderText}>{t('connections.label.oldProfile')}</Text>
+              <Text style={styles.profileHeaderText}>
+                {t('connections.label.oldProfile')}
+              </Text>
             </View>
             <ProfileCard
               name={existingConnection.name}
@@ -157,7 +187,9 @@ export const ReconnectView = ({
           </View>
           <View testID="newProfileView" style={styles.profile}>
             <View style={styles.profileHeader}>
-              <Text style={styles.profileHeaderText}>{t('connections.label.newProfile')}</Text>
+              <Text style={styles.profileHeaderText}>
+                {t('connections.label.newProfile')}
+              </Text>
             </View>
             <ProfileCard
               name={pendingConnection.name}
@@ -200,14 +232,18 @@ export const ReconnectView = ({
             onPress={abuseHandler}
             testID="reportAbuseBtn"
           >
-            <Text style={styles.abuseButtonLabel}>{t('connections.button.reportConnection')}</Text>
+            <Text style={styles.abuseButtonLabel}>
+              {t('connections.button.reportConnection')}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.updateButton}
             onPress={() => setLevelHandler(existingConnection.level)}
             testID="updateBtn"
           >
-            <Text style={styles.updateButtonLabel}>{t('connections.button.updateConnection')}</Text>
+            <Text style={styles.updateButtonLabel}>
+              {t('connections.button.updateConnection')}
+            </Text>
           </TouchableOpacity>
         </View>
       </>
