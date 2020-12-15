@@ -27,14 +27,23 @@ type PreviewConnectionProps = {
 
 export const PreviewConnectionView = (props: PreviewConnectionProps) => {
   const { t } = useTranslation();
-  const {
-    pendingConnection,
-    setLevelHandler,
-    photoTouchHandler,
-  } = props;
+  const { pendingConnection, setLevelHandler, photoTouchHandler } = props;
 
-  const reported = pendingConnection.reports.length / (pendingConnection.connectionsNum || 1) >= REPORTED_PERCENTAGE;
-  const brightIdVerified = pendingConnection.verifications.map(v => v.name).includes('BrightID');
+  // Potential workaround for crashes reported in AppCenter with message
+  // "TypeError: undefined is not an object (evaluating 'L.reports.length')"
+  let reported = false;
+  if (pendingConnection && pendingConnection.reports) {
+    reported =
+      pendingConnection.reports.length /
+        (pendingConnection.connectionsNum || 1) >=
+      REPORTED_PERCENTAGE;
+  } else {
+    console.log(`Failed to get reports.length!`);
+  }
+
+  const brightIdVerified = pendingConnection.verifications
+    .map((v) => v.name)
+    .includes('BrightID');
   let ratingView;
   switch (pendingConnection.state) {
     case pendingConnection_states.UNCONFIRMED: {
@@ -45,7 +54,9 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
     case pendingConnection_states.CONFIRMED: {
       // user already handled this connection request
       ratingView = (
-        <Text style={styles.infoText}>{t('pendingConnection.text.alreadyRated')}</Text>
+        <Text style={styles.infoText}>
+          {t('pendingConnection.text.alreadyRated')}
+        </Text>
       );
       break;
     }
@@ -67,20 +78,26 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
     }
     case pendingConnection_states.MYSELF: {
       ratingView = (
-        <Text style={styles.infoText}>{t('pendingConnection.text.errorMyself')}</Text>
+        <Text style={styles.infoText}>
+          {t('pendingConnection.text.errorMyself')}
+        </Text>
       );
       break;
     }
     default:
       ratingView = (
-        <Text style={styles.infoText}>{t('pendingConnection.text.errorUnhandled')}</Text>
+        <Text style={styles.infoText}>
+          {t('pendingConnection.text.errorUnhandled')}
+        </Text>
       );
   }
 
   return (
     <>
       <View testID="previewConnectionScreen" style={styles.titleContainer}>
-        <Text style={styles.titleText}>{t('pendingConnections.title.connectionRequest')} </Text>
+        <Text style={styles.titleText}>
+          {t('pendingConnections.title.connectionRequest')}{' '}
+        </Text>
       </View>
       <View style={styles.userContainer}>
         <TouchableWithoutFeedback onPress={photoTouchHandler}>
