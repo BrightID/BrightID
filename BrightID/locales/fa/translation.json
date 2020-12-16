@@ -1,1 +1,32 @@
-{}
+{
+    "achievements": {
+        "makeTwoConnection": {
+            "title": "دو کانکشن",
+            "description": "برقراری کانکشن با دو نفر دیگر"
+        },
+        "makeThreeConnection": {
+            "title": "سه کانکشن",
+            "description": "برقراری کانکشن با سه نفر دیگر"
+        },
+        "makeFirstConnection": {
+            "title": "اولین برقراری کانکشن",
+            "description": "برقراری کانکشن با دیگران"
+        },
+        "linkApp": {
+            "title": "اتصال به یک اپلیکیشن",
+            "description": "اتصال به یک اپلیکیشن"
+        },
+        "joinConnectionPartyWithFriend": {
+            "title": "جلسه برقرای کانکشن به  همراه دوستان",
+            "description": "دعوت از دوستان به جلسات برقراری کانکشن"
+        },
+        "joinConnectionParty": {
+            "title": "جلسات برقراری کانکشن",
+            "description": "شرکت در جلسه های برقراری کانکشن"
+        },
+        "getSponsored": {
+            "title": "اسپانسر شوید",
+            "description": "با اتصال به یکی از اپلیکیشن هایی که شمارا اسپانسر میکند، اسپانسر شوید."
+        }
+    }
+}
