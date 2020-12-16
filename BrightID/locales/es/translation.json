@@ -357,7 +357,9 @@
     },
     "contact": {
         "label": {
-            "email": "Correo electrónico"
+            "email": "Correo electrónico",
+            "website": "Sitio web",
+            "socialMedia": "Redes sociales"
         }
     }
 }
