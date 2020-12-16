@@ -1,6 +1,6 @@
 // @flow
 
-import * as React from 'react';
+import React, { useState } from 'react';
 import {
   Alert,
   Image,
@@ -9,34 +9,33 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { connect } from 'react-redux';
-import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { photoDirectory } from '@/utils/filesystem';
 import ChannelAPI from '@/api/channelService';
 import api from '@/api/brightId';
-import {
-  loadRecoveryData,
-  uploadSig,
-  uploadMutualInfo
-} from './helpers';
+import { loadRecoveryData, uploadSig, uploadMutualInfo } from './helpers';
 
-class RecoveryConnectionCard extends React.PureComponent<Props> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      imgErr: false,
-    };
-  }
-  handleConnectionSelect = async () => {
-    const { t, id, aesKey, navigation } = this.props;
+const RecoveryConnectionCard = (props) => {
+  const { id, aesKey, photo, name, connectionDate, style } = props;
+
+  const [imgErr, setImgErr] = useState(false);
+
+  const { t } = useTranslation();
+  const navigation = useNavigation();
+
+  const handleConnectionSelect = async () => {
     try {
       const ipAddress = await api.ip();
       const channelApi = new ChannelAPI(`http://${ipAddress}/profile`);
-      const { signingKey, timestamp } = await loadRecoveryData(channelApi, aesKey);
+      const { signingKey, timestamp } = await loadRecoveryData(
+        channelApi,
+        aesKey,
+      );
       await uploadSig({ id, timestamp, signingKey, channelApi, aesKey });
-      uploadMutualInfo(this.props, channelApi, aesKey).then(() => {
+      uploadMutualInfo(props, channelApi, aesKey).then(() => {
         Alert.alert(
           t('common.alert.info'),
           t('restore.alert.text.requestRecovering'),
@@ -53,53 +52,37 @@ class RecoveryConnectionCard extends React.PureComponent<Props> {
     }
   };
 
-  scoreColor = () => {
-    const { score } = this.props;
-    if (score >= 85) {
-      return { color: '#139c60' };
-    } else {
-      return { color: '#e39f2f' };
-    }
-  };
+  const imageSource =
+    photo?.filename && !imgErr
+      ? {
+          uri: `file://${photoDirectory()}/${photo?.filename}`,
+        }
+      : require('@/static/default_profile.jpg');
 
-  render() {
-    const { photo, name, score, connectionDate, style, t } = this.props;
-    const imageSource =
-      photo?.filename && !this.state.imgErr
-        ? {
-            uri: `file://${photoDirectory()}/${photo?.filename}`,
-          }
-        : require('@/static/default_profile.jpg');
-
-    return (
-      <TouchableOpacity onPress={this.handleConnectionSelect}>
-        <View style={{ ...styles.container, ...style }}>
-          <Image
-            source={imageSource}
-            style={styles.photo}
-            onError={() => {
-              console.log('settingImgErr');
-              this.setState({ imgErr: true });
-            }}
-            accessibilityLabel="profile picture"
-          />
-          <View style={styles.info}>
-            <Text style={styles.name}>{name}</Text>
-            <View style={styles.scoreContainer}>
-              <Text style={styles.scoreLeft}>Score:</Text>
-              <Text style={[styles.scoreRight, this.scoreColor()]}>
-                {score}
-              </Text>
-            </View>
-            <Text style={styles.connectedText}>
-              {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
-            </Text>
-          </View>
+  return (
+    <TouchableOpacity onPress={handleConnectionSelect}>
+      <View style={{ ...styles.container, ...style }}>
+        <Image
+          source={imageSource}
+          style={styles.photo}
+          onError={() => {
+            setImgErr(true);
+          }}
+          accessibilityLabel="profile picture"
+        />
+        <View style={styles.info}>
+          <Text style={styles.name}>{name}</Text>
+          <View style={styles.scoreContainer}></View>
+          <Text style={styles.connectedText}>
+            {t('common.tag.connectionDate', {
+              date: moment(parseInt(connectionDate, 10)).fromNow(),
+            })}
+          </Text>
         </View>
-      </TouchableOpacity>
-    );
-  }
-}
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -162,4 +145,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(withTranslation()(RecoveryConnectionCard));
+export default RecoveryConnectionCard;

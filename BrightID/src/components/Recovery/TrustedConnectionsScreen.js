@@ -1,6 +1,6 @@
 // @flow
 
-import * as React from 'react';
+import React from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,8 +9,9 @@ import {
   Alert,
   FlatList,
 } from 'react-native';
-import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import EmptyList from '@/components/Helpers/EmptyList';
@@ -31,34 +32,29 @@ const getItemLayout = (data, index) => ({
   index,
 });
 
-class TrustedConnectionsScreen extends React.Component<Props> {
-  filterConnections = () => {
-    const { connections, searchParam } = this.props;
-    return connections
-      .filter((item) =>
-        `${item.name}`
-          .toLowerCase()
-          .replace(/\s/g, '')
-          .includes(searchParam.toLowerCase().replace(/\s/g, '')),
-      )
-      .filter((item) => item.status === 'verified');
-  };
+const TrustedConnectionsScreen = () => {
+  const navigation = useNavigation();
+  const { t } = useTranslation();
 
-  cardIsSelected = (card) => {
-    const { trustedConnections } = this.props;
-    return trustedConnections.includes(card.id);
-  };
+  const connections = useSelector((state) => state.connections.connections)
+    .filter((item) =>
+      `${item.name}`
+        .toLowerCase()
+        .replace(/\s/g, '')
+        .includes(searchParam.toLowerCase().replace(/\s/g, '')),
+    )
+    .filter((item) => item.status === 'verified');
 
-  renderConnection = ({ item }) => (
-    <TrustedConnectionCard
-      {...item}
-      selected={this.cardIsSelected(item)}
-      style={styles.connectionCard}
-    />
+  const searchParam = useSelector((state) => state.connections.searchParam);
+  const trustedConnections = useSelector(
+    (state) => state.connections.trustedConnections,
   );
 
-  navigateToBackup = async () => {
-    let { navigation, trustedConnections, t } = this.props;
+  const renderConnection = ({ item }) => (
+    <TrustedConnectionCard {...item} style={styles.connectionCard} />
+  );
+
+  const navigateToBackup = async () => {
     if (trustedConnections.length < 3) {
       Alert.alert(
         t('common.alert.error'),
@@ -78,52 +74,49 @@ class TrustedConnectionsScreen extends React.Component<Props> {
     }
   };
 
-  render() {
-    const { t } = this.props;
-    const connections = this.filterConnections();
-
-    return (
-      <>
-        <View style={styles.orangeTop} />
-        <View style={styles.container}>
-          <View style={styles.mainContainer}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.infoText}>
-                {(t('backup.text.chooseTrustedConnections'))}
-              </Text>
-            </View>
-            <View style={styles.mainContainer}>
-              <FlatList
-                style={styles.connectionsContainer}
-                contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-                data={connections}
-                keyExtractor={({ id }, index) => id + index}
-                renderItem={this.renderConnection}
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                getItemLayout={getItemLayout}
-                ListEmptyComponent={
-                  <EmptyList
-                    iconType="account-off-outline"
-                    title={t('backup.text.noConnections')}
-                  />
-                }
-              />
-            </View>
+  return (
+    <>
+      <View style={styles.orangeTop} />
+      <View style={styles.container}>
+        <View style={styles.mainContainer}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.infoText}>
+              {t('backup.text.chooseTrustedConnections')}
+            </Text>
           </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              onPress={this.navigateToBackup}
-              style={styles.nextButton}
-            >
-              <Text style={styles.buttonInnerText}>{t('backup.button.next')}</Text>
-            </TouchableOpacity>
+          <View style={styles.mainContainer}>
+            <FlatList
+              style={styles.connectionsContainer}
+              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+              data={connections}
+              keyExtractor={({ id }, index) => id + index}
+              renderItem={renderConnection}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+              getItemLayout={getItemLayout}
+              ListEmptyComponent={
+                <EmptyList
+                  iconType="account-off-outline"
+                  title={t('backup.text.noConnections')}
+                />
+              }
+            />
           </View>
         </View>
-      </>
-    );
-  }
-}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={navigateToBackup}
+            style={styles.nextButton}
+          >
+            <Text style={styles.buttonInnerText}>
+              {t('backup.button.next')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   orangeTop: {
@@ -204,7 +197,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ connections, user }) => ({
-  ...user,
-  ...connections,
-}))(withTranslation()(TrustedConnectionsScreen));
+export default TrustedConnectionsScreen;

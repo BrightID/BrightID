@@ -1,82 +1,73 @@
 // @flow
 
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { addTrustedConnection, removeTrustedConnection } from '@/actions/index';
-import store from '@/store';
 import { DEVICE_TYPE } from '@/utils/deviceConstants';
 
-class TrustedConnectionCard extends React.PureComponent<Props> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      imgErr: false,
-    };
-  }
+const TrustedConnectionCard = (props) => {
+  const { id, photo, name, connectionDate, style } = props;
 
-  toggleConnectionSelect = () => {
-    const { id } = this.props;
-    const {
-      connections: { trustedConnections },
-    } = store.getState();
+  const [imgErr, setImgErr] = useState(false);
+
+  const trustedConnections = useSelector(
+    (state) => state.connections.trustedConnections,
+  );
+
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const toggleConnectionSelect = () => {
     trustedConnections.includes(id)
-      ? store.dispatch(removeTrustedConnection(id))
-      : store.dispatch(addTrustedConnection(id));
+      ? dispatch(removeTrustedConnection(id))
+      : dispatch(addTrustedConnection(id));
   };
 
-  selected = () => {
-    const { id } = this.props;
-    const {
-      connections: { trustedConnections },
-    } = store.getState();
-    return trustedConnections.includes(id);
-  };
+  const selected = () => trustedConnections.includes(id);
 
-  render() {
-    const { photo, name, connectionDate, style, t } = this.props;
-    const imageSource =
-      photo?.filename && !this.state.imgErr
-        ? {
-            uri: `file://${photoDirectory()}/${photo?.filename}`,
-          }
-        : require('@/static/default_profile.jpg');
+  const imageSource =
+    photo?.filename && !imgErr
+      ? {
+          uri: `file://${photoDirectory()}/${photo?.filename}`,
+        }
+      : require('@/static/default_profile.jpg');
 
-    return (
-      <View style={{ ...styles.container, ...style }}>
-        <Image
-          source={imageSource}
-          style={styles.photo}
-          onError={() => {
-            console.log('settingImgErr');
-            this.setState({ imgErr: true });
-          }}
-          accessibilityLabel="profile picture"
-        />
-        <View style={styles.info}>
-          <Text style={styles.name}>{name}</Text>
-          <Text style={styles.connectedText}>
-            {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
-          </Text>
-        </View>
-        <TouchableOpacity
-          style={styles.moreIcon}
-          onPress={this.toggleConnectionSelect}
-        >
-          <AntDesign
-            size={30.4}
-            name={this.selected() ? 'checkcircle' : 'checkcircleo'}
-            color={this.selected() ? '#28a84a' : '#000'}
-          />
-        </TouchableOpacity>
+  return (
+    <View style={{ ...styles.container, ...style }}>
+      <Image
+        source={imageSource}
+        style={styles.photo}
+        onError={() => {
+          setImgErr(true);
+        }}
+        accessibilityLabel="profile picture"
+      />
+      <View style={styles.info}>
+        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.connectedText}>
+          {t('common.tag.connectionDate', {
+            date: moment(parseInt(connectionDate, 10)).fromNow(),
+          })}
+        </Text>
       </View>
-    );
-  }
-}
+      <TouchableOpacity
+        style={styles.moreIcon}
+        onPress={toggleConnectionSelect}
+      >
+        <AntDesign
+          size={30.4}
+          name={selected() ? 'checkcircle' : 'checkcircleo'}
+          color={selected() ? '#28a84a' : '#000'}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -123,4 +114,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(withTranslation()(TrustedConnectionCard));
+export default TrustedConnectionCard;

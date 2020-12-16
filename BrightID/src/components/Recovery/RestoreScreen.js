@@ -1,6 +1,6 @@
 // @flow
 
-import * as React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,188 +11,170 @@ import {
   Alert,
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
-import { connect } from 'react-redux';
-import { Trans, withTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import emitter from '@/emitter';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_OS } from '@/utils/deviceConstants';
 import { recoverData } from './helpers';
 
-type State = {
-  pass: string,
-  completed: number,
-  total: number,
-  restoreInProgress: boolean,
-};
-
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
-class RestoreScreen extends React.Component<Props, State> {
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    pass: '',
-    completed: 0,
-    total: 0,
-    restoreInProgress: false,
-  };
+const RestoreScreen = () => {
+  const [pass, setPass] = useState('');
+  const [completed, setCompleted] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [restoreInProgress, setRestoreInProgress] = useState(false);
 
-  componentDidMount() {
-    const { navigation } = this.props;
-    navigation.addListener('focus', () => {
-      emitter.on('restoreProgress', this.updateRestoreStatus);
-      emitter.on('restoreTotal', this.updateRestoreTotal);
-    });
+  const { t } = useTranslation();
+  const navigation = useNavigation();
 
-    navigation.addListener('blur', () => {
-      emitter.off('restoreProgress', this.updateRestoreStatus);
-      emitter.off('restoreTotal', this.updateRestoreTotal);
-    });
-  }
+  useFocusEffect(
+    useCallback(() => {
+      const updateRestoreStatus = (num: number) => {
+        setCompleted((prev) => prev + num);
+      };
 
-  updateRestoreStatus = (num: number) => {
-    this.setState(({ completed }) => ({
-      completed: completed + num,
-    }));
-  };
+      const updateRestoreTotal = (num: number) => {
+        setTotal(num);
+      };
 
-  updateRestoreTotal = (num: number) => {
-    this.setState({
-      total: num,
-    });
-  };
+      emitter.on('restoreProgress', updateRestoreStatus);
+      emitter.on('restoreTotal', updateRestoreTotal);
 
-  restoreCompleted = async () => {
-    const { t } = this.props;
+      () => {
+        emitter.off('restoreProgress', updateRestoreStatus);
+        emitter.off('restoreTotal', updateRestoreTotal);
+      };
+    }, []),
+  );
+
+  const restoreCompleted = async () => {
     Alert.alert(
-      t('common.alert.info'), 
+      t('common.alert.info'),
       t('restore.alert.text.restoreSuccess'),
-      [{ text: t('common.alert.ok') }]
+      [{ text: t('common.alert.ok') }],
     );
   };
 
-  resetState = () => {
-    this.setState({
-      restoreInProgress: false,
-      completed: 0,
-      total: 0,
-      pass: '',
-    });
+  const resetState = () => {
+    setRestoreInProgress(false);
+    setCompleted(0);
+    setTotal(0);
+    setPass('');
   };
 
-  skip = () => {
-    console.log('skip called');
-    this.setState({ pass: '' });
-    this.restore();
+  const skip = () => {
+    setPass('');
+    restore();
   };
 
-  restore = () => {
-    const { navigation, t } = this.props;
-    this.setState({ restoreInProgress: true });
-    recoverData(this.state.pass)
+  const restore = () => {
+    setRestoreInProgress(true);
+    recoverData(pass)
       .then((result) => {
-        result ? this.restoreCompleted() : this.resetState();
+        result ? restoreCompleted() : resetState();
       })
       .catch((err) => {
-        this.resetState();
+        resetState();
         err instanceof Error ? console.warn(err.message) : console.log(err);
         if (err instanceof Error && err.message === 'bad password') {
           Alert.alert(
             t('common.alert.error'),
             t('common.alert.text.incorrectPassword'),
-            [{ text: t('common.alert.ok'), onPress: () => navigation.goBack() }],
+            [
+              {
+                text: t('common.alert.ok'),
+                onPress: () => navigation.goBack(),
+              },
+            ],
           );
         }
         if (err instanceof Error && err.message === 'bad sigs') {
           Alert.alert(
             t('restore.alert.title.notTrusted'),
             t('restore.alert.text.notTrusted'),
-            [{ text: t('common.alert.ok'), onPress: () => navigation.goBack() }],
+            [
+              {
+                text: t('common.alert.ok'),
+                onPress: () => navigation.goBack(),
+              },
+            ],
           );
         }
       });
   };
 
-
-  renderButtonOrSpinner = () => {
-    const { t } = this.props;
-    if (!this.state.restoreInProgress)
+  const renderButtonOrSpinner = () => {
+    if (!restoreInProgress)
       return (
-        <TouchableOpacity
-          style={styles.startRestoreButton}
-          onPress={this.restore}
-        >
-          <Text style={styles.buttonInnerText}>{t('restore.button.startRestore')}</Text>
+        <TouchableOpacity style={styles.startRestoreButton} onPress={restore}>
+          <Text style={styles.buttonInnerText}>
+            {t('restore.button.startRestore')}
+          </Text>
         </TouchableOpacity>
       );
-    else if (this.state.pass)
+    else if (pass)
       return (
         <View style={styles.loader}>
           <Text style={styles.textInfo}>
             {t('restore.text.downloadingData')}
           </Text>
-          {this.state.total !== 0 && (
+          {total !== 0 && (
             <Text style={styles.textInfo}>
-              {t('common.text.progress', {completed: this.state.completed, total: this.state.total})}
+              {t('common.text.progress', {
+                completed,
+                total,
+              })}
             </Text>
           )}
           <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
         </View>
       );
     else
-      return (
-        <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
-      );
+      return <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />;
   };
 
-  render() {
-    const { pass } = this.state;
-    const { t } = this.props;
-    return (
-      <>
-        <View style={styles.orangeTop} />
-        <Container style={styles.container} behavior="padding">
-          <View style={styles.textInputContainer}>
-            <Text style={styles.textInfo}>
-              {t('restore.text.enterPassword')}
-            </Text>
-            <TextInput
-              // eslint-disable-next-line no-shadow
-              onChangeText={(pass) => this.setState({ pass })}
-              value={pass}
-              placeholder={t('common.placeholder.password')}
-              placeholderTextColor="#9e9e9e"
-              style={styles.textInput}
-              autoCorrect={false}
-              textContentType="password"
-              autoCompleteType="password"
-              underlineColorAndroid="transparent"
-              secureTextEntry={true}
-            />
-          </View>
+  return (
+    <>
+      <View style={styles.orangeTop} />
+      <Container style={styles.container} behavior="padding">
+        <View style={styles.textInputContainer}>
+          <Text style={styles.textInfo}>{t('restore.text.enterPassword')}</Text>
+          <TextInput
+            onChangeText={setPass}
+            value={pass}
+            placeholder={t('common.placeholder.password')}
+            placeholderTextColor="#9e9e9e"
+            style={styles.textInput}
+            autoCorrect={false}
+            textContentType="password"
+            autoCompleteType="password"
+            underlineColorAndroid="transparent"
+            secureTextEntry={true}
+          />
+        </View>
 
-          <View style={styles.buttonContainer}>
-            {this.renderButtonOrSpinner()}
+        <View style={styles.buttonContainer}>{renderButtonOrSpinner()}</View>
+        {!restoreInProgress && (
+          <View style={styles.skipContainer}>
+            <Text>
+              <Trans
+                i18nKey="restore.text.skipLoadingBackup"
+                components={[
+                  <Text style={styles.skipLink} onPress={skip}>
+                    dummyLink
+                  </Text>,
+                ]}
+                values={{ skipLink: t('restore.text.skipLink') }}
+              />
+            </Text>
           </View>
-          {!this.state.restoreInProgress && (
-            <View style={styles.skipContainer}>
-              <Text>
-                <Trans
-                  i18nKey="restore.text.skipLoadingBackup"
-                  components={[
-                    <Text style={styles.skipLink} onPress={this.skip}>
-                      dummyLink
-                    </Text>
-                  ]}
-                  values={{skipLink: t("restore.text.skipLink")}}
-                />
-              </Text>
-            </View>
-          )}
-        </Container>
-      </>
-    );
-  }
-}
+        )}
+      </Container>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   orangeTop: {
@@ -281,7 +263,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     margin: 30,
     flexDirection: 'row',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   skipLink: {
     color: 'blue',
@@ -293,4 +275,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(withTranslation()(RestoreScreen));
+export default RestoreScreen;

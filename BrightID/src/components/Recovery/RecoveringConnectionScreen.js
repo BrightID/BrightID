@@ -1,10 +1,11 @@
 // @flow
 
-import * as React from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Spinner from 'react-native-spinkit';
-import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -21,79 +22,80 @@ const getItemLayout = (data, index) => ({
   index,
 });
 
-class RecoveringConnectionScreen extends React.Component<Props> {
+const RecoveringConnectionScreen = () => {
+  const connections = useSelector((state) => state.connections.connections)
+    .filter((item) =>
+      `${item.name}`
+        .toLowerCase()
+        .replace(/\s/g, '')
+        .includes(searchParam.toLowerCase().replace(/\s/g, '')),
+    )
+    .filter((item) => item.status === 'verified');
 
-  filterConnections = () => {
-    const { connections, searchParam } = this.props;
-    return connections
-      .filter((item) =>
-        `${item.name}`
-          .toLowerCase()
-          .replace(/\s/g, '')
-          .includes(searchParam.toLowerCase().replace(/\s/g, '')),
-      )
-      .filter((item) => item.status === 'verified');
-  };
+  const searchParam = useSelector((state) => state.connections.searchParam);
 
-  renderConnection = ({ item }) => (
+  const { t } = useTranslation();
+  const navigation = useNavigation();
+  const route = useRoute();
+  // const aesKey = ;
+
+  const renderConnection = ({ item }) => (
     <RecoveringConnectionCard
       {...item}
-      aesKey={this.props.route.params?.aesKey}
-      navigation={this.props.navigation}
+      aesKey={route.params?.aesKey}
       style={styles.recoveringConnectionCard}
     />
   );
 
-  render() {
-    const { navigation, t } = this.props;
-    const connections = this.filterConnections();
-    const {
-      recoveryData: { totalItems, completedItems }
-    } = store.getState();
-    const waiting = totalItems > 0 && completedItems < totalItems;
-    let msg;
-    if (waiting) {
-      msg = t('restore.text.sendingProgress', { completedItems, totalItems });
-    } else {
-      msg = t('restore.text.chooseConnectionToHelp');
-    }
-    return (
-      <>
-        <View style={styles.orangeTop} />
-        <View style={styles.container}>
+  const {
+    recoveryData: { totalItems, completedItems },
+  } = store.getState();
+
+  const waiting = totalItems > 0 && completedItems < totalItems;
+  let msg;
+  if (waiting) {
+    msg = t('restore.text.sendingProgress', { completedItems, totalItems });
+  } else {
+    msg = t('restore.text.chooseConnectionToHelp');
+  }
+  return (
+    <>
+      <View style={styles.orangeTop} />
+      <View style={styles.container}>
+        <View style={styles.mainContainer}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleText}>
+              {t('restore.title.chooseConnection')}
+            </Text>
+            <Text style={styles.infoText}>{msg}</Text>
+            <Spinner
+              isVisible={waiting}
+              size={DEVICE_LARGE ? 48 : 42}
+              type="Wave"
+              color="#4a90e2"
+            />
+          </View>
+          <SearchConnections navigation={navigation} />
           <View style={styles.mainContainer}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>{t('restore.title.chooseConnection')}</Text>
-              <Text style={styles.infoText}>
-                {msg}
-              </Text>
-              <Spinner
-                isVisible={waiting}
-                size={DEVICE_LARGE ? 48 : 42}
-                type="Wave"
-                color="#4a90e2"
-              />
-            </View>
-            <SearchConnections navigation={navigation} />
-            <View style={styles.mainContainer}>
-              <FlatList
-                style={styles.connectionsContainer}
-                contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-                data={connections}
-                keyExtractor={({ id }, index) => id + index}
-                renderItem={this.renderConnection}
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                ListEmptyComponent={<EmptyList title={t('restore.text.noConnections')} />}
-                getItemLayout={getItemLayout}
-              />
-            </View>
+            <FlatList
+              style={styles.connectionsContainer}
+              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+              data={connections}
+              keyExtractor={({ id }, index) => id + index}
+              renderItem={renderConnection}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+              ListEmptyComponent={
+                <EmptyList title={t('restore.text.noConnections')} />
+              }
+              getItemLayout={getItemLayout}
+            />
           </View>
         </View>
-      </>
-    );
-  }
-}
+      </View>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   orangeTop: {
@@ -191,8 +193,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ connections, user, recoveryData }) => ({
-  ...connections,
-  ...user,
-  ...recoveryData
-}))(withTranslation()(RecoveringConnectionScreen));
+// export default connect(({ connections, user, recoveryData }) => ({
+//   ...connections,
+//   ...user,
+//   ...recoveryData
+// }))(withTranslation()(RecoveringConnectionScreen));
+
+export default RecoveringConnectionScreen;
