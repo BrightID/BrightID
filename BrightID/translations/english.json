@@ -10,12 +10,10 @@
   "home.chatActionSheet.discord": "BrightID Discord",
   "home.accessibilityLabel.connect": "connect",
 
-
   "onboarding.text.intro": "<text>BrightID uses the people you know</text><text>to enforce one-account-per-person</text><text>for important applications like</text><text>voting and universal basic income.</text>",
   "onboarding.label.maintainPrivacy": "Maintain Privacy",
   "onboarding.text.privacy": "<text>Prove you're a unique person</text><text>while preserving your privacy.</text>",
   "onboarding.button.getStarted": "Get Started",
-
 
   "signup.header.title": "SignUp",
   "signup.button.addPhoto": "Add Photo",
@@ -29,11 +27,11 @@
   "signup.alert.nameTooShort": "Your name must be at least 2 characters",
   "signup.alert.photoMissing": "A photo is required. Please press enter on the keyboard.",
 
-
   "recovery.header.title": "Recovery Code",
   "recovery.text.askTrustedConnections": "Ask your trusted connections to scan this code.",
   "recovery.text.recoveredItems": "{{count}} connections/groups recovered",
 
+  "eula.header.title": "License Agreement",
 
   "qrcode.header.connections": "{{count}} / 30 Connections",
   "qrcode.text.scanCode": "<text>Hey {{name}}, scan a code and</text><text>make a new connection today</text>",
@@ -60,7 +58,6 @@
   "qrcode.text.pendingConnections": "You have {{count}} pending connection",
   "qrcode.text.pendingConnections_plural": "You have {{count}} pending connections",
   "qrcode.text.confirmConnections": "Confirm Connections",
-
 
   "pendingConnections.text.errorGeneric": "Error while connecting. Please try to reconnect.",
   "pendingConnections.text.errorMyself": "OOPS!!! This is you...",
@@ -89,7 +86,6 @@
   "pendingConnection.alert.text.errorCreateChannel": "Could not create connection channel. Error message: {{message}}",
   "pendingConnection.alert.text.errorJoinChannel": "Could not join connection channel. Error message: {{message}}",
 
-
   "connections.header.connections": "Connections",
   "connections.text.noConnections": "No connections",
   "connections.removeActionSheet.title": "Remove connection",
@@ -113,7 +109,6 @@
   "connections.accessibilityLabel.connectionPhoto": "Connection Photo",
   "connections.accessibilityLabel.viewConnectionDetails": "View Connection details",
 
-
   "connectionDetails.header.connectionDetails": "Connection Details",
   "connectionDetails.tags.loading": "Loading...",
   "connectionDetails.tags.connectedAt": "Connected {{date}}",
@@ -135,13 +130,11 @@
   "connectionDetails.button.reportSubmit": "Submit",
   "connectionDetails.button.reportCancel": "Cancel",
 
-
   "connectionsSearch.header.sorting": "Sorting",
   "connectionsSearch.button.save": "Save",
   "connectionsSearch.text.chooseSortMethod": "Choose one of the methods below",
   "connectionsSearch.button.sortByDate": "Sort by date added",
   "connectionsSearch.button.sortByName": "Sort by name",
-
 
   "groups.header.groups": "Groups",
   "groups.header.newGroup": "New Group",
@@ -165,7 +158,7 @@
   "groups.memberActionSheet.dismissMember": "Dismiss from group",
   "groups.memberActionSheet.cancel": "Cancel",
   "groups.alert.title.inviteSuccess": "Successful Invitation",
-  "groups.alert.text.inviteSuccess":"You invited {{name}} successfully to the group",
+  "groups.alert.text.inviteSuccess": "You invited {{name}} successfully to the group",
   "groups.alert.title.leaveGroup": "Leave Group",
   "groups.alert.text.leaveGroup": "Are you sure you want to leave this group?",
   "groups.alert.title.errorLeaveGroup": "Error leaving group",
@@ -178,8 +171,7 @@
   "groups.accessibilityLabel.groupsLogo": "groups logo",
   "groups.state.creatingGroup": "creating the group",
   "groups.state.uploadingGroupPhoto": "uploading group photo",
-  
-  
+
   "createGroup.placeholder.groupName": "What is the group name?",
   "createGroup.button.next": "Next",
   "createGroup.label.cofounders": "CO-FOUNDERS",
@@ -190,7 +182,6 @@
   "createGroup.alert.text.nameMissing": "Please add a name for group",
   "createGroup.alert.text.nameTooShort": "The group name must be at least 2 characters",
   "createGroup.alert.title.createFailed": "Group creation unsuccessful",
-  
 
   "apps.text.noApps": "No Apps",
   "apps.text.pendingLink": "Linking your account in {{context}}\n to your BrightID ...",
@@ -211,7 +202,6 @@
   "apps.alert.title.linkFailure": "Failed",
   "apps.alert.text.linkFailure": "Failed to link your account in {{context}} to your BrightID\n{{result}}",
 
-
   "notifications.tab.connections": "connections",
   "notifications.tab.groups": "groups",
   "notifications.tab.miscellaneous": "miscellaneous",
@@ -229,13 +219,11 @@
   "notifications.alert.text.successAcceptGroupInvite": "You joined {{groupName}}",
   "notifications.alert.text.failureAcceptGroupInvite": "Failed to join the group",
 
-
   "notificationBar.title.pendingConnection": "Confirm connections",
   "notificationBar.text.pendingConnections": "You have {{count}} pending connection",
   "notificationBar.text.pendingConnections_plural": "You have {{count}} pending connections",
   "notificationBar.title.socialRecovery": "Backup & Social Recovery",
   "notificationBar.text.socialRecovery": "Please select your Trusted Connections to enable social recovery of your BrightID",
-
 
   "backup.header.backup": "Backup",
   "backup.header.trustedConnections": "Trusted Connections",
@@ -249,7 +237,6 @@
   "backup.alert.text.passwordConfirmNoMatch": "Password and confirm password does not match.",
   "backup.alert.text.passwordTooShort": "Your password must be at least 8 characters long.",
   "backup.alert.text.needThreeTrusted": "You need at least three trusted connections for backup.",
-
 
   "restore.header.accountRecovery": "Account Recovery",
   "restore.button.startRestore": "Start Restore",
@@ -266,7 +253,6 @@
   "restore.text.skipLink": "skip",
   "restore.alert.text.requestRecovering": "Your request to help recovering this account submitted successfully!",
 
-
   "drawer.label.home": "Home",
   "drawer.label.editProfile": "Edit Profile",
   "drawer.label.achievements": "Achievements",
@@ -276,12 +262,10 @@
   "drawer.alert.title.upToDate": "Check for Update",
   "drawer.alert.text.upToDate": "BrightID is up to date.",
 
-
   "graphExplorer.text.backupRequired": "Setting up backup and recovery is required to access your graph explorer code. Check your notifications or connect to more users to be eligible for backup and recovery.",
   "graphExplorer.text.explorerWebsiteDescription": "is a website designed to explore the entire BrightID social graph. Use the code above to see your connections in the graph.",
   "graphExplorer.button.copyCode": "Copy Code",
   "graphExplorer.alert.text.copied": "Copied to clipboard!",
-
 
   "contact.title.contactUs": "Contact Us",
   "contact.label.email": "Email",
@@ -291,7 +275,6 @@
   "contact.label.socialMedia": "Social Media",
   "contact.text.weAre": "We are ",
   "contact.text.openSource": "open source!",
-
 
   "profile.label.name": "Name",
   "profile.label.socialMediaLink": "Social Media Link",
@@ -313,7 +296,6 @@
   "profile.alert.title.passwordMatch": "Please try again",
   "profile.alert.text.passwordMatch": "Current password does not match.",
 
-
   "achievements.progress.title": "Completion:",
   "achievements.notification.title": "Achievement unlocked!",
   "achievements.notification.message": "You completed the task \"{{title}}\".",
@@ -333,7 +315,6 @@
   "achievements.get_sponsored.description": "Get sponsored by linking with an app that offers sponsorship",
   "achievements.setup_trusted_connections.title": "Setup social recovery",
   "achievements.setup_trusted_connections.description": "Setup your trusted connections to enable social account recovery",
-
 
   "common.alert.error": "Error",
   "common.alert.success": "Success",
