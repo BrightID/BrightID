@@ -5,7 +5,9 @@ import { TextInput, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
-import { setSearchParam } from '../../../actions';
+import { fontSize } from '@/theme/fonts';
+import { setSearchParam } from '@/actions';
+import { GREY, WHITE, LIGHT_BLACK } from '@/theme/colors';
 
 class SearchMembers extends React.Component<Props> {
   componentWillUnmount() {
@@ -16,7 +18,7 @@ class SearchMembers extends React.Component<Props> {
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.searchIcon}>
-          <Octicons size={26} name="search" color="#333" />
+          <Octicons size={26} name="search" color={LIGHT_BLACK} />
         </TouchableOpacity>
         <TextInput
           onChangeText={(value) => this.props.dispatch(setSearchParam(value))}
@@ -26,7 +28,7 @@ class SearchMembers extends React.Component<Props> {
           autoCorrect={false}
           textContentType="name"
           underlineColorAndroid="transparent"
-          placeholderTextColor="#aaa"
+          placeholderTextColor={GREY}
         />
         <TouchableOpacity
           onPress={() => {
@@ -35,7 +37,7 @@ class SearchMembers extends React.Component<Props> {
           }}
           style={styles.optionsIcon}
         >
-          <Ionicon size={30} name="ios-options" color="#333" />
+          <Ionicon size={30} name="ios-options" color={LIGHT_BLACK} />
         </TouchableOpacity>
       </View>
     );
@@ -47,11 +49,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 10,
     width: '90%',
-    borderColor: '#ccc',
+    borderColor: GREY,
     borderWidth: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
   },
   searchIcon: {
     marginLeft: 10,
@@ -65,8 +67,8 @@ const styles = StyleSheet.create({
   },
   searchField: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 14,
-    color: '#333',
+    fontSize: fontSize[14],
+    color: LIGHT_BLACK,
     flex: 1,
     fontWeight: 'normal',
     fontStyle: 'normal',

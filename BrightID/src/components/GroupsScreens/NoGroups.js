@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import { useTranslation, Trans } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { WHITE, BLUE, DARKER_GREY } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 
 const learnMoreUrl =
   'https://docs.google.com/document/d/1CEBWv4ImXsZYQ2Qll7BXojeKI9CGtzRXjB9aFIj00c4/edit#heading=h.nr1odgliy5nk';
@@ -22,13 +24,12 @@ const handleLearnMore = () => {
 };
 
 export const NoGroups = ({ navigation }: Props) => {
-  
   const { t } = useTranslation();
   return (
     <View style={styles.noContainer} testID="noGroupsView">
       <View style={styles.noGroupsInfo}>
         <Image
-          source={require('../../static/groups_logo.png')}
+          source={require('../../static/groups.png')}
           style={styles.smallGroupsLogo}
           resizeMode="cover"
           onError={(e) => {
@@ -40,7 +41,7 @@ export const NoGroups = ({ navigation }: Props) => {
         <View>
           <Trans
             i18nKey="groups.text.noGroups"
-            components={{text: <Text style={styles.emptyGroupsText}/>}}
+            components={{ text: <Text style={styles.emptyGroupsText} /> }}
           />
         </View>
       </View>
@@ -50,7 +51,9 @@ export const NoGroups = ({ navigation }: Props) => {
           style={styles.learnMoreButton}
           onPress={handleLearnMore}
         >
-          <Text style={styles.learnMoreText}>{t('groups.button.learnMore')}</Text>
+          <Text style={styles.learnMoreText}>
+            {t('groups.button.learnMore')}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           testID="groupsCreateGroupBtn"
@@ -59,11 +62,13 @@ export const NoGroups = ({ navigation }: Props) => {
             navigation.navigate('GroupInfo');
           }}
         >
-          <Text style={styles.createGroupText}>{t('groups.button.createGroup')}</Text>
+          <Text style={styles.createGroupText}>
+            {t('groups.button.createGroup')}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
-  )
+  );
 };
 
 const styles = StyleSheet.create({
@@ -71,9 +76,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    // height: 280,
     flex: 1,
-    backgroundColor: '#fcfcfc',
+    backgroundColor: WHITE,
   },
   noGroupsInfo: {
     flexDirection: 'row',
@@ -90,15 +94,15 @@ const styles = StyleSheet.create({
   },
   emptyGroupsText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_LARGE ? 18 : 16,
+    fontSize: fontSize[18],
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
-    color: '#4a4a4a',
+    color: DARKER_GREY,
   },
   learnMoreButton: {
     borderRadius: 3,
-    borderColor: '#4a90e2',
+    borderColor: BLUE,
     borderWidth: 1,
     width: DEVICE_LARGE ? 150 : 125,
     paddingTop: 15,
@@ -108,15 +112,15 @@ const styles = StyleSheet.create({
   },
   learnMoreText: {
     fontFamily: 'ApexNew-Medium',
-    fontSize: DEVICE_LARGE ? 18 : 16,
+    fontSize: fontSize[18],
     fontWeight: '500',
     textAlign: 'center',
-    color: '#4a90e2',
+    color: BLUE,
   },
   createGroupButton: {
     marginLeft: 14.5,
     borderRadius: 3,
-    backgroundColor: '#4a90e2',
+    backgroundColor: BLUE,
     width: DEVICE_LARGE ? 150 : 125,
     paddingTop: 16,
     paddingBottom: 16,
@@ -125,13 +129,14 @@ const styles = StyleSheet.create({
   },
   createGroupText: {
     fontFamily: 'ApexNew-Medium',
-    fontSize: DEVICE_LARGE ? 18 : 16,
+    fontSize: fontSize[18],
     fontWeight: '500',
-    color: '#fff',
+    color: WHITE,
     textAlign: 'center',
   },
   smallGroupsLogo: {
-    width: DEVICE_LARGE ? 150 : 135,
-    height: DEVICE_LARGE ? 150 : 135,
+    width: 135,
+    height: 135,
+    marginRight: 20,
   },
 });

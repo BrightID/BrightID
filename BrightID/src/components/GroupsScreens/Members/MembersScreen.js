@@ -16,11 +16,11 @@ import api from '@/api/brightId';
 import { leaveGroup, dismissFromGroup } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { addAdmin } from '@/actions/groups';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE, WHITE, BLUE, DARK_GREY } from '@/theme/colors';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import MemberCard from './MemberCard';
-
 
 type MembersScreenProps = {
   navigation: any,
@@ -32,7 +32,7 @@ function MembersScreen(props: MembersScreenProps) {
   const groupID = route.params.group.id;
   const dispatch = useDispatch();
   const connections = useSelector(
-  (state: State) => state.connections.connections,
+    (state: State) => state.connections.connections,
   );
   const user = useSelector((state: State) => state.user);
   const { group, admins, members } = useSelector((state: State) => {
@@ -71,7 +71,10 @@ function MembersScreen(props: MembersScreenProps) {
                 await dispatch(leaveGroup(group));
                 navigation.goBack();
               } catch (err) {
-                Alert.alert(t('groups.alert.title.errorLeaveGroup'), err.message);
+                Alert.alert(
+                  t('groups.alert.title.errorLeaveGroup'),
+                  err.message,
+                );
               }
             },
           },
@@ -122,7 +125,7 @@ function MembersScreen(props: MembersScreenProps) {
                   title: t('common.actionSheet.title'),
                   showSeparators: true,
                   textStyle: {
-                    color: '#2185D0',
+                    color: BLUE,
                     textAlign: 'center',
                     width: '100%',
                   },
@@ -135,7 +138,7 @@ function MembersScreen(props: MembersScreenProps) {
               );
             }}
           >
-            <Material name="dots-horizontal" size={32} color="#fff" />
+            <Material name="dots-horizontal" size={32} color={WHITE} />
           </TouchableOpacity>
         ),
       });
@@ -205,8 +208,8 @@ function MembersScreen(props: MembersScreenProps) {
             await dispatch(dismissFromGroup(user.id, group));
           } catch (err) {
             Alert.alert(
-              t('groups.alert.title.errorDismissMember'), 
-              err.message
+              t('groups.alert.title.errorDismissMember'),
+              err.message,
             );
           }
         },
@@ -214,7 +217,7 @@ function MembersScreen(props: MembersScreenProps) {
     ];
     Alert.alert(
       t('groups.alert.title.dismissMember'),
-      t('groups.alert.text.dismissMember', {name: user.name}),
+      t('groups.alert.text.dismissMember', { name: user.name }),
       buttons,
       {
         cancelable: true,
@@ -236,7 +239,7 @@ function MembersScreen(props: MembersScreenProps) {
             await dispatch(addAdmin(user.id, group));
           } catch (err) {
             Alert.alert(
-              t('groups.alert.text.addAdmin', {name: user.name}),
+              t('groups.alert.text.addAdmin', { name: user.name }),
               err.message,
             );
           }
@@ -245,7 +248,7 @@ function MembersScreen(props: MembersScreenProps) {
     ];
     Alert.alert(
       t('groups.alert.title.addAdmin'),
-      t('groups.alert.text.addAdmin', {name: user.name}),
+      t('groups.alert.text.addAdmin', { name: user.name }),
       buttons,
       {
         cancelable: true,
@@ -310,7 +313,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
+    backgroundColor: WHITE,
     borderTopLeftRadius: 58,
     marginTop: -58,
     zIndex: 10,
@@ -318,7 +321,7 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
+    backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -329,17 +332,17 @@ const styles = StyleSheet.create({
   },
   groupName: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 28,
+    fontSize: fontSize[28],
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
     textAlign: 'center',
   },
   optionsOverlay: {
-    backgroundColor: 'rgba(62,34,24,0.4)',
+    backgroundColor: DARK_GREY,
   },
   optionsContainer: {
-    backgroundColor: '#fdfdfd',
+    backgroundColor: WHITE,
     height: '12%',
     width: '105%',
     borderRadius: 5,
@@ -357,7 +360,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 18,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderBottomColor: '#fdfdfd',
+    borderBottomColor: WHITE,
     position: 'absolute',
     top: -18,
     right: 20,
@@ -371,7 +374,7 @@ const styles = StyleSheet.create({
   },
   leaveGroupText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 24,
+    fontSize: fontSize[24],
     marginLeft: 30,
   },
   backButtonContainer: {

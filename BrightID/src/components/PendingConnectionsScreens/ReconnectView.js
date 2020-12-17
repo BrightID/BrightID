@@ -6,6 +6,8 @@ import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { BLACK, DARKER_GREY, ORANGE, RED, WHITE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { ConnectionStats } from './ConnectionStats';
 import { ProfileCard } from './ProfileCard';
 import {
@@ -260,22 +262,22 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 22 : 18,
+    fontSize: fontSize[22],
     textAlign: 'center',
-    color: '#000000',
+    color: BLACK,
     marginBottom: 20,
   },
   subheaderText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 15 : 12,
+    fontSize: fontSize[15],
     textAlign: 'center',
-    color: '#827F7F',
+    color: DARKER_GREY,
   },
   lastConnectedText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 15 : 12,
+    fontSize: fontSize[15],
     textAlign: 'center',
-    color: '#827F7F',
+    color: DARKER_GREY,
   },
   profiles: {
     flexDirection: 'row',
@@ -288,8 +290,8 @@ const styles = StyleSheet.create({
   },
   profileHeaderText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 15 : 12,
-    color: '#000',
+    fontSize: fontSize[15],
+    color: BLACK,
   },
   profile: {
     flex: 1,
@@ -297,7 +299,7 @@ const styles = StyleSheet.create({
   },
   verticalDivider: {
     borderRightWidth: StyleSheet.hairlineWidth,
-    borderColor: '#ED7A5D',
+    borderColor: ORANGE,
     height: '100%',
   },
   countsContainer: {
@@ -308,7 +310,7 @@ const styles = StyleSheet.create({
     marginBottom: 28,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: '#ed7a5d',
+    borderColor: ORANGE,
     justifyContent: 'space-evenly',
     flexDirection: 'row',
   },
@@ -321,12 +323,12 @@ const styles = StyleSheet.create({
   },
   connectionLevelLabelText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 15 : 13,
-    color: '#000000',
+    fontSize: fontSize[15],
+    color: BLACK,
   },
   connectionLevelText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 15 : 13,
+    fontSize: fontSize[15],
     marginBottom: 10,
   },
   actionButtons: {
@@ -334,7 +336,7 @@ const styles = StyleSheet.create({
     width: '88%',
   },
   abuseButton: {
-    backgroundColor: '#ED1B24',
+    backgroundColor: RED,
     flex: 1,
     marginRight: 5,
     borderRadius: 60,
@@ -344,12 +346,12 @@ const styles = StyleSheet.create({
   },
   abuseButtonLabel: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 14 : 12,
-    color: '#FFFFFF',
+    fontSize: fontSize[14],
+    color: WHITE,
   },
   updateButton: {
-    backgroundColor: '#FFFFFF',
-    borderColor: '#ED7A5D',
+    backgroundColor: WHITE,
+    borderColor: ORANGE,
     borderWidth: 1,
     borderRadius: 60,
     flex: 1,
@@ -360,7 +362,7 @@ const styles = StyleSheet.create({
   },
   updateButtonLabel: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 14 : 12,
-    color: '#ED7A5D',
+    fontSize: fontSize[14],
+    color: ORANGE,
   },
 });

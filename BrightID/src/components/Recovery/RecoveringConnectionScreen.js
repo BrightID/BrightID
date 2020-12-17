@@ -5,8 +5,9 @@ import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { ORANGE, WHITE, LIGHT_GREY, BLUE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
 
@@ -51,7 +52,9 @@ class RecoveringConnectionScreen extends React.Component<Props> {
         <View style={styles.container}>
           <View style={styles.mainContainer}>
             <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>{t('restore.title.chooseConnection')}</Text>
+              <Text style={styles.titleText}>
+                {t('restore.title.chooseConnection')}
+              </Text>
               <Text style={styles.infoText}>
                 {t('restore.text.chooseConnectionToHelp')}
               </Text>
@@ -66,7 +69,9 @@ class RecoveringConnectionScreen extends React.Component<Props> {
                 renderItem={this.renderConnection}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
-                ListEmptyComponent={<EmptyList title={t('restore.text.noConnections')} />}
+                ListEmptyComponent={
+                  <EmptyList title={t('restore.text.noConnections')} />
+                }
                 getItemLayout={getItemLayout}
               />
             </View>
@@ -86,7 +91,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
+    backgroundColor: WHITE,
     borderTopLeftRadius: 58,
     marginTop: -58,
     zIndex: 10,
@@ -100,13 +105,13 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 20,
+    fontSize: fontSize[20],
   },
   connectionsContainer: {
     flex: 1,
     width: '96.7%',
     borderTopWidth: 1,
-    borderTopColor: '#e3e1e1',
+    borderTopColor: LIGHT_GREY,
   },
   moreIcon: {
     marginRight: 16,
@@ -115,13 +120,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 6,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     width: '96.7%',
     marginBottom: 11,
   },
   titleText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: fontSize[18],
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -136,7 +141,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 14,
+    fontSize: fontSize[14],
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -148,7 +153,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0,
     shadowRadius: 0,
     borderBottomWidth: 1,
-    borderBottomColor: '#e3e1e1',
+    borderBottomColor: LIGHT_GREY,
     width: '100%',
   },
   buttonContainer: {
@@ -156,7 +161,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   saveButton: {
-    backgroundColor: '#428BE5',
+    backgroundColor: BLUE,
     width: 300,
     justifyContent: 'center',
     alignItems: 'center',
@@ -167,9 +172,9 @@ const styles = StyleSheet.create({
   },
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',
-    color: '#fff',
+    color: WHITE,
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: fontSize[18],
   },
 });
 

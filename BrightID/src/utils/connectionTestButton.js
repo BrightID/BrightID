@@ -4,6 +4,7 @@ import { TouchableOpacity } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch } from 'react-redux';
+import { BLUE, WHITE } from '@/theme/colors';
 import {
   connectWithOtherFakeConnections,
   joinAllGroups,
@@ -60,7 +61,7 @@ const ConnectionTestButton = ({ connectionId }: { connectionId: string }) => {
         title: `Connection Test options`,
         showSeparators: true,
         textStyle: {
-          color: '#2185D0',
+          color: BLUE,
           textAlign: 'center',
           width: '100%',
         },
@@ -79,7 +80,7 @@ const ConnectionTestButton = ({ connectionId }: { connectionId: string }) => {
       style={{ marginRight: 11 }}
       onPress={handleButton}
     >
-      <Material name="ghost" size={30} color="#fff" />
+      <Material name="ghost" size={30} color={WHITE} />
     </TouchableOpacity>
   );
 };

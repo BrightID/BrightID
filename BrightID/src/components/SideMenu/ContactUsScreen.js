@@ -9,7 +9,8 @@ import {
   Linking,
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import { DARK_ORANGE } from '@/utils/constants';
+import { DARK_ORANGE, BLUE, WHITE, BLACK } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
@@ -85,7 +86,7 @@ export const ContactUsScreen = function () {
           <SocialItem
             name="github"
             icon="github"
-            color="#000"
+            color={BLACK}
             url="https://github.com/brightid"
           />
           <KeybaseItem />
@@ -127,7 +128,7 @@ export const ContactUsScreen = function () {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     marginTop: DEVICE_LARGE ? 23 : 20,
   },
   itemList: {
@@ -164,12 +165,12 @@ const styles = StyleSheet.create({
   },
   socialName: {
     fontFamily: 'Poppins-Regular',
-    fontSize: DEVICE_LARGE ? 14 : 13,
+    fontSize: fontSize[14],
     marginLeft: DEVICE_LARGE ? 15 : 12,
   },
   listHeader: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 11,
+    fontSize: fontSize[12],
     color: DARK_ORANGE,
     marginVertical: DEVICE_LARGE ? 20 : 18,
   },
@@ -179,13 +180,13 @@ const styles = StyleSheet.create({
   },
   bottomText: {
     fontFamily: 'Poppins-Regular',
-    fontSize: DEVICE_LARGE ? 14 : 13,
+    fontSize: fontSize[14],
     marginVertical: DEVICE_LARGE ? 20 : 18,
   },
   link: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 14 : 13,
-    color: '#2185D0',
+    fontSize: fontSize[14],
+    color: BLUE,
   },
 });
 

@@ -13,7 +13,16 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { chooseImage } from '@/utils/images';
-import { ORANGE } from '@/utils/constants';
+import {
+  ORANGE,
+  GREY,
+  WHITE,
+  DARKER_GREY,
+  DARK_GREY,
+  BLACK,
+  BLUE,
+} from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { DEVICE_TYPE, DEVICE_OS, DEVICE_LARGE } from '@/utils/deviceConstants';
 
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
@@ -95,7 +104,7 @@ export class GroupInfoScreen extends React.Component<Props> {
                   accessible={true}
                   accessibilityLabel={t('common.accessibilityLabel.addPhoto')}
                 >
-                  <SimpleLineIcons size={26} name="camera" color="#979797" />
+                  <SimpleLineIcons size={26} name="camera" color={DARK_GREY} />
                 </TouchableOpacity>
               )}
             </View>
@@ -105,7 +114,7 @@ export class GroupInfoScreen extends React.Component<Props> {
                 onChangeText={(name) => this.setState({ name })}
                 value={name}
                 placeholder={t('createGroup.placeholder.groupName')}
-                placeholderTextColor="#9e9e9e"
+                placeholderTextColor={GREY}
                 style={styles.textInput}
                 autoCapitalize="words"
                 autoCorrect={false}
@@ -145,7 +154,9 @@ export class GroupInfoScreen extends React.Component<Props> {
               style={styles.nextButton}
               onPress={this.validateInputs}
             >
-              <Text style={styles.buttonInnerText}>{t('createGroup.button.next')}</Text>
+              <Text style={styles.buttonInnerText}>
+                {t('createGroup.button.next')}
+              </Text>
             </TouchableOpacity>
           </View>
         </Container>
@@ -163,7 +174,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -195,7 +206,7 @@ const styles = StyleSheet.create({
   },
   addPhoto: {
     borderWidth: 1,
-    borderColor: '#979797',
+    borderColor: DARK_GREY,
     height: 72,
     width: 72,
     borderRadius: 36,
@@ -206,7 +217,7 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: 36,
-    shadowColor: '#000',
+    shadowColor: BLACK,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
@@ -216,34 +227,34 @@ const styles = StyleSheet.create({
   },
   addPhotoText: {
     fontFamily: 'ApexNew-Book',
-    color: '#979797',
+    color: DARK_GREY,
     marginBottom: 8,
     marginTop: 8,
-    fontSize: 12,
+    fontSize: fontSize[12],
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
   },
   textInput: {
     fontFamily: 'ApexNew-Light',
-    fontSize: 20,
+    fontSize: fontSize[20],
     fontWeight: '300',
     fontStyle: 'normal',
-    color: '#000',
+    color: BLACK,
     letterSpacing: 0,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#9e9e9e',
+    borderBottomColor: GREY,
     width: '100%',
     height: 45,
   },
   buttonInfoText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 16,
+    fontSize: fontSize[16],
     width: 300,
     textAlign: 'center',
   },
   nextButton: {
-    backgroundColor: '#428BE5',
+    backgroundColor: BLUE,
     width: DEVICE_TYPE === 'large' ? 285 : 260,
     justifyContent: 'center',
     alignItems: 'center',
@@ -253,9 +264,9 @@ const styles = StyleSheet.create({
   },
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',
-    color: '#fff',
+    color: WHITE,
     fontWeight: '600',
-    fontSize: DEVICE_TYPE === 'large' ? 18 : 16,
+    fontSize: fontSize[18],
   },
   loader: {
     justifyContent: 'center',
@@ -263,9 +274,9 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   primaryToggleLable: {
-    color: '#555555',
+    color: DARKER_GREY,
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: fontSize[18],
     width: 200,
   },
   toggleContainer: {
@@ -280,4 +291,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ groups }) => ({ ...groups }))(withTranslation()(GroupInfoScreen));
+export default connect(({ groups }) => ({ ...groups }))(
+  withTranslation()(GroupInfoScreen),
+);

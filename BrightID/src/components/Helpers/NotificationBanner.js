@@ -1,19 +1,20 @@
 // @flow
 
 import React, { useEffect, useRef } from 'react';
-import { InteractionManager, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import DropdownAlert from 'react-native-dropdownalert';
 import { useSelector, useDispatch } from 'react-redux';
-import { SvgXml } from 'react-native-svg';
 import { navigate, getRoute } from '@/NavigationService';
+import AddGroup from '@/components/Icons/AddGroup';
+import AddPerson from '@/components/Icons/AddPerson';
+import Certificate from '@/components/Icons/Certificate';
+import PhoneLock from '@/components/Icons/PhoneLock';
 import { useTranslation } from 'react-i18next';
-import groups from '@/static/add_group.svg';
-import connections from '@/static/add_person.svg';
-import misc from '@/static/trusted_connections.svg';
 import { setActiveNotification } from '@/actions';
 import { CONNECTIONS_TYPE } from '@/utils/constants';
 import { DEVICE_LARGE, HEIGHT } from '@/utils/deviceConstants';
-
+import { LIGHT_GREEN, BLACK } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import DropDownAlertEnabled from '@/utils/DropDownAlertEnabler';
 
@@ -24,7 +25,12 @@ import DropDownAlertEnabled from '@/utils/DropDownAlertEnabler';
 */
 
 // default icons
-const icons = { connections, groups, misc };
+const Icons = {
+  AddGroup,
+  AddPerson,
+  PhoneLock,
+  Certificate,
+};
 
 const NOTIFICATION_TIMEOUT = 10000;
 
@@ -76,16 +82,18 @@ export const NotificationBanner = () => {
         setActiveNotification({
           type: CONNECTIONS_TYPE,
           title: t('notificationBar.title.pendingConnection'),
-          message: t('notificationBar.text.pendingConnections', {count: pendingConnections.length}),
+          message: t('notificationBar.text.pendingConnections', {
+            count: pendingConnections.length,
+          }),
           navigationTarget: 'PendingConnections',
+          icon: 'AddPerson',
         }),
       );
     }
   }, [pendingConnections.length, dispatch]);
 
-  // icon fallback: activeNotification prop 'xmlIcon' -> default icon for notification type -> default 'misc'
-  const icon =
-    activeNotification?.xmlIcon ?? icons[activeNotification?.type] ?? misc;
+  // icon fallback: activeNotification prop 'icon' -> default icon for notification type -> default 'Certificate'
+  const Icon = Icons[activeNotification?.icon || 'Certificate'];
 
   const _onTap = () => {
     console.log('onTap', activeNotification);
@@ -113,7 +121,7 @@ export const NotificationBanner = () => {
       titleStyle={styles.title}
       messageStyle={styles.message}
       updateStatusBar={true}
-      activeStatusBarBackgroundColor="#AFFDD0"
+      activeStatusBarBackgroundColor={LIGHT_GREEN}
       activeStatusBarStyle="dark-content"
       testID="notificationBanner"
       elevation={10}
@@ -121,12 +129,12 @@ export const NotificationBanner = () => {
       onTap={_onTap}
       onClose={_onClose}
       renderImage={() => (
-        <SvgXml
-          style={styles.icon}
-          xml={icon}
-          width={DEVICE_LARGE ? 24 : 20}
-          height={DEVICE_LARGE ? 24 : 20}
-        />
+        <View style={styles.icon}>
+          <Icon
+            width={DEVICE_LARGE ? 24 : 20}
+            height={DEVICE_LARGE ? 24 : 20}
+          />
+        </View>
       )}
       panResponderEnabled={false}
       tapToCloseEnabled={true}
@@ -136,23 +144,23 @@ export const NotificationBanner = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#AFFDD0',
+    backgroundColor: LIGHT_GREEN,
     height: HEIGHT * 0.15,
   },
   title: {
     fontFamily: 'Poppins-Medium',
     marginLeft: DEVICE_LARGE ? 20 : 10,
-    color: '#000',
-    fontSize: DEVICE_LARGE ? 16 : 15,
+    color: BLACK,
+    fontSize: fontSize[16],
   },
   message: {
     fontFamily: 'Poppins-Medium',
     marginLeft: DEVICE_LARGE ? 20 : 10,
-    color: '#000',
-    fontSize: DEVICE_LARGE ? 13 : 12,
+    color: BLACK,
+    fontSize: fontSize[13],
   },
   icon: {
-    marginLeft: DEVICE_LARGE ? 35 : 10,
+    marginLeft: DEVICE_LARGE ? 20 : 10,
   },
 });
 

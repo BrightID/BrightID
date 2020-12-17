@@ -15,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import { WIDTH, DEVICE_LARGE } from '@/utils/deviceConstants';
+import { WHITE, GREY } from '@/theme/colors';
 import { setActiveNotification } from '@/actions';
 import { confirmPendingConnectionThunk } from './actions/pendingConnectionThunks';
 import { PreviewConnectionController } from './PreviewConnectionController';
@@ -163,7 +164,7 @@ export const PendingConnectionsScreen = () => {
     <SafeAreaView style={[styles.container]}>
       <StatusBar
         barStyle="dark-content"
-        backgroundColor="#fff"
+        backgroundColor={WHITE}
         animated={true}
       />
       {}
@@ -172,7 +173,7 @@ export const PendingConnectionsScreen = () => {
           isVisible={true}
           size={DEVICE_LARGE ? 44 : 40}
           type="FadingCircleAlt"
-          color="#aaa"
+          color={GREY}
         />
       ) : (
         <>
@@ -205,7 +206,7 @@ export const PendingConnectionsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'center',
   },

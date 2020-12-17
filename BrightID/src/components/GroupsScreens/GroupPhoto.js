@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { photoDirectory } from '@/utils/filesystem';
 import { groupCirclePhotos } from '@/utils/groups';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { LIGHT_GREY } from '@/theme/colors';
 
 const photoStyle = (photo) => {
   const style = { ...styles.photo };
@@ -80,13 +81,13 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     width: 60,
     height: 60,
-    backgroundColor: '#d8d8d8',
+    backgroundColor: LIGHT_GREY,
   },
   photo: {
     borderRadius: 20,
     width: DEVICE_LARGE ? 40 : 32,
     height: DEVICE_LARGE ? 40 : 32,
-    backgroundColor: '#d8d8d8',
+    backgroundColor: LIGHT_GREY,
   },
   faded: {
     opacity: 0.25,

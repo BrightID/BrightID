@@ -5,6 +5,14 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import {
+  DARKER_GREY,
+  DARK_ORANGE,
+  GREEN,
+  LIGHT_GREY,
+  WHITE,
+} from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import CirclePhoto from '@/components/Helpers/CirclePhoto';
 
 export const PendingConnectionCard = ({ pendingConnections }) => {
@@ -44,7 +52,9 @@ export const PendingConnectionCard = ({ pendingConnections }) => {
           adjustsFontSizeToFit={true}
           numberOfLines={1}
         >
-          {t('notifications.item.text.pendingConnections', {count: pendingConnections.length})}
+          {t('notifications.item.text.pendingConnections', {
+            count: pendingConnections.length,
+          })}
         </Text>
       </View>
       <View style={styles.approvalButtonContainer} />
@@ -58,8 +68,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    backgroundColor: '#fff',
-    borderBottomColor: '#e3e0e4',
+    backgroundColor: WHITE,
+    borderBottomColor: LIGHT_GREY,
     borderBottomWidth: 1,
     paddingBottom: DEVICE_LARGE ? 10 : 8,
     paddingTop: DEVICE_LARGE ? 10 : 8,
@@ -75,7 +85,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     width: DEVICE_LARGE ? 60 : 48,
     height: DEVICE_LARGE ? 60 : 48,
-    backgroundColor: '#d8d8d8',
+    backgroundColor: LIGHT_GREY,
   },
   info: {
     marginLeft: DEVICE_LARGE ? 10 : 7,
@@ -86,15 +96,15 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 20 : 18,
+    fontSize: fontSize[20],
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
   invitationMsg: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 10,
-    color: '#B64B32',
+    fontSize: fontSize[12],
+    color: DARK_ORANGE,
   },
   greenCircle: {
     alignItems: 'center',
@@ -103,7 +113,7 @@ const styles = StyleSheet.create({
     height: DEVICE_LARGE ? 40 : 32,
     borderRadius: 25,
     borderWidth: 2,
-    borderColor: '#5DEC9A',
+    borderColor: GREEN,
   },
   greyCircle: {
     alignItems: 'center',
@@ -112,7 +122,7 @@ const styles = StyleSheet.create({
     height: DEVICE_LARGE ? 40 : 32,
     borderRadius: 25,
     borderWidth: 2,
-    borderColor: '#707070',
+    borderColor: DARKER_GREY,
     marginLeft: 7,
     marginRight: 7,
   },

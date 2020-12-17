@@ -4,6 +4,7 @@ import React, { useRef } from 'react';
 import { Animated, StyleSheet, PanResponder } from 'react-native';
 import { photoDirectory } from '@/utils/filesystem';
 import { BlurView } from '@react-native-community/blur';
+import { BLACK } from '@/theme/colors';
 
 /**
  * Search Bar in the Groups Screen
@@ -53,7 +54,7 @@ const FullScreenPhoto = ({ route, navigation }) => {
       style={[styles.container]}
       blurType="dark"
       blurAmount={10}
-      reducedTransparencyFallbackColor="black"
+      reducedTransparencyFallbackColor={BLACK}
     >
       <Animated.Image
         source={imageSource}

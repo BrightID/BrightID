@@ -7,10 +7,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-
-const ICON_COLOR = '#fff';
-const ICON_SIZE = 36;
-const BACKGROUND_COLOR = '#f98961';
+import { ORANGE, WHITE } from '@/theme/colors';
 
 export default class FloatActionButton extends Component {
   constructor(props) {
@@ -67,9 +64,9 @@ export default class FloatActionButton extends Component {
           <View style={styles.circleButton}>
             <Material
               name="plus"
-              size={ICON_SIZE}
-              color={ICON_COLOR}
-              style={{ width: ICON_SIZE, height: ICON_SIZE }}
+              size={36}
+              color={WHITE}
+              style={{ width: 36, height: 36 }}
             />
           </View>
         </TouchableOpacity>
@@ -90,7 +87,7 @@ const styles = StyleSheet.create({
   circleButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: BACKGROUND_COLOR,
+    backgroundColor: ORANGE,
     width: 54,
     height: 54,
     borderRadius: 27,

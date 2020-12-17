@@ -11,7 +11,7 @@ import { withTranslation } from 'react-i18next';
 import api from '@/api/brightId';
 import { encryptAesKey } from '@/utils/invites';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import i18next from 'i18next';
 import MemberCard from './MemberCard';
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
+    backgroundColor: WHITE,
     borderTopLeftRadius: 58,
     borderTopRightRadius: 58,
     marginTop: -58,
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
+    backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',

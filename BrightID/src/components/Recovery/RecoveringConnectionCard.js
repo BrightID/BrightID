@@ -14,6 +14,8 @@ import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
 import { withTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { GREY, WHITE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import backupApi from '@/api/backupService';
 import { parseRecoveryQr } from './helpers';
 
@@ -24,6 +26,7 @@ class RecoveryConnectionCard extends React.PureComponent<Props> {
       imgErr: false,
     };
   }
+
   handleConnectionSelect = async () => {
     const { t } = this.props;
     try {
@@ -48,17 +51,8 @@ class RecoveryConnectionCard extends React.PureComponent<Props> {
     }
   };
 
-  scoreColor = () => {
-    const { score } = this.props;
-    if (score >= 85) {
-      return { color: '#139c60' };
-    } else {
-      return { color: '#e39f2f' };
-    }
-  };
-
   render() {
-    const { photo, name, score, connectionDate, style, t } = this.props;
+    const { photo, name, connectionDate, style, t } = this.props;
     const imageSource =
       photo?.filename && !this.state.imgErr
         ? {
@@ -80,14 +74,11 @@ class RecoveryConnectionCard extends React.PureComponent<Props> {
           />
           <View style={styles.info}>
             <Text style={styles.name}>{name}</Text>
-            <View style={styles.scoreContainer}>
-              <Text style={styles.scoreLeft}>Score:</Text>
-              <Text style={[styles.scoreRight, this.scoreColor()]}>
-                {score}
-              </Text>
-            </View>
+            <View style={styles.scoreContainer} />
             <Text style={styles.connectedText}>
-              {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
+              {t('common.tag.connectionDate', {
+                date: moment(parseInt(connectionDate, 10)).fromNow(),
+              })}
             </Text>
           </View>
         </View>
@@ -102,7 +93,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     height: DEVICE_LARGE ? 94 : 80,
     marginBottom: DEVICE_LARGE ? 11.8 : 6,
     shadowColor: 'rgba(0,0,0,0.32)',
@@ -125,7 +116,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_LARGE ? 20 : 18,
+    fontSize: fontSize[20],
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
@@ -135,21 +126,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  scoreLeft: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 14,
-    color: '#9b9b9b',
-    marginRight: 3,
-    paddingTop: 1.5,
-  },
-  scoreRight: {
-    fontFamily: 'ApexNew-Medium',
-    fontSize: 16,
-  },
+
   connectedText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 12,
-    color: '#aba9a9',
+    fontSize: fontSize[12],
+    color: GREY,
     fontStyle: 'italic',
   },
   moreIcon: {

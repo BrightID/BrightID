@@ -9,9 +9,10 @@ import fetchUserInfo from '@/actions/fetchUserInfo';
 import { useNavigation } from '@react-navigation/native';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE, WHITE } from '@/theme/colors';
 import { toSearchString } from '@/utils/strings';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { sortConnectionsBy } from '@/utils/sorting';
 import ConnectionCard from './ConnectionCard';
 
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     borderTopLeftRadius: 58,
     marginTop: -58,
     overflow: 'hidden',
@@ -160,8 +161,8 @@ const styles = StyleSheet.create({
   },
   actionText: {
     fontFamily: 'Poppins-Medium',
-    color: '#fff',
-    fontSize: 11,
+    color: WHITE,
+    fontSize: fontSize[11],
   },
 });
 

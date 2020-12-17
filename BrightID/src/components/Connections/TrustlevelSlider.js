@@ -7,6 +7,8 @@ import i18next from 'i18next';
 import Slider from '@react-native-community/slider';
 import { connection_levels } from '@/utils/constants';
 import { WIDTH, DEVICE_LARGE } from '@/utils/deviceConstants';
+import { ORANGE, BLACK } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import {
   connectionLevelColors,
   connectionLevelStrings,
@@ -85,7 +87,7 @@ const TrustlevelSlider = ({
         maximumTrackTintColor={
           connectionLevelColors[connection_levels.REPORTED]
         }
-        thumbTintColor="orange"
+        thumbTintColor={ORANGE}
         onValueChange={valueChangeHandler}
       />
     </View>
@@ -103,8 +105,8 @@ const styles = StyleSheet.create({
   },
   labelText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 17 : 15,
-    color: '#000',
+    fontSize: fontSize[17],
+    color: BLACK,
   },
   description: {
     // set minimum height so the slider does not jump when the description
@@ -113,8 +115,8 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
-    color: '#000',
+    fontSize: fontSize[16],
+    color: BLACK,
     textAlign: 'center',
   },
   slider: {

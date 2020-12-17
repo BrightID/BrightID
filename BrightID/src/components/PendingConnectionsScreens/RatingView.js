@@ -5,6 +5,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { connection_levels } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { DARKER_GREY } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import {
   connectionLevelColors,
   connectionLevelStrings,
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
   ratingHeader: {
     fontFamily: 'Poppins-Bold',
     textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 16 : 13,
+    fontSize: fontSize[16],
     marginBottom: DEVICE_LARGE ? 5 : 4,
   },
 
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
     paddingTop: DEVICE_LARGE ? 8 : 7,
     fontFamily: 'Poppins-Regular',
     textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 12 : 11,
-    color: '#827F7F',
+    fontSize: fontSize[12],
+    color: DARKER_GREY,
   },
 });

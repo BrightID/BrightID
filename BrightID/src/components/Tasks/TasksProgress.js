@@ -3,6 +3,8 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { GREEN, WHITE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 
 type TasksProgressProps = {
   totalSteps: number,
@@ -46,7 +48,7 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: 'Poppins-Medium',
     fontStyle: 'normal',
-    fontSize: DEVICE_LARGE ? 13 : 12,
+    fontSize: fontSize[13],
   },
   progressBar: {
     flexGrow: 1,
@@ -56,21 +58,21 @@ const styles = StyleSheet.create({
   },
   barFilled: {
     height: DEVICE_LARGE ? 16 : 14,
-    backgroundColor: '#5DEC9A',
+    backgroundColor: GREEN,
     borderRadius: 10,
     width: '100%',
   },
   barCleared: {
     height: DEVICE_LARGE ? 16 : 14,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: WHITE,
     borderRadius: 10,
-    borderColor: '#5DEC9A',
+    borderColor: GREEN,
     borderWidth: 1,
     alignSelf: 'flex-end',
   },
   steps: {
     fontFamily: 'Poppins-Medium',
     fontStyle: 'normal',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
   },
 });

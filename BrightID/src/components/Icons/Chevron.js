@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Svg, { Path } from 'react-native-svg';
+import { BLACK } from '@/theme/colors';
 
 type Props = {
   direction: 'up' | 'down',
@@ -16,7 +17,7 @@ const pathUp = 'M14 9L8 3L2 9';
 
 const Chevron = ({
   direction = 'down',
-  color = '#000',
+  color = BLACK,
   width = 16,
   height = 11,
   strokeWidth = 3,
