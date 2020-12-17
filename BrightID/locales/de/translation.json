@@ -535,7 +535,7 @@
         },
         "text": {
             "noConnections": "Keine Verbindungen …",
-            "enterPassword": "Gib ein Passwort ein, mit dem du deine Sicherungsdaten verschlüsselt haben:",
+            "enterPassword": "Gib das Passwort ein, mit dem du deine Sicherungsdaten verschlüsselt hast:",
             "downloadingData": "Herunterladen von Daten vom Sicherungsserver …",
             "chooseConnectionToHelp": "Bitte wähle die Verbindung aus, deren Konto du wiederherstellen willst."
         },
@@ -558,7 +558,7 @@
     },
     "graphExplorer": {
         "text": {
-            "explorerWebsiteDescription": "ist eine Website, mit der das gesamte soziale BrightID-Diagramm untersucht werden kann. Verwende den obigen Code, um deine Verbindungen in der Grafik anzuzeigen.",
+            "explorerWebsiteDescription": "ist eine Website, mit der der gesamte soziale BrightID-Graph untersucht werden kann. Verwende den obigen Code, um deine Verbindungen im Graphen anzuzeigen.",
             "backupRequired": "Das Einrichten der Sicherung und Wiederherstellung ist erforderlich, um auf deinen Graph Explorer-Code zugreifen zu können. Überprüfe deine Benachrichtigungen oder stelle eine Verbindung zu weiteren Benutzern her, um für die Sicherung und Wiederherstellung berechtigt zu sein."
         },
         "button": {
@@ -577,7 +577,7 @@
         "text": {
             "weAre": "Wir sind ",
             "openSource": "quelloffen!",
-            "meet": "Nimm an einer BrightID-Überprüfungsparty teil!"
+            "meet": "Nimm an einer BrightID-Verbindungsparty teil!"
         },
         "label": {
             "website": "Website",
@@ -604,9 +604,9 @@
             "connectedAt": "Verbunden {{date}}"
         },
         "label": {
-            "mutualGroups": "Gegenseitige Gruppen",
-            "mutualConnections": "Gegenseitige Verbindungen",
-            "connectionLevel": "Verbindungsebene"
+            "mutualGroups": "Gemeinsame Gruppen",
+            "mutualConnections": "Gemeinsame Verbindungen",
+            "connectionLevel": "Verbindungsstufe"
         },
         "header": {
             "connectionDetails": "Verbindungsdetails"
