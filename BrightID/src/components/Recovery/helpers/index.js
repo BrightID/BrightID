@@ -13,7 +13,6 @@ import {
 } from '@/utils/filesystem';
 import { encryptData, decryptData } from '@/utils/cryptoHelper';
 import backupApi from '@/api/backupService';
-d;
 import api from '@/api/brightId';
 import store from '@/store';
 import emitter from '@/emitter';
@@ -34,7 +33,6 @@ import {
 import {
   strToUint8Array,
   uInt8ArrayToB64,
-  b64ToUrlSafeB64,
   hash,
   randomKey,
 } from '@/utils/encoding';
