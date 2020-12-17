@@ -30,10 +30,18 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
   const { t } = useTranslation();
   const { pendingConnection, setLevelHandler, photoTouchHandler } = props;
 
-  const reported =
-    pendingConnection.reports.length /
-      (pendingConnection.connectionsNum || 1) >=
-    REPORTED_PERCENTAGE;
+  // Potential workaround for crashes reported in AppCenter with message
+  // "TypeError: undefined is not an object (evaluating 'L.reports.length')"
+  let reported = false;
+  if (pendingConnection && pendingConnection.reports) {
+    reported =
+      pendingConnection.reports.length /
+        (pendingConnection.connectionsNum || 1) >=
+      REPORTED_PERCENTAGE;
+  } else {
+    console.log(`Failed to get reports.length!`);
+  }
+
   const brightIdVerified = pendingConnection.verifications
     .map((v) => v.name)
     .includes('BrightID');
