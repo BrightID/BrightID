@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { ORANGE } from '@/utils/constants';
+import { connectionsSelector } from '@/utils/connectionsSelector';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import EmptyList from '@/components/Helpers/EmptyList';
 import TrustedConnectionCard from './TrustedConnectionCard';
@@ -36,16 +37,7 @@ const TrustedConnectionsScreen = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
-  const searchParam = useSelector((state) => state.connections.searchParam);
-
-  const connections = useSelector((state) => state.connections.connections)
-    .filter((item) =>
-      `${item.name}`
-        .toLowerCase()
-        .replace(/\s/g, '')
-        .includes(searchParam.toLowerCase().replace(/\s/g, '')),
-    )
-    .filter((item) => item.status === 'verified');
+  const connections = useSelector(connectionsSelector);
 
   const trustedConnections = useSelector(
     (state) => state.connections.trustedConnections,

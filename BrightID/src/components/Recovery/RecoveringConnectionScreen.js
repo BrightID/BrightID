@@ -9,6 +9,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { connectionsSelector } from '@/utils/connectionsSelector';
 import store from '@/store';
 import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
@@ -23,15 +24,7 @@ const getItemLayout = (data, index) => ({
 });
 
 const RecoveringConnectionScreen = () => {
-  const searchParam = useSelector((state) => state.connections.searchParam);
-  const connections = useSelector((state) => state.connections.connections)
-    .filter((item) =>
-      `${item.name}`
-        .toLowerCase()
-        .replace(/\s/g, '')
-        .includes(searchParam.toLowerCase().replace(/\s/g, '')),
-    )
-    .filter((item) => item.status === 'verified');
+  const connections = useSelector(connectionsSelector);
 
   const { t } = useTranslation();
   const navigation = useNavigation();

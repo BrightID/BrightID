@@ -1,56 +1,26 @@
-import React, { useEffect, useRef } from 'react';
-import { Animated, Text } from 'react-native';
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import ConnectionsScreen from '@/components/Connections/ConnectionsScreen';
+import ConnectionScreenController from '@/components/Connections/ConnectionScreenController';
 import SearchConnections from '@/components/Helpers/SearchConnections';
-import TrustedConnectionsScreen from '@/components/Recovery/TrustedConnectionsScreen';
-import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
-import { headerOptions, headerTitleStyle, NavHome } from './helpers';
-import ConnectionScreenController from '../components/Connections/ConnectionScreenController';
+import { headerOptions, AnimatedHeaderTitle, NavHome } from './helpers';
 
 const Stack = createStackNavigator();
-
-
-const HeaderTitle = ({ title }) => {
-  const searchOpen = useSelector((state) => state.connections.searchOpen);
-  const fadeAnim = useRef(new Animated.Value(1)).current;
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: searchOpen ? 0 : 1,
-      useNativeDriver: true,
-      duration: 600,
-    }).start();
-  }, [fadeAnim, searchOpen]);
-  
-  return (
-    <Animated.View style={{ opacity: fadeAnim }}>
-      <Text style={headerTitleStyle}>{title}</Text>
-    </Animated.View>
-  );
-};
-
-const HeaderTitleI18N = ({ i18key }) => {
-  const { t } = useTranslation();
-  return (<HeaderTitle title={t(i18key)}/>);
-};
 
 const connectionsScreenOptions = {
   ...headerOptions,
   headerRight: () => <SearchConnections sortable={true} />,
   headerLeft: () => <NavHome />,
-  headerTitle: () => <HeaderTitleI18N i18key="connections.header.connections" />,
+  headerTitle: () => (
+    <AnimatedHeaderTitle i18key="connections.header.connections" />
+  ),
 };
 
 const connectionScreenOptions = {
   ...headerOptions,
-  headerTitle: () => <HeaderTitleI18N i18key="connectionDetails.header.connectionDetails" />,
-};
-
-const trustedScreenOptions = {
-  ...headerOptions,
-  headerRight: () => <SearchConnections sortable={true} />,
-  headerTitle: () => <HeaderTitleI18N i18key="backup.header.trustedConnections" />,
+  headerTitle: () => (
+    <AnimatedHeaderTitle i18key="connectionDetails.header.connectionDetails" />
+  ),
 };
 
 const Connections = () => {
@@ -61,11 +31,7 @@ const Connections = () => {
         component={ConnectionsScreen}
         options={connectionsScreenOptions}
       />
-      <Stack.Screen
-        name="TrustedConnections"
-        component={TrustedConnectionsScreen}
-        options={trustedScreenOptions}
-      />
+
       <Stack.Screen
         name="Connection"
         component={ConnectionScreenController}

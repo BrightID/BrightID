@@ -1,10 +1,12 @@
-import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Animated, Text, TouchableOpacity, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { navigate } from '@/NavigationService';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import backArrow from '@/static/back_arrow_white.svg';
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 export const headerTitleStyle = {
   fontFamily: 'Poppins-Bold',
@@ -51,3 +53,24 @@ export const NavHome = () => (
     <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
   </TouchableOpacity>
 );
+
+export const AnimatedHeaderTitle = ({ i18key }) => {
+  const { t } = useTranslation();
+  const searchOpen = useSelector(
+    (state) => state.connections.searchOpen || state.groups.searchOpen,
+  );
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: searchOpen ? 0 : 1,
+      useNativeDriver: true,
+      duration: 600,
+    }).start();
+  }, [fadeAnim, searchOpen]);
+
+  return (
+    <Animated.View style={{ opacity: fadeAnim }}>
+      <Text style={headerTitleStyle}>{t(i18key)}</Text>
+    </Animated.View>
+  );
+};
