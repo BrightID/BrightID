@@ -79,7 +79,7 @@ const RecoveringConnectionScreen = () => {
         ) : (
           <View style={styles.mainContainer}>
             <View style={styles.titleContainer}>
-              <Text style={styles.infoText}>Uploading Shared DAta</Text>
+              <Text style={styles.infoText}>Uploading Shared Data</Text>
             </View>
             <Spinner size={DEVICE_LARGE ? 48 : 42} type="Wave" color={ORANGE} />
           </View>
