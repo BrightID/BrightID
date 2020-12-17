@@ -9,25 +9,59 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { SvgXml } from 'react-native-svg';
+import verificationSticker from '@/static/verification-sticker.svg';
+import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import { photoDirectory } from '@/utils/filesystem';
 import ChannelAPI from '@/api/channelService';
 import api from '@/api/brightId';
+import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
 import { loadRecoveryData, uploadSig, uploadMutualInfo } from './helpers';
 
 const RecoveryConnectionCard = (props) => {
-  const { id, aesKey, photo, name, connectionDate, style } = props;
+  const {
+    status,
+    verifications,
+    id,
+    aesKey,
+    photo,
+    name,
+    connectionDate,
+    index,
+    level,
+    hiddenFlag,
+    setUploadingData,
+  } = props;
 
   const [imgErr, setImgErr] = useState(false);
 
   const { t } = useTranslation();
   const navigation = useNavigation();
 
+  const brightidVerified = verifications?.includes('BrightID');
+
+  const confirmConnectionSelection = () => {
+    Alert.alert(
+      'Please Confirm',
+      `Is ${name} the the account you are helping to recover?`,
+      [
+        {
+          text: 'Yes',
+          onPress: handleConnectionSelect,
+        },
+        {
+          text: 'No',
+          onPress: () => {},
+        },
+      ],
+    );
+  };
+
   const handleConnectionSelect = async () => {
     try {
+      setUploadingData(true);
       const ipAddress = await api.ip();
       const channelApi = new ChannelAPI(`http://${ipAddress}/profile`);
       const { signingKey, timestamp } = await loadRecoveryData(
@@ -48,7 +82,7 @@ const RecoveryConnectionCard = (props) => {
         );
       });
     } catch (err) {
-      console.warn(err.message);
+      alert(err.message);
     }
   };
 
@@ -60,8 +94,11 @@ const RecoveryConnectionCard = (props) => {
       : require('@/static/default_profile.jpg');
 
   return (
-    <TouchableOpacity onPress={handleConnectionSelect}>
-      <View style={{ ...styles.container, ...style }}>
+    <TouchableOpacity
+      onPress={confirmConnectionSelection}
+      style={styles.container}
+    >
+      <View style={styles.card}>
         <Image
           source={imageSource}
           style={styles.photo}
@@ -70,14 +107,34 @@ const RecoveryConnectionCard = (props) => {
           }}
           accessibilityLabel="profile picture"
         />
-        <View style={styles.info}>
-          <Text style={styles.name}>{name}</Text>
-          <View style={styles.scoreContainer}></View>
-          <Text style={styles.connectedText}>
-            {t('common.tag.connectionDate', {
-              date: moment(parseInt(connectionDate, 10)).fromNow(),
-            })}
-          </Text>
+        <View style={[styles.info, { maxWidth: WIDTH * 0.56 }]}>
+          <View
+            style={[styles.nameContainer]}
+            testID={`connection_name-${index}`}
+          >
+            <Text
+              numberOfLines={1}
+              style={styles.name}
+              testID={`connectionCardText-${index}`}
+            >
+              {name}
+            </Text>
+            {brightidVerified && (
+              <SvgXml
+                style={styles.verificationSticker}
+                width="16"
+                height="16"
+                xml={verificationSticker}
+              />
+            )}
+          </View>
+          <ConnectionStatus
+            index={index}
+            status={status}
+            hiddenFlag={hiddenFlag}
+            connectionDate={connectionDate}
+            level={level}
+          />
         </View>
       </View>
     </TouchableOpacity>
@@ -86,37 +143,49 @@ const RecoveryConnectionCard = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    flexDirection: 'row',
+    height: DEVICE_LARGE ? 102 : 92,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    backgroundColor: 'transparent',
+  },
+  card: {
+    width: '90%',
+    height: DEVICE_LARGE ? 76 : 71,
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'flex-start',
     backgroundColor: '#fff',
-    height: DEVICE_LARGE ? 94 : 80,
-    marginBottom: DEVICE_LARGE ? 11.8 : 6,
-    shadowColor: 'rgba(0,0,0,0.32)',
+    shadowColor: 'rgba(221, 179, 169, 0.3)',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.43,
-    shadowRadius: 4,
+    shadowOpacity: 1,
+    shadowRadius: 5,
+    elevation: 5,
+    borderTopLeftRadius: DEVICE_LARGE ? 12 : 10,
+    borderBottomLeftRadius: DEVICE_LARGE ? 12 : 10,
   },
   photo: {
-    borderRadius: 30,
-    width: 60,
-    height: 60,
-    marginLeft: 14,
+    borderRadius: 55,
+    width: DEVICE_LARGE ? 65 : 55,
+    height: DEVICE_LARGE ? 65 : 55,
+    marginLeft: DEVICE_LARGE ? 14 : 12,
+    marginTop: -30,
   },
   info: {
-    marginLeft: 25,
+    marginLeft: DEVICE_LARGE ? 22 : 19,
     flex: 1,
     height: DEVICE_LARGE ? 71 : 65,
     flexDirection: 'column',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
+  nameContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   name: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_LARGE ? 20 : 18,
-    shadowColor: 'rgba(0,0,0,0.32)',
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
+    fontFamily: 'Poppins-Medium',
+    fontSize: DEVICE_LARGE ? 16 : 14,
   },
   scoreContainer: {
     flexDirection: 'row',

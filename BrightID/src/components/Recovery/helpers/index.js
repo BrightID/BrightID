@@ -241,7 +241,7 @@ export const uploadSigRequest = async (channelApi, recoveryData) => {
     });
   } catch (e) {
     const msg = 'Profile data already exists in channel';
-    if (e.message !== msg) {
+    if (!e.message.startsWith(msg)) {
       throw e;
     }
   }

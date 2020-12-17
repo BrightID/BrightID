@@ -1,25 +1,23 @@
 // @flow
 
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { connectionsSelector } from '@/utils/connectionsSelector';
 import store from '@/store';
-import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
 
-const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
-const ITEM_MARGIN = DEVICE_LARGE ? 11.8 : 6;
+const ITEM_HEIGHT = DEVICE_LARGE ? 102 : 92;
 
 const getItemLayout = (data, index) => ({
-  length: ITEM_HEIGHT + ITEM_MARGIN,
-  offset: (ITEM_HEIGHT + ITEM_MARGIN) * index,
+  length: ITEM_HEIGHT,
+  offset: ITEM_HEIGHT * index,
   index,
 });
 
@@ -27,17 +25,20 @@ const RecoveringConnectionScreen = () => {
   const connections = useSelector(connectionsSelector);
 
   const { t } = useTranslation();
-  const navigation = useNavigation();
   const route = useRoute();
-  // const aesKey = ;
 
-  const renderConnection = ({ item }) => (
-    <RecoveringConnectionCard
-      {...item}
-      aesKey={route.params?.aesKey}
-      style={styles.recoveringConnectionCard}
-    />
-  );
+  const [uploadingData, setUploadingData] = useState(false);
+
+  const renderConnection = ({ item, index }) => {
+    item.index = index;
+    return (
+      <RecoveringConnectionCard
+        {...item}
+        aesKey={route.params?.aesKey}
+        setUploadingData={setUploadingData}
+      />
+    );
+  };
 
   const {
     recoveryData: { totalItems, completedItems },
@@ -54,36 +55,35 @@ const RecoveringConnectionScreen = () => {
     <>
       <View style={styles.orangeTop} />
       <View style={styles.container}>
-        <View style={styles.mainContainer}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>
-              {t('restore.title.chooseConnection')}
-            </Text>
-            <Text style={styles.infoText}>{msg}</Text>
-            <Spinner
-              isVisible={waiting}
-              size={DEVICE_LARGE ? 48 : 42}
-              type="Wave"
-              color="#4a90e2"
-            />
-          </View>
-          <SearchConnections navigation={navigation} />
+        {!uploadingData ? (
           <View style={styles.mainContainer}>
-            <FlatList
-              style={styles.connectionsContainer}
-              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-              data={connections}
-              keyExtractor={({ id }, index) => id + index}
-              renderItem={renderConnection}
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}
-              ListEmptyComponent={
-                <EmptyList title={t('restore.text.noConnections')} />
-              }
-              getItemLayout={getItemLayout}
-            />
+            <View style={styles.titleContainer}>
+              <Text style={styles.infoText}>{msg}</Text>
+            </View>
+            <View style={styles.mainContainer}>
+              <FlatList
+                style={styles.connectionsContainer}
+                contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+                data={connections}
+                keyExtractor={({ id }, index) => id + index}
+                renderItem={renderConnection}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                ListEmptyComponent={
+                  <EmptyList title={t('restore.text.noConnections')} />
+                }
+                getItemLayout={getItemLayout}
+              />
+            </View>
           </View>
-        </View>
+        ) : (
+          <View style={styles.mainContainer}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.infoText}>Uploading Shared DAta</Text>
+            </View>
+            <Spinner size={DEVICE_LARGE ? 48 : 42} type="Wave" color={ORANGE} />
+          </View>
+        )}
       </View>
     </>
   );
@@ -116,9 +116,7 @@ const styles = StyleSheet.create({
   },
   connectionsContainer: {
     flex: 1,
-    width: '96.7%',
-    borderTopWidth: 1,
-    borderTopColor: '#e3e1e1',
+    width: '100%',
   },
   moreIcon: {
     marginRight: 16,
@@ -128,41 +126,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 6,
     backgroundColor: '#fff',
-    width: '96.7%',
+    width: '100%',
     marginBottom: 11,
   },
-  titleText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 18,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
-    textAlign: 'left',
-    textShadowColor: 'rgba(0, 0, 0, 0.09)',
-    textShadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    textShadowRadius: 4,
-    marginBottom: 6,
-  },
   infoText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 14,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
+    fontFamily: 'Poppins-Regular',
+    fontSize: 15,
     textAlign: 'center',
+    width: '80%',
   },
-  recoveringConnectionCard: {
-    marginBottom: 0,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0,
-    shadowRadius: 0,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e3e1e1',
-    width: '100%',
-  },
+
   buttonContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -184,11 +157,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 });
-
-// export default connect(({ connections, user, recoveryData }) => ({
-//   ...connections,
-//   ...user,
-//   ...recoveryData
-// }))(withTranslation()(RecoveringConnectionScreen));
 
 export default RecoveringConnectionScreen;

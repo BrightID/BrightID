@@ -95,6 +95,9 @@ const RecoveryCodeScreen = () => {
                 });
             }, 3000);
             console.log('start waiting for sigs', checkIntervalId);
+          })
+          .catch((err) => {
+            alert(err.message);
           });
       }
 

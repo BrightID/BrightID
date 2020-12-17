@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import moment from 'moment';
 import { CHANNEL_TTL } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
 import { staleConnection, deleteConnection } from '@/actions';
@@ -14,11 +13,7 @@ import verificationSticker from '@/static/verification-sticker.svg';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-
-import {
-  connectionLevelColors,
-  connectionLevelStrings,
-} from '../../utils/connectionLevelStrings';
+import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
 
 /**
  * Connection Card in the Connections Screen
@@ -100,63 +95,12 @@ const ConnectionCard = (props) => {
     }
   }, [name, status]);
 
-  const ConnectionStatus = () => {
-    if (status === 'initiated') {
-      return (
-        <View style={styles.statusContainer}>
-          <Text style={styles.waitingMessage}>{t('connections.tag.waiting')}</Text>
-        </View>
-      );
-    } else if (status === 'stale') {
-      return (
-        <View style={styles.statusContainer}>
-          <Text style={styles.waitingMessage}>
-            {t('connections.tag.failed')}
-          </Text>
-        </View>
-      );
-    } else if (status === 'hidden') {
-      return (
-        <View style={styles.statusContainer}>
-          <Text style={[styles.deletedMessage, { marginTop: 1 }]}>
-            {hiddenFlag ? t('connections.tag.reportedAs', {flag: `Reported as ${hiddenFlag}`}) : t('connections.tag.hidden')}
-          </Text>
-          <Text style={[styles.connectedText, { marginTop: 1 }]}>
-            {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
-          </Text>
-        </View>
-      );
-    } else if (status === 'deleted') {
-      return (
-        <View style={styles.statusContainer}>
-          <Text style={styles.deletedMessage}>{t('connections.tag.deleted')}</Text>
-        </View>
-      );
-    } else {
-      return (
-        <View style={styles.statusContainer} testID={`connection-${index}`}>
-          <Text
-            testID={`connection_level-${index}`}
-            style={[
-              styles.connectionLevel,
-              { color: connectionLevelColors[level] },
-            ]}
-          >
-            {connectionLevelStrings[level]}
-          </Text>
-          <Text
-            style={styles.connectionTime}
-            testID={`connection_time-${index}`}
-          >
-            {t('common.tag.connectionDate', {date: moment(parseInt(connectionDate, 10)).fromNow()})}
-          </Text>
-        </View>
-      );
-    }
-  };
-
   const { showActionSheetWithOptions } = useActionSheet();
-  const removeOptions = [t('connections.removeActionSheet.remove'), t('common.actionSheet.cancel')];
+
+  const removeOptions = [
+    t('connections.removeActionSheet.remove'),
+    t('common.actionSheet.cancel'),
+  ];
 
   const showRemove = status === 'deleted' || status === 'stale';
 
@@ -171,7 +115,7 @@ const ConnectionCard = (props) => {
               cancelButtonIndex: removeOptions.length - 1,
               destructiveButtonIndex: 0,
               title: t('connections.removeActionSheet.title'),
-              message: t('connections.removeActionSheet.info', {name: name}),
+              message: t('connections.removeActionSheet.info', { name: name }),
               showSeparators: true,
               textStyle: {
                 textAlign: 'center',
@@ -210,7 +154,9 @@ const ConnectionCard = (props) => {
           <Image
             source={imageSource}
             style={styles.photo}
-            accessibilityLabel={t('connections.accessibilityLabel.connectionPhoto')}
+            accessibilityLabel={t(
+              'connections.accessibilityLabel.connectionPhoto',
+            )}
             onError={() => {
               console.log('settingImgErr');
               setImgErr(true);
@@ -222,7 +168,9 @@ const ConnectionCard = (props) => {
           onPress={() => {
             navigation.navigate('Connection', { connectionId: id });
           }}
-          accessibilityLabel={t('connections.accessibilityLabel.viewConnectionDetails')}
+          accessibilityLabel={t(
+            'connections.accessibilityLabel.viewConnectionDetails',
+          )}
         >
           <View style={[styles.info, { maxWidth: WIDTH * 0.56 }]}>
             <View
@@ -230,7 +178,6 @@ const ConnectionCard = (props) => {
               testID={`connection_name-${index}`}
             >
               <Text
-                // adjustsFontSizeToFit={true}
                 numberOfLines={1}
                 style={styles.name}
                 testID={`connectionCardText-${index}`}
@@ -246,7 +193,13 @@ const ConnectionCard = (props) => {
                 />
               )}
             </View>
-            <ConnectionStatus />
+            <ConnectionStatus
+              index={index}
+              status={status}
+              hiddenFlag={hiddenFlag}
+              connectionDate={connectionDate}
+              level={level}
+            />
           </View>
         </TouchableOpacity>
         <RemoveConnection />
@@ -301,37 +254,37 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: DEVICE_LARGE ? 16 : 14,
   },
-  statusContainer: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  connectionLevel: {
-    fontFamily: 'Poppins-Regular',
-    fontSize: DEVICE_LARGE ? 12 : 11,
-    marginTop: DEVICE_LARGE ? 3 : 1,
-  },
-  connectionTime: {
-    fontFamily: 'Poppins-Regular',
-    fontSize: DEVICE_LARGE ? 10 : 9,
-    color: '#B64B32',
-  },
+  // statusContainer: {
+  //   flexDirection: 'column',
+  //   justifyContent: 'center',
+  //   alignItems: 'flex-start',
+  // },
+  // connectionLevel: {
+  //   fontFamily: 'Poppins-Regular',
+  //   fontSize: DEVICE_LARGE ? 12 : 11,
+  //   marginTop: DEVICE_LARGE ? 3 : 1,
+  // },
+  // connectionTime: {
+  //   fontFamily: 'Poppins-Regular',
+  //   fontSize: DEVICE_LARGE ? 10 : 9,
+  //   color: '#B64B32',
+  // },
   moreIcon: {
     marginRight: DEVICE_LARGE ? 26 : 23,
   },
-  waitingMessage: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 13 : 11,
-    color: '#e39f2f',
-    marginTop: DEVICE_LARGE ? 2 : 0,
-  },
-  deletedMessage: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 14 : 12,
-    color: '#FF0800',
-    marginTop: DEVICE_LARGE ? 5 : 2,
-    textTransform: 'capitalize',
-  },
+  // waitingMessage: {
+  //   fontFamily: 'Poppins-Medium',
+  //   fontSize: DEVICE_LARGE ? 13 : 11,
+  //   color: '#e39f2f',
+  //   marginTop: DEVICE_LARGE ? 2 : 0,
+  // },
+  // deletedMessage: {
+  //   fontFamily: 'Poppins-Medium',
+  //   fontSize: DEVICE_LARGE ? 14 : 12,
+  //   color: '#FF0800',
+  //   marginTop: DEVICE_LARGE ? 5 : 2,
+  //   textTransform: 'capitalize',
+  // },
   verificationSticker: {
     marginLeft: DEVICE_LARGE ? 5 : 3.5,
   },
