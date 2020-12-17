@@ -36,6 +36,8 @@ const TrustedConnectionsScreen = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
+  const searchParam = useSelector((state) => state.connections.searchParam);
+
   const connections = useSelector((state) => state.connections.connections)
     .filter((item) =>
       `${item.name}`
@@ -45,7 +47,6 @@ const TrustedConnectionsScreen = () => {
     )
     .filter((item) => item.status === 'verified');
 
-  const searchParam = useSelector((state) => state.connections.searchParam);
   const trustedConnections = useSelector(
     (state) => state.connections.trustedConnections,
   );

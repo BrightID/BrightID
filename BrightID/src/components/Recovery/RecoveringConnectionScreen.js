@@ -23,6 +23,7 @@ const getItemLayout = (data, index) => ({
 });
 
 const RecoveringConnectionScreen = () => {
+  const searchParam = useSelector((state) => state.connections.searchParam);
   const connections = useSelector((state) => state.connections.connections)
     .filter((item) =>
       `${item.name}`
@@ -31,8 +32,6 @@ const RecoveringConnectionScreen = () => {
         .includes(searchParam.toLowerCase().replace(/\s/g, '')),
     )
     .filter((item) => item.status === 'verified');
-
-  const searchParam = useSelector((state) => state.connections.searchParam);
 
   const { t } = useTranslation();
   const navigation = useNavigation();
