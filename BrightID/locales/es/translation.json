@@ -354,5 +354,12 @@
                 "visitWebsite": "Si"
             }
         }
+    },
+    "contact": {
+        "label": {
+            "email": "Correo electrónico",
+            "website": "Sitio web",
+            "socialMedia": "Redes sociales"
+        }
     }
 }
