@@ -69,7 +69,7 @@
         "text": {
             "noApps": "Pas d'application",
             "notSponsored": "Vous n'êtes pas sponsorisé·e.\nVeuillez trouver une application ci-dessous pour vous sponsoriser.",
-            "pendingLink": "Compte BrightID\nen cours de liaison avec {{context}}…"
+            "pendingLink": "Compte BrightID en cours de liaison avec {{context}}…"
         }
     },
     "backup": {
@@ -595,7 +595,7 @@
             "name": "Nom"
         },
         "text": {
-            "creatingAccount": "Création du Bright ID...",
+            "creatingAccount": "Création du Bright ID…",
             "infoNotShared": "Votre nom et photo ne seront jamais partagés avec les applications, ni stockées sur des serveurs",
             "whatsYouName": "Comment vous appellez-vous ?"
         }
