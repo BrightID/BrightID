@@ -1,16 +1,18 @@
 // @flow
 
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { useSelector } from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit';
 import { useTranslation } from 'react-i18next';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useFocusEffect } from '@react-navigation/native';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { connectionsSelector } from '@/utils/connectionsSelector';
 import store from '@/store';
+import api from '@/api/brightId';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
 
 const ITEM_HEIGHT = DEVICE_LARGE ? 102 : 92;
@@ -21,13 +23,28 @@ const getItemLayout = (data, index) => ({
   index,
 });
 
+const recoveryConnectionSelector = createSelector(
+  connectionsSelector,
+  (_, recoveryIds) => recoveryIds,
+  (connections, recoveryIds) => {
+    return connections.filter((conn) => recoveryIds.includes(conn.id));
+  },
+);
+
 const RecoveringConnectionScreen = () => {
-  const connections = useSelector(connectionsSelector);
+  const [recoveryIds, setRecoveryIds] = useState([]);
+
+  const connections = useSelector((state) =>
+    recoveryConnectionSelector(state, recoveryIds),
+  );
+
+  const id = useSelector((state) => state.user.id);
 
   const { t } = useTranslation();
   const route = useRoute();
 
   const [uploadingData, setUploadingData] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const renderConnection = ({ item, index }) => {
     item.index = index;
@@ -39,6 +56,19 @@ const RecoveringConnectionScreen = () => {
       />
     );
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      setLoading(true);
+      api.getConnections(id, 'inbound').then((connections) => {
+        const recoveryIds = connections
+          .filter((conn) => conn.level === 'recovery')
+          .map((conn) => conn.id);
+        setRecoveryIds(recoveryIds);
+        setLoading(false);
+      });
+    }, [id]),
+  );
 
   const {
     recoveryData: { totalItems, completedItems },
@@ -70,7 +100,13 @@ const RecoveringConnectionScreen = () => {
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={
-                  <EmptyList title={t('restore.text.noConnections')} />
+                  <EmptyList
+                    title={
+                      loading
+                        ? 'Downloading recovery connection data'
+                        : 'Unable to recover any of your connections'
+                    }
+                  />
                 }
                 getItemLayout={getItemLayout}
               />
@@ -98,7 +134,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fdfdfd',
+    backgroundColor: '#fff',
     borderTopLeftRadius: 58,
     marginTop: -58,
     zIndex: 10,

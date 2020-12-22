@@ -435,7 +435,6 @@ class NodeApi {
   }
 
   async getConnections(id: string, direction: string) {
-    const requester = store.getState().user.id;
     let res = await this.api.get(`/users/${id}/connections/${direction}`);
     NodeApi.throwOnError(res);
     return res.data.data.connections;
