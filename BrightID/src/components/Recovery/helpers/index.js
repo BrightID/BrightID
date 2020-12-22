@@ -509,6 +509,9 @@ export const recoverData = async (pass: string) => {
     publicKey,
     secretKey,
   } = store.getState().recoveryData;
+
+  // set new signing key on the backend
+  await setSigningKey();
   if (pass) {
     // throws if data is bad
     var { userData, connections, groups } = await restoreUserData(pass);
@@ -552,8 +555,6 @@ export const recoverData = async (pass: string) => {
   await store.dispatch(setGroups(userInfo.groups));
   await store.dispatch(updateConnections(userInfo.connections));
   await store.dispatch(setUserData(userData));
-  // set new signing key on the backend
-  await setSigningKey();
   await store.dispatch(setBackupCompleted(pass != ''));
   // password is required to update backup when user makes new connections
   await store.dispatch(setPassword(pass));
