@@ -45,7 +45,7 @@ const RecoveryConnectionCard = (props) => {
   const confirmConnectionSelection = () => {
     Alert.alert(
       'Please Confirm',
-      `Is ${name} the the account you are helping to recover?`,
+      `Is ${name} the account you are helping to recover?`,
       [
         {
           text: 'Yes',
@@ -94,20 +94,31 @@ const RecoveryConnectionCard = (props) => {
       : require('@/static/default_profile.jpg');
 
   return (
-    <TouchableOpacity
-      onPress={confirmConnectionSelection}
-      style={styles.container}
-    >
+    <View style={styles.container}>
       <View style={styles.card}>
-        <Image
-          source={imageSource}
-          style={styles.photo}
-          onError={() => {
-            setImgErr(true);
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('FullScreenPhoto', { photo });
           }}
-          accessibilityLabel="profile picture"
-        />
-        <View style={[styles.info, { maxWidth: WIDTH * 0.56 }]}>
+          accessibilityLabel={t('connections.accessibilityLabel.viewPhoto')}
+          accessibilityRole="imagebutton"
+        >
+          <Image
+            source={imageSource}
+            style={styles.photo}
+            accessibilityLabel={t(
+              'connections.accessibilityLabel.connectionPhoto',
+            )}
+            onError={() => {
+              console.log('settingImgErr');
+              setImgErr(true);
+            }}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.info, { maxWidth: WIDTH * 0.56 }]}
+          onPress={confirmConnectionSelection}
+        >
           <View
             style={[styles.nameContainer]}
             testID={`connection_name-${index}`}
@@ -135,9 +146,9 @@ const RecoveryConnectionCard = (props) => {
             connectionDate={connectionDate}
             level={level}
           />
-        </View>
+        </TouchableOpacity>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -150,7 +161,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   card: {
-    width: '90%',
+    width: '93%',
     height: DEVICE_LARGE ? 76 : 71,
     alignItems: 'center',
     flexDirection: 'row',

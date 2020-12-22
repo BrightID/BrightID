@@ -71,6 +71,7 @@ const RestoreScreen = () => {
 
   const restore = () => {
     setRestoreInProgress(true);
+
     recoverData(pass)
       .then((result) => {
         result ? restoreCompleted() : resetState();
@@ -85,7 +86,6 @@ const RestoreScreen = () => {
             [
               {
                 text: t('common.alert.ok'),
-                onPress: () => navigation.goBack(),
               },
             ],
           );
@@ -105,61 +105,32 @@ const RestoreScreen = () => {
       });
   };
 
-  const renderButtonOrSpinner = () => {
-    if (!restoreInProgress)
-      return (
-        <TouchableOpacity style={styles.startRestoreButton} onPress={restore}>
-          <Text style={styles.buttonInnerText}>
-            {t('restore.button.startRestore')}
-          </Text>
-        </TouchableOpacity>
-      );
-    else if (pass)
-      return (
-        <View style={styles.loader}>
-          <Text style={styles.textInfo}>
-            {t('restore.text.downloadingData')}
-          </Text>
-          {total !== 0 && (
-            <Text style={styles.textInfo}>
-              {t('common.text.progress', {
-                completed,
-                total,
-              })}
-            </Text>
-          )}
-          <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
-        </View>
-      );
-    else
-      return <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />;
-  };
-
   return (
     <>
       <View style={styles.orangeTop} />
       <Container style={styles.container} behavior="padding">
-        <View style={styles.textInputContainer}>
-          <Text style={styles.textInfo}>{t('restore.text.enterPassword')}</Text>
-          <TextInput
-            onChangeText={setPass}
-            value={pass}
-            placeholder={t('common.placeholder.password')}
-            placeholderTextColor="#9e9e9e"
-            style={styles.textInput}
-            autoCorrect={false}
-            textContentType="password"
-            autoCompleteType="password"
-            underlineColorAndroid="transparent"
-            secureTextEntry={true}
-          />
-        </View>
-
-        <View style={styles.buttonContainer}>{renderButtonOrSpinner()}</View>
-        {!restoreInProgress && (
-          <View style={styles.skipContainer}>
-            <Text>
-              <Trans
+        {!restoreInProgress ? (
+          <>
+            <View style={styles.textInputContainer}>
+              <Text style={styles.textInfo}>
+                {/* {t('restore.text.enterPassword')} */}
+                Please enter your password
+              </Text>
+              <TextInput
+                onChangeText={setPass}
+                value={pass}
+                placeholder="Type your password"
+                placeholderTextColor="#707070"
+                style={styles.textInput}
+                autoCorrect={false}
+                textContentType="password"
+                autoCompleteType="password"
+                underlineColorAndroid="transparent"
+                secureTextEntry={true}
+              />
+            </View>
+            <Text style={styles.skipInfo}>
+              {/* <Trans
                 i18nKey="restore.text.skipLoadingBackup"
                 components={[
                   <Text style={styles.skipLink} onPress={skip}>
@@ -167,8 +138,48 @@ const RestoreScreen = () => {
                   </Text>,
                 ]}
                 values={{ skipLink: t('restore.text.skipLink') }}
-              />
+              /> */}
+              Without the password you can still recover your BrightID but the
+              name & photo of your connections & groups will not be available.
             </Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.submitButton,
+                  pass.length < 1 ? { opacity: 0.5 } : {},
+                ]}
+                onPress={restore}
+                accessibilityLabel="submit"
+                disabled={pass.length < 1}
+              >
+                <Text style={styles.submitText}>Submit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.skipButton}
+                onPress={skip}
+                accessibilityLabel="skip"
+              >
+                <Text style={styles.skipText}>Skip</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        ) : (
+          <View style={styles.loading}>
+            <Spinner
+              isVisible={true}
+              size={DEVICE_LARGE ? 60 : 45}
+              type="Wave"
+              color={ORANGE}
+            />
+            <Text style={styles.textInfo}>Downloading data ...</Text>
+            {total !== 0 && (
+              <Text style={styles.textInfo}>
+                {t('common.text.progress', {
+                  completed,
+                  total,
+                })}
+              </Text>
+            )}
           </View>
         )}
       </Container>
@@ -190,7 +201,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     borderTopLeftRadius: 58,
-    borderTopRightRadius: 58,
     marginTop: -58,
     zIndex: 10,
     overflow: 'hidden',
@@ -199,79 +209,74 @@ const styles = StyleSheet.create({
     marginTop: 44,
     justifyContent: 'center',
     alignItems: 'center',
+    width: '100%',
   },
-  buttonContainer: {
-    marginTop: 44,
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-  },
+
   textInfo: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 18,
-    color: '#333',
-    margin: 18,
+    fontFamily: 'Poppins-Medium',
+    fontSize: DEVICE_LARGE ? 16 : 14,
+    color: '#000',
+    margin: DEVICE_LARGE ? 18 : 16,
   },
   textInput: {
-    fontFamily: 'ApexNew-Light',
-    fontSize: 30,
-    color: '#333',
-    fontWeight: '300',
-    fontStyle: 'normal',
-    letterSpacing: 0,
+    fontFamily: 'Poppins-Regular',
+    fontSize: DEVICE_LARGE ? 14 : 12,
+    color: '#707070',
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#9e9e9e',
-    marginTop: 22,
-    width: 275,
-    textAlign: 'left',
-    paddingBottom: 5,
-  },
-  buttonInfoText: {
-    fontFamily: 'ApexNew-Book',
-    color: '#9e9e9e',
-    fontSize: 14,
-    width: 298,
+    marginVertical: DEVICE_LARGE ? 60 : 50,
+    width: '70%',
     textAlign: 'center',
+    paddingBottom: DEVICE_LARGE ? 12 : 10,
   },
-  startRestoreButton: {
-    backgroundColor: '#428BE5',
-    width: 300,
+  loading: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 13,
-    paddingBottom: 12,
-    marginTop: 22,
+    flex: 1,
   },
-  buttonInnerText: {
-    fontFamily: 'ApexNew-Medium',
-    color: '#fff',
-    fontWeight: '600',
-    fontSize: 18,
-  },
-  button: {
-    width: 300,
-    borderWidth: 1,
-    borderColor: '#4990e2',
-    paddingTop: 13,
-    paddingBottom: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
+  skipInfo: {
+    fontFamily: 'Poppins-Regular',
+    width: '70%',
+    textAlign: 'center',
+    color: '#707070',
     marginTop: 10,
-    marginBottom: 10,
   },
-  skipContainer: {
-    paddingTop: 30,
-    fontSize: 14,
-    margin: 30,
+  buttonContainer: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  skipLink: {
-    color: 'blue',
-  },
-  loader: {
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 22,
+    marginTop: DEVICE_LARGE ? 40 : 32,
+  },
+  submitButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: DEVICE_LARGE ? 120 : 100,
+    height: DEVICE_LARGE ? 46 : 40,
+    borderRadius: 60,
+    backgroundColor: ORANGE,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 4,
+  },
+  submitText: {
+    fontFamily: 'Poppins-Bold',
+    color: '#fff',
+    fontSize: DEVICE_LARGE ? 16 : 14,
+  },
+  skipButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: ORANGE,
+    borderWidth: 1,
+    borderRadius: 60,
+    width: DEVICE_LARGE ? 120 : 100,
+    height: DEVICE_LARGE ? 46 : 40,
+    marginLeft: DEVICE_LARGE ? 20 : 16,
+  },
+  skipText: {
+    fontFamily: 'Poppins-Medium',
+    color: ORANGE,
+    fontSize: DEVICE_LARGE ? 16 : 14,
   },
 });
 
