@@ -69,7 +69,7 @@
         "text": {
             "noApps": "No Apps",
             "notSponsored": "You're not sponsored.\nPlease find an app below to sponsor you.",
-            "pendingLink": "Linking your account in {{context}}\n to your BrightID…"
+            "pendingLink": "Linking your account in {{context}} to your BrightID…"
         }
     },
     "backup": {
@@ -600,7 +600,7 @@
             "name": "Name"
         },
         "text": {
-            "creatingAccount": "Creating Bright ID...",
+            "creatingAccount": "Creating Bright ID…",
             "infoNotShared": "Your name and photo will never be shared with apps or stored on servers",
             "whatsYouName": "What do your friends know you by?"
         }

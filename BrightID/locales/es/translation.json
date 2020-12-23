@@ -3,7 +3,7 @@
         "text": {
             "whatsYouName": "¿Cómo te conocen tus amigos?",
             "infoNotShared": "Tu nombre y foto nunca serán compartidas con otras aplicaciones o almacenadas en servidores",
-            "creatingAccount": "Creando BrightID..."
+            "creatingAccount": "Creando BrightID…"
         },
         "placeholder": {
             "name": "Nombre"
@@ -40,7 +40,7 @@
             "confirmConnections": "Confirmar conexiones",
             "codeSingle": "Código de un solo uso",
             "codeGroup": "Código grupal",
-            "canAlso": "O también puedes..."
+            "canAlso": "O también puedes…"
         },
         "label": {
             "connectionType": "Tipo de conección:"
@@ -121,7 +121,7 @@
     "notifications": {
         "text": {
             "noPendingConnections": "No tienes conexiones pendientes...",
-            "noMiscellaneous": "Nada que ver aqui...",
+            "noMiscellaneous": "Nada que ver aqui…",
             "noGroupInvites": "No tienes invitaciones grupales..."
         },
         "tab": {
@@ -185,7 +185,7 @@
     "groups": {
         "text": {
             "waitingForMembers": "Esperando a que {{list}} se una",
-            "noMembers": "No hay miembros conocidos, invita a algunos...",
+            "noMembers": "No hay miembros conocidos, invita a algunos…",
             "noGroupsMatchSearch": "Ningún grupo coincide con su búsqueda",
             "noGroups": "<text>verifícate más rápido</text><text>creando y</text><text>uniéndose a grupos</text>",
             "noEligibleConnection": "Ninguna conexión existente es elegible para este grupo. Por favor vuelve más tarde..."
@@ -332,7 +332,7 @@
     },
     "apps": {
         "text": {
-            "pendingLink": "Vinculando su cuenta en {{context}} \n a su BrightID...",
+            "pendingLink": "Vinculando su cuenta en {{context}} a su BrightID…",
             "notSponsored": "No está patrocinado.\n Por favor, busque una app a continuación para patrocinarlo.",
             "noApps": "Sin Apps"
         },

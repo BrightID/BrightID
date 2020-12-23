@@ -69,7 +69,7 @@
         "text": {
             "noApps": "Keine Apps",
             "notSponsored": "Du bist noch nicht gesponsert.\nBitte wähle unten eine App aus um dich zu sponsern.",
-            "pendingLink": "Verknüpfe dein {{context}}-Konto\nmit deiner BrightID …"
+            "pendingLink": "Verknüpfe dein {{context}}-Konto mit deiner BrightID…"
         }
     },
     "backup": {
@@ -524,7 +524,7 @@
             "name": "Name"
         },
         "text": {
-            "creatingAccount": "BrightID wird erstellt...",
+            "creatingAccount": "BrightID wird erstellt…",
             "infoNotShared": "Dein Name und Foto wird auf keinem Server gespeichert und nicht an andere Apps weitergegeben",
             "whatsYouName": "Wie nennen Dich Deine Freunde?"
         }
