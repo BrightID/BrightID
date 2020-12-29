@@ -25,16 +25,15 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
   const { pendingConnectionId, ratingHandler, index } = props;
   const dispatch = useDispatch();
 
-  const pendingConnection = useSelector(
-    (state) =>
-      selectPendingConnectionById(state, pendingConnectionId) ?? {
-        state: pendingConnection_states.EXPIRED,
-      },
-    (a, b) => a?.state === b?.state,
+  const pendingConnection = useSelector((state) =>
+    selectPendingConnectionById(state, pendingConnectionId),
   );
 
   const existingConnection = useSelector((state) => {
-    if (pendingConnection.state === pendingConnection_states.UNCONFIRMED) {
+    if (
+      pendingConnection &&
+      pendingConnection.state === pendingConnection_states.UNCONFIRMED
+    ) {
       return state.connections.connections.find(
         (conn) => conn.id === pendingConnection.brightId,
       );
@@ -44,6 +43,12 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
   });
 
   const navigation = useNavigation();
+
+  if (!pendingConnection) {
+    // pending connection has vanished. Most likely channel expired.
+    // Just return null, parent components will take care of moving to a different screen.
+    return null;
+  }
 
   const setLevelHandler = (level: ConnectionLevel) => {
     ratingHandler(pendingConnection.id, level, index);
