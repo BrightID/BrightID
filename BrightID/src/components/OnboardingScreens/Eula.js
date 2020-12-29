@@ -37,12 +37,20 @@ export const Eula = ({ navigation }) => {
         backgroundColor={WHITE}
         animated={true}
       />
-      <View style={styles.container} behavior="padding">
+      <View testID="EulaScreen" style={styles.container} behavior="padding">
         <View style={styles.confirmationButtons}>
-          <TouchableOpacity style={styles.rejectButton} onPress={handleReject}>
+          <TouchableOpacity
+            testID="rejectEulaBtn"
+            style={styles.rejectButton}
+            onPress={handleReject}
+          >
             <Text style={styles.rejectButtonText}>Reject</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.acceptButton} onPress={handleAccept}>
+          <TouchableOpacity
+            testID="acceptEulaBtn"
+            style={styles.acceptButton}
+            onPress={handleAccept}
+          >
             <Text style={styles.acceptButtonText}>Accept</Text>
           </TouchableOpacity>
         </View>
