@@ -1,7 +1,11 @@
 /* global element:false, by:false */
 
+import { acceptEula } from './testUtils';
+
 describe('Onboarding', () => {
   it('should have onboarding carousel screen', async () => {
+    // accept EULA
+    await acceptEula();
     // First page should be there at start
     await expect(element(by.id('brightIdOnboard'))).toBeVisible();
     // Swipe left to show second page
