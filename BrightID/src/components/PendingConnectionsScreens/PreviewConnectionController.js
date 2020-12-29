@@ -1,7 +1,8 @@
 // @flow
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -14,6 +15,22 @@ import {
 import { ReconnectView } from './ReconnectView';
 import { PreviewConnectionView } from './PreviewConnectionView';
 import BackArrow from '../Icons/BackArrow';
+
+const selectAllConnections = (state) => state.connections.connections;
+
+const makeConnectionByBrightIDSelector = () =>
+  createSelector(
+    selectAllConnections,
+    (_, brightID: string) => brightID,
+    (allConnections, brightID) => {
+      if (brightID) {
+        console.log(`Looking for connection ${brightID}`);
+        return allConnections.find((conn) => conn.id === brightID);
+      } else {
+        return undefined;
+      }
+    },
+  );
 
 type PreviewConnectionProps = {
   pendingConnectionId: any,
@@ -29,18 +46,16 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
     selectPendingConnectionById(state, pendingConnectionId),
   );
 
-  const existingConnection = useSelector((state) => {
-    if (
-      pendingConnection &&
-      pendingConnection.state === pendingConnection_states.UNCONFIRMED
-    ) {
-      return state.connections.connections.find(
-        (conn) => conn.id === pendingConnection.brightId,
-      );
-    } else {
-      return undefined;
-    }
-  });
+  // Make sure each instance of PreviewConnectionController has it's own selector. Otherwise they would
+  // invalidate each others cache. See https://react-redux.js.org/next/api/hooks#using-memoizing-selectors
+  const selectConnectionByBrightID = useMemo(
+    makeConnectionByBrightIDSelector,
+    [],
+  );
+
+  let existingConnection = useSelector((state) =>
+    selectConnectionByBrightID(state, pendingConnection?.brightId),
+  );
 
   const navigation = useNavigation();
 
@@ -48,6 +63,11 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
     // pending connection has vanished. Most likely channel expired.
     // Just return null, parent components will take care of moving to a different screen.
     return null;
+  }
+
+  if (pendingConnection.state !== pendingConnection_states.UNCONFIRMED) {
+    // Don't display reconnect screen for connections that have just been confirmed
+    existingConnection = undefined;
   }
 
   const setLevelHandler = (level: ConnectionLevel) => {

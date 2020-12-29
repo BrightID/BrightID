@@ -10,7 +10,7 @@ export const BACKUP_URL = 'https://explorer.brightid.org';
 export const CHANNEL_TTL = 900000; // 15 minutes
 export const CHANNEL_CONNECTION_LIMIT = 30; // maximum number of connections allowed in channel.
 export const MIN_CHANNEL_JOIN_TTL = 5000;
-export const PROFILE_POLL_INTERVAL = 1000;
+export const PROFILE_POLL_INTERVAL = 2000;
 // timestamp can be this far in the future (milliseconds) to accommodate 2 clients clock differences
 export const TIME_FUDGE = 60 * 60 * 1000;
 export const PROFILE_VERSION = 1;
