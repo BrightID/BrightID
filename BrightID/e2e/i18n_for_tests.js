@@ -1,8 +1,8 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import moment from 'moment';
 
-import * as englishTranslation from '../translations/english.json';
-import * as frenchTranslation from '../translations/french.json';
+import * as englishTranslation from '../locales/en/translation.json';
 
 /*
   This is mostly a copy of /i18n.js, but without dependency on react-native-localize. This way it is possible
@@ -13,9 +13,6 @@ const translations = {
   en: {
     translation: englishTranslation,
   },
-  fr: {
-    translation: frenchTranslation,
-  },
 };
 
 const defaultLanguage = {
@@ -25,14 +22,21 @@ const defaultLanguage = {
 
 const { languageTag } = defaultLanguage;
 
-i18n.use(initReactI18next).init({
-  resources: translations,
-  lng: languageTag,
-  fallbackLng: 'en',
-  keySeparator: false,
-  interpolation: {
-    escapeValue: false,
-  },
-});
+/**
+ * Moment will use detected language throughout the app.
+ */
+moment.locale(languageTag);
+
+i18n
+  .use(initReactI18next) // bind react-i18next to the instance
+  .init({
+    resources: translations,
+    lng: languageTag,
+    fallbackLng: 'en',
+    returnEmptyString: false,
+    interpolation: {
+      escapeValue: false,
+    },
+  });
 
 export default i18n;
