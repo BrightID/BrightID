@@ -1,365 +1,612 @@
 {
-    "signup": {
-        "text": {
-            "whatsYouName": "¿Cómo te conocen tus amigos?",
-            "infoNotShared": "Tu nombre y foto nunca serán compartidas con otras aplicaciones o almacenadas en servidores",
-            "creatingAccount": "Creando BrightID…"
-        },
-        "placeholder": {
-            "name": "Nombre"
-        },
-        "header": {
-            "title": "Registrate"
-        },
-        "button": {
-            "recoverAccount": "Recuperar BrightID",
-            "createAccount": "Crear mi BrightID",
-            "addPhoto": "Añadir Foto"
-        },
-        "alert": {
-            "photoMissing": "Se necesita una foto. Por favor presiona enter en el teclado.",
-            "nameTooShort": "Tu nombre debe contener como mínimo 2 letras",
-            "nameMissing": "Por favor añada su nombre"
-        }
+  "achievements": {
+    "getSponsored": {
+      "description": "",
+      "title": ""
     },
-    "recovery": {
-        "text": {
-            "askTrustedConnections": "Pide a tus conecciones de confianza escanear este código."
-        },
-        "header": {
-            "title": "Código de Recuperación"
-        }
+    "joinConnectionParty": {
+      "description": "",
+      "title": ""
     },
-    "qrcode": {
-        "text": {
-            "scanCode": "<text>Hola {{name}}, escanea un codigo</text><text>haz una nueva conexión hoy</text>",
-            "pendingConnections": "Tienes {{count}} conexión pendiente",
-            "pendingConnections_plural": "Tienes {{count}} conexiónes pendientes",
-            "expiresIn": "Expira en:",
-            "downloadingConnectionData": "Descargando datos de conexión",
-            "confirmConnections": "Confirmar conexiones",
-            "codeSingle": "Código de un solo uso",
-            "codeGroup": "Código grupal",
-            "canAlso": "O también puedes…"
-        },
-        "label": {
-            "connectionType": "Tipo de conección:"
-        },
-        "header": {
-            "connections": "{{count}} / 30 Conexiones"
-        },
-        "button": {
-            "showCode": "Muestra tu codigo Qr",
-            "scanCode": "Escanear un código",
-            "copyLink": "Copiar link"
-        },
-        "alert": {
-            "universalLink": "Link Universal",
-            "title": {
-                "codeSingle": "Código de un solo uso",
-                "codeGroup": "Código grupal"
-            },
-            "text": {
-                "codeSingle": "Este código QR se puede utilizar para conectarse con un solo usuario antes de que expire.",
-                "codeGroup": "Este código QR está diseñado para que muchas personas se conecten simultáneamente."
-            }
-        }
+    "joinConnectionPartyWithFriend": {
+      "description": "",
+      "title": ""
     },
-    "profile": {
-        "text": {
-            "viewPassword": "Ver Contraseña",
-            "changeProfilePicture": "Cambiar Foto de Perfil",
-            "changePassword": "Cambia la Contraseña"
-        },
-        "placeholder": {
-            "name": "Ingrese su Nombre"
-        },
-        "label": {
-            "socialMediaLink": "Enlace de redes sociales",
-            "name": "Nombre"
-        }
+    "linkApp": {
+      "description": "",
+      "title": ""
     },
-    "pendingConnections": {
-        "title": {
-            "connectionRequest": "Solicitud de conexión"
-        },
-        "text": {
-            "rating": "Tu respuesta nos ayudará a prevenir ataques"
-        },
-        "label": {
-            "suspicious": "Sospechoso",
-            "reported": "Reportado",
-            "recovery": "Recuperación",
-            "rating": "¿Qué tan bien conoces esta conexión?",
-            "mutualConnections": "Conexiones mutuas",
-            "justMet": "Recien conocido",
-            "groups": "Grupos",
-            "connections": "Conexiones",
-            "alreadyKnown": "Ya conocido (familiar/amigo)"
-        }
+    "makeFirstConnection": {
+      "description": "",
+      "title": ""
     },
-    "pendingConnection": {
-        "text": {
-            "errorUnhandled": "Estado de conexión no controlado",
-            "errorMyself": "No puedes conectarte contigo mismo.",
-            "errorExpired": "La conexión expiró. Por favor intenta reconectar.",
-            "alreadyRated": "Ya calificaste esta conexión"
-        }
+    "makeThreeConnection": {
+      "description": "",
+      "title": ""
     },
-    "onboarding": {
-        "text": {
-            "privacy": "<text>Demuestra que eres una persona única</text><text>protegiendo tu privacidad.</text>",
-            "intro": "<text>BrightID utiliza la gente que conoces</text><text>para hacer cumplir la regla de una-cuenta-por-persona</text><text>para aplicaciones como</text><text>votacion e Ingreso Básico Universal.</text>"
-        },
-        "label": {
-            "maintainPrivacy": "Mantener Privacidad"
-        },
-        "button": {
-            "getStarted": "Empezar"
-        }
+    "makeTwoConnection": {
+      "description": "",
+      "title": ""
     },
-    "notifications": {
-        "text": {
-            "noPendingConnections": "No tienes conexiones pendientes...",
-            "noMiscellaneous": "Nada que ver aqui…",
-            "noGroupInvites": "No tienes invitaciones grupales..."
-        },
-        "tab": {
-            "miscellaneous": "variados",
-            "groups": "grupos",
-            "connections": "conexiones"
-        },
-        "item": {
-            "title": {
-                "backupBrightId": "Copia de seguridad BrightID"
-            },
-            "text": {
-                "pendingGroupInvite": "{{name}} te invitó a unirte",
-                "pendingConnections": "Tienes {{count}} conexión sin confirmar",
-                "pendingConnections_plural": "Tienes {{count}} conexiones sin confirmar",
-                "backupBrightId": "Elija sus conexiones de confianza"
-            }
-        },
-        "alert": {
-            "title": {
-                "rejectGroupInvite": "Rechazar",
-                "failureRejectGroupInvite": "No se pudo rechazar la invitación"
-            },
-            "text": {
-                "rejectGroupInvite": "¿Estás seguro de que quieres rechazar unirte a este grupo?",
-                "failureAcceptGroupInvite": "No se pudo unir al grupo"
-            }
-        }
+    "notification": {
+      "message": "",
+      "title": ""
     },
-    "notificationBar": {
-        "title": {
-            "pendingConnection": "Confirmar conexiones"
-        },
-        "text": {
-            "pendingConnections": "Tienes {{count}} conexión pendiente",
-            "pendingConnections_plural": "Tienes {{count}} conexiones pendientes"
-        }
+    "progress": {
+      "title": ""
     },
-    "home": {
-        "link": {
-            "community": "Unete a la Communidad"
-        },
-        "label": {
-            "createNewConnection": "Crear una nueva conexión"
-        },
-        "chatActionSheet": {
-            "title": "¿Quieres chatear con nosotros?",
-            "discord": "Discord de BrightID"
-        },
-        "button": {
-            "scanCode": "Escanear un Código",
-            "myCode": "Mi código",
-            "groups": "Grupos",
-            "connections": "Conexiones",
-            "apps": "Apps"
-        },
-        "accessibilityLabel": {
-            "connect": "conectar"
-        }
-    },
-    "groups": {
-        "text": {
-            "waitingForMembers": "Esperando a que {{list}} se una",
-            "noMembers": "No hay miembros conocidos, invita a algunos…",
-            "noGroupsMatchSearch": "Ningún grupo coincide con su búsqueda",
-            "noGroups": "<text>verifícate más rápido</text><text>creando y</text><text>uniéndose a grupos</text>",
-            "noEligibleConnection": "Ninguna conexión existente es elegible para este grupo. Por favor vuelve más tarde..."
-        },
-        "tag": {
-            "primaryGroup": "Grupo Primario"
-        },
-        "label": {
-            "unknownMembers": "Desconocido:",
-            "knownMembers": "Miembros conocidos:"
-        },
-        "button": {
-            "learnMore": "Ver más",
-            "createGroup": "Crea un Grupo"
-        },
-        "alert": {
-            "title": {
-                "leaveGroup": "Salir del Grupo",
-                "inviteSuccess": "Invitación Exitosa",
-                "errorLeaveGroup": "Error al salir del grupo",
-                "errorDismissMember": "Error al descartar al miembro del grupo",
-                "dismissMember": "Descartar Miembro",
-                "addAdmin": "Agregar administrador"
-            },
-            "text": {
-                "leaveGroup": "¿Estás seguro de que quieres dejar este grupo?",
-                "inviteSuccess": "Has invitado a {{name}} correctamente al grupo",
-                "dismissMember": "¿Está seguro de que desea descartar a {{name}} de este grupo?",
-                "addAdmin": "¿Estás seguro de que quieres hacer de {{name}} un administrador para este grupo?"
-            }
-        },
-        "accessibilityLabel": {
-            "groupsLogo": "logo del grupo"
-        }
-    },
-    "createGroup": {
-        "text": {
-            "noConnections": "Sin conexiones",
-            "cofounders": "Para crear un grupo, debe seleccionar dos cofundadores"
-        },
-        "placeholder": {
-            "groupName": "¿Cuál es el nombre del grupo?"
-        },
-        "label": {
-            "cofounders": "COFUNDADORES"
-        },
-        "button": {
-            "next": "Siguiente",
-            "createGroup": "Crea un grupo"
-        },
-        "alert": {
-            "title": {
-                "formIncomplete": "Formulario de grupo incompleto"
-            },
-            "text": {
-                "nameTooShort": "El nombre del grupo debe tener al menos 2 caracteres",
-                "nameMissing": "Agrega un nombre para el grupo"
-            }
-        }
-    },
-    "connections": {
-        "text": {
-            "noConnections": "Sin conexiones",
-            "alreadyConnectedWith": "Ya estas conectado con {{name}}"
-        },
-        "tag": {
-            "lastConnected": "Última conexión en {{date}}"
-        },
-        "removeActionSheet": {
-            "title": "Remover conexión",
-            "remove": "Remover",
-            "info": "¿Está seguro de que desea eliminar la conexión con {{name}}? Puede volverse a conectar en cualquier momento."
-        },
-        "label": {
-            "oldProfile": "Perfil Antiguo",
-            "newProfile": "Nuevo Perfil",
-            "currentConnectionLevel": "Nivel de conexión actual"
-        },
-        "button": {
-            "updateConnection": "Actualizar conexión",
-            "reportConnection": "Reportar conexión",
-            "reconnect": "Reconectar"
-        }
-    },
-    "common": {
-        "tag": {
-            "reported": "(reportado)",
-            "connectionDate": "Connectado {{date}}"
-        },
-        "photoActionSheet": {
-            "title": "Seleccionar Foto",
-            "takePhoto": "Tomar Foto",
-            "choosePhoto": "Elige de la Biblioteca"
-        },
-        "camera": {
-            "title": "Permiso para usar la cámara",
-            "ok": "Ok",
-            "message": "Necesitamos su permiso para usar su cámara",
-            "cancel": "Cancelar"
-        },
-        "button": {
-            "copy": "Copiar"
-        },
-        "alert": {
-            "yes": "Si",
-            "sure": "Sure",
-            "success": "Éxito",
-            "ok": "OK",
-            "no": "No",
-            "info": "Info",
-            "formIncomplete": "Formulario BrightID incompleto",
-            "error": "Error",
-            "cancel": "Cancelar"
-        },
-        "actionSheet": {
-            "title": "¿Qué quieres hacer?",
-            "cancel": "cancelar"
-        },
-        "accessibilityLabel": {
-            "userPhoto": "Foto de usuario",
-            "profilePhoto": "foto de perfil",
-            "editPhoto": "editar foto",
-            "addPhoto": "añadir foto"
-        }
-    },
-    "backup": {
-        "text": {
-            "noConnections": "Sin conexiones",
-            "enterPassword": "Ingrese una contraseña para encriptar sus datos de respaldo con:",
-            "chooseTrustedConnections": "Elija tres o más conexiones confiables para hacer una copia de seguridad de su BrightID."
-        },
-        "placeholder": {
-            "confirmPassword": "Confirmar Contraseña"
-        },
-        "button": {
-            "startBackup": "Iniciar copia de respaldo",
-            "next": "Siguiente"
-        },
-        "alert": {
-            "text": {
-                "backupSuccess": "¡Copia de respaldo completada con éxito!"
-            }
-        }
-    },
-    "apps": {
-        "text": {
-            "pendingLink": "Vinculando su cuenta en {{context}} a su BrightID…",
-            "notSponsored": "No está patrocinado.\n Por favor, busque una app a continuación para patrocinarlo.",
-            "noApps": "Sin Apps"
-        },
-        "tag": {
-            "tryAgain": "Inténtalo de nuevo",
-            "notVerifiedForApp": "No verificado para esta app",
-            "linked": "Vinculado",
-            "hasSponsorships": "Tiene patrocinios"
-        },
-        "alert": {
-            "title": {
-                "invalidContext": "Falló"
-            },
-            "text": {
-                "invalidContext": "{{context}} no es un contexto válido!",
-                "checkWebsite": "Para obtener más información sobre {{name}}, visite su sitio web!"
-            },
-            "button": {
-                "visitWebsite": "Si"
-            }
-        }
-    },
-    "contact": {
-        "label": {
-            "email": "Correo electrónico",
-            "website": "Sitio web",
-            "socialMedia": "Redes sociales"
-        }
+    "setupTrustedConnections": {
+      "description": "",
+      "title": ""
     }
+  },
+  "apps": {
+    "alert": {
+      "button": {
+        "visitWebsite": "Si"
+      },
+      "text": {
+        "checkWebsite": "Para obtener más información sobre {{name}}, visite su sitio web!",
+        "invalidContext": "{{context}} no es un contexto válido!",
+        "linkApp": "",
+        "linkFailure": "",
+        "linkSuccess": ""
+      },
+      "title": {
+        "invalidContext": "Falló",
+        "linkApp": "",
+        "linkFailure": "",
+        "linkingFailed": "",
+        "linkSuccess": ""
+      }
+    },
+    "tag": {
+      "hasSponsorships": "Tiene patrocinios",
+      "linked": "Vinculado",
+      "notVerifiedForApp": "No verificado para esta app",
+      "tryAgain": "Inténtalo de nuevo"
+    },
+    "text": {
+      "noApps": "Sin Apps",
+      "notSponsored": "No está patrocinado.\n Por favor, busque una app a continuación para patrocinarlo.",
+      "pendingLink": "Vinculando su cuenta en {{context}} a su BrightID…"
+    }
+  },
+  "backup": {
+    "alert": {
+      "text": {
+        "backupSuccess": "¡Copia de respaldo completada con éxito!",
+        "needThreeTrusted": ""
+      }
+    },
+    "button": {
+      "next": "Siguiente",
+      "startBackup": "Iniciar copia de respaldo"
+    },
+    "header": {
+      "backup": "",
+      "trustedConnections": "Trusted connections"
+    },
+    "placeholder": {
+      "confirmPassword": "Confirmar Contraseña"
+    },
+    "text": {
+      "chooseTrustedConnections": "Elija tres o más conexiones confiables para hacer una copia de seguridad de su BrightID.",
+      "enterPassword": "Ingrese una contraseña para encriptar sus datos de respaldo con:",
+      "noConnections": "Sin conexiones"
+    }
+  },
+  "common": {
+    "accessibilityLabel": {
+      "addPhoto": "añadir foto",
+      "editPhoto": "editar foto",
+      "profilePhoto": "foto de perfil",
+      "userPhoto": "Foto de usuario"
+    },
+    "actionSheet": {
+      "cancel": "cancelar",
+      "title": "¿Qué quieres hacer?"
+    },
+    "alert": {
+      "cancel": "Cancelar",
+      "dismiss": "",
+      "error": "Error",
+      "formIncomplete": "Formulario BrightID incompleto",
+      "info": "Info",
+      "no": "No",
+      "ok": "OK",
+      "success": "Éxito",
+      "sure": "Sure",
+      "text": {
+        "incorrectPassword": "",
+        "lostKeys": "",
+        "passwordMatch": "",
+        "passwordShort": "",
+        "trustedSigned": ""
+      },
+      "title": {
+        "lostKeys": ""
+      },
+      "yes": "Si"
+    },
+    "button": {
+      "cancel": "",
+      "copy": "Copiar",
+      "save": ""
+    },
+    "camera": {
+      "cancel": "Cancelar",
+      "message": "Necesitamos su permiso para usar su cámara",
+      "ok": "Ok",
+      "title": "Permiso para usar la cámara"
+    },
+    "photoActionSheet": {
+      "choosePhoto": "Elige de la Biblioteca",
+      "takePhoto": "Tomar Foto",
+      "title": "Seleccionar Foto"
+    },
+    "placeholder": {
+      "password": "",
+      "searchConnections": ""
+    },
+    "tag": {
+      "connectionDate": "Connectado {{date}}",
+      "reported": "(reportado)"
+    },
+    "text": {
+      "progress": "",
+      "uploadingData": ""
+    }
+  },
+  "connectionDetails": {
+    "button": {
+      "levelSave": "",
+      "report": "",
+      "reportCancel": "",
+      "reportSubmit": ""
+    },
+    "header": {
+      "connectionDetails": "Connection details"
+    },
+    "label": {
+      "connectionLevel": "",
+      "mutualConnections": "",
+      "mutualGroups": ""
+    },
+    "tags": {
+      "connectedAt": "",
+      "loading": ""
+    },
+    "text": {
+      "level": "",
+      "levelAlreadyKnown": "",
+      "levelJustMet": "",
+      "levelRecovery": "",
+      "levelSuspicious": "",
+      "reportConnection": "",
+      "reportDuplicate": "",
+      "reportImpact": "",
+      "reportOther": "",
+      "reportSpammer": ""
+    }
+  },
+  "connections": {
+    "accessibilityLabel": {
+      "connectionPhoto": "",
+      "viewConnectionDetails": "",
+      "viewPhoto": ""
+    },
+    "button": {
+      "reconnect": "Reconectar",
+      "reportConnection": "Reportar conexión",
+      "updateConnection": "Actualizar conexión"
+    },
+    "header": {
+      "connections": "Connections"
+    },
+    "label": {
+      "currentConnectionLevel": "Nivel de conexión actual",
+      "newProfile": "Nuevo Perfil",
+      "oldProfile": "Perfil Antiguo"
+    },
+    "removeActionSheet": {
+      "info": "¿Está seguro de que desea eliminar la conexión con {{name}}? Puede volverse a conectar en cualquier momento.",
+      "remove": "Remover",
+      "title": "Remover conexión"
+    },
+    "tag": {
+      "deleted": "",
+      "failed": "",
+      "hidden": "",
+      "lastConnected": "Última conexión en {{date}}",
+      "reportedAs": "",
+      "waiting": ""
+    },
+    "text": {
+      "alreadyConnectedWith": "Ya estas conectado con {{name}}",
+      "noConnections": "Sin conexiones"
+    }
+  },
+  "contact": {
+    "label": {
+      "email": "Correo electrónico",
+      "meet": "",
+      "socialMedia": "Redes sociales",
+      "website": "Sitio web"
+    },
+    "text": {
+      "meet": "",
+      "openSource": "",
+      "weAre": ""
+    },
+    "title": {
+      "contactUs": ""
+    }
+  },
+  "createGroup": {
+    "alert": {
+      "text": {
+        "nameMissing": "Agrega un nombre para el grupo",
+        "nameTooShort": "El nombre del grupo debe tener al menos 2 caracteres"
+      },
+      "title": {
+        "createFailed": "",
+        "formIncomplete": "Formulario de grupo incompleto"
+      }
+    },
+    "button": {
+      "createGroup": "Crea un grupo",
+      "next": "Siguiente"
+    },
+    "label": {
+      "cofounders": "COFUNDADORES"
+    },
+    "placeholder": {
+      "groupName": "¿Cuál es el nombre del grupo?"
+    },
+    "text": {
+      "cofounders": "Para crear un grupo, debe seleccionar dos cofundadores",
+      "noConnections": "Sin conexiones"
+    }
+  },
+  "drawer": {
+    "alert": {
+      "text": {
+        "upToDate": ""
+      },
+      "title": {
+        "upToDate": ""
+      }
+    },
+    "label": {
+      "achievements": "",
+      "checkForUpdates": "",
+      "contactUs": "",
+      "copyExplorerCode": "",
+      "editProfile": "",
+      "home": ""
+    }
+  },
+  "eula": {
+    "header": {
+      "title": ""
+    }
+  },
+  "graphExplorer": {
+    "alert": {
+      "text": {
+        "copied": ""
+      }
+    },
+    "button": {
+      "copyCode": ""
+    },
+    "text": {
+      "backupRequired": "",
+      "explorerWebsiteDescription": ""
+    }
+  },
+  "groups": {
+    "accessibilityLabel": {
+      "groupsLogo": "logo del grupo"
+    },
+    "alert": {
+      "text": {
+        "addAdmin": "¿Estás seguro de que quieres hacer de {{name}} un administrador para este grupo?",
+        "dismissMember": "¿Está seguro de que desea descartar a {{name}} de este grupo?",
+        "inviteSuccess": "Has invitado a {{name}} correctamente al grupo",
+        "leaveGroup": "¿Estás seguro de que quieres dejar este grupo?"
+      },
+      "title": {
+        "addAdmin": "Agregar administrador",
+        "dismissMember": "Descartar Miembro",
+        "errorDismissMember": "Error al descartar al miembro del grupo",
+        "errorLeaveGroup": "Error al salir del grupo",
+        "inviteSuccess": "Invitación Exitosa",
+        "leaveGroup": "Salir del Grupo"
+      }
+    },
+    "button": {
+      "createGroup": "Crea un Grupo",
+      "learnMore": "Ver más"
+    },
+    "groupActionSheet": {
+      "cancel": "",
+      "inviteUser": "",
+      "leaveGroup": ""
+    },
+    "header": {
+      "groups": "Groups",
+      "inviteList": "",
+      "newGroup": "New group"
+    },
+    "label": {
+      "knownMembers": "Miembros conocidos:",
+      "unknownMembers": "Desconocido:"
+    },
+    "memberActionSheet": {
+      "addAdmin": "",
+      "cancel": "",
+      "dismissMember": ""
+    },
+    "tag": {
+      "primaryGroup": "Grupo Primario"
+    },
+    "text": {
+      "noEligibleConnection": "Ninguna conexión existente es elegible para este grupo. Por favor vuelve más tarde...",
+      "noGroups": "<text>verifícate más rápido</text><text>creando y</text><text>uniéndose a grupos</text>",
+      "noGroupsMatchSearch": "Ningún grupo coincide con su búsqueda",
+      "noMembers": "No hay miembros conocidos, invita a algunos…",
+      "waitingForMembers": "Esperando a que {{list}} se una"
+    }
+  },
+  "home": {
+    "accessibilityLabel": {
+      "connect": "conectar"
+    },
+    "button": {
+      "apps": "Apps",
+      "connections": "Conexiones",
+      "groups": "Grupos",
+      "myCode": "Mi código",
+      "scanCode": "Escanear un Código"
+    },
+    "chatActionSheet": {
+      "discord": "Discord de BrightID",
+      "title": "¿Quieres chatear con nosotros?"
+    },
+    "label": {
+      "createNewConnection": "Crear una nueva conexión"
+    },
+    "link": {
+      "community": "Unete a la Communidad"
+    }
+  },
+  "notificationBar": {
+    "text": {
+      "pendingConnections": "Tienes {{count}} conexión pendiente",
+      "pendingConnections_plural": "Tienes {{count}} conexiones pendientes",
+      "socialRecovery": ""
+    },
+    "title": {
+      "pendingConnection": "Confirmar conexiones",
+      "socialRecovery": ""
+    }
+  },
+  "notifications": {
+    "alert": {
+      "text": {
+        "failureAcceptGroupInvite": "No se pudo unir al grupo",
+        "rejectGroupInvite": "¿Estás seguro de que quieres rechazar unirte a este grupo?",
+        "successGroupInvite": "You joined {{groupName}}"
+      },
+      "title": {
+        "failureRejectGroupInvite": "No se pudo rechazar la invitación",
+        "rejectGroupInvite": "Rechazar"
+      }
+    },
+    "item": {
+      "text": {
+        "backupBrightId": "Elija sus conexiones de confianza",
+        "pendingConnections": "Tienes {{count}} conexión sin confirmar",
+        "pendingConnections_plural": "Tienes {{count}} conexiones sin confirmar",
+        "pendingGroupInvite": "{{name}} te invitó a unirte"
+      },
+      "title": {
+        "backupBrightId": "Copia de seguridad BrightID"
+      }
+    },
+    "tab": {
+      "connections": "conexiones",
+      "groups": "grupos",
+      "miscellaneous": "variados"
+    },
+    "text": {
+      "noGroupInvites": "No tienes invitaciones grupales...",
+      "noMiscellaneous": "Nada que ver aqui…",
+      "noPendingConnections": "No tienes conexiones pendientes..."
+    }
+  },
+  "onboarding": {
+    "button": {
+      "getStarted": "Empezar"
+    },
+    "label": {
+      "maintainPrivacy": "Mantener Privacidad"
+    },
+    "text": {
+      "intro": "<text>BrightID utiliza la gente que conoces</text><text>para hacer cumplir la regla de una-cuenta-por-persona</text><text>para aplicaciones como</text><text>votacion e Ingreso Básico Universal.</text>",
+      "privacy": "<text>Demuestra que eres una persona única</text><text>protegiendo tu privacidad.</text>"
+    }
+  },
+  "pendingConnection": {
+    "alert": {
+      "text": {
+        "errorCreateChannel": "",
+        "errorJoinChannel": "",
+        "localOutdated": "",
+        "otherOutdated": ""
+      },
+      "title": {
+        "connectionImpossible": ""
+      }
+    },
+    "text": {
+      "alreadyRated": "Ya calificaste esta conexión",
+      "errorExpired": "La conexión expiró. Por favor intenta reconectar.",
+      "errorMyself": "No puedes conectarte contigo mismo.",
+      "errorUnhandled": "Estado de conexión no controlado"
+    }
+  },
+  "pendingConnections": {
+    "label": {
+      "alreadyKnown": "Ya conocido (familiar/amigo)",
+      "connections": "Conexiones",
+      "groups": "Grupos",
+      "justMet": "Recien conocido",
+      "mutualConnections": "Conexiones mutuas",
+      "rating": "¿Qué tan bien conoces esta conexión?",
+      "recovery": "Recuperación",
+      "reported": "Reportado",
+      "suspicious": "Sospechoso"
+    },
+    "text": {
+      "errorGeneric": "",
+      "rating": "Tu respuesta nos ayudará a prevenir ataques"
+    },
+    "title": {
+      "connectionRequest": "Solicitud de conexión"
+    }
+  },
+  "profile": {
+    "alert": {
+      "button": {
+        "discard": "",
+        "dontLeave": ""
+      },
+      "text": {
+        "discardChanges": "",
+        "passwordMatch": ""
+      },
+      "title": {
+        "discardChanges": "",
+        "passwordMatch": ""
+      }
+    },
+    "button": {
+      "socialNext": "",
+      "socialPrevious": ""
+    },
+    "label": {
+      "currentPassword": "",
+      "name": "Nombre",
+      "newPassword": "",
+      "newPasswordAgain": "",
+      "socialMediaLink": "Enlace de redes sociales"
+    },
+    "placeholder": {
+      "name": "Ingrese su Nombre",
+      "newPassword": "",
+      "newPasswordAgain": ""
+    },
+    "text": {
+      "changePassword": "Cambia la Contraseña",
+      "changeProfilePicture": "Cambiar Foto de Perfil",
+      "viewPassword": "Ver Contraseña"
+    }
+  },
+  "qrcode": {
+    "alert": {
+      "text": {
+        "codeGroup": "Este código QR está diseñado para que muchas personas se conecten simultáneamente.",
+        "codeSingle": "Este código QR se puede utilizar para conectarse con un solo usuario antes de que expire."
+      },
+      "title": {
+        "codeGroup": "Código grupal",
+        "codeSingle": "Código de un solo uso"
+      },
+      "universalLink": "Link Universal"
+    },
+    "button": {
+      "copyLink": "Copiar link",
+      "scanCode": "Escanear un código",
+      "showCode": "Muestra tu codigo Qr"
+    },
+    "header": {
+      "connections": "{{count}} / 30 Conexiones",
+      "connections_plural": ""
+    },
+    "label": {
+      "connectionType": "Tipo de conección:"
+    },
+    "text": {
+      "canAlso": "O también puedes…",
+      "codeGroup": "Código grupal",
+      "codeSingle": "Código de un solo uso",
+      "confirmConnections": "Confirmar conexiones",
+      "downloadingConnectionData": "Descargando datos de conexión",
+      "expiresIn": "Expira en:",
+      "pendingConnections": "Tienes {{count}} conexión pendiente",
+      "pendingConnections_plural": "Tienes {{count}} conexiónes pendientes",
+      "scanCode": "<text>Hola {{name}}, escanea un codigo</text><text>haz una nueva conexión hoy</text>"
+    }
+  },
+  "recovery": {
+    "header": {
+      "title": "Código de Recuperación"
+    },
+    "text": {
+      "askTrustedConnections": "Pide a tus conecciones de confianza escanear este código."
+    }
+  },
+  "restore": {
+    "alert": {
+      "text": {
+        "notTrusted": "",
+        "requestRecovering": "",
+        "restoreSuccess": ""
+      },
+      "title": {
+        "notTrusted": ""
+      }
+    },
+    "button": {
+      "startRestore": ""
+    },
+    "header": {
+      "accountRecovery": ""
+    },
+    "text": {
+      "chooseConnectionToHelp": "",
+      "downloadingData": "",
+      "enterPassword": "",
+      "noConnections": ""
+    },
+    "title": {
+      "chooseConnection": ""
+    }
+  },
+  "signup": {
+    "alert": {
+      "nameMissing": "Por favor añada su nombre",
+      "nameTooShort": "Tu nombre debe contener como mínimo 2 letras",
+      "photoMissing": "Se necesita una foto. Por favor presiona enter en el teclado."
+    },
+    "button": {
+      "addPhoto": "Añadir Foto",
+      "createAccount": "Crear mi BrightID",
+      "recoverAccount": "Recuperar BrightID"
+    },
+    "header": {
+      "title": "Registrate"
+    },
+    "placeholder": {
+      "name": "Nombre"
+    },
+    "text": {
+      "creatingAccount": "Creando BrightID…",
+      "infoNotShared": "Tu nombre y foto nunca serán compartidas con otras aplicaciones o almacenadas en servidores",
+      "whatsYouName": "¿Cómo te conocen tus amigos?"
+    }
+  }
 }

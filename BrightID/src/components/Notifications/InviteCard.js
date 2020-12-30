@@ -65,6 +65,7 @@ class InviteCard extends React.Component<Props> {
       Alert.alert(
         t('common.alert.success'),
         t('notifications.alert.text.successGroupInvite', {
+          defaultValue: 'You joined {{groupName}}',
           groupName: getGroupName(invite),
         }),
       );
