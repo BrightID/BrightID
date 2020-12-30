@@ -5,7 +5,7 @@
       "title": "Werde gesponsert"
     },
     "joinConnectionParty": {
-      "description": "Nimm an einer BrightID Connectionparty teil",
+      "description": "Nimm an einer BrightID Connection Party teil",
       "title": "Connection Party"
     },
     "joinConnectionPartyWithFriend": {
@@ -85,15 +85,18 @@
     },
     "header": {
       "backup": "Sicherung",
-      "trustedConnections": "Trusted connections"
+      "trustedConnections": ""
     },
     "placeholder": {
-      "confirmPassword": "Passwort bestätigen"
+      "confirmPassword": "Passwort bestätigen",
+      "password": "Passwort"
     },
     "text": {
       "chooseTrustedConnections": "Wähle mindestens drei vertrauenswürdige Verbindungen um deine BrightID zu sichern.",
       "enterPassword": "Gib ein Passwort ein mit dem das Backup verschlüsselt wird:",
-      "noConnections": "Keine Verbindungen"
+      "noConnections": "Keine Verbindungen",
+      "progress": "Fortschritt {{completed}}/{{total}}",
+      "uploadingData": "Lade verschlüsselte Daten auf den Sicherungsserver..."
     }
   },
   "common": {
@@ -208,6 +211,9 @@
       "currentConnectionLevel": "Aktuelle Verbindungsstufe",
       "newProfile": "Neues Profil",
       "oldProfile": "Altes Profil"
+    },
+    "placeholder": {
+      "searchConnections": "Verbindung suchen"
     },
     "removeActionSheet": {
       "info": "Willst du die Verbindung mit {{name}} wirklich löschen? Du kannst dich jederzeit erneut verbinden.",
@@ -376,7 +382,9 @@
       "title": "Willst du mit uns chatten?"
     },
     "label": {
-      "createNewConnection": "Neue Verbindung"
+      "createNewConnection": "Neue Verbindung",
+      "statusUnverified": "unbestätigt",
+      "statusVerified": "bestätigt"
     },
     "link": {
       "community": "Der Community beitreten"
@@ -494,6 +502,8 @@
       }
     },
     "button": {
+      "cancel": "Abbrechen",
+      "save": "Speichern",
       "socialNext": "Weiter",
       "socialPrevious": "Zurück"
     },
