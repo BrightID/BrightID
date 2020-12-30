@@ -56,8 +56,8 @@
         "invalidContext": "Fehlgeschlagen",
         "linkApp": "Anwendung verknüpfen?",
         "linkFailure": "Fehlgeschlagen",
-        "linkingFailed": "Anwendungsverknüpfung fehlgeschlagen",
-        "linkSuccess": "Erfolgreich"
+        "linkSuccess": "Erfolgreich",
+        "linkingFailed": "Anwendungsverknüpfung fehlgeschlagen"
       }
     },
     "tag": {
@@ -85,7 +85,7 @@
     },
     "header": {
       "backup": "Sicherung",
-      "trustedConnections": ""
+      "trustedConnections": "Vertrauenswürdige Verbindungen"
     },
     "placeholder": {
       "confirmPassword": "Passwort bestätigen",
@@ -342,7 +342,7 @@
       "leaveGroup": "Gruppe verlassen"
     },
     "header": {
-      "groups": "Groups",
+      "groups": "Gruppen",
       "inviteList": "Einladungsliste",
       "newGroup": "Neue Gruppe"
     },
@@ -406,7 +406,7 @@
       "text": {
         "failureAcceptGroupInvite": "Beitreten zur Gruppe fehlgeschlagen",
         "rejectGroupInvite": "Willst Du die Gruppeneinladung wirklich ablehnen?",
-        "successGroupInvite": "You joined {{groupName}}"
+        "successGroupInvite": "Du bist {{groupName}} beigetreten"
       },
       "title": {
         "failureRejectGroupInvite": "Ablehnung der Einladung fehlgeschlagen",
@@ -544,7 +544,7 @@
     },
     "header": {
       "connections": "{{count}} / 30 Verbindungen",
-      "connections_plural": ""
+      "connections_plural": "{{count}} / 30 Verbindungen"
     },
     "label": {
       "connectionType": "Verbindungstyp:"
