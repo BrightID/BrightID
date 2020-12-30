@@ -5,7 +5,6 @@ import { Animated, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
 import { getGroupName } from '@/utils/groups';
-import { DEVICE_TYPE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import GroupsScreen from '@/components/GroupsScreens/GroupsScreen';
 import SearchGroups from '@/components/Helpers/SearchGroups';
@@ -14,8 +13,9 @@ import NewGroupScreen from '@/components/GroupsScreens/NewGroups/NewGroupScreen'
 import GroupInfoScreen from '@/components/GroupsScreens/NewGroups/GroupInfoScreen';
 import MembersScreen from '@/components/GroupsScreens/Members/MembersScreen';
 import InviteListScreen from '@/components/GroupsScreens/Members/InviteListScreen';
-import { headerOptions, headerTitleStyle, NavHome } from './helpers';
 import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
+import { headerOptions, headerTitleStyle, NavHome } from './helpers';
 
 const Stack = createStackNavigator();
 
@@ -39,25 +39,28 @@ const HeaderTitle = ({ title }) => {
   );
 };
 
-const HeaderTitleI18N = ({ i18key }) => {
-  const { t } = useTranslation();
-  return <HeaderTitle title={t(i18key)} />;
-};
-
 const groupsOptions = {
   ...headerOptions,
   headerRight: () => <SearchGroups />,
   headerLeft: () => <NavHome />,
-  headerTitle: () => <HeaderTitleI18N i18key="groups.header.groups" />,
+  headerTitle: () => (
+    <HeaderTitle
+      title={i18next.t('groups.header.groups', { defaultValue: 'Groups' })}
+    />
+  ),
 };
 
 const newGroupOptions = {
   ...headerOptions,
   headerRight: () => <SearchConnections />,
-  headerTitle: () => <HeaderTitleI18N i18key="groups.header.newGroup" />,
+  headerTitle: () => (
+    <HeaderTitle
+      title={i18next.t('groups.header.newGroup', { defaultValue: 'New group' })}
+    />
+  ),
 };
 
-const membersScreenOptions = ({ navigation, route }) => {
+const membersScreenOptions = ({ route }) => {
   const group = route.params?.group;
   return {
     ...headerOptions,
@@ -87,7 +90,10 @@ const Groups = () => {
       <Stack.Screen
         name="GroupInfo"
         component={GroupInfoScreen}
-        options={{ ...headerOptions, title: t('groups.header.newGroup') }}
+        options={{
+          ...headerOptions,
+          title: t('groups.header.newGroup', { defaultValue: 'New group' }),
+        }}
       />
       <Stack.Screen
         name="Members"

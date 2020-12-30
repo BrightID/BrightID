@@ -56,7 +56,11 @@ const trustedScreenOptions = {
   ...headerOptions,
   headerRight: () => <SearchConnections sortable={true} />,
   headerTitle: () => (
-    <HeaderTitle title={i18next.t('backup.header.trustedConnections')} />
+    <HeaderTitle
+      title={i18next.t('backup.header.trustedConnections', {
+        defaultValue: 'Trusted connections',
+      })}
+    />
   ),
 };
 
