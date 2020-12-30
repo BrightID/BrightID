@@ -56,8 +56,8 @@
         "invalidContext": "Échec",
         "linkApp": "Lier l'application ?",
         "linkFailure": "Échec",
-        "linkingFailed": "Échec de la liaison de l'application",
-        "linkSuccess": "Succès"
+        "linkSuccess": "Succès",
+        "linkingFailed": "Échec de la liaison de l'application"
       }
     },
     "tag": {
@@ -398,7 +398,7 @@
       "text": {
         "failureAcceptGroupInvite": "Erreur lors de la tentative de rejoindre le groupe",
         "rejectGroupInvite": "Êtes-vous sûr·e de vouloir refuser de rejoindre ce groupe ?",
-        "successGroupInvite": "You joined {{groupName}}"
+        "successGroupInvite": ""
       },
       "title": {
         "failureRejectGroupInvite": "Échec du refus de l'invitation",
