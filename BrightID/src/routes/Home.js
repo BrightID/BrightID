@@ -23,7 +23,6 @@ import {
   resetHome,
   resetNotifications,
 } from '@/NavigationService';
-import { headerOptions } from './helpers';
 import { HomeDrawer } from './HomeDrawer';
 
 /** SELECTORS */
