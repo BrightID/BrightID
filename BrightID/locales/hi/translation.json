@@ -1,1 +1,7 @@
-{}
+{
+  "achievements": {
+    "getSponsored": {
+      "title": "प्रायोजित हो जाएँ"
+    }
+  }
+}
