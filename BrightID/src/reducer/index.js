@@ -8,10 +8,10 @@ import keypair from './keypair';
 import notifications from './notifications';
 import operations from './operations';
 import pendingConnections from '../components/PendingConnectionsScreens/pendingConnectionSlice';
-import recoveryData from './recoveryData';
 import user from './user';
 import tasks from '../components/Tasks/TasksSlice';
 import socialMedia from '../components/EditProfile/socialMediaSlice';
+import recoveryData from '../components/Recovery/recoveryDataSlice';
 
 export default {
   apps,

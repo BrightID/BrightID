@@ -125,7 +125,8 @@
         "trustedSigned": "One of your trusted connections signed your request"
       },
       "title": {
-        "lostKeys": "We've lost the BrightID keypair from the device"
+        "lostKeys": "We've lost the BrightID keypair from the device",
+        "pleaseConfirm": "Please Confirm"
       },
       "yes": "Yes"
     },
@@ -556,7 +557,9 @@
       "title": "Recovery Code"
     },
     "text": {
-      "askTrustedConnections": "Ask your trusted connections to scan this code."
+      "askTrustedConnections": "Please show this QR code to your trusted connections",
+      "signatures": "{{count}} / 2 signatures",
+      "additionalInfo": "Your trusted connections will need to scan this to help you recover your BrightID"
     }
   },
   "restore": {
@@ -564,7 +567,8 @@
       "text": {
         "notTrusted": "One of your friends is not in your list of trusted connections",
         "requestRecovering": "Your request to help recovering this account submitted successfully!",
-        "restoreSuccess": "Your account recovered successfully!"
+        "restoreSuccess": "Your account recovered successfully!",
+        "restoreConfirm": "Is {{name}} the account you are helping to recover?"
       },
       "title": {
         "notTrusted": "Uh Oh"
@@ -573,14 +577,22 @@
     "button": {
       "startRestore": "Start Restore"
     },
+    "emptyList": {
+      "text": {
+        "downloadingData": "Downloading recovery connection data",
+        "nobodyHasChosen": "Unable to recover connection...\nThey did not set you as recovery"
+      }
+    },
     "header": {
       "accountRecovery": "Account Recovery"
     },
     "text": {
       "chooseConnectionToHelp": "Please select the connection whose account you are helping to recover.",
       "downloadingData": "Downloading data from backup server…",
-      "enterPassword": "Enter a password that you encrypted your backup data with:",
-      "noConnections": "No connections…"
+      "enterPassword": "Please enter your password",
+      "noConnections": "No connections…",
+      "skipLoadingBackup": "Without the password you can still recover your BrightID but the name & photo of your connections & groups will not be available.",
+      "skipLink": "skip"
     },
     "title": {
       "chooseConnection": "Choose Connection"

@@ -1,9 +1,8 @@
 // @flow
 
-import React, { useRef, useEffect } from 'react';
-import { Animated, Text } from 'react-native';
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { getGroupName } from '@/utils/groups';
 import { fontSize } from '@/theme/fonts';
 import GroupsScreen from '@/components/GroupsScreens/GroupsScreen';
@@ -13,51 +12,21 @@ import NewGroupScreen from '@/components/GroupsScreens/NewGroups/NewGroupScreen'
 import GroupInfoScreen from '@/components/GroupsScreens/NewGroups/GroupInfoScreen';
 import MembersScreen from '@/components/GroupsScreens/Members/MembersScreen';
 import InviteListScreen from '@/components/GroupsScreens/Members/InviteListScreen';
-import { useTranslation } from 'react-i18next';
-import i18next from 'i18next';
-import { headerOptions, headerTitleStyle, NavHome } from './helpers';
+import { headerOptions, NavHome, AnimatedHeaderTitle } from './helpers';
 
 const Stack = createStackNavigator();
-
-const HeaderTitle = ({ title }) => {
-  const searchOpen = useSelector(
-    (state) => state.groups.searchOpen || state.connections.searchOpen,
-  );
-  const fadeAnim = useRef(new Animated.Value(1)).current;
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: searchOpen ? 0 : 1,
-      useNativeDriver: true,
-      duration: 600,
-    }).start();
-  }, [fadeAnim, searchOpen]);
-
-  return (
-    <Animated.View style={{ opacity: fadeAnim }}>
-      <Text style={headerTitleStyle}>{title}</Text>
-    </Animated.View>
-  );
-};
 
 const groupsOptions = {
   ...headerOptions,
   headerRight: () => <SearchGroups />,
   headerLeft: () => <NavHome />,
-  headerTitle: () => (
-    <HeaderTitle
-      title={i18next.t('groups.header.groups', { defaultValue: 'Groups' })}
-    />
-  ),
+  headerTitle: () => <AnimatedHeaderTitle i18key="groups.header.groups" />,
 };
 
 const newGroupOptions = {
   ...headerOptions,
   headerRight: () => <SearchConnections />,
-  headerTitle: () => (
-    <HeaderTitle
-      title={i18next.t('groups.header.newGroup', { defaultValue: 'New group' })}
-    />
-  ),
+  headerTitle: () => <AnimatedHeaderTitle i18key="groups.header.newGroup" />,
 };
 
 const membersScreenOptions = ({ route }) => {

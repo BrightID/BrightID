@@ -1,6 +1,6 @@
 // @flow
 
-import * as React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,94 +11,58 @@ import {
   Alert,
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
-import { connect } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { useSelector, useDispatch } from 'react-redux';
 import { setInternetCredentials } from 'react-native-keychain';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { setBackupCompleted, setPassword } from '@/actions/index';
-import emitter from '@/emitter';
 import { BACKUP_URL } from '@/utils/constants';
 import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/deviceConstants';
 import { ORANGE, BLUE, WHITE, LIGHT_BLACK, GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { validatePass } from '@/utils/password';
-import { backupAppData } from './helpers';
-
-type State = {
-  pass1: string,
-  pass2: string,
-  completed: number,
-  total: number,
-  backupInProgress: boolean,
-  isEditing: boolean,
-};
+import { backupAppData } from './thunks/backupThunks';
 
 const Container = DEVICE_IOS ? KeyboardAvoidingView : View;
-// const Container = KeyboardAvoidingView;
 
-class BackupScreen extends React.Component<Props, State> {
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    pass1: '',
-    pass2: '',
-    completed: 0,
-    total: 0,
-    backupInProgress: false,
-    isEditing: false,
+const BackupScreen = () => {
+  const [pass1, setPass1] = useState('');
+  const [pass2, setPass2] = useState('');
+  const [backupInProgress, setBackupInProgress] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const id = useSelector((state) => state.user.id);
+
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  const handleTextBlur = () => {
+    setIsEditing(false);
   };
 
-  componentDidMount() {
-    const { navigation } = this.props;
-    emitter.on('backupProgress', this.updateProgress);
-    navigation.addListener('blur', () => {
-      emitter.off('backupProgress', this.updateProgress);
-    });
-  }
-
-  updateProgress = (num: number) => {
-    this.setState(({ completed }) => ({
-      completed: completed + num,
-    }));
+  const handleTextFocus = () => {
+    setIsEditing(true);
   };
 
-  handleTextBlur = () => {
-    this.setState({ isEditing: false });
-  };
-
-  handleTextFocus = () => {
-    this.setState({ isEditing: true });
-  };
-
-  startBackup = async () => {
-    if (!this.state.pass1 || !validatePass(this.state.pass1, this.state.pass2))
-      return;
-
-    const { t } = this.props;
+  const startBackup = async () => {
+    if (!pass1 || !validatePass(pass1, pass2)) return;
 
     try {
-      const { dispatch, connections, groups, navigation, id } = this.props;
-
-      dispatch(setPassword(this.state.pass1));
+      dispatch(setPassword(pass1));
 
       try {
-        await setInternetCredentials(BACKUP_URL, id, this.state.pass1);
+        await setInternetCredentials(BACKUP_URL, id, pass1);
       } catch (err) {
         console.log(err.message);
       }
 
-      const groupsPhotoCount = groups.filter((group) => group.photo?.filename)
-        .length;
-
-      this.setState({
-        backupInProgress: true,
-        total: connections.length + groupsPhotoCount + 2,
-      });
+      setBackupInProgress(true);
 
       // TODO: Any error happening inside backupAppData() is caught and just logged to console. Should this be changed?
-      await backupAppData();
+      await dispatch(backupAppData());
 
-      this.setState({
-        backupInProgress: false,
-      });
+      setBackupInProgress(false);
 
       dispatch(setBackupCompleted(true));
 
@@ -117,96 +81,86 @@ class BackupScreen extends React.Component<Props, State> {
     }
   };
 
-  render() {
-    const { pass1, pass2, isEditing } = this.state;
-    const { t } = this.props;
-    return (
-      <>
-        <View style={styles.orangeTop} />
-        <Container style={styles.container} behavior="padding">
-          <View style={styles.textInputContainer}>
-            {(!isEditing || DEVICE_LARGE) && (
-              <Text style={styles.textInfo}>
-                {t('backup.text.enterPassword')}
-              </Text>
-            )}
-            <TextInput
-              style={styles.invisibleUsername}
-              placeholder="Username"
-              textContentType="username"
-              autoCompleteType="username"
-              value={this.props.id}
-            />
+  return (
+    <>
+      <View style={styles.orangeTop} />
+      <Container style={styles.container} behavior="padding">
+        <View style={styles.textInputContainer}>
+          {(!isEditing || DEVICE_LARGE) && (
+            <Text style={styles.textInfo}>
+              {t('backup.text.enterPassword')}
+            </Text>
+          )}
+          <TextInput
+            style={styles.invisibleUsername}
+            placeholder="Username"
+            textContentType="username"
+            autoCompleteType="username"
+            value={id}
+          />
 
-            <TextInput
-              onChangeText={(pass) => this.setState({ pass1: pass })}
-              value={pass1}
-              placeholder={t('common.placeholder.password')}
-              placeholderTextColor={GREY}
-              style={styles.textInput}
-              autoCorrect={false}
-              textContentType="newPassword"
-              passwordRules="required: lower; required: upper; required: digit; required: [-]; minlength: 20;"
-              autoCompleteType="password"
-              underlineColorAndroid="transparent"
-              secureTextEntry={true}
-              onFocus={this.handleTextFocus}
-            />
-            <TextInput
-              onChangeText={(pass) => this.setState({ pass2: pass })}
-              value={pass2}
-              placeholder={t('backup.placeholder.confirmPassword')}
-              textContentType="newPassword"
-              placeholderTextColor={GREY}
-              style={styles.textInput}
-              autoCorrect={false}
-              autoCompleteType="password"
-              underlineColorAndroid="transparent"
-              secureTextEntry={true}
-              onBlur={this.handleTextBlur}
-              onFocus={this.handleTextFocus}
-              blurOnSubmit={true}
-            />
-          </View>
-          <View style={styles.buttonContainer}>
-            {!this.state.backupInProgress ? (
-              <TouchableOpacity
-                style={[
-                  styles.startBackupButton,
-                  !this.state.pass1 && styles.disabledButton,
-                ]}
-                onPress={this.startBackup}
-                disabled={!this.state.pass1}
-              >
-                <Text style={styles.buttonInnerText}>
-                  {t('backup.button.startBackup')}
-                </Text>
-              </TouchableOpacity>
-            ) : (
-              <View style={styles.loader}>
-                <Text style={styles.textInfo}>
-                  {t('common.text.uploadingData')}
-                </Text>
-                <Text style={styles.textInfo}>
-                  {t('common.text.progress', {
-                    completed: this.state.completed,
-                    total: this.state.total,
-                  })}
-                </Text>
-                <Spinner
-                  isVisible={true}
-                  size={DEVICE_LARGE ? 80 : 65}
-                  type="Wave"
-                  color={LIGHT_BLACK}
-                />
-              </View>
-            )}
-          </View>
-        </Container>
-      </>
-    );
-  }
-}
+          <TextInput
+            onChangeText={setPass1}
+            value={pass1}
+            placeholder={t('common.placeholder.password')}
+            placeholderTextColor={GREY}
+            style={styles.textInput}
+            autoCorrect={false}
+            textContentType="newPassword"
+            passwordRules="required: lower; required: upper; required: digit; required: [-]; minlength: 20;"
+            autoCompleteType="password"
+            underlineColorAndroid="transparent"
+            secureTextEntry={true}
+            onFocus={handleTextFocus}
+          />
+          <TextInput
+            onChangeText={setPass2}
+            value={pass2}
+            placeholder={t('backup.placeholder.confirmPassword')}
+            textContentType="newPassword"
+            placeholderTextColor={GREY}
+            style={styles.textInput}
+            autoCorrect={false}
+            autoCompleteType="password"
+            underlineColorAndroid="transparent"
+            secureTextEntry={true}
+            onBlur={handleTextBlur}
+            onFocus={handleTextFocus}
+            blurOnSubmit={true}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          {!backupInProgress ? (
+            <TouchableOpacity
+              style={[
+                styles.startBackupButton,
+                !pass1 && styles.disabledButton,
+              ]}
+              onPress={startBackup}
+              disabled={!pass1}
+            >
+              <Text style={styles.buttonInnerText}>
+                {t('backup.button.startBackup')}
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <View style={styles.loader}>
+              <Text style={styles.textInfo}>
+                {t('common.text.uploadingData')}
+              </Text>
+              <Spinner
+                isVisible={true}
+                size={DEVICE_LARGE ? 80 : 65}
+                type="Wave"
+                color={ORANGE}
+              />
+            </View>
+          )}
+        </View>
+      </Container>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   orangeTop: {
@@ -305,8 +259,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ connections, groups, user }) => ({
-  ...connections,
-  ...groups,
-  id: user.id,
-}))(withTranslation()(BackupScreen));
+export default BackupScreen;

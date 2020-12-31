@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Alert,
   View,
@@ -13,7 +13,7 @@ import { BlurView } from '@react-native-community/blur';
 import Spinner from 'react-native-spinkit';
 import { setInternetCredentials } from 'react-native-keychain';
 import { useTranslation } from 'react-i18next';
-import { BACKUP_URL } from '@/utils/constants';
+import { BACKUP_URL, ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import {
   DARK_ORANGE,
@@ -27,11 +27,9 @@ import {
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from 'react-redux';
-import { useFocusEffect } from '@react-navigation/native';
 import { validatePass } from '@/utils/password';
 import { setPassword } from '@/actions';
-import { backupAppData } from '@/components/Recovery/helpers';
-import emitter from '@/emitter';
+import { backupAppData } from '@/components/Recovery/thunks/backupThunks';
 
 /**
  * Search Bar in the Groups Screen
@@ -40,44 +38,16 @@ import emitter from '@/emitter';
  */
 
 const UploadAnimation = () => {
-  const [completed, setCompleted] = useState(0);
-  const backupTotal = useSelector(
-    (state) =>
-      2 +
-      state.connections.connections.length +
-      state.groups.groups.filter((group) => group.photo?.filename).length,
-  );
-
   const { t } = useTranslation();
-
-  useFocusEffect(
-    useCallback(() => {
-      const updateProgress = (num) => {
-        setCompleted((completed) => completed + num);
-      };
-
-      emitter.on('backupProgress', updateProgress);
-
-      return () => {
-        emitter.off('backupProgress', updateProgress);
-      };
-    }, []),
-  );
 
   return (
     <View style={styles.uploadAnimationContainer}>
       <Text style={styles.textInfo}>{t('common.text.uploadingData')}</Text>
-      <Text style={styles.textInfo}>
-        {t('common.text.progress', {
-          completed,
-          total: backupTotal,
-        })}
-      </Text>
       <Spinner
         isVisible={true}
         size={DEVICE_LARGE ? 80 : 65}
         type="Wave"
-        color={LIGHT_BLACK}
+        color={ORANGE}
       />
     </View>
   );
@@ -119,7 +89,7 @@ const ChangePasswordModal = ({ route, navigation }) => {
 
       setBackupInProgress(true);
 
-      await backupAppData();
+      await dispatch(backupAppData());
 
       setBackupInProgress(false);
 

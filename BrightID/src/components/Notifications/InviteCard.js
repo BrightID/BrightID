@@ -18,7 +18,10 @@ import { getGroupName } from '@/utils/groups';
 import { acceptInvite, rejectInvite, joinGroup } from '@/actions';
 import api from '@/api/brightId';
 import GroupPhoto from '@/components/GroupsScreens/GroupPhoto';
-import { backupUser, backupPhoto } from '@/components/Recovery/helpers';
+import {
+  backupUser,
+  backupPhoto,
+} from '@/components/Recovery/thunks/backupThunks';
 import Check from '@/components/Icons/Check';
 import xGrey from '@/static/x_grey.svg';
 
@@ -70,9 +73,9 @@ class InviteCard extends React.Component<Props> {
         }),
       );
       if (backupCompleted) {
-        await backupUser();
+        await dispatch(backupUser());
         if (invite.photo && invite.photo.filename) {
-          await backupPhoto(invite.id, invite.photo.filename);
+          await dispatch(backupPhoto(invite.id, invite.photo.filename));
         }
       }
       navigation.navigate('Members', { group: invite });

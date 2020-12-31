@@ -127,9 +127,18 @@ export const HomeScreen = (props) => {
           }}
           onPress={async () => {
             let url = await Clipboard.getString();
-            url = url.replace('https://app.brightid.org', 'brightid://');
-            console.log(`Linking.openURL with ${url}`);
-            Linking.openURL(url);
+            if (url.startsWith('https://app.brightid.org/connection-code/')) {
+              url = url.replace(
+                'https://app.brightid.org/connection-code/',
+                '',
+              );
+
+              navigation.navigate('ScanCode', { qrcode: url });
+            } else {
+              url = url.replace('https://app.brightid.org', 'brightid://');
+              console.log(`Linking.openURL with ${url}`);
+              Linking.openURL(url);
+            }
           }}
         >
           <Material

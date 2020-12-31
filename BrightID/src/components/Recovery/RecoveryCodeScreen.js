@@ -1,7 +1,8 @@
 // @flow
 
-import * as React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
+  Alert,
   StyleSheet,
   Text,
   View,
@@ -10,17 +11,21 @@ import {
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { parseString } from 'xml2js';
 import { path } from 'ramda';
 import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { withTranslation } from 'react-i18next';
-import { ORANGE, LIGHT_BLACK, BLUE, WHITE } from '@/theme/colors';
+import { useTranslation } from 'react-i18next';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { ORANGE, BLACK, WHITE, LIGHT_BLACK, DARKER_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import backupApi from '../../api/backupService';
-import { setupRecovery, recoveryQrStr, handleSigs } from './helpers';
+import {
+  pollChannel,
+  clearChannel,
+  CHANNEL_POLL_INTERVAL,
+} from './thunks/channelThunks';
 
 /**
  * Recovery Code screen of BrightID
@@ -28,142 +33,120 @@ import { setupRecovery, recoveryQrStr, handleSigs } from './helpers';
  * displays a qrcode
  */
 
-type State = {
-  copied: boolean,
-  qrsvg:
-    | string
-    | {
-        svg: {
-          $: {
-            viewBox: string,
-          },
-        },
-      },
-};
+const RecoveryCodeScreen = () => {
+  const [qrsvg, setQrsvg] = useState('');
+  const [alreadyNotified, setAlreadyNotified] = useState(false);
 
-class RecoveryCodeScreen extends React.Component<Props, State> {
-  checkIntervalId: IntervalID;
+  const recoveryData = useSelector((state) => state.recoveryData);
 
-  sigs = {};
+  const count = Object.values(recoveryData?.sigs).length;
 
-  state = {
-    qrsvg: '',
-    copied: false,
-  };
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
 
-  componentDidMount() {
-    try {
-      const { navigation } = this.props;
-      navigation.addListener('focus', async () => {
-        await setupRecovery();
-        qrcode.toString(recoveryQrStr(), this.handleQrString);
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(pollChannel());
+      return () => {
+        clearChannel();
+      };
+    }, [dispatch]),
+  );
+
+  useEffect(() => {
+    const parseQrString = (err, qrsvg) => {
+      if (err) return console.log(err);
+      setQrsvg(qrsvg);
+    };
+
+    if (recoveryData.qrcode) {
+      qrcode.toString(recoveryData.qrcode, (err, qr) => {
+        if (err) return console.log(err);
+        parseString(qr, parseQrString);
       });
-      navigation.addListener('focus', this.waitForSigs);
-      navigation.addListener('blur', () => {
-        clearInterval(this.checkIntervalId);
-      });
-    } catch (err) {
-      console.warn(err.message);
     }
-  }
+  }, [recoveryData]);
 
-  waitForSigs = () => {
-    this.checkIntervalId = setInterval(() => {
-      backupApi
-        .getSig()
-        .then(handleSigs)
-        .then((ready) => {
-          if (ready) this.props.navigation.navigate('Restore');
-        });
-    }, 3000);
-  };
+  useEffect(() => {
+    const sigs = Object.values(recoveryData.sigs);
 
-  handleQrString = (err, qr) => {
-    if (err) return console.log(err);
-    parseString(qr, this.parseQrString);
-  };
+    if (!alreadyNotified && sigs.length === 1) {
+      // alert user that one of their sigs exists
+      Alert.alert(t('common.alert.info'), t('common.alert.text.trustedSigned'));
+      setAlreadyNotified(true);
+    } else if (sigs.length > 1) {
+      // stop polling channel if 2 sigs exist
+      // navigate after one cycle
+      setTimeout(() => {
+        clearChannel();
+        navigation.navigate('Restore');
+      }, CHANNEL_POLL_INTERVAL);
+    }
+  }, [recoveryData.sigs, alreadyNotified, t, navigation]);
 
-  parseQrString = (err, qrsvg) => {
-    if (err) return console.log(err);
-    this.setState({ qrsvg });
-  };
-
-  copyQr = () => {
-    const recoveryCode = recoveryQrStr();
-    const universalLink = `https://app.brightid.org/connection-code/${recoveryCode}`;
+  const copyQr = () => {
+    const universalLink = `https://app.brightid.org/connection-code/${recoveryData?.qrcode}`;
     Clipboard.setString(universalLink);
-    this.setState({ copied: true });
   };
 
-  renderCopyQr = () => {
-    const { t } = this.props;
-    return (
-      <TouchableOpacity style={styles.copyContainer} onPress={this.copyQr}>
-        <Material
-          size={24}
-          name="content-copy"
-          color={LIGHT_BLACK}
-          style={{ width: 24, height: 24 }}
-        />
-        <Text style={styles.copyText}> {t('common.button.copy')}</Text>
-      </TouchableOpacity>
-    );
-  };
+  return (
+    <>
+      <View style={styles.orangeTop} />
+      <View style={styles.container}>
+        <Text style={styles.recoveryCodeInfoText}>
+          {t('recovery.text.askTrustedConnections')}
+        </Text>
 
-  renderSpinner = () => (
-    <View style={styles.qrsvgContainer}>
-      <Spinner
-        // style={styles.spinner}
-        isVisible={true}
-        size={47}
-        type="9CubeGrid"
-        color={BLUE}
-      />
-    </View>
-  );
-
-  renderQrCode = () => (
-    <View style={[styles.qrsvgContainer]}>
-      <Svg
-        height={DEVICE_LARGE ? '260' : '200'}
-        width={DEVICE_LARGE ? '260' : '200'}
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox={path(['svg', '$', 'viewBox'], this.state.qrsvg)}
-        shape-rendering="crispEdges"
-      >
-        <Path
-          fill={this.state.copied ? 'lightblue' : '#fff'}
-          d={path(['svg', 'path', '0', '$', 'd'], this.state.qrsvg)}
-        />
-        <Path
-          stroke="#000"
-          d={path(['svg', 'path', '1', '$', 'd'], this.state.qrsvg)}
-        />
-      </Svg>
-    </View>
-  );
-
-  render() {
-    const { qrsvg } = this.state;
-    const { t } = this.props;
-    return (
-      <>
-        <View style={styles.orangeTop} />
-        <View style={styles.container}>
-          <View style={styles.topHalf}>
-            <Text style={styles.recoveryCodeInfoText}>
-              {t('recovery.text.askTrustedConnections')}
+        {qrsvg ? (
+          <View style={styles.qrsvgContainer}>
+            <Text style={styles.signatures}>
+              {t('recovery.text.signatures', { count })}
             </Text>
+            <Svg
+              height={DEVICE_LARGE ? '240' : '200'}
+              width={DEVICE_LARGE ? '240' : '200'}
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox={path(['svg', '$', 'viewBox'], qrsvg)}
+              shape-rendering="crispEdges"
+            >
+              <Path
+                fill={WHITE}
+                d={path(['svg', 'path', '0', '$', 'd'], qrsvg)}
+              />
+              <Path
+                stroke={BLACK}
+                d={path(['svg', 'path', '1', '$', 'd'], qrsvg)}
+              />
+            </Svg>
+
+            <TouchableOpacity style={styles.copyContainer} onPress={copyQr}>
+              <Material
+                size={24}
+                name="content-copy"
+                color={LIGHT_BLACK}
+                style={{ width: 24, height: 24 }}
+              />
+              <Text style={styles.copyText}> {t('common.button.copy')}</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.bottomHalf}>
-            {qrsvg ? this.renderQrCode() : this.renderSpinner()}
-            {qrsvg ? this.renderCopyQr() : <View />}
+        ) : (
+          <View style={styles.qrsvgContainer}>
+            <Spinner
+              isVisible={true}
+              size={DEVICE_LARGE ? 48 : 42}
+              type="9CubeGrid"
+              color={ORANGE}
+            />
           </View>
-        </View>
-      </>
-    );
-  }
-}
+        )}
+        <Text style={styles.additionalInfo}>
+          {t('recovery.text.additionalInfo')}
+        </Text>
+      </View>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   orangeTop: {
@@ -181,38 +164,36 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'column',
     borderTopLeftRadius: 58,
-    borderTopRightRadius: 58,
     marginTop: -58,
     zIndex: 10,
     overflow: 'hidden',
   },
-  topHalf: {
-    height: '33%',
-    width: '100%',
+  qrsvgContainer: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  bottomHalf: {
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flex: 1,
   },
   recoveryCodeInfoText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: fontSize[18],
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[16],
     textAlign: 'center',
-    color: LIGHT_BLACK,
-    marginLeft: 4,
-    marginRight: 4,
+    color: BLACK,
+    width: '80%',
+    marginTop: DEVICE_LARGE ? 30 : 26,
   },
-  qrsvgContainer: {
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+  additionalInfo: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[16],
+    textAlign: 'center',
+    color: DARKER_GREY,
+    width: '80%',
+    marginBottom: DEVICE_LARGE ? 50 : 45,
+  },
+  signatures: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: fontSize[16],
+    textAlign: 'center',
+    color: BLACK,
   },
   copyContainer: {
     flexDirection: 'row',
@@ -222,9 +203,9 @@ const styles = StyleSheet.create({
     minWidth: 100,
   },
   copyText: {
-    color: LIGHT_BLACK,
-    fontFamily: 'ApexNew-Book',
+    color: BLACK,
+    fontFamily: 'Poppins-Medium',
   },
 });
 
-export default connect()(withTranslation()(RecoveryCodeScreen));
+export default RecoveryCodeScreen;
