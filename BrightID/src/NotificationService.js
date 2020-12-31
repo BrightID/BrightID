@@ -2,11 +2,7 @@
 
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import * as PushNotification from 'react-native-push-notification';
-import {
-  setDeviceToken,
-  setActiveNotification,
-  setNotificationToken,
-} from '@/actions';
+import { setDeviceToken, setNotificationToken } from '@/actions';
 import { store } from '@/store';
 import notificationService from '@/api/notificationService';
 

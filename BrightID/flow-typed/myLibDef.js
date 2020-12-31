@@ -240,7 +240,7 @@ declare type BannerNotification = {
   message: string,
   type: string,
   navigationTarget?: string,
-  xmlIcon?: string,
+  icon?: string,
   oncePerSession?: boolean,
 };
 

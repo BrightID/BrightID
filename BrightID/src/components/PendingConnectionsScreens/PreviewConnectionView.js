@@ -8,10 +8,11 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { useTranslation } from 'react-i18next';
-import { SvgXml } from 'react-native-svg';
-import verificationSticker from '@/static/verification-sticker.svg';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { GREY, ORANGE, BLACK, WHITE, RED, LIGHT_BLACK } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { pendingConnection_states } from './pendingConnectionSlice';
 import { RatingView } from './RatingView';
 import { ConnectionStats } from './ConnectionStats';
@@ -119,7 +120,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
           )}
           {brightIdVerified && (
             <View style={styles.verificationSticker}>
-              <SvgXml width="16" height="16" xml={verificationSticker} />
+              <VerifiedBadge width={16} height={16} />
             </View>
           )}
         </View>
@@ -139,14 +140,14 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
 const styles = StyleSheet.create({
   waitingText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
-    color: '#333',
+    fontSize: fontSize[16],
+    color: LIGHT_BLACK,
   },
   buttonText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 18 : 15,
+    fontSize: fontSize[18],
     textAlign: 'left',
-    color: '#ffffff',
+    color: WHITE,
   },
   titleContainer: {
     marginTop: DEVICE_LARGE ? 18 : 12,
@@ -155,9 +156,9 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 22 : 18,
+    fontSize: fontSize[22],
     textAlign: 'center',
-    color: '#000000',
+    color: BLACK,
   },
   userContainer: {
     marginTop: DEVICE_LARGE ? 12 : 10,
@@ -177,14 +178,14 @@ const styles = StyleSheet.create({
   },
   connectName: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 18 : 16,
+    fontSize: fontSize[18],
     letterSpacing: 0,
     textAlign: 'left',
-    color: '#000000',
+    color: BLACK,
   },
   reported: {
-    fontSize: DEVICE_LARGE ? 18 : 16,
-    color: 'red',
+    fontSize: fontSize[18],
+    color: RED,
   },
   countsContainer: {
     width: '88%',
@@ -194,18 +195,18 @@ const styles = StyleSheet.create({
     marginBottom: DEVICE_LARGE ? 12 : 10,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: '#ed7a5d',
+    borderColor: ORANGE,
     justifyContent: 'space-evenly',
     flexDirection: 'row',
   },
   connectedText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 14,
-    color: '#aba9a9',
+    fontSize: fontSize[14],
+    color: GREY,
     fontStyle: 'italic',
   },
   verificationSticker: {
-    marginLeft: DEVICE_LARGE ? 8 : 5,
+    marginLeft: DEVICE_LARGE ? 7 : 5,
   },
   ratingView: {
     flex: 1,
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
   infoText: {
     fontFamily: 'Poppins-Bold',
     textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 17 : 15,
+    fontSize: fontSize[17],
     marginTop: 32,
   },
 });

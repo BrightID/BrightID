@@ -12,10 +12,10 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { SvgXml } from 'react-native-svg';
-import verificationSticker from '@/static/verification-sticker.svg';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import { photoDirectory } from '@/utils/filesystem';
+import { GREY, WHITE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
 import ChannelAPI from '@/api/channelService';
 import api from '@/api/brightId';
@@ -138,6 +138,8 @@ const RecoveryConnectionCard = (props) => {
             >
               {name}
             </Text>
+            {/* 
+            TODO: ADD VerifiedSticker
             {brightidVerified && (
               <SvgXml
                 style={styles.verificationSticker}
@@ -145,7 +147,7 @@ const RecoveryConnectionCard = (props) => {
                 height="16"
                 xml={verificationSticker}
               />
-            )}
+            )} */}
           </View>
           <ConnectionStatus
             index={index}
@@ -174,7 +176,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     shadowColor: 'rgba(221, 179, 169, 0.3)',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
@@ -211,21 +213,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  scoreLeft: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 14,
-    color: '#9b9b9b',
-    marginRight: 3,
-    paddingTop: 1.5,
-  },
-  scoreRight: {
-    fontFamily: 'ApexNew-Medium',
-    fontSize: 16,
-  },
+
   connectedText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 12,
-    color: '#aba9a9',
+    fontSize: fontSize[12],
+    color: GREY,
     fontStyle: 'italic',
   },
   moreIcon: {

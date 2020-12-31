@@ -8,10 +8,11 @@ import { createSelector } from '@reduxjs/toolkit';
 import { useTranslation } from 'react-i18next';
 import { useRoute, useFocusEffect } from '@react-navigation/native';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { connectionsSelector } from '@/utils/connectionsSelector';
 import api from '@/api/brightId';
+import { ORANGE, WHITE, BLUE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
 
 const ITEM_HEIGHT = DEVICE_LARGE ? 102 : 92;
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     borderTopLeftRadius: 58,
     marginTop: -58,
     zIndex: 10,
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 20,
+    fontSize: fontSize[20],
   },
   connectionsContainer: {
     flex: 1,
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 6,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     width: '100%',
     marginBottom: 11,
   },
@@ -161,13 +162,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: '80%',
   },
-
   buttonContainer: {
     justifyContent: 'center',
     alignItems: 'center',
   },
   saveButton: {
-    backgroundColor: '#428BE5',
+    backgroundColor: BLUE,
     width: 300,
     justifyContent: 'center',
     alignItems: 'center',
@@ -178,9 +178,9 @@ const styles = StyleSheet.create({
   },
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',
-    color: '#fff',
+    color: WHITE,
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: fontSize[18],
   },
 });
 

@@ -14,53 +14,23 @@ import {
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
 import { useHeaderHeight } from '@react-navigation/stack';
-import { ORANGE } from '@/utils/constants';
+import { BLACK, ORANGE, WHITE, GREY } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
-import { SvgXml } from 'react-native-svg';
 import { useTranslation } from 'react-i18next';
 import codePush from 'react-native-code-push';
-import verificationSticker from '@/static/verification-sticker.svg';
 import { retrieveImage, photoDirectory } from '@/utils/filesystem';
-import editProfile from '@/static/edit_profile.svg';
-import editProfileFocused from '@/static/edit_profile_focused.svg';
-import trustedConnections from '@/static/trusted_connections_sidebar_inactive.svg';
-import contactUs from '@/static/contact_us.svg';
-import explorerCode from '@/static/explorer_code_icon.svg';
-import explorerCodeFocused from '@/static/explorer_code_icon_focused.svg';
-import homeIcon from '@/static/home_icon_side_menu.svg';
-import taskList from '@/static/task_list_icon.svg';
-import taskListFocused from '@/static/task_list_icon_focused.svg';
-import faqIcon from '@/static/faq_icon.svg';
+import Home from '@/components/Icons/Home';
+import Pencil from '@/components/Icons/Pencil';
+import List from '@/components/Icons/List';
+import GraphQl from '@/components/Icons/GraphQl';
+import Faq from '@/components/Icons/Faq';
+import Mail from '@/components/Icons/Mail';
+import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import TasksScreen from '@/components/Tasks/TasksScreen';
 import GraphExplorerScreen from '@/components/SideMenu/GraphExplorerScreen';
 import ContactUsScreen from '@/components/SideMenu/ContactUsScreen';
 import EditProfileScreen from '@/components/EditProfile/EditProfileScreen';
-
-const iconMap = {
-  editProfile,
-  editProfileFocused,
-  contactUs,
-  explorerCode,
-  explorerCodeFocused,
-  homeIcon,
-  taskList,
-  taskListFocused,
-  faqIcon,
-  trustedConnections,
-};
-
-const getIcon = (name) => {
-  return ({ focused, color }) => {
-    let icon = `${name}${focused ? 'Focused' : ''}`;
-    return (
-      <SvgXml
-        xml={iconMap[icon]}
-        width={DEVICE_LARGE ? 28 : 24}
-        height={DEVICE_LARGE ? 28 : 24}
-      />
-    );
-  };
-};
 
 const CustomItem = ({
   onPress,
@@ -131,20 +101,26 @@ const CustomDrawerContent = (props) => {
         />
         <Text style={styles.userName}>{name}</Text>
         {verified && (
-          <SvgXml
+          <VerifiedBadge
             style={styles.verificationSticker}
             width="16"
             height="16"
-            xml={verificationSticker}
           />
         )}
       </View>
       <CustomItem
-        inactiveTintColor="#000"
+        inactiveTintColor={BLACK}
         label={t('drawer.label.home')}
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
-        icon={getIcon('homeIcon')}
+        icon={({ focused }) => (
+          <Home
+            width={DEVICE_LARGE ? 28 : 24}
+            height={DEVICE_LARGE ? 28 : 24}
+            color={focused ? GREY : BLACK}
+            highlight={focused ? WHITE : ORANGE}
+          />
+        )}
         onPress={() => {
           navigation.reset({
             index: 0,
@@ -154,14 +130,21 @@ const CustomDrawerContent = (props) => {
       />
       <CustomItem
         focused={state.routeNames[state.index] === 'Edit Profile'}
-        inactiveTintColor="#000"
-        inactiveBackgroundColor="#fff"
-        activeTintColor="#fff"
+        inactiveTintColor={BLACK}
+        inactiveBackgroundColor={WHITE}
+        activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
         label={t('drawer.label.editProfile')}
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
-        icon={getIcon('editProfile')}
+        icon={({ focused }) => (
+          <Pencil
+            width={DEVICE_LARGE ? 28 : 24}
+            height={DEVICE_LARGE ? 28 : 24}
+            color={focused ? GREY : BLACK}
+            highlight={focused ? WHITE : ORANGE}
+          />
+        )}
         onPress={() => {
           navigation.reset({
             index: 1,
@@ -171,14 +154,21 @@ const CustomDrawerContent = (props) => {
       />
       <CustomItem
         focused={state.routeNames[state.index] === 'Achievements'}
-        inactiveTintColor="#000"
-        inactiveBackgroundColor="#fff"
-        activeTintColor="#fff"
+        inactiveTintColor={BLACK}
+        inactiveBackgroundColor={WHITE}
+        activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
         label={t('drawer.label.achievements')}
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
-        icon={getIcon('taskList')}
+        icon={({ focused }) => (
+          <List
+            width={DEVICE_LARGE ? 28 : 24}
+            height={DEVICE_LARGE ? 28 : 24}
+            color={focused ? GREY : BLACK}
+            highlight={focused ? WHITE : ORANGE}
+          />
+        )}
         onPress={() => {
           navigation.reset({
             index: 1,
@@ -189,14 +179,21 @@ const CustomDrawerContent = (props) => {
 
       <CustomItem
         focused={state.routeNames[state.index] === 'Copy Explorer Code'}
-        inactiveTintColor="#000"
-        inactiveBackgroundColor="#fff"
-        activeTintColor="#fff"
+        inactiveTintColor={BLACK}
+        inactiveBackgroundColor={WHITE}
+        activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
         label={t('drawer.label.copyExplorerCode')}
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
-        icon={getIcon('explorerCode')}
+        icon={({ focused }) => (
+          <GraphQl
+            width={DEVICE_LARGE ? 28 : 24}
+            height={DEVICE_LARGE ? 28 : 24}
+            color={focused ? GREY : BLACK}
+            highlight={focused ? WHITE : ORANGE}
+          />
+        )}
         onPress={() => {
           navigation.reset({
             index: 1,
@@ -207,9 +204,16 @@ const CustomDrawerContent = (props) => {
       <CustomItem
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
-        inactiveTintColor="#000"
+        inactiveTintColor={BLACK}
         label={t('drawer.label.checkForUpdates')}
-        icon={getIcon('faqIcon')}
+        icon={({ focused }) => (
+          <Faq
+            width={DEVICE_LARGE ? 28 : 24}
+            height={DEVICE_LARGE ? 28 : 24}
+            color={focused ? GREY : BLACK}
+            highlight={focused ? WHITE : ORANGE}
+          />
+        )}
         onPress={() => {
           codePush.sync(
             {
@@ -218,18 +222,31 @@ const CustomDrawerContent = (props) => {
             },
             (status) => {
               if (status === codePush.SyncStatus.UP_TO_DATE) {
-                Alert.alert(t('drawer.alert.title.upToDate'), t('drawer.alert.text.upToDate'));
+                Alert.alert(
+                  t('drawer.alert.title.upToDate'),
+                  t('drawer.alert.text.upToDate'),
+                );
               }
             },
           );
         }}
       />
       <CustomItem
+        focused={state.routeNames[state.index] === 'ContactUs'}
         style={styles.drawerItem}
         labelStyle={styles.labelStyle}
-        inactiveTintColor="#000"
+        inactiveTintColor={BLACK}
+        activeTintColor={WHITE}
+        activeBackgroundColor={ORANGE}
         label={t('drawer.label.contactUs')}
-        icon={getIcon('contactUs')}
+        icon={({ focused }) => (
+          <Mail
+            width={DEVICE_LARGE ? 28 : 24}
+            height={DEVICE_LARGE ? 28 : 24}
+            color={focused ? GREY : BLACK}
+            highlight={focused ? WHITE : ORANGE}
+          />
+        )}
         onPress={() => {
           navigation.reset({
             index: 1,
@@ -237,6 +254,31 @@ const CustomDrawerContent = (props) => {
           });
         }}
       />
+      {__DEV__ && (
+        <CustomItem
+          focused={state.routeNames[state.index] === 'SampleIconPage'}
+          style={styles.drawerItem}
+          labelStyle={styles.labelStyle}
+          inactiveTintColor={BLACK}
+          activeTintColor={WHITE}
+          activeBackgroundColor={ORANGE}
+          label="Sample Icon Page"
+          icon={({ focused }) => (
+            <List
+              width={DEVICE_LARGE ? 28 : 24}
+              height={DEVICE_LARGE ? 28 : 24}
+              color={focused ? GREY : BLACK}
+              highlight={focused ? WHITE : ORANGE}
+            />
+          )}
+          onPress={() => {
+            navigation.reset({
+              index: 1,
+              routes: [{ name: 'Home' }, { name: 'SampleIconPage' }],
+            });
+          }}
+        />
+      )}
     </DrawerContentScrollView>
   );
 };
@@ -255,10 +297,10 @@ export const HomeDrawer = () => {
       sceneContainerStyle={[styles.sceneContainer]}
       drawerStyle={[styles.drawer, { marginTop: headerHeight }]}
       drawerContentOptions={{
-        activeTintColor: '#FFF',
-        inactiveTintColor: '#000',
+        activeTintColor: WHITE,
+        inactiveTintColor: BLACK,
         activeBackgroundColor: ORANGE,
-        inactiveBackgroundColor: '#fff',
+        inactiveBackgroundColor: WHITE,
         itemStyle: styles.drawerItem,
         labelStyle: styles.labelStyle,
       }}
@@ -273,13 +315,19 @@ export const HomeDrawer = () => {
         component={GraphExplorerScreen}
       />
       <Drawer.Screen name="ContactUs" component={ContactUsScreen} />
+      {__DEV__ && (
+        <Drawer.Screen
+          name="SampleIconPage"
+          component={require('@/components/Icons/SamplePage').default}
+        />
+      )}
     </Drawer.Navigator>
   );
 };
 
 const styles = StyleSheet.create({
   sceneContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
   },
   drawer: {
     width: '85%',
@@ -308,7 +356,7 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     marginLeft: DEVICE_LARGE ? 20 : 18,
   },
   verificationSticker: {
@@ -327,7 +375,7 @@ const styles = StyleSheet.create({
   },
   labelStyle: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     marginLeft: 16,
   },
 });

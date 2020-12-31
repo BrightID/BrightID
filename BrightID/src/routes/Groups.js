@@ -4,7 +4,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import { getGroupName } from '@/utils/groups';
-import { DEVICE_TYPE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import GroupsScreen from '@/components/GroupsScreens/GroupsScreen';
 import SearchGroups from '@/components/Helpers/SearchGroups';
 import SearchConnections from '@/components/Helpers/SearchConnections';
@@ -29,13 +29,13 @@ const newGroupOptions = {
   headerTitle: () => <AnimatedHeaderTitle i18key="groups.header.newGroup" />,
 };
 
-const membersScreenOptions = ({ navigation, route }) => {
+const membersScreenOptions = ({ route }) => {
   const group = route.params?.group;
   return {
     ...headerOptions,
     title: getGroupName(group),
     headerTitleStyle: {
-      fontSize: DEVICE_TYPE === 'large' ? 20 : 18,
+      fontSize: fontSize[20],
       paddingLeft: 20,
       paddingRight: 30,
     },
@@ -59,7 +59,10 @@ const Groups = () => {
       <Stack.Screen
         name="GroupInfo"
         component={GroupInfoScreen}
-        options={{ ...headerOptions, title: t('groups.header.newGroup') }}
+        options={{
+          ...headerOptions,
+          title: t('groups.header.newGroup', { defaultValue: 'New group' }),
+        }}
       />
       <Stack.Screen
         name="Members"

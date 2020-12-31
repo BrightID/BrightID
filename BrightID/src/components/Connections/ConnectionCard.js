@@ -3,14 +3,21 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { SvgXml } from 'react-native-svg';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { CHANNEL_TTL } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
 import { staleConnection, deleteConnection } from '@/actions';
-import verificationSticker from '@/static/verification-sticker.svg';
+import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
+import {
+  WHITE,
+  LIGHT_ORANGE,
+  LIGHT_BLACK,
+  DARK_ORANGE,
+  RED,
+} from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
@@ -115,7 +122,7 @@ const ConnectionCard = (props) => {
               cancelButtonIndex: removeOptions.length - 1,
               destructiveButtonIndex: 0,
               title: t('connections.removeActionSheet.title'),
-              message: t('connections.removeActionSheet.info', { name: name }),
+              message: t('connections.removeActionSheet.info', { name }),
               showSeparators: true,
               textStyle: {
                 textAlign: 'center',
@@ -128,7 +135,11 @@ const ConnectionCard = (props) => {
           );
         }}
       >
-        <Material color="#333" name="close" size={DEVICE_LARGE ? 22 : 18} />
+        <Material
+          color={LIGHT_BLACK}
+          name="close"
+          size={DEVICE_LARGE ? 22 : 18}
+        />
       </TouchableOpacity>
     ) : (
       <View />
@@ -185,12 +196,9 @@ const ConnectionCard = (props) => {
                 {name}
               </Text>
               {brightidVerified && (
-                <SvgXml
-                  style={styles.verificationSticker}
-                  width="16"
-                  height="16"
-                  xml={verificationSticker}
-                />
+                <View style={styles.verificationSticker}>
+                  <VerifiedBadge width={16} height={16} />
+                </View>
               )}
             </View>
             <ConnectionStatus
@@ -222,7 +230,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     shadowColor: 'rgba(221, 179, 169, 0.3)',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
@@ -252,41 +260,41 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
   },
-  // statusContainer: {
-  //   flexDirection: 'column',
-  //   justifyContent: 'center',
-  //   alignItems: 'flex-start',
-  // },
-  // connectionLevel: {
-  //   fontFamily: 'Poppins-Regular',
-  //   fontSize: DEVICE_LARGE ? 12 : 11,
-  //   marginTop: DEVICE_LARGE ? 3 : 1,
-  // },
-  // connectionTime: {
-  //   fontFamily: 'Poppins-Regular',
-  //   fontSize: DEVICE_LARGE ? 10 : 9,
-  //   color: '#B64B32',
-  // },
+  statusContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
+  connectionLevel: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: fontSize[12],
+    marginTop: DEVICE_LARGE ? 3 : 1,
+  },
+  connectionTime: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: fontSize[10],
+    color: DARK_ORANGE,
+  },
   moreIcon: {
     marginRight: DEVICE_LARGE ? 26 : 23,
   },
-  // waitingMessage: {
-  //   fontFamily: 'Poppins-Medium',
-  //   fontSize: DEVICE_LARGE ? 13 : 11,
-  //   color: '#e39f2f',
-  //   marginTop: DEVICE_LARGE ? 2 : 0,
-  // },
-  // deletedMessage: {
-  //   fontFamily: 'Poppins-Medium',
-  //   fontSize: DEVICE_LARGE ? 14 : 12,
-  //   color: '#FF0800',
-  //   marginTop: DEVICE_LARGE ? 5 : 2,
-  //   textTransform: 'capitalize',
-  // },
+  waitingMessage: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[13],
+    color: LIGHT_ORANGE,
+    marginTop: DEVICE_LARGE ? 2 : 0,
+  },
+  deletedMessage: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[14],
+    color: RED,
+    marginTop: DEVICE_LARGE ? 5 : 2,
+    textTransform: 'capitalize',
+  },
   verificationSticker: {
-    marginLeft: DEVICE_LARGE ? 5 : 3.5,
+    marginLeft: DEVICE_LARGE ? 7 : 3.5,
   },
   removeButton: {
     width: DEVICE_LARGE ? 36 : 32,

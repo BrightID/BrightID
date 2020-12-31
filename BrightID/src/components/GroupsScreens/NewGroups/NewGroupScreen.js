@@ -11,8 +11,9 @@ import { withTranslation } from 'react-i18next';
 import store from '@/store';
 import emitter from '@/emitter';
 import { clearNewGroupCoFounders } from '@/actions';
-import { ORANGE } from '@/utils/constants';
+import { BLUE, LIGHT_GREY, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { toSearchString } from '@/utils/strings';
 import Spinner from 'react-native-spinkit';
 import { createNewGroup } from '../actions';
@@ -101,13 +102,15 @@ export class NewGroupScreen extends React.Component<Props> {
           }
           disabled={buttonDisabled}
         >
-          <Text style={styles.buttonInnerText}>{t('createGroup.button.createGroup')}</Text>
+          <Text style={styles.buttonInnerText}>
+            {t('createGroup.button.createGroup')}
+          </Text>
         </TouchableOpacity>
       </View>
     ) : (
       <View style={styles.loader}>
         <Text style={styles.textInfo}>{t(this.state.creationState)} ...</Text>
-        <Spinner isVisible={true} size={97} type="Wave" color="#4990e2" />
+        <Spinner isVisible={true} size={97} type="Wave" color={BLUE} />
       </View>
     );
   };
@@ -130,7 +133,9 @@ export class NewGroupScreen extends React.Component<Props> {
         <View style={styles.container}>
           <View testID="newGroupScreen" style={styles.mainContainer}>
             <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>{t('createGroup.label.cofounders')}</Text>
+              <Text style={styles.titleText}>
+                {t('createGroup.label.cofounders')}
+              </Text>
               <Text style={styles.infoText}>
                 {t('createGroup.text.cofounders')}
               </Text>
@@ -149,7 +154,9 @@ export class NewGroupScreen extends React.Component<Props> {
                 />
               ) : (
                 <View>
-                  <Text style={styles.emptyText}>{t('createGroup.text.noConnections')}</Text>
+                  <Text style={styles.emptyText}>
+                    {t('createGroup.text.noConnections')}
+                  </Text>
                 </View>
               )}
             </View>
@@ -170,7 +177,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     borderTopLeftRadius: 58,
 
     marginTop: -58,
@@ -187,11 +194,11 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '96.7%',
     borderTopWidth: 1,
-    borderTopColor: '#e3e1e1',
+    borderTopColor: LIGHT_GREY,
   },
   emptyText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 20,
+    fontSize: fontSize[20],
   },
   moreIcon: {
     marginRight: 16,
@@ -200,14 +207,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 6,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     width: '96.7%',
 
     marginBottom: DEVICE_TYPE === 'large' ? 11 : 0,
   },
   titleText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: fontSize[18],
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -222,7 +229,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 14,
+    fontSize: fontSize[14],
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -234,7 +241,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0,
     shadowRadius: 0,
     borderBottomWidth: 1,
-    borderBottomColor: '#e3e1e1',
+    borderBottomColor: LIGHT_GREY,
     width: '100%',
   },
   createGroupButtonContainer: {
@@ -242,7 +249,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   createGroupButton: {
-    backgroundColor: '#428BE5',
+    backgroundColor: BLUE,
     width: 300,
     justifyContent: 'center',
     alignItems: 'center',
@@ -253,13 +260,13 @@ const styles = StyleSheet.create({
 
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',
-    color: '#fff',
+    color: WHITE,
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: fontSize[18],
   },
   textInfo: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: fontSize[18],
     margin: 18,
   },
   loader: {

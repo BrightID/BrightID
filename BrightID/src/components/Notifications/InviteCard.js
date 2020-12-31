@@ -6,15 +6,20 @@ import { connect } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
 import { withTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import {
+  DARK_ORANGE,
+  GREEN,
+  DARKER_GREY,
+  LIGHT_GREY,
+  WHITE,
+} from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { getGroupName } from '@/utils/groups';
 import { acceptInvite, rejectInvite, joinGroup } from '@/actions';
 import api from '@/api/brightId';
 import GroupPhoto from '@/components/GroupsScreens/GroupPhoto';
-import {
-  backupUser,
-  backupPhoto,
-} from '@/components/Recovery/thunks/backupThunks';
-import checkGreen from '@/static/check_green.svg';
+import { backupUser, backupPhoto } from '@/components/Recovery/helpers';
+import Check from '@/components/Icons/Check';
 import xGrey from '@/static/x_grey.svg';
 
 class InviteCard extends React.Component<Props> {
@@ -60,6 +65,7 @@ class InviteCard extends React.Component<Props> {
       Alert.alert(
         t('common.alert.success'),
         t('notifications.alert.text.successGroupInvite', {
+          defaultValue: 'You joined {{groupName}}',
           groupName: getGroupName(invite),
         }),
       );
@@ -99,8 +105,8 @@ class InviteCard extends React.Component<Props> {
             style={styles.greenCircle}
             onPress={this.acceptInvite}
           >
-            <SvgXml
-              xml={checkGreen}
+            <Check
+              color={GREEN}
               width={DEVICE_LARGE ? 20 : 17}
               height={DEVICE_LARGE ? 20 : 17}
             />
@@ -127,8 +133,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    backgroundColor: '#fff',
-    borderBottomColor: '#e3e0e4',
+    backgroundColor: WHITE,
+    borderBottomColor: LIGHT_GREY,
     borderBottomWidth: 1,
     paddingBottom: 10,
     paddingTop: 10,
@@ -149,15 +155,15 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 20 : 18,
+    fontSize: fontSize[20],
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
   invitationMsg: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 11,
-    color: '#B64B32',
+    fontSize: fontSize[12],
+    color: DARK_ORANGE,
   },
   greenCircle: {
     alignItems: 'center',
@@ -166,7 +172,7 @@ const styles = StyleSheet.create({
     height: DEVICE_LARGE ? 40 : 32,
     borderRadius: 25,
     borderWidth: 2,
-    borderColor: '#5DEC9A',
+    borderColor: GREEN,
   },
   greyCircle: {
     alignItems: 'center',
@@ -175,7 +181,7 @@ const styles = StyleSheet.create({
     height: DEVICE_LARGE ? 40 : 32,
     borderRadius: 25,
     borderWidth: 2,
-    borderColor: '#707070',
+    borderColor: DARKER_GREY,
     marginLeft: 7,
   },
   approvalButtonContainer: {

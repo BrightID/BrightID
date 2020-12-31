@@ -1,17 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, Text, TouchableOpacity, View } from 'react-native';
-import { SvgXml } from 'react-native-svg';
 import { navigate } from '@/NavigationService';
-import { ORANGE } from '@/utils/constants';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import backArrow from '@/static/back_arrow_white.svg';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { ORANGE, WHITE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
+import { TWENTY_TWO, SIXTY } from '@/theme/sizes';
+import BackArrow from '@/components/Icons/BackArrow';
 
 export const headerTitleStyle = {
   fontFamily: 'Poppins-Bold',
-  fontSize: DEVICE_LARGE ? 20 : 17,
-  color: '#fff',
+  fontSize: fontSize[20],
+  color: WHITE,
 };
 
 export const headerOptions = {
@@ -24,17 +24,17 @@ export const headerOptions = {
     },
     elevation: 0,
   },
-  headerTintColor: '#fff',
+  headerTintColor: WHITE,
   headerTitleAlign: 'left',
   headerBackTitleVisible: false,
   headerBackImage: () => (
     <View
       style={{
-        width: DEVICE_LARGE ? 60 : 50,
+        width: SIXTY,
         alignItems: 'center',
       }}
     >
-      <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
+      <BackArrow height={TWENTY_TWO} color={WHITE} />
     </View>
   ),
 };
@@ -43,14 +43,14 @@ export const NavHome = () => (
   <TouchableOpacity
     testID="NavHomeBtn"
     style={{
-      width: DEVICE_LARGE ? 60 : 50,
+      width: SIXTY,
       alignItems: 'center',
     }}
     onPress={() => {
       navigate('Home');
     }}
   >
-    <SvgXml height={DEVICE_LARGE ? '22' : '20'} xml={backArrow} />
+    <BackArrow height={TWENTY_TWO} color={WHITE} />
   </TouchableOpacity>
 );
 

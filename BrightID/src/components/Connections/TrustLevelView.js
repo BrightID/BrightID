@@ -10,6 +10,8 @@ import {
   connectionLevelStrings,
 } from '@/utils/connectionLevelStrings';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { BLUE, BLACK } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 
 type props = {
   level: ConnectionLevel,
@@ -27,7 +29,9 @@ function TrustLevelView({ level, connectionId }: props) {
   return (
     <View style={styles.container}>
       <View style={styles.trustLevelLabel}>
-        <Text style={styles.trustLevelLabelText}>{t('connectionDetails.label.connectionLevel')}</Text>
+        <Text style={styles.trustLevelLabelText}>
+          {t('connectionDetails.label.connectionLevel')}
+        </Text>
       </View>
 
       <View style={styles.trustLevel}>
@@ -46,7 +50,7 @@ function TrustLevelView({ level, connectionId }: props) {
         testID="EditConnectionLevelBtn"
         onPress={setLevel}
       >
-        <Material name="edit" size={DEVICE_LARGE ? 22 : 20} color="#2185D0" />
+        <Material name="edit" size={DEVICE_LARGE ? 22 : 20} color={BLUE} />
       </TouchableOpacity>
     </View>
   );
@@ -64,8 +68,8 @@ const styles = StyleSheet.create({
   },
   trustLevelLabelText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
-    color: '#000',
+    fontSize: fontSize[16],
+    color: BLACK,
   },
   trustLevel: {
     flex: 1,
@@ -74,7 +78,8 @@ const styles = StyleSheet.create({
   },
   trustLevelText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 14 : 12,
+    fontSize: fontSize[14],
+    color: BLACK,
   },
   trustLevelButton: {
     padding: 5,

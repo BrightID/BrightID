@@ -11,7 +11,8 @@ import {
   View,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE, DARKER_GREY, GREEN, WHITE, BLUE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import { setEula } from '@/actions';
 import L from './License.json';
@@ -33,15 +34,23 @@ export const Eula = ({ navigation }) => {
     <>
       <StatusBar
         barStyle="dark-content"
-        backgroundColor="#fff"
+        backgroundColor={WHITE}
         animated={true}
       />
-      <View style={styles.container} behavior="padding">
+      <View testID="EulaScreen" style={styles.container} behavior="padding">
         <View style={styles.confirmationButtons}>
-          <TouchableOpacity style={styles.rejectButton} onPress={handleReject}>
+          <TouchableOpacity
+            testID="rejectEulaBtn"
+            style={styles.rejectButton}
+            onPress={handleReject}
+          >
             <Text style={styles.rejectButtonText}>Reject</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.acceptButton} onPress={handleAccept}>
+          <TouchableOpacity
+            testID="acceptEulaBtn"
+            style={styles.acceptButton}
+            onPress={handleAccept}
+          >
             <Text style={styles.acceptButtonText}>Accept</Text>
           </TouchableOpacity>
         </View>
@@ -83,20 +92,20 @@ const CONFIRMATION_HEIGHT = DEVICE_LARGE ? 60 : 55;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
     borderBottomLeftRadius: 58,
     borderBottomRightRadius: 58,
-    marginBottom: 10,
+    marginBottom: DEVICE_LARGE ? 22 : 10,
     zIndex: 2,
     overflow: 'hidden',
   },
   orangeBottom: {
     backgroundColor: ORANGE,
     width: '100%',
-    height: 70,
+    height: DEVICE_LARGE ? 100 : 70,
     zIndex: 1,
     position: 'absolute',
     bottom: 0,
@@ -110,18 +119,18 @@ const styles = StyleSheet.create({
   },
   header: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     marginBottom: DEVICE_LARGE ? 14 : 12.5,
   },
   paragraph: {
     fontFamily: 'Poppins-Regular',
-    fontSize: DEVICE_LARGE ? 12 : 11,
+    fontSize: fontSize[12],
   },
   link: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 11,
-    color: '#2185D0',
-    marginBottom: DEVICE_LARGE ? 12 : 11,
+    fontSize: fontSize[12],
+    color: BLUE,
+    marginBottom: fontSize[12],
   },
   confirmationButtons: {
     position: 'absolute',
@@ -131,7 +140,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     height: CONFIRMATION_HEIGHT,
     width: WIDTH,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -139,8 +148,7 @@ const styles = StyleSheet.create({
   acceptButton: {
     width: '33%',
     height: DEVICE_LARGE ? 32 : 29,
-
-    backgroundColor: '#5DEC9A',
+    backgroundColor: GREEN,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
@@ -148,23 +156,23 @@ const styles = StyleSheet.create({
   },
   acceptButtonText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 10,
+    fontSize: fontSize[12],
   },
   rejectButton: {
     width: '33%',
     height: DEVICE_LARGE ? 32 : 29,
 
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#707070',
+    borderColor: DARKER_GREY,
   },
   rejectButtonText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 10,
-    color: '#707070',
+    fontSize: fontSize[12],
+    color: DARKER_GREY,
   },
 });
 

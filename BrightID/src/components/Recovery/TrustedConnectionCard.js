@@ -9,6 +9,8 @@ import moment from 'moment';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { addTrustedConnection, removeTrustedConnection } from '@/actions/index';
 import { DEVICE_TYPE } from '@/utils/deviceConstants';
+import { DARK_GREY, GREEN, BLACK, WHITE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 
 const TrustedConnectionCard = (props) => {
   const { id, photo, name, connectionDate, style } = props;
@@ -62,7 +64,7 @@ const TrustedConnectionCard = (props) => {
         <AntDesign
           size={30.4}
           name={selected() ? 'checkcircle' : 'checkcircleo'}
-          color={selected() ? '#28a84a' : '#000'}
+          color={selected() ? GREEN : BLACK}
         />
       </TouchableOpacity>
     </View>
@@ -75,7 +77,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     height: DEVICE_TYPE === 'large' ? 94 : 80,
     marginBottom: DEVICE_TYPE === 'large' ? 11.8 : 6,
     shadowColor: 'rgba(0,0,0,0.32)',
@@ -98,15 +100,15 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'ApexNew-Book',
-    fontSize: DEVICE_TYPE === 'large' ? 20 : 18,
+    fontSize: fontSize[20],
     shadowColor: 'rgba(0,0,0,0.32)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
   connectedText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 12,
-    color: '#aba9a9',
+    fontSize: fontSize[12],
+    color: DARK_GREY,
     fontStyle: 'italic',
   },
   moreIcon: {

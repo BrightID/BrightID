@@ -1,4 +1,5 @@
 import i18next from 'i18next';
+import { YELLOW, RED, DARK_GREEN } from '@/theme/colors';
 import { connection_levels } from './constants';
 
 export const connectionLevelStrings = {
@@ -20,9 +21,9 @@ export const connectionLevelStrings = {
 };
 
 export const connectionLevelColors = {
-  [connection_levels.REPORTED]: '#ED1B24',
-  [connection_levels.SUSPICIOUS]: '#ED1B24',
-  [connection_levels.JUST_MET]: '#F6BF08',
-  [connection_levels.ALREADY_KNOWN]: '#4EC580',
-  [connection_levels.RECOVERY]: '#4EC580',
+  [connection_levels.REPORTED]: RED,
+  [connection_levels.SUSPICIOUS]: RED,
+  [connection_levels.JUST_MET]: YELLOW,
+  [connection_levels.ALREADY_KNOWN]: DARK_GREEN,
+  [connection_levels.RECOVERY]: DARK_GREEN,
 };

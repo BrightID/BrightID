@@ -13,6 +13,8 @@ import {
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { withTranslation } from 'react-i18next';
+import { fontSize } from '@/theme/fonts';
+import { WHITE, BLUE, LIGHT_BLACK } from '@/theme/colors';
 import MaintainPrivacy from './onboardingCards/MaintainPrivacy';
 import BrightIdOnboard from './onboardingCards/BrightIdOnboard';
 
@@ -73,7 +75,7 @@ export class Onboard extends React.Component<Props, State> {
       <SafeAreaView style={styles.container}>
         <StatusBar
           barStyle="dark-content"
-          backgroundColor="#fff"
+          backgroundColor={WHITE}
           animated={true}
         />
         <View style={styles.carousel} testID="Carousel">
@@ -103,7 +105,9 @@ export class Onboard extends React.Component<Props, State> {
             onPress={() => this.props.navigation.navigate('SignUp')}
             style={styles.button}
           >
-            <Text style={styles.buttonText}>{t('onboarding.button.getStarted')}</Text>
+            <Text style={styles.buttonText}>
+              {t('onboarding.button.getStarted')}
+            </Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -114,7 +118,7 @@ export class Onboard extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -136,7 +140,7 @@ const styles = StyleSheet.create({
   button: {
     width: 300,
     borderWidth: 1,
-    borderColor: '#4990e2',
+    borderColor: BLUE,
     paddingTop: 13,
     paddingBottom: 12,
     alignItems: 'center',
@@ -146,8 +150,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontFamily: 'ApexNew-Medium',
-    color: '#4990e2',
-    fontSize: 18,
+    color: BLUE,
+    fontSize: fontSize[18],
     fontWeight: '500',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -157,7 +161,7 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     marginHorizontal: 8,
-    backgroundColor: '#333',
+    backgroundColor: LIGHT_BLACK,
   },
 });
 

@@ -11,18 +11,28 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { DEVICE_LARGE, DEVICE_IOS, WIDTH } from '@/utils/deviceConstants';
+import {
+  DARK_ORANGE,
+  LIGHT_GREY,
+  DARKER_GREY,
+  WHITE,
+  BLACK,
+  GREEN,
+  DARK_BLUE,
+  BLUE,
+} from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { chooseImage, takePhoto } from '@/utils/images';
 import { saveImage, retrieveImage, photoDirectory } from '@/utils/filesystem';
 import { setPhoto, setName } from '@/actions';
-import downCaret from '@/static/down_caret_blue.svg';
+import Chevron from '@/components/Icons/Chevron';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   selectAllSocialMedia,
@@ -67,22 +77,22 @@ const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
     showActionSheetWithOptions(
       {
         options: [
-          t('common.photoActionSheet.takePhoto'), 
-          t('common.photoActionSheet.choosePhoto'), 
-          t('common.actionSheet.cancel')
+          t('common.photoActionSheet.takePhoto'),
+          t('common.photoActionSheet.choosePhoto'),
+          t('common.actionSheet.cancel'),
         ],
         cancelButtonIndex: 2,
         title: t('common.photoActionSheet.title'),
         showSeparators: true,
         textStyle: {
-          color: '#2185D0',
+          color: BLUE,
           textAlign: 'center',
           width: '100%',
-          fontSize: DEVICE_LARGE ? 18 : 16,
+          fontSize: fontSize[18],
         },
         titleTextStyle: {
           textAlign: 'center',
-          fontSize: DEVICE_LARGE ? 20 : 17,
+          fontSize: fontSize[20],
           width: '100%',
         },
       },
@@ -115,7 +125,9 @@ const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
           accessible={true}
           accessibilityLabel="profile photo"
         />
-        <Text style={styles.profilePhotoText}>{t('profile.text.changeProfilePicture')}</Text>
+        <Text style={styles.profilePhotoText}>
+          {t('profile.text.changeProfilePicture')}
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -132,7 +144,7 @@ const EditName = ({ nextName, setNextName }) => {
         onChangeText={setNextName}
         textContentType="name"
         placeholder={t('profile.placeholder.name')}
-        placeholderTextColor="#707070"
+        placeholderTextColor={DARKER_GREY}
       />
     </View>
   );
@@ -187,10 +199,11 @@ const SocialMediaLink = (props) => {
         }}
       >
         <Text style={styles.socialMediaType}>{company.name}</Text>
-        <SvgXml
+        <Chevron
           width={DEVICE_LARGE ? 14 : 12}
           height={DEVICE_LARGE ? 14 : 12}
-          xml={downCaret}
+          color={DARK_BLUE}
+          strokeWidth={2}
         />
       </TouchableOpacity>
       <TouchableOpacity
@@ -258,7 +271,7 @@ const SocialMediaLinks = () => {
           <Material
             name="plus-thick"
             size={DEVICE_LARGE ? 18 : 16}
-            color="#2185D0"
+            color={DARK_BLUE}
           />
         </TouchableOpacity>
       </View>
@@ -274,7 +287,7 @@ const ShowEditPassword = () => {
   const password = useSelector((state) => state.user.password);
   const [hidePassword, setHidePassword] = useState(true);
   const navigation = useNavigation();
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   useFocusEffect(
     useCallback(() => {
@@ -300,7 +313,9 @@ const ShowEditPassword = () => {
             setHidePassword(!hidePassword);
           }}
         >
-          <Text style={styles.passwordText}>{t('profile.text.viewPassword')}</Text>
+          <Text style={styles.passwordText}>
+            {t('profile.text.viewPassword')}
+          </Text>
         </TouchableOpacity>
         <Text style={styles.displayPassword} selectable={true}>
           {displayPassword}
@@ -312,7 +327,9 @@ const ShowEditPassword = () => {
           navigation.navigate('ChangePassword');
         }}
       >
-        <Text style={styles.passwordText}>{t('profile.text.changePassword')}</Text>
+        <Text style={styles.passwordText}>
+          {t('profile.text.changePassword')}
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -394,7 +411,11 @@ export const EditProfileScreen = ({ navigation }) => {
           t('profile.alert.title.discardChanges'),
           t('profile.alert.text.discardChanges'),
           [
-            { text: t('profile.alert.button.dontLeave'), style: 'cancel', onPress: () => {} },
+            {
+              text: t('profile.alert.button.dontLeave'),
+              style: 'cancel',
+              onPress: () => {},
+            },
             {
               text: t('profile.alert.button.discard'),
               style: 'destructive',
@@ -446,7 +467,9 @@ export const EditProfileScreen = ({ navigation }) => {
             disabled={saveDisabled}
             onPress={clearData}
           >
-            <Text style={styles.cancelButtonText}>{t('common.button.cancel')}</Text>
+            <Text style={styles.cancelButtonText}>
+              {t('common.button.cancel')}
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -456,7 +479,7 @@ export const EditProfileScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     flex: 1,
     width: '100%',
     borderTopLeftRadius: DEVICE_LARGE ? 50 : 40,
@@ -485,8 +508,8 @@ const styles = StyleSheet.create({
   },
   profilePhotoText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
-    color: '#2185D0',
+    fontSize: fontSize[16],
+    color: BLUE,
     marginTop: DEVICE_LARGE ? 6 : 5,
   },
   photo: {
@@ -503,19 +526,19 @@ const styles = StyleSheet.create({
   },
   label: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 11 : 10,
-    color: '#B64B32',
+    fontSize: fontSize[11],
+    color: DARK_ORANGE,
   },
   editNameInput: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     marginTop: DEVICE_LARGE ? 4 : 2,
     width: '100%',
-    color: '#000',
+    color: BLACK,
   },
   bottomDivider: {
     width: '100%',
-    borderBottomColor: '#C4C4C4',
+    borderBottomColor: LIGHT_GREY,
     borderBottomWidth: 1,
     marginTop: DEVICE_LARGE ? 16 : 12,
   },
@@ -542,8 +565,8 @@ const styles = StyleSheet.create({
   },
   socialMediaType: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
-    color: '#2185D0',
+    fontSize: fontSize[16],
+    color: DARK_BLUE,
     marginRight: DEVICE_LARGE ? 8 : 6,
   },
   addSocialMediaBtn: {
@@ -553,8 +576,8 @@ const styles = StyleSheet.create({
   },
   socialMediaInput: {
     fontFamily: 'Poppins-Light',
-    fontSize: DEVICE_LARGE ? 14 : 12,
-    color: '#000',
+    fontSize: fontSize[14],
+    color: BLACK,
   },
   showEditPasswordContainer: {
     width: '100%',
@@ -572,13 +595,13 @@ const styles = StyleSheet.create({
   },
   passwordText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 13 : 11,
-    color: '#2185D0',
+    fontSize: fontSize[13],
+    color: DARK_BLUE,
   },
   displayPassword: {
     fontFamily: 'Poppins-Regular',
-    fontSize: DEVICE_LARGE ? 13 : 11,
-    color: '#000',
+    fontSize: fontSize[13],
+    color: BLACK,
   },
   saveContainer: {
     width: '100%',
@@ -591,7 +614,7 @@ const styles = StyleSheet.create({
     width: DEVICE_LARGE ? 100 : 88,
     paddingTop: 10,
     paddingBottom: 9,
-    backgroundColor: '#5DEC9A',
+    backgroundColor: GREEN,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
@@ -599,23 +622,23 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 10,
+    fontSize: fontSize[12],
   },
   cancelButton: {
     width: DEVICE_LARGE ? 100 : 88,
     paddingTop: 10,
     paddingBottom: 9,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#707070',
+    borderColor: DARKER_GREY,
   },
   cancelButtonText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 10,
-    color: '#707070',
+    fontSize: fontSize[12],
+    color: DARKER_GREY,
   },
   closeButton: {
     paddingHorizontal: DEVICE_LARGE ? 10 : 8,

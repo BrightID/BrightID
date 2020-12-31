@@ -18,7 +18,8 @@ import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE, BLACK, WHITE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import {
   pollChannel,
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'column',
@@ -174,15 +175,15 @@ const styles = StyleSheet.create({
   },
   recoveryCodeInfoText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     textAlign: 'center',
-    color: '#000',
+    color: BLACK,
     width: '80%',
     marginTop: DEVICE_LARGE ? 30 : 26,
   },
   additionalInfo: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     textAlign: 'center',
     color: '#707070',
     width: '80%',
@@ -190,7 +191,7 @@ const styles = StyleSheet.create({
   },
   signatures: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     textAlign: 'center',
     color: '#000',
   },
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
     minWidth: 100,
   },
   copyText: {
-    color: '#000',
+    color: BLACK,
     fontFamily: 'Poppins-Medium',
   },
 });

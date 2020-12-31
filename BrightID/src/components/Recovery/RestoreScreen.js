@@ -14,7 +14,8 @@ import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { ORANGE } from '@/utils/constants';
+import { ORANGE, BLACK, WHITE, DARKER_GREY } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_OS } from '@/utils/deviceConstants';
 import { recoverData } from './thunks/recoveryThunks';
 
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -172,14 +173,14 @@ const styles = StyleSheet.create({
 
   textInfo: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
     color: '#000',
     margin: DEVICE_LARGE ? 18 : 16,
   },
   textInput: {
     fontFamily: 'Poppins-Regular',
-    fontSize: DEVICE_LARGE ? 14 : 12,
-    color: '#707070',
+    fontSize: fontSize[14],
+    color: DARKER_GREY,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#9e9e9e',
     marginVertical: DEVICE_LARGE ? 60 : 50,
@@ -212,14 +213,14 @@ const styles = StyleSheet.create({
     height: DEVICE_LARGE ? 46 : 40,
     borderRadius: 60,
     backgroundColor: ORANGE,
-    shadowColor: '#000',
+    shadowColor: BLACK,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 4,
   },
   submitText: {
     fontFamily: 'Poppins-Bold',
-    color: '#fff',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    color: WHITE,
+    fontSize: fontSize[16],
   },
   skipButton: {
     alignItems: 'center',
@@ -234,7 +235,7 @@ const styles = StyleSheet.create({
   skipText: {
     fontFamily: 'Poppins-Medium',
     color: ORANGE,
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
   },
 });
 

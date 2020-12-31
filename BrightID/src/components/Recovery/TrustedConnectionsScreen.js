@@ -12,8 +12,9 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { ORANGE } from '@/utils/constants';
 import { connectionsSelector } from '@/utils/connectionsSelector';
+import { ORANGE, BLUE, WHITE, LIGHT_GREY } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import EmptyList from '@/components/Helpers/EmptyList';
 import TrustedConnectionCard from './TrustedConnectionCard';
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     borderTopLeftRadius: 58,
     marginTop: -58,
     overflow: 'hidden',
@@ -138,21 +139,21 @@ const styles = StyleSheet.create({
     width: '96.7%',
   },
   emptyText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: 20,
+    fontFamily: 'Poppins-Bold',
+    fontSize: fontSize[20],
   },
   titleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: DEVICE_TYPE === 'large' ? 6 : 0,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     width: '96.7%',
     borderBottomWidth: 1,
-    borderBottomColor: '#e3e1e1',
+    borderBottomColor: LIGHT_GREY,
   },
   infoText: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 18,
+    fontSize: fontSize[18],
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: 0,
@@ -166,7 +167,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0,
     shadowRadius: 0,
     borderBottomWidth: 1,
-    borderBottomColor: '#e3e1e1',
+    borderBottomColor: LIGHT_GREY,
     width: '100%',
   },
   buttonContainer: {
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   nextButton: {
-    backgroundColor: '#428BE5',
+    backgroundColor: BLUE,
     width: 300,
     justifyContent: 'center',
     alignItems: 'center',
@@ -185,9 +186,9 @@ const styles = StyleSheet.create({
   },
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',
-    color: '#fff',
+    color: WHITE,
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: fontSize[18],
   },
 });
 

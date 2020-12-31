@@ -4,16 +4,16 @@ import {
   Keyboard,
   Image,
   TouchableOpacity,
-  View,
 } from 'react-native';
 import { useSelector } from 'react-redux';
 // import { useTranslation } from 'react-i18next';
 import { INVITE_ACTIVE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { BLACK } from '@/theme/colors';
 import { createSelector } from '@reduxjs/toolkit';
 import { createStackNavigator } from '@react-navigation/stack';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { SvgXml } from 'react-native-svg';
+import Bell from '@/components/Icons/NotificationBell';
+import Menu from '@/components/Icons/Menu';
 import {
   pendingConnection_states,
   selectAllPendingConnections,
@@ -23,7 +23,7 @@ import {
   resetHome,
   resetNotifications,
 } from '@/NavigationService';
-import menuBar from '@/static/menu_bar.svg';
+import { headerOptions } from './helpers';
 import { HomeDrawer } from './HomeDrawer';
 
 /** SELECTORS */
@@ -64,20 +64,7 @@ const NotificationBell = () => {
         resetNotifications();
       }}
     >
-      <Material name="bell" size={DEVICE_LARGE ? 28 : 23} color="#000" />
-      {displayBadge ? (
-        <View
-          style={{
-            backgroundColor: '#ED1B24',
-            width: 9,
-            height: 9,
-            borderRadius: 5,
-            position: 'absolute',
-            top: 5,
-            left: 17,
-          }}
-        />
-      ) : null}
+      <Bell size={DEVICE_LARGE ? 28 : 23} color={BLACK} alert={displayBadge} />
     </TouchableOpacity>
   );
 };
@@ -119,7 +106,7 @@ const homeScreenOptions = {
           toggleDrawer();
         }}
       >
-        <SvgXml xml={menuBar} width={DEVICE_LARGE ? 30 : 24} />
+        <Menu width={DEVICE_LARGE ? 30 : 24} />
       </TouchableOpacity>
     );
   },

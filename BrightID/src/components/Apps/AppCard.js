@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   Alert,
   Image,
@@ -16,6 +16,8 @@ import { createSelector } from '@reduxjs/toolkit';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
+import { WHITE, DARKER_GREY, BLACK, BLUE, RED } from '@/theme/colors';
 import { addLinkedContext, removeLinkedContext } from '@/actions';
 
 /**
@@ -91,7 +93,7 @@ const AppCard = (props) => {
   const openApp = () => {
     Alert.alert(
       '',
-      t('apps.alert.text.checkWebsite', {name: name}),
+      t('apps.alert.text.checkWebsite', { name }),
       [
         {
           text: t('apps.alert.button.visitWebsite'),
@@ -115,7 +117,11 @@ const AppCard = (props) => {
 
   const SponsorshipLabel = () => {
     if (!isSponsored && unusedSponsorships > 0) {
-      return <Text style={styles.sponsorshipMessage}>{t('apps.tag.hasSponsorships')}</Text>;
+      return (
+        <Text style={styles.sponsorshipMessage}>
+          {t('apps.tag.hasSponsorships')}
+        </Text>
+      );
     } else {
       return <View />;
     }
@@ -124,7 +130,9 @@ const AppCard = (props) => {
   const VerificationLabel = () => {
     if (!verifications.includes(verification)) {
       return (
-        <Text style={styles.unverifiedMessage}>{t('apps.tag.notVerifiedForApp')}</Text>
+        <Text style={styles.unverifiedMessage}>
+          {t('apps.tag.notVerifiedForApp')}
+        </Text>
       );
     } else {
       return <View />;
@@ -138,7 +146,7 @@ const AppCard = (props) => {
           <Ionicon
             size={DEVICE_LARGE ? 48 : 42}
             name="md-checkmark"
-            color="#4a90e2"
+            color={BLUE}
           />
           <Text testID={`Linked_${id}`} style={styles.linkedMessage}>
             {t('apps.tag.linked')}
@@ -154,7 +162,7 @@ const AppCard = (props) => {
           <Material
             size={DEVICE_LARGE ? 40 : 36}
             name="alert-remove-outline"
-            color="#FF0800"
+            color={RED}
           />
           <Text testID={`Linked_${id}`} style={styles.errorMessage}>
             {t('apps.tag.tryAgain')}
@@ -194,7 +202,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     height: DEVICE_LARGE ? 94 : 80,
     marginBottom: DEVICE_LARGE ? 11.8 : 6,
     shadowColor: 'rgba(0,0,0,0.32)',
@@ -210,8 +218,8 @@ const styles = StyleSheet.create({
   },
   appName: {
     fontFamily: 'Poppins-Medium',
-    color: 'black',
-    fontSize: DEVICE_LARGE ? 22 : 19,
+    color: BLACK,
+    fontSize: fontSize[22],
   },
   labelContainer: {
     flexDirection: 'column',
@@ -221,30 +229,29 @@ const styles = StyleSheet.create({
   },
   sponsorshipMessage: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 14 : 12,
-    color: '#4a90e2',
+    fontSize: fontSize[14],
+    color: BLUE,
   },
   linkedMessage: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 14 : 12,
-    color: '#4a90e2',
+    fontSize: fontSize[14],
+    color: BLUE,
   },
   errorMessage: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 14 : 12,
-    color: '#FF0800',
+    fontSize: fontSize[14],
+    color: RED,
   },
   unverifiedMessage: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 14 : 12,
-    color: '#707070',
+    fontSize: fontSize[14],
+    color: DARKER_GREY,
   },
   linkedContainer: {
     marginLeft: 'auto',
     marginRight: DEVICE_LARGE ? 20 : 16,
     alignItems: 'center',
     justifyContent: 'center',
-    // height: '100%',
   },
   link: {},
 });

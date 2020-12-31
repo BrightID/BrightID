@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Image,
   Linking,
@@ -12,19 +12,21 @@ import {
 import { createSelector } from '@reduxjs/toolkit';
 import { useFocusEffect } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
-import { SvgXml } from 'react-native-svg';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { setActiveNotification } from '@/actions';
 import { retrieveImage } from '@/utils/filesystem';
+import { WHITE, ORANGE, BLACK, BLUE } from '@/theme/colors';
 import fetchUserInfo from '@/actions/fetchUserInfo';
-import verificationSticker from '@/static/verification-sticker.svg';
-import qricon from '@/static/qr_icon_black.svg';
-import cameraIcon from '@/static/camera_icon_black.svg';
-import forumIcon from '@/static/forum_icon.svg';
+import ChatBox from '@/components/Icons/ChatBox';
+import VerifiedBadge from '@/components/Icons/VerifiedBadge';
+import VerifiedSticker from '@/components/Icons/VerifiedSticker';
+import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
+import Camera from '@/components/Icons/Camera';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { version as app_version } from '../../package.json';
 
 /**
@@ -93,7 +95,7 @@ export const HomeScreen = (props) => {
           title: t('home.chatActionSheet.title'),
           showSeparators: true,
           textStyle: {
-            color: '#2185D0',
+            color: BLUE,
             textAlign: 'center',
             width: '100%',
           },
@@ -142,7 +144,7 @@ export const HomeScreen = (props) => {
           <Material
             name="content-paste"
             size={DEVICE_LARGE ? 28 : 23}
-            color="white"
+            color={WHITE}
           />
         </TouchableOpacity>
       );
@@ -180,23 +182,20 @@ export const HomeScreen = (props) => {
               {name}
             </Text>
             {verified && (
-              <SvgXml
-                style={styles.verificationSticker}
-                width="16"
-                height="16"
-                xml={verificationSticker}
-              />
+              <View style={styles.verificationSticker}>
+                <VerifiedBadge width={16} height={16} />
+              </View>
             )}
           </View>
           <View style={styles.profileDivider} />
           {verified ? (
-            <Text style={styles.verified}>
-              {t('common.tag.statusVerified')}
-            </Text>
+            <View style={styles.verified}>
+              <VerifiedSticker width={100} height={20} />
+            </View>
           ) : (
-            <Text style={styles.unverified}>
-              {t('common.tag.statusUnverified')}
-            </Text>
+            <View style={styles.verified}>
+              <UnverifiedSticker width={100} height={19} />
+            </View>
           )}
         </View>
       </View>
@@ -270,10 +269,10 @@ export const HomeScreen = (props) => {
             accessible={true}
             accessibilityLabel={t('home.accessibilityLabel.connect')}
           >
-            <SvgXml
-              xml={qricon}
-              width={DEVICE_LARGE ? 25 : 20}
-              height={DEVICE_LARGE ? 25 : 20}
+            <Material
+              name="qrcode"
+              color={BLACK}
+              size={DEVICE_LARGE ? 25 : 20}
             />
             <Text style={styles.connectText}>{t('home.button.myCode')}</Text>
           </TouchableOpacity>
@@ -287,8 +286,7 @@ export const HomeScreen = (props) => {
             accessible={true}
             accessibilityLabel={t('home.accessibilityLabel.connect')}
           >
-            <SvgXml
-              xml={cameraIcon}
+            <Camera
               width={DEVICE_LARGE ? 25 : 20}
               height={DEVICE_LARGE ? 25 : 20}
             />
@@ -299,12 +297,18 @@ export const HomeScreen = (props) => {
             style={styles.communityContainer}
             onPress={handleChat}
           >
-            <SvgXml
-              width={DEVICE_LARGE ? 28 : 25}
-              height={DEVICE_LARGE ? 28 : 25}
-              xml={forumIcon}
+            <ChatBox
+              width={DEVICE_LARGE ? 22 : 20}
+              height={DEVICE_LARGE ? 22 : 20}
+              color={WHITE}
             />
-            <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }}>
+            <View
+              style={{
+                borderBottomWidth: 1,
+                borderBottomColor: WHITE,
+                marginLeft: 5,
+              }}
+            >
               <Text style={styles.communityLink}>
                 {t('home.link.community')}
               </Text>
@@ -319,7 +323,6 @@ export const HomeScreen = (props) => {
 };
 
 const PHOTO_WIDTH = DEVICE_LARGE ? 90 : 78;
-const ORANGE = '#ED7A5D';
 
 const styles = StyleSheet.create({
   container: {
@@ -336,7 +339,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: 'center',
     paddingLeft: DEVICE_LARGE ? '15%' : '12%',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     paddingTop: DEVICE_LARGE ? 10 : 0,
   },
   verifyNameContainer: {
@@ -344,7 +347,7 @@ const styles = StyleSheet.create({
     marginLeft: DEVICE_LARGE ? 40 : 30,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     maxWidth: '50%',
   },
   nameContainer: {
@@ -366,8 +369,8 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 18 : 15,
-    color: '#000000',
+    fontSize: fontSize[18],
+    color: BLACK,
   },
   verificationsContainer: {
     height: 16,
@@ -377,40 +380,21 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: DEVICE_LARGE ? 10 : 0,
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
   },
   verificationSticker: {
     marginLeft: 5,
     marginTop: 1.5,
   },
   verified: {
-    fontFamily: 'Poppins-Medium',
-    color: ORANGE,
-    borderWidth: 1,
-    borderColor: ORANGE,
-    borderRadius: 10,
     marginTop: 6,
-    paddingTop: DEVICE_ANDROID ? 2 : 1,
-    paddingBottom: DEVICE_ANDROID ? 0 : 1,
-    paddingLeft: 23,
-    paddingRight: 23,
-    fontSize: DEVICE_LARGE ? 11 : 10,
-  },
-  unverified: {
-    fontFamily: 'Poppins-Medium',
-    color: '#707070',
-    borderWidth: 1,
-    borderColor: '#707070',
-    borderRadius: 10,
-    marginTop: 6,
-    paddingTop: DEVICE_ANDROID ? 2 : 1,
-    paddingBottom: DEVICE_ANDROID ? 0 : 1,
-    paddingLeft: 20,
-    paddingRight: 20,
-    fontSize: DEVICE_LARGE ? 11 : 10,
+    // paddingTop: DEVICE_ANDROID ? 2 : 1,
+    // paddingBottom: DEVICE_ANDROID ? 0 : 1,
+    // paddingLeft: 23,
+    // paddingRight: 23,
   },
   countsCard: {
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -432,7 +416,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderBottomLeftRadius: 58,
     borderBottomRightRadius: 58,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     flexGrow: 1,
     paddingTop: DEVICE_LARGE ? 10 : 0,
   },
@@ -444,13 +428,13 @@ const styles = StyleSheet.create({
   countsDescriptionText: {
     fontFamily: 'Poppins-Medium',
     textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 12 : 11,
+    fontSize: fontSize[12],
     marginTop: 6,
   },
   countsNumberText: {
     fontFamily: 'Poppins-Bold',
     textAlign: 'center',
-    fontSize: DEVICE_LARGE ? 25 : 21,
+    fontSize: fontSize[25],
     marginBottom: 3,
   },
   bottomOrangeContainer: {
@@ -469,8 +453,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   newConnectionText: {
-    color: '#fff',
-    fontSize: DEVICE_LARGE ? 18 : 15,
+    color: WHITE,
+    fontSize: fontSize[18],
     fontFamily: 'Poppins-Medium',
     marginBottom: DEVICE_LARGE ? 16 : 11,
   },
@@ -479,7 +463,7 @@ const styles = StyleSheet.create({
     paddingBottom: DEVICE_LARGE ? 10 : 6,
     width: DEVICE_LARGE ? '80%' : 260,
     borderRadius: 60,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
@@ -492,8 +476,8 @@ const styles = StyleSheet.create({
   },
   connectText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: DEVICE_LARGE ? 17 : 15,
-    color: '#000',
+    fontSize: fontSize[17],
+    color: BLACK,
     marginLeft: DEVICE_LARGE ? 10 : 8,
   },
   communityIcon: {
@@ -507,14 +491,14 @@ const styles = StyleSheet.create({
     padding: DEVICE_LARGE ? 20 : 12,
   },
   communityLink: {
-    color: '#fff',
-    fontSize: DEVICE_LARGE ? 14 : 11,
+    color: WHITE,
+    fontSize: fontSize[14],
     fontFamily: 'Poppins-Bold',
   },
   versionInfo: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 12 : 10,
-    color: '#fff',
+    fontSize: fontSize[12],
+    color: WHITE,
     position: 'absolute',
     right: DEVICE_LARGE ? 12 : 7,
     bottom: DEVICE_LARGE ? 12 : 7,

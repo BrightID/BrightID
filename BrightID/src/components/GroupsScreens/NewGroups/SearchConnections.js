@@ -7,6 +7,8 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import { withTranslation } from 'react-i18next';
 import { setSearchParam } from '@/actions';
+import { fontSize } from '@/theme/fonts';
+import { LIGHT_BLACK, LIGHT_GREY, GREY, WHITE } from '@/theme/colors';
 
 /**
  * Search Bar in the Connections Screen
@@ -30,7 +32,7 @@ class SearchConnections extends React.Component<Props & LocalProps> {
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.searchIcon}>
-          <Octicons size={26} name="search" color="#333" />
+          <Octicons size={26} name="search" color={LIGHT_BLACK} />
         </TouchableOpacity>
         <TextInput
           onChangeText={(value) => this.props.dispatch(setSearchParam(value))}
@@ -40,7 +42,7 @@ class SearchConnections extends React.Component<Props & LocalProps> {
           autoCorrect={false}
           textContentType="name"
           underlineColorAndroid="transparent"
-          placeholderTextColor="#aaa"
+          placeholderTextColor={GREY}
         />
         {sortable && (
           <TouchableOpacity
@@ -50,7 +52,7 @@ class SearchConnections extends React.Component<Props & LocalProps> {
             }}
             style={styles.optionsIcon}
           >
-            <Ionicon size={30} name="ios-options" color="#333" />
+            <Ionicon size={30} name="ios-options" color={LIGHT_BLACK} />
           </TouchableOpacity>
         )}
       </View>
@@ -64,11 +66,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     width: '80%',
-    borderColor: '#ccc',
+    borderColor: LIGHT_GREY,
     borderWidth: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
   },
   searchIcon: {
     marginLeft: 10,
@@ -82,8 +84,8 @@ const styles = StyleSheet.create({
   },
   searchField: {
     fontFamily: 'ApexNew-Book',
-    fontSize: 16,
-    color: '#333',
+    fontSize: fontSize[16],
+    color: LIGHT_BLACK,
     marginLeft: 23,
     flex: 1,
     fontWeight: 'normal',

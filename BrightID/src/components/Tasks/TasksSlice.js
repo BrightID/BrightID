@@ -3,7 +3,6 @@
 import { setActiveNotification } from '@/actions';
 import { MISC_TYPE } from '@/utils/constants';
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import certificate from '@/static/certificate.svg';
 import i18next from 'i18next';
 import { UserTasks } from './UserTasks';
 
@@ -123,18 +122,17 @@ export const checkTasks = () => {
     for (const task of pendingTasks) {
       try {
         if (UserTasks[task.id].checkFn(state)) {
-          const title = i18next.t(`achievements.${task.id}.title`);
-          console.log(`Task '${title}' completed."`);
+          console.log(`Task '${UserTasks[task.id].title}' completed.`);
           dispatch(completeTask(task.id));
           dispatch(
             setActiveNotification({
               type: MISC_TYPE,
               title: i18next.t('achievements.notification.title'),
               message: i18next.t('achievements.notification.message', {
-                title,
+                title: UserTasks[task.id].title,
               }),
               navigationTarget: null,
-              xmlIcon: certificate,
+              icon: 'Certificate',
             }),
           );
         }
