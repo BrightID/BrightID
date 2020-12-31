@@ -19,6 +19,7 @@ import { fontSize } from '@/theme/fonts';
 import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
 import ChannelAPI from '@/api/channelService';
 import api from '@/api/brightId';
+import VerifiedSticker from '@/components/Icons/VerifiedSticker';
 import { uploadSig, uploadMutualInfo } from './thunks/channelUploadThunks';
 
 const RecoveryConnectionCard = (props) => {
@@ -46,8 +47,8 @@ const RecoveryConnectionCard = (props) => {
 
   const confirmConnectionSelection = () => {
     Alert.alert(
-      'Please Confirm',
-      `Is ${name} the account you are helping to recover?`,
+      t('common.alert.title.pleaseConfirm'),
+      t('restore.alert.text.restoreConfirm', { name }),
       [
         {
           text: 'Yes',
@@ -138,16 +139,11 @@ const RecoveryConnectionCard = (props) => {
             >
               {name}
             </Text>
-            {/* 
-            TODO: ADD VerifiedSticker
             {brightidVerified && (
-              <SvgXml
-                style={styles.verificationSticker}
-                width="16"
-                height="16"
-                xml={verificationSticker}
-              />
-            )} */}
+              <View style={styles.verificationSticker}>
+                <VerifiedSticker width={16} height={16} />
+              </View>
+            )}
           </View>
           <ConnectionStatus
             index={index}
@@ -206,7 +202,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'Poppins-Medium',
-    fontSize: DEVICE_LARGE ? 16 : 14,
+    fontSize: fontSize[16],
   },
   scoreContainer: {
     flexDirection: 'row',

@@ -18,7 +18,7 @@ import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { ORANGE, BLACK, WHITE } from '@/theme/colors';
+import { ORANGE, BLACK, WHITE, LIGHT_BLACK, DARKER_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import {
@@ -111,11 +111,11 @@ const RecoveryCodeScreen = () => {
               shape-rendering="crispEdges"
             >
               <Path
-                fill="#fff"
+                fill={WHITE}
                 d={path(['svg', 'path', '0', '$', 'd'], qrsvg)}
               />
               <Path
-                stroke="#000"
+                stroke={BLACK}
                 d={path(['svg', 'path', '1', '$', 'd'], qrsvg)}
               />
             </Svg>
@@ -124,7 +124,7 @@ const RecoveryCodeScreen = () => {
               <Material
                 size={24}
                 name="content-copy"
-                color="#333"
+                color={LIGHT_BLACK}
                 style={{ width: 24, height: 24 }}
               />
               <Text style={styles.copyText}> {t('common.button.copy')}</Text>
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
     textAlign: 'center',
-    color: '#707070',
+    color: DARKER_GREY,
     width: '80%',
     marginBottom: DEVICE_LARGE ? 50 : 45,
   },
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[16],
     textAlign: 'center',
-    color: '#000',
+    color: BLACK,
   },
   copyContainer: {
     flexDirection: 'row',

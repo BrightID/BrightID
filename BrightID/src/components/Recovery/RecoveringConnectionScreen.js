@@ -11,7 +11,7 @@ import EmptyList from '@/components/Helpers/EmptyList';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { connectionsSelector } from '@/utils/connectionsSelector';
 import api from '@/api/brightId';
-import { ORANGE, WHITE, BLUE } from '@/theme/colors';
+import { ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
 
@@ -94,8 +94,8 @@ const RecoveringConnectionScreen = () => {
                   <EmptyList
                     title={
                       loading
-                        ? 'Downloading recovery connection data'
-                        : 'Unable to recover any of your connections'
+                        ? t('restore.emptyList.text.downloadingData')
+                        : t('restore.emptyList.text.nobodyHasChosen')
                     }
                   />
                 }
@@ -137,10 +137,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  emptyText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: fontSize[20],
-  },
   connectionsContainer: {
     flex: 1,
     width: '100%',
@@ -158,29 +154,9 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontFamily: 'Poppins-Regular',
-    fontSize: 15,
+    fontSize: fontSize[15],
     textAlign: 'center',
     width: '80%',
-  },
-  buttonContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  saveButton: {
-    backgroundColor: BLUE,
-    width: 300,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 13,
-    paddingBottom: 12,
-    marginTop: 9,
-    marginBottom: 30,
-  },
-  buttonInnerText: {
-    fontFamily: 'ApexNew-Medium',
-    color: WHITE,
-    fontWeight: '600',
-    fontSize: fontSize[18],
   },
 });
 

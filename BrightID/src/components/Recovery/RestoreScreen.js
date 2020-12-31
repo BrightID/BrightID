@@ -97,7 +97,7 @@ const RestoreScreen = () => {
                 onChangeText={setPass}
                 value={pass}
                 placeholder="Type your password"
-                placeholderTextColor="#707070"
+                placeholderTextColor={DARKER_GREY}
                 style={styles.textInput}
                 autoCorrect={false}
                 textContentType="password"
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   textInfo: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
-    color: '#000',
+    color: BLACK,
     margin: DEVICE_LARGE ? 18 : 16,
   },
   textInput: {
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize[14],
     color: DARKER_GREY,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#9e9e9e',
+    borderBottomColor: DARKER_GREY,
     marginVertical: DEVICE_LARGE ? 60 : 50,
     width: '70%',
     textAlign: 'center',
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     width: '70%',
     textAlign: 'center',
-    color: '#707070',
+    color: DARKER_GREY,
     marginTop: 10,
   },
   buttonContainer: {
