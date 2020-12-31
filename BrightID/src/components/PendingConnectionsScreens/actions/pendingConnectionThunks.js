@@ -6,7 +6,10 @@ import {
 import api from '@/api/brightId';
 import { addConnection } from '@/actions';
 import { saveImage } from '@/utils/filesystem';
-import { backupPhoto, backupUser } from '@/components/Recovery/helpers';
+import {
+  backupPhoto,
+  backupUser,
+} from '@/components/Recovery/thunks/backupThunks';
 import {
   confirmPendingConnection,
   pendingConnection_states,
@@ -103,7 +106,7 @@ export const confirmPendingConnectionThunk = (
   }
 
   if (backupCompleted) {
-    await backupUser();
-    await backupPhoto(connection.brightId, filename);
+    await dispatch(backupUser());
+    await dispatch(backupPhoto(connection.brightId, filename));
   }
 };

@@ -9,7 +9,7 @@ import {
   Alert,
   FlatList,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { ORANGE } from '@/utils/constants';
@@ -17,7 +17,7 @@ import { connectionsSelector } from '@/utils/connectionsSelector';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import EmptyList from '@/components/Helpers/EmptyList';
 import TrustedConnectionCard from './TrustedConnectionCard';
-import { setTrustedConnections } from './helpers';
+import { setTrustedConnections } from './thunks/recoveryThunks';
 
 /**
  * Backup screen of BrightID
@@ -35,6 +35,7 @@ const getItemLayout = (data, index) => ({
 
 const TrustedConnectionsScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const { t } = useTranslation();
 
   const connections = useSelector(connectionsSelector);
@@ -48,22 +49,22 @@ const TrustedConnectionsScreen = () => {
   );
 
   const navigateToBackup = async () => {
-    if (trustedConnections.length < 3) {
-      Alert.alert(
-        t('common.alert.error'),
-        t('backup.alert.text.needThreeTrusted'),
-      );
-    } else {
-      setTrustedConnections()
-        .then((success) => {
-          if (success) navigation.navigate('Backup');
-        })
-        .catch((err) => {
-          if (err.message === `trusted connections can't be overwritten`) {
-            navigation.navigate('Backup');
-          }
-          console.warn(err.message);
-        });
+    try {
+      if (trustedConnections.length < 3) {
+        Alert.alert(
+          t('common.alert.error'),
+          t('backup.alert.text.needThreeTrusted'),
+        );
+      } else {
+        await dispatch(setTrustedConnections());
+
+        navigation.navigate('Backup');
+      }
+    } catch (err) {
+      if (err.message === `trusted connections can't be overwritten`) {
+        navigation.navigate('Backup');
+      }
+      console.warn(err.message);
     }
   };
 

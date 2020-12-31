@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,43 +11,22 @@ import {
   Alert,
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
-import { Trans, useTranslation } from 'react-i18next';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import emitter from '@/emitter';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_OS } from '@/utils/deviceConstants';
-import { recoverData } from './helpers';
+import { recoverData } from './thunks/recoveryThunks';
 
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
 const RestoreScreen = () => {
   const [pass, setPass] = useState('');
-  const [completed, setCompleted] = useState(0);
-  const [total, setTotal] = useState(0);
   const [restoreInProgress, setRestoreInProgress] = useState(false);
 
   const { t } = useTranslation();
   const navigation = useNavigation();
-
-  useFocusEffect(
-    useCallback(() => {
-      const updateRestoreStatus = (num: number) => {
-        setCompleted((prev) => prev + num);
-      };
-
-      const updateRestoreTotal = (num: number) => {
-        setTotal(num);
-      };
-
-      emitter.on('restoreProgress', updateRestoreStatus);
-      emitter.on('restoreTotal', updateRestoreTotal);
-
-      () => {
-        emitter.off('restoreProgress', updateRestoreStatus);
-        emitter.off('restoreTotal', updateRestoreTotal);
-      };
-    }, []),
-  );
+  const dispatch = useDispatch();
 
   const restoreCompleted = async () => {
     Alert.alert(
@@ -59,8 +38,6 @@ const RestoreScreen = () => {
 
   const resetState = () => {
     setRestoreInProgress(false);
-    setCompleted(0);
-    setTotal(0);
     setPass('');
   };
 
@@ -72,7 +49,7 @@ const RestoreScreen = () => {
   const restore = () => {
     setRestoreInProgress(true);
 
-    recoverData(pass)
+    dispatch(recoverData(pass))
       .then((result) => {
         result ? restoreCompleted() : resetState();
       })
@@ -113,8 +90,7 @@ const RestoreScreen = () => {
           <>
             <View style={styles.textInputContainer}>
               <Text style={styles.textInfo}>
-                {/* {t('restore.text.enterPassword')} */}
-                Please enter your password
+                {t('restore.text.enterPassword')}
               </Text>
               <TextInput
                 onChangeText={setPass}
@@ -130,17 +106,7 @@ const RestoreScreen = () => {
               />
             </View>
             <Text style={styles.skipInfo}>
-              {/* <Trans
-                i18nKey="restore.text.skipLoadingBackup"
-                components={[
-                  <Text style={styles.skipLink} onPress={skip}>
-                    dummyLink
-                  </Text>,
-                ]}
-                values={{ skipLink: t('restore.text.skipLink') }}
-              /> */}
-              Without the password you can still recover your BrightID but the
-              name & photo of your connections & groups will not be available.
+              {t('restore.text.skipLoadingBackup')}
             </Text>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
@@ -172,14 +138,6 @@ const RestoreScreen = () => {
               color={ORANGE}
             />
             <Text style={styles.textInfo}>Downloading data ...</Text>
-            {total !== 0 && (
-              <Text style={styles.textInfo}>
-                {t('common.text.progress', {
-                  completed,
-                  total,
-                })}
-              </Text>
-            )}
           </View>
         )}
       </Container>

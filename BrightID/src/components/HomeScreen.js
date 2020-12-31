@@ -85,7 +85,10 @@ export const HomeScreen = (props) => {
     } else {
       showActionSheetWithOptions(
         {
-          options: [t('home.chatActionSheet.discord'), t('common.actionSheet.cancel')],
+          options: [
+            t('home.chatActionSheet.discord'),
+            t('common.actionSheet.cancel'),
+          ],
           cancelButtonIndex: 1,
           title: t('home.chatActionSheet.title'),
           showSeparators: true,
@@ -122,9 +125,18 @@ export const HomeScreen = (props) => {
           }}
           onPress={async () => {
             let url = await Clipboard.getString();
-            url = url.replace('https://app.brightid.org', 'brightid://');
-            console.log(`Linking.openURL with ${url}`);
-            Linking.openURL(url);
+            if (url.startsWith('https://app.brightid.org/connection-code/')) {
+              url = url.replace(
+                'https://app.brightid.org/connection-code/',
+                '',
+              );
+
+              navigation.navigate('ScanCode', { qrcode: url });
+            } else {
+              url = url.replace('https://app.brightid.org', 'brightid://');
+              console.log(`Linking.openURL with ${url}`);
+              Linking.openURL(url);
+            }
           }}
         >
           <Material
@@ -178,9 +190,13 @@ export const HomeScreen = (props) => {
           </View>
           <View style={styles.profileDivider} />
           {verified ? (
-            <Text style={styles.verified}>{t('common.tag.statusVerified')}</Text>
+            <Text style={styles.verified}>
+              {t('common.tag.statusVerified')}
+            </Text>
           ) : (
-            <Text style={styles.unverified}>{t('common.tag.statusUnverified')}</Text>
+            <Text style={styles.unverified}>
+              {t('common.tag.statusUnverified')}
+            </Text>
           )}
         </View>
       </View>
@@ -198,7 +214,9 @@ export const HomeScreen = (props) => {
             {connectionsCount}
           </Text>
           <View style={styles.countsBorder} />
-          <Text style={styles.countsDescriptionText}>{t('home.button.connections')}</Text>
+          <Text style={styles.countsDescriptionText}>
+            {t('home.button.connections')}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           testID="groupsBtn"
@@ -212,7 +230,9 @@ export const HomeScreen = (props) => {
             {groupsCount}
           </Text>
           <View style={styles.countsBorder} />
-          <Text style={styles.countsDescriptionText}>{t('home.button.groups')}</Text>
+          <Text style={styles.countsDescriptionText}>
+            {t('home.button.groups')}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           testID="appsBtn"
@@ -230,12 +250,16 @@ export const HomeScreen = (props) => {
             {linkedContextsCount}
           </Text>
           <View style={styles.countsBorder} />
-          <Text style={styles.countsDescriptionText}>{t('home.button.apps')}</Text>
+          <Text style={styles.countsDescriptionText}>
+            {t('home.button.apps')}
+          </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.bottomOrangeContainer}>
         <View style={styles.connectContainer}>
-          <Text style={styles.newConnectionText}>{t('home.label.createNewConnection')}</Text>
+          <Text style={styles.newConnectionText}>
+            {t('home.label.createNewConnection')}
+          </Text>
           <TouchableOpacity
             testID="MyCodeBtn"
             style={styles.connectButton}
@@ -281,7 +305,9 @@ export const HomeScreen = (props) => {
               xml={forumIcon}
             />
             <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }}>
-              <Text style={styles.communityLink}>{t('home.link.community')}</Text>
+              <Text style={styles.communityLink}>
+                {t('home.link.community')}
+              </Text>
             </View>
           </TouchableOpacity>
         </View>

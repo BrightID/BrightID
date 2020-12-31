@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,16 +11,15 @@ import {
   Alert,
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { setInternetCredentials } from 'react-native-keychain';
 import { useTranslation } from 'react-i18next';
 import { setBackupCompleted, setPassword } from '@/actions/index';
-import emitter from '@/emitter';
 import { BACKUP_URL, ORANGE } from '@/utils/constants';
 import { DEVICE_IOS, DEVICE_LARGE } from '@/utils/deviceConstants';
 import { validatePass } from '@/utils/password';
-import { backupAppData } from './helpers';
+import { backupAppData } from './thunks/backupThunks';
 
 const Container = DEVICE_IOS ? KeyboardAvoidingView : View;
 // const Container = KeyboardAvoidingView;
@@ -28,30 +27,14 @@ const Container = DEVICE_IOS ? KeyboardAvoidingView : View;
 const BackupScreen = () => {
   const [pass1, setPass1] = useState('');
   const [pass2, setPass2] = useState('');
-  const [completed, setCompleted] = useState(0);
-  const [total, setTotal] = useState(0);
   const [backupInProgress, setBackupInProgress] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
   const id = useSelector((state) => state.user.id);
-  const connections = useSelector((state) => state.connections.connections);
-  const groups = useSelector((state) => state.groups.groups);
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigation = useNavigation();
-
-  useFocusEffect(
-    useCallback(() => {
-      const updateProgress = (num: number) => {
-        setCompleted((prev) => prev + num);
-      };
-      emitter.on('backupProgress', updateProgress);
-      () => {
-        emitter.off('backupProgress', updateProgress);
-      };
-    }, [setCompleted]),
-  );
 
   const handleTextBlur = () => {
     setIsEditing(false);
@@ -73,14 +56,10 @@ const BackupScreen = () => {
         console.log(err.message);
       }
 
-      const groupsPhotoCount = groups.filter((group) => group.photo?.filename)
-        .length;
-
       setBackupInProgress(true);
-      setTotal(connections.length + groupsPhotoCount + 2);
 
       // TODO: Any error happening inside backupAppData() is caught and just logged to console. Should this be changed?
-      await backupAppData();
+      await dispatch(backupAppData());
 
       setBackupInProgress(false);
 
@@ -168,17 +147,11 @@ const BackupScreen = () => {
               <Text style={styles.textInfo}>
                 {t('common.text.uploadingData')}
               </Text>
-              <Text style={styles.textInfo}>
-                {t('common.text.progress', {
-                  completed,
-                  total,
-                })}
-              </Text>
               <Spinner
                 isVisible={true}
                 size={DEVICE_LARGE ? 80 : 65}
                 type="Wave"
-                color="#333"
+                color={ORANGE}
               />
             </View>
           )}
@@ -284,11 +257,5 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
 });
-
-// export default connect(({ connections, groups, user }) => ({
-//   ...connections,
-//   ...groups,
-//   id: user.id,
-// }))(withTranslation()(BackupScreen));
 
 export default BackupScreen;

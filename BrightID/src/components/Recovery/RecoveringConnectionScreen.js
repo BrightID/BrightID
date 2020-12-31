@@ -11,7 +11,6 @@ import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { connectionsSelector } from '@/utils/connectionsSelector';
-import store from '@/store';
 import api from '@/api/brightId';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
 
@@ -70,17 +69,6 @@ const RecoveringConnectionScreen = () => {
     }, [id]),
   );
 
-  const {
-    recoveryData: { totalItems, completedItems },
-  } = store.getState();
-
-  const waiting = totalItems > 0 && completedItems < totalItems;
-  let msg;
-  if (waiting) {
-    msg = t('restore.text.sendingProgress', { completedItems, totalItems });
-  } else {
-    msg = t('restore.text.chooseConnectionToHelp');
-  }
   return (
     <>
       <View style={styles.orangeTop} />
@@ -88,7 +76,9 @@ const RecoveringConnectionScreen = () => {
         {!uploadingData ? (
           <View style={styles.mainContainer}>
             <View style={styles.titleContainer}>
-              <Text style={styles.infoText}>{msg}</Text>
+              <Text style={styles.infoText}>
+                {t('restore.text.chooseConnectionToHelp')}
+              </Text>
             </View>
             <View style={styles.mainContainer}>
               <FlatList

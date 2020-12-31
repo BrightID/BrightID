@@ -191,9 +191,18 @@ declare type PendingConnection = {
 declare type RecoveryData = {
   publicKey: string,
   secretKey: string,
-  timestamp: number,
   id: string,
+  name: string,
+  photo: string,
+  aesKey: string,
+  timestamp: number,
   sigs: { [string]: Signature },
+  qrcode: string,
+  channel: {
+    channelId: string,
+    url: string,
+    expires: number,
+  },
 };
 
 declare type TasksState = {

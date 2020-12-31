@@ -11,14 +11,15 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 import { SvgXml } from 'react-native-svg';
 import verificationSticker from '@/static/verification-sticker.svg';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import { photoDirectory } from '@/utils/filesystem';
+import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
 import ChannelAPI from '@/api/channelService';
 import api from '@/api/brightId';
-import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
-import { loadRecoveryData, uploadSig, uploadMutualInfo } from './helpers';
+import { uploadSig, uploadMutualInfo } from './thunks/channelUploadThunks';
 
 const RecoveryConnectionCard = (props) => {
   const {
@@ -39,6 +40,7 @@ const RecoveryConnectionCard = (props) => {
 
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const brightidVerified = verifications?.includes('BrightID');
 
@@ -62,25 +64,31 @@ const RecoveryConnectionCard = (props) => {
   const handleConnectionSelect = async () => {
     try {
       setUploadingData(true);
+
       const ipAddress = await api.ip();
       const channelApi = new ChannelAPI(`http://${ipAddress}/profile`);
-      const { signingKey, timestamp } = await loadRecoveryData(
-        channelApi,
-        aesKey,
+
+      // it's important to upload mutal connections first so that we can guarantee the other user downloads them when they recieve the sig
+      await dispatch(
+        uploadMutualInfo({
+          conn: props,
+          aesKey,
+          channelApi,
+        }),
       );
-      await uploadSig({ id, timestamp, signingKey, channelApi, aesKey });
-      uploadMutualInfo(props, channelApi, aesKey).then(() => {
-        Alert.alert(
-          t('common.alert.info'),
-          t('restore.alert.text.requestRecovering'),
-          [
-            {
-              text: t('common.alert.ok'),
-              onPress: () => navigation.navigate('Home'),
-            },
-          ],
-        );
-      });
+
+      await dispatch(uploadSig({ id, aesKey, channelApi }));
+
+      Alert.alert(
+        t('common.alert.info'),
+        t('restore.alert.text.requestRecovering'),
+        [
+          {
+            text: t('common.alert.ok'),
+            onPress: () => navigation.navigate('Home'),
+          },
+        ],
+      );
     } catch (err) {
       alert(err.message);
     }

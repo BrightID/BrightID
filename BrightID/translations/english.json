@@ -28,8 +28,9 @@
   "signup.alert.photoMissing": "A photo is required. Please press enter on the keyboard.",
 
   "recovery.header.title": "Recovery Code",
-  "recovery.text.askTrustedConnections": "Ask your trusted connections to scan this code.",
-  "recovery.text.recoveredItems": "{{count}} connections/groups recovered",
+  "recovery.text.askTrustedConnections": "Please show this QR code to your trusted connections",
+  "recovery.text.signatures": "{{count}} / 2 signatures",
+  "recovery.text.additionalInfo": "Your trusted connections will need to scan this to help you recover your BrightID",
 
   "eula.header.title": "License Agreement",
 
@@ -241,15 +242,14 @@
   "restore.header.accountRecovery": "Account Recovery",
   "restore.button.startRestore": "Start Restore",
   "restore.text.downloadingData": "Downloading data from backup server ...",
-  "restore.text.enterPassword": "Enter a password that you encrypted your backup data with:",
+  "restore.text.enterPassword": "Please enter your password",
   "restore.alert.text.restoreSuccess": "Your account recovered successfully!",
   "restore.alert.title.notTrusted": "Uh Oh",
   "restore.alert.text.notTrusted": "One of your friends is not in your list of trusted connections",
   "restore.title.chooseConnection": "Choose Connection",
   "restore.text.chooseConnectionToHelp": "Please select the connection whose account you are helping to recover.",
-  "restore.text.sendingProgress": "Sending {{completedItems}}/{{totalItems}} completed",
   "restore.text.noConnections": "No connections...",
-  "restore.text.skipLoadingBackup": "You can <0>{{skipLink}}</0> restoring connections and groups names and photos from backup server and only load mutual ones from your recovery connections!",
+  "restore.text.skipLoadingBackup": "Without the password you can still recover your BrightID but the name & photo of your connections & groups will not be available.",
   "restore.text.skipLink": "skip",
   "restore.alert.text.requestRecovering": "Your request to help recovering this account submitted successfully!",
 

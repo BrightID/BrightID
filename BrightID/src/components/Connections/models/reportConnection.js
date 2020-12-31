@@ -2,7 +2,7 @@
 
 import api from '@/api/brightId';
 import { deleteConnection } from '@/actions';
-import { backupUser } from '@/components//Recovery/helpers';
+import { backupUser } from '@/components/Recovery/thunks/backupThunks';
 import { connection_levels } from '@/utils/constants';
 
 export const reportConnection = ({
@@ -28,7 +28,7 @@ export const reportConnection = ({
     // remove connection from local storage
     dispatch(deleteConnection(id));
     if (backupCompleted) {
-      await backupUser();
+      await dispatch(backupUser());
     }
   } catch (err) {
     err instanceof Error ? console.warn(err.message) : console.log(err);

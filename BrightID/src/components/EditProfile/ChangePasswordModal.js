@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Alert,
   View,
@@ -13,14 +13,12 @@ import { BlurView } from '@react-native-community/blur';
 import Spinner from 'react-native-spinkit';
 import { setInternetCredentials } from 'react-native-keychain';
 import { useTranslation } from 'react-i18next';
-import { BACKUP_URL } from '@/utils/constants';
+import { BACKUP_URL, ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from 'react-redux';
-import { useFocusEffect } from '@react-navigation/native';
 import { validatePass } from '@/utils/password';
 import { setPassword } from '@/actions';
-import { backupAppData } from '@/components/Recovery/helpers';
-import emitter from '@/emitter';
+import { backupAppData } from '@/components/Recovery/thunks/backupThunks';
 
 /**
  * Search Bar in the Groups Screen
@@ -29,43 +27,16 @@ import emitter from '@/emitter';
  */
 
 const UploadAnimation = () => {
-  const [completed, setCompleted] = useState(0);
-  const backupTotal = useSelector(
-    (state) =>
-      2 +
-      state.connections.connections.length +
-      state.groups.groups.filter((group) => group.photo?.filename).length,
-  );
-
   const { t } = useTranslation();
-
-  useFocusEffect(
-    useCallback(() => {
-      const updateProgress = (num) => {
-        setCompleted((completed) => completed + num);
-      };
-
-      emitter.on('backupProgress', updateProgress);
-
-      return () => {
-        emitter.off('backupProgress', updateProgress);
-      };
-    }, []),
-  );
 
   return (
     <View style={styles.uploadAnimationContainer}>
-      <Text style={styles.textInfo}>
-        {t('common.text.uploadingData')}
-      </Text>
-      <Text style={styles.textInfo}>
-        {t('common.text.progress', {completed: completed, total: backupTotal})}
-      </Text>
+      <Text style={styles.textInfo}>{t('common.text.uploadingData')}</Text>
       <Spinner
         isVisible={true}
         size={DEVICE_LARGE ? 80 : 65}
         type="Wave"
-        color="#333"
+        color={ORANGE}
       />
     </View>
   );
@@ -89,8 +60,8 @@ const ChangePasswordModal = ({ route, navigation }) => {
   const startBackup = async () => {
     if (oldPassword !== password) {
       Alert.alert(
-        t('profile.alert.title.passwordMatch'), 
-        t('profile.alert.text.passwordMatch')
+        t('profile.alert.title.passwordMatch'),
+        t('profile.alert.text.passwordMatch'),
       );
       return;
     }
@@ -107,7 +78,7 @@ const ChangePasswordModal = ({ route, navigation }) => {
 
       setBackupInProgress(true);
 
-      await backupAppData();
+      await dispatch(backupAppData());
 
       setBackupInProgress(false);
 
@@ -131,7 +102,9 @@ const ChangePasswordModal = ({ route, navigation }) => {
         ) : (
           <>
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>{t('profile.label.currentPassword')}</Text>
+              <Text style={styles.label}>
+                {t('profile.label.currentPassword')}
+              </Text>
               <TextInput
                 autoCompleteType="password"
                 autoCorrect={false}
@@ -161,7 +134,9 @@ const ChangePasswordModal = ({ route, navigation }) => {
               />
             </View>
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>{t('profile.label.newPasswordAgain')}</Text>
+              <Text style={styles.label}>
+                {t('profile.label.newPasswordAgain')}
+              </Text>
               <TextInput
                 autoCompleteType="password"
                 autoCorrect={false}
@@ -177,7 +152,9 @@ const ChangePasswordModal = ({ route, navigation }) => {
             </View>
             <View style={styles.saveContainer}>
               <TouchableOpacity style={styles.saveButton} onPress={startBackup}>
-                <Text style={styles.saveButtonText}>{t('common.button.save')}</Text>
+                <Text style={styles.saveButtonText}>
+                  {t('common.button.save')}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.cancelButton}
@@ -185,7 +162,9 @@ const ChangePasswordModal = ({ route, navigation }) => {
                   navigation.navigate('Edit Profile');
                 }}
               >
-                <Text style={styles.cancelButtonText}>{t('common.button.cancel')}</Text>
+                <Text style={styles.cancelButtonText}>
+                  {t('common.button.cancel')}
+                </Text>
               </TouchableOpacity>
             </View>
           </>

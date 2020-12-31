@@ -10,7 +10,10 @@ import { getGroupName } from '@/utils/groups';
 import { acceptInvite, rejectInvite, joinGroup } from '@/actions';
 import api from '@/api/brightId';
 import GroupPhoto from '@/components/GroupsScreens/GroupPhoto';
-import { backupUser, backupPhoto } from '@/components/Recovery/helpers';
+import {
+  backupUser,
+  backupPhoto,
+} from '@/components/Recovery/thunks/backupThunks';
 import checkGreen from '@/static/check_green.svg';
 import xGrey from '@/static/x_grey.svg';
 
@@ -35,7 +38,10 @@ class InviteCard extends React.Component<Props> {
                 await api.deleteGroup(invite.id);
               }
             } catch (err) {
-              Alert.alert(t('notifications.alert.title.failureRejectGroupInvite'), err.message);
+              Alert.alert(
+                t('notifications.alert.title.failureRejectGroupInvite'),
+                err.message,
+              );
             }
           },
         },
@@ -52,18 +58,23 @@ class InviteCard extends React.Component<Props> {
       invite.members.push(id);
       await dispatch(joinGroup(invite));
       Alert.alert(
-        t('common.alert.success'), 
-        t('notifications.alert.text.successGroupInvite', {groupName: getGroupName(invite)})
+        t('common.alert.success'),
+        t('notifications.alert.text.successGroupInvite', {
+          groupName: getGroupName(invite),
+        }),
       );
       if (backupCompleted) {
-        await backupUser();
+        await dispatch(backupUser());
         if (invite.photo && invite.photo.filename) {
-          await backupPhoto(invite.id, invite.photo.filename);
+          await dispatch(backupPhoto(invite.id, invite.photo.filename));
         }
       }
       navigation.navigate('Members', { group: invite });
     } catch (err) {
-      Alert.alert(t('notifications.alert.text.failureAcceptGroupInvite'), err.message);
+      Alert.alert(
+        t('notifications.alert.text.failureAcceptGroupInvite'),
+        err.message,
+      );
     }
   };
 
@@ -78,7 +89,9 @@ class InviteCard extends React.Component<Props> {
         <View style={styles.info}>
           <Text style={styles.name}>{getGroupName(invite)}</Text>
           <Text style={styles.invitationMsg}>
-            {t('notifications.item.text.pendingGroupInvite', {name: inviter?.name})}
+            {t('notifications.item.text.pendingGroupInvite', {
+              name: inviter?.name,
+            })}
           </Text>
         </View>
         <View style={styles.approvalButtonContainer}>
