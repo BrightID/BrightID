@@ -84,7 +84,8 @@
       "startBackup": "Iniciar copia de respaldo"
     },
     "header": {
-      "backup": "Copia de Respaldo"
+      "backup": "Copia de Respaldo",
+      "trustedConnections": "Conexiones de confianza"
     },
     "placeholder": {
       "confirmPassword": "Confirmar Contraseña"
@@ -124,7 +125,8 @@
         "trustedSigned": "Una de tus conexiones de confianza firmó tu solicitud"
       },
       "title": {
-        "lostKeys": "Perdimos el par de claves BrightID del dispositivo"
+        "lostKeys": "Perdimos el par de claves BrightID del dispositivo",
+        "pleaseConfirm": "Por favor, confirme"
       },
       "yes": "Si"
     },
@@ -396,7 +398,8 @@
     "alert": {
       "text": {
         "failureAcceptGroupInvite": "No se pudo unir al grupo",
-        "rejectGroupInvite": "¿Estás seguro de que quieres rechazar unirte a este grupo?"
+        "rejectGroupInvite": "¿Estás seguro de que quieres rechazar unirte a este grupo?",
+        "successGroupInvite": "Te uniste a {{groupName}}"
       },
       "title": {
         "failureRejectGroupInvite": "No se pudo rechazar la invitación",
@@ -531,7 +534,8 @@
       "showCode": "Muestra tu codigo Qr"
     },
     "header": {
-      "connections": "{{count}} / 30 Conexiones"
+      "connections": "{{count}} / 30 Conexiones",
+      "connections_plural": "{{count}} / 30 Conexiones"
     },
     "label": {
       "connectionType": "Tipo de conección:"
@@ -553,7 +557,9 @@
       "title": "Código de Recuperación"
     },
     "text": {
-      "askTrustedConnections": "Pide a tus conecciones de confianza escanear este código."
+      "additionalInfo": "Tus conexiones de confianza necesitarán escanear este codigo para ayudarte a recuperar tu BrightID",
+      "askTrustedConnections": "Por favor, muestre este código QR a sus conexiones de confianza",
+      "signatures": "{{count}} / 2 firmas"
     }
   },
   "restore": {
@@ -561,6 +567,7 @@
       "text": {
         "notTrusted": "Uno de tus amigos no está en tu lista de conexiones de confianza",
         "requestRecovering": "¡Su solicitud para ayudar a recuperar esta cuenta se envió correctamente!",
+        "restoreConfirm": "¿Es {{name}} la cuenta que está ayudando a recuperar?",
         "restoreSuccess": "¡Su cuenta se recuperó con éxito!"
       },
       "title": {
@@ -570,14 +577,22 @@
     "button": {
       "startRestore": "Iniciar restauración"
     },
+    "emptyList": {
+      "text": {
+        "downloadingData": "Descarga de datos de recuperación de conexiónes",
+        "nobodyHasChosen": "No se pudo recuperar la conexión...\nNo te asignaron para recuperación"
+      }
+    },
     "header": {
       "accountRecovery": "Recuperación de Cuenta"
     },
     "text": {
       "chooseConnectionToHelp": "Seleccione la conexión cuya cuenta está ayudando a recuperar.",
       "downloadingData": "Descargando datos del servidor de respaldo…",
-      "enterPassword": "Ingrese una contraseña con la que cifró su copia de respaldo:",
-      "noConnections": "Sin conexiones…"
+      "enterPassword": "Por favor, introduzca su contraseña",
+      "noConnections": "Sin conexiones…",
+      "skipLink": "saltar",
+      "skipLoadingBackup": "Sin la contraseña, aún puede recuperar su BrightID, pero el nombre y la foto de sus conexiones y grupos no estarán disponibles."
     },
     "title": {
       "chooseConnection": "Elije la conexión"
