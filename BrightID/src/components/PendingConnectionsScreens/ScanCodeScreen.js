@@ -67,8 +67,12 @@ export const ScanCodeScreen = () => {
   const { t } = useTranslation();
 
   const pendingConnectionSizeForChannel = useSelector((state) => {
-    return selectAlUnconfirmedConnectionsByChannelIds(state, [channel?.id])
-      .length;
+    if (channel) {
+      return selectAllUnconfirmedConnectionsByChannelIds(state, [channel.id])
+        .length;
+    } else {
+      return 0;
+    }
   });
 
   // always show scanner when navigating to this page
