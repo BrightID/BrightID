@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import api from '@/api/brightId';
 import { setConnectionLevel } from '@/actions/connections';
 import TrustlevelSlider from './TrustlevelSlider';
+import { connectionByIdSelector } from '../../utils/connectionsSelector';
 
 type props = {
   route: any,
@@ -28,7 +29,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
   const { connectionId } = route.params;
   const myId = useSelector((state) => state.user.id);
   const connection: connection = useSelector((state: State) =>
-    state.connections.connections.find((conn) => conn.id === connectionId),
+    connectionByIdSelector(state, connectionId),
   );
   const dispatch = useDispatch();
   const [level, setLevel] = useState(

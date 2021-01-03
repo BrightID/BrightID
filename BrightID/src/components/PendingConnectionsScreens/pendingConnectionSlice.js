@@ -6,7 +6,6 @@ import {
   createSelector,
 } from '@reduxjs/toolkit';
 import i18next from 'i18next';
-import moment from 'moment';
 import {
   removeChannel,
   selectChannelById,
@@ -15,6 +14,7 @@ import { decryptData } from '@/utils/cryptoHelper';
 import api from '@/api/brightId';
 import { Alert } from 'react-native';
 import { PROFILE_VERSION } from '../../utils/constants';
+import { createDeepEqualSelector } from '../../utils/createDeepEqualSelector';
 
 const pendingConnectionsAdapter = createEntityAdapter();
 
@@ -66,13 +66,23 @@ export const newPendingConnection = createAsyncThunk(
       decryptedObj.version < PROFILE_VERSION // old client version
     ) {
       // other user needs to update his client
-      const msg = i18next.t('pendingConnection.alert.text.otherOutdated', {name: `${decryptedObj.name}`});
-      Alert.alert(i18next.t('pendingConnection.alert.title.connectionImpossible'), msg);
+      const msg = i18next.t('pendingConnection.alert.text.otherOutdated', {
+        name: `${decryptedObj.name}`,
+      });
+      Alert.alert(
+        i18next.t('pendingConnection.alert.title.connectionImpossible'),
+        msg,
+      );
       throw new Error(msg);
     } else if (decryptedObj.version > PROFILE_VERSION) {
       // I need to update my client
-      const msg = i18next.t('pendingConnection.alert.text.localOutdated', {name: `${decryptedObj.name}`});
-      Alert.alert(i18next.t('pendingConnection.alert.title.connectionImpossible'), msg);
+      const msg = i18next.t('pendingConnection.alert.text.localOutdated', {
+        name: `${decryptedObj.name}`,
+      });
+      Alert.alert(
+        i18next.t('pendingConnection.alert.title.connectionImpossible'),
+        msg,
+      );
       throw new Error(msg);
     }
 
@@ -233,18 +243,22 @@ export const selectAllUnconfirmedConnections = createSelector(
 );
 
 // uses channelId's to search for users
-export const selectAllPendingConnectionsByChannelIds = createSelector(
+export const selectAllPendingConnectionsByChannelIds = createDeepEqualSelector(
   selectAllPendingConnections,
   (_, channelIds: string[]) => channelIds,
-  (pendingConnections, channelIds) =>
-    pendingConnections.filter((pc) => channelIds.includes(pc.channelId)),
+  (pendingConnections, channelIds) => {
+    console.log(`selectAllPendingConnectionsByChannelIds ${channelIds}...`);
+    return pendingConnections.filter((pc) => channelIds.includes(pc.channelId));
+  },
 );
 
-export const selectAlUnconfirmedConnectionsByChannelIds = createSelector(
+export const selectAllUnconfirmedConnectionsByChannelIds = createDeepEqualSelector(
   selectAllUnconfirmedConnections,
   (_, channelIds: string[]) => channelIds,
-  (pendingConnections, channelIds) =>
-    pendingConnections.filter((pc) => channelIds.includes(pc.channelId)),
+  (pendingConnections, channelIds) => {
+    console.log(`selectAllUnconfirmedConnectionsByChannelIds ${channelIds}...`);
+    return pendingConnections.filter((pc) => channelIds.includes(pc.channelId));
+  },
 );
 
 // export actions

@@ -26,7 +26,7 @@ import {
   channel_types,
   closeChannel,
 } from '@/components/PendingConnectionsScreens/channelSlice';
-import { selectAlUnconfirmedConnectionsByChannelIds } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+import { selectAllUnconfirmedConnectionsByChannelIds } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import { decodeChannelQrString } from '@/utils/channels';
 import { joinChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
