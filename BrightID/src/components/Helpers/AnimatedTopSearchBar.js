@@ -63,8 +63,6 @@ const AnimatedTopSearchBar = ({
     }).start(() => {});
   };
 
-  console.log('rendering', leftAnim);
-
   return (
     <Animated.View
       style={[
