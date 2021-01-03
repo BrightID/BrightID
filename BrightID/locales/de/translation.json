@@ -128,7 +128,8 @@
         "trustedSigned": "Eine deiner vertrauenswürdigen Verbindungen hat deine Anfrage signiert"
       },
       "title": {
-        "lostKeys": "Wir haben das BrightID-Schlüsselpaar vom Gerät verloren"
+        "lostKeys": "Wir haben das BrightID-Schlüsselpaar vom Gerät verloren",
+        "pleaseConfirm": "Bestätigen"
       },
       "yes": "Ja"
     },
@@ -443,7 +444,7 @@
       "maintainPrivacy": "Schutz der Privatsphäre"
     },
     "text": {
-      "intro": "<text>BrightID verwendet die Personen, die du kennst</text> <text>, um ein Konto pro Person</text> <text>für wichtige Anwendungen wie</text><text>Abstimmungen und universelles Grundeinkommen durchzusetzen.</text>",
+      "intro": "<text>BrightID verwendet die Personen,</text><text>die du kennst, um ein Konto pro Person</text><text>für wichtige Anwendungen wie</text><text>Abstimmungen und universelles Grundeinkommen durchzusetzen.</text>",
       "privacy": "<text>Zeige dass du ein einzigartiger Mensch bist, </text><text>ohne Preisgabe persönlicher Daten.</text>"
     }
   },
@@ -566,7 +567,9 @@
       "title": "Wiederherstellungscode"
     },
     "text": {
-      "askTrustedConnections": "Lass deine vertrauenswürdigen Verbindungen diesen Code scannen."
+      "additionalInfo": "Deine vertrauenswürdigen Verbindungen müssen diesen Code scannen um deine BrightID wiederherzustellen",
+      "askTrustedConnections": "Lass deine vertrauenswürdigen Verbindungen diesen Code scannen",
+      "signatures": "{{count}} / 2 Unterschriften"
     }
   },
   "restore": {
@@ -574,6 +577,7 @@
       "text": {
         "notTrusted": "Einer deiner Freunde ist nicht in deiner Liste der vertrauenswürdigen Verbindungen enthalten",
         "requestRecovering": "Deine Anfrage zur Wiederherstellung dieses Kontos wurde erfolgreich übermittelt!",
+        "restoreConfirm": "Ist {{name}} der Account den du hilfst wiederherzustellen?",
         "restoreSuccess": "Dein Konto wurde erfolgreich wiederhergestellt!"
       },
       "title": {
@@ -583,14 +587,21 @@
     "button": {
       "startRestore": "Wiederherstellung starten"
     },
+    "emptyList": {
+      "text": {
+        "downloadingData": "Lade Wiederherstellungsdaten herunter"
+      }
+    },
     "header": {
       "accountRecovery": "Kontowiederherstellung"
     },
     "text": {
       "chooseConnectionToHelp": "Bitte wähle die Verbindung aus, deren Konto du wiederherstellen willst.",
       "downloadingData": "Herunterladen von Daten vom Sicherungsserver …",
-      "enterPassword": "Gib das Passwort ein, mit dem du deine Sicherungsdaten verschlüsselt hast:",
-      "noConnections": "Keine Verbindungen …"
+      "enterPassword": "Bitte gib dein Passwort ein",
+      "noConnections": "Keine Verbindungen …",
+      "skipLink": "überspringen",
+      "skipLoadingBackup": "Deine BrightID kann auch ohne Passwort wiederhergestellt werden, aber die Namen und Fotos deiner Verbindungen und Gruppen werden fehlen."
     },
     "title": {
       "chooseConnection": "Wähle eine Verbindung"
