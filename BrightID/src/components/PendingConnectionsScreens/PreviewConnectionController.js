@@ -23,12 +23,8 @@ const makeConnectionByBrightIDSelector = () =>
     selectAllConnections,
     (_, brightID: string) => brightID,
     (allConnections, brightID) => {
-      if (brightID) {
-        console.log(`Looking for connection ${brightID}`);
-        return allConnections.find((conn) => conn.id === brightID);
-      } else {
-        return undefined;
-      }
+      console.log(`Looking for connection ${brightID}`);
+      return allConnections.find((conn) => conn.id === brightID);
     },
   );
 
@@ -53,9 +49,13 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
     [],
   );
 
-  let existingConnection = useSelector((state) =>
-    selectConnectionByBrightID(state, pendingConnection?.brightId),
-  );
+  let existingConnection = useSelector((state) => {
+    if (pendingConnection) {
+      return selectConnectionByBrightID(state, pendingConnection.brightId);
+    } else {
+      return undefined;
+    }
+  });
 
   const navigation = useNavigation();
 
