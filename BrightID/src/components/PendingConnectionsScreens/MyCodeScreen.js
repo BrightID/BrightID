@@ -91,10 +91,14 @@ export const MyCodeScreen = () => {
   );
 
   // pending connections attached to active channel
-  const pendingConnectionSize = useSelector(
-    (state) =>
-      selectAllPendingConnectionsByChannelIds(state, [myChannel?.id]).length,
-  );
+  const pendingConnectionSize = useSelector((state) => {
+    if (myChannel) {
+      return selectAllPendingConnectionsByChannelIds(state, [myChannel.id])
+        .length;
+    } else {
+      return 0;
+    }
+  });
 
   const unconfirmedConnectionSize = useSelector(
     (state) =>
