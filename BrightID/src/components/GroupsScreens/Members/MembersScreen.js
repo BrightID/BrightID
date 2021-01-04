@@ -20,8 +20,8 @@ import { ORANGE, WHITE, BLUE, DARK_GREY } from '@/theme/colors';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
+import { groupByIdSelector } from '@/utils/groups';
 import MemberCard from './MemberCard';
-import { groupByIdSelector } from '../../../utils/groups';
 
 type MembersScreenProps = {
   navigation: any,
