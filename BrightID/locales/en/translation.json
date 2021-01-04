@@ -350,6 +350,10 @@
       "cancel": "Cancel",
       "dismissMember": "Dismiss from group"
     },
+    "state": {
+      "creatingGroup": "creating the group",
+      "uploadingGroupPhoto": "uploading group photo"
+    },
     "tag": {
       "primaryGroup": "Primary Group"
     },
@@ -520,13 +524,15 @@
     "alert": {
       "text": {
         "codeGroup": "This QR code is designed for many people to connect simultaneously.",
-        "codeSingle": "This QR code can be used to connect with a single user before it expires."
+        "codeSingle": "This QR code can be used to connect with a single user before it expires.",
+        "shareLinkSingle": "Share this link with one friend",
+        "shareLinkGroup": "Share this link",
+        "universalLink": "Universal Link"
       },
       "title": {
         "codeGroup": "Group code",
         "codeSingle": "Single-use code"
-      },
-      "universalLink": "Universal Link"
+      }
     },
     "button": {
       "copyLink": "Copy Link",
