@@ -56,8 +56,8 @@
         "invalidContext": "Failed",
         "linkApp": "Link App?",
         "linkFailure": "Failed",
-        "linkingFailed": "App linking failed",
-        "linkSuccess": "Success"
+        "linkSuccess": "Success",
+        "linkingFailed": "App linking failed"
       }
     },
     "tag": {
@@ -535,7 +535,7 @@
     },
     "header": {
       "connections": "{{count}} / 30 Connections",
-      "connections_plural": ""
+      "connections_plural": "{{count}} / 30 Connections"
     },
     "label": {
       "connectionType": "Connection Type:"
