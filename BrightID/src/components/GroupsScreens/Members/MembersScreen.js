@@ -21,6 +21,7 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import MemberCard from './MemberCard';
+import { groupByIdSelector } from '../../../utils/groups';
 
 type MembersScreenProps = {
   navigation: any,
@@ -35,14 +36,9 @@ function MembersScreen(props: MembersScreenProps) {
     (state: State) => state.connections.connections,
   );
   const user = useSelector((state: State) => state.user);
-  const { group, admins, members } = useSelector((state: State) => {
-    const group = state.groups.groups.find((entry) => entry.id === groupID);
-    return {
-      group,
-      admins: group ? group.admins : [],
-      members: group ? group.members : [],
-    };
-  });
+  const { group, admins, members } = useSelector((state: State) =>
+    groupByIdSelector(state, groupID),
+  );
 
   const [contextActions, setContextActions] = useState<Array<string>>([]);
   const { t } = useTranslation();
