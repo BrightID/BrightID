@@ -13,8 +13,8 @@ import {
 import { decryptData } from '@/utils/cryptoHelper';
 import api from '@/api/brightId';
 import { Alert } from 'react-native';
-import { PROFILE_VERSION } from '../../utils/constants';
-import { createDeepEqualSelector } from '../../utils/createDeepEqualSelector';
+import { PROFILE_VERSION } from '@/utils/constants';
+import { createDeepEqualStringArraySelector } from '@/utils/createDeepEqualStringArraySelector';
 
 const pendingConnectionsAdapter = createEntityAdapter();
 
@@ -242,8 +242,16 @@ export const selectAllUnconfirmedConnections = createSelector(
     ),
 );
 
-// uses channelId's to search for users
-export const selectAllPendingConnectionsByChannelIds = createDeepEqualSelector(
+/*
+  Using DeepEqualStringArraySelector here because there are different inputs:
+  - selectAllPendingConnections/selectAllUnconfirmedConnections:
+    Returns an array of objects directly from state. This is immutable, so we can use
+    referential/shallow equality check.
+  - channelIds:
+    This array is created dynamically and will be a new object with each invocation. Therefore
+    we have to use deep equality check
+ */
+export const selectAllPendingConnectionsByChannelIds = createDeepEqualStringArraySelector(
   selectAllPendingConnections,
   (_, channelIds: string[]) => channelIds,
   (pendingConnections, channelIds) => {
@@ -251,8 +259,7 @@ export const selectAllPendingConnectionsByChannelIds = createDeepEqualSelector(
     return pendingConnections.filter((pc) => channelIds.includes(pc.channelId));
   },
 );
-
-export const selectAllUnconfirmedConnectionsByChannelIds = createDeepEqualSelector(
+export const selectAllUnconfirmedConnectionsByChannelIds = createDeepEqualStringArraySelector(
   selectAllUnconfirmedConnections,
   (_, channelIds: string[]) => channelIds,
   (pendingConnections, channelIds) => {
