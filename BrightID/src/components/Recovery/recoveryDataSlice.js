@@ -68,6 +68,9 @@ const recoveryData = createSlice({
     resetRecoverySigs(state, action) {
       state.sigs = {};
     },
+    resetRecoveryData(state) {
+      return initialState;
+    },
   },
 });
 
@@ -78,6 +81,7 @@ export const {
   setSig,
   updateNamePhoto,
   resetRecoverySigs,
+  resetRecoveryData,
 } = recoveryData.actions;
 
 // Export reducer
