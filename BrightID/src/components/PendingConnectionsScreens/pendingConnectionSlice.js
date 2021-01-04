@@ -246,7 +246,7 @@ export const selectAllUnconfirmedConnections = createSelector(
   Using DeepEqualStringArraySelector here because there are different inputs:
   - selectAllPendingConnections/selectAllUnconfirmedConnections:
     Returns an array of objects directly from state. This is immutable, so we can use
-    referential/shallow equality check.
+    referential equality check.
   - channelIds:
     This array is created dynamically and will be a new object with each invocation. Therefore
     we have to use deep equality check

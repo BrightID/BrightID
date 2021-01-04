@@ -9,7 +9,7 @@ function isArrayOfStrings(value: any): boolean {
 /*
 `DeepEqualStringArraySelector` will use
   - deep equality check for arrays of strings
-  - referential (shallow) equality check for all other inputs.
+  - referential equality check for all other inputs.
  */
 export const createDeepEqualStringArraySelector = createSelectorCreator(
   defaultMemoize,
