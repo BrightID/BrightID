@@ -18,6 +18,11 @@ function getRandomAddres() {
 
 const apps = [
   {
+    id: '1hive',
+    name: '1Hive Honey Faucet',
+    context: '1hive',
+  },
+  {
     id: 'Gitcoin',
     name: 'Gitcoin',
     context: 'Gitcoin',
@@ -28,19 +33,44 @@ const apps = [
     context: 'idchain',
   },
   {
+    id: 'RabbitHole',
+    name: 'RabbitHole',
+    context: 'RabbitHole',
+  },
+  {
+    id: 'sahm',
+    name: 'Sahm',
+    context: 'idchain',
+  },
+  {
     id: 'ethereum',
     name: 'Burn Signal',
     context: 'ethereum',
   },
   {
-    id: 'DollarForEveryone',
-    name: 'Hedge for Humanity',
-    context: 'DollarForEveryone',
-  },
-  {
     id: 'clr.fund',
     name: 'clr.fund',
     context: 'clr.fund',
+  },
+  {
+    id: 'Lumos',
+    name: 'Lumos',
+    context: 'Lumos',
+  },
+  {
+    id: 'top-up-gifter',
+    name: 'Top-up Gifter',
+    context: 'top-up-gifter',
+  },
+  {
+    id: 'TheEther',
+    name: 'The Ether',
+    context: 'TheEther',
+  },
+  {
+    id: 'Discord',
+    name: 'Discord Unique Bot',
+    context: 'Discord',
   },
 ];
 
@@ -115,14 +145,26 @@ describe('Linking with account', () => {
       });
 
       it('should be listed on apps screen', async () => {
-        await waitFor(
-          element(by.id(`app-${app.id}`))
-        ).toBeVisible().whileElement(by.id('appsList')).scroll(50, 'down');
+        await waitFor(element(by.id(`app-${app.id}`)))
+          .toBeVisible()
+          .whileElement(by.id('appsList'))
+          .scroll(100, 'down');
         await expect(element(by.text(app.name))).toExist();
       });
 
       it('should not be linked', async () => {
         await expect(element(by.id(`Linked_${app.id}`))).toNotExist();
+      });
+    });
+  });
+
+  apps.forEach((app) => {
+    describe(`App ${app.name}`, () => {
+      beforeAll(async () => {
+        await navigateHome();
+        await expectHomescreen();
+        await element(by.id('appsBtn')).tap();
+        await expectAppsScreen();
       });
 
       it(`should successfully link ${app.name}`, async () => {
