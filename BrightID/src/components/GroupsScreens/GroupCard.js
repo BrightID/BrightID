@@ -25,7 +25,7 @@ class GroupCard extends React.PureComponent<Props> {
         <View style={styles.waitingContainer}>
           <Text style={styles.waitingMessage}>
             {t('groups.text.waitingForMembers', {
-              list: notJoinedNames.join(` ${t('common.language.and')} `),
+              list: notJoinedNames.join(`, `),
             })}
           </Text>
         </View>
