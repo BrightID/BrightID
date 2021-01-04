@@ -1,0 +1,45 @@
+{
+  "testRunner": "jest",
+  "runnerConfig": "e2e/config.json",
+  "behavior": {
+    "init": {
+      "reinstallApp": true,
+      "launchApp": false,
+      "exposeGlobals": true
+    }
+  },
+  "configurations": {
+    "android.emu.debug": {
+      "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+      "build": "cd android && RN_SRC_EXT=e2e.js ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+      "type": "android.emulator",
+      "device": {
+        "avdName": "Pixel_2_XL_API_28"
+      }
+    },
+    "android.emu.release": {
+      "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",
+      "build": "cd android && RN_SRC_EXT=e2e.js ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
+      "type": "android.emulator",
+      "device": {
+        "avdName": "Pixel_2_XL_API_28"
+      }
+    },
+    "ios.sim.debug": {
+      "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/BrightID.app",
+      "build": "xcodebuild -workspace ios/BrightID.xcworkspace -scheme BrightID -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
+      "type": "ios.simulator",
+      "device": {
+        "type": "iPhone 12"
+      }
+    },
+    "ios.sim.release": {
+      "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/BrightID.app",
+      "build": "xcodebuild -workspace ios/BrightID.xcworkspace -scheme BrightID -configuration Release -sdk iphonesimulator -derivedDataPath ios/build",
+      "type": "ios.simulator",
+      "device": {
+        "type": "iPhone 12"
+      }
+    }
+  }
+}
