@@ -74,7 +74,7 @@ const apps = [
   },
 ];
 
-describe('Linking without account', () => {
+describe('Without account', () => {
   it('should ignore deep link when running in background', async () => {
     // sends app to background and simulate being pulled to foreground again by clicking on deeplink
     await device.sendToHome();
@@ -95,7 +95,7 @@ describe('Linking without account', () => {
   });
 });
 
-describe('Linking with account', () => {
+describe('With account', () => {
   let yes, no;
 
   beforeAll(async () => {
@@ -135,61 +135,68 @@ describe('Linking with account', () => {
     await expectAppsScreen();
   });
 
-  apps.forEach((app) => {
-    describe(`App ${app.name}`, () => {
-      beforeAll(async () => {
-        await navigateHome();
-        await expectHomescreen();
-        await element(by.id('appsBtn')).tap();
-        await expectAppsScreen();
-      });
-
-      it('should be listed on apps screen', async () => {
-        await waitFor(element(by.id(`app-${app.id}`)))
-          .toBeVisible()
-          .whileElement(by.id('appsList'))
-          .scroll(100, 'down');
-        await expect(element(by.text(app.name))).toExist();
-      });
-
-      it('should not be linked', async () => {
-        await expect(element(by.id(`Linked_${app.id}`))).toNotExist();
-      });
+  describe('Apps screen', () => {
+    beforeAll(async () => {
+      await navigateHome();
+      await expectHomescreen();
+      await element(by.id('appsBtn')).tap();
+      await expectAppsScreen();
     });
+
+    for (const app of apps) {
+      describe(`App ${app.name}`, () => {
+        it('should be listed on apps screen', async () => {
+          await waitFor(element(by.id(`app-${app.id}`)))
+            .toBeVisible()
+            .whileElement(by.id('appsList'))
+            .scroll(100, 'down');
+          await expect(element(by.text(app.name))).toExist();
+        });
+
+        it('should not be linked', async () => {
+          await expect(element(by.id(`Linked_${app.id}`))).toNotExist();
+        });
+      });
+    }
   });
 
-  apps.forEach((app) => {
-    describe(`App ${app.name}`, () => {
-      beforeAll(async () => {
-        await navigateHome();
-        await expectHomescreen();
-        await element(by.id('appsBtn')).tap();
-        await expectAppsScreen();
-      });
-
-      it(`should successfully link ${app.name}`, async () => {
-        await device.sendToHome();
-        await device.launchApp({
-          newInstance: false,
-          url: `brightid://link-verification/http:%2f%2ftest.brightid.org/${
-            app.context
-          }/${getRandomAddres()}`,
-        });
-        // Alert should be open
-        await expect(element(by.text('Link App?'))).toBeVisible();
-        await element(by.text(yes)).tap();
-        await expectAppsScreen();
-        // Success alert should pop up when operation confirms. Wait up to 30 seconds.
-        await waitFor(element(by.text('Success')))
-          .toBeVisible()
-          .withTimeout(30000);
-        // dismiss success alert
-        await element(by.text('OK')).tap();
-        // should show apps screen
-        await expectAppsScreen();
-        // app context should now be linked
-        expect(element(by.id(`Linked_${app.id}`))).toBeVisible();
-      });
+  describe('Link', () => {
+    beforeAll(async () => {
+      await navigateHome();
+      await expectHomescreen();
+      await element(by.id('appsBtn')).tap();
+      await expectAppsScreen();
+      await element(by.id('appsList')).scrollTo('top');
     });
+
+    for (const app of apps) {
+      describe(`App ${app.name}`, () => {
+        it(`should successfully link ${app.name}`, async () => {
+          await device.sendToHome();
+          await device.launchApp({
+            newInstance: false,
+            url: `brightid://link-verification/http:%2f%2ftest.brightid.org/${
+              app.context
+            }/${getRandomAddres()}`,
+          });
+          // Alert should be open
+          await expect(element(by.text('Link App?'))).toBeVisible();
+          await element(by.text(yes)).tap();
+          await expectAppsScreen();
+          // Success alert should pop up when operation confirms. Wait up to 30 seconds.
+          await waitFor(element(by.text('Success')))
+            .toBeVisible()
+            .withTimeout(30000);
+          // dismiss success alert
+          await element(by.text('OK')).tap();
+          // app context should now be linked
+          await waitFor(element(by.id(`Linked_${app.id}`)))
+            .toBeVisible()
+            .whileElement(by.id('appsList'))
+            .scroll(50, 'down');
+          // await expect(element(by.id(`Linked_${app.id}`))).toBeVisible();
+        });
+      });
+    }
   });
 });
