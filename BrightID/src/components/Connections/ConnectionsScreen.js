@@ -4,16 +4,14 @@ import React, { useMemo } from 'react';
 import { StyleSheet, View, StatusBar, FlatList } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { createSelector } from '@reduxjs/toolkit';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import { useNavigation } from '@react-navigation/native';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
+import { connectionsSelector } from '@/utils/connectionsSelector';
 import { ORANGE, WHITE } from '@/theme/colors';
-import { toSearchString } from '@/utils/strings';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { sortConnectionsBy } from '@/utils/sorting';
 import ConnectionCard from './ConnectionCard';
 
 /**
@@ -36,38 +34,13 @@ const renderItem = ({ item, index }) => {
   return <ConnectionCard {...item} />;
 };
 
-/** Selectors */
-const searchParamSelector = (state) => state.connections.searchParam;
-const connectionsSelector = (state) => state.connections.connections;
-const connectionsSortSelector = (state) => state.connections.connectionsSort;
-const filtersSelector = (state) => state.connections.filters;
-
-const filterConnectionsSelector = createSelector(
-  [
-    connectionsSelector,
-    searchParamSelector,
-    filtersSelector,
-    connectionsSortSelector,
-  ],
-  (connections, searchParam, filters, connectionsSort) => {
-    const searchString = toSearchString(searchParam);
-    return connections
-      .filter(
-        (item) =>
-          toSearchString(`${item.name}`).includes(searchString) &&
-          filters.includes(item.level),
-      )
-      .sort(sortConnectionsBy(connectionsSort));
-  },
-);
-
 /** Main Component */
 
 export const ConnectionsScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const connections = useSelector((state) => filterConnectionsSelector(state));
+  const connections = useSelector(connectionsSelector);
   const { t } = useTranslation();
 
   const handleNewConnection = () => {

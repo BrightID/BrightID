@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 import { INVITE_ACTIVE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { BLACK } from '@/theme/colors';
@@ -18,13 +18,11 @@ import {
   pendingConnection_states,
   selectAllPendingConnections,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
-import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnectionScreen';
 import {
   toggleDrawer,
   resetHome,
   resetNotifications,
 } from '@/NavigationService';
-import { headerOptions } from './helpers';
 import { HomeDrawer } from './HomeDrawer';
 
 /** SELECTORS */
@@ -131,21 +129,13 @@ const Stack = createStackNavigator();
 
 const Home = () => {
   /* /!\ Moved 'RecoveringConnection' options to the component in order to access to useTranslation() */
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   return (
     <>
       <Stack.Screen
         name="Home"
         component={HomeDrawer}
         options={homeScreenOptions}
-      />
-      <Stack.Screen
-        name="RecoveringConnection"
-        component={RecoveringConnectionScreen}
-        options={{
-          ...headerOptions,
-          title: t('restore.header.accountRecovery'),
-        }}
       />
     </>
   );

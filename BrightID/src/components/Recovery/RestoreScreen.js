@@ -1,6 +1,6 @@
 // @flow
 
-import * as React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,93 +11,63 @@ import {
   Alert,
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
-import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
-import emitter from '@/emitter';
-import { ORANGE, BLUE, WHITE, GREY, LIGHT_BLACK } from '@/theme/colors';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { ORANGE, BLACK, WHITE, DARKER_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_OS } from '@/utils/deviceConstants';
-import { recoverData } from './helpers';
-
-type State = {
-  pass: string,
-  completed: number,
-  total: number,
-  restoreInProgress: boolean,
-};
+import { recoverData } from './thunks/recoveryThunks';
 
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
-class RestoreScreen extends React.Component<Props, State> {
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    pass: '',
-    completed: 0,
-    total: 0,
-    restoreInProgress: false,
-  };
+const RestoreScreen = () => {
+  const [pass, setPass] = useState('');
+  const [restoreInProgress, setRestoreInProgress] = useState(false);
 
-  componentDidMount() {
-    const { navigation } = this.props;
-    navigation.addListener('focus', () => {
-      emitter.on('restoreProgress', this.updateRestoreStatus);
-      emitter.on('restoreTotal', this.updateRestoreTotal);
-    });
+  const { t } = useTranslation();
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
 
-    navigation.addListener('blur', () => {
-      emitter.off('restoreProgress', this.updateRestoreStatus);
-      emitter.off('restoreTotal', this.updateRestoreTotal);
-    });
-  }
-
-  updateRestoreStatus = (num: number) => {
-    this.setState(({ completed }) => ({
-      completed: completed + num,
-    }));
-  };
-
-  updateRestoreTotal = (num: number) => {
-    this.setState({
-      total: num,
-    });
-  };
-
-  restoreCompleted = async () => {
-    const { navigation, t } = this.props;
-    this.setState({
-      restoreInProgress: false,
-    });
+  const restoreCompleted = async () => {
     Alert.alert(
       t('common.alert.info'),
       t('restore.alert.text.restoreSuccess'),
-      [
-        {
-          text: t('common.alert.ok'),
-          onPress: () => navigation.navigate('Home'),
-        },
-      ],
+      [{ text: t('common.alert.ok') }],
     );
   };
 
-  resetState = () => {
-    this.setState({
-      restoreInProgress: false,
-      completed: 0,
-      total: 0,
-      pass: '',
-    });
+  const resetState = () => {
+    setRestoreInProgress(false);
+    setPass('');
   };
 
-  restore = () => {
-    const { navigation, t } = this.props;
-    this.setState({ restoreInProgress: true });
-    recoverData(this.state.pass)
+  const skip = () => {
+    setPass('');
+    restore();
+  };
+
+  const restore = () => {
+    setRestoreInProgress(true);
+
+    dispatch(recoverData(pass))
       .then((result) => {
-        result ? this.restoreCompleted() : this.resetState();
+        result ? restoreCompleted() : resetState();
       })
       .catch((err) => {
-        this.resetState();
+        resetState();
         err instanceof Error ? console.warn(err.message) : console.log(err);
+        if (err instanceof Error && err.message === 'bad password') {
+          Alert.alert(
+            t('common.alert.error'),
+            t('common.alert.text.incorrectPassword'),
+            [
+              {
+                text: t('common.alert.ok'),
+              },
+            ],
+          );
+        }
         if (err instanceof Error && err.message === 'bad sigs') {
           Alert.alert(
             t('restore.alert.title.notTrusted'),
@@ -113,68 +83,68 @@ class RestoreScreen extends React.Component<Props, State> {
       });
   };
 
-  renderButtonOrSpinner = () => {
-    const { t } = this.props;
-
-    return !this.state.restoreInProgress ? (
-      <TouchableOpacity
-        style={styles.startRestoreButton}
-        onPress={this.restore}
-      >
-        <Text style={styles.buttonInnerText}>
-          {t('restore.button.startRestore')}
-        </Text>
-      </TouchableOpacity>
-    ) : (
-      <View style={styles.loader}>
-        <Text style={styles.textInfo}>{t('restore.text.downloadingData')}</Text>
-        {this.state.total !== 0 && (
-          <Text style={styles.textInfo}>
-            {t('common.text.progress', {
-              completed: this.state.completed,
-              total: this.state.total,
-            })}
-          </Text>
-        )}
-        <Spinner isVisible={true} size={97} type="Wave" color={BLUE} />
-      </View>
-    );
-  };
-
-  render() {
-    const { pass } = this.state;
-    const { t } = this.props;
-    return (
-      <>
-        <View style={styles.orangeTop} />
-        <Container style={styles.container} behavior="padding">
-          <View style={styles.textInputContainer}>
-            <Text style={styles.textInfo}>
-              {t('restore.text.enterPassword')}
+  return (
+    <>
+      <View style={styles.orangeTop} />
+      <Container style={styles.container} behavior="padding">
+        {!restoreInProgress ? (
+          <>
+            <View style={styles.textInputContainer}>
+              <Text style={styles.textInfo}>
+                {t('restore.text.enterPassword')}
+              </Text>
+              <TextInput
+                onChangeText={setPass}
+                value={pass}
+                placeholder="Type your password"
+                placeholderTextColor={DARKER_GREY}
+                style={styles.textInput}
+                autoCorrect={false}
+                textContentType="password"
+                autoCompleteType="password"
+                underlineColorAndroid="transparent"
+                secureTextEntry={true}
+              />
+            </View>
+            <Text style={styles.skipInfo}>
+              {t('restore.text.skipLoadingBackup')}
             </Text>
-            <TextInput
-              // eslint-disable-next-line no-shadow
-              onChangeText={(pass) => this.setState({ pass })}
-              value={pass}
-              placeholder={t('common.placeholder.password')}
-              placeholderTextColor={GREY}
-              style={styles.textInput}
-              autoCorrect={false}
-              textContentType="password"
-              autoCompleteType="password"
-              underlineColorAndroid="transparent"
-              secureTextEntry={true}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.submitButton,
+                  pass.length < 1 ? { opacity: 0.5 } : {},
+                ]}
+                onPress={restore}
+                accessibilityLabel="submit"
+                disabled={pass.length < 1}
+              >
+                <Text style={styles.submitText}>Submit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.skipButton}
+                onPress={skip}
+                accessibilityLabel="skip"
+              >
+                <Text style={styles.skipText}>Skip</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        ) : (
+          <View style={styles.loading}>
+            <Spinner
+              isVisible={true}
+              size={DEVICE_LARGE ? 60 : 45}
+              type="Wave"
+              color={ORANGE}
             />
+            <Text style={styles.textInfo}>Downloading data ...</Text>
           </View>
-
-          <View style={styles.buttonContainer}>
-            {this.renderButtonOrSpinner()}
-          </View>
-        </Container>
-      </>
-    );
-  }
-}
+        )}
+      </Container>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   orangeTop: {
@@ -190,7 +160,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     borderTopLeftRadius: 58,
-    borderTopRightRadius: 58,
     marginTop: -58,
     zIndex: 10,
     overflow: 'hidden',
@@ -199,70 +168,75 @@ const styles = StyleSheet.create({
     marginTop: 44,
     justifyContent: 'center',
     alignItems: 'center',
+    width: '100%',
   },
-  buttonContainer: {
-    marginTop: 44,
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-  },
+
   textInfo: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: fontSize[18],
-    color: LIGHT_BLACK,
-    margin: 18,
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[16],
+    color: BLACK,
+    margin: DEVICE_LARGE ? 18 : 16,
   },
   textInput: {
-    fontFamily: 'ApexNew-Light',
-    fontSize: fontSize[30],
-    color: LIGHT_BLACK,
-    fontWeight: '300',
-    fontStyle: 'normal',
-    letterSpacing: 0,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: GREY,
-    marginTop: 22,
-    width: 275,
-    textAlign: 'left',
-    paddingBottom: 5,
-  },
-  buttonInfoText: {
-    fontFamily: 'ApexNew-Book',
-    color: GREY,
+    fontFamily: 'Poppins-Regular',
     fontSize: fontSize[14],
-    width: 298,
+    color: DARKER_GREY,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: DARKER_GREY,
+    marginVertical: DEVICE_LARGE ? 60 : 50,
+    width: '70%',
     textAlign: 'center',
+    paddingBottom: DEVICE_LARGE ? 12 : 10,
   },
-  startRestoreButton: {
-    backgroundColor: BLUE,
-    width: 300,
+  loading: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 13,
-    paddingBottom: 12,
-    marginTop: 22,
+    flex: 1,
   },
-  buttonInnerText: {
-    fontFamily: 'ApexNew-Medium',
-    color: WHITE,
-    fontWeight: '600',
-    fontSize: fontSize[18],
-  },
-  button: {
-    width: 300,
-    borderWidth: 1,
-    borderColor: BLUE,
-    paddingTop: 13,
-    paddingBottom: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
+  skipInfo: {
+    fontFamily: 'Poppins-Regular',
+    width: '70%',
+    textAlign: 'center',
+    color: DARKER_GREY,
     marginTop: 10,
-    marginBottom: 10,
   },
-  loader: {
-    justifyContent: 'center',
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 22,
+    marginTop: DEVICE_LARGE ? 40 : 32,
+  },
+  submitButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: DEVICE_LARGE ? 120 : 100,
+    height: DEVICE_LARGE ? 46 : 40,
+    borderRadius: 60,
+    backgroundColor: ORANGE,
+    shadowColor: BLACK,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 4,
+  },
+  submitText: {
+    fontFamily: 'Poppins-Bold',
+    color: WHITE,
+    fontSize: fontSize[16],
+  },
+  skipButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: ORANGE,
+    borderWidth: 1,
+    borderRadius: 60,
+    width: DEVICE_LARGE ? 120 : 100,
+    height: DEVICE_LARGE ? 46 : 40,
+    marginLeft: DEVICE_LARGE ? 20 : 16,
+  },
+  skipText: {
+    fontFamily: 'Poppins-Medium',
+    color: ORANGE,
+    fontSize: fontSize[16],
   },
 });
 
-export default connect()(withTranslation()(RestoreScreen));
+export default RestoreScreen;

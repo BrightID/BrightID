@@ -2,12 +2,7 @@
 
 import { create, ApiSauceInstance, ApiResponse } from 'apisauce';
 import nacl from 'tweetnacl';
-import stringify from 'fast-json-stable-stringify';
-import {
-  strToUint8Array,
-  uInt8ArrayToB64,
-  b64ToUrlSafeB64,
-} from '@/utils/encoding';
+import { b64ToUrlSafeB64 } from '@/utils/encoding';
 import store from '@/store';
 
 let recoveryUrl = 'https://recovery.brightid.org';
@@ -58,58 +53,6 @@ class BackupService {
     BackupService.throwOnError(res);
   }
 
-  async getSig() {
-    try {
-      let { publicKey } = store.getState().recoveryData;
-      let res = await this.profileApi.get(
-        `/profile/download/${b64ToUrlSafeB64(publicKey)}`,
-      );
-      BackupService.throwOnError(res);
-      return res.data.data;
-    } catch (err) {
-      console.warn(err);
-    }
-  }
-
-  async setSig({
-    id,
-    timestamp,
-    signingKey,
-  }: {
-    id: string,
-    timestamp: string,
-    signingKey: string,
-  }) {
-    try {
-      let {
-        keypair: { secretKey },
-        user: { id: signer },
-      } = store.getState();
-
-      let op = {
-        name: 'Set Signing Key',
-        id,
-        signingKey,
-        timestamp,
-        v: 5,
-      };
-      const message = stringify(op);
-      let sig = uInt8ArrayToB64(
-        nacl.sign.detached(strToUint8Array(message), secretKey),
-      );
-
-      let data = { signer, id, sig };
-
-      let res = await this.profileApi.post(`/profile/upload`, {
-        data,
-        uuid: b64ToUrlSafeB64(signingKey),
-      });
-      BackupService.throwOnError(res);
-      console.log('setSig');
-    } catch (err) {
-      console.warn(err);
-    }
-  }
 }
 
 const backupService = new BackupService();

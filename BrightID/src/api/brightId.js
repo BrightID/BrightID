@@ -434,6 +434,12 @@ class NodeApi {
     return res.data.data;
   }
 
+  async getConnections(id: string, direction: string) {
+    let res = await this.api.get(`/users/${id}/connections/${direction}`);
+    NodeApi.throwOnError(res);
+    return res.data.data.connections;
+  }
+
   async getOperationState(opHash: string) {
     let res = await this.api.get(`/operations/${opHash}`);
     if (res.status === 404) {

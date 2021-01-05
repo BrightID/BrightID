@@ -69,7 +69,7 @@
     "text": {
       "noApps": "No Apps",
       "notSponsored": "You're not sponsored.\nPlease find an app below to sponsor you.",
-      "pendingLink": "Linking your account in {{context}}\n to your BrightID ..."
+      "pendingLink": "Linking your account in {{context}} to your BrightID…"
     }
   },
   "backup": {
@@ -84,7 +84,8 @@
       "startBackup": "Start Backup"
     },
     "header": {
-      "backup": "Backup"
+      "backup": "Backup",
+      "trustedConnections": "Trusted connections"
     },
     "placeholder": {
       "confirmPassword": "Confirm Password"
@@ -124,7 +125,8 @@
         "trustedSigned": "One of your trusted connections signed your request"
       },
       "title": {
-        "lostKeys": "We've lost the BrightID keypair from the device"
+        "lostKeys": "We've lost the BrightID keypair from the device",
+        "pleaseConfirm": "Please Confirm"
       },
       "yes": "Yes"
     },
@@ -138,6 +140,9 @@
       "message": "We need your permission to use your camera",
       "ok": "Ok",
       "title": "Permission to use camera"
+    },
+    "language": {
+      "and": "and"
     },
     "photoActionSheet": {
       "choosePhoto": "Choose From Library",
@@ -154,7 +159,7 @@
     },
     "text": {
       "progress": "{{completed}}/{{total}} completed",
-      "uploadingData": "Uploading encrypted data to backup server ..."
+      "uploadingData": "Uploading encrypted data to backup server…"
     }
   },
   "connectionDetails": {
@@ -174,7 +179,7 @@
     },
     "tags": {
       "connectedAt": "Connected {{date}}",
-      "loading": "Loading..."
+      "loading": "Loading…"
     },
     "text": {
       "level": "How well do you know {{name}}?",
@@ -234,7 +239,7 @@
       "website": "Website"
     },
     "text": {
-      "meet": "Join a BrightID verification party!",
+      "meet": "Join a BrightID connection party!",
       "openSource": "open source!",
       "weAre": "We are "
     },
@@ -335,6 +340,7 @@
       "leaveGroup": "Leave group"
     },
     "header": {
+      "groups": "Groups",
       "inviteList": "Invite List",
       "newGroup": "New Group"
     },
@@ -347,6 +353,10 @@
       "cancel": "Cancel",
       "dismissMember": "Dismiss from group"
     },
+    "state": {
+      "creatingGroup": "creating the group",
+      "uploadingGroupPhoto": "uploading group photo"
+    },
     "tag": {
       "primaryGroup": "Primary Group"
     },
@@ -354,7 +364,7 @@
       "noEligibleConnection": "No existing connections are eligible for this group, please come back later..",
       "noGroups": "<text>Get verified faster</text><text>by creating and</text><text>joining groups</text>",
       "noGroupsMatchSearch": "No group matches your search",
-      "noMembers": "No known members, invite some...",
+      "noMembers": "No known members, invite some…",
       "waitingForMembers": "Waiting for {{list}} to join"
     }
   },
@@ -395,7 +405,8 @@
     "alert": {
       "text": {
         "failureAcceptGroupInvite": "Failed to join the group",
-        "rejectGroupInvite": "Are you sure you want to reject joining this group?"
+        "rejectGroupInvite": "Are you sure you want to reject joining this group?",
+        "successGroupInvite": "You joined {{groupName}}"
       },
       "title": {
         "failureRejectGroupInvite": "Failed to reject the invite",
@@ -420,7 +431,7 @@
     },
     "text": {
       "noGroupInvites": "You have no group invites..",
-      "noMiscellaneous": "Nothing to see here ...",
+      "noMiscellaneous": "Nothing to see here…",
       "noPendingConnections": "You have no pending connections.."
     }
   },
@@ -516,13 +527,15 @@
     "alert": {
       "text": {
         "codeGroup": "This QR code is designed for many people to connect simultaneously.",
-        "codeSingle": "This QR code can be used to connect with a single user before it expires."
+        "codeSingle": "This QR code can be used to connect with a single user before it expires.",
+        "shareLinkSingle": "Share this link with one friend",
+        "shareLinkGroup": "Share this link",
+        "universalLink": "Universal Link"
       },
       "title": {
         "codeGroup": "Group code",
-        "codeSingle": "Singe-use code"
-      },
-      "universalLink": "Universal Link"
+        "codeSingle": "Single-use code"
+      }
     },
     "button": {
       "copyLink": "Copy Link",
@@ -530,13 +543,14 @@
       "showCode": "Show your QR code"
     },
     "header": {
-      "connections": "{{count}} / 30 Connections"
+      "connections": "{{count}} / 30 Connections",
+      "connections_plural": "{{count}} / 30 Connections"
     },
     "label": {
       "connectionType": "Connection Type:"
     },
     "text": {
-      "canAlso": "Or you can also...",
+      "canAlso": "Or you can also…",
       "codeGroup": "Group code",
       "codeSingle": "Single-use code",
       "confirmConnections": "Confirm Connections",
@@ -552,7 +566,9 @@
       "title": "Recovery Code"
     },
     "text": {
-      "askTrustedConnections": "Ask your trusted connections to scan this code."
+      "askTrustedConnections": "Please show this QR code to your trusted connections",
+      "signatures": "{{count}} / 2 signatures",
+      "additionalInfo": "Your trusted connections will need to scan this to help you recover your BrightID"
     }
   },
   "restore": {
@@ -560,7 +576,8 @@
       "text": {
         "notTrusted": "One of your friends is not in your list of trusted connections",
         "requestRecovering": "Your request to help recovering this account submitted successfully!",
-        "restoreSuccess": "Your account recovered successfully!"
+        "restoreSuccess": "Your account recovered successfully!",
+        "restoreConfirm": "Is {{name}} the account you are helping to recover?"
       },
       "title": {
         "notTrusted": "Uh Oh"
@@ -569,14 +586,22 @@
     "button": {
       "startRestore": "Start Restore"
     },
+    "emptyList": {
+      "text": {
+        "downloadingData": "Downloading recovery connection data",
+        "nobodyHasChosen": "Unable to recover connection...\nThey did not set you as recovery"
+      }
+    },
     "header": {
       "accountRecovery": "Account Recovery"
     },
     "text": {
       "chooseConnectionToHelp": "Please select the connection whose account you are helping to recover.",
-      "downloadingData": "Downloading data from backup server ...",
-      "enterPassword": "Enter a password that you encrypted your backup data with:",
-      "noConnections": "No connections..."
+      "downloadingData": "Downloading data from backup server…",
+      "enterPassword": "Please enter your password",
+      "noConnections": "No connections…",
+      "skipLoadingBackup": "Without the password you can still recover your BrightID but the name & photo of your connections & groups will not be available.",
+      "skipLink": "skip"
     },
     "title": {
       "chooseConnection": "Choose Connection"
@@ -600,7 +625,7 @@
       "name": "Name"
     },
     "text": {
-      "creatingAccount": "Creating Bright ID...",
+      "creatingAccount": "Creating Bright ID…",
       "infoNotShared": "Your name and photo will never be shared with apps or stored on servers",
       "whatsYouName": "What do your friends know you by?"
     }

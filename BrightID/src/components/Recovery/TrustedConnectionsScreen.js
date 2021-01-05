@@ -1,6 +1,6 @@
 // @flow
 
-import * as React from 'react';
+import React from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,14 +9,16 @@ import {
   Alert,
   FlatList,
 } from 'react-native';
-import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
+import { connectionsSelector } from '@/utils/connectionsSelector';
 import { ORANGE, BLUE, WHITE, LIGHT_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import EmptyList from '@/components/Helpers/EmptyList';
 import TrustedConnectionCard from './TrustedConnectionCard';
-import { setTrustedConnections } from './helpers';
+import { setTrustedConnections } from './thunks/recoveryThunks';
 
 /**
  * Backup screen of BrightID
@@ -32,101 +34,84 @@ const getItemLayout = (data, index) => ({
   index,
 });
 
-class TrustedConnectionsScreen extends React.Component<Props> {
-  filterConnections = () => {
-    const { connections, searchParam } = this.props;
-    return connections
-      .filter((item) =>
-        `${item.name}`
-          .toLowerCase()
-          .replace(/\s/g, '')
-          .includes(searchParam.toLowerCase().replace(/\s/g, '')),
-      )
-      .filter((item) => item.status === 'verified');
-  };
+const TrustedConnectionsScreen = () => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
 
-  cardIsSelected = (card) => {
-    const { trustedConnections } = this.props;
-    return trustedConnections.includes(card.id);
-  };
+  const connections = useSelector(connectionsSelector);
 
-  renderConnection = ({ item }) => (
-    <TrustedConnectionCard
-      {...item}
-      selected={this.cardIsSelected(item)}
-      style={styles.connectionCard}
-    />
+  const trustedConnections = useSelector(
+    (state) => state.connections.trustedConnections,
   );
 
-  navigateToBackup = async () => {
-    let { navigation, trustedConnections, t } = this.props;
-    if (trustedConnections.length < 3) {
-      Alert.alert(
-        t('common.alert.error'),
-        t('backup.alert.text.needThreeTrusted'),
-      );
-    } else {
-      setTrustedConnections()
-        .then((success) => {
-          if (success) navigation.navigate('Backup');
-        })
-        .catch((err) => {
-          if (err.message === `trusted connections can't be overwritten`) {
-            navigation.navigate('Backup');
-          }
-          console.warn(err.message);
-        });
+  const renderConnection = ({ item }) => (
+    <TrustedConnectionCard {...item} style={styles.connectionCard} />
+  );
+
+  const navigateToBackup = async () => {
+    try {
+      if (trustedConnections.length < 3) {
+        Alert.alert(
+          t('common.alert.error'),
+          t('backup.alert.text.needThreeTrusted'),
+        );
+      } else {
+        await dispatch(setTrustedConnections());
+
+        navigation.navigate('Backup');
+      }
+    } catch (err) {
+      if (err.message === `trusted connections can't be overwritten`) {
+        navigation.navigate('Backup');
+      }
+      console.warn(err.message);
     }
   };
 
-  render() {
-    const { t } = this.props;
-    const connections = this.filterConnections();
-
-    return (
-      <>
-        <View style={styles.orangeTop} />
-        <View style={styles.container}>
-          <View style={styles.mainContainer}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.infoText}>
-                {t('backup.text.chooseTrustedConnections')}
-              </Text>
-            </View>
-            <View style={styles.mainContainer}>
-              <FlatList
-                style={styles.connectionsContainer}
-                contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-                data={connections}
-                keyExtractor={({ id }, index) => id + index}
-                renderItem={this.renderConnection}
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                getItemLayout={getItemLayout}
-                ListEmptyComponent={
-                  <EmptyList
-                    iconType="account-off-outline"
-                    title={t('backup.text.noConnections')}
-                  />
-                }
-              />
-            </View>
+  return (
+    <>
+      <View style={styles.orangeTop} />
+      <View style={styles.container}>
+        <View style={styles.mainContainer}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.infoText}>
+              {t('backup.text.chooseTrustedConnections')}
+            </Text>
           </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              onPress={this.navigateToBackup}
-              style={styles.nextButton}
-            >
-              <Text style={styles.buttonInnerText}>
-                {t('backup.button.next')}
-              </Text>
-            </TouchableOpacity>
+          <View style={styles.mainContainer}>
+            <FlatList
+              style={styles.connectionsContainer}
+              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+              data={connections}
+              keyExtractor={({ id }, index) => id + index}
+              renderItem={renderConnection}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+              getItemLayout={getItemLayout}
+              ListEmptyComponent={
+                <EmptyList
+                  iconType="account-off-outline"
+                  title={t('backup.text.noConnections')}
+                />
+              }
+            />
           </View>
         </View>
-      </>
-    );
-  }
-}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={navigateToBackup}
+            style={styles.nextButton}
+          >
+            <Text style={styles.buttonInnerText}>
+              {t('backup.button.next')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   orangeTop: {
@@ -154,7 +139,7 @@ const styles = StyleSheet.create({
     width: '96.7%',
   },
   emptyText: {
-    fontFamily: 'ApexNew-Book',
+    fontFamily: 'Poppins-Bold',
     fontSize: fontSize[20],
   },
   titleContainer: {
@@ -207,7 +192,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ connections, user }) => ({
-  ...user,
-  ...connections,
-}))(withTranslation()(TrustedConnectionsScreen));
+export default TrustedConnectionsScreen;

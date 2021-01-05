@@ -1,86 +1,120 @@
 // @flow
 
-import * as React from 'react';
+import React, { useCallback, useState } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
-import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import Spinner from 'react-native-spinkit';
+import { useSelector } from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit';
+import { useTranslation } from 'react-i18next';
+import { useRoute, useFocusEffect } from '@react-navigation/native';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { ORANGE, WHITE, LIGHT_GREY, BLUE } from '@/theme/colors';
+import { connectionsSelector } from '@/utils/connectionsSelector';
+import api from '@/api/brightId';
+import { ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import SearchConnections from '../Connections/SearchConnections';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
 
-const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
-const ITEM_MARGIN = DEVICE_LARGE ? 11.8 : 6;
+const ITEM_HEIGHT = DEVICE_LARGE ? 102 : 92;
 
 const getItemLayout = (data, index) => ({
-  length: ITEM_HEIGHT + ITEM_MARGIN,
-  offset: (ITEM_HEIGHT + ITEM_MARGIN) * index,
+  length: ITEM_HEIGHT,
+  offset: ITEM_HEIGHT * index,
   index,
 });
 
-class RecoveringConnectionScreen extends React.Component<Props> {
-  filterConnections = () => {
-    const { connections, searchParam } = this.props;
-    return connections
-      .filter((item) =>
-        `${item.name}`
-          .toLowerCase()
-          .replace(/\s/g, '')
-          .includes(searchParam.toLowerCase().replace(/\s/g, '')),
-      )
-      .filter((item) => item.status === 'verified');
-  };
+const recoveryConnectionSelector = createSelector(
+  connectionsSelector,
+  (_, recoveryIds) => recoveryIds,
+  (connections, recoveryIds) => {
+    return connections.filter((conn) => recoveryIds.includes(conn.id));
+  },
+);
 
-  renderConnection = ({ item }) => (
-    <RecoveringConnectionCard
-      {...item}
-      recoveryRequestCode={this.props.route.params?.recoveryRequestCode}
-      navigation={this.props.navigation}
-      style={styles.recoveringConnectionCard}
-    />
+const RecoveringConnectionScreen = () => {
+  const [recoveryIds, setRecoveryIds] = useState([]);
+
+  const connections = useSelector((state) =>
+    recoveryConnectionSelector(state, recoveryIds),
   );
 
-  render() {
-    const { navigation, t } = this.props;
-    const connections = this.filterConnections();
+  const id = useSelector((state) => state.user.id);
 
+  const { t } = useTranslation();
+  const route = useRoute();
+
+  const [uploadingData, setUploadingData] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const renderConnection = ({ item, index }) => {
+    item.index = index;
     return (
-      <>
-        <View style={styles.orangeTop} />
-        <View style={styles.container}>
+      <RecoveringConnectionCard
+        {...item}
+        aesKey={route.params?.aesKey}
+        setUploadingData={setUploadingData}
+      />
+    );
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      setLoading(true);
+      api.getConnections(id, 'inbound').then((connections) => {
+        const recoveryIds = connections
+          .filter((conn) => conn.level === 'recovery')
+          .map((conn) => conn.id);
+        setRecoveryIds(recoveryIds);
+        setLoading(false);
+      });
+    }, [id]),
+  );
+
+  return (
+    <>
+      <View style={styles.orangeTop} />
+      <View style={styles.container}>
+        {!uploadingData ? (
           <View style={styles.mainContainer}>
             <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>
-                {t('restore.title.chooseConnection')}
-              </Text>
               <Text style={styles.infoText}>
                 {t('restore.text.chooseConnectionToHelp')}
               </Text>
             </View>
-            <SearchConnections navigation={navigation} />
             <View style={styles.mainContainer}>
               <FlatList
                 style={styles.connectionsContainer}
                 contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
                 data={connections}
                 keyExtractor={({ id }, index) => id + index}
-                renderItem={this.renderConnection}
+                renderItem={renderConnection}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={
-                  <EmptyList title={t('restore.text.noConnections')} />
+                  <EmptyList
+                    title={
+                      loading
+                        ? t('restore.emptyList.text.downloadingData')
+                        : t('restore.emptyList.text.nobodyHasChosen')
+                    }
+                  />
                 }
                 getItemLayout={getItemLayout}
               />
             </View>
           </View>
-        </View>
-      </>
-    );
-  }
-}
+        ) : (
+          <View style={styles.mainContainer}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.infoText}>Uploading Shared Data</Text>
+            </View>
+            <Spinner size={DEVICE_LARGE ? 48 : 42} type="Wave" color={ORANGE} />
+          </View>
+        )}
+      </View>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   orangeTop: {
@@ -103,15 +137,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  emptyText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: fontSize[20],
-  },
   connectionsContainer: {
     flex: 1,
-    width: '96.7%',
-    borderTopWidth: 1,
-    borderTopColor: LIGHT_GREY,
+    width: '100%',
   },
   moreIcon: {
     marginRight: 16,
@@ -121,64 +149,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 6,
     backgroundColor: WHITE,
-    width: '96.7%',
+    width: '100%',
     marginBottom: 11,
   },
-  titleText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: fontSize[18],
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
-    textAlign: 'left',
-    textShadowColor: 'rgba(0, 0, 0, 0.09)',
-    textShadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    textShadowRadius: 4,
-    marginBottom: 6,
-  },
   infoText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: fontSize[14],
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
+    fontFamily: 'Poppins-Regular',
+    fontSize: fontSize[15],
     textAlign: 'center',
-  },
-  recoveringConnectionCard: {
-    marginBottom: 0,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0,
-    shadowRadius: 0,
-    borderBottomWidth: 1,
-    borderBottomColor: LIGHT_GREY,
-    width: '100%',
-  },
-  buttonContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  saveButton: {
-    backgroundColor: BLUE,
-    width: 300,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 13,
-    paddingBottom: 12,
-    marginTop: 9,
-    marginBottom: 30,
-  },
-  buttonInnerText: {
-    fontFamily: 'ApexNew-Medium',
-    color: WHITE,
-    fontWeight: '600',
-    fontSize: fontSize[18],
+    width: '80%',
   },
 });
 
-export default connect(({ connections, user }) => ({
-  ...connections,
-  ...user,
-}))(withTranslation()(RecoveringConnectionScreen));
+export default RecoveringConnectionScreen;

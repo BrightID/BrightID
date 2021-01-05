@@ -4,6 +4,7 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
 import Apps from './Apps';
+import Backup from './Backup';
 import Connections from './Connections';
 import Eula from './Eula';
 import Groups from './Groups';
@@ -26,6 +27,7 @@ const MainTabs = () => {
       {Notifications()}
       {Apps()}
       {Modals()}
+      {Backup()}
     </Stack.Navigator>
   );
 };

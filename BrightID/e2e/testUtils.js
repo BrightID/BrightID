@@ -5,7 +5,18 @@ import i18next from 'i18next';
 
 const testUserName = 'Vincent Vega';
 
+/*
+Accept EULA and proceed to Onboarding screen
+ */
+const acceptEula = async () => {
+  await expect(element(by.id('EulaScreen'))).toBeVisible();
+  await expect(element(by.id('acceptEulaBtn'))).toExist();
+  await element(by.id('acceptEulaBtn')).tap();
+  await expect(element(by.id('brightIdOnboard'))).toBeVisible();
+};
+
 const createBrightID = async (name: string = testUserName) => {
+  await acceptEula();
   await element(by.id('getStartedBtn')).tap();
   await element(by.id('editName')).tap();
   await element(by.id('editName')).replaceText(name);
@@ -251,6 +262,7 @@ const reconnect = async (connectionIndex: number, changeProfile: boolean) => {
 
 export {
   testUserName,
+  acceptEula,
   createBrightID,
   createFakeConnection,
   expectHomescreen,

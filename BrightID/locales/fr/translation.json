@@ -29,7 +29,7 @@
       "title": "Deux connexions"
     },
     "notification": {
-      "message": "Vous avez complété la tâche \"{{title}}\".",
+      "message": "Vous avez complété la tâche « {{title}} ».",
       "title": "Objectif rempli !"
     },
     "progress": {
@@ -54,22 +54,22 @@
       },
       "title": {
         "invalidContext": "Échec",
-        "linkApp": "Lier l'Application ?",
+        "linkApp": "Lier l'application ?",
         "linkFailure": "Échec",
         "linkSuccess": "Succès",
-        "linkingFailed": "Échec de la liaison de l'Application"
+        "linkingFailed": "Échec de la liaison de l'application"
       }
     },
     "tag": {
       "hasSponsorships": "Peut vous sponsoriser",
       "linked": "Lié",
-      "notVerifiedForApp": "Non-vérifié pour cette application",
+      "notVerifiedForApp": "Non vérifié pour cette application",
       "tryAgain": "Veuillez réessayer"
     },
     "text": {
-      "noApps": "Pas d'Application",
-      "notSponsored": "Vous n'êtes pas sponsorisé.\nVeuillez trouver une application ci-dessous pour vous sponsoriser",
-      "pendingLink": "Compte BrightID en cours de liaison avec {{context}} ..."
+      "noApps": "Pas d'application",
+      "notSponsored": "Vous n'êtes pas sponsorisé·e.\nVeuillez trouver une application ci-dessous pour vous sponsoriser.",
+      "pendingLink": "Compte BrightID en cours de liaison avec {{context}}…"
     }
   },
   "backup": {
@@ -81,17 +81,18 @@
     },
     "button": {
       "next": "Suivant",
-      "startBackup": "Commencer la Sauvegarde"
+      "startBackup": "Commencer la sauvegarde"
     },
     "header": {
-      "backup": "Sauvegarde"
+      "backup": "Sauvegarde",
+      "trustedConnections": "Trusted connections"
     },
     "placeholder": {
       "confirmPassword": "Confirmation de Mot de Passe"
     },
     "text": {
-      "chooseTrustedConnections": "Choisissez trois connexions de confiance ou plus pour sauvegarder votre BrightID",
-      "enterPassword": "Entrez un mot de passe avec lequel votre sauvegarde sera chiffrée",
+      "chooseTrustedConnections": "Choisissez trois connexions de confiance ou plus pour sauvegarder votre BrightID.",
+      "enterPassword": "Entrez un mot de passe avec lequel votre sauvegarde sera chiffrée :",
       "noConnections": "Aucune connexion"
     }
   },
@@ -99,7 +100,7 @@
     "accessibilityLabel": {
       "addPhoto": "Ajouter une photo",
       "editPhoto": "éditer la photo",
-      "profilePhoto": "profile photo",
+      "profilePhoto": "photo de profil",
       "userPhoto": "photo de l'utilisateur"
     },
     "actionSheet": {
@@ -111,7 +112,7 @@
       "dismiss": "Fermer",
       "error": "Erreur",
       "formIncomplete": "Formulaire incomplet",
-      "info": "Info",
+      "info": "Infos",
       "no": "Non",
       "ok": "OK",
       "success": "Succès",
@@ -131,17 +132,17 @@
     "button": {
       "cancel": "Annuler",
       "copy": "Copier",
-      "save": "Valider"
+      "save": "Enregistrer"
     },
     "camera": {
       "cancel": "Annuler",
       "message": "Nous avons besoin de votre permission pour utiliser l'appareil photo",
-      "ok": "Ok",
+      "ok": "OK",
       "title": "Permission d'utiliser l'appareil photo"
     },
     "photoActionSheet": {
       "choosePhoto": "Sélectionner depuis l'Album",
-      "takePhoto": "Prendre une Photo",
+      "takePhoto": "Prendre une photo",
       "title": "Sélectionner une photo"
     },
     "placeholder": {
@@ -151,6 +152,10 @@
     "tag": {
       "connectionDate": "Connecté(e) {{date}}",
       "reported": "(signalé)"
+    },
+    "text": {
+      "progress": "{{completed}}/{{total}} complété(s)",
+      "uploadingData": "Téléversement des données chiffrées sur le serveur de sauvegarde…"
     }
   },
   "connectionDetails": {
@@ -160,6 +165,9 @@
       "reportCancel": "Annuler",
       "reportSubmit": "Signaler"
     },
+    "header": {
+      "connectionDetails": "Détails de connexion"
+    },
     "label": {
       "connectionLevel": "Niveau de Connexion",
       "mutualConnections": "Connexions en Commun",
@@ -167,10 +175,10 @@
     },
     "tags": {
       "connectedAt": "Connecté(e) {{date}}",
-      "loading": "Chargement..."
+      "loading": "Chargement…"
     },
     "text": {
-      "level": "A quel point connaissez-vous {{name}} ?",
+      "level": "À quel point connaissez-vous {{name}} ?",
       "levelAlreadyKnown": "Je connais cette personne",
       "levelJustMet": "Je viens de rencontrer cette personne",
       "levelRecovery": "Je fais confiance à cette personne pour m'aider si je perds mon BrightID",
@@ -193,18 +201,21 @@
       "reportConnection": "Signaler",
       "updateConnection": "Mettre à jour"
     },
+    "header": {
+      "connections": "Connexions"
+    },
     "label": {
       "currentConnectionLevel": "Niveau de connexion actuel",
       "newProfile": "Nouveau Profil",
       "oldProfile": "Ancien Profil"
     },
     "removeActionSheet": {
-      "info": "Êtes-vous sûr de vouloir supprimer la connexion avec {{name}}? Vous pouvez vous reconnecter à tout moment.",
+      "info": "Êtes-vous sûr·e de vouloir supprimer la connexion avec {{name}} ? Vous pouvez vous reconnecter à tout moment.",
       "remove": "Supprimer",
       "title": "Supprimer la connexion"
     },
     "tag": {
-      "deleted": "Deleted",
+      "deleted": "Supprimé",
       "failed": "Écec de la connexion.\nVeuillez réessayer.",
       "hidden": "Caché(e)",
       "lastConnected": "Connecté(e) {{date}}",
@@ -218,18 +229,18 @@
   },
   "contact": {
     "label": {
-      "email": "Email",
-      "meet": "Rencontrez des Connexions",
-      "socialMedia": "Réseaux Sociaux",
+      "email": "Courriel",
+      "meet": "Rencontrez des connexions",
+      "socialMedia": "Réseaux sociaux",
       "website": "Site Web"
     },
     "text": {
-      "meet": "Rejoignez des rendez-vous virtuels BrightID !",
-      "openSource": "open source !",
+      "meet": "Rejoignez des rendez-vous BrightID !",
+      "openSource": "avec un code source ouvert !",
       "weAre": "Nous sommes "
     },
     "title": {
-      "contactUs": "Nous Contacter"
+      "contactUs": "Nous contacter"
     }
   },
   "createGroup": {
@@ -264,16 +275,21 @@
         "upToDate": "BrightID est à jour."
       },
       "title": {
-        "upToDate": "Rechercher des Mises à Jour"
+        "upToDate": "Rechercher des mises à jour"
       }
     },
     "label": {
-      "achievements": "Objectifs Remplis",
-      "checkForUpdates": "Rechercher des Mises à Jour",
-      "contactUs": "Nous Contacter",
+      "achievements": "Objectifs remplis",
+      "checkForUpdates": "Rechercher des mises à jour",
+      "contactUs": "Nous contacter",
       "copyExplorerCode": "Copier le Code Explorer",
-      "editProfile": "Éditer le Profil",
+      "editProfile": "Modifier le profil",
       "home": "Accueil"
+    }
+  },
+  "eula": {
+    "header": {
+      "title": "Contrat de licence"
     }
   },
   "graphExplorer": {
@@ -296,17 +312,17 @@
     },
     "alert": {
       "text": {
-        "addAdmin": "Êtes-vous sûr de vouloir définir {{name}} comme administrateur de ce groupe ?",
-        "dismissMember": "Êtes-vous sûr de vouloir retirer {{name}} de ce groupe ?",
+        "addAdmin": "Êtes-vous sûr·e de vouloir définir {{name}} comme administrateur de ce groupe ?",
+        "dismissMember": "Êtes-vous sûr·e de vouloir retirer {{name}} de ce groupe ?",
         "inviteSuccess": "Vous avez invité {{name}} avec succès",
         "leaveGroup": "Êtes-vous sûr de vouloir quitter ce groupe ?"
       },
       "title": {
         "addAdmin": "Définir comme administrateur",
         "dismissMember": "Retirer le Membre",
-        "errorDismissMember": "Erreur en essayant de retirer {{name}} du groupe",
+        "errorDismissMember": "Erreur lors du retrait du membre du groupe",
         "errorLeaveGroup": "Erreur en quittant le groupe",
-        "inviteSuccess": "Invitation Envoyée",
+        "inviteSuccess": "Invitation envoyée",
         "leaveGroup": "Quitter le Groupe"
       }
     },
@@ -320,7 +336,8 @@
       "leaveGroup": "Quitter le groupe"
     },
     "header": {
-      "inviteList": "Liste d'Invitation",
+      "groups": "Groups",
+      "inviteList": "Liste d'invitations",
       "newGroup": "Nouveau Groupe"
     },
     "label": {
@@ -333,13 +350,13 @@
       "dismissMember": "Retirer du Groupe"
     },
     "tag": {
-      "primaryGroup": "Groupe Principal"
+      "primaryGroup": "Groupe principal"
     },
     "text": {
-      "noEligibleConnection": "Aucune connexion existante n'est éligible pour ce groupe. Veuillez réessayer plus tard...",
+      "noEligibleConnection": "Aucune connexion existante n'est éligible pour ce groupe. Veuillez réessayer plus tard.",
       "noGroups": "<text>Devenez vérifié plus facilement</text><text>en créant et</text><text>rejoignant des groupes</text>",
       "noGroupsMatchSearch": "Aucun groupe ne correspond à votre recherche",
-      "noMembers": "Pas de membre connu, invitez quelqu'un...",
+      "noMembers": "Pas de membre connu, invitez quelqu'un…",
       "waitingForMembers": "En attente de validation de {{list}}"
     }
   },
@@ -348,7 +365,7 @@
       "connect": "se connecter"
     },
     "button": {
-      "apps": "Apps",
+      "apps": "Applis",
       "connections": "Connexions",
       "groups": "Groupes",
       "myCode": "Mon Code",
@@ -359,7 +376,7 @@
       "title": "Envie de discuter avec nous ?"
     },
     "label": {
-      "createNewConnection": "Créer une Nouvelle Connexion"
+      "createNewConnection": "Créer une nouvelle connexion"
     },
     "link": {
       "community": "Rejoindre la Communauté"
@@ -373,17 +390,18 @@
     },
     "title": {
       "pendingConnection": "Confirmez vos connexions",
-      "socialRecovery": "Sauvegarde & Restauration Sociale"
+      "socialRecovery": "Sauvegarde et restauration sociale"
     }
   },
   "notifications": {
     "alert": {
       "text": {
         "failureAcceptGroupInvite": "Erreur lors de la tentative de rejoindre le groupe",
-        "rejectGroupInvite": "Êtes-vous sûr de vouloir refuser de rejoindre ce groupe ?"
+        "rejectGroupInvite": "Êtes-vous sûr·e de vouloir refuser de rejoindre ce groupe ?",
+        "successGroupInvite": ""
       },
       "title": {
-        "failureRejectGroupInvite": "Echec du refus de l'invitation",
+        "failureRejectGroupInvite": "Échec du refus de l'invitation",
         "rejectGroupInvite": "Refuser"
       }
     },
@@ -405,7 +423,7 @@
     },
     "text": {
       "noGroupInvites": "Vous n'avez pas d'invitation à des groupes..",
-      "noMiscellaneous": "Rien à voir ici ...",
+      "noMiscellaneous": "Rien à voir ici…",
       "noPendingConnections": "Vous n'avez pas de connexion en attente.."
     }
   },
@@ -434,10 +452,10 @@
       }
     },
     "text": {
-      "alreadyRated": "Vous avez déjà évalué cette connexion.",
+      "alreadyRated": "Vous avez déjà évalué cette connexion",
       "errorExpired": "La connexion a expiré. Veuillez essayer à nouveau de vous connecter.",
       "errorMyself": "Vous ne pouvez pas vous connecter à vous-même.",
-      "errorUnhandled": "État de connexion non supporté."
+      "errorUnhandled": "État de connexion non pris en charge"
     }
   },
   "pendingConnections": {
@@ -445,16 +463,16 @@
       "alreadyKnown": "Connaissance",
       "connections": "Connexions",
       "groups": "Groupes",
-      "justMet": "Juste rencontré(e)",
-      "mutualConnections": "En Commun",
-      "rating": "Connaissez-vous cette personne ?",
+      "justMet": "Nouvelle rencontre",
+      "mutualConnections": "En commun",
+      "rating": "Connaissez-vous cette personne ?",
       "recovery": "Restauration",
       "reported": "Signalé(e)",
       "suspicious": "Suspect(e)"
     },
     "text": {
-      "errorGeneric": "Une erreur est survenue, veuillez essayer à nouveau de vous connecter avec {{name}}...",
-      "rating": "Votre réponse nous aide à prévenir les fraudes."
+      "errorGeneric": "Erreur lors de la connexion. Veuillez essayer de vous reconnecter.",
+      "rating": "Votre réponse nous aidera à prévenir les attaques"
     },
     "title": {
       "connectionRequest": "Demande de Connexion"
@@ -467,7 +485,7 @@
         "dontLeave": "Rester"
       },
       "text": {
-        "discardChanges": "Vous avez des changements non sauvegardés. Êtes-vous sûr de vouloir les annuler en quittant l'écran ?",
+        "discardChanges": "Vous avez des changements non sauvegardés. Êtes-vous sûr·e de vouloir les annuler en quittant l'écran ?",
         "passwordMatch": "Le mot de passe actuel est incorrect."
       },
       "title": {
@@ -484,24 +502,24 @@
       "name": "Nom",
       "newPassword": "Nouveau mot de passe",
       "newPasswordAgain": "Répéter le nouveau mot de passe",
-      "socialMediaLink": "Liens Réseaux Sociaux"
+      "socialMediaLink": "Liens de réseaux sociaux"
     },
     "placeholder": {
-      "name": "Entrez un Nom",
+      "name": "Entrez un nom",
       "newPassword": "Nouveau mot de passe",
       "newPasswordAgain": "Nouveau mot de passe"
     },
     "text": {
-      "changePassword": "Modifier le Mot de Passe",
-      "changeProfilePicture": "Changer la Photo de Profil",
-      "viewPassword": "Voir le Mot de Passe"
+      "changePassword": "Modifier le mot de passe",
+      "changeProfilePicture": "Changer la photo de profil",
+      "viewPassword": "Voir le mot de passe"
     }
   },
   "qrcode": {
     "alert": {
       "text": {
         "codeGroup": "Ce code QR est conçu pour permettre à différentes personnes de se connecter entre-elles simultanément.",
-        "codeSingle": "Ce code QR peut être utilisé pour vous connecter à un seul autre utilisateur"
+        "codeSingle": "Ce code QR peut être utilisé pour se connecter avec un seul utilisateur avant son expiration."
       },
       "title": {
         "codeGroup": "Code de groupe",
@@ -515,20 +533,21 @@
       "showCode": "Afficher votre code QR"
     },
     "header": {
-      "connections": "{{count}} / 30 Connexions"
+      "connections": "{{count}} / 30 connexions",
+      "connections_plural": ""
     },
     "label": {
       "connectionType": "Type de connexion :"
     },
     "text": {
-      "canAlso": "Vous pouvez également...",
+      "canAlso": "Vous pouvez aussi…",
       "codeGroup": "Code de groupe",
       "codeSingle": "Code à usage unique",
       "confirmConnections": "Confirmation des connexions",
       "downloadingConnectionData": "Téléchargement des données de connexion",
       "expiresIn": "Expire dans :",
-      "pendingConnections": "Vous avez {{count}} connexion en attente...",
-      "pendingConnections_plural": "Vous avez {{count}} connexions en attente...",
+      "pendingConnections": "Vous avez {{count}} connexion en attente",
+      "pendingConnections_plural": "Vous avez {{count}} connexions en attente",
       "scanCode": "<text>Bonjour {{name}}, scannez un code et</text><text>créez une nouvelle connexion aujourd'hui</text>"
     }
   },
@@ -548,7 +567,7 @@
         "restoreSuccess": "Votre compte a été restauré avec succès !"
       },
       "title": {
-        "notTrusted": "Oh Oh..."
+        "notTrusted": "Oh oh"
       }
     },
     "button": {
@@ -559,9 +578,9 @@
     },
     "text": {
       "chooseConnectionToHelp": "Veuillez sélectionner dans vos connexions le compte que vous souhaitez aider à restaurer.",
-      "downloadingData": "Téléchargement des données depuis le serveur de sauvegarde ...",
+      "downloadingData": "Téléchargement des données depuis le serveur de sauvegarde…",
       "enterPassword": "Entrez le mot de passe avec lequel vous avez chiffré votre sauvegarde :",
-      "noConnections": "Aucune connexions..."
+      "noConnections": "Aucune connexions…"
     },
     "title": {
       "chooseConnection": "Choissez la Connexion"
@@ -571,7 +590,7 @@
     "alert": {
       "nameMissing": "Veuillez renseigner votre nom",
       "nameTooShort": "Votre nom doit contenir au moins 2 caractères",
-      "photoMissing": "Une photo est requise"
+      "photoMissing": "Une photo est requise. Veuillez appuyer sur Entrée sur le clavier."
     },
     "button": {
       "addPhoto": "Ajouter une photo",
@@ -585,7 +604,7 @@
       "name": "Nom"
     },
     "text": {
-      "creatingAccount": "Création du Bright ID...",
+      "creatingAccount": "Création du Bright ID…",
       "infoNotShared": "Votre nom et photo ne seront jamais partagés avec les applications, ni stockées sur des serveurs",
       "whatsYouName": "Comment vous appellez-vous ?"
     }

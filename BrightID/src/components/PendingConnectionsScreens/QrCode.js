@@ -116,11 +116,11 @@ export const QrCode = ({ channel }) => {
         );
     const alertMsg = t(
       channel?.type === channel_types.SINGLE
-        ? 'qrcode.alert.shareLinkSingle'
-        : 'qrcode.alert.shareLinkGroup',
+        ? 'qrcode.alert.text.shareLinkSingle'
+        : 'qrcode.alert.text.shareLinkGroup',
     );
     Alert.alert(
-      t('qrcode.alert.universalLink'),
+      t('qrcode.alert.text.universalLink'),
       alertMsg,
       [
         {

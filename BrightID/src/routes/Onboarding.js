@@ -17,17 +17,18 @@ const Onboarding = () => {
         component={Onboard}
         options={{ headerShown: false }}
       />
-      <Stack.Screen 
+      <Stack.Screen
         name="SignUp"
         component={SignUp}
-        options={{ title: t('signup.header.title') }} />
+        options={{ title: t('signup.header.title') }}
+      />
       <Stack.Screen
         name="Restore"
         component={Restore}
-        options={{ title: t('recovery.header.title') }}
+        options={{ title: 'Account Recovery' }}
       />
     </Stack.Navigator>
   );
-}
+};
 
 export default Onboarding;

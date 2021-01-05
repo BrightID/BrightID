@@ -1,6 +1,8 @@
-import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Animated, Text, TouchableOpacity, View } from 'react-native';
 import { navigate } from '@/NavigationService';
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { TWENTY_TWO, SIXTY } from '@/theme/sizes';
@@ -51,3 +53,24 @@ export const NavHome = () => (
     <BackArrow height={TWENTY_TWO} color={WHITE} />
   </TouchableOpacity>
 );
+
+export const AnimatedHeaderTitle = ({ i18key }) => {
+  const { t } = useTranslation();
+  const searchOpen = useSelector(
+    (state) => state.connections.searchOpen || state.groups.searchOpen,
+  );
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: searchOpen ? 0 : 1,
+      useNativeDriver: true,
+      duration: 600,
+    }).start();
+  }, [fadeAnim, searchOpen]);
+
+  return (
+    <Animated.View style={{ opacity: fadeAnim }}>
+      <Text style={headerTitleStyle}>{t(i18key)}</Text>
+    </Animated.View>
+  );
+};

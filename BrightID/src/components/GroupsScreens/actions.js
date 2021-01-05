@@ -10,7 +10,7 @@ import { setNewGroupCoFounders, createGroup } from '@/actions/index';
 import api from '@/api/brightId';
 import backupApi from '@/api/backupService';
 import { hash, randomKey } from '@/utils/encoding';
-import { backupPhoto, backupUser } from '../Recovery/helpers';
+import { backupPhoto, backupUser } from '../Recovery/thunks/backupThunks';
 
 export const toggleNewGroupCoFounder = (id: string) => (
   dispatch: dispatch,
@@ -109,18 +109,15 @@ export const createNewGroup = (
     dispatch(createGroup(newGroup));
 
     if (backupCompleted) {
-      await backupUser();
+      await dispatch(backupUser());
       if (filename) {
-        await backupPhoto(groupId, filename);
+        await dispatch(backupPhoto(groupId, filename));
       }
     }
     return true;
   } catch (err) {
     console.log(err.message);
-    Alert.alert(
-      i18next.t('createGroup.alert.title.createFailed'), 
-      err.message
-    );
+    Alert.alert(i18next.t('createGroup.alert.title.createFailed'), err.message);
     return false;
   }
 };

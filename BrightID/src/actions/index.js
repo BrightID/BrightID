@@ -95,13 +95,6 @@ export {
   resetOperations,
 } from './operations';
 
-export {
-  SET_RECOVERY_DATA,
-  REMOVE_RECOVERY_DATA,
-  setRecoveryData,
-  removeRecoveryData,
-} from './recoveryData';
-
 export { RESET_STORE, resetStore } from './resetStore';
 
 export {
