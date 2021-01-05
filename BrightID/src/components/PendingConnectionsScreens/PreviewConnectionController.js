@@ -1,8 +1,7 @@
 // @flow
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from '@reduxjs/toolkit';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -15,18 +14,6 @@ import {
 import { ReconnectView } from './ReconnectView';
 import { PreviewConnectionView } from './PreviewConnectionView';
 import BackArrow from '../Icons/BackArrow';
-
-const selectAllConnections = (state) => state.connections.connections;
-
-const makeConnectionByBrightIDSelector = () =>
-  createSelector(
-    selectAllConnections,
-    (_, brightID: string) => brightID,
-    (allConnections, brightID) => {
-      console.log(`Looking for connection ${brightID}`);
-      return allConnections.find((conn) => conn.id === brightID);
-    },
-  );
 
 type PreviewConnectionProps = {
   pendingConnectionId: any,
@@ -41,22 +28,6 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
   const pendingConnection = useSelector((state) =>
     selectPendingConnectionById(state, pendingConnectionId),
   );
-
-  // Make sure each instance of PreviewConnectionController has it's own selector. Otherwise they would
-  // invalidate each others cache. See https://react-redux.js.org/next/api/hooks#using-memoizing-selectors
-  const selectConnectionByBrightID = useMemo(
-    makeConnectionByBrightIDSelector,
-    [],
-  );
-
-  let existingConnection = useSelector((state) => {
-    if (pendingConnection) {
-      return selectConnectionByBrightID(state, pendingConnection.brightId);
-    } else {
-      return undefined;
-    }
-  });
-
   const navigation = useNavigation();
 
   if (!pendingConnection) {
@@ -65,9 +36,10 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
     return null;
   }
 
+  let isReconnect = !!pendingConnection.existingConnection;
   if (pendingConnection.state !== pendingConnection_states.UNCONFIRMED) {
     // Don't display reconnect screen for connections that have just been confirmed
-    existingConnection = undefined;
+    isReconnect = false;
   }
 
   const setLevelHandler = (level: ConnectionLevel) => {
@@ -75,9 +47,9 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
   };
 
   const abuseHandler = () => {
-    if (existingConnection) {
+    if (isReconnect) {
       navigation.navigate('ReportReason', {
-        connectionId: existingConnection.id,
+        connectionId: pendingConnection.existingConnection.id,
         successCallback: () => {
           // Set pending connection to "CONFIRMED" to indicate it has been handled by the user
           dispatch(
@@ -110,10 +82,10 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
       >
         <BackArrow height={DEVICE_LARGE ? '22' : '20'} color={DARK_GREY} />
       </TouchableOpacity>
-      {existingConnection ? (
+      {isReconnect ? (
         <ReconnectView
           pendingConnection={pendingConnection}
-          existingConnection={existingConnection}
+          existingConnection={pendingConnection.existingConnection}
           setLevelHandler={setLevelHandler}
           abuseHandler={abuseHandler}
         />

@@ -101,8 +101,16 @@ export const newPendingConnection = createAsyncThunk(
           connectedAt: 0,
           verifications: [],
           reports: [],
+          existingConnection: undefined,
         };
       }
+    }
+    // Is this a known connection?
+    connectionInfo.existingConnection = getState().connections.connections.find(
+      (conn) => conn.id === decryptedObj.id,
+    );
+    if (connectionInfo.existingConnection) {
+      console.log(`${decryptedObj.id} exists.`);
     }
     return { ...connectionInfo, ...decryptedObj };
   },
@@ -177,6 +185,7 @@ const pendingConnectionsSlice = createSlice({
         verifications,
         notificationToken,
         socialMedia,
+        existingConnection,
       } = action.payload;
 
       const changes = {
@@ -199,6 +208,7 @@ const pendingConnectionsSlice = createSlice({
         verifications,
         notificationToken,
         socialMedia,
+        existingConnection,
       };
 
       // add secret key if dev
