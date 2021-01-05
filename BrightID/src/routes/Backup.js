@@ -5,6 +5,7 @@ import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnecti
 import SearchConnections from '@/components/Helpers/SearchConnections';
 import TrustedConnectionsScreen from '@/components/Recovery/TrustedConnectionsScreen';
 import BackupScreen from '@/components/Recovery/BackupScreen';
+import i18next from 'i18next';
 import { headerOptions, AnimatedHeaderTitle } from './helpers';
 
 const Stack = createStackNavigator();
@@ -13,7 +14,12 @@ const trustedScreenOptions = {
   ...headerOptions,
   headerRight: () => <SearchConnections sortable={true} />,
   headerTitle: () => (
-    <AnimatedHeaderTitle i18key="backup.header.trustedConnections" />
+    <AnimatedHeaderTitle
+      text={i18next.t(
+        'backup.header.trustedConnections',
+        'Trusted connections',
+      )}
+    />
   ),
 };
 
@@ -21,7 +27,9 @@ const recoveringScreenOptions = {
   ...headerOptions,
   headerRight: () => <SearchConnections sortable={true} />,
   headerTitle: () => (
-    <AnimatedHeaderTitle i18key="restore.header.accountRecovery" />
+    <AnimatedHeaderTitle
+      text={i18next.t('restore.header.accountRecovery', 'Account Recovery')}
+    />
   ),
 };
 

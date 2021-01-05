@@ -54,8 +54,7 @@ export const NavHome = () => (
   </TouchableOpacity>
 );
 
-export const AnimatedHeaderTitle = ({ i18key }) => {
-  const { t } = useTranslation();
+export const AnimatedHeaderTitle = ({ text }) => {
   const searchOpen = useSelector(
     (state) => state.connections.searchOpen || state.groups.searchOpen,
   );
@@ -70,7 +69,7 @@ export const AnimatedHeaderTitle = ({ i18key }) => {
 
   return (
     <Animated.View style={{ opacity: fadeAnim }}>
-      <Text style={headerTitleStyle}>{t(i18key)}</Text>
+      <Text style={headerTitleStyle}>{text}</Text>
     </Animated.View>
   );
 };
