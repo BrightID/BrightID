@@ -141,6 +141,9 @@
       "ok": "Ok",
       "title": "Permission to use camera"
     },
+    "language": {
+      "and": "and"
+    },
     "photoActionSheet": {
       "choosePhoto": "Choose From Library",
       "takePhoto": "Take Photo",
