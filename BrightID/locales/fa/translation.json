@@ -1,32 +1,510 @@
 {
-    "achievements": {
-        "makeTwoConnection": {
-            "title": "دو کانکشن",
-            "description": "برقراری کانکشن با دو نفر دیگر"
-        },
-        "makeThreeConnection": {
-            "title": "سه کانکشن",
-            "description": "برقراری کانکشن با سه نفر دیگر"
-        },
-        "makeFirstConnection": {
-            "title": "اولین برقراری کانکشن",
-            "description": "برقراری کانکشن با دیگران"
-        },
-        "linkApp": {
-            "title": "اتصال به یک اپلیکیشن",
-            "description": "اتصال به یک اپلیکیشن"
-        },
-        "joinConnectionPartyWithFriend": {
-            "title": "جلسه برقرای کانکشن به  همراه دوستان",
-            "description": "دعوت از دوستان به جلسات برقراری کانکشن"
-        },
-        "joinConnectionParty": {
-            "title": "جلسات برقراری کانکشن",
-            "description": "شرکت در جلسه های برقراری کانکشن"
-        },
-        "getSponsored": {
-            "title": "اسپانسر شوید",
-            "description": "با اتصال به یکی از اپلیکیشن هایی که شمارا اسپانسر میکند، اسپانسر شوید."
-        }
+  "achievements": {
+    "getSponsored": {
+      "description": "با اتصال به یکی از اپلیکیشن هایی که شمارا اسپانسر میکند، اسپانسر شو",
+      "title": "اسپانسر شو"
+    },
+    "joinConnectionParty": {
+      "description": "شرکت در جلسه های کانکشن",
+      "title": "جلسات کانکشن"
+    },
+    "joinConnectionPartyWithFriend": {
+      "description": "دعوت از دوستان",
+      "title": "جلسه کانکشن به همراه دوستان"
+    },
+    "linkApp": {
+      "description": "اکانتت رو به یک اپلیکیشن لینک کن",
+      "title": "لینک کردن به یک اپلیکیشن"
+    },
+    "makeFirstConnection": {
+      "description": "با یک کاربر دیگه کانکشن بزن",
+      "title": "اولین کانکشن"
+    },
+    "makeThreeConnection": {
+      "description": "کانکشن با سه نفر دیگه",
+      "title": "سه کانکشن"
+    },
+    "makeTwoConnection": {
+      "description": "برقراری کانکشن با دو نفر دیگه",
+      "title": "دو کانکشن"
+    },
+    "notification": {
+      "message": "{{title}} رو انجام دادی!",
+      "title": "آفرین!"
+    },
+    "progress": {
+      "title": "تکمیل:"
+    },
+    "setupTrustedConnections": {
+      "description": "کانکشن های مورد اعتماد خودتو تایین کن تا بتونی ریکاوری اجتماعی اکانتتو فعال کنی",
+      "title": "تنظیم ریکاوری اجتماعی"
     }
+  },
+  "apps": {
+    "alert": {
+      "button": {
+        "visitWebsite": "برو به سایت اپلیکیشن"
+      },
+      "text": {
+        "checkWebsite": "اگه میخوای درمورد {{name}} بیشتر بدونی، به وبسایتشون سر بزن!",
+        "invalidContext": "{{context}} کانتکس اشتباه است!",
+        "linkApp": "میخوای اکانت خودتو در {{context}} به BrightID خودت لینک کنی؟",
+        "linkFailure": "لینک کردن اکانتت در {{context}} انجام نشد!\n{{result}}",
+        "linkSuccess": "اکانتت در {{context}} با موفقیت به BrightID خودت لینک شد"
+      },
+      "title": {
+        "invalidContext": "ناموفق",
+        "linkApp": "میخوای اپلیکیشنی رو لینک کنی؟",
+        "linkFailure": "انجام نشد",
+        "linkSuccess": "انجام شد",
+        "linkingFailed": "لینک کردن انجام نشد"
+      }
+    },
+    "tag": {
+      "hasSponsorships": "اسپانسرشیپ دارد",
+      "linked": "لینک شد",
+      "notVerifiedForApp": "شما برای این اپلیکیشن وریفای نشده اید",
+      "tryAgain": "دوباره"
+    },
+    "text": {
+      "notSponsored": "اسپانسر نشدی!\nلطفا از طریق یکی از اپلیکیشن های زیر اسپانسر شو.",
+      "pendingLink": "لینک کردن اکانتت در {{context}} به BrightID خودت …"
+    }
+  },
+  "backup": {
+    "alert": {
+      "text": {
+        "backupSuccess": "بک آپ با موفقیت انجام شد!",
+        "needThreeTrusted": "حداقل به سه تا کانکشن مورد اعتماد احتیاج داری تا بتونی بک آپ بگیری."
+      }
+    },
+    "button": {
+      "next": "بعدی",
+      "startBackup": "بک آپ گرفتن"
+    },
+    "header": {
+      "backup": "بک آپ",
+      "trustedConnections": "کانکشن های مورد اعتماد"
+    },
+    "placeholder": {
+      "confirmPassword": "تایید رمزعبور"
+    },
+    "text": {
+      "chooseTrustedConnections": "حداقل سه تا از کانکشن های مورد اعتمادت رو انتخاب کن تا از اکانتت در BrightId بک آپ بگیری.",
+      "enterPassword": "رمزعبورتو وارد کن تا باهاش دیتای بک آپت رمزگذاری بشه:",
+      "noConnections": "بدون کانکشن"
+    }
+  },
+  "common": {
+    "accessibilityLabel": {
+      "addPhoto": "اضافه کردن عکس",
+      "editPhoto": "ویرایش عکس",
+      "profilePhoto": "عکس پروفایل",
+      "userPhoto": "عکس کاربر"
+    },
+    "actionSheet": {
+      "cancel": "لغو",
+      "title": "میخوای چکار کنی؟"
+    },
+    "alert": {
+      "cancel": "لغو",
+      "dismiss": "رد",
+      "error": "خطا",
+      "formIncomplete": "فرم BrightID ناقص است",
+      "info": "اطلاعات",
+      "no": "خیر",
+      "ok": "بله",
+      "success": "انجام شد",
+      "sure": "حتما",
+      "text": {
+        "incorrectPassword": "رمزعبور اشتباه است!",
+        "lostKeys": "لطفا یک BrightID جدید بساز یا BrightID قبلیتو بازیابی کن",
+        "passwordMatch": "رمزعبور و تایید آن یکسان نیستند.",
+        "passwordShort": "رمزعبور باید حداقل 8 حرف داشته باشد.",
+        "trustedSigned": "یکی از کانکشن های مورد اعتمادت به درخواستت جواب داد"
+      },
+      "title": {
+        "lostKeys": "ما کلید عمومی BrightID را از دستگاه گم کردیم :)))))))))))))))))))))))))))))))))))))))))))))))))))"
+      },
+      "yes": "بله"
+    },
+    "button": {
+      "cancel": "لغو",
+      "copy": "کپی",
+      "save": "ذخیره"
+    },
+    "camera": {
+      "cancel": "لغو",
+      "message": "آیا اجازه دسترسی به دوربین میدهید؟",
+      "ok": "بله",
+      "title": "اجازه دسترسی به دوربین"
+    },
+    "photoActionSheet": {
+      "choosePhoto": "انتخاب از کتابخانه",
+      "takePhoto": "عکس گرفتن",
+      "title": "انتخاب عکس"
+    },
+    "placeholder": {
+      "password": "رمزعبور",
+      "searchConnections": "جست وجوی کانکشن ها"
+    },
+    "tag": {
+      "connectionDate": "{{date}} با هم کانکشن زدید",
+      "reported": "(ریپورت شده)"
+    },
+    "text": {
+      "progress": "{{completed}}/{{total}} انجام شد",
+      "uploadingData": "در حال بارگذاری داده های رمزگذاری شده در سرور بک آپ"
+    }
+  },
+  "connectionDetails": {
+    "button": {
+      "levelSave": "ذخیره",
+      "report": "ریپورتش کن",
+      "reportCancel": "لغو",
+      "reportSubmit": "ارسال"
+    },
+    "header": {
+      "connectionDetails": "جزئیات کانکشن"
+    },
+    "label": {
+      "connectionLevel": "سطح کانکشن",
+      "mutualConnections": "کانکشن های مشترک",
+      "mutualGroups": "گروه های مشترک"
+    },
+    "tags": {
+      "connectedAt": "{{date}} با هم کانکشن زدید",
+      "loading": "درحال بارگیری…"
+    },
+    "text": {
+      "level": "چقدر {{name}} رو میشناسی؟",
+      "levelAlreadyKnown": "از قبل میشناسم",
+      "levelJustMet": "این شخص غریبه ایست که تازه ملاقاتش کردم",
+      "levelRecovery": "به این شخص برای بازیابی BrightID خودم اعتماد دارم",
+      "levelSuspicious": "اصلا این شخص رو نمی شناسم",
+      "reportConnection": "{{name}} رو ریپورت کن",
+      "reportDuplicate": "این شخص اکانت های دیگری هم ساخته است",
+      "reportImpact": "؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟؟",
+      "reportOther": "دلایل دیگر",
+      "reportSpammer": "این شخص درخواست کانکشن ناخواسته ای به من داشته"
+    }
+  },
+  "connections": {
+    "accessibilityLabel": {
+      "connectionPhoto": "عکس کانکشن",
+      "viewConnectionDetails": "مشاهده جزیئیات کانکشن",
+      "viewPhoto": "مشاهده عکس تمام صفحه"
+    },
+    "button": {
+      "reconnect": "کانکشن مجدد",
+      "reportConnection": "ریپورت کانکشن",
+      "updateConnection": "آپدیت کانکشن"
+    },
+    "header": {
+      "connections": "کانکشن ها"
+    },
+    "label": {
+      "currentConnectionLevel": "سطح کانکشن فعلی",
+      "newProfile": "پروفایل جدید",
+      "oldProfile": "پروفایل قدیمی"
+    },
+    "removeActionSheet": {
+      "info": "مطمئنی میخوای کانکشنتو با{{name}} حذف کنی؟ هرچند که هرموقع بخوای میتونی باز کانکشن بزنی",
+      "remove": "حذف",
+      "title": "حذف کانکشن"
+    },
+    "tag": {
+      "deleted": "حذف شده",
+      "failed": "کانکشن انجام نشد.\nدوباره امتحان کن.",
+      "hidden": "پنهان شده",
+      "lastConnected": "آخرین بار {{date}} کانکت شده",
+      "reportedAs": "ریپورت شده بعنوان{{flag}}",
+      "waiting": "درحال انتظار"
+    },
+    "text": {
+      "alreadyConnectedWith": "قبلا به{{name}} کانکت شدی",
+      "noConnections": "بدون کانکشن"
+    }
+  },
+  "contact": {
+    "label": {
+      "email": "ایمیل",
+      "meet": "کانکشن زدن",
+      "socialMedia": "شبکه های اجتماعی",
+      "website": "وبسایت"
+    },
+    "text": {
+      "meet": "شرکت در جلسه های کانکشن!",
+      "openSource": "متن باز!(اوپن سورس)",
+      "weAre": "ما "
+    },
+    "title": {
+      "contactUs": "ارتباط با ما"
+    }
+  },
+  "createGroup": {
+    "alert": {
+      "text": {
+        "nameMissing": "یه اسم برای گروه انتخاب کن",
+        "nameTooShort": "اسم گروه حداقل باید دو حرف داشته باشه"
+      },
+      "title": {
+        "createFailed": "ساخت گروه با موفقیت انجام شد",
+        "formIncomplete": "فرم گروه تکمیل نیست"
+      }
+    },
+    "button": {
+      "createGroup": "ساخت گروه",
+      "next": "بعدی"
+    },
+    "label": {
+      "cofounders": "هم بنیانگذاران"
+    },
+    "placeholder": {
+      "groupName": "اسم گروه چیه؟"
+    },
+    "text": {
+      "cofounders": "برای گروه ساختن، باید دو هم بنیانگذار انتخاب کنی",
+      "noConnections": "بدون کانکشن"
+    }
+  },
+  "drawer": {
+    "alert": {
+      "text": {
+        "upToDate": "BrightID بروز است."
+      },
+      "title": {
+        "upToDate": "بررسی بروزرسانی"
+      }
+    },
+    "label": {
+      "achievements": "دستاورد ها",
+      "checkForUpdates": "بررسی بروزرسانی",
+      "contactUs": "ارتباط با ما",
+      "copyExplorerCode": "کپی کردن کد Explorer",
+      "editProfile": "ویرایش پروفایل",
+      "home": "خانه"
+    }
+  },
+  "eula": {
+    "header": {
+      "title": "توافق نامه"
+    }
+  },
+  "graphExplorer": {
+    "alert": {
+      "text": {
+        "copied": "کپی شد!"
+      }
+    },
+    "button": {
+      "copyCode": "کپی کردن کد"
+    },
+    "text": {
+      "backupRequired": "برای دسترسی به کد گراف Explorer ، باید ریکاوری و بک آپ رو تنظیم کنی. اعلان هاتو بررسی کن یا به کاربران بیشتری کانکت شو تا بتونی بک آپ و ریکاوریتو تنظیم کنی.",
+      "explorerWebsiteDescription": "یک وبسایت است که گراف اجتماعی BrightID درآن قرار گرفته است. با استفاده از کد بالا کانکشن هاتو در گراف ببین."
+    }
+  },
+  "groups": {
+    "accessibilityLabel": {
+      "groupsLogo": "لوگوی گروه"
+    },
+    "alert": {
+      "text": {
+        "addAdmin": "مطمئنی میخوای {{name}} رو یکی از ادمین های گروه کنی؟",
+        "dismissMember": "مطمئنی میخوای {{name}} رو از این گروه رد کنی؟",
+        "inviteSuccess": "{{name}} با موفقیت به گروه دعوت شد",
+        "leaveGroup": "مطمئنی میخوای این گروه رو ترک کنی؟"
+      },
+      "title": {
+        "addAdmin": "اضافه کردن ادمین",
+        "dismissMember": "رد کردن یکی از اعضا",
+        "errorDismissMember": "خطا در رد کردن عضو گروه",
+        "errorLeaveGroup": "خطا در ترک کردن گروه",
+        "inviteSuccess": "دعوت موفقیت آمیز بود",
+        "leaveGroup": "ترک گروه"
+      }
+    },
+    "button": {
+      "createGroup": "ساخت گروه",
+      "learnMore": "بیشتر بدانید"
+    },
+    "groupActionSheet": {
+      "cancel": "لغو",
+      "inviteUser": "دعوت از یک کاربر",
+      "leaveGroup": "ترک گروه"
+    },
+    "header": {
+      "groups": "گروه ها",
+      "inviteList": "لیست دعوت ها",
+      "newGroup": "گروه جدید"
+    },
+    "label": {
+      "knownMembers": "اعضای شناخته شده:",
+      "unknownMembers": "ناشناخته:"
+    },
+    "memberActionSheet": {
+      "addAdmin": "اضافه کردن ادمین",
+      "cancel": "لغو",
+      "dismissMember": "رد کردن از گروه"
+    },
+    "tag": {
+      "primaryGroup": "گروه اولیه"
+    },
+    "text": {
+      "noEligibleConnection": "کانکشن واجد شرایطی برای این گروه موجود نیست ، لطفا بعدا امتحان کن..",
+      "noGroups": "<text> سریعتر وریفای شوید</text><text> با ساختن و</text><text> پیوستن به گروه ها</text>",
+      "noGroupsMatchSearch": "گروهی یافت نشد",
+      "noMembers": "بدون اعضای شناخته شده، از دیگران دعوت کن…",
+      "waitingForMembers": "درحال انتطار برای پیوستن{{list}}"
+    }
+  },
+  "home": {
+    "accessibilityLabel": {
+      "connect": "کانکت"
+    },
+    "button": {
+      "apps": "اپلیکیشن ها",
+      "connections": "کانکشن ها",
+      "groups": "گروه ها",
+      "myCode": "کد من",
+      "scanCode": "اسکن کن"
+    },
+    "chatActionSheet": {
+      "discord": "BrightID Discord",
+      "title": "ارتباط مستقیم با ما"
+    },
+    "label": {
+      "createNewConnection": "کانکشن جدید"
+    },
+    "link": {
+      "community": "به ما بپیوندید"
+    }
+  },
+  "notificationBar": {
+    "text": {
+      "pendingConnections": "{{count}} کانکشن در حال انتظار داری",
+      "pendingConnections_plural": "{{count}} کانکشن در حال انتظار داری",
+      "socialRecovery": "لطفا کانکشن های مورد اعتمادت رو انتخاب کن ت بتونی ریکاوری اجتماعی خودتو فعال کنی"
+    },
+    "title": {
+      "pendingConnection": "تایید کانکشن ها",
+      "socialRecovery": "بک آپ و ریکاوری اجتماعی"
+    }
+  },
+  "notifications": {
+    "alert": {
+      "text": {
+        "failureAcceptGroupInvite": "پیوستن به گروه ناموفق بود",
+        "rejectGroupInvite": "مطمئنی نمیخوای به گروه بپیوندی؟",
+        "successGroupInvite": "عضو {{groupName}} شدی"
+      },
+      "title": {
+        "failureRejectGroupInvite": "رد کردن دعوت ناموفق بود",
+        "rejectGroupInvite": "رد"
+      }
+    },
+    "item": {
+      "text": {
+        "backupBrightId": "کانکشن های مورد اعتمادتو انتخاب کن",
+        "pendingConnections": "{{count}} کانکشن تایید نشده داری",
+        "pendingConnections_plural": "{{count}} کانکشن تایید نشده داری",
+        "pendingGroupInvite": "{{name}} شما را به گروه دعوت کرد"
+      },
+      "title": {
+        "backupBrightId": "بک آپ BrightID"
+      }
+    },
+    "tab": {
+      "connections": "کانکشن ها",
+      "groups": "گروه ها",
+      "miscellaneous": "متفرقه"
+    },
+    "text": {
+      "noGroupInvites": "هیچ دعوت به گروهی نداری...",
+      "noMiscellaneous": "خالی…",
+      "noPendingConnections": "هیچ کانکشن درحال انتظاری نداری.."
+    }
+  },
+  "onboarding": {
+    "button": {
+      "getStarted": "شروع"
+    },
+    "label": {
+      "maintainPrivacy": "حفظ حریم خصوصی"
+    },
+    "text": {
+      "intro": "BrightID با استفاده از افرادی که میشناسید </text><text> از داشتن یک حساب به ازای هر فرد </text><text> برای اپلیکیشن های مهم مانند</text><text> برای رای گیری و درآمد پایه جهانی اطمینان حاصل میکند.</text>",
+      "privacy": "<text> یکتایی شما را اثبات میکند </text><text> درحالیکه از حریم خصوصی شما محافظت میکند.</text>"
+    }
+  },
+  "pendingConnection": {
+    "alert": {
+      "text": {
+        "errorCreateChannel": "کانال کانکشن ایجاد نشد. \n{{message}}",
+        "errorJoinChannel": "پیوستن به کانال کانکشن انجام نشد.\n{{message}}",
+        "localOutdated": "بدلیل قدیمی بودن نسخه اپلیکیشن کاربر، نمی توانید با {{name}} کانکشن بزنید. لطفا بروزرسانی کنید و BrightID را دوباره راه اندازی کنید.",
+        "otherOutdated": "بدلیل قدیمی بودن نسخه اپلیکیشن کاربر، نمی توانید با {{name}} کانکشن بزنید. لطفا از {{name}} بخواهید BrightiID app را بروزرسانی کند و دوباره راه اندازی کند."
+      },
+      "title": {
+        "connectionImpossible": "امکان زدن کانکشن وجود ندارد"
+      }
+    },
+    "text": {
+      "alreadyRated": "قبلا رتبه این کانکشن رو مشخص کردی",
+      "errorExpired": "کانکشن منقضی شد. لطفا دوباره امتحان کن.",
+      "errorMyself": "به خودت نمیتونی کانکشن بزنی.",
+      "errorUnhandled": "وضعیت کانکشن غیرقابل دسترس"
+    }
+  },
+  "pendingConnections": {
+    "label": {
+      "alreadyKnown": "قبلا میشناسم",
+      "connections": "کانکشن ها",
+      "groups": "گروه ها",
+      "justMet": "تازه ملاقات کردم",
+      "mutualConnections": "کانکشن های مشترک",
+      "rating": "چقدر این کانکشن رو میشناسی؟",
+      "recovery": "ریکاوری",
+      "reported": "ریپورت شده",
+      "suspicious": "مشکوک"
+    },
+    "text": {
+      "errorGeneric": "خطا هنگام کانکشن زدن. لطفا دوباره امتحان کنید.",
+      "rating": "پاسخ شما به ما در برابر حملات کمک میکند"
+    },
+    "title": {
+      "connectionRequest": "درخواست کانکشن"
+    }
+  },
+  "profile": {
+    "alert": {
+      "button": {
+        "discard": "رد",
+        "dontLeave": "ترک نکن"
+      },
+      "text": {
+        "discardChanges": "تغییرات را ذخیره نکردی. مطمئنی میخوای از صفحه خارج بشی؟",
+        "passwordMatch": "رمزعبور فعلی مطابقت ندارد."
+      },
+      "title": {
+        "discardChanges": "رد کردن تغییرات؟",
+        "passwordMatch": "لطفا دوباره امتحان کنید"
+      }
+    },
+    "button": {
+      "socialNext": "بعدی",
+      "socialPrevious": "قبلی"
+    },
+    "label": {
+      "currentPassword": "رمزعبور فعلی",
+      "name": "نام",
+      "newPassword": "رمزعبور جدید",
+      "newPasswordAgain": "رمزعبور جدید دوباره",
+      "socialMediaLink": "لینک شبکه های اجتماعی"
+    },
+    "placeholder": {
+      "name": "ورود نام"
+    }
+  }
 }

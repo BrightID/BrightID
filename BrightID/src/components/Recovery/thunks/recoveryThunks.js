@@ -14,7 +14,11 @@ import {
   updateConnections,
 } from '@/actions';
 import { fetchBackupData } from './backupThunks';
-import { init, resetRecoverySigs } from '../recoveryDataSlice';
+import {
+  init,
+  resetRecoverySigs,
+  resetRecoveryData,
+} from '../recoveryDataSlice';
 
 // HELPERS
 
@@ -156,6 +160,6 @@ export const recoverData = (pass: string) => async (
   dispatch(setBackupCompleted(pass !== ''));
   // password is required to update backup when user makes new connections
   dispatch(setPassword(pass));
-  // dispatch(removeRecoveryData());
+  dispatch(resetRecoveryData());
   return true;
 };

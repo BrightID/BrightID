@@ -105,22 +105,22 @@ export const QrCode = ({ channel }) => {
     const universalLink = `https://app.brightid.org/connection-code/${qrString}`;
     const clipboardMsg = __DEV__
       ? universalLink
-      : t(
-          channel?.type === channel_types.GROUP
-            ? 'qrcode.alert.connectGroup'
-            : 'qrcode.alert.connectSingle',
-          {
-            name: myName,
-            link: universalLink,
-          },
-        );
-    const alertMsg = t(
+      : channel?.type === channel_types.GROUP
+      ? t('qrcode.alert.connectGroup', {
+          name: myName,
+          link: universalLink,
+        })
+      : t('qrcode.alert.connectSingle', {
+          name: myName,
+          link: universalLink,
+        });
+
+    const alertMsg =
       channel?.type === channel_types.SINGLE
-        ? 'qrcode.alert.shareLinkSingle'
-        : 'qrcode.alert.shareLinkGroup',
-    );
+        ? t('qrcode.alert.text.shareLinkSingle')
+        : t('qrcode.alert.text.shareLinkGroup');
     Alert.alert(
-      t('qrcode.alert.universalLink'),
+      t('qrcode.alert.text.universalLink'),
       alertMsg,
       [
         {

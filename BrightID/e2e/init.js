@@ -3,7 +3,6 @@ import './i18n_for_tests';
 const detox = require('detox');
 const adapter = require('detox/runners/jest/adapter');
 const specReporter = require('detox/runners/jest/specReporter');
-const config = require('../package.json').detox;
 
 /* global jasmine, device */
 
@@ -17,7 +16,7 @@ jasmine.getEnv().addReporter(adapter);
 jasmine.getEnv().addReporter(specReporter);
 
 beforeAll(async () => {
-  await detox.init(config, { launchApp: false });
+  await detox.init();
   await device.launchApp({ permissions: { notifications: 'YES' } });
 }, 300000);
 

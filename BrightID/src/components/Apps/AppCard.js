@@ -169,9 +169,7 @@ const AppCard = (props) => {
             name="alert-remove-outline"
             color={RED}
           />
-          <Text testID={`Linked_${id}`} style={styles.errorMessage}>
-            {t('apps.tag.tryAgain')}
-          </Text>
+          <Text style={styles.errorMessage}>{t('apps.tag.tryAgain')}</Text>
         </TouchableOpacity>
       );
     } else {

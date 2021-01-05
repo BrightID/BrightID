@@ -16,6 +16,7 @@ import GroupPhoto from './GroupPhoto';
 class GroupCard extends React.PureComponent<Props> {
   setStatus = () => {
     const { group, t } = this.props;
+    const concatenationString = t('common.language.and', 'and');
     if (group.isNew) {
       const notJoinedIds = group.founders.filter(
         (founder) => !group.members.includes(founder),
@@ -25,7 +26,8 @@ class GroupCard extends React.PureComponent<Props> {
         <View style={styles.waitingContainer}>
           <Text style={styles.waitingMessage}>
             {t('groups.text.waitingForMembers', {
-              list: notJoinedNames.join(`, `),
+              // TODO: This concatenation assumes english grammar and will not work well in all languages
+              list: notJoinedNames.join(` ${concatenationString} `),
             })}
           </Text>
         </View>
