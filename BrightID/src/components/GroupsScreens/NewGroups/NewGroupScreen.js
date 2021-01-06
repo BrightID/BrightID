@@ -16,6 +16,7 @@ import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { toSearchString } from '@/utils/strings';
 import Spinner from 'react-native-spinkit';
+import i18next from 'i18next';
 import { createNewGroup } from '../actions';
 import NewGroupCard from './NewGroupCard';
 
@@ -32,12 +33,20 @@ const getItemLayout = (data, index) => ({
   index,
 });
 
+const creationStateStrings = {
+  uploadingGroupPhoto: i18next.t(
+    'groups.state.uploadingGroupPhoto',
+    'uploading group photo…',
+  ),
+  creatingGroup: i18next.t('groups.state.creatingGroup', 'creating the group…'),
+};
+
 export class NewGroupScreen extends React.Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
       creating: false,
-      creationState: 'groups.state.uploadingGroupPhoto',
+      creationState: 'uploadingGroupPhoto',
     };
   }
 
@@ -109,7 +118,9 @@ export class NewGroupScreen extends React.Component<Props> {
       </View>
     ) : (
       <View style={styles.loader}>
-        <Text style={styles.textInfo}>{t(this.state.creationState)} ...</Text>
+        <Text style={styles.textInfo}>
+          {creationStateStrings[this.state.creationState]}
+        </Text>
         <Spinner isVisible={true} size={97} type="Wave" color={BLUE} />
       </View>
     );

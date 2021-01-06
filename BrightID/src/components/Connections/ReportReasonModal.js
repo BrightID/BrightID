@@ -12,6 +12,7 @@ import { report_reasons } from '@/utils/constants';
 import { ORANGE, WHITE, BLUE, BLACK, DARKER_GREY, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { reportConnection } from './models/reportConnection';
+import { connectionByIdSelector } from '../../utils/connectionsSelector';
 
 type props = {
   route: any,
@@ -34,14 +35,14 @@ const ReportReasonModal = ({ route, navigation }: props) => {
   const { connectionId, successCallback } = route.params;
   const { t } = useTranslation();
   const connection: connection = useSelector((state: State) =>
-    state.connections.connections.find((conn) => conn.id === connectionId),
+    connectionByIdSelector(state, connectionId),
   );
   const dispatch = useDispatch();
   const [reason, setReason] = useState(undefined);
 
-  // Don't crash when connection does not exist. Should never happen.
+  // If connection just got reported it will not exist anymore. Just return null for this render cycle, as
+  // navigation.goBack() is already dispatched
   if (!connection) {
-    console.log(`Connection ${connectionId} not found!`);
     return null;
   }
 

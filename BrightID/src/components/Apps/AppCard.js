@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   Alert,
   Image,
@@ -30,12 +30,13 @@ import { addLinkedContext, removeLinkedContext } from '@/actions';
 
 const MAX_WAITING_SECONDS = 60;
 
-const linkedContextSelector = createSelector(
-  (state) => state.apps.linkedContexts,
-  (_, context: string) => context,
-  (linkedContexts, context) =>
-    linkedContexts.find((link) => link.context === context),
-);
+const makeLinkedContextSelector = () =>
+  createSelector(
+    (state) => state.apps.linkedContexts,
+    (_, context: string) => context,
+    (linkedContexts, context) =>
+      linkedContexts.find((link) => link.context === context),
+  );
 
 const AppCard = (props) => {
   const {
@@ -51,6 +52,10 @@ const AppCard = (props) => {
   const dispatch = useDispatch();
   const verifications = useSelector((state) => state.user.verifications);
   const isSponsored = useSelector((state) => state.user.isSponsored);
+
+  // Make sure each instance of AppCard has it's own selector. Otherwise they would
+  // invalidate each others cache. See https://react-redux.js.org/next/api/hooks#using-memoizing-selectors
+  const linkedContextSelector = useMemo(makeLinkedContextSelector, []);
   const linkedContext = useSelector((state) =>
     linkedContextSelector(state, context),
   );
@@ -91,24 +96,28 @@ const AppCard = (props) => {
   }, [linkedContext, dispatch]);
 
   const openApp = () => {
-    Alert.alert(
-      '',
-      t('apps.alert.text.checkWebsite', { name }),
-      [
-        {
-          text: t('apps.alert.button.visitWebsite'),
-          onPress: () => {
-            Linking.openURL(url);
+    if (url) {
+      Alert.alert(
+        '',
+        t('apps.alert.text.checkWebsite', { name }),
+        [
+          {
+            text: t('apps.alert.button.visitWebsite'),
+            onPress: () => {
+              Linking.openURL(url);
+            },
           },
-        },
-        {
-          text: t('common.alert.cancel'),
-          style: 'cancel',
-          onPress: () => {},
-        },
-      ],
-      { cancelable: true },
-    );
+          {
+            text: t('common.alert.cancel'),
+            style: 'cancel',
+            onPress: () => {},
+          },
+        ],
+        { cancelable: true },
+      );
+    } else {
+      console.log(`No url set for app ${name}`);
+    }
   };
 
   const removeContext = () => {
@@ -164,9 +173,7 @@ const AppCard = (props) => {
             name="alert-remove-outline"
             color={RED}
           />
-          <Text testID={`Linked_${id}`} style={styles.errorMessage}>
-            {t('apps.tag.tryAgain')}
-          </Text>
+          <Text style={styles.errorMessage}>{t('apps.tag.tryAgain')}</Text>
         </TouchableOpacity>
       );
     } else {

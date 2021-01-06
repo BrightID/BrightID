@@ -56,8 +56,8 @@
         "invalidContext": "Failed",
         "linkApp": "Link App?",
         "linkFailure": "Failed",
-        "linkSuccess": "Success",
-        "linkingFailed": "App linking failed"
+        "linkingFailed": "App linking failed",
+        "linkSuccess": "Success"
       }
     },
     "tag": {
@@ -158,7 +158,6 @@
       "reported": "(reported)"
     },
     "text": {
-      "progress": "{{completed}}/{{total}} completed",
       "uploadingData": "Uploading encrypted data to backup server…"
     }
   },
@@ -525,11 +524,13 @@
   },
   "qrcode": {
     "alert": {
+      "connectGroup": "Make a group connection with {{name}} on BrightID: {{link}}",
+      "connectSingle": "Connect with {{name}} on BrightID: {{link}}",
       "text": {
         "codeGroup": "This QR code is designed for many people to connect simultaneously.",
         "codeSingle": "This QR code can be used to connect with a single user before it expires.",
-        "shareLinkSingle": "Share this link with one friend",
         "shareLinkGroup": "Share this link",
+        "shareLinkSingle": "Share this link with one friend",
         "universalLink": "Universal Link"
       },
       "title": {
@@ -564,13 +565,11 @@
     }
   },
   "recovery": {
-    "header": {
-      "title": "Recovery Code"
-    },
     "text": {
+      "additionalInfo": "Your trusted connections will need to scan this to help you recover your BrightID",
       "askTrustedConnections": "Please show this QR code to your trusted connections",
       "signatures": "{{count}} / 2 signatures",
-      "additionalInfo": "Your trusted connections will need to scan this to help you recover your BrightID"
+      "signatures_plural": ""
     }
   },
   "restore": {
@@ -578,15 +577,12 @@
       "text": {
         "notTrusted": "One of your friends is not in your list of trusted connections",
         "requestRecovering": "Your request to help recovering this account submitted successfully!",
-        "restoreSuccess": "Your account recovered successfully!",
-        "restoreConfirm": "Is {{name}} the account you are helping to recover?"
+        "restoreConfirm": "Is {{name}} the account you are helping to recover?",
+        "restoreSuccess": "Your account recovered successfully!"
       },
       "title": {
         "notTrusted": "Uh Oh"
       }
-    },
-    "button": {
-      "startRestore": "Start Restore"
     },
     "emptyList": {
       "text": {
@@ -599,14 +595,8 @@
     },
     "text": {
       "chooseConnectionToHelp": "Please select the connection whose account you are helping to recover.",
-      "downloadingData": "Downloading data from backup server…",
       "enterPassword": "Please enter your password",
-      "noConnections": "No connections…",
-      "skipLoadingBackup": "Without the password you can still recover your BrightID but the name & photo of your connections & groups will not be available.",
-      "skipLink": "skip"
-    },
-    "title": {
-      "chooseConnection": "Choose Connection"
+      "skipLoadingBackup": "Without the password you can still recover your BrightID but the name & photo of your connections & groups will not be available."
     }
   },
   "signup": {

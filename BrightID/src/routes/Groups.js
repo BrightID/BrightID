@@ -12,6 +12,7 @@ import NewGroupScreen from '@/components/GroupsScreens/NewGroups/NewGroupScreen'
 import GroupInfoScreen from '@/components/GroupsScreens/NewGroups/GroupInfoScreen';
 import MembersScreen from '@/components/GroupsScreens/Members/MembersScreen';
 import InviteListScreen from '@/components/GroupsScreens/Members/InviteListScreen';
+import i18next from 'i18next';
 import { headerOptions, NavHome, AnimatedHeaderTitle } from './helpers';
 
 const Stack = createStackNavigator();
@@ -20,13 +21,19 @@ const groupsOptions = {
   ...headerOptions,
   headerRight: () => <SearchGroups />,
   headerLeft: () => <NavHome />,
-  headerTitle: () => <AnimatedHeaderTitle i18key="groups.header.groups" />,
+  headerTitle: () => (
+    <AnimatedHeaderTitle text={i18next.t('groups.header.groups', 'Groups')} />
+  ),
 };
 
 const newGroupOptions = {
   ...headerOptions,
   headerRight: () => <SearchConnections />,
-  headerTitle: () => <AnimatedHeaderTitle i18key="groups.header.newGroup" />,
+  headerTitle: () => (
+    <AnimatedHeaderTitle
+      text={i18next.t('groups.header.newGroup', 'New Group')}
+    />
+  ),
 };
 
 const membersScreenOptions = ({ route }) => {
@@ -61,7 +68,7 @@ const Groups = () => {
         component={GroupInfoScreen}
         options={{
           ...headerOptions,
-          title: t('groups.header.newGroup', { defaultValue: 'New group' }),
+          title: t('groups.header.newGroup', 'New Group'),
         }}
       />
       <Stack.Screen
