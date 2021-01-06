@@ -42,103 +42,120 @@ export const uploadSig = ({ id, aesKey, channelApi }) => async (
 };
 
 const uploadConnection = async ({ conn, channelApi, aesKey }) => {
-  const {
-    id,
-    name,
-    photo: { filename },
-  } = conn;
+  try {
+    let { id, name, photo } = conn;
 
-  // retrieve photo
-  let photo = await retrieveImage(filename);
-  let profileTimestamp = Date.now();
+    if (!name) {
+      return;
+    }
 
-  let dataObj = {
-    id,
-    photo,
-    name,
-    profileTimestamp,
-  };
+    // retrieve photo
+    if (photo?.filename) {
+      photo = await retrieveImage(photo.filename);
+    }
 
-  let encrypted = encryptData(dataObj, aesKey);
-  console.log(`Posting profile data of ${id} ...`);
-  await channelApi.upload({
-    channelId: hash(aesKey),
-    data: encrypted,
-    dataId: `connection_${id}`,
-  });
+    let profileTimestamp = Date.now();
+
+    let dataObj = {
+      id,
+      photo,
+      name,
+      profileTimestamp,
+    };
+
+    let encrypted = encryptData(dataObj, aesKey);
+    console.log(`Posting profile data of ${id} ...`);
+    await channelApi.upload({
+      channelId: hash(aesKey),
+      data: encrypted,
+      dataId: `connection_${id}`,
+    });
+  } catch (err) {
+    console.error(`uploadConnection: ${err.message}`);
+  }
 };
 
 const uploadGroup = async ({ group, channelApi, aesKey }) => {
-  const {
-    id,
-    name,
-    photo: { filename },
-    aesKey: groupKey,
-  } = group;
+  try {
+    let { id, name, photo, aesKey: groupKey } = group;
+    if (!groupKey) {
+      // not worth uploading group data is missing
+      return;
+    }
+    // retrieve photo
+    if (photo?.filename) {
+      photo = await retrieveImage(photo.filename);
+    }
+    let profileTimestamp = Date.now();
 
-  // retrieve photo
-  let photo = await retrieveImage(filename);
-  let profileTimestamp = Date.now();
+    let dataObj = {
+      id,
+      photo,
+      name,
+      profileTimestamp,
+      aesKey: groupKey,
+    };
 
-  let dataObj = {
-    id,
-    photo,
-    name,
-    profileTimestamp,
-    aesKey: groupKey,
-  };
-
-  let encrypted = encryptData(dataObj, aesKey);
-  console.log(`Posting group data of ${id} ...`);
-  await channelApi.upload({
-    channelId: hash(aesKey),
-    data: encrypted,
-    dataId: `group_${id}`,
-  });
+    let encrypted = encryptData(dataObj, aesKey);
+    console.log(`Posting group data of ${id} ...`);
+    await channelApi.upload({
+      channelId: hash(aesKey),
+      data: encrypted,
+      dataId: `group_${id}`,
+    });
+  } catch (err) {
+    console.error(`uploadGroup: ${err.message}`);
+  }
 };
 
 export const uploadMutualInfo = ({ conn, aesKey, channelApi }) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  const dataIds = await channelApi.list(hash(aesKey));
-  if (!dataIds.includes(`connection_${conn.id}`)) {
-    console.log(`uploading recovery data for connection`);
-    await uploadConnection({ conn, channelApi, aesKey });
-  }
-  let {
-    connections: { connections },
-    groups: { groups },
-    user,
-  } = getState();
-  connections = _.keyBy(connections, 'id');
-  groups = _.keyBy(groups, 'id');
+  try {
+    const dataIds = await channelApi.list(hash(aesKey));
+    if (!dataIds.includes(`connection_${conn.id}`)) {
+      console.log(`uploading recovery data for connection`);
+      await uploadConnection({ conn, channelApi, aesKey });
+    }
+    let {
+      connections: { connections },
+      groups: { groups },
+      user,
+    } = getState();
+    connections = _.keyBy(connections, 'id');
+    groups = _.keyBy(groups, 'id');
 
-  let otherSideConnections = await api.getConnections(conn.id, 'inbound');
-  const knownLevels = ['just met', 'already known', 'recovery'];
-  let mutualConnections = otherSideConnections
-    .filter(
-      (c) =>
-        knownLevels.includes(c.level) &&
-        connections[c.id] &&
-        !dataIds.includes(`connection_${c.id}`),
-    )
-    .map((c) => connections[c.id]);
-  if (!dataIds.includes(`connection_${user.id}`)) {
-    mutualConnections.push(user);
-  }
+    let otherSideConnections = await api.getConnections(conn.id, 'inbound');
+    const knownLevels = ['just met', 'already known', 'recovery'];
+    let mutualConnections = otherSideConnections
+      .filter(
+        (c) =>
+          connections[c.id] &&
+          connections[c.id].name &&
+          knownLevels.includes(c.level) &&
+          !dataIds.includes(`connection_${c.id}`),
+      )
+      .map((c) => connections[c.id]);
 
-  let otherSideGroups = (await api.getUserInfo(conn.id))?.groups;
-  let mutualGroups = otherSideGroups
-    .filter((g) => groups[g.id])
-    .map((g) => groups[g.id]);
+    if (!dataIds.includes(`connection_${user.id}`)) {
+      mutualConnections.push(user);
+    }
 
-  console.log('uploading mutual connections');
-  for (let c of mutualConnections) {
-    await uploadConnection({ conn: c, channelApi, aesKey });
-  }
-  console.log('uploading mutual groups');
-  for (let g of mutualGroups) {
-    await uploadGroup({ group: g, channelApi, aesKey });
+    let otherSideGroups = (await api.getUserInfo(conn.id))?.groups;
+    let mutualGroups = otherSideGroups
+      .filter((g) => groups[g.id])
+      .map((g) => groups[g.id]);
+
+    console.log('uploading mutual connections');
+    for (let c of mutualConnections) {
+      await uploadConnection({ conn: c, channelApi, aesKey });
+    }
+    console.log('uploading mutual groups');
+    for (let g of mutualGroups) {
+      await uploadGroup({ group: g, channelApi, aesKey });
+    }
+  } catch (err) {
+    console.error(`uploadMutualInfo: ${err.message}`);
   }
 };
