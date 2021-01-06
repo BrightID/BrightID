@@ -52,6 +52,8 @@ const uploadConnection = async ({ conn, channelApi, aesKey }) => {
     // retrieve photo
     if (photo?.filename) {
       photo = await retrieveImage(photo.filename);
+    } else {
+      photo = '';
     }
 
     let profileTimestamp = Date.now();
@@ -85,7 +87,10 @@ const uploadGroup = async ({ group, channelApi, aesKey }) => {
     // retrieve photo
     if (photo?.filename) {
       photo = await retrieveImage(photo.filename);
+    } else {
+      photo = '';
     }
+
     let profileTimestamp = Date.now();
 
     let dataObj = {
