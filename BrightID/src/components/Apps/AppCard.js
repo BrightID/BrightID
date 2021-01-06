@@ -96,24 +96,28 @@ const AppCard = (props) => {
   }, [linkedContext, dispatch]);
 
   const openApp = () => {
-    Alert.alert(
-      '',
-      t('apps.alert.text.checkWebsite', { name }),
-      [
-        {
-          text: t('apps.alert.button.visitWebsite'),
-          onPress: () => {
-            Linking.openURL(url);
+    if (url) {
+      Alert.alert(
+        '',
+        t('apps.alert.text.checkWebsite', { name }),
+        [
+          {
+            text: t('apps.alert.button.visitWebsite'),
+            onPress: () => {
+              Linking.openURL(url);
+            },
           },
-        },
-        {
-          text: t('common.alert.cancel'),
-          style: 'cancel',
-          onPress: () => {},
-        },
-      ],
-      { cancelable: true },
-    );
+          {
+            text: t('common.alert.cancel'),
+            style: 'cancel',
+            onPress: () => {},
+          },
+        ],
+        { cancelable: true },
+      );
+    } else {
+      console.log(`No url set for app ${name}`);
+    }
   };
 
   const removeContext = () => {

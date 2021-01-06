@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-import { StyleSheet, InteractionManager } from 'react-native';
+import { StyleSheet, InteractionManager, Linking } from 'react-native';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { pollOperations } from '@/utils/operations';
 import { WHITE } from '@/theme/colors';
@@ -43,6 +43,27 @@ export const App = () => {
           },
         },
       },
+    },
+    // Add custom subscribe method to prevent crashes when url is undefined
+    subscribe(listener) {
+      // default deep link handling
+      const onReceiveURL = ({ url }: { url: string }) => {
+        if (url) {
+          console.log(
+            `Custom subscribe got url ${url}. Calling listener callback.`,
+          );
+          listener(url);
+        } else {
+          console.log(`Custom subscribe got undefined url. Ignoring event.`);
+        }
+      };
+
+      // Listen to incoming links from deep linking
+      Linking.addEventListener('url', onReceiveURL);
+      return () => {
+        // Clean up the event listeners
+        Linking.removeEventListener('url', onReceiveURL);
+      };
     },
   };
 
