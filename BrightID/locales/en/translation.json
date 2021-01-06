@@ -536,9 +536,7 @@
       "title": {
         "codeGroup": "Group code",
         "codeSingle": "Single-use code"
-      },
-      "connectSingle": "Connect with {{name}} on BrightID: {{link}}",
-      "connectGroup": "Make a group connection with {{name}} on BrightID: {{link}}"
+      }
     },
     "button": {
       "copyLink": "Copy Link",
