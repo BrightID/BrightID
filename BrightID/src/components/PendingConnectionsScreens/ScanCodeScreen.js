@@ -26,7 +26,7 @@ import {
   channel_types,
   closeChannel,
 } from '@/components/PendingConnectionsScreens/channelSlice';
-import { selectAlUnconfirmedConnectionsByChannelIds } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+import { selectAllUnconfirmedConnectionsByChannelIds } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import { decodeChannelQrString } from '@/utils/channels';
 import { joinChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
@@ -67,8 +67,12 @@ export const ScanCodeScreen = () => {
   const { t } = useTranslation();
 
   const pendingConnectionSizeForChannel = useSelector((state) => {
-    return selectAlUnconfirmedConnectionsByChannelIds(state, [channel?.id])
-      .length;
+    if (channel) {
+      return selectAllUnconfirmedConnectionsByChannelIds(state, [channel.id])
+        .length;
+    } else {
+      return 0;
+    }
   });
 
   // always show scanner when navigating to this page

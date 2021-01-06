@@ -23,4 +23,13 @@ export const connectionsSelector = createSelector(
   },
 );
 
+export const connectionByIdSelector = createSelector(
+  connSelector,
+  (_, connectionId: string) => connectionId,
+  (connections, connectionId) => {
+    console.log(`connectionByIdSelector ${connectionId}...`);
+    return connections.find((connection) => connection.id === connectionId);
+  },
+);
+
 export default connectionsSelector;

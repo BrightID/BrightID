@@ -8,9 +8,10 @@ import React, {
 } from 'react';
 import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
-import ConnectionScreen from './ConnectionScreen';
 import ConnectionTestButton from '@/utils/connectionTestButton';
 import api from '@/api/brightId';
+import ConnectionScreen from './ConnectionScreen';
+import { connectionByIdSelector } from '../../utils/connectionsSelector';
 
 type ConnectionScreenProps = {
   route: any,
@@ -21,14 +22,16 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
   const { route, navigation } = props;
   const { connectionId } = route.params;
   const connection: connection = useSelector((state: State) =>
-    state.connections.connections.find((conn) => conn.id === connectionId),
+    connectionByIdSelector(state, connectionId),
   );
   const myConnections = useSelector((state) => state.connections.connections);
   const myGroups = useSelector((state) => state.groups.groups);
   const [connectionsNum, setConnectionsNum] = useState(0);
   const [groupsNum, setGroupsNum] = useState(0);
   const [mutualGroups, setMutualGroups] = useState<Array<group>>([]);
-  const [mutualConnections, setMutualConnections] = useState<Array<connection>>([]);
+  const [mutualConnections, setMutualConnections] = useState<Array<connection>>(
+    [],
+  );
   const [verifications, setVerifications] = useState<Array<any>>([]);
   const [createdAt, setCreatedAt] = useState(0);
   const [connectedAt, setConnectedAt] = useState(0);
@@ -45,12 +48,16 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
         setVerifications(profile.verifications);
         setCreatedAt(profile.createdAt);
         setConnectedAt(profile.connectedAt);
-        setMutualConnections(myConnections.filter((conn) => {
-          return profile.mutualConnections.includes(conn.id);
-        }));
-        setMutualGroups(myGroups.filter((g) => {
-          return profile.mutualGroups.includes(g.id);
-        }));
+        setMutualConnections(
+          myConnections.filter((conn) => {
+            return profile.mutualConnections.includes(conn.id);
+          }),
+        );
+        setMutualGroups(
+          myGroups.filter((g) => {
+            return profile.mutualGroups.includes(g.id);
+          }),
+        );
         setLoading(false);
       };
       if (connectionId !== undefined) {
@@ -79,7 +86,9 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
     return null;
   }
 
-  const brightIdVerified = verifications.map(v => v.name).includes('BrightID');
+  const brightIdVerified = verifications
+    .map((v) => v.name)
+    .includes('BrightID');
 
   return (
     <ConnectionScreen
