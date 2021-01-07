@@ -12,13 +12,14 @@ import {
 import { selectAllSocialMedia } from '@/components/EditProfile/socialMediaSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
-import { generateChannelData } from '@/utils/channels';
+import { generateChannelData, createChannelInfo } from '@/utils/channels';
 import {
   CHANNEL_CONNECTION_LIMIT,
   CHANNEL_TTL,
   MIN_CHANNEL_JOIN_TTL,
   PROFILE_POLL_INTERVAL,
   PROFILE_VERSION,
+  CHANNEL_INFO_NAME,
 } from '@/utils/constants';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
@@ -34,8 +35,8 @@ export const createChannel = (channelType: ChannelType) => async (
   let channel: Channel;
   try {
     // create new channel
-    const ipAddress = await api.ip();
-    channel = await generateChannelData(channelType, ipAddress);
+    const url = new URL(`${api.baseUrl}/profile`);
+    channel = await generateChannelData(channelType, url);
     // Set timeout to expire channel
     channel.timeoutId = setTimeout(() => {
       console.log(`timer expired for channel ${channel.id}`);
@@ -45,6 +46,13 @@ export const createChannel = (channelType: ChannelType) => async (
     dispatch(
       setMyChannel({ channelId: channel.id, channelType: channel.type }),
     );
+    // upload channel info
+    const channelInfo: ChannelInfo = createChannelInfo(channel);
+    await channel.api.upload({
+      channelId: channel.id,
+      data: channelInfo,
+      dataId: CHANNEL_INFO_NAME,
+    });
     // upload my profile
     await dispatch(encryptAndUploadProfileToChannel(channel.id));
     // start polling for profiles
@@ -57,7 +65,9 @@ export const createChannel = (channelType: ChannelType) => async (
     console.log(`Error while crating channel: ${e}`);
     Alert.alert(
       i18next.t('common.alert.error'),
-      i18next.t('pendingConnection.alert.text.errorCreateChannel', {message: `${e.message}`})
+      i18next.t('pendingConnection.alert.text.errorCreateChannel', {
+        message: `${e.message}`,
+      }),
     );
   }
 };
@@ -66,7 +76,7 @@ export const joinChannel = (channel: Channel) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  console.log(`Joining channel ${channel.id} at ${channel.ipAddress}`);
+  console.log(`Joining channel ${channel.id} at ${channel.url}`);
   // check to see if channel exists
   const channelIds = selectAllChannelIds(getState());
   if (channelIds.includes(channel.id)) {
@@ -113,7 +123,9 @@ export const joinChannel = (channel: Channel) => async (
     console.log(`Error while joining channel: ${e}`);
     Alert.alert(
       i18next.t('common.alert.error'),
-      i18next.t('pendingConnection.alert.text.errorJoinChannel', {message: `${e.message}`})
+      i18next.t('pendingConnection.alert.text.errorJoinChannel', {
+        message: `${e.message}`,
+      }),
     );
   }
 };
@@ -189,6 +201,13 @@ export const fetchChannelProfiles = createAsyncThunk(
   async (channelId, { getState, dispatch }) => {
     const channel = selectChannelById(getState(), channelId);
     let profileIds = await channel.api.list(channelId);
+
+    // ignore channelInfo.json
+    const channelInfoIndex = profileIds.indexOf(CHANNEL_INFO_NAME);
+    if (channelInfoIndex > -1) {
+      profileIds.splice(channelInfoIndex, 1);
+    }
+
     // Only get up to CHANNEL_CONNECTION_LIMIT profiles
     profileIds = profileIds.slice(0, CHANNEL_CONNECTION_LIMIT);
     const knownProfileIds = selectAllPendingConnectionIds(getState());

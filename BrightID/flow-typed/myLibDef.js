@@ -71,7 +71,6 @@ declare type Channel = {
   id: string,
   initiatorProfileId: string,
   myProfileId: string,
-  ipAddress: string,
   aesKey: string,
   timestamp: number,
   ttl: number,
@@ -81,6 +80,15 @@ declare type Channel = {
   state: ChannelState,
   myProfileTimestamp?: number,
   api: ChannelAPI,
+  url: URL,
+};
+
+declare type ChannelInfo = {
+  version: number,
+  type: ChannelType,
+  timestamp: number,
+  ttl: number,
+  initiatorProfileId: string,
 };
 
 declare type ConnectionsState = {

@@ -14,6 +14,8 @@ export const PROFILE_POLL_INTERVAL = 2000;
 // timestamp can be this far in the future (milliseconds) to accommodate 2 clients clock differences
 export const TIME_FUDGE = 60 * 60 * 1000;
 export const PROFILE_VERSION = 1;
+export const CHANNEL_INFO_NAME = 'channelInfo.json';
+export const CHANNEL_INFO_VERSION = 1;
 
 /** ** THEME CONSTANTS  *** */
 export const ORANGE = '#ED7A5D';

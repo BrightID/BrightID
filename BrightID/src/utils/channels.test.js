@@ -2,6 +2,7 @@ import {
   generateChannelData,
   decodeChannelQrString,
   encodeChannelQrString,
+  createChannelInfo,
 } from '@/utils/channels';
 import {
   channel_types,
@@ -33,9 +34,9 @@ describe('Test channel data', () => {
       expect(channel.state).toBe(channel_states.OPEN);
     });
 
-    test(`encodes and decodes qrdata for type ${channel_type}`, async () => {
+    test(`encodes and decodes old format qrdata for type ${channel_type}`, async () => {
       const originalChannel = await generateChannelData(
-        channel_types.SINGLE,
+        channel_type,
         ipAddress,
       );
       const qrString = encodeChannelQrString(originalChannel);
@@ -60,6 +61,21 @@ describe('Test channel data', () => {
       );
       // decodedChannel should have a ChannelApi instance
       expect(decodedChannel.api).toBeInstanceOf(ChannelAPI);
+    });
+
+    test(`creates correct channel info for type ${channel_type}`, async () => {
+      const originalChannel = await generateChannelData(
+        channel_type,
+        ipAddress,
+      );
+      const channelInfo = createChannelInfo(originalChannel);
+      expect(channelInfo).toMatchObject({
+        version: 1,
+        type: originalChannel.type,
+        timestamp: originalChannel.timestamp,
+        ttl: originalChannel.ttl,
+        initiatorProfileId: originalChannel.myProfileId,
+      });
     });
   }
 });

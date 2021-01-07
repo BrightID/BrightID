@@ -27,7 +27,7 @@ import {
   closeChannel,
 } from '@/components/PendingConnectionsScreens/channelSlice';
 import { selectAllUnconfirmedConnectionsByChannelIds } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
-import { decodeChannelQrString } from '@/utils/channels';
+import { decodeChannelQrString, parseChannelQrURL } from '@/utils/channels';
 import { joinChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
 
@@ -105,7 +105,7 @@ export const ScanCodeScreen = () => {
   useEffect(() => {
     if (route.params?.qrcode) {
       console.log(`Got qrcode ${route.params.qrcode} from Deeplink`);
-      setQrData(route.params.qrcode);
+      setQrData(decodeURIComponent(route.params.qrcode));
     }
   }, [route.params, setQrData]);
 
@@ -121,12 +121,26 @@ export const ScanCodeScreen = () => {
           console.log(`handleQrData: calling Linking.openURL() with ${qrData}`);
           await Linking.openURL(qrData);
         } else if (validQrString(qrData)) {
-          const channel = await decodeChannelQrString(qrData);
+          let channel;
+          try {
+            const channelURL = new URL(qrData);
+            console.log(
+              `handleQrData: valid channelURL, joining channel at ${channelURL.href}`,
+            );
+            channel = await parseChannelQrURL(channelURL);
+          } catch (e) {
+            console.log(
+              `Failed to parse url, trying fallback to old format...`,
+            );
+            channel = await decodeChannelQrString(qrData);
+            console.log(
+              `handleQrData: valid qrdata, joining channel ${channel.id}`,
+            );
+          }
           setChannel(channel);
-          console.log(
-            `handleQrData: valid qrdata, joining channel ${channel.id}`,
-          );
           await dispatch(joinChannel(channel));
+        } else {
+          throw Error(`Can not parse QRData ${qrData}`);
         }
       } catch (err) {
         console.log(err.message);
