@@ -67,6 +67,7 @@
       "tryAgain": "دوباره"
     },
     "text": {
+      "noApps": "بدون اپلیکیشن",
       "notSponsored": "اسپانسر نشدی!\nلطفا از طریق یکی از اپلیکیشن های زیر اسپانسر شو.",
       "pendingLink": "لینک کردن اکانتت در {{context}} به BrightID خودت …"
     }
@@ -124,7 +125,8 @@
         "trustedSigned": "یکی از کانکشن های مورد اعتمادت به درخواستت جواب داد"
       },
       "title": {
-        "lostKeys": "ما کلید عمومی BrightID را از دستگاه گم کردیم :)))))))))))))))))))))))))))))))))))))))))))))))))))"
+        "lostKeys": "ما کلید عمومی BrightID را از دستگاه گم کردیم :)))))))))))))))))))))))))))))))))))))))))))))))))))",
+        "pleaseConfirm": "تایید"
       },
       "yes": "بله"
     },
@@ -138,6 +140,9 @@
       "message": "آیا اجازه دسترسی به دوربین میدهید؟",
       "ok": "بله",
       "title": "اجازه دسترسی به دوربین"
+    },
+    "language": {
+      "and": "و"
     },
     "photoActionSheet": {
       "choosePhoto": "انتخاب از کتابخانه",
@@ -348,6 +353,10 @@
       "cancel": "لغو",
       "dismissMember": "رد کردن از گروه"
     },
+    "state": {
+      "creatingGroup": "ساخت گروه",
+      "uploadingGroupPhoto": "درحال بارگزاری عکس گروه"
+    },
     "tag": {
       "primaryGroup": "گروه اولیه"
     },
@@ -504,7 +513,26 @@
       "socialMediaLink": "لینک شبکه های اجتماعی"
     },
     "placeholder": {
-      "name": "ورود نام"
+      "name": "ورود نام",
+      "newPassword": "رمز عبور جدید",
+      "newPasswordAgain": "رمزعبور جدید"
+    },
+    "text": {
+      "changePassword": "تغییر رمز عبور",
+      "changeProfilePicture": "تغییر عکس پروفایل",
+      "viewPassword": "دیدن رمزعبور"
+    }
+  },
+  "qrcode": {
+    "alert": {
+      "connectGroup": "کانکشن زدن گروهی به{{name}} با BrightID: \n{{link}}",
+      "connectSingle": "کانکشن به {{name}} با BrightID:\n{{link}}",
+      "text": {
+        "codeGroup": "این کد QR برای کانکشن زدن افراد زیاد بصورت همزمان است.",
+        "codeSingle": "این کد QR برای کانکشن زدن با یک کاربر است.",
+        "shareLinkGroup": "اشتراک گذاری لینک",
+        "shareLinkSingle": "اشتراک گذاری لینک با دوستان"
+      }
     }
   }
 }
