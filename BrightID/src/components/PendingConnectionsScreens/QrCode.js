@@ -26,11 +26,7 @@ import {
   channel_types,
   closeChannel,
 } from '@/components/PendingConnectionsScreens/channelSlice';
-import {
-  encodeChannelQrString,
-  buildChannelQrString,
-  buildChannelQrUrl,
-} from '@/utils/channels';
+import { buildChannelQrUrl } from '@/utils/channels';
 
 /**
  * My Code screen of BrightID
