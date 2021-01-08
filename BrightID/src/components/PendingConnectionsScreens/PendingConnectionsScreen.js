@@ -8,6 +8,7 @@ import React, {
   useRef,
 } from 'react';
 import { BackHandler, StyleSheet, StatusBar, View } from 'react-native';
+import { isEqual } from 'lodash';
 import Spinner from 'react-native-spinkit';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Pagination } from 'react-native-snap-carousel';
@@ -26,7 +27,8 @@ import { PreviewConnectionController } from './PreviewConnectionController';
 ==================================================================
  *
  */
-const ZERO_CONNECTIONS_TIMEOUT = 2000;
+
+const REFRESH_VIEWPAGER_TIMEOUT = 1000;
 
 export const PendingConnectionsScreen = () => {
   const navigation = useNavigation();
@@ -42,32 +44,47 @@ export const PendingConnectionsScreen = () => {
   );
   const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [onLastIndex, setOnLastIndex] = useState(false);
 
-  // this will trigger a re-render of the carousel
-  // causes a glitch in the UI on Android
-  const resetDisplayConnections = useCallback(() => {
-    const connectionsToDisplay = pendingConnections;
-    // this will cause the PendingConnectionList to re render
-    setPendingConnectionsDisplay(connectionsToDisplay);
-  }, [pendingConnections]);
+  const refreshDisplayConnections = useCallback(() => {
+    /**
+     *  this will cause the Viewpager to re render
+     * only 10 connections are displayed at one time
+     * */
+    console.log('SLICING / COMPARING PENDING CONNECTIONS');
+    const connectionsToDisplay = pendingConnections.slice(0, 10);
+    if (!isEqual(pendingConnectionsToDisplay, connectionsToDisplay)) {
+      setPendingConnectionsDisplay(pendingConnections.slice(0, 10));
+      console.log('RESETING DISPLAY CONNECTIONS');
+    }
+  }, [pendingConnections, pendingConnectionsToDisplay]);
 
   useFocusEffect(
     useCallback(() => {
-      resetDisplayConnections();
+      refreshDisplayConnections();
       dispatch(setActiveNotification(null));
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
   );
 
-  // re-render list if no connections are displayed or end of list
+  // NAVIGATION
+
   useEffect(() => {
+    /**
+     * we will always refresh the display list
+     * when navigating away from the last page
+     * */
     if (activeIndex === pendingConnectionsToDisplay.length - 1) {
-      resetDisplayConnections();
+      setOnLastIndex(true);
+    } else if (onLastIndex) {
+      refreshDisplayConnections();
+      setOnLastIndex(false);
     }
   }, [
-    resetDisplayConnections,
+    refreshDisplayConnections,
     pendingConnectionsToDisplay.length,
     activeIndex,
+    onLastIndex,
   ]);
 
   // back handling for android
@@ -89,7 +106,7 @@ export const PendingConnectionsScreen = () => {
       setLoading(true);
       timeout = setTimeout(() => {
         navigation.navigate('Connections');
-      }, ZERO_CONNECTIONS_TIMEOUT);
+      }, REFRESH_VIEWPAGER_TIMEOUT);
     } else {
       setLoading(false);
     }
@@ -98,9 +115,22 @@ export const PendingConnectionsScreen = () => {
     };
   }, [pendingConnections.length, navigation]);
 
-  // the list should only re render sparingly for performance and continuity
+  /** 
+    the list should only re render sparingly for performance and continuity
+    only 10 pending connections are displayed at one time
+  */
   const PendingConnectionList = useMemo(() => {
     const renderView = (item, index) => {
+      const last = index === pendingConnectionsToDisplay.length - 1;
+      const moveToNext = () => {
+        /** 
+        setting viewpager active index zero will trigger the list to re - render
+        */
+        last
+          ? viewPagerRef.current?.setPage(0)
+          : viewPagerRef.current?.setPage(index + 1);
+      };
+
       return (
         <View
           style={{ flex: 1, width: '100%' }}
@@ -111,12 +141,12 @@ export const PendingConnectionsScreen = () => {
             pendingConnectionId={item.id}
             viewPagerRef={viewPagerRef}
             index={index}
-            last={index === pendingConnectionsToDisplay.length - 1}
+            moveToNext={moveToNext}
           />
         </View>
       );
     };
-    console.log('rendering pending connections VIEWPAGER');
+    console.log('RE-RENDERING VIEWPAGER');
 
     const Views = pendingConnectionsToDisplay.map(renderView);
 
@@ -126,6 +156,7 @@ export const PendingConnectionsScreen = () => {
         style={{ flex: 1, width: '100%' }}
         initialPage={0}
         onPageSelected={(e) => {
+          console.log('ON PAGE SELECTED', e.nativeEvent.position);
           setActiveIndex(e.nativeEvent.position);
         }}
         orientation="horizontal"
@@ -137,6 +168,8 @@ export const PendingConnectionsScreen = () => {
     );
   }, [pendingConnectionsToDisplay]);
 
+  console.log('ACTIVE INDEX', activeIndex);
+
   return (
     <SafeAreaView style={[styles.container]}>
       <StatusBar
@@ -144,7 +177,6 @@ export const PendingConnectionsScreen = () => {
         backgroundColor={WHITE}
         animated={true}
       />
-      {}
       {loading ? (
         <Spinner
           isVisible={true}

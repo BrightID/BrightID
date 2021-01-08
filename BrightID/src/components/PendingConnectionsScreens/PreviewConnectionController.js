@@ -3,7 +3,12 @@
 import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  InteractionManager,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { DARK_GREY, WHITE } from '@/theme/colors';
@@ -25,7 +30,7 @@ const makeConnectionByBrightIDSelector = () =>
     (_, brightID: string) => brightID,
     (allConnections, brightID) => {
       if (brightID) {
-        console.log(`Looking for connection ${brightID}`);
+        // console.log(`Looking for connection ${brightID}`);
         return allConnections.find((conn) => conn.id === brightID);
       } else {
         return undefined;
@@ -40,7 +45,7 @@ type PreviewConnectionProps = {
 };
 
 export const PreviewConnectionController = (props: PreviewConnectionProps) => {
-  const { pendingConnectionId, viewPagerRef, last, index } = props;
+  const { pendingConnectionId, moveToNext, index } = props;
   const dispatch = useDispatch();
 
   const pendingConnection = useSelector((state) =>
@@ -72,9 +77,12 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
   }
 
   const setLevelHandler = (level: ConnectionLevel) => {
-    dispatch(confirmPendingConnectionThunk(pendingConnection.id, level));
-    // if last page nav back to index 0
-    viewPagerRef.current?.setPage(last ? 0 : index + 1);
+    // navigates to next view in the viewpager
+    moveToNext();
+    // wait until after finishes navigation before dispatching confirm action
+    InteractionManager.runAfterInteractions(() => {
+      dispatch(confirmPendingConnectionThunk(pendingConnection.id, level));
+    });
   };
 
   const abuseHandler = () => {
@@ -102,6 +110,8 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
       base64: true,
     });
   };
+
+  console.log(`rendering ${pendingConnection.name}`);
 
   return (
     <View style={styles.previewContainer}>
