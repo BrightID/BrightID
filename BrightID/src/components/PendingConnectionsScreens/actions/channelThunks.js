@@ -54,11 +54,8 @@ export const createChannel = (channelType: ChannelType) => async (
     if (channel && channel.id) {
       dispatch(leaveChannel(channel.id));
     }
-    console.log(`Error while crating channel: ${e}`);
-    Alert.alert(
-      i18next.t('common.alert.error'),
-      i18next.t('pendingConnection.alert.text.errorCreateChannel', {message: `${e.message}`})
-    );
+    // need to throw to prevent app from looping
+    throw e;
   }
 };
 
@@ -113,7 +110,9 @@ export const joinChannel = (channel: Channel) => async (
     console.log(`Error while joining channel: ${e}`);
     Alert.alert(
       i18next.t('common.alert.error'),
-      i18next.t('pendingConnection.alert.text.errorJoinChannel', {message: `${e.message}`})
+      i18next.t('pendingConnection.alert.text.errorJoinChannel', {
+        message: `${e.message}`,
+      }),
     );
   }
 };

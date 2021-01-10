@@ -3,15 +3,9 @@
 import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
-import {
-  InteractionManager,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { InteractionManager, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { DARK_GREY, WHITE } from '@/theme/colors';
+import { WHITE } from '@/theme/colors';
 import { confirmPendingConnectionThunk } from './actions/pendingConnectionThunks';
 import {
   pendingConnection_states,
@@ -20,7 +14,6 @@ import {
 } from './pendingConnectionSlice';
 import { ReconnectView } from './ReconnectView';
 import { PreviewConnectionView } from './PreviewConnectionView';
-import BackArrow from '../Icons/BackArrow';
 
 const selectAllConnections = (state) => state.connections.connections;
 
@@ -115,14 +108,6 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
 
   return (
     <View style={styles.previewContainer}>
-      <TouchableOpacity
-        style={styles.cancelButton}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      >
-        <BackArrow height={DEVICE_LARGE ? '22' : '20'} color={DARK_GREY} />
-      </TouchableOpacity>
       {existingConnection ? (
         <ReconnectView
           pendingConnection={pendingConnection}
@@ -144,20 +129,12 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
 
 const styles = StyleSheet.create({
   previewContainer: {
+    flex: 1,
     width: '100%',
-    height: '100%',
     backgroundColor: WHITE,
     alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'column',
-    borderRadius: 10,
-  },
-  cancelButton: {
-    position: 'absolute',
-    left: -10,
-    top: DEVICE_LARGE ? 20 : 12,
-    zIndex: 20,
-    width: DEVICE_LARGE ? 60 : 50,
-    alignItems: 'center',
+    paddingVertical: 10,
   },
 });

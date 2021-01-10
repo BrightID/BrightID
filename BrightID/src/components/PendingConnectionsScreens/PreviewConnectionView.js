@@ -95,12 +95,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
 
   return (
     <>
-      <View testID="previewConnectionScreen" style={styles.titleContainer}>
-        <Text style={styles.titleText}>
-          {t('pendingConnections.title.connectionRequest')}{' '}
-        </Text>
-      </View>
-      <View style={styles.userContainer}>
+      <View testID="previewConnectionScreen" style={styles.userContainer}>
         <TouchableWithoutFeedback onPress={photoTouchHandler}>
           <Image
             source={{ uri: pendingConnection.photo }}
@@ -138,28 +133,6 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
 };
 
 const styles = StyleSheet.create({
-  waitingText: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[16],
-    color: LIGHT_BLACK,
-  },
-  buttonText: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[18],
-    textAlign: 'left',
-    color: WHITE,
-  },
-  titleContainer: {
-    marginTop: DEVICE_LARGE ? 18 : 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  titleText: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: fontSize[22],
-    textAlign: 'center',
-    color: BLACK,
-  },
   userContainer: {
     marginTop: DEVICE_LARGE ? 12 : 10,
     paddingBottom: 10,
@@ -198,12 +171,6 @@ const styles = StyleSheet.create({
     borderColor: ORANGE,
     justifyContent: 'space-evenly',
     flexDirection: 'row',
-  },
-  connectedText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: fontSize[14],
-    color: GREY,
-    fontStyle: 'italic',
   },
   verificationSticker: {
     marginLeft: DEVICE_LARGE ? 7 : 5,
