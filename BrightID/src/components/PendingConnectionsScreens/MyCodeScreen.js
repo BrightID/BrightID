@@ -35,7 +35,7 @@ import {
 } from '@/components/PendingConnectionsScreens/channelSlice';
 import {
   selectAllPendingConnectionsByChannelIds,
-  selectAlUnconfirmedConnectionsByChannelIds,
+  selectAllUnconfirmedConnectionsByChannelIds,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 
 import { createChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
@@ -98,14 +98,18 @@ export const MyCodeScreen = () => {
   );
 
   // pending connections attached to active channel
-  const pendingConnectionSize = useSelector(
-    (state) =>
-      selectAllPendingConnectionsByChannelIds(state, [myChannel?.id]).length,
-  );
+  const pendingConnectionSize = useSelector((state) => {
+    if (myChannel) {
+      return selectAllPendingConnectionsByChannelIds(state, [myChannel.id])
+        .length;
+    } else {
+      return 0;
+    }
+  });
 
   const unconfirmedConnectionSize = useSelector(
     (state) =>
-      selectAlUnconfirmedConnectionsByChannelIds(state, activeChannelIds)
+      selectAllUnconfirmedConnectionsByChannelIds(state, activeChannelIds)
         .length,
   );
 
