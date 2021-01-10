@@ -1,1 +1,12 @@
-{}
+{
+  "achievements": {
+    "getSponsored": {
+      "description": "通过链接提供赞助项目app获得赞助费用",
+      "title": "获取赞助"
+    },
+    "joinConnectionParty": {
+      "description": "加入BrightID 连接指导会",
+      "title": "连接指导会"
+    }
+  }
+}
