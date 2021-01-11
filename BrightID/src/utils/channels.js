@@ -20,6 +20,7 @@ export const createRandomId = async (size: number = 9) => {
 export const generateChannelData = async (
   channelType: ChannelType,
   url: URL,
+  ipAddress?: string,
 ): Promise<Channel> => {
   const aesKey = await randomKey(16);
   const id = await createRandomId();
@@ -36,6 +37,7 @@ export const generateChannelData = async (
     api: channelApi,
     id,
     initiatorProfileId,
+    ipAddress,
     myProfileId,
     state,
     timestamp,
@@ -100,6 +102,9 @@ export const parseChannelQrURL = async (url: URL) => {
 
 export const encodeChannelQrString = (channel: Channel) => {
   const { aesKey, id, ipAddress, myProfileId, timestamp, ttl, type } = channel;
+  if (!ipAddress) {
+    throw Error(`Cant create old format channelQRString - ipAddress missing`);
+  }
   const b64Ip = Buffer.from(
     ipAddress.split('.').map((octet) => parseInt(octet, 10)),
   )

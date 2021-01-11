@@ -16,8 +16,11 @@ export const TIME_FUDGE = 60 * 60 * 1000;
 export const PROFILE_VERSION = 1;
 export const CHANNEL_INFO_NAME = 'channelInfo.json';
 export const CHANNEL_INFO_VERSION = 1;
-
-/** ** THEME CONSTANTS  *** */
+// Thursday, January 21 2021 00:00:00
+export const CHANNEL_SWITCH_TIMESTAMP = 1611187200 * 1000;
+// Monday, January 11 2021 00:00:00
+// export const CHANNEL_SWITCH_TIMESTAMP = 1610323200 * 1000;
+//** ** THEME CONSTANTS  *** */
 export const ORANGE = '#ED7A5D';
 export const LIGHTBLUE = '#4A90E2';
 export const DARK_ORANGE = '#B64B32';

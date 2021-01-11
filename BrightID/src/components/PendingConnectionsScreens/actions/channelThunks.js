@@ -20,6 +20,7 @@ import {
   PROFILE_POLL_INTERVAL,
   PROFILE_VERSION,
   CHANNEL_INFO_NAME,
+  CHANNEL_SWITCH_TIMESTAMP,
 } from '@/utils/constants';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
@@ -32,11 +33,18 @@ import i18next from 'i18next';
 export const createChannel = (channelType: ChannelType) => async (
   dispatch: dispatch,
 ) => {
-  let channel: Channel;
+  let channel: ?Channel;
   try {
-    // create new channel
-    const url = new URL(`${api.baseUrl}/profile`);
-    channel = await generateChannelData(channelType, url);
+    // TODO: Remove fallback implementation when CHANNEL_SWITCH_TIMESTAMP is reached
+    let url, ipAddress;
+    if (Date.now() > CHANNEL_SWITCH_TIMESTAMP) {
+      url = new URL(`${api.baseUrl}/profile`);
+    } else {
+      ipAddress = await api.ip();
+      url = new URL(`http://${ipAddress}/profile`);
+    }
+    channel = await generateChannelData(channelType, url, ipAddress);
+
     // Set timeout to expire channel
     channel.timeoutId = setTimeout(() => {
       console.log(`timer expired for channel ${channel.id}`);
@@ -76,7 +84,7 @@ export const joinChannel = (channel: Channel) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  console.log(`Joining channel ${channel.id} at ${channel.url}`);
+  console.log(`Joining channel ${channel.id} at ${channel.url.href}`);
   // check to see if channel exists
   const channelIds = selectAllChannelIds(getState());
   if (channelIds.includes(channel.id)) {
