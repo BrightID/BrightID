@@ -85,7 +85,7 @@
     },
     "header": {
       "backup": "Sauvegarde",
-      "trustedConnections": "Trusted connections"
+      "trustedConnections": "Connexions de confiance"
     },
     "placeholder": {
       "confirmPassword": "Confirmation de Mot de Passe"
@@ -125,7 +125,8 @@
         "trustedSigned": "Une de vos connexions de confiance a signé votre requête"
       },
       "title": {
-        "lostKeys": "Impossible de trouver vos clés BrightID sur cet appareil"
+        "lostKeys": "Impossible de trouver vos clés BrightID sur cet appareil",
+        "pleaseConfirm": "Veuillez confirmer"
       },
       "yes": "Oui"
     },
@@ -139,6 +140,9 @@
       "message": "Nous avons besoin de votre permission pour utiliser l'appareil photo",
       "ok": "OK",
       "title": "Permission d'utiliser l'appareil photo"
+    },
+    "language": {
+      "and": "et"
     },
     "photoActionSheet": {
       "choosePhoto": "Sélectionner depuis l'Album",
@@ -336,7 +340,7 @@
       "leaveGroup": "Quitter le groupe"
     },
     "header": {
-      "groups": "Groups",
+      "groups": "Groupes",
       "inviteList": "Liste d'invitations",
       "newGroup": "Nouveau Groupe"
     },
@@ -348,6 +352,10 @@
       "addAdmin": "Définir comme administrateur",
       "cancel": "Annuler",
       "dismissMember": "Retirer du Groupe"
+    },
+    "state": {
+      "creatingGroup": "création du groupe",
+      "uploadingGroupPhoto": "téléversement de la photo du groupe"
     },
     "tag": {
       "primaryGroup": "Groupe principal"
@@ -398,7 +406,7 @@
       "text": {
         "failureAcceptGroupInvite": "Erreur lors de la tentative de rejoindre le groupe",
         "rejectGroupInvite": "Êtes-vous sûr·e de vouloir refuser de rejoindre ce groupe ?",
-        "successGroupInvite": ""
+        "successGroupInvite": "Vous avez rejoint {{groupName}}"
       },
       "title": {
         "failureRejectGroupInvite": "Échec du refus de l'invitation",
@@ -517,9 +525,14 @@
   },
   "qrcode": {
     "alert": {
+      "connectGroup": "Établissez une connexion de groupe avec {{name}} sur BrightID : {{link}}",
+      "connectSingle": "Connectez-vous avec {{name}} sur BrightID : {{link}}",
       "text": {
         "codeGroup": "Ce code QR est conçu pour permettre à différentes personnes de se connecter entre-elles simultanément.",
-        "codeSingle": "Ce code QR peut être utilisé pour se connecter avec un seul utilisateur avant son expiration."
+        "codeSingle": "Ce code QR peut être utilisé pour se connecter avec un seul utilisateur avant son expiration.",
+        "shareLinkGroup": "Partager ce lien",
+        "shareLinkSingle": "Partagez ce lien avec un ami",
+        "universalLink": "Lien universel"
       },
       "title": {
         "codeGroup": "Code de groupe",
@@ -529,12 +542,12 @@
     },
     "button": {
       "copyLink": "Copier le Lien",
-      "scanCode": "Scanner un Code",
+      "scanCode": "Scanner un code",
       "showCode": "Afficher votre code QR"
     },
     "header": {
       "connections": "{{count}} / 30 connexions",
-      "connections_plural": ""
+      "connections_plural": "{{count}} / 30 connexions"
     },
     "label": {
       "connectionType": "Type de connexion :"
@@ -556,7 +569,10 @@
       "title": "Code de Restauration"
     },
     "text": {
-      "askTrustedConnections": "Demandez à vos contacts de confiance de scanner ce code."
+      "additionalInfo": "Vos connexions de confiance devront scanner ceci afin de vous aider à restaurer votre BrightID",
+      "askTrustedConnections": "Veuillez montrer ce code QR à vos connexions de confiance",
+      "signatures": "{{count}} / 2 signatures",
+      "signatures_plural": ""
     }
   },
   "restore": {
@@ -564,6 +580,7 @@
       "text": {
         "notTrusted": "L'un de vos amis ne figure pas dans votre liste de connexions de confiance",
         "requestRecovering": "Votre requête pour aider à la restauration de ce compte a été soumise avec succès !",
+        "restoreConfirm": "Le compte que vous aidez à restaurer est-il bien {{name}} ?",
         "restoreSuccess": "Votre compte a été restauré avec succès !"
       },
       "title": {
@@ -573,14 +590,21 @@
     "button": {
       "startRestore": "Démarrer la Restauration"
     },
+    "emptyList": {
+      "text": {
+        "downloadingData": "Téléchargement des données de restauration",
+        "nobodyHasChosen": "Impossible de restaurer cette connexion…\nCelle-ci ne vous a pas configuré comme connexion de confiance"
+      }
+    },
     "header": {
       "accountRecovery": "Restauration du Compte"
     },
     "text": {
       "chooseConnectionToHelp": "Veuillez sélectionner dans vos connexions le compte que vous souhaitez aider à restaurer.",
       "downloadingData": "Téléchargement des données depuis le serveur de sauvegarde…",
-      "enterPassword": "Entrez le mot de passe avec lequel vous avez chiffré votre sauvegarde :",
-      "noConnections": "Aucune connexions…"
+      "enterPassword": "Entrez votre mot de passe",
+      "noConnections": "Aucune connexions…",
+      "skipLoadingBackup": "Sans le mot de passe, vous pouvez toujours récupérer votre BrightID mais les noms et photos de vos connexions et groupes ne seront pas disponibles."
     },
     "title": {
       "chooseConnection": "Choissez la Connexion"
