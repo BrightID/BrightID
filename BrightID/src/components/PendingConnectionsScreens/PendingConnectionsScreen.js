@@ -59,11 +59,6 @@ export const PendingConnectionsScreen = () => {
   const [confirmed, setConfirmed] = useState(0);
 
   const refreshDisplayConnections = useCallback(() => {
-    // update total
-    if (pendingConnections.length > total) {
-      setTotal(pendingConnections.length);
-    }
-
     /**
      * this will cause the Viewpager to re render
      * for performance on android, we will limit the list to ~ 15 connections
@@ -78,7 +73,7 @@ export const PendingConnectionsScreen = () => {
     if (!isEqual(pendingConnectionsToDisplay, connectionsToDisplay)) {
       setPendingConnectionsDisplay(connectionsToDisplay);
     }
-  }, [pendingConnections, pendingConnectionsToDisplay, total]);
+  }, [pendingConnections, pendingConnectionsToDisplay]);
 
   useFocusEffect(
     useCallback(() => {
@@ -87,6 +82,15 @@ export const PendingConnectionsScreen = () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
   );
+
+  useEffect(() => {
+    // update total
+    if (pendingConnections.length > total) {
+      setTotal(pendingConnections.length);
+    } else if (confirmed > total) {
+      setTotal(confirmed);
+    }
+  }, [pendingConnections, total, confirmed]);
 
   // NAVIGATION
 
@@ -138,7 +142,6 @@ export const PendingConnectionsScreen = () => {
 
   /** 
     the list should only re render sparingly for performance and continuity
-    only 10 pending connections are displayed at one time
   */
   const PendingConnectionList = useMemo(() => {
     const renderView = (item, index) => {
