@@ -482,7 +482,7 @@
       "rating": "Your answer will help us prevent attacks"
     },
     "title": {
-      "connectionRequest": "Connection Request"
+      "confirmationTotal": "{{confirmed}} / {{total}} confirmed"
     }
   },
   "profile": {

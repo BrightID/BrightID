@@ -29,9 +29,10 @@ const styles = StyleSheet.create({
   rateButton: {
     borderWidth: 2,
     borderRadius: 100,
-    paddingTop: DEVICE_LARGE ? 8 : 7,
-    paddingBottom: DEVICE_LARGE ? 8 : 7,
+    alignItems: 'center',
+    justifyContent: 'center',
     width: '80%',
+    height: DEVICE_LARGE ? 46 : 42,
   },
   rateButtonLabel: {
     fontFamily: 'Poppins-Bold',

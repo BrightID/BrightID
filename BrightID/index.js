@@ -10,12 +10,24 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import codePush from 'react-native-code-push';
 import { DEVICE_ANDROID } from '@/utils/deviceConstants';
-import codePushOptions from './codepush.config.js';
+import codePushOptions from './codepush.config';
 import App from './src/App';
 import { name as appName } from './app.json';
 
 // detox e2e tests fail when yellowboxes come up
 console.disableYellowBox = true;
+
+// remove setting a timer warning
+if (__DEV__) {
+  // eslint-disable-next-line import/no-extraneous-dependencies
+  let _ = require('lodash');
+  let _console = _.clone(console);
+  console.warn = (message) => {
+    if (message.indexOf('Setting a timer') <= -1) {
+      _console.warn(message);
+    }
+  };
+}
 
 // enable react-native-screens
 // enableScreens is causing some android devices to crash
