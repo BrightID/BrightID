@@ -11,6 +11,7 @@ import {
   channel_types,
 } from '@/components/PendingConnectionsScreens/channelSlice';
 import ChannelAPI from '@/api/channelService';
+import i18next from 'i18next';
 
 export const createRandomId = async (size: number = 9) => {
   const key = await randomKey(size);
@@ -82,6 +83,20 @@ export const parseChannelQrURL = async (url: URL) => {
   });
   console.log(`Got ChannelInfo:`);
   console.log(channelInfo);
+
+  if (channelInfo.version > CHANNEL_INFO_VERSION) {
+    const msg = i18next.t(
+      'channel.alert.text.localOutdated',
+      'client version outdated - please update your client and retry',
+    );
+    throw new Error(msg);
+  } else if (channelInfo.version < CHANNEL_INFO_VERSION) {
+    const msg = i18next.t(
+      'channel.alert.text.otherOutdated',
+      'other client version outdated - QRCode creator needs to update client and retry',
+    );
+    throw new Error(msg);
+  }
 
   const myProfileId = await createRandomId();
 

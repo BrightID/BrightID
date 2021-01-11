@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
   StatusBar,
+  Alert,
 } from 'react-native';
 import {
   useFocusEffect,
@@ -31,6 +32,7 @@ import { decodeChannelQrString, parseChannelQrURL } from '@/utils/channels';
 import { joinChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
 
+import i18next from 'i18next';
 import { RNCamera } from './RNCameraProvider';
 
 /**
@@ -129,13 +131,17 @@ export const ScanCodeScreen = () => {
             );
             channel = await parseChannelQrURL(channelURL);
           } catch (e) {
-            console.log(
-              `Failed to parse url, trying fallback to old format...`,
-            );
-            channel = await decodeChannelQrString(qrData);
-            console.log(
-              `handleQrData: valid qrdata, joining channel ${channel.id}`,
-            );
+            if (e instanceof TypeError) {
+              console.log(
+                `Failed to parse url, trying fallback to old format...`,
+              );
+              channel = await decodeChannelQrString(qrData);
+              console.log(
+                `handleQrData: valid qrdata, joining channel ${channel.id}`,
+              );
+            } else {
+              throw e;
+            }
           }
           setChannel(channel);
           await dispatch(joinChannel(channel));
@@ -144,6 +150,13 @@ export const ScanCodeScreen = () => {
         }
       } catch (err) {
         console.log(err.message);
+        Alert.alert(
+          i18next.t('common.alert.error'),
+          i18next.t('pendingConnection.alert.text.errorJoinChannel', {
+            message: `${err.message}`,
+          }),
+        );
+        setQrData(undefined);
       }
     };
     if (qrData) {
