@@ -3,7 +3,9 @@
 import configureStore from 'redux-mock-store';
 import { getDefaultMiddleware } from '@reduxjs/toolkit';
 import ChannelAPI from '@/api/channelService';
+import { hash } from '@/utils/encoding';
 import { setupRecovery } from './recoveryThunks';
+import { createChannel } from './channelThunks';
 import { initialState } from '../recoveryDataSlice';
 
 const mockStore = configureStore(
@@ -16,12 +18,10 @@ const mockStore = configureStore(
 );
 
 describe('Test recovery data', () => {
-  // const ipAddress = '192.168.2.2';
-
   test(`setup recovery data`, async () => {
     const store = mockStore({ recoveryData: initialState });
 
-    const expectedInitAction = expect.objectContaining({
+    const expectedAction = expect.objectContaining({
       type: 'recoveryData/init',
       payload: {
         publicKey: expect.any(Uint8Array),
@@ -36,8 +36,34 @@ describe('Test recovery data', () => {
     const actions = store.getActions();
     expect(actions).toHaveLength(1);
 
-    const initAction = actions[0];
+    const action = actions[0];
 
-    expect(initAction).toEqual(expectedInitAction);
+    expect(action).toEqual(expectedAction);
+  });
+
+  test('create channel', async () => {
+    const recoveryData = {
+      publicKey: new Uint8Array(),
+      timestamp: Date.now(),
+      aesKey: '9/n9l2vcdW7vaga2SgDByw==',
+    };
+
+    const expectedAction = expect.objectContaining({
+      type: 'recoveryData/setChannel',
+      payload: {
+        channelId: expect.any(String),
+        url: expect.stringContaining('http://'),
+      },
+    });
+
+    const store = mockStore({ recoveryData });
+    await store.dispatch(createChannel());
+
+    const actions = store.getActions();
+    expect(actions).toHaveLength(1);
+
+    const action = actions[0];
+
+    expect(action).toEqual(expectedAction);
   });
 });
