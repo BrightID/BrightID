@@ -6,11 +6,13 @@ import { getDefaultMiddleware } from '@reduxjs/toolkit';
 import ChannelAPI from '@/api/channelService';
 import { hash, uInt8ArrayToB64, b64ToUrlSafeB64 } from '@/utils/encoding';
 import { setupRecovery } from './recoveryThunks';
-import { createChannel } from './channelThunks';
+import { createChannel, checkChannel } from './channelThunks';
 import { uploadSig, uploadConnection } from './channelUploadThunks';
 import { initialState } from '../recoveryDataSlice';
 
 const FIFTEEN_MINUTES = 900000;
+
+const recoveryId = '8a-tLVW6tetqYen880vHTUYgBfySWRPEPnaf7jyxWmc';
 
 const mockStore = configureStore(
   getDefaultMiddleware({
@@ -47,6 +49,7 @@ describe('Test recovery data', () => {
 
     expect(action).toEqual(expectedAction);
 
+    // update recoveryData for future tests
     Object.assign(recoveryData, {
       publicKey: action.payload.publicKey,
       secretKey: action.payload.secretKey,
@@ -57,6 +60,8 @@ describe('Test recovery data', () => {
   });
 
   test('create channel', async () => {
+    // update timeout for this test
+    jest.setTimeout(10000);
     const store = mockStore({ recoveryData });
 
     const expectedAction = expect.objectContaining({
@@ -76,6 +81,7 @@ describe('Test recovery data', () => {
 
     expect(action).toEqual(expectedAction);
 
+    // update recoveryData for future tests
     Object.assign(recoveryData.channel, {
       channelId: action.payload.channelId,
       url: action.payload.url,
@@ -85,11 +91,13 @@ describe('Test recovery data', () => {
 
   test('upload name / photo', async () => {
     try {
+      // update timeout for this test
+      jest.setTimeout(10000);
       const { aesKey } = recoveryData;
       const channelApi = new ChannelAPI(recoveryData.channel.url);
 
       const conn = {
-        id: '8a-tLVW6tetqYen880vHTUYgBfySWRPEPnaf7jyxWmc',
+        id: recoveryId,
         name: 'Donaugh Bownd',
         photo: {},
         testPhoto,
@@ -99,10 +107,7 @@ describe('Test recovery data', () => {
 
       const dataIds = await channelApi.list(hash(aesKey));
 
-      expect(dataIds).toEqual([
-        'data',
-        'connection_8a-tLVW6tetqYen880vHTUYgBfySWRPEPnaf7jyxWmc',
-      ]);
+      expect(dataIds).toEqual(['data', `connection_${recoveryId}`]);
     } catch (err) {
       console.error(err.message);
       expect(false).toEqual(true);
@@ -111,6 +116,8 @@ describe('Test recovery data', () => {
 
   test('upload sigs', async () => {
     try {
+      // update timeout for this test
+      jest.setTimeout(10000);
       const { aesKey } = recoveryData;
       const channelApi = new ChannelAPI(recoveryData.channel.url);
 
@@ -124,7 +131,7 @@ describe('Test recovery data', () => {
       });
 
       const sigData = {
-        id: '8a-tLVW6tetqYen880vHTUYgBfySWRPEPnaf7jyxWmc',
+        id: recoveryId,
         aesKey,
         channelApi,
       };
@@ -149,6 +156,50 @@ describe('Test recovery data', () => {
       console.error(err.message);
       expect(false).toEqual(true);
     }
+  });
+  test('download name / photo / sigs', async () => {
+    // update timeout for this test
+    jest.setTimeout(15000);
+
+    // update recoveryId to download name / photo
+    recoveryData.id = recoveryId;
+
+    const store = mockStore({
+      connections: { connections: [] },
+      groups: { groups: [] },
+      recoveryData,
+    });
+
+    const expectedNamePhotoAction = expect.objectContaining({
+      type: 'recoveryData/updateNamePhoto',
+      payload: {
+        id: recoveryId,
+        name: 'Donaugh Bownd',
+        photo: { filename: `${recoveryId}.jpg` },
+        profileTimestamp: expect.any(Number),
+        aesKey: expect.any(String),
+      },
+    });
+
+    const expectedSetSigAction = expect.objectContaining({
+      type: 'recoveryData/setSig',
+      payload: {
+        signer: expect.any(String),
+        sig: {
+          signer: expect.any(String),
+          sig: expect.any(String),
+          id: recoveryId,
+        },
+      },
+    });
+
+    await store.dispatch(checkChannel());
+
+    const actions = store.getActions();
+
+    expect(actions[0]).toEqual(expectedNamePhotoAction);
+    expect(actions[1]).toEqual(expectedSetSigAction);
+    expect(actions[2]).toEqual(expectedSetSigAction);
   });
 });
 
