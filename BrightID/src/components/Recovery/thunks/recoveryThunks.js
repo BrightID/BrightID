@@ -44,7 +44,8 @@ export const setupRecovery = () => async (
       dispatch(init({ publicKey, secretKey, aesKey }));
     }
   } catch (err) {
-    alert(err.message);
+    // alert(err.message);
+    console.error(`setupRecovery: ${err.message}`);
   }
 };
 

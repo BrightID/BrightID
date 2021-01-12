@@ -5,8 +5,6 @@ import Adapter from 'enzyme-adapter-react-16';
 import MockAsyncStorage from 'mock-async-storage';
 import { randomBytes } from 'crypto';
 
-// jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
-
 configure({ adapter: new Adapter() });
 
 const mockImpl = new MockAsyncStorage();
@@ -44,5 +42,21 @@ jest.mock('react-native', () => {
     Platform: {
       OS: 'ios',
     },
+  };
+});
+
+jest.mock('react-native-keychain', () => {
+  const genericPassword = {
+    username: JSON.stringify({ publicKey: '', version: 1 }),
+    password: 'abcd',
+  };
+  return {
+    SECURITY_LEVEL_ANY: 'SECURITY_LEVEL_ANY',
+    SECURITY_LEVEL_SECURE_SOFTWARE: 'SECURITY_LEVEL_SECURE_SOFTWARE',
+    SECURITY_LEVEL_SECURE_HARDWARE: 'SECURITY_LEVEL_SECURE_HARDWARE',
+    setGenericPassword: () => Promise.resolve(true),
+    setInternetCredentials: () => Promise.resolve(true),
+    resetGenericPassword: () => Promise.resolve(true),
+    getGenericPassword: () => Promise.resolve(genericPassword),
   };
 });
