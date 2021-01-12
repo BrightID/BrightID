@@ -6,7 +6,7 @@ import { uInt8ArrayToB64 } from '@/utils/encoding';
 
 const FIFTEEN_MINUTES = 900000;
 
-const initialState: RecoveryData = {
+export const initialState: RecoveryData = {
   publicKey: '',
   secretKey: '',
   aesKey: '',

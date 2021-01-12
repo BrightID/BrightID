@@ -1,9 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
-// import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
+
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import MockAsyncStorage from 'mock-async-storage';
-import { NativeModules } from 'react-native';
 import { randomBytes } from 'crypto';
 
 // jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
@@ -18,9 +17,32 @@ jest.mock(
   () => 'SearchConnections',
 );
 
-NativeModules.RNRandomBytes = {
-  randomBytes: (size, cb) => {
-    let buf = randomBytes(size);
-    cb(null, buf.toString('base64'));
-  },
-};
+jest.mock('react-native', () => {
+  return {
+    Dimensions: {
+      get: () => {
+        return {
+          width: 100,
+          height: 100,
+        };
+      },
+    },
+    InteractionManager: {
+      runAfterInteractions: jest.fn(),
+      createInteractionHandle: jest.fn(),
+      clearInteractionHandle: jest.fn(),
+      setDeadline: jest.fn(),
+    },
+    NativeModules: {
+      RNRandomBytes: {
+        randomBytes: (size, cb) => {
+          let buf = randomBytes(size);
+          cb(null, buf.toString('base64'));
+        },
+      },
+    },
+    Platform: {
+      OS: 'ios',
+    },
+  };
+});
