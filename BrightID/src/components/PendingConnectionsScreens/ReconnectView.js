@@ -82,9 +82,6 @@ export const ReconnectView = ({
     return (
       <>
         <View style={styles.header} testID="ReconnectScreen">
-          <Text style={styles.headerText}>
-            {t('pendingConnections.title.connectionRequest')}
-          </Text>
           <Text style={styles.subheaderText}>
             {t('connections.text.alreadyConnectedWith', {
               name: pendingConnection.name,
@@ -152,9 +149,6 @@ export const ReconnectView = ({
     return (
       <>
         <View style={styles.header} testID="ReconnectScreen">
-          <Text style={styles.headerText}>
-            {t('pendingConnections.title.connectionRequest')}
-          </Text>
           <Text style={styles.subheaderText}>
             {t('connections.text.alreadyConnectedWith')}
           </Text>
@@ -259,13 +253,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,
-  },
-  headerText: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: fontSize[22],
-    textAlign: 'center',
-    color: BLACK,
-    marginBottom: 20,
   },
   subheaderText: {
     fontFamily: 'Poppins-Medium',
