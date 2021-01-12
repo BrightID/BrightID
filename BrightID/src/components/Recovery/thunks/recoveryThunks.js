@@ -32,20 +32,15 @@ export const setupRecovery = () => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  try {
-    let { recoveryData } = getState();
-    await createImageDirectory();
-    // setup recovery data
-    if (!recoveryData.timestamp || pastLimit(recoveryData.timestamp)) {
-      const { publicKey, secretKey } = await nacl.sign.keyPair();
-      const aesKey = await randomKey(16);
+  let { recoveryData } = getState();
+  await createImageDirectory();
+  // setup recovery data
+  if (!recoveryData.timestamp || pastLimit(recoveryData.timestamp)) {
+    const { publicKey, secretKey } = await nacl.sign.keyPair();
+    const aesKey = await randomKey(16);
 
-      // setup recovery data slice with new keypair
-      dispatch(init({ publicKey, secretKey, aesKey }));
-    }
-  } catch (err) {
-    // alert(err.message);
-    console.error(`setupRecovery: ${err.message}`);
+    // setup recovery data slice with new keypair
+    dispatch(init({ publicKey, secretKey, aesKey }));
   }
 };
 
