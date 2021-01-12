@@ -41,9 +41,9 @@ export const uploadSig = ({ id, aesKey, channelApi }) => async (
   });
 };
 
-const uploadConnection = async ({ conn, channelApi, aesKey }) => {
+export const uploadConnection = async ({ conn, channelApi, aesKey }) => {
   try {
-    let { id, name, photo } = conn;
+    let { id, name, photo, testPhoto = '' } = conn;
 
     if (!name) {
       return;
@@ -53,7 +53,7 @@ const uploadConnection = async ({ conn, channelApi, aesKey }) => {
     if (photo?.filename) {
       photo = await retrieveImage(photo.filename);
     } else {
-      photo = '';
+      photo = testPhoto;
     }
 
     let profileTimestamp = Date.now();
