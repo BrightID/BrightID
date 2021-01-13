@@ -54,7 +54,7 @@ const createFakeConnection = async (doConfirm: boolean = true) => {
   // await expect(element(by.id('previewConnectionScreen'))).toBeVisible();
   await waitFor(element(by.id('previewConnectionScreen')))
     .toBeVisible()
-    .withTimeout(20000);
+    .withTimeout(40000);
 
   if (doConfirm) {
     // confirm connection and navigate back to home screen
