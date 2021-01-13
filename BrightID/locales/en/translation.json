@@ -603,17 +603,18 @@
     "button": {
       "addPhoto": "Add Photo",
       "createAccount": "Create My BrightID",
-      "recoverAccount": "Recover BrightID"
+      "recoverAccount": "Recover BrightID",
+      "submit": "Submit"
     },
     "header": {
       "title": "SignUp"
     },
     "placeholder": {
-      "name": "Name"
+      "name": "Your name"
     },
     "text": {
       "creatingAccount": "Creating Bright ID…",
-      "infoNotShared": "Your name and photo will never be shared with apps or stored on servers",
+      "nameNotShared": "Your name will never be shared with apps or\nstored on servers",
       "whatsYouName": "What do your friends know you by?"
     }
   }
