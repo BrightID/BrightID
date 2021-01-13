@@ -249,10 +249,10 @@ export const ReconnectView = ({
 
 const styles = StyleSheet.create({
   header: {
-    marginTop: DEVICE_LARGE ? 18 : 12,
+    marginTop: DEVICE_LARGE ? 10 : 4,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 5,
   },
   subheaderText: {
     fontFamily: 'Poppins-Medium',
@@ -268,12 +268,12 @@ const styles = StyleSheet.create({
   },
   profiles: {
     flexDirection: 'row',
-    marginTop: 20,
-    marginBottom: 10,
+    marginTop: 8,
+    marginBottom: 0,
   },
   profileHeader: {
-    marginTop: 15,
-    marginBottom: 20,
+    marginTop: 8,
+    marginBottom: 10,
   },
   profileHeaderText: {
     fontFamily: 'Poppins-Bold',
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     paddingTop: 6,
     paddingBottom: 6,
     marginTop: 8,
-    marginBottom: 28,
+    marginBottom: 16,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderColor: ORANGE,
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
   connectionLevelText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[15],
-    marginBottom: 10,
+    marginBottom: 5,
   },
   actionButtons: {
     flexDirection: 'row',
