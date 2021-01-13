@@ -33,7 +33,7 @@ const createBrightID = async (name: string = testUserName) => {
   // Wait until photo is loaded
   await waitFor(element(by.id('editPhoto')))
     .toBeVisible()
-    .withTimeout(20000);
+    .withTimeout(30000);
   // create new ID
   await element(by.id('createBrightIDBtn')).tap();
   // should end up at home screen
@@ -50,8 +50,6 @@ const createFakeConnection = async (doConfirm: boolean = true) => {
   await expect(element(by.id('single-use-code'))).toExist();
   await expect(element(by.id('fakeConnectionBtn'))).toBeVisible();
   await element(by.id('fakeConnectionBtn')).tap();
-  // With automatic sync this test fails intermittent, so use explicit waitFor...
-  // await expect(element(by.id('previewConnectionScreen'))).toBeVisible();
   await waitFor(element(by.id('previewConnectionScreen')))
     .toBeVisible()
     .withTimeout(40000);
@@ -230,14 +228,6 @@ const reconnect = async (connectionIndex: number, changeProfile: boolean) => {
   // should be on connectionsscreen
   await expectConnectionsScreen();
 
-  /* Is this necessary??
-  // wait upto 30 seconds till connection is established
-  await waitFor(element(by.text('Connected a few seconds ago')))
-    .toBeVisible()
-    .withTimeout(30000);
-
-   */
-
   // open connection detail screen of specified connection index
   const connectionCardBtn = element(by.id(`ConnectionCard-${connectionIndex}`));
   await expect(connectionCardBtn).toBeVisible();
@@ -257,7 +247,9 @@ const reconnect = async (connectionIndex: number, changeProfile: boolean) => {
   await element(by.id('header-back')).tap();
   await navigateHome();
   await element(by.id('MyCodeBtn')).tap();
-  await expect(element(by.id('ReconnectScreen'))).toBeVisible();
+  await waitFor(element(by.id('ReconnectScreen')))
+    .toBeVisible()
+    .withTimeout(30000);
 };
 
 export {

@@ -14,7 +14,7 @@
       "build": "cd android && RN_SRC_EXT=e2e.js ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
       "type": "android.emulator",
       "device": {
-        "avdName": "Pixel_2_XL_API_28"
+        "avdName": "Pixel_API_28_AOSP"
       }
     },
     "android.emu.release": {
@@ -22,7 +22,7 @@
       "build": "cd android && RN_SRC_EXT=e2e.js ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
       "type": "android.emulator",
       "device": {
-        "avdName": "Pixel_2_XL_API_28"
+        "avdName": "Pixel_API_28_AOSP"
       }
     },
     "ios.sim.debug": {
