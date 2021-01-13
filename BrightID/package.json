@@ -68,13 +68,11 @@
     "react-native-localize": "2.0.1",
     "react-native-modal-overlay": "1.3.1",
     "react-native-navigation-bar-color": "2.0.1",
-    "react-native-popup-menu": "0.15.9",
     "react-native-push-notification": "6.1.3",
     "react-native-randombytes": "3.6.0",
     "react-native-reanimated": "1.13.2",
     "react-native-safe-area-context": "3.1.9",
     "react-native-screens": "2.15.0",
-    "react-native-snap-carousel": "4.0.0-beta.6",
     "react-native-spinkit": "1.5.1",
     "react-native-status-bar-height": "2.6.0",
     "react-native-svg": "12.1.0",
@@ -140,7 +138,7 @@
       "./node_modules/react-native-gesture-handler/jestSetup.js"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!(react-native|react-navigation|@react-navigation/.*|react-navigation-stack|react-native-screens|@react-native-async-storage/async-storage|react-native-gesture-handler|react-native-popup-menu|react-native-platform-touchable|react-native-vector-icons|react-native-spinkit|react-native-status-bar-height|react-native-snap-carousel|react-native-image-picker|react-native-svg|react-native-camera|react-native-image-crop-picker|react-native-keychain)/)"
+      "node_modules/(?!(react-native|react-navigation|@react-navigation/.*|react-navigation-stack|react-native-screens|@react-native-async-storage/async-storage|react-native-gesture-handler|react-native-platform-touchable|react-native-vector-icons|react-native-spinkit|react-native-status-bar-height|react-native-image-picker|react-native-svg|react-native-camera|react-native-image-crop-picker|react-native-keychain)/)"
     ],
     "testPathIgnorePatterns": [
       "./e2e/"

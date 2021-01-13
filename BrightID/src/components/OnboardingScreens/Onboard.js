@@ -11,7 +11,6 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { withTranslation } from 'react-i18next';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, BLUE, LIGHT_BLACK } from '@/theme/colors';
@@ -23,7 +22,6 @@ import BrightIdOnboard from './onboardingCards/BrightIdOnboard';
 
 /**
  * Initial Onboarding screen of BrightID
- * Uses react-native-snap-carousel for displaying onboarding cards
  */
 
 type State = {
@@ -69,7 +67,6 @@ export class Onboard extends React.Component<Props, State> {
   // slide item
 
   render() {
-    const { activeSlide, entries } = this.state;
     const { t } = this.props;
     return (
       <SafeAreaView style={styles.container}>
@@ -78,27 +75,7 @@ export class Onboard extends React.Component<Props, State> {
           backgroundColor={WHITE}
           animated={true}
         />
-        <View style={styles.carousel} testID="Carousel">
-          <Carousel
-            data={entries}
-            renderItem={this.renderItem}
-            layout="default"
-            autoplay={true}
-            sliderWidth={winWidth}
-            itemWidth={winWidth - 40}
-            onSnapToItem={(index) => this.setState({ activeSlide: index })}
-          />
-        </View>
-        <View style={styles.center}>
-          <Pagination
-            dotsLength={entries.length}
-            activeDotIndex={activeSlide}
-            containerStyle={styles.pagination}
-            dotStyle={styles.dotStyle}
-            inactiveDotOpacity={0.4}
-            inactiveDotScale={1}
-          />
-        </View>
+
         <View style={styles.center}>
           <TouchableOpacity
             testID="getStartedBtn"

@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     borderBottomLeftRadius: 58,
     borderBottomRightRadius: 58,
-    marginBottom: DEVICE_LARGE ? 22 : 10,
+    marginBottom: DEVICE_LARGE ? 35 : 20,
     zIndex: 2,
     overflow: 'hidden',
   },
