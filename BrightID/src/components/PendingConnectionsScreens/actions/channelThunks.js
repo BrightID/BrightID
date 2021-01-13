@@ -77,6 +77,8 @@ export const createChannel = (channelType: ChannelType) => async (
         message: `${e.message}`,
       }),
     );
+    // need to throw to prevent app from looping
+    throw e;
   }
 };
 

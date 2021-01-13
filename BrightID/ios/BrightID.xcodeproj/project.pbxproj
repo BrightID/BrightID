@@ -789,7 +789,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.dev2;
+				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.demo;
 				PRODUCT_NAME = BrightID;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -817,7 +817,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.dev2;
+				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.demo;
 				PRODUCT_NAME = BrightID;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1126,7 +1126,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.dev2;
+				PRODUCT_BUNDLE_IDENTIFIER = org.brightid.demo;
 				PRODUCT_NAME = BrightID;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

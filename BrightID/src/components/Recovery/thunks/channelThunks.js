@@ -73,7 +73,7 @@ export const pollChannel = () => async (dispatch: dispatch) => {
         })
         .catch((err) => {
           checkInProgress = false;
-          console.warn(err);
+          console.error(`polling channel: ${err.message}`);
         });
     }
   }, CHANNEL_POLL_INTERVAL);
@@ -100,6 +100,7 @@ export const checkChannel = () => async (
 
   if (expires && Date.now() - expires > 0) {
     // create new channel if date is expired
+    console.log(`channel expired, creating new channel`);
     await dispatch(createChannel());
     return;
   }

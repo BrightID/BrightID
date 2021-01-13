@@ -24,26 +24,26 @@ export const RatingView = ({ setLevelHandler }: RatingViewProps) => {
       <Text style={styles.ratingHeader}>
         {t('pendingConnections.label.rating')}
       </Text>
-
-      <RatingButton
-        color={connectionLevelColors[connection_levels.SUSPICIOUS]}
-        label={connectionLevelStrings[connection_levels.SUSPICIOUS]}
-        handleClick={() => setLevelHandler(connection_levels.SUSPICIOUS)}
-        testID={`${connection_levels.SUSPICIOUS}Btn`}
-      />
-      <RatingButton
-        color={connectionLevelColors[connection_levels.JUST_MET]}
-        label={connectionLevelStrings[connection_levels.JUST_MET]}
-        handleClick={() => setLevelHandler(connection_levels.JUST_MET)}
-        testID={`${connection_levels.JUST_MET}Btn`}
-      />
-      <RatingButton
-        color={connectionLevelColors[connection_levels.ALREADY_KNOWN]}
-        label={connectionLevelStrings[connection_levels.ALREADY_KNOWN]}
-        handleClick={() => setLevelHandler(connection_levels.ALREADY_KNOWN)}
-        testID={`${connection_levels.ALREADY_KNOWN}Btn`}
-      />
-
+      <View style={styles.buttonsContainer}>
+        <RatingButton
+          color={connectionLevelColors[connection_levels.SUSPICIOUS]}
+          label={connectionLevelStrings[connection_levels.SUSPICIOUS]}
+          handleClick={() => setLevelHandler(connection_levels.SUSPICIOUS)}
+          testID={`${connection_levels.SUSPICIOUS}Btn`}
+        />
+        <RatingButton
+          color={connectionLevelColors[connection_levels.JUST_MET]}
+          label={connectionLevelStrings[connection_levels.JUST_MET]}
+          handleClick={() => setLevelHandler(connection_levels.JUST_MET)}
+          testID={`${connection_levels.JUST_MET}Btn`}
+        />
+        <RatingButton
+          color={connectionLevelColors[connection_levels.ALREADY_KNOWN]}
+          label={connectionLevelStrings[connection_levels.ALREADY_KNOWN]}
+          handleClick={() => setLevelHandler(connection_levels.ALREADY_KNOWN)}
+          testID={`${connection_levels.ALREADY_KNOWN}Btn`}
+        />
+      </View>
       <Text style={styles.ratingFooter}>
         {t('pendingConnections.text.rating')}
       </Text>
@@ -58,13 +58,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
   },
+  buttonsContainer: {
+    width: '100%',
+    flexGrow: 1,
+    maxHeight: DEVICE_LARGE ? 225 : 210,
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
   ratingHeader: {
     fontFamily: 'Poppins-Bold',
     textAlign: 'center',
     fontSize: fontSize[16],
     marginBottom: DEVICE_LARGE ? 5 : 4,
   },
-
   ratingFooter: {
     paddingTop: DEVICE_LARGE ? 8 : 7,
     fontFamily: 'Poppins-Regular',

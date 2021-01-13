@@ -1,6 +1,7 @@
 // @flow
 
 import { find, propEq, mergeRight } from 'ramda';
+import { keyBy } from 'lodash';
 import {
   SET_CONNECTIONS,
   CONNECTIONS_SORT,
@@ -48,10 +49,11 @@ export const reducer = (
     }
 
     case UPDATE_CONNECTIONS: {
+      const connectionsMap = keyBy(action.connections, 'id');
       return {
         ...state,
         connections: state.connections.map<connection>((conn: connection) => {
-          const updatedConn = find(propEq('id', conn.id))(action.connections);
+          const updatedConn = connectionsMap[conn.id];
           if (!updatedConn) {
             if (conn.status === 'verified') conn.status = 'deleted';
             return conn;

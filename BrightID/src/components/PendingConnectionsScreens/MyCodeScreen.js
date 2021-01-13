@@ -1,6 +1,11 @@
 // @flow
 
-import React, { useCallback, useEffect, useLayoutEffect } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import {
   StyleSheet,
   Text,
@@ -74,6 +79,8 @@ export const MyCodeScreen = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
+  const [channelErr, setChannelErr] = useState(0);
+
   // GROUP / SINGLE
   const displayChannelType = useSelector(
     (state) => state.channels.displayChannelType,
@@ -110,13 +117,27 @@ export const MyCodeScreen = () => {
   useFocusEffect(
     useCallback(() => {
       if (!navigation.isFocused()) return;
-      if (!myChannel || myChannel?.state !== channel_states.OPEN) {
+      if (
+        (!myChannel || myChannel?.state !== channel_states.OPEN) &&
+        channelErr < 3
+      ) {
         InteractionManager.runAfterInteractions(() => {
-          dispatch(createChannel(displayChannelType));
+          dispatch(createChannel(displayChannelType)).catch((err) => {
+            console.log(`error creating channel: ${err.message}`);
+            if (channelErr === 2) {
+              Alert.alert(
+                t('common.alert.error'),
+                t('pendingConnection.alert.text.errorCreateChannel', {
+                  message: `${err.message}`,
+                }),
+              );
+            }
+            setChannelErr((c) => c + 1);
+          });
         });
       }
       dispatch(setActiveNotification(null));
-    }, [navigation, myChannel, dispatch, displayChannelType]),
+    }, [navigation, myChannel, dispatch, displayChannelType, channelErr, t]),
   );
 
   // Navigate to next screen if QRCode has been scanned

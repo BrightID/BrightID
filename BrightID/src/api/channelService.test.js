@@ -29,6 +29,7 @@ describe('ChannelAPI', () => {
 
   describe(`upload, list and download`, () => {
     test('upload data to channel', async () => {
+      jest.setTimeout(10000);
       await channelApi.upload({
         channelId: sharedChannelId,
         dataId,
@@ -43,6 +44,7 @@ describe('ChannelAPI', () => {
     });
 
     test('download data from channel', async () => {
+      jest.setTimeout(10000);
       const data = await channelApi.download({
         channelId: sharedChannelId,
         dataId,

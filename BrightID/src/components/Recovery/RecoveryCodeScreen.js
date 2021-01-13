@@ -47,11 +47,13 @@ const RecoveryCodeScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(pollChannel());
+      dispatch(pollChannel()).catch((err) => {
+        Alert.alert(t('common.alert.error'), err.message);
+      });
       return () => {
         clearChannel();
       };
-    }, [dispatch]),
+    }, [dispatch, t]),
   );
 
   useEffect(() => {
