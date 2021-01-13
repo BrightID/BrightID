@@ -36,8 +36,9 @@ export const createChannel = (channelType: ChannelType) => async (
   let channel: ?Channel;
   try {
     // TODO: Remove fallback implementation when CHANNEL_SWITCH_TIMESTAMP is reached
+    const switchTimeReached = Date.now() > CHANNEL_SWITCH_TIMESTAMP;
     let url, ipAddress;
-    if (Date.now() > CHANNEL_SWITCH_TIMESTAMP) {
+    if (switchTimeReached) {
       url = new URL(`${api.baseUrl}/profile`);
     } else {
       ipAddress = await api.ip();
@@ -54,13 +55,15 @@ export const createChannel = (channelType: ChannelType) => async (
     dispatch(
       setMyChannel({ channelId: channel.id, channelType: channel.type }),
     );
-    // upload channel info
-    const channelInfo: ChannelInfo = createChannelInfo(channel);
-    await channel.api.upload({
-      channelId: channel.id,
-      data: channelInfo,
-      dataId: CHANNEL_INFO_NAME,
-    });
+    if (switchTimeReached) {
+      // upload channel info
+      const channelInfo: ChannelInfo = createChannelInfo(channel);
+      await channel.api.upload({
+        channelId: channel.id,
+        data: channelInfo,
+        dataId: CHANNEL_INFO_NAME,
+      });
+    }
     // upload my profile
     await dispatch(encryptAndUploadProfileToChannel(channel.id));
     // start polling for profiles
