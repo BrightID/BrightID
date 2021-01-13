@@ -436,14 +436,11 @@
   },
   "onboarding": {
     "button": {
-      "getStarted": "Get Started"
-    },
-    "label": {
-      "maintainPrivacy": "Maintain Privacy"
+      "create": "Create My BrightID",
+      "recover": "Recover BrightID"
     },
     "text": {
-      "intro": "<text>BrightID uses the people you know</text><text>to enforce one-account-per-person</text><text>for important applications like</text><text>voting and universal basic income.</text>",
-      "privacy": "<text>Prove you're a unique person</text><text>while preserving your privacy.</text>"
+      "register": "Register to create your very own\ndigital identity"
     }
   },
   "pendingConnection": {

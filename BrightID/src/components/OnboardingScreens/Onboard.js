@@ -2,20 +2,19 @@
 
 import * as React from 'react';
 import {
-  Dimensions,
+  Image,
+  SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  SafeAreaView,
 } from 'react-native';
-import { getStatusBarHeight } from 'react-native-status-bar-height';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { fontSize } from '@/theme/fonts';
-import { WHITE, BLUE, LIGHT_BLACK } from '@/theme/colors';
-import MaintainPrivacy from './onboardingCards/MaintainPrivacy';
-import BrightIdOnboard from './onboardingCards/BrightIdOnboard';
+import { WHITE, BLACK, GREEN, ORANGE } from '@/theme/colors';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import VerifiedBadge from '../Icons/VerifiedBadge';
 
 /* Description */
 /* ======================================== */
@@ -24,51 +23,15 @@ import BrightIdOnboard from './onboardingCards/BrightIdOnboard';
  * Initial Onboarding screen of BrightID
  */
 
-type State = {
-  activeSlide: number,
-  entries: number[],
-};
-
-/* Constants */
-/* ======================================== */
-
-const winWidth = Dimensions.get('window').width;
-const statusBarHeight = getStatusBarHeight();
-
 /* Onboarding Screen */
 /* ======================================== */
 
-export class Onboard extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      activeSlide: 0,
-      entries: [...Array(2)],
-    };
-  }
-
-  renderItem = ({ index }: { index: number }) => {
-    switch (index) {
-      case 0:
-        return (
-          <View key={index} style={styles.onboardingCards}>
-            <BrightIdOnboard />
-          </View>
-        );
-      case 1:
-        return (
-          <View key={index} style={styles.onboardingCards}>
-            <MaintainPrivacy />
-          </View>
-        );
-      default:
-    }
-  };
+export const Onboard = () => {
   // slide item
-
-  render() {
-    const { t } = this.props;
-    return (
+  console.log('DEVICE_LARGE', DEVICE_LARGE);
+  const { t } = useTranslation();
+  return (
+    <>
       <SafeAreaView style={styles.container}>
         <StatusBar
           barStyle="dark-content"
@@ -76,21 +39,51 @@ export class Onboard extends React.Component<Props, State> {
           animated={true}
         />
 
+        <View style={styles.header}>
+          <Image
+            source={require('@/static/brightid-final.png')}
+            accessible={true}
+            accessibilityLabel="Home Header Logo"
+            resizeMode="contain"
+            style={styles.logo}
+          />
+        </View>
+
         <View style={styles.center}>
-          <TouchableOpacity
-            testID="getStartedBtn"
-            onPress={() => this.props.navigation.navigate('SignUp')}
-            style={styles.button}
-          >
-            <Text style={styles.buttonText}>
-              {t('onboarding.button.getStarted')}
+          <Image
+            source={require('@/static/brightid-phone.png')}
+            accessible={true}
+            accessibilityLabel="Home Header Logo"
+            resizeMode="contain"
+            style={styles.phone}
+          />
+          <View style={styles.verifiedBadge}>
+            <VerifiedBadge
+              width={DEVICE_LARGE ? 65 : 60}
+              height={DEVICE_LARGE ? 65 : 60}
+              strokeWidth={5.5}
+              color={GREEN}
+            />
+          </View>
+        </View>
+        <Text style={styles.registerText}>{t('onboarding.text.register')}</Text>
+        <View style={styles.btnContainer}>
+          <TouchableOpacity style={styles.createBtn}>
+            <Text style={styles.createBtnText}>
+              {t('onboarding.button.create')}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.recoverBtn}>
+            <Text style={styles.recoverBtnText}>
+              {t('onboarding.button.recover')}
             </Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
-    );
-  }
-}
+      <View style={styles.orangeBottom} />
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -98,48 +91,89 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    borderBottomLeftRadius: 58,
+    borderBottomRightRadius: 58,
+    marginBottom: DEVICE_LARGE ? 35 : 20,
+    zIndex: 2,
+    overflow: 'hidden',
   },
-  carousel: {
-    flex: 3.5,
-    marginTop: statusBarHeight,
-  },
-  onboardingCards: {
-    flex: 1,
-  },
-  center: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  orangeBottom: {
+    backgroundColor: ORANGE,
     width: '100%',
+    height: 100,
+    zIndex: 1,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
-  pagination: {},
-  button: {
-    width: 300,
-    borderWidth: 1,
-    borderColor: BLUE,
-    paddingTop: 13,
-    paddingBottom: 12,
+  header: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 10,
+    marginTop: '15%',
+    // borderWidth: 1,
   },
-  buttonText: {
-    fontFamily: 'ApexNew-Medium',
-    color: BLUE,
-    fontSize: fontSize[18],
-    fontWeight: '500',
-    fontStyle: 'normal',
-    letterSpacing: 0,
+  logo: {
+    maxWidth: '40%',
+    maxHeight: 90,
   },
-  dotStyle: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginHorizontal: 8,
-    backgroundColor: LIGHT_BLACK,
+  center: {},
+  phone: {
+    width: DEVICE_LARGE ? 140 : 130,
+    maxHeight: DEVICE_LARGE ? 180 : 165,
+  },
+  verifiedBadge: {
+    position: 'absolute',
+    right: 10,
+    bottom: 5,
+  },
+  registerText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[16],
+    textAlign: 'center',
+    lineHeight: DEVICE_LARGE ? 26 : 24,
+    marginTop: DEVICE_LARGE ? 20 : 18,
+  },
+  btnContainer: {
+    width: '85%',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexGrow: 1,
+  },
+  createBtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: DEVICE_LARGE ? 50 : 45,
+    backgroundColor: ORANGE,
+    borderRadius: 100,
+    elevation: 1,
+    shadowColor: BLACK,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 4,
+  },
+  createBtnText: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: fontSize[16],
+    color: WHITE,
+  },
+  recoverBtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: DEVICE_LARGE ? 50 : 45,
+    backgroundColor: WHITE,
+    borderWidth: 1,
+    borderColor: ORANGE,
+    borderRadius: 100,
+    marginTop: DEVICE_LARGE ? 14 : 12,
+  },
+  recoverBtnText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[16],
+    color: ORANGE,
   },
 });
 
-export default withTranslation()(Onboard);
+export default Onboard;
