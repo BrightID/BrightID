@@ -141,6 +141,9 @@
       "ok": "Ok",
       "title": "Permiso para usar la cámara"
     },
+    "language": {
+      "and": "y"
+    },
     "photoActionSheet": {
       "choosePhoto": "Elige de la Biblioteca",
       "takePhoto": "Tomar Foto",
@@ -350,6 +353,10 @@
       "cancel": "Cancelar",
       "dismissMember": "Descartar del grupo"
     },
+    "state": {
+      "creatingGroup": "creando el grupo",
+      "uploadingGroupPhoto": "subiendo foto de grupo"
+    },
     "tag": {
       "primaryGroup": "Grupo Primario"
     },
@@ -518,9 +525,14 @@
   },
   "qrcode": {
     "alert": {
+      "connectGroup": "Haga una conexión de grupo con {{name}} en BrightID: {{link}}",
+      "connectSingle": "Conectar con {{name}} en BrightID: {{link}}",
       "text": {
         "codeGroup": "Este código QR está diseñado para que muchas personas se conecten simultáneamente.",
-        "codeSingle": "Este código QR se puede utilizar para conectarse con un solo usuario antes de que expire."
+        "codeSingle": "Este código QR se puede utilizar para conectarse con un solo usuario antes de que expire.",
+        "shareLinkGroup": "Comparte este enlace",
+        "shareLinkSingle": "Comparte este enlace con un amigo",
+        "universalLink": "Enlace universal"
       },
       "title": {
         "codeGroup": "Código grupal",
@@ -559,7 +571,8 @@
     "text": {
       "additionalInfo": "Tus conexiones de confianza necesitarán escanear este codigo para ayudarte a recuperar tu BrightID",
       "askTrustedConnections": "Por favor, muestre este código QR a sus conexiones de confianza",
-      "signatures": "{{count}} / 2 firmas"
+      "signatures": "{{count}} / 2 firmas",
+      "signatures_plural": "{{count}} / 2 firmas"
     }
   },
   "restore": {
