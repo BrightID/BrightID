@@ -1,0 +1,291 @@
+{
+  "achievements": {
+    "getSponsored": {
+      "description": "与提供赞助的应用程序链接获得支持",
+      "title": "获得支持"
+    },
+    "joinConnectionParty": {
+      "description": "加入BrightID连接指导会",
+      "title": "线上连接指导会"
+    },
+    "joinConnectionPartyWithFriend": {
+      "description": "邀请家人和好友参与BrightID线上连接指导会",
+      "title": "与家人朋友一起参与连接会"
+    },
+    "linkApp": {
+      "description": "将您的BrightID与应用程序链接",
+      "title": "链接应用程序"
+    },
+    "makeFirstConnection": {
+      "description": "与另一位BrightID用户建立联系",
+      "title": "首位联系人"
+    },
+    "makeThreeConnection": {
+      "description": "与3位BrightID用户建立联系",
+      "title": "3位联系人"
+    },
+    "makeTwoConnection": {
+      "description": "与2位BrightID用户建立连接",
+      "title": "2位联系人"
+    },
+    "notification": {
+      "message": "您已完成任务 \"{{title}}\".",
+      "title": "成就已解锁！"
+    },
+    "progress": {
+      "title": "完成："
+    },
+    "setupTrustedConnections": {
+      "description": "设置可信任联系人来帮助恢复账号",
+      "title": "设置账号恢复"
+    }
+  },
+  "apps": {
+    "alert": {
+      "button": {
+        "visitWebsite": "当然"
+      },
+      "text": {
+        "checkWebsite": "了解更多 {{name}}, 查看他们的网站!",
+        "invalidContext": "{{context}} 无效!",
+        "linkApp": "想要将您的 {{context}}账号链接到您的BrightID吗？",
+        "linkFailure": "{{result}}{{result}}无法将您的 {{context}}账号链接到您的BrightID \n{{result}}",
+        "linkSuccess": "成功将您的{{context}}账号链接到您的BrightID"
+      },
+      "title": {
+        "invalidContext": "失败",
+        "linkApp": "链接APP？",
+        "linkFailure": "失败",
+        "linkSuccess": "成功",
+        "linkingFailed": "App链接失败"
+      }
+    },
+    "tag": {
+      "hasSponsorships": "有赞助",
+      "linked": "已链接",
+      "notVerifiedForApp": "未验证此app",
+      "tryAgain": "再试一次"
+    },
+    "text": {
+      "noApps": "未找到App",
+      "notSponsored": "还没有app支持。\n请在下方选择一款支持的app。",
+      "pendingLink": "将您的{{context}}账号链接到您的BrightID…"
+    }
+  },
+  "backup": {
+    "alert": {
+      "text": {
+        "backupSuccess": "成功完成备份！",
+        "needThreeTrusted": "您需要至少3位可信任的联系人作为后援。"
+      }
+    },
+    "button": {
+      "next": "下一步",
+      "startBackup": "开始备份"
+    },
+    "header": {
+      "backup": "备份",
+      "trustedConnections": "可信联系人"
+    },
+    "placeholder": {
+      "confirmPassword": "确认密码"
+    },
+    "text": {
+      "chooseTrustedConnections": "选择三个或者更多可信赖的联系人为你的BrightID背书。",
+      "enterPassword": "输入密码使用以下方法加密备份数据：",
+      "noConnections": "联系人为空"
+    }
+  },
+  "common": {
+    "accessibilityLabel": {
+      "addPhoto": "上传图片",
+      "editPhoto": "编辑图片",
+      "profilePhoto": "头像",
+      "userPhoto": "用户头像"
+    },
+    "actionSheet": {
+      "cancel": "取消",
+      "title": "你想要做什么？"
+    },
+    "alert": {
+      "cancel": "取消",
+      "dismiss": "解除",
+      "error": "错误",
+      "formIncomplete": "BrightID表格不完整",
+      "info": "信息",
+      "no": "否",
+      "ok": "是",
+      "success": "成功",
+      "sure": "当然",
+      "text": {
+        "incorrectPassword": "密码错误！",
+        "lostKeys": "请创建新的BrightID或者尝试恢复以前的账号",
+        "passwordMatch": "密码和确认密码不匹配。",
+        "passwordShort": "密码长度必须至少为8个字符。",
+        "trustedSigned": "一个可信联系人签名了你的需求"
+      },
+      "title": {
+        "lostKeys": "我们从设备中丢失了BrightID密钥对",
+        "pleaseConfirm": "请确认"
+      },
+      "yes": "是"
+    },
+    "button": {
+      "cancel": "取消",
+      "copy": "复制",
+      "save": "保存"
+    },
+    "camera": {
+      "cancel": "取消",
+      "message": "我们需要您授权使用摄像头",
+      "ok": "好的",
+      "title": "授权使用摄像头"
+    },
+    "language": {
+      "and": "和"
+    },
+    "photoActionSheet": {
+      "choosePhoto": "从图库中选择图片",
+      "takePhoto": "拍照",
+      "title": "选择照片"
+    },
+    "placeholder": {
+      "password": "密码",
+      "searchConnections": "搜索联系人"
+    },
+    "tag": {
+      "connectionDate": "建立联系的 {{date}}",
+      "reported": "(已报告)"
+    },
+    "text": {
+      "uploadingData": "正在将加密数据上传到备份服务器…"
+    }
+  },
+  "connectionDetails": {
+    "button": {
+      "levelSave": "保存",
+      "report": "举报此人",
+      "reportCancel": "取消",
+      "reportSubmit": "提交"
+    },
+    "header": {
+      "connectionDetails": "联系人详情"
+    },
+    "label": {
+      "connectionLevel": "联系人熟悉程度",
+      "mutualConnections": "共同联系人",
+      "mutualGroups": "共同群组"
+    },
+    "tags": {
+      "connectedAt": "建立联系的 {{date}}",
+      "loading": "加载中…"
+    },
+    "text": {
+      "level": "你有多了解 {{name}}？",
+      "levelAlreadyKnown": "我已经了解这个人",
+      "levelJustMet": "这是我刚添加的陌生人",
+      "levelRecovery": "我信任此人，可帮助恢复我的BrightID",
+      "levelSuspicious": "我不认识这个人",
+      "reportConnection": "举报 {{name}}",
+      "reportDuplicate": "此人创建了多个账号",
+      "reportImpact": "标记{{name}}会对他们的BrightID产生负面影响，并且该标记可能会显示给其他用户。",
+      "reportOther": "其他原因",
+      "reportSpammer": "此人向我发送了不需要的连接请求"
+    }
+  },
+  "connections": {
+    "accessibilityLabel": {
+      "connectionPhoto": "联系人照片",
+      "viewConnectionDetails": "查看联系人详情",
+      "viewPhoto": "查看全图"
+    },
+    "button": {
+      "reconnect": "重新建立联系",
+      "reportConnection": "举报该联系人",
+      "updateConnection": "更新联系人"
+    },
+    "header": {
+      "connections": "联系人"
+    },
+    "label": {
+      "currentConnectionLevel": "当前联系人熟悉程度",
+      "newProfile": "新简介",
+      "oldProfile": "旧简介"
+    },
+    "removeActionSheet": {
+      "info": "您确定要移除联系人{{name}}吗？您可以任何时候再重新建立联系。",
+      "remove": "移除",
+      "title": "移除联系人"
+    },
+    "tag": {
+      "deleted": "已删除",
+      "failed": "失败。\n请再试一次。",
+      "hidden": "已隐藏",
+      "lastConnected": "最近建立联系是在{{date}}",
+      "reportedAs": "举报{{flag}}",
+      "waiting": "等待中"
+    },
+    "text": {
+      "alreadyConnectedWith": "您已经与{{name}}建立联系",
+      "noConnections": "联系人为空"
+    }
+  },
+  "contact": {
+    "label": {
+      "email": "邮箱",
+      "meet": "建立联系",
+      "socialMedia": "社交媒体",
+      "website": "网站"
+    },
+    "text": {
+      "meet": "加入一个BrightID 连接指导会吧！",
+      "openSource": "开源！",
+      "weAre": "我们是 "
+    },
+    "title": {
+      "contactUs": "联系我们"
+    }
+  },
+  "createGroup": {
+    "alert": {
+      "text": {
+        "nameMissing": "请为群组命名",
+        "nameTooShort": "群名字必须不少于2个字符"
+      },
+      "title": {
+        "createFailed": "群组创建成功",
+        "formIncomplete": "群组表格不完整"
+      }
+    },
+    "button": {
+      "createGroup": "创建群组",
+      "next": "下一步"
+    },
+    "label": {
+      "cofounders": "联合创建者"
+    },
+    "placeholder": {
+      "groupName": "群名称是？"
+    },
+    "text": {
+      "cofounders": "您必须选择两位成员作为联合创建者",
+      "noConnections": "联系人为空"
+    }
+  },
+  "drawer": {
+    "alert": {
+      "text": {
+        "upToDate": "BrightID是最新的。"
+      },
+      "title": {
+        "upToDate": "检查更新"
+      }
+    },
+    "label": {
+      "achievements": "成就",
+      "checkForUpdates": "检查更新",
+      "contactUs": "联系我们",
+      "copyExplorerCode": "复制资源管理器代码"
+    }
+  }
+}

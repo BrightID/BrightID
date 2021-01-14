@@ -1,12 +1,17 @@
 // @flow
 import { b64ToUint8Array, b64ToUrlSafeB64, randomKey } from '@/utils/encoding';
-import { CHANNEL_TTL } from '@/utils/constants';
+import {
+  CHANNEL_TTL,
+  CHANNEL_INFO_VERSION,
+  CHANNEL_INFO_NAME,
+} from '@/utils/constants';
 import { Buffer } from 'buffer';
 import {
   channel_states,
   channel_types,
 } from '@/components/PendingConnectionsScreens/channelSlice';
 import ChannelAPI from '@/api/channelService';
+import i18next from 'i18next';
 
 export const createRandomId = async (size: number = 9) => {
   const key = await randomKey(size);
@@ -15,7 +20,8 @@ export const createRandomId = async (size: number = 9) => {
 
 export const generateChannelData = async (
   channelType: ChannelType,
-  ipAddress: string,
+  url: URL,
+  ipAddress?: string,
 ): Promise<Channel> => {
   const aesKey = await randomKey(16);
   const id = await createRandomId();
@@ -25,7 +31,7 @@ export const generateChannelData = async (
   const type = channelType;
   const initiatorProfileId = '';
   const state = channel_states.OPEN;
-  const channelApi = new ChannelAPI(`http://${ipAddress}/profile`);
+  const channelApi = new ChannelAPI(`${url.href}`);
 
   return {
     aesKey,
@@ -38,11 +44,82 @@ export const generateChannelData = async (
     timestamp,
     ttl,
     type,
+    url,
   };
+};
+
+export const createChannelInfo = (channel: Channel) => {
+  const obj: ChannelInfo = {
+    version: CHANNEL_INFO_VERSION,
+    type: channel.type,
+    timestamp: channel.timestamp,
+    ttl: channel.ttl,
+    initiatorProfileId: channel.myProfileId,
+  };
+  return obj;
+};
+
+export const buildChannelQrUrl = ({ aesKey, id, url }: Channel) => {
+  const qrUrl = new URL(url.href);
+  qrUrl.searchParams.append('aes', aesKey);
+  qrUrl.searchParams.append('id', id);
+  return qrUrl;
+};
+
+export const parseChannelQrURL = async (url: URL) => {
+  // parse and remove aesKey from URL
+  const aesKey = url.searchParams.get('aes');
+  url.searchParams.delete('aes');
+  // parse and remove channelID from URL
+  const id = url.searchParams.get('id');
+  url.searchParams.delete('id');
+
+  // create channelAPI
+  const channelApi = new ChannelAPI(url.href);
+  // download channelInfo
+  const channelInfo = await channelApi.download({
+    channelId: id,
+    dataId: CHANNEL_INFO_NAME,
+  });
+  console.log(`Got ChannelInfo:`);
+  console.log(channelInfo);
+
+  if (channelInfo.version > CHANNEL_INFO_VERSION) {
+    const msg = i18next.t(
+      'channel.alert.text.localOutdated',
+      'client version outdated - please update your client and retry',
+    );
+    throw new Error(msg);
+  } else if (channelInfo.version < CHANNEL_INFO_VERSION) {
+    const msg = i18next.t(
+      'channel.alert.text.otherOutdated',
+      'other client version outdated - QRCode creator needs to update client and retry',
+    );
+    throw new Error(msg);
+  }
+
+  const myProfileId = await createRandomId();
+
+  const channel: Channel = {
+    aesKey,
+    api: channelApi,
+    id,
+    initiatorProfileId: channelInfo.initiatorProfileId,
+    myProfileId,
+    state: channel_states.OPEN,
+    timestamp: channelInfo.timestamp,
+    ttl: channelInfo.ttl,
+    type: channelInfo.type,
+    url,
+  };
+  return channel;
 };
 
 export const encodeChannelQrString = (channel: Channel) => {
   const { aesKey, id, ipAddress, myProfileId, timestamp, ttl, type } = channel;
+  if (!ipAddress) {
+    throw Error(`Cant create old format channelQRString - ipAddress missing`);
+  }
   const b64Ip = Buffer.from(
     ipAddress.split('.').map((octet) => parseInt(octet, 10)),
   )
@@ -80,7 +157,8 @@ export const decodeChannelQrString = async (qrString: string) => {
   // add local channel data that is not part of qrstring
   const myProfileId = await createRandomId();
   const state = channel_states.OPEN;
-  const channelApi = new ChannelAPI(`http://${ipAddress}/profile`);
+  const url = new URL(`http://${ipAddress}/profile`);
+  const channelApi = new ChannelAPI(url.href);
 
   // convert intType to ChannelType
   let type;
@@ -100,12 +178,12 @@ export const decodeChannelQrString = async (qrString: string) => {
     api: channelApi,
     id,
     initiatorProfileId,
-    ipAddress,
     myProfileId,
     state,
     timestamp,
     ttl,
     type,
+    url,
   };
   return channel;
 };

@@ -12,13 +12,15 @@ import {
 import { selectAllSocialMedia } from '@/components/EditProfile/socialMediaSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
-import { generateChannelData } from '@/utils/channels';
+import { generateChannelData, createChannelInfo } from '@/utils/channels';
 import {
   CHANNEL_CONNECTION_LIMIT,
   CHANNEL_TTL,
   MIN_CHANNEL_JOIN_TTL,
   PROFILE_POLL_INTERVAL,
   PROFILE_VERSION,
+  CHANNEL_INFO_NAME,
+  CHANNEL_SWITCH_TIMESTAMP,
 } from '@/utils/constants';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
@@ -31,11 +33,19 @@ import i18next from 'i18next';
 export const createChannel = (channelType: ChannelType) => async (
   dispatch: dispatch,
 ) => {
-  let channel: Channel;
+  let channel: ?Channel;
   try {
-    // create new channel
-    const ipAddress = await api.ip();
-    channel = await generateChannelData(channelType, ipAddress);
+    // TODO: Remove fallback implementation when CHANNEL_SWITCH_TIMESTAMP is reached
+    const switchTimeReached = Date.now() > CHANNEL_SWITCH_TIMESTAMP;
+    let url, ipAddress;
+    if (switchTimeReached) {
+      url = new URL(`${api.baseUrl}/profile`);
+    } else {
+      ipAddress = await api.ip();
+      url = new URL(`http://${ipAddress}/profile`);
+    }
+    channel = await generateChannelData(channelType, url, ipAddress);
+
     // Set timeout to expire channel
     channel.timeoutId = setTimeout(() => {
       console.log(`timer expired for channel ${channel.id}`);
@@ -45,6 +55,15 @@ export const createChannel = (channelType: ChannelType) => async (
     dispatch(
       setMyChannel({ channelId: channel.id, channelType: channel.type }),
     );
+    if (switchTimeReached) {
+      // upload channel info
+      const channelInfo: ChannelInfo = createChannelInfo(channel);
+      await channel.api.upload({
+        channelId: channel.id,
+        data: channelInfo,
+        dataId: CHANNEL_INFO_NAME,
+      });
+    }
     // upload my profile
     await dispatch(encryptAndUploadProfileToChannel(channel.id));
     // start polling for profiles
@@ -54,6 +73,7 @@ export const createChannel = (channelType: ChannelType) => async (
     if (channel && channel.id) {
       dispatch(leaveChannel(channel.id));
     }
+    console.log(`Error while creating channel: ${e}`);
     // need to throw to prevent app from looping
     throw e;
   }
@@ -63,7 +83,7 @@ export const joinChannel = (channel: Channel) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  console.log(`Joining channel ${channel.id} at ${channel.ipAddress}`);
+  console.log(`Joining channel ${channel.id} at ${channel.url.href}`);
   // check to see if channel exists
   const channelIds = selectAllChannelIds(getState());
   if (channelIds.includes(channel.id)) {
@@ -107,13 +127,7 @@ export const joinChannel = (channel: Channel) => async (
   } catch (e) {
     // Something went wrong while trying to join channel.
     dispatch(leaveChannel(channel.id));
-    console.log(`Error while joining channel: ${e}`);
-    Alert.alert(
-      i18next.t('common.alert.error'),
-      i18next.t('pendingConnection.alert.text.errorJoinChannel', {
-        message: `${e.message}`,
-      }),
-    );
+    throw e;
   }
 };
 
@@ -188,6 +202,14 @@ export const fetchChannelProfiles = createAsyncThunk(
   async (channelId, { getState, dispatch }) => {
     const channel = selectChannelById(getState(), channelId);
     let profileIds = await channel.api.list(channelId);
+
+    // channel.api.list() will include the channelInfo.json file.
+    // Remove it from list as I don't want to download and interpret it as a profile.
+    const channelInfoIndex = profileIds.indexOf(CHANNEL_INFO_NAME);
+    if (channelInfoIndex > -1) {
+      profileIds.splice(channelInfoIndex, 1);
+    }
+
     // Only get up to CHANNEL_CONNECTION_LIMIT profiles
     profileIds = profileIds.slice(0, CHANNEL_CONNECTION_LIMIT);
     const knownProfileIds = selectAllPendingConnectionIds(getState());

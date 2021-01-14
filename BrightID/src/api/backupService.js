@@ -1,9 +1,7 @@
 // @flow
 
 import { create, ApiSauceInstance, ApiResponse } from 'apisauce';
-import nacl from 'tweetnacl';
 import { b64ToUrlSafeB64 } from '@/utils/encoding';
-import store from '@/store';
 
 let recoveryUrl = 'https://recovery.brightid.org';
 let seedUrl = 'http://node.brightid.org';
@@ -52,7 +50,6 @@ class BackupService {
     );
     BackupService.throwOnError(res);
   }
-
 }
 
 const backupService = new BackupService();

@@ -1,6 +1,7 @@
 // @flow
 /* global device:false, element:false, by:false, waitFor:false */
 
+import { report_reasons } from '@/utils/constants';
 import {
   createBrightID,
   createFakeConnection,
@@ -8,7 +9,6 @@ import {
   expectConnectionsScreen,
   navigateHome,
 } from './testUtils';
-import { report_reasons } from '../src/utils/constants';
 
 describe('Report Connections', () => {
   let hasBackButton = true;
