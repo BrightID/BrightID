@@ -73,13 +73,7 @@ export const createChannel = (channelType: ChannelType) => async (
     if (channel && channel.id) {
       dispatch(leaveChannel(channel.id));
     }
-    console.log(`Error while crating channel: ${e}`);
-    Alert.alert(
-      i18next.t('common.alert.error'),
-      i18next.t('pendingConnection.alert.text.errorCreateChannel', {
-        message: `${e.message}`,
-      }),
-    );
+    console.log(`Error while creating channel: ${e}`);
     // need to throw to prevent app from looping
     throw e;
   }
@@ -133,13 +127,7 @@ export const joinChannel = (channel: Channel) => async (
   } catch (e) {
     // Something went wrong while trying to join channel.
     dispatch(leaveChannel(channel.id));
-    console.log(`Error while joining channel: ${e}`);
-    Alert.alert(
-      i18next.t('common.alert.error'),
-      i18next.t('pendingConnection.alert.text.errorJoinChannel', {
-        message: `${e.message}`,
-      }),
-    );
+    throw e;
   }
 };
 
@@ -215,7 +203,8 @@ export const fetchChannelProfiles = createAsyncThunk(
     const channel = selectChannelById(getState(), channelId);
     let profileIds = await channel.api.list(channelId);
 
-    // ignore channelInfo.json
+    // channel.api.list() will include the channelInfo.json file.
+    // Remove it from list as I don't want to download and interpret it as a profile.
     const channelInfoIndex = profileIds.indexOf(CHANNEL_INFO_NAME);
     if (channelInfoIndex > -1) {
       profileIds.splice(channelInfoIndex, 1);
