@@ -33,7 +33,7 @@ export const addFakeConnection = () => async (
     let photo;
     const photoResponse = await RNFetchBlob.fetch(
       'GET',
-      'https://picsum.photos/180',
+      'https://loremflickr.com/180/180',
       {},
     );
     if (photoResponse.info().status === 200) {
@@ -159,7 +159,7 @@ export const reconnectFakeConnection = (
     // load a new random photo
     const photoResponse = await RNFetchBlob.fetch(
       'GET',
-      'https://picsum.photos/180',
+      'https://loremflickr.com/180/180',
       {},
     );
     if (photoResponse.info().status === 200) {

@@ -26,7 +26,8 @@ import {
   channel_types,
   closeChannel,
 } from '@/components/PendingConnectionsScreens/channelSlice';
-import { encodeChannelQrString } from '@/utils/channels';
+import { buildChannelQrUrl, encodeChannelQrString } from '@/utils/channels';
+import { CHANNEL_SWITCH_TIMESTAMP } from '../../utils/constants';
 
 /**
  * My Code screen of BrightID
@@ -76,17 +77,18 @@ const Timer = ({ channel }) => {
 export const QrCode = ({ channel }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  // current channel displayed by QRCode
-
   const myName = useSelector((state) => state.user.name);
-
   const [qrString, setQrString] = useState('');
   const [qrsvg, setQrsvg] = useState('');
 
   // create QRCode from channel data
   useEffect(() => {
     if (channel && channel.state === channel_states.OPEN) {
-      const newQrString = encodeChannelQrString(channel);
+      const newQrString =
+        channel.timestamp > CHANNEL_SWITCH_TIMESTAMP
+          ? buildChannelQrUrl(channel).href
+          : encodeChannelQrString(channel);
+
       // do not re-render svg if we already have the string
       if (newQrString !== qrString) {
         console.log(
@@ -102,7 +104,9 @@ export const QrCode = ({ channel }) => {
   }, [channel, qrString]);
 
   const copyQr = () => {
-    const universalLink = `https://app.brightid.org/connection-code/${qrString}`;
+    const universalLink = `https://app.brightid.org/connection-code/${encodeURIComponent(
+      qrString,
+    )}`;
     const clipboardMsg = __DEV__
       ? universalLink
       : channel?.type === channel_types.GROUP
