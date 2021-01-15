@@ -440,7 +440,8 @@
       "recover": "Recover BrightID"
     },
     "text": {
-      "register": "Register to create your very own\ndigital identity"
+      "register": "Register to create your very own\ndigital identity",
+      "congratulations": "Congratulations!\nYour BrightID has been created.\nIt’s time to make connections."
     }
   },
   "pendingConnection": {
@@ -604,20 +605,25 @@
       "addPhoto": "Add Photo",
       "createAccount": "Create My BrightID",
       "recoverAccount": "Recover BrightID",
-      "submit": "Submit"
+      "submit": "Submit",
+      "skip": "Skip & do it later"
     },
     "header": {
       "title": "Sign Up"
     },
     "placeholder": {
-      "name": "Your name"
+      "name": "Your name",
+      "password": "password",
+      "confirmPassword": "confirm your password"
     },
     "text": {
       "creatingAccount": "Creating Bright ID…",
       "nameNotShared": "Your name will never be shared with apps or\nstored on servers",
       "photoNotShared": "Your photo will never be shared with apps or\nstored on servers",
       "whatsYouName": "What do your friends know you by?",
-      "pleaseAddPhoto": "Please add a photo"
+      "pleaseAddPhoto": "Please add a photo",
+      "createPassword": "Create your BrightID password",
+      "passwordInfo": "This password will encrypt the names and photos of your connections should you need to recover them. It does not allow someone to take over your BrightID."
     }
   }
 }

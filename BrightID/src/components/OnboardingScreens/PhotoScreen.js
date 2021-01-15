@@ -44,7 +44,9 @@ export const PhotoScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      retrieveImage(photoFilename).then(setfinalBase64);
+      if (photoFilename) {
+        retrieveImage(photoFilename).then(setfinalBase64);
+      }
     }, [photoFilename]),
   );
 
@@ -111,7 +113,7 @@ export const PhotoScreen = () => {
       });
   };
 
-  console.log('rendering screen');
+  const disabled = !finalBase64;
 
   return (
     <>
@@ -150,9 +152,10 @@ export const PhotoScreen = () => {
         </View>
         <View style={styles.submitContainer}>
           <TouchableOpacity
-            style={styles.submitBtn}
+            style={[styles.submitBtn, { opacity: disabled ? 0.7 : 1 }]}
             onPress={handleSubmit}
             accessibilityLabel={t('signup.button.submit')}
+            disabled={disabled}
           >
             <Text style={styles.submitBtnText}>
               {t('signup.button.submit')}

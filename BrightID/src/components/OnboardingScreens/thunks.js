@@ -1,7 +1,7 @@
 // @flow
 
 import nacl from 'tweetnacl';
-import { setKeypair, setPhoto } from '@/actions';
+import { setKeypair, setPhoto, setUserId } from '@/actions';
 import { createImageDirectory, saveImage } from '@/utils/filesystem';
 import { b64ToUrlSafeB64, uInt8ArrayToB64 } from '@/utils/encoding';
 
@@ -33,4 +33,11 @@ export const savePhoto = (base64Image) => async (
 
   let filename = await saveImage({ imageName: id, base64Image });
   dispatch(setPhoto({ filename }));
+};
+
+export const saveId = () => async (dispatch: dispatch, getState: getState) => {
+  let { publicKey } = getState().keypair;
+  let id = b64ToUrlSafeB64(publicKey);
+
+  dispatch(setUserId(id));
 };

@@ -38,6 +38,9 @@ export const NameScreen = () => {
     dispatch(setName(displayName));
     navigation.navigate('SignUpPhoto');
   };
+
+  const disabled = displayName.length < 2;
+
   return (
     <>
       <StatusBar
@@ -72,9 +75,10 @@ export const NameScreen = () => {
         </View>
         <View style={styles.submitContainer}>
           <TouchableOpacity
-            style={styles.submitBtn}
+            style={[styles.submitBtn, { opacity: disabled ? 0.7 : 1 }]}
             onPress={handleSubmit}
             accessibilityLabel={t('signup.button.submit')}
+            disabled={disabled}
           >
             <Text style={styles.submitBtnText}>
               {t('signup.button.submit')}
