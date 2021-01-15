@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import {
-  Image,
   StatusBar,
   StyleSheet,
   Text,
@@ -11,11 +10,12 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, BLACK, DARKER_GREY, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { setName } from '@/actions';
 
 /* Description */
 /* ======================================== */
@@ -28,11 +28,16 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 /* ======================================== */
 
 export const NameScreen = () => {
-  // slide item
-  const { t } = useTranslation();
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
-  const [name, setName] = useState('');
+  const name = useSelector((state) => state.user.name);
+  const [displayName, setDisplayName] = useState(name);
+  const handleSubmit = () => {
+    dispatch(setName(displayName));
+    navigation.navigate('SignUpPhoto');
+  };
   return (
     <>
       <StatusBar
@@ -50,8 +55,8 @@ export const NameScreen = () => {
         <View style={styles.midContainer}>
           <TextInput
             testID="editName"
-            onChangeText={setName}
-            value={name}
+            onChangeText={setDisplayName}
+            value={displayName}
             placeholder={t('signup.placeholder.name')}
             placeholderTextColor={DARKER_GREY}
             style={styles.textInput}
@@ -65,12 +70,10 @@ export const NameScreen = () => {
             {t('signup.text.nameNotShared')}
           </Text>
         </View>
-        <View style={styles.midContainer}>
+        <View style={styles.submitContainer}>
           <TouchableOpacity
             style={styles.submitBtn}
-            onPress={() => {
-              navigation.navigate('SignupName');
-            }}
+            onPress={handleSubmit}
             accessibilityLabel={t('signup.button.submit')}
           >
             <Text style={styles.submitBtnText}>
@@ -99,7 +102,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   descContainer: {
-    marginTop: DEVICE_LARGE ? 70 : 60,
+    marginTop: DEVICE_LARGE ? 100 : 85,
   },
   midContainer: {
     flex: 1,
@@ -111,7 +114,6 @@ const styles = StyleSheet.create({
     fontSize: fontSize[16],
     textAlign: 'center',
     lineHeight: DEVICE_LARGE ? 26 : 24,
-    marginTop: DEVICE_LARGE ? 20 : 18,
   },
   textInput: {
     fontFamily: 'Poppins-Regular',
@@ -129,6 +131,11 @@ const styles = StyleSheet.create({
     color: DARKER_GREY,
     textAlign: 'center',
     marginTop: DEVICE_LARGE ? 36 : 30,
+  },
+  submitContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: DEVICE_LARGE ? 85 : 70,
   },
   submitBtn: {
     alignItems: 'center',

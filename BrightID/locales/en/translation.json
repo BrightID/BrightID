@@ -607,7 +607,7 @@
       "submit": "Submit"
     },
     "header": {
-      "title": "SignUp"
+      "title": "Sign Up"
     },
     "placeholder": {
       "name": "Your name"
@@ -615,7 +615,9 @@
     "text": {
       "creatingAccount": "Creating Bright ID…",
       "nameNotShared": "Your name will never be shared with apps or\nstored on servers",
-      "whatsYouName": "What do your friends know you by?"
+      "photoNotShared": "Your photo will never be shared with apps or\nstored on servers",
+      "whatsYouName": "What do your friends know you by?",
+      "pleaseAddPhoto": "Please add a photo"
     }
   }
 }
