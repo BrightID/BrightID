@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import {
+  Alert,
   Image,
   SafeAreaView,
   StatusBar,
@@ -11,10 +12,12 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, BLACK, GREEN, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { createKeypair } from './thunks';
 import VerifiedBadge from '../Icons/VerifiedBadge';
 
 /* Description */
@@ -22,16 +25,27 @@ import VerifiedBadge from '../Icons/VerifiedBadge';
 
 /**
  * Initial Onboarding screen of BrightID
+ * Creates Keypair after pressing `Create My BrightID`
  */
 
 /* Onboarding Screen */
 /* ======================================== */
 
 export const Onboard = () => {
-  // slide item
-  console.log('DEVICE_LARGE', DEVICE_LARGE);
-  const { t } = useTranslation();
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const { t } = useTranslation();
+
+  const handleCreateMyBrightID = () => {
+    dispatch(createKeypair())
+      .then(() => {
+        navigation.navigate('SignupName');
+      })
+      .catch((err) => {
+        Alert.alert(err.message);
+      });
+  };
+
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -72,9 +86,7 @@ export const Onboard = () => {
         <View style={styles.btnContainer}>
           <TouchableOpacity
             style={styles.createBtn}
-            onPress={() => {
-              navigation.navigate('SignupName');
-            }}
+            onPress={handleCreateMyBrightID}
             accessibilityLabel={t('onboarding.button.create')}
           >
             <Text style={styles.createBtnText}>
