@@ -62,6 +62,15 @@ module.exports = {
     'react/display-name': 'off',
     'react/prop-types': 'off',
     'react/jsx-props-no-spreading': 'off',
+    // 'sort-keys': [
+    //   'error',
+    //   'asc',
+    //   {
+    //     caseSensitive: false,
+    //     natural: true,
+    //     minKeys: 2,
+    //   },
+    // ],
   },
   globals: {
     __DEV__: 'readonly',

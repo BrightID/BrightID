@@ -1,7 +1,7 @@
 // @flow
 
 import nacl from 'tweetnacl';
-import { setKeypair, setUserData, setHashedId } from '@/actions';
+import { setKeypair, setUserData } from '@/actions';
 import { createImageDirectory, saveImage } from '@/utils/filesystem';
 import { b64ToUrlSafeB64, uInt8ArrayToB64 } from '@/utils/encoding';
 
@@ -35,9 +35,6 @@ export const handleBrightIdCreation = ({
     // // update redux store
     dispatch(setUserData(userData));
     dispatch(setKeypair(b64PubKey, secretKey));
-
-    // to fix bug while testing
-    dispatch(setHashedId(''));
 
     console.log('brightid creation success');
 

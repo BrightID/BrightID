@@ -224,7 +224,6 @@ declare type UserState = {
   verifications: any[],
   id: string,
   password: string,
-  hashedId: string,
   secretKey: string,
 };
 
