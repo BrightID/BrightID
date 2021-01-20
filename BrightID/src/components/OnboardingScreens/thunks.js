@@ -17,7 +17,7 @@ export const createKeypair = () => async (
     let { publicKey, secretKey } = await nacl.sign.keyPair();
     let b64PubKey = uInt8ArrayToB64(publicKey);
 
-    dispatch(setKeypair(b64PubKey, secretKey));
+    dispatch(setKeypair({ publicKey: b64PubKey, secretKey }));
   }
 };
 
