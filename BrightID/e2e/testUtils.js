@@ -12,15 +12,27 @@ const acceptEula = async () => {
   await expect(element(by.id('EulaScreen'))).toBeVisible();
   await expect(element(by.id('acceptEulaBtn'))).toExist();
   await element(by.id('acceptEulaBtn')).tap();
-  await expect(element(by.id('brightIdOnboard'))).toBeVisible();
 };
 
-const createBrightID = async (name: string = testUserName) => {
-  await acceptEula();
-  await element(by.id('getStartedBtn')).tap();
+const createKeypair = async () => {
+  await expect(element(by.id('OnboardScreen'))).toBeVisible();
+  await expect(element(by.id('createBrightID'))).toExist();
+  await element(by.id('createBrightID')).tap();
+};
+
+const addName = async (name) => {
+  await expect(element(by.id('NameScreen'))).toBeVisible();
+  await expect(element(by.id('editName'))).toExist();
   await element(by.id('editName')).tap();
   await element(by.id('editName')).replaceText(name);
   await element(by.id('editName')).tapReturnKey();
+  await expect(element(by.id('submitName'))).toExist();
+  await element(by.id('submitName')).tap();
+};
+
+const addPhoto = async () => {
+  await expect(element(by.id('PhotoScreen'))).toBeVisible();
+  await expect(element(by.id('addPhoto'))).toExist();
   await element(by.id('addPhoto')).tap();
   // ActionSheet does not support testID prop, so match based on text.
   await expect(
@@ -31,11 +43,27 @@ const createBrightID = async (name: string = testUserName) => {
     by.text(i18next.t('common.photoActionSheet.choosePhoto')),
   ).tap();
   // Wait until photo is loaded
-  await waitFor(element(by.id('editPhoto')))
+  await waitFor(element(by.id('addPhoto')))
     .toBeVisible()
-    .withTimeout(20000);
+    .withTimeout(15000);
   // create new ID
-  await element(by.id('createBrightIDBtn')).tap();
+  await expect(element(by.id('submitPhoto'))).toExist();
+  await element(by.id('submitPhoto')).tap();
+};
+
+const skipPassword = async () => {
+  await expect(element(by.id('PasswordScreen'))).toBeVisible();
+  await expect(element(by.id('skipBtn'))).toExist();
+  await element(by.id('skipBtn')).tap();
+};
+
+const createBrightID = async (name: string = testUserName) => {
+  await acceptEula();
+  await createKeypair();
+  await addName(name);
+  await addPhoto();
+  // skip password
+  await skipPassword();
   // should end up at home screen
   await expectHomescreen();
   return name;

@@ -48,7 +48,7 @@ export const Onboard = () => {
 
   return (
     <>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} testID="OnboardScreen">
         <StatusBar
           barStyle="dark-content"
           backgroundColor={WHITE}
@@ -88,6 +88,7 @@ export const Onboard = () => {
             style={styles.createBtn}
             onPress={handleCreateMyBrightID}
             accessibilityLabel={t('onboarding.button.create')}
+            testID="createBrightID"
           >
             <Text style={styles.createBtnText}>
               {t('onboarding.button.create')}

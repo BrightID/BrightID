@@ -49,7 +49,7 @@ export const NameScreen = () => {
         animated={true}
       />
       <View style={styles.orangeTop} />
-      <View style={styles.container}>
+      <View style={styles.container} testID="NameScreen">
         <View style={styles.descContainer}>
           <Text style={styles.registerText}>
             {t('signup.text.whatsYouName')}
@@ -79,6 +79,7 @@ export const NameScreen = () => {
             onPress={handleSubmit}
             accessibilityLabel={t('signup.button.submit')}
             disabled={disabled}
+            testID="submitName"
           >
             <Text style={styles.submitBtnText}>
               {t('signup.button.submit')}

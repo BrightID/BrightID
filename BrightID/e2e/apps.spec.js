@@ -83,7 +83,7 @@ describe('Without account', () => {
       url: `brightid://link-verification/http:%2f%2ftest.brightid.org/ethereum/${getRandomAddres()}`,
     });
     // app should show onboarding carousel screen
-    await waitFor(element(by.id('brightIdOnboard'))).toBeVisible();
+    await waitFor(element(by.id('OnboardScreen'))).toBeVisible();
   });
   it('should ignore deep link when not running', async () => {
     await device.launchApp({
@@ -91,7 +91,7 @@ describe('Without account', () => {
       url: `brightid://link-verification/http:%2f%2ftest.brightid.org/ethereum/${getRandomAddres()}`,
     });
     // app should show onboarding carousel screen
-    await waitFor(element(by.id('brightIdOnboard'))).toBeVisible();
+    await waitFor(element(by.id('OnboardScreen'))).toBeVisible();
   });
 });
 

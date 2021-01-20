@@ -76,7 +76,7 @@ export const PasswordScreen = () => {
         animated={true}
       />
       <View style={styles.orangeTop} />
-      <View style={styles.container}>
+      <View style={styles.container} testID="PasswordScreen">
         <View style={styles.descContainer}>
           <Text style={styles.registerText}>
             {t('signup.text.createPassword')}
@@ -150,6 +150,7 @@ export const PasswordScreen = () => {
             style={styles.skipBtn}
             onPress={handleSkip}
             accessibilityLabel={t('signup.button.skip')}
+            testID="skipBtn"
           >
             <Text style={styles.skipBtnText}>{t('signup.button.skip')}</Text>
           </TouchableOpacity>

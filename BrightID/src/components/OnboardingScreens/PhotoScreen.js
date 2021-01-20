@@ -123,7 +123,7 @@ export const PhotoScreen = () => {
         animated={true}
       />
       <View style={styles.orangeTop} />
-      <View style={styles.container}>
+      <View style={styles.container} testID="PhotoScreen">
         {!finalBase64 ? (
           <View style={styles.descContainer}>
             <Text style={styles.registerText}>
@@ -158,6 +158,7 @@ export const PhotoScreen = () => {
             onPress={handleSubmit}
             accessibilityLabel={t('signup.button.submit')}
             disabled={disabled}
+            testID="submitPhoto"
           >
             <Text style={styles.submitBtnText}>
               {t('signup.button.submit')}
