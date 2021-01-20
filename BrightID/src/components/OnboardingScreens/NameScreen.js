@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
     color: DARKER_GREY,
     textAlign: 'center',
     marginTop: DEVICE_LARGE ? 36 : 30,
+    width: '72%',
   },
   submitContainer: {
     width: '100%',

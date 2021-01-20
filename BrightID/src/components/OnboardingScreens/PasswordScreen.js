@@ -10,11 +10,12 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { fontSize } from '@/theme/fonts';
-import { WHITE, BLACK, DARKER_GREY, ORANGE } from '@/theme/colors';
+import { WHITE, BLACK, DARKER_GREY, ORANGE, RED } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { setPassword as setUserPassword } from '@/actions';
 
 /* Description */
 /* ======================================== */
@@ -26,6 +27,8 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 /* Onboarding Screen */
 /* ======================================== */
 
+const PASSWORD_LENGTH = 8;
+
 export const PasswordScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -33,9 +36,34 @@ export const PasswordScreen = () => {
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [errors, setErrors] = useState([]);
+
+  const id = useSelector((state) => state.user.id);
+
+  const checkPassword = () =>
+    new Promise((res) => {
+      if (password.length < PASSWORD_LENGTH) {
+        // using array to indicate where to display the message
+        setErrors([`Password must be ${PASSWORD_LENGTH} characters`]);
+      } else if (password !== confirmPassword) {
+        console.log(password, confirmPassword);
+        // using array to indicate where to display the message
+        setErrors([null, 'Passwords must match']);
+      } else {
+        // all good
+        setErrors([]);
+        res(true);
+      }
+    });
 
   const handleSubmit = () => {
-    // dispatch(setName(displayName));
+    checkPassword().then(() => {
+      dispatch(setUserPassword(password));
+      navigation.navigate('OnboardSuccess');
+    });
+  };
+
+  const handleSkip = () => {
     navigation.navigate('OnboardSuccess');
   };
 
@@ -54,35 +82,55 @@ export const PasswordScreen = () => {
             {t('signup.text.createPassword')}
           </Text>
         </View>
+        <TextInput
+          style={styles.invisibleUsername}
+          placeholder="Username"
+          textContentType="username"
+          autoCompleteType="username"
+          autoCorrect={false}
+          value={id}
+        />
         <View style={styles.midContainer}>
-          <TextInput
-            autoCompleteType="password"
-            autoCorrect={false}
-            secureTextEntry={true}
-            style={styles.textInput}
-            textContentType="password"
-            underlineColorAndroid="transparent"
-            testID="password"
-            onChangeText={setPassword}
-            value={password}
-            placeholder={t('signup.placeholder.password')}
-            placeholderTextColor={DARKER_GREY}
-            blurOnSubmit={true}
-          />
-          <TextInput
-            autoCompleteType="password"
-            autoCorrect={false}
-            secureTextEntry={true}
-            style={styles.textInput}
-            textContentType="password"
-            underlineColorAndroid="transparent"
-            testID="confirmPassword"
-            onChangeText={setConfirmPassword}
-            value={confirmPassword}
-            placeholder={t('signup.placeholder.confirmPassword')}
-            placeholderTextColor={DARKER_GREY}
-            blurOnSubmit={true}
-          />
+          <View style={styles.passwordContainer}>
+            <TextInput
+              autoCompleteType="password"
+              autoCorrect={false}
+              secureTextEntry={true}
+              style={styles.textInput}
+              textContentType="password"
+              // passwordrules="minlength: 16; required: lower; required: upper; required: digit; required: [-];"
+              underlineColorAndroid="transparent"
+              testID="password"
+              onChangeText={setPassword}
+              value={password}
+              placeholder={t('signup.placeholder.password')}
+              placeholderTextColor={DARKER_GREY}
+              blurOnSubmit={true}
+            />
+            {errors[0] ? (
+              <Text style={styles.errorText}>{errors[0]}</Text>
+            ) : null}
+          </View>
+          <View style={styles.passwordContainer}>
+            <TextInput
+              autoCompleteType="password"
+              autoCorrect={false}
+              secureTextEntry={true}
+              style={styles.textInput}
+              textContentType="password"
+              // passwordrules="minlength: 16; required: lower; required: upper; required: digit; required: [-];"
+              underlineColorAndroid="transparent"
+              testID="confirmPassword"
+              onChangeText={setConfirmPassword}
+              value={confirmPassword}
+              placeholder={t('signup.placeholder.confirmPassword')}
+              placeholderTextColor={DARKER_GREY}
+              blurOnSubmit={true}
+            />
+            {errors[1] ? (
+              <Text style={styles.errorText}>{errors[1]}</Text>
+            ) : null}
+          </View>
           <Text style={styles.privacyText}>
             {t('signup.text.passwordInfo')}
           </Text>
@@ -100,7 +148,7 @@ export const PasswordScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.skipBtn}
-            onPress={handleSubmit}
+            onPress={handleSkip}
             accessibilityLabel={t('signup.button.skip')}
           >
             <Text style={styles.skipBtnText}>{t('signup.button.skip')}</Text>
@@ -134,11 +182,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
   },
+  invisibleUsername: {
+    position: 'absolute',
+    left: -100,
+    width: 1,
+    height: 1,
+  },
   registerText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
     textAlign: 'center',
     lineHeight: DEVICE_LARGE ? 26 : 24,
+  },
+  passwordContainer: {
+    flexDirection: 'column',
+    width: '60%',
+    alignItems: 'center',
   },
   textInput: {
     fontFamily: 'Poppins-Regular',
@@ -146,9 +205,15 @@ const styles = StyleSheet.create({
     color: BLACK,
     borderBottomWidth: 1,
     borderBottomColor: DARKER_GREY,
-    width: '60%',
+    width: '100%',
     textAlign: 'center',
     paddingBottom: 10,
+  },
+  errorText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[12],
+    color: RED,
+    marginTop: 12,
   },
   privacyText: {
     fontFamily: 'Poppins-Regular',

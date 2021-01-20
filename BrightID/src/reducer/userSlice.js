@@ -1,6 +1,7 @@
 // @flow
 
 import { createSlice } from '@reduxjs/toolkit';
+import { RESET_STORE } from '@/actions/resetStore';
 
 const initialState: UserState = {
   score: 0,
@@ -73,6 +74,11 @@ const userSlice = createSlice({
       state.photo = photo;
       state.id = id;
       state.password = password;
+    },
+  },
+  extraReducers: {
+    [RESET_STORE]: (state, action) => {
+      return initialState;
     },
   },
 });

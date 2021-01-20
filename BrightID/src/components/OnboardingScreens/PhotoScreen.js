@@ -124,11 +124,13 @@ export const PhotoScreen = () => {
       />
       <View style={styles.orangeTop} />
       <View style={styles.container}>
-        <View style={styles.descContainer}>
-          <Text style={styles.registerText}>
-            {t('signup.text.pleaseAddPhoto')}
-          </Text>
-        </View>
+        {!finalBase64 ? (
+          <View style={styles.descContainer}>
+            <Text style={styles.registerText}>
+              {t('signup.text.pleaseAddPhoto')}
+            </Text>
+          </View>
+        ) : null}
         <View style={styles.midContainer}>
           <TouchableOpacity
             testID="addPhoto"
@@ -211,6 +213,7 @@ const styles = StyleSheet.create({
     color: DARKER_GREY,
     textAlign: 'center',
     marginTop: DEVICE_LARGE ? 36 : 30,
+    width: '72%',
   },
   submitContainer: {
     width: '100%',

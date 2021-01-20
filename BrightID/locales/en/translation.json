@@ -618,8 +618,8 @@
     },
     "text": {
       "creatingAccount": "Creating Bright ID…",
-      "nameNotShared": "Your name will never be shared with apps or\nstored on servers",
-      "photoNotShared": "Your photo will never be shared with apps or\nstored on servers",
+      "nameNotShared": "Your name will never be shared with apps or\nstored on our blockchain.",
+      "photoNotShared": "Your photo will never be shared with apps or\nstored on our blockchain.",
       "whatsYouName": "What do your friends know you by?",
       "pleaseAddPhoto": "Please add a photo",
       "createPassword": "Create your BrightID password",
