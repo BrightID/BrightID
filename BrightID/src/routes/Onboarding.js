@@ -1,8 +1,12 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
-import Onboard from '@/components/OnboardingScreens/Onboard';
-import SignUp from '@/components/OnboardingScreens/SignUp';
+import OnboardScreen from '@/components/OnboardingScreens/OnboardScreen';
+import NameScreen from '@/components/OnboardingScreens/NameScreen';
+import PhotoScreen from '@/components/OnboardingScreens/PhotoScreen';
+import PasswordScreen from '@/components/OnboardingScreens/PasswordScreen';
+import SuccessScreen from '@/components/OnboardingScreens/SuccessScreen';
+
 import Restore from './Restore';
 import { headerOptions } from './helpers';
 
@@ -14,18 +18,33 @@ const Onboarding = () => {
     <Stack.Navigator screenOptions={headerOptions}>
       <Stack.Screen
         name="Onboard"
-        component={Onboard}
+        component={OnboardScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="SignUp"
-        component={SignUp}
+        name="SignupName"
+        component={NameScreen}
         options={{ title: t('signup.header.title') }}
+      />
+      <Stack.Screen
+        name="SignUpPhoto"
+        component={PhotoScreen}
+        options={{ title: t('signup.header.title') }}
+      />
+      <Stack.Screen
+        name="SignUpPassword"
+        component={PasswordScreen}
+        options={{ title: t('signup.header.title') }}
+      />
+      <Stack.Screen
+        name="OnboardSuccess"
+        component={SuccessScreen}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Restore"
         component={Restore}
-        options={{ title: 'Account Recovery' }}
+        options={{ title: t('restore.header.accountRecovery') }}
       />
     </Stack.Navigator>
   );

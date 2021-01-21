@@ -71,8 +71,6 @@ export {
   setGroupSearchOpen,
 } from './groups';
 
-export { SET_KEYPAIR, setKeypair } from './keypair';
-
 export {
   SET_BACKUP_PENDING,
   SET_DEVICE_TOKEN,
@@ -97,33 +95,5 @@ export {
 
 export { RESET_STORE, resetStore } from './resetStore';
 
-export {
-  USER_SCORE,
-  SET_IS_SPONSORED,
-  SET_USER_PHOTO,
-  SEARCH_PARAM,
-  SET_USER_DATA,
-  SET_USER_NAME,
-  SET_BACKUP_COMPLETED,
-  SET_PASSWORD,
-  SET_HASHED_ID,
-  SET_USER_ID,
-  REMOVE_SAFE_PUB_KEY,
-  SET_VERIFICATIONS,
-  SET_EULA,
-  HYDRATE_USER,
-  setUserScore,
-  setIsSponsored,
-  setPhoto,
-  setSearchParam,
-  setUserData,
-  setName,
-  setBackupCompleted,
-  setPassword,
-  setHashedId,
-  setUserId,
-  removeSafePubKey,
-  setVerifications,
-  setEula,
-  hydrateUser,
-} from './user';
+export * from '../reducer/keypairSlice';
+export * from '../reducer/userSlice';

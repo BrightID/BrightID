@@ -16,6 +16,7 @@ const VerifiedBadge = ({
   background = WHITE,
   width = 48,
   height = 48,
+  strokeWidth = 4,
 }: Props) => (
   <Svg width={width} height={height} viewBox="0 0 48 48" fill="none">
     <Path
@@ -25,7 +26,7 @@ const VerifiedBadge = ({
     <Path
       d="M16.3076 20L21.4358 24.6154L31.6922 15.3846"
       stroke={background}
-      strokeWidth="4"
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
     />

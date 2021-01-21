@@ -120,7 +120,7 @@ export const recoverData = (pass: string) => async (
     var connections = [];
     var groups = [];
   }
-  dispatch(setKeypair(publicKey, secretKey));
+  dispatch(setKeypair({ publicKey, secretKey }));
 
   for (let conn of connections) {
     try {
