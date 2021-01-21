@@ -96,6 +96,14 @@
       "noConnections": "No connections"
     }
   },
+  "channel": {
+    "alert": {
+      "text": {
+        "localOutdated": "client version outdated - please update your client and retry",
+        "otherOutdated": "other client version outdated - QRCode creator needs to update client and retry"
+      }
+    }
+  },
   "common": {
     "accessibilityLabel": {
       "addPhoto": "add photo",

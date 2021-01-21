@@ -50,13 +50,13 @@ export const chooseImage = () =>
 
 const fakeUserAvatar = (): Promise<string> => {
   // save each connection with their id as the async storage key
-  return RNFetchBlob.fetch('GET', 'https://picsum.photos/180', {})
+  return RNFetchBlob.fetch('GET', 'https://loremflickr.com/180/180', {})
     .then((res) => {
       if (res.info().status === 200) {
         let b64 = res.base64();
         return b64;
       } else {
-        return 'https://picsum.photos/180';
+        return 'https://loremflickr.com/180/180';
       }
     })
     .catch((err) => {
@@ -96,11 +96,7 @@ const mediaTypeToFileExtension = ([mediaType = 'jpeg', image = ' ']): {
 
 export const parseDataUri = compose(mediaTypeToFileExtension, splitDataURI);
 
-const fileType = (str: string): string =>
-  str
-    .split('.')
-    .pop()
-    .toLowerCase();
+const fileType = (str: string): string => str.split('.').pop().toLowerCase();
 
 const normalizeType = (t: string): string => {
   switch (t) {

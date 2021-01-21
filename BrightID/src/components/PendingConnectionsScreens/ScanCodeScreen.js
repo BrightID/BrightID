@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
   StatusBar,
+  Alert,
 } from 'react-native';
 import {
   useFocusEffect,
@@ -27,10 +28,11 @@ import {
   closeChannel,
 } from '@/components/PendingConnectionsScreens/channelSlice';
 import { selectAllUnconfirmedConnectionsByChannelIds } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
-import { decodeChannelQrString } from '@/utils/channels';
+import { decodeChannelQrString, parseChannelQrURL } from '@/utils/channels';
 import { joinChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
 
+import i18next from 'i18next';
 import { RNCamera } from './RNCameraProvider';
 
 /**
@@ -105,7 +107,7 @@ export const ScanCodeScreen = () => {
   useEffect(() => {
     if (route.params?.qrcode) {
       console.log(`Got qrcode ${route.params.qrcode} from Deeplink`);
-      setQrData(route.params.qrcode);
+      setQrData(decodeURIComponent(route.params.qrcode));
     }
   }, [route.params, setQrData]);
 
@@ -121,15 +123,40 @@ export const ScanCodeScreen = () => {
           console.log(`handleQrData: calling Linking.openURL() with ${qrData}`);
           await Linking.openURL(qrData);
         } else if (validQrString(qrData)) {
-          const channel = await decodeChannelQrString(qrData);
+          let channel;
+          try {
+            const channelURL = new URL(qrData);
+            console.log(
+              `handleQrData: valid channelURL, joining channel at ${channelURL.href}`,
+            );
+            channel = await parseChannelQrURL(channelURL);
+          } catch (e) {
+            if (e instanceof TypeError) {
+              console.log(
+                `Failed to parse url, trying fallback to old format...`,
+              );
+              channel = await decodeChannelQrString(qrData);
+              console.log(
+                `handleQrData: valid qrdata, joining channel ${channel.id}`,
+              );
+            } else {
+              throw e;
+            }
+          }
           setChannel(channel);
-          console.log(
-            `handleQrData: valid qrdata, joining channel ${channel.id}`,
-          );
           await dispatch(joinChannel(channel));
+        } else {
+          throw Error(`Can not parse QRData ${qrData}`);
         }
       } catch (err) {
         console.log(err.message);
+        Alert.alert(
+          i18next.t('common.alert.error'),
+          i18next.t('pendingConnection.alert.text.errorJoinChannel', {
+            message: `${err.message}`,
+          }),
+        );
+        setQrData(undefined);
       }
     };
     if (qrData) {
