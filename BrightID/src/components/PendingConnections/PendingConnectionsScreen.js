@@ -22,7 +22,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import ViewPager from '@react-native-community/viewpager';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+import { selectAllUnconfirmedConnections } from '@/components/PendingConnections/pendingConnectionSlice';
 import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
 import { WHITE, GREY, DARK_GREY, BLACK, ORANGE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';

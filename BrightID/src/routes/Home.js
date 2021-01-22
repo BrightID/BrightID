@@ -17,7 +17,7 @@ import Menu from '@/components/Icons/Menu';
 import {
   pendingConnection_states,
   selectAllPendingConnections,
-} from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+} from '@/components/PendingConnections/pendingConnectionSlice';
 import {
   toggleDrawer,
   resetHome,

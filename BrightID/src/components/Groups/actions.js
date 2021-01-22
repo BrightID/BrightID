@@ -10,7 +10,10 @@ import { setNewGroupCoFounders, createGroup } from '@/actions/index';
 import api from '@/api/brightId';
 import backupApi from '@/api/backupService';
 import { hash, randomKey } from '@/utils/encoding';
-import { backupPhoto, backupUser } from '../Recovery/thunks/backupThunks';
+import {
+  backupPhoto,
+  backupUser,
+} from '../Onboarding/RecoveryFlow/thunks/backupThunks';
 
 export const toggleNewGroupCoFounder = (id: string) => (
   dispatch: dispatch,

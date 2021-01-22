@@ -28,12 +28,13 @@ import {
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from 'react-redux';
 import { validatePass } from '@/utils/password';
+
 import {
   setBackupCompleted,
   setPassword,
   updateNotifications,
 } from '@/actions';
-import { backupAppData } from '@/components/Recovery/thunks/backupThunks';
+import { backupAppData } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 
 const UploadAnimation = () => {
   const { t } = useTranslation();

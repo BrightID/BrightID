@@ -8,7 +8,7 @@ import {
   updateChannel,
   selectAllChannelIds,
   channel_types,
-} from '@/components/PendingConnectionsScreens/channelSlice';
+} from '@/components/PendingConnections/channelSlice';
 import { selectAllSocialMedia } from '@/components/EditProfile/socialMediaSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';

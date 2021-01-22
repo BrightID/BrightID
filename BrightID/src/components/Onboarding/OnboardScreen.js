@@ -17,7 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, BLACK, GREEN, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { createKeypair } from './thunks';
+import { createKeypair } from './SignUpFlow/thunks';
 import VerifiedBadge from '../Icons/VerifiedBadge';
 
 /* Description */

@@ -19,7 +19,7 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { backupUser } from '@/components/Recovery/thunks/backupThunks';
 import { setBackupCompleted } from '@/reducer/userSlice';
 import { saveId } from './thunks';
-import Congratulations from '../Icons/Congratulations';
+import Congratulations from '../../Icons/Congratulations';
 
 /* Onboarding Success Screen */
 /* ======================================== */

@@ -2,21 +2,21 @@
 import {
   channel_types,
   selectChannelById,
-} from '@/components/PendingConnectionsScreens/channelSlice';
+} from '@/components/PendingConnections/channelSlice';
 import api from '@/api/brightId';
 import { addConnection } from '@/actions';
 import { saveImage } from '@/utils/filesystem';
 import {
   backupPhoto,
   backupUser,
-} from '@/components/Recovery/thunks/backupThunks';
+} from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import {
   confirmPendingConnection,
   pendingConnection_states,
   selectPendingConnectionById,
   updatePendingConnection,
-} from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
-import { leaveChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
+} from '@/components/PendingConnections/pendingConnectionSlice';
+import { leaveChannel } from '@/components/PendingConnections/actions/channelThunks';
 
 export const confirmPendingConnectionThunk = (
   id: string,

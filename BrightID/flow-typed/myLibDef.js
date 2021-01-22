@@ -4,10 +4,10 @@ import { Dispatch } from 'redux';
 import {
   channel_states,
   channel_types,
-} from '@/components/PendingConnectionsScreens/channelSlice';
+} from '@/components/PendingConnections/channelSlice';
 import ChannelAPI from '@/api/channelService';
 import { connection_levels } from '../src/utils/constants';
-import { pendingConnection_states } from '../src/components/PendingConnectionsScreens/pendingConnectionSlice';
+import { pendingConnection_states } from '../src/components/PendingConnections/pendingConnectionSlice';
 
 declare type getState = () => State;
 
