@@ -26,7 +26,7 @@ export const generateChannelData = async (
   const type = channelType;
   const initiatorProfileId = '';
   const state = channel_states.OPEN;
-  const channelApi = new ChannelAPI(`${url.href}`);
+  const channelApi = new ChannelAPI(url.href);
 
   return {
     aesKey,

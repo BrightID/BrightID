@@ -459,12 +459,6 @@ class NodeApi {
     NodeApi.throwOnError(res);
     return res.data.data.apps;
   }
-
-  async ip(): string {
-    let res = await this.api.get('/ip');
-    NodeApi.throwOnError(res);
-    return res.data.data.ip;
-  }
 }
 
 const brightId = new NodeApi();
