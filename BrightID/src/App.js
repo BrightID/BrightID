@@ -80,6 +80,8 @@ export const App = () => {
     };
   }, []);
 
+  console.log('RENDERING ENTIRE APP');
+
   return (
     <Provider store={store}>
       <PersistGate

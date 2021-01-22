@@ -7,7 +7,8 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setEditProfileLayout } from '@/reducer/walkthroughSlice';
 import HomeScreen, { verifiedSelector } from '@/components/HomeScreen';
 import {
   createDrawerNavigator,
@@ -42,6 +43,7 @@ const CustomItem = ({
   activeBackgroundColor,
   inactiveBackgroundColor,
 }) => {
+  const dispatch = useDispatch();
   return (
     <TouchableOpacity
       activeOpacity={0.3}
@@ -54,6 +56,11 @@ const CustomItem = ({
         },
       ]}
       onPress={onPress}
+      onLayout={(e) => {
+        if (label === 'Edit Profile') {
+          dispatch(setEditProfileLayout(e.nativeEvent?.layout));
+        }
+      }}
     >
       <Icon focused={focused} />
       <Text

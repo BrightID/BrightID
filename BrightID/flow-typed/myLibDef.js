@@ -29,6 +29,7 @@ declare type State = {
   recoveryData: RecoveryData,
   tasks: TasksState,
   user: UserState,
+  walkthrough: WalkthroughState,
 };
 
 declare type AppsState = {
@@ -232,6 +233,16 @@ declare type UserState = {
   id: string,
   password: string,
   secretKey: string,
+};
+
+declare type WalkthroughState = {
+  editProfileLayout?: {
+    width: number,
+    height: number,
+    x: number,
+    y: number,
+  },
+  headerHeight?: number,
 };
 
 declare type NotificationsState = {

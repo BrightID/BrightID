@@ -9,7 +9,7 @@ import TrustlevelModal from '@/components/Connections/TrustlevelModal';
 import SelectSocialMediaModal from '@/components/EditProfile/SelectSocialMediaModal';
 import ReportReasonModal from '@/components/Connections/ReportReasonModal';
 import SortConnectionsModal from '@/components/Helpers/SortConnectionsModal';
-import EditPasswordWalkthrough from '@/components/Onboarding/EditPasswordWalkthrough';
+import ViewPassword from '@/components/Onboarding/Walkthroughs/ViewPassword';
 
 const Stack = createStackNavigator();
 
@@ -56,9 +56,9 @@ const Modals = () => {
         component={SortConnectionsModal}
       />
       <Stack.Screen
-        name="EditPasswordWalkthrough"
+        name="ViewPasswordWalkthrough"
         options={modalOptions}
-        component={EditPasswordWalkthrough}
+        component={ViewPassword}
       />
     </>
   );
