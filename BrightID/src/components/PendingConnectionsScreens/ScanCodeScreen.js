@@ -28,7 +28,7 @@ import {
   closeChannel,
 } from '@/components/PendingConnectionsScreens/channelSlice';
 import { selectAllUnconfirmedConnectionsByChannelIds } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
-import { decodeChannelQrString, parseChannelQrURL } from '@/utils/channels';
+import { parseChannelQrURL } from '@/utils/channels';
 import { joinChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
 
@@ -123,26 +123,11 @@ export const ScanCodeScreen = () => {
           console.log(`handleQrData: calling Linking.openURL() with ${qrData}`);
           await Linking.openURL(qrData);
         } else if (validQrString(qrData)) {
-          let channel;
-          try {
-            const channelURL = new URL(qrData);
-            console.log(
-              `handleQrData: valid channelURL, joining channel at ${channelURL.href}`,
-            );
-            channel = await parseChannelQrURL(channelURL);
-          } catch (e) {
-            if (e instanceof TypeError) {
-              console.log(
-                `Failed to parse url, trying fallback to old format...`,
-              );
-              channel = await decodeChannelQrString(qrData);
-              console.log(
-                `handleQrData: valid qrdata, joining channel ${channel.id}`,
-              );
-            } else {
-              throw e;
-            }
-          }
+          const channelURL = new URL(qrData);
+          console.log(
+            `handleQrData: valid channelURL, joining channel at ${channelURL.href}`,
+          );
+          const channel = await parseChannelQrURL(channelURL);
           setChannel(channel);
           await dispatch(joinChannel(channel));
         } else {
