@@ -29,7 +29,7 @@ Contributions to translations are welcome through [weblate](https://hosted.webla
 * More information on contributing may be found in our [Github Wiki](https://github.com/BrightID/BrightID/wiki).
 * [Apply to our keybase](https://keybase.io/team/brightid) to talk with other contributors.
 
-## Developer Documentation
+## Integrating BrightID in your Project
 
 * [API spec and guides](https://dev.brightid.org) for developers integrating BrightID.
 * See also the [BrightID Node repo](https://github.com/BrightID/BrightID-Node).
