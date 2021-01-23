@@ -31,5 +31,5 @@ Contributions to translations are welcome through [weblate](https://hosted.webla
 
 ## Developer Documentation
 
-* [Guides and API specs](https://dev.brightid.org) for developers integrating BrightID.
+* [API spec and guides](https://dev.brightid.org) for developers integrating BrightID.
 * See also the [BrightID Node repo](https://github.com/BrightID/BrightID-Node).
