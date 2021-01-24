@@ -20,31 +20,20 @@ import {
   PROFILE_POLL_INTERVAL,
   PROFILE_VERSION,
   CHANNEL_INFO_NAME,
-  CHANNEL_SWITCH_TIMESTAMP,
 } from '@/utils/constants';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   newPendingConnection,
   selectAllPendingConnectionIds,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
-import { Alert } from 'react-native';
-import i18next from 'i18next';
 
 export const createChannel = (channelType: ChannelType) => async (
   dispatch: dispatch,
 ) => {
   let channel: ?Channel;
   try {
-    // TODO: Remove fallback implementation when CHANNEL_SWITCH_TIMESTAMP is reached
-    const switchTimeReached = Date.now() > CHANNEL_SWITCH_TIMESTAMP;
-    let url, ipAddress;
-    if (switchTimeReached) {
-      url = new URL(`${api.baseUrl}/profile`);
-    } else {
-      ipAddress = await api.ip();
-      url = new URL(`http://${ipAddress}/profile`);
-    }
-    channel = await generateChannelData(channelType, url, ipAddress);
+    const url = new URL(`${api.baseUrl}/profile`);
+    channel = await generateChannelData(channelType, url);
 
     // Set timeout to expire channel
     channel.timeoutId = setTimeout(() => {
@@ -55,15 +44,15 @@ export const createChannel = (channelType: ChannelType) => async (
     dispatch(
       setMyChannel({ channelId: channel.id, channelType: channel.type }),
     );
-    if (switchTimeReached) {
-      // upload channel info
-      const channelInfo: ChannelInfo = createChannelInfo(channel);
-      await channel.api.upload({
-        channelId: channel.id,
-        data: channelInfo,
-        dataId: CHANNEL_INFO_NAME,
-      });
-    }
+
+    // upload channel info
+    const channelInfo: ChannelInfo = createChannelInfo(channel);
+    await channel.api.upload({
+      channelId: channel.id,
+      data: channelInfo,
+      dataId: CHANNEL_INFO_NAME,
+    });
+
     // upload my profile
     await dispatch(encryptAndUploadProfileToChannel(channel.id));
     // start polling for profiles

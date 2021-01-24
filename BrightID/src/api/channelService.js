@@ -6,13 +6,13 @@
     Operations:
 
     - Upload data with unique ID to channel
-        -> POST http://${ipAddress}/profile/upload/${channelID}
+        -> POST /profile/upload/${channelID}
     - Get list of data IDs in channel
-        -> GET http://${ipAddress}/profile/list/${channelID}
+        -> GET /profile/list/${channelID}
     - Download data from channel
-        -> GET http://${ipAddress}/profile/download/${channelID}/${dataID}
+        -> GET /profile/download/${channelID}/${dataID}
 
-    We need to support multiple different IPAddresses (hosts?), so
+    We need to support multiple different hosts, so
     we can not use a global API instance. Instead it needs to be created per channel.
  */
 import { create, ApiSauceInstance } from 'apisauce';

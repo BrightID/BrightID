@@ -30,10 +30,9 @@ export const createChannel = () => async (
       timestamp: recoveryData.timestamp,
     };
 
-    const ip = await api.ip();
-    const url = `http://${ip}/profile`;
+    const url = new URL(`${api.baseUrl}/profile`);
 
-    const channelApi = new ChannelAPI(url);
+    const channelApi = new ChannelAPI(url.href);
     const channelId = hash(recoveryData.aesKey);
 
     dispatch(setChannel({ channelId, url }));
@@ -105,7 +104,7 @@ export const checkChannel = () => async (
     return;
   }
 
-  const channelApi = new ChannelAPI(url);
+  const channelApi = new ChannelAPI(url.href);
   const dataIds = await channelApi.list(channelId);
 
   if (recoveryId) {

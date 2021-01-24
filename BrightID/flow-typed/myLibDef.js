@@ -71,7 +71,6 @@ declare type Channel = {
   id: string,
   initiatorProfileId: string,
   myProfileId: string,
-  ipAddress?: string,
   aesKey: string,
   timestamp: number,
   ttl: number,
