@@ -11,6 +11,7 @@ import {
 } from '@/utils/encoding';
 import store from '@/store';
 import { addOperation } from '@/actions';
+import BrightidError from '@/api/brightidError';
 
 let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
@@ -56,8 +57,8 @@ class NodeApi {
     if (response.ok) {
       return;
     }
-    if (response.data && response.data.errorMessage) {
-      throw new Error(response.data.errorMessage);
+    if (response.data && response.data.error) {
+      throw new BrightidError(response.data);
     }
     throw new Error(response.problem);
   }
@@ -97,33 +98,6 @@ class NodeApi {
 
     const message = stringify(op);
     console.log(`Connect message: ${message}`);
-    op.sig1 = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
-    let res = await this.api.post(`/operations`, op);
-    NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res, message);
-    NodeApi.setOperation(op);
-  }
-
-  async removeConnection(id2: string, reason: string) {
-    let {
-      user: { id },
-      keypair: { secretKey },
-    } = store.getState();
-
-    let name = 'Remove Connection';
-    let timestamp = Date.now();
-    let op = {
-      name,
-      id1: id,
-      id2,
-      reason,
-      timestamp,
-      v,
-    };
-
-    const message = stringify(op);
     op.sig1 = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
