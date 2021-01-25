@@ -20,16 +20,15 @@ export const GROUP_NOT_FOUND = 17;
 
 class ApiError extends Error {
   constructor(data, ...params) {
-    // Pass remaining arguments (including vendor specific ones) to parent constructor
     super(...params);
     // Maintains proper stack trace for where our error was thrown (only available on V8)
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, ApiError);
     }
     this.name = 'ApiError';
-    // Custom information
+    // Store custom error information from brightID api response
+    this.message = data.errorMessage;
     this.errorNum = data.errorNum || UNKNOWN_ERRORNUM;
-    this.errorMessage = data.errorMessage;
     this.errorCode = data.code;
   }
 }
