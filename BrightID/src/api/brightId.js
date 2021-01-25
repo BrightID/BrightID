@@ -11,7 +11,7 @@ import {
 } from '@/utils/encoding';
 import store from '@/store';
 import { addOperation } from '@/actions';
-import ApiError from '@/api/brightidErrors';
+import BrightidError from '@/api/brightidError';
 
 let seedUrl = 'http://node.brightid.org';
 if (__DEV__) {
@@ -58,7 +58,7 @@ class NodeApi {
       return;
     }
     if (response.data && response.data.error) {
-      throw new ApiError(response.data);
+      throw new BrightidError(response.data);
     }
     throw new Error(response.problem);
   }
