@@ -631,5 +631,11 @@
       "pleaseAddPhoto": "Please add a photo",
       "whatsYouName": "What do your friends know you by?"
     }
+  },
+  "walkthroughs": {
+    "text": {
+      "viewPassword": "You can always see your\nBrightID password in here",
+      "gotIt": "Got it!"
+    }
   }
 }

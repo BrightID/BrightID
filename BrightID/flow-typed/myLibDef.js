@@ -236,13 +236,13 @@ declare type UserState = {
 };
 
 declare type WalkthroughState = {
-  editProfileLayout?: {
-    width: number,
-    height: number,
-    x: number,
-    y: number,
+  editProfileLayout: {
+    width?: number,
+    height?: number,
+    x?: number,
+    y?: number,
   },
-  headerHeight?: number,
+  headerHeight: number,
 };
 
 declare type NotificationsState = {

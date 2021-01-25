@@ -15,6 +15,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { DARKER_GREY, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { openDrawer } from '@/NavigationService';
+import { useTranslation } from 'react-i18next';
 import Arrow from '../../Icons/Arrow';
 
 /**
@@ -39,32 +40,45 @@ const ViewPassword = ({ navigation }) => {
       openDrawer();
     }, []),
   );
+  const { t } = useTranslation();
 
   /**
    * dimensions of edit profile button on the side bar
    * {x, y, width, height}
    */
 
-  const editProfileLayout = useSelector(
-    (state) => state.walkthrough.editProfileLayout,
+  const editProfileMenuLayout = useSelector(
+    (state) => state.walkthrough.editProfileMenuLayout,
+  );
+  const editProfileTextLayout = useSelector(
+    (state) => state.walkthrough.editProfileTextLayout,
   );
   const headerHeight = useSelector((state) => state.walkthrough.headerHeight);
   const { width, height } = useWindowDimensions();
 
-  // added 20 for padding
-  const editProfileX = editProfileLayout?.x + br + 20;
-  const editProfileY = editProfileLayout?.y + headerHeight;
-  // subtracted 160 padding
-  const editProfileWidth = editProfileLayout?.width - 160 - br * 2;
+  /**
+   * Dimensions for the transparent box around Edit Profile in the side menu
+   */
+
+  // added 20 for padding, br for border radius
+  const editProfileX = editProfileMenuLayout?.x + br + 20;
+  // added header height from home page
+  const editProfileY = editProfileMenuLayout?.y + headerHeight;
+  // use edit profile text to make sure the box fits all device sizes
+  const editProfileWidth =
+    editProfileTextLayout?.width + editProfileTextLayout?.x + 10 - br * 2;
   // added 10 for padding
-  const editProfileHeight = editProfileLayout?.height + 10 - br * 2;
+  const editProfileHeight = editProfileMenuLayout?.height + 10 - br * 2;
 
   // subtract 120 because the arrow point is 120 px left inside the svg
   const arrowLeft = editProfileX + editProfileWidth - 120;
-  // 209 + 105
-  const arrowTop = editProfileY + editProfileLayout?.height / 2;
 
-  // arrow width = 169, height = 316
+  const arrowTop = editProfileY + editProfileMenuLayout?.height / 2;
+
+  /**
+   * Dimensions for the box with text about the password
+   */
+
   const infoBoxLeft = arrowLeft + 169 / 2;
   const infoBoxTop = arrowTop + 316 - 48;
   return (
@@ -74,9 +88,6 @@ const ViewPassword = ({ navigation }) => {
         height={height}
         viewBox={`0 0 ${width} ${height}`}
         fill="none"
-        onPress={() => {
-          navigation.goBack();
-        }}
       >
         <Path
           d={`M0 0 V${height} H${width} V0Z M${editProfileX} ${editProfileY} h${editProfileWidth} ${urc} v${editProfileHeight} ${lrc} h${-editProfileWidth} ${llc} v${-editProfileHeight} ${ulc} z`}
@@ -96,9 +107,19 @@ const ViewPassword = ({ navigation }) => {
       </View>
       <View style={[styles.infoBox, { left: infoBoxLeft, top: infoBoxTop }]}>
         <Text style={styles.infoText}>
-          {'You can always see your\nBrightID password in here'}
+          {t('walkthroughs.text.viewPassword')}
         </Text>
       </View>
+      <TouchableOpacity
+        style={[styles.bottomBtn, { top: infoBoxTop + 120 }]}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
+        <View style={styles.gotItBorder}>
+          <Text style={styles.gotIt}>{t('walkthroughs.text.gotIt')}</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -124,6 +145,25 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: fontSize[15],
     lineHeight: 25,
+  },
+  bottomBtn: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    width: '100%',
+    height: 100,
+    alignItems: 'center',
+  },
+  gotIt: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[18],
+    lineHeight: 25,
+    color: WHITE,
+  },
+  gotItBorder: {
+    borderBottomWidth: 2,
+    borderBottomColor: WHITE,
   },
 });
 

@@ -8,7 +8,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { setEditProfileLayout } from '@/reducer/walkthroughSlice';
+import {
+  setEditProfileMenuLayout,
+  setEditProfileTextLayout,
+} from '@/reducer/walkthroughSlice';
 import HomeScreen, { verifiedSelector } from '@/components/HomeScreen';
 import {
   createDrawerNavigator,
@@ -58,7 +61,8 @@ const CustomItem = ({
       onPress={onPress}
       onLayout={(e) => {
         if (label === 'Edit Profile') {
-          dispatch(setEditProfileLayout(e.nativeEvent?.layout));
+          //  X / Y / Height of the entire menu element for walkthough box
+          dispatch(setEditProfileMenuLayout(e.nativeEvent?.layout));
         }
       }}
     >
@@ -70,6 +74,12 @@ const CustomItem = ({
             color: focused ? activeTintColor : inactiveTintColor,
           },
         ]}
+        onLayout={(e) => {
+          if (label === 'Edit Profile') {
+            // use text to determine proper width of walkthrough box
+            dispatch(setEditProfileTextLayout(e.nativeEvent?.layout));
+          }
+        }}
       >
         {label}
       </Text>
