@@ -1,3 +1,5 @@
+/* In case backend does not provide an errorNum */
+export const UNKNOWN_ERRORNUM = 0;
 /* Error numbers copied from foxx/brightId/index.js */
 export const CONTEXT_NOT_FOUND = 1;
 export const CONTEXTID_NOT_FOUND = 2;
@@ -26,7 +28,7 @@ class ApiError extends Error {
     }
     this.name = 'ApiError';
     // Custom information
-    this.errorNum = data.errorNum;
+    this.errorNum = data.errorNum || UNKNOWN_ERRORNUM;
     this.errorMessage = data.errorMessage;
     this.errorCode = data.code;
   }
