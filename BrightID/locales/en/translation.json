@@ -216,7 +216,7 @@
       "connections": "Connections"
     },
     "label": {
-      "currentConnectionLevel": "Current connection level",
+      "currentConnectionLevel": "Connection level",
       "newProfile": "New Profile",
       "oldProfile": "Old Profile"
     },

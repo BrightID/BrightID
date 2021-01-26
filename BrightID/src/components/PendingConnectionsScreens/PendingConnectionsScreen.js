@@ -140,14 +140,14 @@ export const PendingConnectionsScreen = () => {
     };
   }, [pendingConnections.length, navigation]);
 
-  /** 
+  /**
     the list should only re render sparingly for performance and continuity
   */
   const PendingConnectionList = useMemo(() => {
     const renderView = (item, index) => {
       const last = index === pendingConnectionsToDisplay.length - 1;
       const moveToNext = () => {
-        /** 
+        /**
         setting viewpager active index zero will trigger the list to re - render
         */
         last
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
     borderBottomLeftRadius: 58,
     borderBottomRightRadius: 58,
-    marginBottom: -52,
+    marginBottom: -80,
     zIndex: 10,
     overflow: 'hidden',
   },
