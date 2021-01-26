@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { DARKER_GREY, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { openDrawer } from '@/NavigationService';
 import { useTranslation } from 'react-i18next';
 import Arrow from '../../Icons/Arrow';
@@ -68,10 +69,12 @@ const ViewPassword = ({ navigation }) => {
   const editProfileWidth =
     editProfileTextLayout?.width + editProfileTextLayout?.x + 10 - br * 2;
   // added 10 for padding
-  const editProfileHeight = editProfileMenuLayout?.height + 10 - br * 2;
+  const heightPadding = DEVICE_LARGE ? 10 : 18;
+  const editProfileHeight =
+    editProfileMenuLayout?.height + heightPadding - br * 2;
 
   // subtract 120 because the arrow point is 120 px left inside the svg
-  const arrowLeft = editProfileX + editProfileWidth - 120;
+  const arrowLeft = editProfileX + editProfileWidth - 105;
 
   const arrowTop = editProfileY + editProfileMenuLayout?.height / 2;
 
@@ -79,8 +82,8 @@ const ViewPassword = ({ navigation }) => {
    * Dimensions for the box with text about the password
    */
 
-  const infoBoxLeft = arrowLeft + 169 / 2;
-  const infoBoxTop = arrowTop + 316 - 48;
+  const infoBoxLeft = arrowLeft - 10 + 169 / 2;
+  const infoBoxTop = arrowTop + 250 - 48;
   return (
     <View style={styles.container}>
       <Svg
@@ -88,6 +91,9 @@ const ViewPassword = ({ navigation }) => {
         height={height}
         viewBox={`0 0 ${width} ${height}`}
         fill="none"
+        onPress={() => {
+          navigation.goBack();
+        }}
       >
         <Path
           d={`M0 0 V${height} H${width} V0Z M${editProfileX} ${editProfileY} h${editProfileWidth} ${urc} v${editProfileHeight} ${lrc} h${-editProfileWidth} ${llc} v${-editProfileHeight} ${ulc} z`}
@@ -103,7 +109,7 @@ const ViewPassword = ({ navigation }) => {
           top: arrowTop,
         }}
       >
-        <Arrow color={WHITE} />
+        <Arrow color={WHITE} height={250} />
       </View>
       <View style={[styles.infoBox, { left: infoBoxLeft, top: infoBoxTop }]}>
         <Text style={styles.infoText}>
@@ -143,7 +149,7 @@ const styles = StyleSheet.create({
   infoText: {
     fontFamily: 'Poppins-Regular',
     textAlign: 'center',
-    fontSize: fontSize[15],
+    fontSize: fontSize[14],
     lineHeight: 25,
   },
   bottomBtn: {
