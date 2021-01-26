@@ -96,6 +96,14 @@
       "noConnections": "Sin conexiones"
     }
   },
+  "channel": {
+    "alert": {
+      "text": {
+        "localOutdated": "Versión del cliente desactualizada: Actualice BrightID App y vuelva a intentarlo",
+        "otherOutdated": "La versión de BrightID de otro usuario está desactualizada: El creador del código QR necesita actualizar BrightID App y volver a intentarlo"
+      }
+    }
+  },
   "common": {
     "accessibilityLabel": {
       "addPhoto": "añadir foto",
@@ -483,6 +491,7 @@
       "rating": "Tu respuesta nos ayudará a prevenir ataques"
     },
     "title": {
+      "confirmationTotal": "{{confirmed}} / {{total}} confirmados",
       "connectionRequest": "Solicitud de Conexión"
     }
   },

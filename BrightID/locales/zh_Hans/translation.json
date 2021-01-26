@@ -96,6 +96,14 @@
       "noConnections": "联系人为空"
     }
   },
+  "channel": {
+    "alert": {
+      "text": {
+        "localOutdated": "客户端版本已过期-请更新客户端后重试",
+        "otherOutdated": "其他客户端版本已过期 - 二维码创建者需要更新客户端并重试"
+      }
+    }
+  },
   "common": {
     "accessibilityLabel": {
       "addPhoto": "上传图片",
@@ -285,7 +293,334 @@
       "achievements": "成就",
       "checkForUpdates": "检查更新",
       "contactUs": "联系我们",
-      "copyExplorerCode": "复制资源管理器代码"
+      "copyExplorerCode": "复制资源管理器代码",
+      "editProfile": "编辑简介",
+      "home": "主页"
+    }
+  },
+  "eula": {
+    "header": {
+      "title": "许可协议"
+    }
+  },
+  "graphExplorer": {
+    "alert": {
+      "text": {
+        "copied": "复制到剪贴板！"
+      }
+    },
+    "button": {
+      "copyCode": "复制代码"
+    },
+    "text": {
+      "backupRequired": "访问您的图形浏览器代码需要设置备份和账号恢复联系人。检查通知或连接到更多用户以满足备份和账号恢复条件。",
+      "explorerWebsiteDescription": "是一个旨在探索整个BrightID社交图谱的网站。使用上面的代码在图谱中查看您的联系人。"
+    }
+  },
+  "groups": {
+    "accessibilityLabel": {
+      "groupsLogo": "群logo"
+    },
+    "alert": {
+      "text": {
+        "addAdmin": "您确定要把{{name}}设置为群管理员吗？",
+        "dismissMember": "您确定要将{{name}}移出此群吗？",
+        "inviteSuccess": "您已成功邀请{{name}}进群",
+        "leaveGroup": "您确定要退出此群吗？"
+      },
+      "title": {
+        "addAdmin": "添加群管理",
+        "dismissMember": "移出成员",
+        "errorDismissMember": "移出成员出现错误",
+        "errorLeaveGroup": "退群出现错误",
+        "inviteSuccess": "邀请成功",
+        "leaveGroup": "退群"
+      }
+    },
+    "button": {
+      "createGroup": "建群",
+      "learnMore": "更多"
+    },
+    "groupActionSheet": {
+      "cancel": "取消",
+      "inviteUser": "邀请用户",
+      "leaveGroup": "退群"
+    },
+    "header": {
+      "groups": "群组",
+      "inviteList": "邀请列表",
+      "newGroup": "新群"
+    },
+    "label": {
+      "knownMembers": "已知成员：",
+      "unknownMembers": "未知成员："
+    },
+    "memberActionSheet": {
+      "addAdmin": "添加管理员",
+      "cancel": "取消",
+      "dismissMember": "移出此群"
+    },
+    "state": {
+      "creatingGroup": "建群",
+      "uploadingGroupPhoto": "群图片加载中"
+    },
+    "tag": {
+      "primaryGroup": "主群"
+    },
+    "text": {
+      "noEligibleConnection": "当前联系人不符合该组条件，请稍后再试。",
+      "noGroups": "<text>能更快验证<text><text>如果创建并</text><text>加入群组</text>",
+      "noGroupsMatchSearch": "无法匹配您搜索的群组",
+      "noMembers": "还没有已知联系人，邀请一些…",
+      "waitingForMembers": "等待{{list}}加入"
+    }
+  },
+  "home": {
+    "accessibilityLabel": {
+      "connect": "连接"
+    },
+    "button": {
+      "apps": "Apps",
+      "connections": "联系人",
+      "groups": "群组",
+      "myCode": "我的二维码",
+      "scanCode": "扫描二维码"
+    },
+    "chatActionSheet": {
+      "discord": "BrightID Discord社区",
+      "title": "想与我们沟通？"
+    },
+    "label": {
+      "createNewConnection": "创建新的连接"
+    },
+    "link": {
+      "community": "加入社区"
+    }
+  },
+  "notificationBar": {
+    "text": {
+      "pendingConnections": "您有{{count}}个联系正在处理中",
+      "socialRecovery": "请选择您信任的联系人助您恢复BrightID账号"
+    },
+    "title": {
+      "pendingConnection": "确认联系人",
+      "socialRecovery": "备份和恢复"
+    }
+  },
+  "notifications": {
+    "alert": {
+      "text": {
+        "failureAcceptGroupInvite": "加入群组失败",
+        "rejectGroupInvite": "是否确认拒绝入群？",
+        "successGroupInvite": "您已加入{{groupName}}"
+      },
+      "title": {
+        "failureRejectGroupInvite": "拒绝邀请失败",
+        "rejectGroupInvite": "拒绝"
+      }
+    },
+    "item": {
+      "text": {
+        "backupBrightId": "选择您信任的联系人",
+        "pendingConnections": "您有{{count}}个未确认联系人",
+        "pendingGroupInvite": "{{name}}已邀您加入"
+      },
+      "title": {
+        "backupBrightId": "备份BrightID"
+      }
+    },
+    "tab": {
+      "connections": "联系人",
+      "groups": "群",
+      "miscellaneous": "其他"
+    },
+    "text": {
+      "noGroupInvites": "您还没有群邀请..",
+      "noMiscellaneous": "这里信息为空…",
+      "noPendingConnections": "您还没有待处理联系人.."
+    }
+  },
+  "onboarding": {
+    "button": {
+      "getStarted": "开始"
+    },
+    "label": {
+      "maintainPrivacy": "隐私维护"
+    },
+    "text": {
+      "intro": "<text> BrightID使用您认识的人</text><text>强制每人一个帐户</text><text>对一个重要的应用程序例如</text><text>进行投票和普遍基本收入</text>",
+      "privacy": "<text>证明你是独立个人</text><text>在保护隐私的同时</text>"
+    }
+  },
+  "pendingConnection": {
+    "alert": {
+      "text": {
+        "errorCreateChannel": "无法创建联系人渠道，错误信息：{{message}}",
+        "errorJoinChannel": "无法加入联系人渠道，错误信息：{{message}}",
+        "localOutdated": "由于客户端版本不兼容，无法与{{name}}建立联系。请更新版本重启app尝试。",
+        "otherOutdated": "由于客户端版本不兼容，无法与{{name}}建立联系。请{{name}}更新版本重启app尝试。"
+      },
+      "title": {
+        "connectionImpossible": "无法建立联系"
+      }
+    },
+    "text": {
+      "alreadyRated": "您已经对此进行了评分",
+      "errorExpired": "已过期，请重新连接。",
+      "errorMyself": "您无法与自己建立连接。",
+      "errorUnhandled": "未处理连接状态"
+    }
+  },
+  "pendingConnections": {
+    "label": {
+      "alreadyKnown": "已知",
+      "connections": "联系人",
+      "groups": "群组",
+      "justMet": "刚认识",
+      "mutualConnections": "共同联系人",
+      "rating": "您熟知这位联系人吗？",
+      "recovery": "恢复",
+      "reported": "已报告",
+      "suspicious": "可疑人员"
+    },
+    "text": {
+      "errorGeneric": "连接时出错，请重试。",
+      "rating": "您的回答将帮助我们预防攻击"
+    },
+    "title": {
+      "confirmationTotal": "{{confirmed}}/{{total}}已确认"
+    }
+  },
+  "profile": {
+    "alert": {
+      "button": {
+        "discard": "放弃",
+        "dontLeave": "不要离开"
+      },
+      "text": {
+        "discardChanges": "您有未储存的更改。确定放弃更改并离开此页吗？",
+        "passwordMatch": "当前密码不匹配。"
+      },
+      "title": {
+        "discardChanges": "放弃更改？",
+        "passwordMatch": "请重试"
+      }
+    },
+    "button": {
+      "socialNext": "下一页",
+      "socialPrevious": "上一页"
+    },
+    "label": {
+      "currentPassword": "当前密码",
+      "name": "姓名",
+      "newPassword": "新密码",
+      "newPasswordAgain": "请再次输入新密码",
+      "socialMediaLink": "社交媒体账号链接"
+    },
+    "placeholder": {
+      "name": "输入姓名",
+      "newPassword": "新密码",
+      "newPasswordAgain": "请再次输入新密码"
+    },
+    "text": {
+      "changePassword": "修改密码",
+      "changeProfilePicture": "更换头像",
+      "viewPassword": "查看密码"
+    }
+  },
+  "qrcode": {
+    "alert": {
+      "connectGroup": "与BrightID上的{{name}}建立群组连接：{{link}}",
+      "connectSingle": "与BrightID上的{{name}}建立连接：{{link}}",
+      "text": {
+        "codeGroup": "该二维码专为多人同时连接使用。",
+        "codeSingle": "此二维码可在过期之前用于与单个用户建立连接。",
+        "shareLinkGroup": "分享此链接",
+        "shareLinkSingle": "与朋友分享此链接",
+        "universalLink": "通用链接"
+      },
+      "title": {
+        "codeGroup": "群二维码",
+        "codeSingle": "单次使用码"
+      }
+    },
+    "button": {
+      "copyLink": "复制链接",
+      "scanCode": "扫码",
+      "showCode": "出示您的二维码"
+    },
+    "header": {
+      "connections": "{{count}}/30联系人"
+    },
+    "label": {
+      "connectionType": "联系人类型："
+    },
+    "text": {
+      "canAlso": "或者您也可以…",
+      "codeGroup": "群二维码",
+      "codeSingle": "单次使用二维码",
+      "confirmConnections": "确认联系人",
+      "downloadingConnectionData": "联系人数据加载中",
+      "expiresIn": "过期日：",
+      "pendingConnections": "您有{{count}}待处理联系人",
+      "scanCode": "<text>嗨{{name}}，扫码</text><text>今日建立新的联系吧</text>"
+    }
+  },
+  "recovery": {
+    "text": {
+      "additionalInfo": "您的可信任联系人需要扫码来帮您恢复BrightID账号",
+      "askTrustedConnections": "请向您信任的联系人出示该二维码",
+      "signatures": "{{count}} / 2 签名"
+    }
+  },
+  "restore": {
+    "alert": {
+      "text": {
+        "notTrusted": "其中一个朋友不在您的可信联系人列表中",
+        "requestRecovering": "寻求帮助恢复账号的申请已成功提交！",
+        "restoreConfirm": "{{name}}是您要帮助恢复的账号码？",
+        "restoreSuccess": "账号已成功恢复！"
+      },
+      "title": {
+        "notTrusted": "喔"
+      }
+    },
+    "emptyList": {
+      "text": {
+        "downloadingData": "恢复联系人数据加载中",
+        "nobodyHasChosen": "无法恢复联系人...\n对方未设置您为账号恢复协助人"
+      }
+    },
+    "header": {
+      "accountRecovery": "账号恢复"
+    },
+    "text": {
+      "chooseConnectionToHelp": "请选择您要帮助恢复账号的联系人。",
+      "enterPassword": "请输入密码",
+      "skipLoadingBackup": "没有密码您仍可恢复账号，但您将丢失联系人名字&图片& 群组信息。"
+    }
+  },
+  "signup": {
+    "alert": {
+      "nameMissing": "请补充您的姓名",
+      "nameTooShort": "名字不得少于2个字符",
+      "photoMissing": "图片为必填，请点击“enter”键。"
+    },
+    "button": {
+      "addPhoto": "添加图片",
+      "createAccount": "创建我的BrightID",
+      "recoverAccount": "恢复BrightID账号"
+    },
+    "header": {
+      "title": "注册"
+    },
+    "placeholder": {
+      "name": "姓名"
+    },
+    "text": {
+      "creatingAccount": "Bright ID创建中…",
+      "infoNotShared": "您的名字和照片将永远不会与app共享或存储在服务器上",
+      "whatsYouName": "您的朋友是怎么认识您的？"
     }
   }
 }
