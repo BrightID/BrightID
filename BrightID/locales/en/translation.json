@@ -36,7 +36,7 @@
       "title": "Completion:"
     },
     "setupTrustedConnections": {
-      "description": "Setup your trusted connections to enable social account recovery",
+      "description": "Setup your recovery connections to enable social account recovery",
       "title": "Setup social recovery"
     }
   },
@@ -76,7 +76,7 @@
     "alert": {
       "text": {
         "backupSuccess": "Backup completed successfully!",
-        "needThreeTrusted": "You need at least three trusted connections for backup."
+        "needThreeTrusted": "You need at least three recovery connections for backup."
       }
     },
     "button": {
@@ -85,13 +85,13 @@
     },
     "header": {
       "backup": "Backup",
-      "trustedConnections": "Trusted connections"
+      "trustedConnections": "Recovery connections"
     },
     "placeholder": {
       "confirmPassword": "Confirm Password"
     },
     "text": {
-      "chooseTrustedConnections": "Choose three or more trusted connections to back up your BrightID.",
+      "chooseTrustedConnections": "Choose three or more recovery connections to back up your BrightID.",
       "enterPassword": "Enter a password to encrypt your backup data with:",
       "noConnections": "No connections"
     }
@@ -130,7 +130,7 @@
         "lostKeys": "Please create a new BrightID or try recovering your previous BrightID",
         "passwordMatch": "Password and confirm password does not match.",
         "passwordShort": "Your password must be at least 8 characters long.",
-        "trustedSigned": "One of your trusted connections signed your request"
+        "trustedSigned": "One of your recovery connections signed your request"
       },
       "title": {
         "lostKeys": "We've lost the BrightID keypair from the device",
@@ -401,7 +401,7 @@
     "text": {
       "pendingConnections": "You have {{count}} pending connection",
       "pendingConnections_plural": "You have {{count}} pending connections",
-      "socialRecovery": "Please select your Trusted Connections to enable social recovery of your BrightID"
+      "socialRecovery": "Please select your recovery connections to enable social recovery of your BrightID"
     },
     "title": {
       "pendingConnection": "Confirm connections",
@@ -422,7 +422,7 @@
     },
     "item": {
       "text": {
-        "backupBrightId": "Choose your trusted connections",
+        "backupBrightId": "Choose your recovery connections",
         "pendingConnections": "You have {{count}} unconfirmed connection",
         "pendingConnections_plural": "You have {{count}} unconfirmed connections",
         "pendingGroupInvite": "{{name}} invited you to join"
@@ -570,8 +570,8 @@
   },
   "recovery": {
     "text": {
-      "additionalInfo": "Your trusted connections will need to scan this to help you recover your BrightID",
-      "askTrustedConnections": "Please show this QR code to your trusted connections",
+      "additionalInfo": "Your recovery connections will need to scan this to help you recover your BrightID",
+      "askTrustedConnections": "Please show this QR code to your recovery connections",
       "signatures": "{{count}} / 2 signatures",
       "signatures_plural": ""
     }
@@ -579,7 +579,7 @@
   "restore": {
     "alert": {
       "text": {
-        "notTrusted": "One of your friends is not in your list of trusted connections",
+        "notTrusted": "One of your friends is not in your list of recovery connections",
         "requestRecovering": "Your request to help recovering this account submitted successfully!",
         "restoreConfirm": "Is {{name}} the account you are helping to recover?",
         "restoreSuccess": "Your account recovered successfully!"
