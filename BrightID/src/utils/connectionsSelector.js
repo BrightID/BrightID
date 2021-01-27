@@ -28,8 +28,16 @@ export const recoveryConnectionsSelector = createSelector(
   [connSelector],
   (connections) => {
     return connections.filter(
-      (item) => item.level === connection_levels.RECOVERY,
+      (item) =>
+        item.status === 'verified' && item.level === connection_levels.RECOVERY,
     );
+  },
+);
+
+export const verifiedConnectionsSelector = createSelector(
+  [connSelector],
+  (connections) => {
+    return connections.filter((item) => item.status === 'verified');
   },
 );
 

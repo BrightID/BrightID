@@ -2,6 +2,10 @@
 
 import { MISC_TYPE } from '@/utils/constants';
 import i18next from 'i18next';
+import {
+  recoveryConnectionsSelector,
+  verifiedConnectionsSelector,
+} from '@/utils/connectionsSelector';
 
 export const SET_BACKUP_PENDING = 'SET_BACKUP_PENDING';
 export const SET_DEVICE_TOKEN = 'SET_DEVICE_TOKEN';
@@ -41,14 +45,9 @@ export const updateNotifications = () => async (
   getState: () => State,
 ) => {
   try {
-    const {
-      user: { backupCompleted },
-      connections: { connections },
-    } = getState();
-    const verifiedConnections = connections.filter(
-      (conn) => conn.status === 'verified',
-    );
-    if (!backupCompleted && verifiedConnections.length > 5) {
+    const verifiedConnections = verifiedConnectionsSelector(getState());
+    const recoveryConnections = recoveryConnectionsSelector(getState());
+    if (recoveryConnections.length < 2 && verifiedConnections.length > 5) {
       dispatch(setBackupPending(true));
       dispatch(
         setActiveNotification({
