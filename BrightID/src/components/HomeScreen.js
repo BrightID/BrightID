@@ -267,8 +267,7 @@ export const HomeScreen = (props) => {
             style={styles.connectButton}
             onPress={() => {
               dispatch(setActiveNotification(null));
-              // navigation.navigate('MyCode');
-              navigation.navigate('ViewPasswordWalkthrough');
+              navigation.navigate('MyCode');
             }}
             accessible={true}
             accessibilityLabel={t('home.accessibilityLabel.connect')}
