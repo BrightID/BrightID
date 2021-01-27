@@ -24,20 +24,19 @@ export const connectionsSelector = createSelector(
   },
 );
 
-export const recoveryConnectionsSelector = createSelector(
-  [connSelector],
-  (connections) => {
-    return connections.filter(
-      (item) =>
-        item.status === 'verified' && item.level === connection_levels.RECOVERY,
-    );
-  },
-);
-
 export const verifiedConnectionsSelector = createSelector(
   [connSelector],
   (connections) => {
     return connections.filter((item) => item.status === 'verified');
+  },
+);
+
+export const recoveryConnectionsSelector = createSelector(
+  [verifiedConnectionsSelector],
+  (connections) => {
+    return connections.filter(
+      (item) => item.level === connection_levels.RECOVERY,
+    );
   },
 );
 
