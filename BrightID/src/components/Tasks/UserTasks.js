@@ -62,10 +62,7 @@ export const UserTasks = {
     description: i18next.t(`achievements.setupTrustedConnections.description`),
     url: 'https://brightid.gitbook.io/brightid/#backup-your-brightid',
     checkFn(state) {
-      return (
-        state.connections.trustedConnections.length > 2 &&
-        state.user.backupCompleted
-      );
+      return state.connections.trustedConnections.length > 2;
     },
   },
   join_connection_party: {
