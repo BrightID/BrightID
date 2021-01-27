@@ -47,7 +47,7 @@ export const updateNotifications = () => async (
   try {
     const verifiedConnections = verifiedConnectionsSelector(getState());
     const recoveryConnections = recoveryConnectionsSelector(getState());
-    if (recoveryConnections.length < 2 && verifiedConnections.length > 5) {
+    if (recoveryConnections.length < 3 && verifiedConnections.length > 5) {
       dispatch(setBackupPending(true));
       dispatch(
         setActiveNotification({
