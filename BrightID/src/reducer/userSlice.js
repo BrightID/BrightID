@@ -47,7 +47,7 @@ const userSlice = createSlice({
       state.name = action.payload;
     },
     setBackupCompleted(state, action) {
-      state.backouCompleted = action.payload;
+      state.backupCompleted = action.payload;
     },
     setPassword(state, action) {
       state.password = action.payload;
