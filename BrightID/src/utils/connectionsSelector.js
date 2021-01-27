@@ -3,6 +3,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { toSearchString } from '@/utils/strings';
 import { sortConnectionsBy } from '@/utils/sorting';
+import { connection_levels } from '@/utils/constants';
 
 const searchParamSelector = (state) => state.connections.searchParam;
 const connSelector = (state) => state.connections.connections;
@@ -20,6 +21,15 @@ export const connectionsSelector = createSelector(
           filters.includes(item.level),
       )
       .sort(sortConnectionsBy(connectionsSort));
+  },
+);
+
+export const recoveryConnectionsSelector = createSelector(
+  [connSelector],
+  (connections) => {
+    return connections.filter(
+      (item) => item.level === connection_levels.RECOVERY,
+    );
   },
 );
 

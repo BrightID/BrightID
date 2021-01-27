@@ -1,4 +1,5 @@
 import i18next from 'i18next';
+import { recoveryConnectionsSelector } from '@/utils/connectionsSelector';
 
 export const UserTasks = {
   make_first_connection: {
@@ -62,7 +63,7 @@ export const UserTasks = {
     description: i18next.t(`achievements.setupTrustedConnections.description`),
     url: 'https://brightid.gitbook.io/brightid/#backup-your-brightid',
     checkFn(state) {
-      return state.connections.trustedConnections.length > 2;
+      return recoveryConnectionsSelector(state).length > 2;
     },
   },
   join_connection_party: {
