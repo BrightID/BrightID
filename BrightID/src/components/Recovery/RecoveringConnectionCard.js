@@ -66,8 +66,8 @@ const RecoveryConnectionCard = (props) => {
     try {
       setUploadingData(true);
 
-      const ipAddress = await api.ip();
-      const channelApi = new ChannelAPI(`http://${ipAddress}/profile`);
+      const url = new URL(`${api.baseUrl}/profile`);
+      const channelApi = new ChannelAPI(url.href);
 
       // it's important to upload mutal connections first so that we can guarantee the other user downloads them when they recieve the sig
       await dispatch(
