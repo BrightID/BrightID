@@ -73,6 +73,7 @@ export {
   SET_NOTIFICATION_TOKEN,
   SET_ACTIVE_NOTIFICATION,
   REMOVE_ACTIVE_NOTIFICATION,
+  SET_RECOVERY_CONNECTIONS_PENDING,
   updateNotifications,
   setDeviceToken,
   setNotificationToken,

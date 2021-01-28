@@ -27,6 +27,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import EmptyList from '@/components/Helpers/EmptyList';
+import { photoDirectory } from '@/utils/filesystem';
 import NotificationCard from './NotificationCard';
 import InviteCard from './InviteCard';
 import PendingConnectionCard from './PendingConnectionCard';
@@ -125,12 +126,42 @@ const InviteList = () => {
 
 const MiscList = ({ route }) => {
   const { t } = useTranslation();
+  const photoFilename = useSelector((state) => state.user.photo.filename);
   const [refreshing, onRefresh] = useRefresh();
-  const data = route.backupPending
-    ? [{ msg: 'Backup Pending', icon: 'star' }]
-    : [];
+  const data = [];
 
-  console.log('rendering Misc List');
+  if (route.recoveryConnectionsPending) {
+    // TODO: Set better image
+    const imageSource = photoFilename
+      ? { uri: `file://${photoDirectory()}/${photoFilename}` }
+      : require('@/static/default_profile.jpg');
+    data.push({
+      title: t('notifications.item.title.socialRecovery', 'Social recovery'),
+      msg: t(
+        'notifications.item.msg.socialRecovery',
+        'Choose recovery connections to enable social recovery of your BrightID',
+      ),
+      imageSource,
+      navigationTarget: 'TrustedConnections',
+    });
+  }
+
+  if (route.backupPending) {
+    // TODO: Set appropriate image
+    const imageSource = photoFilename
+      ? { uri: `file://${photoDirectory()}/${photoFilename}` }
+      : require('@/static/default_profile.jpg');
+    data.push({
+      title: t('notifications.item.title.backupBrightId'),
+      msg: t(
+        'notifications.item.msg.backupBrightId',
+        'Set a password to enable encrypted backup of your data',
+      ),
+      imageSource,
+      navigationTarget: 'Edit Profile',
+    });
+  }
+
   return (
     <FlatList
       contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
@@ -148,7 +179,12 @@ const MiscList = ({ route }) => {
         />
       }
       renderItem={({ item }) => (
-        <NotificationCard msg={item.msg} icon={item.icon} />
+        <NotificationCard
+          title={item.title}
+          msg={item.msg}
+          imageSource={item.imageSource}
+          navigationTarget={item.navigationTarget}
+        />
       )}
     />
   );
@@ -192,6 +228,10 @@ export const NotificationsScreen = ({ route }) => {
     (state) => state.notifications.backupPending,
   );
 
+  const recoveryConnectionsPending = useSelector(
+    (state) => state.notifications.recoveryConnectionsPending,
+  );
+
   const routes = [
     {
       key: CONNECTIONS_TYPE,
@@ -206,8 +246,9 @@ export const NotificationsScreen = ({ route }) => {
     {
       key: MISC_TYPE,
       title: t('notifications.tab.miscellaneous'),
-      badge: backupPending,
+      badge: backupPending || recoveryConnectionsPending,
       backupPending,
+      recoveryConnectionsPending,
     },
   ];
   // if we navigate here from the banner, go to the section from the banner

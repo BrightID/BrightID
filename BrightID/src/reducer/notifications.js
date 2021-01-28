@@ -2,6 +2,7 @@
 
 import {
   SET_BACKUP_PENDING,
+  SET_RECOVERY_CONNECTIONS_PENDING,
   SET_DEVICE_TOKEN,
   SET_ACTIVE_NOTIFICATION,
   SET_NOTIFICATION_TOKEN,
@@ -13,6 +14,7 @@ import { CONNECTIONS_TYPE, GROUPS_TYPE, MISC_TYPE } from '@/utils/constants';
 const initialState = {
   activeNotification: null,
   backupPending: false,
+  recoveryConnectionsPending: false,
   deviceToken: null,
   notificationToken: null,
   sessionNotifications: [],
@@ -27,6 +29,12 @@ export const reducer = (
   switch (action.type) {
     case SET_BACKUP_PENDING: {
       return { ...state, backupPending: action.backupPending };
+    }
+    case SET_RECOVERY_CONNECTIONS_PENDING: {
+      return {
+        ...state,
+        recoveryConnectionsPending: action.recoveryConnectionsPending,
+      };
     }
     case SET_DEVICE_TOKEN: {
       return { ...state, deviceToken: action.deviceToken };

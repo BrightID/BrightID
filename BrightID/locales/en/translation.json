@@ -35,6 +35,10 @@
     "progress": {
       "title": "Completion:"
     },
+    "setupBackup": {
+      "description": "Set password to enable encrypted backup of your data",
+      "title": "Set backup password"
+    },
     "setupTrustedConnections": {
       "description": "Setup your trusted connections to enable social account recovery",
       "title": "Setup social recovery"
@@ -119,7 +123,6 @@
       "cancel": "Cancel",
       "dismiss": "Dismiss",
       "error": "Error",
-      "formIncomplete": "BrightID Form Incomplete",
       "info": "Info",
       "no": "No",
       "ok": "OK",
@@ -399,13 +402,15 @@
   },
   "notificationBar": {
     "text": {
+      "backupPassword": "Set a password to enable encrypted backup of your data",
       "pendingConnections": "You have {{count}} pending connection",
       "pendingConnections_plural": "You have {{count}} pending connections",
       "socialRecovery": "Please select your Trusted Connections to enable social recovery of your BrightID"
     },
     "title": {
+      "backupPassword": "Backup",
       "pendingConnection": "Confirm connections",
-      "socialRecovery": "Backup & Social Recovery"
+      "socialRecovery": "Social Recovery"
     }
   },
   "notifications": {
@@ -421,14 +426,18 @@
       }
     },
     "item": {
+      "msg": {
+        "backupBrightId": "Set a password to enable encrypted backup of your data",
+        "socialRecovery": "Choose recovery connections to enable social recovery of your BrightID"
+      },
       "text": {
-        "backupBrightId": "Choose your trusted connections",
         "pendingConnections": "You have {{count}} unconfirmed connection",
         "pendingConnections_plural": "You have {{count}} unconfirmed connections",
         "pendingGroupInvite": "{{name}} invited you to join"
       },
       "title": {
-        "backupBrightId": "Backup BrightID"
+        "backupBrightId": "Encrypted Backup",
+        "socialRecovery": "Social recovery"
       }
     },
     "tab": {
@@ -448,8 +457,8 @@
       "recover": "Recover BrightID"
     },
     "text": {
-      "register": "Register to create your very own\ndigital identity",
-      "congratulations": "Congratulations!\nYour BrightID has been created.\nIt’s time to make connections."
+      "congratulations": "Congratulations!\nYour BrightID has been created.\nIt’s time to make connections.",
+      "register": "Register to create your very own\ndigital identity"
     }
   },
   "pendingConnection": {
@@ -514,17 +523,18 @@
       "currentPassword": "Current password",
       "name": "Name",
       "newPassword": "New password",
-      "newPasswordAgain": "New password again",
+      "newPasswordAgain": "Repeat password",
       "socialMediaLink": "Social Media Link"
     },
     "placeholder": {
       "name": "Enter Name",
       "newPassword": "New password",
-      "newPasswordAgain": "New password again"
+      "newPasswordAgain": "Repeat password"
     },
     "text": {
       "changePassword": "Change Password",
       "changeProfilePicture": "Change Profile Picture",
+      "setPassword": "Set password",
       "viewPassword": "View Password"
     }
   },
@@ -604,34 +614,25 @@
     }
   },
   "signup": {
-    "alert": {
-      "nameMissing": "Please add your name",
-      "nameTooShort": "Your name must be at least 2 characters",
-      "photoMissing": "A photo is required. Please press enter on the keyboard."
-    },
     "button": {
-      "addPhoto": "Add Photo",
-      "createAccount": "Create My BrightID",
-      "recoverAccount": "Recover BrightID",
-      "submit": "Submit",
-      "skip": "Skip & do it later"
+      "skip": "Skip & do it later",
+      "submit": "Submit"
     },
     "header": {
       "title": "Sign Up"
     },
     "placeholder": {
+      "confirmPassword": "confirm your password",
       "name": "Your name",
-      "password": "password",
-      "confirmPassword": "confirm your password"
+      "password": "password"
     },
     "text": {
-      "creatingAccount": "Creating Bright ID…",
-      "nameNotShared": "Your name will never be shared with apps or\nstored on our blockchain.",
-      "photoNotShared": "Your photo will never be shared with apps or\nstored on our blockchain.",
-      "whatsYouName": "What do your friends know you by?",
-      "pleaseAddPhoto": "Please add a photo",
       "createPassword": "Create your BrightID password",
-      "passwordInfo": "This password will encrypt the names and photos of your connections should you need to recover them. It does not allow someone to take over your BrightID."
+      "nameNotShared": "Your name will never be shared with apps or\nstored on our blockchain.",
+      "passwordInfo": "This password will encrypt the names and photos of your connections should you need to recover them. It does not allow someone to take over your BrightID.",
+      "photoNotShared": "Your photo will never be shared with apps or\nstored on our blockchain.",
+      "pleaseAddPhoto": "Please add a photo",
+      "whatsYouName": "What do your friends know you by?"
     }
   }
 }

@@ -12,10 +12,19 @@ export const SET_DEVICE_TOKEN = 'SET_DEVICE_TOKEN';
 export const SET_NOTIFICATION_TOKEN = 'SET_NOTIFICATION_TOKEN';
 export const SET_ACTIVE_NOTIFICATION = 'SET_ACTIVE_NOTIFICATION';
 export const REMOVE_ACTIVE_NOTIFICATION = 'REMOVE_ACTIVE_NOTIFICATION';
+export const SET_RECOVERY_CONNECTIONS_PENDING =
+  'SET_RECOVERY_CONNECTIONS_PENDING';
 
 export const setBackupPending = (backupPending: boolean) => ({
   type: SET_BACKUP_PENDING,
   backupPending,
+});
+
+export const setRecoveryConnectionsPending = (
+  recoveryConnectionsPending: boolean,
+) => ({
+  type: SET_RECOVERY_CONNECTIONS_PENDING,
+  recoveryConnectionsPending,
 });
 
 export const setDeviceToken = (deviceToken: string) => ({
@@ -44,11 +53,37 @@ export const updateNotifications = () => async (
   dispatch: dispatch,
   getState: () => State,
 ) => {
+  // check for pending backup setup
+  try {
+    const { password } = getState().user;
+    if (!password) {
+      dispatch(setBackupPending(true));
+      dispatch(
+        setActiveNotification({
+          title: i18next.t('notificationBar.title.backupPassword', 'Backup'),
+          message: i18next.t(
+            'notificationBar.text.backupPassword',
+            'Set a password to enable encrypted backup of your data',
+          ),
+          type: MISC_TYPE,
+          oncePerSession: true,
+          navigationTarget: 'Notifications',
+          icon: 'PhoneLock',
+        }),
+      );
+    } else {
+      dispatch(setBackupPending(false));
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+  // check for pending recovery connections
   try {
     const verifiedConnections = verifiedConnectionsSelector(getState());
     const recoveryConnections = recoveryConnectionsSelector(getState());
     if (recoveryConnections.length < 3 && verifiedConnections.length > 5) {
-      dispatch(setBackupPending(true));
+      dispatch(setRecoveryConnectionsPending(true));
       dispatch(
         setActiveNotification({
           title: i18next.t('notificationBar.title.socialRecovery'),
@@ -60,7 +95,7 @@ export const updateNotifications = () => async (
         }),
       );
     } else {
-      dispatch(setBackupPending(false));
+      dispatch(setRecoveryConnectionsPending(false));
     }
   } catch (err) {
     console.log(err);
