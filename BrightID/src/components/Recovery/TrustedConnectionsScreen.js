@@ -44,6 +44,7 @@ const TrustedConnectionsScreen = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const myId = useSelector((state) => state.user.id);
+  const password = useSelector((state) => state.user.password);
   const connections = useSelector(connectionsSelector);
   const trustedConnections = useSelector(recoveryConnectionsSelector);
   const [selectedConnections, setSelectedConnections] = useState(
@@ -121,7 +122,12 @@ const TrustedConnectionsScreen = () => {
           );
         }
         await Promise.all(promises);
-        navigation.navigate('Backup');
+        // TODO - Improve or separate the "trusted connections" and "setup backup password" flows
+        if (!password) {
+          navigation.navigate('Backup');
+        } else {
+          navigation.navigate('Home');
+        }
       }
     } catch (err) {
       console.warn(err.message);
