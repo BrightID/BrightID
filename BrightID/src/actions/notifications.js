@@ -1,6 +1,10 @@
 // @flow
 
-import { MISC_TYPE } from '@/utils/constants';
+import {
+  MIN_CONNECTIONS_FOR_RECOVERY_NOTIFICATION,
+  MIN_RECOVERY_CONNECTIONS,
+  MISC_TYPE,
+} from '@/utils/constants';
 import i18next from 'i18next';
 import {
   recoveryConnectionsSelector,
@@ -82,7 +86,10 @@ export const updateNotifications = () => async (
   try {
     const verifiedConnections = verifiedConnectionsSelector(getState());
     const recoveryConnections = recoveryConnectionsSelector(getState());
-    if (recoveryConnections.length < 3 && verifiedConnections.length > 5) {
+    if (
+      recoveryConnections.length < MIN_RECOVERY_CONNECTIONS &&
+      verifiedConnections.length >= MIN_CONNECTIONS_FOR_RECOVERY_NOTIFICATION
+    ) {
       dispatch(setRecoveryConnectionsPending(true));
       dispatch(
         setActiveNotification({
