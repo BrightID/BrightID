@@ -84,6 +84,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
         <TrustlevelSlider
           currentLevel={level}
           changeLevelHandler={changeLevelHandler}
+          verbose={true}
         />
         <TouchableOpacity
           testID="SaveLevelBtn"
@@ -134,7 +135,6 @@ const styles = StyleSheet.create({
     width: '90%',
     paddingTop: 8,
     paddingBottom: 8,
-    marginTop: 10,
     backgroundColor: GREEN,
     alignItems: 'center',
     justifyContent: 'center',

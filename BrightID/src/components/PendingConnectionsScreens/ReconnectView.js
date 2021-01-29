@@ -8,13 +8,10 @@ import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { BLACK, DARKER_GREY, ORANGE, RED, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
+import TrustlevelSlider from '@/components/Connections/TrustlevelSlider';
+import { retrieveImage } from '@/utils/filesystem';
 import { ConnectionStats } from './ConnectionStats';
 import { ProfileCard } from './ProfileCard';
-import {
-  connectionLevelColors,
-  connectionLevelStrings,
-} from '../../utils/connectionLevelStrings';
-import { retrieveImage } from '../../utils/filesystem';
 
 // percentage determines reported warning
 const REPORTED_PERCENTAGE = 0.1;
@@ -34,19 +31,15 @@ export const ReconnectView = ({
 }: ReconnectViewProps) => {
   const navigation = useNavigation();
   const [identicalProfile, setIdenticalProfile] = useState(true);
+  const [connectionLevel, setConnectionLevel] = useState(
+    existingConnection.level,
+  );
   const { t } = useTranslation();
 
-  // Potential workaround for crashes reported in AppCenter with message
-  // "TypeError: undefined is not an object (evaluating 'L.reports.length')"
-  let reported = false;
-  if (pendingConnection && pendingConnection.reports) {
-    reported =
-      pendingConnection.reports.length /
-        (pendingConnection.connectionsNum || 1) >=
-      REPORTED_PERCENTAGE;
-  } else {
-    console.log(`Failed to get reports.length!`);
-  }
+  const reported =
+    pendingConnection.reports.length /
+      (pendingConnection.connectionsNum || 1) >=
+    REPORTED_PERCENTAGE;
 
   const brightIdVerified = pendingConnection.verifications
     .map((v) => v.name)
@@ -121,21 +114,18 @@ export const ReconnectView = ({
               {t('connections.label.currentConnectionLevel')}
             </Text>
           </View>
-          <View style={styles.connectionLevel}>
-            <Text
-              style={[
-                styles.connectionLevelText,
-                { color: connectionLevelColors[existingConnection.level] },
-              ]}
-            >
-              {connectionLevelStrings[existingConnection.level]}
-            </Text>
+          <View style={styles.connectionLevel} testID="ReconnectSliderView">
+            <TrustlevelSlider
+              currentLevel={connectionLevel}
+              changeLevelHandler={setConnectionLevel}
+              verbose={false}
+            />
           </View>
         </View>
         <View style={styles.actionButtons}>
           <TouchableOpacity
             style={styles.updateButton}
-            onPress={() => setLevelHandler(existingConnection.level)}
+            onPress={() => setLevelHandler(connectionLevel)}
             testID="updateBtn"
           >
             <Text style={styles.updateButtonLabel}>
@@ -211,15 +201,12 @@ export const ReconnectView = ({
               {t('connections.label.currentConnectionLevel')}
             </Text>
           </View>
-          <View style={styles.connectionLevel}>
-            <Text
-              style={[
-                styles.connectionLevelText,
-                { color: connectionLevelColors[existingConnection.level] },
-              ]}
-            >
-              {connectionLevelStrings[existingConnection.level]}
-            </Text>
+          <View style={styles.connectionLevel} testID="ReconnectSliderView">
+            <TrustlevelSlider
+              currentLevel={connectionLevel}
+              changeLevelHandler={setConnectionLevel}
+              verbose={false}
+            />
           </View>
         </View>
         <View style={styles.actionButtons}>
@@ -234,7 +221,7 @@ export const ReconnectView = ({
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.updateButton}
-            onPress={() => setLevelHandler(existingConnection.level)}
+            onPress={() => setLevelHandler(connectionLevel)}
             testID="updateBtn"
           >
             <Text style={styles.updateButtonLabel}>
@@ -303,7 +290,6 @@ const styles = StyleSheet.create({
   },
   connectionLevel: {
     alignItems: 'center',
-    marginBottom: 10,
   },
   connectionLevelLabel: {
     marginBottom: 10,
