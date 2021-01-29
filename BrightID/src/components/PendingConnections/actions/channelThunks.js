@@ -25,7 +25,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   newPendingConnection,
   selectAllPendingConnectionIds,
-} from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+} from '@/components/PendingConnections/pendingConnectionSlice';
 
 export const createChannel = (channelType: ChannelType) => async (
   dispatch: dispatch,
