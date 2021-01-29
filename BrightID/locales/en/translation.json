@@ -444,14 +444,12 @@
   },
   "onboarding": {
     "button": {
-      "getStarted": "Get Started"
-    },
-    "label": {
-      "maintainPrivacy": "Maintain Privacy"
+      "create": "Create My BrightID",
+      "recover": "Recover BrightID"
     },
     "text": {
-      "intro": "<text>BrightID uses the people you know</text><text>to enforce one-account-per-person</text><text>for important applications like</text><text>voting and universal basic income.</text>",
-      "privacy": "<text>Prove you're a unique person</text><text>while preserving your privacy.</text>"
+      "register": "Register to create your very own\ndigital identity",
+      "congratulations": "Congratulations!\nYour BrightID has been created.\nIt’s time to make connections."
     }
   },
   "pendingConnection": {
@@ -614,18 +612,26 @@
     "button": {
       "addPhoto": "Add Photo",
       "createAccount": "Create My BrightID",
-      "recoverAccount": "Recover BrightID"
+      "recoverAccount": "Recover BrightID",
+      "submit": "Submit",
+      "skip": "Skip & do it later"
     },
     "header": {
-      "title": "SignUp"
+      "title": "Sign Up"
     },
     "placeholder": {
-      "name": "Name"
+      "name": "Your name",
+      "password": "password",
+      "confirmPassword": "confirm your password"
     },
     "text": {
       "creatingAccount": "Creating Bright ID…",
-      "infoNotShared": "Your name and photo will never be shared with apps or stored on servers",
-      "whatsYouName": "What do your friends know you by?"
+      "nameNotShared": "Your name will never be shared with apps or\nstored on our blockchain.",
+      "photoNotShared": "Your photo will never be shared with apps or\nstored on our blockchain.",
+      "whatsYouName": "What do your friends know you by?",
+      "pleaseAddPhoto": "Please add a photo",
+      "createPassword": "Create your BrightID password",
+      "passwordInfo": "This password will encrypt the names and photos of your connections should you need to recover them. It does not allow someone to take over your BrightID."
     }
   }
 }

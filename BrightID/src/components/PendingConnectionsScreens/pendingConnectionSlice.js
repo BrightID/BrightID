@@ -15,6 +15,7 @@ import api from '@/api/brightId';
 import { Alert } from 'react-native';
 import { PROFILE_VERSION } from '@/utils/constants';
 import { createDeepEqualStringArraySelector } from '@/utils/createDeepEqualStringArraySelector';
+import BrightidError, { USER_NOT_FOUND } from '@/api/brightidError';
 
 const pendingConnectionsAdapter = createEntityAdapter();
 
@@ -91,7 +92,8 @@ export const newPendingConnection = createAsyncThunk(
     try {
       connectionInfo = await api.getUserProfile(decryptedObj.id);
     } catch (err) {
-      if (err instanceof Error && err.message === 'User not found') {
+      if (err instanceof BrightidError && err.errorNum === USER_NOT_FOUND) {
+        // this must be a new user not yet existing on backend. Return empty object.
         connectionInfo = {
           connectionsNum: 0,
           groupsNum: 0,
@@ -103,6 +105,8 @@ export const newPendingConnection = createAsyncThunk(
           reports: [],
           existingConnection: undefined,
         };
+      } else {
+        throw err;
       }
     }
     // Is this a known connection?

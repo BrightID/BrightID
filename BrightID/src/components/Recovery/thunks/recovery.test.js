@@ -68,7 +68,7 @@ describe('Test recovery data', () => {
       type: 'recoveryData/setChannel',
       payload: {
         channelId: expect.any(String),
-        url: expect.stringContaining('http://'),
+        url: expect.any(URL),
       },
     });
 
@@ -94,7 +94,7 @@ describe('Test recovery data', () => {
       // update timeout for this test
       jest.setTimeout(10000);
       const { aesKey } = recoveryData;
-      const channelApi = new ChannelAPI(recoveryData.channel.url);
+      const channelApi = new ChannelAPI(recoveryData.channel.url.href);
 
       const conn = {
         id: recoveryId,
@@ -119,7 +119,7 @@ describe('Test recovery data', () => {
       // update timeout for this test
       jest.setTimeout(10000);
       const { aesKey } = recoveryData;
-      const channelApi = new ChannelAPI(recoveryData.channel.url);
+      const channelApi = new ChannelAPI(recoveryData.channel.url.href);
 
       let { publicKey, secretKey } = await nacl.sign.keyPair();
       let b64PubKey = uInt8ArrayToB64(publicKey);

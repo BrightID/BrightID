@@ -26,8 +26,7 @@ import {
   channel_types,
   closeChannel,
 } from '@/components/PendingConnectionsScreens/channelSlice';
-import { buildChannelQrUrl, encodeChannelQrString } from '@/utils/channels';
-import { CHANNEL_SWITCH_TIMESTAMP } from '../../utils/constants';
+import { buildChannelQrUrl } from '@/utils/channels';
 
 /**
  * My Code screen of BrightID
@@ -84,11 +83,7 @@ export const QrCode = ({ channel }) => {
   // create QRCode from channel data
   useEffect(() => {
     if (channel && channel.state === channel_states.OPEN) {
-      const newQrString =
-        channel.timestamp > CHANNEL_SWITCH_TIMESTAMP
-          ? buildChannelQrUrl(channel).href
-          : encodeChannelQrString(channel);
-
+      const newQrString = buildChannelQrUrl(channel).href;
       // do not re-render svg if we already have the string
       if (newQrString !== qrString) {
         console.log(

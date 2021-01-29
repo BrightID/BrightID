@@ -62,9 +62,6 @@ const TrustedConnectionsScreen = () => {
         navigation.navigate('Backup');
       }
     } catch (err) {
-      if (err.message === `trusted connections can't be overwritten`) {
-        navigation.navigate('Backup');
-      }
       console.warn(err.message);
     }
   };

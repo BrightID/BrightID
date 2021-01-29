@@ -71,7 +71,6 @@ declare type Channel = {
   id: string,
   initiatorProfileId: string,
   myProfileId: string,
-  ipAddress?: string,
   aesKey: string,
   timestamp: number,
   ttl: number,
@@ -233,7 +232,6 @@ declare type UserState = {
   verifications: any[],
   id: string,
   password: string,
-  hashedId: string,
   secretKey: string,
 };
 

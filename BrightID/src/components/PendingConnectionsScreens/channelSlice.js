@@ -13,7 +13,6 @@ import {
   - 'api': instance of ChannelAPI for this channel
   - 'id': unique identifier
   - 'initiatorProfileId': profileId of channel initiator
-  - 'ipAddress': IP of profile service
   - 'myProfileId': my profileId in this channel
   - 'pollTimerId: IntervalId of timer polling for incoming connection requests from this channel
   - 'state': state of channel - see channel_states below
@@ -21,6 +20,7 @@ import {
   - 'ttl': time to live of channel (seconds)
   - 'type': group or 1:1 connection - see channel_types below
   - 'timeoutId: Id of timer to expire channel once ttl is reached
+  - 'url': url of channel
 
   The app could hold multiple channels at the same time. E.g. if i scan multiple QRCodes
   in a larger group session.

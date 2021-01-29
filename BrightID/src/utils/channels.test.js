@@ -1,7 +1,5 @@
 import {
   generateChannelData,
-  decodeChannelQrString,
-  encodeChannelQrString,
   createChannelInfo,
   buildChannelQrUrl,
 } from '@/utils/channels';
