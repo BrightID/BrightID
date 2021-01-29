@@ -74,6 +74,7 @@ const ChangePasswordModal = ({ route, navigation }) => {
       );
       return;
     }
+
     if (!validatePass(newPassword, newPasswordAgain)) return;
 
     // save new password
@@ -114,6 +115,9 @@ const ChangePasswordModal = ({ route, navigation }) => {
           <UploadAnimation />
         ) : (
           <>
+            <View>
+              <Text>{headerText}</Text>
+            </View>
             {password ? (
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>
@@ -134,6 +138,7 @@ const ChangePasswordModal = ({ route, navigation }) => {
               </View>
             ) : null}
             <View style={styles.inputGroup}>
+              <Text style={styles.label}>{t('profile.label.newPassword')}</Text>
               <Text style={styles.label}>
                 {password
                   ? t('profile.label.newPassword')
@@ -158,7 +163,9 @@ const ChangePasswordModal = ({ route, navigation }) => {
             </View>
             <View style={styles.inputGroup}>
               <Text style={styles.label}>
-                {t('profile.label.newPasswordAgain')}
+                {password
+                  ? t('profile.label.newPasswordAgain')
+                  : t('profile.label.passwordAgain')}
               </Text>
               <TextInput
                 autoCompleteType="password"

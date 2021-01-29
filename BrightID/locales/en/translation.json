@@ -518,6 +518,8 @@
       "password": "Password",
       "newPassword": "New password",
       "newPasswordAgain": "Repeat password",
+      "password": "Password",
+      "passwordAgain": "Password again",
       "socialMediaLink": "Social Media Link"
     },
     "placeholder": {
@@ -530,7 +532,8 @@
       "changePassword": "Change Password",
       "changeProfilePicture": "Change Profile Picture",
       "setPassword": "Set password",
-      "viewPassword": "View Password"
+      "viewPassword": "View Password",
+      "createPassword": "Create Password"
     }
   },
   "qrcode": {

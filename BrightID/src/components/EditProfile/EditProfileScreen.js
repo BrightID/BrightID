@@ -300,7 +300,11 @@ const ShowEditPassword = () => {
     displayPassword = '*'.repeat(password.length);
   }
 
-  return (
+  const passwordText = password
+    ? t('profile.text.changePassword')
+    : t('profile.text.setPassword', 'Set password');
+
+  const ViewPassword = () => (
     <View style={styles.showEditPasswordContainer}>
       {password ? (
         <>
@@ -348,6 +352,26 @@ const ShowEditPassword = () => {
       )}
     </View>
   );
+
+  const CreatePassword = () => (
+    <View style={styles.showEditPasswordContainer}>
+      <View style={styles.createPasswordContainer}>
+        <TouchableOpacity
+          style={styles.changePasswordButton}
+          onPress={() => {
+            navigation.navigate('ChangePassword');
+          }}
+        >
+          <Text style={[styles.passwordText, { fontSize: fontSize[15] }]}>
+            {t('profile.text.createPassword')}
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <Text style={styles.passwordInfo}>{t('signup.text.passwordInfo')}</Text>
+    </View>
+  );
+
+  return <>{password ? <ViewPassword /> : <CreatePassword />}</>;
 };
 
 export const EditProfileScreen = ({ navigation }) => {
@@ -605,6 +629,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: DEVICE_LARGE ? 26 : 18,
   },
+  createPasswordContainer: {
+    width: '100%',
+    marginTop: DEVICE_LARGE ? 10 : 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   changePasswordButton: {
     marginTop: DEVICE_LARGE ? 12 : 8,
   },
@@ -635,6 +665,13 @@ const styles = StyleSheet.create({
     width: '72%',
     alignSelf: 'center',
     marginTop: DEVICE_LARGE ? 14 : 12,
+  },
+  passwordInfo: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: fontSize[12],
+    color: BLACK,
+    textAlign: 'center',
+    marginTop: 10,
   },
   saveContainer: {
     width: '100%',
