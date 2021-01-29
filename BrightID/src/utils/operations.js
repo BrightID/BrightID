@@ -28,7 +28,7 @@ const handleOpUpdate = (store, op, state, result) => {
       } else {
         Alert.alert(
           i18next.t('apps.alert.title.linkFailure'),
-          i18next.t('apps.alert.text.linkFailure', {context: `${op.context}`, result: `${result}`}),
+          i18next.t('apps.alert.text.linkFailure', {context: `${op.context}`, result: `${result.message}`}),
         );
       }
       break;

@@ -18,11 +18,18 @@ The network consists of volunteers [running nodes](https://github.com/BrightID/B
 
 ID creation and connectons to people and apps are managed though the BrightID mobile app.
 
-
 ## Contribute
 
-Many issues have [bounties assigned](https://github.com/orgs/BrightID/projects/2?card_filter_query=label%3A%22bounty+%F0%9F%92%8E%22), paid in [BrightID Subs tokens](https://uniswap.info/token/0x61ceac48136d6782dbd83c09f51e23514d12470a). [Apply to our keybase](https://keybase.io/team/brightid) to start contributing.
+Many issues have [bounties assigned](https://github.com/orgs/BrightID/projects/2?card_filter_query=label%3A%22bounty+%F0%9F%92%8E%22), paid in [BrightID Subs tokens](https://uniswap.info/token/0x61ceac48136d6782dbd83c09f51e23514d12470a).
 
-Translations are managed through [weblate](https://weblate.org/). Contributions to translations are welcome at https://hosted.weblate.org/projects/brightid/mobile-client/.
+Contributions to translations are welcome through [weblate](https://hosted.weblate.org/projects/brightid/mobile-client/).
 
-[• Project Board](https://github.com/orgs/BrightID/projects/2) [• All Repos](https://github.com/BrightID)
+* [Project board](https://github.com/orgs/BrightID/projects/2)
+* [All BrightID repos](https://github.com/BrightID)
+* More information on contributing may be found in our [Github Wiki](https://github.com/BrightID/BrightID/wiki).
+* [Apply to our keybase](https://keybase.io/team/brightid) to talk with other contributors.
+
+## Integrating BrightID in your Project
+
+* [API spec and guides](https://dev.brightid.org) for developers integrating BrightID.
+* See also the [BrightID Node repo](https://github.com/BrightID/BrightID-Node).
