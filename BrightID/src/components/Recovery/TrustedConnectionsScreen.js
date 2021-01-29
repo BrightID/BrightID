@@ -122,12 +122,16 @@ const TrustedConnectionsScreen = () => {
           );
         }
         await Promise.all(promises);
-        // TODO - Improve or separate the "trusted connections" and "setup backup password" flows
-        if (!password) {
-          navigation.navigate('Backup');
-        } else {
-          navigation.navigate('Home');
-        }
+
+        Alert.alert(
+          t('common.alert.success'),
+          t(
+            'backup.alert.text.completed',
+            'Social recovery of your BrightID is now enabled',
+          ),
+        );
+
+        navigation.navigate('Home');
       }
     } catch (err) {
       console.warn(err.message);
@@ -169,7 +173,7 @@ const TrustedConnectionsScreen = () => {
             style={styles.nextButton}
           >
             <Text style={styles.buttonInnerText}>
-              {t('backup.button.next')}
+              {t('backup.button.save', 'Set recovery connections')}
             </Text>
           </TouchableOpacity>
         </View>
