@@ -73,7 +73,7 @@ const TrustedConnectionsScreen = () => {
     />
   );
 
-  const navigateToBackup = async () => {
+  const save = async () => {
     try {
       if (selectedConnections.length < 3) {
         Alert.alert(
@@ -141,7 +141,7 @@ const TrustedConnectionsScreen = () => {
   return (
     <>
       <View style={styles.orangeTop} />
-      <View style={styles.container}>
+      <View style={styles.container} testID="TrustedConnectionsScreen">
         <View style={styles.mainContainer}>
           <View style={styles.titleContainer}>
             <Text style={styles.infoText}>
@@ -168,10 +168,7 @@ const TrustedConnectionsScreen = () => {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            onPress={navigateToBackup}
-            style={styles.nextButton}
-          >
+          <TouchableOpacity onPress={save} style={styles.nextButton}>
             <Text style={styles.buttonInnerText}>
               {t('backup.button.save', 'Set recovery connections')}
             </Text>

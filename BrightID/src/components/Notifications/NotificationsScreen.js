@@ -143,6 +143,7 @@ const MiscList = ({ route }) => {
       ),
       imageSource,
       navigationTarget: 'TrustedConnections',
+      testID: 'SocialRecoveryNotifcation',
     });
   }
 
@@ -159,6 +160,7 @@ const MiscList = ({ route }) => {
       ),
       imageSource,
       navigationTarget: 'Edit Profile',
+      testID: 'BackupNotification',
     });
   }
 
@@ -184,6 +186,7 @@ const MiscList = ({ route }) => {
           msg={item.msg}
           imageSource={item.imageSource}
           navigationTarget={item.navigationTarget}
+          testID={item.testID}
         />
       )}
     />
@@ -282,7 +285,7 @@ export const NotificationsScreen = ({ route }) => {
         animated={true}
       />
       <View style={styles.orangeTop} />
-      <View style={styles.container}>
+      <View style={styles.container} testID="NotificationsScreen">
         <TabView
           navigationState={{ index, routes }}
           renderScene={renderScene}

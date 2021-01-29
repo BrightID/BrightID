@@ -21,16 +21,18 @@ type NotificationCardProps = {
   msg: string,
   imageSource: any,
   navigationTarget: string,
+  testID: string,
 };
 
 const NotificationCard = (props: NotificationCardProps) => {
-  const { title, msg, imageSource, navigationTarget } = props;
+  const { title, msg, imageSource, navigationTarget, testID } = props;
   const navigation = useNavigation();
   const { t } = useTranslation();
 
   return (
     <TouchableOpacity
       style={styles.container}
+      testID={testID}
       onPress={() => {
         navigation.navigate(navigationTarget);
       }}

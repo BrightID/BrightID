@@ -57,6 +57,7 @@ const NotificationBell = () => {
 
   return (
     <TouchableOpacity
+      testID="notificationsBtn"
       style={{ marginRight: 25 }}
       onPress={() => {
         Keyboard.dismiss();

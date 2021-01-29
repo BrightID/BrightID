@@ -433,7 +433,7 @@ export const EditProfileScreen = ({ navigation }) => {
         { marginTop: headerHeight },
         !isDrawerOpen && styles.shadow,
       ]}
-      testID="graphExplorerScreen"
+      testID="editProfileScreen"
     >
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <EditProfilePhoto

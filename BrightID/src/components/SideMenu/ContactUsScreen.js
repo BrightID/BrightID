@@ -57,7 +57,7 @@ export const ContactUsScreen = function () {
         { marginTop: headerHeight },
         !isDrawerOpen && styles.shadow,
       ]}
-      testID="graphExplorerScreen"
+      testID="contactUsScreen"
     >
       <Text style={styles.title}>{t('contact.title.contactUs')}</Text>
       <View style={styles.itemList}>
