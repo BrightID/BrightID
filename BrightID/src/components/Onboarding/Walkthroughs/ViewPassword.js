@@ -87,6 +87,7 @@ const ViewPassword = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Svg
+        testID="ViewPasswordWalkthrough"
         width={width}
         height={height}
         viewBox={`0 0 ${width} ${height}`}
@@ -121,6 +122,7 @@ const ViewPassword = ({ navigation }) => {
         onPress={() => {
           navigation.goBack();
         }}
+        testID="ViewPasswordGotIt"
       >
         <View style={styles.gotItBorder}>
           <Text style={styles.gotIt}>{t('walkthroughs.text.gotIt')}</Text>

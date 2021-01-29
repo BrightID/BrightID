@@ -78,6 +78,7 @@ const BrightIdLogo = () => {
         Keyboard.dismiss();
         resetHome();
       }}
+      testID="BrightIdLogo"
     >
       <Image
         source={require('@/static/brightid-final.png')}

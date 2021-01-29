@@ -73,6 +73,14 @@ const setPassword = async () => {
   await element(by.id('submitBtn')).tap();
 };
 
+const skipWalkthrough = async () => {
+  await expect(element(by.id('ViewPasswordWalkthrough'))).toBeVisible();
+  await expect(element(by.id('ViewPasswordGotIt'))).toExist();
+  await element(by.id('ViewPasswordGotIt')).tap();
+  await expect(element(by.id('BrightIdLogo'))).toExist();
+  await element(by.id('BrightIdLogo')).tap();
+};
+
 const createBrightID = async (
   name: string = testUserName,
   withPassword: boolean = false,
@@ -86,6 +94,7 @@ const createBrightID = async (
   } else {
     await skipPassword();
   }
+  await skipWalkthrough();
   // should end up at home screen
   await expectHomescreen();
   return name;
