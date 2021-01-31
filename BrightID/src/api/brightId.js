@@ -314,32 +314,6 @@ class NodeApi {
     NodeApi.setOperation(op);
   }
 
-  async setTrusted(trusted: string[]) {
-    let {
-      user: { id },
-      keypair: { secretKey },
-    } = store.getState();
-
-    let name = 'Set Trusted Connections';
-    let timestamp = Date.now();
-    let op = {
-      name,
-      id,
-      trusted,
-      timestamp,
-      v,
-    };
-
-    const message = stringify(op);
-    op.sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
-    let res = await this.api.post(`/operations`, op);
-    NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res, message);
-    NodeApi.setOperation(op);
-  }
-
   async setSigningKey(params: {
     id: string,
     signingKey: string,

@@ -295,41 +295,40 @@ const ShowEditPassword = () => {
     }, []),
   );
 
-  // don't show this option if user does not have password
-  if (!password) {
-    return null;
-  }
-
   let displayPassword = password;
   if (hidePassword) {
     displayPassword = '*'.repeat(password.length);
   }
 
+  const passwordText = password
+    ? t('profile.text.changePassword')
+    : t('profile.text.setPassword', 'Set password');
+
   return (
     <View style={styles.showEditPasswordContainer}>
-      <View style={styles.viewPasswordContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            setHidePassword(!hidePassword);
-          }}
-        >
-          <Text style={styles.passwordText}>
-            {t('profile.text.viewPassword')}
+      {password ? (
+        <View style={styles.viewPasswordContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              setHidePassword(!hidePassword);
+            }}
+          >
+            <Text style={styles.passwordText}>
+              {t('profile.text.viewPassword')}
+            </Text>
+          </TouchableOpacity>
+          <Text style={styles.displayPassword} selectable={true}>
+            {displayPassword}
           </Text>
-        </TouchableOpacity>
-        <Text style={styles.displayPassword} selectable={true}>
-          {displayPassword}
-        </Text>
-      </View>
+        </View>
+      ) : null}
       <TouchableOpacity
         style={styles.changePasswordButton}
         onPress={() => {
           navigation.navigate('ChangePassword');
         }}
       >
-        <Text style={styles.passwordText}>
-          {t('profile.text.changePassword')}
-        </Text>
+        <Text style={styles.passwordText}>{passwordText}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -434,7 +433,7 @@ export const EditProfileScreen = ({ navigation }) => {
         { marginTop: headerHeight },
         !isDrawerOpen && styles.shadow,
       ]}
-      testID="graphExplorerScreen"
+      testID="editProfileScreen"
     >
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <EditProfilePhoto

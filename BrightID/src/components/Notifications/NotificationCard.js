@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { photoDirectory } from '@/utils/filesystem';
 import { useNavigation } from '@react-navigation/native';
@@ -17,21 +16,25 @@ import { fontSize } from '@/theme/fonts';
  * @prop icon
  */
 
-const NotificationCard = (props) => {
+type NotificationCardProps = {
+  title: string,
+  msg: string,
+  imageSource: any,
+  navigationTarget: string,
+  testID: string,
+};
+
+const NotificationCard = (props: NotificationCardProps) => {
+  const { title, msg, imageSource, navigationTarget, testID } = props;
   const navigation = useNavigation();
   const { t } = useTranslation();
-  const photoFilename = useSelector((state) => state.user.photo.filename);
-  const imageSource = photoFilename
-    ? {
-        uri: `file://${photoDirectory()}/${photoFilename}`,
-      }
-    : require('@/static/default_profile.jpg');
 
   return (
     <TouchableOpacity
       style={styles.container}
+      testID={testID}
       onPress={() => {
-        navigation.navigate('TrustedConnections');
+        navigation.navigate(navigationTarget);
       }}
     >
       <View style={styles.photoContainer}>
@@ -47,12 +50,8 @@ const NotificationCard = (props) => {
         />
       </View>
       <View style={styles.info}>
-        <Text style={styles.name}>
-          {t('notifications.item.title.backupBrightId')}
-        </Text>
-        <Text style={styles.invitationMsg}>
-          {t('notifications.item.text.backupBrightId')}
-        </Text>
+        <Text style={styles.name}>{title}</Text>
+        <Text style={styles.invitationMsg}>{msg}</Text>
       </View>
     </TouchableOpacity>
   );

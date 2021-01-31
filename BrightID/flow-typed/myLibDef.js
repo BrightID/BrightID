@@ -93,7 +93,6 @@ declare type ChannelInfo = {
 
 declare type ConnectionsState = {
   connections: connection[],
-  trustedConnections: string[],
   connectionsSort: string,
   searchParam: string,
   searchOpen: boolean,

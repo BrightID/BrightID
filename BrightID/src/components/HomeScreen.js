@@ -27,6 +27,7 @@ import Camera from '@/components/Icons/Camera';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
+import { verifiedConnectionsSelector } from '@/utils/connectionsSelector';
 import { version as app_version } from '../../package.json';
 
 /**
@@ -48,12 +49,6 @@ export const verifiedSelector = createSelector(
   (verifications) => verifications.includes('BrightID'),
 );
 
-export const verifiedConnections = createSelector(
-  (state) => state.connections.connections,
-  (connections) =>
-    connections.filter((conn) => conn.status === 'verified').length,
-);
-
 /** HomeScreen Component */
 
 export const HomeScreen = (props) => {
@@ -63,7 +58,7 @@ export const HomeScreen = (props) => {
   const name = useSelector((state) => state.user.name);
   const photoFilename = useSelector((state) => state.user.photo.filename);
   const groupsCount = useSelector((state) => state.groups.groups.length);
-  const connectionsCount = useSelector(verifiedConnections);
+  const connectionsCount = useSelector(verifiedConnectionsSelector).length;
   const linkedContextsCount = useSelector(linkedContextCountSelector);
   const verified = useSelector(verifiedSelector);
 

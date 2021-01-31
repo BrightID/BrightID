@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,13 +12,18 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { connectionsSelector } from '@/utils/connectionsSelector';
+import {
+  connectionsSelector,
+  recoveryConnectionsSelector,
+} from '@/utils/connectionsSelector';
 import { ORANGE, BLUE, WHITE, LIGHT_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import EmptyList from '@/components/Helpers/EmptyList';
+import { connection_levels } from '@/utils/constants';
+import api from '@/api/brightId';
+import { setConnectionLevel } from '@/actions/connections';
 import TrustedConnectionCard from './TrustedConnectionCard';
-import { setTrustedConnections } from './thunks/recoveryThunks';
 
 /**
  * Backup screen of BrightID
@@ -38,38 +43,108 @@ const TrustedConnectionsScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-
+  const myId = useSelector((state) => state.user.id);
   const connections = useSelector(connectionsSelector);
-
-  const trustedConnections = useSelector(
-    (state) => state.connections.trustedConnections,
+  const trustedConnections = useSelector(recoveryConnectionsSelector);
+  const [selectedConnections, setSelectedConnections] = useState(
+    trustedConnections.map((item) => item.id),
   );
+  const [updateInProgress, setUpdateInProgress] = useState(false);
+
+  const toggleSelection = (id) => {
+    const index = selectedConnections.indexOf(id);
+    if (index >= 0) {
+      // deselect id
+      selectedConnections.splice(index, 1);
+      setSelectedConnections([...selectedConnections]);
+    } else {
+      // select id
+      setSelectedConnections([...selectedConnections, id]);
+    }
+  };
 
   const renderConnection = ({ item }) => (
-    <TrustedConnectionCard {...item} style={styles.connectionCard} />
+    <TrustedConnectionCard
+      {...item}
+      style={styles.connectionCard}
+      selected={selectedConnections.includes(item.id)}
+      toggleHandler={toggleSelection}
+    />
   );
 
-  const navigateToBackup = async () => {
+  const save = async () => {
+    if (updateInProgress) return;
     try {
-      if (trustedConnections.length < 3) {
+      if (selectedConnections.length < 3) {
         Alert.alert(
           t('common.alert.error'),
           t('backup.alert.text.needThreeTrusted'),
         );
       } else {
-        await dispatch(setTrustedConnections());
+        setUpdateInProgress(true);
+        // determine which connections need to be changed
+        const connectionsToUpgrade = connections.filter(
+          (item) =>
+            selectedConnections.includes(item.id) &&
+            item.level !== connection_levels.RECOVERY,
+        );
+        const connectionsToDowngrade = trustedConnections.filter(
+          (item) => !selectedConnections.includes(item.id),
+        );
 
-        navigation.navigate('Backup');
+        // apply changes
+        const promises = [];
+        for (const item of connectionsToUpgrade) {
+          console.log(`Setting ${item.name} to RECOVERY`);
+          promises.push(
+            api.addConnection(
+              myId,
+              item.id,
+              connection_levels.RECOVERY,
+              undefined,
+              Date.now(),
+            ),
+          );
+          dispatch(setConnectionLevel(item.id, connection_levels.RECOVERY));
+        }
+        for (const item of connectionsToDowngrade) {
+          console.log(`Setting ${item.name} to ALREADY_KNOWN`);
+          promises.push(
+            api.addConnection(
+              myId,
+              item.id,
+              connection_levels.ALREADY_KNOWN,
+              undefined,
+              Date.now(),
+            ),
+          );
+          dispatch(
+            setConnectionLevel(item.id, connection_levels.ALREADY_KNOWN),
+          );
+        }
+        await Promise.all(promises);
+
+        Alert.alert(
+          t('common.alert.success'),
+          t(
+            'backup.alert.text.completed',
+            'Social recovery of your BrightID is now enabled',
+          ),
+        );
+
+        navigation.navigate('Home');
       }
     } catch (err) {
       console.warn(err.message);
+    } finally {
+      setUpdateInProgress(false);
     }
   };
 
   return (
     <>
       <View style={styles.orangeTop} />
-      <View style={styles.container}>
+      <View style={styles.container} testID="TrustedConnectionsScreen">
         <View style={styles.mainContainer}>
           <View style={styles.titleContainer}>
             <Text style={styles.infoText}>
@@ -97,11 +172,12 @@ const TrustedConnectionsScreen = () => {
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            onPress={navigateToBackup}
+            disabled={updateInProgress}
+            onPress={save}
             style={styles.nextButton}
           >
             <Text style={styles.buttonInnerText}>
-              {t('backup.button.next')}
+              {t('backup.button.save', 'Set recovery connections')}
             </Text>
           </TouchableOpacity>
         </View>

@@ -44,16 +44,6 @@ export const setupRecovery = () => async (
   }
 };
 
-export const setTrustedConnections = () => async (
-  dispatch: dispatch,
-  getState: getState,
-) => {
-  const {
-    connections: { trustedConnections },
-  } = getState();
-  await api.setTrusted(trustedConnections);
-};
-
 export const setSigningKey = () => async (
   dispatch: dispatch,
   getState: getState,

@@ -1,4 +1,6 @@
 import i18next from 'i18next';
+import { recoveryConnectionsSelector } from '@/utils/connectionsSelector';
+import { MIN_RECOVERY_CONNECTIONS } from '@/utils/constants';
 
 export const UserTasks = {
   make_first_connection: {
@@ -55,6 +57,19 @@ export const UserTasks = {
       return state.connections.connections.length > 2;
     },
   },
+  setup_backup: {
+    id: 'setup_backup',
+    sortValue: 65,
+    title: i18next.t(`achievements.setupBackup.title`, 'Set backup password'),
+    description: i18next.t(
+      `achievements.setupBackup.description`,
+      'Set password to enable encrypted backup of your data',
+    ),
+    url: 'https://brightid.gitbook.io/brightid/#backup-your-brightid',
+    checkFn(state) {
+      return !!state.user.password;
+    },
+  },
   setup_trusted_connections: {
     id: 'setup_trusted_connections',
     sortValue: 70,
@@ -63,8 +78,7 @@ export const UserTasks = {
     url: 'https://brightid.gitbook.io/brightid/#backup-your-brightid',
     checkFn(state) {
       return (
-        state.connections.trustedConnections.length > 2 &&
-        state.user.backupCompleted
+        recoveryConnectionsSelector(state).length >= MIN_RECOVERY_CONNECTIONS
       );
     },
   },

@@ -137,6 +137,7 @@ export const PasswordScreen = () => {
         </View>
         <View style={styles.submitContainer}>
           <TouchableOpacity
+            testID="submitBtn"
             style={[styles.submitBtn, { opacity: disabled ? 0.7 : 1 }]}
             onPress={handleSubmit}
             accessibilityLabel={t('signup.button.submit')}

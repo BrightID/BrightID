@@ -12,10 +12,12 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useFocusEffect } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { backupUser } from '@/components/Recovery/thunks/backupThunks';
+import { setBackupCompleted } from '@/reducer/userSlice';
 import { saveId } from './thunks';
 import Congratulations from '../Icons/Congratulations';
 
@@ -27,6 +29,7 @@ const TIMEOUT = 1500;
 export const SuccessScreen = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const password = useSelector((state) => state.user.password);
 
   /**
    * After 2 seconds we save the user id, which will automatically navigate to the homepage
@@ -34,15 +37,22 @@ export const SuccessScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      let t = setTimeout(() => {
-        dispatch(saveId()).catch((err) => {
+      let t = setTimeout(async () => {
+        try {
+          await dispatch(saveId());
+        } catch (err) {
           Alert.alert(t('common.alert.error'), err.message);
-        });
+        }
+        if (password) {
+          console.log(`Starting initial user backup`);
+          await dispatch(backupUser());
+          dispatch(setBackupCompleted(true));
+        }
       }, TIMEOUT);
       return () => {
         clearTimeout(t);
       };
-    }, [dispatch]),
+    }, [dispatch, password]),
   );
   return (
     <>
