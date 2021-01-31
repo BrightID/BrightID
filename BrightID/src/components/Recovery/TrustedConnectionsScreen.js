@@ -44,15 +44,14 @@ const TrustedConnectionsScreen = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const myId = useSelector((state) => state.user.id);
-  const password = useSelector((state) => state.user.password);
   const connections = useSelector(connectionsSelector);
   const trustedConnections = useSelector(recoveryConnectionsSelector);
   const [selectedConnections, setSelectedConnections] = useState(
     trustedConnections.map((item) => item.id),
   );
+  const [updateInProgress, setUpdateInProgress] = useState(false);
 
   const toggleSelection = (id) => {
-    console.log(`toggle connection ${id}`);
     const index = selectedConnections.indexOf(id);
     if (index >= 0) {
       // deselect id
@@ -74,6 +73,7 @@ const TrustedConnectionsScreen = () => {
   );
 
   const save = async () => {
+    if (updateInProgress) return;
     try {
       if (selectedConnections.length < 3) {
         Alert.alert(
@@ -81,6 +81,7 @@ const TrustedConnectionsScreen = () => {
           t('backup.alert.text.needThreeTrusted'),
         );
       } else {
+        setUpdateInProgress(true);
         // determine which connections need to be changed
         const connectionsToUpgrade = connections.filter(
           (item) =>
@@ -135,6 +136,8 @@ const TrustedConnectionsScreen = () => {
       }
     } catch (err) {
       console.warn(err.message);
+    } finally {
+      setUpdateInProgress(false);
     }
   };
 
@@ -168,7 +171,11 @@ const TrustedConnectionsScreen = () => {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={save} style={styles.nextButton}>
+          <TouchableOpacity
+            disabled={updateInProgress}
+            onPress={save}
+            style={styles.nextButton}
+          >
             <Text style={styles.buttonInnerText}>
               {t('backup.button.save', 'Set recovery connections')}
             </Text>
