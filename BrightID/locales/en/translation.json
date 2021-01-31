@@ -79,24 +79,18 @@
   "backup": {
     "alert": {
       "text": {
-        "backupSuccess": "Backup completed successfully!",
+        "completed": "Social recovery of your BrightID is now enabled",
         "needThreeTrusted": "You need at least three recovery connections for backup."
       }
     },
     "button": {
-      "next": "Next",
-      "startBackup": "Start Backup"
+      "save": "Set recovery connections"
     },
     "header": {
-      "backup": "Backup",
       "trustedConnections": "Recovery connections"
-    },
-    "placeholder": {
-      "confirmPassword": "Confirm Password"
     },
     "text": {
       "chooseTrustedConnections": "Choose three or more recovery connections to back up your BrightID.",
-      "enterPassword": "Enter a password to encrypt your backup data with:",
       "noConnections": "No connections"
     }
   },
@@ -161,7 +155,6 @@
       "title": "Select photo"
     },
     "placeholder": {
-      "password": "Password",
       "searchConnections": "Search Connections"
     },
     "tag": {

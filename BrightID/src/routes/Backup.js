@@ -26,9 +26,7 @@ const recoveringScreenOptions = {
   ...headerOptions,
   headerRight: () => <SearchConnections sortable={true} />,
   headerTitle: () => (
-    <AnimatedHeaderTitle
-      text={i18next.t('restore.header.accountRecovery', 'Account Recovery')}
-    />
+    <AnimatedHeaderTitle text={i18next.t('restore.header.accountRecovery')} />
   ),
 };
 
