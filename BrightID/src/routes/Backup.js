@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnectionScreen';
 import SearchConnections from '@/components/Helpers/SearchConnections';
 import TrustedConnectionsScreen from '@/components/Recovery/TrustedConnectionsScreen';
-import BackupScreen from '@/components/Recovery/BackupScreen';
 import i18next from 'i18next';
 import { headerOptions, AnimatedHeaderTitle } from './helpers';
 
@@ -37,14 +36,6 @@ const Connections = () => {
   const { t } = useTranslation();
   return (
     <>
-      <Stack.Screen
-        name="Backup"
-        component={BackupScreen}
-        options={{
-          ...headerOptions,
-          title: t('backup.header.backup'),
-        }}
-      />
       <Stack.Screen
         name="TrustedConnections"
         component={TrustedConnectionsScreen}
