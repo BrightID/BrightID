@@ -28,7 +28,11 @@ import {
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from 'react-redux';
 import { validatePass } from '@/utils/password';
-import { setPassword, updateNotifications } from '@/actions';
+import {
+  setBackupCompleted,
+  setPassword,
+  updateNotifications,
+} from '@/actions';
 import { backupAppData } from '@/components/Recovery/thunks/backupThunks';
 
 const UploadAnimation = () => {
@@ -83,6 +87,7 @@ const ChangePasswordModal = ({ route, navigation }) => {
     setBackupInProgress(true);
     try {
       await dispatch(backupAppData());
+      dispatch(setBackupCompleted(true));
     } catch (err) {
       console.warn(err);
     }
