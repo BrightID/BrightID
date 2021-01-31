@@ -4,8 +4,10 @@
 import {
   createBrightID,
   createFakeConnection,
+  expectConnectionsScreen,
   expectHomescreen,
   expectNotificationsScreen,
+  navigateHome,
 } from './testUtils';
 
 describe('social recovery', () => {
@@ -23,6 +25,14 @@ describe('social recovery', () => {
       await createFakeConnection();
       await createFakeConnection();
       await createFakeConnection();
+
+      // wait upto 30 seconds till all connect operations are applied
+      await element(by.id('connectionsBtn')).tap();
+      await expectConnectionsScreen();
+      await waitFor(element(by.id('connection-5')))
+        .toExist()
+        .withTimeout(30000);
+      await navigateHome();
     });
 
     it('should show notification', async () => {
