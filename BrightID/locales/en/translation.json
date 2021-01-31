@@ -405,12 +405,12 @@
       "backupPassword": "Set a password to enable encrypted backup of your data",
       "pendingConnections": "You have {{count}} pending connection",
       "pendingConnections_plural": "You have {{count}} pending connections",
-      "socialRecovery": "Please select your Trusted Connections to enable social recovery of your BrightID"
+      "socialRecovery": "Choose recovery connections to enable social recovery of your BrightID"
     },
     "title": {
-      "backupPassword": "Backup",
-      "pendingConnection": "Confirm connections",
-      "socialRecovery": "Social Recovery"
+      "backupPassword": "Set Backup Password",
+      "pendingConnection": "Confirm Connections",
+      "socialRecovery": "Setup Social Recovery"
     }
   },
   "notifications": {
@@ -436,8 +436,8 @@
         "pendingGroupInvite": "{{name}} invited you to join"
       },
       "title": {
-        "backupBrightId": "Encrypted Backup",
-        "socialRecovery": "Social recovery"
+        "backupBrightId": "Set Backup Password",
+        "socialRecovery": "Setup Social Recovery"
       }
     },
     "tab": {

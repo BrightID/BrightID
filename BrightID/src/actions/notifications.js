@@ -64,11 +64,8 @@ export const updateNotifications = () => async (
       dispatch(setBackupPending(true));
       dispatch(
         setActiveNotification({
-          title: i18next.t('notificationBar.title.backupPassword', 'Backup'),
-          message: i18next.t(
-            'notificationBar.text.backupPassword',
-            'Set a password to enable encrypted backup of your data',
-          ),
+          title: i18next.t('notificationBar.title.backupPassword'),
+          message: i18next.t('notificationBar.text.backupPassword'),
           type: MISC_TYPE,
           oncePerSession: true,
           navigationTarget: 'Notifications',

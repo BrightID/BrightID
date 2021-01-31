@@ -136,11 +136,8 @@ const MiscList = ({ route }) => {
       ? { uri: `file://${photoDirectory()}/${photoFilename}` }
       : require('@/static/default_profile.jpg');
     data.push({
-      title: t('notifications.item.title.socialRecovery', 'Social recovery'),
-      msg: t(
-        'notifications.item.msg.socialRecovery',
-        'Choose recovery connections to enable social recovery of your BrightID',
-      ),
+      title: t('notifications.item.title.socialRecovery'),
+      msg: t('notifications.item.msg.socialRecovery'),
       imageSource,
       navigationTarget: 'TrustedConnections',
       testID: 'SocialRecoveryNotifcation',
@@ -154,10 +151,7 @@ const MiscList = ({ route }) => {
       : require('@/static/default_profile.jpg');
     data.push({
       title: t('notifications.item.title.backupBrightId'),
-      msg: t(
-        'notifications.item.msg.backupBrightId',
-        'Set a password to enable encrypted backup of your data',
-      ),
+      msg: t('notifications.item.msg.backupBrightId'),
       imageSource,
       navigationTarget: 'Edit Profile',
       testID: 'BackupNotification',
