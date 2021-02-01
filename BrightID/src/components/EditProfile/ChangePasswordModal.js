@@ -28,13 +28,12 @@ import {
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from 'react-redux';
 import { validatePass } from '@/utils/password';
-
 import {
   setBackupCompleted,
   setPassword,
   updateNotifications,
 } from '@/actions';
-import { backupAppData } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
+import { backupAppData } from '@/components/Recovery/thunks/backupThunks';
 
 const UploadAnimation = () => {
   const { t } = useTranslation();
@@ -136,24 +135,6 @@ const ChangePasswordModal = ({ route, navigation }) => {
                 />
               </View>
             ) : null}
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>{t('profile.label.newPassword')}</Text>
-              <Text style={styles.label}>
-                {t('profile.label.currentPassword')}
-              </Text>
-              <TextInput
-                autoCompleteType="password"
-                autoCorrect={false}
-                onChangeText={setOldPassword}
-                value={oldPassword}
-                placeholder={password}
-                placeholderTextColor={GREY}
-                secureTextEntry={true}
-                style={styles.textInput}
-                textContentType="password"
-                underlineColorAndroid="transparent"
-              />
-            </View>
             <View style={styles.inputGroup}>
               <Text style={styles.label}>{t('profile.label.newPassword')}</Text>
               <TextInput

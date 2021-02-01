@@ -295,11 +295,6 @@ const ShowEditPassword = () => {
     }, []),
   );
 
-  // don't show this option if user does not have password
-  if (!password) {
-    return null;
-  }
-
   let displayPassword = password;
   if (hidePassword) {
     displayPassword = '*'.repeat(password.length);
@@ -309,7 +304,7 @@ const ShowEditPassword = () => {
     ? t('profile.text.changePassword')
     : t('profile.text.setPassword', 'Set password');
 
-  const ViewPassword = () => (
+  return (
     <View style={styles.showEditPasswordContainer}>
       {password ? (
         <>
@@ -448,7 +443,7 @@ export const EditProfileScreen = ({ navigation }) => {
           ],
         );
       }),
-    [navigation, saveDisabled, t],
+    [navigation, saveDisabled],
   );
 
   return (
