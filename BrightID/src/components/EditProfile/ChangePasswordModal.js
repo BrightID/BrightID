@@ -74,7 +74,6 @@ const ChangePasswordModal = ({ route, navigation }) => {
       );
       return;
     }
-
     if (!validatePass(newPassword, newPasswordAgain)) return;
 
     // save new password
@@ -140,10 +139,23 @@ const ChangePasswordModal = ({ route, navigation }) => {
             <View style={styles.inputGroup}>
               <Text style={styles.label}>{t('profile.label.newPassword')}</Text>
               <Text style={styles.label}>
-                {password
-                  ? t('profile.label.newPassword')
-                  : t('profile.label.password')}
+                {t('profile.label.currentPassword')}
               </Text>
+              <TextInput
+                autoCompleteType="password"
+                autoCorrect={false}
+                onChangeText={setOldPassword}
+                value={oldPassword}
+                placeholder={password}
+                placeholderTextColor={GREY}
+                secureTextEntry={true}
+                style={styles.textInput}
+                textContentType="password"
+                underlineColorAndroid="transparent"
+              />
+            </View>
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>{t('profile.label.newPassword')}</Text>
               <TextInput
                 autoCompleteType="password"
                 autoCorrect={false}
@@ -163,9 +175,7 @@ const ChangePasswordModal = ({ route, navigation }) => {
             </View>
             <View style={styles.inputGroup}>
               <Text style={styles.label}>
-                {password
-                  ? t('profile.label.newPasswordAgain')
-                  : t('profile.label.passwordAgain')}
+                {t('profile.label.newPasswordAgain')}
               </Text>
               <TextInput
                 autoCompleteType="password"

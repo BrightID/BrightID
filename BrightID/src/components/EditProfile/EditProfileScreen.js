@@ -295,6 +295,11 @@ const ShowEditPassword = () => {
     }, []),
   );
 
+  // don't show this option if user does not have password
+  if (!password) {
+    return null;
+  }
+
   let displayPassword = password;
   if (hidePassword) {
     displayPassword = '*'.repeat(password.length);
@@ -352,26 +357,6 @@ const ShowEditPassword = () => {
       )}
     </View>
   );
-
-  const CreatePassword = () => (
-    <View style={styles.showEditPasswordContainer}>
-      <View style={styles.createPasswordContainer}>
-        <TouchableOpacity
-          style={styles.changePasswordButton}
-          onPress={() => {
-            navigation.navigate('ChangePassword');
-          }}
-        >
-          <Text style={[styles.passwordText, { fontSize: fontSize[15] }]}>
-            {t('profile.text.createPassword')}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.passwordInfo}>{t('signup.text.passwordInfo')}</Text>
-    </View>
-  );
-
-  return <>{password ? <ViewPassword /> : <CreatePassword />}</>;
 };
 
 export const EditProfileScreen = ({ navigation }) => {
@@ -628,12 +613,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: DEVICE_LARGE ? 26 : 18,
-  },
-  createPasswordContainer: {
-    width: '100%',
-    marginTop: DEVICE_LARGE ? 10 : 8,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   changePasswordButton: {
     marginTop: DEVICE_LARGE ? 12 : 8,
