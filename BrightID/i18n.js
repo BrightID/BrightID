@@ -11,6 +11,7 @@ import * as englishTranslation from './locales/en/translation.json';
 import * as frenchTranslation from './locales/fr/translation.json';
 import * as germanTranslation from './locales/de/translation.json';
 import * as spanishTranslation from './locales/es/translation.json';
+import * as hindiTranslation from './locales/hi/translation.json';
 
 /**
  * For each supported language other than English, import the corresponding moment locale
@@ -19,6 +20,7 @@ import * as spanishTranslation from './locales/es/translation.json';
 import 'moment/locale/fr';
 import 'moment/locale/de';
 import 'moment/locale/es';
+import 'moment/locale/hi';
 
 const translations = {
   de: {
@@ -32,6 +34,9 @@ const translations = {
   },
   es: {
     translation: spanishTranslation,
+  },
+  hi: {
+    translation: hindiTranslation,
   },
 };
 
