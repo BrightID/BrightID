@@ -1,39 +1,19 @@
 // @flow
 
-import React, { useCallback, useEffect, useState } from 'react';
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from 'react-native';
-import Svg, { Path } from 'react-native-svg';
+import React, { useCallback } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
-import { DARKER_GREY, WHITE } from '@/theme/colors';
+import { WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { openDrawer } from '@/NavigationService';
 import { useTranslation } from 'react-i18next';
+import FullScreenHighlightBox from '@/components/Helpers/FullScreenHighlightBox';
 import Arrow from '../../Icons/Arrow';
 
-/**
- * For additional info on how to cut shapes out of shapes with SVG:
- * https://stackoverflow.com/questions/1983256/how-can-i-cut-one-shape-inside-another/7716523#7716523
- */
-
 // border radius for edit profile box
-const br = 20;
-// upper right corner
-const urc = `a${br},${br} 0 0 1 ${br},${br}`;
-// lower right corner
-const lrc = `a${br},${br} 0 0 1 -${br},${br}`;
-// lower left corner
-const llc = `a${br},${br} 0 0 1 -${br},-${br}`;
-// lower left corner
-const ulc = `a${br},${br} 0 0 1 ${br},-${br}`;
+const BR = 20;
 
 const ViewPassword = ({ navigation }) => {
   useFocusEffect(
@@ -55,23 +35,22 @@ const ViewPassword = ({ navigation }) => {
     (state) => state.walkthrough.editProfileTextLayout,
   );
   const headerHeight = useSelector((state) => state.walkthrough.headerHeight);
-  const { width, height } = useWindowDimensions();
 
   /**
    * Dimensions for the transparent box around Edit Profile in the side menu
    */
 
   // added 20 for padding, br for border radius
-  const editProfileX = editProfileMenuLayout?.x + br + 20;
+  const editProfileX = editProfileMenuLayout?.x + BR + 20;
   // added header height from home page
   const editProfileY = editProfileMenuLayout?.y + headerHeight;
   // use edit profile text to make sure the box fits all device sizes
   const editProfileWidth =
-    editProfileTextLayout?.width + editProfileTextLayout?.x + 10 - br * 2;
+    editProfileTextLayout?.width + editProfileTextLayout?.x + 10 - BR * 2;
   // added 10 for padding
   const heightPadding = DEVICE_LARGE ? 10 : 18;
   const editProfileHeight =
-    editProfileMenuLayout?.height + heightPadding - br * 2;
+    editProfileMenuLayout?.height + heightPadding - BR * 2;
 
   // subtract 120 because the arrow point is 120 px left inside the svg
   const arrowLeft = editProfileX + editProfileWidth - 105;
@@ -86,23 +65,17 @@ const ViewPassword = ({ navigation }) => {
   const infoBoxTop = arrowTop + 250 - 48;
   return (
     <View style={styles.container}>
-      <Svg
+      <FullScreenHighlightBox
         testID="ViewPasswordWalkthrough"
-        width={width}
-        height={height}
-        viewBox={`0 0 ${width} ${height}`}
-        fill="none"
         onPress={() => {
           navigation.goBack();
         }}
-      >
-        <Path
-          d={`M0 0 V${height} H${width} V0Z M${editProfileX} ${editProfileY} h${editProfileWidth} ${urc} v${editProfileHeight} ${lrc} h${-editProfileWidth} ${llc} v${-editProfileHeight} ${ulc} z`}
-          fill={DARKER_GREY}
-          fillOpacity={0.8}
-          fillRule="evenodd"
-        />
-      </Svg>
+        br={BR}
+        innerWidth={editProfileWidth}
+        innerHeight={editProfileHeight}
+        innerX={editProfileX}
+        innerY={editProfileY}
+      />
       <View
         style={{
           position: 'absolute',
