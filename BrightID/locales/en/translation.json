@@ -515,12 +515,14 @@
     "label": {
       "currentPassword": "Current password",
       "name": "Name",
+      "password": "Password",
       "newPassword": "New password",
       "newPasswordAgain": "Repeat password",
       "socialMediaLink": "Social Media Link"
     },
     "placeholder": {
       "name": "Enter Name",
+      "password": "Password",
       "newPassword": "New password",
       "newPasswordAgain": "Repeat password"
     },

@@ -300,36 +300,52 @@ const ShowEditPassword = () => {
     displayPassword = '*'.repeat(password.length);
   }
 
-  const passwordText = password
-    ? t('profile.text.changePassword')
-    : t('profile.text.setPassword', 'Set password');
-
   return (
     <View style={styles.showEditPasswordContainer}>
       {password ? (
-        <View style={styles.viewPasswordContainer}>
+        <>
+          <View style={styles.viewPasswordContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                setHidePassword(!hidePassword);
+              }}
+            >
+              <Text style={styles.passwordText}>
+                {t('profile.text.viewPassword')}
+              </Text>
+            </TouchableOpacity>
+            <Text style={styles.displayPassword} selectable={true}>
+              {displayPassword}
+            </Text>
+          </View>
           <TouchableOpacity
+            style={styles.changePasswordButton}
             onPress={() => {
-              setHidePassword(!hidePassword);
+              navigation.navigate('ChangePassword');
             }}
           >
             <Text style={styles.passwordText}>
-              {t('profile.text.viewPassword')}
+              {t('profile.text.changePassword')}
             </Text>
           </TouchableOpacity>
-          <Text style={styles.displayPassword} selectable={true}>
-            {displayPassword}
+        </>
+      ) : (
+        <>
+          <TouchableOpacity
+            style={styles.setPasswordButton}
+            onPress={() => {
+              navigation.navigate('ChangePassword');
+            }}
+          >
+            <Text style={styles.setPasswordText}>
+              {t('profile.text.setPassword')}
+            </Text>
+          </TouchableOpacity>
+          <Text style={styles.privacyText}>
+            {t('signup.text.passwordInfo')}
           </Text>
-        </View>
-      ) : null}
-      <TouchableOpacity
-        style={styles.changePasswordButton}
-        onPress={() => {
-          navigation.navigate('ChangePassword');
-        }}
-      >
-        <Text style={styles.passwordText}>{passwordText}</Text>
-      </TouchableOpacity>
+        </>
+      )}
     </View>
   );
 };
@@ -592,15 +608,33 @@ const styles = StyleSheet.create({
   changePasswordButton: {
     marginTop: DEVICE_LARGE ? 12 : 8,
   },
+  setPasswordButton: {
+    marginTop: DEVICE_LARGE ? 12 : 8,
+    alignSelf: 'center',
+  },
   passwordText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[13],
+    color: DARK_BLUE,
+  },
+  setPasswordText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[15],
     color: DARK_BLUE,
   },
   displayPassword: {
     fontFamily: 'Poppins-Regular',
     fontSize: fontSize[13],
     color: BLACK,
+  },
+  privacyText: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: fontSize[11],
+    color: DARKER_GREY,
+    textAlign: 'center',
+    width: '72%',
+    alignSelf: 'center',
+    marginTop: DEVICE_LARGE ? 14 : 12,
   },
   saveContainer: {
     width: '100%',

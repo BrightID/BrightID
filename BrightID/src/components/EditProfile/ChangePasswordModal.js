@@ -100,10 +100,6 @@ const ChangePasswordModal = ({ route, navigation }) => {
     navigation.goBack();
   };
 
-  const headerText = password
-    ? t('profile.text.changePassword')
-    : t('profile.text.setPassword', 'Set password');
-
   return (
     <View style={styles.container}>
       <BlurView
@@ -117,9 +113,6 @@ const ChangePasswordModal = ({ route, navigation }) => {
           <UploadAnimation />
         ) : (
           <>
-            <View>
-              <Text>{headerText}</Text>
-            </View>
             {password ? (
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>
@@ -140,13 +133,21 @@ const ChangePasswordModal = ({ route, navigation }) => {
               </View>
             ) : null}
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>{t('profile.label.newPassword')}</Text>
+              <Text style={styles.label}>
+                {password
+                  ? t('profile.label.newPassword')
+                  : t('profile.label.password')}
+              </Text>
               <TextInput
                 autoCompleteType="password"
                 autoCorrect={false}
                 onChangeText={setNewPassword}
                 value={newPassword}
-                placeholder={t('profile.placeholder.newPassword')}
+                placeholder={
+                  password
+                    ? t('profile.placeholder.newPassword')
+                    : t('profile.placeholder.password')
+                }
                 placeholderTextColor={GREY}
                 secureTextEntry={true}
                 style={styles.textInput}
