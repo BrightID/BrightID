@@ -62,7 +62,6 @@ export const setSigningKey = () => async (
       sig2: sigs[1].sig,
     });
   } catch (err) {
-    recoveryData.sigs = {};
     dispatch(resetRecoverySigs());
     throw new Error('bad sigs');
   }
