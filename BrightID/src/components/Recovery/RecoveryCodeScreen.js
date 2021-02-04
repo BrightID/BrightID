@@ -43,11 +43,13 @@ const RecoveryCodeScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  useEffect(() => {
-    dispatch(pollChannel()).catch((err) => {
-      Alert.alert(t('common.alert.error'), err.message);
-    });
-  }, [dispatch, t]);
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(pollChannel()).catch((err) => {
+        Alert.alert(t('common.alert.error'), err.message);
+      });
+    }, [dispatch, t]),
+  );
 
   useEffect(() => {
     const parseQrString = (err, qrsvg) => {
