@@ -10,6 +10,7 @@ import SelectSocialMediaModal from '@/components/EditProfile/SelectSocialMediaMo
 import ReportReasonModal from '@/components/Connections/ReportReasonModal';
 import SortConnectionsModal from '@/components/Helpers/SortConnectionsModal';
 import ViewPassword from '@/components/Onboarding/Walkthroughs/ViewPassword';
+import RecoveryCooldownInfoModal from '@/components/Recovery/RecoveryCooldownInfoModal';
 
 const Stack = createStackNavigator();
 
@@ -59,6 +60,11 @@ const Modals = () => {
         name="ViewPasswordWalkthrough"
         options={modalOptions}
         component={ViewPassword}
+      />
+      <Stack.Screen
+        name="RecoveryCooldownInfo"
+        options={modalOptions}
+        component={RecoveryCooldownInfoModal}
       />
     </>
   );

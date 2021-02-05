@@ -124,15 +124,12 @@ const TrustedConnectionsScreen = () => {
         }
         await Promise.all(promises);
 
-        Alert.alert(
-          t('common.alert.success'),
-          t(
-            'backup.alert.text.completed',
-            'Social recovery of your BrightID is now enabled',
-          ),
-        );
-
-        navigation.navigate('Home');
+        // show info about cooldown period
+        navigation.navigate('RecoveryCooldownInfo', {
+          successCallback: () => {
+            navigation.navigate('Home');
+          },
+        });
       }
     } catch (err) {
       console.warn(err.message);

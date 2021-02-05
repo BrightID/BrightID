@@ -47,10 +47,26 @@ const TrustlevelModal = ({ route, navigation }: props) => {
         undefined,
         Date.now(),
       );
-      dispatch(setConnectionLevel(connection.id, level));
+      if (
+        connection.level === connection_levels.RECOVERY ||
+        level === connection_levels.RECOVERY
+      ) {
+        // show info about cooldown period
+        navigation.navigate('RecoveryCooldownInfo', {
+          connectionId,
+          successCallback: () => {
+            dispatch(setConnectionLevel(connection.id, level));
+            navigation.goBack();
+          },
+        });
+      } else {
+        dispatch(setConnectionLevel(connection.id, level));
+        navigation.goBack();
+      }
+    } else {
+      // close modal
+      navigation.goBack();
     }
-    // close modal
-    navigation.goBack();
   };
 
   // go back silently if connection does not exist. Should never happen.
