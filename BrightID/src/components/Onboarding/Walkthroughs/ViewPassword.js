@@ -23,6 +23,7 @@ const ViewPassword = ({ navigation }) => {
   );
   const { t } = useTranslation();
 
+  const password = useSelector((state) => state.user.password);
   /**
    * dimensions of edit profile button on the side bar
    * {x, y, width, height}
@@ -87,7 +88,9 @@ const ViewPassword = ({ navigation }) => {
       </View>
       <View style={[styles.infoBox, { left: infoBoxLeft, top: infoBoxTop }]}>
         <Text style={styles.infoText}>
-          {t('walkthroughs.text.viewPassword')}
+          {password
+            ? t('walkthroughs.text.viewPassword')
+            : t('walkthroughs.text.setPassword')}
         </Text>
       </View>
       <TouchableOpacity

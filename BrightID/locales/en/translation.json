@@ -518,8 +518,7 @@
       "password": "Password",
       "newPassword": "New password",
       "newPasswordAgain": "Repeat password",
-      "password": "Password",
-      "passwordAgain": "Password again",
+      "passwordAgain": "Repeat password",
       "socialMediaLink": "Social Media Link"
     },
     "placeholder": {
@@ -638,6 +637,7 @@
   "walkthroughs": {
     "text": {
       "viewPassword": "You can always see your\nBrightID password in here",
+      "setPassword": "You can always set your\nBrightID password in here",
       "gotIt": "Got it!"
     }
   }
