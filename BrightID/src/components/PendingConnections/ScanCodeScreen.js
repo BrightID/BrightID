@@ -26,10 +26,10 @@ import { fontSize } from '@/theme/fonts';
 import {
   channel_types,
   closeChannel,
-} from '@/components/PendingConnectionsScreens/channelSlice';
-import { selectAllUnconfirmedConnectionsByChannelIds } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+} from '@/components/PendingConnections/channelSlice';
+import { selectAllUnconfirmedConnectionsByChannelIds } from '@/components/PendingConnections/pendingConnectionSlice';
 import { parseChannelQrURL } from '@/utils/channels';
-import { joinChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
+import { joinChannel } from '@/components/PendingConnections/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
 
 import i18next from 'i18next';

@@ -25,7 +25,7 @@ import {
   channel_states,
   channel_types,
   closeChannel,
-} from '@/components/PendingConnectionsScreens/channelSlice';
+} from '@/components/PendingConnections/channelSlice';
 import { buildChannelQrUrl } from '@/utils/channels';
 
 /**

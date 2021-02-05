@@ -1,9 +1,9 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
-import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnectionScreen';
+import RecoveringConnectionScreen from '@/components/Onboarding/RecoveryFlow/RecoveringConnectionScreen';
 import SearchConnections from '@/components/Helpers/SearchConnections';
-import TrustedConnectionsScreen from '@/components/Recovery/TrustedConnectionsScreen';
+import TrustedConnectionsScreen from '@/components/Onboarding/RecoveryFlow/TrustedConnectionsScreen';
 import i18next from 'i18next';
 import { headerOptions, AnimatedHeaderTitle } from './helpers';
 

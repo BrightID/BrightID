@@ -4,10 +4,10 @@ import { Dispatch } from 'redux';
 import {
   channel_states,
   channel_types,
-} from '@/components/PendingConnectionsScreens/channelSlice';
+} from '@/components/PendingConnections/channelSlice';
 import ChannelAPI from '@/api/channelService';
 import { connection_levels } from '../src/utils/constants';
-import { pendingConnection_states } from '../src/components/PendingConnectionsScreens/pendingConnectionSlice';
+import { pendingConnection_states } from '../src/components/PendingConnections/pendingConnectionSlice';
 
 declare type getState = () => State;
 
@@ -29,6 +29,7 @@ declare type State = {
   recoveryData: RecoveryData,
   tasks: TasksState,
   user: UserState,
+  walkthrough: WalkthroughState,
 };
 
 declare type AppsState = {
@@ -232,6 +233,16 @@ declare type UserState = {
   id: string,
   password: string,
   secretKey: string,
+};
+
+declare type WalkthroughState = {
+  editProfileLayout: {
+    width?: number,
+    height?: number,
+    x?: number,
+    y?: number,
+  },
+  headerHeight: number,
 };
 
 declare type NotificationsState = {

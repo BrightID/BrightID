@@ -518,6 +518,7 @@
       "password": "Password",
       "newPassword": "New password",
       "newPasswordAgain": "Repeat password",
+      "passwordAgain": "Repeat password",
       "socialMediaLink": "Social Media Link"
     },
     "placeholder": {
@@ -530,7 +531,8 @@
       "changePassword": "Change Password",
       "changeProfilePicture": "Change Profile Picture",
       "setPassword": "Set password",
-      "viewPassword": "View Password"
+      "viewPassword": "View Password",
+      "createPassword": "Create Password"
     }
   },
   "qrcode": {
@@ -630,6 +632,13 @@
       "photoNotShared": "Your photo will never be shared with apps or\nstored on our blockchain.",
       "pleaseAddPhoto": "Please add a photo",
       "whatsYouName": "What do your friends know you by?"
+    }
+  },
+  "walkthroughs": {
+    "text": {
+      "viewPassword": "You can always see your\nBrightID password in here",
+      "setPassword": "You can always set your\nBrightID password in here",
+      "gotIt": "Got it!"
     }
   }
 }

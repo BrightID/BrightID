@@ -17,6 +17,14 @@ export const toggleDrawer = () => {
   navigationRef.current?.dispatch(DrawerActions.toggleDrawer());
 };
 
+export const openDrawer = () => {
+  navigationRef.current?.dispatch(DrawerActions.openDrawer());
+};
+
+export const closeDrawer = () => {
+  navigationRef.current?.dispatch(DrawerActions.closeDrawer());
+};
+
 export const resetHome = () => {
   navigationRef.current?.reset({
     index: 0,

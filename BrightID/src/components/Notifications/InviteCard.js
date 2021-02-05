@@ -17,11 +17,11 @@ import { fontSize } from '@/theme/fonts';
 import { getGroupName } from '@/utils/groups';
 import { acceptInvite, rejectInvite, joinGroup } from '@/actions';
 import api from '@/api/brightId';
-import GroupPhoto from '@/components/GroupsScreens/GroupPhoto';
+import GroupPhoto from '@/components/Groups/GroupPhoto';
 import {
   backupUser,
   backupPhoto,
-} from '@/components/Recovery/thunks/backupThunks';
+} from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import Check from '@/components/Icons/Check';
 import xGrey from '@/static/x_grey.svg';
 

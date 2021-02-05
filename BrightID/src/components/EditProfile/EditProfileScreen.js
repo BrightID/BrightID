@@ -439,7 +439,7 @@ export const EditProfileScreen = ({ navigation }) => {
           ],
         );
       }),
-    [navigation, saveDisabled],
+    [navigation, saveDisabled, t],
   );
 
   return (

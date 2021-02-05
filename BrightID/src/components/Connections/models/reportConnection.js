@@ -2,7 +2,7 @@
 
 import api from '@/api/brightId';
 import { deleteConnection } from '@/actions';
-import { backupUser } from '@/components/Recovery/thunks/backupThunks';
+import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import { connection_levels } from '@/utils/constants';
 
 export const reportConnection = ({

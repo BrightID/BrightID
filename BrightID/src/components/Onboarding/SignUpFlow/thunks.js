@@ -35,7 +35,7 @@ export const savePhoto = (base64Image) => async (
   dispatch(setPhoto({ filename }));
 };
 
-export const saveId = () => async (dispatch: dispatch, getState: getState) => {
+export const saveId = () => (dispatch: dispatch, getState: getState) => {
   let { publicKey } = getState().keypair;
   let id = b64ToUrlSafeB64(publicKey);
 

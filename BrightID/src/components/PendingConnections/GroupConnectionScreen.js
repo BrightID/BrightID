@@ -28,7 +28,7 @@ import { fontSize } from '@/theme/fonts';
 import {
   selectAllPendingConnections,
   selectPendingConnectionById,
-} from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+} from '@/components/PendingConnections/pendingConnectionSlice';
 
 /** HELPERS */
 

@@ -33,7 +33,7 @@ import {
   setPassword,
   updateNotifications,
 } from '@/actions';
-import { backupAppData } from '@/components/Recovery/thunks/backupThunks';
+import { backupAppData } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 
 const UploadAnimation = () => {
   const { t } = useTranslation();

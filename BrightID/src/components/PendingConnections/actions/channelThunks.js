@@ -8,7 +8,7 @@ import {
   updateChannel,
   selectAllChannelIds,
   channel_types,
-} from '@/components/PendingConnectionsScreens/channelSlice';
+} from '@/components/PendingConnections/channelSlice';
 import { selectAllSocialMedia } from '@/components/EditProfile/socialMediaSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
@@ -25,7 +25,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   newPendingConnection,
   selectAllPendingConnectionIds,
-} from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+} from '@/components/PendingConnections/pendingConnectionSlice';
 
 export const createChannel = (channelType: ChannelType) => async (
   dispatch: dispatch,

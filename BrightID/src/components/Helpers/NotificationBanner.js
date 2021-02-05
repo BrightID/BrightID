@@ -15,7 +15,7 @@ import { CONNECTIONS_TYPE } from '@/utils/constants';
 import { DEVICE_LARGE, HEIGHT } from '@/utils/deviceConstants';
 import { LIGHT_GREEN, BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+import { selectAllUnconfirmedConnections } from '@/components/PendingConnections/pendingConnectionSlice';
 import DropDownAlertEnabled from '@/utils/DropDownAlertEnabler';
 
 /* notification types:
