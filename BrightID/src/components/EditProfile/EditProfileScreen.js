@@ -300,10 +300,6 @@ const ShowEditPassword = () => {
     displayPassword = '*'.repeat(password.length);
   }
 
-  const passwordText = password
-    ? t('profile.text.changePassword')
-    : t('profile.text.setPassword', 'Set password');
-
   return (
     <View style={styles.showEditPasswordContainer}>
       {password ? (
@@ -443,7 +439,7 @@ export const EditProfileScreen = ({ navigation }) => {
           ],
         );
       }),
-    [navigation, saveDisabled],
+    [navigation, saveDisabled, t],
   );
 
   return (
@@ -639,13 +635,6 @@ const styles = StyleSheet.create({
     width: '72%',
     alignSelf: 'center',
     marginTop: DEVICE_LARGE ? 14 : 12,
-  },
-  passwordInfo: {
-    fontFamily: 'Poppins-Regular',
-    fontSize: fontSize[12],
-    color: BLACK,
-    textAlign: 'center',
-    marginTop: 10,
   },
   saveContainer: {
     width: '100%',
