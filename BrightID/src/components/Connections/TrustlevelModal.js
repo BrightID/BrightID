@@ -10,15 +10,22 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { BlurView } from '@react-native-community/blur';
-import { connection_levels } from '@/utils/constants';
+import {
+  connection_levels,
+  RECOVERY_COOLDOWN_DURATION,
+} from '@/utils/constants';
 import { BLACK, WHITE, GREEN } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from 'react-redux';
 import api from '@/api/brightId';
 import { setConnectionLevel } from '@/actions/connections';
+import { calculateCooldownPeriod } from '@/utils/recovery';
+import {
+  connectionByIdSelector,
+  recoveryConnectionsSelector,
+} from '@/utils/connectionsSelector';
 import TrustlevelSlider from './TrustlevelSlider';
-import { connectionByIdSelector } from '../../utils/connectionsSelector';
 
 type props = {
   route: any,
@@ -31,6 +38,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
   const connection: connection = useSelector((state: State) =>
     connectionByIdSelector(state, connectionId),
   );
+  const recoveryConnections = useSelector(recoveryConnectionsSelector);
   const dispatch = useDispatch();
   const [level, setLevel] = useState(
     connection ? connection.level : connection_levels.JUST_MET,
@@ -38,8 +46,21 @@ const TrustlevelModal = ({ route, navigation }: props) => {
   const { t } = useTranslation();
 
   const saveLevelHandler = async () => {
+    let cooldownPeriod = 0;
+    let addedRecovery = false;
     if (connection.level !== level) {
       console.log(`Setting connection level '${level}' for ${connection.name}`);
+      if (level === connection_levels.RECOVERY) {
+        addedRecovery = true;
+        // Get cooldown period for this change
+        cooldownPeriod = calculateCooldownPeriod({
+          recoveryConnections,
+          connection,
+        });
+      } else {
+        // removing recovery connection. Cooldown period always applies
+        cooldownPeriod = RECOVERY_COOLDOWN_DURATION;
+      }
       await api.addConnection(
         myId,
         connection.id,
@@ -47,25 +68,17 @@ const TrustlevelModal = ({ route, navigation }: props) => {
         undefined,
         Date.now(),
       );
-      if (
-        connection.level === connection_levels.RECOVERY ||
-        level === connection_levels.RECOVERY
-      ) {
-        // show info about cooldown period
-        navigation.navigate('RecoveryCooldownInfo', {
-          connectionId,
-          successCallback: () => {
-            dispatch(setConnectionLevel(connection.id, level));
-            navigation.goBack();
-          },
-        });
-      } else {
-        dispatch(setConnectionLevel(connection.id, level));
-        navigation.goBack();
-      }
-    } else {
-      // close modal
-      navigation.goBack();
+      dispatch(setConnectionLevel(connection.id, level));
+    }
+    // close modal
+    navigation.goBack();
+    if (cooldownPeriod > 0) {
+      // show info about cooldown period
+      navigation.navigate('RecoveryCooldownInfo', {
+        connectionId,
+        cooldownPeriod,
+        addedRecovery,
+      });
     }
   };
 

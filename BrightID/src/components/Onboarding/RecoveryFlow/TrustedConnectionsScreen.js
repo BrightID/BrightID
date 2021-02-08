@@ -23,6 +23,7 @@ import EmptyList from '@/components/Helpers/EmptyList';
 import { connection_levels } from '@/utils/constants';
 import api from '@/api/brightId';
 import { setConnectionLevel } from '@/actions/connections';
+import { calculateCooldownPeriod } from '@/utils/recovery';
 import TrustedConnectionCard from './TrustedConnectionCard';
 
 /**
@@ -45,9 +46,9 @@ const TrustedConnectionsScreen = () => {
   const { t } = useTranslation();
   const myId = useSelector((state) => state.user.id);
   const connections = useSelector(connectionsSelector);
-  const trustedConnections = useSelector(recoveryConnectionsSelector);
+  const recoveryConnections = useSelector(recoveryConnectionsSelector);
   const [selectedConnections, setSelectedConnections] = useState(
-    trustedConnections.map((item) => item.id),
+    recoveryConnections.map((item) => item.id),
   );
   const [updateInProgress, setUpdateInProgress] = useState(false);
 
@@ -88,48 +89,56 @@ const TrustedConnectionsScreen = () => {
             selectedConnections.includes(item.id) &&
             item.level !== connection_levels.RECOVERY,
         );
-        const connectionsToDowngrade = trustedConnections.filter(
+        const connectionsToDowngrade = recoveryConnections.filter(
           (item) => !selectedConnections.includes(item.id),
         );
 
-        // apply changes
-        const promises = [];
-        for (const item of connectionsToUpgrade) {
-          console.log(`Setting ${item.name} to RECOVERY`);
-          promises.push(
-            api.addConnection(
-              myId,
-              item.id,
-              connection_levels.RECOVERY,
-              undefined,
-              Date.now(),
-            ),
-          );
-          dispatch(setConnectionLevel(item.id, connection_levels.RECOVERY));
-        }
-        for (const item of connectionsToDowngrade) {
-          console.log(`Setting ${item.name} to ALREADY_KNOWN`);
-          promises.push(
-            api.addConnection(
-              myId,
-              item.id,
-              connection_levels.ALREADY_KNOWN,
-              undefined,
-              Date.now(),
-            ),
-          );
-          dispatch(
-            setConnectionLevel(item.id, connection_levels.ALREADY_KNOWN),
-          );
-        }
-        await Promise.all(promises);
+        const cooldownPeriod = calculateCooldownPeriod({ recoveryConnections });
 
-        // show info about cooldown period
-        navigation.navigate('RecoveryCooldownInfo', {
-          successCallback: () => {
+        if (connectionsToUpgrade.length || connectionsToDowngrade.length) {
+          // apply changes
+          const promises = [];
+          for (const item of connectionsToUpgrade) {
+            console.log(`Setting ${item.name} to RECOVERY`);
+            promises.push(
+              api.addConnection(
+                myId,
+                item.id,
+                connection_levels.RECOVERY,
+                undefined,
+                Date.now(),
+              ),
+            );
+            dispatch(setConnectionLevel(item.id, connection_levels.RECOVERY));
+          }
+          for (const item of connectionsToDowngrade) {
+            console.log(`Setting ${item.name} to ALREADY_KNOWN`);
+            promises.push(
+              api.addConnection(
+                myId,
+                item.id,
+                connection_levels.ALREADY_KNOWN,
+                undefined,
+                Date.now(),
+              ),
+            );
+            dispatch(
+              setConnectionLevel(item.id, connection_levels.ALREADY_KNOWN),
+            );
+          }
+          await Promise.all(promises);
+
+          // show info about cooldown period
+          if (cooldownPeriod > 0) {
+            navigation.navigate('RecoveryCooldownInfo', {
+              successCallback: () => {
+                navigation.navigate('Home');
+              },
+            });
+          } else {
             navigation.navigate('Home');
-          },
-        });
+          }
+        }
       }
     } catch (err) {
       console.warn(err.message);

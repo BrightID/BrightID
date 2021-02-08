@@ -9,23 +9,26 @@ import { Trans, useTranslation } from 'react-i18next';
 import { WHITE, BLUE, BLACK, DARKER_GREY, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import Info from '@/components/Icons/Info';
-import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
-import { connection_levels } from '@/utils/constants';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
+import { connectionByIdSelector } from '@/utils/connectionsSelector';
+import { RECOVERY_COOLDOWN_DURATION } from '@/utils/constants';
 
 type props = {
   route: any,
   navigation: any,
 };
 
-// one week cooldown
-const coolDownDuration = 7 * 24 * 60 * 60 * 1000;
-
 const RecoveryCooldownInfoModal = ({ route, navigation }: props) => {
-  const { successCallback } = route.params;
+  const { successCallback, cooldownPeriod, connectionId } = route.params;
   const { t } = useTranslation();
+  const connection: connection = useSelector((state: State) =>
+    connectionByIdSelector(state, connectionId),
+  );
 
-  const cooldownPeriod = moment.duration(coolDownDuration).humanize();
+  const cooldownPeriodString = moment
+    .duration(cooldownPeriod || RECOVERY_COOLDOWN_DURATION)
+    .humanize();
 
   const dismissModal = () => {
     // leave modal and execute callback function
@@ -34,6 +37,39 @@ const RecoveryCooldownInfoModal = ({ route, navigation }: props) => {
       successCallback();
     }
   };
+
+  let messageTextConnection;
+  if (connection) {
+    messageTextConnection = (
+      <Text style={styles.messageText}>
+        <Trans
+          i18nKey="recoveryCooldownModal.text.connection"
+          defaults="You just changed the recovery level of <bold>{{name}}</bold>."
+          values={{
+            name: connection.name,
+          }}
+          components={{
+            bold: <Text style={{ fontFamily: 'Poppins-Bold' }} />,
+          }}
+        />
+      </Text>
+    );
+  }
+
+  const messageTextGeneric = (
+    <Text style={styles.messageText}>
+      <Trans
+        i18nKey="recoveryCooldownModal.text.generic"
+        defaults="Note that this change takes effect after a cooldown period of <period>{{ cooldownPeriod }}</period> for security reasons."
+        values={{
+          cooldownPeriod: cooldownPeriodString,
+        }}
+        components={{
+          period: <Text style={styles.period} />,
+        }}
+      />
+    </Text>
+  );
 
   return (
     <View style={styles.container} testID="RecoveryCooldownInfo">
@@ -58,30 +94,8 @@ const RecoveryCooldownInfoModal = ({ route, navigation }: props) => {
           </View>
         </View>
         <View style={styles.message}>
-          <Text style={styles.messageText}>
-            <Trans
-              i18nKey="recoveryCooldownModal.text.paragraph1"
-              defaults="You just added or removed the connection level <bold>{{ levelString }}</bold> to/from one of your connections."
-              values={{
-                levelString: connectionLevelStrings[connection_levels.RECOVERY],
-              }}
-              components={{
-                bold: <Text style={{ fontFamily: 'Poppins-Bold' }} />,
-              }}
-            />
-          </Text>
-          <Text style={styles.messageText}>
-            <Trans
-              i18nKey="recoveryCooldownModal.text.paragraph2"
-              defaults="Note that for increased security of your BrightID there is a cooldown period of <period>{{ cooldownPeriod }}</period> until this change takes effect."
-              values={{
-                cooldownPeriod,
-              }}
-              components={{
-                period: <Text style={styles.period} />,
-              }}
-            />
-          </Text>
+          {messageTextConnection}
+          {messageTextGeneric}
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -153,7 +167,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     alignItems: 'center',
-    justifyContent: 'center',
     marginTop: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
