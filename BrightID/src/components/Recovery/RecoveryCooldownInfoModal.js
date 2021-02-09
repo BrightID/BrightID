@@ -39,6 +39,7 @@ const RecoveryCooldownInfoModal = ({ route, navigation }: props) => {
   };
 
   let messageTextConnection;
+  let messageTextCooldown;
   if (connection) {
     messageTextConnection = (
       <Text style={styles.messageText}>
@@ -54,22 +55,37 @@ const RecoveryCooldownInfoModal = ({ route, navigation }: props) => {
         />
       </Text>
     );
+    messageTextCooldown = (
+      <Text style={styles.messageText}>
+        <Trans
+          i18nKey="recoveryCooldownModal.text.cooldown"
+          defaults="Note that this change takes effect after a cooldown period of <period>{{ cooldownPeriod }}</period> for security reasons."
+          values={{
+            cooldownPeriod: cooldownPeriodString,
+          }}
+          components={{
+            period: <Text style={styles.period} />,
+          }}
+        />
+      </Text>
+    );
+  } else {
+    // show a more generic cooldown message as connection and exact period is not known
+    messageTextCooldown = (
+      <Text style={styles.messageText}>
+        <Trans
+          i18nKey="recoveryCooldownModal.text.cooldownGeneric"
+          defaults="Note that change of recovery connections takes effect after a cooldown period of up to <period>{{ cooldownPeriod }}</period> for security reasons."
+          values={{
+            cooldownPeriod: cooldownPeriodString,
+          }}
+          components={{
+            period: <Text style={styles.period} />,
+          }}
+        />
+      </Text>
+    );
   }
-
-  const messageTextGeneric = (
-    <Text style={styles.messageText}>
-      <Trans
-        i18nKey="recoveryCooldownModal.text.generic"
-        defaults="Note that this change takes effect after a cooldown period of <period>{{ cooldownPeriod }}</period> for security reasons."
-        values={{
-          cooldownPeriod: cooldownPeriodString,
-        }}
-        components={{
-          period: <Text style={styles.period} />,
-        }}
-      />
-    </Text>
-  );
 
   return (
     <View style={styles.container} testID="RecoveryCooldownInfo">
@@ -95,7 +111,7 @@ const RecoveryCooldownInfoModal = ({ route, navigation }: props) => {
         </View>
         <View style={styles.message}>
           {messageTextConnection}
-          {messageTextGeneric}
+          {messageTextCooldown}
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
