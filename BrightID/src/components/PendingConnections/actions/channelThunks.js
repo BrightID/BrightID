@@ -76,7 +76,8 @@ export const joinChannel = (channel: Channel) => async (
   // check to see if channel exists
   const channelIds = selectAllChannelIds(getState());
   if (channelIds.includes(channel.id)) {
-    throw new Error('Channel already exists');
+    console.log(`Channel ${channel.id} already joined`);
+    return;
   }
 
   // limit too high channel Time-To-Live
