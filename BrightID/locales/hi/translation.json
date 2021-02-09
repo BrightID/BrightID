@@ -35,8 +35,12 @@
     "progress": {
       "title": "समापन:"
     },
+    "setupBackup": {
+      "description": "अपने डेटा का बैकअप सक्षम करने के लिए पासवर्ड सेट करें",
+      "title": "बैकअप पासवर्ड सेट करें"
+    },
     "setupTrustedConnections": {
-      "description": "सोशल अकाउंट पुनर्प्राप्ति को सक्षम करने के लिए अपने विश्वसनीय कनेक्शन सेट करें",
+      "description": "सोशल अकाउंट रिकवरी को सक्षम करने के लिए अपने रिकवरी कनेक्शन सेट करें",
       "title": "शोशल रिकवरी सेट करें"
     }
   },
@@ -76,24 +80,33 @@
     "alert": {
       "text": {
         "backupSuccess": "बैकअप सफलतापूर्वक पूरा हुआ!",
-        "needThreeTrusted": "आपको बैकअप के लिए कम से कम तीन विश्वसनीय कनेक्शन चाहिए।"
+        "completed": "आपके BrightID की सोशल रिकवरी अब सक्षम है",
+        "needThreeTrusted": "आपको बैकअप के लिए कम से कम तीन रिकवरी कनेक्शन चाहिए।"
       }
     },
     "button": {
       "next": "अगला",
+      "save": "रिकवरी कनेक्शन सेट करें",
       "startBackup": "बैकअप शुरू करें"
     },
     "header": {
       "backup": "बैकअप",
-      "trustedConnections": "विश्वसनीय कनेक्शन"
+      "trustedConnections": "रिकवरी कनेक्शन"
     },
     "placeholder": {
       "confirmPassword": "पासवर्ड की पुष्टि करें"
     },
     "text": {
-      "chooseTrustedConnections": "अपने BrightID का बैकअप लेने के लिए तीन या अधिक विश्वसनीय कनेक्शन चुनें।",
+      "chooseTrustedConnections": "अपने BrightID का बैकअप लेने के लिए तीन या अधिक रिकवरी कनेक्शन चुनें।",
       "enterPassword": "अपना बैकअप डेटा एन्क्रिप्ट करने के लिए एक पासवर्ड दर्ज करें:",
       "noConnections": "कोई कनेक्शन नहीं"
+    }
+  },
+  "channel": {
+    "alert": {
+      "text": {
+        "localOutdated": "ग्राहक संस्करण पुराना है - कृपया अपने ग्राहक को अपडेट करें और पुनः प्रयास करें"
+      }
     }
   },
   "common": {
@@ -122,7 +135,7 @@
         "lostKeys": "कृपया एक नया BrightID बनाएं या अपने पिछले BrightID को पुनर्प्राप्त करने का प्रयास करें",
         "passwordMatch": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
         "passwordShort": "आपका पासवर्ड कम से कम 8 वर्ण का होना चाहिए।",
-        "trustedSigned": "आपके विश्वसनीय कनेक्शनों में से एक ने आपके अनुरोध को स्वीकार किया है"
+        "trustedSigned": "आपके रिकवरी कनेक्शनों में से एक ने आपके अनुरोध को स्वीकार किया है"
       },
       "title": {
         "lostKeys": "हमने डिवाइस से BrightID कीपर खो दिया है",
@@ -209,7 +222,7 @@
       "connections": "कनेक्शन"
     },
     "label": {
-      "currentConnectionLevel": "वर्तमान कनेक्शन स्तर",
+      "currentConnectionLevel": "कनेक्शन स्तर",
       "newProfile": "नया प्रोफाइल",
       "oldProfile": "पुराना प्रोफ़ाइल"
     },
@@ -392,13 +405,15 @@
   },
   "notificationBar": {
     "text": {
+      "backupPassword": "अपने डेटा का बैकअप सक्षम करने के लिए एक पासवर्ड सेट करें",
       "pendingConnections": "आपके पास {{count}} लंबित कनेक्शन है",
       "pendingConnections_plural": "आपके पास {{count}} लंबित कनेक्शन है",
-      "socialRecovery": "अपने BrightID की सामाजिक पुनर्प्राप्ति को सक्षम करने के लिए कृपया अपने विश्वसनीय कनेक्शन का चयन करें"
+      "socialRecovery": "अपने BrightID की सोशल रिकवरी को सक्षम करने के लिए रिकवरी कनेक्शन चुनें"
     },
     "title": {
-      "pendingConnection": "कनेक्शन की पुष्टि करें",
-      "socialRecovery": "बैकअप और सोशल रिकवरी"
+      "backupPassword": "बैकअप पासवर्ड सेट करें",
+      "pendingConnection": "कनेक्शन को कंफर्म करें",
+      "socialRecovery": "सोशल रिकवरी सेट करें"
     }
   },
   "notifications": {
@@ -414,6 +429,10 @@
       }
     },
     "item": {
+      "msg": {
+        "backupBrightId": "अपने डेटा के एन्क्रिप्टेड बैकअप को सक्षम करने के लिए एक पासवर्ड सेट करें",
+        "socialRecovery": "अपने BrightID की सोशल रिकवरी को सक्षम करने के लिए रिकवरी कनेक्शन चुनें"
+      },
       "text": {
         "backupBrightId": "अपने विश्वसनीय कनेक्शन चुनें",
         "pendingConnections": "आपके पास {{count}} अपुष्ट कनेक्शन है",
@@ -421,7 +440,8 @@
         "pendingGroupInvite": "{{name}} ने आपको शामिल होने के लिए आमंत्रित किया है"
       },
       "title": {
-        "backupBrightId": "बैकअप BrightID"
+        "backupBrightId": "बैकअप पासवर्ड सेट करें",
+        "socialRecovery": "सोशल रिकवरी सेट करें"
       }
     },
     "tab": {
@@ -437,14 +457,18 @@
   },
   "onboarding": {
     "button": {
-      "getStarted": "शुरू"
+      "create": "मेरा BrightID बनाएं",
+      "getStarted": "शुरू",
+      "recover": "रिकवरी BrightID"
     },
     "label": {
       "maintainPrivacy": "गोपनीयता बनाए रखें"
     },
     "text": {
+      "congratulations": "आपका शुक्रिया! \nआपका BrightID बन चुका है। \nअब कनेक्शन बनाने का समय है।",
       "intro": "<text>BrightID उन लोगों का उपयोग करता है जिन्हें आप जानते हैं</text><text>एक-खाता-प्रति-व्यक्ति को लागू करने के लिए </text><text> जैसे महत्वपूर्ण अनुप्रयोगों के लिए</text><text>मतदान और सार्वभौमिक बुनियादी आय।</text>",
-      "privacy": "<text> साबित करें कि आप अपनी गोपनीयता को संरक्षित करते हुए </text><text>एक अद्वितीय व्यक्ति हैं</text>"
+      "privacy": "<text> साबित करें कि आप अपनी गोपनीयता को संरक्षित करते हुए </text><text>एक अद्वितीय व्यक्ति हैं</text>",
+      "register": "अपना खुद का बनाने के लिए रजिस्टर करें \nडिजिटल पहचान"
     }
   },
   "pendingConnection": {
@@ -483,6 +507,7 @@
       "rating": "आपका जवाब हमें हमलों को रोकने में मदद करेगा"
     },
     "title": {
+      "confirmationTotal": "{{confirmed}} /{{total}}पुष्टि हो गया",
       "connectionRequest": "कनेक्शन का अनुरोध"
     }
   },
@@ -520,6 +545,7 @@
     "text": {
       "changePassword": "पासवर्ड बदलें",
       "changeProfilePicture": "प्रोफ़ाइल फोटो बदलें",
+      "setPassword": "पासवर्ड सेट करें",
       "viewPassword": "पासवर्ड देखें"
     }
   },
@@ -565,8 +591,8 @@
   },
   "recovery": {
     "text": {
-      "additionalInfo": "आपके विश्वसनीय कनेक्शन को आपके BrightID को पुनर्प्राप्त करने में मदद करने के लिए इसे स्कैन करने की आवश्यकता होगी",
-      "askTrustedConnections": "कृपया इस क्यूआर कोड को अपने विश्वसनीय कनेक्शनों को दिखाएं",
+      "additionalInfo": "आपके रिकवरी कनेक्शन को आपके BrightID को पुनर्प्राप्त करने में मदद करने के लिए इसे स्कैन करने की आवश्यकता होगी",
+      "askTrustedConnections": "कृपया इस क्यूआर कोड को अपने रिकवरी कनेक्शनों को दिखाएं",
       "signatures": "{{count}} / 2 हस्ताक्षर",
       "signatures_plural": "{{count}} / 2 हस्ताक्षर"
     }
@@ -574,7 +600,7 @@
   "restore": {
     "alert": {
       "text": {
-        "notTrusted": "आपका कोई मित्र आपके विश्वसनीय कनेक्शन की सूची में नहीं है",
+        "notTrusted": "आपका कोई मित्र आपके रिकवरी कनेक्शन की सूची में नहीं है",
         "requestRecovering": "आपका अनुरोध सफलतापूर्वक सबमिट किया गया इस अकाउंट को पुनर्प्राप्त करने में मदद करने में मदद करे!",
         "restoreConfirm": "क्या {{name}} वह अकाउंट जिसे आप पुनर्प्राप्त करने में मदद कर रहे हैं?",
         "restoreSuccess": "आपका खाता सफलतापूर्वक पुनर्प्राप्त हो गया!"
@@ -607,7 +633,9 @@
     "button": {
       "addPhoto": "फोटो जोड़ो",
       "createAccount": "मेरी BrightID बनाये",
-      "recoverAccount": "BrightID पुनर्प्राप्त करें"
+      "recoverAccount": "BrightID पुनर्प्राप्त करें",
+      "skip": "इसे छोड़ें & इसे बाद में करें",
+      "submit": "प्रस्तुत"
     },
     "header": {
       "title": "साइन अप करें"
