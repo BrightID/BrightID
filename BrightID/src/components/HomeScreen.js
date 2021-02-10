@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Image,
   Linking,
@@ -27,6 +27,9 @@ import Camera from '@/components/Icons/Camera';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
+import { verifiedConnectionsSelector } from '@/utils/connectionsSelector';
+import { setHeaderHeight } from '@/reducer/walkthroughSlice';
+
 import { version as app_version } from '../../package.json';
 
 /**
@@ -48,12 +51,6 @@ export const verifiedSelector = createSelector(
   (verifications) => verifications.includes('BrightID'),
 );
 
-export const verifiedConnections = createSelector(
-  (state) => state.connections.connections,
-  (connections) =>
-    connections.filter((conn) => conn.status === 'verified').length,
-);
-
 /** HomeScreen Component */
 
 export const HomeScreen = (props) => {
@@ -63,7 +60,7 @@ export const HomeScreen = (props) => {
   const name = useSelector((state) => state.user.name);
   const photoFilename = useSelector((state) => state.user.photo.filename);
   const groupsCount = useSelector((state) => state.groups.groups.length);
-  const connectionsCount = useSelector(verifiedConnections);
+  const connectionsCount = useSelector(verifiedConnectionsSelector).length;
   const linkedContextsCount = useSelector(linkedContextCountSelector);
   const verified = useSelector(verifiedSelector);
 
@@ -77,6 +74,10 @@ export const HomeScreen = (props) => {
       retrieveImage(photoFilename).then(setProfilePhoto);
     }, [dispatch, photoFilename]),
   );
+
+  useEffect(() => {
+    dispatch(setHeaderHeight(headerHeight));
+  }, [dispatch, headerHeight]);
 
   const { showActionSheetWithOptions } = useActionSheet();
 
@@ -152,6 +153,8 @@ export const HomeScreen = (props) => {
       return null;
     }
   };
+
+  console.log('RENDERING HOME PAGE');
 
   return (
     // let verifications = ['BrightID'];

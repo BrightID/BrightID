@@ -57,13 +57,44 @@ const skipPassword = async () => {
   await element(by.id('skipBtn')).tap();
 };
 
-const createBrightID = async (name: string = testUserName) => {
+const setPassword = async () => {
+  const password = '12345678';
+  await expect(element(by.id('PasswordScreen'))).toBeVisible();
+
+  await element(by.id('password')).tap();
+  await element(by.id('password')).replaceText(password);
+  await element(by.id('password')).tapReturnKey();
+
+  await element(by.id('confirmpassword')).tap();
+  await element(by.id('confirmpassword')).replaceText(password);
+  await element(by.id('confirmpassword')).tapReturnKey();
+
+  await expect(element(by.id('submitBtn'))).toExist();
+  await element(by.id('submitBtn')).tap();
+};
+
+const skipWalkthrough = async () => {
+  await expect(element(by.id('ViewPasswordWalkthrough'))).toBeVisible();
+  await expect(element(by.id('ViewPasswordGotIt'))).toExist();
+  await element(by.id('ViewPasswordGotIt')).tap();
+  await expect(element(by.id('BrightIdLogo'))).toExist();
+  await element(by.id('BrightIdLogo')).tap();
+};
+
+const createBrightID = async (
+  name: string = testUserName,
+  withPassword: boolean = false,
+) => {
   await acceptEula();
   await createKeypair();
   await addName(name);
   await addPhoto();
-  // skip password
-  await skipPassword();
+  if (withPassword) {
+    await setPassword();
+  } else {
+    await skipPassword();
+  }
+  await skipWalkthrough();
   // should end up at home screen
   await expectHomescreen();
   return name;
@@ -94,6 +125,12 @@ const createFakeConnection = async (doConfirm: boolean = true) => {
 
 const expectHomescreen = async () => {
   await waitFor(element(by.id('homeScreen')))
+    .toBeVisible()
+    .withTimeout(20000);
+};
+
+const expectNotificationsScreen = async () => {
+  await waitFor(element(by.id('NotificationsScreen')))
     .toBeVisible()
     .withTimeout(20000);
 };
@@ -286,6 +323,7 @@ export {
   createBrightID,
   createFakeConnection,
   expectHomescreen,
+  expectNotificationsScreen,
   expectConnectionsScreen,
   expectConnectionScreen,
   expectGroupsScreen,

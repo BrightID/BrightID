@@ -22,7 +22,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import ViewPager from '@react-native-community/viewpager';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+import { selectAllUnconfirmedConnections } from '@/components/PendingConnections/pendingConnectionSlice';
 import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
 import { WHITE, GREY, DARK_GREY, BLACK, ORANGE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
@@ -140,14 +140,14 @@ export const PendingConnectionsScreen = () => {
     };
   }, [pendingConnections.length, navigation]);
 
-  /** 
+  /**
     the list should only re render sparingly for performance and continuity
   */
   const PendingConnectionList = useMemo(() => {
     const renderView = (item, index) => {
       const last = index === pendingConnectionsToDisplay.length - 1;
       const moveToNext = () => {
-        /** 
+        /**
         setting viewpager active index zero will trigger the list to re - render
         */
         last
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
     borderBottomLeftRadius: 58,
     borderBottomRightRadius: 58,
-    marginBottom: -52,
+    marginBottom: -80,
     zIndex: 10,
     overflow: 'hidden',
   },

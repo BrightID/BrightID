@@ -9,7 +9,7 @@ import i18next from 'i18next';
 import {
   removeChannel,
   selectChannelById,
-} from '@/components/PendingConnectionsScreens/channelSlice';
+} from '@/components/PendingConnections/channelSlice';
 import { decryptData } from '@/utils/cryptoHelper';
 import api from '@/api/brightId';
 import { Alert } from 'react-native';

@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,21 +13,46 @@ import {
 import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { ORANGE, BLACK, WHITE, DARKER_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_OS } from '@/utils/deviceConstants';
 import { recoverData } from './thunks/recoveryThunks';
+import { CHANNEL_POLL_INTERVAL, clearChannel } from './thunks/channelThunks';
 
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
+
+// clear channel after this time
+const channelTimeout = CHANNEL_POLL_INTERVAL * 3.1;
 
 const RestoreScreen = () => {
   const [pass, setPass] = useState('');
   const [restoreInProgress, setRestoreInProgress] = useState(false);
+  const [disabled, setDisabled] = useState(true);
+  const [timer, setTimer] = useState(Math.ceil(channelTimeout / 1000));
 
   const { t } = useTranslation();
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
+  useFocusEffect(
+    useCallback(() => {
+      // disable buttons until 3 passes of the the poll channel to make sure all data is downloaded
+      const t = setTimeout(() => {
+        clearChannel();
+        setDisabled(false);
+      }, channelTimeout);
+
+      // display to user how long they are waiting for the button to be displayed
+      const i = setInterval(() => {
+        setTimer((t) => (t > 0 ? t - 1 : 0));
+      }, 1000);
+      return () => {
+        clearTimeout(t);
+        clearInterval(i);
+      };
+    }, []),
+  );
 
   const restoreCompleted = async () => {
     Alert.alert(
@@ -113,20 +138,23 @@ const RestoreScreen = () => {
               <TouchableOpacity
                 style={[
                   styles.submitButton,
-                  pass.length < 1 ? { opacity: 0.5 } : {},
+                  pass.length < 1 || disabled ? { opacity: 0.5 } : {},
                 ]}
                 onPress={restore}
                 accessibilityLabel="submit"
-                disabled={pass.length < 1}
+                disabled={pass.length < 1 || disabled}
               >
                 <Text style={styles.submitText}>Submit</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={styles.skipButton}
+                style={[styles.skipButton, disabled ? { opacity: 0.5 } : {}]}
                 onPress={skip}
                 accessibilityLabel="skip"
+                disabled={disabled}
               >
-                <Text style={styles.skipText}>Skip</Text>
+                <Text style={styles.skipText}>
+                  {disabled ? `... ${timer}` : t('restore.text.skip')}
+                </Text>
               </TouchableOpacity>
             </View>
           </>
@@ -138,7 +166,9 @@ const RestoreScreen = () => {
               type="Wave"
               color={ORANGE}
             />
-            <Text style={styles.textInfo}>Downloading data ...</Text>
+            <Text style={styles.textInfo}>
+              {t('restore.text.downloadingData')}
+            </Text>
           </View>
         )}
       </Container>

@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   StatusBar,
   StyleSheet,
@@ -33,6 +33,7 @@ export const PasswordScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { t } = useTranslation();
+  const passwordInput = useRef(null);
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -45,10 +46,15 @@ export const PasswordScreen = () => {
       if (password.length < PASSWORD_LENGTH) {
         // using array to indicate where to display the message
         setErrors([`Password must be ${PASSWORD_LENGTH} characters`]);
+        setPassword('');
+        setConfirmPassword('');
+        passwordInput.current?.focus();
       } else if (password !== confirmPassword) {
-        console.log(password, confirmPassword);
         // using array to indicate where to display the message
         setErrors([null, 'Passwords must match']);
+        setPassword('');
+        setConfirmPassword('');
+        passwordInput.current?.focus();
       } else {
         // all good
         setErrors([]);
@@ -67,7 +73,8 @@ export const PasswordScreen = () => {
     navigation.navigate('OnboardSuccess');
   };
 
-  const disabled = !password || !confirmPassword;
+  const submitDisabled = !password || !confirmPassword;
+  const skipDisabled = password && confirmPassword;
   return (
     <>
       <StatusBar
@@ -106,6 +113,7 @@ export const PasswordScreen = () => {
               placeholder={t('signup.placeholder.password')}
               placeholderTextColor={DARKER_GREY}
               blurOnSubmit={true}
+              ref={passwordInput}
             />
             {errors[0] ? (
               <Text style={styles.errorText}>{errors[0]}</Text>
@@ -137,20 +145,22 @@ export const PasswordScreen = () => {
         </View>
         <View style={styles.submitContainer}>
           <TouchableOpacity
-            style={[styles.submitBtn, { opacity: disabled ? 0.7 : 1 }]}
+            testID="submitBtn"
+            style={[styles.submitBtn, { opacity: submitDisabled ? 0.7 : 1 }]}
             onPress={handleSubmit}
             accessibilityLabel={t('signup.button.submit')}
-            disabled={disabled}
+            disabled={submitDisabled}
           >
             <Text style={styles.submitBtnText}>
               {t('signup.button.submit')}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.skipBtn}
+            style={[styles.skipBtn, { opacity: skipDisabled ? 0.7 : 1 }]}
             onPress={handleSkip}
             accessibilityLabel={t('signup.button.skip')}
             testID="skipBtn"
+            disabled={skipDisabled}
           >
             <Text style={styles.skipBtnText}>{t('signup.button.skip')}</Text>
           </TouchableOpacity>

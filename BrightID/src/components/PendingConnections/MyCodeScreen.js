@@ -32,13 +32,13 @@ import {
   closeChannel,
   setDisplayChannelType,
   selectAllActiveChannelIdsByType,
-} from '@/components/PendingConnectionsScreens/channelSlice';
+} from '@/components/PendingConnections/channelSlice';
 import {
   selectAllPendingConnectionsByChannelIds,
   selectAllUnconfirmedConnectionsByChannelIds,
-} from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+} from '@/components/PendingConnections/pendingConnectionSlice';
 
-import { createChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
+import { createChannel } from '@/components/PendingConnections/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
 import { QrCode } from './QrCode';
 

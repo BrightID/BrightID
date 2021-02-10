@@ -6,7 +6,7 @@ import { Alert } from 'react-native';
 import { uInt8ArrayToB64, b64ToUrlSafeB64 } from '@/utils/encoding';
 import { encryptData } from '@/utils/cryptoHelper';
 import { createRandomId } from '@/utils/channels';
-import { selectChannelById } from '@/components/PendingConnectionsScreens/channelSlice';
+import { selectChannelById } from '@/components/PendingConnections/channelSlice';
 import { names } from '@/utils/fakeNames';
 import { connectFakeUsers } from '@/utils/fakeHelper';
 import api from '@/api/brightId';

@@ -21,11 +21,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { ORANGE, BLACK, WHITE, LIGHT_BLACK, DARKER_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import {
-  pollChannel,
-  clearChannel,
-  CHANNEL_POLL_INTERVAL,
-} from './thunks/channelThunks';
+import { pollChannel } from './thunks/channelThunks';
 
 /**
  * Recovery Code screen of BrightID
@@ -39,7 +35,9 @@ const RecoveryCodeScreen = () => {
 
   const recoveryData = useSelector((state) => state.recoveryData);
 
-  const count = Object.values(recoveryData?.sigs).length;
+  const sigCount = recoveryData.sigs
+    ? Object.values(recoveryData.sigs).length
+    : 0;
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -50,9 +48,6 @@ const RecoveryCodeScreen = () => {
       dispatch(pollChannel()).catch((err) => {
         Alert.alert(t('common.alert.error'), err.message);
       });
-      return () => {
-        clearChannel();
-      };
     }, [dispatch, t]),
   );
 
@@ -70,22 +65,20 @@ const RecoveryCodeScreen = () => {
     }
   }, [recoveryData]);
 
-  useEffect(() => {
-    const sigs = Object.values(recoveryData.sigs);
-
-    if (!alreadyNotified && sigs.length === 1) {
-      // alert user that one of their sigs exists
-      Alert.alert(t('common.alert.info'), t('common.alert.text.trustedSigned'));
-      setAlreadyNotified(true);
-    } else if (sigs.length > 1) {
-      // stop polling channel if 2 sigs exist
-      // navigate after one cycle
-      setTimeout(() => {
-        clearChannel();
+  useFocusEffect(
+    useCallback(() => {
+      if (!alreadyNotified && sigCount === 1) {
+        // alert user that one of their sigs exists
+        Alert.alert(
+          t('common.alert.info'),
+          t('common.alert.text.trustedSigned'),
+        );
+        setAlreadyNotified(true);
+      } else if (sigCount > 1) {
         navigation.navigate('Restore');
-      }, CHANNEL_POLL_INTERVAL);
-    }
-  }, [recoveryData.sigs, alreadyNotified, t, navigation]);
+      }
+    }, [sigCount, alreadyNotified, t, navigation]),
+  );
 
   const copyQr = () => {
     const universalLink = `https://app.brightid.org/connection-code/${recoveryData?.qrcode}`;
@@ -103,7 +96,7 @@ const RecoveryCodeScreen = () => {
         {qrsvg ? (
           <View style={styles.qrsvgContainer}>
             <Text style={styles.signatures}>
-              {t('recovery.text.signatures', { count })}
+              {t('recovery.text.signatures', { count: sigCount })}
             </Text>
             <Svg
               height={DEVICE_LARGE ? '240' : '200'}

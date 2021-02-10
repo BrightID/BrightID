@@ -28,14 +28,12 @@ import {
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from 'react-redux';
 import { validatePass } from '@/utils/password';
-import { setPassword } from '@/actions';
-import { backupAppData } from '@/components/Recovery/thunks/backupThunks';
-
-/**
- * Search Bar in the Groups Screen
- *
- * TODO: Create a shared search component to use in both Connections and Group view
- */
+import {
+  setBackupCompleted,
+  setPassword,
+  updateNotifications,
+} from '@/actions';
+import { backupAppData } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 
 const UploadAnimation = () => {
   const { t } = useTranslation();
@@ -66,10 +64,9 @@ const ChangePasswordModal = ({ route, navigation }) => {
 
   const { t } = useTranslation();
 
-  // backupTotal is used to display the upload animation
-
-  const startBackup = async () => {
-    if (oldPassword !== password) {
+  const savePasswordHandler = async () => {
+    // check inputs
+    if (password && oldPassword !== password) {
       Alert.alert(
         t('profile.alert.title.passwordMatch'),
         t('profile.alert.text.passwordMatch'),
@@ -78,25 +75,29 @@ const ChangePasswordModal = ({ route, navigation }) => {
     }
     if (!validatePass(newPassword, newPasswordAgain)) return;
 
+    // save new password
     try {
       await setInternetCredentials(BACKUP_URL, id, newPassword);
     } catch (err) {
       console.log(err.message);
     }
+    dispatch(setPassword(newPassword));
 
+    // backup data
+    setBackupInProgress(true);
     try {
-      dispatch(setPassword(newPassword));
-
-      setBackupInProgress(true);
-
       await dispatch(backupAppData());
-
-      setBackupInProgress(false);
-
-      navigation.navigate('Edit Profile');
+      dispatch(setBackupCompleted(true));
     } catch (err) {
       console.warn(err);
     }
+    setBackupInProgress(false);
+
+    // update notifications to make sure the `set backup password` notification is removed
+    dispatch(updateNotifications());
+
+    // finally close modal
+    navigation.goBack();
   };
 
   return (
@@ -112,31 +113,41 @@ const ChangePasswordModal = ({ route, navigation }) => {
           <UploadAnimation />
         ) : (
           <>
+            {password ? (
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>
+                  {t('profile.label.currentPassword')}
+                </Text>
+                <TextInput
+                  autoCompleteType="password"
+                  autoCorrect={false}
+                  onChangeText={setOldPassword}
+                  value={oldPassword}
+                  placeholder={t('profile.label.currentPassword')}
+                  placeholderTextColor={GREY}
+                  secureTextEntry={true}
+                  style={styles.textInput}
+                  textContentType="password"
+                  underlineColorAndroid="transparent"
+                />
+              </View>
+            ) : null}
             <View style={styles.inputGroup}>
               <Text style={styles.label}>
-                {t('profile.label.currentPassword')}
+                {password
+                  ? t('profile.label.newPassword')
+                  : t('profile.label.password')}
               </Text>
-              <TextInput
-                autoCompleteType="password"
-                autoCorrect={false}
-                onChangeText={setOldPassword}
-                value={oldPassword}
-                placeholder={password}
-                placeholderTextColor={GREY}
-                secureTextEntry={true}
-                style={styles.textInput}
-                textContentType="password"
-                underlineColorAndroid="transparent"
-              />
-            </View>
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>{t('profile.label.newPassword')}</Text>
               <TextInput
                 autoCompleteType="password"
                 autoCorrect={false}
                 onChangeText={setNewPassword}
                 value={newPassword}
-                placeholder={t('profile.placeholder.newPassword')}
+                placeholder={
+                  password
+                    ? t('profile.placeholder.newPassword')
+                    : t('profile.placeholder.password')
+                }
                 placeholderTextColor={GREY}
                 secureTextEntry={true}
                 style={styles.textInput}
@@ -162,7 +173,10 @@ const ChangePasswordModal = ({ route, navigation }) => {
               />
             </View>
             <View style={styles.saveContainer}>
-              <TouchableOpacity style={styles.saveButton} onPress={startBackup}>
+              <TouchableOpacity
+                style={styles.saveButton}
+                onPress={savePasswordHandler}
+              >
                 <Text style={styles.saveButtonText}>
                   {t('common.button.save')}
                 </Text>
@@ -170,7 +184,7 @@ const ChangePasswordModal = ({ route, navigation }) => {
               <TouchableOpacity
                 style={styles.cancelButton}
                 onPress={() => {
-                  navigation.navigate('Edit Profile');
+                  navigation.goBack();
                 }}
               >
                 <Text style={styles.cancelButtonText}>

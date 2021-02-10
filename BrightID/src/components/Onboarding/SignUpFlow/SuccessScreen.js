@@ -1,9 +1,10 @@
 // @flow
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
   Image,
+  InteractionManager,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -11,13 +12,15 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useFocusEffect } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
+import { setBackupCompleted } from '@/reducer/userSlice';
 import { saveId } from './thunks';
-import Congratulations from '../Icons/Congratulations';
+import Congratulations from '../../Icons/Congratulations';
 
 /* Onboarding Success Screen */
 /* ======================================== */
@@ -27,22 +30,60 @@ const TIMEOUT = 1500;
 export const SuccessScreen = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const password = useSelector((state) => state.user.password);
+
+  // this is used instead of a timeout
+  const [currentTime, setCurrentTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
 
   /**
-   * After 2 seconds we save the user id, which will automatically navigate to the homepage
+   * update the time until
    */
 
   useFocusEffect(
     useCallback(() => {
-      let t = setTimeout(() => {
-        dispatch(saveId()).catch((err) => {
-          Alert.alert(t('common.alert.error'), err.message);
-        });
-      }, TIMEOUT);
+      let intervalID = setInterval(() => {
+        setCurrentTime(Date.now());
+      }, 300);
       return () => {
-        clearTimeout(t);
+        clearInterval(intervalID);
       };
-    }, [dispatch]),
+    }, []),
+  );
+
+  useEffect(() => {
+    if (endTime && currentTime && currentTime >= endTime) {
+      // this  will cause navigation to HomeScreen
+      dispatch(saveId());
+
+      return () => {
+        // navigate to view password walkthrough
+        InteractionManager.runAfterInteractions(() => {
+          navigation.navigate('ViewPasswordWalkthrough');
+        });
+      };
+    }
+  }, [currentTime, endTime, dispatch, navigation]);
+
+  useFocusEffect(
+    useCallback(() => {
+      // wait 1.5 seconds before navigating to home page
+      if (!password) {
+        setEndTime(Date.now() + TIMEOUT);
+      } else {
+        // backup user and then wait 1.5 seconds
+        console.log(`Starting initial user backup`);
+        dispatch(backupUser())
+          .then(() => {
+            dispatch(setBackupCompleted(true));
+            setEndTime(Date.now() + TIMEOUT);
+          })
+          .catch((err) => {
+            Alert.alert(t('common.alert.error'), err.message);
+          });
+      }
+    }, [dispatch, password, t]),
   );
   return (
     <>

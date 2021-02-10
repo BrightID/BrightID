@@ -17,7 +17,7 @@ import Menu from '@/components/Icons/Menu';
 import {
   pendingConnection_states,
   selectAllPendingConnections,
-} from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+} from '@/components/PendingConnections/pendingConnectionSlice';
 import {
   toggleDrawer,
   resetHome,
@@ -57,6 +57,7 @@ const NotificationBell = () => {
 
   return (
     <TouchableOpacity
+      testID="notificationsBtn"
       style={{ marginRight: 25 }}
       onPress={() => {
         Keyboard.dismiss();
@@ -77,6 +78,7 @@ const BrightIdLogo = () => {
         Keyboard.dismiss();
         resetHome();
       }}
+      testID="BrightIdLogo"
     >
       <Image
         source={require('@/static/brightid-final.png')}

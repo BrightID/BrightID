@@ -295,11 +295,6 @@ const ShowEditPassword = () => {
     }, []),
   );
 
-  // don't show this option if user does not have password
-  if (!password) {
-    return null;
-  }
-
   let displayPassword = password;
   if (hidePassword) {
     displayPassword = '*'.repeat(password.length);
@@ -307,30 +302,50 @@ const ShowEditPassword = () => {
 
   return (
     <View style={styles.showEditPasswordContainer}>
-      <View style={styles.viewPasswordContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            setHidePassword(!hidePassword);
-          }}
-        >
-          <Text style={styles.passwordText}>
-            {t('profile.text.viewPassword')}
+      {password ? (
+        <>
+          <View style={styles.viewPasswordContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                setHidePassword(!hidePassword);
+              }}
+            >
+              <Text style={styles.passwordText}>
+                {t('profile.text.viewPassword')}
+              </Text>
+            </TouchableOpacity>
+            <Text style={styles.displayPassword} selectable={true}>
+              {displayPassword}
+            </Text>
+          </View>
+          <TouchableOpacity
+            style={styles.changePasswordButton}
+            onPress={() => {
+              navigation.navigate('ChangePassword');
+            }}
+          >
+            <Text style={styles.passwordText}>
+              {t('profile.text.changePassword')}
+            </Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <>
+          <TouchableOpacity
+            style={styles.setPasswordButton}
+            onPress={() => {
+              navigation.navigate('ChangePassword');
+            }}
+          >
+            <Text style={styles.setPasswordText}>
+              {t('profile.text.setPassword')}
+            </Text>
+          </TouchableOpacity>
+          <Text style={styles.privacyText}>
+            {t('signup.text.passwordInfo')}
           </Text>
-        </TouchableOpacity>
-        <Text style={styles.displayPassword} selectable={true}>
-          {displayPassword}
-        </Text>
-      </View>
-      <TouchableOpacity
-        style={styles.changePasswordButton}
-        onPress={() => {
-          navigation.navigate('ChangePassword');
-        }}
-      >
-        <Text style={styles.passwordText}>
-          {t('profile.text.changePassword')}
-        </Text>
-      </TouchableOpacity>
+        </>
+      )}
     </View>
   );
 };
@@ -424,7 +439,7 @@ export const EditProfileScreen = ({ navigation }) => {
           ],
         );
       }),
-    [navigation, saveDisabled],
+    [navigation, saveDisabled, t],
   );
 
   return (
@@ -434,7 +449,7 @@ export const EditProfileScreen = ({ navigation }) => {
         { marginTop: headerHeight },
         !isDrawerOpen && styles.shadow,
       ]}
-      testID="graphExplorerScreen"
+      testID="editProfileScreen"
     >
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <EditProfilePhoto
@@ -593,15 +608,33 @@ const styles = StyleSheet.create({
   changePasswordButton: {
     marginTop: DEVICE_LARGE ? 12 : 8,
   },
+  setPasswordButton: {
+    marginTop: DEVICE_LARGE ? 12 : 8,
+    alignSelf: 'center',
+  },
   passwordText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[13],
+    color: DARK_BLUE,
+  },
+  setPasswordText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[15],
     color: DARK_BLUE,
   },
   displayPassword: {
     fontFamily: 'Poppins-Regular',
     fontSize: fontSize[13],
     color: BLACK,
+  },
+  privacyText: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: fontSize[11],
+    color: DARKER_GREY,
+    textAlign: 'center',
+    width: '72%',
+    alignSelf: 'center',
+    marginTop: DEVICE_LARGE ? 14 : 12,
   },
   saveContainer: {
     width: '100%',

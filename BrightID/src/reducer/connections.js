@@ -1,6 +1,6 @@
 // @flow
 
-import { find, propEq, mergeRight } from 'ramda';
+import { mergeRight } from 'ramda';
 import { keyBy } from 'lodash';
 import {
   SET_CONNECTIONS,
@@ -8,8 +8,6 @@ import {
   UPDATE_CONNECTIONS,
   DELETE_CONNECTION,
   ADD_CONNECTION,
-  ADD_TRUSTED_CONNECTION,
-  REMOVE_TRUSTED_CONNECTION,
   SET_CONNECTIONS_SEARCH,
   SET_CONNECTIONS_SEARCH_OPEN,
   HYDRATE_CONNECTIONS,
@@ -24,7 +22,6 @@ import { connection_levels } from '@/utils/constants';
 
 export const initialState = {
   connections: [],
-  trustedConnections: [],
   connectionsSort: '',
   searchParam: '',
   searchOpen: false,
@@ -47,7 +44,6 @@ export const reducer = (
         connections: action.connections.slice(0),
       };
     }
-
     case UPDATE_CONNECTIONS: {
       const connectionsMap = keyBy(action.connections, 'id');
       return {
@@ -135,21 +131,6 @@ export const reducer = (
         connectionsSort: action.connectionsSort,
       };
     }
-    case ADD_TRUSTED_CONNECTION: {
-      return {
-        ...state,
-        trustedConnections: [...state.trustedConnections, action.id],
-      };
-    }
-    case REMOVE_TRUSTED_CONNECTION: {
-      const trustedConnections: string[] = state.trustedConnections.filter(
-        (id) => id !== action.id,
-      );
-      return {
-        ...state,
-        trustedConnections,
-      };
-    }
     case SET_CONNECTIONS_SEARCH: {
       return {
         ...state,
@@ -183,8 +164,7 @@ export const reducer = (
       };
     }
     case HYDRATE_CONNECTIONS: {
-      if (!action.data.connections || !action.data.trustedConnections)
-        return state;
+      if (!action.data.connections) return state;
 
       return { ...action.data };
     }

@@ -5,8 +5,6 @@ export const CONNECTIONS_SORT = 'CONNECTIONS_SORT';
 export const UPDATE_CONNECTIONS = 'UPDATE_CONNECTIONS';
 export const DELETE_CONNECTION = 'DELETE_CONNECTION';
 export const ADD_CONNECTION = 'ADD_CONNECTION';
-export const ADD_TRUSTED_CONNECTION = 'ADD_TRUSTED_CONNECTION';
-export const REMOVE_TRUSTED_CONNECTION = 'REMOVE_TRUSTED_CONNECTION';
 export const SET_CONNECTIONS_SEARCH = 'SET_CONNECTIONS_SEARCH';
 export const SET_CONNECTIONS_SEARCH_OPEN = 'SET_CONNECTIONS_SEARCH_OPEN';
 export const SET_CONNECTION_LEVEL = 'SET_CONNECTION_LEVEL';
@@ -67,16 +65,6 @@ export const deleteConnection = (id: string) => ({
 export const addConnection = (connection: connection) => ({
   type: ADD_CONNECTION,
   connection,
-});
-
-export const addTrustedConnection = (id: string) => ({
-  type: ADD_TRUSTED_CONNECTION,
-  id,
-});
-
-export const removeTrustedConnection = (id: string) => ({
-  type: REMOVE_TRUSTED_CONNECTION,
-  id,
 });
 
 export const hydrateConnections = (data: ConnectionsState) => ({

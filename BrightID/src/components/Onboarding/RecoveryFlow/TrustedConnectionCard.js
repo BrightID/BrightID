@@ -2,35 +2,32 @@
 
 import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { addTrustedConnection, removeTrustedConnection } from '@/actions/index';
 import { DEVICE_TYPE } from '@/utils/deviceConstants';
 import { DARK_GREY, GREEN, BLACK, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 
 const TrustedConnectionCard = (props) => {
-  const { id, photo, name, connectionDate, style } = props;
+  const {
+    id,
+    photo,
+    name,
+    connectionDate,
+    style,
+    selected,
+    toggleHandler,
+  } = props;
 
   const [imgErr, setImgErr] = useState(false);
 
-  const trustedConnections = useSelector(
-    (state) => state.connections.trustedConnections,
-  );
-
   const { t } = useTranslation();
-  const dispatch = useDispatch();
 
   const toggleConnectionSelect = () => {
-    trustedConnections.includes(id)
-      ? dispatch(removeTrustedConnection(id))
-      : dispatch(addTrustedConnection(id));
+    toggleHandler(id);
   };
-
-  const selected = () => trustedConnections.includes(id);
 
   const imageSource =
     photo?.filename && !imgErr
@@ -63,8 +60,8 @@ const TrustedConnectionCard = (props) => {
       >
         <AntDesign
           size={30.4}
-          name={selected() ? 'checkcircle' : 'checkcircleo'}
-          color={selected() ? GREEN : BLACK}
+          name={selected ? 'checkcircle' : 'checkcircleo'}
+          color={selected ? GREEN : BLACK}
         />
       </TouchableOpacity>
     </View>

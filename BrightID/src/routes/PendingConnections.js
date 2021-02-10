@@ -3,10 +3,10 @@ import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
-import MyCodeScreen from '@/components/PendingConnectionsScreens/MyCodeScreen';
-import ScanCodeScreen from '@/components/PendingConnectionsScreens/ScanCodeScreen';
-import PendingConnectionsScreen from '@/components/PendingConnectionsScreens/PendingConnectionsScreen';
-import GroupConnectionScreen from '@/components/PendingConnectionsScreens/GroupConnectionScreen';
+import MyCodeScreen from '@/components/PendingConnections/MyCodeScreen';
+import ScanCodeScreen from '@/components/PendingConnections/ScanCodeScreen';
+import PendingConnectionsScreen from '@/components/PendingConnections/PendingConnectionsScreen';
+import GroupConnectionScreen from '@/components/PendingConnections/GroupConnectionScreen';
 import { NavHome, headerOptions } from './helpers';
 
 const Stack = createStackNavigator();

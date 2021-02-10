@@ -22,11 +22,12 @@ export const LIGHTBLUE = '#4A90E2';
 export const DARK_ORANGE = '#B64B32';
 
 /** ** NOTIFICATION CONSTANTS  *** */
-
 export const CONNECTIONS_TYPE = 'connections';
 export const GROUPS_TYPE = 'groups';
 export const MISC_TYPE = 'misc';
 export const NONE_TYPE = 'none';
+export const MIN_CONNECTIONS_FOR_RECOVERY_NOTIFICATION = 6;
+export const MIN_RECOVERY_CONNECTIONS = 3;
 
 /** ** CONNECTION CONFIDENCE LEVELS *** */
 export const connection_levels = {

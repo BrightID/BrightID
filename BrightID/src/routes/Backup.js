@@ -1,10 +1,9 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
-import RecoveringConnectionScreen from '@/components/Recovery/RecoveringConnectionScreen';
+import RecoveringConnectionScreen from '@/components/Onboarding/RecoveryFlow/RecoveringConnectionScreen';
 import SearchConnections from '@/components/Helpers/SearchConnections';
-import TrustedConnectionsScreen from '@/components/Recovery/TrustedConnectionsScreen';
-import BackupScreen from '@/components/Recovery/BackupScreen';
+import TrustedConnectionsScreen from '@/components/Onboarding/RecoveryFlow/TrustedConnectionsScreen';
 import i18next from 'i18next';
 import { headerOptions, AnimatedHeaderTitle } from './helpers';
 
@@ -27,9 +26,7 @@ const recoveringScreenOptions = {
   ...headerOptions,
   headerRight: () => <SearchConnections sortable={true} />,
   headerTitle: () => (
-    <AnimatedHeaderTitle
-      text={i18next.t('restore.header.accountRecovery', 'Account Recovery')}
-    />
+    <AnimatedHeaderTitle text={i18next.t('restore.header.accountRecovery')} />
   ),
 };
 
@@ -37,14 +34,6 @@ const Connections = () => {
   const { t } = useTranslation();
   return (
     <>
-      <Stack.Screen
-        name="Backup"
-        component={BackupScreen}
-        options={{
-          ...headerOptions,
-          title: t('backup.header.backup'),
-        }}
-      />
       <Stack.Screen
         name="TrustedConnections"
         component={TrustedConnectionsScreen}

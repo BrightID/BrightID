@@ -5,13 +5,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import { getGroupName } from '@/utils/groups';
 import { fontSize } from '@/theme/fonts';
-import GroupsScreen from '@/components/GroupsScreens/GroupsScreen';
+import GroupsScreen from '@/components/Groups/GroupsScreen';
 import SearchGroups from '@/components/Helpers/SearchGroups';
 import SearchConnections from '@/components/Helpers/SearchConnections';
-import NewGroupScreen from '@/components/GroupsScreens/NewGroups/NewGroupScreen';
-import GroupInfoScreen from '@/components/GroupsScreens/NewGroups/GroupInfoScreen';
-import MembersScreen from '@/components/GroupsScreens/Members/MembersScreen';
-import InviteListScreen from '@/components/GroupsScreens/Members/InviteListScreen';
+import NewGroupScreen from '@/components/Groups/NewGroups/NewGroupScreen';
+import GroupInfoScreen from '@/components/Groups/NewGroups/GroupInfoScreen';
+import MembersScreen from '@/components/Groups/Members/MembersScreen';
+import InviteListScreen from '@/components/Groups/Members/InviteListScreen';
 import i18next from 'i18next';
 import { headerOptions, NavHome, AnimatedHeaderTitle } from './helpers';
 

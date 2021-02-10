@@ -5,7 +5,7 @@ import {
   CHANNEL_INFO_VERSION,
   CHANNEL_INFO_NAME,
 } from '@/utils/constants';
-import { channel_states } from '@/components/PendingConnectionsScreens/channelSlice';
+import { channel_states } from '@/components/PendingConnections/channelSlice';
 import ChannelAPI from '@/api/channelService';
 import i18next from 'i18next';
 

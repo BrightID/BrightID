@@ -20,7 +20,7 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { takePhoto, chooseImage } from '@/utils/images';
 import { retrieveImage } from '@/utils/filesystem';
 import { savePhoto } from './thunks';
-import Avatar from '../Icons/Avatar';
+import Avatar from '../../Icons/Avatar';
 
 /* Description */
 /* ======================================== */

@@ -24,9 +24,10 @@ import { ORANGE, WHITE, GREY, BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { createSelector } from '@reduxjs/toolkit';
-import { selectAllUnconfirmedConnections } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
+import { selectAllUnconfirmedConnections } from '@/components/PendingConnections/pendingConnectionSlice';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import EmptyList from '@/components/Helpers/EmptyList';
+import { photoDirectory } from '@/utils/filesystem';
 import NotificationCard from './NotificationCard';
 import InviteCard from './InviteCard';
 import PendingConnectionCard from './PendingConnectionCard';
@@ -125,12 +126,38 @@ const InviteList = () => {
 
 const MiscList = ({ route }) => {
   const { t } = useTranslation();
+  const photoFilename = useSelector((state) => state.user.photo.filename);
   const [refreshing, onRefresh] = useRefresh();
-  const data = route.backupPending
-    ? [{ msg: 'Backup Pending', icon: 'star' }]
-    : [];
+  const data = [];
 
-  console.log('rendering Misc List');
+  if (route.recoveryConnectionsPending) {
+    // TODO: Set better image
+    const imageSource = photoFilename
+      ? { uri: `file://${photoDirectory()}/${photoFilename}` }
+      : require('@/static/default_profile.jpg');
+    data.push({
+      title: t('notifications.item.title.socialRecovery'),
+      msg: t('notifications.item.msg.socialRecovery'),
+      imageSource,
+      navigationTarget: 'TrustedConnections',
+      testID: 'SocialRecoveryNotifcation',
+    });
+  }
+
+  if (route.backupPending) {
+    // TODO: Set appropriate image
+    const imageSource = photoFilename
+      ? { uri: `file://${photoDirectory()}/${photoFilename}` }
+      : require('@/static/default_profile.jpg');
+    data.push({
+      title: t('notifications.item.title.backupBrightId'),
+      msg: t('notifications.item.msg.backupBrightId'),
+      imageSource,
+      navigationTarget: 'Edit Profile',
+      testID: 'BackupNotification',
+    });
+  }
+
   return (
     <FlatList
       contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
@@ -148,7 +175,13 @@ const MiscList = ({ route }) => {
         />
       }
       renderItem={({ item }) => (
-        <NotificationCard msg={item.msg} icon={item.icon} />
+        <NotificationCard
+          title={item.title}
+          msg={item.msg}
+          imageSource={item.imageSource}
+          navigationTarget={item.navigationTarget}
+          testID={item.testID}
+        />
       )}
     />
   );
@@ -192,6 +225,10 @@ export const NotificationsScreen = ({ route }) => {
     (state) => state.notifications.backupPending,
   );
 
+  const recoveryConnectionsPending = useSelector(
+    (state) => state.notifications.recoveryConnectionsPending,
+  );
+
   const routes = [
     {
       key: CONNECTIONS_TYPE,
@@ -206,8 +243,9 @@ export const NotificationsScreen = ({ route }) => {
     {
       key: MISC_TYPE,
       title: t('notifications.tab.miscellaneous'),
-      badge: backupPending,
+      badge: backupPending || recoveryConnectionsPending,
       backupPending,
+      recoveryConnectionsPending,
     },
   ];
   // if we navigate here from the banner, go to the section from the banner
@@ -241,7 +279,7 @@ export const NotificationsScreen = ({ route }) => {
         animated={true}
       />
       <View style={styles.orangeTop} />
-      <View style={styles.container}>
+      <View style={styles.container} testID="NotificationsScreen">
         <TabView
           navigationState={{ index, routes }}
           renderScene={renderScene}

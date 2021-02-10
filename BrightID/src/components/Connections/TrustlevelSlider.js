@@ -32,11 +32,13 @@ const trustLevelDetails = {
 type TrustlevelSliderProps = {
   currentLevel: ConnectionLevel,
   changeLevelHandler: (newLevel: ConnectionLevel) => any,
+  verbose: boolean,
 };
 
 const TrustlevelSlider = ({
   currentLevel,
   changeLevelHandler,
+  verbose,
 }: TrustlevelSliderProps) => {
   const minValue = 0;
   const maxValue = Object.keys(trustLevelDetails).length - 1;
@@ -69,11 +71,13 @@ const TrustlevelSlider = ({
           {connectionLevelStrings[currentLevel]}
         </Text>
       </View>
-      <View style={styles.description}>
-        <Text style={styles.descriptionText}>
-          "{trustLevelDetails[currentLevel].description}"
-        </Text>
-      </View>
+      {verbose && (
+        <View style={styles.description}>
+          <Text style={styles.descriptionText}>
+            "{trustLevelDetails[currentLevel].description}"
+          </Text>
+        </View>
+      )}
       <Slider
         testID="ConnectionLevelSlider"
         style={styles.slider}
@@ -112,6 +116,7 @@ const styles = StyleSheet.create({
     // set minimum height so the slider does not jump when the description
     // text changes between 1 and 2 lines
     minHeight: 50,
+    marginBottom: DEVICE_LARGE ? 10 : 5,
   },
   descriptionText: {
     fontFamily: 'Poppins-Medium',
@@ -120,7 +125,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   slider: {
-    marginTop: DEVICE_LARGE ? 10 : 5,
     marginBottom: DEVICE_LARGE ? 13 : 11,
     // slider only supports absolute width, so have to calculate manually:
     // width = deviceWidth * modalWidth (90%) * sliderWidth (80% of modal width)
