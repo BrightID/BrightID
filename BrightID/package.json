@@ -18,7 +18,8 @@
     "test:watch": "npm test -- --watch",
     "updateSnap": "jest --updateSnapshot",
     "build:release": "cd android && ./gradlew assembleRelease && cd ..",
-    "mermaid": "find ./diagrams -type f -name *.mmd -exec mmdc -i {} \\;"
+    "mermaid": "find ./diagrams -type f -name *.mmd -exec mmdc -i {} \\;",
+    "m1-install": "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 yarn install"
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "3.8.0",
