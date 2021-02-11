@@ -3,15 +3,14 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['import', 'react', 'jsx-a11y', '@typescript-eslint'],
   extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
     'airbnb-typescript',
+    'plugin:@typescript-eslint/recommended',
     'prettier',
     'prettier/@typescript-eslint'
   ],
-   parserOptions: {
-    project: './tsconfig.json',
-  },
+  //  parserOptions: {
+  //   project: './tsconfig.json',
+  // },
   env: {
     browser: true,
     node: true,
