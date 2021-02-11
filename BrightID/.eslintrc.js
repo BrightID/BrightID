@@ -1,14 +1,17 @@
 module.exports = {
   root: true,
-  plugins: ['import', 'react', 'jsx-a11y', 'flowtype'],
+  parser: '@typescript-eslint/parser',
+  plugins: ['import', 'react', 'jsx-a11y', '@typescript-eslint'],
   extends: [
-    'airbnb',
-    '@react-native-community',
-    'plugin:react/recommended',
-    'plugin:jsx-a11y/recommended',
-    'plugin:flowtype/recommended',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'airbnb-typescript',
     'prettier',
+    'prettier/@typescript-eslint'
   ],
+   parserOptions: {
+    project: './tsconfig.json',
+  },
   env: {
     browser: true,
     node: true,
@@ -19,7 +22,7 @@ module.exports = {
     'import/resolver': {
       alias: {
         map: [['@', './src']],
-        extensions: ['.ios.js', '.android.js', '.js', '.json'],
+        extensions: ['.js', '.json', '.ts', '.tsx'],
       },
     },
   },
