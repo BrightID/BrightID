@@ -8,6 +8,11 @@ import ChannelAPI from '@/api/channelService';
 import { connection_levels } from './src/utils/constants';
 import { pendingConnection_states } from './src/components/PendingConnections/pendingConnectionSlice';
 
+declare module '*.svg' {
+  const content: any;
+  export default content;
+}
+
 declare type State = {
   channels: ChannelsState;
   apps: AppsState;
@@ -239,7 +244,7 @@ declare type NotificationsState = {
   pendingConnections: PendingConnection[];
   backupPending: boolean;
   deviceToken: string;
-  sessionNotifications: Array<String>;
+  sessionNotifications: Array<string>;
 };
 
 declare type BannerNotification = {
@@ -287,7 +292,7 @@ declare type ConnectionLevel = keyof typeof connection_levels;
 declare type PendingConnectionState = keyof typeof pendingConnection_states;
 
 // Jest global functions
-declare var element: any;
-declare var by: any;
-declare var waitFor: any;
-declare var device: any;
+declare let element: any;
+declare let by: any;
+declare let waitFor: any;
+declare let device: any;

@@ -17,7 +17,7 @@ export function notificationSubscription() {
         // if notificationToken exists, then our connections already have it
         // so we need to make sure that the notification server is also synced
 
-        let oldDeviceToken =
+        const oldDeviceToken =
           notifications.deviceToken && notifications.deviceToken !== token
             ? notifications.deviceToken
             : null;

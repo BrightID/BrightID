@@ -1,9 +1,12 @@
 // NavigationService.js
 
 import * as React from 'react';
-import { DrawerActions } from '@react-navigation/native';
+import {
+  DrawerActions,
+  NavigationContainerRef,
+} from '@react-navigation/native';
 
-export const navigationRef = React.createRef();
+export const navigationRef = React.createRef<NavigationContainerRef>();
 
 export const navigate = (name, params) => {
   navigationRef.current?.navigate(name, params);

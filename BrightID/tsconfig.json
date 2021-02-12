@@ -33,5 +33,6 @@
     "index.ts",
     "i18n.ts",
     "codepush.config.ts",
+    "types.d.ts"
   ]
 }

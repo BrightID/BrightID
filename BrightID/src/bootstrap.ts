@@ -9,7 +9,7 @@ import { checkTasks, syncStoreTasks } from './components/Tasks/TasksSlice';
 // happens inside of the loading screen
 
 export const bootstrap = async () => {
-  let {
+  const {
     user: { id, migrated },
   } = store.getState();
 
