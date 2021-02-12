@@ -110,6 +110,6 @@ export const {
 export const {
   selectById: selectSocialMediaById,
   selectAll: selectAllSocialMedia,
-} = socialMediaAdapter.getSelectors((state) => state.socialMedia);
+} = socialMediaAdapter.getSelectors((state: State) => state.socialMedia);
 
 export default socialMediaSlice.reducer;

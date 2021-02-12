@@ -236,6 +236,7 @@ declare global {
     id: string;
     password: string;
     secretKey: string;
+    isSponsored: boolean;
   };
 
   type WalkthroughState = {

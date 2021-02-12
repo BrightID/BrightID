@@ -29,7 +29,7 @@ const MAX_WAITING_SECONDS = 60;
 
 const makeLinkedContextSelector = () =>
   createSelector(
-    (state) => state.apps.linkedContexts,
+    (state: State) => state.apps.linkedContexts,
     (_, context: string) => context,
     (linkedContexts, context) =>
       linkedContexts.find((link) => link.context === context),
@@ -47,13 +47,13 @@ const AppCard = (props) => {
     context,
   } = props;
   const dispatch = useDispatch();
-  const verifications = useSelector((state) => state.user.verifications);
-  const isSponsored = useSelector((state) => state.user.isSponsored);
+  const verifications = useSelector((state: State) => state.user.verifications);
+  const isSponsored = useSelector((state: State) => state.user.isSponsored);
 
   // Make sure each instance of AppCard has it's own selector. Otherwise they would
   // invalidate each others cache. See https://react-redux.js.org/next/api/hooks#using-memoizing-selectors
   const linkedContextSelector = useMemo(makeLinkedContextSelector, []);
-  const linkedContext = useSelector((state) =>
+  const linkedContext = useSelector((state: State) =>
     linkedContextSelector(state, context),
   );
   const { t } = useTranslation();
@@ -107,7 +107,7 @@ const AppCard = (props) => {
           {
             text: t('common.alert.cancel'),
             style: 'cancel',
-            onPress: () => {},
+            onPress: () => { },
           },
         ],
         { cancelable: true },

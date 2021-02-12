@@ -31,8 +31,8 @@ const MainTabs = () => {
 };
 
 const MainApp = () => {
-  const id = useSelector((state) => state.user.id);
-  const eula = useSelector((state) => state.user.eula);
+  const id = useSelector((state: State) => state.user.id);
+  const eula = useSelector((state: State) => state.user.eula);
   return (
     <TopStack.Navigator>
       {!eula ? (

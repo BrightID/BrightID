@@ -32,11 +32,11 @@ const recoveryConnectionSelector = createSelector(
 const RecoveringConnectionScreen = () => {
   const [recoveryIds, setRecoveryIds] = useState([]);
 
-  const connections = useSelector((state) =>
+  const connections = useSelector((state: State) =>
     recoveryConnectionSelector(state, recoveryIds),
   );
 
-  const id = useSelector((state) => state.user.id);
+  const id = useSelector((state: State) => state.user.id);
 
   const { t } = useTranslation();
   const route = useRoute();

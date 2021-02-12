@@ -40,7 +40,7 @@ const TrustedConnectionsScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const myId = useSelector((state) => state.user.id);
+  const myId = useSelector((state: State) => state.user.id);
   const connections = useSelector(connectionsSelector);
   const trustedConnections = useSelector(recoveryConnectionsSelector);
   const [selectedConnections, setSelectedConnections] = useState(

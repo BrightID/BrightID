@@ -25,7 +25,7 @@ type props = {
 
 const TrustlevelModal = ({ route, navigation }: props) => {
   const { connectionId } = route.params;
-  const myId = useSelector((state) => state.user.id);
+  const myId = useSelector((state: State) => state.user.id);
   const connection: connection = useSelector((state: State) =>
     connectionByIdSelector(state, connectionId),
   );

@@ -40,16 +40,16 @@ import {
 
 const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
   const { showActionSheetWithOptions } = useActionSheet();
-  const prevPhotoFilename = useSelector((state) => state.user.photo.filename);
+  const prevPhotoFilename = useSelector((state: State) => state.user.photo.filename);
   const { t } = useTranslation();
 
   const profileSource = profilePhoto
     ? {
-        uri: profilePhoto,
-      }
+      uri: profilePhoto,
+    }
     : {
-        uri: `file://${photoDirectory()}/${prevPhotoFilename}`,
-      };
+      uri: `file://${photoDirectory()}/${prevPhotoFilename}`,
+    };
 
   const getPhotoFromCamera = async () => {
     try {
@@ -282,7 +282,7 @@ const SocialMediaLinks = () => {
 };
 
 const ShowEditPassword = () => {
-  const password = useSelector((state) => state.user.password);
+  const password = useSelector((state: State) => state.user.password);
   const [hidePassword, setHidePassword] = useState(true);
   const navigation = useNavigation();
   const { t } = useTranslation();
@@ -358,9 +358,9 @@ export const EditProfileScreen = ({ navigation }) => {
   const isDrawerOpen = useIsDrawerOpen();
 
   // selectors
-  const id = useSelector((state) => state.user.id);
-  const prevPhotoFilename = useSelector((state) => state.user.photo.filename);
-  const prevName = useSelector((state) => state.user.name);
+  const id = useSelector((state: State) => state.user.id);
+  const prevPhotoFilename = useSelector((state: State) => state.user.photo.filename);
+  const prevName = useSelector((state: State) => state.user.name);
   const prevPhoto = useRef(null);
   // state passed down to children
   const [profilePhoto, setProfilePhoto] = useState(prevPhoto?.current);
@@ -427,7 +427,7 @@ export const EditProfileScreen = ({ navigation }) => {
             {
               text: t('profile.alert.button.dontLeave'),
               style: 'cancel',
-              onPress: () => {},
+              onPress: () => { },
             },
             {
               text: t('profile.alert.button.discard'),

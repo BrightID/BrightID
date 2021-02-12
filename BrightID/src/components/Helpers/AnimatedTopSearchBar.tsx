@@ -23,7 +23,7 @@ const X_TRANSFORM = DEVICE_LARGE ? 250 : 195;
 
 const AnimatedTopSearchBar = ({
   sortable,
-  handleSort = () => {},
+  handleSort = () => { },
   setSearchValue,
   setSearchOpen,
   searchOpenSelector,

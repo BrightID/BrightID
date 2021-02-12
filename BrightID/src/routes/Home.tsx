@@ -36,7 +36,7 @@ const unconfirmedSelector = createSelector(
 );
 
 const inviteSelector = createSelector(
-  (state) => state.groups.invites,
+  (state: State) => state.groups.invites,
   (invites) => invites.filter(({ state }) => state === INVITE_ACTIVE),
 );
 
@@ -44,13 +44,13 @@ const inviteSelector = createSelector(
 
 const NotificationBell = () => {
   const pendingConnections = useSelector(
-    (state) => unconfirmedSelector(state)?.length,
+    (state: State) => unconfirmedSelector(state)?.length,
   );
 
-  const invites = useSelector((state) => inviteSelector(state)?.length);
+  const invites = useSelector((state: State) => inviteSelector(state)?.length);
 
   const backupPending = useSelector(
-    (state) => state.notifications.backupPending,
+    (state: State) => state.notifications.backupPending,
   );
 
   const displayBadge = backupPending || invites || pendingConnections;

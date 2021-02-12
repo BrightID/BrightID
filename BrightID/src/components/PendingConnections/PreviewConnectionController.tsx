@@ -22,7 +22,7 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
   const { pendingConnectionId, moveToNext, index } = props;
   const dispatch = useDispatch();
 
-  const pendingConnection = useSelector((state) =>
+  const pendingConnection = useSelector((state: State) =>
     selectPendingConnectionById(state, pendingConnectionId),
   );
   const navigation = useNavigation();

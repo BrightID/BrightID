@@ -41,12 +41,12 @@ let discordUrl = 'https://discord.gg/nTtuB2M';
 /** Selectors */
 
 const linkedContextCountSelector = createSelector(
-  (state) => state.apps.linkedContexts,
+  (state: State) => state.apps.linkedContexts,
   (contexts) => contexts.filter((link) => link.state === 'applied').length,
 );
 
 export const verifiedSelector = createSelector(
-  (state) => state.user.verifications,
+  (state: State) => state.user.verifications,
   (verifications) => verifications.includes('BrightID'),
 );
 
@@ -56,9 +56,9 @@ export const HomeScreen = (props) => {
   const { navigation } = props;
   const dispatch = useDispatch();
   const headerHeight = useHeaderHeight();
-  const name = useSelector((state) => state.user.name);
-  const photoFilename = useSelector((state) => state.user.photo.filename);
-  const groupsCount = useSelector((state) => state.groups.groups.length);
+  const name = useSelector((state: State) => state.user.name);
+  const photoFilename = useSelector((state: State) => state.user.photo.filename);
+  const groupsCount = useSelector((state: State) => state.groups.groups.length);
   const connectionsCount = useSelector(verifiedConnectionsSelector).length;
   const linkedContextsCount = useSelector(linkedContextCountSelector);
   const verified = useSelector(verifiedSelector);

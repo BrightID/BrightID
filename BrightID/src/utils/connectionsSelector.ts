@@ -3,10 +3,10 @@ import { toSearchString } from '@/utils/strings';
 import { sortConnectionsBy } from '@/utils/sorting';
 import { connection_levels } from '@/utils/constants';
 
-const searchParamSelector = (state) => state.connections.searchParam;
-const connSelector = (state) => state.connections.connections;
-const connSortSelector = (state) => state.connections.connectionsSort;
-const filtersSelector = (state) => state.connections.filters;
+const searchParamSelector = (state: State) => state.connections.searchParam;
+const connSelector = (state: State) => state.connections.connections;
+const connSortSelector = (state: State) => state.connections.connectionsSort;
+const filtersSelector = (state: State) => state.connections.filters;
 
 export const connectionsSelector = createSelector(
   [connSelector, searchParamSelector, filtersSelector, connSortSelector],

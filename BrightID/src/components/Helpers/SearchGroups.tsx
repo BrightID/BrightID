@@ -12,7 +12,7 @@ const SearchGroups = () => (
     sortable={false}
     setSearchValue={setGroupSearch}
     setSearchOpen={setGroupSearchOpen}
-    searchOpenSelector={(state) => state.groups.searchOpen}
+    searchOpenSelector={(state: State) => state.groups.searchOpen}
   />
 );
 

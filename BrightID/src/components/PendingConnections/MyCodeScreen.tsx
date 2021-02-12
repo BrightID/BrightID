@@ -49,7 +49,7 @@ import { QrCode } from './QrCode';
  *
  */
 let FakeConnectionBtn = () => null;
-let addFakeConnection = () => {};
+let addFakeConnection = () => { };
 if (__DEV__) {
   addFakeConnection = require('@/actions/fakeContact').addFakeConnection;
 
@@ -80,7 +80,7 @@ export const MyCodeScreen = () => {
 
   // GROUP / SINGLE
   const displayChannelType = useSelector(
-    (state) => state.channels.displayChannelType,
+    (state: State) => state.channels.displayChannelType,
   );
   // current channel displayed by QRCode
   const myChannel = useSelector(
@@ -90,12 +90,12 @@ export const MyCodeScreen = () => {
   );
 
   // All channels with current displayChannelType actively polling profile service
-  const activeChannelIds = useSelector((state) =>
+  const activeChannelIds = useSelector((state: State) =>
     selectAllActiveChannelIdsByType(state, displayChannelType),
   );
 
   // pending connections attached to active channel
-  const pendingConnectionSize = useSelector((state) => {
+  const pendingConnectionSize = useSelector((state: State) => {
     if (myChannel) {
       return selectAllPendingConnectionsByChannelIds(state, [myChannel.id])
         .length;

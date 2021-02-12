@@ -30,7 +30,7 @@ const RecoveryCodeScreen = () => {
   const [qrsvg, setQrsvg] = useState('');
   const [alreadyNotified, setAlreadyNotified] = useState(false);
 
-  const recoveryData = useSelector((state) => state.recoveryData);
+  const recoveryData = useSelector((state: State) => state.recoveryData);
 
   const sigCount = recoveryData.sigs
     ? Object.values(recoveryData.sigs).length

@@ -143,7 +143,7 @@ export const checkTasks = () => {
 export default tasksSlice.reducer;
 
 export const selectTaskIds = createSelector(
-  (state) => state.tasks,
+  (state: State) => state.tasks,
   (tasks) => {
     return Object.keys(tasks)
       .filter((id) => id !== '_persist')
@@ -153,7 +153,7 @@ export const selectTaskIds = createSelector(
 
 export const selectCompletedTaskIds = createSelector(
   selectTaskIds,
-  (state) => state.tasks,
+  (state: State) => state.tasks,
   (taskIds, tasks) =>
     taskIds.filter((taskId: string) => tasks[taskId].completed),
 );

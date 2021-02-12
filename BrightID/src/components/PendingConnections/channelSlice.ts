@@ -110,7 +110,7 @@ export const {
   selectById: selectChannelById,
   selectAll: selectAllChannels,
   selectIds: selectAllChannelIds,
-} = channelsAdapter.getSelectors((state) => state.channels);
+} = channelsAdapter.getSelectors((state: State) => state.channels);
 
 // additional selectors
 export const selectAllActiveChannelIds = createSelector(

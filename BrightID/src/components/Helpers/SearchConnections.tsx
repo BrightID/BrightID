@@ -21,7 +21,7 @@ const SearchConnections = () => {
       handleSort={handleSort}
       setSearchValue={setConnectionsSearch}
       setSearchOpen={setConnectionsSearchOpen}
-      searchOpenSelector={(state) => state.connections.searchOpen}
+      searchOpenSelector={(state: State) => state.connections.searchOpen}
     />
   );
 };

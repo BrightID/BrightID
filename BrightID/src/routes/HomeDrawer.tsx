@@ -90,8 +90,8 @@ const CustomItem = ({
 const CustomDrawerContent = (props) => {
   const { state, navigation } = props;
   // selectors
-  const photoFilename = useSelector((state) => state.user.photo.filename);
-  const name = useSelector((state) => state.user.name);
+  const photoFilename = useSelector((state: State) => state.user.photo.filename);
+  const name = useSelector((state: State) => state.user.name);
   const verified = useSelector(verifiedSelector);
   // keep profile photo up to date
   const [profilePhoto, setProfilePhoto] = useState('');
@@ -102,11 +102,11 @@ const CustomDrawerContent = (props) => {
   // prevent console error and blank photo
   const profileSource = profilePhoto
     ? {
-        uri: profilePhoto,
-      }
+      uri: profilePhoto,
+    }
     : {
-        uri: `file://${photoDirectory()}/${photoFilename}`,
-      };
+      uri: `file://${photoDirectory()}/${photoFilename}`,
+    };
 
   return (
     <DrawerContentScrollView {...props}>

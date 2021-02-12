@@ -83,7 +83,7 @@ export const knownMemberIDs = (group) => {
 };
 
 export const groupByIdSelector = createSelector(
-  (state) => state.groups.groups,
+  (state: State) => state.groups.groups,
   (_, groupId: string) => groupId,
   (groups, groupId) => {
     const group = groups.find((group) => group.id === groupId);

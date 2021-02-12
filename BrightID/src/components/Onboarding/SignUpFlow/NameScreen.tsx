@@ -31,7 +31,7 @@ export const NameScreen = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
-  const name = useSelector((state) => state.user.name);
+  const name = useSelector((state: State) => state.user.name);
   const [displayName, setDisplayName] = useState(name);
   const handleSubmit = () => {
     dispatch(setName(displayName));

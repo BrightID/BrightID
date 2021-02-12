@@ -30,9 +30,9 @@ export const AppsScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const apps = useSelector((state) => state.apps.apps);
-  const isSponsored = useSelector((state) => state.user.isSponsored);
-  const linkedContexts = useSelector((state) => state.apps.linkedContexts);
+  const apps = useSelector((state: State) => state.apps.apps);
+  const isSponsored = useSelector((state: State) => state.user.isSponsored);
+  const linkedContexts = useSelector((state: State) => state.apps.linkedContexts);
   const [refreshing, setRefreshing] = useState(false);
   const { t } = useTranslation();
 

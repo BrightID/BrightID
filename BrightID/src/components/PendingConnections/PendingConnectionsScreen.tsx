@@ -42,7 +42,7 @@ export const PendingConnectionsScreen = () => {
   const { t } = useTranslation();
   const viewPagerRef = useRef(null);
 
-  const pendingConnections = useSelector((state) => {
+  const pendingConnections = useSelector((state: State) => {
     return selectAllUnconfirmedConnections(state);
   });
   // pending connections to display

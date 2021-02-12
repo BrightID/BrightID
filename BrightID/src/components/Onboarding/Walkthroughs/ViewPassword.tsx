@@ -21,19 +21,19 @@ const ViewPassword = ({ navigation }) => {
   );
   const { t } = useTranslation();
 
-  const password = useSelector((state) => state.user.password);
+  const password = useSelector((state: State) => state.user.password);
 
   /**
    * dimensions of edit profile button on the side bar
    * {x, y, width, height}
    */
   const editProfileMenuLayout = useSelector(
-    (state) => state.walkthrough.editProfileMenuLayout,
+    (state: State) => state.walkthrough.editProfileMenuLayout,
   );
   const editProfileTextLayout = useSelector(
-    (state) => state.walkthrough.editProfileTextLayout,
+    (state: State) => state.walkthrough.editProfileTextLayout,
   );
-  const headerHeight = useSelector((state) => state.walkthrough.headerHeight);
+  const headerHeight = useSelector((state: State) => state.walkthrough.headerHeight);
 
   /**
    * Dimensions for the transparent box around Edit Profile in the side menu

@@ -38,7 +38,7 @@ export const PasswordScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState([]);
 
-  const id = useSelector((state) => state.user.id);
+  const id = useSelector((state: State) => state.user.id);
 
   const checkPassword = () =>
     new Promise((res) => {
