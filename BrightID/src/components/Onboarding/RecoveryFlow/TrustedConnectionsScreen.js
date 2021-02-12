@@ -136,6 +136,13 @@ const TrustedConnectionsScreen = () => {
               },
             });
           } else {
+            Alert.alert(
+              t('common.alert.success'),
+              t(
+                'backup.alert.text.completed',
+                'Social recovery of your BrightID is now enabled',
+              ),
+            );
             navigation.navigate('Home');
           }
         }
