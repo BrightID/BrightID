@@ -101,12 +101,10 @@ export const ReconnectView = ({
         cooldownPeriod,
         successCallback: () => {
           setLevelHandler(connectionLevel);
-          navigation.navigate('Home');
         },
       });
     } else {
       setLevelHandler(connectionLevel);
-      navigation.navigate('Home');
     }
   };
 
