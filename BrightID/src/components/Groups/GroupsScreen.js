@@ -38,7 +38,7 @@ const getItemLayout = (data, index) => ({
   index,
 });
 
-export class GroupsScreen extends React.Componen {
+export class GroupsScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
