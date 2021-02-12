@@ -3,10 +3,10 @@ import Svg, { Circle, Path } from 'react-native-svg';
 import { ORANGE } from '@/theme/colors';
 
 type Props = {
-  color: string;
-  width: number;
-  height: number;
-  strokeWidth: number;
+  color?: string;
+  width?: number;
+  height?: number;
+  strokeWidth?: number;
 };
 
 const Faq = ({

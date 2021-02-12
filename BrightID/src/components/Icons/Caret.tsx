@@ -3,10 +3,10 @@ import Svg, { Path } from 'react-native-svg';
 import { BLACK } from '@/theme/colors';
 
 type Props = {
-  direction: 'down';
-  color: string;
-  width: number;
-  height: number;
+  direction?: 'down';
+  color?: string;
+  width?: number;
+  height?: number;
 };
 
 // TODO: Add pathUp

@@ -3,10 +3,10 @@ import Svg, { Path } from 'react-native-svg';
 import { BLACK, ORANGE } from '@/theme/colors';
 
 type Props = {
-  color: string;
-  highlight: String;
-  width: number;
-  height: number;
+  color?: string;
+  highlight?: string;
+  width?: number;
+  height?: number;
 };
 
 const Pencil = ({

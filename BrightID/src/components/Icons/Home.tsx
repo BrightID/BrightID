@@ -3,10 +3,11 @@ import Svg, { ClipPath, Defs, G, Path, Rect } from 'react-native-svg';
 import { BLACK, ORANGE, WHITE } from '@/theme/colors';
 
 type Props = {
-  color: string;
-  highlight: String;
-  width: number;
-  height: number;
+  color?: string;
+  background?: string;
+  highlight?: string;
+  width?: number;
+  height?: number;
 };
 
 const Home = ({

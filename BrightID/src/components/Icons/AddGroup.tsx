@@ -3,9 +3,9 @@ import Svg, { Path } from 'react-native-svg';
 import { BLACK } from '@/theme/colors';
 
 type Props = {
-  color: string;
-  width: number;
-  height: number;
+  color?: string;
+  width?: number;
+  height?: number;
 };
 
 const AddGroup = ({ color = BLACK, width = 28, height = 28 }: Props) => (

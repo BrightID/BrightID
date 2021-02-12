@@ -3,9 +3,9 @@ import Svg, { Path } from 'react-native-svg';
 import { BLACK } from '@/theme/colors';
 
 type Props = {
-  color: string;
-  width: number;
-  height: number;
+  color?: string;
+  width?: number;
+  height?: number;
 };
 
 const ChatBox = ({ color = BLACK, width = 21, height = 21 }: Props) => (

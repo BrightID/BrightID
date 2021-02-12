@@ -3,9 +3,9 @@ import Svg, { Path } from 'react-native-svg';
 import { BLACK } from '@/theme/colors';
 
 type Props = {
-  color: string;
-  width: number;
-  height: number;
+  color?: string;
+  width?: number;
+  height?: number;
 };
 
 const Camera = ({ color = BLACK, width = 33, height = 30 }: Props) => (

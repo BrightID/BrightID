@@ -3,10 +3,11 @@ import Svg, { Path } from 'react-native-svg';
 import { ORANGE, WHITE } from '@/theme/colors';
 
 type Props = {
-  color: string;
-  background: string;
-  width: number;
-  height: number;
+  color?: string;
+  background?: string;
+  width?: number;
+  height?: number;
+  strokeWidth?: number;
 };
 
 const VerifiedBadge = ({

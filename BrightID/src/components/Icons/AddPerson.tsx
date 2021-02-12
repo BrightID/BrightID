@@ -3,9 +3,9 @@ import Svg, { Path } from 'react-native-svg';
 import { BLACK } from '@/theme/colors';
 
 type Props = {
-  color: string;
-  width: number;
-  height: number;
+  color?: string;
+  width?: number;
+  height?: number;
 };
 
 const AddPerson = ({ color = BLACK, width = 24, height = 24 }: Props) => (

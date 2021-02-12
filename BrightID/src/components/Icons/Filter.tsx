@@ -3,9 +3,9 @@ import Svg, { Circle, Path } from 'react-native-svg';
 import { BLACK } from '@/theme/colors';
 
 type Props = {
-  color: string;
-  width: number;
-  height: number;
+  color?: string;
+  width?: number;
+  height?: number;
 };
 
 const Filter = ({ color = BLACK, width = 52, height = 40 }: Props) => (

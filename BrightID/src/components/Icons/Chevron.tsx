@@ -3,11 +3,11 @@ import Svg, { Path } from 'react-native-svg';
 import { BLACK } from '@/theme/colors';
 
 type Props = {
-  direction: 'up' | 'down';
-  color: string;
-  width: number;
-  height: number;
-  strokeWidth: number;
+  direction?: 'up' | 'down';
+  color?: string;
+  width?: number;
+  height?: number;
+  strokeWidth?: number;
 };
 
 const pathDown = 'M2 2L8 8L14 2';

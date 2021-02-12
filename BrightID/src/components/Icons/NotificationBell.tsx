@@ -3,10 +3,10 @@ import Svg, { Circle, Path } from 'react-native-svg';
 import { BLACK, RED } from '@/theme/colors';
 
 type Props = {
-  color: string;
-  alert: Boolean;
-  width: number;
-  height: number;
+  color?: string;
+  alert?: boolean;
+  width?: number;
+  height?: number;
 };
 
 const NotificationBell = ({

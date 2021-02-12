@@ -3,10 +3,10 @@ import Svg, { Path } from 'react-native-svg';
 import { BLACK } from '@/theme/colors';
 
 type Props = {
-  color: string;
-  width: number;
-  height: number;
-  strokeWidth: number;
+  color?: string;
+  width?: number;
+  height?: number;
+  strokeWidth?: number;
 };
 
 const BackArrow = ({

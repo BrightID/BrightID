@@ -3,9 +3,9 @@ import Svg, { Path } from 'react-native-svg';
 import { BLUE } from '@/theme/colors';
 
 type Props = {
-  color: string;
-  width: number;
-  height: number;
+  color?: string;
+  width?: number;
+  height?: number;
 };
 
 console.log('BLUE', BLUE);

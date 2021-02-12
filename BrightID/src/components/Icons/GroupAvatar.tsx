@@ -3,11 +3,12 @@ import Svg, { Circle, G, Path, Mask } from 'react-native-svg';
 import { DARKER_GREY, LIGHT_GREY, GREY, WHITE } from '@/theme/colors';
 
 type Props = {
-  color: string;
-  background: string;
-  addPicture: Boolean;
-  width: number;
-  height: number;
+  color?: string;
+  background?: string;
+  secondary?: string;
+  addPicture?: boolean;
+  width?: number;
+  height?: number;
 };
 
 const GroupAvatar = ({

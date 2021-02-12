@@ -3,9 +3,9 @@ import Svg, { Path } from 'react-native-svg';
 import { RED } from '@/theme/colors';
 
 type Props = {
-  color: string;
-  width: number;
-  height: number;
+  color?: string;
+  width?: number;
+  height?: number;
 };
 
 const Delete = ({ color = RED, width = 44, height = 44 }: Props) => (

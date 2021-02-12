@@ -8,7 +8,7 @@ import { channel_states } from '@/components/PendingConnections/channelSlice';
 import ChannelAPI from '@/api/channelService';
 import i18next from 'i18next';
 
-export const createRandomId = async (size: number = 9) => {
+export const createRandomId = async (size = 9) => {
   const key = await randomKey(size);
   return b64ToUrlSafeB64(key);
 };
