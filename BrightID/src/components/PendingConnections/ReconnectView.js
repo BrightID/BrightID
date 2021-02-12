@@ -10,6 +10,13 @@ import { BLACK, DARKER_GREY, ORANGE, RED, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import TrustlevelSlider from '@/components/Connections/TrustlevelSlider';
 import { retrieveImage } from '@/utils/filesystem';
+import {
+  connection_levels,
+  RECOVERY_COOLDOWN_DURATION,
+} from '@/utils/constants';
+import { calculateCooldownPeriod } from '@/utils/recovery';
+import { useSelector } from 'react-redux';
+import { recoveryConnectionsSelector } from '@/utils/connectionsSelector';
 import { ConnectionStats } from './ConnectionStats';
 import { ProfileCard } from './ProfileCard';
 
@@ -30,6 +37,7 @@ export const ReconnectView = ({
   abuseHandler,
 }: ReconnectViewProps) => {
   const navigation = useNavigation();
+  const recoveryConnections = useSelector(recoveryConnectionsSelector);
   const [identicalProfile, setIdenticalProfile] = useState(true);
   const [connectionLevel, setConnectionLevel] = useState(
     existingConnection.level,
@@ -69,6 +77,37 @@ export const ReconnectView = ({
       photo,
       base64: type === 'base64',
     });
+  };
+
+  const updateLevel = () => {
+    let cooldownPeriod = 0;
+    if (existingConnection.level !== connectionLevel) {
+      // user changed level. Check if recovery level was added or removed.
+      if (connectionLevel === connection_levels.RECOVERY) {
+        // adding recovery connection. check if cooldown period applies
+        cooldownPeriod = calculateCooldownPeriod({
+          recoveryConnections,
+          existingConnection,
+        });
+      } else if (existingConnection.level === connection_levels.RECOVERY) {
+        // removing recovery connection. Cooldown period always applies.
+        cooldownPeriod = RECOVERY_COOLDOWN_DURATION;
+      }
+    }
+    if (cooldownPeriod > 0) {
+      // show info about cooldown period
+      navigation.navigate('RecoveryCooldownInfo', {
+        connectionId: existingConnection.id,
+        cooldownPeriod,
+        successCallback: () => {
+          setLevelHandler(connectionLevel);
+          navigation.navigate('Home');
+        },
+      });
+    } else {
+      setLevelHandler(connectionLevel);
+      navigation.navigate('Home');
+    }
   };
 
   if (identicalProfile) {
@@ -125,7 +164,7 @@ export const ReconnectView = ({
         <View style={styles.actionButtons}>
           <TouchableOpacity
             style={styles.updateButton}
-            onPress={() => setLevelHandler(connectionLevel)}
+            onPress={updateLevel}
             testID="updateBtn"
           >
             <Text style={styles.updateButtonLabel}>
@@ -221,7 +260,7 @@ export const ReconnectView = ({
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.updateButton}
-            onPress={() => setLevelHandler(connectionLevel)}
+            onPress={updateLevel}
             testID="updateBtn"
           >
             <Text style={styles.updateButtonLabel}>
