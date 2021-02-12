@@ -25,6 +25,13 @@
     "node_modules",
     "babel.config.js",
     "metro.config.js",
-    "jest.config.js"
+    "jest.config.js",
+    ".eslintrc.js",
   ],
+  "include": [
+    "src",
+    "index.ts",
+    "i18n.ts",
+    "codepush.config.ts",
+  ]
 }

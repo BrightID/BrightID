@@ -1,16 +1,13 @@
 module.exports = {
   root: true,
-  parser: '@typescript-eslint/parser',
-  plugins: ['import', 'react', 'jsx-a11y', '@typescript-eslint'],
+  plugins: ['import', 'react', 'jsx-a11y'],
   extends: [
-    'airbnb-typescript',
-    'plugin:@typescript-eslint/recommended',
+    'airbnb',
+    '@react-native-community',
+    'plugin:react/recommended',
+    'plugin:jsx-a11y/recommended',
     'prettier',
-    'prettier/@typescript-eslint'
   ],
-  //  parserOptions: {
-  //   project: './tsconfig.json',
-  // },
   env: {
     browser: true,
     node: true,
@@ -21,10 +18,45 @@ module.exports = {
     'import/resolver': {
       alias: {
         map: [['@', './src']],
-        extensions: ['.js', '.json', '.ts', '.tsx'],
+        extensions: ['.js', '.json'],
       },
     },
   },
+  overrides: [
+    {
+      files: ['**/*.ts', '**/*.tsx'],
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        // ecmaFeatures: { jsx: true },
+        // ecmaVersion: 2018,
+        // sourceType: 'module',
+        project: './tsconfig.json',
+      },
+      plugins: ['import', 'jsx-a11y', '@typescript-eslint'],
+      env: { browser: true, es6: true, node: true },
+      settings: {
+        'import/resolver': {
+          alias: {
+            map: [['@', './src']],
+            extensions: ['.ts', '.tsx'],
+          },
+        },
+      },
+      extends: [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
+        'prettier',
+        'prettier/@typescript-eslint',
+      ],
+      rules: {
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/ban-ts-comment': 'off',
+        '@typescript-eslint/no-var-requires': 'off',
+        // 'import/extensions': 'off',
+      },
+    },
+  ],
   rules: {
     'no-unused-vars': 'error',
     'no-console': 'off',
@@ -64,6 +96,7 @@ module.exports = {
     'react/display-name': 'off',
     'react/prop-types': 'off',
     'react/jsx-props-no-spreading': 'off',
+    'import/extensions': 'off',
     // 'sort-keys': [
     //   'error',
     //   'asc',

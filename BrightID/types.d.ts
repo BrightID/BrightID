@@ -1,22 +1,12 @@
 // @flow
 
-import { Dispatch } from 'redux';
 import {
   channel_states,
   channel_types,
 } from '@/components/PendingConnections/channelSlice';
 import ChannelAPI from '@/api/channelService';
-import { StackNavigationProp} from '@react-navigation/stack'
 import { connection_levels } from './src/utils/constants';
 import { pendingConnection_states } from './src/components/PendingConnections/pendingConnectionSlice';
-
-declare type getState = () => State;
-
-declare type dispatch = Dispatch;
-
-declare type navigation = StackNavigationProp<any, any>;
-
-declare type Props = State & navigation & dispatch;
 
 declare type State = {
   channels: ChannelsState;

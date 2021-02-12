@@ -20,10 +20,9 @@ console.disableYellowBox = true;
 
 // remove setting a timer warning
 if (__DEV__) {
-  // eslint-disable-next-line import/no-extraneous-dependencies
-  let _ = require('lodash');
-  let _console = _.clone(console);
-  console.warn = (message) => {
+  const _ = require('lodash');
+  const _console = _.clone(console);
+  console.warn = (message: string | string[]) => {
     if (message.indexOf('Setting a timer') <= -1) {
       _console.warn(message);
     }
@@ -44,14 +43,19 @@ AntDesign.loadFont();
 MaterialIcons.loadFont();
 
 // Fix Font Scaling
+// @ts-ignore
 Text.defaultProps = Text.defaultProps || {};
+// @ts-ignore
 Text.defaultProps.allowFontScaling = false;
-
+// @ts-ignore
 TextInput.defaultProps = TextInput.defaultProps || {};
+// @ts-ignore
 TextInput.defaultProps.allowFontScaling = false;
-
+// @ts-ignore
 FlatList.defaultProps = FlatList.defaultProps || {};
+// @ts-ignore
 FlatList.defaultProps.windowSize = DEVICE_ANDROID ? 5 : 10;
+// @ts-ignore
 FlatList.defaultProps.removeClippedSubviews = DEVICE_ANDROID;
 
 AppRegistry.registerComponent(appName, () => codePush(codePushOptions)(App));
