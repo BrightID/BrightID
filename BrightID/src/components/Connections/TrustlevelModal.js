@@ -47,17 +47,15 @@ const TrustlevelModal = ({ route, navigation }: props) => {
 
   const saveLevelHandler = async () => {
     let cooldownPeriod = 0;
-    let addedRecovery = false;
     if (connection.level !== level) {
       console.log(`Setting connection level '${level}' for ${connection.name}`);
       if (level === connection_levels.RECOVERY) {
-        addedRecovery = true;
         // Get cooldown period for this change
         cooldownPeriod = calculateCooldownPeriod({
           recoveryConnections,
           connection,
         });
-      } else {
+      } else if (connection.level === connection_levels.RECOVERY) {
         // removing recovery connection. Cooldown period always applies
         cooldownPeriod = RECOVERY_COOLDOWN_DURATION;
       }
@@ -77,7 +75,6 @@ const TrustlevelModal = ({ route, navigation }: props) => {
       navigation.navigate('RecoveryCooldownInfo', {
         connectionId,
         cooldownPeriod,
-        addedRecovery,
       });
     }
   };
