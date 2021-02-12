@@ -117,6 +117,7 @@ declare global {
     hasPrimaryGroup: boolean;
     publicKey?: string;
     flaggers?: any; // TODO: Proper definition, maybe refactor
+    level: ConnectionLevel
   };
 
   type GroupsState = {

@@ -4,11 +4,21 @@ import { Buffer } from 'buffer';
 import CryptoJS from 'crypto-js';
 import { compose } from 'ramda';
 
-export function uInt8ArrayToB64(array: Uint8Array) {
+/**
+ * 
+ * @param {Uint8Array} array 
+ * @returns {string}
+ */
+export function uInt8ArrayToB64(array) {
   return B64.fromByteArray(array);
 }
 
-export function b64ToUint8Array(str: string) {
+/**
+ * 
+ * @param {string} str 
+ * @returns {Uint8Array}
+ */
+export function b64ToUint8Array(str) {
   // B64.toByteArray might return a Uint8Array, an Array or an Object depending on the platform.
   // Wrap it in Object.values and new Uint8Array to make sure it's a Uint8Array.
   let arr = B64.toByteArray(str);
@@ -23,16 +33,36 @@ export function b64ToUint8Array(str: string) {
   return plainArray;
 }
 
-export function strToUint8Array(str: string) {
+/**
+ * 
+ * @param {string} str 
+ * @returns {Uint8Array}
+ */
+export function strToUint8Array(str) {
   return new Uint8Array(Buffer.from(str, 'ascii'));
 }
 
-export const objValues = (obj: Uint8Obj): Array<number> =>
+/**
+ * 
+ * @param {Uint8Obj} obj
+ * @returns {number[]}
+ */
+export const objValues = (obj) =>
   Object.values(obj).map(parseFloat);
 
-export const objToUint8 = (obj: Uint8Obj) => new Uint8Array(objValues(obj));
+/**
+*
+* @param {Uint8Obj} obj
+* @returns {Uint8Array}
+*/
+export const objToUint8 = (obj) => new Uint8Array(objValues(obj));
 
-export function b64ToUrlSafeB64(s: string) {
+/**
+ * 
+ * @param {string} s 
+ * @returns 
+ */
+export function b64ToUrlSafeB64(s) {
   const alts = {
     '/': '_',
     '+': '-',
@@ -43,14 +73,24 @@ export function b64ToUrlSafeB64(s: string) {
 
 export const objToB64 = compose(uInt8ArrayToB64, objToUint8);
 
-export const hash = (data: string) => {
+/**
+ * 
+ * @param {string} data 
+ * @returns 
+ */
+export const hash = (data) => {
   const h = CryptoJS.SHA256(data);
   const b = h.toString(CryptoJS.enc.Base64);
   return b64ToUrlSafeB64(b);
 };
 
 const { RNRandomBytes } = NativeModules;
-export const randomKey = (size: number) =>
+/**
+ * 
+ * @param {number} size 
+ * @returns 
+ */
+export const randomKey = (size) =>
   new Promise((resolve, reject) => {
     RNRandomBytes.randomBytes(size, (err, bytes) => {
       err ? reject(err) : resolve(bytes);
