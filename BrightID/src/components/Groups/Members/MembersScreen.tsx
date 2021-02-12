@@ -76,6 +76,7 @@ function MembersScreen(props: MembersScreenProps) {
         Alert.alert(
           t('groups.alert.title.leaveGroup'),
           t('groups.alert.text.leaveGroup'),
+          // @ts-ignore
           buttons,
           {
             cancelable: true,
@@ -144,6 +145,9 @@ function MembersScreen(props: MembersScreenProps) {
     dispatch,
     group,
     groupID,
+    t,
+    ACTION_LEAVE,
+    ACTION_CANCEL
   ]);
 
   // set available actions for group
@@ -212,6 +216,7 @@ function MembersScreen(props: MembersScreenProps) {
     Alert.alert(
       t('groups.alert.title.dismissMember'),
       t('groups.alert.text.dismissMember', { name: user.name }),
+      // @ts-ignore
       buttons,
       {
         cancelable: true,
@@ -243,6 +248,7 @@ function MembersScreen(props: MembersScreenProps) {
     Alert.alert(
       t('groups.alert.title.addAdmin'),
       t('groups.alert.text.addAdmin', { name: user.name }),
+      // @ts-ignore
       buttons,
       {
         cancelable: true,

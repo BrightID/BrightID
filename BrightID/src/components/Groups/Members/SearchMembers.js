@@ -7,7 +7,7 @@ import { fontSize } from '@/theme/fonts';
 import { setSearchParam } from '@/actions';
 import { GREY, WHITE, LIGHT_BLACK } from '@/theme/colors';
 
-class SearchMembers extends React.Component<Props> {
+class SearchMembers extends React.Component {
   componentWillUnmount() {
     this.props.dispatch(setSearchParam(''));
   }

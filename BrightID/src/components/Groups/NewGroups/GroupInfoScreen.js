@@ -27,7 +27,7 @@ import { DEVICE_TYPE, DEVICE_OS, DEVICE_LARGE } from '@/utils/deviceConstants';
 
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
-export class GroupInfoScreen extends React.Component<Props> {
+export class GroupInfoScreen extends React.Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     name: '',

@@ -29,6 +29,7 @@ type MemberCardProps = {
   userIsAdmin: boolean;
   memberIsAdmin: boolean;
   flaggers: any;
+  testID: string;
 };
 
 function MemberCard(props: MemberCardProps) {

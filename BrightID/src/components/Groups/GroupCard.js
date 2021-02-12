@@ -11,7 +11,7 @@ import GroupPhoto from './GroupPhoto';
 /**
  * Group Card in the Groups Screen
  */
-class GroupCard extends React.PureComponent<Props> {
+class GroupCard extends React.PureComponent {
   setStatus = () => {
     const { group, t } = this.props;
     const concatenationString = t('common.language.and', 'and');

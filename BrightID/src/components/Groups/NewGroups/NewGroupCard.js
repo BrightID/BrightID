@@ -19,8 +19,8 @@ import { toggleNewGroupCoFounder } from '../actions';
  * @prop connectionTime
  * @prop photo
  */
-class NewGroupCard extends React.PureComponent<Props> {
-  constructor(props: Props) {
+class NewGroupCard extends React.PureComponent {
+  constructor(props) {
     super(props);
     this.state = {
       imgErr: false,
@@ -65,8 +65,8 @@ class NewGroupCard extends React.PureComponent<Props> {
     const imageSource =
       photo?.filename && !this.state.imgErr
         ? {
-            uri: `file://${photoDirectory()}/${photo?.filename}`,
-          }
+          uri: `file://${photoDirectory()}/${photo?.filename}`,
+        }
         : require('@/static/default_profile.jpg');
 
     return (

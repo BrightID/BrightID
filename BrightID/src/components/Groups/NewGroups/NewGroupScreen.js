@@ -41,7 +41,7 @@ const creationStateStrings = {
   creatingGroup: i18next.t('groups.state.creatingGroup', 'creating the group…'),
 };
 
-export class NewGroupScreen extends React.Component<Props> {
+export class NewGroupScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

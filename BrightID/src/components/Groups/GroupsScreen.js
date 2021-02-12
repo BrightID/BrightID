@@ -25,9 +25,9 @@ import { compareJoinedDesc } from './models/sortingUtility';
  * Group screen of BrightID
  * Displays a search input and list of Group Cards
  */
-type State = {
-  refreshing: boolean;
-};
+// type State = {
+//   refreshing: boolean;
+// };
 
 const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
 const ITEM_MARGIN = DEVICE_LARGE ? 11.8 : 6;
@@ -38,8 +38,8 @@ const getItemLayout = (data, index) => ({
   index,
 });
 
-export class GroupsScreen extends React.Component<Props, State> {
-  constructor(props: Props) {
+export class GroupsScreen extends React.Componen {
+  constructor(props) {
     super(props);
     this.state = {
       refreshing: false,
