@@ -9,11 +9,6 @@ import ChannelAPI from '@/api/channelService';
 import { connection_levels } from './src/utils/constants';
 import { pendingConnection_states } from './src/components/PendingConnections/pendingConnectionSlice';
 
-declare module '*.svg' {
-  const content: any;
-  export default content;
-}
-
 declare global {
   type getState = () => State;
 
@@ -256,6 +251,7 @@ declare global {
     deviceToken: string;
     sessionNotifications: Array<string>;
     notificationToken: string;
+    recoveryConnectionsPending: boolean;
   };
 
   type BannerNotification = {

@@ -35,7 +35,7 @@ let thecount = 0;
 /** SELECTORS */
 
 const inviteSelector = createSelector(
-  (state: State) => state.groups.invites,
+  (state) => state.groups.invites,
   (invites) => invites.filter(({ state }) => state === INVITE_ACTIVE),
 );
 
@@ -61,7 +61,7 @@ const useRefresh = () => {
 
 const ConnectionsList = ({ route }) => {
   const [refreshing, onRefresh] = useRefresh();
-  const pendingConnections = useSelector((state: State) =>
+  const pendingConnections = useSelector((state) =>
     selectAllUnconfirmedConnections(state),
   );
   const { t } = useTranslation();
@@ -95,7 +95,7 @@ const InviteList = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
   const [refreshing, onRefresh] = useRefresh();
-  const invites = useSelector((state: State) => inviteSelector(state));
+  const invites = useSelector((state) => inviteSelector(state));
   thecount++;
   console.log('Rendering Invite List', thecount);
 
@@ -124,7 +124,7 @@ const InviteList = () => {
 
 const MiscList = ({ route }) => {
   const { t } = useTranslation();
-  const photoFilename = useSelector((state: State) => state.user.photo.filename);
+  const photoFilename = useSelector((state) => state.user.photo.filename);
   const [refreshing, onRefresh] = useRefresh();
   const data = [];
 
@@ -217,14 +217,14 @@ export const NotificationsScreen = ({ route }) => {
     (state) => selectAllUnconfirmedConnections(state)?.length,
   );
 
-  const invites = useSelector((state: State) => inviteSelector(state)?.length);
+  const invites = useSelector((state) => inviteSelector(state)?.length);
 
   const backupPending = useSelector(
-    (state: State) => state.notifications.backupPending,
+    (state) => state.notifications.backupPending,
   );
 
   const recoveryConnectionsPending = useSelector(
-    (state: State) => state.notifications.recoveryConnectionsPending,
+    (state) => state.notifications.recoveryConnectionsPending,
   );
 
   const routes = [

@@ -23,7 +23,7 @@ import {
 import Check from '@/components/Icons/Check';
 import xGrey from '@/static/x_grey.svg';
 
-class InviteCard extends React.Component<Props> {
+class InviteCard extends React.Component {
   rejectInvite = () => {
     const { invite, dispatch, t } = this.props;
     Alert.alert(
@@ -97,7 +97,7 @@ class InviteCard extends React.Component<Props> {
           <Text style={styles.name}>{getGroupName(invite)}</Text>
           <Text style={styles.invitationMsg}>
             {t('notifications.item.text.pendingGroupInvite', {
-              name: inviter?.name,
+              name: inviter?.name
             })}
           </Text>
         </View>
@@ -123,7 +123,7 @@ class InviteCard extends React.Component<Props> {
             />
           </TouchableOpacity>
         </View>
-      </View>
+      </View >
     );
   }
 }
