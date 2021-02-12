@@ -7,6 +7,8 @@ import {
   connectionLevelStrings,
 } from '@/utils/connectionLevelStrings';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { GREY } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 
 export const ConnectionStatus = ({
   index,
@@ -77,6 +79,7 @@ export const ConnectionStatus = ({
   }
 };
 
+// TODO: missing connectedText
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -161,5 +164,11 @@ const styles = StyleSheet.create({
     width: DEVICE_LARGE ? 36 : 32,
     position: 'absolute',
     right: 0,
+  },
+  connectedText: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: fontSize[12],
+    color: GREY,
+    fontStyle: 'italic',
   },
 });

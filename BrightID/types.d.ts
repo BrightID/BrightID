@@ -1,5 +1,6 @@
 // @flow
 
+import { ThunkDispatch } from 'redux-thunk';
 import {
   channel_states,
   channel_types,
@@ -14,6 +15,13 @@ declare module '*.svg' {
 }
 
 declare global {
+  type getState = () => State;
+
+  // TODO: make this type more specific
+  type dispatch = ThunkDispatch<any, any, any>;
+
+  type navigation = () => any;
+
   type State = {
     channels: ChannelsState;
     apps: AppsState;
@@ -71,8 +79,8 @@ declare global {
     aesKey: string;
     timestamp: number;
     ttl: number;
-    pollTimerId?: number;
-    timeoutId?: number;
+    pollTimerId?: ReturnType<typeof setInterval>;
+    timeoutId?: ReturnType<typeof setTimeout>;
     type: ChannelType;
     state: ChannelState;
     myProfileTimestamp?: number;
@@ -246,6 +254,7 @@ declare global {
     backupPending: boolean;
     deviceToken: string;
     sessionNotifications: Array<string>;
+    notificationToken: string;
   };
 
   type BannerNotification = {

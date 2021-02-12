@@ -33,7 +33,9 @@ const FullScreenPhoto = ({ route, navigation }) => {
       onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
       onPanResponderGrant: () => {
         pan.setOffset({
+          // @ts-ignore
           x: pan.x._value,
+          // @ts-ignore
           y: pan.y._value,
         });
       },

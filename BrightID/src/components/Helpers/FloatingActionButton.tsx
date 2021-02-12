@@ -9,7 +9,17 @@ import {
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ORANGE, WHITE } from '@/theme/colors';
 
-export default class FloatActionButton extends Component {
+type Props = { testID: string; onPress: () => void };
+type State = {
+  offset: Animated.Value;
+};
+export default class FloatActionButton extends Component<Props, State> {
+  hideAnim: Animated.CompositeAnimation;
+
+  showAnim: Animated.CompositeAnimation;
+
+  visible: boolean;
+
   constructor(props) {
     super(props);
     this.visible = true;
@@ -19,11 +29,14 @@ export default class FloatActionButton extends Component {
     this.hideAnim = Animated.timing(this.state.offset, {
       toValue: 150,
       duration: 300,
+      useNativeDriver: true,
     });
     this.showAnim = Animated.timing(this.state.offset, {
       toValue: 0,
+      // @ts-ignore
       easing: Easing.back(),
       duration: 300,
+      useNativeDriver: true,
     });
     this._onPress = this._onPress.bind(this);
   }

@@ -3,6 +3,7 @@ import {
   createEntityAdapter,
   createAsyncThunk,
   createSelector,
+  EntityState,
 } from '@reduxjs/toolkit';
 import i18next from 'i18next';
 import {
@@ -16,7 +17,7 @@ import { PROFILE_VERSION } from '@/utils/constants';
 import { createDeepEqualStringArraySelector } from '@/utils/createDeepEqualStringArraySelector';
 import BrightidError, { USER_NOT_FOUND } from '@/api/brightidError';
 
-const pendingConnectionsAdapter = createEntityAdapter();
+const pendingConnectionsAdapter = createEntityAdapter<PendingConnectionsState>();
 
 /*
   PendingConnection slice contains all pending connections and their profile info
@@ -43,7 +44,7 @@ export const pendingConnection_states = {
 
 export const newPendingConnection = createAsyncThunk(
   'pendingConnections/newPendingConnection',
-  async ({ channelId, profileId }, { getState, dispatch }) => {
+  async ({ channelId, profileId }, { getState }) => {
     console.log(`new pending connection ${profileId} in channel ${channelId}`);
 
     const channel = selectChannelById(getState(), channelId);
@@ -121,7 +122,7 @@ export const newPendingConnection = createAsyncThunk(
 // By default, `createEntityAdapter` gives you `{ ids: [], entities: {} }`.
 // If you want to track 'loading' or other keys, you would initialize them here:
 // `getInitialState({ loading: false, activeRequestId: null })`
-const initialState: PendingConnectionsState = pendingConnectionsAdapter.getInitialState();
+const initialState = pendingConnectionsAdapter.getInitialState();
 
 const pendingConnectionsSlice = createSlice({
   name: 'pendingConnections',

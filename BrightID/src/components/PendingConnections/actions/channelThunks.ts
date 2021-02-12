@@ -88,7 +88,7 @@ export const joinChannel = (channel: Channel) => async (
   }
 
   // calc remaining lifetime of channel
-  let ttl_remain = channel.timestamp + channel.ttl - Date.now();
+  const ttl_remain = channel.timestamp + channel.ttl - Date.now();
 
   try {
     // don't join channel if it is/is about to expired
@@ -137,10 +137,7 @@ export const subscribeToConnectionRequests = (channelId: string) => (
   getState: getState,
 ) => {
   // this flow syntax is ugly. https://github.com/facebook/flow/issues/235
-  let { pollTimerId }: { pollTimerId: IntervalID } = selectChannelById(
-    getState(),
-    channelId,
-  );
+  let { pollTimerId } = selectChannelById(getState(), channelId);
 
   if (pollTimerId) {
     console.log(
@@ -254,7 +251,7 @@ export const encryptAndUploadProfileToChannel = (channelId: string) => async (
 
   const { notificationToken } = getState().notifications;
 
-  let socialMedia = selectAllSocialMedia(getState());
+  const socialMedia = selectAllSocialMedia(getState());
 
   // retrieve photo
   const photo = await retrieveImage(filename);
@@ -271,7 +268,7 @@ export const encryptAndUploadProfileToChannel = (channelId: string) => async (
   };
 
   console.log(`Encrypting profile data with key ${channel.aesKey}`);
-  let encrypted = encryptData(dataObj, channel.aesKey);
+  const encrypted = encryptData(dataObj, channel.aesKey);
   console.log(`Posting profile data...`);
   await channel.api.upload({
     channelId,

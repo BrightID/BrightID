@@ -23,13 +23,13 @@ const X_TRANSFORM = DEVICE_LARGE ? 250 : 195;
 
 const AnimatedTopSearchBar = ({
   sortable,
-  handleSort,
+  handleSort = () => {},
   setSearchValue,
   setSearchOpen,
   searchOpenSelector,
 }) => {
   const dispatch = useDispatch();
-  const textInput = useRef(null);
+  const textInput = useRef<TextInput>(null);
   const searchOpen = useSelector(searchOpenSelector);
   const { t } = useTranslation();
 
@@ -47,17 +47,17 @@ const AnimatedTopSearchBar = ({
   const getPidded = () => {
     if (searchOpen) {
       dispatch(setSearchValue(''));
-      textInput.current.clear();
-      textInput.current.blur();
+      textInput.current?.clear();
+      textInput.current?.blur();
     } else {
-      textInput.current.focus();
+      textInput.current?.focus();
     }
 
     dispatch(setSearchOpen(!searchOpen));
     Animated.spring(leftAnim, {
       toValue: searchOpen ? X_TRANSFORM : 0,
       useNativeDriver: true,
-    }).start(() => {});
+    }).start();
   };
 
   return (

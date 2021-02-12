@@ -55,7 +55,7 @@ export const NotificationBanner = () => {
       return;
     }
 
-    let route = getRoute();
+    const route = getRoute();
 
     dropDownAlertRef.current?.closeAction('cancel');
 
