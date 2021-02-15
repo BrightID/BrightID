@@ -2,8 +2,8 @@ import { combineReducers } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import reducers from '@/reducer';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import  FsStorage from './storage/fsStorageAdapter';
-import  KeychainStorage  from './storage/keychainAdapter';
+import FsStorage from './storage/fsStorageAdapter';
+import KeychainStorage from './storage/keychainAdapter';
 import getStoredState from './getStoredState';
 
 // update this in async migrate if changed to prevent require cycle

@@ -7,7 +7,7 @@ export function asyncCreateMigrate(
   config?: { debug: boolean },
 ) {
   let { debug } = config || {};
-  return function(
+  return function (
     state: PersistedState,
     currentVersion: number,
   ): Promise<PersistedState> {

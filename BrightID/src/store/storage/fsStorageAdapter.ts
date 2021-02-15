@@ -2,7 +2,7 @@
  * @flow
  */
 
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob, { Encoding } from 'rn-fetch-blob';
 import { InteractionManager } from 'react-native';
 
 const createStoragePathIfNeeded = (path) =>
@@ -26,7 +26,7 @@ const defaultStoragePath = () =>
 
 let onStorageReady = onStorageReadyFactory(defaultStoragePath());
 
-let encoding = 'utf8';
+let encoding: Encoding = 'utf8';
 
 let toFileName = (key: string) => key.replace(/[^a-z0-9.\-_]/gi, '-');
 

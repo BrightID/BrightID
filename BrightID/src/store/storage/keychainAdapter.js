@@ -7,10 +7,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DEVICE_ANDROID } from '@/utils/deviceConstants';
 import { b64ToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 
-const getItem = async (key: string) => {
+/**
+ * 
+ * @param {string} key 
+ * @returns 
+ */
+const getItem = async (key) => {
   try {
     let { username, password } = await getGenericPassword();
-    console.log('getKeychain', username, password);
     let { publicKey, version } = JSON.parse(username);
     if (!publicKey || !password) {
       throw new Error(`keypair does not exist in keychain!`);
@@ -34,13 +38,19 @@ const getItem = async (key: string) => {
   }
 };
 
+/**
+ * 
+ * @param {string} key 
+ * @param {{
+ *   publicKey: string; 
+ *   secretKey: Uint8Array; 
+ *   _persist: { version: number };
+ * }} keypair
+ * @returns {Promise<boolean>}
+ */
 const setItem = async (
-  key: string,
-  keypair: {
-    publicKey: string;
-    secretKey: Uint8Array;
-    _persist: { version: number };
-  },
+  key,
+  keypair,
 ) => {
   let password = uInt8ArrayToB64(keypair.secretKey);
   try {
