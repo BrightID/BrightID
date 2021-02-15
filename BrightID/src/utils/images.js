@@ -1,4 +1,3 @@
-import RNFetchBlob from 'rn-fetch-blob';
 import { compose } from 'ramda';
 import ImagePicker from './ImagePickerProvider';
 
@@ -47,47 +46,17 @@ export const chooseImage = () =>
   });
 
 /**
- * 
- * @returns Promise<string>
- */
-const fakeUserAvatar = () => {
-  // save each connection with their id as the async storage key
-  return RNFetchBlob.fetch('GET', 'https://loremflickr.com/180/180', {})
-    .then((res) => {
-      if (res.info().status === 200) {
-        let b64 = res.base64();
-        return b64;
-      } else {
-        return 'https://loremflickr.com/180/180';
-      }
-    })
-    .catch((err) => {
-      err instanceof Error ? console.warn(err.message) : console.log(err);
-    });
-};
-
-const randomAvatar = async () => {
-  try {
-    const randomImage = await fakeUserAvatar();
-    return { uri: 'data.jpg', data: randomImage };
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-/**
- * 
+ *
  * @param {string} str
- * @type string
- * @returns 
+ * @returns {string}
  */
 const splitDataURI = (str) => str.split(',', 2);
 
 /**
- * 
- * @param {string} mediaType 
+ *
+ * @param {string} mediaType
  * @param {string} image
- * @returns 
+ * @returns
  */
 const mediaTypeToFileExtension = ([mediaType = 'jpeg', image = ' ']) => {
   if (mediaType.includes('jpeg')) {
@@ -108,18 +77,14 @@ const mediaTypeToFileExtension = ([mediaType = 'jpeg', image = ' ']) => {
 export const parseDataUri = compose(mediaTypeToFileExtension, splitDataURI);
 
 /**
- * 
- * @param {string} str 
+ *
+ * @param {string} str
  * @returns string
  */
-const fileType = (str) =>
-  str
-    .split('.')
-    .pop()
-    .toLowerCase();
+const fileType = (str) => str.split('.').pop().toLowerCase();
 /**
- * 
- * @param {string} t 
+ *
+ * @param {string} t
  * @returns string
  */
 

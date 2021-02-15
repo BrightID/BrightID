@@ -2,8 +2,8 @@ import qrcode from 'qrcode';
 import { parseString } from 'xml2js';
 
 export const qrCodeToSvg = (
-  qrString: string,
-  callback: (arg0: any) => void,
+  qrString,
+  callback,
 ) => {
   qrcode.toString(qrString, (err, qr) => {
     if (err) return console.log(err);

@@ -1,5 +1,3 @@
-import { $Keys } from 'utility-types';
-
 import {
   createSelector,
   createSlice,
@@ -26,27 +24,39 @@ import {
   in a larger group session.
 
  */
-export const channel_types = {
-  GROUP: 'GROUP',
-  SINGLE: 'SINGLE',
-};
 
-export type ChannelType = $Keys<typeof channel_types>;
 
-export const channel_states = {
-  OPEN: 'OPEN',
-  CLOSED: 'CLOSED',
-  BACKGROUND: 'BACKGROUND',
-};
+// type channel_types = typeof channel_types[ChannelType];
+// export const channel_types = {
+//   GROUP: 'GROUP',
+//   SINGLE: 'SINGLE',
+// } as const;
 
-export type ChannelState = $Keys<typeof channel_states>;
+export enum channel_types {
+  GROUP = "GROUP",
+  SINGLE = "SINGLE"
+}
 
-export const channelsAdapter = createEntityAdapter();
+// type channel_states = typeof channel_states[ChannelState];
+// export const channel_states = {
+//   OPEN: 'OPEN',
+//   CLOSED: 'CLOSED',
+//   BACKGROUND: 'BACKGROUND',
+// } as const;
+
+export enum channel_states {
+  OPEN = 'OPEN',
+  CLOSED = 'CLOSED',
+  BACKGROUND = 'BACKGROUND'
+}
+
+
+export const channelsAdapter = createEntityAdapter<ChannelsState>();
 
 // By default, `createEntityAdapter` gives you `{ ids: [], entities: {} }`.
 // If you want to track 'loading' or other keys, you would initialize them here:
 // `getInitialState({ loading: false, activeRequestId: null })`
-const initialState: ChannelsState = channelsAdapter.getInitialState({
+const initialState = channelsAdapter.getInitialState({
   displayChannelType: channel_types.SINGLE,
   myChannelIds: {
     [channel_types.SINGLE]: '',

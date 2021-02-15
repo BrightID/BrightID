@@ -1,7 +1,7 @@
 import { createSelectorCreator, defaultMemoize } from 'reselect';
 import { isEqual } from 'lodash';
 
-function isArrayOfStrings(value: any): boolean {
+function isArrayOfStrings(value) {
   return (
     Array.isArray(value) && value.every((item) => typeof item === 'string')
   );

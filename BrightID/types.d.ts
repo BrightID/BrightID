@@ -96,6 +96,7 @@ declare global {
     connectionsSort: string;
     searchParam: string;
     searchOpen: boolean;
+    filters: string[]
   };
 
   type Photo = {
@@ -117,7 +118,7 @@ declare global {
     hasPrimaryGroup: boolean;
     publicKey?: string;
     flaggers?: any; // TODO: Proper definition, maybe refactor
-    level: ConnectionLevel
+    level: ConnectionLevel,
   };
 
   type GroupsState = {
