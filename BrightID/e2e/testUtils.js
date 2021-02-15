@@ -1,5 +1,4 @@
-// @flow
-/* global element:false, by:false, waitFor:false, device: false */
+/* global element, by, waitFor */
 
 import i18next from 'i18next';
 
@@ -74,7 +73,9 @@ const setPassword = async () => {
 };
 
 const skipWalkthrough = async () => {
-  await expect(element(by.id('ViewPasswordWalkthrough'))).toBeVisible();
+  await waitFor(element(by.id('ViewPasswordWalkthrough')))
+    .toBeVisible()
+    .withTimeout(15000);
   await expect(element(by.id('ViewPasswordGotIt'))).toExist();
   await element(by.id('ViewPasswordGotIt')).tap();
   await expect(element(by.id('BrightIdLogo'))).toExist();
