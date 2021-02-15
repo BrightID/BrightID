@@ -65,9 +65,8 @@ const ViewPassword = ({ navigation }) => {
   const infoBoxLeft = arrowLeft - 10 + 169 / 2;
   const infoBoxTop = arrowTop + 250 - 48;
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="ViewPasswordWalkthrough">
       <FullScreenHighlightBox
-        testID="ViewPasswordWalkthrough"
         onPress={() => {
           navigation.goBack();
         }}
