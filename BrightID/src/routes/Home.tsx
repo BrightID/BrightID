@@ -6,12 +6,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useSelector } from 'react-redux';
-// import { useTranslation } from 'react-i18next';
 import { INVITE_ACTIVE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { BLACK } from '@/theme/colors';
 import { createSelector } from '@reduxjs/toolkit';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackNavigationOptions,
+} from '@react-navigation/stack';
 import Bell from '@/components/Icons/NotificationBell';
 import Menu from '@/components/Icons/Menu';
 import {
@@ -31,6 +33,7 @@ const unconfirmedSelector = createSelector(
   selectAllPendingConnections,
   (pendingConnections) =>
     pendingConnections.filter(
+      // @ts-ignore
       (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
     ),
 );
@@ -64,7 +67,7 @@ const NotificationBell = () => {
         resetNotifications();
       }}
     >
-      <Bell size={DEVICE_LARGE ? 28 : 23} color={BLACK} alert={displayBadge} />
+      <Bell color={BLACK} alert={!!displayBadge} />
     </TouchableOpacity>
   );
 };
@@ -91,7 +94,7 @@ const BrightIdLogo = () => {
   );
 };
 
-const homeScreenOptions = {
+const homeScreenOptions: StackNavigationOptions = {
   headerTitle: () => <BrightIdLogo />,
   headerLeft: () => {
     return (
@@ -115,9 +118,6 @@ const homeScreenOptions = {
   headerStyle: {
     height: DEVICE_LARGE ? 80 : 70,
     shadowRadius: 0,
-    shadowOffset: {
-      height: 0,
-    },
     elevation: -1,
   },
   headerTitleAlign: 'center',

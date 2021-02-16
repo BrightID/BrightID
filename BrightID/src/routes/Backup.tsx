@@ -1,6 +1,8 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { useTranslation } from 'react-i18next';
+import {
+  createStackNavigator,
+  StackNavigationOptions,
+} from '@react-navigation/stack';
 import RecoveringConnectionScreen from '@/components/Onboarding/RecoveryFlow/RecoveringConnectionScreen';
 import SearchConnections from '@/components/Helpers/SearchConnections';
 import TrustedConnectionsScreen from '@/components/Onboarding/RecoveryFlow/TrustedConnectionsScreen';
@@ -9,9 +11,9 @@ import { headerOptions, AnimatedHeaderTitle } from './helpers';
 
 const Stack = createStackNavigator();
 
-const trustedScreenOptions = {
+const trustedScreenOptions: StackNavigationOptions = {
   ...headerOptions,
-  headerRight: () => <SearchConnections sortable={true} />,
+  headerRight: () => <SearchConnections />,
   headerTitle: () => (
     <AnimatedHeaderTitle
       text={i18next.t(
@@ -22,16 +24,15 @@ const trustedScreenOptions = {
   ),
 };
 
-const recoveringScreenOptions = {
+const recoveringScreenOptions: StackNavigationOptions = {
   ...headerOptions,
-  headerRight: () => <SearchConnections sortable={true} />,
+  headerRight: () => <SearchConnections />,
   headerTitle: () => (
     <AnimatedHeaderTitle text={i18next.t('restore.header.accountRecovery')} />
   ),
 };
 
 const Connections = () => {
-  const { t } = useTranslation();
   return (
     <>
       <Stack.Screen

@@ -1,5 +1,8 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackNavigationOptions,
+} from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import { getGroupName } from '@/utils/groups';
 import { fontSize } from '@/theme/fonts';
@@ -15,7 +18,7 @@ import { headerOptions, NavHome, AnimatedHeaderTitle } from './helpers';
 
 const Stack = createStackNavigator();
 
-const groupsOptions = {
+const groupsOptions: StackNavigationOptions = {
   ...headerOptions,
   headerRight: () => <SearchGroups />,
   headerLeft: () => <NavHome />,
@@ -24,7 +27,7 @@ const groupsOptions = {
   ),
 };
 
-const newGroupOptions = {
+const newGroupOptions: StackNavigationOptions = {
   ...headerOptions,
   headerRight: () => <SearchConnections />,
   headerTitle: () => (
@@ -34,7 +37,9 @@ const newGroupOptions = {
   ),
 };
 
-const membersScreenOptions = ({ route }) => {
+const membersScreenOptions: ({ route }) => StackNavigationOptions = ({
+  route,
+}) => {
   const group = route.params?.group;
   return {
     ...headerOptions,

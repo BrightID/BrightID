@@ -120,18 +120,20 @@ const CustomDrawerContent = (props) => {
         />
         <Text style={styles.userName}>{name}</Text>
         {verified && (
-          <VerifiedBadge
-            style={styles.verificationSticker}
-            width="16"
-            height="16"
-          />
+          <View style={styles.verificationSticker}>
+            <VerifiedBadge width={16} height={16} />
+          </View>
         )}
       </View>
       <CustomItem
+        focused={false}
         inactiveTintColor={BLACK}
+        inactiveBackgroundColor={WHITE}
+        activeTintColor={WHITE}
+        activeBackgroundColor={ORANGE}
         label={t('drawer.label.home')}
-        style={styles.drawerItem}
-        labelStyle={styles.labelStyle}
+        // style={styles.drawerItem}
+        // labelStyle={styles.labelStyle}
         icon={({ focused }) => (
           <Home
             width={DEVICE_LARGE ? 28 : 24}
@@ -154,8 +156,8 @@ const CustomDrawerContent = (props) => {
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
         label={t('drawer.label.editProfile')}
-        style={styles.drawerItem}
-        labelStyle={styles.labelStyle}
+        // style={styles.drawerItem}
+        // labelStyle={styles.labelStyle}
         icon={({ focused }) => (
           <Pencil
             width={DEVICE_LARGE ? 28 : 24}
@@ -178,8 +180,8 @@ const CustomDrawerContent = (props) => {
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
         label={t('drawer.label.achievements')}
-        style={styles.drawerItem}
-        labelStyle={styles.labelStyle}
+        // style={styles.drawerItem}
+        // labelStyle={styles.labelStyle}
         icon={({ focused }) => (
           <List
             width={DEVICE_LARGE ? 28 : 24}
@@ -203,8 +205,8 @@ const CustomDrawerContent = (props) => {
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
         label={t('drawer.label.copyExplorerCode')}
-        style={styles.drawerItem}
-        labelStyle={styles.labelStyle}
+        // style={styles.drawerItem}
+        // labelStyle={styles.labelStyle}
         icon={({ focused }) => (
           <GraphQl
             width={DEVICE_LARGE ? 28 : 24}
@@ -221,9 +223,11 @@ const CustomDrawerContent = (props) => {
         }}
       />
       <CustomItem
-        style={styles.drawerItem}
-        labelStyle={styles.labelStyle}
+        focused={false}
         inactiveTintColor={BLACK}
+        inactiveBackgroundColor={WHITE}
+        activeTintColor={WHITE}
+        activeBackgroundColor={ORANGE}
         label={t('drawer.label.checkForUpdates')}
         icon={({ focused }) => (
           <Faq
@@ -236,7 +240,7 @@ const CustomDrawerContent = (props) => {
         onPress={() => {
           codePush.sync(
             {
-              updateDialog: true,
+              updateDialog: {},
               installMode: codePush.InstallMode.IMMEDIATE,
             },
             (status) => {
@@ -252,8 +256,9 @@ const CustomDrawerContent = (props) => {
       />
       <CustomItem
         focused={state.routeNames[state.index] === 'ContactUs'}
-        style={styles.drawerItem}
-        labelStyle={styles.labelStyle}
+        // style={styles.drawerItem}
+        // labelStyle={styles.labelStyle}
+        inactiveBackgroundColor={WHITE}
         inactiveTintColor={BLACK}
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
@@ -276,8 +281,9 @@ const CustomDrawerContent = (props) => {
       {__DEV__ && (
         <CustomItem
           focused={state.routeNames[state.index] === 'SampleIconPage'}
-          style={styles.drawerItem}
-          labelStyle={styles.labelStyle}
+          // style={styles.drawerItem}
+          // labelStyle={styles.labelStyle}
+          inactiveBackgroundColor={WHITE}
           inactiveTintColor={BLACK}
           activeTintColor={WHITE}
           activeBackgroundColor={ORANGE}

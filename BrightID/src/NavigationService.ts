@@ -8,7 +8,7 @@ import {
 
 export const navigationRef = React.createRef<NavigationContainerRef>();
 
-export const navigate = (name, params) => {
+export const navigate = (name: string, params = {}) => {
   navigationRef.current?.navigate(name, params);
 };
 

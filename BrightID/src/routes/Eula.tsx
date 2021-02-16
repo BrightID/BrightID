@@ -1,5 +1,8 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackNavigationOptions,
+} from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import Eula from '@/components/Onboarding/Eula';
 import { fontSize } from '@/theme/fonts';
@@ -11,7 +14,7 @@ export const headerTitleStyle = {
   color: BLACK,
 };
 
-export const headerOptions = {
+export const headerOptions: StackNavigationOptions = {
   headerTitleStyle,
   headerTintColor: BLACK,
   headerTitleAlign: 'left',

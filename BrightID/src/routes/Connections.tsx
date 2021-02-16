@@ -1,5 +1,8 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackNavigationOptions,
+} from '@react-navigation/stack';
 import ConnectionsScreen from '@/components/Connections/ConnectionsScreen';
 import ConnectionScreenController from '@/components/Connections/ConnectionScreenController';
 import SearchConnections from '@/components/Helpers/SearchConnections';
@@ -8,9 +11,9 @@ import { headerOptions, AnimatedHeaderTitle, NavHome } from './helpers';
 
 const Stack = createStackNavigator();
 
-const connectionsScreenOptions = {
+const connectionsScreenOptions: StackNavigationOptions = {
   ...headerOptions,
-  headerRight: () => <SearchConnections sortable={true} />,
+  headerRight: () => <SearchConnections />,
   headerLeft: () => <NavHome />,
   headerTitle: () => (
     <AnimatedHeaderTitle
@@ -19,7 +22,7 @@ const connectionsScreenOptions = {
   ),
 };
 
-const connectionScreenOptions = {
+const connectionScreenOptions: StackNavigationOptions = {
   ...headerOptions,
   headerTitle: () => (
     <AnimatedHeaderTitle

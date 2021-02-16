@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   createStackNavigator,
+  StackNavigationOptions,
   TransitionPresets,
 } from '@react-navigation/stack';
 import FullScreenPhoto from '@/components/Helpers/FullScreenPhoto';
@@ -13,10 +14,9 @@ import ViewPassword from '@/components/Onboarding/Walkthroughs/ViewPassword';
 
 const Stack = createStackNavigator();
 
-const modalOptions = {
+const modalOptions: StackNavigationOptions = {
   headerShown: false,
   cardOverlayEnabled: true,
-  mode: 'modal',
   gestureEnabled: true,
   ...TransitionPresets.FadeFromBottomAndroid,
   cardStyle: { backgroundColor: 'transparent' },

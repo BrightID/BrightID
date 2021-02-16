@@ -96,7 +96,7 @@ declare global {
     connectionsSort: string;
     searchParam: string;
     searchOpen: boolean;
-    filters: string[]
+    filters: string[];
   };
 
   type Photo = {
@@ -118,7 +118,7 @@ declare global {
     hasPrimaryGroup: boolean;
     publicKey?: string;
     flaggers?: any; // TODO: Proper definition, maybe refactor
-    level: ConnectionLevel,
+    level: ConnectionLevel;
   };
 
   type GroupsState = {
@@ -194,6 +194,7 @@ declare global {
     notificationToken?: string;
     secretKey?: string;
     score?: number;
+    state: PendingConnectionState;
   };
 
   type RecoveryData = {
@@ -234,6 +235,7 @@ declare global {
     password: string;
     secretKey: string;
     isSponsored: boolean;
+    eula: boolean;
   };
 
   type WalkthroughState = {

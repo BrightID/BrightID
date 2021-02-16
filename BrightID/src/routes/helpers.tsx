@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, Text, TouchableOpacity, View } from 'react-native';
+import { StackNavigationOptions } from '@react-navigation/stack';
 import { navigate } from '@/NavigationService';
 import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import { ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { TWENTY_TWO, SIXTY } from '@/theme/sizes';
@@ -14,14 +14,11 @@ export const headerTitleStyle = {
   color: WHITE,
 };
 
-export const headerOptions = {
+export const headerOptions: StackNavigationOptions = {
   headerTitleStyle,
   headerStyle: {
     backgroundColor: ORANGE,
     shadowRadius: 0,
-    shadowOffset: {
-      height: 0,
-    },
     elevation: 0,
   },
   headerTintColor: WHITE,

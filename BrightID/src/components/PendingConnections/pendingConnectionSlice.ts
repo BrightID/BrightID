@@ -17,7 +17,7 @@ import { PROFILE_VERSION } from '@/utils/constants';
 import { createDeepEqualStringArraySelector } from '@/utils/createDeepEqualStringArraySelector';
 import BrightidError, { USER_NOT_FOUND } from '@/api/brightidError';
 
-const pendingConnectionsAdapter = createEntityAdapter<PendingConnectionsState>();
+const pendingConnectionsAdapter = createEntityAdapter<PendingConnection[]>();
 
 /*
   PendingConnection slice contains all pending connections and their profile info
