@@ -75,7 +75,7 @@ const userSlice = createSlice({
     },
   },
   extraReducers: {
-    [RESET_STORE]: (state, action) => {
+    [RESET_STORE]: () => {
       return initialState;
     },
   },

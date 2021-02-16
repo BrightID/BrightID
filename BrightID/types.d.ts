@@ -119,6 +119,7 @@ declare global {
     publicKey?: string;
     flaggers?: any; // TODO: Proper definition, maybe refactor
     level: ConnectionLevel;
+    hiddenFlag?: string;
   };
 
   type GroupsState = {
@@ -238,19 +239,21 @@ declare global {
     eula: boolean;
   };
 
+  type LayoutBox = {
+    width?: number;
+    height?: number;
+    x?: number;
+    y?: number;
+  };
+
   type WalkthroughState = {
-    editProfileLayout: {
-      width?: number;
-      height?: number;
-      x?: number;
-      y?: number;
-    };
+    editProfileTextLayout: LayoutBox;
+    editProfileMenuLayout: LayoutBox;
     headerHeight: number;
   };
 
   type NotificationsState = {
     activeNotification?: BannerNotification;
-    pendingConnections: PendingConnection[];
     backupPending: boolean;
     deviceToken: string;
     sessionNotifications: Array<string>;

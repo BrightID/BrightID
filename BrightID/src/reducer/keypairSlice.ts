@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
 
-const initialState: KeyPair = {
+const initialState: Keypair = {
   publicKey: '',
   secretKey: new Uint8Array(),
 };
@@ -17,7 +17,7 @@ const keypairSlice = createSlice({
     },
   },
   extraReducers: {
-    [RESET_STORE]: (state, action) => {
+    [RESET_STORE]: () => {
       return initialState;
     },
   },

@@ -25,6 +25,7 @@ export const initialState = {
   groups: [],
   invites: [],
   searchParam: '',
+  searchOpen: false,
 };
 
 /* ******** REDUCER ****************** */
