@@ -12,8 +12,8 @@ export const createKeypair = () => async (
 
   if (!filename) {
     // create public / private key pair
-    let { publicKey, secretKey } = await nacl.sign.keyPair();
-    let b64PubKey = uInt8ArrayToB64(publicKey);
+    const { publicKey, secretKey } = await nacl.sign.keyPair();
+    const b64PubKey = uInt8ArrayToB64(publicKey);
 
     dispatch(setKeypair({ publicKey: b64PubKey, secretKey }));
   }
@@ -26,16 +26,16 @@ export const savePhoto = (base64Image) => async (
   // creates Image Directory
   await createImageDirectory();
 
-  let { publicKey } = getState().keypair;
-  let id = b64ToUrlSafeB64(publicKey);
+  const { publicKey } = getState().keypair;
+  const id = b64ToUrlSafeB64(publicKey);
 
-  let filename = await saveImage({ imageName: id, base64Image });
+  const filename = await saveImage({ imageName: id, base64Image });
   dispatch(setPhoto({ filename }));
 };
 
 export const saveId = () => (dispatch: dispatch, getState: getState) => {
-  let { publicKey } = getState().keypair;
-  let id = b64ToUrlSafeB64(publicKey);
+  const { publicKey } = getState().keypair;
+  const id = b64ToUrlSafeB64(publicKey);
 
   dispatch(setUserId(id));
 };

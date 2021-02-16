@@ -47,7 +47,9 @@ const byTrust = [types.byTrustLevelDescending, types.byTrustLevelAscending];
 const SortConnectionsModal = ({ route, navigation }: props) => {
   const dispatch = useDispatch();
 
-  const filters: string[] = useSelector((state: State) => state.connections.filters);
+  const filters: string[] = useSelector(
+    (state: State) => state.connections.filters,
+  );
   const connectionsSort: string =
     useSelector((state: State) => state.connections.connectionsSort) ||
     types.byDateAddedDescending;
@@ -141,7 +143,7 @@ const SortConnectionsModal = ({ route, navigation }: props) => {
               color={byDate.includes(newConnectionsSort) ? ORANGE : BLACK}
               direction={
                 byDate.includes(newConnectionsSort) &&
-                  ascending.includes(newConnectionsSort)
+                ascending.includes(newConnectionsSort)
                   ? 'up'
                   : 'down'
               }
@@ -173,7 +175,7 @@ const SortConnectionsModal = ({ route, navigation }: props) => {
               color={byName.includes(newConnectionsSort) ? ORANGE : BLACK}
               direction={
                 byName.includes(newConnectionsSort) &&
-                  ascending.includes(newConnectionsSort)
+                ascending.includes(newConnectionsSort)
                   ? 'up'
                   : 'down'
               }
@@ -206,7 +208,7 @@ const SortConnectionsModal = ({ route, navigation }: props) => {
               color={byTrust.includes(newConnectionsSort) ? ORANGE : BLACK}
               direction={
                 byTrust.includes(newConnectionsSort) &&
-                  ascending.includes(newConnectionsSort)
+                ascending.includes(newConnectionsSort)
                   ? 'up'
                   : 'down'
               }

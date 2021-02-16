@@ -32,7 +32,9 @@ export const AppsScreen = () => {
 
   const apps = useSelector((state: State) => state.apps.apps);
   const isSponsored = useSelector((state: State) => state.user.isSponsored);
-  const linkedContexts = useSelector((state: State) => state.apps.linkedContexts);
+  const linkedContexts = useSelector(
+    (state: State) => state.apps.linkedContexts,
+  );
   const [refreshing, setRefreshing] = useState(false);
   const { t } = useTranslation();
 

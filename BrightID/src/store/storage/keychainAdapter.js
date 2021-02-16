@@ -8,9 +8,9 @@ import { DEVICE_ANDROID } from '@/utils/deviceConstants';
 import { b64ToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 
 /**
- * 
- * @param {string} key 
- * @returns 
+ *
+ * @param {string} key
+ * @returns
  */
 const getItem = async (key) => {
   try {
@@ -39,19 +39,16 @@ const getItem = async (key) => {
 };
 
 /**
- * 
- * @param {string} key 
+ *
+ * @param {string} key
  * @param {{
- *   publicKey: string; 
- *   secretKey: Uint8Array; 
+ *   publicKey: string;
+ *   secretKey: Uint8Array;
  *   _persist: { version: number };
  * }} keypair
  * @returns {Promise<boolean>}
  */
-const setItem = async (
-  key,
-  keypair,
-) => {
+const setItem = async (key, keypair) => {
   let password = uInt8ArrayToB64(keypair.secretKey);
   try {
     let username = JSON.stringify({

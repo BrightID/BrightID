@@ -124,7 +124,7 @@ export const GroupConnectionScreen = () => {
     if (!navigation.isFocused()) return;
     const diff = groupConnections.length - bubbleCoords.length;
     if (diff > 0) {
-      let nextCoords = {};
+      const nextCoords = {};
       if (isEven(bubbleCoords.length)) {
         nextCoords.left = calcX(90 + bubbleCoords.length * 42);
         nextCoords.top = calcY(90 + bubbleCoords.length * 42);
@@ -143,45 +143,45 @@ export const GroupConnectionScreen = () => {
   const GroupConnectionBubbles = () =>
     navigation.isFocused()
       ? groupConnections.map((pc, index) => (
-        <>
-          {bubbleCoords[index] && (
-            <Svg
-              style={{ position: 'absolute', top: 0, left: 0 }}
-              height={HEIGHT}
-              width={WIDTH}
+          <>
+            {bubbleCoords[index] && (
+              <Svg
+                style={{ position: 'absolute', top: 0, left: 0 }}
+                height={HEIGHT}
+                width={WIDTH}
+              >
+                <Line
+                  x1={WIDTH / 2}
+                  y1={HEIGHT / 2 - 100}
+                  x2={bubbleCoords[index]?.left + 40}
+                  y2={bubbleCoords[index]?.top + 40}
+                  stroke={ORANGE}
+                  strokeWidth="2"
+                />
+              </Svg>
+            )}
+            <TouchableWithoutFeedback
+              onPress={() => {
+                navigation.navigate('FullScreenPhoto', {
+                  photo: pc.photo,
+                  base64: true,
+                });
+              }}
             >
-              <Line
-                x1={WIDTH / 2}
-                y1={HEIGHT / 2 - 100}
-                x2={bubbleCoords[index]?.left + 40}
-                y2={bubbleCoords[index]?.top + 40}
-                stroke={ORANGE}
-                strokeWidth="2"
+              <Image
+                key={pc.id}
+                style={[
+                  styles.connectionBubble,
+                  {
+                    left: bubbleCoords[index]?.left,
+                    top: bubbleCoords[index]?.top,
+                  },
+                ]}
+                source={{ uri: pc.photo }}
               />
-            </Svg>
-          )}
-          <TouchableWithoutFeedback
-            onPress={() => {
-              navigation.navigate('FullScreenPhoto', {
-                photo: pc.photo,
-                base64: true,
-              });
-            }}
-          >
-            <Image
-              key={pc.id}
-              style={[
-                styles.connectionBubble,
-                {
-                  left: bubbleCoords[index]?.left,
-                  top: bubbleCoords[index]?.top,
-                },
-              ]}
-              source={{ uri: pc.photo }}
-            />
-          </TouchableWithoutFeedback>
-        </>
-      ))
+            </TouchableWithoutFeedback>
+          </>
+        ))
       : null;
 
   console.log('rendering Group Connection Screen');

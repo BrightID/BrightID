@@ -61,7 +61,7 @@ const tasksSlice = createSlice({
     },
     completeTask(state, action) {
       const taskId = action.payload;
-      let task = state[taskId];
+      const task = state[taskId];
       if (task) {
         task.completed = true;
         task.timestamp = Date.now();

@@ -12,10 +12,10 @@ export const encryptAndBackup = (key: string, data: string) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  let {
+  const {
     user: { id, password },
   } = getState();
-  let hashedId = hashId(id, password);
+  const hashedId = hashId(id, password);
   try {
     const encrypted = CryptoJS.AES.encrypt(data, password).toString();
     await backupApi.putRecovery(hashedId, key, encrypted);

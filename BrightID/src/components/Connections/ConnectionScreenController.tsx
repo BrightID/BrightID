@@ -22,7 +22,9 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
   const connection: connection = useSelector((state: State) =>
     connectionByIdSelector(state, connectionId),
   );
-  const myConnections = useSelector((state: State) => state.connections.connections);
+  const myConnections = useSelector(
+    (state: State) => state.connections.connections,
+  );
   const myGroups = useSelector((state: State) => state.groups.groups);
   const [connectionsNum, setConnectionsNum] = useState(0);
   const [groupsNum, setGroupsNum] = useState(0);

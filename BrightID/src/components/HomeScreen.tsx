@@ -36,7 +36,7 @@ import { version as app_version } from '../../package.json';
  * Home screen of BrightID
  * ==========================
  */
-let discordUrl = 'https://discord.gg/nTtuB2M';
+const discordUrl = 'https://discord.gg/nTtuB2M';
 
 /** Selectors */
 
@@ -57,7 +57,9 @@ export const HomeScreen = (props) => {
   const dispatch = useDispatch();
   const headerHeight = useHeaderHeight();
   const name = useSelector((state: State) => state.user.name);
-  const photoFilename = useSelector((state: State) => state.user.photo.filename);
+  const photoFilename = useSelector(
+    (state: State) => state.user.photo.filename,
+  );
   const groupsCount = useSelector((state: State) => state.groups.groups.length);
   const connectionsCount = useSelector(verifiedConnectionsSelector).length;
   const linkedContextsCount = useSelector(linkedContextCountSelector);

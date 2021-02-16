@@ -29,7 +29,7 @@ import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
  * @prop photo
  */
 const ConnectionCard = (props) => {
-  let stale_check_timer = useRef(0);
+  const stale_check_timer = useRef(0);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const {

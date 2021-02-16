@@ -44,7 +44,7 @@ const Timer = ({ channel }) => {
 
   const timerTick = () => {
     if (channel && navigation.isFocused()) {
-      let countDown = channel.ttl - (Date.now() - channel.timestamp);
+      const countDown = channel.ttl - (Date.now() - channel.timestamp);
       setCountdown(countDown);
     }
   };
@@ -102,11 +102,11 @@ export const QrCode = ({ channel }) => {
     const clipboardMsg = __DEV__
       ? universalLink
       : channel?.type === channel_types.GROUP
-        ? t('qrcode.alert.connectGroup', {
+      ? t('qrcode.alert.connectGroup', {
           name: myName,
           link: universalLink,
         })
-        : t('qrcode.alert.connectSingle', {
+      : t('qrcode.alert.connectSingle', {
           name: myName,
           link: universalLink,
         });

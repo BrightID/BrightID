@@ -97,7 +97,7 @@ class InviteCard extends React.Component {
           <Text style={styles.name}>{getGroupName(invite)}</Text>
           <Text style={styles.invitationMsg}>
             {t('notifications.item.text.pendingGroupInvite', {
-              name: inviter?.name
+              name: inviter?.name,
             })}
           </Text>
         </View>
@@ -123,7 +123,7 @@ class InviteCard extends React.Component {
             />
           </TouchableOpacity>
         </View>
-      </View >
+      </View>
     );
   }
 }

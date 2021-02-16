@@ -49,7 +49,7 @@ export const confirmPendingConnectionThunk = (
     user: { id: brightId, backupCompleted },
   } = getState();
 
-  let connectionTimestamp = Date.now();
+  const connectionTimestamp = Date.now();
   let reportReason;
 
   await api.addConnection(

@@ -41,7 +41,7 @@ export const SuccessScreen = () => {
    */
   useFocusEffect(
     useCallback(() => {
-      let intervalID = setInterval(() => {
+      const intervalID = setInterval(() => {
         setCurrentTime(Date.now());
       }, 300);
       return () => {

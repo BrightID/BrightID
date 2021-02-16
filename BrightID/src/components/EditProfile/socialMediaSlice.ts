@@ -23,7 +23,7 @@ const socialMediaSlice = createSlice({
       } = action.payload;
 
       // access previous values from the reducer
-      let { entities, ids } = original(state);
+      const { entities, ids } = original(state);
 
       const prevEntity = entities[incomingId];
 

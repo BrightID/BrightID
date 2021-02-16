@@ -65,8 +65,8 @@ class NewGroupCard extends React.PureComponent {
     const imageSource =
       photo?.filename && !this.state.imgErr
         ? {
-          uri: `file://${photoDirectory()}/${photo?.filename}`,
-        }
+            uri: `file://${photoDirectory()}/${photo?.filename}`,
+          }
         : require('@/static/default_profile.jpg');
 
     return (

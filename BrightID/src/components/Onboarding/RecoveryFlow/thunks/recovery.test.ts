@@ -22,7 +22,7 @@ const mockStore = configureStore(
 );
 
 // we use `recoveryData` throughout these tests instead of relying on redux
-let recoveryData = initialState;
+const recoveryData = initialState;
 
 describe('Test recovery data', () => {
   test(`setup recovery data`, async () => {
@@ -119,11 +119,11 @@ describe('Test recovery data', () => {
       const { aesKey } = recoveryData;
       const channelApi = new ChannelAPI(recoveryData.channel.url.href);
 
-      let { publicKey, secretKey } = await nacl.sign.keyPair();
-      let b64PubKey = uInt8ArrayToB64(publicKey);
-      let id = b64ToUrlSafeB64(b64PubKey);
+      const { publicKey, secretKey } = await nacl.sign.keyPair();
+      const b64PubKey = uInt8ArrayToB64(publicKey);
+      const id = b64ToUrlSafeB64(b64PubKey);
 
-      let store = mockStore({
+      const store = mockStore({
         keypair: { secretKey },
         user: { id },
       });
@@ -136,11 +136,11 @@ describe('Test recovery data', () => {
 
       await store.dispatch(uploadSig(sigData));
 
-      let { publicKey: pb2, secretKey: sk2 } = await nacl.sign.keyPair();
-      let b64PubKey2 = uInt8ArrayToB64(pb2);
-      let id2 = b64ToUrlSafeB64(b64PubKey2);
+      const { publicKey: pb2, secretKey: sk2 } = await nacl.sign.keyPair();
+      const b64PubKey2 = uInt8ArrayToB64(pb2);
+      const id2 = b64ToUrlSafeB64(b64PubKey2);
 
-      let store2 = mockStore({
+      const store2 = mockStore({
         keypair: { secretKey: sk2 },
         user: { id: id2 },
       });

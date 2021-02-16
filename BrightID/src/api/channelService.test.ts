@@ -1,14 +1,12 @@
 import ChannelAPI from '@/api/channelService';
 
-const generateRandomString = function(length = 6) {
-  return Math.random()
-    .toString(20)
-    .substr(2, length);
+const generateRandomString = function (length = 6) {
+  return Math.random().toString(20).substr(2, length);
 };
 
 describe('ChannelAPI', () => {
   let channelApi;
-  let sharedChannelId = generateRandomString();
+  const sharedChannelId = generateRandomString();
   const myData = {
     some: 'random stuff',
     more: {

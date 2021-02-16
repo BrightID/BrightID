@@ -53,7 +53,9 @@ const SelectMediaModal = ({ route, navigation }) => {
   const prevId = route.params?.prevId;
   const initialPage = route.params?.page;
 
-  const existingSocialMediaIds = useSelector((state: State) => state.socialMedia.ids);
+  const existingSocialMediaIds = useSelector(
+    (state: State) => state.socialMedia.ids,
+  );
 
   // only display social media not already selected by user when adding a new one to the list
   // or allow the user to switch order if editing the social media from the list
@@ -62,8 +64,8 @@ const SelectMediaModal = ({ route, navigation }) => {
       prevId
         ? socialMediaKeyValues
         : socialMediaKeyValues.filter(
-          ([id]) => !existingSocialMediaIds.includes(id),
-        ),
+            ([id]) => !existingSocialMediaIds.includes(id),
+          ),
     [existingSocialMediaIds, prevId],
   );
 

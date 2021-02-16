@@ -40,16 +40,18 @@ import {
 
 const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
   const { showActionSheetWithOptions } = useActionSheet();
-  const prevPhotoFilename = useSelector((state: State) => state.user.photo.filename);
+  const prevPhotoFilename = useSelector(
+    (state: State) => state.user.photo.filename,
+  );
   const { t } = useTranslation();
 
   const profileSource = profilePhoto
     ? {
-      uri: profilePhoto,
-    }
+        uri: profilePhoto,
+      }
     : {
-      uri: `file://${photoDirectory()}/${prevPhotoFilename}`,
-    };
+        uri: `file://${photoDirectory()}/${prevPhotoFilename}`,
+      };
 
   const getPhotoFromCamera = async () => {
     try {
@@ -359,7 +361,9 @@ export const EditProfileScreen = ({ navigation }) => {
 
   // selectors
   const id = useSelector((state: State) => state.user.id);
-  const prevPhotoFilename = useSelector((state: State) => state.user.photo.filename);
+  const prevPhotoFilename = useSelector(
+    (state: State) => state.user.photo.filename,
+  );
   const prevName = useSelector((state: State) => state.user.name);
   const prevPhoto = useRef(null);
   // state passed down to children
@@ -427,7 +431,7 @@ export const EditProfileScreen = ({ navigation }) => {
             {
               text: t('profile.alert.button.dontLeave'),
               style: 'cancel',
-              onPress: () => { },
+              onPress: () => {},
             },
             {
               text: t('profile.alert.button.discard'),

@@ -5,8 +5,8 @@ import CryptoJS from 'crypto-js';
 import { compose } from 'ramda';
 
 /**
- * 
- * @param {Uint8Array} array 
+ *
+ * @param {Uint8Array} array
  * @returns {string}
  */
 export function uInt8ArrayToB64(array) {
@@ -14,8 +14,8 @@ export function uInt8ArrayToB64(array) {
 }
 
 /**
- * 
- * @param {string} str 
+ *
+ * @param {string} str
  * @returns {Uint8Array}
  */
 export function b64ToUint8Array(str) {
@@ -34,8 +34,8 @@ export function b64ToUint8Array(str) {
 }
 
 /**
- * 
- * @param {string} str 
+ *
+ * @param {string} str
  * @returns {Uint8Array}
  */
 export function strToUint8Array(str) {
@@ -43,24 +43,23 @@ export function strToUint8Array(str) {
 }
 
 /**
- * 
+ *
  * @param {Uint8Obj} obj
  * @returns {number[]}
  */
-export const objValues = (obj) =>
-  Object.values(obj).map(parseFloat);
+export const objValues = (obj) => Object.values(obj).map(parseFloat);
 
 /**
-*
-* @param {Uint8Obj} obj
-* @returns {Uint8Array}
-*/
+ *
+ * @param {Uint8Obj} obj
+ * @returns {Uint8Array}
+ */
 export const objToUint8 = (obj) => new Uint8Array(objValues(obj));
 
 /**
- * 
- * @param {string} s 
- * @returns 
+ *
+ * @param {string} s
+ * @returns
  */
 export function b64ToUrlSafeB64(s) {
   const alts = {
@@ -74,9 +73,9 @@ export function b64ToUrlSafeB64(s) {
 export const objToB64 = compose(uInt8ArrayToB64, objToUint8);
 
 /**
- * 
- * @param {string} data 
- * @returns 
+ *
+ * @param {string} data
+ * @returns
  */
 export const hash = (data) => {
   const h = CryptoJS.SHA256(data);
@@ -86,9 +85,9 @@ export const hash = (data) => {
 
 const { RNRandomBytes } = NativeModules;
 /**
- * 
- * @param {number} size 
- * @returns 
+ *
+ * @param {number} size
+ * @returns
  */
 export const randomKey = (size) =>
   new Promise((resolve, reject) => {

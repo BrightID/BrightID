@@ -24,11 +24,11 @@ const onStorageReadyFactory = (storagePath: string) => (
 const defaultStoragePath = () =>
   `${RNFetchBlob.fs.dirs.DocumentDir}/persistStore`;
 
-let onStorageReady = onStorageReadyFactory(defaultStoragePath());
+const onStorageReady = onStorageReadyFactory(defaultStoragePath());
 
-let encoding: Encoding = 'utf8';
+const encoding: Encoding = 'utf8';
 
-let toFileName = (key: string) => key.replace(/[^a-z0-9.\-_]/gi, '-');
+const toFileName = (key: string) => key.replace(/[^a-z0-9.\-_]/gi, '-');
 
 const pathForKey = (key: string) =>
   `${defaultStoragePath()}/${toFileName(key)}`;

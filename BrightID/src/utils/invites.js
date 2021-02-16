@@ -8,10 +8,10 @@ import { saveImage } from './filesystem';
 import { INVITE_ACTIVE } from './constants';
 
 /**
- * 
+ *
  * @param {invite} invite
  * @type invite
- * @returns 
+ * @returns
  */
 export const getInviteInfo = async (invite) => {
   try {
@@ -108,9 +108,9 @@ export const updateInvites = async (invites) => {
 };
 
 /**
- * 
- * @param {string} aesKey 
- * @param {string} signingKey 
+ *
+ * @param {string} aesKey
+ * @param {string} signingKey
  * @returns string
  */
 

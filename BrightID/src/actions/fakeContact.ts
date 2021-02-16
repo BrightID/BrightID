@@ -57,7 +57,7 @@ export const addFakeConnection = () => async (
       version: PROFILE_VERSION,
     };
 
-    let encrypted = encryptData(dataObj, channel.aesKey);
+    const encrypted = encryptData(dataObj, channel.aesKey);
     const fakeChannel = { ...channel, myProfileId: await createRandomId() };
 
     await fakeChannel.api.upload({
@@ -190,7 +190,7 @@ export const reconnectFakeConnection = (
     version: PROFILE_VERSION,
   };
 
-  let encrypted = encryptData(dataObj, channel.aesKey);
+  const encrypted = encryptData(dataObj, channel.aesKey);
   const fakeChannel = { ...channel, myProfileId: await createRandomId() };
 
   await fakeChannel.api.upload({

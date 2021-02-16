@@ -39,7 +39,9 @@ export const PhotoScreen = () => {
 
   const [finalBase64, setfinalBase64] = useState('');
 
-  const photoFilename = useSelector((state: State) => state.user.photo.filename);
+  const photoFilename = useSelector(
+    (state: State) => state.user.photo.filename,
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -136,7 +138,8 @@ export const PhotoScreen = () => {
             onPress={handleAddPhoto}
             accessible={true}
             accessibilityLabel={t(
-              `common.accessibilityLabel.${finalBase64 ? 'editPhoto' : 'addPhoto'
+              `common.accessibilityLabel.${
+                finalBase64 ? 'editPhoto' : 'addPhoto'
               }`,
             )}
           >

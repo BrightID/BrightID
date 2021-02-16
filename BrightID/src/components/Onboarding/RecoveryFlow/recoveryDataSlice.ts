@@ -46,7 +46,7 @@ const recoveryData = createSlice({
     setSig(state, action) {
       const { signer, sig } = action.payload;
       // access previous values from the reducer
-      let { id } = original(state);
+      const { id } = original(state);
 
       if (sig.id !== id) {
         state.sigs = { [signer]: sig };

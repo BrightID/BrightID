@@ -33,7 +33,9 @@ const ViewPassword = ({ navigation }) => {
   const editProfileTextLayout = useSelector(
     (state: State) => state.walkthrough.editProfileTextLayout,
   );
-  const headerHeight = useSelector((state: State) => state.walkthrough.headerHeight);
+  const headerHeight = useSelector(
+    (state: State) => state.walkthrough.headerHeight,
+  );
 
   /**
    * Dimensions for the transparent box around Edit Profile in the side menu

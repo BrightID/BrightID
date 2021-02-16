@@ -4,8 +4,8 @@
  */
 
 /**
- * 
- * @param {string} str 
+ *
+ * @param {string} str
  * @returns {string}
  */
 export const toSearchString = (str) => {

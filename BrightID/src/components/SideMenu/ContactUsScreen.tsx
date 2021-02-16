@@ -40,7 +40,7 @@ const KeybaseItem = () => (
   </TouchableOpacity>
 );
 
-export const ContactUsScreen = function() {
+export const ContactUsScreen = function () {
   const { t } = useTranslation();
   let headerHeight = useHeaderHeight();
   if (DEVICE_IOS && DEVICE_LARGE) {

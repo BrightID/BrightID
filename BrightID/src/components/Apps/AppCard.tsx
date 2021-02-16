@@ -76,7 +76,7 @@ const AppCard = (props) => {
 
       console.log(`Marking linkedContext as stale in ${checkTime}ms.`);
 
-      let stale_check_timer = setTimeout(() => {
+      const stale_check_timer = setTimeout(() => {
         dispatch(
           addLinkedContext({
             context: linkedContext.context,
@@ -107,7 +107,7 @@ const AppCard = (props) => {
           {
             text: t('common.alert.cancel'),
             style: 'cancel',
-            onPress: () => { },
+            onPress: () => {},
           },
         ],
         { cancelable: true },

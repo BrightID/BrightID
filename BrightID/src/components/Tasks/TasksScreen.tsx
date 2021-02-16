@@ -26,7 +26,7 @@ const FlatListItemSeparator = () => {
   );
 };
 
-export const TasksScreen = function() {
+export const TasksScreen = function () {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const taskIds = useSelector(selectTaskIds);

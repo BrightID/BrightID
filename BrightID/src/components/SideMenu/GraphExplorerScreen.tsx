@@ -16,7 +16,7 @@ import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { getExplorerCode } from '@/utils/explorer';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export const GraphExplorerScreen = function() {
+export const GraphExplorerScreen = function () {
   let headerHeight = useHeaderHeight();
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;

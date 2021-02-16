@@ -6,7 +6,7 @@ export function asyncCreateMigrate(
   migrations: MigrationManifest,
   config?: { debug: boolean },
 ) {
-  let { debug } = config || {};
+  const { debug } = config || {};
   return function (
     state: PersistedState,
     currentVersion: number,
@@ -17,7 +17,7 @@ export function asyncCreateMigrate(
       return Promise.resolve(undefined);
     }
 
-    let inboundVersion: number = state?._persist?.version ?? VERSION - 1;
+    const inboundVersion: number = state?._persist?.version ?? VERSION - 1;
 
     if (inboundVersion === currentVersion) {
       if (debug) console.log('redux-persist: versions match, noop migration');
@@ -29,20 +29,20 @@ export function asyncCreateMigrate(
       return Promise.resolve(state);
     }
 
-    let migrationKeys = Object.keys(migrations)
+    const migrationKeys = Object.keys(migrations)
       .map((ver) => parseInt(ver, 10))
       .filter((key) => currentVersion >= key && key > inboundVersion)
       .sort((a, b) => a - b);
 
     if (debug) console.log('redux-persist: migrationKeys', migrationKeys);
     try {
-      let migratedState = migrationKeys.reduce(async (stateP, versionKey) => {
+      const migratedState = migrationKeys.reduce(async (stateP, versionKey) => {
         if (debug)
           console.log(
             'redux-persist: running migration for versionKey',
             versionKey,
           );
-        let state = await stateP;
+        const state = await stateP;
         return migrations[versionKey](state);
       }, Promise.resolve(state));
       return Promise.resolve(migratedState);

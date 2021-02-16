@@ -9,7 +9,7 @@ export const loadRecoveryData = async (
   aesKey: string,
 ): { signingKey: string; timestamp: number } => {
   try {
-    let data = await channelApi.download({
+    const data = await channelApi.download({
       channelId: hash(aesKey),
       dataId: 'data',
     });
@@ -84,8 +84,8 @@ export const downloadConnections = ({ channelApi, dataIds }) => async (
         connId(id) !== recoveryId,
     );
 
-    for (let dataId of connectionDataIds) {
-      let connectionData = await downloadConnection({
+    for (const dataId of connectionDataIds) {
+      const connectionData = await downloadConnection({
         dataId,
         channelApi,
         aesKey,
@@ -117,14 +117,14 @@ export const downloadNamePhoto = ({ channelApi, dataIds }) => async (
 
   const dataId = dataIds.find((id) => connId(id) === recoveryId);
 
-  let connectionData = await downloadConnection({
+  const connectionData = await downloadConnection({
     dataId,
     channelApi,
     aesKey,
     channelId,
   });
 
-  let {
+  const {
     recoveryData: { name },
   } = getState();
 
@@ -179,8 +179,8 @@ export const downloadGroups = ({ channelApi, dataIds }) => async (
       (id) => isGroup(id) && !existingGroupIds.includes(groupId(id)),
     );
 
-    for (let dataId of groupDataIds) {
-      let groupData = await downloadGroup({
+    for (const dataId of groupDataIds) {
+      const groupData = await downloadGroup({
         dataId,
         channelApi,
         aesKey,
@@ -213,7 +213,7 @@ export const downloadSigs = ({ channelApi, dataIds }) => async (
 
     const sigDataIds = dataIds.filter((id) => isSig(id) && !sigs[sigId(id)]);
 
-    for (let dataId of sigDataIds) {
+    for (const dataId of sigDataIds) {
       const signer = sigId(dataId);
       const sig = await channelApi.download({ channelId, dataId });
       dispatch(setSig({ signer, sig }));

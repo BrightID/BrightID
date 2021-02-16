@@ -30,7 +30,7 @@ export const setupRecovery = () => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  let { recoveryData } = getState();
+  const { recoveryData } = getState();
   await createImageDirectory();
   // setup recovery data
   if (!recoveryData.timestamp || pastLimit(recoveryData.timestamp)) {
@@ -109,9 +109,9 @@ export const recoverData = (pass: string) => async (
   }
   dispatch(setKeypair({ publicKey, secretKey }));
 
-  for (let conn of connections) {
+  for (const conn of connections) {
     try {
-      let decrypted = await fetchBackupData(conn.id, id, pass);
+      const decrypted = await fetchBackupData(conn.id, id, pass);
       const filename = await saveImage({
         imageName: conn.id,
         base64Image: decrypted,
@@ -126,7 +126,7 @@ export const recoverData = (pass: string) => async (
   for (const group of groups) {
     if (group.photo?.filename) {
       try {
-        let decrypted = await fetchBackupData(group.id, id, pass);
+        const decrypted = await fetchBackupData(group.id, id, pass);
         await saveImage({
           imageName: group.id,
           base64Image: decrypted,

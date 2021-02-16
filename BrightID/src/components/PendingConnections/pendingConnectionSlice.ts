@@ -245,7 +245,9 @@ export const {
   selectAll: selectAllPendingConnections,
   selectById: selectPendingConnectionById,
   selectIds: selectAllPendingConnectionIds,
-} = pendingConnectionsAdapter.getSelectors((state: State) => state.pendingConnections);
+} = pendingConnectionsAdapter.getSelectors(
+  (state: State) => state.pendingConnections,
+);
 
 export const selectAllUnconfirmedConnections = createSelector(
   selectAllPendingConnections,

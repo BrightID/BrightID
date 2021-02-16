@@ -5,9 +5,9 @@ export const connectFakeUsers = async (
   fakeUser1: FakeUser,
   fakeUser2: FakeUser,
 ) => {
-  let timestamp = Date.now();
+  const timestamp = Date.now();
 
-  let level = connection_levels.JUST_MET;
+  const level = connection_levels.JUST_MET;
   let flagReason;
 
   // Connect user1 -> user2

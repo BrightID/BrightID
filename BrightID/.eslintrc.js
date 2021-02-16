@@ -18,7 +18,7 @@ module.exports = {
     'import/resolver': {
       alias: {
         map: [['@', './src']],
-        extensions: ['.js', '.json'],
+        extensions: ['.ts', '.tsx', '.js', '.json'],
       },
     },
   },
@@ -27,9 +27,9 @@ module.exports = {
       files: ['**/*.ts', '**/*.tsx'],
       parser: '@typescript-eslint/parser',
       parserOptions: {
-        // ecmaFeatures: { jsx: true },
-        // ecmaVersion: 2018,
-        // sourceType: 'module',
+        ecmaFeatures: { jsx: true },
+        ecmaVersion: 2018,
+        sourceType: 'module',
         project: './tsconfig.json',
       },
       plugins: ['import', 'jsx-a11y', '@typescript-eslint'],
@@ -38,7 +38,7 @@ module.exports = {
         'import/resolver': {
           alias: {
             map: [['@', './src']],
-            extensions: ['.ts', '.tsx', '.json'],
+            extensions: ['.ts', '.tsx', '.js', '.json'],
           },
         },
       },

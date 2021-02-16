@@ -49,7 +49,7 @@ import { QrCode } from './QrCode';
  *
  */
 let FakeConnectionBtn = () => null;
-let addFakeConnection = () => { };
+let addFakeConnection = () => {};
 if (__DEV__) {
   addFakeConnection = require('@/actions/fakeContact').addFakeConnection;
 

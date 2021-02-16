@@ -147,7 +147,7 @@ function MembersScreen(props: MembersScreenProps) {
     groupID,
     t,
     ACTION_LEAVE,
-    ACTION_CANCEL
+    ACTION_CANCEL,
   ]);
 
   // set available actions for group

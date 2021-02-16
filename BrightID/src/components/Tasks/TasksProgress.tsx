@@ -10,7 +10,7 @@ type TasksProgressProps = {
   label: string;
 };
 
-export const TasksProgress = function({
+export const TasksProgress = function ({
   totalSteps,
   currentSteps,
   label,

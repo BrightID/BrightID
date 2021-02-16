@@ -25,7 +25,6 @@ import {
 
  */
 
-
 // type channel_types = typeof channel_types[ChannelType];
 // export const channel_types = {
 //   GROUP: 'GROUP',
@@ -33,8 +32,8 @@ import {
 // } as const;
 
 export enum channel_types {
-  GROUP = "GROUP",
-  SINGLE = "SINGLE"
+  GROUP = 'GROUP',
+  SINGLE = 'SINGLE',
 }
 
 // type channel_states = typeof channel_states[ChannelState];
@@ -47,9 +46,8 @@ export enum channel_types {
 export enum channel_states {
   OPEN = 'OPEN',
   CLOSED = 'CLOSED',
-  BACKGROUND = 'BACKGROUND'
+  BACKGROUND = 'BACKGROUND',
 }
-
 
 export const channelsAdapter = createEntityAdapter<ChannelsState>();
 
