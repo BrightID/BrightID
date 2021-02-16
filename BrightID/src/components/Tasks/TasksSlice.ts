@@ -71,7 +71,7 @@ const tasksSlice = createSlice({
     },
   },
   extraReducers: {
-    RESET_STORE: (state, action) => {
+    RESET_STORE: (state) => {
       for (const task of Object.values(state)) {
         task.completed = false;
         task.timestamp = 0;

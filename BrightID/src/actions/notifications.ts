@@ -39,10 +39,7 @@ export const setNotificationToken = (notificationToken: string) => ({
   notificationToken,
 });
 
-export const setActiveNotification = (notification: {
-  message: string;
-  type: string;
-}) => ({
+export const setActiveNotification = (notification: BannerNotification) => ({
   type: SET_ACTIVE_NOTIFICATION,
   notification,
 });

@@ -174,7 +174,7 @@ export const HomeScreen = (props) => {
             style={styles.photo}
             resizeMode="cover"
             onError={(e) => {
-              console.log(e.error);
+              console.log(e);
             }}
             accessible={true}
             accessibilityLabel={t('common.accessibilityLabel.profilePhoto')}

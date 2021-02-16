@@ -215,9 +215,7 @@ declare global {
     };
   };
 
-  type TasksState = {
-    tasks: { [taskId: string]: TasksStateEntry };
-  };
+  type TasksState = { [taskId: string]: TasksStateEntry };
 
   type TasksStateEntry = {
     id: string;
@@ -262,6 +260,7 @@ declare global {
   };
 
   type BannerNotification = {
+    title?: string;
     message: string;
     type: string;
     navigationTarget?: string;
