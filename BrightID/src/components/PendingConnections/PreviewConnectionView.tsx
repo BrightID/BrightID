@@ -9,7 +9,7 @@ import {
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { GREY, ORANGE, BLACK, WHITE, RED, LIGHT_BLACK } from '@/theme/colors';
+import { ORANGE, BLACK, RED } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { pendingConnection_states } from './pendingConnectionSlice';
 import { RatingView } from './RatingView';

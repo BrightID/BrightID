@@ -10,6 +10,8 @@ import { connection_levels } from './src/utils/constants';
 import { pendingConnection_states } from './src/components/PendingConnections/pendingConnectionSlice';
 
 declare global {
+  type ValueOf<T> = T[keyof T];
+
   type getState = () => State;
 
   // TODO: make this type more specific
@@ -114,7 +116,7 @@ declare global {
     photo: Photo;
     status: string;
     signingKey: string;
-    createdAt: number;
+    createdAt: string;
     hasPrimaryGroup: boolean;
     publicKey?: string;
     flaggers?: any; // TODO: Proper definition, maybe refactor
@@ -188,14 +190,20 @@ declare global {
   type PendingConnection = {
     id: string;
     channelId: string;
-    state: string;
     brightId?: string;
     name?: string;
     photo?: string;
     notificationToken?: string;
     secretKey?: string;
     score?: number;
-    state: PendingConnectionState;
+    state?: PendingConnectionState;
+    verifications?: { name: string }[];
+    connectionsNum?: number;
+    reports?: string[];
+    connectedAt?: string;
+    groupsNum?: number;
+    mutualConnections?: string[];
+    existingConnection?: connection;
   };
 
   type RecoveryData = {
@@ -229,7 +237,7 @@ declare global {
     photo: Photo;
     searchParam: string;
     backupCompleted: boolean;
-    verifications: any[];
+    verifications: { name: string }[];
     id: string;
     password: string;
     secretKey: string;
@@ -301,7 +309,7 @@ declare global {
     secretKey: string; // Base64 encoded secretkey
   };
 
-  type ConnectionLevel = keyof typeof connection_levels;
+  type ConnectionLevel = ValueOf<typeof connection_levels>;
   type PendingConnectionState = keyof typeof pendingConnection_states;
 
   // Jest global functions

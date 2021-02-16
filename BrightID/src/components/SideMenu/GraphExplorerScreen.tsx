@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Alert,
   Text,
   StyleSheet,
   View,
@@ -27,7 +28,7 @@ export const GraphExplorerScreen = function () {
 
   const copyText = () => {
     Clipboard.setString(explorerCode);
-    alert(t('graphExplorer.alert.text.copied'));
+    Alert.alert(t('graphExplorer.alert.text.copied'));
   };
 
   return (

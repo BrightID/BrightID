@@ -44,6 +44,10 @@ export const NOT_ADMIN = 41;
 export const ARANGO_ERROR = 42;
 
 class BrightidError extends Error {
+  errorNum: number;
+
+  errorCode: number;
+
   constructor(data, ...params) {
     super(...params);
     // Maintains proper stack trace for where our error was thrown (only available on V8)

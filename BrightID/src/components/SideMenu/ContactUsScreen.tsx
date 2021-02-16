@@ -16,7 +16,7 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import keybaseLogo from '@/static/keybase_logo.svg';
 import { useTranslation } from 'react-i18next';
 
-const SocialItem = ({ name, icon, color, url }) => {
+const SocialItem = ({ icon, color, url }) => {
   return (
     <TouchableOpacity
       style={styles.socialItem}
@@ -82,26 +82,22 @@ export const ContactUsScreen = function () {
         <Text style={styles.listHeader}>{t('contact.label.socialMedia')}</Text>
         <View style={styles.socialMedia}>
           <SocialItem
-            name="github"
             icon="github"
             color={BLACK}
             url="https://github.com/brightid"
           />
           <KeybaseItem />
           <SocialItem
-            name="discord"
             icon="discord"
             color="#6E84D3"
             url="https://discord.gg/GkYM5Jy"
           />
           <SocialItem
-            name="telegram"
             icon="telegram"
             color="#39A0DA"
             url="https://t.me/brightid"
           />
           <SocialItem
-            name="twitter"
             icon="twitter"
             color="#52A7E7"
             url="https://twitter.com/BrightIDProject"

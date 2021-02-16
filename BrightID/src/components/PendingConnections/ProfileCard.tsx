@@ -22,6 +22,7 @@ type ProfileCardProps = {
   name: string;
   verified: boolean;
   photoSize: 'small' | 'large';
+  reported?: boolean;
 };
 
 export const ProfileCard = (props: ProfileCardProps) => {

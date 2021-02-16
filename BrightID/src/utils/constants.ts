@@ -30,13 +30,14 @@ export const MIN_CONNECTIONS_FOR_RECOVERY_NOTIFICATION = 6;
 export const MIN_RECOVERY_CONNECTIONS = 3;
 
 /** ** CONNECTION CONFIDENCE LEVELS *** */
+type connection_levels = typeof connection_levels[keyof typeof connection_levels];
 export const connection_levels = {
   REPORTED: 'reported',
   SUSPICIOUS: 'suspicious',
   JUST_MET: 'just met',
   ALREADY_KNOWN: 'already known',
   RECOVERY: 'recovery',
-};
+} as const;
 
 export const report_reasons = {
   FAKE: 'fake',

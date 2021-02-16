@@ -53,7 +53,7 @@ const Timer = ({ channel }) => {
   useInterval(timerTick, 1000);
   const displayTime = () => {
     const minutes = Math.floor(countdown / 60000);
-    let seconds = Math.trunc((countdown % 60000) / 1000);
+    let seconds: string | number = Math.trunc((countdown % 60000) / 1000);
     if (seconds < 10) {
       seconds = `0${seconds}`;
     }

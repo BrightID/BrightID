@@ -13,6 +13,7 @@ import { ProfileCard } from './ProfileCard';
 
 // percentage determines reported warning
 const REPORTED_PERCENTAGE = 0.1;
+// Reported is currently not displayed inside of the reconnect view
 
 type ReconnectViewProps = {
   pendingConnection: PendingConnection;

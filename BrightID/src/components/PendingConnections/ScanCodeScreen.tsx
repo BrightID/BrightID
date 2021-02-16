@@ -29,8 +29,8 @@ import { selectAllUnconfirmedConnectionsByChannelIds } from '@/components/Pendin
 import { parseChannelQrURL } from '@/utils/channels';
 import { joinChannel } from '@/components/PendingConnections/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
-
 import i18next from 'i18next';
+import { BarCodeReadEvent } from 'react-native-camera';
 import { RNCamera } from './RNCameraProvider';
 
 /**
@@ -57,7 +57,9 @@ const NotAuthorizedView = () => (
 );
 
 export const ScanCodeScreen = () => {
-  const route = useRoute();
+  const route: { params?: { qrcode: string } } = useRoute() as {
+    params?: { qrcode: string };
+  };
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [channel, setChannel] = useState(null);
@@ -80,7 +82,7 @@ export const ScanCodeScreen = () => {
       setQrData(undefined);
       setChannel(null);
       dispatch(setActiveNotification(null));
-    }, []),
+    }, [dispatch]),
   );
 
   // navigate to next page if channel has pending connections
@@ -146,7 +148,7 @@ export const ScanCodeScreen = () => {
     }
   }, [dispatch, navigation, qrData]);
 
-  const handleBarCodeRead = ({ data }: string) => {
+  const handleBarCodeRead = ({ data }: BarCodeReadEvent) => {
     console.log(`Scanned QRCode: ${data}`);
     setQrData(data);
   };

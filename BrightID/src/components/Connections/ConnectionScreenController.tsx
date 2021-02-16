@@ -63,7 +63,8 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
       if (connectionId !== undefined) {
         fetchData(connectionId);
       }
-    }, [connection, myConnections, myGroups, connectionId]),
+      // REMOVED CONNECTION FROM DEPENDENCY ARRAY
+    }, [myConnections, myGroups, connectionId]),
   );
 
   useEffect(() => {

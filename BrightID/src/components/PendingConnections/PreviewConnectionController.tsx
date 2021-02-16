@@ -13,9 +13,9 @@ import { ReconnectView } from './ReconnectView';
 import { PreviewConnectionView } from './PreviewConnectionView';
 
 type PreviewConnectionProps = {
-  pendingConnectionId: any;
-  ratingHandler: (...args: Array<any>) => any;
+  pendingConnectionId: string;
   index: number;
+  moveToNext: () => void;
 };
 
 export const PreviewConnectionController = (props: PreviewConnectionProps) => {
