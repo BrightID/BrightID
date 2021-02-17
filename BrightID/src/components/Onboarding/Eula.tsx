@@ -15,7 +15,7 @@ import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import { setEula } from '@/actions';
 import L from './License.json';
 
-export const Eula = ({ navigation }) => {
+export const Eula = () => {
   const dispatch = useDispatch();
   const handleReject = () => {
     Alert.alert(
@@ -35,7 +35,7 @@ export const Eula = ({ navigation }) => {
         backgroundColor={WHITE}
         animated={true}
       />
-      <View testID="EulaScreen" style={styles.container} behavior="padding">
+      <View testID="EulaScreen" style={styles.container}>
         <View style={styles.confirmationButtons}>
           <TouchableOpacity
             testID="rejectEulaBtn"

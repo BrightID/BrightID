@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import DropdownAlert from 'react-native-dropdownalert';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from '@/store';
 import { navigate, getRoute } from '@/NavigationService';
 import AddGroup from '@/components/Icons/AddGroup';
 import AddPerson from '@/components/Icons/AddPerson';

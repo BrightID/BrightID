@@ -9,14 +9,16 @@ import {
   StatusBar,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-
-import Svg, { Line } from 'react-native-svg';
 import {
+  RouteProp,
   useNavigation,
   useRoute,
   useFocusEffect,
 } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import Svg, { Line } from 'react-native-svg';
+
 import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -58,10 +60,14 @@ const selectGroupConnections = createSelector(
 );
 
 /** MAIN */
+type GroupScreenRoute = RouteProp<
+  { GroupScreen: { channel: Channel } },
+  'GroupScreen'
+>;
 
 export const GroupConnectionScreen = () => {
   const navigation = useNavigation();
-  const route = useRoute();
+  const route = useRoute<GroupScreenRoute>();
 
   const circleArcOneOpacity = useRef(new Animated.Value(0)).current;
   const circleArcTwoOpacity = useRef(new Animated.Value(0)).current;
@@ -124,7 +130,7 @@ export const GroupConnectionScreen = () => {
     if (!navigation.isFocused()) return;
     const diff = groupConnections.length - bubbleCoords.length;
     if (diff > 0) {
-      const nextCoords = {};
+      const nextCoords: { left?: number; top?: number } = {};
       if (isEven(bubbleCoords.length)) {
         nextCoords.left = calcX(90 + bubbleCoords.length * 42);
         nextCoords.top = calcY(90 + bubbleCoords.length * 42);
@@ -249,7 +255,7 @@ export const GroupConnectionScreen = () => {
           </TouchableWithoutFeedback>
         )}
 
-        <GroupConnectionBubbles />
+        {GroupConnectionBubbles()}
 
         <TouchableOpacity
           testID="GroupConnectionsToPendingConnectionsBtn"

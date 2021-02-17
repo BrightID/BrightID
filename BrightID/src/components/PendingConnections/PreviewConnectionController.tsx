@@ -14,12 +14,11 @@ import { PreviewConnectionView } from './PreviewConnectionView';
 
 type PreviewConnectionProps = {
   pendingConnectionId: string;
-  index: number;
   moveToNext: () => void;
 };
 
 export const PreviewConnectionController = (props: PreviewConnectionProps) => {
-  const { pendingConnectionId, moveToNext, index } = props;
+  const { pendingConnectionId, moveToNext } = props;
   const dispatch = useDispatch();
 
   const pendingConnection = useSelector((state: State) =>
@@ -87,7 +86,6 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
         />
       ) : (
         <PreviewConnectionView
-          index={index}
           pendingConnection={pendingConnection}
           setLevelHandler={setLevelHandler}
           photoTouchHandler={photoTouchHandler}

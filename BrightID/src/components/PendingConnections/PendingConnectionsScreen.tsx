@@ -161,7 +161,6 @@ export const PendingConnectionsScreen = () => {
         >
           <PreviewConnectionController
             pendingConnectionId={item.id}
-            index={index}
             moveToNext={moveToNext}
           />
         </View>

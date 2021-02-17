@@ -248,7 +248,7 @@ declare global {
     photo: Photo;
     searchParam: string;
     backupCompleted: boolean;
-    verifications: { name: string }[];
+    verifications: string[];
     id: string;
     password: string;
     secretKey: string;

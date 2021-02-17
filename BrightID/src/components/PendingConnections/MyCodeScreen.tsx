@@ -15,7 +15,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ChannelSwitch from '@/components/Helpers/ChannelSwitch';
@@ -121,7 +121,6 @@ export const MyCodeScreen = () => {
         channelErr < 3
       ) {
         InteractionManager.runAfterInteractions(() => {
-          // @ts-ignore
           dispatch(createChannel(displayChannelType)).catch((err) => {
             console.log(`error creating channel: ${err.message}`);
             if (channelErr === 2) {

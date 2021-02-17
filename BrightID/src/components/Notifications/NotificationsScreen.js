@@ -8,7 +8,7 @@ import {
   RefreshControl,
   StatusBar,
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from '@/store';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { TabBar, TabView, SceneMap } from 'react-native-tab-view';

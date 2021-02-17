@@ -1,5 +1,9 @@
 import { combineReducers } from 'redux';
-import { useDispatch as originalUseDispatch } from 'react-redux';
+import {
+  useDispatch as originalUseDispatch,
+  useSelector as originalUseSelector,
+  TypedUseSelectorHook,
+} from 'react-redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import reducers from '@/reducer';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
@@ -69,8 +73,6 @@ const keypairPersistConfig = {
   deserialize: false,
 };
 
-export type RootState = ReturnType<typeof rootReducer>;
-
 const rootReducer = combineReducers({
   ...reducers,
   apps: persistReducer(appsPersistConfig, reducers.apps),
@@ -98,7 +100,9 @@ export const store = configureStore({
 
 export const persistor = persistStore(store);
 
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;
 export const useDispatch = () => originalUseDispatch<AppDispatch>();
+export const useSelector: TypedUseSelectorHook<RootState> = originalUseSelector;
 
 export default store;
