@@ -8,7 +8,7 @@ import {
   StatusBar,
   RefreshControl,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import EmptyList from '@/components/Helpers/EmptyList';
 import Spinner from 'react-native-spinkit';
@@ -75,7 +75,7 @@ export const AppsScreen = () => {
       context: '',
       contextId: '',
     });
-  }, [navigation, route.params, apps]);
+  }, [navigation, route.params, apps, t]);
 
   const AppStatus = () => {
     const pendingLink = find(propEq('state', 'pending'))(linkedContexts);

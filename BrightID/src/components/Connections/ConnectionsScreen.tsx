@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { StyleSheet, View, StatusBar, FlatList } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import { useNavigation } from '@react-navigation/native';

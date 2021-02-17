@@ -13,7 +13,7 @@
     "test:android": "detox test -c android.emu.debug",
     "test:ios": "detox test -c ios.sim.debug",
     "test": "jest",
-    "lint": "eslint 'src' --fix",
+    "lint": "eslint 'src' --quiet --fix",
     "postinstall": "npx jetify",
     "test:watch": "npm test -- --watch",
     "updateSnap": "jest --updateSnapshot",

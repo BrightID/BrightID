@@ -24,7 +24,7 @@ import {
   GREY,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '@/store';
 import { validatePass } from '@/utils/password';
 import {
   setBackupCompleted,

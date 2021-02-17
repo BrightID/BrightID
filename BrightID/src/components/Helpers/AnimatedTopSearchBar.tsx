@@ -6,7 +6,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';

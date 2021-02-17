@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '@/store';
 import { connection_levels } from '@/utils/constants';
 import { ORANGE, BLACK, WHITE, GREEN, DARKER_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';

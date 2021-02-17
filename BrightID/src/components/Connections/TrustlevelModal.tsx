@@ -12,7 +12,7 @@ import { connection_levels } from '@/utils/constants';
 import { BLACK, WHITE, GREEN } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '@/store';
 import api from '@/api/brightId';
 import { setConnectionLevel } from '@/actions/connections';
 import TrustlevelSlider from './TrustlevelSlider';

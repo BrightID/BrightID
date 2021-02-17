@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '@/store';
 import TaskCard from './TaskCard';
 import { UserTasks } from './UserTasks';
 import { resetTask } from './TasksSlice';
