@@ -3,10 +3,9 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-import { StyleSheet, InteractionManager, Linking } from 'react-native';
+import { InteractionManager, Linking } from 'react-native';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { pollOperations } from '@/utils/operations';
-import { WHITE } from '@/theme/colors';
 import AppRoutes from './routes';
 import { store, persistor } from './store';
 import { navigationRef } from './NavigationService';
@@ -89,7 +88,6 @@ export const App = () => {
             <NotificationBanner />
             <NavigationContainer
               linking={linking}
-              // style={styles.container}
               ref={navigationRef}
               fallback={<InitialLoading app={false} />}
             >
@@ -101,14 +99,5 @@ export const App = () => {
     </Provider>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    backgroundColor: WHITE,
-  },
-});
 
 export default App;

@@ -1,4 +1,4 @@
-/* global device:false, element:false, by:false, waitFor:false */
+/* global element:false, by:false, waitFor:false */
 
 import {
   createBrightID,

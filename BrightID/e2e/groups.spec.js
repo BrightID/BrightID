@@ -122,12 +122,8 @@ describe('Groups', () => {
         .toExist()
         .withTimeout(20000);
       // make the first 2 available connections co-founder
-      await element(by.id('checkCoFounderBtn'))
-        .atIndex(0)
-        .tap();
-      await element(by.id('checkCoFounderBtn'))
-        .atIndex(1)
-        .tap();
+      await element(by.id('checkCoFounderBtn')).atIndex(0).tap();
+      await element(by.id('checkCoFounderBtn')).atIndex(1).tap();
     });
 
     it('should create group', async () => {
@@ -174,12 +170,8 @@ describe('Groups', () => {
       await waitFor(element(by.id('checkCoFounderBtn')).atIndex(1))
         .toExist()
         .withTimeout(20000);
-      await element(by.id('checkCoFounderBtn'))
-        .atIndex(1)
-        .tap();
-      await element(by.id('checkCoFounderBtn'))
-        .atIndex(2)
-        .tap();
+      await element(by.id('checkCoFounderBtn')).atIndex(1).tap();
+      await element(by.id('checkCoFounderBtn')).atIndex(2).tap();
     });
 
     it('should create group', async () => {

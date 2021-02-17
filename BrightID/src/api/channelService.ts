@@ -13,7 +13,7 @@
     We need to support multiple different hosts, so
     we can not use a global API instance. Instead it needs to be created per channel.
  */
-import { create, ApiSauceInstance } from 'apisauce';
+import { create, ApisauceInstance } from 'apisauce';
 
 declare type UploadParams = {
   channelId: string;
@@ -27,7 +27,7 @@ declare type DownloadParams = {
 };
 
 class ChannelAPI {
-  api: ApiSauceInstance;
+  api: ApisauceInstance;
 
   constructor(baseURL: string) {
     this.api = create({

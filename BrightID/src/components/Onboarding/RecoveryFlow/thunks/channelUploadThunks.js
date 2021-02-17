@@ -8,8 +8,8 @@ import { strToUint8Array, uInt8ArrayToB64, hash } from '@/utils/encoding';
 import { loadRecoveryData } from './channelDownloadThunks';
 
 export const uploadSig = ({ id, aesKey, channelApi }) => async (
-  dispatch: dispatch,
-  getState: getState,
+  _,
+  getState,
 ) => {
   const {
     keypair: { secretKey },
@@ -112,8 +112,8 @@ const uploadGroup = async ({ group, channelApi, aesKey }) => {
 };
 
 export const uploadMutualInfo = ({ conn, aesKey, channelApi }) => async (
-  dispatch: dispatch,
-  getState: getState,
+  dispatch,
+  getState,
 ) => {
   try {
     const dataIds = await channelApi.list(hash(aesKey));
