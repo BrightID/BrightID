@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { useDispatch as originalUseDispatch } from 'react-redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import reducers from '@/reducer';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
@@ -68,6 +69,8 @@ const keypairPersistConfig = {
   deserialize: false,
 };
 
+export type RootState = ReturnType<typeof rootReducer>;
+
 const rootReducer = combineReducers({
   ...reducers,
   apps: persistReducer(appsPersistConfig, reducers.apps),
@@ -94,5 +97,8 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
+
+export type Dispatch = typeof store.dispatch;
+export const useDispatch = () => originalUseDispatch<Dispatch>();
 
 export default store;

@@ -94,6 +94,8 @@ export const MyCodeScreen = () => {
     selectAllActiveChannelIdsByType(state, displayChannelType),
   );
 
+  console.log('activeChannelIds', activeChannelIds);
+
   // pending connections attached to active channel
   const pendingConnectionSize = useSelector((state: State) => {
     if (myChannel) {

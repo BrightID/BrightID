@@ -1,6 +1,7 @@
 // @flow
 
 import { ThunkDispatch } from 'redux-thunk';
+import { EntityState } from '@reduxjs/toolkit';
 import {
   channel_states,
   channel_types,
@@ -57,14 +58,15 @@ declare global {
     state: string;
   };
 
-  type ChannelsState = {
-    displayChannelType: string;
+  type DisplayChannel = {
+    displayChannelType: ChannelType;
     myChannelIds: {
-      [id: string]: string;
+      SINGLE: string;
+      GROUP: string;
     };
-    ids: string[];
-    entities: Channel[];
   };
+
+  type ChannelsState = EntityState<Channel> & DisplayChannel;
 
   type ChannelState = keyof typeof channel_states;
   type ChannelType = keyof typeof channel_types;

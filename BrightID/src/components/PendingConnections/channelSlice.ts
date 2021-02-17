@@ -2,8 +2,11 @@ import {
   createSelector,
   createSlice,
   createEntityAdapter,
+  PayloadAction,
+  Update,
 } from '@reduxjs/toolkit';
 
+import { Draft } from 'immer';
 /*
 
   What is a channel:
@@ -49,12 +52,12 @@ export enum channel_states {
   BACKGROUND = 'BACKGROUND',
 }
 
-export const channelsAdapter = createEntityAdapter<ChannelsState>();
+export const channelsAdapter = createEntityAdapter<Channel>();
 
 // By default, `createEntityAdapter` gives you `{ ids: [], entities: {} }`.
 // If you want to track 'loading' or other keys, you would initialize them here:
 // `getInitialState({ loading: false, activeRequestId: null })`
-const initialState = channelsAdapter.getInitialState({
+const initialState = channelsAdapter.getInitialState<DisplayChannel>({
   displayChannelType: channel_types.SINGLE,
   myChannelIds: {
     [channel_types.SINGLE]: '',
@@ -66,11 +69,27 @@ const channelSlice = createSlice({
   name: 'channels',
   initialState,
   reducers: {
-    addChannel: channelsAdapter.addOne,
-    updateChannel: channelsAdapter.updateOne,
-    closeChannel(state, action) {
+    addChannel(state: Draft<ChannelsState>, action: PayloadAction<Channel>) {
+      state = channelsAdapter.addOne<ChannelsState>(
+        state as ChannelsState,
+        action,
+      );
+    },
+    updateChannel(
+      state: Draft<ChannelsState>,
+      action: PayloadAction<Update<Channel>>,
+    ) {
+      state = channelsAdapter.updateOne<ChannelsState>(
+        state as ChannelsState,
+        action,
+      );
+    },
+    closeChannel(
+      state: Draft<ChannelsState>,
+      action: PayloadAction<{ channelId: string; background: boolean }>,
+    ) {
       const { channelId, background } = action.payload;
-      state = channelsAdapter.updateOne(state, {
+      state = channelsAdapter.updateOne<ChannelsState>(state as ChannelsState, {
         id: channelId,
         changes: {
           state: background ? channel_states.BACKGROUND : channel_states.CLOSED,
@@ -82,9 +101,12 @@ const channelSlice = createSlice({
       if (state.myChannelIds[channel_types.GROUP] === channelId)
         state.myChannelIds[channel_types.GROUP] = '';
     },
-    removeChannel(state, action) {
+    removeChannel(state: Draft<ChannelsState>, action: PayloadAction<string>) {
       const channelId = action.payload;
-      state = channelsAdapter.removeOne(state, channelId);
+      state = channelsAdapter.removeOne<ChannelsState>(
+        state as ChannelsState,
+        channelId,
+      );
       // In case my channel got removed also clear myChannelId
       if (state.myChannelIds[channel_types.SINGLE] === channelId)
         state.myChannelIds[channel_types.SINGLE] === '';
@@ -92,11 +114,17 @@ const channelSlice = createSlice({
       if (state.myChannelIds[channel_types.GROUP] === channelId)
         state.myChannelIds[channel_types.GROUP] === '';
     },
-    setMyChannel(state, action) {
+    setMyChannel(
+      state: Draft<ChannelsState>,
+      action: PayloadAction<{ channelType: ChannelType; channelId: string }>,
+    ) {
       const { channelType, channelId } = action.payload;
       state.myChannelIds[channelType] = channelId;
     },
-    setDisplayChannelType(state, action) {
+    setDisplayChannelType(
+      state: Draft<ChannelsState>,
+      action: PayloadAction<ChannelType>,
+    ) {
       const channelType = action.payload;
       state.displayChannelType = channelType;
     },
@@ -123,14 +151,15 @@ export const {
 // additional selectors
 export const selectAllActiveChannelIds = createSelector(
   selectAllChannels,
-  (_, type: ChannelType) => type,
+  // check to see if this is state or channel state
+  (_: State, type: ChannelType) => type,
   (channels, type) =>
     channels.filter((pc) => pc.type === type).map((pc) => pc.id),
 );
 
 export const selectAllActiveChannelIdsByType = createSelector(
   selectAllChannels,
-  (_, type: ChannelType) => type,
+  (_: State, type: ChannelType) => type,
   (channels, type) =>
     channels
       .filter(
