@@ -148,6 +148,7 @@ function MembersScreen(props: MembersScreenProps) {
     t,
     ACTION_LEAVE,
     ACTION_CANCEL,
+    ACTION_INVITE,
   ]);
 
   // set available actions for group
@@ -165,7 +166,7 @@ function MembersScreen(props: MembersScreenProps) {
       actions.push(ACTION_CANCEL);
     }
     setContextActions(actions);
-  }, [user.id, admins, members]);
+  }, [user.id, admins, members, ACTION_INVITE, ACTION_LEAVE, ACTION_CANCEL]);
 
   // Only include the group members that user knows (is connected with), and the user itself
   const groupMembers: Array<connection> = useMemo(() => {

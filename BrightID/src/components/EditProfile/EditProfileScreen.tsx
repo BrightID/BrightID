@@ -431,7 +431,7 @@ export const EditProfileScreen = ({ navigation }) => {
             {
               text: t('profile.alert.button.dontLeave'),
               style: 'cancel',
-              onPress: () => {},
+              onPress: () => null,
             },
             {
               text: t('profile.alert.button.discard'),

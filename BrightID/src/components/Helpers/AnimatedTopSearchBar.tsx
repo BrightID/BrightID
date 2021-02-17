@@ -23,7 +23,7 @@ const X_TRANSFORM = DEVICE_LARGE ? 250 : 195;
 
 const AnimatedTopSearchBar = ({
   sortable,
-  handleSort = () => {},
+  handleSort = () => null,
   setSearchValue,
   setSearchOpen,
   searchOpenSelector,
@@ -40,6 +40,7 @@ const AnimatedTopSearchBar = ({
       dispatch(setSearchValue(''));
       dispatch(setSearchOpen(false));
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const leftAnim = useRef(new Animated.Value(X_TRANSFORM)).current;

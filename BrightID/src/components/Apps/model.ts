@@ -25,7 +25,7 @@ export const handleAppContext = async (params: Params) => {
       {
         text: i18next.t('common.alert.no'),
         style: 'cancel',
-        onPress: () => {},
+        onPress: () => null,
       },
     ],
   );
@@ -49,7 +49,7 @@ const linkContextId = async (baseUrl, context, contextId) => {
       {
         text: i18next.t('common.alert.dismiss'),
         style: 'cancel',
-        onPress: () => {},
+        onPress: () => null,
       },
     ]);
   } finally {

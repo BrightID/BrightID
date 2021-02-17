@@ -52,12 +52,6 @@ export const AppsScreen = () => {
 
   useFocusEffect(refreshApps);
 
-  useEffect(() => {
-    if (apps.length > 0 && route.params?.context) {
-      handleDeepLink();
-    }
-  }, [apps, handleDeepLink, route.params]);
-
   const handleDeepLink = useCallback(() => {
     const context = route.params?.context;
     const isValidContext = any(propEq('context', context))(apps);
@@ -76,6 +70,12 @@ export const AppsScreen = () => {
       contextId: '',
     });
   }, [navigation, route.params, apps, t]);
+
+  useEffect(() => {
+    if (apps.length > 0 && route.params?.context) {
+      handleDeepLink();
+    }
+  }, [apps, handleDeepLink, route.params]);
 
   const AppStatus = () => {
     const pendingLink = find(propEq('state', 'pending'))(linkedContexts);

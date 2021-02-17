@@ -107,7 +107,7 @@ const AppCard = (props) => {
           {
             text: t('common.alert.cancel'),
             style: 'cancel',
-            onPress: () => {},
+            onPress: () => null,
           },
         ],
         { cancelable: true },

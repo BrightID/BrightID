@@ -97,16 +97,19 @@ export const recoverData = (pass: string) => async (
 
   // set new signing key on the backend
   await dispatch(setSigningKey());
+  let userData = { id, publicKey, secretKey, name, photo };
+  let connections = [];
+  let groups = [];
   if (pass) {
     // throws if data is bad
-    var { userData, connections, groups } = await restoreUserData(id, pass);
+    const restoredData = await restoreUserData(id, pass);
+    userData = restoredData.userData;
+    connections = restoredData.connections;
+    groups = restoredData.groups;
     dispatch(setConnections(connections));
     dispatch(setGroups(groups));
-  } else {
-    var userData = { id, publicKey, secretKey, name, photo };
-    var connections = [];
-    var groups = [];
   }
+
   dispatch(setKeypair({ publicKey, secretKey }));
 
   for (const conn of connections) {

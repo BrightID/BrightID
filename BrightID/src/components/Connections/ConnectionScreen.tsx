@@ -54,9 +54,6 @@ function ConnectionScreen(props: Props) {
     connection,
     brightIdVerified,
     connectedAt,
-    createdAt,
-    connectionsNum,
-    groupsNum,
     mutualGroups,
     mutualConnections,
     loading,
@@ -97,7 +94,13 @@ function ConnectionScreen(props: Props) {
       },
     ];
     return data;
-  }, [connectionsCollapsed, groupsCollapsed, mutualConnections, mutualGroups]);
+  }, [
+    connectionsCollapsed,
+    groupsCollapsed,
+    mutualConnections,
+    mutualGroups,
+    t,
+  ]);
 
   const renderBadge = () => {
     if (loading) {

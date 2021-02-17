@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '@/store';
 import { BLUE, WHITE } from '@/theme/colors';
 import {
   connectWithOtherFakeConnections,

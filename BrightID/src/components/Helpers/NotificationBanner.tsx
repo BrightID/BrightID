@@ -87,7 +87,7 @@ export const NotificationBanner = () => {
         }),
       );
     }
-  }, [pendingConnections.length, dispatch]);
+  }, [pendingConnections.length, dispatch, t]);
 
   // icon fallback: activeNotification prop 'icon' -> default icon for notification type -> default 'Certificate'
   const Icon = Icons[activeNotification?.icon || 'Certificate'];

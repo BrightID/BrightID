@@ -2,7 +2,7 @@
 // existsMock.mockReturnValueOnce({ then: jest.fn() });
 
 export default {
-  DocumentDir: () => {},
+  DocumentDir: () => null,
   fs: {
     exists: () => Promise.resolve(true),
     dirs: {

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '@/store';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { ORANGE, BLACK, WHITE, DARKER_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';

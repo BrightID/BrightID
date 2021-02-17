@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '@/store';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import { photoDirectory } from '@/utils/filesystem';
 import { GREY, WHITE } from '@/theme/colors';
@@ -54,7 +54,7 @@ const RecoveryConnectionCard = (props) => {
         },
         {
           text: 'No',
-          onPress: () => {},
+          onPress: () => null,
         },
       ],
     );
