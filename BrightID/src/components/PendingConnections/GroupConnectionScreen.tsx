@@ -19,7 +19,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Svg, { Line } from 'react-native-svg';
 
-import { useSelector } from 'react-redux';
+import { useSelector } from '@/store';
 import { createSelector } from '@reduxjs/toolkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ORANGE, WHITE } from '@/theme/colors';

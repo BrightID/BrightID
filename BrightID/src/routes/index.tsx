@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useSelector } from 'react-redux';
+import { useSelector } from '@/store';
 import Apps from './Apps';
 import Backup from './Backup';
 import Connections from './Connections';

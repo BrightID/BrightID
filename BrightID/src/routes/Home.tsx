@@ -5,7 +5,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector } from '@/store';
 import { INVITE_ACTIVE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { BLACK } from '@/theme/colors';

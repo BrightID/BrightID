@@ -4,7 +4,7 @@ import React, {
   useLayoutEffect,
   useState,
 } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from '@/store';
 import { useFocusEffect } from '@react-navigation/native';
 import ConnectionTestButton from '@/utils/connectionTestButton';
 import api from '@/api/brightId';

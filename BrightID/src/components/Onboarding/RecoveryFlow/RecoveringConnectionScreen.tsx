@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Spinner from 'react-native-spinkit';
-import { useSelector } from 'react-redux';
+import { useSelector } from '@/store';
 import { createSelector } from '@reduxjs/toolkit';
 import { useTranslation } from 'react-i18next';
 import { useRoute, useFocusEffect } from '@react-navigation/native';

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector } from '@/store';
 import { useFocusEffect } from '@react-navigation/native';
 import { WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
