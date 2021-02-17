@@ -3,7 +3,6 @@ import {
   createEntityAdapter,
   createAsyncThunk,
   createSelector,
-  EntityState,
 } from '@reduxjs/toolkit';
 import i18next from 'i18next';
 import {
@@ -17,7 +16,7 @@ import { PROFILE_VERSION } from '@/utils/constants';
 import { createDeepEqualStringArraySelector } from '@/utils/createDeepEqualStringArraySelector';
 import BrightidError, { USER_NOT_FOUND } from '@/api/brightidError';
 
-const pendingConnectionsAdapter = createEntityAdapter<PendingConnection[]>();
+const pendingConnectionsAdapter = createEntityAdapter<PendingConnection>();
 
 /*
   PendingConnection slice contains all pending connections and their profile info
@@ -31,18 +30,25 @@ const pendingConnectionsAdapter = createEntityAdapter<PendingConnection[]>();
    - 'photo' (base64-encoded)
    - 'score'
  */
-export const pendingConnection_states = {
-  INITIAL: 'INITIAL',
-  DOWNLOADING: 'DOWNLOADING',
-  UNCONFIRMED: 'UNCONFIRMED',
-  CONFIRMING: 'CONFIRMING',
-  CONFIRMED: 'CONFIRMED',
-  ERROR: 'ERROR',
-  MYSELF: 'MYSELF',
-  EXPIRED: 'EXPIRED',
-};
+export enum pendingConnection_states {
+  INITIAL = 'INITIAL',
+  DOWNLOADING = 'DOWNLOADING',
+  UNCONFIRMED = 'UNCONFIRMED',
+  CONFIRMING = 'CONFIRMING',
+  CONFIRMED = 'CONFIRMED',
+  ERROR = 'ERROR',
+  MYSELF = 'MYSELF',
+  EXPIRED = 'EXPIRED',
+}
 
-export const newPendingConnection = createAsyncThunk(
+export const newPendingConnection = createAsyncThunk<
+  PendingConnection,
+  { channelId: string; profileId: string },
+  {
+    dispatch: Dispatch;
+    state: State;
+  }
+>(
   'pendingConnections/newPendingConnection',
   async ({ channelId, profileId }, { getState }) => {
     console.log(`new pending connection ${profileId} in channel ${channelId}`);
@@ -54,10 +60,11 @@ export const newPendingConnection = createAsyncThunk(
     }
 
     // download profile
-    const profileData = await channel.api.download({
+    const profileData: string = await channel.api.download({
       channelId,
       dataId: profileId,
     });
+
     const decryptedObj = decryptData(profileData, channel.aesKey);
 
     // compare profile version
@@ -87,7 +94,7 @@ export const newPendingConnection = createAsyncThunk(
     }
 
     decryptedObj.myself = decryptedObj.id === getState().user.id;
-    let connectionInfo = {};
+    let connectionInfo: PendingConnection = {};
     try {
       connectionInfo = await api.getUserProfile(decryptedObj.id);
     } catch (err) {
@@ -142,100 +149,101 @@ const pendingConnectionsSlice = createSlice({
       });
     },
   },
-  extraReducers: {
-    [newPendingConnection.pending]: (state, action) => {
-      // This is called before actual thunk code is executed. Thunk argument is available via
-      // action.meta.arg.
+  extraReducers: (builder) => {
+    builder
+      .addCase(newPendingConnection.pending, (state, action) => {
+        // This is called before actual thunk code is executed. Thunk argument is available via
+        // action.meta.arg.
 
-      // Add pending connection in DOWNLOADING state.
-      state = pendingConnectionsAdapter.addOne(state, {
-        id: action.meta.arg.profileId,
-        channelId: action.meta.arg.channelId,
-        state: pendingConnection_states.DOWNLOADING,
+        // Add pending connection in DOWNLOADING state.
+        state = pendingConnectionsAdapter.addOne(state, {
+          id: action.meta.arg.profileId,
+          channelId: action.meta.arg.channelId,
+          state: pendingConnection_states.DOWNLOADING,
+        });
+      })
+      .addCase(newPendingConnection.rejected, (state, action) => {
+        // This is called if anything goes wrong
+        console.log(`Error adding pending connection:`);
+        console.log(action.error.message);
+
+        state = pendingConnectionsAdapter.updateOne(state, {
+          id: action.meta.arg.profileId,
+          changes: {
+            state: pendingConnection_states.ERROR,
+          },
+        });
+      })
+      .addCase(newPendingConnection.fulfilled, (state, action) => {
+        // thunk argument is available via action.meta.arg:
+        const { profileId } = action.meta.arg;
+
+        // data returned by thunk is available via action.payload:
+        const {
+          id: brightId,
+          name,
+          photo,
+          score,
+          profileTimestamp,
+          initiator,
+          connectionsNum,
+          groupsNum,
+          mutualConnections,
+          mutualGroups,
+          createdAt,
+          connectedAt,
+          reports,
+          verifications,
+          notificationToken,
+          socialMedia,
+          existingConnection,
+        } = action.payload;
+
+        const changes: PendingConnection = {
+          state: action.payload.myself
+            ? pendingConnection_states.MYSELF
+            : pendingConnection_states.UNCONFIRMED,
+          brightId,
+          name,
+          photo,
+          score,
+          profileTimestamp,
+          initiator,
+          connectionsNum,
+          groupsNum,
+          mutualConnections,
+          mutualGroups,
+          createdAt,
+          connectedAt,
+          reports,
+          verifications,
+          notificationToken,
+          socialMedia,
+          existingConnection,
+        };
+
+        // add secret key if dev
+        if (__DEV__) {
+          const { secretKey } = action.payload;
+          changes.secretKey = secretKey;
+        }
+
+        // Perform the update in redux
+        state = pendingConnectionsAdapter.updateOne(state, {
+          id: profileId,
+          changes,
+        });
+      })
+      .addCase(removeChannel, (state, action) => {
+        const channelId = action.payload;
+        const deleteIds = state.ids.filter(
+          (id) => state.entities[id].channelId === channelId,
+        );
+        console.log(
+          `Channel ${channelId} deleted - removing ${deleteIds.length} pending connections associated to channel`,
+        );
+        state = pendingConnectionsAdapter.removeMany(state, deleteIds);
       });
-    },
-    [newPendingConnection.rejected]: (state, action) => {
-      // This is called if anything goes wrong
-      console.log(`Error adding pending connection:`);
-      console.log(action.error.message);
-
-      state = pendingConnectionsAdapter.updateOne(state, {
-        id: action.meta.arg.profileId,
-        changes: {
-          state: pendingConnection_states.ERROR,
-        },
-      });
-    },
-    [newPendingConnection.fulfilled]: (state, action) => {
-      // thunk argument is available via action.meta.arg:
-      const { profileId } = action.meta.arg;
-
-      // data returned by thunk is available via action.payload:
-      const {
-        id: brightId,
-        name,
-        photo,
-        score,
-        profileTimestamp,
-        initiator,
-        connectionsNum,
-        groupsNum,
-        mutualConnections,
-        mutualGroups,
-        createdAt,
-        connectedAt,
-        reports,
-        verifications,
-        notificationToken,
-        socialMedia,
-        existingConnection,
-      } = action.payload;
-
-      const changes = {
-        state: action.payload.myself
-          ? pendingConnection_states.MYSELF
-          : pendingConnection_states.UNCONFIRMED,
-        brightId,
-        name,
-        photo,
-        score,
-        profileTimestamp,
-        initiator,
-        connectionsNum,
-        groupsNum,
-        mutualConnections,
-        mutualGroups,
-        createdAt,
-        connectedAt,
-        reports,
-        verifications,
-        notificationToken,
-        socialMedia,
-        existingConnection,
-      };
-
-      // add secret key if dev
-      if (__DEV__) {
-        const { secretKey } = action.payload;
-        changes.secretKey = secretKey;
-      }
-
-      // Perform the update in redux
-      state = pendingConnectionsAdapter.updateOne(state, {
-        id: profileId,
-        changes,
-      });
-    },
-    [removeChannel]: (state, action) => {
-      const channelId = action.payload;
-      const deleteIds = state.ids.filter(
-        (id) => state.entities[id].channelId === channelId,
-      );
-      console.log(
-        `Channel ${channelId} deleted - removing ${deleteIds.length} pending connections associated to channel`,
-      );
-      state = pendingConnectionsAdapter.removeMany(state, deleteIds);
-    },
   },
 });
 
@@ -286,13 +294,10 @@ export const selectAllUnconfirmedConnectionsByChannelIds = createDeepEqualString
 // export actions
 
 export const {
-  addPendingConnection,
   updatePendingConnection,
   removePendingConnection,
   removeAllPendingConnections,
-  setPollTimerId,
   confirmPendingConnection,
-  rejectPendingConnection,
   addFakePendingConnection,
 } = pendingConnectionsSlice.actions;
 

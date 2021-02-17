@@ -40,7 +40,7 @@ export const PendingConnectionsScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const viewPagerRef = useRef(null);
+  const viewPagerRef = useRef<ViewPager>(null);
 
   const pendingConnections = useSelector((state: State) => {
     return selectAllUnconfirmedConnections(state);
@@ -161,7 +161,6 @@ export const PendingConnectionsScreen = () => {
         >
           <PreviewConnectionController
             pendingConnectionId={item.id}
-            viewPagerRef={viewPagerRef}
             index={index}
             moveToNext={moveToNext}
           />
@@ -215,10 +214,7 @@ export const PendingConnectionsScreen = () => {
                   navigation.goBack();
                 }}
               >
-                <BackArrow
-                  height={DEVICE_LARGE ? '22' : '20'}
-                  color={DARK_GREY}
-                />
+                <BackArrow height={DEVICE_LARGE ? 22 : 20} color={DARK_GREY} />
               </TouchableOpacity>
               <Text style={styles.titleText}>
                 {t('pendingConnections.title.confirmationTotal', {

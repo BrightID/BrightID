@@ -84,7 +84,7 @@ export const confirmPendingConnectionThunk = (
   });
 
   // create established connection from pendingConnection
-  const connectionData = {
+  const connectionData: connection = {
     id: connection.brightId,
     name: connection.name,
     connectionDate: connectionTimestamp,

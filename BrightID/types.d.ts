@@ -1,12 +1,12 @@
 // @flow
 
-import { ThunkDispatch } from 'redux-thunk';
 import { EntityState } from '@reduxjs/toolkit';
 import {
   channel_states,
   channel_types,
 } from '@/components/PendingConnections/channelSlice';
 import ChannelAPI from '@/api/channelService';
+import { AppDispatch } from '@/store';
 import { connection_levels } from './src/utils/constants';
 import { pendingConnection_states } from './src/components/PendingConnections/pendingConnectionSlice';
 
@@ -14,9 +14,11 @@ declare global {
   type ValueOf<T> = T[keyof T];
 
   type getState = () => State;
+  type GetState = getState;
 
   // TODO: make this type more specific
-  type dispatch = ThunkDispatch<any, any, any>;
+  type dispatch = AppDispatch;
+  type Dispatch = dispatch;
 
   type navigation = () => any;
 
@@ -111,19 +113,21 @@ declare global {
   type connection = {
     id: string;
     name: string;
-    score: number;
+    score?: number;
     secretKey?: string;
-    aesKey: string;
+    aesKey?: string;
     connectionDate: number;
     photo: Photo;
     status: string;
-    signingKey: string;
-    createdAt: string;
-    hasPrimaryGroup: boolean;
+    signingKey?: string;
+    createdAt?: string;
+    hasPrimaryGroup?: boolean;
     publicKey?: string;
     flaggers?: any; // TODO: Proper definition, maybe refactor
     level: ConnectionLevel;
     hiddenFlag?: string;
+    socialMedia?: string[];
+    notificationToken?: string;
   };
 
   type GroupsState = {
@@ -184,14 +188,11 @@ declare global {
     hash: string;
   };
 
-  type PendingConnectionsState = {
-    ids: string[];
-    entities: PendingConnection[];
-  };
+  type PendingConnectionsState = EntityState<PendingConnection>;
 
   type PendingConnection = {
-    id: string;
-    channelId: string;
+    id?: string;
+    channelId?: string;
     brightId?: string;
     name?: string;
     photo?: string;
@@ -202,10 +203,18 @@ declare global {
     verifications?: { name: string }[];
     connectionsNum?: number;
     reports?: string[];
-    connectedAt?: string;
+    connectedAt?: number;
     groupsNum?: number;
     mutualConnections?: string[];
     existingConnection?: connection;
+    socialMedia?: string[];
+    notificationToken?: string;
+    mutualGroups?: string[];
+    createdAt?: number;
+    profileTimestamp?: number;
+    initiator?: string;
+    myself?: boolean;
+    secretKey?: Uint8Array;
   };
 
   type RecoveryData = {

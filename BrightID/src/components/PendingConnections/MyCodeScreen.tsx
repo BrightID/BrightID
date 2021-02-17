@@ -49,7 +49,7 @@ import { QrCode } from './QrCode';
  *
  */
 let FakeConnectionBtn = () => null;
-let addFakeConnection = () => {};
+let addFakeConnection = () => null;
 if (__DEV__) {
   addFakeConnection = require('@/actions/fakeContact').addFakeConnection;
 
@@ -84,7 +84,7 @@ export const MyCodeScreen = () => {
   );
   // current channel displayed by QRCode
   const myChannel = useSelector(
-    (state) =>
+    (state: State) =>
       selectChannelById(state, state.channels.myChannelIds[displayChannelType]),
     (a, b) => a?.id === b?.id,
   );
@@ -121,6 +121,7 @@ export const MyCodeScreen = () => {
         channelErr < 3
       ) {
         InteractionManager.runAfterInteractions(() => {
+          // @ts-ignore
           dispatch(createChannel(displayChannelType)).catch((err) => {
             console.log(`error creating channel: ${err.message}`);
             if (channelErr === 2) {
@@ -233,6 +234,7 @@ export const MyCodeScreen = () => {
     navigation,
     pendingConnectionSize,
     unconfirmedConnectionSize,
+    t,
   ]);
 
   // when

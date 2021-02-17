@@ -183,7 +183,14 @@ export const unsubscribeFromConnectionRequests = (channelId: string) => (
   }
 };
 
-export const fetchChannelProfiles = createAsyncThunk(
+export const fetchChannelProfiles = createAsyncThunk<
+  void,
+  string,
+  {
+    dispatch: Dispatch;
+    state: State;
+  }
+>(
   'channels/fetchChannelProfiles',
   async (channelId, { getState, dispatch }) => {
     const channel = selectChannelById(getState(), channelId);
@@ -237,8 +244,8 @@ export const fetchChannelProfiles = createAsyncThunk(
 );
 
 export const encryptAndUploadProfileToChannel = (channelId: string) => async (
-  dispatch: dispatch,
-  getState: getState,
+  dispatch: Dispatch,
+  getState: GetState,
 ) => {
   // get channel
   const channel = selectChannelById(getState(), channelId);

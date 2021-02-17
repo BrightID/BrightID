@@ -47,7 +47,7 @@ const calcY = (a: number) =>
 
 const selectGroupConnections = createSelector(
   selectAllPendingConnections,
-  (_, channel) => channel,
+  (_: State, channel: Channel) => channel,
   (pendingConnections, channel) => {
     console.log('calcing pending connections');
     return pendingConnections.filter(

@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 import { fontSize } from '@/theme/fonts';
 
-type ConnectionStatsProps = {
+interface ConnectionStatsProps {
   connectionsNum: number;
   groupsNum: number;
   mutualConnectionsNum: number;
-};
+}
 
 export const ConnectionStats = ({
   connectionsNum,

@@ -162,7 +162,6 @@ export const QrCode = ({ channel }) => {
       <Svg
         height={DEVICE_LARGE ? '260' : '200'}
         width={DEVICE_LARGE ? '260' : '200'}
-        xmlns="http://www.w3.org/2000/svg"
         viewBox={path(['svg', '$', 'viewBox'], qrsvg)}
         shape-rendering="crispEdges"
       >

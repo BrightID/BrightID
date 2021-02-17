@@ -98,7 +98,7 @@ export const store = configureStore({
 
 export const persistor = persistStore(store);
 
-export type Dispatch = typeof store.dispatch;
-export const useDispatch = () => originalUseDispatch<Dispatch>();
+export type AppDispatch = typeof store.dispatch;
+export const useDispatch = () => originalUseDispatch<AppDispatch>();
 
 export default store;
