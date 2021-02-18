@@ -304,6 +304,7 @@ declare global {
     secretKey: string;
     isSponsored: boolean;
     eula: boolean;
+    migrated?: boolean;
   };
 
   type LayoutBox = {

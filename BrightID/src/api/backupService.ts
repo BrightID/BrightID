@@ -1,4 +1,4 @@
-import { create, ApiSauceInstance, ApiResponse } from 'apisauce';
+import { create, ApisauceInstance, ApiResponse } from 'apisauce';
 import { b64ToUrlSafeB64 } from '@/utils/encoding';
 
 const recoveryUrl = 'https://recovery.brightid.org';
@@ -8,9 +8,9 @@ if (__DEV__) {
 }
 
 class BackupService {
-  recoveryApi: ApiSauceInstance;
+  recoveryApi: ApisauceInstance;
 
-  profileApi: ApiSauceInstance;
+  profileApi: ApisauceInstance;
 
   constructor() {
     this.recoveryApi = create({
@@ -21,7 +21,7 @@ class BackupService {
     });
   }
 
-  static throwOnError(response: ApiResponse) {
+  static throwOnError(response: ApiResponse<any>) {
     if (response.ok) {
       return;
     }

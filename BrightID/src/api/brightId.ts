@@ -45,7 +45,7 @@ class NodeApi {
   }
 
   static checkHash(response, message) {
-    if (response.data.data.hash != hash(message)) {
+    if (response.data.data.hash !== hash(message)) {
       throw new Error('Invalid operation hash returned from server');
     }
     return response.data.data.hash;
@@ -69,8 +69,8 @@ class NodeApi {
     id1: string,
     id2: string,
     level: string,
-    reportReason?: string,
     timestamp: number,
+    reportReason?: string,
     fakeUser?: FakeUser,
   ) {
     let secretKey;
@@ -81,8 +81,23 @@ class NodeApi {
       secretKey = store.getState().keypair.secretKey;
     }
 
+    interface ConnectOp {
+      name: 'Connect';
+      id1: string;
+      id2: string;
+      level: string;
+      timestamp: number;
+      v: number;
+      sig1?: string;
+      reportReason?: string;
+      replacedWith?: string;
+      requestProof?: string;
+      hash?: string;
+    }
+
     const name = 'Connect';
-    const op = {
+
+    const op: ConnectOp = {
       name,
       id1,
       id2,
@@ -90,6 +105,7 @@ class NodeApi {
       timestamp,
       v,
     };
+
     if (reportReason) {
       op.reportReason = reportReason;
     }
@@ -122,7 +138,23 @@ class NodeApi {
     const name = 'Add Group';
     const timestamp = Date.now();
 
-    const op = {
+    interface AddGroupOp {
+      name: 'Add Group';
+      group: string;
+      id1: string;
+      id2: string;
+      id3: string;
+      inviteData2: string;
+      inviteData3: string;
+      url: string;
+      type: string;
+      timestamp: number;
+      v: number;
+      sig1?: string;
+      hash?: string;
+    }
+
+    const op: AddGroupOp = {
       name,
       id1: id,
       id2,
@@ -155,7 +187,18 @@ class NodeApi {
     const name = 'Dismiss';
     const timestamp = Date.now();
 
-    const op = {
+    interface DismissOp {
+      name: string;
+      dismisser: string;
+      dismissee: string;
+      group: string;
+      timestamp: number;
+      v: number;
+      sig?: string;
+      hash?: string;
+    }
+
+    const op: DismissOp = {
       name,
       dismisser: id,
       dismissee: id2,
@@ -182,7 +225,20 @@ class NodeApi {
 
     const name = 'Invite';
     const timestamp = Date.now();
-    const op = {
+
+    interface InviteOp {
+      name: 'Invite';
+      inviter: string;
+      invitee: string;
+      group: string;
+      data: string;
+      timestamp: number;
+      v: number;
+      sig?: string;
+      hash?: string;
+    }
+
+    const op: InviteOp = {
       name,
       inviter: id,
       invitee: id2,
@@ -209,7 +265,19 @@ class NodeApi {
 
     const name = 'Add Admin';
     const timestamp = Date.now();
-    const op = {
+
+    interface AddAdminOp {
+      name: 'Add Admin';
+      id: string;
+      admin: string;
+      group: string;
+      timestamp: number;
+      v: number;
+      sig?: string;
+      hash?: string;
+    }
+
+    const op: AddAdminOp = {
       name,
       id,
       admin: newAdmin,
@@ -237,7 +305,18 @@ class NodeApi {
 
     const name = 'Remove Group';
     const timestamp = Date.now();
-    const op = {
+
+    interface RemoveGroupOp {
+      name: 'Remove Group';
+      id: string;
+      group: string;
+      timestamp: number;
+      v: number;
+      sig?: string;
+      hash?: string;
+    }
+
+    const op: RemoveGroupOp = {
       name,
       id,
       group,
@@ -268,7 +347,18 @@ class NodeApi {
 
     const name = 'Add Membership';
     const timestamp = Date.now();
-    const op = {
+
+    interface AddMembershipOp {
+      name: string;
+      id: string;
+      group: string;
+      timestamp: number;
+      v: number;
+      sig?: string;
+      hash?: string;
+    }
+
+    const op: AddMembershipOp = {
       name,
       id: brightId,
       group,
@@ -294,7 +384,18 @@ class NodeApi {
 
     const name = 'Remove Membership';
     const timestamp = Date.now();
-    const op = {
+
+    interface RemoveMembershipOp {
+      name: string;
+      id: string;
+      group: string;
+      timestamp: number;
+      v: number;
+      sig?: string;
+      hash?: string;
+    }
+
+    const op: RemoveMembershipOp = {
       name,
       id,
       group,
@@ -321,7 +422,20 @@ class NodeApi {
     sig1: string;
     sig2: string;
   }) {
-    const op = {
+    interface SetSigningKeyOp {
+      name: 'Set Signing Key';
+      id: string;
+      signingKey: string;
+      timestamp: number;
+      v: number;
+      id1?: string;
+      id2?: string;
+      sig1?: string;
+      sig2?: string;
+      hash?: string;
+    }
+
+    const op: SetSigningKeyOp = {
       name: 'Set Signing Key',
       id: params.id,
       signingKey: params.signingKey,
@@ -348,7 +462,20 @@ class NodeApi {
 
     const name = 'Link ContextId';
     const timestamp = Date.now();
-    const op = {
+
+    interface LinkContextIdOp {
+      name: 'Link ContextId';
+      timestamp: number;
+      v: number;
+      context: string;
+      contextId?: string;
+      encrypted?: string;
+      id?: string;
+      sig?: string;
+      hash?: string;
+    }
+
+    const op: LinkContextIdOp = {
       name,
       id,
       context,
@@ -368,26 +495,30 @@ class NodeApi {
   }
 
   async getUserInfo(id: string) {
-    const res = await this.api.get(`/users/${id}`);
+    const res = await this.api.get<{ data: any }>(`/users/${id}`);
     NodeApi.throwOnError(res);
     return res.data.data;
   }
 
   async getUserProfile(id: string) {
     const requester = store.getState().user.id;
-    const res = await this.api.get(`/users/${id}/profile/${requester}`);
+    const res = await this.api.get<{ data: any }>(
+      `/users/${id}/profile/${requester}`,
+    );
     NodeApi.throwOnError(res);
     return res.data.data;
   }
 
   async getConnections(id: string, direction: string) {
-    const res = await this.api.get(`/users/${id}/connections/${direction}`);
+    const res = await this.api.get<{ data: any }>(
+      `/users/${id}/connections/${direction}`,
+    );
     NodeApi.throwOnError(res);
     return res.data.data.connections;
   }
 
   async getOperationState(opHash: string) {
-    const res = await this.api.get(`/operations/${opHash}`);
+    const res = await this.api.get<{ data: any }>(`/operations/${opHash}`);
     if (res.status === 404) {
       // operation is not existing on server. Don't throw an error, as a client might try to check
       // operations sent by other clients without knowing if they have been submitted already.
@@ -401,7 +532,7 @@ class NodeApi {
   }
 
   async getApps() {
-    const res = await this.api.get(`/apps`);
+    const res = await this.api.get<{ data: any }>(`/apps`);
     NodeApi.throwOnError(res);
     return res.data.data.apps;
   }

@@ -1,4 +1,4 @@
-import { create, ApiSauceInstance, ApiResponse } from 'apisauce';
+import { create, ApisauceInstance, ApiResponse } from 'apisauce';
 import { DEVICE_OS } from '@/utils/deviceConstants';
 
 let notificationUrl = 'https://notify.brightid.org';
@@ -7,7 +7,7 @@ if (__DEV__) {
 }
 
 class NotificationService {
-  notifyApi: ApiSauceInstance;
+  notifyApi: ApisauceInstance;
 
   constructor() {
     this.notifyApi = create({
@@ -15,7 +15,7 @@ class NotificationService {
     });
   }
 
-  static throwOnError(response: ApiResponse) {
+  static throwOnError(response: ApiResponse<any>) {
     if (response.ok) {
       return;
     }

@@ -13,15 +13,15 @@
     We need to support multiple different hosts, so
     we can not use a global API instance. Instead it needs to be created per channel.
  */
-import { create, ApisauceInstance } from 'apisauce';
+import { create, ApisauceInstance, ApiResponse } from 'apisauce';
 
-declare type UploadParams = {
+type UploadParams = {
   channelId: string;
   data: any;
   dataId: string;
 };
 
-declare type DownloadParams = {
+type DownloadParams = {
   channelId: string;
   dataId: string;
 };
@@ -36,7 +36,7 @@ class ChannelAPI {
     });
   }
 
-  static throwOnError(response: any) {
+  static throwOnError(response: ApiResponse<any>) {
     if (response.ok) {
       return;
     }
@@ -54,7 +54,9 @@ class ChannelAPI {
   }
 
   async list(channelId: string) {
-    const result = await this.api.get(`/list/${channelId}`);
+    const result = await this.api.get<{ profileIds: string[] }>(
+      `/list/${channelId}`,
+    );
     ChannelAPI.throwOnError(result);
     if (result.data && result.data.profileIds) {
       return result.data.profileIds;
@@ -67,7 +69,9 @@ class ChannelAPI {
 
   async download(params: DownloadParams) {
     const { channelId, dataId } = params;
-    const result = await this.api.get(`/download/${channelId}/${dataId}`);
+    const result = await this.api.get<{ data: any }>(
+      `/download/${channelId}/${dataId}`,
+    );
     ChannelAPI.throwOnError(result);
     if (result.data && result.data.data) {
       return result.data.data;
