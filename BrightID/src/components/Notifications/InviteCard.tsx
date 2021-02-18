@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from '@/store';
 import { SvgXml } from 'react-native-svg';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import {
   DARK_ORANGE,
@@ -23,9 +23,17 @@ import {
 import Check from '@/components/Icons/Check';
 import xGrey from '@/static/x_grey.svg';
 
-class InviteCard extends React.Component {
-  rejectInvite = () => {
-    const { invite, dispatch, t } = this.props;
+const InviteCard = (props) => {
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const { invite } = props;
+  const connections = useSelector(
+    (state: State) => state.connections.connections,
+  );
+
+  const inviter = connections.find((conn) => invite.inviter === conn.id);
+
+  const handleRejectInvite = () => {
     Alert.alert(
       t('notifications.alert.title.rejectGroupInvite'),
       t('notifications.alert.text.rejectGroupInvite'),
@@ -56,8 +64,8 @@ class InviteCard extends React.Component {
     );
   };
 
-  acceptInvite = async () => {
-    const { dispatch, invite, backupCompleted, id, navigation, t } = this.props;
+  const handleAcceptInvite = async () => {
+    const { dispatch, invite, backupCompleted, id, navigation, t } = props;
     try {
       await api.joinGroup(invite.id);
       await dispatch(acceptInvite(invite.inviteId));
@@ -85,48 +93,44 @@ class InviteCard extends React.Component {
     }
   };
 
-  render() {
-    const { invite, connections, t } = this.props;
-    const inviter = connections.find((conn) => invite.inviter === conn.id);
-    return (
-      <View style={styles.container}>
-        <View style={styles.photoContainer}>
-          <GroupPhoto group={invite} />
-        </View>
-        <View style={styles.info}>
-          <Text style={styles.name}>{getGroupName(invite)}</Text>
-          <Text style={styles.invitationMsg}>
-            {t('notifications.item.text.pendingGroupInvite', {
-              name: inviter?.name,
-            })}
-          </Text>
-        </View>
-        <View style={styles.approvalButtonContainer}>
-          <TouchableOpacity
-            style={styles.greenCircle}
-            onPress={this.acceptInvite}
-          >
-            <Check
-              color={GREEN}
-              width={DEVICE_LARGE ? 20 : 17}
-              height={DEVICE_LARGE ? 20 : 17}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.greyCircle}
-            onPress={this.rejectInvite}
-          >
-            <SvgXml
-              xml={xGrey}
-              width={DEVICE_LARGE ? 15 : 12}
-              height={DEVICE_LARGE ? 15 : 12}
-            />
-          </TouchableOpacity>
-        </View>
+  return (
+    <View style={styles.container}>
+      <View style={styles.photoContainer}>
+        <GroupPhoto group={invite} />
       </View>
-    );
-  }
-}
+      <View style={styles.info}>
+        <Text style={styles.name}>{getGroupName(invite)}</Text>
+        <Text style={styles.invitationMsg}>
+          {t('notifications.item.text.pendingGroupInvite', {
+            name: inviter?.name,
+          })}
+        </Text>
+      </View>
+      <View style={styles.approvalButtonContainer}>
+        <TouchableOpacity
+          style={styles.greenCircle}
+          onPress={handleAcceptInvite}
+        >
+          <Check
+            color={GREEN}
+            width={DEVICE_LARGE ? 20 : 17}
+            height={DEVICE_LARGE ? 20 : 17}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.greyCircle}
+          onPress={handleRejectInvite}
+        >
+          <SvgXml
+            xml={xGrey}
+            width={DEVICE_LARGE ? 15 : 12}
+            height={DEVICE_LARGE ? 15 : 12}
+          />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -192,6 +196,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ connections }) => ({
-  ...connections,
-}))(withTranslation()(InviteCard));
+export default InviteCard;

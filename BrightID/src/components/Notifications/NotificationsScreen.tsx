@@ -5,11 +5,15 @@ import {
   View,
   FlatList,
   Text,
-  RefreshControl,
   StatusBar,
 } from 'react-native';
 import { useDispatch, useSelector } from '@/store';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+  RouteProp,
+} from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { TabBar, TabView, SceneMap } from 'react-native-tab-view';
 import {
@@ -35,31 +39,41 @@ let thecount = 0;
 /** SELECTORS */
 
 const inviteSelector = createSelector(
-  (state) => state.groups.invites,
+  (state: State) => state.groups.invites,
   (invites) => invites.filter(({ state }) => state === INVITE_ACTIVE),
 );
 
 /** HOOKS */
 
-const useRefresh = () => {
+const useRefresh: () => [boolean, () => void] = () => {
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
-  const onRefresh = async () => {
-    try {
-      setRefreshing(true);
-      await dispatch(fetchUserInfo());
-      setRefreshing(false);
-    } catch (err) {
-      console.log(err.message);
-      setRefreshing(false);
-    }
+  const onRefresh = () => {
+    setRefreshing(true);
+    dispatch(fetchUserInfo())
+      .then(() => {
+        setRefreshing(true);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setRefreshing(false);
+      });
+    setRefreshing(false);
   };
   return [refreshing, onRefresh];
 };
 
+/** TYPES */
+
+type Route = {
+  badge: boolean;
+  backupPending?: boolean;
+  recoveryConnectionsPending?: boolean;
+  title?: string;
+};
 /** COMPONENTS  */
 
-const ConnectionsList = ({ route }) => {
+const ConnectionsList = () => {
   const [refreshing, onRefresh] = useRefresh();
   const pendingConnections = useSelector((state) =>
     selectAllUnconfirmedConnections(state),
@@ -75,16 +89,15 @@ const ConnectionsList = ({ route }) => {
       keyExtractor={({ id }, index) => id + index}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
+      onRefresh={onRefresh}
+      refreshing={refreshing}
       ListEmptyComponent={
         <EmptyList
           title={t('notifications.text.noPendingConnections')}
           iconType="account-off-outline"
         />
       }
-      renderItem={({ item }) => (
+      renderItem={() => (
         <PendingConnectionCard pendingConnections={pendingConnections} />
       )}
     />
@@ -106,9 +119,8 @@ const InviteList = () => {
       keyExtractor={({ inviteId }, index) => inviteId + index}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
+      onRefresh={onRefresh}
+      refreshing={refreshing}
       ListEmptyComponent={
         <EmptyList
           title={t('notifications.text.noGroupInvites')}
@@ -122,7 +134,7 @@ const InviteList = () => {
   );
 };
 
-const MiscList = ({ route }) => {
+const MiscList = ({ route }: { route: Route }) => {
   const { t } = useTranslation();
   const photoFilename = useSelector((state) => state.user.photo.filename);
   const [refreshing, onRefresh] = useRefresh();
@@ -163,9 +175,8 @@ const MiscList = ({ route }) => {
       keyExtractor={({ msg }, index) => msg + index}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
+      onRefresh={onRefresh}
+      refreshing={refreshing}
       ListEmptyComponent={
         <EmptyList
           title={t('notifications.text.noMiscellaneous')}
@@ -192,7 +203,7 @@ const renderTabBar = (props) => (
     {...props}
     indicatorStyle={{ backgroundColor: ORANGE }}
     style={styles.tabBar}
-    renderLabel={({ route, focused, color }) => (
+    renderLabel={({ route, color }: { route: Route; color: string }) => (
       <View style={styles.tabContainer}>
         {route.badge && <View style={styles.badge} />}
         <Text
@@ -209,8 +220,18 @@ const renderTabBar = (props) => (
   />
 );
 
-export const NotificationsScreen = ({ route }) => {
+type NotificationsRoute = RouteProp<
+  {
+    Notifications: {
+      type?: typeof CONNECTIONS_TYPE | typeof GROUPS_TYPE | typeof MISC_TYPE;
+    };
+  },
+  'Notifications'
+>;
+
+export const NotificationsScreen = () => {
   const dispatch = useDispatch();
+  const route = useRoute<NotificationsRoute>();
   const { t } = useTranslation();
 
   const pendingConnections = useSelector(

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { photoDirectory } from '@/utils/filesystem';
 import { useNavigation } from '@react-navigation/native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { DARK_ORANGE, WHITE, LIGHT_GREY } from '@/theme/colors';
