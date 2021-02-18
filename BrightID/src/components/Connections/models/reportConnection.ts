@@ -20,8 +20,8 @@ export const reportConnection = ({
       brightId,
       id,
       connection_levels.REPORTED,
-      reason,
       Date.now(),
+      reason,
     );
     // remove connection from local storage
     dispatch(deleteConnection(id));

@@ -15,8 +15,8 @@ export const connectFakeUsers = async (
     fakeUser1.id,
     fakeUser2.id,
     level,
-    flagReason,
     timestamp,
+    flagReason,
     fakeUser1,
   );
 
@@ -25,8 +25,8 @@ export const connectFakeUsers = async (
     fakeUser2.id,
     fakeUser1.id,
     level,
-    flagReason,
     timestamp,
+    flagReason,
     fakeUser2,
   );
 

@@ -42,13 +42,7 @@ const TrustlevelModal = () => {
   const saveLevelHandler = async () => {
     if (connection.level !== level) {
       console.log(`Setting connection level '${level}' for ${connection.name}`);
-      await api.addConnection(
-        myId,
-        connection.id,
-        level,
-        undefined,
-        Date.now(),
-      );
+      await api.addConnection(myId, connection.id, level, Date.now());
       dispatch(setConnectionLevel(connection.id, level));
     }
     // close modal

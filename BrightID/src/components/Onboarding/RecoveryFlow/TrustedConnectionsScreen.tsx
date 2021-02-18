@@ -98,7 +98,6 @@ const TrustedConnectionsScreen = () => {
               myId,
               item.id,
               connection_levels.RECOVERY,
-              undefined,
               Date.now(),
             ),
           );
@@ -111,7 +110,6 @@ const TrustedConnectionsScreen = () => {
               myId,
               item.id,
               connection_levels.ALREADY_KNOWN,
-              undefined,
               Date.now(),
             ),
           );

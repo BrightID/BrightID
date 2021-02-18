@@ -56,8 +56,8 @@ export const confirmPendingConnectionThunk = (
     brightId,
     connection.brightId,
     level,
-    reportReason,
     connectionTimestamp,
+    reportReason,
   );
 
   if (__DEV__) {
@@ -67,8 +67,8 @@ export const confirmPendingConnectionThunk = (
         connection.brightId,
         brightId,
         level,
-        reportReason,
         connectionTimestamp,
+        reportReason,
         {
           id: connection.brightId,
           secretKey: connection.secretKey,
