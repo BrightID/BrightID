@@ -20,15 +20,18 @@ import {
   useFocusEffect,
   useNavigation,
   useRoute,
+  RouteProp,
 } from '@react-navigation/native';
 import { fontSize } from '@/theme/fonts';
 import AppCard from './AppCard';
-import { handleAppContext } from './model';
+import { handleAppContext, Params } from './model';
+
+type AppsRoute = RouteProp<{ Apps: Params }, 'Apps'>;
 
 export const AppsScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const route = useRoute();
+  const route = useRoute<AppsRoute>();
 
   const apps = useSelector((state: State) => state.apps.apps);
   const isSponsored = useSelector((state: State) => state.user.isSponsored);
@@ -78,7 +81,9 @@ export const AppsScreen = () => {
   }, [apps, handleDeepLink, route.params]);
 
   const AppStatus = () => {
-    const pendingLink = find(propEq('state', 'pending'))(linkedContexts);
+    const pendingLink = find(propEq('state', 'pending'))(
+      linkedContexts,
+    ) as ContextInfo;
     let msg, waiting;
     if (pendingLink) {
       msg = t('apps.text.pendingLink', { context: `${pendingLink.context}` });

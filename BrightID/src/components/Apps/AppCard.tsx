@@ -30,18 +30,17 @@ const MAX_WAITING_SECONDS = 60;
 const makeLinkedContextSelector = () =>
   createSelector(
     (state: State) => state.apps.linkedContexts,
-    (_, context: string) => context,
+    (_: State, context: string) => context,
     (linkedContexts, context) =>
       linkedContexts.find((link) => link.context === context),
   );
 
-const AppCard = (props) => {
+const AppCard = (props: AppInfo) => {
   const {
     url,
     id,
     logo,
     name,
-    style,
     verification,
     unusedSponsorships,
     context,
@@ -179,7 +178,7 @@ const AppCard = (props) => {
   };
 
   return (
-    <View style={{ ...styles.container, ...style }} testID={`app-${id}`}>
+    <View style={styles.container} testID={`app-${id}`}>
       <TouchableOpacity style={styles.link} onPress={openApp}>
         <Image
           source={{

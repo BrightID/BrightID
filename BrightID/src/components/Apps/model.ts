@@ -4,7 +4,7 @@ import { addLinkedContext } from '@/actions';
 import store from '@/store';
 import i18next from 'i18next';
 
-type Params = {
+export type Params = {
   baseUrl: string;
   context: string;
   contextId: string;
@@ -31,7 +31,11 @@ export const handleAppContext = async (params: Params) => {
   );
 };
 
-const linkContextId = async (baseUrl, context, contextId) => {
+const linkContextId = async (
+  baseUrl: string,
+  context: string,
+  contextId: string,
+) => {
   const oldBaseUrl = api.baseUrl;
   try {
     api.baseUrl = baseUrl;
