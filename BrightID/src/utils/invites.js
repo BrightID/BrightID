@@ -66,8 +66,7 @@ export const getInviteInfo = async (invite) => {
 /**
  *
  * @param {invite[]} invites
- * @type Array<invite>
- * @returns Promise<invite[]>
+ * @returns
  */
 export const updateInvites = async (invites) => {
   try {

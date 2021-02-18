@@ -14,7 +14,7 @@ import {
 } from './index';
 
 const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     InteractionManager.runAfterInteractions(async () => {
       const {
         user: { id },
@@ -46,7 +46,7 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
         dispatch(setIsSponsored(isSponsored));
 
         // this can not be done in reducer because it should be in an async function
-        const newInvites = await updateInvites(invites);
+        const newInvites: invite[] = await updateInvites(invites);
         dispatch(setInvites(newInvites));
 
         if (newInvites.length > oldInvites.length) {
@@ -66,7 +66,7 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
         }
 
         dispatch(updateNotifications());
-        resolve();
+        resolve(null);
       } catch (err) {
         console.log(err.message);
       }

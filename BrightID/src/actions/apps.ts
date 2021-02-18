@@ -9,7 +9,7 @@ export const setApps = (apps: AppInfo[]) => ({
   apps,
 });
 
-export const addLinkedContext = (link: LinkInfo) => ({
+export const addLinkedContext = (link: ContextInfo) => ({
   type: ADD_LINKED_CONTEXT,
   link,
 });
@@ -19,10 +19,7 @@ export const removeLinkedContext = (context: string) => ({
   context,
 });
 
-export const fetchApps = () => async (
-  dispatch: dispatch,
-  getState: getState,
-) => {
+export const fetchApps = () => async (dispatch: dispatch) => {
   try {
     const apps = await api.getApps();
     dispatch(setApps(apps));
