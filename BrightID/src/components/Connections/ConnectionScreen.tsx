@@ -9,6 +9,7 @@ import {
   View,
   SectionList,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import VerifiedSticker from '@/components/Icons/VerifiedSticker';
 import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
@@ -36,21 +37,23 @@ import TrustLevelView from './TrustLevelView';
  via ListHeaderComponent, the "Report" button on the bottom via ListFooterComponent.
 * */
 type Props = {
-  navigation: any;
   connection: connection;
   brightIdVerified: boolean;
   connectedAt: number;
-  createdAt: number;
-  connectionsNum: number;
-  groupsNum: number;
   mutualGroups: Array<group>;
   mutualConnections: Array<connection>;
   loading: boolean;
 };
 
+interface Section {
+  title: string;
+  data: Array<connection | group>;
+  key: string;
+  numEntries: number;
+}
+
 function ConnectionScreen(props: Props) {
   const {
-    navigation,
     connection,
     brightIdVerified,
     connectedAt,
@@ -58,6 +61,7 @@ function ConnectionScreen(props: Props) {
     mutualConnections,
     loading,
   } = props;
+  const navigation = useNavigation();
 
   const [groupsCollapsed, setGroupsCollapsed] = useState(true);
   const [connectionsCollapsed, setConnectionsCollapsed] = useState(true);
@@ -79,7 +83,7 @@ function ConnectionScreen(props: Props) {
   };
 
   const getSections = useMemo(() => {
-    const data = [
+    const data: Section[] = [
       {
         title: t('connectionDetails.label.mutualConnections'),
         data: connectionsCollapsed ? [] : mutualConnections,
@@ -150,7 +154,9 @@ function ConnectionScreen(props: Props) {
                 {loading
                   ? t('connectionDetails.tags.loading')
                   : t('connectionDetails.tags.connectedAt', {
-                      date: `${moment(parseInt(connectedAt, 10)).fromNow()}`,
+                      date: `${moment(
+                        parseInt(String(connectedAt), 10),
+                      ).fromNow()}`,
                     })}
               </Text>
             </View>
@@ -168,7 +174,7 @@ function ConnectionScreen(props: Props) {
             )}
           </View>
           <View style={styles.profileDivider} />
-          <View style={styles.badges}>{renderBadge()}</View>
+          <View>{renderBadge()}</View>
         </View>
       </View>
 
@@ -233,7 +239,7 @@ function ConnectionScreen(props: Props) {
     }
   };
 
-  const renderSectionHeader = ({ section }) => {
+  const renderSectionHeader = ({ section }: { section: Section }) => {
     let collapsed;
     switch (section.key) {
       case 'connections':
@@ -282,11 +288,12 @@ function ConnectionScreen(props: Props) {
         <SectionList
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
           sections={getSections}
-          keyExtractor={(item, index) => item.id}
+          keyExtractor={(item) => item.id}
           renderItem={renderItem}
           renderSectionHeader={renderSectionHeader}
           ListHeaderComponent={connectionHeader}
           ListFooterComponent={connectionFooter}
+          // @ts-ignore: mistyped
           ListFooterComponentStyle={styles.connectionFooter}
           ItemSeparatorComponent={ItemSeparator}
         />

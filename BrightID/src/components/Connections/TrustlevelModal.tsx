@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { BlurView } from '@react-native-community/blur';
 import { connection_levels } from '@/utils/constants';
 import { BLACK, WHITE, GREEN } from '@/theme/colors';
@@ -18,12 +19,15 @@ import { setConnectionLevel } from '@/actions/connections';
 import TrustlevelSlider from './TrustlevelSlider';
 import { connectionByIdSelector } from '../../utils/connectionsSelector';
 
-type props = {
-  route: any;
-  navigation: any;
-};
+type SetTrustlevelRoute = RouteProp<
+  { SetTrustlevel: { connectionId: string } },
+  'SetTrustlevel'
+>;
 
-const TrustlevelModal = ({ route, navigation }: props) => {
+const TrustlevelModal = () => {
+  const navigation = useNavigation();
+  const route = useRoute<SetTrustlevelRoute>();
+  console.log('TrustLevelModalRoute', route);
   const { connectionId } = route.params;
   const myId = useSelector((state: State) => state.user.id);
   const connection: connection = useSelector((state: State) =>

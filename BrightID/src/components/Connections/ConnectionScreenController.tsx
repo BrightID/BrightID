@@ -5,19 +5,25 @@ import React, {
   useState,
 } from 'react';
 import { useSelector } from '@/store';
-import { useFocusEffect } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+  RouteProp,
+} from '@react-navigation/native';
 import ConnectionTestButton from '@/utils/connectionTestButton';
 import api from '@/api/brightId';
+import { connectionByIdSelector } from '@/utils/connectionsSelector';
 import ConnectionScreen from './ConnectionScreen';
-import { connectionByIdSelector } from '../../utils/connectionsSelector';
 
-type ConnectionScreenProps = {
-  route: any;
-  navigation: any;
-};
+type ConnectionRoute = RouteProp<
+  { Connection: { connectionId: string } },
+  'Connection'
+>;
 
-function ConnectionScreenController(props: ConnectionScreenProps) {
-  const { route, navigation } = props;
+function ConnectionScreenController() {
+  const navigation = useNavigation();
+  const route = useRoute<ConnectionRoute>();
   const { connectionId } = route.params;
   const connection: connection = useSelector((state: State) =>
     connectionByIdSelector(state, connectionId),
@@ -26,14 +32,11 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
     (state: State) => state.connections.connections,
   );
   const myGroups = useSelector((state: State) => state.groups.groups);
-  const [connectionsNum, setConnectionsNum] = useState(0);
-  const [groupsNum, setGroupsNum] = useState(0);
   const [mutualGroups, setMutualGroups] = useState<Array<group>>([]);
   const [mutualConnections, setMutualConnections] = useState<Array<connection>>(
     [],
   );
   const [verifications, setVerifications] = useState<Array<any>>([]);
-  const [createdAt, setCreatedAt] = useState(0);
   const [connectedAt, setConnectedAt] = useState(0);
   const [loading, setLoading] = useState(false);
 
@@ -43,10 +46,7 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
         setLoading(true);
         console.log(`fetching connection info for ${connectionId}`);
         const profile = await api.getUserProfile(connectionId);
-        setConnectionsNum(profile.connectionsNum);
-        setGroupsNum(profile.groupsNum);
         setVerifications(profile.verifications);
-        setCreatedAt(profile.createdAt);
         setConnectedAt(profile.connectedAt);
         setMutualConnections(
           myConnections.filter((conn) => {
@@ -93,14 +93,10 @@ function ConnectionScreenController(props: ConnectionScreenProps) {
 
   return (
     <ConnectionScreen
-      navigation={navigation}
       connection={connection}
       brightIdVerified={brightIdVerified}
       loading={loading}
-      createdAt={createdAt}
       connectedAt={connectedAt}
-      connectionsNum={connectionsNum}
-      groupsNum={groupsNum}
       mutualConnections={mutualConnections}
       mutualGroups={mutualGroups}
     />

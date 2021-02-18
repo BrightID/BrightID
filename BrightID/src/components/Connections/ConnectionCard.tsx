@@ -28,7 +28,10 @@ import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
  * @prop connectionTime
  * @prop photo
  */
-const ConnectionCard = (props) => {
+
+type Props = connection & { index: number };
+
+const ConnectionCard = (props: Props) => {
   const stale_check_timer = useRef(0);
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -54,7 +57,7 @@ const ConnectionCard = (props) => {
       if (status === 'initiated') {
         const checkStale = () => {
           const ageMs = Date.now() - connectionDate;
-          if (ageMs > CHANNEL_TTL && status !== 'verified') {
+          if (ageMs > CHANNEL_TTL) {
             console.log(`Connection ${name} is stale (age: ${ageMs} ms)`);
             return true;
           }

@@ -134,6 +134,7 @@ declare global {
     hiddenFlag?: string;
     socialMedia?: string[];
     notificationToken?: string;
+    verifications?: string[];
   };
 
   type GroupsState = {

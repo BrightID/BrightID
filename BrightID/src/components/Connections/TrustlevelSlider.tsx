@@ -50,10 +50,12 @@ const TrustlevelSlider = ({
 
   // map connectionLevel to index value
   const initialValue = Object.keys(trustLevelDetails).indexOf(currentLevel);
-  const valueChangeHandler = (value) => {
+  const valueChangeHandler = (value: number) => {
     console.log(`Slider value: ${value}`);
     // map index value back to connectionLevel
-    changeLevelHandler(Object.keys(trustLevelDetails)[value]);
+    changeLevelHandler(
+      Object.keys(trustLevelDetails)[value] as ConnectionLevel,
+    );
   };
 
   return (

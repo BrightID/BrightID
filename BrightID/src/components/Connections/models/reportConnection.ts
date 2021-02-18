@@ -9,7 +9,7 @@ export const reportConnection = ({
 }: {
   id: string;
   reason: string;
-}) => async (dispatch, getState) => {
+}) => async (dispatch: Dispatch, getState: GetState) => {
   try {
     const {
       user: { id: brightId, backupCompleted },

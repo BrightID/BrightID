@@ -11,12 +11,12 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { BLUE, BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 
-type props = {
+type Props = {
   level: ConnectionLevel;
   connectionId: string;
 };
 
-function TrustLevelView({ level, connectionId }: props) {
+function TrustLevelView({ level, connectionId }: Props) {
   const navigation = useNavigation();
   const { t } = useTranslation();
   const setLevel = () => {

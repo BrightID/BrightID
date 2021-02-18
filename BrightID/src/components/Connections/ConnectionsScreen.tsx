@@ -20,15 +20,14 @@ import ConnectionCard from './ConnectionCard';
 /** Helper Component */
 const ITEM_HEIGHT = DEVICE_LARGE ? 102 : 92;
 
-const getItemLayout = (data, index) => ({
+const getItemLayout = (_data, index: number) => ({
   length: ITEM_HEIGHT,
   offset: ITEM_HEIGHT * index,
   index,
 });
 
-const renderItem = ({ item, index }) => {
-  item.index = index;
-  return <ConnectionCard {...item} />;
+const renderItem = ({ item, index }: { item: connection; index: number }) => {
+  return <ConnectionCard {...item} index={index} />;
 };
 
 /** Main Component */

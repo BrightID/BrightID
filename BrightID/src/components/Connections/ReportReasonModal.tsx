@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import i18next from 'i18next';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { BlurView } from '@react-native-community/blur';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from '@/store';
@@ -11,11 +12,6 @@ import { ORANGE, WHITE, BLUE, BLACK, DARKER_GREY, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { reportConnection } from './models/reportConnection';
 import { connectionByIdSelector } from '../../utils/connectionsSelector';
-
-type props = {
-  route: any;
-  navigation: any;
-};
 
 const reasonStrings = {
   [report_reasons.SPAMMER]: {
@@ -29,7 +25,14 @@ const reasonStrings = {
   },
 };
 
-const ReportReasonModal = ({ route, navigation }: props) => {
+type ReportReasonRoute = RouteProp<
+  { ReportReason: { connectionId: string; successCallback: () => void } },
+  'ReportReason'
+>;
+
+const ReportReasonModal = () => {
+  const navigation = useNavigation();
+  const route = useRoute<ReportReasonRoute>();
   const { connectionId, successCallback } = route.params;
   const { t } = useTranslation();
   const connection: connection = useSelector((state: State) =>
