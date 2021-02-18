@@ -3,7 +3,6 @@ module.exports = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   transform: {
     '^.+\\.(js)$': '<rootDir>/node_modules/react-native/jest/preprocessor.js',
-    '^.+\\.(ts|tsx)$': 'ts-jest',
   },
   globals: {
     window: {},
