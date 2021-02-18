@@ -1,4 +1,4 @@
-import { create, ApiSauceInstance } from 'apisauce';
+import { create, ApisauceInstance } from 'apisauce';
 import nacl from 'tweetnacl';
 import stringify from 'fast-json-stable-stringify';
 import {
@@ -18,7 +18,7 @@ if (__DEV__) {
 const v = 5;
 
 class NodeApi {
-  api: ApiSauceInstance;
+  api: ApisauceInstance;
 
   baseUrlInternal: string;
 

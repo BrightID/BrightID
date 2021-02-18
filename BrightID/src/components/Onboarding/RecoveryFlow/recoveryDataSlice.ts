@@ -15,8 +15,8 @@ export const initialState: RecoveryData = {
   sigs: {},
   qrcode: '',
   channel: {
-    id: '',
-    url: '',
+    channelId: '',
+    url: null,
     expires: 0,
   },
 };
@@ -63,10 +63,10 @@ const recoveryData = createSlice({
       state.name = name;
       state.photo = photo;
     },
-    resetRecoverySigs(state, action) {
+    resetRecoverySigs(state) {
       state.sigs = {};
     },
-    resetRecoveryData(state) {
+    resetRecoveryData() {
       return initialState;
     },
   },

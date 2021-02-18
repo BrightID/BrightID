@@ -4,7 +4,7 @@ import Spinner from 'react-native-spinkit';
 import { useSelector } from '@/store';
 import { createSelector } from '@reduxjs/toolkit';
 import { useTranslation } from 'react-i18next';
-import { useRoute, useFocusEffect } from '@react-navigation/native';
+import { useRoute, useFocusEffect, RouteProp } from '@react-navigation/native';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { connectionsSelector } from '@/utils/connectionsSelector';
@@ -29,6 +29,11 @@ const recoveryConnectionSelector = createSelector(
   },
 );
 
+type RecoveringConnectionRoute = RouteProp<
+  { RecoveringConnection: { aesKey: string } },
+  'RecoveringConnection'
+>;
+
 const RecoveringConnectionScreen = () => {
   const [recoveryIds, setRecoveryIds] = useState([]);
 
@@ -39,7 +44,7 @@ const RecoveringConnectionScreen = () => {
   const id = useSelector((state: State) => state.user.id);
 
   const { t } = useTranslation();
-  const route = useRoute();
+  const route = useRoute<RecoveringConnectionRoute>();
 
   const [uploadingData, setUploadingData] = useState(false);
   const [loading, setLoading] = useState(false);

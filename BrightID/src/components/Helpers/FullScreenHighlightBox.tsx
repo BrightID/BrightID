@@ -5,7 +5,6 @@ import Svg, { Path } from 'react-native-svg';
 import { DARKER_GREY } from '@/theme/colors';
 
 const FullScreenHighlightBox = ({
-  testID,
   onPress,
   br,
   innerHeight,
@@ -40,7 +39,7 @@ const FullScreenHighlightBox = ({
 
   return (
     <Svg
-      testID={testID}
+      testID="FullScreenHighlightBox"
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}

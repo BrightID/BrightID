@@ -229,7 +229,7 @@ declare global {
     qrcode: string;
     channel: {
       channelId: string;
-      url: string;
+      url: URL;
       expires: number;
     };
   };

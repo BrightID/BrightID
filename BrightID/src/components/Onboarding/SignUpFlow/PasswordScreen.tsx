@@ -73,7 +73,7 @@ export const PasswordScreen = () => {
   };
 
   const submitDisabled = !password || !confirmPassword;
-  const skipDisabled = password && confirmPassword;
+  const skipDisabled = !!password && !!confirmPassword;
   return (
     <>
       <StatusBar

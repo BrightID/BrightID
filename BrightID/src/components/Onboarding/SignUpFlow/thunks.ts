@@ -19,7 +19,7 @@ export const createKeypair = () => async (
   }
 };
 
-export const savePhoto = (base64Image) => async (
+export const savePhoto = (base64Image: string) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {

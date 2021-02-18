@@ -89,7 +89,7 @@ const RecoveryConnectionCard = (props) => {
         ],
       );
     } catch (err) {
-      alert(err.message);
+      Alert.alert(t('common.alert.error'), err.message);
     }
   };
 
@@ -207,7 +207,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-
   connectedText: {
     fontFamily: 'ApexNew-Book',
     fontSize: fontSize[12],
@@ -216,6 +215,9 @@ const styles = StyleSheet.create({
   },
   moreIcon: {
     marginRight: 16,
+  },
+  verificationSticker: {
+    marginLeft: DEVICE_LARGE ? 7 : 3.5,
   },
 });
 

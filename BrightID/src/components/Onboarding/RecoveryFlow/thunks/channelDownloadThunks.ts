@@ -1,3 +1,4 @@
+import ChannelAPI from '@/api/channelService';
 import { saveImage } from '@/utils/filesystem';
 import { decryptData } from '@/utils/cryptoHelper';
 import { hash } from '@/utils/encoding';
@@ -5,9 +6,9 @@ import { addConnection, createGroup } from '@/actions';
 import { setSig, updateNamePhoto } from '../recoveryDataSlice';
 
 export const loadRecoveryData = async (
-  channelApi: any,
+  channelApi: ChannelAPI,
   aesKey: string,
-): { signingKey: string; timestamp: number } => {
+): Promise<{ signingKey: string; timestamp: number }> => {
   try {
     const data = await channelApi.download({
       channelId: hash(aesKey),

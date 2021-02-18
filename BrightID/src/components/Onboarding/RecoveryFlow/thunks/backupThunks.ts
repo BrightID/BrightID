@@ -9,7 +9,7 @@ const hashId = (id: string, password: string) => {
 };
 
 export const encryptAndBackup = (key: string, data: string) => async (
-  dispatch: dispatch,
+  _: dispatch,
   getState: getState,
 ) => {
   const {
@@ -26,7 +26,6 @@ export const encryptAndBackup = (key: string, data: string) => async (
 
 export const backupPhoto = (id: string, filename: string) => async (
   dispatch: dispatch,
-  getState: getState,
 ) => {
   try {
     const data = await retrieveImage(filename);
