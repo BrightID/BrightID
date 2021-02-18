@@ -48,7 +48,7 @@ function MemberCard(props: MemberCardProps) {
   } = props;
   const navigation = useNavigation();
   const [contextActions, setContextActions] = useState<Array<string>>([]);
-  const [flagged, setFlagged] = useState(false);
+  const [flagged, setFlagged] = useState<boolean | number>(false);
   const [imgErr, setImgErr] = useState(false);
   const { t } = useTranslation();
   const { showActionSheetWithOptions } = useActionSheet();

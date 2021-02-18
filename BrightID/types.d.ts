@@ -9,6 +9,7 @@ import ChannelAPI from '@/api/channelService';
 import { AppDispatch } from '@/store';
 import { connection_levels } from './src/utils/constants';
 import { pendingConnection_states } from './src/components/PendingConnections/pendingConnectionSlice';
+import { socialMediaList } from './src/components/EditProfile/socialMediaList';
 
 declare global {
   type ValueOf<T> = T[keyof T];
@@ -23,15 +24,16 @@ declare global {
   type navigation = () => any;
 
   type State = {
-    channels: ChannelsState;
     apps: AppsState;
     connections: ConnectionsState;
+    channels: ChannelsState;
     groups: GroupsState;
     keypair: Keypair;
     notifications: NotificationsState;
     operations: OperationsState;
     pendingConnections: PendingConnectionsState;
     recoveryData: RecoveryData;
+    socialMedia: SocialMediaState;
     tasks: TasksState;
     user: UserState;
     walkthrough: WalkthroughState;
@@ -110,6 +112,10 @@ declare global {
   };
 
   // TODO: extract DEV properties to separate type and join them conditionally depending on __DEV__
+  // RESPONSE: this should not matter because we cannot type check the compiled code in release mode
+
+  type ConnectionLevel = ValueOf<typeof connection_levels>;
+
   type connection = {
     id: string;
     name: string;
@@ -177,6 +183,37 @@ declare global {
     aesKey: string;
   };
 
+  type NotificationsState = {
+    activeNotification?: BannerNotification;
+    backupPending: boolean;
+    deviceToken: string;
+    sessionNotifications: Array<string>;
+    notificationToken: string;
+    recoveryConnectionsPending: boolean;
+  };
+
+  type BannerNotification = {
+    title?: string;
+    message: string;
+    type: string;
+    navigationTarget?: string;
+    icon?: string;
+    oncePerSession?: boolean;
+  };
+
+  type BackupNotification = {
+    msg: string;
+    icon: string;
+  };
+
+  type PendingConnectionNotification = {
+    id: string;
+  };
+
+  type Notification = BackupNotification &
+    invite &
+    PendingConnectionNotification;
+
   type OperationsState = {
     operations: operation[];
   };
@@ -188,7 +225,7 @@ declare global {
     hash: string;
   };
 
-  type PendingConnectionsState = EntityState<PendingConnection>;
+  type PendingConnectionState = keyof typeof pendingConnection_states;
 
   type PendingConnection = {
     id?: string;
@@ -217,6 +254,8 @@ declare global {
     secretKey?: Uint8Array;
   };
 
+  type PendingConnectionsState = EntityState<PendingConnection>;
+
   type RecoveryData = {
     publicKey: string;
     secretKey: string;
@@ -233,6 +272,16 @@ declare global {
       expires: number;
     };
   };
+
+  type SocialMedia = {
+    id: keyof typeof socialMediaList;
+    company: ValueOf<typeof socialMediaList>;
+    order: number;
+    profile: string;
+    profileDisplayWidth?: number | string;
+  };
+
+  type SocialMediaState = EntityState<SocialMedia>;
 
   type TasksState = { [taskId: string]: TasksStateEntry };
 
@@ -269,37 +318,6 @@ declare global {
     headerHeight: number;
   };
 
-  type NotificationsState = {
-    activeNotification?: BannerNotification;
-    backupPending: boolean;
-    deviceToken: string;
-    sessionNotifications: Array<string>;
-    notificationToken: string;
-    recoveryConnectionsPending: boolean;
-  };
-
-  type BannerNotification = {
-    title?: string;
-    message: string;
-    type: string;
-    navigationTarget?: string;
-    icon?: string;
-    oncePerSession?: boolean;
-  };
-
-  type BackupNotification = {
-    msg: string;
-    icon: string;
-  };
-
-  type PendingConnectionNotification = {
-    id: string;
-  };
-
-  type Notification = BackupNotification &
-    invite &
-    PendingConnectionNotification;
-
   type Signature = {
     signer: string;
     sig: string;
@@ -319,9 +337,6 @@ declare global {
     id: string;
     secretKey: string; // Base64 encoded secretkey
   };
-
-  type ConnectionLevel = ValueOf<typeof connection_levels>;
-  type PendingConnectionState = keyof typeof pendingConnection_states;
 
   // Jest global functions
   let element: any;

@@ -21,24 +21,17 @@ import { fontSize } from '@/theme/fonts';
 import { groupByIdSelector } from '@/utils/groups';
 import MemberCard from './MemberCard';
 
-type MembersScreenProps = {
-  navigation: any;
-  route: any;
-};
-
-function MembersScreen(props: MembersScreenProps) {
+function MembersScreen(props) {
   const { navigation, route } = props;
   const groupID = route.params.group.id;
   const dispatch = useDispatch();
-  const connections = useSelector(
-    (state: State) => state.connections.connections,
-  );
-  const user = useSelector((state: State) => state.user);
-  const { group, admins, members } = useSelector((state: State) =>
+  const connections = useSelector((state) => state.connections.connections);
+  const user = useSelector((state) => state.user);
+  const { group, admins, members } = useSelector((state) =>
     groupByIdSelector(state, groupID),
   );
 
-  const [contextActions, setContextActions] = useState<Array<string>>([]);
+  const [contextActions, setContextActions] = useState([]);
   const { t } = useTranslation();
   const { showActionSheetWithOptions } = useActionSheet();
 
@@ -90,7 +83,7 @@ function MembersScreen(props: MembersScreenProps) {
         });
       };
 
-      const performAction = (index: number) => {
+      const performAction = (index) => {
         const action = contextActions[index];
         console.log(`Performing action ${action}`);
         switch (action) {
@@ -153,7 +146,7 @@ function MembersScreen(props: MembersScreenProps) {
 
   // set available actions for group
   useEffect(() => {
-    const actions: Array<string> = [];
+    const actions = [];
     if (admins.includes(user.id)) {
       // admins can invite other members to group
       actions.push(ACTION_INVITE);
@@ -169,7 +162,7 @@ function MembersScreen(props: MembersScreenProps) {
   }, [user.id, admins, members, ACTION_INVITE, ACTION_LEAVE, ACTION_CANCEL]);
 
   // Only include the group members that user knows (is connected with), and the user itself
-  const groupMembers: Array<connection> = useMemo(() => {
+  const groupMembers = useMemo(() => {
     // TODO: userObj is ugly and just here to satisfy flow typecheck for 'connection' type.
     //    Define a dedicated type for group member to use here or somehow merge user and connection types.
     const userobj = {

@@ -1,12 +1,12 @@
 import {
-  createSelector,
   createSlice,
   createEntityAdapter,
+  PayloadAction,
 } from '@reduxjs/toolkit';
 
-import { original } from 'immer';
+import { original, Draft } from 'immer';
 
-const socialMediaAdapter = createEntityAdapter({
+const socialMediaAdapter = createEntityAdapter<SocialMedia>({
   sortComparer: (a, b) => a.order - b.order,
 });
 
@@ -14,7 +14,10 @@ const socialMediaSlice = createSlice({
   name: 'socialMedia',
   initialState: socialMediaAdapter.getInitialState(),
   reducers: {
-    saveSocialMedia: (state, action) => {
+    saveSocialMedia: (
+      state: Draft<SocialMediaState>,
+      action: PayloadAction<SocialMedia>,
+    ) => {
       // incoming payload values
       const {
         id: incomingId,
@@ -87,7 +90,10 @@ const socialMediaSlice = createSlice({
         socialMediaAdapter.updateMany(state, updateList);
       }
     },
-    setProfileDisplayWidth: (state, action) => {
+    setProfileDisplayWidth: (
+      state: Draft<SocialMediaState>,
+      action: PayloadAction<{ id: string; width: number | string }>,
+    ) => {
       socialMediaAdapter.updateOne(state, {
         id: action.payload.id,
         changes: {
@@ -101,8 +107,6 @@ const socialMediaSlice = createSlice({
 
 export const {
   saveSocialMedia,
-  updateUrl,
-  updateOrder,
   removeSocialMedia,
   setProfileDisplayWidth,
 } = socialMediaSlice.actions;

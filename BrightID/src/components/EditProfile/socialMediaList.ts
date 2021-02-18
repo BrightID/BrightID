@@ -1,5 +1,5 @@
 // uuid's generated via npx uuid
-export default Object.freeze({
+export const socialMediaList = {
   'fab9a32f-e968-495e-807f-7f1b27642506': {
     name: 'Discord',
     shareType: 'username',
@@ -40,4 +40,6 @@ export default Object.freeze({
     name: 'Whatsapp',
     shareType: 'telephone #',
   },
-});
+} as const;
+
+export default Object.freeze(socialMediaList);

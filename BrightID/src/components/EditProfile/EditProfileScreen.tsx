@@ -8,6 +8,7 @@ import {
   View,
   TouchableOpacity,
   Alert,
+  LayoutChangeEvent,
 } from 'react-native';
 import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
@@ -120,7 +121,7 @@ const EditProfilePhoto = ({ profilePhoto, setProfilePhoto }) => {
           style={styles.photo}
           resizeMode="cover"
           onError={(e) => {
-            console.log(e.error);
+            console.log(e);
           }}
           accessible={true}
           accessibilityLabel="profile photo"
@@ -150,19 +151,13 @@ const EditName = ({ nextName, setNextName }) => {
   );
 };
 
-const SocialMediaLink = (props) => {
-  const {
-    navigation,
-    dispatch,
-    id,
-    profile,
-    profileDisplayWidth,
-    order,
-    company,
-  } = props;
+const SocialMediaLink = (props: SocialMedia) => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const { id, profile, profileDisplayWidth, order, company } = props;
 
   // perfectly center profile text with max length
-  const updateInnerTextLayout = (e) => {
+  const updateInnerTextLayout = (e: LayoutChangeEvent) => {
     if (!profileDisplayWidth) {
       if (e.nativeEvent?.layout?.width) {
         dispatch(
@@ -239,19 +234,13 @@ const SocialMediaLink = (props) => {
 
 const SocialMediaLinks = () => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
   const socialMediaItems = useSelector(selectAllSocialMedia);
   const { t } = useTranslation();
 
   console.log('socialMedia', socialMediaItems);
 
   const SocialMediaList = socialMediaItems.map((item) => (
-    <SocialMediaLink
-      key={item.id}
-      navigation={navigation}
-      dispatch={dispatch}
-      {...item}
-    />
+    <SocialMediaLink key={item.id} {...item} />
   ));
 
   return (

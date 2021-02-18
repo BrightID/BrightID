@@ -108,11 +108,11 @@ const SelectMediaModal = ({ route, navigation }) => {
   );
 
   const saveProfile = () => {
-    const socialMedia = {
+    const socialMedia: SocialMedia = {
       id: selectedId,
+      company: socialMediaList[selectedId],
       order: route.params?.order ?? 0,
       profile,
-      company: socialMediaList[selectedId],
     };
     dispatch(saveSocialMedia(socialMedia));
     navigation.navigate('Edit Profile');
@@ -132,7 +132,7 @@ const SelectMediaModal = ({ route, navigation }) => {
             selectedValue={selectedId}
             style={styles.pickerStyle}
             itemStyle={styles.pickerItemStyle}
-            onValueChange={(itemValue, itemIndex) => {
+            onValueChange={(itemValue: string) => {
               setSelectedId(itemValue);
             }}
           >

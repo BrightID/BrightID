@@ -11,6 +11,7 @@ import { BlurView } from '@react-native-community/blur';
 import Spinner from 'react-native-spinkit';
 import { setInternetCredentials } from 'react-native-keychain';
 import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
 import { BACKUP_URL, ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import {
@@ -49,8 +50,9 @@ const UploadAnimation = () => {
   );
 };
 
-const ChangePasswordModal = ({ route, navigation }) => {
+const ChangePasswordModal = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
