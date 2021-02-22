@@ -35,9 +35,13 @@
     "progress": {
       "title": "Avancement :"
     },
+    "setupBackup": {
+      "description": "Définissez un mot de passe pour activer la sauvegarde chiffrée de vos données",
+      "title": "Définir le mot de passe de sauvegarde"
+    },
     "setupTrustedConnections": {
-      "description": "Définir vos connexions de confiance pour activer la Restauration Sociale",
-      "title": "Configurer la Restauration Sociale"
+      "description": "Configurez vos connexions de récupération pour activer la récupération de compte social",
+      "title": "Configurer la récupération sociale"
     }
   },
   "apps": {
@@ -76,11 +80,13 @@
     "alert": {
       "text": {
         "backupSuccess": "Sauvegarde effectuée avec succès !",
+        "completed": "La récupération sociale de votre BrightID est maintenant activée",
         "needThreeTrusted": "Vous devez définir au moins trois connexions de confiance pour effectuer une sauvegarde."
       }
     },
     "button": {
       "next": "Suivant",
+      "save": "Définir les connexions de récupération",
       "startBackup": "Commencer la sauvegarde"
     },
     "header": {
@@ -94,6 +100,13 @@
       "chooseTrustedConnections": "Choisissez trois connexions de confiance ou plus pour sauvegarder votre BrightID.",
       "enterPassword": "Entrez un mot de passe avec lequel votre sauvegarde sera chiffrée :",
       "noConnections": "Aucune connexion"
+    }
+  },
+  "channel": {
+    "alert": {
+      "text": {
+        "localOutdated": "version du client obsolète – veuillez mettre à jour votre client et réessayer"
+      }
     }
   },
   "common": {
