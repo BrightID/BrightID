@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
     /* Basic Options */
-    "target": "esnext", /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */
+    "target": "ES2016", /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */
     "module": "commonjs", /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
     "lib": [
-      "es2018"
+      "ES2018",
     ],
     "allowJs": true, /* Allow javascript files to be compiled. */
     // "checkJs": true,                       /* Report errors in .js files. */
@@ -14,14 +14,14 @@
     "noEmit": true,
     // "incremental": true,                   /* Enable incremental compilation */
     // "importHelpers": true,                 /* Import emit helpers from 'tslib'. */
-    // "downlevelIteration": true,            /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */
+    "downlevelIteration": true, /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */
     "isolatedModules": true, /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
     /* Strict Type-Checking Options */
     "strict": true,
     "noImplicitAny": false,
     "strictNullChecks": false, /* Enable strict null checks. */
-    "strictFunctionTypes": false, /* Enable strict checking of function types. */
-    "strictPropertyInitialization": false, /* Enable strict checking of property initialization in classes. */
+    "strictFunctionTypes": true, /* Enable strict checking of function types. */
+    // "strictPropertyInitialization": false, /* Enable strict checking of property initialization in classes. */
     // "noImplicitThis": true,                /* Raise error on 'this' expressions with an implied 'any' type. */
     // "alwaysStrict": false,
     /* Additional Checks */

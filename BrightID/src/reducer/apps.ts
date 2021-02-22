@@ -5,7 +5,7 @@ import {
   RESET_STORE,
 } from '@/actions';
 
-const initialState = {
+const initialState: AppsState = {
   apps: [],
   linkedContexts: [],
 };

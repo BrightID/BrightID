@@ -1,4 +1,4 @@
-import { create, ApisauceInstance } from 'apisauce';
+import { create, ApisauceInstance, ApiResponse, ApiOkResponse } from 'apisauce';
 import nacl from 'tweetnacl';
 import stringify from 'fast-json-stable-stringify';
 import {
@@ -35,7 +35,7 @@ class NodeApi {
     return this.baseUrlInternal;
   }
 
-  set baseUrl(url) {
+  set baseUrl(url: string) {
     this.baseUrlInternal = url;
     this.api.setBaseURL(this.apiUrl);
   }
@@ -44,21 +44,21 @@ class NodeApi {
     return `${this.baseUrl}/brightid/v5`;
   }
 
-  static checkHash(response, message) {
-    if (response.data.data.hash !== hash(message)) {
+  static checkHash(response: ApiOkResponse<OperationRes>, message: string) {
+    if (response.data.data?.hash !== hash(message)) {
       throw new Error('Invalid operation hash returned from server');
     }
-    return response.data.data.hash;
+    return response.data.data?.hash;
   }
 
-  static throwOnError(response) {
+  static throwOnError(response: ApiResponse<NodeApiRes, ErrRes>) {
     if (response.ok) {
-      return;
+      return true;
+    } else if (response.data && (response.data as ErrRes).errorNum) {
+      throw new BrightidError(response.data as ErrRes);
+    } else {
+      throw new Error(response.problem);
     }
-    if (response.data && response.data.error) {
-      throw new BrightidError(response.data);
-    }
-    throw new Error(response.problem);
   }
 
   static setOperation(op) {
@@ -81,20 +81,6 @@ class NodeApi {
       secretKey = store.getState().keypair.secretKey;
     }
 
-    interface ConnectOp {
-      name: 'Connect';
-      id1: string;
-      id2: string;
-      level: string;
-      timestamp: number;
-      v: number;
-      sig1?: string;
-      reportReason?: string;
-      replacedWith?: string;
-      requestProof?: string;
-      hash?: string;
-    }
-
     const name = 'Connect';
 
     const op: ConnectOp = {
@@ -115,9 +101,9 @@ class NodeApi {
     op.sig1 = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    const res = await this.api.post(`/operations`, op);
+    const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res, message);
+    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
     NodeApi.setOperation(op);
   }
 
@@ -138,22 +124,6 @@ class NodeApi {
     const name = 'Add Group';
     const timestamp = Date.now();
 
-    interface AddGroupOp {
-      name: 'Add Group';
-      group: string;
-      id1: string;
-      id2: string;
-      id3: string;
-      inviteData2: string;
-      inviteData3: string;
-      url: string;
-      type: string;
-      timestamp: number;
-      v: number;
-      sig1?: string;
-      hash?: string;
-    }
-
     const op: AddGroupOp = {
       name,
       id1: id,
@@ -172,9 +142,9 @@ class NodeApi {
     op.sig1 = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    const res = await this.api.post(`/operations`, op);
+    const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res, message);
+    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
     NodeApi.setOperation(op);
   }
 
@@ -186,17 +156,6 @@ class NodeApi {
 
     const name = 'Dismiss';
     const timestamp = Date.now();
-
-    interface DismissOp {
-      name: string;
-      dismisser: string;
-      dismissee: string;
-      group: string;
-      timestamp: number;
-      v: number;
-      sig?: string;
-      hash?: string;
-    }
 
     const op: DismissOp = {
       name,
@@ -211,9 +170,9 @@ class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    const res = await this.api.post(`/operations`, op);
+    const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res, message);
+    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
     NodeApi.setOperation(op);
   }
 
@@ -225,18 +184,6 @@ class NodeApi {
 
     const name = 'Invite';
     const timestamp = Date.now();
-
-    interface InviteOp {
-      name: 'Invite';
-      inviter: string;
-      invitee: string;
-      group: string;
-      data: string;
-      timestamp: number;
-      v: number;
-      sig?: string;
-      hash?: string;
-    }
 
     const op: InviteOp = {
       name,
@@ -252,8 +199,8 @@ class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    const res = await this.api.post(`/operations`, op);
-    op.hash = NodeApi.checkHash(res, message);
+    const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
+    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
     NodeApi.throwOnError(res);
   }
 
@@ -265,17 +212,6 @@ class NodeApi {
 
     const name = 'Add Admin';
     const timestamp = Date.now();
-
-    interface AddAdminOp {
-      name: 'Add Admin';
-      id: string;
-      admin: string;
-      group: string;
-      timestamp: number;
-      v: number;
-      sig?: string;
-      hash?: string;
-    }
 
     const op: AddAdminOp = {
       name,
@@ -291,9 +227,9 @@ class NodeApi {
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
 
-    const res = await this.api.post(`/operations`, op);
+    const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res, message);
+    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
     NodeApi.setOperation(op);
   }
 
@@ -305,16 +241,6 @@ class NodeApi {
 
     const name = 'Remove Group';
     const timestamp = Date.now();
-
-    interface RemoveGroupOp {
-      name: 'Remove Group';
-      id: string;
-      group: string;
-      timestamp: number;
-      v: number;
-      sig?: string;
-      hash?: string;
-    }
 
     const op: RemoveGroupOp = {
       name,
@@ -328,9 +254,9 @@ class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    const res = await this.api.post(`/operations`, op);
+    const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res, message);
+    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
     NodeApi.setOperation(op);
   }
 
@@ -348,16 +274,6 @@ class NodeApi {
     const name = 'Add Membership';
     const timestamp = Date.now();
 
-    interface AddMembershipOp {
-      name: string;
-      id: string;
-      group: string;
-      timestamp: number;
-      v: number;
-      sig?: string;
-      hash?: string;
-    }
-
     const op: AddMembershipOp = {
       name,
       id: brightId,
@@ -370,9 +286,9 @@ class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    const res = await this.api.post(`/operations`, op);
+    const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res, message);
+    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
     NodeApi.setOperation(op);
   }
 
@@ -384,16 +300,6 @@ class NodeApi {
 
     const name = 'Remove Membership';
     const timestamp = Date.now();
-
-    interface RemoveMembershipOp {
-      name: string;
-      id: string;
-      group: string;
-      timestamp: number;
-      v: number;
-      sig?: string;
-      hash?: string;
-    }
 
     const op: RemoveMembershipOp = {
       name,
@@ -407,9 +313,9 @@ class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    const res = await this.api.post(`/operations`, op);
+    const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res, message);
+    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
     NodeApi.setOperation(op);
   }
 
@@ -422,19 +328,6 @@ class NodeApi {
     sig1: string;
     sig2: string;
   }) {
-    interface SetSigningKeyOp {
-      name: 'Set Signing Key';
-      id: string;
-      signingKey: string;
-      timestamp: number;
-      v: number;
-      id1?: string;
-      id2?: string;
-      sig1?: string;
-      sig2?: string;
-      hash?: string;
-    }
-
     const op: SetSigningKeyOp = {
       name: 'Set Signing Key',
       id: params.id,
@@ -448,9 +341,9 @@ class NodeApi {
     op.id2 = params.id2;
     op.sig1 = params.sig1;
     op.sig2 = params.sig2;
-    const res = await this.api.post(`/operations`, op);
+    const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res, message);
+    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
     NodeApi.setOperation(op);
   }
 
@@ -462,18 +355,6 @@ class NodeApi {
 
     const name = 'Link ContextId';
     const timestamp = Date.now();
-
-    interface LinkContextIdOp {
-      name: 'Link ContextId';
-      timestamp: number;
-      v: number;
-      context: string;
-      contextId?: string;
-      encrypted?: string;
-      id?: string;
-      sig?: string;
-      hash?: string;
-    }
 
     const op: LinkContextIdOp = {
       name,
@@ -488,37 +369,39 @@ class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    const res = await this.api.post(`/operations`, op);
+    const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res, message);
+    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
     NodeApi.setOperation(op);
   }
 
   async getUserInfo(id: string) {
-    const res = await this.api.get<{ data: any }>(`/users/${id}`);
+    const res = await this.api.get<UserInfoRes, ErrRes>(`/users/${id}`);
     NodeApi.throwOnError(res);
-    return res.data.data;
+    return (res.data as UserInfoRes).data;
   }
 
   async getUserProfile(id: string) {
     const requester = store.getState().user.id;
-    const res = await this.api.get<{ data: any }>(
+    const res = await this.api.get<UserProfileRes, ErrRes>(
       `/users/${id}/profile/${requester}`,
     );
     NodeApi.throwOnError(res);
-    return res.data.data;
+    return (res.data as UserProfileRes).data;
   }
 
   async getConnections(id: string, direction: string) {
-    const res = await this.api.get<{ data: any }>(
+    const res = await this.api.get<UserConnectionRes, ErrRes>(
       `/users/${id}/connections/${direction}`,
     );
     NodeApi.throwOnError(res);
-    return res.data.data.connections;
+    return (res.data as UserConnectionRes).data?.connections;
   }
 
   async getOperationState(opHash: string) {
-    const res = await this.api.get<{ data: any }>(`/operations/${opHash}`);
+    const res = await this.api.get<OperationStateRes, ErrRes>(
+      `/operations/${opHash}`,
+    );
     if (res.status === 404) {
       // operation is not existing on server. Don't throw an error, as a client might try to check
       // operations sent by other clients without knowing if they have been submitted already.
@@ -528,13 +411,13 @@ class NodeApi {
       };
     }
     NodeApi.throwOnError(res);
-    return res.data.data;
+    return (res.data as OperationStateRes).data;
   }
 
   async getApps() {
-    const res = await this.api.get<{ data: any }>(`/apps`);
+    const res = await this.api.get<AppsRes, ErrRes>(`/apps`);
     NodeApi.throwOnError(res);
-    return res.data.data.apps;
+    return (res.data as AppsRes).data?.apps;
   }
 }
 

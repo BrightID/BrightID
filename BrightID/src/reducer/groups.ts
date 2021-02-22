@@ -20,7 +20,7 @@ import { ADD_ADMIN } from '@/actions/groups';
 
 /* ******** INITIAL STATE ************** */
 
-export const initialState = {
+export const initialState: GroupsState = {
   newGroupCoFounders: [],
   groups: [],
   invites: [],
@@ -45,14 +45,14 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
       };
     }
     case CREATE_GROUP: {
-      const groups: group[] = state.groups.concat(action.group);
+      const groups = state.groups.concat(action.group);
       return {
         ...state,
         groups,
       };
     }
     case DELETE_GROUP: {
-      const groups: group[] = state.groups.filter(
+      const groups = state.groups.filter(
         (group) => group.id !== action.group.id,
       );
       return {
@@ -98,7 +98,7 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
     case ACCEPT_INVITE: {
       return {
         ...state,
-        invites: state.invites.map<invite>((invite) => {
+        invites: state.invites.map((invite) => {
           if (invite.inviteId === action.inviteId) {
             return { ...invite, state: INVITE_ACCEPTED };
           }
@@ -109,7 +109,7 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
     case REJECT_INVITE: {
       return {
         ...state,
-        invites: state.invites.map<invite>((invite) => {
+        invites: state.invites.map((invite) => {
           if (invite.inviteId === action.inviteId) {
             return { ...invite, state: INVITE_REJECTED };
           }
@@ -122,7 +122,7 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
         action.group.isNew = false;
       }
 
-      const groups: group[] = state.groups.concat(action.group);
+      const groups = state.groups.concat(action.group);
 
       return {
         ...state,
@@ -130,7 +130,7 @@ export const reducer = (state: GroupsState = initialState, action: action) => {
       };
     }
     case LEAVE_GROUP: {
-      const groups: group[] = state.groups.filter(
+      const groups = state.groups.filter(
         (group): boolean => group.id !== action.group.id,
       );
       return {

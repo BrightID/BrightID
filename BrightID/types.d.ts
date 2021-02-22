@@ -137,52 +137,52 @@ declare global {
     verifications?: string[];
   };
 
-  type GroupsState = {
-    newGroupCoFounders: string[];
-    invites: invite[];
-    groups: group[];
-    searchParam: string;
-    searchOpen: boolean;
-  };
+  // type GroupsState = {
+  //   newGroupCoFounders: string[];
+  //   invites: invite[];
+  //   groups: group[];
+  //   searchParam: string;
+  //   searchOpen: boolean;
+  // };
 
-  type Keypair = {
-    publicKey: string;
-    secretKey: Uint8Array;
-  };
+  // type Keypair = {
+  //   publicKey: string;
+  //   secretKey: Uint8Array;
+  // };
 
-  type group = {
-    score: number;
-    isNew: boolean;
-    admins: string[];
-    url: string;
-    type: 'general' | 'primary';
-    timestamp: number;
-    founders: string[];
-    members: string[];
-    id: string;
-    name: string;
-    photo: { filename: string };
-    aesKey: string;
-  };
+  // type group = {
+  //   score: number;
+  //   isNew: boolean;
+  //   admins: string[];
+  //   url: string;
+  //   type: 'general' | 'primary';
+  //   timestamp: number;
+  //   founders: string[];
+  //   members: string[];
+  //   id: string;
+  //   name: string;
+  //   photo: { filename: string };
+  //   aesKey: string;
+  // };
 
-  type invite = {
-    score: number;
-    isNew: boolean;
-    admins: string[];
-    url: string;
-    type: 'general' | 'primary';
-    timestamp: number;
-    founder: string[];
-    inviter: string;
-    inviteId: string;
-    data: string;
-    members: string[];
-    id: string;
-    name: string;
-    state: string;
-    photo: { filename: string };
-    aesKey: string;
-  };
+  // type invite = {
+  //   score: number;
+  //   isNew: boolean;
+  //   admins: string[];
+  //   url: string;
+  //   type: 'general' | 'primary';
+  //   timestamp: number;
+  //   founder: string[];
+  //   inviter: string;
+  //   inviteId: string;
+  //   data: string;
+  //   members: string[];
+  //   id: string;
+  //   name: string;
+  //   state: string;
+  //   photo: { filename: string };
+  //   aesKey: string;
+  // };
 
   type NotificationsState = {
     activeNotification?: BannerNotification;
