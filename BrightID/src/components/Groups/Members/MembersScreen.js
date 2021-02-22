@@ -11,9 +11,9 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import { innerJoin } from 'ramda';
 import { useTranslation } from 'react-i18next';
 import api from '@/api/brightId';
-import { leaveGroup, dismissFromGroup } from '@/actions';
+import { leaveGroup, dismissFromGroup, addAdmin } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { addAdmin } from '@/actions/groups';
+
 import { ORANGE, WHITE, BLUE, DARK_GREY } from '@/theme/colors';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -197,7 +197,7 @@ function MembersScreen(props) {
         onPress: async () => {
           try {
             await api.dismiss(user.id, groupID);
-            await dispatch(dismissFromGroup(user.id, group));
+            dispatch(dismissFromGroup({ member: user.id, group }));
           } catch (err) {
             Alert.alert(
               t('groups.alert.title.errorDismissMember'),
@@ -229,7 +229,7 @@ function MembersScreen(props) {
         onPress: async () => {
           try {
             await api.addAdmin(user.id, groupID);
-            await dispatch(addAdmin(user.id, group));
+            dispatch(addAdmin({ member: user.id, group }));
           } catch (err) {
             Alert.alert(
               t('groups.alert.text.addAdmin', { name: user.name }),
