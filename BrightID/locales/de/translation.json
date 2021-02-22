@@ -35,9 +35,12 @@
     "progress": {
       "title": "Fortschritt:"
     },
+    "setupBackup": {
+      "title": "Sicherungspasswort festlegen"
+    },
     "setupTrustedConnections": {
       "description": "Erstelle vertrauenswürdige Verbindungen und sichere deine BrightID",
-      "title": "Soziales Backup"
+      "title": "Soziale Wiederherstellung einrichten"
     }
   },
   "apps": {
