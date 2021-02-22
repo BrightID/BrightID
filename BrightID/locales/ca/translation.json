@@ -1,32 +1,37 @@
 {
-    "apps": {
-        "alert": {
-            "title": {
-                "invalidContext": "Ha fallat"
-            },
-            "text": {
-                "linkSuccess": "S'ha enllaçat correctament el vostre compte de {{context}} amb el vostre BrightID",
-                "linkFailure": "No s'ha pogut enllaçar el vostre compte de {{context}} amb el vostre BrightID\n{{result}}",
-                "linkApp": "Voleu enllaçar el vostre compte de {{context}} amb el vostre BrightID?",
-                "invalidContext": "{{context}} no és un context vàlid!",
-                "checkWebsite": "Per saber més sobre {{name}}, consulteu el seu lloc web!"
-            },
-            "button": {
-                "visitWebsite": "D'acord"
-            }
-        }
+  "achievements": {
+    "makeTwoConnection": {
+      "title": "Dues connexions"
     },
-    "achievements": {
-        "setupTrustedConnections": {
-            "title": "Configura el social recovery",
-            "description": "Configura les connexions de confiança per habilitar la recuperació del compte social"
-        },
-        "notification": {
-            "title": "Assoliment desbloquejat!",
-            "message": "Has completat la tasca \"{{title}}\"."
-        },
-        "makeTwoConnection": {
-            "title": "Dues connexions"
-        }
+    "notification": {
+      "message": "Has completat la tasca \"{{title}}\".",
+      "title": "Assoliment desbloquejat!"
+    },
+    "setupTrustedConnections": {
+      "description": "Configura les connexions de confiança per habilitar la recuperació del compte social",
+      "title": "Configura el social recovery"
     }
+  },
+  "apps": {
+    "alert": {
+      "button": {
+        "visitWebsite": "D'acord"
+      },
+      "text": {
+        "checkWebsite": "Per saber més sobre {{name}}, consulteu el seu lloc web!",
+        "invalidContext": "{{context}} no és un context vàlid!",
+        "linkApp": "Voleu enllaçar el vostre compte de {{context}} amb el vostre BrightID?",
+        "linkFailure": "No s'ha pogut enllaçar el vostre compte de {{context}} amb el vostre BrightID\n{{result}}",
+        "linkSuccess": "S'ha enllaçat correctament el vostre compte de {{context}} amb el vostre BrightID"
+      },
+      "title": {
+        "invalidContext": "Ha fallat"
+      }
+    }
+  },
+  "contact": {
+    "label": {
+      "email": "Correu-e"
+    }
+  }
 }
