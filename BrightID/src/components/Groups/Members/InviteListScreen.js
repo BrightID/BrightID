@@ -25,7 +25,7 @@ const getItemLayout = (data, index) => ({
   index,
 });
 
-export class InviteListScreen extends Component<Props, State> {
+export class InviteListScreen extends Component {
   renderEligible = ({ item, index }) => {
     return (
       <TouchableOpacity

@@ -1,4 +1,3 @@
-// @flow
 import { connection_levels } from './constants';
 
 export const types = {

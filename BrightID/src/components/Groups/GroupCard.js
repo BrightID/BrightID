@@ -1,5 +1,3 @@
-// @flow
-
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
@@ -9,11 +7,11 @@ import { DARK_ORANGE, WHITE, DARK_GREEN, DARK_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { getGroupName, ids2connections } from '@/utils/groups';
 import GroupPhoto from './GroupPhoto';
+
 /**
  * Group Card in the Groups Screen
  */
-
-class GroupCard extends React.PureComponent<Props> {
+class GroupCard extends React.PureComponent {
   setStatus = () => {
     const { group, t } = this.props;
     const concatenationString = t('common.language.and', 'and');

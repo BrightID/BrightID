@@ -1,5 +1,3 @@
-// @flow
-
 import RNFetchBlob from 'rn-fetch-blob';
 import { parseDataUri, mimeFromUri } from './images';
 

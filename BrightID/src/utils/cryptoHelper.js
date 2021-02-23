@@ -1,5 +1,3 @@
-// @flow
-
 import CryptoJS from 'crypto-js';
 
 export const encryptData = (dataObj, aesKey) => {

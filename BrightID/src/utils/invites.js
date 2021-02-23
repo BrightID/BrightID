@@ -1,5 +1,3 @@
-// @flow
-
 import CryptoJS from 'crypto-js';
 import { eqProps } from 'ramda';
 import store from '@/store';
@@ -9,7 +7,13 @@ import { convertPublicKey, convertSecretKey } from 'ed2curve';
 import { saveImage } from './filesystem';
 import { INVITE_ACTIVE } from './constants';
 
-export const getInviteInfo = async (invite: invite) => {
+/**
+ *
+ * @param {invite} invite
+ * @type invite
+ * @returns
+ */
+export const getInviteInfo = async (invite) => {
   try {
     console.log('getting invite info', invite);
     if (!invite.data) {
@@ -59,7 +63,12 @@ export const getInviteInfo = async (invite: invite) => {
   }
 };
 
-export const updateInvites = async (invites: invite[]): Promise<invite[]> => {
+/**
+ *
+ * @param {invite[]} invites
+ * @returns
+ */
+export const updateInvites = async (invites) => {
   try {
     const {
       groups: { invites: oldInvites = [] },
@@ -97,7 +106,14 @@ export const updateInvites = async (invites: invite[]): Promise<invite[]> => {
   }
 };
 
-export const encryptAesKey = async (aesKey: string, signingKey: string) => {
+/**
+ *
+ * @param {string} aesKey
+ * @param {string} signingKey
+ * @returns string
+ */
+
+export const encryptAesKey = async (aesKey, signingKey) => {
   try {
     let { secretKey } = store.getState().keypair;
 

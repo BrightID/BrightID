@@ -1,4 +1,3 @@
-// @flow
 /* global device:false, element:false, by:false, waitFor:false */
 
 import { report_reasons } from '@/utils/constants';

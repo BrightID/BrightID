@@ -1,4 +1,3 @@
-// @flow
 import { getStoredState } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { rootMigrate } from './migrations';

@@ -1,5 +1,3 @@
-// @flow
-
 import { Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
 import i18next from 'i18next';
@@ -15,10 +13,7 @@ import {
   backupUser,
 } from '../Onboarding/RecoveryFlow/thunks/backupThunks';
 
-export const toggleNewGroupCoFounder = (id: string) => (
-  dispatch: dispatch,
-  getState: getState,
-) => {
+export const toggleNewGroupCoFounder = (id) => (dispatch, getState) => {
   let coFounders = [...getState().groups.newGroupCoFounders];
   const index = coFounders.indexOf(id);
   if (index >= 0) {
@@ -29,11 +24,10 @@ export const toggleNewGroupCoFounder = (id: string) => (
   dispatch(setNewGroupCoFounders(coFounders));
 };
 
-export const createNewGroup = (
-  photo: string,
-  name: string,
-  type: string,
-) => async (dispatch: dispatch, getState: getState) => {
+export const createNewGroup = (photo, name, type) => async (
+  dispatch,
+  getState,
+) => {
   try {
     let {
       user: { id, backupCompleted },
