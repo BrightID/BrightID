@@ -20,7 +20,7 @@ import api from '@/api/brightId';
 import VerifiedSticker from '@/components/Icons/VerifiedSticker';
 import { uploadSig, uploadMutualInfo } from './thunks/channelUploadThunks';
 
-const RecoveryConnectionCard = (props) => {
+const RecoveringConnectionCard = (props) => {
   const {
     status,
     verifications,
@@ -221,4 +221,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RecoveryConnectionCard;
+export default RecoveringConnectionCard;

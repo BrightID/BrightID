@@ -17,7 +17,7 @@ export const SET_FILTERS = 'SET_FILTERS';
  * @param type SET_CONNECTIONS
  * @param connections array of connections obtained from server and stored locally
  */
-export const setConnections = (connections: connection[]) => ({
+export const setConnections = (connections: Connection[]) => ({
   type: SET_CONNECTIONS,
   connections,
 });
@@ -42,7 +42,7 @@ export const setConnectionsSort = (connectionsSort: string) => ({
  * @param type UPDATE_CONNECTIONS
  * @param connections updates connections from server
  */
-export const updateConnections = (connections: connection[]) => ({
+export const updateConnections = (connections: ConnectionInfo[]) => ({
   type: UPDATE_CONNECTIONS,
   connections,
 });
@@ -57,7 +57,7 @@ export const deleteConnection = (id: string) => ({
  * @param type ADD_CONNECTION
  * @param connection add a single connection
  */
-export const addConnection = (connection: connection) => ({
+export const addConnection = (connection: Connection) => ({
   type: ADD_CONNECTION,
   connection,
 });

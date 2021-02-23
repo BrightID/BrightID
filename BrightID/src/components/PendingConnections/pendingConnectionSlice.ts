@@ -94,7 +94,9 @@ export const newPendingConnection = createAsyncThunk<
     }
 
     decryptedObj.myself = decryptedObj.id === getState().user.id;
-    let connectionInfo: PendingConnection = {};
+    let connectionInfo: Partial<UserProfileRes['data']> & {
+      existingConnection?: Connection;
+    } = {};
     try {
       connectionInfo = await api.getUserProfile(decryptedObj.id);
     } catch (err) {

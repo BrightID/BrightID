@@ -44,16 +44,16 @@ declare global {
     linkedContexts: ContextInfo[];
   };
 
-  type AppInfo = {
-    id: string;
-    name: string;
-    logo: string;
-    context: string;
-    verification: string;
-    url: string;
-    unusedSponsorships: number;
-    assignedSponsorships: number;
-  };
+  // type AppInfo = {
+  //   id: string;
+  //   name: string;
+  //   logo: string;
+  //   context: string;
+  //   verification: string;
+  //   url: string;
+  //   unusedSponsorships: number;
+  //   assignedSponsorships: number;
+  // };
 
   type ContextInfo = {
     context: string;
@@ -99,14 +99,6 @@ declare global {
     initiatorProfileId: string;
   };
 
-  type ConnectionsState = {
-    connections: connection[];
-    connectionsSort: string;
-    searchParam: string;
-    searchOpen: boolean;
-    filters: string[];
-  };
-
   type Photo = {
     filename: string;
   };
@@ -115,74 +107,6 @@ declare global {
   // RESPONSE: this should not matter because we cannot type check the compiled code in release mode
 
   type ConnectionLevel = ValueOf<typeof connection_levels>;
-
-  type connection = {
-    id: string;
-    name: string;
-    score?: number;
-    secretKey?: string;
-    aesKey?: string;
-    connectionDate: number;
-    photo: Photo;
-    status: string;
-    signingKey?: string;
-    createdAt?: string;
-    hasPrimaryGroup?: boolean;
-    publicKey?: string;
-    flaggers?: any; // TODO: Proper definition, maybe refactor
-    level: ConnectionLevel;
-    hiddenFlag?: string;
-    socialMedia?: string[];
-    notificationToken?: string;
-    verifications?: string[];
-  };
-
-  // type GroupsState = {
-  //   newGroupCoFounders: string[];
-  //   invites: invite[];
-  //   groups: group[];
-  //   searchParam: string;
-  //   searchOpen: boolean;
-  // };
-
-  // type Keypair = {
-  //   publicKey: string;
-  //   secretKey: Uint8Array;
-  // };
-
-  // type group = {
-  //   score: number;
-  //   isNew: boolean;
-  //   admins: string[];
-  //   url: string;
-  //   type: 'general' | 'primary';
-  //   timestamp: number;
-  //   founders: string[];
-  //   members: string[];
-  //   id: string;
-  //   name: string;
-  //   photo: { filename: string };
-  //   aesKey: string;
-  // };
-
-  // type invite = {
-  //   score: number;
-  //   isNew: boolean;
-  //   admins: string[];
-  //   url: string;
-  //   type: 'general' | 'primary';
-  //   timestamp: number;
-  //   founder: string[];
-  //   inviter: string;
-  //   inviteId: string;
-  //   data: string;
-  //   members: string[];
-  //   id: string;
-  //   name: string;
-  //   state: string;
-  //   photo: { filename: string };
-  //   aesKey: string;
-  // };
 
   type NotificationsState = {
     activeNotification?: BannerNotification;
@@ -244,7 +168,7 @@ declare global {
     connectedAt?: number;
     groupsNum?: number;
     mutualConnections?: string[];
-    existingConnection?: connection;
+    existingConnection?: Connection;
     socialMedia?: string[];
     notificationToken?: string;
     mutualGroups?: string[];

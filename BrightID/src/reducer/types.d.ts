@@ -5,7 +5,26 @@
 /**
  * Connections
  */
+type ConnectionsState = {
+  connections: Connection[];
+  connectionsSort: string;
+  searchParam: string;
+  searchOpen: boolean;
+  filters: string[];
+};
 
+type Connection = Partial<ConnectionInfo> & {
+  name: string;
+  photo: { filename: string };
+  connectionDate: number;
+  status: string;
+  socialMedia?: string[];
+  notificationToken?: string;
+  publicKey?: string;
+  secretKey?: string;
+  hiddenFlag?: string;
+  aesKey?: string;
+};
 /**
  * Groups
  */
@@ -17,7 +36,7 @@ type GroupsState = {
   searchOpen: boolean;
 };
 
-type Group = GroupInfo & {
+type Group = Partial<GroupInfo> & {
   name?: string;
   photo?: { filename: string };
   aesKey?: string;

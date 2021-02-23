@@ -46,7 +46,7 @@ export const reducer = (
       const connectionsMap = keyBy(action.connections, 'id');
       return {
         ...state,
-        connections: state.connections.map<connection>((conn: connection) => {
+        connections: state.connections.map((conn) => {
           const updatedConn = connectionsMap[conn.id];
           if (!updatedConn) {
             if (conn.status === 'verified') conn.status = 'deleted';
@@ -60,8 +60,8 @@ export const reducer = (
     }
     case ADD_CONNECTION: {
       if (!action.connection.id) return state;
-      const removeExisting = ({ id }: connection) =>
-        id !== action.connection.id;
+      const removeExisting = (conn: Connection) =>
+        conn.id !== action.connection.id;
       console.log('adding connection', action.connection.id);
       return {
         ...state,
@@ -72,8 +72,8 @@ export const reducer = (
       };
     }
     case DELETE_CONNECTION: {
-      const connections: connection[] = state.connections.filter(
-        (conn: connection) => conn.id !== action.id,
+      const connections = state.connections.filter(
+        (conn) => conn.id !== action.id,
       );
       return {
         ...state,
@@ -81,43 +81,37 @@ export const reducer = (
       };
     }
     case FLAG_AND_HIDE_CONNECTION: {
-      const connections: connection[] = state.connections.map(
-        (conn: connection) => {
-          if (conn.id === action.id) {
-            conn.status = 'hidden';
-            conn.hiddenFlag = action.flag;
-          }
-          return conn;
-        },
-      );
+      const connections = state.connections.map((conn) => {
+        if (conn.id === action.id) {
+          conn.status = 'hidden';
+          conn.hiddenFlag = action.flag;
+        }
+        return conn;
+      });
       return {
         ...state,
         connections,
       };
     }
     case SHOW_CONNECTION: {
-      const connections: connection[] = state.connections.map(
-        (conn: connection) => {
-          if (conn.id === action.id) {
-            conn.status = 'verified';
-          }
-          return conn;
-        },
-      );
+      const connections = state.connections.map((conn) => {
+        if (conn.id === action.id) {
+          conn.status = 'verified';
+        }
+        return conn;
+      });
       return {
         ...state,
         connections,
       };
     }
     case STALE_CONNECTION: {
-      const connections: connection[] = state.connections.map(
-        (conn: connection) => {
-          if (conn.id === action.id) {
-            conn.status = 'stale';
-          }
-          return conn;
-        },
-      );
+      const connections = state.connections.map((conn) => {
+        if (conn.id === action.id) {
+          conn.status = 'stale';
+        }
+        return conn;
+      });
       return {
         ...state,
         connections,
@@ -142,14 +136,12 @@ export const reducer = (
       };
     }
     case SET_CONNECTION_LEVEL: {
-      const connections: connection[] = state.connections.map(
-        (conn: connection) => {
-          if (conn.id === action.id) {
-            conn.level = action.level;
-          }
-          return conn;
-        },
-      );
+      const connections = state.connections.map((conn) => {
+        if (conn.id === action.id) {
+          conn.level = action.level;
+        }
+        return conn;
+      });
       return {
         ...state,
         connections,

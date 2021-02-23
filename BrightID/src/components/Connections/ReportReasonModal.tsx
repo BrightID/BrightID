@@ -35,7 +35,7 @@ const ReportReasonModal = () => {
   const route = useRoute<ReportReasonRoute>();
   const { connectionId, successCallback } = route.params;
   const { t } = useTranslation();
-  const connection: connection = useSelector((state: State) =>
+  const connection: Connection = useSelector((state: State) =>
     connectionByIdSelector(state, connectionId),
   );
   const dispatch = useDispatch();

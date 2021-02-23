@@ -46,7 +46,7 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
         dispatch(setIsSponsored(isSponsored));
 
         // this can not be done in reducer because it should be in an async function
-        const newInvites: invite[] = await updateInvites(invites);
+        const newInvites: Invite[] = await updateInvites(invites);
         dispatch(setInvites(newInvites));
 
         if (newInvites.length > oldInvites.length) {

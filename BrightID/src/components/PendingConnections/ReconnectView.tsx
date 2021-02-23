@@ -17,7 +17,7 @@ const REPORTED_PERCENTAGE = 0.1;
 
 type ReconnectViewProps = {
   pendingConnection: PendingConnection;
-  existingConnection: connection;
+  existingConnection: Connection;
   setLevelHandler: (level: ConnectionLevel) => any;
   abuseHandler: () => any;
 };
@@ -144,7 +144,7 @@ export const ReconnectView = ({
           <Text style={styles.lastConnectedText}>
             {t('connections.tag.lastConnected', {
               date: moment(
-                parseInt(existingConnection.createdAt, 10),
+                parseInt(String(existingConnection.createdAt), 10),
               ).fromNow(),
             })}
           </Text>

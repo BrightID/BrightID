@@ -25,15 +25,15 @@ function ConnectionScreenController() {
   const navigation = useNavigation();
   const route = useRoute<ConnectionRoute>();
   const { connectionId } = route.params;
-  const connection: connection = useSelector((state: State) =>
+  const connection = useSelector((state: State) =>
     connectionByIdSelector(state, connectionId),
   );
   const myConnections = useSelector(
     (state: State) => state.connections.connections,
   );
   const myGroups = useSelector((state: State) => state.groups.groups);
-  const [mutualGroups, setMutualGroups] = useState<Array<group>>([]);
-  const [mutualConnections, setMutualConnections] = useState<Array<connection>>(
+  const [mutualGroups, setMutualGroups] = useState<Array<Group>>([]);
+  const [mutualConnections, setMutualConnections] = useState<Array<Connection>>(
     [],
   );
   const [verifications, setVerifications] = useState<Array<any>>([]);

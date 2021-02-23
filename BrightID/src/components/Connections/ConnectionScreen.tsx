@@ -37,17 +37,17 @@ import TrustLevelView from './TrustLevelView';
  via ListHeaderComponent, the "Report" button on the bottom via ListFooterComponent.
 * */
 type Props = {
-  connection: connection;
+  connection: Connection;
   brightIdVerified: boolean;
   connectedAt: number;
-  mutualGroups: Array<group>;
-  mutualConnections: Array<connection>;
+  mutualGroups: Array<Group>;
+  mutualConnections: Array<Connection>;
   loading: boolean;
 };
 
 interface Section {
   title: string;
-  data: Array<connection | group>;
+  data: Array<Connection | Group>;
   key: string;
   numEntries: number;
 }

@@ -20,7 +20,7 @@
     "strict": true,
     "noImplicitAny": false,
     "strictNullChecks": false, /* Enable strict null checks. */
-    "strictFunctionTypes": true, /* Enable strict checking of function types. */
+    "strictFunctionTypes": false, /* Enable strict checking of function types. */
     // "strictPropertyInitialization": false, /* Enable strict checking of property initialization in classes. */
     // "noImplicitThis": true,                /* Raise error on 'this' expressions with an implied 'any' type. */
     // "alwaysStrict": false,

@@ -30,7 +30,7 @@ const TrustlevelModal = () => {
   console.log('TrustLevelModalRoute', route);
   const { connectionId } = route.params;
   const myId = useSelector((state: State) => state.user.id);
-  const connection: connection = useSelector((state: State) =>
+  const connection: Connection = useSelector((state: State) =>
     connectionByIdSelector(state, connectionId),
   );
   const dispatch = useDispatch();

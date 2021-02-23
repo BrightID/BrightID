@@ -26,7 +26,7 @@ const getItemLayout = (_data, index: number) => ({
   index,
 });
 
-const renderItem = ({ item, index }: { item: connection; index: number }) => {
+const renderItem = ({ item, index }: { item: Connection; index: number }) => {
   return <ConnectionCard {...item} index={index} />;
 };
 

@@ -12,12 +12,12 @@ type NodeApiRes =
   | UserProfileRes;
 
 type AppRes = {
-  data: App;
+  data: AppInfo;
 };
 
 type AppsRes = {
   data: {
-    apps: App[];
+    apps: AppInfo[];
   };
 };
 
@@ -129,7 +129,7 @@ type InviteInfo = {
 type ConnectionInfo = {
   id: string;
   signingKey: string;
-  level: string;
+  level: ConnectionLevel;
   verifications: string[];
   hasPrimaryGroup: boolean;
   trusted: string[];
