@@ -1,5 +1,3 @@
-// @flow
-
 import * as React from 'react';
 import { TextInput, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
@@ -15,12 +13,11 @@ import { LIGHT_BLACK, LIGHT_GREY, GREY, WHITE } from '@/theme/colors';
  * TODO: Add functionality for the Ionicons
  * TODO: add search filter in redux actions
  */
+// type LocalProps = {
+//   sortable: boolean;
+// };
 
-type LocalProps = {
-  sortable: boolean,
-};
-
-class SearchConnections extends React.Component<Props & LocalProps> {
+class SearchConnections extends React.Component {
   componentWillUnmount() {
     // reset search Param
     const { dispatch } = this.props;

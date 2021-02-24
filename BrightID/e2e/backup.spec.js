@@ -1,4 +1,3 @@
-// @flow
 /* global device:false, element:false, by:false, waitFor:false */
 
 import {

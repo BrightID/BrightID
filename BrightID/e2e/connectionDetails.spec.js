@@ -1,4 +1,3 @@
-// @flow
 /* global element:false, by:false, waitFor:false, device: false */
 import i18next from 'i18next';
 import {

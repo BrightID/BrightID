@@ -1,11 +1,10 @@
-// @flow
 import { Alert } from 'react-native';
 import api from '@/api/brightId';
 import store from '@/store';
 import { removeOperation, resetOperations, addLinkedContext } from '@/actions';
 import fetchUserInfo from '@/actions/fetchUserInfo';
-import { checkTasks } from '../components/Tasks/TasksSlice';
 import i18next from 'i18next';
+import { checkTasks } from '../components/Tasks/TasksSlice';
 
 const time_fudge = 2 * 60 * 1000; // trace operations for 2 minutes
 
@@ -20,17 +19,24 @@ const handleOpUpdate = (store, op, state, result) => {
           state,
         }),
       );
+
       if (state === 'applied') {
         Alert.alert(
           i18next.t('apps.alert.title.linkSuccess'),
-          i18next.t('apps.alert.text.linkSuccess', {context: `${op.context}`}),
+          i18next.t('apps.alert.text.linkSuccess', {
+            context: `${op.context}`,
+          }),
         );
       } else {
         Alert.alert(
           i18next.t('apps.alert.title.linkFailure'),
-          i18next.t('apps.alert.text.linkFailure', {context: `${op.context}`, result: `${result.message}`}),
+          i18next.t('apps.alert.text.linkFailure', {
+            context: `${op.context}`,
+            result: `${result.message}`,
+          }),
         );
       }
+
       break;
     default:
   }

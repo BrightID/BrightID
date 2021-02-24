@@ -10,11 +10,6 @@ configure({ adapter: new Adapter() });
 const mockImpl = new MockAsyncStorage();
 jest.mock('@react-native-async-storage/async-storage', () => mockImpl);
 
-jest.mock(
-  './src/components/Connections/SearchConnections',
-  () => 'SearchConnections',
-);
-
 jest.mock('react-native', () => {
   return {
     Dimensions: {

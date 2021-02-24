@@ -27,7 +27,7 @@ import { DEVICE_TYPE, DEVICE_OS, DEVICE_LARGE } from '@/utils/deviceConstants';
 
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
-export class GroupInfoScreen extends React.Component<Props> {
+export class GroupInfoScreen extends React.Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     name: '',
@@ -124,30 +124,27 @@ export class GroupInfoScreen extends React.Component<Props> {
             </View>
           </View>
           {/*
-
             Disabled creation of primary groups for now (https://github.com/BrightID/BrightID/issues/474)
-
             !this.hasPrimaryGroup() && (
-            <View testID="primaryGroupView" style={styles.toggleContainer}>
-              <Text style={styles.primaryGroupText}>
-                A primary group represents the closest personal contacts (e.g.
-                immediate family members) for a particular person. Each person
-                can have only one primary group.
-              </Text>
-
+           <View testID="primaryGroupView" style={styles.toggleContainer}>
+             <Text style={styles.primaryGroupText}>
+               A primary group represents the closest personal contacts (e.g.
+               immediate family members) for a particular person. Each person
+               can have only one primary group.
+             </Text>
               <ToggleSwitch
-                testID="primaryGroupToggle"
-                isOn={isPrimary}
-                onColor="#428BE5"
-                offColor="#979797"
-                label="Primary Group"
-                labelStyle={styles.primaryToggleLable}
-                size="large"
-                onToggle={(isPrimary) => this.setState({ isPrimary })}
-              />
-            </View>
-            )
-            */}
+               testID="primaryGroupToggle"
+               isOn={isPrimary}
+               onColor="#428BE5"
+               offColor="#979797"
+               label="Primary Group"
+               labelStyle={styles.primaryToggleLable}
+               size="large"
+               onToggle={(isPrimary) => this.setState({ isPrimary })}
+             />
+           </View>
+           )
+           */}
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               testID="nextBtn"
