@@ -28,23 +28,10 @@ import { Draft } from 'immer';
 
  */
 
-// type channel_types = typeof channel_types[ChannelType];
-// export const channel_types = {
-//   GROUP: 'GROUP',
-//   SINGLE: 'SINGLE',
-// } as const;
-
 export enum channel_types {
   GROUP = 'GROUP',
   SINGLE = 'SINGLE',
 }
-
-// type channel_states = typeof channel_states[ChannelState];
-// export const channel_states = {
-//   OPEN: 'OPEN',
-//   CLOSED: 'CLOSED',
-//   BACKGROUND: 'BACKGROUND',
-// } as const;
 
 export enum channel_states {
   OPEN = 'OPEN',
@@ -54,9 +41,6 @@ export enum channel_states {
 
 export const channelsAdapter = createEntityAdapter<Channel>();
 
-// By default, `createEntityAdapter` gives you `{ ids: [], entities: {} }`.
-// If you want to track 'loading' or other keys, you would initialize them here:
-// `getInitialState({ loading: false, activeRequestId: null })`
 const initialState = channelsAdapter.getInitialState<DisplayChannel>({
   displayChannelType: channel_types.SINGLE,
   myChannelIds: {
@@ -75,6 +59,7 @@ const channelSlice = createSlice({
         action,
       );
     },
+    // addChannel: channelsAdapter.addOne,
     updateChannel(
       state: Draft<ChannelsState>,
       action: PayloadAction<Update<Channel>>,

@@ -2,6 +2,11 @@
  * Apps
  */
 
+type AppsState = {
+  apps: AppInfo[];
+  linkedContexts: EntityState<ContextInfo>;
+};
+
 /**
  * Connections
  */

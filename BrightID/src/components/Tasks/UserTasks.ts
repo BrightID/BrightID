@@ -1,6 +1,7 @@
 import i18next from 'i18next';
 import { recoveryConnectionsSelector } from '@/utils/connectionsSelector';
 import { MIN_RECOVERY_CONNECTIONS } from '@/utils/constants';
+import { linkedContextTotal } from '@/reducer/appsSlice';
 
 export const UserTasks = {
   make_first_connection: {
@@ -21,10 +22,8 @@ export const UserTasks = {
     url: 'https://apps.brightid.org/',
     checkFn(state) {
       // is there at least one linked context?
-      const linkedContexts = state.apps.linkedContexts.filter(
-        (linkedContext) => linkedContext.state === 'applied',
-      );
-      return linkedContexts.length > 0;
+      const linkedContexts = linkedContextTotal(state);
+      return linkedContexts > 0;
     },
   },
   get_sponsored: {

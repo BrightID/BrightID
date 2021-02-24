@@ -7,7 +7,7 @@ type NodeApiRes =
   | AppsRes
   | OperationRes
   | OperationStateRes
-  | UserconnectionRes
+  | UserConnectionRes
   | UserInfoRes
   | UserProfileRes;
 

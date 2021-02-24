@@ -4,7 +4,7 @@ import { INVITE_ACCEPTED, INVITE_REJECTED } from '@/utils/constants';
 
 /* ******** INITIAL STATE ************** */
 
-export const initialState: GroupsState = {
+const initialState: GroupsState = {
   newGroupCoFounders: [],
   groups: [],
   invites: [],

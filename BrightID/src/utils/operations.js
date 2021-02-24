@@ -1,7 +1,11 @@
 import { Alert } from 'react-native';
 import api from '@/api/brightId';
 import store from '@/store';
-import { removeOperation, resetOperations, addLinkedContext } from '@/actions';
+import {
+  removeOperation,
+  resetOperations,
+  updateLinkedContext,
+} from '@/actions';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import i18next from 'i18next';
 import { checkTasks } from '../components/Tasks/TasksSlice';
@@ -12,7 +16,7 @@ const handleOpUpdate = (store, op, state, result) => {
   switch (op.name) {
     case 'Link ContextId':
       store.dispatch(
-        addLinkedContext({
+        updateLinkedContext({
           context: op.context,
           contextId: op.contextId,
           dateAdded: op.dateAdded,

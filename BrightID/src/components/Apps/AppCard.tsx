@@ -10,13 +10,16 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
-import { createSelector } from '@reduxjs/toolkit';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, DARKER_GREY, BLACK, BLUE, RED } from '@/theme/colors';
-import { addLinkedContext, removeLinkedContext } from '@/actions';
+import {
+  updateLinkedContext,
+  removeLinkedContext,
+  selectLinkedContext,
+} from '@/actions';
 
 /**
  * App Card in the Apps Screen
@@ -26,14 +29,6 @@ import { addLinkedContext, removeLinkedContext } from '@/actions';
  * @prop url
  */
 const MAX_WAITING_SECONDS = 60;
-
-const makeLinkedContextSelector = () =>
-  createSelector(
-    (state: State) => state.apps.linkedContexts,
-    (_: State, context: string) => context,
-    (linkedContexts, context) =>
-      linkedContexts.find((link) => link.context === context),
-  );
 
 const AppCard = (props: AppInfo) => {
   const {
@@ -51,10 +46,11 @@ const AppCard = (props: AppInfo) => {
 
   // Make sure each instance of AppCard has it's own selector. Otherwise they would
   // invalidate each others cache. See https://react-redux.js.org/next/api/hooks#using-memoizing-selectors
-  const linkedContextSelector = useMemo(makeLinkedContextSelector, []);
+  const linkedContextSelector = useMemo(() => selectLinkedContext, []);
   const linkedContext = useSelector((state: State) =>
     linkedContextSelector(state, context),
   );
+  console.log('linkedContext', linkedContext);
   const { t } = useTranslation();
 
   const isLinked = linkedContext && linkedContext.state === 'applied';
@@ -77,10 +73,8 @@ const AppCard = (props: AppInfo) => {
 
       const stale_check_timer = setTimeout(() => {
         dispatch(
-          addLinkedContext({
-            context: linkedContext.context,
+          updateLinkedContext({
             contextId: linkedContext.contextId,
-            dateAdded: linkedContext.dateAdded,
             state: 'failed',
           }),
         );
@@ -117,7 +111,7 @@ const AppCard = (props: AppInfo) => {
   };
 
   const removeContext = () => {
-    dispatch(removeLinkedContext(context));
+    dispatch(removeLinkedContext(linkedContext.contextId));
   };
 
   const SponsorshipLabel = () => {

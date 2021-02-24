@@ -1,12 +1,4 @@
-export {
-  SET_APPS,
-  ADD_LINKED_CONTEXT,
-  REMOVE_LINKED_CONTEXT,
-  fetchApps,
-  setApps,
-  addLinkedContext,
-  removeLinkedContext,
-} from './apps';
+export { fetchApps } from './apps';
 
 export {
   SET_CONNECTIONS,
@@ -36,35 +28,6 @@ export {
   setFilters,
 } from './connections';
 
-// export {
-//   CREATE_GROUP,
-//   DELETE_GROUP,
-//   SET_NEW_GROUP_CO_FOUNDERS,
-//   CLEAR_NEW_GROUP_CO_FOUNDERS,
-//   SET_GROUPS,
-//   SET_INVITES,
-//   ACCEPT_INVITE,
-//   REJECT_INVITE,
-//   JOIN_GROUP,
-//   LEAVE_GROUP,
-//   DISMISS_FROM_GROUP,
-//   SET_GROUP_SEARCH,
-//   SET_GROUP_SEARCH_OPEN,
-//   createGroup,
-//   deleteGroup,
-//   setNewGroupCoFounders,
-//   clearNewGroupCoFounders,
-//   setGroups,
-//   setInvites,
-//   joinGroup,
-//   leaveGroup,
-//   dismissFromGroup,
-//   rejectInvite,
-//   acceptInvite,
-//   setGroupSearch,
-//   setGroupSearchOpen,
-// } from './groups';
-
 export {
   SET_BACKUP_PENDING,
   SET_DEVICE_TOKEN,
@@ -90,6 +53,7 @@ export {
 
 export { RESET_STORE, resetStore } from './resetStore';
 
+export * from '../reducer/appsSlice';
 export * from '../reducer/groupsSlice';
 export * from '../reducer/keypairSlice';
 export * from '../reducer/userSlice';

@@ -14,8 +14,8 @@ import EmptyList from '@/components/Helpers/EmptyList';
 import Spinner from 'react-native-spinkit';
 import { ORANGE, BLUE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { any, find, propEq } from 'ramda';
-import { fetchApps } from '@/actions';
+import { any, propEq } from 'ramda';
+import { fetchApps, selectPendingLinkedContext } from '@/actions';
 import {
   useFocusEffect,
   useNavigation,
@@ -35,9 +35,8 @@ export const AppsScreen = () => {
 
   const apps = useSelector((state: State) => state.apps.apps);
   const isSponsored = useSelector((state: State) => state.user.isSponsored);
-  const linkedContexts = useSelector(
-    (state: State) => state.apps.linkedContexts,
-  );
+  const pendingLink = useSelector(selectPendingLinkedContext);
+
   const [refreshing, setRefreshing] = useState(false);
   const { t } = useTranslation();
 
@@ -81,10 +80,7 @@ export const AppsScreen = () => {
   }, [apps, handleDeepLink, route.params]);
 
   const AppStatus = () => {
-    const pendingLink = find(propEq('state', 'pending'))(
-      linkedContexts,
-    ) as ContextInfo;
-    let msg, waiting;
+    let msg: string, waiting: boolean;
     if (pendingLink) {
       msg = t('apps.text.pendingLink', { context: `${pendingLink.context}` });
       waiting = true;

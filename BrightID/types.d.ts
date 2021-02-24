@@ -1,6 +1,6 @@
 // @flow
 
-import { EntityState } from '@reduxjs/toolkit';
+import { EntityState as ES } from '@reduxjs/toolkit';
 import {
   channel_states,
   channel_types,
@@ -12,6 +12,7 @@ import { pendingConnection_states } from '@/components/PendingConnections/pendin
 import { socialMediaList } from '@/components/EditProfile/socialMediaList';
 
 declare global {
+  type EntityState<T> = ES<T>;
   type ValueOf<T> = T[keyof T];
 
   type getState = () => State;
@@ -37,11 +38,6 @@ declare global {
     tasks: TasksState;
     user: UserState;
     walkthrough: WalkthroughState;
-  };
-
-  type AppsState = {
-    apps: AppInfo[];
-    linkedContexts: ContextInfo[];
   };
 
   type ContextInfo = {

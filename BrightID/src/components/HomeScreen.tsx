@@ -16,6 +16,7 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import { setActiveNotification } from '@/actions';
+import { linkedContextTotal } from '@/reducer/appsSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { WHITE, ORANGE, BLACK, BLUE } from '@/theme/colors';
 import fetchUserInfo from '@/actions/fetchUserInfo';
@@ -40,11 +41,6 @@ const discordUrl = 'https://discord.gg/nTtuB2M';
 
 /** Selectors */
 
-const linkedContextCountSelector = createSelector(
-  (state: State) => state.apps.linkedContexts,
-  (contexts) => contexts.filter((link) => link.state === 'applied').length,
-);
-
 export const verifiedSelector = createSelector(
   (state: State) => state.user.verifications,
   (verifications) => verifications.includes('BrightID'),
@@ -62,7 +58,7 @@ export const HomeScreen = (props) => {
   );
   const groupsCount = useSelector((state: State) => state.groups.groups.length);
   const connectionsCount = useSelector(verifiedConnectionsSelector).length;
-  const linkedContextsCount = useSelector(linkedContextCountSelector);
+  const linkedContextsCount = useSelector(linkedContextTotal);
   const verified = useSelector(verifiedSelector);
 
   const [profilePhoto, setProfilePhoto] = useState('');
