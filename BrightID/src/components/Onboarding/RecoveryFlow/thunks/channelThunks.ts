@@ -50,7 +50,7 @@ export const createChannel = () => async (
   }
 };
 
-let channelIntervalId = 0;
+let channelIntervalId: ReturnType<typeof setTimeout>;
 let checkInProgress = false;
 
 export const pollChannel = () => async (dispatch: dispatch) => {
@@ -59,7 +59,9 @@ export const pollChannel = () => async (dispatch: dispatch) => {
   // create channel for recovery sigs
   await dispatch(createChannel());
 
-  clearInterval(channelIntervalId);
+  if (channelIntervalId) {
+    clearInterval(channelIntervalId);
+  }
 
   channelIntervalId = setInterval(() => {
     if (!checkInProgress) {

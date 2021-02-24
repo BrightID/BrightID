@@ -32,7 +32,7 @@ import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
 type Props = Connection & { index: number };
 
 const ConnectionCard = (props: Props) => {
-  const stale_check_timer = useRef(0);
+  const stale_check_timer = useRef<ReturnType<typeof setTimeout>>(null);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const {
@@ -73,8 +73,11 @@ const ConnectionCard = (props: Props) => {
             console.log(`Warning - checkTime in past: ${checkTime}`);
             checkTime = 1000; // check in 1 second
           }
+
+          if (stale_check_timer.current) {
+            clearTimeout(stale_check_timer.current);
+          }
           console.log(`Marking connection as stale in ${checkTime}ms.`);
-          clearTimeout(stale_check_timer.current);
           stale_check_timer.current = setTimeout(() => {
             if (checkStale()) {
               dispatch(staleConnection(id));
@@ -86,7 +89,7 @@ const ConnectionCard = (props: Props) => {
         // clear timer if it is set
         if (stale_check_timer.current) {
           clearTimeout(stale_check_timer.current);
-          stale_check_timer.current = 0;
+          stale_check_timer.current = null;
         }
       };
     }, [connectionDate, dispatch, id, name, status]),
@@ -98,7 +101,7 @@ const ConnectionCard = (props: Props) => {
         `Connection ${name} changed 'initiated' -> 'verified'. Stopping stale_check_timer ID ${stale_check_timer.current}.`,
       );
       clearTimeout(stale_check_timer.current);
-      stale_check_timer.current = 0;
+      stale_check_timer.current = null;
     }
   }, [name, status]);
 
