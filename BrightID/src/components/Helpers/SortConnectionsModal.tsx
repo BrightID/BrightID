@@ -14,12 +14,8 @@ import { ORANGE, BLACK, WHITE, GREEN, DARKER_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { types } from '@/utils/sorting';
 import { setFilters, setConnectionsSort } from '@/actions';
+import { StackScreenProps } from '@react-navigation/stack';
 import Chevron from '../Icons/Chevron';
-
-type props = {
-  route: any;
-  navigation: any;
-};
 
 /** CONSTANTS */
 
@@ -44,7 +40,9 @@ const byTrust = [types.byTrustLevelDescending, types.byTrustLevelAscending];
 
 /** COMPONENT */
 
-const SortConnectionsModal = ({ route, navigation }: props) => {
+type props = StackScreenProps<ModalStackParamList, 'SortConnections'>;
+
+const SortConnectionsModal = ({ navigation }: props) => {
   const dispatch = useDispatch();
 
   const filters: string[] = useSelector(

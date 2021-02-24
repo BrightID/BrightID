@@ -7,9 +7,9 @@ import {
 } from '@/components/PendingConnections/channelSlice';
 import ChannelAPI from '@/api/channelService';
 import { AppDispatch } from '@/store';
-import { connection_levels } from './src/utils/constants';
-import { pendingConnection_states } from './src/components/PendingConnections/pendingConnectionSlice';
-import { socialMediaList } from './src/components/EditProfile/socialMediaList';
+import { connection_levels } from '@/utils/constants';
+import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
+import { socialMediaList } from '@/components/EditProfile/socialMediaList';
 
 declare global {
   type ValueOf<T> = T[keyof T];
@@ -159,7 +159,6 @@ declare global {
     name?: string;
     photo?: string;
     notificationToken?: string;
-    secretKey?: string;
     score?: number;
     state?: PendingConnectionState;
     verifications?: { name: string }[];
@@ -170,7 +169,6 @@ declare global {
     mutualConnections?: string[];
     existingConnection?: Connection;
     socialMedia?: string[];
-    notificationToken?: string;
     mutualGroups?: string[];
     createdAt?: number;
     profileTimestamp?: number;
@@ -198,8 +196,10 @@ declare global {
     };
   };
 
+  type SocialMediaId = keyof typeof socialMediaList;
+
   type SocialMedia = {
-    id: keyof typeof socialMediaList;
+    id: SocialMediaId;
     company: ValueOf<typeof socialMediaList>;
     order: number;
     profile: string;
@@ -262,6 +262,33 @@ declare global {
   type FakeUser = {
     id: string;
     secretKey: string; // Base64 encoded secretkey
+  };
+
+  type ModalStackParamList = {
+    FullScreenPhoto: {
+      photo?: Photo;
+      base64?: boolean;
+    };
+    ChangePassword: undefined;
+    SelectSocialMedia: {
+      order: number;
+      page: number;
+      prevId: SocialMediaId;
+    };
+    SetTrustlevel: {
+      connectionId: string;
+    };
+    ReportReason: {
+      connectionId: string;
+      successCallback?: () => void;
+    };
+    SortConnections: undefined;
+    ViewPasswordWalkthrough: undefined;
+    RecoveryCooldownInfo: {
+      connectionId: string;
+      cooldownPeriod: number;
+      successCallback?: () => void;
+    };
   };
 
   // Jest global functions

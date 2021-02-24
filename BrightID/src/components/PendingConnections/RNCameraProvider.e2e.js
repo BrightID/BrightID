@@ -7,8 +7,7 @@
  */
 import React from 'react';
 
-const timeout = (ms: number) =>
-  new Promise((resolve) => setTimeout(resolve, ms));
+const timeout = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 class RNCamera extends React.Component {
   static Constants = {

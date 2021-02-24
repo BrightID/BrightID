@@ -20,6 +20,7 @@ import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import { useFocusEffect } from '@react-navigation/native';
+import { StackScreenProps } from '@react-navigation/stack';
 import socialMediaList from './socialMediaList';
 import { saveSocialMedia, selectSocialMediaById } from './socialMediaSlice';
 
@@ -47,8 +48,9 @@ const textContentTypes = {
 };
 
 /** Main Component */
+type props = StackScreenProps<ModalStackParamList, 'SelectSocialMedia'>;
 
-const SelectMediaModal = ({ route, navigation }) => {
+const SelectMediaModal = ({ route, navigation }: props) => {
   const dispatch = useDispatch();
   const prevId = route.params?.prevId;
   const initialPage = route.params?.page;
@@ -183,6 +185,7 @@ const SelectMediaModal = ({ route, navigation }) => {
           <TouchableOpacity
             style={styles.cancelButton}
             onPress={() => {
+              navigation.navigate('Eula');
               // if initial page is 1, users only want to edit text
               page === 1 && initialPage !== 1
                 ? setPage(0)

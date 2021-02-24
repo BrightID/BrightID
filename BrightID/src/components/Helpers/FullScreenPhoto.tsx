@@ -3,14 +3,11 @@ import { Animated, StyleSheet, PanResponder } from 'react-native';
 import { photoDirectory } from '@/utils/filesystem';
 import { BlurView } from '@react-native-community/blur';
 import { BLACK } from '@/theme/colors';
+import { StackScreenProps } from '@react-navigation/stack';
 
-/**
- * Search Bar in the Groups Screen
- *
- * TODO: Create a shared search component to use in both Connections and Group view
- */
-const FullScreenPhoto = ({ route, navigation }) => {
-  // const dispatch = useDispatch();
+type props = StackScreenProps<ModalStackParamList, 'FullScreenPhoto'>;
+
+const FullScreenPhoto = ({ route, navigation }: props) => {
   const photo = route.params?.photo;
   const base64 = route.params?.base64;
   const uri = base64 ? photo : `file://${photoDirectory()}/${photo?.filename}`;

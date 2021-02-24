@@ -1,11 +1,8 @@
-// @flow
-
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { Trans, useTranslation } from 'react-i18next';
-
 import { WHITE, BLUE, BLACK, DARKER_GREY, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import Info from '@/components/Icons/Info';
@@ -13,16 +10,14 @@ import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { connectionByIdSelector } from '@/utils/connectionsSelector';
 import { RECOVERY_COOLDOWN_DURATION } from '@/utils/constants';
+import { StackScreenProps } from '@react-navigation/stack';
 
-type props = {
-  route: any,
-  navigation: any,
-};
+type props = StackScreenProps<ModalStackParamList, 'RecoveryCooldownInfo'>;
 
 const RecoveryCooldownInfoModal = ({ route, navigation }: props) => {
   const { successCallback, cooldownPeriod, connectionId } = route.params;
   const { t } = useTranslation();
-  const connection: connection = useSelector((state: State) =>
+  const connection = useSelector((state: State) =>
     connectionByIdSelector(state, connectionId),
   );
 

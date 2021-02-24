@@ -13,7 +13,7 @@ import SortConnectionsModal from '@/components/Helpers/SortConnectionsModal';
 import ViewPassword from '@/components/Onboarding/Walkthroughs/ViewPassword';
 import RecoveryCooldownInfoModal from '@/components/Recovery/RecoveryCooldownInfoModal';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<ModalStackParamList>();
 
 const modalOptions: StackNavigationOptions = {
   headerShown: false,
