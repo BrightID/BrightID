@@ -7,32 +7,35 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { BlurView } from '@react-native-community/blur';
-import { connection_levels } from '@/utils/constants';
+import {
+  connection_levels,
+  RECOVERY_COOLDOWN_DURATION,
+} from '@/utils/constants';
 import { BLACK, WHITE, GREEN } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from '@/store';
 import api from '@/api/brightId';
 import { setConnectionLevel } from '@/actions/connections';
+import { calculateCooldownPeriod } from '@/utils/recovery';
+import {
+  connectionByIdSelector,
+  recoveryConnectionsSelector,
+} from '@/utils/connectionsSelector';
+import { StackScreenProps } from '@react-navigation/stack';
 import TrustlevelSlider from './TrustlevelSlider';
-import { connectionByIdSelector } from '../../utils/connectionsSelector';
 
-type SetTrustlevelRoute = RouteProp<
-  { SetTrustlevel: { connectionId: string } },
-  'SetTrustlevel'
->;
+type props = StackScreenProps<ModalStackParamList, 'SetTrustlevel'>;
 
-const TrustlevelModal = () => {
-  const navigation = useNavigation();
-  const route = useRoute<SetTrustlevelRoute>();
+const TrustlevelModal = ({ route, navigation }: props) => {
   console.log('TrustLevelModalRoute', route);
   const { connectionId } = route.params;
   const myId = useSelector((state: State) => state.user.id);
   const connection: Connection = useSelector((state: State) =>
     connectionByIdSelector(state, connectionId),
   );
+  const recoveryConnections = useSelector(recoveryConnectionsSelector);
   const dispatch = useDispatch();
   const [level, setLevel] = useState(
     connection ? connection.level : connection_levels.JUST_MET,
@@ -40,13 +43,31 @@ const TrustlevelModal = () => {
   const { t } = useTranslation();
 
   const saveLevelHandler = async () => {
+    let cooldownPeriod = 0;
     if (connection.level !== level) {
       console.log(`Setting connection level '${level}' for ${connection.name}`);
+      if (level === connection_levels.RECOVERY) {
+        // Get cooldown period for this change
+        cooldownPeriod = calculateCooldownPeriod({
+          recoveryConnections,
+          connection,
+        });
+      } else if (connection.level === connection_levels.RECOVERY) {
+        // removing recovery connection. Cooldown period always applies
+        cooldownPeriod = RECOVERY_COOLDOWN_DURATION;
+      }
       await api.addConnection(myId, connection.id, level, Date.now());
       dispatch(setConnectionLevel(connection.id, level));
     }
     // close modal
     navigation.goBack();
+    if (cooldownPeriod > 0) {
+      // show info about cooldown period
+      navigation.navigate('RecoveryCooldownInfo', {
+        connectionId,
+        cooldownPeriod,
+      });
+    }
   };
 
   // go back silently if connection does not exist. Should never happen.

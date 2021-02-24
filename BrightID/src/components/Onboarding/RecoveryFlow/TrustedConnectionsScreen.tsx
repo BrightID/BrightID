@@ -21,6 +21,7 @@ import EmptyList from '@/components/Helpers/EmptyList';
 import { connection_levels } from '@/utils/constants';
 import api from '@/api/brightId';
 import { setConnectionLevel } from '@/actions/connections';
+import { calculateCooldownPeriod } from '@/utils/recovery';
 import TrustedConnectionCard from './TrustedConnectionCard';
 
 /**
@@ -42,9 +43,9 @@ const TrustedConnectionsScreen = () => {
   const { t } = useTranslation();
   const myId = useSelector((state: State) => state.user.id);
   const connections = useSelector(connectionsSelector);
-  const trustedConnections = useSelector(recoveryConnectionsSelector);
+  const recoveryConnections = useSelector(recoveryConnectionsSelector);
   const [selectedConnections, setSelectedConnections] = useState(
-    trustedConnections.map((item) => item.id),
+    recoveryConnections.map((item) => item.id),
   );
   const [updateInProgress, setUpdateInProgress] = useState(false);
 
@@ -85,49 +86,61 @@ const TrustedConnectionsScreen = () => {
             selectedConnections.includes(item.id) &&
             item.level !== connection_levels.RECOVERY,
         );
-        const connectionsToDowngrade = trustedConnections.filter(
+        const connectionsToDowngrade = recoveryConnections.filter(
           (item) => !selectedConnections.includes(item.id),
         );
 
-        // apply changes
-        const promises = [];
-        for (const item of connectionsToUpgrade) {
-          console.log(`Setting ${item.name} to RECOVERY`);
-          promises.push(
-            api.addConnection(
-              myId,
-              item.id,
-              connection_levels.RECOVERY,
-              Date.now(),
-            ),
-          );
-          dispatch(setConnectionLevel(item.id, connection_levels.RECOVERY));
-        }
-        for (const item of connectionsToDowngrade) {
-          console.log(`Setting ${item.name} to ALREADY_KNOWN`);
-          promises.push(
-            api.addConnection(
-              myId,
-              item.id,
-              connection_levels.ALREADY_KNOWN,
-              Date.now(),
-            ),
-          );
-          dispatch(
-            setConnectionLevel(item.id, connection_levels.ALREADY_KNOWN),
-          );
-        }
-        await Promise.all(promises);
+        const cooldownPeriod = calculateCooldownPeriod({ recoveryConnections });
 
-        Alert.alert(
-          t('common.alert.success'),
-          t(
-            'backup.alert.text.completed',
-            'Social recovery of your BrightID is now enabled',
-          ),
-        );
+        if (connectionsToUpgrade.length || connectionsToDowngrade.length) {
+          // apply changes
+          const promises = [];
+          for (const item of connectionsToUpgrade) {
+            console.log(`Setting ${item.name} to RECOVERY`);
+            promises.push(
+                api.addConnection(
+                    myId,
+                    item.id,
+                    connection_levels.RECOVERY,
+                    Date.now(),
+                ),
+            );
+            dispatch(setConnectionLevel(item.id, connection_levels.RECOVERY));
+          }
+          for (const item of connectionsToDowngrade) {
+            console.log(`Setting ${item.name} to ALREADY_KNOWN`);
+            promises.push(
+                api.addConnection(
+                    myId,
+                    item.id,
+                    connection_levels.ALREADY_KNOWN,
+                    Date.now(),
+                ),
+            );
+            dispatch(
+              setConnectionLevel(item.id, connection_levels.ALREADY_KNOWN),
+            );
+          }
+          await Promise.all(promises);
 
-        navigation.navigate('Home');
+          // show info about cooldown period
+          if (cooldownPeriod > 0) {
+            navigation.navigate('RecoveryCooldownInfo', {
+              successCallback: () => {
+                navigation.navigate('Home');
+              },
+            });
+          } else {
+            Alert.alert(
+              t('common.alert.success'),
+              t(
+                'backup.alert.text.completed',
+                'Social recovery of your BrightID is now enabled',
+              ),
+            );
+            navigation.navigate('Home');
+          }
+        }
       }
     } catch (err) {
       console.warn(err.message);

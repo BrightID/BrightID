@@ -8,12 +8,15 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { openDrawer } from '@/NavigationService';
 import { useTranslation } from 'react-i18next';
 import FullScreenHighlightBox from '@/components/Helpers/FullScreenHighlightBox';
+import { StackScreenProps } from '@react-navigation/stack';
 import Arrow from '../../Icons/Arrow';
 
 // border radius for edit profile box
 const BR = 20;
 
-const ViewPassword = ({ navigation }) => {
+type props = StackScreenProps<ModalStackParamList, 'ViewPasswordWalkthrough'>;
+
+const ViewPassword = ({ navigation }: props) => {
   useFocusEffect(
     useCallback(() => {
       openDrawer();
