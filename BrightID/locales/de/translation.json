@@ -5,27 +5,27 @@
       "title": "Werde gesponsert"
     },
     "joinConnectionParty": {
-      "description": "Nimm an einer BrightID Connection Party teil",
-      "title": "Connection Party"
+      "description": "Nimm an einer BrightID-Verbindungsparty teil",
+      "title": "Verbindungsparty"
     },
     "joinConnectionPartyWithFriend": {
-      "description": "Bring Familie und enge Freunde zu einer BrightID Connection Party",
-      "title": "Connection Party mit Familie oder Freunden"
+      "description": "Bring Familie und enge Freunde zu einer BrightID-Verbindungsparty",
+      "title": "Verbindungsparty mit Familie oder Freunden"
     },
     "linkApp": {
-      "description": "Verknüpfe Deine BrightID mit einer App",
-      "title": "Verknüpfe eine App"
+      "description": "Verknüpfe deine BrightID mit einer Anwendung",
+      "title": "Verknüpfe eine Anwendung"
     },
     "makeFirstConnection": {
       "description": "Verbinde dich mit einem anderen BrightID Nutzer",
       "title": "Erste Verbindung"
     },
     "makeThreeConnection": {
-      "description": "Verbinde dich mit 3 BrightID Nutzern",
+      "description": "Verbinde dich mit 3 BrightID-Nutzern",
       "title": "Drei Verbindungen"
     },
     "makeTwoConnection": {
-      "description": "Verbinde dich mit 2 BrightID Nutzern",
+      "description": "Verbinde dich mit 2 BrightID-Nutzern",
       "title": "Zwei Verbindungen"
     },
     "notification": {
@@ -36,10 +36,11 @@
       "title": "Fortschritt:"
     },
     "setupBackup": {
+      "description": "Lege ein Passwort fest, um die verschlüsselte Sicherung deiner Daten zu ermöglichen",
       "title": "Sicherungspasswort festlegen"
     },
     "setupTrustedConnections": {
-      "description": "Erstelle vertrauenswürdige Verbindungen und sichere deine BrightID",
+      "description": "Erstelle Wiederherstellungsverbindungen und sichere deine BrightID",
       "title": "Soziale Wiederherstellung einrichten"
     }
   },
@@ -79,27 +80,37 @@
     "alert": {
       "text": {
         "backupSuccess": "Sicherung erfolgreich erstellt!",
-        "needThreeTrusted": "Du brauchst mindestens drei vertrauenswürdige Verbindungen für die Sicherung."
+        "completed": "Die soziale Wiederherstellung deiner BrightID ist jetzt aktiviert",
+        "needThreeTrusted": "Du brauchst mindestens drei Wiederherstellungsverbindungen für die Sicherung."
       }
     },
     "button": {
       "next": "Weiter",
+      "save": "Wiederherstellungsverbindungen einstellen",
       "startBackup": "Sicherung starten"
     },
     "header": {
       "backup": "Sicherung",
-      "trustedConnections": "Vertrauenswürdige Verbindungen"
+      "trustedConnections": "Wiederherstellungsverbindungen"
     },
     "placeholder": {
       "confirmPassword": "Passwort bestätigen",
       "password": "Passwort"
     },
     "text": {
-      "chooseTrustedConnections": "Wähle mindestens drei vertrauenswürdige Verbindungen um deine BrightID zu sichern.",
+      "chooseTrustedConnections": "Wähle mindestens drei Wiederherstellungsverbindungen, um deine BrightID zu sichern.",
       "enterPassword": "Gib ein Passwort ein mit dem das Backup verschlüsselt wird:",
       "noConnections": "Keine Verbindungen",
       "progress": "Fortschritt {{completed}}/{{total}}",
       "uploadingData": "Lade verschlüsselte Daten auf den Sicherungsserver..."
+    }
+  },
+  "channel": {
+    "alert": {
+      "text": {
+        "localOutdated": "Client-Version veraltet – bitte aktualisier deinen Client und versuche es erneut",
+        "otherOutdated": "andere Client-Version veraltet – der Ersteller des QR-Codes muss den Client aktualisieren und erneut versuchen"
+      }
     }
   },
   "common": {
@@ -128,7 +139,7 @@
         "lostKeys": "Bitte erstelle eine neue BrightID oder versuche, deine vorherige BrightID wiederherzustellen",
         "passwordMatch": "Das Passwort und der Bestätigungspasswortfeld stimmen nicht überein.",
         "passwordShort": "Dein Passwort muss mindestens 8 Zeichen lang sein.",
-        "trustedSigned": "Eine deiner vertrauenswürdigen Verbindungen hat deine Anfrage signiert"
+        "trustedSigned": "Eine deiner Wiederherstellungsverbindungen hat deine Anfrage signiert"
       },
       "title": {
         "lostKeys": "Wir haben das BrightID-Schlüsselpaar vom Gerät verloren",
@@ -215,7 +226,7 @@
       "connections": "Verbindungen"
     },
     "label": {
-      "currentConnectionLevel": "Aktuelle Verbindungsstufe",
+      "currentConnectionLevel": "Verbindungsstufe",
       "newProfile": "Neues Profil",
       "oldProfile": "Altes Profil"
     },
@@ -403,13 +414,15 @@
   },
   "notificationBar": {
     "text": {
+      "backupPassword": "Lege ein Passwort fest, um die verschlüsselte Sicherung deiner Daten zu ermöglichen",
       "pendingConnections": "Du hast {{count}} Verbindungsanfrage",
       "pendingConnections_plural": "Du hast {{count}} Verbindungsanfragen",
-      "socialRecovery": "Bitte wähle deine vertrauenswürdigen Verbindungen aus, um die soziale Wiederherstellung deiner BrightID zu ermöglichen"
+      "socialRecovery": "Wähle Wiederherstellungsverbindungen, um die soziale Wiederherstellung deiner BrightID zu ermöglichen"
     },
     "title": {
-      "pendingConnection": "Verbindung bestätigen",
-      "socialRecovery": "Sicherung und soziale Wiederherstellung"
+      "backupPassword": "Sicherungspasswort festlegen",
+      "pendingConnection": "Verbindungen bestätigen",
+      "socialRecovery": "Soziale Wiederherstellung einrichten"
     }
   },
   "notifications": {
@@ -425,6 +438,10 @@
       }
     },
     "item": {
+      "msg": {
+        "backupBrightId": "Lege ein Passwort fest, um die verschlüsselte Sicherung deiner Daten zu ermöglichen",
+        "socialRecovery": "Wähle Wiederherstellungsverbindungen, um die soziale Wiederherstellung deiner BrightID zu ermöglichen"
+      },
       "text": {
         "backupBrightId": "Wähle vertrauenswürdige Verbindungen aus",
         "pendingConnections": "Du hast {{count}} Verbindungsanfrage",
@@ -432,7 +449,8 @@
         "pendingGroupInvite": "{{name}} hat dich zur Gruppe eingeladen"
       },
       "title": {
-        "backupBrightId": "BrightID sichern"
+        "backupBrightId": "Sicherungspasswort festlegen",
+        "socialRecovery": "Soziale Wiederherstellung einrichten"
       }
     },
     "tab": {
@@ -448,14 +466,18 @@
   },
   "onboarding": {
     "button": {
-      "getStarted": "Los Gehts"
+      "create": "Meine BrightID erstellen",
+      "getStarted": "Los Gehts",
+      "recover": "BrightID wiederherstellen"
     },
     "label": {
       "maintainPrivacy": "Schutz der Privatsphäre"
     },
     "text": {
+      "congratulations": "Herzliche Glückwünsche!\nDeine BrightID ist erstellt worden.\nEs ist Zeit, Verbindungen herzustellen.",
       "intro": "<text>BrightID verwendet die Personen,</text><text>die du kennst, um ein Konto pro Person</text><text>für wichtige Anwendungen wie</text><text>Abstimmungen und universelles Grundeinkommen durchzusetzen.</text>",
-      "privacy": "<text>Zeige dass du ein einzigartiger Mensch bist, </text><text>ohne Preisgabe persönlicher Daten.</text>"
+      "privacy": "<text>Zeige dass du ein einzigartiger Mensch bist, </text><text>ohne Preisgabe persönlicher Daten.</text>",
+      "register": "Registriere dich, um deine eigene\ndigitale Identität zu erstellen"
     }
   },
   "pendingConnection": {
@@ -494,6 +516,7 @@
       "rating": "Diese Info hilft uns BrightID sicherer zu machen"
     },
     "title": {
+      "confirmationTotal": "{{confirmed}} / {{total}} bestätigt",
       "connectionRequest": "Verbindungsanfrage"
     }
   },
@@ -522,17 +545,22 @@
       "currentPassword": "Derzeitiges Passwort",
       "name": "Name",
       "newPassword": "Neues Passwort",
-      "newPasswordAgain": "Neues Passwort nochmal",
+      "newPasswordAgain": "Passwort wiederholen",
+      "password": "Passwort",
+      "passwordAgain": "Passwort wiederholen",
       "socialMediaLink": "Social Media Verknüpfung"
     },
     "placeholder": {
       "name": "Namen eingeben",
       "newPassword": "Neues Passwort",
-      "newPasswordAgain": "Wieder neues Passwort"
+      "newPasswordAgain": "Passwort wiederholen",
+      "password": "Passwort"
     },
     "text": {
       "changePassword": "Passwort ändern",
       "changeProfilePicture": "Profilbild ändern",
+      "createPassword": "Passwort erstellen",
+      "setPassword": "Passwort festlegen",
       "viewPassword": "Passwort anzeigen"
     }
   },
@@ -582,8 +610,8 @@
       "title": "Wiederherstellungscode"
     },
     "text": {
-      "additionalInfo": "Deine vertrauenswürdigen Verbindungen müssen diesen Code scannen um deine BrightID wiederherzustellen",
-      "askTrustedConnections": "Lass deine vertrauenswürdigen Verbindungen diesen Code scannen",
+      "additionalInfo": "Deine Wiederherstellungsverbindungen müssen diesen Code scannen um deine BrightID wiederherzustellen",
+      "askTrustedConnections": "Lass deine Wiederherstellungsverbindungen diesen Code scannen",
       "signatures": "{{count}} / 2 Unterschriften",
       "signatures_plural": ""
     }
@@ -591,7 +619,7 @@
   "restore": {
     "alert": {
       "text": {
-        "notTrusted": "Einer deiner Freunde ist nicht in deiner Liste der vertrauenswürdigen Verbindungen enthalten",
+        "notTrusted": "Einer deiner Freunde ist nicht in deiner Liste der Wiederherstellungsverbindungen enthalten",
         "requestRecovering": "Deine Anfrage zur Wiederherstellung dieses Kontos wurde erfolgreich übermittelt!",
         "restoreConfirm": "Ist {{name}} der Account den du hilfst wiederherzustellen?",
         "restoreSuccess": "Dein Konto wurde erfolgreich wiederhergestellt!"
@@ -605,7 +633,8 @@
     },
     "emptyList": {
       "text": {
-        "downloadingData": "Lade Wiederherstellungsdaten herunter"
+        "downloadingData": "Lade Wiederherstellungsdaten herunter",
+        "nobodyHasChosen": "Verbindung kann nicht wiederhergestellt werden …\nDu wurdest nicht als Widerherstellungsverbindung festgelegt"
       }
     },
     "header": {
@@ -616,6 +645,7 @@
       "downloadingData": "Herunterladen von Daten vom Sicherungsserver …",
       "enterPassword": "Bitte gib dein Passwort ein",
       "noConnections": "Keine Verbindungen …",
+      "skip": "Überspringen",
       "skipLink": "überspringen",
       "skipLoadingBackup": "Deine BrightID kann auch ohne Passwort wiederhergestellt werden, aber die Namen und Fotos deiner Verbindungen und Gruppen werden fehlen."
     },
@@ -632,18 +662,34 @@
     "button": {
       "addPhoto": "Foto erstellen",
       "createAccount": "Meine BrightID erstellen",
-      "recoverAccount": "BrightID wiederherstellen"
+      "recoverAccount": "BrightID wiederherstellen",
+      "skip": "Überspringen und später machen",
+      "submit": "Absenden"
     },
     "header": {
-      "title": "Anmelden"
+      "title": "Registrieren"
     },
     "placeholder": {
-      "name": "Name"
+      "confirmPassword": "Passwort bestätigen",
+      "name": "Deine Name",
+      "password": "Passwort"
     },
     "text": {
+      "createPassword": "Erstelle dein BrightID-Passwort",
       "creatingAccount": "BrightID wird erstellt…",
       "infoNotShared": "Dein Name und Foto wird auf keinem Server gespeichert und nicht an andere Apps weitergegeben",
+      "nameNotShared": "Dein Name wird niemals mit Anwendungen geteilt oder\nin unserer Blockchain gespeichert.",
+      "passwordInfo": "Dieses Passwort verschlüsselt die Namen und Fotos deiner Verbindungen, falls du sie wiederherstellen musst. Es erlaubt niemandem, deine BrightID zu übernehmen.",
+      "photoNotShared": "Dein Foto wird niemals mit Anwendungen geteilt oder\nin unserer Blockchain gespeichert.",
+      "pleaseAddPhoto": "Bitte füge ein Foto hinzu",
       "whatsYouName": "Wie nennen Dich Deine Freunde?"
+    }
+  },
+  "walkthroughs": {
+    "text": {
+      "gotIt": "Verstanden!",
+      "setPassword": "Du kannst jederzeit dein\nBrightID-Passwort hier festlegen",
+      "viewPassword": "Du kannst immer dein\nBrightID-Passwort hier sehen"
     }
   }
 }
