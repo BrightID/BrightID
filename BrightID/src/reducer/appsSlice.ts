@@ -37,7 +37,7 @@ const appsSlice = createSlice({
         action,
       );
     },
-    updateLinkedContext(state, action: PayloadAction<ContextInfo>) {
+    updateLinkedContext(state, action: PayloadAction<Partial<ContextInfo>>) {
       const update: Update<ContextInfo> = {
         id: action.payload.contextId,
         changes: action.payload,

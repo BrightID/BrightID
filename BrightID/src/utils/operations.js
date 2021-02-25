@@ -19,7 +19,6 @@ const handleOpUpdate = (store, op, state, result) => {
         updateLinkedContext({
           context: op.context,
           contextId: op.contextId,
-          dateAdded: op.dateAdded,
           state,
         }),
       );
