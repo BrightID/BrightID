@@ -183,65 +183,58 @@ export const unsubscribeFromConnectionRequests = (channelId: string) => (
   }
 };
 
-export const fetchChannelProfiles = createAsyncThunk<
-  void,
-  string,
-  {
-    dispatch: Dispatch;
-    state: State;
+export const fetchChannelProfiles = (channelId: string) => async (
+  dispatch: Dispatch,
+  getState: GetState,
+) => {
+  const channel = selectChannelById(getState(), channelId);
+  let profileIds = await channel.api.list(channelId);
+
+  // channel.api.list() will include the channelInfo.json file.
+  // Remove it from list as I don't want to download and interpret it as a profile.
+  const channelInfoIndex = profileIds.indexOf(CHANNEL_INFO_NAME);
+  if (channelInfoIndex > -1) {
+    profileIds.splice(channelInfoIndex, 1);
   }
->(
-  'channels/fetchChannelProfiles',
-  async (channelId, { getState, dispatch }) => {
-    const channel = selectChannelById(getState(), channelId);
-    let profileIds = await channel.api.list(channelId);
 
-    // channel.api.list() will include the channelInfo.json file.
-    // Remove it from list as I don't want to download and interpret it as a profile.
-    const channelInfoIndex = profileIds.indexOf(CHANNEL_INFO_NAME);
-    if (channelInfoIndex > -1) {
-      profileIds.splice(channelInfoIndex, 1);
-    }
-
-    // Only get up to CHANNEL_CONNECTION_LIMIT profiles
-    profileIds = profileIds.slice(0, CHANNEL_CONNECTION_LIMIT);
-    const knownProfileIds = selectAllPendingConnectionIds(getState());
-    if (__DEV__ && profileIds.length > knownProfileIds.length + 1) {
-      console.log(`Got ${profileIds.length} profileIds:`, profileIds);
-    }
-    for (const profileId of profileIds) {
-      if (
-        profileId !== channel.myProfileId &&
-        !knownProfileIds.includes(profileId)
-      ) {
-        await dispatch(
-          newPendingConnection({
-            channelId,
-            profileId,
-          }),
-        );
-      }
-    }
-    // can we stop polling?
-    let expectedProfiles;
-    switch (channel.type) {
-      case channel_types.SINGLE:
-        expectedProfiles = 2; // my profile and peer profile
-
-        break;
-      case channel_types.GROUP:
-      default:
-        expectedProfiles = CHANNEL_CONNECTION_LIMIT;
-        break;
-    }
-    if (profileIds.length >= expectedProfiles) {
-      console.log(
-        `Got expected number of profiles (${expectedProfiles}) for channel ${channel.id}`,
+  // Only get up to CHANNEL_CONNECTION_LIMIT profiles
+  profileIds = profileIds.slice(0, CHANNEL_CONNECTION_LIMIT);
+  const knownProfileIds = selectAllPendingConnectionIds(getState());
+  if (__DEV__ && profileIds.length > knownProfileIds.length + 1) {
+    console.log(`Got ${profileIds.length} profileIds:`, profileIds);
+  }
+  for (const profileId of profileIds) {
+    if (
+      profileId !== channel.myProfileId &&
+      !knownProfileIds.includes(profileId)
+    ) {
+      await dispatch(
+        newPendingConnection({
+          channelId,
+          profileId,
+        }),
       );
-      dispatch(unsubscribeFromConnectionRequests(channel.id));
     }
-  },
-);
+  }
+  // can we stop polling?
+  let expectedProfiles: number;
+  switch (channel.type) {
+    case channel_types.SINGLE:
+      expectedProfiles = 2; // my profile and peer profile
+
+      break;
+    case channel_types.GROUP:
+    default:
+      expectedProfiles = CHANNEL_CONNECTION_LIMIT;
+      break;
+  }
+  if (profileIds.length >= expectedProfiles) {
+    console.log(
+      `Got expected number of profiles (${expectedProfiles}) for channel ${channel.id}`,
+    );
+    dispatch(unsubscribeFromConnectionRequests(channel.id));
+  }
+};
 
 export const encryptAndUploadProfileToChannel = (channelId: string) => async (
   dispatch: Dispatch,
