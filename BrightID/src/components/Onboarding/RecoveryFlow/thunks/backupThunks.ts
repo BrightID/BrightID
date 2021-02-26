@@ -104,11 +104,20 @@ export const fetchBackupData = async (
   try {
     const hashedId = hashId(id, pass);
     const res = await backupApi.getRecovery(hashedId, key);
-    const decrypted = CryptoJS.AES.decrypt(res.data, pass).toString(
-      CryptoJS.enc.Utf8,
-    );
-    return decrypted;
+    return CryptoJS.AES.decrypt(res.data, pass).toString(CryptoJS.enc.Utf8);
   } catch (err) {
-    throw new Error('bad password');
+    console.log(`Error while fetching backup data '${key}': ${err.message}`);
+    if (err.message === 'CLIENT_ERROR') {
+      // Any 4xx http code will end up as CLIENT_ERROR
+      // We can not tell if
+      //  - the data has vanished by itself on the backup server or
+      //  - the user provided a wrong password (this will lead to trying non-existing file, as
+      //    the password hash is part of the filename).
+      // Assume user entered wrong password, hoping the backup server will never lose data.
+      throw new Error('bad password');
+    } else {
+      // TODO Better error handling
+      throw new Error('unknown error');
+    }
   }
 };
