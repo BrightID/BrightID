@@ -11,6 +11,7 @@ import {
   setKeypair,
   updateConnections,
 } from '@/actions';
+import { OPERATION_APPLIED_BEFORE } from '@/api/brightidError';
 import { fetchBackupData } from './backupThunks';
 import {
   init,
@@ -60,6 +61,15 @@ export const setSigningKey = () => async (
       sig2: sigs[1].sig,
     });
   } catch (err) {
+    if (err.errorNum === OPERATION_APPLIED_BEFORE) {
+      console.log(
+        `SetSigningKey operation already applied. Ignoring this error.`,
+      );
+      return;
+    }
+    console.log(
+      `Error in setSigningKey: ${err.errorNum} - ${err.code} - ${err.message}`,
+    );
     dispatch(resetRecoverySigs());
     throw new Error('bad sigs');
   }
