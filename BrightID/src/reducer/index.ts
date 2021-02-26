@@ -1,6 +1,6 @@
 import apps from './appsSlice';
 import channels from '../components/PendingConnections/channelSlice';
-import connections from './connections';
+import connections from './connectionsSlice';
 import groups from './groupsSlice';
 import keypair from './keypairSlice';
 import notifications from './notifications';

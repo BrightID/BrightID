@@ -11,7 +11,7 @@ type AppsState = {
  * Connections
  */
 type ConnectionsState = {
-  connections: Connection[];
+  connections: EntityState<Connection>;
   connectionsSort: string;
   searchParam: string;
   searchOpen: boolean;
