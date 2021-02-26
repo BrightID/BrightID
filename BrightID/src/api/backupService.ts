@@ -2,22 +2,13 @@ import { create, ApisauceInstance, ApiResponse } from 'apisauce';
 import { b64ToUrlSafeB64 } from '@/utils/encoding';
 
 const recoveryUrl = 'https://recovery.brightid.org';
-let seedUrl = 'http://node.brightid.org';
-if (__DEV__) {
-  seedUrl = 'http://test.brightid.org';
-}
 
 class BackupService {
   recoveryApi: ApisauceInstance;
 
-  profileApi: ApisauceInstance;
-
   constructor() {
     this.recoveryApi = create({
       baseURL: recoveryUrl,
-    });
-    this.profileApi = create({
-      baseURL: seedUrl,
     });
   }
 
@@ -28,6 +19,9 @@ class BackupService {
     if (response.data && response.data.errorMessage) {
       throw new Error(response.data.errorMessage);
     }
+    console.log(
+      `backupApi response error: ${response.status} - ${response.problem}`,
+    );
     throw new Error(response.problem);
   }
 
