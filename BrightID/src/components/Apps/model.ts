@@ -4,12 +4,6 @@ import { addLinkedContext } from '@/actions';
 import store from '@/store';
 import i18next from 'i18next';
 
-export type Params = {
-  baseUrl: string;
-  context: string;
-  contextId: string;
-};
-
 export const handleAppContext = async (params: Params) => {
   // if 'params' is defined, the user came through a deep link
   params.baseUrl = decodeURIComponent(params.baseUrl);

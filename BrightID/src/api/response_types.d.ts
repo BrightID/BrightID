@@ -53,32 +53,11 @@ type UserConnectionRes = {
 };
 
 type UserInfoRes = {
-  data: {
-    score: number;
-    createdAt: number;
-    groups: GroupInfo[];
-    invites: InviteInfo[];
-    connections: ConnectionInfo[];
-    verifications: string[];
-    isSponsored: boolean;
-    trusted: string[];
-    flaggers: {
-      [id: string]: string;
-    };
-  };
+  data: UserInfo;
 };
 
 type UserProfileRes = {
-  data: {
-    connectionsNum: number;
-    groupsNum: number;
-    mutualConnections: string[];
-    mutualGroups: string[];
-    connectedAt: number;
-    createdAt: number;
-    reports: Array<{ id: string; reportReason: string }>;
-    verifications: Array<{ name: string }>;
-  };
+  data: UserProfile;
 };
 
 /**
@@ -138,4 +117,29 @@ type ConnectionInfo = {
   };
   createdAt: number;
   score?: number;
+};
+
+type UserInfo = {
+  createdAt: number;
+  groups: GroupInfo[];
+  invites: InviteInfo[];
+  connections: ConnectionInfo[];
+  verifications: string[];
+  isSponsored: boolean;
+  trusted: string[];
+  flaggers: {
+    [id: string]: string;
+  };
+  score?: number;
+};
+
+type UserProfile = {
+  connectionsNum: number;
+  groupsNum: number;
+  mutualConnections: string[];
+  mutualGroups: string[];
+  connectedAt: number;
+  createdAt: number;
+  reports: Array<{ id: string; reportReason: string }>;
+  verifications: Array<{ name: string }>;
 };

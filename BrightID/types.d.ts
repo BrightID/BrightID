@@ -1,6 +1,7 @@
 // @flow
 
-import { EntityState as ES } from '@reduxjs/toolkit';
+import { EntityState as _EntityState } from '@reduxjs/toolkit';
+import { RouteProp as _RouteProp } from '@react-navigation/native';
 import {
   channel_states,
   channel_types,
@@ -12,8 +13,9 @@ import { pendingConnection_states } from '@/components/PendingConnections/pendin
 import { socialMediaList } from '@/components/EditProfile/socialMediaList';
 
 declare global {
-  type EntityState<T> = ES<T>;
+  type EntityState<T> = _EntityState<T>;
   type ValueOf<T> = T[keyof T];
+  type RouteProp<ParamList, RouteName> = _RouteProp<ParamList, RouteName>;
 
   type getState = () => State;
   type GetState = getState;
@@ -123,17 +125,6 @@ declare global {
   type Notification = BackupNotification &
     invite &
     PendingConnectionNotification;
-
-  type OperationsState = {
-    operations: operation[];
-  };
-
-  type operation = {
-    name: string;
-    timestamp: number;
-    v: string;
-    hash: string;
-  };
 
   type PendingConnectionState = keyof typeof pendingConnection_states;
 

@@ -70,6 +70,8 @@ type Keypair = {
  * Operations
  */
 
+type OperationsState = EntityState<NodeOps>;
+
 /**
  * UserSlice
  */

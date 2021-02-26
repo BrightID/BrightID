@@ -20,13 +20,10 @@ import {
   useFocusEffect,
   useNavigation,
   useRoute,
-  RouteProp,
 } from '@react-navigation/native';
 import { fontSize } from '@/theme/fonts';
 import AppCard from './AppCard';
-import { handleAppContext, Params } from './model';
-
-type AppsRoute = RouteProp<{ Apps: Params }, 'Apps'>;
+import { handleAppContext } from './model';
 
 export const AppsScreen = () => {
   const dispatch = useDispatch();

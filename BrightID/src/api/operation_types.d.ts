@@ -2,6 +2,18 @@
  * Operation Types
  */
 
+type NodeOps =
+  | AddAdminOp
+  | AddGroupOp
+  | AddMembershipOp
+  | ConnectOp
+  | DismissOp
+  | InviteOp
+  | LinkContextIdOp
+  | RemoveGroupOp
+  | RemoveMembershipOp
+  | SetSigningKeyOp;
+
 type AddAdminOp = {
   name: 'Add Admin';
   id: string;

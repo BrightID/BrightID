@@ -4,7 +4,7 @@ import connections from './connections';
 import groups from './groupsSlice';
 import keypair from './keypairSlice';
 import notifications from './notifications';
-import operations from './operations';
+import operations from './operationsSlice';
 import pendingConnections from '../components/PendingConnections/pendingConnectionSlice';
 import user from './userSlice';
 import tasks from '../components/Tasks/TasksSlice';

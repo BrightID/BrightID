@@ -11,6 +11,7 @@ import {
   setIsSponsored,
   updateNotifications,
   setActiveNotification,
+  selectOperationsTotal,
 } from './index';
 
 const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
@@ -18,9 +19,11 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
     InteractionManager.runAfterInteractions(async () => {
       const {
         user: { id },
-        operations: { operations },
         groups: { invites: oldInvites },
       } = getState();
+
+      const opTotal = selectOperationsTotal(getState());
+
       console.log('refreshing user info', id);
       if (!id) {
         throw new Error('id missing');
@@ -36,7 +39,7 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
           invites,
         } = await api.getUserInfo(id);
 
-        if (operations.length === 0) {
+        if (opTotal === 0) {
           // don't update data when there are pending operations.
           dispatch(setGroups(groups));
           dispatch(updateConnections(connections));

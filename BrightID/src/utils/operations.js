@@ -5,6 +5,7 @@ import {
   removeOperation,
   resetOperations,
   updateLinkedContext,
+  selectAllOperations,
 } from '@/actions';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import i18next from 'i18next';
@@ -46,9 +47,7 @@ const handleOpUpdate = (store, op, state, result) => {
 };
 
 export const pollOperations = async () => {
-  const {
-    operations: { operations },
-  } = store.getState();
+  const operations = selectAllOperations(store.getState());
   let shouldUpdateLocalState = false;
   try {
     for (const op of operations) {

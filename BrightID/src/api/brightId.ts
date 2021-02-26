@@ -61,7 +61,7 @@ class NodeApi {
     }
   }
 
-  static setOperation(op) {
+  static setOperation(op: NodeOps) {
     store.dispatch(addOperation(op));
   }
 
@@ -73,7 +73,7 @@ class NodeApi {
     reportReason?: string,
     fakeUser?: FakeUser,
   ) {
-    let secretKey;
+    let secretKey: Uint8Array;
     if (fakeUser) {
       secretKey = b64ToUint8Array(fakeUser.secretKey);
     } else {

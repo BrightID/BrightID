@@ -42,18 +42,10 @@ export {
   removeActiveNotification,
 } from './notifications';
 
-export {
-  ADD_OPERATION,
-  REMOVE_OPERATION,
-  RESET_OPERATIONS,
-  addOperation,
-  removeOperation,
-  resetOperations,
-} from './operations';
-
 export { RESET_STORE, resetStore } from './resetStore';
 
 export * from '../reducer/appsSlice';
 export * from '../reducer/groupsSlice';
 export * from '../reducer/keypairSlice';
+export * from '../reducer/operationsSlice';
 export * from '../reducer/userSlice';
