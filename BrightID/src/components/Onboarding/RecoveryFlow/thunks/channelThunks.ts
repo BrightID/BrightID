@@ -8,7 +8,7 @@ import {
   downloadNamePhoto,
 } from './channelDownloadThunks';
 import { setupRecovery } from './recoveryThunks';
-import { setChannel } from '../recoveryDataSlice';
+import { resetChannelExpiration, setChannel } from '../recoveryDataSlice';
 
 // CONSTANTS
 
@@ -23,23 +23,14 @@ export const createChannel = () => async (
   try {
     const { recoveryData } = getState();
 
-    const data = {
-      signingKey: recoveryData.publicKey,
-      timestamp: recoveryData.timestamp,
-    };
-
     const url = new URL(`${api.baseUrl}/profile`);
-
+    // const url = new URL(`http://192.168.178.145:3000`);
     const channelApi = new ChannelAPI(url.href);
     const channelId = hash(recoveryData.aesKey);
 
     dispatch(setChannel({ channelId, url }));
 
-    await channelApi.upload({
-      channelId,
-      data,
-      dataId: 'data',
-    });
+    await uploadRecoveryData(recoveryData, channelApi);
 
     console.log(`creating channel for recovery data: ${channelId}`);
   } catch (e) {
@@ -48,6 +39,24 @@ export const createChannel = () => async (
       throw e;
     }
   }
+};
+
+const uploadRecoveryData = async (
+  recoveryData: RecoveryData,
+  channelApi: ChannelAPI,
+) => {
+  const channelId = hash(recoveryData.aesKey);
+  const dataObj = {
+    signingKey: recoveryData.publicKey,
+    timestamp: recoveryData.timestamp,
+  };
+  const data = JSON.stringify(dataObj);
+  console.log(`Uploading data: ${data}`);
+  await channelApi.upload({
+    channelId,
+    data,
+    dataId: 'data',
+  });
 };
 
 let channelIntervalId = 0;
@@ -94,15 +103,25 @@ export const checkChannel = () => async (
       channel: { channelId, url, expires },
     },
   } = getState();
+  const { recoveryData } = getState();
+  const channelApi = new ChannelAPI(url.href);
 
+  // keep channel alive by re-uploading my data
+  const remainingTTL = expires - Date.now();
+  console.log(`Recovery channel ttl is ${remainingTTL}ms`);
+  if (remainingTTL < 30000) {
+    await uploadRecoveryData(recoveryData, channelApi);
+    dispatch(resetChannelExpiration());
+  }
+  /*
   if (expires && Date.now() - expires > 0) {
     // create new channel if date is expired
     console.log(`channel expired, creating new channel`);
     await dispatch(createChannel());
     return;
   }
+   */
 
-  const channelApi = new ChannelAPI(url.href);
   const dataIds = await channelApi.list(channelId);
 
   if (recoveryId) {

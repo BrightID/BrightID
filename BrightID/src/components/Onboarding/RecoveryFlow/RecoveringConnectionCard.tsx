@@ -65,6 +65,7 @@ const RecoveringConnectionCard = (props) => {
       setUploadingData(true);
 
       const url = new URL(`${api.baseUrl}/profile`);
+      // const url = new URL(`http://192.168.178.145:3000`);
       const channelApi = new ChannelAPI(url.href);
 
       // it's important to upload mutal connections first so that we can guarantee the other user downloads them when they recieve the sig
