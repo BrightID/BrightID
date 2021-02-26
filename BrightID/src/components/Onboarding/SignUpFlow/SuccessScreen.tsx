@@ -15,7 +15,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
+import { backupAppData } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import { setBackupCompleted } from '@/reducer/userSlice';
 import { saveId } from './thunks';
 import Congratulations from '../../Icons/Congratulations';
@@ -70,9 +70,9 @@ export const SuccessScreen = () => {
       if (!password) {
         setEndTime(Date.now() + TIMEOUT);
       } else {
-        // backup user and then wait 1.5 seconds
-        console.log(`Starting initial user backup`);
-        dispatch(backupUser())
+        // backup and then wait 1.5 seconds
+        console.log(`Starting initial backup`);
+        dispatch(backupAppData())
           .then(() => {
             dispatch(setBackupCompleted(true));
             setEndTime(Date.now() + TIMEOUT);
