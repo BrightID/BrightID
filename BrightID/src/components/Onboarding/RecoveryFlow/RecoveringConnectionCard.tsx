@@ -17,7 +17,7 @@ import { fontSize } from '@/theme/fonts';
 import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
 import ChannelAPI from '@/api/channelService';
 import api from '@/api/brightId';
-import VerifiedSticker from '@/components/Icons/VerifiedSticker';
+import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { uploadSig, uploadMutualInfo } from './thunks/channelUploadThunks';
 
 const RecoveringConnectionCard = (props) => {
@@ -139,7 +139,7 @@ const RecoveringConnectionCard = (props) => {
             </Text>
             {brightidVerified && (
               <View style={styles.verificationSticker}>
-                <VerifiedSticker width={16} height={16} />
+                <VerifiedBadge width={16} height={16} />
               </View>
             )}
           </View>

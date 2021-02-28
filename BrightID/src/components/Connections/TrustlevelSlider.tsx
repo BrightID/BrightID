@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-
 import i18next from 'i18next';
 import Slider from '@react-native-community/slider';
 import { connection_levels } from '@/utils/constants';
@@ -12,7 +11,7 @@ import {
   connectionLevelStrings,
 } from '@/utils/connectionLevelStrings';
 
-const trustLevelDetails = {
+const levelsWithoutRecovery = {
   [connection_levels.SUSPICIOUS]: {
     description: i18next.t('connectionDetails.text.levelSuspicious'),
   },
@@ -22,6 +21,10 @@ const trustLevelDetails = {
   [connection_levels.ALREADY_KNOWN]: {
     description: i18next.t('connectionDetails.text.levelAlreadyKnown'),
   },
+};
+
+const levelsWithRecovery = {
+  ...levelsWithoutRecovery,
   [connection_levels.RECOVERY]: {
     description: i18next.t('connectionDetails.text.levelRecovery'),
   },
@@ -29,15 +32,19 @@ const trustLevelDetails = {
 
 type TrustlevelSliderProps = {
   currentLevel: ConnectionLevel;
+  incomingLevel: ConnectionLevel;
   changeLevelHandler: (newLevel: ConnectionLevel) => any;
   verbose: boolean;
 };
 
 const TrustlevelSlider = ({
   currentLevel,
+  incomingLevel,
   changeLevelHandler,
   verbose,
 }: TrustlevelSliderProps) => {
+  const includeRecovery = [connection_levels.ALREADY_KNOWN, connection_levels.RECOVERY].includes(incomingLevel);
+  const trustLevelDetails = includeRecovery ? levelsWithRecovery : levelsWithoutRecovery;
   const minValue = 0;
   const maxValue = Object.keys(trustLevelDetails).length - 1;
 

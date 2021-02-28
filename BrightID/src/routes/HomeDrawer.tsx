@@ -12,7 +12,9 @@ import {
   setEditProfileMenuLayout,
   setEditProfileTextLayout,
 } from '@/reducer/walkthroughSlice';
-import HomeScreen, { verifiedSelector } from '@/components/HomeScreen';
+import HomeScreen, {
+  brightIdVerifiedSelector
+} from '@/components/HomeScreen';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -94,7 +96,7 @@ const CustomDrawerContent = (props) => {
     (state: State) => state.user.photo.filename,
   );
   const name = useSelector((state: State) => state.user.name);
-  const verified = useSelector(verifiedSelector);
+  const brightIdVerified = useSelector(brightIdVerifiedSelector);
   // keep profile photo up to date
   const [profilePhoto, setProfilePhoto] = useState('');
   const { t } = useTranslation();
@@ -119,8 +121,8 @@ const CustomDrawerContent = (props) => {
           accessibilityLabel="user photo"
         />
         <Text style={styles.userName}>{name}</Text>
-        {verified && (
-          <View style={styles.verificationSticker}>
+        {brightIdVerified && (
+          <View style={styles.verificationBadge}>
             <VerifiedBadge width={16} height={16} />
           </View>
         )}
@@ -384,7 +386,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize[16],
     marginLeft: DEVICE_LARGE ? 20 : 18,
   },
-  verificationSticker: {
+  verificationBadge: {
     marginLeft: 5,
     marginTop: 1.5,
   },

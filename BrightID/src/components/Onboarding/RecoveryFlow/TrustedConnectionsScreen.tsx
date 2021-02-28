@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import {
   connectionsSelector,
   recoveryConnectionsSelector,
@@ -48,6 +48,23 @@ const TrustedConnectionsScreen = () => {
     recoveryConnections.map((item) => item.id),
   );
   const [updateInProgress, setUpdateInProgress] = useState(false);
+  const [knownConnections, setKnownConnections] = useState([]);
+  useFocusEffect(() => {
+    loadKnownConnections();
+  });
+
+  const loadKnownConnections = () => {
+    api.getConnections(myId, 'inbound').then((conns) => {
+      knownLevels = [connection_levels.ALREADY_KNOWN, connection_levels.RECOVERY];
+      let knownConns = conns.filter(
+        (conn) => knownLevels.includes(conn.level)
+      ).map((conn) => conn.id);
+      knownConns = new Set(knownConns);
+      setKnownConnections(connections.filter(
+        (conn) => knownConns.has(conn.id)
+      ));
+    });
+  };
 
   const toggleSelection = (id) => {
     const index = selectedConnections.indexOf(id);
@@ -163,7 +180,7 @@ const TrustedConnectionsScreen = () => {
             <FlatList
               style={styles.connectionsContainer}
               contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-              data={connections}
+              data={knownConnections}
               keyExtractor={({ id }, index) => id + index}
               renderItem={renderConnection}
               showsHorizontalScrollIndicator={false}

@@ -133,15 +133,14 @@ const AppCard = (props: AppInfo) => {
   };
 
   const VerificationLabel = () => {
-    if (!verifications.includes(verification)) {
-      return (
-        <Text style={styles.unverifiedMessage}>
-          {t('apps.tag.notVerifiedForApp')}
-        </Text>
-      );
-    } else {
-      return <View />;
-    }
+    const verified = verifications.filter(
+      (v) => v.app && id == v.name
+    ).length > 0;
+    return !verified ? (
+      <Text style={styles.unverifiedMessage}>
+        {t('apps.tag.notVerifiedForApp')}
+      </Text>
+    ) : <View />;
   };
 
   const StatusLabel = () => {

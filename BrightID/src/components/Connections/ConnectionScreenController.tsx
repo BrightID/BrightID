@@ -31,6 +31,7 @@ function ConnectionScreenController() {
   const myConnections = useSelector(
     (state: State) => state.connections.connections,
   );
+  const myId = useSelector((state: State) => state.user.id);
   const myGroups = useSelector((state: State) => state.groups.groups);
   const [mutualGroups, setMutualGroups] = useState<Array<Group>>([]);
   const [mutualConnections, setMutualConnections] = useState<Array<Connection>>(
@@ -39,6 +40,7 @@ function ConnectionScreenController() {
   const [verifications, setVerifications] = useState<Array<any>>([]);
   const [connectedAt, setConnectedAt] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [incomingLevel, setIncomingLevel] = useState(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -58,6 +60,11 @@ function ConnectionScreenController() {
             return profile.mutualGroups.includes(g.id);
           }),
         );
+        const incomingConns = await api.getConnections(myId, 'inbound');
+        let level = incomingConns.find(
+          (conn) => conn.id == connectionId
+        )?.level;
+        setIncomingLevel(level);
         setLoading(false);
       };
       if (connectionId !== undefined) {
@@ -90,15 +97,18 @@ function ConnectionScreenController() {
   const brightIdVerified = verifications
     .map((v) => v.name)
     .includes('BrightID');
-
+  const verifiedAppsCount = verifications
+    .filter((v) => v.app).length;
   return (
     <ConnectionScreen
       connection={connection}
       brightIdVerified={brightIdVerified}
+      verifiedAppsCount={verifiedAppsCount}
       loading={loading}
       connectedAt={connectedAt}
       mutualConnections={mutualConnections}
       mutualGroups={mutualGroups}
+      incomingLevel={incomingLevel}
     />
   );
 }

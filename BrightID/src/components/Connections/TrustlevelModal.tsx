@@ -30,7 +30,7 @@ type props = StackScreenProps<ModalStackParamList, 'SetTrustlevel'>;
 
 const TrustlevelModal = ({ route, navigation }: props) => {
   console.log('TrustLevelModalRoute', route);
-  const { connectionId } = route.params;
+  const { connectionId, incomingLevel } = route.params;
   const myId = useSelector((state: State) => state.user.id);
   const connection: Connection = useSelector((state: State) =>
     connectionByIdSelector(state, connectionId),
@@ -99,6 +99,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
           </Text>
         </View>
         <TrustlevelSlider
+          incomingLevel={incomingLevel}
           currentLevel={level}
           changeLevelHandler={changeLevelHandler}
           verbose={true}

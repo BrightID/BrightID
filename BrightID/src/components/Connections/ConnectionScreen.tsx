@@ -11,8 +11,6 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
-import VerifiedSticker from '@/components/Icons/VerifiedSticker';
-import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
 import GroupAvatar from '@/components/Icons/GroupAvatar';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
@@ -39,9 +37,11 @@ import TrustLevelView from './TrustLevelView';
 type Props = {
   connection: Connection;
   brightIdVerified: boolean;
+  verifiedAppsCount: number;
   connectedAt: number;
   mutualGroups: Array<Group>;
   mutualConnections: Array<Connection>;
+  incomingLevel: ConnectionLevel,
   loading: boolean;
 };
 
@@ -56,9 +56,11 @@ function ConnectionScreen(props: Props) {
   const {
     connection,
     brightIdVerified,
+    verifiedAppsCount,
     connectedAt,
     mutualGroups,
     mutualConnections,
+    incomingLevel,
     loading,
   } = props;
   const navigation = useNavigation();
@@ -106,23 +108,17 @@ function ConnectionScreen(props: Props) {
     t,
   ]);
 
-  const renderBadge = () => {
+  const renderSticker = () => {
     if (loading) {
       return <ActivityIndicator size="small" color={DARKER_GREY} animating />;
     } else {
-      if (brightIdVerified) {
-        return (
-          <View style={styles.badge}>
-            <VerifiedSticker width={100} height={20} />
-          </View>
+      const plural = verifiedAppsCount > 1 ? 's' : '';
+      return verifiedAppsCount > 0 ? 
+        (
+          <Text>Verified for {verifiedAppsCount} app{plural}</Text>
+        ) : (
+          <Text>Unverified</Text>
         );
-      } else {
-        return (
-          <View style={styles.badge}>
-            <UnverifiedSticker width={100} height={19} />
-          </View>
-        );
-      }
     }
   };
 
@@ -168,18 +164,22 @@ function ConnectionScreen(props: Props) {
               {connection.name}
             </Text>
             {brightIdVerified && (
-              <View style={styles.verificationSticker}>
+              <View style={styles.badge}>
                 <VerifiedBadge width={16} height={16} />
               </View>
             )}
           </View>
           <View style={styles.profileDivider} />
-          <View>{renderBadge()}</View>
+          <View style={styles.verificationSticker}>{renderSticker()}</View>
         </View>
       </View>
 
       <View style={styles.trustLevelContainer}>
-        <TrustLevelView level={connection.level} connectionId={connection.id} />
+        <TrustLevelView
+          level={connection.level}
+          incomingLevel={incomingLevel}
+          connectionId={connection.id}
+        />
       </View>
     </>
   );
@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize[17],
     color: BLACK,
   },
-  verificationSticker: {
+  badge: {
     marginLeft: DEVICE_LARGE ? 7 : 5,
   },
   profileDivider: {
@@ -374,7 +374,7 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
     width: '98%',
   },
-  badge: {
+  verificationSticker: {
     marginTop: 6,
   },
   connectionInfo: {
