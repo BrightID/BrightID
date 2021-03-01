@@ -23,6 +23,7 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
       } = getState();
 
       const opTotal = selectOperationsTotal(getState());
+      console.log('opTotal', opTotal);
 
       console.log('refreshing user info', id);
       if (!id) {

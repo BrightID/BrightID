@@ -2,6 +2,7 @@ import CryptoJS from 'crypto-js';
 import { retrieveImage } from '@/utils/filesystem';
 import backupApi from '@/api/backupService';
 import { hash } from '@/utils/encoding';
+import { selectAllConnections } from '@/reducer/connectionsSlice';
 
 const hashId = (id: string, password: string) => {
   const h = hash(id + password);
@@ -38,10 +39,10 @@ export const backupPhoto = (id: string, filename: string) => async (
 const backupPhotos = () => async (dispatch: dispatch, getState: getState) => {
   try {
     const {
-      connections: { connections },
       groups: { groups },
       user: { id, photo },
     } = getState();
+    const connections = selectAllConnections(getState());
     for (const item of connections) {
       if (item.photo?.filename) {
         await dispatch(backupPhoto(item.id, item.photo.filename));
@@ -65,15 +66,17 @@ export const backupUser = () => async (
   try {
     const {
       user: { id, score, name, photo },
-      connections: { connections },
       groups: { groups },
     } = getState();
+    const connections = selectAllConnections(getState());
+
     const userData = {
       id,
       name,
       score,
       photo,
     };
+
     const dataStr = JSON.stringify({
       userData,
       connections,

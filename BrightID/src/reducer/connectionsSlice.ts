@@ -25,8 +25,8 @@ const initialState: ConnectionsState = {
   ],
 };
 
-const appsSlice = createSlice({
-  name: 'apps',
+const connectionsSlice = createSlice({
+  name: 'connections',
   initialState,
   reducers: {
     setConnections(state, action: PayloadAction<Connection[]>) {
@@ -41,10 +41,13 @@ const appsSlice = createSlice({
     setConnectionsSort(state, action: PayloadAction<string>) {
       state.connectionsSort = action.payload;
     },
-    updateConnections(state, action: PayloadAction<Connection[]>) {
+    updateConnections(state, action: PayloadAction<ConnectionInfo[]>) {
       state.connections = connectionsAdapter.upsertMany(
         state.connections,
-        action,
+        action.payload.map((conn) => {
+          conn.status = 'verified';
+          return conn;
+        }),
       );
     },
     deleteConnection(state, action: PayloadAction<string>) {
@@ -135,34 +138,33 @@ export const {
   flagAndHideConnection,
   staleConnection,
   setFilters,
-} = appsSlice.actions;
+  setConnectionLevel,
+} = connectionsSlice.actions;
 
 export const {
   selectById: selectConnectionById,
   selectAll: selectAllConnections,
+  selectTotal: connectionTotal,
 } = connectionsAdapter.getSelectors(
   (state: State) => state.connections.connections,
 );
 
-// export const linkedContextTotal = createSelector(
-//   selectAllLinkedContexts,
-//   (contexts) =>
-//     contexts.reduce(
-//       (acc, link) => (link.state === 'applied' ? acc + 1 : acc),
-//       0,
-//     ),
-// );
+export const verifiedConnectionsSelector = createSelector(
+  selectAllConnections,
+  (connections) => {
+    console.log('connections', connections);
+    return connections.filter((conn) => conn?.status === 'verified');
+  },
+);
 
-// export const selectLinkedContext = createSelector(
-//   selectAllLinkedContexts,
-//   (_: State, context: string) => context,
-//   (contexts, context) => contexts.find((link) => link.context === context),
-// );
-
-// export const selectPendingLinkedContext = createSelector(
-//   selectAllLinkedContexts,
-//   (contexts) => contexts.find((link) => link.state === 'pending'),
-// );
+export const recoveryConnectionsSelector = createSelector(
+  [verifiedConnectionsSelector],
+  (connections) => {
+    return connections.filter(
+      (conn) => conn?.level === connection_levels.RECOVERY,
+    );
+  },
+);
 
 // Export reducer
-export default appsSlice.reducer;
+export default connectionsSlice.reducer;

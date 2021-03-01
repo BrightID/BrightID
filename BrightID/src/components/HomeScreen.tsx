@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import { setActiveNotification } from '@/actions';
 import { linkedContextTotal } from '@/reducer/appsSlice';
+import { verifiedConnectionsSelector } from '@/reducer/connectionsSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { WHITE, ORANGE, BLACK, BLUE } from '@/theme/colors';
 import fetchUserInfo from '@/actions/fetchUserInfo';
@@ -28,7 +29,6 @@ import Camera from '@/components/Icons/Camera';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { verifiedConnectionsSelector } from '@/utils/connectionsSelector';
 import { setHeaderHeight } from '@/reducer/walkthroughSlice';
 
 import { version as app_version } from '../../package.json';
@@ -58,6 +58,7 @@ export const HomeScreen = (props) => {
   );
   const groupsCount = useSelector((state: State) => state.groups.groups.length);
   const connectionsCount = useSelector(verifiedConnectionsSelector).length;
+
   const linkedContextsCount = useSelector(linkedContextTotal);
   const verified = useSelector(verifiedSelector);
 

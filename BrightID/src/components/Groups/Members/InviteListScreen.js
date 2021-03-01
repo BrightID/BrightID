@@ -14,6 +14,7 @@ import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import i18next from 'i18next';
+import { selectAllConnections } from '@/actions';
 import MemberCard from './MemberCard';
 
 const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
@@ -121,6 +122,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ connections }) => ({ ...connections }))(
-  withTranslation()(InviteListScreen),
-);
+export default connect((state) => ({
+  connections: selectAllConnections(state),
+}))(withTranslation()(InviteListScreen));

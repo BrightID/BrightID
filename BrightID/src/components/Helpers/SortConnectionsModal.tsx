@@ -45,14 +45,14 @@ type props = StackScreenProps<ModalStackParamList, 'SortConnections'>;
 const SortConnectionsModal = ({ navigation }: props) => {
   const dispatch = useDispatch();
 
-  const filters: string[] = useSelector(
-    (state: State) => state.connections.filters,
-  );
-  const connectionsSort: string =
+  const filters = useSelector((state: State) => state.connections.filters);
+  const connectionsSort =
     useSelector((state: State) => state.connections.connectionsSort) ||
     types.byDateAddedDescending;
 
-  const [newFilters, setNewFilters] = useState(filters || []);
+  const [newFilters, setNewFilters] = useState<ConnectionLevel[]>(
+    filters || [],
+  );
   const [newConnectionsSort, setNewConnectionsSort] = useState(connectionsSort);
 
   const onSubmit = () => {
@@ -61,7 +61,7 @@ const SortConnectionsModal = ({ navigation }: props) => {
     navigation.goBack();
   };
 
-  const renderFilterRadioBtn = (trustLevel: string) => {
+  const renderFilterRadioBtn = (trustLevel: ConnectionLevel) => {
     // const active = btnReason === reason;
     const active = newFilters.includes(trustLevel);
     const updateFilters = () => {

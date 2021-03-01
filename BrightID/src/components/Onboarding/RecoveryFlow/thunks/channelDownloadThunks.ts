@@ -2,7 +2,7 @@ import ChannelAPI from '@/api/channelService';
 import { saveImage } from '@/utils/filesystem';
 import { decryptData } from '@/utils/cryptoHelper';
 import { hash } from '@/utils/encoding';
-import { addConnection, createGroup } from '@/actions';
+import { addConnection, createGroup, selectAllConnections } from '@/actions';
 import { setSig, updateNamePhoto } from '../recoveryDataSlice';
 
 export const loadRecoveryData = async (
@@ -44,7 +44,7 @@ const downloadConnection = async ({
 
     console.log(`Downloading profile data of ${connectionData?.id} ...`);
 
-    let filename;
+    let filename: string;
     if (connectionData.photo) {
       filename = await saveImage({
         imageName: connectionData.id,
@@ -70,8 +70,9 @@ export const downloadConnections = ({ channelApi, dataIds }) => async (
         aesKey,
         channel: { channelId },
       },
-      connections: { connections },
     } = getState();
+
+    const connections = selectAllConnections(getState());
 
     const existingConnIds = connections.map((c) => c.id);
 

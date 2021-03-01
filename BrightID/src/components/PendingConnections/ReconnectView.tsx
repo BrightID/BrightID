@@ -14,7 +14,7 @@ import {
 } from '@/utils/constants';
 import { calculateCooldownPeriod } from '@/utils/recovery';
 import { useSelector } from 'react-redux';
-import { recoveryConnectionsSelector } from '@/utils/connectionsSelector';
+import { recoveryConnectionsSelector } from '@/reducer/connectionsSlice';
 import { ConnectionStats } from './ConnectionStats';
 import { ProfileCard } from './ProfileCard';
 
@@ -86,7 +86,7 @@ export const ReconnectView = ({
         // adding recovery connection. check if cooldown period applies
         cooldownPeriod = calculateCooldownPeriod({
           recoveryConnections,
-          existingConnection,
+          connection: existingConnection,
         });
       } else if (existingConnection.level === connection_levels.RECOVERY) {
         // removing recovery connection. Cooldown period always applies.

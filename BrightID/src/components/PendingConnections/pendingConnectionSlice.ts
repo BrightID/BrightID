@@ -9,6 +9,7 @@ import {
   removeChannel,
   selectChannelById,
 } from '@/components/PendingConnections/channelSlice';
+import { selectConnectionById } from '@/reducer/connectionsSlice';
 import { decryptData } from '@/utils/cryptoHelper';
 import api from '@/api/brightId';
 import { Alert } from 'react-native';
@@ -118,9 +119,11 @@ export const newPendingConnection = createAsyncThunk<
       }
     }
     // Is this a known connection?
-    connectionInfo.existingConnection = getState().connections.connections.find(
-      (conn) => conn.id === decryptedObj.id,
+    connectionInfo.existingConnection = selectConnectionById(
+      getState(),
+      decryptedObj.id,
     );
+
     if (connectionInfo.existingConnection) {
       console.log(`${decryptedObj.id} exists.`);
     }

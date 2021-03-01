@@ -15,21 +15,24 @@ type ConnectionsState = {
   connectionsSort: string;
   searchParam: string;
   searchOpen: boolean;
-  filters: string[];
+  filters: ConnectionLevel[];
 };
 
-type Connection = Partial<ConnectionInfo> & {
+type LocalConnectionData = {
+  id: string;
   name: string;
-  photo: { filename: string };
   connectionDate: number;
+  photo: { filename: string };
   status: string;
-  socialMedia?: string[];
-  notificationToken?: string;
-  publicKey?: string;
-  secretKey?: string;
+  notificationToken: string;
+  level: ConnectionLevel;
+  socialMedia: string[];
   hiddenFlag?: string;
-  aesKey?: string;
+  secretKey?: any;
 };
+
+type Connection = Partial<ConnectionInfo> & Partial<LocalConnectionData>;
+
 /**
  * Groups
  */

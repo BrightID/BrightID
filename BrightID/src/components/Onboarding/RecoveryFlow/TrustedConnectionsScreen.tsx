@@ -10,17 +10,14 @@ import {
 import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import {
-  connectionsSelector,
-  recoveryConnectionsSelector,
-} from '@/utils/connectionsSelector';
+import { connectionsSelector } from '@/utils/connectionsSelector';
 import { ORANGE, BLUE, WHITE, LIGHT_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { connection_levels } from '@/utils/constants';
 import api from '@/api/brightId';
-import { setConnectionLevel } from '@/actions/connections';
+import { setConnectionLevel, recoveryConnectionsSelector } from '@/actions';
 import { calculateCooldownPeriod } from '@/utils/recovery';
 import TrustedConnectionCard from './TrustedConnectionCard';
 
@@ -98,27 +95,35 @@ const TrustedConnectionsScreen = () => {
           for (const item of connectionsToUpgrade) {
             console.log(`Setting ${item.name} to RECOVERY`);
             promises.push(
-                api.addConnection(
-                    myId,
-                    item.id,
-                    connection_levels.RECOVERY,
-                    Date.now(),
-                ),
+              api.addConnection(
+                myId,
+                item.id,
+                connection_levels.RECOVERY,
+                Date.now(),
+              ),
             );
-            dispatch(setConnectionLevel(item.id, connection_levels.RECOVERY));
+            dispatch(
+              setConnectionLevel({
+                id: item.id,
+                level: connection_levels.RECOVERY,
+              }),
+            );
           }
           for (const item of connectionsToDowngrade) {
             console.log(`Setting ${item.name} to ALREADY_KNOWN`);
             promises.push(
-                api.addConnection(
-                    myId,
-                    item.id,
-                    connection_levels.ALREADY_KNOWN,
-                    Date.now(),
-                ),
+              api.addConnection(
+                myId,
+                item.id,
+                connection_levels.ALREADY_KNOWN,
+                Date.now(),
+              ),
             );
             dispatch(
-              setConnectionLevel(item.id, connection_levels.ALREADY_KNOWN),
+              setConnectionLevel({
+                id: item.id,
+                level: connection_levels.ALREADY_KNOWN,
+              }),
             );
           }
           await Promise.all(promises);

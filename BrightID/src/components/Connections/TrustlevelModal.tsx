@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { BlurView } from '@react-native-community/blur';
+import { StackScreenProps } from '@react-navigation/stack';
 import {
   connection_levels,
   RECOVERY_COOLDOWN_DURATION,
@@ -17,13 +18,12 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from '@/store';
 import api from '@/api/brightId';
-import { setConnectionLevel } from '@/actions/connections';
+import { setConnectionLevel } from '@/actions';
 import { calculateCooldownPeriod } from '@/utils/recovery';
 import {
-  connectionByIdSelector,
+  selectConnectionById,
   recoveryConnectionsSelector,
-} from '@/utils/connectionsSelector';
-import { StackScreenProps } from '@react-navigation/stack';
+} from '@/reducer/connectionsSlice';
 import TrustlevelSlider from './TrustlevelSlider';
 
 type props = StackScreenProps<ModalStackParamList, 'SetTrustlevel'>;
@@ -33,7 +33,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
   const { connectionId } = route.params;
   const myId = useSelector((state: State) => state.user.id);
   const connection: Connection = useSelector((state: State) =>
-    connectionByIdSelector(state, connectionId),
+    selectConnectionById(state, connectionId),
   );
   const recoveryConnections = useSelector(recoveryConnectionsSelector);
   const dispatch = useDispatch();
@@ -57,7 +57,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
         cooldownPeriod = RECOVERY_COOLDOWN_DURATION;
       }
       await api.addConnection(myId, connection.id, level, Date.now());
-      dispatch(setConnectionLevel(connection.id, level));
+      dispatch(setConnectionLevel({ id: connection.id, level }));
     }
     // close modal
     navigation.goBack();

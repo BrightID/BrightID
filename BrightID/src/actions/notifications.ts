@@ -7,7 +7,7 @@ import i18next from 'i18next';
 import {
   recoveryConnectionsSelector,
   verifiedConnectionsSelector,
-} from '@/utils/connectionsSelector';
+} from '@/reducer/connectionsSlice';
 
 export const SET_BACKUP_PENDING = 'SET_BACKUP_PENDING';
 export const SET_DEVICE_TOKEN = 'SET_DEVICE_TOKEN';

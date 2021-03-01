@@ -117,6 +117,7 @@ type ConnectionInfo = {
   };
   createdAt: number;
   score?: number;
+  status?: string;
 };
 
 type UserInfo = {

@@ -10,7 +10,7 @@ import { report_reasons } from '@/utils/constants';
 import { ORANGE, WHITE, BLUE, BLACK, DARKER_GREY, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { StackScreenProps } from '@react-navigation/stack';
-import { connectionByIdSelector } from '@/utils/connectionsSelector';
+import { selectConnectionById } from '@/reducer/connectionsSlice';
 import { reportConnection } from './models/reportConnection';
 
 const reasonStrings = {
@@ -31,7 +31,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
   const { connectionId, successCallback } = route.params;
   const { t } = useTranslation();
   const connection: Connection = useSelector((state: State) =>
-    connectionByIdSelector(state, connectionId),
+    selectConnectionById(state, connectionId),
   );
   const dispatch = useDispatch();
   const [reason, setReason] = useState(undefined);
