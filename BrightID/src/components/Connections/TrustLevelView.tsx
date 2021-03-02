@@ -13,17 +13,15 @@ import { fontSize } from '@/theme/fonts';
 
 type Props = {
   level: ConnectionLevel;
-  incomingLevel: ConnectionLevel;
   connectionId: string;
 };
 
-function TrustLevelView({ level, connectionId, incomingLevel }: Props) {
+function TrustLevelView({ level, connectionId }: Props) {
   const navigation = useNavigation();
   const { t } = useTranslation();
   const setLevel = () => {
     navigation.navigate('SetTrustlevel', {
       connectionId,
-      incomingLevel,
     });
   };
   return (

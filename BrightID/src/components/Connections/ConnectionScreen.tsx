@@ -41,7 +41,6 @@ type Props = {
   connectedAt: number;
   mutualGroups: Array<Group>;
   mutualConnections: Array<Connection>;
-  incomingLevel: ConnectionLevel,
   loading: boolean;
 };
 
@@ -60,7 +59,6 @@ function ConnectionScreen(props: Props) {
     connectedAt,
     mutualGroups,
     mutualConnections,
-    incomingLevel,
     loading,
   } = props;
   const navigation = useNavigation();
@@ -177,7 +175,6 @@ function ConnectionScreen(props: Props) {
       <View style={styles.trustLevelContainer}>
         <TrustLevelView
           level={connection.level}
-          incomingLevel={incomingLevel}
           connectionId={connection.id}
         />
       </View>

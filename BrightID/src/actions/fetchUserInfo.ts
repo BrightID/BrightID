@@ -1,4 +1,5 @@
 import { InteractionManager } from 'react-native';
+import _ from 'lodash';
 import api from '@/api/brightId';
 import { updateInvites } from '@/utils/invites';
 import { GROUPS_TYPE } from '@/utils/constants';
@@ -34,6 +35,11 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
           invites,
         } = await api.getUserInfo(id);
         const verifications = await api.getUserVerifications(id);
+        let incomingConns = await api.getConnections(id, 'inbound');
+        incomingConns = _.keyBy(incomingConns, 'id');
+        for (let conn of connections) {
+          conn['incomingLevel'] = incomingConns[conn.id]?.level;
+        }
         if (operations.length === 0) {
           // don't update data when there are pending operations.
           dispatch(setGroups(groups));

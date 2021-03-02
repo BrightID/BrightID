@@ -40,7 +40,6 @@ function ConnectionScreenController() {
   const [verifications, setVerifications] = useState<Array<any>>([]);
   const [connectedAt, setConnectedAt] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [incomingLevel, setIncomingLevel] = useState(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -60,11 +59,6 @@ function ConnectionScreenController() {
             return profile.mutualGroups.includes(g.id);
           }),
         );
-        const incomingConns = await api.getConnections(myId, 'inbound');
-        let level = incomingConns.find(
-          (conn) => conn.id == connectionId
-        )?.level;
-        setIncomingLevel(level);
         setLoading(false);
       };
       if (connectionId !== undefined) {
@@ -108,7 +102,6 @@ function ConnectionScreenController() {
       connectedAt={connectedAt}
       mutualConnections={mutualConnections}
       mutualGroups={mutualGroups}
-      incomingLevel={incomingLevel}
     />
   );
 }

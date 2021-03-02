@@ -48,23 +48,10 @@ const TrustedConnectionsScreen = () => {
     recoveryConnections.map((item) => item.id),
   );
   const [updateInProgress, setUpdateInProgress] = useState(false);
-  const [knownConnections, setKnownConnections] = useState([]);
-  useFocusEffect(() => {
-    loadKnownConnections();
-  });
-
-  const loadKnownConnections = () => {
-    api.getConnections(myId, 'inbound').then((conns) => {
-      knownLevels = [connection_levels.ALREADY_KNOWN, connection_levels.RECOVERY];
-      let knownConns = conns.filter(
-        (conn) => knownLevels.includes(conn.level)
-      ).map((conn) => conn.id);
-      knownConns = new Set(knownConns);
-      setKnownConnections(connections.filter(
-        (conn) => knownConns.has(conn.id)
-      ));
-    });
-  };
+  const knownLevels = [connection_levels.ALREADY_KNOWN, connection_levels.RECOVERY];
+  knownConnections = connections.filter(
+    (conn) => knownLevels.includes(conn.incomingLevel)
+  );
 
   const toggleSelection = (id) => {
     const index = selectedConnections.indexOf(id);
