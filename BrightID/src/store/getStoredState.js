@@ -12,8 +12,9 @@ const getRootState = async (config) => {
       deserialize: undefined,
     });
 
+    console.log('restoredState', restoredState);
     let migratedState = await rootMigrate(restoredState, config.version);
-
+    console.log('migratedState', migratedState);
     let nextState = migratedState && migratedState[config.key];
 
     if (!nextState) {

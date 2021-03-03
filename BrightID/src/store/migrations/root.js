@@ -18,6 +18,7 @@ const findId = (id) => (item) => item[id];
 const rootMigrations = {
   10: async (state) => {
     // migrate linked contexts to entity adapter
+    console.log('MIGRATING STATE', state);
     if (state.apps.linkedContexts) {
       let contextId = findId('contextId');
       let filteredContexts = state.apps.linkedContexts.filter(contextId);
