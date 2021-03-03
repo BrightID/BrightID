@@ -8,7 +8,7 @@ const operationsAdapter = createEntityAdapter<NodeOps>({
 });
 
 const operationsSlice = createSlice({
-  name: 'apps',
+  name: 'operations',
   initialState: operationsAdapter.getInitialState(),
   reducers: {
     addOperation: operationsAdapter.addOne,

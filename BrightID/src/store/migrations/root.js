@@ -43,7 +43,11 @@ const rootMigrations = {
     }
 
     // migrate operations to entity adapter
-    state.operations = { ids: [], entities: {} };
+    if (state.operations) {
+      state.operations = { ids: [], entities: {} };
+    }
+
+    return state;
   },
   9: async (state) => {
     // extract secretKey if not present
