@@ -14,6 +14,9 @@ import { socialMediaList } from '@/components/EditProfile/socialMediaList';
 declare global {
   type ValueOf<T> = T[keyof T];
 
+  type IntervalId = ReturnType<typeof setInterval>;
+  type TimeoutId = ReturnType<typeof setTimeout>;
+
   type getState = () => State;
   type GetState = getState;
 
@@ -82,8 +85,8 @@ declare global {
     aesKey: string;
     timestamp: number;
     ttl: number;
-    pollTimerId?: ReturnType<typeof setInterval>;
-    timeoutId?: ReturnType<typeof setTimeout>;
+    pollTimerId?: IntervalId;
+    timeoutId?: TimeoutId;
     type: ChannelType;
     state: ChannelState;
     myProfileTimestamp?: number;
@@ -152,30 +155,30 @@ declare global {
 
   type PendingConnectionState = keyof typeof pendingConnection_states;
 
-  type PendingConnection = {
-    id?: string;
-    channelId?: string;
-    brightId?: string;
-    name?: string;
-    photo?: string;
-    notificationToken?: string;
-    score?: number;
-    state?: PendingConnectionState;
-    verifications?: { name: string }[];
-    connectionsNum?: number;
-    reports?: string[];
-    connectedAt?: number;
-    groupsNum?: number;
-    mutualConnections?: string[];
-    existingConnection?: Connection;
-    socialMedia?: string[];
-    mutualGroups?: string[];
-    createdAt?: number;
-    profileTimestamp?: number;
-    initiator?: string;
+  type PendingConnection = Partial<{
+    id: string;
+    channelId: string;
+    brightId: string;
+    name: string;
+    photo: string;
+    notificationToken: string;
+    score: number;
+    state: PendingConnectionState;
+    verifications: { name: string }[];
+    connectionsNum: number;
+    reports: string[];
+    connectedAt: number;
+    groupsNum: number;
+    mutualConnections: string[];
+    existingConnection: Connection;
+    socialMedia: string[];
+    mutualGroups: string[];
+    createdAt: number;
+    profileTimestamp: number;
+    initiator: string;
     myself?: boolean;
-    secretKey?: Uint8Array;
-  };
+    secretKey?: any;
+  }>;
 
   type PendingConnectionsState = EntityState<PendingConnection>;
 

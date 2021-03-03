@@ -4,15 +4,18 @@ import {
   RECOVERY_COOLDOWN_EXEMPTION,
 } from '@/utils/constants';
 
-type props = {
-  recoveryConnections: connection[],
-  connection?: connection,
-};
-
+/**
+ *
+ * @param {{
+ * recoveryConnections: Connection[],
+ * connection?: Connection,
+ * }}
+ * @returns {number}
+ */
 export const calculateCooldownPeriod = ({
   recoveryConnections,
   connection,
-}: props) => {
+}) => {
   // no cooldown if setting the first recovery connection
   if (recoveryConnections.length === 0) {
     console.log(`No cooldown as this is the first recovery connection`);

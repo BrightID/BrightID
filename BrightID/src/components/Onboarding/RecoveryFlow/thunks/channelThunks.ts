@@ -50,7 +50,7 @@ export const createChannel = () => async (
   }
 };
 
-let channelIntervalId = 0;
+let channelIntervalId: IntervalId;
 let checkInProgress = false;
 
 export const pollChannel = () => async (dispatch: dispatch) => {

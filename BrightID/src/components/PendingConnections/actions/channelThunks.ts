@@ -176,7 +176,7 @@ export const unsubscribeFromConnectionRequests = (channelId: string) => (
       updateChannel({
         id: channelId,
         changes: {
-          pollTimerId: 0,
+          pollTimerId: null,
         },
       }),
     );

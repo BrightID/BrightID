@@ -6,6 +6,8 @@ import {
   Text,
   TouchableOpacity,
   KeyboardAvoidingView,
+  KeyboardTypeOptions,
+  TextInputProps,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { BlurView } from '@react-native-community/blur';
@@ -19,7 +21,7 @@ import { DARK_ORANGE, DARKER_GREY, WHITE, BLACK, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import socialMediaList from './socialMediaList';
 import { saveSocialMedia, selectSocialMediaById } from './socialMediaSlice';
@@ -31,16 +33,19 @@ const toPickerItem = ([value, { name }]) => (
   <Picker.Item key={value} value={value} label={name} />
 );
 
-const socialMediaKeyValues = Object.entries(socialMediaList);
+const socialMediaKeyValues = Object.entries(socialMediaList) as [
+  SocialMediaId,
+  ValueOf<typeof socialMediaList>,
+][];
 
-const keyboardTypes = {
+const keyboardTypes: { [id: string]: KeyboardTypeOptions } = {
   username: 'default',
   'telephone #': 'phone-pad',
   email: 'email-address',
   url: DEVICE_IOS ? 'url' : 'default',
 };
 
-const textContentTypes = {
+const textContentTypes: { [id: string]: TextInputProps['textContentType'] } = {
   username: 'username',
   'telephone #': 'telephoneNumber',
   email: 'emailAddress',
@@ -50,14 +55,15 @@ const textContentTypes = {
 /** Main Component */
 type props = StackScreenProps<ModalStackParamList, 'SelectSocialMedia'>;
 
-const SelectMediaModal = ({ route, navigation }: props) => {
+const SelectMediaModal = ({ route }: props) => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const prevId = route.params?.prevId;
   const initialPage = route.params?.page;
 
   const existingSocialMediaIds = useSelector(
     (state: State) => state.socialMedia.ids,
-  );
+  ) as SocialMediaId[];
 
   // only display social media not already selected by user when adding a new one to the list
   // or allow the user to switch order if editing the social media from the list
@@ -75,14 +81,15 @@ const SelectMediaModal = ({ route, navigation }: props) => {
     socialMediaToDisplay,
   ]);
 
-  const defaultItem = socialMediaToDisplay[0] && socialMediaToDisplay[0][0];
+  const defaultItem = (socialMediaToDisplay[0] &&
+    socialMediaToDisplay[0][0]) as SocialMediaId;
 
   // if the user is clicking on an existing social media, select that first
   // or display the first item in the picker if the user is adding a new social media
   const firstItem = prevId ?? defaultItem;
 
   // selectedId tracks state of the picker, will always be an id from socialMediaList.js
-  const [selectedId, setSelectedId] = useState(firstItem);
+  const [selectedId, setSelectedId] = useState<SocialMediaId>(firstItem);
 
   const prevProfile = useSelector((state: State) =>
     selectSocialMediaById(state, selectedId),
@@ -134,7 +141,7 @@ const SelectMediaModal = ({ route, navigation }: props) => {
             selectedValue={selectedId}
             style={styles.pickerStyle}
             itemStyle={styles.pickerItemStyle}
-            onValueChange={(itemValue: string) => {
+            onValueChange={(itemValue: SocialMediaId) => {
               setSelectedId(itemValue);
             }}
           >

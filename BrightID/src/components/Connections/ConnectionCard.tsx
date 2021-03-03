@@ -32,7 +32,7 @@ import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
 type Props = Connection & { index: number };
 
 const ConnectionCard = (props: Props) => {
-  const stale_check_timer = useRef(0);
+  const stale_check_timer = useRef<TimeoutId>(null);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const {
@@ -86,7 +86,7 @@ const ConnectionCard = (props: Props) => {
         // clear timer if it is set
         if (stale_check_timer.current) {
           clearTimeout(stale_check_timer.current);
-          stale_check_timer.current = 0;
+          stale_check_timer.current = null;
         }
       };
     }, [connectionDate, dispatch, id, name, status]),
@@ -98,7 +98,7 @@ const ConnectionCard = (props: Props) => {
         `Connection ${name} changed 'initiated' -> 'verified'. Stopping stale_check_timer ID ${stale_check_timer.current}.`,
       );
       clearTimeout(stale_check_timer.current);
-      stale_check_timer.current = 0;
+      stale_check_timer.current = null;
     }
   }, [name, status]);
 
