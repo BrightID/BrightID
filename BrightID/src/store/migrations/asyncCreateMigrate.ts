@@ -1,6 +1,6 @@
 import { PersistedState, MigrationManifest } from 'redux-persist';
 
-const VERSION = 9;
+const VERSION = 10;
 
 export function asyncCreateMigrate(
   migrations: MigrationManifest,

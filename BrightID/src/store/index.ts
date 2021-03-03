@@ -13,7 +13,7 @@ import getStoredState from './getStoredState';
 
 // update this in async migrate if changed to prevent require cycle
 
-const version = 9;
+const version = 10;
 
 const fsPersistConfig = {
   storage: FsStorage,

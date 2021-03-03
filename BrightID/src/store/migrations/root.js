@@ -11,9 +11,40 @@ import { asyncCreateMigrate } from './asyncCreateMigrate';
 
 const keyToString = compose(uInt8ArrayToB64, objToUint8);
 
+const findId = (id) => (item) => item[id];
+
 /** Async migration creators require every version to return a promiseß */
 
 const rootMigrations = {
+  10: async (state) => {
+    // migrate linked contexts to entity adapter
+    if (state.apps.linkedContexts) {
+      let contextId = findId('contextId');
+      let filteredContexts = state.apps.linkedContexts.filter(contextId);
+      console.log('filteredContexts', filteredContexts);
+      let ids = filteredContexts.map(contextId);
+      let entities = {};
+      filteredContexts.forEach((context) => {
+        entities[contextId(context)] = context;
+      });
+      state.apps.linkedContexts = { ids, entities };
+    }
+
+    // migrate connections to entity adapter
+    if (state.connections.connections) {
+      let id = findId('id');
+      let filteredConnections = state.connections.connections.filter(id);
+      let ids = filteredConnections.map(id);
+      let entities = {};
+      filteredConnections.forEach((conn) => {
+        entities[id(conn)] = conn;
+      });
+      state.connections.connections = { ids, entities };
+    }
+
+    // migrate operations to entity adapter
+    state.operations = { ids: [], entities: {} };
+  },
   9: async (state) => {
     // extract secretKey if not present
     if (!state.user.secretKey || typeof state.user.secretKey !== 'string') {
