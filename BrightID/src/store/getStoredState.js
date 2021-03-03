@@ -3,7 +3,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { rootMigrate } from './migrations';
 
 const getRootState = async (config) => {
-  console.log('GETTING ROOT STATE');
   try {
     const restoredState = await getStoredState({
       ...config,
@@ -14,7 +13,7 @@ const getRootState = async (config) => {
     });
 
     let migratedState = await rootMigrate(restoredState, config.version);
-    console.log('migratedState', migratedState);
+
     let nextState = migratedState && migratedState[config.key];
 
     if (!nextState) {
@@ -32,7 +31,6 @@ const getRootState = async (config) => {
 export default async (config) => {
   try {
     let restoredState = await getStoredState(config);
-    console.log('RESTORED STATE', restoredState);
     if (config.migrate) {
       restoredState = await config.migrate(restoredState, config.version);
     }
