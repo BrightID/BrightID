@@ -54,7 +54,12 @@ export const SuccessScreen = () => {
     if (endTime && currentTime && currentTime >= endTime) {
       // this  will cause navigation to HomeScreen
       dispatch(saveId());
-
+      if (password) {
+        console.log(`Starting initial backup`);
+        dispatch(backupAppData()).then(() => {
+          dispatch(setBackupCompleted(true));
+        });
+      }
       return () => {
         // navigate to view password walkthrough
         InteractionManager.runAfterInteractions(() => {
@@ -67,21 +72,8 @@ export const SuccessScreen = () => {
   useFocusEffect(
     useCallback(() => {
       // wait 1.5 seconds before navigating to home page
-      if (!password) {
-        setEndTime(Date.now() + TIMEOUT);
-      } else {
-        // backup and then wait 1.5 seconds
-        console.log(`Starting initial backup`);
-        dispatch(backupAppData())
-          .then(() => {
-            dispatch(setBackupCompleted(true));
-            setEndTime(Date.now() + TIMEOUT);
-          })
-          .catch((err) => {
-            Alert.alert(t('common.alert.error'), err.message);
-          });
-      }
-    }, [dispatch, password, t]),
+      setEndTime(Date.now() + TIMEOUT);
+    }, []),
   );
   return (
     <>
