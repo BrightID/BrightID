@@ -3,7 +3,12 @@ import { saveImage } from '@/utils/filesystem';
 import { decryptData } from '@/utils/cryptoHelper';
 import { hash } from '@/utils/encoding';
 import { addConnection, createGroup } from '@/actions';
-import { setSig, updateNamePhoto } from '../recoveryDataSlice';
+import {
+  increaseRecoveredConnections,
+  increaseRecoveredGroups,
+  setSig,
+  updateNamePhoto,
+} from '../recoveryDataSlice';
 
 export const loadRecoveryData = async (
   channelApi: ChannelAPI,
@@ -85,6 +90,7 @@ export const downloadConnections = ({ channelApi, dataIds }) => async (
         connId(id) !== recoveryId,
     );
 
+    let count = 0;
     for (const dataId of connectionDataIds) {
       const connectionData = await downloadConnection({
         dataId,
@@ -94,7 +100,11 @@ export const downloadConnections = ({ channelApi, dataIds }) => async (
       });
       if (connectionData) {
         dispatch(addConnection(connectionData));
+        count++;
       }
+    }
+    if (count > 0) {
+      dispatch(increaseRecoveredConnections({ count }));
     }
     return connectionDataIds.length;
   } catch (err) {
@@ -180,6 +190,7 @@ export const downloadGroups = ({ channelApi, dataIds }) => async (
       (id) => isGroup(id) && !existingGroupIds.includes(groupId(id)),
     );
 
+    let count = 0;
     for (const dataId of groupDataIds) {
       const groupData = await downloadGroup({
         dataId,
@@ -189,7 +200,11 @@ export const downloadGroups = ({ channelApi, dataIds }) => async (
       });
       if (groupData) {
         dispatch(createGroup(groupData));
+        count++;
       }
+    }
+    if (count > 0) {
+      dispatch(increaseRecoveredGroups({ count }));
     }
     return groupDataIds.length;
   } catch (err) {

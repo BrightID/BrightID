@@ -3,10 +3,8 @@ import { createImageDirectory, saveImage } from '@/utils/filesystem';
 import { randomKey } from '@/utils/encoding';
 import api from '@/api/brightId';
 import {
-  setBackupCompleted,
   setUserData,
   setConnections,
-  setPassword,
   setGroups,
   setKeypair,
   updateConnections,
@@ -15,8 +13,8 @@ import { OPERATION_APPLIED_BEFORE } from '@/api/brightidError';
 import { fetchBackupData } from './backupThunks';
 import {
   init,
-  resetRecoverySigs,
   resetRecoveryData,
+  resetRecoverySigs,
 } from '../recoveryDataSlice';
 
 // HELPERS
@@ -77,16 +75,19 @@ export const setSigningKey = () => async (
 
 export const restoreUserData = async (id: string, pass: string) => {
   const decrypted = await fetchBackupData('data', id, pass);
-
   const { userData, connections, groups = [] } = JSON.parse(decrypted);
-
   if (!userData || !connections) {
+    // TODO Better error handling
     throw new Error('bad password');
   }
 
-  userData.id = id;
-
-  const userPhoto = await fetchBackupData(id, id, pass);
+  let userPhoto;
+  try {
+    userPhoto = await fetchBackupData(id, id, pass);
+  } catch (e) {
+    console.log(`Failed to recover user photo`);
+    // ignore this error and try to continue recovery process
+  }
 
   if (userPhoto) {
     const filename = await saveImage({
@@ -99,28 +100,30 @@ export const restoreUserData = async (id: string, pass: string) => {
   return { userData, connections, groups };
 };
 
+export const recoverAccount = () => async (
+  dispatch: dispatch,
+  getState: getState,
+) => {
+  // set new signing key on the backend
+  await dispatch(setSigningKey());
+  const { publicKey, secretKey } = getState().recoveryData;
+  dispatch(setKeypair({ publicKey, secretKey }));
+};
+
 export const recoverData = (pass: string) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  const { id, name, photo, publicKey, secretKey } = getState().recoveryData;
-
-  // set new signing key on the backend
-  await dispatch(setSigningKey());
-  let userData = { id, publicKey, secretKey, name, photo };
-  let connections = [];
-  let groups = [];
-  if (pass) {
-    // throws if data is bad
-    const restoredData = await restoreUserData(id, pass);
-    userData = restoredData.userData;
-    connections = restoredData.connections;
-    groups = restoredData.groups;
-    dispatch(setConnections(connections));
-    dispatch(setGroups(groups));
-  }
-
-  dispatch(setKeypair({ publicKey, secretKey }));
+  const { id } = getState().recoveryData;
+  console.log(`Starting recoverData for ${id}`);
+  // throws if data is bad
+  const restoredData = await restoreUserData(id, pass);
+  console.log(`Got recovery data for ${id}`);
+  const { userData } = restoredData;
+  const { connections } = restoredData;
+  const { groups } = restoredData;
+  dispatch(setConnections(connections));
+  dispatch(setGroups(groups));
 
   for (const conn of connections) {
     try {
@@ -153,9 +156,16 @@ export const recoverData = (pass: string) => async (
   dispatch(setGroups(userInfo.groups));
   dispatch(updateConnections(userInfo.connections));
   dispatch(setUserData(userData));
-  dispatch(setBackupCompleted(pass !== ''));
-  // password is required to update backup when user makes new connections
-  dispatch(setPassword(pass));
+};
+
+export const finishRecovery = () => async (
+  dispatch: dispatch,
+  getState: getState,
+) => {
+  // collect user data that was populated either by uploads from recovery connections or by restoring backup
+  const { id, secretKey, name, photo } = getState().recoveryData;
+  // clear recovery data from state
   dispatch(resetRecoveryData());
-  return true;
+  // finally set the user data
+  dispatch(setUserData({ id, name, photo, secretKey }));
 };
