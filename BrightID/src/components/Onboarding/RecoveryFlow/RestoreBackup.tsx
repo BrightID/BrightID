@@ -7,11 +7,12 @@ import {
   View,
 } from 'react-native';
 import { BackupSteps } from '@/components/Onboarding/RecoveryFlow/RestoreScreen';
-import { BLACK, DARKER_GREY, ORANGE, WHITE } from '@/theme/colors';
+import { BLACK, DARKER_GREY, GREEN, ORANGE, RED, WHITE } from '@/theme/colors';
 import { useTranslation } from 'react-i18next';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import Spinner from 'react-native-spinkit';
+import IonIcons from 'react-native-vector-icons/Ionicons';
 
 /* Component to track backup restore */
 type RestoreBackupParams = {
@@ -29,39 +30,47 @@ export const RestoreBackup = ({
   setPassword,
 }: RestoreBackupParams) => {
   const [stateDescription, setStateDescription] = useState('');
-  const [ready, setReady] = useState(false);
   const [showPasswordInput, setShowPasswordInput] = useState(true);
+  const [iconData, setIconData] = useState<{ color: string; name: string }>(
+    undefined,
+  );
   const { t } = useTranslation();
 
   useEffect(() => {
     switch (currentStep) {
       case BackupSteps.INITIAL:
-      case BackupSteps.WAITING_UPLOAD:
-      case BackupSteps.WAITING_DOWNLOAD:
+      case BackupSteps.WAITING_ACCOUNT:
+        setIconData(undefined);
         setStateDescription('Waiting for account recovery');
         setShowPasswordInput(false);
         break;
-      case BackupSteps.DOWNLOAD_COMPLETE:
+      case BackupSteps.WAITING_PASSWORD:
+        setIconData({ color: DARKER_GREY, name: 'information-circle-outline' });
         setStateDescription('Enter password or skip');
         setShowPasswordInput(true);
         break;
       case BackupSteps.RESTORING_DATA:
+        setIconData(undefined);
         setStateDescription('Restoring data...');
         setShowPasswordInput(false);
         break;
       case BackupSteps.COMPLETE:
-        setStateDescription('Data restoration complete');
+        setIconData({ color: GREEN, name: 'checkmark-circle-outline' });
+        setStateDescription('Restore complete');
         setShowPasswordInput(false);
         break;
       case BackupSteps.ERROR:
-        setStateDescription('Data recovery failed :-(');
+        setIconData({ color: RED, name: 'alert-circle-outline' });
+        setStateDescription('Restore failed');
         setShowPasswordInput(true);
         break;
       case BackupSteps.SKIPPED:
-        setStateDescription('Data recovery skipped');
+        setIconData({ color: DARKER_GREY, name: 'checkmark-circle-outline' });
+        setStateDescription('Restore skipped');
         setShowPasswordInput(false);
         break;
       default:
+        setIconData({ color: RED, name: 'alert-circle-outline' });
         setStateDescription(`Unhandled state ${BackupSteps[currentStep]}`);
         break;
     }
@@ -78,19 +87,28 @@ export const RestoreBackup = ({
       </View>
       <View style={styles.statusContainer}>
         <View style={styles.iconContainer}>
-          <Spinner
-            isVisible={true}
-            size={DEVICE_LARGE ? 64 : 56}
-            type="Wave"
-            color={ORANGE}
-          />
+          {iconData ? (
+            <IonIcons
+              style={{ alignSelf: 'center' }}
+              size={DEVICE_LARGE ? 64 : 56}
+              name={iconData.name}
+              color={iconData.color}
+            />
+          ) : (
+            <Spinner
+              isVisible={true}
+              size={DEVICE_LARGE ? 64 : 56}
+              type="Wave"
+              color={ORANGE}
+            />
+          )}
         </View>
         <View style={styles.infoTextContainer}>
           <Text style={styles.infoText}>{stateDescription}</Text>
         </View>
       </View>
       {showPasswordInput && (
-        <View>
+        <View style={styles.actionContainer}>
           <View style={styles.textInputContainer}>
             <TextInput
               onChangeText={setPassword}
@@ -110,7 +128,6 @@ export const RestoreBackup = ({
               style={styles.submitButton}
               onPress={doRestore}
               accessibilityLabel="submit"
-              disabled={false /* pass.length < 1 || disabled */}
             >
               <Text style={styles.submitText}>Restore</Text>
             </TouchableOpacity>
@@ -132,7 +149,6 @@ export const RestoreBackup = ({
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    marginTop: 10,
     maxWidth: '90%',
   },
   headerTextContainer: {
@@ -146,23 +162,31 @@ const styles = StyleSheet.create({
   },
   headerInfoText: {
     fontFamily: 'Poppins-Regular',
-    textAlign: 'center',
+    textAlign: 'left',
     color: DARKER_GREY,
   },
   statusContainer: {
     flexDirection: 'row',
+    marginTop: 10,
+    marginLeft: 20,
     alignItems: 'center',
-    padding: 10,
   },
   iconContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: 70,
+    height: 70,
   },
-  infoTextContainer: {},
+  infoTextContainer: {
+    flex: 1,
+    marginLeft: 10,
+  },
   infoText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
     color: BLACK,
+  },
+  actionContainer: {
+    alignItems: 'center',
+    justifyContent: 'flex-start',
   },
   textInputContainer: {
     justifyContent: 'center',

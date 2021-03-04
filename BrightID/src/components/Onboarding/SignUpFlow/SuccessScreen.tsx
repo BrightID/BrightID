@@ -67,7 +67,7 @@ export const SuccessScreen = () => {
         });
       };
     }
-  }, [currentTime, endTime, dispatch, navigation]);
+  }, [currentTime, endTime, dispatch, navigation, password]);
 
   useFocusEffect(
     useCallback(() => {

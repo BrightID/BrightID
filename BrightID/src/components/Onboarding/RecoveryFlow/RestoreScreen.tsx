@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
 import { useDispatch, useSelector } from '@/store';
 import { useFocusEffect } from '@react-navigation/native';
-import { ORANGE, WHITE } from '@/theme/colors';
-import { DEVICE_LARGE, DEVICE_OS } from '@/utils/deviceConstants';
+import { BLACK, ORANGE, WHITE } from '@/theme/colors';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { setBackupCompleted, setPassword } from '@/reducer/userSlice';
 import { RecoverAccount } from '@/components/Onboarding/RecoveryFlow/RecoverAccount';
 import { RestoreBackup } from '@/components/Onboarding/RecoveryFlow/RestoreBackup';
@@ -13,8 +13,6 @@ import {
   recoverData,
 } from './thunks/recoveryThunks';
 import { CHANNEL_POLL_INTERVAL, clearChannel } from './thunks/channelThunks';
-
-const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
 // clear channel after this time
 const channelTimeout = CHANNEL_POLL_INTERVAL * 3.1;
@@ -30,9 +28,8 @@ export enum AccountSteps {
 
 export enum BackupSteps {
   INITIAL,
-  WAITING_UPLOAD,
-  WAITING_DOWNLOAD,
-  DOWNLOAD_COMPLETE,
+  WAITING_ACCOUNT,
+  WAITING_PASSWORD,
   RESTORING_DATA,
   ERROR,
   SKIPPED,
@@ -47,14 +44,13 @@ const RestoreScreen = () => {
   const recoveredGroups = useSelector(
     (state) => state.recoveryData.recoveredGroups,
   );
-  const [restoreInProgress, setRestoreInProgress] = useState(false);
   const [accountStep, setAccountStep] = useState<AccountSteps>(
     AccountSteps.WAITING_DOWNLOAD,
   );
   const [dataStep, setDataStep] = useState<BackupSteps>(
-    BackupSteps.WAITING_DOWNLOAD,
+    BackupSteps.WAITING_ACCOUNT,
   );
-  const [disabled, setDisabled] = useState(true);
+  const [accountError, setAccountError] = useState('');
   const [timer, setTimer] = useState(Math.ceil(channelTimeout / 1000));
   const dispatch = useDispatch();
 
@@ -63,9 +59,7 @@ const RestoreScreen = () => {
       // disable buttons until 3 passes of the the poll channel to make sure all data is downloaded
       const t = setTimeout(() => {
         clearChannel();
-        setDisabled(false);
         setAccountStep(AccountSteps.DOWNLOAD_COMPLETE);
-        setDataStep(BackupSteps.DOWNLOAD_COMPLETE);
       }, channelTimeout);
 
       // display to user how long they are waiting for the button to be displayed
@@ -87,9 +81,12 @@ const RestoreScreen = () => {
         await dispatch(recoverAccount());
         console.log(`Successfully recovered account`);
         setAccountStep(AccountSteps.COMPLETE);
+        // restore backup can now start
+        setDataStep(BackupSteps.WAITING_PASSWORD);
       } catch (e) {
         console.log(`Error during account recovery: ${e.message}`);
         setAccountStep(AccountSteps.ERROR);
+        setAccountError(e.message);
       }
     };
     switch (accountStep) {
@@ -131,7 +128,6 @@ const RestoreScreen = () => {
   };
 
   const restoreBackup = async () => {
-    setRestoreInProgress(true);
     try {
       console.log(`Starting restore backup`);
       setDataStep(BackupSteps.RESTORING_DATA);
@@ -142,28 +138,21 @@ const RestoreScreen = () => {
       console.log(`Error during recover: ${e.message}`);
       setDataStep(BackupSteps.ERROR);
     }
-    setRestoreInProgress(false);
   };
 
   return (
     <>
       <View style={styles.orangeTop} />
-      <Container style={styles.container} behavior="padding">
+      <KeyboardAvoidingView style={styles.container} behavior="position">
         <View style={styles.recoverAccountContainer}>
           <RecoverAccount
             currentStep={accountStep}
             recoveredGroups={recoveredGroups}
             recoveredConnections={recoveredConnections}
+            errorMessage={accountError}
           />
         </View>
-        <View
-          style={{
-            width: '70%',
-            borderBottomWidth: 1,
-            borderColor: 'black',
-            margin: 15,
-          }}
-        />
+        <View style={styles.divider} />
         <View style={styles.restoreBackupContainer}>
           <RestoreBackup
             currentStep={dataStep}
@@ -173,7 +162,7 @@ const RestoreScreen = () => {
             setPassword={setPass}
           />
         </View>
-      </Container>
+      </KeyboardAvoidingView>
     </>
   );
 };
@@ -196,8 +185,14 @@ const styles = StyleSheet.create({
     zIndex: 10,
     overflow: 'hidden',
   },
+  divider: {
+    paddingTop: 40,
+    marginBottom: 30,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor: BLACK,
+  },
   recoverAccountContainer: {
-    marginTop: 10,
+    marginTop: 20,
     minHeight: '25%',
   },
   restoreBackupContainer: {

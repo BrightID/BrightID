@@ -15,6 +15,7 @@ import {
   init,
   resetRecoveryData,
   resetRecoverySigs,
+  updateNamePhoto,
 } from '../recoveryDataSlice';
 
 // HELPERS
@@ -65,11 +66,9 @@ export const setSigningKey = () => async (
       );
       return;
     }
-    console.log(
-      `Error in setSigningKey: ${err.errorNum} - ${err.code} - ${err.message}`,
-    );
+    console.log(`Error in setSigningKey: ${err.errorNum} - ${err.message}`);
     dispatch(resetRecoverySigs());
-    throw new Error('bad sigs');
+    throw new Error(`${err.errorNum} - ${err.message}`);
   }
 };
 
@@ -124,7 +123,9 @@ export const recoverData = (pass: string) => async (
   const { groups } = restoredData;
   dispatch(setConnections(connections));
   dispatch(setGroups(groups));
+  dispatch(updateNamePhoto({ name: userData.name, photo: userData.photo }));
 
+  // fetch connection images
   for (const conn of connections) {
     try {
       const decrypted = await fetchBackupData(conn.id, id, pass);
@@ -139,6 +140,7 @@ export const recoverData = (pass: string) => async (
     }
   }
 
+  // fetch group images
   for (const group of groups) {
     if (group.photo?.filename) {
       try {
@@ -152,10 +154,10 @@ export const recoverData = (pass: string) => async (
       }
     }
   }
+
   const userInfo = await api.getUserInfo(id);
   dispatch(setGroups(userInfo.groups));
   dispatch(updateConnections(userInfo.connections));
-  dispatch(setUserData(userData));
 };
 
 export const finishRecovery = () => async (

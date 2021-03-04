@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { AccountSteps } from '@/components/Onboarding/RecoveryFlow/RestoreScreen';
 import { fontSize } from '@/theme/fonts';
-import { BLACK, DARKER_GREY, GREEN, GREY, ORANGE } from '@/theme/colors';
+import { BLACK, DARKER_GREY, GREEN, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import Spinner from 'react-native-spinkit';
 import IonIcons from 'react-native-vector-icons/Ionicons';
@@ -10,11 +10,13 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 /* Component to track account recovery */
 type RecoverAccountParams = {
   currentStep: AccountSteps;
+  errorMessage: string;
   recoveredGroups: number;
   recoveredConnections: number;
 };
 export const RecoverAccount = ({
   currentStep,
+  errorMessage,
   recoveredConnections,
   recoveredGroups,
 }: RecoverAccountParams) => {
@@ -24,10 +26,6 @@ export const RecoverAccount = ({
     switch (currentStep) {
       case AccountSteps.INITIAL:
       case AccountSteps.WAITING_DOWNLOAD:
-        setStateDescription(
-          'Waiting for recovery connections to upload recovery data...',
-        );
-        break;
       case AccountSteps.DOWNLOAD_COMPLETE:
         setStateDescription('Downloading data from recovery connections...');
         break;
@@ -76,9 +74,10 @@ export const RecoverAccount = ({
         </View>
         <View style={styles.infoTextContainer}>
           <Text style={styles.infoText}>{stateDescription}</Text>
-          <Text style={styles.numberText}>
-            Recovered {recoveredConnections} connections, {recoveredGroups}{' '}
-            groups
+          <Text style={styles.infoSubText}>
+            {currentStep === AccountSteps.ERROR
+              ? errorMessage
+              : `Recovered ${recoveredConnections} connections, ${recoveredGroups} groups`}
           </Text>
         </View>
       </View>
@@ -102,20 +101,21 @@ const styles = StyleSheet.create({
   },
   headerInfoText: {
     fontFamily: 'Poppins-Regular',
-    textAlign: 'center',
+    textAlign: 'left',
     color: DARKER_GREY,
   },
   statusContainer: {
     flexDirection: 'row',
+    marginTop: 10,
+    marginLeft: 20,
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    padding: 10,
   },
   iconContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: 70,
+    height: 70,
   },
   infoTextContainer: {
+    flex: 1,
     marginLeft: 10,
   },
   infoText: {
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize[16],
     color: BLACK,
   },
-  numberText: {
+  infoSubText: {
     fontFamily: 'Poppins-Regular',
     fontSize: fontSize[10],
     color: BLACK,
