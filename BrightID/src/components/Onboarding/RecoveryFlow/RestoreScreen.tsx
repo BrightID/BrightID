@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, Alert } from 'react-native';
 import { useDispatch, useSelector } from '@/store';
 import { useFocusEffect } from '@react-navigation/native';
 import { BLACK, ORANGE, WHITE } from '@/theme/colors';
@@ -7,6 +7,7 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { setBackupCompleted, setPassword } from '@/reducer/userSlice';
 import { RecoverAccount } from '@/components/Onboarding/RecoveryFlow/RecoverAccount';
 import { RestoreBackup } from '@/components/Onboarding/RecoveryFlow/RestoreBackup';
+import { useTranslation } from 'react-i18next';
 import {
   finishRecovery,
   recoverAccount,
@@ -18,7 +19,6 @@ import { CHANNEL_POLL_INTERVAL, clearChannel } from './thunks/channelThunks';
 const channelTimeout = CHANNEL_POLL_INTERVAL * 3.1;
 
 export enum AccountSteps {
-  INITIAL,
   WAITING_DOWNLOAD,
   DOWNLOAD_COMPLETE,
   RECOVERING_ACCOUNT,
@@ -27,16 +27,16 @@ export enum AccountSteps {
 }
 
 export enum BackupSteps {
-  INITIAL,
-  WAITING_ACCOUNT,
-  WAITING_PASSWORD,
-  RESTORING_DATA,
+  WAITING_ACCOUNT, // Waiting for account recovery to complete
+  WAITING_PASSWORD, // Ready to start, waiting for user to provide password
+  RESTORING_DATA, // Restoring in progress
+  SKIPPED, // User decided to skip backup restoration
   ERROR,
-  SKIPPED,
   COMPLETE,
 }
 
 const RestoreScreen = () => {
+  const { t } = useTranslation();
   const [pass, setPass] = useState('');
   const recoveredConnections = useSelector(
     (state) => state.recoveryData.recoveredConnections,
@@ -51,24 +51,18 @@ const RestoreScreen = () => {
     BackupSteps.WAITING_ACCOUNT,
   );
   const [accountError, setAccountError] = useState('');
-  const [timer, setTimer] = useState(Math.ceil(channelTimeout / 1000));
   const dispatch = useDispatch();
 
   useFocusEffect(
     useCallback(() => {
-      // disable buttons until 3 passes of the the poll channel to make sure all data is downloaded
+      // wait 3 passes of the the poll channel to make sure all data is downloaded
       const t = setTimeout(() => {
         clearChannel();
         setAccountStep(AccountSteps.DOWNLOAD_COMPLETE);
       }, channelTimeout);
 
-      // display to user how long they are waiting for the button to be displayed
-      const i = setInterval(() => {
-        setTimer((t) => (t > 0 ? t - 1 : 0));
-      }, 1000);
       return () => {
         clearTimeout(t);
-        clearInterval(i);
       };
     }, []),
   );
@@ -118,6 +112,11 @@ const RestoreScreen = () => {
       (dataStep === BackupSteps.COMPLETE || dataStep === BackupSteps.SKIPPED)
     ) {
       console.log(`Recovery process finished!`);
+      Alert.alert(
+        t('common.alert.info'),
+        t('restore.alert.text.restoreSuccess'),
+        [{ text: t('common.alert.ok') }],
+      );
       dispatch(finishRecovery());
     }
   }, [accountStep, dataStep, dispatch]);

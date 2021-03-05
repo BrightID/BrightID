@@ -38,7 +38,6 @@ export const RestoreBackup = ({
 
   useEffect(() => {
     switch (currentStep) {
-      case BackupSteps.INITIAL:
       case BackupSteps.WAITING_ACCOUNT:
         setIconData(undefined);
         setStateDescription('Waiting for account recovery');
@@ -61,7 +60,7 @@ export const RestoreBackup = ({
         break;
       case BackupSteps.ERROR:
         setIconData({ color: RED, name: 'alert-circle-outline' });
-        setStateDescription('Restore failed');
+        setStateDescription('Restore failed. Wrong password?');
         setShowPasswordInput(true);
         break;
       case BackupSteps.SKIPPED:
@@ -75,6 +74,8 @@ export const RestoreBackup = ({
         break;
     }
   }, [currentStep]);
+
+  const submitDisabled = password.length < 1;
 
   return (
     <View style={styles.container}>
@@ -125,9 +126,13 @@ export const RestoreBackup = ({
           </View>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-              style={styles.submitButton}
+              style={[
+                styles.submitButton,
+                submitDisabled ? { opacity: 0.5 } : {},
+              ]}
               onPress={doRestore}
               accessibilityLabel="submit"
+              disabled={submitDisabled}
             >
               <Text style={styles.submitText}>Restore</Text>
             </TouchableOpacity>
@@ -135,7 +140,6 @@ export const RestoreBackup = ({
               style={styles.skipButton}
               onPress={doSkip}
               accessibilityLabel="skip"
-              disabled={false}
             >
               <Text style={styles.skipText}>{t('restore.text.skip')}</Text>
             </TouchableOpacity>

@@ -24,7 +24,6 @@ export const RecoverAccount = ({
 
   useEffect(() => {
     switch (currentStep) {
-      case AccountSteps.INITIAL:
       case AccountSteps.WAITING_DOWNLOAD:
       case AccountSteps.DOWNLOAD_COMPLETE:
         setStateDescription('Downloading data from recovery connections...');
