@@ -119,7 +119,7 @@ const RestoreScreen = () => {
       );
       dispatch(finishRecovery());
     }
-  }, [accountStep, dataStep, dispatch]);
+  }, [accountStep, dataStep, dispatch, t]);
 
   const skip = () => {
     setPass('');
