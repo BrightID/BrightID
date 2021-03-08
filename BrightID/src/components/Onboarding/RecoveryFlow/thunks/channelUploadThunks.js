@@ -132,14 +132,16 @@ export const uploadMutualInfo = ({ conn, aesKey, channelApi }) => async (
     const otherSideConnections = await api.getConnections(conn.id, 'inbound');
     const knownLevels = ['just met', 'already known', 'recovery'];
     const mutualConnections = otherSideConnections
-      .filter(
-        (c) =>
-          connections[c.id] &&
-          connections[c.id].name &&
-          knownLevels.includes(c.level) &&
-          !dataIds.includes(`connection_${c.id}`),
-      )
-      .map((c) => connections[c.id]);
+      ? otherSideConnections
+          .filter(
+            (c) =>
+              connections[c.id] &&
+              connections[c.id].name &&
+              knownLevels.includes(c.level) &&
+              !dataIds.includes(`connection_${c.id}`),
+          )
+          .map((c) => connections[c.id])
+      : [];
 
     if (!dataIds.includes(`connection_${user.id}`)) {
       mutualConnections.push(user);
@@ -147,8 +149,8 @@ export const uploadMutualInfo = ({ conn, aesKey, channelApi }) => async (
 
     const otherSideGroups = await api.getUserInfo(conn.id)?.groups;
     const mutualGroups = otherSideGroups
-      .filter((g) => groups[g.id])
-      .map((g) => groups[g.id]);
+      ? otherSideGroups.filter((g) => groups[g.id]).map((g) => groups[g.id])
+      : [];
 
     console.log('uploading mutual connections');
     for (const c of mutualConnections) {

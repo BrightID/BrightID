@@ -190,6 +190,8 @@ declare global {
     photo: string;
     aesKey: string;
     timestamp: number;
+    recoveredConnections: number;
+    recoveredGroups: number;
     sigs: { [sig: string]: Signature };
     qrcode: string;
     channel: {
