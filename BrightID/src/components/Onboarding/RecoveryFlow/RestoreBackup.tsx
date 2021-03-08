@@ -40,32 +40,38 @@ export const RestoreBackup = ({
     switch (currentStep) {
       case BackupSteps.WAITING_ACCOUNT:
         setIconData(undefined);
-        setStateDescription('Waiting for account recovery');
+        setStateDescription(
+          t('restore.steps.waitingAccount', 'Waiting for account recovery'),
+        );
         setShowPasswordInput(false);
         break;
       case BackupSteps.WAITING_PASSWORD:
         setIconData({ color: DARKER_GREY, name: 'information-circle-outline' });
-        setStateDescription('Enter password or skip');
+        setStateDescription(
+          t('restore.steps.waitingPassword', 'Enter password or skip'),
+        );
         setShowPasswordInput(true);
         break;
       case BackupSteps.RESTORING_DATA:
         setIconData(undefined);
-        setStateDescription('Restoring data...');
+        setStateDescription(t('restore.steps.restoring', 'Restoring data...'));
         setShowPasswordInput(false);
         break;
       case BackupSteps.COMPLETE:
         setIconData({ color: GREEN, name: 'checkmark-circle-outline' });
-        setStateDescription('Restore complete');
+        setStateDescription(t('restore.steps.complete', 'Restore complete'));
         setShowPasswordInput(false);
         break;
       case BackupSteps.ERROR:
         setIconData({ color: RED, name: 'alert-circle-outline' });
-        setStateDescription('Restore failed. Wrong password?');
+        setStateDescription(
+          t('restore.steps.error', 'Restore failed. Wrong password?'),
+        );
         setShowPasswordInput(true);
         break;
       case BackupSteps.SKIPPED:
         setIconData({ color: DARKER_GREY, name: 'checkmark-circle-outline' });
-        setStateDescription('Restore skipped');
+        setStateDescription(t('restore.steps.skipped', 'Restore skipped'));
         setShowPasswordInput(false);
         break;
       default:
@@ -73,17 +79,23 @@ export const RestoreBackup = ({
         setStateDescription(`Unhandled state ${BackupSteps[currentStep]}`);
         break;
     }
-  }, [currentStep]);
+  }, [currentStep, t]);
 
   const submitDisabled = password.length < 1;
 
   return (
     <View style={styles.container}>
       <View style={styles.headerTextContainer}>
-        <Text style={styles.headerText}>Part 2: Restore backup (optional)</Text>
+        <Text style={styles.headerText}>
+          {t('restore.header.text', {
+            defaultValue: 'Part 2: Restore backup (optional)',
+          })}
+        </Text>
         <Text style={styles.headerInfoText}>
-          With your backup password you can restore names and photos of all your
-          connections and groups.
+          {t('restore.info', {
+            defaultValue:
+              'With your backup password you can restore names and photos of all your connections and groups.',
+          })}
         </Text>
       </View>
       <View style={styles.statusContainer}>
@@ -114,7 +126,10 @@ export const RestoreBackup = ({
             <TextInput
               onChangeText={setPassword}
               value={password}
-              placeholder="Type your password"
+              placeholder={t(
+                'restore.password.placeholder',
+                'Type your password',
+              )}
               placeholderTextColor={DARKER_GREY}
               style={styles.textInput}
               autoCorrect={false}
@@ -134,14 +149,18 @@ export const RestoreBackup = ({
               accessibilityLabel="submit"
               disabled={submitDisabled}
             >
-              <Text style={styles.submitText}>Restore</Text>
+              <Text style={styles.submitText}>
+                {t('restore.password.submit', 'Restore')}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.skipButton}
               onPress={doSkip}
               accessibilityLabel="skip"
             >
-              <Text style={styles.skipText}>{t('restore.text.skip')}</Text>
+              <Text style={styles.skipText}>
+                {t('restore.password.skip', 'Skip')}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

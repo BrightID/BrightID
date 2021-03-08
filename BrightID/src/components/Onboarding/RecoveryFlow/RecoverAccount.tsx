@@ -6,6 +6,7 @@ import { BLACK, DARKER_GREY, GREEN, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import Spinner from 'react-native-spinkit';
 import IonIcons from 'react-native-vector-icons/Ionicons';
+import { useTranslation } from 'react-i18next';
 
 /* Component to track account recovery */
 type RecoverAccountParams = {
@@ -21,36 +22,53 @@ export const RecoverAccount = ({
   recoveredGroups,
 }: RecoverAccountParams) => {
   const [stateDescription, setStateDescription] = useState('');
+  const { t } = useTranslation();
 
   useEffect(() => {
     switch (currentStep) {
       case AccountSteps.WAITING_DOWNLOAD:
       case AccountSteps.DOWNLOAD_COMPLETE:
-        setStateDescription('Downloading data from recovery connections...');
+        setStateDescription(
+          t(
+            'recovery.steps.downloading',
+            'Downloading data from recovery connections...',
+          ),
+        );
         break;
       case AccountSteps.RECOVERING_ACCOUNT:
-        setStateDescription('Recovering account...');
+        setStateDescription(
+          t('recovery.steps.recovering', 'Recovering account...'),
+        );
         break;
       case AccountSteps.COMPLETE:
-        setStateDescription('Account recovery complete');
+        setStateDescription(
+          t('recovery.steps.complete', 'Account recovery complete'),
+        );
         break;
       case AccountSteps.ERROR:
-        setStateDescription('Account recovery failed :-(');
+        setStateDescription(
+          t('recovery.steps.error', 'Account recovery failed'),
+        );
         break;
       default:
         setStateDescription(`Unhandled state ${AccountSteps[currentStep]}`);
         break;
     }
-  }, [currentStep]);
+  }, [currentStep, t]);
 
   return (
     <View style={styles.container}>
       <View style={styles.headerTextContainer}>
-        <Text style={styles.headerText}>Part 1: Recover account</Text>
+        <Text style={styles.headerText}>
+          {t('recovery.header.text', {
+            defaultValue: 'Part 1: Recover account',
+          })}
+        </Text>
         <Text style={styles.headerInfoText}>
-          This step will recover your BrightID on this device. Names and photos
-          of connections in common with your recovery connections will be
-          restored.
+          {t('recovery.info', {
+            defaultValue:
+              'This step will recover your BrightID on this device. Names and photos of connections in common with your recovery connections will be restored.',
+          })}
         </Text>
       </View>
       <View style={styles.statusContainer}>
@@ -76,7 +94,12 @@ export const RecoverAccount = ({
           <Text style={styles.infoSubText}>
             {currentStep === AccountSteps.ERROR
               ? errorMessage
-              : `Recovered ${recoveredConnections} connections, ${recoveredGroups} groups`}
+              : t('recovery.state', {
+                  defaultValue:
+                    'Recovered {{recoveredConnections}} connections, {{recoveredGroups}} groups',
+                  recoveredConnections,
+                  recoveredGroups,
+                })}
           </Text>
         </View>
       </View>
