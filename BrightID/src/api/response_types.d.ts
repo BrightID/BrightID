@@ -52,6 +52,17 @@ type UserConnectionRes = {
   };
 };
 
+type UserVerificationRes = {
+  data: {
+    verifications: Array<{
+      app: boolean;
+      name: string;
+      block: number;
+      timestamp: number;
+    }>;
+  };
+};
+
 type UserInfoRes = {
   data: {
     score: number;
@@ -130,6 +141,7 @@ type ConnectionInfo = {
   id: string;
   signingKey: string;
   level: ConnectionLevel;
+  incomingLevel?: ConnectionLevel;
   verifications: string[];
   hasPrimaryGroup: boolean;
   trusted: string[];

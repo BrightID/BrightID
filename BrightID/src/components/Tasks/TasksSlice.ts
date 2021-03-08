@@ -96,8 +96,8 @@ export const syncStoreTasks = () => {
     const idsToRemove = storeTaskIds.filter((id) => !userTaskIds.includes(id));
     const idsToAdd = userTaskIds.filter((id) => !storeTaskIds.includes(id));
     for (const id of idsToRemove) {
-      console.log(`Removing task ${id} from store`);
       if (id !== '_persist') {
+        console.log(`Removing task ${id} from store`);
         dispatch(removeTask(id));
       }
     }

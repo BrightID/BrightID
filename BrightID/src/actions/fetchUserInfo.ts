@@ -37,8 +37,8 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
         const verifications = await api.getUserVerifications(id);
         let incomingConns = await api.getConnections(id, 'inbound');
         incomingConns = _.keyBy(incomingConns, 'id');
-        for (let conn of connections) {
-          conn['incomingLevel'] = incomingConns[conn.id]?.level;
+        for (const conn of connections) {
+          conn.incomingLevel = incomingConns[conn.id]?.level;
         }
         if (operations.length === 0) {
           // don't update data when there are pending operations.

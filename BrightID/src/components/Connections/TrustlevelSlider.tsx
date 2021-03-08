@@ -43,8 +43,13 @@ const TrustlevelSlider = ({
   changeLevelHandler,
   verbose,
 }: TrustlevelSliderProps) => {
-  const includeRecovery = [connection_levels.ALREADY_KNOWN, connection_levels.RECOVERY].includes(incomingLevel);
-  const trustLevelDetails = includeRecovery ? levelsWithRecovery : levelsWithoutRecovery;
+  const includeRecovery = Array<ConnectionLevel>(
+    connection_levels.ALREADY_KNOWN,
+    connection_levels.RECOVERY,
+  ).includes(incomingLevel);
+  const trustLevelDetails = includeRecovery
+    ? levelsWithRecovery
+    : levelsWithoutRecovery;
   const minValue = 0;
   const maxValue = Object.keys(trustLevelDetails).length - 1;
 

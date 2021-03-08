@@ -391,12 +391,14 @@ class NodeApi {
   }
 
   async getUserVerifications(id: string) {
-    let res = await this.api.get(`/users/${id}/verifications`);
+    const res = await this.api.get<UserVerificationRes, ErrRes>(
+      `/users/${id}/verifications`,
+    );
     NodeApi.throwOnError(res);
-    return res.data.data.verifications;
+    return (res.data as UserVerificationRes).data.verifications;
   }
 
-  async getConnections(id: string, direction: string) {
+  async getConnections(id: string, direction: 'inbound' | 'outbound') {
     const res = await this.api.get<UserConnectionRes, ErrRes>(
       `/users/${id}/connections/${direction}`,
     );

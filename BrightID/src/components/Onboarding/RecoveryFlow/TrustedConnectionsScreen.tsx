@@ -48,9 +48,13 @@ const TrustedConnectionsScreen = () => {
     recoveryConnections.map((item) => item.id),
   );
   const [updateInProgress, setUpdateInProgress] = useState(false);
-  const knownLevels = [connection_levels.ALREADY_KNOWN, connection_levels.RECOVERY];
-  knownConnections = connections.filter(
-    (conn) => knownLevels.includes(conn.incomingLevel)
+
+  const knownLevels = Array<ConnectionLevel>(
+    connection_levels.ALREADY_KNOWN,
+    connection_levels.RECOVERY,
+  );
+  const knownConnections = connections.filter((conn) =>
+    knownLevels.includes(conn.incomingLevel),
   );
 
   const toggleSelection = (id) => {
@@ -102,24 +106,24 @@ const TrustedConnectionsScreen = () => {
           for (const item of connectionsToUpgrade) {
             console.log(`Setting ${item.name} to RECOVERY`);
             promises.push(
-                api.addConnection(
-                    myId,
-                    item.id,
-                    connection_levels.RECOVERY,
-                    Date.now(),
-                ),
+              api.addConnection(
+                myId,
+                item.id,
+                connection_levels.RECOVERY,
+                Date.now(),
+              ),
             );
             dispatch(setConnectionLevel(item.id, connection_levels.RECOVERY));
           }
           for (const item of connectionsToDowngrade) {
             console.log(`Setting ${item.name} to ALREADY_KNOWN`);
             promises.push(
-                api.addConnection(
-                    myId,
-                    item.id,
-                    connection_levels.ALREADY_KNOWN,
-                    Date.now(),
-                ),
+              api.addConnection(
+                myId,
+                item.id,
+                connection_levels.ALREADY_KNOWN,
+                Date.now(),
+              ),
             );
             dispatch(
               setConnectionLevel(item.id, connection_levels.ALREADY_KNOWN),
