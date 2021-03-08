@@ -111,12 +111,13 @@ function ConnectionScreen(props: Props) {
       return <ActivityIndicator size="small" color={DARKER_GREY} animating />;
     } else {
       const plural = verifiedAppsCount > 1 ? 's' : '';
-      return verifiedAppsCount > 0 ? 
-        (
-          <Text>Verified for {verifiedAppsCount} app{plural}</Text>
-        ) : (
-          <Text>Unverified</Text>
-        );
+      return verifiedAppsCount > 0 ? (
+        <Text>
+          Verified for {verifiedAppsCount} app{plural}
+        </Text>
+      ) : (
+        <Text>Unverified</Text>
+      );
     }
   };
 
@@ -173,10 +174,7 @@ function ConnectionScreen(props: Props) {
       </View>
 
       <View style={styles.trustLevelContainer}>
-        <TrustLevelView
-          level={connection.level}
-          connectionId={connection.id}
-        />
+        <TrustLevelView level={connection.level} connectionId={connection.id} />
       </View>
     </>
   );

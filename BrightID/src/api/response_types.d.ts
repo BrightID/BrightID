@@ -54,12 +54,8 @@ type UserConnectionRes = {
 
 type UserVerificationRes = {
   data: {
-    verifications: Array<{
-      app: boolean;
-      name: string;
-      block: number;
-      timestamp: number;
-    }>;
+    // TODO: Fix verifications type
+    verifications: Array<any>;
   };
 };
 
@@ -70,7 +66,8 @@ type UserInfoRes = {
     groups: GroupInfo[];
     invites: InviteInfo[];
     connections: ConnectionInfo[];
-    verifications: string[];
+    // TODO: Fix verifications type
+    verifications: Array<any>;
     isSponsored: boolean;
     trusted: string[];
     flaggers: {

@@ -2,13 +2,13 @@ import {
   MIN_CONNECTIONS_FOR_RECOVERY_NOTIFICATION,
   MIN_RECOVERY_CONNECTIONS,
   MISC_TYPE,
+  connection_levels,
 } from '@/utils/constants';
 import i18next from 'i18next';
 import {
   recoveryConnectionsSelector,
   verifiedConnectionsSelector,
 } from '@/utils/connectionsSelector';
-import { connection_levels } from '@/utils/constants';
 
 export const SET_BACKUP_PENDING = 'SET_BACKUP_PENDING';
 export const SET_DEVICE_TOKEN = 'SET_DEVICE_TOKEN';
@@ -78,14 +78,20 @@ export const updateNotifications = () => async (
   // check for pending recovery connections
   try {
     const verifiedConnections = verifiedConnectionsSelector(getState());
-    const knownLevels = [connection_levels.ALREADY_KNOWN, connection_levels.RECOVERY];
+    const knownLevels = Array<ConnectionLevel>(
+      connection_levels.ALREADY_KNOWN,
+      connection_levels.RECOVERY,
+    );
     const recoveryEligibleConnections = verifiedConnections.filter(
-      (conn) => knownLevels.includes(conn.level) && knownLevels.includes(conn.incomingLevel)
+      (conn) =>
+        knownLevels.includes(conn.level) &&
+        knownLevels.includes(conn.incomingLevel),
     );
     const recoveryConnections = recoveryConnectionsSelector(getState());
     if (
       recoveryConnections.length < MIN_RECOVERY_CONNECTIONS &&
-      recoveryEligibleConnections.length >= MIN_CONNECTIONS_FOR_RECOVERY_NOTIFICATION
+      recoveryEligibleConnections.length >=
+        MIN_CONNECTIONS_FOR_RECOVERY_NOTIFICATION
     ) {
       dispatch(setRecoveryConnectionsPending(true));
       dispatch(

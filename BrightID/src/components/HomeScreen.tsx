@@ -49,7 +49,7 @@ export const verifiedAppsSelector = createSelector(
 );
 
 export const brightIdVerifiedSelector = createSelector(
-  (state) => state.user.verifications,
+  (state: State) => state.user.verifications,
   (verifications) => verifications.map((v) => v.name).includes('BrightID'),
 );
 
@@ -198,7 +198,10 @@ export const HomeScreen = (props) => {
           <View style={styles.profileDivider} />
           {verifiedAppsCount > 0 ? (
             <View style={styles.verified}>
-              <Text>Verified for {verifiedAppsCount} app{verifiedAppsCount > 1 ? 's' : ''}</Text>
+              <Text>
+                Verified for {verifiedAppsCount} app
+                {verifiedAppsCount > 1 ? 's' : ''}
+              </Text>
             </View>
           ) : (
             <View style={styles.verified}>

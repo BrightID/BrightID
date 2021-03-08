@@ -31,7 +31,6 @@ function ConnectionScreenController() {
   const myConnections = useSelector(
     (state: State) => state.connections.connections,
   );
-  const myId = useSelector((state: State) => state.user.id);
   const myGroups = useSelector((state: State) => state.groups.groups);
   const [mutualGroups, setMutualGroups] = useState<Array<Group>>([]);
   const [mutualConnections, setMutualConnections] = useState<Array<Connection>>(
@@ -64,7 +63,6 @@ function ConnectionScreenController() {
       if (connectionId !== undefined) {
         fetchData(connectionId);
       }
-      // REMOVED CONNECTION FROM DEPENDENCY ARRAY
     }, [myConnections, myGroups, connectionId]),
   );
 
@@ -91,8 +89,7 @@ function ConnectionScreenController() {
   const brightIdVerified = verifications
     .map((v) => v.name)
     .includes('BrightID');
-  const verifiedAppsCount = verifications
-    .filter((v) => v.app).length;
+  const verifiedAppsCount = verifications.filter((v) => v.app).length;
   return (
     <ConnectionScreen
       connection={connection}
