@@ -54,7 +54,8 @@ const TrustedConnectionsScreen = () => {
     connection_levels.RECOVERY,
   );
   const knownConnections = connections.filter((conn) =>
-    knownLevels.includes(conn.incomingLevel),
+    knownLevels.includes(conn.incomingLevel) ||
+    conn.level == connection_levels.RECOVERY,
   );
 
   const toggleSelection = (id) => {
