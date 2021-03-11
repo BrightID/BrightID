@@ -36,6 +36,11 @@ const downloadConnection = async ({
   channelApi,
   aesKey,
   channelId,
+}: {
+  dataId: string;
+  channelApi: ChannelAPI;
+  aesKey: string;
+  channelId: string;
 }) => {
   try {
     const encrypted = await channelApi.download({ channelId, dataId });
@@ -64,10 +69,13 @@ const downloadConnection = async ({
   }
 };
 
-export const downloadConnections = ({ channelApi, dataIds }) => async (
-  dispatch: dispatch,
-  getState: getState,
-) => {
+export const downloadConnections = ({
+  channelApi,
+  dataIds,
+}: {
+  channelApi: ChannelAPI;
+  dataIds: Array<string>;
+}) => async (dispatch: dispatch, getState: getState) => {
   try {
     const {
       recoveryData: {
@@ -112,10 +120,13 @@ export const downloadConnections = ({ channelApi, dataIds }) => async (
   }
 };
 
-export const downloadNamePhoto = ({ channelApi, dataIds }) => async (
-  dispatch: dispatch,
-  getState: getState,
-) => {
+export const downloadNamePhoto = ({
+  channelApi,
+  dataIds,
+}: {
+  channelApi: ChannelAPI;
+  dataIds: Array<string>;
+}) => async (dispatch: dispatch, getState: getState) => {
   const {
     recoveryData: {
       id: recoveryId,
@@ -146,7 +157,17 @@ export const downloadNamePhoto = ({ channelApi, dataIds }) => async (
   }
 };
 
-const downloadGroup = async ({ dataId, channelApi, aesKey, channelId }) => {
+const downloadGroup = async ({
+  dataId,
+  channelApi,
+  aesKey,
+  channelId,
+}: {
+  dataId: string;
+  channelApi: ChannelAPI;
+  aesKey: string;
+  channelId: string;
+}) => {
   try {
     const encrypted = await channelApi.download({ channelId, dataId });
     const groupData = decryptData(encrypted, aesKey);
@@ -170,10 +191,13 @@ const downloadGroup = async ({ dataId, channelApi, aesKey, channelId }) => {
   }
 };
 
-export const downloadGroups = ({ channelApi, dataIds }) => async (
-  dispatch: dispatch,
-  getState: getState,
-) => {
+export const downloadGroups = ({
+  channelApi,
+  dataIds,
+}: {
+  channelApi: ChannelAPI;
+  dataIds: Array<string>;
+}) => async (dispatch: dispatch, getState: getState) => {
   try {
     const {
       recoveryData: {
@@ -214,10 +238,13 @@ export const downloadGroups = ({ channelApi, dataIds }) => async (
   }
 };
 
-export const downloadSigs = ({ channelApi, dataIds }) => async (
-  dispatch: dispatch,
-  getState: getState,
-) => {
+export const downloadSigs = ({
+  channelApi,
+  dataIds,
+}: {
+  channelApi: ChannelAPI;
+  dataIds: Array<string>;
+}) => async (dispatch: dispatch, getState: getState) => {
   try {
     const {
       recoveryData: {
