@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { AccountSteps } from '@/components/Onboarding/RecoveryFlow/RestoreScreen';
 import { fontSize } from '@/theme/fonts';
-import { BLACK, DARKER_GREY, GREEN, ORANGE } from '@/theme/colors';
+import { BLACK, DARKER_GREY, GREEN, ORANGE, RED } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import Spinner from 'react-native-spinkit';
 import IonIcons from 'react-native-vector-icons/Ionicons';
@@ -22,12 +22,16 @@ export const RecoverAccount = ({
   recoveredGroups,
 }: RecoverAccountParams) => {
   const [stateDescription, setStateDescription] = useState('');
+  const [iconData, setIconData] = useState<{ color: string; name: string }>(
+    undefined,
+  );
   const { t } = useTranslation();
 
   useEffect(() => {
     switch (currentStep) {
       case AccountSteps.WAITING_DOWNLOAD:
       case AccountSteps.DOWNLOAD_COMPLETE:
+        setIconData(undefined);
         setStateDescription(
           t(
             'recovery.steps.downloading',
@@ -36,16 +40,19 @@ export const RecoverAccount = ({
         );
         break;
       case AccountSteps.RECOVERING_ACCOUNT:
+        setIconData(undefined);
         setStateDescription(
           t('recovery.steps.recovering', 'Recovering account...'),
         );
         break;
       case AccountSteps.COMPLETE:
+        setIconData({ color: GREEN, name: 'checkmark-circle-outline' });
         setStateDescription(
           t('recovery.steps.complete', 'Account recovery complete'),
         );
         break;
       case AccountSteps.ERROR:
+        setIconData({ color: RED, name: 'alert-circle-outline' });
         setStateDescription(
           t('recovery.steps.error', 'Account recovery failed'),
         );
@@ -73,12 +80,12 @@ export const RecoverAccount = ({
       </View>
       <View style={styles.statusContainer}>
         <View style={styles.iconContainer}>
-          {currentStep === AccountSteps.COMPLETE ? (
+          {iconData ? (
             <IonIcons
               style={{ alignSelf: 'center' }}
               size={DEVICE_LARGE ? 64 : 56}
-              name="checkmark-circle-outline"
-              color={GREEN}
+              name={iconData.name}
+              color={iconData.color}
             />
           ) : (
             <Spinner
