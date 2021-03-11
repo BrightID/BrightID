@@ -128,19 +128,21 @@ export const downloadNamePhoto = ({ channelApi, dataIds }) => async (
 
   const dataId = dataIds.find((id) => connId(id) === recoveryId);
 
-  const connectionData = await downloadConnection({
-    dataId,
-    channelApi,
-    aesKey,
-    channelId,
-  });
+  if (dataId) {
+    const connectionData = await downloadConnection({
+      dataId,
+      channelApi,
+      aesKey,
+      channelId,
+    });
 
-  const {
-    recoveryData: { name },
-  } = getState();
+    const {
+      recoveryData: { name },
+    } = getState();
 
-  if (!name && connectionData) {
-    dispatch(updateNamePhoto(connectionData));
+    if (!name && connectionData) {
+      dispatch(updateNamePhoto(connectionData));
+    }
   }
 };
 
