@@ -2,13 +2,11 @@ import React, { useCallback, useState } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { useSelector } from '@/store';
-import { createSelector } from '@reduxjs/toolkit';
 import { useTranslation } from 'react-i18next';
-import { useRoute, useFocusEffect, RouteProp } from '@react-navigation/native';
+import { useRoute, RouteProp } from '@react-navigation/native';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { connectionsSelector } from '@/utils/connectionsSelector';
-import api from '@/api/brightId';
 import { ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import RecoveringConnectionCard from './RecoveringConnectionCard';
@@ -21,33 +19,16 @@ const getItemLayout = (data, index) => ({
   index,
 });
 
-const recoveryConnectionSelector = createSelector(
-  connectionsSelector,
-  (_, recoveryIds) => recoveryIds,
-  (connections, recoveryIds) => {
-    return connections.filter((conn) => recoveryIds.includes(conn.id));
-  },
-);
-
 type RecoveringConnectionRoute = RouteProp<
   { RecoveringConnection: { aesKey: string } },
   'RecoveringConnection'
 >;
 
 const RecoveringConnectionScreen = () => {
-  const [recoveryIds, setRecoveryIds] = useState([]);
-
-  const connections = useSelector((state: State) =>
-    recoveryConnectionSelector(state, recoveryIds),
-  );
-
-  const id = useSelector((state: State) => state.user.id);
-
+  const connections = useSelector(connectionsSelector);
   const { t } = useTranslation();
   const route = useRoute<RecoveringConnectionRoute>();
-
   const [uploadingData, setUploadingData] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const renderConnection = ({ item, index }) => {
     item.index = index;
@@ -59,19 +40,6 @@ const RecoveringConnectionScreen = () => {
       />
     );
   };
-
-  useFocusEffect(
-    useCallback(() => {
-      setLoading(true);
-      api.getConnections(id, 'inbound').then((connections) => {
-        const recoveryIds = connections
-          .filter((conn) => conn.level === 'recovery')
-          .map((conn) => conn.id);
-        setRecoveryIds(recoveryIds);
-        setLoading(false);
-      });
-    }, [id]),
-  );
 
   return (
     <>
@@ -95,11 +63,7 @@ const RecoveringConnectionScreen = () => {
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={
                   <EmptyList
-                    title={
-                      loading
-                        ? t('restore.emptyList.text.downloadingData')
-                        : t('restore.emptyList.text.nobodyHasChosen')
-                    }
+                    title={t('restore.emptyList.text.nobodyHasChosen')}
                   />
                 }
                 getItemLayout={getItemLayout}
