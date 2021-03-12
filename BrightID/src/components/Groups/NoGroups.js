@@ -1,5 +1,3 @@
-// @flow
-
 import * as React from 'react';
 import {
   View,
@@ -23,7 +21,7 @@ const handleLearnMore = () => {
   );
 };
 
-export const NoGroups = ({ navigation }: Props) => {
+export const NoGroups = ({ navigation }) => {
   const { t } = useTranslation();
   return (
     <View style={styles.noContainer} testID="noGroupsView">

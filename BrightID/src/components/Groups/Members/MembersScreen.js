@@ -1,5 +1,3 @@
-// @flow
-
 import React, { useState, useEffect, useLayoutEffect, useMemo } from 'react';
 import {
   StyleSheet,
@@ -8,14 +6,14 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '@/store';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { innerJoin } from 'ramda';
 import { useTranslation } from 'react-i18next';
 import api from '@/api/brightId';
-import { leaveGroup, dismissFromGroup } from '@/actions';
+import { leaveGroup, dismissFromGroup, addAdmin } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { addAdmin } from '@/actions/groups';
+
 import { ORANGE, WHITE, BLUE, DARK_GREY } from '@/theme/colors';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -23,24 +21,17 @@ import { fontSize } from '@/theme/fonts';
 import { groupByIdSelector } from '@/utils/groups';
 import MemberCard from './MemberCard';
 
-type MembersScreenProps = {
-  navigation: any,
-  route: any,
-};
-
-function MembersScreen(props: MembersScreenProps) {
+function MembersScreen(props) {
   const { navigation, route } = props;
   const groupID = route.params.group.id;
   const dispatch = useDispatch();
-  const connections = useSelector(
-    (state: State) => state.connections.connections,
-  );
-  const user = useSelector((state: State) => state.user);
-  const { group, admins, members } = useSelector((state: State) =>
+  const connections = useSelector((state) => state.connections.connections);
+  const user = useSelector((state) => state.user);
+  const { group, admins, members } = useSelector((state) =>
     groupByIdSelector(state, groupID),
   );
 
-  const [contextActions, setContextActions] = useState<Array<string>>([]);
+  const [contextActions, setContextActions] = useState([]);
   const { t } = useTranslation();
   const { showActionSheetWithOptions } = useActionSheet();
 
@@ -78,6 +69,7 @@ function MembersScreen(props: MembersScreenProps) {
         Alert.alert(
           t('groups.alert.title.leaveGroup'),
           t('groups.alert.text.leaveGroup'),
+          // @ts-ignore
           buttons,
           {
             cancelable: true,
@@ -91,7 +83,7 @@ function MembersScreen(props: MembersScreenProps) {
         });
       };
 
-      const performAction = (index: number) => {
+      const performAction = (index) => {
         const action = contextActions[index];
         console.log(`Performing action ${action}`);
         switch (action) {
@@ -146,11 +138,15 @@ function MembersScreen(props: MembersScreenProps) {
     dispatch,
     group,
     groupID,
+    t,
+    ACTION_LEAVE,
+    ACTION_CANCEL,
+    ACTION_INVITE,
   ]);
 
   // set available actions for group
   useEffect(() => {
-    const actions: Array<string> = [];
+    const actions = [];
     if (admins.includes(user.id)) {
       // admins can invite other members to group
       actions.push(ACTION_INVITE);
@@ -163,10 +159,10 @@ function MembersScreen(props: MembersScreenProps) {
       actions.push(ACTION_CANCEL);
     }
     setContextActions(actions);
-  }, [user.id, admins, members]);
+  }, [user.id, admins, members, ACTION_INVITE, ACTION_LEAVE, ACTION_CANCEL]);
 
   // Only include the group members that user knows (is connected with), and the user itself
-  const groupMembers: Array<connection> = useMemo(() => {
+  const groupMembers = useMemo(() => {
     // TODO: userObj is ugly and just here to satisfy flow typecheck for 'connection' type.
     //    Define a dedicated type for group member to use here or somehow merge user and connection types.
     const userobj = {
@@ -201,7 +197,7 @@ function MembersScreen(props: MembersScreenProps) {
         onPress: async () => {
           try {
             await api.dismiss(user.id, groupID);
-            await dispatch(dismissFromGroup(user.id, group));
+            dispatch(dismissFromGroup({ member: user.id, group }));
           } catch (err) {
             Alert.alert(
               t('groups.alert.title.errorDismissMember'),
@@ -214,6 +210,7 @@ function MembersScreen(props: MembersScreenProps) {
     Alert.alert(
       t('groups.alert.title.dismissMember'),
       t('groups.alert.text.dismissMember', { name: user.name }),
+      // @ts-ignore
       buttons,
       {
         cancelable: true,
@@ -232,7 +229,7 @@ function MembersScreen(props: MembersScreenProps) {
         onPress: async () => {
           try {
             await api.addAdmin(user.id, groupID);
-            await dispatch(addAdmin(user.id, group));
+            dispatch(addAdmin({ member: user.id, group }));
           } catch (err) {
             Alert.alert(
               t('groups.alert.text.addAdmin', { name: user.name }),
@@ -245,6 +242,7 @@ function MembersScreen(props: MembersScreenProps) {
     Alert.alert(
       t('groups.alert.title.addAdmin'),
       t('groups.alert.text.addAdmin', { name: user.name }),
+      // @ts-ignore
       buttons,
       {
         cancelable: true,

@@ -1,6 +1,7 @@
 /* global element, by, waitFor */
 
 import i18next from 'i18next';
+import { connection_levels } from '@/utils/constants';
 
 const testUserName = 'Vincent Vega';
 
@@ -82,10 +83,7 @@ const skipWalkthrough = async () => {
   await element(by.id('BrightIdLogo')).tap();
 };
 
-const createBrightID = async (
-  name: string = testUserName,
-  withPassword: boolean = false,
-) => {
+const createBrightID = async (name = testUserName, withPassword = false) => {
   await acceptEula();
   await createKeypair();
   await addName(name);
@@ -95,13 +93,16 @@ const createBrightID = async (
   } else {
     await skipPassword();
   }
-  await skipWalkthrough();
+  // await skipWalkthrough();
   // should end up at home screen
   await expectHomescreen();
   return name;
 };
 
-const createFakeConnection = async (doConfirm: boolean = true) => {
+const createFakeConnection = async (
+  doConfirm = true,
+  connectionLevel = connection_levels.JUST_MET,
+) => {
   // need to be on Homescreen to continue
   await expectHomescreen();
   // open MyCode screen
@@ -116,8 +117,8 @@ const createFakeConnection = async (doConfirm: boolean = true) => {
 
   if (doConfirm) {
     // confirm connection and navigate back to home screen
-    await expect(element(by.id('just metBtn'))).toBeVisible();
-    await element(by.id('just metBtn')).tap();
+    await expect(element(by.id(`${connectionLevel}Btn`))).toBeVisible();
+    await element(by.id(`${connectionLevel}Btn`)).tap();
     // Should end up in the connection list
     await expectConnectionsScreen();
     await navigateHome();
@@ -171,7 +172,7 @@ const expectGroupsScreen = async () => {
     .withTimeout(20000);
 };
 
-const expectAppsScreen = async (bool: boolean = true) => {
+const expectAppsScreen = async (bool = true) => {
   bool
     ? await waitFor(element(by.id('appsScreen')))
         .toBeVisible()
@@ -181,7 +182,7 @@ const expectAppsScreen = async (bool: boolean = true) => {
         .withTimeout(5000);
 };
 
-const inviteConnectionToGroup = async (groupName: string) => {
+const inviteConnectionToGroup = async (groupName) => {
   const inviteUserText = 'Invite user';
 
   // should start on home screen
@@ -219,7 +220,7 @@ const inviteConnectionToGroup = async (groupName: string) => {
   await expectHomescreen();
 };
 
-const joinAllGroups = async (connectionIndex: number) => {
+const joinAllGroups = async (connectionIndex) => {
   await expectHomescreen();
   // navigate to connections screen to make invited user join the group
   await element(by.id('connectionsBtn')).tap();
@@ -246,7 +247,7 @@ const joinAllGroups = async (connectionIndex: number) => {
 };
 
 /* Connect a fake connection with all other fake connections */
-const interConnect = async (connectionIndex: number) => {
+const interConnect = async (connectionIndex) => {
   await expectHomescreen();
   await element(by.id('connectionsBtn')).tap();
   await expectConnectionsScreen();
@@ -278,7 +279,7 @@ const interConnect = async (connectionIndex: number) => {
   opens connection screen and triggers reconnect,
   ends at preview connection screen
  */
-const reconnect = async (connectionIndex: number, changeProfile: boolean) => {
+const reconnect = async (connectionIndex, changeProfile) => {
   const action = changeProfile
     ? 'Reconnect with changed profile'
     : 'Reconnect with identical profile';

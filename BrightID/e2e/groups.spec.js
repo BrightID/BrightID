@@ -16,7 +16,6 @@ import {
   Limitations:
   - Group search is not tested against member name matches, as member names are random
  */
-
 const firstGroupName = 'Reservoir Dogs';
 const secondGroupName = 'Inglourious Basterds';
 

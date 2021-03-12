@@ -1,5 +1,3 @@
-// @flow
-
 import * as React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
@@ -21,9 +19,8 @@ import { toggleNewGroupCoFounder } from '../actions';
  * @prop connectionTime
  * @prop photo
  */
-
-class NewGroupCard extends React.PureComponent<Props> {
-  constructor(props: Props) {
+class NewGroupCard extends React.PureComponent {
+  constructor(props) {
     super(props);
     this.state = {
       imgErr: false,

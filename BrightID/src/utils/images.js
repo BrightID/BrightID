@@ -1,6 +1,3 @@
-// @flow
-
-import RNFetchBlob from 'rn-fetch-blob';
 import { compose } from 'ramda';
 import ImagePicker from './ImagePickerProvider';
 
@@ -48,37 +45,20 @@ export const chooseImage = () =>
       });
   });
 
-const fakeUserAvatar = (): Promise<string> => {
-  // save each connection with their id as the async storage key
-  return RNFetchBlob.fetch('GET', 'https://loremflickr.com/180/180', {})
-    .then((res) => {
-      if (res.info().status === 200) {
-        let b64 = res.base64();
-        return b64;
-      } else {
-        return 'https://loremflickr.com/180/180';
-      }
-    })
-    .catch((err) => {
-      err instanceof Error ? console.warn(err.message) : console.log(err);
-    });
-};
+/**
+ *
+ * @param {string} str
+ * @returns {string}
+ */
+const splitDataURI = (str) => str.split(',', 2);
 
-const randomAvatar = async (): Promise<void> => {
-  try {
-    const randomImage: string = await fakeUserAvatar();
-    return { uri: 'data.jpg', data: randomImage };
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const splitDataURI = (str: string) => str.split(',', 2);
-
-const mediaTypeToFileExtension = ([mediaType = 'jpeg', image = ' ']): {
-  filetype: string,
-  image: string,
-} => {
+/**
+ *
+ * @param {string} mediaType
+ * @param {string} image
+ * @returns
+ */
+const mediaTypeToFileExtension = ([mediaType = 'jpeg', image = ' ']) => {
   if (mediaType.includes('jpeg')) {
     return { filetype: 'jpg', image };
   }
@@ -96,9 +76,19 @@ const mediaTypeToFileExtension = ([mediaType = 'jpeg', image = ' ']): {
 
 export const parseDataUri = compose(mediaTypeToFileExtension, splitDataURI);
 
-const fileType = (str: string): string => str.split('.').pop().toLowerCase();
+/**
+ *
+ * @param {string} str
+ * @returns string
+ */
+const fileType = (str) => str.split('.').pop().toLowerCase();
+/**
+ *
+ * @param {string} t
+ * @returns string
+ */
 
-const normalizeType = (t: string): string => {
+const normalizeType = (t) => {
   switch (t) {
     case 'jpg':
       return 'image/jpeg';

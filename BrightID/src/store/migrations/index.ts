@@ -1,0 +1,1 @@
+export { rootMigrate } from './root';

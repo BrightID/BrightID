@@ -1,5 +1,3 @@
-// @flow
-
 import _ from 'lodash';
 import nacl from 'tweetnacl';
 import stringify from 'fast-json-stable-stringify';
@@ -10,17 +8,17 @@ import { strToUint8Array, uInt8ArrayToB64, hash } from '@/utils/encoding';
 import { loadRecoveryData } from './channelDownloadThunks';
 
 export const uploadSig = ({ id, aesKey, channelApi }) => async (
-  dispatch: dispatch,
-  getState: getState,
+  _,
+  getState,
 ) => {
-  let {
+  const {
     keypair: { secretKey },
     user: { id: signer },
   } = getState();
 
   const { signingKey, timestamp } = await loadRecoveryData(channelApi, aesKey);
 
-  let op = {
+  const op = {
     name: 'Set Signing Key',
     id,
     signingKey,
@@ -28,11 +26,11 @@ export const uploadSig = ({ id, aesKey, channelApi }) => async (
     v: 5,
   };
   const message = stringify(op);
-  let sig = uInt8ArrayToB64(
+  const sig = uInt8ArrayToB64(
     nacl.sign.detached(strToUint8Array(message), secretKey),
   );
 
-  let data = { signer, id, sig };
+  const data = { signer, id, sig };
 
   await channelApi.upload({
     channelId: hash(aesKey),
@@ -56,16 +54,16 @@ export const uploadConnection = async ({ conn, channelApi, aesKey }) => {
       photo = testPhoto;
     }
 
-    let profileTimestamp = Date.now();
+    const profileTimestamp = Date.now();
 
-    let dataObj = {
+    const dataObj = {
       id,
       photo,
       name,
       profileTimestamp,
     };
 
-    let encrypted = encryptData(dataObj, aesKey);
+    const encrypted = encryptData(dataObj, aesKey);
     console.log(`Posting profile data of ${id} ...`);
     await channelApi.upload({
       channelId: hash(aesKey),
@@ -91,9 +89,9 @@ const uploadGroup = async ({ group, channelApi, aesKey }) => {
       photo = '';
     }
 
-    let profileTimestamp = Date.now();
+    const profileTimestamp = Date.now();
 
-    let dataObj = {
+    const dataObj = {
       id,
       photo,
       name,
@@ -101,7 +99,7 @@ const uploadGroup = async ({ group, channelApi, aesKey }) => {
       aesKey: groupKey,
     };
 
-    let encrypted = encryptData(dataObj, aesKey);
+    const encrypted = encryptData(dataObj, aesKey);
     console.log(`Posting group data of ${id} ...`);
     await channelApi.upload({
       channelId: hash(aesKey),
@@ -114,8 +112,8 @@ const uploadGroup = async ({ group, channelApi, aesKey }) => {
 };
 
 export const uploadMutualInfo = ({ conn, aesKey, channelApi }) => async (
-  dispatch: dispatch,
-  getState: getState,
+  dispatch,
+  getState,
 ) => {
   try {
     const dataIds = await channelApi.list(hash(aesKey));
@@ -131,33 +129,35 @@ export const uploadMutualInfo = ({ conn, aesKey, channelApi }) => async (
     connections = _.keyBy(connections, 'id');
     groups = _.keyBy(groups, 'id');
 
-    let otherSideConnections = await api.getConnections(conn.id, 'inbound');
+    const otherSideConnections = await api.getConnections(conn.id, 'inbound');
     const knownLevels = ['just met', 'already known', 'recovery'];
-    let mutualConnections = otherSideConnections
-      .filter(
-        (c) =>
-          connections[c.id] &&
-          connections[c.id].name &&
-          knownLevels.includes(c.level) &&
-          !dataIds.includes(`connection_${c.id}`),
-      )
-      .map((c) => connections[c.id]);
+    const mutualConnections = otherSideConnections
+      ? otherSideConnections
+          .filter(
+            (c) =>
+              connections[c.id] &&
+              connections[c.id].name &&
+              knownLevels.includes(c.level) &&
+              !dataIds.includes(`connection_${c.id}`),
+          )
+          .map((c) => connections[c.id])
+      : [];
 
     if (!dataIds.includes(`connection_${user.id}`)) {
       mutualConnections.push(user);
     }
 
-    let otherSideGroups = (await api.getUserInfo(conn.id))?.groups;
-    let mutualGroups = otherSideGroups
-      .filter((g) => groups[g.id])
-      .map((g) => groups[g.id]);
+    const otherSideGroups = await api.getUserInfo(conn.id)?.groups;
+    const mutualGroups = otherSideGroups
+      ? otherSideGroups.filter((g) => groups[g.id]).map((g) => groups[g.id])
+      : [];
 
     console.log('uploading mutual connections');
-    for (let c of mutualConnections) {
+    for (const c of mutualConnections) {
       await uploadConnection({ conn: c, channelApi, aesKey });
     }
     console.log('uploading mutual groups');
-    for (let g of mutualGroups) {
+    for (const g of mutualGroups) {
       await uploadGroup({ group: g, channelApi, aesKey });
     }
   } catch (err) {

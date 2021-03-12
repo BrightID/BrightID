@@ -1,5 +1,3 @@
-// @flow
-
 import store from '@/store';
 import { createSelector } from '@reduxjs/toolkit';
 
@@ -86,7 +84,7 @@ export const knownMemberIDs = (group) => {
 
 export const groupByIdSelector = createSelector(
   (state) => state.groups.groups,
-  (_, groupId: string) => groupId,
+  (_, groupId) => groupId,
   (groups, groupId) => {
     const group = groups.find((group) => group.id === groupId);
     return {

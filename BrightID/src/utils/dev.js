@@ -1,5 +1,3 @@
-// @flow
-
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { resetStore } from '@/actions';
@@ -10,7 +8,6 @@ const defaultStoragePath = `${RNFetchBlob.fs.dirs.DocumentDir}/persistStore`;
 
 export const dangerouslyDeleteStorage = async () => {
   store.dispatch(resetStore());
-  await AsyncStorage.flushGetRequests();
   await AsyncStorage.clear();
   await RNFetchBlob.fs.unlink(defaultStoragePath);
 };

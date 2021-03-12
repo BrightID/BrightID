@@ -1,5 +1,3 @@
-// @flow
-
 import CryptoJS from 'crypto-js';
 import store from '@/store';
 
