@@ -16,10 +16,14 @@ export const headerTitleStyle = {
 
 export const headerOptions: StackNavigationOptions = {
   headerTitleStyle,
+  // @ts-ignore
   headerStyle: {
     backgroundColor: ORANGE,
     shadowRadius: 0,
     elevation: 0,
+    shadowOffset: {
+      height: 0,
+    },
   },
   headerTintColor: WHITE,
   headerTitleAlign: 'left',
