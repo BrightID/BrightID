@@ -99,6 +99,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
           </Text>
         </View>
         <TrustlevelSlider
+          incomingLevel={connection.incomingLevel}
           currentLevel={level}
           changeLevelHandler={changeLevelHandler}
           verbose={true}

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import {
   connectionsSelector,
   recoveryConnectionsSelector,
@@ -48,6 +48,15 @@ const TrustedConnectionsScreen = () => {
     recoveryConnections.map((item) => item.id),
   );
   const [updateInProgress, setUpdateInProgress] = useState(false);
+
+  const knownLevels = Array<ConnectionLevel>(
+    connection_levels.ALREADY_KNOWN,
+    connection_levels.RECOVERY,
+  );
+  const knownConnections = connections.filter((conn) =>
+    knownLevels.includes(conn.incomingLevel) ||
+    conn.level == connection_levels.RECOVERY,
+  );
 
   const toggleSelection = (id) => {
     const index = selectedConnections.indexOf(id);
@@ -98,24 +107,24 @@ const TrustedConnectionsScreen = () => {
           for (const item of connectionsToUpgrade) {
             console.log(`Setting ${item.name} to RECOVERY`);
             promises.push(
-                api.addConnection(
-                    myId,
-                    item.id,
-                    connection_levels.RECOVERY,
-                    Date.now(),
-                ),
+              api.addConnection(
+                myId,
+                item.id,
+                connection_levels.RECOVERY,
+                Date.now(),
+              ),
             );
             dispatch(setConnectionLevel(item.id, connection_levels.RECOVERY));
           }
           for (const item of connectionsToDowngrade) {
             console.log(`Setting ${item.name} to ALREADY_KNOWN`);
             promises.push(
-                api.addConnection(
-                    myId,
-                    item.id,
-                    connection_levels.ALREADY_KNOWN,
-                    Date.now(),
-                ),
+              api.addConnection(
+                myId,
+                item.id,
+                connection_levels.ALREADY_KNOWN,
+                Date.now(),
+              ),
             );
             dispatch(
               setConnectionLevel(item.id, connection_levels.ALREADY_KNOWN),
@@ -163,7 +172,7 @@ const TrustedConnectionsScreen = () => {
             <FlatList
               style={styles.connectionsContainer}
               contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-              data={connections}
+              data={knownConnections}
               keyExtractor={({ id }, index) => id + index}
               renderItem={renderConnection}
               showsHorizontalScrollIndicator={false}

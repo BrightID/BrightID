@@ -24,9 +24,7 @@ import Pencil from './Pencil';
 import PhoneLock from './PhoneLock';
 import Menu from './Menu';
 import Search from './Search';
-import UnverifiedSticker from './UnverifiedSticker';
 import VerifiedBadge from './VerifiedBadge';
-import VerifiedSticker from './VerifiedSticker';
 
 const SamplePage = () => {
   return (
@@ -64,10 +62,6 @@ const SamplePage = () => {
       <View style={styles.midContainer}>
         <Avatar width={120} height={120} addPicture={true} />
         <GroupAvatar width={120} height={120} addPicture={true} />
-      </View>
-      <View style={styles.midContainer}>
-        <UnverifiedSticker />
-        <VerifiedSticker />
       </View>
     </View>
   );

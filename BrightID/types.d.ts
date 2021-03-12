@@ -227,7 +227,8 @@ declare global {
     photo: Photo;
     searchParam: string;
     backupCompleted: boolean;
-    verifications: string[];
+    // TODO: Fix verifications type
+    verifications: Array<any>;
     id: string;
     password: string;
     secretKey: string;
