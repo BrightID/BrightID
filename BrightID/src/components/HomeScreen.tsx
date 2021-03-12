@@ -21,6 +21,7 @@ import { WHITE, ORANGE, BLACK, BLUE } from '@/theme/colors';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import ChatBox from '@/components/Icons/ChatBox';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
+import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
 import Camera from '@/components/Icons/Camera';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -50,7 +51,7 @@ export const verifiedAppsSelector = createSelector(
 
 export const brightIdVerifiedSelector = createSelector(
   (state: State) => state.user.verifications,
-  (verifications) => verifications.map((v) => v.name).includes('BrightID'),
+  (verifications) => verifications.some((v) => v?.name === 'BrightID'),
 );
 
 /** HomeScreen Component */
@@ -68,7 +69,6 @@ export const HomeScreen = (props) => {
   const linkedContextsCount = useSelector(linkedContextCountSelector);
   const verifiedAppsCount = useSelector(verifiedAppsSelector).length;
   const brightIdVerified = useSelector(brightIdVerifiedSelector);
-
   const [profilePhoto, setProfilePhoto] = useState('');
 
   const { t } = useTranslation();
@@ -198,14 +198,14 @@ export const HomeScreen = (props) => {
           <View style={styles.profileDivider} />
           {verifiedAppsCount > 0 ? (
             <View style={styles.verified}>
-              <Text>
+              <Text style={styles.verifiedText}>
                 Verified for {verifiedAppsCount} app
                 {verifiedAppsCount > 1 ? 's' : ''}
               </Text>
             </View>
           ) : (
             <View style={styles.verified}>
-              <Text>Unverified</Text>
+              <UnverifiedSticker width={100} height={19} />
             </View>
           )}
         </View>
@@ -398,11 +398,13 @@ const styles = StyleSheet.create({
     marginTop: 1.5,
   },
   verified: {
-    marginTop: 6,
-    // paddingTop: DEVICE_ANDROID ? 2 : 1,
-    // paddingBottom: DEVICE_ANDROID ? 0 : 1,
-    // paddingLeft: 23,
-    // paddingRight: 23,
+    marginTop: 8,
+  },
+  verifiedText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[12],
+    color: ORANGE,
+    borderColor: ORANGE,
   },
   countsCard: {
     backgroundColor: WHITE,

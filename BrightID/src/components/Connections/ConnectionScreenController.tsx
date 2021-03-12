@@ -86,9 +86,8 @@ function ConnectionScreenController() {
     return null;
   }
 
-  const brightIdVerified = verifications
-    .map((v) => v.name)
-    .includes('BrightID');
+  const brightIdVerified = verifications.some((v) => v?.name === 'BrightID');
+
   const verifiedAppsCount = verifications.filter((v) => v.app).length;
   return (
     <ConnectionScreen

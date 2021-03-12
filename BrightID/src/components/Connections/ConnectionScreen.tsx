@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
+import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
 import GroupAvatar from '@/components/Icons/GroupAvatar';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
@@ -112,11 +113,11 @@ function ConnectionScreen(props: Props) {
     } else {
       const plural = verifiedAppsCount > 1 ? 's' : '';
       return verifiedAppsCount > 0 ? (
-        <Text>
+        <Text style={styles.verifiedText}>
           Verified for {verifiedAppsCount} app{plural}
         </Text>
       ) : (
-        <Text>Unverified</Text>
+        <UnverifiedSticker width={100} height={19} />
       );
     }
   };
@@ -363,6 +364,11 @@ const styles = StyleSheet.create({
   badge: {
     marginLeft: DEVICE_LARGE ? 7 : 5,
   },
+  verifiedText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[12],
+    color: ORANGE,
+  },
   profileDivider: {
     borderBottomWidth: 2,
     borderBottomColor: ORANGE,
@@ -370,7 +376,7 @@ const styles = StyleSheet.create({
     width: '98%',
   },
   verificationSticker: {
-    marginTop: 6,
+    marginTop: 8,
   },
   connectionInfo: {
     marginTop: 10,

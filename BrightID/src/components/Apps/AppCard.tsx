@@ -125,8 +125,7 @@ const AppCard = (props: AppInfo) => {
   };
 
   const VerificationLabel = () => {
-    const verified =
-      verifications.filter((v) => v.app && id == v.name).length > 0;
+    const verified = verifications.some((v) => v.app && id === v.name);
     return !verified ? (
       <Text style={styles.unverifiedMessage}>
         {t('apps.tag.notVerifiedForApp')}
