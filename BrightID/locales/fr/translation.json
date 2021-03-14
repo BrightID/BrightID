@@ -597,7 +597,16 @@
   },
   "recovery": {
     "header": {
+      "text": "Partie 1 : Récupérer un compte",
       "title": "Code de Restauration"
+    },
+    "info": "Cette étape récupérera votre BrightID sur cet appareil. Les noms et photos des connexions en commun avec vos connexions de récupération seront restaurés.",
+    "state": "{{recoveredConnections}} connexions, {{recoveredGroups}} groupes récupérés",
+    "steps": {
+      "complete": "Récupération du compte terminée",
+      "downloading": "Téléchargement des données à partir des connexions de récupération…",
+      "error": "La récupération du compte a échoué",
+      "recovering": "Récupération du compte…"
     },
     "text": {
       "additionalInfo": "Vos connexions de récupération devront scanner ceci afin de vous aider à récupérer votre BrightID",
@@ -605,6 +614,15 @@
       "signatures": "{{count}} / 2 signatures",
       "signatures_plural": ""
     }
+  },
+  "recoveryCooldownModal": {
+    "dismissButtonLabel": "Compris",
+    "text": {
+      "connection": "Vous venez de modifier le niveau de récupération de <bold>{{name}}</bold>.",
+      "cooldown": "Notez que ce changement prend effet après un temps de recharge de <period>{{ cooldownPeriod }}</period> pour des raisons de sécurité.",
+      "cooldownGeneric": "Notez que le changement des connexions de récupération prend effet après une période de temps de recharge allant jusqu'à <period>{{ cooldownPeriod }}</period> pour des raisons de sécurité."
+    },
+    "title": "Période de recharge pour les connexions de récupération"
   },
   "restore": {
     "alert": {
@@ -628,7 +646,22 @@
       }
     },
     "header": {
-      "accountRecovery": "Récupération du compte"
+      "accountRecovery": "Récupération du compte",
+      "text": "Partie 2 : Restaurer la sauvegarde (facultatif)"
+    },
+    "info": "Avec votre mot de passe de sauvegarde, vous pouvez restaurer les noms et les photos de toutes vos connexions et groupes.",
+    "password": {
+      "placeholder": "Tapez votre mot de passe",
+      "skip": "Ignorer",
+      "submit": "Restaurer"
+    },
+    "steps": {
+      "complete": "Restauration terminée",
+      "error": "La restauration a échoué. Mauvais mot de passe ?",
+      "restoring": "Restauration des données…",
+      "skipped": "Restauration ignorée",
+      "waitingAccount": "En attente de la récupération du compte",
+      "waitingPassword": "Entrez le mot de passe ou ignorez"
     },
     "text": {
       "chooseConnectionToHelp": "Veuillez sélectionner dans vos connexions le compte que vous souhaitez aider à restaurer.",
