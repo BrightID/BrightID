@@ -1,7 +1,7 @@
 {
   "achievements": {
     "getSponsored": {
-      "description": "Lass dich sponsern von einer App die Sponsoring anbietet",
+      "description": "Lass dich sponsern von einer Anwendung, die Sponsoring anbietet",
       "title": "Werde gesponsert"
     },
     "joinConnectionParty": {
@@ -254,7 +254,7 @@
   "contact": {
     "label": {
       "email": "E-Mail",
-      "meet": "Verbindungen herstellen",
+      "meet": "Stelle Verbindungen her",
       "socialMedia": "Sozialen Medien",
       "website": "Website"
     },
@@ -607,7 +607,16 @@
   },
   "recovery": {
     "header": {
+      "text": "Schritt 1: Konto wiederherstellen",
       "title": "Wiederherstellungscode"
+    },
+    "info": "Dieser Schritt stellt Ihre BrightID auf diesem Gerät wieder her. Namen und Fotos von Verbindungen, die mit Ihren Wiederherstellungsverbindungen gemeinsam sind, werden wiederhergestellt.",
+    "state": "{{recoveredConnections}} Verbindungen, {{recoveredGroups}} Gruppen wiederhergestellt",
+    "steps": {
+      "complete": "Kontowiederherstellung abgeschlossen",
+      "downloading": "Herunterladen von Daten von Wiederherstellungsverbindungen …",
+      "error": "Die Wiederherstellung des Kontos ist fehlgeschlagen",
+      "recovering": "Konto wird wiederhergestellt …"
     },
     "text": {
       "additionalInfo": "Deine Wiederherstellungsverbindungen müssen diesen Code scannen um deine BrightID wiederherzustellen",
@@ -615,6 +624,15 @@
       "signatures": "{{count}} / 2 Unterschriften",
       "signatures_plural": ""
     }
+  },
+  "recoveryCooldownModal": {
+    "dismissButtonLabel": "Verstanden",
+    "text": {
+      "connection": "Sie haben gerade die Wiederherstellungsstufe von <bold>{{name}}</bold> geändert.",
+      "cooldown": "Beachte, dass diese Änderung aus Sicherheitsgründen nach einer Abklingzeit von <period>{{ cooldownPeriod }}</period> wirksam wird.",
+      "cooldownGeneric": "Beachte, dass die Änderung der Wiederherstellungsverbindungen aus Sicherheitsgründen nach einer Abklingzeit von bis zu <period>{{ cooldownPeriod }}</period> wirksam wird."
+    },
+    "title": "Abklingzeit für Wiederherstellungsverbindungen"
   },
   "restore": {
     "alert": {
@@ -638,7 +656,22 @@
       }
     },
     "header": {
-      "accountRecovery": "Kontowiederherstellung"
+      "accountRecovery": "Kontowiederherstellung",
+      "text": "Schritt 2: Datensicherung wiederherstellen (optional)"
+    },
+    "info": "Mit Ihrem Sicherungspasswort können Sie Namen und Fotos aller Ihrer Verbindungen und Gruppen wiederherstellen.",
+    "password": {
+      "placeholder": "Gib dein Passwort ein",
+      "skip": "Überspringen",
+      "submit": "Wiederherstellen"
+    },
+    "steps": {
+      "complete": "Wiederherstellung abgeschlossen",
+      "error": "Wiederherstellung fehlgeschlagen. Falsches Passwort?",
+      "restoring": "Daten werden wiederhergestellt …",
+      "skipped": "Wiederherstellung übersprungen",
+      "waitingAccount": "Warten auf Kontowiederherstellung",
+      "waitingPassword": "Passwort eingeben oder überspringen"
     },
     "text": {
       "chooseConnectionToHelp": "Bitte wähle die Verbindung aus, deren Konto du wiederherstellen willst.",
