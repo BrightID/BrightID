@@ -28,7 +28,7 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { verifiedConnectionsSelector } from '@/utils/connectionsSelector';
 import { setHeaderHeight } from '@/reducer/walkthroughSlice';
-
+import { uniq } from 'ramda';
 import { version as app_version } from '../../package.json';
 
 /**
@@ -67,7 +67,7 @@ export const HomeScreen = (props) => {
   const groupsCount = useSelector((state: State) => state.groups.groups.length);
   const connectionsCount = useSelector(verifiedConnectionsSelector).length;
   const linkedContextsCount = useSelector(linkedContextCountSelector);
-  const verifiedAppsCount = useSelector(verifiedAppsSelector).length;
+  const verifiedApps = useSelector(verifiedAppsSelector);
   const brightIdVerified = useSelector(brightIdVerifiedSelector);
   const [profilePhoto, setProfilePhoto] = useState('');
 
@@ -85,6 +85,9 @@ export const HomeScreen = (props) => {
   }, [dispatch, headerHeight]);
 
   const { showActionSheetWithOptions } = useActionSheet();
+
+  // TODO Workaround till backend is fixed: make sure to only count unique app names
+  const verifiedAppsCount = uniq(verifiedApps.map((app) => app.name)).length;
 
   const handleChat = () => {
     if (__DEV__) {
