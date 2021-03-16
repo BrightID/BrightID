@@ -24,7 +24,6 @@ export const createChannel = () => async (
     const { recoveryData } = getState();
 
     const url = new URL(`${api.baseUrl}/profile`);
-    // const url = new URL(`http://192.168.178.145:3000`);
     const channelApi = new ChannelAPI(url.href);
     const channelId = hash(recoveryData.aesKey);
 
