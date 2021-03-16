@@ -1,175 +1,167 @@
-import React, { useCallback, useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  KeyboardAvoidingView,
-  Alert,
-} from 'react-native';
-import Spinner from 'react-native-spinkit';
+import React, { useCallback, useEffect, useState } from 'react';
+import { StyleSheet, View, KeyboardAvoidingView, Alert } from 'react-native';
+import { useDispatch, useSelector } from '@/store';
+import { useFocusEffect } from '@react-navigation/native';
+import { BLACK, ORANGE, WHITE } from '@/theme/colors';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { setBackupCompleted, setPassword } from '@/reducer/userSlice';
+import { RecoverAccount } from '@/components/Onboarding/RecoveryFlow/RecoverAccount';
+import { RestoreBackup } from '@/components/Onboarding/RecoveryFlow/RestoreBackup';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from '@/store';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { ORANGE, BLACK, WHITE, DARKER_GREY } from '@/theme/colors';
-import { fontSize } from '@/theme/fonts';
-import { DEVICE_LARGE, DEVICE_OS } from '@/utils/deviceConstants';
-import { recoverData } from './thunks/recoveryThunks';
+import {
+  finishRecovery,
+  recoverAccount,
+  recoverData,
+} from './thunks/recoveryThunks';
 import { CHANNEL_POLL_INTERVAL, clearChannel } from './thunks/channelThunks';
-
-const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
 // clear channel after this time
 const channelTimeout = CHANNEL_POLL_INTERVAL * 3.1;
 
-const RestoreScreen = () => {
-  const [pass, setPass] = useState('');
-  const [restoreInProgress, setRestoreInProgress] = useState(false);
-  const [disabled, setDisabled] = useState(true);
-  const [timer, setTimer] = useState(Math.ceil(channelTimeout / 1000));
+export enum AccountSteps {
+  WAITING_DOWNLOAD,
+  DOWNLOAD_COMPLETE,
+  RECOVERING_ACCOUNT,
+  ERROR,
+  COMPLETE,
+}
 
+export enum BackupSteps {
+  WAITING_ACCOUNT, // Waiting for account recovery to complete
+  WAITING_PASSWORD, // Ready to start, waiting for user to provide password
+  RESTORING_DATA, // Restoring in progress
+  SKIPPED, // User decided to skip backup restoration
+  ERROR,
+  COMPLETE,
+}
+
+const RestoreScreen = () => {
   const { t } = useTranslation();
-  const navigation = useNavigation();
+  const [pass, setPass] = useState('');
+  const recoveredConnections = useSelector(
+    (state) => state.recoveryData.recoveredConnections,
+  );
+  const recoveredGroups = useSelector(
+    (state) => state.recoveryData.recoveredGroups,
+  );
+  const [accountStep, setAccountStep] = useState<AccountSteps>(
+    AccountSteps.WAITING_DOWNLOAD,
+  );
+  const [dataStep, setDataStep] = useState<BackupSteps>(
+    BackupSteps.WAITING_ACCOUNT,
+  );
+  const [accountError, setAccountError] = useState('');
   const dispatch = useDispatch();
 
   useFocusEffect(
     useCallback(() => {
-      // disable buttons until 3 passes of the the poll channel to make sure all data is downloaded
+      // wait 3 passes of the the poll channel to make sure all data is downloaded
       const t = setTimeout(() => {
         clearChannel();
-        setDisabled(false);
+        setAccountStep(AccountSteps.DOWNLOAD_COMPLETE);
       }, channelTimeout);
 
-      // display to user how long they are waiting for the button to be displayed
-      const i = setInterval(() => {
-        setTimer((t) => (t > 0 ? t - 1 : 0));
-      }, 1000);
       return () => {
         clearTimeout(t);
-        clearInterval(i);
       };
     }, []),
   );
 
-  const restoreCompleted = async () => {
-    Alert.alert(
-      t('common.alert.info'),
-      t('restore.alert.text.restoreSuccess'),
-      [{ text: t('common.alert.ok') }],
-    );
-  };
+  // track account recovery state
+  useEffect(() => {
+    const runEffect = async () => {
+      try {
+        console.log(`Starting account recovery`);
+        await dispatch(recoverAccount());
+        console.log(`Successfully recovered account`);
+        setAccountStep(AccountSteps.COMPLETE);
+        // restore backup can now start
+        setDataStep(BackupSteps.WAITING_PASSWORD);
+      } catch (e) {
+        console.log(`Error during account recovery: ${e.message}`);
+        setAccountStep(AccountSteps.ERROR);
+        setAccountError(e.message);
+      }
+    };
+    switch (accountStep) {
+      case AccountSteps.DOWNLOAD_COMPLETE:
+        runEffect();
+        break;
+      default:
+        break;
+    }
+  }, [dispatch, accountStep]);
 
-  const resetState = () => {
-    setRestoreInProgress(false);
-    setPass('');
-  };
+  // track data recovery state
+  useEffect(() => {
+    switch (dataStep) {
+      case BackupSteps.COMPLETE:
+        // save password in state and set backupCompleted marker
+        dispatch(setPassword(pass));
+        dispatch(setBackupCompleted(true));
+        break;
+      default:
+        break;
+    }
+  }, [dataStep, dispatch, pass]);
+
+  // track overall progress
+  useEffect(() => {
+    if (
+      accountStep === AccountSteps.COMPLETE &&
+      (dataStep === BackupSteps.COMPLETE || dataStep === BackupSteps.SKIPPED)
+    ) {
+      console.log(`Recovery process finished!`);
+      Alert.alert(
+        t('common.alert.info'),
+        t('restore.alert.text.restoreSuccess'),
+        [{ text: t('common.alert.ok') }],
+      );
+      dispatch(finishRecovery());
+    }
+  }, [accountStep, dataStep, dispatch, t]);
 
   const skip = () => {
     setPass('');
-    restore();
+    setDataStep(BackupSteps.SKIPPED);
   };
 
-  const restore = () => {
-    setRestoreInProgress(true);
-
-    dispatch(recoverData(pass))
-      .then((result) => {
-        result ? restoreCompleted() : resetState();
-      })
-      .catch((err) => {
-        resetState();
-        err instanceof Error ? console.warn(err.message) : console.log(err);
-        if (err instanceof Error && err.message === 'bad password') {
-          Alert.alert(
-            t('common.alert.error'),
-            t('common.alert.text.incorrectPassword'),
-            [
-              {
-                text: t('common.alert.ok'),
-              },
-            ],
-          );
-        }
-        if (err instanceof Error && err.message === 'bad sigs') {
-          Alert.alert(
-            t('restore.alert.title.notTrusted'),
-            t('restore.alert.text.notTrusted'),
-            [
-              {
-                text: t('common.alert.ok'),
-                onPress: () => navigation.goBack(),
-              },
-            ],
-          );
-        }
-      });
+  const restoreBackup = async () => {
+    try {
+      console.log(`Starting restore backup`);
+      setDataStep(BackupSteps.RESTORING_DATA);
+      await dispatch(recoverData(pass));
+      console.log(`Successfully restored backup`);
+      setDataStep(BackupSteps.COMPLETE);
+    } catch (e) {
+      console.log(`Error during recover: ${e.message}`);
+      setDataStep(BackupSteps.ERROR);
+    }
   };
 
   return (
     <>
       <View style={styles.orangeTop} />
-      <Container style={styles.container} behavior="padding">
-        {!restoreInProgress ? (
-          <>
-            <View style={styles.textInputContainer}>
-              <Text style={styles.textInfo}>
-                {t('restore.text.enterPassword')}
-              </Text>
-              <TextInput
-                onChangeText={setPass}
-                value={pass}
-                placeholder="Type your password"
-                placeholderTextColor={DARKER_GREY}
-                style={styles.textInput}
-                autoCorrect={false}
-                textContentType="password"
-                autoCompleteType="password"
-                underlineColorAndroid="transparent"
-                secureTextEntry={true}
-              />
-            </View>
-            <Text style={styles.skipInfo}>
-              {t('restore.text.skipLoadingBackup')}
-            </Text>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[
-                  styles.submitButton,
-                  pass.length < 1 || disabled ? { opacity: 0.5 } : {},
-                ]}
-                onPress={restore}
-                accessibilityLabel="submit"
-                disabled={pass.length < 1 || disabled}
-              >
-                <Text style={styles.submitText}>Submit</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.skipButton, disabled ? { opacity: 0.5 } : {}]}
-                onPress={skip}
-                accessibilityLabel="skip"
-                disabled={disabled}
-              >
-                <Text style={styles.skipText}>
-                  {disabled ? `... ${timer}` : t('restore.text.skip')}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        ) : (
-          <View style={styles.loading}>
-            <Spinner
-              isVisible={true}
-              size={DEVICE_LARGE ? 60 : 45}
-              type="Wave"
-              color={ORANGE}
-            />
-            <Text style={styles.textInfo}>
-              {t('restore.text.downloadingData')}
-            </Text>
-          </View>
-        )}
-      </Container>
+      <KeyboardAvoidingView style={styles.container} behavior="position">
+        <View style={styles.recoverAccountContainer}>
+          <RecoverAccount
+            currentStep={accountStep}
+            recoveredGroups={recoveredGroups}
+            recoveredConnections={recoveredConnections}
+            errorMessage={accountError}
+          />
+        </View>
+        <View style={styles.divider} />
+        <View style={styles.restoreBackupContainer}>
+          <RestoreBackup
+            currentStep={dataStep}
+            doRestore={restoreBackup}
+            doSkip={skip}
+            password={pass}
+            setPassword={setPass}
+          />
+        </View>
+      </KeyboardAvoidingView>
     </>
   );
 };
@@ -192,78 +184,18 @@ const styles = StyleSheet.create({
     zIndex: 10,
     overflow: 'hidden',
   },
-  textInputContainer: {
-    marginTop: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  },
-
-  textInfo: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[16],
-    color: BLACK,
-    margin: DEVICE_LARGE ? 18 : 16,
-  },
-  textInput: {
-    fontFamily: 'Poppins-Regular',
-    fontSize: fontSize[14],
-    color: DARKER_GREY,
+  divider: {
+    paddingTop: 40,
+    marginBottom: 30,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: DARKER_GREY,
-    marginVertical: DEVICE_LARGE ? 60 : 50,
-    width: '70%',
-    textAlign: 'center',
-    paddingBottom: DEVICE_LARGE ? 12 : 10,
+    borderColor: BLACK,
   },
-  loading: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
+  recoverAccountContainer: {
+    marginTop: 20,
+    minHeight: '25%',
   },
-  skipInfo: {
-    fontFamily: 'Poppins-Regular',
-    width: '70%',
-    textAlign: 'center',
-    color: DARKER_GREY,
-    marginTop: 10,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: DEVICE_LARGE ? 40 : 32,
-  },
-  submitButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: DEVICE_LARGE ? 120 : 100,
-    height: DEVICE_LARGE ? 46 : 40,
-    borderRadius: 60,
-    backgroundColor: ORANGE,
-    shadowColor: BLACK,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 4,
-  },
-  submitText: {
-    fontFamily: 'Poppins-Bold',
-    color: WHITE,
-    fontSize: fontSize[16],
-  },
-  skipButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: ORANGE,
-    borderWidth: 1,
-    borderRadius: 60,
-    width: DEVICE_LARGE ? 120 : 100,
-    height: DEVICE_LARGE ? 46 : 40,
-    marginLeft: DEVICE_LARGE ? 20 : 16,
-  },
-  skipText: {
-    fontFamily: 'Poppins-Medium',
-    color: ORANGE,
-    fontSize: fontSize[16],
+  restoreBackupContainer: {
+    height: '50%',
   },
 });
 

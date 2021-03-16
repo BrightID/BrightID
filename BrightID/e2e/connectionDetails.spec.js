@@ -202,10 +202,10 @@ describe('Connection details', () => {
       );
       // set new value by swiping right
       // "adjustSliderToPosition" is only available on iOS, so we have to use the not-so-exact "swipe" method
-      // This will swipe all the way to the right, so the new expected level is RECOVERY
+      // This will swipe all the way to the right, so the new expected level is ALREADY_KNOWN
       await slider.swipe('right', 'fast');
       await expect(sliderText).toHaveText(
-        connectionLevelStrings[connection_levels.RECOVERY],
+        connectionLevelStrings[connection_levels.ALREADY_KNOWN],
       );
 
       // click save button
@@ -216,13 +216,13 @@ describe('Connection details', () => {
       ).not.toBeVisible();
       // verify new value is displayed
       await expect(element(by.id('ConnectionLevelText'))).toHaveText(
-        connectionLevelStrings[connection_levels.RECOVERY],
+        connectionLevelStrings[connection_levels.ALREADY_KNOWN],
       );
       // wait 30 seconds until operation is confirmed in the backend
       await new Promise((r) => setTimeout(r, 30000));
       // verify new value is still displayed after operation confirmed
       await expect(element(by.id('ConnectionLevelText'))).toHaveText(
-        connectionLevelStrings[connection_levels.RECOVERY],
+        connectionLevelStrings[connection_levels.ALREADY_KNOWN],
       );
     });
   });

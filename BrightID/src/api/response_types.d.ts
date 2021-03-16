@@ -52,6 +52,13 @@ type UserConnectionRes = {
   };
 };
 
+type UserVerificationRes = {
+  data: {
+    // TODO: Fix verifications type
+    verifications: Array<any>;
+  };
+};
+
 type UserInfoRes = {
   data: {
     score: number;
@@ -59,7 +66,8 @@ type UserInfoRes = {
     groups: GroupInfo[];
     invites: InviteInfo[];
     connections: ConnectionInfo[];
-    verifications: string[];
+    // TODO: Fix verifications type
+    verifications: Array<any>;
     isSponsored: boolean;
     trusted: string[];
     flaggers: {
@@ -130,6 +138,7 @@ type ConnectionInfo = {
   id: string;
   signingKey: string;
   level: ConnectionLevel;
+  incomingLevel?: ConnectionLevel;
   verifications: string[];
   hasPrimaryGroup: boolean;
   trusted: string[];

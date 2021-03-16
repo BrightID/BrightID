@@ -86,7 +86,7 @@ export const ReconnectView = ({
         // adding recovery connection. check if cooldown period applies
         cooldownPeriod = calculateCooldownPeriod({
           recoveryConnections,
-          existingConnection,
+          connection: existingConnection,
         });
       } else if (existingConnection.level === connection_levels.RECOVERY) {
         // removing recovery connection. Cooldown period always applies.

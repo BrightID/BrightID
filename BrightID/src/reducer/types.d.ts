@@ -18,6 +18,7 @@ type Connection = Partial<ConnectionInfo> & {
   photo: { filename: string };
   connectionDate: number;
   status: string;
+  incomingLevel?: ConnectionLevel;
   socialMedia?: string[];
   notificationToken?: string;
   publicKey?: string;

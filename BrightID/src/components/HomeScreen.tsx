@@ -21,7 +21,6 @@ import { WHITE, ORANGE, BLACK, BLUE } from '@/theme/colors';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import ChatBox from '@/components/Icons/ChatBox';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
-import VerifiedSticker from '@/components/Icons/VerifiedSticker';
 import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
 import Camera from '@/components/Icons/Camera';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -29,7 +28,7 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { verifiedConnectionsSelector } from '@/utils/connectionsSelector';
 import { setHeaderHeight } from '@/reducer/walkthroughSlice';
-
+import { uniq } from 'ramda';
 import { version as app_version } from '../../package.json';
 
 /**
@@ -45,9 +44,14 @@ const linkedContextCountSelector = createSelector(
   (contexts) => contexts.filter((link) => link.state === 'applied').length,
 );
 
-export const verifiedSelector = createSelector(
+export const verifiedAppsSelector = createSelector(
   (state: State) => state.user.verifications,
-  (verifications) => verifications.includes('BrightID'),
+  (verifications) => verifications.filter((v) => v.app),
+);
+
+export const brightIdVerifiedSelector = createSelector(
+  (state: State) => state.user.verifications,
+  (verifications) => verifications.some((v) => v?.name === 'BrightID'),
 );
 
 /** HomeScreen Component */
@@ -63,8 +67,8 @@ export const HomeScreen = (props) => {
   const groupsCount = useSelector((state: State) => state.groups.groups.length);
   const connectionsCount = useSelector(verifiedConnectionsSelector).length;
   const linkedContextsCount = useSelector(linkedContextCountSelector);
-  const verified = useSelector(verifiedSelector);
-
+  const verifiedApps = useSelector(verifiedAppsSelector);
+  const brightIdVerified = useSelector(brightIdVerifiedSelector);
   const [profilePhoto, setProfilePhoto] = useState('');
 
   const { t } = useTranslation();
@@ -81,6 +85,9 @@ export const HomeScreen = (props) => {
   }, [dispatch, headerHeight]);
 
   const { showActionSheetWithOptions } = useActionSheet();
+
+  // TODO Workaround till backend is fixed: make sure to only count unique app names
+  const verifiedAppsCount = uniq(verifiedApps.map((app) => app.name)).length;
 
   const handleChat = () => {
     if (__DEV__) {
@@ -185,16 +192,19 @@ export const HomeScreen = (props) => {
             <Text testID="EditNameBtn" style={styles.name} numberOfLines={1}>
               {name}
             </Text>
-            {verified && (
+            {brightIdVerified && (
               <View style={styles.verificationSticker}>
                 <VerifiedBadge width={16} height={16} />
               </View>
             )}
           </View>
           <View style={styles.profileDivider} />
-          {verified ? (
+          {verifiedAppsCount > 0 ? (
             <View style={styles.verified}>
-              <VerifiedSticker width={100} height={20} />
+              <Text style={styles.verifiedText}>
+                Verified for {verifiedAppsCount} app
+                {verifiedAppsCount > 1 ? 's' : ''}
+              </Text>
             </View>
           ) : (
             <View style={styles.verified}>
@@ -391,11 +401,13 @@ const styles = StyleSheet.create({
     marginTop: 1.5,
   },
   verified: {
-    marginTop: 6,
-    // paddingTop: DEVICE_ANDROID ? 2 : 1,
-    // paddingBottom: DEVICE_ANDROID ? 0 : 1,
-    // paddingLeft: 23,
-    // paddingRight: 23,
+    marginTop: 8,
+  },
+  verifiedText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[12],
+    color: ORANGE,
+    borderColor: ORANGE,
   },
   countsCard: {
     backgroundColor: WHITE,

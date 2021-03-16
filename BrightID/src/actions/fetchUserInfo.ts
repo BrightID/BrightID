@@ -1,4 +1,5 @@
 import { InteractionManager } from 'react-native';
+import _ from 'lodash';
 import api from '@/api/brightId';
 import { updateInvites } from '@/utils/invites';
 import { GROUPS_TYPE } from '@/utils/constants';
@@ -25,17 +26,20 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
       if (!id) {
         throw new Error('id missing');
       }
-
       try {
         const {
           groups,
           score,
-          verifications = [],
           connections = [],
           isSponsored,
           invites,
         } = await api.getUserInfo(id);
-
+        const verifications = await api.getUserVerifications(id);
+        let incomingConns = await api.getConnections(id, 'inbound');
+        incomingConns = _.keyBy(incomingConns, 'id');
+        for (const conn of connections) {
+          conn.incomingLevel = incomingConns[conn.id]?.level;
+        }
         if (operations.length === 0) {
           // don't update data when there are pending operations.
           dispatch(setGroups(groups));
@@ -48,7 +52,6 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
         // this can not be done in reducer because it should be in an async function
         const newInvites: Invite[] = await updateInvites(invites);
         dispatch(setInvites(newInvites));
-
         if (newInvites.length > oldInvites.length) {
           const message =
             newInvites.length < 1
@@ -64,7 +67,6 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
             }),
           );
         }
-
         dispatch(updateNotifications());
         resolve(null);
       } catch (err) {

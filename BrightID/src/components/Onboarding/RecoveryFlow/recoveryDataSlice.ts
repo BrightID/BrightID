@@ -13,6 +13,8 @@ export const initialState: RecoveryData = {
   timestamp: 0,
   sigs: {},
   qrcode: '',
+  recoveredConnections: 0,
+  recoveredGroups: 0,
   channel: {
     channelId: '',
     url: null,
@@ -32,6 +34,8 @@ const recoveryData = createSlice({
       state.id = '';
       state.name = '';
       state.photo = '';
+      state.recoveredConnections = 0;
+      state.recoveredGroups = 0;
       state.timestamp = Date.now();
       state.sigs = {};
       state.qrcode = encodeURIComponent(`Recovery2_${aesKey}`);
@@ -71,12 +75,22 @@ const recoveryData = createSlice({
     resetRecoveryData() {
       return initialState;
     },
+    increaseRecoveredConnections(state, action) {
+      const { count } = action.payload;
+      state.recoveredConnections += count;
+    },
+    increaseRecoveredGroups(state, action) {
+      const { count } = action.payload;
+      state.recoveredGroups += count;
+    },
   },
 });
 
 // Export channel actions
 export const {
   init,
+  increaseRecoveredConnections,
+  increaseRecoveredGroups,
   setChannel,
   setSig,
   updateNamePhoto,

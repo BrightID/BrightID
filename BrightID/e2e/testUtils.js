@@ -1,6 +1,7 @@
 /* global element, by, waitFor */
 
 import i18next from 'i18next';
+import { connection_levels } from '@/utils/constants';
 
 const testUserName = 'Vincent Vega';
 
@@ -92,13 +93,16 @@ const createBrightID = async (name = testUserName, withPassword = false) => {
   } else {
     await skipPassword();
   }
-  await skipWalkthrough();
+  // await skipWalkthrough();
   // should end up at home screen
   await expectHomescreen();
   return name;
 };
 
-const createFakeConnection = async (doConfirm = true) => {
+const createFakeConnection = async (
+  doConfirm = true,
+  connectionLevel = connection_levels.JUST_MET,
+) => {
   // need to be on Homescreen to continue
   await expectHomescreen();
   // open MyCode screen
@@ -113,8 +117,8 @@ const createFakeConnection = async (doConfirm = true) => {
 
   if (doConfirm) {
     // confirm connection and navigate back to home screen
-    await expect(element(by.id('just metBtn'))).toBeVisible();
-    await element(by.id('just metBtn')).tap();
+    await expect(element(by.id(`${connectionLevel}Btn`))).toBeVisible();
+    await element(by.id(`${connectionLevel}Btn`)).tap();
     // Should end up in the connection list
     await expectConnectionsScreen();
     await navigateHome();

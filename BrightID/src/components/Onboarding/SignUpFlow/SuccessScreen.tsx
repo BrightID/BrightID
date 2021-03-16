@@ -15,7 +15,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
+import { backupAppData } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import { setBackupCompleted } from '@/reducer/userSlice';
 import { saveId } from './thunks';
 import Congratulations from '../../Icons/Congratulations';
@@ -54,7 +54,12 @@ export const SuccessScreen = () => {
     if (endTime && currentTime && currentTime >= endTime) {
       // this  will cause navigation to HomeScreen
       dispatch(saveId());
-
+      if (password) {
+        console.log(`Starting initial backup`);
+        dispatch(backupAppData()).then(() => {
+          dispatch(setBackupCompleted(true));
+        });
+      }
       return () => {
         // navigate to view password walkthrough
         InteractionManager.runAfterInteractions(() => {
@@ -62,26 +67,13 @@ export const SuccessScreen = () => {
         });
       };
     }
-  }, [currentTime, endTime, dispatch, navigation]);
+  }, [currentTime, endTime, dispatch, navigation, password]);
 
   useFocusEffect(
     useCallback(() => {
       // wait 1.5 seconds before navigating to home page
-      if (!password) {
-        setEndTime(Date.now() + TIMEOUT);
-      } else {
-        // backup user and then wait 1.5 seconds
-        console.log(`Starting initial user backup`);
-        dispatch(backupUser())
-          .then(() => {
-            dispatch(setBackupCompleted(true));
-            setEndTime(Date.now() + TIMEOUT);
-          })
-          .catch((err) => {
-            Alert.alert(t('common.alert.error'), err.message);
-          });
-      }
-    }, [dispatch, password, t]),
+      setEndTime(Date.now() + TIMEOUT);
+    }, []),
   );
   return (
     <>

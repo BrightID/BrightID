@@ -36,15 +36,7 @@ const makeLinkedContextSelector = () =>
   );
 
 const AppCard = (props: AppInfo) => {
-  const {
-    url,
-    id,
-    logo,
-    name,
-    verification,
-    unusedSponsorships,
-    context,
-  } = props;
+  const { url, id, logo, name, unusedSponsorships, context } = props;
   const dispatch = useDispatch();
   const verifications = useSelector((state: State) => state.user.verifications);
   const isSponsored = useSelector((state: State) => state.user.isSponsored);
@@ -133,15 +125,14 @@ const AppCard = (props: AppInfo) => {
   };
 
   const VerificationLabel = () => {
-    if (!verifications.includes(verification)) {
-      return (
-        <Text style={styles.unverifiedMessage}>
-          {t('apps.tag.notVerifiedForApp')}
-        </Text>
-      );
-    } else {
-      return <View />;
-    }
+    const verified = verifications.some((v) => v.app && id === v.name);
+    return !verified ? (
+      <Text style={styles.unverifiedMessage}>
+        {t('apps.tag.notVerifiedForApp')}
+      </Text>
+    ) : (
+      <View />
+    );
   };
 
   const StatusLabel = () => {

@@ -1,4 +1,5 @@
 // uuid's generated via npx uuid
+
 export const socialMediaList = {
   'fab9a32f-e968-495e-807f-7f1b27642506': {
     name: 'Discord',
