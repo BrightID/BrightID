@@ -1,6 +1,7 @@
 import { hash } from '@/utils/encoding';
 import api from '@/api/brightId';
 import ChannelAPI from '@/api/channelService';
+import { RECOVERY_CHANNEL_KEEPALIVE_THRESHOLD } from '@/utils/constants';
 import {
   downloadConnections,
   downloadGroups,
@@ -50,7 +51,6 @@ const uploadRecoveryData = async (
     timestamp: recoveryData.timestamp,
   };
   const data = JSON.stringify(dataObj);
-  console.log(`Uploading data: ${data}`);
   await channelApi.upload({
     channelId,
     data,
@@ -107,19 +107,10 @@ export const checkChannel = () => async (
 
   // keep channel alive by re-uploading my data
   const remainingTTL = expires - Date.now();
-  console.log(`Recovery channel ttl is ${remainingTTL}ms`);
-  if (remainingTTL < 30000) {
+  if (remainingTTL < RECOVERY_CHANNEL_KEEPALIVE_THRESHOLD) {
     await uploadRecoveryData(recoveryData, channelApi);
     dispatch(resetChannelExpiration());
   }
-  /*
-  if (expires && Date.now() - expires > 0) {
-    // create new channel if date is expired
-    console.log(`channel expired, creating new channel`);
-    await dispatch(createChannel());
-    return;
-  }
-   */
 
   const dataIds = await channelApi.list(channelId);
 
