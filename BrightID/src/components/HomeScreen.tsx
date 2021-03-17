@@ -79,13 +79,15 @@ export const HomeScreen = (props) => {
     useCallback(() => {
       retrieveImage(photoFilename).then(setProfilePhoto);
       setLoading(true);
-      dispatch(fetchUserInfo())
-        .then(() => {
-          setLoading(false);
-        })
-        .catch(() => {
-          setLoading(false);
-        });
+      dispatch(fetchUserInfo()).then(() => {
+        setLoading(false);
+      });
+      const timeoutId = setTimeout(() => {
+        setLoading(false);
+      }, 3000);
+      return () => {
+        clearTimeout(timeoutId);
+      };
     }, [dispatch, photoFilename]),
   );
 
