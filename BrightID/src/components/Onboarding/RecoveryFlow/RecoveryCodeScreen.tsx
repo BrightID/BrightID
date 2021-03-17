@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
+  Clipboard,
   StyleSheet,
   Text,
-  View,
   TouchableOpacity,
-  Clipboard,
+  View,
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
@@ -16,10 +16,12 @@ import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { ORANGE, BLACK, WHITE, LIGHT_BLACK, DARKER_GREY } from '@/theme/colors';
+import { BLACK, DARKER_GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { pollChannel } from './thunks/channelThunks';
+import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
+import { clearChannel, pollChannel } from './thunks/channelThunks';
+import { resetRecoveryData } from './recoveryDataSlice';
 
 /**
  * Recovery Code screen of BrightID
@@ -49,18 +51,45 @@ const RecoveryCodeScreen = () => {
   );
 
   useEffect(() => {
-    const parseQrString = (err, qrsvg) => {
-      if (err) return console.log(err);
-      setQrsvg(qrsvg);
-    };
-
-    if (recoveryData.qrcode) {
-      qrcode.toString(recoveryData.qrcode, (err, qr) => {
+    if (recoveryData.errorType !== RecoveryErrorType.NONE) {
+      // something went wrong. Show error message to user and stop recovery process
+      let message;
+      switch (recoveryData.errorType) {
+        case RecoveryErrorType.MISMATCH_ID:
+          message = t(
+            'recovery.error.mismatchId',
+            'Your recovery connections selected different accounts',
+          );
+          break;
+        case RecoveryErrorType.GENERIC:
+        default:
+          // use untranslated errorMessage from state if available, generic message otherwise
+          message =
+            recoveryData.errorMessage !== ''
+              ? recoveryData.errorMessage
+              : t('recovery.error.unknown', 'An unknown error occured');
+      }
+      Alert.alert(
+        t('recovery.error.title', 'Account recovery failed'),
+        message,
+      );
+      clearChannel();
+      dispatch(resetRecoveryData());
+      navigation.goBack();
+    } else {
+      const parseQrString = (err, qrsvg) => {
         if (err) return console.log(err);
-        parseString(qr, parseQrString);
-      });
+        setQrsvg(qrsvg);
+      };
+
+      if (recoveryData.qrcode) {
+        qrcode.toString(recoveryData.qrcode, (err, qr) => {
+          if (err) return console.log(err);
+          parseString(qr, parseQrString);
+        });
+      }
     }
-  }, [recoveryData]);
+  }, [dispatch, navigation, recoveryData, t]);
 
   useFocusEffect(
     useCallback(() => {
