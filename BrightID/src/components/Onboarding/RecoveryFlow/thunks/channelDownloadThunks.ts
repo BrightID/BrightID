@@ -259,8 +259,8 @@ export const downloadSigs = ({
       },
     } = getState();
 
-    const isSig = (id) => id.startsWith('sig_');
-    const sigId = (id) => id.replace('sig_', '');
+    const isSig = (id: string) => id.startsWith('sig_');
+    const sigId = (id: string) => id.replace('sig_', '');
 
     const sigDataIds = dataIds.filter(
       (dataId) => isSig(dataId) && !sigs[sigId(dataId)],
@@ -268,7 +268,7 @@ export const downloadSigs = ({
 
     for (const dataId of sigDataIds) {
       const signer = sigId(dataId);
-      const sig = await channelApi.download({ channelId, dataId });
+      const sig: Signature = await channelApi.download({ channelId, dataId });
       if (id && sig.id !== id) {
         // recovery connections disagree on which account is being recovered!
         throw new RecoveryError(RecoveryErrorType.MISMATCH_ID);

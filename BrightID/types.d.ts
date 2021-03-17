@@ -185,7 +185,7 @@ declare global {
 
   type RecoveryData = {
     publicKey: string;
-    secretKey: string;
+    secretKey: Uint8Array;
     id: string;
     name: string;
     photo: string;

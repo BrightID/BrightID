@@ -1,4 +1,4 @@
-export const enum RecoveryErrorType {
+export enum RecoveryErrorType {
   NONE = 'NONE',
   GENERIC = 'GENERIC',
   MISMATCH_ID = 'MISMATCH_ID',

@@ -7,7 +7,7 @@ const FIFTEEN_MINUTES = 900000;
 
 export const initialState: RecoveryData = {
   publicKey: '',
-  secretKey: '',
+  secretKey: new Uint8Array(),
   aesKey: '',
   errorMessage: '',
   errorType: RecoveryErrorType.NONE,
@@ -26,16 +26,18 @@ export const initialState: RecoveryData = {
   },
 };
 
-interface ErrorPayload {
-  errorType: RecoveryErrorType;
-  errorMessage?: string;
-}
-
 const recoveryData = createSlice({
   name: 'recoveryData',
   initialState,
   reducers: {
-    init(state, action) {
+    init(
+      state,
+      action: PayloadAction<{
+        publicKey: Uint8Array;
+        secretKey: Uint8Array;
+        aesKey: string;
+      }>,
+    ) {
       const { publicKey, secretKey, aesKey } = action.payload;
       state.publicKey = uInt8ArrayToB64(publicKey);
       state.secretKey = secretKey;
@@ -51,13 +53,13 @@ const recoveryData = createSlice({
       state.sigs = {};
       state.qrcode = encodeURIComponent(`Recovery2_${aesKey}`);
     },
-    setChannel(state, action) {
+    setChannel(state, action: PayloadAction<{ channelId: string; url: URL }>) {
       const { channelId, url } = action.payload;
       state.channel.channelId = channelId;
       state.channel.url = url;
       state.channel.expires = Date.now() + FIFTEEN_MINUTES;
     },
-    setSig(state, action) {
+    setSig(state, action: PayloadAction<{ sig: Signature; signer: string }>) {
       const { signer, sig } = action.payload;
       // access previous values from the reducer
       const { id } = original(state);
@@ -72,7 +74,10 @@ const recoveryData = createSlice({
         state.sigs[signer] = sig;
       }
     },
-    updateNamePhoto(state, action) {
+    updateNamePhoto(
+      state,
+      action: PayloadAction<{ name: string; photo: string }>,
+    ) {
       const { name, photo } = action.payload;
       state.name = name;
       state.photo = photo;
