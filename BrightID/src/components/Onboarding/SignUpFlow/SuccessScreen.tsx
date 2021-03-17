@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Alert,
   Image,
   InteractionManager,
   SafeAreaView,
@@ -17,9 +16,9 @@ import { WHITE, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { backupAppData } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import { setBackupCompleted } from '@/reducer/userSlice';
+import DetoxEnabled from '@/utils/Detox';
 import { saveId } from './thunks';
 import Congratulations from '../../Icons/Congratulations';
-
 /* Onboarding Success Screen */
 
 /* ======================================== */
@@ -62,9 +61,11 @@ export const SuccessScreen = () => {
       }
       return () => {
         // navigate to view password walkthrough
-        InteractionManager.runAfterInteractions(() => {
-          navigation.navigate('ViewPasswordWalkthrough');
-        });
+        if (!DetoxEnabled) {
+          InteractionManager.runAfterInteractions(() => {
+            navigation.navigate('ViewPasswordWalkthrough');
+          });
+        }
       };
     }
   }, [currentTime, endTime, dispatch, navigation, password]);
