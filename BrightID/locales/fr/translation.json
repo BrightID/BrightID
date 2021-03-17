@@ -234,9 +234,9 @@
     },
     "tag": {
       "deleted": "Supprimé",
-      "failed": "Écec de la connexion.\nVeuillez réessayer.",
+      "failed": "Échec de la connexion.\nVeuillez réessayer.",
       "hidden": "Caché(e)",
-      "lastConnected": "Connecté(e) {{date}}",
+      "lastConnected": "Dernière connexion : {{date}}",
       "reportedAs": "Signalé en tant que {{flag}}",
       "waiting": "En attente"
     },
