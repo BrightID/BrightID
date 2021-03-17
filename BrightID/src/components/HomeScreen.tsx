@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
   View,
   StatusBar,
-  Clipboard,
 } from 'react-native';
+import Clipboard from '@react-native-community/clipboard';
 import { createSelector } from '@reduxjs/toolkit';
 import { useFocusEffect } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
