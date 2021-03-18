@@ -10,6 +10,7 @@ import { AppDispatch } from '@/store';
 import { connection_levels } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
 import { socialMediaList } from '@/components/EditProfile/socialMediaList';
+import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 
 declare global {
   type ValueOf<T> = T[keyof T];
@@ -184,7 +185,7 @@ declare global {
 
   type RecoveryData = {
     publicKey: string;
-    secretKey: string;
+    secretKey: Uint8Array;
     id: string;
     name: string;
     photo: string;
@@ -199,6 +200,8 @@ declare global {
       url: URL;
       expires: number;
     };
+    errorType: RecoveryErrorType;
+    errorMessage: string;
   };
 
   type SocialMediaId = keyof typeof socialMediaList;

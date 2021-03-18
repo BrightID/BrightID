@@ -573,6 +573,11 @@
     }
   },
   "recovery": {
+    "error": {
+      "mismatchId": "Your recovery connections selected different accounts",
+      "title": "Account recovery failed",
+      "unknown": "An unknown error occured"
+    },
     "header": {
       "text": "Part 1: Recover account"
     },
@@ -610,7 +615,6 @@
     },
     "emptyList": {
       "text": {
-        "downloadingData": "Downloading recovery connection data",
         "nobodyHasChosen": "Unable to recover connection...\nThey did not set you as recovery"
       }
     },

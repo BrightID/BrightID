@@ -4,8 +4,13 @@ import { decryptData } from '@/utils/cryptoHelper';
 import { hash } from '@/utils/encoding';
 import { addConnection, createGroup } from '@/actions';
 import {
+  RecoveryError,
+  RecoveryErrorType,
+} from '@/components/Onboarding/RecoveryFlow/RecoveryError';
+import {
   increaseRecoveredConnections,
   increaseRecoveredGroups,
+  setRecoveryError,
   setSig,
   updateNamePhoto,
 } from '../recoveryDataSlice';
@@ -113,7 +118,7 @@ export const downloadConnections = ({
       }
     }
     if (count > 0) {
-      dispatch(increaseRecoveredConnections({ count }));
+      dispatch(increaseRecoveredConnections(count));
     }
     return connectionDataIds.length;
   } catch (err) {
@@ -231,7 +236,7 @@ export const downloadGroups = ({
       }
     }
     if (count > 0) {
-      dispatch(increaseRecoveredGroups({ count }));
+      dispatch(increaseRecoveredGroups(count));
     }
     return groupDataIds.length;
   } catch (err) {
@@ -251,21 +256,39 @@ export const downloadSigs = ({
       recoveryData: {
         sigs,
         channel: { channelId },
+        id,
       },
     } = getState();
 
-    const isSig = (id) => id.startsWith('sig_');
-    const sigId = (id) => id.replace('sig_', '');
+    const isSig = (id: string) => id.startsWith('sig_');
+    const sigId = (id: string) => id.replace('sig_', '');
 
-    const sigDataIds = dataIds.filter((id) => isSig(id) && !sigs[sigId(id)]);
+    const sigDataIds = dataIds.filter(
+      (dataId) => isSig(dataId) && !sigs[sigId(dataId)],
+    );
 
     for (const dataId of sigDataIds) {
       const signer = sigId(dataId);
-      const sig = await channelApi.download({ channelId, dataId });
+      const sig: Signature = await channelApi.download({ channelId, dataId });
+      if (id && sig.id !== id) {
+        // recovery connections disagree on which account is being recovered!
+        throw new RecoveryError(RecoveryErrorType.MISMATCH_ID);
+      }
       dispatch(setSig({ signer, sig }));
     }
     return sigDataIds.length;
   } catch (err) {
-    console.error(`downloadingSigs: ${err.message}`);
+    if (err instanceof RecoveryError) {
+      console.error(`downloadingSigs: ${err.errorType}`);
+      dispatch(setRecoveryError({ errorType: err.errorType }));
+    } else {
+      console.error(`downloadingSigs: ${err.message}`);
+      dispatch(
+        setRecoveryError({
+          errorType: RecoveryErrorType.GENERIC,
+          errorMessage: err.message,
+        }),
+      );
+    }
   }
 };
