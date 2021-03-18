@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { original } from 'immer';
 import { uInt8ArrayToB64 } from '@/utils/encoding';
-
-const FIFTEEN_MINUTES = 900000;
+import { CHANNEL_TTL } from '@/utils/constants';
 
 export const initialState: RecoveryData = {
   publicKey: '',
@@ -45,7 +44,10 @@ const recoveryData = createSlice({
       const { channelId, url } = action.payload;
       state.channel.channelId = channelId;
       state.channel.url = url;
-      state.channel.expires = Date.now() + FIFTEEN_MINUTES;
+      state.channel.expires = Date.now() + CHANNEL_TTL;
+    },
+    resetChannelExpiration(state) {
+      state.channel.expires = Date.now() + CHANNEL_TTL;
     },
     setSig(state, action) {
       const { signer, sig } = action.payload;
@@ -92,6 +94,7 @@ export const {
   setChannel,
   setSig,
   updateNamePhoto,
+  resetChannelExpiration,
   resetRecoverySigs,
   resetRecoveryData,
 } = recoveryData.actions;

@@ -15,10 +15,11 @@ export const loadRecoveryData = async (
   aesKey: string,
 ): Promise<{ signingKey: string; timestamp: number }> => {
   try {
-    const data = await channelApi.download({
+    const dataString = await channelApi.download({
       channelId: hash(aesKey),
       dataId: 'data',
     });
+    const data = JSON.parse(dataString);
     if (!data.signingKey || !data.timestamp) {
       throw new Error(
         'Please ask the connection to reload their QR code and try again',
