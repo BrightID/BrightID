@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   Image,
   Linking,
   StyleSheet,
@@ -7,8 +8,8 @@ import {
   TouchableOpacity,
   View,
   StatusBar,
-  Clipboard,
 } from 'react-native';
+import Clipboard from '@react-native-community/clipboard';
 import { createSelector } from '@reduxjs/toolkit';
 import { useFocusEffect } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
@@ -17,7 +18,7 @@ import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import { setActiveNotification } from '@/actions';
 import { retrieveImage } from '@/utils/filesystem';
-import { WHITE, ORANGE, BLACK, BLUE } from '@/theme/colors';
+import { WHITE, ORANGE, BLACK, BLUE, DARKER_GREY } from '@/theme/colors';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import ChatBox from '@/components/Icons/ChatBox';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
@@ -70,13 +71,23 @@ export const HomeScreen = (props) => {
   const verifiedApps = useSelector(verifiedAppsSelector);
   const brightIdVerified = useSelector(brightIdVerifiedSelector);
   const [profilePhoto, setProfilePhoto] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const { t } = useTranslation();
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(fetchUserInfo());
       retrieveImage(photoFilename).then(setProfilePhoto);
+      setLoading(true);
+      dispatch(fetchUserInfo()).then(() => {
+        setLoading(false);
+      });
+      const timeoutId = setTimeout(() => {
+        setLoading(false);
+      }, 3000);
+      return () => {
+        clearTimeout(timeoutId);
+      };
     }, [dispatch, photoFilename]),
   );
 
@@ -205,6 +216,10 @@ export const HomeScreen = (props) => {
                 Verified for {verifiedAppsCount} app
                 {verifiedAppsCount > 1 ? 's' : ''}
               </Text>
+            </View>
+          ) : loading ? (
+            <View style={styles.verified}>
+              <ActivityIndicator size="small" color={DARKER_GREY} animating />
             </View>
           ) : (
             <View style={styles.verified}>
@@ -402,6 +417,7 @@ const styles = StyleSheet.create({
   },
   verified: {
     marginTop: 8,
+    minWidth: 100,
   },
   verifiedText: {
     fontFamily: 'Poppins-Medium',

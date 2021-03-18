@@ -1,12 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  Alert,
-  Clipboard,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Alert, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import Clipboard from '@react-native-community/clipboard';
 import Svg, { Path } from 'react-native-svg';
 import qrcode from 'qrcode';
 import { useDispatch, useSelector } from '@/store';
