@@ -51,7 +51,7 @@ const InviteCard = (props) => {
           text: t('common.alert.sure'),
           onPress: async () => {
             try {
-              await dispatch(rejectInvite(invite.inviteId));
+              await dispatch(rejectInvite(invite.id));
               if (invite.isNew) {
                 await api.deleteGroup(invite.id);
               }
