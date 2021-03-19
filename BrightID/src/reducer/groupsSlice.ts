@@ -44,10 +44,13 @@ const groupsSlice = createSlice({
       state.groups = action.payload.map(mergeWithOld);
     },
     joinGroup(state, action: PayloadAction<Group>) {
-      if (action.payload.members.length > 2) {
-        action.payload.isNew = false;
+      const group = action.payload;
+      if (group.members.length > 1) {
+        // joining a group that already has 2 members, so I'm either the last founder
+        // or an additional member -> the group is complete
+        group.isNew = false;
       }
-      state.groups.push(action.payload);
+      state.groups.push(group);
     },
     leaveGroup(state, action: PayloadAction<Group>) {
       state.groups = state.groups.filter(

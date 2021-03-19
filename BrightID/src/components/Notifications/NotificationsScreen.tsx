@@ -105,7 +105,6 @@ const ConnectionsList = () => {
 };
 
 const InviteList = () => {
-  const navigation = useNavigation();
   const { t } = useTranslation();
   const [refreshing, onRefresh] = useRefresh();
   const invites = useSelector((state) => inviteSelector(state));
@@ -127,9 +126,7 @@ const InviteList = () => {
           iconType="account-group-outline"
         />
       }
-      renderItem={({ item }) => (
-        <InviteCard navigation={navigation} invite={item} />
-      )}
+      renderItem={({ item }) => <InviteCard invite={item} />}
     />
   );
 };
