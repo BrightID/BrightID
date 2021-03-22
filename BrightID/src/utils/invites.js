@@ -31,9 +31,18 @@ export const getInviteInfo = async (invite) => {
     const pub = convertPublicKey(b64ToUint8Array(conn.signingKey));
     const msg = b64ToUint8Array(invite.data.split('_')[0]);
     const nonce = b64ToUint8Array(invite.data.split('_')[1]);
-    const groupAesKey = uInt8ArrayToB64(
-      nacl.box.open(msg, nonce, pub, convertSecretKey(secretKey)),
+    const decryptedMessage = nacl.box.open(
+      msg,
+      nonce,
+      pub,
+      convertSecretKey(secretKey),
     );
+
+    if (!decryptedMessage) {
+      // can happen if the user recovered his account after the invitation was created
+      return {};
+    }
+    const groupAesKey = uInt8ArrayToB64(decryptedMessage);
 
     if (!groupAesKey) {
       return {};
