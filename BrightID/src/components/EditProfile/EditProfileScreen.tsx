@@ -291,6 +291,14 @@ const ShowEditPassword = () => {
 
   return (
     <View style={styles.showEditPasswordContainer}>
+      <Text style={styles.label}>
+        {t('profile.text.backupPasswordTitle', 'Backup password')}
+      </Text>
+      <View style={styles.passwordInfoContainer}>
+        <Text style={styles.passwordInfoText}>
+          {t('signup.text.passwordInfo')}
+        </Text>
+      </View>
       {password ? (
         <>
           <View style={styles.viewPasswordContainer}>
@@ -330,9 +338,6 @@ const ShowEditPassword = () => {
               {t('profile.text.setPassword')}
             </Text>
           </TouchableOpacity>
-          <Text style={styles.privacyText}>
-            {t('signup.text.passwordInfo')}
-          </Text>
         </>
       )}
     </View>
@@ -618,14 +623,11 @@ const styles = StyleSheet.create({
     fontSize: fontSize[13],
     color: BLACK,
   },
-  privacyText: {
+  passwordInfoContainer: {},
+  passwordInfoText: {
     fontFamily: 'Poppins-Regular',
     fontSize: fontSize[11],
     color: DARKER_GREY,
-    textAlign: 'center',
-    width: '72%',
-    alignSelf: 'center',
-    marginTop: DEVICE_LARGE ? 14 : 12,
   },
   saveContainer: {
     width: '100%',
