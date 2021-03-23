@@ -16,3 +16,5 @@ export const DEVICE_ANDROID = DEVICE_OS === 'android';
 export const DEVICE_IOS = DEVICE_OS === 'ios';
 
 export const BOTTOM_NAV_HEIGHT = DEVICE_TYPE === 'small' ? 55 : 63;
+
+console.log('DEVICE_SIZE', DEVICE_TYPE);
