@@ -8,8 +8,10 @@ import {
   downloadSigs,
   downloadNamePhoto,
 } from './channelDownloadThunks';
-import { setupRecovery } from './recoveryThunks';
-import { resetChannelExpiration, setChannel } from '../recoveryDataSlice';
+import {
+  resetChannelExpiration,
+  setRecoveryChannel,
+} from '../recoveryDataSlice';
 
 // CONSTANTS
 
@@ -28,7 +30,7 @@ export const createChannel = () => async (
     const channelApi = new ChannelAPI(url.href);
     const channelId = hash(recoveryData.aesKey);
     console.log(`created channel ${channelId} for recovery data`);
-    dispatch(setChannel({ channelId, url }));
+    dispatch(setRecoveryChannel({ channelId, url }));
     await uploadRecoveryData(recoveryData, channelApi);
     console.log(`Finished uploading recovery data to channel ${channelId}`);
   } catch (e) {

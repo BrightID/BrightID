@@ -48,17 +48,6 @@ declare global {
     linkedContexts: ContextInfo[];
   };
 
-  // type AppInfo = {
-  //   id: string;
-  //   name: string;
-  //   logo: string;
-  //   context: string;
-  //   verification: string;
-  //   url: string;
-  //   unusedSponsorships: number;
-  //   assignedSponsorships: number;
-  // };
-
   type ContextInfo = {
     context: string;
     contextId: string;

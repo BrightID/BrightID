@@ -1,19 +1,15 @@
 import {
+  qrCodeURL_types,
   RECOVERY_COOLDOWN_DURATION,
   RECOVERY_COOLDOWN_EXEMPTION,
 } from '@/utils/constants';
 
-/**
- *
- * @param {{
- * recoveryConnections: Connection[],
- * connection?: Connection,
- * }}
- * @returns {number}
- */
 export const calculateCooldownPeriod = ({
   recoveryConnections,
   connection,
+}: {
+  recoveryConnections: Connection[];
+  connection?: Connection;
 }) => {
   // no cooldown if setting the first recovery connection
   if (recoveryConnections.length === 0) {
@@ -63,7 +59,6 @@ export const calculateCooldownPeriod = ({
 export const buildRecoveryChannelQrUrl = ({ aesKey, url }: RecoveryChannel) => {
   const qrUrl = new URL(url.href);
   qrUrl.searchParams.append('aes', aesKey);
-  // set type "recovery"
-  qrUrl.searchParams.append('t', '1'); // TODO use enum
+  qrUrl.searchParams.append('t', qrCodeURL_types.RECOVERY);
   return qrUrl;
 };
