@@ -14,7 +14,19 @@ import { BLACK, DARKER_GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
-import { clearChannel, pollChannel } from './thunks/channelThunks';
+import {
+  channel_types,
+  closeChannel,
+} from '@/components/PendingConnections/channelSlice';
+import api from '@/api/brightId';
+import { setupRecovery } from '@/components/Onboarding/RecoveryFlow/thunks/recoveryThunks';
+import { buildRecoveryChannelQrUrl } from '@/utils/recovery';
+import { buildChannelQrUrl } from '@/utils/channels';
+import {
+  clearChannel,
+  createChannel,
+  pollChannel,
+} from './thunks/channelThunks';
 import { resetRecoveryData } from './recoveryDataSlice';
 
 /**
@@ -23,6 +35,7 @@ import { resetRecoveryData } from './recoveryDataSlice';
  * displays a qrcode
  */
 const RecoveryCodeScreen = () => {
+  const [qrUrl, setQrUrl] = useState<URL>();
   const [qrsvg, setQrsvg] = useState('');
   const [alreadyNotified, setAlreadyNotified] = useState(false);
 
@@ -36,14 +49,45 @@ const RecoveryCodeScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  useFocusEffect(
-    useCallback(() => {
-      dispatch(pollChannel()).catch((err) => {
-        Alert.alert(t('common.alert.error'), err.message);
-      });
-    }, [dispatch, t]),
-  );
+  // create recovery data and start polling channel
+  useEffect(() => {
+    const runEffect = async () => {
+      // create publicKey, secretKey, aesKey for user
+      await dispatch(setupRecovery());
+      // create channel for recovery sigs
+      await dispatch(createChannel());
+      // start polling channel
+      dispatch(pollChannel());
+    };
+    if (!recoveryData.aesKey) {
+      console.log(`initializing recovery process`);
+      runEffect();
+    }
+  }, [dispatch, recoveryData]);
 
+  // set QRCode and SVG
+  useEffect(() => {
+    if (recoveryData.channel.url && recoveryData.aesKey) {
+      const newQrUrl = buildRecoveryChannelQrUrl({
+        aesKey: recoveryData.aesKey,
+        url: recoveryData.channel.url,
+      });
+      console.log(`new qrCode url: ${newQrUrl.href}`);
+      setQrUrl(newQrUrl);
+
+      const parseQrString = (err, qrsvg) => {
+        if (err) return console.log(err);
+        setQrsvg(qrsvg);
+      };
+
+      qrcode.toString(newQrUrl.href, (err, qr) => {
+        if (err) return console.log(err);
+        parseString(qr, parseQrString);
+      });
+    }
+  }, [recoveryData.aesKey, recoveryData.channel.url]);
+
+  // track errors
   useEffect(() => {
     if (recoveryData.errorType !== RecoveryErrorType.NONE) {
       // something went wrong. Show error message to user and stop recovery process
@@ -70,20 +114,14 @@ const RecoveryCodeScreen = () => {
       clearChannel();
       dispatch(resetRecoveryData());
       navigation.goBack();
-    } else {
-      const parseQrString = (err, qrsvg) => {
-        if (err) return console.log(err);
-        setQrsvg(qrsvg);
-      };
-
-      if (recoveryData.qrcode) {
-        qrcode.toString(recoveryData.qrcode, (err, qr) => {
-          if (err) return console.log(err);
-          parseString(qr, parseQrString);
-        });
-      }
     }
-  }, [dispatch, navigation, recoveryData, t]);
+  }, [
+    dispatch,
+    navigation,
+    recoveryData.errorMessage,
+    recoveryData.errorType,
+    t,
+  ]);
 
   useFocusEffect(
     useCallback(() => {
@@ -101,8 +139,25 @@ const RecoveryCodeScreen = () => {
   );
 
   const copyQr = () => {
-    const universalLink = `https://app.brightid.org/connection-code/${recoveryData?.qrcode}`;
-    Clipboard.setString(universalLink);
+    const universalLink = `https://app.brightid.org/connection-code/${encodeURIComponent(
+      qrUrl.href,
+    )}`;
+    const clipboardMsg = universalLink; // TODO Copy plain url if in DEV mode
+    const alertMsg = `Share this link with your recovery connections.`;
+
+    Alert.alert(
+      t('qrcode.alert.text.universalLink'),
+      alertMsg,
+      [
+        {
+          text: t('common.button.copy'),
+          onPress: () => {
+            Clipboard.setString(clipboardMsg);
+          },
+        },
+      ],
+      { cancelable: false },
+    );
   };
 
   return (

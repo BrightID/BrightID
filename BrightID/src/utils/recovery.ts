@@ -1,4 +1,3 @@
-// @flow
 import {
   RECOVERY_COOLDOWN_DURATION,
   RECOVERY_COOLDOWN_EXEMPTION,
@@ -59,4 +58,12 @@ export const calculateCooldownPeriod = ({
 
   // no special case and no specific connection provided. Just return default cooldown period.
   return RECOVERY_COOLDOWN_DURATION;
+};
+
+export const buildRecoveryChannelQrUrl = ({ aesKey, url }: RecoveryChannel) => {
+  const qrUrl = new URL(url.href);
+  qrUrl.searchParams.append('aes', aesKey);
+  // set type "recovery"
+  qrUrl.searchParams.append('t', '1'); // TODO use enum
+  return qrUrl;
 };

@@ -123,12 +123,33 @@ export const ScanCodeScreen = () => {
           await Linking.openURL(qrData);
         } else if (validQrString(qrData)) {
           const channelURL = new URL(qrData);
-          console.log(
-            `handleQrData: valid channelURL, joining channel at ${channelURL.href}`,
-          );
-          const channel = await parseChannelQrURL(channelURL);
-          setChannel(channel);
-          await dispatch(joinChannel(channel));
+
+          // Pop type parameter from url
+          const urlType = channelURL.searchParams.get('t');
+          if (urlType) channelURL.searchParams.delete('t');
+
+          switch (urlType) {
+            // TODO: Enum!
+            case '1': {
+              console.log(
+                `handleQrData: Got recovery channel at ${channelURL.href}`,
+              );
+              const aesKey = channelURL.searchParams.get('aes');
+              navigation.navigate('RecoveringConnection', { aesKey });
+              break;
+            }
+            case '2': // TODO: Enum!
+            case undefined:
+            default: {
+              console.log(
+                `handleQrData: Got connection channel at ${channelURL.href}`,
+              );
+              const channel = await parseChannelQrURL(channelURL);
+              setChannel(channel);
+              await dispatch(joinChannel(channel));
+              break;
+            }
+          }
         } else {
           throw Error(`Can not parse QRData ${qrData}`);
         }

@@ -204,6 +204,11 @@ declare global {
     errorMessage: string;
   };
 
+  type RecoveryChannel = {
+    aesKey: string;
+    url: URL;
+  };
+
   type SocialMediaId = keyof typeof socialMediaList;
 
   type SocialMedia = {
