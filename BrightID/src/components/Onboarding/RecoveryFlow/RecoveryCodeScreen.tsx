@@ -142,12 +142,19 @@ const RecoveryCodeScreen = () => {
     const universalLink = `https://app.brightid.org/connection-code/${encodeURIComponent(
       qrUrl.href,
     )}`;
-    const clipboardMsg = universalLink; // TODO Copy plain url if in DEV mode
-    const alertMsg = `Share this link with your recovery connections.`;
+    const clipboardMsg = __DEV__
+      ? universalLink
+      : t('recovery.alert.clipboardmessage', {
+          defaultValue: 'Help me recover my BrightID: {{link}}',
+          link: universalLink,
+        });
 
     Alert.alert(
-      t('qrcode.alert.text.universalLink'),
-      alertMsg,
+      t('recovery.alert.title', 'Recovery link'),
+      t(
+        'recovery.alert.text',
+        'Share this link with your recovery connections.',
+      ),
       [
         {
           text: t('common.button.copy'),
