@@ -149,7 +149,7 @@ const AppCard = (props: AppInfo) => {
 
   const LinkedSticker = () => {
     return isLinked ? (
-      <View style={styles.linkedContainer}>
+      <View style={styles.linkedContainer} testID={`Linked_${id}`}>
         <View style={styles.linkedSticker}>
           <Check
             width={fontSize[11]}
