@@ -64,12 +64,6 @@
         "linkSuccess": "Success"
       }
     },
-    "tag": {
-      "hasSponsorships": "Has sponsorships",
-      "linked": "Linked",
-      "notVerifiedForApp": "Not verified for this app",
-      "tryAgain": "Try Again"
-    },
     "text": {
       "noApps": "No Apps",
       "notSponsored": "You're not sponsored.\nPlease find an app below to sponsor you.",
@@ -526,6 +520,7 @@
       "password": "Password"
     },
     "text": {
+      "backupPasswordTitle": "Backup password",
       "changePassword": "Change Password",
       "changeProfilePicture": "Change Profile Picture",
       "setPassword": "Set password",
@@ -573,6 +568,11 @@
     }
   },
   "recovery": {
+    "alert": {
+      "clipboardmessage": "Help me recover my BrightID: {{link}}",
+      "text": "Share this link with your recovery connections.",
+      "title": "Recovery link"
+    },
     "error": {
       "mismatchId": "Your recovery connections selected different accounts",
       "title": "Account recovery failed",
