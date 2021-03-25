@@ -41,11 +41,6 @@ const discordUrl = 'https://discord.gg/nTtuB2M';
 
 /** Selectors */
 
-const linkedContextCountSelector = createSelector(
-  (state: State) => state.apps.linkedContexts,
-  (contexts) => contexts.filter((link) => link.state === 'applied').length,
-);
-
 export const verifiedAppsSelector = createSelector(
   (state: State) => state.user.verifications,
   (verifications) => verifications.filter((v) => v.app),
@@ -68,7 +63,7 @@ export const HomeScreen = (props) => {
   );
   const groupsCount = useSelector((state: State) => state.groups.groups.length);
   const connectionsCount = useSelector(verifiedConnectionsSelector).length;
-  const linkedContextsCount = useSelector(linkedContextCountSelector);
+  const linkedContextsCount = useSelector(linkedContextTotal);
   const verifiedApps = useSelector(verifiedAppsSelector);
   const brightIdVerified = useSelector(brightIdVerifiedSelector);
   const [profilePhoto, setProfilePhoto] = useState('');
