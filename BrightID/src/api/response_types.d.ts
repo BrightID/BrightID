@@ -9,7 +9,8 @@ type NodeApiRes =
   | OperationStateRes
   | UserConnectionRes
   | UserInfoRes
-  | UserProfileRes;
+  | UserProfileRes
+  | UserVerificationRes;
 
 type AppRes = {
   data: AppInfo;
