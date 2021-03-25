@@ -53,7 +53,6 @@ describe('Test recovery data', () => {
       secretKey: action.payload.secretKey,
       aesKey: action.payload.aesKey,
       timestamp: Date.now(),
-      qrcode: encodeURIComponent(`Recovery2_${action.payload.aesKey}`),
     });
   });
 
@@ -63,7 +62,7 @@ describe('Test recovery data', () => {
     const store = mockStore({ recoveryData });
 
     const expectedAction = expect.objectContaining({
-      type: 'recoveryData/setChannel',
+      type: 'recoveryData/setRecoveryChannel',
       payload: {
         channelId: expect.any(String),
         url: expect.any(URL),

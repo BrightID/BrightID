@@ -49,3 +49,8 @@ export const report_reasons = {
   DECEASED: 'deceased',
   OTHER: 'other',
 };
+
+export enum qrCodeURL_types {
+  CONNECTION = '1', // qrcode url is for connection channel
+  RECOVERY = '2', // qrcode url is for recovery channel
+}

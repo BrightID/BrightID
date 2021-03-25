@@ -31,7 +31,13 @@ import { joinChannel } from '@/components/PendingConnections/actions/channelThun
 import { setActiveNotification } from '@/actions';
 import i18next from 'i18next';
 import { BarCodeReadEvent } from 'react-native-camera';
+import { hash } from '@/utils/encoding';
+import { qrCodeURL_types } from '@/utils/constants';
 import { RNCamera } from './RNCameraProvider';
+import {
+  setAesKey,
+  setRecoveryChannel,
+} from '../Onboarding/RecoveryFlow/recoveryDataSlice';
 
 /**
  * Returns whether the string is a valid QR identifier
@@ -114,21 +120,53 @@ export const ScanCodeScreen = () => {
   useEffect(() => {
     const handleQrData = async (qrData) => {
       try {
-        if (qrData.startsWith('Recovery2_')) {
-          navigation.navigate('RecoveringConnection', {
-            aesKey: decodeURIComponent(qrData.replace('Recovery2_', '')),
-          });
-        } else if (qrData.startsWith('brightid://')) {
+        if (qrData.startsWith('brightid://')) {
           console.log(`handleQrData: calling Linking.openURL() with ${qrData}`);
           await Linking.openURL(qrData);
         } else if (validQrString(qrData)) {
           const channelURL = new URL(qrData);
-          console.log(
-            `handleQrData: valid channelURL, joining channel at ${channelURL.href}`,
-          );
-          const channel = await parseChannelQrURL(channelURL);
-          setChannel(channel);
-          await dispatch(joinChannel(channel));
+
+          // Pop 'type' parameter from url if it is included
+          const urlType = channelURL.searchParams.get('t');
+          if (urlType) channelURL.searchParams.delete('t');
+
+          switch (urlType) {
+            // TODO: Enum!
+            case qrCodeURL_types.RECOVERY: {
+              // Pop 'aes' parameter from url
+              const aesKey = channelURL.searchParams.get('aes');
+              channelURL.searchParams.delete('aes');
+
+              const channelId = hash(aesKey);
+              console.log(
+                `handleQrData: Got recovery channel ${channelId} at ${channelURL.href}`,
+              );
+
+              dispatch(setAesKey(aesKey));
+              dispatch(
+                setRecoveryChannel({
+                  channelId,
+                  url: channelURL,
+                }),
+              );
+              navigation.navigate('RecoveringConnection');
+              break;
+            }
+            case qrCodeURL_types.CONNECTION:
+            default: {
+              // Currently assuming qrcodes without type parameter are connection channels created by previous app
+              // versions. Change this in one of the next releases:
+              // -> Add type parameter 't' to connection channel qrcode
+              // -> Throw an error if no/unknown type is found in qrcode
+              console.log(
+                `handleQrData: Got connection channel at ${channelURL.href}`,
+              );
+              const channel = await parseChannelQrURL(channelURL);
+              setChannel(channel);
+              await dispatch(joinChannel(channel));
+              break;
+            }
+          }
         } else {
           throw Error(`Can not parse QRData ${qrData}`);
         }

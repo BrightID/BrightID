@@ -1,9 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Spinner from 'react-native-spinkit';
 import { useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
-import { useRoute, RouteProp } from '@react-navigation/native';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { connectionsSelector } from '@/utils/connectionsSelector';
@@ -19,25 +18,15 @@ const getItemLayout = (data, index) => ({
   index,
 });
 
-type RecoveringConnectionRoute = RouteProp<
-  { RecoveringConnection: { aesKey: string } },
-  'RecoveringConnection'
->;
-
 const RecoveringConnectionScreen = () => {
   const connections = useSelector(connectionsSelector);
   const { t } = useTranslation();
-  const route = useRoute<RecoveringConnectionRoute>();
   const [uploadingData, setUploadingData] = useState(false);
 
   const renderConnection = ({ item, index }) => {
     item.index = index;
     return (
-      <RecoveringConnectionCard
-        {...item}
-        aesKey={route.params?.aesKey}
-        setUploadingData={setUploadingData}
-      />
+      <RecoveringConnectionCard {...item} setUploadingData={setUploadingData} />
     );
   };
 

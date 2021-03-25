@@ -48,17 +48,6 @@ declare global {
     linkedContexts: ContextInfo[];
   };
 
-  // type AppInfo = {
-  //   id: string;
-  //   name: string;
-  //   logo: string;
-  //   context: string;
-  //   verification: string;
-  //   url: string;
-  //   unusedSponsorships: number;
-  //   assignedSponsorships: number;
-  // };
-
   type ContextInfo = {
     context: string;
     contextId: string;
@@ -202,6 +191,11 @@ declare global {
     };
     errorType: RecoveryErrorType;
     errorMessage: string;
+  };
+
+  type RecoveryChannel = {
+    aesKey: string;
+    url: URL;
   };
 
   type SocialMediaId = keyof typeof socialMediaList;
