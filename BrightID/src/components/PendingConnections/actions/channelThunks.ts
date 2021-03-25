@@ -216,7 +216,7 @@ export const fetchChannelProfiles = (channelId: string) => async (
     }
   }
   // can we stop polling?
-  let expectedProfiles;
+  let expectedProfiles: number;
   switch (channel.type) {
     case channel_types.SINGLE:
       expectedProfiles = 2; // my profile and peer profile

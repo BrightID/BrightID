@@ -23,10 +23,14 @@ type LocalConnectionData = {
   name: string;
   connectionDate: number;
   photo: { filename: string };
-  status: string;
-  notificationToken: string;
-  level: ConnectionLevel;
-  socialMedia: string[];
+  status?: string;
+  level?: ConnectionLevel;
+  socialMedia?: string[];
+  incomingLevel?: ConnectionLevel;
+  socialMedia?: string[];
+  notificationToken?: string;
+  publicKey?: string;
+  secretKey?: string;
   hiddenFlag?: string;
   secretKey?: any;
 };

@@ -2,6 +2,7 @@ import {
   MIN_CONNECTIONS_FOR_RECOVERY_NOTIFICATION,
   MIN_RECOVERY_CONNECTIONS,
   MISC_TYPE,
+  connection_levels,
 } from '@/utils/constants';
 import i18next from 'i18next';
 import {
@@ -77,10 +78,20 @@ export const updateNotifications = () => async (
   // check for pending recovery connections
   try {
     const verifiedConnections = verifiedConnectionsSelector(getState());
+    const knownLevels = Array<ConnectionLevel>(
+      connection_levels.ALREADY_KNOWN,
+      connection_levels.RECOVERY,
+    );
+    const recoveryEligibleConnections = verifiedConnections.filter(
+      (conn) =>
+        knownLevels.includes(conn.level) &&
+        knownLevels.includes(conn.incomingLevel),
+    );
     const recoveryConnections = recoveryConnectionsSelector(getState());
     if (
       recoveryConnections.length < MIN_RECOVERY_CONNECTIONS &&
-      verifiedConnections.length >= MIN_CONNECTIONS_FOR_RECOVERY_NOTIFICATION
+      recoveryEligibleConnections.length >=
+        MIN_CONNECTIONS_FOR_RECOVERY_NOTIFICATION
     ) {
       dispatch(setRecoveryConnectionsPending(true));
       dispatch(

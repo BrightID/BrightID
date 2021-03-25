@@ -52,6 +52,13 @@ type UserConnectionRes = {
   };
 };
 
+type UserVerificationRes = {
+  data: {
+    // TODO: Fix verifications type
+    verifications: Array<any>;
+  };
+};
+
 type UserInfoRes = {
   data: UserInfo;
 };
@@ -109,6 +116,7 @@ type ConnectionInfo = {
   id: string;
   signingKey: string;
   level: ConnectionLevel;
+  incomingLevel?: ConnectionLevel;
   verifications: string[];
   hasPrimaryGroup: boolean;
   trusted: string[];

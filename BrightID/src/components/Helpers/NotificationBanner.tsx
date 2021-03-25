@@ -14,7 +14,7 @@ import { DEVICE_LARGE, HEIGHT } from '@/utils/deviceConstants';
 import { LIGHT_GREEN, BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnections/pendingConnectionSlice';
-import DropDownAlertEnabled from '@/utils/DropDownAlertEnabler';
+import { DetoxEnabled } from '@/utils/Detox';
 
 /* notification types:
 @type groups
@@ -60,7 +60,7 @@ export const NotificationBanner = () => {
     dropDownAlertRef.current?.closeAction('cancel');
 
     if (!screenBlackList.includes(route?.name)) {
-      if (DropDownAlertEnabled) {
+      if (!DetoxEnabled) {
         dropDownAlertRef.current?.alertWithType(
           'custom',
           activeNotification?.title,

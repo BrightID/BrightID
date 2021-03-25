@@ -4,6 +4,14 @@ import {
   RECOVERY_COOLDOWN_EXEMPTION,
 } from '@/utils/constants';
 
+/**
+ *
+ * @param {{
+ * recoveryConnections: Connection[],
+ * connection?: Connection,
+ * }}
+ * @returns {number}
+ */
 export const calculateCooldownPeriod = ({
   recoveryConnections,
   connection,

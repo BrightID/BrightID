@@ -63,7 +63,6 @@ function ConnectionScreenController() {
       if (connectionId !== undefined) {
         fetchData(connectionId);
       }
-      // REMOVED CONNECTION FROM DEPENDENCY ARRAY
     }, [myConnections, myGroups, connectionId]),
   );
 
@@ -87,14 +86,14 @@ function ConnectionScreenController() {
     return null;
   }
 
-  const brightIdVerified = verifications
-    .map((v) => v.name)
-    .includes('BrightID');
+  const brightIdVerified = verifications.some((v) => v?.name === 'BrightID');
 
+  const verifiedAppsCount = verifications.filter((v) => v.app).length;
   return (
     <ConnectionScreen
       connection={connection}
       brightIdVerified={brightIdVerified}
+      verifiedAppsCount={verifiedAppsCount}
       loading={loading}
       connectedAt={connectedAt}
       mutualConnections={mutualConnections}

@@ -27,14 +27,18 @@ import {
 } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import Check from '@/components/Icons/Check';
 import xGrey from '@/static/x_grey.svg';
+import { useNavigation } from '@react-navigation/native';
+import BrightidError from '@/api/brightidError';
 
 const InviteCard = (props) => {
+  const { invite } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const { invite } = props;
   const inviter = useSelector((state: State) =>
     selectConnectionById(state, invite.inviter),
   );
+  const navigation = useNavigation();
+  const { backupCompleted } = useSelector((state: State) => state.user);
 
   const handleRejectInvite = () => {
     Alert.alert(
@@ -50,7 +54,7 @@ const InviteCard = (props) => {
           text: t('common.alert.sure'),
           onPress: async () => {
             try {
-              await dispatch(rejectInvite(invite.inviteId));
+              await dispatch(rejectInvite(invite.id));
               if (invite.isNew) {
                 await api.deleteGroup(invite.id);
               }
@@ -68,11 +72,9 @@ const InviteCard = (props) => {
   };
 
   const handleAcceptInvite = async () => {
-    const { dispatch, invite, backupCompleted, id, navigation, t } = props;
     try {
       await api.joinGroup(invite.id);
-      await dispatch(acceptInvite(invite.inviteId));
-      invite.members.push(id);
+      dispatch(acceptInvite(invite.id));
       await dispatch(joinGroup(invite));
       Alert.alert(
         t('common.alert.success'),
@@ -89,10 +91,15 @@ const InviteCard = (props) => {
       }
       navigation.navigate('Members', { group: invite });
     } catch (err) {
-      Alert.alert(
-        t('notifications.alert.text.failureAcceptGroupInvite'),
-        err.message,
-      );
+      if (err instanceof BrightidError) {
+        // Something went wrong in the backend while applying operation
+        Alert.alert(
+          t('notifications.alert.text.failureAcceptGroupInvite'),
+          `${err.errorNum} - ${err.message}`,
+        );
+      } else {
+        Alert.alert('Error', err.message);
+      }
     }
   };
 

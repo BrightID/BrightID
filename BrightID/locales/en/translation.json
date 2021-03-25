@@ -123,7 +123,6 @@
       "success": "Success",
       "sure": "Sure",
       "text": {
-        "incorrectPassword": "Incorrect password!",
         "lostKeys": "Please create a new BrightID or try recovering your previous BrightID",
         "passwordMatch": "Password and confirm password does not match.",
         "passwordShort": "Your password must be at least 8 characters long.",
@@ -515,24 +514,22 @@
     "label": {
       "currentPassword": "Current password",
       "name": "Name",
-      "password": "Password",
       "newPassword": "New password",
       "newPasswordAgain": "Repeat password",
-      "passwordAgain": "Repeat password",
+      "password": "Password",
       "socialMediaLink": "Social Media Link"
     },
     "placeholder": {
       "name": "Enter Name",
-      "password": "Password",
       "newPassword": "New password",
-      "newPasswordAgain": "Repeat password"
+      "newPasswordAgain": "Repeat password",
+      "password": "Password"
     },
     "text": {
       "changePassword": "Change Password",
       "changeProfilePicture": "Change Profile Picture",
       "setPassword": "Set password",
-      "viewPassword": "View Password",
-      "createPassword": "Create Password"
+      "viewPassword": "View Password"
     }
   },
   "qrcode": {
@@ -576,6 +573,22 @@
     }
   },
   "recovery": {
+    "error": {
+      "mismatchId": "Your recovery connections selected different accounts",
+      "title": "Account recovery failed",
+      "unknown": "An unknown error occured"
+    },
+    "header": {
+      "text": "Part 1: Recover account"
+    },
+    "info": "This step will recover your BrightID on this device. Names and photos of connections in common with your recovery connections will be restored.",
+    "state": "Recovered {{recoveredConnections}} connections, {{recoveredGroups}} groups",
+    "steps": {
+      "complete": "Account recovery complete",
+      "downloading": "Downloading data from recovery connections...",
+      "error": "Account recovery failed",
+      "recovering": "Recovering account..."
+    },
     "text": {
       "additionalInfo": "Your recovery connections will need to scan this to help you recover your BrightID",
       "askTrustedConnections": "Please show this QR code to your recovery connections",
@@ -583,33 +596,48 @@
       "signatures_plural": ""
     }
   },
+  "recoveryCooldownModal": {
+    "dismissButtonLabel": "Got it",
+    "text": {
+      "connection": "You just changed the recovery level of <bold>{{name}}</bold>.",
+      "cooldown": "Note that this change takes effect after a cooldown period of <period>{{ cooldownPeriod }}</period> for security reasons.",
+      "cooldownGeneric": "Note that change of recovery connections takes effect after a cooldown period of up to <period>{{ cooldownPeriod }}</period> for security reasons."
+    },
+    "title": "Cooldown period for recovery connections"
+  },
   "restore": {
     "alert": {
       "text": {
-        "notTrusted": "One of your friends is not in your list of recovery connections",
         "requestRecovering": "Your request to help recovering this account submitted successfully!",
         "restoreConfirm": "Is {{name}} the account you are helping to recover?",
         "restoreSuccess": "Your account recovered successfully!"
-      },
-      "title": {
-        "notTrusted": "Uh Oh"
       }
     },
     "emptyList": {
       "text": {
-        "downloadingData": "Downloading recovery connection data",
         "nobodyHasChosen": "Unable to recover connection...\nThey did not set you as recovery"
       }
     },
     "header": {
-      "accountRecovery": "Account Recovery"
+      "accountRecovery": "Account Recovery",
+      "text": "Part 2: Restore backup (optional)"
+    },
+    "info": "With your backup password you can restore names and photos of all your connections and groups.",
+    "password": {
+      "placeholder": "Type your password",
+      "skip": "Skip",
+      "submit": "Restore"
+    },
+    "steps": {
+      "complete": "Restore complete",
+      "error": "Restore failed. Wrong password?",
+      "restoring": "Restoring data...",
+      "skipped": "Restore skipped",
+      "waitingAccount": "Waiting for account recovery",
+      "waitingPassword": "Enter password or skip"
     },
     "text": {
-      "chooseConnectionToHelp": "Please select the connection whose account you are helping to recover.",
-      "enterPassword": "Please enter your password",
-      "skipLoadingBackup": "Without the password you can still recover your BrightID but the name & photo of your connections & groups will not be available.",
-      "downloadingData": "Downloading data ...",
-      "skip": "Skip"
+      "chooseConnectionToHelp": "Please select the connection whose account you are helping to recover."
     }
   },
   "signup": {
@@ -636,9 +664,9 @@
   },
   "walkthroughs": {
     "text": {
-      "viewPassword": "You can always see your\nBrightID password in here",
+      "gotIt": "Got it!",
       "setPassword": "You can always set your\nBrightID password in here",
-      "gotIt": "Got it!"
+      "viewPassword": "You can always see your\nBrightID password in here"
     }
   }
 }

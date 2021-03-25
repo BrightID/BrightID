@@ -11,11 +11,15 @@ import { AppDispatch } from '@/store';
 import { connection_levels } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
 import { socialMediaList } from '@/components/EditProfile/socialMediaList';
+import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 
 declare global {
   type EntityState<T> = _EntityState<T>;
   type ValueOf<T> = T[keyof T];
   type RouteProp<ParamList, RouteName> = _RouteProp<ParamList, RouteName>;
+
+  type IntervalId = ReturnType<typeof setInterval>;
+  type TimeoutId = ReturnType<typeof setTimeout>;
 
   type getState = () => State;
   type GetState = getState;
@@ -69,8 +73,8 @@ declare global {
     aesKey: string;
     timestamp: number;
     ttl: number;
-    pollTimerId?: ReturnType<typeof setInterval>;
-    timeoutId?: ReturnType<typeof setTimeout>;
+    pollTimerId?: IntervalId;
+    timeoutId?: TimeoutId;
     type: ChannelType;
     state: ChannelState;
     myProfileTimestamp?: number;
@@ -128,41 +132,43 @@ declare global {
 
   type PendingConnectionState = keyof typeof pendingConnection_states;
 
-  type PendingConnection = {
-    id?: string;
-    channelId?: string;
-    brightId?: string;
-    name?: string;
-    photo?: string;
-    notificationToken?: string;
-    score?: number;
-    state?: PendingConnectionState;
-    verifications?: { name: string }[];
-    connectionsNum?: number;
-    reports?: string[];
-    connectedAt?: number;
-    groupsNum?: number;
-    mutualConnections?: string[];
-    existingConnection?: Connection;
-    socialMedia?: string[];
-    mutualGroups?: string[];
-    createdAt?: number;
-    profileTimestamp?: number;
-    initiator?: string;
+  type PendingConnection = Partial<{
+    id: string;
+    channelId: string;
+    brightId: string;
+    name: string;
+    photo: string;
+    notificationToken: string;
+    score: number;
+    state: PendingConnectionState;
+    verifications: { name: string }[];
+    connectionsNum: number;
+    reports: string[];
+    connectedAt: number;
+    groupsNum: number;
+    mutualConnections: string[];
+    existingConnection: Connection;
+    socialMedia: string[];
+    mutualGroups: string[];
+    createdAt: number;
+    profileTimestamp: number;
+    initiator: string;
     myself?: boolean;
     secretKey?: any;
-  };
+  }>;
 
   type PendingConnectionsState = EntityState<PendingConnection>;
 
   type RecoveryData = {
     publicKey: string;
-    secretKey: string;
+    secretKey: Uint8Array;
     id: string;
     name: string;
     photo: string;
     aesKey: string;
     timestamp: number;
+    recoveredConnections: number;
+    recoveredGroups: number;
     sigs: { [sig: string]: Signature };
     qrcode: string;
     channel: {
@@ -170,6 +176,8 @@ declare global {
       url: URL;
       expires: number;
     };
+    errorType: RecoveryErrorType;
+    errorMessage: string;
   };
 
   type SocialMediaId = keyof typeof socialMediaList;
@@ -198,7 +206,8 @@ declare global {
     photo: Photo;
     searchParam: string;
     backupCompleted: boolean;
-    verifications: string[];
+    // TODO: Fix verifications type
+    verifications: Array<any>;
     id: string;
     password: string;
     secretKey: string;

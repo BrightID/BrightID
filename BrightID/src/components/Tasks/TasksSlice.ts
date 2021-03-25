@@ -96,8 +96,8 @@ export const syncStoreTasks = () => {
     const idsToRemove = storeTaskIds.filter((id) => !userTaskIds.includes(id));
     const idsToAdd = userTaskIds.filter((id) => !storeTaskIds.includes(id));
     for (const id of idsToRemove) {
-      console.log(`Removing task ${id} from store`);
       if (id !== '_persist') {
+        console.log(`Removing task ${id} from store`);
         dispatch(removeTask(id));
       }
     }
@@ -111,30 +111,31 @@ export const syncStoreTasks = () => {
 export const checkTasks = () => {
   return (dispatch: dispatch, getState: getState) => {
     const state = getState();
-    // get pending tasks
-    const pendingTasks = Object.values(state.tasks).filter(
-      (task: TasksStateEntry) => task.completed === false,
-    );
-    // for each pending task call checkFn and dispatch completeTask() on success.
-    for (const task of pendingTasks) {
-      try {
-        if (UserTasks[task.id].checkFn(state)) {
-          console.log(`Task '${UserTasks[task.id].title}' completed.`);
-          dispatch(completeTask(task.id));
-          dispatch(
-            setActiveNotification({
-              type: MISC_TYPE,
-              title: i18next.t('achievements.notification.title'),
-              message: i18next.t('achievements.notification.message', {
-                title: UserTasks[task.id].title,
+    for (const task of Object.values(state.tasks)) {
+      if (UserTasks[task.id]) {
+        try {
+          const completed = UserTasks[task.id].checkFn(state);
+          if (completed && !state.tasks[task.id].completed) {
+            console.log(`Task '${UserTasks[task.id].title}' completed.`);
+            dispatch(completeTask(task.id));
+            dispatch(
+              setActiveNotification({
+                type: MISC_TYPE,
+                title: i18next.t('achievements.notification.title'),
+                message: i18next.t('achievements.notification.message', {
+                  title: UserTasks[task.id].title,
+                }),
+                navigationTarget: null,
+                icon: 'Certificate',
               }),
-              navigationTarget: null,
-              icon: 'Certificate',
-            }),
-          );
+            );
+          } else if (!completed && state.tasks[task.id].completed) {
+            console.log(`Task '${UserTasks[task.id].title}' reset.`);
+            dispatch(resetTask(task.id));
+          }
+        } catch (err) {
+          console.log(`Error while checking task ${task.id}: ${err.message}`);
         }
-      } catch (err) {
-        console.log(`Error while checking task ${task.id}: ${err.message}`);
       }
     }
   };

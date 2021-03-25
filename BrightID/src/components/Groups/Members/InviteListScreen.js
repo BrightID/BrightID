@@ -61,7 +61,6 @@ export class InviteListScreen extends Component {
     return connections.filter(
       (item) =>
         !group?.members?.includes(item.id) &&
-        item.eligible_groups?.includes(group?.id) &&
         (group?.type !== 'primary' || !item.hasPrimaryGroup),
     );
   };

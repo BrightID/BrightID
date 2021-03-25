@@ -154,6 +154,7 @@ export const ReconnectView = ({
             <TrustlevelSlider
               currentLevel={connectionLevel}
               changeLevelHandler={setConnectionLevel}
+              incomingLevel={existingConnection.incomingLevel}
               verbose={false}
             />
           </View>
@@ -241,6 +242,7 @@ export const ReconnectView = ({
             <TrustlevelSlider
               currentLevel={connectionLevel}
               changeLevelHandler={setConnectionLevel}
+              incomingLevel={existingConnection.incomingLevel}
               verbose={false}
             />
           </View>

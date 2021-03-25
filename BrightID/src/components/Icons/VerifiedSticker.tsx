@@ -1,11 +1,13 @@
+// @flow
+
 import React from 'react';
 import Svg, { Path, Rect } from 'react-native-svg';
 import { ORANGE } from '@/theme/colors';
 
 type Props = {
-  color?: string;
-  width?: number;
-  height?: number;
+  color: string;
+  width: number;
+  height: number;
 };
 
 const VerifiedSticker = ({

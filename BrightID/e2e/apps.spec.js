@@ -2,6 +2,7 @@
 
 import {
   createBrightID,
+  createFakeConnection,
   expectAppsScreen,
   expectHomescreen,
   navigateHome,
@@ -104,6 +105,7 @@ describe('With account', () => {
     no = android ? 'NO' : 'No';
     yes = android ? 'YES' : 'Yes';
     await createBrightID();
+    await createFakeConnection();
   });
 
   it('should start linking process when running in background', async () => {

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useDispatch } from '@/store';
+import { useDispatch, useSelector } from '@/store';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { CHANNEL_TTL } from '@/utils/constants';
@@ -19,6 +19,7 @@ import { fontSize } from '@/theme/fonts';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
+import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 
 /**
  * Connection Card in the Connections Screen
@@ -32,7 +33,8 @@ import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
 type Props = Connection & { index: number };
 
 const ConnectionCard = (props: Props) => {
-  const stale_check_timer = useRef<ReturnType<typeof setTimeout>>(null);
+  const stale_check_timer = useRef<TimeoutId>(null);
+  const { backupCompleted } = useSelector((state: State) => state.user);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const {
@@ -132,8 +134,13 @@ const ConnectionCard = (props: Props) => {
                 width: '100%',
               },
             },
-            (index) => {
-              if (index === 0) dispatch(deleteConnection(id));
+            async (index) => {
+              if (index === 0) {
+                dispatch(deleteConnection(id));
+                if (backupCompleted) {
+                  await dispatch(backupUser());
+                }
+              }
             },
           );
         }}

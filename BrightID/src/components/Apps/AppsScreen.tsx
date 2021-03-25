@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   statusMessage: {
     fontFamily: 'Poppins-Medium',
     textAlign: 'center',
-    fontSize: fontSize[16],
+    fontSize: fontSize[14],
     color: BLUE,
   },
   linkingContainer: {
