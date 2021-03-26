@@ -38,13 +38,18 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
           isSponsored,
           invites,
         } = await api.getUserInfo(id);
+
         const verifications = await api.getUserVerifications(id);
+
         let incomingConns = await api.getConnections(id, 'inbound');
+
         incomingConns = _.keyBy(incomingConns, 'id');
+
         for (const conn of connections) {
           conn.incomingLevel = incomingConns[conn.id]?.level;
         }
-        if (opTotal) {
+
+        if (opTotal === 0) {
           // don't update data when there are pending operations.
           dispatch(setGroups(groups));
           dispatch(updateConnections(connections));
@@ -55,12 +60,15 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
 
         // this can not be done in reducer because it should be in an async function
         const newInvites: Invite[] = await updateInvites(invites);
+
         dispatch(setInvites(newInvites));
+
         if (newInvites.length > oldInvites.length) {
           const message =
             newInvites.length < 1
               ? `You have ${newInvites.length} new group invitations`
               : `You've been invited to join ${newInvites[0]?.name}`;
+
           dispatch(
             setActiveNotification({
               title: 'Group Invitation',

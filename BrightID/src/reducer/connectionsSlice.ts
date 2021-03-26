@@ -5,6 +5,8 @@ import {
   PayloadAction,
   Update,
 } from '@reduxjs/toolkit';
+import { original } from 'immer';
+import { difference } from 'ramda';
 import { connection_levels } from '@/utils/constants';
 import { RESET_STORE } from '@/actions/resetStore';
 
@@ -42,11 +44,32 @@ const connectionsSlice = createSlice({
       state.connectionsSort = action.payload;
     },
     updateConnections(state, action: PayloadAction<ConnectionInfo[]>) {
-      state.connections = connectionsAdapter.upsertMany(
+      const { entities, ids } = original(state.connections);
+
+      // check to see if any connections are deleted
+      if (ids.length !== action.payload.length) {
+        const payloadIds = action.payload.map((conn) => conn.id);
+        const diff = difference(ids, payloadIds);
+        diff.forEach((id) => {
+          if (entities[id].status === 'verified') {
+            state.connections = connectionsAdapter.updateOne(
+              state.connections,
+              {
+                id,
+                changes: {
+                  status: 'deleted',
+                },
+              },
+            );
+          }
+        });
+      }
+
+      state.connections = connectionsAdapter.updateMany(
         state.connections,
-        action.payload.map((conn) => {
+        action.payload.map((conn: Connection) => {
           conn.status = 'verified';
-          return conn;
+          return { id: conn.id, changes: conn };
         }),
       );
     },
@@ -152,7 +175,6 @@ export const {
 export const verifiedConnectionsSelector = createSelector(
   selectAllConnections,
   (connections) => {
-    console.log('connections', connections);
     return connections.filter((conn) => conn?.status === 'verified');
   },
 );
