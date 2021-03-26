@@ -92,6 +92,16 @@ export const newPendingConnection = createAsyncThunk<
       );
       throw new Error(msg);
     }
+    // Is this brightID already in the list of pending connections? Can happen if the same user joins a channel multiple times (e.g. if users app crashed)
+    const duplicatedPendingConnection = selectPendingConnectionByBrightId(
+      getState(),
+      decryptedObj.id,
+    );
+    if (duplicatedPendingConnection) {
+      throw new Error(
+        `PendingConnection ${profileId}: BrightId ${decryptedObj.id} is already existing.`,
+      );
+    }
 
     decryptedObj.myself = decryptedObj.id === getState().user.id;
     let connectionInfo: Partial<UserProfileRes['data']> & {
@@ -117,7 +127,7 @@ export const newPendingConnection = createAsyncThunk<
         throw err;
       }
     }
-    // Is this a known connection?
+    // Is this a known connection reconnecting?
     connectionInfo.existingConnection = getState().connections.connections.find(
       (conn) => conn.id === decryptedObj.id,
     );
@@ -265,6 +275,14 @@ export const selectAllUnconfirmedConnections = createSelector(
     pendingConnections.filter(
       (pc) => pc.state === pendingConnection_states.UNCONFIRMED,
     ),
+);
+
+export const selectPendingConnectionByBrightId = createSelector(
+  selectAllPendingConnections,
+  (_, brightId: string) => brightId,
+  (pendingConnections, brightId) => {
+    return pendingConnections.find((pc) => brightId === pc.brightId);
+  },
 );
 
 /*
