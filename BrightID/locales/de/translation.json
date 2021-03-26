@@ -557,6 +557,7 @@
       "password": "Passwort"
     },
     "text": {
+      "backupPasswordTitle": "Sicherungspasswort",
       "changePassword": "Passwort ändern",
       "changeProfilePicture": "Profilbild ändern",
       "createPassword": "Passwort erstellen",
@@ -606,6 +607,16 @@
     }
   },
   "recovery": {
+    "alert": {
+      "clipboardmessage": "Hilft mir, meine BrightID wiederherzustellen: {{link}}",
+      "text": "Teile diesen Link mit deinen Wiederherstellungsverbindungen.",
+      "title": "Wiederherstellungslink"
+    },
+    "error": {
+      "mismatchId": "Deine Wiederherstellungsverbindungen haben verschiedene Konten ausgewählt",
+      "title": "Die Wiederherstellung des Kontos ist fehlgeschlagen",
+      "unknown": "Ein unbekannter Fehler ist aufgetreten"
+    },
     "header": {
       "text": "Schritt 1: Konto wiederherstellen",
       "title": "Wiederherstellungscode"
