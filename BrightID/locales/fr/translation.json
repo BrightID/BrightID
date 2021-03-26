@@ -547,6 +547,7 @@
       "password": "Mot de passe"
     },
     "text": {
+      "backupPasswordTitle": "Mot de passe de sauvegarde",
       "changePassword": "Modifier le mot de passe",
       "changeProfilePicture": "Changer la photo de profil",
       "createPassword": "Créer le mot de passe",
@@ -596,6 +597,16 @@
     }
   },
   "recovery": {
+    "alert": {
+      "clipboardmessage": "Aidez-moi à récupérer mon BrightID : {{link}}",
+      "text": "Partagez ce lien avec vos connexions de récupération.",
+      "title": "Lien de récupération"
+    },
+    "error": {
+      "mismatchId": "Vos connexions de récupération ont sélectionné différents comptes",
+      "title": "La récupération du compte a échoué",
+      "unknown": "Une erreur inconnue s’est produite"
+    },
     "header": {
       "text": "Partie 1 : Récupérer un compte",
       "title": "Code de Restauration"
