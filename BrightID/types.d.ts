@@ -10,6 +10,7 @@ import { AppDispatch } from '@/store';
 import { connection_levels } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
 import { socialMediaList } from '@/components/EditProfile/socialMediaList';
+import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 
 declare global {
   type ValueOf<T> = T[keyof T];
@@ -46,17 +47,6 @@ declare global {
     apps: AppInfo[];
     linkedContexts: ContextInfo[];
   };
-
-  // type AppInfo = {
-  //   id: string;
-  //   name: string;
-  //   logo: string;
-  //   context: string;
-  //   verification: string;
-  //   url: string;
-  //   unusedSponsorships: number;
-  //   assignedSponsorships: number;
-  // };
 
   type ContextInfo = {
     context: string;
@@ -184,7 +174,7 @@ declare global {
 
   type RecoveryData = {
     publicKey: string;
-    secretKey: string;
+    secretKey: Uint8Array;
     id: string;
     name: string;
     photo: string;
@@ -199,6 +189,13 @@ declare global {
       url: URL;
       expires: number;
     };
+    errorType: RecoveryErrorType;
+    errorMessage: string;
+  };
+
+  type RecoveryChannel = {
+    aesKey: string;
+    url: URL;
   };
 
   type SocialMediaId = keyof typeof socialMediaList;
@@ -227,8 +224,7 @@ declare global {
     photo: Photo;
     searchParam: string;
     backupCompleted: boolean;
-    // TODO: Fix verifications type
-    verifications: Array<any>;
+    verifications: Array<Verification>;
     id: string;
     password: string;
     secretKey: string;

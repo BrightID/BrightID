@@ -1,13 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { original } from 'immer';
 import { uInt8ArrayToB64 } from '@/utils/encoding';
-
-const FIFTEEN_MINUTES = 900000;
+import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
+import { CHANNEL_TTL } from '@/utils/constants';
 
 export const initialState: RecoveryData = {
   publicKey: '',
-  secretKey: '',
+  secretKey: new Uint8Array(),
   aesKey: '',
+  errorMessage: '',
+  errorType: RecoveryErrorType.NONE,
   id: '',
   name: '',
   photo: '',
@@ -27,11 +29,20 @@ const recoveryData = createSlice({
   name: 'recoveryData',
   initialState,
   reducers: {
-    init(state, action) {
+    init(
+      state,
+      action: PayloadAction<{
+        publicKey: Uint8Array;
+        secretKey: Uint8Array;
+        aesKey: string;
+      }>,
+    ) {
       const { publicKey, secretKey, aesKey } = action.payload;
       state.publicKey = uInt8ArrayToB64(publicKey);
       state.secretKey = secretKey;
       state.aesKey = aesKey;
+      state.errorMessage = '';
+      state.errorType = RecoveryErrorType.NONE;
       state.id = '';
       state.name = '';
       state.photo = '';
@@ -39,15 +50,23 @@ const recoveryData = createSlice({
       state.recoveredGroups = 0;
       state.timestamp = Date.now();
       state.sigs = {};
-      state.qrcode = encodeURIComponent(`Recovery2_${aesKey}`);
     },
-    setChannel(state, action) {
+    setAesKey(state, action: PayloadAction<string>) {
+      state.aesKey = action.payload;
+    },
+    setRecoveryChannel(
+      state,
+      action: PayloadAction<{ channelId: string; url: URL }>,
+    ) {
       const { channelId, url } = action.payload;
       state.channel.channelId = channelId;
       state.channel.url = url;
-      state.channel.expires = Date.now() + FIFTEEN_MINUTES;
+      state.channel.expires = Date.now() + CHANNEL_TTL;
     },
-    setSig(state, action) {
+    resetChannelExpiration(state) {
+      state.channel.expires = Date.now() + CHANNEL_TTL;
+    },
+    setSig(state, action: PayloadAction<{ sig: Signature; signer: string }>) {
       const { signer, sig } = action.payload;
       // access previous values from the reducer
       const { id } = original(state);
@@ -62,7 +81,10 @@ const recoveryData = createSlice({
         state.sigs[signer] = sig;
       }
     },
-    updateNamePhoto(state, action) {
+    updateNamePhoto(
+      state,
+      action: PayloadAction<{ name: string; photo: string }>,
+    ) {
       const { name, photo } = action.payload;
       state.name = name;
       state.photo = photo;
@@ -73,13 +95,23 @@ const recoveryData = createSlice({
     resetRecoveryData() {
       return initialState;
     },
-    increaseRecoveredConnections(state, action) {
-      const { count } = action.payload;
-      state.recoveredConnections += count;
+    setRecoveryError(
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        errorType: RecoveryErrorType;
+        errorMessage?: string;
+      }>,
+    ) {
+      state.errorType = payload.errorType;
+      state.errorMessage = payload.errorMessage;
     },
-    increaseRecoveredGroups(state, action) {
-      const { count } = action.payload;
-      state.recoveredGroups += count;
+    increaseRecoveredConnections(state, action: PayloadAction<number>) {
+      state.recoveredConnections += action.payload;
+    },
+    increaseRecoveredGroups(state, action: PayloadAction<number>) {
+      state.recoveredGroups += action.payload;
     },
   },
 });
@@ -89,11 +121,14 @@ export const {
   init,
   increaseRecoveredConnections,
   increaseRecoveredGroups,
-  setChannel,
+  setAesKey,
+  setRecoveryChannel,
   setSig,
   updateNamePhoto,
+  resetChannelExpiration,
   resetRecoverySigs,
   resetRecoveryData,
+  setRecoveryError,
 } = recoveryData.actions;
 
 // Export reducer

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import {
   connectionsSelector,
   recoveryConnectionsSelector,
@@ -53,9 +53,10 @@ const TrustedConnectionsScreen = () => {
     connection_levels.ALREADY_KNOWN,
     connection_levels.RECOVERY,
   );
-  const knownConnections = connections.filter((conn) =>
-    knownLevels.includes(conn.incomingLevel) ||
-    conn.level == connection_levels.RECOVERY,
+  const knownConnections = connections.filter(
+    (conn) =>
+      knownLevels.includes(conn.incomingLevel) ||
+      conn.level === connection_levels.RECOVERY,
   );
 
   const toggleSelection = (id) => {

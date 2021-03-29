@@ -1,367 +1,368 @@
 {
-    "signup": {
-        "placeholder": {
-            "name": "Название"
-        },
-        "header": {
-            "title": "Регистрация"
-        },
-        "button": {
-            "recoverAccount": "Восстановить BrightID",
-            "createAccount": "Создать BrightID",
-            "addPhoto": "Добавить фото"
-        },
-        "alert": {
-            "nameMissing": "Пожалуйста, добавьте свое имя"
-        }
+  "achievements": {
+    "linkApp": {
+      "description": "Свяжите свой BrightID с приложением",
+      "title": "Ссылка на приложение"
     },
-    "restore": {
-        "title": {
-            "chooseConnection": "Выберите подключение"
-        },
-        "text": {
-            "downloadingData": "Скачивание данных с резервного сервера…"
-        },
-        "header": {
-            "accountRecovery": "Восстановление аккаунта"
-        },
-        "button": {
-            "startRestore": "Начать восстановление"
-        },
-        "alert": {
-            "title": {
-                "notTrusted": "Ой-ой"
-            },
-            "text": {
-                "restoreSuccess": "Ваш аккаунт успешно восстановлен!"
-            }
-        }
-    },
-    "recovery": {
-        "header": {
-            "title": "Код восстановления"
-        }
-    },
-    "qrcode": {
-        "text": {
-            "expiresIn": "Истекает в:",
-            "codeSingle": "Одноразовый код",
-            "codeGroup": "Код группы"
-        },
-        "label": {
-            "connectionType": "Тип подключения:"
-        },
-        "button": {
-            "showCode": "Показать QR-код",
-            "scanCode": "Отсканировать код",
-            "copyLink": "Копировать ссылку"
-        },
-        "alert": {
-            "universalLink": "Универсальная ссылка",
-            "title": {
-                "codeSingle": "Одноразовый код",
-                "codeGroup": "Код группы"
-            }
-        }
-    },
-    "profile": {
-        "text": {
-            "viewPassword": "Посмотреть пароль",
-            "changeProfilePicture": "Изменить изображение профиля",
-            "changePassword": "Изменить пароль"
-        },
-        "placeholder": {
-            "newPasswordAgain": "Новый пароль еще раз",
-            "newPassword": "Новый пароль",
-            "name": "Введите имя"
-        },
-        "label": {
-            "socialMediaLink": "Ссылка на социальные сети",
-            "newPasswordAgain": "Новый пароль еще раз",
-            "newPassword": "Новый пароль",
-            "name": "Название",
-            "currentPassword": "Текущий пароль"
-        },
-        "button": {
-            "socialNext": "Далее"
-        },
-        "alert": {
-            "title": {
-                "passwordMatch": "Пожалуйста, попробуйте еще раз",
-                "discardChanges": "Отменить изменения?"
-            },
-            "button": {
-                "discard": "Discard"
-            }
-        }
-    },
-    "pendingConnections": {
-        "label": {
-            "recovery": "Восстановление",
-            "groups": "Группы"
-        }
-    },
-    "onboarding": {
-        "label": {
-            "maintainPrivacy": "Сохраняйте конфиденциальность"
-        },
-        "button": {
-            "getStarted": "Начать"
-        }
-    },
-    "notifications": {
-        "tab": {
-            "groups": "группы"
-        },
-        "item": {
-            "title": {
-                "backupBrightId": "Резервное копирование BrightID"
-            }
-        },
-        "alert": {
-            "title": {
-                "rejectGroupInvite": "Отклонить"
-            },
-            "text": {
-                "failureAcceptGroupInvite": "Не удалось присоединиться к группе"
-            }
-        }
-    },
-    "home": {
-        "link": {
-            "community": "Присоединиться к сообществу"
-        },
-        "chatActionSheet": {
-            "title": "Хотите поболтать с нами?",
-            "discord": "BrightID Discord"
-        },
-        "button": {
-            "scanCode": "Отсканировать код",
-            "myCode": "Мой код",
-            "groups": "Группы",
-            "apps": "Приложения"
-        }
-    },
-    "groups": {
-        "tag": {
-            "primaryGroup": "Основная группа"
-        },
-        "memberActionSheet": {
-            "dismissMember": "Выйти из группы",
-            "cancel": "Отмена",
-            "addAdmin": "Добавить администратора"
-        },
-        "header": {
-            "newGroup": "Новая группа"
-        },
-        "groupActionSheet": {
-            "leaveGroup": "Покинуть группу",
-            "inviteUser": "Пригласить пользователя",
-            "cancel": "Отмена"
-        },
-        "button": {
-            "learnMore": "Узнать больше",
-            "createGroup": "Создать группу"
-        },
-        "alert": {
-            "title": {
-                "leaveGroup": "Покинуть группу",
-                "inviteSuccess": "Успешное приглашение",
-                "addAdmin": "Добавить администратора"
-            }
-        },
-        "accessibilityLabel": {
-            "groupsLogo": "логотип группы"
-        }
-    },
-    "graphExplorer": {
-        "button": {
-            "copyCode": "Копировать код"
-        },
-        "alert": {
-            "text": {
-                "copied": "Скопировано в буфер обмена!"
-            }
-        }
-    },
-    "eula": {
-        "header": {
-            "title": "Лицензионное соглашение"
-        }
-    },
-    "drawer": {
-        "label": {
-            "editProfile": "Редактировать профиль",
-            "contactUs": "Связаться с нами",
-            "checkForUpdates": "Проверить наличие обновлений",
-            "achievements": "Достижения"
-        },
-        "alert": {
-            "title": {
-                "upToDate": "Проверить обновления"
-            }
-        }
-    },
-    "createGroup": {
-        "label": {
-            "cofounders": "СОУЧРЕДИТЕЛИ"
-        },
-        "button": {
-            "next": "Далее",
-            "createGroup": "Создать группу"
-        },
-        "alert": {
-            "text": {
-                "nameMissing": "Пожалуйста, добавьте имя для группы"
-            }
-        }
-    },
-    "contact": {
-        "title": {
-            "contactUs": "Связаться с нами"
-        },
-        "text": {
-            "weAre": "Мы ",
-            "openSource": "открытый исходный код!"
-        },
-        "label": {
-            "website": "Веб-сайт",
-            "socialMedia": "Социальные медиа"
-        }
-    },
-    "connections": {
-        "tag": {
-            "waiting": "Ожидание",
-            "hidden": "Скрытый",
-            "deleted": "Удалено"
-        },
-        "removeActionSheet": {
-            "remove": "Удалить"
-        },
-        "label": {
-            "oldProfile": "Старый профиль",
-            "newProfile": "Новый профиль"
-        },
-        "button": {
-            "reconnect": "Переподключиться"
-        },
-        "accessibilityLabel": {
-            "viewConnectionDetails": "Просмотр сведений о подключении",
-            "connectionPhoto": "Фото подключения"
-        }
-    },
-    "connectionDetails": {
-        "text": {
-            "reportOther": "Другая причина",
-            "reportDuplicate": "Этот человек создал несколько учетных записей",
-            "reportConnection": "Отчет {{name}}",
-            "levelAlreadyKnown": "Я знаю этого человека"
-        },
-        "tags": {
-            "loading": "Загрузка…"
-        },
-        "label": {
-            "connectionLevel": "Уровень подключения"
-        },
-        "header": {
-            "connectionDetails": "Детали подключения"
-        },
-        "button": {
-            "reportSubmit": "Отправить",
-            "reportCancel": "Отмена",
-            "report": "Пожаловаться на этого человека",
-            "levelSave": "Сохранить"
-        }
-    },
-    "common": {
-        "text": {
-            "uploadingData": "Загрузка зашифрованных данных на резервный сервер…",
-            "progress": "{{completed}}/{{total}} завершено"
-        },
-        "placeholder": {
-            "password": "Пароль"
-        },
-        "photoActionSheet": {
-            "title": "Выбрать фото",
-            "takePhoto": "Сфотографировать",
-            "choosePhoto": "Выбрать из библиотеки"
-        },
-        "camera": {
-            "ok": "Ок",
-            "cancel": "Отмена"
-        },
-        "button": {
-            "save": "Сохранить",
-            "copy": "Копировать",
-            "cancel": "Отмена"
-        },
-        "alert": {
-            "yes": "Да",
-            "text": {
-                "incorrectPassword": "Неверный пароль!"
-            },
-            "sure": "Конечно",
-            "success": "Успешно",
-            "ok": "ОК",
-            "no": "Нет",
-            "info": "Инфо",
-            "error": "Ошибка",
-            "dismiss": "Отклонить",
-            "cancel": "Отмена"
-        },
-        "actionSheet": {
-            "title": "Что ты хочешь сделать?",
-            "cancel": "отмена"
-        },
-        "accessibilityLabel": {
-            "userPhoto": "фото пользователя",
-            "profilePhoto": "фото профиля",
-            "editPhoto": "редактировать фото",
-            "addPhoto": "добавить фото"
-        }
-    },
-    "backup": {
-        "placeholder": {
-            "confirmPassword": "Подтвердить пароль"
-        },
-        "header": {
-            "backup": "Резервное копирование"
-        },
-        "button": {
-            "startBackup": "Начать резервное копирование",
-            "next": "Далее"
-        },
-        "alert": {
-            "text": {
-                "backupSuccess": "Резервное копирование успешно завершено!"
-            }
-        }
-    },
-    "apps": {
-        "text": {
-            "noApps": "Нет приложений"
-        },
-        "tag": {
-            "tryAgain": "Попробуйте снова"
-        },
-        "alert": {
-            "title": {
-                "linkSuccess": "Успешно",
-                "linkFailure": "Ошибка",
-                "invalidContext": "Ошибка"
-            },
-            "button": {
-                "visitWebsite": "Конечно"
-            }
-        }
-    },
-    "achievements": {
-        "notification": {
-            "title": "Достижение разблокировано!"
-        },
-        "linkApp": {
-            "title": "Ссылка на приложение",
-            "description": "Свяжите свой BrightID с приложением"
-        }
+    "notification": {
+      "title": "Достижение разблокировано!"
     }
+  },
+  "apps": {
+    "alert": {
+      "button": {
+        "visitWebsite": "Конечно"
+      },
+      "title": {
+        "invalidContext": "Ошибка",
+        "linkFailure": "Ошибка",
+        "linkSuccess": "Успешно"
+      }
+    },
+    "tag": {
+      "tryAgain": "Попробуйте снова"
+    },
+    "text": {
+      "noApps": "Нет приложений"
+    }
+  },
+  "backup": {
+    "alert": {
+      "text": {
+        "backupSuccess": "Резервное копирование успешно завершено!"
+      }
+    },
+    "button": {
+      "next": "Далее",
+      "startBackup": "Начать резервное копирование"
+    },
+    "header": {
+      "backup": "Резервное копирование"
+    },
+    "placeholder": {
+      "confirmPassword": "Подтвердить пароль"
+    }
+  },
+  "common": {
+    "accessibilityLabel": {
+      "addPhoto": "добавить фото",
+      "editPhoto": "редактировать фото",
+      "profilePhoto": "фото профиля",
+      "userPhoto": "фото пользователя"
+    },
+    "actionSheet": {
+      "cancel": "отмена",
+      "title": "Что ты хочешь сделать?"
+    },
+    "alert": {
+      "cancel": "Отмена",
+      "dismiss": "Отклонить",
+      "error": "Ошибка",
+      "info": "Инфо",
+      "no": "Нет",
+      "ok": "ОК",
+      "success": "Успешно",
+      "sure": "Конечно",
+      "text": {
+        "incorrectPassword": "Неверный пароль!"
+      },
+      "yes": "Да"
+    },
+    "button": {
+      "cancel": "Отмена",
+      "copy": "Копировать",
+      "save": "Сохранить"
+    },
+    "camera": {
+      "cancel": "Отмена",
+      "ok": "Ок"
+    },
+    "photoActionSheet": {
+      "choosePhoto": "Выбрать из библиотеки",
+      "takePhoto": "Сфотографировать",
+      "title": "Выбрать фото"
+    },
+    "placeholder": {
+      "password": "Пароль"
+    },
+    "text": {
+      "progress": "{{completed}}/{{total}} завершено",
+      "uploadingData": "Загрузка зашифрованных данных на резервный сервер…"
+    }
+  },
+  "connectionDetails": {
+    "button": {
+      "levelSave": "Сохранить",
+      "report": "Пожаловаться на этого человека",
+      "reportCancel": "Отмена",
+      "reportSubmit": "Отправить"
+    },
+    "header": {
+      "connectionDetails": "Детали подключения"
+    },
+    "label": {
+      "connectionLevel": "Уровень подключения"
+    },
+    "tags": {
+      "loading": "Загрузка…"
+    },
+    "text": {
+      "levelAlreadyKnown": "Я знаю этого человека",
+      "reportConnection": "Отчет {{name}}",
+      "reportDuplicate": "Этот человек создал несколько учетных записей",
+      "reportOther": "Другая причина"
+    }
+  },
+  "connections": {
+    "accessibilityLabel": {
+      "connectionPhoto": "Фото подключения",
+      "viewConnectionDetails": "Просмотр сведений о подключении"
+    },
+    "button": {
+      "reconnect": "Переподключиться"
+    },
+    "label": {
+      "newProfile": "Новый профиль",
+      "oldProfile": "Старый профиль"
+    },
+    "removeActionSheet": {
+      "remove": "Удалить"
+    },
+    "tag": {
+      "deleted": "Удалено",
+      "hidden": "Скрытый",
+      "waiting": "Ожидание"
+    }
+  },
+  "contact": {
+    "label": {
+      "email": "Эл. почта",
+      "socialMedia": "Социальные медиа",
+      "website": "Веб-сайт"
+    },
+    "text": {
+      "openSource": "открытый исходный код!",
+      "weAre": "Мы "
+    },
+    "title": {
+      "contactUs": "Связаться с нами"
+    }
+  },
+  "createGroup": {
+    "alert": {
+      "text": {
+        "nameMissing": "Пожалуйста, добавьте имя для группы"
+      }
+    },
+    "button": {
+      "createGroup": "Создать группу",
+      "next": "Далее"
+    },
+    "label": {
+      "cofounders": "СОУЧРЕДИТЕЛИ"
+    }
+  },
+  "drawer": {
+    "alert": {
+      "title": {
+        "upToDate": "Проверить обновления"
+      }
+    },
+    "label": {
+      "achievements": "Достижения",
+      "checkForUpdates": "Проверить наличие обновлений",
+      "contactUs": "Связаться с нами",
+      "editProfile": "Редактировать профиль"
+    }
+  },
+  "eula": {
+    "header": {
+      "title": "Лицензионное соглашение"
+    }
+  },
+  "graphExplorer": {
+    "alert": {
+      "text": {
+        "copied": "Скопировано в буфер обмена!"
+      }
+    },
+    "button": {
+      "copyCode": "Копировать код"
+    }
+  },
+  "groups": {
+    "accessibilityLabel": {
+      "groupsLogo": "логотип группы"
+    },
+    "alert": {
+      "title": {
+        "addAdmin": "Добавить администратора",
+        "inviteSuccess": "Успешное приглашение",
+        "leaveGroup": "Покинуть группу"
+      }
+    },
+    "button": {
+      "createGroup": "Создать группу",
+      "learnMore": "Узнать больше"
+    },
+    "groupActionSheet": {
+      "cancel": "Отмена",
+      "inviteUser": "Пригласить пользователя",
+      "leaveGroup": "Покинуть группу"
+    },
+    "header": {
+      "newGroup": "Новая группа"
+    },
+    "memberActionSheet": {
+      "addAdmin": "Добавить администратора",
+      "cancel": "Отмена",
+      "dismissMember": "Выйти из группы"
+    },
+    "tag": {
+      "primaryGroup": "Основная группа"
+    }
+  },
+  "home": {
+    "button": {
+      "apps": "Приложения",
+      "groups": "Группы",
+      "myCode": "Мой код",
+      "scanCode": "Отсканировать код"
+    },
+    "chatActionSheet": {
+      "discord": "BrightID Discord",
+      "title": "Хотите поболтать с нами?"
+    },
+    "link": {
+      "community": "Присоединиться к сообществу"
+    }
+  },
+  "notifications": {
+    "alert": {
+      "text": {
+        "failureAcceptGroupInvite": "Не удалось присоединиться к группе"
+      },
+      "title": {
+        "rejectGroupInvite": "Отклонить"
+      }
+    },
+    "item": {
+      "title": {
+        "backupBrightId": "Резервное копирование BrightID"
+      }
+    },
+    "tab": {
+      "groups": "группы"
+    }
+  },
+  "onboarding": {
+    "button": {
+      "getStarted": "Начать"
+    },
+    "label": {
+      "maintainPrivacy": "Сохраняйте конфиденциальность"
+    }
+  },
+  "pendingConnections": {
+    "label": {
+      "groups": "Группы",
+      "recovery": "Восстановление"
+    }
+  },
+  "profile": {
+    "alert": {
+      "button": {
+        "discard": "Discard"
+      },
+      "title": {
+        "discardChanges": "Отменить изменения?",
+        "passwordMatch": "Пожалуйста, попробуйте еще раз"
+      }
+    },
+    "button": {
+      "socialNext": "Далее"
+    },
+    "label": {
+      "currentPassword": "Текущий пароль",
+      "name": "Название",
+      "newPassword": "Новый пароль",
+      "newPasswordAgain": "Новый пароль еще раз",
+      "socialMediaLink": "Ссылка на социальные сети"
+    },
+    "placeholder": {
+      "name": "Введите имя",
+      "newPassword": "Новый пароль",
+      "newPasswordAgain": "Новый пароль еще раз"
+    },
+    "text": {
+      "changePassword": "Изменить пароль",
+      "changeProfilePicture": "Изменить изображение профиля",
+      "viewPassword": "Посмотреть пароль"
+    }
+  },
+  "qrcode": {
+    "alert": {
+      "title": {
+        "codeGroup": "Код группы",
+        "codeSingle": "Одноразовый код"
+      },
+      "universalLink": "Универсальная ссылка"
+    },
+    "button": {
+      "copyLink": "Копировать ссылку",
+      "scanCode": "Отсканировать код",
+      "showCode": "Показать QR-код"
+    },
+    "label": {
+      "connectionType": "Тип подключения:"
+    },
+    "text": {
+      "codeGroup": "Код группы",
+      "codeSingle": "Одноразовый код",
+      "expiresIn": "Истекает в:"
+    }
+  },
+  "recovery": {
+    "header": {
+      "title": "Код восстановления"
+    }
+  },
+  "restore": {
+    "alert": {
+      "text": {
+        "restoreSuccess": "Ваш аккаунт успешно восстановлен!"
+      },
+      "title": {
+        "notTrusted": "Ой-ой"
+      }
+    },
+    "button": {
+      "startRestore": "Начать восстановление"
+    },
+    "header": {
+      "accountRecovery": "Восстановление аккаунта"
+    },
+    "text": {
+      "downloadingData": "Скачивание данных с резервного сервера…"
+    },
+    "title": {
+      "chooseConnection": "Выберите подключение"
+    }
+  },
+  "signup": {
+    "alert": {
+      "nameMissing": "Пожалуйста, добавьте свое имя"
+    },
+    "button": {
+      "addPhoto": "Добавить фото",
+      "createAccount": "Создать BrightID",
+      "recoverAccount": "Восстановить BrightID"
+    },
+    "header": {
+      "title": "Регистрация"
+    },
+    "placeholder": {
+      "name": "Название"
+    }
+  }
 }

@@ -9,23 +9,22 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from '@/store';
+import { useDispatch, useSelector } from '@/store';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import { photoDirectory } from '@/utils/filesystem';
 import { GREY, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
 import ChannelAPI from '@/api/channelService';
-import api from '@/api/brightId';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { uploadSig, uploadMutualInfo } from './thunks/channelUploadThunks';
+import { resetRecoveryData } from './recoveryDataSlice';
 
 const RecoveringConnectionCard = (props) => {
   const {
     status,
     verifications,
     id,
-    aesKey,
     photo,
     name,
     connectionDate,
@@ -36,7 +35,8 @@ const RecoveringConnectionCard = (props) => {
   } = props;
 
   const [imgErr, setImgErr] = useState(false);
-
+  const aesKey = useSelector((state) => state.recoveryData.aesKey);
+  const channel = useSelector((state) => state.recoveryData.channel);
   const { t } = useTranslation();
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -64,8 +64,8 @@ const RecoveringConnectionCard = (props) => {
     try {
       setUploadingData(true);
 
-      const url = new URL(`${api.baseUrl}/profile`);
-      const channelApi = new ChannelAPI(url.href);
+      console.log(`Uploading recovery data to channel at ${channel.url.href}`);
+      const channelApi = new ChannelAPI(channel.url.href);
 
       // it's important to upload mutal connections first so that we can guarantee the other user downloads them when they recieve the sig
       await dispatch(
@@ -77,6 +77,7 @@ const RecoveringConnectionCard = (props) => {
       );
 
       await dispatch(uploadSig({ id, aesKey, channelApi }));
+      setUploadingData(false);
 
       Alert.alert(
         t('common.alert.info'),
@@ -84,11 +85,15 @@ const RecoveringConnectionCard = (props) => {
         [
           {
             text: t('common.alert.ok'),
-            onPress: () => navigation.navigate('Home'),
+            onPress: () => {
+              dispatch(resetRecoveryData());
+              navigation.navigate('Home');
+            },
           },
         ],
       );
     } catch (err) {
+      setUploadingData(false);
       Alert.alert(t('common.alert.error'), err.message);
     }
   };

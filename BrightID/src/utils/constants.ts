@@ -11,6 +11,7 @@ export const CHANNEL_TTL = 900000; // 15 minutes
 export const CHANNEL_CONNECTION_LIMIT = 30; // maximum number of connections allowed in channel.
 export const MIN_CHANNEL_JOIN_TTL = 5000;
 export const PROFILE_POLL_INTERVAL = 2000;
+export const RECOVERY_CHANNEL_KEEPALIVE_THRESHOLD = 30000;
 export const RECOVERY_COOLDOWN_DURATION = 7 * 24 * 60 * 60 * 1000; // 1 week
 export const RECOVERY_COOLDOWN_EXEMPTION = 24 * 60 * 60 * 1000; // 24 hours
 // timestamp can be this far in the future (milliseconds) to accommodate 2 clients clock differences
@@ -48,3 +49,8 @@ export const report_reasons = {
   DECEASED: 'deceased',
   OTHER: 'other',
 };
+
+export enum qrCodeURL_types {
+  CONNECTION = '1', // qrcode url is for connection channel
+  RECOVERY = '2', // qrcode url is for recovery channel
+}

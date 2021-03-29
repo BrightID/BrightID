@@ -89,19 +89,11 @@ export const UserTasks = {
     description: i18next.t(`achievements.joinConnectionParty.description`),
     url: 'https://www.brightid.org/meet',
     checkFn(state) {
-      return state.user.verifications.includes('SeedConnected');
-    },
-  },
-  join_connection_party_with_friend: {
-    id: 'join_connection_party_with_friend',
-    sortValue: 120,
-    title: i18next.t(`achievements.joinConnectionPartyWithFriend.title`),
-    description: i18next.t(
-      `achievements.joinConnectionPartyWithFriend.description`,
-    ),
-    url: 'https://www.brightid.org/meet',
-    checkFn(state) {
-      return state.user.verifications.includes('SeedConnectedWithFriend');
+      state.user.verifications.find(
+        (verification) =>
+          verification.name === 'SeedConnected' &&
+          (verification as SeedConnectedVerification).rank > 0,
+      );
     },
   },
 };

@@ -10,10 +10,24 @@ import Spinner from 'react-native-spinkit';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { ORANGE, BLACK, WHITE, LIGHT_BLACK, DARKER_GREY } from '@/theme/colors';
+import { BLACK, DARKER_GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { pollChannel } from './thunks/channelThunks';
+import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
+import {
+  channel_types,
+  closeChannel,
+} from '@/components/PendingConnections/channelSlice';
+import api from '@/api/brightId';
+import { setupRecovery } from '@/components/Onboarding/RecoveryFlow/thunks/recoveryThunks';
+import { buildRecoveryChannelQrUrl } from '@/utils/recovery';
+import { buildChannelQrUrl } from '@/utils/channels';
+import {
+  clearChannel,
+  createChannel,
+  pollChannel,
+} from './thunks/channelThunks';
+import { resetRecoveryData } from './recoveryDataSlice';
 
 /**
  * Recovery Code screen of BrightID
@@ -21,6 +35,7 @@ import { pollChannel } from './thunks/channelThunks';
  * displays a qrcode
  */
 const RecoveryCodeScreen = () => {
+  const [qrUrl, setQrUrl] = useState<URL>();
   const [qrsvg, setQrsvg] = useState('');
   const [alreadyNotified, setAlreadyNotified] = useState(false);
 
@@ -34,27 +49,79 @@ const RecoveryCodeScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  useFocusEffect(
-    useCallback(() => {
-      dispatch(pollChannel()).catch((err) => {
-        Alert.alert(t('common.alert.error'), err.message);
-      });
-    }, [dispatch, t]),
-  );
-
+  // create recovery data and start polling channel
   useEffect(() => {
-    const parseQrString = (err, qrsvg) => {
-      if (err) return console.log(err);
-      setQrsvg(qrsvg);
+    const runEffect = async () => {
+      // create publicKey, secretKey, aesKey for user
+      await dispatch(setupRecovery());
+      // create channel for recovery sigs
+      await dispatch(createChannel());
+      // start polling channel
+      dispatch(pollChannel());
     };
+    if (!recoveryData.aesKey) {
+      console.log(`initializing recovery process`);
+      runEffect();
+    }
+  }, [dispatch, recoveryData]);
 
-    if (recoveryData.qrcode) {
-      qrcode.toString(recoveryData.qrcode, (err, qr) => {
+  // set QRCode and SVG
+  useEffect(() => {
+    if (recoveryData.channel.url && recoveryData.aesKey) {
+      const newQrUrl = buildRecoveryChannelQrUrl({
+        aesKey: recoveryData.aesKey,
+        url: recoveryData.channel.url,
+      });
+      console.log(`new qrCode url: ${newQrUrl.href}`);
+      setQrUrl(newQrUrl);
+
+      const parseQrString = (err, qrsvg) => {
+        if (err) return console.log(err);
+        setQrsvg(qrsvg);
+      };
+
+      qrcode.toString(newQrUrl.href, (err, qr) => {
         if (err) return console.log(err);
         parseString(qr, parseQrString);
       });
     }
-  }, [recoveryData]);
+  }, [recoveryData.aesKey, recoveryData.channel.url]);
+
+  // track errors
+  useEffect(() => {
+    if (recoveryData.errorType !== RecoveryErrorType.NONE) {
+      // something went wrong. Show error message to user and stop recovery process
+      let message;
+      switch (recoveryData.errorType) {
+        case RecoveryErrorType.MISMATCH_ID:
+          message = t(
+            'recovery.error.mismatchId',
+            'Your recovery connections selected different accounts',
+          );
+          break;
+        case RecoveryErrorType.GENERIC:
+        default:
+          // use untranslated errorMessage from state if available, generic message otherwise
+          message =
+            recoveryData.errorMessage !== ''
+              ? recoveryData.errorMessage
+              : t('recovery.error.unknown', 'An unknown error occured');
+      }
+      Alert.alert(
+        t('recovery.error.title', 'Account recovery failed'),
+        message,
+      );
+      clearChannel();
+      dispatch(resetRecoveryData());
+      navigation.goBack();
+    }
+  }, [
+    dispatch,
+    navigation,
+    recoveryData.errorMessage,
+    recoveryData.errorType,
+    t,
+  ]);
 
   useFocusEffect(
     useCallback(() => {
@@ -72,8 +139,32 @@ const RecoveryCodeScreen = () => {
   );
 
   const copyQr = () => {
-    const universalLink = `https://app.brightid.org/connection-code/${recoveryData?.qrcode}`;
-    Clipboard.setString(universalLink);
+    const universalLink = `https://app.brightid.org/connection-code/${encodeURIComponent(
+      qrUrl.href,
+    )}`;
+    const clipboardMsg = __DEV__
+      ? universalLink
+      : t('recovery.alert.clipboardmessage', {
+          defaultValue: 'Help me recover my BrightID: {{link}}',
+          link: universalLink,
+        });
+
+    Alert.alert(
+      t('recovery.alert.title', 'Recovery link'),
+      t(
+        'recovery.alert.text',
+        'Share this link with your recovery connections.',
+      ),
+      [
+        {
+          text: t('common.button.copy'),
+          onPress: () => {
+            Clipboard.setString(clipboardMsg);
+          },
+        },
+      ],
+      { cancelable: false },
+    );
   };
 
   return (

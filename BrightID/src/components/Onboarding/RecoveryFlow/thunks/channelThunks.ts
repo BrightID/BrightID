@@ -1,14 +1,17 @@
 import { hash } from '@/utils/encoding';
 import api from '@/api/brightId';
 import ChannelAPI from '@/api/channelService';
+import { RECOVERY_CHANNEL_KEEPALIVE_THRESHOLD } from '@/utils/constants';
 import {
   downloadConnections,
   downloadGroups,
   downloadSigs,
   downloadNamePhoto,
 } from './channelDownloadThunks';
-import { setupRecovery } from './recoveryThunks';
-import { setChannel } from '../recoveryDataSlice';
+import {
+  resetChannelExpiration,
+  setRecoveryChannel,
+} from '../recoveryDataSlice';
 
 // CONSTANTS
 
@@ -23,25 +26,13 @@ export const createChannel = () => async (
   try {
     const { recoveryData } = getState();
 
-    const data = {
-      signingKey: recoveryData.publicKey,
-      timestamp: recoveryData.timestamp,
-    };
-
     const url = new URL(`${api.baseUrl}/profile`);
-
     const channelApi = new ChannelAPI(url.href);
     const channelId = hash(recoveryData.aesKey);
-
-    dispatch(setChannel({ channelId, url }));
-
-    await channelApi.upload({
-      channelId,
-      data,
-      dataId: 'data',
-    });
-
-    console.log(`creating channel for recovery data: ${channelId}`);
+    console.log(`created channel ${channelId} for recovery data`);
+    dispatch(setRecoveryChannel({ channelId, url }));
+    await uploadRecoveryData(recoveryData, channelApi);
+    console.log(`Finished uploading recovery data to channel ${channelId}`);
   } catch (e) {
     const msg = 'Profile data already exists in channel';
     if (!e.message.startsWith(msg)) {
@@ -50,15 +41,27 @@ export const createChannel = () => async (
   }
 };
 
+const uploadRecoveryData = async (
+  recoveryData: RecoveryData,
+  channelApi: ChannelAPI,
+) => {
+  const channelId = hash(recoveryData.aesKey);
+  const dataObj = {
+    signingKey: recoveryData.publicKey,
+    timestamp: recoveryData.timestamp,
+  };
+  const data = JSON.stringify(dataObj);
+  await channelApi.upload({
+    channelId,
+    data,
+    dataId: 'data',
+  });
+};
+
 let channelIntervalId: IntervalId;
 let checkInProgress = false;
 
 export const pollChannel = () => async (dispatch: dispatch) => {
-  // creates publicKey, secretKey, aesKey for user
-  await dispatch(setupRecovery());
-  // create channel for recovery sigs
-  await dispatch(createChannel());
-
   clearInterval(channelIntervalId);
 
   channelIntervalId = setInterval(() => {
@@ -94,15 +97,16 @@ export const checkChannel = () => async (
       channel: { channelId, url, expires },
     },
   } = getState();
+  const { recoveryData } = getState();
+  const channelApi = new ChannelAPI(url.href);
 
-  if (expires && Date.now() - expires > 0) {
-    // create new channel if date is expired
-    console.log(`channel expired, creating new channel`);
-    await dispatch(createChannel());
-    return;
+  // keep channel alive by re-uploading my data
+  const remainingTTL = expires - Date.now();
+  if (remainingTTL < RECOVERY_CHANNEL_KEEPALIVE_THRESHOLD) {
+    await uploadRecoveryData(recoveryData, channelApi);
+    dispatch(resetChannelExpiration());
   }
 
-  const channelApi = new ChannelAPI(url.href);
   const dataIds = await channelApi.list(channelId);
 
   if (recoveryId) {
