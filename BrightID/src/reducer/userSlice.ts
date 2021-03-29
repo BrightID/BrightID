@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
 
 const initialState: UserState = {
@@ -53,7 +53,7 @@ const userSlice = createSlice({
     setUserId(state, action) {
       state.id = action.payload;
     },
-    setVerifications(state, action) {
+    setVerifications(state, action: PayloadAction<Array<Verification>>) {
       state.verifications = action.payload;
     },
     hydrateUser(state, action) {
