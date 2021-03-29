@@ -131,7 +131,6 @@ export const ScanCodeScreen = () => {
           if (urlType) channelURL.searchParams.delete('t');
 
           switch (urlType) {
-            // TODO: Enum!
             case qrCodeURL_types.RECOVERY: {
               // Pop 'aes' parameter from url
               const aesKey = channelURL.searchParams.get('aes');

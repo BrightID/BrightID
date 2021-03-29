@@ -84,8 +84,6 @@ export const confirmPendingConnectionThunk = (
   });
 
   // create established connection from pendingConnection
-
-  // TODO: should we be including the connection.aesKey?
   const connectionData: Connection = {
     id: connection.brightId,
     name: connection.name,
