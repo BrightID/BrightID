@@ -15,13 +15,9 @@ type V10State = ConnectionsState & PersistedState;
 
 const connectionsMigrations: MigrationManifest = {
   10: async (state: V9State | V10State) => {
-    console.log('connectionsMigrationState', { ...state });
-
     // migrate connections to entity adapter
     if (Array.isArray(state.connections)) {
       const filteredConnections = state.connections.filter(findId);
-
-      console.log('filteredConnections', filteredConnections);
 
       const ids = filteredConnections.map(findId);
 
@@ -33,7 +29,6 @@ const connectionsMigrations: MigrationManifest = {
 
       state.connections = { ids, entities };
     }
-    console.log('connectionsMigrationFinalState', { ...state });
     return state;
   },
 };
