@@ -19,6 +19,8 @@ const connectionsMigrations: MigrationManifest = {
     if (Array.isArray(state.connections)) {
       const filteredConnections = state.connections.filter(findId);
 
+      console.log('filteredContexts', filteredConnections);
+
       const ids = filteredConnections.map(findId);
 
       const entities = {};
