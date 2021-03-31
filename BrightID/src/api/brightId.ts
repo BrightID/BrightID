@@ -17,7 +17,7 @@ if (__DEV__) {
 }
 const v = 5;
 
-class NodeApi {
+export class NodeApi {
   api: ApisauceInstance;
 
   baseUrlInternal: string;
