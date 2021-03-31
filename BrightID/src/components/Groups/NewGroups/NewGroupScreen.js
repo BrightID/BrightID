@@ -10,11 +10,12 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import store from '@/store';
 import emitter from '@/emitter';
-import { clearNewGroupCoFounders, selectAllConnections } from '@/actions';
+import { clearNewGroupCoFounders } from '@/actions';
 import { BLUE, LIGHT_GREY, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { toSearchString } from '@/utils/strings';
+import { connectionsSelector } from '@/utils/connectionsSelector';
+import { createSelector } from '@reduxjs/toolkit';
 import Spinner from 'react-native-spinkit';
 import i18next from 'i18next';
 import { createNewGroup } from '../actions';
@@ -32,6 +33,13 @@ const getItemLayout = (data, index) => ({
   offset: (ITEM_HEIGHT + ITEM_MARGIN) * index,
   index,
 });
+
+const verifiedConnectionsSelector = createSelector(
+  connectionsSelector,
+  (connections) => {
+    return connections.filter((conn) => conn?.status === 'verified');
+  },
+);
 
 const creationStateStrings = {
   uploadingGroupPhoto: i18next.t(
@@ -63,15 +71,6 @@ export class NewGroupScreen extends React.Component {
 
   updateCreationState = (creationState) => {
     this.setState({ creationState });
-  };
-
-  filterConnections = () => {
-    const { connections, searchParam } = this.props;
-    return connections
-      .filter((item) =>
-        toSearchString(`${item.name}`).includes(toSearchString(searchParam)),
-      )
-      .filter((item) => item.status === 'verified');
   };
 
   cardIsSelected = (card) => {
@@ -136,8 +135,8 @@ export class NewGroupScreen extends React.Component {
   );
 
   render() {
-    const { t } = this.props;
-    const connections = this.filterConnections();
+    const { t, connections } = this.props;
+
     return (
       <>
         <View style={styles.orangeTop} />
@@ -289,6 +288,5 @@ const styles = StyleSheet.create({
 
 export default connect((state) => ({
   newGroupCoFounders: state.groups.newGroupCoFounders,
-  connections: selectAllConnections(state),
-  searchParam: state.connections.searchParam,
+  connections: verifiedConnectionsSelector(state),
 }))(withTranslation()(NewGroupScreen));

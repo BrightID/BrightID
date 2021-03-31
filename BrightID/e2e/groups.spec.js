@@ -203,7 +203,6 @@ describe('Groups', () => {
       await element(by.id('groupsFlatList')).swipe('down');
 
       // Text changes to "Known members: " when all invited people have joined
-      // Try / Catch because iOS does not have elements indexed
 
       await waitFor(
         element(by.text(i18next.t('groups.label.knownMembers'))).atIndex(0),

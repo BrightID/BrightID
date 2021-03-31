@@ -1,4 +1,4 @@
-/* global element:false, by:false, waitFor:false, device: false */
+/* global element:false, by:false, waitFor:false */
 import i18next from 'i18next';
 import {
   createBrightID,
@@ -89,14 +89,18 @@ describe('Connection details', () => {
     // Have first 2 accounts accept group invites
     await navigateHome();
     await expectHomescreen();
+
+    // wait 10 seconds until group creation op should be done on the backend
+    await new Promise((r) => setTimeout(r, 10000));
+
     await joinAllGroups(0);
     await joinAllGroups(1);
 
     // Check if cofounders actually joined the groups
     // navigate to groups screen
     await element(by.id('groupsBtn')).tap();
-    // wait 30 seconds until all join ops should be done on the backend
-    await new Promise((r) => setTimeout(r, 30000));
+    // wait 20 seconds until all join ops should be done on the backend
+    await new Promise((r) => setTimeout(r, 20000));
     // refresh
     await element(by.id('groupsFlatList')).swipe('down');
 
@@ -104,8 +108,9 @@ describe('Connection details', () => {
     await waitFor(
       element(by.text(i18next.t('groups.label.knownMembers'))).atIndex(0),
     )
-      .toBeVisible()
-      .withTimeout(30000);
+      .toExist()
+      .withTimeout(20000);
+
     await navigateHome();
     await expectHomescreen();
   });
