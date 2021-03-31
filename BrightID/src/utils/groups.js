@@ -1,11 +1,15 @@
 import store from '@/store';
 import { createSelector } from '@reduxjs/toolkit';
+import {
+  selectAllConnections,
+  selectConnectionById,
+} from '@/reducer/connectionsSlice';
 
 const threeKnownMembers = (group) => {
   const {
     user: { id, photo, name },
-    connections: { connections },
   } = store.getState();
+  const connections = selectAllConnections(store.getState());
   const { founders, members, isNew } = group;
   const connsWithMe = [
     ...connections,
@@ -49,14 +53,14 @@ export const getGroupName = (group) => {
 
 export const ids2connections = (ids) => {
   const {
-    connections: { connections },
     user: { name, id, photo, score },
   } = store.getState();
+
   return ids.map((_id) => {
     if (_id === id) {
       return { id, name, photo, score };
     }
-    const conn = connections.find((conn) => conn.id === _id);
+    const conn = selectConnectionById(store.getState(), _id);
     if (conn) {
       return conn;
     } else {
@@ -66,12 +70,9 @@ export const ids2connections = (ids) => {
 };
 
 export const knownMemberIDs = (group) => {
-  const {
-    connections: { connections },
-  } = store.getState();
   // only members that are in my connections are known
   let knownMemberIDs = group.members.filter((memberId) =>
-    connections.find((connection) => connection.id === memberId),
+    selectConnectionById(store.getState(), memberId),
   );
   if (group.isNew) {
     // explicitly add founderIDs as they might not have joined yet

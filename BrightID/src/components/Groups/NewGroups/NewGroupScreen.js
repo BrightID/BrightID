@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import store from '@/store';
 import emitter from '@/emitter';
-import { clearNewGroupCoFounders } from '@/actions';
+import { clearNewGroupCoFounders, selectAllConnections } from '@/actions';
 import { BLUE, LIGHT_GREY, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
@@ -287,8 +287,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ connections, groups }) => ({
-  newGroupCoFounders: groups.newGroupCoFounders,
-  connections: connections.connections,
-  searchParam: connections.searchParam,
+export default connect((state) => ({
+  newGroupCoFounders: state.groups.newGroupCoFounders,
+  connections: selectAllConnections(state),
+  searchParam: state.connections.searchParam,
 }))(withTranslation()(NewGroupScreen));

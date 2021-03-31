@@ -7,9 +7,10 @@ type NodeApiRes =
   | AppsRes
   | OperationRes
   | OperationStateRes
-  | UserconnectionRes
+  | UserConnectionRes
   | UserInfoRes
-  | UserProfileRes;
+  | UserProfileRes
+  | UserVerificationRes;
 
 type AppRes = {
   data: AppInfo;
@@ -59,32 +60,11 @@ type UserVerificationRes = {
 };
 
 type UserInfoRes = {
-  data: {
-    score: number;
-    createdAt: number;
-    groups: GroupInfo[];
-    invites: InviteInfo[];
-    connections: ConnectionInfo[];
-    verifications: Array<Verification>;
-    isSponsored: boolean;
-    trusted: string[];
-    flaggers: {
-      [id: string]: string;
-    };
-  };
+  data: UserInfo;
 };
 
 type UserProfileRes = {
-  data: {
-    connectionsNum: number;
-    groupsNum: number;
-    mutualConnections: string[];
-    mutualGroups: string[];
-    connectedAt: number;
-    createdAt: number;
-    reports: Array<{ id: string; reportReason: string }>;
-    verifications: Array<{ name: string }>;
-  };
+  data: UserProfile;
 };
 
 /**
@@ -145,4 +125,30 @@ type ConnectionInfo = {
   };
   createdAt: number;
   score?: number;
+  status?: string;
+};
+
+type UserInfo = {
+  createdAt: number;
+  groups: GroupInfo[];
+  invites: InviteInfo[];
+  connections: ConnectionInfo[];
+  verifications: string[];
+  isSponsored: boolean;
+  trusted: string[];
+  flaggers: {
+    [id: string]: string;
+  };
+  score?: number;
+};
+
+type UserProfile = {
+  connectionsNum: number;
+  groupsNum: number;
+  mutualConnections: string[];
+  mutualGroups: string[];
+  connectedAt: number;
+  createdAt: number;
+  reports: Array<{ id: string; reportReason: string }>;
+  verifications: Array<{ name: string }>;
 };

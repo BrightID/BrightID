@@ -5,6 +5,7 @@ import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
 import api from '@/api/brightId';
 import { strToUint8Array, uInt8ArrayToB64, hash } from '@/utils/encoding';
+import { selectAllConnections } from '@/reducer/connectionsSlice';
 import { loadRecoveryData } from './channelDownloadThunks';
 
 export const uploadSig = ({ id, aesKey, channelApi }) => async (
@@ -122,10 +123,11 @@ export const uploadMutualInfo = ({ conn, aesKey, channelApi }) => async (
       await uploadConnection({ conn, channelApi, aesKey });
     }
     let {
-      connections: { connections },
       groups: { groups },
       user,
     } = getState();
+    let connections = selectAllConnections(getState());
+
     connections = _.keyBy(connections, 'id');
     groups = _.keyBy(groups, 'id');
 

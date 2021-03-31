@@ -13,7 +13,10 @@ import {
 } from '@react-navigation/native';
 import ConnectionTestButton from '@/utils/connectionTestButton';
 import api from '@/api/brightId';
-import { connectionByIdSelector } from '@/utils/connectionsSelector';
+import {
+  selectConnectionById,
+  selectAllConnections,
+} from '@/reducer/connectionsSlice';
 import ConnectionScreen from './ConnectionScreen';
 
 type ConnectionRoute = RouteProp<
@@ -26,11 +29,9 @@ function ConnectionScreenController() {
   const route = useRoute<ConnectionRoute>();
   const { connectionId } = route.params;
   const connection = useSelector((state: State) =>
-    connectionByIdSelector(state, connectionId),
+    selectConnectionById(state, connectionId),
   );
-  const myConnections = useSelector(
-    (state: State) => state.connections.connections,
-  );
+  const myConnections = useSelector(selectAllConnections);
   const myGroups = useSelector((state: State) => state.groups.groups);
   const [mutualGroups, setMutualGroups] = useState<Array<Group>>([]);
   const [mutualConnections, setMutualConnections] = useState<Array<Connection>>(

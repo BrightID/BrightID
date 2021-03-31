@@ -1,6 +1,7 @@
 // @flow
 
-import { EntityState } from '@reduxjs/toolkit';
+import { EntityState as _EntityState } from '@reduxjs/toolkit';
+import { RouteProp as _RouteProp } from '@react-navigation/native';
 import {
   channel_states,
   channel_types,
@@ -13,7 +14,9 @@ import { socialMediaList } from '@/components/EditProfile/socialMediaList';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 
 declare global {
+  type EntityState<T> = _EntityState<T>;
   type ValueOf<T> = T[keyof T];
+  type RouteProp<ParamList, RouteName> = _RouteProp<ParamList, RouteName>;
 
   type IntervalId = ReturnType<typeof setInterval>;
   type TimeoutId = ReturnType<typeof setTimeout>;
@@ -41,11 +44,6 @@ declare global {
     tasks: TasksState;
     user: UserState;
     walkthrough: WalkthroughState;
-  };
-
-  type AppsState = {
-    apps: AppInfo[];
-    linkedContexts: ContextInfo[];
   };
 
   type ContextInfo = {
@@ -131,17 +129,6 @@ declare global {
   type Notification = BackupNotification &
     invite &
     PendingConnectionNotification;
-
-  type OperationsState = {
-    operations: operation[];
-  };
-
-  type operation = {
-    name: string;
-    timestamp: number;
-    v: string;
-    hash: string;
-  };
 
   type PendingConnectionState = keyof typeof pendingConnection_states;
 

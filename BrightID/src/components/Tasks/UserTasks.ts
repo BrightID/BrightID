@@ -1,6 +1,10 @@
 import i18next from 'i18next';
-import { recoveryConnectionsSelector } from '@/utils/connectionsSelector';
+import {
+  connectionTotal,
+  recoveryConnectionsSelector,
+} from '@/reducer/connectionsSlice';
 import { MIN_RECOVERY_CONNECTIONS } from '@/utils/constants';
+import { linkedContextTotal } from '@/reducer/appsSlice';
 
 export const UserTasks = {
   make_first_connection: {
@@ -10,7 +14,7 @@ export const UserTasks = {
     description: i18next.t(`achievements.makeFirstConnection.description`),
     url: 'https://brightid.gitbook.io/brightid/#making-connections',
     checkFn(state) {
-      return state.connections.connections.length > 0;
+      return connectionTotal(state) > 0;
     },
   },
   link_app: {
@@ -21,10 +25,8 @@ export const UserTasks = {
     url: 'https://apps.brightid.org/',
     checkFn(state) {
       // is there at least one linked context?
-      const linkedContexts = state.apps.linkedContexts.filter(
-        (linkedContext) => linkedContext.state === 'applied',
-      );
-      return linkedContexts.length > 0;
+      const linkedContexts = linkedContextTotal(state);
+      return linkedContexts > 0;
     },
   },
   get_sponsored: {
@@ -44,7 +46,7 @@ export const UserTasks = {
     description: i18next.t(`achievements.makeTwoConnection.description`),
     url: 'https://brightid.gitbook.io/brightid/#making-connections',
     checkFn(state) {
-      return state.connections.connections.length > 1;
+      return connectionTotal(state) > 1;
     },
   },
   make_three_connection: {
@@ -54,7 +56,7 @@ export const UserTasks = {
     description: i18next.t(`achievements.makeThreeConnection.description`),
     url: 'https://brightid.gitbook.io/brightid/#making-connections',
     checkFn(state) {
-      return state.connections.connections.length > 2;
+      return connectionTotal(state) > 2;
     },
   },
   setup_backup: {

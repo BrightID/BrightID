@@ -20,7 +20,6 @@ import {
   PROFILE_VERSION,
   CHANNEL_INFO_NAME,
 } from '@/utils/constants';
-import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   newPendingConnection,
   selectAllPendingConnectionIds,

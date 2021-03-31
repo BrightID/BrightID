@@ -13,7 +13,12 @@ import {
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { getGroupName } from '@/utils/groups';
-import { acceptInvite, rejectInvite, joinGroup } from '@/actions';
+import {
+  acceptInvite,
+  rejectInvite,
+  joinGroup,
+  selectConnectionById,
+} from '@/actions';
 import api from '@/api/brightId';
 import GroupPhoto from '@/components/Groups/GroupPhoto';
 import {
@@ -29,13 +34,11 @@ const InviteCard = (props) => {
   const { invite } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const inviter = useSelector((state: State) =>
+    selectConnectionById(state, invite.inviter),
+  );
   const navigation = useNavigation();
   const { backupCompleted } = useSelector((state: State) => state.user);
-  const connections = useSelector(
-    (state: State) => state.connections.connections,
-  );
-
-  const inviter = connections.find((conn) => invite.inviter === conn.id);
 
   const handleRejectInvite = () => {
     Alert.alert(

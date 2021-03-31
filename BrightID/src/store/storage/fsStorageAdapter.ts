@@ -5,7 +5,7 @@
 import RNFetchBlob, { Encoding } from 'rn-fetch-blob';
 import { InteractionManager } from 'react-native';
 
-const createStoragePathIfNeeded = (path) =>
+const createStoragePathIfNeeded = (path: string) =>
   RNFetchBlob.fs
     .exists(path)
     .then((exists) =>
@@ -35,7 +35,7 @@ const pathForKey = (key: string) =>
 
 const FilesystemStorage = {
   setItem: (key: string, value: string) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       InteractionManager.runAfterInteractions(() => {
         resolve(RNFetchBlob.fs.writeFile(pathForKey(key), value, encoding));
       });

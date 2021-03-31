@@ -14,7 +14,7 @@ import {
 } from '@/utils/constants';
 import { calculateCooldownPeriod } from '@/utils/recovery';
 import { useSelector } from 'react-redux';
-import { recoveryConnectionsSelector } from '@/utils/connectionsSelector';
+import { recoveryConnectionsSelector } from '@/reducer/connectionsSlice';
 import { ConnectionStats } from './ConnectionStats';
 import { ProfileCard } from './ProfileCard';
 

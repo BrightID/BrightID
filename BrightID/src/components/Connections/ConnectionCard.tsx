@@ -75,8 +75,11 @@ const ConnectionCard = (props: Props) => {
             console.log(`Warning - checkTime in past: ${checkTime}`);
             checkTime = 1000; // check in 1 second
           }
+
+          if (stale_check_timer.current) {
+            clearTimeout(stale_check_timer.current);
+          }
           console.log(`Marking connection as stale in ${checkTime}ms.`);
-          clearTimeout(stale_check_timer.current);
           stale_check_timer.current = setTimeout(() => {
             if (checkStale()) {
               dispatch(staleConnection(id));

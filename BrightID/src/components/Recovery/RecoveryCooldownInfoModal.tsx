@@ -8,7 +8,7 @@ import { fontSize } from '@/theme/fonts';
 import Info from '@/components/Icons/Info';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
-import { connectionByIdSelector } from '@/utils/connectionsSelector';
+import { selectConnectionById } from '@/reducer/connectionsSlice';
 import { RECOVERY_COOLDOWN_DURATION } from '@/utils/constants';
 import { StackScreenProps } from '@react-navigation/stack';
 
@@ -18,7 +18,7 @@ const RecoveryCooldownInfoModal = ({ route, navigation }: props) => {
   const { successCallback, cooldownPeriod, connectionId } = route.params;
   const { t } = useTranslation();
   const connection = useSelector((state: State) =>
-    connectionByIdSelector(state, connectionId),
+    selectConnectionById(state, connectionId),
   );
 
   const cooldownPeriodString = moment

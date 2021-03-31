@@ -11,9 +11,13 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import { innerJoin } from 'ramda';
 import { useTranslation } from 'react-i18next';
 import api from '@/api/brightId';
-import { leaveGroup, dismissFromGroup, addAdmin } from '@/actions';
+import {
+  leaveGroup,
+  dismissFromGroup,
+  addAdmin,
+  selectAllConnections,
+} from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
-
 import { ORANGE, WHITE, BLUE, DARK_GREY } from '@/theme/colors';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -25,7 +29,7 @@ function MembersScreen(props) {
   const { navigation, route } = props;
   const groupID = route.params.group.id;
   const dispatch = useDispatch();
-  const connections = useSelector((state) => state.connections.connections);
+  const connections = useSelector(selectAllConnections);
   const user = useSelector((state) => state.user);
   const { group, admins, members } = useSelector((state) =>
     groupByIdSelector(state, groupID),

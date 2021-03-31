@@ -10,11 +10,11 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
-import { createSelector } from '@reduxjs/toolkit';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, DARKER_GREY, BLACK, BLUE, ORANGE } from '@/theme/colors';
-import { addLinkedContext, removeLinkedContext } from '@/actions';
+import { updateLinkedContext, selectLinkedContext } from '@/actions';
+
 import Check from '../Icons/Check';
 
 /**
@@ -26,14 +26,6 @@ import Check from '../Icons/Check';
  */
 const MAX_WAITING_SECONDS = 60;
 
-const makeLinkedContextSelector = () =>
-  createSelector(
-    (state: State) => state.apps.linkedContexts,
-    (_: State, context: string) => context,
-    (linkedContexts, context) =>
-      linkedContexts.find((link) => link.context === context),
-  );
-
 const AppCard = (props: AppInfo) => {
   const { url, id, logo, name, unusedSponsorships, context } = props;
   const dispatch = useDispatch();
@@ -42,10 +34,11 @@ const AppCard = (props: AppInfo) => {
 
   // Make sure each instance of AppCard has it's own selector. Otherwise they would
   // invalidate each others cache. See https://react-redux.js.org/next/api/hooks#using-memoizing-selectors
-  const linkedContextSelector = useMemo(makeLinkedContextSelector, []);
+  const linkedContextSelector = useMemo(() => selectLinkedContext, []);
   const linkedContext = useSelector((state: State) =>
     linkedContextSelector(state, context),
   );
+  console.log('linkedContext', linkedContext);
   const { t } = useTranslation();
 
   const verified = verifications.some((v) => v.app && id === v.name);
@@ -70,10 +63,8 @@ const AppCard = (props: AppInfo) => {
 
       stale_check_timer = setTimeout(() => {
         dispatch(
-          addLinkedContext({
-            context: linkedContext.context,
+          updateLinkedContext({
             contextId: linkedContext.contextId,
-            dateAdded: linkedContext.dateAdded,
             state: 'failed',
           }),
         );

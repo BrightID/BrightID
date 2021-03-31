@@ -10,10 +10,12 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import FsStorage from './storage/fsStorageAdapter';
 import KeychainStorage from './storage/keychainAdapter';
 import getStoredState from './getStoredState';
+import { appsMigrate } from './migrations/apps';
+import { connectionsMigrate } from './migrations/connections';
 
 // update this in async migrate if changed to prevent require cycle
 
-const version = 9;
+const version = 10;
 
 const fsPersistConfig = {
   storage: FsStorage,
@@ -26,11 +28,13 @@ const fsPersistConfig = {
 const appsPersistConfig = {
   ...fsPersistConfig,
   key: 'apps',
+  migrate: appsMigrate,
 };
 
 const connectionsPersistConfig = {
   ...fsPersistConfig,
   key: 'connections',
+  migrate: connectionsMigrate,
   blacklist: ['searchParam', 'searchOpen'],
 };
 

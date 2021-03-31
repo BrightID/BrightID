@@ -2,30 +2,41 @@
  * Apps
  */
 
+type AppsState = {
+  apps: AppInfo[];
+  linkedContexts: EntityState<ContextInfo>;
+};
+
 /**
  * Connections
  */
 type ConnectionsState = {
-  connections: Connection[];
+  connections: EntityState<Connection>;
   connectionsSort: string;
   searchParam: string;
   searchOpen: boolean;
-  filters: string[];
+  filters: ConnectionLevel[];
 };
 
-type Connection = Partial<ConnectionInfo> & {
+type LocalConnectionData = {
+  id: string;
   name: string;
-  photo: { filename: string };
   connectionDate: number;
-  status: string;
+  photo: { filename: string };
+  status?: string;
+  level?: ConnectionLevel;
+  socialMedia?: string[];
   incomingLevel?: ConnectionLevel;
   socialMedia?: string[];
   notificationToken?: string;
   publicKey?: string;
   secretKey?: string;
   hiddenFlag?: string;
-  aesKey?: string;
+  secretKey?: any;
 };
+
+type Connection = Partial<ConnectionInfo> & Partial<LocalConnectionData>;
+
 /**
  * Groups
  */
@@ -65,6 +76,8 @@ type Keypair = {
 /**
  * Operations
  */
+
+type OperationsState = EntityState<NodeOps>;
 
 /**
  * UserSlice

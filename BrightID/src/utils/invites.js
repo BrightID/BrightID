@@ -4,6 +4,7 @@ import store from '@/store';
 import { uInt8ArrayToB64, b64ToUint8Array, randomKey } from '@/utils/encoding';
 import nacl from 'tweetnacl';
 import { convertPublicKey, convertSecretKey } from 'ed2curve';
+import { selectConnectionById } from '@/reducer/connectionsSlice';
 import { saveImage } from './filesystem';
 import { INVITE_ACTIVE } from './constants';
 
@@ -22,11 +23,7 @@ export const getInviteInfo = async (invite) => {
 
     let { secretKey } = store.getState().keypair;
 
-    const {
-      connections: { connections },
-    } = store.getState();
-
-    const conn = connections.find((conn) => conn.id === invite.inviter);
+    const conn = selectConnectionById(store.getState(), invite.inviter);
 
     const pub = convertPublicKey(b64ToUint8Array(conn.signingKey));
     const msg = b64ToUint8Array(invite.data.split('_')[0]);
