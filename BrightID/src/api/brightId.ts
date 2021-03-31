@@ -22,9 +22,8 @@ class NodeApi {
 
   baseUrlInternal: string;
 
-  constructor() {
-    // for now set the baseUrl to the seedUrl since there is only one server
-    this.baseUrlInternal = seedUrl;
+  constructor(url: string) {
+    this.baseUrlInternal = url;
     this.api = create({
       baseURL: this.apiUrl,
       headers: { 'Cache-Control': 'no-cache' },
@@ -429,6 +428,6 @@ class NodeApi {
   }
 }
 
-const brightId = new NodeApi();
+const brightId = new NodeApi(seedUrl);
 
 export default brightId;
