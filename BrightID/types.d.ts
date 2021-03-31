@@ -180,6 +180,11 @@ declare global {
     errorMessage: string;
   };
 
+  type RecoveryChannel = {
+    aesKey: string;
+    url: URL;
+  };
+
   type SocialMediaId = keyof typeof socialMediaList;
 
   type SocialMedia = {
@@ -206,8 +211,7 @@ declare global {
     photo: Photo;
     searchParam: string;
     backupCompleted: boolean;
-    // TODO: Fix verifications type
-    verifications: Array<any>;
+    verifications: Array<Verification>;
     id: string;
     password: string;
     secretKey: string;

@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { connectionsSelector } from '@/utils/connectionsSelector';
-
 import { ORANGE, BLUE, WHITE, LIGHT_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
@@ -54,7 +53,7 @@ const TrustedConnectionsScreen = () => {
   const knownConnections = connections.filter(
     (conn) =>
       knownLevels.includes(conn.incomingLevel) ||
-      conn.level == connection_levels.RECOVERY,
+      conn.level === connection_levels.RECOVERY,
   );
 
   const toggleSelection = (id) => {

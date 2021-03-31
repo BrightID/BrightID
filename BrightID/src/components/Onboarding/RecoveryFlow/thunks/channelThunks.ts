@@ -8,8 +8,10 @@ import {
   downloadSigs,
   downloadNamePhoto,
 } from './channelDownloadThunks';
-import { setupRecovery } from './recoveryThunks';
-import { resetChannelExpiration, setChannel } from '../recoveryDataSlice';
+import {
+  resetChannelExpiration,
+  setRecoveryChannel,
+} from '../recoveryDataSlice';
 
 // CONSTANTS
 
@@ -27,12 +29,10 @@ export const createChannel = () => async (
     const url = new URL(`${api.baseUrl}/profile`);
     const channelApi = new ChannelAPI(url.href);
     const channelId = hash(recoveryData.aesKey);
-
-    dispatch(setChannel({ channelId, url }));
-
+    console.log(`created channel ${channelId} for recovery data`);
+    dispatch(setRecoveryChannel({ channelId, url }));
     await uploadRecoveryData(recoveryData, channelApi);
-
-    console.log(`creating channel for recovery data: ${channelId}`);
+    console.log(`Finished uploading recovery data to channel ${channelId}`);
   } catch (e) {
     const msg = 'Profile data already exists in channel';
     if (!e.message.startsWith(msg)) {
@@ -62,14 +62,7 @@ let channelIntervalId: IntervalId;
 let checkInProgress = false;
 
 export const pollChannel = () => async (dispatch: dispatch) => {
-  // creates publicKey, secretKey, aesKey for user
-  await dispatch(setupRecovery());
-  // create channel for recovery sigs
-  await dispatch(createChannel());
-
-  if (channelIntervalId) {
-    clearInterval(channelIntervalId);
-  }
+  clearInterval(channelIntervalId);
 
   channelIntervalId = setInterval(() => {
     if (!checkInProgress) {

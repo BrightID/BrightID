@@ -135,7 +135,6 @@ export const subscribeToConnectionRequests = (channelId: string) => (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  // this flow syntax is ugly. https://github.com/facebook/flow/issues/235
   let { pollTimerId } = selectChannelById(getState(), channelId);
 
   if (pollTimerId) {

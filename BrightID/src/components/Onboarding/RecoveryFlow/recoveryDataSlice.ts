@@ -50,9 +50,14 @@ const recoveryData = createSlice({
       state.recoveredGroups = 0;
       state.timestamp = Date.now();
       state.sigs = {};
-      state.qrcode = encodeURIComponent(`Recovery2_${aesKey}`);
     },
-    setChannel(state, action: PayloadAction<{ channelId: string; url: URL }>) {
+    setAesKey(state, action: PayloadAction<string>) {
+      state.aesKey = action.payload;
+    },
+    setRecoveryChannel(
+      state,
+      action: PayloadAction<{ channelId: string; url: URL }>,
+    ) {
       const { channelId, url } = action.payload;
       state.channel.channelId = channelId;
       state.channel.url = url;
@@ -116,7 +121,8 @@ export const {
   init,
   increaseRecoveredConnections,
   increaseRecoveredGroups,
-  setChannel,
+  setAesKey,
+  setRecoveryChannel,
   setSig,
   updateNamePhoto,
   resetChannelExpiration,

@@ -35,8 +35,12 @@
     "progress": {
       "title": "Terminación:"
     },
+    "setupBackup": {
+      "description": "Establezca la contraseña para habilitar la copia de seguridad cifrada de sus datos",
+      "title": "Establecer la contraseña de la copia de seguridad"
+    },
     "setupTrustedConnections": {
-      "description": "Configure sus conexiones de confianza para habilitar la recuperación social de cuentas",
+      "description": "Configure sus conexiones de recuperación para habilitar la recuperación social de cuentas",
       "title": "Configurar la recuperación social"
     }
   },
@@ -76,22 +80,24 @@
     "alert": {
       "text": {
         "backupSuccess": "¡Copia de respaldo completada con éxito!",
-        "needThreeTrusted": "Necesita al menos tres conexiones de confianza para la copia de seguridad."
+        "completed": "La recuperación social de su BrightID está habilitada",
+        "needThreeTrusted": "Necesita al menos tres conexiones de recuperación para la copia de seguridad."
       }
     },
     "button": {
       "next": "Siguiente",
+      "save": "Establecer conexiones de recuperación",
       "startBackup": "Iniciar copia de respaldo"
     },
     "header": {
       "backup": "Copia de Respaldo",
-      "trustedConnections": "Conexiones de confianza"
+      "trustedConnections": "Conexiones de recuperación"
     },
     "placeholder": {
       "confirmPassword": "Confirmar Contraseña"
     },
     "text": {
-      "chooseTrustedConnections": "Elija tres o más conexiones de confianza para hacer una copia de seguridad de su BrightID.",
+      "chooseTrustedConnections": "Elija tres o más conexiones de recuperación para hacer una copia de seguridad de su BrightID.",
       "enterPassword": "Ingrese una contraseña para encriptar sus datos de respaldo con:",
       "noConnections": "Sin conexiones"
     }
@@ -130,7 +136,7 @@
         "lostKeys": "Cree un nuevo BrightID o intente recuperar su BrightID anterior",
         "passwordMatch": "La contraseña y la contraseña de confirmación no coinciden.",
         "passwordShort": "Su contraseña debe tener al menos 8 caracteres.",
-        "trustedSigned": "Una de tus conexiones de confianza firmó tu solicitud"
+        "trustedSigned": "Una de tus conexiones de recuperación firmó tu solicitud"
       },
       "title": {
         "lostKeys": "Perdimos el par de claves BrightID del dispositivo",
@@ -217,7 +223,7 @@
       "connections": "Conexiones"
     },
     "label": {
-      "currentConnectionLevel": "Nivel de conexión actual",
+      "currentConnectionLevel": "Nivel de conexión",
       "newProfile": "Nuevo Perfil",
       "oldProfile": "Perfil Antiguo"
     },
@@ -400,13 +406,15 @@
   },
   "notificationBar": {
     "text": {
+      "backupPassword": "Establezca una contraseña para activar la copia de respaldo cifrada de sus datos",
       "pendingConnections": "Tienes {{count}} conexión pendiente",
       "pendingConnections_plural": "Tienes {{count}} conexiones pendientes",
-      "socialRecovery": "Seleccione sus conexiones de confianza para habilitar la recuperación social de su BrightID"
+      "socialRecovery": "Seleccione sus conexiones de recuperación para habilitar la recuperación social de su BrightID"
     },
     "title": {
-      "pendingConnection": "Confirmar conexiones",
-      "socialRecovery": "Copia de respaldo y recuperación social"
+      "backupPassword": "Establecer contraseña de la copia de seguridad",
+      "pendingConnection": "Confirmar Conexiones",
+      "socialRecovery": "Configurar la Recuperación Social"
     }
   },
   "notifications": {
@@ -422,6 +430,10 @@
       }
     },
     "item": {
+      "msg": {
+        "backupBrightId": "Establezca una contraseña para activar la copia de respaldo cifrada de sus datos",
+        "socialRecovery": "Seleccione sus conexiones de recuperación para habilitar la recuperación social de su BrightID"
+      },
       "text": {
         "backupBrightId": "Elija sus conexiones de confianza",
         "pendingConnections": "Tienes {{count}} conexión sin confirmar",
@@ -429,7 +441,8 @@
         "pendingGroupInvite": "{{name}} te invitó a unirte"
       },
       "title": {
-        "backupBrightId": "Copia de respaldo BrightID"
+        "backupBrightId": "Establecer Contraseña de la Copia de Respaldo",
+        "socialRecovery": "Configurar la Recuperación Social"
       }
     },
     "tab": {
@@ -445,14 +458,18 @@
   },
   "onboarding": {
     "button": {
-      "getStarted": "Empezar"
+      "create": "Crear Mi BrightID",
+      "getStarted": "Empezar",
+      "recover": "Recuperar BrightID"
     },
     "label": {
       "maintainPrivacy": "Mantener Privacidad"
     },
     "text": {
+      "congratulations": "¡Felicitaciones!\nSu BrightID ha sido creado.\nEs hora de hacer conexiones.",
       "intro": "<text>BrightID utiliza la gente que conoces</text><text>para hacer cumplir la regla de una-cuenta-por-persona</text><text>para aplicaciones como</text><text>votacion e Ingreso Básico Universal.</text>",
-      "privacy": "<text>Demuestra que eres una persona única</text><text>protegiendo tu privacidad.</text>"
+      "privacy": "<text>Demuestra que eres una persona única</text><text>protegiendo tu privacidad.</text>",
+      "register": "Regístrese para crear su propia\nidentidad digital"
     }
   },
   "pendingConnection": {
@@ -518,17 +535,22 @@
       "currentPassword": "Contraseña actual",
       "name": "Nombre",
       "newPassword": "Nueva contraseña",
-      "newPasswordAgain": "Nueva contraseña de nuevo",
+      "newPasswordAgain": "Repita la contraseña",
+      "password": "Contraseña",
+      "passwordAgain": "Repita la contraseña",
       "socialMediaLink": "Enlace de redes sociales"
     },
     "placeholder": {
       "name": "Ingrese su Nombre",
       "newPassword": "Nueva contraseña",
-      "newPasswordAgain": "Nueva contraseña de nuevo"
+      "newPasswordAgain": "Repita la contraseña",
+      "password": "Contraseña"
     },
     "text": {
       "changePassword": "Cambiar Contraseña",
       "changeProfilePicture": "Cambiar Foto de Perfil",
+      "createPassword": "Crear Contraseña",
+      "setPassword": "Establecer Contraseña",
       "viewPassword": "Ver Contraseña"
     }
   },
@@ -578,8 +600,8 @@
       "title": "Código de Recuperación"
     },
     "text": {
-      "additionalInfo": "Tus conexiones de confianza necesitarán escanear este codigo para ayudarte a recuperar tu BrightID",
-      "askTrustedConnections": "Por favor, muestre este código QR a sus conexiones de confianza",
+      "additionalInfo": "Tus conexiones de recuperación necesitarán escanear este código para ayudarte a recuperar tu BrightID",
+      "askTrustedConnections": "Por favor, muestre este código QR a sus conexiones de recuperación",
       "signatures": "{{count}} / 2 firmas",
       "signatures_plural": "{{count}} / 2 firmas"
     }
@@ -587,7 +609,7 @@
   "restore": {
     "alert": {
       "text": {
-        "notTrusted": "Uno de tus amigos no está en tu lista de conexiones de confianza",
+        "notTrusted": "Uno de tus amigos no está en tu lista de conexiones de recuperación",
         "requestRecovering": "¡Su solicitud para ayudar a recuperar esta cuenta se envió correctamente!",
         "restoreConfirm": "¿Es {{name}} la cuenta que está ayudando a recuperar?",
         "restoreSuccess": "¡Su cuenta se recuperó con éxito!"
@@ -613,6 +635,7 @@
       "downloadingData": "Descargando datos del servidor de respaldo…",
       "enterPassword": "Por favor, introduzca su contraseña",
       "noConnections": "Sin conexiones…",
+      "skip": "Omitir",
       "skipLink": "saltar",
       "skipLoadingBackup": "Sin la contraseña, aún puede recuperar su BrightID, pero el nombre y la foto de sus conexiones y grupos no estarán disponibles."
     },
@@ -629,18 +652,34 @@
     "button": {
       "addPhoto": "Añadir Foto",
       "createAccount": "Crear mi BrightID",
-      "recoverAccount": "Recuperar BrightID"
+      "recoverAccount": "Recuperar BrightID",
+      "skip": "Omitir y hacerlo más tarde",
+      "submit": "Enviar"
     },
     "header": {
       "title": "Registrate"
     },
     "placeholder": {
-      "name": "Nombre"
+      "confirmPassword": "confirmar su contraseña",
+      "name": "Nombre",
+      "password": "contraseña"
     },
     "text": {
+      "createPassword": "Crea tu contraseña de BrightID",
       "creatingAccount": "Creando BrightID…",
       "infoNotShared": "Tu nombre y foto nunca serán compartidas con otras aplicaciones ni almacenadas en servidores",
+      "nameNotShared": "Su nombre nunca será compartido con aplicaciones o\nalmacenado en nuestra blockchain.",
+      "passwordInfo": "Esta contraseña encriptará los nombres y las fotos de sus conexiones en caso de que necesite recuperarlos. No permite que alguien se apodere de su BrightID.",
+      "photoNotShared": "Tu foto nunca será compartida con aplicaciones o\nalmacenada en nuestra blockchain.",
+      "pleaseAddPhoto": "Por favor, agregue una foto",
       "whatsYouName": "¿Cómo te conocen tus amigos?"
+    }
+  },
+  "walkthroughs": {
+    "text": {
+      "gotIt": "¡Entendido!",
+      "setPassword": "Siempre puede establecer su\ncontraseña de BrightID aquí",
+      "viewPassword": "Siempre podrá ver su\ncontraseña de BrightID aquí"
     }
   }
 }

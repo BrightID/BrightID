@@ -55,8 +55,7 @@ type UserConnectionRes = {
 
 type UserVerificationRes = {
   data: {
-    // TODO: Fix verifications type
-    verifications: Array<any>;
+    verifications: Array<Verification>;
   };
 };
 
