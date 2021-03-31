@@ -89,10 +89,12 @@ export const UserTasks = {
     description: i18next.t(`achievements.joinConnectionParty.description`),
     url: 'https://www.brightid.org/meet',
     checkFn(state) {
-      state.user.verifications.find(
-        (verification) =>
-          verification.name === 'SeedConnected' &&
-          (verification as SeedConnectedVerification).rank > 0,
+      return Boolean(
+        state.user.verifications.find(
+          (verification) =>
+            verification.name === 'SeedConnected' &&
+            (verification as SeedConnectedVerification).rank > 0,
+        ),
       );
     },
   },
