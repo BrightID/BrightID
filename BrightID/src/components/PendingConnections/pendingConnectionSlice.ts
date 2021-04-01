@@ -93,12 +93,12 @@ export const newPendingConnection = createAsyncThunk<
       );
       throw new Error(msg);
     }
-    // Is this brightID already in the list of pending connections? Can happen if the same user joins a channel multiple times (e.g. if users app crashed)
-    const duplicatedPendingConnection = selectPendingConnectionByBrightId(
-      getState(),
-      decryptedObj.id,
+    // Is this brightID already in the list of unconfirmed pending connections? Can happen if the same user joins a
+    // channel multiple times (e.g. if users app crashed)
+    const alreadyPending = selectAllUnconfirmedConnections(getState()).find(
+      (pc) => decryptedObj.id === pc.brightId,
     );
-    if (duplicatedPendingConnection) {
+    if (alreadyPending) {
       throw new Error(
         `PendingConnection ${profileId}: BrightId ${decryptedObj.id} is already existing.`,
       );
