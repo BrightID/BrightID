@@ -29,7 +29,7 @@
       "title": "दो कनेक्शन"
     },
     "notification": {
-      "message": "आपने \"{{title}}\" कार्य पूरा किया।",
+      "message": "आपने “{{title}}” कार्य पूरा किया।",
       "title": "उपलब्धि खुली!"
     },
     "progress": {
