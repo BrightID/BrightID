@@ -21,16 +21,7 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
 import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 
-/**
- * Connection Card in the Connections Screen
- * is created from an array of connections
- * each connection should have:
- * @prop name
- * @prop connectionTime
- * @prop photo
- */
-
-type Props = Connection & { index: number };
+type Props = Connection & { index: number; handlePress: () => void };
 
 const ConnectionCard = (props: Props) => {
   const stale_check_timer = useRef<TimeoutId>(null);
@@ -47,6 +38,7 @@ const ConnectionCard = (props: Props) => {
     hiddenFlag,
     index,
     level,
+    handlePress,
   } = props;
   const { t } = useTranslation();
 
@@ -186,9 +178,7 @@ const ConnectionCard = (props: Props) => {
         </TouchableOpacity>
         <TouchableOpacity
           testID={`ConnectionCard-${index}`}
-          onPress={() => {
-            navigation.navigate('Connection', { connectionId: id });
-          }}
+          onPress={handlePress}
           accessibilityLabel={t(
             'connections.accessibilityLabel.viewConnectionDetails',
           )}

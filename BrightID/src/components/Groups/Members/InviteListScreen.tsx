@@ -1,56 +1,73 @@
 import React, { useMemo } from 'react';
-import { StyleSheet, View, StatusBar, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, Alert, StatusBar } from 'react-native';
+import { createSelector } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from '@/store';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import fetchUserInfo from '@/actions/fetchUserInfo';
-import { useNavigation } from '@react-navigation/native';
-import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
+import api from '@/api/brightId';
+import { encryptAesKey } from '@/utils/invites';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { connectionsSelector } from '@/utils/connectionsSelector';
 import { ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { fontSize } from '@/theme/fonts';
-import ConnectionCard from './ConnectionCard';
+import { connectionsSelector } from '@/utils/connectionsSelector';
+import ConnectionCard from '../../Connections/ConnectionCard';
 
-/**
- * Connection screen of BrightID
- * Displays a search input and list of Connection Cards
- */
-
-/** Helper Component */
 const ITEM_HEIGHT = DEVICE_LARGE ? 102 : 92;
 
-const getItemLayout = (_data, index: number) => ({
+const getItemLayout = (_data: any, index: number) => ({
   length: ITEM_HEIGHT,
   offset: ITEM_HEIGHT * index,
   index,
 });
 
-/** Main Component */
+const eligibleSelector = createSelector(
+  connectionsSelector,
+  (_: State, group: Group) => group,
+  (connections, group) => {
+    return connections.filter(
+      (conn) =>
+        !group?.members?.includes(conn.id) &&
+        (group?.type !== 'primary' || !conn.hasPrimaryGroup),
+    );
+  },
+);
 
-export const ConnectionsScreen = () => {
+type InviteRoute = RouteProp<{ InviteList: { group: Group } }, 'InviteList'>;
+
+const InviteListScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const route = useRoute<InviteRoute>();
 
-  const connections = useSelector(connectionsSelector);
+  const group = route.params?.group;
+  const connections = useSelector((state) => eligibleSelector(state, group));
+
   const { t } = useTranslation();
 
-  const handleNewConnection = () => {
-    navigation.navigate('MyCode');
+  const inviteToGroup = async (connection) => {
+    try {
+      const data = await encryptAesKey(group?.aesKey, connection.signingKey);
+      await api.invite(connection.id, group?.id, data);
+      Alert.alert(
+        t('groups.alert.title.inviteSuccess'),
+        t('groups.alert.text.inviteSuccess', { name: connection.name }),
+      );
+      navigation.goBack();
+    } catch (err) {
+      Alert.alert(t('common.alert.error'), err.message);
+    }
   };
 
-  const renderItem = ({ item, index }: { item: Connection; index: number }) => {
-    return (
-      <ConnectionCard
-        {...item}
-        index={index}
-        handlePress={() => {
-          navigation.navigate('Connection', { connectionId: item.id });
-        }}
-      />
-    );
-  };
-  const ConnectionList = useMemo(() => {
+  const renderItem = ({ item, index }) => (
+    <ConnectionCard
+      {...item}
+      index={index}
+      handlePress={() => inviteToGroup(item)}
+    />
+  );
+
+  const EligibleInviteList = useMemo(() => {
     const onRefresh = async () => {
       try {
         await dispatch(fetchUserInfo());
@@ -78,7 +95,7 @@ export const ConnectionsScreen = () => {
         ListEmptyComponent={
           <EmptyList
             iconType="account-off-outline"
-            title={t('connections.text.noConnections')}
+            title={t('groups.text.noEligibleConnection')}
           />
         }
       />
@@ -96,8 +113,7 @@ export const ConnectionsScreen = () => {
       <View style={styles.orangeTop} />
 
       <View style={styles.container} testID="connectionsScreen">
-        <View style={styles.mainContainer}>{ConnectionList}</View>
-        <FloatingActionButton onPress={handleNewConnection} />
+        <View style={styles.mainContainer}>{EligibleInviteList}</View>
       </View>
     </>
   );
@@ -120,26 +136,16 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
+    marginTop: 8,
   },
   connectionsContainer: {
     flex: 1,
     width: '100%',
   },
-  actionCard: {
-    height: DEVICE_LARGE ? 76 : 71,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: DEVICE_LARGE ? 60 : 55,
-  },
-  actionText: {
-    fontFamily: 'Poppins-Medium',
-    color: WHITE,
-    fontSize: fontSize[11],
-  },
 });
 
-export default ConnectionsScreen;
+export default InviteListScreen;

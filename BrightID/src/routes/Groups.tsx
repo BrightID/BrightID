@@ -82,7 +82,13 @@ const Groups = () => {
       <Stack.Screen
         name="InviteList"
         component={InviteListScreen}
-        options={{ ...headerOptions, title: t('groups.header.inviteList') }}
+        options={{
+          ...headerOptions,
+          headerRight: () => <SearchConnections />,
+          headerTitle: () => (
+            <AnimatedHeaderTitle text={t('groups.header.inviteList')} />
+          ),
+        }}
       />
     </>
   );
