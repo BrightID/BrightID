@@ -29,7 +29,7 @@
       "title": "Dos conexiones"
     },
     "notification": {
-      "message": "Completaste la tarea \"{{title}}\".",
+      "message": "Completaste la tarea «{{title}}».",
       "title": "¡Logro desbloqueado!"
     },
     "progress": {
