@@ -35,6 +35,7 @@ export const AppsScreen = () => {
   const pendingLink = useSelector(selectPendingLinkedContext);
 
   const [refreshing, setRefreshing] = useState(false);
+
   const { t } = useTranslation();
 
   const refreshApps = useCallback(() => {

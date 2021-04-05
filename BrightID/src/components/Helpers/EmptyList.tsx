@@ -31,9 +31,8 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   emptyText: {
-    fontFamily: 'ApexNew-Medium',
+    fontFamily: 'Poppins-Bold',
     textAlign: 'center',
-    fontWeight: 'bold',
     fontSize: fontSize[18],
     color: GREY,
     width: '90%',

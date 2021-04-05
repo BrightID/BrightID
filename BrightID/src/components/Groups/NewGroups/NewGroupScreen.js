@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     borderTopColor: LIGHT_GREY,
   },
   emptyText: {
-    fontFamily: 'ApexNew-Book',
+    fontFamily: 'Poppins-Bold',
     fontSize: fontSize[20],
   },
   moreIcon: {
