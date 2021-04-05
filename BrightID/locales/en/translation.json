@@ -152,6 +152,7 @@
     },
     "tag": {
       "connectionDate": "Connected {{date}}",
+      "joinedDate": "Joined {{date}}",
       "reported": "(reported)"
     },
     "text": {
@@ -361,7 +362,8 @@
       "noGroups": "<text>Get verified faster</text><text>by creating and</text><text>joining groups</text>",
       "noGroupsMatchSearch": "No group matches your search",
       "noMembers": "No known members, invite some…",
-      "waitingForMembers": "Waiting for {{list}} to join"
+      "waitingForMembers": "Waiting for {{list}} to join",
+      "members": "{{count}} members"
     }
   },
   "home": {

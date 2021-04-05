@@ -7,7 +7,7 @@ import {
   connectionLevelStrings,
 } from '@/utils/connectionLevelStrings';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { GREY } from '@/theme/colors';
+import { GREY, DARK_ORANGE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 
 export const ConnectionStatus = ({
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   connectionTime: {
     fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 10 : 9,
-    color: '#B64B32',
+    color: DARK_ORANGE,
   },
   moreIcon: {
     marginRight: DEVICE_LARGE ? 26 : 23,

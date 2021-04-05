@@ -69,7 +69,7 @@ const groupsSelector = createSelector(
         })
         .sort(compareJoinedDesc);
     } else {
-      return groups.sort(compareJoinedDesc);
+      return [...groups].sort(compareJoinedDesc);
     }
   },
 );

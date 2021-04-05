@@ -168,9 +168,10 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
     backgroundColor: 'transparent',
+    width: '100%',
   },
   card: {
-    width: '93%',
+    width: '92%',
     height: DEVICE_LARGE ? 76 : 71,
     alignItems: 'center',
     flexDirection: 'row',
