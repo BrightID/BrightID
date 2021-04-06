@@ -16,9 +16,13 @@ import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { connection_levels } from '@/utils/constants';
-import api from '@/api/brightId';
-import { setConnectionLevel, recoveryConnectionsSelector } from '@/actions';
+import {
+  setConnectionLevel,
+  recoveryConnectionsSelector,
+  addOperation,
+} from '@/actions';
 import { calculateCooldownPeriod } from '@/utils/recovery';
+import { selectNodeApi } from '@/reducer/settingsSlice';
 import TrustedConnectionCard from './TrustedConnectionCard';
 
 /**
@@ -45,6 +49,7 @@ const TrustedConnectionsScreen = () => {
     recoveryConnections.map((item) => item.id),
   );
   const [updateInProgress, setUpdateInProgress] = useState(false);
+  const api = useSelector(selectNodeApi);
 
   const knownLevels = Array<ConnectionLevel>(
     connection_levels.ALREADY_KNOWN,
@@ -136,8 +141,10 @@ const TrustedConnectionsScreen = () => {
               }),
             );
           }
-          await Promise.all(promises);
-
+          const ops = await Promise.all(promises);
+          for (const op of ops) {
+            dispatch(addOperation(op));
+          }
           // show info about cooldown period
           if (cooldownPeriod > 0) {
             navigation.navigate('RecoveryCooldownInfo', {

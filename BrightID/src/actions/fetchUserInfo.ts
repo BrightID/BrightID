@@ -1,8 +1,8 @@
 import { InteractionManager } from 'react-native';
 import _ from 'lodash';
-import api from '@/api/brightId';
 import { updateInvites } from '@/utils/invites';
 import { GROUPS_TYPE } from '@/utils/constants';
+import { selectNodeApi } from '@/reducer/settingsSlice';
 import {
   setGroups,
   setInvites,
@@ -22,6 +22,7 @@ const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
         user: { id },
         groups: { invites: oldInvites },
       } = getState();
+      const api = selectNodeApi(getState());
 
       const opTotal = selectOperationsTotal(getState());
       console.log('opTotal', opTotal);

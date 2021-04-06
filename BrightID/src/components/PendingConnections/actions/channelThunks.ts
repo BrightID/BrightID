@@ -1,4 +1,3 @@
-import api from '@/api/brightId';
 import {
   addChannel,
   selectChannelById,
@@ -24,12 +23,15 @@ import {
   newPendingConnection,
   selectAllPendingConnectionIds,
 } from '@/components/PendingConnections/pendingConnectionSlice';
+import { selectNodeApi } from '@/reducer/settingsSlice';
 
 export const createChannel = (channelType: ChannelType) => async (
   dispatch: dispatch,
+  getState,
 ) => {
   let channel: Channel | null | undefined;
   try {
+    const api = selectNodeApi(getState());
     const url = new URL(`${api.baseUrl}/profile`);
     channel = await generateChannelData(channelType, url);
 

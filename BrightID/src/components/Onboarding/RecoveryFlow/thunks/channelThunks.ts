@@ -1,7 +1,7 @@
 import { hash } from '@/utils/encoding';
-import api from '@/api/brightId';
 import ChannelAPI from '@/api/channelService';
 import { RECOVERY_CHANNEL_KEEPALIVE_THRESHOLD } from '@/utils/constants';
+import { selectNodeApi } from '@/reducer/settingsSlice';
 import {
   downloadConnections,
   downloadGroups,
@@ -25,7 +25,7 @@ export const createChannel = () => async (
 ) => {
   try {
     const { recoveryData } = getState();
-
+    const api = selectNodeApi(getState());
     const url = new URL(`${api.baseUrl}/profile`);
     const channelApi = new ChannelAPI(url.href);
     const channelId = hash(recoveryData.aesKey);

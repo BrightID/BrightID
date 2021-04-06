@@ -3,7 +3,6 @@ import nacl from 'tweetnacl';
 import stringify from 'fast-json-stable-stringify';
 import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
-import api from '@/api/brightId';
 import { strToUint8Array, uInt8ArrayToB64, hash } from '@/utils/encoding';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
 import { loadRecoveryData } from './channelDownloadThunks';

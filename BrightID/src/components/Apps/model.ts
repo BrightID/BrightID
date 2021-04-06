@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-import { addLinkedContext } from '@/actions';
+import { addLinkedContext, addOperation } from '@/actions';
 import store from '@/store';
 import i18next from 'i18next';
 import { NodeApi } from '@/api/brightId';
@@ -30,10 +30,13 @@ const linkContextId = async (
   context: string,
   contextId: string,
 ) => {
-  // Create specific API object, since only the node at the specified baseUrl knows about this context
-  const api = new NodeApi(baseUrl);
+  // Create temporary NodeAPI object, since only the node at the specified baseUrl knows about this context
+  const { id } = store.getState().user;
+  const { secretKey } = store.getState().keypair;
+  const api = new NodeApi({ url: baseUrl, id, secretKey });
   try {
-    await api.linkContextId(context, contextId);
+    const op = await api.linkContextId(context, contextId);
+    store.dispatch(addOperation(op));
     store.dispatch(
       addLinkedContext({
         context,

@@ -1,15 +1,16 @@
 import nacl from 'tweetnacl';
 import { createImageDirectory, saveImage } from '@/utils/filesystem';
 import { randomKey } from '@/utils/encoding';
-import api from '@/api/brightId';
 import {
   setUserData,
   setConnections,
   setGroups,
   setKeypair,
   updateConnections,
+  addOperation,
 } from '@/actions';
 import { OPERATION_APPLIED_BEFORE } from '@/api/brightidError';
+import { selectNodeApi } from '@/reducer/settingsSlice';
 import { fetchBackupData } from './backupThunks';
 import {
   init,
@@ -47,10 +48,11 @@ export const setSigningKey = () => async (
   getState: getState,
 ) => {
   const { recoveryData } = getState();
+  const api = selectNodeApi(getState());
   const sigs = Object.values(recoveryData.sigs);
   console.log('setting signing key');
   try {
-    await api.setSigningKey({
+    const op = await api.setSigningKey({
       id: recoveryData.id,
       signingKey: recoveryData.publicKey,
       timestamp: recoveryData.timestamp,
@@ -59,6 +61,7 @@ export const setSigningKey = () => async (
       sig1: sigs[0].sig,
       sig2: sigs[1].sig,
     });
+    dispatch(addOperation(op));
   } catch (err) {
     if (err.errorNum === OPERATION_APPLIED_BEFORE) {
       console.log(
@@ -114,6 +117,7 @@ export const recoverData = (pass: string) => async (
   getState: getState,
 ) => {
   const { id } = getState().recoveryData;
+  const api = selectNodeApi(getState());
   console.log(`Starting recoverData for ${id}`);
   // throws if data is bad
   const restoredData = await restoreUserData(id, pass);

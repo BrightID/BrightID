@@ -12,9 +12,10 @@ import {
 } from '@/reducer/connectionsSlice';
 import { names } from '@/utils/fakeNames';
 import { connectFakeUsers } from '@/utils/fakeHelper';
-import api from '@/api/brightId';
 import { retrieveImage } from '@/utils/filesystem';
 import { PROFILE_VERSION } from '@/utils/constants';
+import { selectNodeApi } from '@/reducer/settingsSlice';
+import { addOperation } from '@/reducer/operationsSlice';
 
 /** SELECTORS */
 
@@ -89,6 +90,7 @@ export const connectWithOtherFakeConnections = (id: string) => async (
 ) => {
   // get fakeUser by ID
   const fakeUser1 = selectConnectionById(getState(), id);
+  const api = selectNodeApi(getState());
 
   if (!fakeUser1) {
     console.log(`Failed to get fake connection id ${id}`);
@@ -106,10 +108,14 @@ export const connectWithOtherFakeConnections = (id: string) => async (
     `Connecting ${id} with ${otherFakeUsers.length} fake connections`,
   );
   for (const otherUser of otherFakeUsers) {
-    await connectFakeUsers(
+    const ops = await connectFakeUsers(
       { id: fakeUser1.id, secretKey: fakeUser1.secretKey },
       { id: otherUser.id, secretKey: otherUser.secretKey },
+      api,
     );
+    for (const op of ops) {
+      dispatch(addOperation(op));
+    }
   }
 };
 
@@ -119,6 +125,7 @@ export const joinAllGroups = (id: string) => async (
 ) => {
   // get fakeUser by ID
   const fakeUser = selectConnectionById(getState(), id);
+  const api = selectNodeApi(getState());
 
   if (!fakeUser) {
     console.log(`Failed to get fake connection id ${id}`);
@@ -131,9 +138,13 @@ export const joinAllGroups = (id: string) => async (
 
   // join all groups
   const { groups } = getState().groups;
-  groups.map((group) =>
-    api.joinGroup(group.id, { id, secretKey: fakeUser.secretKey }),
-  );
+  for (const group of groups) {
+    const op = await api.joinGroup(group.id, {
+      id,
+      secretKey: fakeUser.secretKey,
+    });
+    dispatch(addOperation(op));
+  }
 };
 
 export const reconnectFakeConnection = (

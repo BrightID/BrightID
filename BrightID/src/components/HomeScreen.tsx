@@ -31,6 +31,7 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { setHeaderHeight } from '@/reducer/walkthroughSlice';
 import { uniq } from 'ramda';
+import { selectBaseUrl } from '@/reducer/settingsSlice';
 import { version as app_version } from '../../package.json';
 
 /**
@@ -43,7 +44,7 @@ const discordUrl = 'https://discord.gg/nTtuB2M';
 
 export const verifiedAppsSelector = createSelector(
   (state: State) => state.user.verifications,
-  (verifications) => verifications.filter((v) => v.app),
+  (verifications) => verifications.filter((v) => (v as AppVerification).app),
 );
 
 export const brightIdVerifiedSelector = createSelector(
@@ -66,6 +67,7 @@ export const HomeScreen = (props) => {
   const linkedContextsCount = useSelector(linkedContextTotal);
   const verifiedApps = useSelector(verifiedAppsSelector);
   const brightIdVerified = useSelector(brightIdVerifiedSelector);
+  const baseUrl = useSelector(selectBaseUrl);
   const [profilePhoto, setProfilePhoto] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -342,6 +344,7 @@ export const HomeScreen = (props) => {
         </View>
         <DeepPasteLink />
         <Text style={styles.versionInfo}>v{app_version}</Text>
+        <Text style={styles.versionInfo}>Node: {baseUrl.href}</Text>
       </View>
     </View>
   );

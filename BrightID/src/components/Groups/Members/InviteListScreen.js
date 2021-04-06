@@ -8,13 +8,13 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import api from '@/api/brightId';
 import { encryptAesKey } from '@/utils/invites';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import i18next from 'i18next';
 import { selectAllConnections } from '@/actions';
+import { selectNodeApi } from '@/reducer/settingsSlice';
 import MemberCard from './MemberCard';
 
 const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
@@ -39,7 +39,7 @@ export class InviteListScreen extends Component {
   };
 
   inviteToGroup = async (connection) => {
-    const { navigation, route } = this.props;
+    const { navigation, route, api } = this.props;
     const group = route.params?.group;
 
     try {
@@ -123,4 +123,5 @@ const styles = StyleSheet.create({
 
 export default connect((state) => ({
   connections: selectAllConnections(state),
+  api: selectNodeApi(state),
 }))(withTranslation()(InviteListScreen));

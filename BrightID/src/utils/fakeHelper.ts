@@ -1,9 +1,10 @@
-import api from '@/api/brightId';
+import { NodeApi } from '@/api/brightId';
 import { connection_levels } from './constants';
 
 export const connectFakeUsers = async (
   fakeUser1: FakeUser,
   fakeUser2: FakeUser,
+  api: NodeApi,
 ) => {
   const timestamp = Date.now();
 
@@ -30,5 +31,6 @@ export const connectFakeUsers = async (
     fakeUser2,
   );
 
-  await Promise.all([user1Promise, user2Promise]);
+  const ops = await Promise.all([user1Promise, user2Promise]);
+  return ops;
 };

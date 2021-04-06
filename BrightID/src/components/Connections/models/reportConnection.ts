@@ -1,7 +1,8 @@
-import api from '@/api/brightId';
-import { deleteConnection } from '@/actions';
+import { addOperation, deleteConnection } from '@/actions';
 import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import { connection_levels } from '@/utils/constants';
+import { useSelector } from '@/store';
+import { selectNodeApi } from '@/reducer/settingsSlice';
 
 export const reportConnection = ({
   id,
@@ -16,13 +17,15 @@ export const reportConnection = ({
     } = getState();
 
     // Change connection to REPORTED level
-    await api.addConnection(
+    const api = selectNodeApi(getState());
+    const op = await api.addConnection(
       brightId,
       id,
       connection_levels.REPORTED,
       Date.now(),
       reason,
     );
+    dispatch(addOperation(op));
     // remove connection from local storage
     dispatch(deleteConnection(id));
     if (backupCompleted) {
