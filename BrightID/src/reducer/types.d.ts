@@ -1,6 +1,7 @@
 /**
  * Apps
  */
+import { NodeApi } from '@/api/brightId';
 
 type AppsState = {
   apps: AppInfo[];
@@ -86,3 +87,11 @@ type OperationsState = EntityState<NodeOps>;
 /**
  * WalkthroughSlice
  */
+
+/**
+ * SettingsSlice
+ */
+type SettingsState = {
+  baseUrl: string;
+  api: NodeApi | undefined;
+};

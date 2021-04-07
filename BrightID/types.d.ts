@@ -38,7 +38,7 @@ declare global {
     operations: OperationsState;
     pendingConnections: PendingConnectionsState;
     recoveryData: RecoveryData;
-    settings: SettingsSlice;
+    settings: SettingsState;
     socialMedia: SocialMediaState;
     tasks: TasksState;
     user: UserState;
