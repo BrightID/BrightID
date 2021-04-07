@@ -9,7 +9,6 @@ import {
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import i18next from 'i18next';
 import { checkTasks } from '@/components/Tasks/TasksSlice';
-import { selectNodeApi } from '@/reducer/settingsSlice';
 
 const time_fudge = 2 * 60 * 1000; // trace operations for 2 minutes
 
@@ -46,9 +45,8 @@ const handleOpUpdate = (store, op, state, result) => {
   }
 };
 
-export const pollOperations = async () => {
+export const pollOperations = async (api) => {
   const operations = selectAllOperations(store.getState());
-  const api = selectNodeApi(store.getState());
 
   let shouldUpdateLocalState = false;
   try {

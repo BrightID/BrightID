@@ -29,7 +29,8 @@ import Check from '@/components/Icons/Check';
 import xGrey from '@/static/x_grey.svg';
 import { useNavigation } from '@react-navigation/native';
 import BrightidError from '@/api/brightidError';
-import { selectNodeApi } from '@/reducer/settingsSlice';
+import { useContext } from 'react';
+import { NodeApiContext } from '@/components/NodeApiGate';
 
 const InviteCard = (props) => {
   const { invite } = props;
@@ -40,7 +41,7 @@ const InviteCard = (props) => {
   );
   const navigation = useNavigation();
   const { backupCompleted } = useSelector((state: State) => state.user);
-  const api = useSelector(selectNodeApi);
+  const api = useContext(NodeApiContext);
 
   const handleRejectInvite = () => {
     Alert.alert(

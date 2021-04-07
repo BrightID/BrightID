@@ -1,15 +1,16 @@
 import { addOperation, deleteConnection } from '@/actions';
 import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import { connection_levels } from '@/utils/constants';
-import { useSelector } from '@/store';
-import { selectNodeApi } from '@/reducer/settingsSlice';
+import { NodeApi } from '@/api/brightId';
 
 export const reportConnection = ({
   id,
   reason,
+  api,
 }: {
   id: string;
   reason: string;
+  api: NodeApi;
 }) => async (dispatch: Dispatch, getState: GetState) => {
   try {
     const {
@@ -17,7 +18,6 @@ export const reportConnection = ({
     } = getState();
 
     // Change connection to REPORTED level
-    const api = selectNodeApi(getState());
     const op = await api.addConnection(
       brightId,
       id,

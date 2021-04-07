@@ -14,7 +14,7 @@ import { ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import i18next from 'i18next';
 import { addOperation, selectAllConnections } from '@/actions';
-import { selectNodeApi } from '@/reducer/settingsSlice';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import MemberCard from './MemberCard';
 
 const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
@@ -27,6 +27,9 @@ const getItemLayout = (data, index) => ({
 });
 
 export class InviteListScreen extends Component {
+  // make api available through this.context
+  static contextType = NodeApiContext;
+
   renderEligible = ({ item, index }) => {
     return (
       <TouchableOpacity
@@ -39,7 +42,8 @@ export class InviteListScreen extends Component {
   };
 
   inviteToGroup = async (connection) => {
-    const { navigation, route, api, dispatch } = this.props;
+    const { navigation, route, dispatch } = this.props;
+    let api = this.context;
     const group = route.params?.group;
 
     try {
@@ -124,5 +128,4 @@ const styles = StyleSheet.create({
 
 export default connect((state) => ({
   connections: selectAllConnections(state),
-  api: selectNodeApi(state),
 }))(withTranslation()(InviteListScreen));

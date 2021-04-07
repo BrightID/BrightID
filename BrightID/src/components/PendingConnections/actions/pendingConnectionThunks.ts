@@ -15,13 +15,13 @@ import {
   updatePendingConnection,
 } from '@/components/PendingConnections/pendingConnectionSlice';
 import { leaveChannel } from '@/components/PendingConnections/actions/channelThunks';
-import { selectNodeApi } from '@/reducer/settingsSlice';
+import { NodeApi } from '@/api/brightId';
 
 export const confirmPendingConnectionThunk = (
   id: string,
   level: ConnectionLevel,
+  api: NodeApi,
 ) => async (dispatch: dispatch, getState: getState) => {
-  const api = selectNodeApi(getState());
   const connection: PendingConnection = selectPendingConnectionById(
     getState(),
     id,

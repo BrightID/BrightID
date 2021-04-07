@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -23,7 +23,7 @@ import {
   selectConnectionById,
   recoveryConnectionsSelector,
 } from '@/reducer/connectionsSlice';
-import { selectNodeApi } from '@/reducer/settingsSlice';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import TrustlevelSlider from './TrustlevelSlider';
 
 type props = StackScreenProps<ModalStackParamList, 'SetTrustlevel'>;
@@ -41,7 +41,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
     connection ? connection.level : connection_levels.JUST_MET,
   );
   const { t } = useTranslation();
-  const api = useSelector(selectNodeApi);
+  const api = useContext(NodeApiContext);
 
   const saveLevelHandler = async () => {
     let cooldownPeriod = 0;

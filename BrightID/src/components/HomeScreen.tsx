@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -32,6 +32,7 @@ import { fontSize } from '@/theme/fonts';
 import { setHeaderHeight } from '@/reducer/walkthroughSlice';
 import { uniq } from 'ramda';
 import { selectBaseUrl } from '@/reducer/settingsSlice';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import { version as app_version } from '../../package.json';
 
 /**
@@ -70,6 +71,7 @@ export const HomeScreen = (props) => {
   const baseUrl = useSelector(selectBaseUrl);
   const [profilePhoto, setProfilePhoto] = useState('');
   const [loading, setLoading] = useState(true);
+  const api = useContext(NodeApiContext);
 
   const { t } = useTranslation();
 
@@ -77,7 +79,7 @@ export const HomeScreen = (props) => {
     useCallback(() => {
       retrieveImage(photoFilename).then(setProfilePhoto);
       setLoading(true);
-      dispatch(fetchUserInfo()).then(() => {
+      dispatch(fetchUserInfo(api)).then(() => {
         setLoading(false);
       });
       const timeoutId = setTimeout(() => {
@@ -86,7 +88,7 @@ export const HomeScreen = (props) => {
       return () => {
         clearTimeout(timeoutId);
       };
-    }, [dispatch, photoFilename]),
+    }, [api, dispatch, photoFilename]),
   );
 
   useEffect(() => {

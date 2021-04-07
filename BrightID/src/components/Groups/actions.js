@@ -8,7 +8,6 @@ import { setNewGroupCoFounders, createGroup } from '@/actions/index';
 import backupApi from '@/api/backupService';
 import { hash, randomKey } from '@/utils/encoding';
 import { selectConnectionById } from '@/reducer/connectionsSlice';
-import { selectNodeApi } from '@/reducer/settingsSlice';
 import { addOperation } from '@/reducer/operationsSlice';
 import {
   backupPhoto,
@@ -26,7 +25,7 @@ export const toggleNewGroupCoFounder = (id) => (dispatch, getState) => {
   dispatch(setNewGroupCoFounders(coFounders));
 };
 
-export const createNewGroup = (photo, name, type) => async (
+export const createNewGroup = (photo, name, type, api) => async (
   dispatch,
   getState,
 ) => {
@@ -51,7 +50,6 @@ export const createNewGroup = (photo, name, type) => async (
         throw new Error(`${name} already has a primary group`);
       }
     }
-    const api = selectNodeApi(getState());
 
     const aesKey = await randomKey(16);
     const uuidKey = await randomKey(9);

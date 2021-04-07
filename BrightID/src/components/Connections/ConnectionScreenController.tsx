@@ -1,5 +1,6 @@
 import React, {
   useCallback,
+  useContext,
   useEffect,
   useLayoutEffect,
   useState,
@@ -16,7 +17,7 @@ import {
   selectConnectionById,
   selectAllConnections,
 } from '@/reducer/connectionsSlice';
-import { selectNodeApi } from '@/reducer/settingsSlice';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import ConnectionScreen from './ConnectionScreen';
 
 type ConnectionRoute = RouteProp<
@@ -28,7 +29,7 @@ function ConnectionScreenController() {
   const navigation = useNavigation();
   const route = useRoute<ConnectionRoute>();
   const { connectionId } = route.params;
-  const api = useSelector(selectNodeApi);
+  const api = useContext(NodeApiContext);
   const connection = useSelector((state: State) =>
     selectConnectionById(state, connectionId),
   );

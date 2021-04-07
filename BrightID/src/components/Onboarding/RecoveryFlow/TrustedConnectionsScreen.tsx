@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -22,7 +22,7 @@ import {
   addOperation,
 } from '@/actions';
 import { calculateCooldownPeriod } from '@/utils/recovery';
-import { selectNodeApi } from '@/reducer/settingsSlice';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import TrustedConnectionCard from './TrustedConnectionCard';
 
 /**
@@ -49,7 +49,7 @@ const TrustedConnectionsScreen = () => {
     recoveryConnections.map((item) => item.id),
   );
   const [updateInProgress, setUpdateInProgress] = useState(false);
-  const api = useSelector(selectNodeApi);
+  const api = useContext(NodeApiContext);
 
   const knownLevels = Array<ConnectionLevel>(
     connection_levels.ALREADY_KNOWN,

@@ -15,8 +15,7 @@ import { Alert } from 'react-native';
 import { PROFILE_VERSION } from '@/utils/constants';
 import { createDeepEqualStringArraySelector } from '@/utils/createDeepEqualStringArraySelector';
 import BrightidError, { USER_NOT_FOUND } from '@/api/brightidError';
-import { useSelector } from '@/store';
-import { selectNodeApi } from '@/reducer/settingsSlice';
+import { NodeApi } from '@/api/brightId';
 
 const pendingConnectionsAdapter = createEntityAdapter<PendingConnection>();
 
@@ -45,16 +44,15 @@ export enum pendingConnection_states {
 
 export const newPendingConnection = createAsyncThunk<
   PendingConnection,
-  { channelId: string; profileId: string },
+  { channelId: string; profileId: string; api: NodeApi },
   {
     dispatch: Dispatch;
     state: State;
   }
 >(
   'pendingConnections/newPendingConnection',
-  async ({ channelId, profileId }, { getState }) => {
+  async ({ channelId, profileId, api }, { getState }) => {
     console.log(`new pending connection ${profileId} in channel ${channelId}`);
-    const api = selectNodeApi(getState());
 
     const channel = selectChannelById(getState(), channelId);
 

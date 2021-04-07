@@ -10,7 +10,7 @@ import {
   addOperation,
 } from '@/actions';
 import { OPERATION_APPLIED_BEFORE } from '@/api/brightidError';
-import { selectNodeApi } from '@/reducer/settingsSlice';
+import { NodeApi } from '@/api/brightId';
 import { fetchBackupData } from './backupThunks';
 import {
   init,
@@ -43,12 +43,11 @@ export const setupRecovery = () => async (
   }
 };
 
-export const setSigningKey = () => async (
+export const setSigningKey = (api: NodeApi) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
   const { recoveryData } = getState();
-  const api = selectNodeApi(getState());
   const sigs = Object.values(recoveryData.sigs);
   console.log('setting signing key');
   try {
@@ -102,22 +101,21 @@ export const restoreUserData = async (id: string, pass: string) => {
   return { userData, connections, groups };
 };
 
-export const recoverAccount = () => async (
+export const recoverAccount = (api: NodeApi) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
   // set new signing key on the backend
-  await dispatch(setSigningKey());
+  await dispatch(setSigningKey(api));
   const { publicKey, secretKey } = getState().recoveryData;
   dispatch(setKeypair({ publicKey, secretKey }));
 };
 
-export const recoverData = (pass: string) => async (
+export const recoverData = (pass: string, api: NodeApi) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
   const { id } = getState().recoveryData;
-  const api = selectNodeApi(getState());
   console.log(`Starting recoverData for ${id}`);
   // throws if data is bad
   const restoredData = await restoreUserData(id, pass);

@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useContext } from 'react';
 import {
   Linking,
   StyleSheet,
@@ -33,6 +33,7 @@ import i18next from 'i18next';
 import { BarCodeReadEvent } from 'react-native-camera';
 import { hash } from '@/utils/encoding';
 import { qrCodeURL_types } from '@/utils/constants';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import { RNCamera } from './RNCameraProvider';
 import {
   setAesKey,
@@ -72,6 +73,7 @@ export const ScanCodeScreen = () => {
   const [qrData, setQrData] = useState(undefined);
   const name = useSelector((state: State) => state.user.name);
   const { t } = useTranslation();
+  const api = useContext(NodeApiContext);
 
   const pendingConnectionSizeForChannel = useSelector((state: State) => {
     if (channel) {
@@ -162,7 +164,7 @@ export const ScanCodeScreen = () => {
               );
               const channel = await parseChannelQrURL(channelURL);
               setChannel(channel);
-              await dispatch(joinChannel(channel));
+              await dispatch(joinChannel(channel, api));
               break;
             }
           }
@@ -183,7 +185,7 @@ export const ScanCodeScreen = () => {
     if (qrData) {
       handleQrData(qrData);
     }
-  }, [dispatch, navigation, qrData]);
+  }, [api, dispatch, navigation, qrData]);
 
   const handleBarCodeRead = ({ data }: BarCodeReadEvent) => {
     console.log(`Scanned QRCode: ${data}`);

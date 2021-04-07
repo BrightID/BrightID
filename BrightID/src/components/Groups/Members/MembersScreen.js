@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useLayoutEffect, useMemo } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useContext,
+} from 'react';
 import {
   StyleSheet,
   View,
@@ -22,15 +28,15 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { groupByIdSelector } from '@/utils/groups';
-import { selectNodeApi } from '@/reducer/settingsSlice';
 import { addOperation } from '@/reducer/operationsSlice';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import MemberCard from './MemberCard';
 
 function MembersScreen(props) {
   const { navigation, route } = props;
   const groupID = route.params.group.id;
   const dispatch = useDispatch();
-  const api = useSelector(selectNodeApi);
+  const api = useContext(NodeApiContext);
   const connections = useSelector(selectAllConnections);
   const user = useSelector((state) => state.user);
   const { group, admins, members } = useSelector((state) =>

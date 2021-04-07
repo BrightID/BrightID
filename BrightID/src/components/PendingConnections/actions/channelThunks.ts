@@ -23,16 +23,17 @@ import {
   newPendingConnection,
   selectAllPendingConnectionIds,
 } from '@/components/PendingConnections/pendingConnectionSlice';
-import { selectNodeApi } from '@/reducer/settingsSlice';
+import { selectBaseUrl } from '@/reducer/settingsSlice';
+import { NodeApi } from '@/api/brightId';
 
-export const createChannel = (channelType: ChannelType) => async (
+export const createChannel = (channelType: ChannelType, api: NodeApi) => async (
   dispatch: dispatch,
   getState,
 ) => {
   let channel: Channel | null | undefined;
   try {
-    const api = selectNodeApi(getState());
-    const url = new URL(`${api.baseUrl}/profile`);
+    const baseUrl = selectBaseUrl(getState());
+    const url = new URL(`${baseUrl}/profile`);
     channel = await generateChannelData(channelType, url);
 
     // Set timeout to expire channel
@@ -56,7 +57,7 @@ export const createChannel = (channelType: ChannelType) => async (
     // upload my profile
     await dispatch(encryptAndUploadProfileToChannel(channel.id));
     // start polling for profiles
-    dispatch(subscribeToConnectionRequests(channel.id));
+    dispatch(subscribeToConnectionRequests(channel.id, api));
   } catch (e) {
     // Something went wrong while creating channel.
     if (channel && channel.id) {
@@ -68,7 +69,7 @@ export const createChannel = (channelType: ChannelType) => async (
   }
 };
 
-export const joinChannel = (channel: Channel) => async (
+export const joinChannel = (channel: Channel, api: NodeApi) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
@@ -113,7 +114,7 @@ export const joinChannel = (channel: Channel) => async (
     // upload my profile to channel
     await dispatch(encryptAndUploadProfileToChannel(channel.id));
     // start polling for profiles
-    dispatch(subscribeToConnectionRequests(channel.id));
+    dispatch(subscribeToConnectionRequests(channel.id, api));
   } catch (e) {
     // Something went wrong while trying to join channel.
     dispatch(leaveChannel(channel.id));
@@ -133,10 +134,10 @@ export const leaveChannel = (channelId: string) => (
   }
 };
 
-export const subscribeToConnectionRequests = (channelId: string) => (
-  dispatch: dispatch,
-  getState: getState,
-) => {
+export const subscribeToConnectionRequests = (
+  channelId: string,
+  api: NodeApi,
+) => (dispatch: dispatch, getState: getState) => {
   let { pollTimerId } = selectChannelById(getState(), channelId);
 
   if (pollTimerId) {
@@ -148,7 +149,7 @@ export const subscribeToConnectionRequests = (channelId: string) => (
 
   pollTimerId = setInterval(() => {
     // fetch all profileIDs in channel
-    dispatch(fetchChannelProfiles(channelId));
+    dispatch(fetchChannelProfiles(channelId, api));
   }, PROFILE_POLL_INTERVAL);
 
   console.log(`Start polling channel ${channelId}, pollTImerId ${pollTimerId}`);
@@ -183,7 +184,7 @@ export const unsubscribeFromConnectionRequests = (channelId: string) => (
   }
 };
 
-export const fetchChannelProfiles = (channelId: string) => async (
+export const fetchChannelProfiles = (channelId: string, api: NodeApi) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
@@ -212,6 +213,7 @@ export const fetchChannelProfiles = (channelId: string) => async (
         newPendingConnection({
           channelId,
           profileId,
+          api,
         }),
       );
     }
