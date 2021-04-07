@@ -344,7 +344,7 @@ export const HomeScreen = (props) => {
         </View>
         <DeepPasteLink />
         <Text style={styles.versionInfo}>v{app_version}</Text>
-        <Text style={styles.versionInfo}>Node: {baseUrl.href}</Text>
+        {__DEV__ && <Text style={styles.nodeInfo}>{baseUrl}</Text>}
       </View>
     </View>
   );
@@ -532,6 +532,14 @@ const styles = StyleSheet.create({
     color: WHITE,
     position: 'absolute',
     right: DEVICE_LARGE ? 12 : 7,
+    bottom: DEVICE_LARGE ? 12 : 7,
+  },
+  nodeInfo: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: fontSize[12],
+    color: WHITE,
+    position: 'absolute',
+    left: 50,
     bottom: DEVICE_LARGE ? 12 : 7,
   },
 });
