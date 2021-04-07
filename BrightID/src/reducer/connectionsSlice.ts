@@ -47,23 +47,18 @@ const connectionsSlice = createSlice({
       const { entities, ids } = original(state.connections);
 
       // check to see if any connections are deleted
-      if (ids.length !== action.payload.length) {
-        const payloadIds = action.payload.map((conn) => conn.id);
-        const diff = difference(ids, payloadIds);
-        diff.forEach((id) => {
-          if (entities[id].status === 'verified') {
-            state.connections = connectionsAdapter.updateOne(
-              state.connections,
-              {
-                id,
-                changes: {
-                  status: 'deleted',
-                },
-              },
-            );
-          }
-        });
-      }
+      const payloadIds = action.payload.map((conn) => conn.id);
+      const diff = difference(ids, payloadIds);
+      diff.forEach((id) => {
+        if (entities[id].status === 'verified') {
+          state.connections = connectionsAdapter.updateOne(state.connections, {
+            id,
+            changes: {
+              status: 'deleted',
+            },
+          });
+        }
+      });
 
       state.connections = connectionsAdapter.updateMany(
         state.connections,
