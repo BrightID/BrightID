@@ -19,18 +19,16 @@ const Stack = createStackNavigator();
 
 const MainTabs = () => {
   return (
-    <NodeApiGate>
-      <Stack.Navigator headerMode="screen">
-        {Home()}
-        {PendingConnections()}
-        {Connections()}
-        {Groups()}
-        {Notifications()}
-        {Apps()}
-        {Modals()}
-        {Backup()}
-      </Stack.Navigator>
-    </NodeApiGate>
+    <Stack.Navigator headerMode="screen">
+      {Home()}
+      {PendingConnections()}
+      {Connections()}
+      {Groups()}
+      {Notifications()}
+      {Apps()}
+      {Modals()}
+      {Backup()}
+    </Stack.Navigator>
   );
 };
 
@@ -38,27 +36,29 @@ const MainApp = () => {
   const id = useSelector((state: State) => state.user.id);
   const eula = useSelector((state: State) => state.user.eula);
   return (
-    <TopStack.Navigator>
-      {!eula ? (
-        <TopStack.Screen
-          name="Eula"
-          component={Eula}
-          options={{ headerShown: false }}
-        />
-      ) : !id ? (
-        <TopStack.Screen
-          name="Onboarding"
-          component={Onboarding}
-          options={{ headerShown: false }}
-        />
-      ) : (
-        <TopStack.Screen
-          name="App"
-          component={MainTabs}
-          options={{ headerShown: false }}
-        />
-      )}
-    </TopStack.Navigator>
+    <NodeApiGate>
+      <TopStack.Navigator>
+        {!eula ? (
+          <TopStack.Screen
+            name="Eula"
+            component={Eula}
+            options={{ headerShown: false }}
+          />
+        ) : !id ? (
+          <TopStack.Screen
+            name="Onboarding"
+            component={Onboarding}
+            options={{ headerShown: false }}
+          />
+        ) : (
+          <TopStack.Screen
+            name="App"
+            component={MainTabs}
+            options={{ headerShown: false }}
+          />
+        )}
+      </TopStack.Navigator>
+    </NodeApiGate>
   );
 };
 

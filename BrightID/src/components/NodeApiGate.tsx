@@ -10,16 +10,26 @@ export const NodeApiContext = React.createContext(null);
 const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
   const id = useSelector((state: State) => state.user.id);
   const secretKey = useSelector((state: State) => state.keypair.secretKey);
-  const baseUrl = useSelector(selectBaseUrl);
-  const [api, setApi] = useState(undefined);
+  const url = useSelector(selectBaseUrl);
+  const [api, setApi] = useState<NodeApi | null>(null);
   const dispatch = useDispatch();
 
-  // Maintain NodeAPI instance
+  // Create and maintain NodeAPI instance
   useEffect(() => {
-    console.log(`Creating API using ${baseUrl}`);
-    const apiInstance = new NodeApi({ url: baseUrl, id, secretKey });
+    let apiInstance;
+    if (id && id.length > 0 && secretKey && secretKey.length > 0) {
+      console.log(`Creating API with credentials using ${url}`);
+      apiInstance = new NodeApi({ url, id, secretKey });
+    } else {
+      console.log(`Creating anonymous API using ${url}`);
+      apiInstance = new NodeApi({
+        url,
+        id: undefined,
+        secretKey: undefined,
+      });
+    }
     setApi(apiInstance);
-  }, [baseUrl, dispatch, id, secretKey]);
+  }, [url, dispatch, id, secretKey]);
 
   useEffect(() => {
     // subscribe to operations

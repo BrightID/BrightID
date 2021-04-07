@@ -16,9 +16,9 @@ export class NodeApi {
 
   baseUrlInternal: string;
 
-  secretKey: Uint8Array;
+  secretKey: Uint8Array | undefined;
 
-  id: string;
+  id: string | undefined;
 
   constructor({
     url,
@@ -26,8 +26,8 @@ export class NodeApi {
     id,
   }: {
     url: string;
-    secretKey: Uint8Array;
-    id: string;
+    secretKey: Uint8Array | undefined;
+    id: string | undefined;
   }) {
     this.baseUrlInternal = url;
     this.id = id;
@@ -68,6 +68,12 @@ export class NodeApi {
     }
   }
 
+  requiresCredentials() {
+    if (this.id === undefined || this.secretKey === undefined) {
+      throw new Error('Missing API credentials');
+    }
+  }
+
   async addConnection(
     id1: string,
     id2: string,
@@ -76,6 +82,7 @@ export class NodeApi {
     reportReason?: string,
     fakeUser?: FakeUser,
   ) {
+    this.requiresCredentials();
     const sk = fakeUser ? b64ToUint8Array(fakeUser.secretKey) : this.secretKey;
 
     const name = 'Connect';
@@ -111,6 +118,7 @@ export class NodeApi {
     url: string,
     type: string,
   ) {
+    this.requiresCredentials();
     const name = 'Add Group';
     const timestamp = Date.now();
 
@@ -139,6 +147,7 @@ export class NodeApi {
   }
 
   async dismiss(id2: string, group: string) {
+    this.requiresCredentials();
     const name = 'Dismiss';
     const timestamp = Date.now();
 
@@ -162,6 +171,7 @@ export class NodeApi {
   }
 
   async invite(id2: string, group: string, data: string) {
+    this.requiresCredentials();
     const name = 'Invite';
     const timestamp = Date.now();
 
@@ -186,6 +196,7 @@ export class NodeApi {
   }
 
   async addAdmin(newAdmin: string, group: string) {
+    this.requiresCredentials();
     const name = 'Add Admin';
     const timestamp = Date.now();
 
@@ -210,6 +221,7 @@ export class NodeApi {
   }
 
   async deleteGroup(group: string) {
+    this.requiresCredentials();
     const name = 'Remove Group';
     const timestamp = Date.now();
 
@@ -232,6 +244,7 @@ export class NodeApi {
   }
 
   async joinGroup(group: string, fakeUser?: FakeUser) {
+    this.requiresCredentials();
     let brightId, secretKey;
     if (fakeUser) {
       brightId = fakeUser.id;
@@ -264,6 +277,7 @@ export class NodeApi {
   }
 
   async leaveGroup(group: string) {
+    this.requiresCredentials();
     const name = 'Remove Membership';
     const timestamp = Date.now();
 
@@ -314,6 +328,7 @@ export class NodeApi {
   }
 
   async linkContextId(context: string, contextId: string) {
+    this.requiresCredentials();
     const name = 'Link ContextId';
     const timestamp = Date.now();
 
@@ -343,6 +358,7 @@ export class NodeApi {
   }
 
   async getUserProfile(id: string) {
+    this.requiresCredentials();
     const requester = this.id;
     const res = await this.api.get<UserProfileRes, ErrRes>(
       `/users/${id}/profile/${requester}`,
