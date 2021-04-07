@@ -8,9 +8,11 @@ import { pollOperations } from '@/utils/operations';
 export const NodeApiContext = React.createContext(null);
 
 const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
-  const id = useSelector((state: State) => state.user.id);
-  const secretKey = useSelector((state: State) => state.keypair.secretKey);
-  const url = useSelector(selectBaseUrl);
+  const id = useSelector<string>((state: State) => state.user.id);
+  const secretKey = useSelector<Uint8Array>(
+    (state: State) => state.keypair.secretKey,
+  );
+  const url = useSelector<string>(selectBaseUrl);
   const [api, setApi] = useState<NodeApi | null>(null);
   const dispatch = useDispatch();
 
