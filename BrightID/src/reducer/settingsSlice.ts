@@ -7,12 +7,12 @@ if (__DEV__) {
 }
 
 interface SettingsSlice {
-  baseUrl: URL;
+  baseUrl: string;
   api: NodeApi | undefined;
 }
 
 const initialState: SettingsSlice = {
-  baseUrl: new URL(seedUrl),
+  baseUrl: seedUrl,
   api: undefined,
 };
 
@@ -20,7 +20,7 @@ export const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    setBaseUrl: (state, action: PayloadAction<URL>) => {
+    setBaseUrl: (state, action: PayloadAction<string>) => {
       state.baseUrl = action.payload;
     },
     setApiInstance: (state, action: PayloadAction<NodeApi>) => {
@@ -45,7 +45,7 @@ export const selectNodeApi = (state: State) => {
   return state.settings.api;
 };
 
-export const setBaseUrlThunk = (newBaseUrl: URL) => async (
+export const setBaseUrlThunk = (newBaseUrl: string) => async (
   dispatch,
   getState,
 ) => {
@@ -54,11 +54,11 @@ export const setBaseUrlThunk = (newBaseUrl: URL) => async (
 
     const api = selectNodeApi(getState);
     if (api) {
-      api.baseUrl = newBaseUrl.href;
+      api.baseUrl = newBaseUrl;
     }
     dispatch(setBaseUrl(newBaseUrl));
   } catch (e) {
-    console.log(`Failed to set baseUrl ${newBaseUrl.href}: ${e.message}`);
+    console.log(`Failed to set baseUrl ${newBaseUrl}: ${e.message}`);
   }
 };
 
