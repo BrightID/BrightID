@@ -78,23 +78,6 @@ const connectionsSlice = createSlice({
         action,
       );
     },
-    flagAndHideConnection(
-      state,
-      action: PayloadAction<{ id: string; flag: string }>,
-    ) {
-      const { id, flag } = action.payload;
-      const update: Update<Connection> = {
-        id,
-        changes: {
-          status: 'hidden',
-          hiddenFlag: flag,
-        },
-      };
-      state.connections = connectionsAdapter.updateOne(
-        state.connections,
-        update,
-      );
-    },
     staleConnection(state, action: PayloadAction<string>) {
       const update: Update<Connection> = {
         id: action.payload,
@@ -139,7 +122,6 @@ export const {
   updateConnections,
   deleteConnection,
   addConnection,
-  flagAndHideConnection,
   staleConnection,
   setFilters,
   setConnectionLevel,
