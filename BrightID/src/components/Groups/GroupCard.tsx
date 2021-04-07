@@ -33,7 +33,7 @@ const GroupCard = (props) => {
     } else {
       return (
         <Text style={styles.connectionTime}>
-          {t('common.tag.joinedDate', {
+          {t('groups.tag.joinedDate', {
             date: moment(parseInt(group.joined, 10)).fromNow(),
           })}
         </Text>

@@ -6,14 +6,8 @@ import { groupCirclePhotos } from '@/utils/groups';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { LIGHT_GREY } from '@/theme/colors';
 
-const photoStyle = (photo) => {
-  const style = { ...styles.photo };
-  if (photo.faded) {
-    style.opacity = 0.25;
-  }
-  return {
-    ...style,
-  };
+const photoStyle = (photo: { faded: boolean }) => {
+  return { ...styles.photo, opacity: photo.faded ? 0.25 : 1 };
 };
 
 const GroupPhoto = ({ group }) => {

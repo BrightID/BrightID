@@ -5,8 +5,16 @@ import {
   Alert,
   FlatList,
   TouchableOpacity,
+  Text,
 } from 'react-native';
+import moment from 'moment';
 import { useDispatch, useSelector } from '@/store';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+  RouteProp,
+} from '@react-navigation/native';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { innerJoin } from 'ramda';
 import { useTranslation } from 'react-i18next';
@@ -18,22 +26,25 @@ import {
   selectAllConnections,
 } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { ORANGE, WHITE, BLUE, DARK_GREY } from '@/theme/colors';
+import { ORANGE, WHITE, BLUE, DARK_GREY, BLACK } from '@/theme/colors';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { groupByIdSelector } from '@/utils/groups';
 import MemberCard from './MemberCard';
+import GroupPhoto from './GroupPhoto';
 
-function MembersScreen(props) {
-  const { navigation, route } = props;
-  const groupID = route.params.group.id;
+type MembersRoute = RouteProp<{ Members: { group: Group } }, 'Members'>;
+
+function MembersScreen() {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const route = useRoute<MembersRoute>();
+
   const connections = useSelector(selectAllConnections);
   const user = useSelector((state) => state.user);
-  const { group, admins, members } = useSelector((state) =>
-    groupByIdSelector(state, groupID),
-  );
+
+  const { group } = route.params;
+  const { id: groupID, admins = [], members = [] } = group;
 
   const [contextActions, setContextActions] = useState([]);
   const { t } = useTranslation();
@@ -254,6 +265,31 @@ function MembersScreen(props) {
     );
   };
 
+  const GroupHeader = () => (
+    <View style={styles.header}>
+      <View style={styles.profile}>
+        <View style={styles.photoContainer}>
+          <GroupPhoto group={group} />
+        </View>
+        <View style={styles.nameContainer}>
+          <View style={styles.nameLabel}>
+            <Text style={styles.name} numberOfLines={1}>
+              {group.name}
+            </Text>
+          </View>
+          <View style={styles.profileDivider} />
+          <View style={styles.connectionInfo}>
+            <Text style={styles.connectionTimestampText}>
+              {t('groups.tag.joinedDate', {
+                date: `${moment(parseInt(String(group.joined), 10)).fromNow()}`,
+              })}
+            </Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+
   const renderMember = ({ item, index }) => {
     const memberIsAdmin = admins.includes(item.id);
     const userIsAdmin = admins.includes(user.id);
@@ -278,6 +314,8 @@ function MembersScreen(props) {
     <>
       <View style={styles.orangeTop} />
       <View style={styles.container}>
+        <GroupHeader />
+
         <View testID="membersView" style={styles.mainContainer}>
           <View>
             <FlatList
@@ -312,84 +350,78 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: WHITE,
-    borderTopLeftRadius: 58,
+    borderTopRightRadius: 58,
     marginTop: -58,
     zIndex: 10,
     overflow: 'hidden',
   },
+  header: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    marginTop: DEVICE_LARGE ? 22 : 18,
+    marginBottom: DEVICE_LARGE ? 40 : 36,
+  },
   mainContainer: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: WHITE,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
     marginTop: 8,
   },
-  moreIcon: {
-    marginRight: 16,
+  connectionTimestampText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[10],
+    color: ORANGE,
+    marginHorizontal: 2,
   },
-  groupName: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: fontSize[28],
-    shadowColor: 'rgba(0,0,0,0.32)',
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    textAlign: 'center',
-  },
-  optionsOverlay: {
-    backgroundColor: DARK_GREY,
-  },
-  optionsContainer: {
-    backgroundColor: WHITE,
-    height: '12%',
-    width: '105%',
-    borderRadius: 5,
-    position: 'absolute',
-    top: 50,
-    alignSelf: 'center',
-  },
-  triangle: {
-    width: 0,
-    height: 0,
-    backgroundColor: 'transparent',
-    borderStyle: 'solid',
-    borderLeftWidth: 9,
-    borderRightWidth: 9,
-    borderBottomWidth: 18,
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-    borderBottomColor: WHITE,
-    position: 'absolute',
-    top: -18,
-    right: 20,
-  },
-  optionsBox: {
+  profile: {
     flexDirection: 'row',
-    width: '90%',
-    height: '70%',
-    justifyContent: 'flex-start',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  photoContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
+  profilePhoto: {
+    borderRadius: DEVICE_LARGE ? 45 : 39,
+    width: DEVICE_LARGE ? 90 : 78,
+    height: DEVICE_LARGE ? 90 : 78,
+  },
+  nameContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    maxWidth: '60%',
+    // borderWidth: 1,
+    marginLeft: DEVICE_LARGE ? 22 : 20,
+  },
+  nameLabel: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
-  leaveGroupText: {
-    fontFamily: 'ApexNew-Book',
-    fontSize: fontSize[24],
-    marginLeft: 30,
+  name: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[17],
+    color: BLACK,
   },
-  backButtonContainer: {
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+  connectionInfo: {
+    marginTop: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  profileDivider: {
+    borderBottomWidth: 2,
+    borderBottomColor: ORANGE,
+    paddingBottom: 3,
     width: '100%',
-    paddingLeft: 10,
   },
-  headerPhoto: {
-    marginLeft: 11,
-    borderRadius: 18,
-    width: 36,
-    height: 36,
-  },
-  backStyle: {
-    paddingTop: 8,
-    paddingLeft: 11,
+  verificationSticker: {
+    marginTop: 8,
   },
 });
 

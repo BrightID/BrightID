@@ -152,7 +152,6 @@
     },
     "tag": {
       "connectionDate": "Connected {{date}}",
-      "joinedDate": "Joined {{date}}",
       "reported": "(reported)"
     },
     "text": {
@@ -355,7 +354,8 @@
       "uploadingGroupPhoto": "uploading group photo"
     },
     "tag": {
-      "primaryGroup": "Primary Group"
+      "primaryGroup": "Primary Group",
+      "joinedDate": "Joined {{date}}"
     },
     "text": {
       "noEligibleConnection": "No existing connections are eligible for this group, please come back later..",

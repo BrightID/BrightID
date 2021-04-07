@@ -11,8 +11,8 @@ import SearchGroups from '@/components/Helpers/SearchGroups';
 import SearchConnections from '@/components/Helpers/SearchConnections';
 import NewGroupScreen from '@/components/Groups/NewGroups/NewGroupScreen';
 import GroupInfoScreen from '@/components/Groups/NewGroups/GroupInfoScreen';
-import MembersScreen from '@/components/Groups/Members/MembersScreen';
-import InviteListScreen from '@/components/Groups/Members/InviteListScreen';
+import MembersScreen from '@/components/Groups/MembersScreen';
+import InviteListScreen from '@/components/Groups/InviteListScreen';
 import i18next from 'i18next';
 import { headerOptions, NavHome, AnimatedHeaderTitle } from './helpers';
 
