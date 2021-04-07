@@ -13,7 +13,7 @@ import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import i18next from 'i18next';
-import { selectAllConnections } from '@/actions';
+import { addOperation, selectAllConnections } from '@/actions';
 import { selectNodeApi } from '@/reducer/settingsSlice';
 import MemberCard from './MemberCard';
 
@@ -39,12 +39,13 @@ export class InviteListScreen extends Component {
   };
 
   inviteToGroup = async (connection) => {
-    const { navigation, route, api } = this.props;
+    const { navigation, route, api, dispatch } = this.props;
     const group = route.params?.group;
 
     try {
       const data = await encryptAesKey(group?.aesKey, connection.signingKey);
-      await api.invite(connection.id, group?.id, data);
+      const op = await api.invite(connection.id, group?.id, data);
+      dispatch(addOperation(op));
       Alert.alert(
         i18next.t('groups.alert.title.inviteSuccess'),
         i18next.t('groups.alert.text.inviteSuccess', { name: connection.name }),

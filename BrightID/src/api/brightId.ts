@@ -182,6 +182,7 @@ export class NodeApi {
     const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
     NodeApi.throwOnError(res);
+    return op;
   }
 
   async addAdmin(newAdmin: string, group: string) {
