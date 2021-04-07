@@ -51,12 +51,10 @@ const connectionsSlice = createSlice({
       const diff = difference(ids, payloadIds);
       diff.forEach((id) => {
         if (entities[id].status === 'verified') {
-          state.connections = connectionsAdapter.updateOne(state.connections, {
+          state.connections = connectionsAdapter.removeOne(
+            state.connections,
             id,
-            changes: {
-              status: 'deleted',
-            },
-          });
+          );
         }
       });
 
