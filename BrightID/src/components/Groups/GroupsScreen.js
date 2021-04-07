@@ -17,6 +17,7 @@ import { WHITE, ORANGE, BLACK } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { toSearchString } from '@/utils/strings';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import GroupCard from './GroupCard';
 import { NoGroups } from './NoGroups';
 import { compareJoinedDesc } from './models/sortingUtility';
@@ -39,6 +40,9 @@ const getItemLayout = (data, index) => ({
 });
 
 export class GroupsScreen extends React.Component {
+  // make api available through this.context
+  static contextType = NodeApiContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -48,8 +52,9 @@ export class GroupsScreen extends React.Component {
 
   componentDidMount() {
     const { navigation, dispatch } = this.props;
+    const api = this.context;
     navigation.addListener('focus', () => {
-      dispatch(fetchUserInfo());
+      dispatch(fetchUserInfo(api));
     });
   }
 
@@ -68,8 +73,9 @@ export class GroupsScreen extends React.Component {
   onRefresh = async () => {
     try {
       const { dispatch } = this.props;
+      const api = this.context;
       this.setState({ refreshing: true });
-      await dispatch(fetchUserInfo());
+      await dispatch(fetchUserInfo(api));
       this.setState({ refreshing: false });
     } catch (err) {
       console.log(err.message);

@@ -82,7 +82,7 @@ export const pollOperations = async (api) => {
       }
     }
     if (shouldUpdateLocalState) {
-      store.dispatch(fetchUserInfo());
+      store.dispatch(fetchUserInfo(api));
       store.dispatch(checkTasks());
     }
   } catch (err) {
