@@ -78,17 +78,6 @@ const connectionsSlice = createSlice({
         action,
       );
     },
-    hydrateConnections(
-      state,
-      action: PayloadAction<{ connections: Connection[] }>,
-    ) {
-      if (action.payload.connections) {
-        state.connections = connectionsAdapter.setAll(
-          state.connections,
-          action.payload.connections,
-        );
-      }
-    },
     flagAndHideConnection(
       state,
       action: PayloadAction<{ id: string; flag: string }>,
@@ -150,7 +139,6 @@ export const {
   updateConnections,
   deleteConnection,
   addConnection,
-  hydrateConnections,
   flagAndHideConnection,
   staleConnection,
   setFilters,
