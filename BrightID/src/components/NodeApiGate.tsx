@@ -21,6 +21,7 @@ const TestCandidates = ['http://test.brightid.org2'];
 
 export const ApiGateState = {
   INITIAL: 'INITIAL',
+  SEARCH_REQUESTED: 'SEARCH_REQUESTED', // should start looking for node
   SEARCHING_NODE: 'SEARCHING', // currently looking for working node
   NODE_AVAILABLE: 'NODE_AVAILABLE', // All good, valid node is set
   ERROR_NO_NODE: 'ERROR_NO_NODE', // Failed to find a working node
@@ -37,19 +38,30 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
   const [gateState, setGateState] = useState<ApiGateState>(
     ApiGateState.INITIAL,
   );
-  const [rerun, setRerun] = useState<boolean>(false);
   const dispatch = useDispatch();
 
+  // Trigger nodechooser when user clicks retry
   const retryHandler = () => {
-    setRerun(true);
+    // Only allow retry if I'm in error state
+    if (gateState === ApiGateState.ERROR_NO_NODE) {
+      console.log(`User clicked retry -> triggering search.`);
+      setGateState(ApiGateState.SEARCH_REQUESTED);
+    }
   };
 
-  // Run nodechooser if no baseUrl is set or user triggerd retry
+  // Trigger nodechooser when no url is set
+  useEffect(() => {
+    if (!url) {
+      console.log(`URL is null -> triggering search.`);
+      setGateState(ApiGateState.SEARCH_REQUESTED);
+    }
+  }, [url]);
+
+  // Run nodechooser if requested
   useEffect(() => {
     const runEffect = async () => {
       console.log(`Running nodechooser to select backend`);
       setGateState(ApiGateState.SEARCHING_NODE);
-      setRerun(false);
       try {
         const fastestUrl = await chooseNode(
           __DEV__ ? TestCandidates : ProdCandidates,
@@ -60,10 +72,10 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
         setGateState(ApiGateState.ERROR_NO_NODE);
       }
     };
-    if (!url || rerun) {
+    if (gateState === ApiGateState.SEARCH_REQUESTED) {
       runEffect();
     }
-  }, [dispatch, rerun, url]);
+  }, [dispatch, gateState]);
 
   // Manage NodeAPI instance
   useEffect(() => {

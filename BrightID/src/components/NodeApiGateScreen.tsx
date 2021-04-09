@@ -14,6 +14,7 @@ export const NodeApiGateScreen = ({
   switch (gateState) {
     case ApiGateState.INITIAL:
     case ApiGateState.SEARCHING_NODE:
+    case ApiGateState.SEARCH_REQUESTED:
       message = 'Selecting node backend...';
       break;
     case ApiGateState.NODE_AVAILABLE:
