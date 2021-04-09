@@ -69,7 +69,7 @@ const socialMediaPersistConfig = {
 const settingsPersistConfig = {
   ...fsPersistConfig,
   key: 'settings',
-  blacklist: ['api'],
+  blacklist: ['baseUrl'],
 };
 
 const keypairPersistConfig = {
