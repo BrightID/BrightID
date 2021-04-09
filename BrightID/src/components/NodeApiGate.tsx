@@ -1,10 +1,11 @@
 import { useDispatch, useSelector } from '@/store';
 import { selectBaseUrl, setBaseUrl } from '@/reducer/settingsSlice';
 import React, { useEffect, useState } from 'react';
-import { View, Text, InteractionManager } from 'react-native';
+import { InteractionManager } from 'react-native';
 import { NodeApi } from '@/api/brightId';
 import { pollOperations } from '@/utils/operations';
 import chooseNode from '@/utils/nodeChooser';
+import { NodeApiGateScreen } from '@/components/NodeApiGateScreen';
 
 export const NodeApiContext = React.createContext(null);
 const ProdCandidates = [
@@ -16,14 +17,15 @@ const ProdCandidates = [
   'http://node.lumos.services',
   'http://brightid.daosquare.io',
 ];
-const TestCandidates = ['http://test.brightid.org'];
+const TestCandidates = ['http://test.brightid.org2'];
 
-enum apiGateStates {
-  INITIAL,
-  SEARCHING_NODE, // currently looking for working node
-  NODE_AVAILABLE, // All good, valid node is set
-  ERROR_NO_NODE, // Failed to find a working node
-}
+export const ApiGateState = {
+  INITIAL: 'INITIAL',
+  SEARCHING_NODE: 'SEARCHING', // currently looking for working node
+  NODE_AVAILABLE: 'NODE_AVAILABLE', // All good, valid node is set
+  ERROR_NO_NODE: 'ERROR_NO_NODE', // Failed to find a working node
+} as const;
+export type ApiGateState = typeof ApiGateState[keyof typeof ApiGateState];
 
 const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
   const id = useSelector<string>((state: State) => state.user.id);
@@ -32,16 +34,22 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
   );
   const url = useSelector<string>(selectBaseUrl);
   const [api, setApi] = useState<NodeApi | null>(null);
-  const [gateState, setGateState] = useState<apiGateStates>(
-    apiGateStates.INITIAL,
+  const [gateState, setGateState] = useState<ApiGateState>(
+    ApiGateState.INITIAL,
   );
+  const [rerun, setRerun] = useState<boolean>(false);
   const dispatch = useDispatch();
 
-  // Run nodechooser if no baseUrl is set
+  const retryHandler = () => {
+    setRerun(true);
+  };
+
+  // Run nodechooser if no baseUrl is set or user triggerd retry
   useEffect(() => {
     const runEffect = async () => {
-      console.log(`No baseUrl set. Running nodechooser to select backend`);
-      setGateState(apiGateStates.SEARCHING_NODE);
+      console.log(`Running nodechooser to select backend`);
+      setGateState(ApiGateState.SEARCHING_NODE);
+      setRerun(false);
       try {
         const fastestUrl = await chooseNode(
           __DEV__ ? TestCandidates : ProdCandidates,
@@ -49,13 +57,13 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
         dispatch(setBaseUrl(fastestUrl));
       } catch (e) {
         // No usable node found :-(
-        setGateState(apiGateStates.ERROR_NO_NODE);
+        setGateState(ApiGateState.ERROR_NO_NODE);
       }
     };
-    if (!url) {
+    if (!url || rerun) {
       runEffect();
     }
-  }, [dispatch, url]);
+  }, [dispatch, rerun, url]);
 
   // Manage NodeAPI instance
   useEffect(() => {
@@ -72,7 +80,7 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
           secretKey: undefined,
         });
       }
-      setGateState(apiGateStates.NODE_AVAILABLE);
+      setGateState(ApiGateState.NODE_AVAILABLE);
       setApi(apiInstance);
     } else {
       setApi(null);
@@ -97,22 +105,6 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
     }
   }, [api]);
 
-  let message: string;
-  switch (gateState) {
-    case apiGateStates.INITIAL:
-    case apiGateStates.SEARCHING_NODE:
-      message = 'Selecting node backend...';
-      break;
-    case apiGateStates.NODE_AVAILABLE:
-      message = 'Node found';
-      break;
-    case apiGateStates.ERROR_NO_NODE:
-      message = 'Failed to find a node';
-      break;
-    default:
-      console.log(`Unhandled gateState ${gateState}!`);
-  }
-
   if (api) {
     return (
       <NodeApiContext.Provider value={api}>
@@ -120,11 +112,8 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
       </NodeApiContext.Provider>
     );
   } else {
-    // TODO: waiting screen etc.
     return (
-      <View>
-        <Text>Gatestate: {message}</Text>
-      </View>
+      <NodeApiGateScreen gateState={gateState} retryHandler={retryHandler} />
     );
   }
 };
