@@ -1,16 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-let seedUrl = 'http://node.brightid.org';
-if (__DEV__) {
-  seedUrl = 'http://test.brightid.org';
-}
-
 interface SettingsSlice {
-  baseUrl: string;
+  baseUrl: string | null;
 }
 
 const initialState: SettingsSlice = {
-  baseUrl: seedUrl,
+  baseUrl: null,
 };
 
 export const settingsSlice = createSlice({
@@ -20,13 +15,20 @@ export const settingsSlice = createSlice({
     setBaseUrl: (state, action: PayloadAction<string>) => {
       state.baseUrl = action.payload;
     },
+    clearBaseUrl: (state) => {
+      state.baseUrl = null;
+    },
     resetSettings: (state) => {
       state = initialState;
     },
   },
 });
 
-export const { setBaseUrl, resetSettings } = settingsSlice.actions;
+export const {
+  setBaseUrl,
+  clearBaseUrl,
+  resetSettings,
+} = settingsSlice.actions;
 
 export const selectBaseUrl = (state: State) => {
   return state.settings.baseUrl;

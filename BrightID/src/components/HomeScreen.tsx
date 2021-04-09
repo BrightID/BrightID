@@ -31,7 +31,7 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { setHeaderHeight } from '@/reducer/walkthroughSlice';
 import { uniq } from 'ramda';
-import { selectBaseUrl } from '@/reducer/settingsSlice';
+import { clearBaseUrl, selectBaseUrl } from '@/reducer/settingsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { version as app_version } from '../../package.json';
 
@@ -343,10 +343,21 @@ export const HomeScreen = (props) => {
               </Text>
             </View>
           </TouchableOpacity>
+          {__DEV__ && (
+            <TouchableOpacity
+              style={styles.nodeInfoContainer}
+              onPress={() => {
+                dispatch(clearBaseUrl());
+              }}
+            >
+              <View>
+                <Text style={styles.nodeInfo}>{baseUrl}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
         </View>
         <DeepPasteLink />
         <Text style={styles.versionInfo}>v{app_version}</Text>
-        {__DEV__ && <Text style={styles.nodeInfo}>{baseUrl}</Text>}
       </View>
     </View>
   );
@@ -536,13 +547,14 @@ const styles = StyleSheet.create({
     right: DEVICE_LARGE ? 12 : 7,
     bottom: DEVICE_LARGE ? 12 : 7,
   },
+  nodeInfoContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   nodeInfo: {
     fontFamily: 'Poppins-Regular',
     fontSize: fontSize[12],
     color: WHITE,
-    position: 'absolute',
-    left: 50,
-    bottom: DEVICE_LARGE ? 12 : 7,
   },
 });
 
