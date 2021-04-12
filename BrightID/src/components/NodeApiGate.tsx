@@ -17,7 +17,7 @@ const ProdCandidates = [
   'http://node.lumos.services',
   'http://brightid.daosquare.io',
 ];
-const TestCandidates = ['http://test.brightid.org2'];
+const TestCandidates = ['http://test.brightid.org'];
 
 export const ApiGateState = {
   INITIAL: 'INITIAL',
@@ -62,17 +62,18 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
   useEffect(() => {
     const runEffect = async () => {
       console.log(`Running nodechooser to select backend`);
-      setGateState(ApiGateState.SEARCHING_NODE);
       setStartTimestamp(Date.now());
+      setGateState(ApiGateState.SEARCHING_NODE);
       try {
         const fastestUrl = await chooseNode(
           __DEV__ ? TestCandidates : ProdCandidates,
         );
         dispatch(setBaseUrl(fastestUrl));
-        setStartTimestamp(0);
       } catch (e) {
         // No usable node found :-(
         setGateState(ApiGateState.ERROR_NO_NODE);
+      } finally {
+        setStartTimestamp(0);
       }
     };
     if (gateState === ApiGateState.SEARCH_REQUESTED) {

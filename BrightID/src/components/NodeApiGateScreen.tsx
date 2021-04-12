@@ -15,6 +15,14 @@ import { fontSize } from '@/theme/fonts';
 import { useTranslation } from 'react-i18next';
 import Spinner from 'react-native-spinkit';
 import IonIcons from 'react-native-vector-icons/Ionicons';
+import { NODE_CHOOSER_TIMEOUT_MS } from '@/utils/constants';
+
+const calculateSecondsLeft = (startTimestamp: number) => {
+  const endTime = startTimestamp + NODE_CHOOSER_TIMEOUT_MS;
+  const remaining = endTime - Date.now();
+  console.log(`Remaining ms: ${remaining}`);
+  return Math.ceil(remaining / 1000);
+};
 
 export const NodeApiGateScreen = ({
   gateState,
@@ -27,6 +35,7 @@ export const NodeApiGateScreen = ({
 }) => {
   const { t } = useTranslation();
   const [stateDescription, setStateDescription] = useState('');
+  const [secondsLeft, setSecondsLeft] = useState(0);
   const [iconData, setIconData] = useState<{ color: string; name: string }>(
     undefined,
   );
@@ -36,22 +45,38 @@ export const NodeApiGateScreen = ({
       case ApiGateState.INITIAL:
       case ApiGateState.SEARCHING_NODE:
       case ApiGateState.SEARCH_REQUESTED:
+      case ApiGateState.NODE_AVAILABLE:
         setIconData(undefined);
         setStateDescription('Connecting to BrightID node...');
         break;
-      case ApiGateState.NODE_AVAILABLE:
-        setStateDescription('Node found');
-        break;
       case ApiGateState.ERROR_NO_NODE:
+        setIconData({ color: RED, name: 'alert-circle-outline' });
         setStateDescription(
           'Failed to connect to a BrightID node. Please check your network connectivity.',
         );
-        setIconData({ color: RED, name: 'alert-circle-outline' });
         break;
       default:
         console.log(`Unhandled gateState ${gateState}!`);
     }
   }, [gateState]);
+
+  // countdown until timeout reached
+  useEffect(() => {
+    let timerId;
+    if (startTimestamp > 0) {
+      timerId = setInterval(() => {
+        const remainingSeconds = calculateSecondsLeft(startTimestamp);
+        if (remainingSeconds >= 0) {
+          setSecondsLeft(remainingSeconds);
+        }
+      }, 500);
+    }
+    return () => {
+      if (timerId) {
+        clearInterval(timerId);
+      }
+    };
+  }, [startTimestamp]);
 
   const retryInfo = (
     <View style={styles.retryBtnContainer}>
@@ -98,7 +123,17 @@ export const NodeApiGateScreen = ({
           <View style={styles.infoTextContainer}>
             <Text style={styles.infoText}>{stateDescription}</Text>
           </View>
-          {gateState === ApiGateState.ERROR_NO_NODE && retryInfo}
+          {gateState === ApiGateState.ERROR_NO_NODE ? (
+            retryInfo
+          ) : (
+            <View style={styles.timeoutContainer}>
+              {secondsLeft > 0 && (
+                <Text style={styles.infoText}>
+                  Time remaining: {secondsLeft} seconds
+                </Text>
+              )}
+            </View>
+          )}
         </View>
       </SafeAreaView>
       <View style={styles.orangeBottom} />
@@ -150,6 +185,12 @@ const styles = StyleSheet.create({
     fontSize: fontSize[16],
     textAlign: 'center',
     lineHeight: 26,
+  },
+  timeoutContainer: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: DEVICE_LARGE ? 85 : 70,
   },
   retryBtnContainer: {
     width: '100%',
