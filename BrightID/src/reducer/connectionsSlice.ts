@@ -25,6 +25,7 @@ const initialState: ConnectionsState = {
     connection_levels.ALREADY_KNOWN,
     connection_levels.RECOVERY,
   ],
+  pendingDeletions: {},
 };
 
 const connectionsSlice = createSlice({
@@ -45,16 +46,32 @@ const connectionsSlice = createSlice({
     },
     updateConnections(state, action: PayloadAction<ConnectionInfo[]>) {
       const { entities, ids } = original(state.connections);
-
       // check to see if any connections are deleted
       const payloadIds = action.payload.map((conn) => conn.id);
       const diff = difference(ids, payloadIds);
+
+      // remove missing connections
       diff.forEach((id) => {
         if (entities[id].status === 'verified') {
-          state.connections = connectionsAdapter.removeOne(
-            state.connections,
-            id,
-          );
+          // count number of times API has shown no connection on backend
+          state.pendingDeletions[id] = state.pendingDeletions[id]
+            ? state.pendingDeletions[id] + 1
+            : 1;
+          // remove connection after 4 API calls
+          if (state.pendingDeletions[id] > 3) {
+            state.connections = connectionsAdapter.removeOne(
+              state.connections,
+              id,
+            );
+            delete state.pendingDeletions[id];
+          }
+        }
+      });
+
+      // remove stale pendingDeletions
+      Object.keys(original(state.pendingDeletions)).forEach((id) => {
+        if (payloadIds.includes(id)) {
+          delete state.pendingDeletions[id];
         }
       });
 

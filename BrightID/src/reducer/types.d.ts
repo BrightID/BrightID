@@ -16,6 +16,9 @@ type ConnectionsState = {
   searchParam: string;
   searchOpen: boolean;
   filters: ConnectionLevel[];
+  pendingDeletions: {
+    [id: string]: number;
+  };
 };
 
 type LocalConnectionData = {
