@@ -100,8 +100,6 @@ export const GroupsScreen = () => {
     };
   }, [dispatch]);
 
-  useFocusEffect(onRefresh);
-
   const renderGroup = ({ item, index }) => {
     return (
       <TouchableOpacity

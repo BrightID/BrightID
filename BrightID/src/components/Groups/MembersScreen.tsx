@@ -114,37 +114,37 @@ function MembersScreen() {
         }
       };
 
-      navigation.setOptions({
-        headerRight: () => (
-          <TouchableOpacity
-            testID="groupOptionsBtn"
-            style={{ marginRight: 11 }}
-            onPress={() => {
-              showActionSheetWithOptions(
-                {
-                  options: contextActions,
-                  cancelButtonIndex: contextActions.indexOf(ACTION_CANCEL),
-                  destructiveButtonIndex: contextActions.indexOf(ACTION_LEAVE),
-                  title: t('common.actionSheet.title'),
-                  showSeparators: true,
-                  textStyle: {
-                    color: BLUE,
-                    textAlign: 'center',
-                    width: '100%',
-                  },
-                  titleTextStyle: {
-                    textAlign: 'center',
-                    width: '100%',
-                  },
-                },
-                performAction,
-              );
-            }}
-          >
-            <Material name="dots-horizontal" size={32} color={WHITE} />
-          </TouchableOpacity>
-        ),
-      });
+      // navigation.setOptions({
+      //   headerRight: () => (
+      //     <TouchableOpacity
+      //       testID="groupOptionsBtn"
+      //       style={{ marginRight: 11 }}
+      //       onPress={() => {
+      //         showActionSheetWithOptions(
+      //           {
+      //             options: contextActions,
+      //             cancelButtonIndex: contextActions.indexOf(ACTION_CANCEL),
+      //             destructiveButtonIndex: contextActions.indexOf(ACTION_LEAVE),
+      //             title: t('common.actionSheet.title'),
+      //             showSeparators: true,
+      //             textStyle: {
+      //               color: BLUE,
+      //               textAlign: 'center',
+      //               width: '100%',
+      //             },
+      //             titleTextStyle: {
+      //               textAlign: 'center',
+      //               width: '100%',
+      //             },
+      //           },
+      //           performAction,
+      //         );
+      //       }}
+      //     >
+      //       <Material name="dots-horizontal" size={32} color={WHITE} />
+      //     </TouchableOpacity>
+      //   ),
+      // });
     }
   }, [
     navigation,
@@ -269,7 +269,7 @@ function MembersScreen() {
     <View style={styles.header}>
       <View style={styles.profile}>
         <View style={styles.photoContainer}>
-          <GroupPhoto group={group} />
+          <GroupPhoto group={group} large={true} />
         </View>
         <View style={styles.nameContainer}>
           <View style={styles.nameLabel}>
@@ -396,7 +396,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     maxWidth: '60%',
-    // borderWidth: 1,
     marginLeft: DEVICE_LARGE ? 22 : 20,
   },
   nameLabel: {

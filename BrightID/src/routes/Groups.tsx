@@ -4,8 +4,6 @@ import {
   StackNavigationOptions,
 } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
-import { getGroupName } from '@/utils/groups';
-import { fontSize } from '@/theme/fonts';
 import GroupsScreen from '@/components/Groups/GroupsScreen';
 import SearchGroups from '@/components/Helpers/SearchGroups';
 import SearchConnections from '@/components/Helpers/SearchConnections';
@@ -37,21 +35,6 @@ const newGroupOptions: StackNavigationOptions = {
   ),
 };
 
-const membersScreenOptions: ({ route }) => StackNavigationOptions = ({
-  route,
-}) => {
-  const group = route.params?.group;
-  return {
-    ...headerOptions,
-    title: getGroupName(group),
-    headerTitleStyle: {
-      fontSize: fontSize[20],
-      paddingLeft: 20,
-      paddingRight: 30,
-    },
-  };
-};
-
 const Groups = () => {
   const { t } = useTranslation();
   return (
@@ -77,7 +60,7 @@ const Groups = () => {
       <Stack.Screen
         name="Members"
         component={MembersScreen}
-        options={membersScreenOptions}
+        options={{ ...headerOptions, title: '' }}
       />
       <Stack.Screen
         name="InviteList"
