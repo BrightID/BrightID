@@ -23,10 +23,13 @@ const mockStore = configureStore(
 
 // we use `recoveryData` throughout these tests instead of relying on redux
 const recoveryData = initialState;
+const settings = {
+  baseUrl: new URL('http://test.brightid.org'),
+};
 
 describe('Test recovery data', () => {
   test(`setup recovery data`, async () => {
-    const store = mockStore({ recoveryData });
+    const store = mockStore({ recoveryData, settings });
 
     const expectedAction = expect.objectContaining({
       type: 'recoveryData/init',
@@ -59,7 +62,7 @@ describe('Test recovery data', () => {
   test('create channel', async () => {
     // update timeout for this test
     jest.setTimeout(10000);
-    const store = mockStore({ recoveryData });
+    const store = mockStore({ recoveryData, settings });
 
     const expectedAction = expect.objectContaining({
       type: 'recoveryData/setRecoveryChannel',
