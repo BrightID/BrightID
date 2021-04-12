@@ -24,6 +24,9 @@ export const ORANGE = '#ED7A5D';
 export const LIGHTBLUE = '#4A90E2';
 export const DARK_ORANGE = '#B64B32';
 
+/** Nodechooser constants * */
+export const NODE_CHOOSER_TIMEOUT_MS = 10 * 1000; // Fail if no valid node found within timeout
+
 /** ** NOTIFICATION CONSTANTS  *** */
 export const CONNECTIONS_TYPE = 'connections';
 export const GROUPS_TYPE = 'groups';

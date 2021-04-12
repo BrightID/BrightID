@@ -1,9 +1,8 @@
 // Shim Promise.any() which is not yet available in react native
 import any from 'promise.any';
+import { NODE_CHOOSER_TIMEOUT_MS } from '@/utils/constants';
 
 any.shim();
-
-const TIMEOUT_MS = 10 * 1000; // Fail if no valid node found within timeout
 
 /**
  * Returns a promise that
@@ -17,7 +16,7 @@ const chooseNode = async (nodeUrls: Array<string>) => {
   // add timeout promise to limit waiting time
   promises.push(
     new Promise((resolve) => {
-      setTimeout(resolve, TIMEOUT_MS, 'TIMEOUT');
+      setTimeout(resolve, NODE_CHOOSER_TIMEOUT_MS, 'TIMEOUT');
     }),
   );
 
