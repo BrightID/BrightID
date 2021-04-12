@@ -35,6 +35,7 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
   );
   const url = useSelector<string>(selectBaseUrl);
   const [api, setApi] = useState<NodeApi | null>(null);
+  const [startTimestamp, setStartTimestamp] = useState(0);
   const [gateState, setGateState] = useState<ApiGateState>(
     ApiGateState.INITIAL,
   );
@@ -62,11 +63,13 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
     const runEffect = async () => {
       console.log(`Running nodechooser to select backend`);
       setGateState(ApiGateState.SEARCHING_NODE);
+      setStartTimestamp(Date.now());
       try {
         const fastestUrl = await chooseNode(
           __DEV__ ? TestCandidates : ProdCandidates,
         );
         dispatch(setBaseUrl(fastestUrl));
+        setStartTimestamp(0);
       } catch (e) {
         // No usable node found :-(
         setGateState(ApiGateState.ERROR_NO_NODE);
@@ -125,7 +128,11 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
     );
   } else {
     return (
-      <NodeApiGateScreen gateState={gateState} retryHandler={retryHandler} />
+      <NodeApiGateScreen
+        gateState={gateState}
+        retryHandler={retryHandler}
+        startTimestamp={startTimestamp}
+      />
     );
   }
 };
