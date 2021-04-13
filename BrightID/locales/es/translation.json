@@ -547,6 +547,7 @@
       "password": "Contraseña"
     },
     "text": {
+      "backupPasswordTitle": "Contraseña de respaldo",
       "changePassword": "Cambiar Contraseña",
       "changeProfilePicture": "Cambiar Foto de Perfil",
       "createPassword": "Crear Contraseña",
@@ -581,7 +582,7 @@
       "connections_plural": "{{count}} / 30 Conexiones"
     },
     "label": {
-      "connectionType": "Tipo de conección:"
+      "connectionType": "Tipo de conexión:"
     },
     "text": {
       "canAlso": "O también puedes…",
@@ -596,8 +597,27 @@
     }
   },
   "recovery": {
+    "alert": {
+      "clipboardmessage": "Ayúdame a recuperar mi BrightID: {{link}}",
+      "text": "Comparta este enlace con sus contactos de recuperación.",
+      "title": "Enlace de recuperación"
+    },
+    "error": {
+      "mismatchId": "Tus conexiones de recuperación seleccionaron cuentas diferentes",
+      "title": "Falló la recuperación de la cuenta",
+      "unknown": "Se ha producido un error desconocido"
+    },
     "header": {
+      "text": "Parte 1: Recuperar cuenta",
       "title": "Código de Recuperación"
+    },
+    "info": "Este paso recuperará su BrightID en este dispositivo. Se restaurarán los nombres y las fotos de las conexiones en común con sus conexiones de recuperación.",
+    "state": "Conexiones recuperadas {{recoveredConnections}}, grupos {{recoveredGroups}}",
+    "steps": {
+      "complete": "Recuperación de la cuenta completa",
+      "downloading": "Descargando datos de las conexiones de recuperación ...",
+      "error": "Falló la recuperación de la cuenta",
+      "recovering": "Recuperando cuenta ..."
     },
     "text": {
       "additionalInfo": "Tus conexiones de recuperación necesitarán escanear este código para ayudarte a recuperar tu BrightID",
@@ -605,6 +625,15 @@
       "signatures": "{{count}} / 2 firmas",
       "signatures_plural": "{{count}} / 2 firmas"
     }
+  },
+  "recoveryCooldownModal": {
+    "dismissButtonLabel": "Entendido",
+    "text": {
+      "connection": "Acabas de cambiar el nivel de recuperación de <bold>{{name}}</bold>.",
+      "cooldown": "Tenga en cuenta que este cambio tiene efecto después de un período de enfriamiento de <period>{{ cooldownPeriod }}</period> por razones de seguridad.",
+      "cooldownGeneric": "Tenga en cuenta que el cambio de las conexiones de recuperación tiene efecto después de un período de enfriamiento de hasta <period>{{ cooldownPeriod }}</period> por razones de seguridad."
+    },
+    "title": "Período de enfriamiento para las conexiones de recuperación"
   },
   "restore": {
     "alert": {
@@ -628,7 +657,22 @@
       }
     },
     "header": {
-      "accountRecovery": "Recuperación de Cuenta"
+      "accountRecovery": "Recuperación de Cuenta",
+      "text": "Parte 2: Restaurar la copia de seguridad (opcional)"
+    },
+    "info": "Con la contraseña de la copia de seguridad puedes restaurar los nombres y las fotos de todas tus conexiones y grupos.",
+    "password": {
+      "placeholder": "Escriba su contraseña",
+      "skip": "Saltar",
+      "submit": "Restaurar"
+    },
+    "steps": {
+      "complete": "Restauración completa",
+      "error": "La restauración ha fallado. ¿Contraseña incorrecta?",
+      "restoring": "Restaurando datos ...",
+      "skipped": "Restauración omitida",
+      "waitingAccount": "Esperando la recuperación de la cuenta",
+      "waitingPassword": "Ingrese contraseña u omita"
     },
     "text": {
       "chooseConnectionToHelp": "Seleccione la conexión cuya cuenta está ayudando a recuperar.",
