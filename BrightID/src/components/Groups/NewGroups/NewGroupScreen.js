@@ -18,6 +18,7 @@ import { connectionsSelector } from '@/utils/connectionsSelector';
 import { createSelector } from '@reduxjs/toolkit';
 import Spinner from 'react-native-spinkit';
 import i18next from 'i18next';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import { createNewGroup } from '../actions';
 import NewGroupCard from './NewGroupCard';
 
@@ -50,6 +51,9 @@ const creationStateStrings = {
 };
 
 export class NewGroupScreen extends React.Component {
+  // make api available through this.context
+  static contextType = NodeApiContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -81,10 +85,11 @@ export class NewGroupScreen extends React.Component {
   createGroup = async () => {
     try {
       this.setState({ creating: true });
+      const api = this.context;
       const { route, navigation } = this.props;
       const { photo, name, isPrimary } = route.params;
       const type = isPrimary ? 'primary' : 'general';
-      const res = await store.dispatch(createNewGroup(photo, name, type));
+      const res = await store.dispatch(createNewGroup(photo, name, type, api));
       if (res) {
         navigation.navigate('Groups');
       } else {
