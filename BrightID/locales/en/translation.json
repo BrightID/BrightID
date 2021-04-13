@@ -355,7 +355,8 @@
     },
     "tag": {
       "primaryGroup": "Primary Group",
-      "joinedDate": "Joined {{date}}"
+      "joinedDate": "Joined {{date}}",
+      "createdDate": "Created {{date}}"
     },
     "text": {
       "noEligibleConnection": "No existing connections are eligible for this group, please come back later..",
@@ -363,7 +364,8 @@
       "noGroupsMatchSearch": "No group matches your search",
       "noMembers": "No known members, invite some…",
       "waitingForMembers": "Waiting for {{list}} to join",
-      "members": "{{count}} members"
+      "members": "{{count}} members",
+      "membersCount": "{{count}} Group members"
     }
   },
   "home": {

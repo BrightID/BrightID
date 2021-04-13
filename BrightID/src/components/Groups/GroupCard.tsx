@@ -34,7 +34,7 @@ const GroupCard = (props) => {
       return (
         <Text style={styles.connectionTime}>
           {t('groups.tag.joinedDate', {
-            date: moment(parseInt(group.joined, 10)).fromNow(),
+            date: moment(group.joined).fromNow(),
           })}
         </Text>
       );

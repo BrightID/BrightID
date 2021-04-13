@@ -9,12 +9,7 @@ import {
 } from 'react-native';
 import moment from 'moment';
 import { useDispatch, useSelector } from '@/store';
-import {
-  useFocusEffect,
-  useNavigation,
-  useRoute,
-  RouteProp,
-} from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { innerJoin } from 'ramda';
 import { useTranslation } from 'react-i18next';
@@ -26,8 +21,7 @@ import {
   selectAllConnections,
 } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { ORANGE, WHITE, BLUE, DARK_GREY, BLACK } from '@/theme/colors';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { ORANGE, WHITE, BLACK } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import MemberCard from './MemberCard';
@@ -280,8 +274,8 @@ function MembersScreen() {
           <View style={styles.profileDivider} />
           <View style={styles.connectionInfo}>
             <Text style={styles.connectionTimestampText}>
-              {t('groups.tag.joinedDate', {
-                date: `${moment(parseInt(String(group.joined), 10)).fromNow()}`,
+              {t('groups.tag.createdDate', {
+                date: `${moment(group.timestamp).fromNow()}`,
               })}
             </Text>
           </View>
@@ -315,22 +309,29 @@ function MembersScreen() {
       <View style={styles.orangeTop} />
       <View style={styles.container}>
         <GroupHeader />
-
         <View testID="membersView" style={styles.mainContainer}>
-          <View>
-            <FlatList
-              style={styles.membersContainer}
-              data={groupMembers}
-              keyExtractor={({ id }, index) => id + index}
-              renderItem={renderMember}
-              contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}
-              ListEmptyComponent={
-                <EmptyList title={t('groups.text.noMembers')} />
-              }
-            />
+          <View style={styles.memberSearchContainer}>
+            <View style={styles.memberInfoContainer}>
+              <Text style={styles.memberCount}>
+                {t('groups.text.membersCount', {
+                  count: group.members?.length,
+                })}
+              </Text>
+              <Text style={styles.addMemberBtn}>A</Text>
+            </View>
           </View>
+          <FlatList
+            style={styles.membersContainer}
+            data={groupMembers}
+            keyExtractor={({ id }, index) => id + index}
+            renderItem={renderMember}
+            contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <EmptyList title={t('groups.text.noMembers')} />
+            }
+          />
         </View>
       </View>
     </>
@@ -374,7 +375,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[10],
     color: ORANGE,
-    marginHorizontal: 2,
+    marginHorizontal: 5,
   },
   profile: {
     flexDirection: 'row',
@@ -421,6 +422,26 @@ const styles = StyleSheet.create({
   },
   verificationSticker: {
     marginTop: 8,
+  },
+  memberSearchContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  memberInfoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  memberCount: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[16],
+    marginLeft: DEVICE_LARGE ? 32 : 28,
+  },
+  addMemberBtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: DEVICE_LARGE ? 12 : 10,
   },
 });
 
