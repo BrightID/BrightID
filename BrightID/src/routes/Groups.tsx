@@ -7,10 +7,10 @@ import { useTranslation } from 'react-i18next';
 import GroupsScreen from '@/components/Groups/GroupsScreen';
 import SearchGroups from '@/components/Helpers/SearchGroups';
 import SearchConnections from '@/components/Helpers/SearchConnections';
-import NewGroupScreen from '@/components/Groups/NewGroups/NewGroupScreen';
-import GroupInfoScreen from '@/components/Groups/NewGroups/GroupInfoScreen';
-import MembersScreen from '@/components/Groups/MembersScreen';
-import InviteListScreen from '@/components/Groups/InviteListScreen';
+import NewGroupScreen from '@/components/Groups/GroupCreation/CreateGroupScreen';
+import GroupInfoScreen from '@/components/Groups/GroupCreation/NewGroupInfoScreen';
+import MembersScreen from '@/components/Groups/Admin/GroupScreen';
+import InviteListScreen from '@/components/Groups/Admin/InviteListScreen';
 import i18next from 'i18next';
 import { headerOptions, NavHome, AnimatedHeaderTitle } from './helpers';
 

@@ -44,8 +44,10 @@ type GroupsState = {
   newGroupCoFounders: string[];
   invites: Invite[];
   groups: Group[];
-  searchParam: string;
-  searchOpen: boolean;
+  groupsSearchParam: string;
+  groupsSearchOpen: boolean;
+  membersSearchParam: string;
+  membersSearchOpen: boolean;
 };
 
 type Group = Partial<GroupInfo> & {

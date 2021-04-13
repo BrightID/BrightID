@@ -1,19 +1,25 @@
 import React from 'react';
-import { setGroupSearch, setGroupSearchOpen } from '@/actions';
-import AnimatedTopSearchBar from './AnimatedTopSearchBar';
+import { setGroupsSearch, setGroupsSearchOpen } from '@/actions';
+import { useTranslation } from 'react-i18next';
+import AnimatedSearchBar from './AnimatedSearchBar';
 
 /**
  * Search Bar in the Groups Screen
  *
  * TODO: Create a shared search component to use in both Connections and Group view
  */
-const SearchGroups = () => (
-  <AnimatedTopSearchBar
-    sortable={false}
-    setSearchValue={setGroupSearch}
-    setSearchOpen={setGroupSearchOpen}
-    searchOpenSelector={(state: State) => state.groups.searchOpen}
-  />
-);
+const SearchGroups = () => {
+  const { t } = useTranslation();
+
+  return (
+    <AnimatedSearchBar
+      sortable={false}
+      setSearchValue={setGroupsSearch}
+      setSearchOpen={setGroupsSearchOpen}
+      searchOpenSelector={(state: State) => state.groups.groupsSearchOpen}
+      placeholder={t('common.placeholder.searchGroups')}
+    />
+  );
+};
 
 export default SearchGroups;

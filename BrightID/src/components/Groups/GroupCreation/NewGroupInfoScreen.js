@@ -27,7 +27,7 @@ import { DEVICE_TYPE, DEVICE_OS, DEVICE_LARGE } from '@/utils/deviceConstants';
 
 const Container = DEVICE_OS === 'ios' ? KeyboardAvoidingView : View;
 
-export class GroupInfoScreen extends React.Component {
+export class NewGroupInfo extends React.Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     name: '',
@@ -289,5 +289,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(({ groups }) => ({ ...groups }))(
-  withTranslation()(GroupInfoScreen),
+  withTranslation()(NewGroupInfo),
 );

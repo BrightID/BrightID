@@ -12,7 +12,7 @@ import { selectConnectionById } from '@/reducer/connectionsSlice';
 import {
   backupPhoto,
   backupUser,
-} from '../Onboarding/RecoveryFlow/thunks/backupThunks';
+} from '../../Onboarding/RecoveryFlow/thunks/backupThunks';
 
 export const toggleNewGroupCoFounder = (id) => (dispatch, getState) => {
   let coFounders = [...getState().groups.newGroupCoFounders];

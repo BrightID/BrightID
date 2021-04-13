@@ -9,7 +9,7 @@ import { withTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { GREY, WHITE, GREEN, BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { toggleNewGroupCoFounder } from '../actions';
+import { toggleNewGroupCoFounder } from './actions';
 
 /**
  * Connection Card in the Connections Screen

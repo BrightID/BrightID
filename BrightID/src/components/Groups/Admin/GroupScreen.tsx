@@ -1,40 +1,25 @@
-import React, { useState, useEffect, useLayoutEffect, useMemo } from 'react';
-import {
-  StyleSheet,
-  View,
-  Alert,
-  FlatList,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import moment from 'moment';
 import { useDispatch, useSelector } from '@/store';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { innerJoin } from 'ramda';
 import { useTranslation } from 'react-i18next';
 import api from '@/api/brightId';
-import {
-  leaveGroup,
-  dismissFromGroup,
-  addAdmin,
-  selectAllConnections,
-} from '@/actions';
-import EmptyList from '@/components/Helpers/EmptyList';
+import { leaveGroup } from '@/actions';
 import { ORANGE, WHITE, BLACK } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import MemberCard from './MemberCard';
-import GroupPhoto from './GroupPhoto';
+import GroupPhoto from '../GroupPhoto';
+import MembersList from './MembersList';
+import MembersSearch from './MembersSearch';
 
 type MembersRoute = RouteProp<{ Members: { group: Group } }, 'Members'>;
 
-function MembersScreen() {
+function GroupScreen() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute<MembersRoute>();
-
-  const connections = useSelector(selectAllConnections);
   const user = useSelector((state) => state.user);
 
   const { group } = route.params;
@@ -170,95 +155,6 @@ function MembersScreen() {
     setContextActions(actions);
   }, [user.id, admins, members, ACTION_INVITE, ACTION_LEAVE, ACTION_CANCEL]);
 
-  // Only include the group members that user knows (is connected with), and the user itself
-  const groupMembers = useMemo(() => {
-    // TODO: userObj is ugly and just here to satisfy flow typecheck for 'connection' type.
-    //    Define a dedicated type for group member to use here or somehow merge user and connection types.
-    const userobj = {
-      id: user.id,
-      name: user.name,
-      photo: user.photo,
-      score: user.score,
-      aesKey: '',
-      connectionDate: 0,
-      status: '',
-      signingKey: '',
-      createdAt: 0,
-      hasPrimaryGroup: false,
-    };
-    return [userobj].concat(
-      innerJoin(
-        (connection, member) => connection.id === member,
-        connections,
-        members,
-      ),
-    );
-  }, [user, connections, members]);
-
-  const handleDismiss = (user) => {
-    const buttons = [
-      {
-        text: t('common.alert.cancel'),
-        style: 'cancel',
-      },
-      {
-        text: t('common.alert.ok'),
-        onPress: async () => {
-          try {
-            await api.dismiss(user.id, groupID);
-            dispatch(dismissFromGroup({ member: user.id, group }));
-          } catch (err) {
-            Alert.alert(
-              t('groups.alert.title.errorDismissMember'),
-              err.message,
-            );
-          }
-        },
-      },
-    ];
-    Alert.alert(
-      t('groups.alert.title.dismissMember'),
-      t('groups.alert.text.dismissMember', { name: user.name }),
-      // @ts-ignore
-      buttons,
-      {
-        cancelable: true,
-      },
-    );
-  };
-
-  const handleAddAdmin = (user) => {
-    const buttons = [
-      {
-        text: t('common.alert.cancel'),
-        style: 'cancel',
-      },
-      {
-        text: t('common.alert.ok'),
-        onPress: async () => {
-          try {
-            await api.addAdmin(user.id, groupID);
-            dispatch(addAdmin({ member: user.id, group }));
-          } catch (err) {
-            Alert.alert(
-              t('groups.alert.text.addAdmin', { name: user.name }),
-              err.message,
-            );
-          }
-        },
-      },
-    ];
-    Alert.alert(
-      t('groups.alert.title.addAdmin'),
-      t('groups.alert.text.addAdmin', { name: user.name }),
-      // @ts-ignore
-      buttons,
-      {
-        cancelable: true,
-      },
-    );
-  };
-
   const GroupHeader = () => (
     <View style={styles.header}>
       <View style={styles.profile}>
@@ -284,54 +180,14 @@ function MembersScreen() {
     </View>
   );
 
-  const renderMember = ({ item, index }) => {
-    const memberIsAdmin = admins.includes(item.id);
-    const userIsAdmin = admins.includes(user.id);
-    return (
-      <MemberCard
-        testID={`memberItem-${index}`}
-        connectionDate={item.connectionDate}
-        flaggers={item.flaggers}
-        memberId={item.id}
-        name={item.name}
-        photo={item.photo}
-        memberIsAdmin={memberIsAdmin}
-        userIsAdmin={userIsAdmin}
-        userId={user.id}
-        handleDismiss={handleDismiss}
-        handleAddAdmin={handleAddAdmin}
-      />
-    );
-  };
-
   return (
     <>
       <View style={styles.orangeTop} />
-      <View style={styles.container}>
+      <View testID="membersView" style={styles.container}>
         <GroupHeader />
-        <View testID="membersView" style={styles.mainContainer}>
-          <View style={styles.memberSearchContainer}>
-            <View style={styles.memberInfoContainer}>
-              <Text style={styles.memberCount}>
-                {t('groups.text.membersCount', {
-                  count: group.members?.length,
-                })}
-              </Text>
-              <Text style={styles.addMemberBtn}>A</Text>
-            </View>
-          </View>
-          <FlatList
-            style={styles.membersContainer}
-            data={groupMembers}
-            keyExtractor={({ id }, index) => id + index}
-            renderItem={renderMember}
-            contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={
-              <EmptyList title={t('groups.text.noMembers')} />
-            }
-          />
+        <View style={styles.mainContainer}>
+          <MembersSearch group={group} />
+          <MembersList />
         </View>
       </View>
     </>
@@ -344,9 +200,6 @@ const styles = StyleSheet.create({
     height: DEVICE_LARGE ? 70 : 65,
     width: '100%',
     zIndex: 1,
-  },
-  membersContainer: {
-    flex: 1,
   },
   container: {
     flex: 1,
@@ -388,11 +241,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
   },
-  profilePhoto: {
-    borderRadius: DEVICE_LARGE ? 45 : 39,
-    width: DEVICE_LARGE ? 90 : 78,
-    height: DEVICE_LARGE ? 90 : 78,
-  },
   nameContainer: {
     flexDirection: 'column',
     alignItems: 'center',
@@ -420,29 +268,6 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
     width: '100%',
   },
-  verificationSticker: {
-    marginTop: 8,
-  },
-  memberSearchContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  memberInfoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  memberCount: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[16],
-    marginLeft: DEVICE_LARGE ? 32 : 28,
-  },
-  addMemberBtn: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: DEVICE_LARGE ? 12 : 10,
-  },
 });
 
-export default MembersScreen;
+export default GroupScreen;

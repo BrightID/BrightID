@@ -45,7 +45,7 @@ const getItemLayout = (data, index) => ({
 
 const groupsSelector = createSelector(
   (state: State) => state.groups.groups,
-  (state: State) => toSearchString(state.groups.searchParam),
+  (state: State) => toSearchString(state.groups.groupsSearchParam),
   (groups, searchParam) => {
     if (searchParam !== '') {
       return groups

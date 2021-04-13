@@ -148,7 +148,9 @@
       "title": "Select photo"
     },
     "placeholder": {
-      "searchConnections": "Search Connections"
+      "searchConnections": "Search Connections",
+      "searchGroups": "Search Groups",
+      "searchMembers": "Search Members"
     },
     "tag": {
       "connectionDate": "Connected {{date}}",

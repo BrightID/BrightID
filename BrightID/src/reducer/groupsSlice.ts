@@ -8,8 +8,10 @@ const initialState: GroupsState = {
   newGroupCoFounders: [],
   groups: [],
   invites: [],
-  searchParam: '',
-  searchOpen: false,
+  groupsSearchParam: '',
+  membersSearchParam: '',
+  groupsSearchOpen: false,
+  membersSearchOpen: false,
 };
 
 const groupsSlice = createSlice({
@@ -98,11 +100,17 @@ const groupsSlice = createSlice({
       );
       if (index !== -1) state.invites[index].state = INVITE_REJECTED;
     },
-    setGroupSearch(state, action: PayloadAction<string>) {
-      state.searchParam = action.payload;
+    setGroupsSearch(state, action: PayloadAction<string>) {
+      state.groupsSearchParam = action.payload;
     },
-    setGroupSearchOpen(state, action: PayloadAction<boolean>) {
-      state.searchOpen = action.payload;
+    setGroupsSearchOpen(state, action: PayloadAction<boolean>) {
+      state.groupsSearchOpen = action.payload;
+    },
+    setMembersSearch(state, action: PayloadAction<string>) {
+      state.membersSearchParam = action.payload;
+    },
+    setMembersSearchOpen(state, action: PayloadAction<boolean>) {
+      state.membersSearchOpen = action.payload;
     },
   },
   extraReducers: {
@@ -126,8 +134,10 @@ export const {
   setInvites,
   rejectInvite,
   acceptInvite,
-  setGroupSearch,
-  setGroupSearchOpen,
+  setGroupsSearch,
+  setGroupsSearchOpen,
+  setMembersSearch,
+  setMembersSearchOpen,
 } = groupsSlice.actions;
 
 // Export reducer

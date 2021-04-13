@@ -11,7 +11,7 @@ import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { connectionsSelector } from '@/utils/connectionsSelector';
-import ConnectionCard from '../Connections/ConnectionCard';
+import ConnectionCard from '../../Connections/ConnectionCard';
 
 const ITEM_HEIGHT = DEVICE_LARGE ? 102 : 92;
 

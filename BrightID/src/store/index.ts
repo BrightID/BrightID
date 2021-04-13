@@ -41,7 +41,13 @@ const connectionsPersistConfig = {
 const groupsPersistConfig = {
   ...fsPersistConfig,
   key: 'groups',
-  blacklist: ['searchParam', 'searchOpen', 'newGroupCoFounders'],
+  blacklist: [
+    'groupsSearchParam',
+    'groupsSearchOpen',
+    'membersSearchParam',
+    'membersSearchOpen',
+    'newGroupCoFounders',
+  ],
 };
 
 const notificationsPersistConfig = {

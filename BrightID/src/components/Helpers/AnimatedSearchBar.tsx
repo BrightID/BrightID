@@ -5,9 +5,8 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-
+import { ActionCreatorWithOptionalPayload } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from '@/store';
-import { useTranslation } from 'react-i18next';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
@@ -21,17 +20,28 @@ import { GREY, LIGHT_BLACK, WHITE } from '@/theme/colors';
  */
 const X_TRANSFORM = DEVICE_LARGE ? 250 : 195;
 
+type Props = {
+  borderRadius?: boolean;
+  handleSort?: () => void;
+  placeholder: string;
+  setSearchValue: ActionCreatorWithOptionalPayload<string>;
+  setSearchOpen: ActionCreatorWithOptionalPayload<boolean>;
+  searchOpenSelector: (state: State) => boolean;
+  sortable: boolean;
+};
+
 const AnimatedTopSearchBar = ({
-  sortable,
+  borderRadius = true,
   handleSort = () => null,
+  placeholder,
   setSearchValue,
   setSearchOpen,
   searchOpenSelector,
-}) => {
+  sortable,
+}: Props) => {
   const dispatch = useDispatch();
   const textInput = useRef<TextInput>(null);
   const searchOpen = useSelector(searchOpenSelector);
-  const { t } = useTranslation();
 
   useEffect(() => {
     // reset search Param
@@ -65,6 +75,7 @@ const AnimatedTopSearchBar = ({
     <Animated.View
       style={[
         styles.container,
+        borderRadius ? styles.borderRadius : styles.tinyBorderRadius,
         {
           transform: [
             {
@@ -94,7 +105,7 @@ const AnimatedTopSearchBar = ({
           styles.searchField,
           DEVICE_IOS && { height: DEVICE_LARGE ? 33 : 26 },
         ]}
-        placeholder={t('common.placeholder.searchConnections')}
+        placeholder={placeholder}
         autoCapitalize="words"
         autoCorrect={false}
         textContentType="none"
@@ -123,11 +134,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: X_TRANSFORM + 50,
     height: DEVICE_LARGE ? 40 : 36,
-    borderTopLeftRadius: 20,
-    borderBottomLeftRadius: 20,
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: WHITE,
+  },
+  borderRadius: {
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 20,
+  },
+  tinyBorderRadius: {
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
   },
   searchIcon: {
     marginLeft: 15,

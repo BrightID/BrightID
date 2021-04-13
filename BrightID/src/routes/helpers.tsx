@@ -57,7 +57,8 @@ export const NavHome = () => (
 
 export const AnimatedHeaderTitle = ({ text }) => {
   const searchOpen = useSelector(
-    (state: State) => state.connections.searchOpen || state.groups.searchOpen,
+    (state: State) =>
+      state.connections.searchOpen || state.groups.groupsSearchOpen,
   );
   const fadeAnim = useRef(new Animated.Value(1)).current;
   useEffect(() => {

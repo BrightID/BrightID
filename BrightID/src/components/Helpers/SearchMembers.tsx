@@ -1,7 +1,7 @@
 import React from 'react';
-import { setConnectionsSearch, setConnectionsSearchOpen } from '@/actions';
-import { useNavigation } from '@react-navigation/native';
-import AnimatedMidSearchBar from './AnimatedMidSearchBar';
+import { setMembersSearch, setMembersSearchOpen } from '@/actions';
+import { useTranslation } from 'react-i18next';
+import AnimatedSearchBar from './AnimatedSearchBar';
 
 /**
  * Search Bar in the Connections Screen
@@ -9,19 +9,16 @@ import AnimatedMidSearchBar from './AnimatedMidSearchBar';
  * TODO: add search filter in redux actions
  */
 const SearchMembers = () => {
-  const navigation = useNavigation();
-
-  const handleSort = () => {
-    navigation.navigate('SortConnections');
-  };
+  const { t } = useTranslation();
 
   return (
-    <AnimatedMidSearchBar
-      sortable={true}
-      handleSort={handleSort}
-      setSearchValue={setConnectionsSearch}
-      setSearchOpen={setConnectionsSearchOpen}
-      searchOpenSelector={(state: State) => state.connections.searchOpen}
+    <AnimatedSearchBar
+      borderRadius={false}
+      sortable={false}
+      setSearchValue={setMembersSearch}
+      setSearchOpen={setMembersSearchOpen}
+      searchOpenSelector={(state: State) => state.groups.membersSearchOpen}
+      placeholder={t('common.placeholder.searchMembers')}
     />
   );
 };

@@ -1,7 +1,8 @@
 import React from 'react';
 import { setConnectionsSearch, setConnectionsSearchOpen } from '@/actions';
 import { useNavigation } from '@react-navigation/native';
-import AnimatedTopSearchBar from './AnimatedTopSearchBar';
+import { useTranslation } from 'react-i18next';
+import AnimatedSearchBar from './AnimatedSearchBar';
 
 /**
  * Search Bar in the Connections Screen
@@ -15,13 +16,16 @@ const SearchConnections = () => {
     navigation.navigate('SortConnections');
   };
 
+  const { t } = useTranslation();
+
   return (
-    <AnimatedTopSearchBar
+    <AnimatedSearchBar
       sortable={true}
       handleSort={handleSort}
       setSearchValue={setConnectionsSearch}
       setSearchOpen={setConnectionsSearchOpen}
       searchOpenSelector={(state: State) => state.connections.searchOpen}
+      placeholder={t('common.placeholder.searchConnections')}
     />
   );
 };
