@@ -11,11 +11,12 @@ export const NodeApiContext = React.createContext(null);
 const ProdCandidates = [
   'http://node.brightid.org',
   'http://brightid.idealmoney.io',
-  'http://brightid.onehive.org',
-  'http://085e67e8aeaf31f0.dyndns.dappnode.io',
-  'http://node.topupgifter.com',
-  'http://node.lumos.services',
-  'http://brightid.daosquare.io',
+  'https://brightid.085e67e8aeaf31f0.dyndns.dappnode.io',
+  // Following nodes exist, but currently fail the NodeChooser tests
+  //  'http://brightid.onehive.org',
+  //  'http://node.topupgifter.com',
+  //  'http://node.lumos.services',
+  //  'http://brightid.daosquare.io',
 ];
 const TestCandidates = ['http://test.brightid.org'];
 
