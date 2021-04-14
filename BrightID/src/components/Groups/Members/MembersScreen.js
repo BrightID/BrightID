@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useLayoutEffect, useMemo } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useContext,
+} from 'react';
 import {
   StyleSheet,
   View,
@@ -10,7 +16,6 @@ import { useDispatch, useSelector } from '@/store';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { innerJoin } from 'ramda';
 import { useTranslation } from 'react-i18next';
-import api from '@/api/brightId';
 import {
   leaveGroup,
   dismissFromGroup,
@@ -23,12 +28,15 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { groupByIdSelector } from '@/utils/groups';
+import { addOperation } from '@/reducer/operationsSlice';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import MemberCard from './MemberCard';
 
 function MembersScreen(props) {
   const { navigation, route } = props;
   const groupID = route.params.group.id;
   const dispatch = useDispatch();
+  const api = useContext(NodeApiContext);
   const connections = useSelector(selectAllConnections);
   const user = useSelector((state) => state.user);
   const { group, admins, members } = useSelector((state) =>
@@ -58,7 +66,8 @@ function MembersScreen(props) {
             text: t('common.alert.ok'),
             onPress: async () => {
               try {
-                await api.leaveGroup(groupID);
+                const op = await api.leaveGroup(groupID);
+                dispatch(addOperation(op));
                 await dispatch(leaveGroup(group));
                 navigation.goBack();
               } catch (err) {
@@ -146,6 +155,7 @@ function MembersScreen(props) {
     ACTION_LEAVE,
     ACTION_CANCEL,
     ACTION_INVITE,
+    api,
   ]);
 
   // set available actions for group
@@ -200,7 +210,8 @@ function MembersScreen(props) {
         text: t('common.alert.ok'),
         onPress: async () => {
           try {
-            await api.dismiss(user.id, groupID);
+            const op = await api.dismiss(user.id, groupID);
+            dispatch(addOperation(op));
             dispatch(dismissFromGroup({ member: user.id, group }));
           } catch (err) {
             Alert.alert(
@@ -232,7 +243,8 @@ function MembersScreen(props) {
         text: t('common.alert.ok'),
         onPress: async () => {
           try {
-            await api.addAdmin(user.id, groupID);
+            const op = await api.addAdmin(user.id, groupID);
+            dispatch(addOperation(op));
             dispatch(addAdmin({ member: user.id, group }));
           } catch (err) {
             Alert.alert(

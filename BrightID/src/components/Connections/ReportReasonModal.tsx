@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import i18next from 'i18next';
 import { BlurView } from '@react-native-community/blur';
@@ -11,6 +11,7 @@ import { ORANGE, WHITE, BLUE, BLACK, DARKER_GREY, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { StackScreenProps } from '@react-navigation/stack';
 import { selectConnectionById } from '@/reducer/connectionsSlice';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import { reportConnection } from './models/reportConnection';
 
 const reasonStrings = {
@@ -30,6 +31,7 @@ type props = StackScreenProps<ModalStackParamList, 'ReportReason'>;
 const ReportReasonModal = ({ route, navigation }: props) => {
   const { connectionId, successCallback } = route.params;
   const { t } = useTranslation();
+  const api = useContext(NodeApiContext);
   const connection: Connection = useSelector((state: State) =>
     selectConnectionById(state, connectionId),
   );
@@ -49,7 +51,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
       );
       // close modal
       navigation.goBack();
-      dispatch(reportConnection({ id: connectionId, reason }));
+      dispatch(reportConnection({ id: connectionId, reason, api }));
       if (successCallback) {
         successCallback();
       }

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { StyleSheet, View, StatusBar, FlatList } from 'react-native';
 import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +10,7 @@ import { connectionsSelector } from '@/utils/connectionsSelector';
 import { ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import ConnectionCard from './ConnectionCard';
 
 /**
@@ -35,6 +36,7 @@ const renderItem = ({ item, index }: { item: Connection; index: number }) => {
 export const ConnectionsScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const api = useContext(NodeApiContext);
 
   const connections = useSelector(connectionsSelector);
   const { t } = useTranslation();
@@ -46,7 +48,7 @@ export const ConnectionsScreen = () => {
   const ConnectionList = useMemo(() => {
     const onRefresh = async () => {
       try {
-        await dispatch(fetchUserInfo());
+        await dispatch(fetchUserInfo(api));
       } catch (err) {
         console.log(err.message);
       }

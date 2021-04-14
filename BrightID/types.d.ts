@@ -1,5 +1,3 @@
-// @flow
-
 import { EntityState as _EntityState } from '@reduxjs/toolkit';
 import { RouteProp as _RouteProp } from '@react-navigation/native';
 import {
@@ -40,6 +38,7 @@ declare global {
     operations: OperationsState;
     pendingConnections: PendingConnectionsState;
     recoveryData: RecoveryData;
+    settings: SettingsState;
     socialMedia: SocialMediaState;
     tasks: TasksState;
     user: UserState;

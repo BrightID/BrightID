@@ -41,7 +41,9 @@ const AppCard = (props: AppInfo) => {
   console.log('linkedContext', linkedContext);
   const { t } = useTranslation();
 
-  const verified = verifications.some((v) => v.app && id === v.name);
+  const verified = verifications.some(
+    (v: AppVerification) => v.app && id === v.name,
+  );
   const isLinked = linkedContext && linkedContext.state === 'applied';
   const notSponsored = unusedSponsorships < 1 || !unusedSponsorships;
 

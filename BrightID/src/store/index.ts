@@ -66,6 +66,12 @@ const socialMediaPersistConfig = {
   key: 'socialMedia',
 };
 
+const settingsPersistConfig = {
+  ...fsPersistConfig,
+  key: 'settings',
+  blacklist: ['baseUrl'],
+};
+
 const keypairPersistConfig = {
   key: 'keypair',
   storage: KeychainStorage,
@@ -90,6 +96,7 @@ const rootReducer = combineReducers({
   socialMedia: persistReducer(socialMediaPersistConfig, reducers.socialMedia),
   tasks: persistReducer(tasksPersistConfig, reducers.tasks),
   user: persistReducer(userPersistConfig, reducers.user),
+  settings: persistReducer(settingsPersistConfig, reducers.settings),
 });
 
 export const store = configureStore({

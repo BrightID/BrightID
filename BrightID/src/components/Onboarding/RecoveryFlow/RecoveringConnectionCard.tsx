@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Alert,
   Image,
@@ -17,6 +17,7 @@ import { fontSize } from '@/theme/fonts';
 import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
 import ChannelAPI from '@/api/channelService';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import { uploadSig, uploadMutualInfo } from './thunks/channelUploadThunks';
 import { resetRecoveryData } from './recoveryDataSlice';
 
@@ -34,6 +35,7 @@ const RecoveringConnectionCard = (props) => {
     setUploadingData,
   } = props;
 
+  const nodeApi = useContext(NodeApiContext);
   const [imgErr, setImgErr] = useState(false);
   const aesKey = useSelector((state) => state.recoveryData.aesKey);
   const channel = useSelector((state) => state.recoveryData.channel);
@@ -73,6 +75,7 @@ const RecoveringConnectionCard = (props) => {
           conn: props,
           aesKey,
           channelApi,
+          nodeApi,
         }),
       );
 

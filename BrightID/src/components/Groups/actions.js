@@ -5,10 +5,10 @@ import emitter from '@/emitter';
 import { saveImage } from '@/utils/filesystem';
 import { encryptAesKey } from '@/utils/invites';
 import { setNewGroupCoFounders, createGroup } from '@/actions/index';
-import api from '@/api/brightId';
 import backupApi from '@/api/backupService';
 import { hash, randomKey } from '@/utils/encoding';
 import { selectConnectionById } from '@/reducer/connectionsSlice';
+import { addOperation } from '@/reducer/operationsSlice';
 import {
   backupPhoto,
   backupUser,
@@ -25,7 +25,7 @@ export const toggleNewGroupCoFounder = (id) => (dispatch, getState) => {
   dispatch(setNewGroupCoFounders(coFounders));
 };
 
-export const createNewGroup = (photo, name, type) => async (
+export const createNewGroup = (photo, name, type, api) => async (
   dispatch,
   getState,
 ) => {
@@ -93,7 +93,7 @@ export const createNewGroup = (photo, name, type) => async (
 
     const inviteData3 = await encryptAesKey(aesKey, founder3.signingKey);
 
-    await api.createGroup(
+    const op = await api.createGroup(
       groupId,
       founder2.id,
       inviteData2,
@@ -102,6 +102,7 @@ export const createNewGroup = (photo, name, type) => async (
       url,
       type,
     );
+    dispatch(addOperation(op));
 
     dispatch(createGroup(newGroup));
 
