@@ -13,7 +13,7 @@ import {
   RECOVERY_COOLDOWN_DURATION,
 } from '@/utils/constants';
 import { calculateCooldownPeriod } from '@/utils/recovery';
-import { useSelector } from 'react-redux';
+import { useSelector } from '@/store';
 import { recoveryConnectionsSelector } from '@/utils/connectionsSelector';
 import { ConnectionStats } from './ConnectionStats';
 import { ProfileCard } from './ProfileCard';
@@ -43,10 +43,17 @@ export const ReconnectView = ({
   );
   const { t } = useTranslation();
 
+  const id = useSelector((state) => state.user.id);
+
+  const userReported = pendingConnection.reports.find(
+    (report) => report.id === id,
+  );
+
   const reported =
+    !userReported &&
     pendingConnection.reports.length /
       (pendingConnection.connectionsNum || 1) >=
-    REPORTED_PERCENTAGE;
+      REPORTED_PERCENTAGE;
 
   const brightIdVerified = pendingConnection.verifications
     .map((v) => v.name)
@@ -134,6 +141,7 @@ export const ReconnectView = ({
               verified={brightIdVerified}
               photoTouchHandler={photoTouchHandler}
               reported={reported}
+              userReported={userReported}
             />
           </View>
         </View>
@@ -206,6 +214,7 @@ export const ReconnectView = ({
               verified={brightIdVerified}
               photoTouchHandler={photoTouchHandler}
               reported={reported}
+              userReported={userReported}
             />
           </View>
           <View testID="newProfileView" style={styles.profile}>
@@ -222,6 +231,7 @@ export const ReconnectView = ({
               verified={brightIdVerified}
               photoTouchHandler={photoTouchHandler}
               reported={reported}
+              userReported={userReported}
             />
           </View>
         </View>
