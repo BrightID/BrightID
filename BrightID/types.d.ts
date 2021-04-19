@@ -156,7 +156,7 @@ declare global {
     state: PendingConnectionState;
     verifications: { name: string }[];
     connectionsNum: number;
-    reports: string[];
+    reports: Array<{ id: string; reportReason: string }>;
     connectedAt: number;
     groupsNum: number;
     mutualConnections: string[];
