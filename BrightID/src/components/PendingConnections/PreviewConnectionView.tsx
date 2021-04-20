@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { ORANGE, BLACK, RED } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
+import { useSelector } from '@/store';
 import { pendingConnection_states } from './pendingConnectionSlice';
 import { RatingView } from './RatingView';
 import { ConnectionStats } from './ConnectionStats';
@@ -27,11 +28,17 @@ type PreviewConnectionProps = {
 export const PreviewConnectionView = (props: PreviewConnectionProps) => {
   const { t } = useTranslation();
   const { pendingConnection, setLevelHandler, photoTouchHandler } = props;
+  const id = useSelector((state) => state.user.id);
+
+  const userReported = pendingConnection.reports.find(
+    (report) => report.id === id,
+  );
 
   const reported =
+    !userReported &&
     pendingConnection.reports.length /
       (pendingConnection.connectionsNum || 1) >=
-    REPORTED_PERCENTAGE;
+      REPORTED_PERCENTAGE;
 
   const brightIdVerified = pendingConnection.verifications
     .map((v) => v.name)
@@ -101,8 +108,15 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
         </TouchableWithoutFeedback>
         <View style={styles.connectNameContainer}>
           <Text style={styles.connectName}>{pendingConnection.name}</Text>
+          {userReported && (
+            <Text style={styles.reported}>
+              {t('common.tag.reportedByUser', {
+                reportReason: userReported.reportReason,
+              })}
+            </Text>
+          )}
           {reported && (
-            <Text style={styles.reported}> {t('common.tag.reported')}</Text>
+            <Text style={styles.reported}>{t('common.tag.reported')}</Text>
           )}
           {brightIdVerified && (
             <View style={styles.verificationSticker}>
@@ -138,7 +152,6 @@ const styles = StyleSheet.create({
   connectNameContainer: {
     marginTop: DEVICE_LARGE ? 12 : 10,
     alignItems: 'center',
-    flexDirection: 'row',
   },
   connectName: {
     fontFamily: 'Poppins-Bold',
@@ -148,6 +161,7 @@ const styles = StyleSheet.create({
     color: BLACK,
   },
   reported: {
+    fontFamily: 'Poppins-Bold',
     fontSize: fontSize[18],
     color: RED,
   },
