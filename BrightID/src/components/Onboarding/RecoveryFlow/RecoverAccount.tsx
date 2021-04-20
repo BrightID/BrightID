@@ -71,6 +71,7 @@ export const RecoverAccount = ({
             defaultValue: 'Part 1: Recover account',
           })}
         </Text>
+
         <Text style={styles.headerInfoText}>
           {t('recovery.info', {
             defaultValue:
@@ -79,18 +80,18 @@ export const RecoverAccount = ({
         </Text>
       </View>
       <View style={styles.statusContainer}>
-        <View style={styles.iconContainer}>
+        <View>
           {iconData ? (
             <IonIcons
               style={{ alignSelf: 'center' }}
-              size={DEVICE_LARGE ? 64 : 56}
+              size={DEVICE_LARGE ? 64 : 44}
               name={iconData.name}
               color={iconData.color}
             />
           ) : (
             <Spinner
               isVisible={true}
-              size={DEVICE_LARGE ? 64 : 56}
+              size={DEVICE_LARGE ? 64 : 44}
               type="Wave"
               color={ORANGE}
             />
@@ -116,8 +117,9 @@ export const RecoverAccount = ({
 
 const styles = StyleSheet.create({
   container: {
+    justifyContent: 'center',
     alignItems: 'center',
-    maxWidth: '90%',
+    width: '100%',
   },
   headerTextContainer: {
     justifyContent: 'center',
@@ -130,18 +132,16 @@ const styles = StyleSheet.create({
   },
   headerInfoText: {
     fontFamily: 'Poppins-Regular',
-    textAlign: 'left',
+    textAlign: 'center',
     color: DARKER_GREY,
+    fontSize: fontSize[12],
+    maxWidth: '90%',
   },
   statusContainer: {
     flexDirection: 'row',
     marginTop: 10,
     marginLeft: 20,
     alignItems: 'center',
-  },
-  iconContainer: {
-    width: 70,
-    height: 70,
   },
   infoTextContainer: {
     flex: 1,

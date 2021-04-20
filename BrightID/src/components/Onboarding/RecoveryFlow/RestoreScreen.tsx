@@ -187,13 +187,13 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   divider: {
-    paddingTop: 40,
-    marginBottom: 30,
+    marginTop: DEVICE_LARGE ? 40 : 20,
+    marginBottom: DEVICE_LARGE ? 30 : 20,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderColor: BLACK,
   },
   recoverAccountContainer: {
-    marginTop: 20,
+    marginTop: DEVICE_LARGE ? 25 : 20,
     minHeight: '25%',
   },
   restoreBackupContainer: {
