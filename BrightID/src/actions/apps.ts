@@ -1,7 +1,6 @@
-import api from '@/api/brightId';
 import { setApps } from '@/reducer/appsSlice';
 
-export const fetchApps = () => async (dispatch: dispatch) => {
+export const fetchApps = (api) => async (dispatch: dispatch, getState) => {
   try {
     const apps = await api.getApps();
     dispatch(setApps(apps));

@@ -6,9 +6,10 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { BLACK } from '@/theme/colors';
+import { BLACK, RED } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { photoDirectory } from '@/utils/filesystem';
 
@@ -23,6 +24,7 @@ type ProfileCardProps = {
   verified: boolean;
   photoSize: 'small' | 'large';
   reported?: boolean;
+  userReported?: { id: string; reportReason: string };
 };
 
 export const ProfileCard = (props: ProfileCardProps) => {
@@ -33,8 +35,11 @@ export const ProfileCard = (props: ProfileCardProps) => {
     photo,
     photoType,
     photoSize,
+    reported,
+    userReported,
   } = props;
 
+  const { t } = useTranslation();
   // build photo uri depending on type
   const photoUri =
     photoType === 'base64' ? photo : `file://${photoDirectory()}/${photo}`;
@@ -57,6 +62,16 @@ export const ProfileCard = (props: ProfileCardProps) => {
       </TouchableWithoutFeedback>
       <View style={styles.connectNameContainer}>
         <Text style={styles.connectName}>{name}</Text>
+        {userReported && (
+          <Text style={styles.reported}>
+            {t('common.tag.reportedByUser', {
+              reportReason: userReported.reportReason,
+            })}
+          </Text>
+        )}
+        {reported && (
+          <Text style={styles.reported}>{t('common.tag.reported')}</Text>
+        )}
         {verified && (
           <View style={styles.verificationSticker}>
             <VerifiedBadge width={16} height={16} />
@@ -71,12 +86,18 @@ const styles = StyleSheet.create({
   connectNameContainer: {
     marginTop: 15,
     alignItems: 'center',
-    flexDirection: 'row',
   },
   connectName: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[17],
+    fontFamily: 'Poppins-Bold',
+    fontSize: fontSize[18],
+    letterSpacing: 0,
+    textAlign: 'left',
     color: BLACK,
+  },
+  reported: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: fontSize[18],
+    color: RED,
   },
   photo_small: {
     borderRadius: 50,

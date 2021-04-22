@@ -2,8 +2,7 @@ import {
   channel_types,
   selectChannelById,
 } from '@/components/PendingConnections/channelSlice';
-import api from '@/api/brightId';
-import { addConnection } from '@/actions';
+import { addConnection, addOperation } from '@/actions';
 import { saveImage } from '@/utils/filesystem';
 import {
   backupPhoto,
@@ -16,10 +15,12 @@ import {
   updatePendingConnection,
 } from '@/components/PendingConnections/pendingConnectionSlice';
 import { leaveChannel } from '@/components/PendingConnections/actions/channelThunks';
+import { NodeApi } from '@/api/brightId';
 
 export const confirmPendingConnectionThunk = (
   id: string,
   level: ConnectionLevel,
+  api: NodeApi,
 ) => async (dispatch: dispatch, getState: getState) => {
   const connection: PendingConnection = selectPendingConnectionById(
     getState(),
@@ -52,18 +53,19 @@ export const confirmPendingConnectionThunk = (
   const connectionTimestamp = Date.now();
   let reportReason;
 
-  await api.addConnection(
+  const op = await api.addConnection(
     brightId,
     connection.brightId,
     level,
     connectionTimestamp,
     reportReason,
   );
+  dispatch(addOperation(op));
 
   if (__DEV__) {
     // if peer is a fake connection also submit opposite addConnection operation
     if (connection.secretKey) {
-      await api.addConnection(
+      const op = await api.addConnection(
         connection.brightId,
         brightId,
         level,
@@ -74,6 +76,7 @@ export const confirmPendingConnectionThunk = (
           secretKey: connection.secretKey,
         },
       );
+      dispatch(addOperation(op));
     }
   }
 

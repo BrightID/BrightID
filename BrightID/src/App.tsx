@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-import { InteractionManager, Linking } from 'react-native';
+import { Linking } from 'react-native';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
-import { pollOperations } from '@/utils/operations';
 import AppRoutes from './routes';
 import { store, persistor } from './store';
 import { navigationRef } from './NavigationService';
@@ -20,7 +19,6 @@ import { NotificationBanner } from './components/Helpers/NotificationBanner';
 // NOTE: BOOTSTRAP happens inside of LoadingScreen
 export const App = () => {
   // setup deep linking
-
   const linking = {
     prefixes: ['brightid://', 'https://app.brightid.org'],
     config: {
@@ -61,19 +59,6 @@ export const App = () => {
       };
     },
   };
-
-  useEffect(() => {
-    // subscribe to operations
-    const timerId = setInterval(() => {
-      InteractionManager.runAfterInteractions(() => {
-        pollOperations();
-      });
-    }, 5000);
-
-    return () => {
-      clearInterval(timerId);
-    };
-  }, []);
 
   console.log('RENDERING ENTIRE APP');
 

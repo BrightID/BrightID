@@ -18,8 +18,8 @@ import {
   rejectInvite,
   joinGroup,
   selectConnectionById,
+  addOperation,
 } from '@/actions';
-import api from '@/api/brightId';
 import GroupPhoto from '@/components/Groups/GroupPhoto';
 import {
   backupUser,
@@ -29,6 +29,8 @@ import Check from '@/components/Icons/Check';
 import xGrey from '@/static/x_grey.svg';
 import { useNavigation } from '@react-navigation/native';
 import BrightidError from '@/api/brightidError';
+import { useContext } from 'react';
+import { NodeApiContext } from '@/components/NodeApiGate';
 
 const InviteCard = (props) => {
   const { invite } = props;
@@ -39,6 +41,7 @@ const InviteCard = (props) => {
   );
   const navigation = useNavigation();
   const { backupCompleted } = useSelector((state: State) => state.user);
+  const api = useContext(NodeApiContext);
 
   const handleRejectInvite = () => {
     Alert.alert(
@@ -56,7 +59,8 @@ const InviteCard = (props) => {
             try {
               await dispatch(rejectInvite(invite.id));
               if (invite.isNew) {
-                await api.deleteGroup(invite.id);
+                const op = await api.deleteGroup(invite.id);
+                dispatch(addOperation(op));
               }
             } catch (err) {
               Alert.alert(
@@ -73,7 +77,8 @@ const InviteCard = (props) => {
 
   const handleAcceptInvite = async () => {
     try {
-      await api.joinGroup(invite.id);
+      const op = await api.joinGroup(invite.id);
+      dispatch(addOperation(op));
       dispatch(acceptInvite(invite.id));
       await dispatch(joinGroup(invite));
       Alert.alert(

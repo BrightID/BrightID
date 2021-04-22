@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useDispatch, useSelector } from '@/store';
 import { InteractionManager, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { WHITE } from '@/theme/colors';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import { confirmPendingConnectionThunk } from './actions/pendingConnectionThunks';
 import {
   pendingConnection_states,
@@ -20,7 +21,7 @@ type PreviewConnectionProps = {
 export const PreviewConnectionController = (props: PreviewConnectionProps) => {
   const { pendingConnectionId, moveToNext } = props;
   const dispatch = useDispatch();
-
+  const api = useContext(NodeApiContext);
   const pendingConnection = useSelector((state: State) =>
     selectPendingConnectionById(state, pendingConnectionId),
   ) as PendingConnection;
@@ -44,7 +45,7 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
     moveToNext();
     // wait until after finishes navigation before dispatching confirm action
     InteractionManager.runAfterInteractions(() => {
-      dispatch(confirmPendingConnectionThunk(pendingConnection.id, level));
+      dispatch(confirmPendingConnectionThunk(pendingConnection.id, level, api));
     });
   };
 

@@ -1,5 +1,6 @@
 import React, {
   useCallback,
+  useContext,
   useEffect,
   useLayoutEffect,
   useState,
@@ -12,11 +13,11 @@ import {
   RouteProp,
 } from '@react-navigation/native';
 import ConnectionTestButton from '@/utils/connectionTestButton';
-import api from '@/api/brightId';
 import {
   selectConnectionById,
   selectAllConnections,
 } from '@/reducer/connectionsSlice';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import ConnectionScreen from './ConnectionScreen';
 
 type ConnectionRoute = RouteProp<
@@ -28,6 +29,7 @@ function ConnectionScreenController() {
   const navigation = useNavigation();
   const route = useRoute<ConnectionRoute>();
   const { connectionId } = route.params;
+  const api = useContext(NodeApiContext);
   const connection = useSelector((state: State) =>
     selectConnectionById(state, connectionId),
   );
@@ -64,7 +66,7 @@ function ConnectionScreenController() {
       if (connectionId !== undefined) {
         fetchData(connectionId);
       }
-    }, [myConnections, myGroups, connectionId]),
+    }, [connectionId, api, myConnections, myGroups]),
   );
 
   useEffect(() => {

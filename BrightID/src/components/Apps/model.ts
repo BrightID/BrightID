@@ -1,8 +1,8 @@
 import { Alert } from 'react-native';
-import api from '@/api/brightId';
-import { addLinkedContext } from '@/actions';
+import { addLinkedContext, addOperation } from '@/actions';
 import store from '@/store';
 import i18next from 'i18next';
+import { NodeApi } from '@/api/brightId';
 
 export const handleAppContext = async (params: Params) => {
   // if 'params' is defined, the user came through a deep link
@@ -30,10 +30,13 @@ const linkContextId = async (
   context: string,
   contextId: string,
 ) => {
-  const oldBaseUrl = api.baseUrl;
+  // Create temporary NodeAPI object, since only the node at the specified baseUrl knows about this context
+  const { id } = store.getState().user;
+  const { secretKey } = store.getState().keypair;
+  const api = new NodeApi({ url: baseUrl, id, secretKey });
   try {
-    api.baseUrl = baseUrl;
-    await api.linkContextId(context, contextId);
+    const op = await api.linkContextId(context, contextId);
+    store.dispatch(addOperation(op));
     store.dispatch(
       addLinkedContext({
         context,
@@ -50,7 +53,5 @@ const linkContextId = async (
         onPress: () => null,
       },
     ]);
-  } finally {
-    api.baseUrl = oldBaseUrl;
   }
 };

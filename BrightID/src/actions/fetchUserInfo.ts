@@ -1,8 +1,8 @@
 import { InteractionManager } from 'react-native';
 import _ from 'lodash';
-import api from '@/api/brightId';
 import { updateInvites } from '@/utils/invites';
 import { GROUPS_TYPE } from '@/utils/constants';
+import { NodeApi } from '@/api/brightId';
 import {
   setGroups,
   setInvites,
@@ -15,13 +15,17 @@ import {
   selectOperationsTotal,
 } from './index';
 
-const fetchUserInfo = () => (dispatch: dispatch, getState: getState) => {
+const fetchUserInfo = (api: NodeApi) => (
+  dispatch: dispatch,
+  getState: getState,
+) => {
   return new Promise((resolve) => {
     InteractionManager.runAfterInteractions(async () => {
       const {
         user: { id },
         groups: { invites: oldInvites },
       } = getState();
+      // const api = selectNodeApi(getState());
 
       const opTotal = selectOperationsTotal(getState());
       console.log('opTotal', opTotal);

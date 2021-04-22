@@ -14,14 +14,8 @@ import { BLACK, DARKER_GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
-import {
-  channel_types,
-  closeChannel,
-} from '@/components/PendingConnections/channelSlice';
-import api from '@/api/brightId';
 import { setupRecovery } from '@/components/Onboarding/RecoveryFlow/thunks/recoveryThunks';
 import { buildRecoveryChannelQrUrl } from '@/utils/recovery';
-import { buildChannelQrUrl } from '@/utils/channels';
 import {
   clearChannel,
   createChannel,

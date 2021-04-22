@@ -154,7 +154,8 @@
     },
     "tag": {
       "connectionDate": "Connected {{date}}",
-      "reported": "(reported)"
+      "reported": "(reported)",
+      "reportedByUser": "(reported by you as {{reportReason}})"
     },
     "text": {
       "uploadingData": "Uploading encrypted data to backup server…"

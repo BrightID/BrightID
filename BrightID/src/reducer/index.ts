@@ -11,6 +11,7 @@ import tasks from '../components/Tasks/TasksSlice';
 import socialMedia from '../components/EditProfile/socialMediaSlice';
 import recoveryData from '../components/Onboarding/RecoveryFlow/recoveryDataSlice';
 import walkthrough from './walkthroughSlice';
+import settings from './settingsSlice';
 
 export default {
   apps,
@@ -26,4 +27,5 @@ export default {
   tasks,
   socialMedia,
   walkthrough,
+  settings,
 };

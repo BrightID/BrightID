@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
   Alert,
   StyleSheet,
@@ -22,6 +22,7 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { fontSize } from '@/theme/fonts';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import AppCard from './AppCard';
 import { handleAppContext } from './model';
 
@@ -29,6 +30,7 @@ export const AppsScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute<AppsRoute>();
+  const api = useContext(NodeApiContext);
 
   const apps = useSelector((state: State) => state.apps.apps);
   const isSponsored = useSelector((state: State) => state.user.isSponsored);
@@ -40,7 +42,7 @@ export const AppsScreen = () => {
 
   const refreshApps = useCallback(() => {
     setRefreshing(true);
-    dispatch(fetchApps())
+    dispatch(fetchApps(api))
       .then(() => {
         setRefreshing(false);
       })
@@ -48,7 +50,7 @@ export const AppsScreen = () => {
         console.log(err.message);
         setRefreshing(false);
       });
-  }, [dispatch]);
+  }, [api, dispatch]);
 
   useFocusEffect(refreshApps);
 
