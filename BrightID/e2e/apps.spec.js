@@ -17,7 +17,7 @@ function getRandomAddres() {
   return a;
 }
 
-const apps2 = [
+const apps = [
   {
     id: '1hive',
     name: '1Hive Honey Faucet',
