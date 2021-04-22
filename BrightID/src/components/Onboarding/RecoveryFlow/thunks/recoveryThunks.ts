@@ -1,15 +1,16 @@
 import nacl from 'tweetnacl';
 import { createImageDirectory, saveImage } from '@/utils/filesystem';
 import { randomKey } from '@/utils/encoding';
-import api from '@/api/brightId';
 import {
   setUserData,
   setConnections,
   setGroups,
   setKeypair,
   updateConnections,
+  addOperation,
 } from '@/actions';
 import { OPERATION_APPLIED_BEFORE } from '@/api/brightidError';
+import { NodeApi } from '@/api/brightId';
 import { fetchBackupData } from './backupThunks';
 import {
   init,
@@ -42,7 +43,7 @@ export const setupRecovery = () => async (
   }
 };
 
-export const setSigningKey = () => async (
+export const setSigningKey = (api: NodeApi) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
@@ -50,7 +51,7 @@ export const setSigningKey = () => async (
   const sigs = Object.values(recoveryData.sigs);
   console.log('setting signing key');
   try {
-    await api.setSigningKey({
+    const op = await api.setSigningKey({
       id: recoveryData.id,
       signingKey: recoveryData.publicKey,
       timestamp: recoveryData.timestamp,
@@ -59,6 +60,7 @@ export const setSigningKey = () => async (
       sig1: sigs[0].sig,
       sig2: sigs[1].sig,
     });
+    dispatch(addOperation(op));
   } catch (err) {
     if (err.errorNum === OPERATION_APPLIED_BEFORE) {
       console.log(
@@ -99,17 +101,17 @@ export const restoreUserData = async (id: string, pass: string) => {
   return { userData, connections, groups };
 };
 
-export const recoverAccount = () => async (
+export const recoverAccount = (api: NodeApi) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
   // set new signing key on the backend
-  await dispatch(setSigningKey());
+  await dispatch(setSigningKey(api));
   const { publicKey, secretKey } = getState().recoveryData;
   dispatch(setKeypair({ publicKey, secretKey }));
 };
 
-export const recoverData = (pass: string) => async (
+export const recoverData = (pass: string, api: NodeApi) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {

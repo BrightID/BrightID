@@ -3,8 +3,8 @@ import nacl from 'tweetnacl';
 import stringify from 'fast-json-stable-stringify';
 import { retrieveImage } from '@/utils/filesystem';
 import { encryptData } from '@/utils/cryptoHelper';
-import api from '@/api/brightId';
 import { strToUint8Array, uInt8ArrayToB64, hash } from '@/utils/encoding';
+import { selectAllConnections } from '@/reducer/connectionsSlice';
 import { loadRecoveryData } from './channelDownloadThunks';
 
 export const uploadSig = ({ id, aesKey, channelApi }) => async (
@@ -111,10 +111,12 @@ const uploadGroup = async ({ group, channelApi, aesKey }) => {
   }
 };
 
-export const uploadMutualInfo = ({ conn, aesKey, channelApi }) => async (
-  dispatch,
-  getState,
-) => {
+export const uploadMutualInfo = ({
+  conn,
+  aesKey,
+  channelApi,
+  nodeApi,
+}) => async (dispatch, getState) => {
   try {
     const dataIds = await channelApi.list(hash(aesKey));
     if (!dataIds.includes(`connection_${conn.id}`)) {
@@ -122,14 +124,18 @@ export const uploadMutualInfo = ({ conn, aesKey, channelApi }) => async (
       await uploadConnection({ conn, channelApi, aesKey });
     }
     let {
-      connections: { connections },
       groups: { groups },
       user,
     } = getState();
+    let connections = selectAllConnections(getState());
+
     connections = _.keyBy(connections, 'id');
     groups = _.keyBy(groups, 'id');
 
-    const otherSideConnections = await api.getConnections(conn.id, 'inbound');
+    const otherSideConnections = await nodeApi.getConnections(
+      conn.id,
+      'inbound',
+    );
     const knownLevels = ['just met', 'already known', 'recovery'];
     const mutualConnections = otherSideConnections
       ? otherSideConnections
@@ -147,7 +153,7 @@ export const uploadMutualInfo = ({ conn, aesKey, channelApi }) => async (
       mutualConnections.push(user);
     }
 
-    const otherSideGroups = await api.getUserInfo(conn.id)?.groups;
+    const otherSideGroups = await nodeApi.getUserInfo(conn.id)?.groups;
     const mutualGroups = otherSideGroups
       ? otherSideGroups.filter((g) => groups[g.id]).map((g) => groups[g.id])
       : [];

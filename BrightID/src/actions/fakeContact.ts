@@ -1,15 +1,29 @@
 import nacl from 'tweetnacl';
 import RNFetchBlob from 'rn-fetch-blob';
 import { Alert } from 'react-native';
+import { createSelector } from '@reduxjs/toolkit';
 import { uInt8ArrayToB64, b64ToUrlSafeB64 } from '@/utils/encoding';
 import { encryptData } from '@/utils/cryptoHelper';
 import { createRandomId } from '@/utils/channels';
 import { selectChannelById } from '@/components/PendingConnections/channelSlice';
+import {
+  selectConnectionById,
+  selectAllConnections,
+} from '@/reducer/connectionsSlice';
 import { names } from '@/utils/fakeNames';
 import { connectFakeUsers } from '@/utils/fakeHelper';
-import api from '@/api/brightId';
 import { retrieveImage } from '@/utils/filesystem';
 import { PROFILE_VERSION } from '@/utils/constants';
+import { addOperation } from '@/reducer/operationsSlice';
+import { NodeApi } from '@/api/brightId';
+
+/** SELECTORS */
+
+export const selectOtherFakeConnections = createSelector(
+  selectAllConnections,
+  (_: State, id: string) => id,
+  (connections, id) => connections.filter((c) => c.secretKey && c.id !== id),
+);
 
 export const addFakeConnection = () => async (
   dispatch: dispatch,
@@ -70,14 +84,13 @@ export const addFakeConnection = () => async (
   }
 };
 
-export const connectWithOtherFakeConnections = (id: string) => async (
-  dispatch: dispatch,
-  getState: getState,
-) => {
+export const connectWithOtherFakeConnections = (
+  id: string,
+  api: NodeApi,
+) => async (dispatch: dispatch, getState: getState) => {
   // get fakeUser by ID
-  const fakeUser1 = getState().connections.connections.find(
-    (entry) => entry.id === id,
-  );
+  const fakeUser1 = selectConnectionById(getState(), id);
+
   if (!fakeUser1) {
     console.log(`Failed to get fake connection id ${id}`);
     return;
@@ -88,26 +101,30 @@ export const connectWithOtherFakeConnections = (id: string) => async (
   }
 
   // get all other fakeUser that we should connect to
-  const otherFakeUser = getState().connections.connections.filter(
-    (entry) => entry.secretKey && entry.id !== id,
+  const otherFakeUsers = selectOtherFakeConnections(getState(), id);
+
+  console.log(
+    `Connecting ${id} with ${otherFakeUsers.length} fake connections`,
   );
-  console.log(`Connecting ${id} with ${otherFakeUser.length} fake connections`);
-  for (const otherUser of otherFakeUser) {
-    await connectFakeUsers(
+  for (const otherUser of otherFakeUsers) {
+    const ops = await connectFakeUsers(
       { id: fakeUser1.id, secretKey: fakeUser1.secretKey },
       { id: otherUser.id, secretKey: otherUser.secretKey },
+      api,
     );
+    for (const op of ops) {
+      dispatch(addOperation(op));
+    }
   }
 };
 
-export const joinAllGroups = (id: string) => async (
+export const joinAllGroups = (id: string, api: NodeApi) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
   // get fakeUser by ID
-  const fakeUser = getState().connections.connections.find(
-    (entry) => entry.id === id,
-  );
+  const fakeUser = selectConnectionById(getState(), id);
+
   if (!fakeUser) {
     console.log(`Failed to get fake connection id ${id}`);
     return;
@@ -119,9 +136,13 @@ export const joinAllGroups = (id: string) => async (
 
   // join all groups
   const { groups } = getState().groups;
-  groups.map((group) =>
-    api.joinGroup(group.id, { id, secretKey: fakeUser.secretKey }),
-  );
+  for (const group of groups) {
+    const op = await api.joinGroup(group.id, {
+      id,
+      secretKey: fakeUser.secretKey,
+    });
+    dispatch(addOperation(op));
+  }
 };
 
 export const reconnectFakeConnection = (
@@ -129,9 +150,8 @@ export const reconnectFakeConnection = (
   changeProfile: boolean,
 ) => async (dispatch: dispatch, getState: getState) => {
   // get fakeUser by ID
-  const fakeUser1 = getState().connections.connections.find(
-    (entry) => entry.id === id,
-  );
+  const fakeUser1 = selectConnectionById(getState(), id);
+
   if (!fakeUser1) {
     console.log(`Failed to get fake connection id ${id}`);
     return;

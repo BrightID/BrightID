@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -17,6 +17,8 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import { setActiveNotification } from '@/actions';
+import { linkedContextTotal } from '@/reducer/appsSlice';
+import { verifiedConnectionsSelector } from '@/reducer/connectionsSlice';
 import { retrieveImage } from '@/utils/filesystem';
 import { WHITE, ORANGE, BLACK, BLUE, DARKER_GREY } from '@/theme/colors';
 import fetchUserInfo from '@/actions/fetchUserInfo';
@@ -27,9 +29,10 @@ import Camera from '@/components/Icons/Camera';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { verifiedConnectionsSelector } from '@/utils/connectionsSelector';
 import { setHeaderHeight } from '@/reducer/walkthroughSlice';
 import { uniq } from 'ramda';
+import { clearBaseUrl, selectBaseUrl } from '@/reducer/settingsSlice';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import { version as app_version } from '../../package.json';
 
 /**
@@ -40,14 +43,9 @@ const discordUrl = 'https://discord.gg/nTtuB2M';
 
 /** Selectors */
 
-const linkedContextCountSelector = createSelector(
-  (state: State) => state.apps.linkedContexts,
-  (contexts) => contexts.filter((link) => link.state === 'applied').length,
-);
-
 export const verifiedAppsSelector = createSelector(
   (state: State) => state.user.verifications,
-  (verifications) => verifications.filter((v) => v.app),
+  (verifications) => verifications.filter((v) => (v as AppVerification).app),
 );
 
 export const brightIdVerifiedSelector = createSelector(
@@ -67,11 +65,13 @@ export const HomeScreen = (props) => {
   );
   const groupsCount = useSelector((state: State) => state.groups.groups.length);
   const connectionsCount = useSelector(verifiedConnectionsSelector).length;
-  const linkedContextsCount = useSelector(linkedContextCountSelector);
+  const linkedContextsCount = useSelector(linkedContextTotal);
   const verifiedApps = useSelector(verifiedAppsSelector);
   const brightIdVerified = useSelector(brightIdVerifiedSelector);
+  const baseUrl = useSelector(selectBaseUrl);
   const [profilePhoto, setProfilePhoto] = useState('');
   const [loading, setLoading] = useState(true);
+  const api = useContext(NodeApiContext);
 
   const { t } = useTranslation();
 
@@ -79,7 +79,7 @@ export const HomeScreen = (props) => {
     useCallback(() => {
       retrieveImage(photoFilename).then(setProfilePhoto);
       setLoading(true);
-      dispatch(fetchUserInfo()).then(() => {
+      dispatch(fetchUserInfo(api)).then(() => {
         setLoading(false);
       });
       const timeoutId = setTimeout(() => {
@@ -88,7 +88,7 @@ export const HomeScreen = (props) => {
       return () => {
         clearTimeout(timeoutId);
       };
-    }, [dispatch, photoFilename]),
+    }, [api, dispatch, photoFilename]),
   );
 
   useEffect(() => {
@@ -343,6 +343,18 @@ export const HomeScreen = (props) => {
               </Text>
             </View>
           </TouchableOpacity>
+          {__DEV__ && (
+            <TouchableOpacity
+              style={styles.nodeInfoContainer}
+              onPress={() => {
+                dispatch(clearBaseUrl());
+              }}
+            >
+              <View>
+                <Text style={styles.nodeInfo}>{baseUrl}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
         </View>
         <DeepPasteLink />
         <Text style={styles.versionInfo}>v{app_version}</Text>
@@ -534,6 +546,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: DEVICE_LARGE ? 12 : 7,
     bottom: DEVICE_LARGE ? 12 : 7,
+  },
+  nodeInfoContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  nodeInfo: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: fontSize[12],
+    color: WHITE,
   },
 });
 

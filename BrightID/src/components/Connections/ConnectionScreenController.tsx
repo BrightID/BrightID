@@ -1,5 +1,6 @@
 import React, {
   useCallback,
+  useContext,
   useEffect,
   useLayoutEffect,
   useState,
@@ -12,8 +13,11 @@ import {
   RouteProp,
 } from '@react-navigation/native';
 import ConnectionTestButton from '@/utils/connectionTestButton';
-import api from '@/api/brightId';
-import { connectionByIdSelector } from '@/utils/connectionsSelector';
+import {
+  selectConnectionById,
+  selectAllConnections,
+} from '@/reducer/connectionsSlice';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import ConnectionScreen from './ConnectionScreen';
 
 type ConnectionRoute = RouteProp<
@@ -25,12 +29,11 @@ function ConnectionScreenController() {
   const navigation = useNavigation();
   const route = useRoute<ConnectionRoute>();
   const { connectionId } = route.params;
+  const api = useContext(NodeApiContext);
   const connection = useSelector((state: State) =>
-    connectionByIdSelector(state, connectionId),
+    selectConnectionById(state, connectionId),
   );
-  const myConnections = useSelector(
-    (state: State) => state.connections.connections,
-  );
+  const myConnections = useSelector(selectAllConnections);
   const myGroups = useSelector((state: State) => state.groups.groups);
   const [mutualGroups, setMutualGroups] = useState<Array<Group>>([]);
   const [mutualConnections, setMutualConnections] = useState<Array<Connection>>(
@@ -63,7 +66,7 @@ function ConnectionScreenController() {
       if (connectionId !== undefined) {
         fetchData(connectionId);
       }
-    }, [myConnections, myGroups, connectionId]),
+    }, [connectionId, api, myConnections, myGroups]),
   );
 
   useEffect(() => {

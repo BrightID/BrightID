@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
   Alert,
   StyleSheet,
@@ -14,36 +14,34 @@ import EmptyList from '@/components/Helpers/EmptyList';
 import Spinner from 'react-native-spinkit';
 import { ORANGE, BLUE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { any, find, propEq } from 'ramda';
-import { fetchApps } from '@/actions';
+import { any, propEq } from 'ramda';
+import { fetchApps, selectPendingLinkedContext } from '@/actions';
 import {
   useFocusEffect,
   useNavigation,
   useRoute,
-  RouteProp,
 } from '@react-navigation/native';
 import { fontSize } from '@/theme/fonts';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import AppCard from './AppCard';
-import { handleAppContext, Params } from './model';
-
-type AppsRoute = RouteProp<{ Apps: Params }, 'Apps'>;
+import { handleAppContext } from './model';
 
 export const AppsScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute<AppsRoute>();
+  const api = useContext(NodeApiContext);
 
   const apps = useSelector((state: State) => state.apps.apps);
   const isSponsored = useSelector((state: State) => state.user.isSponsored);
-  const linkedContexts = useSelector(
-    (state: State) => state.apps.linkedContexts,
-  );
+  const pendingLink = useSelector(selectPendingLinkedContext);
+
   const [refreshing, setRefreshing] = useState(false);
   const { t } = useTranslation();
 
   const refreshApps = useCallback(() => {
     setRefreshing(true);
-    dispatch(fetchApps())
+    dispatch(fetchApps(api))
       .then(() => {
         setRefreshing(false);
       })
@@ -51,7 +49,7 @@ export const AppsScreen = () => {
         console.log(err.message);
         setRefreshing(false);
       });
-  }, [dispatch]);
+  }, [api, dispatch]);
 
   useFocusEffect(refreshApps);
 
@@ -81,10 +79,7 @@ export const AppsScreen = () => {
   }, [apps, handleDeepLink, route.params]);
 
   const AppStatus = () => {
-    const pendingLink = find(propEq('state', 'pending'))(
-      linkedContexts,
-    ) as ContextInfo;
-    let msg, waiting;
+    let msg: string, waiting: boolean;
     if (pendingLink) {
       msg = t('apps.text.pendingLink', { context: `${pendingLink.context}` });
       waiting = true;

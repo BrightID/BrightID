@@ -1,4 +1,4 @@
-/* global device:false, element:false, by:false, waitFor:false */
+/* global  element:false, by:false, waitFor:false */
 import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
 import {
   createBrightID,
@@ -84,11 +84,7 @@ describe('Reconnect existing connection', () => {
       // click Submit button
       const submitButton = element(by.id('SubmitReportBtn'));
       await submitButton.tap();
-      // should be at MyCodeScreen
-      await expect(element(by.id('MyCodeScreen'))).toBeVisible();
-      // go to connections screen
-      await navigateHome();
-      await element(by.id('connectionsBtn')).tap();
+
       await expectConnectionsScreen();
       // there should be no connection entry
       await expect(element(by.id('EmptyListView'))).toExist();
@@ -100,10 +96,6 @@ describe('Reconnect existing connection', () => {
       // create a fake connection
       await createFakeConnection();
       await reconnect(0, false);
-    });
-
-    afterEach(async () => {
-      await navigateHome();
     });
 
     it('should recognize the profile is not changed', async () => {

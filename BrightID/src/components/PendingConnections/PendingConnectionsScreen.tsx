@@ -208,9 +208,16 @@ export const PendingConnectionsScreen = () => {
           <>
             <View style={styles.titleContainer}>
               <TouchableOpacity
+                testID="pendingConnectionsGoBack"
                 style={styles.cancelButton}
                 onPress={() => {
-                  navigation.goBack();
+                  if (total > 1) {
+                    // group connections navigate to MyCodeScreen or GroupConnectionScreen
+                    navigation.goBack();
+                  } else {
+                    // single connections navigate home to avoid loop
+                    navigation.navigate('Home');
+                  }
                 }}
               >
                 <BackArrow height={DEVICE_LARGE ? 22 : 20} color={DARK_GREY} />

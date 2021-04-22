@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { TouchableOpacity } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch } from '@/store';
 import { BLUE, WHITE } from '@/theme/colors';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import {
   connectWithOtherFakeConnections,
   joinAllGroups,
@@ -24,16 +25,17 @@ const btnOptions = [
 const ConnectionTestButton = ({ connectionId }: { connectionId: string }) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const dispatch = useDispatch();
+  const api = useContext(NodeApiContext);
 
   const performAction = (index: number) => {
     switch (index) {
       case 0:
         console.log(`Joining all groups`);
-        dispatch(joinAllGroups(connectionId));
+        dispatch(joinAllGroups(connectionId, api));
         break;
       case 1:
         console.log(`Connecting to other fake connections`);
-        dispatch(connectWithOtherFakeConnections(connectionId));
+        dispatch(connectWithOtherFakeConnections(connectionId, api));
         break;
       case 2:
         console.log(`Reconnecting with different profile`);

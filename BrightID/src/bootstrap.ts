@@ -1,6 +1,5 @@
 import { Alert } from 'react-native';
 import i18next from 'i18next';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { dangerouslyDeleteStorage } from '@/utils/dev';
 import { resetOperations } from './actions';
 import { store } from './store';
@@ -10,7 +9,7 @@ import { checkTasks, syncStoreTasks } from './components/Tasks/TasksSlice';
 
 export const bootstrap = async () => {
   const {
-    user: { id, migrated },
+    user: { id },
   } = store.getState();
 
   // reset operations
@@ -29,17 +28,6 @@ export const bootstrap = async () => {
         i18next.t('common.alert.text.lostKeys'),
       );
       throw new Error('id is empty');
-    }
-
-    // delete old async storage is storage is successfully migrated
-    if (!migrated) {
-      AsyncStorage.getItem('persist:root').then((data) => {
-        if (data) {
-          AsyncStorage.removeItem('persist:root').catch((err) => {
-            console.log(err.message);
-          });
-        }
-      });
     }
   } catch (err) {
     console.error(err);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { BlurView } from '@react-native-community/blur';
+import { StackScreenProps } from '@react-navigation/stack';
 import {
   connection_levels,
   RECOVERY_COOLDOWN_DURATION,
@@ -16,14 +17,13 @@ import { BLACK, WHITE, GREEN } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from '@/store';
-import api from '@/api/brightId';
-import { setConnectionLevel } from '@/actions/connections';
+import { addOperation, setConnectionLevel } from '@/actions';
 import { calculateCooldownPeriod } from '@/utils/recovery';
 import {
-  connectionByIdSelector,
+  selectConnectionById,
   recoveryConnectionsSelector,
-} from '@/utils/connectionsSelector';
-import { StackScreenProps } from '@react-navigation/stack';
+} from '@/reducer/connectionsSlice';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import TrustlevelSlider from './TrustlevelSlider';
 
 type props = StackScreenProps<ModalStackParamList, 'SetTrustlevel'>;
@@ -33,7 +33,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
   const { connectionId } = route.params;
   const myId = useSelector((state: State) => state.user.id);
   const connection: Connection = useSelector((state: State) =>
-    connectionByIdSelector(state, connectionId),
+    selectConnectionById(state, connectionId),
   );
   const recoveryConnections = useSelector(recoveryConnectionsSelector);
   const dispatch = useDispatch();
@@ -41,6 +41,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
     connection ? connection.level : connection_levels.JUST_MET,
   );
   const { t } = useTranslation();
+  const api = useContext(NodeApiContext);
 
   const saveLevelHandler = async () => {
     let cooldownPeriod = 0;
@@ -56,8 +57,14 @@ const TrustlevelModal = ({ route, navigation }: props) => {
         // removing recovery connection. Cooldown period always applies
         cooldownPeriod = RECOVERY_COOLDOWN_DURATION;
       }
-      await api.addConnection(myId, connection.id, level, Date.now());
-      dispatch(setConnectionLevel(connection.id, level));
+      const op = await api.addConnection(
+        myId,
+        connection.id,
+        level,
+        Date.now(),
+      );
+      dispatch(addOperation(op));
+      dispatch(setConnectionLevel({ id: connection.id, level }));
     }
     // close modal
     navigation.goBack();

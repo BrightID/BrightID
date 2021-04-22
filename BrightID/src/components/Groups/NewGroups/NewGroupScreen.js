@@ -14,9 +14,11 @@ import { clearNewGroupCoFounders } from '@/actions';
 import { BLUE, LIGHT_GREY, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { toSearchString } from '@/utils/strings';
+import { connectionsSelector } from '@/utils/connectionsSelector';
+import { createSelector } from '@reduxjs/toolkit';
 import Spinner from 'react-native-spinkit';
 import i18next from 'i18next';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import { createNewGroup } from '../actions';
 import NewGroupCard from './NewGroupCard';
 
@@ -33,6 +35,13 @@ const getItemLayout = (data, index) => ({
   index,
 });
 
+const verifiedConnectionsSelector = createSelector(
+  connectionsSelector,
+  (connections) => {
+    return connections.filter((conn) => conn?.status === 'verified');
+  },
+);
+
 const creationStateStrings = {
   uploadingGroupPhoto: i18next.t(
     'groups.state.uploadingGroupPhoto',
@@ -42,6 +51,9 @@ const creationStateStrings = {
 };
 
 export class NewGroupScreen extends React.Component {
+  // make api available through this.context
+  static contextType = NodeApiContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -65,15 +77,6 @@ export class NewGroupScreen extends React.Component {
     this.setState({ creationState });
   };
 
-  filterConnections = () => {
-    const { connections, searchParam } = this.props;
-    return connections
-      .filter((item) =>
-        toSearchString(`${item.name}`).includes(toSearchString(searchParam)),
-      )
-      .filter((item) => item.status === 'verified');
-  };
-
   cardIsSelected = (card) => {
     const { newGroupCoFounders } = this.props;
     return newGroupCoFounders.includes(card.id);
@@ -82,10 +85,11 @@ export class NewGroupScreen extends React.Component {
   createGroup = async () => {
     try {
       this.setState({ creating: true });
+      const api = this.context;
       const { route, navigation } = this.props;
       const { photo, name, isPrimary } = route.params;
       const type = isPrimary ? 'primary' : 'general';
-      const res = await store.dispatch(createNewGroup(photo, name, type));
+      const res = await store.dispatch(createNewGroup(photo, name, type, api));
       if (res) {
         navigation.navigate('Groups');
       } else {
@@ -136,8 +140,8 @@ export class NewGroupScreen extends React.Component {
   );
 
   render() {
-    const { t } = this.props;
-    const connections = this.filterConnections();
+    const { t, connections } = this.props;
+
     return (
       <>
         <View style={styles.orangeTop} />
@@ -287,8 +291,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ connections, groups }) => ({
-  newGroupCoFounders: groups.newGroupCoFounders,
-  connections: connections.connections,
-  searchParam: connections.searchParam,
+export default connect((state) => ({
+  newGroupCoFounders: state.groups.newGroupCoFounders,
+  connections: verifiedConnectionsSelector(state),
 }))(withTranslation()(NewGroupScreen));

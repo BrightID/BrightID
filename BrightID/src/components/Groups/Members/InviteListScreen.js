@@ -8,12 +8,13 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import api from '@/api/brightId';
 import { encryptAesKey } from '@/utils/invites';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import i18next from 'i18next';
+import { addOperation, selectAllConnections } from '@/actions';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import MemberCard from './MemberCard';
 
 const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
@@ -26,6 +27,9 @@ const getItemLayout = (data, index) => ({
 });
 
 export class InviteListScreen extends Component {
+  // make api available through this.context
+  static contextType = NodeApiContext;
+
   renderEligible = ({ item, index }) => {
     return (
       <TouchableOpacity
@@ -38,12 +42,14 @@ export class InviteListScreen extends Component {
   };
 
   inviteToGroup = async (connection) => {
-    const { navigation, route } = this.props;
+    const { navigation, route, dispatch } = this.props;
+    let api = this.context;
     const group = route.params?.group;
 
     try {
       const data = await encryptAesKey(group?.aesKey, connection.signingKey);
-      await api.invite(connection.id, group?.id, data);
+      const op = await api.invite(connection.id, group?.id, data);
+      dispatch(addOperation(op));
       Alert.alert(
         i18next.t('groups.alert.title.inviteSuccess'),
         i18next.t('groups.alert.text.inviteSuccess', { name: connection.name }),
@@ -120,6 +126,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(({ connections }) => ({ ...connections }))(
-  withTranslation()(InviteListScreen),
-);
+export default connect((state) => ({
+  connections: selectAllConnections(state),
+}))(withTranslation()(InviteListScreen));

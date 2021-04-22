@@ -13,8 +13,13 @@ import {
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { getGroupName } from '@/utils/groups';
-import { acceptInvite, rejectInvite, joinGroup } from '@/actions';
-import api from '@/api/brightId';
+import {
+  acceptInvite,
+  rejectInvite,
+  joinGroup,
+  selectConnectionById,
+  addOperation,
+} from '@/actions';
 import GroupPhoto from '@/components/Groups/GroupPhoto';
 import {
   backupUser,
@@ -24,18 +29,19 @@ import Check from '@/components/Icons/Check';
 import xGrey from '@/static/x_grey.svg';
 import { useNavigation } from '@react-navigation/native';
 import BrightidError from '@/api/brightidError';
+import { useContext } from 'react';
+import { NodeApiContext } from '@/components/NodeApiGate';
 
 const InviteCard = (props) => {
   const { invite } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const inviter = useSelector((state: State) =>
+    selectConnectionById(state, invite.inviter),
+  );
   const navigation = useNavigation();
   const { backupCompleted } = useSelector((state: State) => state.user);
-  const connections = useSelector(
-    (state: State) => state.connections.connections,
-  );
-
-  const inviter = connections.find((conn) => invite.inviter === conn.id);
+  const api = useContext(NodeApiContext);
 
   const handleRejectInvite = () => {
     Alert.alert(
@@ -53,7 +59,8 @@ const InviteCard = (props) => {
             try {
               await dispatch(rejectInvite(invite.id));
               if (invite.isNew) {
-                await api.deleteGroup(invite.id);
+                const op = await api.deleteGroup(invite.id);
+                dispatch(addOperation(op));
               }
             } catch (err) {
               Alert.alert(
@@ -70,7 +77,8 @@ const InviteCard = (props) => {
 
   const handleAcceptInvite = async () => {
     try {
-      await api.joinGroup(invite.id);
+      const op = await api.joinGroup(invite.id);
+      dispatch(addOperation(op));
       dispatch(acceptInvite(invite.id));
       await dispatch(joinGroup(invite));
       Alert.alert(

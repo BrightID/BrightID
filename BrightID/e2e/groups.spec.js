@@ -186,6 +186,8 @@ describe('Groups', () => {
     });
 
     it('invited co-founders should join group', async () => {
+      // wait 10 seconds until group creation op should be done on the backend
+      await new Promise((r) => setTimeout(r, 10000));
       // accept invitation
       await joinAllGroups(0);
       await joinAllGroups(1);
@@ -195,21 +197,24 @@ describe('Groups', () => {
       await expectHomescreen();
       // navigate to groups screen
       await element(by.id('groupsBtn')).tap();
-      // wait 30 seconds until all join ops should be done on the backend
-      await new Promise((r) => setTimeout(r, 30000));
+      // wait 20 seconds until all join ops should be done on the backend
+      await new Promise((r) => setTimeout(r, 20000));
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
+
       // Text changes to "Known members: " when all invited people have joined
+
       await waitFor(
         element(by.text(i18next.t('groups.label.knownMembers'))).atIndex(0),
       )
-        .toBeVisible()
-        .withTimeout(30000);
+        .toExist()
+        .withTimeout(20000);
+
       await waitFor(
         element(by.text(i18next.t('groups.label.knownMembers'))).atIndex(1),
       )
-        .toBeVisible()
-        .withTimeout(30000);
+        .toExist()
+        .withTimeout(20000);
     });
   });
 

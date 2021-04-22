@@ -1,5 +1,6 @@
 import React, {
   useCallback,
+  useContext,
   useEffect,
   useLayoutEffect,
   useState,
@@ -38,6 +39,7 @@ import {
 
 import { createChannel } from '@/components/PendingConnections/actions/channelThunks';
 import { setActiveNotification } from '@/actions';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import { QrCode } from './QrCode';
 
 /**
@@ -75,6 +77,7 @@ export const MyCodeScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const api = useContext(NodeApiContext);
 
   const [channelErr, setChannelErr] = useState(0);
 
@@ -121,7 +124,7 @@ export const MyCodeScreen = () => {
         channelErr < 3
       ) {
         InteractionManager.runAfterInteractions(() => {
-          dispatch(createChannel(displayChannelType)).catch((err) => {
+          dispatch(createChannel(displayChannelType, api)).catch((err) => {
             console.log(`error creating channel: ${err.message}`);
             if (channelErr === 2) {
               Alert.alert(
@@ -136,7 +139,15 @@ export const MyCodeScreen = () => {
         });
       }
       dispatch(setActiveNotification(null));
-    }, [navigation, myChannel, dispatch, displayChannelType, channelErr, t]),
+    }, [
+      navigation,
+      myChannel,
+      channelErr,
+      dispatch,
+      displayChannelType,
+      api,
+      t,
+    ]),
   );
 
   // Navigate to next screen if QRCode has been scanned

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -30,6 +30,7 @@ import { selectAllUnconfirmedConnections } from '@/components/PendingConnections
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { photoDirectory } from '@/utils/filesystem';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import NotificationCard from './NotificationCard';
 import InviteCard from './InviteCard';
 import PendingConnectionCard from './PendingConnectionCard';
@@ -47,10 +48,11 @@ const inviteSelector = createSelector(
 
 const useRefresh: () => [boolean, () => void] = () => {
   const dispatch = useDispatch();
+  const api = useContext(NodeApiContext);
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    dispatch(fetchUserInfo())
+    dispatch(fetchUserInfo(api))
       .then(() => {
         setRefreshing(true);
       })
@@ -230,6 +232,7 @@ export const NotificationsScreen = () => {
   const dispatch = useDispatch();
   const route = useRoute<NotificationsRoute>();
   const { t } = useTranslation();
+  const api = useContext(NodeApiContext);
 
   const pendingConnections = useSelector(
     (state) => selectAllUnconfirmedConnections(state)?.length,
@@ -281,8 +284,8 @@ export const NotificationsScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(fetchUserInfo());
-    }, [dispatch]),
+      dispatch(fetchUserInfo(api));
+    }, [api, dispatch]),
   );
 
   console.log('renderingNotificationScreen');

@@ -1,16 +1,17 @@
-import apps from './apps';
+import apps from './appsSlice';
 import channels from '../components/PendingConnections/channelSlice';
-import connections from './connections';
+import connections from './connectionsSlice';
 import groups from './groupsSlice';
 import keypair from './keypairSlice';
 import notifications from './notifications';
-import operations from './operations';
+import operations from './operationsSlice';
 import pendingConnections from '../components/PendingConnections/pendingConnectionSlice';
 import user from './userSlice';
 import tasks from '../components/Tasks/TasksSlice';
 import socialMedia from '../components/EditProfile/socialMediaSlice';
 import recoveryData from '../components/Onboarding/RecoveryFlow/recoveryDataSlice';
 import walkthrough from './walkthroughSlice';
+import settings from './settingsSlice';
 
 export default {
   apps,
@@ -26,4 +27,5 @@ export default {
   tasks,
   socialMedia,
   walkthrough,
+  settings,
 };

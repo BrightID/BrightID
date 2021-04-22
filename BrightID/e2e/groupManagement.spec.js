@@ -1,4 +1,4 @@
-/* global device:false, element:false, by:false, waitFor:false */
+/* global element:false, by:false, waitFor:false */
 
 import i18next from 'i18next';
 import {
@@ -16,13 +16,13 @@ import {
 const GroupName = 'Reservoir Dogs';
 
 describe('Group Management', () => {
-  let hasBackButton = true;
+  // let hasBackButton = true;
   let leaveGroupText = 'Leave group';
   const actionOK = i18next.t('common.alert.ok');
 
   beforeAll(async () => {
-    const platform = await device.getPlatform();
-    hasBackButton = platform === 'android';
+    // const platform = await device.getPlatform();
+    // hasBackButton = platform === 'android';
     // create identity
     await createBrightID();
 
@@ -98,16 +98,19 @@ describe('Group Management', () => {
     });
 
     it('invited co-founders should join group', async () => {
+      // wait 10 seconds until group creation ops should be done on the backend
+      await new Promise((r) => setTimeout(r, 10000));
       // accept invitation
       await joinAllGroups(0);
       await joinAllGroups(1);
+      await joinAllGroups(2);
 
       // Check if cofounders actually joined the groups
       await expectHomescreen();
       // navigate to groups screen
       await element(by.id('groupsBtn')).tap();
-      // wait 30 seconds until all join ops should be done on the backend
-      await new Promise((r) => setTimeout(r, 30000));
+      // wait 20 seconds until all join ops should be done on the backend
+      await new Promise((r) => setTimeout(r, 20000));
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
       // Text changes to "Known members: " when all invited people have joined
@@ -133,8 +136,8 @@ describe('Group Management', () => {
       // navigate to groups screen
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
-      // wait 30 seconds until all join ops should be done on the backend
-      await new Promise((r) => setTimeout(r, 30000));
+      // wait 20 seconds until all join ops should be done on the backend
+      await new Promise((r) => setTimeout(r, 20000));
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
       // Text changes to "Known members: " when all invited people have joined
@@ -223,8 +226,8 @@ describe('Group Management', () => {
       // navigate to groups screen
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
-      // wait 30 seconds until all join ops should be done on the backend
-      await new Promise((r) => setTimeout(r, 30000));
+      // wait 20 seconds until all join ops should be done on the backend
+      await new Promise((r) => setTimeout(r, 20000));
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
       // Text changes to "Known members: " when all invited people have joined

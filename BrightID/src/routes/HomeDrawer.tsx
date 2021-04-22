@@ -12,9 +12,7 @@ import {
   setEditProfileMenuLayout,
   setEditProfileTextLayout,
 } from '@/reducer/walkthroughSlice';
-import HomeScreen, {
-  brightIdVerifiedSelector
-} from '@/components/HomeScreen';
+import HomeScreen, { brightIdVerifiedSelector } from '@/components/HomeScreen';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,

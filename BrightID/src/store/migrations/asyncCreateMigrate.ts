@@ -1,6 +1,10 @@
-import { PersistedState, MigrationManifest } from 'redux-persist';
+import { PersistedState } from 'redux-persist';
 
-const VERSION = 9;
+export type MigrationManifest = {
+  [key: string]: (state: PersistedState) => Promise<PersistedState>;
+};
+
+const VERSION = 10;
 
 export function asyncCreateMigrate(
   migrations: MigrationManifest,

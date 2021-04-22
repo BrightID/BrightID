@@ -7,24 +7,31 @@ import {
   hash,
   b64ToUint8Array,
 } from '@/utils/encoding';
-import store from '@/store';
-import { addOperation } from '@/actions';
 import BrightidError from '@/api/brightidError';
 
-let seedUrl = 'http://node.brightid.org';
-if (__DEV__) {
-  seedUrl = 'http://test.brightid.org';
-}
 const v = 5;
 
-class NodeApi {
+export class NodeApi {
   api: ApisauceInstance;
 
   baseUrlInternal: string;
 
-  constructor() {
-    // for now set the baseUrl to the seedUrl since there is only one server
-    this.baseUrlInternal = seedUrl;
+  secretKey: Uint8Array | undefined;
+
+  id: string | undefined;
+
+  constructor({
+    url,
+    secretKey,
+    id,
+  }: {
+    url: string;
+    secretKey: Uint8Array | undefined;
+    id: string | undefined;
+  }) {
+    this.baseUrlInternal = url;
+    this.id = id;
+    this.secretKey = secretKey;
     this.api = create({
       baseURL: this.apiUrl,
       headers: { 'Cache-Control': 'no-cache' },
@@ -61,8 +68,10 @@ class NodeApi {
     }
   }
 
-  static setOperation(op) {
-    store.dispatch(addOperation(op));
+  requiresCredentials() {
+    if (this.id === undefined || this.secretKey === undefined) {
+      throw new Error('Missing API credentials');
+    }
   }
 
   async addConnection(
@@ -73,13 +82,8 @@ class NodeApi {
     reportReason?: string,
     fakeUser?: FakeUser,
   ) {
-    let secretKey;
-    if (fakeUser) {
-      secretKey = b64ToUint8Array(fakeUser.secretKey);
-    } else {
-      // use real user data
-      secretKey = store.getState().keypair.secretKey;
-    }
+    this.requiresCredentials();
+    const sk = fakeUser ? b64ToUint8Array(fakeUser.secretKey) : this.secretKey;
 
     const name = 'Connect';
 
@@ -98,13 +102,11 @@ class NodeApi {
 
     const message = stringify(op);
     console.log(`Connect message: ${message}`);
-    op.sig1 = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
-    );
+    op.sig1 = uInt8ArrayToB64(nacl.sign.detached(strToUint8Array(message), sk));
     const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
     op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
-    NodeApi.setOperation(op);
+    return op;
   }
 
   async createGroup(
@@ -116,17 +118,13 @@ class NodeApi {
     url: string,
     type: string,
   ) {
-    const {
-      user: { id },
-      keypair: { secretKey },
-    } = store.getState();
-
+    this.requiresCredentials();
     const name = 'Add Group';
     const timestamp = Date.now();
 
     const op: AddGroupOp = {
       name,
-      id1: id,
+      id1: this.id,
       id2,
       inviteData2,
       id3,
@@ -140,26 +138,22 @@ class NodeApi {
 
     const message = stringify(op);
     op.sig1 = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
+      nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
     const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
     op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
-    NodeApi.setOperation(op);
+    return op;
   }
 
   async dismiss(id2: string, group: string) {
-    const {
-      user: { id },
-      keypair: { secretKey },
-    } = store.getState();
-
+    this.requiresCredentials();
     const name = 'Dismiss';
     const timestamp = Date.now();
 
     const op: DismissOp = {
       name,
-      dismisser: id,
+      dismisser: this.id,
       dismissee: id2,
       group,
       timestamp,
@@ -168,26 +162,22 @@ class NodeApi {
 
     const message = stringify(op);
     op.sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
+      nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
     const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
     op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
-    NodeApi.setOperation(op);
+    return op;
   }
 
   async invite(id2: string, group: string, data: string) {
-    const {
-      user: { id },
-      keypair: { secretKey },
-    } = store.getState();
-
+    this.requiresCredentials();
     const name = 'Invite';
     const timestamp = Date.now();
 
     const op: InviteOp = {
       name,
-      inviter: id,
+      inviter: this.id,
       invitee: id2,
       group,
       data,
@@ -197,25 +187,22 @@ class NodeApi {
 
     const message = stringify(op);
     op.sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
+      nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
     const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
     NodeApi.throwOnError(res);
+    return op;
   }
 
   async addAdmin(newAdmin: string, group: string) {
-    const {
-      user: { id },
-      keypair: { secretKey },
-    } = store.getState();
-
+    this.requiresCredentials();
     const name = 'Add Admin';
     const timestamp = Date.now();
 
     const op: AddAdminOp = {
       name,
-      id,
+      id: this.id,
       admin: newAdmin,
       group,
       timestamp,
@@ -224,27 +211,23 @@ class NodeApi {
 
     const message = stringify(op);
     op.sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
+      nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
 
     const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
     op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
-    NodeApi.setOperation(op);
+    return op;
   }
 
   async deleteGroup(group: string) {
-    const {
-      user: { id },
-      keypair: { secretKey },
-    } = store.getState();
-
+    this.requiresCredentials();
     const name = 'Remove Group';
     const timestamp = Date.now();
 
     const op: RemoveGroupOp = {
       name,
-      id,
+      id: this.id,
       group,
       timestamp,
       v,
@@ -252,23 +235,24 @@ class NodeApi {
 
     const message = stringify(op);
     op.sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
+      nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
     const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
     op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
-    NodeApi.setOperation(op);
+    return op;
   }
 
   async joinGroup(group: string, fakeUser?: FakeUser) {
+    this.requiresCredentials();
     let brightId, secretKey;
     if (fakeUser) {
       brightId = fakeUser.id;
       secretKey = b64ToUint8Array(fakeUser.secretKey);
     } else {
       // use real user data
-      brightId = store.getState().user.id;
-      secretKey = store.getState().keypair.secretKey;
+      brightId = this.id;
+      secretKey = this.secretKey;
     }
 
     const name = 'Add Membership';
@@ -289,21 +273,17 @@ class NodeApi {
     const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
     op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
-    NodeApi.setOperation(op);
+    return op;
   }
 
   async leaveGroup(group: string) {
-    const {
-      user: { id },
-      keypair: { secretKey },
-    } = store.getState();
-
+    this.requiresCredentials();
     const name = 'Remove Membership';
     const timestamp = Date.now();
 
     const op: RemoveMembershipOp = {
       name,
-      id,
+      id: this.id,
       group,
       timestamp,
       v,
@@ -311,12 +291,12 @@ class NodeApi {
 
     const message = stringify(op);
     op.sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
+      nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
     const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
     op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
-    NodeApi.setOperation(op);
+    return op;
   }
 
   async setSigningKey(params: {
@@ -344,21 +324,17 @@ class NodeApi {
     const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
     op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
-    NodeApi.setOperation(op);
+    return op;
   }
 
   async linkContextId(context: string, contextId: string) {
-    const {
-      user: { id },
-      keypair: { secretKey },
-    } = store.getState();
-
+    this.requiresCredentials();
     const name = 'Link ContextId';
     const timestamp = Date.now();
 
     const op: LinkContextIdOp = {
       name,
-      id,
+      id: this.id,
       context,
       contextId,
       timestamp,
@@ -367,12 +343,12 @@ class NodeApi {
 
     const message = stringify(op);
     op.sig = uInt8ArrayToB64(
-      nacl.sign.detached(strToUint8Array(message), secretKey),
+      nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
     const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
     op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
-    NodeApi.setOperation(op);
+    return op;
   }
 
   async getUserInfo(id: string) {
@@ -382,7 +358,8 @@ class NodeApi {
   }
 
   async getUserProfile(id: string) {
-    const requester = store.getState().user.id;
+    this.requiresCredentials();
+    const requester = this.id;
     const res = await this.api.get<UserProfileRes, ErrRes>(
       `/users/${id}/profile/${requester}`,
     );
@@ -428,7 +405,3 @@ class NodeApi {
     return (res.data as AppsRes).data?.apps;
   }
 }
-
-const brightId = new NodeApi();
-
-export default brightId;

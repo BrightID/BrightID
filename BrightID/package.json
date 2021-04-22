@@ -1,6 +1,6 @@
 {
   "name": "BrightID",
-  "version": "4.5.5",
+  "version": "4.6.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android --appIdSuffix debug",
@@ -52,6 +52,7 @@
     "immer": "8.0.1",
     "lodash": "4.17.20",
     "moment": "2.29.1",
+    "promise.any": "^2.0.2",
     "prop-types": "15.7.2",
     "qrcode": "1.4.4",
     "ramda": "0.27.1",

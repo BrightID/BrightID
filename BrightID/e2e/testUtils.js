@@ -147,7 +147,11 @@ const navigateHome = async () => {
     } catch (err) {
       try {
         await element(by.id('NavHomeBtn')).atIndex(2).tap();
-      } catch (err) {}
+      } catch (err) {
+        try {
+          await element(by.id('NavHomeBtn')).atIndex(3).tap();
+        } catch (err) {}
+      }
     }
   }
 

@@ -13,8 +13,8 @@ import {
   RECOVERY_COOLDOWN_DURATION,
 } from '@/utils/constants';
 import { calculateCooldownPeriod } from '@/utils/recovery';
+import { recoveryConnectionsSelector } from '@/reducer/connectionsSlice';
 import { useSelector } from '@/store';
-import { recoveryConnectionsSelector } from '@/utils/connectionsSelector';
 import { ConnectionStats } from './ConnectionStats';
 import { ProfileCard } from './ProfileCard';
 

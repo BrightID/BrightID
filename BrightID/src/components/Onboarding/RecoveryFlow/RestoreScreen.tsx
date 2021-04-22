@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, Alert } from 'react-native';
 import { useDispatch, useSelector } from '@/store';
 import { useFocusEffect } from '@react-navigation/native';
@@ -8,6 +8,7 @@ import { setBackupCompleted, setPassword } from '@/reducer/userSlice';
 import { RecoverAccount } from '@/components/Onboarding/RecoveryFlow/RecoverAccount';
 import { RestoreBackup } from '@/components/Onboarding/RecoveryFlow/RestoreBackup';
 import { useTranslation } from 'react-i18next';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import {
   finishRecovery,
   recoverAccount,
@@ -38,6 +39,7 @@ export enum BackupSteps {
 const RestoreScreen = () => {
   const { t } = useTranslation();
   const [pass, setPass] = useState('');
+  const api = useContext(NodeApiContext);
   const recoveredConnections = useSelector(
     (state) => state.recoveryData.recoveredConnections,
   );
@@ -72,7 +74,7 @@ const RestoreScreen = () => {
     const runEffect = async () => {
       try {
         console.log(`Starting account recovery`);
-        await dispatch(recoverAccount());
+        await dispatch(recoverAccount(api));
         console.log(`Successfully recovered account`);
         setAccountStep(AccountSteps.COMPLETE);
         // restore backup can now start
@@ -90,7 +92,7 @@ const RestoreScreen = () => {
       default:
         break;
     }
-  }, [dispatch, accountStep]);
+  }, [dispatch, accountStep, api]);
 
   // track data recovery state
   useEffect(() => {
@@ -130,7 +132,7 @@ const RestoreScreen = () => {
     try {
       console.log(`Starting restore backup`);
       setDataStep(BackupSteps.RESTORING_DATA);
-      await dispatch(recoverData(pass));
+      await dispatch(recoverData(pass, api));
       console.log(`Successfully restored backup`);
       setDataStep(BackupSteps.COMPLETE);
     } catch (e) {
@@ -185,13 +187,13 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   divider: {
-    paddingTop: 40,
-    marginBottom: 30,
+    marginTop: DEVICE_LARGE ? 40 : 20,
+    marginBottom: DEVICE_LARGE ? 30 : 20,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderColor: BLACK,
   },
   recoverAccountContainer: {
-    marginTop: 20,
+    marginTop: DEVICE_LARGE ? 25 : 20,
     minHeight: '25%',
   },
   restoreBackupContainer: {
