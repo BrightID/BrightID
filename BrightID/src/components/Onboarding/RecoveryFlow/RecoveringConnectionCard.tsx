@@ -31,7 +31,7 @@ const RecoveringConnectionCard = (props) => {
     connectionDate,
     index,
     level,
-    hiddenFlag,
+    reportReason,
     setUploadingData,
   } = props;
 
@@ -154,7 +154,7 @@ const RecoveringConnectionCard = (props) => {
           <ConnectionStatus
             index={index}
             status={status}
-            hiddenFlag={hiddenFlag}
+            reportReason={reportReason}
             connectionDate={connectionDate}
             level={level}
           />

@@ -24,8 +24,10 @@ import {
   DARKER_GREY,
   DARK_BLUE,
   LIGHT_GREY,
+  DARK_GREEN,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
+import { connection_levels } from '@/utils/constants';
 import Chevron from '../Icons/Chevron';
 import TrustLevelView from './TrustLevelView';
 
@@ -180,21 +182,34 @@ function ConnectionScreen(props: Props) {
     </>
   );
 
-  const connectionFooter = (
-    <TouchableOpacity
-      testID="ReportBtn"
-      style={styles.reportBtn}
-      onPress={() => {
-        navigation.navigate('ReportReason', {
-          connectionId: connection.id,
-        });
-      }}
-    >
-      <Text style={styles.reportBtnText}>
-        {t('connectionDetails.button.report')}
-      </Text>
-    </TouchableOpacity>
-  );
+  const connectionFooter =
+    connection.level !== connection_levels.REPORTED ? (
+      <TouchableOpacity
+        testID="ReportBtn"
+        style={styles.reportBtn}
+        onPress={() => {
+          navigation.navigate('ReportReason', {
+            connectionId: connection.id,
+          });
+        }}
+      >
+        <Text style={styles.reportBtnText}>
+          {t('connectionDetails.button.report')}
+        </Text>
+      </TouchableOpacity>
+    ) : (
+      <TouchableOpacity
+        testID="UnReportBtn"
+        style={styles.unReportBtn}
+        onPress={() => {
+          navigation.navigate('ReportReason', {
+            connectionId: connection.id,
+          });
+        }}
+      >
+        <Text style={styles.unReportBtnText}>Unreport</Text>
+      </TouchableOpacity>
+    );
 
   const renderItem = ({ item, index, section }) => {
     const testID = `${section.key}-${index}`;
@@ -412,6 +427,24 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[16],
     color: ORANGE,
+    marginLeft: DEVICE_LARGE ? 10 : 8,
+  },
+  unReportBtn: {
+    width: '75%',
+    borderRadius: 100,
+    borderColor: DARK_GREEN,
+    borderWidth: 1,
+    backgroundColor: WHITE,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: DEVICE_LARGE ? 13 : 12,
+    paddingBottom: DEVICE_LARGE ? 13 : 12,
+  },
+  unReportBtnText: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: fontSize[16],
+    color: DARK_GREEN,
     marginLeft: DEVICE_LARGE ? 10 : 8,
   },
   header: {

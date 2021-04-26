@@ -24,6 +24,7 @@ const trustLevels = [
   connection_levels.JUST_MET,
   connection_levels.ALREADY_KNOWN,
   connection_levels.RECOVERY,
+  connection_levels.REPORTED,
 ];
 
 const ascending = [
