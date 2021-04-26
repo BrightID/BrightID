@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import {
   Image,
   StyleSheet,
@@ -91,6 +92,8 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
       );
   }
 
+  const date = moment(pendingConnection.createdAt || Date.now()).fromNow();
+
   return (
     <>
       <View testID="previewConnectionScreen" style={styles.userContainer}>
@@ -131,6 +134,11 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
           groupsNum={pendingConnection.groupsNum}
           mutualConnectionsNum={pendingConnection.mutualConnections.length}
         />
+      </View>
+      <View style={styles.createdContainer}>
+        <Text style={styles.createdText}>
+          {t('pendingConnections.label.created', { date })}
+        </Text>
       </View>
       <View style={styles.ratingView}>{ratingView}</View>
     </>
@@ -192,5 +200,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: fontSize[17],
     marginTop: 32,
+  },
+  createdContainer: {},
+  createdText: {
+    fontFamily: 'Poppins-Medium',
+    textAlign: 'center',
+    fontSize: fontSize[12],
+    color: ORANGE,
   },
 });
