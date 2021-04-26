@@ -269,6 +269,7 @@ declare global {
     ReportReason: {
       connectionId: string;
       successCallback?: () => void;
+      unreporting?: boolean;
     };
     SortConnections: undefined;
     ViewPasswordWalkthrough: undefined;

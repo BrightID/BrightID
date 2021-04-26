@@ -163,6 +163,7 @@
     "button": {
       "levelSave": "Save",
       "report": "Report this person",
+      "undoReport": "Undo Report",
       "reportCancel": "Cancel",
       "reportSubmit": "Submit"
     },
@@ -185,8 +186,10 @@
       "levelRecovery": "I trust this person to recover my BrightID for me",
       "levelSuspicious": "I don't know this person at all",
       "reportConnection": "Report {{name}}",
+      "unReportConnection": "Undo Report",
       "reportDuplicate": "This person created multiple accounts",
       "reportImpact": "Flagging {{name}} will negatively effect their BrightID score, and this flag might be shown to other users.",
+      "unReportImpact": "You have already reported {{name}} as a {{reportReason}}. Would you like to remove this flag and restore your connection?",
       "reportOther": "Other reason",
       "reportSpammer": "This person sent me an unwanted connection request"
     }

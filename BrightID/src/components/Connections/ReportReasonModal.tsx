@@ -29,7 +29,7 @@ const reasonStrings = {
 type props = StackScreenProps<ModalStackParamList, 'ReportReason'>;
 
 const ReportReasonModal = ({ route, navigation }: props) => {
-  const { connectionId, successCallback } = route.params;
+  const { connectionId, successCallback, reporting } = route.params;
   const { t } = useTranslation();
   const api = useContext(NodeApiContext);
   const connection: Connection = useSelector((state: State) =>
@@ -51,7 +51,12 @@ const ReportReasonModal = ({ route, navigation }: props) => {
       );
       // close modal
       navigation.goBack();
-      dispatch(reportConnection({ id: connectionId, reason, api }));
+      if (reporting) {
+        dispatch(reportConnection({ id: connectionId, reason, api }));
+      } else {
+        // unreport connection
+      }
+
       if (successCallback) {
         successCallback();
       }
@@ -94,25 +99,38 @@ const ReportReasonModal = ({ route, navigation }: props) => {
       <View style={styles.modalContainer}>
         <View style={styles.header}>
           <Text style={styles.headerText}>
-            {t('connectionDetails.text.reportConnection', {
-              name: connection.name,
-            })}
+            {t(
+              `connectionDetails.text.${
+                reporting ? 'reportConnection' : 'unReportConnection'
+              }`,
+              {
+                name: connection.name,
+              },
+            )}
           </Text>
         </View>
         <View style={styles.message}>
           <Material name="information" size={26} color={BLUE} />
           <Text style={styles.messageText}>
-            {t('connectionDetails.text.reportImpact', {
-              name: connection.name,
-            })}
+            {t(
+              `connectionDetails.text.${
+                reporting ? 'reportImpact' : 'unReportImpact'
+              }`,
+              {
+                name: connection.name,
+                reportReason: connection.reportReason,
+              },
+            )}
           </Text>
         </View>
         <View style={styles.divider} />
-        <View style={styles.radioButtonsContainer}>
-          {Object.keys(reasonStrings).map((reason) =>
-            renderReasonButton(reason),
-          )}
-        </View>
+        {reporting && (
+          <View style={styles.radioButtonsContainer}>
+            {Object.keys(reasonStrings).map((reason) =>
+              renderReasonButton(reason),
+            )}
+          </View>
+        )}
         <View style={styles.modalButtons}>
           <TouchableOpacity
             testID="SubmitReportBtn"

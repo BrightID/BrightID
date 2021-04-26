@@ -190,6 +190,7 @@ function ConnectionScreen(props: Props) {
         onPress={() => {
           navigation.navigate('ReportReason', {
             connectionId: connection.id,
+            reporting: true,
           });
         }}
       >
@@ -204,10 +205,13 @@ function ConnectionScreen(props: Props) {
         onPress={() => {
           navigation.navigate('ReportReason', {
             connectionId: connection.id,
+            reporting: false,
           });
         }}
       >
-        <Text style={styles.unReportBtnText}>Unreport</Text>
+        <Text style={styles.unReportBtnText}>
+          {t('connectionDetails.button.undoReport')}
+        </Text>
       </TouchableOpacity>
     );
 
