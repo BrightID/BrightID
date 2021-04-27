@@ -97,6 +97,11 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
   return (
     <>
       <View testID="previewConnectionScreen" style={styles.userContainer}>
+        <View style={styles.createdContainer}>
+          <Text style={styles.createdText}>
+            {t('pendingConnections.label.created', { date })}
+          </Text>
+        </View>
         <TouchableWithoutFeedback onPress={photoTouchHandler}>
           <Image
             source={{ uri: pendingConnection.photo }}
@@ -135,11 +140,7 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
           mutualConnectionsNum={pendingConnection.mutualConnections.length}
         />
       </View>
-      <View style={styles.createdContainer}>
-        <Text style={styles.createdText}>
-          {t('pendingConnections.label.created', { date })}
-        </Text>
-      </View>
+
       <View style={styles.ratingView}>{ratingView}</View>
     </>
   );
@@ -147,7 +148,6 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
 
 const styles = StyleSheet.create({
   userContainer: {
-    marginTop: DEVICE_LARGE ? 12 : 10,
     paddingBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -201,7 +201,9 @@ const styles = StyleSheet.create({
     fontSize: fontSize[17],
     marginTop: 32,
   },
-  createdContainer: {},
+  createdContainer: {
+    marginBottom: DEVICE_LARGE ? 12 : 10,
+  },
   createdText: {
     fontFamily: 'Poppins-Medium',
     textAlign: 'center',
