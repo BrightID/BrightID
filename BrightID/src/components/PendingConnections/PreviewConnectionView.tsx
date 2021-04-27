@@ -97,11 +97,13 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
   return (
     <>
       <View testID="previewConnectionScreen" style={styles.userContainer}>
-        <View style={styles.createdContainer}>
-          <Text style={styles.createdText}>
-            {t('pendingConnections.label.created', { date })}
+        {reported && (
+          <Text
+            style={[styles.reported, { marginBottom: DEVICE_LARGE ? 12 : 10 }]}
+          >
+            {t('common.tag.reported')}
           </Text>
-        </View>
+        )}
         <TouchableWithoutFeedback onPress={photoTouchHandler}>
           <Image
             source={{ uri: pendingConnection.photo }}
@@ -116,16 +118,11 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
         </TouchableWithoutFeedback>
         <View style={styles.connectNameContainer}>
           <Text style={styles.connectName}>{pendingConnection.name}</Text>
-          {userReported && (
-            <Text style={styles.reported}>
-              {t('common.tag.reportedByUser', {
-                reportReason: userReported.reportReason,
-              })}
+          <View style={styles.createdContainer}>
+            <Text style={styles.createdText}>
+              {t('pendingConnections.label.created', { date })}
             </Text>
-          )}
-          {reported && (
-            <Text style={styles.reported}>{t('common.tag.reported')}</Text>
-          )}
+          </View>
           {brightIdVerified && (
             <View style={styles.verificationSticker}>
               <VerifiedBadge width={16} height={16} />
@@ -140,7 +137,16 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
           mutualConnectionsNum={pendingConnection.mutualConnections.length}
         />
       </View>
-
+      {userReported && (
+        <Text style={styles.reported}>
+          ({t('common.tag.reportedByUser')}
+          {userReported.reportReason !== 'other' &&
+            t('common.tag.reportReason', {
+              reportReason: userReported.reportReason,
+            })}
+          )
+        </Text>
+      )}
       <View style={styles.ratingView}>{ratingView}</View>
     </>
   );
@@ -170,7 +176,7 @@ const styles = StyleSheet.create({
   },
   reported: {
     fontFamily: 'Poppins-Bold',
-    fontSize: fontSize[18],
+    fontSize: fontSize[16],
     color: RED,
   },
   countsContainer: {
@@ -202,7 +208,7 @@ const styles = StyleSheet.create({
     marginTop: 32,
   },
   createdContainer: {
-    marginBottom: DEVICE_LARGE ? 12 : 10,
+    marginTop: DEVICE_LARGE ? 7 : 6,
   },
   createdText: {
     fontFamily: 'Poppins-Medium',
