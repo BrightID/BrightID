@@ -165,7 +165,8 @@
       "report": "Report this person",
       "undoReport": "Undo Report",
       "reportCancel": "Cancel",
-      "reportSubmit": "Submit"
+      "reportSubmit": "Submit",
+      "ok": "OK"
     },
     "header": {
       "connectionDetails": "Connection details"

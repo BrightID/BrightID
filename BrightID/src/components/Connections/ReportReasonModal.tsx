@@ -36,7 +36,7 @@ const ReportReasonModal = ({ route, navigation }: props) => {
     selectConnectionById(state, connectionId),
   );
   const dispatch = useDispatch();
-  const [reason, setReason] = useState(undefined);
+  const [reason, setReason] = useState(!reporting ? 'Unreport' : '');
 
   // If connection just got reported it will not exist anymore. Just return null for this render cycle, as
   // navigation.goBack() is already dispatched
@@ -45,7 +45,8 @@ const ReportReasonModal = ({ route, navigation }: props) => {
   }
 
   const confirmReport = () => {
-    if (reason) {
+    // inside report module
+    if (reason && reporting) {
       console.log(
         `Reporting connection ${connection.name} with reason ${reason}`,
       );
@@ -60,6 +61,11 @@ const ReportReasonModal = ({ route, navigation }: props) => {
       if (successCallback) {
         successCallback();
       }
+      // inside undo report module
+    } else {
+      navigation.navigate('SetTrustlevel', {
+        connectionId,
+      });
     }
   };
 
@@ -145,7 +151,9 @@ const ReportReasonModal = ({ route, navigation }: props) => {
                   : styles.submitButtonDisabledText
               }
             >
-              {t('connectionDetails.button.reportSubmit')}
+              {reporting
+                ? t('connectionDetails.button.reportSubmit')
+                : t('connectionDetails.button.ok')}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
