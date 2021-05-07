@@ -6,12 +6,13 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { useDispatch, useSelector } from '@/store';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
-import { report_reasons } from '@/utils/constants';
+import { connection_levels, report_reasons } from '@/utils/constants';
 import { ORANGE, WHITE, BLUE, BLACK, DARKER_GREY, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { StackScreenProps } from '@react-navigation/stack';
 import { selectConnectionById } from '@/reducer/connectionsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
+import { setConnectionLevel } from '@/actions';
 import { reportConnection } from './models/reportConnection';
 
 const reasonStrings = {
@@ -66,6 +67,12 @@ const ReportReasonModal = ({ route, navigation }: props) => {
       navigation.navigate('SetTrustlevel', {
         connectionId,
       });
+      dispatch(
+        setConnectionLevel({
+          id: connection.id,
+          level: connection_levels.SUSPICIOUS,
+        }),
+      );
     }
   };
 

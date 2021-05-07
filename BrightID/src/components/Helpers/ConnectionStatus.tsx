@@ -37,7 +37,7 @@ export const ConnectionStatus = ({
     return (
       <View style={styles.statusContainer}>
         <Text style={[styles.deletedMessage, { marginTop: 1 }]}>
-          {reportReason
+          {reportReason && reportReason !== 'other'
             ? t('connections.tag.reportedAs', {
                 flag: reportReason,
               })
