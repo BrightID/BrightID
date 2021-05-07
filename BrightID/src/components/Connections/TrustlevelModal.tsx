@@ -24,12 +24,14 @@ import {
   recoveryConnectionsSelector,
 } from '@/reducer/connectionsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
+import { useNavigation } from '@react-navigation/native';
+
 import TrustlevelSlider from './TrustlevelSlider';
 
 type props = StackScreenProps<ModalStackParamList, 'SetTrustlevel'>;
 
-const TrustlevelModal = ({ route, navigation }: props) => {
-  console.log('TrustLevelModalRoute', route);
+const TrustlevelModal = ({ route }: props) => {
+  const navigation = useNavigation();
   const { connectionId } = route.params;
   const myId = useSelector((state: State) => state.user.id);
   const connection: Connection = useSelector((state: State) =>
@@ -42,6 +44,10 @@ const TrustlevelModal = ({ route, navigation }: props) => {
   );
   const { t } = useTranslation();
   const api = useContext(NodeApiContext);
+
+  const goBack = () => {
+    navigation.navigate('Connection', { connectionId });
+  };
 
   const saveLevelHandler = async () => {
     let cooldownPeriod = 0;
@@ -67,7 +73,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
       dispatch(setConnectionLevel({ id: connection.id, level }));
     }
     // close modal
-    navigation.goBack();
+    goBack();
     if (cooldownPeriod > 0) {
       // show info about cooldown period
       navigation.navigate('RecoveryCooldownInfo', {
@@ -80,7 +86,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
   // go back silently if connection does not exist. Should never happen.
   if (!connection) {
     console.log(`ConnectionID ${connectionId} not found!`);
-    navigation.goBack();
+    goBack();
     return null;
   }
 
@@ -96,7 +102,7 @@ const TrustlevelModal = ({ route, navigation }: props) => {
         blurAmount={5}
         reducedTransparencyFallbackColor={BLACK}
       />
-      <TouchableWithoutFeedback onPress={navigation.goBack}>
+      <TouchableWithoutFeedback onPress={goBack}>
         <View style={styles.blurView} />
       </TouchableWithoutFeedback>
       <View style={styles.modalContainer}>

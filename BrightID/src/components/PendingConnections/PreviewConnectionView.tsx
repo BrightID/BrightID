@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import {
   Image,
   StyleSheet,
@@ -91,9 +92,18 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
       );
   }
 
+  const date = moment(pendingConnection.createdAt || Date.now()).fromNow();
+
   return (
     <>
       <View testID="previewConnectionScreen" style={styles.userContainer}>
+        {reported && (
+          <Text
+            style={[styles.reported, { marginBottom: DEVICE_LARGE ? 12 : 10 }]}
+          >
+            {t('common.tag.reported')}
+          </Text>
+        )}
         <TouchableWithoutFeedback onPress={photoTouchHandler}>
           <Image
             source={{ uri: pendingConnection.photo }}
@@ -108,16 +118,11 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
         </TouchableWithoutFeedback>
         <View style={styles.connectNameContainer}>
           <Text style={styles.connectName}>{pendingConnection.name}</Text>
-          {userReported && (
-            <Text style={styles.reported}>
-              {t('common.tag.reportedByUser', {
-                reportReason: userReported.reportReason,
-              })}
+          <View style={styles.createdContainer}>
+            <Text style={styles.createdText}>
+              {t('pendingConnections.label.created', { date })}
             </Text>
-          )}
-          {reported && (
-            <Text style={styles.reported}>{t('common.tag.reported')}</Text>
-          )}
+          </View>
           {brightIdVerified && (
             <View style={styles.verificationSticker}>
               <VerifiedBadge width={16} height={16} />
@@ -132,6 +137,17 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
           mutualConnectionsNum={pendingConnection.mutualConnections.length}
         />
       </View>
+      {userReported && (
+        <Text style={styles.reported}>
+          ({t('common.tag.reportedByUser')}
+          {userReported.reportReason &&
+            userReported.reportReason !== 'other' &&
+            t('common.tag.reportReason', {
+              reportReason: userReported.reportReason,
+            })}
+          )
+        </Text>
+      )}
       <View style={styles.ratingView}>{ratingView}</View>
     </>
   );
@@ -139,7 +155,6 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
 
 const styles = StyleSheet.create({
   userContainer: {
-    marginTop: DEVICE_LARGE ? 12 : 10,
     paddingBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -162,7 +177,7 @@ const styles = StyleSheet.create({
   },
   reported: {
     fontFamily: 'Poppins-Bold',
-    fontSize: fontSize[18],
+    fontSize: fontSize[16],
     color: RED,
   },
   countsContainer: {
@@ -192,5 +207,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: fontSize[17],
     marginTop: 32,
+  },
+  createdContainer: {
+    marginTop: DEVICE_LARGE ? 7 : 6,
+  },
+  createdText: {
+    fontFamily: 'Poppins-Medium',
+    textAlign: 'center',
+    fontSize: fontSize[12],
+    color: ORANGE,
   },
 });

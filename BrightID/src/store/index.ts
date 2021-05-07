@@ -35,7 +35,7 @@ const connectionsPersistConfig = {
   ...fsPersistConfig,
   key: 'connections',
   migrate: connectionsMigrate,
-  blacklist: ['searchParam', 'searchOpen'],
+  blacklist: ['searchParam', 'searchOpen', 'filters'],
 };
 
 const groupsPersistConfig = {

@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from '@/store';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { CHANNEL_TTL } from '@/utils/constants';
+import { CHANNEL_TTL, connection_levels } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
 import { staleConnection, deleteConnection } from '@/actions';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
@@ -44,7 +44,7 @@ const ConnectionCard = (props: Props) => {
     id,
     name,
     photo,
-    hiddenFlag,
+    reportReason,
     index,
     level,
   } = props;
@@ -114,7 +114,10 @@ const ConnectionCard = (props: Props) => {
     t('common.actionSheet.cancel'),
   ];
 
-  const showRemove = status === 'deleted' || status === 'stale';
+  const showRemove =
+    status === 'deleted' ||
+    status === 'stale' ||
+    level === connection_levels.REPORTED;
 
   const RemoveConnection = () =>
     showRemove ? (
@@ -214,7 +217,7 @@ const ConnectionCard = (props: Props) => {
             <ConnectionStatus
               index={index}
               status={status}
-              hiddenFlag={hiddenFlag}
+              reportReason={reportReason}
               connectionDate={connectionDate}
               level={level}
             />
