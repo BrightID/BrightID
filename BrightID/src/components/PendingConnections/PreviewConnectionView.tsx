@@ -140,7 +140,8 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
       {userReported && (
         <Text style={styles.reported}>
           ({t('common.tag.reportedByUser')}
-          {userReported.reportReason !== 'other' &&
+          {userReported.reportReason &&
+            userReported.reportReason !== 'other' &&
             t('common.tag.reportReason', {
               reportReason: userReported.reportReason,
             })}

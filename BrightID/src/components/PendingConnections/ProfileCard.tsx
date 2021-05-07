@@ -65,9 +65,11 @@ export const ProfileCard = (props: ProfileCardProps) => {
         {userReported && (
           <Text style={styles.reported}>
             ({t('common.tag.reportedByUser')}
-            {t('common.tag.reportReason', {
-              reportReason: userReported.reportReason,
-            })}
+            {userReported.reportReason &&
+              userReported.reportReason !== 'other' &&
+              t('common.tag.reportReason', {
+                reportReason: userReported.reportReason,
+              })}
             )
           </Text>
         )}
