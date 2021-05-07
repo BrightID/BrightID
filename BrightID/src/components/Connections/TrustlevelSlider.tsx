@@ -58,7 +58,7 @@ const TrustlevelSlider = ({
   // to not allow changing level again until the last operation actually confirmed.
   // RESPONSE: The connection slider will not be avail for users who are marked as REPORTED, because we are no longer deleting reported connections, but I will keep this here in case we run into this issue in the future
   if (currentLevel === connection_levels.REPORTED) {
-    currentLevel = connection_levels.JUST_MET;
+    currentLevel = connection_levels.SUSPICIOUS;
   }
 
   // map connectionLevel to index value
