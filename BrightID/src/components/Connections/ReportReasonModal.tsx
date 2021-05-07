@@ -29,14 +29,14 @@ const reasonStrings = {
 type props = StackScreenProps<ModalStackParamList, 'ReportReason'>;
 
 const ReportReasonModal = ({ route, navigation }: props) => {
-  const { connectionId, successCallback } = route.params;
+  const { connectionId, successCallback, reporting } = route.params;
   const { t } = useTranslation();
   const api = useContext(NodeApiContext);
   const connection: Connection = useSelector((state: State) =>
     selectConnectionById(state, connectionId),
   );
   const dispatch = useDispatch();
-  const [reason, setReason] = useState(undefined);
+  const [reason, setReason] = useState(!reporting ? 'Unreport' : '');
 
   // If connection just got reported it will not exist anymore. Just return null for this render cycle, as
   // navigation.goBack() is already dispatched
@@ -45,16 +45,27 @@ const ReportReasonModal = ({ route, navigation }: props) => {
   }
 
   const confirmReport = () => {
-    if (reason) {
+    // inside report module
+    if (reason && reporting) {
       console.log(
         `Reporting connection ${connection.name} with reason ${reason}`,
       );
       // close modal
       navigation.goBack();
-      dispatch(reportConnection({ id: connectionId, reason, api }));
+      if (reporting) {
+        dispatch(reportConnection({ id: connectionId, reason, api }));
+      } else {
+        // unreport connection
+      }
+
       if (successCallback) {
         successCallback();
       }
+      // inside undo report module
+    } else {
+      navigation.navigate('SetTrustlevel', {
+        connectionId,
+      });
     }
   };
 
@@ -94,25 +105,38 @@ const ReportReasonModal = ({ route, navigation }: props) => {
       <View style={styles.modalContainer}>
         <View style={styles.header}>
           <Text style={styles.headerText}>
-            {t('connectionDetails.text.reportConnection', {
-              name: connection.name,
-            })}
+            {t(
+              `connectionDetails.text.${
+                reporting ? 'reportConnection' : 'unReportConnection'
+              }`,
+              {
+                name: connection.name,
+              },
+            )}
           </Text>
         </View>
         <View style={styles.message}>
           <Material name="information" size={26} color={BLUE} />
           <Text style={styles.messageText}>
-            {t('connectionDetails.text.reportImpact', {
-              name: connection.name,
-            })}
+            {t(
+              `connectionDetails.text.${
+                reporting ? 'reportImpact' : 'unReportImpact'
+              }`,
+              {
+                name: connection.name,
+                reportReason: connection.reportReason,
+              },
+            )}
           </Text>
         </View>
         <View style={styles.divider} />
-        <View style={styles.radioButtonsContainer}>
-          {Object.keys(reasonStrings).map((reason) =>
-            renderReasonButton(reason),
-          )}
-        </View>
+        {reporting && (
+          <View style={styles.radioButtonsContainer}>
+            {Object.keys(reasonStrings).map((reason) =>
+              renderReasonButton(reason),
+            )}
+          </View>
+        )}
         <View style={styles.modalButtons}>
           <TouchableOpacity
             testID="SubmitReportBtn"
@@ -127,7 +151,9 @@ const ReportReasonModal = ({ route, navigation }: props) => {
                   : styles.submitButtonDisabledText
               }
             >
-              {t('connectionDetails.button.reportSubmit')}
+              {reporting
+                ? t('connectionDetails.button.reportSubmit')
+                : t('connectionDetails.button.ok')}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity

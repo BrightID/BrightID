@@ -1,7 +1,6 @@
 /**
  * Apps
  */
-import { NodeApi } from '@/api/brightId';
 
 type AppsState = {
   apps: AppInfo[];
@@ -11,6 +10,7 @@ type AppsState = {
 /**
  * Connections
  */
+
 type ConnectionsState = {
   connections: EntityState<Connection>;
   connectionsSort: string;
@@ -31,9 +31,8 @@ type LocalConnectionData = {
   socialMedia?: string[];
   notificationToken?: string;
   publicKey?: string;
-  secretKey?: string;
-  hiddenFlag?: string;
   secretKey?: any;
+  reportReason?: string;
 };
 
 type Connection = Partial<ConnectionInfo> & Partial<LocalConnectionData>;
@@ -41,6 +40,7 @@ type Connection = Partial<ConnectionInfo> & Partial<LocalConnectionData>;
 /**
  * Groups
  */
+
 type GroupsState = {
   newGroupCoFounders: string[];
   invites: Invite[];
@@ -61,6 +61,7 @@ type Invite = InviteInfo & {
   photo?: { filename: string };
   aesKey?: string;
 };
+
 /**
  * KeypairSlice
  */
@@ -91,7 +92,8 @@ type OperationsState = EntityState<NodeOps>;
 /**
  * SettingsSlice
  */
+
 type SettingsState = {
   baseUrl: string;
-  api: NodeApi | undefined;
+  api: any | undefined;
 };
