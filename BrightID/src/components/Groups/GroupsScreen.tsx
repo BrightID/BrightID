@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import {
   StyleSheet,
   FlatList,
@@ -11,6 +11,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { createSelector } from '@reduxjs/toolkit';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from '@/store';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import { getGroupName, ids2connections, knownMemberIDs } from '@/utils/groups';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
@@ -81,6 +82,7 @@ export const GroupsScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { t } = useTranslation();
+  const api = useContext(NodeApiContext);
 
   const hasGroups = useSelector((state) => state.groups.groups.length > 0);
   const groups = useSelector(groupsSelector);
@@ -89,7 +91,7 @@ export const GroupsScreen = () => {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    dispatch(fetchUserInfo()).then(() => {
+    dispatch(fetchUserInfo(api)).then(() => {
       setRefreshing(false);
     });
     const timeoutId = setTimeout(() => {
@@ -98,7 +100,16 @@ export const GroupsScreen = () => {
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [dispatch]);
+  }, [dispatch, api]);
+
+  // refresh page if no groups exist
+  useFocusEffect(
+    useCallback(() => {
+      if (!groups.length) {
+        onRefresh();
+      }
+    }, [onRefresh, groups.length]),
+  );
 
   const renderGroup = ({ item, index }) => {
     return (

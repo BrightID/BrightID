@@ -12,7 +12,7 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import GroupPhoto from '../GroupPhoto';
 import MembersList from './MembersList';
-import MembersSearch from './MembersSearch';
+import MembersSearch from './MembersInfoBar';
 
 type MembersRoute = RouteProp<{ Members: { group: Group } }, 'Members'>;
 

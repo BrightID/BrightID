@@ -9,8 +9,8 @@ import SearchGroups from '@/components/Helpers/SearchGroups';
 import SearchConnections from '@/components/Helpers/SearchConnections';
 import NewGroupScreen from '@/components/Groups/GroupCreation/CreateGroupScreen';
 import GroupInfoScreen from '@/components/Groups/GroupCreation/NewGroupInfoScreen';
-import MembersScreen from '@/components/Groups/Admin/GroupScreen';
-import InviteListScreen from '@/components/Groups/Admin/InviteListScreen';
+import MembersScreen from '@/components/Groups/IndividualGroup/GroupScreen';
+import InviteListScreen from '@/components/Groups/IndividualGroup/InviteListScreen';
 import i18next from 'i18next';
 import { headerOptions, NavHome, AnimatedHeaderTitle } from './helpers';
 
