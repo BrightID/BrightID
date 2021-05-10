@@ -64,9 +64,13 @@ export const ProfileCard = (props: ProfileCardProps) => {
         <Text style={styles.connectName}>{name}</Text>
         {userReported && (
           <Text style={styles.reported}>
-            {t('common.tag.reportedByUser', {
-              reportReason: userReported.reportReason,
-            })}
+            ({t('common.tag.reportedByUser')}
+            {userReported.reportReason &&
+              userReported.reportReason !== 'other' &&
+              t('common.tag.reportReason', {
+                reportReason: userReported.reportReason,
+              })}
+            )
           </Text>
         )}
         {reported && (

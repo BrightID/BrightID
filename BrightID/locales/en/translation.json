@@ -155,7 +155,8 @@
     "tag": {
       "connectionDate": "Connected {{date}}",
       "reported": "(reported)",
-      "reportedByUser": "(reported by you as {{reportReason}})"
+      "reportedByUser": "reported by you",
+      "reportReason": " as {{reportReason}}"
     },
     "text": {
       "uploadingData": "Uploading encrypted data to backup server…"
@@ -165,8 +166,10 @@
     "button": {
       "levelSave": "Save",
       "report": "Report this person",
+      "undoReport": "Undo Report",
       "reportCancel": "Cancel",
-      "reportSubmit": "Submit"
+      "reportSubmit": "Submit",
+      "ok": "OK"
     },
     "header": {
       "connectionDetails": "Connection details"
@@ -187,8 +190,10 @@
       "levelRecovery": "I trust this person to recover my BrightID for me",
       "levelSuspicious": "I don't know this person at all",
       "reportConnection": "Report {{name}}",
+      "unReportConnection": "Undo Report",
       "reportDuplicate": "This person created multiple accounts",
       "reportImpact": "Flagging {{name}} will negatively effect their BrightID score, and this flag might be shown to other users.",
+      "unReportImpact": "You have already reported {{name}} as a {{reportReason}}. Would you like to remove this flag and restore your connection?",
       "reportOther": "Other reason",
       "reportSpammer": "This person sent me an unwanted connection request"
     }
@@ -220,7 +225,7 @@
     "tag": {
       "deleted": "Deleted",
       "failed": "Connection failed.\nPlease try again.",
-      "hidden": "Hidden",
+      "reported": "Reported",
       "lastConnected": "Last connected {{date}}",
       "reportedAs": "Reported as {{flag}}",
       "waiting": "Waiting"
@@ -480,6 +485,7 @@
       "groups": "Groups",
       "justMet": "Just met",
       "mutualConnections": "Mutual Connections",
+      "created": "Joined BrightID {{date}}",
       "rating": "How well do you know this connection?",
       "recovery": "Recovery",
       "reported": "Reported",

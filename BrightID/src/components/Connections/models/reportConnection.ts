@@ -1,4 +1,4 @@
-import { addOperation, deleteConnection } from '@/actions';
+import { addOperation, reportAndHideConnection } from '@/actions';
 import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 import { connection_levels } from '@/utils/constants';
 import { NodeApi } from '@/api/brightId';
@@ -27,7 +27,7 @@ export const reportConnection = ({
     );
     dispatch(addOperation(op));
     // remove connection from local storage
-    dispatch(deleteConnection(id));
+    dispatch(reportAndHideConnection({ id, reason }));
     if (backupCompleted) {
       await dispatch(backupUser());
     }

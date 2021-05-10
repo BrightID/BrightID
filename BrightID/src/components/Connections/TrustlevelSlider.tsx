@@ -56,8 +56,9 @@ const TrustlevelSlider = ({
   // TODO - Quick workaround to catch connections that just changed from "REPORTED" to something else, but are not
   // confirmed on the backend yet. This can happen when you report someone and later reconnect. Proper solution is
   // to not allow changing level again until the last operation actually confirmed.
+  // RESPONSE: The connection slider will not be avail for users who are marked as REPORTED, because we are no longer deleting reported connections, but I will keep this here in case we run into this issue in the future
   if (currentLevel === connection_levels.REPORTED) {
-    currentLevel = connection_levels.JUST_MET;
+    currentLevel = connection_levels.SUSPICIOUS;
   }
 
   // map connectionLevel to index value

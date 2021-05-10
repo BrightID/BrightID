@@ -9,11 +9,12 @@ import {
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { GREY, DARK_ORANGE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
+import { connection_levels } from '@/utils/constants';
 
 export const ConnectionStatus = ({
   index,
   status,
-  hiddenFlag,
+  reportReason,
   connectionDate,
   level,
 }) => {
@@ -32,15 +33,15 @@ export const ConnectionStatus = ({
         <Text style={styles.waitingMessage}>{t('connections.tag.failed')}</Text>
       </View>
     );
-  } else if (status === 'hidden') {
+  } else if (level === connection_levels.REPORTED) {
     return (
       <View style={styles.statusContainer}>
         <Text style={[styles.deletedMessage, { marginTop: 1 }]}>
-          {hiddenFlag
+          {reportReason && reportReason !== 'other'
             ? t('connections.tag.reportedAs', {
-                flag: `Reported as ${hiddenFlag}`,
+                flag: reportReason,
               })
-            : t('connections.tag.hidden')}
+            : t('connections.tag.reported')}
         </Text>
         <Text style={[styles.connectedText, { marginTop: 1 }]}>
           {t('common.tag.connectionDate', {
