@@ -172,7 +172,9 @@
     },
     "tag": {
       "connectionDate": "Verbunden {{date}}",
-      "reported": "(gemeldet)"
+      "reportReason": " als {{reportReason}}",
+      "reported": "(gemeldet)",
+      "reportedByUser": "von dir gemeldet"
     },
     "text": {
       "progress": "{{completed}}/{{total}} abgeschlossen",
@@ -182,9 +184,11 @@
   "connectionDetails": {
     "button": {
       "levelSave": "Speichern",
+      "ok": "OK",
       "report": "Diese Person melden",
       "reportCancel": "Abbrechen",
-      "reportSubmit": "Einreichen"
+      "reportSubmit": "Einreichen",
+      "undoReport": "Meldung rückgängig machen"
     },
     "header": {
       "connectionDetails": "Verbindungsdetails"
@@ -208,7 +212,9 @@
       "reportDuplicate": "Diese Person hat mehrere Konten erstellt",
       "reportImpact": "Das Markieren von {{name}} wirkt sich negativ auf die BrightID-Bewertung aus, und diese Markierung wird möglicherweise anderen Benutzern angezeigt.",
       "reportOther": "Anderer Grund",
-      "reportSpammer": "Diese Person hat mir eine unerwünschte Verbindungsanfrage gesendet"
+      "reportSpammer": "Diese Person hat mir eine unerwünschte Verbindungsanfrage gesendet",
+      "unReportConnection": "Meldung rückgängig machen",
+      "unReportImpact": "Du hast bereits {{name}} als {{reportReason}} gemeldet. Möchtest du diese Meldung entfernen und deine Verbindung wiederherstellen?"
     }
   },
   "connections": {
@@ -243,6 +249,7 @@
       "failed": "Verbindung fehlgeschlagen.\nBitte versuche es erneut.",
       "hidden": "Versteckt",
       "lastConnected": "Letzte Verbindung: {{date}}",
+      "reported": "Gemeldet",
       "reportedAs": "Gemeldet als {{flag}}",
       "waiting": "Ausstehend"
     },
@@ -503,6 +510,7 @@
     "label": {
       "alreadyKnown": "Bereits bekannt",
       "connections": "Verbindungen",
+      "created": "Mitglied bei BrightID seit {{date}}",
       "groups": "Gruppen",
       "justMet": "Gerade getroffen",
       "mutualConnections": "Gemeinsame Verbindungen",
