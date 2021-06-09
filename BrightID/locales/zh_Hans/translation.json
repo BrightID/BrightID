@@ -29,7 +29,7 @@
       "title": "2位联系人"
     },
     "notification": {
-      "message": "您已完成任务 “{{title}}”.",
+      "message": "您已完成任务 \"{{title}}\".",
       "title": "成就已解锁！"
     },
     "progress": {
