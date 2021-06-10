@@ -1,11 +1,47 @@
 {
   "achievements": {
+    "getSponsored": {
+      "description": "Получите спонсорство привязав свой аккаунт к приложению, предлагающему спонсорство",
+      "title": "Получить спонсорство"
+    },
+    "joinConnectionParty": {
+      "description": "Присоединяйтесь к вечеринке по подключению BrightID",
+      "title": "Вечеринка подключений"
+    },
+    "joinConnectionPartyWithFriend": {
+      "description": "Берите с собой членов вашей семьи или близких друзей на вечеринку по подключению BrightID",
+      "title": "Вечеринка по подключение с друзьями или родственниками"
+    },
     "linkApp": {
       "description": "Свяжите свой BrightID с приложением",
-      "title": "Ссылка на приложение"
+      "title": "Свяжите с приложением"
+    },
+    "makeFirstConnection": {
+      "description": "Подключитесь к другому пользователю BrightID",
+      "title": "Первое подключение"
+    },
+    "makeThreeConnection": {
+      "description": "Подключитесь 3-ём пользователям BrightID",
+      "title": "Три подключения"
+    },
+    "makeTwoConnection": {
+      "description": "Подключитесь к двум пользователям BrightID",
+      "title": "Два подключения"
     },
     "notification": {
+      "message": "Вы выполнили задачу \"{{title}}\".",
       "title": "Достижение разблокировано!"
+    },
+    "progress": {
+      "title": "Завершение:"
+    },
+    "setupBackup": {
+      "description": "Установите пароль, чтобы включить зашифрованное резервное копирование ваших данных",
+      "title": "Установить резервный пароль"
+    },
+    "setupTrustedConnections": {
+      "description": "Установите подключения для восстановления, чтобы включить восстановление учетной записи социальной сети",
+      "title": "Установите социальное восстановление"
     }
   },
   "apps": {
@@ -13,34 +49,61 @@
       "button": {
         "visitWebsite": "Конечно"
       },
+      "text": {
+        "checkWebsite": "Чтобы узнать больше о {{name}}, посетите их веб-сайт!",
+        "invalidContext": "{{context}} не является допустимым контекстом!",
+        "linkApp": "Вы хотите привязать свою учетную запись в {{context}} к своему BrightID?",
+        "linkFailure": "Не удалось привязать ваш аккаунт в {{context}} к вашему BrightID\n{{result}}",
+        "linkSuccess": "Ваш аккаунт в {{context}} успешно привязан к BrightID"
+      },
       "title": {
         "invalidContext": "Ошибка",
+        "linkApp": "Привязать приложение?",
         "linkFailure": "Ошибка",
-        "linkSuccess": "Успешно"
+        "linkSuccess": "Успешно",
+        "linkingFailed": "Привязка к приложению не удалась"
       }
     },
     "tag": {
       "tryAgain": "Попробуйте снова"
     },
     "text": {
-      "noApps": "Нет приложений"
+      "noApps": "Нет приложений",
+      "notSponsored": "Вы не спонсированы.\nПожалуйста, найдите приложение ниже, которое будет спонсировать вас.",
+      "pendingLink": "Подключение вашей учетной записи в {{context}} к вашему BrightID…"
     }
   },
   "backup": {
     "alert": {
       "text": {
-        "backupSuccess": "Резервное копирование успешно завершено!"
+        "backupSuccess": "Резервное копирование успешно завершено!",
+        "completed": "Социальное восстановление вашего BrightID теперь включено",
+        "needThreeTrusted": "Для резервного копирования вам потребуется, как минимум 3 восстановительных подключения с пользователями."
       }
     },
     "button": {
       "next": "Далее",
+      "save": "Установите восстанавливающие подключения",
       "startBackup": "Начать резервное копирование"
     },
     "header": {
-      "backup": "Резервное копирование"
+      "backup": "Резервное копирование",
+      "trustedConnections": "Подключения для восстановления"
     },
     "placeholder": {
       "confirmPassword": "Подтвердить пароль"
+    },
+    "text": {
+      "chooseTrustedConnections": "Выберите три или более подключений в качестве восстановительных для резервного копирования вашего BrightID.",
+      "noConnections": "Нет подключений"
+    }
+  },
+  "channel": {
+    "alert": {
+      "text": {
+        "localOutdated": "версия клиента устарела - обновите клиент и повторите попытку",
+        "otherOutdated": "другая версия клиента устарела - создателю QR кода необходимо обновить клиент и повторить попытку"
+      }
     }
   },
   "common": {
@@ -58,13 +121,21 @@
       "cancel": "Отмена",
       "dismiss": "Отклонить",
       "error": "Ошибка",
-      "info": "Инфо",
+      "info": "Информация",
       "no": "Нет",
-      "ok": "ОК",
+      "ok": "Хорошо",
       "success": "Успешно",
       "sure": "Конечно",
       "text": {
-        "incorrectPassword": "Неверный пароль!"
+        "incorrectPassword": "Неверный пароль!",
+        "lostKeys": "Пожалуйста, создайте новый BrightID или попробуйте восстановить предыдущий BrightID",
+        "passwordMatch": "Пароли не совпадают.",
+        "passwordShort": "Ваш пароль должен состоять не менее чем из 8 символов.",
+        "trustedSigned": "Один из ваших восстановительных подключений принял ваш запрос"
+      },
+      "title": {
+        "lostKeys": "Мы потеряли пару ключей BrightID с устройства",
+        "pleaseConfirm": "Пожалуйста подтвердите"
       },
       "yes": "Да"
     },
@@ -75,15 +146,26 @@
     },
     "camera": {
       "cancel": "Отмена",
-      "ok": "Ок"
+      "message": "Нам нужно ваше разрешение на использование камеры",
+      "ok": "Хорошо",
+      "title": "Разрешение на использование камеры"
+    },
+    "language": {
+      "and": "и"
     },
     "photoActionSheet": {
       "choosePhoto": "Выбрать из библиотеки",
-      "takePhoto": "Сфотографировать",
+      "takePhoto": "Сделать фотографию",
       "title": "Выбрать фото"
     },
     "placeholder": {
-      "password": "Пароль"
+      "password": "Пароль",
+      "searchConnections": "Поиск подключений"
+    },
+    "tag": {
+      "connectionDate": "Подключено {{date}}",
+      "reportReason": " как {{reportReason}}",
+      "reportedByUser": "Вы пожаловались"
     },
     "text": {
       "progress": "{{completed}}/{{total}} завершено",
@@ -93,54 +175,83 @@
   "connectionDetails": {
     "button": {
       "levelSave": "Сохранить",
+      "ok": "Хорошо",
       "report": "Пожаловаться на этого человека",
       "reportCancel": "Отмена",
-      "reportSubmit": "Отправить"
+      "reportSubmit": "Отправить",
+      "undoReport": "Отозвать жалобу"
     },
     "header": {
       "connectionDetails": "Детали подключения"
     },
     "label": {
-      "connectionLevel": "Уровень подключения"
+      "connectionLevel": "Уровень подключения",
+      "mutualConnections": "Общие подключения",
+      "mutualGroups": "Общие группы"
     },
     "tags": {
+      "connectedAt": "Подключено {{date}}",
       "loading": "Загрузка…"
     },
     "text": {
+      "level": "Насколько хорошо ты знаешь {{name}}?",
       "levelAlreadyKnown": "Я знаю этого человека",
-      "reportConnection": "Отчет {{name}}",
+      "levelJustMet": "Этот человек - незнакомец, которого я только что встретил",
+      "levelRecovery": "Я доверяю этому человеку восстановить мой BrightID для меня",
+      "levelSuspicious": "Я совсем не знаю этого человека",
+      "reportConnection": "Жалоба {{name}}",
       "reportDuplicate": "Этот человек создал несколько учетных записей",
-      "reportOther": "Другая причина"
+      "reportOther": "Другая причина",
+      "reportSpammer": "Этот человек прислал мне нежелательный запрос на подключение",
+      "unReportConnection": "Отозвать жалобу",
+      "unReportImpact": "Вы уже пожаловались на {{name}} за {{reportReason}}. Хотите отозвать жалобу и восстановить подключение?"
     }
   },
   "connections": {
     "accessibilityLabel": {
       "connectionPhoto": "Фото подключения",
-      "viewConnectionDetails": "Просмотр сведений о подключении"
+      "viewConnectionDetails": "Просмотр сведений о подключении",
+      "viewPhoto": "Посмотреть фото в полноэкранном режиме"
     },
     "button": {
-      "reconnect": "Переподключиться"
+      "reconnect": "Переподключиться",
+      "reportConnection": "Оставить жалобу на подключение",
+      "updateConnection": "Обновить подключение"
+    },
+    "header": {
+      "connections": "Подключения"
     },
     "label": {
+      "currentConnectionLevel": "Уровень подключения",
       "newProfile": "Новый профиль",
       "oldProfile": "Старый профиль"
     },
     "removeActionSheet": {
-      "remove": "Удалить"
+      "info": "Вы действительно хотите удалить подключение с {{name}}? Вы можете повторно подключиться в любое время.",
+      "remove": "Удалить",
+      "title": "Удалить подключение"
     },
     "tag": {
       "deleted": "Удалено",
+      "failed": "Ошибка при подключении.\nПожалуйста, попробуйте еще раз.",
       "hidden": "Скрытый",
+      "lastConnected": "Последний раз подключался {{date}}",
       "waiting": "Ожидание"
+    },
+    "text": {
+      "alreadyConnectedWith": "Вы уже подключены к {{name}}",
+      "noConnections": "Нету подключений"
     }
   },
   "contact": {
     "label": {
       "email": "Эл. почта",
-      "socialMedia": "Социальные медиа",
+      "meet": "Сделайте подключения",
+      "socialMedia": "Социальные сети",
       "website": "Веб-сайт"
     },
     "text": {
+      "meet": "Присоединяйтесь к вечеринке по подключению BrightID!",
       "openSource": "открытый исходный код!",
       "weAre": "Мы "
     },
@@ -151,7 +262,12 @@
   "createGroup": {
     "alert": {
       "text": {
-        "nameMissing": "Пожалуйста, добавьте имя для группы"
+        "nameMissing": "Пожалуйста, добавьте имя для группы",
+        "nameTooShort": "Название группы должно состоять минимум из 2 символом"
+      },
+      "title": {
+        "createFailed": "Не удалось создать группу",
+        "formIncomplete": "Форма группы не заполнена"
       }
     },
     "button": {
@@ -160,10 +276,20 @@
     },
     "label": {
       "cofounders": "СОУЧРЕДИТЕЛИ"
+    },
+    "placeholder": {
+      "groupName": "Какое название у группы?"
+    },
+    "text": {
+      "cofounders": "Для создания группы необходимо выбрать двух соучредителей",
+      "noConnections": "Нету подключений"
     }
   },
   "drawer": {
     "alert": {
+      "text": {
+        "upToDate": "BrightID обновлен."
+      },
       "title": {
         "upToDate": "Проверить обновления"
       }
@@ -172,7 +298,9 @@
       "achievements": "Достижения",
       "checkForUpdates": "Проверить наличие обновлений",
       "contactUs": "Связаться с нами",
-      "editProfile": "Редактировать профиль"
+      "copyExplorerCode": "Скопировать Explorer код",
+      "editProfile": "Редактировать профиль",
+      "home": "Главная страница"
     }
   },
   "eula": {
@@ -195,8 +323,17 @@
       "groupsLogo": "логотип группы"
     },
     "alert": {
+      "text": {
+        "addAdmin": "Вы действительно хотите сделать {{name}} администратором этой группы?",
+        "dismissMember": "Вы действительно хотите исключить {{name}} из этой группы?",
+        "inviteSuccess": "Вы успешно пригласили {{name}} в группу",
+        "leaveGroup": "Вы уверены, что хотите покинуть эту группу?"
+      },
       "title": {
         "addAdmin": "Добавить администратора",
+        "dismissMember": "Удалить участника",
+        "errorDismissMember": "Ошибка при удалении участника из группы",
+        "errorLeaveGroup": "Ошибка при выходе из группы",
         "inviteSuccess": "Успешное приглашение",
         "leaveGroup": "Покинуть группу"
       }
@@ -211,61 +348,130 @@
       "leaveGroup": "Покинуть группу"
     },
     "header": {
+      "groups": "Группы",
+      "inviteList": "Список приглашений",
       "newGroup": "Новая группа"
+    },
+    "label": {
+      "knownMembers": "Известные участники:",
+      "unknownMembers": "Неизвестные:"
     },
     "memberActionSheet": {
       "addAdmin": "Добавить администратора",
       "cancel": "Отмена",
       "dismissMember": "Выйти из группы"
     },
+    "state": {
+      "creatingGroup": "создание группы",
+      "uploadingGroupPhoto": "загрузка фотографии группы"
+    },
     "tag": {
       "primaryGroup": "Основная группа"
+    },
+    "text": {
+      "noGroupsMatchSearch": "Ни одна группа не соответствует вашему запросу",
+      "noMembers": "Нету известных пользователей, пригласите кого-нибудь…"
     }
   },
   "home": {
+    "accessibilityLabel": {
+      "connect": "Подключить"
+    },
     "button": {
       "apps": "Приложения",
+      "connections": "Подключения",
       "groups": "Группы",
       "myCode": "Мой код",
       "scanCode": "Отсканировать код"
     },
     "chatActionSheet": {
-      "discord": "BrightID Discord",
+      "discord": "Сервер BrightID в Discord",
       "title": "Хотите поболтать с нами?"
+    },
+    "label": {
+      "createNewConnection": "Сделайте новое подключение"
     },
     "link": {
       "community": "Присоединиться к сообществу"
     }
   },
+  "notificationBar": {
+    "title": {
+      "backupPassword": "Установить резервный пароль",
+      "pendingConnection": "Подтвердить подключения",
+      "socialRecovery": "Установите социальное восстановление"
+    }
+  },
   "notifications": {
     "alert": {
       "text": {
-        "failureAcceptGroupInvite": "Не удалось присоединиться к группе"
+        "failureAcceptGroupInvite": "Не удалось присоединиться к группе",
+        "successGroupInvite": "Вы присоединились к группе {{groupName}}"
       },
       "title": {
+        "failureRejectGroupInvite": "Не удалось отклонить приглашение",
         "rejectGroupInvite": "Отклонить"
       }
     },
     "item": {
       "title": {
-        "backupBrightId": "Резервное копирование BrightID"
+        "backupBrightId": "Резервное копирование BrightID",
+        "socialRecovery": "Установите подключения для социального восстановления"
       }
     },
     "tab": {
-      "groups": "группы"
+      "connections": "подключения",
+      "groups": "группы",
+      "miscellaneous": "Разнообразный"
+    },
+    "text": {
+      "noGroupInvites": "У вас нету приглашений в группу...",
+      "noMiscellaneous": "Здесь ничего нету…",
+      "noPendingConnections": "У вас нету ожидающих подключений..."
     }
   },
   "onboarding": {
     "button": {
-      "getStarted": "Начать"
+      "create": "Создать аккаунт BrightID",
+      "getStarted": "Начать",
+      "recover": "Восстановить BrightID"
     },
     "label": {
       "maintainPrivacy": "Сохраняйте конфиденциальность"
+    },
+    "text": {
+      "congratulations": "Поздравляю!\nВаш аккаунт в BrightID создан.\nПришло время делать подключения.",
+      "register": "Зарегистрируйтесь, чтобы создать свою собственную\nцифровую идентичность"
+    }
+  },
+  "pendingConnection": {
+    "alert": {
+      "text": {
+        "errorCreateChannel": "Не удалось создать канал подключения. Сообщение об ошибке: {{message}}",
+        "errorJoinChannel": "Не удалось подключиться к каналу подключения. Сообщение об ошибке: {{message}}",
+        "localOutdated": "Не удается подключиться к {{name}} из-за несовместимой версии клиента. Обновите и перезапустите приложение brightID.",
+        "otherOutdated": "Не удается подключиться к {{name}} из-за несовместимой версии клиента. Попросите {{name}} обновить и перезапустить приложение BrightID."
+      },
+      "title": {
+        "connectionImpossible": "Подключение невозможно"
+      }
+    },
+    "text": {
+      "alreadyRated": "Вы уже оценили это подключение",
+      "errorExpired": "Срок подключения истек. Пожалуйста, попробуйте повторно подключиться.",
+      "errorMyself": "Вы не можете подключиться к самому себе.",
+      "errorUnhandled": "Необработанное состояние подключения"
     }
   },
   "pendingConnections": {
     "label": {
+      "alreadyKnown": "Уже знаком",
+      "connections": "Подключения",
+      "created": "Присоединился к BrightID {{date}}",
       "groups": "Группы",
+      "justMet": "Только что встретил",
+      "mutualConnections": "Общие подключения",
+      "rating": "Насколько хорошо вы знаете это подключение?",
       "recovery": "Восстановление"
     }
   },
@@ -284,7 +490,7 @@
     },
     "label": {
       "currentPassword": "Текущий пароль",
-      "name": "Название",
+      "name": "Имя",
       "newPassword": "Новый пароль",
       "newPasswordAgain": "Новый пароль еще раз",
       "socialMediaLink": "Ссылка на социальные сети"
@@ -319,7 +525,7 @@
     "text": {
       "codeGroup": "Код группы",
       "codeSingle": "Одноразовый код",
-      "expiresIn": "Истекает в:"
+      "expiresIn": "Истекает через:"
     }
   },
   "recovery": {
