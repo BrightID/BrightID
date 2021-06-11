@@ -369,8 +369,11 @@
       "primaryGroup": "Основная группа"
     },
     "text": {
+      "noEligibleConnection": "Нет существующих подключений, подходящих для этой группы. Повторите попытку позже...",
+      "noGroups": "<text> Получите верификацию быстрее </text> <text> путем создания и </text> <text> присоединения к группам </text>",
       "noGroupsMatchSearch": "Ни одна группа не соответствует вашему запросу",
-      "noMembers": "Нету известных пользователей, пригласите кого-нибудь…"
+      "noMembers": "Нету известных пользователей, пригласите кого-нибудь…",
+      "waitingForMembers": "В ожидании присоединения {{list}}"
     }
   },
   "home": {
@@ -396,6 +399,13 @@
     }
   },
   "notificationBar": {
+    "text": {
+      "backupPassword": "Установите пароль, чтобы включить зашифрованное резервное копирование ваших данных",
+      "pendingConnections_0": "У вас {{count}} ожидающее подключение",
+      "pendingConnections_1": "У вас {{count}} ожидающих подключений",
+      "pendingConnections_2": "У вас более {{count}} ожидающих подключений",
+      "socialRecovery": "Выберите подключения для восстановления, чтобы включить социальное восстановление вашего BrightID"
+    },
     "title": {
       "backupPassword": "Установить резервный пароль",
       "pendingConnection": "Подтвердить подключения",
@@ -406,6 +416,7 @@
     "alert": {
       "text": {
         "failureAcceptGroupInvite": "Не удалось присоединиться к группе",
+        "rejectGroupInvite": "Вы уверены, что хотите отказаться от присоединения к этой группе?",
         "successGroupInvite": "Вы присоединились к группе {{groupName}}"
       },
       "title": {
@@ -414,8 +425,18 @@
       }
     },
     "item": {
+      "msg": {
+        "backupBrightId": "Установите пароль, чтобы включить зашифрованное резервное копирование ваших данных",
+        "socialRecovery": "Выберите подключения для восстановления, чтобы включить социальное восстановление вашего BrightID"
+      },
+      "text": {
+        "pendingConnections_0": "У вас {{count}} неподтвержденное подключение",
+        "pendingConnections_1": "У вас {{count}} неподтвержденных подключений",
+        "pendingConnections_2": "У вас более {{count}} неподтвержденных подключений",
+        "pendingGroupInvite": "{{name}} приглашает вас присоединиться"
+      },
       "title": {
-        "backupBrightId": "Резервное копирование BrightID",
+        "backupBrightId": "Установить резервный пароль",
         "socialRecovery": "Установите подключения для социального восстановления"
       }
     },
@@ -472,13 +493,26 @@
       "justMet": "Только что встретил",
       "mutualConnections": "Общие подключения",
       "rating": "Насколько хорошо вы знаете это подключение?",
-      "recovery": "Восстановление"
+      "recovery": "Восстановление",
+      "suspicious": "Подозрительный"
+    },
+    "text": {
+      "errorGeneric": "Ошибка при подключении. Пожалуйста, попробуйте подключиться повторно.",
+      "rating": "Ваш ответ поможет нам предотвратить атаки"
+    },
+    "title": {
+      "confirmationTotal": "{{confirmed}} / {{total}} подтверждено"
     }
   },
   "profile": {
     "alert": {
       "button": {
-        "discard": "Discard"
+        "discard": "Discard",
+        "dontLeave": "Не уходи"
+      },
+      "text": {
+        "discardChanges": "У вас есть несохраненные изменения. Вы уверены, что хотите сбросить их и покинуть экран?",
+        "passwordMatch": "Текущий пароль не совпадает."
       },
       "title": {
         "discardChanges": "Отменить изменения?",
@@ -486,28 +520,42 @@
       }
     },
     "button": {
-      "socialNext": "Далее"
+      "socialNext": "Далее",
+      "socialPrevious": "Предыдущий"
     },
     "label": {
       "currentPassword": "Текущий пароль",
       "name": "Имя",
       "newPassword": "Новый пароль",
-      "newPasswordAgain": "Новый пароль еще раз",
+      "newPasswordAgain": "Повторите пароль",
+      "password": "Пароль",
       "socialMediaLink": "Ссылка на социальные сети"
     },
     "placeholder": {
       "name": "Введите имя",
       "newPassword": "Новый пароль",
-      "newPasswordAgain": "Новый пароль еще раз"
+      "newPasswordAgain": "Повторите пароль",
+      "password": "Пароль"
     },
     "text": {
+      "backupPasswordTitle": "Резервный пароль",
       "changePassword": "Изменить пароль",
       "changeProfilePicture": "Изменить изображение профиля",
+      "setPassword": "Установить пароль",
       "viewPassword": "Посмотреть пароль"
     }
   },
   "qrcode": {
     "alert": {
+      "connectGroup": "Сделайте групповое подключение с {{name}} на BrightID: {{link}}",
+      "connectSingle": "Подключитесь к {{name}} на BrightID: {{link}}",
+      "text": {
+        "codeGroup": "Этот QR-код предназначен для одновременного подключения множества людей.",
+        "codeSingle": "Этот QR-код может быть использован для подключения к одному пользователю до истечения срока его действия.",
+        "shareLinkGroup": "Поделитесь этой ссылкой",
+        "shareLinkSingle": "Поделитесь этой ссылкой с одним другом",
+        "universalLink": "Универсальная ссылка"
+      },
       "title": {
         "codeGroup": "Код группы",
         "codeSingle": "Одноразовый код"
@@ -519,16 +567,33 @@
       "scanCode": "Отсканировать код",
       "showCode": "Показать QR-код"
     },
+    "header": {
+      "connections_0": "{{count}} / 30 подключений",
+      "connections_1": "{{count}} / 30 подключений",
+      "connections_2": "{{count}} / 30 подключений"
+    },
     "label": {
       "connectionType": "Тип подключения:"
     },
     "text": {
+      "canAlso": "Или вы также можете…",
       "codeGroup": "Код группы",
       "codeSingle": "Одноразовый код",
-      "expiresIn": "Истекает через:"
+      "confirmConnections": "Подтвердить подключения",
+      "downloadingConnectionData": "Загрузка данных подключения",
+      "expiresIn": "Истекает через:",
+      "pendingConnections_0": "У вас {{count}} ожидающее подключение",
+      "pendingConnections_1": "У вас {{count}} ожидающих подключений",
+      "pendingConnections_2": "У вас более {{count}} ожидающих подключений",
+      "scanCode": "<text> Привет, {{name}}, отсканируйте код и </text> <text> сделайте новое подключение сегодня </text>"
     }
   },
   "recovery": {
+    "alert": {
+      "clipboardmessage": "Помогите мне восстановить мой BrightID: {{link}}",
+      "text": "Поделитесь этой ссылкой со своими подключениями, которые вы выбрали для восстановления.",
+      "title": "Ссылка для восстановления"
+    },
     "header": {
       "title": "Код восстановления"
     }
