@@ -272,7 +272,7 @@ export const NotificationsScreen = () => {
   // if we navigate here normally, go to the first route with content, if any
   const displayRoute = routes.findIndex(({ badge }) => badge)
 
-  const [index, setIndex] = useState(displayRoute);
+  const [index, setIndex] = useState(displayRoute > 0 ? displayRoute : 0);
 
   const renderScene = SceneMap({
     [CONNECTIONS_TYPE]: ConnectionsList,
