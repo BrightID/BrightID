@@ -89,6 +89,7 @@ type InviteOp = {
 };
 
 type LinkContextIdOp = {
+  api: NodeApi;
   name: 'Link ContextId';
   timestamp: number;
   v: number;

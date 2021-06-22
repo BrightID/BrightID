@@ -51,7 +51,11 @@ export const pollOperations = async (api) => {
   let shouldUpdateLocalState = false;
   try {
     for (const op of operations) {
-      const { state, result } = await api.getOperationState(op.hash);
+      // Some operations like "link context" require to query a specific api endpoint as
+      // the op is only known on that node
+      let queryApi = op.api || api;
+      console.log(`Querying op status for ${op.name} at ${queryApi.apiUrl}`);
+      const { state, result } = await queryApi.getOperationState(op.hash);
 
       // stop polling for op if trace time is expired
       let removeOp = op.timestamp + time_fudge < Date.now();
