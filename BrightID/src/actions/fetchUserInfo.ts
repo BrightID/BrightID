@@ -38,16 +38,15 @@ const fetchUserInfo = (api: NodeApi) => (
         const {
           groups,
           score,
-          connections = [],
+          outboundConnections: connections,
+          inboundConnections,
           isSponsored,
           invites,
         } = await api.getUserInfo(id);
 
         const verifications = await api.getUserVerifications(id);
 
-        let incomingConns = await api.getConnections(id, 'inbound');
-
-        incomingConns = _.keyBy(incomingConns, 'id');
+        const incomingConns = _.keyBy(inboundConnections, 'id');
 
         for (const conn of connections) {
           conn.incomingLevel = incomingConns[conn.id]?.level;
@@ -61,7 +60,6 @@ const fetchUserInfo = (api: NodeApi) => (
         dispatch(setUserScore(score));
         dispatch(setVerifications(verifications));
         dispatch(setIsSponsored(isSponsored));
-
         // this can not be done in reducer because it should be in an async function
         const newInvites: Invite[] = await updateInvites(invites);
 

@@ -9,8 +9,6 @@ import {
 } from '@/utils/encoding';
 import BrightidError from '@/api/brightidError';
 
-const v = 5;
-
 export class NodeApi {
   api: ApisauceInstance;
 
@@ -20,18 +18,23 @@ export class NodeApi {
 
   id: string | undefined;
 
+  v: number | undefined;
+
   constructor({
     url,
     secretKey,
     id,
+    v,
   }: {
     url: string;
     secretKey: Uint8Array | undefined;
     id: string | undefined;
+    v: number | undefined;
   }) {
     this.baseUrlInternal = url;
     this.id = id;
     this.secretKey = secretKey;
+    this.v = v || 6;
     this.api = create({
       baseURL: this.apiUrl,
       headers: { 'Cache-Control': 'no-cache' },
@@ -48,7 +51,7 @@ export class NodeApi {
   }
 
   get apiUrl() {
-    return `${this.baseUrl}/brightid/v5`;
+    return `${this.baseUrl}/brightid/v${this.v}`;
   }
 
   static checkHash(response: ApiOkResponse<OperationRes>, message: string) {
@@ -403,5 +406,47 @@ export class NodeApi {
     const res = await this.api.get<AppsRes, ErrRes>(`/apps`);
     NodeApi.throwOnError(res);
     return (res.data as AppsRes).data?.apps;
+  }
+
+  async getState() {
+    const res = await this.api.get<StateRes, ErrRes>(`/state`);
+    NodeApi.throwOnError(res);
+    return (res.data as StateRes).data;
+  }
+
+  async getPublic(app: string, roundedTimestamp: number, verification: string) {
+    console.log(15, app, roundedTimestamp, verification);
+    const res = await this.api.get<PublicRes, ErrRes>(`/verifications/blinded/public`,
+      { app, roundedTimestamp, verification }
+    );
+    NodeApi.throwOnError(res);
+    return (res.data as PublicRes).data.public;
+  }
+
+  async getBlindedSig(pub: string, sig: string, e: string) {
+    const res = await this.api.get<BlindSigRes, ErrRes>(`/verifications/blinded/sig/${this.id}`,
+      { public: pub, sig, e }
+    );
+    NodeApi.throwOnError(res);
+    return (res.data as BlindSigRes).data.response;
+  }
+
+  async linkAppId(sig: SigInfo, appId: string) {
+    console.log(`/verifications/${sig.app}/${appId}`);
+    console.log({
+      sig: sig.sig,
+      uid: sig.uid,
+      verification: sig.verification,
+      roundedTimestamp: sig.roundedTimestamp
+    });
+    const res = await this.api.post<ErrRes>(`/verifications/${sig.app}/${appId}`, {
+      sig: sig.sig,
+      uid: sig.uid,
+      verification: sig.verification,
+      roundedTimestamp: sig.roundedTimestamp
+    });
+
+    NodeApi.throwOnError(res);
+    return;
   }
 }

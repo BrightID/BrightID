@@ -22,16 +22,26 @@ type AppsRes = {
   };
 };
 
+type StateRes = {
+  data: StateInfo;
+};
+
+type PublicRes = {
+  data: {
+    public: string;
+  };
+};
+
+type BlindSigRes = {
+  data: {
+    response: string;
+  };
+};
+
 type ErrRes = {
   code: number;
   errorMessage: string;
   errorNum: number;
-};
-
-type IpRes = {
-  data: {
-    ip: string;
-  };
 };
 
 type OperationRes = {
@@ -71,6 +81,17 @@ type UserProfileRes = {
  * Info Types
  */
 
+type StateInfo = {
+  lastProcessedBlock: number;
+  verificationsBlock: number;
+  wISchnorrPublic?: {
+    p: string;
+    q: string;
+    g: string;
+    y: string;
+  };
+};
+
 type AppInfo = {
   id: string;
   name: string;
@@ -82,35 +103,31 @@ type AppInfo = {
   assignedSponsorships?: number;
   unusedSponsorships?: number;
   testing: boolean;
+  usingBlindSig: boolean;
+  nodeUrl?: string;
 };
 
 type GroupInfo = {
   id: string;
   members: string[];
   type: string;
-  founders: string[];
   admins: string[];
-  isNew: boolean;
   url: string;
   timestamp: number;
   joined: number;
-  score?: number;
 };
 
 type InviteInfo = {
   id: string;
   members: string[];
   type: string;
-  founders: string[];
   admins: string[];
-  isNew: boolean;
   url: string;
   timestamp: number;
   inviteId: string;
   invited: number;
   inviter: string;
   data: string;
-  score?: number;
 };
 
 type ConnectionInfo = {
@@ -125,7 +142,6 @@ type ConnectionInfo = {
     [id: string]: string;
   };
   createdAt: number;
-  score?: number;
   status?: string;
 };
 
@@ -133,14 +149,14 @@ type UserInfo = {
   createdAt: number;
   groups: GroupInfo[];
   invites: InviteInfo[];
-  connections: ConnectionInfo[];
+  inboundConnections: ConnectionInfo[];
+  outboundConnections: ConnectionInfo[];
   verifications: string[];
   isSponsored: boolean;
   trusted: string[];
   flaggers: {
     [id: string]: string;
   };
-  score?: number;
 };
 
 type UserProfile = {

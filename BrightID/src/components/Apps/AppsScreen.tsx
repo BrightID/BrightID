@@ -14,7 +14,7 @@ import EmptyList from '@/components/Helpers/EmptyList';
 import Spinner from 'react-native-spinkit';
 import { ORANGE, BLUE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { any, propEq } from 'ramda';
+import { any, propEq, find } from 'ramda';
 import { fetchApps, selectPendingLinkedContext } from '@/actions';
 import {
   useFocusEffect,
@@ -24,7 +24,7 @@ import {
 import { fontSize } from '@/theme/fonts';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import AppCard from './AppCard';
-import { handleAppContext } from './model';
+import { handleAppContext, handleBlindSigApp } from './model';
 
 export const AppsScreen = () => {
   const dispatch = useDispatch();
@@ -72,11 +72,31 @@ export const AppsScreen = () => {
     });
   }, [navigation, route.params, apps, t]);
 
-  useEffect(() => {
-    if (apps.length > 0 && route.params?.context) {
-      handleDeepLink();
+  const handleAppDeepLink = useCallback(() => {
+    const app = route.params?.context;
+    const appInfo = find(propEq('id', app))(apps);
+    if (appInfo && appInfo.usingBlindSig) {
+      handleBlindSigApp(route.params);
+    } else {
+      Alert.alert(
+        t('apps.alert.title.invalidApp'),
+        t('apps.alert.text.invalidApp', { app: `${app}` }),
+      );
     }
-  }, [apps, handleDeepLink, route.params]);
+    // reset params
+    navigation.setParams({
+      context: '',
+      contextId: '',
+    });
+  }, [navigation, route.params, apps, t]);
+
+  useEffect(() => {
+    if (apps.length > 0 && route.params?.baseUrl) {
+      handleDeepLink();
+    } else if (apps.length > 0 && route.params?.context) {
+      handleAppDeepLink();
+    }
+  }, [apps, handleDeepLink, handleAppDeepLink, route.params]);
 
   const AppStatus = () => {
     let msg: string, waiting: boolean;

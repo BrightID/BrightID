@@ -13,9 +13,14 @@ const linkedContextsAdapter = createEntityAdapter<ContextInfo>({
   selectId: (linkedContext) => linkedContext.contextId,
 });
 
+const sigsAdapter = createEntityAdapter<SigInfo>({
+  selectId: (sig) => `${sig.app}_${sig.verification}`,
+});
+
 const initialState = {
   apps: [],
   linkedContexts: linkedContextsAdapter.getInitialState(),
+  sigs: sigsAdapter.getInitialState(),
 };
 
 const appsSlice = createSlice({
@@ -47,6 +52,27 @@ const appsSlice = createSlice({
         update,
       );
     },
+    addSig(state, action: PayloadAction<SigInfo>) {
+      state.sigs = sigsAdapter.addOne(
+        state.sigs,
+        action,
+      );
+    },
+    removeAllSigs(state) {
+      state.sigs = sigsAdapter.removeAll(
+        state.sigs,
+      );
+    },
+    updateSig(state, action: PayloadAction<Partial<SigInfo>>) {
+      const update: Update<SigInfo> = {
+        id: `${action.payload.app}_${action.payload.verification}`,
+        changes: action.payload,
+      };
+      state.sigs = sigsAdapter.updateOne(
+        state.sigs,
+        update,
+      );
+    },
   },
   extraReducers: {
     [RESET_STORE]: () => {
@@ -61,6 +87,9 @@ export const {
   addLinkedContext,
   removeLinkedContext,
   updateLinkedContext,
+  addSig,
+  removeAllSigs,
+  updateSig,
 } = appsSlice.actions;
 
 export const {
@@ -68,6 +97,12 @@ export const {
   selectAll: selectAllLinkedContexts,
 } = linkedContextsAdapter.getSelectors(
   (state: State) => state.apps.linkedContexts,
+);
+
+export const {
+  selectAll: selectAllSigs,
+} = sigsAdapter.getSelectors(
+  (state: State) => state.apps.sigs,
 );
 
 export const linkedContextTotal = createSelector(
