@@ -47,12 +47,15 @@
       },
       "text": {
         "checkWebsite": "To find out more about {{name}}, check out their website!",
+        "invalidApp": "{{app}} is not a valid app!",
         "invalidContext": "{{context}} is not a valid context!",
         "linkApp": "Do you want to link your account in {{context}} to your BrightID?",
         "linkFailure": "Failed to link your account in {{context}} to your BrightID\n{{result}}",
-        "linkSuccess": "Succesfully linked your account in {{context}} to your BrightID"
+        "linkSuccess": "Succesfully linked your account in {{context}} to your BrightID",
+        "blindSigNotFound": "No blind sig found for {{app}}",
       },
       "title": {
+        "invalidApp": "Failed",
         "invalidContext": "Failed",
         "linkApp": "Link App?",
         "linkFailure": "Failed",

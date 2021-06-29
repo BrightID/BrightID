@@ -16,7 +16,7 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
-import { fetchApps, selectAllApps, setActiveNotification } from '@/actions';
+import { fetchApps, selectAllApps, setActiveNotification, updateBlindSigs } from '@/actions';
 import { linkedContextTotal } from '@/reducer/appsSlice';
 import { verifiedConnectionsSelector } from '@/reducer/connectionsSlice';
 import { retrieveImage } from '@/utils/filesystem';
@@ -111,6 +111,7 @@ export const HomeScreen = (props) => {
     useCallback(() => {
       retrieveImage(photoFilename).then(setProfilePhoto);
       setLoading(true);
+      dispatch(updateBlindSigs(api));
       dispatch(fetchUserInfo(api)).then(() => {
         setLoading(false);
       });

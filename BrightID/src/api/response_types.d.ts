@@ -24,6 +24,22 @@ type AppsRes = {
   };
 };
 
+type StateRes = {
+  data: StateInfo;
+};
+
+type PublicRes = {
+  data: {
+    public: string;
+  };
+};
+
+type BlindSigRes = {
+  data: {
+    response: string;
+  };
+};
+
 type ErrRes = {
   code: number;
   errorMessage: string;
@@ -76,6 +92,17 @@ type GroupRes = {
  * Info Types
  */
 
+type StateInfo = {
+  lastProcessedBlock: number;
+  verificationsBlock: number;
+  wISchnorrPublic?: {
+    p: string;
+    q: string;
+    g: string;
+    y: string;
+  };
+};
+
 type AppInfo = {
   id: string;
   name: string;
@@ -90,6 +117,7 @@ type AppInfo = {
   idsAsHex: boolean;
   usingBlindSig: boolean;
   sponsorPublicKey: string;
+  nodeUrl?: string;
 };
 
 type OperationInfo = {
