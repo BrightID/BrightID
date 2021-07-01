@@ -1,10 +1,11 @@
 /** 
-  -- WISchnorrClient.js -- 
-  Author : Christof Torres <christof.ferreira.001@student.uni.lu>
-  Date   : September 2016
+	-- WISchnorrClient.js -- 
+	Author : Christof Torres <christof.ferreira.001@student.uni.lu>
+	Date   : September 2016
 **/
 var CryptoJS = require('crypto-js');
 var BigInteger = require("jsbn").BigInteger;
+import modPow from 'react-native-modpow';
 
 function sha256(s) {
 	return new BigInteger(CryptoJS.SHA256(s).toString(CryptoJS.enc.Hex), 16);
@@ -37,8 +38,13 @@ WISchnorrClient.prototype.GenerateWISchnorrClientChallenge = function(params, in
 
 	var F = sha256(info);
 	// z = F^((p-1)/q) mod p
-	// console.log(F.toString(), this.p.subtract(new BigInteger("1")).divide(this.q).toString(), this.p.toString())
-	var z = F.modPow(this.p.subtract(new BigInteger("1")).divide(this.q), this.p);
+	var z = modPow({
+		target: F.toString(16),
+		value: this.p.subtract(new BigInteger("1")).divide(this.q).toString(16),
+		modifier: this.p.toString(16)
+	});
+	z = new BigInteger(z, 16);
+	// var z = F.modPow(this.p.subtract(new BigInteger("1")).divide(this.q), this.p);
 	// alpha = a * g^t1 * y^t2
 	var a = new BigInteger(params.a);
 	var alpha = a.multiply(this.g.modPow(t1, this.p)).multiply(this.y.modPow(t2, this.p)).mod(this.p);
@@ -82,7 +88,13 @@ WISchnorrClient.prototype.GenerateWISchnorrBlindSignature = function(challenge, 
 WISchnorrClient.prototype.VerifyWISchnorrBlindSignature = function(signature, info, msg) {
 	var F = sha256(info);
 	// z = F^((p-1)/q) mod p
-	var z = F.modPow(this.p.subtract(new BigInteger("1")).divide(this.q), this.p);
+	var z = modPow({
+		target: F.toString(16),
+		value: this.p.subtract(new BigInteger("1")).divide(this.q).toString(16),
+		modifier: this.p.toString(16)
+	});
+	z = new BigInteger(z, 16);
+	// var z = F.modPow(this.p.subtract(new BigInteger("1")).divide(this.q), this.p);
 	
 	// g^rho mod p
 	var gp = this.g.modPow(new BigInteger(signature.rho), this.p);
