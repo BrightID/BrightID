@@ -57,7 +57,7 @@ export const updateBlindSigs = (api) => async (dispatch: dispatch, getState) => 
         const { wISchnorrPublic } = await api.getState();
         if (!wISchnorrPublic) {
           console.log('wISchnorrPublic is not set');
-          return;
+          continue;
         }
         const client = new WISchnorrClient(wISchnorrPublic);
         const pub = await api.getPublic(app.id, roundedTimestamp, verification);
@@ -79,7 +79,11 @@ export const updateBlindSigs = (api) => async (dispatch: dispatch, getState) => 
         const response = await api.getBlindedSig(stringify(pub), sig, challenge.e);
         console.log(response, 'response');
         const blindSig = client.GenerateWISchnorrBlindSignature(challenge.t, response);
-        console.log('final sig', blindSig, typeof(blindSig));
+        console.log('final sig', blindSig);
+        if (!client.VerifyWISchnorrBlindSignature(blindSig, info, uid)) {
+          console.log(`wrong signature for ${app.name} (${verification})!`);
+          continue;
+        }
         dispatch(addSig({ sig: blindSig, app: app.id, roundedTimestamp, verification, uid }));
       } catch (err) {
         console.log(`error in getting sig for ${app.name} (${verification})`, err);
