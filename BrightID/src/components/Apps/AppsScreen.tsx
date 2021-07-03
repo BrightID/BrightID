@@ -37,6 +37,7 @@ export const AppsScreen = () => {
   const pendingLink = useSelector(selectPendingLinkedContext);
 
   const [refreshing, setRefreshing] = useState(false);
+  const [sponsoringApp, setSponsoringApp] = useState(null);
   const { t } = useTranslation();
 
   const refreshApps = useCallback(() => {
@@ -76,7 +77,7 @@ export const AppsScreen = () => {
     const app = route.params?.context;
     const appInfo = find(propEq('id', app))(apps);
     if (appInfo && appInfo.usingBlindSig) {
-      handleBlindSigApp(route.params);
+      handleBlindSigApp(route.params, setSponsoringApp, api);
     } else {
       Alert.alert(
         t('apps.alert.title.invalidApp'),
@@ -100,7 +101,10 @@ export const AppsScreen = () => {
 
   const AppStatus = () => {
     let msg: string, waiting: boolean;
-    if (pendingLink) {
+    if (sponsoringApp) {
+      msg = t('apps.text.sponsoring', { app: `${sponsoringApp.name}` });
+      waiting = true;
+    } else if (pendingLink) {
       msg = t('apps.text.pendingLink', { context: `${pendingLink.context}` });
       waiting = true;
     } else if (!isSponsored) {

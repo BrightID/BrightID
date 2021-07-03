@@ -104,6 +104,8 @@ type AppInfo = {
   unusedSponsorships?: number;
   testing: boolean;
   usingBlindSig: boolean;
+  verificationExpirationLength?: number,
+  sponsorPublicKey?: string,
   nodeUrl?: string;
 };
 
