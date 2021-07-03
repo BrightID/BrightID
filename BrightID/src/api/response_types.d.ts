@@ -116,7 +116,8 @@ type AppInfo = {
   testing: boolean;
   idsAsHex: boolean;
   usingBlindSig: boolean;
-  sponsorPublicKey: string;
+  verificationExpirationLength?: number,
+  sponsorPublicKey?: string,
   nodeUrl?: string;
 };
 

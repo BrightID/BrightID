@@ -511,4 +511,16 @@ export class NodeApi {
     NodeApi.throwOnError(res);
     return;
   }
+
+  async sponsor(op: SponsorOp) {
+    this.requiresCredentials();
+    const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
+    NodeApi.throwOnError(res);
+    delete op.sig;
+    const message = stringify(op);
+    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
+    return op;
+  }
+
+
 }

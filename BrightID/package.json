@@ -93,7 +93,8 @@
     "toggle-switch-react-native": "3.0.0",
     "tweetnacl": "https://github.com/RnbWd/tweetnacl-native",
     "xml2js": "0.4.23",
-    "jsbn": "^1.1.0",
+    "js-sha256": "0.9.0",
+    "jsbn": "1.1.0",
     "react-native-modpow": "^1.1.0",
     "expr-eval": "^2.0.2"
   },

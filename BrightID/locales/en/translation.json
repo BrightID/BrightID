@@ -66,7 +66,8 @@
     "text": {
       "noApps": "No Apps",
       "notSponsored": "You're not sponsored.\nPlease find an app below to sponsor you.",
-      "pendingLink": "Linking your account in {{context}} to your BrightID…"
+      "pendingLink": "Linking your account in {{context}} to your BrightID…",
+      "sponsoring": "{{app}} is sponsoring you…",
     }
   },
   "backup": {
