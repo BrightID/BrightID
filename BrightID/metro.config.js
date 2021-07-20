@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-const defaultSourceExts = require('metro-config/src/defaults/defaults')
-  .sourceExts;
+const defaultSourceExts =
+  require('metro-config/src/defaults/defaults').sourceExts;
 
 /**
  * Metro configuration for React Native
@@ -14,7 +14,7 @@ module.exports = {
     getTransformOptions: async () => ({
       transform: {
         experimentalImportSupport: false,
-        inlineRequires: false,
+        inlineRequires: true,
       },
     }),
   },
