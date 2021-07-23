@@ -40,7 +40,7 @@
       "title": "设置备份密码"
     },
     "setupTrustedConnections": {
-      "description": "设置可信任联系人来帮助恢复账号",
+      "description": "设置您的恢复连接以启用社交柜台恢复",
       "title": "设置账号恢复"
     }
   },
@@ -81,7 +81,7 @@
       "text": {
         "backupSuccess": "成功完成备份！",
         "completed": "现在可以恢复你的BrightID账号",
-        "needThreeTrusted": "您需要至少3位可信任的联系人作为后援。"
+        "needThreeTrusted": "您至少需要三个恢复连接进行备份."
       }
     },
     "button": {
@@ -91,13 +91,13 @@
     },
     "header": {
       "backup": "备份",
-      "trustedConnections": "可信联系人"
+      "trustedConnections": "恢复连接"
     },
     "placeholder": {
       "confirmPassword": "确认密码"
     },
     "text": {
-      "chooseTrustedConnections": "选择三个或者更多可信赖的联系人为你的BrightID背书。",
+      "chooseTrustedConnections": "选择三个或更多恢复连接来认可您的 BrightID。",
       "enterPassword": "输入密码使用以下方法加密备份数据：",
       "noConnections": "联系人为空"
     }
@@ -136,7 +136,7 @@
         "lostKeys": "请创建新的BrightID或者尝试恢复以前的账号",
         "passwordMatch": "密码和确认密码不匹配。",
         "passwordShort": "密码长度必须至少为8个字符。",
-        "trustedSigned": "一个可信联系人签名了你的需求"
+        "trustedSigned": "您的一个恢复连接签署了您的请求"
       },
       "title": {
         "lostKeys": "我们从设备中丢失了BrightID密钥对",
@@ -170,7 +170,8 @@
     "tag": {
       "connectionDate": "建立联系的 {{date}}",
       "reportReason": " 作为{{reportReason}}",
-      "reported": "(已报告)"
+      "reported": "(已报告)",
+      "reportedByUser": "被你举报"
     },
     "text": {
       "uploadingData": "正在将加密数据上传到备份服务器…"
@@ -208,7 +209,8 @@
       "reportImpact": "标记{{name}}会对他们的BrightID产生负面影响，并且该标记可能会显示给其他用户。",
       "reportOther": "其他原因",
       "reportSpammer": "此人向我发送了不需要的连接请求",
-      "unReportConnection": "撤销举报"
+      "unReportConnection": "撤销举报",
+      "unReportImpact": "您已经将 {{name}}报告为{{reportReason}}.您想删除此标志并恢复您的连接吗？"
     }
   },
   "connections": {
@@ -226,7 +228,7 @@
       "connections": "联系人"
     },
     "label": {
-      "currentConnectionLevel": "当前联系人熟悉程度",
+      "currentConnectionLevel": "连接级别",
       "newProfile": "新简介",
       "oldProfile": "旧简介"
     },
@@ -412,11 +414,11 @@
     "text": {
       "backupPassword": "设置密码以便备份你的数据",
       "pendingConnections": "您有{{count}}个联系正在处理中",
-      "socialRecovery": "请选择您信任的联系人助您恢复BrightID账号"
+      "socialRecovery": "选择恢复连接为您的 BrightID 启用社交恢复"
     },
     "title": {
       "backupPassword": "设置备份密码",
-      "pendingConnection": "确认联系人",
+      "pendingConnection": "确认连接",
       "socialRecovery": "备份和恢复"
     }
   },
