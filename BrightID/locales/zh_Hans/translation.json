@@ -419,7 +419,7 @@
     "title": {
       "backupPassword": "设置备份密码",
       "pendingConnection": "确认连接",
-      "socialRecovery": "备份和恢复"
+      "socialRecovery": "设置社会的恢复"
     }
   },
   "notifications": {
@@ -445,7 +445,7 @@
         "pendingGroupInvite": "{{name}}已邀您加入"
       },
       "title": {
-        "backupBrightId": "备份BrightID",
+        "backupBrightId": "设置备份密码",
         "socialRecovery": "设置恢复连接"
       }
     },
@@ -539,14 +539,14 @@
       "currentPassword": "当前密码",
       "name": "姓名",
       "newPassword": "新密码",
-      "newPasswordAgain": "请再次输入新密码",
+      "newPasswordAgain": "请再次输入密码",
       "password": "密码",
       "socialMediaLink": "社交媒体账号链接"
     },
     "placeholder": {
       "name": "输入姓名",
       "newPassword": "新密码",
-      "newPasswordAgain": "请再次输入新密码",
+      "newPasswordAgain": "请再次输入密码",
       "password": "密码"
     },
     "text": {
@@ -602,27 +602,35 @@
       "title": "恢复链接"
     },
     "error": {
-      "mismatchId": "你的恢复联系人选择了不同的账户",
+      "mismatchId": "你的恢复 联系选择了不同的账户",
       "title": "账户恢复失败",
       "unknown": "发生了一个未知错误"
     },
     "header": {
       "text": "部分1:恢复账户"
     },
+    "info": "此步骤将在此设备上恢复您的 BrightID.将恢复与恢复连接相同的连接名称和照片.",
     "state": "恢复{{recoveredConnections}}联系人，{{recoveredGroups}}群组",
     "steps": {
       "complete": "账户恢复完成",
+      "downloading": "正在从恢复连接下载数据...",
       "error": "账户恢复失败",
       "recovering": "账户恢复中…"
     },
     "text": {
-      "additionalInfo": "您的可信任联系人需要扫码来帮您恢复BrightID账号",
-      "askTrustedConnections": "请向您信任的联系人出示该二维码",
+      "additionalInfo": "您的恢复连接需要扫码来帮您恢复BrightID账号",
+      "askTrustedConnections": "请向您恢复连接出示该二维码",
       "signatures": "{{count}} / 2 签名"
     }
   },
   "recoveryCooldownModal": {
-    "dismissButtonLabel": "已完成"
+    "dismissButtonLabel": "已完成",
+    "text": {
+      "connection": "您刚刚更改了<bold>{{name}}</bold> 的恢复级别.",
+      "cooldown": "请注意，出于安全原因，此更改会在冷却期 <period>{{ cooldownPeriod }}</period>后生效。",
+      "cooldownGeneric": "请注意, 出于安全原因, 恢复连接的更改会在最多<period>{{ cooldownPeriod }}</period>的冷却期后生效。"
+    },
+    "title": "恢复连接的冷却时间"
   },
   "restore": {
     "alert": {
@@ -643,7 +651,22 @@
       }
     },
     "header": {
-      "accountRecovery": "账号恢复"
+      "accountRecovery": "账号恢复",
+      "text": "第 2 部分：恢复备份（可选）"
+    },
+    "info": "使用备份密码，您可以恢复所有连接和组的名称和照片.",
+    "password": {
+      "placeholder": "输入您的密码",
+      "skip": "跳过",
+      "submit": "恢复"
+    },
+    "steps": {
+      "complete": "恢复完成",
+      "error": "恢复失败. 密码错误？",
+      "restoring": "正在恢复数据...",
+      "skipped": "已跳过还原",
+      "waitingAccount": "等待帐户恢复",
+      "waitingPassword": "输入密码 或 跳过"
     },
     "text": {
       "chooseConnectionToHelp": "请选择您要帮助恢复账号的联系人。",
@@ -660,18 +683,34 @@
     "button": {
       "addPhoto": "添加图片",
       "createAccount": "创建我的BrightID",
-      "recoverAccount": "恢复BrightID账号"
+      "recoverAccount": "恢复BrightID账号",
+      "skip": "跳过它并稍后再做",
+      "submit": "提交"
     },
     "header": {
-      "title": "注册"
+      "title": "报名"
     },
     "placeholder": {
-      "name": "姓名"
+      "confirmPassword": "确认你的密码",
+      "name": "你的姓名",
+      "password": "密码"
     },
     "text": {
+      "createPassword": "创建您的 BrightID 密码",
       "creatingAccount": "Bright ID创建中…",
       "infoNotShared": "您的名字和照片将永远不会与app共享或存储在服务器上",
+      "nameNotShared": "您的姓名永远不会与应用程序共享或\n存储在我们的区块链中.",
+      "passwordInfo": "如果您需要恢复它们，此密码将对您的连接的名称和照片进行加密. 它不允许有人接管您的 BrightID.",
+      "photoNotShared": "您的照片永远不会与应用程序共享或\n存储在我们的区块链中.",
+      "pleaseAddPhoto": "请添加照片",
       "whatsYouName": "您的朋友是怎么认识您的？"
+    }
+  },
+  "walkthroughs": {
+    "text": {
+      "gotIt": "知道了!",
+      "setPassword": "您可以随时在此处设置\n您的BrightID密码.",
+      "viewPassword": "您随时可以在这里看到\n您的 BrightID 密码"
     }
   }
 }
