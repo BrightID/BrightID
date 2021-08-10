@@ -6,16 +6,6 @@ import { groupCirclePhotos } from '@/utils/groups';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { LIGHT_GREY } from '@/theme/colors';
 
-const photoStyle = (photo) => {
-  const style = { ...styles.photo };
-  if (photo.faded) {
-    style.opacity = 0.25;
-  }
-  return {
-    ...style,
-  };
-};
-
 const GroupPhoto = ({ group }) => {
   if (group.photo?.filename) {
     return (
@@ -39,14 +29,13 @@ const GroupPhoto = ({ group }) => {
       }
       return item;
     });
-
     return (
       <View style={styles.container}>
         <View style={styles.topPhotos}>
           {circlePhotos[0] && (
             <Image
               source={circlePhotos[0].source}
-              style={photoStyle(circlePhotos[0])}
+              style={styles.photo}
             />
           )}
         </View>
@@ -54,13 +43,13 @@ const GroupPhoto = ({ group }) => {
           {circlePhotos[1] && (
             <Image
               source={circlePhotos[1].source}
-              style={photoStyle(circlePhotos[1])}
+              style={styles.photo}
             />
           )}
           {circlePhotos[2] && (
             <Image
               source={circlePhotos[2].source}
-              style={photoStyle(circlePhotos[2])}
+              style={styles.photo}
             />
           )}
         </View>
@@ -86,9 +75,6 @@ const styles = StyleSheet.create({
     width: DEVICE_LARGE ? 40 : 32,
     height: DEVICE_LARGE ? 40 : 32,
     backgroundColor: LIGHT_GREY,
-  },
-  faded: {
-    opacity: 0.25,
   },
   topPhotos: {
     alignItems: 'center',

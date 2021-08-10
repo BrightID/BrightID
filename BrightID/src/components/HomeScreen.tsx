@@ -63,7 +63,10 @@ export const HomeScreen = (props) => {
   const photoFilename = useSelector(
     (state: State) => state.user.photo.filename,
   );
-  const groupsCount = useSelector((state: State) => state.groups.groups.length);
+  const groupsCount = useSelector(
+    (state: State) => state.groups.groups
+      .filter(g => g.state === 'initiated' || g.state === 'verified').length
+  );
   const connectionsCount = useSelector(verifiedConnectionsSelector).length;
   const linkedContextsCount = useSelector(linkedContextTotal);
   const verifiedApps = useSelector(verifiedAppsSelector);

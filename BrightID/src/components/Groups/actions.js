@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import emitter from '@/emitter';
 import { saveImage } from '@/utils/filesystem';
 import { encryptAesKey } from '@/utils/invites';
-import { setNewGroupCoFounders, createGroup } from '@/actions/index';
+import { setNewGroupInvitees, createGroup } from '@/actions/index';
 import backupApi from '@/api/backupService';
 import { hash, randomKey } from '@/utils/encoding';
 import { selectConnectionById } from '@/reducer/connectionsSlice';
@@ -14,15 +14,15 @@ import {
   backupUser,
 } from '../Onboarding/RecoveryFlow/thunks/backupThunks';
 
-export const toggleNewGroupCoFounder = (id) => (dispatch, getState) => {
-  let coFounders = [...getState().groups.newGroupCoFounders];
-  const index = coFounders.indexOf(id);
+export const toggleNewGroupInvitee = (id) => (dispatch, getState) => {
+  let invitees = [...getState().groups.newGroupInvitees];
+  const index = invitees.indexOf(id);
   if (index >= 0) {
-    coFounders.splice(index, 1);
-  } else if (coFounders.length < 2) {
-    coFounders.push(id);
+    invitees.splice(index, 1);
+  } else {
+    invitees.push(id);
   }
-  dispatch(setNewGroupCoFounders(coFounders));
+  dispatch(setNewGroupInvitees(invitees));
 };
 
 export const createNewGroup = (photo, name, type, api) => async (
@@ -32,23 +32,19 @@ export const createNewGroup = (photo, name, type, api) => async (
   try {
     let {
       user: { id, backupCompleted },
-      groups: { newGroupCoFounders },
+      groups: { newGroupInvitees },
     } = getState();
 
-    if (newGroupCoFounders.length < 2) {
-      throw new Error('You need two other people to form a group');
-    }
-
-    const founder2 = selectConnectionById(getState(), newGroupCoFounders[0]);
-    const founder3 = selectConnectionById(getState(), newGroupCoFounders[1]);
-
-    if (!founder2 || !founder3) return;
+    const invitees = newGroupInvitees.map(
+      (inv) => selectConnectionById(getState(), inv)
+    );
 
     if (type === 'primary') {
-      if (founder2.hasPrimaryGroup || founder3.hasPrimaryGroup) {
-        const name = founder2.hasPrimaryGroup ? founder2.name : founder3.name;
-        throw new Error(`${name} already has a primary group`);
-      }
+      invitees.forEach((inv) => {
+        if (inv.hasPrimaryGroup) {
+          throw new Error(`${inv.name} already has a primary group`);
+        }
+      });
     }
 
     const aesKey = await randomKey(16);
@@ -76,35 +72,31 @@ export const createNewGroup = (photo, name, type, api) => async (
     }
 
     const newGroup = {
-      founders: [id, founder2.id, founder3.id],
-      admins: [id, founder2.id, founder3.id],
+      admins: [id],
       members: [id],
       id: groupId,
-      isNew: true,
-      score: 0,
       photo: { filename },
       name,
       url,
       aesKey,
       type,
+      state: 'initiated'
     };
 
-    const inviteData2 = await encryptAesKey(aesKey, founder2.signingKey);
-
-    const inviteData3 = await encryptAesKey(aesKey, founder3.signingKey);
-
-    const op = await api.createGroup(
+    let op = await api.createGroup(
       groupId,
-      founder2.id,
-      inviteData2,
-      founder3.id,
-      inviteData3,
       url,
       type,
     );
     dispatch(addOperation(op));
-
     dispatch(createGroup(newGroup));
+
+    for (const inv of invitees) {
+      const { signingKeys } = await api.getProfile(inv.id);
+      const inviteData = await encryptAesKey(aesKey, signingKeys[0]);
+      op = await api.invite(inv.id, groupId, inviteData);
+      dispatch(addOperation(op));
+    }
 
     if (backupCompleted) {
       await dispatch(backupUser());

@@ -3,11 +3,6 @@ import { Image, StyleSheet, View } from 'react-native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { LIGHT_GREY } from '@/theme/colors';
 
-const photoStyle = (photo) => ({
-  ...styles.photo,
-  opacity: photo.faded ? 0.25 : 1,
-});
-
 const CirclePhoto = ({ circlePhotos }) => {
   console.log(circlePhotos);
   return (
@@ -46,9 +41,6 @@ const styles = StyleSheet.create({
     width: DEVICE_LARGE ? 40 : 32,
     height: DEVICE_LARGE ? 40 : 32,
     backgroundColor: LIGHT_GREY,
-  },
-  faded: {
-    opacity: 0.25,
   },
   topPhotos: {
     alignItems: 'center',

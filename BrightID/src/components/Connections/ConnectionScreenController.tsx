@@ -48,7 +48,7 @@ function ConnectionScreenController() {
       const fetchData = async (connectionId) => {
         setLoading(true);
         console.log(`fetching connection info for ${connectionId}`);
-        const profile = await api.getUserProfile(connectionId);
+        const profile = await api.getProfile(connectionId);
         setVerifications(profile.verifications);
         setConnectedAt(profile.connectedAt);
         setMutualConnections(

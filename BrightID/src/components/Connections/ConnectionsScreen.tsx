@@ -1,8 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 import { StyleSheet, View, StatusBar, FlatList } from 'react-native';
-import { useDispatch, useSelector } from '@/store';
+import { useDispatch, useSelector, store } from '@/store';
 import { useTranslation } from 'react-i18next';
-import fetchUserInfo from '@/actions/fetchUserInfo';
 import { useNavigation } from '@react-navigation/native';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
@@ -12,6 +11,7 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import ConnectionCard from './ConnectionCard';
+import { updateConnections } from '@/actions';
 
 /**
  * Connection screen of BrightID
@@ -47,8 +47,11 @@ export const ConnectionsScreen = () => {
 
   const ConnectionList = useMemo(() => {
     const onRefresh = async () => {
+      console.log('Reloading Connections');
+      const { user: { id } } = store.getState();
       try {
-        await dispatch(fetchUserInfo(api));
+        const conns = await api.getConnections(id, 'outbound');
+        await dispatch(updateConnections(conns));
       } catch (err) {
         console.log(err.message);
       }

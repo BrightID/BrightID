@@ -27,9 +27,9 @@ import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { createSelector } from '@reduxjs/toolkit';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnections/pendingConnectionSlice';
-import fetchUserInfo from '@/actions/fetchUserInfo';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { photoDirectory } from '@/utils/filesystem';
+import { updateNotifications } from '@/actions/index';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import NotificationCard from './NotificationCard';
 import InviteCard from './InviteCard';
@@ -52,15 +52,14 @@ const useRefresh: () => [boolean, () => void] = () => {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    dispatch(fetchUserInfo(api))
+    dispatch(updateNotifications(api))
       .then(() => {
-        setRefreshing(true);
+        setRefreshing(false);
       })
       .catch((err) => {
         console.log(err.message);
         setRefreshing(false);
       });
-    setRefreshing(false);
   };
   return [refreshing, onRefresh];
 };
@@ -117,7 +116,7 @@ const InviteList = () => {
     <FlatList
       contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
       data={invites}
-      keyExtractor={({ inviteId }, index) => inviteId + index}
+      keyExtractor={({ id }, index) => id + index}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
       onRefresh={onRefresh}
@@ -284,11 +283,11 @@ export const NotificationsScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(fetchUserInfo(api));
+      dispatch(updateNotifications(api));
     }, [api, dispatch]),
   );
 
-  console.log('renderingNotificationScreen');
+  console.log('Rendering Notification Screen');
 
   return (
     <>

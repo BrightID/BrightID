@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import store from '@/store';
 import emitter from '@/emitter';
-import { clearNewGroupCoFounders } from '@/actions';
+import { clearNewGroupInvitees } from '@/actions';
 import { BLUE, LIGHT_GREY, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
@@ -68,7 +68,7 @@ export class NewGroupScreen extends React.Component {
       emitter.on('creatingGroupChannel', this.updateCreationState);
     });
     navigation.addListener('blur', () => {
-      dispatch(clearNewGroupCoFounders());
+      dispatch(clearNewGroupInvitees());
       emitter.off('creatingGroupChannel', this.updateCreationState);
     });
   }
@@ -78,8 +78,8 @@ export class NewGroupScreen extends React.Component {
   };
 
   cardIsSelected = (card) => {
-    const { newGroupCoFounders } = this.props;
-    return newGroupCoFounders.includes(card.id);
+    const { newGroupInvitees } = this.props;
+    return newGroupInvitees.includes(card.id);
   };
 
   createGroup = async () => {
@@ -102,21 +102,24 @@ export class NewGroupScreen extends React.Component {
 
   renderButtonOrSpinner = () => {
     const { t } = this.props;
-    const buttonDisabled = this.props.newGroupCoFounders.length < 2;
+    const skip = this.props.newGroupInvitees.length < 1;
     return !this.state.creating ? (
       <View style={styles.createGroupButtonContainer}>
         <TouchableOpacity
           testID="createNewGroupBtn"
           onPress={this.createGroup}
           style={
-            buttonDisabled
-              ? { ...styles.createGroupButton, opacity: 0.4 }
+            skip
+              ? { ...styles.createGroupButton, ...styles.skipButton }
               : styles.createGroupButton
           }
-          disabled={buttonDisabled}
         >
           <Text style={styles.buttonInnerText}>
-            {t('createGroup.button.createGroup')}
+            {
+              skip
+              ? t('createGroup.button.skip')
+              : t('createGroup.button.createGroup')
+            }
           </Text>
         </TouchableOpacity>
       </View>
@@ -149,10 +152,10 @@ export class NewGroupScreen extends React.Component {
           <View testID="newGroupScreen" style={styles.mainContainer}>
             <View style={styles.titleContainer}>
               <Text style={styles.titleText}>
-                {t('createGroup.label.cofounders')}
+                {t('createGroup.label.invitees')}
               </Text>
               <Text style={styles.infoText}>
-                {t('createGroup.text.cofounders')}
+                {t('createGroup.text.invitees')}
               </Text>
             </View>
             <View style={styles.mainContainer}>
@@ -272,7 +275,9 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     marginBottom: DEVICE_TYPE === 'large' ? 30 : 25,
   },
-
+  skipButton: {
+    backgroundColor: BLUE,
+  },
   buttonInnerText: {
     fontFamily: 'ApexNew-Medium',
     color: WHITE,
@@ -292,6 +297,6 @@ const styles = StyleSheet.create({
 });
 
 export default connect((state) => ({
-  newGroupCoFounders: state.groups.newGroupCoFounders,
+  newGroupInvitees: state.groups.newGroupInvitees,
   connections: verifiedConnectionsSelector(state),
 }))(withTranslation()(NewGroupScreen));

@@ -47,7 +47,8 @@ export class InviteListScreen extends Component {
     const group = route.params?.group;
 
     try {
-      const data = await encryptAesKey(group?.aesKey, connection.signingKey);
+      const { signingKeys } = await api.getProfile(connection.id);
+      const data = await encryptAesKey(group?.aesKey, signingKeys[0]);
       const op = await api.invite(connection.id, group?.id, data);
       dispatch(addOperation(op));
       Alert.alert(

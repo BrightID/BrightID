@@ -95,7 +95,6 @@ const rootMigrations = {
       name: '',
       timestamp: 0,
       signedMessage: '',
-      score: 0,
     };
     return state;
   },

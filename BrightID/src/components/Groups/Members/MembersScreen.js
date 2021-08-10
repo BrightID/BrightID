@@ -18,6 +18,7 @@ import { innerJoin } from 'ramda';
 import { useTranslation } from 'react-i18next';
 import {
   leaveGroup,
+  updateGroup,
   dismissFromGroup,
   addAdmin,
   selectAllConnections,
@@ -42,7 +43,6 @@ function MembersScreen(props) {
   const { group, admins, members } = useSelector((state) =>
     groupByIdSelector(state, groupID),
   );
-
   const [contextActions, setContextActions] = useState([]);
   const { t } = useTranslation();
   const { showActionSheetWithOptions } = useActionSheet();
@@ -175,6 +175,13 @@ function MembersScreen(props) {
     setContextActions(actions);
   }, [user.id, admins, members, ACTION_INVITE, ACTION_LEAVE, ACTION_CANCEL]);
 
+  useEffect(() => {
+    console.log(`updating group info ${groupID}`);
+    api.getGroup(groupID).then((data) => {
+      dispatch(updateGroup(data));
+    });
+  }, []);
+
   // Only include the group members that user knows (is connected with), and the user itself
   const groupMembers = useMemo(() => {
     // TODO: userObj is ugly and just here to satisfy flow typecheck for 'connection' type.
@@ -183,11 +190,10 @@ function MembersScreen(props) {
       id: user.id,
       name: user.name,
       photo: user.photo,
-      score: user.score,
       aesKey: '',
       connectionDate: 0,
       status: '',
-      signingKey: '',
+      signingKeys: [],
       createdAt: 0,
       hasPrimaryGroup: false,
     };

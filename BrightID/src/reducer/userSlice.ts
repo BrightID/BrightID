@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
 
 const initialState: UserState = {
-  score: 0,
   isSponsored: false,
   name: '',
   photo: { filename: '' },
@@ -19,9 +18,6 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUserScore(state, action) {
-      state.score = action.payload;
-    },
     setIsSponsored(state, action) {
       state.isSponsored = action.payload;
     },
@@ -58,7 +54,6 @@ const userSlice = createSlice({
     },
     hydrateUser(state, action) {
       const {
-        score,
         name,
         photo,
         backupCompleted,
@@ -67,7 +62,6 @@ const userSlice = createSlice({
       } = action.payload;
 
       state.backupCompleted = backupCompleted;
-      state.score = score;
       state.name = name;
       state.photo = photo;
       state.id = id;
@@ -83,7 +77,6 @@ const userSlice = createSlice({
 
 // Export channel actions
 export const {
-  setUserScore,
   setIsSponsored,
   setPhoto,
   setSearchParam,

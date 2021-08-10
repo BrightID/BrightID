@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Alert,
   View,
@@ -11,6 +11,7 @@ import { BlurView } from '@react-native-community/blur';
 import Spinner from 'react-native-spinkit';
 import { setInternetCredentials } from 'react-native-keychain';
 import { useTranslation } from 'react-i18next';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import { BACKUP_URL, ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import {
@@ -95,7 +96,8 @@ const ChangePasswordModal = ({ navigation }: props) => {
     setBackupInProgress(false);
 
     // update notifications to make sure the `set backup password` notification is removed
-    dispatch(updateNotifications());
+    const api = useContext(NodeApiContext);
+    dispatch(updateNotifications(api));
 
     // finally close modal
     navigation.goBack();

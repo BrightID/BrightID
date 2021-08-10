@@ -44,6 +44,7 @@ const connectionsSlice = createSlice({
       state.connectionsSort = action.payload;
     },
     updateConnections(state, action: PayloadAction<ConnectionInfo[]>) {
+      console.log('updating connections state');
       const { entities, ids } = original(state.connections);
 
       // check to see if any connections are deleted
