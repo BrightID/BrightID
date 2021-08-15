@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback, useContext } from 'react';
+import React, { useMemo, useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useHeaderHeight } from '@react-navigation/stack';
-import { ORANGE, WHITE } from '@/theme/colors';
+import { ORANGE, WHITE, GREY, DARK_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { connection_levels } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -57,17 +57,6 @@ const newRecoveryConnectionSelector = createSelector(
 );
 
 // Create Custom Local Components
-const renderItem = ({ item, index }: { item: Connection; index: number }) => {
-  return (
-    <RecoveryConnectionCard
-      {...item}
-      index={index}
-      isSelectionActive={true}
-      onSelect={(id) => console.log(id)}
-    />
-  );
-};
-
 const EmptyList = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -75,20 +64,6 @@ const EmptyList = () => {
         No Accont Available to be added to Recovery Account. :)
       </Text>
     </View>
-  );
-};
-
-const HeaderList = () => {
-  return <Text></Text>;
-};
-
-const FooterList = ({ onPressConfim }: { onPressConfim?: () => void }) => {
-  return (
-    <>
-      <TouchableOpacity style={styles.buttonContainer} onPress={onPressConfim}>
-        <Text style={styles.buttonLabel}>Confirm</Text>
-      </TouchableOpacity>
-    </>
   );
 };
 
@@ -106,6 +81,7 @@ export const NewRecoveryConnectionList = (props) => {
   const [selectedAccount, setSelectedAccount] = useState<string[]>([]);
   const [updateInProgress, setUpdateInProgress] = useState<boolean>(false);
 
+  // toggle for select and deselect recovery account
   const filter = (id: string) => {
     if (selectedAccount.includes(id)) {
       setSelectedAccount(selectedAccount.filter((value) => value !== id));
@@ -114,6 +90,7 @@ export const NewRecoveryConnectionList = (props) => {
     }
   };
 
+  // submit new recovery account
   const confirm = async () => {
     if (updateInProgress) return;
 
@@ -195,7 +172,6 @@ export const NewRecoveryConnectionList = (props) => {
         )}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={<HeaderList />}
         ListEmptyComponent={<EmptyList />}
       />
     );
@@ -227,14 +203,22 @@ export const NewRecoveryConnectionList = (props) => {
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          disabled={updateInProgress}
-          style={styles.button}
+          disabled={updateInProgress || selectedAccount.length === 0}
+          style={[
+            styles.button,
+            {
+              backgroundColor:
+                updateInProgress || selectedAccount.length === 0
+                  ? GREY
+                  : ORANGE,
+            },
+          ]}
           onPress={confirm}
         >
           {updateInProgress ? (
             <ActivityIndicator size="small" color={WHITE} />
           ) : (
-            <Text style={styles.buttonLabel}>Confirm</Text>
+            <Text style={styles.buttonLabel}>Add</Text>
           )}
         </TouchableOpacity>
       </View>
