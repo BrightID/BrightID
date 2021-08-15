@@ -12,6 +12,7 @@ import ReportReasonModal from '@/components/Connections/ReportReasonModal';
 import SortConnectionsModal from '@/components/Helpers/SortConnectionsModal';
 import ViewPassword from '@/components/Onboarding/Walkthroughs/ViewPassword';
 import RecoveryCooldownInfoModal from '@/components/Recovery/RecoveryCooldownInfoModal';
+import ReplaceAccountConfirmModal from '@/components/RecoveryConnections/ReplaceAccountConfirmModal';
 
 const Stack = createStackNavigator<ModalStackParamList>();
 
@@ -65,6 +66,11 @@ const Modals = () => {
         name="RecoveryCooldownInfo"
         options={modalOptions}
         component={RecoveryCooldownInfoModal}
+      />
+      <Stack.Screen
+        name="ReplaceAccountConfirmModal"
+        options={modalOptions}
+        component={ReplaceAccountConfirmModal}
       />
     </>
   );
