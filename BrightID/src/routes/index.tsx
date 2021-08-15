@@ -6,6 +6,7 @@ import { PersistGate } from 'redux-persist/es/integration/react';
 import Apps from './Apps';
 import Backup from './Backup';
 import Connections from './Connections';
+import RecoveryConnections from './RecoveryConnections';
 import Eula from './Eula';
 import Groups from './Groups';
 import Home from './Home';
@@ -23,6 +24,7 @@ const MainTabs = () => {
       {Home()}
       {PendingConnections()}
       {Connections()}
+      {RecoveryConnections()}
       {Groups()}
       {Notifications()}
       {Apps()}
