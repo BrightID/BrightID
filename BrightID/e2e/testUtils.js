@@ -47,7 +47,6 @@ const addPhoto = async () => {
     .toBeVisible()
     .withTimeout(15000);
   // create new ID
-  await new Promise(r => setTimeout(r, 10000));
   await expect(element(by.id('submitPhoto'))).toExist();
   await element(by.id('submitPhoto')).tap();
 };
