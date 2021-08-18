@@ -60,8 +60,6 @@ const ReplaceAccountConfirmModal = (props) => {
   const connections = useSelector(connectionsSelector);
   const recoveryConnections = useSelector(recoveryConnectionsSelector);
 
-  const [backupInProgress, setBackupInProgress] = useState(false);
-
   const currentConnection = useMemo(
     () => connections.filter((conn) => conn.id === currentAccount)[0],
     [connections],
@@ -146,32 +144,27 @@ const ReplaceAccountConfirmModal = (props) => {
         reducedTransparencyFallbackColor={BLACK}
       />
       <View style={styles.modalContainer}>
-        {backupInProgress ? (
-          <UploadAnimation />
-        ) : (
-          <>
-            <Text
-              style={{ textAlign: 'center', fontFamily: 'Poppins-Regular' }}
-            >
-              {`Change ${currentConnection.name} to ${targetConnection.name} as your recovery connections?`}
+        <Text style={styles.message}>
+          Change{' '}
+          <Text style={{ fontWeight: 'bold' }}>{currentConnection.name}</Text>{' '}
+          to <Text style={{ fontWeight: 'bold' }}>{targetConnection.name}</Text>{' '}
+          as your recovery connections?
+        </Text>
+        <View style={styles.saveContainer}>
+          <TouchableOpacity style={styles.saveButton} onPress={confirm}>
+            <Text style={styles.saveButtonText}>Yes</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.cancelButton}
+            onPress={() => {
+              navigation.goBack();
+            }}
+          >
+            <Text style={styles.cancelButtonText}>
+              {t('common.button.cancel')}
             </Text>
-            <View style={styles.saveContainer}>
-              <TouchableOpacity style={styles.saveButton} onPress={confirm}>
-                <Text style={styles.saveButtonText}>Yes</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.cancelButton}
-                onPress={() => {
-                  navigation.goBack();
-                }}
-              >
-                <Text style={styles.cancelButtonText}>
-                  {t('common.button.cancel')}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -190,30 +183,11 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
   },
-  photo: {
-    width: '100%',
-    flex: 1,
-  },
   modalContainer: {
     backgroundColor: WHITE,
     width: '75%',
     borderRadius: 25,
     padding: DEVICE_LARGE ? 36 : 30,
-  },
-  inputGroup: {
-    borderBottomColor: LIGHT_GREY,
-    borderBottomWidth: 1,
-    marginBottom: DEVICE_LARGE ? 12 : 10,
-  },
-  label: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[13],
-    color: DARK_ORANGE,
-    marginBottom: DEVICE_IOS ? (DEVICE_LARGE ? 15 : 13) : 0,
-  },
-  textInput: {
-    fontSize: fontSize[12],
-    marginBottom: DEVICE_IOS ? (DEVICE_LARGE ? 10 : 8) : 0,
   },
   saveContainer: {
     width: '100%',
@@ -262,6 +236,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
+  },
+  message: {
+    textAlign: 'center',
+    fontFamily: 'Poppins-Regular',
   },
 });
 
