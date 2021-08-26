@@ -81,6 +81,7 @@ type AppInfo = {
   url?: string;
   assignedSponsorships?: number;
   unusedSponsorships?: number;
+  testing: boolean;
 };
 
 type GroupInfo = {
