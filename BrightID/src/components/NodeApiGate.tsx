@@ -11,7 +11,7 @@ export const NodeApiContext = React.createContext(null);
 const ProdCandidates = [
   'http://node.brightid.org',
   'http://brightid.idealmoney.io',
-  'https://brightid.085e67e8aeaf31f0.dyndns.dappnode.io',
+  'https://brightid.59836e71dd6e5898.dyndns.dappnode.io',
   // Following nodes exist, but currently fail the NodeChooser tests
   //  'http://brightid.onehive.org',
   //  'http://node.topupgifter.com',
