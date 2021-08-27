@@ -55,6 +55,7 @@ type props = StackScreenProps<ModalStackParamList, 'ChangePassword'>;
 
 const ChangePasswordModal = ({ navigation }: props) => {
   const dispatch = useDispatch();
+  const api = useContext(NodeApiContext);
 
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -96,7 +97,6 @@ const ChangePasswordModal = ({ navigation }: props) => {
     setBackupInProgress(false);
 
     // update notifications to make sure the `set backup password` notification is removed
-    const api = useContext(NodeApiContext);
     dispatch(updateNotifications(api));
 
     // finally close modal
