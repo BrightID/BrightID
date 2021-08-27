@@ -3,6 +3,11 @@ import { Image, StyleSheet, View } from 'react-native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { LIGHT_GREY } from '@/theme/colors';
 
+const photoStyle = (photo) => ({
+  ...styles.photo,
+  opacity: photo.faded ? 0.25 : 1,
+});
+
 const CirclePhoto = ({ circlePhotos }) => {
   console.log(circlePhotos);
   return (
