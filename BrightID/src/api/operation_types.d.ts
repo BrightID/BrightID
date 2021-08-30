@@ -28,16 +28,12 @@ type AddAdminOp = {
 type AddGroupOp = {
   name: 'Add Group';
   group: string;
-  id1: string;
-  id2: string;
-  id3: string;
-  inviteData2: string;
-  inviteData3: string;
+  id: string;
   url: string;
   type: string;
   timestamp: number;
   v: number;
-  sig1?: string;
+  sig?: string;
   hash?: string;
 };
 
