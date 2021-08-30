@@ -117,7 +117,7 @@ export const pollOperations = async (api) => {
         case 'applied':
         case 'failed':
           // op is done, so stop polling for it
-          store.dispatch(removeOperation(op.hash));
+          removeOp = true;
           handleOpUpdate(store, op, state, result, api);
           shouldUpdateTasks = true;
           break;
@@ -125,6 +125,10 @@ export const pollOperations = async (api) => {
           console.log(
             `Op ${op.name} (${op.hash}) has invalid state '${state}'!`,
           );
+      }
+
+      if (removeOp) {
+        store.dispatch(removeOperation(op.hash));
       }
     }
     if (shouldUpdateTasks) {
