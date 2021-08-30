@@ -69,7 +69,6 @@ const handleOpUpdate = (store, op, state, result, api) => {
       if (state === 'failed') {
         if (op.id && op.id !== store.getState().user.id) {
           // the operation was triggered by e2e-tests, using a fake userID. Ignore error.
-          console.log(`Skipping error: ${op.id}`);
           showDefaultError = false;
         } else {
           showDefaultError = true;

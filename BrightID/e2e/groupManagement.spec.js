@@ -7,7 +7,6 @@ import {
   expectConnectionsScreen,
   expectGroupsScreen,
   expectHomescreen,
-  interConnect,
   inviteConnectionToGroup,
   joinAllGroups,
   navigateHome,
@@ -44,11 +43,6 @@ describe('Group Management', () => {
       .toExist()
       .withTimeout(20000);
     await navigateHome();
-
-    // Connect all fake connections with each other
-    await interConnect(0);
-    await interConnect(1);
-    await interConnect(2);
   });
 
   describe('Create group', () => {
@@ -72,18 +66,18 @@ describe('Group Management', () => {
       await element(by.id('editGroupPhoto')).tap();
     });
 
-    it('should set group Co-Founders', async () => {
+    it('should set group Invitees', async () => {
       // proceed to next screen
       await expect(element(by.id('nextBtn'))).toBeVisible();
       await element(by.id('nextBtn')).tap();
       await expect(element(by.id('newGroupScreen'))).toBeVisible();
       // wait until 3 connections are there, sometimes they appear only after a few seconds
-      await waitFor(element(by.id('checkCoFounderBtn')).atIndex(2))
+      await waitFor(element(by.id('checkInviteeBtn')).atIndex(2))
         .toExist()
         .withTimeout(20000);
-      // make the first 2 available connections co-founder
-      await element(by.id('checkCoFounderBtn')).atIndex(0).tap();
-      await element(by.id('checkCoFounderBtn')).atIndex(1).tap();
+      // Invite first 2 available connections
+      await element(by.id('checkInviteeBtn')).atIndex(0).tap();
+      await element(by.id('checkInviteeBtn')).atIndex(1).tap();
     });
 
     it('should create group', async () => {
@@ -97,7 +91,7 @@ describe('Group Management', () => {
       await navigateHome();
     });
 
-    it('invited co-founders should join group', async () => {
+    it('invited members should join group', async () => {
       // wait 10 seconds until group creation ops should be done on the backend
       await new Promise((r) => setTimeout(r, 10000));
       // accept invitation
@@ -105,7 +99,7 @@ describe('Group Management', () => {
       await joinAllGroups(1);
       await joinAllGroups(2);
 
-      // Check if cofounders actually joined the groups
+      // Check if invitees actually joined the groups
       await expectHomescreen();
       // navigate to groups screen
       await element(by.id('groupsBtn')).tap();
@@ -154,7 +148,7 @@ describe('Group Management', () => {
       await navigateHome();
     });
 
-    it('should dismiss admin member from group', async () => {
+    it('should dismiss regular member from group', async () => {
       // navigate to groups screen
       await expectHomescreen();
       await element(by.id('groupsBtn')).tap();
@@ -163,35 +157,6 @@ describe('Group Management', () => {
       await element(by.text(GroupName)).tap();
       // Group should have 4 members, so check for memberItem with index 3
       await expect(element(by.id('memberItem-3'))).toBeVisible();
-
-      // Open context menu of first member that is admin
-      await element(by.id('memberContextBtn').withAncestor(by.id('admin')))
-        .atIndex(0)
-        .tap();
-
-      // ActionSheet does not support testID, so match based on text.
-      await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
-      await element(by.text(actionTitle)).tap();
-      // dismiss confirmation screen
-      await element(by.text(actionOK)).tap();
-      // should be back on groups members screen, dismissed member should be removed
-      // so the last index should be 2
-      await expect(element(by.id('memberItem-3'))).not.toBeVisible();
-      // Now on members screen. Go back to homescreen.
-      // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
-      await element(by.id('header-back')).tap();
-      await navigateHome();
-    });
-
-    it('should dismiss regular member from group', async () => {
-      // navigate to groups screen
-      await expectHomescreen();
-      await element(by.id('groupsBtn')).tap();
-      await expectGroupsScreen();
-      // open group
-      await element(by.text(GroupName)).tap();
-      // Group should have 3 members, so check for memberItem with index 2
-      await expect(element(by.id('memberItem-2'))).toBeVisible();
 
       // Open context menu of first regular user
       await element(by.id('memberContextBtn').withAncestor(by.id('regular')))
@@ -203,9 +168,14 @@ describe('Group Management', () => {
       await element(by.text(actionTitle)).tap();
       // dismiss confirmation screen
       await element(by.text(actionOK)).tap();
+
+      // wait 20 seconds until all dismiss op should be done on the backend
+      await new Promise((r) => setTimeout(r, 20000));
+
       // should be back on groups members screen, dismissed member should be removed
-      // so the last index should be 1
-      await expect(element(by.id('memberItem-2'))).not.toBeVisible();
+      // so the last index should be 2
+      await expect(element(by.id('memberItem-2'))).toBeVisible();
+      await expect(element(by.id('memberItem-3'))).not.toBeVisible();
       // Now on members screen. Go back to homescreen.
       // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
       await element(by.id('header-back')).tap();
@@ -215,6 +185,7 @@ describe('Group Management', () => {
 
   describe('Promote regular member to admin', () => {
     beforeAll(async () => {
+      /*
       // invite
       await inviteConnectionToGroup(GroupName);
       // accept invitation
@@ -222,12 +193,14 @@ describe('Group Management', () => {
       await joinAllGroups(1);
       await joinAllGroups(2);
 
+       */
+
       // check group members
       // navigate to groups screen
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
       // wait 20 seconds until all join ops should be done on the backend
-      await new Promise((r) => setTimeout(r, 20000));
+      // await new Promise((r) => setTimeout(r, 20000));
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
       // Text changes to "Known members: " when all invited people have joined
@@ -238,6 +211,7 @@ describe('Group Management', () => {
       await element(by.text(GroupName)).tap();
       // Group should now have 3 members, so check for memberItem with index 2
       await expect(element(by.id('memberItem-2'))).toBeVisible();
+      await expect(element(by.id('memberItem-3'))).not.toBeVisible();
       // Now on members screen. Go back to homescreen.
       // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
       await element(by.id('header-back')).tap();
@@ -264,10 +238,42 @@ describe('Group Management', () => {
       await element(by.text(actionTitle)).tap();
       // dismiss confirmation screen
       await element(by.text(actionOK)).tap();
-      // All members should be admin now
+      // admin member should exist
       await expect(
-        element(by.id('memberContextBtn').withAncestor(by.id('regular'))),
+        element(by.id('memberContextBtn').withAncestor(by.id('admin'))),
+      ).toExist();
+    });
+
+    it('should dismiss admin member from group', async () => {
+      const actionSheetTitle = 'What do you want to do?';
+      const actionTitle = 'Dismiss from group';
+
+      // Group should have 3 members, so check for memberItem with index 2
+      await expect(element(by.id('memberItem-2'))).toBeVisible();
+      await expect(element(by.id('memberItem-3'))).not.toBeVisible();
+
+      // Open context menu of first member that is admin
+      await element(by.id('memberContextBtn').withAncestor(by.id('admin')))
+        .atIndex(0)
+        .tap();
+
+      // ActionSheet does not support testID, so match based on text.
+      await waitFor(element(by.text(actionSheetTitle))).toBeVisible();
+      await element(by.text(actionTitle)).tap();
+      // dismiss confirmation screen
+      await element(by.text(actionOK)).tap();
+      // should be back on groups members screen, dismissed member should be removed
+      // so the last index should be 1
+      await expect(element(by.id('memberItem-1'))).toBeVisible();
+      await expect(element(by.id('memberItem-2'))).not.toBeVisible();
+      // No other admin member should exist
+      await expect(
+        element(by.id('memberContextBtn').withAncestor(by.id('admin'))),
       ).not.toExist();
+      // Now on members screen. Go back to homescreen.
+      // TODO: navigateHome just goes back one screen here, so execute 2 times :-/
+      await element(by.id('header-back')).tap();
+      await navigateHome();
     });
   });
 
