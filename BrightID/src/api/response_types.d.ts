@@ -128,21 +128,6 @@ type InviteInfo = {
   data: string;
 };
 
-type ConnectionInfo = {
-  id: string;
-  signingKeys: string[];
-  level: ConnectionLevel;
-  incomingLevel?: ConnectionLevel;
-  verifications: string[];
-  hasPrimaryGroup: boolean;
-  trusted: string[];
-  flaggers: {
-    [id: string]: string;
-  };
-  createdAt: number;
-  status?: string;
-};
-
 type ProfileInfo = {
   connectionsNum: number;
   groupsNum: number;
