@@ -7,6 +7,7 @@ import {
   updateConnections,
   setIsSponsored,
   updateNotifications,
+  selectOperationsTotal,
 } from './index';
 
 const fetchUserInfo = (api: NodeApi) => (
@@ -18,17 +19,22 @@ const fetchUserInfo = (api: NodeApi) => (
       const {
         user: { id },
       } = getState();
-      // const api = selectNodeApi(getState());
 
       console.log('refreshing user info', id);
       if (!id) {
         throw new Error('id missing');
       }
+      const opTotal = selectOperationsTotal(getState());
+      console.log(`traced operations: ${opTotal}`);
       try {
         const verifications = await api.getVerifications(id);
         dispatch(setVerifications(verifications));
-        const memberships = await api.getMemberships(id);
-        dispatch(updateMemberships(memberships));
+        if (opTotal === 0) {
+          // only update groups when there is no pending operation
+          // to prevent overwriting newly created groups with groups from server
+          const memberships = await api.getMemberships(id);
+          dispatch(updateMemberships(memberships));
+        }
         const connections = await api.getConnections(id, 'outbound');
         let incomingConns = await api.getConnections(id, 'inbound');
         incomingConns = _.keyBy(incomingConns, 'id');

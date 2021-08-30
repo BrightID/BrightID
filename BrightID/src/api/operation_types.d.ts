@@ -42,7 +42,7 @@ type AddGroupOp = {
 };
 
 type AddMembershipOp = {
-  name: string;
+  name: 'Add Membership';
   id: string;
   group: string;
   timestamp: number;

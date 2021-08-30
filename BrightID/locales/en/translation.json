@@ -121,7 +121,7 @@
         "passwordMatch": "Password and confirm password does not match.",
         "passwordShort": "Your password must be at least 8 characters long.",
         "trustedSigned": "One of your recovery connections signed your request",
-        "failedOp": "{{name}} failed!\n{{message}}",
+        "failedOp": "{{name}} failed!\n{{message}}"
       },
       "title": {
         "lostKeys": "We've lost the BrightID keypair from the device",

@@ -6,7 +6,7 @@ import {
   updateLinkedContext,
   selectAllOperations,
   addConnection,
-  updateMemberships
+  updateMemberships,
 } from '@/actions';
 import i18next from 'i18next';
 import { checkTasks } from '@/components/Tasks/TasksSlice';
@@ -55,7 +55,7 @@ const handleOpUpdate = (store, op, state, result, api) => {
             id: profile.id,
             level: profile.level,
             timestamp: profile.connectedAt,
-            reportReason: profile.reports.find((r) => r.id === op.id1)?.reason
+            reportReason: profile.reports.find((r) => r.id === op.id1)?.reason,
           };
           store.dispatch(addConnection(conn));
         });
@@ -67,10 +67,16 @@ const handleOpUpdate = (store, op, state, result, api) => {
     case 'Add Membership':
     case 'Remove Membership':
       if (state === 'failed') {
-        showDefaultError = true;
-        api.getMemberships(op.id).then((memberships) => {
-          store.dispatch(updateMemberships(memberships));
-        });
+        if (op.id && op.id !== store.getState().user.id) {
+          // the operation was triggered by e2e-tests, using a fake userID. Ignore error.
+          console.log(`Skipping error: ${op.id}`);
+          showDefaultError = false;
+        } else {
+          showDefaultError = true;
+          api.getMemberships(op.id).then((memberships) => {
+            store.dispatch(updateMemberships(memberships));
+          });
+        }
       }
       break;
     default:

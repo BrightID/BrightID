@@ -7,7 +7,6 @@ import {
   expectConnectionsScreen,
   expectGroupsScreen,
   expectHomescreen,
-  interConnect,
   joinAllGroups,
   navigateHome,
 } from './testUtils';
@@ -88,11 +87,6 @@ describe('Groups', () => {
 
   describe('Create initial group', () => {
     beforeAll(async () => {
-      // Connect all fake connections with each other
-      await interConnect(0);
-      await interConnect(1);
-      await interConnect(2);
-
       // navigate to group creation screen
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
@@ -112,18 +106,18 @@ describe('Groups', () => {
       await element(by.id('editGroupPhoto')).tap();
     });
 
-    it('should set group Co-Founders', async () => {
+    it('should set group invitees', async () => {
       // proceed to next screen
       await expect(element(by.id('nextBtn'))).toBeVisible();
       await element(by.id('nextBtn')).tap();
       await expect(element(by.id('newGroupScreen'))).toBeVisible();
       // wait until 3 connections are there, sometimes they appear only after a few seconds
-      await waitFor(element(by.id('checkCoFounderBtn')).atIndex(2))
+      await waitFor(element(by.id('checkInviteeBtn')).atIndex(2))
         .toExist()
         .withTimeout(20000);
-      // make the first 2 available connections co-founder
-      await element(by.id('checkCoFounderBtn')).atIndex(0).tap();
-      await element(by.id('checkCoFounderBtn')).atIndex(1).tap();
+      // invite the first 2 available connections
+      await element(by.id('checkInviteeBtn')).atIndex(0).tap();
+      await element(by.id('checkInviteeBtn')).atIndex(1).tap();
     });
 
     it('should create group', async () => {
@@ -161,17 +155,17 @@ describe('Groups', () => {
       await element(by.id('editGroupPhoto')).tap();
     });
 
-    it('should set group Co-Founders', async () => {
+    it('should set group Invitees', async () => {
       // proceed to next screen
       await expect(element(by.id('nextBtn'))).toBeVisible();
       await element(by.id('nextBtn')).tap();
       await expect(element(by.id('newGroupScreen'))).toBeVisible();
-      // make the 2nd and third available connections co-founder
-      await waitFor(element(by.id('checkCoFounderBtn')).atIndex(1))
+      // invite the 2nd and third available connections
+      await waitFor(element(by.id('checkInviteeBtn')).atIndex(1))
         .toExist()
         .withTimeout(20000);
-      await element(by.id('checkCoFounderBtn')).atIndex(1).tap();
-      await element(by.id('checkCoFounderBtn')).atIndex(2).tap();
+      await element(by.id('checkInviteeBtn')).atIndex(1).tap();
+      await element(by.id('checkInviteeBtn')).atIndex(2).tap();
     });
 
     it('should create group', async () => {
@@ -185,7 +179,7 @@ describe('Groups', () => {
       await navigateHome();
     });
 
-    it('invited co-founders should join group', async () => {
+    it('invited members should join group', async () => {
       // wait 10 seconds until group creation op should be done on the backend
       await new Promise((r) => setTimeout(r, 10000));
       // accept invitation
@@ -193,7 +187,7 @@ describe('Groups', () => {
       await joinAllGroups(1);
       await joinAllGroups(2);
 
-      // Check if cofounders actually joined the groups
+      // Check if invitees actually joined the groups
       await expectHomescreen();
       // navigate to groups screen
       await element(by.id('groupsBtn')).tap();
