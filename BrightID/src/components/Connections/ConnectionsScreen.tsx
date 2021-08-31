@@ -10,8 +10,9 @@ import { ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { NodeApiContext } from '@/components/NodeApiGate';
-import ConnectionCard from './ConnectionCard';
 import { updateConnections } from '@/actions';
+import _ from 'lodash';
+import ConnectionCard from './ConnectionCard';
 
 /**
  * Connection screen of BrightID
@@ -48,9 +49,16 @@ export const ConnectionsScreen = () => {
   const ConnectionList = useMemo(() => {
     const onRefresh = async () => {
       console.log('Reloading Connections');
-      const { user: { id } } = store.getState();
+      const {
+        user: { id },
+      } = store.getState();
       try {
         const conns = await api.getConnections(id, 'outbound');
+        let incomingConns = await api.getConnections(id, 'inbound');
+        incomingConns = _.keyBy(incomingConns, 'id');
+        for (const conn of conns) {
+          conn.incomingLevel = incomingConns[conn.id]?.level;
+        }
         await dispatch(updateConnections(conns));
       } catch (err) {
         console.log(err.message);
