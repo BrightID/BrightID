@@ -32,6 +32,7 @@ type LocalConnectionData = {
   publicKey?: string;
   secretKey?: any;
   reportReason?: string;
+  verifications: Verification[];
 };
 
 type Connection = Partial<ConnectionInfo> & Partial<LocalConnectionData>;

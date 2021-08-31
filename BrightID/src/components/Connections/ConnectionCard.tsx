@@ -50,7 +50,7 @@ const ConnectionCard = (props: Props) => {
   } = props;
   const { t } = useTranslation();
 
-  const brightidVerified = verifications?.includes('BrightID');
+  const brightidVerified = verifications?.some((v) => v?.name === 'BrightID');
   const [imgErr, setImgErr] = useState(false);
 
   useFocusEffect(

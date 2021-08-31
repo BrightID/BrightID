@@ -138,6 +138,20 @@ const connectionsSlice = createSlice({
         update,
       );
     },
+    setConnectionVerifications(
+      state,
+      action: PayloadAction<{ id: string; verifications: Verification[] }>,
+    ) {
+      const { id, verifications } = action.payload;
+      const update: Update<Connection> = {
+        id,
+        changes: { verifications },
+      };
+      state.connections = connectionsAdapter.updateOne(
+        state.connections,
+        update,
+      );
+    },
     setFilters(state, action: PayloadAction<ConnectionLevel[]>) {
       state.filters = action.payload;
     },
@@ -163,6 +177,7 @@ export const {
   staleConnection,
   setFilters,
   setConnectionLevel,
+  setConnectionVerifications,
 } = connectionsSlice.actions;
 
 export const {

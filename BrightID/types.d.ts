@@ -124,7 +124,7 @@ declare global {
     notificationToken: string;
     score: number;
     state: PendingConnectionState;
-    verifications: { name: string }[];
+    verifications: Verification[];
     connectionsNum: number;
     reports: Array<{ id: string; reportReason: string }>;
     connectedAt: number;

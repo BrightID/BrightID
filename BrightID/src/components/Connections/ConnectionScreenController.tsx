@@ -5,7 +5,7 @@ import React, {
   useLayoutEffect,
   useState,
 } from 'react';
-import { useSelector } from '@/store';
+import { useDispatch, useSelector } from '@/store';
 import {
   useFocusEffect,
   useNavigation,
@@ -16,6 +16,7 @@ import ConnectionTestButton from '@/utils/connectionTestButton';
 import {
   selectConnectionById,
   selectAllConnections,
+  setConnectionVerifications,
 } from '@/reducer/connectionsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import ConnectionScreen from './ConnectionScreen';
@@ -28,6 +29,7 @@ type ConnectionRoute = RouteProp<
 function ConnectionScreenController() {
   const navigation = useNavigation();
   const route = useRoute<ConnectionRoute>();
+  const dispatch = useDispatch();
   const { connectionId } = route.params;
   const api = useContext(NodeApiContext);
   const connection = useSelector((state: State) =>
@@ -39,35 +41,57 @@ function ConnectionScreenController() {
   const [mutualConnections, setMutualConnections] = useState<Array<Connection>>(
     [],
   );
-  const [verifications, setVerifications] = useState<Array<any>>([]);
   const [connectedAt, setConnectedAt] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [connectionProfile, setConnectionProfile] = useState<
+    ProfileInfo | undefined
+  >(undefined);
 
   useFocusEffect(
     useCallback(() => {
       const fetchData = async (connectionId) => {
         setLoading(true);
         console.log(`fetching connection info for ${connectionId}`);
-        const profile = await api.getProfile(connectionId);
-        setVerifications(profile.verifications);
-        setConnectedAt(profile.connectedAt);
-        setMutualConnections(
-          myConnections.filter((conn) => {
-            return profile.mutualConnections.includes(conn.id);
-          }),
-        );
-        setMutualGroups(
-          myGroups.filter((g) => {
-            return profile.mutualGroups.includes(g.id);
-          }),
-        );
+        const profile: ProfileInfo = await api.getProfile(connectionId);
+        setConnectionProfile(profile);
         setLoading(false);
       };
       if (connectionId !== undefined) {
         fetchData(connectionId);
       }
-    }, [connectionId, api, myConnections, myGroups]),
+    }, [api, connectionId]),
   );
+
+  // Update connection verifications in store
+  useEffect(() => {
+    if (connectionProfile) {
+      console.log(`Updating verifications for ${connectionProfile.id}`);
+      dispatch(
+        setConnectionVerifications({
+          id: connectionProfile.id,
+          verifications: connectionProfile.verifications,
+        }),
+      );
+    }
+  }, [connectionProfile, dispatch]);
+
+  // Update mutual groups etc. in local state
+  useEffect(() => {
+    if (connectionProfile) {
+      console.log(`Updating mutual groups etc. for ${connectionProfile.id}`);
+      setConnectedAt(connectionProfile.connectedAt);
+      setMutualConnections(
+        myConnections.filter((conn) => {
+          return connectionProfile.mutualConnections.includes(conn.id);
+        }),
+      );
+      setMutualGroups(
+        myGroups.filter((g) => {
+          return connectionProfile.mutualGroups.includes(g.id);
+        }),
+      );
+    }
+  }, [connectionProfile, myConnections, myGroups]);
 
   useEffect(() => {
     if (!connection) {
@@ -89,9 +113,15 @@ function ConnectionScreenController() {
     return null;
   }
 
-  const brightIdVerified = verifications.some((v) => v?.name === 'BrightID');
+  const brightIdVerified = connection.verifications.some(
+    (v) => v?.name === 'BrightID',
+  );
+  const verifiedAppsCount = connection.verifications.filter((v) => {
+    if ('app' in v) {
+      return v.app;
+    } else return false;
+  }).length;
 
-  const verifiedAppsCount = verifications.filter((v) => v.app).length;
   return (
     <ConnectionScreen
       connection={connection}
