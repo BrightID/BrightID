@@ -130,6 +130,7 @@ type InviteInfo = {
 };
 
 type ProfileInfo = {
+  id: string;
   connectionsNum: number;
   groupsNum: number;
   mutualConnections: string[];
