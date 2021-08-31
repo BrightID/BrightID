@@ -113,10 +113,10 @@ function ConnectionScreenController() {
     return null;
   }
 
-  const brightIdVerified = connection.verifications.some(
+  const brightIdVerified = connection.verifications?.some(
     (v) => v?.name === 'BrightID',
   );
-  const verifiedAppsCount = connection.verifications.filter((v) => {
+  const verifiedAppsCount = connection.verifications?.filter((v) => {
     if ('app' in v) {
       return v.app;
     } else return false;
