@@ -20,7 +20,7 @@ export const calculateCooldownPeriod = ({
   // no cooldown if connection being changed is older than RECOVERY_COOLDOWN_DURATION
   if (
     connection &&
-    Date.now() - connection.createdAt > RECOVERY_COOLDOWN_DURATION
+    Date.now() - connection.timestamp > RECOVERY_COOLDOWN_DURATION
   ) {
     console.log(`No cooldown as connection is older than 7 days`);
     return 0;
@@ -30,8 +30,8 @@ export const calculateCooldownPeriod = ({
   //  period after connecting with first recovery connection
   let firstRecoveryTimestamp = Date.now();
   for (const recovery of recoveryConnections) {
-    if (recovery.createdAt < firstRecoveryTimestamp)
-      firstRecoveryTimestamp = recovery.createdAt;
+    if (recovery.timestamp < firstRecoveryTimestamp)
+      firstRecoveryTimestamp = recovery.timestamp;
   }
   const initialRecoveryAge = Date.now() - firstRecoveryTimestamp;
   console.log(
@@ -46,7 +46,7 @@ export const calculateCooldownPeriod = ({
 
   // if a specific connection was provided, calc the cooldown period based on connection age.
   if (connection) {
-    const connectionAge = Date.now() - connection.createdAt;
+    const connectionAge = Date.now() - connection.timestamp;
     const remainingCooldown = RECOVERY_COOLDOWN_DURATION - connectionAge;
     console.log(`remaining cooldown time: ${remainingCooldown}`);
     return remainingCooldown;
