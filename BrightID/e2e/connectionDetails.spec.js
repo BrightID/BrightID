@@ -71,12 +71,12 @@ describe('Connection details', () => {
     await element(by.id('nextBtn')).tap();
     await expect(element(by.id('newGroupScreen'))).toBeVisible();
     // wait until 2 connections are there, sometimes they appear only after a few seconds
-    await waitFor(element(by.id('checkCoFounderBtn')).atIndex(1))
+    await waitFor(element(by.id('checkInviteeBtn')).atIndex(1))
       .toExist()
       .withTimeout(20000);
-    // make the first 2 available connections co-founder
-    await element(by.id('checkCoFounderBtn')).atIndex(0).tap();
-    await element(by.id('checkCoFounderBtn')).atIndex(1).tap();
+    // invite first 2 available connections co-founder
+    await element(by.id('checkInviteeBtn')).atIndex(0).tap();
+    await element(by.id('checkInviteeBtn')).atIndex(1).tap();
     // create group
     await element(by.id('createNewGroupBtn')).tap();
     await expect(element(by.id('createNewGroupBtn'))).not.toBeVisible();
