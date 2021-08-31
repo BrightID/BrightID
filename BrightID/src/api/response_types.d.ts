@@ -95,8 +95,9 @@ type OperationInfo = {
 };
 
 type ConnectionInfo = {
+  incomingLevel: ConnectionLevel;
   id: string;
-  level: string;
+  level: ConnectionLevel;
   timestamp: number;
   reportReason?: string;
 };
@@ -136,6 +137,7 @@ type ProfileInfo = {
   connectedAt: number;
   createdAt: number;
   reports: Array<{ id: string; reportReason: string }>;
-  verifications: Array<{ name: string }>;
+  verifications: Verification[];
   signingKeys: string[];
+  sponsored: boolean;
 };
