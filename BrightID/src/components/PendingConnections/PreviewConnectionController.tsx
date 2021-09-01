@@ -53,6 +53,7 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
     if (isReconnect) {
       navigation.navigate('ReportReason', {
         connectionId: pendingConnection.existingConnection.id,
+        reporting: true,
         successCallback: () => {
           // Set pending connection to "CONFIRMED" to indicate it has been handled by the user
           dispatch(
