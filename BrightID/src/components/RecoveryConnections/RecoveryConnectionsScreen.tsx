@@ -8,28 +8,25 @@ import {
 } from 'react-native';
 // Redux
 import { useSelector } from '@/store';
+import { useTranslation } from 'react-i18next';
 import { recoveryConnectionsSelector } from '@/reducer/connectionsSlice';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { DEVICE_LARGE, DEVICE_IOS, WIDTH } from '@/utils/deviceConstants';
 import {
-  ORANGE,
-  BLACK,
-  WHITE,
-  BLUE,
-  GREEN,
-  DARKER_GREY,
-  GREY,
-} from '@/theme/colors';
+  DEVICE_LARGE,
+  DEVICE_IOS,
+  DEVICE_ANDROID,
+} from '@/utils/deviceConstants';
+import { ORANGE, BLACK, WHITE, BLUE, GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { BlurView } from '@react-native-community/blur';
 
 // Import Components Local
 import RecoveryConnectionCard from './RecoverConnectionsCard';
 
 // Create Custom Local Componenets
 const EmptyList = () => {
+  const { t } = useTranslation();
   return (
     <View
       style={{
@@ -47,7 +44,7 @@ const EmptyList = () => {
         color={GREY}
       />
       <Text style={styles.emptyText}>
-        Please add recovery connections to enable social recovery
+        {t('recoveryConnections.text.emptyList')}
       </Text>
     </View>
   );
@@ -59,6 +56,7 @@ export const RecoveryConnectionsScreen = (props) => {
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
   }
+  const { t } = useTranslation();
   const recoveryConnections = useSelector(recoveryConnectionsSelector);
 
   const RecoveryConnectionList = useMemo(() => {
@@ -87,7 +85,9 @@ export const RecoveryConnectionsScreen = (props) => {
     >
       {recoveryConnections.length > 0 && (
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>Your Current Recovery Connections</Text>
+          <Text style={styles.title}>
+            {t('recoveryConnections.text.currentRecoveryConnections')}
+          </Text>
         </View>
       )}
       {RecoveryConnectionList}
@@ -99,7 +99,7 @@ export const RecoveryConnectionsScreen = (props) => {
             style={styles.orangeButton}
           >
             <Text style={styles.orangeButtonLabel}>
-              Add Recovery Connections
+              {t('recoveryConnections.text.addRecoveryConnections')}
             </Text>
           </TouchableOpacity>
         ) : (
@@ -108,7 +108,7 @@ export const RecoveryConnectionsScreen = (props) => {
             style={styles.transparentBtn}
           >
             <Text style={styles.transparentBtnText}>
-              Add more recovery connection +
+              {t('recoveryConnections.text.addMoreRecovery')}
             </Text>
           </TouchableOpacity>
         )}
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     paddingTop: '8%',
-    paddingBottom: '9%',
+    paddingBottom: DEVICE_ANDROID ? '9%' : '11%',
     backgroundColor: WHITE,
   },
   transparentBtn: {

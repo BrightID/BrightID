@@ -31,7 +31,7 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { ORANGE, WHITE, GREY, DARK_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { connection_levels } from '@/utils/constants';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
 import { calculateCooldownPeriod } from '@/utils/recovery';
 import { NodeApiContext } from '../NodeApiGate';
 // Import Components Local
@@ -60,10 +60,21 @@ const newRecoveryConnectionSelector = createSelector(
 
 // Create Custom Local Components
 const EmptyList = () => {
+  const { t } = useTranslation();
   return (
-    <View style={{ flex: 1, justifyContent: 'center' }}>
+    <View
+      style={{
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        paddingTop: '50%',
+      }}
+    >
       <Text style={styles.emptyMessage}>
-        No Accont Available to be added to Recovery Account. :)
+        {t('recoveryConnections.text.pleaseMakeSomeConnections')}
       </Text>
     </View>
   );
@@ -110,9 +121,9 @@ export const NewRecoveryConnectionList = (props) => {
       if (totalRecoveryAccount < 3) {
         Alert.alert(
           t('common.alert.error'),
-          `Need ${
-            3 - totalRecoveryAccount
-          } more account to enable backup your BrightID`,
+          t('recoveryConnections.text.threeMore', {
+            amount: 3 - totalRecoveryAccount,
+          }),
         );
       } else {
         // calculate cooldown period
@@ -195,13 +206,11 @@ export const NewRecoveryConnectionList = (props) => {
       <View style={styles.container}>
         {recoveryConnections.length === 0 ? (
           <Text style={styles.recoveryMessage}>
-            Choose three or more already known connection to backup your
-            BrightID
+            {t('recoveryConnections.text.chooseThreeConnections')}
           </Text>
         ) : (
           <Text style={styles.recoveryMessage}>
-            Connections must be already known before they can be setup as
-            recovery.
+            {t('recoveryConnections.text.connectionsAlreadyKnown')}
           </Text>
         )}
         <AnimatedTopSearchBar
@@ -233,7 +242,9 @@ export const NewRecoveryConnectionList = (props) => {
             {updateInProgress ? (
               <ActivityIndicator size="small" color={WHITE} />
             ) : (
-              <Text style={styles.buttonLabel}>Add</Text>
+              <Text style={styles.buttonLabel}>
+                {t('recoveryConnections.text.add')}
+              </Text>
             )}
           </TouchableOpacity>
         </View>
@@ -273,7 +284,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: '3%',
-    paddingBottom: '5%',
+    paddingBottom: DEVICE_ANDROID ? '5%' : '10%',
     backgroundColor: 'white',
   },
   button: {
@@ -298,8 +309,8 @@ const styles = StyleSheet.create({
   },
   emptyMessage: {
     paddingHorizontal: '10%',
-    fontFamily: 'Poppins-Regular',
-    marginTop: '50%',
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[16],
     textAlign: 'center',
   },
 });
