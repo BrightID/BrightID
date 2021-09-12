@@ -211,11 +211,11 @@ export const NewRecoveryConnectionList = (props) => {
           searchOpenSelector={(state: State) => state.connections.searchOpen}
         />
         {ConnectionsList}
-        <BlurView
+        <View
           style={styles.buttonContainer}
-          blurType="light"
-          blurAmount={5}
-          reducedTransparencyFallbackColor={WHITE}
+          // blurType="light"
+          // blurAmount={5}
+          // reducedTransparencyFallbackColor={WHITE}
         >
           <TouchableOpacity
             disabled={updateInProgress || selectedAccounts.length === 0}
@@ -236,7 +236,7 @@ export const NewRecoveryConnectionList = (props) => {
               <Text style={styles.buttonLabel}>Add</Text>
             )}
           </TouchableOpacity>
-        </BlurView>
+        </View>
       </View>
     </>
   );
@@ -273,7 +273,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: '3%',
-    paddingBottom: '11%',
+    paddingBottom: '5%',
+    backgroundColor: 'white',
   },
   button: {
     backgroundColor: ORANGE,

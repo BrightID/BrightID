@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     paddingTop: '8%',
-    paddingBottom: '25%',
+    paddingBottom: '9%',
     backgroundColor: WHITE,
   },
   transparentBtn: {
