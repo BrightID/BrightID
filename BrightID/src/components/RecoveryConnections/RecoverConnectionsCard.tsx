@@ -25,6 +25,8 @@ import {
   BLUE,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
+import Pencil from '@/components/Icons/Pencil';
+
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
@@ -40,11 +42,10 @@ import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupTh
  */
 
 type Props = Connection & {
-  isSelectionActive?: Boolean;
+  isSelectionActive?: boolean;
   onSelect?: (id: string) => void;
-  isSelected?: Boolean;
-  isModify?: Boolean;
-  isReplacedActive?: Boolean;
+  isSelected?: boolean;
+  isModify?: boolean;
   currentAccount?: string;
   index: number;
 };
@@ -68,7 +69,6 @@ const RecoveryConnectionCard = (props: Props) => {
     isSelectionActive,
     onSelect,
     isSelected,
-    isReplacedActive,
     currentAccount,
   } = props;
   const { t } = useTranslation();
@@ -142,45 +142,41 @@ const RecoveryConnectionCard = (props: Props) => {
     status === 'stale' ||
     level === connection_levels.REPORTED;
 
-  const RemoveConnection = () =>
-    isModify ? (
-      <TouchableOpacity
-        style={styles.removeButton}
-        onPress={() => {
-          navigation.navigate('ReplaceRecoveryConnections', {
-            currentAccount: id,
-          });
-        }}
-      >
-        <Text
-          style={{
-            fontFamily: 'Poppins-Regular',
-            color: BLUE,
-            fontSize: fontSize[12],
-          }}
-        >
-          Replace
-        </Text>
-      </TouchableOpacity>
-    ) : (
-      <View />
-    );
+  const ModifyConnection = () => (
+    <TouchableOpacity
+      style={styles.removeButton}
+      onPress={() => {
+        navigation.navigate('SetTrustlevel', {
+          connectionId: id,
+        });
+        // navigation.navigate('ReplaceRecoveryConnections', {
+        //   currentAccount: id,
+        // });
+      }}
+    >
+      <Pencil highlight={WHITE} color={BLUE} />
+    </TouchableOpacity>
+  );
 
   const Selection = () => {
-    if (isSelectionActive)
-      return (
-        <TouchableOpacity
-          style={{ flex: 1, alignItems: 'center' }}
-          onPress={() => onSelect(id)}
-        >
-          <IonIcons
-            name={isSelected ? 'checkbox' : 'md-square-outline'}
-            color={ORANGE}
-            size={20}
-          />
-        </TouchableOpacity>
-      );
-    else return null;
+    return (
+      <TouchableOpacity
+        style={{
+          flexGrow: 1,
+          paddingRight: DEVICE_LARGE ? 15 : 13.5,
+          alignItems: 'flex-end',
+          justifyContent: 'center',
+          alignSelf: 'center',
+        }}
+        onPress={() => onSelect(id)}
+      >
+        <IonIcons
+          name={isSelected ? 'checkbox' : 'md-square-outline'}
+          color={ORANGE}
+          size={DEVICE_LARGE ? 26 : 24}
+        />
+      </TouchableOpacity>
+    );
   };
 
   const imageSource =
@@ -192,8 +188,6 @@ const RecoveryConnectionCard = (props: Props) => {
 
   return (
     <View style={styles.container} testID="connectionCardContainer">
-      <Selection />
-
       <View style={styles.card}>
         <TouchableOpacity
           onPress={() => {
@@ -217,18 +211,13 @@ const RecoveryConnectionCard = (props: Props) => {
         <TouchableOpacity
           testID={`ConnectionCard-${index}`}
           onPress={() => {
-            isReplacedActive
-              ? navigation.navigate('ReplaceAccountConfirmModal', {
-                  currentAccount,
-                  targetAccount: id,
-                })
-              : navigation.navigate('Connection', { connectionId: id });
+            navigation.navigate('Connection', { connectionId: id });
           }}
           accessibilityLabel={t(
             'connections.accessibilityLabel.viewConnectionDetails',
           )}
         >
-          <View style={[styles.info, { maxWidth: WIDTH * 0.56 }]}>
+          <View style={[styles.info, { maxWidth: WIDTH * 0.56, flexGrow: 1 }]}>
             <View
               style={[styles.nameContainer]}
               testID={`connection_name-${index}`}
@@ -255,7 +244,8 @@ const RecoveryConnectionCard = (props: Props) => {
             />
           </View>
         </TouchableOpacity>
-        <RemoveConnection />
+        {isSelectionActive && <Selection />}
+        {isModify && <ModifyConnection />}
       </View>
     </View>
   );

@@ -6,18 +6,27 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import { useHeaderHeight } from '@react-navigation/stack';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { DEVICE_LARGE, DEVICE_IOS, WIDTH } from '@/utils/deviceConstants';
-import { ORANGE, BLACK, WHITE, GREEN, DARKER_GREY, GREY } from '@/theme/colors';
-import { fontSize } from '@/theme/fonts';
-
-// Import Components Local
-import RecoveryConnectionCard from './RecoverConnectionsCard';
-
 // Redux
 import { useSelector } from '@/store';
 import { recoveryConnectionsSelector } from '@/reducer/connectionsSlice';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useHeaderHeight } from '@react-navigation/stack';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { DEVICE_LARGE, DEVICE_IOS, WIDTH } from '@/utils/deviceConstants';
+import {
+  ORANGE,
+  BLACK,
+  WHITE,
+  BLUE,
+  GREEN,
+  DARKER_GREY,
+  GREY,
+} from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
+import { BlurView } from '@react-native-community/blur';
+
+// Import Components Local
+import RecoveryConnectionCard from './RecoverConnectionsCard';
 
 // Create Custom Local Componenets
 const EmptyList = () => {
@@ -27,16 +36,18 @@ const EmptyList = () => {
         flex: 1,
         height: '100%',
         width: '100%',
+        alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: '10%',
       }}
     >
-      <Text style={{ fontFamily: 'Poppins-Medium', marginBottom: '5%' }}>
-        You have not setup your Recovery Connection.
-      </Text>
-      <Text style={{ fontFamily: 'Poppins-Medium' }}>
-        Please select your Recovery Connection to enable social recovery of your
-        BrightID
+      <MaterialCommunityIcons
+        size={DEVICE_LARGE ? 48 : 38}
+        name="alert-outline"
+        color={GREY}
+      />
+      <Text style={styles.emptyText}>
+        Please add recovery connections to enable social recovery
       </Text>
     </View>
   );
@@ -50,42 +61,35 @@ export const RecoveryConnectionsScreen = (props) => {
   }
   const recoveryConnections = useSelector(recoveryConnectionsSelector);
 
-  const [isModifyOn, setModifyStatus] = useState<Boolean>(false);
-
   const RecoveryConnectionList = useMemo(() => {
     return (
       <FlatList
         data={recoveryConnections}
         style={styles.recoveryConnectionContainer}
         contentContainerStyle={{
-          paddingBottom: 70,
+          paddingBottom: '35%',
           paddingTop: 20,
           flexGrow: 1,
         }}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         renderItem={({ item, index }) => (
-          <RecoveryConnectionCard
-            {...item}
-            index={index}
-            isModify={isModifyOn}
-          />
+          <RecoveryConnectionCard {...item} index={index} isModify={true} />
         )}
         ListEmptyComponent={<EmptyList />}
       />
     );
-  }, [isModifyOn, recoveryConnections]);
-
-  useFocusEffect(
-    useCallback(() => {
-      setModifyStatus(false);
-    }, []),
-  );
+  }, [recoveryConnections]);
 
   return (
     <View
       style={[styles.container, styles.shadow, { marginTop: headerHeight }]}
     >
+      {recoveryConnections.length > 0 && (
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>Your Current Recovery Connections</Text>
+        </View>
+      )}
       {RecoveryConnectionList}
 
       <View style={styles.buttonContainer}>
@@ -98,31 +102,15 @@ export const RecoveryConnectionsScreen = (props) => {
               Add Recovery Connections
             </Text>
           </TouchableOpacity>
-        ) : !isModifyOn ? (
+        ) : (
           <TouchableOpacity
-            onPress={() => setModifyStatus(true)}
-            style={styles.orangeButton}
+            onPress={() => navigation.navigate('RecoveryConnectionsList')}
+            style={styles.transparentBtn}
           >
-            <Text style={styles.orangeButtonLabel}>
-              Modify Recovery Connection
+            <Text style={styles.transparentBtnText}>
+              Add more recovery connection +
             </Text>
           </TouchableOpacity>
-        ) : (
-          <>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('RecoveryConnectionsList')}
-              style={styles.orangeButton}
-            >
-              <Text style={styles.orangeButtonLabel}>Add</Text>
-            </TouchableOpacity>
-            <View style={{ width: 5 }} />
-            <TouchableOpacity
-              style={styles.hollowButton}
-              onPress={() => setModifyStatus(false)}
-            >
-              <Text style={styles.hollowButtonLabel}>Cancel</Text>
-            </TouchableOpacity>
-          </>
         )}
       </View>
     </View>
@@ -146,8 +134,20 @@ const styles = StyleSheet.create({
       height: 2,
     },
   },
+  titleContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    // flex: 1,
+    marginTop: '20%',
+    marginBottom: '5%',
+  },
+  title: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[16],
+  },
   recoveryConnectionContainer: {
     flex: 1,
+    // flexGrow: 1,
     width: '100%',
   },
   buttonContainer: {
@@ -159,19 +159,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'center',
-    paddingHorizontal: '5%',
-    marginTop: '5%',
-    paddingTop: '5%',
-    paddingBottom: '10%',
+    paddingTop: '8%',
+    paddingBottom: '25%',
     backgroundColor: WHITE,
   },
+  transparentBtn: {
+    backgroundColor: WHITE,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    width: '100%',
+    paddingLeft: '10%',
+  },
+  transparentBtnText: {
+    fontFamily: 'Poppins-Medium',
+    color: BLUE,
+    fontSize: fontSize[16],
+  },
   orangeButton: {
-    flex: 1,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 50,
     backgroundColor: ORANGE,
+    width: '85%',
   },
   orangeButtonLabel: {
     fontFamily: 'Poppins-Bold',
@@ -186,11 +196,20 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 2,
     borderColor: GREY,
+    backgroundColor: WHITE,
   },
   hollowButtonLabel: {
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[15],
     color: GREY,
+  },
+  emptyText: {
+    fontFamily: 'Poppins-Medium',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: fontSize[18],
+    color: GREY,
+    marginVertical: 15,
   },
 });
 

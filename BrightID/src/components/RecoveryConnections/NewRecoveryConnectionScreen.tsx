@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useContext } from 'react';
+import React, { useMemo, useCallback, useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -9,18 +9,7 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import { useHeaderHeight } from '@react-navigation/stack';
-import { ORANGE, WHITE, GREY, DARK_GREY } from '@/theme/colors';
-import { fontSize } from '@/theme/fonts';
-import { connection_levels } from '@/utils/constants';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { NodeApiContext } from '../NodeApiGate';
-import { calculateCooldownPeriod } from '@/utils/recovery';
-
-// Import Components Local
-import RecoveryConnectionCard from './RecoverConnectionsCard';
-import AnimatedTopSearchBar from './TopSearchBar';
+import { BlurView } from '@react-native-community/blur';
 
 // Redux
 import { useDispatch, useSelector } from '@/store';
@@ -35,7 +24,20 @@ import {
   setConnectionsSearch,
   setConnectionsSearchOpen,
 } from '@/actions';
+
 import { toSearchString } from '@/utils/strings';
+import { useTranslation } from 'react-i18next';
+import { useHeaderHeight } from '@react-navigation/stack';
+import { ORANGE, WHITE, GREY, DARK_GREY } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
+import { connection_levels } from '@/utils/constants';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { calculateCooldownPeriod } from '@/utils/recovery';
+import { NodeApiContext } from '../NodeApiGate';
+// Import Components Local
+import RecoveryConnectionCard from './RecoverConnectionsCard';
+import AnimatedTopSearchBar from './TopSearchBar';
+
 const searchParamSelector = (state: State) => state.connections.searchParam;
 
 const newRecoveryConnectionSelector = createSelector(
@@ -74,21 +76,24 @@ export const NewRecoveryConnectionList = (props) => {
   const api = useContext(NodeApiContext);
   const headerHeight = useHeaderHeight();
   const dispatch = useDispatch();
-  const myId = useSelector((state: State) => state.user.id);
+  const myId = useSelector((state) => state.user.id);
   const connections = useSelector(newRecoveryConnectionSelector);
   const recoveryConnections = useSelector(recoveryConnectionsSelector);
 
-  const [selectedAccount, setSelectedAccount] = useState<string[]>([]);
+  const [selectedAccounts, setSelectedAccounts] = useState<string[]>([]);
   const [updateInProgress, setUpdateInProgress] = useState<boolean>(false);
 
   // toggle for select and deselect recovery account
-  const filter = (id: string) => {
-    if (selectedAccount.includes(id)) {
-      setSelectedAccount(selectedAccount.filter((value) => value !== id));
-    } else {
-      setSelectedAccount([...selectedAccount, id]);
-    }
-  };
+  const filter = useCallback(
+    (id: string) => {
+      if (selectedAccounts.includes(id)) {
+        setSelectedAccounts(selectedAccounts.filter((value) => value !== id));
+      } else {
+        setSelectedAccounts([...selectedAccounts, id]);
+      }
+    },
+    [selectedAccounts],
+  );
 
   // submit new recovery account
   const confirm = async () => {
@@ -97,10 +102,10 @@ export const NewRecoveryConnectionList = (props) => {
     try {
       setUpdateInProgress(true);
       console.log(recoveryConnections.length);
-      console.log(selectedAccount.length);
+      console.log(selectedAccounts.length);
 
       const totalRecoveryAccount =
-        recoveryConnections.length + selectedAccount.length;
+        recoveryConnections.length + selectedAccounts.length;
 
       if (totalRecoveryAccount < 3) {
         Alert.alert(
@@ -115,12 +120,12 @@ export const NewRecoveryConnectionList = (props) => {
 
         // apply
         const promises = [];
-        for (const id of selectedAccount) {
+        for (const id of selectedAccounts) {
           promises.push(
             api.addConnection(myId, id, connection_levels.RECOVERY, Date.now()),
           );
           dispatch(
-            setConnectionLevel({ id: id, level: connection_levels.RECOVERY }),
+            setConnectionLevel({ id, level: connection_levels.RECOVERY }),
           );
         }
 
@@ -141,7 +146,7 @@ export const NewRecoveryConnectionList = (props) => {
             t('common.alert.success'),
             t(
               'backup.alert.text.completed',
-              'Social recovery of your BrightID is now enabled',
+              'Recovery connections have been successfully added',
             ),
           );
           navigation.navigate('Home');
@@ -159,7 +164,8 @@ export const NewRecoveryConnectionList = (props) => {
       <FlatList
         data={connections}
         contentContainerStyle={{
-          marginTop: '5%',
+          paddingTop: '5%',
+          paddingBottom: '33%',
         }}
         renderItem={({ item, index }) => (
           <RecoveryConnectionCard
@@ -167,7 +173,7 @@ export const NewRecoveryConnectionList = (props) => {
             index={index}
             isSelectionActive={true}
             onSelect={filter}
-            isSelected={selectedAccount.includes(item.id)}
+            isSelected={selectedAccounts.includes(item.id)}
           />
         )}
         showsHorizontalScrollIndicator={false}
@@ -175,7 +181,7 @@ export const NewRecoveryConnectionList = (props) => {
         ListEmptyComponent={<EmptyList />}
       />
     );
-  }, [connections, selectedAccount]);
+  }, [connections, selectedAccounts, filter]);
 
   return (
     <>
@@ -187,9 +193,15 @@ export const NewRecoveryConnectionList = (props) => {
       <View style={styles.orangeTop} />
 
       <View style={styles.container}>
-        {recoveryConnections.length === 0 && (
+        {recoveryConnections.length === 0 ? (
           <Text style={styles.recoveryMessage}>
-            Choose three or more recovery connection to backup your BrightID
+            Choose three or more already known connection to backup your
+            BrightID
+          </Text>
+        ) : (
+          <Text style={styles.recoveryMessage}>
+            Connections must be already known before they can be setup as
+            recovery.
           </Text>
         )}
         <AnimatedTopSearchBar
@@ -199,28 +211,32 @@ export const NewRecoveryConnectionList = (props) => {
           searchOpenSelector={(state: State) => state.connections.searchOpen}
         />
         {ConnectionsList}
-      </View>
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          disabled={updateInProgress || selectedAccount.length === 0}
-          style={[
-            styles.button,
-            {
-              backgroundColor:
-                updateInProgress || selectedAccount.length === 0
-                  ? GREY
-                  : ORANGE,
-            },
-          ]}
-          onPress={confirm}
+        <BlurView
+          style={styles.buttonContainer}
+          blurType="light"
+          blurAmount={5}
+          reducedTransparencyFallbackColor={WHITE}
         >
-          {updateInProgress ? (
-            <ActivityIndicator size="small" color={WHITE} />
-          ) : (
-            <Text style={styles.buttonLabel}>Add</Text>
-          )}
-        </TouchableOpacity>
+          <TouchableOpacity
+            disabled={updateInProgress || selectedAccounts.length === 0}
+            style={[
+              styles.button,
+              {
+                backgroundColor:
+                  updateInProgress || selectedAccounts.length === 0
+                    ? GREY
+                    : ORANGE,
+              },
+            ]}
+            onPress={confirm}
+          >
+            {updateInProgress ? (
+              <ActivityIndicator size="small" color={WHITE} />
+            ) : (
+              <Text style={styles.buttonLabel}>Add</Text>
+            )}
+          </TouchableOpacity>
+        </BlurView>
       </View>
     </>
   );
@@ -254,16 +270,15 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: '5%',
-    paddingBottom: '10%',
+    paddingTop: '3%',
+    paddingBottom: '11%',
   },
   button: {
     backgroundColor: ORANGE,
     height: 50,
-    width: '90%',
+    width: '80%',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 50,
@@ -276,7 +291,9 @@ const styles = StyleSheet.create({
   recoveryMessage: {
     paddingHorizontal: '10%',
     fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[15],
     marginTop: '5%',
+    textAlign: 'center',
   },
   emptyMessage: {
     paddingHorizontal: '10%',
