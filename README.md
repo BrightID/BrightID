@@ -2,7 +2,7 @@
 
 ### [www.brightid.org](https://www.brightid.org)
 
-## Social Identity Network
+## Solving Unique Human Identity
 
 BrightID allows you to prove to applications that you're only using account.
 
