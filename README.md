@@ -20,8 +20,6 @@ ID creation and connectons to people and apps are managed though the BrightID mo
 
 ## Contribute
 
-Many issues have [bounties assigned](https://github.com/orgs/BrightID/projects/2?card_filter_query=label%3A%22bounty+%F0%9F%92%8E%22), paid in [BrightID Subs tokens](https://uniswap.info/token/0x61ceac48136d6782dbd83c09f51e23514d12470a).
-
 Contributions to translations are welcome through [weblate](https://hosted.weblate.org/projects/brightid/mobile-client/).
 
 * [Project board](https://github.com/orgs/BrightID/projects/2)
