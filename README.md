@@ -2,7 +2,7 @@
 
 ### [www.brightid.org](https://www.brightid.org)
 
-## Solving Unique Human Identity
+## Unique Human Identity
 
 BrightID allows you to prove to applications that you're only using account.
 
