@@ -26,6 +26,7 @@ import codePush from 'react-native-code-push';
 import { retrieveImage, photoDirectory } from '@/utils/filesystem';
 import Home from '@/components/Icons/Home';
 import Pencil from '@/components/Icons/Pencil';
+import RecoveryAccount from '@/components/Icons/RecoveryAccount';
 import List from '@/components/Icons/List';
 import GraphQl from '@/components/Icons/GraphQl';
 import Faq from '@/components/Icons/Faq';
@@ -35,6 +36,7 @@ import TasksScreen from '@/components/Tasks/TasksScreen';
 import GraphExplorerScreen from '@/components/SideMenu/GraphExplorerScreen';
 import ContactUsScreen from '@/components/SideMenu/ContactUsScreen';
 import EditProfileScreen from '@/components/EditProfile/EditProfileScreen';
+import RecoveryConnectionsScreen from '@/components/RecoveryConnections/RecoveryConnectionsScreen';
 
 const CustomItem = ({
   onPress,
@@ -170,6 +172,30 @@ const CustomDrawerContent = (props) => {
           navigation.reset({
             index: 1,
             routes: [{ name: 'Home' }, { name: 'Edit Profile' }],
+          });
+        }}
+      />
+      <CustomItem
+        focused={state.routeNames[state.index] === 'Recovery Connections'}
+        inactiveTintColor={BLACK}
+        inactiveBackgroundColor={WHITE}
+        activeTintColor={WHITE}
+        activeBackgroundColor={ORANGE}
+        label={'Recovery Connections'}
+        // style={styles.drawerItem}
+        // labelStyle={styles.labelStyle}
+        icon={({ focused }) => (
+          <RecoveryAccount
+            width={DEVICE_LARGE ? 28 : 24}
+            height={DEVICE_LARGE ? 28 : 24}
+            color={focused ? GREY : BLACK}
+            highlight={focused ? WHITE : ORANGE}
+          />
+        )}
+        onPress={() => {
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'Recovery Connections' }],
           });
         }}
       />
@@ -335,6 +361,10 @@ export const HomeDrawer = () => {
       <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen name="Achievements" component={TasksScreen} />
       <Drawer.Screen name="Edit Profile" component={EditProfileScreen} />
+      <Drawer.Screen
+        name="Recovery Connections"
+        component={RecoveryConnectionsScreen}
+      />
       <Drawer.Screen
         name="Copy Explorer Code"
         component={GraphExplorerScreen}

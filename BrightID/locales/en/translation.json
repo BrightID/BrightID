@@ -603,6 +603,19 @@
       "signatures_plural": ""
     }
   },
+  "recoveryConnections": {
+    "text": {
+      "emptyList": "Please add recovery connections to enable social recovery",
+      "addRecoveryConnections": "Add Recovery Connections",
+      "addMoreRecovery": "Add more recovery connections +",
+      "pleaseMakeSomeConnections": "Please make some connections :)",
+      "currentRecoveryConnections": "Your Current Recovery Connections",
+      "chooseThreeConnections": "Choose three or more already known connection to backup your BrightID",
+      "connectionsAlreadyKnown": "Connections must be \"already known\" before they can be setup as recovery.",
+      "add": "Add",
+      "threeMore": "You need {{amount}} more already known connection(s) to enable social recovery"
+    }
+  },
   "recoveryCooldownModal": {
     "dismissButtonLabel": "Got it",
     "text": {

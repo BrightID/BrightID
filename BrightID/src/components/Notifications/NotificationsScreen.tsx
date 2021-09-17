@@ -148,7 +148,7 @@ const MiscList = ({ route }: { route: Route }) => {
       title: t('notifications.item.title.socialRecovery'),
       msg: t('notifications.item.msg.socialRecovery'),
       imageSource,
-      navigationTarget: 'TrustedConnections',
+      navigationTarget: 'Recovery Connections',
       testID: 'SocialRecoveryNotifcation',
     });
   }
