@@ -8,10 +8,6 @@
       "description": "Join a BrightID connection party",
       "title": "Connection party"
     },
-    "joinConnectionPartyWithFriend": {
-      "description": "Bring family members or close friends to a BrightID connection party",
-      "title": "Connection party with friends or family"
-    },
     "linkApp": {
       "description": "Link your BrightID with an app",
       "title": "Link with an app"
@@ -117,6 +113,7 @@
       "success": "Success",
       "sure": "Sure",
       "text": {
+        "failedOp": "{{name}} failed!\n{{message}}",
         "lostKeys": "Please create a new BrightID or try recovering your previous BrightID",
         "passwordMatch": "Password and confirm password does not match.",
         "passwordShort": "Your password must be at least 8 characters long.",
@@ -163,11 +160,11 @@
   "connectionDetails": {
     "button": {
       "levelSave": "Save",
+      "ok": "OK",
       "report": "Report this person",
-      "undoReport": "Undo Report",
       "reportCancel": "Cancel",
       "reportSubmit": "Submit",
-      "ok": "OK"
+      "undoReport": "Undo Report"
     },
     "header": {
       "connectionDetails": "Connection details"
@@ -188,12 +185,12 @@
       "levelRecovery": "I trust this person to recover my BrightID for me",
       "levelSuspicious": "I don't know this person at all",
       "reportConnection": "Report {{name}}",
-      "unReportConnection": "Undo Report",
       "reportDuplicate": "This person created multiple accounts",
       "reportImpact": "Flagging {{name}} will negatively effect their BrightID score, and this flag might be shown to other users.",
-      "unReportImpact": "You have already reported {{name}} as a {{reportReason}}. Would you like to remove this flag and restore your connection?",
       "reportOther": "Other reason",
-      "reportSpammer": "This person sent me an unwanted connection request"
+      "reportSpammer": "This person sent me an unwanted connection request",
+      "unReportConnection": "Undo Report",
+      "unReportImpact": "You have already reported {{name}} as a {{reportReason}}. Would you like to remove this flag and restore your connection?"
     }
   },
   "connections": {
@@ -223,8 +220,8 @@
     "tag": {
       "deleted": "Deleted",
       "failed": "Connection failed.\nPlease try again.",
-      "reported": "Reported",
       "lastConnected": "Last connected {{date}}",
+      "reported": "Reported",
       "reportedAs": "Reported as {{flag}}",
       "waiting": "Waiting"
     },
@@ -262,7 +259,8 @@
     },
     "button": {
       "createGroup": "Create Group",
-      "next": "Next"
+      "next": "Next",
+      "skip": "Skip & do it later"
     },
     "label": {
       "cofounders": "CO-FOUNDERS"
@@ -366,8 +364,7 @@
       "noEligibleConnection": "No existing connections are eligible for this group, please come back later..",
       "noGroups": "<text>Get verified faster</text><text>by creating and</text><text>joining groups</text>",
       "noGroupsMatchSearch": "No group matches your search",
-      "noMembers": "No known members, invite some…",
-      "waitingForMembers": "Waiting for {{list}} to join"
+      "noMembers": "No known members, invite some…"
     }
   },
   "home": {
@@ -476,10 +473,10 @@
     "label": {
       "alreadyKnown": "Already known",
       "connections": "Connections",
+      "created": "Joined BrightID {{date}}",
       "groups": "Groups",
       "justMet": "Just met",
       "mutualConnections": "Mutual Connections",
-      "created": "Joined BrightID {{date}}",
       "rating": "How well do you know this connection?",
       "recovery": "Recovery",
       "reported": "Reported",

@@ -101,6 +101,27 @@ const ReportReasonModal = ({ route, navigation }: props) => {
     );
   };
 
+  const reportConnectionText = t('connectionDetails.text.reportConnection', {
+    name: connection.name,
+  });
+  const unReportConnectionText = t(
+    'connectionDetails.text.unReportConnection',
+    {
+      name: connection.name,
+    },
+  );
+  const reportConnectionDetailsText = t('connectionDetails.text.reportImpact', {
+    name: connection.name,
+    reportReason: connection.reportReason,
+  });
+  const unReportConnectionDetailsText = t(
+    'connectionDetails.text.unReportImpact',
+    {
+      name: connection.name,
+      reportReason: connection.reportReason,
+    },
+  );
+
   return (
     <View style={styles.container} testID="ReportReasonModal">
       <BlurView
@@ -112,28 +133,15 @@ const ReportReasonModal = ({ route, navigation }: props) => {
       <View style={styles.modalContainer}>
         <View style={styles.header}>
           <Text style={styles.headerText}>
-            {t(
-              `connectionDetails.text.${
-                reporting ? 'reportConnection' : 'unReportConnection'
-              }`,
-              {
-                name: connection.name,
-              },
-            )}
+            {reporting ? reportConnectionText : unReportConnectionText}
           </Text>
         </View>
         <View style={styles.message}>
           <Material name="information" size={26} color={BLUE} />
           <Text style={styles.messageText}>
-            {t(
-              `connectionDetails.text.${
-                reporting ? 'reportImpact' : 'unReportImpact'
-              }`,
-              {
-                name: connection.name,
-                reportReason: connection.reportReason,
-              },
-            )}
+            {reporting
+              ? reportConnectionDetailsText
+              : unReportConnectionDetailsText}
           </Text>
         </View>
         <View style={styles.divider} />
