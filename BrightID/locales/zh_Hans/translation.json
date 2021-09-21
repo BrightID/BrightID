@@ -382,7 +382,7 @@
     },
     "text": {
       "noEligibleConnection": "当前联系人不符合该组条件，请稍后再试。",
-      "noGroups": "<text>能更快验证<text><text>如果创建并</text><text>加入群组</text>",
+      "noGroups": "<text>能更快验证</text><text>如果创建并</text><text>加入群组</text>",
       "noGroupsMatchSearch": "无法匹配您搜索的群组",
       "noMembers": "还没有已知联系人，邀请一些…",
       "waitingForMembers": "等待{{list}}加入"
@@ -393,7 +393,7 @@
       "connect": "连接"
     },
     "button": {
-      "apps": "Apps",
+      "apps": "应用程序",
       "connections": "联系人",
       "groups": "群组",
       "myCode": "我的二维码",
@@ -688,7 +688,7 @@
       "submit": "提交"
     },
     "header": {
-      "title": "报名"
+      "title": "注册"
     },
     "placeholder": {
       "confirmPassword": "确认你的密码",
@@ -709,7 +709,7 @@
   "walkthroughs": {
     "text": {
       "gotIt": "知道了!",
-      "setPassword": "您可以随时在此处设置\n您的BrightID密码.",
+      "setPassword": "您可以随时在此处设置\n您的BrightID密码",
       "viewPassword": "您随时可以在这里看到\n您的 BrightID 密码"
     }
   }
