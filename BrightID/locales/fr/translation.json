@@ -635,6 +635,20 @@
       "signatures_plural": ""
     }
   },
+  "recoveryConnections": {
+    "text": {
+      "add": "Ajouter",
+      "addMoreRecovery": "Ajouter plus de connexions de récupération +",
+      "addRecoveryConnections": "Ajouter des connexions de récupération",
+      "chooseThreeConnections": "Choisissez trois connexions déjà connues ou plus pour sauvegarder votre BrightID",
+      "completed": "Les connexions de récupération ont été ajoutées avec succès",
+      "connectionsAlreadyKnown": "Les connexions doivent être « déjà connues » avant de pouvoir être configurées en tant que récupération.",
+      "currentRecoveryConnections": "Vos connexions de récupération actuelles",
+      "emptyList": "Veuillez ajouter des connexions de récupération pour permettre la récupération sociale",
+      "pleaseMakeSomeConnections": "Veuillez établir des connexions :)",
+      "threeMore": "Vous avez besoin de {{amount}} connexions supplémentaires déjà connues pour permettre la récupération sociale"
+    }
+  },
   "recoveryCooldownModal": {
     "dismissButtonLabel": "Compris",
     "text": {
