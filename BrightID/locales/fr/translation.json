@@ -132,6 +132,7 @@
       "success": "Succès",
       "sure": "Oui",
       "text": {
+        "failedOp": "{{name}} a échoué !\n{{message}}",
         "incorrectPassword": "Mot de passe incorrect !",
         "lostKeys": "Veuillez créer un nouveau BrightID ou essayer de restaurer votre compte BrightID",
         "passwordMatch": "Le mot de passe et la confirmation de mot de passe ne correspondent pas.",
