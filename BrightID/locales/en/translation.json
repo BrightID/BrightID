@@ -113,7 +113,6 @@
       "success": "Success",
       "sure": "Sure",
       "text": {
-        "failedOp": "{{name}} failed!\n{{message}}",
         "lostKeys": "Please create a new BrightID or try recovering your previous BrightID",
         "passwordMatch": "Password and confirm password does not match.",
         "passwordShort": "Your password must be at least 8 characters long.",
@@ -259,8 +258,7 @@
     },
     "button": {
       "createGroup": "Create Group",
-      "next": "Next",
-      "skip": "Skip & do it later"
+      "next": "Next"
     },
     "label": {
       "cofounders": "CO-FOUNDERS"
@@ -364,7 +362,8 @@
       "noEligibleConnection": "No existing connections are eligible for this group, please come back later..",
       "noGroups": "<text>Get verified faster</text><text>by creating and</text><text>joining groups</text>",
       "noGroupsMatchSearch": "No group matches your search",
-      "noMembers": "No known members, invite some…"
+      "noMembers": "No known members, invite some…",
+      "waitingForMembers": "Waiting for {{list}} to join"
     }
   },
   "home": {
@@ -602,14 +601,15 @@
   },
   "recoveryConnections": {
     "text": {
-      "emptyList": "Please add recovery connections to enable social recovery",
-      "addRecoveryConnections": "Add Recovery Connections",
-      "addMoreRecovery": "Add more recovery connections +",
-      "pleaseMakeSomeConnections": "Please make some connections :)",
-      "currentRecoveryConnections": "Your Current Recovery Connections",
-      "chooseThreeConnections": "Choose three or more already known connection to backup your BrightID",
-      "connectionsAlreadyKnown": "Connections must be \"already known\" before they can be setup as recovery.",
       "add": "Add",
+      "addMoreRecovery": "Add more recovery connections +",
+      "addRecoveryConnections": "Add Recovery Connections",
+      "chooseThreeConnections": "Choose three or more already known connection to backup your BrightID",
+      "completed": "Recovery connections have been successfully added",
+      "connectionsAlreadyKnown": "Connections must be \"already known\" before they can be setup as recovery.",
+      "currentRecoveryConnections": "Your Current Recovery Connections",
+      "emptyList": "Please add recovery connections to enable social recovery",
+      "pleaseMakeSomeConnections": "Please make some connections :)",
       "threeMore": "You need {{amount}} more already known connection(s) to enable social recovery"
     }
   },

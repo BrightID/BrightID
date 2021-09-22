@@ -156,7 +156,7 @@ export const NewRecoveryConnectionList = (props) => {
           Alert.alert(
             t('common.alert.success'),
             t(
-              'backup.alert.text.completed',
+              'recoveryConnections.text.completed',
               'Recovery connections have been successfully added',
             ),
           );
