@@ -41,10 +41,10 @@ describe('social recovery', () => {
       await expect(element(by.id('SocialRecoveryNotifcation'))).toBeVisible();
     });
 
-    it('should navigate to TrustedConnections screen', async () => {
+    it('should navigate to Recovery Connections screen', async () => {
       // click on notification
       await element(by.id('SocialRecoveryNotifcation')).tap();
-      await expect(element(by.id('TrustedConnectionsScreen'))).toBeVisible();
+      await expect(element(by.id('RecoveryConnectionsScreen'))).toBeVisible();
     });
   });
 });

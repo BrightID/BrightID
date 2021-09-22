@@ -82,6 +82,7 @@ export const RecoveryConnectionsScreen = (props) => {
   return (
     <View
       style={[styles.container, styles.shadow, { marginTop: headerHeight }]}
+      testID="RecoveryConnectionsScreen"
     >
       {recoveryConnections.length > 0 && (
         <View style={styles.titleContainer}>
