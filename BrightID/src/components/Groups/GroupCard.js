@@ -23,10 +23,14 @@ class GroupCard extends React.PureComponent {
       return (
         <View style={styles.waitingContainer}>
           <Text style={styles.waitingMessage}>
-            {t('groups.text.waitingForMembers', {
-              // TODO: This concatenation assumes english grammar and will not work well in all languages
-              list: notJoinedNames.join(` ${concatenationString} `),
-            })}
+            {t(
+              'groups.text.waitingForMembers',
+              'Waiting for {{list}} to join',
+              {
+                // TODO: This concatenation assumes english grammar and will not work well in all languages
+                list: notJoinedNames.join(` ${concatenationString} `),
+              },
+            )}
           </Text>
         </View>
       );
