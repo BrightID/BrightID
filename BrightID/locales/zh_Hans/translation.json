@@ -35,8 +35,12 @@
     "progress": {
       "title": "完成："
     },
+    "setupBackup": {
+      "description": "设置密码以启用数据的加密备份",
+      "title": "设置备份密码"
+    },
     "setupTrustedConnections": {
-      "description": "设置可信任联系人来帮助恢复账号",
+      "description": "设置您的恢复连接以启用社交柜台恢复",
       "title": "设置账号恢复"
     }
   },
@@ -76,22 +80,24 @@
     "alert": {
       "text": {
         "backupSuccess": "成功完成备份！",
-        "needThreeTrusted": "您需要至少3位可信任的联系人作为后援。"
+        "completed": "现在可以恢复你的BrightID账号",
+        "needThreeTrusted": "您至少需要三个恢复连接进行备份."
       }
     },
     "button": {
       "next": "下一步",
+      "save": "设置恢复连接",
       "startBackup": "开始备份"
     },
     "header": {
       "backup": "备份",
-      "trustedConnections": "可信联系人"
+      "trustedConnections": "恢复连接"
     },
     "placeholder": {
       "confirmPassword": "确认密码"
     },
     "text": {
-      "chooseTrustedConnections": "选择三个或者更多可信赖的联系人为你的BrightID背书。",
+      "chooseTrustedConnections": "选择三个或更多恢复连接来认可您的 BrightID。",
       "enterPassword": "输入密码使用以下方法加密备份数据：",
       "noConnections": "联系人为空"
     }
@@ -130,7 +136,7 @@
         "lostKeys": "请创建新的BrightID或者尝试恢复以前的账号",
         "passwordMatch": "密码和确认密码不匹配。",
         "passwordShort": "密码长度必须至少为8个字符。",
-        "trustedSigned": "一个可信联系人签名了你的需求"
+        "trustedSigned": "您的一个恢复连接签署了您的请求"
       },
       "title": {
         "lostKeys": "我们从设备中丢失了BrightID密钥对",
@@ -163,7 +169,9 @@
     },
     "tag": {
       "connectionDate": "建立联系的 {{date}}",
-      "reported": "(已报告)"
+      "reportReason": " 作为{{reportReason}}",
+      "reported": "(已报告)",
+      "reportedByUser": "被你举报"
     },
     "text": {
       "uploadingData": "正在将加密数据上传到备份服务器…"
@@ -172,9 +180,11 @@
   "connectionDetails": {
     "button": {
       "levelSave": "保存",
+      "ok": "好",
       "report": "举报此人",
       "reportCancel": "取消",
-      "reportSubmit": "提交"
+      "reportSubmit": "提交",
+      "undoReport": "撤销举报"
     },
     "header": {
       "connectionDetails": "联系人详情"
@@ -198,7 +208,9 @@
       "reportDuplicate": "此人创建了多个账号",
       "reportImpact": "标记{{name}}会对他们的BrightID产生负面影响，并且该标记可能会显示给其他用户。",
       "reportOther": "其他原因",
-      "reportSpammer": "此人向我发送了不需要的连接请求"
+      "reportSpammer": "此人向我发送了不需要的连接请求",
+      "unReportConnection": "撤销举报",
+      "unReportImpact": "您已经将 {{name}}报告为{{reportReason}}.您想删除此标志并恢复您的连接吗？"
     }
   },
   "connections": {
@@ -216,7 +228,7 @@
       "connections": "联系人"
     },
     "label": {
-      "currentConnectionLevel": "当前联系人熟悉程度",
+      "currentConnectionLevel": "连接级别",
       "newProfile": "新简介",
       "oldProfile": "旧简介"
     },
@@ -230,6 +242,7 @@
       "failed": "失败。\n请再试一次。",
       "hidden": "已隐藏",
       "lastConnected": "最近建立联系是在{{date}}",
+      "reported": "已举报",
       "reportedAs": "举报{{flag}}",
       "waiting": "等待中"
     },
@@ -369,7 +382,7 @@
     },
     "text": {
       "noEligibleConnection": "当前联系人不符合该组条件，请稍后再试。",
-      "noGroups": "<text>能更快验证<text><text>如果创建并</text><text>加入群组</text>",
+      "noGroups": "<text>能更快验证</text><text>如果创建并</text><text>加入群组</text>",
       "noGroupsMatchSearch": "无法匹配您搜索的群组",
       "noMembers": "还没有已知联系人，邀请一些…",
       "waitingForMembers": "等待{{list}}加入"
@@ -380,7 +393,7 @@
       "connect": "连接"
     },
     "button": {
-      "apps": "Apps",
+      "apps": "应用程序",
       "connections": "联系人",
       "groups": "群组",
       "myCode": "我的二维码",
@@ -399,12 +412,14 @@
   },
   "notificationBar": {
     "text": {
+      "backupPassword": "设置密码以便备份你的数据",
       "pendingConnections": "您有{{count}}个联系正在处理中",
-      "socialRecovery": "请选择您信任的联系人助您恢复BrightID账号"
+      "socialRecovery": "选择恢复连接为您的 BrightID 启用社交恢复"
     },
     "title": {
-      "pendingConnection": "确认联系人",
-      "socialRecovery": "备份和恢复"
+      "backupPassword": "设置备份密码",
+      "pendingConnection": "确认连接",
+      "socialRecovery": "设置社会的恢复"
     }
   },
   "notifications": {
@@ -420,13 +435,18 @@
       }
     },
     "item": {
+      "msg": {
+        "backupBrightId": "设置密码以启用数据的加密备份",
+        "socialRecovery": "选择恢复联系人用来恢复你的BrightID账号"
+      },
       "text": {
         "backupBrightId": "选择您信任的联系人",
         "pendingConnections": "您有{{count}}个未确认联系人",
         "pendingGroupInvite": "{{name}}已邀您加入"
       },
       "title": {
-        "backupBrightId": "备份BrightID"
+        "backupBrightId": "设置备份密码",
+        "socialRecovery": "设置恢复连接"
       }
     },
     "tab": {
@@ -442,14 +462,18 @@
   },
   "onboarding": {
     "button": {
-      "getStarted": "开始"
+      "create": "创建我的BrightID",
+      "getStarted": "开始",
+      "recover": "恢复BrightID"
     },
     "label": {
       "maintainPrivacy": "隐私维护"
     },
     "text": {
+      "congratulations": "恭喜！\n您的BrightID已创建。\n即刻开始连接。",
       "intro": "<text> BrightID使用您认识的人</text><text>强制每人一个帐户</text><text>对一个重要的应用程序例如</text><text>进行投票和普遍基本收入</text>",
-      "privacy": "<text>证明你是独立个人</text><text>在保护隐私的同时</text>"
+      "privacy": "<text>证明你是独立个人</text><text>在保护隐私的同时</text>",
+      "register": "注册并创建你的个人\n数字身份"
     }
   },
   "pendingConnection": {
@@ -475,6 +499,7 @@
     "label": {
       "alreadyKnown": "已知",
       "connections": "联系人",
+      "created": "加入BrightID{{date}}",
       "groups": "群组",
       "justMet": "刚认识",
       "mutualConnections": "共同联系人",
@@ -514,17 +539,21 @@
       "currentPassword": "当前密码",
       "name": "姓名",
       "newPassword": "新密码",
-      "newPasswordAgain": "请再次输入新密码",
+      "newPasswordAgain": "请再次输入密码",
+      "password": "密码",
       "socialMediaLink": "社交媒体账号链接"
     },
     "placeholder": {
       "name": "输入姓名",
       "newPassword": "新密码",
-      "newPasswordAgain": "请再次输入新密码"
+      "newPasswordAgain": "请再次输入密码",
+      "password": "密码"
     },
     "text": {
+      "backupPasswordTitle": "备份密码",
       "changePassword": "修改密码",
       "changeProfilePicture": "更换头像",
+      "setPassword": "设置密码",
       "viewPassword": "查看密码"
     }
   },
@@ -567,11 +596,41 @@
     }
   },
   "recovery": {
+    "alert": {
+      "clipboardmessage": "帮助恢复我的BrightID{{link}}",
+      "text": "分享你恢复联系人的链接。",
+      "title": "恢复链接"
+    },
+    "error": {
+      "mismatchId": "你的恢复 联系选择了不同的账户",
+      "title": "账户恢复失败",
+      "unknown": "发生了一个未知错误"
+    },
+    "header": {
+      "text": "部分1:恢复账户"
+    },
+    "info": "此步骤将在此设备上恢复您的 BrightID.将恢复与恢复连接相同的连接名称和照片.",
+    "state": "恢复{{recoveredConnections}}联系人，{{recoveredGroups}}群组",
+    "steps": {
+      "complete": "账户恢复完成",
+      "downloading": "正在从恢复连接下载数据...",
+      "error": "账户恢复失败",
+      "recovering": "账户恢复中…"
+    },
     "text": {
-      "additionalInfo": "您的可信任联系人需要扫码来帮您恢复BrightID账号",
-      "askTrustedConnections": "请向您信任的联系人出示该二维码",
+      "additionalInfo": "您的恢复连接需要扫码来帮您恢复BrightID账号",
+      "askTrustedConnections": "请向您恢复连接出示该二维码",
       "signatures": "{{count}} / 2 签名"
     }
+  },
+  "recoveryCooldownModal": {
+    "dismissButtonLabel": "已完成",
+    "text": {
+      "connection": "您刚刚更改了<bold>{{name}}</bold> 的恢复级别.",
+      "cooldown": "请注意，出于安全原因，此更改会在冷却期 <period>{{ cooldownPeriod }}</period>后生效。",
+      "cooldownGeneric": "请注意, 出于安全原因, 恢复连接的更改会在最多<period>{{ cooldownPeriod }}</period>的冷却期后生效。"
+    },
+    "title": "恢复连接的冷却时间"
   },
   "restore": {
     "alert": {
@@ -592,7 +651,22 @@
       }
     },
     "header": {
-      "accountRecovery": "账号恢复"
+      "accountRecovery": "账号恢复",
+      "text": "第 2 部分：恢复备份（可选）"
+    },
+    "info": "使用备份密码，您可以恢复所有连接和组的名称和照片.",
+    "password": {
+      "placeholder": "输入您的密码",
+      "skip": "跳过",
+      "submit": "恢复"
+    },
+    "steps": {
+      "complete": "恢复完成",
+      "error": "恢复失败. 密码错误？",
+      "restoring": "正在恢复数据...",
+      "skipped": "已跳过还原",
+      "waitingAccount": "等待帐户恢复",
+      "waitingPassword": "输入密码 或 跳过"
     },
     "text": {
       "chooseConnectionToHelp": "请选择您要帮助恢复账号的联系人。",
@@ -609,18 +683,34 @@
     "button": {
       "addPhoto": "添加图片",
       "createAccount": "创建我的BrightID",
-      "recoverAccount": "恢复BrightID账号"
+      "recoverAccount": "恢复BrightID账号",
+      "skip": "跳过它并稍后再做",
+      "submit": "提交"
     },
     "header": {
       "title": "注册"
     },
     "placeholder": {
-      "name": "姓名"
+      "confirmPassword": "确认你的密码",
+      "name": "你的姓名",
+      "password": "密码"
     },
     "text": {
+      "createPassword": "创建您的 BrightID 密码",
       "creatingAccount": "Bright ID创建中…",
       "infoNotShared": "您的名字和照片将永远不会与app共享或存储在服务器上",
+      "nameNotShared": "您的姓名永远不会与应用程序共享或\n存储在我们的区块链中.",
+      "passwordInfo": "如果您需要恢复它们，此密码将对您的连接的名称和照片进行加密. 它不允许有人接管您的 BrightID.",
+      "photoNotShared": "您的照片永远不会与应用程序共享或\n存储在我们的区块链中.",
+      "pleaseAddPhoto": "请添加照片",
       "whatsYouName": "您的朋友是怎么认识您的？"
+    }
+  },
+  "walkthroughs": {
+    "text": {
+      "gotIt": "知道了!",
+      "setPassword": "您可以随时在此处设置\n您的BrightID密码",
+      "viewPassword": "您随时可以在这里看到\n您的 BrightID 密码"
     }
   }
 }
