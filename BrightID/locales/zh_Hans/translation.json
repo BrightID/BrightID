@@ -623,6 +623,20 @@
       "signatures": "{{count}} / 2 签名"
     }
   },
+  "recoveryConnections": {
+    "text": {
+      "add": "增加",
+      "addMoreRecovery": "增加更多恢复连接",
+      "addRecoveryConnections": "增加恢复连接",
+      "chooseThreeConnections": "选择三位或更多您已经熟悉的连接，以备份您的 BrightID",
+      "completed": "已经成功添加恢复连接",
+      "connectionsAlreadyKnown": "在被设置为恢复连接之前，这些链接必须是设置为“已知”的",
+      "currentRecoveryConnections": "您的现有恢复连接",
+      "emptyList": "请增加恢复连接，以确保社会恢复",
+      "pleaseMakeSomeConnections": "请确保一些连接",
+      "threeMore": "你还需要{{amount}}位已知的链接，才能启用社会恢复"
+    }
+  },
   "recoveryCooldownModal": {
     "dismissButtonLabel": "已完成",
     "text": {
@@ -700,7 +714,7 @@
       "creatingAccount": "Bright ID创建中…",
       "infoNotShared": "您的名字和照片将永远不会与app共享或存储在服务器上",
       "nameNotShared": "您的姓名永远不会与应用程序共享或\n存储在我们的区块链中.",
-      "passwordInfo": "如果您需要恢复它们，此密码将对您的连接的名称和照片进行加密. 它不允许有人接管您的 BrightID.",
+      "passwordInfo": "如果您需要恢复它们，此密码将对您的连接的名称和照片进行加密. 它不允许任何人接管您的 BrightID.",
       "photoNotShared": "您的照片永远不会与应用程序共享或\n存储在我们的区块链中.",
       "pleaseAddPhoto": "请添加照片",
       "whatsYouName": "您的朋友是怎么认识您的？"
