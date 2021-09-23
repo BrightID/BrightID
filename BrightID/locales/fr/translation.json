@@ -169,7 +169,9 @@
     },
     "tag": {
       "connectionDate": "Connecté(e) {{date}}",
-      "reported": "(signalé)"
+      "reportReason": " comme {{reportReason}}",
+      "reported": "(signalé)",
+      "reportedByUser": "signalé par vous"
     },
     "text": {
       "progress": "{{completed}}/{{total}} complété(s)",
@@ -179,9 +181,11 @@
   "connectionDetails": {
     "button": {
       "levelSave": "Valider",
+      "ok": "OK",
       "report": "Signaler cette personne",
       "reportCancel": "Annuler",
-      "reportSubmit": "Signaler"
+      "reportSubmit": "Signaler",
+      "undoReport": "Annuler le signalement"
     },
     "header": {
       "connectionDetails": "Détails de connexion"
@@ -205,7 +209,9 @@
       "reportDuplicate": "Cette personne utilise plusieurs comptes",
       "reportImpact": "Signaler {{name}} impactera négativement son score BrightID, et ce signalement pourrait être vu par d'autres utilisateurs.",
       "reportOther": "Autre raison",
-      "reportSpammer": "Cette personne m'a envoyé une connexion indésirable"
+      "reportSpammer": "Cette personne m'a envoyé une connexion indésirable",
+      "unReportConnection": "Annuler le signalement",
+      "unReportImpact": "Vous avez déjà signalé {{name}} comme étant un {{reportReason}}. Voulez-vous supprimer ce signalement et rétablir votre connexion ?"
     }
   },
   "connections": {
@@ -237,6 +243,7 @@
       "failed": "Échec de la connexion.\nVeuillez réessayer.",
       "hidden": "Caché(e)",
       "lastConnected": "Dernière connexion : {{date}}",
+      "reported": "Signalé",
       "reportedAs": "Signalé en tant que {{flag}}",
       "waiting": "En attente"
     },
@@ -495,6 +502,7 @@
     "label": {
       "alreadyKnown": "Connaissance",
       "connections": "Connexions",
+      "created": "A rejoint BrightID le {{date}}",
       "groups": "Groupes",
       "justMet": "Nouvelle rencontre",
       "mutualConnections": "En commun",

@@ -20,7 +20,7 @@ function getRandomAddres() {
 const apps = [
   {
     id: '1hive',
-    name: '1Hive Honey Faucet',
+    name: '1Hive',
     context: '1hive',
   },
   {
@@ -39,11 +39,6 @@ const apps = [
     context: 'RabbitHole',
   },
   {
-    id: 'sahm',
-    name: 'Sahm',
-    context: 'idchain',
-  },
-  {
     id: 'ethereum',
     name: 'Burn Signal',
     context: 'ethereum',
@@ -52,11 +47,6 @@ const apps = [
     id: 'clr.fund',
     name: 'clr.fund',
     context: 'clr.fund',
-  },
-  {
-    id: 'Lumos',
-    name: 'Lumos',
-    context: 'Lumos',
   },
   {
     id: 'top-up-gifter',

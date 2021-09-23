@@ -46,7 +46,8 @@ const TrustlevelModal = ({ route }: props) => {
   const api = useContext(NodeApiContext);
 
   const goBack = () => {
-    navigation.navigate('Connection', { connectionId });
+    navigation.goBack();
+    // navigation.navigate('Connection', { connectionId });
   };
 
   const saveLevelHandler = async () => {

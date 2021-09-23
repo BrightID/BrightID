@@ -21,6 +21,7 @@ import List from './List';
 import Mail from './Mail';
 import NotificationBell from './NotificationBell';
 import Pencil from './Pencil';
+import RecoveryAccount from './RecoveryAccount';
 import PhoneLock from './PhoneLock';
 import Menu from './Menu';
 import Search from './Search';
@@ -41,6 +42,7 @@ const SamplePage = () => {
         <GraphQl />
         <Pencil />
         <Home />
+        <RecoveryAccount/>
       </View>
       <View style={styles.midContainer}>
         <Menu />
