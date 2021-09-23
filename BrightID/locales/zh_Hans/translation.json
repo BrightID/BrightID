@@ -714,7 +714,7 @@
       "creatingAccount": "Bright ID创建中…",
       "infoNotShared": "您的名字和照片将永远不会与app共享或存储在服务器上",
       "nameNotShared": "您的姓名永远不会与应用程序共享或\n存储在我们的区块链中.",
-      "passwordInfo": "如果您需要恢复它们，此密码将对您的连接的名称和照片进行加密. 它不允许任何人接管您的 BrightID.",
+      "passwordInfo": "此密码将对您的联系人的名称和照片进行加密和解密. 防止有人接管您的 BrightID.",
       "photoNotShared": "您的照片永远不会与应用程序共享或\n存储在我们的区块链中.",
       "pleaseAddPhoto": "请添加照片",
       "whatsYouName": "您的朋友是怎么认识您的？"
