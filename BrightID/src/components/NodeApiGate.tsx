@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from '@/store';
+import { RootState, useDispatch, useSelector } from '@/store';
 import { selectBaseUrl, setBaseUrl } from '@/reducer/settingsSlice';
 import React, { useEffect, useState } from 'react';
 import { InteractionManager } from 'react-native';
@@ -31,9 +31,9 @@ export const ApiGateState = {
 export type ApiGateState = typeof ApiGateState[keyof typeof ApiGateState];
 
 const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
-  const id = useSelector<string>((state: State) => state.user.id);
+  const id = useSelector<string>((state: RootState) => state.user.id);
   const secretKey = useSelector<Uint8Array>(
-    (state: State) => state.keypair.secretKey,
+    (state: RootState) => state.keypair.secretKey,
   );
   const url = useSelector<string>(selectBaseUrl);
   const [api, setApi] = useState<NodeApi | null>(null);
