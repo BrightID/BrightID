@@ -77,14 +77,8 @@ const validateProfileService = (baseUrl: string) =>
       })
       .then((json) => {
         // Body contains JSON. Now check if JSON content is acceptable.
-        if (validateProfileJsonResponse(json)) {
-          resolve(baseUrl);
-        } else {
-          console.log(
-            `Nodechooser: Node ${baseUrl} provided unexpected JSON data`,
-          );
-          reject(new Error('JSON response not valid'));
-        }
+        validateProfileJsonResponse(json); // will throw if invalid
+        resolve(baseUrl);
       })
       .catch((error) => {
         console.log(`Nodechooser: Node ${baseUrl} failed with ${error}`);
@@ -115,14 +109,8 @@ const validateAPI = (baseUrl: string) =>
       })
       .then((json) => {
         // Body contains JSON. Now check if JSON content is acceptable.
-        if (validateAPIJsonResponse(json)) {
-          resolve(baseUrl);
-        } else {
-          console.log(
-            `Nodechooser: Node ${baseUrl} provided unexpected JSON data`,
-          );
-          throw new Error('JSON response not valid');
-        }
+        validateAPIJsonResponse(json); // will throw if invalid
+        resolve(baseUrl);
       })
       .catch((error) => {
         console.log(`Nodechooser: Node ${baseUrl} failed with ${error}`);
