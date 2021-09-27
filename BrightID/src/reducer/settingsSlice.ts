@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '@/store';
 
 interface SettingsSlice {
   baseUrl: string | null;
@@ -30,7 +31,7 @@ export const {
   resetSettings,
 } = settingsSlice.actions;
 
-export const selectBaseUrl = (state: State) => {
+export const selectBaseUrl = (state: RootState) => {
   return state.settings.baseUrl;
 };
 
