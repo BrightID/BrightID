@@ -19,8 +19,7 @@ const ProdCandidates = [
   //  'http://node.topupgifter.com',
   //  'http://node.lumos.services',
 ];
-// const TestCandidates = ['http://test.brightid.org'];
-const TestCandidates = ProdCandidates;
+const TestCandidates = ['http://test.brightid.org'];
 
 export const ApiGateState = {
   INITIAL: 'INITIAL',
