@@ -1,1 +1,684 @@
-{}
+{
+  "achievements": {
+    "getSponsored": {
+      "description": "通過與提供贊助的應用程序鏈接來獲得贊助",
+      "title": "獲得贊助"
+    },
+    "joinConnectionParty": {
+      "description": "加入 BrightID 連接 會議",
+      "title": "連接會議"
+    },
+    "linkApp": {
+      "description": "將您的 BrightID 與 app進行關聯",
+      "title": "關聯一個app"
+    },
+    "makeFirstConnection": {
+      "description": "與其他的 BrightID 用戶進行關聯",
+      "title": "首次連接"
+    },
+    "makeThreeConnection": {
+      "description": "關聯3個 BrightID 用戶",
+      "title": "3個聯係人"
+    },
+    "makeTwoConnection": {
+      "description": "和2個BrightID 用戶進行關聯",
+      "title": "2個連接"
+    },
+    "notification": {
+      "message": "您已完成了任務\"{{title}}\"。",
+      "title": "成就解鎖！"
+    },
+    "progress": {
+      "title": "完成:"
+    },
+    "setupBackup": {
+      "description": "設置密碼啓用加密您的備份數據",
+      "title": "設置備份密碼"
+    },
+    "setupTrustedConnections": {
+      "description": "設置您的恢復連接以幫助您恢復社交賬戶",
+      "title": "設置社交恢復方式"
+    }
+  },
+  "apps": {
+    "alert": {
+      "button": {
+        "visitWebsite": "確定"
+      },
+      "text": {
+        "checkWebsite": "想瞭解{{name}}更多相關信息，請查看他們的網站！",
+        "invalidContext": "{{context}}是非法的context！",
+        "linkApp": "您想將{{context}}中的賬戶關聯到您的BrightID嗎？",
+        "linkFailure": "鏈接您的BrightID失敗{{context}}\n結果是{{result}}",
+        "linkSuccess": "{{context}}已成功連接到您的BrightID"
+      },
+      "title": {
+        "invalidContext": "失敗",
+        "linkApp": "關聯APP嗎？",
+        "linkFailure": "失敗",
+        "linkSuccess": "成功",
+        "linkingFailed": "APP連接失敗"
+      }
+    },
+    "text": {
+      "noApps": "沒有APP",
+      "notSponsored": "您沒有獲得贊助。\n請在下面找到一個app來贊助您。",
+      "pendingLink": "將您在 {{context}} 中的賬戶與您的 BrightID 關聯中…"
+    }
+  },
+  "backup": {
+    "alert": {
+      "text": {
+        "completed": "現已啓用了BrightID的社交恢復功能",
+        "needThreeTrusted": "您備份 需要至少3個恢復連接。"
+      }
+    },
+    "button": {
+      "save": "設置恢復連接"
+    },
+    "header": {
+      "trustedConnections": "恢復連接"
+    },
+    "text": {
+      "chooseTrustedConnections": "選擇3個或更多的恢復連接來備份您的BrightID。",
+      "noConnections": "沒有連接數"
+    }
+  },
+  "channel": {
+    "alert": {
+      "text": {
+        "localOutdated": "客戶端已過期 - 請更新到您的客戶端並重試",
+        "otherOutdated": "其他用戶的客戶端版本已過期 - 二維碼的創建者需要更新他的客戶端版本並重試"
+      }
+    }
+  },
+  "common": {
+    "accessibilityLabel": {
+      "addPhoto": "添加照片",
+      "editPhoto": "編輯照片",
+      "profilePhoto": "頭像",
+      "userPhoto": "用戶照片"
+    },
+    "actionSheet": {
+      "cancel": "取消",
+      "title": "你想要做什麽？"
+    },
+    "alert": {
+      "cancel": "取消",
+      "dismiss": "消失",
+      "error": "錯誤",
+      "info": "信息",
+      "no": "否",
+      "ok": "好",
+      "success": "成功",
+      "sure": "確認",
+      "text": {
+        "lostKeys": "請創建一個新的 BrightID 或嘗試恢復您以前的 BrightID",
+        "passwordMatch": "密碼和密碼確認輸入不一致。",
+        "passwordShort": "密碼必須超過8位數。",
+        "trustedSigned": "您簽名了一個恢復連接"
+      },
+      "title": {
+        "lostKeys": "我們丟失了設備上的BrightID密鑰對",
+        "pleaseConfirm": "請確認"
+      },
+      "yes": "是"
+    },
+    "button": {
+      "cancel": "取消",
+      "copy": "複製",
+      "save": "保存"
+    },
+    "camera": {
+      "cancel": "取消",
+      "message": "我們需要使用相機授權",
+      "ok": "好",
+      "title": "授權使用相機"
+    },
+    "language": {
+      "and": "和"
+    },
+    "photoActionSheet": {
+      "choosePhoto": "從相冊中選擇",
+      "takePhoto": "拍照",
+      "title": "選擇照片"
+    },
+    "placeholder": {
+      "searchConnections": "搜素連接"
+    },
+    "tag": {
+      "connectionDate": "已連接{{date}}",
+      "reportReason": " 作爲舉報原因 {{reportReason}}",
+      "reported": "（報告）",
+      "reportedByUser": "被您舉報"
+    },
+    "text": {
+      "uploadingData": "上傳加密數據到備份服務…"
+    }
+  },
+  "connectionDetails": {
+    "button": {
+      "levelSave": "保存",
+      "ok": "好",
+      "report": "舉報這個人",
+      "reportCancel": "取消",
+      "reportSubmit": "提交",
+      "undoReport": "撤銷舉報"
+    },
+    "header": {
+      "connectionDetails": "連接詳情"
+    },
+    "label": {
+      "connectionLevel": "連接級別",
+      "mutualConnections": "互相連接",
+      "mutualGroups": "關聯團隊"
+    },
+    "tags": {
+      "connectedAt": "已連接{{date}}",
+      "loading": "加載中…"
+    },
+    "text": {
+      "level": "您對{{name}}瞭解多少？",
+      "levelAlreadyKnown": "我認識這個人",
+      "levelJustMet": "剛認識的陌生人",
+      "levelRecovery": "我相信此人能幫我找回我的BrightID",
+      "levelSuspicious": "我根本不認識此人",
+      "reportConnection": "舉報{{name}}",
+      "reportDuplicate": "此人創建了多個賬戶",
+      "reportImpact": "標記 {{name}} 會對他們的 BrightID 分數產生負面影響，並且此標記可能會顯示給其他用戶。",
+      "reportOther": "其他原因",
+      "reportSpammer": "此人向我發送了不需要的連接請求",
+      "unReportConnection": "撤銷舉報",
+      "unReportImpact": "您已經將 {{name}} 舉報原因是 {{reportReason}}。您想刪除此標誌並恢復您的連接嗎？"
+    }
+  },
+  "connections": {
+    "accessibilityLabel": {
+      "connectionPhoto": "連接照片",
+      "viewConnectionDetails": "查看連接詳情",
+      "viewPhoto": "全屏查看照片"
+    },
+    "button": {
+      "reconnect": "重連",
+      "reportConnection": "舉報此連接",
+      "updateConnection": "更新連接"
+    },
+    "header": {
+      "connections": "連接"
+    },
+    "label": {
+      "currentConnectionLevel": "連接級別",
+      "newProfile": "新屬性",
+      "oldProfile": "舊屬性"
+    },
+    "removeActionSheet": {
+      "info": "您確定要刪除與 {{name}} 的連接嗎？您可以隨時重新連接。",
+      "remove": "刪除",
+      "title": "刪除連接"
+    },
+    "tag": {
+      "deleted": "刪除",
+      "failed": "連接失敗。\n請重試。",
+      "lastConnected": "上次連接 {{date}}",
+      "reported": "已擧報",
+      "reportedAs": "報告為{{flag}}",
+      "waiting": "等待"
+    },
+    "text": {
+      "alreadyConnectedWith": "您已經與{{name}}建立了聯繫",
+      "noConnections": "無連接"
+    }
+  },
+  "contact": {
+    "label": {
+      "email": "郵箱",
+      "meet": "建立聯繫",
+      "socialMedia": "社交媒體",
+      "website": "網站"
+    },
+    "text": {
+      "meet": "加入 BrightID 連接派對！",
+      "openSource": "開源！",
+      "weAre": "我們是 "
+    },
+    "title": {
+      "contactUs": "聯係我們"
+    }
+  },
+  "createGroup": {
+    "alert": {
+      "text": {
+        "nameMissing": "請為群組添加名稱",
+        "nameTooShort": "群組名稱必須至少為 2 個字"
+      },
+      "title": {
+        "createFailed": "群組創建失敗",
+        "formIncomplete": "群組信息不完整"
+      }
+    },
+    "button": {
+      "createGroup": "創建群組",
+      "next": "下一步"
+    },
+    "label": {
+      "cofounders": "聯合創始人"
+    },
+    "placeholder": {
+      "groupName": "群組名稱是什麼？"
+    },
+    "text": {
+      "cofounders": "要創建一個小組，您必須選擇兩個聯合創始人",
+      "noConnections": "無連接"
+    }
+  },
+  "drawer": {
+    "alert": {
+      "text": {
+        "upToDate": "BrightID 是最新版本。"
+      },
+      "title": {
+        "upToDate": "檢查更新"
+      }
+    },
+    "label": {
+      "achievements": "成就",
+      "checkForUpdates": "檢查更新",
+      "contactUs": "聯係我們",
+      "copyExplorerCode": "複製窗口信息",
+      "editProfile": "編輯個人資料",
+      "home": "主頁"
+    }
+  },
+  "eula": {
+    "header": {
+      "title": "許可協議"
+    }
+  },
+  "graphExplorer": {
+    "alert": {
+      "text": {
+        "copied": "已復製到剪貼板！"
+      }
+    },
+    "button": {
+      "copyCode": "複製代碼"
+    },
+    "text": {
+      "backupRequired": "訪問您的圖形瀏覽器代碼需要設置備份和恢復。檢查您的通知或連接到更多用戶以獲得備份和恢復資格。",
+      "explorerWebsiteDescription": "是一個旨在探索整個 BrightID 社交圖的網站。使用上面的代碼在圖中查看您的連接。"
+    }
+  },
+  "groups": {
+    "accessibilityLabel": {
+      "groupsLogo": "群組標志"
+    },
+    "alert": {
+      "text": {
+        "addAdmin": "您確定要讓 {{name}} 成為該群組的管理員嗎？",
+        "dismissMember": "您確定要將 {{name}} 退出該群組嗎？",
+        "inviteSuccess": "您已成功邀請 {{name}} 加入群組",
+        "leaveGroup": "您確定要離開此群組嗎？"
+      },
+      "title": {
+        "addAdmin": "添加管理員",
+        "dismissMember": "解散會員",
+        "errorDismissMember": "從群組中解散成員時出錯",
+        "errorLeaveGroup": "退出群組時出錯",
+        "inviteSuccess": "成功邀請",
+        "leaveGroup": "離開群組"
+      }
+    },
+    "button": {
+      "createGroup": "創建群組",
+      "learnMore": "了解更多"
+    },
+    "groupActionSheet": {
+      "cancel": "取消",
+      "inviteUser": "邀請用戶",
+      "leaveGroup": "離開組"
+    },
+    "header": {
+      "groups": "群組",
+      "inviteList": "邀請名單",
+      "newGroup": "新群組"
+    },
+    "label": {
+      "knownMembers": "已認識成員：",
+      "unknownMembers": "不認識："
+    },
+    "memberActionSheet": {
+      "addAdmin": "添加管理員",
+      "cancel": "取消",
+      "dismissMember": "退出群組"
+    },
+    "state": {
+      "creatingGroup": "創建組",
+      "uploadingGroupPhoto": "上傳群組照片"
+    },
+    "tag": {
+      "primaryGroup": "主要群組"
+    },
+    "text": {
+      "noEligibleConnection": "沒有現有的連接符合此組的條件，請稍後再回來..",
+      "noGroups": "<text>更快地獲得驗證</text><text>通過創建和</text><text>加入群組</text>",
+      "noGroupsMatchSearch": "沒有符合您搜索的群組",
+      "noMembers": "沒有已知成員，請邀請一些……",
+      "waitingForMembers": "等待{{list}}加入"
+    }
+  },
+  "home": {
+    "accessibilityLabel": {
+      "connect": "連接"
+    },
+    "button": {
+      "apps": "應用",
+      "connections": "所有連接",
+      "groups": "群組",
+      "myCode": "我的代碼",
+      "scanCode": "掃描二維碼"
+    },
+    "chatActionSheet": {
+      "discord": "BrightID的Discord鏈接",
+      "title": "喜歡和我們聊天嗎？"
+    },
+    "label": {
+      "createNewConnection": "創建新連接"
+    },
+    "link": {
+      "community": "加入社區"
+    }
+  },
+  "notificationBar": {
+    "text": {
+      "backupPassword": "設置密碼以啟用數據的加密備份",
+      "pendingConnections": "您有 {{count}} 個待處理連接",
+      "socialRecovery": "選擇恢復連接以啟用 BrightID 的社交恢復"
+    },
+    "title": {
+      "backupPassword": "設置備份密碼",
+      "pendingConnection": "確認連接",
+      "socialRecovery": "設置社會恢復"
+    }
+  },
+  "notifications": {
+    "alert": {
+      "text": {
+        "failureAcceptGroupInvite": "加入群組失敗",
+        "rejectGroupInvite": "您確定要拒絕加入此群組嗎？",
+        "successGroupInvite": "您加入了{{groupName}}"
+      },
+      "title": {
+        "failureRejectGroupInvite": "拒絕邀請失敗",
+        "rejectGroupInvite": "拒絕"
+      }
+    },
+    "item": {
+      "msg": {
+        "backupBrightId": "設置密碼以啟用數據的加密備份",
+        "socialRecovery": "選擇恢復連接以啟用 BrightID 的社交恢復"
+      },
+      "text": {
+        "pendingConnections": "您有 {{count}} 個未確認的連接",
+        "pendingGroupInvite": "{{name}} 邀請您加入"
+      },
+      "title": {
+        "backupBrightId": "設置備份密碼",
+        "socialRecovery": "設置社交恢復"
+      }
+    },
+    "tab": {
+      "connections": "連接",
+      "groups": "群組",
+      "miscellaneous": "各種各樣的"
+    },
+    "text": {
+      "noGroupInvites": "您沒有群組邀請..",
+      "noMiscellaneous": "這沒東西看…",
+      "noPendingConnections": "您沒有等待的連接.."
+    }
+  },
+  "onboarding": {
+    "button": {
+      "create": "創建我的BrightID",
+      "recover": "恢復 BrightID"
+    },
+    "text": {
+      "congratulations": "恭喜！\n您的 BrightID 已創建。\n是時候建立聯繫了。",
+      "register": "註冊以創建您自己的\n數字身份"
+    }
+  },
+  "pendingConnection": {
+    "alert": {
+      "text": {
+        "errorCreateChannel": "無法創建連接通道。錯誤信息：{{message}}",
+        "errorJoinChannel": "無法加入連接通道。錯誤信息：{{message}}",
+        "localOutdated": "由於客戶端版本不兼容，無法與 {{name}} 連接。請更新並重新啟動您的 BrightID 應用程序。",
+        "otherOutdated": "由於客戶端版本不兼容，無法與 {{name}} 連接。請讓{{name}}更新並重啟brightID應用程序。"
+      },
+      "title": {
+        "connectionImpossible": "無法連接"
+      }
+    },
+    "text": {
+      "alreadyRated": "您已經評價了此連接",
+      "errorExpired": "連接已過期。請嘗試重新連接。",
+      "errorMyself": "您無法連接到自己。",
+      "errorUnhandled": "未處理的連接狀態"
+    }
+  },
+  "pendingConnections": {
+    "label": {
+      "alreadyKnown": "已經認識",
+      "connections": "連接",
+      "created": "加入 BrightID {{date}}",
+      "groups": "群組",
+      "justMet": "剛認識",
+      "mutualConnections": "互相關聯",
+      "rating": "您對這種聯繫了解多少？",
+      "recovery": "恢復",
+      "reported": "舉報",
+      "suspicious": "可疑"
+    },
+    "text": {
+      "errorGeneric": "連接時出錯。請嘗試重新連接。",
+      "rating": "您的回答將幫助我們防止攻擊"
+    },
+    "title": {
+      "confirmationTotal": "{{confirmed}} / {{total}} 確認"
+    }
+  },
+  "profile": {
+    "alert": {
+      "button": {
+        "discard": "丟棄",
+        "dontLeave": "不要離開"
+      },
+      "text": {
+        "discardChanges": "您有未保存的更改。您確定要丟棄它們並離開屏幕嗎？",
+        "passwordMatch": "當前密碼不匹配。"
+      },
+      "title": {
+        "discardChanges": "放棄更改？",
+        "passwordMatch": "請再試一次"
+      }
+    },
+    "button": {
+      "socialNext": "下一步",
+      "socialPrevious": "上一步"
+    },
+    "label": {
+      "currentPassword": "當前密碼",
+      "name": "姓名",
+      "newPassword": "新密碼",
+      "newPasswordAgain": "重複密碼",
+      "password": "密碼",
+      "socialMediaLink": "社交媒體鏈接"
+    },
+    "placeholder": {
+      "name": "輸入姓名",
+      "newPassword": "新密碼",
+      "newPasswordAgain": "重複密碼",
+      "password": "密碼"
+    },
+    "text": {
+      "backupPasswordTitle": "備份密碼",
+      "changePassword": "修改密碼",
+      "changeProfilePicture": "更改個人資料圖片",
+      "setPassword": "設置密碼",
+      "viewPassword": "查看密碼"
+    }
+  },
+  "qrcode": {
+    "alert": {
+      "connectGroup": "在 BrightID 上與 {{name}} 建立群組連接：{{link}}",
+      "connectSingle": "在 BrightID 上與 {{name}} 聯繫：{{link}}",
+      "text": {
+        "codeGroup": "此二維碼專為多人同時連接而設計。",
+        "codeSingle": "此二維碼可用於在到期前與單個用戶聯繫。",
+        "shareLinkGroup": "分享這個鏈接",
+        "shareLinkSingle": "與一位朋友分享此鏈接",
+        "universalLink": "通用鏈接"
+      },
+      "title": {
+        "codeGroup": "群組編號",
+        "codeSingle": "一次性使用的編號"
+      }
+    },
+    "button": {
+      "copyLink": "複製鏈接",
+      "scanCode": "掃描二維碼",
+      "showCode": "展示您的二維碼"
+    },
+    "header": {
+      "connections": "{{count}} / 30 個連接"
+    },
+    "label": {
+      "connectionType": "連接類型："
+    },
+    "text": {
+      "canAlso": "或者你也可以…",
+      "codeGroup": "群組編號",
+      "codeSingle": "一次性使用的編號",
+      "confirmConnections": "確認連接",
+      "downloadingConnectionData": "下載連接數據",
+      "expiresIn": "過期日期在：",
+      "pendingConnections": "您有 {{count}} 個待處理連接",
+      "scanCode": "<text>嘿{{name}}，掃描一個代碼並</text><text>今天建立一個新的連接</text>"
+    }
+  },
+  "recovery": {
+    "alert": {
+      "clipboardmessage": "幫我找回我的 BrightID：{{link}}",
+      "text": "與您的恢復連接共享此鏈接。",
+      "title": "恢復鏈接"
+    },
+    "error": {
+      "mismatchId": "您的恢復連接選擇了不同的帳戶",
+      "title": "帳號恢復失敗",
+      "unknown": "發生未知錯誤"
+    },
+    "header": {
+      "text": "第 1 部分：恢復帳戶"
+    },
+    "info": "此步驟將在此設備上恢復您的 BrightID。將恢復與您的恢復連接相同的連接名稱和照片。",
+    "state": "恢復了 {{recoveredConnections}} 個連接，{{recoveredGroups}} 個組",
+    "steps": {
+      "complete": "帳號恢復完成",
+      "downloading": "正在從恢復連接下載數據...",
+      "error": "帳號恢復失敗",
+      "recovering": "正在恢復帳戶..."
+    },
+    "text": {
+      "additionalInfo": "您的恢復連接需要掃描此文件以幫助您恢復 BrightID",
+      "askTrustedConnections": "請向您的恢復連接顯示此二維碼",
+      "signatures": "{{count}} / 2 個簽名"
+    }
+  },
+  "recoveryConnections": {
+    "text": {
+      "add": "添加",
+      "addMoreRecovery": "添加更多恢復連接 +",
+      "addRecoveryConnections": "添加恢復連接",
+      "chooseThreeConnections": "選擇三個或更多已知連接來備份您的 BrightID",
+      "completed": "已成功添加恢復連接",
+      "connectionsAlreadyKnown": "連接必須“已經知道”，然後才能將其設置為恢復。",
+      "currentRecoveryConnections": "您當前的恢復連接",
+      "emptyList": "請添加恢復連接以啟用社交恢復",
+      "pleaseMakeSomeConnections": "請建立一些聯繫:)",
+      "threeMore": "您需要 {{amount}} 個已知的連接來實現社交恢復"
+    }
+  },
+  "recoveryCooldownModal": {
+    "dismissButtonLabel": "知道了",
+    "text": {
+      "connection": "您剛剛更改了 <bold>{{name}}</bold> 的恢復級別。",
+      "cooldown": "請注意，出於安全原因，此更改會在 <period>{{ cooldownPeriod }}</period> 冷卻期後生效。",
+      "cooldownGeneric": "請注意，出於安全原因，恢復連接的更改會在最多 <period>{{cooldownPeriod }}</period> 的冷卻期後生效。"
+    },
+    "title": "恢復連接的冷卻時間"
+  },
+  "restore": {
+    "alert": {
+      "text": {
+        "requestRecovering": "您幫助恢復此帳戶的請求已成功提交！",
+        "restoreConfirm": "{{name}} 是您正在幫助恢復的帳戶嗎？",
+        "restoreSuccess": "您的帳戶已成功恢復！"
+      }
+    },
+    "emptyList": {
+      "text": {
+        "nobodyHasChosen": "無法恢復連接...\n他們沒有把你設置為康復者"
+      }
+    },
+    "header": {
+      "accountRecovery": "帳戶恢復",
+      "text": "第 2 部分：恢復備份（可選）"
+    },
+    "info": "使用備份密碼，您可以恢復所有連接和群組的名稱和照片。",
+    "password": {
+      "placeholder": "輸入您的密碼",
+      "skip": "跳過",
+      "submit": "恢復"
+    },
+    "steps": {
+      "complete": "恢復完成",
+      "error": "恢復失敗。密碼錯誤？",
+      "restoring": "正在恢復數據...",
+      "skipped": "已跳過還原",
+      "waitingAccount": "等待帳戶恢復",
+      "waitingPassword": "輸入密碼或跳過"
+    },
+    "text": {
+      "chooseConnectionToHelp": "請選擇您要幫助恢復其帳戶的連接。"
+    }
+  },
+  "signup": {
+    "button": {
+      "skip": "跳過並稍後執行",
+      "submit": "提交"
+    },
+    "header": {
+      "title": "注冊"
+    },
+    "placeholder": {
+      "confirmPassword": "確認你的密碼",
+      "name": "您的名字",
+      "password": "密碼"
+    },
+    "text": {
+      "createPassword": "創建您的 BrightID 密碼",
+      "nameNotShared": "您的姓名永遠不會與應用程序共享或\n存儲在我們的區塊鏈上。",
+      "passwordInfo": "如果您需要恢復它們，此密碼將對您的連接的名稱和照片進行加密。它不允許有人接管您的 BrightID。",
+      "photoNotShared": "您的照片永遠不會與應用程序或\n存儲在我們的區塊鏈上。",
+      "pleaseAddPhoto": "請添加照片",
+      "whatsYouName": "你的朋友通過什麼認識你？"
+    }
+  },
+  "walkthroughs": {
+    "text": {
+      "gotIt": "知道了！",
+      "setPassword": "您可以隨時設置您的\nBrightID 密碼在這裡",
+      "viewPassword": "你總能看到你的\nBrightID 密碼在這裡"
+    }
+  }
+}
