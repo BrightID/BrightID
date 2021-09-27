@@ -20,7 +20,7 @@ const chooseNode = async (nodeUrls: Array<string>) => {
     }),
   );
 
-  // create promise for each candidate
+  // create validation promise for each candidate
   for (const baseUrl of nodeUrls) {
     promises.push(validateNode(baseUrl));
   }
@@ -41,22 +41,35 @@ const chooseNode = async (nodeUrls: Array<string>) => {
 };
 
 /*
-  Check if the provided Url points to a working BrightID node.
-  Get the response from /brightid/v5/state endpoint and check if the reply
-  makes sense.
-  TODO: Extend this to also check if the profile service is working
  */
-const validateNode = (baseUrl: string) =>
+const validateNode = async (baseUrl: string) => {
+  const start = Date.now();
+  await validateAPI(baseUrl);
+  await validateProfileService(baseUrl);
+  const elapsed = Date.now() - start;
+  console.log(
+    `Nodechooser: Node ${baseUrl} passed all tests after ${elapsed}ms`,
+  );
+  return baseUrl;
+};
+
+/**
+ *   Check if the provided Url points to a working BrightID profile service.
+ *   Get the response from /brightid/profile/list endpoint and check
+ *   if the reply makes sense.
+ * @param baseUrl
+ */
+const validateProfileService = (baseUrl: string) =>
   new Promise<string>((resolve, reject) => {
-    const start = Date.now();
-    fetch(`${baseUrl}/brightid/v5/state`)
+    // fetch a random channel. Response should be an empty array
+    fetch(`${baseUrl}/profile/list/abc123`)
       .then((response) => {
         // network request was okay, now check server response on http level
         if (!response.ok) {
           console.log(
-            `Nodechooser: Invalid http response from ${baseUrl}: ${response.status} ${response.statusText}`,
+            `Nodechooser profile service: Invalid http response from ${baseUrl}: ${response.status} ${response.statusText}`,
           );
-          reject(new Error('Response not ok'));
+          reject(new Error('Profile Response not ok'));
         } else {
           // Response is fine on http level. Now see if the content is also fine.
           return response.json(); // will throw if response body is not JSON
@@ -64,28 +77,49 @@ const validateNode = (baseUrl: string) =>
       })
       .then((json) => {
         // Body contains JSON. Now check if JSON content is acceptable.
-        if (validateJsonResponse(json)) {
-          const elapsed = Date.now() - start;
-          console.log(
-            `Nodechooser: Node ${baseUrl} passed all tests after ${elapsed}ms`,
-          );
-          resolve(baseUrl);
-        } else {
-          console.log(
-            `Nodechooser: Node ${baseUrl} provided unexpected JSON data`,
-          );
-          reject(new Error('JSON response not valid'));
-        }
+        validateProfileJsonResponse(json); // will throw if invalid
+        resolve(baseUrl);
       })
       .catch((error) => {
-        const elapsed = Date.now() - start;
-        console.log(`Nodechooser: Node ${baseUrl} failed after ${elapsed}ms.`);
+        console.log(`Nodechooser: Node ${baseUrl} failed with ${error}`);
         reject(error);
       });
   });
 
 /**
- * Check if json contains expected content.
+ *   Check if the provided Url points to a working BrightID node.
+ *   Get the response from /brightid/v5/state endpoint and check
+ *   if the reply makes sense.
+ * @param baseUrl
+ */
+const validateAPI = (baseUrl: string) =>
+  new Promise<string>((resolve, reject) => {
+    fetch(`${baseUrl}/brightid/v5/state`)
+      .then((response) => {
+        // network request was okay, now check server response on http level
+        if (!response.ok) {
+          console.log(
+            `Nodechooser: Invalid http response from ${baseUrl}: ${response.status} ${response.statusText}`,
+          );
+          throw new Error('Response not ok');
+        } else {
+          // Response is fine on http level. Now see if the content is also fine.
+          return response.json(); // will throw if response body is not JSON
+        }
+      })
+      .then((json) => {
+        // Body contains JSON. Now check if JSON content is acceptable.
+        validateAPIJsonResponse(json); // will throw if invalid
+        resolve(baseUrl);
+      })
+      .catch((error) => {
+        console.log(`Nodechooser: Node ${baseUrl} failed with ${error}`);
+        reject(error);
+      });
+  });
+
+/**
+ * Check if json API response contains expected content.
  *
  * Expected schema:
  * {
@@ -100,8 +134,8 @@ const validateNode = (baseUrl: string) =>
  *
  * @param json
  */
-const expectedRootKey = 'data';
-const expectedBodyKeys = [
+const expectedAPIRootKey = 'data';
+const expectedAPIBodyKeys = [
   'lastProcessedBlock',
   'verificationsBlock',
   'initOp',
@@ -109,16 +143,42 @@ const expectedBodyKeys = [
   'verificationsHashes',
 ];
 
-const validateJsonResponse = (json) => {
-  const body = json[expectedRootKey];
+const validateAPIJsonResponse = (json) => {
+  const body = json[expectedAPIRootKey];
   if (!body) {
-    throw new Error(`Missing rootkey ${expectedRootKey}`);
+    throw new Error(`Missing rootkey ${expectedAPIRootKey}`);
   }
   const keys = Object.keys(body);
-  for (const key of expectedBodyKeys) {
+  for (const key of expectedAPIBodyKeys) {
     if (keys.indexOf(key) === -1) {
       throw new Error(`Missing bodykey ${key}`);
     }
+  }
+  return true;
+};
+
+/**
+ * Check if json profile server response contains expected content.
+ *
+ * Expected schema:
+ * {
+ *   "profileIds": []
+ * }
+ *
+ * @param json
+ */
+
+const expectedProfileKey = 'profileIds';
+const validateProfileJsonResponse = (json) => {
+  const keys = Object.keys(json);
+  if (keys.indexOf(expectedProfileKey) === -1) {
+    throw new Error(`Missing profile key ${expectedProfileKey}`);
+  }
+  const data = json[expectedProfileKey];
+  if (JSON.stringify(data) !== '[]') {
+    throw new Error(
+      `Unexpected profile response ${data} - Expected empty array`,
+    );
   }
   return true;
 };
