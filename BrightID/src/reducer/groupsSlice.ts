@@ -21,7 +21,9 @@ const groupsSlice = createSlice({
       state.groups.push(action.payload);
     },
     updateGroup(state, action: PayloadAction<Group>) {
-      const group = state.groups.find((group) => group.id === action.payload.id);
+      const group = state.groups.find(
+        (group) => group.id === action.payload.id,
+      );
       Object.assign(group, action.payload);
     },
     deleteGroup(state, action: PayloadAction<Group>) {
@@ -40,22 +42,28 @@ const groupsSlice = createSlice({
     },
     updateMemberships(state, action: PayloadAction<MembershipInfo[]>) {
       state.groups.forEach((group) => {
-        const membership = action.payload.find((membership) => membership.id === group.id);
+        const membership = action.payload.find(
+          (membership) => membership.id === group.id,
+        );
         if (!membership) {
           group.state = 'dismissed';
         }
       });
       action.payload.forEach((membership) => {
         const group = state.groups.find((group) => group.id === membership.id);
-        group.state = 'verified';
-        group.joined = membership.timestamp;
+        if (group) {
+          group.state = 'verified';
+          group.joined = membership.timestamp;
+        }
       });
     },
     joinGroup(state, action: PayloadAction<Group>) {
       state.groups.push(action.payload);
     },
     leaveGroup(state, action: PayloadAction<Group>) {
-      const group = state.groups.find((group) => group.id === action.payload.id);
+      const group = state.groups.find(
+        (group) => group.id === action.payload.id,
+      );
       group.state = 'dismissed';
     },
     dismissFromGroup(
