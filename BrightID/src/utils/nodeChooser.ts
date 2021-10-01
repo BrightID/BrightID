@@ -44,8 +44,12 @@ const chooseNode = async (nodeUrls: Array<string>) => {
  */
 const validateNode = async (baseUrl: string) => {
   const start = Date.now();
-  await validateAPI(baseUrl);
-  await validateProfileService(baseUrl);
+  const validationTasks = [
+    validateAPI(baseUrl, 5),
+    validateAPI(baseUrl, 6),
+    validateProfileService(baseUrl),
+  ];
+  await Promise.all(validationTasks);
   const elapsed = Date.now() - start;
   console.log(
     `Nodechooser: Node ${baseUrl} passed all tests after ${elapsed}ms`,
@@ -69,7 +73,7 @@ const validateProfileService = (baseUrl: string) =>
           console.log(
             `Nodechooser profile service: Invalid http response from ${baseUrl}: ${response.status} ${response.statusText}`,
           );
-          reject(new Error('Profile Response not ok'));
+          throw new Error('Profile Response not ok');
         } else {
           // Response is fine on http level. Now see if the content is also fine.
           return response.json(); // will throw if response body is not JSON
@@ -92,14 +96,15 @@ const validateProfileService = (baseUrl: string) =>
  *   if the reply makes sense.
  * @param baseUrl
  */
-const validateAPI = (baseUrl: string) =>
+const validateAPI = (baseUrl: string, version: number) =>
   new Promise<string>((resolve, reject) => {
-    fetch(`${baseUrl}/brightid/v5/state`)
+    const stateUrl = `${baseUrl}/brightid/v${version}/state`;
+    fetch(stateUrl)
       .then((response) => {
         // network request was okay, now check server response on http level
         if (!response.ok) {
           console.log(
-            `Nodechooser: Invalid http response from ${baseUrl}: ${response.status} ${response.statusText}`,
+            `Nodechooser: Invalid http response from ${stateUrl}: ${response.status} ${response.statusText}`,
           );
           throw new Error('Response not ok');
         } else {
@@ -113,7 +118,9 @@ const validateAPI = (baseUrl: string) =>
         resolve(baseUrl);
       })
       .catch((error) => {
-        console.log(`Nodechooser: Node ${baseUrl} failed with ${error}`);
+        console.log(
+          `Nodechooser: Node ${baseUrl} failed v${version} test with ${error}`,
+        );
         reject(error);
       });
   });

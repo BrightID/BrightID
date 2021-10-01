@@ -20,7 +20,6 @@ import { NODE_CHOOSER_TIMEOUT_MS } from '@/utils/constants';
 const calculateSecondsLeft = (startTimestamp: number) => {
   const endTime = startTimestamp + NODE_CHOOSER_TIMEOUT_MS;
   const remaining = endTime - Date.now();
-  console.log(`Remaining ms: ${remaining}`);
   return Math.ceil(remaining / 1000);
 };
 
