@@ -180,7 +180,7 @@ function MembersScreen(props) {
     api.getGroup(groupID).then((data) => {
       dispatch(updateGroup(data));
     });
-  }, []);
+  }, [api, dispatch, groupID]);
 
   // Only include the group members that user knows (is connected with), and the user itself
   const groupMembers = useMemo(() => {
