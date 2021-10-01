@@ -19,6 +19,7 @@ import {
   setConnectionVerifications,
 } from '@/reducer/connectionsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
+import { selectAllApps } from '@/reducer/appsSlice';
 import ConnectionScreen from './ConnectionScreen';
 
 type ConnectionRoute = RouteProp<
@@ -32,6 +33,7 @@ function ConnectionScreenController() {
   const dispatch = useDispatch();
   const { connectionId } = route.params;
   const api = useContext(NodeApiContext);
+  const apps = useSelector(selectAllApps);
   const connection = useSelector((state: State) =>
     selectConnectionById(state, connectionId),
   );
@@ -46,6 +48,7 @@ function ConnectionScreenController() {
   const [connectionProfile, setConnectionProfile] = useState<
     ProfileInfo | undefined
   >(undefined);
+  const [verifiedApps, setVerifiedApps] = useState<Array<AppInfo>>([]);
 
   useFocusEffect(
     useCallback(() => {
@@ -93,6 +96,33 @@ function ConnectionScreenController() {
     }
   }, [connectionProfile, myConnections, myGroups]);
 
+  // check for which apps this connection is verified
+  useEffect(() => {
+    const vApps = apps.filter((app) => {
+      let isMissingVerification = false;
+      app.verifications &&
+        app.verifications.forEach((requiredVerification) => {
+          if (
+            connection.verifications.some(
+              (userVerification) =>
+                userVerification.name === requiredVerification,
+            )
+          ) {
+            console.log(
+              `user has required verification ${requiredVerification} for app ${app.name}`,
+            );
+          } else {
+            console.log(
+              `user missing required verification ${requiredVerification} for app ${app.name}`,
+            );
+            isMissingVerification = true;
+          }
+        });
+      return !isMissingVerification;
+    });
+    setVerifiedApps(vApps);
+  }, [apps, connection.verifications]);
+
   useEffect(() => {
     if (!connection) {
       // connection not there anymore.
@@ -114,19 +144,14 @@ function ConnectionScreenController() {
   }
 
   const brightIdVerified = connection.verifications?.some(
-    (v) => v?.name === 'BrightID',
+    (v) => v.name === 'BrightID',
   );
-  const verifiedAppsCount = connection.verifications?.filter((v) => {
-    if ('app' in v) {
-      return v.app;
-    } else return false;
-  }).length;
 
   return (
     <ConnectionScreen
       connection={connection}
       brightIdVerified={brightIdVerified}
-      verifiedAppsCount={verifiedAppsCount}
+      verifiedAppsCount={verifiedApps.length}
       loading={loading}
       connectedAt={connectedAt}
       mutualConnections={mutualConnections}

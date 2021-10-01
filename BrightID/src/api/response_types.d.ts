@@ -80,7 +80,6 @@ type AppInfo = {
   id: string;
   name: string;
   context: string;
-  verification: string; // FIXME this is deprecated with apiv6
   verifications: Array<string>;
   verificationUrl: string;
   logo?: string;

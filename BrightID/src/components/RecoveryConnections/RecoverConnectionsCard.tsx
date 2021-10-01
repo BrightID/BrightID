@@ -73,7 +73,7 @@ const RecoveryConnectionCard = (props: Props) => {
   } = props;
   const { t } = useTranslation();
 
-  const brightidVerified = verifications?.includes('BrightID');
+  const brightIdVerified = verifications?.some((v) => v.name === 'BrightID');
   const [imgErr, setImgErr] = useState(false);
 
   useFocusEffect(
@@ -229,7 +229,7 @@ const RecoveryConnectionCard = (props: Props) => {
               >
                 {name}
               </Text>
-              {brightidVerified && (
+              {brightIdVerified && (
                 <View style={styles.verificationSticker}>
                   <VerifiedBadge width={16} height={16} />
                 </View>
