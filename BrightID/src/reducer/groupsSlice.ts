@@ -45,7 +45,7 @@ const groupsSlice = createSlice({
         const membership = action.payload.find(
           (membership) => membership.id === group.id,
         );
-        if (!membership) {
+        if (!membership && group.state === 'verified') {
           group.state = 'dismissed';
         }
       });
