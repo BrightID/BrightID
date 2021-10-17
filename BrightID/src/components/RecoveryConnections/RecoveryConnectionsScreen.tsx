@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -8,8 +8,9 @@ import {
 } from 'react-native';
 // Redux
 import { useSelector } from '@/store';
+import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
-import { recoveryConnectionsSelector } from '@/reducer/connectionsSlice';
+import { selectAllConnections } from '@/reducer/connectionsSlice';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
@@ -18,6 +19,7 @@ import {
   DEVICE_IOS,
   DEVICE_ANDROID,
 } from '@/utils/deviceConstants';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import { ORANGE, BLACK, WHITE, BLUE, GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 
@@ -57,10 +59,54 @@ export const RecoveryConnectionsScreen = (props) => {
     headerHeight += 7;
   }
   const { t } = useTranslation();
-  const recoveryConnections = useSelector(recoveryConnectionsSelector);
+  const me = useSelector((state: State) => state.user);
+  const [loading, setLoading] = useState(true);
+  const [recoveryConnections, setRecoveryConnections] = useState<Array<Connection>>(
+    [],
+  );
+  const [connectionProfile, setConnectionProfile] = useState<
+    ProfileInfo | undefined
+  >(undefined);
+  const myConnections = useSelector(selectAllConnections);
+  const api = useContext(NodeApiContext);
 
-  const RecoveryConnectionList = useMemo(() => {
-    return (
+  useFocusEffect(
+    useCallback(() => {
+      const fetchData = async () => {
+        setLoading(true);
+        console.log(`fetching own recovery connections`);
+        const profile: ProfileInfo = await api.getProfile(me.id);
+        setConnectionProfile(profile);
+        const recoveryConnections = profile.recoveryConnections.map(rc => {
+          const conn = myConnections.find(c => rc.id === c.id);
+          return conn || { id: rc.id };
+        });
+        setRecoveryConnections(recoveryConnections);
+        setLoading(false);
+      };
+      fetchData();
+    }, [api, myConnections]),
+  );
+
+  const getActiveTime = (item) => {
+    if (!connectionProfile) {
+      return {};
+    }
+    const rc = connectionProfile.recoveryConnections.find(rc => rc.id === item.id);
+    return { activeBefore: rc.activeBefore, activeAfter: rc.activeAfter };
+  };
+
+  const Loading = () => (
+    <View style={styles.loadingContainer}>
+      <Spinner
+        size={DEVICE_LARGE ? 48 : 42}
+        type="Wave"
+        color={BLUE}
+      />
+    </View>
+  );
+
+  const RecoveryConnectionList = () => (
       <FlatList
         data={recoveryConnections}
         style={styles.recoveryConnectionContainer}
@@ -72,12 +118,12 @@ export const RecoveryConnectionsScreen = (props) => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         renderItem={({ item, index }) => (
-          <RecoveryConnectionCard {...item} index={index} isModify={true} />
+          <RecoveryConnectionCard {...item} {...getActiveTime(item)} index={index} isModify={true} />
         )}
         ListEmptyComponent={<EmptyList />}
       />
     );
-  }, [recoveryConnections]);
+
 
   return (
     <View
@@ -91,7 +137,7 @@ export const RecoveryConnectionsScreen = (props) => {
           </Text>
         </View>
       )}
-      {RecoveryConnectionList}
+      {loading ? <Loading /> : <RecoveryConnectionList />}
 
       <View style={styles.buttonContainer}>
         {recoveryConnections.length === 0 ? (
@@ -211,6 +257,12 @@ const styles = StyleSheet.create({
     fontSize: fontSize[18],
     color: GREY,
     marginVertical: 15,
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    paddingBottom: 20,
   },
 });
 

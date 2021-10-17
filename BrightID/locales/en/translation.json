@@ -172,7 +172,8 @@
     "label": {
       "connectionLevel": "Connection Level",
       "mutualConnections": "Mutual Connections",
-      "mutualGroups": "Mutual Groups"
+      "mutualGroups": "Mutual Groups",
+      "recoveryConnections": "Recovery Connections",
     },
     "tags": {
       "connectedAt": "Connected {{date}}",
@@ -190,7 +191,8 @@
       "reportOther": "Other reason",
       "reportSpammer": "This person sent me an unwanted connection request",
       "unReportConnection": "Undo Report",
-      "unReportImpact": "You have already reported {{name}} as a {{reportReason}}. Would you like to remove this flag and restore your connection?"
+      "unReportImpact": "You have already reported {{name}} as a {{reportReason}}. Would you like to remove this flag and restore your connection?",
+      "unkownRecoveryConnection": "Unknown"
     }
   },
   "connections": {

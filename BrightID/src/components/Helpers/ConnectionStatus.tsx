@@ -7,7 +7,7 @@ import {
   connectionLevelStrings,
 } from '@/utils/connectionLevelStrings';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { GREY } from '@/theme/colors';
+import { GREY, RED } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { connection_levels } from '@/utils/constants';
 
@@ -16,9 +16,25 @@ export const ConnectionStatus = ({
   status,
   reportReason,
   connectionDate,
+  infoText,
   level,
 }) => {
   const { t } = useTranslation();
+
+  const ConnectionDate = () => (
+    <Text style={styles.connectionTime} testID={`connection_time-${index}`}>
+      {t('common.tag.connectionDate', {
+        date: moment(parseInt(connectionDate, 10)).fromNow(),
+      })}
+    </Text>
+  );
+
+  const InfoText = () => (
+    <Text style={styles.infoText} testID={`info_text-${index}`}>
+      {infoText}
+    </Text>
+  );
+
   if (status === 'initiated') {
     return (
       <View style={styles.statusContainer}>
@@ -43,11 +59,8 @@ export const ConnectionStatus = ({
               })
             : t('connections.tag.reported')}
         </Text>
-        <Text style={[styles.connectedText, { marginTop: 1 }]}>
-          {t('common.tag.connectionDate', {
-            date: moment(parseInt(connectionDate, 10)).fromNow(),
-          })}
-        </Text>
+        {connectionDate && <ConnectionDate />}
+        {infoText && <InfoText />}
       </View>
     );
   } else if (status === 'deleted') {
@@ -70,11 +83,8 @@ export const ConnectionStatus = ({
         >
           {connectionLevelStrings[level]}
         </Text>
-        <Text style={styles.connectionTime} testID={`connection_time-${index}`}>
-          {t('common.tag.connectionDate', {
-            date: moment(parseInt(connectionDate, 10)).fromNow(),
-          })}
-        </Text>
+        {connectionDate && <ConnectionDate />}
+        {infoText && <InfoText />}
       </View>
     );
   }
@@ -141,6 +151,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 10 : 9,
     color: '#B64B32',
+  },
+  infoText: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: DEVICE_LARGE ? 10 : 9,
+    color: RED,
   },
   moreIcon: {
     marginRight: DEVICE_LARGE ? 26 : 23,

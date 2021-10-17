@@ -39,8 +39,12 @@ function ConnectionScreenController() {
   );
   const myConnections = useSelector(selectAllConnections);
   const myGroups = useSelector((state: State) => state.groups.groups);
+  const me = useSelector((state: State) => state.user);
   const [mutualGroups, setMutualGroups] = useState<Array<Group>>([]);
   const [mutualConnections, setMutualConnections] = useState<Array<Connection>>(
+    [],
+  );
+  const [recoveryConnections, setRecoveryConnections] = useState<Array<RecoveryConnection>>(
     [],
   );
   const [connectedAt, setConnectedAt] = useState(0);
@@ -93,6 +97,15 @@ function ConnectionScreenController() {
           return connectionProfile.mutualGroups.includes(g.id);
         }),
       );
+      const recoveryConnections = connectionProfile.recoveryConnections.map(rc => {
+        if (rc.id === me.id) {
+          rc.conn = me;
+        } else {
+          rc.conn =  myConnections.find(c => rc.id === c.id);
+        }
+        return rc;
+      });
+      setRecoveryConnections(recoveryConnections);
     }
   }, [connectionProfile, myConnections, myGroups]);
 
@@ -156,6 +169,7 @@ function ConnectionScreenController() {
       connectedAt={connectedAt}
       mutualConnections={mutualConnections}
       mutualGroups={mutualGroups}
+      recoveryConnections={recoveryConnections}
     />
   );
 }

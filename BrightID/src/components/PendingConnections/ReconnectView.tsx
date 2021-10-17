@@ -10,10 +10,8 @@ import TrustlevelSlider from '@/components/Connections/TrustlevelSlider';
 import { retrieveImage } from '@/utils/filesystem';
 import {
   connection_levels,
-  RECOVERY_COOLDOWN_DURATION,
+  RECOVERY_COOLDOWN_EXEMPTION
 } from '@/utils/constants';
-import { calculateCooldownPeriod } from '@/utils/recovery';
-import { recoveryConnectionsSelector } from '@/reducer/connectionsSlice';
 import { useSelector } from '@/store';
 import { ConnectionStats } from './ConnectionStats';
 import { ProfileCard } from './ProfileCard';
@@ -36,14 +34,12 @@ export const ReconnectView = ({
   abuseHandler,
 }: ReconnectViewProps) => {
   const navigation = useNavigation();
-  const recoveryConnections = useSelector(recoveryConnectionsSelector);
   const [identicalProfile, setIdenticalProfile] = useState(true);
   const [connectionLevel, setConnectionLevel] = useState(
     existingConnection.level,
   );
   const { t } = useTranslation();
-
-  const id = useSelector((state) => state.user.id);
+  const { id, firstRecoveryTime } = useSelector((state) => state.user);
 
   const userReported = pendingConnection.reports.find(
     (report) => report.id === id,
@@ -86,25 +82,14 @@ export const ReconnectView = ({
   };
 
   const updateLevel = () => {
-    let cooldownPeriod = 0;
-    if (existingConnection.level !== connectionLevel) {
-      // user changed level. Check if recovery level was added or removed.
-      if (connectionLevel === connection_levels.RECOVERY) {
-        // adding recovery connection. check if cooldown period applies
-        cooldownPeriod = calculateCooldownPeriod({
-          recoveryConnections,
-          connection: existingConnection,
-        });
-      } else if (existingConnection.level === connection_levels.RECOVERY) {
-        // removing recovery connection. Cooldown period always applies.
-        cooldownPeriod = RECOVERY_COOLDOWN_DURATION;
-      }
-    }
-    if (cooldownPeriod > 0) {
+    if (existingConnection.level !== connectionLevel &&
+        (existingConnection.level === connection_levels.RECOVERY ||
+        connectionLevel === connection_levels.RECOVERY) &&
+        firstRecoveryTime &&
+        Date.now() - firstRecoveryTime > RECOVERY_COOLDOWN_EXEMPTION
+      ) {
       // show info about cooldown period
       navigation.navigate('RecoveryCooldownInfo', {
-        connectionId: existingConnection.id,
-        cooldownPeriod,
         successCallback: () => {
           setLevelHandler(connectionLevel);
         },

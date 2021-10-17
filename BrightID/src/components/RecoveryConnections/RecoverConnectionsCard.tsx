@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import IonIcons from 'react-native-vector-icons/Ionicons';
+import moment from 'moment';
 import { useDispatch, useSelector } from '@/store';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -48,6 +49,8 @@ type Props = Connection & {
   isModify?: boolean;
   currentAccount?: string;
   index: number;
+  activeBefore: number;
+  activeAfter: number;
 };
 
 const RecoveryConnectionCard = (props: Props) => {
@@ -70,6 +73,8 @@ const RecoveryConnectionCard = (props: Props) => {
     onSelect,
     isSelected,
     currentAccount,
+    activeAfter,
+    activeBefore,
   } = props;
   const { t } = useTranslation();
 
@@ -137,21 +142,13 @@ const RecoveryConnectionCard = (props: Props) => {
     t('common.actionSheet.cancel'),
   ];
 
-  const showRemove =
-    status === 'deleted' ||
-    status === 'stale' ||
-    level === connection_levels.REPORTED;
-
   const ModifyConnection = () => (
     <TouchableOpacity
-      style={styles.removeButton}
+      style={styles.editButton}
       onPress={() => {
         navigation.navigate('SetTrustlevel', {
           connectionId: id,
         });
-        // navigation.navigate('ReplaceRecoveryConnections', {
-        //   currentAccount: id,
-        // });
       }}
     >
       <Pencil highlight={WHITE} color={BLUE} />
@@ -186,6 +183,9 @@ const RecoveryConnectionCard = (props: Props) => {
         }
       : require('@/static/default_profile.jpg');
 
+  const s1 = activeAfter ? `activates in ${moment.duration(activeAfter, "milliseconds").humanize()}` : '';
+  const s2 = activeBefore ? `deactivates in ${moment.duration(activeBefore, "milliseconds").humanize()}` : '';
+  const activeTime = `${s1} ${s2}`;
   return (
     <View style={styles.container} testID="connectionCardContainer">
       <View style={styles.card}>
@@ -239,7 +239,7 @@ const RecoveryConnectionCard = (props: Props) => {
               index={index}
               status={status}
               reportReason={reportReason}
-              connectionDate={connectionDate}
+              infoText={activeTime}
               level={level}
             />
           </View>
@@ -331,10 +331,16 @@ const styles = StyleSheet.create({
   verificationSticker: {
     marginLeft: DEVICE_LARGE ? 7 : 3.5,
   },
-  removeButton: {
+  editButton: {
     width: DEVICE_LARGE ? 60 : 56,
     position: 'absolute',
     right: 0,
+  },
+  activeText: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: fontSize[12],
+    color: RED,
+    fontStyle: 'italic',
   },
 });
 

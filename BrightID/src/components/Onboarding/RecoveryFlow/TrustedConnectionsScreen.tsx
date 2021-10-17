@@ -15,13 +15,12 @@ import { ORANGE, BLUE, WHITE, LIGHT_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { connection_levels } from '@/utils/constants';
+import { connection_levels, RECOVERY_COOLDOWN_EXEMPTION } from '@/utils/constants';
 import {
   setConnectionLevel,
   recoveryConnectionsSelector,
   addOperation,
 } from '@/actions';
-import { calculateCooldownPeriod } from '@/utils/recovery';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import TrustedConnectionCard from './TrustedConnectionCard';
 
@@ -42,7 +41,7 @@ const TrustedConnectionsScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const myId = useSelector((state: State) => state.user.id);
+  const { id: myId, firstRecoveryTime } = useSelector((state: State) => state.user);
   const connections = useSelector(connectionsSelector);
   const recoveryConnections = useSelector(recoveryConnectionsSelector);
   const [selectedConnections, setSelectedConnections] = useState(
@@ -102,8 +101,6 @@ const TrustedConnectionsScreen = () => {
           (item) => !selectedConnections.includes(item.id),
         );
 
-        const cooldownPeriod = calculateCooldownPeriod({ recoveryConnections });
-
         if (connectionsToUpgrade.length || connectionsToDowngrade.length) {
           // apply changes
           const promises = [];
@@ -146,7 +143,7 @@ const TrustedConnectionsScreen = () => {
             dispatch(addOperation(op));
           }
           // show info about cooldown period
-          if (cooldownPeriod > 0) {
+          if (firstRecoveryTime && Date.now() - firstRecoveryTime > RECOVERY_COOLDOWN_EXEMPTION) {
             navigation.navigate('RecoveryCooldownInfo', {
               successCallback: () => {
                 navigation.navigate('Home');
