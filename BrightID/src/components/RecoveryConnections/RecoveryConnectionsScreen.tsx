@@ -11,6 +11,7 @@ import { useSelector } from '@/store';
 import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
+import { selectOperationsTotal } from '@/reducer/operationsSlice';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
@@ -68,12 +69,17 @@ export const RecoveryConnectionsScreen = (props) => {
     ProfileInfo | undefined
   >(undefined);
   const myConnections = useSelector(selectAllConnections);
+  const opTotal = useSelector(selectOperationsTotal);
   const api = useContext(NodeApiContext);
 
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
         setLoading(true);
+        if (opTotal > 0) {
+          console.log('waiting for pending operations to apply');
+          return;
+        }
         console.log(`fetching own recovery connections`);
         const profile: ProfileInfo = await api.getProfile(me.id);
         setConnectionProfile(profile);
@@ -85,7 +91,7 @@ export const RecoveryConnectionsScreen = (props) => {
         setLoading(false);
       };
       fetchData();
-    }, [api, myConnections]),
+    }, [api, myConnections, opTotal]),
   );
 
   const getActiveTime = (item) => {
