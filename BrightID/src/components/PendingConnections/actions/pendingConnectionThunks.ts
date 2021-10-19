@@ -110,7 +110,7 @@ export const confirmPendingConnectionThunk = (
   }
 
   if (backupCompleted) {
-    await dispatch(backupUser());
     await dispatch(backupPhoto(connection.brightId, filename));
+    await dispatch(backupUser());
   }
 };
