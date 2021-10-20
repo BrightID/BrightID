@@ -3,26 +3,21 @@ import { Image, StyleSheet, View } from 'react-native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { LIGHT_GREY } from '@/theme/colors';
 
-const photoStyle = (photo) => ({
-  ...styles.photo,
-  opacity: photo.faded ? 0.25 : 1,
-});
-
 const CirclePhoto = ({ circlePhotos }) => {
   console.log(circlePhotos);
   return (
     <View style={styles.container}>
       <View style={styles.topPhotos}>
         {circlePhotos[0] && (
-          <Image source={circlePhotos[0]} style={photoStyle(circlePhotos[0])} />
+          <Image source={circlePhotos[0]} style={styles.photo} />
         )}
       </View>
       <View style={styles.bottomPhotos}>
         {circlePhotos[1] && (
-          <Image source={circlePhotos[1]} style={photoStyle(circlePhotos[1])} />
+          <Image source={circlePhotos[1]} style={styles.photo} />
         )}
         {circlePhotos[2] && (
-          <Image source={circlePhotos[2]} style={photoStyle(circlePhotos[2])} />
+          <Image source={circlePhotos[2]} style={styles.photo} />
         )}
       </View>
     </View>
