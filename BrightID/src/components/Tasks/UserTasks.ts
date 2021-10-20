@@ -13,7 +13,7 @@ export const UserTasks = {
     title: i18next.t(`achievements.makeFirstConnection.title`),
     description: i18next.t(`achievements.makeFirstConnection.description`),
     url: 'https://brightid.gitbook.io/brightid/#making-connections',
-    checkFn(state) {
+    checkFn(state: State) {
       return connectionTotal(state) > 0;
     },
   },
@@ -23,7 +23,7 @@ export const UserTasks = {
     title: i18next.t(`achievements.linkApp.title`),
     description: i18next.t(`achievements.linkApp.description`),
     url: 'https://apps.brightid.org/',
-    checkFn(state) {
+    checkFn(state: State) {
       // is there at least one linked context?
       const linkedContexts = linkedContextTotal(state);
       return linkedContexts > 0;
@@ -35,7 +35,7 @@ export const UserTasks = {
     title: i18next.t(`achievements.getSponsored.title`),
     description: i18next.t(`achievements.getSponsored.description`),
     url: 'https://apps.brightid.org/',
-    checkFn(state) {
+    checkFn(state: State) {
       return state.user.isSponsored;
     },
   },
@@ -45,7 +45,7 @@ export const UserTasks = {
     title: i18next.t(`achievements.makeTwoConnection.title`),
     description: i18next.t(`achievements.makeTwoConnection.description`),
     url: 'https://brightid.gitbook.io/brightid/#making-connections',
-    checkFn(state) {
+    checkFn(state: State) {
       return connectionTotal(state) > 1;
     },
   },
@@ -55,7 +55,7 @@ export const UserTasks = {
     title: i18next.t(`achievements.makeThreeConnection.title`),
     description: i18next.t(`achievements.makeThreeConnection.description`),
     url: 'https://brightid.gitbook.io/brightid/#making-connections',
-    checkFn(state) {
+    checkFn(state: State) {
       return connectionTotal(state) > 2;
     },
   },
@@ -68,7 +68,7 @@ export const UserTasks = {
       'Set password to enable encrypted backup of your data',
     ),
     url: 'https://brightid.gitbook.io/brightid/#backup-your-brightid',
-    checkFn(state) {
+    checkFn(state: State) {
       return !!state.user.password;
     },
   },
@@ -78,7 +78,7 @@ export const UserTasks = {
     title: i18next.t(`achievements.setupTrustedConnections.title`),
     description: i18next.t(`achievements.setupTrustedConnections.description`),
     url: 'https://brightid.gitbook.io/brightid/#backup-your-brightid',
-    checkFn(state) {
+    checkFn(state: State) {
       return (
         recoveryConnectionsSelector(state).length >= MIN_RECOVERY_CONNECTIONS
       );
@@ -90,7 +90,7 @@ export const UserTasks = {
     title: i18next.t(`achievements.joinConnectionParty.title`),
     description: i18next.t(`achievements.joinConnectionParty.description`),
     url: 'https://www.brightid.org/meet',
-    checkFn(state) {
+    checkFn(state: State) {
       return Boolean(
         state.user.verifications.find(
           (verification) =>
