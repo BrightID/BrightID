@@ -6,7 +6,6 @@ import {
   setConnections,
   setGroups,
   setKeypair,
-  updateConnections,
   addOperation,
 } from '@/actions';
 import { OPERATION_APPLIED_BEFORE } from '@/api/brightidError';
@@ -18,6 +17,7 @@ import {
   resetRecoverySigs,
   updateNamePhoto,
 } from '../recoveryDataSlice';
+import fetchUserInfo from '@/actions/fetchUserInfo';
 
 // HELPERS
 
@@ -43,7 +43,7 @@ export const setupRecovery = () => async (
   }
 };
 
-export const setSigningKey = (api: NodeApi) => async (
+export const socialRecovery = (api: NodeApi) => async (
   dispatch: dispatch,
   getState: getState,
 ) => {
@@ -51,7 +51,7 @@ export const setSigningKey = (api: NodeApi) => async (
   const sigs = Object.values(recoveryData.sigs);
   console.log('setting signing key');
   try {
-    const op = await api.setSigningKey({
+    const op = await api.socialRecovery({
       id: recoveryData.id,
       signingKey: recoveryData.publicKey,
       timestamp: recoveryData.timestamp,
@@ -64,11 +64,11 @@ export const setSigningKey = (api: NodeApi) => async (
   } catch (err) {
     if (err.errorNum === OPERATION_APPLIED_BEFORE) {
       console.log(
-        `SetSigningKey operation already applied. Ignoring this error.`,
+        `Socail Recovery operation already applied. Ignoring this error.`,
       );
       return;
     }
-    console.log(`Error in setSigningKey: ${err.errorNum} - ${err.message}`);
+    console.log(`Error in socialRecovery: ${err.errorNum} - ${err.message}`);
     dispatch(resetRecoverySigs());
     throw new Error(`${err.errorNum} - ${err.message}`);
   }
@@ -106,7 +106,7 @@ export const recoverAccount = (api: NodeApi) => async (
   getState: getState,
 ) => {
   // set new signing key on the backend
-  await dispatch(setSigningKey(api));
+  await dispatch(socialRecovery(api));
   const { publicKey, secretKey } = getState().recoveryData;
   dispatch(setKeypair({ publicKey, secretKey }));
 };
@@ -156,10 +156,7 @@ export const recoverData = (pass: string, api: NodeApi) => async (
       }
     }
   }
-
-  const userInfo = await api.getUserInfo(id);
-  dispatch(setGroups(userInfo.groups));
-  dispatch(updateConnections(userInfo.connections));
+  dispatch(fetchUserInfo(api));
 };
 
 export const finishRecovery = () => async (

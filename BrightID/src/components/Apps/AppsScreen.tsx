@@ -15,7 +15,11 @@ import Spinner from 'react-native-spinkit';
 import { ORANGE, BLUE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { any, propEq } from 'ramda';
-import { fetchApps, selectPendingLinkedContext } from '@/actions';
+import {
+  fetchApps,
+  selectAllApps,
+  selectPendingLinkedContext,
+} from '@/actions';
 import {
   useFocusEffect,
   useNavigation,
@@ -32,7 +36,7 @@ export const AppsScreen = () => {
   const route = useRoute<AppsRoute>();
   const api = useContext(NodeApiContext);
 
-  const apps = useSelector((state: State) => state.apps.apps);
+  const apps = useSelector(selectAllApps);
   const isSponsored = useSelector((state: State) => state.user.isSponsored);
   const pendingLink = useSelector(selectPendingLinkedContext);
 

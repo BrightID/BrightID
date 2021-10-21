@@ -58,10 +58,6 @@ const InviteCard = (props) => {
           onPress: async () => {
             try {
               await dispatch(rejectInvite(invite.id));
-              if (invite.isNew) {
-                const op = await api.deleteGroup(invite.id);
-                dispatch(addOperation(op));
-              }
             } catch (err) {
               Alert.alert(
                 t('notifications.alert.title.failureRejectGroupInvite'),
@@ -77,24 +73,24 @@ const InviteCard = (props) => {
 
   const handleAcceptInvite = async () => {
     try {
-      const op = await api.joinGroup(invite.id);
+      const op = await api.joinGroup(invite.group.id);
       dispatch(addOperation(op));
       dispatch(acceptInvite(invite.id));
-      await dispatch(joinGroup(invite));
+      await dispatch(joinGroup(invite.group));
       Alert.alert(
         t('common.alert.success'),
         t('notifications.alert.text.successGroupInvite', {
           defaultValue: 'You joined {{groupName}}',
-          groupName: getGroupName(invite),
+          groupName: getGroupName(invite.group),
         }),
       );
       if (backupCompleted) {
         await dispatch(backupUser());
-        if (invite.photo && invite.photo.filename) {
-          await dispatch(backupPhoto(invite.id, invite.photo.filename));
+        if (invite.group.photo && invite.group.photo.filename) {
+          await dispatch(backupPhoto(invite.group.id, invite.group.photo.filename));
         }
       }
-      navigation.navigate('Members', { group: invite });
+      navigation.navigate('Members', { group: invite.group });
     } catch (err) {
       if (err instanceof BrightidError) {
         // Something went wrong in the backend while applying operation
@@ -111,10 +107,10 @@ const InviteCard = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.photoContainer}>
-        <GroupPhoto group={invite} />
+        <GroupPhoto group={invite.group} />
       </View>
       <View style={styles.info}>
-        <Text style={styles.name}>{getGroupName(invite)}</Text>
+        <Text style={styles.name}>{getGroupName(invite.group)}</Text>
         <Text style={styles.invitationMsg}>
           {t('notifications.item.text.pendingGroupInvite', {
             name: inviter?.name,

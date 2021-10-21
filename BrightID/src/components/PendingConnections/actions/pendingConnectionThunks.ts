@@ -99,6 +99,7 @@ export const confirmPendingConnectionThunk = (
     secretKey: connection.secretKey,
     level,
     socialMedia: connection.socialMedia,
+    verifications: connection.verifications,
   };
 
   dispatch(addConnection(connectionData));

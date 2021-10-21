@@ -44,6 +44,7 @@ const connectionsSlice = createSlice({
       state.connectionsSort = action.payload;
     },
     updateConnections(state, action: PayloadAction<ConnectionInfo[]>) {
+      console.log('updating connections state');
       const { entities, ids } = original(state.connections);
 
       // check to see if any connections are deleted
@@ -137,6 +138,34 @@ const connectionsSlice = createSlice({
         update,
       );
     },
+    setReportReason(
+      state,
+      action: PayloadAction<{ id: string; reason: string | null }>,
+    ) {
+      const { id, reason } = action.payload;
+      const update: Update<Connection> = {
+        id,
+        changes: { reportReason: reason },
+      };
+      state.connections = connectionsAdapter.updateOne(
+        state.connections,
+        update,
+      );
+    },
+    setConnectionVerifications(
+      state,
+      action: PayloadAction<{ id: string; verifications: Verification[] }>,
+    ) {
+      const { id, verifications } = action.payload;
+      const update: Update<Connection> = {
+        id,
+        changes: { verifications },
+      };
+      state.connections = connectionsAdapter.updateOne(
+        state.connections,
+        update,
+      );
+    },
     setFilters(state, action: PayloadAction<ConnectionLevel[]>) {
       state.filters = action.payload;
     },
@@ -162,6 +191,8 @@ export const {
   staleConnection,
   setFilters,
   setConnectionLevel,
+  setConnectionVerifications,
+  setReportReason,
 } = connectionsSlice.actions;
 
 export const {

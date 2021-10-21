@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import fetchUserInfo from '@/actions/fetchUserInfo';
 import { getGroupName, ids2connections, knownMemberIDs } from '@/utils/groups';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import { WHITE, ORANGE, BLACK } from '@/theme/colors';
@@ -18,9 +17,11 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { toSearchString } from '@/utils/strings';
 import { NodeApiContext } from '@/components/NodeApiGate';
+import { updateMemberships } from '@/actions';
+import store from '@/store';
 import GroupCard from './GroupCard';
 import { NoGroups } from './NoGroups';
-import { compareJoinedDesc } from './models/sortingUtility';
+import { compareCreatedDesc } from './models/sortingUtility';
 
 /**
  * Group screen of BrightID
@@ -50,14 +51,6 @@ export class GroupsScreen extends React.Component {
     };
   }
 
-  componentDidMount() {
-    const { navigation, dispatch } = this.props;
-    const api = this.context;
-    navigation.addListener('focus', () => {
-      dispatch(fetchUserInfo(api));
-    });
-  }
-
   renderGroup = ({ item, index }) => {
     const { navigation } = this.props;
     return (
@@ -75,7 +68,9 @@ export class GroupsScreen extends React.Component {
       const { dispatch } = this.props;
       const api = this.context;
       this.setState({ refreshing: true });
-      await dispatch(fetchUserInfo(api));
+      const { id } = store.getState().user;
+      const memberships = await api.getMemberships(id);
+      dispatch(updateMemberships(memberships));
       this.setState({ refreshing: false });
     } catch (err) {
       console.log(err.message);
@@ -85,7 +80,9 @@ export class GroupsScreen extends React.Component {
 
   render() {
     const { navigation, groups, hasGroups, t } = this.props;
-
+    const activeGroups = groups.filter(
+      (group) => group.state == 'initiated' || group.state == 'verified'
+    );
     return (
       <>
         <StatusBar
@@ -101,7 +98,7 @@ export class GroupsScreen extends React.Component {
                 style={styles.groupsContainer}
                 contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
                 testID="groupsFlatList"
-                data={groups}
+                data={activeGroups}
                 keyExtractor={({ id }, index) => id + index}
                 renderItem={this.renderGroup}
                 showsHorizontalScrollIndicator={false}
@@ -205,8 +202,8 @@ function mapStateToProps(state) {
     groups = [...unfilteredGroups];
   }
 
-  // sort groups by joined timestamp, newest first
-  groups.sort(compareJoinedDesc);
+  // sort groups by creating timestamp, newest first
+  groups.sort(compareCreatedDesc);
 
   return { groups, hasGroups };
 }

@@ -1,4 +1,5 @@
 import CryptoJS from 'crypto-js';
+import { useContext } from 'react';
 import { eqProps } from 'ramda';
 import store from '@/store';
 import { uInt8ArrayToB64, b64ToUint8Array, randomKey } from '@/utils/encoding';
@@ -7,6 +8,7 @@ import { convertPublicKey, convertSecretKey } from 'ed2curve';
 import { selectConnectionById } from '@/reducer/connectionsSlice';
 import { saveImage } from './filesystem';
 import { INVITE_ACTIVE } from './constants';
+import { NodeApiContext } from '@/components/NodeApiGate';
 
 /**
  *
@@ -14,18 +16,27 @@ import { INVITE_ACTIVE } from './constants';
  * @type invite
  * @returns
  */
-export const getInviteInfo = async (invite) => {
+export const getInviteGroup = async (invite, api) => {
   try {
-    console.log('getting invite info', invite);
-    if (!invite.data) {
-      return {};
+    console.log('getting invite group info', invite);
+
+    let {
+      keypair: { secretKey },
+      groups: { groups }
+    } = store.getState();
+
+    let group = groups.find(g => g.id === invite.group);
+    if (group) {
+      return group;
     }
 
-    let { secretKey } = store.getState().keypair;
+    if (!invite.data) {
+      return;
+    }
 
     const conn = selectConnectionById(store.getState(), invite.inviter);
-
-    const pub = convertPublicKey(b64ToUint8Array(conn.signingKey));
+    const { signingKeys } = await api.getProfile(conn.id);
+    const pub = convertPublicKey(b64ToUint8Array(signingKeys[0]));
     const msg = b64ToUint8Array(invite.data.split('_')[0]);
     const nonce = b64ToUint8Array(invite.data.split('_')[1]);
     const decryptedMessage = nacl.box.open(
@@ -34,35 +45,38 @@ export const getInviteInfo = async (invite) => {
       pub,
       convertSecretKey(secretKey),
     );
-
     if (!decryptedMessage) {
       // can happen if the user recovered his account after the invitation was created
-      return {};
+      return;
     }
     const groupAesKey = uInt8ArrayToB64(decryptedMessage);
-
     if (!groupAesKey) {
-      return {};
+      return;
     }
 
     // const uuidKey = invite.url.split('/').pop();
-    const res = await fetch(invite.url);
+    group = await api.getGroup(invite.group);
+    const res = await fetch(group.url);
     const data = await res.text();
-
     if (!data) {
-      return {};
+      return;
     }
 
     let info = CryptoJS.AES.decrypt(data, groupAesKey).toString(
       CryptoJS.enc.Utf8,
     );
-
     info = JSON.parse(info);
-
-    info.aesKey = groupAesKey;
-
-    console.log('group info', info);
-    return info;
+    group = { ...info, ...group };
+    let filename = '';
+    if (group.photo) {
+      filename = await saveImage({
+        imageName: group.id,
+        base64Image: group.photo,
+      });
+    }
+    group.photo = { filename };
+    group.aesKey = groupAesKey;
+    return group;
   } catch (err) {
     console.log(`error in getting invite info ${err.message}`);
     return {};
@@ -74,38 +88,24 @@ export const getInviteInfo = async (invite) => {
  * @param {invite[]} invites
  * @returns
  */
-export const updateInvites = async (invites) => {
+export const getInvites = async (api) => {
   try {
     const {
+      user: { id },
       groups: { invites: oldInvites = [] },
     } = store.getState();
-    let newInvites = [];
+    const invites = await api.getInvites(id);
     for (const invite of invites) {
-      const oldInvite = oldInvites.find(eqProps('inviteId', invite));
-      if (oldInvite && (oldInvite.name || !oldInvite.data)) {
-        oldInvite.members = invite.members;
-        newInvites.push(oldInvite);
+      const oldInvite = oldInvites.find(eqProps('id', invite));
+      if (oldInvite && (oldInvite.group.name || !oldInvite.data)) {
+        invite.group = oldInvite.group;
+        invite.state = oldInvite.state;
       } else {
-        let info = await getInviteInfo(invite);
-
-        let filename = '';
-
-        if (info.photo) {
-          filename = await saveImage({
-            imageName: invite.id,
-            base64Image: info.photo,
-          });
-        }
-        const newInv = Object.assign(invite, {
-          name: info.name,
-          state: INVITE_ACTIVE,
-          photo: { filename },
-          aesKey: info.aesKey,
-        });
-        newInvites.push(newInv);
+        invite.group = await getInviteGroup(invite, api);
+        invite.state = INVITE_ACTIVE;
       }
     }
-    return newInvites;
+    return invites;
   } catch (err) {
     console.log(`error in getting invite info ${err.message}`);
     return [];

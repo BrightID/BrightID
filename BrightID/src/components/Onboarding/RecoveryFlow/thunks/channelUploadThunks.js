@@ -19,11 +19,11 @@ export const uploadSig = ({ id, aesKey, channelApi }) => async (
   const { signingKey, timestamp } = await loadRecoveryData(channelApi, aesKey);
 
   const op = {
-    name: 'Set Signing Key',
+    name: 'Social Recovery',
     id,
     signingKey,
     timestamp,
-    v: 5,
+    v: 6,
   };
   const message = stringify(op);
   const sig = uInt8ArrayToB64(
@@ -153,7 +153,7 @@ export const uploadMutualInfo = ({
       mutualConnections.push(user);
     }
 
-    const otherSideGroups = await nodeApi.getUserInfo(conn.id)?.groups;
+    const otherSideGroups = await nodeApi.getUserMemberships(conn.id);
     const mutualGroups = otherSideGroups
       ? otherSideGroups.filter((g) => groups[g.id]).map((g) => groups[g.id])
       : [];

@@ -27,9 +27,20 @@ import Check from '../Icons/Check';
 const MAX_WAITING_SECONDS = 60;
 
 const AppCard = (props: AppInfo) => {
-  const { url, id, logo, name, unusedSponsorships, context, testing } = props;
+  const {
+    url,
+    id,
+    logo,
+    name,
+    unusedSponsorships,
+    context,
+    testing,
+    verifications,
+  } = props;
   const dispatch = useDispatch();
-  const verifications = useSelector((state: State) => state.user.verifications);
+  const userVerifications = useSelector(
+    (state: State) => state.user.verifications,
+  );
 
   // Make sure each instance of AppCard has it's own selector. Otherwise they would
   // invalidate each others cache. See https://react-redux.js.org/next/api/hooks#using-memoizing-selectors
@@ -40,8 +51,9 @@ const AppCard = (props: AppInfo) => {
 
   const { t } = useTranslation();
 
-  const verified = verifications.some(
-    (v: AppVerification) => v.app && id === v.name,
+  // does user have all required verifications for this app?
+  const verified = verifications.every((v) =>
+    userVerifications.some((uv) => uv.name === v),
   );
   const isLinked = linkedContext && linkedContext.state === 'applied';
   const notSponsored = unusedSponsorships < 1 || !unusedSponsorships;
@@ -155,11 +167,9 @@ const AppCard = (props: AppInfo) => {
     ) : null;
   };
 
-
   // If app is testing and user is not linked, do not display card
-
   if (testing && !isLinked) {
-    return null
+    return null;
   }
 
   return (

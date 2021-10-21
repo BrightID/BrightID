@@ -77,7 +77,6 @@ export const PreviewConnectionController = (props: PreviewConnectionProps) => {
   };
 
   console.log(`rendering ${pendingConnection.name}`);
-
   return (
     <View style={styles.previewContainer}>
       {isReconnect ? (

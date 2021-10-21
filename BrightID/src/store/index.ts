@@ -41,7 +41,7 @@ const connectionsPersistConfig = {
 const groupsPersistConfig = {
   ...fsPersistConfig,
   key: 'groups',
-  blacklist: ['searchParam', 'searchOpen', 'newGroupCoFounders'],
+  blacklist: ['searchParam', 'searchOpen', 'newGroupInvitees'],
 };
 
 const notificationsPersistConfig = {
@@ -111,7 +111,7 @@ export const store = configureStore({
 
 export const persistor = persistStore(store);
 
-export type RootState = ReturnType<typeof rootReducer>;
+export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 export const useDispatch = () => originalUseDispatch<AppDispatch>();
 export const useSelector: TypedUseSelectorHook<RootState> = originalUseSelector;

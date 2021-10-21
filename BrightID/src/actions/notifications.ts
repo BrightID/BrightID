@@ -1,4 +1,10 @@
+import { NodeApi } from '@/api/brightId';
+import { GROUPS_TYPE } from '@/utils/constants';
+import { getInvites } from '@/utils/invites';
+import { getGroupName } from '@/utils/groups';
+import { setInvites } from './index';
 import {
+  INVITE_ACTIVE,
   MIN_CONNECTIONS_FOR_RECOVERY_NOTIFICATION,
   MIN_RECOVERY_CONNECTIONS,
   MISC_TYPE,
@@ -49,7 +55,7 @@ export const removeActiveNotification = () => ({
   type: REMOVE_ACTIVE_NOTIFICATION,
 });
 
-export const updateNotifications = () => async (
+export const updateNotifications = (api: NodeApi) => async (
   dispatch: dispatch,
   getState: () => State,
 ) => {
@@ -106,6 +112,33 @@ export const updateNotifications = () => async (
       );
     } else {
       dispatch(setRecoveryConnectionsPending(false));
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+  // check for invites
+  try {
+    const {
+      user: { id },
+      groups: { invites: oldInvites }
+    } = getState();
+    // this can not be done in reducer because it should be in an async function
+    const invites = await getInvites(api);
+    dispatch(setInvites(invites));
+    if (invites.length > oldInvites.length) {
+      const activeInvites = invites.filter((invite) => invite.state === INVITE_ACTIVE);
+      const groupName = getGroupName(activeInvites[activeInvites.length - 1].group);
+      const message = `You've been invited to join ${groupName}`;
+      dispatch(
+        setActiveNotification({
+          title: 'Group Invitation',
+          message,
+          type: GROUPS_TYPE,
+          navigationTarget: 'Notifications',
+          icon: 'AddGroup',
+        }),
+      );
     }
   } catch (err) {
     console.log(err);

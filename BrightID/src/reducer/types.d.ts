@@ -28,11 +28,11 @@ type LocalConnectionData = {
   level?: ConnectionLevel;
   socialMedia?: string[];
   incomingLevel?: ConnectionLevel;
-  socialMedia?: string[];
   notificationToken?: string;
   publicKey?: string;
   secretKey?: any;
   reportReason?: string;
+  verifications: Verification[];
 };
 
 type Connection = Partial<ConnectionInfo> & Partial<LocalConnectionData>;
@@ -42,25 +42,30 @@ type Connection = Partial<ConnectionInfo> & Partial<LocalConnectionData>;
  */
 
 type GroupsState = {
-  newGroupCoFounders: string[];
+  newGroupInvitees: string[];
   invites: Invite[];
   groups: Group[];
   searchParam: string;
   searchOpen: boolean;
 };
 
-type Group = Partial<GroupInfo> & {
+type Group = GroupInfo & {
   name?: string;
   photo?: { filename: string };
   aesKey?: string;
+  joined: number;
+  state: string;
 };
 
 type Invite = InviteInfo & {
-  name?: string;
-  state?: string;
-  photo?: { filename: string };
-  aesKey?: string;
+  group: Group;
+  state: string;
 };
+
+// type Invite = Omit<InviteInfo, 'group'> & {
+//   group: Group;
+//   state: string;
+// };
 
 /**
  * KeypairSlice

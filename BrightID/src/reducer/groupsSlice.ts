@@ -1,3 +1,4 @@
+import { difference } from 'ramda';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
 import { INVITE_ACCEPTED, INVITE_REJECTED } from '@/utils/constants';
@@ -5,7 +6,7 @@ import { INVITE_ACCEPTED, INVITE_REJECTED } from '@/utils/constants';
 /* ******** INITIAL STATE ************** */
 
 const initialState: GroupsState = {
-  newGroupCoFounders: [],
+  newGroupInvitees: [],
   groups: [],
   invites: [],
   searchParam: '',
@@ -19,43 +20,51 @@ const groupsSlice = createSlice({
     createGroup(state, action: PayloadAction<Group>) {
       state.groups.push(action.payload);
     },
+    updateGroup(state, action: PayloadAction<Group>) {
+      const group = state.groups.find(
+        (group) => group.id === action.payload.id,
+      );
+      Object.assign(group, action.payload);
+    },
     deleteGroup(state, action: PayloadAction<Group>) {
       state.groups = state.groups.filter(
         (group) => group.id !== action.payload.id,
       );
     },
-    setNewGroupCoFounders(state, action: PayloadAction<string[]>) {
-      state.newGroupCoFounders = action.payload;
+    setNewGroupInvitees(state, action: PayloadAction<string[]>) {
+      state.newGroupInvitees = action.payload;
     },
-    clearNewGroupCoFounders(state) {
-      state.newGroupCoFounders = [];
+    clearNewGroupInvitees(state) {
+      state.newGroupInvitees = [];
     },
     setGroups(state, action: PayloadAction<Group[]>) {
-      const mergeWithOld = (group: Group) => {
-        const oldGroup = state.groups.find((g) => g.id === group.id);
-        if (oldGroup) {
-          group.name = oldGroup.name;
-          group.photo = oldGroup.photo;
-          group.aesKey = oldGroup.aesKey;
+      state.groups = action.payload;
+    },
+    updateMemberships(state, action: PayloadAction<MembershipInfo[]>) {
+      state.groups.forEach((group) => {
+        const membership = action.payload.find(
+          (membership) => membership.id === group.id,
+        );
+        if (!membership && group.state === 'verified') {
+          group.state = 'dismissed';
         }
-        return group;
-      };
-
-      state.groups = action.payload.map(mergeWithOld);
+      });
+      action.payload.forEach((membership) => {
+        const group = state.groups.find((group) => group.id === membership.id);
+        if (group) {
+          group.state = 'verified';
+          group.joined = membership.timestamp;
+        }
+      });
     },
     joinGroup(state, action: PayloadAction<Group>) {
-      const group = action.payload;
-      if (group.members.length > 1) {
-        // joining a group that already has 2 members, so I'm either the last founder
-        // or an additional member -> the group is complete
-        group.isNew = false;
-      }
-      state.groups.push(group);
+      state.groups.push(action.payload);
     },
     leaveGroup(state, action: PayloadAction<Group>) {
-      state.groups = state.groups.filter(
-        (group) => group.id !== action.payload.id,
+      const group = state.groups.find(
+        (group) => group.id === action.payload.id,
       );
+      group.state = 'dismissed';
     },
     dismissFromGroup(
       state,
@@ -115,10 +124,12 @@ const groupsSlice = createSlice({
 // Export channel actions
 export const {
   createGroup,
+  updateGroup,
   deleteGroup,
-  setNewGroupCoFounders,
-  clearNewGroupCoFounders,
+  setNewGroupInvitees,
+  clearNewGroupInvitees,
   setGroups,
+  updateMemberships,
   joinGroup,
   leaveGroup,
   dismissFromGroup,

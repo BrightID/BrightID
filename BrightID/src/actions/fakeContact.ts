@@ -39,7 +39,6 @@ export const addFakeConnection = () => async (
       Math.floor(Math.random() * (names.length - 1))
     ];
     const name = `${firstName} ${lastName}`;
-    const score = Math.floor(Math.random() * 99);
 
     // load random photo
     let photo;
@@ -64,7 +63,6 @@ export const addFakeConnection = () => async (
       id: connectId,
       photo,
       name,
-      score,
       profileTimestamp: Date.now(),
       secretKey: uInt8ArrayToB64(secretKey),
       notificationToken: null,
@@ -197,13 +195,11 @@ export const reconnectFakeConnection = (
     // retrieve photo
     photo = await retrieveImage(fakeUser1.photo.filename);
   }
-  const score = Math.floor(Math.random() * 99);
 
   const dataObj = {
     id,
     photo,
     name,
-    score,
     profileTimestamp: Date.now(),
     secretKey: fakeUser1.secretKey,
     notificationToken: null,

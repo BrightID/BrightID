@@ -65,7 +65,7 @@ export const backupUser = () => async (
 ) => {
   try {
     const {
-      user: { id, score, name, photo },
+      user: { id, name, photo },
       groups: { groups },
     } = getState();
     const connections = selectAllConnections(getState());
@@ -73,7 +73,6 @@ export const backupUser = () => async (
     const userData = {
       id,
       name,
-      score,
       photo,
     };
 
