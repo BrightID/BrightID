@@ -135,6 +135,7 @@
       "success": "Erfolg",
       "sure": "Ja",
       "text": {
+        "failedOp": "{{name}} fehlgeschlagen!\n{{message}}",
         "incorrectPassword": "Falsches Passwort!",
         "lostKeys": "Bitte erstelle eine neue BrightID oder versuche, deine vorherige BrightID wiederherzustellen",
         "passwordMatch": "Das Passwort und der Bestätigungspasswortfeld stimmen nicht überein.",
@@ -287,7 +288,8 @@
     },
     "button": {
       "createGroup": "Gruppe erstellen",
-      "next": "Weiter"
+      "next": "Weiter",
+      "skip": "Überspringen und es später machen"
     },
     "label": {
       "cofounders": "Gründungsmitglieder"
@@ -297,6 +299,7 @@
     },
     "text": {
       "cofounders": "Zum Erstellen der Gruppe brauchst Du zwei Gründungsmitglieder",
+      "invitees": "Gruppenmitglieder einladen",
       "noConnections": "Keine Verbindungen"
     }
   },
