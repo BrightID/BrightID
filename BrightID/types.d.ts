@@ -5,7 +5,7 @@ import {
   channel_types,
 } from '@/components/PendingConnections/channelSlice';
 import ChannelAPI from '@/api/channelService';
-import { AppDispatch } from '@/store';
+import { AppDispatch, RootState } from '@/store';
 import { connection_levels } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
 import { socialMediaList } from '@/components/EditProfile/socialMediaList';
@@ -27,23 +27,7 @@ declare global {
   type Dispatch = dispatch;
 
   type navigation = () => any;
-
-  type State = {
-    apps: AppsState;
-    connections: ConnectionsState;
-    channels: ChannelsState;
-    groups: GroupsState;
-    keypair: Keypair;
-    notifications: NotificationsState;
-    operations: OperationsState;
-    pendingConnections: PendingConnectionsState;
-    recoveryData: RecoveryData;
-    settings: SettingsState;
-    socialMedia: SocialMediaState;
-    tasks: TasksState;
-    user: UserState;
-    walkthrough: WalkthroughState;
-  };
+  type State = RootState;
 
   type ContextInfo = {
     context: string;
@@ -140,7 +124,7 @@ declare global {
     notificationToken: string;
     score: number;
     state: PendingConnectionState;
-    verifications: { name: string }[];
+    verifications: Verification[];
     connectionsNum: number;
     reports: Array<{ id: string; reportReason: string }>;
     connectedAt: number;
@@ -205,7 +189,6 @@ declare global {
   };
 
   type UserState = {
-    score: number;
     name: string;
     photo: Photo;
     searchParam: string;

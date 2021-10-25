@@ -1,3 +1,3 @@
-export const compareJoinedDesc = (groupA, groupB) => {
-  return groupB.joined - groupA.joined;
+export const compareCreatedDesc = (groupA, groupB) => {
+  return groupB.timestamp - groupA.timestamp;
 };

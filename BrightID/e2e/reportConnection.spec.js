@@ -117,7 +117,8 @@ describe('Report Connections', () => {
         await submitButton.tap();
         // modal should be closed
         await expect(element(by.id('ReportReasonModal'))).not.toBeVisible();
-        // should be back on Connections Screen
+        // go back to connections screen
+        await element(by.id('header-back')).tap();
         await expectConnectionsScreen();
         // remaining connections should still exist
         remainingConnections -= 1;

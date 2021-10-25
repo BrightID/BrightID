@@ -99,6 +99,7 @@ export const confirmPendingConnectionThunk = (
     secretKey: connection.secretKey,
     level,
     socialMedia: connection.socialMedia,
+    verifications: connection.verifications,
   };
 
   dispatch(addConnection(connectionData));
@@ -110,7 +111,7 @@ export const confirmPendingConnectionThunk = (
   }
 
   if (backupCompleted) {
-    await dispatch(backupUser());
     await dispatch(backupPhoto(connection.brightId, filename));
+    await dispatch(backupUser());
   }
 };

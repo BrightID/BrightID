@@ -10,7 +10,10 @@ import { connection_levels, report_reasons } from '@/utils/constants';
 import { ORANGE, WHITE, BLUE, BLACK, DARKER_GREY, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { StackScreenProps } from '@react-navigation/stack';
-import { selectConnectionById } from '@/reducer/connectionsSlice';
+import {
+  selectConnectionById,
+  setReportReason,
+} from '@/reducer/connectionsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { setConnectionLevel } from '@/actions';
 import { reportConnection } from './models/reportConnection';
@@ -55,12 +58,6 @@ const ReportReasonModal = ({ route, navigation }: props) => {
       navigation.goBack();
       if (reporting) {
         dispatch(reportConnection({ id: connectionId, reason, api }));
-      } else {
-        // unreport connection
-      }
-
-      if (successCallback) {
-        successCallback();
       }
       // inside undo report module
     } else {
@@ -73,6 +70,15 @@ const ReportReasonModal = ({ route, navigation }: props) => {
           level: connection_levels.SUSPICIOUS,
         }),
       );
+      dispatch(
+        setReportReason({
+          id: connection.id,
+          reason: null,
+        }),
+      );
+    }
+    if (successCallback) {
+      successCallback();
     }
   };
 

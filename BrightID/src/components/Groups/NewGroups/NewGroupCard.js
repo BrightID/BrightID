@@ -9,7 +9,7 @@ import { withTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { GREY, WHITE, GREEN, BLACK } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { toggleNewGroupCoFounder } from '../actions';
+import { toggleNewGroupInvitee } from '../actions';
 
 /**
  * Connection Card in the Connections Screen
@@ -29,8 +29,8 @@ class NewGroupCard extends React.PureComponent {
 
   handleGroupSelect = () => {
     console.log('pressed');
-    let { toggleCoFounder, id } = this.props;
-    toggleCoFounder(id);
+    let { toggleInvitee, id } = this.props;
+    toggleInvitee(id);
   };
 
   renderActionButton = () => {
@@ -38,7 +38,7 @@ class NewGroupCard extends React.PureComponent {
     if (groups) {
       return (
         <TouchableOpacity
-          testID="checkCoFounderBtn"
+          testID="checkInviteeBtn"
           style={styles.moreIcon}
           onPress={this.handleGroupSelect}
         >
@@ -140,5 +140,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(null, (dispatch) => ({
-  toggleCoFounder: (id) => dispatch(toggleNewGroupCoFounder(id)),
+  toggleInvitee: (id) => dispatch(toggleNewGroupInvitee(id)),
 }))(withTranslation()(NewGroupCard));

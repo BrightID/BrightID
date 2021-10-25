@@ -1,52 +1,45 @@
 /* Properties shared by all verifications */
 interface BaseVerification {
+  name: string;
   block: number;
   timestamp: number;
 }
 
-/* App verifications all have the same form */
-type AppVerification = BaseVerification & {
-  name: string; // name of the app
-  app: boolean;
+/*
+  'expression' verification
+ */
+type ExpressionVerification = BaseVerification & {
+  expression: boolean;
 };
 
 /*
-  Properties shared by all non-app verifications
-  - block
-  - timestamp
-  - hash
+  'hash' verification
  */
-interface GenericVerification extends BaseVerification {
+type HashVerification = BaseVerification & {
   hash: string;
-}
-
-type BasicVerification = GenericVerification & {
-  name: 'BrightID' | 'DollarForEveryOne' | 'SocialRecoverySetup';
 };
 
-type SeedConnectedVerification = GenericVerification & {
+type SeedConnectedVerification = HashVerification & {
   name: 'SeedConnected';
   rank: number;
   connected: Array<string>; // hashes of seedgroups that connected with user
   reported: Array<string>; // hashes of seedgroups that reported this user
 };
 
-type SeedConnectedWithFriendVerification = GenericVerification & {
+type SeedConnectedWithFriendVerification = HashVerification & {
   name: 'SeedConnectedWithFriend';
   friend: any; // TODO: expected content?
-  hash: string;
 };
 
-type YektaVerification = GenericVerification & {
+type YektaVerification = HashVerification & {
   name: 'Yekta';
   rank: number;
   raw_rank: number;
-  hash: string;
 };
 
 type Verification =
-  | AppVerification
-  | BasicVerification
+  | ExpressionVerification
+  | HashVerification
   | SeedConnectedVerification
   | SeedConnectedWithFriendVerification
   | YektaVerification;

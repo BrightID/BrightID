@@ -15,46 +15,25 @@ class GroupCard extends React.PureComponent {
   setStatus = () => {
     const { group, t } = this.props;
     const concatenationString = t('common.language.and', 'and');
-    if (group.isNew) {
-      const notJoinedIds = group.founders.filter(
-        (founder) => !group.members.includes(founder),
-      );
-      const notJoinedNames = ids2connections(notJoinedIds).map((o) => o.name);
-      return (
-        <View style={styles.waitingContainer}>
-          <Text style={styles.waitingMessage}>
-            {t(
-              'groups.text.waitingForMembers',
-              'Waiting for {{list}} to join',
-              {
-                // TODO: This concatenation assumes english grammar and will not work well in all languages
-                list: notJoinedNames.join(` ${concatenationString} `),
-              },
-            )}
+    const unknowsCount = ids2connections(group.members).filter(
+      (o) => o.name === 'Stranger',
+    ).length;
+    return (
+      <View>
+        <View style={styles.membersContainer}>
+          <Text style={styles.membersLabel}>
+            {t('groups.label.knownMembers')}
           </Text>
+          <Text style={styles.membersKnown}>
+            {group.members.length - unknowsCount}{' '}
+          </Text>
+          <Text style={styles.membersLabel}>
+            {t('groups.label.unknownMembers')}
+          </Text>
+          <Text style={styles.membersUnknown}>{unknowsCount}</Text>
         </View>
-      );
-    } else {
-      const unknowsCount = ids2connections(group.members).filter(
-        (o) => o.name === 'Stranger',
-      ).length;
-      return (
-        <View>
-          <View style={styles.membersContainer}>
-            <Text style={styles.membersLabel}>
-              {t('groups.label.knownMembers')}
-            </Text>
-            <Text style={styles.membersKnown}>
-              {group.members.length - unknowsCount}{' '}
-            </Text>
-            <Text style={styles.membersLabel}>
-              {t('groups.label.unknownMembers')}
-            </Text>
-            <Text style={styles.membersUnknown}>{unknowsCount}</Text>
-          </View>
-        </View>
-      );
-    }
+      </View>
+    );
   };
 
   render() {

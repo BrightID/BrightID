@@ -16,7 +16,7 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
-import { setActiveNotification } from '@/actions';
+import { fetchApps, selectAllApps, setActiveNotification } from '@/actions';
 import { linkedContextTotal } from '@/reducer/appsSlice';
 import { verifiedConnectionsSelector } from '@/reducer/connectionsSlice';
 import { retrieveImage } from '@/utils/filesystem';
@@ -44,8 +44,34 @@ const discordUrl = 'https://discord.gg/nTtuB2M';
 /** Selectors */
 
 export const verifiedAppsSelector = createSelector(
+  selectAllApps,
   (state: State) => state.user.verifications,
-  (verifications) => verifications.filter((v) => (v as AppVerification).app),
+  (apps, userVerifications) => {
+    // check for each app if the user has all required verifications
+    console.log(`Checking verifications for ${apps.length} apps`);
+    return apps.filter((app: AppInfo) => {
+      let isMissingVerification = false;
+      app.verifications &&
+        app.verifications.forEach((requiredVerification) => {
+          if (
+            userVerifications.some(
+              (userVerification) =>
+                userVerification.name === requiredVerification,
+            )
+          ) {
+            console.log(
+              `user has required verification ${requiredVerification} for app ${app.name}`,
+            );
+          } else {
+            console.log(
+              `user missing required verification ${requiredVerification} for app ${app.name}`,
+            );
+            isMissingVerification = true;
+          }
+        });
+      return !isMissingVerification;
+    });
+  },
 );
 
 export const brightIdVerifiedSelector = createSelector(
@@ -60,10 +86,16 @@ export const HomeScreen = (props) => {
   const dispatch = useDispatch();
   const headerHeight = useHeaderHeight();
   const name = useSelector((state: State) => state.user.name);
+  const apps = useSelector(selectAllApps);
   const photoFilename = useSelector(
     (state: State) => state.user.photo.filename,
   );
-  const groupsCount = useSelector((state: State) => state.groups.groups.length);
+  const groupsCount = useSelector(
+    (state: State) =>
+      state.groups.groups.filter(
+        (g) => g.state === 'initiated' || g.state === 'verified',
+      ).length,
+  );
   const connectionsCount = useSelector(verifiedConnectionsSelector).length;
   const linkedContextsCount = useSelector(linkedContextTotal);
   const verifiedApps = useSelector(verifiedAppsSelector);
@@ -90,6 +122,23 @@ export const HomeScreen = (props) => {
       };
     }, [api, dispatch, photoFilename]),
   );
+
+  /* Update list of apps from server if
+     - apps are empty (first startup?)
+     - apps are from previous api version (app object in store
+      is missing 'usingBlindSig' key)
+   */
+  useEffect(() => {
+    if (api) {
+      if (
+        apps.length === 0 ||
+        !Object.keys(apps[0]).includes('usingBlindSig')
+      ) {
+        console.log(`updating apps...`);
+        dispatch(fetchApps(api));
+      }
+    }
+  }, [api, apps, dispatch]);
 
   useEffect(() => {
     dispatch(setHeaderHeight(headerHeight));
@@ -346,7 +395,7 @@ export const HomeScreen = (props) => {
         </View>
         <DeepPasteLink />
         <Text style={styles.versionInfo}>
-          {baseUrl.split('://')[1]} - v{app_version}
+          {baseUrl ? baseUrl.split('://')[1] : 'unknown'} - v{app_version}
         </Text>
       </View>
     </View>

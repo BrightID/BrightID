@@ -113,6 +113,7 @@
       "success": "Success",
       "sure": "Sure",
       "text": {
+        "failedOp": "{{name}} failed!\n{{message}}",
         "lostKeys": "Please create a new BrightID or try recovering your previous BrightID",
         "passwordMatch": "Password and confirm password does not match.",
         "passwordShort": "Your password must be at least 8 characters long.",
@@ -258,16 +259,17 @@
     },
     "button": {
       "createGroup": "Create Group",
-      "next": "Next"
+      "next": "Next",
+      "skip": "Skip & do it later"
     },
     "label": {
-      "cofounders": "CO-FOUNDERS"
+      "invitees": "INVITEES"
     },
     "placeholder": {
       "groupName": "What is the group name?"
     },
     "text": {
-      "cofounders": "To create a group, you must select two co-founders",
+      "invitees": "Invite group members",
       "noConnections": "No connections"
     }
   },
@@ -362,8 +364,7 @@
       "noEligibleConnection": "No existing connections are eligible for this group, please come back later..",
       "noGroups": "<text>Get verified faster</text><text>by creating and</text><text>joining groups</text>",
       "noGroupsMatchSearch": "No group matches your search",
-      "noMembers": "No known members, invite some…",
-      "waitingForMembers": "Waiting for {{list}} to join"
+      "noMembers": "No known members, invite some…"
     }
   },
   "home": {

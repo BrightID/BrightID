@@ -12,7 +12,7 @@ type NodeOps =
   | LinkContextIdOp
   | RemoveGroupOp
   | RemoveMembershipOp
-  | SetSigningKeyOp;
+  | SocialRecoveryOp;
 
 type AddAdminOp = {
   name: 'Add Admin';
@@ -28,21 +28,17 @@ type AddAdminOp = {
 type AddGroupOp = {
   name: 'Add Group';
   group: string;
-  id1: string;
-  id2: string;
-  id3: string;
-  inviteData2: string;
-  inviteData3: string;
+  id: string;
   url: string;
   type: string;
   timestamp: number;
   v: number;
-  sig1?: string;
+  sig?: string;
   hash?: string;
 };
 
 type AddMembershipOp = {
-  name: string;
+  name: 'Add Membership';
   id: string;
   group: string;
   timestamp: number;
@@ -121,8 +117,8 @@ type RemoveMembershipOp = {
   hash?: string;
 };
 
-type SetSigningKeyOp = {
-  name: 'Set Signing Key';
+type SocialRecoveryOp = {
+  name: 'Social Recovery';
   id: string;
   signingKey: string;
   timestamp: number;

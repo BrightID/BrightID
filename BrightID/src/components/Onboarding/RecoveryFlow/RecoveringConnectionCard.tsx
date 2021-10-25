@@ -210,11 +210,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
   },
-  scoreContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
   connectedText: {
     fontFamily: 'ApexNew-Book',
     fontSize: fontSize[12],

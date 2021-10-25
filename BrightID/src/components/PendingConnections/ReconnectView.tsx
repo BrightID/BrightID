@@ -190,7 +190,7 @@ export const ReconnectView = ({
           <Text style={styles.lastConnectedText}>
             {t('connections.tag.lastConnected', {
               date: moment(
-                parseInt(String(existingConnection.createdAt), 10),
+                parseInt(String(existingConnection.timestamp), 10),
               ).fromNow(),
             })}
           </Text>

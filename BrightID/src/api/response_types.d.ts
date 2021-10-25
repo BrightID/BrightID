@@ -5,12 +5,14 @@
 type NodeApiRes =
   | AppRes
   | AppsRes
+  | OperationPostRes
   | OperationRes
-  | OperationStateRes
-  | UserConnectionRes
-  | UserInfoRes
+  | UserConnectionsRes
   | UserProfileRes
-  | UserVerificationRes;
+  | UserVerificationsRes
+  | UserInvitesRes
+  | UserMembershipsRes
+  | GroupRes;
 
 type AppRes = {
   data: AppInfo;
@@ -28,43 +30,46 @@ type ErrRes = {
   errorNum: number;
 };
 
-type IpRes = {
-  data: {
-    ip: string;
-  };
-};
-
-type OperationRes = {
+type OperationPostRes = {
   data: {
     hash: string;
   };
 };
 
-type OperationStateRes = {
+type OperationRes = {
+  data: OperationInfo;
+};
+
+type UserConnectionsRes = {
   data: {
-    state: string;
-    result: string;
+    connections: ConnectionInfo[];
   };
 };
 
-type UserConnectionRes = {
+type UserMembershipsRes = {
   data: {
-    connections: Array<{ id: string; level: string; timestamp: number }>;
+    memberships: MembershipInfo[];
   };
 };
 
-type UserVerificationRes = {
+type UserInvitesRes = {
   data: {
-    verifications: Array<Verification>;
+    invites: InviteInfo[];
   };
 };
 
-type UserInfoRes = {
-  data: UserInfo;
+type UserVerificationsRes = {
+  data: {
+    verifications: Verification[];
+  };
 };
 
 type UserProfileRes = {
-  data: UserProfile;
+  data: ProfileInfo;
+};
+
+type GroupRes = {
+  data: GroupInfo;
 };
 
 /**
@@ -75,75 +80,60 @@ type AppInfo = {
   id: string;
   name: string;
   context: string;
-  verification: string;
+  verifications: Array<string>;
   verificationUrl: string;
   logo?: string;
   url?: string;
   assignedSponsorships?: number;
   unusedSponsorships?: number;
   testing: boolean;
+  idsAsHex: boolean;
+  usingBlindSig: boolean;
+  sponsorPublicKey: string;
+};
+
+type OperationInfo = {
+  state: string;
+  result: string;
+};
+
+type ConnectionInfo = {
+  incomingLevel: ConnectionLevel;
+  id: string;
+  level: ConnectionLevel;
+  timestamp: number;
+  reportReason?: string;
+};
+
+type MembershipInfo = {
+  id: string;
+  timestamp: number;
 };
 
 type GroupInfo = {
   id: string;
   members: string[];
-  type: string;
-  founders: string[];
+  invites: InviteInfo[];
   admins: string[];
-  isNew: boolean;
+  type: string;
   url: string;
   timestamp: number;
-  joined: number;
-  score?: number;
+  seed?: boolean;
+  region?: string;
+  info?: string;
 };
 
 type InviteInfo = {
   id: string;
-  members: string[];
-  type: string;
-  founders: string[];
-  admins: string[];
-  isNew: boolean;
-  url: string;
-  timestamp: number;
-  inviteId: string;
-  invited: number;
+  group: string;
   inviter: string;
+  invitee: number;
+  timestamp: number;
   data: string;
-  score?: number;
 };
 
-type ConnectionInfo = {
+type ProfileInfo = {
   id: string;
-  signingKey: string;
-  level: ConnectionLevel;
-  incomingLevel?: ConnectionLevel;
-  verifications: string[];
-  hasPrimaryGroup: boolean;
-  trusted: string[];
-  flaggers: {
-    [id: string]: string;
-  };
-  createdAt: number;
-  score?: number;
-  status?: string;
-};
-
-type UserInfo = {
-  createdAt: number;
-  groups: GroupInfo[];
-  invites: InviteInfo[];
-  connections: ConnectionInfo[];
-  verifications: string[];
-  isSponsored: boolean;
-  trusted: string[];
-  flaggers: {
-    [id: string]: string;
-  };
-  score?: number;
-};
-
-type UserProfile = {
   connectionsNum: number;
   groupsNum: number;
   mutualConnections: string[];
@@ -151,5 +141,7 @@ type UserProfile = {
   connectedAt: number;
   createdAt: number;
   reports: Array<{ id: string; reportReason: string }>;
-  verifications: Array<{ name: string }>;
+  verifications: Verification[];
+  signingKeys: string[];
+  sponsored: boolean;
 };

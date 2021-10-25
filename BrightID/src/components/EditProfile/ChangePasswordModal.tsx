@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Alert,
   View,
@@ -11,6 +11,7 @@ import { BlurView } from '@react-native-community/blur';
 import Spinner from 'react-native-spinkit';
 import { setInternetCredentials } from 'react-native-keychain';
 import { useTranslation } from 'react-i18next';
+import { NodeApiContext } from '@/components/NodeApiGate';
 import { BACKUP_URL, ORANGE } from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import {
@@ -54,6 +55,7 @@ type props = StackScreenProps<ModalStackParamList, 'ChangePassword'>;
 
 const ChangePasswordModal = ({ navigation }: props) => {
   const dispatch = useDispatch();
+  const api = useContext(NodeApiContext);
 
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -95,7 +97,7 @@ const ChangePasswordModal = ({ navigation }: props) => {
     setBackupInProgress(false);
 
     // update notifications to make sure the `set backup password` notification is removed
-    dispatch(updateNotifications());
+    dispatch(updateNotifications(api));
 
     // finally close modal
     navigation.goBack();

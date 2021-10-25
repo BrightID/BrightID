@@ -95,7 +95,7 @@ export const ContactUsScreen = function () {
           <SocialItem
             icon="telegram"
             color="#39A0DA"
-            url="https://t.me/brightid"
+            url="https://t.me/brightidofficial"
           />
           <SocialItem
             icon="twitter"

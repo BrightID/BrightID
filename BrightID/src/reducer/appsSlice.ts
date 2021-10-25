@@ -13,7 +13,7 @@ const linkedContextsAdapter = createEntityAdapter<ContextInfo>({
   selectId: (linkedContext) => linkedContext.contextId,
 });
 
-const initialState = {
+const initialState: AppsState = {
   apps: [],
   linkedContexts: linkedContextsAdapter.getInitialState(),
 };
@@ -24,6 +24,17 @@ const appsSlice = createSlice({
   reducers: {
     setApps(state, action: PayloadAction<AppInfo[]>) {
       state.apps = action.payload;
+      /*
+      // Workaround until `verification` is removed from server response: Manually fill `verifications`
+      state.apps.forEach((app) => {
+        if (app.verifications === undefined) {
+          console.log(`adding verifications array to app ${app.name}`);
+          app.verifications = [];
+        }
+        if (app.verifications.length === 0 && app.verification !== '')
+          app.verifications.push(app.verification);
+      });
+       */
     },
     addLinkedContext(state, action: PayloadAction<ContextInfo>) {
       state.linkedContexts = linkedContextsAdapter.addOne(
@@ -55,7 +66,7 @@ const appsSlice = createSlice({
   },
 });
 
-// Export channel actions
+// Export app actions
 export const {
   setApps,
   addLinkedContext,
@@ -89,6 +100,11 @@ export const selectPendingLinkedContext = createSelector(
   selectAllLinkedContexts,
   (contexts) => contexts.find((link) => link.state === 'pending'),
 );
+
+// exclude apps using blind signature feature
+// TODO: Return all apps when we are ready to handle blind signatures
+export const selectAllApps = (state) =>
+  state.apps.apps.filter((app) => !app.usingBlindSig);
 
 // Export reducer
 export default appsSlice.reducer;

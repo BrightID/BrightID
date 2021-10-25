@@ -29,7 +29,6 @@ const pendingConnectionsAdapter = createEntityAdapter<PendingConnection>();
    - 'brightId': the brightId if the connection
    - 'name'
    - 'photo' (base64-encoded)
-   - 'score'
  */
 export enum pendingConnection_states {
   INITIAL = 'INITIAL',
@@ -109,7 +108,7 @@ export const newPendingConnection = createAsyncThunk<
       existingConnection?: Connection;
     } = {};
     try {
-      connectionInfo = await api.getUserProfile(decryptedObj.id);
+      connectionInfo = await api.getProfile(decryptedObj.id);
     } catch (err) {
       if (err instanceof BrightidError && err.errorNum === USER_NOT_FOUND) {
         // this must be a new user not yet existing on backend. Return empty object.
@@ -198,7 +197,6 @@ const pendingConnectionsSlice = createSlice({
           id: brightId,
           name,
           photo,
-          score,
           profileTimestamp,
           initiator,
           connectionsNum,
@@ -221,7 +219,6 @@ const pendingConnectionsSlice = createSlice({
           brightId,
           name,
           photo,
-          score,
           profileTimestamp,
           initiator,
           connectionsNum,

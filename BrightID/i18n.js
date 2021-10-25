@@ -13,6 +13,8 @@ import * as germanTranslation from './locales/de/translation.json';
 import * as spanishTranslation from './locales/es/translation.json';
 import * as hindiTranslation from './locales/hi/translation.json';
 import * as hansTranslation from './locales/zh_Hans/translation.json';
+import * as hantTranslation from './locales/zh_Hant/translation.json';
+import * as russianTranslation from './locales/ru/translation.json';
 
 /**
  * For each supported language other than English, import the corresponding moment locale
@@ -22,7 +24,9 @@ import 'moment/locale/fr';
 import 'moment/locale/de';
 import 'moment/locale/es';
 import 'moment/locale/hi';
-import 'moment/locale/zh-cn';
+import 'moment/locale/zh-cn'; // simplified chinese
+import 'moment/locale/zh-tw'; // traditional chinese
+import 'moment/locale/ru';
 
 const translations = {
   de: {
@@ -40,8 +44,14 @@ const translations = {
   hi: {
     translation: hindiTranslation,
   },
-  zh: {
+  'zh-Hans': {
     translation: hansTranslation,
+  },
+  'zh-Hant': {
+    translation: hantTranslation,
+  },
+  ru: {
+    translation: russianTranslation,
   },
 };
 
@@ -54,8 +64,8 @@ const { languageTag } =
   RNLocalize.findBestAvailableLanguage(Object.keys(translations)) ||
   defaultLanguage;
 
-console.log(RNLocalize.getLocales());
-console.log(`Using languagetag ${languageTag}`);
+// console.log(RNLocalize.getLocales());
+// console.log(`Using languagetag ${languageTag}`);
 
 /**
  * Moment will use detected language throughout the app.

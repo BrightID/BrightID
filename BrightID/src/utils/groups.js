@@ -10,7 +10,7 @@ const threeKnownMembers = (group) => {
     user: { id, photo, name },
   } = store.getState();
   const connections = selectAllConnections(store.getState());
-  const { founders, members, isNew } = group;
+  const { members } = group;
   const connsWithMe = [
     ...connections,
     {
@@ -19,27 +19,18 @@ const threeKnownMembers = (group) => {
       id,
     },
   ];
-  let list = (isNew ? founders : members)
+  let list = members
     .map((u) => connsWithMe.find((conn) => conn.id === u))
     .filter((u) => u)
-    .sort((u1, u2) => (founders.includes(u1) ? -1 : 1))
+    .sort((u1, u2) => (group.admins.includes(u1) ? -1 : 1))
     .slice(0, 3);
-
   return list;
 };
 
 export const groupCirclePhotos = (group) => {
-  const { members } = group;
-
-  const photos = threeKnownMembers(group).map((member) => {
-    // If a founder isn't in members, that founder hasn't joined yet and
-    // their photo will be faded.
-
-    const faded = group?.isNew && !members.includes(member.id);
-
-    return { photo: member.photo, faded };
+  return threeKnownMembers(group).map((member) => {
+    return { photo: member.photo };
   });
-  return photos;
 };
 
 export const getGroupName = (group) => {
@@ -53,18 +44,18 @@ export const getGroupName = (group) => {
 
 export const ids2connections = (ids) => {
   const {
-    user: { name, id, photo, score },
+    user: { name, id, photo },
   } = store.getState();
 
   return ids.map((_id) => {
     if (_id === id) {
-      return { id, name, photo, score };
+      return { id, name, photo };
     }
     const conn = selectConnectionById(store.getState(), _id);
     if (conn) {
       return conn;
     } else {
-      return { id: _id, name: 'Stranger', score: 0 };
+      return { id: _id, name: 'Stranger' };
     }
   });
 };
@@ -74,12 +65,6 @@ export const knownMemberIDs = (group) => {
   let knownMemberIDs = group.members.filter((memberId) =>
     selectConnectionById(store.getState(), memberId),
   );
-  if (group.isNew) {
-    // explicitly add founderIDs as they might not have joined yet
-    knownMemberIDs = knownMemberIDs.concat(group.founders);
-    // make sure array is unique
-    knownMemberIDs = [...new Set(knownMemberIDs)];
-  }
   return knownMemberIDs;
 };
 

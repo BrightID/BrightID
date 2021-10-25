@@ -282,16 +282,19 @@
     },
     "button": {
       "createGroup": "Créer le Groupe",
-      "next": "Suivant"
+      "next": "Suivant",
+      "skip": "Passer et le faire plus tard"
     },
     "label": {
-      "cofounders": "COFONDATEURS"
+      "cofounders": "COFONDATEURS",
+      "invitees": "INVITÉS"
     },
     "placeholder": {
       "groupName": "Quel est le nom du groupe ?"
     },
     "text": {
       "cofounders": "Pour créer un groupe, vous devez sélectionner deux cofondateurs",
+      "invitees": "Inviter les membres du groupe",
       "noConnections": "Vous n'avez pas de connexions"
     }
   },
