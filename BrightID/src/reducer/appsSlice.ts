@@ -6,6 +6,7 @@ import {
   Update,
 } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
+import { createDeepEqualSelector } from '@/utils/createDeepEqualStringArraySelector';
 
 /* ******** INITIAL STATE ************** */
 
@@ -103,8 +104,10 @@ export const selectPendingLinkedContext = createSelector(
 
 // exclude apps using blind signature feature
 // TODO: Return all apps when we are ready to handle blind signatures
-export const selectAllApps = (state) =>
-  state.apps.apps.filter((app) => !app.usingBlindSig);
+export const selectAllApps = createDeepEqualSelector(
+  (state: State) => state.apps.apps,
+  (apps) => apps.filter((app) => !app.usingBlindSig),
+);
 
 // Export reducer
 export default appsSlice.reducer;

@@ -59,13 +59,13 @@ export const verifiedAppsSelector = createSelector(
                 userVerification.name === requiredVerification,
             )
           ) {
-            console.log(
-              `user has required verification ${requiredVerification} for app ${app.name}`,
-            );
+            // console.log(
+            //  `user has required verification ${requiredVerification} for app ${app.name}`,
+            // );
           } else {
-            console.log(
-              `user missing required verification ${requiredVerification} for app ${app.name}`,
-            );
+            // console.log(
+            //   `user missing required verification ${requiredVerification} for app ${app.name}`,
+            // );
             isMissingVerification = true;
           }
         });
