@@ -132,6 +132,7 @@
       "success": "Éxito",
       "sure": "Por supuesto",
       "text": {
+        "failedOp": "¡{{name}} falló!\n{{message}}",
         "incorrectPassword": "¡Contraseña incorrecta!",
         "lostKeys": "Cree un nuevo BrightID o intente recuperar su BrightID anterior",
         "passwordMatch": "La contraseña y la contraseña de confirmación no coinciden.",
@@ -169,7 +170,9 @@
     },
     "tag": {
       "connectionDate": "Connectado {{date}}",
-      "reported": "(reportado)"
+      "reportReason": " como {{reportReason}}",
+      "reported": "(reportado)",
+      "reportedByUser": "reportado por ti"
     },
     "text": {
       "progress": "{{completed}}/{{total}} completado",
@@ -179,9 +182,11 @@
   "connectionDetails": {
     "button": {
       "levelSave": "Guardar",
+      "ok": "OK",
       "report": "Reportar a esta persona",
       "reportCancel": "Cancelar",
-      "reportSubmit": "Enviar"
+      "reportSubmit": "Enviar",
+      "undoReport": "Deshacer Reporte"
     },
     "header": {
       "connectionDetails": "Detalles de Conexión"
@@ -205,7 +210,9 @@
       "reportDuplicate": "Esta persona creó varias cuentas",
       "reportImpact": "Marcar {{name}} afectará negativamente su puntuación en BrightID, y esta marca podría mostrarse a otros usuarios.",
       "reportOther": "Otra razon",
-      "reportSpammer": "Esta persona me envió una solicitud de conexión no deseada"
+      "reportSpammer": "Esta persona me envió una solicitud de conexión no deseada",
+      "unReportConnection": "Deshacer Reporte",
+      "unReportImpact": "Ya has reportado a {{name}} como {{reportReason}}. ¿Le gustaría eliminar esta señal y restaurar su conexión?"
     }
   },
   "connections": {
@@ -237,6 +244,7 @@
       "failed": "La conexión falló.\nInténtalo de nuevo.",
       "hidden": "Oculta",
       "lastConnected": "Última conexión el {{date}}",
+      "reported": "Reportado",
       "reportedAs": "Reportado como {{flag}}",
       "waiting": "Esperando"
     },
@@ -274,16 +282,19 @@
     },
     "button": {
       "createGroup": "Crea un Grupo",
-      "next": "Siguiente"
+      "next": "Siguiente",
+      "skip": "Saltar y hacerlo más tarde"
     },
     "label": {
-      "cofounders": "COFUNDADORES"
+      "cofounders": "COFUNDADORES",
+      "invitees": "INVITADOS"
     },
     "placeholder": {
       "groupName": "¿Cuál es el nombre del grupo?"
     },
     "text": {
       "cofounders": "Para crear un grupo, debe seleccionar dos cofundadores",
+      "invitees": "Invitar miembros al grupo",
       "noConnections": "Sin conexiones"
     }
   },
@@ -495,6 +506,7 @@
     "label": {
       "alreadyKnown": "Ya conocido (familiar/amigo)",
       "connections": "Conexiones",
+      "created": "Se unió a BrightID {{date}}",
       "groups": "Grupos",
       "justMet": "Recien conocido",
       "mutualConnections": "Conexiones mutuas",
@@ -624,6 +636,20 @@
       "askTrustedConnections": "Por favor, muestre este código QR a sus conexiones de recuperación",
       "signatures": "{{count}} / 2 firmas",
       "signatures_plural": "{{count}} / 2 firmas"
+    }
+  },
+  "recoveryConnections": {
+    "text": {
+      "add": "Agregar",
+      "addMoreRecovery": "Agregar más conexiones de recuperación +",
+      "addRecoveryConnections": "Agregar conexiones de recuperación",
+      "chooseThreeConnections": "Elija tres o más conexiones ya conocidas para respaldar su BrightID",
+      "completed": "Se agregaron correctamente las conexiones de recuperación",
+      "connectionsAlreadyKnown": "Las conexiones deben ser \"ya conocidas\" antes de que se puedan configurar como recuperación.",
+      "currentRecoveryConnections": "Tus conexiones de recuperación actuales",
+      "emptyList": "Por favor, agregue conexiones de recuperación para habilitar la recuperación social",
+      "pleaseMakeSomeConnections": "Por favor, haga algunas conexiones :)",
+      "threeMore": "Necesitas {{amount}} conexion(es) conocida(s) más para habilitar la recuperación social"
     }
   },
   "recoveryCooldownModal": {
