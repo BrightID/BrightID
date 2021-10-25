@@ -23,3 +23,9 @@ export const createDeepEqualStringArraySelector = createSelectorCreator(
     }
   },
 );
+
+// create a "selector creator" that uses lodash.isequal instead of ===
+export const createDeepEqualSelector = createSelectorCreator(
+  defaultMemoize,
+  isEqual,
+);
