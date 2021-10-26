@@ -52,9 +52,9 @@ const AppCard = (props: AppInfo) => {
   const { t } = useTranslation();
 
   // does user have all required verifications for this app?
-  const verified = verifications.every((v) =>
-    userVerifications.some((uv) => uv.name === v),
-  );
+  const verified = verifications
+    ? verifications.every((v) => userVerifications.some((uv) => uv.name === v))
+    : false;
   const isLinked = linkedContext && linkedContext.state === 'applied';
   const notSponsored = unusedSponsorships < 1 || !unusedSponsorships;
 
