@@ -171,7 +171,7 @@ export const unsubscribeFromConnectionRequests = (channelId: string) => (
   const { pollTimerId } = selectChannelById(getState(), channelId);
 
   if (pollTimerId) {
-    console.log(`Stop polling channel ${channelId} (timer ${pollTimerId}`);
+    console.log(`Stop polling channel ${channelId} (timer ${pollTimerId})`);
     clearInterval(pollTimerId);
     dispatch(
       updateChannel({
@@ -204,35 +204,106 @@ export const fetchChannelProfiles = (channelId: string, api: NodeApi) => async (
   if (__DEV__ && profileIds.length > knownProfileIds.length + 1) {
     console.log(`Got ${profileIds.length} profileIds:`, profileIds);
   }
-  for (const profileId of profileIds) {
-    if (
-      profileId !== channel.myProfileId &&
-      !knownProfileIds.includes(profileId)
-    ) {
-      await dispatch(
-        newPendingConnection({
-          channelId,
-          profileId,
-          api,
-        }),
-      );
-    }
-  }
-  // can we stop polling?
-  let expectedProfiles: number;
-  switch (channel.type) {
-    case channel_types.SINGLE:
-      expectedProfiles = 2; // my profile and peer profile
 
+  /*
+  Polling logic:
+  type STAR:
+   - Channel creator: Load all profiles
+   - Other participant: Only load creator profile
+  type GROUP:
+   - everybody load all profiles
+  type SINGLE:
+   - Channel creator: Load participant profile
+   - Other participant: Load creator profile
+ */
+  let stopPolling = false;
+  switch (channel.type) {
+    case channel_types.STAR:
+      if (channel.initiatorProfileId === channel.myProfileId) {
+        // Channel creator: Load all profiles
+        console.log(`STAR channel - Initiator (${channel.initiatorProfileId})`);
+        for (const profileId of profileIds) {
+          if (
+            profileId !== channel.myProfileId &&
+            !knownProfileIds.includes(profileId)
+          ) {
+            await dispatch(
+              newPendingConnection({
+                channelId,
+                profileId,
+                api,
+              }),
+            );
+          }
+        }
+        // stop polling when channel limit is reached
+        stopPolling = profileIds.length >= CHANNEL_CONNECTION_LIMIT;
+      } else {
+        // other participant: Only load initiator profile
+        console.log(`STAR channel - Participant waiting for initiator profile`);
+        const foundInitiator = profileIds.includes(channel.initiatorProfileId);
+        if (
+          foundInitiator &&
+          !knownProfileIds.includes(channel.initiatorProfileId)
+        ) {
+          console.log(
+            `STAR channel - Participant found initiator profileID ${channel.initiatorProfileId}`,
+          );
+          await dispatch(
+            newPendingConnection({
+              channelId,
+              profileId: channel.initiatorProfileId,
+              api,
+            }),
+          );
+        }
+        // stop polling when initiator profile is found
+        stopPolling = foundInitiator;
+      }
       break;
     case channel_types.GROUP:
-    default:
-      expectedProfiles = CHANNEL_CONNECTION_LIMIT;
+      // Always load all profiles
+      for (const profileId of profileIds) {
+        if (
+          profileId !== channel.myProfileId &&
+          !knownProfileIds.includes(profileId)
+        ) {
+          await dispatch(
+            newPendingConnection({
+              channelId,
+              profileId,
+              api,
+            }),
+          );
+        }
+      }
+      // stop polling only when channel limit is reached
+      stopPolling = profileIds.length >= CHANNEL_CONNECTION_LIMIT;
+      break;
+    case channel_types.SINGLE:
+      // there should be only 2 profiles in the channel. Just load all.
+      for (const profileId of profileIds) {
+        if (
+          profileId !== channel.myProfileId &&
+          !knownProfileIds.includes(profileId)
+        ) {
+          await dispatch(
+            newPendingConnection({
+              channelId,
+              profileId,
+              api,
+            }),
+          );
+        }
+      }
+      // stop polling when 2 profiles are found (own profile and peer profile)
+      stopPolling = profileIds.length >= 2;
       break;
   }
-  if (profileIds.length >= expectedProfiles) {
+
+  if (stopPolling) {
     console.log(
-      `Got expected number of profiles (${expectedProfiles}) for channel ${channel.id}`,
+      `Got expected profiles for channel ${channel.id}. Unsubscribing.`,
     );
     dispatch(unsubscribeFromConnectionRequests(channel.id));
   }

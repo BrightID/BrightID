@@ -3,6 +3,7 @@ import {
   CHANNEL_TTL,
   CHANNEL_INFO_VERSION,
   CHANNEL_INFO_NAME,
+  MIN_CHANNEL_INFO_VERSION,
 } from '@/utils/constants';
 import { channel_states } from '@/components/PendingConnections/channelSlice';
 import ChannelAPI from '@/api/channelService';
@@ -22,8 +23,8 @@ export const generateChannelData = async (
   const timestamp = Date.now();
   const ttl = CHANNEL_TTL;
   const myProfileId = await createRandomId();
+  const initiatorProfileId = myProfileId;
   const type = channelType;
-  const initiatorProfileId = '';
   const state = channel_states.OPEN;
   const channelApi = new ChannelAPI(url.href);
 
@@ -47,7 +48,7 @@ export const createChannelInfo = (channel: Channel) => {
     type: channel.type,
     timestamp: channel.timestamp,
     ttl: channel.ttl,
-    initiatorProfileId: channel.myProfileId,
+    initiatorProfileId: channel.initiatorProfileId,
   };
   return obj;
 };
@@ -83,7 +84,7 @@ export const parseChannelQrURL = async (url: URL) => {
       'client version outdated - please update your client and retry',
     );
     throw new Error(msg);
-  } else if (channelInfo.version < CHANNEL_INFO_VERSION) {
+  } else if (channelInfo.version < MIN_CHANNEL_INFO_VERSION) {
     const msg = i18next.t(
       'channel.alert.text.otherOutdated',
       'other client version outdated - QRCode creator needs to update client and retry',

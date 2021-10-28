@@ -6,31 +6,31 @@ import React, {
   useState,
 } from 'react';
 import {
+  Alert,
+  InteractionManager,
+  StatusBar,
   StyleSheet,
   Text,
-  View,
   TouchableOpacity,
-  Alert,
-  StatusBar,
-  InteractionManager,
   TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ChannelSwitch from '@/components/Helpers/ChannelSwitch';
-import { ORANGE, WHITE, LIGHT_BLACK } from '@/theme/colors';
+import { LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import Camera from '@/components/Icons/Camera';
 import {
   channel_states,
   channel_types,
-  selectChannelById,
   closeChannel,
-  setDisplayChannelType,
   selectAllActiveChannelIdsByType,
+  selectChannelById,
+  setDisplayChannelType,
 } from '@/components/PendingConnections/channelSlice';
 import {
   selectAllPendingConnectionsByChannelIds,
@@ -81,7 +81,7 @@ export const MyCodeScreen = () => {
 
   const [channelErr, setChannelErr] = useState(0);
 
-  // GROUP / SINGLE
+  // GROUP / SINGLE / STAR
   const displayChannelType = useSelector(
     (state: State) => state.channels.displayChannelType,
   );
@@ -157,16 +157,21 @@ export const MyCodeScreen = () => {
       unconfirmedConnectionSize > 0 &&
       myChannel?.state === channel_states.OPEN
     ) {
-      if (displayChannelType === channel_types.SINGLE) {
-        // navigate immediately to pending connections
-        navigation.navigate('PendingConnections');
-        // close channel to prevent navigation loop
-        dispatch(closeChannel({ channelId: myChannel?.id, background: true }));
-      } else if (displayChannelType === channel_types.GROUP) {
-        // navigation.navigate('GroupQr', { channel: myChannel });
-        timer = setTimeout(() => {
+      switch (displayChannelType) {
+        case channel_types.SINGLE:
+          // navigate immediately to pending connections
           navigation.navigate('PendingConnections');
-        }, PENDING_GROUP_TIMEOUT);
+          // close channel to prevent navigation loop
+          dispatch(
+            closeChannel({ channelId: myChannel?.id, background: true }),
+          );
+          break;
+        case channel_types.GROUP:
+        case channel_types.STAR:
+          timer = setTimeout(() => {
+            navigation.navigate('PendingConnections');
+          }, PENDING_GROUP_TIMEOUT);
+          break;
       }
     }
     return () => {
@@ -220,7 +225,11 @@ export const MyCodeScreen = () => {
             })}
           </Text>
         );
-        return myChannel?.type === channel_types.GROUP ? (
+        const group_types: Array<string> = [
+          channel_types.GROUP,
+          channel_types.STAR,
+        ];
+        return group_types.includes(myChannel?.type) ? (
           __DEV__ ? (
             <TouchableWithoutFeedback
               onPress={() => {
@@ -259,6 +268,11 @@ export const MyCodeScreen = () => {
     );
   };
 
+  const setStarChannelType = () => {
+    console.log(`LongPress`);
+    dispatch(setDisplayChannelType(channel_types.STAR));
+  };
+
   const displayOneToOneInfo = () => {
     Alert.alert(
       t('qrcode.alert.title.codeSingle'),
@@ -270,6 +284,16 @@ export const MyCodeScreen = () => {
     Alert.alert(
       t('qrcode.alert.title.codeGroup'),
       t('qrcode.alert.text.codeGroup'),
+    );
+  };
+
+  const displayOneToManyInfo = () => {
+    Alert.alert(
+      t('qrcode.alert.title.codeStar', 'Star code'),
+      t(
+        'qrcode.alert.text.codeStar',
+        'This QR code is designed to connect many people with one person.',
+      ),
     );
   };
 
@@ -286,6 +310,7 @@ export const MyCodeScreen = () => {
           <ChannelSwitch
             onValueChange={toggleChannelType}
             value={displayChannelType === channel_types.SINGLE}
+            onLongPress={setStarChannelType}
             testID="ChannelSwitch"
           />
         </View>
@@ -293,7 +318,7 @@ export const MyCodeScreen = () => {
           <Text style={styles.infoTopText}>
             {t('qrcode.label.connectionType')}{' '}
           </Text>
-          {displayChannelType === channel_types.GROUP ? (
+          {displayChannelType === channel_types.GROUP && (
             <TouchableOpacity
               style={{ flexDirection: 'row' }}
               onPress={displayManyToManyInfo}
@@ -308,7 +333,8 @@ export const MyCodeScreen = () => {
                 color={LIGHT_BLACK}
               />
             </TouchableOpacity>
-          ) : (
+          )}
+          {displayChannelType === channel_types.SINGLE && (
             <TouchableOpacity
               style={{ flexDirection: 'row' }}
               onPress={displayOneToOneInfo}
@@ -316,6 +342,22 @@ export const MyCodeScreen = () => {
             >
               <Text testID="single-use-code" style={styles.infoTopText}>
                 {t('qrcode.text.codeSingle')}
+              </Text>
+              <Material
+                name="information-variant"
+                size={18}
+                color={LIGHT_BLACK}
+              />
+            </TouchableOpacity>
+          )}
+          {displayChannelType === channel_types.STAR && (
+            <TouchableOpacity
+              style={{ flexDirection: 'row' }}
+              onPress={displayOneToManyInfo}
+              testID="ConnectionInfoStarBtn"
+            >
+              <Text testID="star-code" style={styles.infoTopText}>
+                {t('qrcode.text.codeStar', 'Star code')}
               </Text>
               <Material
                 name="information-variant"
