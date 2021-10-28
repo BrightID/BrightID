@@ -87,8 +87,6 @@ export const confirmPendingConnectionThunk = (
   });
 
   // create established connection from pendingConnection
-
-  // TODO: should we be including the connection.aesKey?
   const connectionData: LocalConnectionData = {
     id: connection.brightId,
     name: connection.name,
@@ -105,8 +103,12 @@ export const confirmPendingConnectionThunk = (
   dispatch(addConnection(connectionData));
   dispatch(confirmPendingConnection(connection.id));
 
-  if (channel.type === channel_types.SINGLE) {
-    // Connection is established, so the 1:1 channel can be left
+  // Leave channel if no additional connections are expected
+  if (
+    channel.type === channel_types.SINGLE ||
+    (channel.type === channel_types.STAR &&
+      channel.initiatorProfileId !== channel.myProfileId)
+  ) {
     dispatch(leaveChannel(channel.id));
   }
 
