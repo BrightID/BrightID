@@ -18,7 +18,8 @@ export const RECOVERY_COOLDOWN_EXEMPTION = 24 * 60 * 60 * 1000; // 24 hours
 export const TIME_FUDGE = 60 * 60 * 1000;
 export const PROFILE_VERSION = 1;
 export const CHANNEL_INFO_NAME = 'channelInfo.json';
-export const CHANNEL_INFO_VERSION = 1;
+export const CHANNEL_INFO_VERSION = 2;
+export const MIN_CHANNEL_INFO_VERSION = 1;
 //* * ** THEME CONSTANTS  *** */
 export const ORANGE = '#ED7A5D';
 export const LIGHTBLUE = '#4A90E2';

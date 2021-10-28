@@ -100,12 +100,18 @@ export const ScanCodeScreen = () => {
       pendingConnectionSizeForChannel > 0 &&
       navigation.isFocused()
     ) {
-      if (channel.type === channel_types.SINGLE) {
-        navigation.navigate('PendingConnections');
-        // close single channels to prevent navigation loop
-        dispatch(closeChannel({ channelId: channel.id, background: true }));
-      } else {
-        navigation.navigate('GroupConnection', { channel });
+      switch (channel.type) {
+        case channel_types.SINGLE:
+        case channel_types.STAR:
+          // only one peer connection expected
+          navigation.navigate('PendingConnections');
+          // close single channels to prevent navigation loop
+          dispatch(closeChannel({ channelId: channel.id, background: true }));
+          break;
+        case channel_types.GROUP:
+          // Expect multiple peers, so show group connection screen
+          navigation.navigate('GroupConnection', { channel });
+          break;
       }
     }
   }, [channel, pendingConnectionSizeForChannel, navigation, dispatch]);
