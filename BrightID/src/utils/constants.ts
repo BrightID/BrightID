@@ -17,9 +17,16 @@ export const RECOVERY_COOLDOWN_EXEMPTION = 24 * 60 * 60 * 1000; // 24 hours
 // timestamp can be this far in the future (milliseconds) to accommodate 2 clients clock differences
 export const TIME_FUDGE = 60 * 60 * 1000;
 export const PROFILE_VERSION = 1;
+
+// Channel info
 export const CHANNEL_INFO_NAME = 'channelInfo.json';
-export const CHANNEL_INFO_VERSION = 2;
-export const MIN_CHANNEL_INFO_VERSION = 1;
+export const CHANNEL_INFO_VERSION_1 = 1; // Initial channel info format
+export const CHANNEL_INFO_VERSION_2 = 2; // Adds STAR channel type
+// the oldest channel info format the client understands.
+export const MIN_CHANNEL_INFO_VERSION = CHANNEL_INFO_VERSION_1;
+// the newest channel info format the client understands.
+export const MAX_CHANNEL_INFO_VERSION = CHANNEL_INFO_VERSION_2;
+
 //* * ** THEME CONSTANTS  *** */
 export const ORANGE = '#ED7A5D';
 export const LIGHTBLUE = '#4A90E2';
