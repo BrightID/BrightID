@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ChannelSwitch from '@/components/Helpers/ChannelSwitch';
-import { LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
+import { DARK_GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import Camera from '@/components/Icons/Camera';
@@ -307,12 +307,21 @@ export const MyCodeScreen = () => {
       <View style={styles.orangeTop} />
       <View style={styles.container} testID="MyCodeScreen">
         <View style={styles.infoTopContainer}>
-          <ChannelSwitch
-            onValueChange={toggleChannelType}
-            value={displayChannelType === channel_types.SINGLE}
-            onLongPress={setStarChannelType}
-            testID="ChannelSwitch"
-          />
+          {displayChannelType === channel_types.STAR ? (
+            <TouchableOpacity
+              style={styles.starContainer}
+              onPress={toggleChannelType}
+            >
+              <Material name="star" size={30} color={WHITE} />
+            </TouchableOpacity>
+          ) : (
+            <ChannelSwitch
+              onValueChange={toggleChannelType}
+              value={displayChannelType === channel_types.SINGLE}
+              onLongPress={setStarChannelType}
+              testID="ChannelSwitch"
+            />
+          )}
         </View>
         <View style={styles.infoTopContainer}>
           <Text style={styles.infoTopText}>
@@ -462,6 +471,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: DEVICE_LARGE ? 308 : 244,
+  },
+  starContainer: {
+    flexDirection: 'row',
+    width: DEVICE_LARGE ? 80 : 70,
+    height: DEVICE_LARGE ? 40 : 32,
+    borderRadius: DEVICE_LARGE ? 5 : 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: ORANGE,
+    borderColor: DARK_GREY,
   },
 });
 
