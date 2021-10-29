@@ -538,13 +538,15 @@
       "text": {
         "codeGroup": "This QR code is designed for many people to connect simultaneously.",
         "codeSingle": "This QR code can be used to connect with a single user before it expires.",
+        "codeStar": "This QR code is designed to connect many people with one person.",
         "shareLinkGroup": "Share this link",
         "shareLinkSingle": "Share this link with one friend",
         "universalLink": "Universal Link"
       },
       "title": {
         "codeGroup": "Group code",
-        "codeSingle": "Single-use code"
+        "codeSingle": "Single-use code",
+        "codeStar": "Star code"
       }
     },
     "button": {
@@ -563,6 +565,7 @@
       "canAlso": "Or you can also…",
       "codeGroup": "Group code",
       "codeSingle": "Single-use code",
+      "codeStar": "Star code",
       "confirmConnections": "Confirm Connections",
       "downloadingConnectionData": "Downloading Connection Data",
       "expiresIn": "Expires in:",

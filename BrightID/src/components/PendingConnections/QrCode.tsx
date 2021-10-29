@@ -95,12 +95,12 @@ export const QrCode = ({ channel }) => {
     )}`;
     const clipboardMsg = __DEV__
       ? universalLink
-      : channel?.type === channel_types.GROUP
-      ? t('qrcode.alert.connectGroup', {
+      : channel?.type === channel_types.SINGLE
+      ? t('qrcode.alert.connectSingle', {
           name: myName,
           link: universalLink,
         })
-      : t('qrcode.alert.connectSingle', {
+      : t('qrcode.alert.connectGroup', {
           name: myName,
           link: universalLink,
         });

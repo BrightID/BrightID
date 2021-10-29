@@ -41,6 +41,7 @@ declare global {
     myChannelIds: {
       SINGLE: string;
       GROUP: string;
+      STAR: string;
     };
   };
 

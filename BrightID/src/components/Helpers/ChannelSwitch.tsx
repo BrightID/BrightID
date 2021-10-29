@@ -9,17 +9,10 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DARK_GREY, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
-/**
- * Search Bar in the Groups Screen
- *
- * TODO: Create a shared search component to use in both Connections and Group view
- */
 const X_TRANSFORM = DEVICE_LARGE ? 45 : 40;
 const ANIMATION_DURATION = 150;
 
-const ChannelSwitch = ({ value, onValueChange, testID }) => {
-  // const dispatch = useDispatch();
-
+const ChannelSwitch = ({ value, onValueChange, onLongPress, testID }) => {
   const toggleAnim = useRef(new Animated.Value(value ? 0 : X_TRANSFORM))
     .current;
   const backgroundAnim = useRef(new Animated.Value(value ? 0 : X_TRANSFORM))
@@ -49,7 +42,12 @@ const ChannelSwitch = ({ value, onValueChange, testID }) => {
   console.log('rendering channel switch');
 
   return (
-    <TouchableWithoutFeedback onPress={getPidded} testID={testID}>
+    <TouchableWithoutFeedback
+      onPress={getPidded}
+      testID={testID}
+      onLongPress={onLongPress}
+      delayLongPress={3000}
+    >
       <Animated.View
         style={[
           styles.container,
