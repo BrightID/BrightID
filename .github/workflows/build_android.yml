@@ -5,7 +5,7 @@ jobs:
 
   build_debug_apk:
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     defaults:
       run:
@@ -50,7 +50,7 @@ jobs:
 
   build_staging_apk:
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     defaults:
       run:
@@ -96,7 +96,7 @@ jobs:
 
   build_release_apk:
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     defaults:
       run:
