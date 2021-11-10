@@ -153,6 +153,7 @@ if (stagingPropertiesFile.exists()){
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
+    ndkVersion rootProject.ext.ndkVersion
 
      compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
