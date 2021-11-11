@@ -151,21 +151,23 @@ if (stagingPropertiesFile.exists()){
     stagingProperties.load(new FileInputStream(stagingPropertiesFile))
 }
 
-android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+/**
+ * Architectures to build native code for in debug.
+ */
+def nativeArchitectures = project.getProperties().get("reactNativeDebugArchitectures")
 
-     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+android {
+    ndkVersion rootProject.ext.ndkVersion
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     // Fix "java.lang.UnsatisfiedLinkError: couldn't find DSO to load: libhermes.so" in release builds
     // Found at https://github.com/facebook/react-native/issues/25923#issuecomment-626663209
-    configurations.all {
-      resolutionStrategy {
-        force "com.facebook.soloader:soloader:0.8.2"
-      }
-    }
+    // configurations.all {
+    //   resolutionStrategy {
+    //     force "com.facebook.soloader:soloader:0.8.2"
+    //   }
+    // }
 
     defaultConfig {
         applicationId "org.brightid"
@@ -184,6 +186,11 @@ android {
             storePassword 'android'
             keyAlias 'androiddebugkey'
             keyPassword 'android'
+            if (nativeArchitectures) {
+                ndk {
+                    abiFilters nativeArchitectures.split(',')
+                }
+            }
         }
         staging {
             if (stagingProperties['keyAlias']){
@@ -242,7 +249,7 @@ android {
             def abi = output.getFilter(OutputFile.ABI)
             if (abi != null) {  // null for the universal-debug, universal-release variants
                 output.versionCodeOverride =
-                        versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
+                        defaultConfig.versionCode * 1000 + versionCodes.get(abi)
             }
         }
     }
@@ -267,7 +274,7 @@ dependencies {
     implementation project(':react-native-keychain')
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
-      exclude group:'com.facebook.fbjni'
+        exclude group:'com.facebook.fbjni'
     }
 
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
@@ -294,7 +301,7 @@ dependencies {
 // Run this once to be able to run the application with BUCK
 // puts all compile dependencies into folder libs for BUCK to use
 task copyDownloadableDepsToLibs(type: Copy) {
-    from configurations.compile
+    from configurations.implementation
     into 'libs'
 }
 
