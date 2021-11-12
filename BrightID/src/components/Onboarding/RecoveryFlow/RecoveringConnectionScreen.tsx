@@ -19,7 +19,9 @@ const getItemLayout = (data, index) => ({
 });
 
 const RecoveringConnectionScreen = () => {
-  const connections = useSelector(connectionsSelector);
+  const connections = useSelector((state) =>
+    connectionsSelector(state, undefined),
+  );
   const { t } = useTranslation();
   const [uploadingData, setUploadingData] = useState(false);
 
