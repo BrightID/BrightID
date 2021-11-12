@@ -13,14 +13,16 @@ export const connectionsSelector = createSelector(
     searchParamSelector,
     filtersSelector,
     connSortSelector,
+    (_: State, excluded: string[] | undefined) => excluded,
   ],
-  (connections, searchParam, filters, connectionsSort) => {
+  (connections, searchParam, filters, connectionsSort, excluded) => {
     const searchString = toSearchString(searchParam);
     return connections
       .filter(
         (conn) =>
           toSearchString(`${conn?.name}`).includes(searchString) &&
-          filters.includes(conn?.level),
+          filters.includes(conn?.level) &&
+          !excluded?.includes(conn.id),
       )
       .sort(sortConnectionsBy(connectionsSort));
   },
