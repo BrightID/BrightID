@@ -103,17 +103,19 @@ export class NodeApi {
     const message = stringify(op);
     console.log(`Connect message: ${message}`);
     op.sig1 = uInt8ArrayToB64(nacl.sign.detached(strToUint8Array(message), sk));
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
-  async createGroup(
-    groupId: string,
-    url: string,
-    type: string,
-  ) {
+  async createGroup(groupId: string, url: string, type: string) {
     this.requiresCredentials();
     const name = 'Add Group';
     const timestamp = Date.now();
@@ -132,9 +134,15 @@ export class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
@@ -156,9 +164,15 @@ export class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
@@ -181,9 +195,15 @@ export class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
@@ -206,9 +226,15 @@ export class NodeApi {
       nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
 
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
@@ -229,9 +255,15 @@ export class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
@@ -262,9 +294,15 @@ export class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
@@ -285,9 +323,15 @@ export class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
@@ -313,9 +357,15 @@ export class NodeApi {
     op.id2 = params.id2;
     op.sig1 = params.sig1;
     op.sig2 = params.sig2;
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
@@ -343,14 +393,15 @@ export class NodeApi {
     });
     const res = await api.post<OperationPostRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
   async getGroup(id: string) {
-    const res = await this.api.get<GroupRes, ErrRes>(
-      `/groups/${id}`,
-    );
+    const res = await this.api.get<GroupRes, ErrRes>(`/groups/${id}`);
     NodeApi.throwOnError(res);
     return (res.data as GroupRes).data;
   }
