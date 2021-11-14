@@ -30,7 +30,7 @@ type LocalConnectionData = {
   incomingLevel?: ConnectionLevel;
   notificationToken?: string;
   publicKey?: string;
-  secretKey?: Uint8Array;
+  secretKey?: any;
   reportReason?: string;
   verifications: Verification[];
 };
