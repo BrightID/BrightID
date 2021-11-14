@@ -137,5 +137,6 @@ type SponsorOp = {
   app: string;
   timestamp: number;
   v: number;
-  sig: string;
+  sig?: string;
+  hash?: string;
 };

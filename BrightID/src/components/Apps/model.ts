@@ -60,7 +60,7 @@ const linkContextId = async (
   // Create temporary NodeAPI object, since only the node at the specified baseUrl knows about this context
   const { id } = store.getState().user;
   const { secretKey } = store.getState().keypair;
-  const api = new NodeApi({ url: baseUrl, id, secretKey, v: 5 });
+  const api = new NodeApi({ url: baseUrl, id, secretKey });
   try {
     const op = await api.linkContextId(context, contextId);
     op.api = api;
@@ -88,7 +88,7 @@ const sponsorAndlinkAppId = async (
   app: string,
   appId: string,
   setSponsoringApp,
-  api: NodeApi
+  api: NodeApi,
 ) => {
   const {
     apps: { apps },
@@ -97,7 +97,7 @@ const sponsorAndlinkAppId = async (
   if (isSponsored) {
     return linkAppId(app, appId);
   }
-  const appInfo = find(propEq('id', app))(apps);
+  const appInfo = find(propEq('id', app))(apps) as AppInfo;
   setSponsoringApp(appInfo);
   const network = __DEV__ ? 'test' : 'node';
   const baseUrl = appInfo.nodeUrl || `http://${network}.brightid.org`;
@@ -106,12 +106,12 @@ const sponsorAndlinkAppId = async (
   const channelId = appId;
   console.log('channelId', channelId);
   const timestamp = Date.now();
-  const op = {
+  const op: SponsorOp = {
     name: 'Sponsor',
     id,
     app,
     timestamp,
-    v: 6
+    v: 6,
   };
   const message = stringify(op);
   const { n, e } = JSON.parse(appInfo.sponsorPublicKey);
@@ -165,9 +165,9 @@ const linkAppId = async (
   const {
     apps: { apps },
     user: { id },
-    keypair: { secretKey }
+    keypair: { secretKey },
   } = store.getState();
-  const appInfo = find(propEq('id', app))(apps);
+  const appInfo = find(propEq('id', app))(apps) as AppInfo;
   const vel = appInfo.verificationExpirationLength;
   const roundedTimestamp = vel ? parseInt(Date.now() / vel) * vel : 0;
 
@@ -180,9 +180,9 @@ const linkAppId = async (
       i18next.t('apps.alert.title.linkingFailed'),
       i18next.t('apps.alert.text.blindSigNotFound', { app: app }),
       [{
-        text: i18next.t('common.alert.dismiss'),
-        style: 'cancel',
-        onPress: () => null,
+          text: i18next.t('common.alert.dismiss'),
+          style: 'cancel',
+          onPress: () => null,
       }]
     );
     return;

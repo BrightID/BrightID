@@ -15,7 +15,11 @@ import Spinner from 'react-native-spinkit';
 import { ORANGE, BLUE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { any, propEq, find } from 'ramda';
-import { fetchApps, selectAllApps, selectPendingLinkedContext } from '@/actions';
+import {
+  fetchApps,
+  selectAllApps,
+  selectPendingLinkedContext,
+} from '@/actions';
 import {
   useFocusEffect,
   useNavigation,
@@ -75,7 +79,7 @@ export const AppsScreen = () => {
 
   const handleAppDeepLink = useCallback(() => {
     const app = route.params?.context;
-    const appInfo = find(propEq('id', app))(apps);
+    const appInfo = find(propEq('id', app))(apps) as AppInfo;
     if (appInfo && appInfo.usingBlindSig) {
       handleBlindSigApp(route.params, setSponsoringApp, api);
     } else {
@@ -89,7 +93,7 @@ export const AppsScreen = () => {
       context: '',
       contextId: '',
     });
-  }, [navigation, route.params, apps, t]);
+  }, [route.params, apps, navigation, api, t]);
 
   useEffect(() => {
     if (apps.length > 0 && route.params?.baseUrl) {

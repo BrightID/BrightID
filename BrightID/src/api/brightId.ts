@@ -478,16 +478,18 @@ export class NodeApi {
 
   async getPublic(app: string, roundedTimestamp: number, verification: string) {
     console.log(15, app, roundedTimestamp, verification);
-    const res = await this.api.get<PublicRes, ErrRes>(`/verifications/blinded/public`,
-      { app, roundedTimestamp, verification }
+    const res = await this.api.get<PublicRes, ErrRes>(
+      `/verifications/blinded/public`,
+      { app, roundedTimestamp, verification },
     );
     NodeApi.throwOnError(res);
     return (res.data as PublicRes).data.public;
   }
 
   async getBlindedSig(pub: string, sig: string, e: string) {
-    const res = await this.api.get<BlindSigRes, ErrRes>(`/verifications/blinded/sig/${this.id}`,
-      { public: pub, sig, e }
+    const res = await this.api.get<BlindSigRes, ErrRes>(
+      `/verifications/blinded/sig/${this.id}`,
+      { public: pub, sig, e },
     );
     NodeApi.throwOnError(res);
     return (res.data as BlindSigRes).data.response;
@@ -499,17 +501,19 @@ export class NodeApi {
       sig: sig.sig,
       uid: sig.uid,
       verification: sig.verification,
-      roundedTimestamp: sig.roundedTimestamp
+      roundedTimestamp: sig.roundedTimestamp,
     });
-    const res = await this.api.post<ErrRes>(`/verifications/${sig.app}/${appId}`, {
-      sig: sig.sig,
-      uid: sig.uid,
-      verification: sig.verification,
-      roundedTimestamp: sig.roundedTimestamp
-    });
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/verifications/${sig.app}/${appId}`,
+      {
+        sig: sig.sig,
+        uid: sig.uid,
+        verification: sig.verification,
+        roundedTimestamp: sig.roundedTimestamp,
+      },
+    );
 
     NodeApi.throwOnError(res);
-    return;
   }
 
   async sponsor(op: SponsorOp) {
@@ -521,6 +525,4 @@ export class NodeApi {
     op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
     return op;
   }
-
-
 }

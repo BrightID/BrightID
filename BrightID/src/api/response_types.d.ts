@@ -5,8 +5,11 @@
 type NodeApiRes =
   | AppRes
   | AppsRes
+  | BlindSigRes
   | OperationPostRes
   | OperationRes
+  | PublicRes
+  | StateRes
   | UserConnectionsRes
   | UserProfileRes
   | UserVerificationsRes
@@ -116,8 +119,8 @@ type AppInfo = {
   testing: boolean;
   idsAsHex: boolean;
   usingBlindSig: boolean;
-  verificationExpirationLength?: number,
-  sponsorPublicKey?: string,
+  verificationExpirationLength?: number;
+  sponsorPublicKey?: string;
   nodeUrl?: string;
 };
 
