@@ -23,6 +23,7 @@
     android:usesCleartextTraffic="true"
     android:hasFragileUserData="true"
     android:largeHeap="true"
+    android:networkSecurityConfig="@xml/network_security_config"
   >
 
     <!-- Change the value to true to enable pop-up for in foreground (remote-only, for local use ignoreInForeground) -->
