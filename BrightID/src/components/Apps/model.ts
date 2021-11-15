@@ -169,7 +169,7 @@ const linkAppId = async (
   } = store.getState();
   const appInfo = find(propEq('id', app))(apps) as AppInfo;
   const vel = appInfo.verificationExpirationLength;
-  const roundedTimestamp = vel ? parseInt(Date.now() / vel) * vel : 0;
+  const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
 
   let sigs = selectAllSigs(store.getState())
     .filter(sig => sig.app === app)

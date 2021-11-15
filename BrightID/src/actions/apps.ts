@@ -45,7 +45,7 @@ export const updateBlindSigs = (api) => async (
   apps = apps.filter((app) => app.usingBlindSig);
   for (const app of apps) {
     const vel = app.verificationExpirationLength;
-    const roundedTimestamp = vel ? parseInt(Date.now() / vel) * vel : 0;
+    const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
     for (const verification of app.verifications) {
       const sigInfo = sigs.find(
         (sig) => sig.app == app.id && sig.verification == verification,
