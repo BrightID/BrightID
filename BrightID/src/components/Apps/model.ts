@@ -8,8 +8,8 @@ import { NodeApi } from '@/api/brightId';
 import ChannelAPI from '@/api/channelService';
 import { selectAllSigs } from '@/reducer/appsSlice';
 import { hash } from '@/utils/encoding';
-import BlindSignature from '@/utils/rsablind';
 import { BigInteger } from "jsbn";
+import { blind, unblind } from '@/utils/rsablind';
 
 export const handleAppContext = async (params: Params) => {
   // if 'params' is defined, the user came through a deep link
@@ -116,7 +116,7 @@ const sponsorAndlinkAppId = async (
   const message = stringify(op);
   const { n, e } = JSON.parse(appInfo.sponsorPublicKey);
   console.log(n, e, 'sponsorPublicKey');
-  const { blinded, r } = BlindSignature.blind({ message, N: n, E: e });
+  const { blinded, r } = blind({ message, N: n, E: e });
   await channelApi.upload({
     channelId,
     data: blinded.toString(),
@@ -135,7 +135,7 @@ const sponsorAndlinkAppId = async (
   });
   console.log('sig', signed);
   signed = new BigInteger(signed);
-  const unblinded = BlindSignature.unblind({ signed, N: n, r });
+  const unblinded = unblind({ signed, N: n, r });
   op.sig = unblinded.toString();
   try {
     const res = await api.sponsor(op);
