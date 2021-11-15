@@ -36,6 +36,19 @@ declare global {
     state: string;
   };
 
+  type SigInfo = {
+    sig: {
+      rho: string,
+      omega: string,
+      sigma: string,
+      delta: string
+    };
+    app: string;
+    roundedTimestamp: number;
+    verification: string;
+    uid: string;
+  }
+
   type DisplayChannel = {
     displayChannelType: ChannelType;
     myChannelIds: {
@@ -77,9 +90,6 @@ declare global {
   type Photo = {
     filename: string;
   };
-
-  // TODO: extract DEV properties to separate type and join them conditionally depending on __DEV__
-  // RESPONSE: this should not matter because we cannot type check the compiled code in release mode
 
   type ConnectionLevel = ValueOf<typeof connection_levels>;
 
