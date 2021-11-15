@@ -518,11 +518,11 @@ export class NodeApi {
 
   async sponsor(op: SponsorOp) {
     this.requiresCredentials();
-    const res = await this.api.post<OperationRes, ErrRes>(`/operations`, op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
     delete op.sig;
     const message = stringify(op);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationRes>, message);
+    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
     return op;
   }
 }
