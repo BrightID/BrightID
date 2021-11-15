@@ -12,8 +12,6 @@ target 'BrightID' do
     :hermes_enabled => false
   )
 
-   pod 'AppCenter', '~> 3.3.4'
-
   target 'BrightIDTests' do
     inherit! :complete
     # Pods for testing
