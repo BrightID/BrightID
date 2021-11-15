@@ -137,12 +137,7 @@ export const selectPendingLinkedContext = createSelector(
   (contexts) => contexts.find((link) => link.state === 'pending'),
 );
 
-// exclude apps using blind signature feature
-// TODO: Return all apps when we are ready to handle blind signatures
-export const selectAllApps = createDeepEqualSelector(
-  (state: State) => state.apps.apps,
-  (apps) => apps.filter((app) => !app.usingBlindSig),
-);
+export const selectAllApps = ((state: State) => state.apps.apps);
 
 // Export reducer
 export default appsSlice.reducer;
