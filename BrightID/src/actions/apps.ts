@@ -8,7 +8,7 @@ import {
   addSig,
   selectAllSigs,
 } from '@/reducer/appsSlice';
-import WISchnorrClient from '@/utils/WISchnorrClient';
+const WISchnorrClient = require('@/utils/WISchnorrClient');
 import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 import { NodeApi } from '@/api/brightId';
 
