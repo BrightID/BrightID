@@ -88,7 +88,7 @@ export const updateBlindSigs = (api) => async (
         console.log(info, 'info');
         const s = stringify({ id, public: pub });
         const sig = uInt8ArrayToB64(
-          Object.values(nacl.sign.detached(strToUint8Array(s), secretKey)),
+          nacl.sign.detached(strToUint8Array(s), secretKey)
         );
 
         const response = await api.getBlindedSig(

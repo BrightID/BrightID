@@ -1,5 +1,5 @@
-/** 
-	-- WISchnorrClient.js -- 
+/**
+	-- WISchnorrClient.js --
 	Author : Christof Torres <christof.ferreira.001@student.uni.lu>
 	Date   : September 2016
 **/
@@ -48,7 +48,7 @@ WISchnorrClient.prototype.GenerateWISchnorrClientChallenge = function(params, in
 	// alpha = a * g^t1 * y^t2
 	var a = new BigInteger(params.a);
 	var alpha = a.multiply(this.g.modPow(t1, this.p)).multiply(this.y.modPow(t2, this.p)).mod(this.p);
-	
+
 	// beta = b * g^t3 * z^t4
 	var b = new BigInteger(params.b);
 	var beta = b.multiply(this.g.modPow(t3, this.p)).multiply(z.modPow(t4, this.p)).mod(this.p);
@@ -68,15 +68,15 @@ WISchnorrClient.prototype.GenerateWISchnorrBlindSignature = function(challenge, 
 	// rho = r + t1 mod q
 	var r = new BigInteger(response.r);
 	var rho = r.add(challenge.t1).mod(this.q);
-	
-	// omega = c + t2 mod q 
+
+	// omega = c + t2 mod q
 	var c = new BigInteger(response.c);
 	var omega = c.add(challenge.t2).mod(this.q);
-	
+
 	// sigma = s + t3 mod q
 	var s = new BigInteger(response.s);
 	var sigma = s.add(challenge.t3).mod(this.q);
-	
+
 	// delta = d + t4 mod q
 	var d = new BigInteger(response.d);
 	var delta = d.add(challenge.t4).mod(this.q);
@@ -95,7 +95,7 @@ WISchnorrClient.prototype.VerifyWISchnorrBlindSignature = function(signature, in
 	});
 	z = new BigInteger(z, 16);
 	// var z = F.modPow(this.p.subtract(new BigInteger("1")).divide(this.q), this.p);
-	
+
 	// g^rho mod p
 	var gp = this.g.modPow(new BigInteger(signature.rho), this.p);
 	// y^omega mod p
