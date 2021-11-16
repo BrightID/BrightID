@@ -38,12 +38,18 @@ WISchnorrClient.prototype.GenerateWISchnorrClientChallenge = function(params, in
 
 	var F = sha256(info);
 	// z = F^((p-1)/q) mod p
-	var z = modPow({
-		target: F.toString(16),
-		value: this.p.subtract(new BigInteger("1")).divide(this.q).toString(16),
-		modifier: this.p.toString(16)
-	});
-	z = new BigInteger(z, 16);
+	var z;
+	if (__DEV__) {
+		console.log(`Using js implementation of modPow`)
+		z = F.modPow(this.p.subtract(new BigInteger("1")).divide(this.q), this.p);
+	} else {
+		z = modPow({
+			target: F.toString(16),
+			value: this.p.subtract(new BigInteger("1")).divide(this.q).toString(16),
+			modifier: this.p.toString(16)
+		});
+		z = new BigInteger(z, 16);
+	}
 	// var z = F.modPow(this.p.subtract(new BigInteger("1")).divide(this.q), this.p);
 	// alpha = a * g^t1 * y^t2
 	var a = new BigInteger(params.a);
@@ -88,12 +94,18 @@ WISchnorrClient.prototype.GenerateWISchnorrBlindSignature = function(challenge, 
 WISchnorrClient.prototype.VerifyWISchnorrBlindSignature = function(signature, info, msg) {
 	var F = sha256(info);
 	// z = F^((p-1)/q) mod p
-	var z = modPow({
-		target: F.toString(16),
-		value: this.p.subtract(new BigInteger("1")).divide(this.q).toString(16),
-		modifier: this.p.toString(16)
-	});
-	z = new BigInteger(z, 16);
+	var z;
+	if (__DEV__) {
+		console.log(`Using js implementation of modPow`)
+		z = F.modPow(this.p.subtract(new BigInteger("1")).divide(this.q), this.p);
+	} else {
+		z = modPow({
+			target: F.toString(16),
+			value: this.p.subtract(new BigInteger("1")).divide(this.q).toString(16),
+			modifier: this.p.toString(16)
+		});
+		z = new BigInteger(z, 16);
+	}
 	// var z = F.modPow(this.p.subtract(new BigInteger("1")).divide(this.q), this.p);
 
 	// g^rho mod p
