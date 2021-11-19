@@ -10,6 +10,7 @@ import {
 } from '@/actions';
 import { OPERATION_APPLIED_BEFORE } from '@/api/brightidError';
 import { NodeApi } from '@/api/brightId';
+import fetchUserInfo from '@/actions/fetchUserInfo';
 import { fetchBackupData } from './backupThunks';
 import {
   init,
@@ -17,7 +18,6 @@ import {
   resetRecoverySigs,
   updateNamePhoto,
 } from '../recoveryDataSlice';
-import fetchUserInfo from '@/actions/fetchUserInfo';
 
 // HELPERS
 
@@ -61,10 +61,11 @@ export const socialRecovery = (api: NodeApi) => async (
       sig2: sigs[1].sig,
     });
     dispatch(addOperation(op));
+    return op.hash;
   } catch (err) {
     if (err.errorNum === OPERATION_APPLIED_BEFORE) {
       console.log(
-        `Socail Recovery operation already applied. Ignoring this error.`,
+        `Social Recovery operation already applied. Ignoring this error.`,
       );
       return;
     }
@@ -101,12 +102,10 @@ export const restoreUserData = async (id: string, pass: string) => {
   return { userData, connections, groups };
 };
 
-export const recoverAccount = (api: NodeApi) => async (
+export const setRecoveryKeys = () => (
   dispatch: dispatch,
   getState: getState,
 ) => {
-  // set new signing key on the backend
-  await dispatch(socialRecovery(api));
   const { publicKey, secretKey } = getState().recoveryData;
   dispatch(setKeypair({ publicKey, secretKey }));
 };
