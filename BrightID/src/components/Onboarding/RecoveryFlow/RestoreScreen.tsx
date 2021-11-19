@@ -20,6 +20,9 @@ import { CHANNEL_POLL_INTERVAL, clearChannel } from './thunks/channelThunks';
 // clear channel after this time
 const channelTimeout = CHANNEL_POLL_INTERVAL * 3.1;
 
+// max time to wait for operation being applied
+const applyTimeout = 1000 * 60; // 1 minute
+
 export enum AccountSteps {
   WAITING_DOWNLOAD,
   DOWNLOAD_COMPLETE,
@@ -140,28 +143,37 @@ const RestoreScreen = () => {
       recoveryOpHash !== '' &&
       accountStep === AccountSteps.WAITING_OPERATION
     ) {
+      const startTime = Date.now();
       const timerId = setInterval(async () => {
-        const { state } = await api.getOperationState(recoveryOpHash);
-        console.log(`recover Op state: ${state}`);
-        switch (state) {
-          case 'unknown':
-          case 'init':
-          case 'sent':
-            // op being processed. do nothing.
-            break;
-          case 'applied':
-            setAccountStep(AccountSteps.OPERATION_APPLIED);
-            setRecoveryOpHash('');
-            break;
-          case 'failed':
-            setAccountStep(AccountSteps.ERROR);
-            setAccountError('Operation could not be applied');
-            setRecoveryOpHash('');
-            break;
-          default:
-            setAccountStep(AccountSteps.ERROR);
-            setAccountError('Unhandled operation state');
-            setRecoveryOpHash('');
+        const timeElapsed = Date.now() - startTime;
+        if (timeElapsed > applyTimeout) {
+          // operation did not get applied within time window. Abort and show error.
+          setAccountStep(AccountSteps.ERROR);
+          setAccountError('Operation timed out');
+          setRecoveryOpHash('');
+        } else {
+          const { state } = await api.getOperationState(recoveryOpHash);
+          console.log(`recover Op state: ${state}`);
+          switch (state) {
+            case 'unknown':
+            case 'init':
+            case 'sent':
+              // op being processed. do nothing.
+              break;
+            case 'applied':
+              setAccountStep(AccountSteps.OPERATION_APPLIED);
+              setRecoveryOpHash('');
+              break;
+            case 'failed':
+              setAccountStep(AccountSteps.ERROR);
+              setAccountError('Operation could not be applied');
+              setRecoveryOpHash('');
+              break;
+            default:
+              setAccountStep(AccountSteps.ERROR);
+              setAccountError('Unhandled operation state');
+              setRecoveryOpHash('');
+          }
         }
       }, 5000);
       console.log(`Start polling recoveryOp timer ${timerId}`);
