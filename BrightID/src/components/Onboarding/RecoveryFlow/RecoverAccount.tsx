@@ -39,7 +39,8 @@ export const RecoverAccount = ({
           ),
         );
         break;
-      case AccountSteps.RECOVERING_ACCOUNT:
+      case AccountSteps.WAITING_OPERATION:
+      case AccountSteps.OPERATION_APPLIED:
         setIconData(undefined);
         setStateDescription(
           t('recovery.steps.recovering', 'Recovering account...'),
