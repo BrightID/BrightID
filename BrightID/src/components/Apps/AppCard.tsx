@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   Image,
@@ -12,9 +12,18 @@ import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { WHITE, DARKER_GREY, BLACK, BLUE, ORANGE } from '@/theme/colors';
+import {
+  WHITE,
+  DARKER_GREY,
+  BLACK,
+  BLUE,
+  ORANGE,
+  YELLOW,
+} from '@/theme/colors';
 import { updateLinkedContext, selectLinkedContext } from '@/actions';
 
+import { isVerified } from '@/utils/verifications';
+import _ from 'lodash';
 import Check from '../Icons/Check';
 
 /**
@@ -35,12 +44,13 @@ const AppCard = (props: AppInfo) => {
     unusedSponsorships,
     context,
     testing,
-    verifications,
+    verifications: appVerifications,
   } = props;
   const dispatch = useDispatch();
   const userVerifications = useSelector(
     (state: State) => state.user.verifications,
   );
+  const [verifiedCount, setVerifiedCount] = useState(0);
 
   // Make sure each instance of AppCard has it's own selector. Otherwise they would
   // invalidate each others cache. See https://react-redux.js.org/next/api/hooks#using-memoizing-selectors
@@ -51,10 +61,24 @@ const AppCard = (props: AppInfo) => {
 
   const { t } = useTranslation();
 
-  // does user have all required verifications for this app?
-  const verified = verifications
-    ? verifications.every((v) => userVerifications.some((uv) => uv.name === v))
-    : false;
+  // Get verifications user has for this app
+  useEffect(() => {
+    let count = 0;
+    for (const verification of appVerifications) {
+      const verified = isVerified(
+        _.keyBy(userVerifications, (v) => v.name),
+        verification,
+      );
+      if (verified) {
+        console.log(`$name: verified for ${verification}`);
+        count++;
+      } else {
+        console.log(`${name}: not verified for ${verification}`);
+      }
+    }
+    setVerifiedCount(count);
+  }, [appVerifications, name, userVerifications]);
+
   const isLinked = linkedContext && linkedContext.state === 'applied';
   const notSponsored = unusedSponsorships < 1 || !unusedSponsorships;
 
@@ -115,16 +139,28 @@ const AppCard = (props: AppInfo) => {
   };
 
   const VerifiedLabel = () => {
-    if (verified) {
+    if (verifiedCount === appVerifications.length) {
       return (
         <View style={styles.verifiedContainer}>
           <Text style={styles.verifiedLabel}>verified</Text>
         </View>
       );
+    } else if (verifiedCount > 0) {
+      // partly verified
+      return (
+        <View style={styles.partVerifiedContainer}>
+          <Text style={styles.partVerifiedLabel}>
+            partly verified ({`${verifiedCount}/${appVerifications.length}`})
+          </Text>
+        </View>
+      );
     } else {
+      // no verification
       return (
         <View style={styles.unverifiedContainer}>
-          <Text style={styles.unverifiedLabel}>unverified</Text>
+          <Text style={styles.unverifiedLabel}>
+            unverified ({`${verifiedCount}/${appVerifications.length}`})
+          </Text>
         </View>
       );
     }
@@ -280,6 +316,19 @@ const styles = StyleSheet.create({
     marginHorizontal: DEVICE_LARGE ? 9 : 7.5,
     marginVertical: DEVICE_LARGE ? 1.3 : 1.1,
     color: DARKER_GREY,
+  },
+  partVerifiedContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: YELLOW,
+    borderRadius: 10,
+  },
+  partVerifiedLabel: {
+    fontSize: fontSize[10],
+    marginHorizontal: DEVICE_LARGE ? 9 : 7.5,
+    marginVertical: DEVICE_LARGE ? 1.3 : 1.1,
+    color: YELLOW,
   },
   verifiedContainer: {
     alignItems: 'center',
