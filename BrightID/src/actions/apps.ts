@@ -1,31 +1,13 @@
 import _ from 'lodash';
 import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
-import { Parser } from 'expr-eval';
 import stringify from 'fast-json-stable-stringify';
-import {
-  setApps,
-  addSig,
-  selectAllSigs,
-} from '@/reducer/appsSlice';
-const WISchnorrClient = require('@/utils/WISchnorrClient');
+import { setApps, addSig, selectAllSigs } from '@/reducer/appsSlice';
 import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 import { NodeApi } from '@/api/brightId';
+import { isVerified } from '@/utils/verifications';
 
-function isVerified(verifications, verification) {
-  try {
-    const expr = Parser.parse(verification);
-    for (const v of expr.variables()) {
-      if (!verifications[v]) {
-        verifications[v] = false;
-      }
-    }
-    return expr.evaluate(verifications);
-  } catch (err) {
-    console.log(`verification ${verification} can not be evaluated.`, err);
-    return false;
-  }
-}
+const WISchnorrClient = require('@/utils/WISchnorrClient');
 
 export const updateBlindSigs = (api) => async (
   dispatch: dispatch,
@@ -88,7 +70,7 @@ export const updateBlindSigs = (api) => async (
         console.log(info, 'info');
         const s = stringify({ id, public: pub });
         const sig = uInt8ArrayToB64(
-          nacl.sign.detached(strToUint8Array(s), secretKey)
+          nacl.sign.detached(strToUint8Array(s), secretKey),
         );
 
         const response = await api.getBlindedSig(
