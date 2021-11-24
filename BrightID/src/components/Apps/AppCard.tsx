@@ -70,10 +70,10 @@ const AppCard = (props: AppInfo) => {
         verification,
       );
       if (verified) {
-        console.log(`$name: verified for ${verification}`);
+        // console.log(`${name}: verified for ${verification}`);
         count++;
       } else {
-        console.log(`${name}: not verified for ${verification}`);
+        // console.log(`${name}: not verified for ${verification}`);
       }
     }
     setVerifiedCount(count);
