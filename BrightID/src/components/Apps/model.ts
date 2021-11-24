@@ -10,6 +10,7 @@ import { selectAllSigs } from '@/reducer/appsSlice';
 import { hash, randomKey } from '@/utils/encoding';
 import { BigInteger } from 'jsbn';
 import { blind, unblind } from '@/utils/rsablind';
+import BrightidError, { DUPLICATE_UID_ERROR } from '@/api/brightidError';
 
 // max time to wait for app to respond to sponsoring request
 const sponsorTimeout = 1000 * 30; // 30 seconds
@@ -254,14 +255,24 @@ const linkAppId = async (appId: string, appUserId: string) => {
       const res = await api.linkAppId(sig, appUserId);
     } catch (e) {
       console.log(e);
-      Alert.alert(i18next.t('apps.alert.title.linkingFailed'), `${e.message}`, [
-        {
-          text: i18next.t('common.alert.dismiss'),
-          style: 'cancel',
-          onPress: () => null,
-        },
-      ]);
-      return;
+      if (e instanceof BrightidError && e.errorNum === DUPLICATE_UID_ERROR) {
+        // this user is already linked with the app. Can happen if app state is out of sync with
+        // backend. Ignore and continue.
+        console.log(`Ignoring DUPLICATE_UID_ERROR - already linked.`);
+      } else {
+        Alert.alert(
+          i18next.t('apps.alert.title.linkingFailed'),
+          `${e.message}`,
+          [
+            {
+              text: i18next.t('common.alert.dismiss'),
+              style: 'cancel',
+              onPress: () => null,
+            },
+          ],
+        );
+        return;
+      }
     }
     Alert.alert(
       i18next.t('apps.alert.title.linkSuccess'),
