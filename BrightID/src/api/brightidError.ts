@@ -42,6 +42,23 @@ export const SPONSORED_BEFORE = 39;
 export const SPONSOR_NOT_SUPPORTED = 40;
 export const NOT_ADMIN = 41;
 export const ARANGO_ERROR = 42;
+export const INELIGIBLE_RECOVERY_CONNECTION = 43;
+export const WISCHNORR_PASSWORD_NOT_SET = 45;
+export const INVALID_ROUNDED_TIMESTAMP = 46;
+export const DUPLICATE_SIG_REQUEST_ERROR = 47;
+export const HEAD_ALREADY_IS_FAMILY_MEMBER = 48;
+export const ALREADY_IS_FAMILY_MEMBER = 49;
+export const INELIGIBLE_FAMILY_MEMBER = 50;
+export const NOT_FAMILY = 51;
+export const INELIGIBLE_TO_VOUCH = 52;
+export const INELIGIBLE_TO_VOUCH_FOR = 53;
+export const INELIGIBLE_FAMILY_HEAD = 54;
+export const NOT_HEAD = 55;
+export const DUPLICATE_UID_ERROR = 56;
+export const DUPLICATE_SIGNERS = 57;
+export const WAIT_FOR_COOLDOWN = 58;
+export const UNACCEPTABLE_VERIFICATION = 59;
+export const ALREADY_IS_FAMILY = 60;
 
 class BrightidError extends Error {
   errorNum: number;
