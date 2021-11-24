@@ -7,9 +7,14 @@ import i18next from 'i18next';
 import { NodeApi } from '@/api/brightId';
 import ChannelAPI from '@/api/channelService';
 import { selectAllSigs } from '@/reducer/appsSlice';
-import { hash } from '@/utils/encoding';
-import { BigInteger } from "jsbn";
+import { hash, randomKey } from '@/utils/encoding';
+import { BigInteger } from 'jsbn';
 import { blind, unblind } from '@/utils/rsablind';
+
+// max time to wait for app to respond to sponsoring request
+const sponsorTimeout = 1000 * 30; // 30 seconds
+// Interval to poll for sponsor op
+const sponsorPollInterval = 3000; // 3 seconds
 
 export const handleAppContext = async (params: Params) => {
   // if 'params' is defined, the user came through a deep link
@@ -32,16 +37,20 @@ export const handleAppContext = async (params: Params) => {
   );
 };
 
-export const handleBlindSigApp = async (params: Params, setSponsoringApp, api) => {
-  // if 'params' is defined, the user came through a deep link
-  const { context: app, contextId: appId } = params;
+export const handleBlindSigApp = async (
+  params: Params,
+  setSponsoringApp,
+  api,
+) => {
+  const { context: appId, contextId: appUserId } = params;
   Alert.alert(
     i18next.t('apps.alert.title.linkApp'),
-    i18next.t('apps.alert.text.linkApp', { context: `${app}` }),
+    i18next.t('apps.alert.text.linkApp', { context: `${appId}` }),
     [
       {
         text: i18next.t('common.alert.yes'),
-        onPress: () => sponsorAndlinkAppId(app, appId, setSponsoringApp, api),
+        onPress: () =>
+          sponsorAndlinkAppId(appId, appUserId, setSponsoringApp, api),
       },
       {
         text: i18next.t('common.alert.no'),
@@ -85,8 +94,8 @@ const linkContextId = async (
 };
 
 const sponsorAndlinkAppId = async (
-  app: string,
   appId: string,
+  appUserId: string,
   setSponsoringApp,
   api: NodeApi,
 ) => {
@@ -95,21 +104,22 @@ const sponsorAndlinkAppId = async (
     user: { id, isSponsored },
   } = store.getState();
   if (isSponsored) {
-    return linkAppId(app, appId);
+    return linkAppId(appId, appUserId);
   }
-  const appInfo = find(propEq('id', app))(apps) as AppInfo;
+
+  // Upload blinded sponsor request
+  const appInfo = find(propEq('id', appId))(apps) as AppInfo;
   setSponsoringApp(appInfo);
   const network = __DEV__ ? 'test' : 'node';
   const baseUrl = appInfo.nodeUrl || `http://${network}.brightid.org`;
   const url = new URL(`${baseUrl}/profile`);
   const channelApi = new ChannelAPI(url.href);
-  const channelId = appId;
-  console.log('channelId', channelId);
+  const channelId = appUserId;
   const timestamp = Date.now();
   const op: SponsorOp = {
     name: 'Sponsor',
     id,
-    app,
+    app: appId,
     timestamp,
     v: 6,
   };
@@ -117,29 +127,16 @@ const sponsorAndlinkAppId = async (
   const { n, e } = JSON.parse(appInfo.sponsorPublicKey);
   console.log(n, e, 'sponsorPublicKey');
   const { blinded, r } = blind({ message, N: n, E: e });
-  await channelApi.upload({
-    channelId,
-    data: blinded.toString(),
-    dataId: 'blindedBrightid',
-  });
-  console.log('blinded brightid uploaded for app to sign');
-  let dataIds = [];
-  while (dataIds.indexOf('blindedSig') == -1) {
-    console.log('waiting for sig ...');
-    await new Promise(r => setTimeout(r, 1000));
-    dataIds = await channelApi.list(channelId);
-  }
-  let signed = await channelApi.download({
-    channelId,
-    dataId: 'blindedSig',
-  });
-  console.log('sig', signed);
-  signed = new BigInteger(signed);
-  const unblinded = unblind({ signed, N: n, r });
-  op.sig = unblinded.toString();
+  const rawSuffix = await randomKey(9);
+  const suffix = hash(rawSuffix);
+  const dataId = `blindedBrightid-${suffix}`;
   try {
-    const res = await api.sponsor(op);
-    store.dispatch(addOperation(res));
+    await channelApi.upload({
+      channelId,
+      data: blinded.toString(),
+      dataId,
+    });
+    console.log('blinded brightid uploaded for app to sign');
   } catch (e) {
     console.log(e);
     Alert.alert(i18next.t('apps.alert.title.linkingFailed'), `${e.message}`, [
@@ -152,38 +149,99 @@ const sponsorAndlinkAppId = async (
     setSponsoringApp(null);
     return;
   }
+
+  // wait for app to provide blinded signature for sponsor op
+  let blindedSig;
+  let intervalId;
+  const blindedSigDataId = `blindedSig-${suffix}`;
+  try {
+    blindedSig = await new Promise((resolve, reject) => {
+      const startTime = Date.now();
+      intervalId = setInterval(async () => {
+        const timeElapsed = Date.now() - startTime;
+        if (timeElapsed > sponsorTimeout) {
+          clearInterval(intervalId);
+          reject(new Error(`Timeout waiting for app sponsor response`));
+        } else {
+          const dataIds = await channelApi.list(channelId);
+          if (dataIds.indexOf(blindedSigDataId) !== -1) {
+            console.log(
+              `Downloading blinded sig from channel. Stopping interval ${intervalId}`,
+            );
+            clearInterval(intervalId);
+            const blindedSig = await channelApi.download({
+              channelId,
+              dataId: blindedSigDataId,
+            });
+            console.log('sig', blindedSig);
+            resolve(blindedSig);
+          }
+        }
+      }, sponsorPollInterval);
+    });
+  } catch (e) {
+    console.log(e.message);
+    Alert.alert(i18next.t('apps.alert.title.linkingFailed'), `${e.message}`, [
+      {
+        text: i18next.t('common.alert.dismiss'),
+        style: 'cancel',
+        onPress: () => null,
+      },
+    ]);
+    setSponsoringApp(null);
+    return;
+  }
+
+  // unblind sig and submit sponsor op to node API
+  const signed = new BigInteger(blindedSig);
+  const unblinded = unblind({ signed, N: n, r });
+  op.sig = unblinded.toString();
+  try {
+    const res = await api.sponsor(op);
+    store.dispatch(addOperation(res));
+  } catch (e) {
+    console.log(e.message);
+    Alert.alert(i18next.t('apps.alert.title.linkingFailed'), `${e.message}`, [
+      {
+        text: i18next.t('common.alert.dismiss'),
+        style: 'cancel',
+        onPress: () => null,
+      },
+    ]);
+    setSponsoringApp(null);
+    return;
+  }
   // wait for applying
   setSponsoringApp(null);
-  linkAppId(app, appId);
+  return linkAppId(appId, appUserId);
 };
 
-const linkAppId = async (
-  app: string,
-  appId: string
-) => {
+const linkAppId = async (appId: string, appUserId: string) => {
   // Create temporary NodeAPI object, since the node at the specified nodeUrl will be queried for the verification
   const {
     apps: { apps },
     user: { id },
     keypair: { secretKey },
   } = store.getState();
-  const appInfo = find(propEq('id', app))(apps) as AppInfo;
+  const appInfo = find(propEq('id', appId))(apps) as AppInfo;
   const vel = appInfo.verificationExpirationLength;
   const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
 
-  let sigs = selectAllSigs(store.getState())
-    .filter(sig => sig.app === app)
-    .filter(sig => sig.roundedTimestamp === roundedTimestamp);
+  const sigs = selectAllSigs(store.getState())
+    .filter((sig) => sig.app === appId)
+    .filter((sig) => sig.roundedTimestamp === roundedTimestamp);
 
-  if (sigs.length == 0) {
+  if (sigs.length === 0) {
     Alert.alert(
       i18next.t('apps.alert.title.linkingFailed'),
-      i18next.t('apps.alert.text.blindSigNotFound', { app: app }),
-      [{
+      i18next.t('apps.alert.text.blindSigNotFound', { app: appId }),
+      [
+        {
           text: i18next.t('common.alert.dismiss'),
           style: 'cancel',
           onPress: () => null,
-      }]
+        },
+      ],
     );
     return;
   }
@@ -193,7 +251,7 @@ const linkAppId = async (
   const api = new NodeApi({ url, id, secretKey });
   for (const sig of sigs) {
     try {
-      const res = await api.linkAppId(sig, appId);
+      const res = await api.linkAppId(sig, appUserId);
     } catch (e) {
       console.log(e);
       Alert.alert(i18next.t('apps.alert.title.linkingFailed'), `${e.message}`, [

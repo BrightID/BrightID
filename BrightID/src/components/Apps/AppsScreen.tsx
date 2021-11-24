@@ -78,14 +78,14 @@ export const AppsScreen = () => {
   }, [navigation, route.params, apps, t]);
 
   const handleAppDeepLink = useCallback(() => {
-    const app = route.params?.context;
-    const appInfo = find(propEq('id', app))(apps) as AppInfo;
+    const appId = route.params?.context;
+    const appInfo = find(propEq('id', appId))(apps) as AppInfo;
     if (appInfo && appInfo.usingBlindSig) {
       handleBlindSigApp(route.params, setSponsoringApp, api);
     } else {
       Alert.alert(
         t('apps.alert.title.invalidApp'),
-        t('apps.alert.text.invalidApp', { app: `${app}` }),
+        t('apps.alert.text.invalidApp', { app: `${appId}` }),
       );
     }
     // reset params
