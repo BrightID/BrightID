@@ -11,18 +11,23 @@ import { useTranslation } from 'react-i18next';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import {
   finishRecovery,
-  recoverAccount,
   recoverData,
+  setRecoveryKeys,
+  socialRecovery,
 } from './thunks/recoveryThunks';
 import { CHANNEL_POLL_INTERVAL, clearChannel } from './thunks/channelThunks';
 
 // clear channel after this time
 const channelTimeout = CHANNEL_POLL_INTERVAL * 3.1;
 
+// max time to wait for operation being applied
+const applyTimeout = 1000 * 60; // 1 minute
+
 export enum AccountSteps {
   WAITING_DOWNLOAD,
   DOWNLOAD_COMPLETE,
-  RECOVERING_ACCOUNT,
+  WAITING_OPERATION, // op submitted to backend but not yet applied
+  OPERATION_APPLIED, // op successfully applied in backend
   ERROR,
   COMPLETE,
 }
@@ -53,6 +58,7 @@ const RestoreScreen = () => {
     BackupSteps.WAITING_ACCOUNT,
   );
   const [accountError, setAccountError] = useState('');
+  const [recoveryOpHash, setRecoveryOpHash] = useState('');
   const dispatch = useDispatch();
 
   useFocusEffect(
@@ -71,23 +77,31 @@ const RestoreScreen = () => {
 
   // track account recovery state
   useEffect(() => {
-    const runEffect = async () => {
+    const startRecovery = async () => {
       try {
         console.log(`Starting account recovery`);
-        await dispatch(recoverAccount(api));
-        console.log(`Successfully recovered account`);
-        setAccountStep(AccountSteps.COMPLETE);
-        // restore backup can now start
-        setDataStep(BackupSteps.WAITING_PASSWORD);
+        const opHash = await dispatch(socialRecovery(api));
+        console.log(`Recover op Hash: ${opHash}`);
+        setRecoveryOpHash(opHash);
+        setAccountStep(AccountSteps.WAITING_OPERATION);
       } catch (e) {
         console.log(`Error during account recovery: ${e.message}`);
         setAccountStep(AccountSteps.ERROR);
         setAccountError(e.message);
       }
     };
+    const finishRecovery = async () => {
+      dispatch(setRecoveryKeys());
+      setAccountStep(AccountSteps.COMPLETE);
+      // restore backup can now start
+      setDataStep(BackupSteps.WAITING_PASSWORD);
+    };
     switch (accountStep) {
       case AccountSteps.DOWNLOAD_COMPLETE:
-        runEffect();
+        startRecovery();
+        break;
+      case AccountSteps.OPERATION_APPLIED:
+        finishRecovery();
         break;
       default:
         break;
@@ -122,6 +136,54 @@ const RestoreScreen = () => {
       dispatch(finishRecovery());
     }
   }, [accountStep, dataStep, dispatch, t]);
+
+  // Poll for recovery operation state
+  useEffect(() => {
+    if (
+      recoveryOpHash !== '' &&
+      accountStep === AccountSteps.WAITING_OPERATION
+    ) {
+      const startTime = Date.now();
+      const timerId = setInterval(async () => {
+        const timeElapsed = Date.now() - startTime;
+        if (timeElapsed > applyTimeout) {
+          // operation did not get applied within time window. Abort and show error.
+          setAccountStep(AccountSteps.ERROR);
+          setAccountError('Operation timed out');
+          setRecoveryOpHash('');
+        } else {
+          const { state } = await api.getOperationState(recoveryOpHash);
+          console.log(`recover Op state: ${state}`);
+          switch (state) {
+            case 'unknown':
+            case 'init':
+            case 'sent':
+              // op being processed. do nothing.
+              break;
+            case 'applied':
+              setAccountStep(AccountSteps.OPERATION_APPLIED);
+              setRecoveryOpHash('');
+              break;
+            case 'failed':
+              setAccountStep(AccountSteps.ERROR);
+              setAccountError('Operation could not be applied');
+              setRecoveryOpHash('');
+              break;
+            default:
+              setAccountStep(AccountSteps.ERROR);
+              setAccountError('Unhandled operation state');
+              setRecoveryOpHash('');
+          }
+        }
+      }, 5000);
+      console.log(`Start polling recoveryOp timer ${timerId}`);
+
+      return () => {
+        console.log(`Stop polling recoveryOp timer ${timerId}`);
+        clearInterval(timerId);
+      };
+    }
+  }, [accountStep, api, recoveryOpHash]);
 
   const skip = () => {
     setPass('');

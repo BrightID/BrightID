@@ -25,9 +25,10 @@ export const getInviteGroup = async (invite, api) => {
       groups: { groups }
     } = store.getState();
 
-    let group = groups.find(g => g.id === invite.group);
-    if (group) {
-      return group;
+    const existingGroup = groups.find(g => g.id === invite.group);
+    if (existingGroup && existingGroup.name &&
+        existingGroup.aesKey && existingGroup.aesKey !== '') {
+      return existingGroup;
     }
 
     if (!invite.data) {
@@ -55,7 +56,7 @@ export const getInviteGroup = async (invite, api) => {
     }
 
     // const uuidKey = invite.url.split('/').pop();
-    group = await api.getGroup(invite.group);
+    let group = await api.getGroup(invite.group);
     const res = await fetch(group.url);
     const data = await res.text();
     if (!data) {
