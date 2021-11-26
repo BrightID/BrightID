@@ -1,21 +1,11 @@
 import { Alert } from 'react-native';
 import { propEq, find } from 'ramda';
-import stringify from 'fast-json-stable-stringify';
 import { addLinkedContext, addOperation } from '@/actions';
 import store from '@/store';
 import i18next from 'i18next';
 import { NodeApi } from '@/api/brightId';
-import ChannelAPI from '@/api/channelService';
 import { selectAllSigs } from '@/reducer/appsSlice';
-import { hash, randomKey } from '@/utils/encoding';
-import { BigInteger } from 'jsbn';
-import { blind, unblind } from '@/utils/rsablind';
 import BrightidError, { DUPLICATE_UID_ERROR } from '@/api/brightidError';
-
-// max time to wait for app to respond to sponsoring request
-const sponsorTimeout = 1000 * 30; // 30 seconds
-// Interval to poll for sponsor op
-const sponsorPollInterval = 3000; // 3 seconds
 
 export const handleAppContext = async (params: Params) => {
   // if 'params' is defined, the user came through a deep link
@@ -38,11 +28,7 @@ export const handleAppContext = async (params: Params) => {
   );
 };
 
-export const handleBlindSigApp = async (
-  params: Params,
-  setSponsoringApp,
-  api,
-) => {
+export const handleBlindSigApp = async (params: Params) => {
   const { context: appId, contextId: appUserId } = params;
   Alert.alert(
     i18next.t('apps.alert.title.linkApp'),
@@ -50,8 +36,7 @@ export const handleBlindSigApp = async (
     [
       {
         text: i18next.t('common.alert.yes'),
-        onPress: () =>
-          sponsorAndlinkAppId(appId, appUserId, setSponsoringApp, api),
+        onPress: () => sponsorAndlinkAppId(appId, appUserId),
       },
       {
         text: i18next.t('common.alert.no'),
@@ -94,127 +79,26 @@ const linkContextId = async (
   }
 };
 
-const sponsorAndlinkAppId = async (
-  appId: string,
-  appUserId: string,
-  setSponsoringApp,
-  api: NodeApi,
-) => {
+const sponsorAndlinkAppId = async (appId: string, appUserId: string) => {
   const {
-    apps: { apps },
-    user: { id, isSponsored },
+    user: { isSponsored },
   } = store.getState();
   if (isSponsored) {
     return linkAppId(appId, appUserId);
+  } else {
+    // TODO Remove this when we know how to handle sponsoring with blind sig apps
+    Alert.alert(
+      i18next.t('apps.alert.title.linkingFailed'),
+      'You are not yet sponsored.',
+      [
+        {
+          text: i18next.t('common.alert.dismiss'),
+          style: 'cancel',
+          onPress: () => null,
+        },
+      ],
+    );
   }
-
-  // Upload blinded sponsor request
-  const appInfo = find(propEq('id', appId))(apps) as AppInfo;
-  setSponsoringApp(appInfo);
-  const network = __DEV__ ? 'test' : 'node';
-  const baseUrl = appInfo.nodeUrl || `http://${network}.brightid.org`;
-  const url = new URL(`${baseUrl}/profile`);
-  const channelApi = new ChannelAPI(url.href);
-  const channelId = appUserId;
-  const timestamp = Date.now();
-  const op: SponsorOp = {
-    name: 'Sponsor',
-    id,
-    app: appId,
-    timestamp,
-    v: 6,
-  };
-  const message = stringify(op);
-  const { n, e } = JSON.parse(appInfo.sponsorPublicKey);
-  console.log(n, e, 'sponsorPublicKey');
-  const { blinded, r } = blind({ message, N: n, E: e });
-  const rawSuffix = await randomKey(9);
-  const suffix = hash(rawSuffix);
-  const dataId = `blindedBrightid-${suffix}`;
-  try {
-    await channelApi.upload({
-      channelId,
-      data: blinded.toString(),
-      dataId,
-    });
-    console.log('blinded brightid uploaded for app to sign');
-  } catch (e) {
-    console.log(e);
-    Alert.alert(i18next.t('apps.alert.title.linkingFailed'), `${e.message}`, [
-      {
-        text: i18next.t('common.alert.dismiss'),
-        style: 'cancel',
-        onPress: () => null,
-      },
-    ]);
-    setSponsoringApp(null);
-    return;
-  }
-
-  // wait for app to provide blinded signature for sponsor op
-  let blindedSig;
-  let intervalId;
-  const blindedSigDataId = `blindedSig-${suffix}`;
-  try {
-    blindedSig = await new Promise((resolve, reject) => {
-      const startTime = Date.now();
-      intervalId = setInterval(async () => {
-        const timeElapsed = Date.now() - startTime;
-        if (timeElapsed > sponsorTimeout) {
-          clearInterval(intervalId);
-          reject(new Error(`Timeout waiting for app sponsor response`));
-        } else {
-          const dataIds = await channelApi.list(channelId);
-          if (dataIds.indexOf(blindedSigDataId) !== -1) {
-            console.log(
-              `Downloading blinded sig from channel. Stopping interval ${intervalId}`,
-            );
-            clearInterval(intervalId);
-            const blindedSig = await channelApi.download({
-              channelId,
-              dataId: blindedSigDataId,
-            });
-            console.log('sig', blindedSig);
-            resolve(blindedSig);
-          }
-        }
-      }, sponsorPollInterval);
-    });
-  } catch (e) {
-    console.log(e.message);
-    Alert.alert(i18next.t('apps.alert.title.linkingFailed'), `${e.message}`, [
-      {
-        text: i18next.t('common.alert.dismiss'),
-        style: 'cancel',
-        onPress: () => null,
-      },
-    ]);
-    setSponsoringApp(null);
-    return;
-  }
-
-  // unblind sig and submit sponsor op to node API
-  const signed = new BigInteger(blindedSig);
-  const unblinded = unblind({ signed, N: n, r });
-  op.sig = unblinded.toString();
-  try {
-    const res = await api.sponsor(op);
-    store.dispatch(addOperation(res));
-  } catch (e) {
-    console.log(e.message);
-    Alert.alert(i18next.t('apps.alert.title.linkingFailed'), `${e.message}`, [
-      {
-        text: i18next.t('common.alert.dismiss'),
-        style: 'cancel',
-        onPress: () => null,
-      },
-    ]);
-    setSponsoringApp(null);
-    return;
-  }
-  // wait for applying
-  setSponsoringApp(null);
-  return linkAppId(appId, appUserId);
 };
 
 const linkAppId = async (appId: string, appUserId: string) => {
@@ -256,8 +140,8 @@ const linkAppId = async (appId: string, appUserId: string) => {
     } catch (e) {
       console.log(e);
       if (e instanceof BrightidError && e.errorNum === DUPLICATE_UID_ERROR) {
-        // this user is already linked with the app. Can happen if app state is out of sync with
-        // backend. Ignore and continue.
+        // this sig is already linked with the app. Can happen if app state is out
+        // of sync with backend. Ignore and continue.
         console.log(`Ignoring DUPLICATE_UID_ERROR - already linked.`);
       } else {
         Alert.alert(
