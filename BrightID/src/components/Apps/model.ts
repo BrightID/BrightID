@@ -1,6 +1,6 @@
 import { Alert } from 'react-native';
 import { propEq, find } from 'ramda';
-import { addLinkedContext, addOperation } from '@/actions';
+import { addLinkedContext, addOperation, updateSig } from '@/actions';
 import store from '@/store';
 import i18next from 'i18next';
 import { NodeApi } from '@/api/brightId';
@@ -102,7 +102,6 @@ const sponsorAndlinkAppId = async (appId: string, appUserId: string) => {
 };
 
 const linkAppId = async (appId: string, appUserId: string) => {
-  // Create temporary NodeAPI object, since the node at the specified nodeUrl will be queried for the verification
   const {
     apps: { apps },
     user: { id },
@@ -131,9 +130,11 @@ const linkAppId = async (appId: string, appUserId: string) => {
     return;
   }
 
+  // Create temporary NodeAPI object, since the node at the specified nodeUrl will be queried for the verification
   const network = __DEV__ ? 'test' : 'node';
   const url = appInfo.nodeUrl || `http://${network}.brightid.org`;
   const api = new NodeApi({ url, id, secretKey });
+  const linkedTimestamp = Date.now();
   for (const sig of sigs) {
     try {
       const res = await api.linkAppId(sig, appUserId);
@@ -162,6 +163,14 @@ const linkAppId = async (appId: string, appUserId: string) => {
       i18next.t('apps.alert.title.linkSuccess'),
       i18next.t('apps.alert.text.linkSuccess', {
         context: appInfo.name,
+      }),
+    );
+    // mark sig as linked with app
+    store.dispatch(
+      updateSig({
+        ...sig,
+        linked: true,
+        linkedTimestamp,
       }),
     );
   }

@@ -6,7 +6,6 @@ import {
   Update,
 } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
-import { createDeepEqualSelector } from '@/utils/createDeepEqualStringArraySelector';
 
 /* ******** INITIAL STATE ************** */
 
@@ -30,17 +29,6 @@ const appsSlice = createSlice({
   reducers: {
     setApps(state, action: PayloadAction<AppInfo[]>) {
       state.apps = action.payload;
-      /*
-      // Workaround until `verification` is removed from server response: Manually fill `verifications`
-      state.apps.forEach((app) => {
-        if (app.verifications === undefined) {
-          console.log(`adding verifications array to app ${app.name}`);
-          app.verifications = [];
-        }
-        if (app.verifications.length === 0 && app.verification !== '')
-          app.verifications.push(app.verification);
-      });
-       */
     },
     addLinkedContext(state, action: PayloadAction<ContextInfo>) {
       state.linkedContexts = linkedContextsAdapter.addOne(
@@ -65,25 +53,17 @@ const appsSlice = createSlice({
       );
     },
     addSig(state, action: PayloadAction<SigInfo>) {
-      state.sigs = sigsAdapter.addOne(
-        state.sigs,
-        action,
-      );
+      state.sigs = sigsAdapter.addOne(state.sigs, action);
     },
     removeAllSigs(state) {
-      state.sigs = sigsAdapter.removeAll(
-        state.sigs,
-      );
+      state.sigs = sigsAdapter.removeAll(state.sigs);
     },
     updateSig(state, action: PayloadAction<Partial<SigInfo>>) {
       const update: Update<SigInfo> = {
         id: `${action.payload.app}_${action.payload.verification}`,
         changes: action.payload,
       };
-      state.sigs = sigsAdapter.updateOne(
-        state.sigs,
-        update,
-      );
+      state.sigs = sigsAdapter.updateOne(state.sigs, update);
     },
   },
   extraReducers: {
@@ -111,9 +91,7 @@ export const {
   (state: State) => state.apps.linkedContexts,
 );
 
-export const {
-  selectAll: selectAllSigs,
-} = sigsAdapter.getSelectors(
+export const { selectAll: selectAllSigs } = sigsAdapter.getSelectors(
   (state: State) => state.apps.sigs,
 );
 
@@ -137,7 +115,20 @@ export const selectPendingLinkedContext = createSelector(
   (contexts) => contexts.find((link) => link.state === 'pending'),
 );
 
-export const selectAllApps = ((state: State) => state.apps.apps);
+export const selectAllApps = (state: State) => state.apps.apps;
+
+export const selectAllLinkedSigs = createSelector(selectAllSigs, (sigs) =>
+  sigs.filter((sig) => sig.linked),
+);
+
+export const selectLinkedSigsForApp = createSelector(
+  selectAllLinkedSigs,
+  (_, appId) => appId,
+  (linkedSigs, appId) => {
+    // return all linked sigs that belong to provided app
+    return linkedSigs.filter((sig) => sig.app === appId);
+  },
+);
 
 // Export reducer
 export default appsSlice.reducer;

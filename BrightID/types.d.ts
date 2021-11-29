@@ -37,17 +37,20 @@ declare global {
   };
 
   type SigInfo = {
+    id?: string;
     sig: {
-      rho: string,
-      omega: string,
-      sigma: string,
-      delta: string
+      rho: string;
+      omega: string;
+      sigma: string;
+      delta: string;
     };
     app: string;
     roundedTimestamp: number;
     verification: string;
     uid: string;
-  }
+    linked: boolean;
+    linkedTimestamp: number;
+  };
 
   type DisplayChannel = {
     displayChannelType: ChannelType;

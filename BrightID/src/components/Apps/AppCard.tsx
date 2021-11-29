@@ -20,7 +20,11 @@ import {
   ORANGE,
   YELLOW,
 } from '@/theme/colors';
-import { updateLinkedContext, selectLinkedContext } from '@/actions';
+import {
+  updateLinkedContext,
+  selectLinkedContext,
+  selectLinkedSigsForApp,
+} from '@/actions';
 
 import { isVerified } from '@/utils/verifications';
 import _ from 'lodash';
@@ -45,6 +49,7 @@ const AppCard = (props: AppInfo) => {
     context,
     testing,
     verifications: appVerifications,
+    usingBlindSig,
   } = props;
   const dispatch = useDispatch();
   const userVerifications = useSelector(
@@ -58,6 +63,8 @@ const AppCard = (props: AppInfo) => {
   const linkedContext = useSelector((state: State) =>
     linkedContextSelector(state, context),
   );
+  const linkedSigsSelector = useMemo(() => selectLinkedSigsForApp, []);
+  const linkedSigs = useSelector((state) => linkedSigsSelector(state, id));
 
   const { t } = useTranslation();
 
@@ -188,19 +195,38 @@ const AppCard = (props: AppInfo) => {
   };
 
   const LinkedSticker = () => {
-    return isLinked ? (
-      <View style={styles.linkedContainer} testID={`Linked_${id}`}>
-        <View style={styles.linkedSticker}>
-          <Check
-            width={fontSize[11]}
-            height={fontSize[11]}
-            strokeWidth={3}
-            color={WHITE}
-          />
+    if (usingBlindSig) {
+      // show x/y linked sigs
+      return linkedSigs.length > 0 ? (
+        <View style={styles.linkedContainer} testID={`Linked_${id}`}>
+          <View style={styles.linkedSticker}>
+            <Check
+              width={fontSize[11]}
+              height={fontSize[11]}
+              strokeWidth={3}
+              color={WHITE}
+            />
+          </View>
+          <Text
+            style={styles.linkedText}
+          >{`Linked (${linkedSigs.length}/${appVerifications.length})`}</Text>
         </View>
-        <Text style={styles.linkedText}>Linked</Text>
-      </View>
-    ) : null;
+      ) : null;
+    } else {
+      return isLinked ? (
+        <View style={styles.linkedContainer} testID={`Linked_${id}`}>
+          <View style={styles.linkedSticker}>
+            <Check
+              width={fontSize[11]}
+              height={fontSize[11]}
+              strokeWidth={3}
+              color={WHITE}
+            />
+          </View>
+          <Text style={styles.linkedText}>Linked</Text>
+        </View>
+      ) : null;
+    }
   };
 
   // If app is testing and user is not linked, do not display card
@@ -216,7 +242,7 @@ const AppCard = (props: AppInfo) => {
       <TouchableOpacity onPress={openApp}>
         <Image
           source={{
-            uri: `${logo}`,
+            uri: logo !== '' ? logo : null,
           }}
           style={styles.logo}
         />

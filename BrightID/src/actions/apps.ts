@@ -13,7 +13,6 @@ export const updateBlindSigs = (api) => async (
   dispatch: dispatch,
   getState,
 ) => {
-  // dispatch(removeAllSigs(getState()));
   let {
     user: { verifications, id },
     keypair: { secretKey },
@@ -30,9 +29,9 @@ export const updateBlindSigs = (api) => async (
     const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
     for (const verification of app.verifications) {
       const sigInfo = sigs.find(
-        (sig) => sig.app == app.id && sig.verification == verification,
+        (sig) => sig.app === app.id && sig.verification === verification,
       );
-      if (sigInfo && sigInfo.roundedTimestamp == roundedTimestamp) {
+      if (sigInfo && sigInfo.roundedTimestamp === roundedTimestamp) {
         console.log(`sig exists for ${app.name} (${verification})`);
         continue;
       }
@@ -88,13 +87,18 @@ export const updateBlindSigs = (api) => async (
           console.log(`wrong signature for ${app.name} (${verification})!`);
           continue;
         }
+        // TODO: This will overwrite existing sigs if rounded timestamp does not match
+        // apps timestamps. Is this intended? Should this affect the linked state of an app?
         dispatch(
           addSig({
+            id: `${app.id}_${verification}`,
             sig: blindSig,
             app: app.id,
             roundedTimestamp,
             verification,
             uid,
+            linked: false,
+            linkedTimestamp: 0,
           }),
         );
       } catch (err) {
