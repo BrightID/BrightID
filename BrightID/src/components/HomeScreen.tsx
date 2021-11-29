@@ -110,7 +110,7 @@ export const HomeScreen = (props) => {
     useCallback(() => {
       retrieveImage(photoFilename).then(setProfilePhoto);
       setLoading(true);
-      dispatch(updateBlindSigs(api));
+      dispatch(updateBlindSigs());
       dispatch(fetchUserInfo(api)).then(() => {
         setLoading(false);
       });

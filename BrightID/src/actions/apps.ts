@@ -9,22 +9,21 @@ import { isVerified } from '@/utils/verifications';
 
 const WISchnorrClient = require('@/utils/WISchnorrClient');
 
-export const updateBlindSigs = (api) => async (
+export const updateBlindSigs = () => async (
   dispatch: dispatch,
-  getState,
+  getState: GetState,
 ) => {
-  let {
+  const {
     user: { verifications, id },
     keypair: { secretKey },
     apps: { apps },
   } = getState();
 
-  const wISchnorrPublics = {};
-  verifications = _.keyBy(verifications, (v) => v.name);
+  const verificationsByName = _.keyBy(verifications, (v) => v.name);
   const sigs = selectAllSigs(getState());
   console.log('sigs', sigs);
-  apps = apps.filter((app) => app.usingBlindSig);
-  for (const app of apps) {
+  const blindSigApps = apps.filter((app) => app.usingBlindSig);
+  for (const app of blindSigApps) {
     const vel = app.verificationExpirationLength;
     const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
     for (const verification of app.verifications) {
@@ -33,20 +32,24 @@ export const updateBlindSigs = (api) => async (
       );
       if (sigInfo && sigInfo.roundedTimestamp === roundedTimestamp) {
         console.log(`sig exists for ${app.name} (${verification})`);
+        // eslint-disable-next-line no-continue
         continue;
       }
-      if (!isVerified(verifications, verification)) {
+      if (!isVerified(verificationsByName, verification)) {
         console.log(`user is not verified for ${app.name} (${verification})`);
+        // eslint-disable-next-line no-continue
         continue;
       }
 
       try {
         const network = __DEV__ ? 'test' : 'node';
+        // noinspection HttpUrlsUsage
         const url = app.nodeUrl || `http://${network}.brightid.org`;
         const api = new NodeApi({ url, id, secretKey });
         const { wISchnorrPublic } = await api.getState();
         if (!wISchnorrPublic) {
           console.log('wISchnorrPublic is not set');
+          // eslint-disable-next-line no-continue
           continue;
         }
         const client = new WISchnorrClient(wISchnorrPublic);
@@ -85,6 +88,7 @@ export const updateBlindSigs = (api) => async (
         console.log('final sig', blindSig);
         if (!client.VerifyWISchnorrBlindSignature(blindSig, info, uid)) {
           console.log(`wrong signature for ${app.name} (${verification})!`);
+          // eslint-disable-next-line no-continue
           continue;
         }
 
@@ -110,7 +114,7 @@ export const updateBlindSigs = (api) => async (
   }
 };
 
-export const fetchApps = (api) => async (dispatch: dispatch, getState) => {
+export const fetchApps = (api) => async (dispatch: dispatch, _) => {
   try {
     const apps = await api.getApps();
     dispatch(setApps(apps));
