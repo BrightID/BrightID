@@ -87,8 +87,7 @@ export const updateBlindSigs = (api) => async (
           console.log(`wrong signature for ${app.name} (${verification})!`);
           continue;
         }
-        // TODO: This will overwrite existing sigs if rounded timestamp does not match
-        // apps timestamps. Is this intended? Should this affect the linked state of an app?
+
         dispatch(
           addSig({
             id: `${app.id}_${verification}`,

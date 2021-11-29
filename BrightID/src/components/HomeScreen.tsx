@@ -55,7 +55,6 @@ export const verifiedAppsSelector = createSelector(
   (state: State) => state.user.verifications,
   (apps, userVerifications) => {
     // check for each app if the user has at least one of the verifications
-    // TODO Double-check if this is correct? Or does user need *all* of the verifications?
     return apps.filter((app: AppInfo) => {
       let hasOneVerification = false;
       if (app.verifications) {
