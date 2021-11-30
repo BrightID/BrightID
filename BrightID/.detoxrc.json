@@ -14,7 +14,7 @@
       "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
       "type": "android.emulator",
       "device": {
-        "avdName": "Resizable_API_31"
+        "avdName": "Pixel_3a_API_30"
       }
     },
     "android.emu.release": {
@@ -22,7 +22,7 @@
       "build": "cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
       "type": "android.emulator",
       "device": {
-        "avdName": "Resizable_API_31"
+        "avdName": "Pixel_3a_API_30"
       }
     },
     "ios.sim.debug": {
