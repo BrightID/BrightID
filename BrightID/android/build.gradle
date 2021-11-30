@@ -6,10 +6,8 @@ buildscript {
         minSdkVersion = 21
         compileSdkVersion = 30
         targetSdkVersion = 30
-        ndkVersion = "21.4.7075529"
         ext.kotlinVersion = '1.5.31'
         firebaseMessagingVersion = "21.1.0"
-        ndkVersion = '22.1.7171670'
     }
     repositories {
         google()
@@ -54,7 +52,14 @@ subprojects { subproject ->
     afterEvaluate{
         if((subproject.plugins.hasPlugin('android') || subproject.plugins.hasPlugin('android-library'))) {
             android {
+                // Force all subprojects to use one and only one set of versions
+                // See https://github.com/wix/Detox/issues/2712 for context
                 compileSdkVersion rootProject.ext.compileSdkVersion
+                buildToolsVersion rootProject.ext.buildToolsVersion
+                defaultConfig {
+                    minSdkVersion rootProject.ext.minSdkVersion
+                    targetSdkVersion rootProject.ext.targetSdkVersion
+                }
             }
         }
     }
