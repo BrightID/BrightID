@@ -157,17 +157,7 @@ if (stagingPropertiesFile.exists()){
 def nativeArchitectures = project.getProperties().get("reactNativeDebugArchitectures")
 
 android {
-    ndkVersion rootProject.ext.ndkVersion
-
     compileSdkVersion rootProject.ext.compileSdkVersion
-
-    // Fix "java.lang.UnsatisfiedLinkError: couldn't find DSO to load: libhermes.so" in release builds
-    // Found at https://github.com/facebook/react-native/issues/25923#issuecomment-626663209
-    // configurations.all {
-    //   resolutionStrategy {
-    //     force "com.facebook.soloader:soloader:0.8.2"
-    //   }
-    // }
 
     defaultConfig {
         applicationId "org.brightid"
