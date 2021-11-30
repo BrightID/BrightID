@@ -3,6 +3,7 @@ import { original } from 'immer';
 import { uInt8ArrayToB64 } from '@/utils/encoding';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 import { CHANNEL_TTL } from '@/utils/constants';
+import { RESET_STORE } from '@/actions';
 
 export const initialState: RecoveryData = {
   publicKey: '',
@@ -112,6 +113,11 @@ const recoveryData = createSlice({
     },
     increaseRecoveredGroups(state, action: PayloadAction<number>) {
       state.recoveredGroups += action.payload;
+    },
+  },
+  extraReducers: {
+    [RESET_STORE]: () => {
+      return initialState;
     },
   },
 });

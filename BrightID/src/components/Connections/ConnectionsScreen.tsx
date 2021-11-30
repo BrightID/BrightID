@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react';
 import { StyleSheet, View, StatusBar, FlatList } from 'react-native';
 import { useDispatch, useSelector, store } from '@/store';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { connectionsSelector } from '@/utils/connectionsSelector';
@@ -38,8 +38,13 @@ export const ConnectionsScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const api = useContext(NodeApiContext);
-
-  const connections = useSelector(connectionsSelector);
+  const route: { params?: { group: Group } } = useRoute() as {
+    params?: { group: Group };
+  };
+  const excludeGroup = route.params?.group;
+  const connections = useSelector((state) =>
+    connectionsSelector(state, excludeGroup?.members),
+  );
   const { t } = useTranslation();
 
   const handleNewConnection = () => {

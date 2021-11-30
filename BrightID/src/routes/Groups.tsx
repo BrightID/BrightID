@@ -12,8 +12,8 @@ import SearchConnections from '@/components/Helpers/SearchConnections';
 import NewGroupScreen from '@/components/Groups/NewGroups/NewGroupScreen';
 import GroupInfoScreen from '@/components/Groups/NewGroups/GroupInfoScreen';
 import MembersScreen from '@/components/Groups/Members/MembersScreen';
-import InviteListScreen from '@/components/Groups/Members/InviteListScreen';
 import i18next from 'i18next';
+import ConnectionsScreen from '@/components/Connections/ConnectionsScreen';
 import { headerOptions, NavHome, AnimatedHeaderTitle } from './helpers';
 
 const Stack = createStackNavigator();
@@ -81,8 +81,14 @@ const Groups = () => {
       />
       <Stack.Screen
         name="InviteList"
-        component={InviteListScreen}
-        options={{ ...headerOptions, title: t('groups.header.inviteList') }}
+        component={ConnectionsScreen}
+        options={{
+          ...headerOptions,
+          headerRight: () => <SearchConnections />,
+          headerTitle: () => (
+            <AnimatedHeaderTitle text={i18next.t('groups.header.inviteList')} />
+          ),
+        }}
       />
     </>
   );
