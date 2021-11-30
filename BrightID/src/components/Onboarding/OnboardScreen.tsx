@@ -10,13 +10,15 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from '@/store';
+import { useDispatch, useSelector } from '@/store';
 import { useNavigation } from '@react-navigation/native';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, BLACK, GREEN, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { selectBaseUrl } from '@/reducer/settingsSlice';
 import { createKeypair } from './SignUpFlow/thunks';
 import VerifiedBadge from '../Icons/VerifiedBadge';
+import { version as app_version } from '../../../package.json';
 
 /* Description */
 
@@ -34,6 +36,7 @@ export const Onboard = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { t } = useTranslation();
+  const baseUrl = useSelector(selectBaseUrl);
 
   const handleCreateMyBrightID = () => {
     dispatch(createKeypair())
@@ -104,6 +107,11 @@ export const Onboard = () => {
               {t('onboarding.button.recover')}
             </Text>
           </TouchableOpacity>
+        </View>
+        <View style={styles.versionInfoContainer}>
+          <Text style={styles.versionInfo}>
+            {baseUrl ? baseUrl.split('://')[1] : 'unknown'} - v{app_version}
+          </Text>
         </View>
       </SafeAreaView>
       <View style={styles.orangeBottom} />
@@ -199,6 +207,17 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
     color: ORANGE,
+  },
+  versionInfoContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 5,
+  },
+  versionInfo: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[12],
+    color: BLACK,
   },
 });
 
