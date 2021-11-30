@@ -1,6 +1,6 @@
 {
   "name": "BrightID",
-  "version": "4.7.7",
+  "version": "4.8.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android --appIdSuffix debug",
@@ -61,7 +61,7 @@
     "react-i18next": "11.8.6",
     "react-native": "0.66.3",
     "react-native-barcode-mask": "1.2.4",
-    "react-native-camera": "3.42.2",
+    "react-native-camera": "^4.2.1",
     "react-native-code-push": "7.0.4",
     "react-native-dropdownalert": "4.3.0",
     "react-native-gesture-handler": "1.10.3",
