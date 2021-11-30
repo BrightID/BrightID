@@ -21,6 +21,7 @@
 		8F545B80273A5F9C00DEACF5 /* Poppins-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F545B77273A5F9C00DEACF5 /* Poppins-ExtraLight.otf */; };
 		8F545B81273A5F9C00DEACF5 /* Poppins-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F545B78273A5F9C00DEACF5 /* Poppins-Bold.otf */; };
 		8F545B82273A5F9C00DEACF5 /* Poppins-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8F545B79273A5F9C00DEACF5 /* Poppins-Regular.otf */; };
+		8FCF45A32755F6BB005EFD42 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8FCF45A22755F6BB005EFD42 /* AppCenter-Config.plist */; };
 		A7AE9B051FBA4BD58E9457DD /* libPods-BrightID-BrightIDTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DFF4E16950D873A36D46F492 /* libPods-BrightID-BrightIDTests.a */; };
 		F5DDCB6DDEE0ABB178FA5D8C /* libPods-BrightID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8ABEBE03737CB635D37AEE90 /* libPods-BrightID.a */; };
 /* End PBXBuildFile section */
@@ -61,6 +62,7 @@
 		8F545B77273A5F9C00DEACF5 /* Poppins-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-ExtraLight.otf"; path = "../assets/fonts/Poppins-ExtraLight.otf"; sourceTree = "<group>"; };
 		8F545B78273A5F9C00DEACF5 /* Poppins-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Bold.otf"; path = "../assets/fonts/Poppins-Bold.otf"; sourceTree = "<group>"; };
 		8F545B79273A5F9C00DEACF5 /* Poppins-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Poppins-Regular.otf"; path = "../assets/fonts/Poppins-Regular.otf"; sourceTree = "<group>"; };
+		8FCF45A22755F6BB005EFD42 /* AppCenter-Config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AppCenter-Config.plist"; sourceTree = "<group>"; };
 		ADEFA0AA390DF1B24A61C631 /* Pods-BrightID-BrightIDTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID-BrightIDTests.release.xcconfig"; path = "Target Support Files/Pods-BrightID-BrightIDTests/Pods-BrightID-BrightIDTests.release.xcconfig"; sourceTree = "<group>"; };
 		D18F0EFDD91DF399CF75C467 /* Pods-BrightID.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrightID.debug.xcconfig"; path = "Target Support Files/Pods-BrightID/Pods-BrightID.debug.xcconfig"; sourceTree = "<group>"; };
 		DFF4E16950D873A36D46F492 /* libPods-BrightID-BrightIDTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrightID-BrightIDTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -138,7 +140,6 @@
 				ADEFA0AA390DF1B24A61C631 /* Pods-BrightID-BrightIDTests.release.xcconfig */,
 				7D67506B088AD1B672C49B28 /* Pods-BrightID-BrightIDTests.staging.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -152,6 +153,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				8FCF45A22755F6BB005EFD42 /* AppCenter-Config.plist */,
 				8F545B75273A5F9C00DEACF5 /* ApexNew-Book.otf */,
 				8F545B74273A5F9B00DEACF5 /* ApexNew-Light.otf */,
 				8F545B71273A5F9B00DEACF5 /* ApexNew-Medium.otf */,
@@ -281,6 +283,7 @@
 				8F545B7C273A5F9C00DEACF5 /* Poppins-Medium.otf in Resources */,
 				8F545B7D273A5F9C00DEACF5 /* ApexNew-Light.otf in Resources */,
 				8F545B7E273A5F9C00DEACF5 /* ApexNew-Book.otf in Resources */,
+				8FCF45A32755F6BB005EFD42 /* AppCenter-Config.plist in Resources */,
 				8F545B7F273A5F9C00DEACF5 /* EurostileRegular.ttf in Resources */,
 				8F545B80273A5F9C00DEACF5 /* Poppins-ExtraLight.otf in Resources */,
 				8F545B81273A5F9C00DEACF5 /* Poppins-Bold.otf in Resources */,
