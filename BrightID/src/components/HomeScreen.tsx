@@ -16,7 +16,12 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
-import { fetchApps, selectAllApps, setActiveNotification } from '@/actions';
+import {
+  fetchApps,
+  selectAllApps,
+  setActiveNotification,
+  updateBlindSigs,
+} from '@/actions';
 import { linkedContextTotal } from '@/reducer/appsSlice';
 import { verifiedConnectionsSelector } from '@/reducer/connectionsSlice';
 import { retrieveImage } from '@/utils/filesystem';
@@ -33,6 +38,8 @@ import { setHeaderHeight } from '@/reducer/walkthroughSlice';
 import { uniq } from 'ramda';
 import { clearBaseUrl, selectBaseUrl } from '@/reducer/settingsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
+import { isVerified } from '@/utils/verifications';
+import _ from 'lodash';
 import { version as app_version } from '../../package.json';
 
 /**
@@ -47,29 +54,23 @@ export const verifiedAppsSelector = createSelector(
   selectAllApps,
   (state: State) => state.user.verifications,
   (apps, userVerifications) => {
-    // check for each app if the user has all required verifications
-    console.log(`Checking verifications for ${apps.length} apps`);
+    // check for each app if the user has at least one of the verifications
     return apps.filter((app: AppInfo) => {
-      let isMissingVerification = false;
-      app.verifications &&
-        app.verifications.forEach((requiredVerification) => {
-          if (
-            userVerifications.some(
-              (userVerification) =>
-                userVerification.name === requiredVerification,
-            )
-          ) {
-            // console.log(
-            //  `user has required verification ${requiredVerification} for app ${app.name}`,
-            // );
-          } else {
-            // console.log(
-            //   `user missing required verification ${requiredVerification} for app ${app.name}`,
-            // );
-            isMissingVerification = true;
+      // ignore testing apps
+      if (app.testing) return false;
+      let hasOneVerification = false;
+      if (app.verifications) {
+        for (const verification of app.verifications) {
+          const verified = isVerified(
+            _.keyBy(userVerifications, (v) => v.name),
+            verification,
+          );
+          if (verified) {
+            hasOneVerification = true;
           }
-        });
-      return !isMissingVerification;
+        }
+      }
+      return hasOneVerification;
     });
   },
 );
@@ -111,6 +112,7 @@ export const HomeScreen = (props) => {
     useCallback(() => {
       retrieveImage(photoFilename).then(setProfilePhoto);
       setLoading(true);
+      dispatch(updateBlindSigs());
       dispatch(fetchUserInfo(api)).then(() => {
         setLoading(false);
       });

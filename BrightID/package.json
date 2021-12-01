@@ -18,6 +18,7 @@
     "test:watch": "npm test -- --watch",
     "updateSnap": "jest --updateSnapshot",
     "build:release": "cd android && ./gradlew assembleRelease && cd ..",
+    "build:staging": "cd android && ./gradlew assembleStaging && cd ..",
     "mermaid": "find ./diagrams -type f -name *.mmd -exec mmdc -i {} \\;",
     "m1-install": "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 yarn install"
   },
@@ -91,7 +92,11 @@
     "stream": "0.0.2",
     "timers": "0.1.1",
     "tweetnacl": "https://github.com/RnbWd/tweetnacl-native",
-    "xml2js": "0.4.23"
+    "xml2js": "0.4.23",
+    "js-sha256": "0.9.0",
+    "jsbn": "1.1.0",
+    "react-native-modpow": "^1.1.0",
+    "expr-eval": "^2.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
