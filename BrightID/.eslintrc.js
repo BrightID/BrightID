@@ -78,6 +78,7 @@ module.exports = {
     'react/jsx-one-expression-per-line': 'off',
     'react/no-unused-prop-types': 'warn',
     'react/no-unused-state': 'warn',
+    'react/function-component-definition': 'off',
     'react/sort-comp': 'off',
     'consistent-return': 'off',
     'no-alert': 'off',
