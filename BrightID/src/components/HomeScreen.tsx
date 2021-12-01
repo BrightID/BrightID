@@ -56,6 +56,8 @@ export const verifiedAppsSelector = createSelector(
   (apps, userVerifications) => {
     // check for each app if the user has at least one of the verifications
     return apps.filter((app: AppInfo) => {
+      // ignore testing apps
+      if (app.testing) return false;
       let hasOneVerification = false;
       if (app.verifications) {
         for (const verification of app.verifications) {
