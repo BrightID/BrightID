@@ -1,11 +1,24 @@
 import { Alert } from 'react-native';
 import { propEq, find } from 'ramda';
-import { addLinkedContext, addOperation, updateSig } from '@/actions';
-import store from '@/store';
 import i18next from 'i18next';
+import {
+  addLinkedContext,
+  addOperation,
+  setIsSponsored,
+  updateSig,
+} from '@/actions';
+import store from '@/store';
 import { NodeApi } from '@/api/brightId';
 import { selectAllSigs } from '@/reducer/appsSlice';
-import BrightidError, { DUPLICATE_UID_ERROR } from '@/api/brightidError';
+import BrightidError, {
+  APP_ID_NOT_FOUND,
+  DUPLICATE_UID_ERROR,
+} from '@/api/brightidError';
+
+// max time to wait for app to respond to sponsoring request
+const sponsorTimeout = 1000 * 30; // 30 seconds
+// Interval to poll for sponsor op
+const sponsorPollInterval = 3000; // 3 seconds
 
 export const handleAppContext = async (params: Params) => {
   // if 'params' is defined, the user came through a deep link
@@ -28,7 +41,7 @@ export const handleAppContext = async (params: Params) => {
   );
 };
 
-export const handleBlindSigApp = async (params: Params) => {
+export const handleBlindSigApp = async (params: Params, api: NodeApi) => {
   const { context: appId, contextId: appUserId } = params;
   Alert.alert(
     i18next.t('apps.alert.title.linkApp'),
@@ -36,7 +49,7 @@ export const handleBlindSigApp = async (params: Params) => {
     [
       {
         text: i18next.t('common.alert.yes'),
-        onPress: () => sponsorAndlinkAppId(appId, appUserId),
+        onPress: () => sponsorAndlinkAppId(appId, appUserId, api),
       },
       {
         text: i18next.t('common.alert.no'),
@@ -69,27 +82,9 @@ const linkContextId = async (
       }),
     );
   } catch (e) {
-    Alert.alert(i18next.t('apps.alert.title.linkingFailed'), `${e.message}`, [
-      {
-        text: i18next.t('common.alert.dismiss'),
-        style: 'cancel',
-        onPress: () => null,
-      },
-    ]);
-  }
-};
-
-const sponsorAndlinkAppId = async (appId: string, appUserId: string) => {
-  const {
-    user: { isSponsored },
-  } = store.getState();
-  if (isSponsored) {
-    return linkAppId(appId, appUserId);
-  } else {
-    // TODO Remove this when we know how to handle sponsoring with blind sig apps
     Alert.alert(
       i18next.t('apps.alert.title.linkingFailed'),
-      'You are not yet sponsored.',
+      `${(e as Error).message}`,
       [
         {
           text: i18next.t('common.alert.dismiss'),
@@ -137,7 +132,7 @@ const linkAppId = async (appId: string, appUserId: string) => {
   const linkedTimestamp = Date.now();
   for (const sig of sigs) {
     try {
-      const res = await api.linkAppId(sig, appUserId);
+      await api.linkAppId(sig, appUserId);
     } catch (e) {
       console.log(e);
       if (e instanceof BrightidError && e.errorNum === DUPLICATE_UID_ERROR) {
@@ -147,7 +142,7 @@ const linkAppId = async (appId: string, appUserId: string) => {
       } else {
         Alert.alert(
           i18next.t('apps.alert.title.linkingFailed'),
-          `${e.message}`,
+          `${(e as Error).message}`,
           [
             {
               text: i18next.t('common.alert.dismiss'),
@@ -173,5 +168,73 @@ const linkAppId = async (appId: string, appUserId: string) => {
         linkedTimestamp,
       }),
     );
+  }
+};
+
+const sponsorAndlinkAppId = async (
+  appId: string,
+  appUserId: string,
+  api: NodeApi,
+) => {
+  const {
+    user: { isSponsored },
+  } = store.getState();
+  if (isSponsored) {
+    return linkAppId(appId, appUserId);
+  } else {
+    /*
+    1. get appId from deep link
+    2. already Sponsored? yes: go to step 6. no: go to step 3.
+    3. optimistically send Spend Sponsorship operation.
+    4. wait a bit for node to process sponsor operation from app.
+    5. check GET /sponsorships/{appId} to see if it really got sponsored.
+    6. proceed with posting the verification to the node under the appId.
+     */
+    console.log(`Sending spend sponsorship op...`);
+    const op = await api.spendSponsorship(appId, appUserId);
+
+    // TODO wait for op to be applied before starting polling sponsorship status?
+
+    // wait for app to complete the sponsorship
+    try {
+      await new Promise<void>((resolve, reject) => {
+        const startTime = Date.now();
+        const intervalId = setInterval(async () => {
+          const timeElapsed = Date.now() - startTime;
+          if (timeElapsed > sponsorTimeout) {
+            clearInterval(intervalId);
+            reject(new Error(`Timeout waiting for sponsorship`));
+          } else {
+            try {
+              const sponsorshipInfo = await api.getSponsorShip(appUserId);
+              console.log(`Got sponsorRes: ${sponsorshipInfo}`);
+              if (sponsorshipInfo.state === 'done') {
+                console.log(`Sponsorship complete!`);
+                clearInterval(intervalId);
+                resolve();
+              }
+            } catch (e) {
+              if (
+                e instanceof BrightidError &&
+                e.errorNum === APP_ID_NOT_FOUND
+              ) {
+                // node has not yet registered the sponsor request -> Ignore
+                console.log(
+                  `sponsor request for ${appUserId} not yet existing`,
+                );
+              } else {
+                throw e;
+              }
+            }
+          }
+        }, sponsorPollInterval);
+      });
+      // sponsoring complete
+      store.dispatch(setIsSponsored(true));
+      // now link app.
+      return linkAppId(appId, appUserId);
+    } catch (e) {
+      console.log(`Error getting sponsored: ${(e as Error).message}`);
+    }
   }
 };

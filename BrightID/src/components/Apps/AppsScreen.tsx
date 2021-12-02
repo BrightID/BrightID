@@ -8,23 +8,23 @@ import {
   StatusBar,
   RefreshControl,
 } from 'react-native';
-import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
-import EmptyList from '@/components/Helpers/EmptyList';
 import Spinner from 'react-native-spinkit';
-import { ORANGE, BLUE, WHITE } from '@/theme/colors';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { any, propEq, find } from 'ramda';
-import {
-  fetchApps,
-  selectAllApps,
-  selectPendingLinkedContext,
-} from '@/actions';
 import {
   useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
+import { useDispatch, useSelector } from '@/store';
+import EmptyList from '@/components/Helpers/EmptyList';
+import { ORANGE, BLUE, WHITE } from '@/theme/colors';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import {
+  fetchApps,
+  selectAllApps,
+  selectPendingLinkedContext,
+} from '@/actions';
 import { fontSize } from '@/theme/fonts';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import AppCard from './AppCard';
@@ -81,7 +81,7 @@ export const AppsScreen = () => {
     const appId = route.params?.context;
     const appInfo = find(propEq('id', appId))(apps) as AppInfo;
     if (appInfo && appInfo.usingBlindSig) {
-      handleBlindSigApp(route.params);
+      handleBlindSigApp(route.params, api);
     } else {
       Alert.alert(
         t('apps.alert.title.invalidApp'),
@@ -93,7 +93,7 @@ export const AppsScreen = () => {
       context: '',
       contextId: '',
     });
-  }, [route.params, apps, navigation, t]);
+  }, [route.params, apps, navigation, api, t]);
 
   useEffect(() => {
     if (apps.length > 0 && route.params?.baseUrl) {
