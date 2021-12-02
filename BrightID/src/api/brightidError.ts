@@ -59,6 +59,7 @@ export const DUPLICATE_SIGNERS = 57;
 export const WAIT_FOR_COOLDOWN = 58;
 export const UNACCEPTABLE_VERIFICATION = 59;
 export const ALREADY_IS_FAMILY = 60;
+export const APP_ID_NOT_FOUND = 61;
 
 class BrightidError extends Error {
   errorNum: number;
