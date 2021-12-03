@@ -41,7 +41,9 @@ export const AppsScreen = () => {
   const pendingLink = useSelector(selectPendingLinkedContext);
 
   const [refreshing, setRefreshing] = useState(false);
-  const [sponsoringApp, resetSponsoringApp] = useState(null);
+  const [sponsoringApp, setSponsoringApp] = useState<AppInfo | undefined>(
+    undefined,
+  );
   const { t } = useTranslation();
 
   const refreshApps = useCallback(() => {
@@ -81,7 +83,7 @@ export const AppsScreen = () => {
     const appId = route.params?.context;
     const appInfo = find(propEq('id', appId))(apps) as AppInfo;
     if (appInfo && appInfo.usingBlindSig) {
-      handleBlindSigApp(route.params, api);
+      handleBlindSigApp(route.params, setSponsoringApp, api);
     } else {
       Alert.alert(
         t('apps.alert.title.invalidApp'),

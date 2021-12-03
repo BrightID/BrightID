@@ -41,7 +41,11 @@ export const handleAppContext = async (params: Params) => {
   );
 };
 
-export const handleBlindSigApp = async (params: Params, api: NodeApi) => {
+export const handleBlindSigApp = async (
+  params: Params,
+  setSponsoringApp,
+  api: NodeApi,
+) => {
   const { context: appId, contextId: appUserId } = params;
   Alert.alert(
     i18next.t('apps.alert.title.linkApp'),
@@ -49,7 +53,8 @@ export const handleBlindSigApp = async (params: Params, api: NodeApi) => {
     [
       {
         text: i18next.t('common.alert.yes'),
-        onPress: () => sponsorAndlinkAppId(appId, appUserId, api),
+        onPress: () =>
+          sponsorAndlinkAppId(appId, appUserId, setSponsoringApp, api),
       },
       {
         text: i18next.t('common.alert.no'),
@@ -174,13 +179,15 @@ const linkAppId = async (appId: string, appUserId: string) => {
 const sponsorAndlinkAppId = async (
   appId: string,
   appUserId: string,
+  setSponsoringApp,
   api: NodeApi,
 ) => {
   const {
+    apps: { apps },
     user: { isSponsored },
   } = store.getState();
   if (isSponsored) {
-    return linkAppId(appId, appUserId);
+    await linkAppId(appId, appUserId);
   } else {
     /*
     1. get appId from deep link
@@ -190,6 +197,8 @@ const sponsorAndlinkAppId = async (
     5. check GET /sponsorships/{appId} to see if it really got sponsored.
     6. proceed with posting the verification to the node under the appId.
      */
+    const appInfo = find(propEq('id', appId))(apps) as AppInfo;
+    setSponsoringApp(appInfo);
     console.log(`Sending spend sponsorship op...`);
     const op = await api.spendSponsorship(appId, appUserId);
 
@@ -232,9 +241,22 @@ const sponsorAndlinkAppId = async (
       // sponsoring complete
       store.dispatch(setIsSponsored(true));
       // now link app.
-      return linkAppId(appId, appUserId);
+      await linkAppId(appId, appUserId);
     } catch (e) {
       console.log(`Error getting sponsored: ${(e as Error).message}`);
+      Alert.alert(
+        i18next.t('apps.alert.title.linkingFailed'),
+        `${(e as Error).message}`,
+        [
+          {
+            text: i18next.t('common.alert.dismiss'),
+            style: 'cancel',
+            onPress: () => null,
+          },
+        ],
+      );
+    } finally {
+      setSponsoringApp(undefined);
     }
   }
 };
