@@ -1,25 +1,21 @@
-import { RootState, useDispatch, useSelector } from '@/store';
-import { selectBaseUrl, setBaseUrl } from '@/reducer/settingsSlice';
 import React, { useEffect, useState } from 'react';
 import { InteractionManager } from 'react-native';
+import { RootState, useDispatch, useSelector } from '@/store';
+import {
+  addNodeUrl,
+  clearBaseUrl,
+  selectAllNodeUrls,
+  selectBaseUrl,
+  setBaseUrl,
+} from '@/reducer/settingsSlice';
 import { NodeApi } from '@/api/brightId';
 import { pollOperations } from '@/utils/operations';
 import chooseNode from '@/utils/nodeChooser';
 import { NodeApiGateScreen } from '@/components/NodeApiGateScreen';
 
-export const NodeApiContext = React.createContext(null);
-const ProdCandidates = [
-  'http://node.brightid.org',
-  'http://brightid.idealmoney.io',
-  'http://brightid2.idealmoney.io',
-  'https://brightid.59836e71dd6e5898.dyndns.dappnode.io',
-  'http://bright.daosquare.io',
-  // Following nodes exist, but currently fail the NodeChooser tests
-  //  'http://brightid.onehive.org',
-  //  'http://node.topupgifter.com',
-  //  'http://node.lumos.services',
-];
-const TestCandidates = ['http://test.brightid.org'];
+type ApiContext = NodeApi | null;
+
+export const NodeApiContext = React.createContext<ApiContext>(null);
 
 export const ApiGateState = {
   INITIAL: 'INITIAL',
@@ -36,6 +32,7 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
     (state: RootState) => state.keypair.secretKey,
   );
   const url = useSelector<string>(selectBaseUrl);
+  const candidates = useSelector(selectAllNodeUrls);
   const [api, setApi] = useState<NodeApi | null>(null);
   const [startTimestamp, setStartTimestamp] = useState(0);
   const [gateState, setGateState] = useState<ApiGateState>(
@@ -63,30 +60,33 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
   // Run nodechooser if requested
   useEffect(() => {
     const runEffect = async () => {
-      console.log(`Running nodechooser to select backend`);
-      setStartTimestamp(Date.now());
-      setGateState(ApiGateState.SEARCHING_NODE);
-      try {
-        const fastestUrl = await chooseNode(
-          __DEV__ ? TestCandidates : ProdCandidates,
-        );
-        dispatch(setBaseUrl(fastestUrl));
-      } catch (e) {
-        // No usable node found :-(
+      if (candidates.length === 0) {
+        console.log(`No node candidates available`);
         setGateState(ApiGateState.ERROR_NO_NODE);
-      } finally {
-        setStartTimestamp(0);
+      } else {
+        console.log(`Running nodechooser to select backend`);
+        setStartTimestamp(Date.now());
+        setGateState(ApiGateState.SEARCHING_NODE);
+        try {
+          const fastestUrl = await chooseNode(candidates);
+          dispatch(setBaseUrl(fastestUrl));
+        } catch (e) {
+          // No usable node found :-(
+          setGateState(ApiGateState.ERROR_NO_NODE);
+        } finally {
+          setStartTimestamp(0);
+        }
       }
     };
     if (gateState === ApiGateState.SEARCH_REQUESTED) {
       runEffect();
     }
-  }, [dispatch, gateState]);
+  }, [candidates, dispatch, gateState]);
 
   // Manage NodeAPI instance
   useEffect(() => {
     if (url) {
-      let apiInstance;
+      let apiInstance: NodeApi;
       if (id && id.length > 0 && secretKey && secretKey.length > 0) {
         console.log(`Creating API with credentials using ${url}`);
         apiInstance = new NodeApi({ url, id, secretKey });
@@ -123,7 +123,22 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
     }
   }, [api]);
 
-  if (api) {
+  /* Manually set node url */
+  const setNode = async (nodeUrl: string) => {
+    try {
+      // Check if node is working
+      setGateState(ApiGateState.SEARCHING_NODE);
+      const url = await chooseNode([nodeUrl]);
+      // Add it to node list and set as current node
+      dispatch(addNodeUrl(url));
+      dispatch(setBaseUrl(url));
+    } catch (e) {
+      // Node does not work :-(
+      setGateState(ApiGateState.ERROR_NO_NODE);
+    }
+  };
+
+  if (api && gateState === ApiGateState.NODE_AVAILABLE) {
     return (
       <NodeApiContext.Provider value={api}>
         {props.children}
