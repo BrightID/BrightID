@@ -35,6 +35,7 @@ export class NodeApi {
     this.api = create({
       baseURL: this.apiUrl,
       headers: { 'Cache-Control': 'no-cache' },
+      timeout: 60 * 1000, // one minute timeout for requests
     });
   }
 
@@ -518,11 +519,17 @@ export class NodeApi {
 
   async sponsor(op: SponsorOp) {
     this.requiresCredentials();
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
     delete op.sig;
     const message = stringify(op);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 }
