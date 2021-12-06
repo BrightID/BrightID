@@ -24,10 +24,12 @@ export class NodeApi {
     url,
     secretKey,
     id,
+    monitor,
   }: {
     url: string;
     secretKey: Uint8Array | undefined;
     id: string | undefined;
+    monitor?: (response: ApiResponse<any>) => void;
   }) {
     this.baseUrlInternal = url;
     this.id = id;
@@ -37,6 +39,7 @@ export class NodeApi {
       headers: { 'Cache-Control': 'no-cache' },
       timeout: 60 * 1000, // one minute timeout for requests
     });
+    monitor && this.api.addMonitor((response) => monitor(response));
   }
 
   get baseUrl() {

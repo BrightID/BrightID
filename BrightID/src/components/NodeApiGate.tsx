@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { InteractionManager } from 'react-native';
+import { Alert, InteractionManager } from 'react-native';
+import { ApiResponse } from 'apisauce';
 import { RootState, useDispatch, useSelector } from '@/store';
 import {
   addNodeUrl,
-  clearBaseUrl,
+  removeCurrentNodeUrl,
   selectAllNodeUrls,
   selectBaseUrl,
   setBaseUrl,
@@ -33,6 +34,7 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
   );
   const url = useSelector<string>(selectBaseUrl);
   const candidates = useSelector(selectAllNodeUrls);
+  const [nodeError, setNodeError] = useState(false);
   const [api, setApi] = useState<NodeApi | null>(null);
   const [startTimestamp, setStartTimestamp] = useState(0);
   const [gateState, setGateState] = useState<ApiGateState>(
@@ -83,19 +85,75 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
     }
   }, [candidates, dispatch, gateState]);
 
+  // show node error modal
+  useEffect(() => {
+    if (nodeError) {
+      Alert.alert(
+        'Node error!',
+        'Current node seems not to be functional',
+        [
+          {
+            text: 'Switch to different node',
+            onPress: () => {
+              dispatch(removeCurrentNodeUrl());
+              setNodeError(false);
+            },
+          },
+          {
+            text: 'Ignore',
+            style: 'cancel',
+            onPress: () => {
+              setNodeError(false);
+            },
+          },
+        ],
+        {
+          cancelable: true,
+        },
+      );
+    }
+  }, [dispatch, nodeError]);
+
   // Manage NodeAPI instance
   useEffect(() => {
+    let responseCounter = 0;
+    const apiMonitor = (response: ApiResponse<NodeApiRes, ErrRes>) => {
+      responseCounter++;
+      console.log(
+        `Response ${responseCounter} ok: ${response.ok} - ${response.status} - ${response.problem}`,
+      );
+      if (!response.ok) {
+        switch (response.problem) {
+          case 'SERVER_ERROR':
+          case 'CONNECTION_ERROR':
+          case 'TIMEOUT_ERROR':
+            console.log(`Node problem: ${response.problem}.`);
+            setNodeError(true);
+            break;
+          default:
+            console.log(`Ignoring problem ${response.problem}`);
+        }
+      }
+      /*
+      if (responseCounter % 5 === 0) {
+        console.log(`Pretending server error`);
+        setNodeError(true);
+      }
+       */
+    };
+
     if (url) {
       let apiInstance: NodeApi;
       if (id && id.length > 0 && secretKey && secretKey.length > 0) {
         console.log(`Creating API with credentials using ${url}`);
-        apiInstance = new NodeApi({ url, id, secretKey });
+        apiInstance = new NodeApi({ url, id, secretKey, monitor: apiMonitor });
       } else {
         console.log(`Creating anonymous API using ${url}`);
         apiInstance = new NodeApi({
           url,
           id: undefined,
           secretKey: undefined,
+          monitor: apiMonitor,
         });
       }
       setGateState(ApiGateState.NODE_AVAILABLE);
@@ -103,7 +161,7 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
     } else {
       setApi(null);
     }
-  }, [url, dispatch, id, secretKey]);
+  }, [url, id, secretKey]);
 
   // Manage polling for operations
   useEffect(() => {

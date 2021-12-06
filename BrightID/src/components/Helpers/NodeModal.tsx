@@ -16,7 +16,7 @@ import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from '@/store';
 import {
   clearBaseUrl,
-  removeNodeUrl,
+  removeCurrentNodeUrl,
   resetNodeUrls,
   selectAllNodeUrls,
   selectBaseUrl,
@@ -37,7 +37,7 @@ const NodeModal = () => {
 
   const changeNodeHandler = () => {
     navigation.goBack();
-    dispatch(removeNodeUrl(currentBaseUrl));
+    dispatch(removeCurrentNodeUrl());
   };
 
   const resetHandler = () => {

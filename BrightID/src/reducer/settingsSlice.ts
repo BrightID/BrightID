@@ -50,6 +50,17 @@ export const settingsSlice = createSlice({
         state.baseUrl = null;
       }
     },
+    removeCurrentNodeUrl: (state) => {
+      if (state.baseUrl) {
+        console.log(`Removing active node ${state.baseUrl}`);
+        state.nodeUrls = state.nodeUrls.filter(
+          (url) => url.toLowerCase() !== state.baseUrl,
+        );
+        state.baseUrl = null;
+      } else {
+        console.log(`No active node to remove`);
+      }
+    },
     resetNodeUrls: (state) => {
       console.log(`Resetting node urls`);
       state.nodeUrls = initialState.nodeUrls;
@@ -67,6 +78,7 @@ export const {
   resetSettings,
   addNodeUrl,
   removeNodeUrl,
+  removeCurrentNodeUrl,
   resetNodeUrls,
 } = settingsSlice.actions;
 
