@@ -14,7 +14,7 @@ const linkedContextsAdapter = createEntityAdapter<ContextInfo>({
 });
 
 const sigsAdapter = createEntityAdapter<SigInfo>({
-  selectId: (sig) => `${sig.app}_${sig.verification}`,
+  selectId: (sig) => `${sig.uid}`,
 });
 
 const initialState: AppsState = {

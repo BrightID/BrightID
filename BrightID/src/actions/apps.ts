@@ -96,12 +96,11 @@ export const updateBlindSigs =
 
           dispatch(
             addSig({
-              id: `${app.id}_${verification}`,
+              uid,
               sig: blindSig,
               app: app.id,
               roundedTimestamp,
               verification,
-              uid,
               linked: false,
               linkedTimestamp: 0,
             }),

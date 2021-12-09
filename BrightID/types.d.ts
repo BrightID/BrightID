@@ -37,7 +37,6 @@ declare global {
   };
 
   type SigInfo = {
-    id?: string;
     sig: {
       rho: string;
       omega: string;
