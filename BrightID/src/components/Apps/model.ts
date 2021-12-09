@@ -218,7 +218,7 @@ const sponsorAndlinkAppId = async (
             try {
               const sponsorshipInfo = await api.getSponsorShip(appUserId);
               console.log(`Got sponsorRes: ${sponsorshipInfo}`);
-              if (sponsorshipInfo.state === 'done') {
+              if (sponsorshipInfo.appHasAuthorized) {
                 console.log(`Sponsorship complete!`);
                 clearInterval(intervalId);
                 resolve();

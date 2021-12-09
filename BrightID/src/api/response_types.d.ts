@@ -185,6 +185,7 @@ type ProfileInfo = {
 
 type SponsorshipInfo = {
   app: string;
-  state: 'app' | 'client' | 'done';
   timestamp: number;
+  appHasAuthorized: boolean;
+  spendRequested: boolean;
 };
