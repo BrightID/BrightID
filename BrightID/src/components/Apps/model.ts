@@ -16,9 +16,9 @@ import BrightidError, {
 } from '@/api/brightidError';
 
 // max time to wait for app to respond to sponsoring request
-const sponsorTimeout = 1000 * 30; // 30 seconds
+const sponsorTimeout = 1000 * 60; // 60 seconds
 // Interval to poll for sponsor op
-const sponsorPollInterval = 3000; // 3 seconds
+const sponsorPollInterval = 3000; // 5 seconds
 
 export const handleAppContext = async (params: Params) => {
   // if 'params' is defined, the user came through a deep link
@@ -54,7 +54,8 @@ export const handleBlindSigApp = async (
       {
         text: i18next.t('common.alert.yes'),
         onPress: () =>
-          sponsorAndlinkAppId(appId, appUserId, setSponsoringApp, api),
+          // sponsorAndlinkAppId(appId, appUserId, setSponsoringApp, api),
+          linkAppId(appId, appUserId),
       },
       {
         text: i18next.t('common.alert.no'),
