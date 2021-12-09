@@ -58,12 +58,8 @@ const appsSlice = createSlice({
     removeAllSigs(state) {
       state.sigs = sigsAdapter.removeAll(state.sigs);
     },
-    updateSig(state, action: PayloadAction<Partial<SigInfo>>) {
-      const update: Update<SigInfo> = {
-        id: `${action.payload.app}_${action.payload.verification}`,
-        changes: action.payload,
-      };
-      state.sigs = sigsAdapter.updateOne(state.sigs, update);
+    updateSig(state, action: PayloadAction<Update<SigInfo>>) {
+      state.sigs = sigsAdapter.updateOne(state.sigs, action.payload);
     },
   },
   extraReducers: {

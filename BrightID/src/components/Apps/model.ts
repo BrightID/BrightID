@@ -111,6 +111,44 @@ const linkAppId = async (appId: string, appUserId: string) => {
   const vel = appInfo.verificationExpirationLength;
   const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
 
+  // Check if sig is already used with a different appUserId app
+  const previousSig = selectAllSigs(store.getState()).find(
+    (sig) =>
+      sig.app === appId &&
+      sig.linked &&
+      sig.roundedTimestamp === roundedTimestamp,
+  );
+
+  if (previousSig) {
+    if (previousSig.appUserId !== appUserId) {
+      // already linked, but with a different appUserId
+      Alert.alert(
+        i18next.t('apps.alert.title.linkingFailed'),
+        i18next.t(
+          'apps.alert.text.blindSigAlreadyLinkedDifferent',
+          'You are trying to link with {{app}} using {{appUserId}}. You are already linked with {{app}} with different id {{previousAppUserId}}. This may lead to problems using the app.',
+          {
+            app: appId,
+            appUserId,
+            previousAppUserId: previousSig.appUserId,
+          },
+        ),
+      );
+    } else {
+      // already linked with the same appUserId
+      Alert.alert(
+        i18next.t('apps.alert.title.linkingFailed'),
+        i18next.t(
+          'apps.alert.text.blindSigAlreadyLinkedDifferent',
+          'You are already linked with {{app}} with different id {{appUserId}}',
+          { app: appId, appUserId: previousSig.appUserId },
+        ),
+      );
+    }
+    // abort linking either way
+    return;
+  }
+
   const sigs = selectAllSigs(store.getState())
     .filter((sig) => sig.app === appId)
     .filter((sig) => sig.roundedTimestamp === roundedTimestamp);
@@ -139,12 +177,12 @@ const linkAppId = async (appId: string, appUserId: string) => {
     try {
       await api.linkAppId(sig, appUserId);
     } catch (e) {
-      console.log(e);
       if (e instanceof BrightidError && e.errorNum === DUPLICATE_UID_ERROR) {
         // this sig is already linked with the app. Can happen if app state is out
         // of sync with backend. Ignore and continue.
         console.log(`Ignoring DUPLICATE_UID_ERROR - already linked.`);
       } else {
+        console.log(e);
         Alert.alert(
           i18next.t('apps.alert.title.linkingFailed'),
           `${(e as Error).message}`,
@@ -168,10 +206,8 @@ const linkAppId = async (appId: string, appUserId: string) => {
     // mark sig as linked with app
     store.dispatch(
       updateSig({
-        ...sig,
-        linked: true,
-        linkedTimestamp,
-        appUserId,
+        id: sig.uid,
+        changes: { linked: true, linkedTimestamp, appUserId },
       }),
     );
   }
