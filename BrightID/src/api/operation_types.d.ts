@@ -139,13 +139,3 @@ type SpendSponsorshipOp = {
   v: number;
   hash?: string;
 };
-
-type SponsorOp = {
-  name: 'Sponsor';
-  id: string;
-  app: string;
-  timestamp: number;
-  v: number;
-  sig?: string;
-  hash?: string;
-};
