@@ -54,8 +54,8 @@ export const handleBlindSigApp = async (
       {
         text: i18next.t('common.alert.yes'),
         onPress: () =>
-          // sponsorAndlinkAppId(appId, appUserId, setSponsoringApp, api),
-          linkAppId(appId, appUserId),
+          sponsorAndlinkAppId(appId, appUserId, setSponsoringApp, api),
+        // linkAppId(appId, appUserId),
       },
       {
         text: i18next.t('common.alert.no'),
@@ -112,52 +112,98 @@ const linkAppId = async (appId: string, appUserId: string) => {
   const vel = appInfo.verificationExpirationLength;
   const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
 
-  // Check if sig is already used with a different appUserId app
-  const previousSig = selectAllSigs(store.getState()).find(
+  // existing linked verifications
+  const previousSigs = selectAllSigs(store.getState()).filter(
     (sig) =>
       sig.app === appId &&
-      sig.linked &&
+      sig.linked === true &&
+      sig.roundedTimestamp === roundedTimestamp,
+  );
+  // not yet linked verifications
+  const sigs = selectAllSigs(store.getState()).filter(
+    (sig) =>
+      sig.app === appId &&
+      sig.linked === false &&
       sig.roundedTimestamp === roundedTimestamp,
   );
 
-  if (previousSig) {
-    if (previousSig.appUserId !== appUserId) {
-      // already linked, but with a different appUserId
+  // make sure that always the same appUserId is used.
+  if (previousSigs.length) {
+    const previousAppUserIds: Set<string> = new Set();
+    for (const previousSig of previousSigs) {
+      if (previousSig.appUserId !== appUserId) {
+        previousAppUserIds.add(previousSig.appUserId);
+      }
+    }
+    if (previousAppUserIds.size) {
       Alert.alert(
         i18next.t('apps.alert.title.linkingFailed'),
         i18next.t(
           'apps.alert.text.blindSigAlreadyLinkedDifferent',
-          'You are trying to link with {{app}} using {{appUserId}}. You are already linked with {{app}} with different id {{previousAppUserId}}. This may lead to problems using the app.',
+          'You are trying to link with {{app}} using {{appUserId}}. You are already linked with {{app}} with different id {{previousAppUserIds}}. This may lead to problems using the app.',
           {
             app: appId,
             appUserId,
-            previousAppUserId: previousSig.appUserId,
+            previousAppUserIds: Array.from(previousAppUserIds).join(', '),
           },
         ),
       );
-    } else {
-      // already linked with the same appUserId
+      return; // don't link app when userId is different
+    }
+
+    // check if all app verifications are already linked
+    const allVerificationsLinked = appInfo.verifications.every(
+      (verification) => {
+        for (const prevSig of previousSigs) {
+          if (prevSig.verification === verification) return true;
+        }
+        return false;
+      },
+    );
+    if (allVerificationsLinked) {
       Alert.alert(
         i18next.t('apps.alert.title.linkingFailed'),
         i18next.t(
           'apps.alert.text.blindSigAlreadyLinkedDifferent',
-          'You are already linked with {{app}} with different id {{appUserId}}',
-          { app: appId, appUserId: previousSig.appUserId },
+          'You are already linked with {{app}} with id {{appUserId}}',
+          { app: appId, appUserId },
         ),
       );
+      return;
     }
-    // abort linking either way
-    return;
   }
 
-  const sigs = selectAllSigs(store.getState())
-    .filter((sig) => sig.app === appId)
-    .filter((sig) => sig.roundedTimestamp === roundedTimestamp);
+  // get list of all missing verifications
+  const missingVerifications = appInfo.verifications.filter((verification) => {
+    // exclude verification if it is already linked
+    for (const prevSig of previousSigs) {
+      if (prevSig.verification === verification) {
+        console.log(
+          `Verification ${verification} already linked with sig ${prevSig.uid}`,
+        );
+        return false;
+      }
+    }
+    // exclude verification if not yet linked, but sig is available
+    for (const sig of sigs) {
+      if (sig.verification === verification) {
+        console.log(
+          `Verification ${verification} has sig available and ready to link`,
+        );
+        return false;
+      }
+    }
+    console.log(`Verification ${verification} is missing`);
+    return true;
+  });
+
+  // get list of all already linked verifications
+  const linkedVerifications = previousSigs.map((sig) => sig.verification);
 
   if (sigs.length === 0) {
     Alert.alert(
       i18next.t('apps.alert.title.linkingFailed'),
-      i18next.t('apps.alert.text.blindSigNotFound', { app: appId }),
+      `No blind sig found for app "${appId}". Verifications missing: ${missingVerifications.join()}. Verifications already linked: ${linkedVerifications.join()}`,
       [
         {
           text: i18next.t('common.alert.dismiss'),
