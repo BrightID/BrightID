@@ -44,6 +44,7 @@ declare global {
       delta: string;
     };
     app: string;
+    appUserId?: string;
     roundedTimestamp: number;
     verification: string;
     uid: string;

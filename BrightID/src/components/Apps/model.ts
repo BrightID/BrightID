@@ -171,6 +171,7 @@ const linkAppId = async (appId: string, appUserId: string) => {
         ...sig,
         linked: true,
         linkedTimestamp,
+        appUserId,
       }),
     );
   }
