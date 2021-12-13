@@ -6,26 +6,26 @@
     },
     "joinConnectionParty": {
       "description": "Присоединяйтесь к вечеринке по подключению BrightID",
-      "title": "Вечеринка подключений"
+      "title": "Верификационная вечеринка"
     },
     "joinConnectionPartyWithFriend": {
       "description": "Берите с собой членов вашей семьи или близких друзей на вечеринку по подключению BrightID",
       "title": "Вечеринка по подключение с друзьями или родственниками"
     },
     "linkApp": {
-      "description": "Свяжите свой BrightID с приложением",
+      "description": "Свяжите свой профиль BrightID с приложением",
       "title": "Свяжите с приложением"
     },
     "makeFirstConnection": {
-      "description": "Подключитесь к другому пользователю BrightID",
+      "description": "Сделайте подключение с другим пользователем BrightID",
       "title": "Первое подключение"
     },
     "makeThreeConnection": {
-      "description": "Подключитесь 3-ём пользователям BrightID",
+      "description": "Сделайте подключение с 3-мя пользователями BrightID",
       "title": "Три подключения"
     },
     "makeTwoConnection": {
-      "description": "Подключитесь к двум пользователям BrightID",
+      "description": "Сделайте подключение с двумя пользователями BrightID",
       "title": "Два подключения"
     },
     "notification": {

@@ -574,13 +574,15 @@
       "text": {
         "codeGroup": "Ce code QR est conçu pour permettre à différentes personnes de se connecter entre-elles simultanément.",
         "codeSingle": "Ce code QR peut être utilisé pour se connecter avec un seul utilisateur avant son expiration.",
+        "codeStar": "Ce code QR est conçu pour mettre en relation de nombreuses personnes avec une seule personne.",
         "shareLinkGroup": "Partager ce lien",
         "shareLinkSingle": "Partagez ce lien avec un ami",
         "universalLink": "Lien universel"
       },
       "title": {
         "codeGroup": "Code de groupe",
-        "codeSingle": "Code à usage unique"
+        "codeSingle": "Code à usage unique",
+        "codeStar": "Code étoile"
       },
       "universalLink": "Lien Universel"
     },
@@ -600,6 +602,7 @@
       "canAlso": "Vous pouvez aussi…",
       "codeGroup": "Code de groupe",
       "codeSingle": "Code à usage unique",
+      "codeStar": "Code étoile",
       "confirmConnections": "Confirmation des connexions",
       "downloadingConnectionData": "Téléchargement des données de connexion",
       "expiresIn": "Expire dans :",
