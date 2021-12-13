@@ -516,13 +516,34 @@ export class NodeApi {
     NodeApi.throwOnError(res);
   }
 
-  async sponsor(op: SponsorOp) {
-    this.requiresCredentials();
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
-    NodeApi.throwOnError(res);
-    delete op.sig;
+  async spendSponsorship(appId: string, appUserId: string) {
+    const name = 'Spend Sponsorship';
+    const timestamp = Date.now();
+    const op: SpendSponsorshipOp = {
+      name,
+      app: appId,
+      appId: appUserId,
+      timestamp,
+      v,
+    };
     const message = stringify(op);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      '/operations',
+      op,
+    );
+    NodeApi.throwOnError(res);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
+  }
+
+  async getSponsorShip(appUserId: string) {
+    const res = await this.api.get<SponsorshipRes, ErrRes>(
+      `/sponsorships/${appUserId}`,
+    );
+    NodeApi.throwOnError(res);
+    return (res.data as SponsorshipRes).data;
   }
 }

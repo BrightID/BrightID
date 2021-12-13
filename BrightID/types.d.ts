@@ -37,7 +37,6 @@ declare global {
   };
 
   type SigInfo = {
-    id?: string;
     sig: {
       rho: string;
       omega: string;
@@ -45,6 +44,7 @@ declare global {
       delta: string;
     };
     app: string;
+    appUserId?: string;
     roundedTimestamp: number;
     verification: string;
     uid: string;

@@ -46,13 +46,16 @@
         "visitWebsite": "Sure"
       },
       "text": {
+        "blindSigAlreadyLinked": "You are already linked with {{app}} with id {{appUserId}}",
+        "blindSigAlreadyLinkedDifferent": "You are trying to link with {{app}} using {{appUserId}}. You are already linked with {{app}} with different id {{previousAppUserIds}}. This may lead to problems using the app.",
         "checkWebsite": "To find out more about {{name}}, check out their website!",
         "invalidApp": "{{app}} is not a valid app!",
         "invalidContext": "{{context}} is not a valid context!",
         "linkApp": "Do you want to link your account in {{context}} to your BrightID?",
         "linkFailure": "Failed to link your account in {{context}} to your BrightID\n{{result}}",
+        "linkSigFailed": "Error linking verification {{verification}} to app {{appId}}. Error message: {{msg}}",
         "linkSuccess": "Succesfully linked your account in {{context}} to your BrightID",
-        "blindSigNotFound": "No blind sig found for {{app}}",
+        "missingBlindSig": "No blind sig found for app {{appId}}. Verifications missing: {{missingVerifications}}. Verifications already linked: {{linkedVerifications}}"
       },
       "title": {
         "invalidApp": "Failed",
@@ -67,7 +70,7 @@
       "noApps": "No Apps",
       "notSponsored": "You're not sponsored.\nPlease find an app below to sponsor you.",
       "pendingLink": "Linking your account in {{context}} to your BrightID…",
-      "sponsoring": "{{app}} is sponsoring you…",
+      "sponsoring": "{{app}} is sponsoring you…"
     }
   },
   "backup": {
@@ -365,7 +368,6 @@
       "primaryGroup": "Primary Group"
     },
     "text": {
-      "noEligibleConnection": "No existing connections are eligible for this group, please come back later..",
       "noGroups": "<text>Get verified faster</text><text>by creating and</text><text>joining groups</text>",
       "noGroupsMatchSearch": "No group matches your search",
       "noMembers": "No known members, invite some…"
