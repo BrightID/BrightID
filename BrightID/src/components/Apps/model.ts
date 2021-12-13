@@ -164,7 +164,7 @@ const linkAppId = async (appId: string, appUserId: string) => {
       Alert.alert(
         i18next.t('apps.alert.title.linkingFailed'),
         i18next.t(
-          'apps.alert.text.blindSigAlreadyLinkedDifferent',
+          'apps.alert.text.blindSigAlreadyLinked',
           'You are already linked with {{app}} with id {{appUserId}}',
           { app: appId, appUserId },
         ),
