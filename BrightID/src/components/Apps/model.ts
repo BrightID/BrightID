@@ -225,35 +225,33 @@ const linkAppId = async (appId: string, appUserId: string) => {
   for (const sig of sigs) {
     try {
       await api.linkAppId(sig, appUserId);
-    } catch (e) {
-      if (e instanceof BrightidError && e.errorNum === DUPLICATE_UID_ERROR) {
-        // this sig is already linked with the app. Can happen if app state is out
-        // of sync with backend. Ignore and continue.
-        console.log(`Ignoring DUPLICATE_UID_ERROR - already linked.`);
-      } else {
-        console.log(e);
-        Alert.alert(
-          i18next.t('apps.alert.title.linkingFailed'),
-          `${(e as Error).message}`,
-          [
-            {
-              text: i18next.t('common.alert.dismiss'),
-              style: 'cancel',
-              onPress: () => null,
-            },
-          ],
-        );
-        return;
-      }
+      // mark sig as linked with app
+      store.dispatch(
+        updateSig({
+          id: sig.uid,
+          changes: { linked: true, linkedTimestamp, appUserId },
+        }),
+      );
+      linkSuccess = true;
+    } catch (err) {
+      console.log(err);
+      const msg = err instanceof Error ? err.message : err;
+      Alert.alert(
+        i18next.t('apps.alert.title.linkingFailed'),
+        i18next.t(
+          'apps.alert.text.linkSigFailed',
+          'Error linking verification {{verification}} to app {{appId}}. Error message: {{msg}}',
+          { verification: sig.verification, appId, msg },
+        ),
+        [
+          {
+            text: i18next.t('common.alert.dismiss'),
+            style: 'cancel',
+            onPress: () => null,
+          },
+        ],
+      );
     }
-    // mark sig as linked with app
-    store.dispatch(
-      updateSig({
-        id: sig.uid,
-        changes: { linked: true, linkedTimestamp, appUserId },
-      }),
-    );
-    linkSuccess = true;
   }
 
   if (linkSuccess) {
@@ -332,19 +330,16 @@ const sponsorAndlinkAppId = async (
       store.dispatch(setIsSponsored(true));
       // now link app.
       await linkAppId(appId, appUserId);
-    } catch (e) {
-      console.log(`Error getting sponsored: ${(e as Error).message}`);
-      Alert.alert(
-        i18next.t('apps.alert.title.linkingFailed'),
-        `${(e as Error).message}`,
-        [
-          {
-            text: i18next.t('common.alert.dismiss'),
-            style: 'cancel',
-            onPress: () => null,
-          },
-        ],
-      );
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : err;
+      console.log(`Error getting sponsored: ${msg}`);
+      Alert.alert(i18next.t('apps.alert.title.linkingFailed'), `${msg}`, [
+        {
+          text: i18next.t('common.alert.dismiss'),
+          style: 'cancel',
+          onPress: () => null,
+        },
+      ]);
     } finally {
       setSponsoringApp(undefined);
     }
