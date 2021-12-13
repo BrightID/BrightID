@@ -2,6 +2,7 @@ import _ from 'lodash';
 import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
 import stringify from 'fast-json-stable-stringify';
+import { Alert } from 'react-native';
 import { setApps, addSig, selectAllSigs } from '@/reducer/appsSlice';
 import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 import { NodeApi } from '@/api/brightId';
@@ -12,7 +13,7 @@ const WISchnorrClient = require('@/utils/WISchnorrClient');
 export const updateBlindSigs =
   () => async (dispatch: dispatch, getState: GetState) => {
     const {
-      user: { verifications, id },
+      user: { verifications /* , id */ },
       keypair: { secretKey },
       apps: { apps },
     } = getState();
@@ -109,6 +110,10 @@ export const updateBlindSigs =
           console.log(
             `error in getting sig for ${app.name} (${verification})`,
             err,
+          );
+          Alert.alert(
+            `error in getting sig for ${app.name} (${verification})`,
+            (err as Error).message,
           );
         }
       }

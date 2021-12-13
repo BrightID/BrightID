@@ -36,15 +36,15 @@ const fetchUserInfo = (api: NodeApi) => (
         }
         dispatch(updateConnections(connections));
 
-        const { sponsored } = await api.getProfile(id);
-        dispatch(setIsSponsored(sponsored));
-        dispatch(updateNotifications(api));
-        resolve(null);
-      } catch (err) {
-        console.log(err.message);
-      }
+          const { sponsored } = await api.getProfile(id);
+          dispatch(setIsSponsored(sponsored));
+          dispatch(updateNotifications(api));
+          resolve(null);
+        } catch (err) {
+          console.log(err.message);
+        }
+      });
     });
-  });
-};
+  };
 
 export default fetchUserInfo;
