@@ -10,10 +10,7 @@ import {
 import store from '@/store';
 import { NodeApi } from '@/api/brightId';
 import { selectAllSigs } from '@/reducer/appsSlice';
-import BrightidError, {
-  APP_ID_NOT_FOUND,
-  DUPLICATE_UID_ERROR,
-} from '@/api/brightidError';
+import BrightidError, { APP_ID_NOT_FOUND } from '@/api/brightidError';
 
 // max time to wait for app to respond to sponsoring request
 const sponsorTimeout = 1000 * 60; // 60 seconds
@@ -203,7 +200,15 @@ const linkAppId = async (appId: string, appUserId: string) => {
   if (sigs.length === 0) {
     Alert.alert(
       i18next.t('apps.alert.title.linkingFailed'),
-      `No blind sig found for app "${appId}". Verifications missing: ${missingVerifications.join()}. Verifications already linked: ${linkedVerifications.join()}`,
+      i18next.t(
+        'apps.alert.text.missingBlindSig',
+        'No blind sig found for app {{appId}}. Verifications missing: {{missingVerifications}}. Verifications already linked: {{linkedVerifications}}',
+        {
+          appId,
+          missingVerifications: missingVerifications.join(),
+          linkedVerifications: linkedVerifications.join(),
+        },
+      ),
       [
         {
           text: i18next.t('common.alert.dismiss'),
