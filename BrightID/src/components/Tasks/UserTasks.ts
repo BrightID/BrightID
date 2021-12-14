@@ -100,4 +100,20 @@ export const UserTasks = {
       );
     },
   },
+  bitu_verification: {
+    id: 'bitu_verification',
+    sortValue: 120,
+    title: i18next.t(`achievements.bituVerification.title`),
+    description: i18next.t(`achievements.bituVerification.description`),
+    url: '',
+    checkFn(state: State) {
+      return Boolean(
+        state.user.verifications.find(
+          (verification) =>
+            verification.name === 'Bitu' &&
+            (verification as BituVerification).score > 0,
+        ),
+      );
+    },
+  },
 };

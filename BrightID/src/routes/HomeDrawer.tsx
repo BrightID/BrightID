@@ -12,7 +12,7 @@ import {
   setEditProfileMenuLayout,
   setEditProfileTextLayout,
 } from '@/reducer/walkthroughSlice';
-import HomeScreen, { brightIdVerifiedSelector } from '@/components/HomeScreen';
+import HomeScreen from '@/components/HomeScreen';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -31,8 +31,8 @@ import List from '@/components/Icons/List';
 import GraphQl from '@/components/Icons/GraphQl';
 import Faq from '@/components/Icons/Faq';
 import Mail from '@/components/Icons/Mail';
-import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import TasksScreen from '@/components/Tasks/TasksScreen';
+import BituVerificationScreen from '@/components/Tasks/BituVerificationScreen';
 import GraphExplorerScreen from '@/components/SideMenu/GraphExplorerScreen';
 import ContactUsScreen from '@/components/SideMenu/ContactUsScreen';
 import EditProfileScreen from '@/components/EditProfile/EditProfileScreen';
@@ -96,7 +96,6 @@ const CustomDrawerContent = (props) => {
     (state: State) => state.user.photo.filename,
   );
   const name = useSelector((state: State) => state.user.name);
-  const brightIdVerified = useSelector(brightIdVerifiedSelector);
   // keep profile photo up to date
   const [profilePhoto, setProfilePhoto] = useState('');
   const { t } = useTranslation();
@@ -121,11 +120,6 @@ const CustomDrawerContent = (props) => {
           accessibilityLabel="user photo"
         />
         <Text style={styles.userName}>{name}</Text>
-        {brightIdVerified && (
-          <View style={styles.verificationBadge}>
-            <VerifiedBadge width={16} height={16} />
-          </View>
-        )}
       </View>
       <CustomItem
         focused={false}
@@ -249,6 +243,28 @@ const CustomDrawerContent = (props) => {
         }}
       />
       <CustomItem
+        focused={state.routeNames[state.index] === 'Groups'}
+        inactiveTintColor={BLACK}
+        inactiveBackgroundColor={WHITE}
+        activeTintColor={WHITE}
+        activeBackgroundColor={ORANGE}
+        label={t('drawer.label.groups')}
+        // style={styles.drawerItem}
+        // labelStyle={styles.labelStyle}
+        icon={({ focused }) => (
+          <GraphQl
+            width={DEVICE_LARGE ? 28 : 24}
+            height={DEVICE_LARGE ? 28 : 24}
+            color={focused ? GREY : BLACK}
+            highlight={focused ? WHITE : ORANGE}
+          />
+        )}
+        onPress={() => {
+          navigation.navigate('Groups');
+        }}
+      />
+
+      <CustomItem
         focused={false}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
@@ -360,6 +376,7 @@ export const HomeDrawer = () => {
     >
       <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen name="Achievements" component={TasksScreen} />
+      <Drawer.Screen name="BituVerification" component={BituVerificationScreen} />
       <Drawer.Screen name="Edit Profile" component={EditProfileScreen} />
       <Drawer.Screen
         name="Recovery Connections"
@@ -413,10 +430,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
     marginLeft: DEVICE_LARGE ? 20 : 18,
-  },
-  verificationBadge: {
-    marginLeft: 5,
-    marginTop: 1.5,
   },
   drawerItem: {
     alignItems: 'center',

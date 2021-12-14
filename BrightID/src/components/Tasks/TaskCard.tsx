@@ -10,6 +10,7 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { BLACK, BLUE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { TaskState } from './TaskState';
+import { useNavigation } from '@react-navigation/native';
 
 type TaskCardProps = {
   id: string;
@@ -21,12 +22,17 @@ type TaskCardProps = {
 };
 
 function TaskCard(props: TaskCardProps) {
-  const { title, description, fulfilled, url, onClick } = props;
+  const { title, description, fulfilled, url, onClick, id } = props;
+  const navigation = useNavigation();
 
   const desc = url ? (
     <TouchableOpacity
       onPress={() => {
-        Linking.openURL(url);
+        if (id === 'bitu_verification') {
+          navigation.navigate('BituVerification');
+        } else {
+          Linking.openURL(url);
+        }
       }}
     >
       <Text style={styles.linkifiedDescription}>{description}</Text>

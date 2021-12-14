@@ -38,6 +38,10 @@
     "setupTrustedConnections": {
       "description": "Setup your recovery connections to enable social account recovery",
       "title": "Setup social recovery"
+    },
+    "bituVerification": {
+      "description": "More details",
+      "title": "Bitu verification"
     }
   },
   "apps": {
@@ -292,7 +296,8 @@
       "contactUs": "Contact Us",
       "copyExplorerCode": "Copy Explorer Code",
       "editProfile": "Edit Profile",
-      "home": "Home"
+      "home": "Home",
+      "groups": "Groups",
     }
   },
   "eula": {
@@ -379,6 +384,7 @@
       "apps": "Apps",
       "connections": "Connections",
       "groups": "Groups",
+      "achievements": "Achievements",
       "myCode": "My Code",
       "scanCode": "Scan a Code"
     },

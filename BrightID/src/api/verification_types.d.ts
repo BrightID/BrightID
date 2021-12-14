@@ -37,9 +37,15 @@ type YektaVerification = HashVerification & {
   raw_rank: number;
 };
 
+type BituVerification = HashVerification & {
+  name: 'Bitu';
+  score: number;
+};
+
 type Verification =
   | ExpressionVerification
   | HashVerification
   | SeedConnectedVerification
   | SeedConnectedWithFriendVerification
-  | YektaVerification;
+  | YektaVerification
+  | BituVerification;
