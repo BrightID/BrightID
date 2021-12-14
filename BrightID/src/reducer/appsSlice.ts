@@ -6,7 +6,6 @@ import {
   Update,
 } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
-import { createDeepEqualSelector } from '@/utils/createDeepEqualStringArraySelector';
 
 /* ******** INITIAL STATE ************** */
 
@@ -14,9 +13,14 @@ const linkedContextsAdapter = createEntityAdapter<ContextInfo>({
   selectId: (linkedContext) => linkedContext.contextId,
 });
 
+const sigsAdapter = createEntityAdapter<SigInfo>({
+  selectId: (sig) => `${sig.uid}`,
+});
+
 const initialState: AppsState = {
   apps: [],
   linkedContexts: linkedContextsAdapter.getInitialState(),
+  sigs: sigsAdapter.getInitialState(),
 };
 
 const appsSlice = createSlice({
@@ -25,17 +29,6 @@ const appsSlice = createSlice({
   reducers: {
     setApps(state, action: PayloadAction<AppInfo[]>) {
       state.apps = action.payload;
-      /*
-      // Workaround until `verification` is removed from server response: Manually fill `verifications`
-      state.apps.forEach((app) => {
-        if (app.verifications === undefined) {
-          console.log(`adding verifications array to app ${app.name}`);
-          app.verifications = [];
-        }
-        if (app.verifications.length === 0 && app.verification !== '')
-          app.verifications.push(app.verification);
-      });
-       */
     },
     addLinkedContext(state, action: PayloadAction<ContextInfo>) {
       state.linkedContexts = linkedContextsAdapter.addOne(
@@ -59,6 +52,15 @@ const appsSlice = createSlice({
         update,
       );
     },
+    addSig(state, action: PayloadAction<SigInfo>) {
+      state.sigs = sigsAdapter.addOne(state.sigs, action);
+    },
+    removeAllSigs(state) {
+      state.sigs = sigsAdapter.removeAll(state.sigs);
+    },
+    updateSig(state, action: PayloadAction<Update<SigInfo>>) {
+      state.sigs = sigsAdapter.updateOne(state.sigs, action.payload);
+    },
   },
   extraReducers: {
     [RESET_STORE]: () => {
@@ -73,6 +75,9 @@ export const {
   addLinkedContext,
   removeLinkedContext,
   updateLinkedContext,
+  addSig,
+  removeAllSigs,
+  updateSig,
 } = appsSlice.actions;
 
 export const {
@@ -80,6 +85,10 @@ export const {
   selectAll: selectAllLinkedContexts,
 } = linkedContextsAdapter.getSelectors(
   (state: State) => state.apps.linkedContexts,
+);
+
+export const { selectAll: selectAllSigs } = sigsAdapter.getSelectors(
+  (state: State) => state.apps.sigs,
 );
 
 export const linkedContextTotal = createSelector(
@@ -102,11 +111,19 @@ export const selectPendingLinkedContext = createSelector(
   (contexts) => contexts.find((link) => link.state === 'pending'),
 );
 
-// exclude apps using blind signature feature
-// TODO: Return all apps when we are ready to handle blind signatures
-export const selectAllApps = createDeepEqualSelector(
-  (state: State) => state.apps.apps,
-  (apps) => apps.filter((app) => !app.usingBlindSig),
+export const selectAllApps = (state: State) => state.apps.apps;
+
+export const selectAllLinkedSigs = createSelector(selectAllSigs, (sigs) =>
+  sigs.filter((sig) => sig.linked),
+);
+
+export const selectLinkedSigsForApp = createSelector(
+  selectAllLinkedSigs,
+  (_, appId) => appId,
+  (linkedSigs, appId) => {
+    // return all linked sigs that belong to provided app
+    return linkedSigs.filter((sig) => sig.app === appId);
+  },
 );
 
 // Export reducer

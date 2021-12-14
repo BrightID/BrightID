@@ -469,4 +469,81 @@ export class NodeApi {
     NodeApi.throwOnError(res);
     return (res.data as AppsRes).data?.apps;
   }
+
+  async getState() {
+    const res = await this.api.get<StateRes, ErrRes>(`/state`);
+    NodeApi.throwOnError(res);
+    return (res.data as StateRes).data;
+  }
+
+  async getPublic(app: string, roundedTimestamp: number, verification: string) {
+    console.log(15, app, roundedTimestamp, verification);
+    const res = await this.api.get<PublicRes, ErrRes>(
+      `/verifications/blinded/public`,
+      { app, roundedTimestamp, verification },
+    );
+    NodeApi.throwOnError(res);
+    return (res.data as PublicRes).data.public;
+  }
+
+  async getBlindedSig(pub: string, sig: string, e: string) {
+    const res = await this.api.get<BlindSigRes, ErrRes>(
+      `/verifications/blinded/sig/${this.id}`,
+      { public: pub, sig, e },
+    );
+    NodeApi.throwOnError(res);
+    return (res.data as BlindSigRes).data.response;
+  }
+
+  async linkAppId(sig: SigInfo, appId: string) {
+    console.log(`/verifications/${sig.app}/${appId}`);
+    console.log({
+      sig: sig.sig,
+      uid: sig.uid,
+      verification: sig.verification,
+      roundedTimestamp: sig.roundedTimestamp,
+    });
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/verifications/${sig.app}/${appId}`,
+      {
+        sig: sig.sig,
+        uid: sig.uid,
+        verification: sig.verification,
+        roundedTimestamp: sig.roundedTimestamp,
+      },
+    );
+
+    NodeApi.throwOnError(res);
+  }
+
+  async spendSponsorship(appId: string, appUserId: string) {
+    const name = 'Spend Sponsorship';
+    const timestamp = Date.now();
+    const op: SpendSponsorshipOp = {
+      name,
+      app: appId,
+      appId: appUserId,
+      timestamp,
+      v,
+    };
+    const message = stringify(op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      '/operations',
+      op,
+    );
+    NodeApi.throwOnError(res);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
+    return op;
+  }
+
+  async getSponsorShip(appUserId: string) {
+    const res = await this.api.get<SponsorshipRes, ErrRes>(
+      `/sponsorships/${appUserId}`,
+    );
+    NodeApi.throwOnError(res);
+    return (res.data as SponsorshipRes).data;
+  }
 }

@@ -5,14 +5,18 @@
 type NodeApiRes =
   | AppRes
   | AppsRes
+  | BlindSigRes
   | OperationPostRes
   | OperationRes
+  | PublicRes
+  | StateRes
   | UserConnectionsRes
   | UserProfileRes
   | UserVerificationsRes
   | UserInvitesRes
   | UserMembershipsRes
-  | GroupRes;
+  | GroupRes
+  | SponsorshipRes;
 
 type AppRes = {
   data: AppInfo;
@@ -21,6 +25,22 @@ type AppRes = {
 type AppsRes = {
   data: {
     apps: AppInfo[];
+  };
+};
+
+type StateRes = {
+  data: StateInfo;
+};
+
+type PublicRes = {
+  data: {
+    public: string;
+  };
+};
+
+type BlindSigRes = {
+  data: {
+    response: string;
   };
 };
 
@@ -72,9 +92,24 @@ type GroupRes = {
   data: GroupInfo;
 };
 
+type SponsorshipRes = {
+  data: SponsorshipInfo;
+};
+
 /**
  * Info Types
  */
+
+type StateInfo = {
+  lastProcessedBlock: number;
+  verificationsBlock: number;
+  wISchnorrPublic?: {
+    p: string;
+    q: string;
+    g: string;
+    y: string;
+  };
+};
 
 type AppInfo = {
   id: string;
@@ -89,7 +124,9 @@ type AppInfo = {
   testing: boolean;
   idsAsHex: boolean;
   usingBlindSig: boolean;
-  sponsorPublicKey: string;
+  verificationExpirationLength?: number;
+  sponsorPublicKey?: string;
+  nodeUrl?: string;
 };
 
 type OperationInfo = {
@@ -144,4 +181,11 @@ type ProfileInfo = {
   verifications: Verification[];
   signingKeys: string[];
   sponsored: boolean;
+};
+
+type SponsorshipInfo = {
+  app: string;
+  timestamp: number;
+  appHasAuthorized: boolean;
+  spendRequested: boolean;
 };

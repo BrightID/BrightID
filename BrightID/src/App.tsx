@@ -26,7 +26,7 @@ export const App = () => {
         App: {
           screens: {
             Apps: {
-              path: 'link-verification/:baseUrl/:context/:contextId',
+              path: 'link-verification/:baseUrl?/:context/:contextId',
               exact: true,
             },
             ScanCode: {

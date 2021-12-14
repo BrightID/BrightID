@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   Image,
@@ -12,9 +12,22 @@ import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { WHITE, DARKER_GREY, BLACK, BLUE, ORANGE } from '@/theme/colors';
-import { updateLinkedContext, selectLinkedContext } from '@/actions';
+import {
+  WHITE,
+  DARKER_GREY,
+  BLACK,
+  BLUE,
+  ORANGE,
+  YELLOW,
+} from '@/theme/colors';
+import {
+  updateLinkedContext,
+  selectLinkedContext,
+  selectLinkedSigsForApp,
+} from '@/actions';
 
+import { isVerified } from '@/utils/verifications';
+import _ from 'lodash';
 import Check from '../Icons/Check';
 
 /**
@@ -35,12 +48,14 @@ const AppCard = (props: AppInfo) => {
     unusedSponsorships,
     context,
     testing,
-    verifications,
+    verifications: appVerifications,
+    usingBlindSig,
   } = props;
   const dispatch = useDispatch();
   const userVerifications = useSelector(
     (state: State) => state.user.verifications,
   );
+  const [verifiedCount, setVerifiedCount] = useState(0);
 
   // Make sure each instance of AppCard has it's own selector. Otherwise they would
   // invalidate each others cache. See https://react-redux.js.org/next/api/hooks#using-memoizing-selectors
@@ -48,13 +63,29 @@ const AppCard = (props: AppInfo) => {
   const linkedContext = useSelector((state: State) =>
     linkedContextSelector(state, context),
   );
+  const linkedSigsSelector = useMemo(() => selectLinkedSigsForApp, []);
+  const linkedSigs = useSelector((state) => linkedSigsSelector(state, id));
 
   const { t } = useTranslation();
 
-  // does user have all required verifications for this app?
-  const verified = verifications
-    ? verifications.every((v) => userVerifications.some((uv) => uv.name === v))
-    : false;
+  // Get verifications user has for this app
+  useEffect(() => {
+    let count = 0;
+    for (const verification of appVerifications) {
+      const verified = isVerified(
+        _.keyBy(userVerifications, (v) => v.name),
+        verification,
+      );
+      if (verified) {
+        // console.log(`${name}: verified for ${verification}`);
+        count++;
+      } else {
+        // console.log(`${name}: not verified for ${verification}`);
+      }
+    }
+    setVerifiedCount(count);
+  }, [appVerifications, name, userVerifications]);
+
   const isLinked = linkedContext && linkedContext.state === 'applied';
   const notSponsored = unusedSponsorships < 1 || !unusedSponsorships;
 
@@ -115,16 +146,28 @@ const AppCard = (props: AppInfo) => {
   };
 
   const VerifiedLabel = () => {
-    if (verified) {
+    if (verifiedCount === appVerifications.length) {
       return (
         <View style={styles.verifiedContainer}>
           <Text style={styles.verifiedLabel}>verified</Text>
         </View>
       );
+    } else if (verifiedCount > 0) {
+      // partly verified
+      return (
+        <View style={styles.partVerifiedContainer}>
+          <Text style={styles.partVerifiedLabel}>
+            partly verified ({`${verifiedCount}/${appVerifications.length}`})
+          </Text>
+        </View>
+      );
     } else {
+      // no verification
       return (
         <View style={styles.unverifiedContainer}>
-          <Text style={styles.unverifiedLabel}>unverified</Text>
+          <Text style={styles.unverifiedLabel}>
+            unverified ({`${verifiedCount}/${appVerifications.length}`})
+          </Text>
         </View>
       );
     }
@@ -152,19 +195,38 @@ const AppCard = (props: AppInfo) => {
   };
 
   const LinkedSticker = () => {
-    return isLinked ? (
-      <View style={styles.linkedContainer} testID={`Linked_${id}`}>
-        <View style={styles.linkedSticker}>
-          <Check
-            width={fontSize[11]}
-            height={fontSize[11]}
-            strokeWidth={3}
-            color={WHITE}
-          />
+    if (usingBlindSig) {
+      // show x/y linked sigs
+      return linkedSigs.length > 0 ? (
+        <View style={styles.linkedContainer} testID={`Linked_${id}`}>
+          <View style={styles.linkedSticker}>
+            <Check
+              width={fontSize[11]}
+              height={fontSize[11]}
+              strokeWidth={3}
+              color={WHITE}
+            />
+          </View>
+          <Text
+            style={styles.linkedText}
+          >{`Linked (${linkedSigs.length}/${appVerifications.length})`}</Text>
         </View>
-        <Text style={styles.linkedText}>Linked</Text>
-      </View>
-    ) : null;
+      ) : null;
+    } else {
+      return isLinked ? (
+        <View style={styles.linkedContainer} testID={`Linked_${id}`}>
+          <View style={styles.linkedSticker}>
+            <Check
+              width={fontSize[11]}
+              height={fontSize[11]}
+              strokeWidth={3}
+              color={WHITE}
+            />
+          </View>
+          <Text style={styles.linkedText}>Linked</Text>
+        </View>
+      ) : null;
+    }
   };
 
   // If app is testing and user is not linked, do not display card
@@ -180,7 +242,7 @@ const AppCard = (props: AppInfo) => {
       <TouchableOpacity onPress={openApp}>
         <Image
           source={{
-            uri: `${logo}`,
+            uri: logo !== '' ? logo : null,
           }}
           style={styles.logo}
         />
@@ -280,6 +342,19 @@ const styles = StyleSheet.create({
     marginHorizontal: DEVICE_LARGE ? 9 : 7.5,
     marginVertical: DEVICE_LARGE ? 1.3 : 1.1,
     color: DARKER_GREY,
+  },
+  partVerifiedContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: YELLOW,
+    borderRadius: 10,
+  },
+  partVerifiedLabel: {
+    fontSize: fontSize[10],
+    marginHorizontal: DEVICE_LARGE ? 9 : 7.5,
+    marginVertical: DEVICE_LARGE ? 1.3 : 1.1,
+    color: YELLOW,
   },
   verifiedContainer: {
     alignItems: 'center',

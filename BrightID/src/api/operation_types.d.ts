@@ -12,7 +12,8 @@ type NodeOps =
   | LinkContextIdOp
   | RemoveGroupOp
   | RemoveMembershipOp
-  | SocialRecoveryOp;
+  | SocialRecoveryOp
+  | SponsorOp;
 
 type AddAdminOp = {
   name: 'Add Admin';
@@ -127,5 +128,14 @@ type SocialRecoveryOp = {
   id2?: string;
   sig1?: string;
   sig2?: string;
+  hash?: string;
+};
+
+type SpendSponsorshipOp = {
+  name: 'Spend Sponsorship';
+  app: string;
+  appId: string;
+  timestamp: number;
+  v: number;
   hash?: string;
 };

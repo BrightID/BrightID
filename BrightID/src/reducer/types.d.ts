@@ -5,6 +5,7 @@
 type AppsState = {
   apps: AppInfo[];
   linkedContexts: EntityState<ContextInfo>;
+  sigs: EntityState<SigInfo>;
 };
 
 /**

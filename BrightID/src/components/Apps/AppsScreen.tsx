@@ -8,27 +8,27 @@ import {
   StatusBar,
   RefreshControl,
 } from 'react-native';
-import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
-import EmptyList from '@/components/Helpers/EmptyList';
 import Spinner from 'react-native-spinkit';
-import { ORANGE, BLUE, WHITE } from '@/theme/colors';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { any, propEq } from 'ramda';
-import {
-  fetchApps,
-  selectAllApps,
-  selectPendingLinkedContext,
-} from '@/actions';
+import { any, propEq, find } from 'ramda';
 import {
   useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
+import { useDispatch, useSelector } from '@/store';
+import EmptyList from '@/components/Helpers/EmptyList';
+import { ORANGE, BLUE, WHITE } from '@/theme/colors';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import {
+  fetchApps,
+  selectAllApps,
+  selectPendingLinkedContext,
+} from '@/actions';
 import { fontSize } from '@/theme/fonts';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import AppCard from './AppCard';
-import { handleAppContext } from './model';
+import { handleAppContext, handleBlindSigApp } from './model';
 
 export const AppsScreen = () => {
   const dispatch = useDispatch();
@@ -41,6 +41,9 @@ export const AppsScreen = () => {
   const pendingLink = useSelector(selectPendingLinkedContext);
 
   const [refreshing, setRefreshing] = useState(false);
+  const [sponsoringApp, setSponsoringApp] = useState<AppInfo | undefined>(
+    undefined,
+  );
   const { t } = useTranslation();
 
   const refreshApps = useCallback(() => {
@@ -76,15 +79,38 @@ export const AppsScreen = () => {
     });
   }, [navigation, route.params, apps, t]);
 
-  useEffect(() => {
-    if (apps.length > 0 && route.params?.context) {
-      handleDeepLink();
+  const handleAppDeepLink = useCallback(() => {
+    const appId = route.params?.context;
+    const appInfo = find(propEq('id', appId))(apps) as AppInfo;
+    if (appInfo && appInfo.usingBlindSig) {
+      handleBlindSigApp(route.params, setSponsoringApp, api);
+    } else {
+      Alert.alert(
+        t('apps.alert.title.invalidApp'),
+        t('apps.alert.text.invalidApp', { app: `${appId}` }),
+      );
     }
-  }, [apps, handleDeepLink, route.params]);
+    // reset params
+    navigation.setParams({
+      context: '',
+      contextId: '',
+    });
+  }, [route.params, apps, navigation, api, t]);
+
+  useEffect(() => {
+    if (apps.length > 0 && route.params?.baseUrl) {
+      handleDeepLink();
+    } else if (apps.length > 0 && route.params?.context) {
+      handleAppDeepLink();
+    }
+  }, [apps, handleDeepLink, handleAppDeepLink, route.params]);
 
   const AppStatus = () => {
     let msg: string, waiting: boolean;
-    if (pendingLink) {
+    if (sponsoringApp) {
+      msg = t('apps.text.sponsoring', { app: `${sponsoringApp.name}` });
+      waiting = true;
+    } else if (pendingLink) {
       msg = t('apps.text.pendingLink', { context: `${pendingLink.context}` });
       waiting = true;
     } else if (!isSponsored) {
