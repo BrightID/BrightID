@@ -54,11 +54,13 @@ const NodeModal = () => {
       <>
         <View style={styles.resetInfoContainer}>
           <Text style={styles.resetInfoText}>
-            You are not using the default nodelist
+            {t('nodeApiGate.reset.text')}
           </Text>
         </View>
         <TouchableOpacity style={styles.resetButton} onPress={resetHandler}>
-          <Text style={styles.resetButtonText}>Restore default nodelist</Text>
+          <Text style={styles.resetButtonText}>
+            {t('nodeApiGate.reset.button')}
+          </Text>
         </TouchableOpacity>
       </>
     );
@@ -77,7 +79,9 @@ const NodeModal = () => {
       </TouchableWithoutFeedback>
       <View style={styles.modalContainer}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Current node:</Text>
+          <Text style={styles.headerText}>
+            {t('nodeModal.currentNode.header')}
+          </Text>
           <Text style={styles.subHeaderText}>{currentBaseUrl}</Text>
         </View>
         <TouchableOpacity
@@ -86,7 +90,7 @@ const NodeModal = () => {
           onPress={changeNodeHandler}
         >
           <Text style={styles.switchNodeButtonText}>
-            Switch to another node
+            {t('nodeModal.switchNodeButtonLabel')}
           </Text>
         </TouchableOpacity>
         {resetContainer}

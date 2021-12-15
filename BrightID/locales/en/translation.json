@@ -70,7 +70,7 @@
       "noApps": "No Apps",
       "notSponsored": "You're not sponsored.\nPlease find an app below to sponsor you.",
       "pendingLink": "Linking your account in {{context}} to your BrightID…",
-      "sponsoring": "{{app}} is sponsoring you…",
+      "sponsoring": "{{app}} is sponsoring you…"
     }
   },
   "backup": {
@@ -135,6 +135,7 @@
     "button": {
       "cancel": "Cancel",
       "copy": "Copy",
+      "retry": "Retry",
       "save": "Save"
     },
     "camera": {
@@ -394,6 +395,26 @@
     "link": {
       "community": "Join the Community"
     }
+  },
+  "nodeApiGate": {
+    "state": {
+      "connecting": "Connecting to BrightID node...",
+      "noConnection": "Failed to connect to a BrightID node. Please check your network connectivity.",
+      "noNode": "Nodelist is empty."
+    },
+    "reset": {
+      "text": "You are not using the default nodelist",
+      "button": "Restore default nodelist"
+    },
+    "timer": {
+      "text": "Time remaining: {{secondsLeft}} seconds"
+    }
+  },
+  "nodeModal": {
+    "currentNode": {
+      "header": "Current node:"
+    },
+    "switchNodeButtonLabel": "Switch to another node"
   },
   "notificationBar": {
     "text": {

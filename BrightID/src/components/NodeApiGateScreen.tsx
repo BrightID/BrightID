@@ -55,22 +55,20 @@ export const NodeApiGateScreen = ({
       case ApiGateState.SEARCH_REQUESTED:
       case ApiGateState.NODE_AVAILABLE:
         setIconData(undefined);
-        setStateDescription('Connecting to BrightID node...');
+        setStateDescription(t('nodeApiGate.state.connecting'));
         break;
       case ApiGateState.ERROR_NO_NODE:
         setIconData({ color: RED, name: 'alert-circle-outline' });
         if (currentNodeUrls.length) {
-          setStateDescription(
-            'Failed to connect to a BrightID node. Please check your network connectivity.',
-          );
+          setStateDescription(t('nodeApiGate.state.noConnection'));
         } else {
-          setStateDescription('Nodelist is empty.');
+          setStateDescription(t('nodeApiGate.state.noNode'));
         }
         break;
       default:
         console.log(`Unhandled gateState ${gateState}!`);
     }
-  }, [currentNodeUrls.length, gateState]);
+  }, [currentNodeUrls.length, gateState, t]);
 
   // countdown until timeout reached
   useEffect(() => {
@@ -101,11 +99,13 @@ export const NodeApiGateScreen = ({
       <>
         <View style={styles.resetInfoContainer}>
           <Text style={styles.resetInfoText}>
-            You are not using the default nodelist
+            {t('nodeApiGate.reset.text')}
           </Text>
         </View>
         <TouchableOpacity style={styles.resetButton} onPress={resetHandler}>
-          <Text style={styles.resetButtonText}>Restore default nodelist</Text>
+          <Text style={styles.resetButtonText}>
+            {t('nodeApiGate.reset.button')}
+          </Text>
         </TouchableOpacity>
       </>
     );
@@ -115,7 +115,7 @@ export const NodeApiGateScreen = ({
   if (currentNodeUrls.length) {
     retryInfo = (
       <TouchableOpacity style={styles.retryBtn} onPress={retryHandler}>
-        <Text style={styles.retryBtnText}>Retry</Text>
+        <Text style={styles.retryBtnText}>{t('common.button.retry')}</Text>
       </TouchableOpacity>
     );
   }
@@ -161,7 +161,7 @@ export const NodeApiGateScreen = ({
             <View style={styles.timeoutContainer}>
               {secondsLeft > 0 && (
                 <Text style={styles.infoText}>
-                  Time remaining: {secondsLeft} seconds
+                  {t('nodeApiGate.timer.text', { secondsLeft })}
                 </Text>
               )}
             </View>
