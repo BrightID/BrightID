@@ -119,19 +119,18 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
     let responseCounter = 0;
     const apiMonitor = (response: ApiResponse<NodeApiRes, ErrRes>) => {
       responseCounter++;
-      console.log(
-        `Response ${responseCounter} ok: ${response.ok} - ${response.status} - ${response.problem}`,
-      );
       if (!response.ok) {
         switch (response.problem) {
           case 'SERVER_ERROR':
           case 'CONNECTION_ERROR':
           case 'TIMEOUT_ERROR':
-            console.log(`Node problem: ${response.problem}.`);
+            console.log(
+              `Node monitor: Detected problem: ${response.status} - ${response.problem}.`,
+            );
             setNodeError(true);
             break;
           default:
-            console.log(`Ignoring problem ${response.problem}`);
+            console.log(`Node monitor: Ignoring problem ${response.problem}`);
         }
       }
       /*
@@ -196,7 +195,7 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
     }
   };
 
-  if (api && gateState === ApiGateState.NODE_AVAILABLE) {
+  if (url && api && gateState === ApiGateState.NODE_AVAILABLE) {
     return (
       <NodeApiContext.Provider value={api}>
         {props.children}
