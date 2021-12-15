@@ -131,12 +131,11 @@ type SocialRecoveryOp = {
   hash?: string;
 };
 
-type SponsorOp = {
-  name: 'Sponsor';
-  id: string;
+type SpendSponsorshipOp = {
+  name: 'Spend Sponsorship';
   app: string;
+  appId: string;
   timestamp: number;
   v: number;
-  sig?: string;
   hash?: string;
 };

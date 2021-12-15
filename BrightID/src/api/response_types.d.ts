@@ -15,7 +15,8 @@ type NodeApiRes =
   | UserVerificationsRes
   | UserInvitesRes
   | UserMembershipsRes
-  | GroupRes;
+  | GroupRes
+  | SponsorshipRes;
 
 type AppRes = {
   data: AppInfo;
@@ -89,6 +90,10 @@ type UserProfileRes = {
 
 type GroupRes = {
   data: GroupInfo;
+};
+
+type SponsorshipRes = {
+  data: SponsorshipInfo;
 };
 
 /**
@@ -176,4 +181,11 @@ type ProfileInfo = {
   verifications: Verification[];
   signingKeys: string[];
   sponsored: boolean;
+};
+
+type SponsorshipInfo = {
+  app: string;
+  timestamp: number;
+  appHasAuthorized: boolean;
+  spendRequested: boolean;
 };

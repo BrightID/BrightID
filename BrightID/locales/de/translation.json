@@ -292,7 +292,8 @@
       "skip": "Überspringen und es später machen"
     },
     "label": {
-      "cofounders": "Gründungsmitglieder"
+      "cofounders": "Gründungsmitglieder",
+      "invitees": "EINGELADENEN"
     },
     "placeholder": {
       "groupName": "Wie ist der Gruppenname?"
@@ -583,13 +584,15 @@
       "text": {
         "codeGroup": "Ein Gruppencode kann mehrmals gescannt werden für gleichzeitige Verbindung mit mehreren Personen.",
         "codeSingle": "Ein Einmalcode kann nur zur Verbindung mit jeweils einer Person genutzt werden.",
+        "codeStar": "Dieser QR-Code wurde entwickelt, um viele Menschen mit einer Person zu verbinden.",
         "shareLinkGroup": "Diesen Link teilen",
         "shareLinkSingle": "Teile diesen Link mit einem Freund",
         "universalLink": "Universeller Link"
       },
       "title": {
         "codeGroup": "Gruppencode",
-        "codeSingle": "Einmalcode"
+        "codeSingle": "Einmalcode",
+        "codeStar": "Sterncode"
       },
       "universalLink": "Universeller Link"
     },
@@ -609,6 +612,7 @@
       "canAlso": "Du kannst auch …",
       "codeGroup": "Gruppencode",
       "codeSingle": "Einmalcode",
+      "codeStar": "Sterncode",
       "confirmConnections": "Verbindung bestätigen",
       "downloadingConnectionData": "Lade Verbindungsdaten",
       "expiresIn": "Läuft ab in:",
