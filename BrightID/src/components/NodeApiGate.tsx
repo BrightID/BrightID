@@ -13,6 +13,7 @@ import { NodeApi } from '@/api/brightId';
 import { pollOperations } from '@/utils/operations';
 import chooseNode from '@/utils/nodeChooser';
 import { NodeApiGateScreen } from '@/components/NodeApiGateScreen';
+import { leaveAllChannels } from './PendingConnections/actions/channelThunks';
 
 type ApiContext = NodeApi | null;
 
@@ -95,6 +96,7 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
           {
             text: 'Switch to different node',
             onPress: () => {
+              dispatch(leaveAllChannels());
               dispatch(removeCurrentNodeUrl());
               setNodeError(false);
             },
@@ -183,6 +185,7 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
   /* Manually set node url */
   const setNode = async (nodeUrl: string) => {
     try {
+      dispatch(leaveAllChannels());
       // Check if node is working
       setGateState(ApiGateState.SEARCHING_NODE);
       const url = await chooseNode([nodeUrl]);

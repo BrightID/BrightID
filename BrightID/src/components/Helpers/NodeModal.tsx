@@ -22,6 +22,7 @@ import {
   selectBaseUrl,
   selectDefaultNodeUrls,
 } from '@/reducer/settingsSlice';
+import { leaveAllChannels } from '@/components/PendingConnections/actions/channelThunks';
 
 const NodeModal = () => {
   const navigation = useNavigation();
@@ -37,11 +38,13 @@ const NodeModal = () => {
 
   const changeNodeHandler = () => {
     navigation.goBack();
+    dispatch(leaveAllChannels());
     dispatch(removeCurrentNodeUrl());
   };
 
   const resetHandler = () => {
     dispatch(resetNodeUrls());
+    dispatch(leaveAllChannels());
     dispatch(clearBaseUrl());
   };
 
