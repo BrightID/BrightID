@@ -125,6 +125,7 @@ const NodeApiGate = (props: React.PropsWithChildren<unknown>) => {
         switch (response.problem) {
           case 'SERVER_ERROR':
           case 'CONNECTION_ERROR':
+          case 'NETWORK_ERROR':
           case 'TIMEOUT_ERROR':
             console.log(
               `Node monitor: Detected problem: ${response.status} - ${response.problem}.`,
