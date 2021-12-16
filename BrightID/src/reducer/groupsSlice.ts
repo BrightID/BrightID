@@ -58,7 +58,16 @@ const groupsSlice = createSlice({
       });
     },
     joinGroup(state, action: PayloadAction<Group>) {
-      state.groups.push(action.payload);
+      const newGroup = action.payload;
+      const existingGroup = state.groups.find(
+        (group) => group.id === newGroup.id,
+      );
+      if (existingGroup) {
+        // replace existing group with new group
+        Object.assign(existingGroup, action.payload);
+      } else {
+        state.groups.push(action.payload);
+      }
     },
     leaveGroup(state, action: PayloadAction<Group>) {
       const group = state.groups.find(
