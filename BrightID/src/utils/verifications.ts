@@ -17,17 +17,17 @@ export const isVerified = (verifications: Value, verification: string) => {
 
 export const getVerificationsTexts = (verifications: Verification[]) => {
   const texts = [];
-  let v = verifications.find(v => v.name === 'SeedConnected');
-  if (v && v.rank > 0) {
+  let v = verifications.find((v) => v.name === 'SeedConnected');
+  if (v && (v as SeedConnectedVerification).rank > 0) {
     texts.push(`Joined Meets`);
   }
-  v = verifications.find(v => v.name === 'Bitu');
-  if (v && v.score > 0) {
-    texts.push(`Bitu ${v.score}`);
+  v = verifications.find((v) => v.name === 'Bitu');
+  if (v && (v as BituVerification).score > 0) {
+    texts.push(`Bitu ${(v as BituVerification).score}`);
   }
-  v = verifications.find(v => v.name === 'Seed');
+  v = verifications.find((v) => v.name === 'Seed');
   if (v) {
     texts.push('Seed');
   }
   return texts;
-}
+};

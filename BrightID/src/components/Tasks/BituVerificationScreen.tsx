@@ -1,18 +1,23 @@
-import React, { useCallback } from 'react';
-import { StyleSheet, View, Text, Image, Linking, FlatList, ScrollView } from 'react-native';
-import { useDispatch, store, useSelector } from '@/store';
+import React from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  Linking,
+  FlatList,
+  ScrollView,
+} from 'react-native';
 import { useHeaderHeight } from '@react-navigation/stack';
+import { store, useSelector } from '@/store';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { photoDirectory } from '@/utils/filesystem';
-import { GREY, WHITE, BLUE, BLACK, RED } from '@/theme/colors';
-import { useTranslation } from 'react-i18next';
+import { GREY, BLUE, BLACK, RED } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
 
 export const BituVerificationScreen = function ({ route }) {
   const { url } = route.params;
-  const dispatch = useDispatch();
-  const { t } = useTranslation();
   let headerHeight = useHeaderHeight();
   if (DEVICE_IOS && DEVICE_LARGE) {
     headerHeight += 7;
@@ -21,26 +26,33 @@ export const BituVerificationScreen = function ({ route }) {
     user: { verifications },
   } = store.getState();
   const connections = useSelector(selectAllConnections);
-  const bituVerification = verifications.find(v => v.name == 'Bitu');
-  const directReports = bituVerification ?  Object.keys(bituVerification.directReports) : [];
-  const indirectReports = bituVerification ?  Object.keys(bituVerification.indirectReports) : [];
+  const bituVerification = verifications.find(
+    (v) => v.name === 'Bitu',
+  ) as BituVerification;
+  const directReports = bituVerification
+    ? Object.keys(bituVerification.directReports)
+    : [];
+  const indirectReports = bituVerification
+    ? Object.keys(bituVerification.indirectReports)
+    : [];
 
   const renderItem = (item, index, section) => {
-    const score = section === 'indirect' ?
-      bituVerification.indirectReports[item] :
-      bituVerification.directReports[item];
+    const score =
+      section === 'indirect'
+        ? bituVerification.indirectReports[item]
+        : bituVerification.directReports[item];
     const testID = `${section}-${index}`;
     console.log(
       `Rendering Section ${section} item ${index} (${item.name}) - testID ${testID}`,
     );
-    item = connections.find(c => c.id === item) || {};
+    item = connections.find((c) => c.id === item) || {};
     return (
       <View testID={testID} style={styles.itemContainer}>
         <View style={styles.itemPhoto}>{renderPhoto(item)}</View>
         <View style={styles.itemLabel}>
           <Text style={styles.itemLabelText}>{item.name || 'Unknown'}</Text>
         </View>
-        <View style={{flex: 1}}></View>
+        <View style={{ flex: 1 }} />
         <View style={styles.negativeScoreContainer}>
           <Text style={styles.scoreText}>{score}</Text>
         </View>
@@ -49,8 +61,7 @@ export const BituVerificationScreen = function ({ route }) {
   };
 
   const renderPhoto = (item) => {
-    const imageSource =
-      item?.photo?.filename
+    const imageSource = item?.photo?.filename
       ? { uri: `file://${photoDirectory()}/${item.photo.filename}` }
       : require('@/static/default_profile.jpg');
     return (
@@ -69,14 +80,17 @@ export const BituVerificationScreen = function ({ route }) {
 
   return (
     <ScrollView
-      style={[
-        styles.container,
-        { marginTop: headerHeight },
-      ]}
+      style={[styles.container, { marginTop: headerHeight }]}
       testID="BituVerificationScreen"
     >
       <View style={styles.headerContainer}>
-        <View style={bituVerification ? styles.imageContainer : styles.imageContainerDisabled}>
+        <View
+          style={
+            bituVerification
+              ? styles.imageContainer
+              : styles.imageContainerDisabled
+          }
+        >
           <Image
             source={require('@/static/verifications/bitu.png')}
             accessible={true}
@@ -89,32 +103,36 @@ export const BituVerificationScreen = function ({ route }) {
           <Text style={styles.titleText}>Bitu Verification</Text>
           <Text style={styles.scoreTitle}>Score:</Text>
         </View>
-        <View style={{flex: 1}}></View>
+        <View style={{ flex: 1 }} />
         <View style={styles.scoreContainer}>
           <Text style={styles.scoreText}>{bituVerification?.score || 0}</Text>
         </View>
       </View>
       <Text style={styles.guideText}>
-        You can get verified and increase your score in "Bitu" by making "already known"
-        connections to friends or family who are connected to BrightID graph and have "Bitu"
-        verification.
-        Never make "already known" connections to users you do not know, because
-        you lose 5 scores if they report you and 1 score every time they are reported.
+        You can get verified and increase your score in "Bitu" by making
+        "already known" connections to friends or family who are connected to
+        BrightID graph and have "Bitu" verification. Never make "already known"
+        connections to users you do not know, because you lose 5 scores if they
+        report you and 1 score every time they are reported.
         <Text style={{ color: 'blue' }} onPress={() => Linking.openURL(url)}>
           more ...
         </Text>
       </Text>
-      {directReports.length > 0 && <Text style={styles.reportTitle}>Being reported by</Text>}
+      {directReports.length > 0 && (
+        <Text style={styles.reportTitle}>Being reported by</Text>
+      )}
       <FlatList
         data={directReports}
-        renderItem={({item, index}) => renderItem(item, index, 'direct')}
-        keyExtractor={item => item.id}
+        renderItem={({ item, index }) => renderItem(item, index, 'direct')}
+        keyExtractor={(item) => item}
       />
-      {indirectReports.length > 0 && <Text style={styles.reportTitle}>Reported friends/family</Text>}
+      {indirectReports.length > 0 && (
+        <Text style={styles.reportTitle}>Reported friends/family</Text>
+      )}
       <FlatList
         data={indirectReports}
-        renderItem={({item, index}) => renderItem(item, index, 'indirect')}
-        keyExtractor={item => item.id}
+        renderItem={({ item, index }) => renderItem(item, index, 'indirect')}
+        keyExtractor={(item) => item}
       />
     </ScrollView>
   );
