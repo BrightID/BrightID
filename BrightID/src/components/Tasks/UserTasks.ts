@@ -105,7 +105,8 @@ export const UserTasks = {
     sortValue: 120,
     title: i18next.t(`achievements.bituVerification.title`),
     description: i18next.t(`achievements.bituVerification.description`),
-    url: '',
+    url: 'https://brightid.gitbook.io/brightid/getting-verified/bitu-verification',
+    navigationTarget: 'BituVerification',
     checkFn(state: State) {
       return Boolean(
         state.user.verifications.find(

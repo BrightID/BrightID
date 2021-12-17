@@ -38,7 +38,7 @@ import { setHeaderHeight } from '@/reducer/walkthroughSlice';
 import { uniq } from 'ramda';
 import { clearBaseUrl, selectBaseUrl } from '@/reducer/settingsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
-import { isVerified } from '@/utils/verifications';
+import { getVerificationsTexts } from '@/utils/verifications';
 import {
   selectTaskIds,
   selectCompletedTaskIds,
@@ -57,22 +57,7 @@ const discordUrl = 'https://discord.gg/nTtuB2M';
 
 export const verificationsTextsSelector = createSelector(
   (state: State) => state.user.verifications,
-  (verifications) => {
-    const texts = [];
-    let v = verifications.find(v => v.name === 'SeedConnected');
-    if (v && v.rank > 0) {
-      texts.push(`Joined Meets`);
-    }
-    v = verifications.find(v => v.name === 'Bitu');
-    if (v && v.score > 0) {
-      texts.push(`Bitu ${v.score}`);
-    }
-    v = verifications.find(v => v.name === 'Seed');
-    if (v) {
-      texts.push('Seed');
-    }
-    return texts;
-  },
+  getVerificationsTexts,
 );
 
 /** HomeScreen Component */

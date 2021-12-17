@@ -13,6 +13,7 @@ import {
   RouteProp,
 } from '@react-navigation/native';
 import ConnectionTestButton from '@/utils/connectionTestButton';
+import { getVerificationsTexts } from '@/utils/verifications';
 import {
   selectConnectionById,
   selectAllConnections,
@@ -69,25 +70,12 @@ function ConnectionScreenController() {
   useEffect(() => {
     if (connectionProfile) {
       console.log(`Updating verifications for ${connectionProfile.id}`);
-      const texts = [];
-      const verifications = connectionProfile.verifications;
-      let v = verifications.find(v => v.name === 'SeedConnected');
-      if (v && v.rank > 0) {
-        texts.push(`Joined Meets`);
-      }
-      v = verifications.find(v => v.name === 'Bitu');
-      if (v && v.score > 0) {
-        texts.push(`Bitu ${v.score}`);
-      }
-      v = verifications.find(v => v.name === 'Seed');
-      if (v) {
-        texts.push('Seed');
-      }
+      const texts = getVerificationsTexts(connectionProfile.verifications);
       setVerificationsTexts(texts);
       dispatch(
         setConnectionVerifications({
           id: connectionProfile.id,
-          verifications,
+          verifications: connectionProfile.verifications,
         }),
       );
     }

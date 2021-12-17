@@ -9,7 +9,8 @@ import { useTranslation } from 'react-i18next';
 import { fontSize } from '@/theme/fonts';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
 
-export const BituVerificationScreen = function () {
+export const BituVerificationScreen = function ({ route }) {
+  const { url } = route.params;
   const dispatch = useDispatch();
   const { t } = useTranslation();
   let headerHeight = useHeaderHeight();
@@ -23,7 +24,6 @@ export const BituVerificationScreen = function () {
   const bituVerification = verifications.find(v => v.name == 'Bitu');
   const directReports = bituVerification ?  Object.keys(bituVerification.directReports) : [];
   const indirectReports = bituVerification ?  Object.keys(bituVerification.indirectReports) : [];
-  const readMoreUrl = 'https://brightid.gitbook.io/brightid/setting-up-social-recovery';
 
   const renderItem = (item, index, section) => {
     const score = section === 'indirect' ?
@@ -100,7 +100,7 @@ export const BituVerificationScreen = function () {
         verification.
         Never make "already known" connections to users you do not know, because
         you lose 5 scores if they report you and 1 score every time they are reported.
-        <Text style={{ color: 'blue' }} onPress={() => Linking.openURL(readMoreUrl)}>
+        <Text style={{ color: 'blue' }} onPress={() => Linking.openURL(url)}>
           more ...
         </Text>
       </Text>

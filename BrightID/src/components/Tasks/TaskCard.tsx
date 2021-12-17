@@ -18,19 +18,20 @@ type TaskCardProps = {
   description: string;
   fulfilled: boolean;
   url: string | null | undefined;
+  navigationTarget: string | null | undefined;
   onClick: () => any | null | undefined;
 };
 
 function TaskCard(props: TaskCardProps) {
-  const { title, description, fulfilled, url, onClick, id } = props;
+  const { title, description, fulfilled, url, onClick, id, navigationTarget } = props;
   const navigation = useNavigation();
 
   const desc = url ? (
     <TouchableOpacity
       onPress={() => {
-        if (id === 'bitu_verification') {
-          navigation.navigate('BituVerification');
-        } else {
+        if (navigationTarget) {
+          navigation.navigate(navigationTarget, { url });
+        } else if (url) {
           Linking.openURL(url);
         }
       }}
