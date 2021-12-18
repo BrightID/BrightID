@@ -6,11 +6,11 @@ import {
   Linking,
 } from 'react-native';
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { BLACK, BLUE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { TaskState } from './TaskState';
-import { useNavigation } from '@react-navigation/native';
 
 type TaskCardProps = {
   id: string;
@@ -23,24 +23,26 @@ type TaskCardProps = {
 };
 
 function TaskCard(props: TaskCardProps) {
-  const { title, description, fulfilled, url, onClick, id, navigationTarget } = props;
+  const { title, description, fulfilled, url, onClick, navigationTarget } =
+    props;
   const navigation = useNavigation();
 
-  const desc = url ? (
-    <TouchableOpacity
-      onPress={() => {
-        if (navigationTarget) {
-          navigation.navigate(navigationTarget, { url });
-        } else if (url) {
-          Linking.openURL(url);
-        }
-      }}
-    >
-      <Text style={styles.linkifiedDescription}>{description}</Text>
-    </TouchableOpacity>
-  ) : (
-    <Text style={styles.description}>{description}</Text>
-  );
+  const desc =
+    url || navigationTarget ? (
+      <TouchableOpacity
+        onPress={() => {
+          if (navigationTarget) {
+            navigation.navigate(navigationTarget, { url });
+          } else if (url) {
+            Linking.openURL(url);
+          }
+        }}
+      >
+        <Text style={styles.linkifiedDescription}>{description}</Text>
+      </TouchableOpacity>
+    ) : (
+      <Text style={styles.description}>{description}</Text>
+    );
 
   return (
     <View style={styles.container}>
