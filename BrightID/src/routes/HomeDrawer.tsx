@@ -26,6 +26,7 @@ import codePush from 'react-native-code-push';
 import { retrieveImage, photoDirectory } from '@/utils/filesystem';
 import Home from '@/components/Icons/Home';
 import Pencil from '@/components/Icons/Pencil';
+import Groups from '@/components/Icons/Groups';
 import RecoveryAccount from '@/components/Icons/RecoveryAccount';
 import List from '@/components/Icons/List';
 import GraphQl from '@/components/Icons/GraphQl';
@@ -252,7 +253,7 @@ const CustomDrawerContent = (props) => {
         // style={styles.drawerItem}
         // labelStyle={styles.labelStyle}
         icon={({ focused }) => (
-          <GraphQl
+          <Groups
             width={DEVICE_LARGE ? 28 : 24}
             height={DEVICE_LARGE ? 28 : 24}
             color={focused ? GREY : BLACK}
