@@ -440,7 +440,6 @@ const styles = StyleSheet.create({
     color: BLACK,
   },
   verificationsContainer: {
-    height: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -450,12 +449,12 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
   },
   verificationBox: {
-    marginTop: 5,
     marginRight: 4,
   },
   verificationText: {
     paddingLeft: 5,
     paddingRight: 5,
+    paddingTop: 4,
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[11],
     color: BLUE,
