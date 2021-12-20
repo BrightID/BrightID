@@ -8,14 +8,21 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { ApiGateState } from '@/components/NodeApiGate';
-import { BLACK, ORANGE, RED, WHITE } from '@/theme/colors';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { fontSize } from '@/theme/fonts';
 import { useTranslation } from 'react-i18next';
 import Spinner from 'react-native-spinkit';
 import IonIcons from 'react-native-vector-icons/Ionicons';
+import { isEqual } from 'lodash';
+import { ApiGateState } from '@/components/NodeApiGate';
+import { BLACK, LIGHT_BLACK, ORANGE, RED, WHITE } from '@/theme/colors';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { fontSize } from '@/theme/fonts';
 import { NODE_CHOOSER_TIMEOUT_MS } from '@/utils/constants';
+import {
+  resetNodeUrls,
+  selectAllNodeUrls,
+  selectDefaultNodeUrls,
+} from '@/reducer/settingsSlice';
+import { useDispatch, useSelector } from '@/store';
 
 const calculateSecondsLeft = (startTimestamp: number) => {
   const endTime = startTimestamp + NODE_CHOOSER_TIMEOUT_MS;
@@ -35,9 +42,11 @@ export const NodeApiGateScreen = ({
   const { t } = useTranslation();
   const [stateDescription, setStateDescription] = useState('');
   const [secondsLeft, setSecondsLeft] = useState(0);
-  const [iconData, setIconData] = useState<{ color: string; name: string }>(
-    undefined,
-  );
+  const [iconData, setIconData] =
+    useState<{ color: string; name: string }>(undefined);
+  const defaultNodeUrls = useSelector(selectDefaultNodeUrls);
+  const currentNodeUrls = useSelector(selectAllNodeUrls);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     switch (gateState) {
@@ -46,18 +55,20 @@ export const NodeApiGateScreen = ({
       case ApiGateState.SEARCH_REQUESTED:
       case ApiGateState.NODE_AVAILABLE:
         setIconData(undefined);
-        setStateDescription('Connecting to BrightID node...');
+        setStateDescription(t('nodeApiGate.state.connecting'));
         break;
       case ApiGateState.ERROR_NO_NODE:
         setIconData({ color: RED, name: 'alert-circle-outline' });
-        setStateDescription(
-          'Failed to connect to a BrightID node. Please check your network connectivity.',
-        );
+        if (currentNodeUrls.length) {
+          setStateDescription(t('nodeApiGate.state.noConnection'));
+        } else {
+          setStateDescription(t('nodeApiGate.state.noNode'));
+        }
         break;
       default:
         console.log(`Unhandled gateState ${gateState}!`);
     }
-  }, [gateState]);
+  }, [currentNodeUrls.length, gateState, t]);
 
   // countdown until timeout reached
   useEffect(() => {
@@ -77,13 +88,37 @@ export const NodeApiGateScreen = ({
     };
   }, [startTimestamp]);
 
-  const retryInfo = (
-    <View style={styles.retryBtnContainer}>
+  const resetHandler = () => {
+    dispatch(resetNodeUrls());
+    retryHandler();
+  };
+
+  let resetContainer;
+  if (!isEqual(defaultNodeUrls, currentNodeUrls)) {
+    resetContainer = (
+      <>
+        <View style={styles.resetInfoContainer}>
+          <Text style={styles.resetInfoText}>
+            {t('nodeApiGate.reset.text')}
+          </Text>
+        </View>
+        <TouchableOpacity style={styles.resetButton} onPress={resetHandler}>
+          <Text style={styles.resetButtonText}>
+            {t('nodeApiGate.reset.button')}
+          </Text>
+        </TouchableOpacity>
+      </>
+    );
+  }
+
+  let retryInfo;
+  if (currentNodeUrls.length) {
+    retryInfo = (
       <TouchableOpacity style={styles.retryBtn} onPress={retryHandler}>
-        <Text style={styles.retryBtnText}>Retry</Text>
+        <Text style={styles.retryBtnText}>{t('common.button.retry')}</Text>
       </TouchableOpacity>
-    </View>
-  );
+    );
+  }
 
   return (
     <>
@@ -122,15 +157,18 @@ export const NodeApiGateScreen = ({
           <View style={styles.infoTextContainer}>
             <Text style={styles.infoText}>{stateDescription}</Text>
           </View>
-          {gateState === ApiGateState.ERROR_NO_NODE ? (
-            retryInfo
-          ) : (
+          {gateState !== ApiGateState.ERROR_NO_NODE ? (
             <View style={styles.timeoutContainer}>
               {secondsLeft > 0 && (
                 <Text style={styles.infoText}>
-                  Time remaining: {secondsLeft} seconds
+                  {t('nodeApiGate.timer.text', { secondsLeft })}
                 </Text>
               )}
+            </View>
+          ) : (
+            <View style={styles.buttonContainer}>
+              {retryInfo}
+              {resetContainer}
             </View>
           )}
         </View>
@@ -191,12 +229,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: DEVICE_LARGE ? 85 : 70,
   },
-  retryBtnContainer: {
+  buttonContainer: {
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: DEVICE_LARGE ? 85 : 70,
   },
+  retryBtnContainer: {},
   retryBtn: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -213,5 +252,32 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Bold',
     fontSize: fontSize[16],
     color: WHITE,
+  },
+  resetInfoContainer: {
+    marginBottom: 3,
+    marginTop: 25,
+  },
+  resetInfoText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[14],
+  },
+  resetButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: DEVICE_LARGE ? 50 : 45,
+    backgroundColor: ORANGE,
+    borderRadius: 100,
+    elevation: 1,
+    shadowColor: BLACK,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 4,
+  },
+  resetButtonText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[14],
+    color: WHITE,
+    marginLeft: 20,
+    marginRight: 20,
   },
 });
