@@ -10,10 +10,10 @@ import {
   SectionList,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
-import GroupAvatar from '@/components/Icons/GroupAvatar';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
+import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
+import GroupAvatar from '@/components/Icons/GroupAvatar';
 import { photoDirectory } from '@/utils/filesystem';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import {
@@ -111,12 +111,14 @@ function ConnectionScreen(props: Props) {
     if (loading) {
       return <ActivityIndicator size="small" color={DARKER_GREY} animating />;
     } else {
-      return verificationsTexts.length > 0 ? verificationsTexts.map((verificationText, i) =>
-        <View key={`verificationView-${i}`} style={styles.verificationBox}>
-          <Text key={`verificationText-${i}`} style={styles.verificationText}>
-            {verificationText}
-          </Text>
-        </View>
+      return verificationsTexts.length > 0 ? (
+        verificationsTexts.map((verificationText, i) => (
+          <View key={`verificationView-${i}`} style={styles.verificationBox}>
+            <Text key={`verificationText-${i}`} style={styles.verificationText}>
+              {verificationText}
+            </Text>
+          </View>
+        ))
       ) : (
         <UnverifiedSticker width={100} height={19} />
       );
@@ -374,35 +376,35 @@ const styles = StyleSheet.create({
     fontSize: fontSize[17],
     color: BLACK,
   },
+  verificationsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 6,
+    marginBottom: DEVICE_LARGE ? 10 : 0,
+    width: '100%',
+    backgroundColor: WHITE,
+  },
   verificationBox: {
-    marginTop: 5,
-    marginRight: 4,
+    margin: 1,
   },
   verificationText: {
-    paddingLeft: 5,
-    paddingRight: 5,
+    paddingLeft: 3,
+    paddingRight: 3,
+    paddingTop: 3,
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[11],
     color: BLUE,
     borderColor: BLUE,
     borderWidth: 1,
     borderRadius: 8,
+    textAlign: 'center',
   },
   profileDivider: {
     borderBottomWidth: 2,
     borderBottomColor: ORANGE,
     paddingBottom: 3,
     width: '98%',
-  },
-  verificationsContainer: {
-    height: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: DEVICE_LARGE ? 10 : 0,
-    width: '100%',
-    backgroundColor: WHITE,
   },
   connectionInfo: {
     marginTop: 10,
