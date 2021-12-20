@@ -18,7 +18,7 @@ describe('Homescreen', () => {
     await expect(element(by.id('PhotoContainer'))).toBeVisible();
     await expect(element(by.id('ConnectionsCount'))).toBeVisible();
     await expect(element(by.id('AppsCount'))).toBeVisible();
-    await expect(element(by.id('GroupsCount'))).toBeVisible();
+    await expect(element(by.id('AchievementsCount'))).toBeVisible();
     await expect(element(by.id('MyCodeBtn'))).toBeVisible();
     await expect(element(by.id('ScanCodeBtn'))).toBeVisible();
     await expect(element(by.id('JoinCommunityBtn'))).toBeVisible();

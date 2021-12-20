@@ -7,32 +7,33 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { useDispatch, useSelector } from '@/store';
-import {
-  setEditProfileMenuLayout,
-  setEditProfileTextLayout,
-} from '@/reducer/walkthroughSlice';
-import HomeScreen, { brightIdVerifiedSelector } from '@/components/HomeScreen';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
 import { useHeaderHeight } from '@react-navigation/stack';
+import { useTranslation } from 'react-i18next';
+import codePush from 'react-native-code-push';
+import { useDispatch, useSelector } from '@/store';
+import {
+  setEditProfileMenuLayout,
+  setEditProfileTextLayout,
+} from '@/reducer/walkthroughSlice';
+import HomeScreen from '@/components/HomeScreen';
 import { BLACK, ORANGE, WHITE, GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
-import { useTranslation } from 'react-i18next';
-import codePush from 'react-native-code-push';
 import { retrieveImage, photoDirectory } from '@/utils/filesystem';
 import Home from '@/components/Icons/Home';
 import Pencil from '@/components/Icons/Pencil';
+import Groups from '@/components/Icons/Groups';
 import RecoveryAccount from '@/components/Icons/RecoveryAccount';
 import List from '@/components/Icons/List';
 import GraphQl from '@/components/Icons/GraphQl';
 import Faq from '@/components/Icons/Faq';
 import Mail from '@/components/Icons/Mail';
-import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import TasksScreen from '@/components/Tasks/TasksScreen';
+import BituVerificationScreen from '@/components/Tasks/BituVerificationScreen';
 import GraphExplorerScreen from '@/components/SideMenu/GraphExplorerScreen';
 import ContactUsScreen from '@/components/SideMenu/ContactUsScreen';
 import EditProfileScreen from '@/components/EditProfile/EditProfileScreen';
@@ -47,10 +48,12 @@ const CustomItem = ({
   activeTintColor,
   activeBackgroundColor,
   inactiveBackgroundColor,
+  testId,
 }) => {
   const dispatch = useDispatch();
   return (
     <TouchableOpacity
+      testID={testId}
       activeOpacity={0.3}
       style={[
         styles.drawerItem,
@@ -96,7 +99,6 @@ const CustomDrawerContent = (props) => {
     (state: State) => state.user.photo.filename,
   );
   const name = useSelector((state: State) => state.user.name);
-  const brightIdVerified = useSelector(brightIdVerifiedSelector);
   // keep profile photo up to date
   const [profilePhoto, setProfilePhoto] = useState('');
   const { t } = useTranslation();
@@ -121,13 +123,9 @@ const CustomDrawerContent = (props) => {
           accessibilityLabel="user photo"
         />
         <Text style={styles.userName}>{name}</Text>
-        {brightIdVerified && (
-          <View style={styles.verificationBadge}>
-            <VerifiedBadge width={16} height={16} />
-          </View>
-        )}
       </View>
       <CustomItem
+        testId="drawerHomeBtn"
         focused={false}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
@@ -152,6 +150,7 @@ const CustomDrawerContent = (props) => {
         }}
       />
       <CustomItem
+        testId="drawerEditProfileBtn"
         focused={state.routeNames[state.index] === 'Edit Profile'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
@@ -176,12 +175,13 @@ const CustomDrawerContent = (props) => {
         }}
       />
       <CustomItem
+        testId="drawerRecoveryConnectionsBtn"
         focused={state.routeNames[state.index] === 'Recovery Connections'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
-        label={'Recovery Connections'}
+        label="Recovery Connections"
         // style={styles.drawerItem}
         // labelStyle={styles.labelStyle}
         icon={({ focused }) => (
@@ -200,6 +200,7 @@ const CustomDrawerContent = (props) => {
         }}
       />
       <CustomItem
+        testId="drawerAchievementsBtn"
         focused={state.routeNames[state.index] === 'Achievements'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
@@ -225,6 +226,7 @@ const CustomDrawerContent = (props) => {
       />
 
       <CustomItem
+        testId="drawerHomeBtn"
         focused={state.routeNames[state.index] === 'Copy Explorer Code'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
@@ -249,6 +251,33 @@ const CustomDrawerContent = (props) => {
         }}
       />
       <CustomItem
+        focused={state.routeNames[state.index] === 'Groups'}
+        testId="groupsBtn"
+        inactiveTintColor={BLACK}
+        inactiveBackgroundColor={WHITE}
+        activeTintColor={WHITE}
+        activeBackgroundColor={ORANGE}
+        label={t('drawer.label.groups')}
+        // style={styles.drawerItem}
+        // labelStyle={styles.labelStyle}
+        icon={({ focused }) => (
+          <Groups
+            width={DEVICE_LARGE ? 28 : 24}
+            height={DEVICE_LARGE ? 28 : 24}
+            color={focused ? GREY : BLACK}
+            highlight={focused ? WHITE : ORANGE}
+          />
+        )}
+        onPress={() => {
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'Groups' }],
+          });
+        }}
+      />
+
+      <CustomItem
+        testId="drawerUpdateBtn"
         focused={false}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
@@ -281,6 +310,7 @@ const CustomDrawerContent = (props) => {
         }}
       />
       <CustomItem
+        testId="drawerContactUsBtn"
         focused={state.routeNames[state.index] === 'ContactUs'}
         // style={styles.drawerItem}
         // labelStyle={styles.labelStyle}
@@ -306,6 +336,7 @@ const CustomDrawerContent = (props) => {
       />
       {__DEV__ && (
         <CustomItem
+          testId="drawerIconsBtn"
           focused={state.routeNames[state.index] === 'SampleIconPage'}
           // style={styles.drawerItem}
           // labelStyle={styles.labelStyle}
@@ -360,6 +391,10 @@ export const HomeDrawer = () => {
     >
       <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen name="Achievements" component={TasksScreen} />
+      <Drawer.Screen
+        name="BituVerification"
+        component={BituVerificationScreen}
+      />
       <Drawer.Screen name="Edit Profile" component={EditProfileScreen} />
       <Drawer.Screen
         name="Recovery Connections"
@@ -413,10 +448,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
     marginLeft: DEVICE_LARGE ? 20 : 18,
-  },
-  verificationBadge: {
-    marginLeft: 5,
-    marginTop: 1.5,
   },
   drawerItem: {
     alignItems: 'center',

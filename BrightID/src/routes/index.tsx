@@ -2,7 +2,6 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from '@/store';
 import NodeApiGate from '@/components/NodeApiGate';
-import { PersistGate } from 'redux-persist/es/integration/react';
 import Apps from './Apps';
 import Backup from './Backup';
 import Connections from './Connections';

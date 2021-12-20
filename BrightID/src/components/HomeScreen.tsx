@@ -16,8 +16,6 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { uniq } from 'ramda';
-import _ from 'lodash';
 import { useDispatch, useSelector } from '@/store';
 import {
   fetchApps,
@@ -31,7 +29,6 @@ import { retrieveImage } from '@/utils/filesystem';
 import { WHITE, ORANGE, BLACK, BLUE, DARKER_GREY } from '@/theme/colors';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import ChatBox from '@/components/Icons/ChatBox';
-import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
 import Camera from '@/components/Icons/Camera';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -39,7 +36,12 @@ import { fontSize } from '@/theme/fonts';
 import { setHeaderHeight } from '@/reducer/walkthroughSlice';
 import { selectBaseUrl } from '@/reducer/settingsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
-import { isVerified } from '@/utils/verifications';
+import { getVerificationsTexts } from '@/utils/verifications';
+import {
+  selectTaskIds,
+  selectCompletedTaskIds,
+} from '@/components/Tasks/TasksSlice';
+
 import { version as app_version } from '../../package.json';
 
 /**
@@ -50,34 +52,9 @@ const discordUrl = 'https://discord.gg/nTtuB2M';
 
 /** Selectors */
 
-export const verifiedAppsSelector = createSelector(
-  selectAllApps,
+export const verificationsTextsSelector = createSelector(
   (state: State) => state.user.verifications,
-  (apps, userVerifications) => {
-    // check for each app if the user has at least one of the verifications
-    return apps.filter((app: AppInfo) => {
-      // ignore testing apps
-      if (app.testing) return false;
-      let hasOneVerification = false;
-      if (app.verifications) {
-        for (const verification of app.verifications) {
-          const verified = isVerified(
-            _.keyBy(userVerifications, (v) => v.name),
-            verification,
-          );
-          if (verified) {
-            hasOneVerification = true;
-          }
-        }
-      }
-      return hasOneVerification;
-    });
-  },
-);
-
-export const brightIdVerifiedSelector = createSelector(
-  (state: State) => state.user.verifications,
-  (verifications) => verifications.some((v) => v?.name === 'BrightID'),
+  getVerificationsTexts,
 );
 
 /** HomeScreen Component */
@@ -88,19 +65,15 @@ export const HomeScreen = (props) => {
   const headerHeight = useHeaderHeight();
   const name = useSelector((state: State) => state.user.name);
   const apps = useSelector(selectAllApps);
+  const taskIds = useSelector(selectTaskIds);
+  const completedTaskIds = useSelector(selectCompletedTaskIds);
+  const verificationsTexts = useSelector(verificationsTextsSelector);
+
   const photoFilename = useSelector(
     (state: State) => state.user.photo.filename,
   );
-  const groupsCount = useSelector(
-    (state: State) =>
-      state.groups.groups.filter(
-        (g) => g.state === 'initiated' || g.state === 'verified',
-      ).length,
-  );
   const connectionsCount = useSelector(verifiedConnectionsSelector).length;
   const linkedContextsCount = useSelector(linkedContextTotal);
-  const verifiedApps = useSelector(verifiedAppsSelector);
-  const brightIdVerified = useSelector(brightIdVerifiedSelector);
   const baseUrl = useSelector(selectBaseUrl);
   const [profilePhoto, setProfilePhoto] = useState('');
   const [loading, setLoading] = useState(true);
@@ -147,9 +120,6 @@ export const HomeScreen = (props) => {
   }, [dispatch, headerHeight]);
 
   const { showActionSheetWithOptions } = useActionSheet();
-
-  // TODO Workaround till backend is fixed: make sure to only count unique app names
-  const verifiedAppsCount = uniq(verifiedApps.map((app) => app.name)).length;
 
   const handleChat = () => {
     if (__DEV__) {
@@ -227,7 +197,6 @@ export const HomeScreen = (props) => {
   console.log('RENDERING HOME PAGE');
 
   return (
-    // let verifications = ['BrightID'];
     <View style={[styles.container, { marginTop: headerHeight }]}>
       <StatusBar
         barStyle="dark-content"
@@ -254,29 +223,33 @@ export const HomeScreen = (props) => {
             <Text testID="EditNameBtn" style={styles.name} numberOfLines={1}>
               {name}
             </Text>
-            {brightIdVerified && (
-              <View style={styles.verificationSticker}>
-                <VerifiedBadge width={16} height={16} />
+          </View>
+          <View style={styles.profileDivider} />
+          <View style={styles.verificationsContainer}>
+            {verificationsTexts.length > 0 ? (
+              verificationsTexts.map((verificationText, i) => (
+                <View
+                  key={`verificationView-${i}`}
+                  style={styles.verificationBox}
+                >
+                  <Text
+                    key={`verificationText-${i}`}
+                    style={styles.verificationText}
+                  >
+                    {verificationText}
+                  </Text>
+                </View>
+              ))
+            ) : loading ? (
+              <View style={styles.verificationBox}>
+                <ActivityIndicator size="small" color={DARKER_GREY} animating />
+              </View>
+            ) : (
+              <View style={styles.verificationBox}>
+                <UnverifiedSticker width={100} height={19} />
               </View>
             )}
           </View>
-          <View style={styles.profileDivider} />
-          {verifiedAppsCount > 0 ? (
-            <View style={styles.verified}>
-              <Text style={styles.verifiedText}>
-                Verified for {verifiedAppsCount} app
-                {verifiedAppsCount > 1 ? 's' : ''}
-              </Text>
-            </View>
-          ) : loading ? (
-            <View style={styles.verified}>
-              <ActivityIndicator size="small" color={DARKER_GREY} animating />
-            </View>
-          ) : (
-            <View style={styles.verified}>
-              <UnverifiedSticker width={100} height={19} />
-            </View>
-          )}
         </View>
       </View>
 
@@ -298,19 +271,23 @@ export const HomeScreen = (props) => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          testID="groupsBtn"
+          testID="achievementsBtn"
           style={styles.countsCard}
           onPress={() => {
-            dispatch(setActiveNotification(null));
-            navigation.navigate('Groups');
+            navigation.navigate('Achievements');
           }}
         >
-          <Text testID="GroupsCount" style={styles.countsNumberText}>
-            {groupsCount}
+          <Text testID="AchievementsCount" style={styles.countsNumberText}>
+            {completedTaskIds.length}{' '}
+            <Text style={styles.totalCountsNumberText}>
+              {' '}
+              / {taskIds.length}{' '}
+            </Text>
           </Text>
+
           <View style={styles.countsBorder} />
           <Text style={styles.countsDescriptionText}>
-            {t('home.button.groups')}
+            {t('home.button.achievements')}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -463,28 +440,27 @@ const styles = StyleSheet.create({
     color: BLACK,
   },
   verificationsContainer: {
-    height: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
     marginTop: 10,
     marginBottom: DEVICE_LARGE ? 10 : 0,
     width: '100%',
     backgroundColor: WHITE,
   },
-  verificationSticker: {
-    marginLeft: 5,
-    marginTop: 1.5,
+  verificationBox: {
+    marginRight: 4,
   },
-  verified: {
-    marginTop: 8,
-    minWidth: 100,
-  },
-  verifiedText: {
+  verificationText: {
+    paddingLeft: 5,
+    paddingRight: 5,
+    paddingTop: 4,
     fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[12],
-    color: ORANGE,
-    borderColor: ORANGE,
+    fontSize: fontSize[11],
+    color: BLUE,
+    borderColor: BLUE,
+    borderWidth: 1,
+    borderRadius: 8,
   },
   countsCard: {
     backgroundColor: WHITE,
@@ -529,6 +505,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: fontSize[25],
     marginBottom: 3,
+  },
+  totalCountsNumberText: {
+    fontSize: fontSize[12],
   },
   bottomOrangeContainer: {
     width: '100%',

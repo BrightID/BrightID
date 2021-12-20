@@ -6,6 +6,7 @@ import {
   Linking,
 } from 'react-native';
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { BLACK, BLUE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
@@ -17,23 +18,31 @@ type TaskCardProps = {
   description: string;
   fulfilled: boolean;
   url: string | null | undefined;
+  navigationTarget: string | null | undefined;
   onClick: () => any | null | undefined;
 };
 
 function TaskCard(props: TaskCardProps) {
-  const { title, description, fulfilled, url, onClick } = props;
+  const { title, description, fulfilled, url, onClick, navigationTarget } =
+    props;
+  const navigation = useNavigation();
 
-  const desc = url ? (
-    <TouchableOpacity
-      onPress={() => {
-        Linking.openURL(url);
-      }}
-    >
-      <Text style={styles.linkifiedDescription}>{description}</Text>
-    </TouchableOpacity>
-  ) : (
-    <Text style={styles.description}>{description}</Text>
-  );
+  const desc =
+    url || navigationTarget ? (
+      <TouchableOpacity
+        onPress={() => {
+          if (navigationTarget) {
+            navigation.navigate(navigationTarget, { url });
+          } else if (url) {
+            Linking.openURL(url);
+          }
+        }}
+      >
+        <Text style={styles.linkifiedDescription}>{description}</Text>
+      </TouchableOpacity>
+    ) : (
+      <Text style={styles.description}>{description}</Text>
+    );
 
   return (
     <View style={styles.container}>
