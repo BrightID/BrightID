@@ -16,8 +16,6 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useTranslation } from 'react-i18next';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { uniq } from 'ramda';
-import _ from 'lodash';
 import { useDispatch, useSelector } from '@/store';
 import {
   fetchApps,
@@ -31,7 +29,6 @@ import { retrieveImage } from '@/utils/filesystem';
 import { WHITE, ORANGE, BLACK, BLUE, DARKER_GREY } from '@/theme/colors';
 import fetchUserInfo from '@/actions/fetchUserInfo';
 import ChatBox from '@/components/Icons/ChatBox';
-import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
 import Camera from '@/components/Icons/Camera';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -45,7 +42,6 @@ import {
   selectCompletedTaskIds,
 } from '@/components/Tasks/TasksSlice';
 
-import _ from 'lodash';
 import { version as app_version } from '../../package.json';
 
 /**
@@ -230,12 +226,20 @@ export const HomeScreen = (props) => {
           </View>
           <View style={styles.profileDivider} />
           <View style={styles.verificationsContainer}>
-            {verificationsTexts.length > 0 ? verificationsTexts.map((verificationText, i) =>
-              <View key={`verificationView-${i}`} style={styles.verificationBox}>
-                <Text key={`verificationText-${i}`} style={styles.verificationText}>
-                  {verificationText}
-                </Text>
-              </View>
+            {verificationsTexts.length > 0 ? (
+              verificationsTexts.map((verificationText, i) => (
+                <View
+                  key={`verificationView-${i}`}
+                  style={styles.verificationBox}
+                >
+                  <Text
+                    key={`verificationText-${i}`}
+                    style={styles.verificationText}
+                  >
+                    {verificationText}
+                  </Text>
+                </View>
+              ))
             ) : loading ? (
               <View style={styles.verificationBox}>
                 <ActivityIndicator size="small" color={DARKER_GREY} animating />
@@ -274,7 +278,11 @@ export const HomeScreen = (props) => {
           }}
         >
           <Text testID="AchievementsCount" style={styles.countsNumberText}>
-            {completedTaskIds.length} <Text style={styles.totalCountsNumberText}> / {taskIds.length} </Text>
+            {completedTaskIds.length}{' '}
+            <Text style={styles.totalCountsNumberText}>
+              {' '}
+              / {taskIds.length}{' '}
+            </Text>
           </Text>
 
           <View style={styles.countsBorder} />
