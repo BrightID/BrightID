@@ -192,6 +192,8 @@ const inviteConnectionToGroup = async (groupName) => {
   // should start on home screen
   await expectHomescreen();
   // navigate to groups screen
+  await element(by.id('toggleDrawer')).tap();
+  await expect(element(by.id('groupsBtn'))).toBeVisible();
   await element(by.id('groupsBtn')).tap();
   await expectGroupsScreen();
   // open group

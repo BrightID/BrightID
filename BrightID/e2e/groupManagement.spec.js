@@ -48,6 +48,8 @@ describe('Group Management', () => {
   describe('Create group', () => {
     beforeAll(async () => {
       // navigate to group creation screen
+      await element(by.id('toggleDrawer')).tap();
+      await expect(element(by.id('groupsBtn'))).toBeVisible();
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
       await element(by.id('groupsCreateGroupBtn')).tap();
@@ -102,6 +104,8 @@ describe('Group Management', () => {
       // Check if invitees actually joined the groups
       await expectHomescreen();
       // navigate to groups screen
+      await element(by.id('toggleDrawer')).tap();
+      await expect(element(by.id('groupsBtn'))).toBeVisible();
       await element(by.id('groupsBtn')).tap();
       // wait 20 seconds until all join ops should be done on the backend
       await new Promise((r) => setTimeout(r, 20000));
@@ -128,6 +132,8 @@ describe('Group Management', () => {
 
       // check group members
       // navigate to groups screen
+      await element(by.id('toggleDrawer')).tap();
+      await expect(element(by.id('groupsBtn'))).toBeVisible();
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
       // wait 20 seconds until all join ops should be done on the backend
@@ -151,6 +157,8 @@ describe('Group Management', () => {
     it('should dismiss regular member from group', async () => {
       // navigate to groups screen
       await expectHomescreen();
+      await element(by.id('toggleDrawer')).tap();
+      await expect(element(by.id('groupsBtn'))).toBeVisible();
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
       // open group
@@ -197,6 +205,8 @@ describe('Group Management', () => {
 
       // check group members
       // navigate to groups screen
+      await element(by.id('toggleDrawer')).tap();
+      await expect(element(by.id('groupsBtn'))).toBeVisible();
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
       // wait 20 seconds until all join ops should be done on the backend
@@ -223,6 +233,8 @@ describe('Group Management', () => {
       const actionTitle = 'Add Admin';
 
       // navigate to groups screen
+      await element(by.id('toggleDrawer')).tap();
+      await expect(element(by.id('groupsBtn'))).toBeVisible();
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
       // open group
@@ -282,6 +294,8 @@ describe('Group Management', () => {
     xit('should leave group', async () => {
       await expectHomescreen();
       // navigate to groups screen
+      await element(by.id('toggleDrawer')).tap();
+      await expect(element(by.id('groupsBtn'))).toBeVisible();
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
       // select first group
