@@ -1,14 +1,12 @@
 import CryptoJS from 'crypto-js';
-import { useContext } from 'react';
 import { eqProps } from 'ramda';
-import store from '@/store';
-import { uInt8ArrayToB64, b64ToUint8Array, randomKey } from '@/utils/encoding';
 import nacl from 'tweetnacl';
 import { convertPublicKey, convertSecretKey } from 'ed2curve';
+import store from '@/store';
+import { uInt8ArrayToB64, b64ToUint8Array, randomKey } from '@/utils/encoding';
 import { selectConnectionById } from '@/reducer/connectionsSlice';
 import { saveImage } from './filesystem';
 import { INVITE_ACTIVE } from './constants';
-import { NodeApiContext } from '@/components/NodeApiGate';
 
 /**
  *
@@ -22,12 +20,16 @@ export const getInviteGroup = async (invite, api) => {
 
     let {
       keypair: { secretKey },
-      groups: { groups }
+      groups: { groups },
     } = store.getState();
 
-    const existingGroup = groups.find(g => g.id === invite.group);
-    if (existingGroup && existingGroup.name &&
-        existingGroup.aesKey && existingGroup.aesKey !== '') {
+    const existingGroup = groups.find((g) => g.id === invite.group);
+    if (
+      existingGroup &&
+      existingGroup.name &&
+      existingGroup.aesKey &&
+      existingGroup.aesKey !== ''
+    ) {
       return existingGroup;
     }
 

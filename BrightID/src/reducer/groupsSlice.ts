@@ -58,13 +58,36 @@ const groupsSlice = createSlice({
       });
     },
     joinGroup(state, action: PayloadAction<Group>) {
-      state.groups.push(action.payload);
+      const newGroup = action.payload;
+      const existingGroup = state.groups.find(
+        (group) => group.id === newGroup.id,
+      );
+      if (existingGroup) {
+        // replace existing group with new group
+        Object.assign(existingGroup, action.payload);
+      } else {
+        state.groups.push(action.payload);
+      }
     },
     leaveGroup(state, action: PayloadAction<Group>) {
-      const group = state.groups.find(
+      // get group to leave (and all potential duplicates, see below)
+      const groupsToLeave = state.groups.filter(
         (group) => group.id === action.payload.id,
       );
-      group.state = 'dismissed';
+      for (const group of groupsToLeave) {
+        group.state = 'dismissed';
+      }
+      if (groupsToLeave.length > 1) {
+        // There was a bug that could result in users having the same group multiple times in state.
+        // To clean this up: When leaving a group we look for duplicates and only keep the first matching group in
+        // state "dismissed". The duplicates will be completely removed from state.
+        const groupsWithoutDuplicates = state.groups.filter(
+          (group) => group.id !== action.payload.id,
+        );
+        // only keep first of the duplicates
+        groupsWithoutDuplicates.push(groupsToLeave[0]);
+        state.groups = groupsWithoutDuplicates;
+      }
     },
     dismissFromGroup(
       state,

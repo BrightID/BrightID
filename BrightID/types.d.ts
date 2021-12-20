@@ -275,6 +275,7 @@ declare global {
       cooldownPeriod: number;
       successCallback?: () => void;
     };
+    NodeModal: undefined;
   };
 
   // Jest global functions
