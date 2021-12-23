@@ -31,6 +31,7 @@ import { Draft } from 'immer';
 export enum channel_types {
   GROUP = 'GROUP',
   SINGLE = 'SINGLE',
+  STAR = 'STAR',
 }
 
 export enum channel_states {
@@ -46,6 +47,7 @@ const initialState = channelsAdapter.getInitialState<DisplayChannel>({
   myChannelIds: {
     [channel_types.SINGLE]: '',
     [channel_types.GROUP]: '',
+    [channel_types.STAR]: '',
   },
 });
 
@@ -85,6 +87,9 @@ const channelSlice = createSlice({
 
       if (state.myChannelIds[channel_types.GROUP] === channelId)
         state.myChannelIds[channel_types.GROUP] = '';
+
+      if (state.myChannelIds[channel_types.STAR] === channelId)
+        state.myChannelIds[channel_types.STAR] = '';
     },
     removeChannel(state: Draft<ChannelsState>, action: PayloadAction<string>) {
       const channelId = action.payload;
@@ -98,6 +103,9 @@ const channelSlice = createSlice({
 
       if (state.myChannelIds[channel_types.GROUP] === channelId)
         state.myChannelIds[channel_types.GROUP] === '';
+
+      if (state.myChannelIds[channel_types.STAR] === channelId)
+        state.myChannelIds[channel_types.STAR] = '';
     },
     setMyChannel(
       state: Draft<ChannelsState>,

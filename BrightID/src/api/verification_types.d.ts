@@ -37,9 +37,19 @@ type YektaVerification = HashVerification & {
   raw_rank: number;
 };
 
+type BituReport = Record<string, number>;
+
+type BituVerification = HashVerification & {
+  name: 'Bitu';
+  score: number;
+  directReports: BituReport;
+  indirectReports: BituReport;
+};
+
 type Verification =
   | ExpressionVerification
   | HashVerification
   | SeedConnectedVerification
   | SeedConnectedWithFriendVerification
-  | YektaVerification;
+  | YektaVerification
+  | BituVerification;

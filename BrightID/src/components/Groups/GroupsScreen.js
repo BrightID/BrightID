@@ -17,7 +17,7 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { toSearchString } from '@/utils/strings';
 import { NodeApiContext } from '@/components/NodeApiGate';
-import { updateMemberships } from '@/actions';
+import { updateGroup, updateMemberships } from '@/actions';
 import store from '@/store';
 import GroupCard from './GroupCard';
 import { NoGroups } from './NoGroups';
@@ -65,12 +65,18 @@ export class GroupsScreen extends React.Component {
 
   onRefresh = async () => {
     try {
-      const { dispatch } = this.props;
+      const { dispatch, groups } = this.props;
       const api = this.context;
       this.setState({ refreshing: true });
       const { id } = store.getState().user;
       const memberships = await api.getMemberships(id);
       dispatch(updateMemberships(memberships));
+      groups.forEach((group) => {
+        console.log(`Refreshing group ${group.id}`);
+        api.getGroup(group.id).then((data) => {
+          dispatch(updateGroup(data));
+        });
+      });
       this.setState({ refreshing: false });
     } catch (err) {
       console.log(err.message);
@@ -81,7 +87,7 @@ export class GroupsScreen extends React.Component {
   render() {
     const { navigation, groups, hasGroups, t } = this.props;
     const activeGroups = groups.filter(
-      (group) => group.state == 'initiated' || group.state == 'verified'
+      (group) => group.state == 'initiated' || group.state == 'verified',
     );
     return (
       <>

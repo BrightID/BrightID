@@ -38,6 +38,10 @@
     "setupTrustedConnections": {
       "description": "Setup your recovery connections to enable social account recovery",
       "title": "Setup social recovery"
+    },
+    "bituVerification": {
+      "description": "More details",
+      "title": "Bitu verification"
     }
   },
   "apps": {
@@ -46,13 +50,19 @@
         "visitWebsite": "Sure"
       },
       "text": {
+        "blindSigAlreadyLinked": "You are already linked with {{app}} with id {{appUserId}}",
+        "blindSigAlreadyLinkedDifferent": "You are trying to link with {{app}} using {{appUserId}}. You are already linked with {{app}} with different id {{previousAppUserIds}}. This may lead to problems using the app.",
         "checkWebsite": "To find out more about {{name}}, check out their website!",
+        "invalidApp": "{{app}} is not a valid app!",
         "invalidContext": "{{context}} is not a valid context!",
         "linkApp": "Do you want to link your account in {{context}} to your BrightID?",
         "linkFailure": "Failed to link your account in {{context}} to your BrightID\n{{result}}",
-        "linkSuccess": "Succesfully linked your account in {{context}} to your BrightID"
+        "linkSigFailed": "Error linking verification {{verification}} to app {{appId}}. Error message: {{msg}}",
+        "linkSuccess": "Succesfully linked your account in {{context}} to your BrightID",
+        "missingBlindSig": "No blind sig found for app {{appId}}. Verifications missing: {{missingVerifications}}. Verifications already linked: {{linkedVerifications}}"
       },
       "title": {
+        "invalidApp": "Failed",
         "invalidContext": "Failed",
         "linkApp": "Link App?",
         "linkFailure": "Failed",
@@ -63,7 +73,8 @@
     "text": {
       "noApps": "No Apps",
       "notSponsored": "You're not sponsored.\nPlease find an app below to sponsor you.",
-      "pendingLink": "Linking your account in {{context}} to your BrightID…"
+      "pendingLink": "Linking your account in {{context}} to your BrightID…",
+      "sponsoring": "{{app}} is sponsoring you…"
     }
   },
   "backup": {
@@ -128,6 +139,7 @@
     "button": {
       "cancel": "Cancel",
       "copy": "Copy",
+      "retry": "Retry",
       "save": "Save"
     },
     "camera": {
@@ -290,7 +302,8 @@
       "contactUs": "Contact Us",
       "copyExplorerCode": "Copy Explorer Code",
       "editProfile": "Edit Profile",
-      "home": "Home"
+      "home": "Home",
+      "groups": "Groups"
     }
   },
   "eula": {
@@ -363,7 +376,6 @@
       "primaryGroup": "Primary Group"
     },
     "text": {
-      "noEligibleConnection": "No existing connections are eligible for this group, please come back later..",
       "noGroups": "<text>Get verified faster</text><text>by creating and</text><text>joining groups</text>",
       "noGroupsMatchSearch": "No group matches your search",
       "noMembers": "No known members, invite some…"
@@ -377,6 +389,7 @@
       "apps": "Apps",
       "connections": "Connections",
       "groups": "Groups",
+      "achievements": "Achievements",
       "myCode": "My Code",
       "scanCode": "Scan a Code"
     },
@@ -390,6 +403,26 @@
     "link": {
       "community": "Join the Community"
     }
+  },
+  "nodeApiGate": {
+    "state": {
+      "connecting": "Connecting to BrightID node...",
+      "noConnection": "Failed to connect to a BrightID node. Please check your network connectivity.",
+      "noNode": "Nodelist is empty."
+    },
+    "reset": {
+      "text": "You are not using the default nodelist",
+      "button": "Restore default nodelist"
+    },
+    "timer": {
+      "text": "Time remaining: {{secondsLeft}} seconds"
+    }
+  },
+  "nodeModal": {
+    "currentNode": {
+      "header": "Current node:"
+    },
+    "switchNodeButtonLabel": "Switch to another node"
   },
   "notificationBar": {
     "text": {
@@ -540,13 +573,15 @@
       "text": {
         "codeGroup": "This QR code is designed for many people to connect simultaneously.",
         "codeSingle": "This QR code can be used to connect with a single user before it expires.",
+        "codeStar": "This QR code is designed to connect many people with one person.",
         "shareLinkGroup": "Share this link",
         "shareLinkSingle": "Share this link with one friend",
         "universalLink": "Universal Link"
       },
       "title": {
         "codeGroup": "Group code",
-        "codeSingle": "Single-use code"
+        "codeSingle": "Single-use code",
+        "codeStar": "Star code"
       }
     },
     "button": {
@@ -565,6 +600,7 @@
       "canAlso": "Or you can also…",
       "codeGroup": "Group code",
       "codeSingle": "Single-use code",
+      "codeStar": "Star code",
       "confirmConnections": "Confirm Connections",
       "downloadingConnectionData": "Downloading Connection Data",
       "expiresIn": "Expires in:",

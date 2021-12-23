@@ -13,6 +13,7 @@ import {
   RouteProp,
 } from '@react-navigation/native';
 import ConnectionTestButton from '@/utils/connectionTestButton';
+import { getVerificationsTexts } from '@/utils/verifications';
 import {
   selectConnectionById,
   selectAllConnections,
@@ -47,12 +48,12 @@ function ConnectionScreenController() {
   const [recoveryConnections, setRecoveryConnections] = useState<Array<RecoveryConnection>>(
     [],
   );
+  const [verificationsTexts, setVerificationsTexts] = useState<Array<string>>([]);
   const [connectedAt, setConnectedAt] = useState(0);
   const [loading, setLoading] = useState(false);
   const [connectionProfile, setConnectionProfile] = useState<
     ProfileInfo | undefined
   >(undefined);
-  const [verifiedApps, setVerifiedApps] = useState<Array<AppInfo>>([]);
 
   useFocusEffect(
     useCallback(() => {
@@ -69,10 +70,12 @@ function ConnectionScreenController() {
     }, [api, connectionId]),
   );
 
-  // Update connection verifications in store
+  // Update connection verifications
   useEffect(() => {
     if (connectionProfile) {
       console.log(`Updating verifications for ${connectionProfile.id}`);
+      const texts = getVerificationsTexts(connectionProfile.verifications);
+      setVerificationsTexts(texts);
       dispatch(
         setConnectionVerifications({
           id: connectionProfile.id,
@@ -109,33 +112,6 @@ function ConnectionScreenController() {
     }
   }, [connectionProfile, myConnections, myGroups]);
 
-  // check for which apps this connection is verified
-  useEffect(() => {
-    const vApps = apps.filter((app) => {
-      let isMissingVerification = false;
-      app.verifications &&
-        app.verifications.forEach((requiredVerification) => {
-          if (
-            connection.verifications.some(
-              (userVerification) =>
-                userVerification.name === requiredVerification,
-            )
-          ) {
-            console.log(
-              `user has required verification ${requiredVerification} for app ${app.name}`,
-            );
-          } else {
-            console.log(
-              `user missing required verification ${requiredVerification} for app ${app.name}`,
-            );
-            isMissingVerification = true;
-          }
-        });
-      return !isMissingVerification;
-    });
-    setVerifiedApps(vApps);
-  }, [apps, connection.verifications]);
-
   useEffect(() => {
     if (!connection) {
       // connection not there anymore.
@@ -156,15 +132,10 @@ function ConnectionScreenController() {
     return null;
   }
 
-  const brightIdVerified = connection.verifications?.some(
-    (v) => v.name === 'BrightID',
-  );
-
   return (
     <ConnectionScreen
       connection={connection}
-      brightIdVerified={brightIdVerified}
-      verifiedAppsCount={verifiedApps.length}
+      verificationsTexts={verificationsTexts}
       loading={loading}
       connectedAt={connectedAt}
       mutualConnections={mutualConnections}

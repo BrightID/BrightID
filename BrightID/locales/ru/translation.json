@@ -6,26 +6,26 @@
     },
     "joinConnectionParty": {
       "description": "Присоединяйтесь к вечеринке по подключению BrightID",
-      "title": "Вечеринка подключений"
+      "title": "Верификационная вечеринка"
     },
     "joinConnectionPartyWithFriend": {
       "description": "Берите с собой членов вашей семьи или близких друзей на вечеринку по подключению BrightID",
       "title": "Вечеринка по подключение с друзьями или родственниками"
     },
     "linkApp": {
-      "description": "Свяжите свой BrightID с приложением",
+      "description": "Свяжите свой профиль BrightID с приложением",
       "title": "Свяжите с приложением"
     },
     "makeFirstConnection": {
-      "description": "Подключитесь к другому пользователю BrightID",
+      "description": "Сделайте подключение с другим пользователем BrightID",
       "title": "Первое подключение"
     },
     "makeThreeConnection": {
-      "description": "Подключитесь 3-ём пользователям BrightID",
+      "description": "Сделайте подключение с 3-мя пользователями BrightID",
       "title": "Три подключения"
     },
     "makeTwoConnection": {
-      "description": "Подключитесь к двум пользователям BrightID",
+      "description": "Сделайте подключение с двумя пользователями BrightID",
       "title": "Два подключения"
     },
     "notification": {
@@ -378,7 +378,7 @@
     },
     "text": {
       "noEligibleConnection": "Нет существующих подключений, подходящих для этой группы. Повторите попытку позже...",
-      "noGroups": "<text> Получите верификацию быстрее </text> <text> путем создания и </text> <text> присоединения к группам </text>",
+      "noGroups": "<text> Получите верификацию быстрее </text><text> путем создания и </text><text> присоединения к группам </text>",
       "noGroupsMatchSearch": "Ни одна группа не соответствует вашему запросу",
       "noMembers": "Нету известных пользователей, пригласите кого-нибудь…",
       "waitingForMembers": "В ожидании присоединения {{list}}"
@@ -594,7 +594,7 @@
       "pendingConnections_0": "У вас {{count}} ожидающее подключение",
       "pendingConnections_1": "У вас {{count}} ожидающих подключений",
       "pendingConnections_2": "У вас более {{count}} ожидающих подключений",
-      "scanCode": "<text> Привет, {{name}}, отсканируйте код и </text> <text> сделайте новое подключение сегодня </text>"
+      "scanCode": "<text> Привет, {{name}}, отсканируйте код и </text><text> сделайте новое подключение сегодня </text>"
     }
   },
   "recovery": {

@@ -36,11 +36,28 @@ declare global {
     state: string;
   };
 
+  type SigInfo = {
+    sig: {
+      rho: string;
+      omega: string;
+      sigma: string;
+      delta: string;
+    };
+    app: string;
+    appUserId?: string;
+    roundedTimestamp: number;
+    verification: string;
+    uid: string;
+    linked: boolean;
+    linkedTimestamp: number;
+  };
+
   type DisplayChannel = {
     displayChannelType: ChannelType;
     myChannelIds: {
       SINGLE: string;
       GROUP: string;
+      STAR: string;
     };
   };
 
@@ -76,9 +93,6 @@ declare global {
   type Photo = {
     filename: string;
   };
-
-  // TODO: extract DEV properties to separate type and join them conditionally depending on __DEV__
-  // RESPONSE: this should not matter because we cannot type check the compiled code in release mode
 
   type ConnectionLevel = ValueOf<typeof connection_levels>;
 
@@ -261,6 +275,7 @@ declare global {
       cooldownPeriod: number;
       successCallback?: () => void;
     };
+    NodeModal: undefined;
   };
 
   // Jest global functions

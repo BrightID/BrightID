@@ -31,6 +31,7 @@ function TaskCardController({ taskId }: TaskCardControllerProps) {
       id={extendedTask.id}
       title={extendedTask.title}
       url={extendedTask.url}
+      navigationTarget={extendedTask.navigationTarget}
       onClick={__DEV__ ? reset : null}
     />
   );

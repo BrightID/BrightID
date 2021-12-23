@@ -16,7 +16,7 @@ The network consists of volunteers [running nodes](https://github.com/BrightID/B
 
 ## Mobile App
 
-ID creation and connectons to people and apps are managed though the BrightID mobile app.
+ID creation and connectons to people and apps are managed through the BrightID mobile app.
 
 ## Contribute
 

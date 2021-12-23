@@ -1,11 +1,28 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useDispatch, useSelector } from '@/store';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { CHANNEL_TTL, connection_levels } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
-import { staleConnection, deleteConnection } from '@/actions';
+import { staleConnection, deleteConnection, addOperation } from '@/actions';
 import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import {
@@ -20,6 +37,9 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
 import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
+import { encryptAesKey } from '@/utils/invites';
+import i18next from 'i18next';
+import { NodeApiContext } from '@/components/NodeApiGate';
 
 /**
  * Connection Card in the Connections Screen
@@ -29,13 +49,16 @@ import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupTh
  * @prop connectionTime
  * @prop photo
  */
-
 type Props = Connection & { index: number };
 
 const ConnectionCard = (props: Props) => {
   const stale_check_timer = useRef<TimeoutId>(null);
   const { backupCompleted } = useSelector((state: State) => state.user);
   const navigation = useNavigation();
+  const route: { params?: { group: Group } } = useRoute() as {
+    params?: { group: Group };
+  };
+  const api = useContext(NodeApiContext);
   const dispatch = useDispatch();
   const {
     status,
@@ -50,6 +73,7 @@ const ConnectionCard = (props: Props) => {
   } = props;
   const { t } = useTranslation();
 
+  const group = route.params?.group;
   const brightidVerified = verifications?.some((v) => v?.name === 'BrightID');
   const [imgErr, setImgErr] = useState(false);
 
@@ -165,6 +189,27 @@ const ConnectionCard = (props: Props) => {
         }
       : require('@/static/default_profile.jpg');
 
+  const handlePress = async (id: string) => {
+    if (group) {
+      console.log(`Inviting connection ${id} to group ${group.id}`);
+      try {
+        const { signingKeys } = await api.getProfile(id);
+        const data = await encryptAesKey(group?.aesKey, signingKeys[0]);
+        const op = await api.invite(id, group?.id, data);
+        dispatch(addOperation(op));
+        Alert.alert(
+          i18next.t('groups.alert.title.inviteSuccess'),
+          i18next.t('groups.alert.text.inviteSuccess', { name }),
+        );
+        navigation.goBack();
+      } catch (err) {
+        Alert.alert(i18next.t('common.alert.error'), err.message);
+      }
+    } else {
+      navigation.navigate('Connection', { connectionId: id });
+    }
+  };
+
   return (
     <View style={styles.container} testID="connectionCardContainer">
       <View style={styles.card}>
@@ -190,7 +235,7 @@ const ConnectionCard = (props: Props) => {
         <TouchableOpacity
           testID={`ConnectionCard-${index}`}
           onPress={() => {
-            navigation.navigate('Connection', { connectionId: id });
+            handlePress(id);
           }}
           accessibilityLabel={t(
             'connections.accessibilityLabel.viewConnectionDetails',

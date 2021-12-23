@@ -12,7 +12,7 @@ const Stack = createStackNavigator();
 const connectionsScreenOptions: StackNavigationOptions = {
   ...headerOptions,
   headerLeft: () => <NavHome />,
-  headerTitle: () => <AnimatedHeaderTitle text="Recovery Connections" s />,
+  headerTitle: () => <AnimatedHeaderTitle text="Recovery Connections" />,
 };
 
 const Connections = () => {

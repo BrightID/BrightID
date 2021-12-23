@@ -282,16 +282,19 @@
     },
     "button": {
       "createGroup": "Créer le Groupe",
-      "next": "Suivant"
+      "next": "Suivant",
+      "skip": "Passer et le faire plus tard"
     },
     "label": {
-      "cofounders": "COFONDATEURS"
+      "cofounders": "COFONDATEURS",
+      "invitees": "INVITÉS"
     },
     "placeholder": {
       "groupName": "Quel est le nom du groupe ?"
     },
     "text": {
       "cofounders": "Pour créer un groupe, vous devez sélectionner deux cofondateurs",
+      "invitees": "Inviter les membres du groupe",
       "noConnections": "Vous n'avez pas de connexions"
     }
   },
@@ -571,13 +574,15 @@
       "text": {
         "codeGroup": "Ce code QR est conçu pour permettre à différentes personnes de se connecter entre-elles simultanément.",
         "codeSingle": "Ce code QR peut être utilisé pour se connecter avec un seul utilisateur avant son expiration.",
+        "codeStar": "Ce code QR est conçu pour mettre en relation de nombreuses personnes avec une seule personne.",
         "shareLinkGroup": "Partager ce lien",
         "shareLinkSingle": "Partagez ce lien avec un ami",
         "universalLink": "Lien universel"
       },
       "title": {
         "codeGroup": "Code de groupe",
-        "codeSingle": "Code à usage unique"
+        "codeSingle": "Code à usage unique",
+        "codeStar": "Code étoile"
       },
       "universalLink": "Lien Universel"
     },
@@ -597,6 +602,7 @@
       "canAlso": "Vous pouvez aussi…",
       "codeGroup": "Code de groupe",
       "codeSingle": "Code à usage unique",
+      "codeStar": "Code étoile",
       "confirmConnections": "Confirmation des connexions",
       "downloadingConnectionData": "Téléchargement des données de connexion",
       "expiresIn": "Expire dans :",

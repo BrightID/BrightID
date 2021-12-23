@@ -24,10 +24,12 @@ export class NodeApi {
     url,
     secretKey,
     id,
+    monitor,
   }: {
     url: string;
     secretKey: Uint8Array | undefined;
     id: string | undefined;
+    monitor?: (response: ApiResponse<any>) => void;
   }) {
     this.baseUrlInternal = url;
     this.id = id;
@@ -35,7 +37,9 @@ export class NodeApi {
     this.api = create({
       baseURL: this.apiUrl,
       headers: { 'Cache-Control': 'no-cache' },
+      timeout: 60 * 1000, // one minute timeout for requests
     });
+    monitor && this.api.addMonitor((response) => monitor(response));
   }
 
   get baseUrl() {
@@ -103,17 +107,19 @@ export class NodeApi {
     const message = stringify(op);
     console.log(`Connect message: ${message}`);
     op.sig1 = uInt8ArrayToB64(nacl.sign.detached(strToUint8Array(message), sk));
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
-  async createGroup(
-    groupId: string,
-    url: string,
-    type: string,
-  ) {
+  async createGroup(groupId: string, url: string, type: string) {
     this.requiresCredentials();
     const name = 'Add Group';
     const timestamp = Date.now();
@@ -132,9 +138,15 @@ export class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
@@ -156,9 +168,15 @@ export class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
@@ -181,9 +199,15 @@ export class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
@@ -206,9 +230,15 @@ export class NodeApi {
       nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
 
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
@@ -229,9 +259,15 @@ export class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
@@ -262,9 +298,15 @@ export class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), secretKey),
     );
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
@@ -285,9 +327,15 @@ export class NodeApi {
     op.sig = uInt8ArrayToB64(
       nacl.sign.detached(strToUint8Array(message), this.secretKey),
     );
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
@@ -313,9 +361,15 @@ export class NodeApi {
     op.id2 = params.id2;
     op.sig1 = params.sig1;
     op.sig2 = params.sig2;
-    const res = await this.api.post<OperationPostRes, ErrRes>(`/operations`, op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/operations`,
+      op,
+    );
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
@@ -343,14 +397,15 @@ export class NodeApi {
     });
     const res = await api.post<OperationPostRes, ErrRes>(`/operations`, op);
     NodeApi.throwOnError(res);
-    op.hash = NodeApi.checkHash(res as ApiOkResponse<OperationPostRes>, message);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
     return op;
   }
 
   async getGroup(id: string) {
-    const res = await this.api.get<GroupRes, ErrRes>(
-      `/groups/${id}`,
-    );
+    const res = await this.api.get<GroupRes, ErrRes>(`/groups/${id}`);
     NodeApi.throwOnError(res);
     return (res.data as GroupRes).data;
   }
@@ -417,5 +472,82 @@ export class NodeApi {
     const res = await this.api.get<AppsRes, ErrRes>(`/apps`);
     NodeApi.throwOnError(res);
     return (res.data as AppsRes).data?.apps;
+  }
+
+  async getState() {
+    const res = await this.api.get<StateRes, ErrRes>(`/state`);
+    NodeApi.throwOnError(res);
+    return (res.data as StateRes).data;
+  }
+
+  async getPublic(app: string, roundedTimestamp: number, verification: string) {
+    console.log(15, app, roundedTimestamp, verification);
+    const res = await this.api.get<PublicRes, ErrRes>(
+      `/verifications/blinded/public`,
+      { app, roundedTimestamp, verification },
+    );
+    NodeApi.throwOnError(res);
+    return (res.data as PublicRes).data.public;
+  }
+
+  async getBlindedSig(pub: string, sig: string, e: string) {
+    const res = await this.api.get<BlindSigRes, ErrRes>(
+      `/verifications/blinded/sig/${this.id}`,
+      { public: pub, sig, e },
+    );
+    NodeApi.throwOnError(res);
+    return (res.data as BlindSigRes).data.response;
+  }
+
+  async linkAppId(sig: SigInfo, appId: string) {
+    console.log(`/verifications/${sig.app}/${appId}`);
+    console.log({
+      sig: sig.sig,
+      uid: sig.uid,
+      verification: sig.verification,
+      roundedTimestamp: sig.roundedTimestamp,
+    });
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      `/verifications/${sig.app}/${appId}`,
+      {
+        sig: sig.sig,
+        uid: sig.uid,
+        verification: sig.verification,
+        roundedTimestamp: sig.roundedTimestamp,
+      },
+    );
+
+    NodeApi.throwOnError(res);
+  }
+
+  async spendSponsorship(appId: string, appUserId: string) {
+    const name = 'Spend Sponsorship';
+    const timestamp = Date.now();
+    const op: SpendSponsorshipOp = {
+      name,
+      app: appId,
+      appId: appUserId,
+      timestamp,
+      v,
+    };
+    const message = stringify(op);
+    const res = await this.api.post<OperationPostRes, ErrRes>(
+      '/operations',
+      op,
+    );
+    NodeApi.throwOnError(res);
+    op.hash = NodeApi.checkHash(
+      res as ApiOkResponse<OperationPostRes>,
+      message,
+    );
+    return op;
+  }
+
+  async getSponsorShip(appUserId: string) {
+    const res = await this.api.get<SponsorshipRes, ErrRes>(
+      `/sponsorships/${appUserId}`,
+    );
+    NodeApi.throwOnError(res);
+    return (res.data as SponsorshipRes).data;
   }
 }

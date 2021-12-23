@@ -192,6 +192,8 @@ const inviteConnectionToGroup = async (groupName) => {
   // should start on home screen
   await expectHomescreen();
   // navigate to groups screen
+  await element(by.id('toggleDrawer')).tap();
+  await expect(element(by.id('groupsBtn'))).toBeVisible();
   await element(by.id('groupsBtn')).tap();
   await expectGroupsScreen();
   // open group
@@ -202,16 +204,16 @@ const inviteConnectionToGroup = async (groupName) => {
   // click on "invite"
   await expect(element(by.text(inviteUserText))).toBeVisible();
   await element(by.text(inviteUserText)).tap();
-  // should be on invitescreen now
-  await waitFor(element(by.id('inviteListScreen')))
+  // should be on connections screen now
+  await waitFor(element(by.id('connectionsScreen')))
     .toBeVisible()
     .withTimeout(10000);
   // find the first eligible candidate for this group
-  await waitFor(element(by.id('eligibleItem-0')))
+  await waitFor(element(by.id('ConnectionCard-0')))
     .toBeVisible()
     .withTimeout(10000);
   // invite user
-  await element(by.id('eligibleItem-0')).tap();
+  await element(by.id('ConnectionCard-0')).tap();
   // dismiss success notification
   await waitFor(element(by.text(i18next.t('groups.alert.title.inviteSuccess'))))
     .toBeVisible()
