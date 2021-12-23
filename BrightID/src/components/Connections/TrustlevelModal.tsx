@@ -9,6 +9,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { BlurView } from '@react-native-community/blur';
 import { StackScreenProps } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 import {
   connection_levels,
   RECOVERY_COOLDOWN_EXEMPTION,
@@ -17,10 +18,13 @@ import { BLACK, WHITE, GREEN } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from '@/store';
-import { addOperation, setConnectionLevel, setFirstRecoveryTime } from '@/actions';
+import {
+  addOperation,
+  setConnectionLevel,
+  setFirstRecoveryTime,
+} from '@/actions';
 import { selectConnectionById } from '@/reducer/connectionsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
-import { useNavigation } from '@react-navigation/native';
 
 import TrustlevelSlider from './TrustlevelSlider';
 
@@ -29,7 +33,9 @@ type props = StackScreenProps<ModalStackParamList, 'SetTrustlevel'>;
 const TrustlevelModal = ({ route }: props) => {
   const navigation = useNavigation();
   const { connectionId } = route.params;
-  const { id: myId, firstRecoveryTime } = useSelector((state: State) => state.user);
+  const { id: myId, firstRecoveryTime } = useSelector(
+    (state: State) => state.user,
+  );
   const connection: Connection = useSelector((state: State) =>
     selectConnectionById(state, connectionId),
   );
@@ -57,15 +63,17 @@ const TrustlevelModal = ({ route }: props) => {
       dispatch(addOperation(op));
       dispatch(setConnectionLevel({ id: connection.id, level }));
       if (!firstRecoveryTime && level === connection_levels.RECOVERY) {
-        dispatch(setFirstRecoveryTime(Date.now() - 3600*1000*48));
+        dispatch(setFirstRecoveryTime(Date.now() - 3600 * 1000 * 48));
       }
     }
     // close modal
     goBack();
-    if ((level === connection_levels.RECOVERY ||
+    if (
+      (level === connection_levels.RECOVERY ||
         connection.level === connection_levels.RECOVERY) &&
-        firstRecoveryTime && 
-        Date.now() - firstRecoveryTime > RECOVERY_COOLDOWN_EXEMPTION) {
+      firstRecoveryTime &&
+      Date.now() - firstRecoveryTime > RECOVERY_COOLDOWN_EXEMPTION
+    ) {
       // show info about cooldown period
       navigation.navigate('RecoveryCooldownInfo');
     }

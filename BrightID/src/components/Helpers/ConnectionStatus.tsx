@@ -11,6 +11,15 @@ import { GREY, RED } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { connection_levels } from '@/utils/constants';
 
+type Props = {
+  index: number;
+  status: string;
+  reportReason: string;
+  connectionDate?: number;
+  infoText?: string;
+  level: ConnectionLevel;
+};
+
 export const ConnectionStatus = ({
   index,
   status,
@@ -18,22 +27,22 @@ export const ConnectionStatus = ({
   connectionDate,
   infoText,
   level,
-}) => {
+}: Props) => {
   const { t } = useTranslation();
 
-  const ConnectionDate = () => (
+  const ConnectionDate = connectionDate ? (
     <Text style={styles.connectionTime} testID={`connection_time-${index}`}>
       {t('common.tag.connectionDate', {
-        date: moment(parseInt(connectionDate, 10)).fromNow(),
+        date: moment(connectionDate).fromNow(),
       })}
     </Text>
-  );
+  ) : null;
 
-  const InfoText = () => (
+  const InfoText = infoText ? (
     <Text style={styles.infoText} testID={`info_text-${index}`}>
       {infoText}
     </Text>
-  );
+  ) : null;
 
   if (status === 'initiated') {
     return (
@@ -59,8 +68,8 @@ export const ConnectionStatus = ({
               })
             : t('connections.tag.reported')}
         </Text>
-        {connectionDate && <ConnectionDate />}
-        {infoText && <InfoText />}
+        {ConnectionDate}
+        {InfoText}
       </View>
     );
   } else if (status === 'deleted') {
@@ -83,8 +92,8 @@ export const ConnectionStatus = ({
         >
           {connectionLevelStrings[level]}
         </Text>
-        {connectionDate && <ConnectionDate />}
-        {infoText && <InfoText />}
+        {ConnectionDate}
+        {InfoText}
       </View>
     );
   }

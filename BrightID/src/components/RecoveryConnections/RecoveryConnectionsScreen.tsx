@@ -7,21 +7,21 @@ import {
   TouchableOpacity,
 } from 'react-native';
 // Redux
-import { useSelector } from '@/store';
 import Spinner from 'react-native-spinkit';
 import { useTranslation } from 'react-i18next';
-import { selectAllConnections } from '@/reducer/connectionsSlice';
-import { selectOperationsTotal } from '@/reducer/operationsSlice';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useHeaderHeight } from '@react-navigation/stack';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
+import { selectOperationsTotal } from '@/reducer/operationsSlice';
+import { selectAllConnections } from '@/reducer/connectionsSlice';
+import { useSelector } from '@/store';
 import {
   DEVICE_LARGE,
   DEVICE_IOS,
   DEVICE_ANDROID,
 } from '@/utils/deviceConstants';
 import { NodeApiContext } from '@/components/NodeApiGate';
-import { ORANGE, BLACK, WHITE, BLUE, GREY } from '@/theme/colors';
+import { ORANGE, WHITE, BLUE, GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 
 // Import Components Local
@@ -62,9 +62,9 @@ export const RecoveryConnectionsScreen = (props) => {
   const { t } = useTranslation();
   const me = useSelector((state: State) => state.user);
   const [loading, setLoading] = useState(true);
-  const [recoveryConnections, setRecoveryConnections] = useState<Array<Connection>>(
-    [],
-  );
+  const [recoveryConnections, setRecoveryConnections] = useState<
+    Array<Connection>
+  >([]);
   const [connectionProfile, setConnectionProfile] = useState<
     ProfileInfo | undefined
   >(undefined);
@@ -83,53 +83,55 @@ export const RecoveryConnectionsScreen = (props) => {
         console.log(`fetching own recovery connections`);
         const profile: ProfileInfo = await api.getProfile(me.id);
         setConnectionProfile(profile);
-        const recoveryConnections = profile.recoveryConnections.map(rc => {
-          const conn = myConnections.find(c => rc.id === c.id);
+        const recoveryConnections = profile.recoveryConnections.map((rc) => {
+          const conn = myConnections.find((c) => rc.id === c.id);
           return conn || { id: rc.id };
         });
         setRecoveryConnections(recoveryConnections);
         setLoading(false);
       };
       fetchData();
-    }, [api, myConnections, opTotal]),
+    }, [api, me.id, myConnections, opTotal]),
   );
 
   const getActiveTime = (item) => {
     if (!connectionProfile) {
-      return {};
+      return { activeBefore: 0, activeAfter: 0 };
     }
-    const rc = connectionProfile.recoveryConnections.find(rc => rc.id === item.id);
+    const rc = connectionProfile.recoveryConnections.find(
+      (rc) => rc.id === item.id,
+    );
     return { activeBefore: rc.activeBefore, activeAfter: rc.activeAfter };
   };
 
   const Loading = () => (
     <View style={styles.loadingContainer}>
-      <Spinner
-        size={DEVICE_LARGE ? 48 : 42}
-        type="Wave"
-        color={BLUE}
-      />
+      <Spinner size={DEVICE_LARGE ? 48 : 42} type="Wave" color={BLUE} />
     </View>
   );
 
   const RecoveryConnectionList = () => (
-      <FlatList
-        data={recoveryConnections}
-        style={styles.recoveryConnectionContainer}
-        contentContainerStyle={{
-          paddingBottom: '35%',
-          paddingTop: 20,
-          flexGrow: 1,
-        }}
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item, index }) => (
-          <RecoveryConnectionCard {...item} {...getActiveTime(item)} index={index} isModify={true} />
-        )}
-        ListEmptyComponent={<EmptyList />}
-      />
-    );
-
+    <FlatList
+      data={recoveryConnections}
+      style={styles.recoveryConnectionContainer}
+      contentContainerStyle={{
+        paddingBottom: '35%',
+        paddingTop: 20,
+        flexGrow: 1,
+      }}
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
+      renderItem={({ item, index }) => (
+        <RecoveryConnectionCard
+          {...item}
+          {...getActiveTime(item)}
+          index={index}
+          isModify={true}
+        />
+      )}
+      ListEmptyComponent={<EmptyList />}
+    />
+  );
 
   return (
     <View
