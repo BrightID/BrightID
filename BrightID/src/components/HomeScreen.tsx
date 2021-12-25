@@ -242,7 +242,7 @@ export const HomeScreen = (props) => {
                   {patch.text}
                 </Text>
               </TouchableOpacity>
-            ) : loading ? (
+            )) : loading ? (
               <View style={styles.verificationBox}>
                 <ActivityIndicator size="small" color={DARKER_GREY} animating />
               </View>
