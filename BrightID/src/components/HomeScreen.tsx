@@ -14,8 +14,9 @@ import { createSelector } from '@reduxjs/toolkit';
 import { useFocusEffect } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useDispatch, useSelector } from '@/store';
 import {
   fetchApps,
   selectAllApps,
@@ -30,12 +31,10 @@ import fetchUserInfo from '@/actions/fetchUserInfo';
 import ChatBox from '@/components/Icons/ChatBox';
 import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
 import Camera from '@/components/Icons/Camera';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { setHeaderHeight } from '@/reducer/walkthroughSlice';
-import { uniq } from 'ramda';
-import { clearBaseUrl, selectBaseUrl } from '@/reducer/settingsSlice';
+import { selectBaseUrl } from '@/reducer/settingsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { getVerificationPatches } from '@/utils/verifications';
 import {
@@ -43,7 +42,6 @@ import {
   selectCompletedTaskIds,
 } from '@/components/Tasks/TasksSlice';
 
-import _ from 'lodash';
 import { version as app_version } from '../../package.json';
 
 /**
@@ -228,7 +226,7 @@ export const HomeScreen = (props) => {
           </View>
           <View style={styles.profileDivider} />
           <View style={styles.verificationsContainer}>
-            {verificationPatches.length > 0 ? verificationPatches.map((patch, i) =>
+            {verificationPatches.length > 0 ? verificationPatches.map((patch, i) => (
               <TouchableOpacity
                 key={`verificationPatch-${i}`}
                 style={styles.verificationBox}
@@ -282,7 +280,11 @@ export const HomeScreen = (props) => {
           }}
         >
           <Text testID="AchievementsCount" style={styles.countsNumberText}>
-            {completedTaskIds.length} <Text style={styles.totalCountsNumberText}> / {taskIds.length} </Text>
+            {completedTaskIds.length}{' '}
+            <Text style={styles.totalCountsNumberText}>
+              {' '}
+              / {taskIds.length}{' '}
+            </Text>
           </Text>
 
           <View style={styles.countsBorder} />
@@ -373,9 +375,17 @@ export const HomeScreen = (props) => {
           </TouchableOpacity>
         </View>
         <DeepPasteLink />
-        <Text style={styles.versionInfo}>
-          {baseUrl ? baseUrl.split('://')[1] : 'unknown'} - v{app_version}
-        </Text>
+        <View style={styles.infoContainer}>
+          <TouchableOpacity
+            style={styles.nodeLinkContainer}
+            onPress={() => navigation.navigate('NodeModal')}
+          >
+            <Text style={styles.nodeLink}>
+              {baseUrl ? baseUrl.split('://')[1] : 'disconnected'} - v{' '}
+              {app_version}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -432,7 +442,6 @@ const styles = StyleSheet.create({
     color: BLACK,
   },
   verificationsContainer: {
-    height: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -442,12 +451,12 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
   },
   verificationBox: {
-    marginTop: 5,
     marginRight: 4,
   },
   verificationText: {
     paddingLeft: 5,
     paddingRight: 5,
+    paddingTop: 4,
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[11],
     color: BLUE,
@@ -560,13 +569,17 @@ const styles = StyleSheet.create({
     fontSize: fontSize[14],
     fontFamily: 'Poppins-Bold',
   },
-  versionInfo: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: fontSize[11],
-    color: WHITE,
+  infoContainer: {
     position: 'absolute',
     right: DEVICE_LARGE ? 12 : 7,
     bottom: DEVICE_LARGE ? 12 : 7,
+    flexDirection: 'row',
+  },
+  nodeLinkContainer: {},
+  nodeLink: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[11],
+    color: WHITE,
   },
 });
 

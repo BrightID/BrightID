@@ -7,22 +7,22 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+} from '@react-navigation/drawer';
+import { useHeaderHeight } from '@react-navigation/stack';
+import { useTranslation } from 'react-i18next';
+import codePush from 'react-native-code-push';
 import { useDispatch, useSelector } from '@/store';
 import {
   setEditProfileMenuLayout,
   setEditProfileTextLayout,
 } from '@/reducer/walkthroughSlice';
 import HomeScreen from '@/components/HomeScreen';
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-} from '@react-navigation/drawer';
-import { useHeaderHeight } from '@react-navigation/stack';
 import { BLACK, ORANGE, WHITE, GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
-import { useTranslation } from 'react-i18next';
-import codePush from 'react-native-code-push';
 import { retrieveImage, photoDirectory } from '@/utils/filesystem';
 import Home from '@/components/Icons/Home';
 import Pencil from '@/components/Icons/Pencil';
@@ -48,10 +48,12 @@ const CustomItem = ({
   activeTintColor,
   activeBackgroundColor,
   inactiveBackgroundColor,
+  testId,
 }) => {
   const dispatch = useDispatch();
   return (
     <TouchableOpacity
+      testID={testId}
       activeOpacity={0.3}
       style={[
         styles.drawerItem,
@@ -123,6 +125,7 @@ const CustomDrawerContent = (props) => {
         <Text style={styles.userName}>{name}</Text>
       </View>
       <CustomItem
+        testId="drawerHomeBtn"
         focused={false}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
@@ -147,6 +150,7 @@ const CustomDrawerContent = (props) => {
         }}
       />
       <CustomItem
+        testId="drawerEditProfileBtn"
         focused={state.routeNames[state.index] === 'Edit Profile'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
@@ -171,12 +175,13 @@ const CustomDrawerContent = (props) => {
         }}
       />
       <CustomItem
+        testId="drawerRecoveryConnectionsBtn"
         focused={state.routeNames[state.index] === 'Recovery Connections'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
         activeTintColor={WHITE}
         activeBackgroundColor={ORANGE}
-        label={'Recovery Connections'}
+        label="Recovery Connections"
         // style={styles.drawerItem}
         // labelStyle={styles.labelStyle}
         icon={({ focused }) => (
@@ -195,6 +200,7 @@ const CustomDrawerContent = (props) => {
         }}
       />
       <CustomItem
+        testId="drawerAchievementsBtn"
         focused={state.routeNames[state.index] === 'Achievements'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
@@ -220,6 +226,7 @@ const CustomDrawerContent = (props) => {
       />
 
       <CustomItem
+        testId="drawerHomeBtn"
         focused={state.routeNames[state.index] === 'Copy Explorer Code'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
@@ -245,6 +252,7 @@ const CustomDrawerContent = (props) => {
       />
       <CustomItem
         focused={state.routeNames[state.index] === 'Groups'}
+        testId="groupsBtn"
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
         activeTintColor={WHITE}
@@ -261,11 +269,15 @@ const CustomDrawerContent = (props) => {
           />
         )}
         onPress={() => {
-          navigation.navigate('Groups');
+          navigation.reset({
+            index: 1,
+            routes: [{ name: 'Home' }, { name: 'Groups' }],
+          });
         }}
       />
 
       <CustomItem
+        testId="drawerUpdateBtn"
         focused={false}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
@@ -298,6 +310,7 @@ const CustomDrawerContent = (props) => {
         }}
       />
       <CustomItem
+        testId="drawerContactUsBtn"
         focused={state.routeNames[state.index] === 'ContactUs'}
         // style={styles.drawerItem}
         // labelStyle={styles.labelStyle}
@@ -323,6 +336,7 @@ const CustomDrawerContent = (props) => {
       />
       {__DEV__ && (
         <CustomItem
+          testId="drawerIconsBtn"
           focused={state.routeNames[state.index] === 'SampleIconPage'}
           // style={styles.drawerItem}
           // labelStyle={styles.labelStyle}
@@ -377,7 +391,10 @@ export const HomeDrawer = () => {
     >
       <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen name="Achievements" component={TasksScreen} />
-      <Drawer.Screen name="BituVerification" component={BituVerificationScreen} />
+      <Drawer.Screen
+        name="BituVerification"
+        component={BituVerificationScreen}
+      />
       <Drawer.Screen name="Edit Profile" component={EditProfileScreen} />
       <Drawer.Screen
         name="Recovery Connections"

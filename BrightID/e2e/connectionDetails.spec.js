@@ -55,6 +55,8 @@ describe('Connection details', () => {
     await interConnect(1);
 
     // create a group - enter group info
+    await element(by.id('toggleDrawer')).tap();
+    await expect(element(by.id('groupsBtn'))).toBeVisible();
     await element(by.id('groupsBtn')).tap();
     await expectGroupsScreen();
     await element(by.id('groupsCreateGroupBtn')).tap();
@@ -98,6 +100,8 @@ describe('Connection details', () => {
 
     // Check if cofounders actually joined the groups
     // navigate to groups screen
+    await element(by.id('toggleDrawer')).tap();
+    await expect(element(by.id('groupsBtn'))).toBeVisible();
     await element(by.id('groupsBtn')).tap();
     // wait 20 seconds until all join ops should be done on the backend
     await new Promise((r) => setTimeout(r, 20000));

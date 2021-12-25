@@ -51,6 +51,8 @@ describe('Groups', () => {
   describe('Show initial group screen', () => {
     beforeAll(async () => {
       // make sure to be on the groups screen before starting tests
+      await element(by.id('toggleDrawer')).tap();
+      await expect(element(by.id('groupsBtn'))).toBeVisible();
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
     });
@@ -88,6 +90,8 @@ describe('Groups', () => {
   describe('Create initial group', () => {
     beforeAll(async () => {
       // navigate to group creation screen
+      await element(by.id('toggleDrawer')).tap();
+      await expect(element(by.id('groupsBtn'))).toBeVisible();
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
       await element(by.id('groupsCreateGroupBtn')).tap();
@@ -134,6 +138,8 @@ describe('Groups', () => {
   describe('Create additional group', () => {
     beforeAll(async () => {
       // navigate to group creation screen
+      await element(by.id('toggleDrawer')).tap();
+      await expect(element(by.id('groupsBtn'))).toBeVisible();
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
       // there should be at least one group existing
@@ -190,6 +196,8 @@ describe('Groups', () => {
       // Check if invitees actually joined the groups
       await expectHomescreen();
       // navigate to groups screen
+      await element(by.id('toggleDrawer')).tap();
+      await expect(element(by.id('groupsBtn'))).toBeVisible();
       await element(by.id('groupsBtn')).tap();
       // wait 20 seconds until all join ops should be done on the backend
       await new Promise((r) => setTimeout(r, 20000));
@@ -215,6 +223,8 @@ describe('Groups', () => {
   describe('Groups screen search', () => {
     beforeAll(async () => {
       // navigate to groups screen
+      await element(by.id('toggleDrawer')).tap();
+      await expect(element(by.id('groupsBtn'))).toBeVisible();
       await element(by.id('groupsBtn')).tap();
       await expectGroupsScreen();
       // there should be two groups existing, so look for testID suffix '-1'

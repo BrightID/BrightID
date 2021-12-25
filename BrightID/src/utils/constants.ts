@@ -33,7 +33,7 @@ export const LIGHTBLUE = '#4A90E2';
 export const DARK_ORANGE = '#B64B32';
 
 /** Nodechooser constants * */
-export const NODE_CHOOSER_TIMEOUT_MS = 10 * 1000; // Fail if no valid node found within timeout
+export const NODE_CHOOSER_TIMEOUT_MS = 20 * 1000; // Fail if no valid node found within timeout
 
 /** ** NOTIFICATION CONSTANTS  *** */
 export const CONNECTIONS_TYPE = 'connections';
@@ -44,7 +44,8 @@ export const MIN_CONNECTIONS_FOR_RECOVERY_NOTIFICATION = 3;
 export const MIN_RECOVERY_CONNECTIONS = 3;
 
 /** ** CONNECTION CONFIDENCE LEVELS *** */
-type connection_levels = typeof connection_levels[keyof typeof connection_levels];
+type connection_levels =
+  typeof connection_levels[keyof typeof connection_levels];
 export const connection_levels = {
   REPORTED: 'reported',
   SUSPICIOUS: 'suspicious',
