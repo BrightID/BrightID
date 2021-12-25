@@ -13,7 +13,7 @@ import {
   RouteProp,
 } from '@react-navigation/native';
 import ConnectionTestButton from '@/utils/connectionTestButton';
-import { getVerificationsTexts } from '@/utils/verifications';
+import { getVerificationPatches } from '@/utils/verifications';
 import {
   selectConnectionById,
   selectAllConnections,
@@ -70,7 +70,9 @@ function ConnectionScreenController() {
   useEffect(() => {
     if (connectionProfile) {
       console.log(`Updating verifications for ${connectionProfile.id}`);
-      const texts = getVerificationsTexts(connectionProfile.verifications);
+      const texts = getVerificationPatches(connectionProfile.verifications).map(
+        (patch) => patch.text
+      );
       setVerificationsTexts(texts);
       dispatch(
         setConnectionVerifications({

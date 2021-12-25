@@ -7,7 +7,6 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { useTranslation } from 'react-i18next';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { ORANGE, BLACK, RED } from '@/theme/colors';
@@ -41,9 +40,6 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
       (pendingConnection.connectionsNum || 1) >=
       REPORTED_PERCENTAGE;
 
-  const brightIdVerified = pendingConnection.verifications
-    .map((v) => v.name)
-    .includes('BrightID');
   let ratingView;
   switch (pendingConnection.state) {
     case pendingConnection_states.UNCONFIRMED: {
@@ -123,11 +119,6 @@ export const PreviewConnectionView = (props: PreviewConnectionProps) => {
               {t('pendingConnections.label.created', { date })}
             </Text>
           </View>
-          {brightIdVerified && (
-            <View style={styles.verificationSticker}>
-              <VerifiedBadge width={16} height={16} />
-            </View>
-          )}
         </View>
       </View>
       <View style={styles.countsContainer}>
@@ -191,9 +182,6 @@ const styles = StyleSheet.create({
     borderColor: ORANGE,
     justifyContent: 'space-evenly',
     flexDirection: 'row',
-  },
-  verificationSticker: {
-    marginLeft: DEVICE_LARGE ? 7 : 5,
   },
   ratingView: {
     flex: 1,

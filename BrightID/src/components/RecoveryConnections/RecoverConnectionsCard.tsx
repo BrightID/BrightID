@@ -14,7 +14,6 @@ import { useTranslation } from 'react-i18next';
 import { CHANNEL_TTL, connection_levels, ORANGE } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
 import { staleConnection, deleteConnection } from '@/actions';
-import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
 import {
   WHITE,
@@ -57,7 +56,6 @@ const RecoveryConnectionCard = (props: Props) => {
   const dispatch = useDispatch();
   const {
     status,
-    verifications,
     connectionDate,
     id,
     name,
@@ -73,7 +71,6 @@ const RecoveryConnectionCard = (props: Props) => {
   } = props;
   const { t } = useTranslation();
 
-  const brightIdVerified = verifications?.some((v) => v.name === 'BrightID');
   const [imgErr, setImgErr] = useState(false);
 
   useFocusEffect(
@@ -229,11 +226,6 @@ const RecoveryConnectionCard = (props: Props) => {
               >
                 {name}
               </Text>
-              {brightIdVerified && (
-                <View style={styles.verificationSticker}>
-                  <VerifiedBadge width={16} height={16} />
-                </View>
-              )}
             </View>
             <ConnectionStatus
               index={index}
@@ -327,9 +319,6 @@ const styles = StyleSheet.create({
     color: RED,
     marginTop: DEVICE_LARGE ? 5 : 2,
     textTransform: 'capitalize',
-  },
-  verificationSticker: {
-    marginLeft: DEVICE_LARGE ? 7 : 3.5,
   },
   removeButton: {
     width: DEVICE_LARGE ? 60 : 56,
