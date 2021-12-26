@@ -662,7 +662,7 @@
       "currentRecoveryConnections": "Ihre aktuellen Wiederherstellungsverbindungen",
       "emptyList": "Bitte fügen Sie Wiederherstellungsverbindungen hinzu, um die soziale Wiederherstellung zu ermöglichen",
       "pleaseMakeSomeConnections": "Bitte stellen Sie einige Verbindungen her :)",
-      "threeMore": "Sie benötigen {{amount}} weitere bereits bekannte Verbindung(en), um soziale Wiederherstellung zu ermöglichen"
+      "threeMore": "Sie benötigen {{amount}} weitere bereits bekannte Verbindungen, um soziale Wiederherstellung zu ermöglichen"
     }
   },
   "recoveryCooldownModal": {
