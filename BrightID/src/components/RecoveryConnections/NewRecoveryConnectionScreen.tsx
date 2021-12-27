@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from '@/store';
 import {
   selectAllConnections,
   recoveryConnectionsSelector,
+  firstRecoveryTimeSelector,
 } from '@/reducer/connectionsSlice';
 import {
   addOperation,
@@ -86,7 +87,8 @@ export const NewRecoveryConnectionList = (props) => {
   const { t } = useTranslation();
   const api = useContext(NodeApiContext);
   const dispatch = useDispatch();
-  const { id: myId, firstRecoveryTime } = useSelector((state) => state.user);
+  const { id: myId } = useSelector((state) => state.user);
+  const firstRecoveryTime = useSelector(firstRecoveryTimeSelector);
   const connections = useSelector(newRecoveryConnectionSelector);
   const recoveryConnections = useSelector(recoveryConnectionsSelector);
 

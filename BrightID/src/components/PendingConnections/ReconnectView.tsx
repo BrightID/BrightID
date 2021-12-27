@@ -10,11 +10,12 @@ import TrustlevelSlider from '@/components/Connections/TrustlevelSlider';
 import { retrieveImage } from '@/utils/filesystem';
 import {
   connection_levels,
-  RECOVERY_COOLDOWN_EXEMPTION
+  RECOVERY_COOLDOWN_EXEMPTION,
 } from '@/utils/constants';
 import { useSelector } from '@/store';
 import { ConnectionStats } from './ConnectionStats';
 import { ProfileCard } from './ProfileCard';
+import { firstRecoveryTimeSelector } from '@/reducer/connectionsSlice';
 
 // percentage determines reported warning
 const REPORTED_PERCENTAGE = 0.1;
@@ -39,7 +40,8 @@ export const ReconnectView = ({
     existingConnection.level,
   );
   const { t } = useTranslation();
-  const { id, firstRecoveryTime } = useSelector((state) => state.user);
+  const { id } = useSelector((state) => state.user);
+  const firstRecoveryTime = useSelector(firstRecoveryTimeSelector);
 
   const userReported = pendingConnection.reports.find(
     (report) => report.id === id,
@@ -82,12 +84,13 @@ export const ReconnectView = ({
   };
 
   const updateLevel = () => {
-    if (existingConnection.level !== connectionLevel &&
-        (existingConnection.level === connection_levels.RECOVERY ||
+    if (
+      existingConnection.level !== connectionLevel &&
+      (existingConnection.level === connection_levels.RECOVERY ||
         connectionLevel === connection_levels.RECOVERY) &&
-        firstRecoveryTime &&
-        Date.now() - firstRecoveryTime > RECOVERY_COOLDOWN_EXEMPTION
-      ) {
+      firstRecoveryTime &&
+      Date.now() - firstRecoveryTime > RECOVERY_COOLDOWN_EXEMPTION
+    ) {
       // show info about cooldown period
       navigation.navigate('RecoveryCooldownInfo', {
         successCallback: () => {

@@ -7,7 +7,6 @@ const initialState: UserState = {
   photo: { filename: '' },
   searchParam: '',
   backupCompleted: false,
-  firstRecoveryTime: 0,
   id: '',
   password: '',
   verifications: [],
@@ -44,9 +43,6 @@ const userSlice = createSlice({
     setBackupCompleted(state, action) {
       state.backupCompleted = action.payload;
     },
-    setFirstRecoveryTime(state, action) {
-      state.firstRecoveryTime = action.payload;
-    },
     setPassword(state, action) {
       state.password = action.payload;
     },
@@ -57,17 +53,10 @@ const userSlice = createSlice({
       state.verifications = action.payload;
     },
     hydrateUser(state, action) {
-      const {
-        name,
-        photo,
-        backupCompleted,
-        firstRecoveryTime,
-        id,
-        password,
-      } = action.payload;
+      const { name, photo, backupCompleted, firstRecoveryTime, id, password } =
+        action.payload;
 
       state.backupCompleted = backupCompleted;
-      state.firstRecoveryTime = firstRecoveryTime;
       state.name = name;
       state.photo = photo;
       state.id = id;
@@ -89,7 +78,6 @@ export const {
   setUserData,
   setName,
   setBackupCompleted,
-  setFirstRecoveryTime,
   setPassword,
   setUserId,
   setVerifications,

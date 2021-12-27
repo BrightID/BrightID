@@ -20,6 +20,7 @@ import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from '@/store';
 import {
   addOperation,
+  firstRecoveryTimeSelector,
   setConnectionLevel,
   setFirstRecoveryTime,
 } from '@/actions';
@@ -33,9 +34,8 @@ type props = StackScreenProps<ModalStackParamList, 'SetTrustlevel'>;
 const TrustlevelModal = ({ route }: props) => {
   const navigation = useNavigation();
   const { connectionId } = route.params;
-  const { id: myId, firstRecoveryTime } = useSelector(
-    (state: State) => state.user,
-  );
+  const { id: myId } = useSelector((state: State) => state.user);
+  const firstRecoveryTime = useSelector(firstRecoveryTimeSelector);
   const connection: Connection = useSelector((state: State) =>
     selectConnectionById(state, connectionId),
   );
@@ -63,7 +63,8 @@ const TrustlevelModal = ({ route }: props) => {
       dispatch(addOperation(op));
       dispatch(setConnectionLevel({ id: connection.id, level }));
       if (!firstRecoveryTime && level === connection_levels.RECOVERY) {
-        dispatch(setFirstRecoveryTime(Date.now() - 3600 * 1000 * 48));
+        // First ever recovery connection. Set firstRecoveryTime accordingly.
+        dispatch(setFirstRecoveryTime(Date.now()));
       }
     }
     // close modal

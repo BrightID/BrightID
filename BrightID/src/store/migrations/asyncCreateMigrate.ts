@@ -4,7 +4,7 @@ export type MigrationManifest = {
   [key: string]: (state: PersistedState) => Promise<PersistedState>;
 };
 
-const VERSION = 10;
+const VERSION = 11; // 11;
 
 export function asyncCreateMigrate(
   migrations: MigrationManifest,

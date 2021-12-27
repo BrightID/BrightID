@@ -18,6 +18,7 @@ type ConnectionsState = {
   searchParam: string;
   searchOpen: boolean;
   filters: ConnectionLevel[];
+  firstRecoveryTime: number;
 };
 
 type LocalConnectionData = {

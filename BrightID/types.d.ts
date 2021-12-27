@@ -214,7 +214,6 @@ declare global {
     isSponsored: boolean;
     eula: boolean;
     migrated?: boolean;
-    firstRecoveryTime: number;
   };
 
   type LayoutBox = {

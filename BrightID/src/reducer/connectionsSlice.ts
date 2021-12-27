@@ -19,6 +19,7 @@ const initialState: ConnectionsState = {
   connectionsSort: '',
   searchParam: '',
   searchOpen: false,
+  firstRecoveryTime: 0,
   filters: [
     connection_levels.SUSPICIOUS,
     connection_levels.JUST_MET,
@@ -85,17 +86,6 @@ const connectionsSlice = createSlice({
         state.connections,
         action,
       );
-    },
-    hydrateConnections(
-      state,
-      action: PayloadAction<{ connections: Connection[] }>,
-    ) {
-      if (action.payload.connections) {
-        state.connections = connectionsAdapter.setAll(
-          state.connections,
-          action.payload.connections,
-        );
-      }
     },
     reportAndHideConnection(
       state,
@@ -169,6 +159,9 @@ const connectionsSlice = createSlice({
     setFilters(state, action: PayloadAction<ConnectionLevel[]>) {
       state.filters = action.payload;
     },
+    setFirstRecoveryTime(state, action) {
+      state.firstRecoveryTime = action.payload;
+    },
   },
   extraReducers: {
     [RESET_STORE]: () => {
@@ -186,13 +179,13 @@ export const {
   updateConnections,
   deleteConnection,
   addConnection,
-  hydrateConnections,
   reportAndHideConnection,
   staleConnection,
   setFilters,
   setConnectionLevel,
   setConnectionVerifications,
   setReportReason,
+  setFirstRecoveryTime,
 } = connectionsSlice.actions;
 
 export const {
@@ -218,6 +211,9 @@ export const recoveryConnectionsSelector = createSelector(
     );
   },
 );
+
+export const firstRecoveryTimeSelector = (state: State) =>
+  state.connections.firstRecoveryTime;
 
 // Export reducer
 export default connectionsSlice.reducer;
