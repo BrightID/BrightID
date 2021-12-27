@@ -21,7 +21,6 @@ const connectionsMigrations: MigrationManifest = {
   11: async (state: ConnectionsState & PersistedState) => {
     // set firstRecoveryTime
     console.log(`Migrating connections to 11`);
-    debugger;
     if (state?.connections?.entities) {
       const recoveryConnections = Object.values(
         state.connections.entities,
