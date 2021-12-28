@@ -15,7 +15,7 @@ import { connectionsMigrate } from './migrations/connections';
 
 // update this in async migrate if changed to prevent require cycle
 
-const version = 11; // 11;
+const version = 11;
 
 const fsPersistConfig = {
   storage: FsStorage,
