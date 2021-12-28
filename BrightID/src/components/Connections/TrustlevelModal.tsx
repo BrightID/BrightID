@@ -9,22 +9,23 @@ import {
 import { useTranslation } from 'react-i18next';
 import { BlurView } from '@react-native-community/blur';
 import { StackScreenProps } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 import {
   connection_levels,
-  RECOVERY_COOLDOWN_DURATION,
+  RECOVERY_COOLDOWN_EXEMPTION,
 } from '@/utils/constants';
 import { BLACK, WHITE, GREEN } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from '@/store';
-import { addOperation, setConnectionLevel } from '@/actions';
-import { calculateCooldownPeriod } from '@/utils/recovery';
 import {
-  selectConnectionById,
-  recoveryConnectionsSelector,
-} from '@/reducer/connectionsSlice';
+  addOperation,
+  firstRecoveryTimeSelector,
+  setConnectionLevel,
+  setFirstRecoveryTime,
+} from '@/actions';
+import { selectConnectionById } from '@/reducer/connectionsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
-import { useNavigation } from '@react-navigation/native';
 
 import TrustlevelSlider from './TrustlevelSlider';
 
@@ -33,11 +34,11 @@ type props = StackScreenProps<ModalStackParamList, 'SetTrustlevel'>;
 const TrustlevelModal = ({ route }: props) => {
   const navigation = useNavigation();
   const { connectionId } = route.params;
-  const myId = useSelector((state: State) => state.user.id);
+  const { id: myId } = useSelector((state: State) => state.user);
+  const firstRecoveryTime = useSelector(firstRecoveryTimeSelector);
   const connection: Connection = useSelector((state: State) =>
     selectConnectionById(state, connectionId),
   );
-  const recoveryConnections = useSelector(recoveryConnectionsSelector);
   const dispatch = useDispatch();
   const [level, setLevel] = useState(
     connection ? connection.level : connection_levels.JUST_MET,
@@ -51,19 +52,8 @@ const TrustlevelModal = ({ route }: props) => {
   };
 
   const saveLevelHandler = async () => {
-    let cooldownPeriod = 0;
     if (connection.level !== level) {
       console.log(`Setting connection level '${level}' for ${connection.name}`);
-      if (level === connection_levels.RECOVERY) {
-        // Get cooldown period for this change
-        cooldownPeriod = calculateCooldownPeriod({
-          recoveryConnections,
-          connection,
-        });
-      } else if (connection.level === connection_levels.RECOVERY) {
-        // removing recovery connection. Cooldown period always applies
-        cooldownPeriod = RECOVERY_COOLDOWN_DURATION;
-      }
       const op = await api.addConnection(
         myId,
         connection.id,
@@ -72,15 +62,40 @@ const TrustlevelModal = ({ route }: props) => {
       );
       dispatch(addOperation(op));
       dispatch(setConnectionLevel({ id: connection.id, level }));
+
+      if (__DEV__) {
+        // if peer is a fake connection also submit opposite addConnection operation
+        if (connection.secretKey) {
+          const op = await api.addConnection(
+            connection.id,
+            myId,
+            level,
+            Date.now(),
+            null,
+            {
+              id: connection.id,
+              secretKey: connection.secretKey,
+            },
+          );
+          dispatch(addOperation(op));
+        }
+      }
+
+      if (!firstRecoveryTime && level === connection_levels.RECOVERY) {
+        // First ever recovery connection. Set firstRecoveryTime accordingly.
+        dispatch(setFirstRecoveryTime(Date.now()));
+      }
     }
     // close modal
     goBack();
-    if (cooldownPeriod > 0) {
+    if (
+      (level === connection_levels.RECOVERY ||
+        connection.level === connection_levels.RECOVERY) &&
+      firstRecoveryTime &&
+      Date.now() - firstRecoveryTime > RECOVERY_COOLDOWN_EXEMPTION
+    ) {
       // show info about cooldown period
-      navigation.navigate('RecoveryCooldownInfo', {
-        connectionId,
-        cooldownPeriod,
-      });
+      navigation.navigate('RecoveryCooldownInfo');
     }
   };
 

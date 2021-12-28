@@ -53,13 +53,7 @@ const userSlice = createSlice({
       state.verifications = action.payload;
     },
     hydrateUser(state, action) {
-      const {
-        name,
-        photo,
-        backupCompleted,
-        id,
-        password,
-      } = action.payload;
+      const { name, photo, backupCompleted, id, password } = action.payload;
 
       state.backupCompleted = backupCompleted;
       state.name = name;

@@ -7,18 +7,43 @@ import {
   connectionLevelStrings,
 } from '@/utils/connectionLevelStrings';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { GREY } from '@/theme/colors';
+import { GREY, RED } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { connection_levels } from '@/utils/constants';
+
+type Props = {
+  index: number;
+  status: string;
+  reportReason: string;
+  connectionDate?: number;
+  infoText?: string;
+  level: ConnectionLevel;
+};
 
 export const ConnectionStatus = ({
   index,
   status,
   reportReason,
   connectionDate,
+  infoText,
   level,
-}) => {
+}: Props) => {
   const { t } = useTranslation();
+
+  const ConnectionDate = connectionDate ? (
+    <Text style={styles.connectionTime} testID={`connection_time-${index}`}>
+      {t('common.tag.connectionDate', {
+        date: moment(connectionDate).fromNow(),
+      })}
+    </Text>
+  ) : null;
+
+  const InfoText = infoText ? (
+    <Text style={styles.infoText} testID={`info_text-${index}`}>
+      {infoText}
+    </Text>
+  ) : null;
+
   if (status === 'initiated') {
     return (
       <View style={styles.statusContainer}>
@@ -43,11 +68,8 @@ export const ConnectionStatus = ({
               })
             : t('connections.tag.reported')}
         </Text>
-        <Text style={[styles.connectedText, { marginTop: 1 }]}>
-          {t('common.tag.connectionDate', {
-            date: moment(parseInt(connectionDate, 10)).fromNow(),
-          })}
-        </Text>
+        {ConnectionDate}
+        {InfoText}
       </View>
     );
   } else if (status === 'deleted') {
@@ -70,11 +92,8 @@ export const ConnectionStatus = ({
         >
           {connectionLevelStrings[level]}
         </Text>
-        <Text style={styles.connectionTime} testID={`connection_time-${index}`}>
-          {t('common.tag.connectionDate', {
-            date: moment(parseInt(connectionDate, 10)).fromNow(),
-          })}
-        </Text>
+        {ConnectionDate}
+        {InfoText}
       </View>
     );
   }
@@ -141,6 +160,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     fontSize: DEVICE_LARGE ? 10 : 9,
     color: '#B64B32',
+  },
+  infoText: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: DEVICE_LARGE ? 10 : 9,
+    color: RED,
   },
   moreIcon: {
     marginRight: DEVICE_LARGE ? 26 : 23,

@@ -7,21 +7,25 @@ import {
   Alert,
   FlatList,
 } from 'react-native';
-import { useDispatch, useSelector } from '@/store';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from '@/store';
 import { connectionsSelector } from '@/utils/connectionsSelector';
 import { ORANGE, BLUE, WHITE, LIGHT_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import EmptyList from '@/components/Helpers/EmptyList';
-import { connection_levels } from '@/utils/constants';
+import {
+  connection_levels,
+  RECOVERY_COOLDOWN_EXEMPTION,
+} from '@/utils/constants';
 import {
   setConnectionLevel,
   recoveryConnectionsSelector,
   addOperation,
+  firstRecoveryTimeSelector,
+  setFirstRecoveryTime,
 } from '@/actions';
-import { calculateCooldownPeriod } from '@/utils/recovery';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import TrustedConnectionCard from './TrustedConnectionCard';
 
@@ -43,6 +47,7 @@ const TrustedConnectionsScreen = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const myId = useSelector((state: State) => state.user.id);
+  const firstRecoveryTime = useSelector(firstRecoveryTimeSelector);
   const connections = useSelector((state) =>
     connectionsSelector(state, undefined),
   );
@@ -104,8 +109,6 @@ const TrustedConnectionsScreen = () => {
           (item) => !selectedConnections.includes(item.id),
         );
 
-        const cooldownPeriod = calculateCooldownPeriod({ recoveryConnections });
-
         if (connectionsToUpgrade.length || connectionsToDowngrade.length) {
           // apply changes
           const promises = [];
@@ -147,8 +150,17 @@ const TrustedConnectionsScreen = () => {
           for (const op of ops) {
             dispatch(addOperation(op));
           }
+
+          if (!firstRecoveryTime && connectionsToUpgrade.length) {
+            // First ever recovery connection. Set firstRecoveryTime accordingly.
+            dispatch(setFirstRecoveryTime(Date.now()));
+          }
+
           // show info about cooldown period
-          if (cooldownPeriod > 0) {
+          if (
+            firstRecoveryTime &&
+            Date.now() - firstRecoveryTime > RECOVERY_COOLDOWN_EXEMPTION
+          ) {
             navigation.navigate('RecoveryCooldownInfo', {
               successCallback: () => {
                 navigation.navigate('Home');

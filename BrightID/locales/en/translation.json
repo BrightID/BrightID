@@ -1,5 +1,9 @@
 {
   "achievements": {
+    "bituVerification": {
+      "description": "More details",
+      "title": "Bitu verification"
+    },
     "getSponsored": {
       "description": "Get sponsored by linking with an app that offers sponsorship",
       "title": "Get sponsored"
@@ -38,10 +42,6 @@
     "setupTrustedConnections": {
       "description": "Setup your recovery connections to enable social account recovery",
       "title": "Setup social recovery"
-    },
-    "bituVerification": {
-      "description": "More details",
-      "title": "Bitu verification"
     }
   },
   "apps": {
@@ -184,7 +184,8 @@
     "label": {
       "connectionLevel": "Connection Level",
       "mutualConnections": "Mutual Connections",
-      "mutualGroups": "Mutual Groups"
+      "mutualGroups": "Mutual Groups",
+      "recoveryConnections": "Recovery Connections"
     },
     "tags": {
       "connectedAt": "Connected {{date}}",
@@ -201,6 +202,7 @@
       "reportImpact": "Flagging {{name}} will negatively effect their BrightID score, and this flag might be shown to other users.",
       "reportOther": "Other reason",
       "reportSpammer": "This person sent me an unwanted connection request",
+      "unkownRecoveryConnection": "Unknown",
       "unReportConnection": "Undo Report",
       "unReportImpact": "You have already reported {{name}} as a {{reportReason}}. Would you like to remove this flag and restore your connection?"
     }
@@ -300,8 +302,8 @@
       "contactUs": "Contact Us",
       "copyExplorerCode": "Copy Explorer Code",
       "editProfile": "Edit Profile",
-      "home": "Home",
-      "groups": "Groups"
+      "groups": "Groups",
+      "home": "Home"
     }
   },
   "eula": {
@@ -384,10 +386,9 @@
       "connect": "connect"
     },
     "button": {
+      "achievements": "Achievements",
       "apps": "Apps",
       "connections": "Connections",
-      "groups": "Groups",
-      "achievements": "Achievements",
       "myCode": "My Code",
       "scanCode": "Scan a Code"
     },
@@ -403,14 +404,14 @@
     }
   },
   "nodeApiGate": {
+    "reset": {
+      "button": "Restore default nodelist",
+      "text": "You are not using the default nodelist"
+    },
     "state": {
       "connecting": "Connecting to BrightID node...",
       "noConnection": "Failed to connect to a BrightID node. Please check your network connectivity.",
       "noNode": "Nodelist is empty."
-    },
-    "reset": {
-      "text": "You are not using the default nodelist",
-      "button": "Restore default nodelist"
     },
     "timer": {
       "text": "Time remaining: {{secondsLeft}} seconds"
@@ -653,8 +654,6 @@
   "recoveryCooldownModal": {
     "dismissButtonLabel": "Got it",
     "text": {
-      "connection": "You just changed the recovery level of <bold>{{name}}</bold>.",
-      "cooldown": "Note that this change takes effect after a cooldown period of <period>{{ cooldownPeriod }}</period> for security reasons.",
       "cooldownGeneric": "Note that change of recovery connections takes effect after a cooldown period of up to <period>{{ cooldownPeriod }}</period> for security reasons."
     },
     "title": "Cooldown period for recovery connections"

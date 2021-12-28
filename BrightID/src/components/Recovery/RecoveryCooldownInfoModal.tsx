@@ -8,21 +8,17 @@ import { fontSize } from '@/theme/fonts';
 import Info from '@/components/Icons/Info';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
-import { selectConnectionById } from '@/reducer/connectionsSlice';
 import { RECOVERY_COOLDOWN_DURATION } from '@/utils/constants';
 import { StackScreenProps } from '@react-navigation/stack';
 
 type props = StackScreenProps<ModalStackParamList, 'RecoveryCooldownInfo'>;
 
 const RecoveryCooldownInfoModal = ({ route, navigation }: props) => {
-  const { successCallback, cooldownPeriod, connectionId } = route.params;
+  const { successCallback } = route.params || {};
   const { t } = useTranslation();
-  const connection = useSelector((state: State) =>
-    selectConnectionById(state, connectionId),
-  );
 
   const cooldownPeriodString = moment
-    .duration(cooldownPeriod || RECOVERY_COOLDOWN_DURATION)
+    .duration(RECOVERY_COOLDOWN_DURATION)
     .humanize();
 
   const dismissModal = () => {
@@ -33,55 +29,20 @@ const RecoveryCooldownInfoModal = ({ route, navigation }: props) => {
     }
   };
 
-  let messageTextConnection;
-  let messageTextCooldown;
-  if (connection) {
-    messageTextConnection = (
-      <Text style={styles.messageText}>
-        <Trans
-          i18nKey="recoveryCooldownModal.text.connection"
-          defaults="You just changed the recovery level of <bold>{{name}}</bold>."
-          values={{
-            name: connection.name,
-          }}
-          components={{
-            bold: <Text style={{ fontFamily: 'Poppins-Bold' }} />,
-          }}
-        />
-      </Text>
-    );
-    messageTextCooldown = (
-      <Text style={styles.messageText}>
-        <Trans
-          i18nKey="recoveryCooldownModal.text.cooldown"
-          defaults="Note that this change takes effect after a cooldown period of <period>{{ cooldownPeriod }}</period> for security reasons."
-          values={{
-            cooldownPeriod: cooldownPeriodString,
-          }}
-          components={{
-            period: <Text style={styles.period} />,
-          }}
-        />
-      </Text>
-    );
-  } else {
-    // show a more generic cooldown message as connection and exact period is not known
-    messageTextCooldown = (
-      <Text style={styles.messageText}>
-        <Trans
-          i18nKey="recoveryCooldownModal.text.cooldownGeneric"
-          defaults="Note that change of recovery connections takes effect after a cooldown period of up to <period>{{ cooldownPeriod }}</period> for security reasons."
-          values={{
-            cooldownPeriod: cooldownPeriodString,
-          }}
-          components={{
-            period: <Text style={styles.period} />,
-          }}
-        />
-      </Text>
-    );
-  }
-
+  let messageTextCooldown = (
+    <Text style={styles.messageText}>
+      <Trans
+        i18nKey="recoveryCooldownModal.text.cooldownGeneric"
+        defaults="Note that change of recovery connections takes effect after a cooldown period of up to <period>{{ cooldownPeriod }}</period> for security reasons."
+        values={{
+          cooldownPeriod: cooldownPeriodString,
+        }}
+        components={{
+          period: <Text style={styles.period} />,
+        }}
+      />
+    </Text>
+  );
   return (
     <View style={styles.container} testID="RecoveryCooldownInfo">
       <BlurView
@@ -105,7 +66,6 @@ const RecoveryCooldownInfoModal = ({ route, navigation }: props) => {
           </View>
         </View>
         <View style={styles.message}>
-          {messageTextConnection}
           {messageTextCooldown}
         </View>
         <View style={styles.buttonContainer}>

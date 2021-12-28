@@ -1,14 +1,13 @@
 import { NodeApi } from '@/api/brightId';
-import { connection_levels } from './constants';
 
 export const connectFakeUsers = async (
   fakeUser1: FakeUser,
   fakeUser2: FakeUser,
   api: NodeApi,
+  level: ConnectionLevel,
 ) => {
   const timestamp = Date.now();
 
-  const level = connection_levels.JUST_MET;
   let flagReason;
 
   // Connect user1 -> user2
