@@ -68,7 +68,8 @@ function ConnectionScreen(props: Props) {
 
   const [groupsCollapsed, setGroupsCollapsed] = useState(true);
   const [connectionsCollapsed, setConnectionsCollapsed] = useState(true);
-  const [recoveryConnectionsCollapsed, setRecoveryConnectionsCollapsed] = useState(true);
+  const [recoveryConnectionsCollapsed, setRecoveryConnectionsCollapsed] =
+    useState(true);
   const { t } = useTranslation();
 
   const toggleSection = (key) => {
@@ -96,26 +97,29 @@ function ConnectionScreen(props: Props) {
         data: connectionsCollapsed ? [] : mutualConnections,
         key: 'connections',
         numEntries: mutualConnections.length,
-      }, {
+      },
+      {
         title: t('connectionDetails.label.mutualGroups'),
         data: groupsCollapsed ? [] : mutualGroups,
         key: 'groups',
         numEntries: mutualGroups.length,
-      }, {
+      },
+      {
         title: t('connectionDetails.label.recoveryConnections'),
         data: recoveryConnectionsCollapsed ? [] : recoveryConnections,
         key: 'recoveryConnections',
         numEntries: recoveryConnections.length,
-      }
+      },
     ];
     return data;
   }, [
-    connectionsCollapsed,
-    groupsCollapsed,
-    recoveryConnectionsCollapsed,
-    mutualConnections,
-    mutualGroups,
     t,
+    connectionsCollapsed,
+    mutualConnections,
+    groupsCollapsed,
+    mutualGroups,
+    recoveryConnectionsCollapsed,
+    recoveryConnections,
   ]);
 
   const renderSticker = () => {
@@ -245,24 +249,35 @@ function ConnectionScreen(props: Props) {
     console.log(
       `Rendering Section recoveryConnections item ${index} (${item.id}) - testID ${testID}`,
     );
-    const activeAfter = item.activeAfter ? `(activates in ${moment.duration(item.activeAfter, "milliseconds").humanize()})` : '';
-    const activeBefore = item.activeBefore ? `(deactivates in ${moment.duration(item.activeBefore, "milliseconds").humanize()})` : '';
+    const activeAfter = item.activeAfter
+      ? `(activates in ${moment
+          .duration(item.activeAfter, 'milliseconds')
+          .humanize()})`
+      : '';
+    const activeBefore = item.activeBefore
+      ? `(deactivates in ${moment
+          .duration(item.activeBefore, 'milliseconds')
+          .humanize()})`
+      : '';
     return (
       <View testID={testID} style={styles.itemContainer}>
         <View style={styles.itemPhoto}>{renderRecoveryPhoto(item.conn)}</View>
         <View style={styles.itemLabel}>
-          <Text style={styles.itemLabelText}>{
-            item?.conn?.name ? item.conn.name : t('connectionDetails.text.unkownRecoveryConnection')
-          } {activeAfter} {activeBefore} </Text>
+          <Text style={styles.itemLabelText}>
+            {item?.conn?.name
+              ? item.conn.name
+              : t('connectionDetails.text.unkownRecoveryConnection')}{' '}
+            {activeAfter} {activeBefore}{' '}
+          </Text>
         </View>
       </View>
     );
   };
 
   const renderRecoveryPhoto = (item) => {
-    const source = item?.photo?.filename ? 
-      { uri: `file://${photoDirectory()}/${item.photo.filename}` } :
-      require('@/static/default_profile.jpg');
+    const source = item?.photo?.filename
+      ? { uri: `file://${photoDirectory()}/${item.photo.filename}` }
+      : require('@/static/default_profile.jpg');
     return (
       <Image
         source={source}

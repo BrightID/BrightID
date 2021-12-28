@@ -62,6 +62,25 @@ const TrustlevelModal = ({ route }: props) => {
       );
       dispatch(addOperation(op));
       dispatch(setConnectionLevel({ id: connection.id, level }));
+
+      if (__DEV__) {
+        // if peer is a fake connection also submit opposite addConnection operation
+        if (connection.secretKey) {
+          const op = await api.addConnection(
+            connection.id,
+            myId,
+            level,
+            Date.now(),
+            null,
+            {
+              id: connection.id,
+              secretKey: connection.secretKey,
+            },
+          );
+          dispatch(addOperation(op));
+        }
+      }
+
       if (!firstRecoveryTime && level === connection_levels.RECOVERY) {
         // First ever recovery connection. Set firstRecoveryTime accordingly.
         dispatch(setFirstRecoveryTime(Date.now()));

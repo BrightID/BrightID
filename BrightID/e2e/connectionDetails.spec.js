@@ -22,11 +22,11 @@ describe('Connection details', () => {
     await createBrightID();
 
     // create 5 fake connections
-    await createFakeConnection();
-    await createFakeConnection();
-    await createFakeConnection();
-    await createFakeConnection();
-    await createFakeConnection();
+    await createFakeConnection(true, connection_levels.ALREADY_KNOWN);
+    await createFakeConnection(true, connection_levels.ALREADY_KNOWN);
+    await createFakeConnection(true, connection_levels.ALREADY_KNOWN);
+    await createFakeConnection(true, connection_levels.ALREADY_KNOWN);
+    await createFakeConnection(true, connection_levels.ALREADY_KNOWN);
 
     // make sure all connections are established
     await element(by.id('connectionsBtn')).tap();
@@ -50,9 +50,9 @@ describe('Connection details', () => {
     await navigateHome();
     await expectHomescreen();
 
-    // interconnect first 2 fake accounts to have mutual connections
-    await interConnect(0);
-    await interConnect(1);
+    // interconnect first 2 fake accounts with all other accounts
+    await interConnect(0, connection_levels.ALREADY_KNOWN);
+    await interConnect(1, connection_levels.ALREADY_KNOWN);
 
     // create a group - enter group info
     await element(by.id('toggleDrawer')).tap();
@@ -135,10 +135,9 @@ describe('Connection details', () => {
     });
     test('should show correct connection level', async () => {
       await expect(element(by.id('ConnectionLevelText'))).toHaveText(
-        connectionLevelStrings[connection_levels.JUST_MET],
+        connectionLevelStrings[connection_levels.ALREADY_KNOWN],
       );
     });
-
     test('should show correct mutual connections count', async () => {
       await expect(element(by.id('connections-count'))).toBeVisible();
       await expect(element(by.id('connections-count'))).toHaveText('4');
@@ -146,6 +145,10 @@ describe('Connection details', () => {
     test('should show correct mutual groups count', async () => {
       await expect(element(by.id('groups-count'))).toBeVisible();
       await expect(element(by.id('groups-count'))).toHaveText('1');
+    });
+    test('should show recovery connections count', async () => {
+      await expect(element(by.id('recoveryConnections-count'))).toBeVisible();
+      await expect(element(by.id('recoveryConnections-count'))).toHaveText('0');
     });
     test('should expand and collapse mutual connections', async () => {
       const itemTestId = 'connections-0';
@@ -186,10 +189,18 @@ describe('Connection details', () => {
     beforeAll(async () => {
       await element(by.id('connectionsBtn')).tap();
       await expectConnectionsScreen();
+    });
+
+    beforeEach(async () => {
       // open connection details of first connection
       await expect(element(by.id('ConnectionCard-0'))).toBeVisible();
       await element(by.id('ConnectionCard-0')).tap();
       await expectConnectionScreen();
+    });
+
+    afterEach(async () => {
+      await element(by.id('header-back')).tap();
+      await expectConnectionsScreen();
     });
 
     afterAll(async () => {
@@ -207,14 +218,14 @@ describe('Connection details', () => {
       await expect(element(by.id('ConnectionLevelSliderPopup'))).toBeVisible();
       // check initial value
       await expect(sliderText).toHaveText(
-        connectionLevelStrings[connection_levels.JUST_MET],
+        connectionLevelStrings[connection_levels.ALREADY_KNOWN],
       );
       // set new value by swiping right
       // "adjustSliderToPosition" is only available on iOS, so we have to use the not-so-exact "swipe" method
-      // This will swipe all the way to the right, so the new expected level is ALREADY_KNOWN
+      // This will swipe all the way to the right, so the new expected level is RECOVERY
       await slider.swipe('right', 'fast');
       await expect(sliderText).toHaveText(
-        connectionLevelStrings[connection_levels.ALREADY_KNOWN],
+        connectionLevelStrings[connection_levels.RECOVERY],
       );
 
       // click save button
@@ -225,14 +236,40 @@ describe('Connection details', () => {
       ).not.toBeVisible();
       // verify new value is displayed
       await expect(element(by.id('ConnectionLevelText'))).toHaveText(
-        connectionLevelStrings[connection_levels.ALREADY_KNOWN],
+        connectionLevelStrings[connection_levels.RECOVERY],
       );
       // wait 30 seconds until operation is confirmed in the backend
       await new Promise((r) => setTimeout(r, 30000));
       // verify new value is still displayed after operation confirmed
       await expect(element(by.id('ConnectionLevelText'))).toHaveText(
-        connectionLevelStrings[connection_levels.ALREADY_KNOWN],
+        connectionLevelStrings[connection_levels.RECOVERY],
       );
+    });
+
+    describe('recovery connections', () => {
+      test('should show recovery connections count', async () => {
+        await expect(element(by.id('recoveryConnections-count'))).toBeVisible();
+        await expect(element(by.id('recoveryConnections-count'))).toHaveText(
+          '1',
+        );
+      });
+
+      test('should expand and collapse recovery connections', async () => {
+        const itemTestId = 'recoveryConnections-0';
+        const toggleButton = element(by.id('recoveryConnections-toggleBtn'));
+        const firstItem = element(by.id(itemTestId));
+        await expect(toggleButton).toBeVisible();
+        // initially item should not be visible
+        await expect(firstItem).not.toBeVisible();
+        // expand list
+        await toggleButton.tap();
+        // item should be visible now
+        await expect(firstItem).toBeVisible();
+        // hide list
+        await toggleButton.tap();
+        // item should not be visible anymore
+        await expect(firstItem).not.toBeVisible();
+      });
     });
   });
 });

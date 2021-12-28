@@ -10,15 +10,25 @@ import {
   joinAllGroups,
   reconnectFakeConnection,
 } from '../actions/fakeContact';
+import { connection_levels } from '@/utils/constants';
+import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
 
 /*
 Return a button that opens actionsheet with test methods
  */
 const btnOptions = [
   'Accept all group invites',
-  'Connect with all other fake connections',
   'Reconnect with changed profile',
   'Reconnect with identical profile',
+  `Connect with all other fake connections - ${
+    connectionLevelStrings[connection_levels.JUST_MET]
+  }`,
+  `Connect with all other fake connections - ${
+    connectionLevelStrings[connection_levels.ALREADY_KNOWN]
+  }`,
+  `Connect with all other fake connections - ${
+    connectionLevelStrings[connection_levels.RECOVERY]
+  }`,
   'cancel',
 ];
 
@@ -34,18 +44,44 @@ const ConnectionTestButton = ({ connectionId }: { connectionId: string }) => {
         dispatch(joinAllGroups(connectionId, api));
         break;
       case 1:
-        console.log(`Connecting to other fake connections`);
-        dispatch(connectWithOtherFakeConnections(connectionId, api));
-        break;
-      case 2:
         console.log(`Reconnecting with different profile`);
         dispatch(reconnectFakeConnection(connectionId, true));
         break;
-      case 3:
+      case 2:
         console.log(`Reconnecting with same profile`);
         dispatch(reconnectFakeConnection(connectionId, false));
         break;
+      case 3:
+        console.log(`Connecting to other fake connections - JUST MET`);
+        dispatch(
+          connectWithOtherFakeConnections(
+            connectionId,
+            api,
+            connection_levels.JUST_MET,
+          ),
+        );
+        break;
       case 4:
+        console.log(`Connecting to other fake connections - ALREADY KNOWN`);
+        dispatch(
+          connectWithOtherFakeConnections(
+            connectionId,
+            api,
+            connection_levels.ALREADY_KNOWN,
+          ),
+        );
+        break;
+      case 5:
+        console.log(`Connecting to other fake connections - RECOVERY`);
+        dispatch(
+          connectWithOtherFakeConnections(
+            connectionId,
+            api,
+            connection_levels.RECOVERY,
+          ),
+        );
+        break;
+      case 6:
         console.log(`Cancelled`);
         break;
       default:

@@ -2,6 +2,7 @@
 
 import i18next from 'i18next';
 import { connection_levels } from '@/utils/constants';
+import { connectionLevelStrings } from '@/utils/connectionLevelStrings';
 
 const testUserName = 'Vincent Vega';
 
@@ -253,7 +254,10 @@ const joinAllGroups = async (connectionIndex) => {
 };
 
 /* Connect a fake connection with all other fake connections */
-const interConnect = async (connectionIndex) => {
+const interConnect = async (
+  connectionIndex,
+  connectionLevel = connection_levels.JUST_MET,
+) => {
   await expectHomescreen();
   await element(by.id('connectionsBtn')).tap();
   await expectConnectionsScreen();
@@ -266,7 +270,7 @@ const interConnect = async (connectionIndex) => {
 
   // open connection test ActionSheet
   const actionSheetTitle = 'Connection Test options';
-  const actionTitle = 'Connect with all other fake connections';
+  const actionTitle = `Connect with all other fake connections - ${connectionLevelStrings[connectionLevel]}`;
 
   await element(by.id('connectionTestBtn')).tap();
   // ActionSheet does not support testID, so match based on text.
