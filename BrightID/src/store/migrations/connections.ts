@@ -19,19 +19,19 @@ type V10State = ConnectionsState & PersistedState;
 
 const connectionsMigrations: MigrationManifest = {
   11: async (state: ConnectionsState & PersistedState) => {
-    // set firstRecoveryTime
-    console.log(`Migrating connections to 11`);
-    if (state?.connections?.entities) {
-      const recoveryConnections = Object.values(
-        state.connections.entities,
-      ).filter((conn) => conn.level === connection_levels.RECOVERY);
-      if (recoveryConnections.length) {
-        // assume existing connection was made longer ago than cooldown exception duration
-        state.firstRecoveryTime =
-          Date.now() - (RECOVERY_COOLDOWN_EXEMPTION + 60 * 1000);
+    // Set first recovery time if not yet set and user has existing RECOVERY connections
+    if (!state.firstRecoveryTime) {
+      if (state?.connections?.entities) {
+        const recoveryConnections = Object.values(
+          state.connections.entities,
+        ).filter((conn) => conn.level === connection_levels.RECOVERY);
+        if (recoveryConnections.length) {
+          // assume existing connection was made longer ago than cooldown exception duration
+          state.firstRecoveryTime =
+            Date.now() - (RECOVERY_COOLDOWN_EXEMPTION + 60 * 1000);
+        }
       }
     }
-
     return state;
   },
   10: async (state: V9State | V10State) => {
