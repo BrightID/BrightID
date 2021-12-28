@@ -37,13 +37,11 @@ type YektaVerification = HashVerification & {
   raw_rank: number;
 };
 
-type BituReport = Record<string, number>;
-
 type BituVerification = HashVerification & {
   name: 'Bitu';
   score: number;
-  directReports: BituReport;
-  indirectReports: BituReport;
+  directReports: Record<string, number>;;
+  reportedConnections: Record<string, Array<string>>;
 };
 
 type Verification =

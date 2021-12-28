@@ -1,4 +1,5 @@
 import { Parser, Value } from 'expr-eval';
+import { UserTasks } from '@/components/Tasks/UserTasks';
 
 export const isVerified = (verifications: Value, verification: string) => {
   try {
@@ -15,19 +16,39 @@ export const isVerified = (verifications: Value, verification: string) => {
   }
 };
 
-export const getVerificationsTexts = (verifications: Verification[]) => {
-  const texts = [];
+export const getVerificationPatches = (verifications: Verification[]) => {
+  const patches = [];
   let v = verifications.find((v) => v.name === 'SeedConnected');
   if (v && (v as SeedConnectedVerification).rank > 0) {
-    texts.push(`Joined Meets`);
+    patches.push({ text: 'Meets' });
   }
   v = verifications.find((v) => v.name === 'Bitu');
   if (v && (v as BituVerification).score > 0) {
-    texts.push(`Bitu ${(v as BituVerification).score}`);
+    patches.push({
+      text: `Bitu ${(v as BituVerification).score}`,
+      task: UserTasks['bitu_verification']
+    });
   }
   v = verifications.find((v) => v.name === 'Seed');
   if (v) {
-    texts.push('Seed');
+    patches.push({ text: 'Seed' });
   }
-  return texts;
+  return patches;
 };
+
+export const getBituReportedByText = (bituVerification: BituVerification, connections: Connection[], item: string) => {
+  const reportersNames = bituVerification.reportedConnections[item].map(
+    (id) => connections.find((c) => c.id === id)?.name
+  );
+  const parts = reportersNames.filter((name) => !!name);
+  const unknownReportersCount = reportersNames.filter((name) => !name).length;
+  if (unknownReportersCount > 0) {
+    parts.push(`${unknownReportersCount} unkown user${unknownReportersCount > 1 ? 's' : ''}`);
+  }
+  // this function is used to convert ['a', 'b', 'c'] to 'a, b and c'
+  const joinParts = (a) => [a.slice(0, -1).join(', '), a.slice(-1)[0]].join(
+    a.length < 2 ? '' : ' and '
+  );
+  return `Reported by ${joinParts(parts)}`;
+}
+

@@ -36,7 +36,7 @@ import { fontSize } from '@/theme/fonts';
 import { setHeaderHeight } from '@/reducer/walkthroughSlice';
 import { selectBaseUrl } from '@/reducer/settingsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
-import { getVerificationsTexts } from '@/utils/verifications';
+import { getVerificationPatches } from '@/utils/verifications';
 import {
   selectTaskIds,
   selectCompletedTaskIds,
@@ -52,9 +52,9 @@ const discordUrl = 'https://discord.gg/nTtuB2M';
 
 /** Selectors */
 
-export const verificationsTextsSelector = createSelector(
+export const verificationPatchesSelector = createSelector(
   (state: State) => state.user.verifications,
-  getVerificationsTexts,
+  getVerificationPatches,
 );
 
 /** HomeScreen Component */
@@ -67,7 +67,7 @@ export const HomeScreen = (props) => {
   const apps = useSelector(selectAllApps);
   const taskIds = useSelector(selectTaskIds);
   const completedTaskIds = useSelector(selectCompletedTaskIds);
-  const verificationsTexts = useSelector(verificationsTextsSelector);
+  const verificationPatches = useSelector(verificationPatchesSelector);
 
   const photoFilename = useSelector(
     (state: State) => state.user.photo.filename,
@@ -226,21 +226,23 @@ export const HomeScreen = (props) => {
           </View>
           <View style={styles.profileDivider} />
           <View style={styles.verificationsContainer}>
-            {verificationsTexts.length > 0 ? (
-              verificationsTexts.map((verificationText, i) => (
-                <View
-                  key={`verificationView-${i}`}
-                  style={styles.verificationBox}
-                >
-                  <Text
-                    key={`verificationText-${i}`}
-                    style={styles.verificationText}
-                  >
-                    {verificationText}
-                  </Text>
-                </View>
-              ))
-            ) : loading ? (
+            {verificationPatches.length > 0 ? verificationPatches.map((patch, i) => (
+              <TouchableOpacity
+                key={`verificationPatch-${i}`}
+                style={styles.verificationBox}
+                onPress={() => {
+                  if (patch?.task?.navigationTarget) {
+                    navigation.navigate(patch.task.navigationTarget, {
+                      url: patch.task.url
+                    });
+                  }
+                }}
+              >
+                <Text key={`verificationText-${i}`} style={styles.verificationText}>
+                  {patch.text}
+                </Text>
+              </TouchableOpacity>
+            )) : loading ? (
               <View style={styles.verificationBox}>
                 <ActivityIndicator size="small" color={DARKER_GREY} animating />
               </View>

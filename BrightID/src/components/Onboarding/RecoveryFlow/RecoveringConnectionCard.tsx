@@ -16,7 +16,6 @@ import { GREY, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
 import ChannelAPI from '@/api/channelService';
-import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { uploadSig, uploadMutualInfo } from './thunks/channelUploadThunks';
 import { resetRecoveryData } from './recoveryDataSlice';
@@ -24,7 +23,6 @@ import { resetRecoveryData } from './recoveryDataSlice';
 const RecoveringConnectionCard = (props) => {
   const {
     status,
-    verifications,
     id,
     photo,
     name,
@@ -42,8 +40,6 @@ const RecoveringConnectionCard = (props) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const dispatch = useDispatch();
-
-  const brightidVerified = verifications?.includes('BrightID');
 
   const confirmConnectionSelection = () => {
     Alert.alert(
@@ -145,11 +141,6 @@ const RecoveringConnectionCard = (props) => {
             >
               {name}
             </Text>
-            {brightidVerified && (
-              <View style={styles.verificationSticker}>
-                <VerifiedBadge width={16} height={16} />
-              </View>
-            )}
           </View>
           <ConnectionStatus
             index={index}
@@ -218,9 +209,6 @@ const styles = StyleSheet.create({
   },
   moreIcon: {
     marginRight: 16,
-  },
-  verificationSticker: {
-    marginLeft: DEVICE_LARGE ? 7 : 3.5,
   },
 });
 

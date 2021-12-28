@@ -8,9 +8,9 @@
       "description": "Get sponsored by linking with an app that offers sponsorship",
       "title": "Get sponsored"
     },
-    "joinConnectionParty": {
-      "description": "Join a BrightID connection party",
-      "title": "Connection party"
+    "joinMeet": {
+      "description": "Join a BrightID meet",
+      "title": "BrightID meet"
     },
     "linkApp": {
       "description": "Link your BrightID with an app",
@@ -252,7 +252,7 @@
       "website": "Website"
     },
     "text": {
-      "meet": "Join a BrightID connection party!",
+      "meet": "Join a BrightID meet!",
       "openSource": "open source!",
       "weAre": "We are "
     },

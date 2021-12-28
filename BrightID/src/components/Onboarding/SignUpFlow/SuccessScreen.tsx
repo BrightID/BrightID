@@ -166,11 +166,6 @@ const styles = StyleSheet.create({
     width: 140,
     height: 180,
   },
-  verifiedBadge: {
-    position: 'absolute',
-    right: 10,
-    bottom: 5,
-  },
   registerText: {
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],

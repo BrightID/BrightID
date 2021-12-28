@@ -53,10 +53,6 @@ export const ReconnectView = ({
       (pendingConnection.connectionsNum || 1) >=
       REPORTED_PERCENTAGE;
 
-  const brightIdVerified = pendingConnection.verifications
-    .map((v) => v.name)
-    .includes('BrightID');
-
   useEffect(() => {
     const compareProfiles = async () => {
       if (pendingConnection.name !== existingConnection.name) {
@@ -126,7 +122,6 @@ export const ReconnectView = ({
               photo={pendingConnection.photo}
               photoSize="large"
               photoType="base64"
-              verified={brightIdVerified}
               photoTouchHandler={photoTouchHandler}
               reported={reported}
               userReported={userReported}
@@ -199,7 +194,6 @@ export const ReconnectView = ({
               photo={existingConnection.photo.filename}
               photoSize="small"
               photoType="file"
-              verified={brightIdVerified}
               photoTouchHandler={photoTouchHandler}
               reported={reported}
               userReported={userReported}
@@ -216,7 +210,6 @@ export const ReconnectView = ({
               photo={pendingConnection.photo}
               photoSize="small"
               photoType="base64"
-              verified={brightIdVerified}
               photoTouchHandler={photoTouchHandler}
               reported={reported}
               userReported={userReported}
