@@ -66,8 +66,8 @@
         "invalidContext": "Failed",
         "linkApp": "Link App?",
         "linkFailure": "Failed",
-        "linkingFailed": "App linking failed",
-        "linkSuccess": "Success"
+        "linkSuccess": "Success",
+        "linkingFailed": "App linking failed"
       }
     },
     "text": {
@@ -161,9 +161,9 @@
     },
     "tag": {
       "connectionDate": "Connected {{date}}",
+      "reportReason": " as {{reportReason}}",
       "reported": "(reported)",
-      "reportedByUser": "reported by you",
-      "reportReason": " as {{reportReason}}"
+      "reportedByUser": "reported by you"
     },
     "text": {
       "uploadingData": "Uploading encrypted data to backup server…"
@@ -626,9 +626,9 @@
     "state": "Recovered {{recoveredConnections}} connections, {{recoveredGroups}} groups",
     "steps": {
       "complete": "Account recovery complete",
-      "downloading": "Downloading data from recovery connections...",
+      "downloading": "Downloading data from recovery connections…",
       "error": "Account recovery failed",
-      "recovering": "Recovering account..."
+      "recovering": "Recovering account ..."
     },
     "text": {
       "additionalInfo": "Your recovery connections will need to scan this to help you recover your BrightID",
@@ -648,7 +648,7 @@
       "currentRecoveryConnections": "Your Current Recovery Connections",
       "emptyList": "Please add recovery connections to enable social recovery",
       "pleaseMakeSomeConnections": "Please make some connections :)",
-      "threeMore": "You need {{amount}} more already known connection(s) to enable social recovery"
+      "threeMore": "You need {{amount}} more already known connections to enable social recovery"
     }
   },
   "recoveryCooldownModal": {
@@ -684,7 +684,7 @@
     "steps": {
       "complete": "Restore complete",
       "error": "Restore failed. Wrong password?",
-      "restoring": "Restoring data...",
+      "restoring": "Restoring data…",
       "skipped": "Restore skipped",
       "waitingAccount": "Waiting for account recovery",
       "waitingPassword": "Enter password or skip"
