@@ -9,30 +9,32 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import { BlurView } from '@react-native-community/blur';
 
 // Redux
-import { useDispatch, useSelector } from '@/store';
 import { createSelector } from '@reduxjs/toolkit';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from '@/store';
 import {
   selectAllConnections,
   recoveryConnectionsSelector,
+  firstRecoveryTimeSelector,
 } from '@/reducer/connectionsSlice';
 import {
   addOperation,
   setConnectionLevel,
   setConnectionsSearch,
   setConnectionsSearchOpen,
+  setFirstRecoveryTime,
 } from '@/actions';
 
 import { toSearchString } from '@/utils/strings';
-import { useTranslation } from 'react-i18next';
-import { useHeaderHeight } from '@react-navigation/stack';
-import { ORANGE, WHITE, GREY, DARK_GREY } from '@/theme/colors';
+import { ORANGE, WHITE, GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { connection_levels } from '@/utils/constants';
+import {
+  connection_levels,
+  RECOVERY_COOLDOWN_EXEMPTION,
+} from '@/utils/constants';
 import { DEVICE_LARGE, DEVICE_ANDROID } from '@/utils/deviceConstants';
-import { calculateCooldownPeriod } from '@/utils/recovery';
 import { NodeApiContext } from '../NodeApiGate';
 // Import Components Local
 import RecoveryConnectionCard from './RecoverConnectionsCard';
@@ -69,7 +71,6 @@ const EmptyList = () => {
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-
         paddingTop: '50%',
       }}
     >
@@ -85,9 +86,9 @@ export const NewRecoveryConnectionList = (props) => {
 
   const { t } = useTranslation();
   const api = useContext(NodeApiContext);
-  const headerHeight = useHeaderHeight();
   const dispatch = useDispatch();
-  const myId = useSelector((state) => state.user.id);
+  const { id: myId } = useSelector((state) => state.user);
+  const firstRecoveryTime = useSelector(firstRecoveryTimeSelector);
   const connections = useSelector(newRecoveryConnectionSelector);
   const recoveryConnections = useSelector(recoveryConnectionsSelector);
 
@@ -126,9 +127,6 @@ export const NewRecoveryConnectionList = (props) => {
           }),
         );
       } else {
-        // calculate cooldown period
-        const cooldownPeriod = calculateCooldownPeriod({ recoveryConnections });
-
         // apply
         const promises = [];
         for (const id of selectedAccounts) {
@@ -139,6 +137,9 @@ export const NewRecoveryConnectionList = (props) => {
             setConnectionLevel({ id, level: connection_levels.RECOVERY }),
           );
         }
+        if (selectedAccounts.length > 0 && !firstRecoveryTime) {
+          dispatch(setFirstRecoveryTime(Date.now()));
+        }
 
         const ops = await Promise.all(promises);
         for (const op of ops) {
@@ -146,7 +147,10 @@ export const NewRecoveryConnectionList = (props) => {
         }
 
         // show info about cooldown period
-        if (cooldownPeriod > 0) {
+        if (
+          firstRecoveryTime &&
+          Date.now() - firstRecoveryTime > RECOVERY_COOLDOWN_EXEMPTION
+        ) {
           navigation.navigate('RecoveryCooldownInfo', {
             successCallback: () => {
               navigation.navigate('Home');
@@ -180,6 +184,8 @@ export const NewRecoveryConnectionList = (props) => {
         }}
         renderItem={({ item, index }) => (
           <RecoveryConnectionCard
+            activeBefore={0}
+            activeAfter={0}
             {...item}
             index={index}
             isSelectionActive={true}

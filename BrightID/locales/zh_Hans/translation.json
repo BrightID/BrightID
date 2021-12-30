@@ -132,6 +132,7 @@
       "success": "成功",
       "sure": "当然",
       "text": {
+        "failedOp": "{{name}} 失败!\n{{message}}",
         "incorrectPassword": "密码错误！",
         "lostKeys": "请创建新的BrightID或者尝试恢复以前的账号",
         "passwordMatch": "密码和确认密码不匹配。",
@@ -280,16 +281,19 @@
     },
     "button": {
       "createGroup": "创建群组",
-      "next": "下一步"
+      "next": "下一步",
+      "skip": "跳过并稍后处理"
     },
     "label": {
-      "cofounders": "联合创建者"
+      "cofounders": "联合创建者",
+      "invitees": "受邀者们"
     },
     "placeholder": {
       "groupName": "群名称是？"
     },
     "text": {
       "cofounders": "您必须选择两位成员作为联合创建者",
+      "invitees": "邀请群组成员",
       "noConnections": "联系人为空"
     }
   },
@@ -564,13 +568,15 @@
       "text": {
         "codeGroup": "该二维码专为多人同时连接使用。",
         "codeSingle": "此二维码可在过期之前用于与单个用户建立连接。",
+        "codeStar": "此二维码码将许多人与一个人联系起来。",
         "shareLinkGroup": "分享此链接",
         "shareLinkSingle": "与朋友分享此链接",
         "universalLink": "通用链接"
       },
       "title": {
         "codeGroup": "群二维码",
-        "codeSingle": "单次使用码"
+        "codeSingle": "单次使用码",
+        "codeStar": "多次使用二维码"
       }
     },
     "button": {
@@ -588,6 +594,7 @@
       "canAlso": "或者您也可以…",
       "codeGroup": "群二维码",
       "codeSingle": "单次使用二维码",
+      "codeStar": "多次使用二维码",
       "confirmConnections": "确认联系人",
       "downloadingConnectionData": "联系人数据加载中",
       "expiresIn": "过期日：",
@@ -613,9 +620,9 @@
     "state": "恢复{{recoveredConnections}}联系人，{{recoveredGroups}}群组",
     "steps": {
       "complete": "账户恢复完成",
-      "downloading": "正在从恢复连接下载数据...",
+      "downloading": "正在从恢复连接下载数据…",
       "error": "账户恢复失败",
-      "recovering": "账户恢复中…"
+      "recovering": "账户恢复中 …"
     },
     "text": {
       "additionalInfo": "您的恢复连接需要扫码来帮您恢复BrightID账号",
@@ -630,11 +637,11 @@
       "addRecoveryConnections": "增加恢复连接",
       "chooseThreeConnections": "选择三位或更多您已经熟悉的连接，以备份您的 BrightID",
       "completed": "已经成功添加恢复连接",
-      "connectionsAlreadyKnown": "在被设置为恢复连接之前，这些链接必须是设置为“已知”的",
+      "connectionsAlreadyKnown": "在被设置为恢复连接之前，这些链接必须是设置为“已知”的.",
       "currentRecoveryConnections": "您的现有恢复连接",
       "emptyList": "请增加恢复连接，以确保社会恢复",
       "pleaseMakeSomeConnections": "请确保一些连接",
-      "threeMore": "你还需要{{amount}}位已知的链接，才能启用社会恢复"
+      "threeMore": "你还需要{{amount}}位已知的多链接，才能启用社会恢复"
     }
   },
   "recoveryCooldownModal": {
@@ -677,7 +684,7 @@
     "steps": {
       "complete": "恢复完成",
       "error": "恢复失败. 密码错误？",
-      "restoring": "正在恢复数据...",
+      "restoring": "正在恢复数据 …",
       "skipped": "已跳过还原",
       "waitingAccount": "等待帐户恢复",
       "waitingPassword": "输入密码 或 跳过"

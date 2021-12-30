@@ -12,6 +12,7 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { store, useSelector } from '@/store';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
 import { photoDirectory } from '@/utils/filesystem';
+import { getBituReportedByText } from '@/utils/verifications';
 import { GREY, BLUE, BLACK, RED } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
@@ -32,15 +33,19 @@ export const BituVerificationScreen = function ({ route }) {
   const directReports = bituVerification
     ? Object.keys(bituVerification.directReports)
     : [];
-  const indirectReports = bituVerification
-    ? Object.keys(bituVerification.indirectReports)
+  const reportedConnections = bituVerification
+    ? Object.keys(bituVerification.reportedConnections)
     : [];
 
   const renderItem = (item, index, section) => {
-    const score =
-      section === 'indirect'
-        ? bituVerification.indirectReports[item]
-        : bituVerification.directReports[item];
+    let score, reportedBy;
+    if (section === 'reportedConnections') {
+      score = bituVerification.reportedConnections[item].length * -1;
+      reportedBy = getBituReportedByText(bituVerification, connections, item);
+    } else {
+      score = bituVerification.directReports[item];
+      reportedBy = '';
+    }
     const testID = `${section}-${index}`;
     console.log(
       `Rendering Section ${section} item ${index} (${item.name}) - testID ${testID}`,
@@ -51,6 +56,7 @@ export const BituVerificationScreen = function ({ route }) {
         <View style={styles.itemPhoto}>{renderPhoto(item)}</View>
         <View style={styles.itemLabel}>
           <Text style={styles.itemLabelText}>{item.name || 'Unknown'}</Text>
+          { reportedBy.length > 0 && <Text style={styles.itemReportedByText}>{reportedBy}</Text> }
         </View>
         <View style={{ flex: 1 }} />
         <View style={styles.negativeScoreContainer}>
@@ -123,15 +129,15 @@ export const BituVerificationScreen = function ({ route }) {
       )}
       <FlatList
         data={directReports}
-        renderItem={({ item, index }) => renderItem(item, index, 'direct')}
+        renderItem={({ item, index }) => renderItem(item, index, 'directReports')}
         keyExtractor={(item) => item}
       />
-      {indirectReports.length > 0 && (
+      {reportedConnections.length > 0 && (
         <Text style={styles.reportTitle}>Reported friends/family</Text>
       )}
       <FlatList
-        data={indirectReports}
-        renderItem={({ item, index }) => renderItem(item, index, 'indirect')}
+        data={reportedConnections}
+        renderItem={({ item, index }) => renderItem(item, index, 'reportedConnections')}
         keyExtractor={(item) => item}
       />
     </ScrollView>
@@ -219,6 +225,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[15],
     color: BLACK,
+  },
+  itemReportedByText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: fontSize[12],
+    color: RED,
   },
   photo: {
     borderRadius: 20,

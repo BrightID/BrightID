@@ -5,22 +5,21 @@ import React, {
   useLayoutEffect,
   useState,
 } from 'react';
-import { useDispatch, useSelector } from '@/store';
 import {
   useFocusEffect,
   useNavigation,
   useRoute,
   RouteProp,
 } from '@react-navigation/native';
+import { useDispatch, useSelector } from '@/store';
 import ConnectionTestButton from '@/utils/connectionTestButton';
-import { getVerificationsTexts } from '@/utils/verifications';
+import { getVerificationPatches } from '@/utils/verifications';
 import {
   selectConnectionById,
   selectAllConnections,
   setConnectionVerifications,
 } from '@/reducer/connectionsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
-import { selectAllApps } from '@/reducer/appsSlice';
 import ConnectionScreen from './ConnectionScreen';
 
 type ConnectionRoute = RouteProp<
@@ -28,23 +27,30 @@ type ConnectionRoute = RouteProp<
   'Connection'
 >;
 
+type DetailedRecoveryConnection = RecoveryConnection & { conn?: Connection };
+
 function ConnectionScreenController() {
   const navigation = useNavigation();
   const route = useRoute<ConnectionRoute>();
   const dispatch = useDispatch();
   const { connectionId } = route.params;
   const api = useContext(NodeApiContext);
-  const apps = useSelector(selectAllApps);
   const connection = useSelector((state: State) =>
     selectConnectionById(state, connectionId),
   );
   const myConnections = useSelector(selectAllConnections);
   const myGroups = useSelector((state: State) => state.groups.groups);
+  const me = useSelector((state: State) => state.user);
   const [mutualGroups, setMutualGroups] = useState<Array<Group>>([]);
   const [mutualConnections, setMutualConnections] = useState<Array<Connection>>(
     [],
   );
-  const [verificationsTexts, setVerificationsTexts] = useState<Array<string>>([]);
+  const [recoveryConnections, setRecoveryConnections] = useState<
+    Array<DetailedRecoveryConnection>
+  >([]);
+  const [verificationsTexts, setVerificationsTexts] = useState<Array<string>>(
+    [],
+  );
   const [connectedAt, setConnectedAt] = useState(0);
   const [loading, setLoading] = useState(false);
   const [connectionProfile, setConnectionProfile] = useState<
@@ -70,7 +76,9 @@ function ConnectionScreenController() {
   useEffect(() => {
     if (connectionProfile) {
       console.log(`Updating verifications for ${connectionProfile.id}`);
-      const texts = getVerificationsTexts(connectionProfile.verifications);
+      const texts = getVerificationPatches(connectionProfile.verifications).map(
+        (patch) => patch.text
+      );
       setVerificationsTexts(texts);
       dispatch(
         setConnectionVerifications({
@@ -96,8 +104,20 @@ function ConnectionScreenController() {
           return connectionProfile.mutualGroups.includes(g.id);
         }),
       );
+      const recoveryConnections: Array<DetailedRecoveryConnection> =
+        connectionProfile.recoveryConnections.map(
+          (rc: DetailedRecoveryConnection) => {
+            if (rc.id === me.id) {
+              rc.conn = me;
+            } else {
+              rc.conn = myConnections.find((c) => rc.id === c.id);
+            }
+            return rc;
+          },
+        );
+      setRecoveryConnections(recoveryConnections);
     }
-  }, [connectionProfile, myConnections, myGroups]);
+  }, [connectionProfile, me, myConnections, myGroups]);
 
   useEffect(() => {
     if (!connection) {
@@ -127,6 +147,7 @@ function ConnectionScreenController() {
       connectedAt={connectedAt}
       mutualConnections={mutualConnections}
       mutualGroups={mutualGroups}
+      recoveryConnections={recoveryConnections}
     />
   );
 }

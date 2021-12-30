@@ -7,21 +7,19 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import VerifiedBadge from '@/components/Icons/VerifiedBadge';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { BLACK, RED } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { photoDirectory } from '@/utils/filesystem';
 
 /*
-Displays profile photo, name and verified status
+Displays profile photo and name
  */
 type ProfileCardProps = {
   photo: string;
   photoType: 'base64' | 'file';
   photoTouchHandler: (photo: string, type: 'base64' | 'file') => any;
   name: string;
-  verified: boolean;
   photoSize: 'small' | 'large';
   reported?: boolean;
   userReported?: { id: string; reportReason: string };
@@ -29,7 +27,6 @@ type ProfileCardProps = {
 
 export const ProfileCard = (props: ProfileCardProps) => {
   const {
-    verified,
     name,
     photoTouchHandler,
     photo,
@@ -76,11 +73,6 @@ export const ProfileCard = (props: ProfileCardProps) => {
         {reported && (
           <Text style={styles.reported}>{t('common.tag.reported')}</Text>
         )}
-        {verified && (
-          <View style={styles.verificationSticker}>
-            <VerifiedBadge width={16} height={16} />
-          </View>
-        )}
       </View>
     </>
   );
@@ -112,8 +104,5 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     width: 150,
     height: 150,
-  },
-  verificationSticker: {
-    marginLeft: DEVICE_LARGE ? 7 : 5,
   },
 });

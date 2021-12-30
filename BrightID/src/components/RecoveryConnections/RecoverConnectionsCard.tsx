@@ -1,36 +1,18 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import IonIcons from 'react-native-vector-icons/Ionicons';
-import { useDispatch, useSelector } from '@/store';
+import moment from 'moment';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { CHANNEL_TTL, connection_levels, ORANGE } from '@/utils/constants';
+import { useDispatch } from '@/store';
+import { CHANNEL_TTL, ORANGE } from '@/utils/constants';
 import { photoDirectory } from '@/utils/filesystem';
-import { staleConnection, deleteConnection } from '@/actions';
-import VerifiedBadge from '@/components/Icons/VerifiedBadge';
+import { staleConnection } from '@/actions';
 import { DEVICE_LARGE, WIDTH } from '@/utils/deviceConstants';
-import {
-  WHITE,
-  LIGHT_ORANGE,
-  LIGHT_BLACK,
-  DARK_ORANGE,
-  RED,
-  BLUE,
-} from '@/theme/colors';
+import { WHITE, LIGHT_ORANGE, DARK_ORANGE, RED, BLUE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import Pencil from '@/components/Icons/Pencil';
-
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useActionSheet } from '@expo/react-native-action-sheet';
 import { ConnectionStatus } from '@/components/Helpers/ConnectionStatus';
-import { backupUser } from '@/components/Onboarding/RecoveryFlow/thunks/backupThunks';
 
 /**
  * Connection Card in the Connections Screen
@@ -46,18 +28,17 @@ type Props = Connection & {
   onSelect?: (id: string) => void;
   isSelected?: boolean;
   isModify?: boolean;
-  currentAccount?: string;
   index: number;
+  activeBefore: number;
+  activeAfter: number;
 };
 
 const RecoveryConnectionCard = (props: Props) => {
   const stale_check_timer = useRef<TimeoutId>(null);
-  const { backupCompleted } = useSelector((state: State) => state.user);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const {
     status,
-    verifications,
     connectionDate,
     id,
     name,
@@ -69,11 +50,11 @@ const RecoveryConnectionCard = (props: Props) => {
     isSelectionActive,
     onSelect,
     isSelected,
-    currentAccount,
+    activeAfter,
+    activeBefore,
   } = props;
   const { t } = useTranslation();
 
-  const brightIdVerified = verifications?.some((v) => v.name === 'BrightID');
   const [imgErr, setImgErr] = useState(false);
 
   useFocusEffect(
@@ -130,28 +111,13 @@ const RecoveryConnectionCard = (props: Props) => {
     }
   }, [name, status]);
 
-  const { showActionSheetWithOptions } = useActionSheet();
-
-  const removeOptions = [
-    t('connections.removeActionSheet.remove'),
-    t('common.actionSheet.cancel'),
-  ];
-
-  const showRemove =
-    status === 'deleted' ||
-    status === 'stale' ||
-    level === connection_levels.REPORTED;
-
   const ModifyConnection = () => (
     <TouchableOpacity
-      style={styles.removeButton}
+      style={styles.editButton}
       onPress={() => {
         navigation.navigate('SetTrustlevel', {
           connectionId: id,
         });
-        // navigation.navigate('ReplaceRecoveryConnections', {
-        //   currentAccount: id,
-        // });
       }}
     >
       <Pencil highlight={WHITE} color={BLUE} />
@@ -186,6 +152,15 @@ const RecoveryConnectionCard = (props: Props) => {
         }
       : require('@/static/default_profile.jpg');
 
+  const s1 = activeAfter
+    ? `activates in ${moment.duration(activeAfter, 'milliseconds').humanize()}`
+    : '';
+  const s2 = activeBefore
+    ? `deactivates in ${moment
+        .duration(activeBefore, 'milliseconds')
+        .humanize()}`
+    : '';
+  const activeTime = `${s1} ${s2}`;
   return (
     <View style={styles.container} testID="connectionCardContainer">
       <View style={styles.card}>
@@ -229,17 +204,12 @@ const RecoveryConnectionCard = (props: Props) => {
               >
                 {name}
               </Text>
-              {brightIdVerified && (
-                <View style={styles.verificationSticker}>
-                  <VerifiedBadge width={16} height={16} />
-                </View>
-              )}
             </View>
             <ConnectionStatus
               index={index}
               status={status}
               reportReason={reportReason}
-              connectionDate={connectionDate}
+              infoText={activeTime}
               level={level}
             />
           </View>
@@ -328,13 +298,16 @@ const styles = StyleSheet.create({
     marginTop: DEVICE_LARGE ? 5 : 2,
     textTransform: 'capitalize',
   },
-  verificationSticker: {
-    marginLeft: DEVICE_LARGE ? 7 : 3.5,
-  },
-  removeButton: {
+  editButton: {
     width: DEVICE_LARGE ? 60 : 56,
     position: 'absolute',
     right: 0,
+  },
+  activeText: {
+    fontFamily: 'ApexNew-Book',
+    fontSize: fontSize[12],
+    color: RED,
+    fontStyle: 'italic',
   },
 });
 

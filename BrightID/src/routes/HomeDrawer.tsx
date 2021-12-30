@@ -14,6 +14,7 @@ import {
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import codePush from 'react-native-code-push';
+import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from '@/store';
 import {
   setEditProfileMenuLayout,
@@ -38,6 +39,7 @@ import GraphExplorerScreen from '@/components/SideMenu/GraphExplorerScreen';
 import ContactUsScreen from '@/components/SideMenu/ContactUsScreen';
 import EditProfileScreen from '@/components/EditProfile/EditProfileScreen';
 import RecoveryConnectionsScreen from '@/components/RecoveryConnections/RecoveryConnectionsScreen';
+import GroupsDrawerIcon from '@/static/groups_drawer.svg';
 
 const CustomItem = ({
   onPress,
@@ -226,7 +228,7 @@ const CustomDrawerContent = (props) => {
       />
 
       <CustomItem
-        testId="drawerHomeBtn"
+        testId="drawerExplorerCodeBtn"
         focused={state.routeNames[state.index] === 'Copy Explorer Code'}
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
@@ -251,7 +253,7 @@ const CustomDrawerContent = (props) => {
         }}
       />
       <CustomItem
-        focused={state.routeNames[state.index] === 'Groups'}
+        focused={false}
         testId="groupsBtn"
         inactiveTintColor={BLACK}
         inactiveBackgroundColor={WHITE}
@@ -260,12 +262,11 @@ const CustomDrawerContent = (props) => {
         label={t('drawer.label.groups')}
         // style={styles.drawerItem}
         // labelStyle={styles.labelStyle}
-        icon={({ focused }) => (
-          <Groups
+        icon={() => (
+          <SvgXml
+            xml={GroupsDrawerIcon}
             width={DEVICE_LARGE ? 28 : 24}
             height={DEVICE_LARGE ? 28 : 24}
-            color={focused ? GREY : BLACK}
-            highlight={focused ? WHITE : ORANGE}
           />
         )}
         onPress={() => {

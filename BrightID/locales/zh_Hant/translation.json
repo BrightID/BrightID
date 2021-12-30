@@ -113,6 +113,7 @@
       "success": "成功",
       "sure": "確認",
       "text": {
+        "failedOp": "{{name}}失敗!\n{{message}}",
         "lostKeys": "請創建一個新的 BrightID 或嘗試恢復您以前的 BrightID",
         "passwordMatch": "密碼和密碼確認輸入不一致。",
         "passwordShort": "密碼必須超過8位數。",
@@ -258,16 +259,19 @@
     },
     "button": {
       "createGroup": "創建群組",
-      "next": "下一步"
+      "next": "下一步",
+      "skip": "跳过并稍好再试"
     },
     "label": {
-      "cofounders": "聯合創始人"
+      "cofounders": "聯合創始人",
+      "invitees": "受邀者"
     },
     "placeholder": {
       "groupName": "群組名稱是什麼？"
     },
     "text": {
       "cofounders": "要創建一個小組，您必須選擇兩個聯合創始人",
+      "invitees": "邀请群组成员",
       "noConnections": "無連接"
     }
   },
@@ -535,13 +539,15 @@
       "text": {
         "codeGroup": "此二維碼專為多人同時連接而設計。",
         "codeSingle": "此二維碼可用於在到期前與單個用戶聯繫。",
+        "codeStar": "此二維碼設計為一人連接多人.",
         "shareLinkGroup": "分享這個鏈接",
         "shareLinkSingle": "與一位朋友分享此鏈接",
         "universalLink": "通用鏈接"
       },
       "title": {
         "codeGroup": "群組編號",
-        "codeSingle": "一次性使用的編號"
+        "codeSingle": "一次性使用的編號",
+        "codeStar": "多次使用的編號"
       }
     },
     "button": {
@@ -559,6 +565,7 @@
       "canAlso": "或者你也可以…",
       "codeGroup": "群組編號",
       "codeSingle": "一次性使用的編號",
+      "codeStar": "多次使用的編號",
       "confirmConnections": "確認連接",
       "downloadingConnectionData": "下載連接數據",
       "expiresIn": "過期日期在：",
@@ -584,7 +591,7 @@
     "state": "恢復了 {{recoveredConnections}} 個連接，{{recoveredGroups}} 個組",
     "steps": {
       "complete": "帳號恢復完成",
-      "downloading": "正在從恢復連接下載數據...",
+      "downloading": "正在從恢復連接下載數據…",
       "error": "帳號恢復失敗",
       "recovering": "正在恢復帳戶..."
     },
@@ -605,7 +612,7 @@
       "currentRecoveryConnections": "您當前的恢復連接",
       "emptyList": "請添加恢復連接以啟用社交恢復",
       "pleaseMakeSomeConnections": "請建立一些聯繫:)",
-      "threeMore": "您需要 {{amount}} 個已知的連接來實現社交恢復"
+      "threeMore": "您需要 {{amount}} 個已知的多連接來實現社交恢復"
     }
   },
   "recoveryCooldownModal": {
@@ -643,7 +650,7 @@
     "steps": {
       "complete": "恢復完成",
       "error": "恢復失敗。密碼錯誤？",
-      "restoring": "正在恢復數據...",
+      "restoring": "正在恢復數據…",
       "skipped": "已跳過還原",
       "waitingAccount": "等待帳戶恢復",
       "waitingPassword": "輸入密碼或跳過"

@@ -5,8 +5,8 @@ import {
   TypedUseSelectorHook,
 } from 'react-redux';
 import { persistStore, persistReducer } from 'redux-persist';
-import reducers from '@/reducer';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import reducers from '@/reducer';
 import FsStorage from './storage/fsStorageAdapter';
 import KeychainStorage from './storage/keychainAdapter';
 import getStoredState from './getStoredState';
@@ -15,7 +15,7 @@ import { connectionsMigrate } from './migrations/connections';
 
 // update this in async migrate if changed to prevent require cycle
 
-const version = 10;
+const version = 11;
 
 const fsPersistConfig = {
   storage: FsStorage,

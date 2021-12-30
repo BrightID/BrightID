@@ -84,11 +84,11 @@ export const UserTasks = {
       );
     },
   },
-  join_connection_party: {
-    id: 'join_connection_party',
+  join_meet: {
+    id: 'join_meet',
     sortValue: 110,
-    title: i18next.t(`achievements.joinConnectionParty.title`),
-    description: i18next.t(`achievements.joinConnectionParty.description`),
+    title: i18next.t(`achievements.joinMeet.title`),
+    description: i18next.t(`achievements.joinMeet.description`),
     url: 'https://www.brightid.org/meet',
     checkFn(state: State) {
       return Boolean(

@@ -175,12 +175,20 @@ type ProfileInfo = {
   groupsNum: number;
   mutualConnections: string[];
   mutualGroups: string[];
+  recoveryConnections: RecoveryConnection[];
   connectedAt: number;
   createdAt: number;
   reports: Array<{ id: string; reportReason: string }>;
   verifications: Verification[];
   signingKeys: string[];
   sponsored: boolean;
+};
+
+type RecoveryConnection = {
+  id: string;
+  isActive: boolean;
+  activeBefore: number;
+  activeAfter: number;
 };
 
 type SponsorshipInfo = {
