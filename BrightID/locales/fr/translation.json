@@ -16,6 +16,10 @@
       "description": "Participer à un rendez-vous virtuel BrightID avec des amis proches ou des membres de votre famille",
       "title": "Rendez-vous virtuel avec amis ou famille"
     },
+    "joinMeet": {
+      "description": "Rejoindre une réunion BrightID",
+      "title": "Réunion BrightID"
+    },
     "linkApp": {
       "description": "Lier votre compte BrightID à une application",
       "title": "Lier une application"
@@ -206,7 +210,8 @@
     "label": {
       "connectionLevel": "Niveau de Connexion",
       "mutualConnections": "Connexions en Commun",
-      "mutualGroups": "Groupes en Commun"
+      "mutualGroups": "Groupes en Commun",
+      "recoveryConnections": "Connexions de récupération"
     },
     "tags": {
       "connectedAt": "Connecté(e) {{date}}",
@@ -224,7 +229,8 @@
       "reportOther": "Autre raison",
       "reportSpammer": "Cette personne m'a envoyé une connexion indésirable",
       "unReportConnection": "Annuler le signalement",
-      "unReportImpact": "Vous avez déjà signalé {{name}} comme étant un {{reportReason}}. Voulez-vous supprimer ce signalement et rétablir votre connexion ?"
+      "unReportImpact": "Vous avez déjà signalé {{name}} comme étant un {{reportReason}}. Voulez-vous supprimer ce signalement et rétablir votre connexion ?",
+      "unkownRecoveryConnection": "Inconnu"
     }
   },
   "connections": {
@@ -273,7 +279,7 @@
       "website": "Site Web"
     },
     "text": {
-      "meet": "Rejoignez des rendez-vous BrightID !",
+      "meet": "Rejoignez une réunion BrightID !",
       "openSource": "avec un code source ouvert !",
       "weAre": "Nous sommes "
     },
