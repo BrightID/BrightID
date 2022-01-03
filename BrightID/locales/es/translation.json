@@ -194,7 +194,8 @@
     "label": {
       "connectionLevel": "Nivel de Conexión",
       "mutualConnections": "Conexiones Mutuas",
-      "mutualGroups": "Grupos Mutuos"
+      "mutualGroups": "Grupos Mutuos",
+      "possibleDuplicates": "Posibles Duplicados"
     },
     "tags": {
       "connectedAt": "Conectado {{date}}",

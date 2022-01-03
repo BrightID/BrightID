@@ -9,6 +9,9 @@ import {
   View,
   SectionList,
 } from 'react-native';
+import {
+  selectAllConnections,
+} from '@/reducer/connectionsSlice';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
@@ -30,6 +33,9 @@ import { fontSize } from '@/theme/fonts';
 import { connection_levels } from '@/utils/constants';
 import Chevron from '../Icons/Chevron';
 import TrustLevelView from './TrustLevelView';
+import { useSelector } from '@/store';
+import { connectionsSelector } from '@/utils/connectionsSelector';
+import stringSimilarity from '@/utils/stringSimilarity';
 
 /**
  Connection details screen
@@ -65,11 +71,14 @@ function ConnectionScreen(props: Props) {
     loading,
   } = props;
   const navigation = useNavigation();
+  const myConnections = useSelector(selectAllConnections);
 
   const [groupsCollapsed, setGroupsCollapsed] = useState(true);
   const [connectionsCollapsed, setConnectionsCollapsed] = useState(true);
   const [recoveryConnectionsCollapsed, setRecoveryConnectionsCollapsed] =
     useState(true);
+  const [possibleDuplicatesCollapsed, setPossibleDuplicatesCollapsed] = useState(true);
+  const possibleDuplicates = myConnections.filter(conn => stringSimilarity(conn.name, connection.name) >= 0.6 && conn.id != connection.id);
   const { t } = useTranslation();
 
   const toggleSection = (key) => {
@@ -82,6 +91,9 @@ function ConnectionScreen(props: Props) {
         break;
       case 'recoveryConnections':
         setRecoveryConnectionsCollapsed(!recoveryConnectionsCollapsed);
+        break;
+      case 'duplicates':
+        setPossibleDuplicatesCollapsed(!possibleDuplicatesCollapsed);
         break;
     }
   };
@@ -110,6 +122,12 @@ function ConnectionScreen(props: Props) {
         key: 'recoveryConnections',
         numEntries: recoveryConnections.length,
       },
+      {
+        title: t('connectionDetails.label.possibleDuplicates'),
+        data: possibleDuplicatesCollapsed ? [] : possibleDuplicates,
+        key: 'duplicates',
+        numEntries: possibleDuplicates.length,
+      },
     ];
     return data;
   }, [
@@ -120,6 +138,8 @@ function ConnectionScreen(props: Props) {
     mutualGroups,
     recoveryConnectionsCollapsed,
     recoveryConnections,
+    possibleDuplicatesCollapsed,
+    possibleDuplicates
   ]);
 
   const renderSticker = () => {
@@ -327,6 +347,9 @@ function ConnectionScreen(props: Props) {
         break;
       case 'recoveryConnections':
         collapsed = recoveryConnectionsCollapsed;
+        break;
+      case 'duplicates':
+        collapsed = possibleDuplicatesCollapsed;
         break;
     }
     return (
