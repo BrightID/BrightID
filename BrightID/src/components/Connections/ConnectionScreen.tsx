@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -78,7 +78,10 @@ function ConnectionScreen(props: Props) {
   const [recoveryConnectionsCollapsed, setRecoveryConnectionsCollapsed] =
     useState(true);
   const [possibleDuplicatesCollapsed, setPossibleDuplicatesCollapsed] = useState(true);
-  const possibleDuplicates = myConnections.filter(conn => stringSimilarity(conn.name, connection.name) >= 0.6 && conn.id != connection.id);
+  const [possibleDuplicates, setPossibleDuplicates] = useState([]);
+  useEffect(() => {
+    setPossibleDuplicates(myConnections.filter(conn => stringSimilarity(conn.name, connection.name) >= 0.6 && conn.id != connection.id));
+  }, [myConnections])
   const { t } = useTranslation();
 
   const toggleSection = (key) => {
