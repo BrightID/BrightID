@@ -30,7 +30,7 @@ import {
   DARK_GREEN,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { connection_levels } from '@/utils/constants';
+import { connection_levels, POSSIBLE_DUPLICATE_STRING_SIMILARITY_RATE } from '@/utils/constants';
 import Chevron from '../Icons/Chevron';
 import TrustLevelView from './TrustLevelView';
 import { useSelector } from '@/store';
@@ -80,7 +80,12 @@ function ConnectionScreen(props: Props) {
   const [possibleDuplicatesCollapsed, setPossibleDuplicatesCollapsed] = useState(true);
   const [possibleDuplicates, setPossibleDuplicates] = useState([]);
   useEffect(() => {
-    setPossibleDuplicates(myConnections.filter(conn => stringSimilarity(conn.name, connection.name) >= 0.6 && conn.id != connection.id));
+    setPossibleDuplicates(myConnections.filter(
+      conn =>
+        stringSimilarity(conn.name, connection.name) >= POSSIBLE_DUPLICATE_STRING_SIMILARITY_RATE
+        && conn.id != connection.id
+      )
+    );
   }, [myConnections])
   const { t } = useTranslation();
 
