@@ -36,9 +36,9 @@ import { qrCodeURL_types } from '@/utils/constants';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { RNCamera } from './RNCameraProvider';
 import {
-  setAesKey,
+  setRecoveryAesKey,
   setRecoveryChannel,
-} from '../Onboarding/RecoveryFlow/recoveryDataSlice';
+} from '@/components/Onboarding/RecoveryFlow/recoveryDataSlice';
 
 /**
  * Returns whether the string is a valid QR identifier
@@ -133,13 +133,13 @@ export const ScanCodeScreen = () => {
           await Linking.openURL(qrData);
         } else if (validQrString(qrData)) {
           const channelURL = new URL(qrData);
-
           // Pop 'type' parameter from url if it is included
           const urlType = channelURL.searchParams.get('t');
           if (urlType) channelURL.searchParams.delete('t');
 
           switch (urlType) {
-            case qrCodeURL_types.RECOVERY: {
+            case qrCodeURL_types.RECOVERY:
+            case qrCodeURL_types.IMPORT: {
               // Pop 'aes' parameter from url
               const aesKey = channelURL.searchParams.get('aes');
               channelURL.searchParams.delete('aes');
@@ -149,14 +149,18 @@ export const ScanCodeScreen = () => {
                 `handleQrData: Got recovery channel ${channelId} at ${channelURL.href}`,
               );
 
-              dispatch(setAesKey(aesKey));
+              dispatch(setRecoveryAesKey(aesKey));
               dispatch(
                 setRecoveryChannel({
                   channelId,
                   url: channelURL,
                 }),
               );
-              navigation.navigate('RecoveringConnection');
+              if (urlType === qrCodeURL_types.RECOVERY) {
+                navigation.navigate('RecoveringConnection');
+              } else {
+                navigation.navigate('Add Device');
+              }
               break;
             }
             case qrCodeURL_types.CONNECTION:

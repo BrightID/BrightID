@@ -7,6 +7,7 @@ import {
   updateConnections,
   setIsSponsored,
   updateNotifications,
+  setActiveDevices,
 } from './index';
 
 const fetchUserInfo = (api: NodeApi) => (
@@ -36,8 +37,9 @@ const fetchUserInfo = (api: NodeApi) => (
         }
         dispatch(updateConnections(connections));
 
-        const { sponsored } = await api.getProfile(id);
+        const { sponsored, signingKeys } = await api.getProfile(id);
         dispatch(setIsSponsored(sponsored));
+        dispatch(setActiveDevices(signingKeys));
         dispatch(updateNotifications(api));
         resolve(null);
       } catch (err) {

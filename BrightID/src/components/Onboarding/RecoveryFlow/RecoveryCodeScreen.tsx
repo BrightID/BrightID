@@ -13,6 +13,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { BLACK, DARKER_GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { qrCodeURL_types } from '@/utils/constants';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 import { setupRecovery } from '@/components/Onboarding/RecoveryFlow/thunks/recoveryThunks';
 import { buildRecoveryChannelQrUrl } from '@/utils/recovery';
@@ -28,7 +29,8 @@ import { resetRecoveryData } from './recoveryDataSlice';
  *
  * displays a qrcode
  */
-const RecoveryCodeScreen = () => {
+const RecoveryCodeScreen = ({ route }) => {
+  const { action } = route.params;
   const [qrUrl, setQrUrl] = useState<URL>();
   const [qrsvg, setQrsvg] = useState('');
   const [alreadyNotified, setAlreadyNotified] = useState(false);
@@ -65,6 +67,7 @@ const RecoveryCodeScreen = () => {
       const newQrUrl = buildRecoveryChannelQrUrl({
         aesKey: recoveryData.aesKey,
         url: recoveryData.channel.url,
+        t: action === 'recovery' ? qrCodeURL_types.RECOVERY : qrCodeURL_types.IMPORT,
       });
       console.log(`new qrCode url: ${newQrUrl.href}`);
       setQrUrl(newQrUrl);
@@ -119,17 +122,19 @@ const RecoveryCodeScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      if (!alreadyNotified && sigCount === 1) {
+      if (action === 'recovery' && !alreadyNotified && sigCount === 1) {
         // alert user that one of their sigs exists
         Alert.alert(
           t('common.alert.info'),
-          t('common.alert.text.trustedSigned'),
+          t('common.alert.text.recoverySigned'),
         );
         setAlreadyNotified(true);
-      } else if (sigCount > 1) {
+      } else if (action === 'recovery' && sigCount > 1) {
         navigation.navigate('Restore');
+      } else if (action === 'import' && recoveryData.name) {
+        navigation.navigate('Import');
       }
-    }, [sigCount, alreadyNotified, t, navigation]),
+    }, [sigCount, recoveryData.name, alreadyNotified, t, navigation]),
   );
 
   const copyQr = () => {
@@ -166,13 +171,13 @@ const RecoveryCodeScreen = () => {
       <View style={styles.orangeTop} />
       <View style={styles.container}>
         <Text style={styles.recoveryCodeInfoText}>
-          {t('recovery.text.askTrustedConnections')}
+          {t(`${action}.text.askScanning`)}
         </Text>
 
         {qrsvg ? (
           <View style={styles.qrsvgContainer}>
             <Text style={styles.signatures}>
-              {t('recovery.text.signatures', { count: sigCount })}
+              { action === 'recovery' ? t('recovery.text.signatures', { count: sigCount }) : '' }
             </Text>
             <Svg
               height={DEVICE_LARGE ? '240' : '200'}
@@ -211,7 +216,7 @@ const RecoveryCodeScreen = () => {
           </View>
         )}
         <Text style={styles.additionalInfo}>
-          {t('recovery.text.additionalInfo')}
+          {t(`${action}.text.additionalInfo`)}
         </Text>
       </View>
     </>

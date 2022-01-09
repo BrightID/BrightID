@@ -22,3 +22,4 @@ export * from '../reducer/groupsSlice';
 export * from '../reducer/keypairSlice';
 export * from '../reducer/operationsSlice';
 export * from '../reducer/userSlice';
+export * from '../reducer/devicesSlice';

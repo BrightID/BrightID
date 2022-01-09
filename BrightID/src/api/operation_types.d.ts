@@ -139,3 +139,21 @@ type SpendSponsorshipOp = {
   v: number;
   hash?: string;
 };
+
+type AddSigningKeyOp = {
+  name: 'Add Signing Key';
+  id: string;
+  signingKey: string;
+  timestamp: number;
+  v: number;
+  hash?: string;
+};
+
+type RemoveSigningKey = {
+  name: 'Remove Signing Key';
+  id: string;
+  signingKey: string;
+  timestamp: number;
+  v: number;
+  hash?: string;
+}

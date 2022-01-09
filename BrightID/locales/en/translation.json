@@ -39,7 +39,7 @@
       "description": "Set password to enable encrypted backup of your data",
       "title": "Set backup password"
     },
-    "setupTrustedConnections": {
+    "setupRecoveryConnections": {
       "description": "Setup your recovery connections to enable social account recovery",
       "title": "Setup social recovery"
     }
@@ -77,24 +77,6 @@
       "sponsoring": "{{app}} is sponsoring you…"
     }
   },
-  "backup": {
-    "alert": {
-      "text": {
-        "completed": "Social recovery of your BrightID is now enabled",
-        "needThreeTrusted": "You need at least three recovery connections for backup."
-      }
-    },
-    "button": {
-      "save": "Set recovery connections"
-    },
-    "header": {
-      "trustedConnections": "Recovery connections"
-    },
-    "text": {
-      "chooseTrustedConnections": "Choose three or more recovery connections to back up your BrightID.",
-      "noConnections": "No connections"
-    }
-  },
   "channel": {
     "alert": {
       "text": {
@@ -128,7 +110,7 @@
         "lostKeys": "Please create a new BrightID or try recovering your previous BrightID",
         "passwordMatch": "Password and confirm password does not match.",
         "passwordShort": "Your password must be at least 8 characters long.",
-        "trustedSigned": "One of your recovery connections signed your request"
+        "recoverySigned": "One of your recovery connections signed your request"
       },
       "title": {
         "lostKeys": "We've lost the BrightID keypair from the device",
@@ -303,7 +285,8 @@
       "copyExplorerCode": "Copy Explorer Code",
       "editProfile": "Edit Profile",
       "groups": "Groups",
-      "home": "Home"
+      "home": "Home",
+      "devices": "Devices",
     }
   },
   "eula": {
@@ -477,7 +460,8 @@
   "onboarding": {
     "button": {
       "create": "Create My BrightID",
-      "recover": "Recover BrightID"
+      "recover": "Recover",
+      "import": "Import"
     },
     "text": {
       "congratulations": "Congratulations!\nYour BrightID has been created.\nIt’s time to make connections.",
@@ -608,6 +592,16 @@
       "scanCode": "<text>Hey {{name}}, scan a code and</text><text>make a new connection today</text>"
     }
   },
+  "import": {
+    "header": {
+      "title": "Import Account"
+    },
+    "text": {
+      "additionalInfo": "This QR code should be scanned using  your other device to import your BrightID into this one",
+      "askScanning": "Please scan this QR code using your other device",
+      "waitImporting": "Importing connections, please wait ...",
+    }
+  },
   "recovery": {
     "alert": {
       "clipboardmessage": "Help me recover my BrightID: {{link}}",
@@ -632,7 +626,7 @@
     },
     "text": {
       "additionalInfo": "Your recovery connections will need to scan this to help you recover your BrightID",
-      "askTrustedConnections": "Please show this QR code to your recovery connections",
+      "askScanning": "Please show this QR code to your recovery connections",
       "signatures": "{{count}} / 2 signatures",
       "signatures_plural": ""
     }
@@ -721,5 +715,23 @@
       "setPassword": "You can always set your\nBrightID password in here",
       "viewPassword": "You can always see your\nBrightID password in here"
     }
-  }
+  },
+  "devices": {
+    "button": {
+      "submit": "Submit",
+    },
+    "text": {
+      "confirmTitle": "Confirmation",
+      "confirm": "Are you sure that you want to export your BrightID into another device?",
+      "confirmRemoveTitle": "Confirmation",
+      "confirmRemove": "Are you sure that you want to remove your BrightID from \"{{name}}\"?",
+      "whatsDeviceName": "Please choose a name for the new device",
+      "listDescription": "Your BrightID is available on following devices:",
+      "waitingForExport": "Exporting connections, please wait ...",
+    },
+    "placeholder": {
+      "deviceName": "Device Name",
+    }
+
+  },
 }

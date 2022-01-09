@@ -16,6 +16,7 @@ export const initialState: RecoveryData = {
   photo: '',
   timestamp: 0,
   sigs: {},
+  uploadCompletedBy: {},
   qrcode: '',
   recoveredConnections: 0,
   recoveredGroups: 0,
@@ -51,8 +52,9 @@ const recoveryData = createSlice({
       state.recoveredGroups = 0;
       state.timestamp = Date.now();
       state.sigs = {};
+      state.uploadCompletedBy = {};
     },
-    setAesKey(state, action: PayloadAction<string>) {
+    setRecoveryAesKey(state, action: PayloadAction<string>) {
       state.aesKey = action.payload;
     },
     setRecoveryChannel(
@@ -114,6 +116,9 @@ const recoveryData = createSlice({
     increaseRecoveredGroups(state, action: PayloadAction<number>) {
       state.recoveredGroups += action.payload;
     },
+    setUploadCompletedBy(state, action: PayloadAction<string>) {
+      state.uploadCompletedBy[action.payload] = true;
+    },
   },
   extraReducers: {
     [RESET_STORE]: () => {
@@ -127,7 +132,7 @@ export const {
   init,
   increaseRecoveredConnections,
   increaseRecoveredGroups,
-  setAesKey,
+  setRecoveryAesKey,
   setRecoveryChannel,
   setSig,
   updateNamePhoto,
@@ -135,6 +140,7 @@ export const {
   resetRecoverySigs,
   resetRecoveryData,
   setRecoveryError,
+  setUploadCompletedBy,
 } = recoveryData.actions;
 
 // Export reducer

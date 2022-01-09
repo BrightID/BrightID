@@ -8,6 +8,7 @@ import PasswordScreen from '@/components/Onboarding/SignUpFlow/PasswordScreen';
 import SuccessScreen from '@/components/Onboarding/SignUpFlow/SuccessScreen';
 
 import Restore from './Restore';
+import Import from './Import';
 import { headerOptions } from './helpers';
 
 const Stack = createStackNavigator();
@@ -45,6 +46,11 @@ const Onboarding = () => {
         name="Restore"
         component={Restore}
         options={{ title: t('restore.header.accountRecovery') }}
+      />
+      <Stack.Screen
+        name="Import"
+        component={Import}
+        options={{ title: t('import.header.title') }}
       />
     </Stack.Navigator>
   );

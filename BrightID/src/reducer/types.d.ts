@@ -104,3 +104,19 @@ type SettingsState = {
   baseUrl: string;
   api: any | undefined;
 };
+
+/**
+ * DevicesSlice
+ */
+
+type Device = {
+  name: string;
+  signingKey: string;
+  active: boolean;
+};
+
+type DevicesState = {
+  devices: EntityState<Device>;
+};
+
+

@@ -65,4 +65,5 @@ export const report_reasons = {
 export enum qrCodeURL_types {
   CONNECTION = '1', // qrcode url is for connection channel
   RECOVERY = '2', // qrcode url is for recovery channel
+  IMPORT = '3', // qrcode url is for import channel
 }
