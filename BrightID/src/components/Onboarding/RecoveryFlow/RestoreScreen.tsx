@@ -1,13 +1,13 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, Alert } from 'react-native';
-import { useDispatch, useSelector } from '@/store';
 import { useFocusEffect } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from '@/store';
 import { BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { setBackupCompleted, setPassword } from '@/reducer/userSlice';
 import { RecoverAccount } from '@/components/Onboarding/RecoveryFlow/RecoverAccount';
 import { RestoreBackup } from '@/components/Onboarding/RecoveryFlow/RestoreBackup';
-import { useTranslation } from 'react-i18next';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import {
   finishRecovery,
@@ -59,6 +59,8 @@ const RestoreScreen = () => {
   );
   const [accountError, setAccountError] = useState('');
   const [recoveryOpHash, setRecoveryOpHash] = useState('');
+  const [currentItem, setCurrentItem] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
   const dispatch = useDispatch();
 
   useFocusEffect(
@@ -84,10 +86,16 @@ const RestoreScreen = () => {
         console.log(`Recover op Hash: ${opHash}`);
         setRecoveryOpHash(opHash);
         setAccountStep(AccountSteps.WAITING_OPERATION);
-      } catch (e) {
-        console.log(`Error during account recovery: ${e.message}`);
+      } catch (err) {
+        let errorString = '';
+        if (err instanceof Error) {
+          errorString = `${err.message}`;
+        } else {
+          errorString = `${err}`;
+        }
+        console.log(`Error during account recovery: ${errorString}`);
         setAccountStep(AccountSteps.ERROR);
-        setAccountError(e.message);
+        setAccountError(errorString);
       }
     };
     const finishRecovery = async () => {
@@ -194,11 +202,17 @@ const RestoreScreen = () => {
     try {
       console.log(`Starting restore backup`);
       setDataStep(BackupSteps.RESTORING_DATA);
-      await dispatch(recoverData(pass, api));
+      await dispatch(recoverData(pass, api, setTotalItems, setCurrentItem));
       console.log(`Successfully restored backup`);
       setDataStep(BackupSteps.COMPLETE);
-    } catch (e) {
-      console.log(`Error during recover: ${e.message}`);
+    } catch (err) {
+      let errorString = '';
+      if (err instanceof Error) {
+        errorString = `${err.name} - ${err.message}`;
+      } else {
+        errorString = `${err}`;
+      }
+      console.log(`Error during recover: ${errorString}`);
       setDataStep(BackupSteps.ERROR);
     }
   };
@@ -223,6 +237,8 @@ const RestoreScreen = () => {
             doSkip={skip}
             password={pass}
             setPassword={setPass}
+            totalItems={totalItems}
+            currentItem={currentItem}
           />
         </View>
       </KeyboardAvoidingView>

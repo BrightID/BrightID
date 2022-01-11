@@ -197,7 +197,8 @@
     "label": {
       "connectionLevel": "Verbindungsstufe",
       "mutualConnections": "Gemeinsame Verbindungen",
-      "mutualGroups": "Gemeinsame Gruppen"
+      "mutualGroups": "Gemeinsame Gruppen",
+      "possibleDuplicates": "Mögliche Duplikate"
     },
     "tags": {
       "connectedAt": "Verbunden {{date}}",

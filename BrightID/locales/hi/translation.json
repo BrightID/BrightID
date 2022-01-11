@@ -193,7 +193,8 @@
     "label": {
       "connectionLevel": "कनेक्शन की लेवल",
       "mutualConnections": "आपसी कनेक्शन",
-      "mutualGroups": "आपसी ग्रुप"
+      "mutualGroups": "आपसी ग्रुप",
+      "possibleDuplicates": "संभावित डुप्लिकेट"
     },
     "tags": {
       "connectedAt": "कनेक्ट {{date}}",
