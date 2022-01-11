@@ -185,7 +185,8 @@
       "connectionLevel": "Connection Level",
       "mutualConnections": "Mutual Connections",
       "mutualGroups": "Mutual Groups",
-      "recoveryConnections": "Recovery Connections"
+      "recoveryConnections": "Recovery Connections",
+      "possibleDuplicates": "Possible Duplicates"
     },
     "tags": {
       "connectedAt": "Connected {{date}}",

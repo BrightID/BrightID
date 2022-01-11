@@ -188,7 +188,8 @@
     "label": {
       "connectionLevel": "Уровень подключения",
       "mutualConnections": "Общие подключения",
-      "mutualGroups": "Общие группы"
+      "mutualGroups": "Общие группы",
+      "possibleDuplicates": "Возможные дубликаты"
     },
     "tags": {
       "connectedAt": "Подключено {{date}}",
