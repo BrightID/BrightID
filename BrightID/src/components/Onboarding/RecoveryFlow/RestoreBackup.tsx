@@ -6,13 +6,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { BackupSteps } from '@/components/Onboarding/RecoveryFlow/RestoreScreen';
-import { BLACK, DARKER_GREY, GREEN, ORANGE, RED, WHITE } from '@/theme/colors';
 import { useTranslation } from 'react-i18next';
-import { fontSize } from '@/theme/fonts';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import Spinner from 'react-native-spinkit';
 import IonIcons from 'react-native-vector-icons/Ionicons';
+import { BackupSteps } from '@/components/Onboarding/RecoveryFlow/RestoreScreen';
+import { BLACK, DARKER_GREY, GREEN, ORANGE, RED, WHITE } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
 
 /* Component to track backup restore */
 type RestoreBackupParams = {
@@ -31,9 +31,8 @@ export const RestoreBackup = ({
 }: RestoreBackupParams) => {
   const [stateDescription, setStateDescription] = useState('');
   const [showPasswordInput, setShowPasswordInput] = useState(true);
-  const [iconData, setIconData] = useState<{ color: string; name: string }>(
-    undefined,
-  );
+  const [iconData, setIconData] =
+    useState<{ color: string; name: string }>(undefined);
   const { t } = useTranslation();
 
   useEffect(() => {
