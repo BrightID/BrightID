@@ -129,8 +129,11 @@ type AppInfo = {
   nodeUrl?: string;
 };
 
-type OperationInfo = {
-  state: string;
+type OperationState = {
+  state: 'unknown' | 'init' | 'sent' | 'applied' | 'failed' | 'expired';
+};
+
+type OperationInfo = OperationState & {
   result: string;
 };
 

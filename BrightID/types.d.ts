@@ -29,6 +29,8 @@ declare global {
   type navigation = () => any;
   type State = RootState;
 
+  type Operation = NodeOps & OperationState;
+
   type ContextInfo = {
     context: string;
     contextId: string;

@@ -1,17 +1,16 @@
 import { Alert } from 'react-native';
+import i18next from 'i18next';
 import store from '@/store';
 import {
-  removeOperation,
-  resetOperations,
   updateLinkedContext,
-  selectAllOperations,
   addConnection,
   updateMemberships,
+  updateOperation,
+  selectPendingOperations,
 } from '@/actions';
-import i18next from 'i18next';
 import { checkTasks } from '@/components/Tasks/TasksSlice';
 
-const time_fudge = 2 * 60 * 1000; // trace operations for 2 minutes
+const trace_duration = 2 * 60 * 1000; // trace operations for 2 minutes
 
 const handleOpUpdate = (store, op, state, result, api) => {
   let showDefaultError = false;
@@ -43,7 +42,7 @@ const handleOpUpdate = (store, op, state, result, api) => {
       break;
 
     case 'Connect':
-      if (op.id1 != store.getState().user.id) {
+      if (op.id1 !== store.getState().user.id) {
         // ignore other side of dummy test connections
         break;
       }
@@ -96,50 +95,60 @@ const handleOpUpdate = (store, op, state, result, api) => {
 };
 
 export const pollOperations = async (api) => {
-  const operations = selectAllOperations(store.getState());
+  const operations: Array<Operation> = selectPendingOperations(
+    store.getState(),
+  );
   let shouldUpdateTasks = false;
   try {
     for (const op of operations) {
       // If the op has an api instance attached, use that instead of the default one.
       // Background: Some operations like "link context" require to query a specific
       // api endpoint as the op is only known on that node
-      let queryApi = op.api || api;
+      const queryApi = op.api || api;
       const { state, result } = await queryApi.getOperationState(op.hash);
 
-      // stop polling for op if trace time is expired
-      let removeOp = op.timestamp + time_fudge < Date.now();
-
-      switch (state) {
-        case 'unknown':
-          // Op not found on server. It might appear in a future poll cycle, so do nothing.
-          console.log(`operation ${op.name} (${op.hash}) unknown on server`);
-          break;
-        case 'init':
-        case 'sent':
-          // Op still waiting to be processed. Do nothing.
-          break;
-        case 'applied':
-        case 'failed':
-          // op is done, so stop polling for it
-          removeOp = true;
-          handleOpUpdate(store, op, state, result, api);
+      if (op.state !== state) {
+        switch (state) {
+          case 'unknown':
+            // Op not found on server. It might appear in a future poll cycle, so do nothing.
+            console.log(`operation ${op.name} (${op.hash}) unknown on server`);
+            break;
+          case 'init':
+          case 'sent':
+            // Op still waiting to be processed. Do nothing.
+            break;
+          case 'applied':
+          case 'failed':
+            handleOpUpdate(store, op, state, result, api);
+            break;
+          default:
+            console.log(
+              `Op ${op.name} (${op.hash}) has invalid state '${state}'!`,
+            );
+        }
+        store.dispatch(updateOperation({ id: op.hash, changes: { state } }));
+        if (state === 'applied') {
+          // if an op was applied we should check achievements
           shouldUpdateTasks = true;
-          break;
-        default:
-          console.log(
-            `Op ${op.name} (${op.hash}) has invalid state '${state}'!`,
+        }
+      } else {
+        // stop polling for op if trace time is expired
+        if (op.timestamp + trace_duration < Date.now()) {
+          store.dispatch(
+            updateOperation({ id: op.hash, changes: { state: 'expired' } }),
           );
-      }
-
-      if (removeOp) {
-        store.dispatch(removeOperation(op.hash));
+        }
       }
     }
+  } catch (err) {
+    if (err instanceof Error) {
+      console.warn(err.message);
+    } else {
+      console.warn(err);
+    }
+  } finally {
     if (shouldUpdateTasks) {
       store.dispatch(checkTasks());
     }
-  } catch (err) {
-    console.warn(err.message);
-    store.dispatch(resetOperations());
   }
 };
