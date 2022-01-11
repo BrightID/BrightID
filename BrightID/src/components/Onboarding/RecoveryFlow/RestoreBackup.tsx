@@ -21,6 +21,8 @@ type RestoreBackupParams = {
   setPassword: (pass: string) => void;
   doRestore: () => void;
   doSkip: () => void;
+  totalItems: number;
+  currentItem: number;
 };
 export const RestoreBackup = ({
   currentStep,
@@ -28,6 +30,8 @@ export const RestoreBackup = ({
   doSkip,
   password,
   setPassword,
+  totalItems,
+  currentItem,
 }: RestoreBackupParams) => {
   const [stateDescription, setStateDescription] = useState('');
   const [showPasswordInput, setShowPasswordInput] = useState(true);
@@ -53,7 +57,19 @@ export const RestoreBackup = ({
         break;
       case BackupSteps.RESTORING_DATA:
         setIconData(undefined);
-        setStateDescription(t('restore.steps.restoring', 'Restoring data...'));
+        if (totalItems) {
+          setStateDescription(
+            t(
+              'restore.steps.restoringProgress',
+              'Restoring item {{currentItem}} of {{totalItems}}',
+              { totalItems, currentItem },
+            ),
+          );
+        } else {
+          setStateDescription(
+            t('restore.steps.restoring', 'Restoring data ...'),
+          );
+        }
         setShowPasswordInput(false);
         break;
       case BackupSteps.COMPLETE:
@@ -78,7 +94,7 @@ export const RestoreBackup = ({
         setStateDescription(`Unhandled state ${BackupSteps[currentStep]}`);
         break;
     }
-  }, [currentStep, t]);
+  }, [currentItem, currentStep, t, totalItems]);
 
   const submitDisabled = password.length < 1;
 

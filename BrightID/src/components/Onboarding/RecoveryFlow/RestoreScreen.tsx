@@ -59,6 +59,8 @@ const RestoreScreen = () => {
   );
   const [accountError, setAccountError] = useState('');
   const [recoveryOpHash, setRecoveryOpHash] = useState('');
+  const [currentItem, setCurrentItem] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
   const dispatch = useDispatch();
 
   useFocusEffect(
@@ -200,7 +202,7 @@ const RestoreScreen = () => {
     try {
       console.log(`Starting restore backup`);
       setDataStep(BackupSteps.RESTORING_DATA);
-      await dispatch(recoverData(pass, api));
+      await dispatch(recoverData(pass, api, setTotalItems, setCurrentItem));
       console.log(`Successfully restored backup`);
       setDataStep(BackupSteps.COMPLETE);
     } catch (err) {
@@ -235,6 +237,8 @@ const RestoreScreen = () => {
             doSkip={skip}
             password={pass}
             setPassword={setPass}
+            totalItems={totalItems}
+            currentItem={currentItem}
           />
         </View>
       </KeyboardAvoidingView>

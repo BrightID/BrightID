@@ -113,7 +113,12 @@ export const setRecoveryKeys =
   };
 
 export const recoverData =
-  (pass: string, api: NodeApi) =>
+  (
+    pass: string,
+    api: NodeApi,
+    setTotalItems: (totalItems: number) => void,
+    setCurrentItem: (currentItem: number) => void,
+  ) =>
   async (dispatch: dispatch, getState: getState) => {
     const { id } = getState().recoveryData;
     console.log(`Starting recoverData for ${id}`);
@@ -123,13 +128,17 @@ export const recoverData =
     const { userData } = restoredData;
     const { connections } = restoredData;
     const { groups } = restoredData;
+    setTotalItems(connections.length + groups.length);
     dispatch(setConnections(connections));
     dispatch(setGroups(groups));
     dispatch(updateNamePhoto({ name: userData.name, photo: userData.photo }));
 
+    let currentItem = 1;
+
     // fetch connection images
     for (const conn of connections) {
       try {
+        setCurrentItem(currentItem++);
         const decrypted = await fetchBackupData(conn.id, id, pass);
         const filename = await saveImage({
           imageName: conn.id,
@@ -150,6 +159,7 @@ export const recoverData =
 
     // fetch group images
     for (const group of groups) {
+      setCurrentItem(currentItem++);
       if (group.photo?.filename) {
         try {
           const decrypted = await fetchBackupData(group.id, id, pass);
