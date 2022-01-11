@@ -133,7 +133,7 @@ export const RestoreBackup = ({
               style={styles.textInput}
               autoCorrect={false}
               textContentType="password"
-              autoCompleteType="password"
+              autoComplete="password"
               underlineColorAndroid="transparent"
               secureTextEntry={true}
             />
