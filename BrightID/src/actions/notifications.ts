@@ -1,16 +1,16 @@
+import i18next from 'i18next';
 import { NodeApi } from '@/api/brightId';
-import { GROUPS_TYPE } from '@/utils/constants';
-import { getInvites } from '@/utils/invites';
-import { getGroupName } from '@/utils/groups';
-import { setInvites } from './index';
 import {
+  GROUPS_TYPE,
   INVITE_ACTIVE,
   MIN_CONNECTIONS_FOR_RECOVERY_NOTIFICATION,
   MIN_RECOVERY_CONNECTIONS,
   MISC_TYPE,
   connection_levels,
 } from '@/utils/constants';
-import i18next from 'i18next';
+import { getInvites } from '@/utils/invites';
+import { getGroupName } from '@/utils/groups';
+import { setInvites } from './index';
 import {
   recoveryConnectionsSelector,
   verifiedConnectionsSelector,
@@ -55,92 +55,94 @@ export const removeActiveNotification = () => ({
   type: REMOVE_ACTIVE_NOTIFICATION,
 });
 
-export const updateNotifications = (api: NodeApi) => async (
-  dispatch: dispatch,
-  getState: () => State,
-) => {
-  // check for pending backup setup
-  try {
-    const { password } = getState().user;
-    if (!password) {
-      dispatch(setBackupPending(true));
-      dispatch(
-        setActiveNotification({
-          title: i18next.t('notificationBar.title.backupPassword'),
-          message: i18next.t('notificationBar.text.backupPassword'),
-          type: MISC_TYPE,
-          oncePerSession: true,
-          navigationTarget: 'Notifications',
-          icon: 'PhoneLock',
-        }),
-      );
-    } else {
-      dispatch(setBackupPending(false));
+export const updateNotifications =
+  (api: NodeApi) => async (dispatch: dispatch, getState: () => State) => {
+    // check for pending backup setup
+    try {
+      const { password } = getState().user;
+      if (!password) {
+        dispatch(setBackupPending(true));
+        dispatch(
+          setActiveNotification({
+            title: i18next.t('notificationBar.title.backupPassword'),
+            message: i18next.t('notificationBar.text.backupPassword'),
+            type: MISC_TYPE,
+            oncePerSession: true,
+            navigationTarget: 'Notifications',
+            icon: 'PhoneLock',
+          }),
+        );
+      } else {
+        dispatch(setBackupPending(false));
+      }
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
-  }
 
-  // check for pending recovery connections
-  try {
-    const verifiedConnections = verifiedConnectionsSelector(getState());
-    const knownLevels = Array<ConnectionLevel>(
-      connection_levels.ALREADY_KNOWN,
-      connection_levels.RECOVERY,
-    );
-    const recoveryEligibleConnections = verifiedConnections.filter(
-      (conn) =>
-        knownLevels.includes(conn.level) &&
-        knownLevels.includes(conn.incomingLevel),
-    );
-    const recoveryConnections = recoveryConnectionsSelector(getState());
-    if (
-      recoveryConnections.length < MIN_RECOVERY_CONNECTIONS &&
-      recoveryEligibleConnections.length >=
-        MIN_CONNECTIONS_FOR_RECOVERY_NOTIFICATION
-    ) {
-      dispatch(setRecoveryConnectionsPending(true));
-      dispatch(
-        setActiveNotification({
-          title: i18next.t('notificationBar.title.socialRecovery'),
-          message: i18next.t('notificationBar.text.socialRecovery'),
-          type: MISC_TYPE,
-          oncePerSession: true,
-          navigationTarget: 'Notifications',
-          icon: 'PhoneLock',
-        }),
+    // check for pending recovery connections
+    try {
+      const verifiedConnections = verifiedConnectionsSelector(getState());
+      const knownLevels = Array<ConnectionLevel>(
+        connection_levels.ALREADY_KNOWN,
+        connection_levels.RECOVERY,
       );
-    } else {
-      dispatch(setRecoveryConnectionsPending(false));
+      const recoveryEligibleConnections = verifiedConnections.filter(
+        (conn) =>
+          knownLevels.includes(conn.level) &&
+          knownLevels.includes(conn.incomingLevel),
+      );
+      const recoveryConnections = recoveryConnectionsSelector(getState());
+      if (
+        recoveryConnections.length < MIN_RECOVERY_CONNECTIONS &&
+        recoveryEligibleConnections.length >=
+          MIN_CONNECTIONS_FOR_RECOVERY_NOTIFICATION
+      ) {
+        dispatch(setRecoveryConnectionsPending(true));
+        dispatch(
+          setActiveNotification({
+            title: i18next.t('notificationBar.title.socialRecovery'),
+            message: i18next.t('notificationBar.text.socialRecovery'),
+            type: MISC_TYPE,
+            oncePerSession: true,
+            navigationTarget: 'Notifications',
+            icon: 'PhoneLock',
+          }),
+        );
+      } else {
+        dispatch(setRecoveryConnectionsPending(false));
+      }
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
-  }
 
-  // check for invites
-  try {
-    const {
-      user: { id },
-      groups: { invites: oldInvites }
-    } = getState();
-    // this can not be done in reducer because it should be in an async function
-    const invites = await getInvites(api);
-    dispatch(setInvites(invites));
-    if (invites.length > oldInvites.length) {
-      const activeInvites = invites.filter((invite) => invite.state === INVITE_ACTIVE);
-      const groupName = getGroupName(activeInvites[activeInvites.length - 1].group);
-      const message = `You've been invited to join ${groupName}`;
-      dispatch(
-        setActiveNotification({
-          title: 'Group Invitation',
-          message,
-          type: GROUPS_TYPE,
-          navigationTarget: 'Notifications',
-          icon: 'AddGroup',
-        }),
-      );
+    // check for invites
+    try {
+      const {
+        user: { id },
+        groups: { invites: oldInvites },
+      } = getState();
+      // this can not be done in reducer because it should be in an async function
+      const invites = await getInvites(api);
+      dispatch(setInvites(invites));
+      if (invites.length > oldInvites.length) {
+        const activeInvites = invites.filter(
+          (invite) => invite.state === INVITE_ACTIVE,
+        );
+        const groupName = getGroupName(
+          activeInvites[activeInvites.length - 1].group,
+        );
+        const message = `You've been invited to join ${groupName}`;
+        dispatch(
+          setActiveNotification({
+            title: 'Group Invitation',
+            message,
+            type: GROUPS_TYPE,
+            navigationTarget: 'Notifications',
+            icon: 'AddGroup',
+          }),
+        );
+      }
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
-  }
-};
+  };

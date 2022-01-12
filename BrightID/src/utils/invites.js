@@ -34,7 +34,7 @@ export const getInviteGroup = async (invite, api) => {
     }
 
     if (!invite.data) {
-      return;
+      return undefined;
     }
 
     const conn = selectConnectionById(store.getState(), invite.inviter);
@@ -50,11 +50,11 @@ export const getInviteGroup = async (invite, api) => {
     );
     if (!decryptedMessage) {
       // can happen if the user recovered his account after the invitation was created
-      return;
+      return undefined;
     }
     const groupAesKey = uInt8ArrayToB64(decryptedMessage);
     if (!groupAesKey) {
-      return;
+      return undefined;
     }
 
     // const uuidKey = invite.url.split('/').pop();
@@ -62,7 +62,7 @@ export const getInviteGroup = async (invite, api) => {
     const res = await fetch(group.url);
     const data = await res.text();
     if (!data) {
-      return;
+      return undefined;
     }
 
     let info = CryptoJS.AES.decrypt(data, groupAesKey).toString(
@@ -82,7 +82,7 @@ export const getInviteGroup = async (invite, api) => {
     return group;
   } catch (err) {
     console.log(`error in getting invite info ${err.message}`);
-    return {};
+    return undefined;
   }
 };
 
@@ -108,7 +108,8 @@ export const getInvites = async (api) => {
         invite.state = INVITE_ACTIVE;
       }
     }
-    return invites;
+    // exclude invites where group could not be determined
+    return invites.filter((invite) => invite.group);
   } catch (err) {
     console.log(`error in getting invite info ${err.message}`);
     return [];
