@@ -16,6 +16,7 @@ import {
   socialRecovery,
 } from './thunks/recoveryThunks';
 import { CHANNEL_POLL_INTERVAL, clearChannel } from './thunks/channelThunks';
+import { operation_states } from '@/utils/constants';
 
 // clear channel after this time
 const channelTimeout = CHANNEL_POLL_INTERVAL * 3.1;
@@ -163,16 +164,16 @@ const RestoreScreen = () => {
           const { state } = await api.getOperationState(recoveryOpHash);
           console.log(`recover Op state: ${state}`);
           switch (state) {
-            case 'unknown':
-            case 'init':
-            case 'sent':
+            case operation_states.UNKNOWN:
+            case operation_states.INIT:
+            case operation_states.SENT:
               // op being processed. do nothing.
               break;
-            case 'applied':
+            case operation_states.APPLIED:
               setAccountStep(AccountSteps.OPERATION_APPLIED);
               setRecoveryOpHash('');
               break;
-            case 'failed':
+            case operation_states.FAILED:
               setAccountStep(AccountSteps.ERROR);
               setAccountError('Operation could not be applied');
               setRecoveryOpHash('');

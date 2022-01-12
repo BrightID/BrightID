@@ -4,6 +4,7 @@ import {
   createSelector,
 } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
+import { operation_states } from '@/utils/constants';
 
 /* ******** INITIAL STATE ************** */
 
@@ -21,7 +22,7 @@ const operationsSlice = createSlice({
         return {
           payload: {
             ...operation,
-            state: 'unknown',
+            state: operation_states.UNKNOWN,
           },
         };
       },
@@ -50,7 +51,11 @@ export const {
   selectTotal: selectOperationsTotal,
 } = operationsAdapter.getSelectors((state: State) => state.operations);
 
-const pendingStates = ['unknown', 'init', 'sent'];
+const pendingStates = [
+  operation_states.UNKNOWN,
+  operation_states.INIT,
+  operation_states.SENT,
+];
 export const selectPendingOperations = createSelector(
   selectAllOperations,
   (operations) => operations.filter((op) => pendingStates.includes(op.state)),

@@ -9,8 +9,7 @@ import {
   selectPendingOperations,
 } from '@/actions';
 import { checkTasks } from '@/components/Tasks/TasksSlice';
-
-const trace_duration = 2 * 60 * 1000; // trace operations for 2 minutes
+import { operation_states, OPERATION_TRACE_TIME } from '@/utils/constants';
 
 const handleOpUpdate = (store, op, state, result, api) => {
   let showDefaultError = false;
@@ -23,7 +22,7 @@ const handleOpUpdate = (store, op, state, result, api) => {
           state,
         }),
       );
-      if (state === 'applied') {
+      if (state === operation_states.APPLIED) {
         Alert.alert(
           i18next.t('apps.alert.title.linkSuccess'),
           i18next.t('apps.alert.text.linkSuccess', {
@@ -46,7 +45,7 @@ const handleOpUpdate = (store, op, state, result, api) => {
         // ignore other side of dummy test connections
         break;
       }
-      if (state === 'applied') {
+      if (state === operation_states.APPLIED) {
         store.dispatch(addConnection({ id: op.id2, status: 'verified' }));
       } else {
         api.getProfile(op.id2).then((profile) => {
@@ -65,7 +64,7 @@ const handleOpUpdate = (store, op, state, result, api) => {
     case 'Add Group':
     case 'Add Membership':
     case 'Remove Membership':
-      if (state === 'failed') {
+      if (state === operation_states.FAILED) {
         if (op.id && op.id !== store.getState().user.id) {
           // the operation was triggered by e2e-tests, using a fake userID. Ignore error.
           showDefaultError = false;
@@ -78,7 +77,7 @@ const handleOpUpdate = (store, op, state, result, api) => {
       }
       break;
     default:
-      if (state === 'failed') {
+      if (state === operation_states.FAILED) {
         showDefaultError = true;
       }
   }
@@ -109,16 +108,16 @@ export const pollOperations = async (api) => {
 
       if (op.state !== state) {
         switch (state) {
-          case 'unknown':
+          case operation_states.UNKNOWN:
             // Op not found on server. It might appear in a future poll cycle, so do nothing.
             console.log(`operation ${op.name} (${op.hash}) unknown on server`);
             break;
-          case 'init':
-          case 'sent':
+          case operation_states.INIT:
+          case operation_states.SENT:
             // Op still waiting to be processed. Do nothing.
             break;
-          case 'applied':
-          case 'failed':
+          case operation_states.APPLIED:
+          case operation_states.FAILED:
             handleOpUpdate(store, op, state, result, api);
             break;
           default:
@@ -127,15 +126,18 @@ export const pollOperations = async (api) => {
             );
         }
         store.dispatch(updateOperation({ id: op.hash, changes: { state } }));
-        if (state === 'applied') {
+        if (state === operation_states.APPLIED) {
           // if an op was applied we should check achievements
           shouldUpdateTasks = true;
         }
       } else {
         // stop polling for op if trace time is expired
-        if (op.timestamp + trace_duration < Date.now()) {
+        if (op.timestamp + OPERATION_TRACE_TIME < Date.now()) {
           store.dispatch(
-            updateOperation({ id: op.hash, changes: { state: 'expired' } }),
+            updateOperation({
+              id: op.hash,
+              changes: { state: operation_states.EXPIRED },
+            }),
           );
         }
       }

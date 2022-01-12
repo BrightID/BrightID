@@ -1,6 +1,7 @@
 /**
  * Response Types
  */
+import { operation_states } from '@/utils/constants';
 
 type NodeApiRes =
   | AppRes
@@ -130,7 +131,7 @@ type AppInfo = {
 };
 
 type OperationState = {
-  state: 'unknown' | 'init' | 'sent' | 'applied' | 'failed' | 'expired';
+  state: keyof typeof operation_states;
 };
 
 type OperationInfo = OperationState & {
