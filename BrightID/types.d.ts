@@ -10,6 +10,7 @@ import { connection_levels } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
 import { socialMediaList } from '@/components/EditProfile/socialMediaList';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
+import { NodeApi } from '@/api/brightId';
 
 declare global {
   type EntityState<T> = _EntityState<T>;
@@ -29,7 +30,10 @@ declare global {
   type navigation = () => any;
   type State = RootState;
 
-  type Operation = NodeOps & OperationState;
+  type Operation = NodeOps &
+    OperationState & {
+      api?: NodeApi;
+    };
 
   type ContextInfo = {
     context: string;
