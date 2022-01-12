@@ -30,11 +30,6 @@ declare global {
   type navigation = () => any;
   type State = RootState;
 
-  type Operation = NodeOps &
-    OperationState & {
-      api?: NodeApi;
-    };
-
   type ContextInfo = {
     context: string;
     contextId: string;

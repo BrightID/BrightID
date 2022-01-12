@@ -9,7 +9,7 @@ import {
   selectPendingOperations,
 } from '@/actions';
 import { checkTasks } from '@/components/Tasks/TasksSlice';
-import { OPERATION_TRACE_TIME } from '@/utils/constants';
+import { operation_states, OPERATION_TRACE_TIME } from '@/utils/constants';
 
 const handleOpUpdate = (store, op, state, result, api) => {
   let showDefaultError = false;
@@ -94,9 +94,7 @@ const handleOpUpdate = (store, op, state, result, api) => {
 };
 
 export const pollOperations = async (api) => {
-  const operations: Array<Operation> = selectPendingOperations(
-    store.getState(),
-  );
+  const operations = selectPendingOperations(store.getState());
   let shouldUpdateTasks = false;
   try {
     for (const op of operations) {

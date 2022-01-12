@@ -129,19 +129,6 @@ type AppInfo = {
   nodeUrl?: string;
 };
 
-enum operation_states {
-  UNKNOWN = 'unknown',
-  INIT = 'init',
-  SENT = 'sent',
-  APPLIED = 'applied',
-  FAILED = 'failed',
-  EXPIRED = 'expired',
-}
-
-type OperationState = {
-  state: keyof typeof operation_states;
-};
-
 type OperationInfo = OperationState & {
   result: string;
 };
