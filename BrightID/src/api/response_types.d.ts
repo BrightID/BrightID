@@ -1,7 +1,6 @@
 /**
  * Response Types
  */
-import { operation_states } from '@/utils/constants';
 
 type NodeApiRes =
   | AppRes
@@ -129,6 +128,15 @@ type AppInfo = {
   sponsorPublicKey?: string;
   nodeUrl?: string;
 };
+
+enum operation_states {
+  UNKNOWN = 'unknown',
+  INIT = 'init',
+  SENT = 'sent',
+  APPLIED = 'applied',
+  FAILED = 'failed',
+  EXPIRED = 'expired',
+}
 
 type OperationState = {
   state: keyof typeof operation_states;

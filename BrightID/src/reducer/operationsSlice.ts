@@ -4,7 +4,6 @@ import {
   createSelector,
 } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
-import { operation_states } from '@/utils/constants';
 
 /* ******** INITIAL STATE ************** */
 

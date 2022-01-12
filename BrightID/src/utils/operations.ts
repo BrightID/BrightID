@@ -9,7 +9,7 @@ import {
   selectPendingOperations,
 } from '@/actions';
 import { checkTasks } from '@/components/Tasks/TasksSlice';
-import { operation_states, OPERATION_TRACE_TIME } from '@/utils/constants';
+import { OPERATION_TRACE_TIME } from '@/utils/constants';
 
 const handleOpUpdate = (store, op, state, result, api) => {
   let showDefaultError = false;

@@ -8,14 +8,6 @@ export const BACKUP_URL = 'https://explorer.brightid.org';
 
 // Operation & API constants
 export const OPERATION_TRACE_TIME = 2 * 60 * 1000; // trace operations for 2 minutes
-export enum operation_states {
-  UNKNOWN = 'unknown',
-  INIT = 'init',
-  SENT = 'sent',
-  APPLIED = 'applied',
-  FAILED = 'failed',
-  EXPIRED = 'expired',
-}
 
 // CONNECTION CONSTANTS
 export const CHANNEL_TTL = 900000; // 15 minutes
