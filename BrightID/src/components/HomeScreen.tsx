@@ -19,7 +19,6 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from '@/store';
 import {
   fetchApps,
-  scrubOps,
   selectAllApps,
   setActiveNotification,
   updateBlindSigs,
@@ -115,11 +114,6 @@ export const HomeScreen = (props) => {
       }
     }
   }, [api, apps, dispatch]);
-
-  // scrub outdated operations from state at least once at app startup
-  useEffect(() => {
-    dispatch(scrubOps());
-  }, [dispatch]);
 
   useEffect(() => {
     dispatch(setHeaderHeight(headerHeight));
