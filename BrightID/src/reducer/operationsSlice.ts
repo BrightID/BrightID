@@ -32,6 +32,7 @@ const operationsSlice = createSlice({
     removeOperation: operationsAdapter.removeOne,
     resetOperations: operationsAdapter.removeAll,
     updateOperation: operationsAdapter.updateOne,
+    removeManyOperations: operationsAdapter.removeMany,
   },
   extraReducers: {
     [RESET_STORE]: operationsAdapter.removeAll,
@@ -44,6 +45,7 @@ export const {
   updateOperation,
   // removeOperation,
   // resetOperations,
+  removeManyOperations,
 } = operationsSlice.actions;
 
 // export selectors
@@ -58,10 +60,42 @@ const pendingStates = [
   operation_states.INIT,
   operation_states.SENT,
 ];
+
 export const selectPendingOperations = createSelector(
   selectAllOperations,
   (operations) => operations.filter((op) => pendingStates.includes(op.state)),
 );
+
+const outdatedStates = [
+  operation_states.APPLIED,
+  operation_states.FAILED,
+  operation_states.EXPIRED,
+];
+
+// keep "done" operations in state for one week
+const outdatedAge = 60 * 60 * 24 * 7 * 1000;
+
+/* Return IDs of operation entries that are outdated and can be removed from state */
+export const selectOutdatedOperations = createSelector(
+  selectAllOperations,
+  (operations) => {
+    const now = Date.now();
+    return operations
+      .filter(
+        (op) =>
+          outdatedStates.includes(op.state) && now - op.timestamp > outdatedAge,
+      )
+      .map((op) => op.hash);
+  },
+);
+
+export const scrubOps = () => (dispatch: dispatch, getState: getState) => {
+  const removeOpIds = selectOutdatedOperations(getState());
+  console.log(
+    `Scrubbing ${removeOpIds.length} outdated operations: ${removeOpIds}`,
+  );
+  dispatch(removeManyOperations(removeOpIds));
+};
 
 // Export reducer
 export default operationsSlice.reducer;

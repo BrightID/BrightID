@@ -19,6 +19,7 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from '@/store';
 import {
   fetchApps,
+  scrubOps,
   selectAllApps,
   setActiveNotification,
   updateBlindSigs,
@@ -114,6 +115,11 @@ export const HomeScreen = (props) => {
       }
     }
   }, [api, apps, dispatch]);
+
+  // scrub outdated operations from state at least once at app startup
+  useEffect(() => {
+    dispatch(scrubOps());
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(setHeaderHeight(headerHeight));
@@ -226,23 +232,28 @@ export const HomeScreen = (props) => {
           </View>
           <View style={styles.profileDivider} />
           <View style={styles.verificationsContainer}>
-            {verificationPatches.length > 0 ? verificationPatches.map((patch, i) => (
-              <TouchableOpacity
-                key={`verificationPatch-${i}`}
-                style={styles.verificationBox}
-                onPress={() => {
-                  if (patch?.task?.navigationTarget) {
-                    navigation.navigate(patch.task.navigationTarget, {
-                      url: patch.task.url
-                    });
-                  }
-                }}
-              >
-                <Text key={`verificationText-${i}`} style={styles.verificationText}>
-                  {patch.text}
-                </Text>
-              </TouchableOpacity>
-            )) : loading ? (
+            {verificationPatches.length > 0 ? (
+              verificationPatches.map((patch, i) => (
+                <TouchableOpacity
+                  key={`verificationPatch-${i}`}
+                  style={styles.verificationBox}
+                  onPress={() => {
+                    if (patch?.task?.navigationTarget) {
+                      navigation.navigate(patch.task.navigationTarget, {
+                        url: patch.task.url,
+                      });
+                    }
+                  }}
+                >
+                  <Text
+                    key={`verificationText-${i}`}
+                    style={styles.verificationText}
+                  >
+                    {patch.text}
+                  </Text>
+                </TouchableOpacity>
+              ))
+            ) : loading ? (
               <View style={styles.verificationBox}>
                 <ActivityIndicator size="small" color={DARKER_GREY} animating />
               </View>
