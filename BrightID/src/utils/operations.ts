@@ -10,6 +10,7 @@ import {
 } from '@/actions';
 import { checkTasks } from '@/components/Tasks/TasksSlice';
 import { operation_states, OPERATION_TRACE_TIME } from '@/utils/constants';
+import { NodeApi } from '@/api/brightId';
 
 const handleOpUpdate = (store, op, state, result, api) => {
   let showDefaultError = false;
@@ -98,10 +99,15 @@ export const pollOperations = async (api) => {
   let shouldUpdateTasks = false;
   try {
     for (const op of operations) {
-      // If the op has an api instance attached, use that instead of the default one.
-      // Background: Some operations like "link context" require to query a specific
-      // api endpoint as the op is only known on that node
-      const queryApi = op.api || api;
+      let queryApi = api;
+      if (op.apiUrl) {
+        // If the op has an apiUrl attached, use that instead of the default one.
+        // Background: Some operations like "link context" require to query a specific
+        // api endpoint as the op is only known on that node
+        const { id } = store.getState().user;
+        const { secretKey } = store.getState().keypair;
+        queryApi = new NodeApi({ url: op.apiUrl, id, secretKey });
+      }
       const { state, result } = await queryApi.getOperationState(op.hash);
 
       if (op.state !== state) {

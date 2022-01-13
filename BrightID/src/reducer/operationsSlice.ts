@@ -4,14 +4,10 @@ import {
   createSelector,
 } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
-import { NodeApi } from '@/api/brightId';
 import { operation_states } from '@/utils/constants';
 
-/* ******** INITIAL STATE ************** */
-
 export type Operation = NodeOps & {
-  api?: NodeApi;
-  state: keyof typeof operation_states;
+  state: typeof operation_states[keyof typeof operation_states];
 };
 
 const operationsAdapter = createEntityAdapter<Operation>({
@@ -42,12 +38,12 @@ const operationsSlice = createSlice({
   },
 });
 
-// Export channel actions
+// Export actions
 export const {
   addOperation,
-  removeOperation,
-  resetOperations,
   updateOperation,
+  // removeOperation,
+  // resetOperations,
 } = operationsSlice.actions;
 
 // export selectors
