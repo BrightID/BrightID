@@ -7,7 +7,10 @@ export const INVITE_ACCEPTED = 'accepted';
 export const BACKUP_URL = 'https://explorer.brightid.org';
 
 // Operation & API constants
-export const OPERATION_TRACE_TIME = 2 * 60 * 1000; // trace operations for 2 minutes
+// Max. time to wait for operation result
+export const OPERATION_TRACE_TIME = 2 * 60 * 1000; // 2 minutes
+// How long to keep "done" operations (success, failed or expired) in local redux store
+export const LOCAL_OPERATION_KEEP_THRESHOLD = 60 * 60 * 24 * 7 * 1000; // 1 week
 export const operation_states = {
   UNKNOWN: 'unknown',
   INIT: 'init',

@@ -4,7 +4,10 @@ import {
   createSelector,
 } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
-import { operation_states } from '@/utils/constants';
+import {
+  LOCAL_OPERATION_KEEP_THRESHOLD,
+  operation_states,
+} from '@/utils/constants';
 
 export type Operation = NodeOps & {
   state: typeof operation_states[keyof typeof operation_states];
@@ -72,9 +75,6 @@ const outdatedStates = [
   operation_states.EXPIRED,
 ];
 
-// keep "done" operations in state for one week
-const outdatedAge = 60 * 60 * 24 * 7 * 1000;
-
 /* Return IDs of operation entries that are outdated and can be removed from state */
 export const selectOutdatedOperations = createSelector(
   selectAllOperations,
@@ -83,7 +83,8 @@ export const selectOutdatedOperations = createSelector(
     return operations
       .filter(
         (op) =>
-          outdatedStates.includes(op.state) && now - op.timestamp > outdatedAge,
+          outdatedStates.includes(op.state) &&
+          now - op.timestamp > LOCAL_OPERATION_KEEP_THRESHOLD,
       )
       .map((op) => op.hash);
   },
