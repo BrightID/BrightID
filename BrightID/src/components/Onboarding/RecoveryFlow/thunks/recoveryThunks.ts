@@ -57,7 +57,7 @@ export const socialRecovery =
         sig2: sigs[1].sig,
       });
       dispatch(addOperation(op));
-      return op.hash;
+      return op;
     } catch (err) {
       let errorString = '';
       if (err instanceof BrightidError) {
@@ -65,7 +65,7 @@ export const socialRecovery =
           console.log(
             `Social Recovery operation already applied. Ignoring this error.`,
           );
-          return;
+          return 'ALREADY APPLIED';
         }
         errorString = `${err.errorNum} - ${err.message}`;
       } else if (err instanceof Error) {
