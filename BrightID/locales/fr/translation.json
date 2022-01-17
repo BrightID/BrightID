@@ -211,7 +211,7 @@
       "connectionLevel": "Niveau de Connexion",
       "mutualConnections": "Connexions en Commun",
       "mutualGroups": "Groupes en Commun",
-      "recoveryConnections": "Connexions de récupération"
+      "recoveryConnections": "Connexions de récupération",
       "possibleDuplicates": "Doublons Possibles"
     },
     "tags": {
