@@ -8,8 +8,8 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from '@/store';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from '@/store';
 import { fontSize } from '@/theme/fonts';
 import { WHITE, BLACK, DARKER_GREY, ORANGE, RED } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
@@ -92,14 +92,14 @@ export const PasswordScreen = () => {
           style={styles.invisibleUsername}
           placeholder="Username"
           textContentType="username"
-          autoCompleteType="username"
+          autoComplete="username"
           autoCorrect={false}
           value={id}
         />
         <View style={styles.midContainer}>
           <View style={styles.passwordContainer}>
             <TextInput
-              autoCompleteType="password"
+              autoComplete="password"
               autoCorrect={false}
               secureTextEntry={true}
               style={styles.textInput}
@@ -119,7 +119,7 @@ export const PasswordScreen = () => {
           </View>
           <View style={styles.passwordContainer}>
             <TextInput
-              autoCompleteType="password"
+              autoComplete="password"
               autoCorrect={false}
               secureTextEntry={true}
               style={styles.textInput}
