@@ -26,11 +26,11 @@ class BackupService {
   }
 
   async getRecovery(key1: string, key2: string) {
-    const res = await this.recoveryApi.get(
+    const res = await this.recoveryApi.get<GetRecoveryRes, ErrRes>(
       `/backups/${b64ToUrlSafeB64(key1)}/${b64ToUrlSafeB64(key2)}`,
     );
     BackupService.throwOnError(res);
-    return res;
+    return res as unknown as GetRecoveryRes;
   }
 
   async putRecovery(key1: string, key2: string, data: string) {

@@ -1,8 +1,9 @@
 import React, { useContext, useMemo } from 'react';
 import { StyleSheet, View, StatusBar, FlatList } from 'react-native';
-import { useDispatch, useSelector, store } from '@/store';
 import { useTranslation } from 'react-i18next';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import _ from 'lodash';
+import { useDispatch, useSelector, store } from '@/store';
 import FloatingActionButton from '@/components/Helpers/FloatingActionButton';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { connectionsSelector } from '@/utils/connectionsSelector';
@@ -11,7 +12,6 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { updateConnections } from '@/actions';
-import _ from 'lodash';
 import ConnectionCard from './ConnectionCard';
 
 /**
@@ -59,10 +59,10 @@ export const ConnectionsScreen = () => {
       } = store.getState();
       try {
         const conns = await api.getConnections(id, 'outbound');
-        let incomingConns = await api.getConnections(id, 'inbound');
-        incomingConns = _.keyBy(incomingConns, 'id');
+        const incomingConns = await api.getConnections(id, 'inbound');
+        const incomingConnsById = _.keyBy(incomingConns, 'id');
         for (const conn of conns) {
-          conn.incomingLevel = incomingConns[conn.id]?.level;
+          conn.incomingLevel = incomingConnsById[conn.id]?.level;
         }
         await dispatch(updateConnections(conns));
       } catch (err) {
