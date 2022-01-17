@@ -47,9 +47,13 @@ const addPhoto = async () => {
   await waitFor(element(by.id('addPhoto')))
     .toBeVisible()
     .withTimeout(15000);
-  // create new ID
-  await expect(element(by.id('submitPhoto'))).toExist();
-  await element(by.id('submitPhoto')).tap();
+
+  const submitPhoto = element(by.id('submitPhoto'))
+  await expect(submitPhoto).toExist();
+  // wait for the button to be enabled after setting the photo
+  await new Promise((r) => setTimeout(r, 2000));
+  // submit photo
+  await submitPhoto.tap();
 };
 
 const skipPassword = async () => {

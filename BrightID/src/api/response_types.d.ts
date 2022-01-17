@@ -129,8 +129,7 @@ type AppInfo = {
   nodeUrl?: string;
 };
 
-type OperationInfo = {
-  state: string;
+type OperationInfo = OperationState & {
   result: string;
 };
 

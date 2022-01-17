@@ -45,8 +45,10 @@ describe('Test channel data', () => {
     test(`creates correct channel info for type ${channel_type}`, async () => {
       const originalChannel = await generateChannelData(channel_type, url);
       const channelInfo = createChannelInfo(originalChannel);
+      // channel type STAR requires version 2, other types 1
+      const expectedVersion = channel_type === channel_types.STAR ? 2 : 1;
       expect(channelInfo).toMatchObject({
-        version: 1,
+        version: expectedVersion,
         type: originalChannel.type,
         timestamp: originalChannel.timestamp,
         ttl: originalChannel.ttl,

@@ -52,10 +52,10 @@ export const App = () => {
       };
 
       // Listen to incoming links from deep linking
-      Linking.addEventListener('url', onReceiveURL);
+      const emitterSubscription = Linking.addEventListener('url', onReceiveURL);
       return () => {
         // Clean up the event listeners
-        Linking.removeEventListener('url', onReceiveURL);
+        emitterSubscription.remove();
       };
     },
   };

@@ -1,9 +1,9 @@
 import { Alert } from 'react-native';
 import i18next from 'i18next';
 import { dangerouslyDeleteStorage } from '@/utils/dev';
-import { resetOperations } from './actions';
 import { store } from './store';
 import { checkTasks, syncStoreTasks } from './components/Tasks/TasksSlice';
+import { scrubOps } from '@/reducer/operationsSlice';
 
 // happens inside of the loading screen
 
@@ -12,12 +12,12 @@ export const bootstrap = async () => {
     user: { id },
   } = store.getState();
 
-  // reset operations
-  store.dispatch(resetOperations());
   // update available usertasks
   store.dispatch(syncStoreTasks());
   // Initial check for completed tasks
   store.dispatch(checkTasks());
+  // scrub outdated operations from state
+  store.dispatch(scrubOps());
 
   try {
     // delete all storage if brightid is empty

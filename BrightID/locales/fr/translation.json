@@ -212,6 +212,7 @@
       "mutualConnections": "Connexions en Commun",
       "mutualGroups": "Groupes en Commun",
       "recoveryConnections": "Connexions de récupération"
+      "possibleDuplicates": "Doublons Possibles"
     },
     "tags": {
       "connectedAt": "Connecté(e) {{date}}",
