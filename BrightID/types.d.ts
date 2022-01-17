@@ -151,7 +151,7 @@ declare global {
     profileTimestamp: number;
     initiator: string;
     myself?: boolean;
-    secretKey?: any;
+    secretKey?: string;
   }>;
 
   type PendingConnectionsState = EntityState<PendingConnection>;

@@ -3,17 +3,20 @@ import { parseDataUri, mimeFromUri } from './images';
 
 export const photoDirectory = () => `${RNFetchBlob.fs.dirs.DocumentDir}/photos`;
 
-export const createImageDirectory = () => {
-  return RNFetchBlob.fs
-    .exists(photoDirectory())
-    .then((exists) =>
-      exists
-        ? new Promise((resolve) => resolve(true))
-        : RNFetchBlob.fs.mkdir(photoDirectory()),
-    );
+export const createImageDirectory = async () => {
+  const exists = await RNFetchBlob.fs.exists(photoDirectory());
+  return exists
+    ? new Promise<void>((resolve) => resolve())
+    : RNFetchBlob.fs.mkdir(photoDirectory());
 };
 
-export const saveImage = async ({ base64Image, imageName }) => {
+export const saveImage = async ({
+  base64Image,
+  imageName,
+}: {
+  base64Image: string;
+  imageName: string;
+}) => {
   try {
     const { filetype, image } = parseDataUri(base64Image);
     const path = `${photoDirectory()}/${imageName}.${filetype}`;
@@ -24,7 +27,7 @@ export const saveImage = async ({ base64Image, imageName }) => {
   }
 };
 
-export const retrieveImage = async (filename) => {
+export const retrieveImage = async (filename: string) => {
   try {
     const mime = mimeFromUri(filename);
     const base64Image = await RNFetchBlob.fs.readFile(
