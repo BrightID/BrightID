@@ -18,7 +18,7 @@ export function uInt8ArrayToB64(array) {
  * @param {string} str
  * @returns {Uint8Array}
  */
-export function b64ToUint8Array(str) {
+export function b64ToUint8Array(str: string): Uint8Array {
   // B64.toByteArray might return a Uint8Array, an Array or an Object depending on the platform.
   // Wrap it in Object.values and new Uint8Array to make sure it's a Uint8Array.
   let arr = B64.toByteArray(str);
@@ -30,6 +30,9 @@ export function b64ToUint8Array(str) {
   if (arr.join) {
     return arr;
   }
+  // TODO Fix this code to solve below typescript error about returning Array<number>
+  // instead of UInt8Array. I don't think it makes sense to return a number array here anyway
+  // @ts-ignore
   return plainArray;
 }
 
@@ -89,8 +92,8 @@ const { RNRandomBytes } = NativeModules;
  * @param {number} size
  * @returns
  */
-export const randomKey = (size) =>
-  new Promise((resolve, reject) => {
+export const randomKey = (size: number) =>
+  new Promise<string>((resolve, reject) => {
     RNRandomBytes.randomBytes(size, (err, bytes) => {
       err ? reject(err) : resolve(bytes);
     });
