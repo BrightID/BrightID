@@ -3,27 +3,22 @@ import { eqProps } from 'ramda';
 import nacl from 'tweetnacl';
 import { convertPublicKey, convertSecretKey } from 'ed2curve';
 import store from '@/store';
-import { uInt8ArrayToB64, b64ToUint8Array, randomKey } from '@/utils/encoding';
+import { b64ToUint8Array, randomKey, uInt8ArrayToB64 } from '@/utils/encoding';
 import { selectConnectionById } from '@/reducer/connectionsSlice';
 import { saveImage } from './filesystem';
 import { INVITE_ACTIVE } from './constants';
+import { NodeApi } from '@/api/brightId';
 
-/**
- *
- * @param {invite} invite
- * @type invite
- * @returns
- */
-export const getInviteGroup = async (invite, api) => {
+export const getInviteGroup = async (inviteInfo: InviteInfo, api: NodeApi) => {
   try {
-    console.log('getting invite group info', invite);
+    console.log('getting invite group info', inviteInfo);
 
-    let {
+    const {
       keypair: { secretKey },
       groups: { groups },
     } = store.getState();
 
-    const existingGroup = groups.find((g) => g.id === invite.group);
+    const existingGroup = groups.find((g) => g.id === inviteInfo.group);
     if (
       existingGroup &&
       existingGroup.name &&
@@ -33,15 +28,15 @@ export const getInviteGroup = async (invite, api) => {
       return existingGroup;
     }
 
-    if (!invite.data) {
+    if (!inviteInfo.data) {
       return undefined;
     }
 
-    const conn = selectConnectionById(store.getState(), invite.inviter);
+    const conn = selectConnectionById(store.getState(), inviteInfo.inviter);
     const { signingKeys } = await api.getProfile(conn.id);
     const pub = convertPublicKey(b64ToUint8Array(signingKeys[0]));
-    const msg = b64ToUint8Array(invite.data.split('_')[0]);
-    const nonce = b64ToUint8Array(invite.data.split('_')[1]);
+    const msg = b64ToUint8Array(inviteInfo.data.split('_')[0]);
+    const nonce = b64ToUint8Array(inviteInfo.data.split('_')[1]);
     const decryptedMessage = nacl.box.open(
       msg,
       nonce,
@@ -58,56 +53,59 @@ export const getInviteGroup = async (invite, api) => {
     }
 
     // const uuidKey = invite.url.split('/').pop();
-    let group = await api.getGroup(invite.group);
+    const group = await api.getGroup(inviteInfo.group);
     const res = await fetch(group.url);
     const data = await res.text();
     if (!data) {
       return undefined;
     }
 
-    let info = CryptoJS.AES.decrypt(data, groupAesKey).toString(
+    const infoString = CryptoJS.AES.decrypt(data, groupAesKey).toString(
       CryptoJS.enc.Utf8,
     );
-    info = JSON.parse(info);
-    group = { ...info, ...group };
+    const info = JSON.parse(infoString);
+    const groupObj = { ...info, ...group };
     let filename = '';
-    if (group.photo) {
+    if (groupObj.photo) {
       filename = await saveImage({
-        imageName: group.id,
-        base64Image: group.photo,
+        imageName: groupObj.id,
+        base64Image: groupObj.photo,
       });
     }
-    group.photo = { filename };
-    group.aesKey = groupAesKey;
-    return group;
+    groupObj.photo = { filename };
+    groupObj.aesKey = groupAesKey;
+    return groupObj;
   } catch (err) {
     console.log(`error in getting invite info ${err.message}`);
     return undefined;
   }
 };
 
-/**
- *
- * @param {invite[]} invites
- * @returns
- */
-export const getInvites = async (api) => {
+export const getInvites = async (api: NodeApi) => {
   try {
     const {
       user: { id },
       groups: { invites: oldInvites = [] },
     } = store.getState();
-    const invites = await api.getInvites(id);
-    for (const invite of invites) {
-      const oldInvite = oldInvites.find(eqProps('id', invite));
-      if (oldInvite && (oldInvite.group.name || !oldInvite.data)) {
-        invite.group = oldInvite.group;
-        invite.state = oldInvite.state;
-      } else {
-        invite.group = await getInviteGroup(invite, api);
-        invite.state = INVITE_ACTIVE;
-      }
-    }
+    const inviteInfos = await api.getInvites(id);
+    const invites: Array<Invite> = await Promise.all(
+      inviteInfos.map(async (inviteInfo) => {
+        const oldInvite = oldInvites.find(eqProps('id', inviteInfo));
+        if (oldInvite && (oldInvite.group.name || !oldInvite.data)) {
+          return {
+            ...inviteInfo,
+            group: oldInvite.group,
+            state: oldInvite.state,
+          };
+        } else {
+          return {
+            ...inviteInfo,
+            group: await getInviteGroup(inviteInfo, api),
+            state: INVITE_ACTIVE,
+          };
+        }
+      }),
+    );
     // exclude invites where group could not be determined
     return invites.filter((invite) => invite.group);
   } catch (err) {
@@ -123,17 +121,16 @@ export const getInvites = async (api) => {
  * @returns string
  */
 
-export const encryptAesKey = async (aesKey, signingKey) => {
+export const encryptAesKey = async (aesKey: string, signingKey: string) => {
   try {
-    let { secretKey } = store.getState().keypair;
+    const { secretKey } = store.getState().keypair;
 
     const pub = convertPublicKey(b64ToUint8Array(signingKey));
     const msg = b64ToUint8Array(aesKey);
     const nonce = await randomKey(24);
-    const data = `${uInt8ArrayToB64(
+    return `${uInt8ArrayToB64(
       nacl.box(msg, b64ToUint8Array(nonce), pub, convertSecretKey(secretKey)),
     )}_${nonce}`;
-    return data;
   } catch (err) {
     console.log(err.message);
     return '';

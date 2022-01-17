@@ -7,13 +7,18 @@ export const types = {
   byDateAddedDescending: 'BY_DATE_ADDED_DESCENDING',
   byTrustLevelAscending: 'BY_TRUST_LEVEL_ASCENDING',
   byTrustLevelDescending: 'BY_TRUST_LEVEL_DESCENDING',
-};
+} as const;
 
+type SortTypes = typeof types[keyof typeof types];
 const trustLevels = Object.values(connection_levels);
 
 const trustLevel = (level) => trustLevels.indexOf(level);
 
-export const sortConnectionsBy = (connectionsSort) => {
+export const sortConnectionsBy: (
+  connectionsSort: SortTypes,
+) => (a: Connection, b: Connection) => number = (
+  connectionsSort: SortTypes,
+) => {
   switch (connectionsSort) {
     case types.byNameAscending:
       return (a, b) => b.name.localeCompare(a.name);

@@ -8,7 +8,7 @@
  * @param {string} str
  * @returns {string}
  */
-export const toSearchString = (str) => {
+export const toSearchString = (str: string): string => {
   return str
     .replace(/\s/g, '')
     .normalize('NFD')
