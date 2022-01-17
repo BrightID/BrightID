@@ -4,6 +4,7 @@ on: [push, pull_request]
 jobs:
 
   build_debug_apk:
+    if: github.repository_owner == 'BrightID'
 
     runs-on: ubuntu-latest
 
@@ -49,6 +50,7 @@ jobs:
           path: /home/runner/work/BrightID/BrightID/BrightID/android/app/build/outputs/apk/debug/app-debug.apk
 
   build_staging_apk:
+    if: github.repository_owner == 'BrightID'
 
     runs-on: ubuntu-latest
 
@@ -95,6 +97,7 @@ jobs:
           path: /home/runner/work/BrightID/BrightID/BrightID/android/app/build/outputs/apk/staging/app-staging.apk
 
   build_release_apk:
+    if: github.repository_owner == 'BrightID'
 
     runs-on: ubuntu-latest
 
