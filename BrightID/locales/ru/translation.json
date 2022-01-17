@@ -206,7 +206,7 @@
       "connectionLevel": "Уровень подключения",
       "mutualConnections": "Общие подключения",
       "mutualGroups": "Общие группы",
-      "recoveryConnections": "Связи для восстановления"
+      "recoveryConnections": "Связи для восстановления",
       "possibleDuplicates": "Возможные дубликаты"
     },
     "tags": {
