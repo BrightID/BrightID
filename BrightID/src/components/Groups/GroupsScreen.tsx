@@ -23,7 +23,7 @@ import {
   updateMemberships,
 } from '@/actions';
 import { useDispatch, useSelector } from '@/store';
-import GroupCard from './GroupCard';
+import { GroupCard } from './GroupCard';
 import { NoGroups } from './NoGroups';
 
 /**
