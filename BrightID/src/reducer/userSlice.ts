@@ -69,7 +69,6 @@ const userSlice = createSlice({
   },
 });
 
-// Export channel actions
 export const {
   setIsSponsored,
   setPhoto,
@@ -83,6 +82,14 @@ export const {
   setEula,
   hydrateUser,
 } = userSlice.actions;
+
+export const userSelector = (state: State): User => ({
+  id: state.user.id,
+  name: state.user.name,
+  photo: state.user.photo,
+  password: state.user.password,
+  secretKey: state.user.secretKey,
+});
 
 // Export reducer
 export default userSlice.reducer;

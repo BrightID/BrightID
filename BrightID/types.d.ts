@@ -202,19 +202,15 @@ declare global {
     timestamp: number;
   };
 
-  type UserState = {
+  type User = {
+    id: string;
     name: string;
     photo: Photo;
-    searchParam: string;
-    backupCompleted: boolean;
-    verifications: Array<Verification>;
-    id: string;
     password: string;
     secretKey: string;
-    isSponsored: boolean;
-    eula: boolean;
-    migrated?: boolean;
   };
+
+  type GroupMember = User | Connection;
 
   type LayoutBox = {
     width?: number;

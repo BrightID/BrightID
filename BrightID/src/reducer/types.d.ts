@@ -64,11 +64,6 @@ type Invite = InviteInfo & {
   state: string;
 };
 
-// type Invite = Omit<InviteInfo, 'group'> & {
-//   group: Group;
-//   state: string;
-// };
-
 /**
  * KeypairSlice
  */
@@ -91,6 +86,14 @@ type OperationsState = EntityState<NodeOps>;
 /**
  * UserSlice
  */
+type UserState = User & {
+  searchParam: string;
+  backupCompleted: boolean;
+  verifications: Array<Verification>;
+  isSponsored: boolean;
+  eula: boolean;
+  migrated?: boolean;
+};
 
 /**
  * WalkthroughSlice
