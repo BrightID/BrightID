@@ -1,7 +1,12 @@
 import { difference } from 'ramda';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
 import { INVITE_ACCEPTED, INVITE_REJECTED } from '@/utils/constants';
+import { selectAllConnections } from '@/reducer/connectionsSlice';
+import { RootState } from '@/store';
+import { toSearchString } from '@/utils/strings';
+import { getGroupName, ids2connections, knownMemberIDs } from '@/utils/groups';
+import { compareCreatedDesc } from '@/components/Groups/models/sortingUtility';
 
 /* ******** INITIAL STATE ************** */
 
@@ -20,7 +25,7 @@ const groupsSlice = createSlice({
     createGroup(state, action: PayloadAction<Group>) {
       state.groups.push(action.payload);
     },
-    updateGroup(state, action: PayloadAction<Group>) {
+    updateGroup(state, action: PayloadAction<GroupInfo>) {
       const group = state.groups.find(
         (group) => group.id === action.payload.id,
       );
@@ -143,6 +148,47 @@ const groupsSlice = createSlice({
     },
   },
 });
+
+export const allGroupsSelector = (state: RootState) => state.groups.groups;
+
+export const activeGroupsSelector = (state: RootState) =>
+  state.groups.groups.filter(
+    (group) => group.state === 'initiated' || group.state === 'verified',
+  );
+
+export const searchParamSelector = (state: RootState) =>
+  state.groups.searchParam;
+
+export const filteredGroupsSelector = createSelector(
+  activeGroupsSelector,
+  searchParamSelector,
+  (allGroups, searchParam) => {
+    let filteredGroups: Array<Group>;
+    if (searchParam !== '') {
+      filteredGroups = allGroups.filter((group) => {
+        if (toSearchString(getGroupName(group)).includes(searchParam)) {
+          // direct group name match
+          return true;
+        } else {
+          // check group members
+          const allMemberNames = ids2connections(knownMemberIDs(group)).map(
+            (member) => toSearchString(member.name),
+          );
+          for (const name of allMemberNames) {
+            if (name.includes(searchParam)) {
+              // stop looking if a match is found
+              return true;
+            }
+          }
+          return false;
+        }
+      });
+    } else {
+      filteredGroups = allGroups;
+    }
+    return filteredGroups.sort(compareCreatedDesc);
+  },
+);
 
 // Export channel actions
 export const {
