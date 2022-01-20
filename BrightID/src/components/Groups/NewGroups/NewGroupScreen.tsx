@@ -71,7 +71,7 @@ export const NewGroupScreen = () => {
   };
 
   const toggleNewGroupInvitee = (id: string) => {
-    const invitees = newGroupInvitees;
+    const invitees = [...newGroupInvitees];
     const index = invitees.indexOf(id);
     if (index >= 0) {
       invitees.splice(index, 1);
@@ -100,7 +100,7 @@ export const NewGroupScreen = () => {
 
   const renderButtonOrSpinner = () => {
     const skip = newGroupInvitees.length < 1;
-    return creating ? (
+    return !creating ? (
       <View style={styles.createGroupButtonContainer}>
         <TouchableOpacity
           testID="createNewGroupBtn"
@@ -144,6 +144,7 @@ export const NewGroupScreen = () => {
           <View style={styles.mainContainer}>
             {connections.length > 0 ? (
               <FlatList
+                extraData={newGroupInvitees}
                 style={styles.connectionsContainer}
                 contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
                 data={connections}
