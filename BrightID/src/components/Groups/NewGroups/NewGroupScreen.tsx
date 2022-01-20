@@ -12,13 +12,13 @@ import i18next from 'i18next';
 import { useContext, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import store, { useSelector } from '@/store';
-import { verifiedConnectionsSelector } from '@/actions';
 import { BLUE, LIGHT_GREY, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { createNewGroup } from '../actions';
 import { NewGroupCard } from './NewGroupCard';
+import { connectionsSelector } from '@/utils/connectionsSelector';
 
 const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
 const ITEM_MARGIN = DEVICE_LARGE ? 11.8 : 6;
@@ -46,7 +46,7 @@ export const NewGroupScreen = () => {
   const { t } = useTranslation();
   const [creating, setCreating] = useState(false);
   const [creationState, setCreationState] = useState('uploadingGroupPhoto');
-  const connections = useSelector(verifiedConnectionsSelector);
+  const connections = useSelector((state) => connectionsSelector(state, []));
   const [newGroupInvitees, setNewGroupInvitees] = useState<Array<string>>([]);
 
   const createGroup = async () => {
@@ -81,13 +81,7 @@ export const NewGroupScreen = () => {
     setNewGroupInvitees(invitees);
   };
 
-  const renderConnection = ({
-    item,
-    index,
-  }: {
-    item: Connection;
-    index: number;
-  }) => (
+  const renderConnection = ({ item }: { item: Connection }) => (
     <NewGroupCard
       id={item.id}
       connectionDate={item.connectionDate}
