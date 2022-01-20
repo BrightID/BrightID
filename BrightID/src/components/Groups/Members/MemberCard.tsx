@@ -3,14 +3,14 @@ import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 import { useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { photoDirectory } from '@/utils/filesystem';
 import moment from 'moment';
-import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { WHITE, BLUE, GREY, RED, LIGHT_GREY } from '@/theme/colors';
-import { fontSize } from '@/theme/fonts';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useNavigation } from '@react-navigation/native';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { photoDirectory } from '@/utils/filesystem';
+import { DEVICE_LARGE } from '@/utils/deviceConstants';
+import { WHITE, BLUE, GREY, RED, LIGHT_GREY } from '@/theme/colors';
+import { fontSize } from '@/theme/fonts';
 
 const ICON_SIZE = DEVICE_LARGE ? 36 : 32;
 const ACTION_ADD_ADMIN = i18next.t('groups.memberActionSheet.addAdmin');
@@ -18,34 +18,35 @@ const ACTION_DISMISS = i18next.t('groups.memberActionSheet.dismissMember');
 // Not using 'common.actionSheet.cancel' because 'Cancel' instead of 'cancel' (making sure printed text doesn't change after i18n)
 const ACTION_CANCEL = i18next.t('groups.memberActionSheet.cancel');
 
-type MemberCardProps = {
+export type GroupMember = {
   memberId: string;
   userId: string;
   photo: Photo;
   name: string;
   connectionDate: number;
+};
+
+type MemberCardProps = GroupMember & {
   handleDismiss: (...args: Array<any>) => any;
   handleAddAdmin: (...args: Array<any>) => any;
   userIsAdmin: boolean;
   memberIsAdmin: boolean;
-  flaggers: any;
+  // flaggers: any; TODO replace with reporters from v6 api
   testID: string;
 };
 
-function MemberCard(props: MemberCardProps) {
-  const {
-    memberId,
-    userId,
-    photo,
-    name,
-    connectionDate,
-    handleDismiss,
-    handleAddAdmin,
-    userIsAdmin,
-    memberIsAdmin,
-    flaggers,
-    testID,
-  } = props;
+export const MemberCard = ({
+  memberId,
+  userId,
+  photo,
+  name,
+  connectionDate,
+  handleDismiss,
+  handleAddAdmin,
+  userIsAdmin,
+  memberIsAdmin,
+  testID,
+}: MemberCardProps) => {
   const navigation = useNavigation();
   const [contextActions, setContextActions] = useState<Array<string>>([]);
   const [flagged, setFlagged] = useState<boolean | number>(false);
@@ -73,7 +74,8 @@ function MemberCard(props: MemberCardProps) {
   }, [userIsAdmin, memberIsAdmin, userId, memberId]);
 
   // show reported status of member?
-  useEffect(() => {
+  // TODO replace with reporters from v6 api
+  /*  useEffect(() => {
     if (!userIsAdmin) {
       // only admins can see reported state
       setFlagged(false);
@@ -81,6 +83,7 @@ function MemberCard(props: MemberCardProps) {
       setFlagged(flaggers && Object.keys(flaggers).length);
     }
   }, [flaggers, userIsAdmin]);
+   */
 
   const performAction = (index: number) => {
     if (contextActions.length === 0) return;
@@ -181,7 +184,7 @@ function MemberCard(props: MemberCardProps) {
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -237,5 +240,3 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
 });
-
-export default MemberCard;

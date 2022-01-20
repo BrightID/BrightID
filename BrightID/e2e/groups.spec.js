@@ -126,7 +126,7 @@ describe('Groups', () => {
 
     it('should create group', async () => {
       await element(by.id('createNewGroupBtn')).tap();
-      await expect(element(by.id('createNewGroupBtn'))).toBeNotVisible();
+      await expect(element(by.id('createNewGroupBtn'))).not.toBeVisible();
       // if group was created successfully we should be back at the Groups screen
       await expectGroupsScreen();
       // there should be exactly one group now
@@ -176,7 +176,7 @@ describe('Groups', () => {
 
     it('should create group', async () => {
       await element(by.id('createNewGroupBtn')).tap();
-      await expect(element(by.id('createNewGroupBtn'))).toBeNotVisible();
+      await expect(element(by.id('createNewGroupBtn'))).not.toBeVisible();
       // if group was created successfully we should be back at the Groups screen
       await expectGroupsScreen();
       // there should be exactly two groups now
@@ -204,19 +204,8 @@ describe('Groups', () => {
       // refresh
       await element(by.id('groupsFlatList')).swipe('down');
 
-      // Text changes to "Known members: " when all invited people have joined
-
-      await waitFor(
-        element(by.text(i18next.t('groups.label.knownMembers'))).atIndex(0),
-      )
-        .toExist()
-        .withTimeout(20000);
-
-      await waitFor(
-        element(by.text(i18next.t('groups.label.knownMembers'))).atIndex(1),
-      )
-        .toExist()
-        .withTimeout(20000);
+      // there should be 3 known members in second group
+      expect(element(by.id('groupMembersCount-1'))).toHaveText('3 ');
     });
   });
 

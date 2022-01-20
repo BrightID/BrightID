@@ -8,6 +8,7 @@ import {
   Linking,
 } from 'react-native';
 import { useTranslation, Trans } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { WHITE, BLUE, DARKER_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
@@ -21,8 +22,10 @@ const handleLearnMore = () => {
   );
 };
 
-export const NoGroups = ({ navigation }) => {
+export const NoGroups = () => {
   const { t } = useTranslation();
+  const navigation = useNavigation();
+
   return (
     <View style={styles.noContainer} testID="noGroupsView">
       <View style={styles.noGroupsInfo}>

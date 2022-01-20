@@ -196,3 +196,7 @@ type SponsorshipInfo = {
   appHasAuthorized: boolean;
   spendRequested: boolean;
 };
+
+type GetRecoveryRes = {
+  data: string;
+};

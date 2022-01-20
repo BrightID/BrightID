@@ -6,25 +6,19 @@ import {
   View,
   FlatList,
 } from 'react-native';
-import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
-import store from '@/store';
-import emitter from '@/emitter';
-import { clearNewGroupInvitees } from '@/actions';
+import { useTranslation } from 'react-i18next';
+import Spinner from 'react-native-spinkit';
+import i18next from 'i18next';
+import { useContext, useState } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import store, { useSelector } from '@/store';
 import { BLUE, LIGHT_GREY, ORANGE, WHITE } from '@/theme/colors';
 import { DEVICE_LARGE, DEVICE_TYPE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
-import { connectionsSelector } from '@/utils/connectionsSelector';
-import { createSelector } from '@reduxjs/toolkit';
-import Spinner from 'react-native-spinkit';
-import i18next from 'i18next';
 import { NodeApiContext } from '@/components/NodeApiGate';
 import { createNewGroup } from '../actions';
-import NewGroupCard from './NewGroupCard';
-
-// type State = {
-//   creating: boolean,
-// };
+import { NewGroupCard } from './NewGroupCard';
+import { connectionsSelector } from '@/utils/connectionsSelector';
 
 const ITEM_HEIGHT = DEVICE_LARGE ? 94 : 80;
 const ITEM_MARGIN = DEVICE_LARGE ? 11.8 : 6;
@@ -35,13 +29,6 @@ const getItemLayout = (data, index) => ({
   index,
 });
 
-const verifiedConnectionsSelector = createSelector(
-  connectionsSelector,
-  (connections) => {
-    return connections.filter((conn) => conn?.status === 'verified');
-  },
-);
-
 const creationStateStrings = {
   uploadingGroupPhoto: i18next.t(
     'groups.state.uploadingGroupPhoto',
@@ -50,7 +37,134 @@ const creationStateStrings = {
   creatingGroup: i18next.t('groups.state.creatingGroup', 'creating the group…'),
 };
 
-export class NewGroupScreen extends React.Component {
+export const NewGroupScreen = () => {
+  const api = useContext(NodeApiContext);
+  const navigation = useNavigation();
+  const route = useRoute() as {
+    params?: { photo: string; name: string };
+  };
+  const { t } = useTranslation();
+  const [creating, setCreating] = useState(false);
+  const [creationState, setCreationState] = useState('uploadingGroupPhoto');
+  const connections = useSelector((state) => connectionsSelector(state, []));
+  const [newGroupInvitees, setNewGroupInvitees] = useState<Array<string>>([]);
+
+  const createGroup = async () => {
+    try {
+      setCreating(true);
+      const { photo, name } = route.params;
+      const res = await store.dispatch(
+        createNewGroup(photo, name, api, newGroupInvitees, setCreationState),
+      );
+      if (res) {
+        navigation.navigate('Groups');
+      } else {
+        setCreating(false);
+      }
+    } catch (err) {
+      setCreating(false);
+    }
+  };
+
+  const cardIsSelected = (connection: Connection) => {
+    return newGroupInvitees.includes(connection.id);
+  };
+
+  const toggleNewGroupInvitee = (id: string) => {
+    const invitees = [...newGroupInvitees];
+    const index = invitees.indexOf(id);
+    if (index >= 0) {
+      invitees.splice(index, 1);
+    } else {
+      invitees.push(id);
+    }
+    setNewGroupInvitees(invitees);
+  };
+
+  const renderConnection = ({ item }: { item: Connection }) => (
+    <NewGroupCard
+      id={item.id}
+      connectionDate={item.connectionDate}
+      name={item.name}
+      photo={item.photo}
+      selected={cardIsSelected(item)}
+      toggleInvitee={toggleNewGroupInvitee}
+    />
+  );
+
+  const renderButtonOrSpinner = () => {
+    const skip = newGroupInvitees.length < 1;
+    return !creating ? (
+      <View style={styles.createGroupButtonContainer}>
+        <TouchableOpacity
+          testID="createNewGroupBtn"
+          onPress={createGroup}
+          style={
+            skip
+              ? { ...styles.createGroupButton, ...styles.skipButton }
+              : styles.createGroupButton
+          }
+        >
+          <Text style={styles.buttonInnerText}>
+            {skip
+              ? t('createGroup.button.skip')
+              : t('createGroup.button.createGroup')}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    ) : (
+      <View style={styles.loader}>
+        <Text style={styles.textInfo}>
+          {creationStateStrings[creationState]}
+        </Text>
+        <Spinner isVisible={true} size={97} type="Wave" color={BLUE} />
+      </View>
+    );
+  };
+
+  return (
+    <>
+      <View style={styles.orangeTop} />
+      <View style={styles.container}>
+        <View testID="newGroupScreen" style={styles.mainContainer}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleText}>
+              {t('createGroup.label.invitees')}
+            </Text>
+            <Text style={styles.infoText}>
+              {t('createGroup.text.invitees')}
+            </Text>
+          </View>
+          <View style={styles.mainContainer}>
+            {connections.length > 0 ? (
+              <FlatList
+                extraData={newGroupInvitees}
+                style={styles.connectionsContainer}
+                contentContainerStyle={{ paddingBottom: 50, flexGrow: 1 }}
+                data={connections}
+                keyExtractor={({ id }, index) => id + index}
+                renderItem={renderConnection}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                getItemLayout={getItemLayout}
+              />
+            ) : (
+              <View>
+                <Text style={styles.emptyText}>
+                  {t('createGroup.text.noConnections')}
+                </Text>
+              </View>
+            )}
+          </View>
+        </View>
+        {renderButtonOrSpinner()}
+      </View>
+    </>
+  );
+};
+
+/*
+export class NewGroupScreen_ extends React.Component {
   // make api available through this.context
   static contextType = NodeApiContext;
 
@@ -87,9 +201,8 @@ export class NewGroupScreen extends React.Component {
       this.setState({ creating: true });
       const api = this.context;
       const { route, navigation } = this.props;
-      const { photo, name, isPrimary } = route.params;
-      const type = isPrimary ? 'primary' : 'general';
-      const res = await store.dispatch(createNewGroup(photo, name, type, api));
+      const { photo, name } = route.params;
+      const res = await store.dispatch(createNewGroup(photo, name, api));
       if (res) {
         navigation.navigate('Groups');
       } else {
@@ -115,11 +228,9 @@ export class NewGroupScreen extends React.Component {
           }
         >
           <Text style={styles.buttonInnerText}>
-            {
-              skip
+            {skip
               ? t('createGroup.button.skip')
-              : t('createGroup.button.createGroup')
-            }
+              : t('createGroup.button.createGroup')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -185,6 +296,8 @@ export class NewGroupScreen extends React.Component {
     );
   }
 }
+
+ */
 
 const styles = StyleSheet.create({
   orangeTop: {
@@ -253,15 +366,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: 'center',
   },
-  connectionCard: {
-    marginBottom: 0,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0,
-    shadowRadius: 0,
-    borderBottomWidth: 1,
-    borderBottomColor: LIGHT_GREY,
-    width: '100%',
-  },
   createGroupButtonContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -295,8 +399,3 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
 });
-
-export default connect((state) => ({
-  newGroupInvitees: state.groups.newGroupInvitees,
-  connections: verifiedConnectionsSelector(state),
-}))(withTranslation()(NewGroupScreen));
