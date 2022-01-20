@@ -13,9 +13,10 @@ import { GroupPhoto } from '@/components/Groups/GroupPhoto';
  */
 type GroupCardProps = {
   group: Group;
+  index: number;
 };
 
-export const GroupCard = ({ group }: GroupCardProps) => {
+export const GroupCard = ({ group, index }: GroupCardProps) => {
   const { t } = useTranslation();
   const [unknownsCount, setUnknownsCount] = useState(0);
 
@@ -46,7 +47,10 @@ export const GroupCard = ({ group }: GroupCardProps) => {
             <Text style={styles.membersLabel}>
               {t('groups.label.knownMembers')}
             </Text>
-            <Text style={styles.membersKnown}>
+            <Text
+              style={styles.membersKnown}
+              testID={`groupMembersCount-${index}`}
+            >
               {group.members.length - unknownsCount}{' '}
             </Text>
             <Text style={styles.membersLabel}>

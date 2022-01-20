@@ -56,7 +56,7 @@ export const GroupsScreen = () => {
         testID={`groupItem-${index}`}
         onPress={() => navigation.navigate('Members', { group: item })}
       >
-        <GroupCard group={item} />
+        <GroupCard group={item} index={index} />
       </TouchableOpacity>
     );
   };
