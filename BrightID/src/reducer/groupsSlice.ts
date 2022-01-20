@@ -1,8 +1,6 @@
-import { difference } from 'ramda';
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RESET_STORE } from '@/actions/resetStore';
 import { INVITE_ACCEPTED, INVITE_REJECTED } from '@/utils/constants';
-import { selectAllConnections } from '@/reducer/connectionsSlice';
 import { RootState } from '@/store';
 import { toSearchString } from '@/utils/strings';
 import { getGroupName, ids2connections, knownMemberIDs } from '@/utils/groups';
@@ -11,7 +9,6 @@ import { compareCreatedDesc } from '@/components/Groups/models/sortingUtility';
 /* ******** INITIAL STATE ************** */
 
 const initialState: GroupsState = {
-  newGroupInvitees: [],
   groups: [],
   invites: [],
   searchParam: '',
@@ -35,12 +32,6 @@ const groupsSlice = createSlice({
       state.groups = state.groups.filter(
         (group) => group.id !== action.payload.id,
       );
-    },
-    setNewGroupInvitees(state, action: PayloadAction<string[]>) {
-      state.newGroupInvitees = action.payload;
-    },
-    clearNewGroupInvitees(state) {
-      state.newGroupInvitees = [];
     },
     setGroups(state, action: PayloadAction<Group[]>) {
       state.groups = action.payload;
@@ -190,13 +181,10 @@ export const filteredGroupsSelector = createSelector(
   },
 );
 
-// Export channel actions
 export const {
   createGroup,
   updateGroup,
   deleteGroup,
-  setNewGroupInvitees,
-  clearNewGroupInvitees,
   setGroups,
   updateMemberships,
   joinGroup,

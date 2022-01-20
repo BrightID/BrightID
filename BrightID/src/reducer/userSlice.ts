@@ -24,7 +24,7 @@ const userSlice = createSlice({
     setPhoto(state, action) {
       state.photo = action.payload;
     },
-    setSearchParam(state, action) {
+    setSearchParam(state, action: PayloadAction<string>) {
       state.searchParam = action.payload;
     },
     setEula(state, action) {

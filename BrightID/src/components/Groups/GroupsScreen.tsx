@@ -110,7 +110,7 @@ export const GroupsScreen = () => {
                     {t('groups.text.noGroupsMatchSearch')}
                   </Text>
                 ) : (
-                  <NoGroups navigation={navigation} />
+                  <NoGroups />
                 )
               }
             />
