@@ -173,7 +173,8 @@
       "connectionLevel": "連接級別",
       "mutualConnections": "互相連接",
       "mutualGroups": "關聯團隊",
-      "possibleDuplicates": "可能的重複"
+      "possibleDuplicates": "可能的重複",
+      "socialMedia": "社交媒體"
     },
     "tags": {
       "connectedAt": "已連接{{date}}",

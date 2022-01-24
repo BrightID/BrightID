@@ -145,7 +145,7 @@ declare global {
     groupsNum: number;
     mutualConnections: string[];
     existingConnection: Connection;
-    socialMedia: string[];
+    socialMedia: SocialMedia[];
     mutualGroups: string[];
     createdAt: number;
     profileTimestamp: number;
@@ -182,11 +182,28 @@ declare global {
     url: URL;
   };
 
-  type SocialMediaId = keyof typeof socialMediaList;
+  // We are sure that these properties are
+  // shared in old or new versions of app
+  interface SocialMediaCompanyShared {
+    name: string,
+    shareType: string,
+  }
+
+  type SocialMediaCompany = SocialMediaCompanyShared  & {
+    icon: any,
+    iconGrayscale: any,
+    urlBuilder: (profile: string) => string,
+  }
+
+  type SocialMediaId = string;
+
+  type SocialMediaList = {
+      [key: SocialMediaId]: SocialMediaCompany
+  }
 
   type SocialMedia = {
     id: SocialMediaId;
-    company: ValueOf<typeof socialMediaList>;
+    company: SocialMediaCompanyShared;
     order: number;
     profile: string;
     profileDisplayWidth?: number | string;

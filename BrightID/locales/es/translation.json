@@ -195,7 +195,8 @@
       "connectionLevel": "Nivel de Conexión",
       "mutualConnections": "Conexiones Mutuas",
       "mutualGroups": "Grupos Mutuos",
-      "possibleDuplicates": "Posibles Duplicados"
+      "possibleDuplicates": "Posibles Duplicados",
+      "socialMedia": "Redes sociales"
     },
     "tags": {
       "connectedAt": "Conectado {{date}}",

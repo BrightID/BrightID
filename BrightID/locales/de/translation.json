@@ -206,7 +206,7 @@
       "connectionLevel": "Verbindungsstufe",
       "mutualConnections": "Gemeinsame Verbindungen",
       "mutualGroups": "Gemeinsame Gruppen",
-      "possibleDuplicates": "Mögliche Duplikate"
+      "socialMedia": "Sozialen Medien"
     },
     "tags": {
       "connectedAt": "Verbunden {{date}}",

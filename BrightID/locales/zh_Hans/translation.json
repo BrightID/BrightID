@@ -194,7 +194,8 @@
       "connectionLevel": "联系人熟悉程度",
       "mutualConnections": "共同联系人",
       "mutualGroups": "共同群组",
-      "possibleDuplicates": "可能的重复"
+      "possibleDuplicates": "可能的重复",
+      "socialMedia": "社交媒体"
     },
     "tags": {
       "connectedAt": "建立联系的 {{date}}",

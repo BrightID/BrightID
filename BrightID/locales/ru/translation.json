@@ -207,7 +207,8 @@
       "mutualConnections": "Общие подключения",
       "mutualGroups": "Общие группы",
       "recoveryConnections": "Связи для восстановления",
-      "possibleDuplicates": "Возможные дубликаты"
+      "possibleDuplicates": "Возможные дубликаты",
+      "socialMedia": "Социальные медиа"
     },
     "tags": {
       "connectedAt": "Подключено {{date}}",

@@ -176,7 +176,8 @@
       "connectionLevel": "سطح کانکشن",
       "mutualConnections": "کانکشن های مشترک",
       "mutualGroups": "گروه های مشترک",
-      "possibleDuplicates": "موارد تکراری احتمالی"
+      "possibleDuplicates": "موارد تکراری احتمالی",
+      "socialMedia": "شبکه های اجتماعی"
     },
     "tags": {
       "connectedAt": "{{date}} با هم کانکشن زدید",

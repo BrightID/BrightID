@@ -8,6 +8,8 @@ import {
   TouchableWithoutFeedback,
   View,
   SectionList,
+  Linking,
+  FlatList,
 } from 'react-native';
 import {
   selectAllConnections,
@@ -36,6 +38,9 @@ import TrustLevelView from './TrustLevelView';
 import { useSelector } from '@/store';
 import { connectionsSelector } from '@/utils/connectionsSelector';
 import stringSimilarity from '@/utils/stringSimilarity';
+import { SvgXml } from 'react-native-svg';
+import socialMediaList from '../EditProfile/socialMediaList';
+import { element } from 'prop-types';
 
 /**
  Connection details screen
@@ -53,11 +58,25 @@ type Props = {
   loading: boolean;
 };
 
+type SocialMediaOnConnectionPage = {
+  id: SocialMediaId,
+  icon: any,
+  profileUrl: string | null,
+}
+
 interface Section {
   title: string;
-  data: Array<Connection | Group>;
-  key: string;
+  data: Array<Connection | Group | SocialMediaOnConnectionPage[]>;
+  key: ConnectionScreenSectionKeys;
   numEntries: number;
+}
+
+enum ConnectionScreenSectionKeys {
+  CONNECTIONS = 'connections',
+  GROUPS = 'groups',
+  RECOVERY_CONNECTIONS = 'recoveryConnections',
+  DUPLICATES = 'duplicates',
+  SOCIAL_MEDIA = 'socialMedia'
 }
 
 function ConnectionScreen(props: Props) {
@@ -78,7 +97,11 @@ function ConnectionScreen(props: Props) {
   const [recoveryConnectionsCollapsed, setRecoveryConnectionsCollapsed] =
     useState(true);
   const [possibleDuplicatesCollapsed, setPossibleDuplicatesCollapsed] = useState(true);
+  const [socailMediaCollapsed, setSocialMediaCollapsed] = useState(true);
   const [possibleDuplicates, setPossibleDuplicates] = useState([]);
+  const [connectionSocailMedia, setConnectionSocailMedia] =
+    useState<SocialMediaOnConnectionPage[]>([]);
+
   useEffect(() => {
     setPossibleDuplicates(myConnections.filter(
       conn =>
@@ -87,21 +110,40 @@ function ConnectionScreen(props: Props) {
       )
     );
   }, [myConnections])
+
+
+  useEffect(() => {
+    let socialMediaOnConnectionPage : SocialMediaOnConnectionPage[] = [];
+    for (const socialMediaId in socialMediaList) {
+      const element = socialMediaList[socialMediaId];
+      const profile = connection.socialMedia?.find(s => s.id == socialMediaId)?.profile
+      socialMediaOnConnectionPage.push({
+        id: socialMediaId,
+        icon: profile ? element.icon : element.iconGrayscale,
+        profileUrl: profile ? element.urlBuilder(profile) : null
+      })
+    }
+    console.log(socialMediaOnConnectionPage);
+    setConnectionSocailMedia(socialMediaOnConnectionPage)
+  }, [connection])
   const { t } = useTranslation();
 
   const toggleSection = (key) => {
     switch (key) {
-      case 'connections':
+      case ConnectionScreenSectionKeys.CONNECTIONS:
         setConnectionsCollapsed(!connectionsCollapsed);
         break;
-      case 'groups':
+      case ConnectionScreenSectionKeys.GROUPS:
         setGroupsCollapsed(!groupsCollapsed);
         break;
-      case 'recoveryConnections':
+      case ConnectionScreenSectionKeys.RECOVERY_CONNECTIONS:
         setRecoveryConnectionsCollapsed(!recoveryConnectionsCollapsed);
         break;
-      case 'duplicates':
+      case ConnectionScreenSectionKeys.DUPLICATES:
         setPossibleDuplicatesCollapsed(!possibleDuplicatesCollapsed);
+        break;
+      case ConnectionScreenSectionKeys.SOCIAL_MEDIA:
+        setSocialMediaCollapsed(!socailMediaCollapsed);
         break;
     }
   };
@@ -115,26 +157,32 @@ function ConnectionScreen(props: Props) {
       {
         title: t('connectionDetails.label.mutualConnections'),
         data: connectionsCollapsed ? [] : mutualConnections,
-        key: 'connections',
+        key: ConnectionScreenSectionKeys.CONNECTIONS,
         numEntries: mutualConnections.length,
       },
       {
         title: t('connectionDetails.label.mutualGroups'),
         data: groupsCollapsed ? [] : mutualGroups,
-        key: 'groups',
+        key: ConnectionScreenSectionKeys.GROUPS,
         numEntries: mutualGroups.length,
       },
       {
         title: t('connectionDetails.label.recoveryConnections'),
         data: recoveryConnectionsCollapsed ? [] : recoveryConnections,
-        key: 'recoveryConnections',
+        key: ConnectionScreenSectionKeys.RECOVERY_CONNECTIONS,
         numEntries: recoveryConnections.length,
       },
       {
         title: t('connectionDetails.label.possibleDuplicates'),
         data: possibleDuplicatesCollapsed ? [] : possibleDuplicates,
-        key: 'duplicates',
+        key: ConnectionScreenSectionKeys.DUPLICATES,
         numEntries: possibleDuplicates.length,
+      },
+      {
+        title: t('connectionDetails.label.socialMedia'),
+        data: socailMediaCollapsed ? [] : [connectionSocailMedia],
+        key: ConnectionScreenSectionKeys.SOCIAL_MEDIA,
+        numEntries: connectionSocailMedia.filter(s => !!s.profileUrl).length,
       },
     ];
     return data;
@@ -147,7 +195,9 @@ function ConnectionScreen(props: Props) {
     recoveryConnectionsCollapsed,
     recoveryConnections,
     possibleDuplicatesCollapsed,
-    possibleDuplicates
+    possibleDuplicates,
+    connectionSocailMedia,
+    socailMediaCollapsed
   ]);
 
   const renderSticker = () => {
@@ -255,8 +305,11 @@ function ConnectionScreen(props: Props) {
     );
 
   const renderItem = ({ item, index, section }) => {
-    if (section.key === 'recoveryConnections') {
+    if (section.key === ConnectionScreenSectionKeys.RECOVERY_CONNECTIONS) {
       return renderRecoveryItem({ item, index });
+    }
+    if (section.key == ConnectionScreenSectionKeys.SOCIAL_MEDIA) {
+      return renderSocialMediaList({ item, index });
     }
     const testID = `${section.key}-${index}`;
     console.log(
@@ -270,6 +323,38 @@ function ConnectionScreen(props: Props) {
         </View>
       </View>
     );
+  };
+
+
+  const renderSocialMediaList = ({ item, index } : {item: SocialMediaOnConnectionPage[], index: number}) => {
+    return (
+      <FlatList
+        columnWrapperStyle={styles.socialMediaListColumn}
+        data={item}
+        numColumns={5}
+        renderItem={renderSocialMediaListItem}
+        keyExtractor={socialMediaListKeyExtractor}
+      />
+    )
+  };
+
+  const socialMediaListKeyExtractor = (item: SocialMediaOnConnectionPage) => {
+    return item.id
+  }
+
+  const renderSocialMediaListItem = ({ item }: {item: SocialMediaOnConnectionPage}) => {
+    const testID = 'social-media-section'
+    return (
+      <TouchableWithoutFeedback
+        onPress={item.profileUrl ? () => Linking.openURL(item.profileUrl) : null  }
+      >
+        <SvgXml
+          xml={item.icon}
+          width={DEVICE_LARGE ? 36 : 32}
+          height={DEVICE_LARGE ? 36 : 32}
+        />
+      </TouchableWithoutFeedback>
+    )
   };
 
   const renderRecoveryItem = ({ item, index }) => {
@@ -347,17 +432,20 @@ function ConnectionScreen(props: Props) {
   const renderSectionHeader = ({ section }: { section: Section }) => {
     let collapsed;
     switch (section.key) {
-      case 'connections':
+      case ConnectionScreenSectionKeys.CONNECTIONS:
         collapsed = connectionsCollapsed;
         break;
-      case 'groups':
+      case ConnectionScreenSectionKeys.GROUPS:
         collapsed = groupsCollapsed;
         break;
-      case 'recoveryConnections':
+      case ConnectionScreenSectionKeys.RECOVERY_CONNECTIONS:
         collapsed = recoveryConnectionsCollapsed;
         break;
-      case 'duplicates':
+      case ConnectionScreenSectionKeys.DUPLICATES:
         collapsed = possibleDuplicatesCollapsed;
+        break;
+      case ConnectionScreenSectionKeys.SOCIAL_MEDIA:
+        collapsed = socailMediaCollapsed;
         break;
     }
     return (
@@ -425,6 +513,13 @@ const ItemSeparator = () => {
 };
 
 const styles = StyleSheet.create({
+  socialMediaListColumn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    marginRight: 10,
+    marginBottom: DEVICE_LARGE ? 8 : 6,
+  },
   orangeTop: {
     backgroundColor: ORANGE,
     height: DEVICE_LARGE ? 70 : 65,
