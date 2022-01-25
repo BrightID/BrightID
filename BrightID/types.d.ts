@@ -10,6 +10,7 @@ import { connection_levels } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
 import { socialMediaList } from '@/components/EditProfile/socialMediaList';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
+import { SocialMediaShareActionType } from '@/components/EditProfile/socialMediaList';
 
 declare global {
   type EntityState<T> = _EntityState<T>;
@@ -187,12 +188,13 @@ declare global {
   interface SocialMediaCompanyShared {
     name: string,
     shareType: string,
+    shareTypeDisplay: string,
   }
 
   type SocialMediaCompany = SocialMediaCompanyShared  & {
     icon: any,
     iconGrayscale: any,
-    urlBuilder: (profile: string) => string,
+    getShareAction: (profile: string) => SocialMediaShareAction,
   }
 
   type SocialMediaId = string;
@@ -208,6 +210,11 @@ declare global {
     profile: string;
     profileDisplayWidth?: number | string;
   };
+
+  type SocialMediaShareAction = {
+    actionType: SocialMediaShareActionType,
+    data: string,
+  }
 
   type SocialMediaState = EntityState<SocialMedia>;
 

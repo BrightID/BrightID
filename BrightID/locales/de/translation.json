@@ -213,6 +213,7 @@
       "loading": "Wird geladen …"
     },
     "text": {
+      "copied": "In die Zwischenablage kopiert!",
       "level": "Wie gut kennst du {{name}}?",
       "levelAlreadyKnown": "Ich kenne diese Person bereits",
       "levelJustMet": "Diese Person ist ein Fremder, den ich gerade getroffen habe",

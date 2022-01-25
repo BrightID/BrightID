@@ -202,6 +202,7 @@
       "loading": "加载中…"
     },
     "text": {
+      "copied": "复制到剪贴板！",
       "level": "你有多了解 {{name}}？",
       "levelAlreadyKnown": "我已经了解这个人",
       "levelJustMet": "这是我刚添加的陌生人",

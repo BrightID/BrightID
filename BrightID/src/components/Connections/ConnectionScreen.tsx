@@ -10,6 +10,9 @@ import {
   SectionList,
   Linking,
   FlatList,
+  Platform,
+  ToastAndroid,
+  Alert
 } from 'react-native';
 import {
   selectAllConnections,
@@ -39,8 +42,9 @@ import { useSelector } from '@/store';
 import { connectionsSelector } from '@/utils/connectionsSelector';
 import stringSimilarity from '@/utils/stringSimilarity';
 import { SvgXml } from 'react-native-svg';
-import socialMediaList from '../EditProfile/socialMediaList';
+import socialMediaList, { SocialMediaShareActionType } from '@/components/EditProfile/socialMediaList';
 import { element } from 'prop-types';
+import Clipboard from '@react-native-community/clipboard';
 
 /**
  Connection details screen
@@ -61,7 +65,7 @@ type Props = {
 type SocialMediaOnConnectionPage = {
   id: SocialMediaId,
   icon: any,
-  profileUrl: string | null,
+  shareAction: SocialMediaShareAction | null,
 }
 
 interface Section {
@@ -120,7 +124,7 @@ function ConnectionScreen(props: Props) {
       socialMediaOnConnectionPage.push({
         id: socialMediaId,
         icon: profile ? element.icon : element.iconGrayscale,
-        profileUrl: profile ? element.urlBuilder(profile) : null
+        shareAction: profile ? element.getShareAction(profile) : null
       })
     }
     console.log(socialMediaOnConnectionPage);
@@ -182,7 +186,7 @@ function ConnectionScreen(props: Props) {
         title: t('connectionDetails.label.socialMedia'),
         data: socailMediaCollapsed ? [] : [connectionSocailMedia],
         key: ConnectionScreenSectionKeys.SOCIAL_MEDIA,
-        numEntries: connectionSocailMedia.filter(s => !!s.profileUrl).length,
+        numEntries: connectionSocailMedia.filter(s => !!s.shareAction).length,
       },
     ];
     return data;
@@ -344,10 +348,23 @@ function ConnectionScreen(props: Props) {
   }
 
   const renderSocialMediaListItem = ({ item }: {item: SocialMediaOnConnectionPage}) => {
-    const testID = 'social-media-section'
     return (
       <TouchableWithoutFeedback
-        onPress={item.profileUrl ? () => Linking.openURL(item.profileUrl) : null  }
+        onPress={() => {
+          if(item.shareAction){
+            const data = item.shareAction.data;
+            if(item.shareAction.actionType == SocialMediaShareActionType.OPEN_LINK) {
+              Linking.openURL(data)
+            } else if(item.shareAction.actionType == SocialMediaShareActionType.COPY) {
+              Clipboard.setString(data);
+              if (Platform.OS === 'android') {
+                ToastAndroid.show(t('connectionDetails.text.copied'), ToastAndroid.LONG)
+              } else {
+                Alert.alert(t('connectionDetails.text.copied'));
+              }
+            }
+          }
+        }}
       >
         <SvgXml
           xml={item.icon}

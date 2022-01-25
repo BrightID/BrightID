@@ -181,6 +181,7 @@
       "loading": "加載中…"
     },
     "text": {
+      "copied": "已復製到剪貼板！",
       "level": "您對{{name}}瞭解多少？",
       "levelAlreadyKnown": "我認識這個人",
       "levelJustMet": "剛認識的陌生人",
