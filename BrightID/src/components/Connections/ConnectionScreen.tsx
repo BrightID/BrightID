@@ -329,6 +329,7 @@ function ConnectionScreen(props: Props) {
   const renderSocialMediaList = ({ item, index } : {item: SocialMediaOnConnectionPage[], index: number}) => {
     return (
       <FlatList
+        style={styles.socialMediaList}
         columnWrapperStyle={styles.socialMediaListColumn}
         data={item}
         numColumns={5}
@@ -350,8 +351,8 @@ function ConnectionScreen(props: Props) {
       >
         <SvgXml
           xml={item.icon}
-          width={DEVICE_LARGE ? 36 : 32}
-          height={DEVICE_LARGE ? 36 : 32}
+          width={DEVICE_LARGE ? 40 : 36}
+          height={DEVICE_LARGE ? 40 : 36}
         />
       </TouchableWithoutFeedback>
     )
@@ -513,12 +514,17 @@ const ItemSeparator = () => {
 };
 
 const styles = StyleSheet.create({
+  socialMediaList: {
+    marginTop: DEVICE_LARGE ? 8 : 6,
+    marginBottom: DEVICE_LARGE ? 8 : 6,
+  },
   socialMediaListColumn: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     marginRight: 10,
-    marginBottom: DEVICE_LARGE ? 8 : 6,
+    marginTop: DEVICE_LARGE ? 10 : 8,
+    marginBottom: DEVICE_LARGE ? 10 : 8,
   },
   orangeTop: {
     backgroundColor: ORANGE,
