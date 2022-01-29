@@ -193,7 +193,6 @@ declare global {
 
   type SocialMediaCompany = SocialMediaCompanyShared  & {
     icon: any,
-    iconGrayscale: any,
     getShareAction: (profile: string) => SocialMediaShareAction,
   }
 

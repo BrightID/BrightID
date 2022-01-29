@@ -1,24 +1,14 @@
 // uuid's generated via npx uuid
 import RedditIcon from '@/static/socialmedia/icons8-reddit.svg'
-import RedditIconGrayscale from '@/static/socialmedia/grayscale/icons8-reddit-grayscale.svg'
 import LinkedinIcon from '@/static/socialmedia/icons8-linkedin.svg'
-import LinkedinIconGrayscale from '@/static/socialmedia/grayscale/icons8-linkedin-grayscale.svg'
 import WhatsappIcon from '@/static/socialmedia/icons8-whatsapp.svg'
-import WhatsappIconGrayscale from '@/static/socialmedia/grayscale/icons8-whatsapp-grayscale.svg'
 import InstagramIcon from '@/static/socialmedia/icons8-instagram.svg'
-import InstagramIconGrayscale from '@/static/socialmedia/grayscale/icons8-instagram-grayscale.svg'
 import SignalIcon from '@/static/socialmedia/icons8-signal-app.svg'
-import SignalIconGrayscale from '@/static/socialmedia/grayscale/icons8-signal-app-grayscale.svg'
 import TelegramIcon from '@/static/socialmedia/icons8-telegram-app.svg'
-import TelegramIconGrayscale from '@/static/socialmedia/grayscale/icons8-telegram-app-grayscale.svg'
 import DiscordIcon from '@/static/socialmedia/icons8-discord-bubble.svg'
-import DiscordIconGrayscale from '@/static/socialmedia/grayscale/icons8-discord-bubble-grayscale.svg'
 import KeybaseIcon from '@/static/socialmedia/Keybase_logo_official.svg'
-import KeybaseIconGrayscale from '@/static/socialmedia/grayscale/Keybase_logo_official-grayscale.svg'
 import MediumIcon from '@/static/socialmedia/icons8-medium-monogram.svg'
-import MediumIconGrayscale from '@/static/socialmedia/grayscale/icons8-medium-monogram-grayscale.svg'
 import TwitterIcon from '@/static/socialmedia/icons8-twitter-circled.svg'
-import TwitterIconGrayscale from '@/static/socialmedia/grayscale/icons8-twitter-circled-grayscale.svg'
 
 const isPhoneNumber = (profile: string): boolean => {
   const c = profile[0]
@@ -31,7 +21,6 @@ export const socialMediaList : SocialMediaList = {
     shareType: 'username',
     shareTypeDisplay: 'username',
     icon: DiscordIcon,
-    iconGrayscale: DiscordIconGrayscale,
     getShareAction: (profile: string) : SocialMediaShareAction => {
       return {
         actionType: SocialMediaShareActionType.COPY,
@@ -44,7 +33,6 @@ export const socialMediaList : SocialMediaList = {
     shareType: 'username',
     shareTypeDisplay: 'username',
     icon: InstagramIcon,
-    iconGrayscale: InstagramIconGrayscale,
     getShareAction: (profile: string) : SocialMediaShareAction => ({
       actionType: SocialMediaShareActionType.OPEN_LINK,
       data: `https://instagram.com/${profile}/`
@@ -55,7 +43,6 @@ export const socialMediaList : SocialMediaList = {
     shareType: 'username',
     shareTypeDisplay: 'username',
     icon: KeybaseIcon,
-    iconGrayscale: KeybaseIconGrayscale,
     getShareAction: (profile: string) : SocialMediaShareAction => ({
       actionType: SocialMediaShareActionType.OPEN_LINK,
       data: `https://keybase.io/${profile}/`
@@ -66,7 +53,6 @@ export const socialMediaList : SocialMediaList = {
     shareType: 'url',
     shareTypeDisplay: 'url',
     icon: LinkedinIcon,
-    iconGrayscale: LinkedinIconGrayscale,
     getShareAction: (profile: string) : SocialMediaShareAction => ({
       actionType: SocialMediaShareActionType.OPEN_LINK,
       data: `https://www.linkedin.com/in/${profile}/`
@@ -77,7 +63,6 @@ export const socialMediaList : SocialMediaList = {
     shareType: 'url',
     shareTypeDisplay: 'url',
     icon: MediumIcon,
-    iconGrayscale: MediumIconGrayscale,
     getShareAction: (profile: string) : SocialMediaShareAction => ({
       actionType: SocialMediaShareActionType.OPEN_LINK,
       data: `${profile}`
@@ -88,7 +73,6 @@ export const socialMediaList : SocialMediaList = {
     shareType: 'username',
     shareTypeDisplay: 'username',
     icon: RedditIcon,
-    iconGrayscale: RedditIconGrayscale,
     getShareAction: (profile: string) : SocialMediaShareAction => ({
       actionType: SocialMediaShareActionType.OPEN_LINK,
       data: `https://www.reddit.com/user/${profile}/`
@@ -99,7 +83,6 @@ export const socialMediaList : SocialMediaList = {
     shareType: 'telephone #',
     shareTypeDisplay: 'telephone #',
     icon: SignalIcon,
-    iconGrayscale: SignalIconGrayscale,
     getShareAction: (profile: string) : SocialMediaShareAction => ({
       actionType: SocialMediaShareActionType.OPEN_LINK,
       data: `${profile}`
@@ -110,7 +93,6 @@ export const socialMediaList : SocialMediaList = {
     shareType: 'telephone #',
     shareTypeDisplay: 'username or telephone',
     icon: TelegramIcon,
-    iconGrayscale: TelegramIconGrayscale,
     getShareAction: (profile: string) : SocialMediaShareAction => (
     isPhoneNumber(profile) ? {
       actionType: SocialMediaShareActionType.COPY,
@@ -125,7 +107,6 @@ export const socialMediaList : SocialMediaList = {
     shareType: 'username',
     shareTypeDisplay: 'username',
     icon: TwitterIcon,
-    iconGrayscale: TwitterIconGrayscale,
     getShareAction: (profile: string) : SocialMediaShareAction => ({
       actionType: SocialMediaShareActionType.OPEN_LINK,
       data: `https://twitter.com/${profile}/`
@@ -136,7 +117,6 @@ export const socialMediaList : SocialMediaList = {
     shareType: 'telephone #',
     shareTypeDisplay: 'telephone #',
     icon: WhatsappIcon,
-    iconGrayscale: WhatsappIconGrayscale,
     getShareAction: (profile: string) : SocialMediaShareAction => ({
       actionType: SocialMediaShareActionType.OPEN_LINK,
       data: `https://wa.me/${profile}/`

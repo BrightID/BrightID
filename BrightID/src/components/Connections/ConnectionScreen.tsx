@@ -121,11 +121,13 @@ function ConnectionScreen(props: Props) {
     for (const socialMediaId in socialMediaList) {
       const element = socialMediaList[socialMediaId];
       const profile = connection.socialMedia?.find(s => s.id == socialMediaId)?.profile
-      socialMediaOnConnectionPage.push({
-        id: socialMediaId,
-        icon: profile ? element.icon : element.iconGrayscale,
-        shareAction: profile ? element.getShareAction(profile) : null
-      })
+      if(profile) {
+        socialMediaOnConnectionPage.push({
+          id: socialMediaId,
+          icon: element.icon,
+          shareAction: element.getShareAction(profile)
+        })
+      }
     }
     console.log(socialMediaOnConnectionPage);
     setConnectionSocailMedia(socialMediaOnConnectionPage)
@@ -538,7 +540,7 @@ const styles = StyleSheet.create({
   socialMediaListColumn: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
     marginRight: 10,
     marginTop: DEVICE_LARGE ? 10 : 8,
     marginBottom: DEVICE_LARGE ? 10 : 8,
