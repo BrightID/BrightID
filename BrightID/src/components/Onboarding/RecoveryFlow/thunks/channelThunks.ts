@@ -7,7 +7,6 @@ import {
   downloadGroups,
   downloadSigs,
   downloadNamePhoto,
-  checkCompletedFlags,
 } from './channelDownloadThunks';
 import {
   resetChannelExpiration,
@@ -127,7 +126,4 @@ export const checkChannel = () => async (
   // process signatures uploaded to the channel
   // returns true if downloading sigs this cycle
   await dispatch(downloadSigs({ channelApi, dataIds }));
-
-  // process completed flags uploaded to the channel
-  await dispatch(checkCompletedFlags({ channelApi, dataIds }));
 };

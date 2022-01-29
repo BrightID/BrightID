@@ -17,10 +17,8 @@ import { WHITE, BLACK, DARKER_GREY, ORANGE } from '@/theme/colors';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { addDevice } from '@/actions';
 import ChannelAPI from '@/api/channelService';
-import {
-  loadRecoveryData
-} from '@/components/Onboarding/RecoveryFlow/thunks/channelDownloadThunks';
-import { uploadAllInfo } from './thunks/channelUploadThunks';
+import { loadRecoveryData } from '../RecoveryFlow/thunks/channelDownloadThunks';
+import { uploadAllInfoAfter } from './thunks/channelUploadThunks';
 import { NodeApiContext } from '@/components/NodeApiGate';
 
 
@@ -39,33 +37,32 @@ export const AddDeviceScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { t } = useTranslation();
+  const url = useSelector((state) => state.recoveryData.channel?.url);
   const aesKey = useSelector((state) => state.recoveryData.aesKey);
-  const channel = useSelector((state) => state.recoveryData.channel);
   const [deviceName, setDeviceName] = useState('');
   const [waiting, setWaiting] = useState(false);
   const api = useContext(NodeApiContext);
 
   const handleSubmit = async () => {
     setWaiting(true);
-    const channelApi = new ChannelAPI(channel.url.href);
+    const channelApi = new ChannelAPI(url.href);
     const { signingKey } = await loadRecoveryData(channelApi, aesKey);
     await api.addSigningKey(signingKey);
-    dispatch(uploadAllInfo({ aesKey, channelApi })).then(() => {
-      dispatch(addDevice({ name: deviceName, signingKey, active: true }));
-      navigation.navigate('Devices');
-    });
+    await uploadAllInfoAfter(0);
+    dispatch(addDevice({ name: deviceName, signingKey, active: true }));
+    navigation.navigate('Devices');
   };
 
   const disabled = deviceName.length < 3;
 
   const showConfirmDialog = () => {
     return Alert.alert(
-      t("devices.text.confirmTitle"),
-      t("devices.text.confirm"),
+      t("common.alert.title.pleaseConfirm"),
+      t("devices.alert.confirmAdd"),
       [{
-        text: "Yes",
+        text: t("common.alert.yes"),
       }, {
-        text: "No",
+        text: t("common.alert.no"),
         onPress: () => {
           navigation.navigate("Home");
         },

@@ -20,6 +20,7 @@ export const initialState: RecoveryData = {
   qrcode: '',
   recoveredConnections: 0,
   recoveredGroups: 0,
+  recoveredBlindSigs: 0,
   channel: {
     channelId: '',
     url: null,
@@ -40,7 +41,7 @@ const recoveryData = createSlice({
       }>,
     ) {
       const { publicKey, secretKey, aesKey } = action.payload;
-      state.publicKey = uInt8ArrayToB64(publicKey);
+      state.publicKey = uInt8ArrayToB64(publicKey ?? new Uint8Array());
       state.secretKey = secretKey;
       state.aesKey = aesKey;
       state.errorMessage = '';
@@ -50,6 +51,7 @@ const recoveryData = createSlice({
       state.photo = '';
       state.recoveredConnections = 0;
       state.recoveredGroups = 0;
+      state.recoveredBlindSigs = 0;
       state.timestamp = Date.now();
       state.sigs = {};
       state.uploadCompletedBy = {};
@@ -116,8 +118,16 @@ const recoveryData = createSlice({
     increaseRecoveredGroups(state, action: PayloadAction<number>) {
       state.recoveredGroups += action.payload;
     },
+    increaseRecoveredBlindSigs(state, action: PayloadAction<number>) {
+      state.recoveredBlindSigs += action.payload;
+    },
+    // used for import/sync
     setUploadCompletedBy(state, action: PayloadAction<string>) {
       state.uploadCompletedBy[action.payload] = true;
+    },
+    // used for import
+    setRecoveryId(state, action: PayloadAction<string>) {
+      state.id = action.payload;
     },
   },
   extraReducers: {
@@ -127,11 +137,16 @@ const recoveryData = createSlice({
   },
 });
 
+export const uploadCompletedByOtherSide = (state) => {
+  return Object.keys(state.recoveryData.uploadCompletedBy).length > 0;
+}
+
 // Export channel actions
 export const {
   init,
   increaseRecoveredConnections,
   increaseRecoveredGroups,
+  increaseRecoveredBlindSigs,
   setRecoveryAesKey,
   setRecoveryChannel,
   setSig,
@@ -141,6 +156,7 @@ export const {
   resetRecoveryData,
   setRecoveryError,
   setUploadCompletedBy,
+  setRecoveryId,
 } = recoveryData.actions;
 
 // Export reducer

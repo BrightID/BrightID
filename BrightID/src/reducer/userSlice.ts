@@ -12,6 +12,7 @@ const initialState: UserState = {
   verifications: [],
   secretKey: '',
   eula: false,
+  updateTimestamps: {},
 };
 
 const userSlice = createSlice({
@@ -20,9 +21,11 @@ const userSlice = createSlice({
   reducers: {
     setIsSponsored(state, action) {
       state.isSponsored = action.payload;
+      state.updateTimestamps.isSponsored = Date.now();
     },
     setPhoto(state, action) {
       state.photo = action.payload;
+      state.updateTimestamps.photo = Date.now();
     },
     setSearchParam(state, action) {
       state.searchParam = action.payload;
@@ -36,15 +39,21 @@ const userSlice = createSlice({
       state.name = name;
       state.id = id;
       state.secretKey = secretKey;
+      const t = Date.now();
+      state.updateTimestamps.name = t;
+      state.updateTimestamps.photo = t;
     },
     setName(state, action) {
       state.name = action.payload;
+      state.updateTimestamps.name = Date.now();
     },
     setBackupCompleted(state, action) {
       state.backupCompleted = action.payload;
+      state.updateTimestamps.backupCompleted = Date.now();
     },
     setPassword(state, action) {
       state.password = action.payload;
+      state.updateTimestamps.password = Date.now();
     },
     setUserId(state, action) {
       state.id = action.payload;

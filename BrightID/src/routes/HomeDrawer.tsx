@@ -299,7 +299,7 @@ const CustomDrawerContent = (props) => {
         onPress={() => {
           navigation.reset({
             index: 1,
-            routes: [{ name: 'Devices' }, { name: 'Devices' }],
+            routes: [{ name: 'Devices' }, { name: 'Devices', params: { syncing: false, asScanner: false } }],
           });
         }}
       />

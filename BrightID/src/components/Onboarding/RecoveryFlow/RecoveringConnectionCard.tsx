@@ -66,14 +66,12 @@ const RecoveringConnectionCard = (props) => {
       const channelApi = new ChannelAPI(channel.url.href);
 
       // it's important to upload mutal connections first so that we can guarantee the other user downloads them when they recieve the sig
-      await dispatch(
-        uploadMutualInfo({
-          conn: props,
-          aesKey,
-          channelApi,
-          nodeApi,
-        }),
-      );
+      await uploadMutualInfo({
+        conn: props,
+        aesKey,
+        channelApi,
+        nodeApi,
+      });
 
       await dispatch(uploadSig({ id, aesKey, channelApi }));
       setUploadingData(false);

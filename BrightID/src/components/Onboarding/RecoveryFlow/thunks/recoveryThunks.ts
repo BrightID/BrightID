@@ -37,7 +37,6 @@ export const setupRecovery = () => async (
   if (!recoveryData.timestamp || pastLimit(recoveryData.timestamp)) {
     const { publicKey, secretKey } = await nacl.sign.keyPair();
     const aesKey = await randomKey(16);
-
     // setup recovery data slice with new keypair
     dispatch(init({ publicKey, secretKey, aesKey }));
   }
@@ -163,9 +162,9 @@ export const finishRecovery = () => async (
   getState: getState,
 ) => {
   // collect user data that was populated either by uploads from recovery connections or by restoring backup
-  const { id, secretKey, name, photo } = getState().recoveryData;
+  const { id, name, photo } = getState().recoveryData;
   // clear recovery data from state
   dispatch(resetRecoveryData());
   // finally set the user data
-  dispatch(setUserData({ id, name, photo, secretKey }));
+  dispatch(setUserData({ id, name, photo }));
 };
