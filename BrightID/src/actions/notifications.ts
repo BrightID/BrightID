@@ -56,7 +56,7 @@ export const removeActiveNotification = () => ({
 });
 
 export const updateNotifications =
-  (api: NodeApi) => async (dispatch: dispatch, getState: () => State) => {
+  (api?: NodeApi) => async (dispatch: dispatch, getState: () => State) => {
     // check for pending backup setup
     try {
       const { password } = getState().user;
@@ -116,33 +116,34 @@ export const updateNotifications =
     }
 
     // check for invites
-    try {
-      const {
-        user: { id },
-        groups: { invites: oldInvites },
-      } = getState();
-      // this can not be done in reducer because it should be in an async function
-      const invites = await getInvites(api);
-      dispatch(setInvites(invites));
-      if (invites.length > oldInvites.length) {
-        const activeInvites = invites.filter(
-          (invite) => invite.state === INVITE_ACTIVE,
-        );
-        const groupName = getGroupName(
-          activeInvites[activeInvites.length - 1].group,
-        );
-        const message = `You've been invited to join ${groupName}`;
-        dispatch(
-          setActiveNotification({
-            title: 'Group Invitation',
-            message,
-            type: GROUPS_TYPE,
-            navigationTarget: 'Notifications',
-            icon: 'AddGroup',
-          }),
-        );
+    if (api) {
+      try {
+        const {
+          groups: { invites: oldInvites },
+        } = getState();
+        // this can not be done in reducer because it should be in an async function
+        const invites = await getInvites(api);
+        dispatch(setInvites(invites));
+        if (invites.length > oldInvites.length) {
+          const activeInvites = invites.filter(
+            (invite) => invite.state === INVITE_ACTIVE,
+          );
+          const groupName = getGroupName(
+            activeInvites[activeInvites.length - 1].group,
+          );
+          const message = `You've been invited to join ${groupName}`;
+          dispatch(
+            setActiveNotification({
+              title: 'Group Invitation',
+              message,
+              type: GROUPS_TYPE,
+              navigationTarget: 'Notifications',
+              icon: 'AddGroup',
+            }),
+          );
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
     }
   };

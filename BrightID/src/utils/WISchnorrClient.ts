@@ -5,8 +5,8 @@
 * */
 import modPow from 'react-native-modpow';
 
-var CryptoJS = require('crypto-js');
-var { BigInteger } = require('jsbn');
+import CryptoJS from 'crypto-js';
+import { BigInteger } from 'jsbn';
 
 if (!__DEV__) {
   console.log(`Monkey-patching BigNumber.modPow to use react-native-modpow`);
@@ -27,7 +27,10 @@ function sha256(s) {
 }
 
 /* Initializes the WISchnorClient based on a given public key */
-function WISchnorrClient(publicKey) {
+function WISchnorrClient(
+  this: { p: BigInteger; q: BigInteger; g: BigInteger; y: BigInteger },
+  publicKey,
+) {
   // Discrete logarithm parameters
   this.p = new BigInteger(publicKey.p);
   this.q = new BigInteger(publicKey.q);
@@ -38,7 +41,8 @@ function WISchnorrClient(publicKey) {
 
 /* Generates a cryptographically secure random number modulo q */
 WISchnorrClient.prototype.GenerateRandomNumber = function () {
-  var bytes = Math.floor(Math.random() * (this.q.bitLength() / 8 - 1 + 1)) + 1;
+  const bytes =
+    Math.floor(Math.random() * (this.q.bitLength() / 8 - 1 + 1)) + 1;
   const r = CryptoJS.lib.WordArray.random(bytes);
   const rhex = CryptoJS.enc.Hex.stringify(r);
   return new BigInteger(rhex, 16).mod(this.q);
@@ -50,34 +54,37 @@ WISchnorrClient.prototype.GenerateWISchnorrClientChallenge = function (
   info,
   msg,
 ) {
-  var t1 = this.GenerateRandomNumber();
-  var t2 = this.GenerateRandomNumber();
-  var t3 = this.GenerateRandomNumber();
-  var t4 = this.GenerateRandomNumber();
+  const t1: BigInteger = this.GenerateRandomNumber();
+  const t2: BigInteger = this.GenerateRandomNumber();
+  const t3: BigInteger = this.GenerateRandomNumber();
+  const t4: BigInteger = this.GenerateRandomNumber();
 
-  var F = sha256(info);
+  const F = sha256(info);
   // z = F^((p-1)/q) mod p
-  var z = F.modPow(this.p.subtract(new BigInteger('1')).divide(this.q), this.p);
+  const z = F.modPow(
+    this.p.subtract(new BigInteger('1')).divide(this.q),
+    this.p,
+  );
   // alpha = a * g^t1 * y^t2
-  var a = new BigInteger(params.a);
-  var alpha = a
+  const a = new BigInteger(params.a);
+  const alpha = a
     .multiply(this.g.modPow(t1, this.p))
     .multiply(this.y.modPow(t2, this.p))
     .mod(this.p);
 
   // beta = b * g^t3 * z^t4
-  var b = new BigInteger(params.b);
-  var beta = b
+  const b = new BigInteger(params.b);
+  const beta = b
     .multiply(this.g.modPow(t3, this.p))
     .multiply(z.modPow(t4, this.p))
     .mod(this.p);
 
-  var H = sha256(alpha.toString() + beta.toString() + z.toString() + msg);
+  const H = sha256(alpha.toString() + beta.toString() + z.toString() + msg);
   // epsilon = H mod q
-  var epsilon = H.mod(this.q);
+  const epsilon = H.mod(this.q);
 
   // e = eplison - t2 - t4 mod q
-  var e = epsilon.subtract(t2).subtract(t4).mod(this.q);
+  const e = epsilon.subtract(t2).subtract(t4).mod(this.q);
 
   return { e: e.toString(), t: { t1, t2, t3, t4 } };
 };
@@ -88,20 +95,20 @@ WISchnorrClient.prototype.GenerateWISchnorrBlindSignature = function (
   response,
 ) {
   // rho = r + t1 mod q
-  var r = new BigInteger(response.r);
-  var rho = r.add(challenge.t1).mod(this.q);
+  const r = new BigInteger(response.r);
+  const rho = r.add(challenge.t1).mod(this.q);
 
   // omega = c + t2 mod q
-  var c = new BigInteger(response.c);
-  var omega = c.add(challenge.t2).mod(this.q);
+  const c = new BigInteger(response.c);
+  const omega = c.add(challenge.t2).mod(this.q);
 
   // sigma = s + t3 mod q
-  var s = new BigInteger(response.s);
-  var sigma = s.add(challenge.t3).mod(this.q);
+  const s = new BigInteger(response.s);
+  const sigma = s.add(challenge.t3).mod(this.q);
 
   // delta = d + t4 mod q
-  var d = new BigInteger(response.d);
-  var delta = d.add(challenge.t4).mod(this.q);
+  const d = new BigInteger(response.d);
+  const delta = d.add(challenge.t4).mod(this.q);
 
   return {
     rho: rho.toString(),
@@ -117,38 +124,37 @@ WISchnorrClient.prototype.VerifyWISchnorrBlindSignature = function (
   info,
   msg,
 ) {
-  var F = sha256(info);
+  const F = sha256(info);
   // z = F^((p-1)/q) mod p
-  var z = F.modPow(this.p.subtract(new BigInteger('1')).divide(this.q), this.p);
+  const z = F.modPow(
+    this.p.subtract(new BigInteger('1')).divide(this.q),
+    this.p,
+  );
 
   // g^rho mod p
-  var gp = this.g.modPow(new BigInteger(signature.rho), this.p);
+  const gp = this.g.modPow(new BigInteger(signature.rho), this.p);
   // y^omega mod p
-  var yw = this.y.modPow(new BigInteger(signature.omega), this.p);
+  const yw = this.y.modPow(new BigInteger(signature.omega), this.p);
   // g^rho * y^omega mod p
-  var gpyw = gp.multiply(yw).mod(this.p);
+  const gpyw = gp.multiply(yw).mod(this.p);
 
   // g^sigma mod p
-  var gs = this.g.modPow(new BigInteger(signature.sigma), this.p);
+  const gs = this.g.modPow(new BigInteger(signature.sigma), this.p);
   // z^delta mod p
-  var zd = z.modPow(new BigInteger(signature.delta), this.p);
+  const zd = z.modPow(new BigInteger(signature.delta), this.p);
   // g^sigma * z^delta mod p
-  var gszd = gs.multiply(zd).mod(this.p);
+  const gszd = gs.multiply(zd).mod(this.p);
 
-  var H = sha256(gpyw.toString() + gszd.toString() + z.toString() + msg);
+  const H = sha256(gpyw.toString() + gszd.toString() + z.toString() + msg);
   // hsig = H mod q
-  var hsig = H.mod(this.q);
+  const hsig = H.mod(this.q);
 
   // vsig = omega + delta mod q
-  var vsig = new BigInteger(signature.omega)
+  const vsig = new BigInteger(signature.omega)
     .add(new BigInteger(signature.delta))
     .mod(this.q);
 
-  if (vsig.compareTo(hsig) === 0) {
-    return true;
-  } else {
-    return false;
-  }
+  return vsig.compareTo(hsig) === 0;
 };
 
 module.exports = WISchnorrClient;

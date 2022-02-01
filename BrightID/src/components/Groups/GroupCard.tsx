@@ -1,63 +1,68 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
 import { DEVICE_TYPE } from '@/utils/deviceConstants';
 import { DARK_ORANGE, WHITE, DARK_GREEN, DARK_GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { getGroupName, ids2connections } from '@/utils/groups';
-import GroupPhoto from './GroupPhoto';
+import { GroupPhoto } from '@/components/Groups/GroupPhoto';
 
 /**
  * Group Card in the Groups Screen
  */
-class GroupCard extends React.PureComponent {
-  setStatus = () => {
-    const { group, t } = this.props;
-    const concatenationString = t('common.language.and', 'and');
-    const unknowsCount = ids2connections(group.members).filter(
-      (o) => o.name === 'Stranger',
-    ).length;
-    return (
-      <View>
-        <View style={styles.membersContainer}>
-          <Text style={styles.membersLabel}>
-            {t('groups.label.knownMembers')}
-          </Text>
-          <Text style={styles.membersKnown}>
-            {group.members.length - unknowsCount}{' '}
-          </Text>
-          <Text style={styles.membersLabel}>
-            {t('groups.label.unknownMembers')}
-          </Text>
-          <Text style={styles.membersUnknown}>{unknowsCount}</Text>
-        </View>
-      </View>
-    );
-  };
+type GroupCardProps = {
+  group: Group;
+  index: number;
+};
 
-  render() {
-    const { group, t } = this.props;
-    return (
-      <View style={styles.container}>
-        <View style={styles.photoContainer}>
-          <GroupPhoto group={group} />
-        </View>
-        <View style={styles.info}>
-          {group.type === 'primary' ? (
-            <Text style={styles.primary}>{t('groups.tag.primaryGroup')}</Text>
-          ) : (
-            <View />
-          )}
-          <Text testID="groupName" style={styles.name}>
-            {getGroupName(group)}
-          </Text>
-          <this.setStatus />
+export const GroupCard = ({ group, index }: GroupCardProps) => {
+  const { t } = useTranslation();
+  const [unknownsCount, setUnknownsCount] = useState(0);
+
+  useEffect(() => {
+    setUnknownsCount(
+      ids2connections(group.members).filter(
+        (member) => member.name === 'Stranger',
+      ).length,
+    );
+  }, [group.members]);
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.photoContainer}>
+        <GroupPhoto group={group} />
+      </View>
+      <View style={styles.info}>
+        {group.type === 'primary' ? (
+          <Text style={styles.primary}>{t('groups.tag.primaryGroup')}</Text>
+        ) : (
+          <View />
+        )}
+        <Text testID="groupName" style={styles.name}>
+          {getGroupName(group)}
+        </Text>
+        <View>
+          <View style={styles.membersContainer}>
+            <Text style={styles.membersLabel}>
+              {t('groups.label.knownMembers')}
+            </Text>
+            <Text
+              style={styles.membersKnown}
+              testID={`groupMembersCount-${index}`}
+            >
+              {group.members.length - unknownsCount}{' '}
+            </Text>
+            <Text style={styles.membersLabel}>
+              {t('groups.label.unknownMembers')}
+            </Text>
+            <Text style={styles.membersUnknown}>{unknownsCount}</Text>
+          </View>
         </View>
       </View>
-    );
-  }
-}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -123,5 +128,3 @@ const styles = StyleSheet.create({
     color: DARK_ORANGE,
   },
 });
-
-export default connect()(withTranslation()(GroupCard));

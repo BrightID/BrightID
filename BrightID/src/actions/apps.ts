@@ -23,7 +23,9 @@ export const updateBlindSigs =
         const verificationsByName = _.keyBy(verifications, (v) => v.name);
         const sigs = selectAllSigs(getState());
         console.log('sigs', sigs);
-        const blindSigApps = apps.filter((app) => app.usingBlindSig);
+        const blindSigApps = apps
+          ? apps.filter((app) => app.usingBlindSig)
+          : [];
         for (const app of blindSigApps) {
           const vel = app.verificationExpirationLength;
           const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;

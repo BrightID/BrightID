@@ -16,12 +16,11 @@ import {
   socialRecovery,
 } from './thunks/recoveryThunks';
 import { CHANNEL_POLL_INTERVAL, clearChannel } from './thunks/channelThunks';
+import { selectOperationByHash } from '@/reducer/operationsSlice';
+import { operation_states } from '@/utils/constants';
 
 // clear channel after this time
 const channelTimeout = CHANNEL_POLL_INTERVAL * 3.1;
-
-// max time to wait for operation being applied
-const applyTimeout = 1000 * 60; // 1 minute
 
 export enum AccountSteps {
   WAITING_DOWNLOAD,
@@ -59,6 +58,9 @@ const RestoreScreen = () => {
   );
   const [accountError, setAccountError] = useState('');
   const [recoveryOpHash, setRecoveryOpHash] = useState('');
+  const recoveryOp = useSelector((state) =>
+    selectOperationByHash(state, recoveryOpHash),
+  );
   const [currentItem, setCurrentItem] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
   const dispatch = useDispatch();
@@ -81,11 +83,16 @@ const RestoreScreen = () => {
   useEffect(() => {
     const startRecovery = async () => {
       try {
-        console.log(`Starting account recovery`);
-        const opHash = await dispatch(socialRecovery(api));
-        console.log(`Recover op Hash: ${opHash}`);
-        setRecoveryOpHash(opHash);
         setAccountStep(AccountSteps.WAITING_OPERATION);
+        console.log(`Starting account recovery`);
+        const op = await dispatch(socialRecovery(api));
+        if (op === 'ALREADY APPLIED') {
+          // we can shortcut to the next step without waiting for operation status
+          setAccountStep(AccountSteps.OPERATION_APPLIED);
+        } else {
+          console.log(`Recover op Hash: ${op.hash}`);
+          setRecoveryOpHash(op.hash);
+        }
       } catch (err) {
         let errorString = '';
         if (err instanceof Error) {
@@ -145,53 +152,37 @@ const RestoreScreen = () => {
     }
   }, [accountStep, dataStep, dispatch, t]);
 
-  // Poll for recovery operation state
   useEffect(() => {
-    if (
-      recoveryOpHash !== '' &&
-      accountStep === AccountSteps.WAITING_OPERATION
-    ) {
-      const startTime = Date.now();
-      const timerId = setInterval(async () => {
-        const timeElapsed = Date.now() - startTime;
-        if (timeElapsed > applyTimeout) {
+    if (recoveryOp && accountStep === AccountSteps.WAITING_OPERATION) {
+      console.log(`recover Op state: ${recoveryOp.state}`);
+      switch (recoveryOp.state) {
+        case operation_states.UNKNOWN:
+        case operation_states.INIT:
+        case operation_states.SENT:
+          // op being processed. do nothing.
+          break;
+        case operation_states.APPLIED:
+          setAccountStep(AccountSteps.OPERATION_APPLIED);
+          setRecoveryOpHash('');
+          break;
+        case operation_states.FAILED:
+          setAccountStep(AccountSteps.ERROR);
+          setAccountError('Operation could not be applied');
+          setRecoveryOpHash('');
+          break;
+        case operation_states.EXPIRED:
           // operation did not get applied within time window. Abort and show error.
           setAccountStep(AccountSteps.ERROR);
           setAccountError('Operation timed out');
           setRecoveryOpHash('');
-        } else {
-          const { state } = await api.getOperationState(recoveryOpHash);
-          console.log(`recover Op state: ${state}`);
-          switch (state) {
-            case 'unknown':
-            case 'init':
-            case 'sent':
-              // op being processed. do nothing.
-              break;
-            case 'applied':
-              setAccountStep(AccountSteps.OPERATION_APPLIED);
-              setRecoveryOpHash('');
-              break;
-            case 'failed':
-              setAccountStep(AccountSteps.ERROR);
-              setAccountError('Operation could not be applied');
-              setRecoveryOpHash('');
-              break;
-            default:
-              setAccountStep(AccountSteps.ERROR);
-              setAccountError('Unhandled operation state');
-              setRecoveryOpHash('');
-          }
-        }
-      }, 5000);
-      console.log(`Start polling recoveryOp timer ${timerId}`);
-
-      return () => {
-        console.log(`Stop polling recoveryOp timer ${timerId}`);
-        clearInterval(timerId);
-      };
+          break;
+        default:
+          setAccountStep(AccountSteps.ERROR);
+          setAccountError('Unhandled operation state');
+          setRecoveryOpHash('');
+      }
     }
-  }, [accountStep, api, recoveryOpHash]);
+  }, [recoveryOp, accountStep]);
 
   const skip = () => {
     setPass('');

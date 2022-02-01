@@ -27,5 +27,3 @@ export const connectionsSelector = createSelector(
       .sort(sortConnectionsBy(connectionsSort));
   },
 );
-
-export default connectionsSelector;
