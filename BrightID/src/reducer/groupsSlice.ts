@@ -156,8 +156,9 @@ export const filteredGroupsSelector = createSelector(
   (allGroups, searchParam) => {
     let filteredGroups: Array<Group>;
     if (searchParam !== '') {
+      const searchString = toSearchString(searchParam);
       filteredGroups = allGroups.filter((group) => {
-        if (toSearchString(getGroupName(group)).includes(searchParam)) {
+        if (toSearchString(getGroupName(group)).includes(searchString)) {
           // direct group name match
           return true;
         } else {
@@ -166,7 +167,7 @@ export const filteredGroupsSelector = createSelector(
             (member) => toSearchString(member.name),
           );
           for (const name of allMemberNames) {
-            if (name.includes(searchParam)) {
+            if (name.includes(searchString)) {
               // stop looking if a match is found
               return true;
             }
