@@ -8,9 +8,8 @@ import ChannelAPI from '@/api/channelService';
 import { AppDispatch, RootState } from '@/store';
 import { connection_levels } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
-import { socialMediaList } from '@/components/EditProfile/socialMediaList';
-import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 import { SocialMediaShareActionType } from '@/components/EditProfile/socialMediaList';
+import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 
 declare global {
   type EntityState<T> = _EntityState<T>;
@@ -186,21 +185,21 @@ declare global {
   // We are sure that these properties are
   // shared in old or new versions of app
   interface SocialMediaCompanyShared {
-    name: string,
-    shareType: string,
-    shareTypeDisplay: string,
+    name: string;
+    shareType: string;
+    shareTypeDisplay: string;
   }
 
-  type SocialMediaCompany = SocialMediaCompanyShared  & {
-    icon: any,
-    getShareAction: (profile: string) => SocialMediaShareAction,
-  }
+  type SocialMediaCompany = SocialMediaCompanyShared & {
+    icon: any;
+    getShareAction: (profile: string) => SocialMediaShareAction;
+  };
 
   type SocialMediaId = string;
 
   type SocialMediaList = {
-      [key: SocialMediaId]: SocialMediaCompany
-  }
+    [key: SocialMediaId]: SocialMediaCompany;
+  };
 
   type SocialMedia = {
     id: SocialMediaId;
@@ -211,9 +210,9 @@ declare global {
   };
 
   type SocialMediaShareAction = {
-    actionType: SocialMediaShareActionType,
-    data: string,
-  }
+    actionType: SocialMediaShareActionType;
+    data: string;
+  };
 
   type SocialMediaState = EntityState<SocialMedia>;
 

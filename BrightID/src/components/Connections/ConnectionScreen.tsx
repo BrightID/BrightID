@@ -12,14 +12,14 @@ import {
   FlatList,
   Platform,
   ToastAndroid,
-  Alert
+  Alert,
 } from 'react-native';
-import {
-  selectAllConnections,
-} from '@/reducer/connectionsSlice';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
+import { SvgXml } from 'react-native-svg';
+import Clipboard from '@react-native-community/clipboard';
+import { selectAllConnections } from '@/reducer/connectionsSlice';
 import UnverifiedSticker from '@/components/Icons/UnverifiedSticker';
 import GroupAvatar from '@/components/Icons/GroupAvatar';
 import { photoDirectory } from '@/utils/filesystem';
@@ -35,16 +35,17 @@ import {
   DARK_GREEN,
 } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
-import { connection_levels, POSSIBLE_DUPLICATE_STRING_SIMILARITY_RATE } from '@/utils/constants';
+import {
+  connection_levels,
+  POSSIBLE_DUPLICATE_STRING_SIMILARITY_RATE,
+} from '@/utils/constants';
 import Chevron from '../Icons/Chevron';
 import TrustLevelView from './TrustLevelView';
 import { useSelector } from '@/store';
-import { connectionsSelector } from '@/utils/connectionsSelector';
 import stringSimilarity from '@/utils/stringSimilarity';
-import { SvgXml } from 'react-native-svg';
-import socialMediaList, { SocialMediaShareActionType } from '@/components/EditProfile/socialMediaList';
-import { element } from 'prop-types';
-import Clipboard from '@react-native-community/clipboard';
+import socialMediaList, {
+  SocialMediaShareActionType,
+} from '@/components/EditProfile/socialMediaList';
 
 /**
  Connection details screen
@@ -63,10 +64,10 @@ type Props = {
 };
 
 type SocialMediaOnConnectionPage = {
-  id: SocialMediaId,
-  icon: any,
-  shareAction: SocialMediaShareAction | null,
-}
+  id: SocialMediaId;
+  icon: any;
+  shareAction: SocialMediaShareAction | null;
+};
 
 interface Section {
   title: string;
@@ -80,7 +81,7 @@ enum ConnectionScreenSectionKeys {
   GROUPS = 'groups',
   RECOVERY_CONNECTIONS = 'recoveryConnections',
   DUPLICATES = 'duplicates',
-  SOCIAL_MEDIA = 'socialMedia'
+  SOCIAL_MEDIA = 'socialMedia',
 }
 
 function ConnectionScreen(props: Props) {
@@ -100,38 +101,43 @@ function ConnectionScreen(props: Props) {
   const [connectionsCollapsed, setConnectionsCollapsed] = useState(true);
   const [recoveryConnectionsCollapsed, setRecoveryConnectionsCollapsed] =
     useState(true);
-  const [possibleDuplicatesCollapsed, setPossibleDuplicatesCollapsed] = useState(true);
+  const [possibleDuplicatesCollapsed, setPossibleDuplicatesCollapsed] =
+    useState(true);
   const [socailMediaCollapsed, setSocialMediaCollapsed] = useState(true);
   const [possibleDuplicates, setPossibleDuplicates] = useState([]);
-  const [connectionSocailMedia, setConnectionSocailMedia] =
-    useState<SocialMediaOnConnectionPage[]>([]);
+  const [connectionSocailMedia, setConnectionSocailMedia] = useState<
+    SocialMediaOnConnectionPage[]
+  >([]);
 
   useEffect(() => {
-    setPossibleDuplicates(myConnections.filter(
-      conn =>
-        stringSimilarity(conn.name, connection.name) >= POSSIBLE_DUPLICATE_STRING_SIMILARITY_RATE
-        && conn.id != connection.id
-      )
+    setPossibleDuplicates(
+      myConnections.filter(
+        (conn) =>
+          stringSimilarity(conn.name, connection.name) >=
+            POSSIBLE_DUPLICATE_STRING_SIMILARITY_RATE &&
+          conn.id !== connection.id,
+      ),
     );
-  }, [myConnections])
-
+  }, [connection.id, connection.name, myConnections]);
 
   useEffect(() => {
-    let socialMediaOnConnectionPage : SocialMediaOnConnectionPage[] = [];
+    const socialMediaOnConnectionPage: SocialMediaOnConnectionPage[] = [];
     for (const socialMediaId in socialMediaList) {
       const element = socialMediaList[socialMediaId];
-      const profile = connection.socialMedia?.find(s => s.id == socialMediaId)?.profile
-      if(profile) {
+      const profile = connection.socialMedia?.find(
+        (s) => s.id === socialMediaId,
+      )?.profile;
+      if (profile) {
         socialMediaOnConnectionPage.push({
           id: socialMediaId,
           icon: element.icon,
-          shareAction: element.getShareAction(profile)
-        })
+          shareAction: element.getShareAction(profile),
+        });
       }
     }
     console.log(socialMediaOnConnectionPage);
-    setConnectionSocailMedia(socialMediaOnConnectionPage)
-  }, [connection])
+    setConnectionSocailMedia(socialMediaOnConnectionPage);
+  }, [connection]);
   const { t } = useTranslation();
 
   const toggleSection = (key) => {
@@ -188,7 +194,7 @@ function ConnectionScreen(props: Props) {
         title: t('connectionDetails.label.socialMedia'),
         data: socailMediaCollapsed ? [] : [connectionSocailMedia],
         key: ConnectionScreenSectionKeys.SOCIAL_MEDIA,
-        numEntries: connectionSocailMedia.filter(s => !!s.shareAction).length,
+        numEntries: connectionSocailMedia.filter((s) => !!s.shareAction).length,
       },
     ];
     return data;
@@ -203,7 +209,7 @@ function ConnectionScreen(props: Props) {
     possibleDuplicatesCollapsed,
     possibleDuplicates,
     connectionSocailMedia,
-    socailMediaCollapsed
+    socailMediaCollapsed,
   ]);
 
   const renderSticker = () => {
@@ -314,7 +320,7 @@ function ConnectionScreen(props: Props) {
     if (section.key === ConnectionScreenSectionKeys.RECOVERY_CONNECTIONS) {
       return renderRecoveryItem({ item, index });
     }
-    if (section.key == ConnectionScreenSectionKeys.SOCIAL_MEDIA) {
+    if (section.key === ConnectionScreenSectionKeys.SOCIAL_MEDIA) {
       return renderSocialMediaList({ item, index });
     }
     const testID = `${section.key}-${index}`;
@@ -331,8 +337,13 @@ function ConnectionScreen(props: Props) {
     );
   };
 
-
-  const renderSocialMediaList = ({ item, index } : {item: SocialMediaOnConnectionPage[], index: number}) => {
+  const renderSocialMediaList = ({
+    item,
+    index,
+  }: {
+    item: SocialMediaOnConnectionPage[];
+    index: number;
+  }) => {
     return (
       <FlatList
         style={styles.socialMediaList}
@@ -342,25 +353,37 @@ function ConnectionScreen(props: Props) {
         renderItem={renderSocialMediaListItem}
         keyExtractor={socialMediaListKeyExtractor}
       />
-    )
+    );
   };
 
   const socialMediaListKeyExtractor = (item: SocialMediaOnConnectionPage) => {
-    return item.id
-  }
+    return item.id;
+  };
 
-  const renderSocialMediaListItem = ({ item }: {item: SocialMediaOnConnectionPage}) => {
+  const renderSocialMediaListItem = ({
+    item,
+  }: {
+    item: SocialMediaOnConnectionPage;
+  }) => {
     return (
       <TouchableWithoutFeedback
         onPress={() => {
-          if(item.shareAction){
-            const data = item.shareAction.data;
-            if(item.shareAction.actionType == SocialMediaShareActionType.OPEN_LINK) {
-              Linking.openURL(data)
-            } else if(item.shareAction.actionType == SocialMediaShareActionType.COPY) {
+          if (item.shareAction) {
+            const { data } = item.shareAction;
+            if (
+              item.shareAction.actionType ===
+              SocialMediaShareActionType.OPEN_LINK
+            ) {
+              Linking.openURL(data);
+            } else if (
+              item.shareAction.actionType === SocialMediaShareActionType.COPY
+            ) {
               Clipboard.setString(data);
               if (Platform.OS === 'android') {
-                ToastAndroid.show(t('connectionDetails.text.copied'), ToastAndroid.LONG)
+                ToastAndroid.show(
+                  t('connectionDetails.text.copied'),
+                  ToastAndroid.LONG,
+                );
               } else {
                 Alert.alert(t('connectionDetails.text.copied'));
               }
@@ -374,7 +397,7 @@ function ConnectionScreen(props: Props) {
           height={DEVICE_LARGE ? 40 : 36}
         />
       </TouchableWithoutFeedback>
-    )
+    );
   };
 
   const renderRecoveryItem = ({ item, index }) => {
