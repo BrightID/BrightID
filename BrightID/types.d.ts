@@ -8,7 +8,7 @@ import ChannelAPI from '@/api/channelService';
 import { AppDispatch, RootState } from '@/store';
 import { connection_levels } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
-import { socialMediaList } from '@/components/EditProfile/socialMediaList';
+import { SocialMediaShareActionType } from '@/components/EditProfile/socialMediaList';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 
 declare global {
@@ -145,7 +145,7 @@ declare global {
     groupsNum: number;
     mutualConnections: string[];
     existingConnection: Connection;
-    socialMedia: string[];
+    socialMedia: SocialMedia[];
     mutualGroups: string[];
     createdAt: number;
     profileTimestamp: number;
@@ -182,14 +182,36 @@ declare global {
     url: URL;
   };
 
-  type SocialMediaId = keyof typeof socialMediaList;
+  // We are sure that these properties are
+  // shared in old or new versions of app
+  interface SocialMediaCompanyShared {
+    name: string;
+    shareType: string;
+    shareTypeDisplay: string;
+  }
+
+  type SocialMediaCompany = SocialMediaCompanyShared & {
+    icon: any;
+    getShareAction: (profile: string) => SocialMediaShareAction;
+  };
+
+  type SocialMediaId = string;
+
+  type SocialMediaList = {
+    [key: SocialMediaId]: SocialMediaCompany;
+  };
 
   type SocialMedia = {
     id: SocialMediaId;
-    company: ValueOf<typeof socialMediaList>;
+    company: SocialMediaCompanyShared;
     order: number;
     profile: string;
     profileDisplayWidth?: number | string;
+  };
+
+  type SocialMediaShareAction = {
+    actionType: SocialMediaShareActionType;
+    data: string;
   };
 
   type SocialMediaState = EntityState<SocialMedia>;

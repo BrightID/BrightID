@@ -186,6 +186,7 @@
       "mutualConnections": "Mutual Connections",
       "mutualGroups": "Mutual Groups",
       "possibleDuplicates": "Possible Duplicates",
+      "socialMedia": "Social Media",
       "recoveryConnections": "Recovery Connections"
     },
     "tags": {
@@ -193,6 +194,7 @@
       "loading": "Loading…"
     },
     "text": {
+      "copied": "Copied to clipboard!",
       "level": "How well do you know {{name}}?",
       "levelAlreadyKnown": "I already know this person",
       "levelJustMet": "This person is a stranger I just met",

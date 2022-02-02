@@ -151,7 +151,7 @@ const SelectMediaModal = ({ route }: props) => {
         ) : (
           <View style={styles.inputContainer}>
             <Text style={styles.label}>
-              {socialMediaList[selectedId].shareType}
+              {socialMediaList[selectedId].shareTypeDisplay}
             </Text>
             <TextInput
               style={styles.socialMediaInput}
@@ -163,7 +163,7 @@ const SelectMediaModal = ({ route }: props) => {
               keyboardType={
                 keyboardTypes[socialMediaList[selectedId].shareType]
               }
-              placeholder={`add ${socialMediaList[selectedId].shareType}`}
+              placeholder={`add ${socialMediaList[selectedId].shareTypeDisplay}`}
               placeholderTextColor={DARKER_GREY}
               textContentType={
                 textContentTypes[socialMediaList[selectedId].shareType]

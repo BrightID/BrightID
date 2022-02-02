@@ -28,7 +28,7 @@ type LocalConnectionData = {
   photo: Photo;
   status?: string;
   level?: ConnectionLevel;
-  socialMedia?: string[];
+  socialMedia?: SocialMedia[];
   incomingLevel?: ConnectionLevel;
   notificationToken?: string;
   publicKey?: string;

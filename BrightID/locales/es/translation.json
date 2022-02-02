@@ -195,13 +195,15 @@
       "connectionLevel": "Nivel de Conexión",
       "mutualConnections": "Conexiones Mutuas",
       "mutualGroups": "Grupos Mutuos",
-      "possibleDuplicates": "Posibles Duplicados"
+      "possibleDuplicates": "Posibles Duplicados",
+      "socialMedia": "Redes sociales"
     },
     "tags": {
       "connectedAt": "Conectado {{date}}",
       "loading": "Cargando…"
     },
     "text": {
+      "copied": "Copiado al portapapeles!",
       "level": "¿Qué tan bien conoces a {{name}}?",
       "levelAlreadyKnown": "Ya conozco a esta persona",
       "levelJustMet": "Esta persona es un extraño que acabo de conocer",
