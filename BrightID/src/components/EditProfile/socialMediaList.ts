@@ -90,7 +90,7 @@ export const socialMediaList: SocialMediaList = {
   },
   '4fc96842-0d3d-40ba-bb39-1aaf59a48a59': {
     name: 'Telegram',
-    shareType: 'telephone #',
+    shareType: 'username',
     shareTypeDisplay: 'username or telephone',
     icon: TelegramIcon,
     getShareAction: (profile: string): SocialMediaShareAction =>
