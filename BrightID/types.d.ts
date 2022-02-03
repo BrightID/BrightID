@@ -187,10 +187,10 @@ declare global {
   interface SocialMediaCompanyShared {
     name: string;
     shareType: string;
-    shareTypeDisplay: string;
   }
 
   type SocialMediaCompany = SocialMediaCompanyShared & {
+    shareTypeDisplay: string;
     icon: any;
     getShareAction: (profile: string) => SocialMediaShareAction;
   };
