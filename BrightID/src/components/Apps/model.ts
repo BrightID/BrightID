@@ -11,6 +11,7 @@ import store from '@/store';
 import { NodeApi } from '@/api/brightId';
 import { selectAllSigs } from '@/reducer/appsSlice';
 import BrightidError, { APP_ID_NOT_FOUND } from '@/api/brightidError';
+import { updateBlindSig } from '@/actions';
 
 // max time to wait for app to respond to sponsoring request
 const sponsorTimeout = 1000 * 60; // 60 seconds
@@ -108,7 +109,9 @@ const linkAppId = async (appId: string, appUserId: string) => {
   const appInfo = find(propEq('id', appId))(apps) as AppInfo;
   const vel = appInfo.verificationExpirationLength;
   const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
-
+  // generate blind sig for apps with no verification expiration at linking time
+  // and also ensure blind sig is not missed because of delay in generation for all apps
+  await store.dispatch(updateBlindSig(appInfo));
   // existing linked verifications
   const previousSigs = selectAllSigs(store.getState()).filter(
     (sig) =>

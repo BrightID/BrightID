@@ -1,4 +1,4 @@
-export { fetchApps, updateBlindSigs } from './apps';
+export { fetchApps, updateBlindSigs, updateBlindSig } from './apps';
 
 export {
   SET_BACKUP_PENDING,
