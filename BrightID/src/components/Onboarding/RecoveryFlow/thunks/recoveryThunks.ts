@@ -1,12 +1,13 @@
 import nacl from 'tweetnacl';
 import { createImageDirectory, saveImage } from '@/utils/filesystem';
-import { randomKey } from '@/utils/encoding';
+import { hash, randomKey } from '@/utils/encoding';
 import {
   setUserData,
   setConnections,
   setGroups,
   setKeypair,
   addOperation,
+  upsertSig,
 } from '@/actions';
 import { OPERATION_APPLIED_BEFORE } from '@/api/brightidError';
 import { NodeApi } from '@/api/brightId';
@@ -154,6 +155,26 @@ export const recoverData = (pass: string, api: NodeApi) => async (
       }
     }
   }
+
+  // fetch blind sigs
+  console.log('fetching blind sigs ...');
+  const apps = await api.getApps();
+  const blindSigApps = apps.filter((app) => app.usingBlindSig);
+  for (const app of blindSigApps) {
+    for (const verification of app.verifications) {
+      console.log(app.id, 'apppppppps');
+      const vel = app.verificationExpirationLength;
+      const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
+      const key = hash(`${app.id} ${verification} ${roundedTimestamp}`);
+      try {
+        const decrypted = await fetchBackupData(key, id, pass);
+        await dispatch(upsertSig(JSON.parse(decrypted)));
+      } catch (err) {
+        console.log(`blind sig not found for ${key}`, err.message);
+      }
+    }
+  }
+
   dispatch(fetchUserInfo(api));
 };
 

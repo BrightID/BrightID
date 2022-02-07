@@ -125,10 +125,8 @@ export const uploadMutualInfo = async ({
     user,
   } = store.getState();
   let connections = selectAllConnections(store.getState());
-
   connections = _.keyBy(connections, 'id');
   groups = _.keyBy(groups, 'id');
-
   const otherSideConnections = await nodeApi.getConnections(
     conn.id,
     'inbound',
@@ -149,12 +147,10 @@ export const uploadMutualInfo = async ({
   if (!dataIds.includes(`connection_${user.id}`)) {
     mutualConnections.push(user);
   }
-
-  const otherSideGroups = await nodeApi.getUserMemberships(conn.id);
+  const otherSideGroups = await nodeApi.getMemberships(conn.id);
   const mutualGroups = otherSideGroups
     ? otherSideGroups.filter((g) => groups[g.id]).map((g) => groups[g.id])
     : [];
-
   console.log('uploading mutual connections');
   for (const c of mutualConnections) {
     await uploadConnection({ conn: c, channelApi, aesKey });

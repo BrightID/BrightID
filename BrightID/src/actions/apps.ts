@@ -3,10 +3,12 @@ import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
 import stringify from 'fast-json-stable-stringify';
 import { InteractionManager } from 'react-native';
+import { store } from '@/store';
 import { setApps, upsertSig, updateSig, selectAllSigs } from '@/reducer/appsSlice';
-import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
+import { hash, strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 import { NodeApi } from '@/api/brightId';
 import { isVerified } from '@/utils/verifications';
+import backupApi from '@/api/backupService';
 
 const WISchnorrClient = require('@/utils/WISchnorrClient');
 
@@ -15,14 +17,13 @@ export const updateBlindSig =
   const {
     user: { verifications, id },
     keypair: { secretKey },
-    apps: { apps },
   } = getState();
   const sigs = selectAllSigs(getState());
   const verificationsByName = _.keyBy(verifications, (v) => v.name);
   const vel = app.verificationExpirationLength;
   const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
   for (const verification of app.verifications) {
-    const sigInfo = sigs.find(
+    let sigInfo = sigs.find(
       (sig) =>
         sig.app === app.id &&
         sig.verification === verification &&
@@ -81,19 +82,18 @@ export const updateBlindSig =
         console.log(challenge, 'challenge');
         // store sig info before getting sig to be able to receive sig from server again
         // if app stopped just after querying the one time sig from the server
-        await dispatch(
-          upsertSig({
-            uid,
-            app: app.id,
-            roundedTimestamp,
-            verification,
-            pub,
-            challenge,
-            linked: false,
-            linkedTimestamp: 0,
-            signedTimestamp: Date.now(),
-          }),
-        );
+        sigInfo = {
+          uid,
+          app: app.id,
+          roundedTimestamp,
+          verification,
+          pub,
+          challenge,
+          linked: false,
+          linkedTimestamp: 0,
+          signedTimestamp: Date.now(),
+        }
+        await dispatch(upsertSig(sigInfo));
       } else if (sigInfo && !sigInfo.sig) {
         pub = sigInfo.pub;
         uid = sigInfo.uid;
@@ -124,12 +124,17 @@ export const updateBlindSig =
         continue;
       }
 
+      const backupData = stringify({...sigInfo, sig: blindSig});
+      const backupKey = hash(`${app.id} ${verification} ${roundedTimestamp}`);
+      await encryptAndBackup(backupKey, backupData);
+
       await dispatch(
         updateSig({
           id: uid,
           changes: { sig: blindSig },
         }),
       );
+
     } catch (err) {
       console.log(
         `error in getting sig for ${app.name} (${verification})`,
@@ -146,6 +151,7 @@ export const updateBlindSigs =
         const {
           apps: { apps },
         } = getState();
+
         // blind sigs for apps with no verification expiration time will be created at linking time
         const expirableBlindSigApps = apps.filter((app) =>
           app.usingBlindSig && app.verificationExpirationLength);
@@ -155,6 +161,19 @@ export const updateBlindSigs =
       });
     });
   };
+
+const encryptAndBackup = async (key: string, data: string) => {
+  const {
+    user: { id, password },
+  } = store.getState();
+  const hashedId = hash(id + password);
+  try {
+    const encrypted = CryptoJS.AES.encrypt(data, password).toString();
+    await backupApi.putRecovery(hashedId, key, encrypted);
+  } catch (err) {
+    err instanceof Error ? console.warn(err.message) : console.warn(err);
+  }
+};
 
 export const fetchApps = (api) => async (dispatch: dispatch, _) => {
   try {
