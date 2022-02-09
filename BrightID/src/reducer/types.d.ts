@@ -107,7 +107,6 @@ type SettingsState = {
   api: any | undefined;
 };
 
-
 type Photo = {
   filename: string;
 };
