@@ -3,7 +3,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from '@/store';
 import NodeApiGate from '@/components/NodeApiGate';
 import Apps from './Apps';
-import Backup from './Backup';
+import RecoveringConnection from './RecoveringConnection';
+import Devices from './Devices';
 import Connections from './Connections';
 import RecoveryConnections from './RecoveryConnections';
 import Eula from './Eula';
@@ -26,9 +27,10 @@ const MainTabs = () => {
       {RecoveryConnections()}
       {Groups()}
       {Notifications()}
+      {Devices()}
       {Apps()}
       {Modals()}
-      {Backup()}
+      {RecoveringConnection()}
     </Stack.Navigator>
   );
 };

@@ -96,17 +96,37 @@ export const Onboard = () => {
               {t('onboarding.button.create')}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.recoverBtn}
-            onPress={() => {
-              navigation.navigate('Restore');
-            }}
-            accessibilityLabel={t('onboarding.button.recover')}
-          >
-            <Text style={styles.recoverBtnText}>
-              {t('onboarding.button.recover')}
-            </Text>
-          </TouchableOpacity>
+          <View style={styles.recoverImportContainer}>
+            <TouchableOpacity
+              style={styles.recoverBtn}
+              onPress={() => {
+                navigation.navigate('Restore', {
+                  screen: 'RecoveryCode',
+                  params: { action: 'recovery' },
+                });
+              }}
+              accessibilityLabel={t('onboarding.button.recover')}
+            >
+              <Text style={styles.recoverBtnText}>
+                {t('onboarding.button.recover')}
+              </Text>
+            </TouchableOpacity>
+            <View style={styles.space}></View>
+            <TouchableOpacity
+              style={styles.recoverBtn}
+              onPress={() => {
+                navigation.navigate('Import', {
+                  screen: 'ImportCode',
+                  params: { action: 'import' },
+                });
+              }}
+              accessibilityLabel={t('onboarding.button.import')}
+            >
+              <Text style={styles.recoverBtnText}>
+                {t('onboarding.button.import')}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.versionInfoContainer}>
           <Text style={styles.versionInfo}>
@@ -192,10 +212,13 @@ const styles = StyleSheet.create({
     fontSize: fontSize[16],
     color: WHITE,
   },
+  space: {
+    width: 10,
+  },
   recoverBtn: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
+    flex: 1,
     height: DEVICE_LARGE ? 50 : 45,
     backgroundColor: WHITE,
     borderWidth: 1,
@@ -207,6 +230,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: fontSize[16],
     color: ORANGE,
+  },
+  recoverImportContainer: {
+    flexDirection: 'row',
   },
   versionInfoContainer: {
     display: 'flex',

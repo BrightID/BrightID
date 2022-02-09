@@ -12,6 +12,7 @@ import {
   updateNamePhoto,
   increaseRecoveredConnections,
   increaseRecoveredGroups,
+  setUploadCompletedBy,
   setRecoveryError,
 } from '../recoveryDataSlice';
 
@@ -284,6 +285,48 @@ export const downloadSigs = ({
       dispatch(setRecoveryError({ errorType: err.errorType }));
     } else {
       console.error(`downloadingSigs: ${err.message}`);
+      dispatch(
+        setRecoveryError({
+          errorType: RecoveryErrorType.GENERIC,
+          errorMessage: err.message,
+        }),
+      );
+    }
+  }
+};
+
+export const checkCompletedFlags = ({
+  channelApi,
+  dataIds,
+}: {
+  channelApi: ChannelAPI;
+  dataIds: Array<string>;
+}) => async (dispatch: dispatch, getState: getState) => {
+  try {
+    const {
+      recoveryData: {
+        uploadCompletedBy,
+        channel: { channelId },
+      },
+    } = getState();
+
+    const isCompleted = (id: string) => id.startsWith('completed_');
+    const completedBy = (id: string) => id.replace('completed_', '');
+
+    const completedDataIds = dataIds.filter(
+      (dataId) => isCompleted(dataId) && !uploadCompletedBy[completedBy(dataId)],
+    );
+
+    for (const dataId of completedDataIds) {
+      const uploader = completedBy(dataId);
+      dispatch(setUploadCompletedBy(uploader));
+    }
+  } catch (err) {
+    if (err instanceof RecoveryError) {
+      console.error(`checkCompletedFlags: ${err.errorType}`);
+      dispatch(setRecoveryError({ errorType: err.errorType }));
+    } else {
+      console.error(`checkCompletedFlags: ${err.message}`);
       dispatch(
         setRecoveryError({
           errorType: RecoveryErrorType.GENERIC,

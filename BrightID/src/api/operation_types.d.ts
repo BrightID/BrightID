@@ -111,3 +111,21 @@ type SpendSponsorshipOp = BaseOp & {
   app: string;
   appId: string;
 };
+
+type AddSigningKeyOp = {
+  name: 'Add Signing Key';
+  id: string;
+  signingKey: string;
+  timestamp: number;
+  v: number;
+  hash?: string;
+};
+
+type RemoveSigningKey = {
+  name: 'Remove Signing Key';
+  id: string;
+  signingKey: string;
+  timestamp: number;
+  v: number;
+  hash?: string;
+}

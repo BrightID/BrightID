@@ -107,6 +107,21 @@ type SettingsState = {
   api: any | undefined;
 };
 
+
 type Photo = {
   filename: string;
+};
+
+/**
+ * DevicesSlice
+ */
+
+type Device = {
+  name: string;
+  signingKey: string;
+  active: boolean;
+};
+
+type DevicesState = {
+  devices: EntityState<Device>;
 };
