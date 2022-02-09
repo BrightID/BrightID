@@ -14,15 +14,20 @@ import { BLACK, DARKER_GREY, LIGHT_BLACK, ORANGE, WHITE } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { qrCodeURL_types } from '@/utils/constants';
-import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
-import { setupRecovery } from '@/components/Onboarding/RecoveryFlow/thunks/recoveryThunks';
+import { RecoveryErrorType } from './RecoveryError';
+import { setupRecovery } from './thunks/recoveryThunks';
 import { buildRecoveryChannelQrUrl } from '@/utils/recovery';
 import {
   clearChannel,
   createChannel,
   pollChannel,
 } from './thunks/channelThunks';
-import { resetRecoveryData } from './recoveryDataSlice';
+import { resetRecoveryData, uploadCompletedByOtherSide } from './recoveryDataSlice';
+import {
+  setupSync,
+  createSyncChannel,
+  pollImportChannel,
+} from '../ImportFlow/thunks/channelThunks';
 
 /**
  * Recovery Code screen of BrightID
@@ -30,7 +35,7 @@ import { resetRecoveryData } from './recoveryDataSlice';
  * displays a qrcode
  */
 const RecoveryCodeScreen = ({ route }) => {
-  const { action } = route.params;
+  const { action, urlType } = route.params;
   const [qrUrl, setQrUrl] = useState<URL>();
   const [qrsvg, setQrsvg] = useState('');
   const [alreadyNotified, setAlreadyNotified] = useState(false);
@@ -41,6 +46,12 @@ const RecoveryCodeScreen = ({ route }) => {
     ? Object.values(recoveryData.sigs).length
     : 0;
 
+  const isScanned = useSelector((state: State) =>
+    uploadCompletedByOtherSide(state) ||
+    state.recoveryData.recoveredConnections ||
+    state.recoveryData.recoveredGroups ||
+    state.recoveryData.recoveredBlindSigs);
+
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -50,14 +61,40 @@ const RecoveryCodeScreen = ({ route }) => {
     const runEffect = async () => {
       // create publicKey, secretKey, aesKey for user
       await dispatch(setupRecovery());
-      // create channel for recovery sigs
+      // create channel and upload new publicKey to get signed by the scanner
       await dispatch(createChannel());
-      // start polling channel
+      // start polling channel to get sig and mutual info
       dispatch(pollChannel());
     };
+    const runImportEffect = async () => {
+      // create publicKey, secretKey, aesKey for user
+      await dispatch(setupRecovery());
+      // create channel and upload new publicKey to be added as a new signing key by the scanner
+      await dispatch(createChannel());
+      // start polling channel to get connections/groups/blindsigs info
+      dispatch(pollImportChannel());
+    };
+    const runSyncEffect = async () => {
+      // create a new aesKey
+      await dispatch(setupSync());
+      // create channel and upload lastSyncTime to the channel if it is not primary device
+      // or poll lastSyncTime from other side if it is and then upload connections/groups/blindsigs
+      // added after lastSyncTime to the channel
+      await dispatch(createSyncChannel());
+      // start polling channel to get new connections/groups/blindsigs info
+      dispatch(pollImportChannel());
+    };
     if (!recoveryData.aesKey) {
-      console.log(`initializing recovery process`);
-      runEffect();
+      if (action === 'recovery') {
+        console.log(`initializing recovery process`);
+        runEffect();
+      } else if (action === 'import') {
+        console.log(`initializing import process`);
+        runImportEffect();
+      } else if (action === 'sync') {
+        console.log(`initializing sync process`);
+        runSyncEffect();
+      }
     }
   }, [dispatch, recoveryData]);
 
@@ -67,7 +104,7 @@ const RecoveryCodeScreen = ({ route }) => {
       const newQrUrl = buildRecoveryChannelQrUrl({
         aesKey: recoveryData.aesKey,
         url: recoveryData.channel.url,
-        t: action === 'recovery' ? qrCodeURL_types.RECOVERY : qrCodeURL_types.IMPORT,
+        t: urlType,
       });
       console.log(`new qrCode url: ${newQrUrl.href}`);
       setQrUrl(newQrUrl);
@@ -131,10 +168,12 @@ const RecoveryCodeScreen = ({ route }) => {
         setAlreadyNotified(true);
       } else if (action === 'recovery' && sigCount > 1) {
         navigation.navigate('Restore');
-      } else if (action === 'import' && recoveryData.name) {
+      } else if (action === 'import' && isScanned) {
         navigation.navigate('Import');
+      } else if (action === 'sync' && isScanned) {
+        navigation.navigate('Devices',{ syncing: true, asScanner: false });
       }
-    }, [sigCount, recoveryData.name, alreadyNotified, t, navigation]),
+    }, [sigCount, isScanned, recoveryData.name, alreadyNotified, t, navigation]),
   );
 
   const copyQr = () => {

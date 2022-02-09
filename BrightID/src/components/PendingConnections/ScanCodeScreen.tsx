@@ -139,6 +139,7 @@ export const ScanCodeScreen = () => {
 
           switch (urlType) {
             case qrCodeURL_types.RECOVERY:
+            case qrCodeURL_types.SYNC:
             case qrCodeURL_types.IMPORT: {
               // Pop 'aes' parameter from url
               const aesKey = channelURL.searchParams.get('aes');
@@ -158,7 +159,9 @@ export const ScanCodeScreen = () => {
               );
               if (urlType === qrCodeURL_types.RECOVERY) {
                 navigation.navigate('RecoveringConnection');
-              } else {
+              } else if (urlType === qrCodeURL_types.SYNC) {
+                navigation.navigate('Devices', { syncing: true, asScanner: true });
+              } else if (urlType === qrCodeURL_types.IMPORT) {
                 navigation.navigate('Add Device');
               }
               break;

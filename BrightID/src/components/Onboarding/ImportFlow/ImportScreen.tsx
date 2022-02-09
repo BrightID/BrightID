@@ -4,35 +4,38 @@ import {
   Text,
   View,
 } from 'react-native';
+import { setUserId } from '@/actions';
 import { useSelector, useDispatch } from '@/store';
+import Spinner from 'react-native-spinkit';
 import { useNavigation } from '@react-navigation/native';
 import { BLACK, DARKER_GREY, GREEN, ORANGE } from '@/theme/colors';
 import { useTranslation } from 'react-i18next';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import {
-  finishRecovery,
-  setRecoveryKeys,
-} from '@/components/Onboarding/RecoveryFlow/thunks/recoveryThunks';
-import Spinner from 'react-native-spinkit';
+import { setRecoveryKeys } from '../RecoveryFlow/thunks/recoveryThunks';
+import { resetRecoveryData, uploadCompletedByOtherSide } from '../RecoveryFlow/recoveryDataSlice';
+import { clearImportChannel } from './thunks/channelThunks';
+
 
 /* Component to track import restore */
 
 const ImportScreen = () => {
-  const recoveryData = useSelector((state: State) => state.recoveryData);
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const recoveryData = useSelector((state: State) => state.recoveryData);
+  const importCompleted = useSelector((state) => uploadCompletedByOtherSide(state));
 
   useEffect(() => {
     const setup = async () => {
-      console.log('hereeeeeeeee');
+      clearImportChannel();
       await dispatch(setRecoveryKeys());
-      await dispatch(finishRecovery());
+      await dispatch(resetRecoveryData());
+      await dispatch(setUserId(recoveryData.id));
       // navigation.navigate('Home');
     }
-    console.log(recoveryData?.uploadCompletedBy, recoveryData?.id);
-    if (recoveryData && recoveryData.uploadCompletedBy[recoveryData.id]) {
+
+    if (importCompleted) {
        setup();
     }
     

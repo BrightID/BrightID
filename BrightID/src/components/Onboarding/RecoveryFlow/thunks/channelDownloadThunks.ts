@@ -1,7 +1,7 @@
 import ChannelAPI from '@/api/channelService';
 import { saveImage } from '@/utils/filesystem';
 import { decryptData } from '@/utils/cryptoHelper';
-import { hash } from '@/utils/encoding';
+import { hash, b64ToUrlSafeB64 } from '@/utils/encoding';
 import { addConnection, createGroup, selectAllConnections } from '@/actions';
 import {
   RecoveryError,
@@ -12,7 +12,6 @@ import {
   updateNamePhoto,
   increaseRecoveredConnections,
   increaseRecoveredGroups,
-  setUploadCompletedBy,
   setRecoveryError,
 } from '../recoveryDataSlice';
 
@@ -50,6 +49,7 @@ const downloadConnection = async ({
   channelId: string;
 }) => {
   try {
+    console.log(channelId, dataId);
     const encrypted = await channelApi.download({ channelId, dataId });
     const connectionData = decryptData(encrypted, aesKey);
 
@@ -58,7 +58,6 @@ const downloadConnection = async ({
       console.log('missing connection data');
       return;
     }
-
     console.log(`Downloading profile data of ${connectionData?.id} ...`);
 
     let filename: string;
@@ -73,6 +72,7 @@ const downloadConnection = async ({
     return connectionData;
   } catch (err) {
     console.error(`downloadConnection: ${err.message}`);
+    throw err;
   }
 };
 
@@ -85,6 +85,9 @@ export const downloadConnections = ({
 }) => async (dispatch: dispatch, getState: getState) => {
   try {
     const {
+      keypair: {
+        publicKey: signingKey
+      },
       recoveryData: {
         id: recoveryId,
         aesKey,
@@ -97,11 +100,12 @@ export const downloadConnections = ({
     const existingConnIds = connections.map((c) => c.id);
 
     const isConn = (id) => id.startsWith('connection_');
-    const connId = (id) => id.replace('connection_', '');
+    const connId = (id) => id.replace('connection_', '').split(':')[0];
+    const uploader = (id) => id.replace('connection_', '').split(':')[1];
 
     const connectionDataIds = dataIds.filter(
       (id) =>
-        isConn(id) &&
+        isConn(id) && uploader(id) != b64ToUrlSafeB64(signingKey) &&
         !existingConnIds.includes(connId(id)) &&
         connId(id) !== recoveryId,
     );
@@ -136,6 +140,9 @@ export const downloadNamePhoto = ({
   dataIds: Array<string>;
 }) => async (dispatch: dispatch, getState: getState) => {
   const {
+    keypair: {
+      publicKey: signingKey,
+    },
     recoveryData: {
       id: recoveryId,
       aesKey,
@@ -143,9 +150,12 @@ export const downloadNamePhoto = ({
     },
   } = getState();
 
-  const connId = (id) => id.replace('connection_', '');
+  const connId = (id) => id.replace('connection_', '').split(':')[0];
+  const uploader = (id) => id.replace('connection_', '').split(':')[1];
 
-  const dataId = dataIds.find((id) => connId(id) === recoveryId);
+  const dataId = dataIds.find((id) =>
+    connId(id) === recoveryId &&
+    uploader(id) !== b64ToUrlSafeB64(signingKey));
 
   if (dataId) {
     const connectionData = await downloadConnection({
@@ -218,10 +228,14 @@ export const downloadGroups = ({
     const existingGroupIds = groups.map((c) => c.id);
 
     const isGroup = (id) => id.startsWith('group_');
-    const groupId = (id) => id.replace('group_', '');
+    const groupId = (id) => id.replace('group_', '').split(':')[0];
+    const uploader = (id) => id.replace('group_', '').split(':')[1];
 
     const groupDataIds = dataIds.filter(
-      (id) => isGroup(id) && !existingGroupIds.includes(groupId(id)),
+      (id) =>
+        isGroup(id) &&
+        uploader(id) != b64ToUrlSafeB64(signingKey) &&
+        !existingGroupIds.includes(groupId(id)),
     );
 
     let count = 0;
@@ -263,7 +277,7 @@ export const downloadSigs = ({
     } = getState();
 
     const isSig = (id: string) => id.startsWith('sig_');
-    const sigId = (id: string) => id.replace('sig_', '');
+    const sigId = (id: string) => id.replace('sig_', '').split(':')[0];
 
     const sigDataIds = dataIds.filter(
       (dataId) => isSig(dataId) && !sigs[sigId(dataId)],
@@ -285,48 +299,6 @@ export const downloadSigs = ({
       dispatch(setRecoveryError({ errorType: err.errorType }));
     } else {
       console.error(`downloadingSigs: ${err.message}`);
-      dispatch(
-        setRecoveryError({
-          errorType: RecoveryErrorType.GENERIC,
-          errorMessage: err.message,
-        }),
-      );
-    }
-  }
-};
-
-export const checkCompletedFlags = ({
-  channelApi,
-  dataIds,
-}: {
-  channelApi: ChannelAPI;
-  dataIds: Array<string>;
-}) => async (dispatch: dispatch, getState: getState) => {
-  try {
-    const {
-      recoveryData: {
-        uploadCompletedBy,
-        channel: { channelId },
-      },
-    } = getState();
-
-    const isCompleted = (id: string) => id.startsWith('completed_');
-    const completedBy = (id: string) => id.replace('completed_', '');
-
-    const completedDataIds = dataIds.filter(
-      (dataId) => isCompleted(dataId) && !uploadCompletedBy[completedBy(dataId)],
-    );
-
-    for (const dataId of completedDataIds) {
-      const uploader = completedBy(dataId);
-      dispatch(setUploadCompletedBy(uploader));
-    }
-  } catch (err) {
-    if (err instanceof RecoveryError) {
-      console.error(`checkCompletedFlags: ${err.errorType}`);
-      dispatch(setRecoveryError({ errorType: err.errorType }));
-    } else {
-      console.error(`checkCompletedFlags: ${err.message}`);
       dispatch(
         setRecoveryError({
           errorType: RecoveryErrorType.GENERIC,

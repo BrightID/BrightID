@@ -18,6 +18,7 @@ import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { selectBaseUrl } from '@/reducer/settingsSlice';
 import { createKeypair } from './SignUpFlow/thunks';
 import VerifiedBadge from '../Icons/VerifiedBadge';
+import { qrCodeURL_types } from '@/utils/constants';
 import { version as app_version } from '../../../package.json';
 
 /* Description */
@@ -102,7 +103,7 @@ export const Onboard = () => {
               onPress={() => {
                 navigation.navigate('Restore', {
                   screen: 'RecoveryCode',
-                  params: { action: 'recovery' },
+                  params: { urlType: qrCodeURL_types.RECOVERY, action: 'recovery' },
                 });
               }}
               accessibilityLabel={t('onboarding.button.recover')}
@@ -117,7 +118,7 @@ export const Onboard = () => {
               onPress={() => {
                 navigation.navigate('Import', {
                   screen: 'ImportCode',
-                  params: { action: 'import' },
+                  params: { urlType: qrCodeURL_types.IMPORT, action: 'import' },
                 });
               }}
               accessibilityLabel={t('onboarding.button.import')}

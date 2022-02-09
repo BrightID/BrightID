@@ -3,7 +3,7 @@ import CryptoJS from 'crypto-js';
 import nacl from 'tweetnacl';
 import stringify from 'fast-json-stable-stringify';
 import { InteractionManager } from 'react-native';
-import { setApps, addSig, selectAllSigs } from '@/reducer/appsSlice';
+import { setApps, upsertSig, selectAllSigs } from '@/reducer/appsSlice';
 import { strToUint8Array, uInt8ArrayToB64 } from '@/utils/encoding';
 import { NodeApi } from '@/api/brightId';
 import { isVerified } from '@/utils/verifications';
@@ -107,7 +107,7 @@ export const updateBlindSigs =
               }
 
               dispatch(
-                addSig({
+                upsertSig({
                   uid,
                   sig: blindSig,
                   app: app.id,
@@ -115,6 +115,7 @@ export const updateBlindSigs =
                   verification,
                   linked: false,
                   linkedTimestamp: 0,
+                  signedTimestamp: Date.now(),
                 }),
               );
             } catch (err) {

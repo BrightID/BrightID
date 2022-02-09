@@ -27,6 +27,7 @@ const pastLimit = (timestamp) => timestamp + THREE_DAYS < Date.now();
 
 // THUNKS
 
+
 export const setupRecovery =
   () => async (dispatch: dispatch, getState: getState) => {
     const { recoveryData } = getState();
@@ -184,9 +185,9 @@ export const recoverData =
 export const finishRecovery =
   () => async (dispatch: dispatch, getState: getState) => {
     // collect user data that was populated either by uploads from recovery connections or by restoring backup
-    const { id, secretKey, name, photo } = getState().recoveryData;
+    const { id, name, photo } = getState().recoveryData;
     // clear recovery data from state
     dispatch(resetRecoveryData());
     // finally set the user data
-    dispatch(setUserData({ id, name, photo, secretKey }));
+    dispatch(setUserData({ id, name, photo }));
   };

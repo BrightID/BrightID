@@ -1,53 +1,116 @@
-import { hash } from '@/utils/encoding';
+import { store } from '@/store';
+import { b64ToUrlSafeB64, hash } from '@/utils/encoding';
+import { encryptData } from '@/utils/cryptoHelper';
+import { retrieveImage } from '@/utils/filesystem';
 import { selectAllConnections } from '@/reducer/connectionsSlice';
+import { selectAllSigs } from '@/reducer/appsSlice';
+import ChannelAPI from '@/api/channelService';
 import {
   uploadConnection,
   uploadGroup
-} from '@/components/Onboarding/RecoveryFlow/thunks/channelUploadThunks';
+} from '../../RecoveryFlow/thunks/channelUploadThunks';
 
-export const uploadAllInfo = ({
-  aesKey,
-  channelApi,
-}) => async (dispatch, getState) => {
+export const uploadAllInfoAfter = async (after) => {
+  const {
+    user,
+    keypair: { publicKey: signingKey },
+    groups: { groups },
+    recoveryData: {
+      channel: { url, channelId },
+      aesKey,
+    },
+    settings: { isPrimaryDevice },
+  } = store.getState();
+  // use keypair for sync and recovery for import
+  const channelApi = new ChannelAPI(url.href);
+
+  console.log('uploading user info');
+  const photo = await retrieveImage(user.photo.filename);
+  const data = {
+    id: user.id,
+    name: user.name,
+    photo,
+    isSponsored: user.isSponsored,
+    backupCompleted: user.backupCompleted,
+    password: user.password,
+    updateTimestamps: user.updateTimestamps
+  };
+
+  const encrypted = encryptData(data, aesKey);
+  await channelApi.upload({
+    channelId,
+    dataId: `userinfo_${user.id}:${b64ToUrlSafeB64(signingKey)}`,
+    data: encrypted,
+  });
+
+  console.log('uploading connections');
+  const connections = selectAllConnections(store.getState());
+  for (const conn of connections) {
+    if (conn.timestamp > after) {
+      await uploadConnection({ conn, channelApi, aesKey });
+    }
+  }
+
+  console.log('uploading groups');
+  for (const group of groups) {
+    if (group.joined > after) {
+      await uploadGroup({ group, channelApi, aesKey });
+    }
+  }
+
+  console.log('uploading blind sigs');
+  if (isPrimaryDevice) {
+    const sigs = selectAllSigs(store.getState());
+    for (const sig of sigs) {
+      if (sig.signedTimestamp > after || sig.linkedTimestamp > after) {
+        await uploadBlindSig({ sig, channelApi, aesKey });
+      }
+    }
+
+  }
+
+  console.log('uploading completed flag');
+  await channelApi.upload({
+    channelId,
+    dataId: `completed_${user.id}:${b64ToUrlSafeB64(signingKey)}`,
+    data: 'completed',
+  });
+
+};
+
+const uploadBlindSig = async ({ sig, channelApi, aesKey }) => {
+  const { keypair: { publicKey: signingKey } } = store.getState();
   try {
-    const dataIds = await channelApi.list(hash(aesKey));
-    const {
-      groups: { groups },
-      user,
-    } = getState();
-    const connections = selectAllConnections(getState());
-    connections.unshift(user);
-
-    // uploading a dummy sig to set user id on the other side
-    console.log('uploading user id');
-    const data = { signer: user.id, id: user.id, sig: 'dummy sig' };
+    const encrypted = encryptData(sig, aesKey);
+    console.log(`Posting blind sig for app: ${sig.app} verification: ${sig.verification} ...`);
     await channelApi.upload({
       channelId: hash(aesKey),
-      dataId: `sig_${user.id}`,
-      data,
-    });
-
-    console.log('uploading connections');
-    for (const conn of connections) {
-      if (!dataIds.includes(`connection_${conn.id}`)) {
-        await uploadConnection({ conn, channelApi, aesKey });
-      }
-    }
-
-    console.log('uploading groups');
-    for (const group of groups) {
-      if (!dataIds.includes(`group_${group.id}`)) {
-        await uploadGroup({ group, channelApi, aesKey });
-      }
-    }
-
-    console.log('uploading completed flag');
-    await channelApi.upload({
-      channelId: hash(aesKey),
-      dataId: `completed_${user.id}`,
-      data: 'completed',
+      data: encrypted,
+      // use hash of sig.uid to avoid revealing it
+      dataId: `blindsig_${hash(sig.uid)}:${b64ToUrlSafeB64(signingKey)}`,
     });
   } catch (err) {
-    console.error(`uploadAllInfo: ${err.message}`);
+    console.error(`uploadBlindSig: ${err.message}`);
   }
+};
+
+export const uploadDeviceInfo = async () => {
+  const {
+    recoveryData: {
+      channel: { url, channelId },
+      publicKey: signingKey,
+    },
+    settings: {
+      lastSyncTime,
+      isPrimaryDevice,
+    }
+  } = store.getState();
+  const dataObj = { signingKey, lastSyncTime, isPrimaryDevice };
+  const data = JSON.stringify(dataObj);
+  const channelApi = new ChannelAPI(url.href);
+  await channelApi.upload({
+    channelId,
+    data,
+    dataId: 'data',
+  });
 };
