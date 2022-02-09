@@ -43,6 +43,7 @@ const fetchUserInfo =
           console.log(err.message);
         }
       });
-    };
+    });
+  }
 
 export default fetchUserInfo;
