@@ -10,125 +10,121 @@ import KeybaseIcon from '@/static/socialmedia/Keybase_logo_official.svg';
 import MediumIcon from '@/static/socialmedia/icons8-medium-monogram.svg';
 import TwitterIcon from '@/static/socialmedia/icons8-twitter-circled.svg';
 
-const isPhoneNumber = (profile: string): boolean => {
-  const c = profile[0];
-  return c === '+' || (c >= '0' && c <= '9');
-};
+export enum SocialMediaType {
+  SOCIAL_PROFILE = 'so',
+  PHONE_NUMBER = 'ph',
+}
+
+export enum SocialMediaShareActionType {
+  OPEN_LINK = 'ol',
+  COPY = 'cp',
+  COPY_IF_PHONE_LINK_IF_USERNAME = 'cl',
+}
+
+export enum ShareType {
+  USERNAME = 'username',
+  TELEPHONE = 'telephone #',
+  URL = 'url',
+}
+
+export enum ShareTypeDisplay {
+  USERNAME = 'username',
+  TELEPHONE = 'telephone #',
+  URL = 'url',
+  USERNAME_OR_TELEPHONE = 'username or telephone',
+}
 
 export const socialMediaList: SocialMediaList = {
   'fab9a32f-e968-495e-807f-7f1b27642506': {
     name: 'Discord',
-    shareType: 'username',
-    shareTypeDisplay: 'username',
     icon: DiscordIcon,
-    getShareAction: (profile: string): SocialMediaShareAction => {
-      return {
-        actionType: SocialMediaShareActionType.COPY,
-        data: `${profile}`,
-      };
-    },
+    type: SocialMediaType.SOCIAL_PROFILE,
+    shareType: ShareType.USERNAME,
+    shareTypeDisplay: ShareTypeDisplay.USERNAME,
+    shareActionType: SocialMediaShareActionType.COPY,
+    shareActionDataFormat: `%%PROFILE%%`,
   },
   'efc5e269-195b-47e8-8634-b1899c00df9b': {
     name: 'Instagram',
-    shareType: 'username',
-    shareTypeDisplay: 'username',
     icon: InstagramIcon,
-    getShareAction: (profile: string): SocialMediaShareAction => ({
-      actionType: SocialMediaShareActionType.OPEN_LINK,
-      data: `https://instagram.com/${profile}/`,
-    }),
+    type: SocialMediaType.SOCIAL_PROFILE,
+    shareType: ShareType.USERNAME,
+    shareTypeDisplay: ShareTypeDisplay.USERNAME,
+    shareActionType: SocialMediaShareActionType.OPEN_LINK,
+    shareActionDataFormat: `https://instagram.com/%%PROFILE%%/`,
   },
   '607223cc-7fbc-4b44-a595-e84d62146f30': {
     name: 'Keybase',
-    shareType: 'username',
-    shareTypeDisplay: 'username',
     icon: KeybaseIcon,
-    getShareAction: (profile: string): SocialMediaShareAction => ({
-      actionType: SocialMediaShareActionType.OPEN_LINK,
-      data: `https://keybase.io/${profile}/`,
-    }),
+    type: SocialMediaType.SOCIAL_PROFILE,
+    shareType: ShareType.USERNAME,
+    shareTypeDisplay: ShareTypeDisplay.USERNAME,
+    shareActionType: SocialMediaShareActionType.OPEN_LINK,
+    shareActionDataFormat: `https://keybase.io/%%PROFILE%%/`,
   },
   'd750bd42-e2d3-465f-a3fd-40fde0080022': {
     name: 'LinkedIn',
-    shareType: 'url',
-    shareTypeDisplay: 'url',
     icon: LinkedinIcon,
-    getShareAction: (profile: string): SocialMediaShareAction => ({
-      actionType: SocialMediaShareActionType.OPEN_LINK,
-      data: `https://www.linkedin.com/in/${profile}/`,
-    }),
+    type: SocialMediaType.SOCIAL_PROFILE,
+    shareType: ShareType.URL,
+    shareTypeDisplay: ShareTypeDisplay.URL,
+    shareActionType: SocialMediaShareActionType.OPEN_LINK,
+    shareActionDataFormat: `https://www.linkedin.com/in/%%PROFILE%%/`,
   },
   '50ea1e56-f53b-4fa9-bbcb-846a3f3ac7b6': {
     name: 'Medium',
-    shareType: 'url',
-    shareTypeDisplay: 'url',
     icon: MediumIcon,
-    getShareAction: (profile: string): SocialMediaShareAction => ({
-      actionType: SocialMediaShareActionType.OPEN_LINK,
-      data: `${profile}`,
-    }),
+    type: SocialMediaType.SOCIAL_PROFILE,
+    shareType: ShareType.URL,
+    shareTypeDisplay: ShareTypeDisplay.URL,
+    shareActionType: SocialMediaShareActionType.OPEN_LINK,
+    shareActionDataFormat: `%%PROFILE%%`,
   },
   '65a174ff-b823-4abd-9dbb-ae0f46f7bc53': {
     name: 'Reddit',
-    shareType: 'username',
-    shareTypeDisplay: 'username',
     icon: RedditIcon,
-    getShareAction: (profile: string): SocialMediaShareAction => ({
-      actionType: SocialMediaShareActionType.OPEN_LINK,
-      data: `https://www.reddit.com/user/${profile}/`,
-    }),
+    type: SocialMediaType.SOCIAL_PROFILE,
+    shareType: ShareType.USERNAME,
+    shareTypeDisplay: ShareTypeDisplay.USERNAME,
+    shareActionType: SocialMediaShareActionType.OPEN_LINK,
+    shareActionDataFormat: `https://www.reddit.com/user/%%PROFILE%%/`,
   },
   '0e92b39b-e1b5-4236-be40-7377aadca4db': {
     name: 'Signal',
-    shareType: 'telephone #',
-    shareTypeDisplay: 'telephone #',
     icon: SignalIcon,
-    getShareAction: (profile: string): SocialMediaShareAction => ({
-      actionType: SocialMediaShareActionType.OPEN_LINK,
-      data: `${profile}`,
-    }),
+    type: SocialMediaType.SOCIAL_PROFILE,
+    shareType: ShareType.TELEPHONE,
+    shareTypeDisplay: ShareTypeDisplay.TELEPHONE,
+    shareActionType: SocialMediaShareActionType.OPEN_LINK,
+    shareActionDataFormat: `%%PROFILE%%`,
   },
   '4fc96842-0d3d-40ba-bb39-1aaf59a48a59': {
     name: 'Telegram',
-    shareType: 'username',
-    shareTypeDisplay: 'username or telephone',
     icon: TelegramIcon,
-    getShareAction: (profile: string): SocialMediaShareAction =>
-      isPhoneNumber(profile)
-        ? {
-            actionType: SocialMediaShareActionType.COPY,
-            data: `${profile}`,
-          }
-        : {
-            actionType: SocialMediaShareActionType.OPEN_LINK,
-            data: `https://t.me/${profile}/`,
-          },
+    type: SocialMediaType.SOCIAL_PROFILE,
+    shareType: ShareType.USERNAME,
+    shareTypeDisplay: ShareTypeDisplay.USERNAME_OR_TELEPHONE,
+    shareActionType: SocialMediaShareActionType.COPY_IF_PHONE_LINK_IF_USERNAME,
+    shareActionDataFormat: `https://t.me/%%PROFILE%%/`,
   },
   'a8b188b1-f9f9-416d-b002-7b7faf6e2d41': {
     name: 'Twitter',
-    shareType: 'username',
-    shareTypeDisplay: 'username',
     icon: TwitterIcon,
-    getShareAction: (profile: string): SocialMediaShareAction => ({
-      actionType: SocialMediaShareActionType.OPEN_LINK,
-      data: `https://twitter.com/${profile}/`,
-    }),
+    type: SocialMediaType.SOCIAL_PROFILE,
+    shareType: ShareType.USERNAME,
+    shareTypeDisplay: ShareTypeDisplay.USERNAME,
+    shareActionType: SocialMediaShareActionType.OPEN_LINK,
+    shareActionDataFormat: `https://twitter.com/%%PROFILE%%/`,
   },
   '283ade8a-6ef1-4d38-a744-70ee2f478ba4': {
     name: 'Whatsapp',
-    shareType: 'telephone #',
-    shareTypeDisplay: 'telephone #',
     icon: WhatsappIcon,
-    getShareAction: (profile: string): SocialMediaShareAction => ({
-      actionType: SocialMediaShareActionType.OPEN_LINK,
-      data: `https://wa.me/${profile}/`,
-    }),
+    type: SocialMediaType.SOCIAL_PROFILE,
+    shareType: ShareType.TELEPHONE,
+    shareTypeDisplay: ShareTypeDisplay.TELEPHONE,
+    shareActionType: SocialMediaShareActionType.OPEN_LINK,
+    shareActionDataFormat: `https://wa.me/%%PROFILE%%/`,
   },
 } as const;
-
-export enum SocialMediaShareActionType {
-  OPEN_LINK = 'OPEN_LINK',
-  COPY = 'COPY',
-}
 
 export default Object.freeze(socialMediaList);

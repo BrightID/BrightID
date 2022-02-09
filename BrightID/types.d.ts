@@ -8,7 +8,12 @@ import ChannelAPI from '@/api/channelService';
 import { AppDispatch, RootState } from '@/store';
 import { connection_levels } from '@/utils/constants';
 import { pendingConnection_states } from '@/components/PendingConnections/pendingConnectionSlice';
-import { SocialMediaShareActionType } from '@/components/EditProfile/socialMediaList';
+import {
+  SocialMediaType,
+  SocialMediaShareActionType,
+  ShareType,
+  ShareTypeDisplay,
+} from '@/components/EditProfile/socialMediaList';
 import { RecoveryErrorType } from '@/components/Onboarding/RecoveryFlow/RecoveryError';
 
 declare global {
@@ -186,13 +191,15 @@ declare global {
   // shared in old or new versions of app
   interface SocialMediaCompanyShared {
     name: string;
-    shareType: string;
+    shareType: ShareType;
   }
 
   type SocialMediaCompany = SocialMediaCompanyShared & {
-    shareTypeDisplay: string;
+    type: SocialMediaType;
+    shareTypeDisplay: ShareTypeDisplay;
+    shareActionType: SocialMediaShareActionType;
+    shareActionDataFormat: string;
     icon: any;
-    getShareAction: (profile: string) => SocialMediaShareAction;
   };
 
   type SocialMediaId = string;
@@ -207,11 +214,6 @@ declare global {
     order: number;
     profile: string;
     profileDisplayWidth?: number | string;
-  };
-
-  type SocialMediaShareAction = {
-    actionType: SocialMediaShareActionType;
-    data: string;
   };
 
   type SocialMediaState = EntityState<SocialMedia>;
