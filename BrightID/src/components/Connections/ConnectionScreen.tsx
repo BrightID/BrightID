@@ -66,7 +66,8 @@ type Props = {
 type SocialMediaOnConnectionPage = {
   id: SocialMediaId;
   icon: any;
-  shareAction: SocialMediaShareAction | null;
+  shareActionType: SocialMediaShareActionType;
+  shareActionData: string;
 };
 
 interface Section {
@@ -83,6 +84,11 @@ enum ConnectionScreenSectionKeys {
   DUPLICATES = 'duplicates',
   SOCIAL_MEDIA = 'socialMedia',
 }
+
+const isPhoneNumber = (profile: string): boolean => {
+  const c = profile[0];
+  return c === '+' || (c >= '0' && c <= '9');
+};
 
 function ConnectionScreen(props: Props) {
   const {
@@ -128,10 +134,25 @@ function ConnectionScreen(props: Props) {
         (s) => s.id === socialMediaId,
       )?.profile;
       if (profile) {
+        let { shareActionType } = element;
+        if (
+          shareActionType ===
+          SocialMediaShareActionType.COPY_IF_PHONE_LINK_IF_USERNAME
+        ) {
+          if (isPhoneNumber(profile)) {
+            shareActionType = SocialMediaShareActionType.COPY
+          } else {
+            shareActionType = SocialMediaShareActionType.OPEN_LINK
+          }
+        }
         socialMediaOnConnectionPage.push({
           id: socialMediaId,
           icon: element.icon,
-          shareAction: element.getShareAction(profile),
+          shareActionType,
+          shareActionData: element.shareActionDataFormat.replace(
+            '%%PROFILE%%',
+            profile,
+          ),
         });
       }
     }
@@ -194,7 +215,8 @@ function ConnectionScreen(props: Props) {
         title: t('connectionDetails.label.socialMedia'),
         data: socailMediaCollapsed ? [] : [connectionSocailMedia],
         key: ConnectionScreenSectionKeys.SOCIAL_MEDIA,
-        numEntries: connectionSocailMedia.filter((s) => !!s.shareAction).length,
+        numEntries: connectionSocailMedia.filter((s) => !!s.shareActionData)
+          .length,
       },
     ];
     return data;
@@ -368,15 +390,12 @@ function ConnectionScreen(props: Props) {
     return (
       <TouchableWithoutFeedback
         onPress={() => {
-          if (item.shareAction) {
-            const { data } = item.shareAction;
-            if (
-              item.shareAction.actionType ===
-              SocialMediaShareActionType.OPEN_LINK
-            ) {
+          if (item.shareActionData) {
+            const data = item.shareActionData;
+            if (item.shareActionType === SocialMediaShareActionType.OPEN_LINK) {
               Linking.openURL(data);
             } else if (
-              item.shareAction.actionType === SocialMediaShareActionType.COPY
+              item.shareActionType === SocialMediaShareActionType.COPY
             ) {
               Clipboard.setString(data);
               if (Platform.OS === 'android') {
