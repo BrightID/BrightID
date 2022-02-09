@@ -4,7 +4,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { setUserId } from '@/actions';
+import { setUserId, setPrimaryDevice } from '@/actions';
 import { useSelector, useDispatch } from '@/store';
 import Spinner from 'react-native-spinkit';
 import { useNavigation } from '@react-navigation/native';
@@ -29,6 +29,7 @@ const ImportScreen = () => {
   useEffect(() => {
     const setup = async () => {
       clearImportChannel();
+      await dispatch(setPrimaryDevice(false));
       await dispatch(setRecoveryKeys());
       await dispatch(resetRecoveryData());
       await dispatch(setUserId(recoveryData.id));
