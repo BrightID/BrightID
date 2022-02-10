@@ -3,15 +3,13 @@ import React from 'react';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Svg, { Path, SvgXml } from 'react-native-svg';
 import { ORANGE } from '@/theme/colors';
-import { arc } from './BottomNavigation';
 
-export default function ConnectionsCard() {
-  const d = arc();
+export default function ConnectionsCard(props) {
+  const { onPress } = props;
 
-  // console.log(...d);
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.rowHeader}>
+      <TouchableOpacity style={styles.rowHeader} onPress={onPress}>
         <Text style={{ fontFamily: 'Poppins-Bold' }}>Connections</Text>
         <Material name="arrow-right" size={25} color={ORANGE} />
       </TouchableOpacity>
