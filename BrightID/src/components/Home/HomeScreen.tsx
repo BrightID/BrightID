@@ -42,7 +42,7 @@ import {
   selectCompletedTaskIds,
 } from '@/components/Tasks/TasksSlice';
 
-import { version as app_version } from '../../package.json';
+import { version as app_version } from '../../../package.json';
 
 /**
  * Home screen of BrightID

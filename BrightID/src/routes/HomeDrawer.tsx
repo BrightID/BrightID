@@ -20,7 +20,7 @@ import {
   setEditProfileMenuLayout,
   setEditProfileTextLayout,
 } from '@/reducer/walkthroughSlice';
-import HomeScreen from '@/components/HomeScreen';
+import HomeScreen from '@/components/Home/HomeScreen';
 import { BLACK, ORANGE, WHITE, GREY } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { DEVICE_LARGE, DEVICE_IOS } from '@/utils/deviceConstants';
