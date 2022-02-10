@@ -8,7 +8,7 @@ import {
 import { useSelector } from '@/store';
 import { INVITE_ACTIVE } from '@/utils/constants';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
-import { BLACK } from '@/theme/colors';
+import { BLACK, WHITE } from '@/theme/colors';
 import { createSelector } from '@reduxjs/toolkit';
 import {
   createStackNavigator,
@@ -67,7 +67,7 @@ const NotificationBell = () => {
         resetNotifications();
       }}
     >
-      <Bell color={BLACK} alert={!!displayBadge} />
+      <Bell color={WHITE} alert={!!displayBadge} />
     </TouchableOpacity>
   );
 };
@@ -84,7 +84,7 @@ const BrightIdLogo = () => {
       testID="BrightIdLogo"
     >
       <Image
-        source={require('@/static/brightid-final.png')}
+        source={require('@/static/brightid-white.png')}
         accessible={true}
         accessibilityLabel="Home Header Logo"
         resizeMode="contain"
