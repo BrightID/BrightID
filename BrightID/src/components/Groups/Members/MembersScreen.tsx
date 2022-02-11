@@ -12,34 +12,39 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import { useDispatch, useSelector } from '@/store';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { innerJoin } from 'ramda';
 import { useTranslation } from 'react-i18next';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useDispatch, useSelector } from '@/store';
 import {
   leaveGroup,
   updateGroup,
   dismissFromGroup,
   addAdmin,
   selectAllConnections,
+  userSelector,
 } from '@/actions';
 import EmptyList from '@/components/Helpers/EmptyList';
 import { ORANGE, WHITE, BLUE, DARK_GREY } from '@/theme/colors';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DEVICE_LARGE } from '@/utils/deviceConstants';
 import { fontSize } from '@/theme/fonts';
 import { groupByIdSelector } from '@/utils/groups';
 import { addOperation } from '@/reducer/operationsSlice';
 import { NodeApiContext } from '@/components/NodeApiGate';
-import MemberCard from './MemberCard';
+import { MemberCard } from '@/components/Groups/Members/MemberCard';
 
-function MembersScreen(props) {
-  const { navigation, route } = props;
+export const MembersScreen = () => {
+  const navigation = useNavigation();
+  const route: { params?: { group: Group } } = useRoute() as {
+    params?: { group: Group };
+  };
   const groupID = route.params.group.id;
   const dispatch = useDispatch();
   const api = useContext(NodeApiContext);
   const connections = useSelector(selectAllConnections);
-  const user = useSelector((state) => state.user);
+  const user = useSelector(userSelector);
   const { group, admins, members } = useSelector((state) =>
     groupByIdSelector(state, groupID),
   );
@@ -183,21 +188,8 @@ function MembersScreen(props) {
   }, [api, dispatch, groupID]);
 
   // Only include the group members that user knows (is connected with), and the user itself
-  const groupMembers = useMemo(() => {
-    // TODO: userObj is ugly and just here to satisfy flow typecheck for 'connection' type.
-    //    Define a dedicated type for group member to use here or somehow merge user and connection types.
-    const userobj = {
-      id: user.id,
-      name: user.name,
-      photo: user.photo,
-      aesKey: '',
-      connectionDate: 0,
-      status: '',
-      signingKeys: [],
-      createdAt: 0,
-      hasPrimaryGroup: false,
-    };
-    return [userobj].concat(
+  const groupMembers: Array<GroupMember> = useMemo(() => {
+    return ([user] as Array<GroupMember>).concat(
       innerJoin(
         (connection, member) => connection.id === member,
         connections,
@@ -272,14 +264,19 @@ function MembersScreen(props) {
     );
   };
 
-  const renderMember = ({ item, index }) => {
+  const renderMember = ({
+    item,
+    index,
+  }: {
+    item: GroupMember;
+    index: number;
+  }) => {
     const memberIsAdmin = admins.includes(item.id);
     const userIsAdmin = admins.includes(user.id);
     return (
       <MemberCard
         testID={`memberItem-${index}`}
-        connectionDate={item.connectionDate}
-        flaggers={item.flaggers}
+        connectionDate={(item as Connection).connectionDate || 0}
         memberId={item.id}
         name={item.name}
         photo={item.photo}
@@ -315,7 +312,7 @@ function MembersScreen(props) {
       </View>
     </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   orangeTop: {
@@ -410,5 +407,3 @@ const styles = StyleSheet.create({
     paddingLeft: 11,
   },
 });
-
-export default MembersScreen;

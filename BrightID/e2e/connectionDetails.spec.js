@@ -84,6 +84,8 @@ describe('Connection details', () => {
     await expect(element(by.id('createNewGroupBtn'))).not.toBeVisible();
     // if group was created successfully we should be back at the Groups screen
     await expectGroupsScreen();
+    // wait 20 seconds until group creation op should be done on the backend
+    await new Promise((r) => setTimeout(r, 20000));
     // there should be exactly one group now
     await expect(element(by.id('groupItem-0'))).toBeVisible();
     await expect(element(by.id('groupName'))).toHaveText(groupName);
@@ -91,9 +93,6 @@ describe('Connection details', () => {
     // Have first 2 accounts accept group invites
     await navigateHome();
     await expectHomescreen();
-
-    // wait 10 seconds until group creation op should be done on the backend
-    await new Promise((r) => setTimeout(r, 10000));
 
     await joinAllGroups(0);
     await joinAllGroups(1);
@@ -108,12 +107,8 @@ describe('Connection details', () => {
     // refresh
     await element(by.id('groupsFlatList')).swipe('down');
 
-    // Text changes to "Known members" when all invited people have joined
-    await waitFor(
-      element(by.text(i18next.t('groups.label.knownMembers'))).atIndex(0),
-    )
-      .toExist()
-      .withTimeout(20000);
+    // there should be 3 known members in the first group
+    expect(element(by.id('groupMembersCount-0'))).toHaveText('3 ');
 
     await navigateHome();
     await expectHomescreen();

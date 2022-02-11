@@ -11,6 +11,9 @@ import {
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { BlurView } from '@react-native-community/blur';
+import { useTranslation } from 'react-i18next';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { StackScreenProps } from '@react-navigation/stack';
 import {
   DEVICE_LARGE,
   DEVICE_IOS,
@@ -20,9 +23,6 @@ import {
 import { DARK_ORANGE, DARKER_GREY, WHITE, BLACK, GREEN } from '@/theme/colors';
 import { fontSize } from '@/theme/fonts';
 import { useDispatch, useSelector } from '@/store';
-import { useTranslation } from 'react-i18next';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { StackScreenProps } from '@react-navigation/stack';
 import socialMediaList from './socialMediaList';
 import { saveSocialMedia, selectSocialMediaById } from './socialMediaSlice';
 
@@ -77,9 +77,10 @@ const SelectMediaModal = ({ route }: props) => {
     [existingSocialMediaIds, prevId],
   );
 
-  const PickerItems = useMemo(() => socialMediaToDisplay.map(toPickerItem), [
-    socialMediaToDisplay,
-  ]);
+  const PickerItems = useMemo(
+    () => socialMediaToDisplay.map(toPickerItem),
+    [socialMediaToDisplay],
+  );
 
   const defaultItem = (socialMediaToDisplay[0] &&
     socialMediaToDisplay[0][0]) as SocialMediaId;
@@ -155,7 +156,7 @@ const SelectMediaModal = ({ route }: props) => {
             <TextInput
               style={styles.socialMediaInput}
               autoCapitalize="none"
-              autoCompleteType="off"
+              autoComplete="off"
               autoCorrect={false}
               autoFocus={true}
               blurOnSubmit={true}

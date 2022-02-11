@@ -1,5 +1,9 @@
 {
   "achievements": {
+    "bituVerification": {
+      "description": "Plus de détails",
+      "title": "Vérification Bitu"
+    },
     "getSponsored": {
       "description": "Vous faire parrainer en liant votre compte BrightID à une application de parrainage",
       "title": "Être parrainé·e"
@@ -11,6 +15,10 @@
     "joinConnectionPartyWithFriend": {
       "description": "Participer à un rendez-vous virtuel BrightID avec des amis proches ou des membres de votre famille",
       "title": "Rendez-vous virtuel avec amis ou famille"
+    },
+    "joinMeet": {
+      "description": "Rejoindre une réunion BrightID",
+      "title": "Réunion BrightID"
     },
     "linkApp": {
       "description": "Lier votre compte BrightID à une application",
@@ -50,13 +58,19 @@
         "visitWebsite": "Visiter"
       },
       "text": {
+        "blindSigAlreadyLinked": "Vous êtes déjà lié·e à {{app}} avec l’identifiant {{appUserId}}",
+        "blindSigAlreadyLinkedDifferent": "Vous essayez d'établir un lien avec {{app}} en utilisant {{appUserId}}. Vous êtes déjà lié·e à {{app}} avec un idientifiant différent {{previousAppUserIds}}. Ceci peut entraîner des problèmes d'utilisation de l'application.",
         "checkWebsite": "Pour en savoir davantage à propos de {{name}}, visitez leur site web !",
+        "invalidApp": "{{app}} n'est pas une application valide !",
         "invalidContext": "{{context}} n'est pas un contexte valide !",
         "linkApp": "Voulez-vous lier votre compte BrightID à {{context}} ?",
         "linkFailure": "Impossible de lier votre compte BrightID avec {{context}}\n{{result}}",
-        "linkSuccess": "Votre compte BrightID est désormais lié à {{context}}"
+        "linkSigFailed": "Erreur de liaison entre la vérification {{verification}} et l'application {{appId}}. Message d'erreur : {{msg}}",
+        "linkSuccess": "Votre compte BrightID est désormais lié à {{context}}",
+        "missingBlindSig": "Aucun sig aveugle trouvé pour l'application {{appId}}. Vérifications manquantes : {{missingVerifications}}. Vérifications déjà liées : {{linkedVerifications}}"
       },
       "title": {
+        "invalidApp": "Échec",
         "invalidContext": "Échec",
         "linkApp": "Lier l'application ?",
         "linkFailure": "Échec",
@@ -73,7 +87,8 @@
     "text": {
       "noApps": "Pas d'application",
       "notSponsored": "Vous n'êtes pas parrainé·e.\nVeuillez trouver une application ci-dessous pour vous parrainer.",
-      "pendingLink": "Compte BrightID en cours de liaison avec {{context}}…"
+      "pendingLink": "Compte BrightID en cours de liaison avec {{context}}…",
+      "sponsoring": "{{app}} vous parraine…"
     }
   },
   "backup": {
@@ -148,6 +163,7 @@
     "button": {
       "cancel": "Annuler",
       "copy": "Copier",
+      "retry": "Réessayer",
       "save": "Enregistrer"
     },
     "camera": {
@@ -195,6 +211,7 @@
       "connectionLevel": "Niveau de Connexion",
       "mutualConnections": "Connexions en Commun",
       "mutualGroups": "Groupes en Commun",
+      "recoveryConnections": "Connexions de récupération",
       "possibleDuplicates": "Doublons Possibles"
     },
     "tags": {
@@ -213,7 +230,8 @@
       "reportOther": "Autre raison",
       "reportSpammer": "Cette personne m'a envoyé une connexion indésirable",
       "unReportConnection": "Annuler le signalement",
-      "unReportImpact": "Vous avez déjà signalé {{name}} comme étant un {{reportReason}}. Voulez-vous supprimer ce signalement et rétablir votre connexion ?"
+      "unReportImpact": "Vous avez déjà signalé {{name}} comme étant un {{reportReason}}. Voulez-vous supprimer ce signalement et rétablir votre connexion ?",
+      "unkownRecoveryConnection": "Inconnu"
     }
   },
   "connections": {
@@ -262,7 +280,7 @@
       "website": "Site Web"
     },
     "text": {
-      "meet": "Rejoignez des rendez-vous BrightID !",
+      "meet": "Rejoignez une réunion BrightID !",
       "openSource": "avec un code source ouvert !",
       "weAre": "Nous sommes "
     },
@@ -314,6 +332,7 @@
       "contactUs": "Nous contacter",
       "copyExplorerCode": "Copier le Code Explorer",
       "editProfile": "Modifier le profil",
+      "groups": "Groupes",
       "home": "Accueil"
     }
   },
@@ -399,6 +418,7 @@
       "connect": "se connecter"
     },
     "button": {
+      "achievements": "Réalisations",
       "apps": "Applis",
       "connections": "Connexions",
       "groups": "Groupes",
@@ -415,6 +435,26 @@
     "link": {
       "community": "Rejoindre la Communauté"
     }
+  },
+  "nodeApiGate": {
+    "reset": {
+      "button": "Restaurer la liste de nœuds par défaut",
+      "text": "Vous n'utilisez pas la liste de nœuds par défaut"
+    },
+    "state": {
+      "connecting": "Connexion au nœud BrightID…",
+      "noConnection": "Impossible de se connecter à un nœud BrightID. Veuillez vérifier votre connectivité réseau.",
+      "noNode": "La liste de nœuds est vide."
+    },
+    "timer": {
+      "text": "Temps restant : {{secondsLeft}} secondes"
+    }
+  },
+  "nodeModal": {
+    "currentNode": {
+      "header": "Nœud actuel :"
+    },
+    "switchNodeButtonLabel": "Basculer sur un autre nœud"
   },
   "notificationBar": {
     "text": {

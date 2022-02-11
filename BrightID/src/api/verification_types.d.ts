@@ -40,7 +40,7 @@ type YektaVerification = HashVerification & {
 type BituVerification = HashVerification & {
   name: 'Bitu';
   score: number;
-  directReports: Record<string, number>;;
+  directReports: Record<string, number>;
   reportedConnections: Record<string, Array<string>>;
 };
 

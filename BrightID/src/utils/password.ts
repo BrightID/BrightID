@@ -1,7 +1,7 @@
 import i18next from 'i18next';
 import { Alert } from 'react-native';
 
-export const validatePass = (pass1, pass2) => {
+export const validatePass = (pass1: string, pass2: string) => {
   if (pass1 !== pass2) {
     Alert.alert(
       i18next.t('common.alert.error'),

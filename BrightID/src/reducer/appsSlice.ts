@@ -117,14 +117,11 @@ export const selectAllLinkedSigs = createSelector(selectAllSigs, (sigs) =>
   sigs.filter((sig) => sig.linked),
 );
 
-export const selectLinkedSigsForApp = createSelector(
-  selectAllLinkedSigs,
-  (_, appId) => appId,
-  (linkedSigs, appId) => {
+export const createSelectLinkedSigsForApp = (appId) =>
+  createSelector(selectAllLinkedSigs, (linkedSigs) => {
     // return all linked sigs that belong to provided app
     return linkedSigs.filter((sig) => sig.app === appId);
-  },
-);
+  });
 
 // Export reducer
 export default appsSlice.reducer;

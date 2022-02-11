@@ -82,7 +82,7 @@ export const AppsScreen = () => {
   const handleAppDeepLink = useCallback(() => {
     const appId = route.params?.context;
     const appInfo = find(propEq('id', appId))(apps) as AppInfo;
-    if (appInfo && appInfo.usingBlindSig) {
+    if (api && appInfo && appInfo.usingBlindSig) {
       handleBlindSigApp(route.params, setSponsoringApp, api);
     } else {
       Alert.alert(
