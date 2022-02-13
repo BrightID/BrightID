@@ -1,12 +1,13 @@
 import nacl from 'tweetnacl';
 import { createImageDirectory, saveImage } from '@/utils/filesystem';
-import { randomKey } from '@/utils/encoding';
+import { hash, randomKey } from '@/utils/encoding';
 import {
   setUserData,
   setConnections,
   setGroups,
   setKeypair,
   addOperation,
+  upsertSig,
 } from '@/actions';
 import BrightidError, { OPERATION_APPLIED_BEFORE } from '@/api/brightidError';
 import { NodeApi } from '@/api/brightId';
@@ -129,7 +130,9 @@ export const recoverData =
     const { userData } = restoredData;
     const { connections } = restoredData;
     const { groups } = restoredData;
-    setTotalItems(connections.length + groups.length);
+    const apps = await api.getApps();
+    const blindSigApps = apps.filter((app) => app.usingBlindSig);
+    setTotalItems(connections.length + groups.length + blindSigApps.length);
     dispatch(setConnections(connections));
     dispatch(setGroups(groups));
     dispatch(updateNamePhoto({ name: userData.name, photo: userData.photo }));
@@ -158,7 +161,6 @@ export const recoverData =
       }
     }
 
-
     // fetch group images
     for (const group of groups) {
       setCurrentItem(currentItem++);
@@ -180,6 +182,23 @@ export const recoverData =
         }
       }
     }
+
+    // fetch blind sigs
+    for (const app of blindSigApps) {
+      setCurrentItem(currentItem++);
+      for (const verification of app.verifications) {
+        const vel = app.verificationExpirationLength;
+        const roundedTimestamp = vel ? Math.floor(Date.now() / vel) * vel : 0;
+        const key = hash(`${app.id} ${verification} ${roundedTimestamp}`);
+        try {
+          const decrypted = await fetchBackupData(key, id, pass);
+          await dispatch(upsertSig(JSON.parse(decrypted)));
+        } catch (err) {
+          console.log(`blind sig not found for ${key}`, err.message);
+        }
+      }
+    }
+
     dispatch(fetchUserInfo(api));
   };
 
